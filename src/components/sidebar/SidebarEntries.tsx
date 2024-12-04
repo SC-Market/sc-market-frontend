@@ -25,6 +25,7 @@ import PeopleAltIcon from "@mui/icons-material/PeopleAltRounded"
 import React from "react"
 import { SidebarSectionProps } from "./Sidebar"
 import { Pistol } from "mdi-material-ui"
+import StorefrontIcon from "@mui/icons-material/Storefront"
 
 export const all_sidebar_entries: SidebarSectionProps[] = [
   {
@@ -86,6 +87,11 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
             to: "/market",
             text: "Everything",
             icon: <HomeRounded />,
+          },
+          {
+            to: "/shops",
+            text: "Player Shops",
+            icon: <StorefrontIcon />,
           },
           {
             to: "/market/category/weapon",
