@@ -2394,13 +2394,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:^18.2.78":
+"@types/react@npm:*":
   version: 18.3.12
   resolution: "@types/react@npm:18.3.12"
   dependencies:
     "@types/prop-types": "npm:*"
     csstype: "npm:^3.0.2"
   checksum: 10c0/8bae8d9a41619804561574792e29112b413044eb0d53746dde2b9720c1f9a59f71c895bbd7987cd8ce9500b00786e53bc032dced38cddf42910458e145675290
+  languageName: node
+  linkType: hard
+
+"@types/react@npm:^19.0.12":
+  version: 19.0.12
+  resolution: "@types/react@npm:19.0.12"
+  dependencies:
+    csstype: "npm:^3.0.2"
+  checksum: 10c0/c814b6af5c0fbcf5c65d031b1c9bf98c5b857e015254d95811f2851b27b869c3d31c6f35dab127dc6921a3dbda0b0622c6323d493a14b31b231a6a58c41c5e84
   languageName: node
   linkType: hard
 
@@ -4225,7 +4234,7 @@ __metadata:
     "@reduxjs/toolkit": "npm:^2.2.3"
     "@types/jest": "npm:^29.5.4"
     "@types/lodash": "npm:^4.14.180"
-    "@types/react": "npm:^18.2.78"
+    "@types/react": "npm:^19.0.12"
     "@types/react-dom": "npm:^18.2.17"
     "@types/react-transition-group": "npm:^4.4.9"
     "@vitejs/plugin-react": "npm:^4.3.4"
@@ -4241,7 +4250,7 @@ __metadata:
     mdi-material-ui: "npm:^7.7.0"
     moment: "npm:^2.29.4"
     prettier: "npm:^3.3.3"
-    react: "npm:^18.2.0"
+    react: "npm:^19.0.0"
     react-animated-numbers: "npm:^0.18.0"
     react-apexcharts: "npm:^1.5.0"
     react-cookie: "npm:^7.0.1"
@@ -7300,12 +7309,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:^18.2.0":
-  version: 18.3.1
-  resolution: "react@npm:18.3.1"
-  dependencies:
-    loose-envify: "npm:^1.1.0"
-  checksum: 10c0/283e8c5efcf37802c9d1ce767f302dd569dd97a70d9bb8c7be79a789b9902451e0d16334b05d73299b20f048cbc3c7d288bbbde10b701fa194e2089c237dbea3
+"react@npm:^19.0.0":
+  version: 19.0.0
+  resolution: "react@npm:19.0.0"
+  checksum: 10c0/9cad8f103e8e3a16d15cb18a0d8115d8bd9f9e1ce3420310aea381eb42aa0a4f812cf047bb5441349257a05fba8a291515691e3cb51267279b2d2c3253f38471
   languageName: node
   linkType: hard
 
