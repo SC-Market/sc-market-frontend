@@ -2712,9 +2712,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"apexcharts@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "apexcharts@npm:4.0.0"
+"apexcharts@npm:^4.5.0":
+  version: 4.5.0
+  resolution: "apexcharts@npm:4.5.0"
   dependencies:
     "@svgdotjs/svg.draggable.js": "npm:^3.0.4"
     "@svgdotjs/svg.filter.js": "npm:^3.0.8"
@@ -2722,7 +2722,7 @@ __metadata:
     "@svgdotjs/svg.resize.js": "npm:^2.0.2"
     "@svgdotjs/svg.select.js": "npm:^4.0.1"
     "@yr/monotone-cubic-spline": "npm:^1.0.3"
-  checksum: 10c0/723a8b2ceb2b1166588c5821aefb27ea105ca1ee08aaf415234edcd5cc1c279e21f40241622d2e909934b6d6f6b9cda6fee15c16226739b7a3d8b9d7ecf04908
+  checksum: 10c0/284e8ef367ee21055358db3705648a86e0922ae55237c6e9e6bddaf8e3012b2d7414b56be9c0267f19c7bd69b500ef7e0eefc80780661976cc4c5d7a9157f68d
   languageName: node
   linkType: hard
 
@@ -4230,7 +4230,7 @@ __metadata:
     "@types/react-transition-group": "npm:^4.4.9"
     "@vitejs/plugin-react": "npm:^4.3.4"
     "@vitejs/plugin-react-swc": "npm:^3.5.0"
-    apexcharts: "npm:^4.0.0"
+    apexcharts: "npm:^4.5.0"
     eslint: "npm:^9.22.0"
     eslint-config-prettier: "npm:^9.1.0"
     eslint-plugin-prettier: "npm:^5.2.1"
