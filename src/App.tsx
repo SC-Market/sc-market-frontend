@@ -557,6 +557,12 @@ const router = createBrowserRouter([
         ],
       },
       {
+        path: "/shops",
+        lazy: async () => ({
+          Component: (await import("./pages/shop/ListShopsPage")).ListShopsPage,
+        }),
+      },
+      {
         path: "/*",
         lazy: async () => ({
           Component: (await import("./pages/errors/Error404")).Error404,
