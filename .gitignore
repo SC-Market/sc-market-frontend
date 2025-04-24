@@ -31,3 +31,8 @@ packages/*/build
 packages/*/dist
 
 docker-compose.override.yml
+
+.pnp.cjs
+.pnp.loader.mjs
+
+.vscode
