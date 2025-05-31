@@ -1,8 +1,8 @@
-import { AppBar, Button, IconButton, Toolbar, Typography } from "@mui/material"
+import { AppBar, IconButton, Toolbar, Typography } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import React from "react"
-import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
+import { useDrawerOpen } from "../../hooks/layout/Drawer"
 import { NotificationsButton } from "./NotificationsButton"
 import { MenuRounded } from "@mui/icons-material"
 import { ProfileNavAvatar } from "../../views/people/ProfileNavAvatar"
@@ -26,13 +26,13 @@ export function Navbar(props: { children?: React.ReactNode }) {
         // marginLeft: (drawerOpen ? sidebarDrawerWidth : 0),
         // width: `calc(100% - ${(drawerOpen ? sidebarDrawerWidth : 1) - 1}px)`,
 
-        [theme.breakpoints.up("sm")]: {
-          marginLeft: drawerOpen ? sidebarDrawerWidth : 0,
-          width: `calc(100% - ${(drawerOpen ? sidebarDrawerWidth : 1) - 1}px)`,
-        },
-        [theme.breakpoints.down("sm")]: {
-          width: drawerOpen ? 0 : "100%",
-        },
+        // [theme.breakpoints.up("sm")]: {
+        //   marginLeft: drawerOpen ? sidebarDrawerWidth : 0,
+        //   width: `calc(100% - ${(drawerOpen ? sidebarDrawerWidth : 1) - 1}px)`,
+        // },
+        // [theme.breakpoints.down("sm")]: {
+        //   width: drawerOpen ? 0 : "100%",
+        // },
 
         transition: theme.transitions.create(["width", "margin"], {
           easing: theme.transitions.easing.easeOut,

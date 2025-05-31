@@ -168,6 +168,7 @@ export function DarkBannerContainer(props: {
         borderRadius: 0,
         position: "relative",
         padding: 3,
+        border: "none",
       }}
     >
       <Box

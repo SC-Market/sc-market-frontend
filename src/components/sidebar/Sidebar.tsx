@@ -3,7 +3,6 @@ import {
   Box,
   Chip,
   Collapse,
-  Divider,
   Drawer,
   Grid,
   List,
@@ -23,7 +22,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react"
 import ExpandMore from "@mui/icons-material/ExpandMore"
 import ExpandLess from "@mui/icons-material/ExpandLess"
 import IconButton from "@mui/material/IconButton"
-import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
+import { useDrawerOpen } from "../../hooks/layout/Drawer"
 import { ChevronLeftRounded } from "@mui/icons-material"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useGetUserProfileQuery } from "../../store/profile"
@@ -336,29 +335,29 @@ export function Sidebar() {
     <Drawer
       elevation={1}
       PaperProps={{ elevation: 8 }}
-      variant="permanent"
-      open
+      variant="persistent"
+      open={drawerOpen}
       sx={{
-        transition: theme.transitions.create("width", {
-          easing: theme.transitions.easing.easeOut,
-          duration: "0.3s",
-        }),
+        // transition: theme.transitions.create("width", {
+        //   easing: theme.transitions.easing.easeOut,
+        //   duration: "0.3s",
+        // }),
         // width: (drawerOpen ? sidebarDrawerWidth : 0),
 
-        [theme.breakpoints.up("sm")]: {
-          width: drawerOpen ? sidebarDrawerWidth : 0,
-        },
+        // [theme.breakpoints.up("sm")]: {
+        //   width: sidebarDrawerWidth,
+        // },
         [theme.breakpoints.down("sm")]: {
-          width: drawerOpen ? "100%" : 0,
+          width: "100%",
         },
 
         "& .MuiDrawer-paper": {
           // width: (drawerOpen ? sidebarDrawerWidth : 0),
-          [theme.breakpoints.up("sm")]: {
-            width: drawerOpen ? sidebarDrawerWidth : 0,
-          },
+          // [theme.breakpoints.up("sm")]: {
+          //   width: drawerOpen ? sidebarDrawerWidth : 0,
+          // },
           [theme.breakpoints.down("sm")]: {
-            width: drawerOpen ? "100%" : 0,
+            // width: drawerOpen ? "100%" : 0,
             borderRight: 0,
           },
 
@@ -368,10 +367,10 @@ export function Sidebar() {
           borderColor: theme.palette.outline.main,
           scrollPadding: 0,
 
-          transition: theme.transitions.create("width", {
-            easing: theme.transitions.easing.easeOut,
-            duration: "0.3s",
-          }),
+          // transition: theme.transitions.create("width", {
+          //   easing: theme.transitions.easing.easeOut,
+          //   duration: "0.3s",
+          // }),
         },
         position: "relative",
         whiteSpace: "nowrap",
