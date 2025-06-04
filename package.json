@@ -42,7 +42,7 @@
     "simplebar-react": "^3.2.4",
     "socket.io-client": "^4.7.5",
     "typescript": "^5.2.2",
-    "web-vitals": "^3.5.1"
+    "web-vitals": "^5.0.2"
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",
