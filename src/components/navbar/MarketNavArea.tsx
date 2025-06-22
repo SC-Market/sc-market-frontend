@@ -62,7 +62,7 @@ export function MarketNavEntry(
   )
 }
 
-export function useOnScreen(ref?: RefObject<HTMLElement>) {
+export function useOnScreen(ref?: RefObject<HTMLElement | null> | null) {
   if (!ref) {
     return false
   }

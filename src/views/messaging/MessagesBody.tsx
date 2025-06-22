@@ -548,7 +548,7 @@ function MessageEntry(props: { message: Message }) {
 
 function MessagesArea(props: {
   messages: Message[]
-  messageBoxRef: RefObject<HTMLDivElement>
+  messageBoxRef: RefObject<HTMLDivElement | null>
   maxHeight?: number
 }) {
   const theme = useTheme<ExtendedTheme>()

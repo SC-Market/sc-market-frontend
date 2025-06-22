@@ -104,7 +104,7 @@ export function MarkdownEditor(props: {
     props
 
   const theme = useTheme()
-  const inputRef = React.useRef<HTMLInputElement>()
+  const inputRef = React.useRef<HTMLInputElement>(null)
 
   const buttons = [
     ["*", <i key={"*"}>I</i>],
