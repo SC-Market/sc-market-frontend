@@ -26,7 +26,7 @@
     "react-animated-numbers": "^0.18.0",
     "react-apexcharts": "^1.7.0",
     "react-cookie": "^7.2.2",
-    "react-dom": "^18.3.1",
+    "react-dom": "^19.1.0",
     "react-ga4": "^2.1.0",
     "react-helmet": "^6.1.0",
     "react-markdown": "^9.1.0",

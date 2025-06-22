@@ -4,11 +4,6 @@ import {
   Theme,
   ThemeOptions,
 } from "@mui/material"
-import { ComponentsProps } from "@mui/material/styles/props"
-import { ComponentsOverrides } from "@mui/material/styles/overrides"
-import { ComponentsVariants } from "@mui/material/styles/variants"
-import { DataGridProps } from "@mui/x-data-grid/models/props/DataGridProps"
-import { DataGridComponentNameToClassKey } from "@mui/x-data-grid/themeAugmentation"
 
 declare module "@mui/material/styles" {
   interface BreakpointOverrides {

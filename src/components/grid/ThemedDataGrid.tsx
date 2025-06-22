@@ -1,5 +1,4 @@
-import { DataGrid } from "@mui/x-data-grid"
-import { DataGridProps } from "@mui/x-data-grid/models/props/DataGridProps"
+import { DataGrid, DataGridProps } from "@mui/x-data-grid"
 import React from "react"
 
 export function ThemedDataGrid(props: DataGridProps) {
