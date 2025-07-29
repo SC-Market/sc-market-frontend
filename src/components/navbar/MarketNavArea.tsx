@@ -36,12 +36,14 @@ import { useMarketSidebar } from "../../hooks/market/MarketSidebar"
 import { useSearchParams } from "react-router-dom"
 import { useMarketSearch } from "../../hooks/market/MarketSearch"
 import { SelectGameCategoryOption } from "../select/SelectGameItem"
+import { useTranslation } from "react-i18next"
 
 export function MarketNavEntry(
   props: { title: string; children: React.ReactElement } & PaperProps,
 ) {
   const { title, children, ...paperProps } = props
   const theme = useTheme<Theme>()
+  const { t } = useTranslation()
 
   return (
     <Paper
@@ -56,7 +58,7 @@ export function MarketNavEntry(
       }}
       {...paperProps}
     >
-      <Typography sx={{ marginRight: 1 }}>{title}</Typography>
+      <Typography sx={{ marginRight: 1 }}>{t(title)}</Typography>
       {children}
     </Paper>
   )
@@ -96,6 +98,7 @@ export function HideOnScroll(props: { children: React.ReactNode }) {
 
   const theme = useTheme()
   const drawerOpen = useDrawerOpen()
+  const { t } = useTranslation()
 
   useEffect(() => {
     setLoaded(true)
@@ -186,6 +189,7 @@ export function HideOnScroll(props: { children: React.ReactNode }) {
 }
 
 export function MarketNavArea(props: { top?: boolean }) {
+  const { t } = useTranslation()
   const [filterOpen, setFilterOpen] = useState(false)
   const theme = useTheme()
   const profile = useGetUserProfileQuery()
@@ -211,11 +215,6 @@ export function MarketNavArea(props: { top?: boolean }) {
   )
   const [drawerOpen] = useDrawerOpen()
   const [open, setOpen] = useMarketSidebar()
-
-  // const xs = useMediaQuery(theme.breakpoints.down('lg'));
-  // useEffect(() => {
-  //     setOpen(!xs)
-  // }, [setOpen, xs])
 
   const handleKindChange = (event: { target: { value: string } }) => {
     setKind(event.target.value)
@@ -277,9 +276,9 @@ export function MarketNavArea(props: { top?: boolean }) {
             <Grid item sx={{ paddingTop: 2 }}>
               <TextField
                 fullWidth
-                label={"Search Query"}
+                label={t("market.search_query")}
                 InputProps={{
-                  startAdornment: <SearchIcon />,
+                  startAdornment: <SearchRounded />,
                 }}
                 value={query}
                 onChange={handleQueryChange}
@@ -289,7 +288,7 @@ export function MarketNavArea(props: { top?: boolean }) {
             </Grid>
 
             <Grid item sx={{ paddingTop: 2 }}>
-              <Tooltip title="Filters">
+              <Tooltip title={t("market.filters")}>
                 <IconButton onClick={() => setFilterOpen((o) => !o)}>
                   <FilterAltRounded
                     style={{
@@ -310,7 +309,7 @@ export function MarketNavArea(props: { top?: boolean }) {
                 startIcon={<SearchRounded />}
                 variant={"contained"}
               >
-                Search
+                {t("market.search")}
               </Button>
             </Grid>
           </Grid>
@@ -334,7 +333,7 @@ export function MarketNavArea(props: { top?: boolean }) {
                 <TextField
                   select
                   fullWidth
-                  label="Sort By"
+                  label={t("market.sort_by")}
                   color={"secondary"}
                   value={sort || ""}
                   onChange={handleSortChange}
@@ -343,30 +342,38 @@ export function MarketNavArea(props: { top?: boolean }) {
                   }}
                   size={"small"}
                 >
-                  <MenuItem value={""}>None</MenuItem>
-                  <MenuItem value={"title"}>Title</MenuItem>
-                  <MenuItem value={"price-low"}>Price (Low to High)</MenuItem>
-                  <MenuItem value={"price-high"}>Price (High to Low)</MenuItem>
+                  <MenuItem value={""}>{t("market.none")}</MenuItem>
+                  <MenuItem value={"title"}>{t("market.title")}</MenuItem>
+                  <MenuItem value={"price-low"}>
+                    {t("market.price_low_to_high")}
+                  </MenuItem>
+                  <MenuItem value={"price-high"}>
+                    {t("market.price_high_to_low")}
+                  </MenuItem>
                   <MenuItem value={"quantity-low"}>
-                    Quantity Available (Low to High)
+                    {t("market.quantity_low_to_high")}
                   </MenuItem>
                   <MenuItem value={"quantity-high"}>
-                    Quantity Available (High to Low)
+                    {t("market.quantity_high_to_low")}
                   </MenuItem>
                   <MenuItem value={"date-new"}>
-                    Date Listed (Old to New)
+                    {t("market.date_old_to_new")}
                   </MenuItem>
                   <MenuItem value={"date-old"}>
-                    Date Listed (New to Old)
+                    {t("market.date_new_to_old")}
                   </MenuItem>
-                  <MenuItem value={"activity"}>Recent Activity</MenuItem>
-                  <MenuItem value={"rating"}>Rating (High to Low)</MenuItem>
+                  <MenuItem value={"activity"}>
+                    {t("market.recent_activity")}
+                  </MenuItem>
+                  <MenuItem value={"rating"}>
+                    {t("market.rating_high_to_low")}
+                  </MenuItem>
                 </TextField>
               </Grid>
               <Grid item xs={12} md={4} lg={4}>
                 <TextField
                   fullWidth
-                  label="Quantity Available"
+                  label={t("market.quantity_available")}
                   color={"secondary"}
                   size={"small"}
                   onChange={handleQuantityChange}
@@ -376,10 +383,6 @@ export function MarketNavArea(props: { top?: boolean }) {
                     pattern: "[0-9]*",
                   }}
                   InputProps={{
-                    // endAdornment: <InputAdornment
-                    //     position="start">
-                    //     {`of ${listing.quantity_available} available`}
-                    // </InputAdornment>,
                     inputMode: "numeric",
                   }}
                 />
@@ -388,7 +391,7 @@ export function MarketNavArea(props: { top?: boolean }) {
                 <TextField
                   select
                   fullWidth
-                  label="Sale Type"
+                  label={t("market.sale_type")}
                   size={"small"}
                   color={"secondary"}
                   value={kind}
@@ -397,10 +400,10 @@ export function MarketNavArea(props: { top?: boolean }) {
                     IconComponent: KeyboardArrowDownRoundedIcon,
                   }}
                 >
-                  <MenuItem value={"any"}>Any</MenuItem>
-                  <MenuItem value={"sale"}>Sale</MenuItem>
-                  <MenuItem value={"aggregate"}>Aggregate</MenuItem>
-                  <MenuItem value={"auction"}>Auction</MenuItem>
+                  <MenuItem value={"any"}>{t("market.any")}</MenuItem>
+                  <MenuItem value={"sale"}>{t("market.sale")}</MenuItem>
+                  <MenuItem value={"aggregate"}>{t("market.aggregate")}</MenuItem>
+                  <MenuItem value={"auction"}>{t("market.auction")}</MenuItem>
                 </TextField>
               </Grid>
               <Grid item xs={12} md={4} lg={4}>
@@ -416,7 +419,7 @@ export function MarketNavArea(props: { top?: boolean }) {
               <Grid item xs={12} md={4} lg={4}>
                 <TextField
                   fullWidth
-                  label="Min Cost"
+                  label={t("market.min_cost")}
                   size={"small"}
                   color={"secondary"}
                   onChange={handleMinCostChange}
@@ -437,7 +440,7 @@ export function MarketNavArea(props: { top?: boolean }) {
                 <TextField
                   fullWidth
                   size={"small"}
-                  label="Max Cost"
+                  label={t("market.max_cost")}
                   color={"secondary"}
                   value={maxCost == null ? "" : maxCost}
                   onChange={handleMaxCostChange}
