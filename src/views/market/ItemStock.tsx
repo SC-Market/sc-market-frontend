@@ -724,15 +724,21 @@ export function DisplayStock({ listings }: { listings: UniqueListing[] }) {
       display: "flex",
       renderCell: (params: GridRenderCellParams) => {
         const isNewRow = newRows.find((row) => row.id === params.id)
-        const isInEditMode = rowModesModel[params.id]?.mode === GridRowModes.Edit
-        
+        const isInEditMode =
+          rowModesModel[params.id]?.mode === GridRowModes.Edit
+
         if (isNewRow) {
           if (isInEditMode) {
             const editingRow = editingRows[params.id]
             const hasValidItem = editingRow?.item_name
 
             return (
-              <Stack direction="row" spacing={1} justifyContent="flex-end" sx={{ width: '100%' }}>
+              <Stack
+                direction="row"
+                spacing={1}
+                justifyContent="flex-end"
+                sx={{ width: "100%" }}
+              >
                 <Tooltip title="Save">
                   <IconButton
                     size="small"
@@ -757,7 +763,11 @@ export function DisplayStock({ listings }: { listings: UniqueListing[] }) {
           } else {
             // For new rows that have been saved, just show edit
             return (
-              <Stack direction="row" justifyContent="flex-end" sx={{ width: '100%' }}>
+              <Stack
+                direction="row"
+                justifyContent="flex-end"
+                sx={{ width: "100%" }}
+              >
                 <Tooltip title="Edit">
                   <IconButton
                     size="small"
@@ -771,7 +781,7 @@ export function DisplayStock({ listings }: { listings: UniqueListing[] }) {
             )
           }
         }
-        
+
         return (
           <Tooltip title={"Edit Listing"}>
             <Link
