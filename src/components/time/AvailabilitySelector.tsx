@@ -9,6 +9,7 @@ import { Section } from "../paper/Section"
 import { useGetUserProfileQuery } from "../../store/profile"
 import CreateRoundedIcon from "@mui/icons-material/CreateRounded"
 import { Link } from "react-router-dom"
+import { useTranslation } from "react-i18next"
 
 function AvailabilityItem(props: {
   day: number
@@ -73,6 +74,7 @@ export function AvailabilitySelector(props: {
   onSave: (selections: boolean[]) => any
   initialSelections?: boolean[]
 }) {
+  const { t } = useTranslation()
   const { onSave, initialSelections } = props
 
   const [clicked, setClicked] = useState(false)
@@ -106,14 +108,10 @@ export function AvailabilitySelector(props: {
 
           for (let day = left; day <= right; day++) {
             for (let slot = top; slot <= bottom; slot++) {
-              if (day >= left && day <= right) {
-                if (slot >= top && slot <= bottom) {
-                  setSelections((old) => {
-                    old[day * 48 + slot] = startedSelect.value
-                    return old
-                  })
-                }
-              }
+              setSelections((old) => {
+                old[day * 48 + slot] = startedSelect.value
+                return old
+              })
             }
           }
         }
@@ -123,15 +121,13 @@ export function AvailabilitySelector(props: {
       }
       setClicked(value)
     },
-    [setClicked, startedSelect, endedSelect, setStartedSelect, setEndedSelect],
+    [setClicked, startedSelect, endedSelect],
   )
 
   return (
     <Section
       xs={12}
-      title={`Select Availability (${
-        Intl.DateTimeFormat().resolvedOptions().timeZone
-      })`}
+      title={`${t("availability.select_availability")} (${Intl.DateTimeFormat().resolvedOptions().timeZone})`}
     >
       <Grid
         item
@@ -161,56 +157,61 @@ export function AvailabilitySelector(props: {
           }}
         >
           <table draggable={"false"}>
-            <tr style={{ height: 23.5 }}></tr>
-            {[...Array(25).keys()].map((i: number) => (
-              <tr
-                style={{
-                  position: "relative",
-                  boxSizing: "border-box",
-                  height: 22,
-                }}
-              >
-                <td
-                  style={{
-                    fontSize: 10,
-                    position: "relative",
-                    top: -10,
-                  }}
+            <tbody>
+              <tr style={{ height: 23.5 }}></tr>
+              {[...Array(25).keys()].map((i: number) => (
+                <tr
                   key={i}
-                  draggable={"false"}
+                  style={{
+                    position: "relative",
+                    boxSizing: "border-box",
+                    height: 22,
+                  }}
                 >
-                  <div
+                  <td
                     style={{
-                      width: "100%",
-                      height: "100%",
-                      overflow: "hidden",
+                      fontSize: 10,
+                      position: "relative",
+                      top: -10,
                     }}
                     draggable={"false"}
                   >
-                    {moment().startOf("day").add(i, "hours").format("HH:mm")}
-                  </div>
-                </td>
-              </tr>
-            ))}
+                    <div
+                      style={{
+                        width: "100%",
+                        height: "100%",
+                        overflow: "hidden",
+                      }}
+                      draggable={"false"}
+                    >
+                      {moment().startOf("day").add(i, "hours").format("HH:mm")}
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
           </table>
           <table style={{ width: "100%", height: 400 }} draggable={"false"}>
-            <tr>
-              {[...Array(7).keys()].map((i) => (
-                <th>{moment().startOf("week").add(i, "days").format("ddd")}</th>
-              ))}
-            </tr>
-
-            {[...Array(48).keys()].map((slot: number) => (
-              <tr style={{ height: 10 }}>
-                {[...Array(7).keys()].map((day: number) => (
-                  <AvailabilityItem
-                    day={day}
-                    slot={slot}
-                    value={selections[day * 48 + slot]}
-                  />
+            <tbody>
+              <tr>
+                {[...Array(7).keys()].map((i) => (
+                  <th key={i}>{moment().startOf("week").add(i, "days").format("ddd")}</th>
                 ))}
               </tr>
-            ))}
+
+              {[...Array(48).keys()].map((slot: number) => (
+                <tr key={slot} style={{ height: 10 }}>
+                  {[...Array(7).keys()].map((day: number) => (
+                    <AvailabilityItem
+                      key={day * 48 + slot}
+                      day={day}
+                      slot={slot}
+                      value={selections[day * 48 + slot]}
+                    />
+                  ))}
+                </tr>
+              ))}
+            </tbody>
           </table>
         </AvailabilityHookContext.Provider>
       </Grid>
@@ -219,7 +220,7 @@ export function AvailabilitySelector(props: {
           variant={"contained"}
           onClick={() => onSave(arrayRotate(selections, -tzOffset))}
         >
-          Save
+          {t("availability.save")}
         </Button>
       </Grid>
     </Section>
@@ -229,6 +230,7 @@ export function AvailabilitySelector(props: {
 export function AvailabilityDisplay(
   props: { value: boolean[]; name: string } & GridProps,
 ) {
+  const { t } = useTranslation()
   const { value, name, ...gridprops } = props
   const availability = useMemo(() => arrayRotate(value, tzOffset), [value])
   const { data: profile } = useGetUserProfileQuery()
@@ -238,9 +240,7 @@ export function AvailabilityDisplay(
       xs={12}
       lg={4}
       md={6}
-      title={`Availability for ${name} - (${
-        Intl.DateTimeFormat().resolvedOptions().timeZone
-      })`}
+      title={`${t("availability.availability_for")} ${name} - (${Intl.DateTimeFormat().resolvedOptions().timeZone})`}
       subtitle={
         profile?.username === name ? (
           <Link to={"/availability"} style={{ color: "inherit" }}>
@@ -271,7 +271,6 @@ export function AvailabilityDisplay(
                     position: "relative",
                     top: -10,
                   }}
-                  key={i}
                   draggable={"false"}
                 >
                   <div
@@ -293,14 +292,15 @@ export function AvailabilityDisplay(
           <tbody>
             <tr>
               {[...Array(7).keys()].map((i) => (
-                <th>{moment().startOf("week").add(i, "days").format("ddd")}</th>
+                <th key={i}>{moment().startOf("week").add(i, "days").format("ddd")}</th>
               ))}
             </tr>
 
             {[...Array(48).keys()].map((slot: number) => (
-              <tr style={{ height: 10 }}>
+              <tr key={slot} style={{ height: 10 }}>
                 {[...Array(7).keys()].map((day: number) => (
                   <td
+                    key={day * 48 + slot}
                     style={{
                       backgroundColor: availability[day * 48 + slot]
                         ? "#595"
