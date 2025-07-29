@@ -8,12 +8,14 @@ import { MenuRounded } from "@mui/icons-material"
 import { ProfileNavAvatar } from "../../views/people/ProfileNavAvatar"
 import { useGetUserProfileQuery } from "../../store/profile"
 import { DiscordLoginButton } from "../button/DiscordLoginButton"
+import { useTranslation } from "react-i18next"
 
 export function Navbar(props: { children?: React.ReactNode }) {
   const theme: ExtendedTheme = useTheme()
   const profile = useGetUserProfileQuery()
 
   const [drawerOpen, setDrawerOpen] = useDrawerOpen()
+  const { t } = useTranslation()
 
   return (
     <AppBar
@@ -74,7 +76,7 @@ export function Navbar(props: { children?: React.ReactNode }) {
         }}
       >
         {!drawerOpen && (
-          <Tooltip title="Toggle Drawer">
+          <Tooltip title={t("navbar.toggle_drawer")}>
             <IconButton
               color={"secondary"}
               onClick={() => setDrawerOpen(true)}
