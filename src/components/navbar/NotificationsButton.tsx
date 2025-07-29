@@ -144,9 +144,10 @@ export function NotificationBase(props: {
 
 export function NotificationDeleteButton(props: { notif: Notification }) {
   const [deleteNotification] = useNotificationDeleteMutation()
+  const { t } = useTranslation() // ✅ додано
 
   return (
-    <Tooltip title={"Delete notification"}>
+    <Tooltip title={t("notifications.delete_notification")}>
       <IconButton
         size={"small"}
         onClick={(event) => {
@@ -166,6 +167,7 @@ export function NotificationOrderReview(props: { notif: Notification }) {
   const { notif } = props
   const theme = useTheme<ExtendedTheme>()
   const review = useMemo(() => notif.entity as OrderReview, [notif.entity])
+  const { t } = useTranslation() // ✅ додано
 
   return (
     <NotificationBase
@@ -173,7 +175,7 @@ export function NotificationOrderReview(props: { notif: Notification }) {
       to={`/contract/${review.order_id}`}
       notif={notif}
     >
-      New Review Left by{" "}
+      {t("notifications.new_review_by")}{" "}
       <Link
         to={
           review.user_author
@@ -198,6 +200,7 @@ export function NotificationOrderComment(props: { notif: Notification }) {
   const { notif } = props
   const theme = useTheme<ExtendedTheme>()
   const comment = useMemo(() => notif.entity as OrderComment, [notif.entity])
+  const { t } = useTranslation()
 
   return (
     <NotificationBase
@@ -205,7 +208,7 @@ export function NotificationOrderComment(props: { notif: Notification }) {
       to={`/contract/${comment.order_id}`}
       notif={notif}
     >
-      New Order Comment Left by{" "}
+      {t("notifications.new_order_comment_by")}{" "}
       <Link
         to={`/user/${comment.author.username}`}
         style={{
@@ -223,6 +226,7 @@ export function NotificationOrderMessage(props: { notif: Notification }) {
   const { notif } = props
   const theme = useTheme<ExtendedTheme>()
   const comment = useMemo(() => notif.entity as Order, [notif.entity])
+  const { t } = useTranslation()
 
   return (
     <NotificationBase
@@ -230,7 +234,7 @@ export function NotificationOrderMessage(props: { notif: Notification }) {
       to={`/contract/${comment.order_id}`}
       notif={notif}
     >
-      New Order Message by{" "}
+      {t("notifications.new_order_message_by")}{" "}
       <Link
         to={`/user/${notif.actors[0].username}`}
         style={{
@@ -248,6 +252,7 @@ export function NotificationOrderCreate(props: { notif: Notification }) {
   const { notif } = props
   const theme = useTheme<ExtendedTheme>()
   const order = useMemo(() => notif.entity as Order, [notif.entity])
+  const { t } = useTranslation()
 
   return (
     <NotificationBase
@@ -255,7 +260,7 @@ export function NotificationOrderCreate(props: { notif: Notification }) {
       to={`/contract/${order.order_id}`}
       notif={notif}
     >
-      New Order Placed by{" "}
+      {t("notifications.new_order_placed_by")}{" "}
       <Link
         to={`/user/${order.customer}`}
         style={{
@@ -273,6 +278,7 @@ export function NotificationOfferCreate(props: { notif: Notification }) {
   const { notif } = props
   const theme = useTheme<ExtendedTheme>()
   const offer = useMemo(() => notif.entity as OfferSession, [notif.entity])
+  const { t } = useTranslation()
 
   return (
     <NotificationBase
@@ -281,8 +287,8 @@ export function NotificationOfferCreate(props: { notif: Notification }) {
       notif={notif}
     >
       {notif.action === "offer_create"
-        ? "New Offer Received From"
-        : "Counter Offer Received From"}{" "}
+        ? t("notifications.new_offer_received_from")
+        : t("notifications.counter_offer_received_from")}{" "}
       <Link
         to={`/user/${offer.customer.username}`}
         style={{
@@ -307,6 +313,7 @@ export function NotificationOrderUpdateStatus(props: { notif: Notification }) {
     | "in-progress"
     | "not-started"
     | "cancelled"
+  const { t } = useTranslation()
 
   return (
     <NotificationBase
@@ -314,7 +321,7 @@ export function NotificationOrderUpdateStatus(props: { notif: Notification }) {
       to={`/contract/${order.order_id}`}
       notif={notif}
     >
-      Order status updated to {status} by{" "}
+      {t("notifications.order_status_updated_to", { status })}{" "}
       <Link
         to={`/user/${notif.actors[0].username}`}
         style={{
@@ -333,12 +340,13 @@ export function NotificationContractorInvite(props: { notif: Notification }) {
   const [open, setOpen] = useState(false)
   const { notif } = props
   const invite = useMemo(() => notif.entity as ContractorInvite, [notif.entity])
+  const { t } = useTranslation()
 
   const [
-    acceptInvite, // This is the mutation trigger
+    acceptInvite,
   ] = useAcceptContractorInviteMutation()
   const [
-    declineInvite, // This is the mutation trigger
+    declineInvite,
   ] = useDeclineContractorInviteMutation()
 
   const issueAlert = useAlertHook()
@@ -346,7 +354,6 @@ export function NotificationContractorInvite(props: { notif: Notification }) {
   async function submitInviteForm(
     choice: "accept" | "decline",
   ): Promise<boolean | void> {
-    // event.preventDefault();
     const funs = {
       accept: acceptInvite,
       decline: declineInvite,
@@ -358,7 +365,7 @@ export function NotificationContractorInvite(props: { notif: Notification }) {
       .unwrap()
       .then(() => {
         issueAlert({
-          message: "Submitted!",
+          message: t("notifications.submitted"),
           severity: "success",
         })
       })
@@ -374,7 +381,7 @@ export function NotificationContractorInvite(props: { notif: Notification }) {
         onClick={() => setOpen((o) => !o)}
         notif={notif}
       >
-        Contractor invite from{" "}
+        {t("notifications.contractor_invite_from")}{" "}
         <Link
           to={`/contractor/${invite.spectrum_id}`}
           style={{
@@ -394,10 +401,10 @@ export function NotificationContractorInvite(props: { notif: Notification }) {
             sx={{ marginRight: 1, marginLeft: 1 }}
             onClick={() => submitInviteForm("accept")}
           >
-            Accept
+            {t("notifications.accept")}
           </Button>
           <Button color={"error"} onClick={() => submitInviteForm("decline")}>
-            Decline
+            {t("notifications.decline")}
           </Button>
         </ListItem>
       </Collapse>
@@ -410,6 +417,7 @@ export function NotificationBid(props: { notif: Notification }) {
   const theme = useTheme<ExtendedTheme>()
   const bid = useMemo(() => notif.entity as MarketBid, [notif.entity])
   const { data: listing } = useMarketGetListingByIDQuery(bid.listing_id)
+  const { t } = useTranslation()
 
   return (
     <NotificationBase
@@ -417,7 +425,7 @@ export function NotificationBid(props: { notif: Notification }) {
       to={`/market/${bid.listing_id}`}
       notif={notif}
     >
-      New Bid Placed by{" "}
+      {t("notifications.new_bid_placed_by")}{" "}
       <Link
         to={
           bid.user_bidder
@@ -435,7 +443,7 @@ export function NotificationBid(props: { notif: Notification }) {
             : bid.contractor_bidder!.name}
         </UnderlineLink>
       </Link>{" "}
-      for{" "}
+      {t("notifications.for")}{" "}
       <Link
         to={`/market/${bid.listing_id}`}
         style={{
@@ -453,6 +461,7 @@ export function NotificationsButton() {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null)
   const notifOpen = Boolean(anchorEl)
   const theme = useTheme<ExtendedTheme>()
+  const { t } = useTranslation()
 
   const { data: notifications } = useGetNotificationsQuery(undefined, {
     pollingInterval: 60000,
@@ -467,7 +476,6 @@ export function NotificationsButton() {
   }
 
   const [updateNotifications] = useNotificationUpdateMutation()
-
   const [deleteNotifications] = useNotificationDeleteMutation()
 
   const markAllReadCallback = useCallback(async () => {
@@ -488,8 +496,6 @@ export function NotificationsButton() {
       )
     }
   }, [deleteNotifications, notifications])
-
-  const { t } = useTranslation()
 
   return (
     <>
@@ -537,12 +543,12 @@ export function NotificationsButton() {
             {t("notifications.notifications")}
           </Typography>
           <Box>
-            <Tooltip title={"Clear all notifications"}>
+            <Tooltip title={t("notifications.clear_all")}>
               <IconButton onClick={deleteAllCallback}>
                 <ClearAllRounded />
               </IconButton>
             </Tooltip>
-            <Tooltip title={"Mark all as read"}>
+            <Tooltip title={t("notifications.mark_all_as_read")}>
               <IconButton onClick={markAllReadCallback}>
                 <MarkEmailReadRounded />
               </IconButton>
