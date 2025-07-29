@@ -31,3 +31,4 @@ packages/*/build
 packages/*/dist
 
 docker-compose.override.yml
+.env
