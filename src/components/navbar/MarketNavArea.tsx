@@ -402,7 +402,9 @@ export function MarketNavArea(props: { top?: boolean }) {
                 >
                   <MenuItem value={"any"}>{t("market.any")}</MenuItem>
                   <MenuItem value={"sale"}>{t("market.sale")}</MenuItem>
-                  <MenuItem value={"aggregate"}>{t("market.aggregate")}</MenuItem>
+                  <MenuItem value={"aggregate"}>
+                    {t("market.aggregate")}
+                  </MenuItem>
                   <MenuItem value={"auction"}>{t("market.auction")}</MenuItem>
                 </TextField>
               </Grid>
