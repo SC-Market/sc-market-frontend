@@ -1,0 +1,62 @@
+{
+  "navbar": {
+    "toggle_drawer": "Toggle Drawer"
+  },
+  "notifications": {
+    "notifications": "Notifications",
+    "delete_notification": "Delete notification",
+    "new_review_by": "New Review Left by",
+    "new_order_comment_by": "New Order Comment Left by",
+    "new_order_message_by": "New Order Message by",
+    "new_order_placed_by": "New Order Placed by",
+    "new_offer_received_from": "New Offer Received From",
+    "counter_offer_received_from": "Counter Offer Received From",
+    "order_status_updated_to": "Order status updated to {{status}} by",
+    "contractor_invite_from": "Contractor invite from",
+    "submitted": "Submitted!",
+    "accept": "Accept",
+    "decline": "Decline",
+    "new_bid_placed_by": "New Bid Placed by",
+    "for": "for",
+    "clear_all": "Clear all notifications",
+    "mark_all_as_read": "Mark all as read"
+  },
+  "market": {
+    "search_query": "Search Query",
+    "filters": "Filters",
+    "search": "Search",
+    "sort_by": "Sort By",
+    "none": "None",
+    "title": "Title",
+    "price_low_to_high": "Price (Low to High)",
+    "price_high_to_low": "Price (High to Low)",
+    "quantity_low_to_high": "Quantity Available (Low to High)",
+    "quantity_high_to_low": "Quantity Available (High to Low)",
+    "date_old_to_new": "Date Listed (Old to New)",
+    "date_new_to_old": "Date Listed (New to Old)",
+    "recent_activity": "Recent Activity",
+    "rating_high_to_low": "Rating (High to Low)",
+    "quantity_available": "Quantity Available",
+    "sale_type": "Sale Type",
+    "any": "Any",
+    "sale": "Sale",
+    "aggregate": "Aggregate",
+    "auction": "Auction",
+    "min_cost": "Min Cost",
+    "max_cost": "Max Cost"
+  },
+  "availability": {
+    "select_availability": "Select Availability",
+    "save": "Save",
+    "availability_for": "Availability for"
+  },
+  "sidebar": {
+    "SC Market": "SC Market",
+    "toggle_drawer": "Toggle Drawer"
+  },
+  "sidebar_actor_select": {
+    "select_role": "Select Role",
+    "login_to_select_role": "Login to Select Role",
+    "avatar_of": "Avatar of {{username}}"
+  }
+}
