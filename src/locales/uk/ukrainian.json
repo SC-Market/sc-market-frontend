@@ -51,7 +51,7 @@
     "availability_for": "Доступність для"
   },
   "sidebar": {
-    "SC Market": "SC Маркет",
+    "sc_market": "SC Маркет",
     "toggle_drawer": "Перемкнути меню"
   },
   "sidebar_actor_select": {
