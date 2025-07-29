@@ -34,6 +34,7 @@ import { useGetContractorBySpectrumIDQuery } from "../../store/contractor"
 import { CURRENT_CUSTOM_ORG } from "../../hooks/contractor/CustomDomain"
 import { Stack } from "@mui/system"
 import SCMarketLogo from "../../assets/scmarket-logo.png"
+import { useTranslation } from "react-i18next"
 
 export function SidebarDropdown(props: SidebarItemProps) {
   const [open, setOpen] = useState(false)
@@ -43,6 +44,7 @@ export function SidebarDropdown(props: SidebarItemProps) {
   const anyChild = props.children?.some(
     (child) => !!matchPath(loc.pathname, child.to || ""),
   )
+  const { t } = useTranslation()
 
   const contrast = theme.palette.getContrastText(
     theme.palette.background.sidebar,
@@ -87,7 +89,7 @@ export function SidebarDropdown(props: SidebarItemProps) {
             }}
             variant={"subtitle2"}
           >
-            {text}
+            {t(text)}
           </Typography>
         </ListItemText>
         {chip ? (
@@ -135,6 +137,7 @@ export function SidebarLinkBody(props: SidebarItemProps & { to: string }) {
   const selected = !!matchPath(loc.pathname, props.to || "")
   const { icon, text, chip } = props
   const theme: Theme = useTheme()
+  const { t } = useTranslation()
 
   const xs = useMediaQuery(theme.breakpoints.down("sm"))
   const [drawerOpen, setDrawerOpen] = useDrawerOpen()
@@ -186,7 +189,7 @@ export function SidebarLinkBody(props: SidebarItemProps & { to: string }) {
             }}
             variant={"subtitle2"}
           >
-            {text}
+            {t(text)}
           </Typography>
         </ListItemText>
         {chip ? (
@@ -271,6 +274,7 @@ export interface SidebarSectionProps {
 
 export function Sidebar() {
   const theme: ExtendedTheme = useTheme()
+  const { t } = useTranslation()
   const { data: profile, error: profile_error } = useGetUserProfileQuery()
   const [drawerOpen, setDrawerOpen] = useDrawerOpen()
   const [currentOrgObj, setCurrentOrgObj] = useCurrentOrg()
@@ -420,7 +424,7 @@ export function Sidebar() {
                 />
 
                 <Typography color={"white"} fontWeight={600}>
-                  SC Market
+                  {t("sidebar.sc_market")}
                 </Typography>
               </Stack>
             </NavLink>
@@ -482,7 +486,7 @@ export function Sidebar() {
                       }}
                       variant={"body2"}
                     >
-                      {item.title}
+                      {t(item.title)}
                     </Typography>
                   </ListSubheader>
                 }
