@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react"
+import React, { useEffect, useState } from "react"
 import {
   Avatar,
   Box,
@@ -16,6 +16,7 @@ import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownR
 import { useGetContractorBySpectrumIDQuery } from "../../store/contractor"
 import { useTheme } from "@mui/material/styles"
 import { Stack } from "@mui/system"
+import { useTranslation } from "react-i18next"
 
 const localTheme = createTheme({
   palette: {
@@ -24,6 +25,7 @@ const localTheme = createTheme({
 })
 
 export function SidebarActorSelect() {
+  const { t } = useTranslation()
   const { data: profile } = useGetUserProfileQuery()
 
   const [cookies, setCookie, deleteCookie] = useCookies(["current_contractor"])
@@ -33,7 +35,7 @@ export function SidebarActorSelect() {
 
   const contractor = useGetContractorBySpectrumIDQuery(contractorSpectrumID!, {
     skip: !contractorSpectrumID || contractorSpectrumID === "_",
-  }) // Contractor is whatever the current selection is
+  })
 
   const [, setCurrentOrg] = useCurrentOrg()
 
@@ -65,7 +67,7 @@ export function SidebarActorSelect() {
     setCurrentOrg,
     setCookie,
     contractorSpectrumID,
-  ]) // only when contractor changes
+  ])
 
   const theme = useTheme()
 
@@ -97,6 +99,7 @@ export function SidebarActorSelect() {
             },
           }}
           sx={{ borderRadius: 32 }}
+          label={t("sidebar_actor_select.select_role")}
         >
           {profile ? (
             [
@@ -110,13 +113,13 @@ export function SidebarActorSelect() {
                   <Avatar
                     variant={"rounded"}
                     src={profile?.avatar}
-                    alt={`Avatar of ${profile.username}`}
+                    alt={t("sidebar_actor_select.avatar_of", { username: profile.username })}
                     sx={{ height: 48, width: 48 }}
                   />
                   <Box>{profile.display_name}</Box>
                 </Stack>
               </MenuItem>,
-              ...profile.contractors.map((choice, idx) => (
+              ...profile.contractors.map((choice) => (
                 <MenuItem value={choice.spectrum_id} key={choice.spectrum_id}>
                   <Stack
                     direction={"row"}
@@ -129,7 +132,7 @@ export function SidebarActorSelect() {
                     <Avatar
                       variant={"rounded"}
                       src={choice?.avatar}
-                      alt={`Avatar of ${choice.avatar}`}
+                      alt={t("sidebar_actor_select.avatar_of", { username: choice.avatar })}
                       sx={{ height: 48, width: 48 }}
                     />
                     <Typography style={{ whiteSpace: "normal" }}>
@@ -141,7 +144,7 @@ export function SidebarActorSelect() {
             ]
           ) : (
             <MenuItem value={contractorSpectrumID}>
-              Login to Select Role
+              {t("sidebar_actor_select.login_to_select_role")}
             </MenuItem>
           )}
         </TextField>
