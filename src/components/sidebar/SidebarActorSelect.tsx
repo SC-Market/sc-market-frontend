@@ -113,7 +113,9 @@ export function SidebarActorSelect() {
                   <Avatar
                     variant={"rounded"}
                     src={profile?.avatar}
-                    alt={t("sidebar_actor_select.avatar_of", { username: profile.username })}
+                    alt={t("sidebar_actor_select.avatar_of", {
+                      username: profile.username,
+                    })}
                     sx={{ height: 48, width: 48 }}
                   />
                   <Box>{profile.display_name}</Box>
@@ -132,7 +134,9 @@ export function SidebarActorSelect() {
                     <Avatar
                       variant={"rounded"}
                       src={choice?.avatar}
-                      alt={t("sidebar_actor_select.avatar_of", { username: choice.avatar })}
+                      alt={t("sidebar_actor_select.avatar_of", {
+                        username: choice.avatar,
+                      })}
                       sx={{ height: 48, width: 48 }}
                     />
                     <Typography style={{ whiteSpace: "normal" }}>
