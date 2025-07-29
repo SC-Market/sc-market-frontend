@@ -342,12 +342,8 @@ export function NotificationContractorInvite(props: { notif: Notification }) {
   const invite = useMemo(() => notif.entity as ContractorInvite, [notif.entity])
   const { t } = useTranslation()
 
-  const [
-    acceptInvite,
-  ] = useAcceptContractorInviteMutation()
-  const [
-    declineInvite,
-  ] = useDeclineContractorInviteMutation()
+  const [acceptInvite] = useAcceptContractorInviteMutation()
+  const [declineInvite] = useDeclineContractorInviteMutation()
 
   const issueAlert = useAlertHook()
 
