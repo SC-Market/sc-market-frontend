@@ -1,0 +1,62 @@
+{
+  "navbar": {
+    "toggle_drawer": "Перемкнути меню"
+  },
+  "notifications": {
+    "notifications": "Сповіщення",
+    "delete_notification": "Видалити сповіщення",
+    "new_review_by": "Новий відгук від",
+    "new_order_comment_by": "Новий коментар до замовлення від",
+    "new_order_message_by": "Нове повідомлення по замовленню від",
+    "new_order_placed_by": "Нове замовлення від",
+    "new_offer_received_from": "Нова пропозиція від",
+    "counter_offer_received_from": "Контрпропозиція від",
+    "order_status_updated_to": "Статус замовлення оновлено на {{status}} від",
+    "contractor_invite_from": "Запрошення підрядника від",
+    "submitted": "Відправлено!",
+    "accept": "Прийняти",
+    "decline": "Відхилити",
+    "new_bid_placed_by": "Нова ставка від",
+    "for": "для",
+    "clear_all": "Очистити всі сповіщення",
+    "mark_all_as_read": "Позначити всі як прочитані"
+  },
+  "market": {
+    "search_query": "Пошуковий запит",
+    "filters": "Фільтри",
+    "search": "Пошук",
+    "sort_by": "Сортувати за",
+    "none": "Відсутнє",
+    "title": "Назва",
+    "price_low_to_high": "Ціна (від низької до високої)",
+    "price_high_to_low": "Ціна (від високої до низької)",
+    "quantity_low_to_high": "Кількість (від меншої до більшої)",
+    "quantity_high_to_low": "Кількість (від більшої до меншої)",
+    "date_old_to_new": "Дата (від старої до нової)",
+    "date_new_to_old": "Дата (від нової до старої)",
+    "recent_activity": "Остання активність",
+    "rating_high_to_low": "Рейтинг (від високого до низького)",
+    "quantity_available": "Доступна кількість",
+    "sale_type": "Тип продажу",
+    "any": "Будь-який",
+    "sale": "Продаж",
+    "aggregate": "Агрегат",
+    "auction": "Аукціон",
+    "min_cost": "Мінімальна вартість",
+    "max_cost": "Максимальна вартість"
+  },
+  "availability": {
+    "select_availability": "Оберіть доступність",
+    "save": "Зберегти",
+    "availability_for": "Доступність для"
+  },
+  "sidebar": {
+    "SC Market": "SC Маркет",
+    "toggle_drawer": "Перемкнути меню"
+  },
+  "sidebar_actor_select": {
+    "select_role": "Оберіть роль",
+    "login_to_select_role": "Увійдіть, щоб обрати роль",
+    "avatar_of": "Аватар {{username}}"
+  }
+}
