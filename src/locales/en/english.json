@@ -51,7 +51,7 @@
     "availability_for": "Availability for"
   },
   "sidebar": {
-    "SC Market": "SC Market",
+    "sc_market": "SC Market",
     "toggle_drawer": "Toggle Drawer"
   },
   "sidebar_actor_select": {
