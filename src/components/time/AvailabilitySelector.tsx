@@ -195,7 +195,9 @@ export function AvailabilitySelector(props: {
             <tbody>
               <tr>
                 {[...Array(7).keys()].map((i) => (
-                  <th key={i}>{moment().startOf("week").add(i, "days").format("ddd")}</th>
+                  <th key={i}>
+                    {moment().startOf("week").add(i, "days").format("ddd")}
+                  </th>
                 ))}
               </tr>
 
@@ -292,7 +294,9 @@ export function AvailabilityDisplay(
           <tbody>
             <tr>
               {[...Array(7).keys()].map((i) => (
-                <th key={i}>{moment().startOf("week").add(i, "days").format("ddd")}</th>
+                <th key={i}>
+                  {moment().startOf("week").add(i, "days").format("ddd")}
+                </th>
               ))}
             </tr>
 
