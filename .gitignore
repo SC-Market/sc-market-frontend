@@ -1,34 +1,52 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# dependencies
-/node_modules
+# ========================
+# 📦 Dependencies
+# ========================
+node_modules/
+packages/*/node_modules
 /.pnp
 .pnp.js
 .yarn/
 .yarnrc.yml
 
-# testing
+# ========================
+# 🧪 Testing
+# ========================
 /coverage
 
-# production
+# ========================
+# 🚀 Production builds
+# ========================
 /build
 /dist
+packages/*/build
+packages/*/dist
 
-# misc
-.DS_Store
+# ========================
+# ⚙️ Environment & Config
+# ========================
+.env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
+docker-compose.override.yml
 
+# ========================
+# 🪲 Logs & Debug
+# ========================
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-node_modules/
-packages/*/node_modules
-packages/*/build
-packages/*/dist
+# ========================
+# 🍏 macOS system files
+# ========================
+.DS_Store
 
-docker-compose.override.yml
-.env
+# ========================
+# ⚠️ Misc files to ignore
+# ========================
+package-lock.json
+public/.user.ini
