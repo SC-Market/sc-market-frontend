@@ -33,9 +33,11 @@ import {
   RecruitingSearchState,
   useRecruitingSearch,
 } from "../../hooks/recruiting/RecruitingSearch"
+import { useTranslation } from "react-i18next" // adde localisation
 
 export function RecruitingSidebar() {
   const theme: ExtendedTheme = useTheme()
+  const { t } = useTranslation()
 
   // Search fields
   const [fields, setFields] = useState<ContractorKindIconKey[]>([])
@@ -117,11 +119,7 @@ export function RecruitingSidebar() {
       }
     >
       <Box
-        sx={{
-          ...theme.mixins.toolbar,
-          position: "relative",
-          width: "100%",
-        }}
+        sx={{ ...theme.mixins.toolbar, position: "relative", width: "100%" }}
       />
       <Box
         sx={{
@@ -143,7 +141,7 @@ export function RecruitingSidebar() {
           <Grid item xs={12}>
             <TextField
               fullWidth
-              label={"Search"}
+              label={t("recruiting_sidebar.search")}
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -160,7 +158,7 @@ export function RecruitingSidebar() {
           </Grid>
           <Grid item xs={12}>
             <Typography variant={"subtitle2"} fontWeight={"bold"}>
-              Sorting
+              {t("recruiting_sidebar.sorting")}
             </Typography>
           </Grid>
           <Grid item xs={12}>
@@ -168,37 +166,54 @@ export function RecruitingSidebar() {
               select
               fullWidth
               value={sorting}
-              label="Sort Attribute"
+              label={t("recruiting_sidebar.sort_attribute")}
               onChange={handleSortChange}
               color={"secondary"}
               SelectProps={{
                 IconComponent: KeyboardArrowDownRoundedIcon,
               }}
             >
-              <MenuItem value={"activity"}>Activity</MenuItem>
-              {/*<MenuItem value={'activity-reverse'}>Name (Z to A)</MenuItem>*/}
-              <MenuItem value={"all-time"}>Upvotes (All time)</MenuItem>
-              <MenuItem value={"rating"}>Rating (High to Low)</MenuItem>
-              <MenuItem value={"rating-reverse"}>Rating (Low to High)</MenuItem>
-              <MenuItem value={"name-reverse"}>Name (A to Z)</MenuItem>
-              <MenuItem value={"name"}>Name (Z to A)</MenuItem>
-              <MenuItem value={"members"}>Member Count (High to Low)</MenuItem>
+              <MenuItem value={"activity"}>
+                {t("recruiting_sidebar.sort.activity")}
+              </MenuItem>
+              <MenuItem value={"all-time"}>
+                {t("recruiting_sidebar.sort.upvotes_all_time")}
+              </MenuItem>
+              <MenuItem value={"rating"}>
+                {t("recruiting_sidebar.sort.rating_high")}
+              </MenuItem>
+              <MenuItem value={"rating-reverse"}>
+                {t("recruiting_sidebar.sort.rating_low")}
+              </MenuItem>
+              <MenuItem value={"name-reverse"}>
+                {t("recruiting_sidebar.sort.name_a_z")}
+              </MenuItem>
+              <MenuItem value={"name"}>
+                {t("recruiting_sidebar.sort.name_z_a")}
+              </MenuItem>
+              <MenuItem value={"members"}>
+                {t("recruiting_sidebar.sort.members_high")}
+              </MenuItem>
               <MenuItem value={"members-reverse"}>
-                Member Count (Low to High)
+                {t("recruiting_sidebar.sort.members_low")}
               </MenuItem>
               <MenuItem value={"date-reverse"}>
-                Date Org Listed (Old to New)
+                {t("recruiting_sidebar.sort.date_old")}
               </MenuItem>
-              <MenuItem value={"date"}>Date Org Listed (New to Old)</MenuItem>
+              <MenuItem value={"date"}>
+                {t("recruiting_sidebar.sort.date_new")}
+              </MenuItem>
               <MenuItem value={"post-date-reverse"}>
-                Date Posted (Old to New)
+                {t("recruiting_sidebar.sort.post_old")}
               </MenuItem>
-              <MenuItem value={"post-date"}>Date Posted (New to Old)</MenuItem>
+              <MenuItem value={"post-date"}>
+                {t("recruiting_sidebar.sort.post_new")}
+              </MenuItem>
             </TextField>
           </Grid>
           <Grid item xs={12}>
             <Typography variant={"subtitle2"} fontWeight={"bold"}>
-              Filtering
+              {t("recruiting_sidebar.filtering")}
             </Typography>
           </Grid>
           <Grid item xs={12}>
@@ -218,8 +233,8 @@ export function RecruitingSidebar() {
                 <TextField
                   {...params}
                   variant="outlined"
-                  label="Org Tags"
-                  placeholder="mining"
+                  label={t("recruiting_sidebar.org_tags")}
+                  placeholder={t("recruiting_sidebar.org_tags_placeholder")}
                   fullWidth
                   SelectProps={{
                     IconComponent: KeyboardArrowDownRoundedIcon,
@@ -242,7 +257,7 @@ export function RecruitingSidebar() {
           </Grid>
           <Grid item xs={12}>
             <Typography variant={"subtitle2"} fontWeight={"bold"}>
-              Minimum Rating
+              {t("recruiting_sidebar.min_rating")}
             </Typography>
           </Grid>
 

@@ -5,6 +5,7 @@ import { CookieRounded } from "@mui/icons-material"
 import ReactGA from "react-ga4"
 import { useLocation } from "react-router-dom"
 import { useTheme } from "@mui/material/styles"
+import { useTranslation } from "react-i18next" // Added for localisation
 
 const TRACKING_ID = "G-KT8SEND6F2" // OUR_TRACKING_ID
 
@@ -12,6 +13,8 @@ export function CookieConsent() {
   const [cookies, setCookie] = useCookies(["cookie_consent"])
 
   const location = useLocation()
+
+  const { t } = useTranslation() // Added for localisation
 
   useEffect(() => {
     if (cookies.cookie_consent === "all") {
@@ -74,7 +77,7 @@ export function CookieConsent() {
                   setCookie("cookie_consent", "all", { sameSite: "strict" })
                 }
               >
-                Accept All
+                {t("cookie_consent.accept_all")}
               </Button>
             </Grid>
             <Grid item>
@@ -87,19 +90,14 @@ export function CookieConsent() {
                   })
                 }
               >
-                Accept Necessary
+                {t("cookie_consent.accept_necessary")}
               </Button>
             </Grid>
           </Grid>
         }
       >
-        <AlertTitle>Cookie Consent</AlertTitle>
-        <Box maxWidth={500}>
-          We use cookies to improve the user experience and analyze its
-          performance (i.e. Google Analytics). Click “Accept All” to accept all
-          cookies or &quot;Accept Necessary&quot; to accept only necessary
-          cookies.
-        </Box>
+        <AlertTitle>{t("cookie_consent.title")}</AlertTitle>
+        <Box maxWidth={500}>{t("cookie_consent.description")}</Box>
       </Alert>
     </Snackbar>
   )

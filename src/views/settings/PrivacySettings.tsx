@@ -13,10 +13,12 @@ import {
 } from "@mui/material"
 import { AccountSettingsBody } from "../../hooks/login/UserProfile"
 import { BACKEND_URL } from "../../util/constants"
+import { useTranslation } from "react-i18next" // ✅ локалізація
 
 export function PrivacySettings() {
   const { data: profile, refetch } = useGetUserProfileQuery()
   const [updateProfile] = useProfileUpdateSettingsMutation()
+  const { t } = useTranslation()
 
   const handleUpdate = useCallback(
     (body: AccountSettingsBody) => {
@@ -27,7 +29,7 @@ export function PrivacySettings() {
   )
 
   return (
-    <FlatSection title={"Privacy"}>
+    <FlatSection title={t("privacy_settings.title")}>
       <Grid item>
         <FormControlLabel
           control={
@@ -39,7 +41,7 @@ export function PrivacySettings() {
               }
             />
           }
-          label="Publicly Display Discord Profile"
+          label={t("privacy_settings.public_discord")}
           labelPlacement="start"
         />
       </Grid>
@@ -54,24 +56,21 @@ export function PrivacySettings() {
               }
             />
           }
-          label="Share Discord Profile with Sellers"
+          label={t("privacy_settings.share_discord_with_sellers")}
           labelPlacement="start"
         />
       </Grid>
       <Grid item>
         <Typography variant={"subtitle1"} color={"text.secondary"}>
-          Request my Data
+          {t("privacy_settings.request_data_title")}
         </Typography>
         <Typography variant={"body2"}>
-          Request your data associated with the site. This function is a work in
-          progress and does not represent all of your data. We are working to
-          make this as complete as possible, but for now this contains most of
-          the information associated with your user account.
+          {t("privacy_settings.request_data_description")}
         </Typography>
       </Grid>
       <Grid item>
         <Button href={`${BACKEND_URL}/api/profile/my_data`} target={"_blank"}>
-          Request Data
+          {t("privacy_settings.request_data_button")}
         </Button>
       </Grid>
     </FlatSection>

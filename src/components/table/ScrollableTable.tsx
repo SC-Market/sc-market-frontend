@@ -18,6 +18,7 @@ import { TransparentHeaderCell } from "./TransparentHeaderCell"
 import { SxProps } from "@mui/system"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { HeadCell } from "./PaginatedTable"
+import { useTranslation } from "react-i18next" // added
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -62,6 +63,9 @@ function EnhancedTableHead<T>(props: EnhancedTableProps<T>) {
     headCells,
     disableSelect,
   } = props
+
+  const { t } = useTranslation() // added
+
   const createSortHandler =
     (property: keyof T) => (event: React.MouseEvent<unknown>) => {
       onRequestSort(event, property)
@@ -78,7 +82,7 @@ function EnhancedTableHead<T>(props: EnhancedTableProps<T>) {
               checked={rowCount > 0 && numSelected === rowCount}
               onChange={onSelectAllClick}
               inputProps={{
-                "aria-label": "select all desserts",
+                "aria-label": t("select_all_items"),
               }}
             />
           </TransparentHeaderCell>
@@ -104,8 +108,8 @@ function EnhancedTableHead<T>(props: EnhancedTableProps<T>) {
                 {orderBy === headCell.id ? (
                   <Box component="span" sx={visuallyHidden}>
                     {order === "desc"
-                      ? "sorted descending"
-                      : "sorted ascending"}
+                      ? t("sorted_descending")
+                      : t("sorted_ascending")}
                   </Box>
                 ) : null}
               </TableSortLabel>

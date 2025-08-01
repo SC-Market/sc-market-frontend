@@ -3,6 +3,7 @@ import React, { useMemo } from "react"
 import { useMarketGetMyListingsQuery } from "../../store/market"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { UniqueListing } from "../../datatypes/MarketListing"
+import { useTranslation } from "react-i18next"
 
 export interface SelectMarketListingProps {
   listing_id: string | null
@@ -11,6 +12,7 @@ export interface SelectMarketListingProps {
 }
 
 export function SelectMarketListing(props: SelectMarketListingProps) {
+  const { t } = useTranslation()
   const [currentOrg] = useCurrentOrg()
   const { data: listings } = useMarketGetMyListingsQuery(
     currentOrg?.spectrum_id,
@@ -53,7 +55,7 @@ export function SelectMarketListing(props: SelectMarketListingProps) {
       renderInput={(params) => (
         <TextField
           {...params}
-          label="Select Market Listing"
+          label={t("selectMarketListing.label", "Select Market Listing")}
           {...props.TextfieldProps}
         />
       )}

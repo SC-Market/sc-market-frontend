@@ -14,8 +14,11 @@ import {
 } from "../../datatypes/MarketListing"
 import { useMarketUpdateListingMutation } from "../../store/market"
 import LoadingButton from "@mui/lab/LoadingButton"
+import { useTranslation } from "react-i18next" // added
 
 export function MarketActions() {
+  const { t } = useTranslation() // added
+
   return (
     <Grid item>
       <Grid container spacing={2}>
@@ -29,8 +32,12 @@ export function MarketActions() {
               startIcon={<CreateRounded />}
               variant={"contained"}
               size={"large"}
+              title={t(
+                "marketActions.createListingTooltip",
+                "Create a new listing",
+              )} // added
             >
-              Create Listing
+              {t("marketActions.createListing", "Create Listing")}
             </Button>
           </Link>
         </Grid>
@@ -45,8 +52,12 @@ export function MarketActions() {
               startIcon={<ShoppingCartRoundedIcon />}
               variant={"contained"}
               size={"large"}
+              title={t(
+                "marketActions.myCartTooltip",
+                "View your shopping cart",
+              )} // added
             >
-              My Cart
+              {t("marketActions.myCart", "My Cart")}
             </Button>
           </Link>
         </Grid>
@@ -56,6 +67,7 @@ export function MarketActions() {
 }
 
 export function ManageListingsActions() {
+  const { t } = useTranslation() // added
   const [selectedListings] = useContext(ItemStockContext)!
 
   const [updateListing, { isLoading }] = useMarketUpdateListingMutation()
@@ -84,8 +96,12 @@ export function ManageListingsActions() {
             onClick={() => {
               updateListingCallback({ status: "active" })
             }}
+            title={t(
+              "manageListingsActions.activateTooltip",
+              "Activate selected listings",
+            )} // added
           >
-            Activate Listings
+            {t("manageListingsActions.activateListings", "Activate Listings")}
           </LoadingButton>
         </Grid>
 
@@ -99,8 +115,15 @@ export function ManageListingsActions() {
             onClick={() => {
               updateListingCallback({ status: "inactive" })
             }}
+            title={t(
+              "manageListingsActions.deactivateTooltip",
+              "Deactivate selected listings",
+            )} // added
           >
-            Deactivate Listings
+            {t(
+              "manageListingsActions.deactivateListings",
+              "Deactivate Listings",
+            )}
           </LoadingButton>
         </Grid>
 
@@ -113,6 +136,8 @@ export function ManageListingsActions() {
 }
 
 export function BuyOrderActions() {
+  const { t } = useTranslation() // added
+
   return (
     <Grid item>
       <Grid container spacing={2}>
@@ -126,8 +151,12 @@ export function BuyOrderActions() {
               startIcon={<CreateRounded />}
               variant={"contained"}
               size={"large"}
+              title={t(
+                "buyOrderActions.createBuyOrderTooltip",
+                "Create a new buy order",
+              )} // added
             >
-              Create Buy Order
+              {t("buyOrderActions.createBuyOrder", "Create Buy Order")}
             </Button>
           </Link>
         </Grid>

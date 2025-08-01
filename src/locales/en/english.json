@@ -1,25 +1,81 @@
 {
-  "navbar": {
-    "toggle_drawer": "Toggle Drawer"
+  "admin": {
+    "orderStats": "Admin Order Stats"
   },
-  "notifications": {
-    "notifications": "Notifications",
-    "delete_notification": "Delete notification",
-    "new_review_by": "New Review Left by",
-    "new_order_comment_by": "New Order Comment Left by",
-    "new_order_message_by": "New Order Message by",
-    "new_order_placed_by": "New Order Placed by",
-    "new_offer_received_from": "New Offer Received From",
-    "counter_offer_received_from": "Counter Offer Received From",
-    "order_status_updated_to": "Order status updated to {{status}} by",
-    "contractor_invite_from": "Contractor invite from",
-    "submitted": "Submitted!",
-    "accept": "Accept",
-    "decline": "Decline",
-    "new_bid_placed_by": "New Bid Placed by",
-    "for": "for",
-    "clear_all": "Clear all notifications",
-    "mark_all_as_read": "Mark all as read"
+  "adminExpressVerify": {
+    "title": "Express Verify User",
+    "ownerDiscordId": "Owner Discord ID",
+    "ownerUsername": "Owner Username*",
+    "spectrumId": "Org Spectrum ID*",
+    "submit": "Submit",
+    "success": "Submitted!",
+    "failure": "Failed to submit! {{reason}}"
+  },
+  "auth": {
+    "title": "Registration",
+    "email": "Email",
+    "username": "Username",
+    "password": "Password",
+    "repeatPassword": "Repeat Password",
+    "loginWith": "Login with",
+    "terms": "By clicking here, you agree to our Terms of Service",
+    "submit": "Submit",
+    "loginWithDiscord": "Login with Discord",
+    "accountLink": "Account Link",
+    "authenticateWithRSI": "Authenticate with RSI"
+  },
+  "availability": {
+    "select_availability": "Select Availability",
+    "save": "Save",
+    "availability_for": "Availability for"
+  },
+  "buyOrderActions": {
+    "createBuyOrder": "Create Buy Order",
+    "createBuyOrderTooltip": "Create a new buy order"
+  },
+  "commentVotes": {
+    "upvoteTooltip": "Upvote this comment",
+    "downvoteTooltip": "Downvote this comment"
+  },
+  "cookie_consent": {
+    "title": "Cookie Consent",
+    "description": "We use cookies to improve the user experience and analyze its performance (i.e. Google Analytics). Click “Accept All” to accept all cookies or \"Accept Necessary\" to accept only necessary cookies.",
+    "accept_all": "Accept All",
+    "accept_necessary": "Accept Necessary"
+  },
+  "footer": {
+    "support": "Support",
+    "discord": "Discord",
+    "discordBot": "Discord Bot",
+    "wiki": "Wiki",
+    "donate": "Donate",
+    "github": "Github",
+    "privacyPolicy": "Privacy Policy",
+    "termsOfService": "Terms of Service",
+    "copyright": "Copyright ©",
+    "trademark": "Star Citizen®, Squadron 42®, Roberts Space Industries®, and Cloud Imperium® are registered trademarks of Cloud Imperium Rights LLC",
+    "unofficial": "This is an unofficial Star Citizen fansite, not affiliated with the Cloud Imperium group of companies. All content on this site not authored by its host or users are property of their respective owners",
+    "thanksTo": "Thank you to",
+    "ladyFleur": "LadyFleur",
+    "forLogo": "for the site logo, and to",
+    "starCitizenApi": "StarCitizen-API",
+    "nexd": "NEXD",
+    "and": "and",
+    "starCitizenWiki": "Star Citizen Wiki",
+    "forTheirApis": "for their APIs.",
+    "referralCode": "Use our referral code:"
+  },
+  "listing": {
+    "95PercentRating25PlusTransactions": "95%+ rating and 25+ transactions",
+    "90PercentRating25PlusTransactions": "90%+ rating and 25+ transactions",
+    "tenPlusFiveStarStreak": "10+ 5 star streak",
+    "fivePlusFiveStarStreak": "5+ 5 star streak"
+  },
+  "manageListingsActions": {
+    "activateListings": "Activate Listings",
+    "activateTooltip": "Activate selected listings",
+    "deactivateListings": "Deactivate Listings",
+    "deactivateTooltip": "Deactivate selected listings"
   },
   "market": {
     "search_query": "Search Query",
@@ -43,20 +99,237 @@
     "aggregate": "Aggregate",
     "auction": "Auction",
     "min_cost": "Min Cost",
-    "max_cost": "Max Cost"
+    "max_cost": "Max Cost",
+    "item_type": "Item Type",
+    "item_name": "Item Name",
+    "other_category": "Other",
+    "allListings": "All Market Listings",
+    "toggleSidebar": "toggle market sidebar",
+    "activeListings": "Active Listings",
+    "inactiveListings": "Inactive Listings",
+    "archivedListings": "Archived Listings"
   },
-  "availability": {
-    "select_availability": "Select Availability",
-    "save": "Save",
-    "availability_for": "Availability for"
+  "marketActions": {
+    "createListing": "Create Listing",
+    "createListingTooltip": "Create a new listing",
+    "myCart": "My Cart",
+    "myCartTooltip": "View your shopping cart"
+  },
+  "navigation": {
+    "goBack": "Go Back"
+  },
+  "notifications": {
+    "notifications": "Notifications",
+    "delete_notification": "Delete notification",
+    "new_review_by": "New Review Left by",
+    "new_order_comment_by": "New Order Comment Left by",
+    "new_order_message_by": "New Order Message by",
+    "new_order_placed_by": "New Order Placed by",
+    "new_offer_received_from": "New Offer Received From",
+    "counter_offer_received_from": "Counter Offer Received From",
+    "order_status_updated_to": "Order status updated to {{status}} by",
+    "contractor_invite_from": "Contractor invite from",
+    "submitted": "Submitted!",
+    "accept": "Accept",
+    "decline": "Decline",
+    "new_bid_placed_by": "New Bid Placed by",
+    "for": "for",
+    "clear_all": "Clear all notifications",
+    "mark_all_as_read": "Mark all as read"
+  },
+  "recruitmentVotes": {
+    "upvoteButtonTooltip": "Upvote this post"
+  },
+  "recruiting_sidebar": {
+    "search": "Search",
+    "sorting": "Sorting",
+    "sort_attribute": "Sort Attribute",
+    "sort": {
+      "activity": "Activity",
+      "upvotes_all_time": "Upvotes (All time)",
+      "rating_high": "Rating (High to Low)",
+      "rating_low": "Rating (Low to High)",
+      "name_a_z": "Name (A to Z)",
+      "name_z_a": "Name (Z to A)",
+      "members_high": "Member Count (High to Low)",
+      "members_low": "Member Count (Low to High)",
+      "date_old": "Date Org Listed (Old to New)",
+      "date_new": "Date Org Listed (New to Old)",
+      "post_old": "Date Posted (Old to New)",
+      "post_new": "Date Posted (New to Old)"
+    },
+    "filtering": "Filtering",
+    "org_tags": "Org Tags",
+    "org_tags_placeholder": "mining",
+    "min_rating": "Minimum Rating"
+  },
+  "selectLocation": {
+    "title": "Location",
+    "inputLabel": "Source (Optional)",
+    "helperText": "For Escort and Transport, for example, from where to where will the order occur? For Support, where should the contractor find you?"
+  },
+  "selectMarketListing": {
+    "label": "Select Market Listing"
+  },
+  "settings": {
+    "title": "Settings",
+    "tabs": {
+      "profile": "Profile",
+      "privacy": "Privacy",
+      "discordIntegration": "Discord Integration",
+      "market": "Market",
+      "contractors": "Contractors"
+    },
+    "profile": {
+      "updateAndVerify": "Update Username and Re-Verify Account",
+      "authenticateWithRSI": "Authenticate with RSI",
+      "viewUserProfile": "View User Profile"
+    }
   },
   "sidebar": {
+    "dashboard": {
+      "title": "Dashboard",
+      "text": "Dashboard"
+    },
+    "manage_market_listings": "Manage Market Listings",
+    "manage_services": "Manage Services",
+    "availability": "Availability",
+    "my_fleet": "My Fleet",
+    "messaging": "Messaging",
+    "my_organization": {
+      "title": "My Organization"
+    },
+    "orders": {
+      "title": "Orders"
+    },
+    "my_org": "My Org",
+    "manage": "Manage",
+    "settings": "Settings",
+    "my_market_listings": "My Market Listings",
+    "manage_listings": "Manage Listings",
+    "archived_listings": "Archived Listings",
+    "money": "Money",
+    "invoices": "Invoices",
+    "fleet": "Fleet",
+    "new_chip": "New!",
+    "people": "People",
+    "customers": "Customers",
+    "members": "Members",
+    "market": {
+      "title": "Market"
+    },
+    "player_market": "Player Market",
+    "everything": "Everything",
+    "weapons": "Weapons",
+    "armor": "Armor",
+    "components": "Components",
+    "bulk_items": "Bulk Items",
+    "buy_orders": "Buy Orders",
+    "contractor_services": "Contractor Services",
+    "my_org_listings": "My Org's Listings",
+    "sell_materials": "Sell Materials",
+    "contracting": {
+      "title": "Contracting"
+    },
+    "my_orders": "My Orders",
+    "contractors": "Contractors",
+    "open_contracts": "Open Contracts",
+    "organizations": {
+      "title": "Organizations"
+    },
+    "recruiting": "Recruiting",
+    "register": "Register",
+    "admin": {
+      "title": "Admin"
+    },
+    "users": "Users",
     "sc_market": "SC Market",
+    "sc_market_home": "SC Market Home",
     "toggle_drawer": "Toggle Drawer"
   },
   "sidebar_actor_select": {
     "select_role": "Select Role",
     "login_to_select_role": "Login to Select Role",
     "avatar_of": "Avatar of {{username}}"
+  },
+  "select_all_items": "Select all items",
+  "sorted_descending": "sorted descending",
+  "sorted_ascending": "sorted ascending",
+  "select_all": "select all",
+  "rows_per_page": "Rows per page",
+  "no_listings": "No listings to display",
+  "displayed_rows": "{{from}}–{{to}} of {{count}}",
+  "all": "all",
+  "contractors": "Contractors",
+  "recruiting_orgs": "Recruiting Orgs",
+  "toggle_market_sidebar": "Toggle market sidebar",
+  "update_post": "Update Post",
+  "create_post": "Create Post",
+
+  "discord_bot": {
+    "integrating_with_discord": "Integrating with Discord",
+    "how_to_get_notified": "How to get notified when an order is placed",
+    "how_to_get_notified_answer": "Add the official [SC Market Discord Bot](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot) to your server to automatically receive direct messages when an order is placed with you or assigned to you. Alternatively, use the below configuration to fulfill orders through [SC Market's Official Server]({{DISCORD_INVITE}}).",
+    "how_to_communicate": "How to communicate with buyers through Discord",
+    "how_to_communicate_answer": "Add the official [SC Market Discord Bot](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot) to your server and you can register a channel to automatically create threads between sellers and buyers when an order is placed. Buyers will automatically be invited to your server where you can work with them to fulfill the order.\n\n1. Add [the Bot](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot) to your server\n\n2. Run `/register Server` targeting either an individual user or an org contractor. For example, to have orders associated with you as an individual, run `/register Server User`. To register on behalf of an org `/register Server Contractor ORGNAME`. After doing so, users will automatically be invited to your server when placing an order.\n\n3. Run `/register Channel` targeting either an individual user or an org contractor. For example, to have orders associated with you as an individual, run `/register Channel User`. To register on behalf of an org `/register Channel Contractor ORGNAME`. After doing so, users will automatically be added to threads with the person assigned to their orders."
+  },
+  "preferences": {
+    "page_settings": "Page settings",
+    "theme": "Theme",
+    "light": "Light",
+    "dark": "Dark"
+  },
+  "privacy_settings": {
+    "title": "Privacy",
+    "public_discord": "Publicly Display Discord Profile",
+    "share_discord_with_sellers": "Share Discord Profile with Sellers",
+    "request_data_title": "Request my Data",
+    "request_data_description": "Request your data associated with the site. This function is a work in progress and does not represent all of your data. We are working to make this as complete as possible, but for now this contains most of the information associated with your user account.",
+    "request_data_button": "Request Data"
+  },
+  "transactions": {
+    "recent_transactions": "Recent Transactions",
+    "date": "Date",
+    "details": "Details",
+    "amount": "Amount",
+    "from": "from",
+    "to": "to",
+    "yesterday": "Yesterday",
+    "status": {
+      "title": "Status",
+      "completed": "Completed",
+      "pending": "Pending",
+      "cancelled": "Cancelled"
+    },
+    "kind": {
+      "Payment": "Payment",
+      "Refund": "Refund",
+      "Withdrawal": "Withdrawal",
+      "Deposit": "Deposit"
+    }
+  },
+  "service_actions": {
+    "create_service": "Create Service"
+  },
+  "service_market": {
+    "toggle_sidebar": "Toggle service sidebar"
+  },
+  "service_search": {
+    "search": "Search",
+    "filtering": "Filtering",
+    "contract_type": "Contract Type",
+    "contract_types": {
+      "Any": "Any"
+    },
+    "cost": "Cost",
+    "min_cost": "Minimum Cost",
+    "max_cost": "Maximum Cost",
+    "payment_type": "Payment Type",
+    "payment_types": {
+      "any": "Any",
+      "one_time": "One time",
+      "hourly": "Hourly",
+      "daily": "Daily"
+    }
   }
 }

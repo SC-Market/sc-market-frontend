@@ -12,8 +12,10 @@ import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { Link } from "react-router-dom"
 import { ItemStockRework } from "../../views/market/ItemStockRework"
 import { useGetUserProfileQuery } from "../../store/profile.ts"
+import { useTranslation } from "react-i18next" // додано для локалізації
 
 export function ManageStock() {
+  const { t } = useTranslation()
   const [open, setOpen] = useState(true)
   const [searchState, setSearchState] = useMarketSearch()
 
@@ -29,13 +31,13 @@ export function ManageStock() {
   const { data: profile } = useGetUserProfileQuery()
 
   return (
-    <Page title={"My Market Listings"}>
+    <Page title={t("sidebar.my_market_listings")}>
       <ItemStockContext.Provider
         value={[selectedListings, setSelectedListings]}
       >
         <MarketSidebarContext.Provider value={[open, setOpen]}>
           <ContainerGrid maxWidth={"xl"} sidebarOpen={true}>
-            <HeaderTitle>Manage Listings</HeaderTitle>
+            <HeaderTitle>{t("sidebar.manage_listings")}</HeaderTitle>
 
             <Grid item xs={12} md={3}>
               <Paper>
@@ -62,7 +64,7 @@ export function ManageStock() {
               sx={{ display: "flex", justifyContent: "flex-end" }}
             >
               <Link to={"/market/me"} style={{ color: "inherit" }}>
-                <UnderlineLink>Archived Listings</UnderlineLink>
+                <UnderlineLink>{t("sidebar.archived_listings")}</UnderlineLink>
               </Link>
             </Grid>
           </ContainerGrid>

@@ -17,8 +17,10 @@ import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
 import CloseIcon from "@mui/icons-material/CloseRounded"
 import MenuIcon from "@mui/icons-material/MenuRounded"
 import { Page } from "../../components/metadata/Page"
+import { useTranslation } from "react-i18next" // додано
 
 export function Contractors() {
+  const { t } = useTranslation() // додано
   const [perPage, setPerPage] = useState(10)
   const [page, setPage] = useState(0)
 
@@ -64,7 +66,7 @@ export function Contractors() {
   }, [searchState])
 
   return (
-    <Page title={"Contractors"}>
+    <Page title={t("contractors")}>
       <ContractorSidebarContext.Provider value={[sidebarOpen, setSidebarOpen]}>
         <ContractorSearchContext.Provider value={[searchState, setSearchState]}>
           <IconButton
@@ -87,7 +89,7 @@ export function Contractors() {
           <ContractorSidebar />
           <ContainerGrid maxWidth={"md"} sidebarOpen={true}>
             <div ref={ref} />
-            <HeaderTitle>Contractors</HeaderTitle>
+            <HeaderTitle>{t("contractors")}</HeaderTitle>
             {!isLoading
               ? (contractors || { items: [] }).items.map((item, index) => (
                   <ContractorListItem
@@ -106,6 +108,10 @@ export function Contractors() {
 
             <Grid item xs={12}>
               <TablePagination
+                labelRowsPerPage={t("rows_per_page")}
+                labelDisplayedRows={({ from, to, count }) =>
+                  t("displayed_rows", { from, to, count })
+                }
                 rowsPerPageOptions={[5, 10, 25]}
                 component="div"
                 count={isLoading ? 0 : contractors?.total || 0}

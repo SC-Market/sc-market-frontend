@@ -3,9 +3,11 @@ import { Button } from "@mui/material"
 import React from "react"
 import { useLocation } from "react-router-dom"
 import { Discord } from "../icon/DiscordIcon"
+import { useTranslation } from "react-i18next"
 
 export function DiscordLoginButton() {
   const location = useLocation()
+  const { t } = useTranslation()
 
   return (
     <Button
@@ -14,11 +16,11 @@ export function DiscordLoginButton() {
           location.pathname === "/" ? "/market" : location.pathname,
         )}`
       }}
-      color={"secondary"}
-      variant={"contained"}
+      color="secondary"
+      variant="contained"
       startIcon={<Discord />}
     >
-      Login with Discord
+      {t("auth.loginWithDiscord", "Login with Discord")}
     </Button>
   )
 }

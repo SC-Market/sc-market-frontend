@@ -13,9 +13,11 @@ import { useServiceSearch } from "../../hooks/contract/ServiceSearch"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTheme } from "@mui/material/styles"
 import { Stack } from "@mui/system"
+import { useTranslation } from "react-i18next" // added localisation
 
 export function ServiceSearchArea() {
   const theme: ExtendedTheme = useTheme()
+  const { t } = useTranslation()
 
   // Search fields
   const [kind, setKind] = useState<string>("Any")
@@ -66,7 +68,7 @@ export function ServiceSearchArea() {
         <Grid item xs={12}>
           <TextField
             fullWidth
-            label={"Search"}
+            label={t("service_search.search")}
             InputProps={{
               startAdornment: <SearchIcon style={{ color: "inherit" }} />,
             }}
@@ -78,7 +80,7 @@ export function ServiceSearchArea() {
         </Grid>
         <Grid item xs={12}>
           <Typography variant={"subtitle2"} fontWeight={"bold"}>
-            Filtering
+            {t("service_search.filtering")}
           </Typography>
         </Grid>
         <Grid item xs={12}>
@@ -86,7 +88,7 @@ export function ServiceSearchArea() {
             select
             fullWidth
             value={kind}
-            label="Contract Type"
+            label={t("service_search.contract_type")}
             onChange={handleKindChange}
             size={"small"}
             color={"secondary"}
@@ -96,14 +98,14 @@ export function ServiceSearchArea() {
           >
             {["Any", ...Object.keys(orderIcons)].map((k) => (
               <MenuItem value={k} key={k}>
-                {k}
+                {t(`service_search.contract_types.${k}`, k)}
               </MenuItem>
             ))}
           </TextField>
         </Grid>
         <Grid item xs={12}>
           <Typography variant={"subtitle2"} fontWeight={"bold"}>
-            Cost
+            {t("service_search.cost")}
           </Typography>
         </Grid>
 
@@ -111,7 +113,7 @@ export function ServiceSearchArea() {
           <TextField
             fullWidth
             value={minOffer}
-            label="Minimum Cost"
+            label={t("service_search.min_cost")}
             onChange={handleMinCostChange}
             size={"small"}
             color={"secondary"}
@@ -131,7 +133,7 @@ export function ServiceSearchArea() {
           <TextField
             fullWidth
             value={maxOffer == null ? "" : maxOffer}
-            label="Maximum Cost"
+            label={t("service_search.max_cost")}
             onChange={handleMaxCostChange}
             size={"small"}
             color={"secondary"}
@@ -150,7 +152,7 @@ export function ServiceSearchArea() {
         <Grid item xs={12}>
           <TextField
             select
-            label={"Payment Type"}
+            label={t("service_search.payment_type")}
             value={paymentType}
             size={"small"}
             onChange={handlePaymentTypeChange}
@@ -159,10 +161,18 @@ export function ServiceSearchArea() {
               IconComponent: KeyboardArrowDownRoundedIcon,
             }}
           >
-            <MenuItem value={"any"}>Any</MenuItem>
-            <MenuItem value={"one-time"}>One time</MenuItem>
-            <MenuItem value={"hourly"}>Hourly</MenuItem>
-            <MenuItem value={"daily"}>Daily</MenuItem>
+            <MenuItem value={"any"}>
+              {t("service_search.payment_types.any")}
+            </MenuItem>
+            <MenuItem value={"one-time"}>
+              {t("service_search.payment_types.one_time")}
+            </MenuItem>
+            <MenuItem value={"hourly"}>
+              {t("service_search.payment_types.hourly")}
+            </MenuItem>
+            <MenuItem value={"daily"}>
+              {t("service_search.payment_types.daily")}
+            </MenuItem>
           </TextField>
         </Grid>
       </Grid>

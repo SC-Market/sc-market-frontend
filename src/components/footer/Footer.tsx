@@ -2,8 +2,11 @@ import { UnderlineLink } from "../typography/UnderlineLink"
 import { Divider, Grid, Link, Typography } from "@mui/material"
 import React from "react"
 import { DISCORD_INVITE } from "../../util/constants"
+import { useTranslation } from "react-i18next"
 
 export function Footer() {
+  const { t } = useTranslation()
+
   return (
     <Grid item xs={12} sx={{ marginTop: 2 }}>
       <Grid container spacing={2}>
@@ -16,16 +19,22 @@ export function Footer() {
               rel="noopener noreferrer"
               target="_blank"
               href={DISCORD_INVITE}
+              aria-label={t("footer.support", "Support")}
             >
-              <UnderlineLink color={"text.secondary"}>Support</UnderlineLink>
+              <UnderlineLink color={"text.secondary"}>
+                {t("footer.support", "Support")}
+              </UnderlineLink>
             </Link>
             &nbsp;|&nbsp;
             <Link
               rel="noopener noreferrer"
               target="_blank"
               href={DISCORD_INVITE}
+              aria-label={t("footer.discord", "Discord")}
             >
-              <UnderlineLink color={"text.secondary"}>Discord</UnderlineLink>
+              <UnderlineLink color={"text.secondary"}>
+                {t("footer.discord", "Discord")}
+              </UnderlineLink>
             </Link>
             &nbsp;|&nbsp;
             <Link
@@ -34,9 +43,10 @@ export function Footer() {
               href={
                 "https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot"
               }
+              aria-label={t("footer.discordBot", "Discord Bot")}
             >
               <UnderlineLink color={"text.secondary"}>
-                Discord Bot
+                {t("footer.discordBot", "Discord Bot")}
               </UnderlineLink>
             </Link>
             &nbsp;|&nbsp;
@@ -44,33 +54,43 @@ export function Footer() {
               rel="noopener noreferrer"
               target="_blank"
               href={"https://github.com/henry232323/sc-market/wiki"}
+              aria-label={t("footer.wiki", "Wiki")}
             >
-              <UnderlineLink color={"text.secondary"}>Wiki</UnderlineLink>
+              <UnderlineLink color={"text.secondary"}>
+                {t("footer.wiki", "Wiki")}
+              </UnderlineLink>
             </Link>
             &nbsp;|&nbsp;
             <Link
               rel="noopener noreferrer"
               target="_blank"
               href={"https://www.patreon.com/henry232323"}
+              aria-label={t("footer.donate", "Donate")}
             >
-              <UnderlineLink color={"primary"}>Donate</UnderlineLink>
+              <UnderlineLink color={"primary"}>
+                {t("footer.donate", "Donate")}
+              </UnderlineLink>
             </Link>
             &nbsp;|&nbsp;
             <Link
               rel="noopener noreferrer"
               target="_blank"
               href={"https://github.com/henry232323/sc-market"}
+              aria-label={t("footer.github", "Github")}
             >
-              <UnderlineLink color={"text.secondary"}>Github</UnderlineLink>
+              <UnderlineLink color={"text.secondary"}>
+                {t("footer.github", "Github")}
+              </UnderlineLink>
             </Link>
             &nbsp;|&nbsp;
             <Link
               rel="noopener noreferrer"
               target="_blank"
               href={"/privacy-policy"}
+              aria-label={t("footer.privacyPolicy", "Privacy Policy")}
             >
               <UnderlineLink color={"text.secondary"}>
-                Privacy Policy
+                {t("footer.privacyPolicy", "Privacy Policy")}
               </UnderlineLink>
             </Link>
             &nbsp;|&nbsp;
@@ -78,45 +98,48 @@ export function Footer() {
               rel="noopener noreferrer"
               target="_blank"
               href={"/terms-of-service"}
+              aria-label={t("footer.termsOfService", "Terms of Service")}
             >
               <UnderlineLink color={"text.secondary"}>
-                Terms of Service
+                {t("footer.termsOfService", "Terms of Service")}
               </UnderlineLink>
             </Link>
           </Typography>
           <br />
           <Typography variant="body2" color="textSecondary" align="center">
-            {"Copyright © "}
-            SC Market {new Date().getFullYear() + 930}
-            {"."}
+            {t("footer.copyright", "Copyright © ")} SC Market{" "}
+            {new Date().getFullYear() + 930}.
             <br />
-            {
-              "Star Citizen®, Squadron 42®, Roberts Space Industries®, and Cloud Imperium® are registered trademarks of Cloud Imperium Rights LLC"
-            }
+            {t(
+              "footer.trademark",
+              "Star Citizen®, Squadron 42®, Roberts Space Industries®, and Cloud Imperium® are registered trademarks of Cloud Imperium Rights LLC",
+            )}
             <br />
-            This is an unofficial Star Citizen fansite, not affiliated with the
-            Cloud Imperium group of companies. All content on this site not
-            authored by its host or users are property of their respective
-            owners
+            {t(
+              "footer.unofficial",
+              "This is an unofficial Star Citizen fansite, not affiliated with the Cloud Imperium group of companies. All content on this site not authored by its host or users are property of their respective owners",
+            )}
             <br />
-            Thank you to{" "}
+            {t("footer.thanksTo", "Thank you to")}{" "}
             <Link
               rel="noopener noreferrer"
               target="_blank"
               href={"https://www.youtube.com/@robinerino"}
+              aria-label={t("footer.ladyFleur", "LadyFleur")}
             >
               <UnderlineLink color={"text.primary"} variant="body2">
-                LadyFleur
+                {t("footer.ladyFleur", "LadyFleur")}
               </UnderlineLink>
             </Link>{" "}
-            for the site logo, and to{" "}
+            {t("footer.forLogo", "for the site logo, and to")}{" "}
             <Link
               rel="noopener noreferrer"
               target="_blank"
               href={"https://starcitizen-api.com/"}
+              aria-label={t("footer.starCitizenApi", "StarCitizen-API")}
             >
               <UnderlineLink color={"text.primary"} variant="body2">
-                StarCitizen-API
+                {t("footer.starCitizenApi", "StarCitizen-API")}
               </UnderlineLink>
             </Link>
             ,{" "}
@@ -124,24 +147,26 @@ export function Footer() {
               rel="noopener noreferrer"
               target="_blank"
               href={"https://nexd.to/ "}
+              aria-label={t("footer.nexd", "NEXD")}
             >
               <UnderlineLink color={"text.primary"} variant="body2">
-                NEXD
+                {t("footer.nexd", "NEXD")}
               </UnderlineLink>
             </Link>
-            , and{" "}
+            , {t("footer.and", "and")}{" "}
             <Link
               rel="noopener noreferrer"
               target="_blank"
               href={"https://starcitizen.tools/"}
+              aria-label={t("footer.starCitizenWiki", "Star Citizen Wiki")}
             >
               <UnderlineLink color={"text.primary"} variant="body2">
-                Star Citizen Wiki
+                {t("footer.starCitizenWiki", "Star Citizen Wiki")}
               </UnderlineLink>
             </Link>{" "}
-            for their APIs.
+            {t("footer.forTheirApis", "for their APIs.")}
             <br />
-            Use our referral code: STAR-GSFY-MQW9
+            {t("footer.referralCode", "Use our referral code:")} STAR-GSFY-MQW9
           </Typography>
         </Grid>
       </Grid>

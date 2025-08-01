@@ -14,18 +14,20 @@ import React, { useState } from "react"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { ServiceSearchArea } from "./ServiceSearchArea"
+import { useTranslation } from "react-i18next" // added localisation
 
 export function ServiceMarketView() {
   const [open, setOpen] = useState(false)
   const theme = useTheme<ExtendedTheme>()
   const xs = useMediaQuery(theme.breakpoints.down("md"))
+  const { t } = useTranslation()
 
   return (
     <ServiceSidebarContext.Provider value={[open, setOpen]}>
       {xs && (
         <IconButton
           color="secondary"
-          aria-label="toggle service sidebar"
+          aria-label={t("service_market.toggle_sidebar")}
           sx={{
             position: "absolute",
             zIndex: 50,

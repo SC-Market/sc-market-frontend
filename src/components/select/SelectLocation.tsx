@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react"
+import { useTranslation } from "react-i18next"
 import { BACKEND_URL } from "../../util/constants"
 import throttle from "lodash/throttle"
 import { Autocomplete, Grid, TextField, Typography } from "@mui/material"
@@ -67,6 +68,8 @@ export interface StarmapObject {
 }
 
 export function SelectLocation() {
+  const { t } = useTranslation()
+
   const [locationSuggest, setLocationSuggest] = useState<StarmapObject[]>([])
   const [locationTarget, setLocationTarget] = useState("")
   const [locationTargetObject, setLocationTargetObject] =
@@ -128,7 +131,7 @@ export function SelectLocation() {
             color={"text.secondary"}
             sx={{ fontWeight: "bold" }}
           >
-            Location
+            {t("selectLocation.title", "Location")}
           </Typography>
         </Grid>
         <Grid item xs={12} lg={8} container spacing={2}>
@@ -172,7 +175,7 @@ export function SelectLocation() {
                 return (
                   <TextField
                     {...params}
-                    label="Source (Optional)"
+                    label={t("selectLocation.inputLabel", "Source (Optional)")}
                     color={"secondary"}
                     SelectProps={{
                       IconComponent: KeyboardArrowDownRoundedIcon,
@@ -182,11 +185,10 @@ export function SelectLocation() {
                         fill: "white",
                       },
                     }}
-                    helperText={
-                      "For Escort and Transport, for example, " +
-                      "from where to where will the order occur? " +
-                      "For Support, where should the contractor find you?"
-                    }
+                    helperText={t(
+                      "selectLocation.helperText",
+                      "For Escort and Transport, for example, from where to where will the order occur? For Support, where should the contractor find you?",
+                    )}
                   />
                 )
               }}

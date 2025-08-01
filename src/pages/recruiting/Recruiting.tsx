@@ -29,8 +29,10 @@ import {
 import { NoteAddRounded } from "@mui/icons-material"
 import { Link } from "react-router-dom"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
+import { useTranslation } from "react-i18next" // додано
 
 export function Recruiting() {
+  const { t } = useTranslation() // додано
   const [perPage, setPerPage] = useState(15)
   const [page, setPage] = useState(0)
   const [searchState, setSearchState] = useState<RecruitingSearchState>({
@@ -77,12 +79,12 @@ export function Recruiting() {
   const [sidebarOpen, setSidebarOpen] = useState(true)
 
   return (
-    <Page title={"Recruiting Orgs"}>
+    <Page title={t("recruiting_orgs")}>
       <RecruitingSidebarContext.Provider value={[sidebarOpen, setSidebarOpen]}>
         <RecruitingSearchContext.Provider value={[searchState, setSearchState]}>
           <IconButton
             color="secondary"
-            aria-label="toggle market sidebar"
+            aria-label={t("toggle_market_sidebar")}
             sx={{
               position: "absolute",
               zIndex: 50,
@@ -108,7 +110,7 @@ export function Recruiting() {
               xs={12}
             >
               <HeaderTitle lg={7} xl={7}>
-                Recruiting Orgs
+                {t("recruiting_orgs")}
               </HeaderTitle>
               {currentOrg && (
                 <Grid item>
@@ -121,7 +123,7 @@ export function Recruiting() {
                         startIcon={<NoteAddRounded />}
                         variant={"contained"}
                       >
-                        Update Post
+                        {t("update_post")}
                       </Button>
                     </Link>
                   ) : (
@@ -133,7 +135,7 @@ export function Recruiting() {
                         startIcon={<NoteAddRounded />}
                         variant={"contained"}
                       >
-                        Create Post
+                        {t("create_post")}
                       </Button>
                     </Link>
                   )}
@@ -154,6 +156,10 @@ export function Recruiting() {
 
             <Grid item xs={12}>
               <TablePagination
+                labelRowsPerPage={t("rows_per_page")}
+                labelDisplayedRows={({ from, to, count }) =>
+                  t("displayed_rows", { from, to, count })
+                }
                 rowsPerPageOptions={[5, 15, 25]}
                 component="div"
                 count={posts?.total || 0}

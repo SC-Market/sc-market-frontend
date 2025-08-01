@@ -7,9 +7,11 @@ import { KeyboardArrowUpRounded } from "@mui/icons-material"
 import React, { useState } from "react"
 import { useGetUserProfileQuery } from "../../store/profile"
 import { BACKEND_URL } from "../../util/constants"
+import { useTranslation } from "react-i18next" // added
 
 export function RecruitmentVotes(props: { post: RecruitingPost }) {
   const { post } = props
+  const { t } = useTranslation() // added
 
   const [
     doUpvote, // This is the mutation trigger
@@ -40,6 +42,7 @@ export function RecruitmentVotes(props: { post: RecruitingPost }) {
       }}
       variant={"contained"}
       size={"small"}
+      title={t("recruitmentVotes.upvoteButtonTooltip", "Upvote this post")} // added a localisation tooltip
     >
       {post.upvotes + pressed}
     </Button>

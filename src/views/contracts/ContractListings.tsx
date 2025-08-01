@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState } from "react"
+import { useTranslation } from "react-i18next" // added for localization
 import { orderIcons } from "../../datatypes/Order"
 import {
   Box,
@@ -199,6 +200,7 @@ export function ContractListings(props: { user?: string }) {
   const { user } = props
 
   const ref = useRef<HTMLDivElement>(null)
+  const { t } = useTranslation() // added
 
   const handleChangePage = useCallback(
     (event: unknown, newPage: number) => {
@@ -244,7 +246,6 @@ export function ContractListings(props: { user?: string }) {
         })
         .filter((listing) => {
           return !user || listing.customer.username === user
-          // && (!org || listing.contractor_seller?.spectrum_id === org)
         })
         .sort((a, b) => {
           switch (searchState.sort) {
@@ -262,9 +263,7 @@ export function ContractListings(props: { user?: string }) {
               return 0
           }
         })
-        .filter((listing, idx) => {
-          return idx <= perPage
-        }),
+        .filter((listing, idx) => idx <= perPage),
     [contracts, perPage, searchState, user],
   )
 
@@ -284,6 +283,10 @@ export function ContractListings(props: { user?: string }) {
       </Grid>
       <Grid item xs={12}>
         <TablePagination
+          labelRowsPerPage={t("rows_per_page")}
+          labelDisplayedRows={({ from, to, count }) =>
+            t("displayed_rows", { from, to, count })
+          }
           rowsPerPageOptions={[6, 10, 16]}
           component="div"
           count={filteredListings ? filteredListings.length : 0}

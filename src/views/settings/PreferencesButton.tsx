@@ -10,11 +10,13 @@ import {
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { SettingsRounded } from "@mui/icons-material"
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
+import { useTranslation } from "react-i18next"
 
 export function PreferencesButton() {
   const [lightTheme, setLightTheme] = useLightTheme()
   const theme = useTheme()
+  const { t } = useTranslation()
 
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
   const open = Boolean(anchorEl)
@@ -30,7 +32,7 @@ export function PreferencesButton() {
   return (
     <>
       <Fab
-        aria-label="Page settings"
+        aria-label={t("preferences.page_settings")}
         sx={{
           position: "absolute",
           right: theme.spacing(2),
@@ -64,7 +66,7 @@ export function PreferencesButton() {
         <Box sx={{ padding: 2 }}>
           <Grid container spacing={2}>
             <Grid item xs={12}>
-              <Typography>Theme</Typography>
+              <Typography>{t("preferences.theme")}</Typography>
               <ToggleButtonGroup
                 value={lightTheme}
                 exclusive
@@ -73,10 +75,10 @@ export function PreferencesButton() {
                 }
               >
                 <ToggleButton value={"light"} color={"primary"}>
-                  Light
+                  {t("preferences.light")}
                 </ToggleButton>
                 <ToggleButton value={"dark"} color={"primary"}>
-                  Dark
+                  {t("preferences.dark")}
                 </ToggleButton>
               </ToggleButtonGroup>
             </Grid>

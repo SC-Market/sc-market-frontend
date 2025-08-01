@@ -1,19 +1,135 @@
 {
-  "navbar": {
-    "toggle_drawer": "Перемкнути меню"
+  "admin": {
+    "orderStats": "Статистика замовлень адміністратора"
+  },
+  "adminExpressVerify": {
+    "title": "Експрес-верифікація користувача",
+    "ownerDiscordId": "Discord ID власника",
+    "ownerUsername": "Ім'я користувача власника*",
+    "spectrumId": "ID організації в Spectrum*",
+    "submit": "Надіслати",
+    "success": "Відправлено!",
+    "failure": "Не вдалося надіслати! {{reason}}"
+  },
+  "auth": {
+    "title": "Реєстрація",
+    "email": "Електронна пошта",
+    "username": "Ім'я користувача",
+    "password": "Пароль",
+    "repeatPassword": "Повторіть пароль",
+    "loginWith": "Увійти через",
+    "terms": "Натискаючи тут, ви погоджуєтесь з нашими Умовами користування",
+    "submit": "Надіслати",
+    "loginWithDiscord": "Увійти через Discord",
+    "accountLink": "Прив’язка акаунта",
+    "authenticateWithRSI": "Аутентифікація через RSI"
+  },
+  "availability": {
+    "select_availability": "Оберіть доступність",
+    "save": "Зберегти",
+    "availability_for": "Доступність для"
+  },
+  "buyOrderActions": {
+    "createBuyOrder": "Створити замовлення на купівлю",
+    "createBuyOrderTooltip": "Створити нове замовлення на купівлю"
+  },
+  "commentVotes": {
+    "upvoteTooltip": "Підтримати цей коментар",
+    "downvoteTooltip": "Не підтримати цей коментар"
+  },
+  "cookie_consent": {
+    "title": "Згода на файли cookie",
+    "description": "Ми використовуємо cookie для покращення роботи користувача та аналізу продуктивності (наприклад, Google Analytics). Натисніть «Прийняти всі», щоб погодитися з усіма cookie, або «Прийняти необхідні», щоб прийняти лише необхідні.",
+    "accept_all": "Прийняти всі",
+    "accept_necessary": "Прийняти необхідні"
+  },
+  "footer": {
+    "support": "Підтримка",
+    "discord": "Discord",
+    "discordBot": "Discord-бот",
+    "wiki": "Вікі",
+    "donate": "Пожертвувати",
+    "github": "Github",
+    "privacyPolicy": "Політика конфіденційності",
+    "termsOfService": "Умови користування",
+    "copyright": "Авторське право ©",
+    "trademark": "Star Citizen®, Squadron 42®, Roberts Space Industries® та Cloud Imperium® — зареєстровані торговельні марки компанії Cloud Imperium Rights LLC",
+    "unofficial": "Це неофіційний фан-сайт Star Citizen, який не має стосунку до компаній групи Cloud Imperium. Увесь контент, який не створено адміністрацією чи користувачами цього сайту, є власністю відповідних правовласників",
+    "thanksTo": "Дякуємо",
+    "ladyFleur": "LadyFleur",
+    "forLogo": "за логотип сайту, а також",
+    "starCitizenApi": "StarCitizen-API",
+    "nexd": "NEXD",
+    "and": "та",
+    "starCitizenWiki": "Star Citizen Wiki",
+    "forTheirApis": "за їхні API.",
+    "referralCode": "Використайте наш реферальний код:"
+  },
+  "listing": {
+    "95PercentRating25PlusTransactions": "95%+ рейтинг і 25+ транзакцій",
+    "90PercentRating25PlusTransactions": "90%+ рейтинг і 25+ транзакцій",
+    "tenPlusFiveStarStreak": "10+ п’ятизіркових оцінок поспіль",
+    "fivePlusFiveStarStreak": "5+ п’ятизіркових оцінок поспіль"
+  },
+  "manageListingsActions": {
+    "activateListings": "Активувати оголошення",
+    "activateTooltip": "Активувати вибрані оголошення",
+    "deactivateListings": "Деактивувати оголошення",
+    "deactivateTooltip": "Деактивувати вибрані оголошення"
+  },
+  "market": {
+    "search_query": "Пошуковий запит",
+    "filters": "Фільтри",
+    "search": "Пошук",
+    "sort_by": "Сортувати за",
+    "none": "Немає",
+    "title": "Назва",
+    "price_low_to_high": "Ціна (від низької до високої)",
+    "price_high_to_low": "Ціна (від високої до низької)",
+    "quantity_low_to_high": "Кількість (від меншої до більшої)",
+    "quantity_high_to_low": "Кількість (від більшої до меншої)",
+    "date_old_to_new": "Дата (спочатку старі)",
+    "date_new_to_old": "Дата (спочатку нові)",
+    "recent_activity": "Недавня активність",
+    "rating_high_to_low": "Рейтинг (високий до низького)",
+    "quantity_available": "Доступна кількість",
+    "sale_type": "Тип продажу",
+    "any": "Будь-який",
+    "sale": "Продаж",
+    "aggregate": "Агрегований",
+    "auction": "Аукціон",
+    "min_cost": "Мінімальна ціна",
+    "max_cost": "Максимальна ціна",
+    "item_type": "Тип предмета",
+    "item_name": "Назва предмета",
+    "other_category": "Інше",
+    "allListings": "Всі оголошення на маркеті",
+    "toggleSidebar": "Перемкнути бокове меню маркету",
+    "activeListings": "Активні оголошення",
+    "inactiveListings": "Неактивні оголошення",
+    "archivedListings": "Архівні оголошення"
+  },
+  "marketActions": {
+    "createListing": "Створити оголошення",
+    "createListingTooltip": "Створити нове оголошення",
+    "myCart": "Мій кошик",
+    "myCartTooltip": "Переглянути ваш кошик"
+  },
+  "navigation": {
+    "goBack": "Назад"
   },
   "notifications": {
     "notifications": "Сповіщення",
     "delete_notification": "Видалити сповіщення",
-    "new_review_by": "Новий відгук від",
+    "new_review_by": "Нова рецензія від",
     "new_order_comment_by": "Новий коментар до замовлення від",
-    "new_order_message_by": "Нове повідомлення по замовленню від",
+    "new_order_message_by": "Нове повідомлення щодо замовлення від",
     "new_order_placed_by": "Нове замовлення від",
-    "new_offer_received_from": "Нова пропозиція від",
-    "counter_offer_received_from": "Контрпропозиція від",
-    "order_status_updated_to": "Статус замовлення оновлено на {{status}} від",
+    "new_offer_received_from": "Отримано нову пропозицію від",
+    "counter_offer_received_from": "Отримано зустрічну пропозицію від",
+    "order_status_updated_to": "Статус замовлення змінено на {{status}} користувачем",
     "contractor_invite_from": "Запрошення підрядника від",
-    "submitted": "Відправлено!",
+    "submitted": "Надіслано!",
     "accept": "Прийняти",
     "decline": "Відхилити",
     "new_bid_placed_by": "Нова ставка від",
@@ -21,42 +137,199 @@
     "clear_all": "Очистити всі сповіщення",
     "mark_all_as_read": "Позначити всі як прочитані"
   },
-  "market": {
-    "search_query": "Пошуковий запит",
-    "filters": "Фільтри",
-    "search": "Пошук",
-    "sort_by": "Сортувати за",
-    "none": "Відсутнє",
-    "title": "Назва",
-    "price_low_to_high": "Ціна (від низької до високої)",
-    "price_high_to_low": "Ціна (від високої до низької)",
-    "quantity_low_to_high": "Кількість (від меншої до більшої)",
-    "quantity_high_to_low": "Кількість (від більшої до меншої)",
-    "date_old_to_new": "Дата (від старої до нової)",
-    "date_new_to_old": "Дата (від нової до старої)",
-    "recent_activity": "Остання активність",
-    "rating_high_to_low": "Рейтинг (від високого до низького)",
-    "quantity_available": "Доступна кількість",
-    "sale_type": "Тип продажу",
-    "any": "Будь-який",
-    "sale": "Продаж",
-    "aggregate": "Агрегат",
-    "auction": "Аукціон",
-    "min_cost": "Мінімальна вартість",
-    "max_cost": "Максимальна вартість"
+  "recruitmentVotes": {
+    "upvoteButtonTooltip": "Підтримати цю публікацію"
   },
-  "availability": {
-    "select_availability": "Оберіть доступність",
-    "save": "Зберегти",
-    "availability_for": "Доступність для"
+  "recruiting_sidebar": {
+    "search": "Пошук",
+    "sorting": "Сортування",
+    "sort_attribute": "Поле сортування",
+    "sort": {
+      "activity": "Активність",
+      "upvotes_all_time": "Вподобання (за весь час)",
+      "rating_high": "Рейтинг (від вищого до нижчого)",
+      "rating_low": "Рейтинг (від нижчого до вищого)",
+      "name_a_z": "Назва (А–Я)",
+      "name_z_a": "Назва (Я–А)",
+      "members_high": "Кількість учасників (від більшої до меншої)",
+      "members_low": "Кількість учасників (від меншої до більшої)",
+      "date_old": "Дата додавання орг. (від старих до нових)",
+      "date_new": "Дата додавання орг. (від нових до старих)",
+      "post_old": "Дата публікації (від старих до нових)",
+      "post_new": "Дата публікації (від нових до старих)"
+    },
+    "filtering": "Фільтрування",
+    "org_tags": "Теги організації",
+    "org_tags_placeholder": "видобуток",
+    "min_rating": "Мінімальний рейтинг"
+  },
+  "selectLocation": {
+    "title": "Локація",
+    "inputLabel": "Джерело (необов’язково)",
+    "helperText": "Для супроводу та транспорту, наприклад, звідки й куди має бути замовлення? Для підтримки — де вас знайти?"
+  },
+  "selectMarketListing": {
+    "label": "Оберіть оголошення на маркеті"
+  },
+  "settings": {
+    "title": "Налаштування",
+    "tabs": {
+      "profile": "Профіль",
+      "privacy": "Приватність",
+      "discordIntegration": "Інтеграція Discord",
+      "market": "Маркет",
+      "contractors": "Підрядники"
+    },
+    "profile": {
+      "updateAndVerify": "Оновити ім'я користувача та повторно верифікувати акаунт",
+      "authenticateWithRSI": "Аутентифікація через RSI",
+      "viewUserProfile": "Переглянути профіль користувача"
+    }
   },
   "sidebar": {
+    "dashboard": {
+      "title": "Панель",
+      "text": "Панель"
+    },
+    "manage_market_listings": "Керувати оголошеннями",
+    "manage_services": "Керувати послугами",
+    "availability": "Доступність",
+    "my_fleet": "Мій флот",
+    "messaging": "Повідомлення",
+    "my_organization": {
+      "title": "Моя організація"
+    },
+    "orders": {
+      "title": "Замовлення"
+    },
+    "my_org": "Моя організація",
+    "manage": "Керування",
+    "settings": "Налаштування",
+    "my_market_listings": "Мої оголошення на ринку",
+    "manage_listings": "Керування оголошеннями",
+    "archived_listings": "Архівні оголошення",
+    "money": "Фінанси",
+    "invoices": "Рахунки",
+    "fleet": "Флот",
+    "new_chip": "Нове!",
+    "people": "Люди",
+    "customers": "Клієнти",
+    "members": "Учасники",
+    "market": {
+      "title": "Маркет"
+    },
+    "player_market": "Маркет гравців",
+    "everything": "Усе",
+    "weapons": "Зброя",
+    "armor": "Броня",
+    "components": "Компоненти",
+    "bulk_items": "Оптові товари",
+    "buy_orders": "Замовлення на купівлю",
+    "contractor_services": "Послуги підрядників",
+    "my_org_listings": "Оголошення моєї організації",
+    "sell_materials": "Продаж матеріалів",
+    "contracting": {
+      "title": "Контракти"
+    },
+    "my_orders": "Мої замовлення",
+    "contractors": "Підрядники",
+    "open_contracts": "Відкриті контракти",
+    "organizations": {
+      "title": "Організації"
+    },
+    "recruiting": "Набір",
+    "register": "Реєстрація",
+    "admin": {
+      "title": "Адмін"
+    },
+    "users": "Користувачі",
     "sc_market": "SC Маркет",
+    "sc_market_home": "Головна SC Маркету",
     "toggle_drawer": "Перемкнути меню"
   },
   "sidebar_actor_select": {
     "select_role": "Оберіть роль",
     "login_to_select_role": "Увійдіть, щоб обрати роль",
-    "avatar_of": "Аватар {{username}}"
+    "avatar_of": "Аватар користувача {{username}}"
+  },
+  "select_all_items": "Вибрати всі предмети",
+  "sorted_descending": "сортувати за спаданням",
+  "sorted_ascending": "сортувати за зростанням",
+  "select_all": "вибрати всі",
+  "rows_per_page": "Рядків на сторінку",
+  "no_listings": "Немає оголошень для показу",
+  "displayed_rows": "{{from}}–{{to}} з {{count}}",
+  "all": "Усі",
+  "contractors": "Підрядники",
+  "recruiting_orgs": "Рекрутингові організації",
+  "toggle_market_sidebar": "Перемкнути панель маркету",
+  "update_post": "Оновити публікацію",
+  "create_post": "Створити публікацію",
+
+  "discord_bot": {
+    "integrating_with_discord": "Інтеграція з Discord",
+    "how_to_get_notified": "Як отримувати сповіщення, коли створено замовлення",
+    "how_to_get_notified_answer": "Додайте офіційного [SC Market Discord-бота](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot) на свій сервер, щоб автоматично отримувати особисті повідомлення, коли замовлення оформлено для вас або закріплено за вами. Або скористайтеся наведеною нижче конфігурацією, щоб виконувати замовлення через [офіційний сервер SC Market]({{DISCORD_INVITE}}).",
+    "how_to_communicate": "Як спілкуватися з покупцями через Discord",
+    "how_to_communicate_answer": "Додайте офіційного [SC Market Discord-бота](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot) на свій сервер, і ви зможете зареєструвати канал для автоматичного створення обговорень між продавцями та покупцями після оформлення замовлення. Покупці автоматично отримають запрошення на ваш сервер, де ви зможете працювати з ними над виконанням замовлення.\n\n1. Додайте [бота](https://discord.com/oauth2/authorize?client_id=868709691469987860&permissions=361314126849&integration_type=0&scope=bot) на свій сервер.\n\n2. Виконайте `/register Server`, вказавши або окремого користувача, або підрядника організації. Наприклад, щоб замовлення були прив'язані особисто до вас, виконайте `/register Server User`. Щоб зареєструвати від імені організації — `/register Server Contractor НАЗВАОРГ`. Після цього користувачі автоматично отримуватимуть запрошення на ваш сервер при оформленні замовлення.\n\n3. Виконайте `/register Channel`, вказавши або окремого користувача, або підрядника організації. Наприклад, щоб замовлення були прив'язані особисто до вас, виконайте `/register Channel User`. Щоб зареєструвати від імені організації — `/register Channel Contractor НАЗВАОРГ`. Після цього користувачі автоматично додаватимуться до обговорень з особою, призначеною для виконання їхніх замовлень."
+  },
+  "preferences": {
+    "page_settings": "Налаштування сторінки",
+    "theme": "Тема",
+    "light": "Світла",
+    "dark": "Темна"
+  },
+  "privacy_settings": {
+    "title": "Приватність",
+    "public_discord": "Публічно відображати профіль Discord",
+    "share_discord_with_sellers": "Ділитися профілем Discord з продавцями",
+    "request_data_title": "Запит моїх даних",
+    "request_data_description": "Запросіть дані, пов'язані з вашим акаунтом на сайті. Ця функція перебуває у розробці та не відображає всі ваші дані. Ми працюємо над тим, щоб зробити її максимально повною, але наразі вона містить більшість інформації, пов’язаної з вашим користувацьким акаунтом.",
+    "request_data_button": "Запросити дані"
+  },
+  "transactions": {
+    "recent_transactions": "Останні транзакції",
+    "date": "Дата",
+    "details": "Деталі",
+    "amount": "Сума",
+    "from": "від",
+    "to": "до",
+    "yesterday": "Вчора",
+    "status": {
+      "title": "Статус",
+      "completed": "Завершено",
+      "pending": "Очікує",
+      "cancelled": "Скасовано"
+    },
+    "kind": {
+      "Payment": "Платіж",
+      "Refund": "Повернення",
+      "Withdrawal": "Виведення",
+      "Deposit": "Депозит"
+    }
+  },
+  "service_actions": {
+    "create_service": "Створити послугу"
+  },
+  "service_market": {
+    "toggle_sidebar": "Перемкнути бічну панель послуг"
+  },
+  "service_search": {
+    "search": "Пошук",
+    "filtering": "Фільтр",
+    "contract_type": "Тип контракту",
+    "contract_types": {
+      "Any": "Будь-який"
+    },
+    "cost": "Вартість",
+    "min_cost": "Мінімальна вартість",
+    "max_cost": "Максимальна вартість",
+    "payment_type": "Тип оплати",
+    "payment_types": {
+      "any": "Будь-який",
+      "one_time": "Одноразова",
+      "hourly": "Погодинна",
+      "daily": "Денна"
+    }
   }
 }

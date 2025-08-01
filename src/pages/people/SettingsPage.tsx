@@ -21,8 +21,11 @@ import { ConfigureDiscord } from "../../views/notifications/ConfigureDiscord"
 import { MarketEditTemplate } from "../../views/market/MarketEditTemplate"
 import { SettingsManageContractors } from "../../views/contractor/SettingsManageContractors"
 
+import { useTranslation } from "react-i18next" // added
+
 export function SettingsPage() {
   const { data: profile } = useGetUserProfileQuery()
+  const { t } = useTranslation()
 
   const [page, setPage] = React.useState(0)
 
@@ -31,7 +34,7 @@ export function SettingsPage() {
   }
 
   return (
-    <Page title={"Settings"}>
+    <Page title={t("settings.title")}>
       <ContainerGrid sidebarOpen={true} maxWidth={"md"}>
         <Grid item xs={12}>
           <Tabs
@@ -43,31 +46,31 @@ export function SettingsPage() {
             indicatorColor="secondary"
           >
             <Tab
-              label="Profile"
+              label={t("settings.tabs.profile")}
               icon={<InfoIcon />}
               {...a11yProps(0)}
               value={0}
             />
             <Tab
-              label="Privacy"
+              label={t("settings.tabs.privacy")}
               icon={<PrivacyTipRounded />}
               {...a11yProps(1)}
               value={1}
             />
             <Tab
-              label="Discord Integration"
+              label={t("settings.tabs.discordIntegration")}
               icon={<Discord sx={{ marginRight: 1 }} />}
               {...a11yProps(2)}
               value={2}
             />
             <Tab
-              label="Market"
+              label={t("settings.tabs.market")}
               icon={<StoreRounded />}
               {...a11yProps(3)}
               value={3}
             />
             <Tab
-              label="Contractors"
+              label={t("settings.tabs.contractors")}
               icon={<PeopleAltRounded />}
               {...a11yProps(4)}
               value={4}
@@ -80,8 +83,8 @@ export function SettingsPage() {
             <Grid container spacing={4} alignItems={"flex-start"}>
               <HeaderTitle>
                 {profile?.rsi_confirmed
-                  ? "Update Username and Re-Verify Account"
-                  : "Authenticate with RSI"}
+                  ? t("settings.profile.updateAndVerify")
+                  : t("settings.profile.authenticateWithRSI")}
               </HeaderTitle>
               <AuthenticateRSI />
             </Grid>

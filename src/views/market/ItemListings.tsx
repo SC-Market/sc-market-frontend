@@ -52,6 +52,7 @@ import {
   Typography,
 } from "@mui/material"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { useTranslation } from "react-i18next" // added
 import {
   MarketAggregate,
   MarketAggregateListing,
@@ -1310,14 +1311,10 @@ export function DisplayListings(props: {
   listings: (MarketListingType | SellerListingType)[]
   loading?: boolean
 }) {
+  const { t } = useTranslation() // added
   const [searchState] = useMarketSearch()
   const [perPage, setPerPage] = useState(48)
   const [page, setPage] = useState(0)
-
-  // useEffect(() => {
-  //     console.log("toggled", searchState)
-  //     setPage(0)
-  // }, [searchState, setPage])
 
   const { listings, loading } = props
 
@@ -1374,7 +1371,7 @@ export function DisplayListings(props: {
 
       {listings && !filteredListings.length && !props.loading && (
         <Grid item xs={12}>
-          No listings to display
+          {t("no_listings")}
         </Grid>
       )}
 
@@ -1384,6 +1381,18 @@ export function DisplayListings(props: {
 
       <Grid item xs={12}>
         <TablePagination
+          labelRowsPerPage={t("rows_per_page")}
+          labelDisplayedRows={({ from, to, count }) =>
+            t("displayed_rows", {
+              from,
+              to,
+              count: count === -1 ? t("all") : count,
+            })
+          }
+          SelectProps={{
+            "aria-label": t("select_rows_per_page"),
+            color: "primary",
+          }}
           rowsPerPageOptions={[12, 24, 48, 96]}
           component="div"
           count={filteredListings.length}
@@ -1612,6 +1621,7 @@ export function DisplayBuyOrderListings(props: {
   listings: MarketAggregate[]
   loading?: boolean
 }) {
+  const { t } = useTranslation() // added
   const [searchState] = useMarketSearch()
   const [perPage, setPerPage] = useState(48)
   const [page, setPage] = useState(0)
@@ -1679,6 +1689,18 @@ export function DisplayBuyOrderListings(props: {
 
       <Grid item xs={12}>
         <TablePagination
+          labelRowsPerPage={t("rows_per_page")}
+          labelDisplayedRows={({ from, to, count }) =>
+            t("displayed_rows", {
+              from,
+              to,
+              count: count === -1 ? t("all") : count,
+            })
+          }
+          SelectProps={{
+            "aria-label": t("select_rows_per_page"),
+            color: "primary",
+          }}
           rowsPerPageOptions={[12, 24, 48, 96]}
           component="div"
           count={filteredListings.length}
@@ -1701,6 +1723,7 @@ export function ItemListings(props: {
   status?: string
   mine?: boolean
 }) {
+  const { t } = useTranslation() // added
   const [searchState, setSearchState] = useMarketSearch()
 
   const { org, user, status } = props
@@ -1735,10 +1758,6 @@ export function ItemListings(props: {
     [results],
   )
 
-  // useEffect(() => {
-  //     setPage(0)
-  // }, [searchState])
-
   const ref = useRef<HTMLDivElement>(null)
 
   const handleChangePage = useCallback(
@@ -1775,6 +1794,18 @@ export function ItemListings(props: {
 
       <Grid item xs={12}>
         <TablePagination
+          labelRowsPerPage={t("rows_per_page")}
+          labelDisplayedRows={({ from, to, count }) =>
+            t("displayed_rows", {
+              from,
+              to,
+              count: count === -1 ? t("all") : count,
+            })
+          }
+          SelectProps={{
+            "aria-label": t("select_rows_per_page"),
+            color: "primary",
+          }}
           rowsPerPageOptions={[12, 24, 48, 96]}
           component="div"
           count={total}
@@ -1797,6 +1828,7 @@ export function BulkListingsRefactor(props: {
   status?: string
   mine?: boolean
 }) {
+  const { t } = useTranslation() // added
   const [searchState, setSearchState] = useMarketSearch()
 
   const { org, user, status } = props
@@ -1831,10 +1863,6 @@ export function BulkListingsRefactor(props: {
     [results],
   )
 
-  // useEffect(() => {
-  //     setPage(0)
-  // }, [searchState])
-
   const ref = useRef<HTMLDivElement>(null)
 
   const handleChangePage = useCallback(
@@ -1871,6 +1899,18 @@ export function BulkListingsRefactor(props: {
 
       <Grid item xs={12}>
         <TablePagination
+          labelRowsPerPage={t("rows_per_page")}
+          labelDisplayedRows={({ from, to, count }) =>
+            t("displayed_rows", {
+              from,
+              to,
+              count: count === -1 ? t("all") : count,
+            })
+          }
+          SelectProps={{
+            "aria-label": t("select_rows_per_page"),
+            color: "primary",
+          }}
           rowsPerPageOptions={[12, 24, 48, 96]}
           component="div"
           count={total}

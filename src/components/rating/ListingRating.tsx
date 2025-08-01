@@ -12,11 +12,13 @@ import { Link } from "react-router-dom"
 import { UnderlineLink } from "../typography/UnderlineLink"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { useTranslation } from "react-i18next" // added
 
 export function ListingNameAndRating(props: {
   user?: MinimalUser | null
   contractor?: MinimalContractor | null
 }) {
+  const { t } = useTranslation() // added
   const { user, contractor } = props
 
   return (
@@ -88,6 +90,7 @@ export function SellerRatingCount(props: {
   user?: MinimalUser | null
   contractor?: MinimalContractor | null
 }) {
+  const { t } = useTranslation() // added
   const theme = useTheme<ExtendedTheme>()
   const { user, contractor } = props
   const rating = useMemo(
@@ -107,7 +110,7 @@ export function SellerRatingCount(props: {
       ({rating.rating_count.toLocaleString(undefined)}){" "}
       {rating.total_orders >= 25 ? (
         rating.avg_rating >= 47.5 ? (
-          <Tooltip title={"95%+ rating and 25+ transactions"}>
+          <Tooltip title={t("listing.95PercentRating25PlusTransactions")}>
             <Box>
               <svg width={0} height={0}>
                 <linearGradient
@@ -130,13 +133,13 @@ export function SellerRatingCount(props: {
             </Box>
           </Tooltip>
         ) : rating.avg_rating >= 45 ? (
-          <Tooltip title={"90%+ rating and 25+ transactions"}>
+          <Tooltip title={t("listing.90PercentRating25PlusTransactions")}>
             <AutoGraphOutlined color={"primary"} />
           </Tooltip>
         ) : null
       ) : null}
       {rating.streak >= 10 ? (
-        <Tooltip title={"10+ 5 star streak"}>
+        <Tooltip title={t("listing.tenPlusFiveStarStreak")}>
           <Box>
             <svg width={0} height={0}>
               <linearGradient
@@ -159,7 +162,7 @@ export function SellerRatingCount(props: {
           </Box>
         </Tooltip>
       ) : rating.streak >= 5 ? (
-        <Tooltip title={"5+ 5 star streak"}>
+        <Tooltip title={t("listing.fivePlusFiveStarStreak")}>
           <WhatshotRounded color={"primary"} />
         </Tooltip>
       ) : null}

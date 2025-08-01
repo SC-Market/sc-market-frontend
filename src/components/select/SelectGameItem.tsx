@@ -4,6 +4,7 @@ import {
   useMarketCategoriesQuery,
   useMarketItemsByCategoryQuery,
 } from "../../store/market"
+import { useTranslation } from "react-i18next" // add i18n
 
 export interface SelectGameItemProps {
   item_type: string
@@ -14,6 +15,7 @@ export interface SelectGameItemProps {
 }
 
 export function SelectGameItemStack(props: SelectGameItemProps) {
+  const { t } = useTranslation() // add i18n
   const { data: categories } = useMarketCategoriesQuery()
   const { data: items, isLoading: itemsLoading } =
     useMarketItemsByCategoryQuery(props.item_type!, {
@@ -24,11 +26,14 @@ export function SelectGameItemStack(props: SelectGameItemProps) {
     () =>
       categories
         ? (categories || []).find((o) => o.subcategory === props.item_type) || {
-            category: "Other",
-            subcategory: "Other",
+            category: t("market.other_category", "Other"),
+            subcategory: t("market.other_category", "Other"),
           }
-        : { category: "Other", subcategory: "Other" },
-    [categories, props.item_type],
+        : {
+            category: t("market.other_category", "Other"),
+            subcategory: t("market.other_category", "Other"),
+          },
+    [categories, props.item_type, t],
   )
   const item_name_value = useMemo(
     () =>
@@ -54,11 +59,7 @@ export function SelectGameItemStack(props: SelectGameItemProps) {
           groupBy={(o) => o.category}
           color={"secondary"}
           renderInput={(params) => (
-            <TextField
-              {...params}
-              label={"Item Type"}
-              {...props.TextfieldProps}
-            />
+            <TextField {...params} label={t("market.item_type", "Item Type")} />
           )}
           getOptionLabel={(option) => option.subcategory}
         />
@@ -76,7 +77,7 @@ export function SelectGameItemStack(props: SelectGameItemProps) {
           renderInput={(params) => (
             <TextField
               {...params}
-              label={"Item Name"}
+              label={t("market.item_name", "Item Name")}
               {...props.TextfieldProps}
             />
           )}
@@ -90,6 +91,7 @@ export function SelectGameItemStack(props: SelectGameItemProps) {
 }
 
 export function SelectGameItem(props: SelectGameItemProps) {
+  const { t } = useTranslation()
   const { data: categories } = useMarketCategoriesQuery()
   const { data: items, isLoading: itemsLoading } =
     useMarketItemsByCategoryQuery(props.item_type!, {
@@ -100,11 +102,14 @@ export function SelectGameItem(props: SelectGameItemProps) {
     () =>
       categories
         ? (categories || []).find((o) => o.subcategory === props.item_type) || {
-            category: "Other",
-            subcategory: "Other",
+            category: t("market.other_category", "Other"),
+            subcategory: t("market.other_category", "Other"),
           }
-        : { category: "Other", subcategory: "Other" },
-    [categories, props.item_type],
+        : {
+            category: t("market.other_category", "Other"),
+            subcategory: t("market.other_category", "Other"),
+          },
+    [categories, props.item_type, t],
   )
   const item_name_value = useMemo(
     () =>
@@ -131,7 +136,7 @@ export function SelectGameItem(props: SelectGameItemProps) {
         renderInput={(params) => (
           <TextField
             {...params}
-            label={"Item Type"}
+            label={t("market.item_type", "Item Type")}
             {...props.TextfieldProps}
           />
         )}
@@ -149,7 +154,7 @@ export function SelectGameItem(props: SelectGameItemProps) {
         renderInput={(params) => (
           <TextField
             {...params}
-            label={"Item Name"}
+            label={t("market.item_name", "Item Name")}
             {...props.TextfieldProps}
           />
         )}
@@ -166,17 +171,21 @@ export function SelectGameCategory(props: {
   onTypeChange: (newValue: string) => void
   TextfieldProps?: TextFieldProps
 }) {
+  const { t } = useTranslation()
   const { data: categories } = useMarketCategoriesQuery()
 
   const category_value = useMemo(
     () =>
       categories
         ? (categories || []).find((o) => o.subcategory === props.item_type) || {
-            category: "Other",
-            subcategory: "Other",
+            category: t("market.other_category", "Other"),
+            subcategory: t("market.other_category", "Other"),
           }
-        : { category: "Other", subcategory: "Other" },
-    [categories, props.item_type],
+        : {
+            category: t("market.other_category", "Other"),
+            subcategory: t("market.other_category", "Other"),
+          },
+    [categories, props.item_type, t],
   )
 
   return (
@@ -197,7 +206,7 @@ export function SelectGameCategory(props: {
           renderInput={(params) => (
             <TextField
               {...params}
-              label={"Item Type"}
+              label={t("market.item_type", "Item Type")}
               {...props.TextfieldProps}
             />
           )}
@@ -213,17 +222,21 @@ export function SelectGameCategoryOption(props: {
   onTypeChange: (newValue: string | null) => void
   TextfieldProps?: TextFieldProps
 }) {
+  const { t } = useTranslation()
   const { data: categories } = useMarketCategoriesQuery()
 
   const category_value = useMemo(
     () =>
       categories
         ? (categories || []).find((o) => o.subcategory === props.item_type) || {
-            category: "Other",
-            subcategory: "Other",
+            category: t("market.other_category", "Other"),
+            subcategory: t("market.other_category", "Other"),
           }
-        : { category: "Other", subcategory: "Other" },
-    [categories, props.item_type],
+        : {
+            category: t("market.other_category", "Other"),
+            subcategory: t("market.other_category", "Other"),
+          },
+    [categories, props.item_type, t],
   )
 
   return (
@@ -242,7 +255,7 @@ export function SelectGameCategoryOption(props: {
           renderInput={(params) => (
             <TextField
               {...params}
-              label={"Item Type"}
+              label={t("market.item_type", "Item Type")}
               {...props.TextfieldProps}
             />
           )}

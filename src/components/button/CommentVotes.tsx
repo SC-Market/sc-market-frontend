@@ -15,12 +15,14 @@ import {
   useCommentsDownvoteMutation,
   useCommentsUpvoteMutation,
 } from "../../store/comments"
+import { useTranslation } from "react-i18next" // added
 
 export function CommentVotes(props: {
   comment: Comment | RecruitingComment
   post?: RecruitingPost
 }) {
   const { comment, post } = props
+  const { t } = useTranslation() // added
 
   const [
     doUpvote, // This is the mutation trigger
@@ -38,6 +40,7 @@ export function CommentVotes(props: {
         onClick={() =>
           doUpvote({ comment_id: comment.comment_id, post_id: post?.post_id })
         }
+        title={t("commentVotes.upvoteTooltip", "Upvote this comment")} // added
       >
         {comment.upvotes}
       </Button>
@@ -47,6 +50,7 @@ export function CommentVotes(props: {
         onClick={() =>
           doDownvote({ comment_id: comment.comment_id, post_id: post?.post_id })
         }
+        title={t("commentVotes.downvoteTooltip", "Downvote this comment")} // added
       >
         {comment.downvotes}
       </Button>

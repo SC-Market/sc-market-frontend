@@ -29,18 +29,18 @@ import { Pistol } from "mdi-material-ui"
 
 export const all_sidebar_entries: SidebarSectionProps[] = [
   {
-    title: "Dashboard",
+    title: "sidebar.dashboard.title",
     items: [
       {
         to: "/dashboard",
-        text: "Dashboard",
+        text: "sidebar.dashboard.text",
         icon: <DashboardIcon />,
         logged_in: true,
         custom: false,
       },
       {
         to: "/dashboard",
-        text: "Dashboard",
+        text: "sidebar.dashboard.text",
         icon: <DashboardIcon />,
         logged_in: true,
         custom: true,
@@ -48,35 +48,35 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
       },
       {
         to: "/market/manage?quantityAvailable=0",
-        text: "Manage Market Listings",
+        text: "sidebar.manage_market_listings",
         icon: <WarehouseRounded />,
         logged_in: true,
         org: false,
       },
       {
         to: "/order/services",
-        text: "Manage Services",
+        text: "sidebar.manage_services",
         icon: <DashboardCustomizeRounded />,
         org: false,
         logged_in: true,
       },
       {
         to: "/availability",
-        text: "Availability",
+        text: "sidebar.availability",
         icon: <CalendarMonthRounded />,
         org: false,
         logged_in: true,
       },
       {
         to: "/myfleet",
-        text: "My Fleet",
+        text: "sidebar.my_fleet",
         icon: <LocalShipping />,
         hidden: true,
         logged_in: true,
       },
       {
         to: "/messaging",
-        text: "Messaging",
+        text: "sidebar.messaging",
         icon: <ForumRoundedIcon />,
         hidden: true,
         logged_in: true,
@@ -84,48 +84,48 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
     ],
   },
   {
-    title: "My Organization",
+    title: "sidebar.my_organization.title",
     items: [
       {
         to: "/org/orders",
-        text: "Orders",
+        text: "sidebar.orders",
         icon: <DashboardIcon />,
         // hidden: true,
         org_admin: true,
       },
       {
         to: "/availability",
-        text: "Availability",
+        text: "sidebar.availability",
         icon: <CalendarMonthRounded />,
         org: true,
       },
       {
         to: `/myorg`,
-        text: "My Org",
+        text: "sidebar.my_org",
         icon: <BusinessIcon />,
         org: true,
         hidden: true,
       },
       {
-        text: "Manage",
+        text: "sidebar.manage",
         icon: <ManageAccountsRounded />,
         org_admin: true,
         children: [
           {
             to: "/org/manage",
-            text: "Settings",
+            text: "sidebar.settings",
             icon: <SettingsIcon />,
           },
           {
             to: "/market/manage?quantityAvailable=0",
-            text: "Manage Listings",
+            text: "sidebar.manage_listings",
             icon: <WarehouseRounded />,
             logged_in: true,
             org: true,
           },
           {
             to: "/order/services",
-            text: "Manage Services",
+            text: "sidebar.manage_services",
             icon: <DashboardCustomizeRounded />,
             org_admin: true,
           },
@@ -134,41 +134,41 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
 
       {
         to: "/org/money",
-        text: "Money",
+        text: "sidebar.money",
         icon: <AttachMoneyRoundedIcon />,
         hidden: true,
         org_admin: true,
       },
       {
         to: "/invoices",
-        text: "Invoices",
+        text: "sidebar.invoices",
         icon: <FolderOpenIcon />,
         hidden: true,
         org_admin: true,
       },
       {
         to: "/org/fleet",
-        text: "Fleet",
+        text: "sidebar.fleet",
         icon: <LocalShipping />,
-        chip: "New!",
+        chip: "sidebar.new_chip",
         hidden: true,
         org_admin: true,
       },
 
       {
-        text: "People",
+        text: "sidebar.people",
         icon: <PeopleAltIcon />,
         org_admin: true,
         hidden: true,
         children: [
           {
             to: "/customers",
-            text: "Customers",
+            text: "sidebar.customers",
             hidden: true,
           },
           {
             to: "/org/members",
-            text: "Members",
+            text: "sidebar.members",
             hidden: true,
           },
         ],
@@ -177,43 +177,43 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
   },
 
   {
-    title: "Market",
+    title: "sidebar.market.title",
     items: [
       {
-        text: "Player Market",
+        text: "sidebar.player_market",
         icon: <StoreRounded />,
         children: [
           {
             to: "/market",
-            text: "Everything",
+            text: "sidebar.everything",
             icon: <HomeRounded />,
           },
           {
             to: "/market/category/weapon",
             params: "type=weapon",
-            text: "Weapons",
+            text: "sidebar.weapons",
             icon: <Pistol />,
           },
           {
             to: "/market/category/armor",
-            text: "Armor",
+            text: "sidebar.armor",
             params: "type=armor",
             icon: <ShieldRounded />,
           },
           {
             to: "/market/category/component",
-            text: "Components",
+            text: "sidebar.components",
             params: "type=component",
             icon: <CableRounded />,
           },
           {
             to: "/bulk",
-            text: "Bulk Items",
+            text: "sidebar.bulk_items",
             icon: <GavelIcon />,
           },
           {
             to: "/buyorders",
-            text: "Buy Orders",
+            text: "sidebar.buy_orders",
             icon: <RequestQuoteRounded />,
           },
         ],
@@ -221,25 +221,25 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
 
       {
         to: "/market/services",
-        text: "Contractor Services",
+        text: "sidebar.contractor_services",
         icon: <DesignServicesRounded />,
       },
       // {
       //   to: "/market/me",
-      //   text: "My Listings",
+      //   text: "sidebar.my_listings",
       //   icon: <ManageAccountsRounded />,
       //   logged_in: true,
       //   org: false,
       // },
       {
         to: "/market/me",
-        text: "My Org's Listings",
+        text: "sidebar.my_org_listings",
         icon: <ManageAccountsRounded />,
         org: true,
       },
       {
         to: "/sell",
-        text: "Sell Materials",
+        text: "sidebar.sell_materials",
         icon: <PaidIcon />,
         hidden: true,
         logged_in: true,
@@ -247,29 +247,29 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
     ],
   },
   {
-    title: "Contracting",
+    title: "sidebar.contracting.title",
     items: [
       {
         to: "/orders",
-        text: "My Orders",
+        text: "sidebar.my_orders",
         icon: <CreateIcon />,
         logged_in: true,
       },
       {
         to: "/contractors",
-        text: "Contractors",
+        text: "sidebar.contractors",
         icon: <BusinessIcon />,
         custom: false,
       },
       {
         to: "/contracts",
-        text: "Open Contracts",
+        text: "sidebar.open_contracts",
         icon: <AssignmentIcon />,
         custom: false,
       },
       {
         to: "/contracts",
-        text: "Open Contracts",
+        text: "sidebar.open_contracts",
         icon: <AssignmentIcon />,
         custom: true,
         org: true,
@@ -277,23 +277,23 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
     ],
   },
   {
-    title: "Organizations",
+    title: "sidebar.organizations.title",
     items: [
       {
         to: "/recruiting",
-        text: "Recruiting",
+        text: "sidebar.recruiting",
         icon: <PersonAddRounded />,
         custom: false,
       },
       // {
       //     to: "/recruiting",
-      //     text: "Join the Org",
+      //     text: "sidebar.join_the_org",
       //     icon: (<PersonAddRounded/>),
       //     custom: true,
       // },
       {
         to: "/org/register",
-        text: "Register",
+        text: "sidebar.register",
         icon: <CreateIcon />,
         org: false,
         logged_in: true,
@@ -301,23 +301,23 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
     ],
   },
   {
-    title: "Admin",
+    title: "sidebar.admin.title",
     items: [
       {
-        text: "Users",
+        text: "sidebar.users",
         icon: <PeopleAltIcon />,
         hidden: false,
         site_admin: true,
         to: "/admin/users",
       },
       {
-        text: "Market",
+        text: "sidebar.market",
         icon: <GavelIcon />,
         site_admin: true,
         to: "/admin/market",
       },
       {
-        text: "Orders",
+        text: "sidebar.orders",
         icon: <CreateIcon />,
         site_admin: true,
         to: "/admin/orders",
@@ -325,10 +325,10 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
     ],
   },
   {
-    title: "SC Market",
+    title: "sidebar.sc_market.title",
     items: [
       {
-        text: "SC Market Home",
+        text: "sidebar.sc_market_home",
         icon: <HomeRounded />,
         custom: true,
         to: "https://sc-market.space",

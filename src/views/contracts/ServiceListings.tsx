@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState } from "react"
+import { useTranslation } from "react-i18next" // added
 import { orderIcons, Service } from "../../datatypes/Order"
 import {
   Avatar,
@@ -209,6 +210,7 @@ export function ServiceListings(props: { user?: string; contractor?: string }) {
   const { user, contractor } = props
 
   const ref = useRef<HTMLDivElement>(null)
+  const { t } = useTranslation()
 
   const handleChangePage = useCallback(
     (event: unknown, newPage: number) => {
@@ -253,7 +255,6 @@ export function ServiceListings(props: { user?: string; contractor?: string }) {
             (!user || listing.user?.username === user) &&
             (!contractor || contractor === listing.contractor?.spectrum_id)
           )
-          // && (!org || listing.contractor_seller?.spectrum_id === org)
         })
         .filter((listing) => {
           return (
@@ -284,7 +285,7 @@ export function ServiceListings(props: { user?: string; contractor?: string }) {
         ))}
       {services && !filteredListings.length && (
         <Grid item xs={12}>
-          No services to display
+          {t("no_listings")}
         </Grid>
       )}
       <Grid item xs={12}>
@@ -292,6 +293,18 @@ export function ServiceListings(props: { user?: string; contractor?: string }) {
       </Grid>
       <Grid item xs={12}>
         <TablePagination
+          labelRowsPerPage={t("rows_per_page")}
+          labelDisplayedRows={({ from, to, count }) =>
+            t("displayed_rows", {
+              from,
+              to,
+              count: count === -1 ? t("all") : count,
+            })
+          }
+          SelectProps={{
+            "aria-label": t("select_rows_per_page"),
+            color: "primary",
+          }}
           rowsPerPageOptions={[6, 10, 16]}
           component="div"
           count={filteredListings ? filteredListings.length : 0}

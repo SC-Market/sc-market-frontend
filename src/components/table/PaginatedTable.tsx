@@ -18,6 +18,7 @@ import { useTheme } from "@mui/material/styles"
 import { TransparentHeaderCell } from "./TransparentHeaderCell"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useOnScreen } from "../navbar/MarketNavArea"
+import { useTranslation } from "react-i18next" // Added
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {
@@ -72,6 +73,8 @@ function EnhancedTableHead<T>(props: EnhancedTableProps<T>) {
     headCells,
     disableSelect,
   } = props
+  const { t } = useTranslation() // Added
+
   const createSortHandler =
     (property: keyof T) => (event: React.MouseEvent<unknown>) => {
       onRequestSort(event, property)
@@ -88,7 +91,7 @@ function EnhancedTableHead<T>(props: EnhancedTableProps<T>) {
               checked={rowCount > 0 && numSelected === rowCount}
               onChange={onSelectAllClick}
               inputProps={{
-                "aria-label": "select all desserts",
+                "aria-label": t("select_all"), // Заміна
               }}
             />
           </TransparentHeaderCell>
@@ -115,8 +118,9 @@ function EnhancedTableHead<T>(props: EnhancedTableProps<T>) {
                 {orderBy === headCell.id ? (
                   <Box component="span" sx={visuallyHidden}>
                     {order === "desc"
-                      ? "sorted descending"
-                      : "sorted ascending"}
+                      ? t("sorted_descending") // Заміна
+                      : t("sorted_ascending")}{" "}
+                    // Заміна
                   </Box>
                 ) : null}
               </TableSortLabel>
@@ -159,6 +163,7 @@ export function PaginatedTable<T>(props: {
   const [page, setPage] = React.useState(0)
   const [rowsPerPage, setRowsPerPage] = React.useState(5)
   const theme = useTheme<ExtendedTheme>()
+  const { t } = useTranslation() // Додано для локалізації
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -214,7 +219,7 @@ export function PaginatedTable<T>(props: {
         })
       }
     },
-    [ref],
+    [ref, isVisible],
   )
 
   const handleChangeRowsPerPage = (
@@ -226,7 +231,6 @@ export function PaginatedTable<T>(props: {
 
   const isSelected = (name: T[keyof T]) => selected.indexOf(name) !== -1
 
-  // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0
 
@@ -258,8 +262,6 @@ export function PaginatedTable<T>(props: {
             disableSelect={disableSelect}
           />
           <TableBody>
-            {/* if you don't need to support IE11, you can replace the `stableSort` call with:
-              rows.slice().sort(getComparator(order, orderBy)) */}
             {rows
               .slice()
               .sort(getComparator(order, orderBy))
@@ -309,6 +311,10 @@ export function PaginatedTable<T>(props: {
         SelectProps={{
           color: "primary",
         }}
+        labelRowsPerPage={t("rows_per_page")} // Локалізація
+        labelDisplayedRows={
+          ({ from, to, count }) => t("displayed_rows", { from, to, count }) // Локалізація
+        }
       />
     </Grid>
   )
@@ -337,6 +343,8 @@ export function ControlledTable<T>(props: {
   order: Order
   rowCount: number
 }) {
+  const { t } = useTranslation()
+
   const {
     rows,
     keyAttr,
@@ -419,7 +427,6 @@ export function ControlledTable<T>(props: {
 
   const isSelected = (name: T[keyof T]) => selected.indexOf(name) !== -1
 
-  // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows = pageSize - rows.length
 
   return (
@@ -450,8 +457,6 @@ export function ControlledTable<T>(props: {
             disableSelect={disableSelect}
           />
           <TableBody>
-            {/* if you don't need to support IE11, you can replace the `stableSort` call with:
-              rows.slice().sort(getComparator(order, orderBy)) */}
             {rows.map((row, index) => {
               const isItemSelected = isSelected(row[keyAttr])
               const labelId = `enhanced-table-checkbox-${index}`
@@ -496,7 +501,16 @@ export function ControlledTable<T>(props: {
         backIconButtonProps={{ color: "primary" }}
         SelectProps={{
           color: "primary",
+          "aria-label": t("select_rows_per_page"), // для доступності
         }}
+        labelRowsPerPage={t("rows_per_page")} // локалізація
+        labelDisplayedRows={({ from, to, count }) =>
+          t("displayed_rows", {
+            from,
+            to,
+            count: count === -1 ? t("all") : count, // підтримка "all"
+          })
+        }
       />
     </Grid>
   )

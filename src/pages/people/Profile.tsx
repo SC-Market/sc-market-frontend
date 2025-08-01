@@ -4,8 +4,10 @@ import { Navigate, useParams } from "react-router-dom"
 import { ProfileSkeleton, ViewProfile } from "../../views/people/ViewProfile"
 import { useGetUserByUsernameQuery } from "../../store/profile"
 import { Page } from "../../components/metadata/Page"
+import { useTranslation } from "react-i18next"
 
 export function Profile() {
+  const { t } = useTranslation()
   const { username } = useParams<{ username: string }>()
   // const myProfile = useGetUserProfileQuery()
 
@@ -15,7 +17,7 @@ export function Profile() {
     <Page
       title={
         user.data?.display_name
-          ? `${user.data?.display_name} - View User Profile`
+          ? `${user.data?.display_name} - ${t("profile.viewUserProfile")}`
           : null
       }
     >

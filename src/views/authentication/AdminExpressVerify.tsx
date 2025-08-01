@@ -4,8 +4,11 @@ import { useAdminExpressVerifyContractorMutation } from "../../store/contractor"
 import { FlatSection } from "../../components/paper/Section"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
+import { useTranslation } from "react-i18next"
 
 export function AdminExpressVerify() {
+  const { t } = useTranslation()
+
   const [state, setState] = useState({
     owner_discord_id: "",
     owner_username: "",
@@ -22,24 +25,26 @@ export function AdminExpressVerify() {
       setState({ owner_discord_id: "", owner_username: "", spectrum_id: "" })
 
       issueAlert({
-        message: "Submitted!",
+        message: t("adminExpressVerify.success", "Submitted!"),
         severity: "success",
       })
     } else {
       issueAlert({
-        message: `Failed to submit! ${
-          res.error?.error || res.error?.data?.error || res.error
-        }`,
+        message: t("adminExpressVerify.failure", {
+          defaultValue: "Failed to submit! {{reason}}",
+          reason:
+            res.error?.error || res.error?.data?.error || String(res.error),
+        }),
         severity: "error",
       })
     }
-  }, [state])
+  }, [state, t])
 
   return (
-    <FlatSection title={"Express Verify User"}>
+    <FlatSection title={t("adminExpressVerify.title", "Express Verify User")}>
       <Grid item>
         <TextField
-          label={"Owner Discord ID"}
+          label={t("adminExpressVerify.ownerDiscordId", "Owner Discord ID")}
           value={state.owner_discord_id}
           onChange={(event) =>
             setState({ ...state, owner_discord_id: event.target.value })
@@ -48,7 +53,7 @@ export function AdminExpressVerify() {
       </Grid>
       <Grid item>
         <TextField
-          label={"Owner Username*"}
+          label={t("adminExpressVerify.ownerUsername", "Owner Username*")}
           value={state.owner_username}
           onChange={(event) =>
             setState({ ...state, owner_username: event.target.value })
@@ -57,7 +62,7 @@ export function AdminExpressVerify() {
       </Grid>
       <Grid item>
         <TextField
-          label={"Org Spectrum ID*"}
+          label={t("adminExpressVerify.spectrumId", "Org Spectrum ID*")}
           value={state.spectrum_id}
           onChange={(event) =>
             setState({ ...state, spectrum_id: event.target.value })
@@ -66,7 +71,7 @@ export function AdminExpressVerify() {
       </Grid>
       <Grid item>
         <LoadingButton loading={isLoading} onClick={callback}>
-          Submit
+          {t("adminExpressVerify.submit", "Submit")}
         </LoadingButton>
       </Grid>
     </FlatSection>

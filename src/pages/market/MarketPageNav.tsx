@@ -1,6 +1,7 @@
 import React, { useCallback } from "react"
 import { useMarketSearch } from "../../hooks/market/MarketSearch"
 import { TablePagination } from "@mui/material"
+import { useTranslation } from "react-i18next" // added
 
 export function MarketPageNav(props: {
   ref: React.RefObject<HTMLDivElement>
@@ -8,6 +9,7 @@ export function MarketPageNav(props: {
 }) {
   const { ref, total } = props
   const [searchState, setSearchState] = useMarketSearch()
+  const { t } = useTranslation() // added
 
   const handleChangePage = useCallback(
     (event: unknown, newPage: number) => {
@@ -37,6 +39,10 @@ export function MarketPageNav(props: {
 
   return (
     <TablePagination
+      labelRowsPerPage={t("rows_per_page")} // localised
+      labelDisplayedRows={
+        ({ from, to, count }) => t("displayed_rows", { from, to, count }) // added
+      }
       rowsPerPageOptions={[12, 24, 48, 96]}
       component="div"
       count={total}

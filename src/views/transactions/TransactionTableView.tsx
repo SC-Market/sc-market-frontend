@@ -6,6 +6,7 @@ import { HeadCell } from "../../components/table/PaginatedTable"
 import { Section } from "../../components/paper/Section"
 import { ScrollableTable } from "../../components/table/ScrollableTable"
 import { useGetUserProfileQuery } from "../../store/profile"
+import { useTranslation } from "react-i18next" // ✅ локалізація
 
 const statusColors = new Map<
   "Completed" | "Pending" | "Cancelled",
@@ -41,7 +42,7 @@ function formatAMPM(date: Date) {
   return hours + ":" + minutes + " " + ampm
 }
 
-function formatDate(someDateTimeStamp: number) {
+function formatDate(someDateTimeStamp: number, t: any) {
   const dt = new Date(someDateTimeStamp),
     date = dt.getDate(),
     month = months[dt.getMonth()],
@@ -53,7 +54,7 @@ function formatDate(someDateTimeStamp: number) {
   if (diffYears === 0 && diffDays === 0 && diffMonths === 0) {
     return formatAMPM(dt)
   } else if (diffYears === 0 && diffDays === 1) {
-    return "Yesterday"
+    return t("transactions.yesterday")
   } else if (diffYears >= 1) {
     return month + " " + date + ", " + new Date(someDateTimeStamp).getFullYear()
   } else {
@@ -69,6 +70,7 @@ export function TransactionTableRow(props: {
   labelId: string
 }) {
   const { row, index, isItemSelected } = props
+  const { t } = useTranslation()
 
   const { data: profile } = useGetUserProfileQuery()
   const userRec = useMemo(
@@ -108,12 +110,13 @@ export function TransactionTableRow(props: {
       >
         <TableCell>
           <Typography variant={"subtitle1"}>
-            {formatDate(new Date(row.timestamp).getTime())}
+            {formatDate(new Date(row.timestamp).getTime(), t)}
           </Typography>
         </TableCell>
         <TableCell>
           <Typography color={"secondary"}>
-            {row.kind} {receiving ? "from" : "to"}{" "}
+            {t(`transactions.kind.${row.kind}`, row.kind)}{" "}
+            {receiving ? t("transactions.from") : t("transactions.to")}{" "}
             {receiving
               ? row.user_sender_id || row.contractor_sender_id
               : row.user_recipient_id || row.contractor_recipient_id}
@@ -122,7 +125,7 @@ export function TransactionTableRow(props: {
         <TableCell>
           <Chip
             color={statusColors.get(row.status) || "info"}
-            label={row.status}
+            label={t(`transactions.status.${row.status.toLowerCase()}`)}
           />
         </TableCell>
         <TableCell align={"right"}>
@@ -148,39 +151,47 @@ export const transactionsHeadCells: readonly HeadCell<Transaction>[] = [
     id: "timestamp",
     numeric: true,
     disablePadding: false,
-    label: "Date",
+    label: "transactions.date",
     minWidth: 100,
   },
   {
     id: "kind",
     numeric: false,
     disablePadding: false,
-    label: "Details",
+    label: "transactions.details",
     minWidth: 300,
   },
   {
     id: "status",
     numeric: false,
     disablePadding: false,
-    label: "Status",
+    label: "transactions.status.title",
   },
   {
     id: "amount",
     numeric: true,
     disablePadding: false,
-    label: "Amount",
+    label: "transactions.amount",
     minWidth: 150,
   },
 ]
 
 export function TransactionTableView(props: { transactions: Transaction[] }) {
+  const { t } = useTranslation()
   return (
-    <Section xs={12} title={"Recent Transactions"} disablePadding>
+    <Section
+      xs={12}
+      title={t("transactions.recent_transactions")}
+      disablePadding
+    >
       <ScrollableTable<Transaction>
         rows={props.transactions}
         initialSort={"timestamp"}
         generateRow={TransactionTableRow}
-        headCells={transactionsHeadCells}
+        headCells={transactionsHeadCells.map((cell) => ({
+          ...cell,
+          label: t(cell.label),
+        }))}
         keyAttr={"transaction_id"}
         initialDirection={"desc"}
         disableSelect
