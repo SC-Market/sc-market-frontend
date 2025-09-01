@@ -5405,7 +5405,7 @@ __metadata:
     react-player: "npm:^2.16.0"
     react-redux: "npm:^9.2.0"
     react-router-dom: "npm:^6.30.1"
-    react-top-loading-bar: "npm:^2.3.1"
+    react-top-loading-bar: "npm:^3.0.2"
     react-transition-group: "npm:^4.4.5"
     react-youtube: "npm:^10.1.0"
     regexify-string: "npm:^1.0.19"
@@ -8966,12 +8966,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-top-loading-bar@npm:^2.3.1":
-  version: 2.3.1
-  resolution: "react-top-loading-bar@npm:2.3.1"
+"react-top-loading-bar@npm:^3.0.2":
+  version: 3.0.2
+  resolution: "react-top-loading-bar@npm:3.0.2"
   peerDependencies:
-    react: ^16 || ^17 || ^18
-  checksum: 10c0/f3190a16edc2dc4b169cd28a23d9032828cd3b7f516767b74548ee87efdf6df502e6e14a7eca475db8cd78a1a480cac4352ac7df7f683a07bf3e857fb78e3388
+    react: ^16 || ^17 || ^18 || ^19
+  checksum: 10c0/35d149e4da8a313d84b6965036e89cd4929057ed01bf0cdb7b49b553179312f69d6ad99bcc2e32b8f60350ed69447e776d1128468409dd49e499f7a66514d868
   languageName: node
   linkType: hard
 
