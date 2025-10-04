@@ -138,13 +138,12 @@ export function MarketRatingStars(props: {
 }) {
   const theme = useTheme<ExtendedTheme>()
   const { rating } = props
-  const ratingValue = useMemo(() => rating.avg_rating / 10, [rating.avg_rating])
 
   return (
     <Rating
       readOnly
       precision={0.1}
-      value={ratingValue}
+      value={rating.avg_rating}
       icon={<StarRounded fontSize="inherit" />}
       emptyIcon={
         <StarRounded
