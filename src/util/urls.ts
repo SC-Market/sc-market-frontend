@@ -38,10 +38,10 @@ export function formatMarketUrl(listing: MarketListingSearchResult) {
   }
 }
 
-export function formatCompleteListingUrl(listing: BaseListingType) {
+export function formatCompleteListingUrl(listing: FormattableListingType) {
   try {
     return listing?.type === "aggregate_composite"
-      ? `/market/aggregate/${listing?.aggregate_id}/#/${formatListingSlug(
+      ? `/market/aggregate/${listing?.listing.listing_id}/#/${formatListingSlug(
           listing.details.title,
         )}`
       : `/market/${listing?.listing.listing_id}/#/${formatListingSlug(listing.details.title)}`

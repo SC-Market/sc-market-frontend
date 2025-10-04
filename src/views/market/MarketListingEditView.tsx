@@ -29,6 +29,7 @@ import { useCurrentMarketListing } from "../../hooks/market/CurrentMarketItem"
 import {
   useMarketUpdateListingMutation,
   useMarketUploadListingPhotosMutation,
+  useUpdateMarketListingMutation,
   validatePhotoUploadParams,
 } from "../../store/market"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
@@ -43,13 +44,11 @@ import {
 import { has_permission } from "../contractor/OrgRoles"
 import { NumericFormat } from "react-number-format"
 import { SelectGameItemStack } from "../../components/select/SelectGameItem"
-import { Stack } from "@mui/system"
 import { SelectPhotosArea } from "../../components/modal/SelectPhotosArea"
 import { useTranslation } from "react-i18next" // Localization
 
 export function MarketListingEditView() {
   const { t } = useTranslation() // Localization hook
-  // TODO: Update listing details
   const [listing] = useCurrentMarketListing<UniqueListing>()
   const { data: profile } = useGetUserProfileQuery()
   const [currentOrg] = useCurrentOrg()
@@ -59,12 +58,6 @@ export function MarketListingEditView() {
       currentOrg?.spectrum_id ===
       listing?.listing.contractor_seller?.spectrum_id,
     [currentOrg?.spectrum_id, listing?.listing?.contractor_seller],
-  )
-  const amSeller = useMemo(
-    () =>
-      profile?.username === listing?.listing.user_seller?.username &&
-      !currentOrg,
-    [currentOrg, listing?.listing?.user_seller?.username, profile?.username],
   )
 
   const amContractorManager = useMemo(
@@ -79,22 +72,12 @@ export function MarketListingEditView() {
     [currentOrg, profile, amContractor],
   )
 
-  const amRelated = useMemo(
-    () => amSeller || amContractorManager || profile?.role === "admin",
-    [amSeller, amContractorManager, profile?.role],
-  )
-
-  const { data: contractor } = useGetContractorBySpectrumIDQuery(
-    listing.listing.contractor_seller?.spectrum_id!,
-    { skip: !listing.listing.contractor_seller },
-  )
-
   const issueAlert = useAlertHook()
 
   const [
     updateListing, // This is the mutation trigger
     { isLoading }, // This is the destructured mutation result
-  ] = useMarketUpdateListingMutation()
+  ] = useUpdateMarketListingMutation()
 
   const [uploadPhotos, { isLoading: isUploading }] =
     useMarketUploadListingPhotosMutation()
@@ -120,8 +103,8 @@ export function MarketListingEditView() {
   const updateListingCallback = useCallback(
     (body: MarketListingUpdateBody) => {
       return updateListing({
-        id: listing.listing.listing_id,
-        data: body,
+        listing_id: listing.listing.listing_id,
+        body,
       })
         .unwrap()
         .then(() => {

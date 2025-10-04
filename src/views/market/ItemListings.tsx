@@ -71,6 +71,7 @@ import {
   ExtendedMultipleSearchResult,
   ExtendedAggregateSearchResult,
   useSearchMarketQuery,
+  useGetMyListingsQuery,
 } from "../../store/market"
 import { Link } from "react-router-dom"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
@@ -1629,74 +1630,82 @@ export function MyItemListings(props: {
   )
 
   // Determine if we should search by contractor or user
-  const searchByContractor = currentOrg?.spectrum_id
-  const searchByUser =
-    currentOrg === null && profile?.username && !profileLoading
+  const hasOrg = currentOrg && currentOrg.spectrum_id
+  const hasUser = !hasOrg && profile?.username && !profileLoading
 
-  // Build search query parameters
+  // Get search state from URL
+  const [searchState] = useMarketSearch()
+
+  // Build search query parameters for new endpoints
   const searchQueryParams = useMemo(() => {
     const baseParams = {
       page_size: perPage,
-      index: page,
-      quantityAvailable: 1,
-      query: "",
+      index: page * perPage, // Convert page to index
+      quantityAvailable: searchState.quantityAvailable ?? 1,
+      query: searchState.query || "",
+      sort: searchState.sort || "activity",
+      minCost: searchState.minCost || undefined,
+      maxCost: searchState.maxCost || undefined,
+      item_type: searchState.item_type || undefined,
+      sale_type: searchState.sale_type || undefined,
     }
 
-    // Add contractor or user filter
-    if (searchByContractor) {
-      return {
-        ...baseParams,
-        contractor_seller: searchByContractor,
-      }
-    } else if (searchByUser && profile?.username) {
-      return {
-        ...baseParams,
-        user_seller: profile.username,
-      }
+    // Add status filter if provided
+    if (props.status) {
+      ;(baseParams as any).statuses = props.status
     }
 
     return baseParams
-  }, [searchByContractor, searchByUser, perPage, page])
+  }, [perPage, page, props.status, searchState])
 
-  // Add status filter if provided
-  const finalSearchParams = useMemo(() => {
-    const params: any = {
-      ...searchQueryParams,
-      sort: "activity", // Use valid default sort value
-    }
+  // Use unified endpoint with contractor_id parameter when needed
+  const finalParams = hasOrg 
+    ? { ...searchQueryParams, contractor_id: currentOrg?.spectrum_id }
+    : searchQueryParams
 
-    if (props.status) {
-      params.status = props.status
-    }
+  const { data: searchResults, isLoading } = useGetMyListingsQuery(finalParams)
 
-    // Add internal filter
-    if (props.showInternal === false) {
-      params.internal = "false"
-    } else if (props.showInternal === true) {
-      params.internal = "true"
-    }
-    // If showInternal is "all" or undefined, don't add internal filter (show all)
-
-    return params
-  }, [searchQueryParams, props.status, props.showInternal])
-
-  const { data: searchResults, isLoading } =
-    useSearchMarketListingsQuery(finalSearchParams)
-
-  const [, setSearchState] = useMarketSearch()
-  useEffect(() => {
-    setSearchState({ query: "", quantityAvailable: 1 })
-  }, [])
+  // Convert the new format to the old format for compatibility
+  const convertedListings = useMemo(() => {
+    if (!searchResults?.listings) return []
+    
+    return searchResults.listings.map((listing: any) => ({
+      listing_id: listing.listing.listing_id,
+      listing_type: listing.type,
+      item_type: listing.details.item_type,
+      item_name: listing.details.title,
+      game_item_id: null,
+      price: listing.listing.price,
+      expiration: listing.listing.expiration || "",
+      minimum_price: listing.listing.price,
+      maximum_price: listing.listing.price,
+      quantity_available: listing.listing.quantity_available,
+      timestamp: listing.listing.timestamp || "",
+      total_rating: 0,
+      avg_rating: 0,
+      details_id: listing.listing.listing_id,
+      status: listing.listing.status,
+      user_seller: null,
+      contractor_seller: null,
+      rating_count: 0,
+      rating_streak: 0,
+      total_orders: listing.stats?.order_count || 0,
+      total_assignments: 0,
+      response_rate: 0,
+      title: listing.details.title,
+      photo: listing.photos[0] || "",
+      internal: false,
+      sale_type: listing.listing.sale_type,
+      auction_end_time: null,
+    }))
+  }, [searchResults])
 
   return (
     <>
       <Grid item xs={12}>
         <div ref={ref} />
       </Grid>
-      <DisplayListingsMin
-        listings={searchResults?.listings || []}
-        loading={isLoading}
-      />
+      <DisplayListingsMin listings={convertedListings} loading={isLoading} />
 
       <Grid item xs={12}>
         <Divider light />

@@ -6,6 +6,7 @@ import {
   MarketMultipleBody,
   ListingStats,
   MarketListingBody,
+  UniqueListing,
 } from "../datatypes/MarketListing"
 import { MinimalUser } from "../datatypes/User.ts"
 import { Order } from "../datatypes/Order.tsx"
@@ -309,16 +310,11 @@ export const marketApi = serviceApi.injectEndpoints({
       ],
     }),
 
-    getContractorListings: builder.query<MarketListing[], string>({
-      query: (spectrum_id) => `/api/market/contractor/${spectrum_id}`,
-      transformResponse: unwrapResponse,
-      providesTags: (result, error, spectrum_id) => [
-        { type: "ContractorListings" as const, id: spectrum_id },
-      ],
-    }),
-
-    getMyListings: builder.query<MarketListing[], void>({
-      query: () => "/api/market/mine",
+    getMyListings: builder.query<
+      { listings: UniqueListing[]; total: number },
+      any
+    >({
+      query: (params) => ({ url: "/api/market/mine", params }),
       transformResponse: unwrapResponse,
       providesTags: ["MyListings"],
     }),
@@ -481,15 +477,15 @@ export const marketApi = serviceApi.injectEndpoints({
     }),
 
     updateListingQuantity: builder.mutation<
-      any,
-      { listingId: string; quantity: number }
+      void,
+      { listing_id: string; quantity: number }
     >({
-      query: ({ listingId, quantity }) => ({
-        url: `/api/market/listing/${listingId}/update_quantity`,
+      query: ({ listing_id, quantity }) => ({
+        url: `/api/market/listing/${listing_id}/update_quantity`,
         method: "POST",
         body: { quantity_available: quantity },
       }),
-      invalidatesTags: (result, error, { listingId }) => [
+      invalidatesTags: (result, error, { listing_id }) => [
         // Invalidate all market-related caches aggressively
         "MarketListings" as const,
         "MyListings" as const,
@@ -499,15 +495,16 @@ export const marketApi = serviceApi.injectEndpoints({
         "AllListings" as const,
         "ContractorListings" as const,
         // Invalidate specific listing
-        { type: "MarketListings" as const, id: listingId },
+        { type: "MarketListings" as const, id: listing_id },
       ],
     }),
-    createMarketListingLegacy: builder.mutation<any, MarketListingBody>({
+    createMarketListing: builder.mutation<UniqueListing, MarketListingBody>({
       query: (listingData) => ({
         url: "/api/market/listings",
         method: "POST",
         body: listingData,
       }),
+      transformResponse: unwrapResponse,
       invalidatesTags: [
         "MarketListings",
         "MyListings",
@@ -520,7 +517,7 @@ export const marketApi = serviceApi.injectEndpoints({
     }),
     getGameItemByName: builder.query<any, string>({
       query: (name) => `/api/market/item/${name}`,
-      transformResponse: (response: any) => response,
+      transformResponse: unwrapResponse,
       providesTags: (result, error, name) => [
         { type: "GameItem" as const, id: name },
       ],
@@ -617,13 +614,16 @@ export const marketApi = serviceApi.injectEndpoints({
       ],
     }),
 
-    updateMarketListing: builder.mutation<any, { id: string; data: any }>({
-      query: ({ id, data }) => ({
-        url: `/api/market/listing/${id}`,
+    updateMarketListing: builder.mutation<
+      void,
+      { listing_id: string; body: Partial<MarketListingBody> }
+    >({
+      query: ({ listing_id, body }) => ({
+        url: `/api/market/listing/${listing_id}`,
         method: "PUT",
-        body: data,
+        body,
       }),
-      invalidatesTags: (result, error, { id }) => [
+      invalidatesTags: (result, error, { listing_id }) => [
         // Invalidate all market-related caches aggressively
         "MarketListings",
         "MyListings",
@@ -632,7 +632,7 @@ export const marketApi = serviceApi.injectEndpoints({
         "BuyOrderListings",
         "AllListings",
         // Invalidate specific listing
-        { type: "MarketListings" as const, id },
+        { type: "MarketListings" as const, id: listing_id },
       ],
     }),
 
@@ -680,7 +680,7 @@ export const {
   useGetAggregateHistoryQuery,
   useUpdateAggregateAdminMutation,
   useUpdateListingQuantityMutation,
-  useCreateMarketListingLegacyMutation,
+  useCreateMarketListingMutation,
   useGetGameItemByNameQuery,
   useUploadListingPhotosMutation,
   useCreateAggregateListingMutation,
@@ -694,12 +694,8 @@ export const {
 // Additional missing hooks that components are trying to import
 export const useSearchMarketQuery = useSearchMarketListingsQuery
 export const useMarketGetGameItemByNameQuery = useGetGameItemByNameQuery
-export const useMarketCreateListingMutation =
-  useCreateMarketListingLegacyMutation
 export const useMarketRefreshListingMutation = useRefreshMarketListingMutation
 export const useMarketUpdateListingMutation = useUpdateMarketListingMutation
-export const useMarketUpdateListingQuantityMutation =
-  useUpdateListingQuantityMutation
 export const useMarketCancelBuyOrderMutation = useCancelBuyOrderMutation
 export const useMarketFulfillBuyOrderMutation = useFulfillBuyOrderMutation
 export const useMarketGetAggregateChartByIDQuery = useGetAggregateChartQuery

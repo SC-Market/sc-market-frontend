@@ -14,14 +14,13 @@ import {
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import {
-  useMarketCreateListingMutation,
   useMarketCreateAggregateListingMutation,
   useMarketCreateMultipleListingMutation,
   useGetAggregateByIdQuery,
-  useMarketGetMyListingsQuery,
   useSearchMarketQuery,
   useMarketUploadListingPhotosMutation,
   validatePhotoUploadParams,
+  useCreateMarketListingMutation,
 } from "../../store/market"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import {
@@ -89,7 +88,7 @@ export function MarketListingForm(props: { sale_type: "sale" | "auction" }) {
   const [
     createListing, // This is the mutation trigger
     { isLoading }, // This is the destructured mutation result
-  ] = useMarketCreateListingMutation()
+  ] = useCreateMarketListingMutation()
 
   const [uploadPhotos, { isLoading: isUploading }] =
     useMarketUploadListingPhotosMutation()
@@ -113,7 +112,7 @@ export function MarketListingForm(props: { sale_type: "sale" | "auction" }) {
           // Upload photos if any files were selected
           if (uploadedFiles.length > 0) {
             const uploadParams = validatePhotoUploadParams(
-              res.listing_id,
+              res.listing.listing_id,
               uploadedFiles,
             )
             if (uploadParams.status === "invalid") {
@@ -130,12 +129,6 @@ export function MarketListingForm(props: { sale_type: "sale" | "auction" }) {
             })
               .unwrap()
               .then((uploadResult) => {
-                console.log(`[Photo Upload] Upload successful:`, {
-                  listing_id: res.listing_id,
-                  result: uploadResult,
-                  photo_urls: uploadResult.photo_urls,
-                })
-
                 issueAlert({
                   message: t("MarketListingForm.photosUploaded"),
                   severity: "success",
@@ -145,21 +138,11 @@ export function MarketListingForm(props: { sale_type: "sale" | "auction" }) {
                 setUploadedFiles([])
               })
               .catch((uploadError) => {
-                console.error(
-                  `[Photo Upload] Upload failed for listing ${res.listing_id}:`,
-                  {
-                    listing_id: res.listing_id,
-                    error: uploadError,
-                    error_message: uploadError?.message || "Unknown error",
-                    error_status: uploadError?.status || "No status",
-                  },
-                )
-
                 issueAlert(uploadError)
               })
           } else {
             console.log(
-              `[Photo Upload] No photos to upload for listing ${res.listing_id}`,
+              `[Photo Upload] No photos to upload for listing ${res.listing.listing_id}`,
             )
           }
 
@@ -185,7 +168,7 @@ export function MarketListingForm(props: { sale_type: "sale" | "auction" }) {
             severity: "success",
           })
 
-          navigate(`/market/${res.listing_id}`)
+          navigate(`/market/${res.listing.listing_id}`)
         })
         .catch((err) => {
           issueAlert(err)

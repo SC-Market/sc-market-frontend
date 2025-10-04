@@ -13,17 +13,24 @@ import {
   GridValidRowModel,
   Toolbar,
 } from "@mui/x-data-grid"
-import React, { useCallback } from "react"
+import React, { useCallback, useEffect } from "react"
 import { Stack } from "@mui/system"
 import { MinimalUser } from "../../datatypes/User"
 import {
   Autocomplete,
   Button,
   ButtonGroup,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  FormControlLabel,
   IconButton,
   Switch,
   TextField,
   Tooltip,
+  Paper,
+  Typography,
 } from "@mui/material"
 import {
   AddRounded,
@@ -32,19 +39,20 @@ import {
   DeleteRounded,
   RemoveRounded,
   SaveRounded,
+  ShoppingCartRounded,
 } from "@mui/icons-material"
 import { useGetUserProfileQuery } from "../../store/profile"
 import { UserProfileState } from "../../hooks/login/UserProfile"
 import { UserAvatar } from "../../components/avatar/UserAvatar"
 import { ThemedDataGrid } from "../../components/grid/ThemedDataGrid"
 import { SelectMarketListing } from "../../components/select/SelectMarketListing.tsx"
+import { UniqueListing } from "../../datatypes/MarketListing.ts"
 import { NumericFormat } from "react-number-format"
-import { ExtendedUniqueSearchResult } from "../../store/market"
 import { useTranslation } from "react-i18next" // Added for localization
 
 interface StockEntry extends GridValidRowModel {
   id: string
-  listing: ExtendedUniqueSearchResult | null
+  listing: UniqueListing | null
   quantity_available: number
   location: string
   status: string
@@ -54,13 +62,13 @@ interface StockEntry extends GridValidRowModel {
 }
 
 export function StockEntryItemDisplay(props: {
-  listing: ExtendedUniqueSearchResult | null
+  listing: UniqueListing | null
 }) {
   const { t } = useTranslation()
-  if (!props.listing) {
+  if (!props.listing || !props.listing.details) {
     return t("ItemStockRework.noItemSelected")
   }
-  return `${props.listing.item_type} / ${props.listing.title}`
+  return `${props.listing.details.item_type} / ${props.listing.details.title}`
 }
 
 export function ManageStockArea(props: {
@@ -362,10 +370,10 @@ export function ItemStockRework() {
                 listing_id={currentListing?.listing?.listing_id || null}
                 onListingChange={(newListing) => {
                   // Update editing state instead of immediately updating rows
-                  setEditingRows((prev) => ({
-                    ...prev,
-                    [params.id]: { ...prev[params.id], listing: newListing },
-                  }))
+                  // setEditingRows((prev) => ({
+                  //   ...prev,
+                  //   [params.id]: { ...prev[params.id], listing: newListing },
+                  // }))
                 }}
                 TextfieldProps={{
                   size: "small",
@@ -593,6 +601,10 @@ export function ItemStockRework() {
       },
     },
   ]
+
+  useEffect(() => {
+    console.log(rows)
+  }, [rows])
 
   return (
     <ThemedDataGrid
