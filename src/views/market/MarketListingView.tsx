@@ -1239,7 +1239,9 @@ export function MarketListingView() {
                               icon={<VisibilityRounded fontSize={"inherit"} />}
                             >
                               {t("MarketListingView.views")}{" "}
-                              {(complete.view_count || 0).toLocaleString()}
+                              {(
+                                complete.stats?.view_count || 0
+                              ).toLocaleString()}
                             </ListingDetailItem>
 
                             <ListingDetailItem

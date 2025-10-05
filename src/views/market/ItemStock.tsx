@@ -336,7 +336,6 @@ export function DisplayStock({
           view_count: 0,
         }),
         // Access view_count from both locations for backward compatibility
-        view_count: listing.stats?.view_count || 0,
         image_url: listing.photos[0],
       })),
     [listings],

@@ -33,9 +33,7 @@ export function ManageStock() {
 
   return (
     <Page title={t("sidebar.my_market_listings")}>
-      <ItemStockContext.Provider
-        value={[selectionModel, setSelectionModel]}
-      >
+      <ItemStockContext.Provider value={[selectionModel, setSelectionModel]}>
         <MarketSidebarContext.Provider value={[open, setOpen]}>
           <ContainerGrid maxWidth={"xl"} sidebarOpen={true}>
             <HeaderTitle>{t("sidebar.manage_listings")}</HeaderTitle>

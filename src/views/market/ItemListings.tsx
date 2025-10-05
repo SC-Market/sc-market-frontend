@@ -1659,7 +1659,7 @@ export function MyItemListings(props: {
   }, [perPage, page, props.status, searchState])
 
   // Use unified endpoint with contractor_id parameter when needed
-  const finalParams = hasOrg 
+  const finalParams = hasOrg
     ? { ...searchQueryParams, contractor_id: currentOrg?.spectrum_id }
     : searchQueryParams
 
@@ -1668,7 +1668,7 @@ export function MyItemListings(props: {
   // Convert the new format to the old format for compatibility
   const convertedListings = useMemo(() => {
     if (!searchResults?.listings) return []
-    
+
     return searchResults.listings.map((listing: any) => ({
       listing_id: listing.listing.listing_id,
       listing_type: listing.type,
