@@ -1416,6 +1416,7 @@
   "MarketAggregateView": {
     "market": "Market",
     "sellerRating": "Seller Rating",
+    "buyer": "Seller",
     "price": "Price",
     "quantityAvailable": "Quantity Available",
     "viewCount": "Total Views",
