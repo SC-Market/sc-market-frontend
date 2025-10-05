@@ -423,6 +423,7 @@ export const marketApi = serviceApi.injectEndpoints({
         body: buyOrderData,
       }),
       invalidatesTags: ["BuyOrderListings"],
+      transformResponse: unwrapResponse,
     }),
 
     cancelBuyOrder: builder.mutation<void, string>({
