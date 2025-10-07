@@ -758,26 +758,6 @@ export function AggregateBuyOrderListingBase(props: {
                 </Typography>
               </CardContent>
             </Box>
-
-            {/*<CardActions*/}
-            {/*    sx={{*/}
-            {/*        paddingLeft: 2,*/}
-            {/*        paddingRight: 2*/}
-            {/*    }}*/}
-            {/*>*/}
-            {/*    <Grid container justifyContent={'space-between'}>*/}
-            {/*        /!*<Grid item xs={6} container alignItems={'center'}>*!/*/}
-            {/*        /!*    <Rating name="read-only" value={listing.rating} readOnly precision={0.1}/>*!/*/}
-            {/*        /!*</Grid>*!/*/}
-            {/*        <Grid item xs={6} container justifyContent={'right'}>*/}
-            {/*            <Button color={'secondary'} variant={'outlined'}>*/}
-            {/*                Buy*/}
-            {/*            </Button>*/}
-            {/*        </Grid>*/}
-
-            {/*    </Grid>*/}
-
-            {/*</CardActions>*/}
           </Card>
         </CardActionArea>
       </Link>
@@ -930,26 +910,6 @@ export function MultipleListingBase(props: {
                 </Typography>
               </CardContent>
             </Box>
-
-            {/*<CardActions*/}
-            {/*    sx={{*/}
-            {/*        paddingLeft: 2,*/}
-            {/*        paddingRight: 2*/}
-            {/*    }}*/}
-            {/*>*/}
-            {/*    <Grid container justifyContent={'space-between'}>*/}
-            {/*        /!*<Grid item xs={6} container alignItems={'center'}>*!/*/}
-            {/*        /!*    <Rating name="read-only" value={listing.rating} readOnly precision={0.1}/>*!/*/}
-            {/*        /!*</Grid>*!/*/}
-            {/*        <Grid item xs={6} container justifyContent={'right'}>*/}
-            {/*            <Button color={'secondary'} variant={'outlined'}>*/}
-            {/*                Buy*/}
-            {/*            </Button>*/}
-            {/*        </Grid>*/}
-
-            {/*    </Grid>*/}
-
-            {/*</CardActions>*/}
           </Card>
         </CardActionArea>
       </Link>
@@ -1681,17 +1641,17 @@ export function MyItemListings(props: {
       maximum_price: listing.listing.price,
       quantity_available: listing.listing.quantity_available,
       timestamp: listing.listing.timestamp || "",
-      total_rating: 0,
-      avg_rating: 0,
+      total_rating: listing.listing.rating.total_rating,
+      avg_rating: listing.listing.rating.avg_rating,
       details_id: listing.listing.listing_id,
       status: listing.listing.status,
       user_seller: null,
       contractor_seller: null,
-      rating_count: 0,
-      rating_streak: 0,
+      rating_count: listing.listing.rating.rating_count,
+      rating_streak: listing.listing.rating.rating_streak,
       total_orders: listing.stats?.order_count || 0,
-      total_assignments: 0,
-      response_rate: 0,
+      total_assignments: listing.listing.rating.total_assignments,
+      response_rate: listing.listing.rating.response_rate,
       title: listing.details.title,
       photo: listing.photos[0] || "",
       internal: false,
