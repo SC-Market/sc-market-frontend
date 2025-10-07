@@ -57,7 +57,7 @@ export interface MarketListing {
   price: number
   timestamp: string
   quantity_available: number
-  status: string
+  status: "active" | "inactive" | "archived"
   user_seller?: MinimalUser | null
   contractor_seller?: MinimalContractor | null
   orders?: Order[] | null

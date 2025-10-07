@@ -72,6 +72,7 @@ import {
   ExtendedAggregateSearchResult,
   useSearchMarketQuery,
   useGetMyListingsQuery,
+  MarketListingComplete,
 } from "../../store/market"
 import { Link } from "react-router-dom"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
@@ -1626,38 +1627,46 @@ export function MyItemListings(props: {
   const { data: searchResults, isLoading } = useGetMyListingsQuery(finalParams)
 
   // Convert the new format to the old format for compatibility
-  const convertedListings = useMemo(() => {
+  const convertedListings: MarketListingSearchResult[] = useMemo(() => {
     if (!searchResults?.listings) return []
 
-    return searchResults.listings.map((listing: any) => ({
-      listing_id: listing.listing.listing_id,
-      listing_type: listing.type,
-      item_type: listing.details.item_type,
-      item_name: listing.details.title,
-      game_item_id: null,
-      price: listing.listing.price,
-      expiration: listing.listing.expiration || "",
-      minimum_price: listing.listing.price,
-      maximum_price: listing.listing.price,
-      quantity_available: listing.listing.quantity_available,
-      timestamp: listing.listing.timestamp || "",
-      total_rating: listing.listing.rating.total_rating,
-      avg_rating: listing.listing.rating.avg_rating,
-      details_id: listing.listing.listing_id,
-      status: listing.listing.status,
-      user_seller: null,
-      contractor_seller: null,
-      rating_count: listing.listing.rating.rating_count,
-      rating_streak: listing.listing.rating.rating_streak,
-      total_orders: listing.stats?.order_count || 0,
-      total_assignments: listing.listing.rating.total_assignments,
-      response_rate: listing.listing.rating.response_rate,
-      title: listing.details.title,
-      photo: listing.photos[0] || "",
-      internal: false,
-      sale_type: listing.listing.sale_type,
-      auction_end_time: null,
-    }))
+    return searchResults.listings.map(
+      (listing: UniqueListing): MarketListingSearchResult => {
+        const seller =
+          listing.listing.user_seller || listing.listing.contractor_seller!
+        const rating = seller.rating
+
+        return {
+          listing_id: listing.listing.listing_id,
+          listing_type: listing.type,
+          item_type: listing.details.item_type,
+          item_name: listing.details.title,
+          game_item_id: null,
+          price: listing.listing.price,
+          expiration: listing.listing.expiration || "",
+          minimum_price: listing.listing.price,
+          maximum_price: listing.listing.price,
+          quantity_available: listing.listing.quantity_available,
+          timestamp: listing.listing.timestamp || "",
+          total_rating: rating.total_rating,
+          avg_rating: rating.avg_rating,
+          details_id: listing.listing.listing_id,
+          status: listing.listing.status,
+          user_seller: null,
+          contractor_seller: null,
+          rating_count: rating.rating_count,
+          rating_streak: rating.streak,
+          total_orders: listing.stats?.order_count || 0,
+          total_assignments: rating.total_assignments,
+          response_rate: rating.response_rate,
+          title: listing.details.title,
+          photo: listing.photos[0] || "",
+          internal: false,
+          sale_type: listing.listing.sale_type as "auction" | "sale",
+          auction_end_time: null,
+        }
+      },
+    )
   }, [searchResults])
 
   return (
