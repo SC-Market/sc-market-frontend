@@ -13,6 +13,8 @@ import { HeadCell, PaginatedTable } from "../../components/table/PaginatedTable"
 import React, { useMemo } from "react"
 import { MarketListingDetails } from "../../components/list/UserDetails"
 import { useTranslation } from "react-i18next"
+import { completeToSearchResult } from "../market/ItemListings.tsx"
+import { ListingRowItem } from "./OfferMarketListingsEditArea.tsx"
 
 export function OfferListingRowItem(props: {
   row: ListingRowItem
@@ -33,7 +35,7 @@ export function OfferListingRowItem(props: {
         key={index}
       >
         <TableCell component="th" scope="row">
-          <MarketListingDetails listing={row.listing} />
+          <MarketListingDetails listing={row} />
         </TableCell>
         <TableCell align={"right"}>{row.quantity.toLocaleString()}</TableCell>
         <TableCell align={"right"}>
@@ -72,21 +74,15 @@ export const marketListingHeadCells: readonly HeadCell<ListingRowItem>[] = [
   },
 ]
 
-export interface ListingRowItem extends OfferMarketListing {
-  title: string
-  total: number
-  unit_price: number
-}
-
 export function OfferMarketListings(props: { offer: OfferSession }) {
   const { t } = useTranslation()
   const { offer: session } = props
-  const extendedListings = useMemo(() => {
+  const extendedListings: ListingRowItem[] = useMemo(() => {
     return session.offers[0].market_listings.map((l) => ({
-      ...l,
-      title: l.listing.details.title,
+      ...completeToSearchResult(l.listing),
       unit_price: l.listing.listing.price,
       total: l.quantity * l.listing.listing.price,
+      quantity: l.quantity,
     }))
   }, [session.offers])
 

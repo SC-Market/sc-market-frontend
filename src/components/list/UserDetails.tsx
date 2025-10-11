@@ -7,6 +7,10 @@ import { UniqueListing } from "../../datatypes/MarketListing"
 import { Link } from "react-router-dom"
 import { formatCompleteListingUrl, formatMarketUrl } from "../../util/urls"
 import { FALLBACK_IMAGE_URL } from "../../util/constants"
+import {
+  MarketListingSearchResult,
+  MarketSearchResult,
+} from "../../store/market.ts"
 
 export function UserDetails(props: { user: MinimalUser }) {
   const { user } = props
@@ -60,13 +64,15 @@ export function OrgDetails(props: { org: MinimalContractor }) {
   )
 }
 
-export function MarketListingDetails(props: { listing: UniqueListing }) {
+export function MarketListingDetails(props: {
+  listing: MarketListingSearchResult
+}) {
   const { listing } = props
 
   return (
     <Stack direction={"row"} spacing={1} alignItems={"center"}>
       <Avatar
-        src={listing.photos[0] || FALLBACK_IMAGE_URL}
+        src={listing.photo || FALLBACK_IMAGE_URL}
         variant={"rounded"}
         imgProps={{
           onError: ({ currentTarget }) => {
@@ -78,11 +84,11 @@ export function MarketListingDetails(props: { listing: UniqueListing }) {
       <Stack direction={"column"} justifyContent={"left"}>
         <MaterialLink
           component={Link}
-          to={formatCompleteListingUrl(listing)}
+          to={formatMarketUrl(listing)}
           underline={"hover"}
         >
           <Typography variant={"subtitle2"} color={"text.secondary"}>
-            {listing.details.title}
+            {listing.title}
           </Typography>
         </MaterialLink>
       </Stack>

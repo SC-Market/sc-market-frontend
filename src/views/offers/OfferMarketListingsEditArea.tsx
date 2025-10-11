@@ -22,7 +22,6 @@ import {
   useSearchMarketQuery,
 } from "../../store/market"
 import { useCounterOffer } from "../../hooks/offer/CounterOfferDetails"
-import { UniqueListing } from "../../datatypes/MarketListing"
 import { marketListingHeadCells } from "./OfferMarketListings"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import { NumericFormat } from "react-number-format"
@@ -50,7 +49,7 @@ export function OfferListingRowItemEditable(props: {
         key={index}
       >
         <TableCell component="th" scope="row">
-          <MarketListingDetails listing={row.listing} />
+          <MarketListingDetails listing={row} />
         </TableCell>
         <TableCell align={"right"}>
           <Stack
@@ -73,7 +72,7 @@ export function OfferListingRowItemEditable(props: {
                         ...l,
                         quantity: Math.min(
                           values.floatValue || 1,
-                          row.listing.listing.quantity_available,
+                          row.quantity_available,
                         ),
                       }
                     } else {
@@ -90,7 +89,7 @@ export function OfferListingRowItemEditable(props: {
                 endAdornment: (
                   <InputAdornment position="start">
                     {t("OfferMarketListingsEditArea.of", {
-                      count: row?.listing?.listing.quantity_available || 0,
+                      count: row?.quantity_available || 0,
                     })}
                   </InputAdornment>
                 ),
@@ -98,10 +97,7 @@ export function OfferListingRowItemEditable(props: {
               }}
               size="small"
               label={t("OfferMarketListingsEditArea.qty")}
-              value={Math.min(
-                row.quantity || 1,
-                row.listing.listing.quantity_available,
-              )}
+              value={Math.min(row.quantity || 1, row.quantity_available)}
               color={"secondary"}
             />
             <IconButton
@@ -127,9 +123,10 @@ export function OfferListingRowItemEditable(props: {
   )
 }
 
-export interface ListingRowItem extends OfferMarketListing {
+export type ListingRowItem = MarketListingSearchResult & {
   title: string
   total: number
+  quantity: number
   unit_price: number
 }
 
@@ -138,38 +135,22 @@ export function OfferMarketListingsEditArea(props: { offer: OfferSession }) {
   const { offer: session } = props
   const [body, setBody] = useCounterOffer()
 
-  const { data: userSearchResults } = useSearchMarketQuery(
-    {
-      user_seller: session.assigned_to?.username,
-      quantityAvailable: 1,
-      index: 0,
-      page_size: 50,
-    },
-    {
-      skip: !session.assigned_to?.username,
-    },
-  )
-  const { data: contractorSearchResults } = useSearchMarketQuery(
-    {
-      contractor_seller: session.contractor?.spectrum_id,
-      quantityAvailable: 1,
-      index: 0,
-      page_size: 96,
-    },
-    { skip: !session.contractor?.spectrum_id },
+  const { data: searchResults } = useSearchMarketQuery({
+    user_seller: !session.contractor
+      ? session.assigned_to?.username
+      : undefined,
+    contractor_seller: session.contractor?.spectrum_id,
+    quantityAvailable: 1,
+    index: 0,
+    page_size: 50,
+  })
+
+  const listings: MarketListingSearchResult[] = useMemo(
+    () => searchResults?.listings || [],
+    [session.assigned_to, searchResults],
   )
 
-  const listings = useMemo(
-    () =>
-      (session.assigned_to
-        ? userSearchResults?.listings
-        : contractorSearchResults?.listings) ||
-      [] ||
-      [],
-    [session.assigned_to, userSearchResults, contractorSearchResults],
-  )
-
-  const extendedListings = useMemo(() => {
+  const extendedListings: ListingRowItem[] = useMemo(() => {
     return body.market_listings
       .map((l) => {
         const fullListing =
@@ -180,12 +161,13 @@ export function OfferMarketListingsEditArea(props: { offer: OfferSession }) {
         }
 
         return {
-          title: fullListing.title,
-          unit_price: fullListing.price,
           total: l.quantity * fullListing.price,
+          quantity: l.quantity,
+          unit_price: fullListing.price,
+          ...fullListing,
         }
       })
-      .filter((o) => o) as ListingRowItem[]
+      .filter<ListingRowItem>((o) => !!o)
   }, [body.market_listings, listings])
 
   const [selected, setSelected] = useState<MarketListingSearchResult | null>(
