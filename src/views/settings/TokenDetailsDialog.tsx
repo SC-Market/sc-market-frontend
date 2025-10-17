@@ -28,6 +28,7 @@ import {
   ApiToken,
   useGetContractorsForTokensQuery,
 } from "../../store/tokens"
+import { useGetUserProfileQuery } from "../../store/profile.ts"
 
 interface TokenDetailsDialogProps {
   open: boolean
@@ -44,7 +45,8 @@ export function TokenDetailsDialog({
   const { data: stats } = useGetTokenStatsQuery(token?.id || "", {
     skip: !token?.id,
   })
-  const { data: contractors } = useGetContractorsForTokensQuery()
+  const { data: profile } = useGetUserProfileQuery()
+  const contractors = profile?.contractors || []
 
   const [showToken, setShowToken] = useState(false)
 
@@ -231,17 +233,17 @@ export function TokenDetailsDialog({
               Contractor Access
             </Typography>
             <Typography variant="body2">
-              {(token.contractor_ids || []).length === 0
+              {(token.contractor_spectrum_ids || []).length === 0
                 ? "Access to all contractors"
-                : `Access to ${(token.contractor_ids || []).length} contractor(s)`}
+                : `Access to ${(token.contractor_spectrum_ids || []).length} contractor(s)`}
             </Typography>
-            {(token.contractor_ids || []).length > 0 && (
+            {(token.contractor_spectrum_ids || []).length > 0 && (
               <Box sx={{ mt: 1 }}>
                 <Typography variant="body2" color="text.secondary">
                   Organizations:
                 </Typography>
                 <Box display="flex" flexWrap="wrap" gap={0.5} sx={{ mt: 0.5 }}>
-                  {(token.contractor_ids || []).map((contractorId) => {
+                  {(token.contractor_spectrum_ids || []).map((contractorId) => {
                     // Find contractor by spectrum_id
                     const contractor = contractors?.find(
                       (c) => c.spectrum_id === contractorId,

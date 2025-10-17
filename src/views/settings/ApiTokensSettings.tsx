@@ -295,9 +295,9 @@ export function ApiTokensSettings() {
                       Contractor Access:
                     </Typography>
                     <Typography variant="body2">
-                      {(token.contractor_ids || []).length === 0
+                      {(token.contractor_spectrum_ids || []).length === 0
                         ? "All contractors"
-                        : `${(token.contractor_ids || []).length} contractor(s)`}
+                        : `${(token.contractor_spectrum_ids || []).length} contractor(s)`}
                     </Typography>
                   </Box>
 

@@ -25,6 +25,7 @@ import {
   useCreateTokenMutation,
   useGetContractorsForTokensQuery,
 } from "../../store/tokens"
+import { useGetUserProfileQuery } from "../../store/profile.ts"
 
 interface CreateTokenDialogProps {
   open: boolean
@@ -114,7 +115,8 @@ const SCOPE_CATEGORIES = {
 export function CreateTokenDialog({ open, onClose }: CreateTokenDialogProps) {
   const { t } = useTranslation()
   const [createToken, { isLoading }] = useCreateTokenMutation()
-  const { data: contractors } = useGetContractorsForTokensQuery()
+  const { data: profile } = useGetUserProfileQuery()
+  const contractors = profile?.contractors || []
 
   const [formData, setFormData] = useState({
     name: "",
@@ -164,7 +166,7 @@ export function CreateTokenDialog({ open, onClose }: CreateTokenDialogProps) {
         name: formData.name,
         description: formData.description || undefined,
         scopes: formData.scopes,
-        contractor_ids: contractorIds,
+        contractor_spectrum_ids: contractorIds,
         expires_at: formData.expires_at || undefined,
       }).unwrap()
 
@@ -209,7 +211,7 @@ export function CreateTokenDialog({ open, onClose }: CreateTokenDialogProps) {
           <Box>
             <Alert severity="success" sx={{ mb: 2 }}>
               Your API token has been created successfully. Make sure to copy it
-              now as it won't be shown again.
+              now as it won&#39;t be shown again.
             </Alert>
 
             <TextField
@@ -232,8 +234,8 @@ export function CreateTokenDialog({ open, onClose }: CreateTokenDialogProps) {
             <Alert severity="warning">
               <Typography variant="body2">
                 <strong>Important:</strong> Store this token securely. It
-                provides access to your account with the permissions you've
-                granted. If you lose this token, you'll need to create a new
+                provides access to your account with the permissions you&#39;ve
+                granted. If you lose this token, you&#39;ll need to create a new
                 one.
               </Typography>
             </Alert>
@@ -287,7 +289,7 @@ export function CreateTokenDialog({ open, onClose }: CreateTokenDialogProps) {
                   sx={{ mb: 2 }}
                 >
                   Select the permissions this token should have. Be conservative
-                  and only grant what's necessary.
+                  and only grant what&#39;s necessary.
                 </Typography>
 
                 {Object.entries(SCOPE_CATEGORIES).map(

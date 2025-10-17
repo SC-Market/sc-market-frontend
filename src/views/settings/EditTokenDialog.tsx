@@ -21,6 +21,7 @@ import {
   ApiToken,
   useGetContractorsForTokensQuery,
 } from "../../store/tokens"
+import { useGetUserProfileQuery } from "../../store/profile.ts"
 
 interface EditTokenDialogProps {
   open: boolean
@@ -115,7 +116,8 @@ export function EditTokenDialog({
 }: EditTokenDialogProps) {
   const { t } = useTranslation()
   const [updateToken, { isLoading }] = useUpdateTokenMutation()
-  const { data: contractors } = useGetContractorsForTokensQuery()
+  const { data: profile } = useGetUserProfileQuery()
+  const contractors = profile?.contractors || []
 
   const [formData, setFormData] = useState({
     name: "",
@@ -129,11 +131,13 @@ export function EditTokenDialog({
 
   useEffect(() => {
     if (token) {
-      // Convert contractor_ids to spectrum_ids for display
+      // Convert contractor_spectrum_ids to spectrum_ids for display
       const contractorSpectrumIds =
-        token.contractor_ids?.length > 0
+        token.contractor_spectrum_ids?.length > 0
           ? contractors
-              ?.filter((c) => token.contractor_ids?.includes(c.spectrum_id))
+              ?.filter((c) =>
+                token.contractor_spectrum_ids?.includes(c.spectrum_id),
+              )
               .map((c) => c.spectrum_id) || []
           : []
 
@@ -189,7 +193,7 @@ export function EditTokenDialog({
           name: formData.name,
           description: formData.description || undefined,
           scopes: formData.scopes,
-          contractor_ids: contractorIds,
+          contractor_spectrum_ids: contractorIds,
           expires_at: formData.expires_at || undefined,
         },
       }).unwrap()
@@ -256,7 +260,7 @@ export function EditTokenDialog({
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
               Select the permissions this token should have. Be conservative and
-              only grant what's necessary.
+              only grant what&#39;s necessary.
             </Typography>
 
             {Object.entries(SCOPE_CATEGORIES).map(

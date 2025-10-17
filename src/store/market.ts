@@ -337,18 +337,6 @@ export const marketApi = serviceApi.injectEndpoints({
       ],
     }),
 
-    getMarketPublic: builder.query<MarketListing[], void>({
-      query: () => "/api/market/public",
-      transformResponse: (response: MarketListing[]) => response,
-      providesTags: ["PublicListings"],
-    }),
-
-    getAllMarketListings: builder.query<MarketListing[], void>({
-      query: () => "/api/market/all_listings",
-      transformResponse: (response: MarketListing[]) => response,
-      providesTags: ["AllListings"],
-    }),
-
     getBuyOrderListings: builder.query<any[], void>({
       query: () => "/api/market/aggregates/buyorders",
       transformResponse: (response: any[]) => response,

@@ -10,7 +10,7 @@ export interface ApiToken {
   name: string
   description?: string
   scopes: string[]
-  contractor_ids: string[]
+  contractor_spectrum_ids: string[]
   expires_at?: string
   last_used_at?: string
   created_at: string
@@ -21,7 +21,7 @@ export interface CreateTokenRequest {
   name: string
   description?: string
   scopes: string[]
-  contractor_ids?: string[]
+  contractor_spectrum_ids?: string[]
   expires_at?: string
 }
 
@@ -29,7 +29,7 @@ export interface UpdateTokenRequest {
   name?: string
   description?: string
   scopes?: string[]
-  contractor_ids?: string[]
+  contractor_spectrum_ids?: string[]
   expires_at?: string
 }
 
