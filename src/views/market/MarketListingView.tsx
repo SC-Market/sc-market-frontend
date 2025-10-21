@@ -859,6 +859,7 @@ function ListingOrdersSection({ listingId }: { listingId: string }) {
         xs={12}
         title={t("MarketListingView.orders")}
         innerJustify={"flex-start"}
+        disablePadding
       >
         <Grid item xs={12}>
           <Tabs

@@ -354,7 +354,22 @@ export const marketApi = serviceApi.injectEndpoints({
       ],
     }),
 
-    purchaseMarketListing: builder.mutation<any, any>({
+    purchaseMarketListing: builder.mutation<
+      {
+        result: string
+        offer_id: string
+        session_id: string
+        discord_invite?: string | null
+      },
+      {
+        items: {
+          listing_id: string
+          quantity: number
+        }[]
+        note?: string
+        offer?: number | string | null
+      }
+    >({
       query: (purchaseData) => ({
         url: "/api/market/purchase",
         method: "POST",
@@ -700,7 +715,6 @@ export const useMarketCreateMultipleListingMutation =
 export const useMarketGetMyListingsQuery = useGetMyListingsQuery
 export const useMarketUpdateMultipleListingMutation =
   useUpdateMultipleListingMutation
-export const useMarketPurchaseMutation = usePurchaseMarketListingMutation
 export const useMarketTrackListingViewMutation =
   useTrackMarketListingViewMutation
 export const useMarketGetListingOrdersQuery = useGetMarketListingOrdersQuery
