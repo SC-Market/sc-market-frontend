@@ -1585,7 +1585,7 @@ export const completeToSearchResult = (
     details_id: listing.listing.listing_id,
     status: listing.listing.status,
     user_seller: listing.listing.user_seller?.username || null,
-    contractor_seller: listing.listing.contractor_seller?.name || null,
+    contractor_seller: listing.listing.contractor_seller?.spectrum_id || null,
     rating_count: rating.rating_count,
     rating_streak: rating.streak,
     total_orders: listing.stats?.order_count || 0,
