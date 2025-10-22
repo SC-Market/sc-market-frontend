@@ -3,7 +3,7 @@ import { useTheme } from "@mui/material/styles"
 import React from "react"
 
 export function UnderlineLink(
-  props: { to?: string; target?: string } & TypographyProps,
+  props: { to?: string; target?: string; href?: string } & TypographyProps,
 ) {
   const theme: Theme = useTheme()
 

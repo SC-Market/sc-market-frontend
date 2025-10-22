@@ -43,6 +43,7 @@ import {
 import { CreateTokenDialog } from "./CreateTokenDialog"
 import { EditTokenDialog } from "./EditTokenDialog"
 import { TokenDetailsDialog } from "./TokenDetailsDialog"
+import { UnderlineLink } from "../../components/typography/UnderlineLink.tsx"
 
 export function ApiTokensSettings() {
   const { t } = useTranslation()
@@ -177,7 +178,15 @@ export function ApiTokensSettings() {
         <Alert severity="info" sx={{ mb: 2 }}>
           API tokens allow third-party applications to access your account with
           specific permissions. You can create tokens with limited scopes and
-          contractor access for enhanced security.
+          contractor access for enhanced security. You can find our API docs{" "}
+          <UnderlineLink
+            component="a"
+            href="https://api.sc-market.space/docs"
+            target="_blank"
+          >
+            here.
+          </UnderlineLink>
+          ./
         </Alert>
       </Grid>
 
