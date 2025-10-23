@@ -574,7 +574,7 @@ export function NotificationsButton() {
       pageSize,
     },
     {
-      pollingInterval: 60000,
+      pollingInterval: 120000,
     },
   )
 
