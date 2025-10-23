@@ -568,10 +568,15 @@ export function NotificationsButton() {
   const [page, setPage] = useState(0)
   const [pageSize, setPageSize] = useState(5)
 
-  const { data: notificationsData } = useGetNotificationsQuery({
-    page,
-    pageSize,
-  })
+  const { data: notificationsData } = useGetNotificationsQuery(
+    {
+      page,
+      pageSize,
+    },
+    {
+      pollingInterval: 60000,
+    },
+  )
 
   const notifications = notificationsData?.notifications || []
   const total = notificationsData?.pagination?.total || 0
