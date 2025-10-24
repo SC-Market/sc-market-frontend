@@ -5,8 +5,8 @@ import { Grid, List, ListItem, Typography } from "@mui/material"
 import { DynamicApexChart } from "../../components/charts/DynamicCharts"
 import { useTranslation } from "react-i18next"
 import {
-  useGetAllAssignedOrdersQuery,
   useGetContractorOrderDataQuery,
+  useGetUserOrderDataQuery,
   ContractorOrderData,
 } from "../../store/orders"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
@@ -446,7 +446,8 @@ export function OrgOrderTrend() {
 export function UserOrderTrend() {
   const [contractor] = useCurrentOrg()
 
-  const { data: orderData } = useGetContractorOrderDataQuery(
+  // Use contractor data if user is in an organization
+  const { data: contractorOrderData } = useGetContractorOrderDataQuery(
     {
       spectrum_id: contractor?.spectrum_id!,
       include_trends: true,
@@ -457,9 +458,18 @@ export function UserOrderTrend() {
     },
   )
 
-  const { data: allOrders } = useGetAllAssignedOrdersQuery(undefined, {
-    skip: !!contractor?.spectrum_id,
-  })
+  // Use user data if user is not in an organization
+  const { data: userOrderData } = useGetUserOrderDataQuery(
+    {
+      include_trends: true,
+    },
+    {
+      skip: !!contractor?.spectrum_id,
+    },
+  )
+
+  // Use the appropriate data source
+  const orderData = contractorOrderData || userOrderData
 
   // Use metrics trend data if available, otherwise fall back to recent orders
   if (orderData?.metrics?.trend_data) {
@@ -467,17 +477,7 @@ export function UserOrderTrend() {
   }
 
   // Fallback to original implementation with recent orders
-  const trendOrders = [
-    ...(orderData?.recent_orders || []),
-    ...(allOrders || []).map((order) => ({
-      order_id: order.order_id,
-      timestamp: order.timestamp,
-      status: order.status,
-      cost: parseFloat(order.cost),
-      title: order.title,
-    })),
-  ]
-  return <OrderTrendFromOrders orders={trendOrders} />
+  return <OrderTrendFromOrders orders={orderData?.recent_orders || []} />
 }
 
 export function TopContractors(props: { orders: OrderStub[] }) {

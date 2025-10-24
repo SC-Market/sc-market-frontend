@@ -207,21 +207,6 @@ const ordersApi = serviceApi.injectEndpoints({
       providesTags: ["Order" as const, { type: "Order" as const }],
       transformResponse: unwrapResponse,
     }),
-    getAllAssignedOrders: builder.query<OrderStub[], void>({
-      query: () => `/api/orders/assigned`,
-      providesTags: (result, error, arg) =>
-        result
-          ? [
-              ...result.map(({ order_id }) => ({
-                type: "Order" as const,
-                id: order_id,
-              })),
-              { type: "Order" as const },
-              "Order" as const,
-            ]
-          : ["Order" as const, { type: "Order" as const }],
-      transformResponse: unwrapResponse,
-    }),
     requestReviewRevision: builder.mutation<
       {
         review_id: string
@@ -284,7 +269,6 @@ export const {
   useAssignOrderMutation,
   useLeaveOrderReviewMutation,
   useSetOrderStatusMutation,
-  useGetAllAssignedOrdersQuery,
   useCreateOrderThreadMutation,
   useSearchOrdersQuery,
   useRequestReviewRevisionMutation,
@@ -368,10 +352,24 @@ const ordersApiWithMetrics = serviceApi.injectEndpoints({
       providesTags: ["Order" as const, { type: "Order" as const }],
       transformResponse: unwrapResponse,
     }),
+    // User-specific order data endpoint (replaces getAllAssignedOrders for trends)
+    getUserOrderData: builder.query<
+      ContractorOrderData,
+      { include_trends?: boolean }
+    >({
+      query: ({ include_trends = true }) => {
+        const params = new URLSearchParams()
+        if (include_trends) params.append("include_trends", "true")
+        return `/api/orders/user/data?${params.toString()}`
+      },
+      providesTags: ["Order" as const, { type: "Order" as const }],
+      transformResponse: unwrapResponse,
+    }),
   }),
 })
 
 export const {
   useGetContractorOrderMetricsQuery,
   useGetContractorOrderDataQuery,
+  useGetUserOrderDataQuery,
 } = ordersApiWithMetrics
