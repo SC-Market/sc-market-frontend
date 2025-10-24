@@ -188,40 +188,6 @@ const ordersApi = serviceApi.injectEndpoints({
         { type: "Order" as const, id: arg.order_id },
       ],
     }),
-    getMyOrders: builder.query<OrderStub[], void>({
-      query: () => `/api/orders/mine`,
-      providesTags: (result, error, arg) =>
-        result
-          ? [
-              ...result.map(({ order_id }) => ({
-                type: "Order" as const,
-                id: order_id,
-              })),
-              { type: "Order" as const },
-              "Order" as const,
-            ]
-          : ["Order" as const, { type: "Order" as const }],
-      transformResponse: unwrapResponse,
-    }),
-    getAllOrders: builder.query<OrderStub[], void>({
-      query: () => `/api/orders/all`,
-      providesTags: (result, error, arg) =>
-        result
-          ? [
-              ...result.map(({ order_id }) => ({
-                type: "Order" as const,
-                id: order_id,
-              })),
-              "Order" as const,
-            ]
-          : ["Order" as const, { type: "Order" as const }],
-      transformResponse: unwrapResponse,
-    }),
-    getOrdersByContractor: builder.query<OrderStub[], string>({
-      query: (spectrum_id) => `/api/orders/contractor/${spectrum_id}`,
-      providesTags: ["Order" as const, { type: "Order" as const }],
-      transformResponse: unwrapResponse,
-    }),
     searchOrders: builder.query<
       {
         items: OrderStub[]
@@ -239,21 +205,6 @@ const ordersApi = serviceApi.injectEndpoints({
         params: queryParams,
       }),
       providesTags: ["Order" as const, { type: "Order" as const }],
-      transformResponse: unwrapResponse,
-    }),
-    getAssignedOrdersByContractor: builder.query<OrderStub[], string>({
-      query: (spectrum_id) => `/api/orders/contractor/${spectrum_id}/assigned`,
-      providesTags: (result, error, arg) =>
-        result
-          ? [
-              ...result.map(({ order_id }) => ({
-                type: "Order" as const,
-                id: order_id,
-              })),
-              { type: "Order" as const },
-              "Order" as const,
-            ]
-          : ["Order" as const, { type: "Order" as const }],
       transformResponse: unwrapResponse,
     }),
     getAllAssignedOrders: builder.query<OrderStub[], void>({
@@ -333,10 +284,6 @@ export const {
   useAssignOrderMutation,
   useLeaveOrderReviewMutation,
   useSetOrderStatusMutation,
-  useGetAllOrdersQuery,
-  useGetMyOrdersQuery,
-  useGetOrdersByContractorQuery,
-  useGetAssignedOrdersByContractorQuery,
   useGetAllAssignedOrdersQuery,
   useCreateOrderThreadMutation,
   useSearchOrdersQuery,

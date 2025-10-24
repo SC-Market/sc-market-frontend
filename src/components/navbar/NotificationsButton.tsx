@@ -16,7 +16,7 @@ import {
   Typography,
 } from "@mui/material"
 import NotificationsActiveRoundedIcon from "@mui/icons-material/NotificationsActiveRounded"
-import React, { useCallback, useMemo, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"

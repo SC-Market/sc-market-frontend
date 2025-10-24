@@ -202,12 +202,9 @@ export const offersApi = serviceApi.injectEndpoints({
 })
 
 export const {
-  useGetReceivedOffersQuery,
   useGetOfferSessionByIDQuery,
   useUpdateOfferStatusMutation,
   useCounterOfferMutation,
-  useGetSentOffersQuery,
-  useGetReceivedOffersOrgQuery,
   useCreateOfferThreadMutation,
   useSearchOfferSessionsQuery,
 } = offersApi
