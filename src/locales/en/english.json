@@ -403,6 +403,7 @@
     "notifications": "Notifications",
     "delete_notification": "Delete notification",
     "new_review_by": "New Review Left by",
+    "reviewRevisionRequested": "{{requester}} requested a revision for their review",
     "new_order_comment_by": "New Order Comment Left by",
     "new_order_message_by": "New Order Message by",
     "new_offer_message_from": "New Offer Message from",
@@ -2069,6 +2070,45 @@
       "reasonLabel": "Reason (optional)",
       "reasonPlaceholder": "Enter a reason for blocking this user...",
       "confirm": "Block User"
+    }
+  },
+  "reviewRevision": {
+    "button": {
+      "requestRevision": "Request Review Revision",
+      "requesting": "Requesting...",
+      "revisionRequested": "Revision Requested",
+      "editReview": "Edit Review",
+      "save": "Save Changes",
+      "saving": "Saving...",
+      "cancel": "Cancel"
+    },
+    "title": {
+      "editReview": "Edit Review"
+    },
+    "label": {
+      "rating": "Rating",
+      "content": "Review Content",
+      "characters": "characters"
+    },
+    "status": {
+      "revisionRequested": "Revision Requested"
+    },
+    "info": {
+      "revisionRequested": "A revision has been requested for this review. You can now edit it to address the feedback.",
+      "editInstructions": "Please update your review based on the feedback received. Make sure to provide a fair and accurate assessment."
+    },
+    "validation": {
+      "contentMinLength": "Review content must be at least 10 characters long",
+      "contentMaxLength": "Review content cannot exceed 2000 characters",
+      "ratingRange": "Rating must be between 0.5 and 5.0"
+    },
+    "success": {
+      "requested": "Review revision requested successfully",
+      "updated": "Review updated successfully"
+    },
+    "error": {
+      "requestFailed": "Failed to request review revision",
+      "updateFailed": "Failed to update review"
     }
   }
 }

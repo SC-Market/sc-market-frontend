@@ -35,6 +35,7 @@ import { getRelativeTime } from "../../util/time"
 import {
   ClearAllRounded,
   CloseRounded,
+  EditRounded,
   MarkEmailReadRounded,
   UpdateRounded,
 } from "@mui/icons-material"
@@ -93,6 +94,8 @@ export function NotificationEntry(props: { notif: Notification }) {
       return <NotificationBid notif={notif} />
     case "admin_alert":
       return <NotificationAdminAlert notif={notif} />
+    case "order_review_revision_requested":
+      return <NotificationReviewRevisionRequest notif={notif} />
     default:
       return null
   }
@@ -556,6 +559,47 @@ export function NotificationAdminAlert(props: { notif: Notification }) {
           {t("notifications.click_to_open_link", "Click to open link")}
         </Typography>
       )}
+    </NotificationBase>
+  )
+}
+
+export function NotificationReviewRevisionRequest(props: {
+  notif: Notification
+}) {
+  const { notif } = props
+  const { t } = useTranslation()
+
+  const reviewEntity =
+    notif.entity &&
+    typeof notif.entity === "object" &&
+    "review_id" in notif.entity
+      ? (notif.entity as {
+          review_id: string
+          order_id: string
+        })
+      : null
+
+  // Get the requester from the actors array (first actor is the requester)
+  const requester =
+    notif.actors && notif.actors.length > 0 ? notif.actors[0] : null
+
+  return (
+    <NotificationBase
+      icon={<EditRounded />}
+      to={
+        reviewEntity?.order_id ? `/order/${reviewEntity.order_id}` : undefined
+      }
+      notif={notif}
+    >
+      <Trans
+        i18nKey="notifications.reviewRevisionRequested"
+        values={{
+          requester: requester?.username || "Unknown user",
+        }}
+        components={{
+          strong: <strong />,
+        }}
+      />
     </NotificationBase>
   )
 }

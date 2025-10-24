@@ -271,6 +271,53 @@ const ordersApi = serviceApi.injectEndpoints({
           : ["Order" as const, { type: "Order" as const }],
       transformResponse: unwrapResponse,
     }),
+    requestReviewRevision: builder.mutation<
+      {
+        review_id: string
+        revision_requested: boolean
+        revision_requested_at: string
+      },
+      {
+        reviewId: string
+        orderId: string
+      }
+    >({
+      query: ({ reviewId, orderId }) => ({
+        url: `/api/orders/${orderId}/reviews/${reviewId}/request-revision`,
+        method: "POST",
+      }),
+      invalidatesTags: (result, error, { orderId }) => [
+        { type: "Order" as const, id: orderId },
+        "Order" as const,
+        { type: "Order" as const },
+      ],
+      transformResponse: unwrapResponse,
+    }),
+    updateOrderReview: builder.mutation<
+      {
+        review_id: string
+        last_modified_at: string
+        revision_requested: boolean
+      },
+      {
+        reviewId: string
+        orderId: string
+        content: string
+        rating: number
+      }
+    >({
+      query: ({ reviewId, orderId, content, rating }) => ({
+        url: `/api/orders/${orderId}/reviews/${reviewId}`,
+        method: "PUT",
+        body: { content, rating },
+      }),
+      invalidatesTags: (result, error, { orderId }) => [
+        { type: "Order" as const, id: orderId },
+        "Order" as const,
+        { type: "Order" as const },
+      ],
+      transformResponse: unwrapResponse,
+    }),
   }),
 })
 
@@ -290,6 +337,8 @@ export const {
   useGetAllAssignedOrdersQuery,
   useCreateOrderThreadMutation,
   useSearchOrdersQuery,
+  useRequestReviewRevisionMutation,
+  useUpdateOrderReviewMutation,
 } = ordersApi
 
 // Add contractor metrics interface

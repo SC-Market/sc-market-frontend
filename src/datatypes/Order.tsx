@@ -156,6 +156,10 @@ export interface OrderReview {
   review_id: string
   order_id: string
   rating: number
+  role: "customer" | "contractor"
+  revision_requested: boolean
+  revision_requested_at: string | null
+  last_modified_at: string
 }
 
 export interface OrderTrendDatapoint {

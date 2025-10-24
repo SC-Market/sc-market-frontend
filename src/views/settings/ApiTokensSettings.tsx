@@ -179,12 +179,8 @@ export function ApiTokensSettings() {
           API tokens allow third-party applications to access your account with
           specific permissions. You can create tokens with limited scopes and
           contractor access for enhanced security.
-          <a
-            href="https://api.sc-market.space/docs"
-            target="_blank">
-          <Button>
-            Open API Docs
-          </Button>
+          <a href="https://api.sc-market.space/docs" target="_blank">
+            <Button>Open API Docs</Button>
           </a>
         </Alert>
       </Grid>
@@ -384,9 +380,9 @@ export function ApiTokensSettings() {
         <DialogTitle>Delete API Token</DialogTitle>
         <DialogContent>
           <Typography>
-            Are you sure you want to delete the token "{tokenToDelete?.name}"?
-            This action cannot be undone and any applications using this token
-            will lose access.
+            Are you sure you want to delete the token &#34;{tokenToDelete?.name}
+            &#34;? This action cannot be undone and any applications using this
+            token will lose access.
           </Typography>
         </DialogContent>
         <DialogActions>

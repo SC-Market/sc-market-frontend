@@ -10,14 +10,90 @@ import {
 } from "@mui/material"
 import { Section } from "../../components/paper/Section"
 import { StarRounded } from "@mui/icons-material"
-import { useCurrentOrder } from "../../hooks/order/CurrentOrder"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { Link } from "react-router-dom"
 import { getRelativeTime } from "../../util/time"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTheme } from "@mui/material/styles"
-import { Order } from "../../datatypes/Order"
+import { Order, OrderReview } from "../../datatypes/Order"
 import { useTranslation } from "react-i18next"
+import { ReviewRevisionButton } from "../../components/reviews/ReviewRevisionButton"
+import { EditableReview } from "../../components/reviews/EditableReview"
+import { useGetUserProfileQuery } from "../../store/profile"
+import { UserProfileState } from "../../hooks/login/UserProfile"
+import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
+import { has_permission } from "../contractor/OrgRoles"
+import { Contractor } from "../../datatypes/Contractor.ts"
+
+// Helper function to determine if current user can request revision
+function canRequestRevision(
+  review: OrderReview,
+  currentUser: UserProfileState | undefined,
+  currentOrg: Contractor | undefined | null,
+  order: Order,
+): boolean {
+  if (!currentUser || !review) return false
+
+  if (review.role !== "customer" && order.customer === currentUser.username) {
+    return true
+  }
+
+  // Check if user is the recipient of the review
+  if (
+    review.role !== "contractor" &&
+    order.assigned_to === currentUser.username
+  ) {
+    return true
+  }
+
+  if (
+    review.role !== "contractor" &&
+    order.contractor &&
+    currentOrg &&
+    order.contractor === currentOrg.spectrum_id
+  ) {
+    return has_permission(
+      currentOrg,
+      currentUser,
+      "manage_orders",
+      currentUser?.contractors,
+    )
+  }
+
+  return false
+}
+
+// Helper function to determine if current user can edit review
+function canEditReview(
+  review: OrderReview,
+  currentUser: UserProfileState | undefined,
+  currentOrg: Contractor | null | undefined,
+  order: Order,
+): boolean {
+  if (!currentUser || !review || !review.revision_requested) return false
+
+  // Individual user can edit their own review
+  if (review.user_author?.username === currentUser.username) return true
+
+  // Organization member can edit org review if they have permission
+  if (
+    review.contractor_author &&
+    order.contractor &&
+    order.contractor === currentOrg?.spectrum_id
+  ) {
+    if (currentOrg) {
+      // Check if user has manage_orders permission
+      return has_permission(
+        currentOrg,
+        currentUser,
+        "manage_orders",
+        currentUser?.contractors,
+      )
+    }
+  }
+
+  return false
+}
 
 export function OrderReviewView(props: {
   customer?: boolean
@@ -27,6 +103,9 @@ export function OrderReviewView(props: {
   const { order } = props
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
+  const { data: currentUser } = useGetUserProfileQuery()
+  const [currentOrg] = useCurrentOrg()
+
   const review = useMemo(
     () => (props.customer ? order.customer_review! : order.contractor_review!),
     [order.contractor_review, order.customer_review, props.customer],
@@ -118,6 +197,20 @@ export function OrderReviewView(props: {
             }
           />
         </Grid>
+
+        {/* Review Revision Button */}
+        {canRequestRevision(review, currentUser, currentOrg, order) && (
+          <Grid item xs={12} sx={{ mt: 2 }}>
+            <ReviewRevisionButton review={review} orderId={order.order_id} />
+          </Grid>
+        )}
+
+        {/* Editable Review Component */}
+        {canEditReview(review, currentUser, currentOrg, order) && (
+          <Grid item xs={12} sx={{ mt: 2 }}>
+            <EditableReview review={review} />
+          </Grid>
+        )}
       </Section>
     </>
   )
