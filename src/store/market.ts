@@ -658,9 +658,7 @@ export const marketApi = serviceApi.injectEndpoints({
   }),
 })
 
-// Export hooks for usage in functional components
 export const {
-  // New REST-compliant hooks
   useGetMarketStatsQuery,
   useSearchMarketListingsQuery,
   useGetMarketListingQuery,
@@ -695,7 +693,6 @@ export const {
   useAcceptBidMutation,
 } = marketApi
 
-// Additional missing hooks that components are trying to import
 export const useSearchMarketQuery = useSearchMarketListingsQuery
 export const useMarketGetGameItemByNameQuery = useGetGameItemByNameQuery
 export const useMarketRefreshListingMutation = useRefreshMarketListingMutation

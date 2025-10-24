@@ -106,6 +106,17 @@ export function Footer() {
               </UnderlineLink>
             </Link>
             &nbsp;|&nbsp;
+            <Link
+              rel="noopener noreferrer"
+              target="_blank"
+              href={"https://api.sc-market.space/docs"}
+              aria-label={t("footer.apiDocs", "API Docs")}
+            >
+              <UnderlineLink color={"text.secondary"}>
+                {t("footer.apiDocs", "API Docs")}
+              </UnderlineLink>
+            </Link>
+            &nbsp;|&nbsp;
             <ReportButton />
           </Typography>
           <br />
