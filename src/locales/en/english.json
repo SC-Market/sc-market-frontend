@@ -2079,8 +2079,12 @@
       "revisionRequested": "Revision Requested",
       "editReview": "Edit Review",
       "save": "Save Changes",
+      "submit": "Submit Request",
       "saving": "Saving...",
       "cancel": "Cancel"
+    },
+    "message": {
+      "placeholder": "Enter message here"
     },
     "title": {
       "editReview": "Edit Review"
@@ -2094,7 +2098,7 @@
       "revisionRequested": "Revision Requested"
     },
     "info": {
-      "revisionRequested": "A revision has been requested for this review. You can now edit it to address the feedback.",
+      "revisionRequested": "A revision has been requested for this review. You can now edit it to address the feedback. Message from seller: {{message}}",
       "editInstructions": "Please update your review based on the feedback received. Make sure to provide a fair and accurate assessment."
     },
     "validation": {

@@ -573,10 +573,7 @@ export function NotificationReviewRevisionRequest(props: {
     notif.entity &&
     typeof notif.entity === "object" &&
     "review_id" in notif.entity
-      ? (notif.entity as {
-          review_id: string
-          order_id: string
-        })
+      ? (notif.entity as OrderReview)
       : null
 
   // Get the requester from the actors array (first actor is the requester)
@@ -595,9 +592,15 @@ export function NotificationReviewRevisionRequest(props: {
         i18nKey="notifications.reviewRevisionRequested"
         values={{
           requester: requester?.username || "Unknown user",
+          message: reviewEntity?.revision_message,
         }}
         components={{
           strong: <strong />,
+          message: (
+            <div style={{ fontStyle: "italic", marginTop: "4px" }}>
+              reviewEntity?.revision_message
+            </div>
+          ),
         }}
       />
     </NotificationBase>

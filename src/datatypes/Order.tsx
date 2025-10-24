@@ -160,6 +160,7 @@ export interface OrderReview {
   revision_requested: boolean
   revision_requested_at: string | null
   last_modified_at: string
+  revision_message: string | null
 }
 
 export interface OrderTrendDatapoint {

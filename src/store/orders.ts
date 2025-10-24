@@ -276,15 +276,18 @@ const ordersApi = serviceApi.injectEndpoints({
         review_id: string
         revision_requested: boolean
         revision_requested_at: string
+        revision_message: string | null
       },
       {
         reviewId: string
         orderId: string
+        message?: string
       }
     >({
-      query: ({ reviewId, orderId }) => ({
+      query: ({ reviewId, orderId, message }) => ({
         url: `/api/orders/${orderId}/reviews/${reviewId}/request-revision`,
         method: "POST",
+        body: { message },
       }),
       invalidatesTags: (result, error, { orderId }) => [
         { type: "Order" as const, id: orderId },

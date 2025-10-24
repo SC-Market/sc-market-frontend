@@ -90,8 +90,7 @@ export function EditableReview({ review }: EditableReviewProps) {
         sx={{
           p: 2,
           border: "2px solid",
-          borderColor: "warning.main",
-          backgroundColor: "warning.light",
+          borderColor: "warning.dark",
           opacity: 0.9,
         }}
       >
@@ -105,7 +104,9 @@ export function EditableReview({ review }: EditableReviewProps) {
         </Box>
 
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-          {t("reviewRevision.info.revisionRequested")}
+          {t("reviewRevision.info.revisionRequested", "Revision requested", {
+            message: review.revision_message,
+          })}
         </Typography>
 
         <Button
