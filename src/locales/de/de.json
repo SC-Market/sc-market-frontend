@@ -223,7 +223,16 @@
       "reVerifyDescription": "Aktualisieren Sie Ihren Profil-Benutzernamen, damit er mit Ihrem aktuellen Spectrum-Handle übereinstimmt. Dies aktualisiert nur Ihren Benutzernamen.",
       "reVerifyButton": "Profil erneut verifizieren",
       "reVerifySuccess": "Profil erfolgreich erneut verifiziert! Ihr Benutzername wurde aktualisiert.",
-      "reVerifyError": "Fehler beim erneuten Verifizieren des Profils. Bitte versuchen Sie es später erneut."
+      "reVerifyError": "Fehler beim erneuten Verifizieren des Profils. Bitte versuchen Sie es später erneut.",
+      "unlinkTitle": "Star Citizen Konto trennen",
+      "unlinkDescription": "Trennen Sie Ihr Star Citizen Konto, um zum unverifizierten Status zurückzukehren. Ihr Benutzername wird auf das Standardformat basierend auf Ihrer Discord-ID zurückgesetzt.",
+      "unlinkButton": "Konto trennen",
+      "unlinkSuccess": "Star Citizen Konto erfolgreich getrennt! Ihr Profil wurde auf unverifizierten Status zurückgesetzt.",
+      "unlinkError": "Fehler beim Trennen des Star Citizen Kontos. Bitte versuchen Sie es später erneut.",
+      "unlinkDialogTitle": "Konto-Trennung bestätigen",
+      "unlinkDialogDescription": "Sind Sie sicher, dass Sie Ihr Star Citizen Konto trennen möchten? Dies setzt Ihr Profil auf unverifizierten Status zurück und ändert Ihren Benutzernamen zurück zum Standardformat. Sie können Ihr Konto jederzeit wieder verknüpfen.",
+      "unlinkDialogCancel": "Abbrechen",
+      "unlinkDialogConfirm": "Konto trennen"
     }
   },
   "sidebar": {

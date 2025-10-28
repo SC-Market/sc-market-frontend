@@ -2044,7 +2044,16 @@
       "reVerifyDescription": "Update your profile username to match your current Spectrum handle. This will only update your username.",
       "reVerifyButton": "Re-verify Profile",
       "reVerifySuccess": "Profile successfully re-verified! Your username has been updated.",
-      "reVerifyError": "Failed to re-verify profile. Please try again later."
+      "reVerifyError": "Failed to re-verify profile. Please try again later.",
+      "unlinkTitle": "Unlink Star Citizen Account",
+      "unlinkDescription": "Unlink your Star Citizen account to return to unverified status. Your username will be reset to the default format based on your Discord ID.",
+      "unlinkButton": "Unlink Account",
+      "unlinkSuccess": "Star Citizen account successfully unlinked! Your profile has been reset to unverified status.",
+      "unlinkError": "Failed to unlink Star Citizen account. Please try again later.",
+      "unlinkDialogTitle": "Confirm Account Unlink",
+      "unlinkDialogDescription": "Are you sure you want to unlink your Star Citizen account? This will reset your profile to unverified status and change your username back to the default format. You can re-link your account at any time.",
+      "unlinkDialogCancel": "Cancel",
+      "unlinkDialogConfirm": "Unlink Account"
     },
     "locale": {
       "title": "Organization Language",

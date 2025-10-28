@@ -223,7 +223,16 @@
       "reVerifyDescription": "Mettez à jour le nom d'utilisateur de votre profil pour qu'il corresponde à votre handle Spectrum actuel. Cela ne mettra à jour que votre nom d'utilisateur.",
       "reVerifyButton": "Re-vérifier le profil",
       "reVerifySuccess": "Profil re-vérifié avec succès ! Votre nom d'utilisateur a été mis à jour.",
-      "reVerifyError": "Échec de la re-vérification du profil. Veuillez réessayer plus tard."
+      "reVerifyError": "Échec de la re-vérification du profil. Veuillez réessayer plus tard.",
+      "unlinkTitle": "Dissocier le compte Star Citizen",
+      "unlinkDescription": "Dissociez votre compte Star Citizen pour revenir au statut non vérifié. Votre nom d'utilisateur sera réinitialisé au format par défaut basé sur votre ID Discord.",
+      "unlinkButton": "Dissocier le compte",
+      "unlinkSuccess": "Compte Star Citizen dissocié avec succès ! Votre profil a été réinitialisé au statut non vérifié.",
+      "unlinkError": "Échec de la dissociation du compte Star Citizen. Veuillez réessayer plus tard.",
+      "unlinkDialogTitle": "Confirmer la dissociation du compte",
+      "unlinkDialogDescription": "Êtes-vous sûr de vouloir dissocier votre compte Star Citizen ? Cela réinitialisera votre profil au statut non vérifié et changera votre nom d'utilisateur vers le format par défaut. Vous pouvez re-associer votre compte à tout moment.",
+      "unlinkDialogCancel": "Annuler",
+      "unlinkDialogConfirm": "Dissocier le compte"
     }
   },
   "sidebar": {

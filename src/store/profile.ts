@@ -193,6 +193,13 @@ export const userApi = serviceApi.injectEndpoints({
       }),
       invalidatesTags: [{ type: "MyProfile" as const }, "MyProfile" as const],
     }),
+    profileUnlinkAccount: builder.mutation<UserProfileState, void>({
+      query: () => ({
+        url: `${baseUrl}/auth/unlink`,
+        method: "POST",
+      }),
+      invalidatesTags: [{ type: "MyProfile" as const }, "MyProfile" as const],
+    }),
     // Blocklist endpoints
     profileGetBlocklist: builder.query<BlocklistEntry[], void>({
       query: () => `${baseUrl}/blocklist`,
@@ -266,6 +273,7 @@ export const {
   useProfileGetDiscordSettingsQuery,
   useProfileUseOfficialDiscordSettingsMutation,
   useProfileSyncHandleMutation,
+  useProfileUnlinkAccountMutation,
   useProfileGetBlocklistQuery,
   useProfileBlockUserMutation,
   useProfileUnblockUserMutation,

@@ -223,7 +223,16 @@
       "reVerifyDescription": "Actualice el nombre de usuario de su perfil para que coincida con su handle actual de Spectrum. Esto solo actualizará su nombre de usuario.",
       "reVerifyButton": "Re-verificar perfil",
       "reVerifySuccess": "¡Perfil re-verificado exitosamente! Su nombre de usuario ha sido actualizado.",
-      "reVerifyError": "Error al re-verificar el perfil. Por favor, inténtelo de nuevo más tarde."
+      "reVerifyError": "Error al re-verificar el perfil. Por favor, inténtelo de nuevo más tarde.",
+      "unlinkTitle": "Desvincular cuenta de Star Citizen",
+      "unlinkDescription": "Desvincule su cuenta de Star Citizen para volver al estado no verificado. Su nombre de usuario se restablecerá al formato predeterminado basado en su ID de Discord.",
+      "unlinkButton": "Desvincular cuenta",
+      "unlinkSuccess": "¡Cuenta de Star Citizen desvinculada exitosamente! Su perfil ha sido restablecido al estado no verificado.",
+      "unlinkError": "Error al desvincular la cuenta de Star Citizen. Por favor, inténtelo de nuevo más tarde.",
+      "unlinkDialogTitle": "Confirmar desvinculación de cuenta",
+      "unlinkDialogDescription": "¿Está seguro de que desea desvincular su cuenta de Star Citizen? Esto restablecerá su perfil al estado no verificado y cambiará su nombre de usuario de vuelta al formato predeterminado. Puede volver a vincular su cuenta en cualquier momento.",
+      "unlinkDialogCancel": "Cancelar",
+      "unlinkDialogConfirm": "Desvincular cuenta"
     }
   },
   "sidebar": {
