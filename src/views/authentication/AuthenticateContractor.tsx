@@ -13,7 +13,7 @@ import { useGetAuthenticatorIdentifier } from "../../store/profile"
 import { useNavigate } from "react-router-dom"
 import { useContractorLinkMutation } from "../../store/contractor"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
-import { useTranslation } from "react-i18next"
+import { Trans, useTranslation } from "react-i18next"
 
 export function AuthenticateContractor() {
   const identifier = useGetAuthenticatorIdentifier()
@@ -72,20 +72,25 @@ export function AuthenticateContractor() {
       </Grid>
       <Grid item xs={12}>
         <Typography display={"inline"}>
-          {t("authenticateContractor.instructions.1")}
-          <Button
-            style={{ display: "inline" }}
-            color={"secondary"}
-            size={"small"}
-            onClick={() =>
-              navigator.clipboard.writeText(
-                identifier.data?.identifier || "PLACEHOLDER",
-              )
-            }
-          >
-            {identifier.data?.identifier || "PLACEHOLDER"}
-          </Button>
-          {t("authenticateContractor.instructions.2")}
+          <Trans
+            i18nKey="authenticateContractor.instructions"
+            components={{
+              copyButton: (
+                <Button
+                  style={{ display: "inline" }}
+                  color={"secondary"}
+                  size={"small"}
+                  onClick={() =>
+                    navigator.clipboard.writeText(
+                      identifier.data?.identifier || "PLACEHOLDER",
+                    )
+                  }
+                >
+                  {identifier.data?.identifier || "PLACEHOLDER"}
+                </Button>
+              ),
+            }}
+          />
         </Typography>
       </Grid>
       <Grid item xs={12}>

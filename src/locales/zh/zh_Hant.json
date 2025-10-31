@@ -1413,15 +1413,8 @@
     "here": "",
     "submit": "",
     "copy_and_open": "",
-    "instructions": {
-      "1": "",
-      "2": "",
-      "3": ""
-    },
-    "tos": {
-      "1": "",
-      "2": ""
-    }
+    "instructions": "",
+    "tos": ""
   },
   "authenticateContractor": {
     "org_spectrum_id": "",
@@ -1429,10 +1422,7 @@
     "copy_and_open": "",
     "submit": "",
     "failed_auth": "",
-    "instructions": {
-      "1": "",
-      "2": ""
-    }
+    "instructions": ""
   },
   "people": {
     "title": ""

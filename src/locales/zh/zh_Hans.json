@@ -1461,15 +1461,8 @@
     "here": "here",
     "submit": "Submit",
     "copy_and_open": "Copy Code and Open Profile",
-    "instructions": {
-      "1": "In order to verify you own the above RSI profile, please click the button below to copy your code and add it to your user profile short bio, then enter your RSI handle (not monniker) above. You can remove this code once verification is complete. See ",
-      "2": " for a screenshot guide.",
-      "3": " Click submit once the code is visible on your profile."
-    },
-    "tos": {
-      "1": "I have read and accepted SC Market's",
-      "2": "Terms of Service"
-    }
+    "instructions": "In order to verify you own the above RSI profile, please click the button below to copy your code and add it to your user profile short bio, then enter your RSI handle (not monniker) above. You can remove this code once verification is complete. See <guideLink>here</guideLink> for a screenshot guide. Click submit once the code is visible on your profile.",
+    "tos": "I have read and accepted SC Market's <tosLink>Terms of Service</tosLink>"
   },
   "authenticateContractor": {
     "org_spectrum_id": "Org Spectrum ID",
@@ -1477,10 +1470,7 @@
     "copy_and_open": "Copy Code and Open Org Page",
     "submit": "Submit",
     "failed_auth": "Failed to authenticate! {{reason}}",
-    "instructions": {
-      "1": "In order to verify you own the above organization, please click the button below to open your org page and add the following code to your org introduction, history, manifesto, or charter sections. You can remove this code once verification is complete.",
-      "2": " Click submit once the code is visible on the org page."
-    }
+    "instructions": "In order to verify you own the above organization, please click the button below to open your org page and add the following code to your org introduction, history, manifesto, or charter sections. You can remove this code once verification is complete. Click submit once the code is visible on the org page."
   },
   "people": {
     "title": "People"

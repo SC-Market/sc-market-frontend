@@ -18,7 +18,7 @@ import {
 import { useNavigate } from "react-router-dom"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
-import { useTranslation } from "react-i18next"
+import { Trans, useTranslation } from "react-i18next"
 
 export function isAlphaNumeric(str: string) {
   let code, i, len
@@ -116,40 +116,56 @@ export function AuthenticateRSI() {
       </Grid>
       <Grid item xs={12}>
         <Typography display={"inline"}>
-          {t("authenticateRSI.instructions.1")}
-          <Button
-            style={{ display: "inline" }}
-            color={"secondary"}
-            size={"small"}
-            onClick={() =>
-              navigator.clipboard.writeText(
-                identifier.data?.identifier || "PLACEHOLDER",
-              )
-            }
-          >
-            {identifier.data?.identifier || "PLACEHOLDER"}
-          </Button>
-          {t("authenticateRSI.instructions.2")}
-          <a
-            href={
-              "https://github.com/henry232323/sc-market/wiki/How-to-Verify-Your-Account"
-            }
-          >
-            <UnderlineLink component={"a"} color={"primary"}>
-              {t("authenticateRSI.here")}
-            </UnderlineLink>
-          </a>
-          {t("authenticateRSI.instructions.3")}
+          <Trans
+            i18nKey="authenticateRSI.instructions"
+            components={{
+              copyButton: (
+                <Button
+                  style={{ display: "inline" }}
+                  color={"secondary"}
+                  size={"small"}
+                  onClick={() =>
+                    navigator.clipboard.writeText(
+                      identifier.data?.identifier || "PLACEHOLDER",
+                    )
+                  }
+                >
+                  {identifier.data?.identifier || "PLACEHOLDER"}
+                </Button>
+              ),
+              guideLink: (
+                <a
+                  href={
+                    "https://github.com/henry232323/sc-market/wiki/How-to-Verify-Your-Account"
+                  }
+                >
+                  <UnderlineLink component={"a"} color={"primary"}>
+                    {t("authenticateRSI.here")}
+                  </UnderlineLink>
+                </a>
+              ),
+            }}
+          />
         </Typography>
       </Grid>
       <Grid item xs={12} display={"flex"} alignItems={"center"}>
         <Typography variant={"body2"}>
-          {t("authenticateRSI.tos.1")}{" "}
-          <a href={"/terms-of-service.html"} target={"_blank"} rel="noreferrer">
-            <UnderlineLink color={"primary"}>
-              {t("authenticateRSI.tos.2")}
-            </UnderlineLink>
-          </a>
+          <Trans
+            i18nKey="authenticateRSI.tos"
+            components={{
+              tosLink: (
+                <a
+                  href={"/terms-of-service.html"}
+                  target={"_blank"}
+                  rel="noreferrer"
+                >
+                  <UnderlineLink color={"primary"}>
+                    {t("authenticateRSI.tos.2")}
+                  </UnderlineLink>
+                </a>
+              ),
+            }}
+          />
         </Typography>
         <Checkbox
           value={tosAccepted}

@@ -69,9 +69,6 @@ export const userApi = serviceApi.injectEndpoints({
         "MyProfile" as const,
       ],
     }),
-    profileGetAllUsers: builder.query<(User & { role: string })[], void>({
-      query: () => `${baseUrl}/allusers`,
-    }),
     profileGetUserByName: builder.query<User, string>({
       query: (username) => `${baseUrl}/user/${username}`,
       providesTags: (result, error, arg) => [
@@ -260,8 +257,6 @@ export const useProfileDeleteWebhook =
   userApi.endpoints.profileDeleteWebhook.useMutation
 export const useUpdateProfile =
   userApi.endpoints.profileUpdateProfile.useMutation
-export const useProfileGetAllUsers =
-  userApi.endpoints.profileGetAllUsers.useQuery
 export const useProfileUpdateLocale =
   userApi.endpoints.profileUpdateLocale.useMutation
 

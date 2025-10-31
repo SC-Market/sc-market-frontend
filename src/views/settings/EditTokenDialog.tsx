@@ -14,6 +14,7 @@ import {
   Alert,
   Divider,
   Grid,
+  Chip,
 } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import {
@@ -100,6 +101,16 @@ const SCOPE_CATEGORIES = {
       { value: "moderation:write", label: "Submit Reports" },
     ],
   },
+  admin: {
+    label: "Admin",
+    scopes: [
+      { value: "admin:read", label: "Read Admin Data" },
+      { value: "admin:write", label: "Write Admin Data" },
+      { value: "admin:spectrum", label: "Spectrum Migration" },
+      { value: "admin:stats", label: "View Statistics" },
+      { value: "admin", label: "Full Admin Access" },
+    ],
+  },
   special: {
     label: "Special",
     scopes: [
@@ -118,6 +129,18 @@ export function EditTokenDialog({
   const [updateToken, { isLoading }] = useUpdateTokenMutation()
   const { data: profile } = useGetUserProfileQuery()
   const contractors = profile?.contractors || []
+  const isAdmin = profile?.role === "admin"
+  
+  // Filter scopes based on user role - admins can see all, non-admins can't see admin/moderation scopes
+  const allScopes = Object.values(SCOPE_CATEGORIES).flatMap(cat => cat.scopes.map(s => s.value))
+  const availableScopes: string[] = isAdmin ? 
+    allScopes :
+    allScopes.filter(scope => 
+      !scope.startsWith("admin:") && 
+      scope !== "admin" &&
+      scope !== "moderation:read" &&
+      scope !== "moderation:write"
+    )
 
   const [formData, setFormData] = useState({
     name: "",
@@ -141,17 +164,27 @@ export function EditTokenDialog({
               .map((c) => c.spectrum_id) || []
           : []
 
+      // Filter out admin/moderation scopes for non-admin users
+      const scopesToShow = isAdmin 
+        ? token.scopes 
+        : token.scopes.filter(scope => 
+            !scope.startsWith("admin:") && 
+            scope !== "admin" &&
+            scope !== "moderation:read" &&
+            scope !== "moderation:write"
+          )
+
       setFormData({
         name: token.name,
         description: token.description || "",
-        scopes: token.scopes,
+        scopes: scopesToShow,
         contractor_spectrum_ids: contractorSpectrumIds,
         expires_at: token.expires_at
           ? new Date(token.expires_at).toISOString().slice(0, 16)
           : "",
       })
     }
-  }, [token, contractors])
+  }, [token, contractors, isAdmin])
 
   const handleScopeChange = (scope: string, checked: boolean) => {
     setFormData((prev) => ({
@@ -264,30 +297,48 @@ export function EditTokenDialog({
             </Typography>
 
             {Object.entries(SCOPE_CATEGORIES).map(
-              ([category, { label, scopes }]) => (
-                <Box key={category} sx={{ mb: 3 }}>
-                  <Typography variant="subtitle1" gutterBottom>
-                    {label}
-                  </Typography>
-                  <FormGroup>
-                    {scopes.map(({ value, label: scopeLabel }) => (
-                      <FormControlLabel
-                        key={value}
-                        control={
-                          <Checkbox
-                            checked={formData.scopes.includes(value)}
-                            onChange={(e) =>
-                              handleScopeChange(value, e.target.checked)
-                            }
-                          />
-                        }
-                        label={scopeLabel}
-                      />
-                    ))}
-                  </FormGroup>
-                  <Divider sx={{ mt: 1 }} />
-                </Box>
-              ),
+              ([category, { label, scopes }]) => {
+                // Filter scopes based on availability only (no showing admin scopes to non-admins)
+                const filteredScopes = scopes.filter(scope => 
+                  availableScopes.includes(scope.value)
+                )
+                
+                // Don't render category if no scopes are available
+                if (filteredScopes.length === 0) return null
+                
+                return (
+                  <Box key={category} sx={{ mb: 3 }}>
+                    <Typography variant="subtitle1" gutterBottom>
+                      {label}
+                      {!isAdmin && (category === "admin" || category === "moderation") && (
+                        <Chip 
+                          label="Admin Only" 
+                          size="small" 
+                          color="warning" 
+                          sx={{ ml: 1 }}
+                        />
+                      )}
+                    </Typography>
+                    <FormGroup>
+                      {filteredScopes.map(({ value, label: scopeLabel }) => (
+                        <FormControlLabel
+                          key={value}
+                          control={
+                            <Checkbox
+                              checked={formData.scopes.includes(value)}
+                              onChange={(e) =>
+                                handleScopeChange(value, e.target.checked)
+                              }
+                            />
+                          }
+                          label={scopeLabel}
+                        />
+                      ))}
+                    </FormGroup>
+                    <Divider sx={{ mt: 1 }} />
+                  </Box>
+                )
+              },
             )}
           </Grid>
 
