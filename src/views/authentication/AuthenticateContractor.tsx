@@ -14,6 +14,12 @@ import { useNavigate } from "react-router-dom"
 import { useContractorLinkMutation } from "../../store/contractor"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { Trans, useTranslation } from "react-i18next"
+import {
+  extractOrgIdFromUrl,
+  sanitizeAlphanumeric,
+  isRsiUrl,
+} from "../../utils/rsiUrlUtils"
+import { SentinelCode } from "../../components/authentication/SentinelCode"
 
 export function AuthenticateContractor() {
   const identifier = useGetAuthenticatorIdentifier()
@@ -61,7 +67,45 @@ export function AuthenticateContractor() {
           label={t("authenticateContractor.org_spectrum_id")}
           fullWidth
           value={orgName}
-          onChange={(event) => setOrgName(event.target.value.toUpperCase())}
+          onChange={(event) => {
+            const input = event.target.value
+            
+            // If it looks like a URL, try to extract the org ID
+            if (isRsiUrl(input)) {
+              const extractedId = extractOrgIdFromUrl(input)
+              if (extractedId) {
+                setOrgName(sanitizeAlphanumeric(extractedId).toUpperCase())
+                return
+              }
+            }
+            
+            // Otherwise, sanitize the input and convert to uppercase (remove spaces and non-alphanumeric except _ and -)
+            setOrgName(sanitizeAlphanumeric(input).toUpperCase())
+          }}
+          onPaste={(event) => {
+            const pastedText = event.clipboardData.getData("text")
+            
+            // If pasted text is a URL, extract the ID
+            if (isRsiUrl(pastedText)) {
+              const extractedId = extractOrgIdFromUrl(pastedText)
+              if (extractedId) {
+                event.preventDefault()
+                setOrgName(sanitizeAlphanumeric(extractedId).toUpperCase())
+                return
+              }
+            }
+            
+            // If pasted text contains non-alphanumeric (except _ and -), sanitize it
+            if (!/^[a-zA-Z0-9_-]*$/.test(pastedText)) {
+              event.preventDefault()
+              const sanitized = sanitizeAlphanumeric(pastedText)
+              setOrgName(sanitized.toUpperCase())
+            } else {
+              // Just convert to uppercase if valid
+              event.preventDefault()
+              setOrgName(pastedText.toUpperCase())
+            }
+          }}
           error={error ? !orgName : false}
           helperText={
             error && !orgName
@@ -75,19 +119,10 @@ export function AuthenticateContractor() {
           <Trans
             i18nKey="authenticateContractor.instructions"
             components={{
-              copyButton: (
-                <Button
-                  style={{ display: "inline" }}
-                  color={"secondary"}
-                  size={"small"}
-                  onClick={() =>
-                    navigator.clipboard.writeText(
-                      identifier.data?.identifier || "PLACEHOLDER",
-                    )
-                  }
-                >
-                  {identifier.data?.identifier || "PLACEHOLDER"}
-                </Button>
+              sentinelCode: (
+                <SentinelCode
+                  code={identifier.data?.identifier || "PLACEHOLDER"}
+                />
               ),
             }}
           />

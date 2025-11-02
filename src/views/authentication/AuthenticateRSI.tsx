@@ -19,6 +19,12 @@ import { useNavigate } from "react-router-dom"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { Trans, useTranslation } from "react-i18next"
+import {
+  extractProfileIdFromUrl,
+  sanitizeAlphanumeric,
+  isRsiUrl,
+} from "../../utils/rsiUrlUtils"
+import { SentinelCode } from "../../components/authentication/SentinelCode"
 
 export function isAlphaNumeric(str: string) {
   let code, i, len
@@ -102,14 +108,41 @@ export function AuthenticateRSI() {
           label={t("authenticateRSI.handle")}
           fullWidth
           value={username}
-          onChange={(event) =>
-            setUsername(
-              event.target.value.replace(
-                "https://robertsspaceindustries.com/citizens/",
-                "",
-              ),
-            )
-          }
+          onChange={(event) => {
+            const input = event.target.value
+
+            // If it looks like a URL, try to extract the profile ID
+            if (isRsiUrl(input)) {
+              const extractedId = extractProfileIdFromUrl(input)
+              if (extractedId) {
+                setUsername(sanitizeAlphanumeric(extractedId))
+                return
+              }
+            }
+
+            // Otherwise, sanitize the input (remove spaces and non-alphanumeric except _ and -)
+            setUsername(sanitizeAlphanumeric(input))
+          }}
+          onPaste={(event) => {
+            const pastedText = event.clipboardData.getData("text")
+
+            // If pasted text is a URL, extract the ID
+            if (isRsiUrl(pastedText)) {
+              const extractedId = extractProfileIdFromUrl(pastedText)
+              if (extractedId) {
+                event.preventDefault()
+                setUsername(sanitizeAlphanumeric(extractedId))
+                return
+              }
+            }
+
+            // If pasted text contains non-alphanumeric (except _ and -), sanitize it
+            if (!/^[a-zA-Z0-9_-]*$/.test(pastedText)) {
+              event.preventDefault()
+              const sanitized = sanitizeAlphanumeric(pastedText)
+              setUsername(sanitized)
+            }
+          }}
           error={isError}
           helperText={errorMessage}
         />
@@ -119,30 +152,23 @@ export function AuthenticateRSI() {
           <Trans
             i18nKey="authenticateRSI.instructions"
             components={{
-              copyButton: (
-                <Button
-                  style={{ display: "inline" }}
-                  color={"secondary"}
-                  size={"small"}
-                  onClick={() =>
-                    navigator.clipboard.writeText(
-                      identifier.data?.identifier || "PLACEHOLDER",
-                    )
-                  }
-                >
-                  {identifier.data?.identifier || "PLACEHOLDER"}
-                </Button>
+              sentinelCode: (
+                <SentinelCode
+                  code={identifier.data?.identifier || "PLACEHOLDER"}
+                />
               ),
               guideLink: (
-                <a
+                <UnderlineLink
+                  component={"a"}
+                  color={"primary"}
                   href={
                     "https://github.com/henry232323/sc-market/wiki/How-to-Verify-Your-Account"
                   }
+                  target={"blank"}
+                  style={{ textDecoration: "none" }}
                 >
-                  <UnderlineLink component={"a"} color={"primary"}>
-                    {t("authenticateRSI.here")}
-                  </UnderlineLink>
-                </a>
+                  {t("authenticateRSI.here")}
+                </UnderlineLink>
               ),
             }}
           />
@@ -154,15 +180,15 @@ export function AuthenticateRSI() {
             i18nKey="authenticateRSI.tos"
             components={{
               tosLink: (
-                <a
+                <UnderlineLink
+                  color={"primary"}
+                  component={"a"}
                   href={"/terms-of-service.html"}
                   target={"_blank"}
                   rel="noreferrer"
                 >
-                  <UnderlineLink color={"primary"}>
-                    {t("authenticateRSI.tos.2")}
-                  </UnderlineLink>
-                </a>
+                  {t("authenticateRSI.tos")}
+                </UnderlineLink>
               ),
             }}
           />
