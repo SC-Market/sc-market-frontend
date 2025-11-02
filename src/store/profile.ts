@@ -114,8 +114,6 @@ export const userApi = serviceApi.injectEndpoints({
       UserProfileState,
       {
         about?: string
-        avatar_url?: string
-        banner_url?: string
         display_name?: string
         market_order_template?: string
       }
@@ -132,6 +130,46 @@ export const userApi = serviceApi.injectEndpoints({
         },
         { type: "MyProfile" as const },
         "MyProfile" as const,
+      ],
+    }),
+    profileUploadAvatar: builder.mutation<
+      { result: string; resource_id: string; url: string },
+      File
+    >({
+      query: (file) => {
+        const formData = new FormData()
+        formData.append("avatar", file)
+        return {
+          url: `${baseUrl}/avatar`,
+          method: "POST",
+          body: formData,
+          // Don't set Content-Type header, let the browser set it with boundary for multipart/form-data
+        }
+      },
+      invalidatesTags: [
+        { type: "MyProfile" as const },
+        "MyProfile" as const,
+        { type: "Profile" as const, id: "LIST" },
+      ],
+    }),
+    profileUploadBanner: builder.mutation<
+      { result: string; resource_id: string; url: string },
+      File
+    >({
+      query: (file) => {
+        const formData = new FormData()
+        formData.append("banner", file)
+        return {
+          url: `${baseUrl}/banner`,
+          method: "POST",
+          body: formData,
+          // Don't set Content-Type header, let the browser set it with boundary for multipart/form-data
+        }
+      },
+      invalidatesTags: [
+        { type: "MyProfile" as const },
+        "MyProfile" as const,
+        { type: "Profile" as const, id: "LIST" },
       ],
     }),
     profileUpdateLocale: builder.mutation<
@@ -272,4 +310,6 @@ export const {
   useProfileGetBlocklistQuery,
   useProfileBlockUserMutation,
   useProfileUnblockUserMutation,
+  useProfileUploadAvatarMutation,
+  useProfileUploadBannerMutation,
 } = userApi

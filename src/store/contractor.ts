@@ -291,8 +291,6 @@ export const contractorsApi = serviceApi.injectEndpoints({
         body: {
           description?: string
           tags?: string[]
-          avatar_url?: string
-          banner_url?: string
           site_url?: string
           name?: string
           market_order_template?: string
@@ -309,6 +307,42 @@ export const contractorsApi = serviceApi.injectEndpoints({
         { type: "Contractor" as const, id: arg.contractor },
       ],
       transformResponse: unwrapResponse,
+    }),
+    contractorUploadAvatar: builder.mutation<
+      { result: string; resource_id: string; url: string },
+      { contractor: string; file: File }
+    >({
+      query: ({ contractor, file }) => {
+        const formData = new FormData()
+        formData.append("avatar", file)
+        return {
+          url: `/api/contractors/${contractor}/avatar`,
+          method: "POST",
+          body: formData,
+          // Don't set Content-Type header, let the browser set it with boundary for multipart/form-data
+        }
+      },
+      invalidatesTags: (result, error, arg) => [
+        { type: "Contractor" as const, id: arg.contractor },
+      ],
+    }),
+    contractorUploadBanner: builder.mutation<
+      { result: string; resource_id: string; url: string },
+      { contractor: string; file: File }
+    >({
+      query: ({ contractor, file }) => {
+        const formData = new FormData()
+        formData.append("banner", file)
+        return {
+          url: `/api/contractors/${contractor}/banner`,
+          method: "POST",
+          body: formData,
+          // Don't set Content-Type header, let the browser set it with boundary for multipart/form-data
+        }
+      },
+      invalidatesTags: (result, error, arg) => [
+        { type: "Contractor" as const, id: arg.contractor },
+      ],
     }),
     refetchContractorDetails: builder.mutation<void, string>({
       query: (spectrum_id) => ({
@@ -556,6 +590,8 @@ export const {
   useGetContractorInviteCodeQuery,
   useDeclineContractorInviteMutation,
   useUpdateContractorMutation,
+  useContractorUploadAvatarMutation,
+  useContractorUploadBannerMutation,
   useCreateContractorWebhookMutation,
   useDeleteContractorWebhookMutation,
   useCreateContractorInviteMutation,

@@ -24,6 +24,7 @@ import { Section } from "../../components/paper/Section"
 import { Link, useParams } from "react-router-dom"
 import { a11yProps, TabPanel } from "../../components/tabs/Tabs"
 import {
+  AddAPhotoRounded,
   CreateRounded,
   DesignServicesRounded,
   EditRounded,
@@ -40,6 +41,8 @@ import { ItemListings, UserRecentListings } from "../market/ItemListings"
 import {
   useGetUserProfileQuery,
   useProfileRefetchMutation,
+  useProfileUploadAvatarMutation,
+  useProfileUploadBannerMutation,
   useUpdateProfile,
 } from "../../store/profile"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
@@ -203,8 +206,53 @@ function BannerEditArea(props: {
     [myProfile?.username, profile.username],
   )
 
-  const [bannerEntryOpen, setBannerEntryOpen] = useState(false)
-  const [newBannerURL, setNewBannerURL] = useState("")
+  const [bannerFileInputRef, setBannerFileInputRef] =
+    useState<HTMLInputElement | null>(null)
+  const issueAlert = useAlertHook()
+
+  const [uploadBanner, { isLoading: isUploadingBanner }] =
+    useProfileUploadBannerMutation()
+
+  async function handleBannerUpload(
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    // Validate file size (2.5MB limit for banners)
+    if (file.size > 2.5 * 1000 * 1000) {
+      issueAlert({
+        message: t("viewProfile.banner_too_large", {
+          defaultValue: "Banner must be less than 2.5MB",
+        }),
+        severity: "error",
+      })
+      return
+    }
+
+    try {
+      await uploadBanner(file).unwrap()
+      issueAlert({
+        message: t("viewProfile.banner_uploaded", {
+          defaultValue: "Banner uploaded successfully",
+        }),
+        severity: "success",
+      })
+    } catch (error: any) {
+      issueAlert({
+        message: `${t("viewProfile.banner_upload_failed", {
+          defaultValue: "Failed to upload banner",
+        })}: ${error?.data?.error || error?.message || "Unknown error"}`,
+        severity: "error",
+      })
+    } finally {
+      // Reset file input
+      if (bannerFileInputRef) {
+        bannerFileInputRef.value = ""
+      }
+    }
+  }
+
   return (
     <Box
       sx={{
@@ -214,47 +262,31 @@ function BannerEditArea(props: {
         display: "flex",
       }}
     >
-      <Collapse in={bannerEntryOpen} orientation={"horizontal"}>
-        <Box
-          sx={{
-            backgroundColor: "#00000090",
-            marginRight: 2,
-          }}
-        >
-          <TextField
-            variant={"filled"}
-            label={t("viewProfile.image_url")}
-            fullWidth
-            focused
-            multiline
-            helperText={bannerEntryOpen && t("viewProfile.image_url_helper")}
-            onChange={(event: React.ChangeEvent<{ value: string }>) => {
-              setNewBannerURL(event.target.value)
-            }}
-            value={newBannerURL}
-            error={
-              !!newBannerURL && !newBannerURL.match(external_resource_regex)
-            }
-          />
-        </Box>
-      </Collapse>
-
       {isMyProfile && (
-        <Fab
-          color={bannerEntryOpen ? "primary" : "secondary"}
-          aria-label={t("orgDetailEdit.set_banner")}
-          onClick={async () => {
-            if (bannerEntryOpen && newBannerURL) {
-              await submitUpdate({ banner_url: newBannerURL })
-            }
-            setBannerEntryOpen((v) => !v)
-          }}
-          sx={{
-            transition: "0.3s",
-          }}
-        >
-          {bannerEntryOpen ? <SaveRounded /> : <EditRounded />}
-        </Fab>
+        <>
+          <input
+            type="file"
+            accept="image/png,image/jpeg,image/webp"
+            onChange={handleBannerUpload}
+            ref={(input) => setBannerFileInputRef(input)}
+            style={{ display: "none" }}
+            id="banner-upload-input"
+            disabled={isUploadingBanner}
+          />
+          <label htmlFor="banner-upload-input">
+            <Fab
+              component="span"
+              disabled={isUploadingBanner}
+              color="secondary"
+              aria-label={t("orgDetailEdit.set_banner")}
+              sx={{
+                transition: "0.3s",
+              }}
+            >
+              {isUploadingBanner ? <SaveRounded /> : <AddAPhotoRounded />}
+            </Fab>
+          </label>
+        </>
       )}
     </Box>
   )
@@ -307,8 +339,8 @@ export function ViewProfile(props: { profile: User }) {
   const [newDescription, setNewDescription] = useState("")
 
   const [showAvatarButton, setShowAvatarButton] = useState(false)
-  const [avatarEntryOpen, setAvatarEntryOpen] = useState(false)
-  const [newAvatarURL, setNewAvatarURL] = useState("")
+  const [avatarFileInputRef, setAvatarFileInputRef] =
+    useState<HTMLInputElement | null>(null)
 
   const issueAlert = useAlertHook()
 
@@ -316,10 +348,11 @@ export function ViewProfile(props: { profile: User }) {
     updateProfile, // This is the mutation trigger
   ] = useUpdateProfile()
 
+  const [uploadAvatar, { isLoading: isUploadingAvatar }] =
+    useProfileUploadAvatarMutation()
+
   async function submitUpdate(data: {
     about?: string
-    avatar_url?: string
-    banner_url?: string
     display_name?: string
   }) {
     const res: { data?: any; error?: any } = await updateProfile(data)
@@ -338,6 +371,44 @@ export function ViewProfile(props: { profile: User }) {
       })
     }
     return false
+  }
+
+  async function handleAvatarUpload(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    // Validate file size (1MB limit for avatars)
+    if (file.size > 1 * 1000 * 1000) {
+      issueAlert({
+        message: t("viewProfile.avatar_too_large", {
+          defaultValue: "Avatar must be less than 1MB",
+        }),
+        severity: "error",
+      })
+      return
+    }
+
+    try {
+      await uploadAvatar(file).unwrap()
+      issueAlert({
+        message: t("viewProfile.avatar_uploaded", {
+          defaultValue: "Avatar uploaded successfully",
+        }),
+        severity: "success",
+      })
+    } catch (error: any) {
+      issueAlert({
+        message: `${t("viewProfile.avatar_upload_failed", {
+          defaultValue: "Failed to upload avatar",
+        })}: ${error?.data?.error || error?.message || "Unknown error"}`,
+        severity: "error",
+      })
+    } finally {
+      // Reset file input
+      if (avatarFileInputRef) {
+        avatarFileInputRef.value = ""
+      }
+    }
   }
 
   const theme = useTheme()
@@ -399,20 +470,40 @@ export function ViewProfile(props: { profile: User }) {
                           onMouseEnter={() => setShowAvatarButton(true)}
                           onMouseLeave={() => setShowAvatarButton(false)}
                         >
-                          <IconButton
-                            sx={{
-                              opacity: showAvatarButton ? 1 : 0,
-                              position: "absolute",
-                              zIndex: 50,
-                              transition: "0.3s",
-                              color: "white",
-                              top: 20,
-                              left: 20,
-                            }}
-                            onClick={() => setAvatarEntryOpen((v) => !v)}
-                          >
-                            <EditRounded />
-                          </IconButton>
+                          <input
+                            type="file"
+                            accept="image/png,image/jpeg,image/webp"
+                            onChange={handleAvatarUpload}
+                            ref={(input) => setAvatarFileInputRef(input)}
+                            style={{ display: "none" }}
+                            id="avatar-upload-input"
+                            disabled={isUploadingAvatar}
+                          />
+                          <label htmlFor="avatar-upload-input">
+                            <IconButton
+                              component="span"
+                              disabled={isUploadingAvatar}
+                              sx={{
+                                opacity: showAvatarButton ? 1 : 0,
+                                position: "absolute",
+                                zIndex: 50,
+                                transition: "0.3s",
+                                color: "white",
+                                top: 20,
+                                left: 20,
+                                backgroundColor: "rgba(0, 0, 0, 0.5)",
+                                "&:hover": {
+                                  backgroundColor: "rgba(0, 0, 0, 0.7)",
+                                },
+                              }}
+                            >
+                              {isUploadingAvatar ? (
+                                <SaveRounded />
+                              ) : (
+                                <AddAPhotoRounded />
+                              )}
+                            </IconButton>
+                          </label>
 
                           <Avatar
                             src={props.profile.avatar}
@@ -420,65 +511,11 @@ export function ViewProfile(props: { profile: User }) {
                               height: 80,
                               width: 80,
                               borderRadius: 4,
-                              opacity: showAvatarButton ? 0.5 : 1,
+                              opacity: showAvatarButton || isUploadingAvatar ? 0.5 : 1,
                               transition: "0.5s",
                             }}
                             variant={"rounded"}
                           />
-
-                          <Collapse
-                            in={avatarEntryOpen}
-                            orientation={"horizontal"}
-                          >
-                            <Box
-                              sx={{
-                                backgroundColor: "#000000D0",
-                                position: "absolute",
-                                zIndex: 50,
-                                left: 96,
-                                top: 0,
-                                minWidth: 400,
-                                display: "flex",
-                              }}
-                            >
-                              <TextField
-                                variant={"filled"}
-                                label={t("viewProfile.image_url")}
-                                fullWidth
-                                focused
-                                multiline
-                                helperText={
-                                  avatarEntryOpen &&
-                                  t("viewProfile.image_url_helper")
-                                }
-                                onChange={(
-                                  event: React.ChangeEvent<{
-                                    value: string
-                                  }>,
-                                ) => {
-                                  setNewAvatarURL(event.target.value)
-                                }}
-                                value={newAvatarURL}
-                                error={
-                                  !!newAvatarURL &&
-                                  !newAvatarURL.match(external_resource_regex)
-                                }
-                              />
-
-                              <Button
-                                onClick={async () => {
-                                  if (avatarEntryOpen && newAvatarURL) {
-                                    await submitUpdate({
-                                      avatar_url: newAvatarURL,
-                                    })
-                                  }
-                                  setAvatarEntryOpen(false)
-                                }}
-                              >
-                                Save
-                              </Button>
-                            </Box>
-                          </Collapse>
                         </Box>
                       ) : (
                         <Avatar

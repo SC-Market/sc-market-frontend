@@ -33,8 +33,17 @@ import {
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import { Contractor } from "../../datatypes/Contractor"
-import { EditRounded, SaveRounded, StarRounded } from "@mui/icons-material"
-import { useUpdateContractorMutation } from "../../store/contractor"
+import {
+  AddAPhotoRounded,
+  EditRounded,
+  SaveRounded,
+  StarRounded,
+} from "@mui/icons-material"
+import {
+  useContractorUploadAvatarMutation,
+  useContractorUploadBannerMutation,
+  useUpdateContractorMutation,
+} from "../../store/contractor"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import {
   MarkdownEditor,
@@ -81,24 +90,27 @@ export function OrgDetailEditForm(props: { contractor: Contractor }) {
   const [newTags, setNewTags] = useState(contractor?.fields || [])
 
   const [showAvatarButton, setShowAvatarButton] = useState(false)
-  const [avatarEntryOpen, setAvatarEntryOpen] = useState(false)
-  const [newAvatarURL, setNewAvatarURL] = useState("")
-
-  const [bannerEntryOpen, setBannerEntryOpen] = useState(false)
-  const [newBannerURL, setNewBannerURL] = useState("")
+  const [avatarFileInputRef, setAvatarFileInputRef] =
+    useState<HTMLInputElement | null>(null)
+  const [bannerFileInputRef, setBannerFileInputRef] =
+    useState<HTMLInputElement | null>(null)
 
   const [
     updateContractor, // This is the mutation trigger
     { isSuccess }, // This is the destructured mutation result
   ] = useUpdateContractorMutation()
 
+  const [uploadAvatar, { isLoading: isUploadingAvatar }] =
+    useContractorUploadAvatarMutation()
+
+  const [uploadBanner, { isLoading: isUploadingBanner }] =
+    useContractorUploadBannerMutation()
+
   async function submitUpdate(data: {
     description?: string
     tags?: string[]
-    avatar_url?: string
     site_url?: string
     name?: string
-    banner_url?: string
   }) {
     const res: { data?: any; error?: any } = await updateContractor({
       contractor: contractor.spectrum_id,
@@ -121,6 +133,92 @@ export function OrgDetailEditForm(props: { contractor: Contractor }) {
     return false
   }
 
+  async function handleAvatarUpload(
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    // Validate file size (1MB limit for avatars)
+    if (file.size > 1 * 1000 * 1000) {
+      issueAlert({
+        message: t("orgDetailEdit.avatar_too_large", {
+          defaultValue: "Avatar must be less than 1MB",
+        }),
+        severity: "error",
+      })
+      return
+    }
+
+    try {
+      await uploadAvatar({
+        contractor: contractor.spectrum_id,
+        file,
+      }).unwrap()
+      issueAlert({
+        message: t("orgDetailEdit.avatar_uploaded", {
+          defaultValue: "Avatar uploaded successfully",
+        }),
+        severity: "success",
+      })
+    } catch (error: any) {
+      issueAlert({
+        message: `${t("orgDetailEdit.avatar_upload_failed", {
+          defaultValue: "Failed to upload avatar",
+        })}: ${error?.data?.error || error?.message || "Unknown error"}`,
+        severity: "error",
+      })
+    } finally {
+      // Reset file input
+      if (avatarFileInputRef) {
+        avatarFileInputRef.value = ""
+      }
+    }
+  }
+
+  async function handleBannerUpload(
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    // Validate file size (2.5MB limit for banners)
+    if (file.size > 2.5 * 1000 * 1000) {
+      issueAlert({
+        message: t("orgDetailEdit.banner_too_large", {
+          defaultValue: "Banner must be less than 2.5MB",
+        }),
+        severity: "error",
+      })
+      return
+    }
+
+    try {
+      await uploadBanner({
+        contractor: contractor.spectrum_id,
+        file,
+      }).unwrap()
+      issueAlert({
+        message: t("orgDetailEdit.banner_uploaded", {
+          defaultValue: "Banner uploaded successfully",
+        }),
+        severity: "success",
+      })
+    } catch (error: any) {
+      issueAlert({
+        message: `${t("orgDetailEdit.banner_upload_failed", {
+          defaultValue: "Failed to upload banner",
+        })}: ${error?.data?.error || error?.message || "Unknown error"}`,
+        severity: "error",
+      })
+    } finally {
+      // Reset file input
+      if (bannerFileInputRef) {
+        bannerFileInputRef.value = ""
+      }
+    }
+  }
+
   return (
     <React.Fragment>
       <Grid item xs={12} lg={12}>
@@ -140,20 +238,36 @@ export function OrgDetailEditForm(props: { contractor: Contractor }) {
                 onMouseEnter={() => setShowAvatarButton(true)}
                 onMouseLeave={() => setShowAvatarButton(false)}
               >
-                <IconButton
-                  sx={{
-                    opacity: showAvatarButton ? 1 : 0,
-                    position: "absolute",
-                    zIndex: 50,
-                    transition: "0.3s",
-                    color: "white",
-                    top: theme.spacing(4),
-                    left: theme.spacing(4),
-                  }}
-                  onClick={() => setAvatarEntryOpen((v) => !v)}
-                >
-                  <EditRounded />
-                </IconButton>
+                <input
+                  type="file"
+                  accept="image/png,image/jpeg,image/webp"
+                  onChange={handleAvatarUpload}
+                  ref={(input) => setAvatarFileInputRef(input)}
+                  style={{ display: "none" }}
+                  id="org-avatar-upload-input"
+                  disabled={isUploadingAvatar}
+                />
+                <label htmlFor="org-avatar-upload-input">
+                  <IconButton
+                    component="span"
+                    disabled={isUploadingAvatar}
+                    sx={{
+                      opacity: showAvatarButton ? 1 : 0,
+                      position: "absolute",
+                      zIndex: 50,
+                      transition: "0.3s",
+                      color: "white",
+                      top: theme.spacing(4),
+                      left: theme.spacing(4),
+                      backgroundColor: "rgba(0, 0, 0, 0.5)",
+                      "&:hover": {
+                        backgroundColor: "rgba(0, 0, 0, 0.7)",
+                      },
+                    }}
+                  >
+                    {isUploadingAvatar ? <SaveRounded /> : <AddAPhotoRounded />}
+                  </IconButton>
+                </label>
                 <Avatar
                   src={contractor?.avatar}
                   aria-label={t("contractors.contractor")}
@@ -161,80 +275,15 @@ export function OrgDetailEditForm(props: { contractor: Contractor }) {
                   sx={{
                     maxHeight: theme.spacing(12),
                     maxWidth: theme.spacing(12),
-                    opacity: showAvatarButton ? 0.5 : 1,
+                    opacity: showAvatarButton || isUploadingAvatar ? 0.5 : 1,
                     // maxWidth:'100%',
                     // maxHeight:'100%',
                     width: "100%",
                     height: "100%",
                     objectFit: "cover",
+                    transition: "0.5s",
                   }}
                 />
-
-                <Collapse in={avatarEntryOpen} orientation={"horizontal"}>
-                  <Box
-                    sx={{
-                      backgroundColor: "#000000D0",
-                      position: "absolute",
-                      zIndex: 50,
-                      left: 96,
-                      top: 0,
-                      minWidth: 400,
-                      display: "flex",
-                      borderRadius: 2,
-                    }}
-                  >
-                    <TextField
-                      variant={"filled"}
-                      label={t("orgDetailEdit.image_url")}
-                      fullWidth
-                      focused
-                      multiline
-                      helperText={
-                        avatarEntryOpen && t("orgDetailEdit.image_url_helper")
-                      }
-                      onChange={(
-                        event: React.ChangeEvent<{ value: string }>,
-                      ) => {
-                        setNewAvatarURL(event.target.value)
-                      }}
-                      value={newAvatarURL}
-                      error={
-                        !!newAvatarURL &&
-                        !newAvatarURL.match(external_resource_regex)
-                      }
-                      aria-label={t(
-                        "accessibility.avatarUrlInput",
-                        "Enter avatar image URL",
-                      )}
-                      aria-describedby="avatar-url-help"
-                    />
-                    <div id="avatar-url-help" className="sr-only">
-                      {t(
-                        "accessibility.avatarUrlHelp",
-                        "Enter the URL for your organization's avatar image",
-                      )}
-                    </div>
-
-                    <Button
-                      onClick={async () => {
-                        if (avatarEntryOpen && newAvatarURL) {
-                          await submitUpdate({ avatar_url: newAvatarURL })
-                        }
-                        setAvatarEntryOpen(false)
-                      }}
-                      aria-label={t("accessibility.saveAvatar", "Save avatar")}
-                      aria-describedby="save-avatar-help"
-                    >
-                      {t("orgDetailEdit.save")}
-                      <span id="save-avatar-help" className="sr-only">
-                        {t(
-                          "accessibility.saveAvatarHelp",
-                          "Save the new avatar image URL",
-                        )}
-                      </span>
-                    </Button>
-                  </Box>
-                </Collapse>
               </Box>
             }
             title={
@@ -523,62 +572,28 @@ export function OrgDetailEditForm(props: { contractor: Contractor }) {
                   display: "flex",
                 }}
               >
-                <Collapse in={bannerEntryOpen} orientation={"horizontal"}>
-                  <Box
+                <input
+                  type="file"
+                  accept="image/png,image/jpeg,image/webp"
+                  onChange={handleBannerUpload}
+                  ref={(input) => setBannerFileInputRef(input)}
+                  style={{ display: "none" }}
+                  id="org-banner-upload-input"
+                  disabled={isUploadingBanner}
+                />
+                <label htmlFor="org-banner-upload-input">
+                  <Fab
+                    component="span"
+                    disabled={isUploadingBanner}
+                    color="secondary"
+                    aria-label={t("orgDetailEdit.set_banner")}
                     sx={{
-                      backgroundColor: "#00000090",
+                      transition: "0.3s",
                     }}
                   >
-                    <TextField
-                      variant={"filled"}
-                      label={t("orgDetailEdit.image_url")}
-                      fullWidth
-                      focused
-                      multiline
-                      helperText={
-                        bannerEntryOpen && t("orgDetailEdit.image_url_helper")
-                      }
-                      onChange={(
-                        event: React.ChangeEvent<{ value: string }>,
-                      ) => {
-                        setNewBannerURL(event.target.value)
-                      }}
-                      value={newBannerURL}
-                      error={
-                        !!newBannerURL &&
-                        !newBannerURL.match(external_resource_regex)
-                      }
-                      aria-label={t(
-                        "accessibility.bannerUrlInput",
-                        "Enter banner image URL",
-                      )}
-                      aria-describedby="banner-url-help"
-                    />
-                    <div id="banner-url-help" className="sr-only">
-                      {t(
-                        "accessibility.bannerUrlHelp",
-                        "Enter the URL for your organization's banner image",
-                      )}
-                    </div>
-                  </Box>
-                </Collapse>
-
-                <Fab
-                  color={bannerEntryOpen ? "primary" : "secondary"}
-                  aria-label={t("orgDetailEdit.set_banner")}
-                  onClick={async () => {
-                    if (bannerEntryOpen && newBannerURL) {
-                      await submitUpdate({ banner_url: newBannerURL })
-                    }
-                    setBannerEntryOpen((v) => !v)
-                  }}
-                  sx={{
-                    transition: "0.3s",
-                    marginLeft: 2,
-                  }}
-                >
-                  {bannerEntryOpen ? <SaveRounded /> : <EditRounded />}
-                </Fab>
+                    {isUploadingBanner ? <SaveRounded /> : <AddAPhotoRounded />}
+                  </Fab>
+                </label>
               </Box>
             </Paper>
           </CardContent>
