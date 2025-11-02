@@ -10,10 +10,12 @@ export interface RecruitingSearchState {
     | "name"
     | "activity"
     | "all-time"
+    | "members"
     | "rating-reverse"
     | "name-reverse"
     | "activity-reverse"
     | "all-time-reverse"
+    | "members-reverse"
 }
 
 export const RecruitingSearchContext = React.createContext<
