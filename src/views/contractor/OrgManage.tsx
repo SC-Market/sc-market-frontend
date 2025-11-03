@@ -133,7 +133,7 @@ export function OrgDetailEditForm(props: { contractor: Contractor }) {
     return false
   }
 
-  async function handleAvatarUpload(
+  function handleAvatarUpload(
     event: React.ChangeEvent<HTMLInputElement>,
   ) {
     const file = event.target.files?.[0]
@@ -150,33 +150,29 @@ export function OrgDetailEditForm(props: { contractor: Contractor }) {
       return
     }
 
-    try {
-      await uploadAvatar({
-        contractor: contractor.spectrum_id,
-        file,
-      }).unwrap()
-      issueAlert({
-        message: t("orgDetailEdit.avatar_uploaded", {
-          defaultValue: "Avatar uploaded successfully",
-        }),
-        severity: "success",
+    uploadAvatar({
+      contractor: contractor.spectrum_id,
+      file,
+    })
+      .unwrap()
+      .then(() => {
+        issueAlert({
+          message: t("orgDetailEdit.avatar_uploaded", {
+            defaultValue: "Avatar uploaded successfully",
+          }),
+          severity: "success",
+        })
       })
-    } catch (error: any) {
-      issueAlert({
-        message: `${t("orgDetailEdit.avatar_upload_failed", {
-          defaultValue: "Failed to upload avatar",
-        })}: ${error?.data?.error || error?.message || "Unknown error"}`,
-        severity: "error",
+      .catch(issueAlert)
+      .finally(() => {
+        // Reset file input
+        if (avatarFileInputRef) {
+          avatarFileInputRef.value = ""
+        }
       })
-    } finally {
-      // Reset file input
-      if (avatarFileInputRef) {
-        avatarFileInputRef.value = ""
-      }
-    }
   }
 
-  async function handleBannerUpload(
+  function handleBannerUpload(
     event: React.ChangeEvent<HTMLInputElement>,
   ) {
     const file = event.target.files?.[0]
@@ -193,30 +189,26 @@ export function OrgDetailEditForm(props: { contractor: Contractor }) {
       return
     }
 
-    try {
-      await uploadBanner({
-        contractor: contractor.spectrum_id,
-        file,
-      }).unwrap()
-      issueAlert({
-        message: t("orgDetailEdit.banner_uploaded", {
-          defaultValue: "Banner uploaded successfully",
-        }),
-        severity: "success",
+    uploadBanner({
+      contractor: contractor.spectrum_id,
+      file,
+    })
+      .unwrap()
+      .then(() => {
+        issueAlert({
+          message: t("orgDetailEdit.banner_uploaded", {
+            defaultValue: "Banner uploaded successfully",
+          }),
+          severity: "success",
+        })
       })
-    } catch (error: any) {
-      issueAlert({
-        message: `${t("orgDetailEdit.banner_upload_failed", {
-          defaultValue: "Failed to upload banner",
-        })}: ${error?.data?.error || error?.message || "Unknown error"}`,
-        severity: "error",
+      .catch(issueAlert)
+      .finally(() => {
+        // Reset file input
+        if (bannerFileInputRef) {
+          bannerFileInputRef.value = ""
+        }
       })
-    } finally {
-      // Reset file input
-      if (bannerFileInputRef) {
-        bannerFileInputRef.value = ""
-      }
-    }
   }
 
   return (

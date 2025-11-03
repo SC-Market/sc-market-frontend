@@ -230,27 +230,23 @@ function BannerEditArea(props: {
       return
     }
 
-    try {
-      await uploadBanner(file).unwrap()
-      issueAlert({
-        message: t("viewProfile.banner_uploaded", {
-          defaultValue: "Banner uploaded successfully",
-        }),
-        severity: "success",
+    uploadBanner(file)
+      .unwrap()
+      .then(() => {
+        issueAlert({
+          message: t("viewProfile.banner_uploaded", {
+            defaultValue: "Banner uploaded successfully",
+          }),
+          severity: "success",
+        })
       })
-    } catch (error: any) {
-      issueAlert({
-        message: `${t("viewProfile.banner_upload_failed", {
-          defaultValue: "Failed to upload banner",
-        })}: ${error?.data?.error || error?.message || "Unknown error"}`,
-        severity: "error",
+      .catch(issueAlert)
+      .finally(() => {
+        // Reset file input
+        if (bannerFileInputRef) {
+          bannerFileInputRef.value = ""
+        }
       })
-    } finally {
-      // Reset file input
-      if (bannerFileInputRef) {
-        bannerFileInputRef.value = ""
-      }
-    }
   }
 
   return (
@@ -373,7 +369,7 @@ export function ViewProfile(props: { profile: User }) {
     return false
   }
 
-  async function handleAvatarUpload(event: React.ChangeEvent<HTMLInputElement>) {
+  function handleAvatarUpload(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0]
     if (!file) return
 
@@ -388,27 +384,23 @@ export function ViewProfile(props: { profile: User }) {
       return
     }
 
-    try {
-      await uploadAvatar(file).unwrap()
-      issueAlert({
-        message: t("viewProfile.avatar_uploaded", {
-          defaultValue: "Avatar uploaded successfully",
-        }),
-        severity: "success",
+    uploadAvatar(file)
+      .unwrap()
+      .then(() => {
+        issueAlert({
+          message: t("viewProfile.avatar_uploaded", {
+            defaultValue: "Avatar uploaded successfully",
+          }),
+          severity: "success",
+        })
       })
-    } catch (error: any) {
-      issueAlert({
-        message: `${t("viewProfile.avatar_upload_failed", {
-          defaultValue: "Failed to upload avatar",
-        })}: ${error?.data?.error || error?.message || "Unknown error"}`,
-        severity: "error",
+      .catch(issueAlert)
+      .finally(() => {
+        // Reset file input
+        if (avatarFileInputRef) {
+          avatarFileInputRef.value = ""
+        }
       })
-    } finally {
-      // Reset file input
-      if (avatarFileInputRef) {
-        avatarFileInputRef.value = ""
-      }
-    }
   }
 
   const theme = useTheme()
