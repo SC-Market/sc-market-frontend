@@ -51,15 +51,14 @@ export function SettingsManageContractors() {
           row.spectrum_id,
         )
 
-        const ownerRole = (contractor?.roles || []).find(
-          (role) => role.position === 0,
-        )
+        const ownerRole = contractor?.owner_role
 
         // Check if user is owner using profile contractors
         const userContractor = profile?.contractors?.find(
           (c) => c.spectrum_id === contractor?.spectrum_id,
         )
-        const isOwner = ownerRole && userContractor?.role === ownerRole.name
+        const isOwner =
+          ownerRole && userContractor?.roles.find((r) => r === ownerRole)
 
         if (isOwner) {
           return null

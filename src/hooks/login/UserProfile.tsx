@@ -57,7 +57,7 @@ export interface UserProfileState {
   discord_username: string
   avatar: string
   role: "user" | "admin"
-  contractors: ({ role: string } & MinimalContractor)[]
+  contractors: (MinimalContractor & { roles: string[]; role: string })[]
   balance: number
   rsi_confirmed?: boolean
   profile_description: string
