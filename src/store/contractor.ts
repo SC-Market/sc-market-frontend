@@ -197,6 +197,27 @@ export const contractorsApi = serviceApi.injectEndpoints({
       invalidatesTags: ["OrderWebhook" as const],
       transformResponse: unwrapResponse,
     }),
+    archiveContractor: builder.mutation<
+      void,
+      { spectrum_id: string; reason?: string }
+    >({
+      query: ({ spectrum_id, reason }) => ({
+        url: `/api/contractors/${spectrum_id}`,
+        method: "DELETE",
+        body: reason ? { reason } : undefined,
+      }),
+      invalidatesTags: (result, error, arg) => [
+        { type: "Contractor" as const, id: arg.spectrum_id },
+        { type: "Contractor" as const, id: "LIST" },
+        "MyProfile" as const,
+        { type: "ContractorInvite" as const },
+      ],
+      transformResponse: (response: unknown) => {
+        // Handle 204 No Content responses - RTK Query may return undefined or empty response
+        // For void mutations, we just return undefined
+        return undefined
+      },
+    }),
     createContractorInvite: builder.mutation<
       ContractorInviteCode,
       {
@@ -207,7 +228,7 @@ export const contractorsApi = serviceApi.injectEndpoints({
       query: ({ contractor, body }) => ({
         url: `/api/contractors/${contractor}/invites`,
         method: "POST",
-        body: body,
+        body,
       }),
       invalidatesTags: (result, error, arg) => [
         { type: "ContractorInvite" as const },
@@ -516,11 +537,31 @@ export const contractorsApi = serviceApi.injectEndpoints({
     >({
       query: (params) => ({ url: `/api/contractors`, params }),
       transformResponse: unwrapResponse,
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.items.map((contractor) => ({
+                type: "Contractor" as const,
+                id: contractor.spectrum_id,
+              })),
+              { type: "Contractor" as const, id: "LIST" },
+            ]
+          : [{ type: "Contractor" as const, id: "LIST" }],
     }),
     searchContractors: builder.query<MinimalContractor[], string>({
       query: (query) => `/api/contractors/search/${query}`,
       transformResponse: (response: { data: MinimalContractor[] }) =>
         response.data,
+      providesTags: (result) =>
+        result
+          ? [
+              ...result.map((contractor) => ({
+                type: "Contractor" as const,
+                id: contractor.spectrum_id,
+              })),
+              { type: "Contractor" as const, id: "LIST" },
+            ]
+          : [{ type: "Contractor" as const, id: "LIST" }],
     }),
     // Organization blocklist endpoints
     getOrgBlocklist: builder.query<BlocklistEntry[], string>({
@@ -594,6 +635,7 @@ export const {
   useContractorUploadBannerMutation,
   useCreateContractorWebhookMutation,
   useDeleteContractorWebhookMutation,
+  useArchiveContractorMutation,
   useCreateContractorInviteMutation,
   useDeleteContractorInviteMutation,
   useGetContractorsQuery,

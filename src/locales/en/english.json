@@ -541,7 +541,7 @@
   "select_all": "select all",
   "rows_per_page": "Rows per page",
   "no_listings": "No listings to display",
-  "displayed_rows": "{{from}}?{{to}} of {{count}}",
+  "displayed_rows": "{{from}}-{{to}} of {{count}}",
   "all": "all",
   "contractors": "Contractors",
   "recruiting_orgs": "Recruiting Orgs",
@@ -1601,7 +1601,17 @@
   "settingsManageContractors": {
     "name": "Name",
     "actions": "Actions",
-    "leave_org": "Leave Organization"
+    "leave_org": "Leave Organization",
+    "disband_org": "Archive Organization",
+    "archived_label": "Archived",
+    "disband_org_confirm_title": "Archive organization?",
+    "disband_org_confirm_body": "Archiving {{name}} will remove all members, cancel open orders, and hide the organization. This action cannot be undone.",
+    "disband_org_confirm_reason_label": "Reason (optional)",
+    "disband_org_confirm_reason_placeholder": "Add additional context for your team (optional)",
+    "disband_org_confirm_cancel_button": "Cancel",
+    "disband_org_confirm_confirm_button": "Archive organization",
+    "disband_org_success": "{{name}} has been archived.",
+    "disband_org_error": "Failed to archive {{name}}."
   },
   "manageRoles": {
     "title": "Roles",

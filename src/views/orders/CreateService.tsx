@@ -441,6 +441,9 @@ export function CreateServiceForm(props: GridProps & { service?: Service }) {
               message: t("CreateServiceForm.alert.submitted"),
               severity: "success",
             })
+
+            // Redirect to the service edit page
+            navigate(`/order/service/${serviceId}/edit`)
           })
           .catch((err) => {
             console.error(`[Service Photo Upload] Service creation failed:`, {

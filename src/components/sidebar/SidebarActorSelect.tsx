@@ -40,33 +40,54 @@ export function SidebarActorSelect() {
   const [, setCurrentOrg] = useCurrentOrg()
 
   useEffect(() => {
-    if (profile) {
-      if (
-        contractorSpectrumID &&
-        contractorSpectrumID !== "_" &&
-        contractor.data
-      ) {
-        setCurrentOrg(contractor.data)
-        setCookie("current_contractor", contractorSpectrumID, {
-          path: "/",
-          sameSite: "strict",
-        })
-      } else {
-        setCurrentOrg(null)
-        deleteCookie("current_contractor")
+    if (!profile) {
+      return
+    }
+
+    const isMember = profile.contractors.some(
+      (choice) => choice.spectrum_id === contractorSpectrumID,
+    )
+
+    if (!contractorSpectrumID || contractorSpectrumID === "_" || !isMember) {
+      if (contractorSpectrumID !== "_") {
+        setContractorSpectrumID("_")
       }
+      setCurrentOrg(null)
+      deleteCookie("current_contractor")
+      return
     }
 
     if (contractor.error) {
+      setContractorSpectrumID("_")
+      setCurrentOrg(null)
       deleteCookie("current_contractor")
+      return
+    }
+
+    if (contractor.data) {
+      // If the contractor is archived, reset to personal profile
+      if (contractor.data.archived) {
+        setContractorSpectrumID("_")
+        setCurrentOrg(null)
+        deleteCookie("current_contractor")
+        return
+      }
+
+      setCurrentOrg(contractor.data)
+      setCookie("current_contractor", contractorSpectrumID, {
+        path: "/",
+        sameSite: "strict",
+      })
     }
   }, [
-    contractor,
+    contractor.data,
+    contractor.error,
+    contractorSpectrumID,
     deleteCookie,
     profile,
+    setContractorSpectrumID,
     setCurrentOrg,
     setCookie,
-    contractorSpectrumID,
   ])
 
   const theme = useTheme()

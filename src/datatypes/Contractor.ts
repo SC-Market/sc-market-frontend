@@ -38,6 +38,7 @@ export interface Contractor {
   discord_thread_channel_id: string | null
   market_order_template: string
   locale?: string
+  archived?: boolean
 }
 
 export interface MinimalContractor {
@@ -62,6 +63,7 @@ export interface UserContractorState {
   balance: number
   roles?: ContractorRole[]
   locale?: string
+  archived?: boolean
 }
 
 export interface OrderWebhook {

@@ -103,7 +103,7 @@ const servicesApi = serviceApi.injectEndpoints({
       ],
       transformResponse: unwrapResponse,
     }),
-    createService: builder.mutation<void, ServiceBody>({
+    createService: builder.mutation<{ service_id: string }, ServiceBody>({
       query: (body) => ({
         url: `/api/services`,
         method: "POST",
