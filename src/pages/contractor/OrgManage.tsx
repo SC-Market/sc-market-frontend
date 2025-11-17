@@ -14,6 +14,7 @@ import {
   StoreRounded,
   SettingsRounded,
   Block,
+  HistoryRounded,
 } from "@mui/icons-material"
 import { a11yProps, TabPanel } from "../../components/tabs/Tabs"
 import { CreateOrgInviteCode } from "../../views/contractor/CreateOrgInviteCode"
@@ -34,6 +35,7 @@ import { MarketEditTemplate } from "../../views/market/MarketEditTemplate"
 import { useTranslation } from "react-i18next"
 import { OrgSettings } from "../../views/contractor/OrgSettings"
 import { OrgBlocklistSettings } from "../../views/contractor/OrgBlocklistSettings"
+import { OrgAuditLogs } from "../../views/contractor/OrgAuditLogs"
 
 export function OrgManage() {
   const { t } = useTranslation()
@@ -160,6 +162,11 @@ export function OrgManage() {
                   {...a11yProps(6)}
                 />
               )}
+              <Tab
+                label={t("org.auditLogsTab")}
+                icon={<HistoryRounded />}
+                {...a11yProps(7)}
+              />
               {/*<Tab*/}
               {/*    label="Customers"*/}
               {/*    icon={*/}
@@ -210,6 +217,9 @@ export function OrgManage() {
             <OrgBlocklistSettings />
           </TabPanel>
           <TabPanel value={page} index={7}>
+            <OrgAuditLogs />
+          </TabPanel>
+          <TabPanel value={page} index={8}>
             <Grid container spacing={2}>
               <CustomerList />
             </Grid>

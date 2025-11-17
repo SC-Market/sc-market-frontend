@@ -53,5 +53,7 @@ export const serviceApi = createApi({
     "AggregateHistory",
     "GameItem",
     "Multiple",
+    "AdminAuditLogs",
+    "ContractorAuditLogs",
   ],
 })

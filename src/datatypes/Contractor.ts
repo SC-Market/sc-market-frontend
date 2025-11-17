@@ -1,6 +1,29 @@
 import { ContractorKindIconKey } from "../views/contractor/ContractorList"
 import { MinimalUser } from "./User"
 
+export interface AuditLogEntry {
+  audit_log_id: string
+  action: string
+  actor_id: string | null
+  actor: MinimalUser | null
+  subject_type: string
+  subject_id: string
+  metadata: Record<string, unknown>
+  created_at: string
+  contractor?: {
+    contractor_id: string
+    name: string
+    spectrum_id: string
+  } | null
+}
+
+export interface AuditLogsResponse {
+  items: AuditLogEntry[]
+  total: number
+  page: number
+  page_size: number
+}
+
 export interface DiscordSettings {
   guild_avatar: string
   guild_name: string

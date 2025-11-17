@@ -397,20 +397,34 @@ export function CreateServiceForm(props: GridProps & { service?: Service }) {
           photos: allPhotos,
         })
           .unwrap()
-          .then(async () => {
-            console.log(`[Service Photo Upload] Service creation successful`)
+          .then(async (result) => {
+            const serviceId = result.service_id
+            console.log(`[Service Photo Upload] Service creation successful: ${serviceId}`)
 
-            // Note: We cannot upload photos for new services because the createService
-            // endpoint doesn't return the service ID. Users will need to edit the service
-            // later to add photos.
+            // Upload any pending files if they exist
             if (uploadedFiles.length > 0) {
-              console.warn(
-                `[Service Photo Upload] Cannot upload photos for new service - service_id not available`,
+              console.log(
+                `[Service Photo Upload] Uploading photos for new service ${serviceId}`,
               )
-              issueAlert({
-                message: t("CreateServiceForm.alert.photosPending"),
-                severity: "info",
+
+              uploadServicePhotos({
+                service_id: serviceId,
+                photos: uploadedFiles,
               })
+                .unwrap()
+                .then((uploadResult) => {
+                  console.log(
+                    `[Service Photo Upload] Photos uploaded successfully:`,
+                    {
+                      service_id: serviceId,
+                      result: uploadResult,
+                      photo_urls: uploadResult.photos,
+                    },
+                  )
+                })
+                .catch((uploadErr) => {
+                  issueAlert(uploadErr)
+                })
             }
 
             setState({
@@ -446,11 +460,6 @@ export function CreateServiceForm(props: GridProps & { service?: Service }) {
             navigate(`/order/service/${serviceId}/edit`)
           })
           .catch((err) => {
-            console.error(`[Service Photo Upload] Service creation failed:`, {
-              error: err,
-              error_message: (err as any)?.message || "Unknown error",
-              error_status: (err as any)?.status || "No status",
-            })
             issueAlert(err)
           })
       }

@@ -457,6 +457,13 @@ const router = createBrowserRouter([
                     .AdminAlerts,
                 }),
               },
+              {
+                path: "/admin/audit-logs",
+                lazy: async () => ({
+                  Component: (await import("./pages/admin/AdminAuditLogs"))
+                    .AdminAuditLogs,
+                }),
+              },
             ],
           },
           {

@@ -5,6 +5,7 @@ import {
   OrderWebhook,
   MinimalContractor,
   ContractorMember,
+  AuditLogsResponse,
 } from "../datatypes/Contractor"
 import { MinimalUser, User } from "../datatypes/User"
 import { OrderReview } from "../datatypes/Order"
@@ -16,6 +17,48 @@ import { BlocklistEntry } from "./profile"
 export const contractorsApi = serviceApi.injectEndpoints({
   overrideExisting: false,
   endpoints: (builder) => ({
+    getAdminAuditLogs: builder.query<
+      AuditLogsResponse,
+      {
+        page?: number
+        page_size?: number
+        action?: string
+        subject_type?: string
+        subject_id?: string
+        actor_id?: string
+        start_date?: string
+        end_date?: string
+      }
+    >({
+      query: ({
+        page = 1,
+        page_size = 20,
+        action,
+        subject_type,
+        subject_id,
+        actor_id,
+        start_date,
+        end_date,
+      }) => {
+        const params = new URLSearchParams({
+          page: page.toString(),
+          page_size: page_size.toString(),
+        })
+        if (action) params.append("action", action)
+        if (subject_type) params.append("subject_type", subject_type)
+        if (subject_id) params.append("subject_id", subject_id)
+        if (actor_id) params.append("actor_id", actor_id)
+        if (start_date) params.append("start_date", start_date)
+        if (end_date) params.append("end_date", end_date)
+
+        return `/api/admin/audit-logs?${params.toString()}`
+      },
+      transformResponse: unwrapResponse,
+      providesTags: [
+        "AdminAuditLogs" as const,
+        { type: "AdminAuditLogs" as const, id: "LIST" },
+      ],
+    }),
     getContractorBySpectrumID: builder.query<Contractor, string>({
       query: (spectrum_id) => `/api/contractors/${spectrum_id}`,
       providesTags: (result, error, arg) => [
@@ -125,6 +168,44 @@ export const contractorsApi = serviceApi.injectEndpoints({
       query: (spectrum_id) => `/api/contractors/${spectrum_id}/reviews`,
       transformResponse: unwrapResponse,
     }),
+    getContractorAuditLogs: builder.query<
+      AuditLogsResponse,
+      {
+        spectrum_id: string
+        page?: number
+        page_size?: number
+        action?: string
+        actor_id?: string
+        start_date?: string
+        end_date?: string
+      }
+    >({
+      query: ({
+        spectrum_id,
+        page = 1,
+        page_size = 20,
+        action,
+        actor_id,
+        start_date,
+        end_date,
+      }) => {
+        const params = new URLSearchParams({
+          page: page.toString(),
+          page_size: page_size.toString(),
+        })
+        if (action) params.append("action", action)
+        if (actor_id) params.append("actor_id", actor_id)
+        if (start_date) params.append("start_date", start_date)
+        if (end_date) params.append("end_date", end_date)
+
+        return `/api/contractors/${spectrum_id}/audit-logs?${params.toString()}`
+      },
+      transformResponse: unwrapResponse,
+      providesTags: (result, error, arg) => [
+        { type: "Contractor" as const, id: arg.spectrum_id },
+        { type: "ContractorAuditLogs" as const, id: arg.spectrum_id },
+      ],
+    }),
     contractorLink: builder.mutation<void, { contractor: string }>({
       query: (body) => ({
         url: `/api/contractors/auth/link`,
@@ -147,6 +228,9 @@ export const contractorsApi = serviceApi.injectEndpoints({
       }),
       invalidatesTags: (result, error, arg) => [
         { type: "Contractor", id: arg.contractor },
+        { type: "ContractorAuditLogs" as const, id: arg.contractor },
+        "AdminAuditLogs" as const,
+        { type: "AdminAuditLogs" as const, id: "LIST" },
       ],
       transformResponse: unwrapResponse,
     }),
@@ -162,7 +246,12 @@ export const contractorsApi = serviceApi.injectEndpoints({
         method: "POST",
         body: body,
       }),
-      invalidatesTags: ["OrderWebhook" as const],
+      invalidatesTags: (result, error, arg) => [
+        "OrderWebhook" as const,
+        { type: "ContractorAuditLogs" as const, id: arg.contractor },
+        "AdminAuditLogs" as const,
+        { type: "AdminAuditLogs" as const, id: "LIST" },
+      ],
       transformResponse: unwrapResponse,
     }),
     registerContractor: builder.mutation<
@@ -183,6 +272,8 @@ export const contractorsApi = serviceApi.injectEndpoints({
       invalidatesTags: (result, error, arg) => [
         { type: "MyProfile" as const },
         "MyProfile" as const,
+        "AdminAuditLogs" as const,
+        { type: "AdminAuditLogs" as const, id: "LIST" },
       ],
       transformResponse: unwrapResponse,
     }),
@@ -194,7 +285,12 @@ export const contractorsApi = serviceApi.injectEndpoints({
         url: `/api/contractors/${contractor}/webhooks/${webhook_id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["OrderWebhook" as const],
+      invalidatesTags: (result, error, arg) => [
+        "OrderWebhook" as const,
+        { type: "ContractorAuditLogs" as const, id: arg.contractor },
+        "AdminAuditLogs" as const,
+        { type: "AdminAuditLogs" as const, id: "LIST" },
+      ],
       transformResponse: unwrapResponse,
     }),
     archiveContractor: builder.mutation<
@@ -211,6 +307,9 @@ export const contractorsApi = serviceApi.injectEndpoints({
         { type: "Contractor" as const, id: "LIST" },
         "MyProfile" as const,
         { type: "ContractorInvite" as const },
+        { type: "ContractorAuditLogs" as const, id: arg.spectrum_id },
+        "AdminAuditLogs" as const,
+        { type: "AdminAuditLogs" as const, id: "LIST" },
       ],
       transformResponse: (response: unknown) => {
         // Handle 204 No Content responses - RTK Query may return undefined or empty response
@@ -233,6 +332,9 @@ export const contractorsApi = serviceApi.injectEndpoints({
       invalidatesTags: (result, error, arg) => [
         { type: "ContractorInvite" as const },
         "ContractorInvite" as const,
+        { type: "ContractorAuditLogs" as const, id: arg.contractor },
+        "AdminAuditLogs" as const,
+        { type: "AdminAuditLogs" as const, id: "LIST" },
       ],
       transformResponse: unwrapResponse,
     }),
@@ -250,6 +352,9 @@ export const contractorsApi = serviceApi.injectEndpoints({
       invalidatesTags: (result, error, arg) => [
         { type: "ContractorInvite" as const },
         "ContractorInvite" as const,
+        { type: "ContractorAuditLogs" as const, id: arg.contractor },
+        "AdminAuditLogs" as const,
+        { type: "AdminAuditLogs" as const, id: "LIST" },
       ],
       transformResponse: unwrapResponse,
     }),
@@ -267,6 +372,9 @@ export const contractorsApi = serviceApi.injectEndpoints({
         { type: "MyProfile" as const },
         "Notifications" as const,
         { type: "Notifications" as const },
+        { type: "ContractorAuditLogs" as const, id: arg.contractor },
+        "AdminAuditLogs" as const,
+        { type: "AdminAuditLogs" as const, id: "LIST" },
       ],
       transformResponse: unwrapResponse,
     }),
@@ -326,6 +434,9 @@ export const contractorsApi = serviceApi.injectEndpoints({
       }),
       invalidatesTags: (result, error, arg) => [
         { type: "Contractor" as const, id: arg.contractor },
+        { type: "ContractorAuditLogs" as const, id: arg.contractor },
+        "AdminAuditLogs" as const,
+        { type: "AdminAuditLogs" as const, id: "LIST" },
       ],
       transformResponse: unwrapResponse,
     }),
@@ -388,6 +499,9 @@ export const contractorsApi = serviceApi.injectEndpoints({
       }),
       invalidatesTags: (result, error, arg) => [
         { type: "Contractor" as const, id: arg.contractor },
+        { type: "ContractorAuditLogs" as const, id: arg.contractor },
+        "AdminAuditLogs" as const,
+        { type: "AdminAuditLogs" as const, id: "LIST" },
       ],
       transformResponse: unwrapResponse,
     }),
@@ -416,6 +530,9 @@ export const contractorsApi = serviceApi.injectEndpoints({
       }),
       invalidatesTags: (result, error, arg) => [
         { type: "Contractor" as const, id: arg.contractor },
+        { type: "ContractorAuditLogs" as const, id: arg.contractor },
+        "AdminAuditLogs" as const,
+        { type: "AdminAuditLogs" as const, id: "LIST" },
       ],
       transformResponse: unwrapResponse,
     }),
@@ -446,6 +563,9 @@ export const contractorsApi = serviceApi.injectEndpoints({
       }),
       invalidatesTags: (result, error, arg) => [
         { type: "Contractor" as const, id: arg.contractor },
+        { type: "ContractorAuditLogs" as const, id: arg.contractor },
+        "AdminAuditLogs" as const,
+        { type: "AdminAuditLogs" as const, id: "LIST" },
       ],
       transformResponse: unwrapResponse,
     }),
@@ -463,6 +583,9 @@ export const contractorsApi = serviceApi.injectEndpoints({
       }),
       invalidatesTags: (result, error, arg) => [
         { type: "Contractor" as const, id: arg.contractor },
+        { type: "ContractorAuditLogs" as const, id: arg.contractor },
+        "AdminAuditLogs" as const,
+        { type: "AdminAuditLogs" as const, id: "LIST" },
       ],
       transformResponse: unwrapResponse,
     }),
@@ -480,6 +603,9 @@ export const contractorsApi = serviceApi.injectEndpoints({
       }),
       invalidatesTags: (result, error, arg) => [
         { type: "Contractor" as const, id: arg.contractor },
+        { type: "ContractorAuditLogs" as const, id: arg.contractor },
+        "AdminAuditLogs" as const,
+        { type: "AdminAuditLogs" as const, id: "LIST" },
       ],
       transformResponse: unwrapResponse,
     }),
@@ -496,6 +622,9 @@ export const contractorsApi = serviceApi.injectEndpoints({
       }),
       invalidatesTags: (result, error, arg) => [
         { type: "Contractor" as const, id: arg.contractor },
+        { type: "ContractorAuditLogs" as const, id: arg.contractor },
+        "AdminAuditLogs" as const,
+        { type: "AdminAuditLogs" as const, id: "LIST" },
       ],
       transformResponse: unwrapResponse,
     }),
@@ -644,4 +773,6 @@ export const {
   useGetOrgBlocklistQuery,
   useBlockUserForOrgMutation,
   useUnblockUserForOrgMutation,
+  useGetContractorAuditLogsQuery,
+  useGetAdminAuditLogsQuery,
 } = contractorsApi

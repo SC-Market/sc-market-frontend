@@ -341,6 +341,12 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
         site_admin: true,
         to: "/admin/alerts",
       },
+      {
+        text: "sidebar.audit_logs.text",
+        icon: <SecurityRounded />,
+        site_admin: true,
+        to: "/admin/audit-logs",
+      },
     ],
   },
   {
