@@ -63,6 +63,7 @@ export function ServiceCreateOrder() {
 
         {service && (
           <CreateOrderForm
+            key={service.service_id}
             service={service}
             contractor_id={service.contractor?.spectrum_id}
             assigned_to={service.user?.username}

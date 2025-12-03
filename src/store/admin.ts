@@ -55,6 +55,35 @@ const baseUrl = `/api/admin`
 export const adminApi = serviceApi.injectEndpoints({
   overrideExisting: false,
   endpoints: (builder) => ({
+    adminUnlinkUserAccount: builder.mutation<
+      { message: string; username: string },
+      { username: string }
+    >({
+      query: ({ username }) => ({
+        url: `/api/admin/users/${username}/unlink`,
+        method: "POST",
+      }),
+      transformResponse: unwrapResponse,
+      invalidatesTags: (result, error, arg) => [
+        // Invalidate the old username's profile
+        { type: "Profile" as const, id: arg.username },
+        // Invalidate the new username's profile (from result)
+        ...(result?.username
+          ? [{ type: "Profile" as const, id: result.username }]
+          : []),
+        // Invalidate Profile LIST (for admin users list and search)
+        { type: "Profile" as const, id: "LIST" },
+        "Profile" as const,
+        // Invalidate MyProfile (in case the unlinked user is viewing their own profile)
+        { type: "MyProfile" as const },
+        "MyProfile" as const,
+        // Invalidate user listings (username-based cache)
+        { type: "UserListings" as const, id: arg.username },
+        ...(result?.username
+          ? [{ type: "UserListings" as const, id: result.username }]
+          : []),
+      ],
+    }),
     getActivityAdmin: builder.query<
       {
         daily: { date: string; count: number }[]
@@ -138,4 +167,5 @@ export const {
   useCreateAdminAlertMutation,
   useUpdateAdminAlertMutation,
   useDeleteAdminAlertMutation,
+  useAdminUnlinkUserAccountMutation,
 } = adminApi

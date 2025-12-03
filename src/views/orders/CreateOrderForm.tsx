@@ -79,6 +79,12 @@ const CreateOrderFormComponent = React.forwardRef<
   )
 
   const [service, setService] = useState<Service | null>(props.service || null)
+  
+  // Sync props.service to local service state when it changes
+  useEffect(() => {
+    setService(props.service || null)
+  }, [props.service])
+  
   useEffect(() => {
     if (service) {
       setState((state) => ({

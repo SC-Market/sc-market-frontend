@@ -94,6 +94,7 @@ export function UserSearch({
         },
         market_order_template: "",
         created_at: Date.now(),
+        rsi_confirmed: false,
       }
       onUserSelect(userObj)
       setQuery("")

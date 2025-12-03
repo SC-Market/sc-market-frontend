@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import {
   IconButton,
   Popover,
@@ -20,6 +20,18 @@ import {
 import { useGetOrgBlocklistQuery } from "../../store/contractor"
 import { BlockUserButton, BlockUserForOrgButton } from "./BlockUserButton"
 import { UnblockUserButton, UnblockUserForOrgButton } from "./UnblockUserButton"
+import { useAdminUnlinkUserAccountMutation } from "../../store/admin"
+import { useAlertHook } from "../../hooks/alert/AlertHook"
+import { LinkOff as LinkOffIcon } from "@mui/icons-material"
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
+  Button,
+} from "@mui/material"
+import LoadingButton from "@mui/lab/LoadingButton"
 
 interface UserActionsDropdownProps {
   user: User
@@ -32,6 +44,10 @@ export function UserActionsDropdown({ user }: UserActionsDropdownProps) {
   const open = Boolean(anchorEl)
   const [contractor] = useCurrentOrg()
   const { data: myProfile } = useGetUserProfileQuery()
+  const [unlinkAccount, { isLoading: isUnlinking }] =
+    useAdminUnlinkUserAccountMutation()
+  const issueAlert = useAlertHook()
+  const [unlinkDialogOpen, setUnlinkDialogOpen] = useState(false)
 
   // Personal blocklist
   const { data: personalBlocklist = [], isLoading: personalBlocklistLoading } =
@@ -75,6 +91,32 @@ export function UserActionsDropdown({ user }: UserActionsDropdownProps) {
   const handleSuccess = () => {
     handleClose()
   }
+
+  const handleUnlinkClick = () => {
+    setUnlinkDialogOpen(true)
+    handleClose()
+  }
+
+  const handleConfirmUnlink = async () => {
+    try {
+      await unlinkAccount({ username: user.username }).unwrap()
+      issueAlert({
+        message: t("userActions.adminUnlinkSuccess", {
+          username: user.username,
+        }),
+        severity: "success",
+      })
+      setUnlinkDialogOpen(false)
+    } catch (err: any) {
+      issueAlert(err)
+    }
+  }
+
+  const handleCancelUnlink = () => {
+    setUnlinkDialogOpen(false)
+  }
+
+  const isAdmin = myProfile?.role === "admin"
 
   return (
     <>
@@ -172,9 +214,59 @@ export function UserActionsDropdown({ user }: UserActionsDropdownProps) {
                   disabled={orgBlocklistLoading}
                 />
               ))}
+
+            {isAdmin && user.rsi_confirmed && (
+              <ListItemButton onClick={handleUnlinkClick}>
+                <ListItemIcon
+                  sx={{
+                    transition: "0.3s",
+                    fontSize: "0.9em",
+                    color: theme.palette.error.main,
+                  }}
+                >
+                  <LinkOffIcon />
+                </ListItemIcon>
+                <ListItemText>
+                  <Box color={"text.secondary"} fontSize="0.9em">
+                    {t("userActions.adminUnlinkAccount")}
+                  </Box>
+                </ListItemText>
+              </ListItemButton>
+            )}
           </List>
         </Box>
       </Popover>
+
+      <Dialog
+        open={unlinkDialogOpen}
+        onClose={handleCancelUnlink}
+        aria-labelledby="admin-unlink-dialog-title"
+        aria-describedby="admin-unlink-dialog-description"
+      >
+        <DialogTitle id="admin-unlink-dialog-title">
+          {t("userActions.adminUnlinkDialogTitle")}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="admin-unlink-dialog-description">
+            {t("userActions.adminUnlinkDialogDescription", {
+              username: user.username,
+            })}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCancelUnlink}>
+            {t("userActions.adminUnlinkDialogCancel")}
+          </Button>
+          <LoadingButton
+            onClick={handleConfirmUnlink}
+            color="error"
+            loading={isUnlinking}
+            variant="contained"
+          >
+            {t("userActions.adminUnlinkDialogConfirm")}
+          </LoadingButton>
+        </DialogActions>
+      </Dialog>
     </>
   )
 }

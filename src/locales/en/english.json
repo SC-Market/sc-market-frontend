@@ -2078,7 +2078,13 @@
     "menu": "User actions menu",
     "viewRSIPage": "View RSI Page",
     "blockPersonally": "Block {{username}} as {{myUsername}}",
-    "blockForOrg": "Block {{username}} for {{orgName}}"
+    "blockForOrg": "Block {{username}} for {{orgName}}",
+    "adminUnlinkAccount": "Unlink RSI Account (Admin)",
+    "adminUnlinkSuccess": "Successfully unlinked RSI account for {{username}}",
+    "adminUnlinkDialogTitle": "Confirm Unlink RSI Account",
+    "adminUnlinkDialogDescription": "Are you sure you want to unlink the Star Citizen account for {{username}}? This will reset their profile to unverified status and change their username back to the default format based on their Discord ID.",
+    "adminUnlinkDialogCancel": "Cancel",
+    "adminUnlinkDialogConfirm": "Unlink Account"
   },
   "userSearch": {
     "placeholder": "Search for users...",

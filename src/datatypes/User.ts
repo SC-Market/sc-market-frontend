@@ -23,6 +23,7 @@ export interface User {
   }
   created_at?: number
   market_order_template: string
+  rsi_confirmed: boolean
 }
 
 export interface MinimalUser {
