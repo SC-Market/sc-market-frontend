@@ -1,5 +1,8 @@
-import React, { useState } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import {
+  Autocomplete,
+  Avatar,
+  Box,
   Button,
   Chip,
   Dialog,
@@ -10,17 +13,25 @@ import {
   Grid,
   Paper,
   TextField,
+  Typography,
 } from "@mui/material"
 import { GridColDef } from "@mui/x-data-grid"
+import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
+import throttle from "lodash/throttle"
 import { useGetUserProfileQuery } from "../../store/profile"
 import {
   useGetContractorBySpectrumIDQuery,
   useArchiveContractorMutation,
   useLeaveContractorMutation,
+  useTransferOwnershipMutation,
+  useGetContractorMembersQuery,
+  contractorsApi,
 } from "../../store/contractor"
 import { ThemedDataGrid } from "../../components/grid/ThemedDataGrid"
 import { useTranslation } from "react-i18next"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
+import { MinimalUser } from "../../datatypes/User"
+import { store } from "../../store/store"
 
 export function SettingsManageContractors() {
   const { t } = useTranslation() // ДОДАЙ ОЦЕ!
@@ -29,6 +40,8 @@ export function SettingsManageContractors() {
   const [leaveOrg] = useLeaveContractorMutation()
   const [archiveContractor, { isLoading: isArchiving }] =
     useArchiveContractorMutation()
+  const [transferOwnership, { isLoading: isTransferring }] =
+    useTransferOwnershipMutation()
   const issueAlert = useAlertHook()
 
   const [archiveTarget, setArchiveTarget] = useState<{
@@ -36,6 +49,20 @@ export function SettingsManageContractors() {
     name: string
   } | null>(null)
   const [archiveReason, setArchiveReason] = useState("")
+
+  const [transferTarget, setTransferTarget] = useState<{
+    spectrum_id: string
+    name: string
+  } | null>(null)
+  const [transferSearchQuery, setTransferSearchQuery] = useState("")
+  const [transferSelectedUser, setTransferSelectedUser] = useState<{
+    username: string
+    display_name: string
+    avatar?: string
+  } | null>(null)
+  const [transferSearchOptions, setTransferSearchOptions] = useState<
+    MinimalUser[]
+  >([])
 
   const handleLeaveOrg = (spectrum_id: string) => {
     leaveOrg(spectrum_id)
@@ -68,12 +95,91 @@ export function SettingsManageContractors() {
       })
   }
 
+  // Get members for the transfer target contractor
+  const { data: transferMembersData } = useGetContractorMembersQuery(
+    {
+      spectrum_id: transferTarget?.spectrum_id || "",
+      page: 0,
+      page_size: 100,
+      search: "",
+      role_filter: "",
+      sort: "username",
+    },
+    { skip: !transferTarget },
+  )
+
+  const transferMembers = transferMembersData?.members || []
+
+  const fetchTransferOptions = useCallback(
+    async (query: string) => {
+      if (!transferTarget || query.length < 3) {
+        setTransferSearchOptions([])
+        return
+      }
+
+      const { status, data, error } = await store.dispatch(
+        contractorsApi.endpoints.searchContractorMembers.initiate({
+          spectrum_id: transferTarget.spectrum_id,
+          query: query,
+        }),
+      )
+
+      setTransferSearchOptions(data || [])
+    },
+    [transferTarget],
+  )
+
+  const retrieveTransfer = useMemo(
+    () =>
+      throttle((query: string) => {
+        fetchTransferOptions(query)
+      }, 400),
+    [fetchTransferOptions],
+  )
+
+  useEffect(() => {
+    retrieveTransfer(transferSearchQuery)
+  }, [transferSearchQuery, retrieveTransfer])
+
+  const handleTransferOwnership = () => {
+    if (!transferTarget || !transferSelectedUser) return
+    transferOwnership({
+      contractor: transferTarget.spectrum_id,
+      username: transferSelectedUser.username,
+    })
+      .unwrap()
+      .then(() => {
+        issueAlert({
+          message: t("settingsManageContractors.transfer_ownership_success", {
+            name: transferTarget.name,
+            username: transferSelectedUser.username,
+          }),
+          severity: "success",
+        })
+        setTransferTarget(null)
+        setTransferSearchQuery("")
+        setTransferSelectedUser(null)
+        setTransferSearchOptions([])
+      })
+      .catch((error: any) => {
+        issueAlert({
+          message:
+            error?.data?.message ||
+            t("settingsManageContractors.transfer_ownership_error", {
+              name: transferTarget.name,
+            }),
+          severity: "error",
+        })
+      })
+  }
+
   const columns: GridColDef[] = [
-    { field: "name", headerName: t("settingsManageContractors.name"), flex: 1 },
+    { field: "name", headerName: t("settingsManageContractors.name"), flex: 0.6, minWidth: 150 },
     {
       field: "actions",
       headerName: t("settingsManageContractors.actions"),
-      flex: 1,
+      flex: 1.4,
+      minWidth: 300,
       sortable: false,
       align: "right",
       renderCell: ({ row }) => {
@@ -96,18 +202,33 @@ export function SettingsManageContractors() {
 
         if (isOwner) {
           return (
-            <Button
-              variant="contained"
-              color="error"
-              onClick={() =>
-                setArchiveTarget({
-                  spectrum_id: row.spectrum_id,
-                  name: row.name,
-                })
-              }
-            >
-              {t("settingsManageContractors.disband_org")}
-            </Button>
+            <>
+              <Button
+                variant="outlined"
+                color="primary"
+                onClick={() =>
+                  setTransferTarget({
+                    spectrum_id: row.spectrum_id,
+                    name: row.name,
+                  })
+                }
+                sx={{ mr: 1 }}
+              >
+                {t("settingsManageContractors.transfer_ownership")}
+              </Button>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={() =>
+                  setArchiveTarget({
+                    spectrum_id: row.spectrum_id,
+                    name: row.name,
+                  })
+                }
+              >
+                {t("settingsManageContractors.disband_org")}
+              </Button>
+            </>
           )
         }
 
@@ -192,6 +313,120 @@ export function SettingsManageContractors() {
             disabled={isArchiving}
           >
             {t("settingsManageContractors.disband_org_confirm_confirm_button")}
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog
+        open={Boolean(transferTarget)}
+        onClose={() => {
+          if (!isTransferring) {
+            setTransferTarget(null)
+            setTransferSearchQuery("")
+            setTransferSelectedUser(null)
+            setTransferSearchOptions([])
+          }
+        }}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>
+          {t("settingsManageContractors.transfer_ownership_confirm_title")}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText sx={{ mb: 2 }}>
+            {t("settingsManageContractors.transfer_ownership_confirm_body", {
+              name: transferTarget?.name ?? "",
+            })}
+          </DialogContentText>
+          <Autocomplete
+            filterOptions={(x) => x}
+            fullWidth
+            options={
+              transferSearchQuery
+                ? transferSearchOptions
+                : transferMembers
+                    .map((u) => ({
+                      username: u.username,
+                      display_name: u.display_name || u.username,
+                      avatar: u.avatar,
+                    }))
+                    .slice(0, 8)
+            }
+            getOptionLabel={(option) =>
+              `${option.display_name || option.username} (@${option.username})`
+            }
+            renderOption={(props, option) => (
+              <Box component="li" {...props}>
+                <Avatar
+                  src={option.avatar}
+                  sx={{ width: 32, height: 32, mr: 2 }}
+                />
+                <Box>
+                  <Typography variant="body2" fontWeight={500}>
+                    {option.display_name || option.username}
+                  </Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    @{option.username}
+                  </Typography>
+                </Box>
+              </Box>
+            )}
+            disablePortal
+            value={transferSelectedUser}
+            onChange={(
+              event: any,
+              newValue: { display_name: string; username: string; avatar?: string } | null,
+            ) => {
+              setTransferSelectedUser(newValue)
+            }}
+            inputValue={transferSearchQuery}
+            onInputChange={(event, newInputValue) => {
+              setTransferSearchQuery(newInputValue)
+            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label={t(
+                  "settingsManageContractors.transfer_ownership_confirm_username_label",
+                )}
+                placeholder={t(
+                  "settingsManageContractors.transfer_ownership_confirm_username_placeholder",
+                )}
+                disabled={isTransferring}
+                SelectProps={{
+                  IconComponent: KeyboardArrowDownRoundedIcon,
+                }}
+              />
+            )}
+            disabled={isTransferring}
+            autoFocus
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button
+            onClick={() => {
+              if (!isTransferring) {
+                setTransferTarget(null)
+                setTransferSearchQuery("")
+                setTransferSelectedUser(null)
+                setTransferSearchOptions([])
+              }
+            }}
+            disabled={isTransferring}
+          >
+            {t(
+              "settingsManageContractors.transfer_ownership_confirm_cancel_button",
+            )}
+          </Button>
+          <Button
+            onClick={handleTransferOwnership}
+            color="primary"
+            variant="contained"
+            disabled={isTransferring || !transferSelectedUser}
+          >
+            {t(
+              "settingsManageContractors.transfer_ownership_confirm_confirm_button",
+            )}
           </Button>
         </DialogActions>
       </Dialog>

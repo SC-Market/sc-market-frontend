@@ -609,6 +609,25 @@ export const contractorsApi = serviceApi.injectEndpoints({
       ],
       transformResponse: unwrapResponse,
     }),
+    transferOwnership: builder.mutation<
+      { result: string; message: string },
+      { contractor: string; username: string }
+    >({
+      query: ({ contractor, username }) => ({
+        url: `/api/contractors/${contractor}/transfer-ownership`,
+        method: "POST",
+        body: { username },
+      }),
+      invalidatesTags: (result, error, arg) => [
+        { type: "Contractor" as const, id: arg.contractor },
+        { type: "ContractorAuditLogs" as const, id: arg.contractor },
+        "AdminAuditLogs" as const,
+        { type: "AdminAuditLogs" as const, id: "LIST" },
+        { type: "MyProfile" as const },
+        "MyProfile" as const,
+      ],
+      transformResponse: unwrapResponse,
+    }),
     kickContractorMember: builder.mutation<
       void,
       {
@@ -749,6 +768,7 @@ export const {
   useApplyContractorRoleMutation,
   useRemoveContractorRoleMutation,
   useKickContractorMemberMutation,
+  useTransferOwnershipMutation,
   useAdminExpressVerifyContractorMutation,
   useRegisterContractorMutation,
   useGetDiscordSettingsQuery,

@@ -1305,7 +1305,26 @@
   "settingsManageContractors": {
     "name": "Name",
     "actions": "Actions",
-    "leave_org": "Leave Organization"
+    "leave_org": "Leave Organization",
+    "disband_org": "Archive Organization",
+    "archived_label": "Archived",
+    "disband_org_confirm_title": "Archive organization?",
+    "disband_org_confirm_body": "Archiving {{name}} will remove all members, cancel open orders, and hide the organization. This action cannot be undone.",
+    "disband_org_confirm_reason_label": "Reason (optional)",
+    "disband_org_confirm_reason_placeholder": "Add additional context for your team (optional)",
+    "disband_org_confirm_cancel_button": "Cancel",
+    "disband_org_confirm_confirm_button": "Archive organization",
+    "disband_org_success": "{{name}} has been archived.",
+    "disband_org_error": "Failed to archive {{name}}.",
+    "transfer_ownership": "Transfer Ownership",
+    "transfer_ownership_confirm_title": "Transfer organization ownership?",
+    "transfer_ownership_confirm_body": "Transferring ownership of {{name}} will give the new owner full control of the organization. You will lose owner privileges but retain your other roles. This action cannot be undone.",
+    "transfer_ownership_confirm_username_label": "New Owner Username",
+    "transfer_ownership_confirm_username_placeholder": "Enter the username of the member to transfer ownership to",
+    "transfer_ownership_confirm_cancel_button": "Cancel",
+    "transfer_ownership_confirm_confirm_button": "Transfer Ownership",
+    "transfer_ownership_success": "Ownership of {{name}} has been transferred to {{username}}.",
+    "transfer_ownership_error": "Failed to transfer ownership of {{name}}."
   },
   "manageRoles": {
     "title": "Roles",

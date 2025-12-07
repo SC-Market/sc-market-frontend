@@ -1309,9 +1309,28 @@
     "submit": "Submit"
   },
   "settingsManageContractors": {
-    "name": "Name",
-    "actions": "Actions",
-    "leave_org": "Leave Organization"
+    "name": "名称",
+    "actions": "操作",
+    "leave_org": "离开组织",
+    "disband_org": "归档组织",
+    "archived_label": "已归档",
+    "disband_org_confirm_title": "归档组织？",
+    "disband_org_confirm_body": "归档 {{name}} 将移除所有成员，取消未完成的订单，并隐藏该组织。此操作无法撤销。",
+    "disband_org_confirm_reason_label": "原因（可选）",
+    "disband_org_confirm_reason_placeholder": "为您的团队添加额外说明（可选）",
+    "disband_org_confirm_cancel_button": "取消",
+    "disband_org_confirm_confirm_button": "归档组织",
+    "disband_org_success": "{{name}} 已被归档。",
+    "disband_org_error": "归档 {{name}} 失败。",
+    "transfer_ownership": "转移所有权",
+    "transfer_ownership_confirm_title": "转移组织所有权？",
+    "transfer_ownership_confirm_body": "转移 {{name}} 的所有权将使新所有者获得组织的完全控制权。您将失去所有者权限，但保留其他角色。此操作无法撤销。",
+    "transfer_ownership_confirm_username_label": "新所有者用户名",
+    "transfer_ownership_confirm_username_placeholder": "输入要转移所有权的成员用户名",
+    "transfer_ownership_confirm_cancel_button": "取消",
+    "transfer_ownership_confirm_confirm_button": "转移所有权",
+    "transfer_ownership_success": "{{name}} 的所有权已转移给 {{username}}。",
+    "transfer_ownership_error": "转移 {{name}} 的所有权失败。"
   },
   "manageRoles": {
     "title": "Roles",

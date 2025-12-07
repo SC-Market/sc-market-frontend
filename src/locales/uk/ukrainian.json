@@ -1268,7 +1268,26 @@
   "settingsManageContractors": {
     "name": "Назва",
     "actions": "Дії",
-    "leave_org": "Вийти з організації"
+    "leave_org": "Вийти з організації",
+    "disband_org": "Архівувати організацію",
+    "archived_label": "Архівовано",
+    "disband_org_confirm_title": "Архівувати організацію?",
+    "disband_org_confirm_body": "Архівування {{name}} видалить усіх членів, скасує відкриті замовлення та приховає організацію. Цю дію неможливо скасувати.",
+    "disband_org_confirm_reason_label": "Причина (необов'язково)",
+    "disband_org_confirm_reason_placeholder": "Додайте додатковий контекст для вашої команди (необов'язково)",
+    "disband_org_confirm_cancel_button": "Скасувати",
+    "disband_org_confirm_confirm_button": "Архівувати організацію",
+    "disband_org_success": "{{name}} було архівовано.",
+    "disband_org_error": "Не вдалося архівувати {{name}}.",
+    "transfer_ownership": "Передати власність",
+    "transfer_ownership_confirm_title": "Передати власність організації?",
+    "transfer_ownership_confirm_body": "Передача власності {{name}} надасть новому власнику повний контроль над організацією. Ви втратите привілеї власника, але збережете інші ролі. Цю дію неможливо скасувати.",
+    "transfer_ownership_confirm_username_label": "Ім'я користувача нового власника",
+    "transfer_ownership_confirm_username_placeholder": "Введіть ім'я користувача члена, якому передати власність",
+    "transfer_ownership_confirm_cancel_button": "Скасувати",
+    "transfer_ownership_confirm_confirm_button": "Передати власність",
+    "transfer_ownership_success": "Власність {{name}} передано користувачу {{username}}.",
+    "transfer_ownership_error": "Не вдалося передати власність {{name}}."
   },
   "manageRoles": {
     "title": "Ролі",
