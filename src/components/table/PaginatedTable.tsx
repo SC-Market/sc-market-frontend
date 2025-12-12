@@ -380,6 +380,8 @@ export function ControlledTable<T>(props: {
   keyAttr: keyof T
   headCells: readonly HeadCell<T>[]
   disableSelect?: boolean
+  selected?: readonly T[keyof T][]
+  onSelectChange?: (selected: readonly T[keyof T][]) => void
   generateRow: (props: {
     row: T
     index: number
@@ -405,6 +407,8 @@ export function ControlledTable<T>(props: {
     headCells,
     generateRow: RowComponent,
     disableSelect,
+    selected: controlledSelected,
+    onSelectChange,
     onPageChange,
     page,
     onPageSizeChange,
@@ -416,7 +420,11 @@ export function ControlledTable<T>(props: {
     rowCount,
   } = props
 
-  const [selected, setSelected] = React.useState<readonly T[keyof T][]>([])
+  const [internalSelected, setInternalSelected] = React.useState<
+    readonly T[keyof T][]
+  >([])
+  const selected = controlledSelected ?? internalSelected
+  const setSelected = onSelectChange ?? setInternalSelected
   const theme = useTheme<ExtendedTheme>()
 
   const handleRequestSort = (

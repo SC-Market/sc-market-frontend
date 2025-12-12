@@ -382,6 +382,8 @@ export const marketApi = serviceApi.injectEndpoints({
         "MarketCategories",
         "BuyOrderListings",
         "AllListings",
+        "Offers",
+        "Offer",
       ],
     }),
 

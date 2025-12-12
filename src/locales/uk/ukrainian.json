@@ -767,7 +767,17 @@
     "waitingCustomer": "Очікує покупця",
     "accepted": "Прийнято",
     "rejected": "Відхилено",
-    "items": "предметів"
+    "items": "предметів",
+    "merge_offers": "Об'єднати пропозиції ({{count}})",
+    "merge_offers_confirm_title": "Об'єднати сесії пропозицій?",
+    "merge_offers_confirm_body": "Об'єднання {{count}} сесій пропозицій створить нову об'єднану сесію пропозиції та закриє вибрані сесії. Цю дію неможливо скасувати.",
+    "merge_offers_selected_count": "Вибрано: {{count}} сесій пропозицій",
+    "merge_offers_combined_cost": "Загальна вартість: {{cost}} aUEC",
+    "merge_offers_warning": "Усі вибрані сесії пропозицій будуть закриті та замінені однією об'єднаною сесією пропозиції.",
+    "merge_offers_confirm_cancel": "Скасувати",
+    "merge_offers_confirm_button": "Об'єднати пропозиції",
+    "merge_success": "Пропозиції успішно об'єднано",
+    "merge_error": "Не вдалося об'єднати пропозиції"
   },
   "OfferServiceEditArea": {
     "associatedServices": "Пов'язані послуги",

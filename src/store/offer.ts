@@ -150,10 +150,7 @@ export const offersApi = serviceApi.injectEndpoints({
         url: `/api/offers/search`,
         params: queryParams,
       }),
-      // providesTags: (_result, _error, id) => [
-      //   { type: "Offer" as const, id: id },
-      //   "Offer" as const,
-      // ],
+      providesTags: ["Offers" as const, "Offer" as const],
       transformResponse: unwrapResponse,
     }),
     updateOfferStatus: builder.mutation<
@@ -198,6 +195,31 @@ export const offersApi = serviceApi.injectEndpoints({
       ],
       transformResponse: unwrapResponse,
     }),
+    mergeOfferSessions: builder.mutation<
+      {
+        result: string
+        merged_offer_session: OfferSession
+        source_offer_session_ids: string[]
+        message: string
+      },
+      { offer_session_ids: string[] }
+    >({
+      query: ({ offer_session_ids }) => ({
+        url: `/api/offers/merge`,
+        method: "POST",
+        body: { offer_session_ids },
+      }),
+      invalidatesTags: (result, error, arg) => {
+        const mergedId = result?.merged_offer_session?.id
+        return [
+          ...arg.offer_session_ids.map((id) => ({ type: "Offer" as const, id })),
+          mergedId ? ({ type: "Offer" as const, id: mergedId } as const) : null,
+          "Offers" as const,
+          "Offer" as const,
+        ].filter(Boolean) as { type: "Offer"; id?: string }[] | ("Offers" | "Offer")[]
+      },
+      transformResponse: unwrapResponse,
+    }),
   }),
 })
 
@@ -207,4 +229,5 @@ export const {
   useCounterOfferMutation,
   useCreateOfferThreadMutation,
   useSearchOfferSessionsQuery,
+  useMergeOfferSessionsMutation,
 } = offersApi

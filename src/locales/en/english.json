@@ -1020,7 +1020,17 @@
     "waitingCustomer": "Waiting for Customer",
     "accepted": "Accepted",
     "rejected": "Rejected",
-    "items": "items"
+    "items": "items",
+    "merge_offers": "Merge Offers ({{count}})",
+    "merge_offers_confirm_title": "Merge offer sessions?",
+    "merge_offers_confirm_body": "Merging {{count}} offer sessions will create a new merged offer session and close the selected sessions. This action cannot be undone.",
+    "merge_offers_selected_count": "Selected: {{count}} offer sessions",
+    "merge_offers_combined_cost": "Combined cost: {{cost}} aUEC",
+    "merge_offers_warning": "All selected offer sessions will be closed and replaced with a single merged offer session.",
+    "merge_offers_confirm_cancel": "Cancel",
+    "merge_offers_confirm_button": "Merge Offers",
+    "merge_success": "Offers merged successfully",
+    "merge_error": "Failed to merge offers"
   },
   "OfferServiceEditArea": {
     "associatedServices": "Associated Services",
