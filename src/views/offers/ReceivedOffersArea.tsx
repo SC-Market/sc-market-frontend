@@ -302,10 +302,9 @@ export function OffersViewPaginated(props: {
   const handleMergeOffers = async () => {
     if (selectedOfferIds.length < 2) return
 
-    try {
-      const result = await mergeOffers({
-        offer_session_ids: selectedOfferIds,
-      }).unwrap()
+    const result = await mergeOffers({
+      offer_session_ids: selectedOfferIds,
+    }).unwrap().then(result => {
 
       issueAlert({
         message: result.message || t("OffersViewPaginated.merge_success"),
@@ -319,15 +318,7 @@ export function OffersViewPaginated(props: {
       if (result.merged_offer_session?.id) {
         window.open(`/offer/${result.merged_offer_session.id}`, "_blank")
       }
-    } catch (error: any) {
-      issueAlert({
-        message:
-          error?.data?.message ||
-          t("OffersViewPaginated.merge_error") ||
-          "Failed to merge offers",
-        severity: "error",
-      })
-    }
+    }).catch(issueAlert)
   }
 
   const selectedOffers = useMemo(() => {
