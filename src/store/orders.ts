@@ -200,10 +200,20 @@ const ordersApi = serviceApi.injectEndpoints({
       },
       OrderSearchQuery
     >({
-      query: (queryParams) => ({
-        url: `/api/orders/search`,
-        params: queryParams,
-      }),
+      query: (queryParams) => {
+        // Convert boolean filters to strings for query params
+        const params: any = { ...queryParams }
+        if (params.has_market_listings !== undefined) {
+          params.has_market_listings = String(params.has_market_listings)
+        }
+        if (params.has_service !== undefined) {
+          params.has_service = String(params.has_service)
+        }
+        return {
+          url: `/api/orders/search`,
+          params,
+        }
+      },
       providesTags: ["Order" as const, { type: "Order" as const }],
       transformResponse: unwrapResponse,
     }),

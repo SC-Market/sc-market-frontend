@@ -3,17 +3,22 @@ import {
   OrderSearchStatus,
   OrderStub,
 } from "../../datatypes/Order"
-import React, { MouseEventHandler, useMemo, useState } from "react"
+import React, { MouseEventHandler, useMemo, useState, useEffect } from "react"
 import {
   Avatar,
+  Button,
   Chip,
+  Collapse,
+  FormControlLabel,
   Grid,
   Link as MaterialLink,
   Paper,
+  Switch,
   Tab,
   TableCell,
   TableRow,
   Tabs,
+  TextField,
   Typography,
 } from "@mui/material"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
@@ -29,6 +34,12 @@ import SCMarketLogo from "../../assets/scmarket-logo.png"
 import { useSearchOrdersQuery } from "../../store/orders"
 import { useGetUserProfileQuery } from "../../store/profile"
 import { useTranslation } from "react-i18next"
+import { useDebounce } from "../../hooks/useDebounce"
+import {
+  ExpandLess,
+  ExpandMore,
+  Search,
+} from "@mui/icons-material"
 
 export const statusColors = new Map<
   | "active"
@@ -270,6 +281,22 @@ export function OrdersViewPaginated(props: {
   const [order, setOrder] = useState<"asc" | "desc">("desc")
   const { t } = useTranslation()
 
+  // Filter state
+  const [filtersOpen, setFiltersOpen] = useState(false)
+  const [buyerUsername, setBuyerUsername] = useState("")
+  const [sellerUsername, setSellerUsername] = useState("")
+  const [hasMarketListings, setHasMarketListings] = useState<boolean | undefined>(undefined)
+  const [hasService, setHasService] = useState<boolean | undefined>(undefined)
+  
+  // Debounce username inputs
+  const debouncedBuyerUsername = useDebounce(buyerUsername, 500)
+  const debouncedSellerUsername = useDebounce(sellerUsername, 500)
+
+  // Reset page when filters change
+  useEffect(() => {
+    setPage(0)
+  }, [debouncedBuyerUsername, debouncedSellerUsername, hasMarketListings, hasService])
+
   const { data: orders } = useSearchOrdersQuery({
     status: statusFilter === "all" ? undefined : statusFilter,
     index: page,
@@ -279,6 +306,10 @@ export function OrdersViewPaginated(props: {
     contractor: contractor,
     sort_method: orderBy as OrderSearchSortMethod,
     reverse_sort: order === "desc",
+    buyer_username: !mine && debouncedBuyerUsername ? debouncedBuyerUsername : undefined,
+    seller_username: mine && debouncedSellerUsername ? debouncedSellerUsername : undefined,
+    has_market_listings: hasMarketListings,
+    has_service: hasService,
   })
 
   const tabs = [
@@ -330,12 +361,30 @@ export function OrdersViewPaginated(props: {
     }
   }, [orders])
 
+  // Count active filters
+  const activeFiltersCount = useMemo(() => {
+    let count = 0
+    if (debouncedBuyerUsername) count++
+    if (debouncedSellerUsername) count++
+    if (hasMarketListings !== undefined) count++
+    if (hasService !== undefined) count++
+    return count
+  }, [debouncedBuyerUsername, debouncedSellerUsername, hasMarketListings, hasService])
+
+  const clearFilters = () => {
+    setBuyerUsername("")
+    setSellerUsername("")
+    setHasMarketListings(undefined)
+    setHasService(undefined)
+  }
+
   return (
     <Grid item xs={12}>
       <Paper>
         <Stack
           direction={"row"}
           sx={{ paddingTop: 2, paddingLeft: 2, paddingRight: 2 }}
+          alignItems="center"
         >
           <Typography
             variant={"h5"}
@@ -348,6 +397,22 @@ export function OrdersViewPaginated(props: {
           >
             {title}
           </Typography>
+          <Button
+            startIcon={<Search />}
+            endIcon={filtersOpen ? <ExpandLess /> : <ExpandMore />}
+            onClick={() => setFiltersOpen(!filtersOpen)}
+            sx={{ ml: 2 }}
+            size="small"
+          >
+            {t("orders.filters", "Filters")}
+            {activeFiltersCount > 0 && (
+              <Chip
+                label={activeFiltersCount}
+                size="small"
+                sx={{ ml: 1, height: 20, minWidth: 20 }}
+              />
+            )}
+          </Button>
           <Tabs
             value={tab}
             // onChange={(_, newPage) => setPage(newPage)}
@@ -365,6 +430,120 @@ export function OrdersViewPaginated(props: {
             ))}
           </Tabs>
         </Stack>
+        
+        {/* Filter Panel */}
+        <Collapse in={filtersOpen}>
+          <Paper sx={{ p: 1, m: 1, bgcolor: "background.default" }}>
+            <Stack>
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <Typography variant="subtitle2">
+                  {t("orders.filter_orders", "Filter Orders")}
+                </Typography>
+                {activeFiltersCount > 0 && (
+                  <Button size="small" onClick={clearFilters}>
+                    {t("orders.clear_filters", "Clear All")}
+                  </Button>
+                )}
+              </Stack>
+
+              <Grid container spacing={1}>
+                {/* Buyer/Seller Username Filter */}
+                {!mine ? (
+                  <Grid item xs={12} md={6}>
+                    <TextField
+                      fullWidth
+                      label={t("orders.buyer_username", "Buyer Username")}
+                      value={buyerUsername}
+                      onChange={(e) => setBuyerUsername(e.target.value)}
+                      size="small"
+                      placeholder={t("orders.buyer_username_placeholder", "Enter buyer username")}
+                    />
+                  </Grid>
+                ) : (
+                  <Grid item xs={12} md={6}>
+                    <TextField
+                      fullWidth
+                      label={t("orders.seller_username", "Seller Username")}
+                      value={sellerUsername}
+                      onChange={(e) => setSellerUsername(e.target.value)}
+                      size="small"
+                      placeholder={t("orders.seller_username_placeholder", "Enter seller username or spectrum ID")}
+                    />
+                  </Grid>
+                )}
+                
+                {/* Has Market Listings Toggle */}
+                <Grid item xs={12} md={3}>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={hasMarketListings === true}
+                        onChange={(e) =>
+                          setHasMarketListings(e.target.checked ? true : undefined)
+                        }
+                      />
+                    }
+                    label={t("orders.has_market_listings", "Has Market Listings")}
+                  />
+                </Grid>
+                
+                {/* Has Service Toggle */}
+                <Grid item xs={12} md={3}>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={hasService === true}
+                        onChange={(e) =>
+                          setHasService(e.target.checked ? true : undefined)
+                        }
+                      />
+                    }
+                    label={t("orders.has_service", "Has Service")}
+                  />
+                </Grid>
+              </Grid>
+              
+              {/* Active Filters Chips */}
+              {activeFiltersCount > 0 && (
+                <Stack direction="row" spacing={0.5} flexWrap="wrap" gap={0.5}>
+                  {debouncedBuyerUsername && (
+                    <Chip
+                      label={`${t("orders.buyer", "Buyer")}: ${debouncedBuyerUsername}`}
+                      onDelete={() => setBuyerUsername("")}
+                      size="small"
+                    />
+                  )}
+                  {debouncedSellerUsername && (
+                    <Chip
+                      label={`${t("orders.seller", "Seller")}: ${debouncedSellerUsername}`}
+                      onDelete={() => setSellerUsername("")}
+                      size="small"
+                    />
+                  )}
+                  {hasMarketListings !== undefined && (
+                    <Chip
+                      label={t("orders.has_market_listings", "Has Market Listings")}
+                      onDelete={() => setHasMarketListings(undefined)}
+                      size="small"
+                    />
+                  )}
+                  {hasService !== undefined && (
+                    <Chip
+                      label={t("orders.has_service", "Has Service")}
+                      onDelete={() => setHasService(undefined)}
+                      size="small"
+                    />
+                  )}
+                </Stack>
+              )}
+            </Stack>
+          </Paper>
+        </Collapse>
+        
         <ControlledTable
           rows={(orders?.items || []).map((o) => ({
             ...o,

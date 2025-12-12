@@ -264,6 +264,14 @@ export interface OrderSearchQuery {
   index?: number
   page_size?: number
   reverse_sort?: boolean
+  buyer_username?: string
+  seller_username?: string
+  has_market_listings?: boolean
+  has_service?: boolean
+  cost_min?: number
+  cost_max?: number
+  date_from?: string
+  date_to?: string
 }
 
 export interface OrderAnalytics {

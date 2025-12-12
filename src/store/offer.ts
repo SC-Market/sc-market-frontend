@@ -107,6 +107,14 @@ export interface OfferSearchQuery {
   index?: number
   page_size?: number
   reverse_sort?: boolean
+  buyer_username?: string
+  seller_username?: string
+  has_market_listings?: boolean
+  has_service?: boolean
+  cost_min?: number
+  cost_max?: number
+  date_from?: string
+  date_to?: string
 }
 
 export const offersApi = serviceApi.injectEndpoints({
@@ -146,10 +154,20 @@ export const offersApi = serviceApi.injectEndpoints({
       },
       OfferSearchQuery
     >({
-      query: (queryParams) => ({
-        url: `/api/offers/search`,
-        params: queryParams,
-      }),
+      query: (queryParams) => {
+        // Convert boolean filters to strings for query params
+        const params: any = { ...queryParams }
+        if (params.has_market_listings !== undefined) {
+          params.has_market_listings = String(params.has_market_listings)
+        }
+        if (params.has_service !== undefined) {
+          params.has_service = String(params.has_service)
+        }
+        return {
+          url: `/api/offers/search`,
+          params,
+        }
+      },
       providesTags: ["Offers" as const, "Offer" as const],
       transformResponse: unwrapResponse,
     }),

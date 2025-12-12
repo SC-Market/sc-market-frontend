@@ -11,6 +11,7 @@ import {
 import { MinimalUser } from "../datatypes/User.ts"
 import { Order } from "../datatypes/Order.tsx"
 import { unwrapResponse } from "./orders.ts"
+import { BaseQueryMeta } from "@reduxjs/toolkit/query"
 
 // Discriminated union for photo upload parameters to prevent undefined values
 type PhotoUploadParams =
@@ -375,6 +376,7 @@ export const marketApi = serviceApi.injectEndpoints({
         method: "POST",
         body: purchaseData,
       }),
+      transformResponse: unwrapResponse,
       invalidatesTags: [
         "MarketListings",
         "MyListings",

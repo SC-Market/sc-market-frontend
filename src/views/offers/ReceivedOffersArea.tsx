@@ -8,22 +8,27 @@ import {
   ControlledTable,
   HeadCell,
 } from "../../components/table/PaginatedTable"
-import React, { MouseEventHandler, useMemo, useState } from "react"
+import React, { MouseEventHandler, useMemo, useState, useEffect } from "react"
 import {
   Button,
   Checkbox,
   Chip,
+  Collapse,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
+  FormControlLabel,
   Grid,
+  IconButton,
   Paper,
+  Switch,
   Tab,
   TableCell,
   TableRow,
   Tabs,
+  TextField,
   Typography,
 } from "@mui/material"
 import { Link } from "react-router-dom"
@@ -31,7 +36,11 @@ import {
   Announcement,
   Cancel,
   CheckCircle,
+  Close,
+  ExpandLess,
+  ExpandMore,
   HourglassTop,
+  Search,
 } from "@mui/icons-material"
 import { a11yProps } from "../../components/tabs/Tabs"
 import { Stack } from "@mui/system"
@@ -43,6 +52,7 @@ import { UserAvatar } from "../../components/avatar/UserAvatar"
 import { useTranslation } from "react-i18next"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { useNavigate } from "react-router-dom"
+import { useDebounce } from "../../hooks/useDebounce"
 
 // Map for all statuses
 const statusTextToKey: Record<string, string> = {
@@ -84,7 +94,8 @@ export function OfferRow(props: {
   enableSelection?: boolean
 }) {
   const { t } = useTranslation()
-  const { row, index, isItemSelected, onClick, enableSelection, labelId } = props
+  const { row, index, isItemSelected, onClick, enableSelection, labelId } =
+    props
   const date = useMemo(() => new Date(row.timestamp), [row.timestamp])
   const theme = useTheme()
   const navigate = useNavigate()
@@ -252,12 +263,38 @@ export function OffersViewPaginated(props: {
   const [order, setOrder] = useState<"asc" | "desc">("desc")
   const [selectedOfferIds, setSelectedOfferIds] = useState<string[]>([])
   const [mergeModalOpen, setMergeModalOpen] = useState(false)
-  const [mergeOffers, { isLoading: isMerging }] = useMergeOfferSessionsMutation()
+  const [mergeOffers, { isLoading: isMerging }] =
+    useMergeOfferSessionsMutation()
   const issueAlert = useAlertHook()
   const navigate = useNavigate()
 
+  // Filter state
+  const [filtersOpen, setFiltersOpen] = useState(false)
+  const [buyerUsername, setBuyerUsername] = useState("")
+  const [sellerUsername, setSellerUsername] = useState("")
+  const [hasMarketListings, setHasMarketListings] = useState<
+    boolean | undefined
+  >(undefined)
+  const [hasService, setHasService] = useState<boolean | undefined>(undefined)
+
+  // Debounce username inputs
+  const debouncedBuyerUsername = useDebounce(buyerUsername, 500)
+  const debouncedSellerUsername = useDebounce(sellerUsername, 500)
+
+  // Reset page when filters change
+  useEffect(() => {
+    setPage(0)
+  }, [
+    debouncedBuyerUsername,
+    debouncedSellerUsername,
+    hasMarketListings,
+    hasService,
+  ])
+
   const handleSelectChange = (
-    selected: readonly (OfferSessionStub & { customer_name: string })[keyof (OfferSessionStub & { customer_name: string })][],
+    selected: readonly (OfferSessionStub & {
+      customer_name: string
+    })[keyof (OfferSessionStub & { customer_name: string })][],
   ) => {
     // Convert to string array (selected values are the id field values)
     setSelectedOfferIds(selected as string[])
@@ -272,6 +309,12 @@ export function OffersViewPaginated(props: {
     contractor: contractor,
     sort_method: orderBy as OrderSearchSortMethod,
     reverse_sort: order === "desc",
+    buyer_username:
+      !mine && debouncedBuyerUsername ? debouncedBuyerUsername : undefined,
+    seller_username:
+      mine && debouncedSellerUsername ? debouncedSellerUsername : undefined,
+    has_market_listings: hasMarketListings,
+    has_service: hasService,
   })
 
   const tabs = [
@@ -304,21 +347,23 @@ export function OffersViewPaginated(props: {
 
     const result = await mergeOffers({
       offer_session_ids: selectedOfferIds,
-    }).unwrap().then(result => {
+    })
+      .unwrap()
+      .then((result) => {
+        issueAlert({
+          message: result.message || t("OffersViewPaginated.merge_success"),
+          severity: "success",
+        })
 
-      issueAlert({
-        message: result.message || t("OffersViewPaginated.merge_success"),
-        severity: "success",
+        setSelectedOfferIds([])
+        setMergeModalOpen(false)
+
+        // Navigate to the merged offer
+        if (result.merged_offer_session?.id) {
+          window.open(`/offer/${result.merged_offer_session.id}`, "_blank")
+        }
       })
-
-      setSelectedOfferIds([])
-      setMergeModalOpen(false)
-
-      // Navigate to the merged offer
-      if (result.merged_offer_session?.id) {
-        window.open(`/offer/${result.merged_offer_session.id}`, "_blank")
-      }
-    }).catch(issueAlert)
+      .catch(issueAlert)
   }
 
   const selectedOffers = useMemo(() => {
@@ -334,12 +379,35 @@ export function OffersViewPaginated(props: {
     )
   }, [selectedOffers])
 
+  // Count active filters
+  const activeFiltersCount = useMemo(() => {
+    let count = 0
+    if (debouncedBuyerUsername) count++
+    if (debouncedSellerUsername) count++
+    if (hasMarketListings !== undefined) count++
+    if (hasService !== undefined) count++
+    return count
+  }, [
+    debouncedBuyerUsername,
+    debouncedSellerUsername,
+    hasMarketListings,
+    hasService,
+  ])
+
+  const clearFilters = () => {
+    setBuyerUsername("")
+    setSellerUsername("")
+    setHasMarketListings(undefined)
+    setHasService(undefined)
+  }
+
   return (
     <Grid item xs={12}>
       <Paper>
         <Stack
           direction={"row"}
           sx={{ paddingTop: 2, paddingLeft: 2, paddingRight: 2 }}
+          alignItems="center"
         >
           <Typography
             variant={"h5"}
@@ -348,6 +416,22 @@ export function OffersViewPaginated(props: {
           >
             {t("OffersViewPaginated.offers")}
           </Typography>
+          <Button
+            startIcon={<Search />}
+            endIcon={filtersOpen ? <ExpandLess /> : <ExpandMore />}
+            onClick={() => setFiltersOpen(!filtersOpen)}
+            sx={{ ml: 2 }}
+            size="small"
+          >
+            {t("OffersViewPaginated.filters", "Filters")}
+            {activeFiltersCount > 0 && (
+              <Chip
+                label={activeFiltersCount}
+                size="small"
+                sx={{ ml: 1, height: 20, minWidth: 20 }}
+              />
+            )}
+          </Button>
           <Tabs
             value={tab}
             // onChange={(_, newPage) => setPage(newPage)}
@@ -368,21 +452,158 @@ export function OffersViewPaginated(props: {
                 {...a11yProps(index + 1)}
                 onClick={() => setStatusFilter(id)}
               />
-          ))}
-        </Tabs>
-        {!mine && selectedOfferIds.length >= 2 && (
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => setMergeModalOpen(true)}
-            sx={{ ml: "auto" }}
-          >
-            {t("OffersViewPaginated.merge_offers", {
-              count: selectedOfferIds.length,
-            })}
-          </Button>
-        )}
-      </Stack>
+            ))}
+          </Tabs>
+          {!mine && selectedOfferIds.length >= 2 && (
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => setMergeModalOpen(true)}
+              sx={{ ml: "auto" }}
+            >
+              {t("OffersViewPaginated.merge_offers", {
+                count: selectedOfferIds.length,
+              })}
+            </Button>
+          )}
+        </Stack>
+
+        {/* Filter Panel */}
+        <Collapse in={filtersOpen}>
+          <Paper sx={{ p: 1, m: 1, bgcolor: "background.default" }}>
+            <Stack>
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <Typography variant="subtitle2">
+                  {t("OffersViewPaginated.filter_offers", "Filter Offers")}
+                </Typography>
+                {activeFiltersCount > 0 && (
+                  <Button size="small" onClick={clearFilters}>
+                    {t("OffersViewPaginated.clear_filters", "Clear All")}
+                  </Button>
+                )}
+              </Stack>
+
+              <Grid container spacing={1}>
+                {/* Buyer/Seller Username Filter */}
+                {!mine ? (
+                  <Grid item xs={12} md={6}>
+                    <TextField
+                      fullWidth
+                      label={t(
+                        "OffersViewPaginated.buyer_username",
+                        "Buyer Username",
+                      )}
+                      value={buyerUsername}
+                      onChange={(e) => setBuyerUsername(e.target.value)}
+                      size="small"
+                      placeholder={t(
+                        "OffersViewPaginated.buyer_username_placeholder",
+                        "Enter buyer username",
+                      )}
+                    />
+                  </Grid>
+                ) : (
+                  <Grid item xs={12} md={6}>
+                    <TextField
+                      fullWidth
+                      label={t(
+                        "OffersViewPaginated.seller_username",
+                        "Seller Username",
+                      )}
+                      value={sellerUsername}
+                      onChange={(e) => setSellerUsername(e.target.value)}
+                      size="small"
+                      placeholder={t(
+                        "OffersViewPaginated.seller_username_placeholder",
+                        "Enter seller username or spectrum ID",
+                      )}
+                    />
+                  </Grid>
+                )}
+
+                {/* Has Market Listings Toggle */}
+                <Grid item xs={12} md={3}>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={hasMarketListings === true}
+                        onChange={(e) =>
+                          setHasMarketListings(
+                            e.target.checked ? true : undefined,
+                          )
+                        }
+                      />
+                    }
+                    label={t(
+                      "OffersViewPaginated.has_market_listings",
+                      "Has Market Listings",
+                    )}
+                  />
+                </Grid>
+
+                {/* Has Service Toggle */}
+                <Grid item xs={12} md={3}>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={hasService === true}
+                        onChange={(e) =>
+                          setHasService(e.target.checked ? true : undefined)
+                        }
+                      />
+                    }
+                    label={t("OffersViewPaginated.has_service", "Has Service")}
+                  />
+                </Grid>
+              </Grid>
+
+              {/* Active Filters Chips */}
+              {activeFiltersCount > 0 && (
+                <Stack direction="row" spacing={0.5} flexWrap="wrap" gap={0.5}>
+                  {debouncedBuyerUsername && (
+                    <Chip
+                      label={`${t("OffersViewPaginated.buyer", "Buyer")}: ${debouncedBuyerUsername}`}
+                      onDelete={() => setBuyerUsername("")}
+                      size="small"
+                    />
+                  )}
+                  {debouncedSellerUsername && (
+                    <Chip
+                      label={`${t("OffersViewPaginated.seller", "Seller")}: ${debouncedSellerUsername}`}
+                      onDelete={() => setSellerUsername("")}
+                      size="small"
+                    />
+                  )}
+                  {hasMarketListings !== undefined && (
+                    <Chip
+                      label={t(
+                        "OffersViewPaginated.has_market_listings",
+                        "Has Market Listings",
+                      )}
+                      onDelete={() => setHasMarketListings(undefined)}
+                      size="small"
+                    />
+                  )}
+                  {hasService !== undefined && (
+                    <Chip
+                      label={t(
+                        "OffersViewPaginated.has_service",
+                        "Has Service",
+                      )}
+                      onDelete={() => setHasService(undefined)}
+                      size="small"
+                    />
+                  )}
+                </Stack>
+              )}
+            </Stack>
+          </Paper>
+        </Collapse>
+
         <ControlledTable
           rows={(data?.items || []).map((o) => ({
             ...o,
@@ -403,71 +624,71 @@ export function OffersViewPaginated(props: {
           disableSelect={mine}
           selected={!mine ? selectedOfferIds : undefined}
           onSelectChange={!mine ? handleSelectChange : undefined}
-        onPageChange={setPage}
-        page={page}
-        onPageSizeChange={setPageSize}
-        pageSize={pageSize}
-        rowCount={statusFilter ? totals.get(statusFilter) || 0 : totalCount}
-        onOrderChange={setOrder}
-        order={order}
-        onOrderByChange={setOrderBy}
-        orderBy={orderBy}
-      />
-      <Dialog
-        open={mergeModalOpen}
-        onClose={() => {
-          if (!isMerging) {
-            setMergeModalOpen(false)
-          }
-        }}
-        maxWidth="sm"
-        fullWidth
-      >
-        <DialogTitle>
-          {t("OffersViewPaginated.merge_offers_confirm_title")}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText sx={{ mb: 2 }}>
-            {t("OffersViewPaginated.merge_offers_confirm_body", {
-              count: selectedOfferIds.length,
-            })}
-          </DialogContentText>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-            {t("OffersViewPaginated.merge_offers_selected_count", {
-              count: selectedOfferIds.length,
-            })}
-          </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-            {t("OffersViewPaginated.merge_offers_combined_cost", {
-              cost: totalCost.toLocaleString(),
-            })}
-          </Typography>
-          <DialogContentText variant="body2" color="warning.main">
-            {t("OffersViewPaginated.merge_offers_warning")}
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => {
-              if (!isMerging) {
-                setMergeModalOpen(false)
-              }
-            }}
-            disabled={isMerging}
-          >
-            {t("OffersViewPaginated.merge_offers_confirm_cancel")}
-          </Button>
-          <Button
-            onClick={handleMergeOffers}
-            color="primary"
-            variant="contained"
-            disabled={isMerging || selectedOfferIds.length < 2}
-          >
-            {t("OffersViewPaginated.merge_offers_confirm_button")}
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </Paper>
-  </Grid>
-)
+          onPageChange={setPage}
+          page={page}
+          onPageSizeChange={setPageSize}
+          pageSize={pageSize}
+          rowCount={statusFilter ? totals.get(statusFilter) || 0 : totalCount}
+          onOrderChange={setOrder}
+          order={order}
+          onOrderByChange={setOrderBy}
+          orderBy={orderBy}
+        />
+        <Dialog
+          open={mergeModalOpen}
+          onClose={() => {
+            if (!isMerging) {
+              setMergeModalOpen(false)
+            }
+          }}
+          maxWidth="sm"
+          fullWidth
+        >
+          <DialogTitle>
+            {t("OffersViewPaginated.merge_offers_confirm_title")}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText sx={{ mb: 2 }}>
+              {t("OffersViewPaginated.merge_offers_confirm_body", {
+                count: selectedOfferIds.length,
+              })}
+            </DialogContentText>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+              {t("OffersViewPaginated.merge_offers_selected_count", {
+                count: selectedOfferIds.length,
+              })}
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+              {t("OffersViewPaginated.merge_offers_combined_cost", {
+                cost: totalCost.toLocaleString(),
+              })}
+            </Typography>
+            <DialogContentText variant="body2" color="warning.main">
+              {t("OffersViewPaginated.merge_offers_warning")}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={() => {
+                if (!isMerging) {
+                  setMergeModalOpen(false)
+                }
+              }}
+              disabled={isMerging}
+            >
+              {t("OffersViewPaginated.merge_offers_confirm_cancel")}
+            </Button>
+            <Button
+              onClick={handleMergeOffers}
+              color="primary"
+              variant="contained"
+              disabled={isMerging || selectedOfferIds.length < 2}
+            >
+              {t("OffersViewPaginated.merge_offers_confirm_button")}
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </Paper>
+    </Grid>
+  )
 }
