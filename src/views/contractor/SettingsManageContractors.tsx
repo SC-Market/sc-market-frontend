@@ -174,7 +174,12 @@ export function SettingsManageContractors() {
   }
 
   const columns: GridColDef[] = [
-    { field: "name", headerName: t("settingsManageContractors.name"), flex: 0.6, minWidth: 150 },
+    {
+      field: "name",
+      headerName: t("settingsManageContractors.name"),
+      flex: 0.6,
+      minWidth: 150,
+    },
     {
       field: "actions",
       headerName: t("settingsManageContractors.actions"),
@@ -375,7 +380,11 @@ export function SettingsManageContractors() {
             value={transferSelectedUser}
             onChange={(
               event: any,
-              newValue: { display_name: string; username: string; avatar?: string } | null,
+              newValue: {
+                display_name: string
+                username: string
+                avatar?: string
+              } | null,
             ) => {
               setTransferSelectedUser(newValue)
             }}

@@ -128,17 +128,20 @@ export function CreateTokenDialog({ open, onClose }: CreateTokenDialogProps) {
   const { data: profile } = useGetUserProfileQuery()
   const contractors = profile?.contractors || []
   const isAdmin = profile?.role === "admin"
-  
+
   // Filter scopes based on user role - admins can see all, non-admins can't see admin/moderation scopes
-  const allScopes = Object.values(SCOPE_CATEGORIES).flatMap(cat => cat.scopes.map(s => s.value))
-  const availableScopes: string[] = isAdmin ? 
-    allScopes :
-    allScopes.filter(scope => 
-      !scope.startsWith("admin:") && 
-      scope !== "admin" &&
-      scope !== "moderation:read" &&
-      scope !== "moderation:write"
-    )
+  const allScopes = Object.values(SCOPE_CATEGORIES).flatMap((cat) =>
+    cat.scopes.map((s) => s.value),
+  )
+  const availableScopes: string[] = isAdmin
+    ? allScopes
+    : allScopes.filter(
+        (scope) =>
+          !scope.startsWith("admin:") &&
+          scope !== "admin" &&
+          scope !== "moderation:read" &&
+          scope !== "moderation:write",
+      )
 
   const [formData, setFormData] = useState({
     name: "",
@@ -317,41 +320,45 @@ export function CreateTokenDialog({ open, onClose }: CreateTokenDialogProps) {
                 {Object.entries(SCOPE_CATEGORIES).map(
                   ([category, { label, scopes }]) => {
                     // Filter scopes based on availability
-                    const filteredScopes = scopes.filter(scope => 
-                      availableScopes.includes(scope.value)
+                    const filteredScopes = scopes.filter((scope) =>
+                      availableScopes.includes(scope.value),
                     )
-                    
+
                     // Don't render category if no scopes are available
                     if (filteredScopes.length === 0) return null
-                    
+
                     return (
                       <Box key={category} sx={{ mb: 3 }}>
                         <Typography variant="subtitle1" gutterBottom>
                           {label}
-                          {!isAdmin && (category === "admin" || category === "moderation") && (
-                            <Chip 
-                              label="Admin Only" 
-                              size="small" 
-                              color="warning" 
-                              sx={{ ml: 1 }}
-                            />
-                          )}
+                          {!isAdmin &&
+                            (category === "admin" ||
+                              category === "moderation") && (
+                              <Chip
+                                label="Admin Only"
+                                size="small"
+                                color="warning"
+                                sx={{ ml: 1 }}
+                              />
+                            )}
                         </Typography>
                         <FormGroup>
-                          {filteredScopes.map(({ value, label: scopeLabel }) => (
-                            <FormControlLabel
-                              key={value}
-                              control={
-                                <Checkbox
-                                  checked={formData.scopes.includes(value)}
-                                  onChange={(e) =>
-                                    handleScopeChange(value, e.target.checked)
-                                  }
-                                />
-                              }
-                              label={scopeLabel}
-                            />
-                          ))}
+                          {filteredScopes.map(
+                            ({ value, label: scopeLabel }) => (
+                              <FormControlLabel
+                                key={value}
+                                control={
+                                  <Checkbox
+                                    checked={formData.scopes.includes(value)}
+                                    onChange={(e) =>
+                                      handleScopeChange(value, e.target.checked)
+                                    }
+                                  />
+                                }
+                                label={scopeLabel}
+                              />
+                            ),
+                          )}
                         </FormGroup>
                         <Divider sx={{ mt: 1 }} />
                       </Box>

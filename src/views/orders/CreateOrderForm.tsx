@@ -1,5 +1,13 @@
 import {
+  Alert,
+  AlertTitle,
+  Box,
+  Button,
   Checkbox,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
   FormControlLabel,
   Grid,
   GridProps,
@@ -25,6 +33,18 @@ import {
 } from "../../store/services"
 import { PublicContract } from "../../store/public_contracts"
 import { useTranslation } from "react-i18next"
+import {
+  useCheckContractorAvailabilityRequirementQuery,
+  useCheckUserAvailabilityRequirementQuery,
+} from "../../store/orderSettings"
+import {
+  useProfileGetAvailabilityQuery,
+  useProfileUpdateAvailabilityMutation,
+} from "../../store/profile"
+import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
+import { CheckCircle, Warning } from "@mui/icons-material"
+import { AvailabilitySelector } from "../../components/time/AvailabilitySelector"
+import { convertAvailability } from "../../pages/availability/Availability"
 
 interface WorkRequestState {
   title: string
@@ -79,12 +99,147 @@ const CreateOrderFormComponent = React.forwardRef<
   )
 
   const [service, setService] = useState<Service | null>(props.service || null)
-  
+
+  // Check availability requirement - check both contractor and assigned user
+  const {
+    data: contractorRequirement,
+    refetch: refetchContractorRequirement,
+  } = useCheckContractorAvailabilityRequirementQuery(props.contractor_id!, {
+    skip: !props.contractor_id,
+  })
+
+  const {
+    data: userRequirement,
+    refetch: refetchUserRequirement,
+  } = useCheckUserAvailabilityRequirementQuery(props.assigned_to!, {
+    skip: !props.assigned_to,
+  })
+
+  // If either requires availability, enforce it
+  const availabilityRequirement = useMemo(() => {
+    if (contractorRequirement?.required) {
+      return contractorRequirement
+    }
+    if (userRequirement?.required) {
+      return userRequirement
+    }
+    // If neither requires, return undefined
+    return undefined
+  }, [contractorRequirement, userRequirement])
+
+  // Get user's current availability - check contractor-specific if contractor, global if user seller
+  const [currentOrg] = useCurrentOrg()
+  const { data: userAvailability } = useProfileGetAvailabilityQuery(
+    props.contractor_id ? currentOrg?.spectrum_id || null : null,
+  )
+
+  // Check if availability is set
+  const hasAvailabilitySet = useMemo(() => {
+    if (!availabilityRequirement?.required) return true
+    // The backend already checked this, so we can use the hasAvailability from the requirement check
+    return availabilityRequirement.hasAvailability
+  }, [availabilityRequirement])
+
+  const formDisabled = availabilityRequirement?.required && !hasAvailabilitySet
+
+  // Availability modal state
+  const [isAvailabilityModalOpen, setIsAvailabilityModalOpen] = useState(false)
+  const [availabilitySelections, setAvailabilitySelections] = useState<
+    boolean[]
+  >(convertAvailability(userAvailability?.selections || []))
+  const [updateAvailability] = useProfileUpdateAvailabilityMutation()
+
+  // Update availability selections when userAvailability changes
+  useEffect(() => {
+    if (userAvailability) {
+      setAvailabilitySelections(
+        convertAvailability(userAvailability.selections || []),
+      )
+    }
+  }, [userAvailability])
+
+  const handleSaveAvailability = useCallback(
+    async (selections: boolean[]) => {
+      // Convert to spans format (same as Availability page)
+      const spans: Array<{ start: number; finish: number }> = []
+      let current: { start: number; finish: number } | null = null
+
+      for (let i = 0; i < selections.length; i++) {
+        if (selections[i]) {
+          if (current) {
+            current.finish = i
+          } else {
+            current = { start: i, finish: i }
+          }
+        } else {
+          if (current) {
+            spans.push(current)
+            current = null
+          }
+        }
+      }
+
+      if (current) {
+        spans.push(current)
+      }
+
+      try {
+        await updateAvailability({
+          contractor: props.contractor_id || null,
+          selections: spans,
+        }).unwrap()
+
+        // Refetch availability requirement checks to update form state
+        if (props.contractor_id) {
+          refetchContractorRequirement()
+        }
+        if (props.assigned_to) {
+          refetchUserRequirement()
+        }
+
+        setIsAvailabilityModalOpen(false)
+        issueAlert({
+          message: t("availability.updated"),
+          severity: "success",
+        })
+      } catch (error) {
+        const errorMessage =
+          (error as any)?.error ||
+          (error as any)?.data?.error ||
+          (error instanceof Error ? error.message : String(error))
+        issueAlert({
+          message: `${t("availability.failed")} ${errorMessage}`,
+          severity: "error",
+        })
+      }
+    },
+    [
+      props.contractor_id,
+      props.assigned_to,
+      updateAvailability,
+      refetchContractorRequirement,
+      refetchUserRequirement,
+      issueAlert,
+      t,
+    ],
+  )
+
+  // Get seller name for display
+  const sellerName = useMemo(() => {
+    if (props.contractor_id) {
+      return props.contractor_id // Could enhance to get contractor name
+    }
+    if (props.assigned_to) {
+      return props.assigned_to
+    }
+    return "this seller"
+  }, [props.contractor_id, props.assigned_to])
+
   // Sync props.service to local service state when it changes
   useEffect(() => {
     setService(props.service || null)
   }, [props.service])
-  
+
   useEffect(() => {
     if (service) {
       setState((state) => ({
@@ -169,7 +324,16 @@ const CreateOrderFormComponent = React.forwardRef<
           navigate(`/offer/${data.session_id}`)
         })
         .catch((error) => {
-          issueAlert(error)
+          if (error?.data?.error?.code === "AVAILABILITY_REQUIRED") {
+            issueAlert({
+              message:
+                error.data.error.message ||
+                t("AvailabilityRequirement.apiError"),
+              severity: "error",
+            })
+          } else {
+            issueAlert(error)
+          }
         })
       return false
     },
@@ -194,6 +358,80 @@ const CreateOrderFormComponent = React.forwardRef<
   return (
     // <FormControl component={Grid} item xs={12} container spacing={2}>
     <>
+      {/* Availability Requirement Banner */}
+      {availabilityRequirement && (
+        <Grid item xs={12}>
+          <Alert
+            severity={hasAvailabilitySet ? "success" : "warning"}
+            icon={hasAvailabilitySet ? <CheckCircle /> : <Warning />}
+            sx={{ mb: 2 }}
+          >
+            <AlertTitle>
+              {hasAvailabilitySet
+                ? t("AvailabilityRequirement.set")
+                : t("AvailabilityRequirement.required")}
+            </AlertTitle>
+            <Box>
+              {hasAvailabilitySet ? (
+                <>
+                  {t("AvailabilityRequirement.setMessage", {
+                    sellerName,
+                  })}
+                  <Button
+                    size="small"
+                    onClick={() => setIsAvailabilityModalOpen(true)}
+                    sx={{ mt: 1, ml: 1 }}
+                  >
+                    {t("availability.edit", "Edit")}
+                  </Button>
+                </>
+              ) : (
+                <>
+                  {t("AvailabilityRequirement.requiredMessage", {
+                    sellerName,
+                  })}
+                  <Box mt={1}>
+                    <Button
+                      variant="contained"
+                      size="small"
+                      onClick={() => setIsAvailabilityModalOpen(true)}
+                    >
+                      {t("AvailabilityRequirement.setAvailability")}
+                    </Button>
+                  </Box>
+                </>
+              )}
+            </Box>
+          </Alert>
+        </Grid>
+      )}
+
+      {/* Availability Modal */}
+      <Dialog
+        open={isAvailabilityModalOpen}
+        onClose={() => setIsAvailabilityModalOpen(false)}
+        maxWidth="lg"
+        fullWidth
+        aria-labelledby="availability-modal-title"
+      >
+        <DialogTitle id="availability-modal-title">
+          {t("availability.select_availability")} - {sellerName}
+        </DialogTitle>
+        <DialogContent>
+          <Box sx={{ mt: 1 }}>
+            <AvailabilitySelector
+              onSave={handleSaveAvailability}
+              initialSelections={availabilitySelections}
+            />
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setIsAvailabilityModalOpen(false)}>
+            {t("accessibility.cancel", "Cancel")}
+          </Button>
+        </DialogActions>
+      </Dialog>
+
       {services && !!services.length && !props.service && (
         <Section xs={12}>
           <Grid item xs={12} lg={4}>
@@ -542,10 +780,13 @@ const CreateOrderFormComponent = React.forwardRef<
           color={"secondary"}
           type="submit"
           onClick={submitOrder}
+          disabled={formDisabled}
           aria-label={t("accessibility.submitOrder", "Submit order")}
           aria-describedby="submit-order-help"
         >
-          {t("CreateOrderForm.submit")}
+          {formDisabled
+            ? t("AvailabilityRequirement.submitDisabled")
+            : t("CreateOrderForm.submit")}
           <span id="submit-order-help" className="sr-only">
             {t(
               "accessibility.submitOrderHelp",

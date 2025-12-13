@@ -1,8 +1,14 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { Page } from "../../components/metadata/Page"
 import {
+  Alert,
+  AlertTitle,
   Box,
   Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
   Divider,
   Grid,
   InputAdornment,
@@ -34,6 +40,21 @@ import { NumericFormat } from "react-number-format"
 import { formatCompleteListingUrl, formatMarketUrl } from "../../util/urls"
 import { FALLBACK_IMAGE_URL } from "../../util/constants"
 import { useTranslation } from "react-i18next"
+import {
+  useCheckContractorAvailabilityRequirementQuery,
+  useCheckUserAvailabilityRequirementQuery,
+} from "../../store/orderSettings"
+import {
+  useProfileGetAvailabilityQuery,
+  useProfileUpdateAvailabilityMutation,
+} from "../../store/profile"
+import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
+import { CheckCircle, Warning } from "@mui/icons-material"
+import {
+  AvailabilitySelector,
+  AvailabilityDisplay,
+} from "../../components/time/AvailabilitySelector"
+import { convertAvailability } from "../../pages/availability/Availability"
 
 export function CartItemEntry(props: {
   item: CartItem
@@ -241,6 +262,139 @@ export function CartSellerEntry(props: {
 
   const navigate = useNavigate()
 
+  // Check availability requirement for this seller
+  const {
+    data: contractorRequirement,
+    isLoading: checkingContractor,
+    refetch: refetchContractorRequirement,
+  } = useCheckContractorAvailabilityRequirementQuery(
+    seller.contractor_seller_id!,
+    {
+      skip: !seller.contractor_seller_id,
+    },
+  )
+
+  const {
+    data: userRequirement,
+    isLoading: checkingUser,
+    refetch: refetchUserRequirement,
+  } = useCheckUserAvailabilityRequirementQuery(seller.user_seller_id!, {
+    skip: !seller.user_seller_id,
+  })
+
+  // If either requires availability, enforce it
+  const availabilityRequirement = useMemo(() => {
+    if (contractorRequirement?.required) {
+      return contractorRequirement
+    }
+    if (userRequirement?.required) {
+      return userRequirement
+    }
+    return undefined
+  }, [contractorRequirement, userRequirement])
+
+  const checkingRequirement = checkingContractor || checkingUser
+
+  // Get user's current availability for this seller's contractor (for display purposes)
+  const [currentOrg] = useCurrentOrg()
+  const { data: userAvailability } = useProfileGetAvailabilityQuery(
+    seller.contractor_seller_id || null,
+  )
+
+  // Check if availability is set - use the value from the requirement check
+  const hasAvailabilitySet = useMemo(() => {
+    if (!availabilityRequirement?.required) return true
+    // The backend already checked this, so we can use the hasAvailability from the requirement check
+    return availabilityRequirement.hasAvailability
+  }, [availabilityRequirement])
+
+  // Update availability mutation
+  const [updateAvailability] = useProfileUpdateAvailabilityMutation()
+
+  // Local state for availability selector
+  const [availabilitySelections, setAvailabilitySelections] = useState<
+    boolean[]
+  >(convertAvailability(userAvailability?.selections || []))
+  const [isAvailabilityModalOpen, setIsAvailabilityModalOpen] = useState(false)
+
+  // Update availability selections when userAvailability changes
+  useEffect(() => {
+    if (userAvailability) {
+      setAvailabilitySelections(
+        convertAvailability(userAvailability.selections || []),
+      )
+    }
+  }, [userAvailability])
+
+  const handleSaveAvailability = useCallback(
+    async (selections: boolean[]) => {
+      // Convert to spans format (same as Availability page)
+      const spans: Array<{ start: number; finish: number }> = []
+      let current: { start: number; finish: number } | null = null
+
+      for (let i = 0; i < selections.length; i++) {
+        if (selections[i]) {
+          if (current) {
+            current.finish = i
+          } else {
+            current = { start: i, finish: i }
+          }
+        } else {
+          if (current) {
+            spans.push(current)
+            current = null
+          }
+        }
+      }
+
+      if (current) {
+        spans.push(current)
+      }
+
+      try {
+        await updateAvailability({
+          contractor: seller.contractor_seller_id || null,
+          selections: spans,
+        }).unwrap()
+
+        // Refetch availability requirement checks to update form state
+        if (seller.contractor_seller_id) {
+          refetchContractorRequirement()
+        }
+        if (seller.user_seller_id) {
+          refetchUserRequirement()
+        }
+
+        setIsAvailabilityModalOpen(false)
+        issueAlert({
+          message: t("availability.updated"),
+          severity: "success",
+        })
+      } catch (error) {
+        const errorMessage =
+          (error as any)?.error ||
+          (error as any)?.data?.error ||
+          (error instanceof Error ? error.message : String(error))
+        issueAlert({
+          message: `${t("availability.failed")} ${errorMessage}`,
+          severity: "error",
+        })
+      }
+    },
+    [
+      seller.contractor_seller_id,
+      seller.user_seller_id,
+      updateAvailability,
+      refetchContractorRequirement,
+      refetchUserRequirement,
+      issueAlert,
+      t,
+    ],
+  )
+
+  const sellerName =
+    user_seller?.display_name || contractor_seller?.name || "Seller"
+
   const handlePurchase = useCallback(
     async (offer: number | undefined | null) => {
       purchaseListing({
@@ -268,7 +422,16 @@ export function CartSellerEntry(props: {
           navigate(`/offer/${res.session_id}`)
         })
         .catch((error) => {
-          issueAlert(error)
+          if (error?.data?.error?.code === "AVAILABILITY_REQUIRED") {
+            issueAlert({
+              message:
+                error.data.error.message ||
+                t("AvailabilityRequirement.apiError"),
+              severity: "error",
+            })
+          } else {
+            issueAlert(error)
+          }
         })
     },
     [seller, purchaseListing, issueAlert],
@@ -319,6 +482,93 @@ export function CartSellerEntry(props: {
           </Typography>
         </Box>
       </Grid>
+
+      {/* Availability Section - Show if required or while checking */}
+      {availabilityRequirement?.required && (
+        <>
+          <Grid item xs={12}>
+            {checkingRequirement ? (
+              <Alert severity="info" sx={{ mb: 2 }}>
+                <AlertTitle>
+                  {t(
+                    "availability.checking",
+                    "Checking availability requirement...",
+                  )}
+                </AlertTitle>
+              </Alert>
+            ) : (
+              <Alert
+                severity={hasAvailabilitySet ? "success" : "warning"}
+                icon={hasAvailabilitySet ? <CheckCircle /> : <Warning />}
+                sx={{ mb: 2 }}
+              >
+                <AlertTitle>
+                  {hasAvailabilitySet
+                    ? t("AvailabilityRequirement.set")
+                    : t("AvailabilityRequirement.required")}
+                </AlertTitle>
+                <Box>
+                  {hasAvailabilitySet ? (
+                    <>
+                      {t("AvailabilityRequirement.setMessage", {
+                        sellerName,
+                      })}
+                      <Button
+                        size="small"
+                        onClick={() => setIsAvailabilityModalOpen(true)}
+                        sx={{ mt: 1, ml: 1 }}
+                      >
+                        {t("availability.edit", "Edit")}
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      {t("AvailabilityRequirement.requiredMessage", {
+                        sellerName,
+                      })}
+                      <Box mt={1}>
+                        <Button
+                          variant="contained"
+                          size="small"
+                          onClick={() => setIsAvailabilityModalOpen(true)}
+                        >
+                          {t("AvailabilityRequirement.setAvailability")}
+                        </Button>
+                      </Box>
+                    </>
+                  )}
+                </Box>
+              </Alert>
+            )}
+          </Grid>
+        </>
+      )}
+
+      {/* Availability Modal */}
+      <Dialog
+        open={isAvailabilityModalOpen}
+        onClose={() => setIsAvailabilityModalOpen(false)}
+        maxWidth="lg"
+        fullWidth
+        aria-labelledby="availability-modal-title"
+      >
+        <DialogTitle id="availability-modal-title">
+          {t("availability.select_availability")} - {sellerName}
+        </DialogTitle>
+        <DialogContent>
+          <Box sx={{ mt: 1 }}>
+            <AvailabilitySelector
+              onSave={handleSaveAvailability}
+              initialSelections={availabilitySelections}
+            />
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setIsAvailabilityModalOpen(false)}>
+            {t("accessibility.cancel", "Cancel")}
+          </Button>
+        </DialogActions>
+      </Dialog>
 
       <Grid item xs={12}>
         <MarkdownEditor
@@ -400,9 +650,12 @@ export function CartSellerEntry(props: {
                   variant={"outlined"}
                   startIcon={<LocalOfferRounded />}
                   loading={purchaseLoading}
+                  disabled={!hasAvailabilitySet}
                   onClick={() => handlePurchase(offer)}
                 >
-                  {t("cart.submitOffer")}
+                  {!hasAvailabilitySet
+                    ? t("AvailabilityRequirement.submitDisabled")
+                    : t("cart.submitOffer")}
                 </LoadingButton>
               </Grid>
             </Grid>

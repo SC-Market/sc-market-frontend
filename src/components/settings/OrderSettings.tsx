@@ -38,8 +38,12 @@ export function OrderSettings({ entityType, entityId }: OrderSettingsProps) {
   const [orderMessage, setOrderMessage] = useState("")
   const [offerEnabled, setOfferEnabled] = useState(true)
   const [orderEnabled, setOrderEnabled] = useState(true)
+  const [requireAvailabilityEnabled, setRequireAvailabilityEnabled] =
+    useState(false)
   const [offerSettingId, setOfferSettingId] = useState<string | null>(null)
   const [orderSettingId, setOrderSettingId] = useState<string | null>(null)
+  const [requireAvailabilitySettingId, setRequireAvailabilitySettingId] =
+    useState<string | null>(null)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
@@ -95,6 +99,15 @@ export function OrderSettings({ entityType, entityId }: OrderSettingsProps) {
         setOrderMessage(orderSetting.message_content)
         setOrderEnabled(orderSetting.enabled)
         setOrderSettingId(orderSetting.id)
+      }
+
+      const requireAvailabilitySetting = settings.find(
+        (s) => s.setting_type === "require_availability",
+      )
+
+      if (requireAvailabilitySetting) {
+        setRequireAvailabilityEnabled(requireAvailabilitySetting.enabled)
+        setRequireAvailabilitySettingId(requireAvailabilitySetting.id)
       }
     }
   }, [settings])
@@ -175,6 +188,52 @@ export function OrderSettings({ entityType, entityId }: OrderSettingsProps) {
         }
       }
 
+      // Handle availability requirement
+      if (requireAvailabilitySettingId) {
+        // Update existing
+        if (entityType === "user") {
+          await updateUserSetting({
+            id: requireAvailabilitySettingId,
+            message_content: "", // Not used for require_availability
+            enabled: requireAvailabilityEnabled,
+          }).unwrap()
+        } else {
+          await updateContractorSetting({
+            contractorId: entityId!,
+            id: requireAvailabilitySettingId,
+            message_content: "", // Not used for require_availability
+            enabled: requireAvailabilityEnabled,
+          }).unwrap()
+        }
+      } else if (requireAvailabilityEnabled) {
+        // Create new
+        const request: CreateOrderSettingRequest = {
+          setting_type: "require_availability",
+          message_content: "", // Not used for require_availability
+          enabled: requireAvailabilityEnabled,
+        }
+
+        if (entityType === "user") {
+          await createUserSetting(request).unwrap()
+        } else {
+          await createContractorSetting({
+            contractorId: entityId!,
+            ...request,
+          }).unwrap()
+        }
+      } else if (requireAvailabilitySettingId && !requireAvailabilityEnabled) {
+        // Setting exists but is disabled - delete it
+        if (entityType === "user") {
+          await deleteUserSetting(requireAvailabilitySettingId).unwrap()
+        } else {
+          await deleteContractorSetting({
+            contractorId: entityId!,
+            id: requireAvailabilitySettingId,
+          }).unwrap()
+        }
+        setRequireAvailabilitySettingId(null)
+      }
+
       setSuccess(t("OrderSettings.savedSuccessfully"))
     } catch (err: any) {
       const errorMessage =
@@ -193,7 +252,7 @@ export function OrderSettings({ entityType, entityId }: OrderSettingsProps) {
   }
 
   const handleDelete = async (
-    settingType: "offer_message" | "order_message",
+    settingType: "offer_message" | "order_message" | "require_availability",
   ) => {
     if (!confirm(t("OrderSettings.confirmDelete"))) return
 
@@ -202,7 +261,11 @@ export function OrderSettings({ entityType, entityId }: OrderSettingsProps) {
 
     try {
       const settingId =
-        settingType === "offer_message" ? offerSettingId : orderSettingId
+        settingType === "offer_message"
+          ? offerSettingId
+          : settingType === "order_message"
+            ? orderSettingId
+            : requireAvailabilitySettingId
 
       if (settingId) {
         if (entityType === "user") {
@@ -219,10 +282,13 @@ export function OrderSettings({ entityType, entityId }: OrderSettingsProps) {
           setOfferMessage("")
           setOfferEnabled(true)
           setOfferSettingId(null)
-        } else {
+        } else if (settingType === "order_message") {
           setOrderMessage("")
           setOrderEnabled(true)
           setOrderSettingId(null)
+        } else {
+          setRequireAvailabilityEnabled(false)
+          setRequireAvailabilitySettingId(null)
         }
 
         setSuccess(t("OrderSettings.deletedSuccessfully"))
@@ -360,6 +426,33 @@ export function OrderSettings({ entityType, entityId }: OrderSettingsProps) {
               {t("OrderSettings.delete")}
             </Button>
           )}
+        </Box>
+
+        <Divider sx={{ my: 2 }} />
+
+        {/* Availability Requirement Setting */}
+        <Box mb={3}>
+          <Typography variant="subtitle1" gutterBottom>
+            {t("OrderSettings.availabilityRequirement")}
+          </Typography>
+
+          <FormControlLabel
+            control={
+              <Switch
+                checked={requireAvailabilityEnabled}
+                onChange={(e) =>
+                  setRequireAvailabilityEnabled(e.target.checked)
+                }
+                disabled={saving}
+              />
+            }
+            label={t("OrderSettings.requireAvailabilityLabel")}
+            sx={{ mb: 1 }}
+          />
+
+          <Typography variant="body2" color="text.secondary">
+            {t("OrderSettings.requireAvailabilityDescription")}
+          </Typography>
         </Box>
 
         <Button

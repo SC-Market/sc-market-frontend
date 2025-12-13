@@ -71,7 +71,7 @@ export function AdminExpressVerify() {
           value={state.spectrum_id}
           onChange={(event) => {
             const input = event.target.value
-            
+
             // If it looks like a URL, try to extract the org ID
             if (isRsiUrl(input)) {
               const extractedId = extractOrgIdFromUrl(input)
@@ -83,7 +83,7 @@ export function AdminExpressVerify() {
                 return
               }
             }
-            
+
             // Otherwise, sanitize the input and convert to uppercase (remove spaces and non-alphanumeric except _ and -)
             setState({
               ...state,
@@ -92,7 +92,7 @@ export function AdminExpressVerify() {
           }}
           onPaste={(event) => {
             const pastedText = event.clipboardData.getData("text")
-            
+
             // If pasted text is a URL, extract the ID
             if (isRsiUrl(pastedText)) {
               const extractedId = extractOrgIdFromUrl(pastedText)
@@ -105,7 +105,7 @@ export function AdminExpressVerify() {
                 return
               }
             }
-            
+
             // If pasted text contains non-alphanumeric (except _ and -), sanitize it
             if (!/^[a-zA-Z0-9_-]*$/.test(pastedText)) {
               event.preventDefault()

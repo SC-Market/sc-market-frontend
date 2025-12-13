@@ -4,7 +4,7 @@ export interface OrderSetting {
   id: string
   entity_type: "user" | "contractor"
   entity_id: string
-  setting_type: "offer_message" | "order_message"
+  setting_type: "offer_message" | "order_message" | "require_availability"
   message_content: string
   enabled: boolean
   created_at: string
@@ -12,8 +12,8 @@ export interface OrderSetting {
 }
 
 export interface CreateOrderSettingRequest {
-  setting_type: "offer_message" | "order_message"
-  message_content: string
+  setting_type: "offer_message" | "order_message" | "require_availability"
+  message_content?: string // Optional for require_availability
   enabled?: boolean
 }
 
@@ -123,6 +123,38 @@ export const orderSettingsApi = serviceApi.injectEndpoints({
         { type: "OrderSettings", id: contractorId },
       ],
     }),
+
+    // Check availability requirement for contractor
+    checkContractorAvailabilityRequirement: builder.query<
+      { required: boolean; hasAvailability: boolean },
+      string
+    >({
+      query: (spectrumId) => ({
+        url: `/api/orders/availability/contractor/${spectrumId}/check`,
+      }),
+      transformResponse: (response: {
+        data: { required: boolean; hasAvailability: boolean }
+      }) => response.data,
+      providesTags: (result, error, spectrumId) => [
+        { type: "AvailabilityRequirement" as const, id: `contractor:${spectrumId}` },
+      ],
+    }),
+
+    // Check availability requirement for user
+    checkUserAvailabilityRequirement: builder.query<
+      { required: boolean; hasAvailability: boolean },
+      string
+    >({
+      query: (username) => ({
+        url: `/api/orders/availability/user/${username}/check`,
+      }),
+      transformResponse: (response: {
+        data: { required: boolean; hasAvailability: boolean }
+      }) => response.data,
+      providesTags: (result, error, username) => [
+        { type: "AvailabilityRequirement" as const, id: `user:${username}` },
+      ],
+    }),
   }),
 })
 
@@ -135,4 +167,6 @@ export const {
   useCreateContractorOrderSettingMutation,
   useUpdateContractorOrderSettingMutation,
   useDeleteContractorOrderSettingMutation,
+  useCheckContractorAvailabilityRequirementQuery,
+  useCheckUserAvailabilityRequirementQuery,
 } = orderSettingsApi

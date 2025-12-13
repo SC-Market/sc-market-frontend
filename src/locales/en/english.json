@@ -283,7 +283,10 @@
     "availability_for": "Availability for",
     "title": "My Availability",
     "updated": "Updated availability!",
-    "failed": "Failed to update!"
+    "failed": "Failed to update!",
+    "edit": "Edit",
+    "yourAvailability": "Your Availability",
+    "checking": "Checking availability requirement..."
   },
   "buyOrderActions": {
     "createBuyOrder": "Create Buy Order",
@@ -1260,6 +1263,9 @@
     "description": "Configure custom messages that will be automatically sent when offers are created or when offers turn into orders.",
     "offerMessage": "Offer Message",
     "orderMessage": "Order Message",
+    "availabilityRequirement": "Availability Requirements",
+    "requireAvailabilityLabel": "Require buyers to set availability before submitting offers",
+    "requireAvailabilityDescription": "When enabled, buyers must have their availability set before they can submit offers to you.",
     "enabled": "Enabled",
     "offerMessagePlaceholder": "Enter a message to send when an offer is created...",
     "orderMessagePlaceholder": "Enter a message to send when an offer becomes an order...",
@@ -1272,6 +1278,15 @@
     "saveError": "Failed to save settings. Please try again.",
     "deleteError": "Failed to delete setting. Please try again.",
     "loadError": "Failed to load settings. Please refresh the page."
+  },
+  "AvailabilityRequirement": {
+    "required": "Availability Required",
+    "set": "Availability Set",
+    "requiredMessage": "{{sellerName}} requires you to set your availability before submitting offers.",
+    "setMessage": "Your availability is configured. You can submit offers to {{sellerName}}.",
+    "setAvailability": "Set Availability",
+    "submitDisabled": "Set availability to continue",
+    "apiError": "Availability is required to submit this offer. Please set your availability first."
   },
   "MarketMultipleView": {
     "market": "Market",

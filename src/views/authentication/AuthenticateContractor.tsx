@@ -69,7 +69,7 @@ export function AuthenticateContractor() {
           value={orgName}
           onChange={(event) => {
             const input = event.target.value
-            
+
             // If it looks like a URL, try to extract the org ID
             if (isRsiUrl(input)) {
               const extractedId = extractOrgIdFromUrl(input)
@@ -78,13 +78,13 @@ export function AuthenticateContractor() {
                 return
               }
             }
-            
+
             // Otherwise, sanitize the input and convert to uppercase (remove spaces and non-alphanumeric except _ and -)
             setOrgName(sanitizeAlphanumeric(input).toUpperCase())
           }}
           onPaste={(event) => {
             const pastedText = event.clipboardData.getData("text")
-            
+
             // If pasted text is a URL, extract the ID
             if (isRsiUrl(pastedText)) {
               const extractedId = extractOrgIdFromUrl(pastedText)
@@ -94,7 +94,7 @@ export function AuthenticateContractor() {
                 return
               }
             }
-            
+
             // If pasted text contains non-alphanumeric (except _ and -), sanitize it
             if (!/^[a-zA-Z0-9_-]*$/.test(pastedText)) {
               event.preventDefault()

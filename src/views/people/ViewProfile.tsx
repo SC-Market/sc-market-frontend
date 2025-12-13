@@ -347,10 +347,7 @@ export function ViewProfile(props: { profile: User }) {
   const [uploadAvatar, { isLoading: isUploadingAvatar }] =
     useProfileUploadAvatarMutation()
 
-  async function submitUpdate(data: {
-    about?: string
-    display_name?: string
-  }) {
+  async function submitUpdate(data: { about?: string; display_name?: string }) {
     const res: { data?: any; error?: any } = await updateProfile(data)
 
     if (res?.data && !res?.error) {
@@ -503,7 +500,8 @@ export function ViewProfile(props: { profile: User }) {
                               height: 80,
                               width: 80,
                               borderRadius: 4,
-                              opacity: showAvatarButton || isUploadingAvatar ? 0.5 : 1,
+                              opacity:
+                                showAvatarButton || isUploadingAvatar ? 0.5 : 1,
                               transition: "0.5s",
                             }}
                             variant={"rounded"}

@@ -18,7 +18,10 @@ import { useGetContractorAuditLogsQuery } from "../../store/contractor"
 import { useTranslation } from "react-i18next"
 import { AuditLogEntry } from "../../datatypes/Contractor"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
-import { ControlledTable, HeadCell } from "../../components/table/PaginatedTable"
+import {
+  ControlledTable,
+  HeadCell,
+} from "../../components/table/PaginatedTable"
 
 // Date formatting helper
 function formatDate(dateString: string): string {
@@ -46,7 +49,16 @@ function formatAction(action: string): string {
     .join(" ")
 }
 
-function getActionColor(action: string): "default" | "primary" | "secondary" | "error" | "info" | "success" | "warning" {
+function getActionColor(
+  action: string,
+):
+  | "default"
+  | "primary"
+  | "secondary"
+  | "error"
+  | "info"
+  | "success"
+  | "warning" {
   if (action.includes("archive") || action.includes("delete")) {
     return "error"
   }
@@ -80,7 +92,7 @@ const AUDIT_LOG_ACTIONS = [
   "discord.linked",
 ] as const
 
-type AuditLogAction = typeof AUDIT_LOG_ACTIONS[number]
+type AuditLogAction = (typeof AUDIT_LOG_ACTIONS)[number]
 
 const headCells: readonly HeadCell<AuditLogEntry & { expanded?: boolean }>[] = [
   {
@@ -182,9 +194,7 @@ export function OrgAuditLogs() {
       <Grid item xs={12}>
         <Paper>
           <Box p={3}>
-            <Typography color="error">
-              {t("orgAuditLogs.error")}
-            </Typography>
+            <Typography color="error">{t("orgAuditLogs.error")}</Typography>
           </Box>
         </Paper>
       </Grid>
@@ -324,7 +334,10 @@ export function OrgAuditLogs() {
                             <Typography variant="body2" fontWeight="bold">
                               {entry.actor.display_name}
                             </Typography>
-                            <Typography variant="caption" color="text.secondary">
+                            <Typography
+                              variant="caption"
+                              color="text.secondary"
+                            >
                               @{entry.actor.username}
                             </Typography>
                           </Box>
@@ -333,7 +346,11 @@ export function OrgAuditLogs() {
                             {entry.actor_id.substring(0, 8)}...
                           </Typography>
                         ) : (
-                          <Typography variant="body2" color="text.secondary" fontStyle="italic">
+                          <Typography
+                            variant="body2"
+                            color="text.secondary"
+                            fontStyle="italic"
+                          >
                             {t("orgAuditLogs.system")}
                           </Typography>
                         )}
@@ -347,7 +364,11 @@ export function OrgAuditLogs() {
                     {isExpanded && hasMetadata && (
                       <TableRow>
                         <TableCell colSpan={4} sx={{ py: 0 }}>
-                          <Collapse in={isExpanded} timeout="auto" unmountOnExit>
+                          <Collapse
+                            in={isExpanded}
+                            timeout="auto"
+                            unmountOnExit
+                          >
                             <Box sx={{ margin: 2 }}>
                               <Typography variant="subtitle2" gutterBottom>
                                 {t("orgAuditLogs.metadata")}
@@ -361,7 +382,9 @@ export function OrgAuditLogs() {
                                   overflow: "auto",
                                 }}
                               >
-                                <pre style={{ margin: 0, fontSize: "0.875rem" }}>
+                                <pre
+                                  style={{ margin: 0, fontSize: "0.875rem" }}
+                                >
                                   {JSON.stringify(entry.metadata, null, 2)}
                                 </pre>
                               </Paper>

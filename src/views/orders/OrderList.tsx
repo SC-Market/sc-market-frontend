@@ -35,11 +35,7 @@ import { useSearchOrdersQuery } from "../../store/orders"
 import { useGetUserProfileQuery } from "../../store/profile"
 import { useTranslation } from "react-i18next"
 import { useDebounce } from "../../hooks/useDebounce"
-import {
-  ExpandLess,
-  ExpandMore,
-  Search,
-} from "@mui/icons-material"
+import { ExpandLess, ExpandMore, Search } from "@mui/icons-material"
 
 export const statusColors = new Map<
   | "active"
@@ -285,9 +281,11 @@ export function OrdersViewPaginated(props: {
   const [filtersOpen, setFiltersOpen] = useState(false)
   const [buyerUsername, setBuyerUsername] = useState("")
   const [sellerUsername, setSellerUsername] = useState("")
-  const [hasMarketListings, setHasMarketListings] = useState<boolean | undefined>(undefined)
+  const [hasMarketListings, setHasMarketListings] = useState<
+    boolean | undefined
+  >(undefined)
   const [hasService, setHasService] = useState<boolean | undefined>(undefined)
-  
+
   // Debounce username inputs
   const debouncedBuyerUsername = useDebounce(buyerUsername, 500)
   const debouncedSellerUsername = useDebounce(sellerUsername, 500)
@@ -295,7 +293,12 @@ export function OrdersViewPaginated(props: {
   // Reset page when filters change
   useEffect(() => {
     setPage(0)
-  }, [debouncedBuyerUsername, debouncedSellerUsername, hasMarketListings, hasService])
+  }, [
+    debouncedBuyerUsername,
+    debouncedSellerUsername,
+    hasMarketListings,
+    hasService,
+  ])
 
   const { data: orders } = useSearchOrdersQuery({
     status: statusFilter === "all" ? undefined : statusFilter,
@@ -306,8 +309,10 @@ export function OrdersViewPaginated(props: {
     contractor: contractor,
     sort_method: orderBy as OrderSearchSortMethod,
     reverse_sort: order === "desc",
-    buyer_username: !mine && debouncedBuyerUsername ? debouncedBuyerUsername : undefined,
-    seller_username: mine && debouncedSellerUsername ? debouncedSellerUsername : undefined,
+    buyer_username:
+      !mine && debouncedBuyerUsername ? debouncedBuyerUsername : undefined,
+    seller_username:
+      mine && debouncedSellerUsername ? debouncedSellerUsername : undefined,
     has_market_listings: hasMarketListings,
     has_service: hasService,
   })
@@ -369,7 +374,12 @@ export function OrdersViewPaginated(props: {
     if (hasMarketListings !== undefined) count++
     if (hasService !== undefined) count++
     return count
-  }, [debouncedBuyerUsername, debouncedSellerUsername, hasMarketListings, hasService])
+  }, [
+    debouncedBuyerUsername,
+    debouncedSellerUsername,
+    hasMarketListings,
+    hasService,
+  ])
 
   const clearFilters = () => {
     setBuyerUsername("")
@@ -430,7 +440,7 @@ export function OrdersViewPaginated(props: {
             ))}
           </Tabs>
         </Stack>
-        
+
         {/* Filter Panel */}
         <Collapse in={filtersOpen}>
           <Paper sx={{ p: 1, m: 1, bgcolor: "background.default" }}>
@@ -460,7 +470,10 @@ export function OrdersViewPaginated(props: {
                       value={buyerUsername}
                       onChange={(e) => setBuyerUsername(e.target.value)}
                       size="small"
-                      placeholder={t("orders.buyer_username_placeholder", "Enter buyer username")}
+                      placeholder={t(
+                        "orders.buyer_username_placeholder",
+                        "Enter buyer username",
+                      )}
                     />
                   </Grid>
                 ) : (
@@ -471,11 +484,14 @@ export function OrdersViewPaginated(props: {
                       value={sellerUsername}
                       onChange={(e) => setSellerUsername(e.target.value)}
                       size="small"
-                      placeholder={t("orders.seller_username_placeholder", "Enter seller username or spectrum ID")}
+                      placeholder={t(
+                        "orders.seller_username_placeholder",
+                        "Enter seller username or spectrum ID",
+                      )}
                     />
                   </Grid>
                 )}
-                
+
                 {/* Has Market Listings Toggle */}
                 <Grid item xs={12} md={3}>
                   <FormControlLabel
@@ -483,14 +499,19 @@ export function OrdersViewPaginated(props: {
                       <Switch
                         checked={hasMarketListings === true}
                         onChange={(e) =>
-                          setHasMarketListings(e.target.checked ? true : undefined)
+                          setHasMarketListings(
+                            e.target.checked ? true : undefined,
+                          )
                         }
                       />
                     }
-                    label={t("orders.has_market_listings", "Has Market Listings")}
+                    label={t(
+                      "orders.has_market_listings",
+                      "Has Market Listings",
+                    )}
                   />
                 </Grid>
-                
+
                 {/* Has Service Toggle */}
                 <Grid item xs={12} md={3}>
                   <FormControlLabel
@@ -506,7 +527,7 @@ export function OrdersViewPaginated(props: {
                   />
                 </Grid>
               </Grid>
-              
+
               {/* Active Filters Chips */}
               {activeFiltersCount > 0 && (
                 <Stack direction="row" spacing={0.5} flexWrap="wrap" gap={0.5}>
@@ -526,7 +547,10 @@ export function OrdersViewPaginated(props: {
                   )}
                   {hasMarketListings !== undefined && (
                     <Chip
-                      label={t("orders.has_market_listings", "Has Market Listings")}
+                      label={t(
+                        "orders.has_market_listings",
+                        "Has Market Listings",
+                      )}
                       onDelete={() => setHasMarketListings(undefined)}
                       size="small"
                     />
@@ -543,7 +567,7 @@ export function OrdersViewPaginated(props: {
             </Stack>
           </Paper>
         </Collapse>
-        
+
         <ControlledTable
           rows={(orders?.items || []).map((o) => ({
             ...o,
