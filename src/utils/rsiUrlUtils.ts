@@ -9,14 +9,14 @@
 export function extractProfileIdFromUrl(url: string): string | null {
   try {
     const urlObj = new URL(url)
-    const pathParts = urlObj.pathname.split('/').filter(Boolean)
-    
+    const pathParts = urlObj.pathname.split("/").filter(Boolean)
+
     // Look for /citizens/ pattern (locale prefix is optional, e.g., /en/, /fr/, etc.)
-    const citizensIndex = pathParts.indexOf('citizens')
+    const citizensIndex = pathParts.indexOf("citizens")
     if (citizensIndex !== -1 && pathParts.length > citizensIndex + 1) {
       return pathParts[citizensIndex + 1]
     }
-    
+
     return null
   } catch {
     // If URL parsing fails, try regex fallback
@@ -37,14 +37,14 @@ export function extractProfileIdFromUrl(url: string): string | null {
 export function extractOrgIdFromUrl(url: string): string | null {
   try {
     const urlObj = new URL(url)
-    const pathParts = urlObj.pathname.split('/').filter(Boolean)
-    
+    const pathParts = urlObj.pathname.split("/").filter(Boolean)
+
     // Look for /orgs/ pattern (locale prefix is optional, e.g., /en/, /fr/, etc.)
-    const orgsIndex = pathParts.indexOf('orgs')
+    const orgsIndex = pathParts.indexOf("orgs")
     if (orgsIndex !== -1 && pathParts.length > orgsIndex + 1) {
       return pathParts[orgsIndex + 1]
     }
-    
+
     return null
   } catch {
     // If URL parsing fails, try regex fallback
@@ -59,7 +59,7 @@ export function extractOrgIdFromUrl(url: string): string | null {
  * Removes all spaces and other invalid characters
  */
 export function sanitizeAlphanumeric(input: string): string {
-  return input.replace(/[^a-zA-Z0-9_-]/g, '')
+  return input.replace(/[^a-zA-Z0-9_-]/g, "")
 }
 
 /**
@@ -68,5 +68,7 @@ export function sanitizeAlphanumeric(input: string): string {
  */
 export function isRsiUrl(str: string): boolean {
   // Matches robertsspaceindustries.com with optional locale prefix before /citizens/ or /orgs/
-  return /robertsspaceindustries\.com.*\/(?:[a-z]{2,5}\/)?(citizens|orgs)\//i.test(str)
+  return /robertsspaceindustries\.com.*\/(?:[a-z]{2,5}\/)?(citizens|orgs)\//i.test(
+    str,
+  )
 }

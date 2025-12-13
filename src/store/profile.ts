@@ -108,7 +108,12 @@ export const userApi = serviceApi.injectEndpoints({
         method: "POST",
         body,
       }),
-      invalidatesTags: [{ type: "MyProfile" as const }, "MyProfile" as const],
+      invalidatesTags: [
+        { type: "MyProfile" as const },
+        "MyProfile" as const,
+        // Invalidate all availability requirement checks so forms can re-enable submit buttons
+        { type: "AvailabilityRequirement" as const },
+      ],
     }),
     profileUpdateProfile: builder.mutation<
       UserProfileState,

@@ -133,9 +133,7 @@ export function OrgDetailEditForm(props: { contractor: Contractor }) {
     return false
   }
 
-  function handleAvatarUpload(
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) {
+  function handleAvatarUpload(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0]
     if (!file) return
 
@@ -172,9 +170,7 @@ export function OrgDetailEditForm(props: { contractor: Contractor }) {
       })
   }
 
-  function handleBannerUpload(
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) {
+  function handleBannerUpload(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0]
     if (!file) return
 

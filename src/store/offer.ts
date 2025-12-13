@@ -230,11 +230,16 @@ export const offersApi = serviceApi.injectEndpoints({
       invalidatesTags: (result, error, arg) => {
         const mergedId = result?.merged_offer_session?.id
         return [
-          ...arg.offer_session_ids.map((id) => ({ type: "Offer" as const, id })),
+          ...arg.offer_session_ids.map((id) => ({
+            type: "Offer" as const,
+            id,
+          })),
           mergedId ? ({ type: "Offer" as const, id: mergedId } as const) : null,
           "Offers" as const,
           "Offer" as const,
-        ].filter(Boolean) as { type: "Offer"; id?: string }[] | ("Offers" | "Offer")[]
+        ].filter(Boolean) as
+          | { type: "Offer"; id?: string }[]
+          | ("Offers" | "Offer")[]
       },
       transformResponse: unwrapResponse,
     }),

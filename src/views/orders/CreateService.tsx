@@ -399,7 +399,9 @@ export function CreateServiceForm(props: GridProps & { service?: Service }) {
           .unwrap()
           .then(async (result) => {
             const serviceId = result.service_id
-            console.log(`[Service Photo Upload] Service creation successful: ${serviceId}`)
+            console.log(
+              `[Service Photo Upload] Service creation successful: ${serviceId}`,
+            )
 
             // Upload any pending files if they exist
             if (uploadedFiles.length > 0) {

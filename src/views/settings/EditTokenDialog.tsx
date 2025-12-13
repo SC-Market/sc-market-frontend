@@ -130,17 +130,20 @@ export function EditTokenDialog({
   const { data: profile } = useGetUserProfileQuery()
   const contractors = profile?.contractors || []
   const isAdmin = profile?.role === "admin"
-  
+
   // Filter scopes based on user role - admins can see all, non-admins can't see admin/moderation scopes
-  const allScopes = Object.values(SCOPE_CATEGORIES).flatMap(cat => cat.scopes.map(s => s.value))
-  const availableScopes: string[] = isAdmin ? 
-    allScopes :
-    allScopes.filter(scope => 
-      !scope.startsWith("admin:") && 
-      scope !== "admin" &&
-      scope !== "moderation:read" &&
-      scope !== "moderation:write"
-    )
+  const allScopes = Object.values(SCOPE_CATEGORIES).flatMap((cat) =>
+    cat.scopes.map((s) => s.value),
+  )
+  const availableScopes: string[] = isAdmin
+    ? allScopes
+    : allScopes.filter(
+        (scope) =>
+          !scope.startsWith("admin:") &&
+          scope !== "admin" &&
+          scope !== "moderation:read" &&
+          scope !== "moderation:write",
+      )
 
   const [formData, setFormData] = useState({
     name: "",
@@ -165,13 +168,14 @@ export function EditTokenDialog({
           : []
 
       // Filter out admin/moderation scopes for non-admin users
-      const scopesToShow = isAdmin 
-        ? token.scopes 
-        : token.scopes.filter(scope => 
-            !scope.startsWith("admin:") && 
-            scope !== "admin" &&
-            scope !== "moderation:read" &&
-            scope !== "moderation:write"
+      const scopesToShow = isAdmin
+        ? token.scopes
+        : token.scopes.filter(
+            (scope) =>
+              !scope.startsWith("admin:") &&
+              scope !== "admin" &&
+              scope !== "moderation:read" &&
+              scope !== "moderation:write",
           )
 
       setFormData({
@@ -299,25 +303,26 @@ export function EditTokenDialog({
             {Object.entries(SCOPE_CATEGORIES).map(
               ([category, { label, scopes }]) => {
                 // Filter scopes based on availability only (no showing admin scopes to non-admins)
-                const filteredScopes = scopes.filter(scope => 
-                  availableScopes.includes(scope.value)
+                const filteredScopes = scopes.filter((scope) =>
+                  availableScopes.includes(scope.value),
                 )
-                
+
                 // Don't render category if no scopes are available
                 if (filteredScopes.length === 0) return null
-                
+
                 return (
                   <Box key={category} sx={{ mb: 3 }}>
                     <Typography variant="subtitle1" gutterBottom>
                       {label}
-                      {!isAdmin && (category === "admin" || category === "moderation") && (
-                        <Chip 
-                          label="Admin Only" 
-                          size="small" 
-                          color="warning" 
-                          sx={{ ml: 1 }}
-                        />
-                      )}
+                      {!isAdmin &&
+                        (category === "admin" || category === "moderation") && (
+                          <Chip
+                            label="Admin Only"
+                            size="small"
+                            color="warning"
+                            sx={{ ml: 1 }}
+                          />
+                        )}
                     </Typography>
                     <FormGroup>
                       {filteredScopes.map(({ value, label: scopeLabel }) => (

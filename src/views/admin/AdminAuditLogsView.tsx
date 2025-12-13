@@ -17,7 +17,10 @@ import { ExpandMore, ExpandLess } from "@mui/icons-material"
 import { useGetAdminAuditLogsQuery } from "../../store/contractor"
 import { useTranslation } from "react-i18next"
 import { AuditLogEntry } from "../../datatypes/Contractor"
-import { ControlledTable, HeadCell } from "../../components/table/PaginatedTable"
+import {
+  ControlledTable,
+  HeadCell,
+} from "../../components/table/PaginatedTable"
 
 // Date formatting helper
 function formatDate(dateString: string): string {
@@ -45,7 +48,16 @@ function formatAction(action: string): string {
     .join(" ")
 }
 
-function getActionColor(action: string): "default" | "primary" | "secondary" | "error" | "info" | "success" | "warning" {
+function getActionColor(
+  action: string,
+):
+  | "default"
+  | "primary"
+  | "secondary"
+  | "error"
+  | "info"
+  | "success"
+  | "warning" {
   if (action.includes("archive") || action.includes("delete")) {
     return "error"
   }
@@ -79,7 +91,7 @@ const AUDIT_LOG_ACTIONS = [
   "discord.linked",
 ] as const
 
-type AuditLogAction = typeof AUDIT_LOG_ACTIONS[number]
+type AuditLogAction = (typeof AUDIT_LOG_ACTIONS)[number]
 
 const headCells: readonly HeadCell<AuditLogEntry & { expanded?: boolean }>[] = [
   {
@@ -196,9 +208,7 @@ export function AdminAuditLogsView() {
       <Grid item xs={12}>
         <Paper>
           <Box p={3}>
-            <Typography color="error">
-              {t("adminAuditLogs.error")}
-            </Typography>
+            <Typography color="error">{t("adminAuditLogs.error")}</Typography>
           </Box>
         </Paper>
       </Grid>
@@ -358,7 +368,10 @@ export function AdminAuditLogsView() {
                             <Typography variant="body2" fontWeight="bold">
                               {entry.actor.display_name}
                             </Typography>
-                            <Typography variant="caption" color="text.secondary">
+                            <Typography
+                              variant="caption"
+                              color="text.secondary"
+                            >
                               @{entry.actor.username}
                             </Typography>
                           </Box>
@@ -367,7 +380,11 @@ export function AdminAuditLogsView() {
                             {entry.actor_id.substring(0, 8)}...
                           </Typography>
                         ) : (
-                          <Typography variant="body2" color="text.secondary" fontStyle="italic">
+                          <Typography
+                            variant="body2"
+                            color="text.secondary"
+                            fontStyle="italic"
+                          >
                             {t("adminAuditLogs.system")}
                           </Typography>
                         )}
@@ -378,18 +395,27 @@ export function AdminAuditLogsView() {
                             <Typography variant="body2" fontWeight="bold">
                               {entry.contractor.name}
                             </Typography>
-                            <Typography variant="caption" color="text.secondary">
+                            <Typography
+                              variant="caption"
+                              color="text.secondary"
+                            >
                               {entry.contractor.spectrum_id}
                             </Typography>
                           </Box>
                         ) : (
-                          <Typography variant="body2" color="text.secondary" fontStyle="italic">
+                          <Typography
+                            variant="body2"
+                            color="text.secondary"
+                            fontStyle="italic"
+                          >
                             {t("adminAuditLogs.no_contractor")}
                           </Typography>
                         )}
                       </TableCell>
                       <TableCell>
-                        <Typography variant="body2">{entry.subject_type}</Typography>
+                        <Typography variant="body2">
+                          {entry.subject_type}
+                        </Typography>
                         <Typography variant="caption" color="text.secondary">
                           {entry.subject_id.substring(0, 8)}...
                         </Typography>
@@ -403,7 +429,11 @@ export function AdminAuditLogsView() {
                     {isExpanded && hasMetadata && (
                       <TableRow>
                         <TableCell colSpan={6} sx={{ py: 0 }}>
-                          <Collapse in={isExpanded} timeout="auto" unmountOnExit>
+                          <Collapse
+                            in={isExpanded}
+                            timeout="auto"
+                            unmountOnExit
+                          >
                             <Box sx={{ margin: 2 }}>
                               <Typography variant="subtitle2" gutterBottom>
                                 {t("adminAuditLogs.metadata")}
@@ -417,7 +447,9 @@ export function AdminAuditLogsView() {
                                   overflow: "auto",
                                 }}
                               >
-                                <pre style={{ margin: 0, fontSize: "0.875rem" }}>
+                                <pre
+                                  style={{ margin: 0, fontSize: "0.875rem" }}
+                                >
                                   {JSON.stringify(entry.metadata, null, 2)}
                                 </pre>
                               </Paper>
