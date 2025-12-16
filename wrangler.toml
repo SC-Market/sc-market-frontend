@@ -1,0 +1,23 @@
+name = "sc-market-frontend"
+compatibility_date = "2024-01-01"
+
+# Cloudflare Pages configuration
+pages_build_output_dir = "dist"
+
+# Environment variables (set via Cloudflare Dashboard or wrangler secret put)
+# [vars]
+# VITE_API_URL = "https://api.sc-market.space"
+
+# Custom domain (configure in Cloudflare Dashboard)
+# routes = [
+#   { pattern = "sc-market.space/*", zone_name = "sc-market.space" },
+#   { pattern = "www.sc-market.space/*", zone_name = "sc-market.space" }
+# ]
+
+# Headers configuration (can also use public/_headers file)
+# [[pages.headers]]
+# for = "/*"
+# [pages.headers.values]
+# X-Frame-Options = "DENY"
+# X-Content-Type-Options = "nosniff"
+# Referrer-Policy = "strict-origin-when-cross-origin"
