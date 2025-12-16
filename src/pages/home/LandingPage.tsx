@@ -45,6 +45,8 @@ import CharLogo from "../../assets/CharHoldings_Logo.png"
 import UNNLogo from "../../assets/UNN_Traders_Logo.jpg"
 import BirdIncLogo from "../../assets/birdinc.jpg"
 import { useTranslation } from "react-i18next"
+import { useGetUserProfileQuery } from "../../store/profile"
+import { LoginArea } from "../../views/authentication/LoginArea"
 
 const bg = "https://media.tenor.com/4LKXThFQuHMAAAAd/perseus-star-citizen.gif"
 
@@ -207,6 +209,7 @@ export function OrderStatistics() {
 export function LandingPage() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
+  const profile = useGetUserProfileQuery()
 
   return (
     <Page>
@@ -245,21 +248,24 @@ export function LandingPage() {
           >
             {/* corrected central block text */}
             <Container
+              maxWidth="lg"
               sx={{
                 display: "flex",
-                flexDirection: "column",
+                flexDirection: { xs: "column", sm: "column", md: "row" },
                 alignItems: "center",
                 justifyContent: "center",
-                textAlign: "center",
-                padding: 0,
-                margin: 0,
+                gap: theme.spacing(4),
               }}
             >
               <Stack
                 justifyContent="center"
                 alignItems="center"
                 flexDirection="column"
-                sx={{ width: "100%", textAlign: "center" }}
+                sx={{
+                  width: "100%",
+                  textAlign: "center",
+                  flex: { xs: "1 1 auto", md: "0 1 auto" },
+                }}
               >
                 <Avatar
                   sx={{
@@ -285,6 +291,19 @@ export function LandingPage() {
                   {t("landing.subtitle")}
                 </Typography>
               </Stack>
+              {!profile.data && (
+                <Box
+                  sx={{
+                    width: { xs: "100%", md: "auto" },
+                    maxWidth: { xs: "100%", md: 480 },
+                    flex: { xs: "1 1 auto", md: "0 1 auto" },
+                  }}
+                >
+                  <Grid container spacing={2} justifyContent="center">
+                    <LoginArea />
+                  </Grid>
+                </Box>
+              )}
             </Container>
           </Box>
           <Container>

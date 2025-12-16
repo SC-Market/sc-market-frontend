@@ -50,6 +50,13 @@ const router = createBrowserRouter([
         }),
       },
       {
+        path: "/login",
+        lazy: async () => ({
+          Component: (await import("./pages/authentication/LoginPage"))
+            .LoginPage,
+        }),
+      },
+      {
         path: "/offer/:id",
         lazy: async () => ({
           Component: (await import("./pages/offers/ViewOfferPage"))

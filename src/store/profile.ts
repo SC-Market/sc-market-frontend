@@ -226,6 +226,35 @@ export const userApi = serviceApi.injectEndpoints({
         { type: "Contractor", id: arg },
       ],
     }),
+    profileGetLinks: builder.query<
+      Array<{
+        provider_type: string
+        provider_id: string
+        is_primary: boolean
+        linked_at: string
+        last_used_at: string | null
+      }>,
+      void
+    >({
+      query: () => `${baseUrl}/links`,
+      transformResponse: (response: { data: { providers: any[] } }) =>
+        response.data.providers,
+      providesTags: [{ type: "MyProfile" as const }, "MyProfile" as const],
+    }),
+    profileUnlinkProvider: builder.mutation<void, { provider_type: string }>({
+      query: (body) => ({
+        url: `${baseUrl}/links/${body.provider_type}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: [{ type: "MyProfile" as const }, "MyProfile" as const],
+    }),
+    profileSetPrimaryProvider: builder.mutation<void, { provider_type: string }>({
+      query: (body) => ({
+        url: `${baseUrl}/links/${body.provider_type}/primary`,
+        method: "PUT",
+      }),
+      invalidatesTags: [{ type: "MyProfile" as const }, "MyProfile" as const],
+    }),
     profileSyncHandle: builder.mutation<UserProfileState, void>({
       query: () => ({
         url: `${baseUrl}/auth/sync-handle`,
@@ -298,10 +327,10 @@ export const useProfileCreateWebhook =
   userApi.endpoints.profileCreateWebhook.useMutation
 export const useProfileDeleteWebhook =
   userApi.endpoints.profileDeleteWebhook.useMutation
-export const useUpdateProfile =
-  userApi.endpoints.profileUpdateProfile.useMutation
 export const useProfileUpdateLocale =
   userApi.endpoints.profileUpdateLocale.useMutation
+export const useUpdateProfile =
+  userApi.endpoints.profileUpdateProfile.useMutation
 
 export const {
   useProfileUpdateSettingsMutation,
@@ -317,4 +346,7 @@ export const {
   useProfileUnblockUserMutation,
   useProfileUploadAvatarMutation,
   useProfileUploadBannerMutation,
+  useProfileGetLinksQuery,
+  useProfileUnlinkProviderMutation,
+  useProfileSetPrimaryProviderMutation,
 } = userApi

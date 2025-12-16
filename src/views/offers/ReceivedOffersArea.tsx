@@ -342,10 +342,10 @@ export function OffersViewPaginated(props: {
     [data],
   )
 
-  const handleMergeOffers = async () => {
+  const handleMergeOffers = () => {
     if (selectedOfferIds.length < 2) return
 
-    const result = await mergeOffers({
+    mergeOffers({
       offer_session_ids: selectedOfferIds,
     })
       .unwrap()

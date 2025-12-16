@@ -22,7 +22,7 @@ export function Profile() {
     <Page
       title={
         user.data?.display_name
-          ? `${user.data?.display_name} - ${t("profile.viewUserProfile")}`
+          ? `${user.data?.display_name} - ${t("viewProfile.profile_tab")}`
           : null
       }
     >
