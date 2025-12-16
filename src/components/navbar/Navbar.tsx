@@ -1,4 +1,11 @@
-import { AppBar, IconButton, Toolbar, Tooltip, Typography } from "@mui/material"
+import {
+  AppBar,
+  Button,
+  IconButton,
+  Toolbar,
+  Tooltip,
+  Typography,
+} from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import React from "react"
@@ -7,8 +14,9 @@ import { NotificationsButton } from "./NotificationsButton"
 import { MenuRounded } from "@mui/icons-material"
 import { ProfileNavAvatar } from "../../views/people/ProfileNavAvatar"
 import { useGetUserProfileQuery } from "../../store/profile"
-import { DiscordLoginButton } from "../button/DiscordLoginButton"
 import { useTranslation } from "react-i18next"
+import { Stack } from "@mui/system"
+import { Link as RouterLink } from "react-router-dom"
 
 export function Navbar(props: { children?: React.ReactNode }) {
   const theme: ExtendedTheme = useTheme()
@@ -106,7 +114,16 @@ export function Navbar(props: { children?: React.ReactNode }) {
             <ProfileNavAvatar />
           </React.Fragment>
         ) : (
-          <DiscordLoginButton />
+          <Stack direction="row" spacing={1}>
+            <Button
+              component={RouterLink}
+              to="/login"
+              variant="contained"
+              color="primary"
+            >
+              {t("auth.signIn", "Sign in")}
+            </Button>
+          </Stack>
         )}
       </Toolbar>
     </AppBar>

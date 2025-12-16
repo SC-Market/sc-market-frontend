@@ -30,10 +30,10 @@ import { FilterAltRounded, SearchRounded } from "@mui/icons-material"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
 import { NotificationsButton } from "./NotificationsButton"
 import { ProfileNavAvatar } from "../../views/people/ProfileNavAvatar"
-import { DiscordLoginButton } from "../button/DiscordLoginButton"
 import { useGetUserProfileQuery } from "../../store/profile"
+import { Stack } from "@mui/system"
 import { useMarketSidebar } from "../../hooks/market/MarketSidebar"
-import { useSearchParams } from "react-router-dom"
+import { Link as RouterLink, useSearchParams } from "react-router-dom"
 import {
   SaleTypeSelect,
   useMarketSearch,
@@ -327,7 +327,16 @@ export function MarketNavArea(props: { top?: boolean }) {
                 <ProfileNavAvatar />
               </Box>
             ) : (
-              <DiscordLoginButton />
+              <Stack direction="row" spacing={1}>
+                <Button
+                  component={RouterLink}
+                  to="/login"
+                  variant="contained"
+                  color="primary"
+                >
+                  {t("auth.signIn", "Sign in")}
+                </Button>
+              </Stack>
             )}
           </Grid>
         )}

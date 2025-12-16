@@ -24,7 +24,7 @@ import { LightThemeContext, ThemeChoice } from "./styles/LightTheme"
 import { useCookies } from "react-cookie"
 import { CURRENT_CUSTOM_ORG } from "./contractor/CustomDomain"
 import { CUSTOM_THEMES } from "./styles/custom_themes"
-import { useLocation } from "react-router-dom"
+import { useLocation, useSearchParams } from "react-router-dom"
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment"
 
@@ -42,7 +42,8 @@ export function HookProvider(props: { children: React.ReactElement }) {
     cookies.theme || (prefersLight ? "light" : "dark"),
   )
   const location = useLocation()
-  const { i18n } = useTranslation()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const { i18n, t } = useTranslation()
 
   const baseTheme = useMemo(() => {
     if (CURRENT_CUSTOM_ORG) {
@@ -62,6 +63,28 @@ export function HookProvider(props: { children: React.ReactElement }) {
   useEffect(() => {
     setCookie("theme", useLightTheme, { path: "/", sameSite: "strict" })
   }, [useLightTheme, setCookie])
+
+  // Surface Citizen ID login/link errors coming back via query params
+  useEffect(() => {
+    const error = searchParams.get("error")
+    if (error === "citizenid_account_not_verified") {
+      const errorDescription =
+        searchParams.get("error_description") ||
+        t(
+          "auth.citizenidAccountNotVerified",
+          "Your Citizen ID account must be verified to sign up or log in.",
+        )
+
+      issueAlert({
+        severity: "error",
+        message: errorDescription,
+      })
+
+      searchParams.delete("error")
+      searchParams.delete("error_description")
+      setSearchParams(searchParams, { replace: true })
+    }
+  }, [searchParams, setSearchParams, issueAlert, t])
 
   // Add useEffect to support the moment.js language
   useEffect(() => {
