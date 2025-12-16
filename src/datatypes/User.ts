@@ -16,6 +16,10 @@ export interface User {
   }[]
   profile_description: string
   rating: Rating
+  badges?: {
+    badge_ids: string[]
+    metadata: any
+  } | null
   discord_profile?: {
     id: string
     discriminator: string
@@ -31,6 +35,10 @@ export interface MinimalUser {
   display_name: string
   avatar: string
   rating: Rating
+  badges?: {
+    badge_ids: string[]
+    metadata: any
+  } | null
   discord_profile?: {
     id: string
     discriminator: string

@@ -69,6 +69,10 @@ export interface BaseMarketListingSearchResult {
   title: string
   photo: string
   internal: boolean
+  badges?: {
+    badge_ids: string[]
+    metadata: any
+  } | null
 }
 
 export type ExtendedUniqueSearchResult = BaseMarketListingSearchResult & {
