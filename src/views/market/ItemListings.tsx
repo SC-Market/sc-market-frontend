@@ -356,6 +356,8 @@ export function ItemListingBase(props: {
                     total_orders={listing.total_orders}
                     total_assignments={listing.total_assignments}
                     response_rate={listing.response_rate}
+                    badge_ids={listing.badges?.badge_ids || null}
+                    display_limit={3}
                   />
                 </Typography>
               </Stack>
@@ -1589,8 +1591,8 @@ export const completeToSearchResult = (
     rating_count: rating.rating_count,
     rating_streak: rating.streak,
     total_orders: listing.stats?.order_count || 0,
-    total_assignments: rating.total_assignments,
-    response_rate: rating.response_rate,
+    total_assignments: rating.total_assignments || 0,
+    response_rate: rating.response_rate || 0,
     title: listing.details.title,
     photo: listing.photos[0] || "",
     internal: false,

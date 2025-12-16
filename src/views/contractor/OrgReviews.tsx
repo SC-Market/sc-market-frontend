@@ -22,7 +22,7 @@ import { styled, useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { amber } from "@mui/material/colors"
-import { SellerRatingStars } from "../../components/rating/ListingRating"
+import { SellerRatingStars, SellerRatingCount } from "../../components/rating/ListingRating"
 import { useTranslation } from "react-i18next"
 
 function ReviewRow(props: {
@@ -265,6 +265,11 @@ export function ReviewSummaryArea(props: {
           <SellerRatingStars
             contractor={target as Contractor}
             user={target as MinimalUser}
+          />
+          <SellerRatingCount
+            contractor={target as Contractor}
+            user={target as MinimalUser}
+            display_limit={undefined}
           />
           <Typography variant={"body1"} color={"text.primary"}>
             {target.rating.rating_count} {t("orderReviewArea.review")}

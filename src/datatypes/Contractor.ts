@@ -37,9 +37,9 @@ export interface Rating {
   rating_count: number
   total_rating: number
   streak: number
-  total_orders: number
-  response_rate: number
-  total_assignments: number
+  total_orders?: number // Optional - available in badge metadata
+  response_rate?: number // Optional - available in badge metadata
+  total_assignments?: number // Optional - available in badge metadata
 }
 
 export interface Contractor {
@@ -48,6 +48,10 @@ export interface Contractor {
   banner: string
   site_url?: string
   rating: Rating
+  badges?: {
+    badge_ids: string[]
+    metadata: any
+  } | null
   size: number
   name: string
   description: string
@@ -69,6 +73,10 @@ export interface MinimalContractor {
   name: string
   spectrum_id: string
   rating: Rating
+  badges?: {
+    badge_ids: string[]
+    metadata: any
+  } | null
   role?: string
   role_id?: string
 }
