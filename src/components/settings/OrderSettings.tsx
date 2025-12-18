@@ -11,6 +11,10 @@ import {
   Alert,
   CircularProgress,
   Divider,
+  RadioGroup,
+  Radio,
+  FormControl,
+  FormLabel,
 } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import {
@@ -40,9 +44,14 @@ export function OrderSettings({ entityType, entityId }: OrderSettingsProps) {
   const [orderEnabled, setOrderEnabled] = useState(true)
   const [requireAvailabilityEnabled, setRequireAvailabilityEnabled] =
     useState(false)
+  const [stockSubtractionTiming, setStockSubtractionTiming] = useState<
+    "on_accepted" | "on_received" | "dont_subtract"
+  >("on_accepted")
   const [offerSettingId, setOfferSettingId] = useState<string | null>(null)
   const [orderSettingId, setOrderSettingId] = useState<string | null>(null)
   const [requireAvailabilitySettingId, setRequireAvailabilitySettingId] =
+    useState<string | null>(null)
+  const [stockSubtractionTimingSettingId, setStockSubtractionTimingSettingId] =
     useState<string | null>(null)
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -108,6 +117,24 @@ export function OrderSettings({ entityType, entityId }: OrderSettingsProps) {
       if (requireAvailabilitySetting) {
         setRequireAvailabilityEnabled(requireAvailabilitySetting.enabled)
         setRequireAvailabilitySettingId(requireAvailabilitySetting.id)
+      }
+
+      const stockSubtractionTimingSetting = settings.find(
+        (s) => s.setting_type === "stock_subtraction_timing",
+      )
+
+      if (stockSubtractionTimingSetting) {
+        // If setting exists, use its value (on_received or dont_subtract)
+        setStockSubtractionTiming(
+          (stockSubtractionTimingSetting.message_content as
+            | "on_received"
+            | "dont_subtract") || "on_received",
+        )
+        setStockSubtractionTimingSettingId(stockSubtractionTimingSetting.id)
+      } else {
+        // No setting = default to "on_accepted"
+        setStockSubtractionTiming("on_accepted")
+        setStockSubtractionTimingSettingId(null)
       }
     }
   }, [settings])
@@ -234,6 +261,60 @@ export function OrderSettings({ entityType, entityId }: OrderSettingsProps) {
         setRequireAvailabilitySettingId(null)
       }
 
+      // Handle stock subtraction timing
+      if (stockSubtractionTiming === "on_accepted") {
+        // "on_accepted" is the default - delete setting if it exists
+        if (stockSubtractionTimingSettingId) {
+          if (entityType === "user") {
+            await deleteUserSetting(stockSubtractionTimingSettingId).unwrap()
+          } else {
+            await deleteContractorSetting({
+              contractorId: entityId!,
+              id: stockSubtractionTimingSettingId,
+            }).unwrap()
+          }
+          setStockSubtractionTimingSettingId(null)
+        }
+        // If no setting exists, nothing to do (already at default)
+      } else {
+        // "on_received" or "dont_subtract" - create or update setting
+        const request: CreateOrderSettingRequest = {
+          setting_type: "stock_subtraction_timing",
+          message_content: stockSubtractionTiming,
+          enabled: true,
+        }
+
+        if (stockSubtractionTimingSettingId) {
+          // Update existing
+          if (entityType === "user") {
+            await updateUserSetting({
+              id: stockSubtractionTimingSettingId,
+              message_content: stockSubtractionTiming,
+              enabled: true,
+            }).unwrap()
+          } else {
+            await updateContractorSetting({
+              contractorId: entityId!,
+              id: stockSubtractionTimingSettingId,
+              message_content: stockSubtractionTiming,
+              enabled: true,
+            }).unwrap()
+          }
+        } else {
+          // Create new
+          if (entityType === "user") {
+            const result = await createUserSetting(request).unwrap()
+            setStockSubtractionTimingSettingId(result.setting.id)
+          } else {
+            const result = await createContractorSetting({
+              contractorId: entityId!,
+              ...request,
+            }).unwrap()
+            setStockSubtractionTimingSettingId(result.setting.id)
+          }
+        }
+      }
+
       setSuccess(t("OrderSettings.savedSuccessfully"))
     } catch (err: any) {
       const errorMessage =
@@ -252,7 +333,11 @@ export function OrderSettings({ entityType, entityId }: OrderSettingsProps) {
   }
 
   const handleDelete = async (
-    settingType: "offer_message" | "order_message" | "require_availability",
+    settingType:
+      | "offer_message"
+      | "order_message"
+      | "require_availability"
+      | "stock_subtraction_timing",
   ) => {
     if (!confirm(t("OrderSettings.confirmDelete"))) return
 
@@ -265,7 +350,9 @@ export function OrderSettings({ entityType, entityId }: OrderSettingsProps) {
           ? offerSettingId
           : settingType === "order_message"
             ? orderSettingId
-            : requireAvailabilitySettingId
+            : settingType === "require_availability"
+              ? requireAvailabilitySettingId
+              : stockSubtractionTimingSettingId
 
       if (settingId) {
         if (entityType === "user") {
@@ -286,9 +373,12 @@ export function OrderSettings({ entityType, entityId }: OrderSettingsProps) {
           setOrderMessage("")
           setOrderEnabled(true)
           setOrderSettingId(null)
-        } else {
+        } else if (settingType === "require_availability") {
           setRequireAvailabilityEnabled(false)
           setRequireAvailabilitySettingId(null)
+        } else {
+          setStockSubtractionTiming("on_accepted")
+          setStockSubtractionTimingSettingId(null)
         }
 
         setSuccess(t("OrderSettings.deletedSuccessfully"))
@@ -452,6 +542,52 @@ export function OrderSettings({ entityType, entityId }: OrderSettingsProps) {
 
           <Typography variant="body2" color="text.secondary">
             {t("OrderSettings.requireAvailabilityDescription")}
+          </Typography>
+        </Box>
+
+        <Divider sx={{ my: 2 }} />
+
+        {/* Stock Subtraction Timing Setting */}
+        <Box mb={3}>
+          <Typography variant="subtitle1" gutterBottom>
+            {t("OrderSettings.stockSubtractionTiming")}
+          </Typography>
+
+          <FormControl component="fieldset" disabled={saving} sx={{ mb: 1 }}>
+            <FormLabel component="legend">
+              {t("OrderSettings.stockSubtractionTimingLabel")}
+            </FormLabel>
+            <RadioGroup
+              value={stockSubtractionTiming}
+              onChange={(e) =>
+                setStockSubtractionTiming(
+                  e.target.value as
+                    | "on_accepted"
+                    | "on_received"
+                    | "dont_subtract",
+                )
+              }
+            >
+              <FormControlLabel
+                value="on_accepted"
+                control={<Radio />}
+                label={t("OrderSettings.stockSubtractionOnAccepted")}
+              />
+              <FormControlLabel
+                value="on_received"
+                control={<Radio />}
+                label={t("OrderSettings.stockSubtractionOnReceived")}
+              />
+              <FormControlLabel
+                value="dont_subtract"
+                control={<Radio />}
+                label={t("OrderSettings.stockSubtractionDontSubtract")}
+              />
+            </RadioGroup>
+          </FormControl>
+
+          <Typography variant="body2" color="text.secondary">
+            {t("OrderSettings.stockSubtractionTimingDescription")}
           </Typography>
         </Box>
 
