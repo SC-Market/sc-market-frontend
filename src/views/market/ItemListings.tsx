@@ -1583,7 +1583,7 @@ export const completeToSearchResult = (
     quantity_available: listing.listing.quantity_available,
     timestamp: listing.listing.timestamp || "",
     total_rating: rating.total_rating,
-    avg_rating: rating.avg_rating / 5,
+    avg_rating: rating.avg_rating, // Already in 0-5 scale, no division needed
     details_id: listing.listing.listing_id,
     status: listing.listing.status,
     user_seller: listing.listing.user_seller?.username || null,

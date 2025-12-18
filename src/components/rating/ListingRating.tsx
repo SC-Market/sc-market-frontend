@@ -253,7 +253,7 @@ function BadgeDisplay(props: { badges: string[] }) {
   const gradientId = `linearColors-${Math.random().toString(36).substr(2, 9)}`
 
   return (
-    <>
+    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5, alignItems: "center" }}>
       {/* Rating badges */}
       {badges.includes(BADGE_RATING_99_9) && (
         <Tooltip title={t("listing.99_9PercentRating25PlusTransactions")}>
@@ -489,6 +489,6 @@ function BadgeDisplay(props: { badges: string[] }) {
           <AccessTimeRounded color={"success"} />
         </Tooltip>
       )}
-    </>
+    </Box>
   )
 }
