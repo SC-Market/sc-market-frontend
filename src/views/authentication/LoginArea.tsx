@@ -3,6 +3,7 @@ import { Grid, Link as MuiLink, Paper, Stack, Typography } from "@mui/material"
 import { DiscordLoginButton } from "../../components/button/DiscordLoginButton"
 import { CitizenIDLoginButton } from "../../components/button/CitizenIDLoginButton"
 import { useTranslation } from "react-i18next"
+import { isCitizenIdEnabled } from "../../util/constants"
 
 export function LoginArea() {
   const { t } = useTranslation()
@@ -29,24 +30,26 @@ export function LoginArea() {
           <Typography variant="h4">
             {t("auth.signInTitle", "Sign in to SC Market")}
           </Typography>
-          <Typography variant="body1" color="text.secondary">
-            {t(
-              "auth.citizenIdBlurb",
-              "Sign in and verify with your RSI account to simplify your account management across the Star Citizen community tools using identity federation.",
-            )}
-            {" "}
-            <MuiLink
-              href="https://citizenid.space/"
-              target="_blank"
-              rel="noreferrer"
-            >
-              Citizen ID
-            </MuiLink>
-          </Typography>
+          {isCitizenIdEnabled && (
+            <Typography variant="body1" color="text.secondary">
+              {t(
+                "auth.citizenIdBlurb",
+                "Sign in and verify with your RSI account to simplify your account management across the Star Citizen community tools using identity federation.",
+              )}
+              {" "}
+              <MuiLink
+                href="https://citizenid.space/"
+                target="_blank"
+                rel="noreferrer"
+              >
+                Citizen iD
+              </MuiLink>
+            </Typography>
+          )}
         </Stack>
 
         <Stack spacing={2}>
-          <CitizenIDLoginButton />
+          {isCitizenIdEnabled && <CitizenIDLoginButton />}
           <DiscordLoginButton />
         </Stack>
       </Paper>

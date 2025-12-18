@@ -5,6 +5,7 @@ import { AuthenticateRSI } from "../authentication/AuthenticateRSI"
 import { ReVerifyProfile } from "./ReVerifyProfile"
 import { UnlinkProfile } from "./UnlinkProfile"
 import { AccountLinks } from "./AccountLinks"
+import { isCitizenIdEnabled } from "../../util/constants"
 
 export function ProfileSettings() {
   const { data: profile } = useGetUserProfileQuery()
@@ -14,9 +15,10 @@ export function ProfileSettings() {
     return <AuthenticateRSI />
   }
 
-  // Check if Citizen ID is linked - if so, hide unlink section
-  // Citizen ID is the authoritative source for RSI details when linked
-  const hasCitizenID = Array.isArray(links)
+  // Check if Citizen iD is linked - if so, hide unlink section
+  // Citizen iD is the authoritative source for RSI details when linked
+  // Only check if feature is enabled
+  const hasCitizenID = isCitizenIdEnabled && Array.isArray(links)
     ? links.some((link) => link.provider_type === "citizenid")
     : false
 

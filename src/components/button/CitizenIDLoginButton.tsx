@@ -1,4 +1,4 @@
-import { BACKEND_URL } from "../../util/constants"
+import { BACKEND_URL, isCitizenIdEnabled } from "../../util/constants"
 import { Button } from "@mui/material"
 import React from "react"
 import { useLocation } from "react-router-dom"
@@ -8,6 +8,10 @@ import { CitizenIDLogo } from "../icon/CitizenIDLogo"
 export function CitizenIDLoginButton() {
   const location = useLocation()
   const { t } = useTranslation()
+
+  if (!isCitizenIdEnabled) {
+    return null
+  }
 
   return (
     <Button
@@ -26,7 +30,7 @@ export function CitizenIDLoginButton() {
       <span id="citizenid-login-description" className="sr-only">
         {t(
           "accessibility.loginWithCitizenIDDescription",
-          "Authenticate using your Citizen ID account",
+          "Authenticate using your Citizen iD account",
         )}
       </span>
     </Button>

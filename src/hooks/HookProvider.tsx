@@ -27,6 +27,7 @@ import { CUSTOM_THEMES } from "./styles/custom_themes"
 import { useLocation, useSearchParams } from "react-router-dom"
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment"
+import { isCitizenIdEnabled } from "../util/constants"
 
 // Add moment and locale import + i18n
 import moment from "moment"
@@ -64,15 +65,18 @@ export function HookProvider(props: { children: React.ReactElement }) {
     setCookie("theme", useLightTheme, { path: "/", sameSite: "strict" })
   }, [useLightTheme, setCookie])
 
-  // Surface Citizen ID login/link errors coming back via query params
+  // Surface Citizen iD login/link errors coming back via query params
+  // Only show if feature is enabled
   useEffect(() => {
     const error = searchParams.get("error")
-    if (error === "citizenid_account_not_verified") {
+    if (!error) return
+    
+    if (isCitizenIdEnabled && error === "citizenid_account_not_verified") {
       const errorDescription =
         searchParams.get("error_description") ||
         t(
           "auth.citizenidAccountNotVerified",
-          "Your Citizen ID account must be verified to sign up or log in.",
+          "Your Citizen iD account must be verified to sign up or log in.",
         )
 
       issueAlert({

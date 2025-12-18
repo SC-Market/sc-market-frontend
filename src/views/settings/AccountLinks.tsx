@@ -28,6 +28,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle"
 import { Discord } from "../../components/icon/DiscordIcon"
 import CheckCircleIcon from "@mui/icons-material/CheckCircle"
 import { CitizenIDLogo } from "../../components/icon/CitizenIDLogo"
+import { isCitizenIdEnabled } from "../../util/constants"
 
 export function AccountLinks() {
   const { t } = useTranslation()
@@ -75,102 +76,119 @@ export function AccountLinks() {
       let message = ""
       
       // Explicit error codes from backend
-      switch (errorParam) {
-        case "citizenid_account_not_verified":
-          message = t(
-            "settings.profile.accountNotVerified",
-            "Your Citizen ID account must be verified before it can be linked. Please verify your account on Citizen ID and try again.",
-          )
-          break
-          
-        case "citizenid_username_mismatch":
-          // Build message with usernames if available
-          if (accountUsernameParam && citizenIDUsernameParam) {
-            message = t(
-              "settings.profile.usernameMismatchWithUsernames",
-              "Cannot link: Your account username does not match your Citizen ID username. Please use matching usernames to link accounts.",
-            )
-          } else if (errorDescription && errorDescription.includes('"')) {
-            message = errorDescription
-          } else {
-            message = t(
-              "settings.profile.usernameMismatch",
-              "Cannot link: Your Citizen ID username does not match your account username. Please verify your account or use a matching username.",
-            )
-          }
-          break
-          
-        case "citizenid_already_linked":
-          message = t(
-            "settings.profile.alreadyLinked",
-            "This Citizen ID account is already linked to another user.",
-          )
-          break
-          
-        case "citizenid_auth_failed":
-          message = t(
-            "settings.profile.authFailed",
-            "Authentication failed. Please try again.",
-          )
-          break
-          
-        case "citizenid_login_failed":
-          message = t(
-            "settings.profile.loginFailed",
-            "Failed to log in. Please try again.",
-          )
-          break
-          
-        case "citizenid_oauth_error":
-          message = t(
-            "settings.profile.oauthError",
-            "An error occurred during authentication. Please try again.",
-          )
-          break
-          
-        default:
-          // Fallback for legacy error codes or unknown errors
-          if (errorParam === "account_not_verified" || errorParam === "Forbidden" || errorParam === "forbidden" || errorParam === "access_denied") {
+      // Only show Citizen iD errors if feature is enabled
+      if (isCitizenIdEnabled) {
+        switch (errorParam) {
+          case "citizenid_account_not_verified":
             message = t(
               "settings.profile.accountNotVerified",
-              "Your Citizen ID account must be verified before it can be linked. Please verify your account on Citizen ID and try again.",
+              "Your Citizen iD account must be verified before it can be linked. Please verify your account on Citizen iD and try again.",
             )
-          } else if (errorParam === "auth_failed") {
+            break
+            
+          case "citizenid_username_mismatch":
+            // Build message with usernames if available
+            if (accountUsernameParam && citizenIDUsernameParam) {
+              message = t(
+                "settings.profile.usernameMismatchWithUsernames",
+                "Cannot link: Your account username does not match your Citizen iD username. Please use matching usernames to link accounts.",
+              )
+            } else if (errorDescription && errorDescription.includes('"')) {
+              message = errorDescription
+            } else {
+              message = t(
+                "settings.profile.usernameMismatch",
+                "Cannot link: Your Citizen iD username does not match your account username. Please verify your account or use a matching username.",
+              )
+            }
+            break
+            
+          case "citizenid_already_linked":
+            message = t(
+              "settings.profile.alreadyLinked",
+              "This Citizen iD account is already linked to another user.",
+            )
+            break
+            
+          case "citizenid_auth_failed":
             message = t(
               "settings.profile.authFailed",
               "Authentication failed. Please try again.",
             )
-          } else if (errorParam.includes("username") || errorParam.includes("match")) {
+            break
+            
+          case "citizenid_login_failed":
             message = t(
-              "settings.profile.usernameMismatch",
-              "Cannot link: Your Citizen ID username does not match your account username. Please verify your account or use a matching username.",
+              "settings.profile.loginFailed",
+              "Failed to log in. Please try again.",
             )
-          } else if (errorParam.includes("already linked")) {
+            break
+            
+          case "citizenid_oauth_error":
             message = t(
-              "settings.profile.alreadyLinked",
-              "This Citizen ID account is already linked to another user.",
+              "settings.profile.oauthError",
+              "An error occurred during authentication. Please try again.",
             )
-          } else {
-            // Use error description if available, otherwise use error code
-            const errorText = errorDescription || errorParam
-            message = t(
-              "settings.profile.linkingError",
-              "An error occurred while linking your account: {{error}}",
-              { error: errorText },
-            )
-          }
+            break
+            
+          default:
+            // Fallback for legacy error codes or unknown errors
+            if (errorParam === "account_not_verified" || errorParam === "Forbidden" || errorParam === "forbidden" || errorParam === "access_denied") {
+              message = t(
+                "settings.profile.accountNotVerified",
+                "Your Citizen iD account must be verified before it can be linked. Please verify your account on Citizen iD and try again.",
+              )
+            } else if (errorParam === "auth_failed") {
+              message = t(
+                "settings.profile.authFailed",
+                "Authentication failed. Please try again.",
+              )
+            } else if (errorParam.includes("username") || errorParam.includes("match")) {
+              message = t(
+                "settings.profile.usernameMismatch",
+                "Cannot link: Your Citizen iD username does not match your account username. Please verify your account or use a matching username.",
+              )
+            } else if (errorParam.includes("already linked")) {
+              message = t(
+                "settings.profile.alreadyLinked",
+                "This Citizen iD account is already linked to another user.",
+              )
+            } else {
+              // Use error description if available, otherwise use error code
+              const errorText = errorDescription || errorParam
+              message = t(
+                "settings.profile.linkingError",
+                "An error occurred while linking your account: {{error}}",
+                { error: errorText },
+              )
+            }
+        }
+      } else {
+        // If Citizen iD is disabled, show generic error for Citizen iD error codes
+        if (errorParam.startsWith("citizenid_")) {
+          message = t(
+            "settings.profile.linkingError",
+            "An error occurred while linking your account: {{error}}",
+            { error: errorDescription || errorParam },
+          )
+        }
       }
       setErrorMessage(message)
     }
   }, [errorParam, searchParams, navigate, t, accountUsername, citizenIDUsername])
 
   // Filter out RSI - it's not an authentication provider, only a verification method
+  // Also filter out Citizen iD if feature is disabled
   const authProviders = Array.isArray(links)
-    ? links.filter((link) => link.provider_type !== "rsi")
+    ? links.filter((link) => {
+        if (link.provider_type === "rsi") return false
+        if (!isCitizenIdEnabled && link.provider_type === "citizenid") return false
+        return true
+      })
     : []
   
   const hasDiscord = authProviders.some((link) => link.provider_type === "discord")
-  const hasCitizenID = authProviders.some((link) => link.provider_type === "citizenid")
+  const hasCitizenID = isCitizenIdEnabled && authProviders.some((link) => link.provider_type === "citizenid")
   const primaryProvider = authProviders.find((link) => link.is_primary)
 
   const handleUnlinkClick = (providerType: string) => {
@@ -205,7 +223,8 @@ export function AccountLinks() {
       case "discord":
         return "Discord"
       case "citizenid":
-        return "Citizen ID"
+        if (!isCitizenIdEnabled) return providerType // Fallback if somehow shown when disabled
+        return "Citizen iD"
       case "rsi":
         return "RSI"
       default:
@@ -218,6 +237,7 @@ export function AccountLinks() {
       case "discord":
         return <Discord />
       case "citizenid":
+        if (!isCitizenIdEnabled) return <AccountCircleIcon />
         return <CitizenIDLogo height={24} />
       default:
         return <AccountCircleIcon />
@@ -253,7 +273,7 @@ export function AccountLinks() {
                     </code>
                   </Typography>
                   <Typography variant="body2">
-                    <strong>{t("settings.profile.citizenIDUsername", "Citizen ID username")}:</strong>{" "}
+                    <strong>{t("settings.profile.citizenIDUsername", "Citizen iD username")}:</strong>{" "}
                     <code style={{ backgroundColor: "rgba(0,0,0,0.05)", padding: "2px 4px", borderRadius: "3px" }}>
                       {citizenIDUsername}
                     </code>
@@ -345,10 +365,10 @@ export function AccountLinks() {
                 {!hasDiscord && (
                   <DiscordLoginButton />
                 )}
-                {!hasCitizenID && (
+                {isCitizenIdEnabled && !hasCitizenID && (
                   <LinkCitizenIDButton />
                 )}
-                {hasDiscord && hasCitizenID && (
+                {hasDiscord && (!isCitizenIdEnabled || hasCitizenID) && (
                   <Typography variant="body2" color="text.secondary">
                     {t(
                       "settings.profile.allAccountsLinked",

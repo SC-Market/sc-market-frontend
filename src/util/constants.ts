@@ -4,6 +4,12 @@ export const BACKEND_URL =
   import.meta.env.VITE_BACKEND_URL || "http://localhost"
 export const WS_URL = import.meta.env.VITE_WS_URL || "ws://localhost"
 
+/**
+ * Feature flag for Citizen iD integration
+ * Enabled in development, disabled in production
+ */
+export const isCitizenIdEnabled = import.meta.env.DEV
+
 export const defaultAvatar = SCMarketLogo
 
 export const FALLBACK_IMAGE_URL =
