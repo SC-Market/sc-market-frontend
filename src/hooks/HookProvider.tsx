@@ -37,22 +37,30 @@ import { useTranslation } from "react-i18next"
 export function HookProvider(props: { children: React.ReactElement }) {
   const [alert, issueAlert] = useState<AlertInterface | null>(null)
 
-  const [cookies, setCookie] = useCookies(["theme"])
+  const [cookies, setCookie, removeCookie] = useCookies(["theme"])
   const prefersLight = useMediaQuery("(prefers-color-scheme: light)")
   const [useLightTheme, setUseLightTheme] = useState<ThemeChoice>(
-    cookies.theme || (prefersLight ? "light" : "dark"),
+    cookies.theme || "system",
   )
   const location = useLocation()
   const [searchParams, setSearchParams] = useSearchParams()
   const { i18n, t } = useTranslation()
+
+  // Determine the actual theme to use (resolves "system" to light/dark)
+  const actualTheme = useMemo(() => {
+    if (useLightTheme === "system") {
+      return prefersLight ? "light" : "dark"
+    }
+    return useLightTheme
+  }, [useLightTheme, prefersLight])
 
   const baseTheme = useMemo(() => {
     if (CURRENT_CUSTOM_ORG) {
       const theme = CUSTOM_THEMES.get(CURRENT_CUSTOM_ORG)
       if (theme) return theme
     }
-    return useLightTheme === "light" ? lightTheme : mainTheme
-  }, [useLightTheme, location.pathname])
+    return actualTheme === "light" ? lightTheme : mainTheme
+  }, [actualTheme, location.pathname])
 
   // Build a localized theme when language changes
   const localizedTheme = useMemo(() => {
@@ -62,8 +70,14 @@ export function HookProvider(props: { children: React.ReactElement }) {
   }, [baseTheme, i18n.language])
 
   useEffect(() => {
-    setCookie("theme", useLightTheme, { path: "/", sameSite: "strict" })
-  }, [useLightTheme, setCookie])
+    if (useLightTheme === "system") {
+      // Remove cookie when system is selected
+      removeCookie("theme", { path: "/" })
+    } else {
+      // Save preference when light or dark is selected
+      setCookie("theme", useLightTheme, { path: "/", sameSite: "strict" })
+    }
+  }, [useLightTheme, setCookie, removeCookie])
 
   // Surface Citizen iD login/link errors coming back via query params
   // Only show if feature is enabled

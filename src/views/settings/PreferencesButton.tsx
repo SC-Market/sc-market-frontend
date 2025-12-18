@@ -153,6 +153,9 @@ export function PreferencesButton() {
                 <ToggleButton value={"dark"} color={"primary"}>
                   {t("preferences.dark")}
                 </ToggleButton>
+                <ToggleButton value={"system"} color={"primary"}>
+                  {t("preferences.system", "System")}
+                </ToggleButton>
               </ToggleButtonGroup>
             </Grid>
 
