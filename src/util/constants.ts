@@ -8,7 +8,7 @@ export const WS_URL = import.meta.env.VITE_WS_URL || "ws://localhost"
  * Feature flag for Citizen iD integration
  * Enabled in development, disabled in production
  */
-export const isCitizenIdEnabled = import.meta.env.DEV
+export const isCitizenIdEnabled = true
 
 export const defaultAvatar = SCMarketLogo
 
