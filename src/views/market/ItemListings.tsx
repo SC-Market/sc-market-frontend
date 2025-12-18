@@ -89,7 +89,15 @@ import { RefreshRounded } from "@mui/icons-material"
 import moment from "moment/moment"
 import { Stack } from "@mui/system"
 import { formatMarketMultipleUrl, formatMarketUrl } from "../../util/urls"
-import { FALLBACK_IMAGE_URL } from "../../util/constants" // const listingIcons = {
+import { FALLBACK_IMAGE_URL } from "../../util/constants"
+import { AdCard } from "../../components/ads/AdCard"
+import { MARKET_ADS } from "../../components/ads/adConfig"
+import {
+  injectAds,
+  ListingOrAd,
+  isListing,
+  calculateRequestSize,
+} from "../../components/ads/adUtils" // const listingIcons = {
 
 export function ListingSkeleton(props: { index: number }) {
   const { index } = props
@@ -1031,10 +1039,17 @@ export function ListingBase(props: {
 }
 
 export function Listing(props: {
-  listing: MarketListingSearchResult
+  listing: MarketListingSearchResult | ListingOrAd
   index: number
 }) {
   const { listing, index } = props
+  
+  // Handle ad cards
+  if (!isListing(listing)) {
+    return <AdCard ad={listing} index={index} />
+  }
+  
+  // Handle regular listings
   if (listing.listing_type === "aggregate") {
     return (
       <AggregateListing
@@ -1066,14 +1081,33 @@ export function DisplayListings(props: {
   listings: MarketListingSearchResult[]
   loading?: boolean
   total?: number
+  startIndex?: number
 }) {
   const { t } = useTranslation()
   const [perPage, setPerPage] = useState(48)
   const [page, setPage] = useState(0)
 
-  const { listings, loading, total } = props
+  const { listings, loading, total, startIndex = 0 } = props
 
   const ref = useRef<HTMLDivElement>(null)
+
+  // Inject ads into listings array before pagination
+  // Ads are injected into the full list, then we paginate the result
+  const listingsWithAds = useMemo(() => {
+    if (loading || !listings || listings.length === 0) {
+      return []
+    }
+    // Inject ads into the full listings array
+    // startIndex accounts for any offset from parent (e.g., if parent is doing server-side pagination)
+    return injectAds(listings, MARKET_ADS, startIndex)
+  }, [listings, loading, startIndex])
+
+  // Apply client-side pagination to the listings with ads
+  const paginatedListings = useMemo(() => {
+    const start = page * perPage
+    const end = start + perPage
+    return listingsWithAds.slice(start, end)
+  }, [listingsWithAds, page, perPage])
 
   const handleChangePage = useCallback(
     (event: unknown, newPage: number) => {
@@ -1106,9 +1140,13 @@ export function DisplayListings(props: {
         ? new Array(perPage)
             .fill(undefined)
             .map((o, i) => <ListingSkeleton index={i} key={i} />)
-        : (listings || []).map((item, index) => (
-            <Listing listing={item} index={index} key={item.listing_id} />
-          ))}
+        : paginatedListings.map((item, index) => {
+            // Generate unique key for each item (listing or ad)
+            const key = isListing(item)
+              ? item.listing_id
+              : `ad-${item.id}-${index}`
+            return <Listing listing={item} index={index} key={key} />
+          })}
 
       {listings !== undefined && !listings.length && !props.loading && (
         <Grid item xs={12}>
@@ -1138,7 +1176,7 @@ export function DisplayListings(props: {
           }}
           rowsPerPageOptions={[12, 24, 48, 96]}
           component="div"
-          count={total ?? (listings?.length || 0)}
+          count={total ?? listingsWithAds.length}
           rowsPerPage={perPage}
           page={page}
           onPageChange={handleChangePage}
@@ -1155,16 +1193,32 @@ export function DisplayListings(props: {
 export function DisplayListingsMin(props: {
   listings: MarketListingSearchResult[]
   loading?: boolean
+  startIndex?: number
 }) {
+  const { listings, loading, startIndex = 0 } = props
+
+  // Inject ads into listings array
+  const listingsWithAds = useMemo(() => {
+    if (loading || !listings || listings.length === 0) {
+      return []
+    }
+    // Inject ads into the full listings array
+    return injectAds(listings, MARKET_ADS, startIndex)
+  }, [listings, loading, startIndex])
+
   return (
     <React.Fragment>
-      {props.loading
+      {loading
         ? new Array(16)
             .fill(undefined)
             .map((o, i) => <ListingSkeleton index={i} key={i} />)
-        : props.listings.map((item, index) => (
-            <Listing listing={item} index={index} key={item.listing_id} />
-          ))}
+        : listingsWithAds.map((item, index) => {
+            // Generate unique key for each item (listing or ad)
+            const key = isListing(item)
+              ? item.listing_id
+              : `ad-${item.id}-${index}`
+            return <Listing listing={item} index={index} key={key} />
+          })}
     </React.Fragment>
   )
 }
