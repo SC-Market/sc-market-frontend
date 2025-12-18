@@ -124,14 +124,14 @@ export function prioritizeBadges(
 export function calculateBadgesFromRating(rating: Rating): string[] {
   const badges: string[] = []
 
-  // Rating badges - only highest tier applies
-  if (rating.avg_rating >= 49.95 && (rating.total_orders || 0) >= 25) {
+  // Rating badges - only highest tier applies (using 0-5 scale: 4.995 = 99.9%, 4.95 = 99%, 4.75 = 95%, 4.5 = 90%)
+  if (rating.avg_rating >= 4.995 && (rating.total_orders || 0) >= 25) {
     badges.push(BADGE_RATING_99_9)
-  } else if (rating.avg_rating >= 49.5 && (rating.total_orders || 0) >= 25) {
+  } else if (rating.avg_rating >= 4.95 && (rating.total_orders || 0) >= 25) {
     badges.push(BADGE_RATING_99)
-  } else if (rating.avg_rating >= 47.5 && (rating.total_orders || 0) >= 25) {
+  } else if (rating.avg_rating >= 4.75 && (rating.total_orders || 0) >= 25) {
     badges.push(BADGE_RATING_95)
-  } else if (rating.avg_rating >= 45 && (rating.total_orders || 0) >= 25) {
+  } else if (rating.avg_rating >= 4.5 && (rating.total_orders || 0) >= 25) {
     badges.push(BADGE_RATING_90)
   }
 

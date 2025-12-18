@@ -260,7 +260,7 @@ export function ReviewSummaryArea(props: {
           }}
         >
           <Typography variant={"h3"}>
-            {(target.rating.avg_rating / 10).toFixed(1)}
+            {target.rating.avg_rating.toFixed(1)}
           </Typography>
           <SellerRatingStars
             contractor={target as Contractor}

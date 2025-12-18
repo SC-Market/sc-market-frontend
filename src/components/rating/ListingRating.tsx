@@ -146,10 +146,11 @@ export function SellerRatingStars(props: {
 }) {
   const theme = useTheme<ExtendedTheme>()
   const { user, contractor } = props
-  const rating = useMemo(
-    () => (user?.rating.avg_rating || contractor?.rating.avg_rating || 0) / 10,
-    [user, contractor],
-  )
+  const rating = useMemo(() => {
+    const avgRating = user?.rating.avg_rating || contractor?.rating.avg_rating || 0
+    // Ratings are stored in 0-5 scale, use directly (no division needed)
+    return avgRating
+  }, [user, contractor])
 
   return (
     <MuiRating
@@ -174,6 +175,7 @@ export function MarketRatingStars(props: {
   const theme = useTheme<ExtendedTheme>()
   const { rating } = props
 
+  // Market listings use 0-5 scale from market_search view
   return (
     <MuiRating
       readOnly
