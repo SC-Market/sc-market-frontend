@@ -61,7 +61,6 @@ export function injectAds(
   }
 
   const result: ListingOrAd[] = []
-  let adIndex = 0
   let displayPosition = startIndex // Track the current display position (1-indexed)
 
   // Calculate how many ads we want to show
@@ -73,8 +72,9 @@ export function injectAds(
     listings.forEach((listing) => {
       result.push(listing)
     })
-    // Add 1 ad at the end
-    const ad = adConfigs[adIndex % adConfigs.length]
+    // Add 1 ad at the end, randomly chosen
+    const randomAdIndex = Math.floor(Math.random() * adConfigs.length)
+    const ad = adConfigs[randomAdIndex]
     result.push(ad)
     return result
   }
@@ -127,9 +127,10 @@ export function injectAds(
       nextAdPositionIndex < adPositions.length &&
       displayPosition === adPositions[nextAdPositionIndex]
     ) {
-      const ad = adConfigs[adIndex % adConfigs.length]
+      // Randomly choose an ad
+      const randomAdIndex = Math.floor(Math.random() * adConfigs.length)
+      const ad = adConfigs[randomAdIndex]
       result.push(ad)
-      adIndex++
       displayPosition++ // Account for the ad we just inserted
       nextAdPositionIndex++
     }
@@ -137,7 +138,8 @@ export function injectAds(
 
   // If we didn't place any ads (shouldn't happen, but safety check), add one at the end
   if (adPositions.length === 0 && listings.length > 0) {
-    const ad = adConfigs[adIndex % adConfigs.length]
+    const randomAdIndex = Math.floor(Math.random() * adConfigs.length)
+    const ad = adConfigs[randomAdIndex]
     result.push(ad)
   }
 
