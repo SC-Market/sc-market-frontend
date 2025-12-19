@@ -39,7 +39,7 @@ export function calculateRequestSize(
 }
 
 /**
- * Inject ads into a listings array at the specified positions
+ * Inject ads into a listings array at random positions starting after position 10
  * @param listings Array of listings from the API
  * @param adConfigs Array of ad configurations to inject
  * @param startIndex Starting index for position calculation (for pagination)
@@ -63,42 +63,80 @@ export function injectAds(
   const result: ListingOrAd[] = []
   let adIndex = 0
   let displayPosition = startIndex // Track the current display position (1-indexed)
-  let adInserted = false // Track if we've inserted at least one ad
 
-  // If we have fewer listings than the ad frequency, ensure we show at least 1 ad
-  const shouldShowAtLeastOneAd = listings.length < adFrequency
+  // Calculate how many ads we want to show
+  // Target: approximately 1 ad per adFrequency listings, minimum 1
+  const targetAdCount = Math.max(1, Math.floor(listings.length / adFrequency))
+  
+  // If we have less than 10 listings, just show 1 ad at the end
+  if (listings.length < 10) {
+    listings.forEach((listing) => {
+      result.push(listing)
+    })
+    // Add 1 ad at the end
+    const ad = adConfigs[adIndex % adConfigs.length]
+    result.push(ad)
+    return result
+  }
+
+  // For 10+ listings, randomly place ads starting after position 10
+  // Generate random positions after position 10
+  const adPositions: number[] = []
+  const minSpacing = 3 // Minimum spacing between ads to avoid clustering
+  const maxAttempts = 100 // Prevent infinite loops
+  
+  // Generate random positions
+  let attempts = 0
+  while (adPositions.length < targetAdCount && attempts < maxAttempts) {
+    attempts++
+    
+    // Random position between 11 and listings.length (inclusive)
+    // We add startIndex to account for pagination offset
+    const randomPos = startIndex + 10 + Math.floor(Math.random() * (listings.length - 10)) + 1
+    
+    // Check if this position is far enough from existing ads
+    const tooClose = adPositions.some(pos => Math.abs(pos - randomPos) < minSpacing)
+    
+    if (!tooClose && randomPos <= startIndex + listings.length) {
+      adPositions.push(randomPos)
+    }
+  }
+  
+  // If we couldn't place enough ads with spacing, place them with reduced spacing
+  if (adPositions.length < targetAdCount) {
+    const remaining = targetAdCount - adPositions.length
+    for (let i = 0; i < remaining; i++) {
+      const randomPos = startIndex + 10 + Math.floor(Math.random() * (listings.length - 10)) + 1
+      if (!adPositions.includes(randomPos)) {
+        adPositions.push(randomPos)
+      }
+    }
+  }
+  
+  // Sort positions to process them in order
+  adPositions.sort((a, b) => a - b)
+
+  let nextAdPositionIndex = 0
 
   listings.forEach((listing, index) => {
     displayPosition++
     result.push(listing)
 
     // Check if we should insert an ad after this listing
-    let shouldInsertAd = false
-
-    if (shouldShowAtLeastOneAd) {
-      // If we have fewer than 24 listings, show 1 ad at position 12
-      if (!adInserted && displayPosition === 12) {
-        shouldInsertAd = true
-        adInserted = true
-      }
-    } else {
-      // Normal case: ads appear at positions 24, 48, 72, etc. (every 24 items)
-      if (displayPosition % adFrequency === 0) {
-        shouldInsertAd = true
-        adInserted = true
-      }
-    }
-
-    if (shouldInsertAd) {
+    if (
+      nextAdPositionIndex < adPositions.length &&
+      displayPosition === adPositions[nextAdPositionIndex]
+    ) {
       const ad = adConfigs[adIndex % adConfigs.length]
       result.push(ad)
       adIndex++
       displayPosition++ // Account for the ad we just inserted
+      nextAdPositionIndex++
     }
   })
 
-  // If we still haven't inserted an ad (edge case), add one at the end
-  if (!adInserted && listings.length > 0) {
+  // If we didn't place any ads (shouldn't happen, but safety check), add one at the end
+  if (adPositions.length === 0 && listings.length > 0) {
     const ad = adConfigs[adIndex % adConfigs.length]
     result.push(ad)
   }

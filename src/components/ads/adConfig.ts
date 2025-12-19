@@ -1,6 +1,7 @@
 import { AdConfig } from "./types"
 import ionImage from "../../assets/ion.png"
 import infernoImage from "../../assets/inferno.png"
+import perseusImage from "../../assets/perseus.png"
 
 /**
  * Static configuration for market ads.
@@ -27,6 +28,14 @@ export const MARKET_ADS: AdConfig[] = [
     linkUrl:
       "https://robertsspaceindustries.com/en/comm-link/transmission/17379-Crusader-Ares",
     description: "Crusader Industries Ares Series",
+  },
+  {
+    id: "perseus",
+    title: "Perseus",
+    imageUrl: perseusImage,
+    linkUrl:
+      "https://robertsspaceindustries.com/en/comm-link/transmission/20738-RSI-Perseus",
+    description: "RSI Perseus",
   },
 ]
 

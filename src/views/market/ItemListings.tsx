@@ -289,7 +289,7 @@ export function ItemListingBase(props: {
                 height: "100%",
                 width: "100%",
                 borderRadius: 1,
-                background: `linear-gradient(to bottom, transparent, transparent 25%, ${theme.palette.background.sidebar}AA 40%, ${theme.palette.background.sidebar} 100%)`,
+                background: `linear-gradient(to bottom, transparent, transparent 60%, ${theme.palette.background.sidebar}AA 70%, ${theme.palette.background.sidebar} 100%)`,
               }}
             />
 
@@ -1082,12 +1082,13 @@ export function DisplayListings(props: {
   loading?: boolean
   total?: number
   startIndex?: number
+  disableAds?: boolean
 }) {
   const { t } = useTranslation()
   const [perPage, setPerPage] = useState(48)
   const [page, setPage] = useState(0)
 
-  const { listings, loading, total, startIndex = 0 } = props
+  const { listings, loading, total, startIndex = 0, disableAds = false } = props
 
   const ref = useRef<HTMLDivElement>(null)
 
@@ -1097,10 +1098,14 @@ export function DisplayListings(props: {
     if (loading || !listings || listings.length === 0) {
       return []
     }
+    // Skip ad injection if disabled
+    if (disableAds) {
+      return listings
+    }
     // Inject ads into the full listings array
     // startIndex accounts for any offset from parent (e.g., if parent is doing server-side pagination)
     return injectAds(listings, MARKET_ADS, startIndex)
-  }, [listings, loading, startIndex])
+  }, [listings, loading, startIndex, disableAds])
 
   // Apply client-side pagination to the listings with ads
   const paginatedListings = useMemo(() => {
@@ -1194,17 +1199,22 @@ export function DisplayListingsMin(props: {
   listings: MarketListingSearchResult[]
   loading?: boolean
   startIndex?: number
+  disableAds?: boolean
 }) {
-  const { listings, loading, startIndex = 0 } = props
+  const { listings, loading, startIndex = 0, disableAds = false } = props
 
   // Inject ads into listings array
   const listingsWithAds = useMemo(() => {
     if (loading || !listings || listings.length === 0) {
       return []
     }
+    // Skip ad injection if disabled
+    if (disableAds) {
+      return listings
+    }
     // Inject ads into the full listings array
     return injectAds(listings, MARKET_ADS, startIndex)
-  }, [listings, loading, startIndex])
+  }, [listings, loading, startIndex, disableAds])
 
   return (
     <React.Fragment>
@@ -1390,7 +1400,11 @@ export function ItemListings(props: {
       <Grid item xs={12}>
         <div ref={ref} />
       </Grid>
-      <DisplayListingsMin listings={listings || []} loading={isLoading} />
+      <DisplayListingsMin
+        listings={listings || []}
+        loading={isLoading}
+        disableAds={!!(org || user)}
+      />
 
       <Grid item xs={12}>
         <Divider light />
@@ -1503,7 +1517,11 @@ export function BulkListingsRefactor(props: {
       <Grid item xs={12}>
         <div ref={ref} />
       </Grid>
-      <DisplayListingsMin listings={listings || []} loading={isLoading} />
+      <DisplayListingsMin
+        listings={listings || []}
+        loading={isLoading}
+        disableAds={!!(org || user)}
+      />
 
       <Grid item xs={12}>
         <Divider light />
@@ -1582,6 +1600,7 @@ export function OrgListings(props: { org: string }) {
     <DisplayListings
       listings={searchResults?.listings || []}
       loading={isLoading}
+      disableAds={true}
     />
   )
 }
