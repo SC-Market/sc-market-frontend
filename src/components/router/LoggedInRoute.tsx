@@ -25,9 +25,8 @@ export function LoggedInRoute() {
       return <Outlet />
     }
   } else {
-    window.location.href = `${BACKEND_URL}/auth/discord?path=${encodeURIComponent(
-      location.pathname,
-    )}`
+    // Redirect to frontend login page with current path as redirect parameter
+    window.location.href = `/login?redirect=${encodeURIComponent(location.pathname)}`
     return null
   }
 }

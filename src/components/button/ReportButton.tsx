@@ -49,10 +49,8 @@ export function ReportButton({
   const handleOpen = () => {
     // Check if user is authenticated
     if (!currentOrg) {
-      // Redirect to Discord OAuth with current path
-      window.location.href = `${BACKEND_URL}/auth/discord?path=${encodeURIComponent(
-        window.location.pathname,
-      )}`
+      // Redirect to frontend login page with current path as redirect parameter
+      window.location.href = `/login?redirect=${encodeURIComponent(window.location.pathname)}`
       return
     }
 

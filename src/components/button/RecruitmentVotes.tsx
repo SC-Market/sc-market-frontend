@@ -34,9 +34,8 @@ export function RecruitmentVotes(props: { post: RecruitingPost }) {
           //     setPressed(1)
           // }
         } else {
-          window.location.href = `${BACKEND_URL}/auth/discord?path=${encodeURIComponent(
-            window.location.pathname,
-          )}`
+          // Redirect to frontend login page with current path as redirect parameter
+          window.location.href = `/login?redirect=${encodeURIComponent(window.location.pathname)}`
         }
         return false
       }}

@@ -1,20 +1,23 @@
 import { BACKEND_URL } from "../../util/constants"
 import { Button } from "@mui/material"
 import React from "react"
-import { useLocation } from "react-router-dom"
+import { useLocation, useSearchParams } from "react-router-dom"
 import { Discord } from "../icon/DiscordIcon"
 import { useTranslation } from "react-i18next"
 
 export function DiscordLoginButton() {
   const location = useLocation()
+  const [searchParams] = useSearchParams()
   const { t } = useTranslation()
+
+  // Get redirect path from query params (if coming from pageAuthentication redirect)
+  // Otherwise use current pathname
+  const redirectPath = searchParams.get("redirect") || location.pathname
 
   return (
     <Button
       onClick={() => {
-        window.location.href = `${BACKEND_URL}/auth/discord?path=${encodeURIComponent(
-          location.pathname === "/" ? "/market" : location.pathname,
-        )}`
+        window.location.href = `${BACKEND_URL}/auth/discord?path=${encodeURIComponent(redirectPath)}`
       }}
       color="secondary"
       variant="contained"
