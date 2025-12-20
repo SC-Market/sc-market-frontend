@@ -6,7 +6,7 @@ import perseusImage from "../../assets/perseus.png"
 /**
  * Static configuration for market ads.
  * These are "in-universe" Star Citizen ads that appear between listings.
- * 
+ *
  * To add a new ad:
  * 1. Add a new AdConfig object to this array
  * 2. Ensure the imageUrl points to a valid image (should match listing card dimensions)

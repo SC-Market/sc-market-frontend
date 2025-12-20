@@ -43,20 +43,22 @@ export function AccountLinks() {
     open: boolean
     providerType: string | null
   }>({ open: false, providerType: null })
-  
+
   // Check for error in URL params
   const errorParam = searchParams.get("error")
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [accountUsername, setAccountUsername] = useState<string | null>(null)
-  const [citizenIDUsername, setCitizenIDUsername] = useState<string | null>(null)
-  
+  const [citizenIDUsername, setCitizenIDUsername] = useState<string | null>(
+    null,
+  )
+
   useEffect(() => {
     if (errorParam) {
       // Get error description and usernames before clearing
       const errorDescription = searchParams.get("error_description")
       const accountUsernameParam = searchParams.get("account_username")
       const citizenIDUsernameParam = searchParams.get("citizenid_username")
-      
+
       // Store usernames for display
       if (accountUsernameParam) {
         setAccountUsername(accountUsernameParam)
@@ -64,17 +66,17 @@ export function AccountLinks() {
       if (citizenIDUsernameParam) {
         setCitizenIDUsername(citizenIDUsernameParam)
       }
-      
+
       // Clear the error from URL
       searchParams.delete("error")
       searchParams.delete("error_description")
       searchParams.delete("account_username")
       searchParams.delete("citizenid_username")
       navigate({ search: searchParams.toString() }, { replace: true })
-      
+
       // Set appropriate error message based on explicit error code
       let message = ""
-      
+
       // Explicit error codes from backend
       // Only show Citizen iD errors if feature is enabled
       if (isCitizenIdEnabled) {
@@ -85,7 +87,7 @@ export function AccountLinks() {
               "Your Citizen iD account must be verified before it can be linked. Please verify your account on Citizen iD and try again.",
             )
             break
-            
+
           case "citizenid_username_mismatch":
             // Build message with usernames if available
             if (accountUsernameParam && citizenIDUsernameParam) {
@@ -102,38 +104,43 @@ export function AccountLinks() {
               )
             }
             break
-            
+
           case "citizenid_already_linked":
             message = t(
               "settings.profile.alreadyLinked",
               "This Citizen iD account is already linked to another user.",
             )
             break
-            
+
           case "citizenid_auth_failed":
             message = t(
               "settings.profile.authFailed",
               "Authentication failed. Please try again.",
             )
             break
-            
+
           case "citizenid_login_failed":
             message = t(
               "settings.profile.loginFailed",
               "Failed to log in. Please try again.",
             )
             break
-            
+
           case "citizenid_oauth_error":
             message = t(
               "settings.profile.oauthError",
               "An error occurred during authentication. Please try again.",
             )
             break
-            
+
           default:
             // Fallback for legacy error codes or unknown errors
-            if (errorParam === "account_not_verified" || errorParam === "Forbidden" || errorParam === "forbidden" || errorParam === "access_denied") {
+            if (
+              errorParam === "account_not_verified" ||
+              errorParam === "Forbidden" ||
+              errorParam === "forbidden" ||
+              errorParam === "access_denied"
+            ) {
               message = t(
                 "settings.profile.accountNotVerified",
                 "Your Citizen iD account must be verified before it can be linked. Please verify your account on Citizen iD and try again.",
@@ -143,7 +150,10 @@ export function AccountLinks() {
                 "settings.profile.authFailed",
                 "Authentication failed. Please try again.",
               )
-            } else if (errorParam.includes("username") || errorParam.includes("match")) {
+            } else if (
+              errorParam.includes("username") ||
+              errorParam.includes("match")
+            ) {
               message = t(
                 "settings.profile.usernameMismatch",
                 "Cannot link: Your Citizen iD username does not match your account username. Please verify your account or use a matching username.",
@@ -175,20 +185,32 @@ export function AccountLinks() {
       }
       setErrorMessage(message)
     }
-  }, [errorParam, searchParams, navigate, t, accountUsername, citizenIDUsername])
+  }, [
+    errorParam,
+    searchParams,
+    navigate,
+    t,
+    accountUsername,
+    citizenIDUsername,
+  ])
 
   // Filter out RSI - it's not an authentication provider, only a verification method
   // Also filter out Citizen iD if feature is disabled
   const authProviders = Array.isArray(links)
     ? links.filter((link) => {
         if (link.provider_type === "rsi") return false
-        if (!isCitizenIdEnabled && link.provider_type === "citizenid") return false
+        if (!isCitizenIdEnabled && link.provider_type === "citizenid")
+          return false
         return true
       })
     : []
-  
-  const hasDiscord = authProviders.some((link) => link.provider_type === "discord")
-  const hasCitizenID = isCitizenIdEnabled && authProviders.some((link) => link.provider_type === "citizenid")
+
+  const hasDiscord = authProviders.some(
+    (link) => link.provider_type === "discord",
+  )
+  const hasCitizenID =
+    isCitizenIdEnabled &&
+    authProviders.some((link) => link.provider_type === "citizenid")
   const primaryProvider = authProviders.find((link) => link.is_primary)
 
   const handleUnlinkClick = (providerType: string) => {
@@ -246,7 +268,9 @@ export function AccountLinks() {
 
   return (
     <>
-      <FlatSection title={t("settings.profile.accountLinks", "Linked Accounts")}>
+      <FlatSection
+        title={t("settings.profile.accountLinks", "Linked Accounts")}
+      >
         {errorMessage && (
           <Grid item xs={12}>
             <Alert
@@ -262,19 +286,53 @@ export function AccountLinks() {
                 {errorMessage}
               </Typography>
               {accountUsername && citizenIDUsername && (
-                <Box sx={{ mt: 2, pl: 2, borderLeft: 2, borderColor: "error.main" }}>
-                  <Typography variant="body2" sx={{ mb: 1, fontWeight: "medium" }}>
+                <Box
+                  sx={{
+                    mt: 2,
+                    pl: 2,
+                    borderLeft: 2,
+                    borderColor: "error.main",
+                  }}
+                >
+                  <Typography
+                    variant="body2"
+                    sx={{ mb: 1, fontWeight: "medium" }}
+                  >
                     {t("settings.profile.usernames", "Usernames:")}
                   </Typography>
                   <Typography variant="body2" sx={{ mb: 0.5 }}>
-                    <strong>{t("settings.profile.accountUsername", "Account username")}:</strong>{" "}
-                    <code style={{ backgroundColor: "rgba(0,0,0,0.05)", padding: "2px 4px", borderRadius: "3px" }}>
+                    <strong>
+                      {t(
+                        "settings.profile.accountUsername",
+                        "Account username",
+                      )}
+                      :
+                    </strong>{" "}
+                    <code
+                      style={{
+                        backgroundColor: "rgba(0,0,0,0.05)",
+                        padding: "2px 4px",
+                        borderRadius: "3px",
+                      }}
+                    >
                       {accountUsername}
                     </code>
                   </Typography>
                   <Typography variant="body2">
-                    <strong>{t("settings.profile.citizenIDUsername", "Citizen iD username")}:</strong>{" "}
-                    <code style={{ backgroundColor: "rgba(0,0,0,0.05)", padding: "2px 4px", borderRadius: "3px" }}>
+                    <strong>
+                      {t(
+                        "settings.profile.citizenIDUsername",
+                        "Citizen iD username",
+                      )}
+                      :
+                    </strong>{" "}
+                    <code
+                      style={{
+                        backgroundColor: "rgba(0,0,0,0.05)",
+                        padding: "2px 4px",
+                        borderRadius: "3px",
+                      }}
+                    >
                       {citizenIDUsername}
                     </code>
                   </Typography>
@@ -314,7 +372,9 @@ export function AccountLinks() {
                         borderRadius: 1,
                       }}
                     >
-                      <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                      <Box
+                        sx={{ display: "flex", alignItems: "center", gap: 2 }}
+                      >
                         {getProviderIcon(link.provider_type)}
                         <Typography variant="body1">
                           {getProviderName(link.provider_type)}
@@ -344,7 +404,9 @@ export function AccountLinks() {
                             variant="outlined"
                             color="error"
                             size="small"
-                            onClick={() => handleUnlinkClick(link.provider_type)}
+                            onClick={() =>
+                              handleUnlinkClick(link.provider_type)
+                            }
                             disabled={isUnlinking}
                           >
                             {t("settings.profile.unlink", "Unlink")}
@@ -362,12 +424,8 @@ export function AccountLinks() {
                 {t("settings.profile.linkNewAccount", "Link New Account")}
               </Typography>
               <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
-                {!hasDiscord && (
-                  <DiscordLoginButton />
-                )}
-                {isCitizenIdEnabled && !hasCitizenID && (
-                  <LinkCitizenIDButton />
-                )}
+                {!hasDiscord && <DiscordLoginButton />}
+                {isCitizenIdEnabled && !hasCitizenID && <LinkCitizenIDButton />}
                 {hasDiscord && (!isCitizenIdEnabled || hasCitizenID) && (
                   <Typography variant="body2" color="text.secondary">
                     {t(

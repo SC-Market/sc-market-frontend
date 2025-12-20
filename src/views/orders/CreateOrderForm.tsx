@@ -101,19 +101,15 @@ const CreateOrderFormComponent = React.forwardRef<
   const [service, setService] = useState<Service | null>(props.service || null)
 
   // Check availability requirement - check both contractor and assigned user
-  const {
-    data: contractorRequirement,
-    refetch: refetchContractorRequirement,
-  } = useCheckContractorAvailabilityRequirementQuery(props.contractor_id!, {
-    skip: !props.contractor_id,
-  })
+  const { data: contractorRequirement, refetch: refetchContractorRequirement } =
+    useCheckContractorAvailabilityRequirementQuery(props.contractor_id!, {
+      skip: !props.contractor_id,
+    })
 
-  const {
-    data: userRequirement,
-    refetch: refetchUserRequirement,
-  } = useCheckUserAvailabilityRequirementQuery(props.assigned_to!, {
-    skip: !props.assigned_to,
-  })
+  const { data: userRequirement, refetch: refetchUserRequirement } =
+    useCheckUserAvailabilityRequirementQuery(props.assigned_to!, {
+      skip: !props.assigned_to,
+    })
 
   // If either requires availability, enforce it
   const availabilityRequirement = useMemo(() => {

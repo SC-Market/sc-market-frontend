@@ -12,7 +12,12 @@ import {
   CalendarTodayRounded,
   RocketLaunchRounded,
 } from "@mui/icons-material"
-import { Box, Link as MaterialLink, Rating as MuiRating, Tooltip } from "@mui/material"
+import {
+  Box,
+  Link as MaterialLink,
+  Rating as MuiRating,
+  Tooltip,
+} from "@mui/material"
 import { Rating } from "../../datatypes/Contractor"
 import React, { useEffect, useMemo } from "react"
 import { Link } from "react-router-dom"
@@ -147,7 +152,8 @@ export function SellerRatingStars(props: {
   const theme = useTheme<ExtendedTheme>()
   const { user, contractor } = props
   const rating = useMemo(() => {
-    const avgRating = user?.rating.avg_rating || contractor?.rating.avg_rating || 0
+    const avgRating =
+      user?.rating.avg_rating || contractor?.rating.avg_rating || 0
     // Ratings are stored in 0-5 scale, use directly (no division needed)
     return avgRating
   }, [user, contractor])
@@ -169,9 +175,7 @@ export function SellerRatingStars(props: {
   )
 }
 
-export function MarketRatingStars(props: {
-  rating: Rating
-}) {
+export function MarketRatingStars(props: { rating: Rating }) {
   const theme = useTheme<ExtendedTheme>()
   const { rating } = props
 
@@ -253,7 +257,9 @@ function BadgeDisplay(props: { badges: string[] }) {
   const gradientId = `linearColors-${Math.random().toString(36).substr(2, 9)}`
 
   return (
-    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5, alignItems: "center" }}>
+    <Box
+      sx={{ display: "flex", flexWrap: "wrap", gap: 0.5, alignItems: "center" }}
+    >
       {/* Rating badges */}
       {badges.includes(BADGE_RATING_99_9) && (
         <Tooltip title={t("listing.99_9PercentRating25PlusTransactions")}>

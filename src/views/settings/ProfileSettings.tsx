@@ -1,6 +1,9 @@
 import React from "react"
 import { Grid, Typography, Divider } from "@mui/material"
-import { useGetUserProfileQuery, useProfileGetLinksQuery } from "../../store/profile"
+import {
+  useGetUserProfileQuery,
+  useProfileGetLinksQuery,
+} from "../../store/profile"
 import { AuthenticateRSI } from "../authentication/AuthenticateRSI"
 import { ReVerifyProfile } from "./ReVerifyProfile"
 import { UnlinkProfile } from "./UnlinkProfile"
@@ -16,9 +19,10 @@ export function ProfileSettings() {
   // Check if Citizen iD is linked - if so, hide unlink section
   // Citizen iD is the authoritative source for RSI details when linked
   // Only check if feature is enabled
-  const hasCitizenID = isCitizenIdEnabled && Array.isArray(links)
-    ? links.some((link) => link.provider_type === "citizenid")
-    : false
+  const hasCitizenID =
+    isCitizenIdEnabled && Array.isArray(links)
+      ? links.some((link) => link.provider_type === "citizenid")
+      : false
 
   // If user is not verified, show both verification options
   if (!profile?.rsi_confirmed) {
@@ -35,7 +39,7 @@ export function ProfileSettings() {
             )}
           </Typography>
         </Grid>
-        
+
         {isCitizenIdEnabled && (
           <>
             <Grid item xs={12}>
@@ -50,7 +54,7 @@ export function ProfileSettings() {
             </Grid>
           </>
         )}
-        
+
         <Grid item xs={12}>
           <Typography variant="h6" gutterBottom>
             {t("settings.profile.manualVerification", "Manual Verification")}

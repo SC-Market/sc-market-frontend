@@ -1043,12 +1043,12 @@ export function Listing(props: {
   index: number
 }) {
   const { listing, index } = props
-  
+
   // Handle ad cards
   if (!isListing(listing)) {
     return <AdCard ad={listing} index={index} />
   }
-  
+
   // Handle regular listings
   if (listing.listing_type === "aggregate") {
     return (

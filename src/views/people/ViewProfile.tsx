@@ -38,7 +38,10 @@ import {
 import { CreateOrderForm } from "../orders/CreateOrderForm"
 import { UserReviews, UserReviewSummary } from "../contractor/OrgReviews"
 import { ItemListings, UserRecentListings } from "../market/ItemListings"
-import { SellerRatingCount, SellerRatingStars } from "../../components/rating/ListingRating"
+import {
+  SellerRatingCount,
+  SellerRatingStars,
+} from "../../components/rating/ListingRating"
 import {
   useGetUserProfileQuery,
   useProfileRefetchMutation,
@@ -530,7 +533,14 @@ export function ViewProfile(props: { profile: User }) {
                         {props.profile?.username}{" "}
                         <UserActionsDropdown user={props.profile} />
                       </Typography>
-                      <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, mt: 0.5 }}>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 0.5,
+                          mt: 0.5,
+                        }}
+                      >
                         <SellerRatingStars user={props.profile} />
                         <SellerRatingCount
                           user={props.profile}

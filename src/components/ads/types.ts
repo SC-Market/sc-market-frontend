@@ -17,9 +17,7 @@ export interface AdConfig {
 /**
  * Type guard to check if an item is an AdConfig
  */
-export function isAdConfig(
-  item: unknown
-): item is AdConfig {
+export function isAdConfig(item: unknown): item is AdConfig {
   return (
     typeof item === "object" &&
     item !== null &&

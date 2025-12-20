@@ -84,7 +84,7 @@ export function HookProvider(props: { children: React.ReactElement }) {
   useEffect(() => {
     const error = searchParams.get("error")
     if (!error) return
-    
+
     if (isCitizenIdEnabled && error === "citizenid_account_not_verified") {
       const errorDescription =
         searchParams.get("error_description") ||

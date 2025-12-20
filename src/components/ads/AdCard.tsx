@@ -1,8 +1,4 @@
-import {
-  Paper,
-  Fade,
-  Grid,
-} from "@mui/material"
+import { Paper, Fade, Grid } from "@mui/material"
 import React from "react"
 import { AdConfig } from "./types"
 import { useMarketSidebarExp } from "../../hooks/market/MarketSidebar"

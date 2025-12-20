@@ -248,7 +248,10 @@ export const userApi = serviceApi.injectEndpoints({
       }),
       invalidatesTags: [{ type: "MyProfile" as const }, "MyProfile" as const],
     }),
-    profileSetPrimaryProvider: builder.mutation<void, { provider_type: string }>({
+    profileSetPrimaryProvider: builder.mutation<
+      void,
+      { provider_type: string }
+    >({
       query: (body) => ({
         url: `${baseUrl}/links/${body.provider_type}/primary`,
         method: "PUT",

@@ -18,8 +18,7 @@ export function CitizenIDLogo(props: { height?: number }) {
   const useDevAssets = import.meta.env.DEV
   const lightLogo = useDevAssets ? DEV_LIGHT_LOGO_URL : PROD_LIGHT_LOGO_URL
   const darkLogo = useDevAssets ? DEV_DARK_LOGO_URL : PROD_DARK_LOGO_URL
-  const logoSrc =
-    theme.palette.mode === "dark" ? lightLogo : darkLogo
+  const logoSrc = theme.palette.mode === "dark" ? lightLogo : darkLogo
 
   return (
     <Box

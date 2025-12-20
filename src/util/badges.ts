@@ -76,9 +76,7 @@ export function prioritizeBadges(
   limit?: number,
 ): string[] {
   // Filter to only include valid badge IDs
-  const availableBadges = badge_ids.filter((id) =>
-    BADGE_PRIORITY.includes(id),
-  )
+  const availableBadges = badge_ids.filter((id) => BADGE_PRIORITY.includes(id))
 
   // Sort by priority order
   const prioritized = availableBadges.sort((a, b) => {
@@ -93,9 +91,7 @@ export function prioritizeBadges(
     BADGE_BUSY_SELLER,
     BADGE_ACTIVE_SELLER,
   ]
-  const hasActivityBadge = prioritized.some((id) =>
-    activityBadges.includes(id),
-  )
+  const hasActivityBadge = prioritized.some((id) => activityBadges.includes(id))
   if (hasActivityBadge) {
     // Find highest activity badge
     const highestActivity = prioritized.find((id) =>

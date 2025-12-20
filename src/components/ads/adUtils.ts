@@ -15,7 +15,7 @@ export type ListingOrAd = MarketListingSearchResult | AdConfig
  */
 export function calculateAdPositions(
   totalItems: number,
-  adFrequency: number = AD_FREQUENCY
+  adFrequency: number = AD_FREQUENCY,
 ): number[] {
   const positions: number[] = []
   for (let i = adFrequency; i <= totalItems; i += adFrequency) {
@@ -32,7 +32,7 @@ export function calculateAdPositions(
  */
 export function calculateRequestSize(
   displaySize: number,
-  adFrequency: number = AD_FREQUENCY
+  adFrequency: number = AD_FREQUENCY,
 ): number {
   const adCount = Math.floor(displaySize / adFrequency)
   return displaySize - adCount
@@ -50,7 +50,7 @@ export function injectAds(
   listings: MarketListingSearchResult[],
   adConfigs: AdConfig[],
   startIndex: number = 0,
-  adFrequency: number = AD_FREQUENCY
+  adFrequency: number = AD_FREQUENCY,
 ): ListingOrAd[] {
   if (adConfigs.length === 0) {
     return listings
@@ -66,7 +66,7 @@ export function injectAds(
   // Calculate how many ads we want to show
   // Target: approximately 1 ad per adFrequency listings, minimum 1
   const targetAdCount = Math.max(1, Math.floor(listings.length / adFrequency))
-  
+
   // If we have less than 10 listings, just show 1 ad at the end
   if (listings.length < 10) {
     listings.forEach((listing) => {
@@ -84,35 +84,39 @@ export function injectAds(
   const adPositions: number[] = []
   const minSpacing = 3 // Minimum spacing between ads to avoid clustering
   const maxAttempts = 100 // Prevent infinite loops
-  
+
   // Generate random positions
   let attempts = 0
   while (adPositions.length < targetAdCount && attempts < maxAttempts) {
     attempts++
-    
+
     // Random position between 11 and listings.length (inclusive)
     // We add startIndex to account for pagination offset
-    const randomPos = startIndex + 10 + Math.floor(Math.random() * (listings.length - 10)) + 1
-    
+    const randomPos =
+      startIndex + 10 + Math.floor(Math.random() * (listings.length - 10)) + 1
+
     // Check if this position is far enough from existing ads
-    const tooClose = adPositions.some(pos => Math.abs(pos - randomPos) < minSpacing)
-    
+    const tooClose = adPositions.some(
+      (pos) => Math.abs(pos - randomPos) < minSpacing,
+    )
+
     if (!tooClose && randomPos <= startIndex + listings.length) {
       adPositions.push(randomPos)
     }
   }
-  
+
   // If we couldn't place enough ads with spacing, place them with reduced spacing
   if (adPositions.length < targetAdCount) {
     const remaining = targetAdCount - adPositions.length
     for (let i = 0; i < remaining; i++) {
-      const randomPos = startIndex + 10 + Math.floor(Math.random() * (listings.length - 10)) + 1
+      const randomPos =
+        startIndex + 10 + Math.floor(Math.random() * (listings.length - 10)) + 1
       if (!adPositions.includes(randomPos)) {
         adPositions.push(randomPos)
       }
     }
   }
-  
+
   // Sort positions to process them in order
   adPositions.sort((a, b) => a - b)
 
@@ -150,7 +154,7 @@ export function injectAds(
  * Type guard to check if an item is a listing (not an ad)
  */
 export function isListing(
-  item: ListingOrAd
+  item: ListingOrAd,
 ): item is MarketListingSearchResult {
   return !isAdConfig(item)
 }

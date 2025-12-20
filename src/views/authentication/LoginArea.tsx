@@ -35,8 +35,7 @@ export function LoginArea() {
               {t(
                 "auth.citizenIdBlurb",
                 "Sign in and verify with your RSI account to simplify your account management across the Star Citizen community tools using identity federation.",
-              )}
-              {" "}
+              )}{" "}
               <MuiLink
                 href="https://citizenid.space/"
                 target="_blank"
