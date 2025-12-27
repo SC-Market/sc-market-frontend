@@ -10,7 +10,7 @@ console.log("🔍 Analyzing bundle size and dependencies...\n")
 const statsPath = path.join(process.cwd(), "dist", "stats.html")
 if (!fs.existsSync(statsPath)) {
   console.log(
-    '❌ Bundle stats not found. Please run "yarn build:analyze" first.',
+    '❌ Bundle stats not found. Please run "npm run build:analyze" first.',
   )
   process.exit(1)
 }
@@ -65,5 +65,5 @@ console.log("  4. 🔄 Consider implementing component-level lazy loading")
 console.log("  5. 🔄 Consider replacing moment.js with date-fns")
 console.log("  6. 🔄 Consider lazy loading chart components")
 
-console.log('\n📊 Run "yarn analyze" to view detailed bundle analysis')
-console.log('📊 Run "yarn build" to see chunk sizes in console')
+console.log('\n📊 Run "npm run analyze" to view detailed bundle analysis')
+console.log('📊 Run "npm run build" to see chunk sizes in console')

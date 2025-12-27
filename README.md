@@ -9,20 +9,20 @@ and ensure the variables in [.env](.env) match those in your backend's .env file
 
 ### Local Development Server
 
-This project uses yarn to manage dependencies. You can install dependencies using the `yarn` command.
+This project uses npm to manage dependencies. You can install dependencies using the `npm` command.
 
 ```shell
-yarn install
+npm install
 ```
 
 Running the project is simple and can be done with
 
 ```shell
-yarn dev
+npm run dev
 ```
 
 You can ensure your changes build with
 
 ```shell
-yarn build
+npm run build
 ```

@@ -84,7 +84,7 @@
     "format": "prettier --write .",
     "check": "tsc --noEmit",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest --config ./jest.config.cjs --coverage",
-    "analyze": "yarn build:analyze && open dist/stats.html",
+    "analyze": "npm run build:analyze && open dist/stats.html",
     "analyze:detailed": "node scripts/analyze-bundle.js"
   },
   "webpackConfig": {
@@ -101,6 +101,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "packageManager": "yarn@4.5.1"
+  }
 }
