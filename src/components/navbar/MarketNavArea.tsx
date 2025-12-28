@@ -40,6 +40,7 @@ import {
 } from "../../hooks/market/MarketSearch"
 import { SelectGameCategoryOption } from "../select/SelectGameItem"
 import { useTranslation } from "react-i18next"
+import { LanguageFilter } from "../search/LanguageFilter"
 
 export function MarketNavEntry(
   props: { title: string; children: React.ReactElement } & PaperProps,
@@ -218,6 +219,14 @@ export function MarketNavArea(props: { top?: boolean }) {
   const [activity, setActivity] = useState<string>(
     searchState.statuses || "active",
   )
+  const [languageCodes, setLanguageCodes] = useState<string[]>(
+    searchState.language_codes || [],
+  )
+
+  // Sync language codes when search state changes
+  useEffect(() => {
+    setLanguageCodes(searchState.language_codes || [])
+  }, [searchState.language_codes])
   const [drawerOpen] = useDrawerOpen()
   const [open, setOpen] = useMarketSidebar()
 
@@ -245,6 +254,9 @@ export function MarketNavArea(props: { top?: boolean }) {
   const handleActivityChange = (event: { target: { value: string } }) => {
     setActivity(event.target.value)
   }
+  const handleLanguageCodesChange = (codes: string[]) => {
+    setLanguageCodes(codes)
+  }
 
   const searchClickCallback = useCallback(() => {
     setMarketSearch({
@@ -256,6 +268,7 @@ export function MarketNavArea(props: { top?: boolean }) {
       query,
       sort,
       statuses: activity,
+      language_codes: languageCodes.length > 0 ? languageCodes : undefined,
     })
   }, [
     activity,
@@ -267,6 +280,7 @@ export function MarketNavArea(props: { top?: boolean }) {
     setMarketSearch,
     sort,
     type,
+    languageCodes,
   ])
 
   useEffect(() => {
@@ -470,6 +484,12 @@ export function MarketNavArea(props: { top?: boolean }) {
                     ),
                     inputMode: "numeric",
                   }}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <LanguageFilter
+                  selectedLanguages={languageCodes}
+                  onChange={handleLanguageCodesChange}
                 />
               </Grid>
             </Grid>

@@ -6,6 +6,7 @@ export interface ContractorSearchState {
   rating: number
   query: string
   sorting: string
+  language_codes?: string[]
 }
 
 export const ContractorSearchContext = React.createContext<

@@ -16,6 +16,7 @@ export interface RecruitingSearchState {
     | "activity-reverse"
     | "all-time-reverse"
     | "members-reverse"
+  language_codes?: string[]
 }
 
 export const RecruitingSearchContext = React.createContext<

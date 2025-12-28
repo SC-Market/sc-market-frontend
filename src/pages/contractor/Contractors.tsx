@@ -51,11 +51,16 @@ export function Contractors() {
     fields: [],
     rating: 0,
     sorting: "date-reverse",
+    language_codes: undefined,
   })
   const { data: contractors, isLoading } = useGetContractorsQuery({
     pageSize: perPage,
     index: page,
     ...searchState,
+    language_codes:
+      searchState.language_codes && searchState.language_codes.length > 0
+        ? searchState.language_codes.join(",")
+        : undefined,
   })
 
   const [drawerOpen] = useDrawerOpen()

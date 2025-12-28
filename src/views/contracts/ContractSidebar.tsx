@@ -23,6 +23,7 @@ import { useContractSearch } from "../../hooks/contract/ContractSearch"
 import { orderIcons } from "../../datatypes/Order"
 import { PAYMENT_TYPES } from "../../util/constants"
 import { useTranslation } from "react-i18next"
+import { LanguageFilter } from "../../components/search/LanguageFilter"
 
 export function ContractSidebar() {
   const theme: ExtendedTheme = useTheme()
@@ -35,6 +36,7 @@ export function ContractSidebar() {
   const [query, setQuery] = useState<string>("")
   const [paymentType, setPaymentType] = useState<string>("any")
   const [sort, setSort] = useState<string>("date-old")
+  const [languageCodes, setLanguageCodes] = useState<string[]>([])
 
   // States
   const [open, setOpen] = useContractSidebar()
@@ -64,6 +66,9 @@ export function ContractSidebar() {
   const handleSortChange = (event: { target: { value: string } }) => {
     setSort(event.target.value)
   }
+  const handleLanguageCodesChange = (codes: string[]) => {
+    setLanguageCodes(codes)
+  }
 
   useEffect(() => {
     setSearchState((state) => ({
@@ -74,8 +79,9 @@ export function ContractSidebar() {
       query: query,
       paymentType: paymentType === "any" ? undefined : paymentType,
       sort: sort,
+      language_codes: languageCodes.length > 0 ? languageCodes : undefined,
     }))
-  }, [kind, setSearchState, query, minOffer, maxOffer, paymentType, sort])
+  }, [kind, setSearchState, query, minOffer, maxOffer, paymentType, sort, languageCodes])
 
   return (
     <Drawer
@@ -165,6 +171,12 @@ export function ContractSidebar() {
             <Typography variant={"subtitle2"} fontWeight={"bold"}>
               {t("service_search.filtering")}
             </Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <LanguageFilter
+              selectedLanguages={languageCodes}
+              onChange={handleLanguageCodesChange}
+            />
           </Grid>
           <Grid item xs={12}>
             <TextField

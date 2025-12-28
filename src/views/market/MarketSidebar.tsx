@@ -30,6 +30,7 @@ import { SelectGameCategoryOption } from "../../components/select/SelectGameItem
 import CloseIcon from "@mui/icons-material/CloseRounded"
 import MenuIcon from "@mui/icons-material/MenuRounded"
 import { SaleType } from "../../store/market.ts"
+import { LanguageFilter } from "../../components/search/LanguageFilter"
 
 export function MarketSearchArea(props: { status?: boolean }) {
   const theme: ExtendedTheme = useTheme()
@@ -54,6 +55,9 @@ export function MarketSearchArea(props: { status?: boolean }) {
   const [query, setQuery] = useState<string>(searchState.query || "")
   const [activity, setActivity] = useState<string>(
     searchState.statuses || "active",
+  )
+  const [languageCodes, setLanguageCodes] = useState<string[]>(
+    searchState.language_codes || [],
   )
 
   const handleKindChange = (event: { target: { value: string } }) => {
@@ -80,6 +84,9 @@ export function MarketSearchArea(props: { status?: boolean }) {
   const handleActivityChange = (event: { target: { value: string } }) => {
     setActivity(event.target.value)
   }
+  const handleLanguageCodesChange = (codes: string[]) => {
+    setLanguageCodes(codes)
+  }
 
   const searchClickCallback = useCallback(() => {
     setMarketSearch({
@@ -91,6 +98,7 @@ export function MarketSearchArea(props: { status?: boolean }) {
       query,
       sort,
       statuses: activity,
+      language_codes: languageCodes.length > 0 ? languageCodes : undefined,
     })
   }, [
     activity,
@@ -102,6 +110,7 @@ export function MarketSearchArea(props: { status?: boolean }) {
     setMarketSearch,
     sort,
     type,
+    languageCodes,
   ])
 
   useEffect(() => {
@@ -196,6 +205,12 @@ export function MarketSearchArea(props: { status?: boolean }) {
           <Typography variant={"subtitle2"} fontWeight={"bold"}>
             {t("MarketSearchArea.filtering")}
           </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <LanguageFilter
+            selectedLanguages={languageCodes}
+            onChange={handleLanguageCodesChange}
+          />
         </Grid>
         <Grid item xs={12}>
           <TextField

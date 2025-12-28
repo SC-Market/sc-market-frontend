@@ -8,6 +8,7 @@ interface ServiceSearchState {
   // quantityAvailable?: number
   query: string
   paymentType?: string
+  language_codes?: string[]
 }
 
 export const ServiceSearchContext = React.createContext<

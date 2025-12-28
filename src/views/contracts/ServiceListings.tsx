@@ -183,25 +183,17 @@ export function ServiceListingBase(props: { service: Service; index: number }) {
                   />
                 )}
                 {service.languages && service.languages.length > 0 && (
-                  <Box
-                    sx={{
-                      display: "flex",
-                      gap: 0.5,
-                      flexWrap: "wrap",
-                      marginBottom: 1,
-                    }}
-                  >
+                  <>
                     {service.languages.map((lang) => (
                       <Chip
                         key={lang.code}
                         label={lang.name}
-                        size="small"
                         variant="outlined"
-                        sx={{ padding: 1 }}
+                        sx={{ marginBottom: 1, padding: 1 }}
                         onClick={(event) => event.stopPropagation()}
                       />
                     ))}
-                  </Box>
+                  </>
                 )}
               </Stack>
             </Box>
@@ -255,6 +247,9 @@ export function ServiceListings(props: { user?: string; contractor?: string }) {
     }
     if (searchState.paymentType) {
       params.paymentType = searchState.paymentType
+    }
+    if (searchState.language_codes && searchState.language_codes.length > 0) {
+      params.language_codes = searchState.language_codes.join(",")
     }
 
     return params

@@ -669,27 +669,17 @@ export function ServiceView(props: {
                       (event) => event.stopPropagation() // Don't highlight cell if button clicked
                     }
                   />
-                  {service.languages && service.languages.length > 0 && (
-                    <Box
-                      sx={{
-                        display: "flex",
-                        gap: 0.5,
-                        flexWrap: "wrap",
-                        marginBottom: 1,
-                      }}
-                    >
-                      {service.languages.map((lang) => (
-                        <Chip
-                          key={lang.code}
-                          label={lang.name}
-                          size="small"
-                          variant="outlined"
-                          sx={{ padding: 1 }}
-                          onClick={(event) => event.stopPropagation()}
-                        />
-                      ))}
-                    </Box>
-                  )}
+                  {service.languages &&
+                    service.languages.length > 0 &&
+                    service.languages.map((lang) => (
+                      <Chip
+                        key={lang.code}
+                        label={lang.name}
+                        variant="outlined"
+                        sx={{ marginRight: 1, marginBottom: 1, padding: 1 }}
+                        onClick={(event) => event.stopPropagation()}
+                      />
+                    ))}
                 </Box>
                 <Button
                   variant="contained"

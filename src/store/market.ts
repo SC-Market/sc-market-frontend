@@ -198,6 +198,7 @@ export type MarketSearchParams = Partial<{
   index: string | number
   page_size: string | number
   listing_type: string | null
+  language_codes: string
 }>
 
 export interface MarketSearchResult {

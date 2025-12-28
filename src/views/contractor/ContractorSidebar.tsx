@@ -30,6 +30,7 @@ import {
 import { StarRounded } from "@mui/icons-material"
 import { useContractorSidebar } from "../../hooks/contractor/ContractorSidebar"
 import { useTranslation } from "react-i18next"
+import { LanguageFilter } from "../../components/search/LanguageFilter"
 
 export function ContractorSidebar() {
   const theme: ExtendedTheme = useTheme()
@@ -40,6 +41,7 @@ export function ContractorSidebar() {
   const [rating, setRating] = useState<number>(0)
   const [query, setQuery] = useState<string>("")
   const [sorting, setSorting] = useState<string>("date")
+  const [languageCodes, setLanguageCodes] = useState<string[]>([])
 
   // States
   const [open, setOpen] = useContractorSidebar()
@@ -66,8 +68,9 @@ export function ContractorSidebar() {
       rating: rating,
       query: query,
       sorting: sorting,
+      language_codes: languageCodes.length > 0 ? languageCodes : undefined,
     }))
-  }, [fields, setSearchState, query, rating, sorting])
+  }, [fields, setSearchState, query, rating, sorting, languageCodes])
 
   return (
     <Drawer
@@ -196,6 +199,12 @@ export function ContractorSidebar() {
             <Typography variant={"subtitle2"} fontWeight={"bold"}>
               {t("contractorSidebar.filtering")}
             </Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <LanguageFilter
+              selectedLanguages={languageCodes}
+              onChange={setLanguageCodes}
+            />
           </Grid>
           <Grid item xs={12}>
             <Autocomplete

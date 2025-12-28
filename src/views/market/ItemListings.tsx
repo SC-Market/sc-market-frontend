@@ -1381,6 +1381,10 @@ export function ItemListings(props: {
       contractor_seller: CURRENT_CUSTOM_ORG || org,
       user_seller: user,
       ...searchState,
+      language_codes:
+        searchState.language_codes && searchState.language_codes.length > 0
+          ? searchState.language_codes.join(",")
+          : undefined,
       index: page,
       page_size: perPage,
       listing_type: "not-aggregate",
@@ -1498,6 +1502,10 @@ export function BulkListingsRefactor(props: {
       contractor_seller: CURRENT_CUSTOM_ORG || org,
       user_seller: user,
       ...searchState,
+      language_codes:
+        searchState.language_codes && searchState.language_codes.length > 0
+          ? searchState.language_codes.join(",")
+          : undefined,
       index: page,
       page_size: perPage,
       listing_type: "aggregate",
@@ -1606,6 +1614,10 @@ export function OrgListings(props: { org: string }) {
     page_size: 96,
     listing_type: undefined,
     ...searchState,
+    language_codes:
+      searchState.language_codes && searchState.language_codes.length > 0
+        ? searchState.language_codes.join(",")
+        : undefined,
   })
 
   useEffect(() => {

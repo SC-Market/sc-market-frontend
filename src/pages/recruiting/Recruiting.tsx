@@ -40,12 +40,17 @@ export function Recruiting() {
     query: "",
     fields: [],
     rating: 0,
+    language_codes: undefined,
   })
 
   const { data: posts, isLoading } = useRecruitingGetAllPostsQuery({
     index: page,
     pageSize: perPage,
     ...searchState,
+    language_codes:
+      searchState.language_codes && searchState.language_codes.length > 0
+        ? searchState.language_codes.join(",")
+        : undefined,
   })
   const [currentOrg] = useCurrentOrg()
   const { data: mypost, isSuccess: alreadyPosted } =

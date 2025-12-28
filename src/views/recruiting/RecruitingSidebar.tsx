@@ -34,6 +34,7 @@ import {
   useRecruitingSearch,
 } from "../../hooks/recruiting/RecruitingSearch"
 import { useTranslation } from "react-i18next"
+import { LanguageFilter } from "../../components/search/LanguageFilter"
 
 export function RecruitingSidebar() {
   const theme: ExtendedTheme = useTheme()
@@ -45,6 +46,7 @@ export function RecruitingSidebar() {
   const [query, setQuery] = useState<string>("")
   const [sorting, setSorting] =
     useState<RecruitingSearchState["sorting"]>("activity")
+  const [languageCodes, setLanguageCodes] = useState<string[]>([])
 
   // States
   const [open, setOpen] = useRecruitingSidebar()
@@ -71,8 +73,9 @@ export function RecruitingSidebar() {
       rating: rating,
       query: query,
       sorting,
+      language_codes: languageCodes.length > 0 ? languageCodes : undefined,
     }))
-  }, [fields, setSearchState, query, rating, sorting])
+  }, [fields, setSearchState, query, rating, sorting, languageCodes])
 
   return (
     <Drawer
@@ -215,6 +218,12 @@ export function RecruitingSidebar() {
             <Typography variant={"subtitle2"} fontWeight={"bold"}>
               {t("recruiting_sidebar.filtering")}
             </Typography>
+          </Grid>
+          <Grid item xs={12}>
+            <LanguageFilter
+              selectedLanguages={languageCodes}
+              onChange={setLanguageCodes}
+            />
           </Grid>
           <Grid item xs={12}>
             <Autocomplete

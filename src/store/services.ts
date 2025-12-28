@@ -36,6 +36,7 @@ interface ServicesQueryParams {
   paymentType?: string
   sortBy?: "timestamp" | "cost" | "service_name"
   sortOrder?: "asc" | "desc"
+  language_codes?: string
 }
 
 const servicesApi = serviceApi.injectEndpoints({
@@ -59,6 +60,7 @@ const servicesApi = serviceApi.injectEndpoints({
           paymentType: params.paymentType,
           sortBy: params.sortBy || "timestamp",
           sortOrder: params.sortOrder || "desc",
+          language_codes: params.language_codes,
         },
       }),
       providesTags: (result, error, params) => ["Service" as const],
@@ -86,6 +88,7 @@ const servicesApi = serviceApi.injectEndpoints({
           paymentType: paymentType || "",
           sortBy: sortBy || "timestamp",
           sortOrder: sortOrder || "desc",
+          language_codes: queryArgs.language_codes || undefined,
         })
       },
     }),

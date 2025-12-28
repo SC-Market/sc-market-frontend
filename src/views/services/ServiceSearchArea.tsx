@@ -16,6 +16,7 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTheme } from "@mui/material/styles"
 import { Stack } from "@mui/system"
 import { useTranslation } from "react-i18next"
+import { LanguageFilter } from "../../components/search/LanguageFilter"
 
 export function ServiceSearchArea() {
   const theme: ExtendedTheme = useTheme()
@@ -27,6 +28,7 @@ export function ServiceSearchArea() {
   const [maxOffer, setMaxOffer] = useState<number | null>(null)
   const [query, setQuery] = useState<string>("")
   const [paymentType, setPaymentType] = useState<string>("any")
+  const [languageCodes, setLanguageCodes] = useState<string[]>([])
   const [, setSearchState] = useServiceSearch()
 
   // Debounce the search query to prevent excessive API calls
@@ -56,8 +58,9 @@ export function ServiceSearchArea() {
       maxOffer: maxOffer,
       query: debouncedQuery, // Use debounced query instead of immediate query
       paymentType: paymentType === "any" ? undefined : paymentType,
+      language_codes: languageCodes.length > 0 ? languageCodes : undefined,
     }))
-  }, [kind, setSearchState, debouncedQuery, minOffer, maxOffer, paymentType])
+  }, [kind, setSearchState, debouncedQuery, minOffer, maxOffer, paymentType, languageCodes])
 
   return (
     <Stack
@@ -86,6 +89,12 @@ export function ServiceSearchArea() {
           <Typography variant={"subtitle2"} fontWeight={"bold"}>
             {t("service_search.filtering")}
           </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <LanguageFilter
+            selectedLanguages={languageCodes}
+            onChange={setLanguageCodes}
+          />
         </Grid>
         <Grid item xs={12}>
           <TextField

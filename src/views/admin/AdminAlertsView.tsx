@@ -96,9 +96,12 @@ export function AdminAlertsView() {
 
   // RTK Query for contractor search with throttling
   const { data: contractorOptions = [], isLoading: isSearchingContractors } =
-    useSearchContractorsQuery(contractorSearchQuery, {
-      skip: contractorSearchQuery.length < 3, // Only search when query is 3+ characters
-    })
+    useSearchContractorsQuery(
+      { query: contractorSearchQuery },
+      {
+        skip: contractorSearchQuery.length < 3, // Only search when query is 3+ characters
+      },
+    )
 
   // URL validation function
   const validateUrl = (url: string): boolean => {

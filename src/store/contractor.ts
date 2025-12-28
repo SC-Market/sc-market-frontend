@@ -683,9 +683,18 @@ export const contractorsApi = serviceApi.injectEndpoints({
       {
         index: number
         pageSize: number
-      } & ContractorSearchState
+      } & Omit<ContractorSearchState, "language_codes"> & {
+        language_codes?: string
+      }
     >({
-      query: (params) => ({ url: `/api/contractors`, params }),
+      query: (params) => {
+        const { language_codes, ...restParams } = params
+        const queryParams: any = { ...restParams }
+        if (language_codes) {
+          queryParams.language_codes = language_codes
+        }
+        return { url: `/api/contractors`, params: queryParams }
+      },
       transformResponse: unwrapResponse,
       providesTags: (result) =>
         result
@@ -698,8 +707,18 @@ export const contractorsApi = serviceApi.injectEndpoints({
             ]
           : [{ type: "Contractor" as const, id: "LIST" }],
     }),
-    searchContractors: builder.query<MinimalContractor[], string>({
-      query: (query) => `/api/contractors/search/${query}`,
+    searchContractors: builder.query<
+      MinimalContractor[],
+      { query: string; language_codes?: string[] }
+    >({
+      query: ({ query, language_codes }) => {
+        const params = new URLSearchParams()
+        if (language_codes && language_codes.length > 0) {
+          params.append("language_codes", language_codes.join(","))
+        }
+        const queryString = params.toString()
+        return `/api/contractors/search/${query}${queryString ? `?${queryString}` : ""}`
+      },
       transformResponse: (response: { data: MinimalContractor[] }) =>
         response.data,
       providesTags: (result) =>

@@ -31,9 +31,18 @@ export const recruitingApi = serviceApi.injectEndpoints({
   endpoints: (builder) => ({
     recruitingGetAllPosts: builder.query<
       { total: number; items: RecruitingPost[] },
-      { index: number; pageSize: number } & RecruitingSearchState
+      { index: number; pageSize: number } & Omit<RecruitingSearchState, "language_codes"> & {
+        language_codes?: string
+      }
     >({
-      query: (params) => ({ url: `/api/recruiting/posts`, params }),
+      query: (params) => {
+        const { language_codes, ...restParams } = params
+        const queryParams: any = { ...restParams }
+        if (language_codes) {
+          queryParams.language_codes = language_codes
+        }
+        return { url: `/api/recruiting/posts`, params: queryParams }
+      },
       transformResponse: unwrapResponse,
       providesTags: ["RecruitingPosts"],
     }),

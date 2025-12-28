@@ -16,6 +16,7 @@ export interface MarketSearchState {
   index?: number
   page_size?: number
   listing_type?: string
+  language_codes?: string[]
 }
 
 export const MarketSearchContext = React.createContext<
@@ -43,6 +44,9 @@ export const useMarketSearch = () => {
         statuses: searchParams.get("statuses") || "active",
         index: +searchParams.get("index")! ? 0 : undefined,
         page_size: searchParams.get("page_size")! ? 48 : undefined,
+        language_codes: searchParams.get("language_codes")
+          ? searchParams.get("language_codes")!.split(",").map((s) => s.trim()).filter(Boolean)
+          : undefined,
       }) as MarketSearchState,
     [searchParams],
   )
@@ -77,6 +81,10 @@ export const useMarketSearch = () => {
         index: searchState.index === 0 ? undefined : searchState.index,
         page_size:
           searchState.page_size === 48 ? undefined : searchState.page_size,
+        language_codes:
+          searchState.language_codes && searchState.language_codes.length > 0
+            ? searchState.language_codes.join(",")
+            : undefined,
       }
 
       setSearchParams(
