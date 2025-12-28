@@ -10,6 +10,7 @@ import { OrderReview } from "../datatypes/Order"
 import { serviceApi } from "./service"
 import { DiscordSettings, OrderWebhook, Rating } from "../datatypes/Contractor"
 import { unwrapResponse } from "./orders"
+import { Language } from "../constants/languages"
 
 export interface SerializedError {
   error?: string
@@ -308,6 +309,30 @@ export const userApi = serviceApi.injectEndpoints({
         "MyProfile" as const,
       ],
     }),
+    // Language endpoints
+    profileGetLanguages: builder.query<{ languages: Language[] }, void>({
+      query: () => `${baseUrl}/languages`,
+      transformResponse: (response: { data: { languages: Language[] } }) =>
+        response.data,
+      providesTags: ["UserLanguages" as const],
+    }),
+    profileSetLanguages: builder.mutation<
+      { languages: Language[] },
+      { language_codes: string[] }
+    >({
+      query: (body) => ({
+        url: `${baseUrl}/languages`,
+        method: "PUT",
+        body,
+      }),
+      transformResponse: (response: { data: { languages: Language[] } }) =>
+        response.data,
+      invalidatesTags: [
+        "UserLanguages" as const,
+        { type: "MyProfile" as const },
+        "MyProfile" as const,
+      ],
+    }),
   }),
 })
 
@@ -352,4 +377,6 @@ export const {
   useProfileGetLinksQuery,
   useProfileUnlinkProviderMutation,
   useProfileSetPrimaryProviderMutation,
+  useProfileGetLanguagesQuery,
+  useProfileSetLanguagesMutation,
 } = userApi

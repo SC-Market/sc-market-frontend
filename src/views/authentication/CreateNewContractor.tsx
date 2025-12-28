@@ -15,6 +15,7 @@ import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { isAlphaNumeric } from "./AuthenticateRSI"
 import { MarkdownEditor } from "../../components/markdown/Markdown"
 import { useTranslation } from "react-i18next"
+import { LanguageSelector } from "../../components/settings/LanguageSelector"
 
 export const fallback_image =
   "https://cdn.robertsspaceindustries.com/static/images/Temp/default-image.png"
@@ -27,6 +28,7 @@ export function CreateNewContractor() {
   const [avatar, setAvatar] = useState(fallback_image)
   const [banner, setBanner] = useState(fallback_banner)
   const [description, setDescription] = useState("")
+  const [selectedLanguages, setSelectedLanguages] = useState<string[]>(["en"])
   const [error, setError] = useState(false)
   const { t } = useTranslation()
 
@@ -52,6 +54,7 @@ export function CreateNewContractor() {
         identifier: contractorIdentifier,
         logo: avatar,
         banner,
+        language_codes: selectedLanguages,
       })
 
       if (res?.data && !res?.error) {
@@ -74,6 +77,7 @@ export function CreateNewContractor() {
       contractorIdentifier,
       avatar,
       banner,
+      selectedLanguages,
       navigate,
       issueAlert,
       t,
@@ -242,6 +246,25 @@ export function CreateNewContractor() {
               ? t("contractorCreate.error_banner")
               : undefined
           }
+        />
+      </Grid>
+
+      <Grid item xs={12}>
+        <Divider light />
+      </Grid>
+
+      <Grid item xs={12}>
+        <LanguageSelector
+          selectedLanguages={selectedLanguages}
+          onChange={setSelectedLanguages}
+          label={t(
+            "contractorCreate.languages",
+            "Supported Languages (Optional)",
+          )}
+          helperText={t(
+            "contractorCreate.languagesHelper",
+            "Select languages your organization can communicate in. You can change this later in settings.",
+          )}
         />
       </Grid>
 

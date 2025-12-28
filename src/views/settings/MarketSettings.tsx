@@ -4,7 +4,7 @@ import { MarketEditTemplate } from "../market/MarketEditTemplate"
 
 export function MarketSettings() {
   return (
-    <Grid container spacing={4} alignItems={"flex-start"}>
+    <Grid container spacing={1} alignItems={"flex-start"}>
       <MarketEditTemplate />
     </Grid>
   )

@@ -1251,6 +1251,42 @@ export function MarketListingView() {
                                 reportedUrl={`/market/${listing.listing_id}`}
                               />
                             </ListingDetailItem>
+
+                            {listing.languages &&
+                              listing.languages.length > 0 && (
+                                <ListingDetailItem
+                                  icon={<PersonRounded fontSize={"inherit"} />}
+                                >
+                                  <Box
+                                    sx={{
+                                      display: "flex",
+                                      gap: 0.5,
+                                      flexWrap: "wrap",
+                                      alignItems: "center",
+                                    }}
+                                  >
+                                    <Typography
+                                      variant="subtitle2"
+                                      color="text.secondary"
+                                    >
+                                      {t(
+                                        "MarketListingView.languages",
+                                        "Languages",
+                                      )}
+                                      :
+                                    </Typography>
+                                    {listing.languages.map((lang) => (
+                                      <Chip
+                                        key={lang.code}
+                                        label={lang.name}
+                                        size="small"
+                                        variant="outlined"
+                                        sx={{ height: 22, fontSize: "0.7rem" }}
+                                      />
+                                    ))}
+                                  </Box>
+                                </ListingDetailItem>
+                              )}
                           </Stack>
                         </Box>
                       }

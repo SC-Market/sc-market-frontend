@@ -649,7 +649,14 @@ export function ServiceView(props: {
                 justifyContent={"space-between"}
                 alignItems={"center"}
               >
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 1,
+                    flexWrap: "wrap",
+                  }}
+                >
                   <Chip
                     color={"primary"}
                     label={t(`myServices.${service.kind}`, {
@@ -662,6 +669,27 @@ export function ServiceView(props: {
                       (event) => event.stopPropagation() // Don't highlight cell if button clicked
                     }
                   />
+                  {service.languages && service.languages.length > 0 && (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        gap: 0.5,
+                        flexWrap: "wrap",
+                        marginBottom: 1,
+                      }}
+                    >
+                      {service.languages.map((lang) => (
+                        <Chip
+                          key={lang.code}
+                          label={lang.name}
+                          size="small"
+                          variant="outlined"
+                          sx={{ padding: 1 }}
+                          onClick={(event) => event.stopPropagation()}
+                        />
+                      ))}
+                    </Box>
+                  )}
                 </Box>
                 <Button
                   variant="contained"

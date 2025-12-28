@@ -66,6 +66,7 @@ export interface Contractor {
   market_order_template: string
   locale?: string
   archived?: boolean
+  languages?: Array<{ code: string; name: string }>
 }
 
 export interface MinimalContractor {

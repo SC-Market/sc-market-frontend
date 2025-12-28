@@ -1,6 +1,11 @@
 import React from "react"
 import { Alert, Box, Typography } from "@mui/material"
-import { Info, Warning, CheckCircle, Error as ErrorIcon } from "@mui/icons-material"
+import {
+  Info,
+  Warning,
+  CheckCircle,
+  Error as ErrorIcon,
+} from "@mui/icons-material"
 import { OrderLimits } from "../../store/orderSettings"
 
 interface OrderLimitsDisplayProps {

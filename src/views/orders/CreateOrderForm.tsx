@@ -137,9 +137,12 @@ const CreateOrderFormComponent = React.forwardRef<
     props.contractor_id!,
     { skip: !props.contractor_id },
   )
-  const { data: userLimits } = useCheckUserOrderLimitsQuery(props.assigned_to!, {
-    skip: !props.assigned_to,
-  })
+  const { data: userLimits } = useCheckUserOrderLimitsQuery(
+    props.assigned_to!,
+    {
+      skip: !props.assigned_to,
+    },
+  )
 
   // Use contractor limits if available, otherwise user limits
   const orderLimits = contractorLimits || userLimits

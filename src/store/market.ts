@@ -73,6 +73,7 @@ export interface BaseMarketListingSearchResult {
     badge_ids: string[]
     metadata: any
   } | null
+  languages?: Array<{ code: string; name: string }>
 }
 
 export type ExtendedUniqueSearchResult = BaseMarketListingSearchResult & {
@@ -158,6 +159,7 @@ export interface MarketListingComplete {
   photo?: string
   user_seller?: MinimalUser | null
   contractor_seller?: MinimalUser | null
+  languages?: Array<{ code: string; name: string }>
 }
 
 export interface MarketBid {

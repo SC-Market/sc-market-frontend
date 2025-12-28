@@ -1,4 +1,9 @@
-import React, { MouseEventHandler, ReactElement, useCallback, useEffect } from "react"
+import React, {
+  MouseEventHandler,
+  ReactElement,
+  useCallback,
+  useEffect,
+} from "react"
 import { Box, IconButton, TableCell, TableRow, Typography } from "@mui/material"
 import { Section } from "../../components/paper/Section"
 import { HeadCell, PaginatedTable } from "../../components/table/PaginatedTable"

@@ -1,9 +1,9 @@
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
-import { Section } from "../../components/paper/Section"
+import { FlatSection } from "../../components/paper/Section"
 import { MarkdownEditor } from "../../components/markdown/Markdown"
 import React, { useCallback, useEffect, useState } from "react"
 import { useGetUserProfileQuery, useUpdateProfile } from "../../store/profile"
-import { Grid, Typography, Divider } from "@mui/material"
+import { Grid, Typography } from "@mui/material"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { useUpdateContractorMutation } from "../../store/contractor"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
@@ -62,9 +62,11 @@ export function MarketEditTemplate(props: { org?: boolean }) {
   return (
     <>
       <Grid item xs={12}>
-        <Section xs={12} title={t("MarketEditTemplate.title")}>
+        <FlatSection title={t("MarketEditTemplate.title")}>
           <Grid item xs={12}>
-            <Typography>{t("MarketEditTemplate.configure")}</Typography>
+            <Typography variant="body2" color="text.secondary" paragraph>
+              {t("MarketEditTemplate.configure")}
+            </Typography>
           </Grid>
           <Grid item xs={12}>
             <MarkdownEditor value={template} onChange={setTemplate} />
@@ -79,16 +81,14 @@ export function MarketEditTemplate(props: { org?: boolean }) {
               {t("MarketEditTemplate.submit")}
             </LoadingButton>
           </Grid>
-        </Section>
+        </FlatSection>
       </Grid>
 
       {/* Order Settings Section */}
-      <Grid item xs={12}>
-        <OrderSettings
-          entityType={props.org ? "contractor" : "user"}
-          entityId={props.org ? contractor?.spectrum_id : undefined}
-        />
-      </Grid>
+      <OrderSettings
+        entityType={props.org ? "contractor" : "user"}
+        entityId={props.org ? contractor?.spectrum_id : undefined}
+      />
     </>
   )
 }

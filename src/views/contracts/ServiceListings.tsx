@@ -182,6 +182,27 @@ export function ServiceListingBase(props: { service: Service; index: number }) {
                     }
                   />
                 )}
+                {service.languages && service.languages.length > 0 && (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      gap: 0.5,
+                      flexWrap: "wrap",
+                      marginBottom: 1,
+                    }}
+                  >
+                    {service.languages.map((lang) => (
+                      <Chip
+                        key={lang.code}
+                        label={lang.name}
+                        size="small"
+                        variant="outlined"
+                        sx={{ padding: 1 }}
+                        onClick={(event) => event.stopPropagation()}
+                      />
+                    ))}
+                  </Box>
+                )}
               </Stack>
             </Box>
           </Card>

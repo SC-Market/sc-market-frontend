@@ -13,6 +13,7 @@ import { serviceApi } from "./service"
 import { ContractorSearchState } from "../hooks/contractor/ContractorSearch"
 import { unwrapResponse } from "./orders"
 import { BlocklistEntry } from "./profile"
+import { Language } from "../constants/languages"
 
 export const contractorsApi = serviceApi.injectEndpoints({
   overrideExisting: false,
@@ -262,6 +263,7 @@ export const contractorsApi = serviceApi.injectEndpoints({
         identifier: string
         logo: string
         banner: string
+        language_codes?: string[]
       }
     >({
       query: (body) => ({
@@ -750,6 +752,31 @@ export const contractorsApi = serviceApi.injectEndpoints({
         "MyProfile" as const,
       ],
     }),
+    // Language endpoints
+    getContractorLanguages: builder.query<{ languages: Language[] }, string>({
+      query: (spectrum_id) => `/api/contractors/${spectrum_id}/languages`,
+      transformResponse: (response: { data: { languages: Language[] } }) =>
+        response.data,
+      providesTags: (result, error, spectrum_id) => [
+        { type: "ContractorLanguages" as const, id: spectrum_id },
+      ],
+    }),
+    setContractorLanguages: builder.mutation<
+      { languages: Language[] },
+      { spectrum_id: string; language_codes: string[] }
+    >({
+      query: ({ spectrum_id, ...body }) => ({
+        url: `/api/contractors/${spectrum_id}/languages`,
+        method: "PUT",
+        body,
+      }),
+      transformResponse: (response: { data: { languages: Language[] } }) =>
+        response.data,
+      invalidatesTags: (result, error, { spectrum_id }) => [
+        { type: "ContractorLanguages" as const, id: spectrum_id },
+        { type: "Contractor" as const, id: spectrum_id },
+      ],
+    }),
   }),
 })
 
@@ -795,4 +822,6 @@ export const {
   useUnblockUserForOrgMutation,
   useGetContractorAuditLogsQuery,
   useGetAdminAuditLogsQuery,
+  useGetContractorLanguagesQuery,
+  useSetContractorLanguagesMutation,
 } = contractorsApi

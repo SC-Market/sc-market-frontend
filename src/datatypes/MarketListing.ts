@@ -63,6 +63,7 @@ export interface MarketListing {
   orders?: Order[] | null
   expiration: string
   internal: boolean
+  languages?: Array<{ code: string; name: string }>
 }
 
 export interface UniqueListing {

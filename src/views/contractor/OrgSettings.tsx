@@ -12,6 +12,7 @@ import { useTranslation } from "react-i18next"
 import { languages } from "../../util/i18n"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useUpdateContractorMutation } from "../../store/contractor"
+import { OrgLanguageSettings } from "./OrgLanguageSettings"
 
 export function OrgSettings() {
   const { t } = useTranslation()
@@ -83,6 +84,7 @@ export function OrgSettings() {
           <Divider sx={{ my: 1 }} />
         </Grid>
       </Section>
+      <OrgLanguageSettings />
     </Grid>
   )
 }

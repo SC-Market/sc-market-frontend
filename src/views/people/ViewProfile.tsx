@@ -19,6 +19,7 @@ import {
   Tabs,
   TextField,
   Typography,
+  Chip,
 } from "@mui/material"
 import { Section } from "../../components/paper/Section"
 import { Link, useParams } from "react-router-dom"
@@ -630,6 +631,26 @@ export function ViewProfile(props: { profile: User }) {
                         }
                       />
                     </Typography>
+                    {props.profile.languages &&
+                      props.profile.languages.length > 0 && (
+                        <Box
+                          sx={{
+                            mt: 2,
+                            display: "flex",
+                            gap: 0.5,
+                            flexWrap: "wrap",
+                          }}
+                        >
+                          {props.profile.languages.map((lang) => (
+                            <Chip
+                              key={lang.code}
+                              label={`${lang.name} (${t(`languages.${lang.code}`, lang.name)})`}
+                              size="small"
+                              variant="outlined"
+                            />
+                          ))}
+                        </Box>
+                      )}
 
                     {isMyProfile && (
                       <Fab

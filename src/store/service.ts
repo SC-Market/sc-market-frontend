@@ -57,5 +57,7 @@ export const serviceApi = createApi({
     "ContractorAuditLogs",
     "AvailabilityRequirement",
     "OrderLimits",
+    "ContractorLanguages",
+    "UserLanguages",
   ],
 })

@@ -693,15 +693,19 @@ export function CartSellerEntry(props: {
                   loading={purchaseLoading}
                   disabled={
                     !hasAvailabilitySet ||
-                    !!(orderLimits &&
+                    !!(
+                      orderLimits &&
                       ((orderLimits.min_order_size &&
-                        currentSize < parseInt(orderLimits.min_order_size, 10)) ||
+                        currentSize <
+                          parseInt(orderLimits.min_order_size, 10)) ||
                         (orderLimits.max_order_size &&
-                          currentSize > parseInt(orderLimits.max_order_size, 10)) ||
+                          currentSize >
+                            parseInt(orderLimits.max_order_size, 10)) ||
                         (orderLimits.min_order_value &&
                           offer < parseInt(orderLimits.min_order_value, 10)) ||
                         (orderLimits.max_order_value &&
-                          offer > parseInt(orderLimits.max_order_value, 10))))
+                          offer > parseInt(orderLimits.max_order_value, 10)))
+                    )
                   }
                   onClick={() => handlePurchase(offer)}
                 >

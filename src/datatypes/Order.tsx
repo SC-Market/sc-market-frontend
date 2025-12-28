@@ -138,6 +138,7 @@ export interface Service {
   user?: User | null
   status: "active" | "inactive"
   photos: string[]
+  languages?: Array<{ code: string; name: string }>
 }
 
 export interface OrderComment {

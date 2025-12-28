@@ -405,6 +405,30 @@ export function ItemListingBase(props: {
                   count: listing.quantity_available,
                 })}
               </Typography>
+              {listing.languages && listing.languages.length > 0 && (
+                <Box
+                  sx={{
+                    display: "flex",
+                    gap: 0.5,
+                    flexWrap: "wrap",
+                    mt: 1,
+                  }}
+                >
+                  {listing.languages.map((lang) => (
+                    <Chip
+                      key={lang.code}
+                      label={lang.name}
+                      size="small"
+                      variant="outlined"
+                      sx={{ height: 20, fontSize: "0.7rem" }}
+                      onClick={(event) => {
+                        event.preventDefault()
+                        event.stopPropagation()
+                      }}
+                    />
+                  ))}
+                </Box>
+              )}
             </CardContent>
           </Card>
         </CardActionArea>

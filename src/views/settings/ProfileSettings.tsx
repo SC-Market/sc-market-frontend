@@ -8,6 +8,7 @@ import { AuthenticateRSI } from "../authentication/AuthenticateRSI"
 import { ReVerifyProfile } from "./ReVerifyProfile"
 import { UnlinkProfile } from "./UnlinkProfile"
 import { AccountLinks } from "./AccountLinks"
+import { LanguageSettings } from "./LanguageSettings"
 import { isCitizenIdEnabled } from "../../util/constants"
 import { useTranslation } from "react-i18next"
 
@@ -79,6 +80,9 @@ export function ProfileSettings() {
           <UnlinkProfile />
         </Grid>
       )}
+      <Grid item xs={12}>
+        <LanguageSettings />
+      </Grid>
     </Grid>
   )
 }

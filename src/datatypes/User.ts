@@ -28,6 +28,7 @@ export interface User {
   created_at?: number
   market_order_template: string
   rsi_confirmed: boolean
+  languages?: Array<{ code: string; name: string }>
 }
 
 export interface MinimalUser {
