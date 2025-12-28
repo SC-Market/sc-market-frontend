@@ -43,6 +43,8 @@ import { useTranslation } from "react-i18next"
 import {
   useCheckContractorAvailabilityRequirementQuery,
   useCheckUserAvailabilityRequirementQuery,
+  useCheckContractorOrderLimitsQuery,
+  useCheckUserOrderLimitsQuery,
 } from "../../store/orderSettings"
 import {
   useProfileGetAvailabilityQuery,
@@ -55,6 +57,7 @@ import {
   AvailabilityDisplay,
 } from "../../components/time/AvailabilitySelector"
 import { convertAvailability } from "../../pages/availability/Availability"
+import { OrderLimitsDisplay } from "../../components/orders/OrderLimitsDisplay"
 
 export function CartItemEntry(props: {
   item: CartItem
@@ -308,6 +311,25 @@ export function CartSellerEntry(props: {
     return availabilityRequirement.hasAvailability
   }, [availabilityRequirement])
 
+  // Check order limits for this seller
+  const { data: contractorLimits } = useCheckContractorOrderLimitsQuery(
+    seller.contractor_seller_id!,
+    { skip: !seller.contractor_seller_id },
+  )
+  const { data: userLimits } = useCheckUserOrderLimitsQuery(
+    seller.user_seller_id!,
+    { skip: !seller.user_seller_id },
+  )
+
+  // Use contractor limits if available, otherwise user limits
+  const orderLimits = contractorLimits || userLimits
+
+  // Calculate current order size (sum of quantities)
+  const currentSize = useMemo(
+    () => seller.items.reduce((sum, item) => sum + item.quantity, 0),
+    [seller.items],
+  )
+
   // Update availability mutation
   const [updateAvailability] = useProfileUpdateAvailabilityMutation()
 
@@ -427,6 +449,13 @@ export function CartSellerEntry(props: {
               message:
                 error.data.error.message ||
                 t("AvailabilityRequirement.apiError"),
+              severity: "error",
+            })
+          } else if (error?.data?.error?.code === "ORDER_LIMIT_VIOLATION") {
+            issueAlert({
+              message:
+                error.data.error.message ||
+                "Order does not meet size or value requirements",
               severity: "error",
             })
           } else {
@@ -570,6 +599,18 @@ export function CartSellerEntry(props: {
         </DialogActions>
       </Dialog>
 
+      {/* Order Limits Display */}
+      {orderLimits && (
+        <Grid item xs={12}>
+          <OrderLimitsDisplay
+            limits={orderLimits}
+            currentSize={currentSize}
+            currentValue={offer}
+            showValidation={true}
+          />
+        </Grid>
+      )}
+
       <Grid item xs={12}>
         <MarkdownEditor
           sx={{ marginRight: 2, marginBottom: 1 }}
@@ -650,7 +691,18 @@ export function CartSellerEntry(props: {
                   variant={"outlined"}
                   startIcon={<LocalOfferRounded />}
                   loading={purchaseLoading}
-                  disabled={!hasAvailabilitySet}
+                  disabled={
+                    !hasAvailabilitySet ||
+                    !!(orderLimits &&
+                      ((orderLimits.min_order_size &&
+                        currentSize < parseInt(orderLimits.min_order_size, 10)) ||
+                        (orderLimits.max_order_size &&
+                          currentSize > parseInt(orderLimits.max_order_size, 10)) ||
+                        (orderLimits.min_order_value &&
+                          offer < parseInt(orderLimits.min_order_value, 10)) ||
+                        (orderLimits.max_order_value &&
+                          offer > parseInt(orderLimits.max_order_value, 10))))
+                  }
                   onClick={() => handlePurchase(offer)}
                 >
                   {!hasAvailabilitySet

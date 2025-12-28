@@ -9,6 +9,10 @@ export interface OrderSetting {
     | "order_message"
     | "require_availability"
     | "stock_subtraction_timing"
+    | "min_order_size"
+    | "max_order_size"
+    | "min_order_value"
+    | "max_order_value"
   message_content: string
   enabled: boolean
   created_at: string
@@ -21,8 +25,19 @@ export interface CreateOrderSettingRequest {
     | "order_message"
     | "require_availability"
     | "stock_subtraction_timing"
+    | "min_order_size"
+    | "max_order_size"
+    | "min_order_value"
+    | "max_order_value"
   message_content?: string // Optional for require_availability and stock_subtraction_timing
   enabled?: boolean
+}
+
+export interface OrderLimits {
+  min_order_size?: string
+  max_order_size?: string
+  min_order_value?: string
+  max_order_value?: string
 }
 
 export interface UpdateOrderSettingRequest {
@@ -166,6 +181,33 @@ export const orderSettingsApi = serviceApi.injectEndpoints({
         { type: "AvailabilityRequirement" as const, id: `user:${username}` },
       ],
     }),
+
+    // Check order limits for contractor
+    checkContractorOrderLimits: builder.query<OrderLimits, string>({
+      query: (spectrumId) => ({
+        url: `/api/orders/limits/contractor/${spectrumId}/check`,
+      }),
+      transformResponse: (response: { data: { limits: OrderLimits } }) =>
+        response.data.limits,
+      providesTags: (result, error, spectrumId) => [
+        {
+          type: "OrderLimits" as const,
+          id: `contractor:${spectrumId}`,
+        },
+      ],
+    }),
+
+    // Check order limits for user
+    checkUserOrderLimits: builder.query<OrderLimits, string>({
+      query: (username) => ({
+        url: `/api/orders/limits/user/${username}/check`,
+      }),
+      transformResponse: (response: { data: { limits: OrderLimits } }) =>
+        response.data.limits,
+      providesTags: (result, error, username) => [
+        { type: "OrderLimits" as const, id: `user:${username}` },
+      ],
+    }),
   }),
 })
 
@@ -180,4 +222,6 @@ export const {
   useDeleteContractorOrderSettingMutation,
   useCheckContractorAvailabilityRequirementQuery,
   useCheckUserAvailabilityRequirementQuery,
+  useCheckContractorOrderLimitsQuery,
+  useCheckUserOrderLimitsQuery,
 } = orderSettingsApi

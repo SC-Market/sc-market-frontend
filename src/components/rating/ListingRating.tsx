@@ -11,6 +11,7 @@ import {
   BoltRounded,
   CalendarTodayRounded,
   RocketLaunchRounded,
+  FavoriteRounded,
 } from "@mui/icons-material"
 import {
   Box,
@@ -51,6 +52,10 @@ import {
   BADGE_CONSISTENCY_GOLD,
   BADGE_CONSISTENCY_SILVER,
   BADGE_CONSISTENCY_COPPER,
+  BADGE_DONOR_PRO,
+  BADGE_DONOR_GOLD,
+  BADGE_DONOR_SILVER,
+  BADGE_DONOR_COPPER,
   BADGE_EARLY_ADOPTER,
   BADGE_RESPONSIVE,
 } from "../../util/badges"
@@ -479,6 +484,47 @@ function BadgeDisplay(props: { badges: string[] }) {
       {badges.includes(BADGE_CONSISTENCY_COPPER) && (
         <Tooltip title={t("listing.activeSellerFor6PlusMonths")}>
           <CalendarTodayRounded sx={{ color: "#CD7F32" }} />
+        </Tooltip>
+      )}
+
+      {/* Donor badges */}
+      {badges.includes(BADGE_DONOR_PRO) && (
+        <Tooltip title={t("listing.donor12PlusMonths")}>
+          <Box>
+            <svg width={0} height={0}>
+              <linearGradient
+                id={`${gradientId}-donor`}
+                x1={1}
+                y1={0}
+                x2={1}
+                y2={1}
+                gradientTransform="rotate(-15)"
+              >
+                <stop offset={0} stopColor={theme.palette.primary.main} />
+                <stop offset={1} stopColor={theme.palette.secondary.main} />
+              </linearGradient>
+            </svg>
+            <FavoriteRounded
+              sx={{
+                fill: `url(#${gradientId}-donor)`,
+              }}
+            />
+          </Box>
+        </Tooltip>
+      )}
+      {badges.includes(BADGE_DONOR_GOLD) && (
+        <Tooltip title={t("listing.donor6PlusMonths")}>
+          <FavoriteRounded sx={{ color: "#FFD700" }} />
+        </Tooltip>
+      )}
+      {badges.includes(BADGE_DONOR_SILVER) && (
+        <Tooltip title={t("listing.donor3PlusMonths")}>
+          <FavoriteRounded sx={{ color: "#C0C0C0" }} />
+        </Tooltip>
+      )}
+      {badges.includes(BADGE_DONOR_COPPER) && (
+        <Tooltip title={t("listing.donor1PlusMonth")}>
+          <FavoriteRounded sx={{ color: "#CD7F32" }} />
         </Tooltip>
       )}
 

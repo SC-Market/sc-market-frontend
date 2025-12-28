@@ -56,5 +56,6 @@ export const serviceApi = createApi({
     "AdminAuditLogs",
     "ContractorAuditLogs",
     "AvailabilityRequirement",
+    "OrderLimits",
   ],
 })

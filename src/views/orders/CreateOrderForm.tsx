@@ -36,6 +36,8 @@ import { useTranslation } from "react-i18next"
 import {
   useCheckContractorAvailabilityRequirementQuery,
   useCheckUserAvailabilityRequirementQuery,
+  useCheckContractorOrderLimitsQuery,
+  useCheckUserOrderLimitsQuery,
 } from "../../store/orderSettings"
 import {
   useProfileGetAvailabilityQuery,
@@ -45,6 +47,7 @@ import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { CheckCircle, Warning } from "@mui/icons-material"
 import { AvailabilitySelector } from "../../components/time/AvailabilitySelector"
 import { convertAvailability } from "../../pages/availability/Availability"
+import { OrderLimitsDisplay } from "../../components/orders/OrderLimitsDisplay"
 
 interface WorkRequestState {
   title: string
@@ -128,6 +131,18 @@ const CreateOrderFormComponent = React.forwardRef<
   const { data: userAvailability } = useProfileGetAvailabilityQuery(
     props.contractor_id ? currentOrg?.spectrum_id || null : null,
   )
+
+  // Check order limits
+  const { data: contractorLimits } = useCheckContractorOrderLimitsQuery(
+    props.contractor_id!,
+    { skip: !props.contractor_id },
+  )
+  const { data: userLimits } = useCheckUserOrderLimitsQuery(props.assigned_to!, {
+    skip: !props.assigned_to,
+  })
+
+  // Use contractor limits if available, otherwise user limits
+  const orderLimits = contractorLimits || userLimits
 
   // Check if availability is set
   const hasAvailabilitySet = useMemo(() => {
@@ -327,6 +342,13 @@ const CreateOrderFormComponent = React.forwardRef<
                 t("AvailabilityRequirement.apiError"),
               severity: "error",
             })
+          } else if (error?.data?.error?.code === "ORDER_LIMIT_VIOLATION") {
+            issueAlert({
+              message:
+                error.data.error.message ||
+                "Order does not meet size or value requirements",
+              severity: "error",
+            })
           } else {
             issueAlert(error)
           }
@@ -399,6 +421,18 @@ const CreateOrderFormComponent = React.forwardRef<
               )}
             </Box>
           </Alert>
+        </Grid>
+      )}
+
+      {/* Order Limits Display */}
+      {orderLimits && (
+        <Grid item xs={12}>
+          <OrderLimitsDisplay
+            limits={orderLimits}
+            currentSize={0} // Service orders have no market listings
+            currentValue={state.offer}
+            showValidation={true}
+          />
         </Grid>
       )}
 

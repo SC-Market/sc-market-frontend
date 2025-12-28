@@ -28,6 +28,11 @@ import {
 import { MinimalUser } from "../../datatypes/User"
 import { PAYMENT_TYPES } from "../../util/constants"
 import { useTranslation } from "react-i18next"
+import {
+  useCheckContractorOrderLimitsQuery,
+  useCheckUserOrderLimitsQuery,
+} from "../../store/orderSettings"
+import { OrderLimitsDisplay } from "../../components/orders/OrderLimitsDisplay"
 
 export function ContractOfferForm(props: { contract: PublicContract }) {
   const { contract } = props
@@ -73,7 +78,16 @@ export function ContractOfferForm(props: { contract: PublicContract }) {
           navigate(`/offer/${data.session_id}`)
         })
         .catch((error) => {
-          issueAlert(error)
+          if (error?.data?.error?.code === "ORDER_LIMIT_VIOLATION") {
+            issueAlert({
+              message:
+                error.data.error.message ||
+                "Order does not meet size or value requirements",
+              severity: "error",
+            })
+          } else {
+            issueAlert(error)
+          }
         })
       return false
     },
@@ -97,6 +111,19 @@ export function ContractOfferForm(props: { contract: PublicContract }) {
   const { data: myUser } = useGetUserByUsernameQuery(profile?.username!, {
     skip: !profile,
   })
+
+  // Check order limits for the seller (contractor or user making the offer)
+  const { data: contractorLimits } = useCheckContractorOrderLimitsQuery(
+    currentOrg?.spectrum_id || "",
+    { skip: !currentOrg?.spectrum_id },
+  )
+  const { data: userLimits } = useCheckUserOrderLimitsQuery(
+    profile?.username || "",
+    { skip: !profile?.username || !!currentOrg },
+  )
+
+  // Use contractor limits if available, otherwise user limits
+  const orderLimits = contractorLimits || userLimits
 
   return (
     <>
@@ -318,6 +345,18 @@ export function ContractOfferForm(props: { contract: PublicContract }) {
               )}
             </div>
           </Grid>
+
+          {/* Order Limits Display */}
+          {orderLimits && (
+            <Grid item xs={12}>
+              <OrderLimitsDisplay
+                limits={orderLimits}
+                currentSize={0} // Contract offers have no market listings
+                currentValue={cost}
+                showValidation={true}
+              />
+            </Grid>
+          )}
 
           <Grid item xs={12}>
             <TextField

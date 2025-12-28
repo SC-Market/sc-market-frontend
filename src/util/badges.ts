@@ -24,6 +24,10 @@ export const BADGE_CONSISTENCY_PRO = "consistency_pro"
 export const BADGE_CONSISTENCY_GOLD = "consistency_gold"
 export const BADGE_CONSISTENCY_SILVER = "consistency_silver"
 export const BADGE_CONSISTENCY_COPPER = "consistency_copper"
+export const BADGE_DONOR_PRO = "donor_pro"
+export const BADGE_DONOR_GOLD = "donor_gold"
+export const BADGE_DONOR_SILVER = "donor_silver"
+export const BADGE_DONOR_COPPER = "donor_copper"
 export const BADGE_EARLY_ADOPTER = "early_adopter"
 export const BADGE_RESPONSIVE = "responsive"
 
@@ -55,6 +59,11 @@ const BADGE_PRIORITY = [
   BADGE_CONSISTENCY_GOLD,
   BADGE_CONSISTENCY_SILVER,
   BADGE_CONSISTENCY_COPPER,
+  // Donor badges (new - medium priority)
+  BADGE_DONOR_PRO,
+  BADGE_DONOR_GOLD,
+  BADGE_DONOR_SILVER,
+  BADGE_DONOR_COPPER,
   // Activity badges (only highest applicable)
   BADGE_POWER_SELLER,
   BADGE_BUSY_SELLER,

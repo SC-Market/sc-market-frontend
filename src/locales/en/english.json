@@ -345,6 +345,10 @@
     "activeSellerFor2PlusYears": "Active seller for 2+ years",
     "activeSellerFor1PlusYear": "Active seller for 1+ year",
     "activeSellerFor6PlusMonths": "Active seller for 6+ months",
+    "donor12PlusMonths": "Donor for 12+ months",
+    "donor6PlusMonths": "Donor for 6+ months",
+    "donor3PlusMonths": "Donor for 3+ months",
+    "donor1PlusMonth": "Donor for 1+ month",
     "earlyPlatformAdopter": "Early platform adopter"
   },
   "manageListingsActions": {
