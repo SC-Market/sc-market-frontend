@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, useCallback, useEffect } from "react"
+import React, { MouseEventHandler, ReactElement, useCallback, useEffect } from "react"
 import { Box, IconButton, TableCell, TableRow, Typography } from "@mui/material"
 import { Section } from "../../components/paper/Section"
 import { HeadCell, PaginatedTable } from "../../components/table/PaginatedTable"
@@ -47,7 +47,7 @@ export function InviteRow(props: {
   onClick?: MouseEventHandler
   isItemSelected: boolean
   labelId: string
-}): JSX.Element {
+}): ReactElement {
   const { row, index, isItemSelected } = props
   const [currentOrg] = useCurrentOrg()
   const theme = useTheme<ExtendedTheme>()

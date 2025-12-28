@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, useMemo, useState } from "react"
+import React, { MouseEventHandler, ReactElement, useMemo, useState } from "react"
 import { Section } from "../../components/paper/Section"
 import {
   Avatar,
@@ -46,7 +46,7 @@ import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownR
 import { useGetCommoditiesQuery } from "../../store/commodities"
 import LocalOfferIcon from "@mui/icons-material/LocalOffer"
 
-export const kindIcons: { [key: string]: [JSX.Element, string] } = {
+export const kindIcons: { [key: string]: [ReactElement, string] } = {
   Agricultural: [<AgricultureIcon key={"Agricultural"} />, green[500]],
   Waste: [<DeleteIcon key={"Waste"} />, lightGreen[800]],
   Metal: [<DirectionsCarIcon key={"Metal"} />, brown[200]],
@@ -69,7 +69,7 @@ function SellItemRow(props: {
   onClick?: MouseEventHandler
   isItemSelected: boolean
   labelId: string
-}): JSX.Element {
+}): ReactElement {
   const { t, i18n } = useTranslation()
   const { row, onClick, isItemSelected, labelId } = props
   const bgColor = useMemo(
@@ -178,7 +178,7 @@ function onlyUnique<T>(value: T, index: number, self: T[]) {
   return self.indexOf(value) === index
 }
 
-export function SellMaterialsList(props: {}): JSX.Element {
+export function SellMaterialsList(props: {}): ReactElement {
   const { t } = useTranslation()
   const theme: ExtendedTheme = useTheme()
   const [kind, setKind] = useState<string>("Any")

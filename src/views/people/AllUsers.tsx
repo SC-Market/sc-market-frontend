@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, useMemo, useState } from "react"
+import React, { MouseEventHandler, ReactElement, useMemo, useState } from "react"
 import { Section } from "../../components/paper/Section"
 import {
   Avatar,
@@ -40,7 +40,7 @@ function PeopleRow(props: {
   onClick?: MouseEventHandler
   isItemSelected: boolean
   labelId: string
-}): JSX.Element {
+}): ReactElement {
   const { row, onClick, isItemSelected, labelId } = props
   return (
     <TableRow
@@ -164,7 +164,7 @@ export function AdminUserList(props: {
   contractors?: boolean
   members?: boolean
   customers?: boolean
-}): JSX.Element {
+}): ReactElement {
   const { t } = useTranslation()
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(5)

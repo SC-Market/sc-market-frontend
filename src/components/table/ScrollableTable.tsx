@@ -1,4 +1,4 @@
-import React, { MouseEventHandler } from "react"
+import React, { MouseEventHandler, ReactElement } from "react"
 import {
   Box,
   Checkbox,
@@ -135,7 +135,7 @@ export function ScrollableTable<T>(props: {
     onClick?: MouseEventHandler
     isItemSelected: boolean
     labelId: string
-  }) => JSX.Element
+  }) => ReactElement
 }) {
   const { rows, keyAttr, initialSort, headCells, disableSelect } = props
   const RowComponent = props.generateRow

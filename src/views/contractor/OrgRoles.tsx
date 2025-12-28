@@ -1,5 +1,6 @@
 import React, {
   MouseEventHandler,
+  ReactElement,
   useCallback,
   useEffect,
   useMemo,
@@ -398,7 +399,7 @@ function RoleRow(props: {
   isItemSelected: boolean
   labelId: string
   manage?: boolean
-}): JSX.Element {
+}): ReactElement {
   const { row, index, onClick, isItemSelected, labelId } = props
   const [open, setOpen] = useState(false)
 
@@ -488,7 +489,7 @@ const headCells: readonly HeadCell<ContractorRole>[] = [
   },
 ]
 
-export function ManageRoles(): JSX.Element {
+export function ManageRoles(): ReactElement {
   const [contractor] = useCurrentOrg()
   const { t } = useTranslation()
 

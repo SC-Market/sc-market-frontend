@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, useCallback } from "react"
+import React, { MouseEventHandler, ReactElement, useCallback } from "react"
 import { Box, IconButton, TableCell, TableRow, Typography } from "@mui/material"
 import { Section } from "../../components/paper/Section"
 import { HeadCell, PaginatedTable } from "../../components/table/PaginatedTable"
@@ -41,7 +41,7 @@ export function WebhookRow(props: {
   isItemSelected: boolean
   labelId: string
   org?: boolean
-}): JSX.Element {
+}): ReactElement {
   const { row, index, isItemSelected } = props // TODO: Add `assigned_to` column
   const [currentOrg] = useCurrentOrg()
 

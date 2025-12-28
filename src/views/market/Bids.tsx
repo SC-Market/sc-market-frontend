@@ -1,5 +1,5 @@
 import { Section } from "../../components/paper/Section"
-import React, { MouseEventHandler, useCallback } from "react"
+import React, { MouseEventHandler, ReactElement, useCallback } from "react"
 import { HeadCell, PaginatedTable } from "../../components/table/PaginatedTable"
 import { Button, TableCell, TableRow, Typography } from "@mui/material"
 import {
@@ -22,7 +22,7 @@ export interface BidRowProps {
   labelId: string
 }
 
-export function BidRow(props: BidRowProps): JSX.Element {
+export function BidRow(props: BidRowProps): ReactElement {
   const { row, index, isItemSelected } = props // TODO: Add `assigned_to` column
   const { i18n } = useTranslation()
 

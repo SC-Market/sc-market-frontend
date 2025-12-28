@@ -1,4 +1,4 @@
-import React, { MouseEventHandler } from "react"
+import React, { MouseEventHandler, ReactElement } from "react"
 import { Section } from "../../components/paper/Section"
 import {
   Avatar,
@@ -24,7 +24,7 @@ function PeopleRow(props: {
   onClick?: MouseEventHandler
   isItemSelected: boolean
   labelId: string
-}): JSX.Element {
+}): ReactElement {
   const { row, onClick, isItemSelected, labelId } = props
   return (
     <TableRow

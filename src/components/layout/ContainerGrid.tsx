@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react"
+import React, { ReactElement, useEffect, useRef } from "react"
 import {
   Box,
   Container,
@@ -20,7 +20,7 @@ export function ContainerGrid(
     GridProps?: GridProps
     noTopSpacer?: boolean
   } & ContainerProps,
-): JSX.Element {
+): ReactElement {
   const theme: Theme = useTheme()
 
   const [drawerOpen, setDrawerOpen] = useDrawerOpen()
