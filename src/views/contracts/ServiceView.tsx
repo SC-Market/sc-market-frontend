@@ -18,7 +18,9 @@ import {
   Divider,
   ButtonBase,
   Button,
+  useTheme,
 } from "@mui/material"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { Link } from "react-router-dom"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { getRelativeTime } from "../../util/time"
@@ -473,6 +475,7 @@ export function ServiceView(props: {
   orderFormRef?: React.RefObject<HTMLDivElement | null>
 }) {
   const { service } = props
+  const theme = useTheme<ExtendedTheme>()
   const { data: profile } = useGetUserProfileQuery()
   const [currentOrg] = useCurrentOrg()
   const { t } = useTranslation()
@@ -645,7 +648,7 @@ export function ServiceView(props: {
                   {amRelated ? (
                     <Link to={`/order/service/${service.service_id}/edit`}>
                       <IconButton>
-                        <CreateRounded style={{ color: "white" }} />
+                        <CreateRounded sx={{ color: theme.palette.background.light }} />
                       </IconButton>
                     </Link>
                   ) : undefined}

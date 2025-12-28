@@ -1,7 +1,10 @@
 import { DataGrid, DataGridProps } from "@mui/x-data-grid"
 import React from "react"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function ThemedDataGrid(props: DataGridProps) {
+  const theme = useTheme<ExtendedTheme>()
   return (
     <DataGrid
       {...props}
@@ -15,7 +18,7 @@ export function ThemedDataGrid(props: DataGridProps) {
           color: "outline.main",
         },
         [".MuiDataGrid-menu"]: {
-          color: "white",
+          color: theme.palette.background.light,
         },
         ...props.sx,
       }}

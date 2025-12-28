@@ -97,7 +97,7 @@ export function SidebarDropdown(props: SidebarItemProps) {
           marginBottom: 0.5,
           transition: "0.3s",
           "&:hover": {
-            backgroundColor: "rgba(36,41,58,0.43)",
+            backgroundColor: theme.palette.action.hover,
           },
           // ...makeCut('12px'),
         }}
@@ -193,7 +193,7 @@ export function SidebarLinkBody(props: SidebarItemProps & { to: string }) {
           marginTop: 0.5,
           transition: "0.3s",
           "&:hover": {
-            backgroundColor: "rgba(36,41,58,0.43)",
+            backgroundColor: theme.palette.action.hover,
           },
           // ...makeCut('12px'),
         }}
@@ -480,7 +480,7 @@ export function Sidebar() {
                   }}
                 />
 
-                <Typography color={"white"} fontWeight={600}>
+                <Typography color={theme.palette.background.light} fontWeight={600}>
                   {t("sidebar.sc_market")}
                 </Typography>
               </Stack>
@@ -539,7 +539,7 @@ export function Sidebar() {
                         opacity: 0.7,
                         textTransform: "uppercase",
                         fontSize: "0.85em",
-                        color: "#929ca1",
+                        color: theme.palette.common.subheader,
                         transition: "0.3s",
                       }}
                       variant={"body2"}

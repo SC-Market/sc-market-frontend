@@ -4,7 +4,8 @@ import {
   AvailabilityHookContext,
   useAvailability,
 } from "../../hooks/time/AvailabilityHook"
-import { Button, Grid, GridProps, IconButton } from "@mui/material"
+import { Button, Grid, GridProps, IconButton, useTheme } from "@mui/material"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { Section } from "../paper/Section"
 import { useGetUserProfileQuery } from "../../store/profile"
 import CreateRoundedIcon from "@mui/icons-material/CreateRounded"
@@ -16,6 +17,7 @@ function AvailabilityItem(props: {
   slot: number
   value: boolean
 }) {
+  const theme = useTheme<ExtendedTheme>()
   const { day, slot, value } = props
   const {
     clicked,
@@ -45,7 +47,11 @@ function AvailabilityItem(props: {
 
   return (
     <td
-      style={{ backgroundColor: active ? "#595" : "#555" }}
+      style={{ 
+        backgroundColor: active 
+          ? theme.palette.success.main 
+          : theme.palette.action.disabledBackground || theme.palette.grey[700] 
+      }}
       onMouseOver={() => endSelect(day, slot)}
       onMouseDown={() => startSelect(day, slot)}
       onMouseUp={() => setClicked(false)}
@@ -243,6 +249,7 @@ export function AvailabilitySelector(props: {
 export function AvailabilityDisplay(
   props: { value: boolean[]; name: string } & GridProps,
 ) {
+  const theme = useTheme<ExtendedTheme>()
   const { t, i18n } = useTranslation()
   const { value, name, ...gridprops } = props
   const availability = useMemo(() => arrayRotate(value, tzOffset), [value])
@@ -329,8 +336,8 @@ export function AvailabilityDisplay(
                     key={day * 48 + slot}
                     style={{
                       backgroundColor: availability[day * 48 + slot]
-                        ? "#595"
-                        : "#555",
+                        ? theme.palette.success.main
+                        : theme.palette.action.disabledBackground || theme.palette.grey[700],
                     }}
                     draggable={"false"}
                   ></td>

@@ -107,7 +107,7 @@ export function MarketMultipleView() {
                 <Paper
                   sx={{
                     borderRadius: 3,
-                    backgroundColor: "black",
+                    backgroundColor: theme.palette.background.default,
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",

@@ -15,6 +15,32 @@ declare module "@mui/material/styles" {
     xxl: true
   }
 
+
+  interface TypeBackground {
+    navbar: string
+    sidebar: string
+    light: string
+    overlay: string
+    overlayDark: string
+    imageOverlay: string
+    imageOverlayHover: string
+  }
+
+  interface TypeAction {
+    hover: string
+  }
+
+  interface CommonColors {
+    subheader: string
+    focus: string
+    badge: {
+      gold: string
+      silver: string
+      bronze: string
+      purple: string
+    }
+  }
+
   interface Palette {
     discord: Palette["primary"]
     outline: Palette["primary"]
@@ -23,12 +49,6 @@ declare module "@mui/material/styles" {
   interface PaletteOptions {
     discord?: PaletteOptions["primary"]
     outline?: PaletteOptions["primary"]
-  }
-
-  interface TypeBackground {
-    navbar: string
-    sidebar: string
-    light: string
   }
 
   interface ThemeOptions {
@@ -216,9 +236,26 @@ export const mainThemeOptions: ExtendedThemeOptions = {
       sidebar: "#111828",
       navbar: "#111828",
       light: "#FFF",
+      overlay: "rgba(0, 0, 0, 0.5)",
+      overlayDark: "rgba(0, 0, 0, 0.7)",
+      imageOverlay: "rgba(0, 0, 0, 0.8)",
+      imageOverlayHover: "rgba(0, 0, 0, 0.9)",
     },
     outline: {
       main: mainOutline,
+    },
+    action: {
+      hover: "rgba(36, 41, 58, 0.43)",
+    },
+    common: {
+      subheader: "#929ca1",
+      focus: "#1976d2",
+      badge: {
+        gold: "#FFD700",
+        silver: "#C0C0C0",
+        bronze: "#CD7F32",
+        purple: "#9C27B0",
+      },
     },
   },
   navKind: "outlined",
@@ -281,6 +318,9 @@ export const mainThemeOptions: ExtendedThemeOptions = {
           // scrollbarColor: "#6b6b6b #2b2b2b",
           backgroundColor: "#0b0f1a",
         },
+        "*:focus": {
+          outlineColor: "var(--mui-palette-common-focus, #1976d2)",
+        },
       },
     },
   },
@@ -319,6 +359,23 @@ export const lightThemeOptions: ExtendedThemeOptions = {
       paper: "#FFFFFF",
       navbar: "#FFFFFF",
       sidebar: "#101827",
+      overlay: "rgba(0, 0, 0, 0.5)",
+      overlayDark: "rgba(0, 0, 0, 0.7)",
+      imageOverlay: "rgba(0, 0, 0, 0.6)",
+      imageOverlayHover: "rgba(0, 0, 0, 0.8)",
+    },
+    action: {
+      hover: "rgba(0, 0, 0, 0.04)",
+    },
+    common: {
+      subheader: "rgba(0, 0, 0, 0.6)",
+      focus: "#1976d2",
+      badge: {
+        gold: "#FFD700",
+        silver: "#C0C0C0",
+        bronze: "#CD7F32",
+        purple: "#9C27B0",
+      },
     },
   },
   navKind: "outlined",

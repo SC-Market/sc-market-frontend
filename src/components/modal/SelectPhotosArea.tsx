@@ -25,9 +25,10 @@ import { Section } from "../paper/Section"
 import { external_resource_regex } from "../../views/people/ViewProfile"
 
 export function PhotoEntry(props: { url: string; onClose: () => void }) {
+  const theme = useTheme()
   return (
     <Paper
-      sx={{ width: 96, height: 96, bgcolor: "#000000CC", position: "relative" }}
+      sx={{ width: 96, height: 96, bgcolor: theme.palette.background.imageOverlay, position: "relative" }}
     >
       <Fab
         size={"small"}
@@ -50,6 +51,7 @@ export function PhotoEntry(props: { url: string; onClose: () => void }) {
 }
 
 export function PendingPhotoEntry(props: { file: File; onClose: () => void }) {
+  const theme = useTheme()
   const [previewUrl, setPreviewUrl] = useState<string>("")
 
   React.useEffect(() => {
@@ -64,7 +66,7 @@ export function PendingPhotoEntry(props: { file: File; onClose: () => void }) {
 
   return (
     <Paper
-      sx={{ width: 96, height: 96, bgcolor: "#000000CC", position: "relative" }}
+      sx={{ width: 96, height: 96, bgcolor: theme.palette.background.imageOverlay, position: "relative" }}
     >
       <Fab
         size={"small"}
@@ -352,7 +354,7 @@ export function SelectPhotosArea(props: {
         </Paper> */}
 
         {/* URL input button for external image URLs */}
-        <Paper sx={{ width: 96, height: 96, bgcolor: "#00000099" }}>
+        <Paper sx={{ width: 96, height: 96, bgcolor: theme.palette.background.imageOverlay }}>
           <ButtonBase
             sx={{ width: "100%", height: "100%" }}
             onClick={() => {
@@ -379,7 +381,7 @@ export function SelectPhotosArea(props: {
         </Paper>
 
         {showUploadButton && onFileUpload && (
-          <Paper sx={{ width: 96, height: 96, bgcolor: "#00000099" }}>
+          <Paper sx={{ width: 96, height: 96, bgcolor: theme.palette.background.imageOverlay }}>
             <ButtonBase
               sx={{ width: "100%", height: "100%" }}
               onClick={() => fileInputRef.current?.click()}

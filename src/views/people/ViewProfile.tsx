@@ -497,12 +497,12 @@ export function ViewProfile(props: { profile: User }) {
                                 position: "absolute",
                                 zIndex: 50,
                                 transition: "0.3s",
-                                color: "white",
+                                color: theme.palette.background.light,
                                 top: 20,
                                 left: 20,
-                                backgroundColor: "rgba(0, 0, 0, 0.5)",
+                                backgroundColor: theme.palette.background.overlay,
                                 "&:hover": {
-                                  backgroundColor: "rgba(0, 0, 0, 0.7)",
+                                  backgroundColor: theme.palette.background.overlayDark,
                                 },
                               }}
                             >

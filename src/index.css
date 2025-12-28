@@ -27,7 +27,7 @@ code {
 
 /* Focus management */
 *:focus {
-  outline: 2px solid #1976d2;
+  outline: 2px solid var(--mui-palette-common-focus, #1976d2);
   outline-offset: 2px;
 }
 

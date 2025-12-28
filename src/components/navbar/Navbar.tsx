@@ -57,7 +57,7 @@ export function Navbar(props: { children?: React.ReactNode }) {
         // borderColor: theme.palette.outline.main,
         // borderBottom: 1,
         "& .MuiAppBar-root": {
-          backgroundColor: "rgba(0,0,0,0)",
+          backgroundColor: "transparent",
           // backgroundColor: theme.palette.background.default
           overflow: "hidden",
         },
@@ -82,7 +82,7 @@ export function Navbar(props: { children?: React.ReactNode }) {
               }
             : {
                 border: "none",
-                boxShadow: "0px 5px 5px 0px rgba(0, 0, 0)",
+                boxShadow: `0px 5px 5px 0px ${theme.palette.mode === "dark" ? "rgba(0, 0, 0, 0.5)" : "rgba(0, 0, 0, 0.1)"}`,
               }),
         }}
       >

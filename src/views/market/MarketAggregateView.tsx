@@ -24,7 +24,9 @@ import {
   TableRow,
   TextField,
   Typography,
+  useTheme,
 } from "@mui/material"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useGetUserProfileQuery } from "../../store/profile"
 import {
@@ -160,6 +162,7 @@ export function MarketAggregateView() {
 
   // const {data: contractor} = useGetContractorBySpectrumIDQuery(listing.contractor_seller?.spectrum_id!, {skip: !listing.contractor_seller})
 
+  const theme = useTheme<ExtendedTheme>()
   const issueAlert = useAlertHook()
   const [imageModalOpen, setImageModalOpen] = useState(false)
   const [updateImageModalOpen, setUpdateImageModalOpen] = useState(false)
@@ -176,7 +179,7 @@ export function MarketAggregateView() {
         <Paper
           sx={{
             borderRadius: 3,
-            backgroundColor: "black",
+            backgroundColor: theme.palette.background.default,
             display: "flex",
             justifyContent: "center",
             alignItems: "center",

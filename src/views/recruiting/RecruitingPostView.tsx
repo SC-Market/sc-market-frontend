@@ -139,7 +139,7 @@ export function RecruitingPostView(props: { post: RecruitingPost }) {
                     to={`/recruiting/post/${post.post_id}/update`}
                     style={{ marginLeft: 2 }}
                   >
-                    <IconButton sx={{ color: "white" }}>
+                    <IconButton sx={{ color: theme.palette.background.light }}>
                       <CreateRounded />
                     </IconButton>
                   </Link>

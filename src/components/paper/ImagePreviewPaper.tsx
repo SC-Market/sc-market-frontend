@@ -1,5 +1,5 @@
 import { ImagePreviewModal } from "../modal/ImagePreviewModal"
-import { IconButton, Paper } from "@mui/material"
+import { IconButton, Paper, useTheme } from "@mui/material"
 import {
   KeyboardArrowLeft,
   KeyboardArrowRight,
@@ -7,9 +7,11 @@ import {
 } from "@mui/icons-material"
 import React, { useState } from "react"
 import { useTranslation } from "react-i18next"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function ImagePreviewPaper(props: { photos: string[] }) {
   const { photos } = props
+  const theme = useTheme<ExtendedTheme>()
   const [imageIndex, setImageIndex] = useState(0)
   const [imageModalOpen, setImageModalOpen] = useState(false)
   const { t } = useTranslation()
@@ -37,7 +39,7 @@ export function ImagePreviewPaper(props: { photos: string[] }) {
       <Paper
         sx={{
           borderRadius: 3,
-          backgroundColor: "black",
+          backgroundColor: theme.palette.background.default,
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
@@ -71,7 +73,7 @@ export function ImagePreviewPaper(props: { photos: string[] }) {
             onClick={handlePreviousImage}
             aria-label={t("accessibility.previousImage", "Previous image")}
           >
-            <KeyboardArrowRight style={{ color: "white" }} />
+            <KeyboardArrowRight sx={{ color: theme.palette.background.light }} />
           </IconButton>
         )}
 
@@ -81,7 +83,7 @@ export function ImagePreviewPaper(props: { photos: string[] }) {
             onClick={handleNextImage}
             aria-label={t("accessibility.nextImage", "Next image")}
           >
-            <KeyboardArrowLeft style={{ color: "white" }} />
+            <KeyboardArrowLeft sx={{ color: theme.palette.background.light }} />
           </IconButton>
         )}
 

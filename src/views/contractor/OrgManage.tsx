@@ -244,12 +244,12 @@ export function OrgDetailEditForm(props: { contractor: Contractor }) {
                       position: "absolute",
                       zIndex: 50,
                       transition: "0.3s",
-                      color: "white",
+                      color: theme.palette.background.light,
                       top: theme.spacing(4),
                       left: theme.spacing(4),
-                      backgroundColor: "rgba(0, 0, 0, 0.5)",
+                      backgroundColor: theme.palette.background.overlay,
                       "&:hover": {
-                        backgroundColor: "rgba(0, 0, 0, 0.7)",
+                        backgroundColor: theme.palette.background.overlayDark,
                       },
                     }}
                   >
@@ -477,7 +477,7 @@ export function OrgDetailEditForm(props: { contractor: Contractor }) {
                   // position: 'absolute',
                   zIndex: 50,
                   transition: "0.3s",
-                  color: "white",
+                  color: theme.palette.background.light,
                   // top: 20,
                   // left: 20
                 }}

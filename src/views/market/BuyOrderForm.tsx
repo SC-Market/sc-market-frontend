@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react"
 import { FlatSection } from "../../components/paper/Section"
-import { Divider, Grid, InputAdornment, Paper, TextField } from "@mui/material"
+import { Divider, Grid, InputAdornment, Paper, TextField, useTheme } from "@mui/material"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { MarketAggregate } from "../../datatypes/MarketListing"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
@@ -13,6 +14,7 @@ import { NumericFormat } from "react-number-format"
 import { useTranslation } from "react-i18next"
 
 export function BuyOrderForm(props: { aggregate: MarketAggregate }) {
+  const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
   const { aggregate } = props
   const [state, setState] = useState({
@@ -60,7 +62,7 @@ export function BuyOrderForm(props: { aggregate: MarketAggregate }) {
         <Paper
           sx={{
             borderRadius: 3,
-            backgroundColor: "black",
+            backgroundColor: theme.palette.background.default,
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
