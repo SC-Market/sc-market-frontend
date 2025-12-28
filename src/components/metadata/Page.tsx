@@ -2,6 +2,7 @@ import React, { PropsWithChildren, useEffect } from "react"
 import { CURRENT_CUSTOM_ORG } from "../../hooks/contractor/CustomDomain"
 import { Helmet } from "react-helmet"
 import { useGetContractorBySpectrumIDQuery } from "../../store/contractor"
+import { FRONTEND_URL } from "../../util/constants"
 import { CircularProgress } from "@mui/material"
 import { Stack } from "@mui/system"
 import {
@@ -74,7 +75,7 @@ export function Page(
         {(props.canonUrl || !props.dontUseDefaultCanonUrl) && (
           <link
             rel="canonical"
-            href={`https://sc-market.space${props.canonUrl || backupCanonUrl}`}
+            href={`${FRONTEND_URL}${props.canonUrl || backupCanonUrl}`}
           />
         )}
       </Helmet>

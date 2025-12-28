@@ -48,6 +48,7 @@ import {
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { MarkdownRender } from "../../components/markdown/Markdown"
 import { useCookies } from "react-cookie"
+import { FRONTEND_URL } from "../../util/constants"
 import { Cart } from "../../datatypes/Cart"
 import { Link, Navigate, useNavigate } from "react-router-dom"
 import { ListingNameAndRating } from "../../components/rating/ListingRating"
@@ -238,6 +239,21 @@ export function MarketAggregateView() {
         </Paper>
         <Helmet>
           <meta name="description" content={details.description} />
+
+          {/* Open Graph Meta Tags */}
+          <meta property="og:type" content="website" />
+          <meta property="og:url" content={`${FRONTEND_URL}/market/aggregate/${details.game_item_id}`} />
+          <meta property="og:title" content={details.title} />
+          <meta property="og:description" content={details.description} />
+          <meta property="og:image" content={photos[0]} />
+
+          {/* Twitter Card Meta Tags */}
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:url" content={`${FRONTEND_URL}/market/aggregate/${details.game_item_id}`} />
+          <meta name="twitter:title" content={details.title} />
+          <meta name="twitter:description" content={details.description} />
+          <meta name="twitter:image" content={photos[0]} />
+
           <script type="application/ld+json">
             {JSON.stringify({
               "@context": "https://schema.org",

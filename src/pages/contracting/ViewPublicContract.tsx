@@ -3,7 +3,9 @@ import {
   useGetPublicContractQuery,
 } from "../../store/public_contracts"
 import { Link, useParams } from "react-router-dom"
+import { Helmet } from "react-helmet"
 import { Page } from "../../components/metadata/Page"
+import { FRONTEND_URL } from "../../util/constants"
 import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import {
   Breadcrumbs,
@@ -41,6 +43,23 @@ export function ViewPublicContract() {
 
   return (
     <Page title={`${contract?.title} - ${t("contracts.publicOrderTitle")}`}>
+      {contract && (
+        <Helmet>
+          {/* Open Graph Meta Tags */}
+          <meta property="og:type" content="website" />
+          <meta property="og:url" content={`${FRONTEND_URL}/contracts/public/${contract_id}`} />
+          <meta property="og:title" content={`${contract.title} - SC Market`} />
+          <meta property="og:description" content={contract.description} />
+          <meta property="og:image" content={`${FRONTEND_URL}/homepage-preview.png`} />
+
+          {/* Twitter Card Meta Tags */}
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:url" content={`${FRONTEND_URL}/contracts/public/${contract_id}`} />
+          <meta name="twitter:title" content={`${contract.title} - SC Market`} />
+          <meta name="twitter:description" content={contract.description} />
+          <meta name="twitter:image" content={`${FRONTEND_URL}/homepage-preview.png`} />
+        </Helmet>
+      )}
       <ContainerGrid sidebarOpen={true} maxWidth={"lg"}>
         <Grid item xs={12}>
           <Breadcrumbs>

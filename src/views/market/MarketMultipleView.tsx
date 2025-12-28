@@ -34,6 +34,7 @@ import { OrderList } from "../../components/list/OrderList"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { MarkdownRender } from "../../components/markdown/Markdown"
 import { Helmet } from "react-helmet"
+import { FRONTEND_URL } from "../../util/constants"
 import { ListingNameAndRating } from "../../components/rating/ListingRating"
 import { has_permission } from "../contractor/OrgRoles"
 import { ImagePreviewModal } from "../../components/modal/ImagePreviewModal"
@@ -142,6 +143,21 @@ export function MarketMultipleView() {
 
                 <Helmet>
                   <meta name="description" content={details.description} />
+
+                  {/* Open Graph Meta Tags */}
+                  <meta property="og:type" content="website" />
+                  <meta property="og:url" content={`${FRONTEND_URL}/market/multiple/${listing.listing_id}`} />
+                  <meta property="og:title" content={details.title} />
+                  <meta property="og:description" content={details.description} />
+                  <meta property="og:image" content={photos[0]} />
+
+                  {/* Twitter Card Meta Tags */}
+                  <meta name="twitter:card" content="summary_large_image" />
+                  <meta name="twitter:url" content={`${FRONTEND_URL}/market/multiple/${listing.listing_id}`} />
+                  <meta name="twitter:title" content={details.title} />
+                  <meta name="twitter:description" content={details.description} />
+                  <meta name="twitter:image" content={photos[0]} />
+
                   <script type="application/ld+json">
                     {JSON.stringify({
                       "@context": "https://schema.org",

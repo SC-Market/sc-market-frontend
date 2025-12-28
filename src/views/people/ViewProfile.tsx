@@ -58,6 +58,7 @@ import {
 
 import { UserActionsDropdown } from "../../components/profile/UserActionsDropdown"
 import { Helmet } from "react-helmet"
+import { FRONTEND_URL } from "../../util/constants"
 import {
   ServiceListings,
   UserRecentServices,
@@ -429,6 +430,20 @@ export function ViewProfile(props: { profile: User }) {
           }}
         >
           <Helmet>
+            {/* Open Graph Meta Tags */}
+            <meta property="og:type" content="profile" />
+            <meta property="og:url" content={`${FRONTEND_URL}/people/${props.profile.username}`} />
+            <meta property="og:title" content={`${props.profile.display_name} - SC Market`} />
+            <meta property="og:description" content={props.profile.profile_description || `${props.profile.display_name}'s profile on SC Market`} />
+            <meta property="og:image" content={props.profile.banner || props.profile.avatar} />
+
+            {/* Twitter Card Meta Tags */}
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta name="twitter:url" content={`${FRONTEND_URL}/people/${props.profile.username}`} />
+            <meta name="twitter:title" content={`${props.profile.display_name} - SC Market`} />
+            <meta name="twitter:description" content={props.profile.profile_description || `${props.profile.display_name}'s profile on SC Market`} />
+            <meta name="twitter:image" content={props.profile.banner || props.profile.avatar} />
+
             <script type="application/ld+json">
               {JSON.stringify({
                 "@context": "https://schema.org",

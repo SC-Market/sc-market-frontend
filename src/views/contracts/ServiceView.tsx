@@ -1,5 +1,7 @@
 import React, { useMemo, useCallback } from "react"
+import { Helmet } from "react-helmet"
 import { useMainRef } from "../../hooks/layout/MainRef"
+import { FRONTEND_URL } from "../../util/constants"
 import {
   Box,
   Card,
@@ -520,6 +522,21 @@ export function ServiceView(props: {
 
   return (
     <>
+      <Helmet>
+        {/* Open Graph Meta Tags */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content={`${FRONTEND_URL}/order/service/${service.service_id}`} />
+        <meta property="og:title" content={`${service.service_name} - SC Market`} />
+        <meta property="og:description" content={service.service_description || service.description} />
+        <meta property="og:image" content={service.photos[0]} />
+
+        {/* Twitter Card Meta Tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content={`${FRONTEND_URL}/order/service/${service.service_id}`} />
+        <meta name="twitter:title" content={`${service.service_name} - SC Market`} />
+        <meta name="twitter:description" content={service.service_description || service.description} />
+        <meta name="twitter:image" content={service.photos[0]} />
+      </Helmet>
       <Grid item xs={12} lg={4}>
         <ImagePreviewPaper photos={service.photos} />
       </Grid>

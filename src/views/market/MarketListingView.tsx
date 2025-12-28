@@ -53,7 +53,7 @@ import { useCookies } from "react-cookie"
 import { Cart } from "../../datatypes/Cart"
 import { ListingNameAndRating } from "../../components/rating/ListingRating"
 import { has_permission } from "../contractor/OrgRoles"
-import { BACKEND_URL } from "../../util/constants"
+import { BACKEND_URL, FRONTEND_URL } from "../../util/constants"
 import { NumericFormat } from "react-number-format"
 import { Stack } from "@mui/system"
 import { ImagePreviewPaper } from "../../components/paper/ImagePreviewPaper"
@@ -1053,11 +1053,22 @@ export function MarketListingView() {
                   <meta name="description" content={details.description} />
                   <meta name="thumbnail" content={photos[0]} />
 
+                  {/* Open Graph Meta Tags */}
+                  <meta property="og:type" content="website" />
+                  <meta property="og:url" content={`${FRONTEND_URL}/market/${listing.listing_id}`} />
+                  <meta property="og:title" content={details.title} />
                   <meta
                     property="og:description"
                     content={details.description}
                   />
                   <meta property="og:image" content={photos[0]} />
+
+                  {/* Twitter Card Meta Tags */}
+                  <meta name="twitter:card" content="summary_large_image" />
+                  <meta name="twitter:url" content={`${FRONTEND_URL}/market/${listing.listing_id}`} />
+                  <meta name="twitter:title" content={details.title} />
+                  <meta name="twitter:description" content={details.description} />
+                  <meta name="twitter:image" content={photos[0]} />
 
                   <script type="application/ld+json">
                     {JSON.stringify({
