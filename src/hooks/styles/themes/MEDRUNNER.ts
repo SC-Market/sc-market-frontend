@@ -33,6 +33,16 @@ export const medrunnerThemeOptions: ThemeOptions = {
       sidebar: "#FFFFFF",
       navbar: "transparent",
     },
+    common: {
+      subheader: "rgba(155, 0, 2, 0.7)", // Dark red for subheaders
+      focus: "rgb(155, 0, 2)",
+      badge: {
+        gold: "#FFD700",
+        silver: "#C0C0C0",
+        bronze: "#CD7F32",
+        purple: "#9C27B0",
+      },
+    },
   },
   components: {
     MuiPaper: {

@@ -39,6 +39,7 @@ export function HookProvider(props: { children: React.ReactElement }) {
 
   const [cookies, setCookie, removeCookie] = useCookies(["theme"])
   const prefersLight = useMediaQuery("(prefers-color-scheme: light)")
+  const isDev = import.meta.env.DEV || import.meta.env.MODE === "development"
   const [useLightTheme, setUseLightTheme] = useState<ThemeChoice>(
     cookies.theme || "system",
   )
@@ -51,16 +52,27 @@ export function HookProvider(props: { children: React.ReactElement }) {
     if (useLightTheme === "system") {
       return prefersLight ? "light" : "dark"
     }
+    // If it's a custom theme name, return it as-is
+    if (isDev && CUSTOM_THEMES.has(useLightTheme)) {
+      return useLightTheme
+    }
     return useLightTheme
-  }, [useLightTheme, prefersLight])
+  }, [useLightTheme, prefersLight, isDev])
 
   const baseTheme = useMemo(() => {
+    // In dev mode, check if a custom theme is selected
+    if (isDev && CUSTOM_THEMES.has(useLightTheme)) {
+      const customTheme = CUSTOM_THEMES.get(useLightTheme)
+      if (customTheme) return customTheme
+    }
+    
+    // Normal theme selection logic
     if (CURRENT_CUSTOM_ORG) {
       const theme = CUSTOM_THEMES.get(CURRENT_CUSTOM_ORG)
       if (theme) return theme
     }
     return actualTheme === "light" ? lightTheme : mainTheme
-  }, [actualTheme, location.pathname])
+  }, [actualTheme, location.pathname, isDev, useLightTheme])
 
   // Build a localized theme when language changes
   const localizedTheme = useMemo(() => {

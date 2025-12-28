@@ -1,6 +1,20 @@
 import React from "react"
+import { CUSTOM_THEMES } from "./custom_themes"
 
-export type ThemeChoice = "light" | "dark" | "system"
+export type ThemeChoice =
+  | "light"
+  | "dark"
+  | "system"
+  | "BWINCORP"
+  | "MEDRUNNER"
+  | "RSNM"
+  | "INDUSTRIAL"
+  | "NATURE"
+  | "NATURE_DARK"
+  | "CYBERPUNK"
+  | "OCEAN"
+  | "SUNSET"
+  | "SPACE"
 
 export const LightThemeContext = React.createContext<
   [ThemeChoice, React.Dispatch<React.SetStateAction<ThemeChoice>>] | null

@@ -28,6 +28,16 @@ export const rsnmThemeOptions: ThemeOptions = {
       sidebar: "#000000",
       navbar: "#000000",
     },
+    common: {
+      subheader: "#D8B45A", // Gold for subheaders
+      focus: "#b7301A",
+      badge: {
+        gold: "#FFD700",
+        silver: "#C0C0C0",
+        bronze: "#CD7F32",
+        purple: "#9C27B0",
+      },
+    },
   },
   navKind: "outlined",
 }

@@ -28,6 +28,16 @@ export const bwinThemeOptions: ThemeOptions = {
       sidebar: "rgb(20, 20, 20)",
       navbar: "rgb(20, 20, 20)",
     },
+    common: {
+      subheader: "#D13624", // Red-tinted gray for subheaders
+      focus: "#D13624",
+      badge: {
+        gold: "#FFD700",
+        silver: "#C0C0C0",
+        bronze: "#CD7F32",
+        purple: "#9C27B0",
+      },
+    },
   },
   navKind: "outlined",
 }
