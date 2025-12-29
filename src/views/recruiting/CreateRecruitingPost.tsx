@@ -14,6 +14,8 @@ import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { MarkdownEditor } from "../../components/markdown/Markdown"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export interface RecruitingPostState {
   title: string
@@ -23,6 +25,7 @@ export interface RecruitingPostState {
 export function CreateRecruitingPost(props: { post?: RecruitingPost }) {
   const { post } = props
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
   const [state, setState] = React.useState<RecruitingPostState>({
     title: "",
     body: "",
@@ -123,7 +126,7 @@ export function CreateRecruitingPost(props: { post?: RecruitingPost }) {
             {t("recruiting_post.about")}
           </Typography>
         </Grid>
-        <Grid item xs={12} lg={8} container spacing={2}>
+        <Grid item xs={12} lg={8} container spacing={theme.layoutSpacing.layout}>
           <Grid item xs={12} lg={12}>
             <TextField
               label={t("recruiting_post.title_required")}

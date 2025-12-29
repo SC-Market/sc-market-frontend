@@ -16,9 +16,12 @@ import { Page } from "../../components/metadata/Page"
 import { Link } from "react-router-dom"
 import { CreateRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function Contracts() {
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
   const [open, setOpen] = useState(true)
   const [drawerOpen] = useDrawerOpen()
 
@@ -47,7 +50,7 @@ export function Contracts() {
           <ContractSidebar />
           <ContainerGrid maxWidth={"lg"} sidebarOpen={true}>
             <Grid item xs={12}>
-              <Grid container justifyContent={"space-between"} spacing={2}>
+              <Grid container justifyContent={"space-between"} spacing={theme.layoutSpacing.layout}>
                 <HeaderTitle lg={8} xl={8}>
                   {t("contracts.activeContracts")}
                 </HeaderTitle>

@@ -53,6 +53,7 @@ export function ServiceSellerReviews(props: {
   contractorSeller?: { spectrum_id: string } | null
 }) {
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
   const { userSeller, contractorSeller } = props
 
   // Get reviews for user or contractor
@@ -113,7 +114,7 @@ export function ServiceSellerReviews(props: {
             </MaterialLink>
           )}
         </Box>
-        <Grid container spacing={2}>
+        <Grid container spacing={theme.layoutSpacing.layout}>
           {reviews.map((review: OrderReview) => (
             <Grid item xs={12} md={4} key={review.review_id}>
               <Box
@@ -121,7 +122,7 @@ export function ServiceSellerReviews(props: {
                   p: 2,
                   border: 1,
                   borderColor: "divider",
-                  borderRadius: 2,
+                  borderRadius: (theme) => theme.spacing(theme.borderRadius.topLevel),
                   height: "100%",
                   display: "flex",
                   flexDirection: "column",
@@ -251,7 +252,7 @@ export function ServiceSellerOtherServices(props: {
                   sx={{
                     width: "100%",
                     height: "100%",
-                    borderRadius: 1,
+                    borderRadius: (theme) => theme.spacing(theme.borderRadius.button),
                     textAlign: "left",
                   }}
                 >
@@ -386,7 +387,7 @@ export function RelatedServicesByCategory(props: {
                   sx={{
                     width: "100%",
                     height: "100%",
-                    borderRadius: 1,
+                    borderRadius: (theme) => theme.spacing(theme.borderRadius.button),
                     textAlign: "left",
                   }}
                 >
@@ -548,7 +549,6 @@ export function ServiceView(props: {
         <Fade in={true}>
           <Card
             sx={{
-              borderRadius: 3,
               padding: 0,
             }}
           >

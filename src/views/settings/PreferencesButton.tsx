@@ -1,4 +1,5 @@
 import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 import {
   Box,
   Fab,
@@ -23,7 +24,7 @@ import { useLightTheme, ThemeChoice } from "../../hooks/styles/LightTheme"
 import { CUSTOM_THEMES } from "../../hooks/styles/custom_themes"
 
 export function PreferencesButton() {
-  const theme = useTheme()
+  const theme = useTheme<ExtendedTheme>()
   const { t, i18n } = useTranslation()
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
   const [lightTheme, setLightTheme] = useLightTheme()
@@ -103,13 +104,13 @@ export function PreferencesButton() {
         PaperProps={{
           variant: "outlined",
           sx: {
-            borderRadius: 3,
+            borderRadius: (theme) => theme.spacing(theme.borderRadius.topLevel),
             borderColor: theme.palette.outline.main,
           },
         }}
       >
         <Box sx={{ padding: 2 }}>
-          <Grid container spacing={2}>
+          <Grid container spacing={theme.layoutSpacing.component}>
             <Grid item xs={12}>
               <Typography variant="subtitle2" sx={{ mb: 1 }}>
                 {t("preferences.theme")}

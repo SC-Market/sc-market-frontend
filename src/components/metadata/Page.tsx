@@ -11,6 +11,8 @@ import {
   useNavigate,
   useRouteError,
 } from "react-router-dom"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function Page(
   props: PropsWithChildren<{
@@ -85,8 +87,9 @@ export function Page(
 }
 
 export function PageFallback() {
+  const theme = useTheme<ExtendedTheme>()
   return (
-    <Stack width={"100%"} spacing={2}>
+    <Stack width={"100%"} spacing={theme.layoutSpacing.layout}>
       <CircularProgress />
     </Stack>
   )

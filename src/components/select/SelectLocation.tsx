@@ -5,6 +5,8 @@ import throttle from "lodash/throttle"
 import { Autocomplete, Grid, TextField, Typography } from "@mui/material"
 import { Section } from "../paper/Section"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function romanize(num: number) {
   if (isNaN(num)) return NaN
@@ -68,6 +70,7 @@ export interface StarmapObject {
 }
 
 export function SelectLocation() {
+  const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
 
   const [locationSuggest, setLocationSuggest] = useState<StarmapObject[]>([])
@@ -134,7 +137,7 @@ export function SelectLocation() {
             {t("selectLocation.title", "Location")}
           </Typography>
         </Grid>
-        <Grid item xs={12} lg={8} container spacing={2}>
+        <Grid item xs={12} lg={8} container spacing={theme.layoutSpacing.layout}>
           <Grid item xs={12} lg={12}>
             <Autocomplete
               id="locationure-select"

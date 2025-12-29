@@ -29,6 +29,8 @@ import {
 } from "../../store/services"
 import { useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 function romanize(num: number) {
   if (isNaN(num)) return NaN
@@ -113,6 +115,7 @@ export interface ServiceState {
 }
 
 export function CreateServiceForm(props: GridProps & { service?: Service }) {
+  const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
   const [currentOrg] = useCurrentOrg()
   const [state, setState] = React.useState<ServiceState>({
@@ -507,7 +510,7 @@ export function CreateServiceForm(props: GridProps & { service?: Service }) {
             {t("CreateServiceForm.serviceDetails")}
           </Typography>
         </Grid>
-        <Grid item xs={12} lg={8} container spacing={2}>
+        <Grid item xs={12} lg={8} container spacing={theme.layoutSpacing.layout}>
           <Grid item xs={12} lg={12}>
             <TextField
               fullWidth
@@ -634,7 +637,7 @@ export function CreateServiceForm(props: GridProps & { service?: Service }) {
             {t("CreateServiceForm.orderServiceDetails")}
           </Typography>
         </Grid>
-        <Grid item xs={12} lg={8} container spacing={2}>
+        <Grid item xs={12} lg={8} container spacing={theme.layoutSpacing.layout}>
           <Grid item xs={12} lg={12}>
             <TextField
               fullWidth
@@ -874,7 +877,7 @@ export function CreateServiceForm(props: GridProps & { service?: Service }) {
             {t("CreateServiceForm.costs")}
           </Typography>
         </Grid>
-        <Grid item xs={12} lg={8} container spacing={2}>
+        <Grid item xs={12} lg={8} container spacing={theme.layoutSpacing.layout}>
           <Grid item xs={12}>
             <NumericFormat
               decimalScale={0}

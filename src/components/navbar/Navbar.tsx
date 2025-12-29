@@ -114,7 +114,7 @@ export function Navbar(props: { children?: React.ReactNode }) {
             <ProfileNavAvatar />
           </React.Fragment>
         ) : (
-          <Stack direction="row" spacing={1}>
+          <Stack direction="row" spacing={theme.layoutSpacing.compact}>
             <Button
               component={RouterLink}
               to="/login"

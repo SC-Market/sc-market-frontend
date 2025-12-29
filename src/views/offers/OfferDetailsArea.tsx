@@ -43,6 +43,8 @@ import { useGetPublicContractQuery } from "../../store/public_contracts"
 import { ListingSellerRating } from "../../components/rating/ListingRating"
 import { useTranslation } from "react-i18next"
 import { PAYMENT_TYPE_MAP } from "../../util/constants"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 // Status map for unified translation and colour coding
 const statusTextToKey: Record<string, string> = {
@@ -103,6 +105,7 @@ export function OfferMessagesArea(props: { offer: OfferSession }) {
 }
 
 export function OfferDetailsArea(props: { session: OfferSession }) {
+  const theme = useTheme<ExtendedTheme>()
   const { t, i18n } = useTranslation()
   const { session } = props
   const [org] = useCurrentOrg()
@@ -319,7 +322,7 @@ export function OfferDetailsArea(props: { session: OfferSession }) {
               {/*  Description*/}
               {/*</TableCell>*/}
               <TableCell colSpan={2}>
-                <Stack direction="column" spacing={1}>
+                <Stack direction="column" spacing={theme.layoutSpacing.compact}>
                   {t("OfferDetailsArea.details")}
                   <Typography color={"text.secondary"} variant={"subtitle2"}>
                     <MarkdownRender text={session.offers[0].description} />
@@ -404,7 +407,7 @@ export function OfferDetailsArea(props: { session: OfferSession }) {
                   {t("OfferDetailsArea.acceptOrDecline")}
                 </TableCell>
                 <TableCell align="right">
-                  <Stack direction="row" justifyContent={"right"} spacing={1}>
+                  <Stack direction="row" justifyContent={"right"} spacing={theme.layoutSpacing.compact}>
                     <LoadingButton
                       color={"success"}
                       variant={"contained"}
@@ -438,7 +441,7 @@ export function OfferDetailsArea(props: { session: OfferSession }) {
                   {t("OfferDetailsArea.cancelOrder")}
                 </TableCell>
                 <TableCell align="right">
-                  <Stack direction="row" justifyContent={"right"} spacing={1}>
+                  <Stack direction="row" justifyContent={"right"} spacing={theme.layoutSpacing.compact}>
                     <LoadingButton
                       color={"error"}
                       variant={"contained"}

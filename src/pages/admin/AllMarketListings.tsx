@@ -14,9 +14,12 @@ import {
   MarketNavArea,
 } from "../../components/navbar/MarketNavArea"
 import { useTranslation } from "react-i18next"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function AllMarketListings(props: {}) {
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
   const [open, setOpen] = useState(false)
   const [drawerOpen] = useDrawerOpen()
 
@@ -44,7 +47,7 @@ export function AllMarketListings(props: {}) {
             item
             container
             justifyContent={"space-between"}
-            spacing={2}
+            spacing={theme.layoutSpacing.layout}
             xs={12}
           >
             <HeaderTitle lg={7} xl={7}>
@@ -69,7 +72,7 @@ export function AllMarketListings(props: {}) {
             container
             xs={12}
             lg={12}
-            spacing={3}
+            spacing={theme.layoutSpacing.layout}
             sx={{ transition: "0.3s" }}
           >
             <AllItemListings status={"active"} />
@@ -79,7 +82,7 @@ export function AllMarketListings(props: {}) {
             item
             container
             justifyContent={"space-between"}
-            spacing={2}
+            spacing={theme.layoutSpacing.layout}
             xs={12}
           >
             <HeaderTitle lg={12} xl={12}>
@@ -96,7 +99,7 @@ export function AllMarketListings(props: {}) {
             container
             xs={12}
             lg={12}
-            spacing={3}
+            spacing={theme.layoutSpacing.layout}
             sx={{ transition: "0.3s" }}
           >
             <AllItemListings status={"inactive"} />
@@ -106,7 +109,7 @@ export function AllMarketListings(props: {}) {
             item
             container
             justifyContent={"space-between"}
-            spacing={2}
+            spacing={theme.layoutSpacing.layout}
             xs={12}
           >
             <HeaderTitle lg={12} xl={12}>
@@ -123,7 +126,7 @@ export function AllMarketListings(props: {}) {
             container
             xs={12}
             lg={12}
-            spacing={3}
+            spacing={theme.layoutSpacing.layout}
             sx={{ transition: "0.3s" }}
           >
             <AllItemListings status={"archived"} />

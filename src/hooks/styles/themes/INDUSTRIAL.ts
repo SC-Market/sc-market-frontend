@@ -49,6 +49,13 @@ export const industrialThemeOptions: ThemeOptions = {
       },
     },
   },
+  borderRadius: {
+    topLevel: 0,
+    image: 0,
+    button: 0,
+    input: 0,
+    minimal: 0,
+  },
   navKind: "outlined",
   components: {
     MuiPaper: {

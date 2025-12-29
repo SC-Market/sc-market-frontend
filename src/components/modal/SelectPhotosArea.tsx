@@ -23,9 +23,10 @@ import { useTranslation } from "react-i18next"
 import { ContainerGrid } from "../layout/ContainerGrid"
 import { Section } from "../paper/Section"
 import { external_resource_regex } from "../../views/people/ViewProfile"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function PhotoEntry(props: { url: string; onClose: () => void }) {
-  const theme = useTheme()
+  const theme = useTheme<ExtendedTheme>()
   return (
     <Paper
       sx={{ width: 96, height: 96, bgcolor: theme.palette.background.imageOverlay, position: "relative" }}
@@ -51,7 +52,7 @@ export function PhotoEntry(props: { url: string; onClose: () => void }) {
 }
 
 export function PendingPhotoEntry(props: { file: File; onClose: () => void }) {
-  const theme = useTheme()
+  const theme = useTheme<ExtendedTheme>()
   const [previewUrl, setPreviewUrl] = useState<string>("")
 
   React.useEffect(() => {
@@ -109,7 +110,7 @@ export function SelectPhotosArea(props: {
   const [isDragOver, setIsDragOver] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
   const { t } = useTranslation()
-  const theme = useTheme()
+  const theme = useTheme<ExtendedTheme>()
   const [photoOpen, setPhotoOpen] = useState(false)
   const [urlModalOpen, setUrlModalOpen] = useState(false)
   const [urlInput, setUrlInput] = useState("")
@@ -273,7 +274,7 @@ export function SelectPhotosArea(props: {
           border: isDragOver
             ? `2px dashed ${theme.palette.primary.main}`
             : "2px dashed transparent",
-          borderRadius: 2,
+          borderRadius: theme.spacing(theme.borderRadius.topLevel),
           padding: isDragOver ? 1 : 0,
           backgroundColor: isDragOver
             ? `${theme.palette.primary.main}08`
@@ -294,7 +295,7 @@ export function SelectPhotosArea(props: {
                 right: 0,
                 bottom: 0,
                 backgroundColor: `${theme.palette.primary.main}04`,
-                borderRadius: 2,
+                borderRadius: theme.spacing(theme.borderRadius.topLevel),
                 zIndex: -1,
               }
             : {},

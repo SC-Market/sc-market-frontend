@@ -15,6 +15,8 @@ import { MarketListingDetails } from "../../components/list/UserDetails"
 import { useTranslation } from "react-i18next"
 import { completeToSearchResult } from "../market/ItemListings.tsx"
 import { ListingRowItem } from "./OfferMarketListingsEditArea.tsx"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function OfferListingRowItem(props: {
   row: ListingRowItem
@@ -75,6 +77,7 @@ export const marketListingHeadCells: readonly HeadCell<ListingRowItem>[] = [
 ]
 
 export function OfferMarketListings(props: { offer: OfferSession }) {
+  const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
   const { offer: session } = props
   const extendedListings: ListingRowItem[] = useMemo(() => {
@@ -91,7 +94,7 @@ export function OfferMarketListings(props: { offer: OfferSession }) {
       <>
         <Grid item xs={12} lg={8} md={12}>
           <Paper sx={{ padding: 2 }}>
-            <Stack spacing={1} direction="column">
+            <Stack spacing={theme.layoutSpacing.compact} direction="column">
               <Typography
                 variant={"h5"}
                 sx={{ fontWeight: "bold" }}
@@ -138,7 +141,7 @@ export function OfferMarketListings(props: { offer: OfferSession }) {
     return (
       <Grid item xs={12} lg={8} md={12}>
         <Paper sx={{ padding: 2 }}>
-          <Stack spacing={1}>
+          <Stack spacing={theme.layoutSpacing.compact}>
             <Typography
               variant={"h5"}
               sx={{ fontWeight: "bold" }}

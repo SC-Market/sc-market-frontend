@@ -36,9 +36,12 @@ import { useTranslation } from "react-i18next"
 import { OrgSettings } from "../../views/contractor/OrgSettings"
 import { OrgBlocklistSettings } from "../../views/contractor/OrgBlocklistSettings"
 import { OrgAuditLogs } from "../../views/contractor/OrgAuditLogs"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function OrgManage() {
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
   const [contractor] = useCurrentOrg()
   const { data: profile } = useGetUserProfileQuery()
 
@@ -179,26 +182,26 @@ export function OrgManage() {
         </Grid>
         <Grid item xs={12}>
           <TabPanel value={page} index={0}>
-            <Grid container spacing={2}>
+            <Grid container spacing={theme.layoutSpacing.layout}>
               <OrgDetailEdit />
             </Grid>
           </TabPanel>
           <TabPanel value={page} index={1}>
-            <Grid container spacing={2}>
+            <Grid container spacing={theme.layoutSpacing.layout}>
               <OrgInvite />
               <CreateOrgInviteCode />
               <ListInviteCodes />
             </Grid>
           </TabPanel>
           <TabPanel value={page} index={2}>
-            <Grid container spacing={2}>
+            <Grid container spacing={theme.layoutSpacing.layout}>
               <ManageRoles />
               <ManageMemberList />
               <AddRole />
             </Grid>
           </TabPanel>
           <TabPanel value={page} index={3}>
-            <Grid container spacing={2}>
+            <Grid container spacing={theme.layoutSpacing.layout}>
               <DiscordBotDetails org />
               <ConfigureDiscord org />
               <AddNotificationWebhook org />
@@ -206,7 +209,7 @@ export function OrgManage() {
             </Grid>
           </TabPanel>
           <TabPanel value={page} index={4}>
-            <Grid container spacing={2}>
+            <Grid container spacing={theme.layoutSpacing.layout}>
               <MarketEditTemplate org />
             </Grid>
           </TabPanel>
@@ -220,7 +223,7 @@ export function OrgManage() {
             <OrgAuditLogs />
           </TabPanel>
           <TabPanel value={page} index={8}>
-            <Grid container spacing={2}>
+            <Grid container spacing={theme.layoutSpacing.layout}>
               <CustomerList />
             </Grid>
           </TabPanel>

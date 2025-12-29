@@ -12,9 +12,12 @@ import { ServiceListings } from "../../views/contracts/ServiceListings"
 import { Link } from "react-router-dom"
 import { CreateRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function Services() {
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
   const [open, setOpen] = useState(true)
 
   const [drawerOpen] = useDrawerOpen()
@@ -44,7 +47,7 @@ export function Services() {
             item
             container
             justifyContent={"space-between"}
-            spacing={2}
+            spacing={theme.layoutSpacing.layout}
             xs={12}
           >
             <HeaderTitle md={7} lg={7} xl={7}>

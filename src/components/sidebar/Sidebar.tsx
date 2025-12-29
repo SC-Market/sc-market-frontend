@@ -75,7 +75,7 @@ import { useTranslation } from "react-i18next"
 export function SidebarDropdown(props: SidebarItemProps) {
   const [open, setOpen] = useState(false)
   const { icon, text, chip, children } = props
-  const theme: Theme = useTheme()
+  const theme = useTheme<ExtendedTheme>()
   const loc = useLocation()
   const anyChild = props.children?.some(
     (child) => !!matchPath(loc.pathname, child.to || ""),
@@ -93,7 +93,7 @@ export function SidebarDropdown(props: SidebarItemProps) {
         sx={{
           padding: 1,
           paddingLeft: 2,
-          borderRadius: 2,
+          borderRadius: theme.spacing(theme.borderRadius.topLevel),
           marginBottom: 0.5,
           transition: "0.3s",
           "&:hover": {
@@ -172,7 +172,7 @@ export function SidebarLinkBody(props: SidebarItemProps & { to: string }) {
   const loc = useLocation()
   const selected = !!matchPath(loc.pathname, props.to || "")
   const { icon, text, chip } = props
-  const theme: Theme = useTheme()
+  const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
 
   const xs = useMediaQuery(theme.breakpoints.down("sm"))
@@ -189,7 +189,7 @@ export function SidebarLinkBody(props: SidebarItemProps & { to: string }) {
         sx={{
           padding: 0.5,
           paddingLeft: 2,
-          borderRadius: 2,
+          borderRadius: theme.spacing(theme.borderRadius.topLevel),
           marginTop: 0.5,
           transition: "0.3s",
           "&:hover": {
@@ -447,7 +447,7 @@ export function Sidebar() {
     >
       <Stack
         direction={"column"}
-        spacing={1}
+        spacing={theme.layoutSpacing.compact}
         sx={{
           width: "100%",
           display: "flex",
@@ -463,7 +463,7 @@ export function Sidebar() {
             >
               <Stack
                 direction={"row"}
-                spacing={1}
+                spacing={theme.layoutSpacing.compact}
                 justifyContent={"center"}
                 alignItems={"center"}
               >
@@ -480,7 +480,10 @@ export function Sidebar() {
                   }}
                 />
 
-                <Typography color={theme.palette.background.light} fontWeight={600}>
+                <Typography 
+                  color={theme.palette.getContrastText(theme.palette.background.sidebar)} 
+                  fontWeight={600}
+                >
                   {t("sidebar.sc_market")}
                 </Typography>
               </Stack>
@@ -499,7 +502,7 @@ export function Sidebar() {
       </Stack>
       <Stack
         direction={"column"}
-        spacing={1.5}
+                spacing={theme.layoutSpacing.component}
         sx={{
           // backgroundColor: 'rgb(0,0,0,.6)',
           width: "100%",
@@ -539,7 +542,7 @@ export function Sidebar() {
                         opacity: 0.7,
                         textTransform: "uppercase",
                         fontSize: "0.85em",
-                        color: theme.palette.common.subheader,
+                        color: theme.palette.getContrastText(theme.palette.background.sidebar),
                         transition: "0.3s",
                       }}
                       variant={"body2"}

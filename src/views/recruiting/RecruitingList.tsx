@@ -66,12 +66,12 @@ export function RecruitingPostItem(props: {
             </Box>
             <CardActionArea
               sx={{
-                borderRadius: 2,
+                borderRadius: theme.spacing(theme.borderRadius.topLevel),
               }}
             >
               <Card
                 sx={{
-                  borderRadius: 2,
+                  borderRadius: theme.spacing(theme.borderRadius.topLevel),
                   padding: 1,
                   border: `1px solid ${theme.palette.outline.main}`,
                 }}
@@ -112,7 +112,7 @@ export function RecruitingPostItem(props: {
                   }
                   subheader={
                     <Box>
-                      <Grid container alignItems={"center"} spacing={1}>
+                      <Grid container alignItems={"center"} spacing={theme.layoutSpacing.compact}>
                         <Grid item>
                           <PeopleAltRoundedIcon
                             style={{ color: theme.palette.text.primary }}
@@ -196,7 +196,7 @@ export function RecruitingPostSkeleton() {
       <Skeleton
         variant={"rectangular"}
         sx={{
-          borderRadius: 3,
+          borderRadius: (theme) => theme.spacing((theme as ExtendedTheme).borderRadius.image),
           height: 350,
           width: "100%",
         }}

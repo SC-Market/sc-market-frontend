@@ -15,11 +15,14 @@ import {
   MarketNavArea,
 } from "../../components/navbar/MarketNavArea"
 import { useTranslation } from "react-i18next"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function MyMarketListings(props: {}) {
   const [open, setOpen] = useState(false)
   const [drawerOpen] = useDrawerOpen()
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
 
   return (
     <Page title={t("sidebar.my_market_listings")}>
@@ -45,7 +48,7 @@ export function MyMarketListings(props: {}) {
             item
             container
             justifyContent={"space-between"}
-            spacing={2}
+            spacing={theme.layoutSpacing.layout}
             xs={12}
           >
             <HeaderTitle lg={7} xl={7}>
@@ -70,7 +73,7 @@ export function MyMarketListings(props: {}) {
             container
             xs={12}
             lg={12}
-            spacing={1.5}
+            spacing={theme.layoutSpacing.component}
             sx={{ transition: "0.3s" }}
           >
             <MyItemListings status={"active"} />
@@ -80,7 +83,7 @@ export function MyMarketListings(props: {}) {
             item
             container
             justifyContent={"space-between"}
-            spacing={2}
+            spacing={theme.layoutSpacing.layout}
             xs={12}
           >
             <HeaderTitle lg={12} xl={12}>
@@ -97,7 +100,7 @@ export function MyMarketListings(props: {}) {
             container
             xs={12}
             lg={12}
-            spacing={1.5}
+            spacing={theme.layoutSpacing.component}
             sx={{ transition: "0.3s" }}
           >
             <MyItemListings status={"inactive"} />
@@ -107,7 +110,7 @@ export function MyMarketListings(props: {}) {
             item
             container
             justifyContent={"space-between"}
-            spacing={2}
+            spacing={theme.layoutSpacing.layout}
             xs={12}
           >
             <HeaderTitle lg={12} xl={12}>
@@ -124,7 +127,7 @@ export function MyMarketListings(props: {}) {
             container
             xs={12}
             lg={12}
-            spacing={1.5}
+            spacing={theme.layoutSpacing.component}
             sx={{ transition: "0.3s" }}
           >
             <MyItemListings status={"archived"} />

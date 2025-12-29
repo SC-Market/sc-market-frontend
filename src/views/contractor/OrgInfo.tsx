@@ -129,7 +129,7 @@ export function OrgRefetchButton(props: { org: Contractor }) {
 export function OrgBannerArea(props: { org: Contractor }) {
   const { org } = props
 
-  const theme = useTheme()
+  const theme = useTheme<ExtendedTheme>()
 
   return theme.palette.mode === "dark" ? (
     <DarkBannerContainer profile={org}>
@@ -184,16 +184,16 @@ export function OrgInfo(props: { contractor: Contractor }) {
                 }),
           }}
         >
-          <Grid container spacing={2}>
+          <Grid container spacing={theme.layoutSpacing.layout}>
             <Grid item xs={12}>
               <Grid
                 container
-                spacing={2}
+                spacing={theme.layoutSpacing.component}
                 alignItems={"flex-end"}
                 minHeight={375}
               >
                 <Grid item md={4}>
-                  <Grid container spacing={1}>
+                  <Grid container spacing={theme.layoutSpacing.text}>
                     <Grid item sm={4}>
                       <Avatar
                         src={contractor?.avatar}
@@ -370,9 +370,9 @@ export function OrgInfo(props: { contractor: Contractor }) {
             </Grid>
             <Grid item xs={12}>
               <TabPanel value={page} index={0}>
-                <Grid container spacing={2}>
+                <Grid container spacing={theme.layoutSpacing.layout}>
                   <Grid item lg={12}>
-                    <Grid container spacing={2}>
+                    <Grid container spacing={theme.layoutSpacing.layout}>
                       <OrgRelevantListingsArea org={contractor.spectrum_id} />
                     </Grid>
                   </Grid>
@@ -385,27 +385,27 @@ export function OrgInfo(props: { contractor: Contractor }) {
                 </Grid>
               </TabPanel>
               <TabPanel value={page} index={1}>
-                <Grid container spacing={3}>
+                <Grid container spacing={theme.layoutSpacing.layout}>
                   <ServiceListings contractor={contractor.spectrum_id} />
                 </Grid>
               </TabPanel>
               <TabPanel value={page} index={2}>
-                <Grid container spacing={3}>
+                <Grid container spacing={theme.layoutSpacing.layout}>
                   <OrgListings org={contractor.spectrum_id} />
                 </Grid>
               </TabPanel>
               <TabPanel value={page} index={3}>
-                <Grid container spacing={3}>
+                <Grid container spacing={theme.layoutSpacing.layout}>
                   <CreateOrderForm contractor_id={contractor.spectrum_id} />
                 </Grid>
               </TabPanel>
               <TabPanel value={page} index={4}>
-                <Grid container spacing={3}>
+                <Grid container spacing={theme.layoutSpacing.layout}>
                   <MemberList contractor={contractor} />
                 </Grid>
               </TabPanel>
               <TabPanel value={page} index={5}>
-                <Grid container spacing={3}>
+                <Grid container spacing={theme.layoutSpacing.layout}>
                   <RecruitingPostArea spectrum_id={contractor.spectrum_id} />
                 </Grid>
               </TabPanel>
@@ -457,7 +457,7 @@ export function OrgInfoSkeleton() {
         <TabPanel value={page} index={0}>
           <Skeleton
             sx={{
-              borderRadius: 3,
+              borderRadius: (theme) => theme.spacing((theme as ExtendedTheme).borderRadius.image),
               width: "100%",
               padding: 0,
               height: 700,
@@ -467,7 +467,7 @@ export function OrgInfoSkeleton() {
         <TabPanel value={page} index={1}>
           <Skeleton
             sx={{
-              borderRadius: 3,
+              borderRadius: (theme) => theme.spacing((theme as ExtendedTheme).borderRadius.image),
               width: "100%",
               padding: 0,
               height: 700,
@@ -477,7 +477,7 @@ export function OrgInfoSkeleton() {
         <TabPanel value={page} index={2}>
           <Skeleton
             sx={{
-              borderRadius: 3,
+              borderRadius: (theme) => theme.spacing((theme as ExtendedTheme).borderRadius.image),
               width: "100%",
               padding: 0,
               height: 700,

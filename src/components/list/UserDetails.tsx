@@ -11,12 +11,15 @@ import {
   MarketListingSearchResult,
   MarketSearchResult,
 } from "../../store/market.ts"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function UserDetails(props: { user: MinimalUser }) {
   const { user } = props
+  const theme = useTheme<ExtendedTheme>()
 
   return (
-    <Stack direction={"row"} spacing={1} alignItems={"center"}>
+    <Stack direction={"row"} spacing={theme.layoutSpacing.compact} alignItems={"center"}>
       <Avatar src={user.avatar} />
       <Stack direction={"column"} justifyContent={"left"}>
         <MaterialLink
@@ -40,9 +43,10 @@ export function UserDetails(props: { user: MinimalUser }) {
 
 export function OrgDetails(props: { org: MinimalContractor }) {
   const { org } = props
+  const theme = useTheme<ExtendedTheme>()
 
   return (
-    <Stack direction={"row"} spacing={1} alignItems={"center"}>
+    <Stack direction={"row"} spacing={theme.layoutSpacing.compact} alignItems={"center"}>
       <Avatar src={org.avatar} />
       <Stack direction={"column"} justifyContent={"left"}>
         <MaterialLink
@@ -68,9 +72,10 @@ export function MarketListingDetails(props: {
   listing: MarketListingSearchResult
 }) {
   const { listing } = props
+  const theme = useTheme<ExtendedTheme>()
 
   return (
-    <Stack direction={"row"} spacing={1} alignItems={"center"}>
+    <Stack direction={"row"} spacing={theme.layoutSpacing.compact} alignItems={"center"}>
       <Avatar
         src={listing.photo || FALLBACK_IMAGE_URL}
         variant={"rounded"}

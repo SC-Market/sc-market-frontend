@@ -38,7 +38,7 @@ export function ImagePreviewPaper(props: { photos: string[] }) {
       />
       <Paper
         sx={{
-          borderRadius: 3,
+          borderRadius: (theme) => theme.spacing((theme as ExtendedTheme).borderRadius.image),
           backgroundColor: theme.palette.background.default,
           display: "flex",
           justifyContent: "center",

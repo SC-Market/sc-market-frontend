@@ -44,6 +44,13 @@ export const medrunnerThemeOptions: ThemeOptions = {
       },
     },
   },
+  borderRadius: {
+    topLevel: 1.5, // Increased from 0.375 (3px) to 1.5 (12px)
+    image: 1.5, // Increased from 0.375 (3px) to 1.5 (12px)
+    button: 2, // Increased from 1 (8px) to 2 (16px)
+    input: 1, // Increased from 0.5 (4px) to 1 (8px)
+    minimal: 0,
+  },
   components: {
     MuiPaper: {
       defaultProps: {

@@ -46,6 +46,8 @@ import {
   UniqueListing,
 } from "../../datatypes/MarketListing"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 import {
   useCreateMarketListingMutation,
   useGetMyListingsQuery,
@@ -315,6 +317,7 @@ export function DisplayStock({
 }) {
   const [refresh] = useMarketRefreshListingMutation()
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
 
   // State for new listing rows
   const [newRows, setNewRows] = React.useState<NewListingRow[]>([])
@@ -511,7 +514,7 @@ export function DisplayStock({
           <Stack
             justifyContent={"left"}
             direction={"row"}
-            spacing={1}
+            spacing={theme.layoutSpacing.compact}
             alignItems={"center"}
           >
             <Avatar src={params.row.image_url} variant="rounded" />
@@ -785,7 +788,7 @@ export function DisplayStock({
             return (
               <Stack
                 direction="row"
-                spacing={1}
+                spacing={theme.layoutSpacing.compact}
                 justifyContent="flex-end"
                 sx={{ width: "100%" }}
               >

@@ -711,7 +711,7 @@ export function NotificationsButton() {
         PaperProps={{
           variant: "outlined",
           sx: {
-            borderRadius: 3,
+            borderRadius: (theme) => theme.spacing((theme as ExtendedTheme).borderRadius.topLevel),
             borderColor: theme.palette.outline.main,
             maxWidth: 400,
             width: "100%",

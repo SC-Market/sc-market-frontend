@@ -29,6 +29,8 @@ import {
   useGetContractorsForTokensQuery,
 } from "../../store/tokens"
 import { useGetUserProfileQuery } from "../../store/profile.ts"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 interface TokenDetailsDialogProps {
   open: boolean
@@ -42,6 +44,7 @@ export function TokenDetailsDialog({
   token,
 }: TokenDetailsDialogProps) {
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
   const { data: stats } = useGetTokenStatsQuery(token?.id || "", {
     skip: !token?.id,
   })
@@ -117,7 +120,7 @@ export function TokenDetailsDialog({
         </Box>
       </DialogTitle>
       <DialogContent>
-        <Grid container spacing={3}>
+        <Grid container spacing={theme.layoutSpacing.layout}>
           <Grid item xs={12}>
             <Box
               display="flex"
@@ -147,7 +150,7 @@ export function TokenDetailsDialog({
             <Typography variant="subtitle1" gutterBottom>
               Token Information
             </Typography>
-            <Grid container spacing={2}>
+            <Grid container spacing={theme.layoutSpacing.layout}>
               <Grid item xs={6}>
                 <Typography variant="body2" color="text.secondary">
                   Token ID:
@@ -276,7 +279,7 @@ export function TokenDetailsDialog({
                 <Typography variant="subtitle1" gutterBottom>
                   Usage Statistics
                 </Typography>
-                <Grid container spacing={2}>
+                <Grid container spacing={theme.layoutSpacing.layout}>
                   <Grid item xs={6}>
                     <Typography variant="body2" color="text.secondary">
                       Usage Count:

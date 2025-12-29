@@ -15,6 +15,8 @@ import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { URL_REGEX } from "../../util/parsing"
 import { useTranslation } from "react-i18next"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 // Checkbox item for webhook notification action selection
 function NotificationActionCheck(props: {
@@ -51,6 +53,7 @@ function NotificationActionCheck(props: {
 }
 
 export function AddNotificationWebhook(props: { org?: boolean }) {
+  const theme = useTheme<ExtendedTheme>()
   const [currentOrg] = useCurrentOrg()
   const [name, setName] = useState("")
   const [url, setURL] = useState("")
@@ -162,7 +165,7 @@ export function AddNotificationWebhook(props: { org?: boolean }) {
       </Grid>
 
       <Grid item xs={12}>
-        <Grid container spacing={1} direction={"column"}>
+        <Grid container spacing={theme.layoutSpacing.compact} direction={"column"}>
           <NotificationActionCheck
             actions={actions}
             setActions={setActions}

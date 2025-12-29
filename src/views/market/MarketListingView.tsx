@@ -61,7 +61,9 @@ import moment from "moment"
 import { ClockAlert } from "mdi-material-ui"
 import { useTranslation } from "react-i18next"
 import { ReportButton } from "../../components/button/ReportButton"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { DisplayListingsHorizontal } from "./ItemListings"
+import { useTheme } from "@mui/material/styles"
 import { useSearchMarketQuery } from "../../store/market"
 import { useGetUserOrderReviews } from "../../store/profile"
 import { useGetContractorReviewsQuery } from "../../store/contractor"
@@ -73,6 +75,7 @@ export function SellerOtherListings(props: {
   currentListingId: string
 }) {
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
   const { userSeller, contractorSeller, currentListingId } = props
 
   // Get other listings from the same seller
@@ -139,6 +142,7 @@ export function SellerReviews(props: {
   contractorSeller?: { spectrum_id: string } | null
 }) {
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
   const { userSeller, contractorSeller } = props
 
   // Get reviews for user or contractor
@@ -201,7 +205,7 @@ export function SellerReviews(props: {
             </MaterialLink>
           )}
         </Box>
-        <Grid container spacing={2}>
+        <Grid container spacing={theme.layoutSpacing.component}>
           {reviews.map((review: OrderReview) => (
             <Grid item xs={12} md={4} key={review.review_id}>
               <Box
@@ -209,7 +213,6 @@ export function SellerReviews(props: {
                   p: 2,
                   border: 1,
                   borderColor: "divider",
-                  borderRadius: 2,
                   height: "100%",
                   display: "flex",
                   flexDirection: "column",
@@ -336,8 +339,9 @@ export function ListingDetailItem(props: {
   icon: React.ReactNode
   children: React.ReactNode
 }) {
+  const theme = useTheme<ExtendedTheme>()
   return (
-    <Stack direction={"row"} alignItems={"center"} spacing={0.5}>
+    <Stack direction={"row"} alignItems={"center"} spacing={theme.layoutSpacing.compact}>
       {props.icon}
       <Typography color={"text.primary"} variant={"subtitle2"}>
         {props.children}
@@ -357,6 +361,7 @@ export function dateDiffInDays(a: Date, b: Date) {
 
 export function PurchaseArea(props: { listing: BaseListingType }) {
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
   const { listing } = props
   const [quantity, setQuantity] = useState(1)
   const [offer, setOffer] = useState(1)
@@ -471,7 +476,7 @@ export function PurchaseArea(props: { listing: BaseListingType }) {
     >
       <Stack direction={"row"} justifyContent={"space-between"} padding={2}>
         <Stack
-          spacing={1}
+          spacing={theme.layoutSpacing.text}
           direction={"column"}
           justifyContent={"space-between"}
         >
@@ -523,7 +528,7 @@ export function PurchaseArea(props: { listing: BaseListingType }) {
           />
         </Stack>
         <Stack
-          spacing={1}
+          spacing={theme.layoutSpacing.text}
           direction={"column"}
           justifyContent={"space-between"}
         >
@@ -685,19 +690,20 @@ function BidArea(props: { listing: UniqueListing }) {
 
 // Skeleton component for market listing view
 export function MarketListingViewSkeleton() {
+  const theme = useTheme<ExtendedTheme>()
   return (
     <Grid item xs={12} lg={12}>
-      <Grid container spacing={2}>
+      <Grid container spacing={theme.layoutSpacing.layout}>
         {/* Left column - Image and user info */}
         <Grid item xs={12} lg={4}>
-          <Grid container spacing={2}>
+          <Grid container spacing={theme.layoutSpacing.layout}>
             <Grid item xs={12} lg={12}>
               {/* Image skeleton */}
               <Skeleton
                 variant="rectangular"
                 height={400}
                 width="100%"
-                sx={{ borderRadius: 3 }}
+                sx={{ borderRadius: (theme) => theme.spacing((theme as ExtendedTheme).borderRadius.image) }}
               />
             </Grid>
 
@@ -718,9 +724,9 @@ export function MarketListingViewSkeleton() {
 
         {/* Right column - Main content */}
         <Grid item xs={12} lg={8}>
-          <Grid container spacing={2}>
+          <Grid container spacing={theme.layoutSpacing.layout}>
             <Grid item xs={12}>
-              <Card sx={{ borderRadius: 3, minHeight: 400 }}>
+              <Card sx={{ minHeight: 400 }}>
                 <CardHeader
                   sx={{ padding: 3, paddingBottom: 1 }}
                   title={
@@ -967,6 +973,7 @@ function ListingOrdersSection({ listingId }: { listingId: string }) {
 
 export function MarketListingView() {
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
   const [complete] = useCurrentMarketListing<UniqueListing>()
   const { listing, details, photos, auction_details } = complete
   const { data: profile } = useGetUserProfileQuery()
@@ -1043,9 +1050,9 @@ export function MarketListingView() {
   return (
     <>
       <Grid item xs={12} lg={12}>
-        <Grid container spacing={2}>
+        <Grid container spacing={theme.layoutSpacing.layout}>
           <Grid item xs={12} lg={4}>
-            <Grid container spacing={2}>
+            <Grid container spacing={theme.layoutSpacing.layout}>
               <Grid item xs={12} lg={12}>
                 <ImagePreviewPaper photos={photos} />
 
@@ -1107,12 +1114,11 @@ export function MarketListingView() {
           </Grid>
 
           <Grid item xs={12} lg={8}>
-            <Grid container spacing={2}>
+            <Grid container spacing={theme.layoutSpacing.component}>
               <Grid item xs={12}>
                 <Fade in={true}>
                   <Card
                     sx={{
-                      borderRadius: 3,
                       minHeight: 400,
                     }}
                   >
@@ -1126,7 +1132,7 @@ export function MarketListingView() {
                         <Stack
                           direction={"column"}
                           alignItems={"left"}
-                          spacing={1}
+                          spacing={theme.layoutSpacing.text}
                           justifyContent={"left"}
                         >
                           <Breadcrumbs
@@ -1302,7 +1308,7 @@ export function MarketListingView() {
                         </Box>
                       }
                       action={
-                        <Stack direction={"row"} spacing={1}>
+                        <Stack direction={"row"} spacing={theme.layoutSpacing.compact}>
                           {amRelated &&
                           listing.status !== "archived" &&
                           listing.sale_type !== "auction" ? (

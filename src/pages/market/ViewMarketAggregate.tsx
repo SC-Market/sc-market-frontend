@@ -19,10 +19,13 @@ import {
   shouldShowErrorPage,
 } from "../../util/errorHandling"
 import { ErrorPage } from "../errors/ErrorPage"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function ViewMarketAggregate(props: {}) {
   const { id } = useParams<{ id: string }>()
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
 
   const {
     data: aggregate,
@@ -38,7 +41,7 @@ export function ViewMarketAggregate(props: {}) {
           item
           container
           justifyContent={"space-between"}
-          spacing={2}
+          spacing={theme.layoutSpacing.layout}
           xs={12}
         >
           <HeaderTitle md={7} lg={7} xl={7}>

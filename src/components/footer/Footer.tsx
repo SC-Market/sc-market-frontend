@@ -4,13 +4,16 @@ import React from "react"
 import { DISCORD_INVITE } from "../../util/constants"
 import { Trans, useTranslation } from "react-i18next"
 import { ReportButton } from "../button/ReportButton"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function Footer() {
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
 
   return (
     <Grid item xs={12} sx={{ marginTop: 2 }}>
-      <Grid container spacing={2}>
+      <Grid container spacing={theme.layoutSpacing.layout}>
         <Grid item xs={12}>
           <Divider light />
         </Grid>

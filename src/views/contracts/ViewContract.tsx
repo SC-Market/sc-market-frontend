@@ -30,8 +30,7 @@ export function ViewContract(props: { listing: Order }) {
     <Grid item xs={12} lg={appOpen ? 8 : 12}>
       <Card
         sx={{
-          borderRadius: 3,
-          padding: 3,
+            padding: 3,
         }}
       >
         <CardHeader

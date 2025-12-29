@@ -45,6 +45,7 @@ import {
 } from "./MarketListingView"
 import { Stack } from "@mui/system"
 import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 import moment from "moment/moment"
 import { ClockAlert } from "mdi-material-ui"
 import { useTranslation } from "react-i18next"
@@ -90,14 +91,14 @@ export function MarketMultipleView() {
 
   const issueAlert = useAlertHook()
   const [imageModalOpen, setImageModalOpen] = useState(false)
-  const theme = useTheme()
+  const theme = useTheme<ExtendedTheme>()
 
   return (
     <>
       <Grid item xs={12} lg={12}>
-        <Grid container spacing={2}>
+        <Grid container spacing={theme.layoutSpacing.layout}>
           <Grid item xs={12} lg={4}>
-            <Grid container spacing={2}>
+            <Grid container spacing={theme.layoutSpacing.layout}>
               <Grid item xs={12} lg={12}>
                 <ImagePreviewModal
                   images={photos}
@@ -106,7 +107,7 @@ export function MarketMultipleView() {
                 />
                 <Paper
                   sx={{
-                    borderRadius: 3,
+                    borderRadius: (theme) => theme.spacing(theme.borderRadius.image),
                     backgroundColor: theme.palette.background.default,
                     display: "flex",
                     justifyContent: "center",
@@ -194,7 +195,7 @@ export function MarketMultipleView() {
 
               {amRelated && (
                 <Grid item lg={12} xs={12}>
-                  <Grid container spacing={2}>
+                  <Grid container spacing={theme.layoutSpacing.component}>
                     <Section
                       disablePadding
                       xs={12}
@@ -232,12 +233,12 @@ export function MarketMultipleView() {
           </Grid>
 
           <Grid item xs={12} lg={8}>
-            <Grid container spacing={2}>
+            <Grid container spacing={theme.layoutSpacing.layout}>
               <Grid item xs={12}>
                 <Fade in={true}>
                   <Card
                     sx={{
-                      borderRadius: 3,
+                      borderRadius: (theme) => theme.spacing(theme.borderRadius.image),
                       minHeight: 400,
                     }}
                   >
@@ -251,7 +252,7 @@ export function MarketMultipleView() {
                         <Stack
                           direction={"column"}
                           alignItems={"left"}
-                          spacing={1}
+                          spacing={theme.layoutSpacing.compact}
                           justifyContent={"left"}
                         >
                           <Breadcrumbs

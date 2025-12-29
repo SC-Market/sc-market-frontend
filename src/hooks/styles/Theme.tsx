@@ -41,6 +41,21 @@ declare module "@mui/material/styles" {
     }
   }
 
+  interface LayoutSpacing {
+    layout: number // Between top-level components (market listings, sections)
+    component: number // Inside cards/papers (between form fields, content sections)
+    text: number // Between text elements, small components
+    compact: number // Very tight spacing (icon groups, badges)
+  }
+
+  interface BorderRadius {
+    topLevel: number // Cards, Papers, major components
+    image: number // Image previews, media containers
+    button: number // Buttons, chips, interactive elements
+    input: number // Text fields, inputs
+    minimal: number // Dividers, minimal elements
+  }
+
   interface Palette {
     discord: Palette["primary"]
     outline: Palette["primary"]
@@ -53,10 +68,14 @@ declare module "@mui/material/styles" {
 
   interface ThemeOptions {
     navKind?: "elevation" | "outlined"
+    layoutSpacing?: Partial<LayoutSpacing>
+    borderRadius?: Partial<BorderRadius>
   }
 
   interface Theme {
     navKind?: "elevation" | "outlined"
+    layoutSpacing: LayoutSpacing
+    borderRadius: BorderRadius
   }
 }
 
@@ -85,8 +104,28 @@ type ExtendedThemeOptions = ThemeOptions
 const mainOutline = "rgb(45,55,72)"
 export const refTheme = createTheme()
 
+// Standardized spacing system
+const defaultLayoutSpacing: ExtendedThemeOptions["layoutSpacing"] = {
+  layout: 1, // Between top-level components (market listings, sections, major cards) - reduced from 2
+  component: 1.5, // Inside cards/papers (between form fields, content sections)
+  text: 1, // Between text elements, small components
+  compact: 0.5, // Very tight spacing (icon groups, badges, chips)
+}
+
+// Standardized border radius system (values are spacing multipliers)
+// Note: theme.spacing(0.375) = 3px (old borderRadius: 3), theme.spacing(1) = 8px
+const defaultBorderRadius: ExtendedThemeOptions["borderRadius"] = {
+  topLevel: 0.375, // Cards, Papers, major components - use theme.spacing(theme.borderRadius.topLevel) = 3px
+  image: 0.375, // Image previews, media containers - use theme.spacing(theme.borderRadius.image) = 3px
+  button: 1, // Buttons, chips, interactive elements - use theme.spacing(theme.borderRadius.button) = 8px
+  input: 0.5, // Text fields, inputs - use theme.spacing(theme.borderRadius.input) = 4px
+  minimal: 0, // Dividers, minimal elements - use theme.spacing(theme.borderRadius.minimal) = 0px
+}
+
 // @ts-ignore
 export const themeBase: ExtendedThemeOptions = {
+  layoutSpacing: defaultLayoutSpacing,
+  borderRadius: defaultBorderRadius,
   palette: {
     discord: {
       main: "#454FBF",
@@ -120,16 +159,28 @@ export const themeBase: ExtendedThemeOptions = {
     },
     MuiButton: {
       styleOverrides: {
-        outlined: {
-          fontFamily: `Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"`,
+        outlined: ({ theme }) => {
+          const extTheme = theme as ExtendedTheme
+          return {
+            fontFamily: `Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"`,
+            borderRadius: theme.spacing(extTheme.borderRadius.button),
+          }
         },
-        text: {
-          fontFamily: `Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"`,
+        text: ({ theme }) => {
+          const extTheme = theme as ExtendedTheme
+          return {
+            fontFamily: `Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"`,
+            borderRadius: theme.spacing(extTheme.borderRadius.button),
+          }
         },
         // same for other variants
-        contained: {
-          // ...makeReverseCut('12px'),
-          // ...makeCut('12px'),
+        contained: ({ theme }) => {
+          const extTheme = theme as ExtendedTheme
+          return {
+            borderRadius: theme.spacing(extTheme.borderRadius.button),
+            // ...makeReverseCut('12px'),
+            // ...makeCut('12px'),
+          }
         },
       },
     },
@@ -268,6 +319,12 @@ export const mainThemeOptions: ExtendedThemeOptions = {
         outlined: {
           border: `1px solid ${mainOutline}`,
         },
+        root: ({ theme }) => {
+          const extTheme = theme as ExtendedTheme
+          return {
+            borderRadius: theme.spacing(extTheme.borderRadius.topLevel),
+          }
+        },
       },
     },
     MuiCard: {
@@ -275,8 +332,12 @@ export const mainThemeOptions: ExtendedThemeOptions = {
         variant: "outlined",
       },
       styleOverrides: {
-        root: {
-          border: `1px solid ${mainOutline}`,
+        root: ({ theme }) => {
+          const extTheme = theme as ExtendedTheme
+          return {
+            border: `1px solid ${mainOutline}`,
+            borderRadius: theme.spacing(extTheme.borderRadius.topLevel),
+          }
         },
       },
     },

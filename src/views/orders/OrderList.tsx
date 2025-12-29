@@ -24,6 +24,7 @@ import {
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { Link } from "react-router-dom"
 import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 import {
   ControlledTable,
   HeadCell,
@@ -125,7 +126,7 @@ export function OrderRow(props: {
 }) {
   const { row, index, isItemSelected } = props // TODO: Add `assigned_to` column
   const date = useMemo(() => new Date(row.timestamp), [row.timestamp])
-  const theme = useTheme()
+  const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
 
   const statusColor = useMemo(() => statusColors.get(row.status), [row.status])
@@ -149,7 +150,7 @@ export function OrderRow(props: {
     >
       <TableCell>
         <Stack
-          spacing={1}
+          spacing={theme.layoutSpacing.compact}
           direction="row"
           alignItems="center"
           justifyContent="left"
@@ -192,7 +193,7 @@ export function OrderRow(props: {
       </TableCell>
       <TableCell align={"right"}>
         <Stack
-          spacing={1}
+          spacing={theme.layoutSpacing.compact}
           direction={"row"}
           justifyContent={"right"}
           alignItems={"center"}
@@ -267,6 +268,7 @@ export function OrdersViewPaginated(props: {
   contractor?: string
 }) {
   const { title, mine, assigned, contractor } = props
+  const theme = useTheme<ExtendedTheme>()
   const { data: profile } = useGetUserProfileQuery()
   const [statusFilter, setStatusFilter] = useState<
     "all" | "active" | "past" | OrderSearchStatus
@@ -460,7 +462,7 @@ export function OrdersViewPaginated(props: {
                 )}
               </Stack>
 
-              <Grid container spacing={1}>
+              <Grid container spacing={theme.layoutSpacing.compact}>
                 {/* Buyer/Seller Username Filter */}
                 {!mine ? (
                   <Grid item xs={12} md={6}>
@@ -530,7 +532,7 @@ export function OrdersViewPaginated(props: {
 
               {/* Active Filters Chips */}
               {activeFiltersCount > 0 && (
-                <Stack direction="row" spacing={0.5} flexWrap="wrap" gap={0.5}>
+                <Stack direction="row" spacing={theme.layoutSpacing.compact} flexWrap="wrap" gap={theme.layoutSpacing.compact}>
                   {debouncedBuyerUsername && (
                     <Chip
                       label={`${t("orders.buyer", "Buyer")}: ${debouncedBuyerUsername}`}

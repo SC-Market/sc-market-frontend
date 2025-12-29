@@ -38,6 +38,8 @@ import {
 } from "../../store/admin"
 import { DynamicApexChart } from "../../components/charts/DynamicCharts"
 import { useTranslation } from "react-i18next"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 function PeopleRow(props: {
   row: AdminUser
@@ -47,6 +49,7 @@ function PeopleRow(props: {
   labelId: string
 }): ReactElement {
   const { row, onClick, isItemSelected, labelId } = props
+  const theme = useTheme<ExtendedTheme>()
   return (
     <TableRow
       hover
@@ -72,7 +75,7 @@ function PeopleRow(props: {
         scope="row"
         // padding="none"
       >
-        <Grid container spacing={2}>
+        <Grid container spacing={theme.layoutSpacing.layout}>
           <Grid item>
             <Avatar src={row.avatar} />
           </Grid>

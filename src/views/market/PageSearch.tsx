@@ -69,7 +69,7 @@ function PageChoice(props: {
             }}
             alt={""}
             sx={{
-              borderRadius: 3,
+              borderRadius: (theme) => theme.spacing((theme as ExtendedTheme).borderRadius.image),
               transition: "0.5s",
             }}
           />
@@ -156,7 +156,7 @@ export function PageSearch(props: {
               }
               alt={""}
               sx={{
-                borderRadius: 3,
+                borderRadius: theme.spacing(theme.borderRadius.image),
                 transition: "0.5s",
               }}
             />

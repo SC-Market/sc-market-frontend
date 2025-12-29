@@ -8,10 +8,11 @@ import { OrderMetrics } from "../../views/orders/OrderMetrics"
 import { ReceivedOffersArea } from "../../views/offers/ReceivedOffersArea"
 import { useTranslation } from "react-i18next"
 import { Grid, useMediaQuery, useTheme } from "@mui/material"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function OrgOrders() {
   const { t } = useTranslation()
-  const theme = useTheme()
+  const theme = useTheme<ExtendedTheme>()
   const xxl = useMediaQuery(theme.breakpoints.up("xxl"))
   const lg = useMediaQuery(theme.breakpoints.up("lg"))
 
@@ -23,18 +24,18 @@ export function OrgOrders() {
         {xxl && (
           <>
             <Grid item xs={12} lg={2.5}>
-              <Grid container spacing={3}>
+              <Grid container spacing={theme.layoutSpacing.layout}>
                 <OrderMetrics />
               </Grid>
             </Grid>
             <Grid item xs={12} lg={6.5}>
-              <Grid container spacing={3}>
+              <Grid container spacing={theme.layoutSpacing.layout}>
                 <ReceivedOffersArea />
                 <RecentOrders />
               </Grid>
             </Grid>
             <Grid item xs={12} lg={3}>
-              <Grid container spacing={3}>
+              <Grid container spacing={theme.layoutSpacing.layout}>
                 <OrgOrderTrend />
               </Grid>
             </Grid>
@@ -44,12 +45,12 @@ export function OrgOrders() {
         {lg && !xxl && (
           <>
             <Grid item xs={12} lg={3}>
-              <Grid container spacing={3}>
+              <Grid container spacing={theme.layoutSpacing.layout}>
                 <OrderMetrics />
               </Grid>
             </Grid>
             <Grid item xs={12} lg={9}>
-              <Grid container spacing={3}>
+              <Grid container spacing={theme.layoutSpacing.layout}>
                 <ReceivedOffersArea />
                 <RecentOrders />
                 <OrgOrderTrend />

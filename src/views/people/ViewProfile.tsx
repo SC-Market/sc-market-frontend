@@ -66,6 +66,7 @@ import {
 import { UserContractorList } from "../../components/list/UserContractorList"
 import { useSearchMarketListingsQuery } from "../../store/market"
 import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { OpenLayout } from "../../components/layout/ContainerGrid"
 import { Contractor } from "../../datatypes/Contractor"
@@ -170,7 +171,7 @@ export function DarkBannerContainer(props: {
   profile: User | Contractor
 }) {
   const { profile } = props
-  const theme = useTheme()
+  const theme = useTheme<ExtendedTheme>()
 
   return (
     <Paper
@@ -307,7 +308,7 @@ export function ProfileBannerArea(props: {
     [myProfile?.username, profile.username],
   )
 
-  const theme = useTheme()
+  const theme = useTheme<ExtendedTheme>()
 
   return theme.palette.mode === "dark" ? (
     <DarkBannerContainer profile={profile}>
@@ -406,7 +407,7 @@ export function ViewProfile(props: { profile: User }) {
       })
   }
 
-  const theme = useTheme()
+  const theme = useTheme<ExtendedTheme>()
 
   return (
     <OpenLayout sidebarOpen={true}>
@@ -456,10 +457,10 @@ export function ViewProfile(props: { profile: User }) {
               })}
             </script>
           </Helmet>
-          <Grid container spacing={2}>
+          <Grid container spacing={theme.layoutSpacing.layout}>
             <Grid item xs={12}>
               <Grid
-                spacing={2}
+                spacing={theme.layoutSpacing.layout}
                 container
                 justifyContent={"space-between"}
                 alignItems={"end"}
@@ -471,7 +472,7 @@ export function ViewProfile(props: { profile: User }) {
                 }}
               >
                 <Grid item lg={6}>
-                  <Grid container spacing={2} alignItems={"end"}>
+                  <Grid container spacing={theme.layoutSpacing.component} alignItems={"end"}>
                     <Grid item>
                       {isMyProfile ? (
                         <Box
@@ -519,7 +520,7 @@ export function ViewProfile(props: { profile: User }) {
                             sx={{
                               height: 80,
                               width: 80,
-                              borderRadius: 4,
+                              borderRadius: theme.spacing(theme.borderRadius.image),
                               opacity:
                                 showAvatarButton || isUploadingAvatar ? 0.5 : 1,
                               transition: "0.5s",
@@ -533,7 +534,7 @@ export function ViewProfile(props: { profile: User }) {
                           sx={{
                             height: 80,
                             width: 80,
-                            borderRadius: 4,
+                            borderRadius: theme.spacing(theme.borderRadius.image),
                           }}
                           variant={"rounded"}
                         />
@@ -752,27 +753,27 @@ export function ViewProfile(props: { profile: User }) {
             </Grid>
             <Grid item xs={12}>
               <TabPanel value={page} index={0}>
-                <Grid container spacing={4}>
+                <Grid container spacing={theme.layoutSpacing.layout}>
                   <UserRelevantListingsArea user={props.profile.username} />
                 </Grid>
               </TabPanel>
               <TabPanel index={page} value={1}>
-                <Grid container spacing={3}>
+                <Grid container spacing={theme.layoutSpacing.layout}>
                   <ServiceListings user={props.profile?.username} />
                 </Grid>
               </TabPanel>
               <TabPanel index={page} value={2}>
-                <Grid container spacing={3}>
+                <Grid container spacing={theme.layoutSpacing.layout}>
                   <ItemListings user={props.profile?.username} />
                 </Grid>
               </TabPanel>
               <TabPanel index={page} value={3}>
-                <Grid container spacing={3}>
+                <Grid container spacing={theme.layoutSpacing.layout}>
                   <CreateOrderForm assigned_to={props.profile?.username} />
                 </Grid>
               </TabPanel>
               <TabPanel index={page} value={4}>
-                <Grid container spacing={2}>
+                <Grid container spacing={theme.layoutSpacing.layout}>
                   {props.profile && <UserReviewSummary user={props.profile} />}
                   <Section xs={12} lg={8} disablePadding>
                     <UserReviews user={props.profile} />
@@ -788,6 +789,7 @@ export function ViewProfile(props: { profile: User }) {
 }
 
 export function ProfileSkeleton() {
+  const theme = useTheme<ExtendedTheme>()
   return (
     <React.Fragment>
       <Grid item xs={12}>
@@ -795,15 +797,15 @@ export function ProfileSkeleton() {
           variant="rectangular"
           sx={{
             height: 350,
-            borderRadius: 3,
+            borderRadius: (theme) => theme.spacing((theme as ExtendedTheme).borderRadius.image),
           }}
         />
       </Grid>
       <Grid item xs={12} container justifyContent={"space-between"}>
-        <Grid item xs={12} lg={4} alignItems={"center"} spacing={2} container>
+        <Grid item xs={12} lg={4} alignItems={"center"} spacing={theme.layoutSpacing.layout} container>
           <Grid item>
             <Skeleton
-              sx={{ height: 80, width: 80, borderRadius: 4 }}
+              sx={{ height: 80, width: 80, borderRadius: theme.spacing(theme.borderRadius.image) }}
               variant={"rectangular"}
             />
           </Grid>
@@ -822,7 +824,7 @@ export function ProfileSkeleton() {
           xs={12}
           lg={5}
           container
-          spacing={2}
+          spacing={theme.layoutSpacing.layout}
           alignItems={"center"}
           justifyContent={"right"}
         />

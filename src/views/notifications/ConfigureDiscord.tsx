@@ -14,6 +14,8 @@ import { Stack } from "@mui/system"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { DISCORD_INVITE } from "../../util/constants"
 import { useTranslation } from "react-i18next"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function ConfigureDiscord(props: { org?: boolean }) {
   const [currentOrg] = useCurrentOrg()
@@ -30,6 +32,7 @@ export function ConfigureDiscord(props: { org?: boolean }) {
 
   const settings = props.org ? orgSettings : userSettings
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
 
   const callback = useCallback(async () => {
     if (props.org) {
@@ -49,7 +52,7 @@ export function ConfigureDiscord(props: { org?: boolean }) {
     <Section title={t("ConfigureDiscord.orderManagement")} xs={12}>
       <Grid item xs={12}>
         <Typography>{t("ConfigureDiscord.integratedChannel")}</Typography>
-        <Stack direction={"row"} alignItems={"center"} spacing={1}>
+        <Stack direction={"row"} alignItems={"center"} spacing={theme.layoutSpacing.compact}>
           <Avatar src={settings?.guild_avatar} />
           <a
             href={`https://discord.com/channels/${

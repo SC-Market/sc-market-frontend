@@ -2,6 +2,8 @@ import { Paper, Fade, Grid } from "@mui/material"
 import React from "react"
 import { AdConfig } from "./types"
 import { useMarketSidebarExp } from "../../hooks/market/MarketSidebar"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 interface AdCardProps {
   /** The ad configuration to display */
@@ -17,6 +19,7 @@ interface AdCardProps {
 export function AdCard(props: AdCardProps) {
   const { ad, index } = props
   const marketSidebarOpen = useMarketSidebarExp()
+  const theme = useTheme<ExtendedTheme>()
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -50,7 +53,7 @@ export function AdCard(props: AdCardProps) {
               height: 400,
               position: "relative",
               overflow: "hidden",
-              borderRadius: 2,
+              borderRadius: theme.spacing(theme.borderRadius.topLevel),
               cursor: "pointer",
               "&:hover": {
                 elevation: 6,

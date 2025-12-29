@@ -58,7 +58,7 @@ export function ProfileNavAvatar() {
         PaperProps={{
           variant: "outlined",
           sx: {
-            borderRadius: 3,
+            borderRadius: (theme) => theme.spacing((theme as ExtendedTheme).borderRadius.topLevel),
             borderColor: theme.palette.outline.main,
           },
         }}

@@ -31,7 +31,6 @@ export function ViewPublicOrder() {
       <Fade in={true}>
         <Card
           sx={{
-            borderRadius: 3,
             padding: 3,
           }}
         >

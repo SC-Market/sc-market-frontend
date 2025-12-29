@@ -48,6 +48,8 @@ import { ThemedDataGrid } from "../../components/grid/ThemedDataGrid"
 import { SelectMarketListing } from "../../components/select/SelectMarketListing.tsx"
 import { UniqueListing } from "../../datatypes/MarketListing.ts"
 import { NumericFormat } from "react-number-format"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTranslation } from "react-i18next" // Added for localization
 
 interface StockEntry extends GridValidRowModel {
@@ -76,6 +78,7 @@ export function ManageStockArea(props: {
   onUpdateQuantity: (rowId: string, newQuantity: number) => void
 }) {
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
   const [quantity, setQuantity] = React.useState(1)
   const { selectedRows, onUpdateQuantity } = props
 
@@ -91,7 +94,7 @@ export function ManageStockArea(props: {
   )
 
   return (
-    <Stack direction="row" spacing={2} alignItems="center">
+    <Stack direction="row" spacing={theme.layoutSpacing.layout} alignItems="center">
       <NumericFormat
         decimalScale={0}
         allowNegative={false}
@@ -199,6 +202,7 @@ declare module "@mui/x-data-grid" {
 
 export function ItemStockRework() {
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
   const { data: profile } = useGetUserProfileQuery()
   const [rowSelectionModel, setRowSelectionModel] =
     React.useState<GridRowSelectionModel>({ type: "include", ids: new Set() })
@@ -358,7 +362,7 @@ export function ItemStockRework() {
               direction={"row"}
               alignItems={"center"}
               justifyContent={"center"}
-              spacing={1}
+              spacing={theme.layoutSpacing.compact}
               sx={{
                 flexGrow: "1",
                 "& > *": {

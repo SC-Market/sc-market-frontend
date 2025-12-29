@@ -4,9 +4,12 @@ import { DiscordLoginButton } from "../../components/button/DiscordLoginButton"
 import { CitizenIDLoginButton } from "../../components/button/CitizenIDLoginButton"
 import { useTranslation } from "react-i18next"
 import { isCitizenIdEnabled } from "../../util/constants"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function LoginArea() {
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
 
   return (
     <Grid
@@ -26,7 +29,7 @@ export function LoginArea() {
           gap: 3,
         }}
       >
-        <Stack spacing={1}>
+        <Stack spacing={theme.layoutSpacing.compact}>
           <Typography variant="h4">
             {t("auth.signInTitle", "Sign in to SC Market")}
           </Typography>
@@ -47,7 +50,7 @@ export function LoginArea() {
           )}
         </Stack>
 
-        <Stack spacing={2}>
+        <Stack spacing={theme.layoutSpacing.layout}>
           {isCitizenIdEnabled && <CitizenIDLoginButton />}
           <DiscordLoginButton />
         </Stack>

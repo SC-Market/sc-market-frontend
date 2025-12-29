@@ -26,6 +26,8 @@ import {
   useGetContractorsForTokensQuery,
 } from "../../store/tokens"
 import { useGetUserProfileQuery } from "../../store/profile.ts"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 interface CreateTokenDialogProps {
   open: boolean
@@ -225,6 +227,7 @@ export function CreateTokenDialog({ open, onClose }: CreateTokenDialogProps) {
   }
 
   const isFormValid = formData.name.trim() && formData.scopes.length > 0
+  const theme = useTheme<ExtendedTheme>()
 
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
@@ -273,7 +276,7 @@ export function CreateTokenDialog({ open, onClose }: CreateTokenDialogProps) {
               </Alert>
             )}
 
-            <Grid container spacing={3}>
+            <Grid container spacing={theme.layoutSpacing.layout}>
               <Grid item xs={12}>
                 <TextField
                   fullWidth

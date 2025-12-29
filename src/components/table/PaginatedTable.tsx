@@ -276,7 +276,7 @@ export function PaginatedTable<T>(props: {
         </div>
         <Table
           sx={{
-            borderRadius: 2,
+            borderRadius: theme.spacing(theme.borderRadius.topLevel),
             [`& .${tableCellClasses.root}`]: {
               borderColor: theme.palette.outline.main,
             },
@@ -499,7 +499,7 @@ export function ControlledTable<T>(props: {
       <TableContainer sx={{ width: "100%" }}>
         <Table
           sx={{
-            borderRadius: 2,
+            borderRadius: theme.spacing(theme.borderRadius.topLevel),
             [`& .${tableCellClasses.root}`]: {
               borderColor: theme.palette.outline.main,
             },

@@ -5,6 +5,7 @@ import { CookieRounded } from "@mui/icons-material"
 import ReactGA from "react-ga4"
 import { useLocation } from "react-router-dom"
 import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTranslation } from "react-i18next"
 
 const TRACKING_ID = "G-KT8SEND6F2" // OUR_TRACKING_ID
@@ -52,7 +53,7 @@ export function CookieConsent() {
     }
   }, [location, cookies.cookie_consent])
 
-  const theme = useTheme()
+  const theme = useTheme<ExtendedTheme>()
 
   return (
     <Snackbar
@@ -68,7 +69,7 @@ export function CookieConsent() {
           backgroundColor: theme.palette.secondary.dark,
         }}
         action={
-          <Grid container spacing={1}>
+          <Grid container spacing={theme.layoutSpacing.compact}>
             <Grid item>
               <Button
                 size="small"

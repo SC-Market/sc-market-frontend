@@ -22,9 +22,12 @@ import {
   shouldShowErrorPage,
 } from "../../util/errorHandling"
 import { ErrorPage } from "../errors/ErrorPage"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function ViewMarketListing() {
   const { id } = useParams<{ id: string }>()
+  const theme = useTheme<ExtendedTheme>()
 
   /*
    * TODO:
@@ -53,7 +56,7 @@ export function ViewMarketListing() {
           item
           container
           justifyContent={"space-between"}
-          spacing={2}
+          spacing={theme.layoutSpacing.layout}
           xs={12}
         >
           <HeaderTitle md={7} lg={7} xl={7}>

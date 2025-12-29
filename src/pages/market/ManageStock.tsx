@@ -11,9 +11,12 @@ import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { GridRowSelectionModel } from "@mui/x-data-grid"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function ManageStock() {
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
   const [open, setOpen] = useState(true)
   const [searchState, setSearchState] = useMarketSearch()
 
@@ -45,7 +48,7 @@ export function ManageStock() {
             </Grid>
 
             <Grid item xs={12} md={9}>
-              <Grid container spacing={2}>
+              <Grid container spacing={theme.layoutSpacing.layout}>
                 <Grid item xs={12}>
                   <MyItemStock />
                 </Grid>

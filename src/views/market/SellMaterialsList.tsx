@@ -185,7 +185,7 @@ function onlyUnique<T>(value: T, index: number, self: T[]) {
 
 export function SellMaterialsList(props: {}): ReactElement {
   const { t } = useTranslation()
-  const theme: ExtendedTheme = useTheme()
+  const theme = useTheme<ExtendedTheme>()
   const [kind, setKind] = useState<string>("Any")
   const [query, setQuery] = useState<string>("")
 
@@ -201,7 +201,7 @@ export function SellMaterialsList(props: {}): ReactElement {
           container
           justifyContent={"right"}
           alignItems={"center"}
-          spacing={2}
+          spacing={theme.layoutSpacing.layout}
         >
           <Grid item>
             <TextField

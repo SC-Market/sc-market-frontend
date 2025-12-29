@@ -45,6 +45,8 @@ import {
 import { has_permission } from "../contractor/OrgRoles"
 import { PAYMENT_TYPE_MAP } from "../../util/constants"
 import { useTranslation } from "react-i18next"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function OrderMessagesArea(props: { order: Order }) {
   const { order } = props
@@ -98,6 +100,7 @@ export function OrderMessagesArea(props: { order: Order }) {
 }
 
 export function OrderDetailsArea(props: { order: Order }) {
+  const theme = useTheme<ExtendedTheme>()
   const { order } = props
   const { t } = useTranslation()
   const { data: profile } = useGetUserProfileQuery()
@@ -312,7 +315,7 @@ export function OrderDetailsArea(props: { order: Order }) {
               {/*  Description*/}
               {/*</TableCell>*/}
               <TableCell colSpan={2}>
-                <Stack direction="column" spacing={1}>
+                <Stack direction="column" spacing={theme.layoutSpacing.compact}>
                   {t("orderDetailsArea.details")}
                   <Typography color={"text.secondary"} variant={"subtitle2"}>
                     <MarkdownRender text={order.description} />
@@ -393,7 +396,7 @@ export function OrderDetailsArea(props: { order: Order }) {
                 {t("orderDetailsArea.update_status")}
               </TableCell>
               <TableCell align="right">
-                <Stack direction="row" justifyContent={"right"} spacing={1}>
+                <Stack direction="row" justifyContent={"right"} spacing={theme.layoutSpacing.compact}>
                   {privateContractCustomer && !isComplete && (
                     <LoadingButton
                       variant={"contained"}

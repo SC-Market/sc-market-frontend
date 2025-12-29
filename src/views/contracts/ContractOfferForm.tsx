@@ -33,10 +33,13 @@ import {
   useCheckUserOrderLimitsQuery,
 } from "../../store/orderSettings"
 import { OrderLimitsDisplay } from "../../components/orders/OrderLimitsDisplay"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function ContractOfferForm(props: { contract: PublicContract }) {
   const { contract } = props
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
   const [currentOrg] = useCurrentOrg()
   const [title, setTitle] = useState(contract.title)
   const [description, setDescription] = useState(contract.description)
@@ -157,7 +160,7 @@ export function ContractOfferForm(props: { contract: PublicContract }) {
             {t("createPublicContract.about")}
           </Typography>
         </Grid>
-        <Grid item xs={12} lg={8} container spacing={2}>
+        <Grid item xs={12} lg={8} container spacing={theme.layoutSpacing.layout}>
           <Grid item xs={12} lg={12}>
             <TextField
               fullWidth
@@ -265,7 +268,7 @@ export function ContractOfferForm(props: { contract: PublicContract }) {
             {t("createPublicContract.costs")}
           </Typography>
         </Grid>
-        <Grid item xs={12} lg={8} container spacing={2}>
+        <Grid item xs={12} lg={8} container spacing={theme.layoutSpacing.layout}>
           <Grid item xs={12}>
             <NumericFormat
               decimalScale={0}

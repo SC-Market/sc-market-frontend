@@ -70,7 +70,7 @@ function LandingSmallImage(props: { src: string; title: string }) {
           border: `1px solid ${theme.palette.outline.main}`,
           marginBottom: theme.spacing(2),
           objectFit: "cover",
-          borderRadius: theme.spacing(2),
+          borderRadius: theme.spacing(theme.borderRadius.image),
         }}
         alt={title}
         loading="lazy"
@@ -135,7 +135,7 @@ export function RecentListingsSkeleton() {
                 variant={"rectangular"}
                 height={400}
                 width={250}
-                sx={{ borderRadius: 3 }}
+                sx={{ borderRadius: (theme) => theme.spacing((theme as ExtendedTheme).borderRadius.image) }}
               />
             </Fade>
           </Box>
@@ -156,8 +156,9 @@ export function OrderStatistics() {
       week_order_value: 0,
     }
 
+  const theme = useTheme<ExtendedTheme>()
   return (
-    <Grid container spacing={2} justifyContent={"center"}>
+    <Grid container spacing={theme.layoutSpacing.layout} justifyContent={"center"}>
       <MetricSection
         title={t("landing.totalOrders")}
         body={<AnimatedNumbers includeComma animateToNumber={total_orders} />}
@@ -299,7 +300,7 @@ export function LandingPage() {
                     flex: { xs: "1 1 auto", md: "0 1 auto" },
                   }}
                 >
-                  <Grid container spacing={2} justifyContent="center">
+                  <Grid container spacing={theme.layoutSpacing.layout} justifyContent="center">
                     <LoginArea />
                   </Grid>
                 </Box>
@@ -324,7 +325,7 @@ export function LandingPage() {
                 <RecentListings />
               </Box>
 
-              <Grid2 container justifyContent={"center"} spacing={8}>
+              <Grid2 container justifyContent={"center"} spacing={theme.layoutSpacing.layout * 4}>
                 <Grid2 size={{ xs: 12, md: 4 }}>
                   <Stack direction={"column"}>
                     <Typography
@@ -412,7 +413,7 @@ export function LandingPage() {
                 </Typography>
               </Stack>
 
-              <Grid2 container justifyContent={"center"} spacing={4}>
+              <Grid2 container justifyContent={"center"} spacing={theme.layoutSpacing.layout * 2}>
                 <Grid2 size={{ xs: 12, md: 4 }}>
                   <LandingSmallImage
                     src={recruitingCap}
@@ -529,7 +530,7 @@ function FAQSection() {
   const theme = useTheme<ExtendedTheme>()
 
   return (
-    <Stack direction={"row"} sx={{ flexWrap: "wrap" }} spacing={1}>
+    <Stack direction={"row"} sx={{ flexWrap: "wrap" }} spacing={theme.layoutSpacing.compact}>
       <Typography
         variant={"h3"}
         color={"text.secondary"}
@@ -540,7 +541,7 @@ function FAQSection() {
       <Paper sx={{ flexGrow: "1" }}>
         <List
           sx={{
-            borderRadius: theme.spacing(2),
+            borderRadius: theme.spacing(theme.borderRadius.topLevel),
             padding: 0,
           }}
         >
@@ -574,6 +575,7 @@ function FAQSection() {
 
 function SupportersSection() {
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
   const supporters = [
     {
       avatar: BirdIncLogo,
@@ -593,7 +595,7 @@ function SupportersSection() {
   ]
 
   return (
-    <Stack spacing={2} sx={{ maxWidth: "100%" }}>
+    <Stack spacing={theme.layoutSpacing.layout} sx={{ maxWidth: "100%" }}>
       <Typography
         variant={"h3"}
         sx={{ fontWeight: "bold", textAlign: "center" }}
@@ -621,7 +623,7 @@ function SupportersSection() {
       <Stack
         sx={{ maxWidth: "100%", overflow: "scroll", flexWrap: "wrap" }}
         useFlexGap
-        spacing={2}
+        spacing={theme.layoutSpacing.layout}
         direction={"row"}
         justifyContent={"center"}
         alignItems={"center"}
@@ -636,14 +638,14 @@ function SupportersSection() {
             key={supporter.name}
           >
             <Stack
-              spacing={1}
+              spacing={theme.layoutSpacing.text}
               direction={"column"}
               key={supporter.name}
               justifyContent={"center"}
               alignItems={"center"}
             >
               <ButtonBase
-                sx={{ borderRadius: 1 }}
+                sx={{ borderRadius: theme.spacing(theme.borderRadius.topLevel) }}
                 aria-label={t(
                   "accessibility.viewSupporterWebsite",
                   "Visit {{name}} website",
@@ -652,7 +654,7 @@ function SupportersSection() {
               >
                 <img
                   src={supporter.avatar}
-                  style={{ maxHeight: 128, maxWidth: "100%", borderRadius: 4 }}
+                  style={{ maxHeight: 128, maxWidth: "100%", borderRadius: `${theme.spacing(theme.borderRadius.image)}px` }}
                   alt={t("accessibility.supporterLogo", "{{name}} logo", {
                     name: supporter.name,
                   })}

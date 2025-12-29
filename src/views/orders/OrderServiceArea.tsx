@@ -5,10 +5,13 @@ import { Stack } from "@mui/system"
 import { Order } from "../../datatypes/Order"
 import { useGetServiceByIdQuery } from "../../store/services"
 import { useTranslation } from "react-i18next"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function OrderServiceArea(props: { order: Order }) {
   const { order } = props
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
   const { data: service } = useGetServiceByIdQuery(order.service_id!, {
     skip: !order.service_id,
   })
@@ -17,7 +20,7 @@ export function OrderServiceArea(props: { order: Order }) {
     return (
       <Grid item xs={12} lg={4} md={12}>
         <Paper sx={{ padding: 2 }}>
-          <Stack spacing={1}>
+          <Stack spacing={theme.layoutSpacing.compact}>
             <Typography
               variant={"h5"}
               sx={{ fontWeight: "bold" }}
@@ -34,7 +37,7 @@ export function OrderServiceArea(props: { order: Order }) {
     return (
       <Grid item xs={12} lg={4} md={12}>
         <Paper sx={{ padding: 2 }}>
-          <Stack spacing={1}>
+          <Stack spacing={theme.layoutSpacing.compact}>
             <Typography
               variant={"h5"}
               sx={{ fontWeight: "bold" }}

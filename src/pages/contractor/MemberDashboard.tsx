@@ -10,13 +10,16 @@ import { UserOrderTrend } from "../../views/orders/OrderTrend"
 import { ReceivedOffersArea } from "../../views/offers/ReceivedOffersArea"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useTranslation } from "react-i18next"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function MemberDashboard() {
   // TODO: Add a notifications section here, and maybe some other content
 
   const { t } = useTranslation()
-  const lg = useMediaQuery((theme: Theme) => theme.breakpoints.up("lg"))
-  const xxl = useMediaQuery((theme: Theme) => theme.breakpoints.up("xxl"))
+  const theme = useTheme<ExtendedTheme>()
+  const lg = useMediaQuery(theme.breakpoints.up("lg"))
+  const xxl = useMediaQuery(theme.breakpoints.up("xxl"))
   const [currentOrg] = useCurrentOrg()
 
   return (
@@ -26,14 +29,14 @@ export function MemberDashboard() {
         {xxl && (
           <>
             <Grid item xs={12} lg={2.5}>
-              <Grid container spacing={3}>
+              <Grid container spacing={theme.layoutSpacing.layout}>
                 {/*<MemberBalance/>*/}
                 <OrderMetrics />
                 <DashNotificationArea />
               </Grid>
             </Grid>
             <Grid item xs={12} lg={6.5}>
-              <Grid container spacing={3}>
+              <Grid container spacing={theme.layoutSpacing.layout}>
                 {!currentOrg && <ReceivedOffersArea />}
                 <MemberAssignments />
                 <UserOrderTrend />
@@ -48,7 +51,7 @@ export function MemberDashboard() {
         {lg && !xxl && (
           <>
             <Grid item xs={12} lg={3}>
-              <Grid container spacing={3}>
+              <Grid container spacing={theme.layoutSpacing.layout}>
                 {/*<MemberBalance/>*/}
                 <OrderMetrics />
                 <DashNotificationArea />
@@ -56,7 +59,7 @@ export function MemberDashboard() {
               </Grid>
             </Grid>
             <Grid item xs={12} lg={9}>
-              <Grid container spacing={3}>
+              <Grid container spacing={theme.layoutSpacing.layout}>
                 {!currentOrg && <ReceivedOffersArea />}
                 <MemberAssignments />
                 <UserOrderTrend />

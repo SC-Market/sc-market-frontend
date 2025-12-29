@@ -15,6 +15,7 @@ import { useCookies } from "react-cookie"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import { useGetContractorBySpectrumIDQuery } from "../../store/contractor"
 import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { Stack } from "@mui/system"
 import { useTranslation } from "react-i18next"
 
@@ -90,7 +91,7 @@ export function SidebarActorSelect() {
     setCookie,
   ])
 
-  const theme = useTheme()
+  const theme = useTheme<ExtendedTheme>()
 
   return (
     <Paper
@@ -113,13 +114,39 @@ export function SidebarActorSelect() {
               PaperProps: {
                 sx: {
                   bgcolor: theme.palette.background.sidebar,
+                  "& .MuiMenuItem-root": {
+                    color: theme.palette.getContrastText(theme.palette.background.sidebar),
+                    "&:hover": {
+                      backgroundColor: theme.palette.action.hover,
+                    },
+                  },
                 },
                 variant: "outlined",
                 padding: 2,
               },
             },
           }}
-          sx={{ borderRadius: 32 }}
+          sx={{ 
+            borderRadius: 32,
+            "& .MuiInputLabel-root": {
+              color: theme.palette.getContrastText(theme.palette.background.sidebar),
+            },
+            "& .MuiOutlinedInput-root": {
+              color: theme.palette.getContrastText(theme.palette.background.sidebar),
+              "& fieldset": {
+                borderColor: theme.palette.getContrastText(theme.palette.background.sidebar),
+                opacity: 0.3,
+              },
+              "&:hover fieldset": {
+                borderColor: theme.palette.getContrastText(theme.palette.background.sidebar),
+                opacity: 0.5,
+              },
+              "&.Mui-focused fieldset": {
+                borderColor: theme.palette.getContrastText(theme.palette.background.sidebar),
+                opacity: 0.7,
+              },
+            },
+          }}
           label={t("sidebar_actor_select.select_role")}
         >
           {profile ? (
@@ -127,7 +154,7 @@ export function SidebarActorSelect() {
               <MenuItem value={"_"} key={"user"}>
                 <Stack
                   direction={"row"}
-                  spacing={1}
+                  spacing={theme.layoutSpacing.compact}
                   alignItems={"center"}
                   justifyContent={"left"}
                 >
@@ -139,14 +166,18 @@ export function SidebarActorSelect() {
                     })}
                     sx={{ height: 48, width: 48 }}
                   />
-                  <Box>{profile.display_name}</Box>
+                  <Box>
+                    <Typography color={theme.palette.getContrastText(theme.palette.background.sidebar)}>
+                      {profile.display_name}
+                    </Typography>
+                  </Box>
                 </Stack>
               </MenuItem>,
               ...profile.contractors.map((choice) => (
                 <MenuItem value={choice.spectrum_id} key={choice.spectrum_id}>
                   <Stack
                     direction={"row"}
-                    spacing={1}
+                    spacing={theme.layoutSpacing.compact}
                     alignItems={"center"}
                     justifyContent={"left"}
                     maxWidth={"100%"}
@@ -160,7 +191,10 @@ export function SidebarActorSelect() {
                       })}
                       sx={{ height: 48, width: 48 }}
                     />
-                    <Typography style={{ whiteSpace: "normal" }}>
+                    <Typography 
+                      style={{ whiteSpace: "normal" }}
+                      color={theme.palette.getContrastText(theme.palette.background.sidebar)}
+                    >
                       {choice.name}
                     </Typography>
                   </Stack>
@@ -169,7 +203,9 @@ export function SidebarActorSelect() {
             ]
           ) : (
             <MenuItem value={contractorSpectrumID}>
-              {t("sidebar_actor_select.login_to_select_role")}
+              <Typography color={theme.palette.getContrastText(theme.palette.background.sidebar)}>
+                {t("sidebar_actor_select.login_to_select_role")}
+              </Typography>
             </MenuItem>
           )}
         </TextField>

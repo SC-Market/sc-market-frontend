@@ -81,6 +81,7 @@ function MarketTabLoader() {
 export function MarketPage() {
   const { t } = useTranslation()
   const location = useLocation()
+  const theme = useTheme<ExtendedTheme>()
   const pages = ["/market/services", "/market"]
   const tabPage = useMemo(
     () =>
@@ -96,12 +97,12 @@ export function MarketPage() {
         <Container maxWidth={"lg"} sx={{ paddingTop: 8 }}>
           <Grid
             container
-            spacing={2}
+            spacing={theme.layoutSpacing.layout}
             justifyContent={"space-between"}
             sx={{ marginBottom: 4 }}
           >
             <Grid item>
-              <Stack direction={"row"} spacing={2}>
+              <Stack direction={"row"} spacing={theme.layoutSpacing.layout}>
                 <Typography
                   variant={"h4"}
                   sx={{ fontWeight: "bold" }}
@@ -202,7 +203,7 @@ export function BulkItems() {
         {/*<MarketSidebar/>*/}
         <ContainerGrid maxWidth={"lg"} sidebarOpen={true}>
           <Grid item xs={12}>
-            <Grid container justifyContent={"space-between"} spacing={1}>
+            <Grid container justifyContent={"space-between"} spacing={theme.layoutSpacing.compact}>
               <HeaderTitle lg={7} xl={7}>
                 {t("market.bulkListings")}
               </HeaderTitle>
@@ -226,7 +227,7 @@ export function BulkItems() {
             container
             xs={12}
             lg={12}
-            spacing={1.5}
+            spacing={theme.layoutSpacing.component}
             sx={{ transition: "0.3s" }}
           >
             <Suspense fallback={<MarketTabLoader />}>
@@ -283,7 +284,7 @@ export function BuyOrderItems() {
         {/*<MarketSidebar/>*/}
         <ContainerGrid maxWidth={"lg"} sidebarOpen={true}>
           <Grid item xs={12}>
-            <Grid container justifyContent={"space-between"} spacing={1}>
+            <Grid container justifyContent={"space-between"} spacing={theme.layoutSpacing.compact}>
               <HeaderTitle lg={7} xl={7}>
                 {t("market.buyOrders")}
               </HeaderTitle>
@@ -307,7 +308,7 @@ export function BuyOrderItems() {
             container
             xs={12}
             lg={12}
-            spacing={1.5}
+            spacing={theme.layoutSpacing.component}
             sx={{ transition: "0.3s" }}
           >
             <Suspense fallback={<MarketTabLoader />}>

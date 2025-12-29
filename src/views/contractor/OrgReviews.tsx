@@ -60,7 +60,7 @@ function ReviewRow(props: {
         selected={isItemSelected}
       >
         <TableCell component="th" id={labelId} scope="row">
-          <Grid container spacing={2}>
+          <Grid container spacing={theme.layoutSpacing.layout}>
             <Grid item>
               <Avatar
                 src={row.user_author?.avatar || row.contractor_author!.avatar}
@@ -193,21 +193,24 @@ export function UserReviews(props: { user: MinimalUser }) {
   )
 }
 
-const BorderLinearProgress = styled(LinearProgress)(({ theme }) => ({
-  height: 10,
-  borderRadius: 5,
-  width: "95%",
-  display: "inline",
-  flexGrow: "1",
-  [`&.${linearProgressClasses.colorPrimary}`]: {
-    backgroundColor:
-      theme.palette.grey[theme.palette.mode === "light" ? 200 : 800],
-  },
-  [`& .${linearProgressClasses.bar}`]: {
-    borderRadius: 5,
-    backgroundColor: amber[500],
-  },
-}))
+const BorderLinearProgress = styled(LinearProgress)(({ theme }) => {
+  const extendedTheme = theme as ExtendedTheme
+  return {
+    height: 10,
+    borderRadius: theme.spacing(extendedTheme.borderRadius.input),
+    width: "95%",
+    display: "inline",
+    flexGrow: "1",
+    [`&.${linearProgressClasses.colorPrimary}`]: {
+      backgroundColor:
+        theme.palette.grey[theme.palette.mode === "light" ? 200 : 800],
+    },
+    [`& .${linearProgressClasses.bar}`]: {
+      borderRadius: theme.spacing(extendedTheme.borderRadius.input),
+      backgroundColor: amber[500],
+    },
+  }
+})
 
 export function ReviewSummaryArea(props: {
   reviews: OrderReview[]

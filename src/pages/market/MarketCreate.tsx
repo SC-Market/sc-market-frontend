@@ -13,6 +13,8 @@ import { a11yProps, TabPanel } from "../../components/tabs/Tabs"
 import { useParams } from "react-router-dom"
 import { BackArrow } from "../../components/button/BackArrow"
 import { useTranslation } from "react-i18next"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 const name_to_index = new Map([
   // ["aggregate", 0],
@@ -23,6 +25,7 @@ const name_to_index = new Map([
 
 export function MarketCreate(props: {}) {
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
   const { tab } = useParams<{ tab?: string }>()
   const page = useMemo(() => name_to_index.get(tab || "aggregate") || 0, [tab])
 
@@ -82,22 +85,22 @@ export function MarketCreate(props: {}) {
         </Grid>
         <Grid item xs={12}>
           {/*<TabPanel value={page} index={0}>
-            <Grid container spacing={4}>
+            <Grid container spacing={theme.layoutSpacing.layout * 4}>
               <AggregateMarketListingForm />
             </Grid>
           </TabPanel>*/}
           <TabPanel value={page} index={0}>
-            <Grid container spacing={4}>
+            <Grid container spacing={theme.layoutSpacing.layout * 4}>
               <MarketListingForm sale_type={"sale"} key={"sale"} />
             </Grid>
           </TabPanel>
           <TabPanel value={page} index={1}>
-            <Grid container spacing={4}>
+            <Grid container spacing={theme.layoutSpacing.layout * 4}>
               <MarketListingForm sale_type={"auction"} key={"auction"} />
             </Grid>
           </TabPanel>
           <TabPanel value={page} index={2}>
-            <Grid container spacing={4}>
+            <Grid container spacing={theme.layoutSpacing.layout * 4}>
               <MarketMultipleForm />
             </Grid>
           </TabPanel>

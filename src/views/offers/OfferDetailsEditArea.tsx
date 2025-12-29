@@ -23,9 +23,12 @@ import { useTranslation } from "react-i18next"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import { NumericFormat } from "react-number-format"
 import { useCounterOffer } from "../../hooks/offer/CounterOfferDetails"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function OfferDetailsEditArea(props: { session: OfferSession }) {
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
   const { session } = props
   const [body, setBody] = useCounterOffer()
 
@@ -136,7 +139,7 @@ export function OfferDetailsEditArea(props: { session: OfferSession }) {
               {/*  Description*/}
               {/*</TableCell>*/}
               <TableCell colSpan={2}>
-                <Stack direction="column" spacing={1}>
+                <Stack direction="column" spacing={theme.layoutSpacing.compact}>
                   {t("OfferDetailsEditArea.details")}
                   <Typography color={"text.secondary"} variant={"subtitle2"}>
                     <MarkdownEditor
@@ -161,7 +164,7 @@ export function OfferDetailsEditArea(props: { session: OfferSession }) {
                   <Stack
                     direction="column"
                     justifyContent={"right"}
-                    spacing={1}
+                    spacing={theme.layoutSpacing.compact}
                     maxWidth={300}
                   >
                     <NumericFormat

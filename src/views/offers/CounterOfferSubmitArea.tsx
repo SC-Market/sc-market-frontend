@@ -7,6 +7,8 @@ import { useNavigate } from "react-router-dom"
 import { useCounterOffer } from "../../hooks/offer/CounterOfferDetails"
 import Grid from "@mui/material/Grid"
 import { useTranslation } from "react-i18next"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function CounterOfferSubmitArea(props: { session: OfferSession }) {
   const { session } = props
@@ -16,6 +18,7 @@ export function CounterOfferSubmitArea(props: { session: OfferSession }) {
   const navigate = useNavigate()
   const [body, setBody] = useCounterOffer()
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
 
   const counterOfferCallback = useCallback(() => {
     counterOffer(body)
@@ -31,7 +34,7 @@ export function CounterOfferSubmitArea(props: { session: OfferSession }) {
 
   return (
     <Grid item xs={12}>
-      <Stack direction="row" justifyContent={"right"} spacing={1}>
+      <Stack direction="row" justifyContent={"right"} spacing={theme.layoutSpacing.compact}>
         <LoadingButton
           color={"secondary"}
           variant={"contained"}

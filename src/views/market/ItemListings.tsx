@@ -122,7 +122,7 @@ export function ListingSkeleton(props: { index: number }) {
           variant={"rectangular"}
           height={400}
           width={"100%"}
-          sx={{ borderRadius: 3 }}
+          sx={{ borderRadius: (theme) => theme.spacing((theme as ExtendedTheme).borderRadius.image) }}
         />
       </Fade>
     </Grid>
@@ -215,7 +215,7 @@ export function ItemListingBase(props: {
         to={formatMarketUrl(listing)}
         style={{ textDecoration: "none", color: "inherit" }}
       >
-        <CardActionArea sx={{ borderRadius: 2 }}>
+        <CardActionArea sx={{ borderRadius: theme.spacing(theme.borderRadius.topLevel) }}>
           <Card
             sx={{
               height: 400,
@@ -288,7 +288,7 @@ export function ItemListingBase(props: {
                 left: 0,
                 height: "100%",
                 width: "100%",
-                borderRadius: 1,
+                borderRadius: theme.spacing(theme.borderRadius.topLevel),
                 background: `linear-gradient(to bottom, transparent, transparent 60%, ${theme.palette.background.sidebar}AA 70%, ${theme.palette.background.sidebar} 100%)`,
               }}
             />
@@ -329,7 +329,7 @@ export function ItemListingBase(props: {
               </Typography>
               <Stack
                 direction={"row"}
-                spacing={1}
+                spacing={theme.layoutSpacing.text}
                 alignItems={"center"}
                 display={"flex"}
                 sx={{
@@ -525,12 +525,12 @@ export function AggregateListingBase(props: {
       >
         <CardActionArea
           sx={{
-            borderRadius: 3,
+            borderRadius: (theme) => theme.spacing((theme as ExtendedTheme).borderRadius.topLevel),
           }}
         >
           <Card
             sx={{
-              borderRadius: 2,
+              borderRadius: (theme) => theme.spacing((theme as ExtendedTheme).borderRadius.topLevel),
               height: 400,
               postition: "relative",
             }}
@@ -569,7 +569,7 @@ export function AggregateListingBase(props: {
                 left: 0,
                 height: "100%",
                 width: "100%",
-                borderRadius: 2,
+                borderRadius: (theme) => theme.spacing((theme as ExtendedTheme).borderRadius.topLevel),
                 background: `linear-gradient(to bottom, transparent, transparent 25%, ${theme.palette.background.sidebar}AA 40%, ${theme.palette.background.sidebar} 100%)`,
               }}
             />
@@ -694,12 +694,12 @@ export function AggregateBuyOrderListingBase(props: {
       >
         <CardActionArea
           sx={{
-            borderRadius: 3,
+            borderRadius: (theme) => theme.spacing((theme as ExtendedTheme).borderRadius.topLevel),
           }}
         >
           <Card
             sx={{
-              borderRadius: 2,
+              borderRadius: (theme) => theme.spacing((theme as ExtendedTheme).borderRadius.topLevel),
               height: 400,
               postition: "relative",
             }}
@@ -738,7 +738,7 @@ export function AggregateBuyOrderListingBase(props: {
                 left: 0,
                 height: "100%",
                 width: "100%",
-                borderRadius: 2,
+                borderRadius: (theme) => theme.spacing((theme as ExtendedTheme).borderRadius.topLevel),
                 background: `linear-gradient(to bottom, transparent, transparent 25%, ${theme.palette.background.sidebar}AA 40%, ${theme.palette.background.sidebar} 100%)`,
               }}
             />
@@ -845,12 +845,12 @@ export function MultipleListingBase(props: {
       >
         <CardActionArea
           sx={{
-            borderRadius: 3,
+            borderRadius: (theme) => theme.spacing((theme as ExtendedTheme).borderRadius.topLevel),
           }}
         >
           <Card
             sx={{
-              borderRadius: 2,
+              borderRadius: (theme) => theme.spacing((theme as ExtendedTheme).borderRadius.topLevel),
               height: 400,
               postition: "relative",
             }}
@@ -889,7 +889,7 @@ export function MultipleListingBase(props: {
                 left: 0,
                 height: "100%",
                 width: "100%",
-                borderRadius: 2,
+                borderRadius: (theme) => theme.spacing((theme as ExtendedTheme).borderRadius.topLevel),
                 background: `linear-gradient(to bottom, transparent, transparent 25%, ${theme.palette.background.sidebar}AA 40%, ${theme.palette.background.sidebar} 100%)`,
               }}
             />

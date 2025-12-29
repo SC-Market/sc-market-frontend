@@ -44,9 +44,12 @@ import { CreateTokenDialog } from "./CreateTokenDialog"
 import { EditTokenDialog } from "./EditTokenDialog"
 import { TokenDetailsDialog } from "./TokenDetailsDialog"
 import { UnderlineLink } from "../../components/typography/UnderlineLink.tsx"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function ApiTokensSettings() {
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
   const { data: tokens, isLoading, error } = useGetTokensQuery()
   const [deleteToken] = useDeleteTokenMutation()
 
@@ -137,7 +140,7 @@ export function ApiTokensSettings() {
 
   if (isLoading) {
     return (
-      <Grid container spacing={3}>
+      <Grid container spacing={theme.layoutSpacing.layout}>
         <Grid item xs={12}>
           <Typography>Loading tokens...</Typography>
         </Grid>
@@ -147,7 +150,7 @@ export function ApiTokensSettings() {
 
   if (error) {
     return (
-      <Grid container spacing={3}>
+      <Grid container spacing={theme.layoutSpacing.layout}>
         <Grid item xs={12}>
           <Alert severity="error">
             Failed to load API tokens. Please try again later.

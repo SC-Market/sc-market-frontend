@@ -16,8 +16,11 @@ import { PAYMENT_TYPE_MAP } from "../../util/constants"
 import React from "react"
 import { PublicContract } from "../../store/public_contracts"
 import { useTranslation } from "react-i18next"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function ContractDetailsArea(props: { contract: PublicContract }) {
+  const theme = useTheme<ExtendedTheme>()
   const { contract } = props
   const { t, i18n } = useTranslation()
   const paymentType = PAYMENT_TYPE_MAP.get(contract.payment_type) || ""
@@ -87,7 +90,7 @@ export function ContractDetailsArea(props: { contract: PublicContract }) {
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
               <TableCell colSpan={2}>
-                <Stack direction="column" spacing={1}>
+                <Stack direction="column" spacing={theme.layoutSpacing.compact}>
                   {t("contractDetailsArea.details")}
                   <Typography color={"text.secondary"} variant={"subtitle2"}>
                     <MarkdownRender text={contract.description} />

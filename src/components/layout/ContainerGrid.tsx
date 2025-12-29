@@ -11,6 +11,7 @@ import { useTheme } from "@mui/material/styles"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
 import { Footer } from "../footer/Footer"
 import { MainRefContext } from "../../hooks/layout/MainRef"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function ContainerGrid(
   props: {
@@ -21,7 +22,7 @@ export function ContainerGrid(
     noTopSpacer?: boolean
   } & ContainerProps,
 ): ReactElement {
-  const theme: Theme = useTheme()
+  const theme = useTheme<ExtendedTheme>()
 
   const [drawerOpen, setDrawerOpen] = useDrawerOpen()
 
@@ -72,7 +73,7 @@ export function ContainerGrid(
             ...props.sx,
           }}
         >
-          <Grid container spacing={2} justifyContent={"center"} {...GridProps}>
+          <Grid container spacing={theme.layoutSpacing.layout} justifyContent={"center"} {...GridProps}>
             {props.children}
             {!props.noFooter && <Footer />}
           </Grid>
@@ -93,7 +94,7 @@ export function OpenGrid(
     >
   } & GridProps,
 ) {
-  const theme: Theme = useTheme()
+  const theme = useTheme<ExtendedTheme>()
 
   const [drawerOpen, setDrawerOpen] = useDrawerOpen()
 
@@ -134,7 +135,7 @@ export function OpenGrid(
             display: theme.navKind === "outlined" ? "block" : "none",
           }}
         />
-        <Grid container spacing={4} justifyContent={"center"} {...gridProps}>
+        <Grid container spacing={theme.layoutSpacing.layout * 4} justifyContent={"center"} {...gridProps}>
           {props.children}
           {!props.noFooter && <Footer />}
         </Grid>

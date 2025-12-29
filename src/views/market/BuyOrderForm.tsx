@@ -61,7 +61,7 @@ export function BuyOrderForm(props: { aggregate: MarketAggregate }) {
       <Grid item xs={12} lg={4}>
         <Paper
           sx={{
-            borderRadius: 3,
+            borderRadius: (theme) => theme.spacing(theme.borderRadius.image),
             backgroundColor: theme.palette.background.default,
             display: "flex",
             justifyContent: "center",
@@ -96,7 +96,7 @@ export function BuyOrderForm(props: { aggregate: MarketAggregate }) {
         </Paper>
       </Grid>
       <Grid item xs={12} lg={8}>
-        <Grid container spacing={2}>
+        <Grid container spacing={theme.layoutSpacing.layout}>
           <FlatSection title={t("buyorder.create_buy_order")}>
             <Grid item xs={12} display={"flex"} justifyContent={"right"}>
               <NumericFormat

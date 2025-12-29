@@ -27,6 +27,8 @@ import {
 } from "@mui/icons-material"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useTranslation } from "react-i18next"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function OrderApplicantsArea(props: { order: Order }) {
   const { order } = props
@@ -48,6 +50,7 @@ export function ApplicantListItem(props: {
   applicant: OrderApplicant
 }) {
   const { applicant } = props
+  const theme = useTheme<ExtendedTheme>()
 
   const { order } = props
   const { t } = useTranslation()
@@ -119,7 +122,7 @@ export function ApplicantListItem(props: {
         </ListItemText>
       </ListItem>
       <Collapse component={ListItem} in={open}>
-        <Grid container spacing={1}>
+        <Grid container spacing={theme.layoutSpacing.compact}>
           <Grid item xs={12}>
             <Typography sx={{ width: "100%" }}>{applicant.message}</Typography>
           </Grid>

@@ -29,9 +29,12 @@ import { Discord } from "../../components/icon/DiscordIcon"
 import CheckCircleIcon from "@mui/icons-material/CheckCircle"
 import { CitizenIDLogo } from "../../components/icon/CitizenIDLogo"
 import { isCitizenIdEnabled } from "../../util/constants"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function AccountLinks() {
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
   const [searchParams, setSearchParams] = useSearchParams()
   const navigate = useNavigate()
   const { data: links, isLoading } = useProfileGetLinksQuery()
@@ -312,7 +315,7 @@ export function AccountLinks() {
                       style={{
                         backgroundColor: "rgba(0,0,0,0.05)",
                         padding: "2px 4px",
-                        borderRadius: "3px",
+                        borderRadius: `${theme.spacing(theme.borderRadius.input)}px`,
                       }}
                     >
                       {accountUsername}
@@ -330,7 +333,7 @@ export function AccountLinks() {
                       style={{
                         backgroundColor: "rgba(0,0,0,0.05)",
                         padding: "2px 4px",
-                        borderRadius: "3px",
+                        borderRadius: `${theme.spacing(theme.borderRadius.input)}px`,
                       }}
                     >
                       {citizenIDUsername}
@@ -369,7 +372,7 @@ export function AccountLinks() {
                         padding: 2,
                         border: 1,
                         borderColor: "divider",
-                        borderRadius: 1,
+                        borderRadius: theme.spacing(theme.borderRadius.topLevel),
                       }}
                     >
                       <Box

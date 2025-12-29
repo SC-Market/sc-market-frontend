@@ -16,6 +16,7 @@ import {
   Typography,
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 import React, {
   RefObject,
   useCallback,
@@ -46,7 +47,7 @@ export function MarketNavEntry(
   props: { title: string; children: React.ReactElement } & PaperProps,
 ) {
   const { title, children, ...paperProps } = props
-  const theme = useTheme<Theme>()
+  const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
 
   return (
@@ -100,7 +101,7 @@ export function HideOnScroll(props: { children: React.ReactNode }) {
   const [loaded, setLoaded] = useState(false)
   const isVisible = useOnScreen(ref) || !loaded
 
-  const theme = useTheme()
+  const theme = useTheme<ExtendedTheme>()
   const drawerOpen = useDrawerOpen()
   const { t } = useTranslation()
 
@@ -195,7 +196,7 @@ export function HideOnScroll(props: { children: React.ReactNode }) {
 export function MarketNavArea(props: { top?: boolean }) {
   const { t } = useTranslation()
   const [filterOpen, setFilterOpen] = useState(false)
-  const theme = useTheme()
+  const theme = useTheme<ExtendedTheme>()
   const profile = useGetUserProfileQuery()
 
   const [searchParams, setSearchParams] = useSearchParams()
@@ -289,9 +290,9 @@ export function MarketNavArea(props: { top?: boolean }) {
 
   return (
     <>
-      <Grid container justifyContent={"space-between"} spacing={1}>
+      <Grid container justifyContent={"space-between"} spacing={theme.layoutSpacing.compact}>
         <Grid item>
-          <Grid container spacing={1}>
+          <Grid container spacing={theme.layoutSpacing.compact}>
             <Grid item sx={{ paddingTop: 2 }}>
               <TextField
                 fullWidth
@@ -341,7 +342,7 @@ export function MarketNavArea(props: { top?: boolean }) {
                 <ProfileNavAvatar />
               </Box>
             ) : (
-              <Stack direction="row" spacing={1}>
+              <Stack direction="row" spacing={theme.layoutSpacing.compact}>
                 <Button
                   component={RouterLink}
                   to="/login"
@@ -356,7 +357,7 @@ export function MarketNavArea(props: { top?: boolean }) {
         )}
         <Grid item xs={12} sx={{ paddingBottom: 1 }}>
           <Collapse in={filterOpen}>
-            <Grid container spacing={1} sx={{ padding: "none" }}>
+            <Grid container spacing={theme.layoutSpacing.compact} sx={{ padding: "none" }}>
               <Grid item xs={12} md={4} lg={4}>
                 <TextField
                   select

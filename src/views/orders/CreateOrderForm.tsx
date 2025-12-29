@@ -48,6 +48,8 @@ import { CheckCircle, Warning } from "@mui/icons-material"
 import { AvailabilitySelector } from "../../components/time/AvailabilitySelector"
 import { convertAvailability } from "../../pages/availability/Availability"
 import { OrderLimitsDisplay } from "../../components/orders/OrderLimitsDisplay"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 interface WorkRequestState {
   title: string
@@ -70,6 +72,7 @@ const CreateOrderFormComponent = React.forwardRef<
   }
 >((props, ref) => {
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
   const [state, setState] = React.useState<WorkRequestState>({
     title: "",
     rush: false,
@@ -477,7 +480,7 @@ const CreateOrderFormComponent = React.forwardRef<
               {t("CreateOrderForm.services")}
             </Typography>
           </Grid>
-          <Grid item xs={12} lg={8} container spacing={1}>
+          <Grid item xs={12} lg={8} container spacing={theme.layoutSpacing.compact}>
             <Grid item xs={12} lg={12}>
               <TextField
                 fullWidth
@@ -534,7 +537,7 @@ const CreateOrderFormComponent = React.forwardRef<
             {t("CreateOrderForm.about")}
           </Typography>
         </Grid>
-        <Grid item xs={12} lg={8} container spacing={2}>
+        <Grid item xs={12} lg={8} container spacing={theme.layoutSpacing.layout}>
           <Grid item xs={12} lg={12}>
             <TextField
               fullWidth
@@ -672,7 +675,7 @@ const CreateOrderFormComponent = React.forwardRef<
             {t("CreateOrderForm.costs")}
           </Typography>
         </Grid>
-        <Grid item xs={12} lg={8} container spacing={2}>
+        <Grid item xs={12} lg={8} container spacing={theme.layoutSpacing.layout}>
           <Grid item xs={12}>
             <NumericFormat
               decimalScale={0}

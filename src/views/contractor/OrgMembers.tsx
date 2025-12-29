@@ -37,6 +37,8 @@ import SearchIcon from "@mui/icons-material/Search"
 import { Stack } from "@mui/system"
 import { BACKEND_URL } from "../../util/constants"
 import { useTranslation } from "react-i18next"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 function PeopleRow(props: {
   row: OrgMember
@@ -353,6 +355,7 @@ export function MemberList(props: { contractor: Contractor }) {
 }
 
 export function ManageMemberList() {
+  const theme = useTheme<ExtendedTheme>()
   const [contractor] = useCurrentOrg()
   const { t } = useTranslation()
 
@@ -390,7 +393,7 @@ export function ManageMemberList() {
       title={t("manageMemberList.members")}
       disablePadding
       subtitle={
-        <Stack spacing={1} direction="row" sx={{ minWidth: 100 }}>
+        <Stack spacing={theme.layoutSpacing.compact} direction="row" sx={{ minWidth: 100 }}>
           <Button
             href={`${BACKEND_URL}/api/contractor/${contractor?.spectrum_id}/members/csv`}
           >

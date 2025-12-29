@@ -14,13 +14,14 @@ import { ItemListings } from "./ItemListings"
 import { MarketSidebarContext } from "../../hooks/market/MarketSidebar"
 import React, { useState } from "react"
 import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useDrawerOpen } from "../../hooks/layout/Drawer"
 import CloseIcon from "@mui/icons-material/CloseRounded"
 import MenuIcon from "@mui/icons-material/MenuRounded"
 import { useTranslation } from "react-i18next"
 
 export function ItemMarketView() {
-  const theme = useTheme()
+  const theme = useTheme<ExtendedTheme>()
   const xs = useMediaQuery(theme.breakpoints.down("md"))
   const drawerOpen = useDrawerOpen()
   const [open, setOpen] = useState(false)
@@ -50,7 +51,7 @@ export function ItemMarketView() {
         {xs && <MarketSidebar />}
 
         <Container maxWidth={"lg"}>
-          <Grid container spacing={2} justifyContent={"center"}>
+          <Grid container spacing={theme.layoutSpacing.layout} justifyContent={"center"}>
             <Grid item xs={12}>
               <HideOnScroll>
                 <MarketNavArea />
@@ -66,7 +67,7 @@ export function ItemMarketView() {
               container
               xs={12}
               lg={12}
-              spacing={1.5}
+              spacing={theme.layoutSpacing.layout}
               sx={{ transition: "0.3s" }}
             >
               <ItemListings />

@@ -178,7 +178,7 @@ export function MarketAggregateView() {
         />
         <Paper
           sx={{
-            borderRadius: 3,
+            borderRadius: (theme) => theme.spacing(theme.borderRadius.image),
             backgroundColor: theme.palette.background.default,
             display: "flex",
             justifyContent: "center",
@@ -286,7 +286,7 @@ export function MarketAggregateView() {
         <Fade in={true}>
           <Card
             sx={{
-              borderRadius: 3,
+              borderRadius: (theme) => theme.spacing(theme.borderRadius.image),
               minHeight: 400,
             }}
           >
@@ -300,7 +300,7 @@ export function MarketAggregateView() {
                 <Stack
                   direction={"column"}
                   alignItems={"left"}
-                  spacing={1}
+                  spacing={theme.layoutSpacing.compact}
                   justifyContent={"left"}
                 >
                   <Breadcrumbs

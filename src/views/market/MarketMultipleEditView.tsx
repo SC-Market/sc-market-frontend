@@ -24,9 +24,12 @@ import { Section } from "../../components/paper/Section"
 import { useCurrentMarketListing } from "../../hooks/market/CurrentMarketItem"
 import { SelectGameCategory } from "../../components/select/SelectGameItem"
 import { useTranslation } from "react-i18next"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function MarketMultipleEditView() {
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
   const [current_listing] = useCurrentMarketListing<MarketMultiple>()
 
   const [state, setState] = React.useState<
@@ -106,7 +109,7 @@ export function MarketMultipleEditView() {
             {t("MarketMultipleEditView.about")}
           </Typography>
         </Grid>
-        <Grid item xs={12} lg={8} container spacing={2}>
+        <Grid item xs={12} lg={8} container spacing={theme.layoutSpacing.layout}>
           <Grid item xs={12} lg={12}>
             <TextField
               fullWidth
@@ -159,7 +162,7 @@ export function MarketMultipleEditView() {
             {t("MarketMultipleEditView.listings")}
           </Typography>
         </Grid>
-        <Grid item xs={12} lg={8} container spacing={2}>
+        <Grid item xs={12} lg={8} container spacing={theme.layoutSpacing.layout}>
           <Grid item xs={12}>
             <Autocomplete
               // multiple

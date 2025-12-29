@@ -46,9 +46,12 @@ import { NumericFormat } from "react-number-format"
 import { SelectGameItemStack } from "../../components/select/SelectGameItem"
 import { SelectPhotosArea } from "../../components/modal/SelectPhotosArea"
 import { useTranslation } from "react-i18next" // Localization
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function MarketListingEditView() {
   const { t } = useTranslation() // Localization hook
+  const theme = useTheme<ExtendedTheme>()
   const [listing] = useCurrentMarketListing<UniqueListing>()
   const { data: profile } = useGetUserProfileQuery()
   const [currentOrg] = useCurrentOrg()
@@ -257,12 +260,11 @@ export function MarketListingEditView() {
   return (
     <>
       <Grid item xs={12} lg={12}>
-        <Grid container spacing={2}>
+        <Grid container spacing={theme.layoutSpacing.layout}>
           <Grid item xs={12}>
             <Fade in={true}>
               <Card
                 sx={{
-                  borderRadius: 3,
                   minHeight: 400,
                 }}
               >

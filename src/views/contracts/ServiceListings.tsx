@@ -25,6 +25,8 @@ import { ListingNameAndRating } from "../../components/rating/ListingRating"
 import { RecentListingsSkeleton } from "../../pages/home/LandingPage"
 import { CURRENT_CUSTOM_ORG } from "../../hooks/contractor/CustomDomain"
 import { Stack } from "@mui/system"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 import {
   useGetPublicServicesQuery,
   useGetServicesContractorQuery,
@@ -39,6 +41,7 @@ export type ContractKindIconKey = keyof typeof orderIcons
 export function ServiceListingBase(props: { service: Service; index: number }) {
   const { service, index } = props
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
   const key = PAYMENT_TYPE_MAP.get(service.payment_type) || ""
 
   return (
@@ -55,12 +58,12 @@ export function ServiceListingBase(props: { service: Service; index: number }) {
       >
         <CardActionArea
           sx={{
-            borderRadius: 1,
+            borderRadius: theme.spacing(theme.borderRadius.topLevel),
           }}
         >
           <Card
             sx={{
-              borderRadius: 1,
+              borderRadius: theme.spacing(theme.borderRadius.topLevel),
             }}
           >
             <CardHeader
@@ -121,7 +124,7 @@ export function ServiceListingBase(props: { service: Service; index: number }) {
             />
             <CardContent sx={{ padding: 2, paddingTop: 0 }}>
               <Stack
-                spacing={1}
+                spacing={theme.layoutSpacing.text}
                 direction={"row"}
                 justifyContent={"space-between"}
               >
@@ -157,7 +160,7 @@ export function ServiceListingBase(props: { service: Service; index: number }) {
               </Stack>
             </CardContent>
             <Box sx={{ padding: 2, paddingTop: 0 }}>
-              <Stack direction={"row"} spacing={1} flexWrap={"wrap"}>
+              <Stack direction={"row"} spacing={theme.layoutSpacing.compact} flexWrap={"wrap"}>
                 <Chip
                   color={"primary"}
                   label={t(`myServices.${service.kind}`, {
@@ -438,7 +441,7 @@ export function RecentServicesSkeleton() {
                 variant={"rectangular"}
                 height={400}
                 width={250}
-                sx={{ borderRadius: 3 }}
+                sx={{ borderRadius: (theme) => theme.spacing((theme as ExtendedTheme).borderRadius.image) }}
               />
             </Box>
           ),

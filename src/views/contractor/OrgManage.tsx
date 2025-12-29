@@ -212,7 +212,7 @@ export function OrgDetailEditForm(props: { contractor: Contractor }) {
       <Grid item xs={12} lg={12}>
         <Card
           sx={{
-            borderRadius: 3,
+            borderRadius: (theme) => theme.spacing(theme.borderRadius.image),
             padding: 3,
           }}
         >
@@ -278,7 +278,7 @@ export function OrgDetailEditForm(props: { contractor: Contractor }) {
               editingName ? (
                 <Grid
                   container
-                  spacing={1}
+                  spacing={theme.layoutSpacing.compact}
                   alignItems={"center"}
                   sx={{ marginBottom: 1 }}
                 >
@@ -348,7 +348,7 @@ export function OrgDetailEditForm(props: { contractor: Contractor }) {
             }
             subheader={
               <Box>
-                <Grid container alignItems={"center"} spacing={1}>
+                <Grid container alignItems={"center"} spacing={theme.layoutSpacing.compact}>
                   <Grid item>
                     <PeopleAltRoundedIcon />
                   </Grid>
@@ -363,7 +363,7 @@ export function OrgDetailEditForm(props: { contractor: Contractor }) {
                   </Grid>
                 </Grid>
 
-                <Grid container alignItems={"center"} spacing={1}>
+                <Grid container alignItems={"center"} spacing={theme.layoutSpacing.compact}>
                   {/*<Grid item>*/}
                   {/*    <StarRateRoundedIcon style={{color: theme.palette.text.primary}}/>*/}
                   {/*</Grid>*/}
@@ -526,7 +526,7 @@ export function OrgDetailEditForm(props: { contractor: Contractor }) {
                 </Box>
               </>
             ) : (
-              <Grid container spacing={2}>
+              <Grid container spacing={theme.layoutSpacing.layout}>
                 <Grid item xs={1}>
                   <IconButton
                     onClick={() => {
@@ -548,7 +548,7 @@ export function OrgDetailEditForm(props: { contractor: Contractor }) {
                 height: 350,
                 background: `url(${props.contractor.banner})`,
                 backgroundSize: "cover",
-                borderRadius: 3,
+                borderRadius: (theme) => theme.spacing(theme.borderRadius.image),
                 position: "relative",
               }}
             >

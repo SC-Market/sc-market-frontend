@@ -45,11 +45,11 @@ import { useTranslation } from "react-i18next"
 
 function MessageHeader() {
   const profile = useGetUserProfileQuery()
+  const theme = useTheme<ExtendedTheme>()
   const [messageSidebarOpen, setMessageSidebar] = useMessagingSidebar()
 
   const [chat] = useCurrentChat()
 
-  const theme = useTheme<ExtendedTheme>()
   const [dateTime, setDateTime] = useState(moment())
   const { t } = useTranslation()
 
@@ -135,7 +135,7 @@ function MessageHeader() {
 
       <Stack
         direction={"row"}
-        spacing={1}
+        spacing={theme.layoutSpacing.compact}
         useFlexGap
         alignItems={"center"}
         justifyContent={"right"}
@@ -189,7 +189,7 @@ export function MsgPaper(
       | undefined
   },
 ) {
-  const theme: Theme = useTheme()
+  const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
   const { author, other, ...paperProps } = props
 
@@ -207,7 +207,7 @@ export function MsgPaper(
           marginRight: 2,
           display: "inline-block",
           whiteSpace: "pre-line",
-          borderRadius: 1.5,
+          borderRadius: theme.spacing(theme.borderRadius.button),
           width: "100%",
         }}
       >
@@ -240,7 +240,7 @@ export function MsgPaper(
           whiteSpace: "pre-line",
           maxWidth: 400,
           flexGrow: 1,
-          borderRadius: 1.5,
+          borderRadius: theme.spacing(theme.borderRadius.button),
         }}
       >
         <Typography variant={"subtitle2"}>
@@ -350,7 +350,7 @@ function MessageEntry2(props: { message: Message }) {
   )
 
   return (
-    <Stack direction={"row"} spacing={1} justifyContent={"flex-start"}>
+    <Stack direction={"row"} spacing={theme.layoutSpacing.compact} justifyContent={"flex-start"}>
       {message.author ? (
         <Link to={`/user/${author?.username}`}>
           <Avatar
@@ -368,7 +368,7 @@ function MessageEntry2(props: { message: Message }) {
       )}
 
       <Stack direction={"column"}>
-        <Stack direction={"row"} spacing={1} alignItems={"flex-end"}>
+        <Stack direction={"row"} spacing={theme.layoutSpacing.compact} alignItems={"flex-end"}>
           {message.author ? (
             <MaterialLink
               component={Link}
@@ -419,7 +419,7 @@ function MessageEntry(props: { message: Message }) {
     return (
       <Stack
         direction={"row"}
-        spacing={1}
+        spacing={theme.layoutSpacing.compact}
         justifyContent={"flex-end"}
         sx={{ marginBottom: 1 }}
       >
@@ -468,7 +468,7 @@ function MessageEntry(props: { message: Message }) {
     return (
       <Stack
         direction={"row"}
-        spacing={1}
+        spacing={theme.layoutSpacing.compact}
         justifyContent={"flex-start"}
         sx={{ marginBottom: 1 }}
       >
@@ -514,7 +514,7 @@ function MessageEntry(props: { message: Message }) {
     return (
       <Stack
         direction={"row"}
-        spacing={1}
+        spacing={theme.layoutSpacing.compact}
         justifyContent={"flex-end"}
         sx={{ marginBottom: 1 }}
       >
@@ -592,7 +592,7 @@ function MessagesArea(props: {
           maxHeight: props.maxHeight,
         }}
       >
-        <Stack spacing={1}>
+        <Stack spacing={theme.layoutSpacing.compact}>
           {messages.map((message: Message) => (
             <MessageEntry2 message={message} key={message.timestamp} />
           ))}
@@ -659,6 +659,7 @@ export const socket = io(WS_URL, {
  * The main messages body used across Orders and Offers
  */
 export function MessagesBody(props: { maxHeight?: number }) {
+  const theme = useTheme<ExtendedTheme>()
   const [currentChat, setCurrentChat] = useCurrentChat()
   const messageBoxRef = useRef<HTMLDivElement>(null)
   const [sendChatMessage] = useSendChatMessageMutation()

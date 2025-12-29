@@ -28,6 +28,8 @@ import { MarkdownRender } from "../../components/markdown/Markdown"
 import { useContractSearch } from "../../hooks/contract/ContractSearch"
 import { dateDiffInDays } from "../market/MarketListingView"
 import { PAYMENT_TYPE_MAP } from "../../util/constants"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function ContractListing(props: {
   contract: PublicContract
@@ -35,6 +37,7 @@ export function ContractListing(props: {
 }) {
   const { contract, index } = props
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
   const key = PAYMENT_TYPE_MAP.get(contract.payment_type) || ""
 
   return (
@@ -52,12 +55,12 @@ export function ContractListing(props: {
         >
           <CardActionArea
             sx={{
-              borderRadius: 2,
+              borderRadius: theme.spacing(theme.borderRadius.topLevel),
             }}
           >
             <Card
               sx={{
-                borderRadius: 2,
+                borderRadius: theme.spacing(theme.borderRadius.topLevel),
               }}
             >
               <CardHeader

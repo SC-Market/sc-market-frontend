@@ -17,9 +17,12 @@ import { NumericFormat } from "react-number-format"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { useCreatePublicContractMutation } from "../../store/public_contracts"
 import { useTranslation } from "react-i18next"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function CreatePublicContract() {
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
 
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
@@ -77,8 +80,8 @@ export function CreatePublicContract() {
 
   return (
     <Grid item xs={12}>
-      <FormControl component={Grid} item xs={12} container spacing={2}>
-        <Grid container spacing={4}>
+      <FormControl component={Grid} item xs={12} container spacing={theme.layoutSpacing.layout}>
+        <Grid container spacing={theme.layoutSpacing.layout * 4}>
           <Section xs={12}>
             <Grid item xs={12} lg={4}>
               <Typography
@@ -90,7 +93,7 @@ export function CreatePublicContract() {
                 {t("createPublicContract.about")}
               </Typography>
             </Grid>
-            <Grid item xs={12} lg={8} container spacing={2}>
+            <Grid item xs={12} lg={8} container spacing={theme.layoutSpacing.layout}>
               <Grid item xs={12} lg={12}>
                 <TextField
                   fullWidth
@@ -157,7 +160,7 @@ export function CreatePublicContract() {
                 {t("createPublicContract.costs")}
               </Typography>
             </Grid>
-            <Grid item xs={12} lg={8} container spacing={2}>
+            <Grid item xs={12} lg={8} container spacing={theme.layoutSpacing.layout}>
               <Grid item xs={12}>
                 <NumericFormat
                   decimalScale={0}

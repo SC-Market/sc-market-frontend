@@ -11,9 +11,12 @@ import { AccountLinks } from "./AccountLinks"
 import { LanguageSettings } from "./LanguageSettings"
 import { isCitizenIdEnabled } from "../../util/constants"
 import { useTranslation } from "react-i18next"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function ProfileSettings() {
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
   const { data: profile } = useGetUserProfileQuery()
   const { data: links } = useProfileGetLinksQuery()
 
@@ -28,7 +31,7 @@ export function ProfileSettings() {
   // If user is not verified, show both verification options
   if (!profile?.rsi_confirmed) {
     return (
-      <Grid container spacing={2}>
+      <Grid container spacing={theme.layoutSpacing.layout}>
         <Grid item xs={12}>
           <Typography variant="h5" gutterBottom>
             {t("settings.profile.verifyAccount", "Verify Your Account")}
@@ -68,7 +71,7 @@ export function ProfileSettings() {
 
   // User is verified - show normal settings
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={theme.layoutSpacing.layout}>
       <Grid item xs={12}>
         <AccountLinks />
       </Grid>

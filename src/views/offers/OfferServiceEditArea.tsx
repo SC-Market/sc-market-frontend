@@ -10,9 +10,12 @@ import {
   useGetServicesQuery,
 } from "../../store/services"
 import { useTranslation } from "react-i18next"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function OfferServiceEditArea(props: { offer: OfferSession }) {
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
   const { offer: session } = props
   const [body, setBody] = useCounterOffer()
 
@@ -38,7 +41,7 @@ export function OfferServiceEditArea(props: { offer: OfferSession }) {
   return (
     <Grid item xs={12} lg={4} md={12}>
       <Paper sx={{ padding: 2 }}>
-        <Stack spacing={1}>
+        <Stack spacing={theme.layoutSpacing.compact}>
           <Typography
             variant={"h5"}
             sx={{ fontWeight: "bold" }}

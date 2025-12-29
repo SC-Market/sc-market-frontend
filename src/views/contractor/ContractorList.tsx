@@ -84,12 +84,12 @@ export function ContractorListItem(props: {
         >
           <CardActionArea
             sx={{
-              borderRadius: 2,
+              borderRadius: theme.spacing(theme.borderRadius.topLevel),
             }}
           >
             <Card
               sx={{
-                borderRadius: 2,
+                borderRadius: theme.spacing(theme.borderRadius.topLevel),
 
                 ...(theme.palette.mode === "dark"
                   ? {
@@ -156,7 +156,7 @@ export function ContractorListItem(props: {
                   }
                   subheader={
                     <Box>
-                      <Grid container alignItems={"center"} spacing={1}>
+                      <Grid container alignItems={"center"} spacing={theme.layoutSpacing.compact}>
                         <Grid item>
                           <PeopleAltRoundedIcon
                             style={{ color: theme.palette.text.primary }}
@@ -238,7 +238,7 @@ export function ContractorSkeleton() {
       <Skeleton
         variant={"rectangular"}
         sx={{
-          borderRadius: 3,
+          borderRadius: (theme) => theme.spacing((theme as ExtendedTheme).borderRadius.image),
           height: 350,
           width: "100%",
         }}

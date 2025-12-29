@@ -135,7 +135,7 @@ export function RecruitingSidebar() {
           borderColor: theme.palette.outline.main,
         }}
       >
-        <Grid container spacing={3}>
+        <Grid container spacing={theme.layoutSpacing.layout}>
           <Grid item xs={12}>
             <IconButton onClick={() => setOpen(false)} color={"secondary"}>
               <CloseIcon />

@@ -11,6 +11,7 @@ import {
 import { ArrowDropDown, Link as LinkIcon } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { User } from "../../datatypes/User"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import {
@@ -146,7 +147,7 @@ export function UserActionsDropdown({ user }: UserActionsDropdownProps) {
         PaperProps={{
           variant: "outlined",
           sx: {
-            borderRadius: 3,
+            borderRadius: (theme) => theme.spacing((theme as ExtendedTheme).borderRadius.topLevel),
             borderColor: theme.palette.outline.main,
           },
         }}

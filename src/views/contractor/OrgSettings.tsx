@@ -13,9 +13,12 @@ import { languages } from "../../util/i18n"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useUpdateContractorMutation } from "../../store/contractor"
 import { OrgLanguageSettings } from "./OrgLanguageSettings"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function OrgSettings() {
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
   const [contractor, setContractor] = useCurrentOrg()
   const [updateContractor] = useUpdateContractorMutation()
 
@@ -43,7 +46,7 @@ export function OrgSettings() {
   }
 
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={theme.layoutSpacing.layout}>
       <Section title={t("org.settingsTab") as string} xs={12}>
         <Grid item xs={12}>
           <Autocomplete

@@ -15,13 +15,16 @@ import {
 import { useUpdateMarketListingMutation } from "../../store/market"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { useTranslation } from "react-i18next"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function MarketActions() {
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
 
   return (
     <Grid item>
-      <Grid container spacing={2}>
+      <Grid container spacing={theme.layoutSpacing.layout}>
         <Grid item>
           <Link
             to={"/market/create"}
@@ -90,10 +93,11 @@ export function MarketActions() {
 
 export function BuyOrderActions() {
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
 
   return (
     <Grid item>
-      <Grid container spacing={2}>
+      <Grid container spacing={theme.layoutSpacing.layout}>
         <Grid item>
           <Link
             to={"/buyorder/create"}

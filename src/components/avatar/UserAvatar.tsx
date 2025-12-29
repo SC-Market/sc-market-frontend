@@ -5,14 +5,17 @@ import { UnderlineLink } from "../typography/UnderlineLink"
 import React from "react"
 import { MinimalUser } from "../../datatypes/User"
 import { useTranslation } from "react-i18next"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function UserAvatar(props: { user: MinimalUser }) {
   const { user } = props
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
 
   return (
     <Stack
-      spacing={1}
+      spacing={theme.layoutSpacing.compact}
       direction={"row"}
       justifyContent={"right"}
       alignItems={"center"}

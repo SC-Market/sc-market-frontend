@@ -45,6 +45,7 @@ import {
 import { a11yProps } from "../../components/tabs/Tabs"
 import { Stack } from "@mui/system"
 import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useGetUserProfileQuery } from "../../store/profile"
 import { OrderSearchSortMethod } from "../../datatypes/Order"
@@ -97,7 +98,7 @@ export function OfferRow(props: {
   const { row, index, isItemSelected, onClick, enableSelection, labelId } =
     props
   const date = useMemo(() => new Date(row.timestamp), [row.timestamp])
-  const theme = useTheme()
+  const theme = useTheme<ExtendedTheme>()
   const navigate = useNavigate()
 
   // Key for translation and colour
@@ -157,7 +158,7 @@ export function OfferRow(props: {
       )}
       <TableCell>
         <Stack
-          spacing={1}
+          spacing={theme.layoutSpacing.compact}
           direction="row"
           alignItems="center"
           justifyContent="left"
@@ -252,6 +253,7 @@ export function OffersViewPaginated(props: {
   contractor?: string
 }) {
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
   const { mine, assigned, contractor } = props
   const { data: profile } = useGetUserProfileQuery()
   const [statusFilter, setStatusFilter] = useState<null | OfferSearchStatus>(
@@ -487,7 +489,7 @@ export function OffersViewPaginated(props: {
                 )}
               </Stack>
 
-              <Grid container spacing={1}>
+              <Grid container spacing={theme.layoutSpacing.compact}>
                 {/* Buyer/Seller Username Filter */}
                 {!mine ? (
                   <Grid item xs={12} md={6}>
@@ -563,7 +565,7 @@ export function OffersViewPaginated(props: {
 
               {/* Active Filters Chips */}
               {activeFiltersCount > 0 && (
-                <Stack direction="row" spacing={0.5} flexWrap="wrap" gap={0.5}>
+                <Stack direction="row" spacing={theme.layoutSpacing.compact} flexWrap="wrap" gap={theme.layoutSpacing.compact}>
                   {debouncedBuyerUsername && (
                     <Chip
                       label={`${t("OffersViewPaginated.buyer", "Buyer")}: ${debouncedBuyerUsername}`}

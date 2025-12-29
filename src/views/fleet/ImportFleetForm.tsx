@@ -6,9 +6,12 @@ import { AlertInterface } from "../../datatypes/Alert"
 import { Navigate } from "react-router-dom"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { useTranslation } from "react-i18next"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function ImportFleetForm() {
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
   const [selectedFile, setSelectedFile] = React.useState<File | null>(null)
 
   const [
@@ -53,8 +56,8 @@ export function ImportFleetForm() {
             {t("ships.import.title")}
           </Typography>
         </Grid>
-        <Grid item xs={12} lg={8} container spacing={2}>
-          <Grid item container spacing={2} justifyContent={"right"}>
+        <Grid item xs={12} lg={8} container spacing={theme.layoutSpacing.layout}>
+          <Grid item container spacing={theme.layoutSpacing.layout} justifyContent={"right"}>
             <Grid
               item
               xs={12}

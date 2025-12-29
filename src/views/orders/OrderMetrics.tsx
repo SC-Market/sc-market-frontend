@@ -7,6 +7,8 @@ import {
   ContractorOrderMetrics,
 } from "../../store/orders"
 import { useTranslation } from "react-i18next"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function MetricSection(props: {
   title: string
@@ -14,9 +16,10 @@ export function MetricSection(props: {
   bodyColor?: string
 }) {
   const { title, body, bodyColor } = props
+  const theme = useTheme<ExtendedTheme>()
   return (
     <Grid item xs={12} lg={3}>
-      <Grid container spacing={1}>
+      <Grid container spacing={theme.layoutSpacing.compact}>
         <Grid item xs={12}>
           <Typography
             variant={"subtitle1"}
@@ -44,6 +47,7 @@ export function ContractorOrderMetricsDisplay(props: {
 }) {
   const { metrics } = props
   const { t, i18n } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
 
   const activeOrders =
     metrics.status_counts["in-progress"] + metrics.status_counts["not-started"]
@@ -242,7 +246,7 @@ export function ContractorOrderMetricsDisplay(props: {
             </Typography>
           </Grid>
           <Grid item xs={12}>
-            <Grid container spacing={1}>
+            <Grid container spacing={theme.layoutSpacing.compact}>
               {metrics.top_customers.slice(0, 5).map((customer, index) => (
                 <Grid item xs={12} key={customer.username}>
                   <Box
@@ -277,6 +281,7 @@ export function ContractorOrderMetricsDisplay(props: {
 }
 
 export function OrderMetrics(props: {}) {
+  const theme = useTheme<ExtendedTheme>()
   const [contractor] = useCurrentOrg()
   const {
     data: metrics,

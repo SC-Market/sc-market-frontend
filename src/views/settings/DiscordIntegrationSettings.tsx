@@ -4,10 +4,13 @@ import { MyWebhooks } from "../notifications/ListNotificationWebhooks"
 import { AddNotificationWebhook } from "../notifications/AddNotificationWebhook"
 import { DiscordBotDetails } from "./DiscordBotDetails"
 import { ConfigureDiscord } from "../notifications/ConfigureDiscord"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function DiscordIntegrationSettings() {
+  const theme = useTheme<ExtendedTheme>()
   return (
-    <Grid container spacing={4} alignItems={"flex-start"}>
+    <Grid container spacing={theme.layoutSpacing.layout * 4} alignItems={"flex-start"}>
       <DiscordBotDetails />
       <ConfigureDiscord />
       <AddNotificationWebhook />

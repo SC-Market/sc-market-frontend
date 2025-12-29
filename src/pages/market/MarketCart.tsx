@@ -40,6 +40,8 @@ import { NumericFormat } from "react-number-format"
 import { formatCompleteListingUrl, formatMarketUrl } from "../../util/urls"
 import { FALLBACK_IMAGE_URL } from "../../util/constants"
 import { useTranslation } from "react-i18next"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 import {
   useCheckContractorAvailabilityRequirementQuery,
   useCheckUserAvailabilityRequirementQuery,
@@ -65,6 +67,7 @@ export function CartItemEntry(props: {
   removeCartItem: (item: CartItem) => void
 }) {
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
   const { item, updateCart, removeCartItem } = props
   const { data: listing } = useGetMarketListingQuery(item.listing_id)
   const composite = listing as MarketAggregateListingComposite | undefined
@@ -83,7 +86,7 @@ export function CartItemEntry(props: {
 
   return (
     <Grid item xs={12}>
-      <Grid container spacing={2} justifyContent={"space-between"}>
+      <Grid container spacing={theme.layoutSpacing.layout} justifyContent={"space-between"}>
         <Grid item>
           <img
             height={128}
@@ -91,7 +94,7 @@ export function CartItemEntry(props: {
             src={(listing?.photos || [])[0] || FALLBACK_IMAGE_URL}
             alt={listing?.details?.description}
             style={{
-              borderRadius: 3,
+              borderRadius: theme.spacing(theme.borderRadius.image),
               objectFit: "cover",
             }}
             loading="lazy"
@@ -205,6 +208,7 @@ export function CartSellerEntry(props: {
   removeSellerEntry: (item: CartSeller) => void
 }) {
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
   const { seller, updateCart, removeSellerEntry } = props
   const { data: user_seller } = useGetUserByUsernameQuery(
     seller.user_seller_id!,
@@ -630,7 +634,7 @@ export function CartSellerEntry(props: {
       <Grid item xs={12} md={8}>
         <Grid
           container
-          spacing={1}
+          spacing={theme.layoutSpacing.text}
           justifyContent={"right"}
           alignItems={"center"}
           sx={{ marginBottom: 2 }}
@@ -656,9 +660,9 @@ export function CartSellerEntry(props: {
             </LoadingButton>
           </Grid>*/}
         </Grid>
-        <Grid container spacing={1} justifyContent={"right"}>
+        <Grid container spacing={theme.layoutSpacing.text} justifyContent={"right"}>
           <Grid item>
-            <Grid container spacing={1}>
+            <Grid container spacing={theme.layoutSpacing.text}>
               <Grid item>
                 <NumericFormat
                   decimalScale={0}
@@ -724,6 +728,7 @@ export function CartSellerEntry(props: {
 
 export function MarketCart() {
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
   const [cookies, setCookie, deleteCookie] = useCookies(["market_cart"])
   const cart = cookies.market_cart
 
@@ -747,7 +752,7 @@ export function MarketCart() {
           item
           container
           justifyContent={"space-between"}
-          spacing={2}
+          spacing={theme.layoutSpacing.layout}
           xs={12}
         >
           <HeaderTitle>
@@ -755,7 +760,7 @@ export function MarketCart() {
           </HeaderTitle>
         </Grid>
         <Grid item xs={12} lg={12}>
-          <Grid container spacing={2}>
+          <Grid container spacing={theme.layoutSpacing.layout}>
             {(cart || []).map((seller: CartSeller) => (
               <CartSellerEntry
                 key={seller.contractor_seller_id || seller.user_seller_id}

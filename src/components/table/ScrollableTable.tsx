@@ -191,7 +191,7 @@ export function ScrollableTable<T>(props: {
       <TableContainer sx={{ width: "100%", overflow: "scroll", ...props.sx }}>
         <Table
           sx={{
-            borderRadius: 2,
+            borderRadius: theme.spacing(theme.borderRadius.topLevel),
             [`& .${tableCellClasses.root}`]: {
               borderColor: theme.palette.outline.main,
             },

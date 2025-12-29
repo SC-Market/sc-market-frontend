@@ -30,9 +30,12 @@ import { NoteAddRounded } from "@mui/icons-material"
 import { Link } from "react-router-dom"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useTranslation } from "react-i18next"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function Recruiting() {
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
   const [perPage, setPerPage] = useState(15)
   const [page, setPage] = useState(0)
   const [searchState, setSearchState] = useState<RecruitingSearchState>({
@@ -111,7 +114,7 @@ export function Recruiting() {
               item
               container
               justifyContent={"space-between"}
-              spacing={2}
+              spacing={theme.layoutSpacing.layout}
               xs={12}
             >
               <HeaderTitle lg={7} xl={7}>

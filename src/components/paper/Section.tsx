@@ -69,7 +69,7 @@ export const Section = React.forwardRef<
           <Grid item>
             <Grid
               container
-              spacing={2}
+              spacing={theme.layoutSpacing.component}
               justifyContent={innerJustify || "center"}
               height={"100%"}
               sx={{
@@ -92,6 +92,7 @@ export function FlatSection(props: {
   title: React.ReactNode
   children: React.ReactNode
 }) {
+  const theme = useTheme<ExtendedTheme>()
   return (
     <Section xs={12}>
       <Grid item xs={12} lg={4}>
@@ -105,7 +106,7 @@ export function FlatSection(props: {
         </Typography>
       </Grid>
       <Grid item xs={12} lg={8}>
-        <Grid container spacing={2} justifyContent={"right"}>
+        <Grid container spacing={theme.layoutSpacing.component} justifyContent={"right"}>
           {props.children}
         </Grid>
       </Grid>

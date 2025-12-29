@@ -27,12 +27,15 @@ import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownR
 import { NumericFormat } from "react-number-format"
 import { TrashCan } from "mdi-material-ui"
 import { useTranslation } from "react-i18next"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function OfferListingRowItemEditable(props: {
   row: ListingRowItem
   index: number
 }) {
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
   const { row, index } = props
   const [body, setBody] = useCounterOffer()
   return (
@@ -54,7 +57,7 @@ export function OfferListingRowItemEditable(props: {
         <TableCell align={"right"}>
           <Stack
             direction={"row"}
-            spacing={1}
+            spacing={theme.layoutSpacing.compact}
             justifyContent={"right"}
             alignItems={"center"}
           >
@@ -131,6 +134,7 @@ export type ListingRowItem = MarketListingSearchResult & {
 }
 
 export function OfferMarketListingsEditArea(props: { offer: OfferSession }) {
+  const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
   const { offer: session } = props
   const [body, setBody] = useCounterOffer()
@@ -207,12 +211,12 @@ export function OfferMarketListingsEditArea(props: { offer: OfferSession }) {
               direction="row"
               justifyContent={"space-between"}
               alignItems={"flex-end"}
-              spacing={1}
+              spacing={theme.layoutSpacing.compact}
             >
               <Stack
                 direction={"column"}
                 justifyContent={"left"}
-                spacing={1}
+                spacing={theme.layoutSpacing.compact}
                 sx={{ flexGrow: 1 }}
               >
                 <Typography variant={"body2"} color={"text.secondary"}>

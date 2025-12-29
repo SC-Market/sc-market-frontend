@@ -7,9 +7,12 @@ import { Link } from "react-router-dom"
 import { MyServices } from "../../views/orders/Services"
 import { Page } from "../../components/metadata/Page"
 import { useTranslation } from "react-i18next"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function MyServicesPage(props: {}) {
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
 
   return (
     <Page title={t("services.myServices")}>
@@ -18,7 +21,7 @@ export function MyServicesPage(props: {}) {
           item
           container
           justifyContent={"space-between"}
-          spacing={2}
+          spacing={theme.layoutSpacing.layout}
           xs={12}
         >
           <HeaderTitle lg={8} xl={8}>
@@ -51,7 +54,7 @@ export function MyServicesPage(props: {}) {
           container
           xs={12}
           lg={12}
-          spacing={3}
+          spacing={theme.layoutSpacing.layout}
           sx={{ transition: "0.3s" }}
         >
           <MyServices status={"active"} />
@@ -62,7 +65,7 @@ export function MyServicesPage(props: {}) {
           container
           xs={12}
           lg={12}
-          spacing={3}
+          spacing={theme.layoutSpacing.layout}
           sx={{ transition: "0.3s" }}
         >
           <MyServices status={"inactive"} />

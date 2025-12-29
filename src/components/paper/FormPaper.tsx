@@ -1,13 +1,15 @@
 import { useTheme } from "@mui/material/styles"
 import React from "react"
 import { Grid, GridProps, Paper, PaperProps, Typography } from "@mui/material"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function PaperGrid(props: { GridProps: GridProps } & PaperProps) {
   const { children, GridProps, ...paperProps } = props
+  const theme = useTheme<ExtendedTheme>()
   return (
     <Grid item justifyContent={"left"} {...GridProps}>
       <Paper {...paperProps}>
-        <Grid container spacing={1}>
+        <Grid container spacing={theme.layoutSpacing.compact}>
           {children}
         </Grid>
       </Paper>
@@ -21,7 +23,7 @@ export function FormPaper(props: {
   children: React.ReactNode
 }) {
   const { title, subtitle, children } = props
-  const theme = useTheme()
+  const theme = useTheme<ExtendedTheme>()
 
   return (
     <>
@@ -40,7 +42,7 @@ export function FormPaper(props: {
       </Grid>
       <PaperGrid GridProps={{ xs: 12, lg: 9 }} sx={{ padding: 2 }}>
         <Grid item xs={12} display={"flex"} justifyContent={"flex-end"}>
-          <Grid container spacing={1}>
+          <Grid container spacing={theme.layoutSpacing.compact}>
             {children}
           </Grid>
         </Grid>

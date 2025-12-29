@@ -6,6 +6,8 @@ import { useTranslation } from "react-i18next"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { Link } from "react-router-dom"
 import { OrderAnalytics } from "../../datatypes/Order"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 interface OrderAnalyticsProps {
   analytics: OrderAnalytics
@@ -278,9 +280,10 @@ export function TopUsersAnalytics({ analytics }: OrderAnalyticsProps) {
 }
 
 export function OrderSummary({ analytics }: OrderAnalyticsProps) {
+  const theme = useTheme<ExtendedTheme>()
   return (
     <Section title={"Order Summary"} xs={12} lg={6}>
-      <Grid container spacing={2}>
+      <Grid container spacing={theme.layoutSpacing.layout}>
         <Grid item xs={6}>
           <strong>Total Orders:</strong> {analytics.summary.total_orders}
         </Grid>
