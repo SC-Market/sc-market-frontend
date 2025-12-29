@@ -33,3 +33,19 @@ packages/*/dist
 docker-compose.override.yml
 
 dev-dist/
+
+# Bubblewrap / Android
+android.keystore
+*.keystore
+twa/
+*.apk
+*.aab
+*.idsig
+.gradle/
+app/
+gradle/
+build.gradle
+settings.gradle
+gradlew
+gradlew.bat
+local.properties

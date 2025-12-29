@@ -1,0 +1,60 @@
+{
+  "packageId": "space.sc_market.twa",
+  "host": "sc-market.space",
+  "name": "SC Market - Star Citizen Marketplace",
+  "launcherName": "SC Market",
+  "display": "standalone",
+  "themeColor": "#111828",
+  "themeColorDark": "#000000",
+  "navigationColor": "#000000",
+  "navigationColorDark": "#000000",
+  "navigationDividerColor": "#000000",
+  "navigationDividerColorDark": "#000000",
+  "backgroundColor": "#111828",
+  "enableNotifications": true,
+  "startUrl": "/",
+  "iconUrl": "https://sc-market.space/android-chrome-512x512.png",
+  "maskableIconUrl": "https://sc-market.space/android-chrome-512x512.png",
+  "splashScreenFadeOutDuration": 300,
+  "signingKey": {
+    "path": "/Users/henryscott/WebstormProjects/scmarket/sc-market-frontend/android.keystore",
+    "alias": "android"
+  },
+  "appVersionName": "0.0.1",
+  "appVersionCode": 2,
+  "shortcuts": [
+    {
+      "name": "Market",
+      "shortName": "Market",
+      "url": "https://sc-market.space/market",
+      "chosenIconUrl": "https://sc-market.space/android-chrome-192x192.png"
+    },
+    {
+      "name": "Contracts",
+      "shortName": "Contracts",
+      "url": "https://sc-market.space/contracts",
+      "chosenIconUrl": "https://sc-market.space/android-chrome-192x192.png"
+    }
+  ],
+  "generatorApp": "bubblewrap-cli",
+  "webManifestUrl": "https://sc-market.space/manifest.json",
+  "fallbackType": "customtabs",
+  "features": {},
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "enableSiteSettingsShortcut": true,
+  "isChromeOSOnly": false,
+  "isMetaQuest": false,
+  "fullScopeUrl": "https://sc-market.space/",
+  "minSdkVersion": 21,
+  "orientation": "portrait-primary",
+  "fingerprints": [],
+  "additionalTrustedOrigins": [],
+  "retainedBundles": [],
+  "protocolHandlers": [],
+  "fileHandlers": [],
+  "launchHandlerClientMode": "",
+  "displayOverride": [],
+  "appVersion": "0.0.1"
+}
