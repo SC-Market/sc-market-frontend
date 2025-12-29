@@ -12,7 +12,8 @@ export default defineConfig({
     viteTsconfigPaths(),
     svgrPlugin(),
     VitePWA({
-      registerType: "autoUpdate",
+      registerType: "prompt", // Use prompt so we can handle registration manually for better control
+      injectRegister: false, // Disable auto-injection since we're handling registration manually
       includeAssets: [
         "favicon.ico",
         "apple-touch-icon.png",
@@ -74,6 +75,13 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2,woff,ttf}"],
+        // In dev mode, don't precache to avoid issues with Vite's HMR
+        ...(import.meta.env.DEV
+          ? {
+              // Skip precaching in dev - let Vite handle it
+              globIgnores: ["**/*"],
+            }
+          : {}),
         runtimeCaching: [
           {
             // Cache API calls - match backend API domain and exclude sensitive endpoints
@@ -125,15 +133,18 @@ export default defineConfig({
             },
           },
         ],
-        navigateFallback: "/offline.html",
-        navigateFallbackDenylist: [/^\/api/, /^\/_/, /^\/sw\.js/],
+        // Only use offline fallback in production
+        // In dev mode, don't intercept navigation - let Vite handle it
+        navigateFallback: import.meta.env.DEV ? undefined : "/offline.html",
+        navigateFallbackDenylist: [/^\/api/, /^\/_/, /^\/sw\.js/, /^\/dev-sw/, /^\/vite/, /^\/@/],
       },
       devOptions: {
-        enabled: true, // Enable in dev for testing
-        type: "module", // Use module type for dev
-        navigateFallback: "index.html",
-        suppressWarnings: true, // Suppress workbox warnings in dev
-        disableDevLogs: true, // Disable dev logs to reduce console noise
+        enabled: false, // Disable in dev to prevent offline page from showing
+        // Set to true only when you specifically want to test PWA features
+        type: "module",
+        navigateFallback: undefined,
+        suppressWarnings: true,
+        disableDevLogs: true,
       },
     }),
     // Only enable bundle visualizer when ANALYZE_BUNDLE env var is set

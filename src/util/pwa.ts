@@ -46,15 +46,25 @@ export function registerServiceWorker(): Promise<ServiceWorkerRegistration | nul
   }
 
   // In development, use the dev service worker path
-  // Wait a bit for Vite to serve the dev service worker
+  // In production, vite-plugin-pwa generates sw.js in the dist folder
   const swPath = import.meta.env.DEV ? "/dev-sw.js?dev-sw" : "/sw.js"
+  
+  // Log for debugging
+  if (!import.meta.env.DEV) {
+    console.log("Registering service worker from:", swPath)
+  }
 
   // In dev mode, wait a bit for the service worker to be available
   const registerSW = () => {
     return navigator.serviceWorker
       .register(swPath, { scope: "/" })
       .then((registration) => {
-        console.log("Service Worker registered successfully:", registration.scope)
+        console.log("Service Worker registered successfully:", {
+          scope: registration.scope,
+          active: registration.active?.state,
+          installing: registration.installing?.state,
+          waiting: registration.waiting?.state,
+        })
 
         registrationState.registration = registration
 
@@ -107,7 +117,15 @@ export function registerServiceWorker(): Promise<ServiceWorkerRegistration | nul
           }
           // Silently ignore websocket errors in dev - they're expected if HMR isn't working
         } else {
-          console.error("Service Worker registration failed:", error)
+          // In production, log detailed error information
+          console.error("Service Worker registration failed:", {
+            message: error.message,
+            stack: error.stack,
+            swPath: swPath,
+            url: window.location.href,
+            protocol: window.location.protocol,
+            hostname: window.location.hostname,
+          })
         }
         return null
       })
@@ -224,6 +242,24 @@ export function initPWA(): void {
   if (typeof window === "undefined") return
 
   try {
+    // In dev mode, unregister any existing service workers and skip registration
+    // This prevents the offline page from showing during development
+    if (import.meta.env.DEV) {
+      if ("serviceWorker" in navigator) {
+        // Unregister any existing service workers
+        navigator.serviceWorker.getRegistrations().then((registrations) => {
+          registrations.forEach((registration) => {
+            registration.unregister().catch(() => {
+              // Ignore errors
+            })
+          })
+        })
+      }
+      // Only initialize online detection in dev mode
+      initOnlineDetection()
+      return
+    }
+
     // Check if service workers are supported
     if (!("serviceWorker" in navigator)) {
       console.log("Service Workers not supported in this browser")
@@ -232,25 +268,28 @@ export function initPWA(): void {
       return
     }
 
-    // Register service worker after page loads
-    // In dev mode, wait longer for Vite to set up the dev service worker
-    // and for websocket connections to be established
-    const delay = import.meta.env.DEV ? 3000 : 0
+    // Register service worker after page loads (production only)
+    // Wait a bit to ensure the service worker file is available
+    const delay = 1000
+
+    const register = () => {
+      registerServiceWorker()
+        .then((registration) => {
+          if (registration) {
+            console.log("✅ PWA Service Worker active and ready")
+          }
+        })
+        .catch((error) => {
+          console.error("❌ Service worker registration failed:", error)
+        })
+    }
 
     if (document.readyState === "complete") {
-      // Page already loaded, register immediately (with delay)
-      setTimeout(() => {
-        registerServiceWorker().catch((error) => {
-          console.warn("Service worker registration failed (non-critical):", error)
-        })
-      }, delay)
+      // Page already loaded, register after a short delay
+      setTimeout(register, delay)
     } else {
       window.addEventListener("load", () => {
-        setTimeout(() => {
-          registerServiceWorker().catch((error) => {
-            console.warn("Service worker registration failed (non-critical):", error)
-          })
-        }, delay)
+        setTimeout(register, delay)
       })
     }
 
