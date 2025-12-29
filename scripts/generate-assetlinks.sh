@@ -19,7 +19,7 @@ if [ -n "$KEYSTORE_PASSWORD" ]; then
     echo "   Using password from KEYSTORE_PASSWORD environment variable"
     # Extract SHA256 fingerprint, remove colons and spaces, convert to lowercase
     # Format: "SHA256: C2:E4:E6:03:..." -> "c2e4e603..."
-    FINGERPRINT=$(keytool -list -v -keystore "$KEYSTORE_PATH" -alias "$KEYSTORE_ALIAS" -storepass "$KEYSTORE_PASSWORD" 2>&1 | grep -i "SHA256:" | sed 's/.*SHA256: //' | tr -d ' :' | tr '[:upper:]' '[:lower:]')
+    FINGERPRINT=$(keytool -list -v -keystore "$KEYSTORE_PATH" -alias "$KEYSTORE_ALIAS" -storepass "$KEYSTORE_PASSWORD" 2>&1 | grep -i "SHA256:" | sed 's/.*SHA256: //')
 else
     # Prompt for password if not in environment
     echo -n "   Enter keystore password: "
@@ -27,7 +27,7 @@ else
     echo ""
     # Extract SHA256 fingerprint, remove colons and spaces, convert to lowercase
     # Format: "SHA256: C2:E4:E6:03:..." -> "c2e4e603..."
-    FINGERPRINT=$(keytool -list -v -keystore "$KEYSTORE_PATH" -alias "$KEYSTORE_ALIAS" -storepass "$KEYSTORE_PASS" 2>&1 | grep -i "SHA256:" | sed 's/.*SHA256: //' | tr -d ' :' | tr '[:upper:]' '[:lower:]')
+    FINGERPRINT=$(keytool -list -v -keystore "$KEYSTORE_PATH" -alias "$KEYSTORE_ALIAS" -storepass "$KEYSTORE_PASS" 2>&1 | grep -i "SHA256:" | sed 's/.*SHA256: //')
 fi
 
 if [ -z "$FINGERPRINT" ]; then
