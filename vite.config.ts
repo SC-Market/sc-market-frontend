@@ -57,18 +57,14 @@ export default defineConfig({
             short_name: "Market",
             description: "Browse market listings",
             url: "/market",
-            icons: [
-              { src: "/android-chrome-192x192.png", sizes: "192x192" },
-            ],
+            icons: [{ src: "/android-chrome-192x192.png", sizes: "192x192" }],
           },
           {
             name: "Contracts",
             short_name: "Contracts",
             description: "View contracts",
             url: "/contracts",
-            icons: [
-              { src: "/android-chrome-192x192.png", sizes: "192x192" },
-            ],
+            icons: [{ src: "/android-chrome-192x192.png", sizes: "192x192" }],
           },
         ],
         categories: ["games", "shopping", "social"],

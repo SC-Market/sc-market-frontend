@@ -11,9 +11,8 @@
   "navigationDividerColor": "#000000",
   "navigationDividerColorDark": "#000000",
   "backgroundColor": "#0B0F1A",
-  "splashScreenBackgroundColor": "#0B0F1A",
   "enableNotifications": true,
-  "startUrl": "/",
+  "startUrl": "https://sc-market.space/",
   "iconUrl": "https://sc-market.space/android-chrome-512x512-bg.png",
   "maskableIconUrl": "https://sc-market.space/android-chrome-512x512-bg.png",
   "splashScreenFadeOutDuration": 300,
@@ -21,8 +20,8 @@
     "path": "/Users/henryscott/WebstormProjects/scmarket/sc-market-frontend/android.keystore",
     "alias": "android"
   },
-  "appVersionName": "0.0.3",
-  "appVersionCode": 4,
+  "appVersionName": "0.0.4",
+  "appVersionCode": 5,
   "shortcuts": [
     {
       "name": "Market",
@@ -57,5 +56,5 @@
   "fileHandlers": [],
   "launchHandlerClientMode": "",
   "displayOverride": [],
-  "appVersion": "0.0.3"
+  "appVersion": "0.0.4"
 }
