@@ -35,20 +35,28 @@ import moment from "moment"
 import { getMuiLocales } from "../util/i18n"
 import { useTranslation } from "react-i18next"
 
-export function HookProvider(props: { children: React.ReactElement }) {
-  const [alert, issueAlert] = useState<AlertInterface | null>(null)
-
+// Component that handles theme logic - must be inside Redux Provider
+function ThemeProviderWrapper(props: { children: React.ReactElement }) {
   const [cookies, setCookie, removeCookie] = useCookies(["theme"])
   const prefersLight = useMediaQuery("(prefers-color-scheme: light)")
   const isDev = import.meta.env.DEV || import.meta.env.MODE === "development"
-  const { data: userProfile } = useGetUserProfileQuery()
-  const isAdmin = userProfile?.role === "admin"
   const [useLightTheme, setUseLightTheme] = useState<ThemeChoice>(
     cookies.theme || "system",
   )
   const location = useLocation()
-  const [searchParams, setSearchParams] = useSearchParams()
-  const { i18n, t } = useTranslation()
+  const { i18n } = useTranslation()
+
+  // Only check admin status if a custom theme might be selected
+  // In dev mode, we don't need to check admin status (devs can always use custom themes)
+  const mightBeCustomTheme = useLightTheme !== "light" && 
+                             useLightTheme !== "dark" && 
+                             useLightTheme !== "system" &&
+                             CUSTOM_THEMES.has(useLightTheme)
+  // Skip the query if we're in dev mode (no admin check needed) or if no custom theme is selected
+  const { data: userProfile } = useGetUserProfileQuery(undefined, {
+    skip: isDev || !mightBeCustomTheme,
+  })
+  const isAdmin = userProfile?.role === "admin"
 
   // Determine the actual theme to use (resolves "system" to light/dark)
   const actualTheme = useMemo(() => {
@@ -98,6 +106,38 @@ export function HookProvider(props: { children: React.ReactElement }) {
     }
   }, [useLightTheme, setCookie, removeCookie])
 
+  // Add useEffect to support the moment.js language
+  useEffect(() => {
+    // Set moment.js locale according to current i18n language
+    moment.locale(i18n.language)
+    const handler = () => {
+      moment.locale(i18n.language)
+    }
+    i18n.on("languageChanged", handler)
+    return () => i18n.off("languageChanged", handler)
+  }, [i18n])
+
+  const xs = useMediaQuery(localizedTheme.breakpoints.down("sm"))
+  const drawerWidthState = useState(!xs)
+
+  return (
+    <LightThemeContext.Provider value={[useLightTheme, setUseLightTheme]}>
+      <ThemeProvider theme={localizedTheme}>
+        <LocalizationProvider dateAdapter={AdapterMoment}>
+          <DrawerOpenContext.Provider value={drawerWidthState}>
+            {props.children}
+          </DrawerOpenContext.Provider>
+        </LocalizationProvider>
+      </ThemeProvider>
+    </LightThemeContext.Provider>
+  )
+}
+
+export function HookProvider(props: { children: React.ReactElement }) {
+  const [alert, issueAlert] = useState<AlertInterface | null>(null)
+  const [searchParams, setSearchParams] = useSearchParams()
+  const { t } = useTranslation()
+
   // Surface Citizen iD login/link errors coming back via query params
   // Only show if feature is enabled
   useEffect(() => {
@@ -123,66 +163,46 @@ export function HookProvider(props: { children: React.ReactElement }) {
     }
   }, [searchParams, setSearchParams, issueAlert, t])
 
-  // Add useEffect to support the moment.js language
-  useEffect(() => {
-    // Set moment.js locale according to current i18n language
-    moment.locale(i18n.language)
-    const handler = () => {
-      moment.locale(i18n.language)
-    }
-    i18n.on("languageChanged", handler)
-    return () => i18n.off("languageChanged", handler)
-  }, [])
-
-  const xs = useMediaQuery(localizedTheme.breakpoints.down("sm"))
-  const drawerWidthState = useState(!xs)
-
   return (
     <Provider store={store}>
-      <LightThemeContext.Provider value={[useLightTheme, setUseLightTheme]}>
-        <ThemeProvider theme={localizedTheme}>
-          <LocalizationProvider dateAdapter={AdapterMoment}>
-            <AlertHookContext.Provider value={[alert, issueAlert]}>
-              <CurrentOrgProvider>
-                <DrawerOpenContext.Provider value={drawerWidthState}>
-                  <ServiceSearchContext.Provider
-                    value={useState({ query: "" })}
+      <ThemeProviderWrapper>
+        <AlertHookContext.Provider value={[alert, issueAlert]}>
+          <CurrentOrgProvider>
+            <ServiceSearchContext.Provider
+              value={useState({ query: "" })}
+            >
+              <CurrentChatIDContext.Provider
+                value={useState<string | null | undefined>(undefined)}
+              >
+                <CurrentChatContext.Provider
+                  value={useState<Chat | null | undefined>(undefined)}
+                >
+                  <CurrentChatMessagesContext.Provider
+                    value={useState<Message[]>([])}
                   >
-                    <CurrentChatIDContext.Provider
-                      value={useState<string | null | undefined>(undefined)}
+                    <CssBaseline key="css-baseline" />
+                    {props.children}
+                    <Snackbar
+                      open={!!alert}
+                      autoHideDuration={6000}
+                      onClose={() => issueAlert(null)}
                     >
-                      <CurrentChatContext.Provider
-                        value={useState<Chat | null | undefined>(undefined)}
+                      <Alert
+                        onClose={() => issueAlert(null)}
+                        severity={alert?.severity}
+                        sx={{ width: "100%" }}
+                        variant={"filled"}
                       >
-                        <CurrentChatMessagesContext.Provider
-                          value={useState<Message[]>([])}
-                        >
-                          <CssBaseline key="css-baseline" />
-                          {props.children}
-                          <Snackbar
-                            open={!!alert}
-                            autoHideDuration={6000}
-                            onClose={() => issueAlert(null)}
-                          >
-                            <Alert
-                              onClose={() => issueAlert(null)}
-                              severity={alert?.severity}
-                              sx={{ width: "100%" }}
-                              variant={"filled"}
-                            >
-                              {alert?.message}
-                            </Alert>
-                          </Snackbar>
-                        </CurrentChatMessagesContext.Provider>
-                      </CurrentChatContext.Provider>
-                    </CurrentChatIDContext.Provider>
-                  </ServiceSearchContext.Provider>
-                </DrawerOpenContext.Provider>
-              </CurrentOrgProvider>
-            </AlertHookContext.Provider>
-          </LocalizationProvider>
-        </ThemeProvider>
-      </LightThemeContext.Provider>
+                        {alert?.message}
+                      </Alert>
+                    </Snackbar>
+                  </CurrentChatMessagesContext.Provider>
+                </CurrentChatContext.Provider>
+              </CurrentChatIDContext.Provider>
+            </ServiceSearchContext.Provider>
+          </CurrentOrgProvider>
+        </AlertHookContext.Provider>
+      </ThemeProviderWrapper>
     </Provider>
   )
 }
