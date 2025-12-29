@@ -11,6 +11,7 @@
   "navigationDividerColor": "#000000",
   "navigationDividerColorDark": "#000000",
   "backgroundColor": "#111828",
+  "splashScreenBackgroundColor": "#111828",
   "enableNotifications": true,
   "startUrl": "/",
   "iconUrl": "https://sc-market.space/android-chrome-512x512.png",
