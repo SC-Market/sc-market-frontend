@@ -396,7 +396,11 @@ export function OrderDetailsArea(props: { order: Order }) {
                 {t("orderDetailsArea.update_status")}
               </TableCell>
               <TableCell align="right">
-                <Stack direction="row" justifyContent={"right"} spacing={theme.layoutSpacing.compact}>
+                <Stack
+                  direction="row"
+                  justifyContent={"right"}
+                  spacing={theme.layoutSpacing.compact}
+                >
                   {privateContractCustomer && !isComplete && (
                     <LoadingButton
                       variant={"contained"}

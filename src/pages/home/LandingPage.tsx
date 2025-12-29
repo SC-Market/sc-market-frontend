@@ -135,7 +135,10 @@ export function RecentListingsSkeleton() {
                 variant={"rectangular"}
                 height={400}
                 width={250}
-                sx={{ borderRadius: (theme) => theme.spacing((theme as ExtendedTheme).borderRadius.image) }}
+                sx={{
+                  borderRadius: (theme) =>
+                    theme.spacing((theme as ExtendedTheme).borderRadius.image),
+                }}
               />
             </Fade>
           </Box>
@@ -158,7 +161,11 @@ export function OrderStatistics() {
 
   const theme = useTheme<ExtendedTheme>()
   return (
-    <Grid container spacing={theme.layoutSpacing.layout} justifyContent={"center"}>
+    <Grid
+      container
+      spacing={theme.layoutSpacing.layout}
+      justifyContent={"center"}
+    >
       <MetricSection
         title={t("landing.totalOrders")}
         body={<AnimatedNumbers includeComma animateToNumber={total_orders} />}
@@ -300,7 +307,11 @@ export function LandingPage() {
                     flex: { xs: "1 1 auto", md: "0 1 auto" },
                   }}
                 >
-                  <Grid container spacing={theme.layoutSpacing.layout} justifyContent="center">
+                  <Grid
+                    container
+                    spacing={theme.layoutSpacing.layout}
+                    justifyContent="center"
+                  >
                     <LoginArea />
                   </Grid>
                 </Box>
@@ -325,7 +336,11 @@ export function LandingPage() {
                 <RecentListings />
               </Box>
 
-              <Grid2 container justifyContent={"center"} spacing={theme.layoutSpacing.layout * 4}>
+              <Grid2
+                container
+                justifyContent={"center"}
+                spacing={theme.layoutSpacing.layout * 4}
+              >
                 <Grid2 size={{ xs: 12, md: 4 }}>
                   <Stack direction={"column"}>
                     <Typography
@@ -413,7 +428,11 @@ export function LandingPage() {
                 </Typography>
               </Stack>
 
-              <Grid2 container justifyContent={"center"} spacing={theme.layoutSpacing.layout * 2}>
+              <Grid2
+                container
+                justifyContent={"center"}
+                spacing={theme.layoutSpacing.layout * 2}
+              >
                 <Grid2 size={{ xs: 12, md: 4 }}>
                   <LandingSmallImage
                     src={recruitingCap}
@@ -530,7 +549,11 @@ function FAQSection() {
   const theme = useTheme<ExtendedTheme>()
 
   return (
-    <Stack direction={"row"} sx={{ flexWrap: "wrap" }} spacing={theme.layoutSpacing.compact}>
+    <Stack
+      direction={"row"}
+      sx={{ flexWrap: "wrap" }}
+      spacing={theme.layoutSpacing.compact}
+    >
       <Typography
         variant={"h3"}
         color={"text.secondary"}
@@ -647,7 +670,9 @@ function SupportersSection() {
               alignItems={"center"}
             >
               <ButtonBase
-                sx={{ borderRadius: theme.spacing(theme.borderRadius.topLevel) }}
+                sx={{
+                  borderRadius: theme.spacing(theme.borderRadius.topLevel),
+                }}
                 aria-label={t(
                   "accessibility.viewSupporterWebsite",
                   "Visit {{name}} website",
@@ -656,14 +681,22 @@ function SupportersSection() {
               >
                 <img
                   src={supporter.avatar}
-                  style={{ maxHeight: 128, maxWidth: "100%", borderRadius: `${theme.spacing(theme.borderRadius.button)}px` }}
+                  style={{
+                    maxHeight: 128,
+                    maxWidth: "100%",
+                    borderRadius: `${theme.spacing(theme.borderRadius.button)}px`,
+                  }}
                   alt={t("accessibility.supporterLogo", "{{name}} logo", {
                     name: supporter.name,
                   })}
                 />
               </ButtonBase>
 
-              <Typography variant={"body2"} align={"center"} color={"text.secondary"}>
+              <Typography
+                variant={"body2"}
+                align={"center"}
+                color={"text.secondary"}
+              >
                 {supporter.name}
               </Typography>
             </Stack>

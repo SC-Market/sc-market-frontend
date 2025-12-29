@@ -372,7 +372,9 @@ export function AccountLinks() {
                         padding: 2,
                         border: 1,
                         borderColor: "divider",
-                        borderRadius: theme.spacing(theme.borderRadius.topLevel),
+                        borderRadius: theme.spacing(
+                          theme.borderRadius.topLevel,
+                        ),
                       }}
                     >
                       <Box

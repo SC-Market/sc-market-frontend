@@ -10,7 +10,11 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 export function DiscordIntegrationSettings() {
   const theme = useTheme<ExtendedTheme>()
   return (
-    <Grid container spacing={theme.layoutSpacing.layout * 4} alignItems={"flex-start"}>
+    <Grid
+      container
+      spacing={theme.layoutSpacing.layout * 4}
+      alignItems={"flex-start"}
+    >
       <DiscordBotDetails />
       <ConfigureDiscord />
       <AddNotificationWebhook />

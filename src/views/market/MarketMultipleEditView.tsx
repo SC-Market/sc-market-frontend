@@ -109,7 +109,13 @@ export function MarketMultipleEditView() {
             {t("MarketMultipleEditView.about")}
           </Typography>
         </Grid>
-        <Grid item xs={12} lg={8} container spacing={theme.layoutSpacing.layout}>
+        <Grid
+          item
+          xs={12}
+          lg={8}
+          container
+          spacing={theme.layoutSpacing.layout}
+        >
           <Grid item xs={12} lg={12}>
             <TextField
               fullWidth
@@ -162,7 +168,13 @@ export function MarketMultipleEditView() {
             {t("MarketMultipleEditView.listings")}
           </Typography>
         </Grid>
-        <Grid item xs={12} lg={8} container spacing={theme.layoutSpacing.layout}>
+        <Grid
+          item
+          xs={12}
+          lg={8}
+          container
+          spacing={theme.layoutSpacing.layout}
+        >
           <Grid item xs={12}>
             <Autocomplete
               // multiple

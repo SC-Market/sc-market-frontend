@@ -34,11 +34,17 @@ export function PreferencesButton() {
   const isAdmin = userProfile?.role === "admin"
 
   const open = Boolean(anchorEl)
-  
+
   // Get available theme options - show custom themes in dev mode or for site admins
-  const availableThemes: ThemeChoice[] = (isDev || isAdmin)
-    ? ["light", "dark", "system", ...Array.from(CUSTOM_THEMES.keys()) as ThemeChoice[]]
-    : ["light", "dark", "system"]
+  const availableThemes: ThemeChoice[] =
+    isDev || isAdmin
+      ? [
+          "light",
+          "dark",
+          "system",
+          ...(Array.from(CUSTOM_THEMES.keys()) as ThemeChoice[]),
+        ]
+      : ["light", "dark", "system"]
 
   // Initialize language from user profile if available
   useEffect(() => {
@@ -116,7 +122,7 @@ export function PreferencesButton() {
               <Typography variant="subtitle2" sx={{ mb: 1 }}>
                 {t("preferences.theme")}
               </Typography>
-              {(isDev || isAdmin) ? (
+              {isDev || isAdmin ? (
                 <Autocomplete
                   value={lightTheme}
                   onChange={(event, newValue) => {
@@ -141,7 +147,10 @@ export function PreferencesButton() {
                     <TextField
                       {...params}
                       size="small"
-                      placeholder={t("preferences.select_theme", "Select theme")}
+                      placeholder={t(
+                        "preferences.select_theme",
+                        "Select theme",
+                      )}
                     />
                   )}
                 />
@@ -180,7 +189,8 @@ export function PreferencesButton() {
                         backgroundColor: theme.palette.action.hover,
                       },
                       "&.Mui-disabled": {
-                        backgroundColor: theme.palette.action.disabledBackground,
+                        backgroundColor:
+                          theme.palette.action.disabledBackground,
                         color: theme.palette.action.disabled,
                       },
                     },

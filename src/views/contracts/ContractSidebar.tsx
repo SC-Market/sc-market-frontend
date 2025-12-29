@@ -81,7 +81,16 @@ export function ContractSidebar() {
       sort: sort,
       language_codes: languageCodes.length > 0 ? languageCodes : undefined,
     }))
-  }, [kind, setSearchState, query, minOffer, maxOffer, paymentType, sort, languageCodes])
+  }, [
+    kind,
+    setSearchState,
+    query,
+    minOffer,
+    maxOffer,
+    paymentType,
+    sort,
+    languageCodes,
+  ])
 
   return (
     <Drawer

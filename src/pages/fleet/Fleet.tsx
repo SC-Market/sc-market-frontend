@@ -17,7 +17,13 @@ export function Fleet() {
       <HeaderTitle>{t("fleet.fleetTitle")}</HeaderTitle>
       <Grid container xs={12} spacing={theme.layoutSpacing.layout * 4} item>
         <Ships />
-        <Grid item xs={12} xl={7} container spacing={theme.layoutSpacing.layout * 4}>
+        <Grid
+          item
+          xs={12}
+          xl={7}
+          container
+          spacing={theme.layoutSpacing.layout * 4}
+        >
           {/*<FleetBreakdown/>*/}
           <ActiveDeliveries />
         </Grid>

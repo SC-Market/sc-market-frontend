@@ -80,7 +80,13 @@ export function CreatePublicContract() {
 
   return (
     <Grid item xs={12}>
-      <FormControl component={Grid} item xs={12} container spacing={theme.layoutSpacing.layout}>
+      <FormControl
+        component={Grid}
+        item
+        xs={12}
+        container
+        spacing={theme.layoutSpacing.layout}
+      >
         <Grid container spacing={theme.layoutSpacing.layout * 4}>
           <Section xs={12}>
             <Grid item xs={12} lg={4}>
@@ -93,7 +99,13 @@ export function CreatePublicContract() {
                 {t("createPublicContract.about")}
               </Typography>
             </Grid>
-            <Grid item xs={12} lg={8} container spacing={theme.layoutSpacing.layout}>
+            <Grid
+              item
+              xs={12}
+              lg={8}
+              container
+              spacing={theme.layoutSpacing.layout}
+            >
               <Grid item xs={12} lg={12}>
                 <TextField
                   fullWidth
@@ -160,7 +172,13 @@ export function CreatePublicContract() {
                 {t("createPublicContract.costs")}
               </Typography>
             </Grid>
-            <Grid item xs={12} lg={8} container spacing={theme.layoutSpacing.layout}>
+            <Grid
+              item
+              xs={12}
+              lg={8}
+              container
+              spacing={theme.layoutSpacing.layout}
+            >
               <Grid item xs={12}>
                 <NumericFormat
                   decimalScale={0}

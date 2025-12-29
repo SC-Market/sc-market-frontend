@@ -684,8 +684,8 @@ export const contractorsApi = serviceApi.injectEndpoints({
         index: number
         pageSize: number
       } & Omit<ContractorSearchState, "language_codes"> & {
-        language_codes?: string
-      }
+          language_codes?: string
+        }
     >({
       query: (params) => {
         const { language_codes, ...restParams } = params

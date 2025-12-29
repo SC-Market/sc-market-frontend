@@ -203,7 +203,11 @@ export function BulkItems() {
         {/*<MarketSidebar/>*/}
         <ContainerGrid maxWidth={"lg"} sidebarOpen={true}>
           <Grid item xs={12}>
-            <Grid container justifyContent={"space-between"} spacing={theme.layoutSpacing.compact}>
+            <Grid
+              container
+              justifyContent={"space-between"}
+              spacing={theme.layoutSpacing.compact}
+            >
               <HeaderTitle lg={7} xl={7}>
                 {t("market.bulkListings")}
               </HeaderTitle>
@@ -284,7 +288,11 @@ export function BuyOrderItems() {
         {/*<MarketSidebar/>*/}
         <ContainerGrid maxWidth={"lg"} sidebarOpen={true}>
           <Grid item xs={12}>
-            <Grid container justifyContent={"space-between"} spacing={theme.layoutSpacing.compact}>
+            <Grid
+              container
+              justifyContent={"space-between"}
+              spacing={theme.layoutSpacing.compact}
+            >
               <HeaderTitle lg={7} xl={7}>
                 {t("market.buyOrders")}
               </HeaderTitle>

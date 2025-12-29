@@ -38,174 +38,189 @@ import { formatServiceUrl } from "../../util/urls"
 
 export type ContractKindIconKey = keyof typeof orderIcons
 
-export function ServiceListingBase(props: { service: Service; index: number }) {
-  const { service, index } = props
-  const { t } = useTranslation()
-  const theme = useTheme<ExtendedTheme>()
-  const key = PAYMENT_TYPE_MAP.get(service.payment_type) || ""
+export const ServiceListingBase = React.memo(
+  function ServiceListingBase(props: { service: Service; index: number }) {
+    const { service, index } = props
+    const { t } = useTranslation()
+    const theme = useTheme<ExtendedTheme>()
+    const key = PAYMENT_TYPE_MAP.get(service.payment_type) || ""
 
-  return (
-    <Link
-      to={formatServiceUrl(service)}
-      style={{ textDecoration: "none", color: "inherit" }}
-    >
-      <Fade
-        in={true}
-        style={{
-          transitionDelay: `${50 + 50 * index}ms`,
-          transitionDuration: "500ms",
-        }}
+    return (
+      <Link
+        to={formatServiceUrl(service)}
+        style={{ textDecoration: "none", color: "inherit" }}
       >
-        <CardActionArea
-          sx={{
-            borderRadius: theme.spacing(theme.borderRadius.topLevel),
+        <Fade
+          in={true}
+          style={{
+            transitionDelay: `${50 + 50 * index}ms`,
+            transitionDuration: "500ms",
           }}
         >
-          <Card
+          <CardActionArea
             sx={{
               borderRadius: theme.spacing(theme.borderRadius.topLevel),
             }}
           >
-            <CardHeader
-              disableTypography
+            <Card
               sx={{
-                overflow: "hidden",
-                root: {
-                  overflow: "hidden",
-                },
-                content: {
-                  overflow: "hidden",
-                  width: "100%",
-                  display: "contents",
-                  flex: "1 1 auto",
-                },
-                "& .MuiCardHeader-content": {
-                  overflow: "hidden",
-                },
-                paddingBottom: 1,
+                borderRadius: theme.spacing(theme.borderRadius.topLevel),
               }}
-              title={
-                <Box display={"flex"} alignItems={"center"}>
-                  {dateDiffInDays(new Date(), new Date(service.timestamp)) <=
-                    1 && (
-                    <Chip
-                      color={"secondary"}
-                      label={t("serviceListings.new")}
-                      sx={{
-                        marginRight: 1,
-                        textTransform: "uppercase",
-                        fontSize: "0.85em",
-                        fontWeight: "bold",
-                      }}
+            >
+              <CardHeader
+                disableTypography
+                sx={{
+                  overflow: "hidden",
+                  root: {
+                    overflow: "hidden",
+                  },
+                  content: {
+                    overflow: "hidden",
+                    width: "100%",
+                    display: "contents",
+                    flex: "1 1 auto",
+                  },
+                  "& .MuiCardHeader-content": {
+                    overflow: "hidden",
+                  },
+                  paddingBottom: 1,
+                }}
+                title={
+                  <Box display={"flex"} alignItems={"center"}>
+                    {dateDiffInDays(new Date(), new Date(service.timestamp)) <=
+                      1 && (
+                      <Chip
+                        color={"secondary"}
+                        label={t("serviceListings.new")}
+                        sx={{
+                          marginRight: 1,
+                          textTransform: "uppercase",
+                          fontSize: "0.85em",
+                          fontWeight: "bold",
+                        }}
+                      />
+                    )}
+                    <Typography
+                      noWrap
+                      sx={{ marginRight: 1 }}
+                      variant={"h6"}
+                      color={"text.secondary"}
+                    >
+                      {service.service_name}
+                    </Typography>
+                  </Box>
+                }
+                subheader={
+                  <Box>
+                    <ListingNameAndRating
+                      user={service.user}
+                      contractor={service.contractor}
                     />
-                  )}
-                  <Typography
-                    noWrap
-                    sx={{ marginRight: 1 }}
-                    variant={"h6"}
-                    color={"text.secondary"}
-                  >
-                    {service.service_name}
-                  </Typography>
-                </Box>
-              }
-              subheader={
-                <Box>
-                  <ListingNameAndRating
-                    user={service.user}
-                    contractor={service.contractor}
-                  />
-                  <Typography color={"primary"} variant={"subtitle2"}>
-                    {service.cost.toLocaleString(undefined)} aUEC{" "}
-                    {key ? t(key) : ""}
-                  </Typography>
-                </Box>
-              }
-            />
-            <CardContent sx={{ padding: 2, paddingTop: 0 }}>
-              <Stack
-                spacing={theme.layoutSpacing.text}
-                direction={"row"}
-                justifyContent={"space-between"}
-              >
-                <Typography
-                  variant={"body2"}
-                  color={"text.secondary"}
-                  sx={{
-                    display: "-webkit-box",
-                    WebkitLineClamp: "6",
-                    lineClamp: "6",
-                    WebkitBoxOrient: "vertical",
-                    overflowY: "hidden",
-                    textOverflow: "ellipsis",
-                  }}
+                    <Typography color={"primary"} variant={"subtitle2"}>
+                      {service.cost.toLocaleString(undefined)} aUEC{" "}
+                      {key ? t(key) : ""}
+                    </Typography>
+                  </Box>
+                }
+              />
+              <CardContent sx={{ padding: 2, paddingTop: 0 }}>
+                <Stack
+                  spacing={theme.layoutSpacing.text}
+                  direction={"row"}
+                  justifyContent={"space-between"}
                 >
-                  <MarkdownRender
-                    text={service.service_description}
-                    plainText
-                  />
-                </Typography>
-                {service.photos[0] ? (
-                  <Avatar
-                    src={
-                      service.photos[0] ||
-                      "https://cdn.robertsspaceindustries.com/static/images/Temp/default-image.png"
-                    }
-                    variant={"rounded"}
-                    sx={{ height: 128 + 32, width: 128 + 32 }}
-                  />
-                ) : (
-                  <Box sx={{ height: 128 + 32 }} />
-                )}
-              </Stack>
-            </CardContent>
-            <Box sx={{ padding: 2, paddingTop: 0 }}>
-              <Stack direction={"row"} spacing={theme.layoutSpacing.compact} flexWrap={"wrap"}>
-                <Chip
-                  color={"primary"}
-                  label={t(`myServices.${service.kind}`, {
-                    defaultValue: service.kind,
-                  })}
-                  sx={{ marginBottom: 1, padding: 1 }}
-                  variant={"outlined"}
-                  icon={orderIcons[service.kind]}
-                  onClick={
-                    (event) => event.stopPropagation() // Don't highlight cell if button clicked
-                  }
-                />
-                {service.rush && (
+                  <Typography
+                    variant={"body2"}
+                    color={"text.secondary"}
+                    sx={{
+                      display: "-webkit-box",
+                      WebkitLineClamp: "6",
+                      lineClamp: "6",
+                      WebkitBoxOrient: "vertical",
+                      overflowY: "hidden",
+                      textOverflow: "ellipsis",
+                    }}
+                  >
+                    <MarkdownRender
+                      text={service.service_description}
+                      plainText
+                    />
+                  </Typography>
+                  {service.photos[0] ? (
+                    <Avatar
+                      src={
+                        service.photos[0] ||
+                        "https://cdn.robertsspaceindustries.com/static/images/Temp/default-image.png"
+                      }
+                      variant={"rounded"}
+                      sx={{ height: 128 + 32, width: 128 + 32 }}
+                    />
+                  ) : (
+                    <Box sx={{ height: 128 + 32 }} />
+                  )}
+                </Stack>
+              </CardContent>
+              <Box sx={{ padding: 2, paddingTop: 0 }}>
+                <Stack
+                  direction={"row"}
+                  spacing={theme.layoutSpacing.compact}
+                  flexWrap={"wrap"}
+                >
                   <Chip
-                    color={"warning"}
-                    label={t("serviceListings.rush")}
+                    color={"primary"}
+                    label={t(`myServices.${service.kind}`, {
+                      defaultValue: service.kind,
+                    })}
                     sx={{ marginBottom: 1, padding: 1 }}
                     variant={"outlined"}
-                    icon={<ElectricBoltRounded />}
+                    icon={orderIcons[service.kind]}
                     onClick={
                       (event) => event.stopPropagation() // Don't highlight cell if button clicked
                     }
                   />
-                )}
-                {service.languages && service.languages.length > 0 && (
-                  <>
-                    {service.languages.map((lang) => (
-                      <Chip
-                        key={lang.code}
-                        label={lang.name}
-                        variant="outlined"
-                        sx={{ marginBottom: 1, padding: 1 }}
-                        onClick={(event) => event.stopPropagation()}
-                      />
-                    ))}
-                  </>
-                )}
-              </Stack>
-            </Box>
-          </Card>
-        </CardActionArea>
-      </Fade>
-    </Link>
-  )
-}
+                  {service.rush && (
+                    <Chip
+                      color={"warning"}
+                      label={t("serviceListings.rush")}
+                      sx={{ marginBottom: 1, padding: 1 }}
+                      variant={"outlined"}
+                      icon={<ElectricBoltRounded />}
+                      onClick={
+                        (event) => event.stopPropagation() // Don't highlight cell if button clicked
+                      }
+                    />
+                  )}
+                  {service.languages && service.languages.length > 0 && (
+                    <>
+                      {service.languages.map((lang) => (
+                        <Chip
+                          key={lang.code}
+                          label={lang.name}
+                          variant="outlined"
+                          sx={{ marginBottom: 1, padding: 1 }}
+                          onClick={(event) => event.stopPropagation()}
+                        />
+                      ))}
+                    </>
+                  )}
+                </Stack>
+              </Box>
+            </Card>
+          </CardActionArea>
+        </Fade>
+      </Link>
+    )
+  },
+  (prevProps, nextProps) => {
+    // Custom comparison: only re-render if service data actually changed
+    return (
+      prevProps.service.service_id === nextProps.service.service_id &&
+      prevProps.service.cost === nextProps.service.cost &&
+      prevProps.service.status === nextProps.service.status &&
+      prevProps.index === nextProps.index
+    )
+  },
+)
 
 export function ServiceListing(props: { service: Service; index: number }) {
   const { service, index } = props
@@ -441,7 +456,10 @@ export function RecentServicesSkeleton() {
                 variant={"rectangular"}
                 height={400}
                 width={250}
-                sx={{ borderRadius: (theme) => theme.spacing((theme as ExtendedTheme).borderRadius.image) }}
+                sx={{
+                  borderRadius: (theme) =>
+                    theme.spacing((theme as ExtendedTheme).borderRadius.image),
+                }}
               />
             </Box>
           ),

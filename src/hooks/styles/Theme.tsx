@@ -15,7 +15,6 @@ declare module "@mui/material/styles" {
     xxl: true
   }
 
-
   interface TypeBackground {
     navbar: string
     sidebar: string

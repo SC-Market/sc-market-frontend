@@ -160,7 +160,13 @@ export function ContractOfferForm(props: { contract: PublicContract }) {
             {t("createPublicContract.about")}
           </Typography>
         </Grid>
-        <Grid item xs={12} lg={8} container spacing={theme.layoutSpacing.layout}>
+        <Grid
+          item
+          xs={12}
+          lg={8}
+          container
+          spacing={theme.layoutSpacing.layout}
+        >
           <Grid item xs={12} lg={12}>
             <TextField
               fullWidth
@@ -268,7 +274,13 @@ export function ContractOfferForm(props: { contract: PublicContract }) {
             {t("createPublicContract.costs")}
           </Typography>
         </Grid>
-        <Grid item xs={12} lg={8} container spacing={theme.layoutSpacing.layout}>
+        <Grid
+          item
+          xs={12}
+          lg={8}
+          container
+          spacing={theme.layoutSpacing.layout}
+        >
           <Grid item xs={12}>
             <NumericFormat
               decimalScale={0}

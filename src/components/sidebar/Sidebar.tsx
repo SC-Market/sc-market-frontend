@@ -480,8 +480,10 @@ export function Sidebar() {
                   }}
                 />
 
-                <Typography 
-                  color={theme.palette.getContrastText(theme.palette.background.sidebar)} 
+                <Typography
+                  color={theme.palette.getContrastText(
+                    theme.palette.background.sidebar,
+                  )}
                   fontWeight={600}
                 >
                   {t("sidebar.sc_market")}
@@ -502,7 +504,7 @@ export function Sidebar() {
       </Stack>
       <Stack
         direction={"column"}
-                spacing={theme.layoutSpacing.component}
+        spacing={theme.layoutSpacing.component}
         sx={{
           // backgroundColor: 'rgb(0,0,0,.6)',
           width: "100%",
@@ -542,7 +544,9 @@ export function Sidebar() {
                         opacity: 0.7,
                         textTransform: "uppercase",
                         fontSize: "0.85em",
-                        color: theme.palette.getContrastText(theme.palette.background.sidebar),
+                        color: theme.palette.getContrastText(
+                          theme.palette.background.sidebar,
+                        ),
                         transition: "0.3s",
                       }}
                       variant={"body2"}

@@ -31,9 +31,12 @@ export const recruitingApi = serviceApi.injectEndpoints({
   endpoints: (builder) => ({
     recruitingGetAllPosts: builder.query<
       { total: number; items: RecruitingPost[] },
-      { index: number; pageSize: number } & Omit<RecruitingSearchState, "language_codes"> & {
-        language_codes?: string
-      }
+      { index: number; pageSize: number } & Omit<
+        RecruitingSearchState,
+        "language_codes"
+      > & {
+          language_codes?: string
+        }
     >({
       query: (params) => {
         const { language_codes, ...restParams } = params

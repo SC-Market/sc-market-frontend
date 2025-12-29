@@ -350,7 +350,11 @@ function MessageEntry2(props: { message: Message }) {
   )
 
   return (
-    <Stack direction={"row"} spacing={theme.layoutSpacing.compact} justifyContent={"flex-start"}>
+    <Stack
+      direction={"row"}
+      spacing={theme.layoutSpacing.compact}
+      justifyContent={"flex-start"}
+    >
       {message.author ? (
         <Link to={`/user/${author?.username}`}>
           <Avatar
@@ -368,7 +372,11 @@ function MessageEntry2(props: { message: Message }) {
       )}
 
       <Stack direction={"column"}>
-        <Stack direction={"row"} spacing={theme.layoutSpacing.compact} alignItems={"flex-end"}>
+        <Stack
+          direction={"row"}
+          spacing={theme.layoutSpacing.compact}
+          alignItems={"flex-end"}
+        >
           {message.author ? (
             <MaterialLink
               component={Link}

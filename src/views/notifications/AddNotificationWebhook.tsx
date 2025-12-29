@@ -165,7 +165,11 @@ export function AddNotificationWebhook(props: { org?: boolean }) {
       </Grid>
 
       <Grid item xs={12}>
-        <Grid container spacing={theme.layoutSpacing.compact} direction={"column"}>
+        <Grid
+          container
+          spacing={theme.layoutSpacing.compact}
+          direction={"column"}
+        >
           <NotificationActionCheck
             actions={actions}
             setActions={setActions}

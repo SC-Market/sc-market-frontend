@@ -275,7 +275,11 @@ function RoleDetailsRow(props: { role: ContractorRole; open: boolean }) {
               }}
             >
               <CardContent sx={{ padding: 2 }}>
-                <Grid container spacing={theme.layoutSpacing.compact} direction={"column"}>
+                <Grid
+                  container
+                  spacing={theme.layoutSpacing.compact}
+                  direction={"column"}
+                >
                   <Grid item>
                     <TextField
                       fullWidth

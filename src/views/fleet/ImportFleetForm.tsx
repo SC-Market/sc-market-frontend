@@ -56,8 +56,19 @@ export function ImportFleetForm() {
             {t("ships.import.title")}
           </Typography>
         </Grid>
-        <Grid item xs={12} lg={8} container spacing={theme.layoutSpacing.layout}>
-          <Grid item container spacing={theme.layoutSpacing.layout} justifyContent={"right"}>
+        <Grid
+          item
+          xs={12}
+          lg={8}
+          container
+          spacing={theme.layoutSpacing.layout}
+        >
+          <Grid
+            item
+            container
+            spacing={theme.layoutSpacing.layout}
+            justifyContent={"right"}
+          >
             <Grid
               item
               xs={12}

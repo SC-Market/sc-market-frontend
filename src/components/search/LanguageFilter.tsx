@@ -61,7 +61,9 @@ export function LanguageFilter({
       renderInput={(params) => (
         <TextField
           {...params}
-          label={label || t("search.languageFilter.label", "Filter by Languages")}
+          label={
+            label || t("search.languageFilter.label", "Filter by Languages")
+          }
           helperText={
             helperText ||
             t(

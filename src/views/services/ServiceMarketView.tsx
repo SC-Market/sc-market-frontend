@@ -47,14 +47,22 @@ export function ServiceMarketView() {
       )}
       {xs && <ServiceSidebar />}
       <Container maxWidth={"xl"}>
-        <Grid container spacing={theme.layoutSpacing.layout} justifyContent={"center"}>
+        <Grid
+          container
+          spacing={theme.layoutSpacing.layout}
+          justifyContent={"center"}
+        >
           <Grid item xs={12} md={3}>
             <Paper>
               <ServiceSearchArea />
             </Paper>
           </Grid>
           <Grid item md={9}>
-            <Grid container spacing={theme.layoutSpacing.layout} justifyContent={"center"}>
+            <Grid
+              container
+              spacing={theme.layoutSpacing.layout}
+              justifyContent={"center"}
+            >
               <ServiceListings />
             </Grid>
           </Grid>

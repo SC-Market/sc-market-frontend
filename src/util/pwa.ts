@@ -48,7 +48,7 @@ export function registerServiceWorker(): Promise<ServiceWorkerRegistration | nul
   // In development, use the dev service worker path
   // In production, vite-plugin-pwa generates sw.js in the dist folder
   const swPath = import.meta.env.DEV ? "/dev-sw.js?dev-sw" : "/sw.js"
-  
+
   // Log for debugging
   if (!import.meta.env.DEV) {
     console.log("Registering service worker from:", swPath)
@@ -66,12 +66,15 @@ export function registerServiceWorker(): Promise<ServiceWorkerRegistration | nul
           waiting: registration.waiting?.state,
           controller: navigator.serviceWorker.controller?.scriptURL,
         })
-        
+
         // Log when service worker becomes active
         if (registration.active) {
-          console.log("Service Worker is active:", registration.active.scriptURL)
+          console.log(
+            "Service Worker is active:",
+            registration.active.scriptURL,
+          )
         }
-        
+
         // Wait for service worker to activate
         if (registration.installing) {
           registration.installing.addEventListener("statechange", () => {
@@ -102,9 +105,12 @@ export function registerServiceWorker(): Promise<ServiceWorkerRegistration | nul
 
         // Check for updates periodically (only in production)
         if (!import.meta.env.DEV) {
-          setInterval(() => {
-            registration.update()
-          }, 60 * 60 * 1000) // Check every hour
+          setInterval(
+            () => {
+              registration.update()
+            },
+            60 * 60 * 1000,
+          ) // Check every hour
         }
 
         notifyListeners()
@@ -155,7 +161,9 @@ export function registerServiceWorker(): Promise<ServiceWorkerRegistration | nul
         .catch(() => {
           // If it fails, wait a bit and try again
           setTimeout(() => {
-            registerSW().then(resolve).catch(() => resolve(null))
+            registerSW()
+              .then(resolve)
+              .catch(() => resolve(null))
           }, 1000)
         })
     })

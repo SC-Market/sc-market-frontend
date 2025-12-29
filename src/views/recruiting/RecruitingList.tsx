@@ -1,3 +1,4 @@
+import React from "react"
 import {
   Avatar,
   Box,
@@ -13,7 +14,6 @@ import {
   Skeleton,
   Typography,
 } from "@mui/material"
-import React from "react"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTheme } from "@mui/material/styles"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
@@ -27,168 +27,178 @@ import { ListingSellerRating } from "../../components/rating/ListingRating"
 import { RecruitmentVotes } from "../../components/button/RecruitmentVotes"
 import { useTranslation } from "react-i18next"
 
-export function RecruitingPostItem(props: {
-  post: RecruitingPost
-  index: number
-}) {
-  const { post, index } = props
-  const { contractor } = post
-  const theme = useTheme<ExtendedTheme>()
-  const { t } = useTranslation()
+export const RecruitingPostItem = React.memo(
+  function RecruitingPostItem(props: { post: RecruitingPost; index: number }) {
+    const { post, index } = props
+    const { contractor } = post
+    const theme = useTheme<ExtendedTheme>()
+    const { t } = useTranslation()
 
-  return (
-    <Grid item xs={12} lg={12}>
-      <Link
-        to={`/contractor/${contractor.spectrum_id}/recruiting`}
-        style={{ textDecoration: "none", color: "inherit" }}
-      >
-        <Fade
-          in={true}
-          style={{
-            transitionDelay: `${50 + 50 * index}ms`,
-            transitionDuration: "500ms",
-          }}
+    return (
+      <Grid item xs={12} lg={12}>
+        <Link
+          to={`/contractor/${contractor.spectrum_id}/recruiting`}
+          style={{ textDecoration: "none", color: "inherit" }}
         >
-          <Box
-            sx={{
-              position: "relative",
+          <Fade
+            in={true}
+            style={{
+              transitionDelay: `${50 + 50 * index}ms`,
+              transitionDuration: "500ms",
             }}
           >
             <Box
               sx={{
-                position: "absolute",
-                top: theme.spacing(2),
-                right: theme.spacing(2),
-                zIndex: 2,
+                position: "relative",
               }}
             >
-              <RecruitmentVotes post={post} />
-            </Box>
-            <CardActionArea
-              sx={{
-                borderRadius: theme.spacing(theme.borderRadius.topLevel),
-              }}
-            >
-              <Card
+              <Box
                 sx={{
-                  borderRadius: theme.spacing(theme.borderRadius.topLevel),
-                  padding: 1,
-                  border: `1px solid ${theme.palette.outline.main}`,
+                  position: "absolute",
+                  top: theme.spacing(2),
+                  right: theme.spacing(2),
+                  zIndex: 2,
                 }}
               >
-                <CardHeader
-                  avatar={
-                    <Avatar
-                      src={contractor.avatar}
-                      aria-label={t("recruiting_post.contractor", {
-                        defaultValue: "Contractor",
-                      })}
-                      variant={"rounded"}
-                      sx={{
-                        maxHeight: theme.spacing(12),
-                        maxWidth: theme.spacing(12),
-                        // maxWidth:'100%',
-                        // maxHeight:'100%',
-                        width: "100%",
-                        height: "100%",
-                        objectFit: "cover",
-                      }}
-                    />
-                  }
-                  title={
-                    <MaterialLink
-                      component={Link}
-                      to={`/contractor/${contractor.spectrum_id}`}
-                      style={{ textDecoration: "none", color: "inherit" }}
-                    >
-                      <UnderlineLink
-                        color={"text.secondary"}
-                        variant={"subtitle1"}
-                        fontWeight={"bold"}
-                      >
-                        {contractor.name}
-                      </UnderlineLink>
-                    </MaterialLink>
-                  }
-                  subheader={
-                    <Box>
-                      <Grid container alignItems={"center"} spacing={theme.layoutSpacing.compact}>
-                        <Grid item>
-                          <PeopleAltRoundedIcon
-                            style={{ color: theme.palette.text.primary }}
-                          />
-                        </Grid>
-                        <Grid item>
-                          <Typography
-                            sx={{ marginLeft: 1 }}
-                            color={"text.primary"}
-                            fontWeight={"bold"}
-                          >
-                            {contractor.size}
-                          </Typography>
-                        </Grid>
-                      </Grid>
-
-                      <ListingSellerRating contractor={contractor} />
-                    </Box>
-                  }
-                />
-                <CardContent>
-                  <Typography
-                    variant={"h4"}
-                    sx={{ width: "100%" }}
-                    textAlign={"center"}
-                  >
-                    <b>{post.title}</b>
-                  </Typography>
-                  <Typography
-                    sx={{
-                      "-webkit-box-orient": "vertical",
-                      display: "-webkit-box",
-                      "-webkit-line-clamp": "10",
-                      overflow: "hidden",
-                      lineClamp: "10",
-                      textOverflow: "ellipsis",
-                      // whiteSpace: "pre-line"
-                    }}
-                    variant={"body2"}
-                  >
-                    <MarkdownRender text={post.body} plainText />
-                  </Typography>
-                </CardContent>
-                <CardActions>
-                  <Box>
-                    {contractor.fields.map((field) => (
-                      <Chip
-                        key={field}
-                        color={"primary"}
-                        label={t(`contractor.fields.${field}`, field)}
+                <RecruitmentVotes post={post} />
+              </Box>
+              <CardActionArea
+                sx={{
+                  borderRadius: theme.spacing(theme.borderRadius.topLevel),
+                }}
+              >
+                <Card
+                  sx={{
+                    borderRadius: theme.spacing(theme.borderRadius.topLevel),
+                    padding: 1,
+                    border: `1px solid ${theme.palette.outline.main}`,
+                  }}
+                >
+                  <CardHeader
+                    avatar={
+                      <Avatar
+                        src={contractor.avatar}
+                        aria-label={t("recruiting_post.contractor", {
+                          defaultValue: "Contractor",
+                        })}
+                        variant={"rounded"}
                         sx={{
-                          marginRight: 1,
-                          marginBottom: 1,
-                          padding: 1,
-                          textTransform: "capitalize",
+                          maxHeight: theme.spacing(12),
+                          maxWidth: theme.spacing(12),
+                          // maxWidth:'100%',
+                          // maxHeight:'100%',
+                          width: "100%",
+                          height: "100%",
+                          objectFit: "cover",
                         }}
-                        variant={"outlined"}
-                        icon={contractorKindIcons[field]}
-                        onClick={
-                          (event) => {
-                            event.stopPropagation()
-                            event.preventDefault()
-                          } // Don't highlight cell if button clicked
-                        }
                       />
-                    ))}
-                  </Box>
-                </CardActions>
-              </Card>
-            </CardActionArea>
-          </Box>
-        </Fade>
-      </Link>
-    </Grid>
-  )
-}
+                    }
+                    title={
+                      <MaterialLink
+                        component={Link}
+                        to={`/contractor/${contractor.spectrum_id}`}
+                        style={{ textDecoration: "none", color: "inherit" }}
+                      >
+                        <UnderlineLink
+                          color={"text.secondary"}
+                          variant={"subtitle1"}
+                          fontWeight={"bold"}
+                        >
+                          {contractor.name}
+                        </UnderlineLink>
+                      </MaterialLink>
+                    }
+                    subheader={
+                      <Box>
+                        <Grid
+                          container
+                          alignItems={"center"}
+                          spacing={theme.layoutSpacing.compact}
+                        >
+                          <Grid item>
+                            <PeopleAltRoundedIcon
+                              style={{ color: theme.palette.text.primary }}
+                            />
+                          </Grid>
+                          <Grid item>
+                            <Typography
+                              sx={{ marginLeft: 1 }}
+                              color={"text.primary"}
+                              fontWeight={"bold"}
+                            >
+                              {contractor.size}
+                            </Typography>
+                          </Grid>
+                        </Grid>
+
+                        <ListingSellerRating contractor={contractor} />
+                      </Box>
+                    }
+                  />
+                  <CardContent>
+                    <Typography
+                      variant={"h4"}
+                      sx={{ width: "100%" }}
+                      textAlign={"center"}
+                    >
+                      <b>{post.title}</b>
+                    </Typography>
+                    <Typography
+                      sx={{
+                        "-webkit-box-orient": "vertical",
+                        display: "-webkit-box",
+                        "-webkit-line-clamp": "10",
+                        overflow: "hidden",
+                        lineClamp: "10",
+                        textOverflow: "ellipsis",
+                        // whiteSpace: "pre-line"
+                      }}
+                      variant={"body2"}
+                    >
+                      <MarkdownRender text={post.body} plainText />
+                    </Typography>
+                  </CardContent>
+                  <CardActions>
+                    <Box>
+                      {contractor.fields.map((field) => (
+                        <Chip
+                          key={field}
+                          color={"primary"}
+                          label={t(`contractor.fields.${field}`, field)}
+                          sx={{
+                            marginRight: 1,
+                            marginBottom: 1,
+                            padding: 1,
+                            textTransform: "capitalize",
+                          }}
+                          variant={"outlined"}
+                          icon={contractorKindIcons[field]}
+                          onClick={
+                            (event) => {
+                              event.stopPropagation()
+                              event.preventDefault()
+                            } // Don't highlight cell if button clicked
+                          }
+                        />
+                      ))}
+                    </Box>
+                  </CardActions>
+                </Card>
+              </CardActionArea>
+            </Box>
+          </Fade>
+        </Link>
+      </Grid>
+    )
+  },
+  (prevProps, nextProps) => {
+    // Custom comparison: only re-render if post data actually changed
+    return (
+      prevProps.post.post_id === nextProps.post.post_id &&
+      prevProps.index === nextProps.index
+    )
+  },
+)
 
 export function RecruitingPostSkeleton() {
   return (
@@ -196,7 +206,8 @@ export function RecruitingPostSkeleton() {
       <Skeleton
         variant={"rectangular"}
         sx={{
-          borderRadius: (theme) => theme.spacing((theme as ExtendedTheme).borderRadius.image),
+          borderRadius: (theme) =>
+            theme.spacing((theme as ExtendedTheme).borderRadius.image),
           height: 350,
           width: "100%",
         }}

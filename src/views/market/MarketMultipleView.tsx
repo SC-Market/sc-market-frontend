@@ -107,7 +107,8 @@ export function MarketMultipleView() {
                 />
                 <Paper
                   sx={{
-                    borderRadius: (theme) => theme.spacing(theme.borderRadius.image),
+                    borderRadius: (theme) =>
+                      theme.spacing(theme.borderRadius.image),
                     backgroundColor: theme.palette.background.default,
                     display: "flex",
                     justifyContent: "center",
@@ -147,16 +148,28 @@ export function MarketMultipleView() {
 
                   {/* Open Graph Meta Tags */}
                   <meta property="og:type" content="website" />
-                  <meta property="og:url" content={`${FRONTEND_URL}/market/multiple/${listing.listing_id}`} />
+                  <meta
+                    property="og:url"
+                    content={`${FRONTEND_URL}/market/multiple/${listing.listing_id}`}
+                  />
                   <meta property="og:title" content={details.title} />
-                  <meta property="og:description" content={details.description} />
+                  <meta
+                    property="og:description"
+                    content={details.description}
+                  />
                   <meta property="og:image" content={photos[0]} />
 
                   {/* Twitter Card Meta Tags */}
                   <meta name="twitter:card" content="summary_large_image" />
-                  <meta name="twitter:url" content={`${FRONTEND_URL}/market/multiple/${listing.listing_id}`} />
+                  <meta
+                    name="twitter:url"
+                    content={`${FRONTEND_URL}/market/multiple/${listing.listing_id}`}
+                  />
                   <meta name="twitter:title" content={details.title} />
-                  <meta name="twitter:description" content={details.description} />
+                  <meta
+                    name="twitter:description"
+                    content={details.description}
+                  />
                   <meta name="twitter:image" content={photos[0]} />
 
                   <script type="application/ld+json">
@@ -238,7 +251,8 @@ export function MarketMultipleView() {
                 <Fade in={true}>
                   <Card
                     sx={{
-                      borderRadius: (theme) => theme.spacing(theme.borderRadius.image),
+                      borderRadius: (theme) =>
+                        theme.spacing(theme.borderRadius.image),
                       minHeight: 400,
                     }}
                   >

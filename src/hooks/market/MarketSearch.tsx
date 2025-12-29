@@ -1,6 +1,8 @@
 import React, { useMemo, useCallback } from "react"
 import { useSearchParams } from "react-router-dom"
 import { SaleType } from "../../store/market.ts"
+import { useTheme, useMediaQuery } from "@mui/material"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export type SaleTypeSelect = SaleType | "any"
 
@@ -26,6 +28,11 @@ export const MarketSearchContext = React.createContext<
 
 export const useMarketSearch = () => {
   const [searchParams, setSearchParams] = useSearchParams()
+  const theme = useTheme<ExtendedTheme>()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+
+  // Mobile-optimized default page size
+  const defaultPageSize = isMobile ? 12 : 48
 
   // Memoize the search state to prevent unnecessary re-renders
   const searchState = useMemo(
@@ -43,12 +50,18 @@ export const useMarketSearch = () => {
         query: searchParams.get("query") || "",
         statuses: searchParams.get("statuses") || "active",
         index: +searchParams.get("index")! ? 0 : undefined,
-        page_size: searchParams.get("page_size")! ? 48 : undefined,
+        page_size: searchParams.get("page_size")
+          ? +searchParams.get("page_size")!
+          : defaultPageSize,
         language_codes: searchParams.get("language_codes")
-          ? searchParams.get("language_codes")!.split(",").map((s) => s.trim()).filter(Boolean)
+          ? searchParams
+              .get("language_codes")!
+              .split(",")
+              .map((s) => s.trim())
+              .filter(Boolean)
           : undefined,
       }) as MarketSearchState,
-    [searchParams],
+    [searchParams, defaultPageSize],
   )
 
   // Memoize the setter function to prevent unnecessary re-renders
@@ -80,7 +93,9 @@ export const useMarketSearch = () => {
           searchState.statuses !== "active" ? searchState.statuses : undefined,
         index: searchState.index === 0 ? undefined : searchState.index,
         page_size:
-          searchState.page_size === 48 ? undefined : searchState.page_size,
+          searchState.page_size === defaultPageSize
+            ? undefined
+            : searchState.page_size,
         language_codes:
           searchState.language_codes && searchState.language_codes.length > 0
             ? searchState.language_codes.join(",")
@@ -95,7 +110,7 @@ export const useMarketSearch = () => {
         },
       )
     },
-    [setSearchParams],
+    [setSearchParams, defaultPageSize],
   )
 
   return [searchState, setSearchState] as const

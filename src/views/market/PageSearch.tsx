@@ -69,7 +69,8 @@ function PageChoice(props: {
             }}
             alt={""}
             sx={{
-              borderRadius: (theme) => theme.spacing((theme as ExtendedTheme).borderRadius.image),
+              borderRadius: (theme) =>
+                theme.spacing((theme as ExtendedTheme).borderRadius.image),
               transition: "0.5s",
             }}
           />

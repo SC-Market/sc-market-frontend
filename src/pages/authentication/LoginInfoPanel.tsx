@@ -16,7 +16,11 @@ export function LoginInfoPanel() {
 
         <img
           src={Screencap}
-          style={{ width: "100%", height: "auto", borderRadius: `${theme.spacing(theme.borderRadius.image)}px` }}
+          style={{
+            width: "100%",
+            height: "auto",
+            borderRadius: `${theme.spacing(theme.borderRadius.image)}px`,
+          }}
           alt={t("loginInfoPanel.dashboardScreenshot")}
           loading="lazy"
         />
@@ -26,7 +30,11 @@ export function LoginInfoPanel() {
 
         <img
           src={Screencap2}
-          style={{ width: "100%", height: "auto", borderRadius: `${theme.spacing(theme.borderRadius.image)}px` }}
+          style={{
+            width: "100%",
+            height: "auto",
+            borderRadius: `${theme.spacing(theme.borderRadius.image)}px`,
+          }}
           alt={t("loginInfoPanel.dashboardScreenshot")}
           loading="lazy"
         />

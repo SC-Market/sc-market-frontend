@@ -393,7 +393,11 @@ export function ManageMemberList() {
       title={t("manageMemberList.members")}
       disablePadding
       subtitle={
-        <Stack spacing={theme.layoutSpacing.compact} direction="row" sx={{ minWidth: 100 }}>
+        <Stack
+          spacing={theme.layoutSpacing.compact}
+          direction="row"
+          sx={{ minWidth: 100 }}
+        >
           <Button
             href={`${BACKEND_URL}/api/contractor/${contractor?.spectrum_id}/members/csv`}
           >

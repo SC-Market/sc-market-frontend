@@ -52,7 +52,11 @@ export function ConfigureDiscord(props: { org?: boolean }) {
     <Section title={t("ConfigureDiscord.orderManagement")} xs={12}>
       <Grid item xs={12}>
         <Typography>{t("ConfigureDiscord.integratedChannel")}</Typography>
-        <Stack direction={"row"} alignItems={"center"} spacing={theme.layoutSpacing.compact}>
+        <Stack
+          direction={"row"}
+          alignItems={"center"}
+          spacing={theme.layoutSpacing.compact}
+        >
           <Avatar src={settings?.guild_avatar} />
           <a
             href={`https://discord.com/channels/${

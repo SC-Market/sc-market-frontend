@@ -348,7 +348,11 @@ export function OrgDetailEditForm(props: { contractor: Contractor }) {
             }
             subheader={
               <Box>
-                <Grid container alignItems={"center"} spacing={theme.layoutSpacing.compact}>
+                <Grid
+                  container
+                  alignItems={"center"}
+                  spacing={theme.layoutSpacing.compact}
+                >
                   <Grid item>
                     <PeopleAltRoundedIcon />
                   </Grid>
@@ -363,7 +367,11 @@ export function OrgDetailEditForm(props: { contractor: Contractor }) {
                   </Grid>
                 </Grid>
 
-                <Grid container alignItems={"center"} spacing={theme.layoutSpacing.compact}>
+                <Grid
+                  container
+                  alignItems={"center"}
+                  spacing={theme.layoutSpacing.compact}
+                >
                   {/*<Grid item>*/}
                   {/*    <StarRateRoundedIcon style={{color: theme.palette.text.primary}}/>*/}
                   {/*</Grid>*/}
@@ -548,7 +556,8 @@ export function OrgDetailEditForm(props: { contractor: Contractor }) {
                 height: 350,
                 background: `url(${props.contractor.banner})`,
                 backgroundSize: "cover",
-                borderRadius: (theme) => theme.spacing(theme.borderRadius.image),
+                borderRadius: (theme) =>
+                  theme.spacing(theme.borderRadius.image),
                 position: "relative",
               }}
             >

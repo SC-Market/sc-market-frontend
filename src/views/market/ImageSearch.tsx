@@ -82,7 +82,8 @@ export function ImageSearch(props: {
               image={image || MISSING_IMAGE_URL}
               alt={image || ""}
               sx={{
-                borderRadius: (theme) => theme.spacing((theme as ExtendedTheme).borderRadius.image),
+                borderRadius: (theme) =>
+                  theme.spacing((theme as ExtendedTheme).borderRadius.image),
                 transition: "0.5s",
               }}
             />

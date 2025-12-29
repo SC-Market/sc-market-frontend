@@ -106,7 +106,11 @@ export function FlatSection(props: {
         </Typography>
       </Grid>
       <Grid item xs={12} lg={8}>
-        <Grid container spacing={theme.layoutSpacing.component} justifyContent={"right"}>
+        <Grid
+          container
+          spacing={theme.layoutSpacing.component}
+          justifyContent={"right"}
+        >
           {props.children}
         </Grid>
       </Grid>

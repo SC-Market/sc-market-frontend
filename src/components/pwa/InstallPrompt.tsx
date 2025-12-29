@@ -50,10 +50,7 @@ export function InstallPrompt() {
       setShowPrompt(true)
     }
 
-    window.addEventListener(
-      "beforeinstallprompt",
-      handleBeforeInstallPrompt,
-    )
+    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt)
 
     // Listen for app installed event
     window.addEventListener("appinstalled", () => {
@@ -111,9 +108,19 @@ export function InstallPrompt() {
       }}
     >
       <CardContent>
-        <Stack direction="row" justifyContent="space-between" alignItems="flex-start" spacing={2}>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="flex-start"
+          spacing={2}
+        >
           <Box sx={{ flex: 1 }}>
-            <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1 }}>
+            <Stack
+              direction="row"
+              spacing={1}
+              alignItems="center"
+              sx={{ mb: 1 }}
+            >
               <GetAppRounded color="primary" />
               <Typography variant="h6" component="div">
                 Install SC Market

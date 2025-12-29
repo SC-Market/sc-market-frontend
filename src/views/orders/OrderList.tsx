@@ -532,7 +532,12 @@ export function OrdersViewPaginated(props: {
 
               {/* Active Filters Chips */}
               {activeFiltersCount > 0 && (
-                <Stack direction="row" spacing={theme.layoutSpacing.compact} flexWrap="wrap" gap={theme.layoutSpacing.compact}>
+                <Stack
+                  direction="row"
+                  spacing={theme.layoutSpacing.compact}
+                  flexWrap="wrap"
+                  gap={theme.layoutSpacing.compact}
+                >
                   {debouncedBuyerUsername && (
                     <Chip
                       label={`${t("orders.buyer", "Buyer")}: ${debouncedBuyerUsername}`}

@@ -137,7 +137,13 @@ export function SelectLocation() {
             {t("selectLocation.title", "Location")}
           </Typography>
         </Grid>
-        <Grid item xs={12} lg={8} container spacing={theme.layoutSpacing.layout}>
+        <Grid
+          item
+          xs={12}
+          lg={8}
+          container
+          spacing={theme.layoutSpacing.layout}
+        >
           <Grid item xs={12} lg={12}>
             <Autocomplete
               id="locationure-select"

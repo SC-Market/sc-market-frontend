@@ -424,7 +424,13 @@ export function AdminAlertsView() {
         </HeaderTitle>
       </Grid>
 
-      <Grid item container xs={12} spacing={theme.layoutSpacing.layout} sx={{ mb: 2 }}>
+      <Grid
+        item
+        container
+        xs={12}
+        spacing={theme.layoutSpacing.layout}
+        sx={{ mb: 2 }}
+      >
         <Grid item xs={12} md={3}>
           <FormControl size="small" fullWidth>
             <InputLabel>
@@ -840,7 +846,14 @@ export function AdminAlertsView() {
             )}
           </Typography>
           {selectedAlert && (
-            <Box sx={{ mt: 2, p: 2, bgcolor: "grey.100", borderRadius: theme.spacing(theme.borderRadius.topLevel) }}>
+            <Box
+              sx={{
+                mt: 2,
+                p: 2,
+                bgcolor: "grey.100",
+                borderRadius: theme.spacing(theme.borderRadius.topLevel),
+              }}
+            >
               <Typography variant="h6">{selectedAlert.title}</Typography>
               <MarkdownRender text={selectedAlert.content} />
             </Box>

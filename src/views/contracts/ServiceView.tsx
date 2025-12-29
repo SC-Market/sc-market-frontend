@@ -122,7 +122,8 @@ export function ServiceSellerReviews(props: {
                   p: 2,
                   border: 1,
                   borderColor: "divider",
-                  borderRadius: (theme) => theme.spacing(theme.borderRadius.topLevel),
+                  borderRadius: (theme) =>
+                    theme.spacing(theme.borderRadius.topLevel),
                   height: "100%",
                   display: "flex",
                   flexDirection: "column",
@@ -252,7 +253,8 @@ export function ServiceSellerOtherServices(props: {
                   sx={{
                     width: "100%",
                     height: "100%",
-                    borderRadius: (theme) => theme.spacing(theme.borderRadius.button),
+                    borderRadius: (theme) =>
+                      theme.spacing(theme.borderRadius.button),
                     textAlign: "left",
                   }}
                 >
@@ -387,7 +389,8 @@ export function RelatedServicesByCategory(props: {
                   sx={{
                     width: "100%",
                     height: "100%",
-                    borderRadius: (theme) => theme.spacing(theme.borderRadius.button),
+                    borderRadius: (theme) =>
+                      theme.spacing(theme.borderRadius.button),
                     textAlign: "left",
                   }}
                 >
@@ -529,16 +532,34 @@ export function ServiceView(props: {
       <Helmet>
         {/* Open Graph Meta Tags */}
         <meta property="og:type" content="website" />
-        <meta property="og:url" content={`${FRONTEND_URL}/order/service/${service.service_id}`} />
-        <meta property="og:title" content={`${service.service_name} - SC Market`} />
-        <meta property="og:description" content={service.service_description || service.description} />
+        <meta
+          property="og:url"
+          content={`${FRONTEND_URL}/order/service/${service.service_id}`}
+        />
+        <meta
+          property="og:title"
+          content={`${service.service_name} - SC Market`}
+        />
+        <meta
+          property="og:description"
+          content={service.service_description || service.description}
+        />
         <meta property="og:image" content={service.photos[0]} />
 
         {/* Twitter Card Meta Tags */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:url" content={`${FRONTEND_URL}/order/service/${service.service_id}`} />
-        <meta name="twitter:title" content={`${service.service_name} - SC Market`} />
-        <meta name="twitter:description" content={service.service_description || service.description} />
+        <meta
+          name="twitter:url"
+          content={`${FRONTEND_URL}/order/service/${service.service_id}`}
+        />
+        <meta
+          name="twitter:title"
+          content={`${service.service_name} - SC Market`}
+        />
+        <meta
+          name="twitter:description"
+          content={service.service_description || service.description}
+        />
         <meta name="twitter:image" content={service.photos[0]} />
       </Helmet>
       <Grid item xs={12} lg={4}>
@@ -648,7 +669,9 @@ export function ServiceView(props: {
                   {amRelated ? (
                     <Link to={`/order/service/${service.service_id}/edit`}>
                       <IconButton>
-                        <CreateRounded sx={{ color: theme.palette.background.light }} />
+                        <CreateRounded
+                          sx={{ color: theme.palette.background.light }}
+                        />
                       </IconButton>
                     </Link>
                   ) : undefined}
