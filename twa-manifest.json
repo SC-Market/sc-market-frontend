@@ -20,8 +20,8 @@
     "path": "/Users/henryscott/WebstormProjects/scmarket/sc-market-frontend/android.keystore",
     "alias": "android"
   },
-  "appVersionName": "0.0.5",
-  "appVersionCode": 6,
+  "appVersionName": "0.0.6",
+  "appVersionCode": 7,
   "shortcuts": [
     {
       "name": "Market",
@@ -37,7 +37,7 @@
     }
   ],
   "generatorApp": "bubblewrap-cli",
-  "webManifestUrl": "https://sc-market.space/manifest.json",
+  "webManifestUrl": "https://sc-market.space/manifest.webmanifest",
   "fallbackType": "customtabs",
   "features": {},
   "alphaDependencies": {
@@ -56,5 +56,5 @@
   "fileHandlers": [],
   "launchHandlerClientMode": "",
   "displayOverride": [],
-  "appVersion": "0.0.5"
+  "appVersion": "0.0.6"
 }

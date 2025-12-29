@@ -30,7 +30,9 @@ export default defineConfig({
         background_color: "#111828",
         display: "standalone",
         orientation: "portrait-primary",
-        start_url: "/",
+        start_url: process.env.VITE_FRONTEND_URL
+          ? `${process.env.VITE_FRONTEND_URL}/`
+          : "https://sc-market.space/",
         scope: "/",
         icons: [
           {
@@ -49,6 +51,11 @@ export default defineConfig({
             src: "/apple-touch-icon.png",
             sizes: "180x180",
             type: "image/png",
+          },
+          {
+            src: "/favicon.ico",
+            sizes: "64x64 32x32 24x24 16x16",
+            type: "image/x-icon",
           },
         ],
         shortcuts: [
