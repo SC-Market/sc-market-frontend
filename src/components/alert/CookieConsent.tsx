@@ -75,7 +75,11 @@ export function CookieConsent() {
                 size="small"
                 variant={"contained"}
                 onClick={() =>
-                  setCookie("cookie_consent", "all", { sameSite: "strict" })
+                  setCookie("cookie_consent", "all", { 
+                    path: "/", 
+                    sameSite: "strict",
+                    maxAge: 31536000 // 1 year in seconds
+                  })
                 }
               >
                 {t("cookie_consent.accept_all")}
@@ -87,7 +91,9 @@ export function CookieConsent() {
                 variant={"contained"}
                 onClick={() =>
                   setCookie("cookie_consent", "necessary", {
+                    path: "/",
                     sameSite: "strict",
+                    maxAge: 31536000 // 1 year in seconds
                   })
                 }
               >

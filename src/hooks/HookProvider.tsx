@@ -87,7 +87,11 @@ export function HookProvider(props: { children: React.ReactElement }) {
       removeCookie("theme", { path: "/" })
     } else {
       // Save preference when light or dark is selected
-      setCookie("theme", useLightTheme, { path: "/", sameSite: "strict" })
+      setCookie("theme", useLightTheme, { 
+        path: "/", 
+        sameSite: "strict",
+        maxAge: 31536000 // 1 year in seconds
+      })
     }
   }, [useLightTheme, setCookie, removeCookie])
 

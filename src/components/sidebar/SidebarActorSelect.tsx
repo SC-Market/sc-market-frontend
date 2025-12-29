@@ -78,6 +78,7 @@ export function SidebarActorSelect() {
       setCookie("current_contractor", contractorSpectrumID, {
         path: "/",
         sameSite: "strict",
+        maxAge: 31536000 // 1 year in seconds
       })
     }
   }, [

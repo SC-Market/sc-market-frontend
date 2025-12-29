@@ -733,7 +733,11 @@ export function MarketCart() {
   const cart = cookies.market_cart
 
   const updateCart = useCallback(() => {
-    setCookie("market_cart", cart, { path: "/", sameSite: "strict" })
+    setCookie("market_cart", cart, { 
+      path: "/", 
+      sameSite: "strict",
+      maxAge: 2592000 // 30 days in seconds - cart items may become unavailable or prices may change
+    })
   }, [cart, setCookie])
 
   const removeSellerEntry = useCallback(

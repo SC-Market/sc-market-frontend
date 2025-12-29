@@ -509,7 +509,11 @@ export function AggregateRow(props: {
       })
     }
 
-    setCookie("market_cart", cart, { path: "/", sameSite: "strict" })
+    setCookie("market_cart", cart, { 
+      path: "/", 
+      sameSite: "strict",
+      maxAge: 2592000 // 30 days in seconds - cart items may become unavailable or prices may change
+    })
     issueAlert({
       message: t("MarketAggregateView.addedToCart"),
       severity: "success",
