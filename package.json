@@ -95,7 +95,8 @@
     "twa:doctor": "bubblewrap doctor",
     "twa:open": "./scripts/open-app.sh",
     "twa:install": "bubblewrap install",
-    "twa:assetlinks": "./scripts/generate-assetlinks.sh"
+    "twa:assetlinks": "./scripts/generate-assetlinks.sh",
+    "twa:icon-bg": "./scripts/generate-icon-with-bg.sh"
   },
   "webpackConfig": {
     "target": "web"
