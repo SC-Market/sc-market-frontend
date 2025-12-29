@@ -50,6 +50,7 @@
     "web-vitals": "^3.5.2"
   },
   "devDependencies": {
+    "@bubblewrap/cli": "^1.21.0",
     "@eslint/js": "^9.29.0",
     "@swc/core": "^1.7.42",
     "@swc/jest": "^0.2.36",
@@ -86,7 +87,15 @@
     "check": "tsc --noEmit",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest --config ./jest.config.cjs --coverage",
     "analyze": "npm run build:analyze && open dist/stats.html",
-    "analyze:detailed": "node scripts/analyze-bundle.js"
+    "analyze:detailed": "node scripts/analyze-bundle.js",
+    "twa:init": "bubblewrap init --manifest=https://sc-market.space/manifest.json",
+    "twa:update": "bubblewrap update",
+    "twa:build": "bubblewrap build",
+    "twa:validate": "bubblewrap merge --manifest=https://sc-market.space/manifest.json",
+    "twa:doctor": "bubblewrap doctor",
+    "twa:open": "./scripts/open-app.sh",
+    "twa:install": "bubblewrap install",
+    "twa:assetlinks": "./scripts/generate-assetlinks.sh"
   },
   "webpackConfig": {
     "target": "web"
