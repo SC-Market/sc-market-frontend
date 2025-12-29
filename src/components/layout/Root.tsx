@@ -30,10 +30,11 @@ export function Root(props: { children: React.ReactNode }) {
     >
       <SkipNavigation />
       <CookieConsent />
-      {/* PWA Components - temporarily disabled if causing issues */}
+      {/* PWA Components */}
       {typeof window !== "undefined" && (
         <>
-          <OfflineIndicator />
+          {/* OfflineIndicator disabled - offline popup removed */}
+          {/* <OfflineIndicator /> */}
           <UpdateNotification />
           <InstallPrompt />
         </>

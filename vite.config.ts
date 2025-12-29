@@ -83,6 +83,25 @@ export default defineConfig({
             }
           : {}),
         runtimeCaching: [
+          // Cache navigation requests (page loads) with NetworkFirst
+          // If network fails, serve from cache (if available) or let the request fail normally
+          // Never show offline.html page
+          {
+            urlPattern: ({ request }) => request.mode === "navigate",
+            handler: "NetworkFirst",
+            options: {
+              cacheName: "pages-v1",
+              expiration: {
+                maxEntries: 50,
+                maxAgeSeconds: 60 * 60 * 24, // 1 day
+              },
+              networkTimeoutSeconds: 5, // Wait 5 seconds for network
+              cacheableResponse: {
+                statuses: [0, 200], // Only cache successful responses
+              },
+              // No fallback - if network fails and no cache, let browser handle the error
+            },
+          },
           {
             // Cache API calls - match backend API domain and exclude sensitive endpoints
             urlPattern: ({ url }) => {
@@ -133,10 +152,19 @@ export default defineConfig({
             },
           },
         ],
-        // Only use offline fallback in production
-        // In dev mode, don't intercept navigation - let Vite handle it
-        navigateFallback: import.meta.env.DEV ? undefined : "/offline.html",
-        navigateFallbackDenylist: [/^\/api/, /^\/_/, /^\/sw\.js/, /^\/dev-sw/, /^\/vite/, /^\/@/],
+        // Completely disable navigateFallback - never show offline page
+        navigateFallback: undefined,
+        navigateFallbackDenylist: [
+          /^\/api/,
+          /^\/_/,
+          /^\/sw\.js/,
+          /^\/dev-sw/,
+          /^\/vite/,
+          /^\/@/,
+          /^\/manifest/,
+          /^\/workbox/,
+          /.*/, // Deny all paths - never use offline fallback
+        ],
       },
       devOptions: {
         enabled: false, // Disable in dev to prevent offline page from showing

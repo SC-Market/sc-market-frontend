@@ -59,12 +59,27 @@ export function registerServiceWorker(): Promise<ServiceWorkerRegistration | nul
     return navigator.serviceWorker
       .register(swPath, { scope: "/" })
       .then((registration) => {
-        console.log("Service Worker registered successfully:", {
+        console.log("✅ Service Worker registered successfully:", {
           scope: registration.scope,
           active: registration.active?.state,
           installing: registration.installing?.state,
           waiting: registration.waiting?.state,
+          controller: navigator.serviceWorker.controller?.scriptURL,
         })
+        
+        // Log when service worker becomes active
+        if (registration.active) {
+          console.log("Service Worker is active:", registration.active.scriptURL)
+        }
+        
+        // Wait for service worker to activate
+        if (registration.installing) {
+          registration.installing.addEventListener("statechange", () => {
+            if (registration.installing?.state === "activated") {
+              console.log("✅ Service Worker activated and controlling page")
+            }
+          })
+        }
 
         registrationState.registration = registration
 
