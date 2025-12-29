@@ -28,7 +28,6 @@ import { useLocation, useSearchParams } from "react-router-dom"
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment"
 import { isCitizenIdEnabled } from "../util/constants"
-import { useGetUserProfileQuery } from "../store/profile"
 
 // Add moment and locale import + i18n
 import moment from "moment"
@@ -41,8 +40,6 @@ export function HookProvider(props: { children: React.ReactElement }) {
   const [cookies, setCookie, removeCookie] = useCookies(["theme"])
   const prefersLight = useMediaQuery("(prefers-color-scheme: light)")
   const isDev = import.meta.env.DEV || import.meta.env.MODE === "development"
-  const { data: userProfile } = useGetUserProfileQuery()
-  const isAdmin = userProfile?.role === "admin"
   const [useLightTheme, setUseLightTheme] = useState<ThemeChoice>(
     cookies.theme || "system",
   )
@@ -55,16 +52,16 @@ export function HookProvider(props: { children: React.ReactElement }) {
     if (useLightTheme === "system") {
       return prefersLight ? "light" : "dark"
     }
-    // If it's a custom theme name, return it as-is (for dev mode or admins)
-    if ((isDev || isAdmin) && CUSTOM_THEMES.has(useLightTheme)) {
+    // If it's a custom theme name, return it as-is
+    if (isDev && CUSTOM_THEMES.has(useLightTheme)) {
       return useLightTheme
     }
     return useLightTheme
-  }, [useLightTheme, prefersLight, isDev, isAdmin])
+  }, [useLightTheme, prefersLight, isDev])
 
   const baseTheme = useMemo(() => {
-    // In dev mode or for admins, check if a custom theme is selected
-    if ((isDev || isAdmin) && CUSTOM_THEMES.has(useLightTheme)) {
+    // In dev mode, check if a custom theme is selected
+    if (isDev && CUSTOM_THEMES.has(useLightTheme)) {
       const customTheme = CUSTOM_THEMES.get(useLightTheme)
       if (customTheme) return customTheme
     }
@@ -75,7 +72,7 @@ export function HookProvider(props: { children: React.ReactElement }) {
       if (theme) return theme
     }
     return actualTheme === "light" ? lightTheme : mainTheme
-  }, [actualTheme, location.pathname, isDev, isAdmin, useLightTheme])
+  }, [actualTheme, location.pathname, isDev, useLightTheme])
 
   // Build a localized theme when language changes
   const localizedTheme = useMemo(() => {
