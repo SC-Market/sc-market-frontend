@@ -75,13 +75,6 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2,woff,ttf}"],
-        // In dev mode, don't precache to avoid issues with Vite's HMR
-        ...(import.meta.env.DEV
-          ? {
-              // Skip precaching in dev - let Vite handle it
-              globIgnores: ["**/*"],
-            }
-          : {}),
         runtimeCaching: [
           // Cache navigation requests (page loads) with NetworkFirst
           // If network fails, serve from cache (if available) or let the request fail normally
