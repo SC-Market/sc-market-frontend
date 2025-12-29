@@ -20,8 +20,8 @@
     "path": "/Users/henryscott/WebstormProjects/scmarket/sc-market-frontend/android.keystore",
     "alias": "android"
   },
-  "appVersionName": "0.0.4",
-  "appVersionCode": 5,
+  "appVersionName": "0.0.5",
+  "appVersionCode": 6,
   "shortcuts": [
     {
       "name": "Market",
@@ -56,5 +56,5 @@
   "fileHandlers": [],
   "launchHandlerClientMode": "",
   "displayOverride": [],
-  "appVersion": "0.0.4"
+  "appVersion": "0.0.5"
 }
