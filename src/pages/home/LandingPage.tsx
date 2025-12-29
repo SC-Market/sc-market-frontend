@@ -629,8 +629,10 @@ function SupportersSection() {
         alignItems={"center"}
       >
         {supporters.map((supporter) => (
-          <Link
-            to={supporter.url}
+          <MaterialLink
+            href={supporter.url}
+            target="_blank"
+            rel="noopener noreferrer"
             style={{
               color: "inherit",
               textDecoration: "none",
@@ -661,13 +663,11 @@ function SupportersSection() {
                 />
               </ButtonBase>
 
-              <MaterialLink underline={"hover"} color={"text.secondary"}>
-                <Typography variant={"body2"} align={"center"}>
-                  {supporter.name}
-                </Typography>
-              </MaterialLink>
+              <Typography variant={"body2"} align={"center"} color={"text.secondary"}>
+                {supporter.name}
+              </Typography>
             </Stack>
-          </Link>
+          </MaterialLink>
         ))}
       </Stack>
     </Stack>

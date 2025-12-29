@@ -18,7 +18,7 @@ export function Footer() {
           <Divider light />
         </Grid>
         <Grid item xs={12}>
-          <Typography variant="body2" color="text.primary" align="center">
+          <Typography component="div" variant="body2" color="text.primary" align="center">
             <Link
               rel="noopener noreferrer"
               target="_blank"
@@ -123,7 +123,7 @@ export function Footer() {
             <ReportButton />
           </Typography>
           <br />
-          <Typography variant="body2" color="textSecondary" align="center">
+          <Typography component="div" variant="body2" color="textSecondary" align="center">
             {t("footer.copyright", "Copyright © ")} SC Market{" "}
             {new Date().getFullYear() + 930}.
             <br />
@@ -147,7 +147,7 @@ export function Footer() {
                     href="https://www.youtube.com/@robinerino"
                     aria-label="LadyFleur"
                   >
-                    <UnderlineLink color="text.primary" variant="body2">
+                    <UnderlineLink component="span" color="text.primary" variant="body2">
                       LadyFleur
                     </UnderlineLink>
                   </Link>
@@ -159,7 +159,7 @@ export function Footer() {
                     href="https://starcitizen-api.com/"
                     aria-label="StarCitizen-API"
                   >
-                    <UnderlineLink color="text.primary" variant="body2">
+                    <UnderlineLink component="span" color="text.primary" variant="body2">
                       StarCitizen-API
                     </UnderlineLink>
                   </Link>
@@ -171,7 +171,7 @@ export function Footer() {
                     href="https://nexd.to/"
                     aria-label="NEXD"
                   >
-                    <UnderlineLink color="text.primary" variant="body2">
+                    <UnderlineLink component="span" color="text.primary" variant="body2">
                       NEXD
                     </UnderlineLink>
                   </Link>
@@ -183,7 +183,7 @@ export function Footer() {
                     href="https://starcitizen.tools/"
                     aria-label="Star Citizen Wiki"
                   >
-                    <UnderlineLink color="text.primary" variant="body2">
+                    <UnderlineLink component="span" color="text.primary" variant="body2">
                       Star Citizen Wiki
                     </UnderlineLink>
                   </Link>

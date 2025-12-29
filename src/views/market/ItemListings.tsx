@@ -74,7 +74,7 @@ import {
   useGetMyListingsQuery,
   MarketListingComplete,
 } from "../../store/market"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { useMarketSidebarExp } from "../../hooks/market/MarketSidebar"
@@ -159,6 +159,7 @@ export function ItemListingBase(props: {
   const { listing, index } = props
   const { user_seller, contractor_seller } = listing
   const theme = useTheme<ExtendedTheme>()
+  const navigate = useNavigate()
   const [timeDisplay, setTimeDisplay] = useState(
     listing.auction_end_time
       ? getRelativeTime(new Date(listing.auction_end_time))
@@ -211,22 +212,23 @@ export function ItemListingBase(props: {
         transitionDuration: "500ms",
       }}
     >
-      <Link
-        to={formatMarketUrl(listing)}
-        style={{ textDecoration: "none", color: "inherit" }}
-      >
-        <CardActionArea sx={{ borderRadius: theme.spacing(theme.borderRadius.topLevel) }}>
-          <Card
-            sx={{
-              height: 400,
-              postition: "relative",
-            }}
-          >
-            {showExpiration &&
-              moment(listing.expiration) <
-                moment().add(1, "months").subtract(3, "days") && (
-                <ListingRefreshButton listing={listing} />
-              )}
+      <Box sx={{ position: "relative", borderRadius: theme.spacing(theme.borderRadius.topLevel) }}>
+        {showExpiration &&
+          moment(listing.expiration) <
+            moment().add(1, "months").subtract(3, "days") && (
+            <ListingRefreshButton listing={listing} />
+          )}
+        <Link
+          to={formatMarketUrl(listing)}
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
+          <CardActionArea sx={{ borderRadius: theme.spacing(theme.borderRadius.topLevel) }}>
+            <Card
+              sx={{
+                height: 400,
+                position: "relative",
+              }}
+            >
             {moment(listing.timestamp) > moment().subtract(3, "days") && (
               <Chip
                 label={t("market.new")}
@@ -338,19 +340,24 @@ export function ItemListingBase(props: {
                 }}
               >
                 <UnderlineLink
-                  component={Link}
+                  component="span"
                   display={"inline"}
                   noWrap={true}
                   variant={"subtitle2"}
-                  to={
-                    user_seller
-                      ? `/user/${user_seller}`
-                      : `/contractor/${contractor_seller}`
-                  }
+                  onClick={(e) => {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    navigate(
+                      user_seller
+                        ? `/user/${user_seller}`
+                        : `/contractor/${contractor_seller}`
+                    )
+                  }}
                   sx={{
                     overflowX: "hidden",
                     textOverflow: "ellipsis",
                     whiteSpace: "nowrap",
+                    cursor: "pointer",
                   }}
                 >
                   {user_seller || contractor_seller}{" "}
@@ -371,8 +378,9 @@ export function ItemListingBase(props: {
               </Stack>
 
               {listing.auction_end_time && (
-                <Typography display={"block"}>
+                <Typography component="div" display={"block"}>
                   <Typography
+                    component="span"
                     display={"inline"}
                     color={ending ? "error.light" : "inherit"}
                     variant={"subtitle2"}
@@ -384,8 +392,9 @@ export function ItemListingBase(props: {
                 </Typography>
               )}
               {showExpiration && (
-                <Typography display={"block"}>
+                <Typography component="div" display={"block"}>
                   <Typography
+                    component="span"
                     display={"inline"}
                     color={ending ? "error.light" : "inherit"}
                     variant={"subtitle2"}
@@ -433,6 +442,7 @@ export function ItemListingBase(props: {
           </Card>
         </CardActionArea>
       </Link>
+      </Box>
     </Fade>
   )
 }
