@@ -1,20 +1,62 @@
 {
+  "name": "SC Market - Star Citizen Marketplace",
   "short_name": "SC Market",
-  "name": "SC Market",
+  "description": "Buy, sell, and trade Star Citizen items and services. Connect with players, manage contracts, and browse the marketplace.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#111828",
+  "background_color": "#111828",
   "icons": [
     {
-      "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-      "src": "logo512.png",
+      "src": "/android-chrome-512x512.png",
+      "sizes": "512x512",
       "type": "image/png",
-      "sizes": "512x512"
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
     }
   ],
-  "start_url": ".",
-  "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "shortcuts": [
+    {
+      "name": "Market",
+      "short_name": "Market",
+      "description": "Browse market listings",
+      "url": "/market",
+      "icons": [
+        {
+          "src": "/android-chrome-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Contracts",
+      "short_name": "Contracts",
+      "description": "View contracts",
+      "url": "/contracts",
+      "icons": [
+        {
+          "src": "/android-chrome-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
+  "categories": ["games", "shopping", "social"]
 }

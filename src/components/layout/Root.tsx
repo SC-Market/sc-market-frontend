@@ -7,6 +7,9 @@ import { PreferencesButton } from "../../views/settings/PreferencesButton"
 import { CookieConsent } from "../alert/CookieConsent"
 import { useRoutePrefetch } from "../../hooks/prefetch/RoutePrefetch"
 import { SkipNavigation } from "../accessibility/SkipNavigation"
+import { OfflineIndicator } from "../pwa/OfflineIndicator"
+import { UpdateNotification } from "../pwa/UpdateNotification"
+import { InstallPrompt } from "../pwa/InstallPrompt"
 
 export function Root(props: { children: React.ReactNode }) {
   const theme: Theme = useTheme()
@@ -27,6 +30,14 @@ export function Root(props: { children: React.ReactNode }) {
     >
       <SkipNavigation />
       <CookieConsent />
+      {/* PWA Components - temporarily disabled if causing issues */}
+      {typeof window !== "undefined" && (
+        <>
+          <OfflineIndicator />
+          <UpdateNotification />
+          <InstallPrompt />
+        </>
+      )}
       <Navbar />
       <Sidebar />
       {props.children}
