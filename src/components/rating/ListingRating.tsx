@@ -297,12 +297,16 @@ function BadgeDisplay(props: { badges: string[] }) {
       )}
       {badges.includes(BADGE_RATING_95) && (
         <Tooltip title={t("listing.95PercentRating25PlusTransactions")}>
-          <AutoAwesomeRounded sx={{ color: theme.palette.common.badge.silver }} />
+          <AutoAwesomeRounded
+            sx={{ color: theme.palette.common.badge.silver }}
+          />
         </Tooltip>
       )}
       {badges.includes(BADGE_RATING_90) && (
         <Tooltip title={t("listing.90PercentRating25PlusTransactions")}>
-          <AutoGraphOutlined sx={{ color: theme.palette.common.badge.bronze }} />
+          <AutoGraphOutlined
+            sx={{ color: theme.palette.common.badge.bronze }}
+          />
         </Tooltip>
       )}
 
@@ -333,17 +337,23 @@ function BadgeDisplay(props: { badges: string[] }) {
       )}
       {badges.includes(BADGE_VOLUME_GOLD) && (
         <Tooltip title={t("listing.1000PlusOrdersCompleted")}>
-          <WorkspacePremiumRounded sx={{ color: theme.palette.common.badge.gold }} />
+          <WorkspacePremiumRounded
+            sx={{ color: theme.palette.common.badge.gold }}
+          />
         </Tooltip>
       )}
       {badges.includes(BADGE_VOLUME_SILVER) && (
         <Tooltip title={t("listing.500PlusOrdersCompleted")}>
-          <WorkspacePremiumRounded sx={{ color: theme.palette.common.badge.silver }} />
+          <WorkspacePremiumRounded
+            sx={{ color: theme.palette.common.badge.silver }}
+          />
         </Tooltip>
       )}
       {badges.includes(BADGE_VOLUME_COPPER) && (
         <Tooltip title={t("listing.100PlusOrdersCompleted")}>
-          <WorkspacePremiumRounded sx={{ color: theme.palette.common.badge.bronze }} />
+          <WorkspacePremiumRounded
+            sx={{ color: theme.palette.common.badge.bronze }}
+          />
         </Tooltip>
       )}
 
@@ -473,17 +483,23 @@ function BadgeDisplay(props: { badges: string[] }) {
       )}
       {badges.includes(BADGE_CONSISTENCY_GOLD) && (
         <Tooltip title={t("listing.activeSellerFor2PlusYears")}>
-          <CalendarTodayRounded sx={{ color: theme.palette.common.badge.gold }} />
+          <CalendarTodayRounded
+            sx={{ color: theme.palette.common.badge.gold }}
+          />
         </Tooltip>
       )}
       {badges.includes(BADGE_CONSISTENCY_SILVER) && (
         <Tooltip title={t("listing.activeSellerFor1PlusYear")}>
-          <CalendarTodayRounded sx={{ color: theme.palette.common.badge.silver }} />
+          <CalendarTodayRounded
+            sx={{ color: theme.palette.common.badge.silver }}
+          />
         </Tooltip>
       )}
       {badges.includes(BADGE_CONSISTENCY_COPPER) && (
         <Tooltip title={t("listing.activeSellerFor6PlusMonths")}>
-          <CalendarTodayRounded sx={{ color: theme.palette.common.badge.bronze }} />
+          <CalendarTodayRounded
+            sx={{ color: theme.palette.common.badge.bronze }}
+          />
         </Tooltip>
       )}
 
@@ -531,7 +547,9 @@ function BadgeDisplay(props: { badges: string[] }) {
       {/* Early adopter badge */}
       {badges.includes(BADGE_EARLY_ADOPTER) && (
         <Tooltip title={t("listing.earlyPlatformAdopter")}>
-          <RocketLaunchRounded sx={{ color: theme.palette.common.badge.purple }} />
+          <RocketLaunchRounded
+            sx={{ color: theme.palette.common.badge.purple }}
+          />
         </Tooltip>
       )}
 

@@ -50,6 +50,7 @@ import {
   Skeleton,
   TablePagination,
   Typography,
+  useMediaQuery,
 } from "@mui/material"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
@@ -122,7 +123,10 @@ export function ListingSkeleton(props: { index: number }) {
           variant={"rectangular"}
           height={400}
           width={"100%"}
-          sx={{ borderRadius: (theme) => theme.spacing((theme as ExtendedTheme).borderRadius.image) }}
+          sx={{
+            borderRadius: (theme) =>
+              theme.spacing((theme as ExtendedTheme).borderRadius.image),
+          }}
         />
       </Fade>
     </Grid>
@@ -151,301 +155,327 @@ export function ListingRefreshButton(props: {
   )
 }
 
-export function ItemListingBase(props: {
-  listing: ExtendedUniqueSearchResult
-  index: number
-}) {
-  const { t, i18n } = useTranslation()
-  const { listing, index } = props
-  const { user_seller, contractor_seller } = listing
-  const theme = useTheme<ExtendedTheme>()
-  const navigate = useNavigate()
-  const [timeDisplay, setTimeDisplay] = useState(
-    listing.auction_end_time
-      ? getRelativeTime(new Date(listing.auction_end_time))
-      : "",
-  )
+export const ItemListingBase = React.memo(
+  function ItemListingBase(props: {
+    listing: ExtendedUniqueSearchResult
+    index: number
+  }) {
+    const { t, i18n } = useTranslation()
+    const { listing, index } = props
+    const { user_seller, contractor_seller } = listing
+    const theme = useTheme<ExtendedTheme>()
+    const navigate = useNavigate()
+    const [timeDisplay, setTimeDisplay] = useState(
+      listing.auction_end_time
+        ? getRelativeTime(new Date(listing.auction_end_time))
+        : "",
+    )
 
-  useEffect(() => {
-    if (listing.auction_end_time) {
-      const interval = setInterval(
-        () =>
-          listing.auction_end_time &&
-          setTimeDisplay(getRelativeTime(new Date(listing.auction_end_time))),
-        1000,
-      )
-      return () => {
-        clearInterval(interval)
+    useEffect(() => {
+      if (listing.auction_end_time) {
+        const interval = setInterval(
+          () =>
+            listing.auction_end_time &&
+            setTimeDisplay(getRelativeTime(new Date(listing.auction_end_time))),
+          1000,
+        )
+        return () => {
+          clearInterval(interval)
+        }
       }
-    }
-  }, [listing])
-  const ending = useMemo(
-    () =>
-      timeDisplay.endsWith("seconds") ||
-      timeDisplay.endsWith("minutes") ||
-      timeDisplay.endsWith("minute") ||
-      timeDisplay.endsWith("minute"),
-    [timeDisplay],
-  )
-  const { data: profile } = useGetUserProfileQuery()
-  const [currentOrg] = useCurrentOrg()
-  const showExpiration = useMemo(
-    () =>
-      (listing.user_seller === profile?.username ||
-        (currentOrg && currentOrg.spectrum_id === listing.contractor_seller)) &&
-      listing.expiration &&
-      profile,
-    [
-      currentOrg,
-      listing.contractor_seller,
-      listing.expiration,
-      listing.user_seller,
-      profile,
-    ],
-  )
+    }, [listing])
+    const ending = useMemo(
+      () =>
+        timeDisplay.endsWith("seconds") ||
+        timeDisplay.endsWith("minutes") ||
+        timeDisplay.endsWith("minute") ||
+        timeDisplay.endsWith("minute"),
+      [timeDisplay],
+    )
+    const { data: profile } = useGetUserProfileQuery()
+    const [currentOrg] = useCurrentOrg()
+    const showExpiration = useMemo(
+      () =>
+        (listing.user_seller === profile?.username ||
+          (currentOrg &&
+            currentOrg.spectrum_id === listing.contractor_seller)) &&
+        listing.expiration &&
+        profile,
+      [
+        currentOrg,
+        listing.contractor_seller,
+        listing.expiration,
+        listing.user_seller,
+        profile,
+      ],
+    )
 
-  return (
-    <Fade
-      in={true}
-      style={{
-        transitionDelay: `${50 + 50 * index}ms`,
-        transitionDuration: "500ms",
-      }}
-    >
-      <Box sx={{ position: "relative", borderRadius: theme.spacing(theme.borderRadius.topLevel) }}>
-        {showExpiration &&
-          moment(listing.expiration) <
-            moment().add(1, "months").subtract(3, "days") && (
-            <ListingRefreshButton listing={listing} />
-          )}
-        <Link
-          to={formatMarketUrl(listing)}
-          style={{ textDecoration: "none", color: "inherit" }}
+    return (
+      <Fade
+        in={true}
+        style={{
+          transitionDelay: `${50 + 50 * index}ms`,
+          transitionDuration: "500ms",
+        }}
+      >
+        <Box
+          sx={{
+            position: "relative",
+            borderRadius: theme.spacing(theme.borderRadius.topLevel),
+          }}
         >
-          <CardActionArea sx={{ borderRadius: theme.spacing(theme.borderRadius.topLevel) }}>
-            <Card
-              sx={{
-                height: 400,
-                position: "relative",
-              }}
+          {showExpiration &&
+            moment(listing.expiration) <
+              moment().add(1, "months").subtract(3, "days") && (
+              <ListingRefreshButton listing={listing} />
+            )}
+          <Link
+            to={formatMarketUrl(listing)}
+            style={{ textDecoration: "none", color: "inherit" }}
+          >
+            <CardActionArea
+              sx={{ borderRadius: theme.spacing(theme.borderRadius.topLevel) }}
             >
-            {moment(listing.timestamp) > moment().subtract(3, "days") && (
-              <Chip
-                label={t("market.new")}
-                color={"secondary"}
+              <Card
                 sx={{
-                  position: "absolute",
-                  top: 8,
-                  left: 8,
-                  textTransform: "uppercase",
-                  fontWeight: "bold",
+                  height: 400,
+                  position: "relative",
                 }}
-              />
-            )}
-            {listing.internal && (
-              <Chip
-                label={t("market.internalListing")}
-                color={"warning"}
-                size="small"
-                sx={{
-                  position: "absolute",
-                  top: 8,
-                  right: 8,
-                  textTransform: "uppercase",
-                  fontWeight: "bold",
-                }}
-              />
-            )}
-            <CardMedia
-              component="img"
-              loading="lazy"
-              image={listing.photo || FALLBACK_IMAGE_URL}
-              onError={({ currentTarget }) => {
-                currentTarget.onerror = null
-                currentTarget.src = FALLBACK_IMAGE_URL
-              }}
-              sx={{
-                ...(theme.palette.mode === "dark"
-                  ? {
-                      height: "100%",
-                    }
-                  : {
-                      height: 244,
-                    }),
-                // maxHeight: '100%',
-                overflow: "hidden",
-              }}
-              alt={`Image of ${listing.title}`}
-            />
-            <Box
-              sx={{
-                ...(theme.palette.mode === "light"
-                  ? {
-                      display: "none",
-                    }
-                  : {}),
-                position: "absolute",
-                zIndex: 3,
-                top: 0,
-                left: 0,
-                height: "100%",
-                width: "100%",
-                borderRadius: theme.spacing(theme.borderRadius.topLevel),
-                background: `linear-gradient(to bottom, transparent, transparent 60%, ${theme.palette.background.sidebar}AA 70%, ${theme.palette.background.sidebar} 100%)`,
-              }}
-            />
-
-            <CardContent
-              sx={{
-                ...(theme.palette.mode === "dark"
-                  ? {
+              >
+                {moment(listing.timestamp) > moment().subtract(3, "days") && (
+                  <Chip
+                    label={t("market.new")}
+                    color={"secondary"}
+                    sx={{
                       position: "absolute",
-                      bottom: 0,
-                      zIndex: 4,
-                    }
-                  : {}),
-                maxWidth: "100%",
-              }}
-            >
-              <Typography variant={"h5"} color={"primary"} fontWeight={"bold"}>
-                {listing.price.toLocaleString(i18n.language)} aUEC
-              </Typography>
-              <Typography
-                variant={"subtitle2"}
-                color={"text.secondary"}
-                maxHeight={60}
-              >
-                <span
-                  style={{
-                    lineClamp: "2",
-                    textOverflow: "ellipsis",
-                    // whiteSpace: "pre-line",
-                    overflow: "hidden",
-                    WebkitBoxOrient: "vertical",
-                    display: "-webkit-box",
-                    WebkitLineClamp: "2",
-                  }}
-                >
-                  {listing.title} ({listing.item_type})
-                </span>{" "}
-              </Typography>
-              <Stack
-                direction={"row"}
-                spacing={theme.layoutSpacing.text}
-                alignItems={"center"}
-                display={"flex"}
-                sx={{
-                  width: "100%",
-                  overflowX: "hidden",
-                }}
-              >
-                <UnderlineLink
-                  component="span"
-                  display={"inline"}
-                  noWrap={true}
-                  variant={"subtitle2"}
-                  onClick={(e) => {
-                    e.preventDefault()
-                    e.stopPropagation()
-                    navigate(
-                      user_seller
-                        ? `/user/${user_seller}`
-                        : `/contractor/${contractor_seller}`
-                    )
+                      top: 8,
+                      left: 8,
+                      textTransform: "uppercase",
+                      fontWeight: "bold",
+                    }}
+                  />
+                )}
+                {listing.internal && (
+                  <Chip
+                    label={t("market.internalListing")}
+                    color={"warning"}
+                    size="small"
+                    sx={{
+                      position: "absolute",
+                      top: 8,
+                      right: 8,
+                      textTransform: "uppercase",
+                      fontWeight: "bold",
+                    }}
+                  />
+                )}
+                <CardMedia
+                  component="img"
+                  loading="lazy"
+                  image={listing.photo || FALLBACK_IMAGE_URL}
+                  onError={({ currentTarget }) => {
+                    currentTarget.onerror = null
+                    currentTarget.src = FALLBACK_IMAGE_URL
                   }}
                   sx={{
-                    overflowX: "hidden",
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                    cursor: "pointer",
+                    ...(theme.palette.mode === "dark"
+                      ? {
+                          height: "100%",
+                        }
+                      : {
+                          height: 244,
+                        }),
+                    // maxHeight: '100%',
+                    overflow: "hidden",
                   }}
-                >
-                  {user_seller || contractor_seller}{" "}
-                </UnderlineLink>
-                <Typography variant={"subtitle2"} sx={{ flexShrink: "0" }}>
-                  <MarketListingRating
-                    avg_rating={listing.avg_rating}
-                    rating_count={listing.rating_count}
-                    total_rating={listing.total_rating}
-                    rating_streak={listing.rating_streak}
-                    total_orders={listing.total_orders}
-                    total_assignments={listing.total_assignments}
-                    response_rate={listing.response_rate}
-                    badge_ids={listing.badges?.badge_ids || null}
-                    display_limit={3}
-                  />
-                </Typography>
-              </Stack>
-
-              {listing.auction_end_time && (
-                <Typography component="div" display={"block"}>
-                  <Typography
-                    component="span"
-                    display={"inline"}
-                    color={ending ? "error.light" : "inherit"}
-                    variant={"subtitle2"}
-                  >
-                    {timeDisplay.endsWith("ago")
-                      ? t("market.ended", { time: timeDisplay })
-                      : t("market.ending_in", { time: timeDisplay })}
-                  </Typography>
-                </Typography>
-              )}
-              {showExpiration && (
-                <Typography component="div" display={"block"}>
-                  <Typography
-                    component="span"
-                    display={"inline"}
-                    color={ending ? "error.light" : "inherit"}
-                    variant={"subtitle2"}
-                  >
-                    {t("market.expiration", {
-                      time: getRelativeTime(new Date(listing.expiration!)),
-                    })}
-                  </Typography>
-                </Typography>
-              )}
-              <Typography
-                display={"block"}
-                color={"text.primary"}
-                variant={"subtitle2"}
-              >
-                {t("market.available", {
-                  count: listing.quantity_available,
-                })}
-              </Typography>
-              {listing.languages && listing.languages.length > 0 && (
+                  alt={`Image of ${listing.title}`}
+                />
                 <Box
                   sx={{
-                    display: "flex",
-                    gap: 0.5,
-                    flexWrap: "wrap",
-                    mt: 1,
+                    ...(theme.palette.mode === "light"
+                      ? {
+                          display: "none",
+                        }
+                      : {}),
+                    position: "absolute",
+                    zIndex: 3,
+                    top: 0,
+                    left: 0,
+                    height: "100%",
+                    width: "100%",
+                    borderRadius: theme.spacing(theme.borderRadius.topLevel),
+                    background: `linear-gradient(to bottom, transparent, transparent 60%, ${theme.palette.background.sidebar}AA 70%, ${theme.palette.background.sidebar} 100%)`,
+                  }}
+                />
+
+                <CardContent
+                  sx={{
+                    ...(theme.palette.mode === "dark"
+                      ? {
+                          position: "absolute",
+                          bottom: 0,
+                          zIndex: 4,
+                        }
+                      : {}),
+                    maxWidth: "100%",
                   }}
                 >
-                  {listing.languages.map((lang) => (
-                    <Chip
-                      key={lang.code}
-                      label={lang.name}
-                      size="small"
-                      variant="outlined"
-                      sx={{ height: 20, fontSize: "0.7rem" }}
-                      onClick={(event) => {
-                        event.preventDefault()
-                        event.stopPropagation()
+                  <Typography
+                    variant={"h5"}
+                    color={"primary"}
+                    fontWeight={"bold"}
+                  >
+                    {listing.price.toLocaleString(i18n.language)} aUEC
+                  </Typography>
+                  <Typography
+                    variant={"subtitle2"}
+                    color={"text.secondary"}
+                    maxHeight={60}
+                  >
+                    <span
+                      style={{
+                        lineClamp: "2",
+                        textOverflow: "ellipsis",
+                        // whiteSpace: "pre-line",
+                        overflow: "hidden",
+                        WebkitBoxOrient: "vertical",
+                        display: "-webkit-box",
+                        WebkitLineClamp: "2",
                       }}
-                    />
-                  ))}
-                </Box>
-              )}
-            </CardContent>
-          </Card>
-        </CardActionArea>
-      </Link>
-      </Box>
-    </Fade>
-  )
-}
+                    >
+                      {listing.title} ({listing.item_type})
+                    </span>{" "}
+                  </Typography>
+                  <Stack
+                    direction={"row"}
+                    spacing={theme.layoutSpacing.text}
+                    alignItems={"center"}
+                    display={"flex"}
+                    sx={{
+                      width: "100%",
+                      overflowX: "hidden",
+                    }}
+                  >
+                    <UnderlineLink
+                      component="span"
+                      display={"inline"}
+                      noWrap={true}
+                      variant={"subtitle2"}
+                      onClick={(e) => {
+                        e.preventDefault()
+                        e.stopPropagation()
+                        navigate(
+                          user_seller
+                            ? `/user/${user_seller}`
+                            : `/contractor/${contractor_seller}`,
+                        )
+                      }}
+                      sx={{
+                        overflowX: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                        cursor: "pointer",
+                      }}
+                    >
+                      {user_seller || contractor_seller}{" "}
+                    </UnderlineLink>
+                    <Typography variant={"subtitle2"} sx={{ flexShrink: "0" }}>
+                      <MarketListingRating
+                        avg_rating={listing.avg_rating}
+                        rating_count={listing.rating_count}
+                        total_rating={listing.total_rating}
+                        rating_streak={listing.rating_streak}
+                        total_orders={listing.total_orders}
+                        total_assignments={listing.total_assignments}
+                        response_rate={listing.response_rate}
+                        badge_ids={listing.badges?.badge_ids || null}
+                        display_limit={3}
+                      />
+                    </Typography>
+                  </Stack>
+
+                  {listing.auction_end_time && (
+                    <Typography component="div" display={"block"}>
+                      <Typography
+                        component="span"
+                        display={"inline"}
+                        color={ending ? "error.light" : "inherit"}
+                        variant={"subtitle2"}
+                      >
+                        {timeDisplay.endsWith("ago")
+                          ? t("market.ended", { time: timeDisplay })
+                          : t("market.ending_in", { time: timeDisplay })}
+                      </Typography>
+                    </Typography>
+                  )}
+                  {showExpiration && (
+                    <Typography component="div" display={"block"}>
+                      <Typography
+                        component="span"
+                        display={"inline"}
+                        color={ending ? "error.light" : "inherit"}
+                        variant={"subtitle2"}
+                      >
+                        {t("market.expiration", {
+                          time: getRelativeTime(new Date(listing.expiration!)),
+                        })}
+                      </Typography>
+                    </Typography>
+                  )}
+                  <Typography
+                    display={"block"}
+                    color={"text.primary"}
+                    variant={"subtitle2"}
+                  >
+                    {t("market.available", {
+                      count: listing.quantity_available,
+                    })}
+                  </Typography>
+                  {listing.languages && listing.languages.length > 0 && (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        gap: 0.5,
+                        flexWrap: "wrap",
+                        mt: 1,
+                      }}
+                    >
+                      {listing.languages.map((lang) => (
+                        <Chip
+                          key={lang.code}
+                          label={lang.name}
+                          size="small"
+                          variant="outlined"
+                          sx={{ height: 20, fontSize: "0.7rem" }}
+                          onClick={(event) => {
+                            event.preventDefault()
+                            event.stopPropagation()
+                          }}
+                        />
+                      ))}
+                    </Box>
+                  )}
+                </CardContent>
+              </Card>
+            </CardActionArea>
+          </Link>
+        </Box>
+      </Fade>
+    )
+  },
+  (prevProps, nextProps) => {
+    // Custom comparison: only re-render if listing data actually changed
+    return (
+      prevProps.listing.listing_id === nextProps.listing.listing_id &&
+      prevProps.listing.price === nextProps.listing.price &&
+      prevProps.listing.quantity_available ===
+        nextProps.listing.quantity_available &&
+      prevProps.listing.status === nextProps.listing.status &&
+      prevProps.listing.expiration === nextProps.listing.expiration &&
+      prevProps.index === nextProps.index
+    )
+  },
+)
 
 export function ItemListing(props: {
   listing: ExtendedUniqueSearchResult
@@ -535,12 +565,14 @@ export function AggregateListingBase(props: {
       >
         <CardActionArea
           sx={{
-            borderRadius: (theme) => theme.spacing((theme as ExtendedTheme).borderRadius.topLevel),
+            borderRadius: (theme) =>
+              theme.spacing((theme as ExtendedTheme).borderRadius.topLevel),
           }}
         >
           <Card
             sx={{
-              borderRadius: (theme) => theme.spacing((theme as ExtendedTheme).borderRadius.topLevel),
+              borderRadius: (theme) =>
+                theme.spacing((theme as ExtendedTheme).borderRadius.topLevel),
               height: 400,
               postition: "relative",
             }}
@@ -579,7 +611,8 @@ export function AggregateListingBase(props: {
                 left: 0,
                 height: "100%",
                 width: "100%",
-                borderRadius: (theme) => theme.spacing((theme as ExtendedTheme).borderRadius.topLevel),
+                borderRadius: (theme) =>
+                  theme.spacing((theme as ExtendedTheme).borderRadius.topLevel),
                 background: `linear-gradient(to bottom, transparent, transparent 25%, ${theme.palette.background.sidebar}AA 40%, ${theme.palette.background.sidebar} 100%)`,
               }}
             />
@@ -704,12 +737,14 @@ export function AggregateBuyOrderListingBase(props: {
       >
         <CardActionArea
           sx={{
-            borderRadius: (theme) => theme.spacing((theme as ExtendedTheme).borderRadius.topLevel),
+            borderRadius: (theme) =>
+              theme.spacing((theme as ExtendedTheme).borderRadius.topLevel),
           }}
         >
           <Card
             sx={{
-              borderRadius: (theme) => theme.spacing((theme as ExtendedTheme).borderRadius.topLevel),
+              borderRadius: (theme) =>
+                theme.spacing((theme as ExtendedTheme).borderRadius.topLevel),
               height: 400,
               postition: "relative",
             }}
@@ -748,7 +783,8 @@ export function AggregateBuyOrderListingBase(props: {
                 left: 0,
                 height: "100%",
                 width: "100%",
-                borderRadius: (theme) => theme.spacing((theme as ExtendedTheme).borderRadius.topLevel),
+                borderRadius: (theme) =>
+                  theme.spacing((theme as ExtendedTheme).borderRadius.topLevel),
                 background: `linear-gradient(to bottom, transparent, transparent 25%, ${theme.palette.background.sidebar}AA 40%, ${theme.palette.background.sidebar} 100%)`,
               }}
             />
@@ -855,12 +891,14 @@ export function MultipleListingBase(props: {
       >
         <CardActionArea
           sx={{
-            borderRadius: (theme) => theme.spacing((theme as ExtendedTheme).borderRadius.topLevel),
+            borderRadius: (theme) =>
+              theme.spacing((theme as ExtendedTheme).borderRadius.topLevel),
           }}
         >
           <Card
             sx={{
-              borderRadius: (theme) => theme.spacing((theme as ExtendedTheme).borderRadius.topLevel),
+              borderRadius: (theme) =>
+                theme.spacing((theme as ExtendedTheme).borderRadius.topLevel),
               height: 400,
               postition: "relative",
             }}
@@ -899,7 +937,8 @@ export function MultipleListingBase(props: {
                 left: 0,
                 height: "100%",
                 width: "100%",
-                borderRadius: (theme) => theme.spacing((theme as ExtendedTheme).borderRadius.topLevel),
+                borderRadius: (theme) =>
+                  theme.spacing((theme as ExtendedTheme).borderRadius.topLevel),
                 background: `linear-gradient(to bottom, transparent, transparent 25%, ${theme.palette.background.sidebar}AA 40%, ${theme.palette.background.sidebar} 100%)`,
               }}
             />
@@ -1366,6 +1405,8 @@ export function ItemListings(props: {
   mine?: boolean
 }) {
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const [searchState, setSearchState] = useMarketSearch()
 
   const { org, user, status } = props
@@ -1381,7 +1422,7 @@ export function ItemListings(props: {
     // Fire once, no deps
   }, [])
 
-  const [perPage, setPerPage] = useState(48)
+  const [perPage, setPerPage] = useState(isMobile ? 12 : 48)
   const [page, setPage] = useState(0)
 
   // Memoize search query parameters to prevent unnecessary re-renders
@@ -1502,7 +1543,9 @@ export function BulkListingsRefactor(props: {
     // Fire once, no deps
   }, [])
 
-  const [perPage, setPerPage] = useState(48)
+  const theme = useTheme<ExtendedTheme>()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const [perPage, setPerPage] = useState(isMobile ? 12 : 48)
   const [page, setPage] = useState(0)
 
   // Memoize search query parameters to prevent unnecessary re-renders
@@ -1725,9 +1768,11 @@ export function MyItemListings(props: {
   showInternal?: boolean | "all"
 }) {
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const [currentOrg] = useCurrentOrg()
   const { data: profile, isLoading: profileLoading } = useGetUserProfileQuery()
-  const [perPage, setPerPage] = useState(48)
+  const [perPage, setPerPage] = useState(isMobile ? 12 : 48)
   const [page, setPage] = useState(0)
   const ref = useRef<HTMLDivElement>(null)
 

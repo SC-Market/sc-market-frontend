@@ -433,17 +433,47 @@ export function ViewProfile(props: { profile: User }) {
           <Helmet>
             {/* Open Graph Meta Tags */}
             <meta property="og:type" content="profile" />
-            <meta property="og:url" content={`${FRONTEND_URL}/people/${props.profile.username}`} />
-            <meta property="og:title" content={`${props.profile.display_name} - SC Market`} />
-            <meta property="og:description" content={props.profile.profile_description || `${props.profile.display_name}'s profile on SC Market`} />
-            <meta property="og:image" content={props.profile.banner || props.profile.avatar} />
+            <meta
+              property="og:url"
+              content={`${FRONTEND_URL}/people/${props.profile.username}`}
+            />
+            <meta
+              property="og:title"
+              content={`${props.profile.display_name} - SC Market`}
+            />
+            <meta
+              property="og:description"
+              content={
+                props.profile.profile_description ||
+                `${props.profile.display_name}'s profile on SC Market`
+              }
+            />
+            <meta
+              property="og:image"
+              content={props.profile.banner || props.profile.avatar}
+            />
 
             {/* Twitter Card Meta Tags */}
             <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:url" content={`${FRONTEND_URL}/people/${props.profile.username}`} />
-            <meta name="twitter:title" content={`${props.profile.display_name} - SC Market`} />
-            <meta name="twitter:description" content={props.profile.profile_description || `${props.profile.display_name}'s profile on SC Market`} />
-            <meta name="twitter:image" content={props.profile.banner || props.profile.avatar} />
+            <meta
+              name="twitter:url"
+              content={`${FRONTEND_URL}/people/${props.profile.username}`}
+            />
+            <meta
+              name="twitter:title"
+              content={`${props.profile.display_name} - SC Market`}
+            />
+            <meta
+              name="twitter:description"
+              content={
+                props.profile.profile_description ||
+                `${props.profile.display_name}'s profile on SC Market`
+              }
+            />
+            <meta
+              name="twitter:image"
+              content={props.profile.banner || props.profile.avatar}
+            />
 
             <script type="application/ld+json">
               {JSON.stringify({
@@ -472,7 +502,11 @@ export function ViewProfile(props: { profile: User }) {
                 }}
               >
                 <Grid item lg={6}>
-                  <Grid container spacing={theme.layoutSpacing.component} alignItems={"end"}>
+                  <Grid
+                    container
+                    spacing={theme.layoutSpacing.component}
+                    alignItems={"end"}
+                  >
                     <Grid item>
                       {isMyProfile ? (
                         <Box
@@ -501,9 +535,11 @@ export function ViewProfile(props: { profile: User }) {
                                 color: theme.palette.background.light,
                                 top: 20,
                                 left: 20,
-                                backgroundColor: theme.palette.background.overlay,
+                                backgroundColor:
+                                  theme.palette.background.overlay,
                                 "&:hover": {
-                                  backgroundColor: theme.palette.background.overlayDark,
+                                  backgroundColor:
+                                    theme.palette.background.overlayDark,
                                 },
                               }}
                             >
@@ -520,7 +556,9 @@ export function ViewProfile(props: { profile: User }) {
                             sx={{
                               height: 80,
                               width: 80,
-                              borderRadius: theme.spacing(theme.borderRadius.image),
+                              borderRadius: theme.spacing(
+                                theme.borderRadius.image,
+                              ),
                               opacity:
                                 showAvatarButton || isUploadingAvatar ? 0.5 : 1,
                               transition: "0.5s",
@@ -534,7 +572,9 @@ export function ViewProfile(props: { profile: User }) {
                           sx={{
                             height: 80,
                             width: 80,
-                            borderRadius: theme.spacing(theme.borderRadius.image),
+                            borderRadius: theme.spacing(
+                              theme.borderRadius.image,
+                            ),
                           }}
                           variant={"rounded"}
                         />
@@ -797,15 +837,27 @@ export function ProfileSkeleton() {
           variant="rectangular"
           sx={{
             height: 350,
-            borderRadius: (theme) => theme.spacing((theme as ExtendedTheme).borderRadius.image),
+            borderRadius: (theme) =>
+              theme.spacing((theme as ExtendedTheme).borderRadius.image),
           }}
         />
       </Grid>
       <Grid item xs={12} container justifyContent={"space-between"}>
-        <Grid item xs={12} lg={4} alignItems={"center"} spacing={theme.layoutSpacing.layout} container>
+        <Grid
+          item
+          xs={12}
+          lg={4}
+          alignItems={"center"}
+          spacing={theme.layoutSpacing.layout}
+          container
+        >
           <Grid item>
             <Skeleton
-              sx={{ height: 80, width: 80, borderRadius: theme.spacing(theme.borderRadius.image) }}
+              sx={{
+                height: 80,
+                width: 80,
+                borderRadius: theme.spacing(theme.borderRadius.image),
+              }}
               variant={"rectangular"}
             />
           </Grid>

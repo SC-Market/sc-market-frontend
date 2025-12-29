@@ -10,6 +10,7 @@ import {
   Switch,
   TextField,
   Typography,
+  CircularProgress,
 } from "@mui/material"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
@@ -37,7 +38,12 @@ import {
 import { MarkdownEditor } from "../../components/markdown/Markdown"
 import { DateTimePicker } from "@mui/x-date-pickers"
 import { useNavigate } from "react-router-dom"
-import { PageSearch } from "./PageSearch"
+import { Suspense, lazy } from "react"
+
+// Lazy load heavy modal components
+const PageSearch = lazy(() =>
+  import("./PageSearch").then((module) => ({ default: module.PageSearch })),
+)
 import { DisplayListingsHorizontal } from "./ItemListings"
 import { NumericFormat } from "react-number-format"
 import { FormPaper } from "../../components/paper/FormPaper"
@@ -730,19 +736,21 @@ export function AggregateMarketListingForm() {
             </Grid>
           </Grid>
 
-          <PageSearch
-            open={imageOpen}
-            setOpen={setImageOpen}
-            callback={(arg) => {
-              if (arg) {
-                setState({
-                  ...state,
-                  wiki_id: arg.pageid,
-                })
-                setAggregateChoice({ id: arg.pageid, label: arg.title })
-              }
-            }}
-          />
+          <Suspense fallback={<CircularProgress />}>
+            <PageSearch
+              open={imageOpen}
+              setOpen={setImageOpen}
+              callback={(arg) => {
+                if (arg) {
+                  setState({
+                    ...state,
+                    wiki_id: arg.pageid,
+                  })
+                  setAggregateChoice({ id: arg.pageid, label: arg.title })
+                }
+              }}
+            />
+          </Suspense>
         </Grid>
       </FormPaper>
 

@@ -341,7 +341,11 @@ export function ListingDetailItem(props: {
 }) {
   const theme = useTheme<ExtendedTheme>()
   return (
-    <Stack direction={"row"} alignItems={"center"} spacing={theme.layoutSpacing.compact}>
+    <Stack
+      direction={"row"}
+      alignItems={"center"}
+      spacing={theme.layoutSpacing.compact}
+    >
       {props.icon}
       <Typography color={"text.primary"} variant={"subtitle2"}>
         {props.children}
@@ -446,10 +450,10 @@ export function PurchaseArea(props: { listing: BaseListingType }) {
       })
     }
 
-    setCookie("market_cart", cart, { 
-      path: "/", 
+    setCookie("market_cart", cart, {
+      path: "/",
       sameSite: "strict",
-      maxAge: 2592000 // 30 days in seconds - cart items may become unavailable or prices may change
+      maxAge: 2592000, // 30 days in seconds - cart items may become unavailable or prices may change
     })
     issueAlert({
       message: t("MarketListingView.addedToCart"),
@@ -707,7 +711,10 @@ export function MarketListingViewSkeleton() {
                 variant="rectangular"
                 height={400}
                 width="100%"
-                sx={{ borderRadius: (theme) => theme.spacing((theme as ExtendedTheme).borderRadius.image) }}
+                sx={{
+                  borderRadius: (theme) =>
+                    theme.spacing((theme as ExtendedTheme).borderRadius.image),
+                }}
               />
             </Grid>
 
@@ -1066,7 +1073,10 @@ export function MarketListingView() {
 
                   {/* Open Graph Meta Tags */}
                   <meta property="og:type" content="website" />
-                  <meta property="og:url" content={`${FRONTEND_URL}/market/${listing.listing_id}`} />
+                  <meta
+                    property="og:url"
+                    content={`${FRONTEND_URL}/market/${listing.listing_id}`}
+                  />
                   <meta property="og:title" content={details.title} />
                   <meta
                     property="og:description"
@@ -1076,9 +1086,15 @@ export function MarketListingView() {
 
                   {/* Twitter Card Meta Tags */}
                   <meta name="twitter:card" content="summary_large_image" />
-                  <meta name="twitter:url" content={`${FRONTEND_URL}/market/${listing.listing_id}`} />
+                  <meta
+                    name="twitter:url"
+                    content={`${FRONTEND_URL}/market/${listing.listing_id}`}
+                  />
                   <meta name="twitter:title" content={details.title} />
-                  <meta name="twitter:description" content={details.description} />
+                  <meta
+                    name="twitter:description"
+                    content={details.description}
+                  />
                   <meta name="twitter:image" content={photos[0]} />
 
                   <script type="application/ld+json">
@@ -1312,7 +1328,10 @@ export function MarketListingView() {
                         </Box>
                       }
                       action={
-                        <Stack direction={"row"} spacing={theme.layoutSpacing.compact}>
+                        <Stack
+                          direction={"row"}
+                          spacing={theme.layoutSpacing.compact}
+                        >
                           {amRelated &&
                           listing.status !== "archived" &&
                           listing.sale_type !== "auction" ? (

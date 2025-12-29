@@ -73,7 +73,12 @@ export function ContainerGrid(
             ...props.sx,
           }}
         >
-          <Grid container spacing={theme.layoutSpacing.layout} justifyContent={"center"} {...GridProps}>
+          <Grid
+            container
+            spacing={theme.layoutSpacing.layout}
+            justifyContent={"center"}
+            {...GridProps}
+          >
             {props.children}
             {!props.noFooter && <Footer />}
           </Grid>
@@ -135,7 +140,12 @@ export function OpenGrid(
             display: theme.navKind === "outlined" ? "block" : "none",
           }}
         />
-        <Grid container spacing={theme.layoutSpacing.layout * 4} justifyContent={"center"} {...gridProps}>
+        <Grid
+          container
+          spacing={theme.layoutSpacing.layout * 4}
+          justifyContent={"center"}
+          {...gridProps}
+        >
           {props.children}
           {!props.noFooter && <Footer />}
         </Grid>

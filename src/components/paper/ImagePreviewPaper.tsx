@@ -38,7 +38,8 @@ export function ImagePreviewPaper(props: { photos: string[] }) {
       />
       <Paper
         sx={{
-          borderRadius: (theme) => theme.spacing((theme as ExtendedTheme).borderRadius.image),
+          borderRadius: (theme) =>
+            theme.spacing((theme as ExtendedTheme).borderRadius.image),
           backgroundColor: theme.palette.background.default,
           display: "flex",
           justifyContent: "center",
@@ -73,7 +74,9 @@ export function ImagePreviewPaper(props: { photos: string[] }) {
             onClick={handlePreviousImage}
             aria-label={t("accessibility.previousImage", "Previous image")}
           >
-            <KeyboardArrowRight sx={{ color: theme.palette.background.light }} />
+            <KeyboardArrowRight
+              sx={{ color: theme.palette.background.light }}
+            />
           </IconButton>
         )}
 

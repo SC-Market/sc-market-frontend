@@ -11,15 +11,22 @@ import {
   Modal,
   TextField,
   Grid,
+  CircularProgress,
 } from "@mui/material"
 import {
   AddAPhotoRounded,
   CloseRounded,
   CloudUploadRounded,
 } from "@mui/icons-material"
-import React, { useState, useRef, useCallback } from "react"
-import { ImageSearch } from "../../views/market/ImageSearch"
+import React, { useState, useRef, useCallback, Suspense } from "react"
 import { useTranslation } from "react-i18next"
+
+// Lazy load heavy modal components
+const ImageSearch = React.lazy(() =>
+  import("../../views/market/ImageSearch").then((module) => ({
+    default: module.ImageSearch,
+  })),
+)
 import { ContainerGrid } from "../layout/ContainerGrid"
 import { Section } from "../paper/Section"
 import { external_resource_regex } from "../../views/people/ViewProfile"
@@ -29,7 +36,12 @@ export function PhotoEntry(props: { url: string; onClose: () => void }) {
   const theme = useTheme<ExtendedTheme>()
   return (
     <Paper
-      sx={{ width: 96, height: 96, bgcolor: theme.palette.background.imageOverlay, position: "relative" }}
+      sx={{
+        width: 96,
+        height: 96,
+        bgcolor: theme.palette.background.imageOverlay,
+        position: "relative",
+      }}
     >
       <Fab
         size={"small"}
@@ -67,7 +79,12 @@ export function PendingPhotoEntry(props: { file: File; onClose: () => void }) {
 
   return (
     <Paper
-      sx={{ width: 96, height: 96, bgcolor: theme.palette.background.imageOverlay, position: "relative" }}
+      sx={{
+        width: 96,
+        height: 96,
+        bgcolor: theme.palette.background.imageOverlay,
+        position: "relative",
+      }}
     >
       <Fab
         size={"small"}
@@ -355,7 +372,13 @@ export function SelectPhotosArea(props: {
         </Paper> */}
 
         {/* URL input button for external image URLs */}
-        <Paper sx={{ width: 96, height: 96, bgcolor: theme.palette.background.imageOverlay }}>
+        <Paper
+          sx={{
+            width: 96,
+            height: 96,
+            bgcolor: theme.palette.background.imageOverlay,
+          }}
+        >
           <ButtonBase
             sx={{ width: "100%", height: "100%" }}
             onClick={() => {
@@ -382,7 +405,13 @@ export function SelectPhotosArea(props: {
         </Paper>
 
         {showUploadButton && onFileUpload && (
-          <Paper sx={{ width: 96, height: 96, bgcolor: theme.palette.background.imageOverlay }}>
+          <Paper
+            sx={{
+              width: 96,
+              height: 96,
+              bgcolor: theme.palette.background.imageOverlay,
+            }}
+          >
             <ButtonBase
               sx={{ width: "100%", height: "100%" }}
               onClick={() => fileInputRef.current?.click()}
@@ -549,16 +578,20 @@ export function SelectPhotosArea(props: {
         </ContainerGrid>
       </Modal>
 
-      {/* ImageSearch component - temporarily disabled */}
-      <ImageSearch
-        open={photoOpen}
-        setOpen={setPhotoOpen}
-        callback={(arg) => {
-          if (arg) {
-            setPhotos([...photos, arg])
-          }
-        }}
-      />
+      {/* ImageSearch component - lazy loaded */}
+      {photoOpen && (
+        <Suspense fallback={<CircularProgress />}>
+          <ImageSearch
+            open={photoOpen}
+            setOpen={setPhotoOpen}
+            callback={(arg) => {
+              if (arg) {
+                setPhotos([...photos, arg])
+              }
+            }}
+          />
+        </Suspense>
+      )}
     </>
   )
 }

@@ -7,7 +7,11 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 export function MarketSettings() {
   const theme = useTheme<ExtendedTheme>()
   return (
-    <Grid container spacing={theme.layoutSpacing.compact} alignItems={"flex-start"}>
+    <Grid
+      container
+      spacing={theme.layoutSpacing.compact}
+      alignItems={"flex-start"}
+    >
       <MarketEditTemplate />
     </Grid>
   )

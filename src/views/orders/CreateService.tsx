@@ -510,7 +510,13 @@ export function CreateServiceForm(props: GridProps & { service?: Service }) {
             {t("CreateServiceForm.serviceDetails")}
           </Typography>
         </Grid>
-        <Grid item xs={12} lg={8} container spacing={theme.layoutSpacing.layout}>
+        <Grid
+          item
+          xs={12}
+          lg={8}
+          container
+          spacing={theme.layoutSpacing.layout}
+        >
           <Grid item xs={12} lg={12}>
             <TextField
               fullWidth
@@ -637,7 +643,13 @@ export function CreateServiceForm(props: GridProps & { service?: Service }) {
             {t("CreateServiceForm.orderServiceDetails")}
           </Typography>
         </Grid>
-        <Grid item xs={12} lg={8} container spacing={theme.layoutSpacing.layout}>
+        <Grid
+          item
+          xs={12}
+          lg={8}
+          container
+          spacing={theme.layoutSpacing.layout}
+        >
           <Grid item xs={12} lg={12}>
             <TextField
               fullWidth
@@ -877,7 +889,13 @@ export function CreateServiceForm(props: GridProps & { service?: Service }) {
             {t("CreateServiceForm.costs")}
           </Typography>
         </Grid>
-        <Grid item xs={12} lg={8} container spacing={theme.layoutSpacing.layout}>
+        <Grid
+          item
+          xs={12}
+          lg={8}
+          container
+          spacing={theme.layoutSpacing.layout}
+        >
           <Grid item xs={12}>
             <NumericFormat
               decimalScale={0}

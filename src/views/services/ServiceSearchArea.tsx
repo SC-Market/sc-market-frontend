@@ -60,7 +60,15 @@ export function ServiceSearchArea() {
       paymentType: paymentType === "any" ? undefined : paymentType,
       language_codes: languageCodes.length > 0 ? languageCodes : undefined,
     }))
-  }, [kind, setSearchState, debouncedQuery, minOffer, maxOffer, paymentType, languageCodes])
+  }, [
+    kind,
+    setSearchState,
+    debouncedQuery,
+    minOffer,
+    maxOffer,
+    paymentType,
+    languageCodes,
+  ])
 
   return (
     <Stack

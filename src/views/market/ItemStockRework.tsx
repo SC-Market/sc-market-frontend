@@ -94,7 +94,11 @@ export function ManageStockArea(props: {
   )
 
   return (
-    <Stack direction="row" spacing={theme.layoutSpacing.layout} alignItems="center">
+    <Stack
+      direction="row"
+      spacing={theme.layoutSpacing.layout}
+      alignItems="center"
+    >
       <NumericFormat
         decimalScale={0}
         allowNegative={false}

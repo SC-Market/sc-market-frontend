@@ -245,14 +245,20 @@ export function MarketAggregateView() {
 
           {/* Open Graph Meta Tags */}
           <meta property="og:type" content="website" />
-          <meta property="og:url" content={`${FRONTEND_URL}/market/aggregate/${details.game_item_id}`} />
+          <meta
+            property="og:url"
+            content={`${FRONTEND_URL}/market/aggregate/${details.game_item_id}`}
+          />
           <meta property="og:title" content={details.title} />
           <meta property="og:description" content={details.description} />
           <meta property="og:image" content={photos[0]} />
 
           {/* Twitter Card Meta Tags */}
           <meta name="twitter:card" content="summary_large_image" />
-          <meta name="twitter:url" content={`${FRONTEND_URL}/market/aggregate/${details.game_item_id}`} />
+          <meta
+            name="twitter:url"
+            content={`${FRONTEND_URL}/market/aggregate/${details.game_item_id}`}
+          />
           <meta name="twitter:title" content={details.title} />
           <meta name="twitter:description" content={details.description} />
           <meta name="twitter:image" content={photos[0]} />
@@ -509,10 +515,10 @@ export function AggregateRow(props: {
       })
     }
 
-    setCookie("market_cart", cart, { 
-      path: "/", 
+    setCookie("market_cart", cart, {
+      path: "/",
       sameSite: "strict",
-      maxAge: 2592000 // 30 days in seconds - cart items may become unavailable or prices may change
+      maxAge: 2592000, // 30 days in seconds - cart items may become unavailable or prices may change
     })
     issueAlert({
       message: t("MarketAggregateView.addedToCart"),

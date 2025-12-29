@@ -290,7 +290,11 @@ export function MarketNavArea(props: { top?: boolean }) {
 
   return (
     <>
-      <Grid container justifyContent={"space-between"} spacing={theme.layoutSpacing.compact}>
+      <Grid
+        container
+        justifyContent={"space-between"}
+        spacing={theme.layoutSpacing.compact}
+      >
         <Grid item>
           <Grid container spacing={theme.layoutSpacing.compact}>
             <Grid item sx={{ paddingTop: 2 }}>
@@ -357,7 +361,11 @@ export function MarketNavArea(props: { top?: boolean }) {
         )}
         <Grid item xs={12} sx={{ paddingBottom: 1 }}>
           <Collapse in={filterOpen}>
-            <Grid container spacing={theme.layoutSpacing.compact} sx={{ padding: "none" }}>
+            <Grid
+              container
+              spacing={theme.layoutSpacing.compact}
+              sx={{ padding: "none" }}
+            >
               <Grid item xs={12} md={4} lg={4}>
                 <TextField
                   select

@@ -45,7 +45,7 @@ export function MarketCreate(props: {}) {
             <Alert severity="warning">
               {t(
                 "market.verificationRequired",
-                "Your account must be verified to create market listings. Please verify your account with RSI/Citizen iD to continue."
+                "Your account must be verified to create market listings. Please verify your account with RSI/Citizen iD to continue.",
               )}
             </Alert>
           </Grid>
@@ -113,7 +113,7 @@ export function MarketCreate(props: {}) {
                   <Alert severity="info">
                     {t(
                       "market.pleaseVerify",
-                      "Please verify your account to create market listings."
+                      "Please verify your account to create market listings.",
                     )}
                   </Alert>
                 </Grid>
@@ -129,7 +129,7 @@ export function MarketCreate(props: {}) {
                   <Alert severity="info">
                     {t(
                       "market.pleaseVerify",
-                      "Please verify your account to create market listings."
+                      "Please verify your account to create market listings.",
                     )}
                   </Alert>
                 </Grid>
@@ -145,7 +145,7 @@ export function MarketCreate(props: {}) {
                   <Alert severity="info">
                     {t(
                       "market.pleaseVerify",
-                      "Please verify your account to create market listings."
+                      "Please verify your account to create market listings.",
                     )}
                   </Alert>
                 </Grid>

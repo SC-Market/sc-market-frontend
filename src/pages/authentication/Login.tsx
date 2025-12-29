@@ -21,13 +21,23 @@ export function Login() {
   return (
     <ContainerGrid maxWidth={"xl"} sidebarOpen={false}>
       {!profile.isLoading && !profile.error && <Navigate to={"/dashboard"} />}
-      <Grid item xs={12} lg={8} container spacing={theme.layoutSpacing.layout * 4}>
+      <Grid
+        item
+        xs={12}
+        lg={8}
+        container
+        spacing={theme.layoutSpacing.layout * 4}
+      >
         <HeaderTitle></HeaderTitle>
         <LoginInfoPanel />
       </Grid>
 
       <Grid item xs={12} lg={4}>
-        <Grid container spacing={theme.layoutSpacing.layout * 4} alignItems={"flex-start"}>
+        <Grid
+          container
+          spacing={theme.layoutSpacing.layout * 4}
+          alignItems={"flex-start"}
+        >
           <HeaderTitle>{t("login.title")}</HeaderTitle>
           <AuthenticateRSI />
         </Grid>

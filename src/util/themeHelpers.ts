@@ -2,7 +2,7 @@ import { ExtendedTheme } from "../hooks/styles/Theme"
 
 /**
  * Helper functions for standardized spacing and border radius
- * 
+ *
  * Usage examples:
  * - Spacing: <Grid container spacing={theme.layoutSpacing.layout}>
  * - Border radius: sx={{ borderRadius: (theme) => theme.spacing((theme as ExtendedTheme).borderRadius.topLevel) }}

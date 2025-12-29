@@ -86,7 +86,11 @@ export function CartItemEntry(props: {
 
   return (
     <Grid item xs={12}>
-      <Grid container spacing={theme.layoutSpacing.layout} justifyContent={"space-between"}>
+      <Grid
+        container
+        spacing={theme.layoutSpacing.layout}
+        justifyContent={"space-between"}
+      >
         <Grid item>
           <img
             height={128}
@@ -660,7 +664,11 @@ export function CartSellerEntry(props: {
             </LoadingButton>
           </Grid>*/}
         </Grid>
-        <Grid container spacing={theme.layoutSpacing.text} justifyContent={"right"}>
+        <Grid
+          container
+          spacing={theme.layoutSpacing.text}
+          justifyContent={"right"}
+        >
           <Grid item>
             <Grid container spacing={theme.layoutSpacing.text}>
               <Grid item>
@@ -733,10 +741,10 @@ export function MarketCart() {
   const cart = cookies.market_cart
 
   const updateCart = useCallback(() => {
-    setCookie("market_cart", cart, { 
-      path: "/", 
+    setCookie("market_cart", cart, {
+      path: "/",
       sameSite: "strict",
-      maxAge: 2592000 // 30 days in seconds - cart items may become unavailable or prices may change
+      maxAge: 2592000, // 30 days in seconds - cart items may become unavailable or prices may change
     })
   }, [cart, setCookie])
 

@@ -20,7 +20,11 @@ export function AuthenticateRSIPage() {
       <ContainerGrid maxWidth={"xl"} sidebarOpen={false}>
         {profile.data?.rsi_confirmed && <Navigate to={"/dashboard"} />}
         <Grid item xs={12} lg={4}>
-          <Grid container spacing={theme.layoutSpacing.layout * 4} alignItems={"flex-start"}>
+          <Grid
+            container
+            spacing={theme.layoutSpacing.layout * 4}
+            alignItems={"flex-start"}
+          >
             <HeaderTitle>{t("login.authenticateWithRSI")}</HeaderTitle>
             <AuthenticateRSI />
           </Grid>

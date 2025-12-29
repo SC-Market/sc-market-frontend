@@ -47,10 +47,10 @@ function AvailabilityItem(props: {
 
   return (
     <td
-      style={{ 
-        backgroundColor: active 
-          ? theme.palette.success.main 
-          : theme.palette.action.disabledBackground || theme.palette.grey[700] 
+      style={{
+        backgroundColor: active
+          ? theme.palette.success.main
+          : theme.palette.action.disabledBackground || theme.palette.grey[700],
       }}
       onMouseOver={() => endSelect(day, slot)}
       onMouseDown={() => startSelect(day, slot)}
@@ -337,7 +337,8 @@ export function AvailabilityDisplay(
                     style={{
                       backgroundColor: availability[day * 48 + slot]
                         ? theme.palette.success.main
-                        : theme.palette.action.disabledBackground || theme.palette.grey[700],
+                        : theme.palette.action.disabledBackground ||
+                          theme.palette.grey[700],
                     }}
                     draggable={"false"}
                   ></td>

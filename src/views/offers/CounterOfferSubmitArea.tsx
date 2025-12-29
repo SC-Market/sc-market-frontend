@@ -34,7 +34,11 @@ export function CounterOfferSubmitArea(props: { session: OfferSession }) {
 
   return (
     <Grid item xs={12}>
-      <Stack direction="row" justifyContent={"right"} spacing={theme.layoutSpacing.compact}>
+      <Stack
+        direction="row"
+        justifyContent={"right"}
+        spacing={theme.layoutSpacing.compact}
+      >
         <LoadingButton
           color={"secondary"}
           variant={"contained"}

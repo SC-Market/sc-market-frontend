@@ -19,7 +19,11 @@ export function UserDetails(props: { user: MinimalUser }) {
   const theme = useTheme<ExtendedTheme>()
 
   return (
-    <Stack direction={"row"} spacing={theme.layoutSpacing.compact} alignItems={"center"}>
+    <Stack
+      direction={"row"}
+      spacing={theme.layoutSpacing.compact}
+      alignItems={"center"}
+    >
       <Avatar src={user.avatar} />
       <Stack direction={"column"} justifyContent={"left"}>
         <MaterialLink
@@ -46,7 +50,11 @@ export function OrgDetails(props: { org: MinimalContractor }) {
   const theme = useTheme<ExtendedTheme>()
 
   return (
-    <Stack direction={"row"} spacing={theme.layoutSpacing.compact} alignItems={"center"}>
+    <Stack
+      direction={"row"}
+      spacing={theme.layoutSpacing.compact}
+      alignItems={"center"}
+    >
       <Avatar src={org.avatar} />
       <Stack direction={"column"} justifyContent={"left"}>
         <MaterialLink
@@ -75,7 +83,11 @@ export function MarketListingDetails(props: {
   const theme = useTheme<ExtendedTheme>()
 
   return (
-    <Stack direction={"row"} spacing={theme.layoutSpacing.compact} alignItems={"center"}>
+    <Stack
+      direction={"row"}
+      spacing={theme.layoutSpacing.compact}
+      alignItems={"center"}
+    >
       <Avatar
         src={listing.photo || FALLBACK_IMAGE_URL}
         variant={"rounded"}

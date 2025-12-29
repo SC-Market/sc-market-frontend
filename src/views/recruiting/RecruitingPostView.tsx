@@ -105,7 +105,11 @@ export function RecruitingPostView(props: { post: RecruitingPost }) {
             }
             subheader={
               <Box>
-                <Grid container alignItems={"center"} spacing={theme.layoutSpacing.compact}>
+                <Grid
+                  container
+                  alignItems={"center"}
+                  spacing={theme.layoutSpacing.compact}
+                >
                   <Grid item>
                     <PeopleAltRoundedIcon
                       style={{ color: theme.palette.text.primary }}
@@ -193,7 +197,8 @@ export function RecruitingPostSkeleton() {
       <Skeleton
         variant={"rectangular"}
         sx={{
-          borderRadius: (theme) => theme.spacing((theme as ExtendedTheme).borderRadius.image),
+          borderRadius: (theme) =>
+            theme.spacing((theme as ExtendedTheme).borderRadius.image),
           height: 350,
           width: "100%",
         }}

@@ -480,7 +480,13 @@ const CreateOrderFormComponent = React.forwardRef<
               {t("CreateOrderForm.services")}
             </Typography>
           </Grid>
-          <Grid item xs={12} lg={8} container spacing={theme.layoutSpacing.compact}>
+          <Grid
+            item
+            xs={12}
+            lg={8}
+            container
+            spacing={theme.layoutSpacing.compact}
+          >
             <Grid item xs={12} lg={12}>
               <TextField
                 fullWidth
@@ -537,7 +543,13 @@ const CreateOrderFormComponent = React.forwardRef<
             {t("CreateOrderForm.about")}
           </Typography>
         </Grid>
-        <Grid item xs={12} lg={8} container spacing={theme.layoutSpacing.layout}>
+        <Grid
+          item
+          xs={12}
+          lg={8}
+          container
+          spacing={theme.layoutSpacing.layout}
+        >
           <Grid item xs={12} lg={12}>
             <TextField
               fullWidth
@@ -675,7 +687,13 @@ const CreateOrderFormComponent = React.forwardRef<
             {t("CreateOrderForm.costs")}
           </Typography>
         </Grid>
-        <Grid item xs={12} lg={8} container spacing={theme.layoutSpacing.layout}>
+        <Grid
+          item
+          xs={12}
+          lg={8}
+          container
+          spacing={theme.layoutSpacing.layout}
+        >
           <Grid item xs={12}>
             <NumericFormat
               decimalScale={0}

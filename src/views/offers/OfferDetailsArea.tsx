@@ -407,7 +407,11 @@ export function OfferDetailsArea(props: { session: OfferSession }) {
                   {t("OfferDetailsArea.acceptOrDecline")}
                 </TableCell>
                 <TableCell align="right">
-                  <Stack direction="row" justifyContent={"right"} spacing={theme.layoutSpacing.compact}>
+                  <Stack
+                    direction="row"
+                    justifyContent={"right"}
+                    spacing={theme.layoutSpacing.compact}
+                  >
                     <LoadingButton
                       color={"success"}
                       variant={"contained"}
@@ -441,7 +445,11 @@ export function OfferDetailsArea(props: { session: OfferSession }) {
                   {t("OfferDetailsArea.cancelOrder")}
                 </TableCell>
                 <TableCell align="right">
-                  <Stack direction="row" justifyContent={"right"} spacing={theme.layoutSpacing.compact}>
+                  <Stack
+                    direction="row"
+                    justifyContent={"right"}
+                    spacing={theme.layoutSpacing.compact}
+                  >
                     <LoadingButton
                       color={"error"}
                       variant={"contained"}

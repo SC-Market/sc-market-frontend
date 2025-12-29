@@ -78,7 +78,7 @@ export function SidebarActorSelect() {
       setCookie("current_contractor", contractorSpectrumID, {
         path: "/",
         sameSite: "strict",
-        maxAge: 31536000 // 1 year in seconds
+        maxAge: 31536000, // 1 year in seconds
       })
     }
   }, [
@@ -116,7 +116,9 @@ export function SidebarActorSelect() {
                 sx: {
                   bgcolor: theme.palette.background.sidebar,
                   "& .MuiMenuItem-root": {
-                    color: theme.palette.getContrastText(theme.palette.background.sidebar),
+                    color: theme.palette.getContrastText(
+                      theme.palette.background.sidebar,
+                    ),
                     "&:hover": {
                       backgroundColor: theme.palette.action.hover,
                     },
@@ -127,23 +129,33 @@ export function SidebarActorSelect() {
               },
             },
           }}
-          sx={{ 
+          sx={{
             borderRadius: 32,
             "& .MuiInputLabel-root": {
-              color: theme.palette.getContrastText(theme.palette.background.sidebar),
+              color: theme.palette.getContrastText(
+                theme.palette.background.sidebar,
+              ),
             },
             "& .MuiOutlinedInput-root": {
-              color: theme.palette.getContrastText(theme.palette.background.sidebar),
+              color: theme.palette.getContrastText(
+                theme.palette.background.sidebar,
+              ),
               "& fieldset": {
-                borderColor: theme.palette.getContrastText(theme.palette.background.sidebar),
+                borderColor: theme.palette.getContrastText(
+                  theme.palette.background.sidebar,
+                ),
                 opacity: 0.3,
               },
               "&:hover fieldset": {
-                borderColor: theme.palette.getContrastText(theme.palette.background.sidebar),
+                borderColor: theme.palette.getContrastText(
+                  theme.palette.background.sidebar,
+                ),
                 opacity: 0.5,
               },
               "&.Mui-focused fieldset": {
-                borderColor: theme.palette.getContrastText(theme.palette.background.sidebar),
+                borderColor: theme.palette.getContrastText(
+                  theme.palette.background.sidebar,
+                ),
                 opacity: 0.7,
               },
             },
@@ -168,7 +180,11 @@ export function SidebarActorSelect() {
                     sx={{ height: 48, width: 48 }}
                   />
                   <Box>
-                    <Typography color={theme.palette.getContrastText(theme.palette.background.sidebar)}>
+                    <Typography
+                      color={theme.palette.getContrastText(
+                        theme.palette.background.sidebar,
+                      )}
+                    >
                       {profile.display_name}
                     </Typography>
                   </Box>
@@ -192,9 +208,11 @@ export function SidebarActorSelect() {
                       })}
                       sx={{ height: 48, width: 48 }}
                     />
-                    <Typography 
+                    <Typography
                       style={{ whiteSpace: "normal" }}
-                      color={theme.palette.getContrastText(theme.palette.background.sidebar)}
+                      color={theme.palette.getContrastText(
+                        theme.palette.background.sidebar,
+                      )}
                     >
                       {choice.name}
                     </Typography>
@@ -204,7 +222,11 @@ export function SidebarActorSelect() {
             ]
           ) : (
             <MenuItem value={contractorSpectrumID}>
-              <Typography color={theme.palette.getContrastText(theme.palette.background.sidebar)}>
+              <Typography
+                color={theme.palette.getContrastText(
+                  theme.palette.background.sidebar,
+                )}
+              >
                 {t("sidebar_actor_select.login_to_select_role")}
               </Typography>
             </MenuItem>

@@ -51,7 +51,11 @@ export function ItemMarketView() {
         {xs && <MarketSidebar />}
 
         <Container maxWidth={"lg"}>
-          <Grid container spacing={theme.layoutSpacing.layout} justifyContent={"center"}>
+          <Grid
+            container
+            spacing={theme.layoutSpacing.layout}
+            justifyContent={"center"}
+          >
             <Grid item xs={12}>
               <HideOnScroll>
                 <MarketNavArea />

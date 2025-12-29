@@ -1,6 +1,13 @@
 import React, { useCallback, useEffect, useState } from "react"
 import { FlatSection } from "../../components/paper/Section"
-import { Divider, Grid, InputAdornment, Paper, TextField, useTheme } from "@mui/material"
+import {
+  Divider,
+  Grid,
+  InputAdornment,
+  Paper,
+  TextField,
+  useTheme,
+} from "@mui/material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { MarketAggregate } from "../../datatypes/MarketListing"

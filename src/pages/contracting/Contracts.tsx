@@ -50,7 +50,11 @@ export function Contracts() {
           <ContractSidebar />
           <ContainerGrid maxWidth={"lg"} sidebarOpen={true}>
             <Grid item xs={12}>
-              <Grid container justifyContent={"space-between"} spacing={theme.layoutSpacing.layout}>
+              <Grid
+                container
+                justifyContent={"space-between"}
+                spacing={theme.layoutSpacing.layout}
+              >
                 <HeaderTitle lg={8} xl={8}>
                   {t("contracts.activeContracts")}
                 </HeaderTitle>

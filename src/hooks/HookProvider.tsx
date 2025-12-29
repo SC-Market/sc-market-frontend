@@ -48,10 +48,11 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
 
   // Only check admin status if a custom theme might be selected
   // In dev mode, we don't need to check admin status (devs can always use custom themes)
-  const mightBeCustomTheme = useLightTheme !== "light" && 
-                             useLightTheme !== "dark" && 
-                             useLightTheme !== "system" &&
-                             CUSTOM_THEMES.has(useLightTheme)
+  const mightBeCustomTheme =
+    useLightTheme !== "light" &&
+    useLightTheme !== "dark" &&
+    useLightTheme !== "system" &&
+    CUSTOM_THEMES.has(useLightTheme)
   // Skip the query if we're in dev mode (no admin check needed) or if no custom theme is selected
   const { data: userProfile } = useGetUserProfileQuery(undefined, {
     skip: isDev || !mightBeCustomTheme,
@@ -76,7 +77,7 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
       const customTheme = CUSTOM_THEMES.get(useLightTheme)
       if (customTheme) return customTheme
     }
-    
+
     // Normal theme selection logic
     if (CURRENT_CUSTOM_ORG) {
       const theme = CUSTOM_THEMES.get(CURRENT_CUSTOM_ORG)
@@ -98,10 +99,10 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
       removeCookie("theme", { path: "/" })
     } else {
       // Save preference when light or dark is selected
-      setCookie("theme", useLightTheme, { 
-        path: "/", 
+      setCookie("theme", useLightTheme, {
+        path: "/",
         sameSite: "strict",
-        maxAge: 31536000 // 1 year in seconds
+        maxAge: 31536000, // 1 year in seconds
       })
     }
   }, [useLightTheme, setCookie, removeCookie])
@@ -168,9 +169,7 @@ export function HookProvider(props: { children: React.ReactElement }) {
       <ThemeProviderWrapper>
         <AlertHookContext.Provider value={[alert, issueAlert]}>
           <CurrentOrgProvider>
-            <ServiceSearchContext.Provider
-              value={useState({ query: "" })}
-            >
+            <ServiceSearchContext.Provider value={useState({ query: "" })}>
               <CurrentChatIDContext.Provider
                 value={useState<string | null | undefined>(undefined)}
               >
