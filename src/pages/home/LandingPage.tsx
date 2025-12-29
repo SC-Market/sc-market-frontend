@@ -52,7 +52,7 @@ const bg = "https://media.tenor.com/4LKXThFQuHMAAAAd/perseus-star-citizen.gif"
 
 function LandingSmallImage(props: { src: string; title: string }) {
   const { src, title } = props
-  const theme = useTheme<Theme>()
+  const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
 
   return (
@@ -70,7 +70,7 @@ function LandingSmallImage(props: { src: string; title: string }) {
           border: `1px solid ${theme.palette.outline.main}`,
           marginBottom: theme.spacing(2),
           objectFit: "cover",
-          borderRadius: theme.spacing(theme.borderRadius.image),
+          borderRadius: theme.spacing(theme.borderRadius.button),
         }}
         alt={title}
         loading="lazy"
@@ -654,7 +654,7 @@ function SupportersSection() {
               >
                 <img
                   src={supporter.avatar}
-                  style={{ maxHeight: 128, maxWidth: "100%", borderRadius: `${theme.spacing(theme.borderRadius.image)}px` }}
+                  style={{ maxHeight: 128, maxWidth: "100%", borderRadius: `${theme.spacing(theme.borderRadius.button)}px` }}
                   alt={t("accessibility.supporterLogo", "{{name}} logo", {
                     name: supporter.name,
                   })}

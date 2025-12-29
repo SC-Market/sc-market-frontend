@@ -31,11 +31,12 @@ export function PreferencesButton() {
   const [updateLocale] = useProfileUpdateLocale()
   const { data: userProfile } = useGetUserProfileQuery()
   const isDev = import.meta.env.DEV || import.meta.env.MODE === "development"
+  const isAdmin = userProfile?.role === "admin"
 
   const open = Boolean(anchorEl)
   
-  // Get available theme options
-  const availableThemes: ThemeChoice[] = isDev
+  // Get available theme options - show custom themes in dev mode or for site admins
+  const availableThemes: ThemeChoice[] = (isDev || isAdmin)
     ? ["light", "dark", "system", ...Array.from(CUSTOM_THEMES.keys()) as ThemeChoice[]]
     : ["light", "dark", "system"]
 
@@ -115,7 +116,7 @@ export function PreferencesButton() {
               <Typography variant="subtitle2" sx={{ mb: 1 }}>
                 {t("preferences.theme")}
               </Typography>
-              {isDev ? (
+              {(isDev || isAdmin) ? (
                 <Autocomplete
                   value={lightTheme}
                   onChange={(event, newValue) => {
