@@ -431,8 +431,8 @@ export function PushNotificationSettings() {
             <Grid item xs={12}>
               <CircularProgress />
             </Grid>
-          ) : (
-            preferences?.preferences.map((pref) => (
+          ) : preferences?.preferences && preferences.preferences.length > 0 ? (
+            preferences.preferences.map((pref) => (
               <Grid item xs={12} key={pref.action}>
                 <FormControlLabel
                   control={
@@ -454,6 +454,12 @@ export function PushNotificationSettings() {
                 />
               </Grid>
             ))
+          ) : (
+            <Grid item xs={12}>
+              <Typography variant="body2" color="text.secondary">
+                No preferences available
+              </Typography>
+            </Grid>
           )}
         </>
       )}
