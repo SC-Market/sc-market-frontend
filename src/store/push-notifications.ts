@@ -1,7 +1,7 @@
 import { BACKEND_URL } from "../util/constants"
 import { serviceApi } from "./service"
 
-const baseUrl = `${BACKEND_URL}/api/v1/push`
+const baseUrl = `${BACKEND_URL}/api/push`
 
 /**
  * Push subscription data from browser
