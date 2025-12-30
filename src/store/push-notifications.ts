@@ -92,6 +92,11 @@ export const pushNotificationApi = serviceApi.injectEndpoints({
         url: `${baseUrl}/preferences`,
         method: "GET",
       }),
+      transformResponse: (response: { data: { preferences: PushPreference[] } }) => {
+        // Backend returns { data: { preferences: [...] } }
+        const unwrapped = unwrapResponse(response) as { preferences: PushPreference[] }
+        return unwrapped
+      },
       providesTags: ["PushPreferences" as const],
     }),
 
