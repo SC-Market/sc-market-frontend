@@ -68,8 +68,10 @@ export function ContainerGrid(
         <Container
           {...containerProps}
           sx={{
-            paddingTop: theme.spacing(10),
-            paddingBottom: theme.spacing(4),
+            paddingTop: theme.spacing(4),
+            paddingBottom: theme.spacing(2),
+            paddingLeft: { xs: theme.spacing(2), sm: theme.spacing(3) },
+            paddingRight: { xs: theme.spacing(2), sm: theme.spacing(3) },
             ...props.sx,
           }}
         >
@@ -203,7 +205,16 @@ export function OpenLayout(
             height: 64,
           }}
         />
-        {children}
+        <Box
+          sx={{
+            paddingLeft: { xs: theme.spacing(2), sm: theme.spacing(3) },
+            paddingRight: { xs: theme.spacing(2), sm: theme.spacing(3) },
+            paddingTop: theme.spacing(4),
+            paddingBottom: theme.spacing(2),
+          }}
+        >
+          {children}
+        </Box>
         {!noFooter && <Footer />}
       </main>
     </MainRefContext.Provider>

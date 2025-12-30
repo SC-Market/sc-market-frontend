@@ -93,6 +93,7 @@ import { formatMarketMultipleUrl, formatMarketUrl } from "../../util/urls"
 import { FALLBACK_IMAGE_URL } from "../../util/constants"
 import { AdCard } from "../../components/ads/AdCard"
 import { MARKET_ADS } from "../../components/ads/adConfig"
+import { VirtualizedGrid } from "../../components/list/VirtualizedGrid"
 import {
   injectAds,
   ListingOrAd,
@@ -1273,8 +1274,11 @@ export function DisplayListingsMin(props: {
   loading?: boolean
   startIndex?: number
   disableAds?: boolean
+  useVirtualization?: boolean
 }) {
-  const { listings, loading, startIndex = 0, disableAds = false } = props
+  const { listings, loading, startIndex = 0, disableAds = false, useVirtualization = true } = props
+  const theme = useTheme<ExtendedTheme>()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
 
   // Inject ads into listings array
   const listingsWithAds = useMemo(() => {
@@ -1289,19 +1293,67 @@ export function DisplayListingsMin(props: {
     return injectAds(listings, MARKET_ADS, startIndex)
   }, [listings, loading, startIndex, disableAds])
 
+  // Use virtualization for large lists (50+ items) or on mobile
+  const shouldVirtualize = useVirtualization && (listingsWithAds.length > 50 || isMobile)
+
+  if (loading) {
+    return (
+      <React.Fragment>
+        {new Array(16)
+          .fill(undefined)
+          .map((o, i) => (
+            <ListingSkeleton index={i} key={i} />
+          ))}
+      </React.Fragment>
+    )
+  }
+
+  if (shouldVirtualize && listingsWithAds.length > 0) {
+    // Use virtual scrolling for better performance
+    // For virtualized grid, we render ItemListingBase directly (not wrapped in Grid item)
+    return (
+      <Grid item xs={12}>
+        <Box sx={{ height: "calc(100vh - 400px)", minHeight: 600 }}>
+          <VirtualizedGrid
+            items={listingsWithAds}
+            renderItem={(item, index) => {
+              const key = isListing(item)
+                ? item.listing_id
+                : `ad-${item.id}-${index}`
+              // For virtualized grid, render the base component directly
+              // The grid handles layout, so we don't need Grid item wrapper
+              if (isListing(item)) {
+                if (item.listing_type === "unique") {
+                  return <ItemListingBase listing={item as ExtendedUniqueSearchResult} index={index} key={key} />
+                } else if (item.listing_type === "aggregate") {
+                  return <AggregateListingBase aggregate={item as ExtendedAggregateSearchResult} index={index} key={key} />
+                } else if (item.listing_type === "multiple") {
+                  return <MultipleListingBase multiple={item as ExtendedMultipleSearchResult} index={index} key={key} />
+                }
+              }
+              // Ad card
+              return <AdCard ad={item as any} index={index} key={key} />
+            }}
+            itemHeight={400}
+            columns={{ xs: 1, sm: 2, md: 3, lg: 4 }}
+            gap={theme.layoutSpacing.layout}
+            overscan={3}
+          />
+        </Box>
+      </Grid>
+    )
+  }
+
+  // Fallback to regular rendering for small lists
   return (
     <React.Fragment>
-      {loading
-        ? new Array(16)
-            .fill(undefined)
-            .map((o, i) => <ListingSkeleton index={i} key={i} />)
-        : listingsWithAds.map((item, index) => {
-            // Generate unique key for each item (listing or ad)
-            const key = isListing(item)
-              ? item.listing_id
-              : `ad-${item.id}-${index}`
-            return <Listing listing={item} index={index} key={key} />
-          })}
+      {listingsWithAds.map((item, index) => {
+        // Generate unique key for each item (listing or ad)
+        const key = isListing(item)
+          ? item.listing_id
+          : `ad-${item.id}-${index}`
+        return <Listing listing={item} index={index} key={key} />
+      })}
     </React.Fragment>
   )
 }
