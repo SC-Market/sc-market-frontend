@@ -1,7 +1,7 @@
 import { Page } from "../../components/metadata/Page"
 import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { useGetOfferSessionByIDQuery } from "../../store/offer"
 import { Link, useParams, useNavigate, Navigate } from "react-router-dom"
 import {
@@ -13,6 +13,11 @@ import {
   Grid,
   Link as MaterialLink,
   Skeleton,
+  Tabs,
+  Tab,
+  Box,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material"
 import { OfferMarketListings } from "../../views/offers/OfferMarketListings"
 import { OfferServiceArea } from "../../views/offers/OfferServiceArea"
@@ -33,6 +38,9 @@ export function ViewOfferPage() {
   const { data: session, error } = useGetOfferSessionByIDQuery(id!)
   const { t } = useTranslation()
   const navigate = useNavigate()
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const [activeTab, setActiveTab] = useState(0)
 
   // Get and delete message notifications for this offer
   const { data: notificationsData } = useGetNotificationsQuery({
@@ -90,41 +98,115 @@ export function ViewOfferPage() {
         {shouldRedirectTo404(error) ? <Navigate to={"/404"} /> : null}
         {shouldShowErrorPage(error) ? <ErrorPage /> : null}
 
-        {session ? (
-          <OfferDetailsArea session={session} />
-        ) : (
-          <Grid item xs={12} lg={8} md={6}>
-            <Skeleton width={"100%"} height={400} />
+        {isMobile && session ? (
+          <Grid item xs={12}>
+            <Tabs
+              value={activeTab}
+              onChange={(_, newValue) => setActiveTab(newValue)}
+              variant="scrollable"
+              scrollButtons="auto"
+              sx={{
+                borderBottom: 1,
+                borderColor: "divider",
+                marginBottom: 1,
+              }}
+            >
+              <Tab label={t("offers.details", "Details")} />
+              <Tab label={t("offers.messages", "Messages")} />
+              {session.offers[0]?.service && (
+                <Tab label={t("offers.service", "Service")} />
+              )}
+              {session.offers[0]?.market_listings &&
+                session.offers[0].market_listings.length > 0 && (
+                  <Tab label={t("offers.marketListings", "Market Listings")} />
+                )}
+              {session.availability && (
+                <Tab label={t("offers.availability", "Availability")} />
+              )}
+            </Tabs>
           </Grid>
+        ) : null}
+
+        {/* Details Tab */}
+        {(isMobile ? activeTab === 0 : true) && (
+          <>
+            {session ? (
+              <OfferDetailsArea session={session} />
+            ) : (
+              <Grid item xs={12} lg={8} md={6}>
+                <Skeleton width={"100%"} height={400} />
+              </Grid>
+            )}
+          </>
         )}
 
-        {session ? (
-          <OfferMessagesArea offer={session} />
-        ) : (
-          <Grid item xs={12} lg={4} md={6}>
-            <Skeleton width={"100%"} height={400} />
-          </Grid>
-        )}
+        {/* Calculate tab indices dynamically */}
+        {(() => {
+          if (!session) return null
+          
+          let tabIndex = 0
+          const detailsTab = tabIndex++
+          const messagesTab = tabIndex++
+          const serviceTab = session.offers[0]?.service ? tabIndex++ : -1
+          const marketListingsTab =
+            session.offers[0]?.market_listings &&
+            session.offers[0].market_listings.length > 0
+              ? tabIndex++
+              : -1
+          const availabilityTab = session.availability ? tabIndex++ : -1
 
-        {session ? (
-          <OfferServiceArea offer={session} />
-        ) : (
-          <Grid item xs={12} lg={4}>
-            <Skeleton width={"100%"} height={400} />
-          </Grid>
-        )}
+          return (
+            <>
+              {/* Messages Tab - Desktop always shows, mobile only when tab is selected */}
+              {(isMobile ? activeTab === messagesTab : true) && (
+                <>
+                  {session ? (
+                    <OfferMessagesArea offer={session} />
+                  ) : (
+                    <Grid item xs={12} lg={4} md={6}>
+                      <Skeleton width={"100%"} height={400} />
+                    </Grid>
+                  )}
+                </>
+              )}
 
-        {session ? (
-          <OfferMarketListings offer={session} />
-        ) : (
-          <Grid item xs={12} lg={4}>
-            <Skeleton width={"100%"} height={400} />
-          </Grid>
-        )}
+              {/* Service Tab */}
+              {session.offers[0]?.service &&
+                (isMobile ? activeTab === serviceTab : true) && (
+                  <>
+                    {session ? (
+                      <OfferServiceArea offer={session} />
+                    ) : (
+                      <Grid item xs={12} lg={4}>
+                        <Skeleton width={"100%"} height={400} />
+                      </Grid>
+                    )}
+                  </>
+                )}
 
-        {session && session.availability && (
-          <OrderAvailabilityArea order={session} />
-        )}
+              {/* Market Listings Tab */}
+              {session.offers[0]?.market_listings &&
+                session.offers[0].market_listings.length > 0 &&
+                (isMobile ? activeTab === marketListingsTab : true) && (
+                  <>
+                    {session ? (
+                      <OfferMarketListings offer={session} />
+                    ) : (
+                      <Grid item xs={12} lg={4}>
+                        <Skeleton width={"100%"} height={400} />
+                      </Grid>
+                    )}
+                  </>
+                )}
+
+              {/* Availability Tab */}
+              {session.availability &&
+                (isMobile ? activeTab === availabilityTab : true) && (
+                  <OrderAvailabilityArea order={session} />
+                )}
+            </>
+          )
+        })()}
       </ContainerGrid>
     </Page>
   )
