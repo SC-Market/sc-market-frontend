@@ -46,6 +46,7 @@ import { has_permission } from "../contractor/OrgRoles"
 import { PAYMENT_TYPE_MAP } from "../../util/constants"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
+import { useMediaQuery } from "@mui/material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function OrderMessagesArea(props: { order: Order }) {
@@ -101,6 +102,7 @@ export function OrderMessagesArea(props: { order: Order }) {
 
 export function OrderDetailsArea(props: { order: Order }) {
   const theme = useTheme<ExtendedTheme>()
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
   const { order } = props
   const { t } = useTranslation()
   const { data: profile } = useGetUserProfileQuery()
@@ -210,9 +212,16 @@ export function OrderDetailsArea(props: { order: Order }) {
     useCreateOrderThreadMutation()
 
   return (
-    <Grid item xs={12} lg={8} md={6}>
-      <TableContainer component={Paper}>
-        <Table aria-label={t("orderDetailsArea.details_table")}>
+    <Grid item xs={12} lg={8} md={6} sx={{ minWidth: 0 }}>
+      <TableContainer
+        component={Paper}
+        sx={{
+          width: "100%",
+          overflowX: "auto",
+          overflowY: "visible",
+        }}
+      >
+        <Table aria-label={t("orderDetailsArea.details_table")} sx={{ tableLayout: "auto" }}>
           <TableBody>
             <TableRow
               sx={{
@@ -286,9 +295,9 @@ export function OrderDetailsArea(props: { order: Order }) {
               <TableCell component="th" scope="row">
                 {t("orderDetailsArea.title")}
               </TableCell>
-              <TableCell align="right">
+              <TableCell align="right" sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}>
                 <Stack direction="row" justifyContent={"right"}>
-                  <Typography color={"text.secondary"} variant={"subtitle2"}>
+                  <Typography color={"text.secondary"} variant={"subtitle2"} sx={{ wordBreak: "break-word", overflowWrap: "break-word", textAlign: "right" }}>
                     {order.title}
                   </Typography>
                 </Stack>
@@ -300,9 +309,9 @@ export function OrderDetailsArea(props: { order: Order }) {
               <TableCell component="th" scope="row">
                 {t("orderDetailsArea.kind")}
               </TableCell>
-              <TableCell align="right">
+              <TableCell align="right" sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}>
                 <Stack direction="row" justifyContent={"right"}>
-                  <Typography color={"text.secondary"} variant={"subtitle2"}>
+                  <Typography color={"text.secondary"} variant={"subtitle2"} sx={{ wordBreak: "break-word", overflowWrap: "break-word", textAlign: "right" }}>
                     {order.kind}
                   </Typography>
                 </Stack>
@@ -314,10 +323,10 @@ export function OrderDetailsArea(props: { order: Order }) {
               {/*<TableCell component="th" scope="row">*/}
               {/*  Description*/}
               {/*</TableCell>*/}
-              <TableCell colSpan={2}>
+              <TableCell colSpan={2} sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}>
                 <Stack direction="column" spacing={theme.layoutSpacing.compact}>
                   {t("orderDetailsArea.details")}
-                  <Typography color={"text.secondary"} variant={"subtitle2"}>
+                  <Typography color={"text.secondary"} variant={"subtitle2"} sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}>
                     <MarkdownRender text={order.description} />
                   </Typography>
                 </Stack>
@@ -330,14 +339,15 @@ export function OrderDetailsArea(props: { order: Order }) {
               <TableCell component="th" scope="row">
                 {t("orderDetailsArea.order")}
               </TableCell>
-              <TableCell align="right">
+              <TableCell align="right" sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}>
                 <Stack direction="row" justifyContent={"right"}>
-                  <Typography color={"text.secondary"} variant={"subtitle2"}>
+                  <Typography color={"text.secondary"} variant={"subtitle2"} sx={{ wordBreak: "break-word", overflowWrap: "break-word", textAlign: "right" }}>
                     {(+order.cost).toLocaleString(undefined)}{" "}
                     <Typography
                       color={"text.primary"}
                       variant={"subtitle2"}
                       display={"inline"}
+                      sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}
                     >
                       aUEC {t(PAYMENT_TYPE_MAP.get(order.payment_type) || "")}
                     </Typography>
@@ -395,11 +405,12 @@ export function OrderDetailsArea(props: { order: Order }) {
               <TableCell component="th" scope="row">
                 {t("orderDetailsArea.update_status")}
               </TableCell>
-              <TableCell align="right">
+              <TableCell align="right" sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}>
                 <Stack
-                  direction="row"
-                  justifyContent={"right"}
+                  direction={{ xs: "column", sm: "row" }}
+                  justifyContent={{ xs: "stretch", sm: "right" }}
                   spacing={theme.layoutSpacing.compact}
+                  sx={{ gap: theme.layoutSpacing.compact }}
                 >
                   {privateContractCustomer && !isComplete && (
                     <LoadingButton
@@ -407,6 +418,7 @@ export function OrderDetailsArea(props: { order: Order }) {
                       color={"error"}
                       startIcon={<CancelRounded />}
                       onClick={() => updateOrderStatus("cancelled")}
+                      fullWidth={isMobile}
                     >
                       {t("orderDetailsArea.cancel")}
                     </LoadingButton>
@@ -417,6 +429,7 @@ export function OrderDetailsArea(props: { order: Order }) {
                       color={"error"}
                       startIcon={<CancelRounded />}
                       onClick={() => updateOrderStatus("cancelled")}
+                      fullWidth={isMobile}
                     >
                       {t("orderDetailsArea.cancel")}
                     </LoadingButton>
@@ -424,55 +437,106 @@ export function OrderDetailsArea(props: { order: Order }) {
                   {(profile?.role === "admin" ||
                     amContractorManager ||
                     amAssigned) && (
-                    <ButtonGroup
-                      variant="contained"
-                      aria-label={t("ui.aria.loadingButtonGroup")}
-                    >
-                      {(profile?.role === "admin" ||
-                        order.status === "not-started" ||
-                        order.status === "in-progress") && (
-                        <LoadingButton
-                          variant={"contained"}
-                          color={"success"}
-                          startIcon={<DoneRounded />}
-                          onClick={() => updateOrderStatus("fulfilled")}
-                        >
-                          {t("orderDetailsArea.complete_order")}
-                        </LoadingButton>
-                      )}
-                      {(profile?.role === "admin" ||
-                        order.status === "not-started") && (
-                        <LoadingButton
-                          variant={"contained"}
-                          color={"warning"}
-                          startIcon={<PlayArrowRounded />}
-                          onClick={() => updateOrderStatus("in-progress")}
-                        >
-                          {t("orderDetailsArea.begin_work")}
-                        </LoadingButton>
-                      )}
-                      {profile?.role === "admin" && (
-                        <LoadingButton
-                          variant={"contained"}
-                          color={"info"}
-                          startIcon={<PlayArrowRounded />}
-                          onClick={() => updateOrderStatus("not-started")}
-                        >
-                          {t("orderDetailsArea.not_started")}
-                        </LoadingButton>
-                      )}
-
-                      {(profile?.role === "admin" || !isComplete) && (
-                        <LoadingButton
-                          variant={"contained"}
-                          color={"error"}
-                          startIcon={<CancelRounded />}
-                          onClick={() => updateOrderStatus("cancelled")}
-                        >
-                          {t("orderDetailsArea.cancel")}
-                        </LoadingButton>
-                      )}
-                    </ButtonGroup>
+                    isMobile ? (
+                      <Stack direction="column" spacing={theme.layoutSpacing.compact} sx={{ width: "100%" }}>
+                        {(profile?.role === "admin" ||
+                          order.status === "not-started" ||
+                          order.status === "in-progress") && (
+                          <LoadingButton
+                            variant={"contained"}
+                            color={"success"}
+                            startIcon={<DoneRounded />}
+                            onClick={() => updateOrderStatus("fulfilled")}
+                            fullWidth
+                          >
+                            {t("orderDetailsArea.complete_order")}
+                          </LoadingButton>
+                        )}
+                        {(profile?.role === "admin" ||
+                          order.status === "not-started") && (
+                          <LoadingButton
+                            variant={"contained"}
+                            color={"warning"}
+                            startIcon={<PlayArrowRounded />}
+                            onClick={() => updateOrderStatus("in-progress")}
+                            fullWidth
+                          >
+                            {t("orderDetailsArea.begin_work")}
+                          </LoadingButton>
+                        )}
+                        {profile?.role === "admin" && (
+                          <LoadingButton
+                            variant={"contained"}
+                            color={"info"}
+                            startIcon={<PlayArrowRounded />}
+                            onClick={() => updateOrderStatus("not-started")}
+                            fullWidth
+                          >
+                            {t("orderDetailsArea.not_started")}
+                          </LoadingButton>
+                        )}
+                        {(profile?.role === "admin" || !isComplete) && (
+                          <LoadingButton
+                            variant={"contained"}
+                            color={"error"}
+                            startIcon={<CancelRounded />}
+                            onClick={() => updateOrderStatus("cancelled")}
+                            fullWidth
+                          >
+                            {t("orderDetailsArea.cancel")}
+                          </LoadingButton>
+                        )}
+                      </Stack>
+                    ) : (
+                      <ButtonGroup
+                        variant="contained"
+                        aria-label={t("ui.aria.loadingButtonGroup")}
+                      >
+                        {(profile?.role === "admin" ||
+                          order.status === "not-started" ||
+                          order.status === "in-progress") && (
+                          <LoadingButton
+                            variant={"contained"}
+                            color={"success"}
+                            startIcon={<DoneRounded />}
+                            onClick={() => updateOrderStatus("fulfilled")}
+                          >
+                            {t("orderDetailsArea.complete_order")}
+                          </LoadingButton>
+                        )}
+                        {(profile?.role === "admin" ||
+                          order.status === "not-started") && (
+                          <LoadingButton
+                            variant={"contained"}
+                            color={"warning"}
+                            startIcon={<PlayArrowRounded />}
+                            onClick={() => updateOrderStatus("in-progress")}
+                          >
+                            {t("orderDetailsArea.begin_work")}
+                          </LoadingButton>
+                        )}
+                        {profile?.role === "admin" && (
+                          <LoadingButton
+                            variant={"contained"}
+                            color={"info"}
+                            startIcon={<PlayArrowRounded />}
+                            onClick={() => updateOrderStatus("not-started")}
+                          >
+                            {t("orderDetailsArea.not_started")}
+                          </LoadingButton>
+                        )}
+                        {(profile?.role === "admin" || !isComplete) && (
+                          <LoadingButton
+                            variant={"contained"}
+                            color={"error"}
+                            startIcon={<CancelRounded />}
+                            onClick={() => updateOrderStatus("cancelled")}
+                          >
+                            {t("orderDetailsArea.cancel")}
+                          </LoadingButton>
+                        )}
+                      </ButtonGroup>
+                    )
                   )}
                 </Stack>
               </TableCell>
