@@ -46,6 +46,7 @@ import {
   useNotificationBulkUpdateMutation,
   useNotificationBulkDeleteMutation,
 } from "../../store/notification"
+import { useNotificationPollingInterval } from "../../hooks/notifications/useNotificationPolling"
 import { MarketBid } from "../../datatypes/MarketListing"
 import { useGetMarketListingQuery } from "../../store/market"
 import { OfferSession } from "../../store/offer"
@@ -615,13 +616,16 @@ export function NotificationsButton() {
   const [page, setPage] = useState(0)
   const [pageSize, setPageSize] = useState(5)
 
+  // Calculate optimal polling interval based on push subscription and app visibility
+  const pollingInterval = useNotificationPollingInterval()
+
   const { data: notificationsData } = useGetNotificationsQuery(
     {
       page,
       pageSize,
     },
     {
-      pollingInterval: 120000,
+      pollingInterval: pollingInterval > 0 ? pollingInterval : undefined, // Disable polling if interval is 0
     },
   )
 

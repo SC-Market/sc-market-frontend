@@ -14,6 +14,13 @@ export default defineConfig({
     VitePWA({
       registerType: "prompt", // Use prompt so we can handle registration manually for better control
       injectRegister: false, // Disable auto-injection since we're handling registration manually
+      // Use injectManifest to allow custom push notification handlers
+      strategies: "injectManifest",
+      srcDir: "public",
+      filename: "sw.js", // Our custom service worker file
+      injectManifest: {
+        globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2,woff,ttf}"],
+      },
       includeAssets: [
         "favicon.ico",
         "apple-touch-icon.png",
@@ -169,6 +176,8 @@ export default defineConfig({
         navigateFallback: undefined,
         suppressWarnings: true,
         disableDevLogs: true,
+        // Use injectManifest in dev if needed for testing
+        // For now, we'll use generateSW in dev and injectManifest in prod
       },
     }),
     // Only enable bundle visualizer when ANALYZE_BUNDLE env var is set
