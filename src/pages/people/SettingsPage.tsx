@@ -10,6 +10,7 @@ import {
   StoreRounded,
   Block,
   SecurityRounded,
+  NotificationsActiveRounded,
 } from "@mui/icons-material"
 import { PrivacySettings } from "../../views/settings/PrivacySettings"
 import { Discord } from "../../components/icon/DiscordIcon"
@@ -19,6 +20,7 @@ import { MarketSettings } from "../../views/settings/MarketSettings"
 import { ContractorsSettings } from "../../views/settings/ContractorsSettings"
 import { BlocklistSettings } from "../../views/settings/BlocklistSettings"
 import { ApiTokensSettings } from "../../views/settings/ApiTokensSettings"
+import { PushNotificationSettings } from "../../views/settings/PushNotificationSettings"
 import { useTranslation } from "react-i18next"
 
 export function SettingsPage() {
@@ -84,6 +86,12 @@ export function SettingsPage() {
               {...a11yProps(6)}
               value={6}
             />
+            <Tab
+              label="Push Notifications"
+              icon={<NotificationsActiveRounded />}
+              {...a11yProps(7)}
+              value={7}
+            />
           </Tabs>
         </Grid>
 
@@ -109,6 +117,9 @@ export function SettingsPage() {
           </TabPanel>
           <TabPanel value={page} index={6}>
             <ApiTokensSettings />
+          </TabPanel>
+          <TabPanel value={page} index={7}>
+            <PushNotificationSettings />
           </TabPanel>
         </Grid>
       </ContainerGrid>

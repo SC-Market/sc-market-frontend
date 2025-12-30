@@ -18,6 +18,8 @@ import {
   OrgRoute,
   OrgAdminRoute,
 } from "./components/router/LoggedInRoute"
+import { store } from "./store/store"
+import { notificationApi } from "./store/notification"
 
 import "./util/i18n.ts"
 
@@ -25,6 +27,29 @@ function App() {
   useEffect(() => {
     // Start background prefetching after the app loads
     startBackgroundPrefetch()
+
+    // Set up push notification handling
+    if ("serviceWorker" in navigator) {
+      // Listen for push events from service worker
+      navigator.serviceWorker.addEventListener("message", (event) => {
+        if (event.data && event.data.type === "PUSH_NOTIFICATION_RECEIVED") {
+          // Invalidate notification cache to trigger refetch
+          store.dispatch(
+            notificationApi.util.invalidateTags(["Notifications" as const]),
+          )
+        }
+      })
+
+      // Also listen for push events directly (when app is in foreground)
+      navigator.serviceWorker.ready.then((registration) => {
+        // The service worker will handle push events, but we can also listen here
+        // for when the app is in the foreground
+        if (registration.pushManager) {
+          // Push events are handled by the service worker
+          // We just need to invalidate cache when notifications arrive
+        }
+      })
+    }
 
     // Cleanup function to prevent memory leaks
     return () => {

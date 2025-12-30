@@ -63,5 +63,7 @@ export const serviceApi = createApi({
     "OrderLimits",
     "ContractorLanguages",
     "UserLanguages",
+    "PushSubscriptions",
+    "PushPreferences",
   ],
 })
