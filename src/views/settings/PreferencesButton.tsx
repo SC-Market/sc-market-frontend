@@ -11,6 +11,7 @@ import {
   Divider,
   Autocomplete,
   TextField,
+  useMediaQuery,
 } from "@mui/material"
 import { SettingsRounded } from "@mui/icons-material"
 import { useState, useEffect } from "react"
@@ -25,6 +26,7 @@ import { CUSTOM_THEMES } from "../../hooks/styles/custom_themes"
 
 export function PreferencesButton() {
   const theme = useTheme<ExtendedTheme>()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const { t, i18n } = useTranslation()
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
   const [lightTheme, setLightTheme] = useLightTheme()
@@ -89,7 +91,9 @@ export function PreferencesButton() {
         sx={{
           position: "absolute",
           right: theme.spacing(2),
-          bottom: theme.spacing(2),
+          // On mobile, position above bottom nav (64px height + 16px spacing)
+          bottom: isMobile ? theme.spacing(10) : theme.spacing(2),
+          zIndex: theme.zIndex.drawer + 2, // Above bottom nav
         }}
         color={"primary"}
         onClick={handleClick}

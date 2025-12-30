@@ -62,6 +62,8 @@ export const contractorsApi = serviceApi.injectEndpoints({
     }),
     getContractorBySpectrumID: builder.query<Contractor, string>({
       query: (spectrum_id) => `/api/contractors/${spectrum_id}`,
+      // Keep contractor data in cache for 5 minutes (frequently viewed)
+      keepUnusedDataFor: 300,
       providesTags: (result, error, arg) => [
         { type: "Contractor" as const, id: arg },
       ],

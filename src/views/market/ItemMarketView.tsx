@@ -42,7 +42,7 @@ export function ItemMarketView() {
           top: 64 + 24,
         }}
         onClick={() => {
-          setOpen(true)
+          setOpen((prev) => !prev)
         }}
       >
         {open ? <CloseIcon /> : <MenuIcon />}
@@ -50,7 +50,7 @@ export function ItemMarketView() {
       <MarketSidebarContext.Provider value={[open, setOpen]}>
         {xs && <MarketSidebar />}
 
-        <Container maxWidth={"lg"}>
+        <Container maxWidth={"lg"} sx={{ padding: 0 }}>
           <Grid
             container
             spacing={theme.layoutSpacing.layout}

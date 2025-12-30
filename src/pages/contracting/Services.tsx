@@ -36,7 +36,7 @@ export function Services() {
             transition: "0.3s",
           }}
           onClick={() => {
-            setOpen(true)
+            setOpen((prev) => !prev)
           }}
         >
           {open ? <CloseIcon /> : <MenuIcon />}

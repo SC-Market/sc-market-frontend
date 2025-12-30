@@ -1313,7 +1313,13 @@ export function DisplayListingsMin(props: {
     // For virtualized grid, we render ItemListingBase directly (not wrapped in Grid item)
     return (
       <Grid item xs={12}>
-        <Box sx={{ height: "calc(100vh - 400px)", minHeight: 600 }}>
+        <Box
+          sx={{
+            // Remove fixed height on mobile to allow natural page scrolling
+            height: { xs: "auto", sm: "calc(100vh - 400px)" },
+            minHeight: { xs: "auto", sm: 600 },
+          }}
+        >
           <VirtualizedGrid
             items={listingsWithAds}
             renderItem={(item, index) => {
@@ -1331,12 +1337,12 @@ export function DisplayListingsMin(props: {
                   return <MultipleListingBase multiple={item as ExtendedMultipleSearchResult} index={index} key={key} />
                 }
               }
-              // Ad card
-              return <AdCard ad={item as any} index={index} key={key} />
+              // Ad card - render same as listings, no special handling
+              return <AdCard ad={item as any} index={index} key={key} noGridWrapper={true} />
             }}
             itemHeight={400}
-            columns={{ xs: 1, sm: 2, md: 3, lg: 4 }}
-            gap={theme.layoutSpacing.layout}
+            columns={{ xs: 2, sm: 2, md: 3, lg: 4 }}
+            gap={{ xs: theme.layoutSpacing.component, sm: theme.layoutSpacing.layout }}
             overscan={3}
           />
         </Box>

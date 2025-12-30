@@ -39,7 +39,7 @@ export function ServiceMarketView() {
             transition: "0.3s",
           }}
           onClick={() => {
-            setOpen(true)
+            setOpen((prev) => !prev)
           }}
         >
           {open ? <CloseIcon /> : <MenuIcon />}
@@ -52,12 +52,13 @@ export function ServiceMarketView() {
           spacing={theme.layoutSpacing.layout}
           justifyContent={"center"}
         >
-          <Grid item xs={12} md={3}>
+          {/* Hide search area on mobile - it's in the sidebar */}
+          <Grid item xs={0} md={3} sx={{ display: { xs: "none", md: "block" } }}>
             <Paper>
               <ServiceSearchArea />
             </Paper>
           </Grid>
-          <Grid item md={9}>
+          <Grid item xs={12} md={9}>
             <Grid
               container
               spacing={theme.layoutSpacing.layout}

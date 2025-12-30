@@ -1,29 +1,36 @@
 import { Link } from "react-router-dom"
-import { Button, Grid } from "@mui/material"
+import { Button, Grid, useMediaQuery } from "@mui/material"
 import { CreateRounded } from "@mui/icons-material"
 import React from "react"
 import { useTranslation } from "react-i18next"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function ServiceActions() {
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
 
   return (
-    <Grid item>
-      <Link
-        to={"/order/service/create"}
-        style={{ color: "inherit", textDecoration: "none" }}
-      >
-        <Button
-          color={"secondary"}
-          startIcon={<CreateRounded />}
-          variant={"contained"}
-          size={"large"}
+    <Grid container>
+      <Grid item xs={12}>
+        <Link
+          to={"/order/service/create"}
+          style={{ color: "inherit", textDecoration: "none", display: "block" }}
         >
-          {t("service_actions.create_service", {
-            defaultValue: "Create Service",
-          })}
-        </Button>
-      </Link>
+          <Button
+            color={"secondary"}
+            startIcon={<CreateRounded />}
+            variant={"contained"}
+            size={isMobile ? "medium" : "large"}
+            fullWidth
+          >
+            {t("service_actions.create_service", {
+              defaultValue: "Create Service",
+            })}
+          </Button>
+        </Link>
+      </Grid>
     </Grid>
   )
 }

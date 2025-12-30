@@ -9,6 +9,10 @@ export const serviceApi = createApi({
   endpoints: (builder) => ({}),
   reducerPath: "serviceApi",
   refetchOnReconnect: true,
+  // Enhanced caching configuration for better mobile performance
+  keepUnusedDataFor: 300, // Keep unused data for 5 minutes (default is 60 seconds)
+  // This reduces API requests by keeping data in cache longer
+  // Users navigating back/forth won't trigger unnecessary refetches
   tagTypes: [
     "RecruitingPostComments",
     "RecruitingPosts",

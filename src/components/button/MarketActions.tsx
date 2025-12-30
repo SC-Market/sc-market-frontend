@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom"
-import { Button, Grid } from "@mui/material"
+import { Button, Grid, useMediaQuery } from "@mui/material"
 import {
   CreateRounded,
   RadioButtonCheckedRounded,
@@ -21,71 +21,72 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 export function MarketActions() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
 
   return (
-    <Grid item>
-      <Grid container spacing={theme.layoutSpacing.layout}>
-        <Grid item>
-          <Link
-            to={"/market/create"}
-            style={{ color: "inherit", textDecoration: "none" }}
+    <Grid container spacing={theme.layoutSpacing.component}>
+      <Grid item xs={6}>
+        <Link
+          to={"/market/create"}
+          style={{ color: "inherit", textDecoration: "none", display: "block" }}
+        >
+          <Button
+            color={"secondary"}
+            startIcon={<CreateRounded />}
+            variant={"contained"}
+            size={isMobile ? "medium" : "large"}
+            fullWidth
+            title={t(
+              "marketActions.createListingTooltip",
+              "Create a new listing",
+            )}
+            aria-label={t(
+              "accessibility.createMarketListing",
+              "Create a new market listing",
+            )}
+            aria-describedby="create-listing-description"
           >
-            <Button
-              color={"secondary"}
-              startIcon={<CreateRounded />}
-              variant={"contained"}
-              size={"large"}
-              title={t(
-                "marketActions.createListingTooltip",
-                "Create a new listing",
+            {t("marketActions.createListing", "Create Listing")}
+            <span id="create-listing-description" className="sr-only">
+              {t(
+                "accessibility.createListingDescription",
+                "Navigate to the create listing page",
               )}
-              aria-label={t(
-                "accessibility.createMarketListing",
-                "Create a new market listing",
-              )}
-              aria-describedby="create-listing-description"
-            >
-              {t("marketActions.createListing", "Create Listing")}
-              <span id="create-listing-description" className="sr-only">
-                {t(
-                  "accessibility.createListingDescription",
-                  "Navigate to the create listing page",
-                )}
-              </span>
-            </Button>
-          </Link>
-        </Grid>
+            </span>
+          </Button>
+        </Link>
+      </Grid>
 
-        <Grid item>
-          <Link
-            to={"/market/cart"}
-            style={{ color: "inherit", textDecoration: "none" }}
+      <Grid item xs={6}>
+        <Link
+          to={"/market/cart"}
+          style={{ color: "inherit", textDecoration: "none", display: "block" }}
+        >
+          <Button
+            color={"primary"}
+            startIcon={<ShoppingCartRoundedIcon />}
+            variant={"contained"}
+            size={isMobile ? "medium" : "large"}
+            fullWidth
+            title={t(
+              "marketActions.myCartTooltip",
+              "View your shopping cart",
+            )}
+            aria-label={t(
+              "accessibility.viewShoppingCart",
+              "View your shopping cart",
+            )}
+            aria-describedby="view-cart-description"
           >
-            <Button
-              color={"primary"}
-              startIcon={<ShoppingCartRoundedIcon />}
-              variant={"contained"}
-              size={"large"}
-              title={t(
-                "marketActions.myCartTooltip",
-                "View your shopping cart",
+            {t("marketActions.myCart", "My Cart")}
+            <span id="view-cart-description" className="sr-only">
+              {t(
+                "accessibility.viewCartDescription",
+                "Navigate to your shopping cart",
               )}
-              aria-label={t(
-                "accessibility.viewShoppingCart",
-                "View your shopping cart",
-              )}
-              aria-describedby="view-cart-description"
-            >
-              {t("marketActions.myCart", "My Cart")}
-              <span id="view-cart-description" className="sr-only">
-                {t(
-                  "accessibility.viewCartDescription",
-                  "Navigate to your shopping cart",
-                )}
-              </span>
-            </Button>
-          </Link>
-        </Grid>
+            </span>
+          </Button>
+        </Link>
       </Grid>
     </Grid>
   )

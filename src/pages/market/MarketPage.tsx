@@ -10,6 +10,7 @@ import {
   Typography,
   CircularProgress,
   Box,
+  useMediaQuery,
 } from "@mui/material"
 // Removed static imports - now using dynamic imports
 import {
@@ -93,54 +94,84 @@ export function MarketPage() {
 
   return (
     <Page title={t("market.market")} dontUseDefaultCanonUrl={true}>
-      <OpenLayout sidebarOpen={true}>
-        <Container maxWidth={"lg"} sx={{ paddingTop: 8 }}>
+      <OpenLayout sidebarOpen={true} noMobilePadding={true}>
+        <Container
+          maxWidth={"lg"}
+          sx={{
+            paddingTop: { xs: 2, sm: 8 },
+            paddingX: { xs: theme.spacing(1), sm: theme.spacing(3) },
+          }}
+        >
           <Grid
             container
-            spacing={theme.layoutSpacing.layout}
-            justifyContent={"space-between"}
-            sx={{ marginBottom: 4 }}
+            spacing={{ xs: theme.layoutSpacing.component, sm: theme.layoutSpacing.layout }}
+            sx={{ marginBottom: { xs: 2, sm: 4 } }}
           >
-            <Grid item>
-              <Stack direction={"row"} spacing={theme.layoutSpacing.layout}>
-                <Typography
-                  variant={"h4"}
-                  sx={{ fontWeight: "bold" }}
-                  color={"text.secondary"}
-                >
-                  {t("market.market")}
-                </Typography>
-                <Tabs
-                  value={tabPage}
-                  aria-label={t("ui.aria.orgInfoArea")}
-                  variant="scrollable"
-                  textColor="secondary"
-                  indicatorColor="secondary"
-                >
-                  <Tab
-                    label={t("market.itemsTab")}
-                    value={1}
-                    component={Link}
-                    {...a11yProps(0)}
-                    to={"/market"}
-                  />
-                  <Tab
-                    label={t("market.servicesTab")}
-                    value={0}
-                    component={Link}
-                    {...a11yProps(1)}
-                    to={"/market/services"}
-                  />
-                </Tabs>
-              </Stack>
+            {/* First row: Market header on left, Tabs on right */}
+            <Grid item xs={12}>
+              <Grid
+                container
+                justifyContent="space-between"
+                alignItems="center"
+                spacing={theme.layoutSpacing.component}
+              >
+                <Grid item xs="auto">
+                  <Typography
+                    variant="h4"
+                    sx={{
+                      fontWeight: "bold",
+                      fontSize: { xs: "1.5rem", sm: "2.125rem" },
+                    }}
+                    color={"text.secondary"}
+                  >
+                    {t("market.market")}
+                  </Typography>
+                </Grid>
+                <Grid item xs="auto">
+                  <Tabs
+                    value={tabPage}
+                    aria-label={t("ui.aria.orgInfoArea")}
+                    variant="scrollable"
+                    scrollButtons="auto"
+                    textColor="secondary"
+                    indicatorColor="secondary"
+                    sx={{
+                      minHeight: { xs: 48, sm: 64 },
+                      "& .MuiTab-root": {
+                        minHeight: { xs: 48, sm: 64 },
+                        fontSize: { xs: "0.875rem", sm: "1rem" },
+                        padding: { xs: "12px 16px", sm: "12px 24px" },
+                      },
+                    }}
+                  >
+                    <Tab
+                      label={t("market.itemsTab")}
+                      value={1}
+                      component={Link}
+                      {...a11yProps(0)}
+                      to={"/market"}
+                    />
+                    <Tab
+                      label={t("market.servicesTab")}
+                      value={0}
+                      component={Link}
+                      {...a11yProps(1)}
+                      to={"/market/services"}
+                    />
+                  </Tabs>
+                </Grid>
+              </Grid>
             </Grid>
-            {tabPage === 1 ? (
-              <MarketActions />
-            ) : (
-              <Suspense fallback={<CircularProgress size={24} />}>
-                <ServiceActions />
-              </Suspense>
-            )}
+            {/* Second row: Action buttons 50-50 width */}
+            <Grid item xs={12}>
+              {tabPage === 1 ? (
+                <MarketActions />
+              ) : (
+                <Suspense fallback={<CircularProgress size={24} />}>
+                  <ServiceActions />
+                </Suspense>
+              )}
+            </Grid>
           </Grid>
         </Container>
 

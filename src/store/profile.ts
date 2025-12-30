@@ -37,6 +37,8 @@ export const userApi = serviceApi.injectEndpoints({
   endpoints: (builder) => ({
     profileGetUserProfile: builder.query<UserProfileState, void>({
       query: () => `${baseUrl}`,
+      // Keep user profile in cache for 5 minutes (frequently accessed)
+      keepUnusedDataFor: 300,
       providesTags: (result, error, arg) => [
         {
           type: "Profile" as const,
@@ -72,6 +74,8 @@ export const userApi = serviceApi.injectEndpoints({
     }),
     profileGetUserByName: builder.query<User, string>({
       query: (username) => `${baseUrl}/user/${username}`,
+      // Keep user profiles in cache for 5 minutes (users navigate back/forth)
+      keepUnusedDataFor: 300,
       providesTags: (result, error, arg) => [
         { type: "Profile" as const, id: arg },
       ],

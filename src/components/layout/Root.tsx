@@ -10,6 +10,7 @@ import { SkipNavigation } from "../accessibility/SkipNavigation"
 import { OfflineIndicator } from "../pwa/OfflineIndicator"
 import { UpdateNotification } from "../pwa/UpdateNotification"
 import { InstallPrompt } from "../pwa/InstallPrompt"
+import { MobileBottomNav } from "../navigation/MobileBottomNav"
 
 export function Root(props: { children: React.ReactNode }) {
   const theme: Theme = useTheme()
@@ -43,6 +44,7 @@ export function Root(props: { children: React.ReactNode }) {
       <Sidebar />
       {props.children}
       <PreferencesButton />
+      <MobileBottomNav />
     </Box>
   )
 }
