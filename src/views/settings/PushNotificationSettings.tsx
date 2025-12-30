@@ -32,6 +32,7 @@ import {
   isPushNotificationSupported,
   getPushPermissionStatus,
   requestPushPermission,
+  getCurrentPushSubscription,
 } from "../../util/push-subscription"
 import {
   isPWAInstalled,
@@ -71,9 +72,51 @@ export function PushNotificationSettings() {
   const [unsubscribePush] = useUnsubscribePushMutation()
   const [updatePreference] = useUpdatePushPreferenceMutation()
 
+  // Check if current device is subscribed
+  const [currentDeviceSubscribed, setCurrentDeviceSubscribed] = React.useState<boolean | null>(null)
+  const [currentSubscriptionId, setCurrentSubscriptionId] = React.useState<string | null>(null)
+
   // Check browser support
   const isSupported = isPushNotificationSupported()
   const permissionStatus = getPushPermissionStatus()
+
+  // Check if current device is subscribed
+  React.useEffect(() => {
+    const checkCurrentDeviceSubscription = async () => {
+      if (!isSupported || !subscriptions) {
+        setCurrentDeviceSubscribed(false)
+        return
+      }
+
+      try {
+        const currentSubscription = await getCurrentPushSubscription()
+        if (!currentSubscription) {
+          setCurrentDeviceSubscribed(false)
+          setCurrentSubscriptionId(null)
+          return
+        }
+
+        // Check if current device's endpoint matches any subscription
+        const matchingSubscription = subscriptions.find(
+          (sub) => sub.endpoint === currentSubscription.endpoint
+        )
+
+        if (matchingSubscription) {
+          setCurrentDeviceSubscribed(true)
+          setCurrentSubscriptionId(matchingSubscription.subscription_id)
+        } else {
+          setCurrentDeviceSubscribed(false)
+          setCurrentSubscriptionId(null)
+        }
+      } catch (error) {
+        console.error("Failed to check current device subscription:", error)
+        setCurrentDeviceSubscribed(false)
+        setCurrentSubscriptionId(null)
+      }
+    }
+
+    checkCurrentDeviceSubscription()
+  }, [isSupported, subscriptions])
 
   // Check PWA installation status
   const pwaInstalled = isPWAInstalled()
@@ -268,6 +311,7 @@ export function PushNotificationSettings() {
   }
 
   const hasSubscriptions = subscriptions && subscriptions.length > 0
+  const isCurrentDeviceSubscribed = currentDeviceSubscribed === true
   const isPermissionGranted = permissionStatus === "granted"
   const isPermissionDenied = permissionStatus === "denied"
 
@@ -329,33 +373,37 @@ export function PushNotificationSettings() {
 
           {/* Subscription Toggle */}
           <Box sx={{ mb: 2 }}>
-            {subscriptionsLoading ? (
+            {subscriptionsLoading || currentDeviceSubscribed === null ? (
               <CircularProgress size={24} />
-            ) : hasSubscriptions ? (
+            ) : isCurrentDeviceSubscribed ? (
               <Box>
                 <Typography variant="body2" color="success.main" gutterBottom>
                   <NotificationsActiveIcon sx={{ verticalAlign: "middle", mr: 1 }} />
-                  Push notifications are enabled ({subscriptions.length} device
-                  {subscriptions.length !== 1 ? "s" : ""})
+                  Push notifications are enabled on this device
+                  {hasSubscriptions && subscriptions.length > 1 && (
+                    <> ({subscriptions.length} total device{subscriptions.length !== 1 ? "s" : ""})</>
+                  )}
                 </Typography>
-                <Button
-                  variant="outlined"
-                  color="error"
-                  size="small"
-                  onClick={() => {
-                    // Unsubscribe from all devices
-                    subscriptions.forEach((sub) => handleUnsubscribe(sub.subscription_id))
-                  }}
-                  sx={{ mt: 1 }}
-                >
-                  Disable Push Notifications
-                </Button>
+                {currentSubscriptionId && (
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    size="small"
+                    onClick={() => handleUnsubscribe(currentSubscriptionId)}
+                    sx={{ mt: 1 }}
+                  >
+                    Disable on This Device
+                  </Button>
+                )}
               </Box>
             ) : (
               <Box>
                 <Typography variant="body2" color="text.secondary" gutterBottom>
                   <NotificationsOffIcon sx={{ verticalAlign: "middle", mr: 1 }} />
-                  Push notifications are not enabled
+                  Push notifications are not enabled on this device
+                  {hasSubscriptions && (
+                    <> ({subscriptions.length} other device{subscriptions.length !== 1 ? "s" : ""} connected)</>
+                  )}
                 </Typography>
                 <Button
                   variant="contained"
@@ -415,7 +463,7 @@ export function PushNotificationSettings() {
       </Grid>
 
       {/* Preferences Section */}
-      {hasSubscriptions && (
+      {isCurrentDeviceSubscribed && (
         <>
           <Grid item xs={12}>
             <Typography variant="h6" gutterBottom>
@@ -468,10 +516,45 @@ export function PushNotificationSettings() {
 }
 
 /**
- * Format action name for display
+ * Get user-friendly label for notification action type
  */
 function formatActionName(action: string): string {
-  return action
+  const actionLabels: Record<string, string> = {
+    // Order notifications
+    order_create: "New Order Created",
+    order_assigned: "Order Assigned to You",
+    order_status_fulfilled: "Order Fulfilled",
+    order_status_in_progress: "Order In Progress",
+    order_status_not_started: "Order Not Started",
+    order_status_cancelled: "Order Cancelled",
+    order_comment: "Order Comments",
+    order_message: "Order Messages",
+    order_review: "Order Reviews",
+    order_review_revision_requested: "Review Revision Requested",
+    order_contractor_applied: "Contractor Applied to Order",
+    public_order_create: "New Public Order",
+    
+    // Market notifications
+    market_item_bid: "Market Item Bids",
+    market_item_offer: "Market Item Offers",
+    market_bid_accepted: "Market Bid Accepted",
+    market_bid_declined: "Market Bid Declined",
+    market_offer_accepted: "Market Offer Accepted",
+    market_offer_declined: "Market Offer Declined",
+    
+    // Offer notifications
+    offer_create: "New Offers",
+    offer_message: "Offer Messages",
+    counter_offer_create: "Counter Offers",
+    
+    // Contractor notifications
+    contractor_invite: "Contractor Invitations",
+    
+    // Admin notifications
+    admin_alert: "Admin Alerts",
+  }
+  
+  return actionLabels[action] || action
     .split("_")
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ")
