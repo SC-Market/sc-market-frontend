@@ -76,15 +76,20 @@ registerRoute(
 self.addEventListener("push", (event) => {
   console.log("Push event received:", event)
 
+  // Default notification data optimized for Android
+  // Android requires proper PNG icons (not favicon.ico)
   let notificationData = {
     title: "SC Market",
     body: "You have a new notification",
-    icon: "/android-chrome-192x192.png",
-    badge: "/android-chrome-192x192.png",
+    icon: "/android-chrome-192x192.png", // Android-optimized icon
+    badge: "/android-chrome-192x192.png", // Badge for Android notification tray
     tag: "scmarket-notification",
     data: {
       url: "/",
     },
+    // Android-specific options
+    requireInteraction: false,
+    silent: false,
   }
 
   // Parse push event data if available
@@ -144,13 +149,30 @@ self.addEventListener("notificationclick", (event) => {
       })
       .then((clientList) => {
         // Check if there's already a window/tab open with the target URL
+        // This works for both browser and PWA contexts
         for (const client of clientList) {
-          if (client.url === urlToOpen && "focus" in client) {
+          // Check if URL matches (accounting for hash/path differences)
+          const clientUrl = new URL(client.url)
+          const targetUrl = new URL(urlToOpen, self.location.origin)
+          
+          if (
+            clientUrl.origin === targetUrl.origin &&
+            clientUrl.pathname === targetUrl.pathname &&
+            "focus" in client
+          ) {
             return client.focus()
           }
         }
 
         // If no matching window, open a new one
+        // This works in both browser and PWA (standalone) mode on Android
+        if (clients.openWindow) {
+          return clients.openWindow(urlToOpen)
+        }
+      })
+      .catch((error) => {
+        console.error("Failed to handle notification click:", error)
+        // Fallback: try to open in a new window
         if (clients.openWindow) {
           return clients.openWindow(urlToOpen)
         }
