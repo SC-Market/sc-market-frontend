@@ -15,6 +15,7 @@
     "@mui/x-data-grid": "^8.5.3",
     "@mui/x-date-pickers": "^7.29.4",
     "@reduxjs/toolkit": "^2.8.2",
+    "@tanstack/react-virtual": "^3.13.13",
     "@vitejs/plugin-react-swc": "^3.10.2",
     "apexcharts": "^4.6.0",
     "i18next": "^25.3.2",
