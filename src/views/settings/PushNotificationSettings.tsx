@@ -273,27 +273,22 @@ export function PushNotificationSettings() {
 
   return (
     <FlatSection title="Push Notifications">
-      <Grid container spacing={2}>
-        {/* Status and Subscription Section */}
-        <Grid item xs={12}>
-          <Typography variant="h6" gutterBottom>
-            Subscription Status
-          </Typography>
+      {/* Status and Subscription Section */}
+      <Grid item xs={12}>
+        {error && (
+          <Alert severity="error" sx={{ mb: 2 }} onClose={() => setError(null)}>
+            {error}
+          </Alert>
+        )}
 
-          {error && (
-            <Alert severity="error" sx={{ mb: 2 }} onClose={() => setError(null)}>
-              {error}
-            </Alert>
-          )}
+        {success && (
+          <Alert severity="success" sx={{ mb: 2 }} onClose={() => setSuccess(null)}>
+            {success}
+          </Alert>
+        )}
 
-          {success && (
-            <Alert severity="success" sx={{ mb: 2 }} onClose={() => setSuccess(null)}>
-              {success}
-            </Alert>
-          )}
-
-          {/* Permission Status */}
-          <Box sx={{ mb: 2 }}>
+        {/* Permission Status */}
+        <Box sx={{ mb: 2 }}>
             <Typography variant="body2" color="text.secondary" gutterBottom>
               Permission Status:
             </Typography>
@@ -417,10 +412,11 @@ export function PushNotificationSettings() {
               </List>
             </Box>
           )}
-        </Grid>
+      </Grid>
 
-        {/* Preferences Section */}
-        {hasSubscriptions && (
+      {/* Preferences Section */}
+      {hasSubscriptions && (
+        <>
           <Grid item xs={12}>
             <Typography variant="h6" gutterBottom>
               Notification Preferences
@@ -429,38 +425,38 @@ export function PushNotificationSettings() {
               Choose which types of notifications you want to receive via push
               notifications.
             </Typography>
-
-            {preferencesLoading ? (
-              <CircularProgress />
-            ) : (
-              <Grid container spacing={2}>
-                {preferences?.preferences.map((pref) => (
-                  <Grid item xs={12} sm={6} key={pref.action}>
-                    <FormControlLabel
-                      control={
-                        <Switch
-                          checked={pref.enabled}
-                          onChange={(e) =>
-                            handlePreferenceChange(pref.action, e.target.checked)
-                          }
-                          color="primary"
-                        />
-                      }
-                      label={
-                        <Typography variant="body2">
-                          {formatActionName(pref.action)}
-                        </Typography>
-                      }
-                      labelPlacement="start"
-                      sx={{ width: "100%", justifyContent: "space-between" }}
-                    />
-                  </Grid>
-                ))}
-              </Grid>
-            )}
           </Grid>
-        )}
-      </Grid>
+
+          {preferencesLoading ? (
+            <Grid item xs={12}>
+              <CircularProgress />
+            </Grid>
+          ) : (
+            preferences?.preferences.map((pref) => (
+              <Grid item xs={12} key={pref.action}>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      checked={pref.enabled}
+                      onChange={(e) =>
+                        handlePreferenceChange(pref.action, e.target.checked)
+                      }
+                      color="primary"
+                    />
+                  }
+                  label={
+                    <Typography variant="body2">
+                      {formatActionName(pref.action)}
+                    </Typography>
+                  }
+                  labelPlacement="start"
+                  sx={{ width: "100%", justifyContent: "space-between" }}
+                />
+              </Grid>
+            ))
+          )}
+        </>
+      )}
     </FlatSection>
   )
 }

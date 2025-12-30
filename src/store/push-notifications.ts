@@ -49,6 +49,8 @@ export const pushNotificationApi = serviceApi.injectEndpoints({
         url: `${baseUrl}/subscribe`,
         method: "GET",
       }),
+      transformResponse: (response: { subscriptions: PushSubscription[] }) =>
+        response.subscriptions,
       providesTags: ["PushSubscriptions" as const],
     }),
 
