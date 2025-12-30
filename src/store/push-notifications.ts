@@ -1,5 +1,6 @@
 import { BACKEND_URL } from "../util/constants"
 import { serviceApi } from "./service"
+import { unwrapResponse } from "./orders"
 
 const baseUrl = `${BACKEND_URL}/api/push`
 
@@ -49,8 +50,11 @@ export const pushNotificationApi = serviceApi.injectEndpoints({
         url: `${baseUrl}/subscribe`,
         method: "GET",
       }),
-      transformResponse: (response: { subscriptions: PushSubscription[] }) =>
-        response.subscriptions,
+      transformResponse: (response: { data: { subscriptions: PushSubscription[] } }) => {
+        // Backend returns { data: { subscriptions: [...] } }
+        const unwrapped = unwrapResponse(response) as { subscriptions: PushSubscription[] }
+        return unwrapped.subscriptions
+      },
       providesTags: ["PushSubscriptions" as const],
     }),
 
