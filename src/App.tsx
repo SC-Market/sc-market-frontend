@@ -12,6 +12,12 @@ import { PageFallback } from "./components/metadata/Page"
 import { FrontendErrorElement } from "./pages/errors/FrontendError"
 import { startBackgroundPrefetch } from "./util/prefetch"
 import { SharedIntersectionObserver } from "./hooks/prefetch/usePrefetchOnVisible"
+import {
+  LoggedInRoute,
+  SiteAdminRoute,
+  OrgRoute,
+  OrgAdminRoute,
+} from "./components/router/LoggedInRoute"
 
 import "./util/i18n.ts"
 
@@ -221,10 +227,7 @@ const router = createBrowserRouter([
         }),
       },
       {
-        lazy: async () => ({
-          Component: (await import("./components/router/LoggedInRoute"))
-            .LoggedInRoute,
-        }),
+        element: <LoggedInRoute />,
         children: [
           {
             path: "/accountlink",
@@ -424,10 +427,7 @@ const router = createBrowserRouter([
             }),
           },
           {
-            lazy: async () => ({
-              Component: (await import("./components/router/LoggedInRoute"))
-                .SiteAdminRoute,
-            }),
+            element: <SiteAdminRoute />,
             children: [
               {
                 path: "/admin/users",
@@ -474,10 +474,7 @@ const router = createBrowserRouter([
             ],
           },
           {
-            lazy: async () => ({
-              Component: (await import("./components/router/LoggedInRoute"))
-                .OrgRoute,
-            }),
+            element: <OrgRoute />,
             children: [
               {
                 path: "/org/fleet",
@@ -504,15 +501,7 @@ const router = createBrowserRouter([
             ],
           },
           {
-            lazy: async () => {
-              const component = (
-                await import("./components/router/LoggedInRoute")
-              ).OrgAdminRoute
-              return {
-                Component: () =>
-                  createElement(component, { permission: "manage_recruiting" }),
-              }
-            },
+            element: <OrgAdminRoute permission="manage_recruiting" />,
             children: [
               {
                 path: "/recruiting/post/create",
@@ -533,15 +522,7 @@ const router = createBrowserRouter([
             ],
           },
           {
-            lazy: async () => {
-              const component = (
-                await import("./components/router/LoggedInRoute")
-              ).OrgAdminRoute
-              return {
-                Component: () =>
-                  createElement(component, { permission: "manage_orders" }),
-              }
-            },
+            element: <OrgAdminRoute permission="manage_orders" />,
             children: [
               {
                 path: "/org/orders",
@@ -553,28 +534,19 @@ const router = createBrowserRouter([
             ],
           },
           {
-            lazy: async () => ({
-              Component: (await import("./components/router/LoggedInRoute"))
-                .OrgRoute,
-            }),
+            element: <OrgRoute />,
             children: [
               {
-                lazy: async () => {
-                  const component = (
-                    await import("./components/router/LoggedInRoute")
-                  ).OrgAdminRoute
-                  return {
-                    Component: () =>
-                      createElement(component, {
-                        anyPermission: [
-                          "manage_org_details",
-                          "manage_invites",
-                          "manage_roles",
-                          "manage_webhooks",
-                        ],
-                      }),
-                  }
-                },
+                element: (
+                  <OrgAdminRoute
+                    anyPermission={[
+                      "manage_org_details",
+                      "manage_invites",
+                      "manage_roles",
+                      "manage_webhooks",
+                    ]}
+                  />
+                ),
                 children: [
                   {
                     path: "/org/manage",
@@ -586,17 +558,7 @@ const router = createBrowserRouter([
                 ],
               },
               {
-                lazy: async () => {
-                  const component = (
-                    await import("./components/router/LoggedInRoute")
-                  ).OrgAdminRoute
-                  return {
-                    Component: () =>
-                      createElement(component, {
-                        permission: "manage_stock",
-                      }),
-                  }
-                },
+                element: <OrgAdminRoute permission="manage_stock" />,
                 children: [
                   {
                     path: "/org/money",
