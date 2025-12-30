@@ -20,14 +20,21 @@ export function ContainerGrid(
     noSidebar?: boolean
     GridProps?: GridProps
     noTopSpacer?: boolean
+    noMobilePadding?: boolean // If true, removes padding on mobile (for market listings)
   } & ContainerProps,
 ): ReactElement {
   const theme = useTheme<ExtendedTheme>()
 
   const [drawerOpen, setDrawerOpen] = useDrawerOpen()
 
-  const { sidebarOpen, noFooter, noSidebar, GridProps, ...containerProps } =
-    props
+  const {
+    sidebarOpen,
+    noFooter,
+    noSidebar,
+    GridProps,
+    noMobilePadding,
+    ...containerProps
+  } = props
 
   useEffect(() => {
     if (noSidebar) {
@@ -67,17 +74,35 @@ export function ContainerGrid(
         />
         <Container
           {...containerProps}
+          maxWidth={
+            containerProps.maxWidth !== undefined
+              ? containerProps.maxWidth
+              : "lg"
+          }
           sx={{
             paddingTop: theme.spacing(4),
-            paddingBottom: theme.spacing(2),
-            paddingLeft: { xs: theme.spacing(2), sm: theme.spacing(3) },
-            paddingRight: { xs: theme.spacing(2), sm: theme.spacing(3) },
+            paddingBottom: { xs: theme.spacing(10), sm: theme.spacing(2) }, // Extra bottom padding on mobile for bottom nav
+            paddingLeft: {
+              xs: noMobilePadding ? 0 : theme.spacing(1),
+              sm: theme.spacing(3),
+            },
+            paddingRight: {
+              xs: noMobilePadding ? 0 : theme.spacing(1),
+              sm: theme.spacing(3),
+            },
+            // Override maxWidth on mobile to allow full width
+            [theme.breakpoints.down("sm")]: {
+              maxWidth: "100%",
+            },
             ...props.sx,
           }}
         >
           <Grid
             container
-            spacing={theme.layoutSpacing.layout}
+            spacing={{
+              xs: theme.layoutSpacing.component,
+              sm: theme.layoutSpacing.layout,
+            }}
             justifyContent={"center"}
             {...GridProps}
           >
@@ -162,13 +187,21 @@ export function OpenLayout(
     noFooter?: boolean
     noSidebar?: boolean
     children: React.ReactNode
+    noMobilePadding?: boolean // If true, removes padding on mobile (for market listings)
   } & React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>,
 ) {
   const theme: Theme = useTheme()
 
   const [drawerOpen, setDrawerOpen] = useDrawerOpen()
 
-  const { sidebarOpen, noFooter, noSidebar, children, ...mainProps } = props
+  const {
+    sidebarOpen,
+    noFooter,
+    noSidebar,
+    children,
+    noMobilePadding,
+    ...mainProps
+  } = props
 
   useEffect(() => {
     if (noSidebar) {
@@ -207,10 +240,16 @@ export function OpenLayout(
         />
         <Box
           sx={{
-            paddingLeft: { xs: theme.spacing(2), sm: theme.spacing(3) },
-            paddingRight: { xs: theme.spacing(2), sm: theme.spacing(3) },
+            paddingLeft: {
+              xs: noMobilePadding ? 0 : theme.spacing(1),
+              sm: theme.spacing(3),
+            },
+            paddingRight: {
+              xs: noMobilePadding ? 0 : theme.spacing(1),
+              sm: theme.spacing(3),
+            },
             paddingTop: theme.spacing(4),
-            paddingBottom: theme.spacing(2),
+            paddingBottom: { xs: theme.spacing(10), sm: theme.spacing(2) }, // Extra bottom padding on mobile for bottom nav
           }}
         >
           {children}

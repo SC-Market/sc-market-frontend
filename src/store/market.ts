@@ -240,6 +240,8 @@ export const marketApi = serviceApi.injectEndpoints({
       {
         query: (params) => ({ url: "/api/market/listings", params }),
         transformResponse: unwrapResponse,
+        // Keep search results in cache for 2 minutes (frequently accessed, but need fresh data)
+        keepUnusedDataFor: 120,
         providesTags: (result, error, params) => [
           "MarketListings" as const,
           { type: "MarketListings" as const, id: "SEARCH" },
@@ -258,6 +260,8 @@ export const marketApi = serviceApi.injectEndpoints({
     getMarketListing: builder.query<BaseListingType, string>({
       query: (id) => `/api/market/listings/${id}`,
       transformResponse: unwrapResponse,
+      // Keep individual listing data for 5 minutes (users often navigate back)
+      keepUnusedDataFor: 300,
       providesTags: (result, error, listing_id) => [
         "MarketListings",
         {

@@ -348,6 +348,7 @@ export function MarketSidebar(props: { status?: boolean }) {
   const [drawerOpen] = useDrawerOpen()
   const [open, setOpen] = useMarketSidebar()
   const theme = useTheme<ExtendedTheme>()
+  const { t } = useTranslation()
 
   // const xs = useMediaQuery(theme.breakpoints.down('lg'));
   // useEffect(() => {
@@ -405,6 +406,22 @@ export function MarketSidebar(props: { status?: boolean }) {
           width: "100%",
         }}
       />
+
+      <Box
+        sx={{
+          paddingLeft: 2,
+          paddingTop: 2,
+          display: { xs: "block", md: "none" }, // Only show close button on mobile
+        }}
+      >
+        <IconButton
+          onClick={() => setOpen(false)}
+          color="secondary"
+          aria-label={t("market.toggleSidebar")}
+        >
+          <CloseIcon />
+        </IconButton>
+      </Box>
 
       <MarketSearchArea status={status} />
     </Drawer>

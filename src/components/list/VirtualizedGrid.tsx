@@ -8,7 +8,7 @@ interface VirtualizedGridProps<T> {
   renderItem: (item: T, index: number) => React.ReactNode
   itemHeight?: number
   columns?: { xs?: number; sm?: number; md?: number; lg?: number }
-  gap?: number
+  gap?: number | { xs?: number; sm?: number; md?: number; lg?: number }
   overscan?: number
   containerRef?: React.RefObject<HTMLDivElement>
 }
@@ -43,6 +43,19 @@ export function VirtualizedGrid<T>(props: VirtualizedGridProps<T>) {
     return columns.xs || 1
   }, [isXs, isSm, isMd, isLg, columns])
 
+  // Determine gap value based on breakpoint
+  const gapValue = useMemo(() => {
+    if (typeof gap === "number") return gap
+    if (typeof gap === "object") {
+      if (isXs) return gap.xs ?? gap.sm ?? gap.md ?? gap.lg ?? 2
+      if (isSm) return gap.sm ?? gap.md ?? gap.lg ?? gap.xs ?? 2
+      if (isMd) return gap.md ?? gap.lg ?? gap.sm ?? gap.xs ?? 2
+      if (isLg) return gap.lg ?? gap.md ?? gap.sm ?? gap.xs ?? 2
+      return gap.xs ?? 2
+    }
+    return 2 // Default
+  }, [isXs, isSm, isMd, isLg, gap])
+
   // Calculate number of rows
   const rowCount = Math.ceil(items.length / cols)
 
@@ -50,12 +63,20 @@ export function VirtualizedGrid<T>(props: VirtualizedGridProps<T>) {
   const internalRef = useRef<HTMLDivElement>(null)
   const parentRef = externalRef || internalRef
 
+  // On mobile, use document element scroll instead of container scroll for better UX
+  const getScrollElement = (): Element | null => {
+    if (isXs) {
+      return typeof document !== "undefined" ? (document.documentElement as Element) : null
+    }
+    return parentRef.current
+  }
+
   // Create virtualizer for rows
   // Convert spacing to number (spacing returns string like "16px")
-  const gapPx = typeof gap === "number" ? gap * 8 : 16 // Default 8px per spacing unit
+  const gapPx = gapValue * 8 // 8px per spacing unit
   const rowVirtualizer = useVirtualizer({
     count: rowCount,
-    getScrollElement: () => parentRef.current,
+    getScrollElement,
     estimateSize: () => itemHeight + gapPx,
     overscan,
   })
@@ -68,11 +89,11 @@ export function VirtualizedGrid<T>(props: VirtualizedGridProps<T>) {
 
   return (
     <Box
-      ref={parentRef}
+      ref={isXs ? undefined : parentRef} // Don't attach ref on mobile since we use window scroll
       sx={{
-        height: "100%",
+        height: isXs ? "auto" : "100%", // Auto height on mobile for natural flow
         width: "100%",
-        overflow: "auto",
+        overflow: isXs ? "visible" : "auto", // No overflow on mobile, use window scroll
         // Smooth scrolling
         scrollBehavior: "smooth",
       }}
@@ -101,8 +122,8 @@ export function VirtualizedGrid<T>(props: VirtualizedGridProps<T>) {
                 transform: `translateY(${virtualRow.start}px)`,
                 display: "grid",
                 gridTemplateColumns: `repeat(${cols}, 1fr)`,
-                gap: theme.spacing(gap),
-                paddingX: theme.spacing(gap / 2),
+                gap: theme.spacing(gapValue),
+                paddingX: { xs: theme.spacing(1), sm: theme.spacing(gapValue / 2) },
               }}
             >
               {rowItems.map((item, colIndex) => {

@@ -32,6 +32,8 @@ const ordersApi = serviceApi.injectEndpoints({
   endpoints: (builder) => ({
     getOrderById: builder.query<Order, string>({
       query: (order_id) => `/api/orders/${order_id}`,
+      // Keep order data in cache for 3 minutes (users navigate back to orders)
+      keepUnusedDataFor: 180,
       providesTags: (_result, _error, order_id) => [
         { type: "Order" as const, id: order_id },
       ],

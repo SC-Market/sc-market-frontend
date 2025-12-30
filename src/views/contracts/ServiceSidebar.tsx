@@ -76,7 +76,13 @@ export function ServiceSidebar() {
         }}
       />
       <Stack justifyContent={"left"} direction={"column"}>
-        <Box sx={{ paddingLeft: 2, paddingTop: 4 }}>
+        <Box
+          sx={{
+            paddingLeft: 2,
+            paddingTop: 4,
+            display: { xs: "block", md: "none" }, // Only show close button on mobile
+          }}
+        >
           <IconButton
             onClick={() => setOpen(false)}
             color={"secondary"}
