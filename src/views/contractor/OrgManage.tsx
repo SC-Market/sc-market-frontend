@@ -213,12 +213,16 @@ export function OrgDetailEditForm(props: { contractor: Contractor }) {
         <Card
           sx={{
             borderRadius: (theme) => theme.spacing(theme.borderRadius.image),
-            padding: 3,
+            padding: { xs: 1, sm: 1.5 }, // Further reduced padding
           }}
         >
           <CardHeader
             sx={{
               width: "100%",
+              padding: { xs: 1, sm: 1.5 },
+              "& .MuiCardHeader-content": {
+                paddingRight: { xs: 0.5, sm: 1 },
+              },
             }}
             avatar={
               <Box
@@ -394,7 +398,7 @@ export function OrgDetailEditForm(props: { contractor: Contractor }) {
             // }
           />
           {editingTags ? (
-            <CardContent sx={{ display: "flex", justifyContent: "flex-end" }}>
+            <CardContent sx={{ display: "flex", justifyContent: "flex-end", padding: { xs: 1, sm: 1.5 } }}>
               <Autocomplete
                 fullWidth
                 multiple
@@ -465,7 +469,7 @@ export function OrgDetailEditForm(props: { contractor: Contractor }) {
               </Button>
             </CardContent>
           ) : (
-            <CardActions sx={{ overflow: "scroll" }}>
+            <CardActions sx={{ overflow: "scroll", padding: { xs: 1, sm: 1.5 } }}>
               {contractor.fields.length ? (
                 contractor?.fields.map((option, index) => (
                   <Chip
@@ -495,7 +499,7 @@ export function OrgDetailEditForm(props: { contractor: Contractor }) {
               </IconButton>
             </CardActions>
           )}
-          <CardContent>
+          <CardContent sx={{ padding: { xs: 1, sm: 1.5 } }}>
             {editingDesc ? (
               <>
                 <MarkdownEditor

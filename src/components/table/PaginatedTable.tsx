@@ -12,6 +12,7 @@ import {
   TablePagination,
   TableRow,
   TableSortLabel,
+  useMediaQuery,
 } from "@mui/material"
 import { visuallyHidden } from "@mui/utils"
 import { useTheme } from "@mui/material/styles"
@@ -74,6 +75,7 @@ function EnhancedTableHead<T>(props: EnhancedTableProps<T>) {
     disableSelect,
   } = props
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
 
   const createSortHandler =
     (property: keyof T) => (event: React.MouseEvent<unknown>) => {
@@ -107,25 +109,34 @@ function EnhancedTableHead<T>(props: EnhancedTableProps<T>) {
           </TransparentHeaderCell>
         )}
 
-        {headCells.map((headCell) => (
-          <TransparentHeaderCell
-            key={headCell.id.toString()}
-            align={headCell.numeric ? "right" : "left"}
-            padding={headCell.disablePadding ? "none" : "normal"}
-            sortDirection={orderBy === headCell.id ? order : false}
-            sx={{
-              minWidth: headCell.minWidth,
-              maxWidth: headCell.maxWidth,
-            }}
-            scope="col"
-            aria-sort={
-              orderBy === headCell.id
-                ? order === "desc"
-                  ? "descending"
-                  : "ascending"
-                : "none"
-            }
-          >
+        {headCells.map((headCell) => {
+          return (
+            <TransparentHeaderCell
+              key={headCell.id.toString()}
+              align={headCell.numeric ? "right" : "left"}
+              padding={headCell.disablePadding ? "none" : "normal"}
+              sortDirection={orderBy === headCell.id ? order : false}
+              sx={{
+                minWidth: headCell.minWidth,
+                maxWidth: headCell.maxWidth,
+                width: headCell.id === "other_name" || headCell.id === "customer"
+                  ? { xs: "30%", sm: "auto" } 
+                  : headCell.id === "status"
+                  ? { xs: "25%", sm: "auto" }
+                  : headCell.id === "timestamp"
+                  ? { xs: "45%", sm: "auto" }
+                  : undefined,
+                padding: { xs: theme.spacing(0.75), sm: theme.spacing(2) },
+              }}
+              scope="col"
+              aria-sort={
+                orderBy === headCell.id
+                  ? order === "desc"
+                    ? "descending"
+                    : "ascending"
+                  : "none"
+              }
+            >
             {!headCell.noSort && (
               <TableSortLabel
                 active={orderBy === headCell.id}
@@ -153,7 +164,8 @@ function EnhancedTableHead<T>(props: EnhancedTableProps<T>) {
             )}
             {headCell.noSort && t(headCell.label)}
           </TransparentHeaderCell>
-        ))}
+          )
+        })}
       </TableRow>
     </TableHead>
   )

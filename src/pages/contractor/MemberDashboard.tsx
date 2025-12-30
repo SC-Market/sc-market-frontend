@@ -70,13 +70,21 @@ export function MemberDashboard() {
         )}
         {!lg && (
           <>
-            {!currentOrg && <ReceivedOffersArea />}
+            {!currentOrg && (
+              <Grid item xs={12}>
+                <ReceivedOffersArea />
+              </Grid>
+            )}
             {/*<MemberBalance/>*/}
-            <MemberAssignments />
+            <Grid item xs={12}>
+              <MemberAssignments />
+            </Grid>
             {/*<UserTransactions/>*/}
             <OrderMetrics />
             <UserOrderTrend />
-            <DashNotificationArea />
+            <Grid item xs={12}>
+              <DashNotificationArea />
+            </Grid>
           </>
         )}
       </ContainerGrid>
