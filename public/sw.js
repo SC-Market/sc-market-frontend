@@ -96,6 +96,13 @@ self.addEventListener("push", (event) => {
   if (event.data) {
     try {
       const data = event.data.json()
+      
+      // Skip silent/test notifications
+      if (data.silent === true || data.test === true) {
+        console.log("Skipping silent/test notification")
+        return
+      }
+      
       notificationData = {
         title: data.title || notificationData.title,
         body: data.body || notificationData.body,
