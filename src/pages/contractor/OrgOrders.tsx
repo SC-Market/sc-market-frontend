@@ -61,8 +61,12 @@ export function OrgOrders() {
 
         {!lg && (
           <>
-            <ReceivedOffersArea />
-            <RecentOrders />
+            <Grid item xs={12}>
+              <ReceivedOffersArea />
+            </Grid>
+            <Grid item xs={12}>
+              <RecentOrders />
+            </Grid>
             <OrderMetrics />
             <OrgOrderTrend />
           </>

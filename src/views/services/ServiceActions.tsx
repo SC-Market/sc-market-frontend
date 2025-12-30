@@ -12,8 +12,8 @@ export function ServiceActions() {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
 
   return (
-    <Grid container>
-      <Grid item xs={12}>
+    <Grid container justifyContent={{ xs: "stretch", sm: "flex-end" }}>
+      <Grid item xs={12} sm="auto">
         <Link
           to={"/order/service/create"}
           style={{ color: "inherit", textDecoration: "none", display: "block" }}
@@ -23,7 +23,7 @@ export function ServiceActions() {
             startIcon={<CreateRounded />}
             variant={"contained"}
             size={isMobile ? "medium" : "large"}
-            fullWidth
+            fullWidth={isMobile}
           >
             {t("service_actions.create_service", {
               defaultValue: "Create Service",

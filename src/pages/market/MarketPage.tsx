@@ -106,64 +106,58 @@ export function MarketPage() {
             container
             spacing={{ xs: theme.layoutSpacing.component, sm: theme.layoutSpacing.layout }}
             sx={{ marginBottom: { xs: 2, sm: 4 } }}
+            alignItems="center"
+            justifyContent="space-between"
           >
-            {/* First row: Market header on left, Tabs on right */}
-            <Grid item xs={12}>
-              <Grid
-                container
-                justifyContent="space-between"
-                alignItems="center"
-                spacing={theme.layoutSpacing.component}
+            {/* Title - full width on mobile, auto on large */}
+            <Grid item xs={12} sm="auto">
+              <Typography
+                variant="h4"
+                sx={{
+                  fontWeight: "bold",
+                  fontSize: { xs: "1.5rem", sm: "2.125rem" },
+                }}
+                color={"text.secondary"}
               >
-                <Grid item xs="auto">
-                  <Typography
-                    variant="h4"
-                    sx={{
-                      fontWeight: "bold",
-                      fontSize: { xs: "1.5rem", sm: "2.125rem" },
-                    }}
-                    color={"text.secondary"}
-                  >
-                    {t("market.market")}
-                  </Typography>
-                </Grid>
-                <Grid item xs="auto">
-                  <Tabs
-                    value={tabPage}
-                    aria-label={t("ui.aria.orgInfoArea")}
-                    variant="scrollable"
-                    scrollButtons="auto"
-                    textColor="secondary"
-                    indicatorColor="secondary"
-                    sx={{
-                      minHeight: { xs: 48, sm: 64 },
-                      "& .MuiTab-root": {
-                        minHeight: { xs: 48, sm: 64 },
-                        fontSize: { xs: "0.875rem", sm: "1rem" },
-                        padding: { xs: "12px 16px", sm: "12px 24px" },
-                      },
-                    }}
-                  >
-                    <Tab
-                      label={t("market.itemsTab")}
-                      value={1}
-                      component={Link}
-                      {...a11yProps(0)}
-                      to={"/market"}
-                    />
-                    <Tab
-                      label={t("market.servicesTab")}
-                      value={0}
-                      component={Link}
-                      {...a11yProps(1)}
-                      to={"/market/services"}
-                    />
-                  </Tabs>
-                </Grid>
-              </Grid>
+                {t("market.market")}
+              </Typography>
             </Grid>
-            {/* Second row: Action buttons 50-50 width */}
-            <Grid item xs={12}>
+            {/* Tabs - full width on mobile, auto on large */}
+            <Grid item xs={12} sm="auto">
+              <Tabs
+                value={tabPage}
+                aria-label={t("ui.aria.orgInfoArea")}
+                variant="scrollable"
+                scrollButtons="auto"
+                textColor="secondary"
+                indicatorColor="secondary"
+                sx={{
+                  minHeight: { xs: 48, sm: 64 },
+                  "& .MuiTab-root": {
+                    minHeight: { xs: 48, sm: 64 },
+                    fontSize: { xs: "0.875rem", sm: "1rem" },
+                    padding: { xs: "12px 16px", sm: "12px 24px" },
+                  },
+                }}
+              >
+                <Tab
+                  label={t("market.itemsTab")}
+                  value={1}
+                  component={Link}
+                  {...a11yProps(0)}
+                  to={"/market"}
+                />
+                <Tab
+                  label={t("market.servicesTab")}
+                  value={0}
+                  component={Link}
+                  {...a11yProps(1)}
+                  to={"/market/services"}
+                />
+              </Tabs>
+            </Grid>
+            {/* Action buttons - full width on mobile, auto on large */}
+            <Grid item xs={12} sm="auto">
               {tabPage === 1 ? (
                 <MarketActions />
               ) : (

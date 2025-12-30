@@ -10,6 +10,7 @@ import {
 } from "../../components/table/PaginatedTable"
 import React, { MouseEventHandler, useMemo, useState, useEffect } from "react"
 import {
+  Box,
   Button,
   Checkbox,
   Chip,
@@ -30,6 +31,7 @@ import {
   Tabs,
   TextField,
   Typography,
+  useMediaQuery,
 } from "@mui/material"
 import { Link } from "react-router-dom"
 import {
@@ -126,6 +128,8 @@ export function OfferRow(props: {
     }
   }
 
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
+
   return (
     <TableRow
       hover
@@ -136,6 +140,11 @@ export function OfferRow(props: {
       key={index}
       selected={isItemSelected}
       style={{ textDecoration: "none", color: "inherit", cursor: "pointer" }}
+      sx={{
+        "& .MuiTableCell-root": {
+          padding: { xs: theme.spacing(0.75), sm: theme.spacing(2) },
+        },
+      }}
     >
       {enableSelection && (
         <TableCell padding="checkbox">
@@ -156,7 +165,12 @@ export function OfferRow(props: {
           />
         </TableCell>
       )}
-      <TableCell>
+      <TableCell
+        sx={{
+          width: { xs: "45%", sm: "auto" },
+          minWidth: { xs: 0, sm: "auto" },
+        }}
+      >
         <Stack
           spacing={theme.layoutSpacing.compact}
           direction="row"
@@ -164,36 +178,63 @@ export function OfferRow(props: {
           justifyContent="left"
         >
           <Paper
-            sx={{ padding: 0.5, bgcolor: theme.palette.background.default }}
+            sx={{
+              padding: { xs: 0.25, sm: 0.5 },
+              bgcolor: theme.palette.background.default,
+              minWidth: { xs: 40, sm: 50 },
+              flexShrink: 0,
+            }}
           >
             <Stack
               direction={"column"}
               alignItems="center"
               justifyContent="space-between"
             >
-              <Typography variant={"subtitle2"} color={"text.secondary"}>
+              <Typography
+                variant={"subtitle2"}
+                color={"text.secondary"}
+                sx={{ fontSize: { xs: "0.625rem", sm: "0.875rem" } }}
+              >
                 {date.toLocaleString("default", { month: "short" })}
               </Typography>
               <Typography
                 variant={"h5"}
                 fontWeight={"bold"}
                 color={"text.secondary"}
+                sx={{ fontSize: { xs: "1rem", sm: "1.5rem" } }}
               >
                 {date.getDate()}
               </Typography>
             </Stack>
           </Paper>
-          <Stack direction={"column"} sx={{ flex: 1 }}>
+          <Stack direction={"column"} sx={{ flex: 1, minWidth: 0 }}>
             <Link
               to={`/offer/${row.id}`}
               style={{ textDecoration: "none", color: "inherit" }}
               onClick={(e) => e.stopPropagation()}
             >
-              <Typography color={"text.secondary"} fontWeight={"bold"}>
+              <Typography
+                color={"text.secondary"}
+                fontWeight={"bold"}
+                sx={{
+                  fontSize: { xs: "0.875rem", sm: "1rem" },
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                }}
+              >
                 {t("OffersViewPaginated.offer")}{" "}
                 {row.id.substring(0, 8).toUpperCase()}
               </Typography>
-              <Typography variant={"body2"}>
+              <Typography
+                variant={"body2"}
+                sx={{
+                  fontSize: { xs: "0.75rem", sm: "0.875rem" },
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                }}
+              >
                 {row.most_recent_offer.count
                   ? `${row.most_recent_offer.count.toLocaleString(
                       undefined,
@@ -207,14 +248,29 @@ export function OfferRow(props: {
           </Stack>
         </Stack>
       </TableCell>
-      <TableCell align={"right"}>
+      <TableCell
+        align="right"
+        sx={{
+          display: { xs: "table-cell", md: "table-cell" },
+          textAlign: { xs: "left", sm: "right" },
+          width: { xs: "30%", sm: "auto" },
+          minWidth: { xs: 80, sm: "auto" },
+        }}
+      >
         <UserAvatar user={row.customer} />
       </TableCell>
-      <TableCell align={"right"}>
+      <TableCell
+        align="right"
+        sx={{
+          width: { xs: "25%", sm: "auto" },
+          minWidth: { xs: 70, sm: "auto" },
+        }}
+      >
         <Chip
           label={t(`OffersViewPaginated.${statusKey}`, row.status)}
           color={statusColor}
           icon={icon}
+          size={isMobile ? "small" : "medium"}
         />
       </TableCell>
       {/*<TableCell align="right">*/}
@@ -407,14 +463,21 @@ export function OffersViewPaginated(props: {
     <Grid item xs={12}>
       <Paper>
         <Stack
-          direction={"row"}
+          direction={{ xs: "column", sm: "row" }}
+          spacing={{ xs: theme.layoutSpacing.component, sm: theme.layoutSpacing.layout }}
           sx={{ paddingTop: 2, paddingLeft: 2, paddingRight: 2 }}
-          alignItems="center"
+          alignItems={{ xs: "stretch", sm: "center" }}
         >
           <Typography
             variant={"h5"}
             color={"text.secondary"}
             fontWeight={"bold"}
+            sx={{
+              whiteSpace: "nowrap",
+              textOverflow: "display",
+              fontSize: { xs: "1.25rem", sm: "1.5rem" },
+              flexShrink: 0,
+            }}
           >
             {t("OffersViewPaginated.offers")}
           </Typography>
@@ -422,7 +485,11 @@ export function OffersViewPaginated(props: {
             startIcon={<Search />}
             endIcon={filtersOpen ? <ExpandLess /> : <ExpandMore />}
             onClick={() => setFiltersOpen(!filtersOpen)}
-            sx={{ ml: 2 }}
+            sx={{
+              ml: { xs: 0, sm: 2 },
+              alignSelf: { xs: "flex-start", sm: "center" },
+              flexShrink: 0,
+            }}
             size="small"
           >
             {t("OffersViewPaginated.filters", "Filters")}
@@ -434,12 +501,34 @@ export function OffersViewPaginated(props: {
               />
             )}
           </Button>
-          <Tabs
-            value={tab}
-            // onChange={(_, newPage) => setPage(newPage)}
-            aria-label={t("offers.aria.offerTabs")}
-            variant="scrollable"
+          <Box
+            sx={{
+              flex: { xs: 1, sm: "1 1 auto" },
+              minWidth: 0,
+              overflow: "hidden",
+            }}
           >
+            <Tabs
+              value={tab}
+              // onChange={(_, newPage) => setPage(newPage)}
+              aria-label={t("offers.aria.offerTabs")}
+              variant="scrollable"
+              scrollButtons="auto"
+              allowScrollButtonsMobile
+              sx={{
+                minHeight: { xs: 48, sm: 64 },
+                width: "100%",
+                "& .MuiTab-root": {
+                  minHeight: { xs: 48, sm: 64 },
+                  fontSize: { xs: "0.75rem", sm: "0.875rem" },
+                  padding: { xs: "8px 12px", sm: "12px 16px" },
+                  whiteSpace: "nowrap",
+                },
+                "& .MuiTabs-scrollButtons": {
+                  display: "flex",
+                },
+              }}
+            >
             <Tab
               label={t("OffersViewPaginated.all")}
               icon={<Chip label={totalCount} size={"small"} />}
@@ -456,6 +545,7 @@ export function OffersViewPaginated(props: {
               />
             ))}
           </Tabs>
+          </Box>
           {!mine && selectedOfferIds.length >= 2 && (
             <Button
               variant="contained"

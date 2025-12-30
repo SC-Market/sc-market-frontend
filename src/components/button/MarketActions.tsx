@@ -24,8 +24,13 @@ export function MarketActions() {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
 
   return (
-    <Grid container spacing={theme.layoutSpacing.component}>
-      <Grid item xs={6}>
+    <Grid
+      container
+      spacing={theme.layoutSpacing.component}
+      direction={{ xs: "row", sm: "row" }}
+      justifyContent={{ xs: "stretch", sm: "flex-end" }}
+    >
+      <Grid item xs={6} sm="auto">
         <Link
           to={"/market/create"}
           style={{ color: "inherit", textDecoration: "none", display: "block" }}
@@ -35,7 +40,7 @@ export function MarketActions() {
             startIcon={<CreateRounded />}
             variant={"contained"}
             size={isMobile ? "medium" : "large"}
-            fullWidth
+            fullWidth={isMobile}
             title={t(
               "marketActions.createListingTooltip",
               "Create a new listing",
@@ -57,7 +62,7 @@ export function MarketActions() {
         </Link>
       </Grid>
 
-      <Grid item xs={6}>
+      <Grid item xs={6} sm="auto">
         <Link
           to={"/market/cart"}
           style={{ color: "inherit", textDecoration: "none", display: "block" }}
@@ -67,7 +72,7 @@ export function MarketActions() {
             startIcon={<ShoppingCartRoundedIcon />}
             variant={"contained"}
             size={isMobile ? "medium" : "large"}
-            fullWidth
+            fullWidth={isMobile}
             title={t(
               "marketActions.myCartTooltip",
               "View your shopping cart",

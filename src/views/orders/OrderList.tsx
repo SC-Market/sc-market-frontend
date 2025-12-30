@@ -6,6 +6,7 @@ import {
 import React, { MouseEventHandler, useMemo, useState, useEffect } from "react"
 import {
   Avatar,
+  Box,
   Button,
   Chip,
   Collapse,
@@ -20,6 +21,7 @@ import {
   Tabs,
   TextField,
   Typography,
+  useMediaQuery,
 } from "@mui/material"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { Link } from "react-router-dom"
@@ -128,6 +130,7 @@ export function OrderRow(props: {
   const date = useMemo(() => new Date(row.timestamp), [row.timestamp])
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
 
   const statusColor = useMemo(() => statusColors.get(row.status), [row.status])
   const status = useMemo(
@@ -147,8 +150,19 @@ export function OrderRow(props: {
       style={{ textDecoration: "none", color: "inherit" }}
       component={Link}
       to={`/contract/${row.order_id}`}
+      sx={{
+        "& .MuiTableCell-root": {
+          padding: { xs: theme.spacing(1), sm: theme.spacing(2) },
+        },
+      }}
     >
-      <TableCell>
+      <TableCell
+        sx={{
+          width: { xs: "45%", sm: "auto" },
+          minWidth: { xs: 0, sm: "auto" },
+          padding: { xs: theme.spacing(0.75), sm: theme.spacing(2) },
+        }}
+      >
         <Stack
           spacing={theme.layoutSpacing.compact}
           direction="row"
@@ -156,31 +170,58 @@ export function OrderRow(props: {
           justifyContent="left"
         >
           <Paper
-            sx={{ padding: 0.5, bgcolor: theme.palette.background.default }}
+            sx={{
+              padding: { xs: 0.25, sm: 0.5 },
+              bgcolor: theme.palette.background.default,
+              minWidth: { xs: 40, sm: 50 },
+              flexShrink: 0,
+            }}
           >
             <Stack
               direction={"column"}
               alignItems="center"
               justifyContent="space-between"
             >
-              <Typography variant={"subtitle2"} color={"text.secondary"}>
+              <Typography
+                variant={"subtitle2"}
+                color={"text.secondary"}
+                sx={{ fontSize: { xs: "0.625rem", sm: "0.875rem" } }}
+              >
                 {date.toLocaleString("default", { month: "short" })}
               </Typography>
               <Typography
                 variant={"h5"}
                 fontWeight={"bold"}
                 color={"text.secondary"}
+                sx={{ fontSize: { xs: "1rem", sm: "1.5rem" } }}
               >
                 {date.getDate()}
               </Typography>
             </Stack>
           </Paper>
-          <Stack direction={"column"}>
-            <Typography color={"text.secondary"} fontWeight={"bold"}>
+          <Stack direction={"column"} sx={{ flex: 1, minWidth: 0 }}>
+            <Typography
+              color={"text.secondary"}
+              fontWeight={"bold"}
+              sx={{
+                fontSize: { xs: "0.875rem", sm: "1rem" },
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+              }}
+            >
               {t("orders.orderLabel")}{" "}
               {row.order_id.substring(0, 8).toUpperCase()}
             </Typography>
-            <Typography variant={"body2"}>
+            <Typography
+              variant={"body2"}
+              sx={{
+                fontSize: { xs: "0.75rem", sm: "0.875rem" },
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+              }}
+            >
               {row.count
                 ? `${row.count.toLocaleString(undefined)} ${t("orders.items")} • `
                 : row.service_name
@@ -191,14 +232,24 @@ export function OrderRow(props: {
           </Stack>
         </Stack>
       </TableCell>
-      <TableCell align={"right"}>
+      <TableCell
+        align="right"
+        sx={{
+          display: { xs: "table-cell", md: "table-cell" },
+          textAlign: { xs: "left", sm: "right" },
+          width: { xs: "30%", sm: "auto" },
+          minWidth: { xs: 80, sm: "auto" },
+          padding: { xs: theme.spacing(0.75), sm: theme.spacing(2) },
+        }}
+      >
         <Stack
-          spacing={theme.layoutSpacing.compact}
+          spacing={{ xs: theme.layoutSpacing.compact / 2, sm: theme.layoutSpacing.compact }}
           direction={"row"}
-          justifyContent={"right"}
+          justifyContent={{ xs: "flex-start", sm: "flex-end" }}
           alignItems={"center"}
         >
           <Avatar
+            sx={{ width: { xs: 28, sm: 40 }, height: { xs: 28, sm: 40 }, flexShrink: 0 }}
             src={
               (row.mine
                 ? row.contractor?.avatar || row.assigned_to?.avatar
@@ -208,7 +259,8 @@ export function OrderRow(props: {
           <Stack
             direction={"column"}
             justifyContent={"center"}
-            alignItems={"center"}
+            alignItems={{ xs: "flex-start", sm: "center" }}
+            sx={{ minWidth: 0, flex: 1 }}
           >
             <MaterialLink
               component={Link}
@@ -227,6 +279,13 @@ export function OrderRow(props: {
                 color={"text.secondary"}
                 variant={"subtitle1"}
                 fontWeight={"bold"}
+                sx={{
+                  fontSize: { xs: "0.75rem", sm: "1rem" },
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                  maxWidth: "100%",
+                }}
               >
                 {row.mine
                   ? row.contractor?.spectrum_id ||
@@ -235,7 +294,16 @@ export function OrderRow(props: {
                   : row.customer.username}
               </UnderlineLink>
             </MaterialLink>
-            <Typography variant={"subtitle2"}>
+            <Typography
+              variant={"subtitle2"}
+              sx={{
+                fontSize: { xs: "0.625rem", sm: "0.875rem" },
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+                maxWidth: "100%",
+              }}
+            >
               {row.mine
                 ? row.assigned_to?.display_name || row.contractor?.name
                 : row.customer.display_name}
@@ -243,8 +311,19 @@ export function OrderRow(props: {
           </Stack>
         </Stack>
       </TableCell>
-      <TableCell align={"right"}>
-        <Chip label={status} color={statusColor} />
+      <TableCell
+        align="right"
+        sx={{
+          width: { xs: "25%", sm: "auto" },
+          minWidth: { xs: 70, sm: "auto" },
+          padding: { xs: theme.spacing(0.75), sm: theme.spacing(2) },
+        }}
+      >
+        <Chip
+          label={status}
+          color={statusColor}
+          size={isMobile ? "small" : "medium"}
+        />
       </TableCell>
       {/*<TableCell align="right">*/}
       {/*  <Typography variant={"subtitle1"} color={"text.primary"}>*/}
@@ -394,9 +473,10 @@ export function OrdersViewPaginated(props: {
     <Grid item xs={12}>
       <Paper>
         <Stack
-          direction={"row"}
+          direction={{ xs: "column", sm: "row" }}
+          spacing={{ xs: theme.layoutSpacing.component, sm: theme.layoutSpacing.layout }}
           sx={{ paddingTop: 2, paddingLeft: 2, paddingRight: 2 }}
-          alignItems="center"
+          alignItems={{ xs: "stretch", sm: "center" }}
         >
           <Typography
             variant={"h5"}
@@ -405,6 +485,8 @@ export function OrdersViewPaginated(props: {
             sx={{
               whiteSpace: "nowrap",
               textOverflow: "display",
+              fontSize: { xs: "1.25rem", sm: "1.5rem" },
+              flexShrink: 0,
             }}
           >
             {title}
@@ -413,7 +495,11 @@ export function OrdersViewPaginated(props: {
             startIcon={<Search />}
             endIcon={filtersOpen ? <ExpandLess /> : <ExpandMore />}
             onClick={() => setFiltersOpen(!filtersOpen)}
-            sx={{ ml: 2 }}
+            sx={{ 
+              ml: { xs: 0, sm: 2 },
+              alignSelf: { xs: "flex-start", sm: "center" },
+              flexShrink: 0,
+            }}
             size="small"
           >
             {t("orders.filters", "Filters")}
@@ -425,12 +511,34 @@ export function OrdersViewPaginated(props: {
               />
             )}
           </Button>
-          <Tabs
-            value={tab}
-            // onChange={(_, newPage) => setPage(newPage)}
-            aria-label={t("orders.aria.orderTabs")}
-            variant="scrollable"
+          <Box
+            sx={{
+              flex: { xs: 1, sm: "1 1 auto" },
+              minWidth: 0,
+              overflow: "hidden",
+            }}
           >
+            <Tabs
+              value={tab}
+              // onChange={(_, newPage) => setPage(newPage)}
+              aria-label={t("orders.aria.orderTabs")}
+              variant="scrollable"
+              scrollButtons="auto"
+              allowScrollButtonsMobile
+              sx={{
+                minHeight: { xs: 48, sm: 64 },
+                width: "100%",
+                "& .MuiTab-root": {
+                  minHeight: { xs: 48, sm: 64 },
+                  fontSize: { xs: "0.75rem", sm: "0.875rem" },
+                  padding: { xs: "8px 12px", sm: "12px 16px" },
+                  whiteSpace: "nowrap",
+                },
+                "& .MuiTabs-scrollButtons": {
+                  display: "flex",
+                },
+              }}
+            >
             {tabs.map(([id, tag], index) => (
               <Tab
                 key={id}
@@ -441,6 +549,7 @@ export function OrdersViewPaginated(props: {
               />
             ))}
           </Tabs>
+          </Box>
         </Stack>
 
         {/* Filter Panel */}
