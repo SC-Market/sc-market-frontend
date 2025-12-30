@@ -33,6 +33,16 @@ import {
   getPushPermissionStatus,
   requestPushPermission,
 } from "../../util/push-subscription"
+import {
+  isPWAInstalled,
+  requiresPWAInstallationForPush,
+  getPWAInstallationMessage,
+} from "../../util/pwa-detection"
+import {
+  isAndroidDevice,
+  isAndroidPushSupported,
+  getAndroidPushErrorMessage,
+} from "../../util/android-push-check"
 import { useTranslation } from "react-i18next"
 import { VITE_VAPID_PUBLIC_KEY } from "../../util/constants"
 
@@ -64,6 +74,16 @@ export function PushNotificationSettings() {
   // Check browser support
   const isSupported = isPushNotificationSupported()
   const permissionStatus = getPushPermissionStatus()
+
+  // Check PWA installation status
+  const pwaInstalled = isPWAInstalled()
+  const requiresPWAInstall = requiresPWAInstallationForPush()
+  const pwaInstallMessage = getPWAInstallationMessage()
+
+  // Android-specific checks
+  const isAndroid = isAndroidDevice()
+  const androidPushSupported = isAndroidPushSupported()
+  const androidErrorMessage = getAndroidPushErrorMessage()
 
   // Get VAPID public key from environment
   const vapidPublicKey = VITE_VAPID_PUBLIC_KEY
@@ -186,6 +206,26 @@ export function PushNotificationSettings() {
     )
   }
 
+  // Show Android-specific error if applicable
+  if (isAndroid && androidErrorMessage) {
+    return (
+      <FlatSection title="Push Notifications">
+        <Alert severity="warning" sx={{ mb: 2 }}>
+          <Typography variant="subtitle2" gutterBottom>
+            Android Push Notification Requirements
+          </Typography>
+          <Typography variant="body2">{androidErrorMessage}</Typography>
+        </Alert>
+        {!pwaInstalled && (
+          <Typography variant="body2" color="text.secondary">
+            Please install this app as a PWA to enable push notifications on
+            Android.
+          </Typography>
+        )}
+      </FlatSection>
+    )
+  }
+
   if (!isConfigured) {
     return (
       <FlatSection title="Push Notifications">
@@ -197,6 +237,32 @@ export function PushNotificationSettings() {
           Push notification functionality requires server configuration. The
           feature is currently disabled.
         </Typography>
+      </FlatSection>
+    )
+  }
+
+  // Check if PWA installation is required
+  if (requiresPWAInstall) {
+    return (
+      <FlatSection title="Push Notifications">
+        <Alert severity="info" sx={{ mb: 2 }}>
+          <Typography variant="subtitle2" gutterBottom>
+            Installation Required
+          </Typography>
+          <Typography variant="body2">
+            {pwaInstallMessage}
+          </Typography>
+        </Alert>
+        <Box sx={{ mt: 2 }}>
+          <Typography variant="body2" color="text.secondary">
+            Once installed, you can return here to enable push notifications.
+          </Typography>
+          {!pwaInstalled && (
+            <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+              Current status: Not installed as PWA
+            </Typography>
+          )}
+        </Box>
       </FlatSection>
     )
   }
@@ -300,7 +366,12 @@ export function PushNotificationSettings() {
                   variant="contained"
                   color="primary"
                   onClick={handleSubscribe}
-                  disabled={isSubscribing || !isPermissionGranted || !isConfigured}
+                  disabled={
+                    isSubscribing ||
+                    !isPermissionGranted ||
+                    !isConfigured ||
+                    requiresPWAInstall
+                  }
                   sx={{ mt: 1 }}
                 >
                   {isSubscribing ? (
