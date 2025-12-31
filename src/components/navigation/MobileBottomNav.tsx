@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useRef, useEffect, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import {
   BottomNavigation,
@@ -6,6 +6,7 @@ import {
   Paper,
   useTheme,
   useMediaQuery,
+  Box,
 } from "@mui/material"
 import {
   StoreRounded,
@@ -28,13 +29,15 @@ export function MobileBottomNav() {
   const { t } = useTranslation()
   const { data: userProfile } = useGetUserProfileQuery()
   const isLoggedIn = !!userProfile
-
-  // Only show on mobile devices
+  
+  // Only show on mobile devices - check this BEFORE hooks to avoid hook order issues
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
 
-  if (!isMobile) {
-    return null
-  }
+  const navRef = useRef<HTMLDivElement>(null)
+  const [indicatorStyle, setIndicatorStyle] = useState<{
+    left: number
+    width: number
+  }>({ left: 0, width: 0 })
 
   // Determine current active route
   const getActiveValue = () => {
@@ -45,6 +48,31 @@ export function MobileBottomNav() {
     if (path.startsWith("/dashboard")) return "dashboard"
     if (path === "/") return "home"
     return ""
+  }
+
+  const activeValue = getActiveValue()
+
+  // Update indicator position when active value changes
+  useEffect(() => {
+    if (!isMobile || !navRef.current) return
+
+    const activeButton = navRef.current.querySelector(
+      `.MuiBottomNavigationAction-root[data-value="${activeValue}"]`,
+    ) as HTMLElement
+
+    if (activeButton) {
+      const navRect = navRef.current.getBoundingClientRect()
+      const buttonRect = activeButton.getBoundingClientRect()
+      setIndicatorStyle({
+        left: buttonRect.left - navRect.left,
+        width: buttonRect.width,
+      })
+    }
+  }, [activeValue, location.pathname, isMobile])
+
+  // Early return AFTER all hooks to maintain hook order
+  if (!isMobile) {
+    return null
   }
 
   const handleChange = (_event: React.SyntheticEvent, newValue: string) => {
@@ -90,55 +118,78 @@ export function MobileBottomNav() {
       }}
       elevation={3}
     >
-      <BottomNavigation
-        value={getActiveValue()}
-        onChange={handleChange}
-        showLabels
-        sx={{
-          backgroundColor: theme.palette.background.paper,
-          height: 64, // Standard bottom nav height
-          "& .MuiBottomNavigationAction-root": {
-            color: theme.palette.text.secondary,
-            minWidth: 0,
-            padding: "6px 12px",
-            "&.Mui-selected": {
-              color: theme.palette.primary.main,
+      <Box sx={{ position: "relative" }}>
+        <BottomNavigation
+          ref={navRef}
+          value={activeValue}
+          onChange={handleChange}
+          showLabels
+          sx={{
+            backgroundColor: theme.palette.background.paper,
+            height: 64, // Standard bottom nav height
+            position: "relative",
+            "& .MuiBottomNavigationAction-root": {
+              color: theme.palette.text.secondary,
+              minWidth: 0,
+              padding: "6px 12px",
+              "&.Mui-selected": {
+                color: theme.palette.primary.main,
+              },
             },
-          },
-          "& .MuiBottomNavigationAction-label": {
-            fontSize: "0.75rem",
-            marginTop: 0.5,
-            "&.Mui-selected": {
+            "& .MuiBottomNavigationAction-label": {
               fontSize: "0.75rem",
+              marginTop: 0.5,
+              "&.Mui-selected": {
+                fontSize: "0.75rem",
+              },
             },
-          },
-        }}
-      >
-        <BottomNavigationAction
-          label={t("sidebar.player_market", "Market")}
-          value="market"
-          icon={<StoreRounded />}
-        />
-        <BottomNavigationAction
-          label={t("sidebar.contractor_services", "Services")}
-          value="services"
-          icon={<DesignServicesRounded />}
-        />
-        {isLoggedIn && (
+          }}
+        >
           <BottomNavigationAction
-            label={t("sidebar.my_orders", "My Orders")}
-            value="orders"
-            icon={<CreateRounded />}
+            label={t("sidebar.player_market", "Market")}
+            value="market"
+            icon={<StoreRounded />}
+            data-value="market"
+          />
+          <BottomNavigationAction
+            label={t("sidebar.contractor_services", "Services")}
+            value="services"
+            icon={<DesignServicesRounded />}
+            data-value="services"
+          />
+          {isLoggedIn && (
+            <BottomNavigationAction
+              label={t("sidebar.my_orders", "My Orders")}
+              value="orders"
+              icon={<CreateRounded />}
+              data-value="orders"
+            />
+          )}
+          {isLoggedIn && (
+            <BottomNavigationAction
+              label={t("sidebar.dashboard.text", "Dashboard")}
+              value="dashboard"
+              icon={<DashboardRounded />}
+              data-value="dashboard"
+            />
+          )}
+        </BottomNavigation>
+        {/* Animated underline indicator */}
+        {activeValue && (
+          <Box
+            sx={{
+              position: "absolute",
+              bottom: 0,
+              left: 0,
+              height: 2,
+              backgroundColor: theme.palette.primary.main,
+              transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+              width: indicatorStyle.width,
+              transform: `translateX(${indicatorStyle.left}px)`,
+            }}
           />
         )}
-        {isLoggedIn && (
-          <BottomNavigationAction
-            label={t("sidebar.dashboard.text", "Dashboard")}
-            value="dashboard"
-            icon={<DashboardRounded />}
-          />
-        )}
-      </BottomNavigation>
+      </Box>
     </Paper>
   )
 }

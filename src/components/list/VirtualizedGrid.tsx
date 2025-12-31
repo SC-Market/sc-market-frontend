@@ -33,28 +33,30 @@ export function VirtualizedGrid<T>(props: VirtualizedGridProps<T>) {
   const isSm = useMediaQuery(theme.breakpoints.between("sm", "md"))
   const isMd = useMediaQuery(theme.breakpoints.between("md", "lg"))
   const isLg = useMediaQuery(theme.breakpoints.up("lg"))
+  const isBelowMd = useMediaQuery(theme.breakpoints.down("md")) // < 900px
 
   // Determine number of columns based on breakpoint
+  // On medium devices (<900px), ensure 2 columns to prevent layout issues
   const cols = useMemo(() => {
     if (isXs) return columns.xs || 1
-    if (isSm) return columns.sm || 2
+    if (isBelowMd) return columns.sm || 2 // Force 2 columns on <900px
     if (isMd) return columns.md || 3
     if (isLg) return columns.lg || 4
     return columns.xs || 1
-  }, [isXs, isSm, isMd, isLg, columns])
+  }, [isXs, isSm, isMd, isLg, isBelowMd, columns])
 
   // Determine gap value based on breakpoint
   const gapValue = useMemo(() => {
     if (typeof gap === "number") return gap
     if (typeof gap === "object") {
       if (isXs) return gap.xs ?? gap.sm ?? gap.md ?? gap.lg ?? 2
-      if (isSm) return gap.sm ?? gap.md ?? gap.lg ?? gap.xs ?? 2
+      if (isBelowMd) return gap.sm ?? gap.md ?? gap.lg ?? gap.xs ?? 2 // Use sm gap for <900px
       if (isMd) return gap.md ?? gap.lg ?? gap.sm ?? gap.xs ?? 2
       if (isLg) return gap.lg ?? gap.md ?? gap.sm ?? gap.xs ?? 2
       return gap.xs ?? 2
     }
     return 2 // Default
-  }, [isXs, isSm, isMd, isLg, gap])
+  }, [isXs, isSm, isMd, isLg, isBelowMd, gap])
 
   // Calculate number of rows
   const rowCount = Math.ceil(items.length / cols)
@@ -63,9 +65,9 @@ export function VirtualizedGrid<T>(props: VirtualizedGridProps<T>) {
   const internalRef = useRef<HTMLDivElement>(null)
   const parentRef = externalRef || internalRef
 
-  // On mobile, use document element scroll instead of container scroll for better UX
+  // On mobile and medium devices (<900px), use document element scroll instead of container scroll for better UX
   const getScrollElement = (): Element | null => {
-    if (isXs) {
+    if (isBelowMd) {
       return typeof document !== "undefined" ? (document.documentElement as Element) : null
     }
     return parentRef.current
@@ -89,11 +91,11 @@ export function VirtualizedGrid<T>(props: VirtualizedGridProps<T>) {
 
   return (
     <Box
-      ref={isXs ? undefined : parentRef} // Don't attach ref on mobile since we use window scroll
+      ref={isBelowMd ? undefined : parentRef} // Don't attach ref on <900px devices since we use window scroll
       sx={{
-        height: isXs ? "auto" : "100%", // Auto height on mobile for natural flow
+        height: isBelowMd ? "auto" : "100%", // Auto height on <900px devices for natural flow
         width: "100%",
-        overflow: isXs ? "visible" : "auto", // No overflow on mobile, use window scroll
+        overflow: isBelowMd ? "visible" : "auto", // No overflow on <900px devices, use window scroll
         // Smooth scrolling
         scrollBehavior: "smooth",
       }}
@@ -111,21 +113,22 @@ export function VirtualizedGrid<T>(props: VirtualizedGridProps<T>) {
           const rowItems = items.slice(startIndex, endIndex)
 
           return (
-            <Box
-              key={virtualRow.key}
-              sx={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                width: "100%",
-                height: `${virtualRow.size}px`,
-                transform: `translateY(${virtualRow.start}px)`,
-                display: "grid",
-                gridTemplateColumns: `repeat(${cols}, 1fr)`,
-                gap: theme.spacing(gapValue),
-                paddingX: { xs: theme.spacing(1), sm: theme.spacing(gapValue / 2) },
-              }}
-            >
+              <Box
+                key={virtualRow.key}
+                sx={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  height: `${virtualRow.size}px`,
+                  transform: `translateY(${virtualRow.start}px)`,
+                  display: "grid",
+                  gridTemplateColumns: `repeat(${cols}, 1fr)`,
+                  gap: theme.spacing(gapValue),
+                  paddingX: { xs: theme.spacing(1), sm: theme.spacing(gapValue / 2) },
+                  boxSizing: "border-box",
+                }}
+              >
               {rowItems.map((item, colIndex) => {
                 const index = startIndex + colIndex
                 return (
