@@ -266,6 +266,7 @@
       "text": "Маркет"
     },
     "player_market": "Маркет гравців",
+    "market_short": "Маркет",
     "everything": "Усе",
     "weapons": "Зброя",
     "armor": "Броня",
@@ -273,6 +274,7 @@
     "bulk_items": "Оптові товари",
     "buy_orders": "Заявка на купівлю",
     "contractor_services": "Послуги підрядників",
+    "services_short": "Послуги",
     "my_org_listings": "Пропозиції Організації",
     "sell_materials": "Продаж матеріалів",
     "contracting": {
