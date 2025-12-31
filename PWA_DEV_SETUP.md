@@ -17,6 +17,7 @@ Service workers **require** one of the following:
 ### "The operation is insecure" Error
 
 This error occurs when you're trying to access the app via:
+
 - IP address (e.g., `http://192.168.1.100:5173`)
 - Non-localhost domain (e.g., `http://mycomputer.local:5173`)
 
@@ -25,6 +26,7 @@ This error occurs when you're trying to access the app via:
 ### Service Worker Not Registering in Dev
 
 If the service worker doesn't register immediately:
+
 - Wait a few seconds after page load (Vite needs time to serve the dev service worker)
 - Check the browser console for detailed error messages
 - Verify you're accessing via `localhost` or `127.0.0.1`
@@ -32,6 +34,7 @@ If the service worker doesn't register immediately:
 ## Testing PWA Features
 
 1. **Start dev server:**
+
    ```bash
    npm run dev
    ```
@@ -52,12 +55,14 @@ If the service worker doesn't register immediately:
 ## WebSocket Connection Issues
 
 If you see errors like:
+
 - `NS_ERROR_WEBSOCKET_CONNECTION_REFUSED`
 - `TypeError: can't access property "send", ws is undefined`
 
 These are related to Vite's HMR (Hot Module Replacement) websocket, not the PWA service worker itself. The service worker registration will gracefully handle these errors and won't break your app.
 
 **These errors are safe to ignore** - they just mean:
+
 - The dev service worker can't use Vite's HMR features
 - PWA features will still work, just without HMR in the service worker
 - The service worker will register successfully once Vite's websocket is available
@@ -75,6 +80,7 @@ For production-like testing:
 
 1. Build the app: `npm run build`
 2. Serve with HTTPS (required for service workers):
+
    ```bash
    # Using a tool like serve with HTTPS
    npx serve -s dist --ssl-cert cert.pem --ssl-key key.pem

@@ -1,11 +1,15 @@
 # SC Market Frontend
 
-This repository hosts the backend for [SC Market](https://sc-market.space).
+This repository hosts the frontend for [SC Market](https://sc-market.space).
 
 ## Local Development
 
 Please read through the guide for setting up the [backend](https://github.com/SC-Market/sc-market-backend/blob/main/README.md)
 and ensure the variables in [.env](.env) match those in your backend's .env file.
+
+## Android Build
+
+Android TWA (Trusted Web Activity) build tooling has been moved to a separate repository: [sc-market-android](../sc-market-android/). See that repository for Android app build instructions.
 
 ### Local Development Server
 
