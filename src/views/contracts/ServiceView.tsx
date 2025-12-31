@@ -691,48 +691,80 @@ export function ServiceView(props: {
                 display={"flex"}
                 justifyContent={"space-between"}
                 alignItems={"center"}
+                spacing={{ xs: 2, sm: 0 }}
+                sx={{
+                  flexDirection: { xs: "column", sm: "row" }, // Stack vertically on mobile
+                  alignItems: { xs: "stretch", sm: "center" }, // Stretch on mobile for full-width button
+                }}
               >
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 1,
-                    flexWrap: "wrap",
-                  }}
-                >
-                  <Chip
-                    color={"primary"}
-                    label={t(`myServices.${service.kind}`, {
-                      defaultValue: service.kind,
-                    })}
-                    sx={{ marginRight: 1, marginBottom: 1, padding: 1 }}
-                    variant={"outlined"}
-                    icon={orderIcons[service.kind]}
-                    onClick={
-                      (event) => event.stopPropagation() // Don't highlight cell if button clicked
-                    }
-                  />
-                  {service.languages &&
-                    service.languages.length > 0 &&
-                    service.languages.map((lang) => (
-                      <Chip
-                        key={lang.code}
-                        label={lang.name}
-                        variant="outlined"
-                        sx={{ marginRight: 1, marginBottom: 1, padding: 1 }}
-                        onClick={(event) => event.stopPropagation()}
-                      />
-                    ))}
-                </Box>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  startIcon={<ShoppingCartRounded />}
-                  onClick={scrollToOrderForm}
-                  sx={{ marginBottom: 1 }}
-                >
-                  {t("serviceView.placeOrder", "Place Order")}
-                </Button>
+                <Grid item xs={12} sm="auto">
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1,
+                      flexWrap: { xs: "nowrap", sm: "wrap" }, // No wrap on mobile, wrap on desktop
+                      overflowX: { xs: "auto", sm: "visible" }, // Horizontal scroll on mobile
+                      overflowY: "hidden",
+                      pb: { xs: 0.5, sm: 0 }, // Small padding on mobile for scrollbar
+                      "&::-webkit-scrollbar": {
+                        height: 4,
+                      },
+                      "&::-webkit-scrollbar-thumb": {
+                        backgroundColor: theme.palette.divider,
+                        borderRadius: 2,
+                      },
+                    }}
+                  >
+                    <Chip
+                      color={"primary"}
+                      label={t(`myServices.${service.kind}`, {
+                        defaultValue: service.kind,
+                      })}
+                      sx={{
+                        marginRight: 1,
+                        marginBottom: { xs: 0, sm: 1 },
+                        padding: 1,
+                        flexShrink: 0, // Prevent shrinking on mobile
+                      }}
+                      variant={"outlined"}
+                      icon={orderIcons[service.kind]}
+                      onClick={
+                        (event) => event.stopPropagation() // Don't highlight cell if button clicked
+                      }
+                    />
+                    {service.languages &&
+                      service.languages.length > 0 &&
+                      service.languages.map((lang) => (
+                        <Chip
+                          key={lang.code}
+                          label={lang.name}
+                          variant="outlined"
+                          sx={{
+                            marginRight: 1,
+                            marginBottom: { xs: 0, sm: 1 },
+                            padding: 1,
+                            flexShrink: 0, // Prevent shrinking on mobile
+                          }}
+                          onClick={(event) => event.stopPropagation()}
+                        />
+                      ))}
+                  </Box>
+                </Grid>
+                <Grid item xs={12} sm="auto">
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    startIcon={<ShoppingCartRounded />}
+                    onClick={scrollToOrderForm}
+                    sx={{
+                      marginBottom: { xs: 0, sm: 1 },
+                      width: { xs: "100%", sm: "auto" }, // Full width on mobile
+                    }}
+                  >
+                    {t("serviceView.placeOrder", "Place Order")}
+                  </Button>
+                </Grid>
               </Grid>
             </CardActions>
           </Card>
