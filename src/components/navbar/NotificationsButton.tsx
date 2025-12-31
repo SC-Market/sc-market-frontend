@@ -141,7 +141,7 @@ export function NotificationBase(props: {
       </ListItemIcon>
       <ListItemText
         sx={{
-          maxWidth: 300,
+          maxWidth: { xs: "calc(100% - 80px)", sm: 300 }, // Responsive maxWidth: account for icon and delete button on mobile
           color: "text.secondary",
           wordWrap: "break-word",
           overflowWrap: "break-word",
@@ -718,14 +718,15 @@ export function NotificationsButton() {
             borderRadius: (theme) =>
               theme.spacing((theme as ExtendedTheme).borderRadius.topLevel),
             borderColor: theme.palette.outline.main,
-            maxWidth: 400,
-            width: "100%",
+            maxWidth: { xs: "calc(100vw - 32px)", sm: 400 }, // Responsive maxWidth: full width minus padding on mobile
+            width: { xs: "calc(100vw - 32px)", sm: 400 }, // Responsive width
+            maxHeight: { xs: "calc(100vh - 100px)", sm: "80vh" }, // Limit height on mobile to fit viewport
           },
         }}
       >
         <Box
           sx={{
-            padding: 2,
+            padding: { xs: 1.5, sm: 2 }, // Reduced padding on mobile
             bgcolor: "secondary.main",
             color: "secondary.contrastText",
             display: "flex",
@@ -763,8 +764,8 @@ export function NotificationsButton() {
                 borderBottom: `1px solid ${theme.palette.outline.main}`,
               },
               padding: 0,
-              maxHeight: 400,
-              overflow: "scroll",
+              maxHeight: { xs: "calc(100vh - 250px)", sm: 400 }, // Responsive maxHeight to fit viewport
+              overflow: "auto", // Changed from "scroll" to "auto" for better mobile behavior
               minHeight: 20,
             }}
           >
