@@ -146,13 +146,13 @@ export function MobileBottomNav() {
           }}
         >
           <BottomNavigationAction
-            label={t("sidebar.player_market", "Market")}
+            label="Market"
             value="market"
             icon={<StoreRounded />}
             data-value="market"
           />
           <BottomNavigationAction
-            label={t("sidebar.contractor_services", "Services")}
+            label="Services"
             value="services"
             icon={<DesignServicesRounded />}
             data-value="services"
