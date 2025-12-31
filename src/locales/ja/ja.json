@@ -494,6 +494,8 @@
     "order_count_daily": "日次注文数",
     "order_count_weekly": "週次注文数",
     "order_count_monthly": "月次注文数",
+    "average_order_value_monthly": "平均注文価値（月次）",
+    "average_order_value": "平均注文価値",
     "order_value_daily": "日次注文価値",
     "orders_daily": "日次注文",
     "orders_weekly": "週次注文",

@@ -299,6 +299,7 @@ export interface OrderAnalytics {
     fulfilled: number
     cancelled: number
     not_started: number
+    average_fulfilled_value?: number
   }>
   top_contractors: Array<{
     name: string

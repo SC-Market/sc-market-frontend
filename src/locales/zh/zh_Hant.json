@@ -488,6 +488,8 @@
     "order_count_daily": "每日訂單數量",
     "order_count_weekly": "每週訂單數量",
     "order_count_monthly": "每月訂單數量",
+    "average_order_value_monthly": "平均訂單價值（月度）",
+    "average_order_value": "平均訂單價值",
     "order_value_daily": "每日訂單價值",
     "orders_daily": "每日訂單",
     "orders_weekly": "每週訂單",

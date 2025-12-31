@@ -503,6 +503,8 @@
     "order_count_daily": "Nombre de Commandes Quotidien",
     "order_count_weekly": "Nombre de Commandes Hebdomadaire",
     "order_count_monthly": "Nombre de Commandes Mensuel",
+    "average_order_value_monthly": "Valeur Moyenne des Commandes (Mensuel)",
+    "average_order_value": "Valeur Moyenne des Commandes",
     "order_value_daily": "Valeur des Commandes Quotidienne",
     "orders_daily": "Commandes Quotidiennes",
     "orders_weekly": "Commandes Hebdomadaires",

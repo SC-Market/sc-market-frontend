@@ -807,6 +807,8 @@
     "order_count_daily": "Order Count Daily",
     "order_count_weekly": "Order Count Weekly",
     "order_count_monthly": "Order Count Monthly",
+    "average_order_value_monthly": "Average Order Value (Monthly)",
+    "average_order_value": "Average Order Value",
     "order_value_daily": "Order Value Daily",
     "orders_daily": "Orders Daily",
     "orders_weekly": "Orders Weekly",

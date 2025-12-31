@@ -503,6 +503,8 @@
     "order_count_daily": "Tägliche Bestellanzahl",
     "order_count_weekly": "Wöchentliche Bestellanzahl",
     "order_count_monthly": "Monatliche Bestellanzahl",
+    "average_order_value_monthly": "Durchschnittlicher Bestellwert (Monatlich)",
+    "average_order_value": "Durchschnittlicher Bestellwert",
     "order_value_daily": "Täglicher Bestellwert",
     "orders_daily": "Bestellungen täglich",
     "orders_weekly": "Bestellungen wöchentlich",

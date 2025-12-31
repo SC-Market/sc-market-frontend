@@ -532,6 +532,8 @@
     "order_count_daily": "每日订单数量",
     "order_count_weekly": "每周订单数量",
     "order_count_monthly": "每月订单数量",
+    "average_order_value_monthly": "平均订单价值（月度）",
+    "average_order_value": "平均订单价值",
     "order_value_daily": "每日订单价值",
     "orders_daily": "每日订单",
     "orders_weekly": "每周订单",
