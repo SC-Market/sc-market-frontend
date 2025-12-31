@@ -261,6 +261,7 @@
       "text": "Market"
     },
     "player_market": "Player Market",
+    "market_short": "マーケット",
     "everything": "Everything",
     "weapons": "Weapons",
     "armor": "Armor",
@@ -268,6 +269,7 @@
     "bulk_items": "Bulk Items",
     "buy_orders": "Buy Orders",
     "contractor_services": "Contractor Services",
+    "services_short": "サービス",
     "my_org_listings": "My Org's Listings",
     "sell_materials": "Sell Materials",
     "contracting": {

@@ -255,6 +255,7 @@
       "text": "市集"
     },
     "player_market": "玩家市集",
+    "market_short": "市集",
     "everything": "全部物品",
     "weapons": "武器",
     "armor": "护甲",
@@ -262,6 +263,7 @@
     "bulk_items": "大宗",
     "buy_orders": "购买订单",
     "contractor_services": "合约服务",
+    "services_short": "服務",
     "my_org_listings": "我的组织的商品页",
     "sell_materials": "材料售卖",
     "contracting": {
