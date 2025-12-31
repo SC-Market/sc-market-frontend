@@ -489,6 +489,7 @@ export function ItemListing(props: {
     <Grid
       item
       xs={marketSidebarOpen ? 12 : 6}
+      sm={marketSidebarOpen ? 12 : 6}
       md={marketSidebarOpen ? 12 : 4}
       lg={marketSidebarOpen ? 6 : 4}
       xl={3}
@@ -511,6 +512,7 @@ export function AggregateListing(props: {
     <Grid
       item
       xs={marketSidebarOpen ? 12 : 6}
+      sm={marketSidebarOpen ? 12 : 6}
       md={marketSidebarOpen ? 12 : 4}
       lg={marketSidebarOpen ? 6 : 4}
       xl={3}
@@ -533,6 +535,7 @@ export function AggregateBuyOrderListing(props: {
     <Grid
       item
       xs={marketSidebarOpen ? 12 : 6}
+      sm={marketSidebarOpen ? 12 : 6}
       md={marketSidebarOpen ? 12 : 4}
       lg={marketSidebarOpen ? 6 : 4}
       xl={3}
@@ -858,6 +861,7 @@ export function MultipleListing(props: {
     <Grid
       item
       xs={marketSidebarOpen ? 12 : 6}
+      sm={marketSidebarOpen ? 12 : 6}
       md={marketSidebarOpen ? 12 : 4}
       lg={marketSidebarOpen ? 6 : 4}
       xl={3}
@@ -1315,9 +1319,9 @@ export function DisplayListingsMin(props: {
       <Grid item xs={12}>
         <Box
           sx={{
-            // Remove fixed height on mobile to allow natural page scrolling
-            height: { xs: "auto", sm: "calc(100vh - 400px)" },
-            minHeight: { xs: "auto", sm: 600 },
+            // Remove fixed height on <900px devices to allow natural page scrolling
+            height: { xs: "auto", sm: "auto", md: "calc(100vh - 400px)" },
+            minHeight: { xs: "auto", sm: "auto", md: 600 },
           }}
         >
           <VirtualizedGrid
