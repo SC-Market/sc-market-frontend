@@ -232,6 +232,61 @@ export function OrderAnalyticsCharts({ analytics }: OrderAnalyticsProps) {
           />
         </Grid>
       </Section>
+
+      <Section xs={12} title={t("orderTrend.average_order_value_monthly", "Average Order Value (Monthly)")}>
+        <Grid item xs={12}>
+          {/* @ts-ignore */}
+          <DynamicApexChart
+            width={"100%"}
+            height={400}
+            type={"line"}
+            options={{
+              xaxis: {
+                type: "datetime",
+                labels: {
+                  format: "MM/yy",
+                },
+              },
+              yaxis: {
+                forceNiceScale: true,
+                min: 0,
+                labels: {
+                  formatter: (value: number) => {
+                    return `${value.toLocaleString()} aUEC`
+                  },
+                },
+              },
+              dataLabels: {
+                enabled: false,
+              },
+              stroke: {
+                curve: "smooth",
+                width: 3,
+              },
+              tooltip: {
+                x: {
+                  format: "MM/yy",
+                },
+                y: {
+                  formatter: (value: number) => {
+                    return `${value.toLocaleString()} aUEC`
+                  },
+                },
+              },
+              colors: ["#1976d2"], // Primary color for the line
+            }}
+            series={[
+              {
+                name: t("orderTrend.average_order_value", "Average Order Value"),
+                data: analytics.monthly_totals.map((item) => ({
+                  x: new Date(item.date).toISOString(),
+                  y: item.average_fulfilled_value || 0,
+                })),
+              },
+            ]}
+          />
+        </Grid>
+      </Section>
     </>
   )
 }

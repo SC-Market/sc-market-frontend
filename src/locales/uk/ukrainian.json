@@ -525,6 +525,8 @@
     "order_count_daily": "Кількість замовлень (щодня)",
     "order_count_weekly": "Кількість замовлень (щотижня)",
     "order_count_monthly": "Кількість замовлень (щомісяця)",
+    "average_order_value_monthly": "Середня вартість замовлень (щомісяця)",
+    "average_order_value": "Середня вартість замовлень",
     "order_value_daily": "Вартість замовлень (щодня)",
     "orders_daily": "Замовлення щодня",
     "orders_weekly": "Замовлення щотижня",

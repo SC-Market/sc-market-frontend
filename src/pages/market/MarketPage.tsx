@@ -23,6 +23,7 @@ import MenuIcon from "@mui/icons-material/MenuRounded"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { MarketSidebarContext } from "../../hooks/market/MarketSidebar"
+import { ServiceSidebarContext } from "../../hooks/contract/ServiceSidebar"
 import { Page } from "../../components/metadata/Page"
 import {
   BuyOrderActions,
@@ -83,6 +84,9 @@ export function MarketPage() {
   const { t } = useTranslation()
   const location = useLocation()
   const theme = useTheme<ExtendedTheme>()
+  const xs = useMediaQuery(theme.breakpoints.down("md"))
+  const [marketSidebarOpen, setMarketSidebarOpen] = useState(false)
+  const [serviceSidebarOpen, setServiceSidebarOpen] = useState(false)
   const pages = ["/market/services", "/market"]
   const tabPage = useMemo(
     () =>
@@ -94,34 +98,72 @@ export function MarketPage() {
 
   return (
     <Page title={t("market.market")} dontUseDefaultCanonUrl={true}>
-      <OpenLayout sidebarOpen={true} noMobilePadding={true}>
-        <Container
-          maxWidth={"lg"}
-          sx={{
-            paddingTop: { xs: 2, sm: 8 },
-            paddingX: { xs: theme.spacing(1), sm: theme.spacing(3) },
-          }}
-        >
-          <Grid
-            container
-            spacing={{ xs: theme.layoutSpacing.component, sm: theme.layoutSpacing.layout }}
-            sx={{ marginBottom: { xs: 2, sm: 4 } }}
-            alignItems="center"
-            justifyContent="space-between"
-          >
-            {/* Title - full width on mobile, auto on large */}
-            <Grid item xs={12} sm="auto">
-              <Typography
-                variant="h4"
-                sx={{
-                  fontWeight: "bold",
-                  fontSize: { xs: "1.5rem", sm: "2.125rem" },
-                }}
-                color={"text.secondary"}
+      <MarketSidebarContext.Provider value={[marketSidebarOpen, setMarketSidebarOpen]}>
+        <ServiceSidebarContext.Provider value={[serviceSidebarOpen, setServiceSidebarOpen]}>
+          <OpenLayout sidebarOpen={true} noMobilePadding={true}>
+            <Container
+              maxWidth={"lg"}
+              sx={{
+                paddingTop: { xs: 2, sm: 8 },
+                paddingX: { xs: theme.spacing(1), sm: theme.spacing(3) },
+              }}
+            >
+              <Grid
+                container
+                spacing={{ xs: theme.layoutSpacing.component, sm: theme.layoutSpacing.layout }}
+                sx={{ marginBottom: { xs: 2, sm: 4 } }}
+                alignItems="center"
+                justifyContent="space-between"
               >
-                {t("market.market")}
-              </Typography>
-            </Grid>
+                {/* Title - full width on mobile, auto on large */}
+                <Grid item xs={12} sm="auto">
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                    {/* Market sidebar toggle - only show on mobile */}
+                    {xs && tabPage === 1 && (
+                      <IconButton
+                        color="secondary"
+                        aria-label={t("market.toggleSidebar")}
+                        onClick={() => {
+                          setMarketSidebarOpen((prev) => !prev)
+                        }}
+                        sx={{
+                          [theme.breakpoints.up("md")]: {
+                            display: "none",
+                          },
+                        }}
+                      >
+                        {marketSidebarOpen ? <CloseIcon /> : <MenuIcon />}
+                      </IconButton>
+                    )}
+                    {/* Services sidebar toggle - only show on mobile */}
+                    {xs && tabPage === 0 && (
+                      <IconButton
+                        color="secondary"
+                        aria-label={t("service_market.toggle_sidebar")}
+                        onClick={() => {
+                          setServiceSidebarOpen((prev) => !prev)
+                        }}
+                        sx={{
+                          [theme.breakpoints.up("md")]: {
+                            display: "none",
+                          },
+                        }}
+                      >
+                        {serviceSidebarOpen ? <CloseIcon /> : <MenuIcon />}
+                      </IconButton>
+                    )}
+                    <Typography
+                      variant="h4"
+                      sx={{
+                        fontWeight: "bold",
+                        fontSize: { xs: "1.5rem", sm: "2.125rem" },
+                      }}
+                      color={"text.secondary"}
+                    >
+                      {t("market.market")}
+                    </Typography>
+                  </Box>
+                </Grid>
             {/* Tabs - full width on mobile, auto on large */}
             <Grid item xs={12} sm="auto">
               <Tabs
@@ -180,6 +222,8 @@ export function MarketPage() {
           </Suspense>
         </TabPanel>
       </OpenLayout>
+        </ServiceSidebarContext.Provider>
+      </MarketSidebarContext.Provider>
     </Page>
   )
 }

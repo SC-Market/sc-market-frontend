@@ -503,6 +503,8 @@
     "order_count_daily": "Recuento de Pedidos Diario",
     "order_count_weekly": "Recuento de Pedidos Semanal",
     "order_count_monthly": "Recuento de Pedidos Mensual",
+    "average_order_value_monthly": "Valor Promedio de Pedidos (Mensual)",
+    "average_order_value": "Valor Promedio de Pedidos",
     "order_value_daily": "Valor de Pedidos Diario",
     "orders_daily": "Pedidos Diarios",
     "orders_weekly": "Pedidos Semanales",
