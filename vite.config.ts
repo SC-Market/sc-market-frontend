@@ -116,14 +116,14 @@ export default defineConfig({
             options: {
               cacheName: "pages-v1",
               expiration: {
-                maxEntries: 50,
-                maxAgeSeconds: 60 * 60 * 24, // 1 day
+                maxEntries: 100, // Increased from 50
+                maxAgeSeconds: 60 * 60 * 24 * 7, // 7 days (increased from 1 day)
+                purgeOnQuotaError: true,
               },
-              networkTimeoutSeconds: 5, // Wait 5 seconds for network
+              networkTimeoutSeconds: 3, // Faster timeout for better perceived performance
               cacheableResponse: {
                 statuses: [0, 200], // Only cache successful responses
               },
-              // No fallback - if network fails and no cache, let browser handle the error
             },
           },
           {
@@ -151,14 +151,14 @@ export default defineConfig({
 
               return isApiCall && isApiPath && !isExcluded && isSecure
             },
-            handler: "NetworkFirst",
+            handler: "StaleWhileRevalidate", // Changed from NetworkFirst for better offline experience
             options: {
               cacheName: "api-cache-v1",
               expiration: {
-                maxEntries: 50,
-                maxAgeSeconds: 3600, // 1 hour
+                maxEntries: 200, // Increased from 50
+                maxAgeSeconds: 60 * 60 * 24, // 24 hours (increased from 1 hour)
+                purgeOnQuotaError: true,
               },
-              networkTimeoutSeconds: 10,
               cacheableResponse: {
                 statuses: [0, 200],
               },
@@ -170,8 +170,35 @@ export default defineConfig({
             options: {
               cacheName: "images-v1",
               expiration: {
-                maxEntries: 200,
+                maxEntries: 500, // Increased from 200
+                maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days (increased from 7 days)
+                purgeOnQuotaError: true,
+              },
+            },
+          },
+          {
+            // Cache fonts aggressively (they rarely change)
+            urlPattern: /\.(?:woff|woff2|ttf|otf|eot)$/,
+            handler: "CacheFirst",
+            options: {
+              cacheName: "fonts-v1",
+              expiration: {
+                maxEntries: 50,
+                maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year
+                purgeOnQuotaError: true,
+              },
+            },
+          },
+          {
+            // Cache CSS and JS with StaleWhileRevalidate for better updates
+            urlPattern: /\.(?:css|js)$/,
+            handler: "StaleWhileRevalidate",
+            options: {
+              cacheName: "static-assets-v1",
+              expiration: {
+                maxEntries: 100,
                 maxAgeSeconds: 60 * 60 * 24 * 7, // 7 days
+                purgeOnQuotaError: true,
               },
             },
           },
