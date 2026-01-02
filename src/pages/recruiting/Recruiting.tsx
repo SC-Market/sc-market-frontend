@@ -24,10 +24,8 @@ import {
   useRecruitingGetAllPostsQuery,
   useRecruitingGetPostByOrgQuery,
 } from "../../store/recruiting"
-import {
-  RecruitingPostItem,
-  RecruitingPostSkeleton,
-} from "../../views/recruiting/RecruitingList"
+import { RecruitingPostItem } from "../../views/recruiting/RecruitingList"
+import { RecruitingPostSkeleton } from "../../components/skeletons"
 import { NoteAddRounded } from "@mui/icons-material"
 import { Link } from "react-router-dom"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
@@ -48,7 +46,7 @@ export function Recruiting() {
     language_codes: undefined,
   })
 
-  const { data: posts, isLoading } = useRecruitingGetAllPostsQuery({
+  const { data: posts, isLoading, isFetching } = useRecruitingGetAllPostsQuery({
     index: page,
     pageSize: perPage,
     ...searchState,
@@ -181,7 +179,7 @@ export function Recruiting() {
                 </Grid>
               )}
             </Grid>
-            {!isLoading
+            {!(isLoading || isFetching)
               ? (posts?.items || []).map((item, index) => (
                   <RecruitingPostItem post={item} key={index} index={index} />
                 ))

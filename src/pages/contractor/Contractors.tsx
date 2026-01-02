@@ -1,9 +1,7 @@
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
 import React, { useCallback, useEffect, useRef, useState } from "react"
-import {
-  ContractorListItem,
-  ContractorSkeleton,
-} from "../../views/contractor/ContractorList"
+import { ContractorListItem } from "../../views/contractor/ContractorList"
+import { ContractorSkeleton } from "../../components/skeletons"
 import { Button, Divider, Grid, IconButton, TablePagination, useMediaQuery } from "@mui/material"
 import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import { useGetContractorsQuery } from "../../store/contractor"
@@ -56,7 +54,7 @@ export function Contractors() {
     sorting: "date-reverse",
     language_codes: undefined,
   })
-  const { data: contractors, isLoading } = useGetContractorsQuery({
+  const { data: contractors, isLoading, isFetching } = useGetContractorsQuery({
     pageSize: perPage,
     index: page,
     ...searchState,
@@ -129,7 +127,7 @@ export function Contractors() {
           <ContainerGrid maxWidth={"md"} sidebarOpen={true}>
             <div ref={ref} />
             <HeaderTitle>{t("contractorsPage.title")}</HeaderTitle>
-            {!isLoading
+            {!(isLoading || isFetching)
               ? (contractors || { items: [] }).items.map((item, index) => (
                   <ContractorListItem
                     contractor={item}

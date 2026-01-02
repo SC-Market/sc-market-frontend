@@ -13,6 +13,7 @@ import {
   Link as MaterialLink,
   Paper,
   Skeleton,
+  Stack,
   Tab,
   Tabs,
   Typography,
@@ -436,76 +437,199 @@ export function OrgInfo(props: { contractor: Contractor }) {
 }
 
 export function OrgInfoSkeleton() {
-  const [page, setPage] = React.useState(0)
+  const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
 
-  const handleChange = (event: React.SyntheticEvent, newPage: number) => {
-    setPage(newPage)
-  }
-
   return (
-    <React.Fragment>
-      <Grid item xs={12}>
-        <Box sx={{ borderBottom: 1, borderColor: "divider.light" }}>
-          <Tabs
-            value={page}
-            onChange={handleChange}
-            aria-label={t("ui.aria.orgInfoArea")}
-            variant="scrollable"
-          >
-            <Tab
-              label={t("orgInfo.about")}
-              icon={<InfoIcon />}
-              {...a11yProps(0)}
-            />
-            <Tab
-              label={t("orgInfo.order")}
-              icon={<CreateIcon />}
-              {...a11yProps(1)}
-            />
-            <Tab
-              label={t("orgInfo.members")}
-              icon={<PeopleAltRoundedIcon />}
-              {...a11yProps(2)}
-            />
-          </Tabs>
-        </Box>
-      </Grid>
-      <Grid item xs={12}>
-        <TabPanel value={page} index={0}>
-          <Skeleton
-            sx={{
-              borderRadius: (theme) =>
-                theme.spacing((theme as ExtendedTheme).borderRadius.image),
-              width: "100%",
-              padding: 0,
-              height: 700,
-            }}
-          />
-        </TabPanel>
-        <TabPanel value={page} index={1}>
-          <Skeleton
-            sx={{
-              borderRadius: (theme) =>
-                theme.spacing((theme as ExtendedTheme).borderRadius.image),
-              width: "100%",
-              padding: 0,
-              height: 700,
-            }}
-          />
-        </TabPanel>
-        <TabPanel value={page} index={2}>
-          <Skeleton
-            sx={{
-              borderRadius: (theme) =>
-                theme.spacing((theme as ExtendedTheme).borderRadius.image),
-              width: "100%",
-              padding: 0,
-              height: 700,
-            }}
-          />
-        </TabPanel>
-      </Grid>
-    </React.Fragment>
+    <OpenLayout sidebarOpen={true}>
+      <Box sx={{ position: "relative" }}>
+        {/* Banner skeleton */}
+        <Skeleton
+          variant="rectangular"
+          sx={{
+            height: theme.palette.mode === "dark" ? 450 : 200,
+            width: "100%",
+            borderRadius: 0,
+          }}
+        />
+        <Container
+          maxWidth={"lg"}
+          sx={{
+            ...(theme.palette.mode === "dark"
+              ? {
+                  position: "relative",
+                  top: -450,
+                }
+              : {
+                  position: "relative",
+                  top: -200,
+                }),
+          }}
+        >
+          <Grid container spacing={theme.layoutSpacing.layout}>
+            <Grid item xs={12}>
+              <Grid
+                container
+                spacing={theme.layoutSpacing.component}
+                alignItems={"flex-end"}
+                minHeight={375}
+              >
+                <Grid item md={4}>
+                  <Grid container spacing={theme.layoutSpacing.text}>
+                    <Grid item sm={4}>
+                      <Skeleton
+                        variant="rectangular"
+                        sx={{
+                          maxHeight: theme.spacing(12),
+                          maxWidth: theme.spacing(12),
+                          width: "100%",
+                          height: "100%",
+                          borderRadius: theme.spacing(theme.borderRadius.image),
+                        }}
+                      />
+                    </Grid>
+                    <Grid item sm={8}>
+                      <Grid container spacing={0}>
+                        <Grid item>
+                          <Skeleton variant="text" width={200} height={28} sx={{ mb: 1 }} />
+                        </Grid>
+                        <Grid
+                          item
+                          xs={12}
+                          alignItems={"center"}
+                          display={"flex"}
+                        >
+                          <PeopleAltRoundedIcon
+                            style={{ color: theme.palette.text.primary }}
+                          />
+                          <Skeleton
+                            variant="text"
+                            width={40}
+                            height={20}
+                            sx={{ marginLeft: 1 }}
+                          />
+                        </Grid>
+                        <Grid item>
+                          <Stack direction="row" spacing={0.5} alignItems="center" sx={{ mt: 0.5 }}>
+                            <Skeleton variant="circular" width={16} height={16} />
+                            <Skeleton variant="text" width={60} height={16} />
+                          </Stack>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Box>
+                        <Stack direction="row" spacing={0.5} flexWrap="wrap">
+                          <Skeleton
+                            variant="rectangular"
+                            width={100}
+                            height={32}
+                            sx={{
+                              borderRadius: 1,
+                              marginBottom: 0.5,
+                            }}
+                          />
+                          <Skeleton
+                            variant="rectangular"
+                            width={100}
+                            height={32}
+                            sx={{
+                              borderRadius: 1,
+                              marginBottom: 0.5,
+                            }}
+                          />
+                          <Skeleton
+                            variant="rectangular"
+                            width={100}
+                            height={32}
+                            sx={{
+                              borderRadius: 1,
+                              marginBottom: 0.5,
+                            }}
+                          />
+                        </Stack>
+                      </Box>
+                    </Grid>
+                  </Grid>
+                </Grid>
+
+                <Grid item xs={12} md={8}>
+                  <Paper
+                    sx={{ padding: 1, maxHeight: 350, overflow: "scroll" }}
+                  >
+                    <Skeleton variant="text" width="100%" height={20} sx={{ mb: 0.5 }} />
+                    <Skeleton variant="text" width="100%" height={20} sx={{ mb: 0.5 }} />
+                    <Skeleton variant="text" width="90%" height={20} sx={{ mb: 0.5 }} />
+                    <Skeleton variant="text" width="80%" height={20} sx={{ mb: 2 }} />
+                    <Stack direction="row" spacing={0.5} flexWrap="wrap">
+                      <Skeleton
+                        variant="rectangular"
+                        width={80}
+                        height={24}
+                        sx={{ borderRadius: 1 }}
+                      />
+                      <Skeleton
+                        variant="rectangular"
+                        width={80}
+                        height={24}
+                        sx={{ borderRadius: 1 }}
+                      />
+                    </Stack>
+                  </Paper>
+                </Grid>
+              </Grid>
+            </Grid>
+
+            <Grid item xs={12}>
+              <Box sx={{ borderBottom: 1, borderColor: "divider.light" }}>
+                <Tabs
+                  value={0}
+                  aria-label={t("ui.aria.orgInfoArea")}
+                  variant="scrollable"
+                >
+                  <Tab
+                    label={<Skeleton width={60} />}
+                    icon={<InfoRounded />}
+                    {...a11yProps(0)}
+                  />
+                  <Tab
+                    label={<Skeleton width={60} />}
+                    icon={<DesignServicesRounded />}
+                    {...a11yProps(1)}
+                  />
+                  <Tab
+                    label={<Skeleton width={60} />}
+                    icon={<GavelRounded />}
+                    {...a11yProps(2)}
+                  />
+                  <Tab
+                    label={<Skeleton width={60} />}
+                    icon={<CreateRounded />}
+                    {...a11yProps(3)}
+                  />
+                  <Tab
+                    label={<Skeleton width={60} />}
+                    icon={<PeopleAltRoundedIcon />}
+                    {...a11yProps(4)}
+                  />
+                </Tabs>
+              </Box>
+            </Grid>
+            <Grid item xs={12}>
+              <Grid container spacing={theme.layoutSpacing.layout}>
+                <Skeleton
+                  variant="rectangular"
+                  width="100%"
+                  height={400}
+                  sx={{
+                    borderRadius: theme.spacing(theme.borderRadius.topLevel),
+                  }}
+                />
+              </Grid>
+            </Grid>
+          </Grid>
+        </Container>
+      </Box>
+    </OpenLayout>
   )
 }
