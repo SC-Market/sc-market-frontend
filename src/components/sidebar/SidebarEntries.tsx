@@ -148,10 +148,9 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
         logged_in: true,
       },
       {
-        to: "/messaging",
+        to: "/messages",
         text: "sidebar.messaging",
         icon: <ForumRoundedIcon />,
-        hidden: true,
         logged_in: true,
       },
     ],

@@ -81,6 +81,7 @@ export function ProfileNavAvatar() {
             <Link
               to={`/user/${profile?.username}`}
               style={{ color: "inherit", textDecoration: "none" }}
+              onClick={handleClose}
             >
               <ListItemButton>
                 <ListItemIcon
@@ -102,6 +103,7 @@ export function ProfileNavAvatar() {
             <Link
               to={"/settings"}
               style={{ color: "inherit", textDecoration: "none" }}
+              onClick={handleClose}
             >
               <ListItemButton>
                 <ListItemIcon
@@ -123,6 +125,7 @@ export function ProfileNavAvatar() {
             <a
               href={`${BACKEND_URL}/logout`}
               style={{ color: "inherit", textDecoration: "none" }}
+              onClick={handleClose}
             >
               <ListItemButton>
                 <ListItemIcon

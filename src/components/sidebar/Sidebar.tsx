@@ -424,12 +424,13 @@ export function Sidebar() {
           boxSizing: "border-box",
           backgroundColor: theme.palette.background.sidebar,
           overflow: "hidden",
-          borderColor: theme.palette.outline.main,
+          borderRight: drawerOpen ? 1 : 0,
+          borderColor: drawerOpen ? theme.palette.outline.main : "transparent",
           scrollPadding: 0,
           display: "flex",
           flexDirection: "column",
 
-          transition: theme.transitions.create("width", {
+          transition: theme.transitions.create(["width", "borderRight", "borderColor"], {
             easing: theme.transitions.easing.easeOut,
             duration: "0.3s",
           }),
