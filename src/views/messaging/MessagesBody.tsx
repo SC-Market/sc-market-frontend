@@ -29,6 +29,7 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import BusinessIcon from "@mui/icons-material/BusinessRounded"
 import DescriptionIcon from "@mui/icons-material/DescriptionRounded"
 import SendIcon from "@mui/icons-material/SendRounded"
+import ContentCopyRounded from "@mui/icons-material/ContentCopyRounded"
 import { UserParticipant, ContractorParticipant } from "../../datatypes/Chat"
 import { Message } from "../../datatypes/Chat"
 import {
@@ -49,6 +50,7 @@ import { DateTimePicker } from "@mui/x-date-pickers"
 import moment from "moment"
 import { useTranslation } from "react-i18next"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
+import { LongPressMenu } from "../../components/gestures"
 
 function MessageHeader() {
   const profile = useGetUserProfileQuery()
@@ -498,18 +500,33 @@ function replaceDiscordTimestamps(input: string) {
 
 function MessageEntry2(props: { message: Message }) {
   const { message } = props
+  const theme = useTheme<ExtendedTheme>()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const { t } = useTranslation()
   const { data: profile } = useGetUserProfileQuery()
   const { data: author } = useGetUserByUsernameQuery(message.author!, {
     skip: !message.author,
   })
-  const theme = useTheme<ExtendedTheme>()
-  const { t } = useTranslation()
   const convertedContent = useMemo(
     () => replaceDiscordTimestamps(message.content),
     [message.content],
   )
 
-  return (
+  // Long-press menu actions for messages
+  const longPressActions = useMemo(() => {
+    if (!message.content) return [] // No content to copy
+    return [
+      {
+        label: t("messages.copy", { defaultValue: "Copy" }),
+        icon: <ContentCopyRounded />,
+        onClick: () => {
+          navigator.clipboard.writeText(message.content || "")
+        },
+      },
+    ]
+  }, [message.content, t])
+
+  const messageContent = (
     <Stack
       direction={"row"}
       spacing={theme.layoutSpacing.compact}
@@ -576,6 +593,17 @@ function MessageEntry2(props: { message: Message }) {
       </Stack>
     </Stack>
   )
+
+  // Wrap with LongPressMenu on mobile if there are actions
+  if (isMobile && longPressActions.length > 0) {
+    return (
+      <LongPressMenu actions={longPressActions} enabled={isMobile}>
+        {messageContent}
+      </LongPressMenu>
+    )
+  }
+
+  return messageContent
 }
 
 function MessageEntry(props: { message: Message }) {

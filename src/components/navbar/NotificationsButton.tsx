@@ -14,6 +14,7 @@ import {
   TablePagination,
   Tooltip,
   Typography,
+  useMediaQuery,
 } from "@mui/material"
 import NotificationsActiveRoundedIcon from "@mui/icons-material/NotificationsActiveRounded"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
@@ -38,6 +39,9 @@ import {
   EditRounded,
   MarkEmailReadRounded,
   UpdateRounded,
+  ShareRounded,
+  DeleteRounded,
+  MarkEmailUnreadRounded,
 } from "@mui/icons-material"
 import {
   useGetNotificationsQuery,
@@ -53,6 +57,7 @@ import { OfferSession } from "../../store/offer"
 import { Trans, useTranslation } from "react-i18next"
 import { MarkdownRender } from "../markdown/Markdown"
 import { useBadgeAPI } from "../../hooks/pwa/useBadgeAPI"
+import { LongPressMenu } from "../gestures"
 
 /*
 VALUES ('order_create', 'orders'),
@@ -112,8 +117,11 @@ export function NotificationBase(props: {
 }) {
   const theme = useTheme<ExtendedTheme>()
   const { icon, to, notif, onClick } = props
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const { t } = useTranslation()
 
   const [updateNotification] = useNotificationUpdateMutation()
+  const [deleteNotification] = useNotificationDeleteMutation()
 
   const defaultClick = useCallback(async () => {
     await updateNotification({
@@ -122,7 +130,72 @@ export function NotificationBase(props: {
     })
   }, [notif.notification_id, updateNotification])
 
-  return (
+  // Long-press menu actions
+  const longPressActions = useMemo(() => {
+    const actions = []
+    
+    // Mark as read/unread
+    if (notif.read) {
+      actions.push({
+        label: t("notifications.markAsUnread", { defaultValue: "Mark as Unread" }),
+        icon: <MarkEmailUnreadRounded />,
+        onClick: async () => {
+          await updateNotification({
+            notification_id: notif.notification_id,
+            read: false,
+          })
+        },
+      })
+    } else {
+      actions.push({
+        label: t("notifications.markAsRead", { defaultValue: "Mark as Read" }),
+        icon: <MarkEmailReadRounded />,
+        onClick: async () => {
+          await updateNotification({
+            notification_id: notif.notification_id,
+            read: true,
+          })
+        },
+      })
+    }
+
+    // Share (if there's a link)
+    if (to) {
+      actions.push({
+        label: t("notifications.share", { defaultValue: "Share" }),
+        icon: <ShareRounded />,
+        onClick: () => {
+          const url = `${window.location.origin}${to}`
+          if (navigator.share) {
+            navigator.share({
+              title: t("notifications.notification", { defaultValue: "Notification" }),
+              text: t("notifications.shareNotification", { defaultValue: "Check out this notification" }),
+              url,
+            }).catch(() => {
+              // User cancelled or error occurred
+            })
+          } else {
+            // Fallback: copy to clipboard
+            navigator.clipboard.writeText(url)
+          }
+        },
+      })
+    }
+
+    // Delete
+    actions.push({
+      label: t("notifications.delete", { defaultValue: "Delete" }),
+      icon: <DeleteRounded />,
+      onClick: () => {
+        deleteNotification([notif.notification_id])
+      },
+      destructive: true,
+    })
+
+    return actions
+  }, [notif, to, updateNotification, deleteNotification, t])
+
+  const listItemButton = (
     <ListItemButton
       component={to ? Link : "div"}
       to={to}
@@ -158,6 +231,17 @@ export function NotificationBase(props: {
       <NotificationDeleteButton notif={notif} />
     </ListItemButton>
   )
+
+  // Wrap with LongPressMenu on mobile
+  if (isMobile && longPressActions.length > 0) {
+    return (
+      <LongPressMenu actions={longPressActions} enabled={isMobile}>
+        {listItemButton}
+      </LongPressMenu>
+    )
+  }
+
+  return listItemButton
 }
 
 export function NotificationDeleteButton(props: { notif: Notification }) {
