@@ -31,6 +31,7 @@
     "password": "密码",
     "repeatPassword": "重输密码",
     "loginWith": "用此方法登录",
+    "signIn": "登录",
     "terms": "点此同意服务条款",
     "submit": "提交",
     "loginWithDiscord": "用Discord登录",
@@ -316,6 +317,8 @@
   "rows_per_page": "每页行数",
   "no_listings": "无可用的商品页",
   "displayed_rows": "{{from}}–{{to}}页，全{{count}}页",
+  "displayed_rows_range": "{{from}}–{{to}} / 共{{count}}",
+  "displayed_rows_range_more": "{{from}}–{{to}} / 超过{{to}}",
   "all": "全部",
   "recruiting_orgs": "招募中的组织",
   "toggle_market_sidebar": "开关市集侧边栏",
@@ -467,11 +470,17 @@
       "updatePost": "Update Post"
     }
   },
+  "recruiting": {
+    "viewDetails": "查看详情",
+    "viewContractor": "查看合约组织",
+    "share": "分享"
+  },
   "contractor": {
     "fields": {
       "mining": "Mining",
       "trading": "Trading",
-      "security": "Security"
+      "security": "Security",
+      "repair": "Repair"
     }
   },
   "adminUsers": {
@@ -1629,12 +1638,21 @@
     "subtitle": "I wonder how you got here...",
     "returnToDashboard": "Return to Dashboard"
   },
+  "errorPage": {
+    "title": "出错了",
+    "subtitle": "加载此页面时遇到错误。这可能是由于临时服务器问题或网络问题造成的。",
+    "retry": "重试",
+    "goBackToPage": "返回页面",
+    "path": "页面",
+    "pageTitle": "错误"
+  },
   "frontendError": {
     "title": "An Error Occurred Loading the Page",
     "subtitle": "Please let us know in",
     "afterRefresh": "if you see this error after refreshing the page.",
     "page": "Error page",
     "message": "Message",
+    "goBackToPage": "返回页面",
     "returnToDashboard": "Return to Dashboard",
     "pageTitle": "An Error Occurred"
   },
@@ -1720,6 +1738,12 @@
   "common": {
     "cancel": "取消",
     "loading": "加载中",
-    "error": "错误"
+    "error": "错误",
+    "previous": "上一页",
+    "page": "页",
+    "next": "下一页",
+    "viewDetails": "查看详情",
+    "share": "分享",
+    "rowsPerPage": "每页行数"
   }
 }

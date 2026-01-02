@@ -31,6 +31,7 @@
     "password": "Password",
     "repeatPassword": "Repeat Password",
     "loginWith": "Login with",
+    "signIn": "Iniciar sesión",
     "terms": "By clicking here, you agree to our Terms of Service",
     "submit": "Submit",
     "loginWithDiscord": "Login with Discord",
@@ -312,6 +313,8 @@
   "rows_per_page": "Rows per page",
   "no_listings": "No listings to display",
   "displayed_rows": "{{from}}–{{to}} of {{count}}",
+  "displayed_rows_range": "{{from}}–{{to}} de {{count}}",
+  "displayed_rows_range_more": "{{from}}–{{to}} de más de {{to}}",
   "all": "all",
   "contractors": "Contractors",
   "recruiting_orgs": "Recruiting Orgs",
@@ -438,11 +441,17 @@
       "updatePost": "Update Post"
     }
   },
+  "recruiting": {
+    "viewDetails": "Ver detalles",
+    "viewContractor": "Ver contratista",
+    "share": "Compartir"
+  },
   "contractor": {
     "fields": {
       "mining": "Mining",
       "trading": "Trading",
-      "security": "Security"
+      "security": "Security",
+      "repair": "Repair"
     }
   },
   "adminUsers": {
@@ -1586,12 +1595,21 @@
     "subtitle": "I wonder how you got here...",
     "returnToDashboard": "Return to Dashboard"
   },
+  "errorPage": {
+    "title": "Algo salió mal",
+    "subtitle": "Encontramos un error al cargar esta página. Esto podría deberse a un problema temporal del servidor o de la red.",
+    "retry": "Intentar de nuevo",
+    "goBackToPage": "Volver a la página",
+    "path": "Página",
+    "pageTitle": "Error"
+  },
   "frontendError": {
     "title": "An Error Occurred Loading the Page",
     "subtitle": "Please let us know in",
     "afterRefresh": "if you see this error after refreshing the page.",
     "page": "Error page",
     "message": "Message",
+    "goBackToPage": "Volver a la página",
     "returnToDashboard": "Return to Dashboard",
     "pageTitle": "An Error Occurred"
   },
@@ -1642,6 +1660,12 @@
   "common": {
     "cancel": "Cancelar",
     "loading": "Cargando",
-    "error": "Error"
+    "error": "Error",
+    "previous": "Anterior",
+    "page": "Página",
+    "next": "Siguiente",
+    "viewDetails": "Ver detalles",
+    "share": "Compartir",
+    "rowsPerPage": "Filas por página"
   }
 }

@@ -31,6 +31,7 @@
     "password": "Password",
     "repeatPassword": "Repeat Password",
     "loginWith": "Login with",
+    "signIn": "Anmelden",
     "terms": "By clicking here, you agree to our Terms of Service",
     "submit": "Submit",
     "loginWithDiscord": "Login with Discord",
@@ -312,6 +313,8 @@
   "rows_per_page": "Rows per page",
   "no_listings": "No listings to display",
   "displayed_rows": "{{from}}–{{to}} of {{count}}",
+  "displayed_rows_range": "{{from}}–{{to}} von {{count}}",
+  "displayed_rows_range_more": "{{from}}–{{to}} von mehr als {{to}}",
   "all": "all",
   "contractors": "Contractors",
   "recruiting_orgs": "Recruiting Orgs",
@@ -438,11 +441,17 @@
       "updatePost": "Update Post"
     }
   },
+  "recruiting": {
+    "viewDetails": "Details anzeigen",
+    "viewContractor": "Auftragnehmer anzeigen",
+    "share": "Teilen"
+  },
   "contractor": {
     "fields": {
       "mining": "Mining",
       "trading": "Trading",
-      "security": "Security"
+      "security": "Security",
+      "repair": "Repair"
     }
   },
   "adminUsers": {
@@ -1584,12 +1593,21 @@
     "subtitle": "I wonder how you got here...",
     "returnToDashboard": "Return to Dashboard"
   },
+  "errorPage": {
+    "title": "Etwas ist schief gelaufen",
+    "subtitle": "Beim Laden dieser Seite ist ein Fehler aufgetreten. Dies könnte auf ein vorübergehendes Server- oder Netzwerkproblem zurückzuführen sein.",
+    "retry": "Erneut versuchen",
+    "goBackToPage": "Zurück zur Seite",
+    "path": "Seite",
+    "pageTitle": "Fehler"
+  },
   "frontendError": {
     "title": "An Error Occurred Loading the Page",
     "subtitle": "Please let us know in",
     "afterRefresh": "if you see this error after refreshing the page.",
     "page": "Error page",
     "message": "Message",
+    "goBackToPage": "Zurück zur Seite",
     "returnToDashboard": "Return to Dashboard",
     "pageTitle": "An Error Occurred"
   },
@@ -1640,6 +1658,12 @@
   "common": {
     "cancel": "Abbrechen",
     "loading": "Lädt",
-    "error": "Fehler"
+    "error": "Fehler",
+    "previous": "Zurück",
+    "page": "Seite",
+    "next": "Weiter",
+    "viewDetails": "Details anzeigen",
+    "share": "Teilen",
+    "rowsPerPage": "Zeilen pro Seite"
   }
 }

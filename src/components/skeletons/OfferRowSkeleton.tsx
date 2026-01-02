@@ -1,4 +1,4 @@
-import { TableRow, TableCell, Avatar, Stack, Paper } from "@mui/material"
+import { TableRow, TableCell, Avatar, Stack, Paper, Checkbox } from "@mui/material"
 import { BaseSkeleton } from "./BaseSkeleton"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTheme } from "@mui/material/styles"
@@ -18,6 +18,15 @@ export function OfferRowSkeleton({ index = 0 }: OfferRowSkeletonProps) {
 
   return (
     <TableRow>
+      {/* Checkbox column - matches OfferRow structure when selection is enabled */}
+      <TableCell
+        padding="checkbox"
+        sx={{
+          display: { xs: "none", sm: "table-cell" }, // Hide checkbox on mobile, matching OfferRow
+        }}
+      >
+        <BaseSkeleton variant="rectangular" width={24} height={24} />
+      </TableCell>
       {/* Offer column (timestamp) */}
       <TableCell
         sx={{

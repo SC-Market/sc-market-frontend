@@ -55,7 +55,7 @@ import { Stack } from "@mui/system"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { EmptyOrders } from "../../components/empty-states"
-import { PullToRefresh, SwipeableItem, useLongPress } from "../../components/gestures"
+import { PullToRefresh, useLongPress } from "../../components/gestures"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useGetUserProfileQuery } from "../../store/profile"
 import { OrderSearchSortMethod } from "../../datatypes/Order"
@@ -104,9 +104,10 @@ export function OfferRow(props: {
   isItemSelected: boolean
   labelId: string
   enableSelection?: boolean
+  hasSelectedItems?: boolean
 }) {
   const { t } = useTranslation()
-  const { row, index, isItemSelected, onClick, enableSelection, labelId } =
+  const { row, index, isItemSelected, onClick, enableSelection, labelId, hasSelectedItems = false } =
     props
   const date = useMemo(() => new Date(row.timestamp), [row.timestamp])
   const theme = useTheme<ExtendedTheme>()
@@ -127,8 +128,16 @@ export function OfferRow(props: {
     }
   }, [statusKey])
 
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
+  
+  // When in selection mode (hasSelectedItems) on mobile, single tap should select
+  const isInSelectionMode = isMobile && hasSelectedItems
+
   const handleRowClick = (event: React.MouseEvent<unknown>) => {
-    if (enableSelection && onClick) {
+    if (isInSelectionMode && onClick) {
+      // In selection mode on mobile - use onClick for selection
+      onClick(event as React.MouseEvent<Element>)
+    } else if (enableSelection && onClick) {
       // Selection mode - use onClick for selection
       onClick(event as React.MouseEvent<Element>)
     } else if (!enableSelection) {
@@ -136,8 +145,6 @@ export function OfferRow(props: {
       navigate(`/offer/${row.id}`)
     }
   }
-
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
 
   // Long-press handler - on mobile, directly toggles selection
   const handleLongPressForSelection = useCallback(
@@ -158,17 +165,19 @@ export function OfferRow(props: {
     delay: 500,
   })
 
+  const shouldUseDiv = isInSelectionMode || (isMobile && enableSelection)
+  
   return (
     <TableRow
       hover
-      onClick={isMobile && enableSelection ? undefined : handleRowClick}
+      onClick={isInSelectionMode ? handleRowClick : (isMobile && enableSelection ? undefined : handleRowClick)}
       role={enableSelection ? "checkbox" : undefined}
       aria-checked={enableSelection ? isItemSelected : undefined}
       tabIndex={-1}
       key={index}
       selected={isItemSelected}
       style={{ textDecoration: "none", color: "inherit", cursor: "pointer" }}
-      {...(isMobile && enableSelection ? { component: "div" as const } : {})}
+      {...(shouldUseDiv ? { component: "div" as const } : {})}
       {...(isMobile && enableSelection ? longPressHandlers : {})}
       sx={{
         "& .MuiTableCell-root": {
@@ -201,7 +210,7 @@ export function OfferRow(props: {
         </TableCell>
       )}
       <TableCell
-        onClick={isMobile && enableSelection ? () => navigate(`/offer/${row.id}`) : undefined}
+        onClick={isInSelectionMode ? handleRowClick : (isMobile && enableSelection ? () => navigate(`/offer/${row.id}`) : undefined)}
         sx={{
           width: { xs: "45%", sm: "auto" },
           minWidth: { xs: 0, sm: "auto" },
@@ -747,32 +756,7 @@ export function OffersViewPaginated(props: {
           }}
           enabled={useMediaQuery(theme.breakpoints.down("md"))}
         >
-          <SwipeableItem
-            onSwipeLeft={() => {
-              const currentIndex = tabs.findIndex(([id]) => id === statusFilter)
-              if (currentIndex < tabs.length - 1 && currentIndex >= 0) {
-                const nextTab = tabs[currentIndex + 1]
-                if (nextTab && nextTab[0] !== null) {
-                  setStatusFilter(nextTab[0] as OfferSearchStatus)
-                } else if (nextTab && nextTab[0] === null) {
-                  setStatusFilter(null)
-                }
-              }
-            }}
-            onSwipeRight={() => {
-              const currentIndex = tabs.findIndex(([id]) => id === statusFilter)
-              if (currentIndex > 0) {
-                const prevTab = tabs[currentIndex - 1]
-                if (prevTab && prevTab[0] !== null) {
-                  setStatusFilter(prevTab[0] as OfferSearchStatus)
-                } else if (prevTab && prevTab[0] === null) {
-                  setStatusFilter(null)
-                }
-              }
-            }}
-            enabled={useMediaQuery(theme.breakpoints.down("md"))}
-          >
-            <ControlledTable
+          <ControlledTable
             rows={(data?.items || []).map((o) => ({
               ...o,
               customer_name: o.customer.username,
@@ -814,7 +798,6 @@ export function OffersViewPaginated(props: {
             loading={isLoading || isFetching}
             loadingRowComponent={OfferRowSkeleton}
           />
-          </SwipeableItem>
         </PullToRefresh>
         <Dialog
           open={mergeModalOpen}

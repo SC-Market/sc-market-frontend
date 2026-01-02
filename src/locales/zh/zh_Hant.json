@@ -31,6 +31,7 @@
     "password": "密码",
     "repeatPassword": "重输密码",
     "loginWith": "用此方法登录",
+    "signIn": "登入",
     "terms": "点此同意服务条款",
     "submit": "提交",
     "loginWithDiscord": "用Discord登录",
@@ -297,6 +298,8 @@
   "rows_per_page": "每页行数",
   "no_listings": "无可用的商品页",
   "displayed_rows": "{{from}}–{{to}}页，全{{count}}页",
+  "displayed_rows_range": "{{from}}–{{to}} / 共{{count}}",
+  "displayed_rows_range_more": "{{from}}–{{to}} / 超過{{to}}",
   "all": "全部",
   "contractors": "合约组织",
   "recruiting_orgs": "招募中的组织",
@@ -423,11 +426,17 @@
       "updatePost": ""
     }
   },
+  "recruiting": {
+    "viewDetails": "查看詳情",
+    "viewContractor": "查看合約組織",
+    "share": "分享"
+  },
   "contractor": {
     "fields": {
       "mining": "",
       "trading": "",
-      "security": ""
+      "security": "",
+      "repair": ""
     }
   },
   "adminUsers": {
@@ -1544,12 +1553,21 @@
     "subtitle": "",
     "returnToDashboard": ""
   },
+  "errorPage": {
+    "title": "出錯了",
+    "subtitle": "載入此頁面時遇到錯誤。這可能是由於臨時伺服器問題或網路問題造成的。",
+    "retry": "重試",
+    "goBackToPage": "返回頁面",
+    "path": "頁面",
+    "pageTitle": "錯誤"
+  },
   "frontendError": {
     "title": "",
     "subtitle": "",
     "afterRefresh": "",
     "page": "",
     "message": "",
+    "goBackToPage": "返回頁面",
     "returnToDashboard": "",
     "pageTitle": ""
   },
@@ -1600,6 +1618,12 @@
   "common": {
     "cancel": "取消",
     "loading": "載入中",
-    "error": "錯誤"
+    "error": "錯誤",
+    "previous": "上一頁",
+    "page": "頁",
+    "next": "下一頁",
+    "viewDetails": "查看詳情",
+    "share": "分享",
+    "rowsPerPage": "每頁行數"
   }
 }

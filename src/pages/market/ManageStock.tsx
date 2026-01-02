@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Grid, Paper } from "@mui/material"
+import { Grid, Paper, useMediaQuery } from "@mui/material"
 import { MarketSearchArea } from "../../views/market/MarketSidebar"
 import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import { MarketSidebarContext } from "../../hooks/market/MarketSidebar"
@@ -17,7 +17,8 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 export function ManageStock() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
-  const [open, setOpen] = useState(true)
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const [open, setOpen] = useState(!isMobile) // Start closed on mobile
   const [searchState, setSearchState] = useMarketSearch()
 
   useEffect(() => {
@@ -41,13 +42,15 @@ export function ManageStock() {
           <ContainerGrid maxWidth={"xl"} sidebarOpen={true}>
             <HeaderTitle>{t("sidebar.manage_listings")}</HeaderTitle>
 
-            <Grid item xs={12} md={3}>
-              <Paper>
-                <MarketSearchArea status />
-              </Paper>
-            </Grid>
+            {!isMobile && (
+              <Grid item xs={12} md={3}>
+                <Paper>
+                  <MarketSearchArea status />
+                </Paper>
+              </Grid>
+            )}
 
-            <Grid item xs={12} md={9}>
+            <Grid item xs={12} md={isMobile ? 12 : 9}>
               <Grid container spacing={theme.layoutSpacing.layout}>
                 <Grid item xs={12}>
                   <MyItemStock />

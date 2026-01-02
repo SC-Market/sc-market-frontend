@@ -14,6 +14,7 @@ import {
   Avatar,
   Box,
   Button,
+  Checkbox,
   Chip,
   Collapse,
   FormControlLabel,
@@ -57,7 +58,6 @@ import { OrderRowSkeleton } from "../../components/skeletons"
 import { EmptyOrders } from "../../components/empty-states"
 import {
   PullToRefresh,
-  SwipeableItem,
   LongPressMenu,
   useLongPress,
 } from "../../components/gestures"
@@ -147,13 +147,17 @@ export function OrderRow(props: {
   onClick?: MouseEventHandler
   isItemSelected: boolean
   labelId: string
+  hasSelectedItems?: boolean
 }) {
-  const { row, index, isItemSelected } = props // TODO: Add `assigned_to` column
+  const { row, index, isItemSelected, hasSelectedItems = false } = props // TODO: Add `assigned_to` column
   const date = useMemo(() => new Date(row.timestamp), [row.timestamp])
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
   const navigate = useNavigate()
+  
+  // When in selection mode (hasSelectedItems) on mobile, single tap should select
+  const isInSelectionMode = isMobile && hasSelectedItems
 
   const statusColor = useMemo(() => statusColors.get(row.status), [row.status])
   const status = useMemo(
@@ -218,15 +222,15 @@ export function OrderRow(props: {
   const rowContent = (
     <TableRow
       hover
-      onClick={isMobile ? undefined : props.onClick}
+      onClick={isInSelectionMode ? props.onClick : (isMobile ? undefined : props.onClick)}
       role="checkbox"
       aria-checked={isItemSelected}
       tabIndex={-1}
       key={index}
       selected={isItemSelected}
       style={{ textDecoration: "none", color: "inherit" }}
-      component={isMobile ? "div" : Link}
-      to={isMobile ? undefined : `/contract/${row.order_id}`}
+      component={isInSelectionMode ? "div" : (isMobile ? "div" : Link)}
+      to={isInSelectionMode ? undefined : (isMobile ? undefined : `/contract/${row.order_id}`)}
       {...(isMobile ? longPressHandlers : {})}
       sx={{
         "& .MuiTableCell-root": {
@@ -239,8 +243,31 @@ export function OrderRow(props: {
         },
       }}
     >
+      {/* Checkbox column - matches table header when selection is enabled */}
       <TableCell
-        onClick={isMobile ? () => navigate(`/contract/${row.order_id}`) : undefined}
+        padding="checkbox"
+        sx={{
+          display: { xs: "none", sm: "table-cell" }, // Hide checkbox on mobile
+        }}
+      >
+        <Checkbox
+          color="primary"
+          checked={isItemSelected}
+          inputProps={{
+            "aria-labelledby": props.labelId,
+          }}
+          onClick={(e: React.MouseEvent) => e.stopPropagation()}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            e.stopPropagation()
+            if (props.onClick) {
+              // Leverage the table's selection handler
+              props.onClick(e as unknown as React.MouseEvent<Element>)
+            }
+          }}
+        />
+      </TableCell>
+      <TableCell
+        onClick={isInSelectionMode ? props.onClick : (isMobile ? () => navigate(`/contract/${row.order_id}`) : undefined)}
         sx={{
           width: { xs: "45%", sm: "auto" },
           minWidth: { xs: 0, sm: "auto" },
@@ -726,29 +753,14 @@ export function OrdersViewPaginated(props: {
           }}
           enabled={isMobile}
         >
-          <SwipeableItem
-            onSwipeLeft={() => {
-              const currentIndex = tabs.findIndex(([id]) => id === statusFilter)
-              if (currentIndex < tabs.length - 1) {
-                setStatusFilter(tabs[currentIndex + 1][0])
-              }
+          <Box
+            sx={{
+              // Hide checkbox column header on mobile
+              "& .MuiTableHead .MuiTableCell-root:first-of-type": {
+                display: { xs: "none", sm: "table-cell" },
+              },
             }}
-            onSwipeRight={() => {
-              const currentIndex = tabs.findIndex(([id]) => id === statusFilter)
-              if (currentIndex > 0) {
-                setStatusFilter(tabs[currentIndex - 1][0])
-              }
-            }}
-            enabled={isMobile}
           >
-            <Box
-              sx={{
-                // Hide checkbox column header on mobile
-                "& .MuiTableHead .MuiTableCell-root:first-of-type": {
-                  display: { xs: "none", sm: "table-cell" },
-                },
-              }}
-            >
             <ControlledTable
             rows={(orders?.items || []).map((o) => ({
               ...o,
@@ -787,8 +799,7 @@ export function OrdersViewPaginated(props: {
               ) : undefined
             }
           />
-            </Box>
-          </SwipeableItem>
+          </Box>
         </PullToRefresh>
       </Paper>
     </Grid>
