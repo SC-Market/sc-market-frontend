@@ -10,7 +10,7 @@ import {
 } from "../datatypes/MarketListing"
 import { MinimalUser } from "../datatypes/User.ts"
 import { Order } from "../datatypes/Order.tsx"
-import { unwrapResponse } from "./orders.ts"
+import { unwrapResponse } from "./api-utils"
 import { BaseQueryMeta } from "@reduxjs/toolkit/query"
 import { generateTempId, createOptimisticUpdate } from "../util/optimisticUpdates"
 

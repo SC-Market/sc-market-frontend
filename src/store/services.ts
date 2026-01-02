@@ -1,6 +1,6 @@
 import { serviceApi } from "./service"
 import { Service, ServiceBody } from "../datatypes/Order"
-import { unwrapResponse } from "./orders"
+import { unwrapResponse } from "./api-utils"
 
 // Define the photo upload response type based on OpenAPI spec
 interface PhotoUploadResponse {

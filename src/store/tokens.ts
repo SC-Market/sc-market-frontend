@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 import { BACKEND_URL } from "../util/constants"
 import { Contractor } from "../datatypes/Contractor"
-import { unwrapResponse } from "./orders"
+import { unwrapResponse } from "./api-utils"
 
 const baseUrl = `${BACKEND_URL}/api`
 

@@ -1,6 +1,6 @@
 import { Chat } from "../datatypes/Chat"
 import { serviceApi } from "./service"
-import { unwrapResponse } from "./orders"
+import { unwrapResponse } from "./api-utils"
 import { generateTempId, createOptimisticUpdate } from "../util/optimisticUpdates"
 
 export const chatsApi = serviceApi.injectEndpoints({

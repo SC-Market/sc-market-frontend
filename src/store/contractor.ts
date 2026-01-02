@@ -11,7 +11,7 @@ import { MinimalUser, User } from "../datatypes/User"
 import { OrderReview } from "../datatypes/Order"
 import { serviceApi } from "./service"
 import { ContractorSearchState } from "../hooks/contractor/ContractorSearch"
-import { unwrapResponse } from "./orders"
+import { unwrapResponse } from "./api-utils"
 import { BlocklistEntry } from "./profile"
 import { Language } from "../constants/languages"
 

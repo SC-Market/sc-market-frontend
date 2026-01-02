@@ -15,3 +15,6 @@ export type { EmptySearchResultsProps } from "./EmptySearchResults"
 
 export { EmptyContracts } from "./EmptyContracts"
 export type { EmptyContractsProps } from "./EmptyContracts"
+
+export { EmptyReviews } from "./EmptyReviews"
+export type { EmptyReviewsProps } from "./EmptyReviews"

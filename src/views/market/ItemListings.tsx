@@ -1797,16 +1797,34 @@ export function OrgRecentListings(props: { org: string }) {
 
 export function UserRecentListings(props: { user: string }) {
   const { user } = props
-  const { data: listings } = useSearchMarketListingsQuery({
+  const { t } = useTranslation()
+  const { data: listings, isLoading, isFetching } = useSearchMarketListingsQuery({
     page_size: 25,
     user_seller: user,
   })
 
-  return listings ? (
-    <DisplayListingsHorizontal listings={listings.listings || []} />
-  ) : (
-    <RecentListingsSkeleton />
-  )
+  if (isLoading || isFetching) {
+    return <RecentListingsSkeleton />
+  }
+
+  if (!listings || (listings.listings || []).length === 0) {
+    return (
+      <Grid item xs={12}>
+        <EmptyListings
+          isSearchResult={false}
+          showCreateAction={false}
+          title={t("emptyStates.profile.noListings", {
+            defaultValue: "No listings yet",
+          })}
+          description={t("emptyStates.profile.noListingsDescription", {
+            defaultValue: "This user hasn't created any market listings yet",
+          })}
+        />
+      </Grid>
+    )
+  }
+
+  return <DisplayListingsHorizontal listings={listings.listings || []} />
 }
 
 export const completeToSearchResult = (

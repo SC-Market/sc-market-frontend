@@ -2,7 +2,7 @@ import { serviceApi } from "./service"
 import { MinimalUser } from "../datatypes/User"
 import { Contractor } from "../datatypes/Contractor"
 import { RecruitingSearchState } from "../hooks/recruiting/RecruitingSearch"
-import { unwrapResponse } from "./orders.ts"
+import { unwrapResponse } from "./api-utils"
 
 export interface Comment {
   comment_id: string

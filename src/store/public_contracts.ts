@@ -1,7 +1,7 @@
 import { serviceApi } from "./service"
 import { MinimalUser } from "../datatypes/User"
 import { OrderKind, PaymentType } from "../datatypes/Order"
-import { unwrapResponse } from "./orders"
+import { unwrapResponse } from "./api-utils"
 
 export interface PublicContract {
   id: string

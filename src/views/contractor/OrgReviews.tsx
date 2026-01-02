@@ -2,7 +2,6 @@ import React, { MouseEventHandler, useCallback, useMemo } from "react"
 import {
   Avatar,
   Box,
-  Grid,
   LinearProgress,
   linearProgressClasses,
   Rating,
@@ -27,6 +26,8 @@ import {
   SellerRatingCount,
 } from "../../components/rating/ListingRating"
 import { useTranslation } from "react-i18next"
+import { EmptyReviews } from "../../components/empty-states"
+import { Grid } from "@mui/material"
 
 function ReviewRow(props: {
   row: OrderReview
@@ -174,7 +175,30 @@ export function OrgReviews(props: { contractor: MinimalContractor }) {
 
 export function UserReviews(props: { user: MinimalUser }) {
   const { t } = useTranslation()
-  const { data: rows } = useGetUserOrderReviews(props.user.username)
+  const { data: rows, isLoading, isFetching } = useGetUserOrderReviews(
+    props.user.username,
+  )
+
+  if (isLoading || isFetching) {
+    // Show skeleton while loading - PaginatedTable doesn't have loading prop
+    return (
+      <Grid item xs={12}>
+        <Box sx={{ p: 3 }}>
+          <Typography variant="body2" color="text.secondary">
+            {t("common.loading", { defaultValue: "Loading..." })}
+          </Typography>
+        </Box>
+      </Grid>
+    )
+  }
+
+  if (!rows || rows.length === 0) {
+    return (
+      <Grid item xs={12}>
+        <EmptyReviews isUser={true} />
+      </Grid>
+    )
+  }
 
   return (
     <React.Fragment>

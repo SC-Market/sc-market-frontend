@@ -73,6 +73,7 @@ import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { OpenLayout } from "../../components/layout/ContainerGrid"
 import { Contractor } from "../../datatypes/Contractor"
 import { Discord } from "../../components/icon/DiscordIcon"
+import { EmptyListings } from "../../components/empty-states"
 import { useGetServicesQuery } from "../../store/services"
 import { BottomSheet } from "../../components/mobile/BottomSheet"
 
@@ -116,6 +117,7 @@ export function ProfileRefetchButton(props: { user: User }) {
 
 export function UserRelevantListingsArea(props: { user: string }) {
   const { user } = props
+  const { t } = useTranslation()
 
   const { data: listings } = useSearchMarketListingsQuery({
     user_seller: user,
@@ -132,6 +134,24 @@ export function UserRelevantListingsArea(props: { user: string }) {
         .sort((a, b) => b.items.length - a.items.length),
     [listings, services],
   )
+
+  // Show empty state if both listings and services are empty
+  if (order.length === 0) {
+    return (
+      <Grid item xs={12}>
+        <EmptyListings
+          isSearchResult={false}
+          showCreateAction={false}
+          title={t("emptyStates.profile.noContent", {
+            defaultValue: "No listings or services yet",
+          })}
+          description={t("emptyStates.profile.noContentDescription", {
+            defaultValue: "This user hasn't created any listings or services yet",
+          })}
+        />
+      </Grid>
+    )
+  }
 
   return (
     <>
