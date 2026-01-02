@@ -83,7 +83,7 @@ function MessageHeader() {
         <Box
           sx={{
             display: "flex",
-            overflow: "hide",
+            overflow: "hidden",
             width: "100%",
             maxWidth: "100%",
           }}
@@ -105,6 +105,7 @@ function MessageHeader() {
               sx={{
                 marginRight: { xs: 1, sm: 3 },
                 display: { xs: "flex", sm: "flex" },
+                flexShrink: 0,
               }}
               size={isMobile ? "small" : "medium"}
             >
@@ -141,7 +142,7 @@ function MessageHeader() {
             return (
               <>
                 <Tooltip title={participantNames.join(", ")}>
-                  <AvatarGroup max={3} spacing={"small"}>
+                  <AvatarGroup max={3} spacing={"small"} sx={{ flexShrink: 0 }}>
                     {otherUsers.map((part) => (
                       <Avatar
                         alt={part.username}
@@ -185,7 +186,13 @@ function MessageHeader() {
                         noWrap
                         align={"left"}
                         color={"text.secondary"}
-                        sx={{ fontWeight: 500, flexShrink: 0 }}
+                        sx={{
+                          fontWeight: 500,
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                          minWidth: 0,
+                        }}
                       >
                         {chat!.title}
                       </Typography>
@@ -196,7 +203,12 @@ function MessageHeader() {
                             noWrap
                             align={"left"}
                             color={"text.secondary"}
-                            sx={{ flexShrink: 0 }}
+                            sx={{
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              whiteSpace: "nowrap",
+                              minWidth: 0,
+                            }}
                           >
                             {otherUsers.map((x) => x.username).join(", ")}
                           </Typography>
