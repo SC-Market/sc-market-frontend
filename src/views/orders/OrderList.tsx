@@ -43,6 +43,7 @@ import { useDebounce } from "../../hooks/useDebounce"
 import { ExpandLess, ExpandMore, Search } from "@mui/icons-material"
 import { OrderRowSkeleton } from "../../components/skeletons"
 import { EmptyOrders } from "../../components/empty-states"
+import { PullToRefresh, SwipeableItem } from "../../components/gestures"
 
 export const statusColors = new Map<
   | "active"
@@ -293,6 +294,7 @@ export function OrdersViewPaginated(props: {
 }) {
   const { title, mine, assigned, contractor } = props
   const theme = useTheme<ExtendedTheme>()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const { data: profile } = useGetUserProfileQuery()
   const [statusFilter, setStatusFilter] = useState<
     "all" | "active" | "past" | OrderSearchStatus
@@ -330,6 +332,7 @@ export function OrdersViewPaginated(props: {
     data: orders,
     isLoading,
     isFetching,
+    refetch,
   } = useSearchOrdersQuery({
     status: statusFilter === "all" ? undefined : statusFilter,
     index: page,
@@ -636,43 +639,67 @@ export function OrdersViewPaginated(props: {
           </Paper>
         </Collapse>
 
-        <ControlledTable
-          rows={(orders?.items || []).map((o) => ({
-            ...o,
-            other_name: mine
-              ? o.assigned_to?.username || o.contractor?.spectrum_id || null
-              : o.customer.username,
-            mine,
-          }))}
-          initialSort={"timestamp"}
-          onPageChange={setPage}
-          page={page}
-          onPageSizeChange={setPageSize}
-          pageSize={pageSize}
-          rowCount={+(totalCounts[statusFilter] || 0)}
-          onOrderChange={setOrder}
-          order={order}
-          onOrderByChange={setOrderBy}
-          orderBy={orderBy}
-          generateRow={OrderRow}
-          keyAttr={"order_id"}
-          headCells={(mine ? MyOrderHeadCells : OrderHeadCells).map((cell) => ({
-            ...cell,
-            label: t(cell.label),
-          }))}
-          disableSelect
-          loading={isLoading || isFetching}
-          loadingRowComponent={OrderRowSkeleton}
-          emptyStateComponent={
-            !(isLoading || isFetching) && (orders?.items || []).length === 0 ? (
-              <EmptyOrders
-                isOffers={false}
-                showCreateAction={mine}
-                sx={{ py: 4 }}
-              />
-            ) : undefined
-          }
-        />
+        <PullToRefresh
+          onRefresh={async () => {
+            await refetch()
+          }}
+          enabled={isMobile}
+        >
+          <SwipeableItem
+            onSwipeLeft={() => {
+              const currentIndex = tabs.findIndex(([id]) => id === statusFilter)
+              if (currentIndex < tabs.length - 1) {
+                setStatusFilter(tabs[currentIndex + 1][0])
+              }
+            }}
+            onSwipeRight={() => {
+              const currentIndex = tabs.findIndex(([id]) => id === statusFilter)
+              if (currentIndex > 0) {
+                setStatusFilter(tabs[currentIndex - 1][0])
+              }
+            }}
+            enabled={isMobile}
+          >
+            <ControlledTable
+            rows={(orders?.items || []).map((o) => ({
+              ...o,
+              other_name: mine
+                ? o.assigned_to?.username || o.contractor?.spectrum_id || null
+                : o.customer.username,
+              mine,
+            }))}
+            initialSort={"timestamp"}
+            onPageChange={setPage}
+            page={page}
+            onPageSizeChange={setPageSize}
+            pageSize={pageSize}
+            rowCount={+(totalCounts[statusFilter] || 0)}
+            onOrderChange={setOrder}
+            order={order}
+            onOrderByChange={setOrderBy}
+            orderBy={orderBy}
+            generateRow={OrderRow}
+            keyAttr={"order_id"}
+            headCells={(mine ? MyOrderHeadCells : OrderHeadCells).map((cell) => ({
+              ...cell,
+              label: t(cell.label),
+            }))}
+            disableSelect
+            loading={isLoading || isFetching}
+            loadingRowComponent={OrderRowSkeleton}
+            emptyStateComponent={
+              !(isLoading || isFetching) && (orders?.items || []).length === 0 ? (
+                <EmptyOrders
+                  isOffers={false}
+                  isSent={mine}
+                  showCreateAction={mine}
+                  sx={{ py: 4 }}
+                />
+              ) : undefined
+            }
+          />
+          </SwipeableItem>
+        </PullToRefresh>
       </Paper>
     </Grid>
   )

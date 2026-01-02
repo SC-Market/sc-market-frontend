@@ -6,12 +6,17 @@ import { useTranslation } from "react-i18next"
 
 export interface EmptyOrdersProps extends Omit<
   EmptyStateProps,
-  "title" | "icon" | "action"
+  "title" | "icon" | "action" | "secondaryAction"
 > {
   /**
    * Whether this is for offers (vs. orders)
    */
   isOffers?: boolean
+  /**
+   * For offers: whether these are sent offers (true) or received offers (false)
+   * For orders: whether these are your orders (true) or all orders (false)
+   */
+  isSent?: boolean
   /**
    * Custom title override
    */
@@ -28,6 +33,10 @@ export interface EmptyOrdersProps extends Omit<
    * Custom action override
    */
   action?: EmptyStateProps["action"]
+  /**
+   * Custom secondary action override
+   */
+  secondaryAction?: EmptyStateProps["secondaryAction"]
 }
 
 /**
@@ -37,10 +46,12 @@ export interface EmptyOrdersProps extends Omit<
  */
 export function EmptyOrders({
   isOffers = false,
+  isSent = false,
   title,
   description,
   showCreateAction = true,
   action,
+  secondaryAction,
   ...props
 }: EmptyOrdersProps) {
   const { t } = useTranslation()
@@ -50,25 +61,96 @@ export function EmptyOrders({
     ? t("emptyStates.orders.noOffers", { defaultValue: "No offers yet" })
     : t("emptyStates.orders.noOrders", { defaultValue: "No orders yet" })
 
-  const defaultDescription = isOffers
-    ? t("emptyStates.orders.noOffersDescription", {
+  // Context-aware descriptions and actions
+  let defaultDescription: string
+  let defaultAction: EmptyStateProps["action"] | undefined
+  let defaultSecondaryAction: EmptyStateProps["secondaryAction"] | undefined
+
+  if (isOffers) {
+    // For offers
+    if (isSent) {
+      // Sent offers (none) → point to market and services pages
+      defaultDescription = t(
+        "emptyStates.orders.noSentOffersDescription",
+        {
+          defaultValue:
+            "Browse the market and services to find items and services to purchase",
+        },
+      )
+      defaultAction = {
+        label: t("emptyStates.orders.browseMarket", {
+          defaultValue: "Browse Market",
+        }),
+        onClick: () => navigate("/market"),
+        variant: "contained" as const,
+      }
+      defaultSecondaryAction = {
+        label: t("emptyStates.orders.browseServices", {
+          defaultValue: "Browse Services",
+        }),
+        onClick: () => navigate("/market/services"),
+      }
+    } else {
+      // Received offers (none) → point to create market listing or service listing
+      defaultDescription = t(
+        "emptyStates.orders.noReceivedOffersDescription",
+        {
+          defaultValue:
+            "Create market listings or service listings to start receiving offers from customers",
+        },
+      )
+      defaultAction = {
+        label: t("emptyStates.orders.createMarketListing", {
+          defaultValue: "Create Market Listing",
+        }),
+        onClick: () => navigate("/market/create"),
+        variant: "contained" as const,
+      }
+      defaultSecondaryAction = {
+        label: t("emptyStates.orders.createServiceListing", {
+          defaultValue: "Create Service Listing",
+        }),
+        onClick: () => navigate("/order/service/create"),
+      }
+    }
+  } else {
+    // For orders
+    if (isSent) {
+      // My orders (none) → point to market and services pages
+      defaultDescription = t("emptyStates.orders.noMyOrdersDescription", {
         defaultValue:
-          "Offers will appear here when customers make purchase requests",
+          "Browse the market and services to find items and services to order",
       })
-    : t("emptyStates.orders.noOrdersDescription", {
+      defaultAction = {
+        label: t("emptyStates.orders.browseMarket", {
+          defaultValue: "Browse Market",
+        }),
+        onClick: () => navigate("/market"),
+        variant: "contained" as const,
+      }
+      defaultSecondaryAction = {
+        label: t("emptyStates.orders.browseServices", {
+          defaultValue: "Browse Services",
+        }),
+        onClick: () => navigate("/market/services"),
+      }
+    } else {
+      // All orders (none) → generic message
+      defaultDescription = t("emptyStates.orders.noOrdersDescription", {
         defaultValue:
           "Create your first order to get started with contracting services",
       })
-
-  const defaultAction = showCreateAction
-    ? {
-        label: t("emptyStates.orders.createOrder", {
-          defaultValue: "Create Order",
-        }),
-        onClick: () => navigate("/order/create"),
-        variant: "contained" as const,
-      }
-    : undefined
+      defaultAction = showCreateAction
+        ? {
+            label: t("emptyStates.orders.createOrder", {
+              defaultValue: "Create Order",
+            }),
+            onClick: () => navigate("/order/create"),
+            variant: "contained" as const,
+          }
+        : undefined
+    }
+  }
 
   return (
     <EmptyState
@@ -76,6 +158,7 @@ export function EmptyOrders({
       description={description || defaultDescription}
       icon={<AssignmentOutlined />}
       action={action || defaultAction}
+      secondaryAction={secondaryAction || defaultSecondaryAction}
       {...props}
     />
   )

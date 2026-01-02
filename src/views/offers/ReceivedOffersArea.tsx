@@ -49,6 +49,7 @@ import { Stack } from "@mui/system"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { EmptyOrders } from "../../components/empty-states"
+import { PullToRefresh, SwipeableItem } from "../../components/gestures"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useGetUserProfileQuery } from "../../store/profile"
 import { OrderSearchSortMethod } from "../../datatypes/Order"
@@ -360,7 +361,7 @@ export function OffersViewPaginated(props: {
     setSelectedOfferIds(selected as string[])
   }
 
-  const { data, isLoading, isFetching } = useSearchOfferSessionsQuery({
+  const { data, isLoading, isFetching, refetch } = useSearchOfferSessionsQuery({
     status: statusFilter || undefined,
     index: page,
     page_size: pageSize,
@@ -378,6 +379,7 @@ export function OffersViewPaginated(props: {
   })
 
   const tabs = [
+    [null, t("OffersViewPaginated.all", { defaultValue: "All" })],
     ["to-seller", t("OffersViewPaginated.waitingSeller")],
     ["to-customer", t("OffersViewPaginated.waitingCustomer")],
     ["accepted", t("OffersViewPaginated.accepted")],
@@ -542,9 +544,9 @@ export function OffersViewPaginated(props: {
               />
               {tabs.map(([id, tag], index) => (
                 <Tab
-                  key={id}
+                  key={id || "all"}
                   label={tag}
-                  icon={<Chip label={totals.get(id) || 0} size={"small"} />}
+                  icon={<Chip label={id ? (totals.get(id) || 0) : totalCount} size={"small"} />}
                   {...a11yProps(index + 1)}
                   onClick={() => setStatusFilter(id)}
                 />
@@ -706,47 +708,81 @@ export function OffersViewPaginated(props: {
           </Paper>
         </Collapse>
 
-        <ControlledTable
-          rows={(data?.items || []).map((o) => ({
-            ...o,
-            customer_name: o.customer.username,
-          }))}
-          initialSort={"timestamp"}
-          generateRow={(props) => (
-            <OfferRow {...props} enableSelection={!mine} />
-          )}
-          keyAttr={"id"}
-          headCells={OffersHeadCells.map((cell) => ({
-            ...cell,
-            label: t(
-              `OffersViewPaginated.${cell.label.toLowerCase()}`,
-              cell.label,
-            ),
-          }))}
-          disableSelect={mine}
-          selected={!mine ? selectedOfferIds : undefined}
-          onSelectChange={!mine ? handleSelectChange : undefined}
-          onPageChange={setPage}
-          emptyStateComponent={
-            !(isLoading || isFetching) && (data?.items || []).length === 0 ? (
-              <EmptyOrders
-                isOffers={true}
-                showCreateAction={false}
-                sx={{ py: 4 }}
-              />
-            ) : undefined
-          }
-          page={page}
-          onPageSizeChange={setPageSize}
-          pageSize={pageSize}
-          rowCount={statusFilter ? totals.get(statusFilter) || 0 : totalCount}
-          onOrderChange={setOrder}
-          order={order}
-          onOrderByChange={setOrderBy}
-          orderBy={orderBy}
-          loading={isLoading || isFetching}
-          loadingRowComponent={OfferRowSkeleton}
-        />
+        <PullToRefresh
+          onRefresh={async () => {
+            await refetch()
+          }}
+          enabled={useMediaQuery(theme.breakpoints.down("md"))}
+        >
+          <SwipeableItem
+            onSwipeLeft={() => {
+              const currentIndex = tabs.findIndex(([id]) => id === statusFilter)
+              if (currentIndex < tabs.length - 1 && currentIndex >= 0) {
+                const nextTab = tabs[currentIndex + 1]
+                if (nextTab && nextTab[0] !== null) {
+                  setStatusFilter(nextTab[0] as OfferSearchStatus)
+                } else if (nextTab && nextTab[0] === null) {
+                  setStatusFilter(null)
+                }
+              }
+            }}
+            onSwipeRight={() => {
+              const currentIndex = tabs.findIndex(([id]) => id === statusFilter)
+              if (currentIndex > 0) {
+                const prevTab = tabs[currentIndex - 1]
+                if (prevTab && prevTab[0] !== null) {
+                  setStatusFilter(prevTab[0] as OfferSearchStatus)
+                } else if (prevTab && prevTab[0] === null) {
+                  setStatusFilter(null)
+                }
+              }
+            }}
+            enabled={useMediaQuery(theme.breakpoints.down("md"))}
+          >
+            <ControlledTable
+            rows={(data?.items || []).map((o) => ({
+              ...o,
+              customer_name: o.customer.username,
+            }))}
+            initialSort={"timestamp"}
+            generateRow={(props) => (
+              <OfferRow {...props} enableSelection={!mine} />
+            )}
+            keyAttr={"id"}
+            headCells={OffersHeadCells.map((cell) => ({
+              ...cell,
+              label: t(
+                `OffersViewPaginated.${cell.label.toLowerCase()}`,
+                cell.label,
+              ),
+            }))}
+            disableSelect={mine}
+            selected={!mine ? selectedOfferIds : undefined}
+            onSelectChange={!mine ? handleSelectChange : undefined}
+            onPageChange={setPage}
+            emptyStateComponent={
+              !(isLoading || isFetching) && (data?.items || []).length === 0 ? (
+                <EmptyOrders
+                  isOffers={true}
+                  isSent={mine}
+                  showCreateAction={false}
+                  sx={{ py: 4 }}
+                />
+              ) : undefined
+            }
+            page={page}
+            onPageSizeChange={setPageSize}
+            pageSize={pageSize}
+            rowCount={statusFilter ? totals.get(statusFilter) || 0 : totalCount}
+            onOrderChange={setOrder}
+            order={order}
+            onOrderByChange={setOrderBy}
+            orderBy={orderBy}
+            loading={isLoading || isFetching}
+            loadingRowComponent={OfferRowSkeleton}
+          />
+          </SwipeableItem>
+        </PullToRefresh>
         <Dialog
           open={mergeModalOpen}
           onClose={() => {

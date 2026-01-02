@@ -15,6 +15,7 @@ import {
   Skeleton,
   TablePagination,
   Typography,
+  useMediaQuery,
 } from "@mui/material"
 import { Link } from "react-router-dom"
 import { ElectricBoltRounded } from "@mui/icons-material"
@@ -24,6 +25,7 @@ import { dateDiffInDays } from "../market/MarketListingView"
 import { ListingNameAndRating } from "../../components/rating/ListingRating"
 import { ServiceListingSkeleton } from "../../components/skeletons"
 import { EmptyListings } from "../../components/empty-states"
+import { PullToRefresh } from "../../components/gestures"
 import { CURRENT_CUSTOM_ORG } from "../../hooks/contractor/CustomDomain"
 import { Stack } from "@mui/system"
 import { useTheme } from "@mui/material/styles"
@@ -238,6 +240,8 @@ export function ServiceListings(props: { user?: string; contractor?: string }) {
   const [perPage, setPerPage] = useState(20)
   const [searchState] = useServiceSearch()
   const { user, contractor } = props
+  const theme = useTheme<ExtendedTheme>()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
 
   const ref = useRef<HTMLDivElement>(null)
   const { t } = useTranslation()
@@ -279,6 +283,7 @@ export function ServiceListings(props: { user?: string; contractor?: string }) {
     isLoading,
     isFetching,
     error,
+    refetch,
   } = useGetPublicServicesQuery(queryParams)
 
   const handleChangePage = useCallback(
@@ -351,28 +356,35 @@ export function ServiceListings(props: { user?: string; contractor?: string }) {
       <Grid item xs={12} sx={{ paddingTop: 0 }}>
         <div ref={ref} />
       </Grid>
-      {filteredServices.map((service, index) => (
-        <ServiceListing
-          service={service}
-          key={service.service_id}
-          index={index}
-        />
-      ))}
-      {servicesResponse && filteredServices.length === 0 && (
-        <Grid item xs={12}>
-          <EmptyListings
-            isSearchResult={false}
-            title={t("emptyStates.services.noServices", {
-              defaultValue: "No services yet",
-            })}
-            description={t("emptyStates.services.noServicesDescription", {
-              defaultValue:
-                "Create your first service to start offering your expertise",
-            })}
-            showCreateAction={false}
-          />
-        </Grid>
-      )}
+      <Grid item xs={12}>
+        <PullToRefresh
+          onRefresh={async () => {
+            await refetch()
+          }}
+          enabled={isMobile}
+        >
+          {filteredServices.map((service, index) => (
+            <ServiceListing
+              service={service}
+              key={service.service_id}
+              index={index}
+            />
+          ))}
+          {servicesResponse && filteredServices.length === 0 && (
+            <EmptyListings
+              isSearchResult={false}
+              title={t("emptyStates.services.noServices", {
+                defaultValue: "No services yet",
+              })}
+              description={t("emptyStates.services.noServicesDescription", {
+                defaultValue:
+                  "Create your first service to start offering your expertise",
+              })}
+              showCreateAction={false}
+            />
+          )}
+        </PullToRefresh>
+      </Grid>
       <Grid item xs={12}>
         <Divider light />
       </Grid>

@@ -38,6 +38,7 @@ import {
   EmptyMessages,
   EmptySearchResults,
 } from "../../components/empty-states"
+import { PullToRefresh } from "../../components/gestures"
 
 // Single chat entry in the chat list
 function ChatEntry(props: { chat: Chat }) {
@@ -175,7 +176,7 @@ export function MessagingSidebarContent(
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const { t } = useTranslation()
   const [, setCreatingMessageGroup] = useMessageGroupCreate()
-  const { data: chats, isLoading, isFetching } = useGetMyChatsQuery()
+  const { data: chats, isLoading, isFetching, refetch } = useGetMyChatsQuery()
   const [searchQuery, setSearchQuery] = useState("")
   const [drawerOpen, setDrawerOpen] = useDrawerOpen()
 
@@ -241,64 +242,80 @@ export function MessagingSidebarContent(
           size={isMobile ? "small" : "medium"}
         />
       </Box>
-      <List
-        sx={{
-          borderTop: 1,
-          borderColor: theme.palette.outline.main,
-          flexGrow: props.asPageContent ? 1 : 0,
-          overflow: "auto",
+      <PullToRefresh
+        onRefresh={async () => {
+          await refetch()
         }}
+        enabled={isMobile}
       >
-        {isLoading || isFetching ? (
-          <>
-            {Array.from({ length: 5 }).map((_, i) => (
-              <MessageListSkeleton key={i} index={i} />
-            ))}
-          </>
-        ) : (chats || []).length === 0 ? (
-          <Box sx={{ p: 3 }}>
-            <EmptyMessages
-              isChatList={true}
-              showCreateAction={true}
-              sx={{ py: 2 }}
-            />
-          </Box>
-        ) : (chats || []).filter((chat) => {
-            if (!searchQuery) return true
-            // Search in user usernames and contractor names
-            const searchLower = searchQuery.toLowerCase()
-            return chat.participants.some((p) => {
-              if (p.type === "user") {
-                return p.username.toLowerCase().includes(searchLower)
-              } else {
-                return p.name.toLowerCase().includes(searchLower)
-              }
-            })
-          }).length === 0 ? (
-          <Box sx={{ p: 3 }}>
-            <EmptySearchResults
-              searchQuery={searchQuery}
-              onClearFilters={() => setSearchQuery("")}
-              sx={{ py: 2 }}
-            />
-          </Box>
-        ) : (
-          (chats || [])
-            .filter((chat) => {
-              if (!searchQuery) return true
-              // Search in user usernames and contractor names
-              const searchLower = searchQuery.toLowerCase()
-              return chat.participants.some((p) => {
-                if (p.type === "user") {
-                  return p.username.toLowerCase().includes(searchLower)
-                } else {
-                  return p.name.toLowerCase().includes(searchLower)
-                }
+      <PullToRefresh
+        onRefresh={async () => {
+          await refetch()
+        }}
+        enabled={isMobile}
+      >
+        <List
+          sx={{
+            borderTop: 1,
+            borderColor: theme.palette.outline.main,
+            flexGrow: props.asPageContent ? 1 : 0,
+            overflow: "auto",
+          }}
+        >
+          {isLoading || isFetching ? (
+            <>
+              {Array.from({ length: 5 }).map((_, i) => (
+                <MessageListSkeleton key={i} index={i} />
+              ))}
+            </>
+          ) : (chats || []).length === 0 ? (
+            <Box sx={{ p: 3 }}>
+              <EmptyMessages
+                isChatList={true}
+                showCreateAction={true}
+                sx={{ py: 2 }}
+              />
+            </Box>
+          ) : (chats || [])
+              .filter((chat) => {
+                if (!searchQuery) return true
+                // Search in user usernames and contractor names
+                const searchLower = searchQuery.toLowerCase()
+                return chat.participants.some((p) => {
+                  if (p.type === "user") {
+                    return p.username.toLowerCase().includes(searchLower)
+                  } else {
+                    return p.name.toLowerCase().includes(searchLower)
+                  }
+                })
               })
-            })
-            .map((chat) => <ChatEntry chat={chat} key={chat.chat_id} />)
-        )}
-      </List>
+              .length === 0 ? (
+            <Box sx={{ p: 3 }}>
+              <EmptySearchResults
+                searchQuery={searchQuery}
+                onClearFilters={() => setSearchQuery("")}
+                sx={{ py: 2 }}
+              />
+            </Box>
+          ) : (
+            (chats || [])
+              .filter((chat) => {
+                if (!searchQuery) return true
+                // Search in user usernames and contractor names
+                const searchLower = searchQuery.toLowerCase()
+                return chat.participants.some((p) => {
+                  if (p.type === "user") {
+                    return p.username.toLowerCase().includes(searchLower)
+                  } else {
+                    return p.name.toLowerCase().includes(searchLower)
+                  }
+                })
+              })
+              .map((chat) => <ChatEntry chat={chat} key={chat.chat_id} />)
+          )}
+        </List>
+      </PullToRefresh>
+      </PullToRefresh>
     </Box>
   )
 
