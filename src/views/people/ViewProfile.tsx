@@ -20,6 +20,7 @@ import {
   TextField,
   Typography,
   Chip,
+  useMediaQuery,
 } from "@mui/material"
 import { Section } from "../../components/paper/Section"
 import { Link, useParams } from "react-router-dom"
@@ -72,6 +73,7 @@ import { OpenLayout } from "../../components/layout/ContainerGrid"
 import { Contractor } from "../../datatypes/Contractor"
 import { Discord } from "../../components/icon/DiscordIcon"
 import { useGetServicesQuery } from "../../store/services"
+import { BottomSheet } from "../../components/mobile/BottomSheet"
 
 const external_resource_pattern =
   /^https?:\/\/(www\.)?((((media)|(cdn)\.)?robertsspaceindustries\.com)|((media\.)?starcitizen.tools)|(i\.imgur\.com)|(cstone\.space))\b([-a-zA-Z0-9()@:%_+.~#?&\/=]*)$/
@@ -329,6 +331,8 @@ export function ProfileBannerArea(props: {
 
 export function ViewProfile(props: { profile: User }) {
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const { tab } = useParams<{ tab?: string }>()
   const page = useMemo(() => name_to_index.get(tab || "") || 0, [tab])
 
@@ -406,8 +410,6 @@ export function ViewProfile(props: { profile: User }) {
         }
       })
   }
-
-  const theme = useTheme<ExtendedTheme>()
 
   return (
     <OpenLayout sidebarOpen={true}>
@@ -646,19 +648,13 @@ export function ViewProfile(props: { profile: User }) {
                     }}
                   >
                     <Typography sx={{ width: "100%" }}>
-                      <Modal
-                        open={descriptionEditOpen}
-                        onClose={() => setDescriptionEditOpen(false)}
-                      >
-                        <Container
-                          maxWidth={"lg"}
-                          sx={{
-                            height: "100%",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            display: "flex",
-                            flexDirection: "column",
-                          }}
+                      {isMobile ? (
+                        <BottomSheet
+                          open={descriptionEditOpen}
+                          onClose={() => setDescriptionEditOpen(false)}
+                          title={t("viewProfile.editDescription", "Edit Description")}
+                          maxHeight="90vh"
+                          fullHeight
                         >
                           <MarkdownEditor
                             sx={{ width: "100%" }}
@@ -678,8 +674,43 @@ export function ViewProfile(props: { profile: User }) {
                               </Button>
                             }
                           />
-                        </Container>
-                      </Modal>
+                        </BottomSheet>
+                      ) : (
+                        <Modal
+                          open={descriptionEditOpen}
+                          onClose={() => setDescriptionEditOpen(false)}
+                        >
+                          <Container
+                            maxWidth={"lg"}
+                            sx={{
+                              height: "100%",
+                              alignItems: "center",
+                              justifyContent: "center",
+                              display: "flex",
+                              flexDirection: "column",
+                            }}
+                          >
+                            <MarkdownEditor
+                              sx={{ width: "100%" }}
+                              onChange={(value: string) => {
+                                setNewDescription(value)
+                              }}
+                              value={newDescription}
+                              BarItems={
+                                <Button
+                                  variant={"contained"}
+                                  onClick={async () => {
+                                    await submitUpdate({ about: newDescription })
+                                    setDescriptionEditOpen(false)
+                                  }}
+                                >
+                                  {t("ui.buttons.save")}
+                                </Button>
+                              }
+                            />
+                          </Container>
+                        </Modal>
+                      )}
                       <MarkdownRender
                         text={
                           props.profile.profile_description ||
