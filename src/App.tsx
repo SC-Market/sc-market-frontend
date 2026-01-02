@@ -110,6 +110,13 @@ function App() {
 }
 
 const router = createBrowserRouter([
+  // Standalone widget route (no Root layout)
+  {
+    path: "/widget/orders",
+    lazy: async () => ({
+      Component: (await import("./pages/widget/OrdersWidget")).OrdersWidget,
+    }),
+  },
   {
     errorElement: <FrontendErrorElement />,
     element: (
