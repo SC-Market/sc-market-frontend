@@ -72,6 +72,10 @@ export const publicContractsApi = serviceApi.injectEndpoints({
         method: "POST",
         body,
       }),
+      // Note: No optimistic update here because:
+      // 1. This operation redirects to /contracts/public/{contract_id} which requires the real contract_id from server
+      // 2. The user is immediately redirected away, so they won't see the list update
+      // 3. Optimistic updates for redirecting operations can cause navigation to non-existent resources
       transformResponse: unwrapResponse,
     }),
   }),
