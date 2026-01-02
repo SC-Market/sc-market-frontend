@@ -8,15 +8,22 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
+  useMediaQuery,
+  Box,
 } from "@mui/material"
 import React from "react"
 import { useProfileUnlinkAccountMutation } from "../../store/profile"
 import { useTranslation } from "react-i18next"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { FlatSection } from "../../components/paper/Section"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { BottomSheet } from "../../components/mobile/BottomSheet"
 
 export function UnlinkProfile() {
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const [unlinkAccount, { isLoading, isSuccess, isError, error }] =
     useProfileUnlinkAccountMutation()
   const [open, setOpen] = React.useState(false)
@@ -81,34 +88,61 @@ export function UnlinkProfile() {
         )}
       </FlatSection>
 
-      <Dialog
-        open={open}
-        onClose={handleCancelUnlink}
-        aria-labelledby="unlink-dialog-title"
-        aria-describedby="unlink-dialog-description"
-      >
-        <DialogTitle id="unlink-dialog-title">
-          {t("settings.profile.unlinkDialogTitle")}
-        </DialogTitle>
-        <DialogContent>
+      {/* On mobile, use BottomSheet */}
+      {isMobile ? (
+        <BottomSheet
+          open={open}
+          onClose={handleCancelUnlink}
+          title={t("settings.profile.unlinkDialogTitle")}
+          maxHeight="90vh"
+        >
           <DialogContentText id="unlink-dialog-description">
             {t("settings.profile.unlinkDialogDescription")}
           </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCancelUnlink}>
-            {t("settings.profile.unlinkDialogCancel")}
-          </Button>
-          <LoadingButton
-            onClick={handleConfirmUnlink}
-            color="error"
-            loading={isLoading}
-            variant="contained"
-          >
-            {t("settings.profile.unlinkDialogConfirm")}
-          </LoadingButton>
-        </DialogActions>
-      </Dialog>
+          <Box sx={{ mt: 2, display: "flex", justifyContent: "flex-end", gap: 1 }}>
+            <Button onClick={handleCancelUnlink}>
+              {t("settings.profile.unlinkDialogCancel")}
+            </Button>
+            <LoadingButton
+              onClick={handleConfirmUnlink}
+              color="error"
+              loading={isLoading}
+              variant="contained"
+            >
+              {t("settings.profile.unlinkDialogConfirm")}
+            </LoadingButton>
+          </Box>
+        </BottomSheet>
+      ) : (
+        <Dialog
+          open={open}
+          onClose={handleCancelUnlink}
+          aria-labelledby="unlink-dialog-title"
+          aria-describedby="unlink-dialog-description"
+        >
+          <DialogTitle id="unlink-dialog-title">
+            {t("settings.profile.unlinkDialogTitle")}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="unlink-dialog-description">
+              {t("settings.profile.unlinkDialogDescription")}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCancelUnlink}>
+              {t("settings.profile.unlinkDialogCancel")}
+            </Button>
+            <LoadingButton
+              onClick={handleConfirmUnlink}
+              color="error"
+              loading={isLoading}
+              variant="contained"
+            >
+              {t("settings.profile.unlinkDialogConfirm")}
+            </LoadingButton>
+          </DialogActions>
+        </Dialog>
+      )}
     </>
   )
 }

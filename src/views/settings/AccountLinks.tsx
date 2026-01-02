@@ -10,6 +10,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
+  useMediaQuery,
 } from "@mui/material"
 import React, { useState, useEffect } from "react"
 import {
@@ -31,10 +32,12 @@ import { CitizenIDLogo } from "../../components/icon/CitizenIDLogo"
 import { isCitizenIdEnabled } from "../../util/constants"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { BottomSheet } from "../../components/mobile/BottomSheet"
 
 export function AccountLinks() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const [searchParams, setSearchParams] = useSearchParams()
   const navigate = useNavigate()
   const { data: links, isLoading } = useProfileGetLinksQuery()
@@ -445,16 +448,14 @@ export function AccountLinks() {
         )}
       </FlatSection>
 
-      <Dialog
-        open={unlinkDialog.open}
-        onClose={handleCancelUnlink}
-        aria-labelledby="unlink-dialog-title"
-        aria-describedby="unlink-dialog-description"
-      >
-        <DialogTitle id="unlink-dialog-title">
-          {t("settings.profile.unlinkProviderTitle", "Unlink Account")}
-        </DialogTitle>
-        <DialogContent>
+      {/* On mobile, use BottomSheet */}
+      {isMobile ? (
+        <BottomSheet
+          open={unlinkDialog.open}
+          onClose={handleCancelUnlink}
+          title={t("settings.profile.unlinkProviderTitle", "Unlink Account")}
+          maxHeight="90vh"
+        >
           <DialogContentText id="unlink-dialog-description">
             {t(
               "settings.profile.unlinkProviderDescription",
@@ -466,21 +467,58 @@ export function AccountLinks() {
               },
             )}
           </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCancelUnlink}>
-            {t("common.cancel", "Cancel")}
-          </Button>
-          <LoadingButton
-            onClick={handleConfirmUnlink}
-            color="error"
-            loading={isUnlinking}
-            variant="contained"
-          >
-            {t("settings.profile.unlink", "Unlink")}
-          </LoadingButton>
-        </DialogActions>
-      </Dialog>
+          <Box sx={{ mt: 2, display: "flex", justifyContent: "flex-end", gap: 1 }}>
+            <Button onClick={handleCancelUnlink}>
+              {t("common.cancel", "Cancel")}
+            </Button>
+            <LoadingButton
+              onClick={handleConfirmUnlink}
+              color="error"
+              loading={isUnlinking}
+              variant="contained"
+            >
+              {t("settings.profile.unlink", "Unlink")}
+            </LoadingButton>
+          </Box>
+        </BottomSheet>
+      ) : (
+        <Dialog
+          open={unlinkDialog.open}
+          onClose={handleCancelUnlink}
+          aria-labelledby="unlink-dialog-title"
+          aria-describedby="unlink-dialog-description"
+        >
+          <DialogTitle id="unlink-dialog-title">
+            {t("settings.profile.unlinkProviderTitle", "Unlink Account")}
+          </DialogTitle>
+          <DialogContent>
+            <DialogContentText id="unlink-dialog-description">
+              {t(
+                "settings.profile.unlinkProviderDescription",
+                "Are you sure you want to unlink this account? You will no longer be able to log in using this method.",
+                {
+                  provider: unlinkDialog.providerType
+                    ? getProviderName(unlinkDialog.providerType)
+                    : "",
+                },
+              )}
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCancelUnlink}>
+              {t("common.cancel", "Cancel")}
+            </Button>
+            <LoadingButton
+              onClick={handleConfirmUnlink}
+              color="error"
+              loading={isUnlinking}
+              variant="contained"
+            >
+              {t("settings.profile.unlink", "Unlink")}
+            </LoadingButton>
+          </DialogActions>
+        </Dialog>
+      )}
     </>
   )
 }

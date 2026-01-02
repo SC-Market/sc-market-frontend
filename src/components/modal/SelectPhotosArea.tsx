@@ -12,6 +12,7 @@ import {
   TextField,
   Grid,
   CircularProgress,
+  useMediaQuery,
 } from "@mui/material"
 import {
   AddAPhotoRounded,
@@ -31,6 +32,7 @@ import { ContainerGrid } from "../layout/ContainerGrid"
 import { Section } from "../paper/Section"
 import { external_resource_regex } from "../../views/people/ViewProfile"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { BottomSheet } from "../mobile/BottomSheet"
 
 export function PhotoEntry(props: { url: string; onClose: () => void }) {
   const theme = useTheme<ExtendedTheme>()
@@ -128,6 +130,7 @@ export function SelectPhotosArea(props: {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const [photoOpen, setPhotoOpen] = useState(false)
   const [urlModalOpen, setUrlModalOpen] = useState(false)
   const [urlInput, setUrlInput] = useState("")
@@ -514,17 +517,14 @@ export function SelectPhotosArea(props: {
       )}
 
       {/* URL Input Modal */}
-      <Modal open={urlModalOpen} onClose={() => setUrlModalOpen(false)}>
-        <ContainerGrid sidebarOpen={false} maxWidth={"sm"} noFooter>
-          <Section
-            title={t("SelectPhotosArea.urlModalTitle", "Add Image URL")}
-            xs={12}
-            onClick={(event: React.MouseEvent) => {
-              event.preventDefault()
-              event.stopPropagation()
-              return false
-            }}
-          >
+      {isMobile ? (
+        <BottomSheet
+          open={urlModalOpen}
+          onClose={() => setUrlModalOpen(false)}
+          title={t("SelectPhotosArea.urlModalTitle", "Add Image URL")}
+          maxHeight="90vh"
+        >
+          <Grid container spacing={2}>
             <Grid item xs={12}>
               <Box sx={{ marginBottom: 2 }}>
                 <TextField
@@ -574,9 +574,73 @@ export function SelectPhotosArea(props: {
                 </Button>
               </Box>
             </Grid>
-          </Section>
-        </ContainerGrid>
-      </Modal>
+          </Grid>
+        </BottomSheet>
+      ) : (
+        <Modal open={urlModalOpen} onClose={() => setUrlModalOpen(false)}>
+          <ContainerGrid sidebarOpen={false} maxWidth={"sm"} noFooter>
+            <Section
+              title={t("SelectPhotosArea.urlModalTitle", "Add Image URL")}
+              xs={12}
+              onClick={(event: React.MouseEvent) => {
+                event.preventDefault()
+                event.stopPropagation()
+                return false
+              }}
+            >
+              <Grid item xs={12}>
+                <Box sx={{ marginBottom: 2 }}>
+                  <TextField
+                    variant={"outlined"}
+                    label={t("SelectPhotosArea.imageUrl", "Image URL")}
+                    fullWidth
+                    focused
+                    helperText={t(
+                      "SelectPhotosArea.imageUrlHelp",
+                      "Enter a direct URL to an image (from Imgur, RSI, or starcitizen.tools)",
+                    )}
+                    onChange={(event: React.ChangeEvent<{ value: string }>) => {
+                      setUrlInput(event.target.value)
+                    }}
+                    value={urlInput}
+                    error={!!urlInput && !urlInput.match(external_resource_regex)}
+                  />
+                </Box>
+              </Grid>
+              <Grid item xs={12}>
+                <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1 }}>
+                  <Button
+                    color={"error"}
+                    variant={"contained"}
+                    onClick={() => {
+                      setUrlModalOpen(false)
+                      setUrlInput("")
+                    }}
+                  >
+                    {t("ui.dialog.selectImage.buttons.cancel", "Cancel")}
+                  </Button>
+                  <Button
+                    color={"primary"}
+                    variant={"contained"}
+                    disabled={
+                      !urlInput || !urlInput.match(external_resource_regex)
+                    }
+                    onClick={() => {
+                      if (urlInput && urlInput.trim()) {
+                        setPhotos([...photos, urlInput.trim()])
+                        setUrlModalOpen(false)
+                        setUrlInput("")
+                      }
+                    }}
+                  >
+                    {t("ui.dialog.selectImage.buttons.saveAndClose", "Add URL")}
+                  </Button>
+                </Box>
+              </Grid>
+            </Section>
+          </ContainerGrid>
+        </Modal>
+      )}
 
       {/* ImageSearch component - lazy loaded */}
       {photoOpen && (

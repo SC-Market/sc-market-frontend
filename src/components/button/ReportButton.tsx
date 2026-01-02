@@ -12,6 +12,7 @@ import {
   Typography,
   Box,
   Button,
+  useMediaQuery,
 } from "@mui/material"
 import { Report as ReportIcon } from "@mui/icons-material"
 import { useReportContentMutation } from "../../store/moderation"
@@ -20,6 +21,9 @@ import { useTranslation } from "react-i18next"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { BACKEND_URL } from "../../util/constants"
 import { UnderlineLink } from "../typography/UnderlineLink"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { BottomSheet } from "../mobile/BottomSheet"
 
 interface ReportButtonProps {
   reportedUrl?: string // Optional custom URL, defaults to current page
@@ -38,6 +42,8 @@ export function ReportButton({
   const [reportContent] = useReportContentMutation()
   const issueAlert = useAlertHook()
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const [currentOrg] = useCurrentOrg()
 
   // Get current page path if none provided
@@ -113,6 +119,91 @@ export function ReportButton({
     { value: "other", label: t("ReportButton.reasons.other") },
   ]
 
+  // Content to reuse
+  const dialogContent = (
+    <>
+      <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+        {t("ReportButton.reportDescription")}
+      </Typography>
+
+      <Typography variant="body2" sx={{ mb: 1, fontWeight: "medium" }}>
+        {t("ReportButton.reportingUrl")}:{" "}
+        <code
+          style={{
+            padding: "2px 4px",
+            borderRadius: "3px",
+          }}
+        >
+          {getCurrentUrl()}
+        </code>
+      </Typography>
+
+      <FormControl fullWidth sx={{ mb: 2, mt: 2 }}>
+        <InputLabel id="report-reason-label">
+          {t("ReportButton.reason")} *
+        </InputLabel>
+        <Select
+          labelId="report-reason-label"
+          value={reason}
+          label={t("ReportButton.reason") + " *"}
+          onChange={(e) => setReason(e.target.value)}
+          required
+        >
+          {reportReasons.map((reasonOption) => (
+            <MenuItem key={reasonOption.value} value={reasonOption.value}>
+              {reasonOption.label}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+
+      <TextField
+        fullWidth
+        multiline
+        rows={3}
+        label={t("ReportButton.additionalDetails")}
+        value={details}
+        onChange={(e) => setDetails(e.target.value)}
+        placeholder={t("ReportButton.detailsPlaceholder")}
+        helperText={t("ReportButton.detailsHelperText")}
+        inputProps={{ maxLength: 1000 }}
+      />
+    </>
+  )
+
+  const dialogActions = (
+    <>
+      <Button
+        onClick={handleClose}
+        disabled={isSubmitting}
+        aria-label={t("accessibility.cancelReport", "Cancel report")}
+      >
+        {t("ReportButton.cancel")}
+      </Button>
+      <Button
+        onClick={handleSubmit}
+        variant="contained"
+        color="error"
+        disabled={isSubmitting || !reason}
+        startIcon={isSubmitting ? undefined : <ReportIcon />}
+        aria-label={t("accessibility.submitReport", "Submit report")}
+        aria-describedby={isSubmitting ? "submitting-status" : undefined}
+      >
+        {isSubmitting
+          ? t("ReportButton.submitting")
+          : t("ReportButton.submit")}
+        {isSubmitting && (
+          <span id="submitting-status" className="sr-only">
+            {t(
+              "accessibility.submittingReport",
+              "Submitting report, please wait",
+            )}
+          </span>
+        )}
+      </Button>
+    </>
+  )
+
   return (
     <>
       <a
@@ -139,101 +230,41 @@ export function ReportButton({
         </span>
       </a>
 
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        maxWidth="sm"
-        fullWidth
-        aria-labelledby="report-dialog-title"
-        aria-describedby="report-dialog-description"
-      >
-        <DialogTitle id="report-dialog-title">
-          <Box display="flex" alignItems="center" gap={1}>
+      {/* On mobile, use BottomSheet */}
+      {isMobile ? (
+        <BottomSheet
+          open={open}
+          onClose={handleClose}
+          title={t("ReportButton.reportContent")}
+          maxHeight="90vh"
+        >
+          <Box display="flex" alignItems="center" gap={1} mb={2}>
             <ReportIcon color="error" />
-            {t("ReportButton.reportContent")}
           </Box>
-        </DialogTitle>
-
-        <DialogContent>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            {t("ReportButton.reportDescription")}
-          </Typography>
-
-          <Typography variant="body2" sx={{ mb: 1, fontWeight: "medium" }}>
-            {t("ReportButton.reportingUrl")}:{" "}
-            <code
-              style={{
-                padding: "2px 4px",
-                borderRadius: "3px",
-              }}
-            >
-              {getCurrentUrl()}
-            </code>
-          </Typography>
-
-          <FormControl fullWidth sx={{ mb: 2, mt: 2 }}>
-            <InputLabel id="report-reason-label">
-              {t("ReportButton.reason")} *
-            </InputLabel>
-            <Select
-              labelId="report-reason-label"
-              value={reason}
-              label={t("ReportButton.reason") + " *"}
-              onChange={(e) => setReason(e.target.value)}
-              required
-            >
-              {reportReasons.map((reasonOption) => (
-                <MenuItem key={reasonOption.value} value={reasonOption.value}>
-                  {reasonOption.label}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          <TextField
-            fullWidth
-            multiline
-            rows={3}
-            label={t("ReportButton.additionalDetails")}
-            value={details}
-            onChange={(e) => setDetails(e.target.value)}
-            placeholder={t("ReportButton.detailsPlaceholder")}
-            helperText={t("ReportButton.detailsHelperText")}
-            inputProps={{ maxLength: 1000 }}
-          />
-        </DialogContent>
-
-        <DialogActions>
-          <Button
-            onClick={handleClose}
-            disabled={isSubmitting}
-            aria-label={t("accessibility.cancelReport", "Cancel report")}
-          >
-            {t("ReportButton.cancel")}
-          </Button>
-          <Button
-            onClick={handleSubmit}
-            variant="contained"
-            color="error"
-            disabled={isSubmitting || !reason}
-            startIcon={isSubmitting ? undefined : <ReportIcon />}
-            aria-label={t("accessibility.submitReport", "Submit report")}
-            aria-describedby={isSubmitting ? "submitting-status" : undefined}
-          >
-            {isSubmitting
-              ? t("ReportButton.submitting")
-              : t("ReportButton.submit")}
-            {isSubmitting && (
-              <span id="submitting-status" className="sr-only">
-                {t(
-                  "accessibility.submittingReport",
-                  "Submitting report, please wait",
-                )}
-              </span>
-            )}
-          </Button>
-        </DialogActions>
-      </Dialog>
+          {dialogContent}
+          <Box sx={{ mt: 2, display: "flex", justifyContent: "flex-end", gap: 1 }}>
+            {dialogActions}
+          </Box>
+        </BottomSheet>
+      ) : (
+        <Dialog
+          open={open}
+          onClose={handleClose}
+          maxWidth="sm"
+          fullWidth
+          aria-labelledby="report-dialog-title"
+          aria-describedby="report-dialog-description"
+        >
+          <DialogTitle id="report-dialog-title">
+            <Box display="flex" alignItems="center" gap={1}>
+              <ReportIcon color="error" />
+              {t("ReportButton.reportContent")}
+            </Box>
+          </DialogTitle>
+          <DialogContent>{dialogContent}</DialogContent>
+          <DialogActions>{dialogActions}</DialogActions>
+        </Dialog>
+      )}
     </>
   )
 }

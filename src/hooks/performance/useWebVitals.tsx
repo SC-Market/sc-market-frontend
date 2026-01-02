@@ -22,6 +22,18 @@ import {
  * Metrics are sent to Google Analytics 4 if available, and logged in development.
  * Core Web Vitals are performance metrics and don't contain personal data.
  */
+
+// Helper to safely check if we're in development mode
+// Build tools replace process.env.NODE_ENV at build time, but TypeScript doesn't know about it
+const isDevelopment = (): boolean => {
+  try {
+    // @ts-ignore - process.env is replaced at build time by bundlers
+    return typeof process !== "undefined" && process.env?.NODE_ENV === "development"
+  } catch {
+    return false
+  }
+}
+
 export function useWebVitals() {
   useEffect(() => {
     // Function to send metrics to analytics
@@ -56,14 +68,14 @@ export function useWebVitals() {
           })
         } catch (error) {
           // Silently fail if analytics is not properly configured
-          if (process.env.NODE_ENV === "development") {
+          if (isDevelopment()) {
             console.warn("[Web Vitals] Failed to send to analytics:", error)
           }
         }
       }
 
       // Also log to console in development for debugging
-      if (process.env.NODE_ENV === "development") {
+      if (isDevelopment()) {
         console.log("[Web Vitals]", {
           name: metric.name,
           value: metric.value,
