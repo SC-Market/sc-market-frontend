@@ -490,6 +490,9 @@
   "selectMarketListing": {
     "label": "Select Market Listing"
   },
+  "navbar": {
+    "toggle_drawer": "Toggle sidebar"
+  },
   "sidebar": {
     "dashboard": {
       "title": "Dashboard",
