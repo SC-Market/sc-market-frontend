@@ -191,18 +191,4 @@ export function RecruitingPostView(props: { post: RecruitingPost }) {
   )
 }
 
-export function RecruitingPostSkeleton() {
-  return (
-    <Grid item xs={12} lg={12}>
-      <Skeleton
-        variant={"rectangular"}
-        sx={{
-          borderRadius: (theme) =>
-            theme.spacing((theme as ExtendedTheme).borderRadius.image),
-          height: 350,
-          width: "100%",
-        }}
-      />
-    </Grid>
-  )
-}
+// RecruitingPostViewSkeleton is now exported from components/skeletons

@@ -30,10 +30,8 @@ export function ViewOrg() {
           : null
       }
     >
-      {contractor.isLoading ? (
-        <ContainerGrid maxWidth={"lg"} sidebarOpen={true}>
-          <OrgSectionSkeleton />
-        </ContainerGrid>
+      {contractor.isLoading || contractor.isFetching ? (
+        <OrgInfoSkeleton />
       ) : shouldRedirectTo404(contractor.error) ? (
         <Navigate to={"/404"} />
       ) : shouldShowErrorPage(contractor.error) ? (

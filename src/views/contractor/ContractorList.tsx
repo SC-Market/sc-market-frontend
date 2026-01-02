@@ -245,18 +245,3 @@ export const ContractorListItem = React.memo(
   },
 )
 
-export function ContractorSkeleton() {
-  return (
-    <Grid item xs={12} lg={12}>
-      <Skeleton
-        variant={"rectangular"}
-        sx={{
-          borderRadius: (theme) =>
-            theme.spacing((theme as ExtendedTheme).borderRadius.image),
-          height: 350,
-          width: "100%",
-        }}
-      />
-    </Grid>
-  )
-}
