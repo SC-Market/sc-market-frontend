@@ -101,6 +101,7 @@ export function PullToRefresh({
       sx={{
         position: "relative",
         touchAction: "pan-y", // Allow vertical scrolling
+        bgcolor: "transparent", // Ensure no background color
       }}
       onTouchStart={handlers.onTouchStart}
       onTouchMove={handlers.onTouchMove}
@@ -108,6 +109,9 @@ export function PullToRefresh({
     >
       {showIndicator && (refreshIndicator || defaultIndicator)}
       <Box
+        sx={{
+          bgcolor: "transparent", // Ensure no background color
+        }}
         style={{
           transform: `translateY(${Math.max(0, pullDistance)}px)`,
           transition: isRefreshing ? "transform 0.3s ease-out" : "none",
