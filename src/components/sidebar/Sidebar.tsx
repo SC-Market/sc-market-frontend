@@ -388,10 +388,20 @@ export function Sidebar() {
 
   const xs = useMediaQuery(theme.breakpoints.down("sm"))
   const location = useLocation()
+  const prevXs = React.useRef<boolean | undefined>(undefined)
 
   // Auto-close drawer on mobile when screen size changes
   useEffect(() => {
-    setDrawerOpen(!xs)
+    // Only update drawer state when screen size changes, not on every render
+    if (prevXs.current === undefined) {
+      // Initial mount: set based on screen size
+      setDrawerOpen(!xs)
+      prevXs.current = xs
+    } else if (prevXs.current !== xs) {
+      // Screen size changed: update drawer state accordingly
+      setDrawerOpen(!xs)
+      prevXs.current = xs
+    }
   }, [setDrawerOpen, xs])
 
   // Close drawer on mobile when navigating to a new route
