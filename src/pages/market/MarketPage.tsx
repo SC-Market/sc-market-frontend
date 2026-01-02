@@ -13,6 +13,8 @@ import {
   Box,
   useMediaQuery,
 } from "@mui/material"
+import { ListingSkeleton } from "../../components/skeletons"
+import { useMarketSidebarExp } from "../../hooks/market/MarketSidebar"
 // Removed static imports - now using dynamic imports
 import {
   ContainerGrid,
@@ -68,18 +70,9 @@ const BuyOrders = React.lazy(() =>
   })),
 )
 
-// Loading component for market tabs
+// Loading component for market tabs - minimal placeholder since components handle their own loading
 function MarketTabLoader() {
-  return (
-    <Box
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      minHeight="400px"
-    >
-      <CircularProgress />
-    </Box>
-  )
+  return null // Components (ItemMarketView, ServiceMarketView) handle their own loading states
 }
 
 export function MarketPage() {

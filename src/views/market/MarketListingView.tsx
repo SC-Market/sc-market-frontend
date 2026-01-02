@@ -68,6 +68,7 @@ import { useSearchMarketQuery } from "../../store/market"
 import { useGetUserOrderReviews } from "../../store/profile"
 import { useGetContractorReviewsQuery } from "../../store/contractor"
 import { OrderReview } from "../../datatypes/Order"
+import { HorizontalListingSkeleton } from "../../components/skeletons"
 
 export function SellerOtherListings(props: {
   userSeller?: { username: string } | null
@@ -104,10 +105,43 @@ export function SellerOtherListings(props: {
     return results.listings.filter((l) => l.listing_id !== currentListingId) // exclude current listing
   }, [results?.listings, currentListingId])
 
-  // Don't show section if no other listings or still loading
-  if (isLoading || !otherListings.length) return null
-
   const sellerName = userSeller?.username || contractorSeller?.spectrum_id || ""
+
+  // Show skeletons while loading
+  if (isLoading) {
+    return (
+      <Grid item xs={12}>
+        <Box sx={{ mb: 2 }}>
+          <Typography
+            variant="h6"
+            color="text.secondary"
+            fontWeight="bold"
+            gutterBottom
+          >
+            {t("MarketListingView.otherListingsFrom", {
+              seller: sellerName,
+              defaultValue: `Other listings from ${sellerName}`,
+            })}
+          </Typography>
+          <Box
+            sx={{
+              maxWidth: "100%",
+              overflowX: "scroll",
+              pb: 1,
+              display: "flex",
+            }}
+          >
+            {[1, 2, 3, 4, 5, 6, 7, 8].map((item, index) => (
+              <HorizontalListingSkeleton key={index} index={index} />
+            ))}
+          </Box>
+        </Box>
+      </Grid>
+    )
+  }
+
+  // Don't show section if no other listings
+  if (!otherListings.length) return null
 
   return (
     <Grid item xs={12}>
@@ -304,8 +338,41 @@ export function RelatedListings(props: {
     return results.listings.filter((l) => l.listing_id !== currentListingId) // Exclude current listing
   }, [results?.listings, currentListingId])
 
-  // Don't show section if no related listings or still loading
-  if (isLoading || !relatedListings.length) return null
+  // Show skeletons while loading
+  if (isLoading) {
+    return (
+      <Grid item xs={12}>
+        <Box sx={{ mb: 2 }}>
+          <Typography
+            variant="h6"
+            color="text.secondary"
+            fontWeight="bold"
+            gutterBottom
+          >
+            {t("MarketListingView.relatedListings", {
+              category: itemType,
+              defaultValue: `Related ${itemType} listings`,
+            })}
+          </Typography>
+          <Box
+            sx={{
+              maxWidth: "100%",
+              overflowX: "scroll",
+              pb: 1,
+              display: "flex",
+            }}
+          >
+            {[1, 2, 3, 4, 5, 6, 7, 8].map((item, index) => (
+              <HorizontalListingSkeleton key={index} index={index} />
+            ))}
+          </Box>
+        </Box>
+      </Grid>
+    )
+  }
+
+  // Don't show section if no related listings
+  if (!relatedListings.length) return null
 
   return (
     <Grid item xs={12}>
