@@ -6,6 +6,7 @@ import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useGetNotificationsQuery } from "../../store/notification"
 import { useTranslation } from "react-i18next"
+import { EmptyNotifications } from "../../components/empty-states"
 
 export function DashNotificationArea() {
   const theme = useTheme<ExtendedTheme>()
@@ -40,32 +41,38 @@ export function DashNotificationArea() {
     >
       {/*<Box sx={{width: '100%', padding: 2}}>*/}
       <Grid item xs={12}>
-        <List
-          sx={{
-            "&>:first-child": {
-              borderTop: `1px solid ${theme.palette.outline.main}`,
-            },
-            "&>:last-child": {
-              borderBottom: "none",
-            },
-            "& > *": {
-              borderBottom: `1px solid ${theme.palette.outline.main}`,
-            },
-            padding: 0,
-            maxHeight: 400,
-            overflowY: "scroll",
-            width: "100%",
-            maxWidth: "100%",
-          }}
-        >
-          {(notifications || []).map(
-            (notification, idx) => (
-              // <Fade in={true} style={{transitionDelay: `${50 + 50 * idx}ms`, transitionDuration: '500ms'}} key={idx}>
-              <NotificationEntry notif={notification} key={idx} />
-            ),
-            // </Fade>
-          )}
-        </List>
+        {notifications.length === 0 ? (
+          <Grid item xs={12}>
+            <EmptyNotifications sx={{ py: 4 }} />
+          </Grid>
+        ) : (
+          <List
+            sx={{
+              "&>:first-child": {
+                borderTop: `1px solid ${theme.palette.outline.main}`,
+              },
+              "&>:last-child": {
+                borderBottom: "none",
+              },
+              "& > *": {
+                borderBottom: `1px solid ${theme.palette.outline.main}`,
+              },
+              padding: 0,
+              maxHeight: 400,
+              overflowY: "scroll",
+              width: "100%",
+              maxWidth: "100%",
+            }}
+          >
+            {(notifications || []).map(
+              (notification, idx) => (
+                // <Fade in={true} style={{transitionDelay: `${50 + 50 * idx}ms`, transitionDuration: '500ms'}} key={idx}>
+                <NotificationEntry notif={notification} key={idx} />
+              ),
+              // </Fade>
+            )}
+          </List>
+        )}
       </Grid>
 
       <Grid item xs={12}>
