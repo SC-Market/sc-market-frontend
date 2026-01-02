@@ -107,6 +107,27 @@ export function ContractSidebar() {
         borderColor: theme.palette.outline.main,
       }}
     >
+      {/* Close button for desktop drawer */}
+      {!isMobile && open && (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            marginBottom: theme.spacing(1),
+          }}
+        >
+          <IconButton
+            color="secondary"
+            aria-label={t("contracts.toggleSidebar")}
+            onClick={() => {
+              setOpen(false)
+            }}
+            size="small"
+          >
+            <CloseIcon />
+          </IconButton>
+        </Box>
+      )}
       <Grid container spacing={theme.layoutSpacing.layout}>
           <Grid item xs={12}>
             <TextField
@@ -258,25 +279,14 @@ export function ContractSidebar() {
   // On mobile, use BottomSheet
   if (isMobile) {
     return (
-      <>
-        <BottomSheet
-          open={open}
-          onClose={() => setOpen(false)}
-          title={t("service_search.filters", "Filters")}
-          maxHeight="90vh"
-        >
-          {sidebarContent}
-        </BottomSheet>
-        {/* Desktop drawer still needed for layout spacing */}
-        <Drawer
-          variant="permanent"
-          open={false}
-          sx={{
-            width: 0,
-            display: { xs: "none", md: "block" },
-          }}
-        />
-      </>
+      <BottomSheet
+        open={open}
+        onClose={() => setOpen(false)}
+        title={t("service_search.filters", "Filters")}
+        maxHeight="90vh"
+      >
+        {sidebarContent}
+      </BottomSheet>
     )
   }
 
