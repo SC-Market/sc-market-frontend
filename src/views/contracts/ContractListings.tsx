@@ -30,6 +30,7 @@ import { dateDiffInDays } from "../market/MarketListingView"
 import { PAYMENT_TYPE_MAP } from "../../util/constants"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { ServiceListingSkeleton } from "../../components/skeletons"
 
 export function ContractListing(props: {
   contract: PublicContract
@@ -227,7 +228,7 @@ export function ContractListings(props: { user?: string }) {
     setPage(0)
   }
 
-  const { data: contracts } = useGetPublicContractsQuery()
+  const { data: contracts, isLoading, isFetching } = useGetPublicContractsQuery()
 
   const filteredListings = useMemo(
     () =>
@@ -272,6 +273,17 @@ export function ContractListings(props: { user?: string }) {
         .filter((listing, idx) => idx <= perPage),
     [contracts, perPage, searchState, user],
   )
+
+  // Show skeletons while loading
+  if (isLoading || isFetching) {
+    return (
+      <>
+        {Array.from({ length: perPage }).map((_, i) => (
+          <ServiceListingSkeleton key={i} index={i} />
+        ))}
+      </>
+    )
+  }
 
   return (
     <React.Fragment>

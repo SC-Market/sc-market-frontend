@@ -12,12 +12,14 @@ import {
   shouldShowErrorPage,
 } from "../../util/errorHandling"
 import { ErrorPage } from "../errors/ErrorPage"
+import { ContractDetailSkeleton } from "../../components/skeletons"
+import { Grid } from "@mui/material"
 
 export function ContractInfo(props: {}) {
   const { t } = useTranslation()
   const { id } = useParams<{ id: string }>()
 
-  const { data, error, isLoading } = useGetOrderByIdQuery(id!)
+  const { data, error, isLoading, isFetching } = useGetOrderByIdQuery(id!)
 
   const [appOpen, setAppOpen] = useState(false)
 
@@ -27,8 +29,13 @@ export function ContractInfo(props: {}) {
         <HeaderTitle>{t("contracts.contractTitle")}</HeaderTitle>
         {shouldRedirectTo404(error) && <Navigate to={"/404"} />}
         {shouldShowErrorPage(error) && <ErrorPage />}
-        {/*TODO: Add contract skeleton*/}
-        {!isLoading && <ViewContract listing={data!} />}
+        {(isLoading || isFetching) ? (
+          <Grid item xs={12} lg={appOpen ? 8 : 12}>
+            <ContractDetailSkeleton />
+          </Grid>
+        ) : (
+          <ViewContract listing={data!} />
+        )}
         {appOpen && <ContractApp />}
       </ContainerGrid>
     </ContractAppOpenContext.Provider>

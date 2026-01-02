@@ -11,7 +11,6 @@ import {
   Breadcrumbs,
   Grid,
   Link as MaterialLink,
-  Skeleton,
 } from "@mui/material"
 import React from "react"
 import { BackArrow } from "../../components/button/BackArrow"
@@ -21,6 +20,7 @@ import { ContractDetailsArea } from "../../views/contracts/ContractDetailsArea"
 import { ContractOfferForm } from "../../views/contracts/ContractOfferForm"
 import { useGetUserProfileQuery } from "../../store/profile"
 import { useTranslation } from "react-i18next"
+import { ContractDetailsTableSkeleton } from "../../components/skeletons"
 
 export function ViewPublicContractBody(props: { contract: PublicContract }) {
   const { contract } = props
@@ -37,7 +37,7 @@ export function ViewPublicContractBody(props: { contract: PublicContract }) {
 export function ViewPublicContract() {
   const { t } = useTranslation()
   const { contract_id } = useParams<{ contract_id: string }>()
-  const { data: contract, isError } = useGetPublicContractQuery(
+  const { data: contract, isError, isLoading, isFetching } = useGetPublicContractQuery(
     contract_id || "",
   )
 
@@ -108,11 +108,9 @@ export function ViewPublicContract() {
           <PageBody404 />
         ) : contract ? (
           <ViewPublicContractBody contract={contract} />
-        ) : (
-          <Grid item xs={12}>
-            <Skeleton width={"100%"} height={800} />
-          </Grid>
-        )}
+        ) : (isLoading || isFetching) ? (
+          <ContractDetailsTableSkeleton />
+        ) : null}
       </ContainerGrid>
     </Page>
   )
