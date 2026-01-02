@@ -1,26 +1,34 @@
 import React, { useEffect, useState } from "react"
-import { Box } from "@mui/material"
+import { Box, useMediaQuery, useTheme } from "@mui/material"
+import { useParams, useNavigate } from "react-router-dom"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
 import { MessagesBody } from "../../views/messaging/MessagesBody"
 import { MessagingSidebar } from "../../views/messaging/MessagingSidebar"
-import { useCurrentChatID } from "../../hooks/messaging/CurrentChatID"
 import { Message } from "../../datatypes/Chat"
 import { MessageGroupCreateContext } from "../../hooks/messaging/MessageGroupCreate"
 import { MessagingSidebarContext } from "../../hooks/messaging/MessagingSidebar"
 import { CreateMessageGroupBody } from "../../views/messaging/CreateMessageGroup"
 import { useCurrentChat } from "../../hooks/messaging/CurrentChat"
 import { useGetChatByIDQuery } from "../../store/chats"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { CurrentChatIDContext } from "../../hooks/messaging/CurrentChatID"
+import { messagingDrawerWidth } from "../../views/messaging/MessagingSidebar"
 
 export function Messages() {
+  const { chat_id } = useParams<{ chat_id: string }>()
+  const navigate = useNavigate()
   const [drawerOpen] = useDrawerOpen()
-  const [messageSidebarOpen, setMessageSidebar] = useState(true)
-  const [creatingMessageGroup, setCreatingMessageGroup] = useState(true)
+  const theme = useTheme<ExtendedTheme>()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
 
-  const [currentChatID] = useCurrentChatID()
+  // On desktop, always show sidebar (unless collapsed). On mobile, hide sidebar when viewing chat
+  const [messageSidebarOpen, setMessageSidebar] = useState(!isMobile)
+  const [creatingMessageGroup, setCreatingMessageGroup] = useState(false)
+
   const [currentChat, setCurrentChat] = useCurrentChat()
 
-  const { data: chatObj } = useGetChatByIDQuery(currentChatID!, {
-    skip: !currentChatID,
+  const { data: chatObj } = useGetChatByIDQuery(chat_id!, {
+    skip: !chat_id,
   })
 
   useEffect(() => {
@@ -37,41 +45,85 @@ export function Messages() {
     }
   }, [chatObj, setCurrentChat])
 
+  // On mobile, hide sidebar when viewing a chat
+  useEffect(() => {
+    if (isMobile && chat_id) {
+      setMessageSidebar(false)
+      setCreatingMessageGroup(false)
+    } else if (!isMobile) {
+      // On desktop, always show sidebar
+      setMessageSidebar(true)
+    }
+  }, [isMobile, chat_id])
+
   return (
     <React.Fragment>
-      <MessagingSidebarContext.Provider
-        value={[messageSidebarOpen, setMessageSidebar]}
+      <CurrentChatIDContext.Provider
+        value={[
+          chat_id || null,
+          (id) => {
+            if (id) {
+              navigate(`/messages/${id}`)
+            } else {
+              navigate("/messages")
+            }
+          },
+        ]}
       >
-        <MessageGroupCreateContext.Provider
-          value={[creatingMessageGroup, setCreatingMessageGroup]}
+        <MessagingSidebarContext.Provider
+          value={[messageSidebarOpen, setMessageSidebar]}
         >
-          <MessagingSidebar />
-          <main
-            style={{
-              flexGrow: 1,
-              overflow: "auto",
-              height: "100vh",
-              display: "flex",
-              flexDirection: "column",
-            }}
+          <MessageGroupCreateContext.Provider
+            value={[creatingMessageGroup, setCreatingMessageGroup]}
           >
-            <Box
-              sx={{
-                // ...theme.mixins.toolbar,
+            {/* On desktop, always show sidebar. On mobile, only show if no chat selected */}
+            {(!isMobile || !chat_id) && <MessagingSidebar />}
+            <main
+              style={{
+                flexGrow: 1,
+                overflow: "auto",
+                height: "100vh",
+                display: "flex",
+                flexDirection: "column",
+                marginLeft: 0,
+                transition: isMobile
+                  ? undefined
+                  : theme.transitions.create("marginLeft", {
+                      easing: theme.transitions.easing.sharp,
+                      duration: theme.transitions.duration.enteringScreen,
+                    }),
                 position: "relative",
-                width: drawerOpen ? sidebarDrawerWidth : 0,
-                height: 64,
-                minHeight: 64,
               }}
-            />
-            {creatingMessageGroup ? (
-              <CreateMessageGroupBody />
-            ) : (
-              currentChat && <MessagesBody />
-            )}
-          </main>
-        </MessageGroupCreateContext.Provider>
-      </MessagingSidebarContext.Provider>
+            >
+              <Box
+                sx={{
+                  position: "relative",
+                  width: 0,
+                  height: { xs: 56, sm: 64 },
+                  minHeight: { xs: 56, sm: 64 },
+                }}
+              />
+              {creatingMessageGroup ? (
+                <CreateMessageGroupBody />
+              ) : chat_id && currentChat ? (
+                <MessagesBody />
+              ) : (
+                <Box
+                  sx={{
+                    flexGrow: 1,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "text.secondary",
+                  }}
+                >
+                  Select a chat to start messaging
+                </Box>
+              )}
+            </main>
+          </MessageGroupCreateContext.Provider>
+        </MessagingSidebarContext.Provider>
+      </CurrentChatIDContext.Provider>
     </React.Fragment>
   )
 }

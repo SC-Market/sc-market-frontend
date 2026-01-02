@@ -1,10 +1,10 @@
 /**
  * Service Worker for SC Market PWA
  * Handles push notifications and offline functionality
- * 
+ *
  * Note: This file is used with vite-plugin-pwa injectManifest strategy
  * Workbox will inject the precache manifest and workbox imports during build
- * 
+ *
  * The build process will:
  * 1. Replace import statements with workbox CDN imports or bundled code
  * 2. Inject the precache manifest into self.__WB_MANIFEST
@@ -96,13 +96,13 @@ self.addEventListener("push", (event) => {
   if (event.data) {
     try {
       const data = event.data.json()
-      
+
       // Skip silent/test notifications
       if (data.silent === true || data.test === true) {
         console.log("Skipping silent/test notification")
         return
       }
-      
+
       notificationData = {
         title: data.title || notificationData.title,
         body: data.body || notificationData.body,
@@ -161,7 +161,7 @@ self.addEventListener("notificationclick", (event) => {
           // Check if URL matches (accounting for hash/path differences)
           const clientUrl = new URL(client.url)
           const targetUrl = new URL(urlToOpen, self.location.origin)
-          
+
           if (
             clientUrl.origin === targetUrl.origin &&
             clientUrl.pathname === targetUrl.pathname &&

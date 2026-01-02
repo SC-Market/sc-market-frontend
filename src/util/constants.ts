@@ -5,8 +5,7 @@ export const BACKEND_URL =
 export const WS_URL = import.meta.env.VITE_WS_URL || "ws://localhost"
 export const FRONTEND_URL =
   import.meta.env.VITE_FRONTEND_URL || "https://sc-market.space"
-export const VITE_VAPID_PUBLIC_KEY =
-  import.meta.env.VITE_VAPID_PUBLIC_KEY || ""
+export const VITE_VAPID_PUBLIC_KEY = import.meta.env.VITE_VAPID_PUBLIC_KEY || ""
 
 /**
  * Feature flag for Citizen iD integration

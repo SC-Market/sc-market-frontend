@@ -119,13 +119,14 @@ function EnhancedTableHead<T>(props: EnhancedTableProps<T>) {
               sx={{
                 minWidth: headCell.minWidth,
                 maxWidth: headCell.maxWidth,
-                width: headCell.id === "other_name" || headCell.id === "customer"
-                  ? { xs: "30%", sm: "auto" } 
-                  : headCell.id === "status"
-                  ? { xs: "25%", sm: "auto" }
-                  : headCell.id === "timestamp"
-                  ? { xs: "45%", sm: "auto" }
-                  : undefined,
+                width:
+                  headCell.id === "other_name" || headCell.id === "customer"
+                    ? { xs: "30%", sm: "auto" }
+                    : headCell.id === "status"
+                      ? { xs: "25%", sm: "auto" }
+                      : headCell.id === "timestamp"
+                        ? { xs: "45%", sm: "auto" }
+                        : undefined,
                 padding: { xs: theme.spacing(0.75), sm: theme.spacing(2) },
               }}
               scope="col"
@@ -137,33 +138,33 @@ function EnhancedTableHead<T>(props: EnhancedTableProps<T>) {
                   : "none"
               }
             >
-            {!headCell.noSort && (
-              <TableSortLabel
-                active={orderBy === headCell.id}
-                direction={orderBy === headCell.id ? order : "asc"}
-                onClick={createSortHandler(headCell.id)}
-                aria-label={
-                  orderBy === headCell.id
-                    ? t("accessibility.sortByColumn", "Sort by {{column}}", {
-                        column: t(headCell.label),
-                      })
-                    : t("accessibility.sortColumn", "Sort by {{column}}", {
-                        column: t(headCell.label),
-                      })
-                }
-              >
-                {t(headCell.label)}
-                {orderBy === headCell.id ? (
-                  <Box component="span" sx={visuallyHidden}>
-                    {order === "desc"
-                      ? t("sorted_descending")
-                      : t("sorted_ascending")}{" "}
-                  </Box>
-                ) : null}
-              </TableSortLabel>
-            )}
-            {headCell.noSort && t(headCell.label)}
-          </TransparentHeaderCell>
+              {!headCell.noSort && (
+                <TableSortLabel
+                  active={orderBy === headCell.id}
+                  direction={orderBy === headCell.id ? order : "asc"}
+                  onClick={createSortHandler(headCell.id)}
+                  aria-label={
+                    orderBy === headCell.id
+                      ? t("accessibility.sortByColumn", "Sort by {{column}}", {
+                          column: t(headCell.label),
+                        })
+                      : t("accessibility.sortColumn", "Sort by {{column}}", {
+                          column: t(headCell.label),
+                        })
+                  }
+                >
+                  {t(headCell.label)}
+                  {orderBy === headCell.id ? (
+                    <Box component="span" sx={visuallyHidden}>
+                      {order === "desc"
+                        ? t("sorted_descending")
+                        : t("sorted_ascending")}{" "}
+                    </Box>
+                  ) : null}
+                </TableSortLabel>
+              )}
+              {headCell.noSort && t(headCell.label)}
+            </TransparentHeaderCell>
           )
         })}
       </TableRow>

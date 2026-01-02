@@ -11,10 +11,13 @@ import { OfflineIndicator } from "../pwa/OfflineIndicator"
 import { UpdateNotification } from "../pwa/UpdateNotification"
 import { InstallPrompt } from "../pwa/InstallPrompt"
 import { MobileBottomNav } from "../navigation/MobileBottomNav"
+import { useLocation } from "react-router-dom"
 
 export function Root(props: { children: React.ReactNode }) {
   const theme: Theme = useTheme()
   const [drawerOpen] = useDrawerOpen()
+  const location = useLocation()
+  const isMessagingPage = location.pathname.startsWith("/messages")
 
   // Enable route-based prefetching
   useRoutePrefetch()
@@ -43,7 +46,7 @@ export function Root(props: { children: React.ReactNode }) {
       <Navbar />
       <Sidebar />
       {props.children}
-      <PreferencesButton />
+      {!isMessagingPage && <PreferencesButton />}
       <MobileBottomNav />
     </Box>
   )

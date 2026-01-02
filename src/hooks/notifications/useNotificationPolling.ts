@@ -5,7 +5,7 @@ import { useGetPushSubscriptionsQuery } from "../../store/push-notifications"
  * Calculate optimal polling interval based on:
  * - Push notification subscription status
  * - App visibility (foreground/background)
- * 
+ *
  * Returns polling interval in milliseconds:
  * - 0 = disabled (push enabled + app in background)
  * - 600000 = 10 minutes (push enabled + app in foreground)

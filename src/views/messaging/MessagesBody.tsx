@@ -3,6 +3,7 @@ import {
   AvatarGroup,
   Box,
   Button,
+  Chip,
   Grid,
   IconButton,
   Link as MaterialLink,
@@ -12,6 +13,7 @@ import {
   Theme,
   Tooltip,
   Typography,
+  useMediaQuery,
 } from "@mui/material"
 import React, {
   RefObject,
@@ -21,9 +23,13 @@ import React, {
   useRef,
   useState,
 } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import BusinessIcon from "@mui/icons-material/BusinessRounded"
+import DescriptionIcon from "@mui/icons-material/DescriptionRounded"
+import SendIcon from "@mui/icons-material/SendRounded"
+import { UserParticipant, ContractorParticipant } from "../../datatypes/Chat"
 import { Message } from "../../datatypes/Chat"
 import {
   useGetUserByUsernameQuery,
@@ -46,7 +52,9 @@ import { useTranslation } from "react-i18next"
 function MessageHeader() {
   const profile = useGetUserProfileQuery()
   const theme = useTheme<ExtendedTheme>()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const [messageSidebarOpen, setMessageSidebar] = useMessagingSidebar()
+  const navigate = useNavigate()
 
   const [chat] = useCurrentChat()
 
@@ -57,15 +65,17 @@ function MessageHeader() {
     <Box
       sx={{
         width: "100%",
-        padding: 2,
-        paddingTop: 2,
-        paddingLeft: 2,
+        padding: { xs: 1.5, sm: 2 },
         boxSizing: "border-box",
         borderWidth: 0,
         borderBottom: `solid 1px ${theme.palette.outline.main}`,
         bgcolor: theme.palette.background.paper,
         display: "flex",
+        flexDirection: { xs: "column", sm: "row" },
         justifyContent: "space-between",
+        alignItems: { xs: "flex-start", sm: "center" },
+        gap: { xs: 1, sm: 0 },
+        minHeight: { xs: "auto", sm: 64 },
       }}
     >
       {chat?.participants?.length ? (
@@ -83,62 +93,183 @@ function MessageHeader() {
               color="secondary"
               aria-label={t("MessagesBody.toggleSidebar")}
               onClick={() => {
-                setMessageSidebar((v) => !v)
+                if (isMobile) {
+                  // On mobile, navigate back to messages list
+                  navigate("/messages")
+                } else {
+                  // On desktop, toggle sidebar
+                  setMessageSidebar((v) => !v)
+                }
               }}
-              sx={{ marginRight: 3 }}
+              sx={{
+                marginRight: { xs: 1, sm: 3 },
+                display: { xs: "flex", sm: "flex" },
+              }}
+              size={isMobile ? "small" : "medium"}
             >
-              {!messageSidebarOpen ? <MenuIcon /> : <ChevronLeftRounded />}
+              {isMobile ? (
+                <ChevronLeftRounded />
+              ) : !messageSidebarOpen ? (
+                <MenuIcon />
+              ) : (
+                <ChevronLeftRounded />
+              )}
             </IconButton>
           )}
 
-          <Tooltip
-            title={chat!.participants
-              .filter(
-                (part) =>
-                  chat?.participants?.length === 1 ||
-                  part.username !== profile.data?.username,
-              )
-              .map((part) => part.username)
-              .join(", ")}
-          >
-            <AvatarGroup max={3} spacing={"small"}>
-              {chat!.participants
-                .filter(
-                  (part) =>
-                    chat?.participants?.length === 1 ||
-                    part.username !== profile.data?.username,
-                )
-                .map((part) => (
-                  <Avatar
-                    alt={part.username}
-                    src={part.avatar}
-                    key={part.username}
-                  />
-                ))}
-            </AvatarGroup>
-          </Tooltip>
+          {(() => {
+            // Separate user and contractor participants
+            const userParticipants = chat!.participants.filter(
+              (p): p is UserParticipant => p.type === "user",
+            )
+            const contractorParticipants = chat!.participants.filter(
+              (p): p is ContractorParticipant => p.type === "contractor",
+            )
 
-          <Box sx={{ marginLeft: 1, overflow: "hidden" }}>
-            <Typography noWrap align={"left"} color={"text.secondary"}>
-              {chat!.participants
-                .filter(
-                  (part) =>
-                    chat?.participants?.length === 1 ||
-                    part.username !== profile.data?.username,
-                )
-                .map((part) => part.username)
-                .join(", ")}
-            </Typography>
-          </Box>
+            const otherUsers = userParticipants.filter(
+              (part) =>
+                userParticipants.length === 1 ||
+                part.username !== profile.data?.username,
+            )
+
+            const participantNames = [
+              ...otherUsers.map((u) => u.username),
+              ...contractorParticipants.map((c) => c.name),
+            ]
+
+            return (
+              <>
+                <Tooltip title={participantNames.join(", ")}>
+                  <AvatarGroup max={3} spacing={"small"}>
+                    {otherUsers.map((part) => (
+                      <Avatar
+                        alt={part.username}
+                        src={part.avatar}
+                        key={part.username}
+                      />
+                    ))}
+                    {contractorParticipants.map((part) => (
+                      <Avatar
+                        alt={part.name}
+                        src={part.avatar}
+                        key={part.spectrum_id}
+                        sx={{
+                          bgcolor: theme.palette.primary.main,
+                        }}
+                      >
+                        <BusinessIcon />
+                      </Avatar>
+                    ))}
+                  </AvatarGroup>
+                </Tooltip>
+
+                <Box
+                  sx={{
+                    marginLeft: 1,
+                    overflow: "hidden",
+                    flexGrow: 1,
+                    minWidth: 0,
+                  }}
+                >
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 0.5,
+                      flexWrap: "wrap",
+                    }}
+                  >
+                    {chat!.title ? (
+                      <Typography
+                        noWrap
+                        align={"left"}
+                        color={"text.secondary"}
+                        sx={{ fontWeight: 500, flexShrink: 0 }}
+                      >
+                        {chat!.title}
+                      </Typography>
+                    ) : (
+                      <>
+                        {otherUsers.length > 0 && (
+                          <Typography
+                            noWrap
+                            align={"left"}
+                            color={"text.secondary"}
+                            sx={{ flexShrink: 0 }}
+                          >
+                            {otherUsers.map((x) => x.username).join(", ")}
+                          </Typography>
+                        )}
+                        {contractorParticipants.map((contractor) => (
+                          <Chip
+                            key={contractor.spectrum_id}
+                            icon={<BusinessIcon sx={{ fontSize: 16 }} />}
+                            label={contractor.name}
+                            size="small"
+                            component={Link}
+                            to={`/contractor/${contractor.spectrum_id}`}
+                            onClick={(e) => e.stopPropagation()}
+                            sx={{
+                              height: 20,
+                              fontSize: "0.75rem",
+                              "& .MuiChip-icon": {
+                                marginLeft: 0.5,
+                              },
+                            }}
+                          />
+                        ))}
+                      </>
+                    )}
+                    {chat!.order_id ? (
+                      <Chip
+                        icon={<DescriptionIcon sx={{ fontSize: 16 }} />}
+                        label="View Order"
+                        size="small"
+                        component={Link}
+                        to={`/order/${chat!.order_id}`}
+                        onClick={(e) => e.stopPropagation()}
+                        clickable
+                        sx={{
+                          height: 20,
+                          fontSize: "0.75rem",
+                          "& .MuiChip-icon": {
+                            marginLeft: 0.5,
+                          },
+                        }}
+                      />
+                    ) : chat!.session_id ? (
+                      <Chip
+                        icon={<DescriptionIcon sx={{ fontSize: 16 }} />}
+                        label="View Offer"
+                        size="small"
+                        component={Link}
+                        to={`/offer/${chat!.session_id}`}
+                        onClick={(e) => e.stopPropagation()}
+                        clickable
+                        sx={{
+                          height: 20,
+                          fontSize: "0.75rem",
+                          "& .MuiChip-icon": {
+                            marginLeft: 0.5,
+                          },
+                        }}
+                      />
+                    ) : null}
+                  </Box>
+                </Box>
+              </>
+            )
+          })()}
         </Box>
       ) : null}
 
       <Stack
-        direction={"row"}
+        direction={{ xs: "column", sm: "row" }}
         spacing={theme.layoutSpacing.compact}
         useFlexGap
-        alignItems={"center"}
+        alignItems={{ xs: "stretch", sm: "center" }}
         justifyContent={"right"}
+        sx={{ width: { xs: "100%", sm: "auto" } }}
       >
         <DateTimePicker
           value={dateTime}
@@ -147,25 +278,41 @@ function MessageHeader() {
               setDateTime(newValue)
             }
           }}
+          slotProps={{
+            textField: {
+              size: isMobile ? "small" : "medium",
+              sx: { width: { xs: "100%", sm: "auto" } },
+            },
+          }}
         />
-        <Button
-          onClick={() => {
-            navigator.clipboard.writeText(
-              `<t:${Math.trunc(dateTime.valueOf() / 1000)}:D>`,
-            )
-          }}
+        <Stack
+          direction="row"
+          spacing={1}
+          sx={{ width: { xs: "100%", sm: "auto" } }}
         >
-          {t("MessagesBody.copyDate")}
-        </Button>
-        <Button
-          onClick={() => {
-            navigator.clipboard.writeText(
-              `<t:${Math.trunc(dateTime.valueOf() / 1000)}:t>`,
-            )
-          }}
-        >
-          {t("MessagesBody.copyTime")}
-        </Button>
+          <Button
+            onClick={() => {
+              navigator.clipboard.writeText(
+                `<t:${Math.trunc(dateTime.valueOf() / 1000)}:D>`,
+              )
+            }}
+            size={isMobile ? "small" : "medium"}
+            fullWidth={isMobile}
+          >
+            {t("MessagesBody.copyDate")}
+          </Button>
+          <Button
+            onClick={() => {
+              navigator.clipboard.writeText(
+                `<t:${Math.trunc(dateTime.valueOf() / 1000)}:t>`,
+              )
+            }}
+            size={isMobile ? "small" : "medium"}
+            fullWidth={isMobile}
+          >
+            {t("MessagesBody.copyTime")}
+          </Button>
+        </Stack>
       </Stack>
     </Box>
   )
@@ -359,14 +506,22 @@ function MessageEntry2(props: { message: Message }) {
         <Link to={`/user/${author?.username}`}>
           <Avatar
             variant="rounded"
-            sx={{ width: 42, height: 42 }}
+            sx={{
+              width: { xs: 36, sm: 42 },
+              height: { xs: 36, sm: 42 },
+              flexShrink: 0,
+            }}
             src={author?.avatar || SCMarketLogo}
           />
         </Link>
       ) : (
         <Avatar
           variant="rounded"
-          sx={{ width: 42, height: 42 }}
+          sx={{
+            width: { xs: 36, sm: 42 },
+            height: { xs: 36, sm: 42 },
+            flexShrink: 0,
+          }}
           src={SCMarketLogo}
         />
       )}
@@ -387,7 +542,7 @@ function MessageEntry2(props: { message: Message }) {
             </MaterialLink>
           ) : (
             <Typography variant={"subtitle2"}>
-              {t("MessagesBody.scMarket")}
+              {t("MessagesBody.system")}
             </Typography>
           )}
           <Typography
@@ -431,7 +586,13 @@ function MessageEntry(props: { message: Message }) {
         justifyContent={"flex-end"}
         sx={{ marginBottom: 1 }}
       >
-        <Box sx={{ flexGrow: 1, maxWidth: "80%" }}>
+        <Box
+          sx={{
+            flexGrow: 1,
+            maxWidth: { xs: "75%", sm: "80%" },
+            minWidth: 0, // Allow text to shrink
+          }}
+        >
           <MsgPaper author={author}>
             <Typography
               color={theme.palette.secondary.contrastText}
@@ -464,7 +625,11 @@ function MessageEntry(props: { message: Message }) {
         <Link to={`/user/${message.author}`}>
           <Avatar
             variant="rounded"
-            sx={{ width: 36, height: 36 }}
+            sx={{
+              width: { xs: 32, sm: 36 },
+              height: { xs: 32, sm: 36 },
+              flexShrink: 0,
+            }}
             src={author?.avatar}
           />
         </Link>
@@ -482,10 +647,20 @@ function MessageEntry(props: { message: Message }) {
       >
         <Avatar
           variant="rounded"
-          sx={{ width: 36, height: 36 }}
+          sx={{
+            width: { xs: 32, sm: 36 },
+            height: { xs: 32, sm: 36 },
+            flexShrink: 0,
+          }}
           src={SCMarketLogo}
         />
-        <Box sx={{ flexGrow: 1, maxWidth: "90%" }}>
+        <Box
+          sx={{
+            flexGrow: 1,
+            maxWidth: { xs: "85%", sm: "90%" },
+            minWidth: 0, // Allow text to shrink
+          }}
+        >
           <MsgPaper other author={author}>
             <Typography
               color={theme.palette.text.secondary}
@@ -529,11 +704,21 @@ function MessageEntry(props: { message: Message }) {
         <Link to={`/user/${message.author}`}>
           <Avatar
             variant="rounded"
-            sx={{ width: 36, height: 36 }}
+            sx={{
+              width: { xs: 32, sm: 36 },
+              height: { xs: 32, sm: 36 },
+              flexShrink: 0,
+            }}
             src={author?.avatar}
           />
         </Link>
-        <Box sx={{ flexGrow: 1, maxWidth: "90%" }}>
+        <Box
+          sx={{
+            flexGrow: 1,
+            maxWidth: { xs: "85%", sm: "90%" },
+            minWidth: 0, // Allow text to shrink
+          }}
+        >
           <MsgPaper other author={author}>
             <Typography
               color={theme.palette.text.secondary}
@@ -591,13 +776,15 @@ function MessagesArea(props: {
         sx={{
           flexGrow: 1,
           width: "100%",
-          padding: 2,
+          padding: { xs: 1.5, sm: 2 },
+          paddingBottom: { xs: 10, sm: 2 }, // Extra padding on mobile for bottom nav (64px + spacing)
           borderColor: theme.palette.outline.main,
           boxSizing: "border-box",
           borderWidth: 0,
           borderStyle: "solid",
-          overflow: "scroll",
+          overflow: "auto",
           maxHeight: props.maxHeight,
+          WebkitOverflowScrolling: "touch", // Smooth scrolling on iOS
         }}
       >
         <Stack spacing={theme.layoutSpacing.compact}>
@@ -613,43 +800,87 @@ function MessagesArea(props: {
 
 function MessageSendArea(props: { onSend: (content: string) => void }) {
   const theme = useTheme<ExtendedTheme>()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const [textEntry, setTextEntry] = useState("")
   const { t } = useTranslation()
+
+  const handleSend = () => {
+    if (textEntry.trim()) {
+      props.onSend(textEntry)
+      setTextEntry("")
+    }
+  }
+
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault()
+      handleSend()
+    }
+    // Shift+Enter allows newline (default behavior)
+  }
 
   return (
     <Box
       sx={{
         width: "100%",
-        padding: 1,
+        padding: { xs: 1.5, sm: 1 },
+        paddingBottom: { xs: 10, sm: 1 }, // Extra padding on mobile for bottom nav (64px + spacing)
         borderTopColor: theme.palette.outline.main,
         boxSizing: "border-box",
         borderWidth: 0,
         borderTop: `solid 1px ${theme.palette.outline.main}`,
         display: "flex",
+        flexDirection: "row",
+        gap: { xs: 1, sm: 0 },
         bgcolor: theme.palette.background.paper,
+        alignItems: { xs: "flex-end", sm: "center" },
       }}
     >
       <TextField
         fullWidth
         multiline
-        maxRows={4}
+        maxRows={isMobile ? 3 : 4}
         variant={"outlined"}
-        sx={{ marginRight: 2 }}
+        size={isMobile ? "small" : "medium"}
+        sx={{
+          marginRight: { xs: 0, sm: 2 },
+          marginBottom: { xs: 0, sm: 0 },
+        }}
         value={textEntry}
         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
           setTextEntry(event.target.value)
         }}
+        onKeyPress={handleKeyPress}
+        placeholder={t("MessagesBody.typeMessage") || "Type a message..."}
       />
-      <Button
-        variant={"outlined"}
-        sx={{ maxHeight: 60 }}
-        onClick={() => {
-          props.onSend(textEntry)
-          setTextEntry("")
-        }}
-      >
-        {t("MessagesBody.send")}
-      </Button>
+      {isMobile ? (
+        <IconButton
+          color="primary"
+          onClick={handleSend}
+          disabled={!textEntry.trim()}
+          sx={{
+            flexShrink: 0,
+            alignSelf: "flex-end",
+            marginBottom: 0.5, // Align with text field baseline
+          }}
+        >
+          <SendIcon />
+        </IconButton>
+      ) : (
+        <Button
+          variant={"contained"}
+          color={"primary"}
+          sx={{
+            maxHeight: 60,
+            whiteSpace: "nowrap",
+          }}
+          onClick={handleSend}
+          disabled={!textEntry.trim()}
+          size="large"
+        >
+          {t("MessagesBody.send")}
+        </Button>
+      )}
     </Box>
   )
 }

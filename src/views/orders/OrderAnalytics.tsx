@@ -233,7 +233,13 @@ export function OrderAnalyticsCharts({ analytics }: OrderAnalyticsProps) {
         </Grid>
       </Section>
 
-      <Section xs={12} title={t("orderTrend.average_order_value_monthly", "Average Order Value (Monthly)")}>
+      <Section
+        xs={12}
+        title={t(
+          "orderTrend.average_order_value_monthly",
+          "Average Order Value (Monthly)",
+        )}
+      >
         <Grid item xs={12}>
           {/* @ts-ignore */}
           <DynamicApexChart
@@ -277,7 +283,10 @@ export function OrderAnalyticsCharts({ analytics }: OrderAnalyticsProps) {
             }}
             series={[
               {
-                name: t("orderTrend.average_order_value", "Average Order Value"),
+                name: t(
+                  "orderTrend.average_order_value",
+                  "Average Order Value",
+                ),
                 data: analytics.monthly_totals.map((item) => ({
                   x: new Date(item.date).toISOString(),
                   y: item.average_fulfilled_value || 0,

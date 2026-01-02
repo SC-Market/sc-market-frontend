@@ -1223,13 +1223,26 @@
     "copyTime": "Copy Time",
     "send": "Send",
     "system": "System",
-    "scMarket": "SC Market"
+    "scMarket": "SC Market",
+    "typeMessage": "Type a message..."
   },
   "CreateMessageGroupBody": {
     "toggleSidebar": "Toggle sidebar",
     "usernames": "Usernames",
-    "create": "Create",
-    "close": "Close"
+    "create": "Create Chat",
+    "creating": "Creating...",
+    "close": "Close",
+    "searchUsers": "Search users...",
+    "searchPlaceholder": "Type to search users",
+    "minChars": "Type at least 3 characters",
+    "typeToSearch": "Type at least 3 characters to search",
+    "selectedCount": "{{count}} user selected",
+    "selectedCount_plural": "{{count}} users selected",
+    "noUsersFound": "No users found",
+    "selectUsers": "Select users to start a chat",
+    "selectedUsers": "Selected Users",
+    "startNewChat": "Start a new chat",
+    "searchAndSelect": "Search and select users to create a group chat"
   },
   "MemberBalance": {
     "myBalance": "My Balance",
