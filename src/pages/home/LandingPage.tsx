@@ -88,7 +88,7 @@ function LandingSmallImage(props: { src: string; title: string }) {
 }
 
 export function RecentListings() {
-  const { data: results, isLoading } = useSearchMarketListingsQuery({
+  const { data: results, isLoading, isFetching } = useSearchMarketListingsQuery({
     page: 0,
     page_size: 8,
     statuses: "active",
@@ -97,7 +97,7 @@ export function RecentListings() {
     sort: "activity",
   })
 
-  return !isLoading ? (
+  return !(isLoading || isFetching) ? (
     <DisplayListingsHorizontal listings={results?.listings || []} />
   ) : (
     <RecentListingsSkeleton />

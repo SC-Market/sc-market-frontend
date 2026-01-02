@@ -56,6 +56,7 @@ import { useTranslation } from "react-i18next"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { useNavigate } from "react-router-dom"
 import { useDebounce } from "../../hooks/useDebounce"
+import { OfferRowSkeleton } from "../../components/skeletons"
 
 // Map for all statuses
 const statusTextToKey: Record<string, string> = {
@@ -358,7 +359,7 @@ export function OffersViewPaginated(props: {
     setSelectedOfferIds(selected as string[])
   }
 
-  const { data } = useSearchOfferSessionsQuery({
+  const { data, isLoading, isFetching } = useSearchOfferSessionsQuery({
     status: statusFilter || undefined,
     index: page,
     page_size: pageSize,
@@ -733,6 +734,8 @@ export function OffersViewPaginated(props: {
           order={order}
           onOrderByChange={setOrderBy}
           orderBy={orderBy}
+          loading={isLoading || isFetching}
+          loadingRowComponent={OfferRowSkeleton}
         />
         <Dialog
           open={mergeModalOpen}

@@ -27,6 +27,8 @@ import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { Link } from "react-router-dom"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { UserAvatar } from "../../components/avatar/UserAvatar"
+import { ContractorAvatar } from "../../components/avatar/ContractorAvatar"
 import {
   ControlledTable,
   HeadCell,
@@ -39,6 +41,7 @@ import { useGetUserProfileQuery } from "../../store/profile"
 import { useTranslation } from "react-i18next"
 import { useDebounce } from "../../hooks/useDebounce"
 import { ExpandLess, ExpandMore, Search } from "@mui/icons-material"
+import { OrderRowSkeleton } from "../../components/skeletons"
 
 export const statusColors = new Map<
   | "active"
@@ -242,81 +245,15 @@ export function OrderRow(props: {
           padding: { xs: theme.spacing(0.75), sm: theme.spacing(2) },
         }}
       >
-        <Stack
-          spacing={{
-            xs: theme.layoutSpacing.compact / 2,
-            sm: theme.layoutSpacing.compact,
-          }}
-          direction={"row"}
-          justifyContent={{ xs: "flex-start", sm: "flex-end" }}
-          alignItems={"center"}
-        >
-          <Avatar
-            sx={{
-              width: { xs: 28, sm: 40 },
-              height: { xs: 28, sm: 40 },
-              flexShrink: 0,
-            }}
-            src={
-              (row.mine
-                ? row.contractor?.avatar || row.assigned_to?.avatar
-                : row.customer.avatar) || SCMarketLogo
-            }
-          />
-          <Stack
-            direction={"column"}
-            justifyContent={"center"}
-            alignItems={{ xs: "flex-start", sm: "center" }}
-            sx={{ minWidth: 0, flex: 1 }}
-          >
-            <MaterialLink
-              component={Link}
-              to={
-                row.mine
-                  ? row.contractor
-                    ? `/contractor/${row.contractor?.spectrum_id}`
-                    : row.assigned_to
-                      ? `/user/${row.assigned_to?.username}`
-                      : "#"
-                  : `/user/${row.customer.username}`
-              }
-              style={{ textDecoration: "none", color: "inherit" }}
-            >
-              <UnderlineLink
-                color={"text.secondary"}
-                variant={"subtitle1"}
-                fontWeight={"bold"}
-                sx={{
-                  fontSize: { xs: "0.75rem", sm: "1rem" },
-                  overflow: "hidden",
-                  textOverflow: "ellipsis",
-                  whiteSpace: "nowrap",
-                  maxWidth: "100%",
-                }}
-              >
-                {row.mine
-                  ? row.contractor?.spectrum_id ||
-                    row.assigned_to?.username ||
-                    t("orders.public")
-                  : row.customer.username}
-              </UnderlineLink>
-            </MaterialLink>
-            <Typography
-              variant={"subtitle2"}
-              sx={{
-                fontSize: { xs: "0.625rem", sm: "0.875rem" },
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
-                maxWidth: "100%",
-              }}
-            >
-              {row.mine
-                ? row.assigned_to?.display_name || row.contractor?.name
-                : row.customer.display_name}
-            </Typography>
-          </Stack>
-        </Stack>
+        {row.mine ? (
+          row.contractor ? (
+            <ContractorAvatar contractor={row.contractor} />
+          ) : row.assigned_to ? (
+            <UserAvatar user={row.assigned_to} />
+          ) : null
+        ) : (
+          <UserAvatar user={row.customer} />
+        )}
       </TableCell>
       <TableCell
         align="right"
@@ -388,7 +325,7 @@ export function OrdersViewPaginated(props: {
     hasService,
   ])
 
-  const { data: orders } = useSearchOrdersQuery({
+  const { data: orders, isLoading, isFetching } = useSearchOrdersQuery({
     status: statusFilter === "all" ? undefined : statusFilter,
     index: page,
     page_size: pageSize,
@@ -719,6 +656,8 @@ export function OrdersViewPaginated(props: {
             label: t(cell.label),
           }))}
           disableSelect
+          loading={isLoading || isFetching}
+          loadingRowComponent={OrderRowSkeleton}
         />
       </Paper>
     </Grid>

@@ -1526,7 +1526,7 @@ export function ItemListings(props: {
     [org, user, searchState, page, perPage],
   )
 
-  const { data: results, isLoading } =
+  const { data: results, isLoading, isFetching } =
     useSearchMarketListingsQuery(searchQueryParams)
 
   const { total, listings } = useMemo(
@@ -1564,7 +1564,7 @@ export function ItemListings(props: {
       </Grid>
       <DisplayListingsMin
         listings={listings || []}
-        loading={isLoading}
+        loading={isLoading || isFetching}
         disableAds={!!(org || user)}
       />
 
@@ -1649,7 +1649,7 @@ export function BulkListingsRefactor(props: {
     [org, user, searchState, page, perPage],
   )
 
-  const { data: results, isLoading } =
+  const { data: results, isLoading, isFetching } =
     useSearchMarketListingsQuery(searchQueryParams)
 
   const { total, listings } = useMemo(
@@ -1687,7 +1687,7 @@ export function BulkListingsRefactor(props: {
       </Grid>
       <DisplayListingsMin
         listings={listings || []}
-        loading={isLoading}
+        loading={isLoading || isFetching}
         disableAds={!!(org || user)}
       />
 
@@ -1911,7 +1911,7 @@ export function MyItemListings(props: {
     ? { ...searchQueryParams, contractor_id: currentOrg?.spectrum_id }
     : searchQueryParams
 
-  const { data: searchResults, isLoading } = useGetMyListingsQuery(finalParams)
+  const { data: searchResults, isLoading, isFetching } = useGetMyListingsQuery(finalParams)
 
   // Convert the new format to the old format for compatibility
   const convertedListings: MarketListingSearchResult[] = useMemo(() => {
@@ -1925,7 +1925,7 @@ export function MyItemListings(props: {
       <Grid item xs={12}>
         <div ref={ref} />
       </Grid>
-      <DisplayListingsMin listings={convertedListings} loading={isLoading} />
+      <DisplayListingsMin listings={convertedListings} loading={isLoading || isFetching} />
 
       <Grid item xs={12}>
         <Divider light />

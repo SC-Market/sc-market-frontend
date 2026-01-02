@@ -276,6 +276,7 @@ export function ServiceListings(props: { user?: string; contractor?: string }) {
   const {
     data: servicesResponse,
     isLoading,
+    isFetching,
     error,
   } = useGetPublicServicesQuery(queryParams)
 
@@ -326,7 +327,7 @@ export function ServiceListings(props: { user?: string; contractor?: string }) {
     })
   }, [servicesResponse?.data, user, contractor])
 
-  if (isLoading) {
+  if (isLoading || isFetching) {
     return (
       <>
         {Array.from({ length: perPage }).map((_, i) => (
