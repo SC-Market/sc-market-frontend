@@ -4,7 +4,10 @@ import { Inventory2Outlined } from "@mui/icons-material"
 import { EmptyState, EmptyStateProps } from "./EmptyState"
 import { useTranslation } from "react-i18next"
 
-export interface EmptyListingsProps extends Omit<EmptyStateProps, "title" | "icon" | "action"> {
+export interface EmptyListingsProps extends Omit<
+  EmptyStateProps,
+  "title" | "icon" | "action"
+> {
   /**
    * Whether this is a search result (vs. a general empty state)
    */
@@ -47,20 +50,26 @@ export function EmptyListings({
   const navigate = useNavigate()
 
   const defaultTitle = isSearchResult
-    ? t("emptyStates.listings.noSearchResults", { defaultValue: "No listings found" })
+    ? t("emptyStates.listings.noSearchResults", {
+        defaultValue: "No listings found",
+      })
     : t("emptyStates.listings.noListings", { defaultValue: "No listings yet" })
 
   const defaultDescription = isSearchResult
     ? t("emptyStates.listings.noSearchResultsDescription", {
-        defaultValue: "Try adjusting your search filters or browse all listings",
+        defaultValue:
+          "Try adjusting your search filters or browse all listings",
       })
     : t("emptyStates.listings.noListingsDescription", {
-        defaultValue: "Create your first listing to start selling items on the market",
+        defaultValue:
+          "Create your first listing to start selling items on the market",
       })
 
   const defaultAction = showCreateAction
     ? {
-        label: t("emptyStates.listings.createListing", { defaultValue: "Create Listing" }),
+        label: t("emptyStates.listings.createListing", {
+          defaultValue: "Create Listing",
+        }),
         onClick: () => navigate("/market/create"),
         variant: "contained" as const,
       }

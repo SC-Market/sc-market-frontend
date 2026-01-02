@@ -69,10 +69,13 @@ export function MessagingSidebar() {
           borderLeft: 0,
           borderColor: theme.palette.outline.main,
           overflow: "hidden",
-          transition: theme.transitions.create(["width", "left", "borderRight"], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen,
-          }),
+          transition: theme.transitions.create(
+            ["width", "left", "borderRight"],
+            {
+              easing: theme.transitions.easing.sharp,
+              duration: theme.transitions.duration.enteringScreen,
+            },
+          ),
         },
       }}
       container={

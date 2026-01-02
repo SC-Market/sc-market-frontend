@@ -94,7 +94,11 @@ export function SellerOtherListings(props: {
     }
   }, [userSeller?.username, contractorSeller?.spectrum_id])
 
-  const { data: results, isLoading, isFetching } = useSearchMarketQuery(searchParams!, {
+  const {
+    data: results,
+    isLoading,
+    isFetching,
+  } = useSearchMarketQuery(searchParams!, {
     skip: !searchParams,
   })
 
@@ -329,7 +333,11 @@ export function RelatedListings(props: {
     [itemType],
   )
 
-  const { data: results, isLoading, isFetching } = useSearchMarketQuery(searchParams)
+  const {
+    data: results,
+    isLoading,
+    isFetching,
+  } = useSearchMarketQuery(searchParams)
 
   // Filter out the current listing and convert to legacy format
   const relatedListings = useMemo(() => {

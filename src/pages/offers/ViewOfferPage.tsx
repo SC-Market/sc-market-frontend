@@ -36,7 +36,12 @@ import {
 
 export function ViewOfferPage() {
   const { id } = useParams<{ id: string }>()
-  const { data: session, error, isLoading, isFetching } = useGetOfferSessionByIDQuery(id!)
+  const {
+    data: session,
+    error,
+    isLoading,
+    isFetching,
+  } = useGetOfferSessionByIDQuery(id!)
   const { t } = useTranslation()
   const navigate = useNavigate()
   const theme = useTheme()

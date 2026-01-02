@@ -18,7 +18,11 @@ export function createDynamicImport<T extends React.ComponentType<any>>(
   const LazyComponent = React.lazy(importFn)
 
   return function DynamicComponent(props: React.ComponentProps<T>) {
-    const defaultErrorFallback = (error: Error, errorInfo: React.ErrorInfo, reset: () => void) => (
+    const defaultErrorFallback = (
+      error: Error,
+      errorInfo: React.ErrorInfo,
+      reset: () => void,
+    ) => (
       <ErrorFallback
         error={error}
         errorInfo={errorInfo}

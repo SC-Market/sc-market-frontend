@@ -1536,8 +1536,11 @@ export function ItemListings(props: {
     [org, user, searchState, page, perPage],
   )
 
-  const { data: results, isLoading, isFetching } =
-    useSearchMarketListingsQuery(searchQueryParams)
+  const {
+    data: results,
+    isLoading,
+    isFetching,
+  } = useSearchMarketListingsQuery(searchQueryParams)
 
   const { total, listings } = useMemo(
     () => results || { total: 1, listings: [] },
@@ -1659,8 +1662,11 @@ export function BulkListingsRefactor(props: {
     [org, user, searchState, page, perPage],
   )
 
-  const { data: results, isLoading, isFetching } =
-    useSearchMarketListingsQuery(searchQueryParams)
+  const {
+    data: results,
+    isLoading,
+    isFetching,
+  } = useSearchMarketListingsQuery(searchQueryParams)
 
   const { total, listings } = useMemo(
     () => results || { total: 1, listings: [] },
@@ -1807,7 +1813,11 @@ export function OrgRecentListings(props: { org: string }) {
 export function UserRecentListings(props: { user: string }) {
   const { user } = props
   const { t } = useTranslation()
-  const { data: listings, isLoading, isFetching } = useSearchMarketListingsQuery({
+  const {
+    data: listings,
+    isLoading,
+    isFetching,
+  } = useSearchMarketListingsQuery({
     page_size: 25,
     user_seller: user,
   })
@@ -1939,7 +1949,11 @@ export function MyItemListings(props: {
     ? { ...searchQueryParams, contractor_id: currentOrg?.spectrum_id }
     : searchQueryParams
 
-  const { data: searchResults, isLoading, isFetching } = useGetMyListingsQuery(finalParams)
+  const {
+    data: searchResults,
+    isLoading,
+    isFetching,
+  } = useGetMyListingsQuery(finalParams)
 
   // Convert the new format to the old format for compatibility
   const convertedListings: MarketListingSearchResult[] = useMemo(() => {
@@ -1953,7 +1967,10 @@ export function MyItemListings(props: {
       <Grid item xs={12}>
         <div ref={ref} />
       </Grid>
-      <DisplayListingsMin listings={convertedListings} loading={isLoading || isFetching} />
+      <DisplayListingsMin
+        listings={convertedListings}
+        loading={isLoading || isFetching}
+      />
 
       <Grid item xs={12}>
         <Divider light />

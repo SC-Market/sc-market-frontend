@@ -326,7 +326,11 @@ export function OrdersViewPaginated(props: {
     hasService,
   ])
 
-  const { data: orders, isLoading, isFetching } = useSearchOrdersQuery({
+  const {
+    data: orders,
+    isLoading,
+    isFetching,
+  } = useSearchOrdersQuery({
     status: statusFilter === "all" ? undefined : statusFilter,
     index: page,
     page_size: pageSize,

@@ -2,7 +2,10 @@ import React, { ReactNode } from "react"
 import { ErrorBoundary, ErrorBoundaryProps } from "./ErrorBoundary"
 import { ErrorFallback } from "./ErrorFallback"
 
-export interface FeatureErrorBoundaryProps extends Omit<ErrorBoundaryProps, "fallback"> {
+export interface FeatureErrorBoundaryProps extends Omit<
+  ErrorBoundaryProps,
+  "fallback"
+> {
   /**
    * Children to render
    */
@@ -41,7 +44,11 @@ export function FeatureErrorBoundary({
   const handleError = (error: Error, errorInfo: React.ErrorInfo) => {
     // Log feature-specific error
     if (import.meta.env.DEV) {
-      console.error(`[FeatureErrorBoundary:${featureName}] Error:`, error, errorInfo)
+      console.error(
+        `[FeatureErrorBoundary:${featureName}] Error:`,
+        error,
+        errorInfo,
+      )
     }
 
     // Call custom error handler
@@ -52,7 +59,11 @@ export function FeatureErrorBoundary({
     // TODO: Log to error tracking service with feature context
   }
 
-  const defaultFallback = (error: Error, errorInfo: React.ErrorInfo, reset: () => void) => (
+  const defaultFallback = (
+    error: Error,
+    errorInfo: React.ErrorInfo,
+    reset: () => void,
+  ) => (
     <ErrorFallback
       error={error}
       errorInfo={errorInfo}

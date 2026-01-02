@@ -1,7 +1,18 @@
 import React from "react"
-import { Box, Button, Typography, Alert, AlertTitle, Stack } from "@mui/material"
+import {
+  Box,
+  Button,
+  Typography,
+  Alert,
+  AlertTitle,
+  Stack,
+} from "@mui/material"
 import { ErrorInfo } from "react"
-import { RefreshRounded, HomeRounded, ReportProblemRounded } from "@mui/icons-material"
+import {
+  RefreshRounded,
+  HomeRounded,
+  ReportProblemRounded,
+} from "@mui/icons-material"
 import { useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -97,7 +108,8 @@ export function ErrorFallback({
           "We encountered an error while loading this page. This could be due to a temporary server issue or network problem.",
       })
     : t("errorBoundary.componentError.message", {
-        defaultValue: "This component encountered an error. You can try again or continue using other parts of the application.",
+        defaultValue:
+          "This component encountered an error. You can try again or continue using other parts of the application.",
       })
 
   const handleGoHome = () => {
@@ -175,7 +187,10 @@ export function ErrorFallback({
           sx={{
             marginTop: 4,
             padding: 2,
-            backgroundColor: theme.palette.mode === "dark" ? "rgba(255, 255, 255, 0.05)" : "rgba(0, 0, 0, 0.02)",
+            backgroundColor:
+              theme.palette.mode === "dark"
+                ? "rgba(255, 255, 255, 0.05)"
+                : "rgba(0, 0, 0, 0.02)",
             borderRadius: 1,
             maxWidth: 800,
             width: "100%",
@@ -185,7 +200,8 @@ export function ErrorFallback({
           }}
         >
           <Typography variant="subtitle2" fontWeight={600} gutterBottom>
-            {t("errorBoundary.errorDetails", { defaultValue: "Error Details" })}:
+            {t("errorBoundary.errorDetails", { defaultValue: "Error Details" })}
+            :
           </Typography>
           <Typography
             variant="body2"

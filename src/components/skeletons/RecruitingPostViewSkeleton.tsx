@@ -39,12 +39,7 @@ export function RecruitingPostViewSkeleton() {
             />
           }
           title={
-            <Skeleton
-              variant="text"
-              width={200}
-              height={24}
-              sx={{ mb: 0.5 }}
-            />
+            <Skeleton variant="text" width={200} height={24} sx={{ mb: 0.5 }} />
           }
           subheader={
             <Box>
@@ -67,7 +62,12 @@ export function RecruitingPostViewSkeleton() {
                   />
                 </Grid>
               </Grid>
-              <Stack direction="row" spacing={0.5} alignItems="center" sx={{ mt: 0.5 }}>
+              <Stack
+                direction="row"
+                spacing={0.5}
+                alignItems="center"
+                sx={{ mt: 0.5 }}
+              >
                 <Skeleton variant="circular" width={16} height={16} />
                 <Skeleton variant="text" width={60} height={16} />
               </Stack>
@@ -87,11 +87,7 @@ export function RecruitingPostViewSkeleton() {
                 height={40}
                 sx={{ borderRadius: 1 }}
               />
-              <Skeleton
-                variant="circular"
-                width={40}
-                height={40}
-              />
+              <Skeleton variant="circular" width={40} height={40} />
             </Stack>
           }
         />
@@ -102,53 +98,14 @@ export function RecruitingPostViewSkeleton() {
             height={40}
             sx={{ mx: "auto", mb: 3 }}
           />
-          <Skeleton
-            variant="text"
-            width="100%"
-            height={20}
-            sx={{ mb: 0.5 }}
-          />
-          <Skeleton
-            variant="text"
-            width="100%"
-            height={20}
-            sx={{ mb: 0.5 }}
-          />
-          <Skeleton
-            variant="text"
-            width="100%"
-            height={20}
-            sx={{ mb: 0.5 }}
-          />
-          <Skeleton
-            variant="text"
-            width="95%"
-            height={20}
-            sx={{ mb: 0.5 }}
-          />
-          <Skeleton
-            variant="text"
-            width="90%"
-            height={20}
-            sx={{ mb: 0.5 }}
-          />
-          <Skeleton
-            variant="text"
-            width="85%"
-            height={20}
-            sx={{ mb: 0.5 }}
-          />
-          <Skeleton
-            variant="text"
-            width="80%"
-            height={20}
-            sx={{ mb: 0.5 }}
-          />
-          <Skeleton
-            variant="text"
-            width="75%"
-            height={20}
-          />
+          <Skeleton variant="text" width="100%" height={20} sx={{ mb: 0.5 }} />
+          <Skeleton variant="text" width="100%" height={20} sx={{ mb: 0.5 }} />
+          <Skeleton variant="text" width="100%" height={20} sx={{ mb: 0.5 }} />
+          <Skeleton variant="text" width="95%" height={20} sx={{ mb: 0.5 }} />
+          <Skeleton variant="text" width="90%" height={20} sx={{ mb: 0.5 }} />
+          <Skeleton variant="text" width="85%" height={20} sx={{ mb: 0.5 }} />
+          <Skeleton variant="text" width="80%" height={20} sx={{ mb: 0.5 }} />
+          <Skeleton variant="text" width="75%" height={20} />
         </CardContent>
         <CardActions>
           <Box>

@@ -113,13 +113,17 @@ export const userApi = serviceApi.injectEndpoints({
 
             // Optimistically update settings in profile
             const profilePatch = dispatch(
-              userApi.util.updateQueryData("profileGetUserProfile", undefined, (draft) => {
-                if (draft.settings) {
-                  Object.assign(draft.settings, body)
-                } else {
-                  draft.settings = body as any
-                }
-              }),
+              userApi.util.updateQueryData(
+                "profileGetUserProfile",
+                undefined,
+                (draft) => {
+                  if (draft.settings) {
+                    Object.assign(draft.settings, body)
+                  } else {
+                    draft.settings = body as any
+                  }
+                },
+              ),
             )
             patches.push(profilePatch)
 
@@ -164,13 +168,19 @@ export const userApi = serviceApi.injectEndpoints({
 
             // Optimistically update user profile
             const profilePatch = dispatch(
-              userApi.util.updateQueryData("profileGetUserProfile", undefined, (draft) => {
-                if (body.display_name !== undefined) draft.display_name = body.display_name
-                if (body.market_order_template !== undefined)
-                  draft.market_order_template = body.market_order_template
-                // 'about' maps to 'profile_description' in UserProfileState
-                if (body.about !== undefined) draft.profile_description = body.about
-              }),
+              userApi.util.updateQueryData(
+                "profileGetUserProfile",
+                undefined,
+                (draft) => {
+                  if (body.display_name !== undefined)
+                    draft.display_name = body.display_name
+                  if (body.market_order_template !== undefined)
+                    draft.market_order_template = body.market_order_template
+                  // 'about' maps to 'profile_description' in UserProfileState
+                  if (body.about !== undefined)
+                    draft.profile_description = body.about
+                },
+              ),
             )
             patches.push(profilePatch)
 
@@ -213,20 +223,29 @@ export const userApi = serviceApi.injectEndpoints({
 
             // Optimistically update avatar with preview
             const profilePatch = dispatch(
-              userApi.util.updateQueryData("profileGetUserProfile", undefined, (draft) => {
-                draft.avatar = previewUrl
-              }),
+              userApi.util.updateQueryData(
+                "profileGetUserProfile",
+                undefined,
+                (draft) => {
+                  draft.avatar = previewUrl
+                },
+              ),
             )
             patches.push(profilePatch)
 
             // Also update if viewing own profile by username
             const state = getState() as any
-            const profile = state?.api?.queries?.["profileGetUserProfile(undefined)"]?.data
+            const profile =
+              state?.api?.queries?.["profileGetUserProfile(undefined)"]?.data
             if (profile?.username) {
               const userProfilePatch = dispatch(
-                userApi.util.updateQueryData("profileGetUserByName", profile.username, (draft) => {
-                  draft.avatar = previewUrl
-                }),
+                userApi.util.updateQueryData(
+                  "profileGetUserByName",
+                  profile.username,
+                  (draft) => {
+                    draft.avatar = previewUrl
+                  },
+                ),
               )
               patches.push(userProfilePatch)
             }

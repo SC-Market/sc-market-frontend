@@ -84,7 +84,10 @@ export function EmptyState({
         <Box
           sx={{
             marginBottom: 3,
-            color: theme.palette.mode === "dark" ? "rgba(255, 255, 255, 0.5)" : "rgba(0, 0, 0, 0.4)",
+            color:
+              theme.palette.mode === "dark"
+                ? "rgba(255, 255, 255, 0.5)"
+                : "rgba(0, 0, 0, 0.4)",
             "& svg": {
               fontSize: { xs: 64, sm: 80, md: 96 },
             },
@@ -112,7 +115,7 @@ export function EmptyState({
         <Typography
           variant="body1"
           sx={{
-            marginBottom: (action || secondaryAction || children) ? 3 : 0,
+            marginBottom: action || secondaryAction || children ? 3 : 0,
             color: "text.secondary",
             maxWidth: 500,
           }}
@@ -125,7 +128,7 @@ export function EmptyState({
       {children && (
         <Box
           sx={{
-            marginBottom: (action || secondaryAction) ? 3 : 0,
+            marginBottom: action || secondaryAction ? 3 : 0,
             width: "100%",
             maxWidth: 500,
           }}

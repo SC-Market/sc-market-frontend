@@ -259,153 +259,153 @@ export function EditTokenDialog({
   // Content to reuse
   const dialogContent = (
     <>
-        {error && (
-          <Alert severity="error" sx={{ mb: 2 }}>
-            {error}
-          </Alert>
-        )}
+      {error && (
+        <Alert severity="error" sx={{ mb: 2 }}>
+          {error}
+        </Alert>
+      )}
 
-        <Grid container spacing={theme.layoutSpacing.layout}>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Token Name"
-              value={formData.name}
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, name: e.target.value }))
-              }
-              required
-              helperText="A descriptive name for this token"
-            />
-          </Grid>
-
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Description (Optional)"
-              value={formData.description}
-              onChange={(e) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  description: e.target.value,
-                }))
-              }
-              multiline
-              rows={2}
-              helperText="Optional description of what this token will be used for"
-            />
-          </Grid>
-
-          <Grid item xs={12}>
-            <Typography variant="h6" gutterBottom>
-              Permissions (Scopes)
-            </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              Select the permissions this token should have. Be conservative and
-              only grant what&#39;s necessary.
-            </Typography>
-
-            {Object.entries(SCOPE_CATEGORIES).map(
-              ([category, { label, scopes }]) => {
-                // Filter scopes based on availability only (no showing admin scopes to non-admins)
-                const filteredScopes = scopes.filter((scope) =>
-                  availableScopes.includes(scope.value),
-                )
-
-                // Don't render category if no scopes are available
-                if (filteredScopes.length === 0) return null
-
-                return (
-                  <Box key={category} sx={{ mb: 3 }}>
-                    <Typography variant="subtitle1" gutterBottom>
-                      {label}
-                      {!isAdmin &&
-                        (category === "admin" || category === "moderation") && (
-                          <Chip
-                            label="Admin Only"
-                            size="small"
-                            color="warning"
-                            sx={{ ml: 1 }}
-                          />
-                        )}
-                    </Typography>
-                    <FormGroup>
-                      {filteredScopes.map(({ value, label: scopeLabel }) => (
-                        <FormControlLabel
-                          key={value}
-                          control={
-                            <Checkbox
-                              checked={formData.scopes.includes(value)}
-                              onChange={(e) =>
-                                handleScopeChange(value, e.target.checked)
-                              }
-                            />
-                          }
-                          label={scopeLabel}
-                        />
-                      ))}
-                    </FormGroup>
-                    <Divider sx={{ mt: 1 }} />
-                  </Box>
-                )
-              },
-            )}
-          </Grid>
-
-          <Grid item xs={12}>
-            <Typography variant="h6" gutterBottom>
-              Contractor Access
-            </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              Restrict this token to specific contractors. Leave empty for
-              access to all contractors.
-            </Typography>
-
-            {contractors && contractors.length > 0 ? (
-              <FormGroup>
-                {contractors.map((contractor) => (
-                  <FormControlLabel
-                    key={contractor.spectrum_id}
-                    control={
-                      <Checkbox
-                        checked={formData.contractor_spectrum_ids.includes(
-                          contractor.spectrum_id,
-                        )}
-                        onChange={(e) =>
-                          handleContractorChange(
-                            contractor.spectrum_id,
-                            e.target.checked,
-                          )
-                        }
-                      />
-                    }
-                    label={`${contractor.name} (${contractor.spectrum_id})`}
-                  />
-                ))}
-              </FormGroup>
-            ) : (
-              <Typography variant="body2" color="text.secondary">
-                No contractors available
-              </Typography>
-            )}
-          </Grid>
-
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Expiration Date (Optional)"
-              type="datetime-local"
-              value={formData.expires_at}
-              onChange={(e) =>
-                setFormData((prev) => ({ ...prev, expires_at: e.target.value }))
-              }
-              InputLabelProps={{
-                shrink: true,
-              }}
-              helperText="Leave empty for no expiration. Time is interpreted as UTC."
-            />
-          </Grid>
+      <Grid container spacing={theme.layoutSpacing.layout}>
+        <Grid item xs={12}>
+          <TextField
+            fullWidth
+            label="Token Name"
+            value={formData.name}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, name: e.target.value }))
+            }
+            required
+            helperText="A descriptive name for this token"
+          />
         </Grid>
+
+        <Grid item xs={12}>
+          <TextField
+            fullWidth
+            label="Description (Optional)"
+            value={formData.description}
+            onChange={(e) =>
+              setFormData((prev) => ({
+                ...prev,
+                description: e.target.value,
+              }))
+            }
+            multiline
+            rows={2}
+            helperText="Optional description of what this token will be used for"
+          />
+        </Grid>
+
+        <Grid item xs={12}>
+          <Typography variant="h6" gutterBottom>
+            Permissions (Scopes)
+          </Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+            Select the permissions this token should have. Be conservative and
+            only grant what&#39;s necessary.
+          </Typography>
+
+          {Object.entries(SCOPE_CATEGORIES).map(
+            ([category, { label, scopes }]) => {
+              // Filter scopes based on availability only (no showing admin scopes to non-admins)
+              const filteredScopes = scopes.filter((scope) =>
+                availableScopes.includes(scope.value),
+              )
+
+              // Don't render category if no scopes are available
+              if (filteredScopes.length === 0) return null
+
+              return (
+                <Box key={category} sx={{ mb: 3 }}>
+                  <Typography variant="subtitle1" gutterBottom>
+                    {label}
+                    {!isAdmin &&
+                      (category === "admin" || category === "moderation") && (
+                        <Chip
+                          label="Admin Only"
+                          size="small"
+                          color="warning"
+                          sx={{ ml: 1 }}
+                        />
+                      )}
+                  </Typography>
+                  <FormGroup>
+                    {filteredScopes.map(({ value, label: scopeLabel }) => (
+                      <FormControlLabel
+                        key={value}
+                        control={
+                          <Checkbox
+                            checked={formData.scopes.includes(value)}
+                            onChange={(e) =>
+                              handleScopeChange(value, e.target.checked)
+                            }
+                          />
+                        }
+                        label={scopeLabel}
+                      />
+                    ))}
+                  </FormGroup>
+                  <Divider sx={{ mt: 1 }} />
+                </Box>
+              )
+            },
+          )}
+        </Grid>
+
+        <Grid item xs={12}>
+          <Typography variant="h6" gutterBottom>
+            Contractor Access
+          </Typography>
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+            Restrict this token to specific contractors. Leave empty for access
+            to all contractors.
+          </Typography>
+
+          {contractors && contractors.length > 0 ? (
+            <FormGroup>
+              {contractors.map((contractor) => (
+                <FormControlLabel
+                  key={contractor.spectrum_id}
+                  control={
+                    <Checkbox
+                      checked={formData.contractor_spectrum_ids.includes(
+                        contractor.spectrum_id,
+                      )}
+                      onChange={(e) =>
+                        handleContractorChange(
+                          contractor.spectrum_id,
+                          e.target.checked,
+                        )
+                      }
+                    />
+                  }
+                  label={`${contractor.name} (${contractor.spectrum_id})`}
+                />
+              ))}
+            </FormGroup>
+          ) : (
+            <Typography variant="body2" color="text.secondary">
+              No contractors available
+            </Typography>
+          )}
+        </Grid>
+
+        <Grid item xs={12}>
+          <TextField
+            fullWidth
+            label="Expiration Date (Optional)"
+            type="datetime-local"
+            value={formData.expires_at}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, expires_at: e.target.value }))
+            }
+            InputLabelProps={{
+              shrink: true,
+            }}
+            helperText="Leave empty for no expiration. Time is interpreted as UTC."
+          />
+        </Grid>
+      </Grid>
     </>
   )
 
@@ -432,7 +432,9 @@ export function EditTokenDialog({
         maxHeight="90vh"
       >
         {dialogContent}
-        <Box sx={{ mt: 2, display: "flex", justifyContent: "flex-end", gap: 1 }}>
+        <Box
+          sx={{ mt: 2, display: "flex", justifyContent: "flex-end", gap: 1 }}
+        >
           {dialogActions}
         </Box>
       </BottomSheet>

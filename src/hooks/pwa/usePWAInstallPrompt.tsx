@@ -90,7 +90,8 @@ export function usePWAInstallPrompt() {
     }
   }, [deferredPrompt])
 
-  const canInstall = !isInstalled && (deferredPrompt !== null || globalDeferredPrompt !== null)
+  const canInstall =
+    !isInstalled && (deferredPrompt !== null || globalDeferredPrompt !== null)
 
   return {
     canInstall,

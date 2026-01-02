@@ -87,7 +87,8 @@ export function CollapsibleHeader({
       sx={{
         zIndex: theme.zIndex.appBar,
         height: currentHeight,
-        transition: variant === "shrink" ? "height 0.3s ease-out" : "all 0.3s ease-out",
+        transition:
+          variant === "shrink" ? "height 0.3s ease-out" : "all 0.3s ease-out",
         transform:
           variant === "slide"
             ? isCollapsed

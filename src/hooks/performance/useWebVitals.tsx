@@ -1,13 +1,5 @@
 import { useEffect } from "react"
-import {
-  onCLS,
-  onFID,
-  onLCP,
-  onFCP,
-  onTTFB,
-  onINP,
-  Metric,
-} from "web-vitals"
+import { onCLS, onFID, onLCP, onFCP, onTTFB, onINP, Metric } from "web-vitals"
 
 /**
  * Hook to track Core Web Vitals and send them to analytics
@@ -24,11 +16,11 @@ import {
  */
 
 // Helper to safely check if we're in development mode
-// Build tools replace process.env.NODE_ENV at build time, but TypeScript doesn't know about it
+// Vite provides import.meta.env.DEV for development mode detection
 const isDevelopment = (): boolean => {
   try {
-    // @ts-ignore - process.env is replaced at build time by bundlers
-    return typeof process !== "undefined" && process.env?.NODE_ENV === "development"
+    // Vite replaces import.meta.env at build time
+    return import.meta.env.DEV === true
   } catch {
     return false
   }

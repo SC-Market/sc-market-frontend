@@ -88,7 +88,11 @@ function LandingSmallImage(props: { src: string; title: string }) {
 }
 
 export function RecentListings() {
-  const { data: results, isLoading, isFetching } = useSearchMarketListingsQuery({
+  const {
+    data: results,
+    isLoading,
+    isFetching,
+  } = useSearchMarketListingsQuery({
     page: 0,
     page_size: 8,
     statuses: "active",

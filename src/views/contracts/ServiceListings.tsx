@@ -362,9 +362,12 @@ export function ServiceListings(props: { user?: string; contractor?: string }) {
         <Grid item xs={12}>
           <EmptyListings
             isSearchResult={false}
-            title={t("emptyStates.services.noServices", { defaultValue: "No services yet" })}
+            title={t("emptyStates.services.noServices", {
+              defaultValue: "No services yet",
+            })}
             description={t("emptyStates.services.noServicesDescription", {
-              defaultValue: "Create your first service to start offering your expertise",
+              defaultValue:
+                "Create your first service to start offering your expertise",
             })}
             showCreateAction={false}
           />

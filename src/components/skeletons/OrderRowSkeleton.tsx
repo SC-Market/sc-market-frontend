@@ -47,7 +47,11 @@ export function OrderRowSkeleton({ index = 0 }: OrderRowSkeletonProps) {
               flexShrink: 0,
             }}
           >
-            <Stack direction="column" alignItems="center" justifyContent="space-between">
+            <Stack
+              direction="column"
+              alignItems="center"
+              justifyContent="space-between"
+            >
               <BaseSkeleton
                 variant="text"
                 width={30}
@@ -103,11 +107,7 @@ export function OrderRowSkeleton({ index = 0 }: OrderRowSkeletonProps) {
           >
             <BaseSkeleton variant="circular" width="100%" height="100%" />
           </Avatar>
-          <Stack
-            direction="column"
-            justifyContent="center"
-            alignItems="center"
-          >
+          <Stack direction="column" justifyContent="center" alignItems="center">
             <BaseSkeleton
               variant="text"
               width={isMobile ? 60 : 100}

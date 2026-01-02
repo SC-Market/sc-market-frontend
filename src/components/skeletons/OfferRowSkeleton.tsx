@@ -1,10 +1,4 @@
-import {
-  TableRow,
-  TableCell,
-  Avatar,
-  Stack,
-  Paper,
-} from "@mui/material"
+import { TableRow, TableCell, Avatar, Stack, Paper } from "@mui/material"
 import { BaseSkeleton } from "./BaseSkeleton"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTheme } from "@mui/material/styles"
@@ -46,7 +40,11 @@ export function OfferRowSkeleton({ index = 0 }: OfferRowSkeletonProps) {
               flexShrink: 0,
             }}
           >
-            <Stack direction="column" alignItems="center" justifyContent="space-between">
+            <Stack
+              direction="column"
+              alignItems="center"
+              justifyContent="space-between"
+            >
               <BaseSkeleton
                 variant="text"
                 width={30}
@@ -102,11 +100,7 @@ export function OfferRowSkeleton({ index = 0 }: OfferRowSkeletonProps) {
           >
             <BaseSkeleton variant="circular" width="100%" height="100%" />
           </Avatar>
-          <Stack
-            direction="column"
-            justifyContent="center"
-            alignItems="center"
-          >
+          <Stack direction="column" justifyContent="center" alignItems="center">
             <BaseSkeleton
               variant="text"
               width={isMobile ? 60 : 100}

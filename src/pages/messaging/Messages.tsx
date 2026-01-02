@@ -31,7 +31,11 @@ export function Messages() {
 
   const [currentChat, setCurrentChat] = useCurrentChat()
 
-  const { data: chatObj, isLoading, isFetching } = useGetChatByIDQuery(chat_id!, {
+  const {
+    data: chatObj,
+    isLoading,
+    isFetching,
+  } = useGetChatByIDQuery(chat_id!, {
     skip: !chat_id,
   })
 

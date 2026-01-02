@@ -150,9 +150,7 @@ export default defineConfig({
             data: "/api/orders/user/data", // Use existing backend endpoint
             type: "application/json",
             update: 300000, // Update every 5 minutes
-            icons: [
-              { src: "/android-chrome-192x192.png", sizes: "192x192" },
-            ],
+            icons: [{ src: "/android-chrome-192x192.png", sizes: "192x192" }],
           },
         ],
       },

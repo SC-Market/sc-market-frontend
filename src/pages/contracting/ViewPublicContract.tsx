@@ -7,11 +7,7 @@ import { Helmet } from "react-helmet"
 import { Page } from "../../components/metadata/Page"
 import { FRONTEND_URL } from "../../util/constants"
 import { ContainerGrid } from "../../components/layout/ContainerGrid"
-import {
-  Breadcrumbs,
-  Grid,
-  Link as MaterialLink,
-} from "@mui/material"
+import { Breadcrumbs, Grid, Link as MaterialLink } from "@mui/material"
 import React from "react"
 import { BackArrow } from "../../components/button/BackArrow"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
@@ -37,9 +33,12 @@ export function ViewPublicContractBody(props: { contract: PublicContract }) {
 export function ViewPublicContract() {
   const { t } = useTranslation()
   const { contract_id } = useParams<{ contract_id: string }>()
-  const { data: contract, isError, isLoading, isFetching } = useGetPublicContractQuery(
-    contract_id || "",
-  )
+  const {
+    data: contract,
+    isError,
+    isLoading,
+    isFetching,
+  } = useGetPublicContractQuery(contract_id || "")
 
   return (
     <Page title={`${contract?.title} - ${t("contracts.publicOrderTitle")}`}>
@@ -108,7 +107,7 @@ export function ViewPublicContract() {
           <PageBody404 />
         ) : contract ? (
           <ViewPublicContractBody contract={contract} />
-        ) : (isLoading || isFetching) ? (
+        ) : isLoading || isFetching ? (
           <ContractDetailsTableSkeleton />
         ) : null}
       </ContainerGrid>

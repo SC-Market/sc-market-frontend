@@ -12,7 +12,11 @@
  * - Operations that don't redirect after completion
  */
 
-import { BaseQueryFn, FetchArgs, FetchBaseQueryError } from "@reduxjs/toolkit/query"
+import {
+  BaseQueryFn,
+  FetchArgs,
+  FetchBaseQueryError,
+} from "@reduxjs/toolkit/query"
 
 /**
  * Type for optimistic update patches that can be rolled back
@@ -33,7 +37,10 @@ export function generateTempId(prefix = "temp"): string {
 /**
  * Helper to check if an item is optimistically added (has temp ID)
  */
-export function isOptimisticItem(item: { id?: string; listing_id?: string }): boolean {
+export function isOptimisticItem(item: {
+  id?: string
+  listing_id?: string
+}): boolean {
   const id = item.id || item.listing_id
   return id ? id.startsWith("temp-") : false
 }

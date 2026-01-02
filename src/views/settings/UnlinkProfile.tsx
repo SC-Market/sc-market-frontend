@@ -99,7 +99,9 @@ export function UnlinkProfile() {
           <DialogContentText id="unlink-dialog-description">
             {t("settings.profile.unlinkDialogDescription")}
           </DialogContentText>
-          <Box sx={{ mt: 2, display: "flex", justifyContent: "flex-end", gap: 1 }}>
+          <Box
+            sx={{ mt: 2, display: "flex", justifyContent: "flex-end", gap: 1 }}
+          >
             <Button onClick={handleCancelUnlink}>
               {t("settings.profile.unlinkDialogCancel")}
             </Button>

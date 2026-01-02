@@ -146,7 +146,8 @@ export function UserRelevantListingsArea(props: { user: string }) {
             defaultValue: "No listings or services yet",
           })}
           description={t("emptyStates.profile.noContentDescription", {
-            defaultValue: "This user hasn't created any listings or services yet",
+            defaultValue:
+              "This user hasn't created any listings or services yet",
           })}
         />
       </Grid>
@@ -673,7 +674,10 @@ export function ViewProfile(props: { profile: User }) {
                         <BottomSheet
                           open={descriptionEditOpen}
                           onClose={() => setDescriptionEditOpen(false)}
-                          title={t("viewProfile.editDescription", "Edit Description")}
+                          title={t(
+                            "viewProfile.editDescription",
+                            "Edit Description",
+                          )}
                           maxHeight="90vh"
                           fullHeight
                         >
@@ -721,7 +725,9 @@ export function ViewProfile(props: { profile: User }) {
                                 <Button
                                   variant={"contained"}
                                   onClick={async () => {
-                                    await submitUpdate({ about: newDescription })
+                                    await submitUpdate({
+                                      about: newDescription,
+                                    })
                                     setDescriptionEditOpen(false)
                                   }}
                                 >
@@ -882,7 +888,7 @@ export function ViewProfile(props: { profile: User }) {
 
 export function ProfileSkeleton() {
   const theme = useTheme<ExtendedTheme>()
-  
+
   return (
     <OpenLayout sidebarOpen={true}>
       <Box sx={{ position: "relative" }}>
@@ -940,14 +946,28 @@ export function ProfileSkeleton() {
                       />
                     </Grid>
                     <Grid item>
-                      <Skeleton variant="text" width={200} height={28} sx={{ mb: 1 }} />
-                      <Stack direction="row" spacing={0.5} alignItems="center" sx={{ mb: 1 }}>
+                      <Skeleton
+                        variant="text"
+                        width={200}
+                        height={28}
+                        sx={{ mb: 1 }}
+                      />
+                      <Stack
+                        direction="row"
+                        spacing={0.5}
+                        alignItems="center"
+                        sx={{ mb: 1 }}
+                      >
                         <Skeleton variant="circular" width={16} height={16} />
                         <Skeleton variant="text" width={60} height={16} />
                       </Stack>
                       <Skeleton variant="text" width={150} height={20} />
                     </Grid>
-                    <Grid item xs={12} sx={{ maxHeight: 200, overflowX: "scroll" }}>
+                    <Grid
+                      item
+                      xs={12}
+                      sx={{ maxHeight: 200, overflowX: "scroll" }}
+                    >
                       <Stack direction="row" spacing={1}>
                         <Skeleton
                           variant="rectangular"
@@ -975,10 +995,30 @@ export function ProfileSkeleton() {
                       overflowY: "scroll",
                     }}
                   >
-                    <Skeleton variant="text" width="100%" height={20} sx={{ mb: 0.5 }} />
-                    <Skeleton variant="text" width="100%" height={20} sx={{ mb: 0.5 }} />
-                    <Skeleton variant="text" width="90%" height={20} sx={{ mb: 0.5 }} />
-                    <Skeleton variant="text" width="80%" height={20} sx={{ mb: 2 }} />
+                    <Skeleton
+                      variant="text"
+                      width="100%"
+                      height={20}
+                      sx={{ mb: 0.5 }}
+                    />
+                    <Skeleton
+                      variant="text"
+                      width="100%"
+                      height={20}
+                      sx={{ mb: 0.5 }}
+                    />
+                    <Skeleton
+                      variant="text"
+                      width="90%"
+                      height={20}
+                      sx={{ mb: 0.5 }}
+                    />
+                    <Skeleton
+                      variant="text"
+                      width="80%"
+                      height={20}
+                      sx={{ mb: 2 }}
+                    />
                     <Stack direction="row" spacing={0.5} flexWrap="wrap">
                       <Skeleton
                         variant="rectangular"
@@ -1007,9 +1047,18 @@ export function ProfileSkeleton() {
                   indicatorColor="secondary"
                 >
                   <Tab label={<Skeleton width={60} />} icon={<InfoRounded />} />
-                  <Tab label={<Skeleton width={60} />} icon={<DesignServicesRounded />} />
-                  <Tab label={<Skeleton width={60} />} icon={<GavelRounded />} />
-                  <Tab label={<Skeleton width={60} />} icon={<CreateRounded />} />
+                  <Tab
+                    label={<Skeleton width={60} />}
+                    icon={<DesignServicesRounded />}
+                  />
+                  <Tab
+                    label={<Skeleton width={60} />}
+                    icon={<GavelRounded />}
+                  />
+                  <Tab
+                    label={<Skeleton width={60} />}
+                    icon={<CreateRounded />}
+                  />
                   <Tab label={<Skeleton width={60} />} icon={<StarRounded />} />
                 </Tabs>
               </Box>

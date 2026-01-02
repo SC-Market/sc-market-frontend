@@ -9,12 +9,14 @@ A collection of reusable components optimized for mobile experiences. These comp
 A mobile-friendly modal that slides up from the bottom. Better UX than full-screen modals on mobile devices.
 
 **Features:**
+
 - Slides up from bottom on mobile
 - Drag handle indicator
 - Safe area support for iOS
 - Falls back to regular drawer on desktop
 
 **Usage:**
+
 ```tsx
 import { BottomSheet } from "../components/mobile"
 
@@ -39,12 +41,14 @@ function MyComponent() {
 A card that can be swiped left/right to reveal actions. Perfect for mobile interactions.
 
 **Features:**
+
 - Swipe left/right to reveal actions
 - Smooth animations
 - Only active on mobile
 - Customizable threshold
 
 **Usage:**
+
 ```tsx
 import { SwipeableCard } from "../components/mobile"
 import { IconButton } from "@mui/material"
@@ -79,12 +83,14 @@ function MyCard() {
 A sticky header that collapses on scroll. Provides more screen space while maintaining navigation.
 
 **Features:**
+
 - Collapses on scroll
 - Multiple variants: slide, fade, shrink
 - Configurable threshold
 - Only active on mobile
 
 **Usage:**
+
 ```tsx
 import { CollapsibleHeader } from "../components/mobile"
 
@@ -112,12 +118,14 @@ function MyPage() {
 Floating Action Button optimized for mobile. Automatically positions above bottom navigation.
 
 **Features:**
+
 - Automatic positioning above bottom nav
 - Safe area support
 - Multiple positions
 - Responsive sizing
 
 **Usage:**
+
 ```tsx
 import { MobileFAB } from "../components/mobile"
 import { Add } from "@mui/icons-material"
@@ -144,6 +152,7 @@ function MyPage() {
 Tap to edit, save on blur. Perfect for quick edits on mobile.
 
 **Features:**
+
 - Tap to edit
 - Save on blur
 - Keyboard shortcuts (Enter to save, Escape to cancel)
@@ -151,6 +160,7 @@ Tap to edit, save on blur. Perfect for quick edits on mobile.
 - Custom display component
 
 **Usage:**
+
 ```tsx
 import { InlineEdit } from "../components/mobile"
 
@@ -179,12 +189,14 @@ function MyComponent() {
 Wraps sidebar content to show as BottomSheet on mobile, Drawer on desktop. Automatically handles responsive behavior.
 
 **Features:**
+
 - Automatic mobile/desktop switching
 - BottomSheet on mobile
 - Drawer on desktop
 - Consistent API
 
 **Usage:**
+
 ```tsx
 import { MobileSidebarWrapper } from "../components/mobile"
 
@@ -218,13 +230,13 @@ function MySidebar() {
 
 ```tsx
 // Before
-<Dialog open={open} onClose={onClose}>
+;<Dialog open={open} onClose={onClose}>
   <DialogContent>Content</DialogContent>
 </Dialog>
 
 // After
 import { BottomSheet } from "../components/mobile"
-<BottomSheet open={open} onClose={onClose} title="Modal Title">
+;<BottomSheet open={open} onClose={onClose} title="Modal Title">
   <YourContent />
 </BottomSheet>
 ```
@@ -233,14 +245,18 @@ import { BottomSheet } from "../components/mobile"
 
 ```tsx
 // Before
-<Card>
+;<Card>
   <CardContent>Content</CardContent>
 </Card>
 
 // After
 import { SwipeableCard } from "../components/mobile"
-<SwipeableCard
-  rightActions={<IconButton onClick={handleDelete}><Delete /></IconButton>}
+;<SwipeableCard
+  rightActions={
+    <IconButton onClick={handleDelete}>
+      <Delete />
+    </IconButton>
+  }
 >
   <CardContent>Content</CardContent>
 </SwipeableCard>
@@ -250,13 +266,13 @@ import { SwipeableCard } from "../components/mobile"
 
 ```tsx
 // Before
-<AppBar position="sticky">
+;<AppBar position="sticky">
   <Toolbar>Header</Toolbar>
 </AppBar>
 
 // After
 import { CollapsibleHeader } from "../components/mobile"
-<CollapsibleHeader>
+;<CollapsibleHeader>
   <Toolbar>Header</Toolbar>
 </CollapsibleHeader>
 ```

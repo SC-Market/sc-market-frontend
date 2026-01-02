@@ -2,7 +2,14 @@ import { HeaderTitle } from "../../components/typography/HeaderTitle"
 import React, { useCallback, useEffect, useRef, useState } from "react"
 import { ContractorListItem } from "../../views/contractor/ContractorList"
 import { ContractorSkeleton } from "../../components/skeletons"
-import { Button, Divider, Grid, IconButton, TablePagination, useMediaQuery } from "@mui/material"
+import {
+  Button,
+  Divider,
+  Grid,
+  IconButton,
+  TablePagination,
+  useMediaQuery,
+} from "@mui/material"
 import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import { useGetContractorsQuery } from "../../store/contractor"
 import {
@@ -54,7 +61,11 @@ export function Contractors() {
     sorting: "date-reverse",
     language_codes: undefined,
   })
-  const { data: contractors, isLoading, isFetching } = useGetContractorsQuery({
+  const {
+    data: contractors,
+    isLoading,
+    isFetching,
+  } = useGetContractorsQuery({
     pageSize: perPage,
     index: page,
     ...searchState,

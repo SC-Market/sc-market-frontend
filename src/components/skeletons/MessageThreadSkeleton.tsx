@@ -1,10 +1,4 @@
-import {
-  Box,
-  Avatar,
-  Stack,
-  Paper,
-  Typography,
-} from "@mui/material"
+import { Box, Avatar, Stack, Paper, Typography } from "@mui/material"
 import { BaseSkeleton } from "./BaseSkeleton"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTheme } from "@mui/material/styles"
@@ -67,8 +61,16 @@ export function MessageThreadSkeleton({
                 sx={{ marginRight: 4 }}
               />
             </Stack>
-            <BaseSkeleton variant="text" width={isMobile ? 200 : 300} height={20} />
-            <BaseSkeleton variant="text" width={isMobile ? 180 : 280} height={20} />
+            <BaseSkeleton
+              variant="text"
+              width={isMobile ? 200 : 300}
+              height={20}
+            />
+            <BaseSkeleton
+              variant="text"
+              width={isMobile ? 180 : 280}
+              height={20}
+            />
           </Stack>
         </Stack>
       ))}

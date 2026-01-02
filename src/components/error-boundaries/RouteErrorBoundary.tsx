@@ -3,7 +3,10 @@ import { useLocation } from "react-router-dom"
 import { ErrorBoundary, ErrorBoundaryProps } from "./ErrorBoundary"
 import { ErrorFallback } from "./ErrorFallback"
 
-export interface RouteErrorBoundaryProps extends Omit<ErrorBoundaryProps, "fallback" | "resetOnChange"> {
+export interface RouteErrorBoundaryProps extends Omit<
+  ErrorBoundaryProps,
+  "fallback" | "resetOnChange"
+> {
   /**
    * Children to render
    */
@@ -44,7 +47,11 @@ export function RouteErrorBoundary({
   const handleError = (error: Error, errorInfo: React.ErrorInfo) => {
     // Log route-specific error
     if (import.meta.env.DEV) {
-      console.error(`[RouteErrorBoundary] Error on route ${location.pathname}:`, error, errorInfo)
+      console.error(
+        `[RouteErrorBoundary] Error on route ${location.pathname}:`,
+        error,
+        errorInfo,
+      )
     }
 
     // Call custom error handler
@@ -55,7 +62,11 @@ export function RouteErrorBoundary({
     // TODO: Log to error tracking service with route context
   }
 
-  const defaultFallback = (error: Error, errorInfo: React.ErrorInfo, reset: () => void) => (
+  const defaultFallback = (
+    error: Error,
+    errorInfo: React.ErrorInfo,
+    reset: () => void,
+  ) => (
     <ErrorFallback
       error={error}
       errorInfo={errorInfo}

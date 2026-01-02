@@ -229,7 +229,11 @@ export function ContractListings(props: { user?: string }) {
     setPage(0)
   }
 
-  const { data: contracts, isLoading, isFetching } = useGetPublicContractsQuery()
+  const {
+    data: contracts,
+    isLoading,
+    isFetching,
+  } = useGetPublicContractsQuery()
 
   const filteredListings = useMemo(
     () =>

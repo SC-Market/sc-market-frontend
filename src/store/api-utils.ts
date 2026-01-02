@@ -1,6 +1,6 @@
 /**
  * Shared API Response Utilities
- * 
+ *
  * Utilities for handling API responses that work with both
  * the new standardized format and legacy formats for backward compatibility.
  */
@@ -14,12 +14,12 @@ import type {
 
 /**
  * Unwrap API response, extracting data from success responses
- * 
+ *
  * Supports both new standardized format and legacy formats for backward compatibility.
- * 
+ *
  * @param response - API response (new or legacy format)
  * @returns The data from the response, or the response itself if no data property exists
- * 
+ *
  * @example
  * ```ts
  * const data = unwrapResponse(response) // Returns T from { data: T }
@@ -30,24 +30,24 @@ export function unwrapResponse<T, E = any>(response: Response<T, E>): T {
   if (response && typeof response === "object" && "data" in response) {
     return (response as StandardSuccessResponse<T>).data
   }
-  
+
   // Legacy format: check for data property
   if ((response as any).data) {
     return (response as any).data
   }
-  
+
   // If no data property, return response as-is (might be error or legacy format)
   return response as any
 }
 
 /**
  * Extract error message from API response
- * 
+ *
  * Supports both new standardized error format and legacy formats.
- * 
+ *
  * @param response - API response (error or success)
  * @returns Error message if present, undefined otherwise
- * 
+ *
  * @example
  * ```ts
  * const errorMsg = extractErrorMessage(errorResponse)
@@ -58,10 +58,14 @@ export function unwrapResponse<T, E = any>(response: Response<T, E>): T {
  */
 export function extractErrorMessage(response: any): string | undefined {
   // New standardized format: { error: { code, message, details? } }
-  if (response?.error && typeof response.error === "object" && "message" in response.error) {
+  if (
+    response?.error &&
+    typeof response.error === "object" &&
+    "message" in response.error
+  ) {
     return response.error.message
   }
-  
+
   // Legacy formats
   if (response?.error && typeof response.error === "string") {
     return response.error
@@ -69,18 +73,18 @@ export function extractErrorMessage(response: any): string | undefined {
   if (response?.message) {
     return response.message
   }
-  
+
   return undefined
 }
 
 /**
  * Extract error code from API response
- * 
+ *
  * Only works with new standardized error format.
- * 
+ *
  * @param response - API response (error or success)
  * @returns Error code if present, undefined otherwise
- * 
+ *
  * @example
  * ```ts
  * const errorCode = extractErrorCode(errorResponse)
@@ -91,19 +95,23 @@ export function extractErrorMessage(response: any): string | undefined {
  */
 export function extractErrorCode(response: any): string | undefined {
   // New standardized format
-  if (response?.error && typeof response.error === "object" && "code" in response.error) {
+  if (
+    response?.error &&
+    typeof response.error === "object" &&
+    "code" in response.error
+  ) {
     return response.error.code
   }
-  
+
   return undefined
 }
 
 /**
  * Check if a response is an error response
- * 
+ *
  * @param response - API response
  * @returns True if the response is an error response
- * 
+ *
  * @example
  * ```ts
  * if (isErrorResponse(response)) {
@@ -113,7 +121,7 @@ export function extractErrorCode(response: any): string | undefined {
  * ```
  */
 export function isErrorResponse<T>(
-  response: Response<T>
+  response: Response<T>,
 ): response is StandardErrorResponse {
   return (
     response !== null &&
@@ -127,10 +135,10 @@ export function isErrorResponse<T>(
 
 /**
  * Check if a response is a success response
- * 
+ *
  * @param response - API response
  * @returns True if the response is a success response
- * 
+ *
  * @example
  * ```ts
  * if (isSuccessResponse(response)) {
@@ -140,7 +148,7 @@ export function isErrorResponse<T>(
  * ```
  */
 export function isSuccessResponse<T>(
-  response: Response<T>
+  response: Response<T>,
 ): response is StandardSuccessResponse<T> {
   return (
     response !== null &&

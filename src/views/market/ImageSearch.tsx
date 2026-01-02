@@ -78,38 +78,38 @@ export function ImageSearch(props: {
           return false
         }}
       >
-          <Grid item xs={12} md={3}>
-            <CardMedia
-              component="img"
-              loading="lazy"
-              height={200}
-              image={image || MISSING_IMAGE_URL}
-              alt={image || ""}
-              sx={{
-                borderRadius: (theme) =>
-                  theme.spacing((theme as ExtendedTheme).borderRadius.image),
-                transition: "0.5s",
+        <Grid item xs={12} md={3}>
+          <CardMedia
+            component="img"
+            loading="lazy"
+            height={200}
+            image={image || MISSING_IMAGE_URL}
+            alt={image || ""}
+            sx={{
+              borderRadius: (theme) =>
+                theme.spacing((theme as ExtendedTheme).borderRadius.image),
+              transition: "0.5s",
+            }}
+          />
+        </Grid>
+        <Grid item xs={12} md={9}>
+          <Box sx={{ marginBottom: 2 }}>
+            <TextField
+              variant={"outlined"}
+              label={t("ui.dialog.selectImage.imageUrl.label")}
+              fullWidth
+              focused
+              multiline
+              helperText={t("ui.dialog.selectImage.imageUrl.placeholder")}
+              onChange={(event: React.ChangeEvent<{ value: string }>) => {
+                setImage(event.target.value)
               }}
+              value={image}
+              error={!!image && !image.match(external_resource_regex)}
             />
-          </Grid>
-          <Grid item xs={12} md={9}>
-            <Box sx={{ marginBottom: 2 }}>
-              <TextField
-                variant={"outlined"}
-                label={t("ui.dialog.selectImage.imageUrl.label")}
-                fullWidth
-                focused
-                multiline
-                helperText={t("ui.dialog.selectImage.imageUrl.placeholder")}
-                onChange={(event: React.ChangeEvent<{ value: string }>) => {
-                  setImage(event.target.value)
-                }}
-                value={image}
-                error={!!image && !image.match(external_resource_regex)}
-              />
-            </Box>
-            {/* Wiki image search temporarily disabled */}
-            {/* <Box>
+          </Box>
+          {/* Wiki image search temporarily disabled */}
+          {/* <Box>
               <TextField
                 variant={"outlined"}
                 label={t("ui.dialog.selectImage.imageSearch.label")}
@@ -123,9 +123,9 @@ export function ImageSearch(props: {
                 value={query}
               />
             </Box> */}
-          </Grid>
-          {/* Search results display temporarily disabled */}
-          {/* <Grid item xs={12}>
+        </Grid>
+        {/* Search results display temporarily disabled */}
+        {/* <Grid item xs={12}>
             <Paper
               variant={"outlined"}
               sx={{ border: "2px solid", color: theme.palette.secondary.main }}
@@ -170,33 +170,33 @@ export function ImageSearch(props: {
               </Box>
             </Paper>
           </Grid> */}
-          <Grid item xs={12}>
-            <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-              <Button
-                color={"error"}
-                variant={"contained"}
-                onClick={() => {
-                  setOpen(false)
-                  callback(null)
-                }}
-                sx={{ marginRight: 1 }}
-              >
-                {t("ui.dialog.selectImage.buttons.cancel")}
-              </Button>
-              <Button
-                color={"primary"}
-                variant={"contained"}
-                onClick={() => {
-                  setOpen(false)
-                  callback(image)
-                }}
-              >
-                {t("ui.dialog.selectImage.buttons.saveAndClose")}
-              </Button>
-            </Box>
-          </Grid>
-        </Section>
-      </ContainerGrid>
+        <Grid item xs={12}>
+          <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+            <Button
+              color={"error"}
+              variant={"contained"}
+              onClick={() => {
+                setOpen(false)
+                callback(null)
+              }}
+              sx={{ marginRight: 1 }}
+            >
+              {t("ui.dialog.selectImage.buttons.cancel")}
+            </Button>
+            <Button
+              color={"primary"}
+              variant={"contained"}
+              onClick={() => {
+                setOpen(false)
+                callback(image)
+              }}
+            >
+              {t("ui.dialog.selectImage.buttons.saveAndClose")}
+            </Button>
+          </Box>
+        </Grid>
+      </Section>
+    </ContainerGrid>
   )
 
   // On mobile, use BottomSheet

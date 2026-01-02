@@ -3,8 +3,10 @@ import { SearchOffOutlined } from "@mui/icons-material"
 import { EmptyState, EmptyStateProps } from "./EmptyState"
 import { useTranslation } from "react-i18next"
 
-export interface EmptySearchResultsProps
-  extends Omit<EmptyStateProps, "title" | "icon" | "action"> {
+export interface EmptySearchResultsProps extends Omit<
+  EmptyStateProps,
+  "title" | "icon" | "action"
+> {
   /**
    * The search query that returned no results
    */
@@ -57,7 +59,9 @@ export function EmptySearchResults({
 
   const defaultAction = onClearFilters
     ? {
-        label: t("emptyStates.search.clearFilters", { defaultValue: "Clear Filters" }),
+        label: t("emptyStates.search.clearFilters", {
+          defaultValue: "Clear Filters",
+        }),
         onClick: onClearFilters,
         variant: "outlined" as const,
       }

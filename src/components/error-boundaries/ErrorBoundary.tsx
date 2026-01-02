@@ -9,7 +9,9 @@ export interface ErrorBoundaryProps {
    * Custom fallback UI to display when an error occurs
    * If not provided, uses default ErrorFallback
    */
-  fallback?: ReactNode | ((error: Error, errorInfo: ErrorInfo, reset: () => void) => ReactNode)
+  fallback?:
+    | ReactNode
+    | ((error: Error, errorInfo: ErrorInfo, reset: () => void) => ReactNode)
   /**
    * Callback fired when an error is caught
    * Useful for logging errors to external services
@@ -53,7 +55,10 @@ interface ErrorBoundaryState {
  * </ErrorBoundary>
  * ```
  */
-export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
+export class ErrorBoundary extends Component<
+  ErrorBoundaryProps,
+  ErrorBoundaryState
+> {
   private resetTimeoutId: number | null = null
 
   constructor(props: ErrorBoundaryProps) {
@@ -118,13 +123,18 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
         }
       } else if (typeof resetOnChange === "string") {
         // Reset when specific prop changes
-        if (prevProps[resetOnChange as keyof ErrorBoundaryProps] !== this.props[resetOnChange as keyof ErrorBoundaryProps]) {
+        if (
+          prevProps[resetOnChange as keyof ErrorBoundaryProps] !==
+          this.props[resetOnChange as keyof ErrorBoundaryProps]
+        ) {
           this.resetErrorBoundary()
         }
       } else if (Array.isArray(resetOnChange)) {
         // Reset when any of the specified props change
         const shouldReset = resetOnChange.some(
-          (prop) => prevProps[prop as keyof ErrorBoundaryProps] !== this.props[prop as keyof ErrorBoundaryProps],
+          (prop) =>
+            prevProps[prop as keyof ErrorBoundaryProps] !==
+            this.props[prop as keyof ErrorBoundaryProps],
         )
         if (shouldReset) {
           this.resetErrorBoundary()
@@ -157,7 +167,11 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
 
       if (fallback) {
         if (typeof fallback === "function") {
-          return fallback(this.state.error, this.state.errorInfo!, this.resetErrorBoundary)
+          return fallback(
+            this.state.error,
+            this.state.errorInfo!,
+            this.resetErrorBoundary,
+          )
         }
         return fallback
       }

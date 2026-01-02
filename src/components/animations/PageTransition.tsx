@@ -38,7 +38,7 @@ export function PageTransition({
 
   const getStyles = () => {
     const baseTransition = `opacity ${timeout}ms ease-in-out, transform ${timeout}ms ease-in-out`
-    
+
     switch (variant) {
       case "slide":
         return {

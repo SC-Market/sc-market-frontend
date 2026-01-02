@@ -26,7 +26,14 @@ export function ImagePreviewModal(props: {
   enableZoom?: boolean
   showThumbnails?: boolean
 }) {
-  const { images, open, onClose, index: initialIndex, enableZoom = true, showThumbnails = true } = props
+  const {
+    images,
+    open,
+    onClose,
+    index: initialIndex,
+    enableZoom = true,
+    showThumbnails = true,
+  } = props
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const { t } = useTranslation()
@@ -158,7 +165,10 @@ export function ImagePreviewModal(props: {
                     color: "white",
                     "&:hover": { backgroundColor: "rgba(0, 0, 0, 0.7)" },
                   }}
-                  aria-label={t("accessibility.previousImage", "Previous image")}
+                  aria-label={t(
+                    "accessibility.previousImage",
+                    "Previous image",
+                  )}
                 >
                   <KeyboardArrowLeft />
                 </IconButton>

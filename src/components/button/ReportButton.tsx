@@ -189,9 +189,7 @@ export function ReportButton({
         aria-label={t("accessibility.submitReport", "Submit report")}
         aria-describedby={isSubmitting ? "submitting-status" : undefined}
       >
-        {isSubmitting
-          ? t("ReportButton.submitting")
-          : t("ReportButton.submit")}
+        {isSubmitting ? t("ReportButton.submitting") : t("ReportButton.submit")}
         {isSubmitting && (
           <span id="submitting-status" className="sr-only">
             {t(
@@ -242,7 +240,9 @@ export function ReportButton({
             <ReportIcon color="error" />
           </Box>
           {dialogContent}
-          <Box sx={{ mt: 2, display: "flex", justifyContent: "flex-end", gap: 1 }}>
+          <Box
+            sx={{ mt: 2, display: "flex", justifyContent: "flex-end", gap: 1 }}
+          >
             {dialogActions}
           </Box>
         </BottomSheet>

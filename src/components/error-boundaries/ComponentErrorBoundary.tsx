@@ -2,7 +2,10 @@ import React, { ReactNode } from "react"
 import { ErrorBoundary, ErrorBoundaryProps } from "./ErrorBoundary"
 import { ErrorFallback } from "./ErrorFallback"
 
-export interface ComponentErrorBoundaryProps extends Omit<ErrorBoundaryProps, "fallback"> {
+export interface ComponentErrorBoundaryProps extends Omit<
+  ErrorBoundaryProps,
+  "fallback"
+> {
   /**
    * Children to render
    */
@@ -50,7 +53,11 @@ export function ComponentErrorBoundary({
   const handleError = (error: Error, errorInfo: React.ErrorInfo) => {
     // Log component-specific error
     if (import.meta.env.DEV) {
-      console.error(`[ComponentErrorBoundary${componentName ? `:${componentName}` : ""}] Error:`, error, errorInfo)
+      console.error(
+        `[ComponentErrorBoundary${componentName ? `:${componentName}` : ""}] Error:`,
+        error,
+        errorInfo,
+      )
     }
 
     // Call custom error handler
@@ -61,7 +68,11 @@ export function ComponentErrorBoundary({
     // TODO: Log to error tracking service with component context
   }
 
-  const defaultFallback = (error: Error, errorInfo: React.ErrorInfo, reset: () => void) => (
+  const defaultFallback = (
+    error: Error,
+    errorInfo: React.ErrorInfo,
+    reset: () => void,
+  ) => (
     <ErrorFallback
       error={error}
       errorInfo={errorInfo}
