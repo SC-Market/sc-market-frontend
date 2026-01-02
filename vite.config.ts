@@ -40,10 +40,9 @@ export default defineConfig({
         background_color: "#111828",
         display: "standalone",
         orientation: "portrait-primary",
-        start_url: process.env.VITE_FRONTEND_URL
-          ? `${process.env.VITE_FRONTEND_URL}/`
-          : "https://sc-market.space/",
+        start_url: "/",
         scope: "/",
+        prefer_related_applications: false,
         icons: [
           {
             src: "/android-chrome-192x192.png",
