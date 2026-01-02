@@ -68,7 +68,9 @@ export function VirtualizedGrid<T>(props: VirtualizedGridProps<T>) {
   // On mobile and medium devices (<900px), use document element scroll instead of container scroll for better UX
   const getScrollElement = (): Element | null => {
     if (isBelowMd) {
-      return typeof document !== "undefined" ? (document.documentElement as Element) : null
+      return typeof document !== "undefined"
+        ? (document.documentElement as Element)
+        : null
     }
     return parentRef.current
   }
@@ -113,22 +115,25 @@ export function VirtualizedGrid<T>(props: VirtualizedGridProps<T>) {
           const rowItems = items.slice(startIndex, endIndex)
 
           return (
-              <Box
-                key={virtualRow.key}
-                sx={{
-                  position: "absolute",
-                  top: 0,
-                  left: 0,
-                  width: "100%",
-                  height: `${virtualRow.size}px`,
-                  transform: `translateY(${virtualRow.start}px)`,
-                  display: "grid",
-                  gridTemplateColumns: `repeat(${cols}, 1fr)`,
-                  gap: theme.spacing(gapValue),
-                  paddingX: { xs: theme.spacing(1), sm: theme.spacing(gapValue / 2) },
-                  boxSizing: "border-box",
-                }}
-              >
+            <Box
+              key={virtualRow.key}
+              sx={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: `${virtualRow.size}px`,
+                transform: `translateY(${virtualRow.start}px)`,
+                display: "grid",
+                gridTemplateColumns: `repeat(${cols}, 1fr)`,
+                gap: theme.spacing(gapValue),
+                paddingX: {
+                  xs: theme.spacing(1),
+                  sm: theme.spacing(gapValue / 2),
+                },
+                boxSizing: "border-box",
+              }}
+            >
               {rowItems.map((item, colIndex) => {
                 const index = startIndex + colIndex
                 return (

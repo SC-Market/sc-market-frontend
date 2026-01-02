@@ -13,6 +13,7 @@ import {
   CreateRounded,
   DashboardRounded,
   DesignServicesRounded,
+  ForumRounded,
 } from "@mui/icons-material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useGetUserProfileQuery } from "../../store/profile"
@@ -29,7 +30,7 @@ export function MobileBottomNav() {
   const { t } = useTranslation()
   const { data: userProfile } = useGetUserProfileQuery()
   const isLoggedIn = !!userProfile
-  
+
   // Only show on mobile devices - check this BEFORE hooks to avoid hook order issues
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
 
@@ -44,7 +45,9 @@ export function MobileBottomNav() {
     const path = location.pathname
     if (path.startsWith("/market/services")) return "services"
     if (path.startsWith("/market")) return "market"
-    if (path.startsWith("/orders") && !path.startsWith("/org/orders")) return "orders"
+    if (path.startsWith("/messages")) return "messages"
+    if (path.startsWith("/orders") && !path.startsWith("/org/orders"))
+      return "orders"
     if (path.startsWith("/dashboard")) return "dashboard"
     if (path === "/") return "home"
     return ""
@@ -85,6 +88,13 @@ export function MobileBottomNav() {
         break
       case "services":
         navigate("/market/services")
+        break
+      case "messages":
+        if (isLoggedIn) {
+          navigate("/messages")
+        } else {
+          navigate("/login")
+        }
         break
       case "orders":
         if (isLoggedIn) {
@@ -157,6 +167,14 @@ export function MobileBottomNav() {
             icon={<DesignServicesRounded />}
             data-value="services"
           />
+          {isLoggedIn && (
+            <BottomNavigationAction
+              label={t("sidebar.messaging", "Messages")}
+              value="messages"
+              icon={<ForumRounded />}
+              data-value="messages"
+            />
+          )}
           {isLoggedIn && (
             <BottomNavigationAction
               label={t("sidebar.my_orders", "My Orders")}

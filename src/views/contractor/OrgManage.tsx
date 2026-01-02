@@ -398,7 +398,13 @@ export function OrgDetailEditForm(props: { contractor: Contractor }) {
             // }
           />
           {editingTags ? (
-            <CardContent sx={{ display: "flex", justifyContent: "flex-end", padding: { xs: 1, sm: 1.5 } }}>
+            <CardContent
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end",
+                padding: { xs: 1, sm: 1.5 },
+              }}
+            >
               <Autocomplete
                 fullWidth
                 multiple
@@ -469,7 +475,9 @@ export function OrgDetailEditForm(props: { contractor: Contractor }) {
               </Button>
             </CardContent>
           ) : (
-            <CardActions sx={{ overflow: "scroll", padding: { xs: 1, sm: 1.5 } }}>
+            <CardActions
+              sx={{ overflow: "scroll", padding: { xs: 1, sm: 1.5 } }}
+            >
               {contractor.fields.length ? (
                 contractor?.fields.map((option, index) => (
                   <Chip

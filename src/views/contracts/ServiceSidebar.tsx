@@ -46,10 +46,13 @@ export function ServiceSidebar() {
             left: 0,
           },
           backgroundColor: theme.palette.background.default,
-          transition: theme.transitions.create(["width", "borderRight", "borderColor"], {
-            easing: theme.transitions.easing.easeOut,
-            duration: "0.3s",
-          }),
+          transition: theme.transitions.create(
+            ["width", "borderRight", "borderColor"],
+            {
+              easing: theme.transitions.easing.easeOut,
+              duration: "0.3s",
+            },
+          ),
           borderRight: open ? 1 : 0,
           borderColor: open ? theme.palette.outline.main : "transparent",
         },

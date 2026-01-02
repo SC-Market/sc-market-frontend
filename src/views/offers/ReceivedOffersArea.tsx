@@ -464,7 +464,10 @@ export function OffersViewPaginated(props: {
       <Paper>
         <Stack
           direction={{ xs: "column", sm: "row" }}
-          spacing={{ xs: theme.layoutSpacing.component, sm: theme.layoutSpacing.layout }}
+          spacing={{
+            xs: theme.layoutSpacing.component,
+            sm: theme.layoutSpacing.layout,
+          }}
           sx={{ paddingTop: 2, paddingLeft: 2, paddingRight: 2 }}
           alignItems={{ xs: "stretch", sm: "center" }}
         >
@@ -529,22 +532,22 @@ export function OffersViewPaginated(props: {
                 },
               }}
             >
-            <Tab
-              label={t("OffersViewPaginated.all")}
-              icon={<Chip label={totalCount} size={"small"} />}
-              {...a11yProps(0)}
-              onClick={() => setStatusFilter(null)}
-            />
-            {tabs.map(([id, tag], index) => (
               <Tab
-                key={id}
-                label={tag}
-                icon={<Chip label={totals.get(id) || 0} size={"small"} />}
-                {...a11yProps(index + 1)}
-                onClick={() => setStatusFilter(id)}
+                label={t("OffersViewPaginated.all")}
+                icon={<Chip label={totalCount} size={"small"} />}
+                {...a11yProps(0)}
+                onClick={() => setStatusFilter(null)}
               />
-            ))}
-          </Tabs>
+              {tabs.map(([id, tag], index) => (
+                <Tab
+                  key={id}
+                  label={tag}
+                  icon={<Chip label={totals.get(id) || 0} size={"small"} />}
+                  {...a11yProps(index + 1)}
+                  onClick={() => setStatusFilter(id)}
+                />
+              ))}
+            </Tabs>
           </Box>
           {!mine && selectedOfferIds.length >= 2 && (
             <Button

@@ -73,8 +73,12 @@ export function PushNotificationSettings() {
   const [updatePreference] = useUpdatePushPreferenceMutation()
 
   // Check if current device is subscribed
-  const [currentDeviceSubscribed, setCurrentDeviceSubscribed] = React.useState<boolean | null>(null)
-  const [currentSubscriptionId, setCurrentSubscriptionId] = React.useState<string | null>(null)
+  const [currentDeviceSubscribed, setCurrentDeviceSubscribed] = React.useState<
+    boolean | null
+  >(null)
+  const [currentSubscriptionId, setCurrentSubscriptionId] = React.useState<
+    string | null
+  >(null)
 
   // Check browser support
   const isSupported = isPushNotificationSupported()
@@ -98,7 +102,7 @@ export function PushNotificationSettings() {
 
         // Check if current device's endpoint matches any subscription
         const matchingSubscription = subscriptions.find(
-          (sub) => sub.endpoint === currentSubscription.endpoint
+          (sub) => sub.endpoint === currentSubscription.endpoint,
         )
 
         if (matchingSubscription) {
@@ -186,7 +190,9 @@ export function PushNotificationSettings() {
     try {
       const permission = await requestPushPermission()
       if (permission === "granted") {
-        setSuccess("Permission granted! You can now subscribe to push notifications.")
+        setSuccess(
+          "Permission granted! You can now subscribe to push notifications.",
+        )
       } else {
         setError(
           `Permission ${permission}. Please enable notifications in your browser settings.`,
@@ -194,9 +200,7 @@ export function PushNotificationSettings() {
       }
     } catch (error) {
       setError(
-        error instanceof Error
-          ? error.message
-          : "Failed to request permission",
+        error instanceof Error ? error.message : "Failed to request permission",
       )
     }
   }, [])
@@ -292,9 +296,7 @@ export function PushNotificationSettings() {
           <Typography variant="subtitle2" gutterBottom>
             Installation Required
           </Typography>
-          <Typography variant="body2">
-            {pwaInstallMessage}
-          </Typography>
+          <Typography variant="body2">{pwaInstallMessage}</Typography>
         </Alert>
         <Box sx={{ mt: 2 }}>
           <Typography variant="body2" color="text.secondary">
@@ -326,140 +328,161 @@ export function PushNotificationSettings() {
         )}
 
         {success && (
-          <Alert severity="success" sx={{ mb: 2 }} onClose={() => setSuccess(null)}>
+          <Alert
+            severity="success"
+            sx={{ mb: 2 }}
+            onClose={() => setSuccess(null)}
+          >
             {success}
           </Alert>
         )}
 
         {/* Permission Status */}
         <Box sx={{ mb: 2 }}>
-            <Typography variant="body2" color="text.secondary" gutterBottom>
-              Permission Status:
-            </Typography>
-            <Chip
-              label={
-                permissionStatus === "granted"
-                  ? "Granted"
-                  : permissionStatus === "denied"
-                    ? "Denied"
-                    : "Not Requested"
-              }
-              color={
-                permissionStatus === "granted"
-                  ? "success"
-                  : permissionStatus === "denied"
-                    ? "error"
-                    : "default"
-              }
+          <Typography variant="body2" color="text.secondary" gutterBottom>
+            Permission Status:
+          </Typography>
+          <Chip
+            label={
+              permissionStatus === "granted"
+                ? "Granted"
+                : permissionStatus === "denied"
+                  ? "Denied"
+                  : "Not Requested"
+            }
+            color={
+              permissionStatus === "granted"
+                ? "success"
+                : permissionStatus === "denied"
+                  ? "error"
+                  : "default"
+            }
+            size="small"
+            sx={{ mr: 1 }}
+          />
+          {!isPermissionGranted && !isPermissionDenied && (
+            <Button
               size="small"
-              sx={{ mr: 1 }}
-            />
-            {!isPermissionGranted && !isPermissionDenied && (
-              <Button
-                size="small"
-                variant="outlined"
-                onClick={handleRequestPermission}
-              >
-                Request Permission
-              </Button>
-            )}
-            {isPermissionDenied && (
-              <Typography variant="caption" color="error" display="block" sx={{ mt: 1 }}>
-                Please enable notifications in your browser settings to use push
-                notifications.
-              </Typography>
-            )}
-          </Box>
+              variant="outlined"
+              onClick={handleRequestPermission}
+            >
+              Request Permission
+            </Button>
+          )}
+          {isPermissionDenied && (
+            <Typography
+              variant="caption"
+              color="error"
+              display="block"
+              sx={{ mt: 1 }}
+            >
+              Please enable notifications in your browser settings to use push
+              notifications.
+            </Typography>
+          )}
+        </Box>
 
-          {/* Subscription Toggle */}
-          <Box sx={{ mb: 2 }}>
-            {subscriptionsLoading || currentDeviceSubscribed === null ? (
-              <CircularProgress size={24} />
-            ) : isCurrentDeviceSubscribed ? (
-              <Box>
-                <Typography variant="body2" color="success.main" gutterBottom>
-                  <NotificationsActiveIcon sx={{ verticalAlign: "middle", mr: 1 }} />
-                  Push notifications are enabled on this device
-                  {hasSubscriptions && subscriptions.length > 1 && (
-                    <> ({subscriptions.length} total device{subscriptions.length !== 1 ? "s" : ""})</>
-                  )}
-                </Typography>
-                {currentSubscriptionId && (
-                  <Button
-                    variant="outlined"
-                    color="error"
-                    size="small"
-                    onClick={() => handleUnsubscribe(currentSubscriptionId)}
-                    sx={{ mt: 1 }}
-                  >
-                    Disable on This Device
-                  </Button>
+        {/* Subscription Toggle */}
+        <Box sx={{ mb: 2 }}>
+          {subscriptionsLoading || currentDeviceSubscribed === null ? (
+            <CircularProgress size={24} />
+          ) : isCurrentDeviceSubscribed ? (
+            <Box>
+              <Typography variant="body2" color="success.main" gutterBottom>
+                <NotificationsActiveIcon
+                  sx={{ verticalAlign: "middle", mr: 1 }}
+                />
+                Push notifications are enabled on this device
+                {hasSubscriptions && subscriptions.length > 1 && (
+                  <>
+                    {" "}
+                    ({subscriptions.length} total device
+                    {subscriptions.length !== 1 ? "s" : ""})
+                  </>
                 )}
-              </Box>
-            ) : (
-              <Box>
-                <Typography variant="body2" color="text.secondary" gutterBottom>
-                  <NotificationsOffIcon sx={{ verticalAlign: "middle", mr: 1 }} />
-                  Push notifications are not enabled on this device
-                  {hasSubscriptions && (
-                    <> ({subscriptions.length} other device{subscriptions.length !== 1 ? "s" : ""} connected)</>
-                  )}
-                </Typography>
+              </Typography>
+              {currentSubscriptionId && (
                 <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleSubscribe}
-                  disabled={
-                    isSubscribing ||
-                    !isPermissionGranted ||
-                    !isConfigured ||
-                    requiresPWAInstall
-                  }
+                  variant="outlined"
+                  color="error"
+                  size="small"
+                  onClick={() => handleUnsubscribe(currentSubscriptionId)}
                   sx={{ mt: 1 }}
                 >
-                  {isSubscribing ? (
-                    <>
-                      <CircularProgress size={16} sx={{ mr: 1 }} />
-                      Subscribing...
-                    </>
-                  ) : (
-                    "Enable Push Notifications"
-                  )}
+                  Disable on This Device
                 </Button>
-              </Box>
-            )}
-          </Box>
-
-          {/* Device List */}
-          {hasSubscriptions && (
-            <Box sx={{ mt: 2 }}>
-              <Typography variant="subtitle2" gutterBottom>
-                Connected Devices:
+              )}
+            </Box>
+          ) : (
+            <Box>
+              <Typography variant="body2" color="text.secondary" gutterBottom>
+                <NotificationsOffIcon sx={{ verticalAlign: "middle", mr: 1 }} />
+                Push notifications are not enabled on this device
+                {hasSubscriptions && (
+                  <>
+                    {" "}
+                    ({subscriptions.length} other device
+                    {subscriptions.length !== 1 ? "s" : ""} connected)
+                  </>
+                )}
               </Typography>
-              <List dense>
-                {subscriptions.map((subscription) => (
-                  <ListItem key={subscription.subscription_id}>
-                    <ListItemText
-                      primary={subscription.user_agent || "Unknown Device"}
-                      secondary={`Subscribed ${new Date(
-                        subscription.created_at,
-                      ).toLocaleDateString()}`}
-                    />
-                    <ListItemSecondaryAction>
-                      <IconButton
-                        edge="end"
-                        aria-label="delete"
-                        onClick={() => handleUnsubscribe(subscription.subscription_id)}
-                        size="small"
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </ListItemSecondaryAction>
-                  </ListItem>
-                ))}
-              </List>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleSubscribe}
+                disabled={
+                  isSubscribing ||
+                  !isPermissionGranted ||
+                  !isConfigured ||
+                  requiresPWAInstall
+                }
+                sx={{ mt: 1 }}
+              >
+                {isSubscribing ? (
+                  <>
+                    <CircularProgress size={16} sx={{ mr: 1 }} />
+                    Subscribing...
+                  </>
+                ) : (
+                  "Enable Push Notifications"
+                )}
+              </Button>
             </Box>
           )}
+        </Box>
+
+        {/* Device List */}
+        {hasSubscriptions && (
+          <Box sx={{ mt: 2 }}>
+            <Typography variant="subtitle2" gutterBottom>
+              Connected Devices:
+            </Typography>
+            <List dense>
+              {subscriptions.map((subscription) => (
+                <ListItem key={subscription.subscription_id}>
+                  <ListItemText
+                    primary={subscription.user_agent || "Unknown Device"}
+                    secondary={`Subscribed ${new Date(
+                      subscription.created_at,
+                    ).toLocaleDateString()}`}
+                  />
+                  <ListItemSecondaryAction>
+                    <IconButton
+                      edge="end"
+                      aria-label="delete"
+                      onClick={() =>
+                        handleUnsubscribe(subscription.subscription_id)
+                      }
+                      size="small"
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+                </ListItem>
+              ))}
+            </List>
+          </Box>
+        )}
       </Grid>
 
       {/* Preferences Section */}
@@ -533,7 +556,7 @@ function formatActionName(action: string): string {
     order_review_revision_requested: "Review Revision Requested",
     order_contractor_applied: "Contractor Applied to Order",
     public_order_create: "New Public Order",
-    
+
     // Market notifications
     market_item_bid: "Market Item Bids",
     market_item_offer: "Market Item Offers",
@@ -541,23 +564,26 @@ function formatActionName(action: string): string {
     market_bid_declined: "Market Bid Declined",
     market_offer_accepted: "Market Offer Accepted",
     market_offer_declined: "Market Offer Declined",
-    
+
     // Offer notifications
     offer_create: "New Offers",
     offer_message: "Offer Messages",
     counter_offer_create: "Counter Offers",
-    
+
     // Contractor notifications
     contractor_invite: "Contractor Invitations",
-    
+
     // Admin notifications
     admin_alert: "Admin Alerts",
   }
-  
-  return actionLabels[action] || action
-    .split("_")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(" ")
-    .replace(/([A-Z])/g, " $1")
-    .trim()
+
+  return (
+    actionLabels[action] ||
+    action
+      .split("_")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ")
+      .replace(/([A-Z])/g, " $1")
+      .trim()
+  )
 }

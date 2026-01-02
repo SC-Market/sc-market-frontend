@@ -430,10 +430,13 @@ export function Sidebar() {
           display: "flex",
           flexDirection: "column",
 
-          transition: theme.transitions.create(["width", "borderRight", "borderColor"], {
-            easing: theme.transitions.easing.easeOut,
-            duration: "0.3s",
-          }),
+          transition: theme.transitions.create(
+            ["width", "borderRight", "borderColor"],
+            {
+              easing: theme.transitions.easing.easeOut,
+              duration: "0.3s",
+            },
+          ),
         },
         position: "relative",
         whiteSpace: "nowrap",

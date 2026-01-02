@@ -50,9 +50,13 @@ export const pushNotificationApi = serviceApi.injectEndpoints({
         url: `${baseUrl}/subscribe`,
         method: "GET",
       }),
-      transformResponse: (response: { data: { subscriptions: PushSubscription[] } }) => {
+      transformResponse: (response: {
+        data: { subscriptions: PushSubscription[] }
+      }) => {
         // Backend returns { data: { subscriptions: [...] } }
-        const unwrapped = unwrapResponse(response) as { subscriptions: PushSubscription[] }
+        const unwrapped = unwrapResponse(response) as {
+          subscriptions: PushSubscription[]
+        }
         return unwrapped.subscriptions
       },
       providesTags: ["PushSubscriptions" as const],
@@ -84,17 +88,18 @@ export const pushNotificationApi = serviceApi.injectEndpoints({
     }),
 
     // Get push notification preferences
-    getPushPreferences: builder.query<
-      { preferences: PushPreference[] },
-      void
-    >({
+    getPushPreferences: builder.query<{ preferences: PushPreference[] }, void>({
       query: () => ({
         url: `${baseUrl}/preferences`,
         method: "GET",
       }),
-      transformResponse: (response: { data: { preferences: PushPreference[] } }) => {
+      transformResponse: (response: {
+        data: { preferences: PushPreference[] }
+      }) => {
         // Backend returns { data: { preferences: [...] } }
-        const unwrapped = unwrapResponse(response) as { preferences: PushPreference[] }
+        const unwrapped = unwrapResponse(response) as {
+          preferences: PushPreference[]
+        }
         return unwrapped
       },
       providesTags: ["PushPreferences" as const],

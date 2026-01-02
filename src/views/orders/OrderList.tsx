@@ -243,13 +243,20 @@ export function OrderRow(props: {
         }}
       >
         <Stack
-          spacing={{ xs: theme.layoutSpacing.compact / 2, sm: theme.layoutSpacing.compact }}
+          spacing={{
+            xs: theme.layoutSpacing.compact / 2,
+            sm: theme.layoutSpacing.compact,
+          }}
           direction={"row"}
           justifyContent={{ xs: "flex-start", sm: "flex-end" }}
           alignItems={"center"}
         >
           <Avatar
-            sx={{ width: { xs: 28, sm: 40 }, height: { xs: 28, sm: 40 }, flexShrink: 0 }}
+            sx={{
+              width: { xs: 28, sm: 40 },
+              height: { xs: 28, sm: 40 },
+              flexShrink: 0,
+            }}
             src={
               (row.mine
                 ? row.contractor?.avatar || row.assigned_to?.avatar
@@ -474,7 +481,10 @@ export function OrdersViewPaginated(props: {
       <Paper>
         <Stack
           direction={{ xs: "column", sm: "row" }}
-          spacing={{ xs: theme.layoutSpacing.component, sm: theme.layoutSpacing.layout }}
+          spacing={{
+            xs: theme.layoutSpacing.component,
+            sm: theme.layoutSpacing.layout,
+          }}
           sx={{ paddingTop: 2, paddingLeft: 2, paddingRight: 2 }}
           alignItems={{ xs: "stretch", sm: "center" }}
         >
@@ -495,7 +505,7 @@ export function OrdersViewPaginated(props: {
             startIcon={<Search />}
             endIcon={filtersOpen ? <ExpandLess /> : <ExpandMore />}
             onClick={() => setFiltersOpen(!filtersOpen)}
-            sx={{ 
+            sx={{
               ml: { xs: 0, sm: 2 },
               alignSelf: { xs: "flex-start", sm: "center" },
               flexShrink: 0,
@@ -539,16 +549,16 @@ export function OrdersViewPaginated(props: {
                 },
               }}
             >
-            {tabs.map(([id, tag], index) => (
-              <Tab
-                key={id}
-                label={tag}
-                icon={<Chip label={totalCounts[id] || 0} size={"small"} />}
-                {...a11yProps(index)}
-                onClick={() => setStatusFilter(id)}
-              />
-            ))}
-          </Tabs>
+              {tabs.map(([id, tag], index) => (
+                <Tab
+                  key={id}
+                  label={tag}
+                  icon={<Chip label={totalCounts[id] || 0} size={"small"} />}
+                  {...a11yProps(index)}
+                  onClick={() => setStatusFilter(id)}
+                />
+              ))}
+            </Tabs>
           </Box>
         </Stack>
 

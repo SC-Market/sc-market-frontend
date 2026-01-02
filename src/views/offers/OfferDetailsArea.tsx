@@ -200,7 +200,10 @@ export function OfferDetailsArea(props: { session: OfferSession }) {
           overflowY: "visible",
         }}
       >
-        <Table aria-label={t("offers.details_table")} sx={{ tableLayout: "auto" }}>
+        <Table
+          aria-label={t("offers.details_table")}
+          sx={{ tableLayout: "auto" }}
+        >
           <TableBody>
             <TableRow
               sx={{
@@ -302,9 +305,20 @@ export function OfferDetailsArea(props: { session: OfferSession }) {
               <TableCell component="th" scope="row">
                 {t("OfferDetailsArea.title")}
               </TableCell>
-              <TableCell align="right" sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}>
+              <TableCell
+                align="right"
+                sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}
+              >
                 <Stack direction="row" justifyContent={"right"}>
-                  <Typography color={"text.secondary"} variant={"subtitle2"} sx={{ wordBreak: "break-word", overflowWrap: "break-word", textAlign: "right" }}>
+                  <Typography
+                    color={"text.secondary"}
+                    variant={"subtitle2"}
+                    sx={{
+                      wordBreak: "break-word",
+                      overflowWrap: "break-word",
+                      textAlign: "right",
+                    }}
+                  >
                     {session.offers[0].title}
                   </Typography>
                 </Stack>
@@ -316,9 +330,20 @@ export function OfferDetailsArea(props: { session: OfferSession }) {
               <TableCell component="th" scope="row">
                 {t("OfferDetailsArea.kind")}
               </TableCell>
-              <TableCell align="right" sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}>
+              <TableCell
+                align="right"
+                sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}
+              >
                 <Stack direction="row" justifyContent={"right"}>
-                  <Typography color={"text.secondary"} variant={"subtitle2"} sx={{ wordBreak: "break-word", overflowWrap: "break-word", textAlign: "right" }}>
+                  <Typography
+                    color={"text.secondary"}
+                    variant={"subtitle2"}
+                    sx={{
+                      wordBreak: "break-word",
+                      overflowWrap: "break-word",
+                      textAlign: "right",
+                    }}
+                  >
                     {session.offers[0].kind}
                   </Typography>
                 </Stack>
@@ -330,10 +355,17 @@ export function OfferDetailsArea(props: { session: OfferSession }) {
               {/*<TableCell component="th" scope="row">*/}
               {/*  Description*/}
               {/*</TableCell>*/}
-              <TableCell colSpan={2} sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}>
+              <TableCell
+                colSpan={2}
+                sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}
+              >
                 <Stack direction="column" spacing={theme.layoutSpacing.compact}>
                   {t("OfferDetailsArea.details")}
-                  <Typography color={"text.secondary"} variant={"subtitle2"} sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}>
+                  <Typography
+                    color={"text.secondary"}
+                    variant={"subtitle2"}
+                    sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}
+                  >
                     <MarkdownRender text={session.offers[0].description} />
                   </Typography>
                 </Stack>
@@ -345,15 +377,29 @@ export function OfferDetailsArea(props: { session: OfferSession }) {
               <TableCell component="th" scope="row">
                 {t("OfferDetailsArea.offer")}
               </TableCell>
-              <TableCell align="right" sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}>
+              <TableCell
+                align="right"
+                sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}
+              >
                 <Stack direction="row" justifyContent={"right"}>
-                  <Typography color={"text.secondary"} variant={"subtitle2"} sx={{ wordBreak: "break-word", overflowWrap: "break-word", textAlign: "right" }}>
+                  <Typography
+                    color={"text.secondary"}
+                    variant={"subtitle2"}
+                    sx={{
+                      wordBreak: "break-word",
+                      overflowWrap: "break-word",
+                      textAlign: "right",
+                    }}
+                  >
                     {(+session.offers[0].cost).toLocaleString(undefined)}{" "}
                     <Typography
                       color={"text.primary"}
                       variant={"subtitle2"}
                       display={"inline"}
-                      sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}
+                      sx={{
+                        wordBreak: "break-word",
+                        overflowWrap: "break-word",
+                      }}
                     >
                       aUEC{" "}
                       {t(
@@ -416,7 +462,10 @@ export function OfferDetailsArea(props: { session: OfferSession }) {
                 <TableCell component="th" scope="row">
                   {t("OfferDetailsArea.acceptOrDecline")}
                 </TableCell>
-                <TableCell align="right" sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}>
+                <TableCell
+                  align="right"
+                  sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}
+                >
                   <Stack
                     direction={{ xs: "column", sm: "row" }}
                     justifyContent={{ xs: "stretch", sm: "right" }}
@@ -432,9 +481,12 @@ export function OfferDetailsArea(props: { session: OfferSession }) {
                     >
                       {t("OfferDetailsArea.accept")}
                     </LoadingButton>
-                    <Link to={`/offer/${session.id}/counteroffer`} style={{ width: isMobile ? "100%" : "auto" }}>
-                      <LoadingButton 
-                        color={"warning"} 
+                    <Link
+                      to={`/offer/${session.id}/counteroffer`}
+                      style={{ width: isMobile ? "100%" : "auto" }}
+                    >
+                      <LoadingButton
+                        color={"warning"}
                         variant={"contained"}
                         fullWidth={isMobile}
                         sx={{ width: isMobile ? "100%" : "auto" }}
@@ -462,7 +514,10 @@ export function OfferDetailsArea(props: { session: OfferSession }) {
                 <TableCell component="th" scope="row">
                   {t("OfferDetailsArea.cancelOrder")}
                 </TableCell>
-                <TableCell align="right" sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}>
+                <TableCell
+                  align="right"
+                  sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}
+                >
                   <Stack
                     direction={{ xs: "column", sm: "row" }}
                     justifyContent={{ xs: "stretch", sm: "right" }}

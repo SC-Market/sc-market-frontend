@@ -5,11 +5,14 @@ import {
   Toolbar,
   Tooltip,
   Typography,
+  useMediaQuery,
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import React from "react"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
+import { useLocation } from "react-router-dom"
+import { messagingDrawerWidth } from "../../views/messaging/MessagingSidebar"
 import { NotificationsButton } from "./NotificationsButton"
 import { MenuRounded } from "@mui/icons-material"
 import { ProfileNavAvatar } from "../../views/people/ProfileNavAvatar"
@@ -21,9 +24,18 @@ import { Link as RouterLink } from "react-router-dom"
 export function Navbar(props: { children?: React.ReactNode }) {
   const theme: ExtendedTheme = useTheme()
   const profile = useGetUserProfileQuery()
+  const location = useLocation()
+  const isMessagingPage = location.pathname.startsWith("/messages")
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
 
   const [drawerOpen, setDrawerOpen] = useDrawerOpen()
   const { t } = useTranslation()
+
+  // Calculate total sidebar width (main sidebar + messaging sidebar if on messaging page)
+  // On desktop, messaging sidebar is always open (unless collapsed), so account for it
+  const totalSidebarWidth = drawerOpen ? sidebarDrawerWidth : 0
+  const messagingSidebarWidth =
+    isMessagingPage && !isMobile ? messagingDrawerWidth : 0
 
   return (
     <AppBar
@@ -38,11 +50,6 @@ export function Navbar(props: { children?: React.ReactNode }) {
           : theme.zIndex.drawer - 1,
         // marginLeft: (drawerOpen ? sidebarDrawerWidth : 0),
         // width: `calc(100% - ${(drawerOpen ? sidebarDrawerWidth : 1) - 1}px)`,
-
-        [theme.breakpoints.up("sm")]: {
-          marginLeft: drawerOpen ? sidebarDrawerWidth : 0,
-          width: `calc(100% - ${(drawerOpen ? sidebarDrawerWidth : 1) - 1}px)`,
-        },
         [theme.breakpoints.down("sm")]: {
           width: drawerOpen ? 0 : "100%",
         },
@@ -86,7 +93,7 @@ export function Navbar(props: { children?: React.ReactNode }) {
               }),
         }}
       >
-        {!drawerOpen && (
+        {!drawerOpen && !isMessagingPage && (
           <Tooltip title={t("navbar.toggle_drawer")}>
             <IconButton
               color={"secondary"}

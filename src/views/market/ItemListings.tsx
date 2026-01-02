@@ -1280,7 +1280,13 @@ export function DisplayListingsMin(props: {
   disableAds?: boolean
   useVirtualization?: boolean
 }) {
-  const { listings, loading, startIndex = 0, disableAds = false, useVirtualization = true } = props
+  const {
+    listings,
+    loading,
+    startIndex = 0,
+    disableAds = false,
+    useVirtualization = true,
+  } = props
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
 
@@ -1298,16 +1304,15 @@ export function DisplayListingsMin(props: {
   }, [listings, loading, startIndex, disableAds])
 
   // Use virtualization for large lists (50+ items) or on mobile
-  const shouldVirtualize = useVirtualization && (listingsWithAds.length > 50 || isMobile)
+  const shouldVirtualize =
+    useVirtualization && (listingsWithAds.length > 50 || isMobile)
 
   if (loading) {
     return (
       <React.Fragment>
-        {new Array(16)
-          .fill(undefined)
-          .map((o, i) => (
-            <ListingSkeleton index={i} key={i} />
-          ))}
+        {new Array(16).fill(undefined).map((o, i) => (
+          <ListingSkeleton index={i} key={i} />
+        ))}
       </React.Fragment>
     )
   }
@@ -1334,19 +1339,47 @@ export function DisplayListingsMin(props: {
               // The grid handles layout, so we don't need Grid item wrapper
               if (isListing(item)) {
                 if (item.listing_type === "unique") {
-                  return <ItemListingBase listing={item as ExtendedUniqueSearchResult} index={index} key={key} />
+                  return (
+                    <ItemListingBase
+                      listing={item as ExtendedUniqueSearchResult}
+                      index={index}
+                      key={key}
+                    />
+                  )
                 } else if (item.listing_type === "aggregate") {
-                  return <AggregateListingBase aggregate={item as ExtendedAggregateSearchResult} index={index} key={key} />
+                  return (
+                    <AggregateListingBase
+                      aggregate={item as ExtendedAggregateSearchResult}
+                      index={index}
+                      key={key}
+                    />
+                  )
                 } else if (item.listing_type === "multiple") {
-                  return <MultipleListingBase multiple={item as ExtendedMultipleSearchResult} index={index} key={key} />
+                  return (
+                    <MultipleListingBase
+                      multiple={item as ExtendedMultipleSearchResult}
+                      index={index}
+                      key={key}
+                    />
+                  )
                 }
               }
               // Ad card - render same as listings, no special handling
-              return <AdCard ad={item as any} index={index} key={key} noGridWrapper={true} />
+              return (
+                <AdCard
+                  ad={item as any}
+                  index={index}
+                  key={key}
+                  noGridWrapper={true}
+                />
+              )
             }}
             itemHeight={400}
             columns={{ xs: 2, sm: 2, md: 3, lg: 4 }}
-            gap={{ xs: theme.layoutSpacing.component, sm: theme.layoutSpacing.layout }}
+            gap={{
+              xs: theme.layoutSpacing.component,
+              sm: theme.layoutSpacing.layout,
+            }}
             overscan={3}
           />
         </Box>
@@ -1359,9 +1392,7 @@ export function DisplayListingsMin(props: {
     <React.Fragment>
       {listingsWithAds.map((item, index) => {
         // Generate unique key for each item (listing or ad)
-        const key = isListing(item)
-          ? item.listing_id
-          : `ad-${item.id}-${index}`
+        const key = isListing(item) ? item.listing_id : `ad-${item.id}-${index}`
         return <Listing listing={item} index={index} key={key} />
       })}
     </React.Fragment>

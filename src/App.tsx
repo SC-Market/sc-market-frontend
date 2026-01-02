@@ -177,6 +177,25 @@ const router = createBrowserRouter([
         }),
       },
       {
+        path: "/messages",
+        element: <LoggedInRoute />,
+        children: [
+          {
+            index: true,
+            lazy: async () => ({
+              Component: (await import("./pages/messaging/MessagesList"))
+                .MessagesList,
+            }),
+          },
+          {
+            path: ":chat_id",
+            lazy: async () => ({
+              Component: (await import("./pages/messaging/Messages")).Messages,
+            }),
+          },
+        ],
+      },
+      {
         path: "/contracts/public/:contract_id",
         lazy: async () => ({
           Component: (await import("./pages/contracting/ViewPublicContract"))

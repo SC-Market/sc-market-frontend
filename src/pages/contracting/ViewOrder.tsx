@@ -233,7 +233,7 @@ export function ViewOrder() {
         {/* Calculate tab indices */}
         {(() => {
           if (!order) return null
-          
+
           let tabIndex = 0
           const detailsTab = tabIndex++
           const messagesTab = isAssigned ? tabIndex++ : -1
@@ -244,12 +244,12 @@ export function ViewOrder() {
               ? tabIndex++
               : -1
           const reviewsTab =
-            ((order && amCustomer && !order.customer_review) ||
-              (order &&
-                (amContractorManager || amAssigned) &&
-                !order.contractor_review) ||
-              order?.customer_review ||
-              order?.contractor_review)
+            (order && amCustomer && !order.customer_review) ||
+            (order &&
+              (amContractorManager || amAssigned) &&
+              !order.contractor_review) ||
+            order?.customer_review ||
+            order?.contractor_review
               ? tabIndex++
               : -1
           const availabilityTab = amRelated ? tabIndex++ : -1

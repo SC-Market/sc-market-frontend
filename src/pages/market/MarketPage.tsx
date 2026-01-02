@@ -98,8 +98,12 @@ export function MarketPage() {
 
   return (
     <Page title={t("market.market")} dontUseDefaultCanonUrl={true}>
-      <MarketSidebarContext.Provider value={[marketSidebarOpen, setMarketSidebarOpen]}>
-        <ServiceSidebarContext.Provider value={[serviceSidebarOpen, setServiceSidebarOpen]}>
+      <MarketSidebarContext.Provider
+        value={[marketSidebarOpen, setMarketSidebarOpen]}
+      >
+        <ServiceSidebarContext.Provider
+          value={[serviceSidebarOpen, setServiceSidebarOpen]}
+        >
           <OpenLayout sidebarOpen={true} noMobilePadding={true}>
             <Container
               maxWidth={"lg"}
@@ -110,7 +114,10 @@ export function MarketPage() {
             >
               <Grid
                 container
-                spacing={{ xs: theme.layoutSpacing.component, sm: theme.layoutSpacing.layout }}
+                spacing={{
+                  xs: theme.layoutSpacing.component,
+                  sm: theme.layoutSpacing.layout,
+                }}
                 sx={{ marginBottom: { xs: 2, sm: 4 } }}
                 alignItems="center"
                 justifyContent="space-between"
@@ -164,64 +171,64 @@ export function MarketPage() {
                     </Typography>
                   </Box>
                 </Grid>
-            {/* Tabs - full width on mobile, auto on large */}
-            <Grid item xs={12} sm="auto">
-              <Tabs
-                value={tabPage}
-                aria-label={t("ui.aria.orgInfoArea")}
-                variant="scrollable"
-                scrollButtons="auto"
-                textColor="secondary"
-                indicatorColor="secondary"
-                sx={{
-                  minHeight: { xs: 48, sm: 64 },
-                  "& .MuiTab-root": {
-                    minHeight: { xs: 48, sm: 64 },
-                    fontSize: { xs: "0.875rem", sm: "1rem" },
-                    padding: { xs: "12px 16px", sm: "12px 24px" },
-                  },
-                }}
-              >
-                <Tab
-                  label={t("market.itemsTab")}
-                  value={1}
-                  component={Link}
-                  {...a11yProps(0)}
-                  to={"/market"}
-                />
-                <Tab
-                  label={t("market.servicesTab")}
-                  value={0}
-                  component={Link}
-                  {...a11yProps(1)}
-                  to={"/market/services"}
-                />
-              </Tabs>
-            </Grid>
-            {/* Action buttons - full width on mobile, auto on large */}
-            <Grid item xs={12} sm="auto">
-              {tabPage === 1 ? (
-                <MarketActions />
-              ) : (
-                <Suspense fallback={<CircularProgress size={24} />}>
-                  <ServiceActions />
-                </Suspense>
-              )}
-            </Grid>
-          </Grid>
-        </Container>
+                {/* Tabs - full width on mobile, auto on large */}
+                <Grid item xs={12} sm="auto">
+                  <Tabs
+                    value={tabPage}
+                    aria-label={t("ui.aria.orgInfoArea")}
+                    variant="scrollable"
+                    scrollButtons="auto"
+                    textColor="secondary"
+                    indicatorColor="secondary"
+                    sx={{
+                      minHeight: { xs: 48, sm: 64 },
+                      "& .MuiTab-root": {
+                        minHeight: { xs: 48, sm: 64 },
+                        fontSize: { xs: "0.875rem", sm: "1rem" },
+                        padding: { xs: "12px 16px", sm: "12px 24px" },
+                      },
+                    }}
+                  >
+                    <Tab
+                      label={t("market.itemsTab")}
+                      value={1}
+                      component={Link}
+                      {...a11yProps(0)}
+                      to={"/market"}
+                    />
+                    <Tab
+                      label={t("market.servicesTab")}
+                      value={0}
+                      component={Link}
+                      {...a11yProps(1)}
+                      to={"/market/services"}
+                    />
+                  </Tabs>
+                </Grid>
+                {/* Action buttons - full width on mobile, auto on large */}
+                <Grid item xs={12} sm="auto">
+                  {tabPage === 1 ? (
+                    <MarketActions />
+                  ) : (
+                    <Suspense fallback={<CircularProgress size={24} />}>
+                      <ServiceActions />
+                    </Suspense>
+                  )}
+                </Grid>
+              </Grid>
+            </Container>
 
-        <TabPanel value={tabPage} index={1}>
-          <Suspense fallback={<MarketTabLoader />}>
-            <ItemMarketView />
-          </Suspense>
-        </TabPanel>
-        <TabPanel value={tabPage} index={0}>
-          <Suspense fallback={<MarketTabLoader />}>
-            <ServiceMarketView />
-          </Suspense>
-        </TabPanel>
-      </OpenLayout>
+            <TabPanel value={tabPage} index={1}>
+              <Suspense fallback={<MarketTabLoader />}>
+                <ItemMarketView />
+              </Suspense>
+            </TabPanel>
+            <TabPanel value={tabPage} index={0}>
+              <Suspense fallback={<MarketTabLoader />}>
+                <ServiceMarketView />
+              </Suspense>
+            </TabPanel>
+          </OpenLayout>
         </ServiceSidebarContext.Provider>
       </MarketSidebarContext.Provider>
     </Page>

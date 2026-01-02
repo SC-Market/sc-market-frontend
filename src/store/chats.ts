@@ -46,6 +46,7 @@ export const chatsApi = serviceApi.injectEndpoints({
         body,
       }),
       transformResponse: unwrapResponse,
+      invalidatesTags: ["Chat" as const],
     }),
     getMyChats: builder.query<Chat[], void>({
       query: () => `/api/chats`,

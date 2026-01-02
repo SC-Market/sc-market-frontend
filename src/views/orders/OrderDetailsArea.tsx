@@ -221,7 +221,10 @@ export function OrderDetailsArea(props: { order: Order }) {
           overflowY: "visible",
         }}
       >
-        <Table aria-label={t("orderDetailsArea.details_table")} sx={{ tableLayout: "auto" }}>
+        <Table
+          aria-label={t("orderDetailsArea.details_table")}
+          sx={{ tableLayout: "auto" }}
+        >
           <TableBody>
             <TableRow
               sx={{
@@ -295,9 +298,20 @@ export function OrderDetailsArea(props: { order: Order }) {
               <TableCell component="th" scope="row">
                 {t("orderDetailsArea.title")}
               </TableCell>
-              <TableCell align="right" sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}>
+              <TableCell
+                align="right"
+                sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}
+              >
                 <Stack direction="row" justifyContent={"right"}>
-                  <Typography color={"text.secondary"} variant={"subtitle2"} sx={{ wordBreak: "break-word", overflowWrap: "break-word", textAlign: "right" }}>
+                  <Typography
+                    color={"text.secondary"}
+                    variant={"subtitle2"}
+                    sx={{
+                      wordBreak: "break-word",
+                      overflowWrap: "break-word",
+                      textAlign: "right",
+                    }}
+                  >
                     {order.title}
                   </Typography>
                 </Stack>
@@ -309,9 +323,20 @@ export function OrderDetailsArea(props: { order: Order }) {
               <TableCell component="th" scope="row">
                 {t("orderDetailsArea.kind")}
               </TableCell>
-              <TableCell align="right" sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}>
+              <TableCell
+                align="right"
+                sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}
+              >
                 <Stack direction="row" justifyContent={"right"}>
-                  <Typography color={"text.secondary"} variant={"subtitle2"} sx={{ wordBreak: "break-word", overflowWrap: "break-word", textAlign: "right" }}>
+                  <Typography
+                    color={"text.secondary"}
+                    variant={"subtitle2"}
+                    sx={{
+                      wordBreak: "break-word",
+                      overflowWrap: "break-word",
+                      textAlign: "right",
+                    }}
+                  >
                     {order.kind}
                   </Typography>
                 </Stack>
@@ -323,10 +348,17 @@ export function OrderDetailsArea(props: { order: Order }) {
               {/*<TableCell component="th" scope="row">*/}
               {/*  Description*/}
               {/*</TableCell>*/}
-              <TableCell colSpan={2} sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}>
+              <TableCell
+                colSpan={2}
+                sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}
+              >
                 <Stack direction="column" spacing={theme.layoutSpacing.compact}>
                   {t("orderDetailsArea.details")}
-                  <Typography color={"text.secondary"} variant={"subtitle2"} sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}>
+                  <Typography
+                    color={"text.secondary"}
+                    variant={"subtitle2"}
+                    sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}
+                  >
                     <MarkdownRender text={order.description} />
                   </Typography>
                 </Stack>
@@ -339,15 +371,29 @@ export function OrderDetailsArea(props: { order: Order }) {
               <TableCell component="th" scope="row">
                 {t("orderDetailsArea.order")}
               </TableCell>
-              <TableCell align="right" sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}>
+              <TableCell
+                align="right"
+                sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}
+              >
                 <Stack direction="row" justifyContent={"right"}>
-                  <Typography color={"text.secondary"} variant={"subtitle2"} sx={{ wordBreak: "break-word", overflowWrap: "break-word", textAlign: "right" }}>
+                  <Typography
+                    color={"text.secondary"}
+                    variant={"subtitle2"}
+                    sx={{
+                      wordBreak: "break-word",
+                      overflowWrap: "break-word",
+                      textAlign: "right",
+                    }}
+                  >
                     {(+order.cost).toLocaleString(undefined)}{" "}
                     <Typography
                       color={"text.primary"}
                       variant={"subtitle2"}
                       display={"inline"}
-                      sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}
+                      sx={{
+                        wordBreak: "break-word",
+                        overflowWrap: "break-word",
+                      }}
                     >
                       aUEC {t(PAYMENT_TYPE_MAP.get(order.payment_type) || "")}
                     </Typography>
@@ -405,7 +451,10 @@ export function OrderDetailsArea(props: { order: Order }) {
               <TableCell component="th" scope="row">
                 {t("orderDetailsArea.update_status")}
               </TableCell>
-              <TableCell align="right" sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}>
+              <TableCell
+                align="right"
+                sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}
+              >
                 <Stack
                   direction={{ xs: "column", sm: "row" }}
                   justifyContent={{ xs: "stretch", sm: "right" }}
@@ -436,9 +485,13 @@ export function OrderDetailsArea(props: { order: Order }) {
                   )}
                   {(profile?.role === "admin" ||
                     amContractorManager ||
-                    amAssigned) && (
-                    isMobile ? (
-                      <Stack direction="column" spacing={theme.layoutSpacing.compact} sx={{ width: "100%" }}>
+                    amAssigned) &&
+                    (isMobile ? (
+                      <Stack
+                        direction="column"
+                        spacing={theme.layoutSpacing.compact}
+                        sx={{ width: "100%" }}
+                      >
                         {(profile?.role === "admin" ||
                           order.status === "not-started" ||
                           order.status === "in-progress") && (
@@ -536,8 +589,7 @@ export function OrderDetailsArea(props: { order: Order }) {
                           </LoadingButton>
                         )}
                       </ButtonGroup>
-                    )
-                  )}
+                    ))}
                 </Stack>
               </TableCell>
             </TableRow>

@@ -143,7 +143,7 @@ export function ViewOfferPage() {
         {/* Calculate tab indices dynamically */}
         {(() => {
           if (!session) return null
-          
+
           let tabIndex = 0
           const detailsTab = tabIndex++
           const messagesTab = tabIndex++

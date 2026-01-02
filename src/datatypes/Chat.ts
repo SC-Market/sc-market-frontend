@@ -1,8 +1,23 @@
 export interface Chat {
   chat_id: string
-  participants: { username: string; avatar: string }[]
+  participants: (UserParticipant | ContractorParticipant)[]
   messages: Message[]
   order_id: string | null
+  session_id?: string | null
+  title?: string | null
+}
+
+export interface UserParticipant {
+  type: "user"
+  username: string
+  avatar: string
+}
+
+export interface ContractorParticipant {
+  type: "contractor"
+  name: string
+  avatar: string
+  spectrum_id: string
 }
 
 export interface Message {

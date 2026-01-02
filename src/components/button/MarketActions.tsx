@@ -73,10 +73,7 @@ export function MarketActions() {
             variant={"contained"}
             size={isMobile ? "medium" : "large"}
             fullWidth={isMobile}
-            title={t(
-              "marketActions.myCartTooltip",
-              "View your shopping cart",
-            )}
+            title={t("marketActions.myCartTooltip", "View your shopping cart")}
             aria-label={t(
               "accessibility.viewShoppingCart",
               "View your shopping cart",

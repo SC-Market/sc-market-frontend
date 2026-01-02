@@ -39,7 +39,13 @@ export function AdCard(props: AdCardProps) {
       <a
         href={ad.linkUrl}
         onClick={handleClick}
-        style={{ textDecoration: "none", color: "inherit", display: "block", width: "100%", height: "100%" }}
+        style={{
+          textDecoration: "none",
+          color: "inherit",
+          display: "block",
+          width: "100%",
+          height: "100%",
+        }}
       >
         <Paper
           elevation={3}

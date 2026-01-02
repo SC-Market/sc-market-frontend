@@ -1,9 +1,4 @@
-import {
-  Container,
-  Grid,
-  Paper,
-  useMediaQuery,
-} from "@mui/material"
+import { Container, Grid, Paper, useMediaQuery } from "@mui/material"
 import { ServiceSidebar } from "../contracts/ServiceSidebar"
 import { ServiceListings } from "../contracts/ServiceListings"
 import { useServiceSidebar } from "../../hooks/contract/ServiceSidebar"
@@ -27,7 +22,12 @@ export function ServiceMarketView() {
           justifyContent={"center"}
         >
           {/* Hide search area on mobile - it's in the sidebar */}
-          <Grid item xs={0} md={3} sx={{ display: { xs: "none", md: "block" } }}>
+          <Grid
+            item
+            xs={0}
+            md={3}
+            sx={{ display: { xs: "none", md: "block" } }}
+          >
             <Paper>
               <ServiceSearchArea />
             </Paper>
