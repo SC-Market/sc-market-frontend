@@ -8,24 +8,27 @@ import {
   Stack,
   Avatar,
   Box,
+  Skeleton,
 } from "@mui/material"
 import { BaseSkeleton } from "./BaseSkeleton"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTheme } from "@mui/material/styles"
 
-export interface OrderDetailSkeletonProps {
-  showContractor?: boolean
+export interface OfferDetailSkeletonProps {
+  showContract?: boolean
   showAssigned?: boolean
+  showContractLink?: boolean
 }
 
 /**
- * Skeleton component for order detail table
- * Matches the layout of OrderDetailsArea table
+ * Skeleton component for offer detail table
+ * Matches the layout of OfferDetailsArea table
  */
-export function OrderDetailSkeleton({
-  showContractor = false,
+export function OfferDetailSkeleton({
+  showContract = false,
   showAssigned = false,
-}: OrderDetailSkeletonProps) {
+  showContractLink = false,
+}: OfferDetailSkeletonProps) {
   const theme = useTheme<ExtendedTheme>()
 
   return (
@@ -50,78 +53,93 @@ export function OrderDetailSkeleton({
             </TableCell>
             <TableCell align="right">
               <Stack direction="row" justifyContent="right">
-                <Stack
-                  direction="row"
-                  spacing={theme.layoutSpacing.compact}
-                  alignItems="center"
-                >
-                  <Avatar>
-                    <BaseSkeleton variant="circular" width="100%" height="100%" />
-                  </Avatar>
-                  <Stack direction="column" justifyContent="left">
-                    <BaseSkeleton variant="text" width={100} height={20} />
-                    <BaseSkeleton variant="text" width={80} height={16} />
+                <Stack direction="column" spacing={0.5}>
+                  <Stack
+                    direction="row"
+                    spacing={theme.layoutSpacing.compact}
+                    alignItems="center"
+                  >
+                    <Avatar>
+                      <BaseSkeleton variant="circular" width="100%" height="100%" />
+                    </Avatar>
+                    <Stack direction="column" justifyContent="left">
+                      <BaseSkeleton variant="text" width={100} height={20} />
+                      <BaseSkeleton variant="text" width={80} height={16} />
+                    </Stack>
+                  </Stack>
+                  <Stack direction="row" spacing={0.5} alignItems="center">
+                    <BaseSkeleton variant="circular" width={16} height={16} />
+                    <BaseSkeleton variant="text" width={60} height={16} />
                   </Stack>
                 </Stack>
               </Stack>
             </TableCell>
           </TableRow>
 
-          {/* Contractor row (conditional) */}
-          {showContractor && (
+          {/* Associated contract row (conditional) */}
+          {showContractLink && (
             <TableRow
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                <BaseSkeleton variant="text" width={100} height={20} />
+                <BaseSkeleton variant="text" width={150} height={20} />
               </TableCell>
               <TableCell align="right">
                 <Stack direction="row" justifyContent="right">
-                  <Stack
-                    direction="row"
-                    spacing={theme.layoutSpacing.compact}
-                    alignItems="center"
-                  >
-                    <Avatar>
-                      <BaseSkeleton variant="circular" width="100%" height="100%" />
-                    </Avatar>
-                    <Stack direction="column" justifyContent="left">
-                      <BaseSkeleton variant="text" width={100} height={20} />
-                      <BaseSkeleton variant="text" width={80} height={16} />
-                    </Stack>
-                  </Stack>
+                  <BaseSkeleton variant="text" width={200} height={20} />
                 </Stack>
               </TableCell>
             </TableRow>
           )}
 
-          {/* Assigned row (conditional) */}
-          {showAssigned && (
-            <TableRow
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                <BaseSkeleton variant="text" width={100} height={20} />
-              </TableCell>
-              <TableCell align="right">
-                <Stack direction="row" justifyContent="right">
-                  <Stack
-                    direction="row"
-                    spacing={theme.layoutSpacing.compact}
-                    alignItems="center"
-                  >
-                    <Avatar>
-                      <BaseSkeleton variant="circular" width="100%" height="100%" />
-                    </Avatar>
-                    <Stack direction="column" justifyContent="left">
-                      <BaseSkeleton variant="text" width={100} height={20} />
-                      <BaseSkeleton variant="text" width={80} height={16} />
+          {/* Seller row */}
+          <TableRow
+            sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+          >
+            <TableCell component="th" scope="row">
+              <BaseSkeleton variant="text" width={80} height={20} />
+            </TableCell>
+            <TableCell align="right">
+              <Stack direction="row" justifyContent="right">
+                <Stack direction="column" spacing={0.5}>
+                  {showAssigned && (
+                    <Stack
+                      direction="row"
+                      spacing={theme.layoutSpacing.compact}
+                      alignItems="center"
+                    >
+                      <Avatar>
+                        <BaseSkeleton variant="circular" width="100%" height="100%" />
+                      </Avatar>
+                      <Stack direction="column" justifyContent="left">
+                        <BaseSkeleton variant="text" width={100} height={20} />
+                        <BaseSkeleton variant="text" width={80} height={16} />
+                      </Stack>
                     </Stack>
+                  )}
+                  {showContract && (
+                    <Stack
+                      direction="row"
+                      spacing={theme.layoutSpacing.compact}
+                      alignItems="center"
+                    >
+                      <Avatar>
+                        <BaseSkeleton variant="circular" width="100%" height="100%" />
+                      </Avatar>
+                      <Stack direction="column" justifyContent="left">
+                        <BaseSkeleton variant="text" width={100} height={20} />
+                        <BaseSkeleton variant="text" width={80} height={16} />
+                      </Stack>
+                    </Stack>
+                  )}
+                  <Stack direction="row" spacing={0.5} alignItems="center">
+                    <BaseSkeleton variant="circular" width={16} height={16} />
+                    <BaseSkeleton variant="text" width={60} height={16} />
                   </Stack>
                 </Stack>
-              </TableCell>
-            </TableRow>
-          )}
+              </Stack>
+            </TableCell>
+          </TableRow>
 
           {/* Date row */}
           <TableRow
@@ -145,7 +163,7 @@ export function OrderDetailSkeleton({
             <TableCell align="right">
               <BaseSkeleton
                 variant="rectangular"
-                width={100}
+                width={120}
                 height={32}
                 sx={{ borderRadius: 1 }}
               />
@@ -190,7 +208,7 @@ export function OrderDetailSkeleton({
             </TableCell>
           </TableRow>
 
-          {/* Cost row */}
+          {/* Offer cost row */}
           <TableRow
             sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
           >

@@ -48,7 +48,7 @@ export function ViewOrder() {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const [activeTab, setActiveTab] = useState(0)
 
-  const { data: order, error } = useGetOrderByIdQuery(id!)
+  const { data: order, error, isLoading, isFetching } = useGetOrderByIdQuery(id!)
   const { data: profile } = useGetUserProfileQuery()
   const [currentOrg] = useCurrentOrg()
 
@@ -260,7 +260,7 @@ export function ViewOrder() {
               {/* Details Tab */}
               {(isMobile ? activeTab === detailsTab : true) && (
                 <>
-                  {order ? (
+                  {!(isLoading || isFetching) && order ? (
                     <OrderDetailsArea order={order} />
                   ) : (
                     <Grid item xs={12} lg={8} md={6}>
@@ -273,7 +273,7 @@ export function ViewOrder() {
               {/* Messages Tab - Desktop always shows if assigned, mobile only when tab is selected */}
               {(isMobile ? activeTab === messagesTab : isAssigned) && (
                 <>
-                  {order ? (
+                  {!(isLoading || isFetching) && order ? (
                     isAssigned ? (
                       <OrderMessagesArea order={order} />
                     ) : null
@@ -288,7 +288,7 @@ export function ViewOrder() {
               {/* Service Tab */}
               {session?.offers[0]?.service &&
                 (isMobile ? activeTab === serviceTab : true) &&
-                (session ? (
+                (!(isLoading || isFetching) && session ? (
                   <OfferServiceArea offer={session} />
                 ) : (
                   <Grid item xs={12} lg={4}>
@@ -300,7 +300,7 @@ export function ViewOrder() {
               {session?.offers[0]?.market_listings &&
                 session.offers[0].market_listings.length > 0 &&
                 (isMobile ? activeTab === marketListingsTab : true) &&
-                (session ? (
+                (!(isLoading || isFetching) && session ? (
                   <OfferMarketListings offer={session} />
                 ) : (
                   <Grid item xs={12} lg={4}>

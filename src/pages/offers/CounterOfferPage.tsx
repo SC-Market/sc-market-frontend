@@ -14,6 +14,7 @@ import {
   Skeleton,
   Typography,
 } from "@mui/material"
+import { OfferDetailSkeleton } from "../../components/skeletons"
 import { OfferDetailsEditArea } from "../../views/offers/OfferDetailsEditArea"
 import { CounterOfferSubmitArea } from "../../views/offers/CounterOfferSubmitArea"
 import { CounterOfferDetailsContext } from "../../hooks/offer/CounterOfferDetails"
@@ -28,7 +29,7 @@ import { ErrorPage } from "../errors/ErrorPage"
 
 export function CounterOfferPage() {
   const { id } = useParams<{ id: string }>()
-  const { data: session, error } = useGetOfferSessionByIDQuery(id!)
+  const { data: session, error, isLoading, isFetching } = useGetOfferSessionByIDQuery(id!)
   const { t } = useTranslation()
 
   const [counterOffer, setCounterOffer] = useState<CounterOfferBody>({
@@ -104,15 +105,19 @@ export function CounterOfferPage() {
           {shouldRedirectTo404(error) ? <Navigate to={"/404"} /> : null}
           {shouldShowErrorPage(error) ? <ErrorPage /> : null}
 
-          {session ? (
+          {!(isLoading || isFetching) && session ? (
             <OfferDetailsEditArea session={session} />
           ) : (
             <Grid item xs={12} lg={8} md={6}>
-              <Skeleton width={"100%"} height={400} />
+              <OfferDetailSkeleton
+                showContract={!!session?.contractor}
+                showAssigned={!!session?.assigned_to}
+                showContractLink={!!session?.contract_id}
+              />
             </Grid>
           )}
 
-          {session ? (
+          {!(isLoading || isFetching) && session ? (
             <OfferServiceEditArea offer={session} />
           ) : (
             <Grid item xs={12} lg={4}>
@@ -120,7 +125,7 @@ export function CounterOfferPage() {
             </Grid>
           )}
 
-          {session ? (
+          {!(isLoading || isFetching) && session ? (
             <OfferMarketListingsEditArea offer={session} />
           ) : (
             <Grid item xs={12} lg={8}>
@@ -128,7 +133,7 @@ export function CounterOfferPage() {
             </Grid>
           )}
 
-          {session && <CounterOfferSubmitArea session={session} />}
+          {!(isLoading || isFetching) && session && <CounterOfferSubmitArea session={session} />}
         </ContainerGrid>
       </CounterOfferDetailsContext.Provider>
     </Page>

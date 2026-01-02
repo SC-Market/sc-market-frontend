@@ -58,6 +58,12 @@ export function CreateNewContractor() {
       })
 
       if (res?.data && !res?.error) {
+        issueAlert({
+          message: t("contractorCreate.success", {
+            defaultValue: "Contractor created successfully",
+          }),
+          severity: "success",
+        })
         navigate(`/contractor/~${contractorIdentifier}`)
       } else {
         issueAlert({

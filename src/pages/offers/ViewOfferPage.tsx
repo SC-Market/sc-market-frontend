@@ -19,6 +19,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material"
+import { OfferDetailSkeleton } from "../../components/skeletons"
 import { OfferMarketListings } from "../../views/offers/OfferMarketListings"
 import { OfferServiceArea } from "../../views/offers/OfferServiceArea"
 import { OrderAvailabilityArea } from "../../views/orders/OrderAvailabilityArea"
@@ -35,7 +36,7 @@ import {
 
 export function ViewOfferPage() {
   const { id } = useParams<{ id: string }>()
-  const { data: session, error } = useGetOfferSessionByIDQuery(id!)
+  const { data: session, error, isLoading, isFetching } = useGetOfferSessionByIDQuery(id!)
   const { t } = useTranslation()
   const navigate = useNavigate()
   const theme = useTheme()
@@ -130,11 +131,15 @@ export function ViewOfferPage() {
         {/* Details Tab */}
         {(isMobile ? activeTab === 0 : true) && (
           <>
-            {session ? (
+            {!(isLoading || isFetching) && session ? (
               <OfferDetailsArea session={session} />
             ) : (
               <Grid item xs={12} lg={8} md={6}>
-                <Skeleton width={"100%"} height={400} />
+                <OfferDetailSkeleton
+                  showContract={!!session?.contractor}
+                  showAssigned={!!session?.assigned_to}
+                  showContractLink={!!session?.contract_id}
+                />
               </Grid>
             )}
           </>
@@ -142,7 +147,7 @@ export function ViewOfferPage() {
 
         {/* Calculate tab indices dynamically */}
         {(() => {
-          if (!session) return null
+          if (isLoading || isFetching || !session) return null
 
           let tabIndex = 0
           const detailsTab = tabIndex++

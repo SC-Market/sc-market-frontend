@@ -23,14 +23,17 @@ export function CounterOfferSubmitArea(props: { session: OfferSession }) {
   const counterOfferCallback = useCallback(() => {
     counterOffer(body)
       .unwrap()
-      .then((result) => navigate(`/offer/${session.id}`))
-      .catch((err) =>
+      .then((result) => {
         issueAlert({
-          message: err.message,
-          severity: "error",
-        }),
-      )
-  }, [counterOffer, body, navigate, session.id, issueAlert])
+          message: t("CounterOfferSubmitArea.counterOfferSubmitted", {
+            defaultValue: "Counter offer submitted successfully",
+          }),
+          severity: "success",
+        })
+        navigate(`/offer/${session.id}`)
+      })
+      .catch(issueAlert)
+  }, [counterOffer, body, navigate, session.id, issueAlert, t])
 
   return (
     <Grid item xs={12}>
