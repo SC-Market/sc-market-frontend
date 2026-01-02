@@ -310,6 +310,7 @@
     "wiki": "Wiki",
     "donate": "Donate",
     "github": "Github",
+    "apiDocs": "API Docs",
     "privacyPolicy": "Privacy Policy",
     "termsOfService": "Terms of Service",
     "copyright": "Copyright © ",
@@ -317,6 +318,13 @@
     "unofficial": "This is an unofficial Star Citizen fansite, not affiliated with the Cloud Imperium group of companies. All content on this site not authored by its host or users are property of their respective owners",
     "acknowledgments": "Special thanks to <ladyFleurLink>LadyFleur</ladyFleurLink> for the logo, and <starCitizenApiLink>StarCitizen-API</starCitizenApiLink>, <nexdLink>NEXD</nexdLink>, and <starCitizenWikiLink>Star Citizen Wiki</starCitizenWikiLink> for their APIs.",
     "referralCode": "Referral Code: {{code}}"
+  },
+  "search": {
+    "languageFilter": {
+      "label": "Filter by Languages",
+      "helperText": "Show results from sellers who support any of these languages",
+      "placeholder": "Select languages..."
+    }
   },
   "listing": {
     "99_9PercentRating25PlusTransactions": "99.9%+ rating and 25+ transactions",

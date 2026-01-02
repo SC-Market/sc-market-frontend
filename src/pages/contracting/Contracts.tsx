@@ -9,10 +9,8 @@ import {
   ContractSearchState,
 } from "../../hooks/contract/ContractSearch"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
-import CloseIcon from "@mui/icons-material/CloseRounded"
-import MenuIcon from "@mui/icons-material/MenuRounded"
 import FilterListIcon from "@mui/icons-material/FilterList"
-import { Button, Grid, IconButton, useMediaQuery } from "@mui/material"
+import { Button, Grid, Box, useMediaQuery } from "@mui/material"
 import { Page } from "../../components/metadata/Page"
 import { Link } from "react-router-dom"
 import { CreateRounded } from "@mui/icons-material"
@@ -33,33 +31,6 @@ export function Contracts() {
         value={useState<ContractSearchState>({ query: "", sort: "date-old" })}
       >
         <ContractSidebarContext.Provider value={[open, setOpen]}>
-          {isMobile ? (
-            <Button
-              variant="outlined"
-              color="secondary"
-              startIcon={<FilterListIcon />}
-              aria-label={t("contracts.toggleSidebar")}
-              onClick={() => {
-                setOpen(true)
-              }}
-              sx={{
-                position: "fixed",
-                bottom: { xs: 80, sm: 24 },
-                right: 24,
-                zIndex: theme.zIndex.speedDial,
-                borderRadius: 2,
-                textTransform: "none",
-                boxShadow: theme.shadows[4],
-                backgroundColor: theme.palette.background.paper,
-                "&:hover": {
-                  backgroundColor: theme.palette.background.paper,
-                  boxShadow: theme.shadows[8],
-                },
-              }}
-            >
-              {t("contracts.filters", "Filters")}
-            </Button>
-          ) : null}
           <ContractSidebar />
           <ContainerGrid maxWidth={"lg"} sidebarOpen={true}>
             <Grid item xs={12}>
@@ -69,21 +40,33 @@ export function Contracts() {
                 alignItems={"center"}
                 spacing={theme.layoutSpacing.layout}
               >
-                <Grid item sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                  {!isMobile && (
-                    <IconButton
-                      color="secondary"
-                      aria-label={t("contracts.toggleSidebar")}
-                      onClick={() => {
-                        setOpen(true)
-                      }}
-                    >
-                      {open ? <CloseIcon /> : <MenuIcon />}
-                    </IconButton>
-                  )}
-                  <HeaderTitle lg={8} xl={8}>
-                    {t("contracts.activeContracts")}
-                  </HeaderTitle>
+                <Grid item xs={12} sm="auto">
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                    {/* Filter button - always show on mobile */}
+                    {isMobile && (
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        startIcon={<FilterListIcon />}
+                        aria-label={t("contracts.toggleSidebar")}
+                        onClick={() => {
+                          setOpen(!open)
+                        }}
+                        sx={{
+                          [theme.breakpoints.up("md")]: {
+                            display: "none",
+                          },
+                          borderRadius: 2,
+                          textTransform: "none",
+                        }}
+                      >
+                        {t("contracts.filters", "Filters")}
+                      </Button>
+                    )}
+                    <HeaderTitle lg={8} xl={8}>
+                      {t("contracts.activeContracts")}
+                    </HeaderTitle>
+                  </Box>
                 </Grid>
 
                 <Grid item>
