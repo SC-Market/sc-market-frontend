@@ -14,6 +14,8 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { CurrentChatIDContext } from "../../hooks/messaging/CurrentChatID"
 import { messagingDrawerWidth } from "../../views/messaging/MessagingSidebar"
 import { MessageThreadSkeleton } from "../../components/skeletons"
+import { EmptyMessages } from "../../components/empty-states"
+import { useTranslation } from "react-i18next"
 
 export function Messages() {
   const { chat_id } = useParams<{ chat_id: string }>()
@@ -21,6 +23,7 @@ export function Messages() {
   const [drawerOpen] = useDrawerOpen()
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const { t } = useTranslation()
 
   // On desktop, always show sidebar (unless collapsed). On mobile, hide sidebar when viewing chat
   const [messageSidebarOpen, setMessageSidebar] = useState(!isMobile)
@@ -112,30 +115,24 @@ export function Messages() {
                 ) : currentChat ? (
                   <MessagesBody />
                 ) : (
-                  <Box
-                    sx={{
-                      flexGrow: 1,
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      color: "text.secondary",
-                    }}
-                  >
-                    Select a chat to start messaging
-                  </Box>
+                  <EmptyMessages
+                    isChatList={false}
+                    showCreateAction={false}
+                    title={t("emptyStates.messages.selectChat", {
+                      defaultValue: "Select a chat to start messaging",
+                    })}
+                    description={undefined}
+                  />
                 )
               ) : (
-                <Box
-                  sx={{
-                    flexGrow: 1,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    color: "text.secondary",
-                  }}
-                >
-                  Select a chat to start messaging
-                </Box>
+                <EmptyMessages
+                  isChatList={false}
+                  showCreateAction={false}
+                  title={t("emptyStates.messages.selectChat", {
+                    defaultValue: "Select a chat to start messaging",
+                  })}
+                  description={undefined}
+                />
               )}
             </main>
           </MessageGroupCreateContext.Provider>

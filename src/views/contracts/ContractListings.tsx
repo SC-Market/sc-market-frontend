@@ -31,6 +31,7 @@ import { PAYMENT_TYPE_MAP } from "../../util/constants"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { ServiceListingSkeleton } from "../../components/skeletons"
+import { EmptyContracts } from "../../components/empty-states"
 
 export function ContractListing(props: {
   contract: PublicContract
@@ -282,6 +283,19 @@ export function ContractListings(props: { user?: string }) {
           <ServiceListingSkeleton key={i} index={i} />
         ))}
       </>
+    )
+  }
+
+  // Show empty state if no contracts
+  if ((filteredListings || []).length === 0) {
+    return (
+      <Grid item xs={12}>
+        <EmptyContracts
+          isPublic={!user}
+          showCreateAction={!user}
+          sx={{ py: 4 }}
+        />
+      </Grid>
     )
   }
 
