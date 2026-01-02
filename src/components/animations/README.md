@@ -2,10 +2,71 @@
 
 Reusable components and hooks for smooth animations and visual enhancements.
 
+## What's New vs Material-UI
+
+### Material-UI Provides (Already Available)
+- **`Fade`**, **`Grow`**, **`Slide`** - Transition components from `@mui/material`
+- **`Skeleton`** - Loading placeholders
+- **CSS transitions** - Built into Material-UI components via `sx` prop
+- **Grid system** - Layout system (Grid container → Grid items)
+
+### New Custom Components (What We Built)
+- **`AnimatedListItem`** - Grid-compatible wrapper for staggered list animations
+- **`PageTransition`** - Custom page transition component
+- **`ParallaxContainer`** - Performance-conscious parallax effect
+- **`ImageZoomPan`** - Image zoom/pan functionality
+- **`AnimatedButton`** - Button with micro-interactions
+- **`useMicroInteractions`** - Hook for press feedback
+
+## Existing Patterns in Codebase
+
+The codebase already uses Material-UI's `Fade` component for staggered animations:
+
+```tsx
+// Existing pattern (from ItemListings.tsx, ListingSkeleton):
+<Grid item xs={12} md={6}>
+  <Fade
+    in={true}
+    style={{
+      transitionDelay: `${50 + 50 * index}ms`,
+      transitionDuration: "500ms",
+    }}
+  >
+    <Skeleton variant="rectangular" height={400} />
+  </Fade>
+</Grid>
+```
+
+**Important**: Material-UI Grid containers require direct Grid item children. Wrapping Grid items breaks the layout.
+
 ## Components
 
+### AnimatedListItem
+**NEW** - Grid-compatible wrapper for staggered animations. Works with existing Grid item structure.
+
+```tsx
+import { AnimatedListItem } from "../../components/animations"
+
+// Usage: Wrap components that DON'T already have animations
+{items.map((item, index) => (
+  <AnimatedListItem key={item.id} index={index} in={!loading}>
+    <Grid item xs={12} md={6}>
+      <YourComponent item={item} />
+    </Grid>
+  </AnimatedListItem>
+))}
+```
+
+**How it works:**
+- Detects if child is a Grid item (or component returning Grid item)
+- Applies animation styles directly via `sx` prop (no wrapper elements)
+- Preserves Grid layout structure
+- Uses CSS transitions (not Material-UI transitions) for Grid compatibility
+
+**Important**: Only use for components that DON'T already have animations. Many listing components (like `ItemListingBase`, `AggregateListingBase`) already use Material-UI's `Fade` component internally, so wrapping them with `AnimatedListItem` would create duplicate animations.
+
 ### PageTransition
-Smooth fade/slide transitions between routes.
+**NEW** - Custom page transition component (CSS-only, React 19 compatible).
 
 ```tsx
 import { PageTransition } from "../../components/animations"
@@ -20,21 +81,8 @@ import { PageTransition } from "../../components/animations"
 - `slide` - Slide in from right
 - `slideUp` - Slide up from bottom
 
-### AnimatedListItem
-Staggered fade-in animations for list items.
-
-```tsx
-import { AnimatedListItem } from "../../components/animations"
-
-{items.map((item, index) => (
-  <AnimatedListItem key={item.id} index={index} in={true}>
-    <YourListItemComponent item={item} />
-  </AnimatedListItem>
-))}
-```
-
 ### ParallaxContainer
-Performance-conscious parallax effect (disabled on mobile).
+**NEW** - Performance-conscious parallax effect (disabled on mobile).
 
 ```tsx
 import { ParallaxContainer } from "../../components/animations"
@@ -49,7 +97,7 @@ import { ParallaxContainer } from "../../components/animations"
 - `disabled` - Disable parallax effect
 
 ### ImageZoomPan
-Zoom and pan functionality for product images.
+**NEW** - Zoom and pan functionality for product images.
 
 ```tsx
 import { ImageZoomPan } from "../../components/animations"
@@ -69,7 +117,7 @@ import { ImageZoomPan } from "../../components/animations"
 - Zoom controls (zoom in/out/reset)
 
 ### AnimatedButton
-Button with micro-interaction feedback.
+**NEW** - Button with micro-interaction feedback.
 
 ```tsx
 import { AnimatedButton } from "../../components/animations"
@@ -82,7 +130,7 @@ import { AnimatedButton } from "../../components/animations"
 ## Hooks
 
 ### useMicroInteractions
-Provides button press feedback and hover effects.
+**NEW** - Provides button press feedback and hover effects.
 
 ```tsx
 import { useMicroInteractions } from "../../hooks/animations"
@@ -105,6 +153,34 @@ function MyButton() {
   )
 }
 ```
+
+## Grid Layout Requirements
+
+**CRITICAL**: Material-UI Grid containers require direct Grid item children. Wrapping Grid items breaks layouts.
+
+### Existing Pattern (Material-UI Fade)
+```tsx
+// ✅ Works: Fade inside Grid item
+<Grid item xs={12} md={6}>
+  <Fade in={true} style={{ transitionDelay: `${50 * index}ms` }}>
+    <Card>Content</Card>
+  </Fade>
+</Grid>
+```
+
+### New Pattern (AnimatedListItem)
+```tsx
+// ✅ Works: AnimatedListItem applies styles directly to Grid item
+<AnimatedListItem index={index} in={true}>
+  <ItemListing listing={item} index={index} /> {/* Returns Grid item */}
+</AnimatedListItem>
+```
+
+**How AnimatedListItem works:**
+- Detects Grid items (or components returning Grid items)
+- Clones element with animation styles in `sx` prop
+- Preserves Grid structure (no wrapper elements)
+- Falls back to div wrapper only for non-Grid children
 
 ## Enhanced Components
 

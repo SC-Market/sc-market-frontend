@@ -1228,6 +1228,8 @@ export function DisplayListings(props: {
             const key = isListing(item)
               ? item.listing_id
               : `ad-${item.id}-${index}`
+            // Note: Listing components (ItemListingBase, AggregateListingBase, MultipleListingBase)
+            // already have Material-UI Fade animations built in, so no need for AnimatedListItem wrapper
             return <Listing listing={item} index={index} key={key} />
           })}
 
@@ -1393,6 +1395,7 @@ export function DisplayListingsMin(props: {
       {listingsWithAds.map((item, index) => {
         // Generate unique key for each item (listing or ad)
         const key = isListing(item) ? item.listing_id : `ad-${item.id}-${index}`
+        // Note: Listing components already have Material-UI Fade animations built in
         return <Listing listing={item} index={index} key={key} />
       })}
     </React.Fragment>
