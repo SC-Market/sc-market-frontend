@@ -177,7 +177,7 @@ export function MobileBottomNav() {
           )}
           {isLoggedIn && (
             <BottomNavigationAction
-              label={t("sidebar.my_orders", "My Orders")}
+              label={t("sidebar.orders.text", "Orders")}
               value="orders"
               icon={<CreateRounded />}
               data-value="orders"
