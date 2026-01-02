@@ -21,12 +21,16 @@ import {
 import { store } from "./store/store"
 import { notificationApi } from "./store/notification"
 import { usePeriodicBackgroundSync } from "./hooks/pwa/usePeriodicBackgroundSync"
+import { useWebVitals } from "./hooks/performance/useWebVitals"
 
 import "./util/i18n.ts"
 
 function App() {
   const { registerPeriodicSync, isSupported: periodicSyncSupported } =
     usePeriodicBackgroundSync()
+  
+  // Track Core Web Vitals
+  useWebVitals()
 
   useEffect(() => {
     // Start background prefetching after the app loads
