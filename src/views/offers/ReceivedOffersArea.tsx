@@ -8,7 +8,13 @@ import {
   ControlledTable,
   HeadCell,
 } from "../../components/table/PaginatedTable"
-import React, { MouseEventHandler, useMemo, useState, useEffect } from "react"
+import React, {
+  MouseEventHandler,
+  useMemo,
+  useState,
+  useEffect,
+  useCallback,
+} from "react"
 import {
   Box,
   Button,
@@ -49,7 +55,7 @@ import { Stack } from "@mui/system"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { EmptyOrders } from "../../components/empty-states"
-import { PullToRefresh, SwipeableItem } from "../../components/gestures"
+import { PullToRefresh, SwipeableItem, useLongPress } from "../../components/gestures"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useGetUserProfileQuery } from "../../store/profile"
 import { OrderSearchSortMethod } from "../../datatypes/Order"
@@ -133,16 +139,37 @@ export function OfferRow(props: {
 
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
 
+  // Long-press handler - on mobile, directly toggles selection
+  const handleLongPressForSelection = useCallback(
+    (event: React.MouseEvent | React.TouchEvent) => {
+      if (isMobile && enableSelection && onClick) {
+        // On mobile, long-press directly toggles selection
+        event.preventDefault()
+        event.stopPropagation()
+        onClick(event as React.MouseEvent<Element>)
+      }
+    },
+    [isMobile, enableSelection, onClick],
+  )
+
+  const longPressHandlers = useLongPress({
+    onLongPress: handleLongPressForSelection,
+    enabled: isMobile && enableSelection,
+    delay: 500,
+  })
+
   return (
     <TableRow
       hover
-      onClick={handleRowClick}
+      onClick={isMobile && enableSelection ? undefined : handleRowClick}
       role={enableSelection ? "checkbox" : undefined}
       aria-checked={enableSelection ? isItemSelected : undefined}
       tabIndex={-1}
       key={index}
       selected={isItemSelected}
       style={{ textDecoration: "none", color: "inherit", cursor: "pointer" }}
+      {...(isMobile && enableSelection ? { component: "div" as const } : {})}
+      {...(isMobile && enableSelection ? longPressHandlers : {})}
       sx={{
         "& .MuiTableCell-root": {
           padding: { xs: theme.spacing(0.75), sm: theme.spacing(2) },
@@ -150,7 +177,12 @@ export function OfferRow(props: {
       }}
     >
       {enableSelection && (
-        <TableCell padding="checkbox">
+        <TableCell
+          padding="checkbox"
+          sx={{
+            display: { xs: "none", sm: "table-cell" }, // Hide checkbox on mobile
+          }}
+        >
           <Checkbox
             color="primary"
             checked={isItemSelected}
@@ -169,6 +201,7 @@ export function OfferRow(props: {
         </TableCell>
       )}
       <TableCell
+        onClick={isMobile && enableSelection ? () => navigate(`/offer/${row.id}`) : undefined}
         sx={{
           width: { xs: "45%", sm: "auto" },
           minWidth: { xs: 0, sm: "auto" },

@@ -3,7 +3,13 @@ import {
   OrderSearchStatus,
   OrderStub,
 } from "../../datatypes/Order"
-import React, { MouseEventHandler, useMemo, useState, useEffect } from "react"
+import React, {
+  MouseEventHandler,
+  useMemo,
+  useState,
+  useEffect,
+  useCallback,
+} from "react"
 import {
   Avatar,
   Box,
@@ -24,7 +30,7 @@ import {
   useMediaQuery,
 } from "@mui/material"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { UserAvatar } from "../../components/avatar/UserAvatar"
@@ -40,10 +46,21 @@ import { useSearchOrdersQuery } from "../../store/orders"
 import { useGetUserProfileQuery } from "../../store/profile"
 import { useTranslation } from "react-i18next"
 import { useDebounce } from "../../hooks/useDebounce"
-import { ExpandLess, ExpandMore, Search } from "@mui/icons-material"
+import {
+  ExpandLess,
+  ExpandMore,
+  Search,
+  ShareRounded,
+  VisibilityRounded,
+} from "@mui/icons-material"
 import { OrderRowSkeleton } from "../../components/skeletons"
 import { EmptyOrders } from "../../components/empty-states"
-import { PullToRefresh, SwipeableItem } from "../../components/gestures"
+import {
+  PullToRefresh,
+  SwipeableItem,
+  LongPressMenu,
+  useLongPress,
+} from "../../components/gestures"
 
 export const statusColors = new Map<
   | "active"
@@ -136,6 +153,7 @@ export function OrderRow(props: {
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
+  const navigate = useNavigate()
 
   const statusColor = useMemo(() => statusColors.get(row.status), [row.status])
   const status = useMemo(
@@ -143,25 +161,86 @@ export function OrderRow(props: {
     [row.status, t],
   )
 
-  return (
+  // Long-press handler - on mobile, directly toggles selection
+  const handleLongPressForSelection = useCallback(
+    (event: React.MouseEvent | React.TouchEvent) => {
+      if (isMobile && props.onClick) {
+        // On mobile, long-press directly toggles selection
+        event.preventDefault()
+        event.stopPropagation()
+        props.onClick(event as React.MouseEvent)
+      }
+    },
+    [isMobile, props.onClick],
+  )
+
+  const longPressHandlers = useLongPress({
+    onLongPress: handleLongPressForSelection,
+    enabled: isMobile,
+    delay: 500,
+  })
+
+  // Long-press menu actions (for non-selection actions) - only show on desktop or as secondary
+  const longPressActions = useMemo(() => {
+    if (isMobile) {
+      // On mobile, selection is handled by long-press directly, menu is for other actions
+      // We'll show menu on a different gesture or make it less prominent
+      return []
+    }
+    return [
+      {
+        label: t("orders.viewDetails", { defaultValue: "View Details" }),
+        icon: <VisibilityRounded />,
+        onClick: () => navigate(`/contract/${row.order_id}`),
+      },
+      {
+        label: t("orders.share", { defaultValue: "Share" }),
+        icon: <ShareRounded />,
+        onClick: () => {
+          const url = `${window.location.origin}/contract/${row.order_id}`
+          if (navigator.share) {
+            navigator.share({
+              title: t("orders.orderLabel", { defaultValue: "Order" }),
+              text: `${t("orders.orderLabel", { defaultValue: "Order" })} ${row.order_id.substring(0, 8).toUpperCase()}`,
+              url,
+            }).catch(() => {
+              // User cancelled or error occurred
+            })
+          } else {
+            // Fallback: copy to clipboard
+            navigator.clipboard.writeText(url)
+          }
+        },
+      },
+    ]
+  }, [row.order_id, navigate, t, isMobile])
+
+  const rowContent = (
     <TableRow
       hover
-      // onClick={onClick}
+      onClick={isMobile ? undefined : props.onClick}
       role="checkbox"
       aria-checked={isItemSelected}
       tabIndex={-1}
       key={index}
       selected={isItemSelected}
       style={{ textDecoration: "none", color: "inherit" }}
-      component={Link}
-      to={`/contract/${row.order_id}`}
+      component={isMobile ? "div" : Link}
+      to={isMobile ? undefined : `/contract/${row.order_id}`}
+      {...(isMobile ? longPressHandlers : {})}
       sx={{
         "& .MuiTableCell-root": {
           padding: { xs: theme.spacing(1), sm: theme.spacing(2) },
         },
+        cursor: "pointer",
+        // On mobile, make the first cell clickable for navigation
+        "& .MuiTableCell-root:first-of-type": {
+          cursor: "pointer",
+        },
       }}
     >
       <TableCell
+        onClick={isMobile ? () => navigate(`/contract/${row.order_id}`) : undefined}
         sx={{
           width: { xs: "45%", sm: "auto" },
           minWidth: { xs: 0, sm: "auto" },
@@ -284,6 +363,8 @@ export function OrderRow(props: {
       {/*</TableCell>*/}
     </TableRow>
   )
+
+  return rowContent
 }
 
 export function OrdersViewPaginated(props: {
@@ -660,6 +741,14 @@ export function OrdersViewPaginated(props: {
             }}
             enabled={isMobile}
           >
+            <Box
+              sx={{
+                // Hide checkbox column header on mobile
+                "& .MuiTableHead .MuiTableCell-root:first-of-type": {
+                  display: { xs: "none", sm: "table-cell" },
+                },
+              }}
+            >
             <ControlledTable
             rows={(orders?.items || []).map((o) => ({
               ...o,
@@ -684,7 +773,7 @@ export function OrdersViewPaginated(props: {
               ...cell,
               label: t(cell.label),
             }))}
-            disableSelect
+            disableSelect={false} // Selection enabled on both mobile and desktop
             loading={isLoading || isFetching}
             loadingRowComponent={OrderRowSkeleton}
             emptyStateComponent={
@@ -698,6 +787,7 @@ export function OrdersViewPaginated(props: {
               ) : undefined
             }
           />
+            </Box>
           </SwipeableItem>
         </PullToRefresh>
       </Paper>

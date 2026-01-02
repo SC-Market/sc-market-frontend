@@ -87,7 +87,7 @@ import { RecentListingsSkeleton } from "../../pages/home/LandingPage"
 import { getRelativeTime } from "../../util/time"
 import { MarketListingRating } from "../../components/rating/ListingRating"
 import { useGetUserProfileQuery } from "../../store/profile"
-import { RefreshRounded } from "@mui/icons-material"
+import { RefreshRounded, EditRounded, ShareRounded } from "@mui/icons-material"
 import moment from "moment/moment"
 import { Stack } from "@mui/system"
 import { formatMarketMultipleUrl, formatMarketUrl } from "../../util/urls"
@@ -103,7 +103,8 @@ import {
 } from "../../components/ads/adUtils"
 import { ListingSkeleton as StandardListingSkeleton } from "../../components/skeletons"
 import { EmptyListings } from "../../components/empty-states"
-import { PullToRefresh } from "../../components/gestures"
+import { PullToRefresh, LongPressMenu } from "../../components/gestures"
+import { useAlertHook } from "../../hooks/alert/AlertHook"
 
 export function ListingRefreshButton(props: {
   listing: ExtendedUniqueSearchResult
@@ -136,7 +137,9 @@ export const ItemListingBase = React.memo(
     const { listing, index } = props
     const { user_seller, contractor_seller } = listing
     const theme = useTheme<ExtendedTheme>()
+    const isMobile = useMediaQuery(theme.breakpoints.down("md"))
     const navigate = useNavigate()
+    const issueAlert = useAlertHook()
     const [timeDisplay, setTimeDisplay] = useState(
       listing.auction_end_time
         ? getRelativeTime(new Date(listing.auction_end_time))
@@ -182,7 +185,59 @@ export const ItemListingBase = React.memo(
       ],
     )
 
-    return (
+    // Determine if this is the user's own listing
+    const isMyListing = useMemo(
+      () =>
+        listing.user_seller === profile?.username ||
+        (currentOrg &&
+          currentOrg.spectrum_id === listing.contractor_seller),
+      [
+        listing.user_seller,
+        listing.contractor_seller,
+        profile?.username,
+        currentOrg,
+      ],
+    )
+
+    // Long-press menu actions for my listings
+    const longPressActions = useMemo(() => {
+      if (!isMyListing) return []
+      return [
+        {
+          label: t("market.editListing", { defaultValue: "Edit Listing" }),
+          icon: <EditRounded />,
+          onClick: () => navigate(`/market/edit/${listing.listing_id}`),
+        },
+        {
+          label: t("market.shareListing", { defaultValue: "Share" }),
+          icon: <ShareRounded />,
+          onClick: () => {
+            if (navigator.share) {
+              navigator.share({
+                title: listing.title,
+                text: listing.title,
+                url: `${window.location.origin}${formatMarketUrl(listing)}`,
+              }).catch(() => {
+                // User cancelled or error occurred
+              })
+            } else {
+              // Fallback: copy to clipboard
+              navigator.clipboard.writeText(
+                `${window.location.origin}${formatMarketUrl(listing)}`,
+              )
+              issueAlert({
+                message: t("market.linkCopied", {
+                  defaultValue: "Link copied to clipboard",
+                }),
+                severity: "success",
+              })
+            }
+          },
+        },
+      ]
+    }, [isMyListing, listing, navigate, t, issueAlert])
+
+    const listingContent = (
       <Fade
         in={true}
         style={{
@@ -434,6 +489,17 @@ export const ItemListingBase = React.memo(
         </Box>
       </Fade>
     )
+
+    // Wrap with LongPressMenu if actions are available
+    if (longPressActions.length > 0 && isMobile) {
+      return (
+        <LongPressMenu actions={longPressActions} enabled={isMobile}>
+          {listingContent}
+        </LongPressMenu>
+      )
+    }
+
+    return listingContent
   },
   (prevProps, nextProps) => {
     // Custom comparison: only re-render if listing data actually changed

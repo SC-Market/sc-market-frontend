@@ -363,26 +363,30 @@ export function ServiceListings(props: { user?: string; contractor?: string }) {
           }}
           enabled={isMobile}
         >
-          {filteredServices.map((service, index) => (
-            <ServiceListing
-              service={service}
-              key={service.service_id}
-              index={index}
-            />
-          ))}
-          {servicesResponse && filteredServices.length === 0 && (
-            <EmptyListings
-              isSearchResult={false}
-              title={t("emptyStates.services.noServices", {
-                defaultValue: "No services yet",
-              })}
-              description={t("emptyStates.services.noServicesDescription", {
-                defaultValue:
-                  "Create your first service to start offering your expertise",
-              })}
-              showCreateAction={false}
-            />
-          )}
+          <Grid container spacing={theme.layoutSpacing.layout}>
+            {filteredServices.map((service, index) => (
+              <ServiceListing
+                service={service}
+                key={service.service_id}
+                index={index}
+              />
+            ))}
+            {servicesResponse && filteredServices.length === 0 && (
+              <Grid item xs={12}>
+                <EmptyListings
+                  isSearchResult={false}
+                  title={t("emptyStates.services.noServices", {
+                    defaultValue: "No services yet",
+                  })}
+                  description={t("emptyStates.services.noServicesDescription", {
+                    defaultValue:
+                      "Create your first service to start offering your expertise",
+                  })}
+                  showCreateAction={false}
+                />
+              </Grid>
+            )}
+          </Grid>
         </PullToRefresh>
       </Grid>
       <Grid item xs={12}>

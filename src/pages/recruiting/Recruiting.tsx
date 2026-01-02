@@ -192,31 +192,33 @@ export function Recruiting() {
               }}
               enabled={isMobile}
             >
-              {!(isLoading || isFetching) ? (
-                (posts?.items || []).length === 0 ? (
-                  <Grid item xs={12}>
-                    <EmptyRecruiting
-                      isSearchResult={
-                        searchState.query !== "" ||
-                        (searchState.fields && searchState.fields.length > 0) ||
-                        searchState.rating > 0 ||
-                        (searchState.language_codes &&
-                          searchState.language_codes.length > 0)
-                      }
-                      showCreateAction={!!currentOrg}
-                      sx={{ py: 4 }}
-                    />
-                  </Grid>
+              <Grid container spacing={theme.layoutSpacing.layout}>
+                {!(isLoading || isFetching) ? (
+                  (posts?.items || []).length === 0 ? (
+                    <Grid item xs={12}>
+                      <EmptyRecruiting
+                        isSearchResult={
+                          searchState.query !== "" ||
+                          (searchState.fields && searchState.fields.length > 0) ||
+                          searchState.rating > 0 ||
+                          (searchState.language_codes &&
+                            searchState.language_codes.length > 0)
+                        }
+                        showCreateAction={!!currentOrg}
+                        sx={{ py: 4 }}
+                      />
+                    </Grid>
+                  ) : (
+                    (posts?.items || []).map((item, index) => (
+                      <RecruitingPostItem post={item} key={index} index={index} />
+                    ))
+                  )
                 ) : (
-                  (posts?.items || []).map((item, index) => (
-                    <RecruitingPostItem post={item} key={index} index={index} />
+                  [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
+                    <RecruitingPostSkeleton key={i} />
                   ))
-                )
-              ) : (
-                [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
-                  <RecruitingPostSkeleton key={i} />
-                ))
-              )}
+                )}
+              </Grid>
             </PullToRefresh>
 
             <Grid item xs={12}>

@@ -24,7 +24,7 @@ import {
   useMediaQuery,
 } from "@mui/material"
 import { Section } from "../../components/paper/Section"
-import { Link, useParams } from "react-router-dom"
+import { Link, useParams, useNavigate } from "react-router-dom"
 import { a11yProps, TabPanel } from "../../components/tabs/Tabs"
 import {
   AddAPhotoRounded,
@@ -76,6 +76,7 @@ import { Discord } from "../../components/icon/DiscordIcon"
 import { EmptyListings } from "../../components/empty-states"
 import { useGetServicesQuery } from "../../store/services"
 import { BottomSheet } from "../../components/mobile/BottomSheet"
+import { SwipeableItem } from "../../components/gestures"
 
 const external_resource_pattern =
   /^https?:\/\/(www\.)?((((media)|(cdn)\.)?robertsspaceindustries\.com)|((media\.)?starcitizen.tools)|(i\.imgur\.com)|(cstone\.space))\b([-a-zA-Z0-9()@:%_+.~#?&\/=]*)$/
@@ -355,8 +356,21 @@ export function ViewProfile(props: { profile: User }) {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const navigate = useNavigate()
   const { tab } = useParams<{ tab?: string }>()
   const page = useMemo(() => name_to_index.get(tab || "") || 0, [tab])
+
+  // Tab paths for navigation
+  const tabPaths = useMemo(
+    () => [
+      `/user/${props.profile.username}`,
+      `/user/${props.profile.username}/services`,
+      `/user/${props.profile.username}/market`,
+      `/user/${props.profile.username}/order`,
+      `/user/${props.profile.username}/reviews`,
+    ],
+    [props.profile.username],
+  )
 
   const { data: myProfile } = useGetUserProfileQuery()
   const isMyProfile = useMemo(
@@ -850,34 +864,50 @@ export function ViewProfile(props: { profile: User }) {
               <Divider light />
             </Grid>
             <Grid item xs={12}>
-              <TabPanel value={page} index={0}>
-                <Grid container spacing={theme.layoutSpacing.layout}>
-                  <UserRelevantListingsArea user={props.profile.username} />
-                </Grid>
-              </TabPanel>
-              <TabPanel index={page} value={1}>
-                <Grid container spacing={theme.layoutSpacing.layout}>
-                  <ServiceListings user={props.profile?.username} />
-                </Grid>
-              </TabPanel>
-              <TabPanel index={page} value={2}>
-                <Grid container spacing={theme.layoutSpacing.layout}>
-                  <ItemListings user={props.profile?.username} />
-                </Grid>
-              </TabPanel>
-              <TabPanel index={page} value={3}>
-                <Grid container spacing={theme.layoutSpacing.layout}>
-                  <CreateOrderForm assigned_to={props.profile?.username} />
-                </Grid>
-              </TabPanel>
-              <TabPanel index={page} value={4}>
-                <Grid container spacing={theme.layoutSpacing.layout}>
-                  {props.profile && <UserReviewSummary user={props.profile} />}
-                  <Section xs={12} lg={8} disablePadding>
-                    <UserReviews user={props.profile} />
-                  </Section>
-                </Grid>
-              </TabPanel>
+              <SwipeableItem
+                onSwipeLeft={() => {
+                  // Swipe left = next tab
+                  if (page < tabPaths.length - 1) {
+                    navigate(tabPaths[page + 1])
+                  }
+                }}
+                onSwipeRight={() => {
+                  // Swipe right = previous tab
+                  if (page > 0) {
+                    navigate(tabPaths[page - 1])
+                  }
+                }}
+                enabled={isMobile}
+              >
+                <TabPanel value={page} index={0}>
+                  <Grid container spacing={theme.layoutSpacing.layout}>
+                    <UserRelevantListingsArea user={props.profile.username} />
+                  </Grid>
+                </TabPanel>
+                <TabPanel index={page} value={1}>
+                  <Grid container spacing={theme.layoutSpacing.layout}>
+                    <ServiceListings user={props.profile?.username} />
+                  </Grid>
+                </TabPanel>
+                <TabPanel index={page} value={2}>
+                  <Grid container spacing={theme.layoutSpacing.layout}>
+                    <ItemListings user={props.profile?.username} />
+                  </Grid>
+                </TabPanel>
+                <TabPanel index={page} value={3}>
+                  <Grid container spacing={theme.layoutSpacing.layout}>
+                    <CreateOrderForm assigned_to={props.profile?.username} />
+                  </Grid>
+                </TabPanel>
+                <TabPanel index={page} value={4}>
+                  <Grid container spacing={theme.layoutSpacing.layout}>
+                    {props.profile && <UserReviewSummary user={props.profile} />}
+                    <Section xs={12} lg={8} disablePadding>
+                      <UserReviews user={props.profile} />
+                    </Section>
+                  </Grid>
+                </TabPanel>
+              </SwipeableItem>
             </Grid>
           </Grid>
         </Container>

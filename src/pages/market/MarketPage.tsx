@@ -38,10 +38,11 @@ import {
   MarketNavArea,
 } from "../../components/navbar/MarketNavArea"
 import { useMarketSearch } from "../../hooks/market/MarketSearch"
-import { Link, useLocation } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import { a11yProps, TabPanel } from "../../components/tabs/Tabs"
 import { Stack } from "@mui/system"
 import { useTranslation } from "react-i18next"
+import { SwipeableItem } from "../../components/gestures"
 
 // Dynamic imports for heavy components
 const ItemMarketView = React.lazy(() =>
@@ -78,6 +79,7 @@ function MarketTabLoader() {
 export function MarketPage() {
   const { t } = useTranslation()
   const location = useLocation()
+  const navigate = useNavigate()
   const theme = useTheme<ExtendedTheme>()
   const xs = useMediaQuery(theme.breakpoints.down("md"))
   const [marketSidebarOpen, setMarketSidebarOpen] = useState(false)
@@ -221,16 +223,32 @@ export function MarketPage() {
               </Grid>
             </Container>
 
-            <TabPanel value={tabPage} index={1}>
-              <Suspense fallback={<MarketTabLoader />}>
-                <ItemMarketView />
-              </Suspense>
-            </TabPanel>
-            <TabPanel value={tabPage} index={0}>
-              <Suspense fallback={<MarketTabLoader />}>
-                <ServiceMarketView />
-              </Suspense>
-            </TabPanel>
+            <SwipeableItem
+              onSwipeLeft={() => {
+                // Swipe left = next tab
+                if (tabPage === 1) {
+                  navigate("/market/services")
+                }
+              }}
+              onSwipeRight={() => {
+                // Swipe right = previous tab
+                if (tabPage === 0) {
+                  navigate("/market")
+                }
+              }}
+              enabled={xs}
+            >
+              <TabPanel value={tabPage} index={1}>
+                <Suspense fallback={<MarketTabLoader />}>
+                  <ItemMarketView />
+                </Suspense>
+              </TabPanel>
+              <TabPanel value={tabPage} index={0}>
+                <Suspense fallback={<MarketTabLoader />}>
+                  <ServiceMarketView />
+                </Suspense>
+              </TabPanel>
+            </SwipeableItem>
           </OpenLayout>
         </ServiceSidebarContext.Provider>
       </MarketSidebarContext.Provider>
