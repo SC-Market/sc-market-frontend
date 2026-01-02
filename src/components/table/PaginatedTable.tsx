@@ -185,6 +185,7 @@ export function PaginatedTable<T>(props: {
     onClick?: MouseEventHandler
     isItemSelected: boolean
     labelId: string
+    hasSelectedItems?: boolean
   }) => React.ReactNode
 }) {
   const {
@@ -318,6 +319,7 @@ export function PaginatedTable<T>(props: {
               .map((row, index) => {
                 const isItemSelected = isSelected(row[keyAttr])
                 const labelId = `enhanced-table-checkbox-${index}`
+                const hasSelectedItems = selected.length > 0
 
                 return (
                   <RowComponent
@@ -330,6 +332,7 @@ export function PaginatedTable<T>(props: {
                       },
                       isItemSelected: isItemSelected,
                       labelId: labelId,
+                      hasSelectedItems: hasSelectedItems,
                     }}
                   />
                 )
@@ -545,7 +548,7 @@ export function ControlledTable<T>(props: {
             ) : rows.length === 0 && !loading && emptyStateComponent ? (
               <TableRow>
                 <TableCell
-                  colSpan={headCells.length}
+                  colSpan={headCells.length + (disableSelect ? 0 : 1)}
                   sx={{ border: 0, padding: 0 }}
                 >
                   {emptyStateComponent}
@@ -555,6 +558,7 @@ export function ControlledTable<T>(props: {
               rows.map((row, index) => {
                 const isItemSelected = isSelected(row[keyAttr])
                 const labelId = `enhanced-table-checkbox-${index}`
+                const hasSelectedItems = selected.length > 0
 
                 return (
                   <RowComponent
@@ -567,6 +571,7 @@ export function ControlledTable<T>(props: {
                       },
                       isItemSelected: isItemSelected,
                       labelId: labelId,
+                      hasSelectedItems: hasSelectedItems,
                     }}
                   />
                 )
@@ -578,7 +583,7 @@ export function ControlledTable<T>(props: {
                   height: 73 * emptyRows,
                 }}
               >
-                <TableCell colSpan={headCells.length} />
+                <TableCell colSpan={headCells.length + (disableSelect ? 0 : 1)} />
               </TableRow>
             )}
           </TableBody>

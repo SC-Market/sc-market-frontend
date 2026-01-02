@@ -15,28 +15,42 @@ import React, {
   useEffect,
   useMemo,
   useState,
+  useCallback as useCallbackAlias,
 } from "react"
 import {
   Avatar,
   Box,
   Button,
   ButtonGroup,
+  Card,
+  CardActionArea,
+  CardContent,
+  Chip,
+  FormControlLabel,
   IconButton,
   Link as MaterialLink,
+  Menu,
+  MenuItem,
+  Paper,
   Switch,
+  TablePagination,
   TextField,
   Tooltip,
   Typography,
+  useMediaQuery,
 } from "@mui/material"
 import {
   AddRounded,
   CreateRounded,
   DeleteRounded,
+  MoreVertRounded,
   RadioButtonCheckedRounded,
   RadioButtonUncheckedRounded,
   RefreshOutlined,
   RemoveRounded,
   SaveRounded,
+  ShareRounded,
+  VisibilityRounded,
 } from "@mui/icons-material"
 import { useMarketSearch } from "../../hooks/market/MarketSearch"
 import { formatCompleteListingUrl } from "../../util/urls"
@@ -66,6 +80,10 @@ import { ThemedDataGrid } from "../../components/grid/ThemedDataGrid"
 import { SelectGameItemStack } from "../../components/select/SelectGameItem"
 import { useGetUserProfileQuery } from "../../store/profile"
 import { useTranslation } from "react-i18next"
+import { PullToRefresh, LongPressMenu, useLongPress } from "../../components/gestures"
+import { Grid } from "@mui/material"
+import { EmptyListings } from "../../components/empty-states"
+import { BottomSheet } from "../../components/mobile"
 
 export const ItemStockContext = React.createContext<
   | [
@@ -76,7 +94,11 @@ export const ItemStockContext = React.createContext<
 >(null)
 
 export function ManageStockArea(props: { listings: UniqueListing[] }) {
-  const [selectionModel] = useContext(ItemStockContext)!
+  const context = useContext(ItemStockContext)
+  if (!context || !Array.isArray(context)) {
+    return null // Context not available
+  }
+  const [selectionModel] = context
   const [quantity, setQuantity] = useState(1)
   const { listings } = props
 
@@ -227,9 +249,18 @@ function ItemStockToolbar(props: {
     newModel: (oldModel: GridRowModesModel) => GridRowModesModel,
   ) => void
   newRows: NewListingRow[]
+  isMobile?: boolean
+  onAddQuickListing?: () => void
 }) {
-  const [selectionModel] = useContext(ItemStockContext)!
+  const context = useContext(ItemStockContext)
+  if (!context || !Array.isArray(context)) {
+    return null // Context not available
+  }
+  const [selectionModel] = context
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
+  const isMobile = props.isMobile ?? useMediaQuery(theme.breakpoints.down("md"))
+  const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null)
 
   const [updateListing, { isLoading }] = useUpdateMarketListingMutation()
   const updateListingCallback = useCallback(
@@ -243,6 +274,69 @@ function ItemStockToolbar(props: {
     },
     [selectionModel, updateListing],
   )
+
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setMenuAnchor(event.currentTarget)
+  }
+
+  const handleMenuClose = () => {
+    setMenuAnchor(null)
+  }
+
+  if (isMobile) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 1,
+          padding: 2,
+          borderBottom: 1,
+          borderColor: "divider",
+        }}
+      >
+        <ManageStockArea listings={props.listings} />
+        <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap", alignItems: "center" }}>
+          <LoadingButton
+            color={"success"}
+            startIcon={<RadioButtonCheckedRounded />}
+            variant={"outlined"}
+            size={"small"}
+            loading={isLoading}
+            onClick={() => {
+              updateListingCallback({ status: "active" })
+            }}
+            fullWidth
+          >
+            {t("ItemStock.activate")}
+          </LoadingButton>
+          <LoadingButton
+            color={"error"}
+            startIcon={<RadioButtonUncheckedRounded />}
+            variant={"outlined"}
+            size={"small"}
+            loading={isLoading}
+            onClick={() => {
+              updateListingCallback({ status: "inactive" })
+            }}
+            fullWidth
+          >
+            {t("ItemStock.deactivate")}
+          </LoadingButton>
+          <Button
+            onClick={props.onAddQuickListing || handleMenuOpen}
+            color="primary"
+            variant="outlined"
+            size="small"
+            startIcon={<AddRounded />}
+            sx={{ flex: "0 0 auto" }}
+          >
+            {t("ItemStock.addQuickListing")}
+          </Button>
+        </Box>
+      </Box>
+    )
+  }
 
   return (
     <Toolbar>
@@ -307,6 +401,7 @@ export function DisplayStock({
   perPage,
   onPageChange,
   onRowsPerPageChange,
+  onRefresh,
 }: {
   listings: UniqueListing[]
   total?: number
@@ -314,6 +409,7 @@ export function DisplayStock({
   perPage?: number
   onPageChange?: (event: unknown, newPage: number) => void
   onRowsPerPageChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onRefresh?: () => Promise<void>
 }) {
   const [refresh] = useMarketRefreshListingMutation()
   const { t } = useTranslation()
@@ -875,8 +971,516 @@ export function DisplayStock({
     return [...existingRows, ...newRowsWithId]
   }, [rows, newRows, t])
 
-  const [rowSelectionModel, setRowSelectionModel] =
-    React.useContext(ItemStockContext)!
+  const context = React.useContext(ItemStockContext)
+  if (!context || !Array.isArray(context)) {
+    return null // Context not available
+  }
+  const [rowSelectionModel, setRowSelectionModel] = context
+
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+
+  // Mobile card component - needs access to newRows, editingRows, rowModesModel, and handlers
+  const StockCard = React.memo(
+    ({ 
+      row, 
+      isSelected,
+      newRows,
+      editingRows,
+      rowModesModel,
+      setEditingRows,
+      setRowModesModel,
+      setFetchingItemName,
+      handleEditClick,
+      handleSaveClick,
+      handleCancelClick,
+    }: { 
+      row: StockRow & { id: string }
+      isSelected: boolean
+      newRows: NewListingRow[]
+      editingRows: Record<string, Partial<NewListingRow>>
+      rowModesModel: GridRowModesModel
+      setEditingRows: React.Dispatch<React.SetStateAction<Record<string, Partial<NewListingRow>>>>
+      setRowModesModel: React.Dispatch<React.SetStateAction<GridRowModesModel>>
+      setFetchingItemName: (name: string) => void
+      handleEditClick: (id: GridRowId) => () => void
+      handleSaveClick: (id: GridRowId) => () => Promise<void>
+      handleCancelClick: (id: GridRowId) => () => void
+    }) => {
+      const stockContext = useContext(ItemStockContext)
+      if (!stockContext || !Array.isArray(stockContext)) {
+        return null // Context not available
+      }
+      const [selectionModel, setSelectionModel] = stockContext
+      
+      // Check if this is a new row by ID pattern
+      const isNewRow = row.id.startsWith("new-")
+      const newRowData = isNewRow ? newRows.find((r) => r.id === row.id) : null
+      
+      const handleLongPressForSelection = React.useCallback(
+        (event: React.MouseEvent | React.TouchEvent) => {
+          if (isNewRow) return // Don't allow selection for new rows
+          const newIds = new Set(selectionModel.ids)
+          if (newIds.has(row.id)) {
+            newIds.delete(row.id)
+          } else {
+            newIds.add(row.id)
+          }
+          setSelectionModel({ type: "include", ids: newIds })
+        },
+        [selectionModel, row.id, setSelectionModel, isNewRow],
+      )
+
+      const longPressHandlers = useLongPress({
+        onLongPress: handleLongPressForSelection,
+        enabled: !isNewRow,
+        delay: 500,
+      })
+
+      const longPressActions = [
+        {
+          label: t("common.viewDetails", "View Details"),
+          icon: <VisibilityRounded />,
+          onClick: () => {
+            window.location.href = formatCompleteListingUrl({
+              type: "unique",
+              details: { title: row.title },
+              listing: row,
+            })
+          },
+        },
+        {
+          label: t("common.share"),
+          icon: <ShareRounded />,
+          onClick: () => {
+            if (navigator.share) {
+              navigator.share({
+                title: row.title,
+                url: formatCompleteListingUrl({
+                  type: "unique",
+                  details: { title: row.title },
+                  listing: row,
+                }),
+              })
+            }
+          },
+        },
+        {
+          label: t("ItemStock.editListing"),
+          icon: <CreateRounded />,
+          onClick: () => {
+            window.location.href = `/market_edit/${row.listing_id}`
+          },
+        },
+      ]
+
+      // New rows on mobile - show a simple card that opens bottom sheet on click
+      if (isNewRow) {
+        return (
+          <Grid item xs={12}>
+            <Card
+              sx={{
+                border: 1,
+                borderColor: "primary.main",
+                borderStyle: "dashed",
+                bgcolor: "action.hover",
+                cursor: "pointer",
+              }}
+              onClick={handleEditClick(row.id)}
+            >
+              <CardContent sx={{ p: 2 }}>
+                <Stack direction="row" spacing={2} alignItems="center" justifyContent="space-between">
+                  <Box>
+                    <Typography variant="body1" color="text.secondary" fontWeight="medium">
+                      {newRowData?.item_name || t("ItemStock.newListingPending", "New listing - tap to edit")}
+                    </Typography>
+                    {newRowData?.item_name && (
+                      <Typography variant="body2" color="text.secondary">
+                        {newRowData.price.toLocaleString(undefined)} aUEC • Qty: {newRowData.quantity_available}
+                      </Typography>
+                    )}
+                  </Box>
+                  <Button
+                    size="small"
+                    variant="outlined"
+                    startIcon={<CreateRounded />}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleEditClick(row.id)()
+                    }}
+                  >
+                    {t("ItemStock.edit")}
+                  </Button>
+                </Stack>
+              </CardContent>
+            </Card>
+          </Grid>
+        )
+      }
+
+      return (
+        <Grid item xs={12}>
+          <LongPressMenu actions={longPressActions}>
+            <Card
+              sx={{
+                border: isSelected ? 2 : 1,
+                borderColor: isSelected ? "primary.main" : "divider",
+                bgcolor: isSelected 
+                  ? (theme) => {
+                      const primaryColor = theme.palette.primary.main
+                      // Extract RGB values and add alpha
+                      if (primaryColor.startsWith('#')) {
+                        const r = parseInt(primaryColor.slice(1, 3), 16)
+                        const g = parseInt(primaryColor.slice(3, 5), 16)
+                        const b = parseInt(primaryColor.slice(5, 7), 16)
+                        return `rgba(${r}, ${g}, ${b}, ${theme.palette.mode === 'dark' ? 0.12 : 0.08})`
+                      }
+                      return theme.palette.primary.main
+                    }
+                  : "background.paper",
+              }}
+              {...longPressHandlers}
+            >
+              <CardActionArea
+                component={Link}
+                to={formatCompleteListingUrl({
+                  type: "unique",
+                  details: { title: row.title },
+                  listing: row,
+                })}
+                sx={{ p: 2 }}
+              >
+                <Stack direction="row" spacing={2} alignItems="center">
+                  <Avatar
+                    src={row.image_url}
+                    variant="rounded"
+                    sx={{ width: 64, height: 64 }}
+                  />
+                  <Box sx={{ flex: 1, minWidth: 0 }}>
+                    <Typography variant="h6" noWrap>
+                      {row.title}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {row.price.toLocaleString(undefined)} aUEC
+                    </Typography>
+                    <Stack direction="row" spacing={1} sx={{ mt: 1 }} flexWrap="wrap">
+                      <Chip
+                        label={`${t("ItemStock.quantity")}: ${row.quantity_available.toLocaleString(undefined)}`}
+                        size="small"
+                        variant="outlined"
+                      />
+                      <Chip
+                        label={
+                          row.status === "active"
+                            ? t("ItemStock.active")
+                            : t("ItemStock.inactive")
+                        }
+                        color={row.status === "active" ? "success" : "error"}
+                        size="small"
+                      />
+                      {row.order_count > 0 && (
+                        <Chip
+                          label={`${row.order_count} ${t("ItemStock.offersAccepted")}`}
+                          size="small"
+                          variant="outlined"
+                        />
+                      )}
+                    </Stack>
+                  </Box>
+                  {isSelected && (
+                    <RadioButtonCheckedRounded color="primary" />
+                  )}
+                </Stack>
+              </CardActionArea>
+            </Card>
+          </LongPressMenu>
+        </Grid>
+      )
+    },
+  )
+
+  // Bottom sheet state for quick create
+  const [bottomSheetOpen, setBottomSheetOpen] = useState(false)
+  const [editingRowId, setEditingRowId] = useState<string | null>(null)
+
+  // Initialize editing row when bottom sheet opens
+  const handleOpenBottomSheet = (rowId?: string) => {
+    if (rowId) {
+      // Editing existing new row
+      setEditingRowId(rowId)
+      const existingRow = newRows.find((r) => r.id === rowId)
+      if (existingRow) {
+        setEditingRows((prev) => ({
+          ...prev,
+          [rowId]: { ...existingRow },
+        }))
+      }
+      setRowModesModel((oldModel) => ({
+        ...oldModel,
+        [rowId]: { mode: GridRowModes.Edit, fieldToFocus: "item_type" },
+      }))
+    } else {
+      // Creating new row
+      const id = `new-${Date.now()}`
+      const newRow: NewListingRow = {
+        id,
+        item_type: "Other",
+        item_name: null,
+        price: 1,
+        quantity_available: 1,
+        status: "active",
+        isNew: true,
+      }
+      setEditingRowId(id)
+      setNewRows((prev) => [...prev, newRow])
+      setEditingRows((prev) => ({
+        ...prev,
+        [id]: { ...newRow },
+      }))
+      setRowModesModel((oldModel) => ({
+        ...oldModel,
+        [id]: { mode: GridRowModes.Edit, fieldToFocus: "item_type" },
+      }))
+    }
+    setBottomSheetOpen(true)
+  }
+
+  const handleCloseBottomSheet = () => {
+    setBottomSheetOpen(false)
+    if (editingRowId) {
+      // Don't clear editing state - let user save or cancel explicitly
+      setEditingRowId(null)
+    }
+  }
+
+  const handleSaveFromBottomSheet = async () => {
+    if (!editingRowId) return
+    await handleSaveClick(editingRowId)()
+    setBottomSheetOpen(false)
+    setEditingRowId(null)
+  }
+
+  const handleCancelFromBottomSheet = () => {
+    if (!editingRowId) return
+    handleCancelClick(editingRowId)()
+    setBottomSheetOpen(false)
+    setEditingRowId(null)
+  }
+
+  if (isMobile) {
+    const editingRow = editingRowId ? editingRows[editingRowId] : null
+    const newRowData = editingRowId ? newRows.find((r) => r.id === editingRowId) : null
+    const currentItemType = editingRow?.item_type ?? newRowData?.item_type ?? "Other"
+    const currentItemName = editingRow?.item_name ?? newRowData?.item_name ?? null
+    const currentPrice = editingRow?.price ?? newRowData?.price ?? 1
+    const currentQuantity = editingRow?.quantity_available ?? newRowData?.quantity_available ?? 1
+    const currentStatus = editingRow?.status ?? newRowData?.status ?? "active"
+    const hasValidItem = !!currentItemName
+
+    return (
+      <Box sx={{ width: "100%" }}>
+        <ItemStockToolbar
+          listings={listings}
+          setNewRows={setNewRows}
+          setRowModesModel={setRowModesModel}
+          newRows={newRows}
+          isMobile={true}
+          onAddQuickListing={() => handleOpenBottomSheet()}
+        />
+        <PullToRefresh
+          onRefresh={async () => {
+            if (onRefresh) {
+              await onRefresh()
+            }
+          }}
+        >
+          <Paper
+            sx={{
+              borderRadius: theme.spacing(theme.borderRadius.topLevel),
+            }}
+          >
+            {allRows.length === 0 ? (
+              <EmptyListings showCreateAction={false} />
+            ) : (
+              <Grid container spacing={theme.layoutSpacing.layout}>
+                {allRows.map((row) => {
+                  const isSelected = rowSelectionModel.ids.has(row.id)
+                  // Pass necessary props for editing functionality
+                  return (
+                    <StockCard 
+                      key={row.id} 
+                      row={row} 
+                      isSelected={isSelected}
+                      newRows={newRows}
+                      editingRows={editingRows}
+                      rowModesModel={rowModesModel}
+                      setEditingRows={setEditingRows}
+                      setRowModesModel={setRowModesModel}
+                      setFetchingItemName={setFetchingItemName}
+                      handleEditClick={(id) => () => handleOpenBottomSheet(id.toString())}
+                      handleSaveClick={handleSaveClick}
+                      handleCancelClick={handleCancelClick}
+                    />
+                  )
+                })}
+              </Grid>
+            )}
+          </Paper>
+        </PullToRefresh>
+        
+        {/* Bottom Sheet for Quick Create */}
+        <BottomSheet
+          open={bottomSheetOpen}
+          onClose={handleCloseBottomSheet}
+          title={t("ItemStock.newListing", "New Listing")}
+          maxHeight="90vh"
+        >
+          <Stack spacing={2}>
+            <SelectGameItemStack
+              item_type={currentItemType}
+              item_name={currentItemName}
+              onTypeChange={(newType) => {
+                if (editingRowId) {
+                  setEditingRows((prev) => ({
+                    ...prev,
+                    [editingRowId]: {
+                      ...prev[editingRowId],
+                      item_type: newType,
+                      item_name: null,
+                    },
+                  }))
+                }
+              }}
+              onItemChange={(newItem) => {
+                if (editingRowId) {
+                  setEditingRows((prev) => ({
+                    ...prev,
+                    [editingRowId]: {
+                      ...prev[editingRowId],
+                      item_name: newItem,
+                    },
+                  }))
+                  if (newItem) {
+                    setFetchingItemName(newItem)
+                  }
+                }
+              }}
+              TextfieldProps={{ size: "small", fullWidth: true }}
+            />
+
+            <NumericFormat
+              decimalScale={0}
+              allowNegative={false}
+              customInput={TextField}
+              thousandSeparator
+              onValueChange={(values) => {
+                if (editingRowId) {
+                  setEditingRows((prev) => ({
+                    ...prev,
+                    [editingRowId]: {
+                      ...prev[editingRowId],
+                      price: values.floatValue || 1,
+                    },
+                  }))
+                }
+              }}
+              size="small"
+              label={t("ItemStock.price")}
+              value={currentPrice}
+              fullWidth
+            />
+
+            <NumericFormat
+              decimalScale={0}
+              allowNegative={false}
+              customInput={TextField}
+              thousandSeparator
+              onValueChange={(values) => {
+                if (editingRowId) {
+                  setEditingRows((prev) => ({
+                    ...prev,
+                    [editingRowId]: {
+                      ...prev[editingRowId],
+                      quantity_available: values.floatValue || 1,
+                    },
+                  }))
+                }
+              }}
+              size="small"
+              label={t("ItemStock.qty")}
+              value={currentQuantity}
+              fullWidth
+            />
+
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={currentStatus === "active"}
+                  onChange={(e) => {
+                    if (editingRowId) {
+                      setEditingRows((prev) => ({
+                        ...prev,
+                        [editingRowId]: {
+                          ...prev[editingRowId],
+                          status: (e.target.checked ? "active" : "inactive") as "active" | "inactive",
+                        },
+                      }))
+                    }
+                  }}
+                />
+              }
+              label={currentStatus === "active" ? t("ItemStock.active") : t("ItemStock.inactive")}
+            />
+
+            <Stack direction="row" spacing={1} justifyContent="flex-end" sx={{ pt: 2 }}>
+              <Button
+                variant="outlined"
+                color="error"
+                startIcon={<DeleteRounded />}
+                onClick={handleCancelFromBottomSheet}
+              >
+                {t("ItemStock.discard")}
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                startIcon={<SaveRounded />}
+                onClick={handleSaveFromBottomSheet}
+                disabled={!hasValidItem}
+              >
+                {t("ItemStock.save")}
+              </Button>
+            </Stack>
+          </Stack>
+        </BottomSheet>
+        {/* Mobile pagination */}
+        <TablePagination
+          component="div"
+          count={total || allRows.length}
+          page={page || 0}
+          onPageChange={(event, newPage) => {
+            onPageChange?.(null, newPage)
+          }}
+          rowsPerPage={perPage || 48}
+          onRowsPerPageChange={(event) => {
+            if (onRowsPerPageChange) {
+              const value = (event.target as HTMLInputElement).value
+              onRowsPerPageChange({
+                target: { value },
+              } as React.ChangeEvent<HTMLInputElement>)
+            }
+          }}
+          rowsPerPageOptions={[24, 48, 96, 192]}
+          labelRowsPerPage={t("common.rowsPerPage", "Rows per page")}
+          labelDisplayedRows={({ from, to, count }) =>
+            count !== -1
+              ? t("displayed_rows_range", { from, to, count })
+              : t("displayed_rows_range_more", { from, to })
+          }
+          color="primary"
+        />
+      </Box>
+    )
+  }
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -898,6 +1502,7 @@ export function DisplayStock({
               setNewRows={setNewRows}
               setRowModesModel={setRowModesModel}
               newRows={newRows}
+              isMobile={false}
             />
           ),
         }}
@@ -950,7 +1555,7 @@ export function MyItemStock() {
     ? { ...searchQueryParams, contractor_id: currentOrg?.spectrum_id }
     : searchQueryParams
 
-  const { data: searchResults, isLoading } = useGetMyListingsQuery(finalParams)
+  const { data: searchResults, isLoading, refetch } = useGetMyListingsQuery(finalParams)
 
   const handleChangePage = useCallback((event: unknown, newPage: number) => {
     setPage(newPage)
@@ -964,6 +1569,10 @@ export function MyItemStock() {
     [],
   )
 
+  const handleRefresh = useCallback(async () => {
+    await refetch()
+  }, [refetch])
+
   const listings = searchResults?.listings || []
 
   return (
@@ -975,6 +1584,7 @@ export function MyItemStock() {
         perPage={perPage}
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
+        onRefresh={handleRefresh}
       />
     </>
   )

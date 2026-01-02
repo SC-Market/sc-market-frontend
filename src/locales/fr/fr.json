@@ -31,6 +31,7 @@
     "password": "Password",
     "repeatPassword": "Repeat Password",
     "loginWith": "Login with",
+    "signIn": "Se connecter",
     "terms": "By clicking here, you agree to our Terms of Service",
     "submit": "Submit",
     "loginWithDiscord": "Login with Discord",
@@ -312,6 +313,8 @@
   "rows_per_page": "Rows per page",
   "no_listings": "No listings to display",
   "displayed_rows": "{{from}}–{{to}} of {{count}}",
+  "displayed_rows_range": "{{from}}–{{to}} sur {{count}}",
+  "displayed_rows_range_more": "{{from}}–{{to}} sur plus de {{to}}",
   "all": "all",
   "contractors": "Contractors",
   "recruiting_orgs": "Recruiting Orgs",
@@ -438,11 +441,17 @@
       "updatePost": "Update Post"
     }
   },
+  "recruiting": {
+    "viewDetails": "Voir les détails",
+    "viewContractor": "Voir le contractant",
+    "share": "Partager"
+  },
   "contractor": {
     "fields": {
       "mining": "Mining",
       "trading": "Trading",
-      "security": "Security"
+      "security": "Security",
+      "repair": "Repair"
     }
   },
   "adminUsers": {
@@ -1586,12 +1595,21 @@
     "subtitle": "I wonder how you got here...",
     "returnToDashboard": "Return to Dashboard"
   },
+  "errorPage": {
+    "title": "Quelque chose s'est mal passé",
+    "subtitle": "Nous avons rencontré une erreur lors du chargement de cette page. Cela pourrait être dû à un problème temporaire du serveur ou du réseau.",
+    "retry": "Réessayer",
+    "goBackToPage": "Retourner à la page",
+    "path": "Page",
+    "pageTitle": "Erreur"
+  },
   "frontendError": {
     "title": "An Error Occurred Loading the Page",
     "subtitle": "Please let us know in",
     "afterRefresh": "if you see this error after refreshing the page.",
     "page": "Error page",
     "message": "Message",
+    "goBackToPage": "Retourner à la page",
     "returnToDashboard": "Return to Dashboard",
     "pageTitle": "An Error Occurred"
   },
@@ -1642,6 +1660,12 @@
   "common": {
     "cancel": "Annuler",
     "loading": "Chargement",
-    "error": "Erreur"
+    "error": "Erreur",
+    "previous": "Précédent",
+    "page": "Page",
+    "next": "Suivant",
+    "viewDetails": "Voir les détails",
+    "share": "Partager",
+    "rowsPerPage": "Lignes par page"
   }
 }

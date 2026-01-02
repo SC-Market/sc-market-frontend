@@ -31,6 +31,7 @@
     "password": "Password",
     "repeatPassword": "Repeat Password",
     "loginWith": "Login with",
+    "signIn": "サインイン",
     "terms": "By clicking here, you agree to our Terms of Service",
     "submit": "Submit",
     "loginWithDiscord": "Login with Discord",
@@ -303,6 +304,8 @@
   "rows_per_page": "Rows per page",
   "no_listings": "No listings to display",
   "displayed_rows": "{{from}}–{{to}} of {{count}}",
+  "displayed_rows_range": "{{from}}–{{to}} / {{count}}",
+  "displayed_rows_range_more": "{{from}}–{{to}} / {{to}}以上",
   "all": "all",
   "contractors": "Contractors",
   "recruiting_orgs": "Recruiting Orgs",
@@ -429,11 +432,17 @@
       "updatePost": "Update Post"
     }
   },
+  "recruiting": {
+    "viewDetails": "詳細を見る",
+    "viewContractor": "契約者を見る",
+    "share": "共有"
+  },
   "contractor": {
     "fields": {
       "mining": "Mining",
       "trading": "Trading",
-      "security": "Security"
+      "security": "Security",
+      "repair": "Repair"
     }
   },
   "adminUsers": {
@@ -1575,12 +1584,21 @@
     "subtitle": "I wonder how you got here...",
     "returnToDashboard": "Return to Dashboard"
   },
+  "errorPage": {
+    "title": "問題が発生しました",
+    "subtitle": "このページの読み込み中にエラーが発生しました。一時的なサーバーまたはネットワークの問題が原因である可能性があります。",
+    "retry": "再試行",
+    "goBackToPage": "ページに戻る",
+    "path": "ページ",
+    "pageTitle": "エラー"
+  },
   "frontendError": {
     "title": "An Error Occurred Loading the Page",
     "subtitle": "Please let us know in",
     "afterRefresh": "if you see this error after refreshing the page.",
     "page": "Error page",
     "message": "Message",
+    "goBackToPage": "ページに戻る",
     "returnToDashboard": "Return to Dashboard",
     "pageTitle": "An Error Occurred"
   },
@@ -1631,6 +1649,12 @@
   "common": {
     "cancel": "キャンセル",
     "loading": "読み込み中",
-    "error": "エラー"
+    "error": "エラー",
+    "previous": "前へ",
+    "page": "ページ",
+    "next": "次へ",
+    "viewDetails": "詳細を見る",
+    "share": "共有",
+    "rowsPerPage": "ページあたりの行数"
   }
 }

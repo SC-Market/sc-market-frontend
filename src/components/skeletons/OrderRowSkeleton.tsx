@@ -5,6 +5,7 @@ import {
   Stack,
   Paper,
   Typography,
+  Checkbox,
 } from "@mui/material"
 import { BaseSkeleton } from "./BaseSkeleton"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -25,6 +26,15 @@ export function OrderRowSkeleton({ index = 0 }: OrderRowSkeletonProps) {
 
   return (
     <TableRow>
+      {/* Checkbox column - matches table structure when selection is enabled */}
+      <TableCell
+        padding="checkbox"
+        sx={{
+          display: { xs: "none", sm: "table-cell" }, // Hide checkbox on mobile, matching table header
+        }}
+      >
+        <BaseSkeleton variant="rectangular" width={24} height={24} />
+      </TableCell>
       {/* Order column (timestamp) */}
       <TableCell
         sx={{
