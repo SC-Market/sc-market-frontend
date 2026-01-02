@@ -326,6 +326,19 @@
       "placeholder": "Select languages..."
     }
   },
+  "orderKinds": {
+    "Support": "Support",
+    "Escort": "Escort",
+    "Transport": "Transport",
+    "Construction": "Construction",
+    "Resource Acquisition": "Resource Acquisition",
+    "Rental": "Rental",
+    "Delivery": "Delivery",
+    "Medical": "Medical",
+    "Intelligence Services": "Intelligence Services",
+    "Misc": "Misc",
+    "Custom": "Custom"
+  },
   "listing": {
     "99_9PercentRating25PlusTransactions": "99.9%+ rating and 25+ transactions",
     "99PercentRating25PlusTransactions": "99%+ rating and 25+ transactions",
@@ -697,6 +710,7 @@
   "service_search": {
     "search": "Search",
     "filtering": "Filtering",
+    "filters": "Filters",
     "contract_type": "Contract Type",
     "contract_types": {
       "Any": "Any"
@@ -708,6 +722,7 @@
     "payment_types": {
       "any": "Any",
       "one_time": "One time",
+      "one-time": "One time",
       "hourly": "Hourly",
       "daily": "Daily",
       "unit": "Unit",
@@ -848,6 +863,7 @@
     "contractShort": "Contract {{id}}",
     "viewContract": "View Contract",
     "contractTitle": "Contract",
+    "filters": "Filters",
     "kind": {
       "Escort": "Escort",
       "Transport": "Transport",
