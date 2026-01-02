@@ -59,35 +59,32 @@ export function Contracts() {
             >
               {t("contracts.filters", "Filters")}
             </Button>
-          ) : (
-            <IconButton
-              color="secondary"
-              aria-label={t("contracts.toggleSidebar")}
-              sx={{
-                position: "absolute",
-                zIndex: 50,
-                left: (drawerOpen ? sidebarDrawerWidth : 0) + 24,
-                top: 64 + 24,
-                transition: "0.3s",
-              }}
-              onClick={() => {
-                setOpen(true)
-              }}
-            >
-              {open ? <CloseIcon /> : <MenuIcon />}
-            </IconButton>
-          )}
+          ) : null}
           <ContractSidebar />
           <ContainerGrid maxWidth={"lg"} sidebarOpen={true}>
             <Grid item xs={12}>
               <Grid
                 container
                 justifyContent={"space-between"}
+                alignItems={"center"}
                 spacing={theme.layoutSpacing.layout}
               >
-                <HeaderTitle lg={8} xl={8}>
-                  {t("contracts.activeContracts")}
-                </HeaderTitle>
+                <Grid item sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                  {!isMobile && (
+                    <IconButton
+                      color="secondary"
+                      aria-label={t("contracts.toggleSidebar")}
+                      onClick={() => {
+                        setOpen(true)
+                      }}
+                    >
+                      {open ? <CloseIcon /> : <MenuIcon />}
+                    </IconButton>
+                  )}
+                  <HeaderTitle lg={8} xl={8}>
+                    {t("contracts.activeContracts")}
+                  </HeaderTitle>
+                </Grid>
 
                 <Grid item>
                   <Link
