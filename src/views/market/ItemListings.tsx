@@ -1370,6 +1370,15 @@ export function DisplayListingsMin(props: {
     )
   }
 
+  // Show empty state if no listings
+  if (listingsWithAds.length === 0) {
+    return (
+      <Grid item xs={12}>
+        <EmptyListings isSearchResult={false} showCreateAction={false} />
+      </Grid>
+    )
+  }
+
   // Fallback to regular rendering for small lists
   return (
     <React.Fragment>
