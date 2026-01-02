@@ -260,7 +260,6 @@ export function SwipeableItem({
         sx={{
           position: "relative",
           zIndex: 2,
-          backgroundColor: "background.paper",
           transform: `translateX(${swipeOffset}px)`,
           transition: isSwiping ? "none" : "transform 0.3s ease-out",
         }}
