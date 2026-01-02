@@ -15,6 +15,7 @@ import {
   Link as MaterialLink,
   TextField,
   Typography,
+  useMediaQuery,
 } from "@mui/material"
 import { Section } from "../../components/paper/Section"
 import { useCookies } from "react-cookie"
@@ -60,6 +61,7 @@ import {
 } from "../../components/time/AvailabilitySelector"
 import { convertAvailability } from "../../pages/availability/Availability"
 import { OrderLimitsDisplay } from "../../components/orders/OrderLimitsDisplay"
+import { BottomSheet } from "../../components/mobile/BottomSheet"
 
 export function CartItemEntry(props: {
   item: CartItem
@@ -213,6 +215,7 @@ export function CartSellerEntry(props: {
 }) {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const { seller, updateCart, removeSellerEntry } = props
   const { data: user_seller } = useGetUserByUsernameQuery(
     seller.user_seller_id!,
@@ -582,30 +585,51 @@ export function CartSellerEntry(props: {
       )}
 
       {/* Availability Modal */}
-      <Dialog
-        open={isAvailabilityModalOpen}
-        onClose={() => setIsAvailabilityModalOpen(false)}
-        maxWidth="lg"
-        fullWidth
-        aria-labelledby="availability-modal-title"
-      >
-        <DialogTitle id="availability-modal-title">
-          {t("availability.select_availability")} - {sellerName}
-        </DialogTitle>
-        <DialogContent>
+      {isMobile ? (
+        <BottomSheet
+          open={isAvailabilityModalOpen}
+          onClose={() => setIsAvailabilityModalOpen(false)}
+          title={`${t("availability.select_availability")} - ${sellerName}`}
+          maxHeight="90vh"
+        >
           <Box sx={{ mt: 1 }}>
             <AvailabilitySelector
               onSave={handleSaveAvailability}
               initialSelections={availabilitySelections}
             />
           </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setIsAvailabilityModalOpen(false)}>
-            {t("accessibility.cancel", "Cancel")}
-          </Button>
-        </DialogActions>
-      </Dialog>
+          <Box sx={{ mt: 2, display: "flex", justifyContent: "flex-end" }}>
+            <Button onClick={() => setIsAvailabilityModalOpen(false)}>
+              {t("accessibility.cancel", "Cancel")}
+            </Button>
+          </Box>
+        </BottomSheet>
+      ) : (
+        <Dialog
+          open={isAvailabilityModalOpen}
+          onClose={() => setIsAvailabilityModalOpen(false)}
+          maxWidth="lg"
+          fullWidth
+          aria-labelledby="availability-modal-title"
+        >
+          <DialogTitle id="availability-modal-title">
+            {t("availability.select_availability")} - {sellerName}
+          </DialogTitle>
+          <DialogContent>
+            <Box sx={{ mt: 1 }}>
+              <AvailabilitySelector
+                onSave={handleSaveAvailability}
+                initialSelections={availabilitySelections}
+              />
+            </Box>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setIsAvailabilityModalOpen(false)}>
+              {t("accessibility.cancel", "Cancel")}
+            </Button>
+          </DialogActions>
+        </Dialog>
+      )}
 
       {/* Order Limits Display */}
       {orderLimits && (

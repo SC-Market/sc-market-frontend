@@ -9,6 +9,7 @@ import {
   Modal,
   Paper,
   TextField,
+  useMediaQuery,
 } from "@mui/material"
 import React, { useCallback, useEffect, useState } from "react"
 import { Section } from "../../components/paper/Section"
@@ -20,6 +21,7 @@ import { ExtendedTheme, MISSING_IMAGE_URL } from "../../hooks/styles/Theme"
 // import { transformSearchResults, wikiRestApi } from "../../store/wiki"
 import { useTheme } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
+import { BottomSheet } from "../../components/mobile/BottomSheet"
 
 export function ImageSearch(props: {
   open: boolean
@@ -62,18 +64,20 @@ export function ImageSearch(props: {
   //   }
   // }, [query, retrieve])
 
-  return (
-    <Modal open={open} onClose={() => callback(image)}>
-      <ContainerGrid sidebarOpen={false} maxWidth={"md"} noFooter>
-        <Section
-          title={t("ui.dialog.selectImage.title")}
-          xs={12}
-          onClick={(event) => {
-            event.preventDefault()
-            event.stopPropagation()
-            return false
-          }}
-        >
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+
+  // Content to reuse
+  const searchContent = (
+    <ContainerGrid sidebarOpen={false} maxWidth={"md"} noFooter>
+      <Section
+        title={t("ui.dialog.selectImage.title")}
+        xs={12}
+        onClick={(event) => {
+          event.preventDefault()
+          event.stopPropagation()
+          return false
+        }}
+      >
           <Grid item xs={12} md={3}>
             <CardMedia
               component="img"
@@ -193,6 +197,26 @@ export function ImageSearch(props: {
           </Grid>
         </Section>
       </ContainerGrid>
+  )
+
+  // On mobile, use BottomSheet
+  if (isMobile) {
+    return (
+      <BottomSheet
+        open={open}
+        onClose={() => callback(image)}
+        title={t("ui.dialog.selectImage.title")}
+        maxHeight="90vh"
+      >
+        {searchContent}
+      </BottomSheet>
+    )
+  }
+
+  // On desktop, use Modal
+  return (
+    <Modal open={open} onClose={() => callback(image)}>
+      {searchContent}
     </Modal>
   )
 }

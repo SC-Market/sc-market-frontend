@@ -4,7 +4,8 @@ import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
 import CloseIcon from "@mui/icons-material/CloseRounded"
 import MenuIcon from "@mui/icons-material/MenuRounded"
-import { Button, Grid, IconButton, Box, Typography } from "@mui/material"
+import FilterListIcon from "@mui/icons-material/FilterList"
+import { Button, Grid, IconButton, Box, Typography, useMediaQuery } from "@mui/material"
 import { Page } from "../../components/metadata/Page"
 import { ServiceSidebar } from "../../views/contracts/ServiceSidebar"
 import { ServiceSidebarContext } from "../../hooks/contract/ServiceSidebar"
@@ -18,6 +19,7 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 export function Services() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const [open, setOpen] = useState(true)
 
   const [drawerOpen] = useDrawerOpen()
@@ -37,18 +39,36 @@ export function Services() {
           >
             <Grid item md={7} lg={7} xl={7}>
               <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                <IconButton
-                  color="secondary"
-                  aria-label={t("services.toggleSidebar")}
-                  onClick={() => {
-                    setOpen((prev) => !prev)
-                  }}
-                  sx={{
-                    transition: "0.3s",
-                  }}
-                >
-                  {open ? <CloseIcon /> : <MenuIcon />}
-                </IconButton>
+                {isMobile ? (
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    startIcon={<FilterListIcon />}
+                    aria-label={t("services.toggleSidebar")}
+                    onClick={() => {
+                      setOpen((prev) => !prev)
+                    }}
+                    sx={{
+                      borderRadius: 2,
+                      textTransform: "none",
+                    }}
+                  >
+                    {t("services.filters", "Filters")}
+                  </Button>
+                ) : (
+                  <IconButton
+                    color="secondary"
+                    aria-label={t("services.toggleSidebar")}
+                    onClick={() => {
+                      setOpen((prev) => !prev)
+                    }}
+                    sx={{
+                      transition: "0.3s",
+                    }}
+                  >
+                    {open ? <CloseIcon /> : <MenuIcon />}
+                  </IconButton>
+                )}
                 <Typography
                   variant="h4"
                   sx={{ fontWeight: "bold", margin: 0 }}

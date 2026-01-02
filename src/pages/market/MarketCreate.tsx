@@ -105,7 +105,7 @@ export function MarketCreate(props: {}) {
             </Grid>
           </TabPanel>*/}
           <TabPanel value={page} index={0}>
-            <Grid container spacing={theme.layoutSpacing.layout * 4}>
+            <Grid container spacing={theme.layoutSpacing.layout}>
               {isVerified ? (
                 <MarketListingForm sale_type={"sale"} key={"sale"} />
               ) : (
@@ -121,7 +121,7 @@ export function MarketCreate(props: {}) {
             </Grid>
           </TabPanel>
           <TabPanel value={page} index={1}>
-            <Grid container spacing={theme.layoutSpacing.layout * 4}>
+            <Grid container spacing={theme.layoutSpacing.layout}>
               {isVerified ? (
                 <MarketListingForm sale_type={"auction"} key={"auction"} />
               ) : (
@@ -137,7 +137,7 @@ export function MarketCreate(props: {}) {
             </Grid>
           </TabPanel>
           <TabPanel value={page} index={2}>
-            <Grid container spacing={theme.layoutSpacing.layout * 4}>
+            <Grid container spacing={theme.layoutSpacing.layout}>
               {isVerified ? (
                 <MarketMultipleForm />
               ) : (

@@ -8,6 +8,7 @@ import {
   MenuItem,
   TextField,
   Typography,
+  useMediaQuery,
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import SearchIcon from "@mui/icons-material/Search"
@@ -29,8 +30,10 @@ import {
 import { SelectGameCategoryOption } from "../../components/select/SelectGameItem"
 import CloseIcon from "@mui/icons-material/CloseRounded"
 import MenuIcon from "@mui/icons-material/MenuRounded"
+import FilterListIcon from "@mui/icons-material/FilterList"
 import { SaleType } from "../../store/market.ts"
 import { LanguageFilter } from "../../components/search/LanguageFilter"
+import { BottomSheet } from "../../components/mobile/BottomSheet"
 
 export function MarketSearchArea(props: { status?: boolean }) {
   const theme: ExtendedTheme = useTheme()
@@ -348,13 +351,35 @@ export function MarketSidebar(props: { status?: boolean }) {
   const [drawerOpen] = useDrawerOpen()
   const [open, setOpen] = useMarketSidebar()
   const theme = useTheme<ExtendedTheme>()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const { t } = useTranslation()
 
-  // const xs = useMediaQuery(theme.breakpoints.down('lg'));
-  // useEffect(() => {
-  //     setOpen(!xs)
-  // }, [setOpen, xs])
+  // On mobile, use BottomSheet
+  if (isMobile) {
+    return (
+      <>
+        <BottomSheet
+          open={open}
+          onClose={() => setOpen(false)}
+          title={t("market.filters", "Filters")}
+          maxHeight="90vh"
+        >
+          <MarketSearchArea status={status} />
+        </BottomSheet>
+        {/* Desktop drawer still needed for layout spacing */}
+        <Drawer
+          variant="permanent"
+          open={false}
+          sx={{
+            width: 0,
+            display: { xs: "none", md: "block" },
+          }}
+        />
+      </>
+    )
+  }
 
+  // On desktop, use permanent drawer
   return (
     <Drawer
       variant="permanent"
@@ -370,12 +395,7 @@ export function MarketSidebar(props: { status?: boolean }) {
           width: open ? marketDrawerWidth : 0,
           boxSizing: "border-box",
           overflow: "scroll",
-          [theme.breakpoints.up("sm")]: {
-            left: drawerOpen ? sidebarDrawerWidth : 0,
-          },
-          [theme.breakpoints.down("sm")]: {
-            left: 0,
-          },
+          left: drawerOpen ? sidebarDrawerWidth : 0,
           // backgroundColor: theme.palette.background.default,
           transition: theme.transitions.create(
             ["width", "borderRight", "borderColor"],
@@ -389,10 +409,6 @@ export function MarketSidebar(props: { status?: boolean }) {
         },
         position: "relative",
         whiteSpace: "nowrap",
-        // backgroundColor: "#132321",
-        // backgroundRepeat: 'no-repeat',
-        // backgroundPosition: 'center',
-        // backgroundSize: "cover",
         background: "transparent",
         overflow: "scroll",
         borderRight: open ? 1 : 0,
@@ -412,22 +428,6 @@ export function MarketSidebar(props: { status?: boolean }) {
         }}
       />
 
-      <Box
-        sx={{
-          paddingLeft: 2,
-          paddingTop: 2,
-          display: { xs: "block", md: "none" }, // Only show close button on mobile
-        }}
-      >
-        <IconButton
-          onClick={() => setOpen(false)}
-          color="secondary"
-          aria-label={t("market.toggleSidebar")}
-        >
-          <CloseIcon />
-        </IconButton>
-      </Box>
-
       <MarketSearchArea status={status} />
     </Drawer>
   )
@@ -437,8 +437,41 @@ export function MarketSideBarToggleButton() {
   const [open, setOpen] = useMarketSidebar()
   const theme = useTheme<ExtendedTheme>()
   const [drawerOpen] = useDrawerOpen()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const { t } = useTranslation()
 
+  // On mobile, use a more prominent button with label
+  if (isMobile) {
+    return (
+      <Button
+        variant="outlined"
+        color="secondary"
+        startIcon={<FilterListIcon />}
+        aria-label={t("market.toggleSidebar")}
+        onClick={() => {
+          setOpen((value) => !value)
+        }}
+        sx={{
+          position: "fixed",
+          bottom: { xs: 80, sm: 24 },
+          right: 24,
+          zIndex: theme.zIndex.speedDial,
+          borderRadius: 2,
+          textTransform: "none",
+          boxShadow: theme.shadows[4],
+          backgroundColor: theme.palette.background.paper,
+          "&:hover": {
+            backgroundColor: theme.palette.background.paper,
+            boxShadow: theme.shadows[8],
+          },
+        }}
+      >
+        {t("market.filters", "Filters")}
+      </Button>
+    )
+  }
+
+  // On desktop, use the original icon button
   return (
     <IconButton
       color="secondary"

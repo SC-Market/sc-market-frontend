@@ -13,6 +13,7 @@ import {
   Alert,
   IconButton,
   Tooltip,
+  useMediaQuery,
 } from "@mui/material"
 import {
   ContentCopy as CopyIcon,
@@ -31,6 +32,7 @@ import {
 import { useGetUserProfileQuery } from "../../store/profile.ts"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { BottomSheet } from "../../components/mobile/BottomSheet"
 
 interface TokenDetailsDialogProps {
   open: boolean
@@ -45,6 +47,7 @@ export function TokenDetailsDialog({
 }: TokenDetailsDialogProps) {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const { data: stats } = useGetTokenStatsQuery(token?.id || "", {
     skip: !token?.id,
   })
@@ -111,16 +114,9 @@ export function TokenDetailsDialog({
 
   const expiryStatus = getExpiryStatus(token.expires_at)
 
-  return (
-    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>
-        <Box display="flex" alignItems="center" gap={1}>
-          <SecurityIcon />
-          Token Details
-        </Box>
-      </DialogTitle>
-      <DialogContent>
-        <Grid container spacing={theme.layoutSpacing.layout}>
+  // Content to reuse in both Dialog and BottomSheet
+  const dialogContent = (
+    <Grid container spacing={theme.layoutSpacing.layout}>
           <Grid item xs={12}>
             <Box
               display="flex"
@@ -311,7 +307,38 @@ export function TokenDetailsDialog({
             </Alert>
           </Grid>
         </Grid>
-      </DialogContent>
+  )
+
+  // On mobile, use BottomSheet
+  if (isMobile) {
+    return (
+      <BottomSheet
+        open={open}
+        onClose={onClose}
+        title="Token Details"
+        maxHeight="90vh"
+      >
+        <Box display="flex" alignItems="center" gap={1} mb={2}>
+          <SecurityIcon />
+        </Box>
+        {dialogContent}
+        <Box sx={{ mt: 2, display: "flex", justifyContent: "flex-end" }}>
+          <Button onClick={onClose}>Close</Button>
+        </Box>
+      </BottomSheet>
+    )
+  }
+
+  // On desktop, use Dialog
+  return (
+    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
+      <DialogTitle>
+        <Box display="flex" alignItems="center" gap={1}>
+          <SecurityIcon />
+          Token Details
+        </Box>
+      </DialogTitle>
+      <DialogContent>{dialogContent}</DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Close</Button>
       </DialogActions>

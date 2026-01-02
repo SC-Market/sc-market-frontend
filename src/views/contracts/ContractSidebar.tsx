@@ -24,6 +24,7 @@ import { orderIcons } from "../../datatypes/Order"
 import { PAYMENT_TYPES } from "../../util/constants"
 import { useTranslation } from "react-i18next"
 import { LanguageFilter } from "../../components/search/LanguageFilter"
+import { BottomSheet } from "../../components/mobile/BottomSheet"
 
 export function ContractSidebar() {
   const theme: ExtendedTheme = useTheme()
@@ -44,6 +45,7 @@ export function ContractSidebar() {
   const [drawerOpen] = useDrawerOpen()
 
   const xs = useMediaQuery(theme.breakpoints.down("lg"))
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   useEffect(() => {
     setOpen(!xs)
   }, [setOpen, xs])
@@ -92,83 +94,20 @@ export function ContractSidebar() {
     languageCodes,
   ])
 
-  return (
-    <Drawer
-      variant="permanent"
-      open
+  // Content component to reuse in both Drawer and BottomSheet
+  const sidebarContent = (
+    <Box
       sx={{
-        zIndex: theme.zIndex.drawer - 3,
-        width: open ? marketDrawerWidth : 0,
-        transition: theme.transitions.create(["width", "margin"], {
-          easing: theme.transitions.easing.sharp,
-          duration: theme.transitions.duration.enteringScreen,
-        }),
-        "& .MuiDrawer-paper": {
-          width: open ? marketDrawerWidth : 0,
-          boxSizing: "border-box",
-          overflow: "scroll",
-          [theme.breakpoints.up("sm")]: {
-            left: drawerOpen ? sidebarDrawerWidth : 0,
-          },
-          [theme.breakpoints.down("sm")]: {
-            left: 0,
-          },
-          backgroundColor: theme.palette.background.default,
-          transition: theme.transitions.create(
-            ["width", "borderRight", "borderColor"],
-            {
-              easing: theme.transitions.easing.easeOut,
-              duration: "0.3s",
-            },
-          ),
-          borderRight: open ? 1 : 0,
-          borderColor: open ? theme.palette.outline.main : "transparent",
-        },
-        position: "relative",
-        whiteSpace: "nowrap",
-        // backgroundColor: "#132321",
-        // backgroundRepeat: 'no-repeat',
-        // backgroundPosition: 'center',
-        // backgroundSize: "cover",
-        background: "transparent",
-        overflow: "scroll",
-        borderRight: open ? 1 : 0,
-        borderColor: open ? theme.palette.outline.main : "transparent",
+        width: "100%",
+        height: "100%",
+        flexDirection: "column",
+        display: "flex",
+        padding: { xs: theme.spacing(2), md: theme.spacing(3) },
+        paddingTop: { xs: theme.spacing(2), md: theme.spacing(3) },
+        borderColor: theme.palette.outline.main,
       }}
-      container={
-        window !== undefined
-          ? () => window.document.getElementById("rootarea")
-          : undefined
-      }
     >
-      <Box
-        sx={{
-          ...theme.mixins.toolbar,
-          position: "relative",
-          width: "100%",
-        }}
-      />
-      <Box
-        sx={{
-          width: "100%",
-          height: "100%",
-          flexDirection: "column",
-          display: "flex",
-          padding: theme.spacing(3),
-          paddingTop: theme.spacing(3),
-          borderColor: theme.palette.outline.main,
-        }}
-      >
-        <Grid container spacing={theme.layoutSpacing.layout}>
-          <Grid item xs={12}>
-            <IconButton
-              onClick={() => setOpen(false)}
-              color={"secondary"}
-              aria-label={t("service_market.toggle_sidebar")}
-            >
-              <CloseIcon />
-            </IconButton>
-          </Grid>
+      <Grid container spacing={theme.layoutSpacing.layout}>
           <Grid item xs={12}>
             <TextField
               fullWidth
@@ -314,6 +253,82 @@ export function ContractSidebar() {
           </Grid>
         </Grid>
       </Box>
+  )
+
+  // On mobile, use BottomSheet
+  if (isMobile) {
+    return (
+      <>
+        <BottomSheet
+          open={open}
+          onClose={() => setOpen(false)}
+          title={t("service_search.filters", "Filters")}
+          maxHeight="90vh"
+        >
+          {sidebarContent}
+        </BottomSheet>
+        {/* Desktop drawer still needed for layout spacing */}
+        <Drawer
+          variant="permanent"
+          open={false}
+          sx={{
+            width: 0,
+            display: { xs: "none", md: "block" },
+          }}
+        />
+      </>
+    )
+  }
+
+  // On desktop, use permanent drawer
+  return (
+    <Drawer
+      variant="permanent"
+      open
+      sx={{
+        zIndex: theme.zIndex.drawer - 3,
+        width: open ? marketDrawerWidth : 0,
+        transition: theme.transitions.create(["width", "margin"], {
+          easing: theme.transitions.easing.sharp,
+          duration: theme.transitions.duration.enteringScreen,
+        }),
+        "& .MuiDrawer-paper": {
+          width: open ? marketDrawerWidth : 0,
+          boxSizing: "border-box",
+          overflow: "scroll",
+          left: drawerOpen ? sidebarDrawerWidth : 0,
+          backgroundColor: theme.palette.background.default,
+          transition: theme.transitions.create(
+            ["width", "borderRight", "borderColor"],
+            {
+              easing: theme.transitions.easing.easeOut,
+              duration: "0.3s",
+            },
+          ),
+          borderRight: open ? 1 : 0,
+          borderColor: open ? theme.palette.outline.main : "transparent",
+        },
+        position: "relative",
+        whiteSpace: "nowrap",
+        background: "transparent",
+        overflow: "scroll",
+        borderRight: open ? 1 : 0,
+        borderColor: open ? theme.palette.outline.main : "transparent",
+      }}
+      container={
+        window !== undefined
+          ? () => window.document.getElementById("rootarea")
+          : undefined
+      }
+    >
+      <Box
+        sx={{
+          ...theme.mixins.toolbar,
+          position: "relative",
+          width: "100%",
+        }}
+      />
+      {sidebarContent}
     </Drawer>
   )
 }

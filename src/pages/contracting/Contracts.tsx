@@ -11,7 +11,8 @@ import {
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
 import CloseIcon from "@mui/icons-material/CloseRounded"
 import MenuIcon from "@mui/icons-material/MenuRounded"
-import { Button, Grid, IconButton } from "@mui/material"
+import FilterListIcon from "@mui/icons-material/FilterList"
+import { Button, Grid, IconButton, useMediaQuery } from "@mui/material"
 import { Page } from "../../components/metadata/Page"
 import { Link } from "react-router-dom"
 import { CreateRounded } from "@mui/icons-material"
@@ -22,6 +23,7 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 export function Contracts() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const [open, setOpen] = useState(true)
   const [drawerOpen] = useDrawerOpen()
 
@@ -31,22 +33,50 @@ export function Contracts() {
         value={useState<ContractSearchState>({ query: "", sort: "date-old" })}
       >
         <ContractSidebarContext.Provider value={[open, setOpen]}>
-          <IconButton
-            color="secondary"
-            aria-label={t("contracts.toggleSidebar")}
-            sx={{
-              position: "absolute",
-              zIndex: 50,
-              left: (drawerOpen ? sidebarDrawerWidth : 0) + 24,
-              top: 64 + 24,
-              transition: "0.3s",
-            }}
-            onClick={() => {
-              setOpen(true)
-            }}
-          >
-            {open ? <CloseIcon /> : <MenuIcon />}
-          </IconButton>
+          {isMobile ? (
+            <Button
+              variant="outlined"
+              color="secondary"
+              startIcon={<FilterListIcon />}
+              aria-label={t("contracts.toggleSidebar")}
+              onClick={() => {
+                setOpen(true)
+              }}
+              sx={{
+                position: "fixed",
+                bottom: { xs: 80, sm: 24 },
+                right: 24,
+                zIndex: theme.zIndex.speedDial,
+                borderRadius: 2,
+                textTransform: "none",
+                boxShadow: theme.shadows[4],
+                backgroundColor: theme.palette.background.paper,
+                "&:hover": {
+                  backgroundColor: theme.palette.background.paper,
+                  boxShadow: theme.shadows[8],
+                },
+              }}
+            >
+              {t("contracts.filters", "Filters")}
+            </Button>
+          ) : (
+            <IconButton
+              color="secondary"
+              aria-label={t("contracts.toggleSidebar")}
+              sx={{
+                position: "absolute",
+                zIndex: 50,
+                left: (drawerOpen ? sidebarDrawerWidth : 0) + 24,
+                top: 64 + 24,
+                transition: "0.3s",
+              }}
+              onClick={() => {
+                setOpen(true)
+              }}
+            >
+              {open ? <CloseIcon /> : <MenuIcon />}
+            </IconButton>
+          )}
           <ContractSidebar />
           <ContainerGrid maxWidth={"lg"} sidebarOpen={true}>
             <Grid item xs={12}>

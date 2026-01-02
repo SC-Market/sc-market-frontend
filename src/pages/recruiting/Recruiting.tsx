@@ -6,11 +6,13 @@ import {
   Grid,
   IconButton,
   TablePagination,
+  useMediaQuery,
 } from "@mui/material"
 import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
 import CloseIcon from "@mui/icons-material/CloseRounded"
 import MenuIcon from "@mui/icons-material/MenuRounded"
+import FilterListIcon from "@mui/icons-material/FilterList"
 import { Page } from "../../components/metadata/Page"
 import { RecruitingSidebar } from "../../views/recruiting/RecruitingSidebar"
 import { RecruitingSidebarContext } from "../../hooks/recruiting/RecruitingSidebar"
@@ -85,27 +87,56 @@ export function Recruiting() {
 
   const [drawerOpen] = useDrawerOpen()
   const [sidebarOpen, setSidebarOpen] = useState(true)
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
 
   return (
     <Page title={t("recruiting_orgs")}>
       <RecruitingSidebarContext.Provider value={[sidebarOpen, setSidebarOpen]}>
         <RecruitingSearchContext.Provider value={[searchState, setSearchState]}>
-          <IconButton
-            color="secondary"
-            aria-label={t("toggle_market_sidebar")}
-            sx={{
-              position: "absolute",
-              zIndex: 50,
-              left: (drawerOpen ? sidebarDrawerWidth : 0) + 24,
-              top: 64 + 24,
-              transition: "0.3s",
-            }}
-            onClick={() => {
-              setSidebarOpen(true)
-            }}
-          >
-            {sidebarOpen ? <CloseIcon /> : <MenuIcon />}
-          </IconButton>
+          {isMobile ? (
+            <Button
+              variant="outlined"
+              color="secondary"
+              startIcon={<FilterListIcon />}
+              aria-label={t("toggle_market_sidebar")}
+              onClick={() => {
+                setSidebarOpen(true)
+              }}
+              sx={{
+                position: "fixed",
+                bottom: { xs: 80, sm: 24 },
+                right: 24,
+                zIndex: theme.zIndex.speedDial,
+                borderRadius: 2,
+                textTransform: "none",
+                boxShadow: theme.shadows[4],
+                backgroundColor: theme.palette.background.paper,
+                "&:hover": {
+                  backgroundColor: theme.palette.background.paper,
+                  boxShadow: theme.shadows[8],
+                },
+              }}
+            >
+              {t("recruiting_sidebar.filters", "Filters")}
+            </Button>
+          ) : (
+            <IconButton
+              color="secondary"
+              aria-label={t("toggle_market_sidebar")}
+              sx={{
+                position: "absolute",
+                zIndex: 50,
+                left: (drawerOpen ? sidebarDrawerWidth : 0) + 24,
+                top: 64 + 24,
+                transition: "0.3s",
+              }}
+              onClick={() => {
+                setSidebarOpen(true)
+              }}
+            >
+              {sidebarOpen ? <CloseIcon /> : <MenuIcon />}
+            </IconButton>
+          )}
 
           <RecruitingSidebar />
           <ContainerGrid maxWidth={"md"} sidebarOpen={true}>

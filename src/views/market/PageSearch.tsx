@@ -13,6 +13,7 @@ import {
   Paper,
   TextField,
   Typography,
+  useMediaQuery,
 } from "@mui/material"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { Section } from "../../components/paper/Section"
@@ -25,6 +26,7 @@ import { useTheme } from "@mui/material/styles"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { MarkdownRender } from "../../components/markdown/Markdown"
 import { useTranslation } from "react-i18next"
+import { BottomSheet } from "../../components/mobile/BottomSheet"
 
 const valid_categories = [
   "Category:Armor_set",
@@ -134,18 +136,20 @@ export function PageSearch(props: {
     }
   }, [query, retrieve])
 
-  return (
-    <Modal open={open} onClose={() => callback(page)}>
-      <ContainerGrid sidebarOpen={false} maxWidth={"md"} noFooter>
-        <Section
-          title={t("PageSearch.selectItem")}
-          xs={12}
-          onClick={(event) => {
-            event.preventDefault()
-            event.stopPropagation()
-            return false
-          }}
-        >
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+
+  // Content to reuse
+  const searchContent = (
+    <ContainerGrid sidebarOpen={false} maxWidth={"md"} noFooter>
+      <Section
+        title={t("PageSearch.selectItem")}
+        xs={12}
+        onClick={(event) => {
+          event.preventDefault()
+          event.stopPropagation()
+          return false
+        }}
+      >
           <Grid item xs={12} md={3}>
             <CardMedia
               component="img"
@@ -267,6 +271,26 @@ export function PageSearch(props: {
           </Grid>
         </Section>
       </ContainerGrid>
+  )
+
+  // On mobile, use BottomSheet
+  if (isMobile) {
+    return (
+      <BottomSheet
+        open={open}
+        onClose={() => callback(page)}
+        title={t("PageSearch.selectItem")}
+        maxHeight="90vh"
+      >
+        {searchContent}
+      </BottomSheet>
+    )
+  }
+
+  // On desktop, use Modal
+  return (
+    <Modal open={open} onClose={() => callback(page)}>
+      {searchContent}
     </Modal>
   )
 }
