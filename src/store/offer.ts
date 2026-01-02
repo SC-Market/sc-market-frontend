@@ -3,7 +3,7 @@ import { MinimalUser } from "../datatypes/User"
 import { MinimalContractor } from "../datatypes/Contractor"
 import { OrderAvailability, Service } from "../datatypes/Order"
 import { UniqueListing } from "../datatypes/MarketListing"
-import { unwrapResponse } from "./orders"
+import { unwrapResponse } from "./api-utils"
 import { generateTempId, createOptimisticUpdate } from "../util/optimisticUpdates"
 
 export interface OfferSessionStub {

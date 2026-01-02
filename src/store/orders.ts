@@ -6,27 +6,29 @@ import {
 } from "../datatypes/Order"
 import { serviceApi } from "./service"
 import { generateTempId, createOptimisticUpdate } from "../util/optimisticUpdates"
+import { unwrapResponse } from "./api-utils"
 
-export interface ErrorResponse<E> {
-  error: E
-  errors: E[]
-  validationErrors: E[]
-  message?: string
-}
+/**
+ * Re-export shared API types and utilities
+ * 
+ * For backward compatibility, we re-export from the shared files.
+ * New code should import directly from ./api-types and ./api-utils
+ */
+export type {
+  APIResponse,
+  StandardErrorResponse,
+  StandardSuccessResponse,
+  Response,
+  ValidationError,
+} from "./api-types"
 
-export interface SuccessResponse<T> {
-  data: T
-}
-
-export type Response<T, E> = ErrorResponse<E> | SuccessResponse<T>
-
-export function unwrapResponse<T, E>(response: Response<T, E>) {
-  if ((response as SuccessResponse<T>).data) {
-    return (response as SuccessResponse<T>).data
-  } else {
-    return (response as ErrorResponse<E>).error
-  }
-}
+export {
+  unwrapResponse,
+  extractErrorMessage,
+  extractErrorCode,
+  isErrorResponse,
+  isSuccessResponse,
+} from "./api-utils"
 
 const ordersApi = serviceApi.injectEndpoints({
   overrideExisting: false,

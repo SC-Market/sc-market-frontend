@@ -9,7 +9,7 @@ import {
 import { OrderReview } from "../datatypes/Order"
 import { serviceApi } from "./service"
 import { DiscordSettings, OrderWebhook, Rating } from "../datatypes/Contractor"
-import { unwrapResponse } from "./orders"
+import { unwrapResponse } from "./api-utils"
 import { Language } from "../constants/languages"
 import { createOptimisticUpdate } from "../util/optimisticUpdates"
 

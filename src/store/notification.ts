@@ -74,7 +74,7 @@ export const notificationApi = serviceApi.injectEndpoints({
         body,
       }),
       invalidatesTags: [
-        // Invalidate all notification queries since bulk operations affect all
+        // RTK Query automatically invalidates all queries that provide this tag
         "Notifications" as const,
       ],
     }),
