@@ -31,8 +31,8 @@ export function MobileBottomNav() {
   const { data: userProfile } = useGetUserProfileQuery()
   const isLoggedIn = !!userProfile
 
-  // Only show on mobile devices - check this BEFORE hooks to avoid hook order issues
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  // Only show on xs devices (not sm) - check this BEFORE hooks to avoid hook order issues
+  const isMobile = useMediaQuery(theme.breakpoints.only("xs"))
 
   const navRef = useRef<HTMLDivElement>(null)
   const [indicatorStyle, setIndicatorStyle] = useState<{
@@ -122,7 +122,7 @@ export function MobileBottomNav() {
         right: 0,
         zIndex: theme.zIndex.drawer + 1, // Above sidebar but below modals
         borderTop: `1px solid ${theme.palette.outline.main}`,
-        display: { xs: "block", md: "none" },
+        display: { xs: "block", sm: "none" },
         // Add padding for safe area on iOS devices
         paddingBottom: "env(safe-area-inset-bottom)",
       }}

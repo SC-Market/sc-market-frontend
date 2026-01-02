@@ -405,18 +405,26 @@ export function Sidebar() {
   }, [setDrawerOpen, xs])
 
   // Close drawer on mobile when navigating to a new route
+  const prevPathname = React.useRef<string>(location.pathname)
   useEffect(() => {
-    if (xs && drawerOpen) {
+    // Only close if the pathname actually changed (user navigated)
+    if (xs && prevPathname.current !== location.pathname) {
+      // Close drawer when navigating on mobile
       setDrawerOpen(false)
+      prevPathname.current = location.pathname
+    } else if (prevPathname.current !== location.pathname) {
+      // Update ref to track pathname changes (for non-mobile or when drawer already closed)
+      prevPathname.current = location.pathname
     }
-  }, [location.pathname, xs, drawerOpen, setDrawerOpen])
+  }, [location.pathname, xs, setDrawerOpen])
 
   return (
     <Drawer
       elevation={1}
       PaperProps={{ elevation: 8 }}
-      variant="permanent"
-      open
+      variant={xs ? "temporary" : "permanent"}
+      open={drawerOpen}
+      onClose={() => setDrawerOpen(false)}
       sx={{
         transition: theme.transitions.create("width", {
           easing: theme.transitions.easing.easeOut,
