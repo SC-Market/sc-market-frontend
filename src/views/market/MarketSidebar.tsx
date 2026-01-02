@@ -377,11 +377,12 @@ export function MarketSidebar(props: { status?: boolean }) {
             left: 0,
           },
           // backgroundColor: theme.palette.background.default,
-          transition: theme.transitions.create("width", {
+          transition: theme.transitions.create(["width", "borderRight", "borderColor"], {
             easing: theme.transitions.easing.easeOut,
             duration: "0.3s",
           }),
-          borderColor: theme.palette.outline.main,
+          borderRight: open ? 1 : 0,
+          borderColor: open ? theme.palette.outline.main : "transparent",
         },
         position: "relative",
         whiteSpace: "nowrap",
@@ -391,7 +392,8 @@ export function MarketSidebar(props: { status?: boolean }) {
         // backgroundSize: "cover",
         background: "transparent",
         overflow: "scroll",
-        borderColor: theme.palette.outline.main,
+        borderRight: open ? 1 : 0,
+        borderColor: open ? theme.palette.outline.main : "transparent",
       }}
       container={
         window !== undefined

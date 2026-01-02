@@ -153,10 +153,12 @@ export function MessagingSidebar() {
           overflow: "scroll",
           left: drawerOpen ? sidebarDrawerWidth : 0,
           backgroundColor: theme.palette.background.paper,
-          transition: theme.transitions.create("width", {
+          transition: theme.transitions.create(["width", "borderRight", "borderColor"], {
             easing: theme.transitions.easing.easeOut,
             duration: "0.3s",
           }),
+          borderRight: messagingSidebar ? 1 : 0,
+          borderColor: messagingSidebar ? theme.palette.outline.main : "transparent",
         },
         position: "relative",
         whiteSpace: "nowrap",
@@ -193,10 +195,10 @@ export function MessagingSidebar() {
           flexDirection: "column",
           // justifyContent: 'space-between',
           display: "flex",
-          borderRight: 1,
+          borderRight: messagingSidebar ? 1 : 0,
           // borderTop: 1,
           paddingTop: theme.spacing(3),
-          borderColor: theme.palette.outline.main,
+          borderColor: messagingSidebar ? theme.palette.outline.main : "transparent",
         }}
       >
         <Box
