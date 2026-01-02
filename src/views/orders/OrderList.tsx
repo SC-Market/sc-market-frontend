@@ -42,6 +42,7 @@ import { useTranslation } from "react-i18next"
 import { useDebounce } from "../../hooks/useDebounce"
 import { ExpandLess, ExpandMore, Search } from "@mui/icons-material"
 import { OrderRowSkeleton } from "../../components/skeletons"
+import { EmptyOrders } from "../../components/empty-states"
 
 export const statusColors = new Map<
   | "active"
@@ -658,6 +659,15 @@ export function OrdersViewPaginated(props: {
           disableSelect
           loading={isLoading || isFetching}
           loadingRowComponent={OrderRowSkeleton}
+          emptyStateComponent={
+            !(isLoading || isFetching) && (orders?.items || []).length === 0 ? (
+              <EmptyOrders
+                isOffers={false}
+                showCreateAction={mine}
+                sx={{ py: 4 }}
+              />
+            ) : undefined
+          }
         />
       </Paper>
     </Grid>

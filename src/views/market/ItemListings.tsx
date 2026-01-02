@@ -101,6 +101,7 @@ import {
   calculateRequestSize,
 } from "../../components/ads/adUtils"
 import { ListingSkeleton as StandardListingSkeleton } from "../../components/skeletons"
+import { EmptyListings } from "../../components/empty-states"
 
 export function ListingRefreshButton(props: {
   listing: ExtendedUniqueSearchResult
@@ -1210,7 +1211,7 @@ export function DisplayListings(props: {
 
       {listings !== undefined && !listings.length && !props.loading && (
         <Grid item xs={12}>
-          {t("no_listings")}
+          <EmptyListings isSearchResult={true} />
         </Grid>
       )}
 

@@ -48,6 +48,7 @@ import { a11yProps } from "../../components/tabs/Tabs"
 import { Stack } from "@mui/system"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { EmptyOrders } from "../../components/empty-states"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useGetUserProfileQuery } from "../../store/profile"
 import { OrderSearchSortMethod } from "../../datatypes/Order"
@@ -726,6 +727,15 @@ export function OffersViewPaginated(props: {
           selected={!mine ? selectedOfferIds : undefined}
           onSelectChange={!mine ? handleSelectChange : undefined}
           onPageChange={setPage}
+          emptyStateComponent={
+            !(isLoading || isFetching) && (data?.items || []).length === 0 ? (
+              <EmptyOrders
+                isOffers={true}
+                showCreateAction={false}
+                sx={{ py: 4 }}
+              />
+            ) : undefined
+          }
           page={page}
           onPageSizeChange={setPageSize}
           pageSize={pageSize}
