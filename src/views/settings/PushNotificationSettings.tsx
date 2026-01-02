@@ -39,6 +39,8 @@ import {
   requiresPWAInstallationForPush,
   getPWAInstallationMessage,
 } from "../../util/pwa-detection"
+import { usePWAInstallPrompt } from "../../hooks/pwa/usePWAInstallPrompt"
+import { GetAppRounded } from "@mui/icons-material"
 import {
   isAndroidDevice,
   isAndroidPushSupported,
@@ -126,6 +128,7 @@ export function PushNotificationSettings() {
   const pwaInstalled = isPWAInstalled()
   const requiresPWAInstall = requiresPWAInstallationForPush()
   const pwaInstallMessage = getPWAInstallationMessage()
+  const { canInstall, triggerInstall } = usePWAInstallPrompt()
 
   // Android-specific checks
   const isAndroid = isAndroidDevice()
@@ -299,11 +302,29 @@ export function PushNotificationSettings() {
           <Typography variant="body2">{pwaInstallMessage}</Typography>
         </Alert>
         <Box sx={{ mt: 2 }}>
-          <Typography variant="body2" color="text.secondary">
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
             Once installed, you can return here to enable push notifications.
           </Typography>
+          {canInstall && (
+            <Button
+              variant="contained"
+              color="primary"
+              startIcon={<GetAppRounded />}
+              onClick={async () => {
+                const success = await triggerInstall()
+                if (success) {
+                  setSuccess("App installed! You can now enable push notifications.")
+                } else {
+                  setError("Installation was cancelled or failed. Please try again.")
+                }
+              }}
+              sx={{ mb: 2 }}
+            >
+              Install App
+            </Button>
+          )}
           {!pwaInstalled && (
-            <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+            <Typography variant="body2" color="text.secondary">
               Current status: Not installed as PWA
             </Typography>
           )}
