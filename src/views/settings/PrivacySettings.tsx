@@ -14,18 +14,30 @@ import {
 import { AccountSettingsBody } from "../../hooks/login/UserProfile"
 import { BACKEND_URL } from "../../util/constants"
 import { useTranslation } from "react-i18next"
+import { useAlertHook } from "../../hooks/alert/AlertHook"
 
 export function PrivacySettings() {
   const { data: profile, refetch } = useGetUserProfileQuery()
   const [updateProfile] = useProfileUpdateSettingsMutation()
   const { t } = useTranslation()
+  const issueAlert = useAlertHook()
 
   const handleUpdate = useCallback(
     (body: AccountSettingsBody) => {
       updateProfile(body)
-      refetch()
+        .unwrap()
+        .then(() => {
+          issueAlert({
+            message: t("privacy_settings.updated", {
+              defaultValue: "Settings updated successfully",
+            }),
+            severity: "success",
+          })
+          refetch()
+        })
+        .catch(issueAlert)
     },
-    [updateProfile, refetch],
+    [updateProfile, refetch, issueAlert, t],
   )
 
   return (

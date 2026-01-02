@@ -18,6 +18,7 @@ import {
 } from "@mui/material"
 import { FlatSection } from "../paper/Section"
 import { useTranslation } from "react-i18next"
+import { useAlertHook } from "../../hooks/alert/AlertHook"
 import {
   OrderSetting,
   CreateOrderSettingRequest,
@@ -39,6 +40,7 @@ interface OrderSettingsProps {
 
 export function OrderSettings({ entityType, entityId }: OrderSettingsProps) {
   const { t } = useTranslation()
+  const issueAlert = useAlertHook()
   const [offerMessage, setOfferMessage] = useState("")
   const [orderMessage, setOrderMessage] = useState("")
   const [offerEnabled, setOfferEnabled] = useState(true)
@@ -197,7 +199,7 @@ export function OrderSettings({ entityType, entityId }: OrderSettingsProps) {
     }
   }, [settings])
 
-  const handleLimitSetting = async (
+  const handleLimitSetting = (
     settingType:
       | "min_order_size"
       | "max_order_size"
@@ -207,35 +209,46 @@ export function OrderSettings({ entityType, entityId }: OrderSettingsProps) {
     enabled: boolean,
     settingId: string | null,
     setSettingId: (id: string | null) => void,
-  ) => {
+  ): Promise<void> => {
     if (settingId) {
       // Update existing
       if (enabled && value.trim()) {
         if (entityType === "user") {
-          await updateUserSetting({
+          return updateUserSetting({
             id: settingId,
             message_content: value.trim(),
             enabled: true,
-          }).unwrap()
+          })
+            .unwrap()
+            .then(() => {})
         } else {
-          await updateContractorSetting({
+          return updateContractorSetting({
             contractorId: entityId!,
             id: settingId,
             message_content: value.trim(),
             enabled: true,
-          }).unwrap()
+          })
+            .unwrap()
+            .then(() => {})
         }
       } else {
         // Disabled or empty - delete
         if (entityType === "user") {
-          await deleteUserSetting(settingId).unwrap()
+          return deleteUserSetting(settingId)
+            .unwrap()
+            .then(() => {
+              setSettingId(null)
+            })
         } else {
-          await deleteContractorSetting({
+          return deleteContractorSetting({
             contractorId: entityId!,
             id: settingId,
-          }).unwrap()
+          })
+            .unwrap()
+            .then(() => {
+              setSettingId(null)
+            })
         }
-        setSettingId(null)
       }
     } else if (enabled && value.trim()) {
       // Create new
@@ -246,242 +259,332 @@ export function OrderSettings({ entityType, entityId }: OrderSettingsProps) {
       }
 
       if (entityType === "user") {
-        const result = await createUserSetting(request).unwrap()
-        setSettingId(result.setting.id)
+        return createUserSetting(request)
+          .unwrap()
+          .then((result) => {
+            setSettingId(result.setting.id)
+          })
       } else {
-        const result = await createContractorSetting({
+        return createContractorSetting({
           contractorId: entityId!,
           ...request,
-        }).unwrap()
-        setSettingId(result.setting.id)
+        })
+          .unwrap()
+          .then((result) => {
+            setSettingId(result.setting.id)
+          })
       }
     }
+    return Promise.resolve()
   }
 
-  const handleSave = async () => {
+  const handleSave = () => {
     setSaving(true)
     setError(null)
     setSuccess(null)
 
-    try {
-      // Handle offer message
-      if (offerSettingId) {
-        // Update existing
-        if (entityType === "user") {
-          await updateUserSetting({
+    // Build promise chain for all operations
+    let promise: Promise<unknown> = Promise.resolve()
+
+    // Handle offer message
+    if (offerSettingId) {
+      // Update existing
+      if (entityType === "user") {
+        promise = promise.then(() =>
+          updateUserSetting({
             id: offerSettingId,
             message_content: offerMessage,
             enabled: offerEnabled,
-          }).unwrap()
-        } else {
-          await updateContractorSetting({
-            contractorId: entityId!,
-            id: offerSettingId,
-            message_content: offerMessage,
-            enabled: offerEnabled,
-          }).unwrap()
-        }
-      } else if (offerMessage.trim()) {
-        // Create new
-        const request: CreateOrderSettingRequest = {
-          setting_type: "offer_message",
-          message_content: offerMessage,
-          enabled: offerEnabled,
-        }
-
-        if (entityType === "user") {
-          await createUserSetting(request).unwrap()
-        } else {
-          await createContractorSetting({
-            contractorId: entityId!,
-            ...request,
-          }).unwrap()
-        }
-      }
-
-      // Handle order message
-      if (orderSettingId) {
-        // Update existing
-        if (entityType === "user") {
-          await updateUserSetting({
-            id: orderSettingId,
-            message_content: orderMessage,
-            enabled: orderEnabled,
-          }).unwrap()
-        } else {
-          await updateContractorSetting({
-            contractorId: entityId!,
-            id: orderSettingId,
-            message_content: orderMessage,
-            enabled: orderEnabled,
-          }).unwrap()
-        }
-      } else if (orderMessage.trim()) {
-        // Create new
-        const request: CreateOrderSettingRequest = {
-          setting_type: "order_message",
-          message_content: orderMessage,
-          enabled: orderEnabled,
-        }
-
-        if (entityType === "user") {
-          await createUserSetting(request).unwrap()
-        } else {
-          await createContractorSetting({
-            contractorId: entityId!,
-            ...request,
-          }).unwrap()
-        }
-      }
-
-      // Handle availability requirement
-      if (requireAvailabilitySettingId) {
-        // Update existing
-        if (entityType === "user") {
-          await updateUserSetting({
-            id: requireAvailabilitySettingId,
-            message_content: "", // Not used for require_availability
-            enabled: requireAvailabilityEnabled,
-          }).unwrap()
-        } else {
-          await updateContractorSetting({
-            contractorId: entityId!,
-            id: requireAvailabilitySettingId,
-            message_content: "", // Not used for require_availability
-            enabled: requireAvailabilityEnabled,
-          }).unwrap()
-        }
-      } else if (requireAvailabilityEnabled) {
-        // Create new
-        const request: CreateOrderSettingRequest = {
-          setting_type: "require_availability",
-          message_content: "", // Not used for require_availability
-          enabled: requireAvailabilityEnabled,
-        }
-
-        if (entityType === "user") {
-          await createUserSetting(request).unwrap()
-        } else {
-          await createContractorSetting({
-            contractorId: entityId!,
-            ...request,
-          }).unwrap()
-        }
-      } else if (requireAvailabilitySettingId && !requireAvailabilityEnabled) {
-        // Setting exists but is disabled - delete it
-        if (entityType === "user") {
-          await deleteUserSetting(requireAvailabilitySettingId).unwrap()
-        } else {
-          await deleteContractorSetting({
-            contractorId: entityId!,
-            id: requireAvailabilitySettingId,
-          }).unwrap()
-        }
-        setRequireAvailabilitySettingId(null)
-      }
-
-      // Handle stock subtraction timing
-      if (stockSubtractionTiming === "on_accepted") {
-        // "on_accepted" is the default - delete setting if it exists
-        if (stockSubtractionTimingSettingId) {
-          if (entityType === "user") {
-            await deleteUserSetting(stockSubtractionTimingSettingId).unwrap()
-          } else {
-            await deleteContractorSetting({
-              contractorId: entityId!,
-              id: stockSubtractionTimingSettingId,
-            }).unwrap()
-          }
-          setStockSubtractionTimingSettingId(null)
-        }
-        // If no setting exists, nothing to do (already at default)
+          }).unwrap(),
+        )
       } else {
-        // "on_received" or "dont_subtract" - create or update setting
-        const request: CreateOrderSettingRequest = {
-          setting_type: "stock_subtraction_timing",
-          message_content: stockSubtractionTiming,
-          enabled: true,
-        }
+        promise = promise.then(() =>
+          updateContractorSetting({
+            contractorId: entityId!,
+            id: offerSettingId,
+            message_content: offerMessage,
+            enabled: offerEnabled,
+          }).unwrap(),
+        )
+      }
+    } else if (offerMessage.trim()) {
+      // Create new
+      const request: CreateOrderSettingRequest = {
+        setting_type: "offer_message",
+        message_content: offerMessage,
+        enabled: offerEnabled,
+      }
 
-        if (stockSubtractionTimingSettingId) {
-          // Update existing
-          if (entityType === "user") {
-            await updateUserSetting({
-              id: stockSubtractionTimingSettingId,
-              message_content: stockSubtractionTiming,
-              enabled: true,
-            }).unwrap()
-          } else {
-            await updateContractorSetting({
+      if (entityType === "user") {
+        promise = promise.then(() => createUserSetting(request).unwrap())
+      } else {
+        promise = promise.then(() =>
+          createContractorSetting({
+            contractorId: entityId!,
+            ...request,
+          }).unwrap(),
+        )
+      }
+    }
+
+    // Handle order message
+    if (orderSettingId) {
+      // Update existing
+      if (entityType === "user") {
+        promise = promise.then(() =>
+          updateUserSetting({
+            id: orderSettingId,
+            message_content: orderMessage,
+            enabled: orderEnabled,
+          }).unwrap(),
+        )
+      } else {
+        promise = promise.then(() =>
+          updateContractorSetting({
+            contractorId: entityId!,
+            id: orderSettingId,
+            message_content: orderMessage,
+            enabled: orderEnabled,
+          }).unwrap(),
+        )
+      }
+    } else if (orderMessage.trim()) {
+      // Create new
+      const request: CreateOrderSettingRequest = {
+        setting_type: "order_message",
+        message_content: orderMessage,
+        enabled: orderEnabled,
+      }
+
+      if (entityType === "user") {
+        promise = promise.then(() => createUserSetting(request).unwrap())
+      } else {
+        promise = promise.then(() =>
+          createContractorSetting({
+            contractorId: entityId!,
+            ...request,
+          }).unwrap(),
+        )
+      }
+    }
+
+    // Handle availability requirement
+    if (requireAvailabilitySettingId) {
+      // Update existing
+      if (entityType === "user") {
+        promise = promise.then(() =>
+          updateUserSetting({
+            id: requireAvailabilitySettingId,
+            message_content: "", // Not used for require_availability
+            enabled: requireAvailabilityEnabled,
+          }).unwrap(),
+        )
+      } else {
+        promise = promise.then(() =>
+          updateContractorSetting({
+            contractorId: entityId!,
+            id: requireAvailabilitySettingId,
+            message_content: "", // Not used for require_availability
+            enabled: requireAvailabilityEnabled,
+          }).unwrap(),
+        )
+      }
+    } else if (requireAvailabilityEnabled) {
+      // Create new
+      const request: CreateOrderSettingRequest = {
+        setting_type: "require_availability",
+        message_content: "", // Not used for require_availability
+        enabled: requireAvailabilityEnabled,
+      }
+
+      if (entityType === "user") {
+        promise = promise.then(() => createUserSetting(request).unwrap())
+      } else {
+        promise = promise.then(() =>
+          createContractorSetting({
+            contractorId: entityId!,
+            ...request,
+          }).unwrap(),
+        )
+      }
+    } else if (requireAvailabilitySettingId && !requireAvailabilityEnabled) {
+      // Setting exists but is disabled - delete it
+      if (entityType === "user") {
+        promise = promise
+          .then(() => deleteUserSetting(requireAvailabilitySettingId).unwrap())
+          .then(() => {
+            setRequireAvailabilitySettingId(null)
+          })
+      } else {
+        promise = promise
+          .then(() =>
+            deleteContractorSetting({
               contractorId: entityId!,
-              id: stockSubtractionTimingSettingId,
-              message_content: stockSubtractionTiming,
-              enabled: true,
-            }).unwrap()
-          }
+              id: requireAvailabilitySettingId,
+            }).unwrap(),
+          )
+          .then(() => {
+            setRequireAvailabilitySettingId(null)
+          })
+      }
+    }
+
+    // Handle stock subtraction timing
+    if (stockSubtractionTiming === "on_accepted") {
+      // "on_accepted" is the default - delete setting if it exists
+      if (stockSubtractionTimingSettingId) {
+        if (entityType === "user") {
+          promise = promise
+            .then(() =>
+              deleteUserSetting(stockSubtractionTimingSettingId).unwrap(),
+            )
+            .then(() => {
+              setStockSubtractionTimingSettingId(null)
+            })
         } else {
-          // Create new
-          if (entityType === "user") {
-            const result = await createUserSetting(request).unwrap()
-            setStockSubtractionTimingSettingId(result.setting.id)
-          } else {
-            const result = await createContractorSetting({
-              contractorId: entityId!,
-              ...request,
-            }).unwrap()
-            setStockSubtractionTimingSettingId(result.setting.id)
-          }
+          promise = promise
+            .then(() =>
+              deleteContractorSetting({
+                contractorId: entityId!,
+                id: stockSubtractionTimingSettingId,
+              }).unwrap(),
+            )
+            .then(() => {
+              setStockSubtractionTimingSettingId(null)
+            })
         }
+      }
+      // If no setting exists, nothing to do (already at default)
+    } else {
+      // "on_received" or "dont_subtract" - create or update setting
+      const request: CreateOrderSettingRequest = {
+        setting_type: "stock_subtraction_timing",
+        message_content: stockSubtractionTiming,
+        enabled: true,
+      }
 
-        // Handle order size limits
-        await handleLimitSetting(
+      if (stockSubtractionTimingSettingId) {
+        // Update existing
+        if (entityType === "user") {
+          promise = promise.then(() =>
+            updateUserSetting({
+              id: stockSubtractionTimingSettingId,
+              message_content: stockSubtractionTiming,
+              enabled: true,
+            }).unwrap(),
+          )
+        } else {
+          promise = promise.then(() =>
+            updateContractorSetting({
+              contractorId: entityId!,
+              id: stockSubtractionTimingSettingId,
+              message_content: stockSubtractionTiming,
+              enabled: true,
+            }).unwrap(),
+          )
+        }
+      } else {
+        // Create new
+        if (entityType === "user") {
+          promise = promise
+            .then(() => createUserSetting(request).unwrap())
+            .then((result) => {
+              setStockSubtractionTimingSettingId(result.setting.id)
+            })
+        } else {
+          promise = promise
+            .then(() =>
+              createContractorSetting({
+                contractorId: entityId!,
+                ...request,
+              }).unwrap(),
+            )
+            .then((result) => {
+              setStockSubtractionTimingSettingId(result.setting.id)
+            })
+        }
+      }
+
+      // Handle order size limits
+      promise = promise.then(() =>
+        handleLimitSetting(
           "min_order_size",
           minOrderSize,
           minOrderSizeEnabled,
           minOrderSizeSettingId,
           setMinOrderSizeSettingId,
-        )
-        await handleLimitSetting(
+        ),
+      )
+      promise = promise.then(() =>
+        handleLimitSetting(
           "max_order_size",
           maxOrderSize,
           maxOrderSizeEnabled,
           maxOrderSizeSettingId,
           setMaxOrderSizeSettingId,
-        )
-        await handleLimitSetting(
+        ),
+      )
+      promise = promise.then(() =>
+        handleLimitSetting(
           "min_order_value",
           minOrderValue,
           minOrderValueEnabled,
           minOrderValueSettingId,
           setMinOrderValueSettingId,
-        )
-        await handleLimitSetting(
+        ),
+      )
+      promise = promise.then(() =>
+        handleLimitSetting(
           "max_order_value",
           maxOrderValue,
           maxOrderValueEnabled,
           maxOrderValueSettingId,
           setMaxOrderValueSettingId,
-        )
-      }
-
-      setSuccess(t("OrderSettings.savedSuccessfully"))
-    } catch (err: any) {
-      const errorMessage =
-        err?.data?.error?.error ||
-        err?.data?.error ||
-        err?.message ||
-        t("OrderSettings.saveError")
-      setError(
-        typeof errorMessage === "string"
-          ? errorMessage
-          : t("OrderSettings.saveError"),
+        ),
       )
-    } finally {
-      setSaving(false)
     }
+
+    promise
+      .then(() => {
+        issueAlert({
+          message: t("OrderSettings.savedSuccessfully"),
+          severity: "success",
+        })
+        setSuccess(t("OrderSettings.savedSuccessfully"))
+        setSaving(false)
+      })
+      .catch((err) => {
+        issueAlert(err)
+        // Extract error message for local state (issueAlert already handles the toast)
+        const errorMessage =
+          (err &&
+          typeof err === "object" &&
+          "data" in err &&
+          err.data &&
+          typeof err.data === "object" &&
+          "error" in err.data
+            ? typeof err.data.error === "object" &&
+              err.data.error &&
+              "error" in err.data.error &&
+              typeof err.data.error.error === "string"
+              ? err.data.error.error
+              : typeof err.data.error === "string"
+                ? err.data.error
+                : undefined
+            : undefined) ||
+          (err &&
+          typeof err === "object" &&
+          "message" in err &&
+          typeof err.message === "string"
+            ? err.message
+            : undefined) ||
+          t("OrderSettings.saveError")
+        setError(errorMessage)
+        setSaving(false)
+      })
   }
 
-  const handleDelete = async (
+  const handleDelete = (
     settingType:
       | "offer_message"
       | "order_message"
@@ -497,34 +600,38 @@ export function OrderSettings({ entityType, entityId }: OrderSettingsProps) {
     setSaving(true)
     setError(null)
 
-    try {
-      const settingId =
-        settingType === "offer_message"
-          ? offerSettingId
-          : settingType === "order_message"
-            ? orderSettingId
-            : settingType === "require_availability"
-              ? requireAvailabilitySettingId
-              : settingType === "stock_subtraction_timing"
-                ? stockSubtractionTimingSettingId
-                : settingType === "min_order_size"
-                  ? minOrderSizeSettingId
-                  : settingType === "max_order_size"
-                    ? maxOrderSizeSettingId
-                    : settingType === "min_order_value"
-                      ? minOrderValueSettingId
-                      : maxOrderValueSettingId
+    const settingId =
+      settingType === "offer_message"
+        ? offerSettingId
+        : settingType === "order_message"
+          ? orderSettingId
+          : settingType === "require_availability"
+            ? requireAvailabilitySettingId
+            : settingType === "stock_subtraction_timing"
+              ? stockSubtractionTimingSettingId
+              : settingType === "min_order_size"
+                ? minOrderSizeSettingId
+                : settingType === "max_order_size"
+                  ? maxOrderSizeSettingId
+                  : settingType === "min_order_value"
+                    ? minOrderValueSettingId
+                    : maxOrderValueSettingId
 
-      if (settingId) {
-        if (entityType === "user") {
-          await deleteUserSetting(settingId).unwrap()
-        } else {
-          await deleteContractorSetting({
+    if (!settingId) {
+      setSaving(false)
+      return
+    }
+
+    const deletePromise =
+      entityType === "user"
+        ? deleteUserSetting(settingId).unwrap()
+        : deleteContractorSetting({
             contractorId: entityId!,
             id: settingId,
           }).unwrap()
-        }
 
+    deletePromise
+      .then(() => {
         // Reset form
         if (settingType === "offer_message") {
           setOfferMessage("")
@@ -558,22 +665,42 @@ export function OrderSettings({ entityType, entityId }: OrderSettingsProps) {
           setMaxOrderValueSettingId(null)
         }
 
+        issueAlert({
+          message: t("OrderSettings.deletedSuccessfully"),
+          severity: "success",
+        })
         setSuccess(t("OrderSettings.deletedSuccessfully"))
-      }
-    } catch (err: any) {
-      const errorMessage =
-        err?.data?.error?.error ||
-        err?.data?.error ||
-        err?.message ||
-        t("OrderSettings.deleteError")
-      setError(
-        typeof errorMessage === "string"
-          ? errorMessage
-          : t("OrderSettings.deleteError"),
-      )
-    } finally {
-      setSaving(false)
-    }
+        setSaving(false)
+      })
+      .catch((err) => {
+        issueAlert(err)
+        // Extract error message for local state (issueAlert already handles the toast)
+        const errorMessage =
+          (err &&
+          typeof err === "object" &&
+          "data" in err &&
+          err.data &&
+          typeof err.data === "object" &&
+          "error" in err.data
+            ? typeof err.data.error === "object" &&
+              err.data.error &&
+              "error" in err.data.error &&
+              typeof err.data.error.error === "string"
+              ? err.data.error.error
+              : typeof err.data.error === "string"
+                ? err.data.error
+                : undefined
+            : undefined) ||
+          (err &&
+          typeof err === "object" &&
+          "message" in err &&
+          typeof err.message === "string"
+            ? err.message
+            : undefined) ||
+          t("OrderSettings.deleteError")
+        setError(errorMessage)
+        setSaving(false)
+      })
   }
 
   if (isLoading) {

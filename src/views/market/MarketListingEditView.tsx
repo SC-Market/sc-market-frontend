@@ -103,6 +103,11 @@ export function MarketListingEditView() {
     setPhotos(listing.photos)
   }, [listing.photos])
 
+  // Watch for internal status updates and sync local state
+  useEffect(() => {
+    setInternal(listing.listing.internal)
+  }, [listing.listing.internal])
+
   const updateListingCallback = useCallback(
     (body: MarketListingUpdateBody) => {
       return updateListing({
@@ -559,7 +564,7 @@ export function MarketListingEditView() {
                       </Box>
                     </>
                   )}
-                  {amContractorManager && (
+                  {amContractorManager && listing.listing.contractor_seller && (
                     <>
                       <Divider light />
                       <Box

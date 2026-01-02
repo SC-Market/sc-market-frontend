@@ -288,7 +288,7 @@ self.addEventListener("message", (event) => {
  * This allows the app to sync data periodically even when not open
  * @see https://developer.mozilla.org/en-US/docs/Web/API/PeriodicBackgroundSync
  */
-self.addEventListener("periodicsync", (event: any) => {
+self.addEventListener("periodicsync", (event) => {
   console.log("Periodic background sync event:", event.tag)
 
   if (event.tag === "sync-notifications") {
@@ -302,7 +302,7 @@ self.addEventListener("periodicsync", (event: any) => {
  * Handle one-time background sync (when device comes back online)
  * This is a fallback for browsers that don't support Periodic Background Sync
  */
-self.addEventListener("sync", (event: any) => {
+self.addEventListener("sync", (event) => {
   console.log("Background sync event (one-time):", event.tag)
 
   if (event.tag === "sync-notifications") {

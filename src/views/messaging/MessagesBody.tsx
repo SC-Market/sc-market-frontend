@@ -48,6 +48,7 @@ import SCMarketLogo from "../../assets/scmarket-logo.png"
 import { DateTimePicker } from "@mui/x-date-pickers"
 import moment from "moment"
 import { useTranslation } from "react-i18next"
+import { useAlertHook } from "../../hooks/alert/AlertHook"
 
 function MessageHeader() {
   const profile = useGetUserProfileQuery()
@@ -944,13 +945,17 @@ export function MessagesBody(props: { maxHeight?: number }) {
     }
   }, [currentChat?.chat_id])
 
+  const issueAlert = useAlertHook()
+
   const onSend = useCallback(
     (content: string) => {
       if (content) {
         sendChatMessage({ chat_id: currentChat!.chat_id, content })
+          .unwrap()
+          .catch(issueAlert)
       }
     },
-    [currentChat, sendChatMessage],
+    [currentChat, sendChatMessage, issueAlert],
   )
 
   return (

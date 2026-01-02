@@ -38,6 +38,7 @@ import throttle from "lodash/throttle"
 import { useCreateChatMutation, useGetMyChatsQuery } from "../../store/chats"
 import { useTranslation } from "react-i18next"
 import { useCurrentChatID } from "../../hooks/messaging/CurrentChatID"
+import { useAlertHook } from "../../hooks/alert/AlertHook"
 
 function MessageHeader(props: {
   target: string
@@ -424,8 +425,9 @@ export function CreateMessageGroupBody() {
 
   const [
     createChatMutation,
-    { isSuccess, isLoading: isCreating, error: createError },
+    { isLoading: isCreating },
   ] = useCreateChatMutation()
+  const issueAlert = useAlertHook()
 
   // Refetch chats after creation to get the new chat
   const { refetch: refetchChats } = useGetMyChatsQuery()
@@ -439,27 +441,6 @@ export function CreateMessageGroupBody() {
     }
   }, [])
 
-  useEffect(() => {
-    if (isSuccess) {
-      // Refetch chats to get the newly created chat
-      refetchChats()
-      setGroupCreate(false)
-      setTarget("")
-      setTargetObject([])
-      setError(null)
-    }
-  }, [isSuccess, setGroupCreate, refetchChats])
-
-  useEffect(() => {
-    if (createError) {
-      setError(
-        createError && "data" in createError
-          ? (createError.data as any)?.error || "Failed to create chat"
-          : "Failed to create chat",
-      )
-    }
-  }, [createError])
-
   const createChat = async () => {
     if (targetObject.length === 0) {
       setError("Please select at least one user")
@@ -467,11 +448,31 @@ export function CreateMessageGroupBody() {
     }
 
     setError(null)
-    try {
-      await createChatMutation({ users: targetObject.map((u) => u.username) })
-    } catch (err) {
-      // Error is handled by useEffect above
-    }
+    createChatMutation({ users: targetObject.map((u) => u.username) })
+      .unwrap()
+      .then(() => {
+        issueAlert({
+          message: t("messages.chatCreated", {
+            defaultValue: "Chat created successfully",
+          }),
+          severity: "success",
+        })
+        // Refetch chats to get the newly created chat
+        refetchChats()
+        setGroupCreate(false)
+        setTarget("")
+        setTargetObject([])
+        setError(null)
+      })
+      .catch((err) => {
+        issueAlert(err)
+        setError(
+          err && "data" in err && err.data
+            ? (err.data as { error?: { message?: string } })?.error?.message ||
+              "Failed to create chat"
+            : "Failed to create chat",
+        )
+      })
   }
 
   const removeUser = (userToRemove: User) => {
