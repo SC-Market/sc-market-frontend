@@ -4,7 +4,7 @@ import { ErrorFallback } from "./ErrorFallback"
 
 /**
  * Error fallback component for React Router errorElement
- * 
+ *
  * This component is used as the errorElement in route definitions.
  * It extracts the error from React Router's useRouteError hook
  * and displays it using the ErrorFallback component.

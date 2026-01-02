@@ -162,7 +162,9 @@ registerRoute(
       url.hostname.includes("sc-market.space") ||
       url.hostname.includes("localhost")
     const isApiPath = url.pathname.startsWith("/api/")
-    const isMutation = ["POST", "PUT", "PATCH", "DELETE"].includes(request.method)
+    const isMutation = ["POST", "PUT", "PATCH", "DELETE"].includes(
+      request.method,
+    )
     const isExcluded =
       url.pathname.includes("/auth/") ||
       url.pathname.includes("/register") ||
@@ -296,7 +298,10 @@ self.addEventListener("push", (event: PushEvent) => {
   }
 
   event.waitUntil(
-    self.registration.showNotification(notificationData.title, notificationOptions),
+    self.registration.showNotification(
+      notificationData.title,
+      notificationOptions,
+    ),
   )
 })
 
@@ -448,7 +453,10 @@ async function syncNotifications(): Promise<void> {
         unread: data.unread_count || 0,
       })
     } else {
-      console.warn("Background sync: Failed to fetch notifications", response.status)
+      console.warn(
+        "Background sync: Failed to fetch notifications",
+        response.status,
+      )
     }
 
     // Notify all clients to refresh notifications
@@ -524,7 +532,7 @@ async function syncData(): Promise<void> {
       `${BACKEND_URL}/api/chats`, // User's chat list (important for communication)
       `${BACKEND_URL}/api/market/mine?pageSize=20`, // User's own market listings
       `${BACKEND_URL}/api/ships/mine`, // User's ships
-      
+
       // Public/active data (medium priority)
       `${BACKEND_URL}/api/contracts`, // Active public contracts
       `${BACKEND_URL}/api/market/listings?pageSize=20`, // Recent market listings (default sort)

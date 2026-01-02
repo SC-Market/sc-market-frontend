@@ -113,7 +113,9 @@ export function SwipeableCard({
             backgroundColor: theme.palette.primary.main,
             zIndex: 1,
             transform: `translateX(${
-              clampedTranslateX > 0 ? clampedTranslateX - leftActionWidth : -leftActionWidth
+              clampedTranslateX > 0
+                ? clampedTranslateX - leftActionWidth
+                : -leftActionWidth
             }px)`,
             transition: isDragging ? "none" : "transform 0.3s ease-out",
             px: 1,

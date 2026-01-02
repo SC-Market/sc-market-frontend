@@ -12,7 +12,7 @@ import { lightTheme } from "../../hooks/styles/Theme"
  * Widget view for recent orders
  * This is a simplified, standalone view designed for PWA widgets
  * Uses existing backend API and frontend components
- * 
+ *
  * This component is wrapped in HookProvider and ThemeProvider to work standalone
  */
 function OrdersWidgetContent() {

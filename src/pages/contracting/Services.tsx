@@ -5,7 +5,14 @@ import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
 import CloseIcon from "@mui/icons-material/CloseRounded"
 import MenuIcon from "@mui/icons-material/MenuRounded"
 import FilterListIcon from "@mui/icons-material/FilterList"
-import { Button, Grid, IconButton, Box, Typography, useMediaQuery } from "@mui/material"
+import {
+  Button,
+  Grid,
+  IconButton,
+  Box,
+  Typography,
+  useMediaQuery,
+} from "@mui/material"
 import { Page } from "../../components/metadata/Page"
 import { ServiceSidebar } from "../../views/contracts/ServiceSidebar"
 import { ServiceSidebarContext } from "../../hooks/contract/ServiceSidebar"

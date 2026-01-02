@@ -1,20 +1,26 @@
 /**
  * AnimatedListItem Component
- * 
+ *
  * NEW: Custom component for staggered fade-in animations
- * 
+ *
  * Provides Grid-compatible staggered animations for list items.
  * Unlike Material-UI's Fade component, this applies styles directly to Grid items
  * without adding wrapper elements that break Grid layouts.
- * 
+ *
  * Material-UI provides: Fade, Grow, Slide (but they add wrapper elements)
  * This component: Applies CSS transitions directly via sx prop (Grid-compatible)
- * 
+ *
  * IMPORTANT: Grid containers require direct Grid item children.
  * This component preserves that structure by cloning elements with animation styles.
  */
 
-import React, { ReactNode, isValidElement, cloneElement, useEffect, useState } from "react"
+import React, {
+  ReactNode,
+  isValidElement,
+  cloneElement,
+  useEffect,
+  useState,
+} from "react"
 import { Grid, GridProps } from "@mui/material"
 
 interface AnimatedListItemProps {

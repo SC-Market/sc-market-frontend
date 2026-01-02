@@ -129,151 +129,151 @@ export function ContractSidebar() {
         </Box>
       )}
       <Grid container spacing={theme.layoutSpacing.layout}>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label={t("service_search.search")}
-              InputProps={{
-                startAdornment: <SearchIcon />,
-              }}
-              value={query}
-              onChange={handleQueryChange}
-              color={"secondary"}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <Typography variant={"subtitle2"} fontWeight={"bold"}>
-              {t("service_search.filtering")}
-            </Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <LanguageFilter
-              selectedLanguages={languageCodes}
-              onChange={handleLanguageCodesChange}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              select
-              fullWidth
-              value={kind}
-              label={t("service_search.contract_type")}
-              onChange={handleKindChange}
-              color={"secondary"}
-              SelectProps={{
-                IconComponent: KeyboardArrowDownRoundedIcon,
-              }}
-            >
-              <MenuItem value={"Any"}>
-                {t("service_search.contract_types.Any")}
-              </MenuItem>
-              {Object.keys(orderIcons).map((k) => (
-                <MenuItem value={k} key={k}>
-                  {t(`orderKinds.${k}`, k)}
-                </MenuItem>
-              ))}
-            </TextField>
-          </Grid>
-          <Grid item xs={12}>
-            <Typography variant={"subtitle2"} fontWeight={"bold"}>
-              {t("recruiting_sidebar.sorting")}
-            </Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              select
-              fullWidth
-              label={t("recruiting_sidebar.sort_attribute")}
-              value={sort || ""}
-              onChange={handleSortChange}
-              color={"secondary"}
-              SelectProps={{
-                IconComponent: KeyboardArrowDownRoundedIcon,
-              }}
-            >
-              <MenuItem value={""}>{t("market.none")}</MenuItem>
-              <MenuItem value={"title"}>{t("market.title")}</MenuItem>
-              <MenuItem value={"price-low"}>
-                {t("market.price_low_to_high")}
-              </MenuItem>
-              <MenuItem value={"price-high"}>
-                {t("market.price_high_to_low")}
-              </MenuItem>
-              <MenuItem value={"date-new"}>
-                {t("market.date_old_to_new")}
-              </MenuItem>
-              <MenuItem value={"date-old"}>
-                {t("market.date_new_to_old")}
-              </MenuItem>
-            </TextField>
-          </Grid>
-          <Grid item xs={12}>
-            <Typography variant={"subtitle2"} fontWeight={"bold"}>
-              {t("service_search.cost")}
-            </Typography>
-          </Grid>
-
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              value={minOffer}
-              label={t("service_search.min_cost")}
-              onChange={handleMinCostChange}
-              color={"secondary"}
-              inputProps={{
-                inputMode: "numeric",
-                pattern: "[0-9]*",
-              }}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="start">{`aUEC`}</InputAdornment>
-                ),
-                inputMode: "numeric",
-              }}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              value={maxOffer == null ? "" : maxOffer}
-              label={t("service_search.max_cost")}
-              onChange={handleMaxCostChange}
-              color={"secondary"}
-              inputProps={{
-                inputMode: "numeric",
-                pattern: "[0-9]*",
-              }}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="start">{`aUEC`}</InputAdornment>
-                ),
-                inputMode: "numeric",
-              }}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              select
-              label={t("service_search.payment_type")}
-              value={paymentType}
-              onChange={handlePaymentTypeChange}
-              fullWidth
-              SelectProps={{
-                IconComponent: KeyboardArrowDownRoundedIcon,
-              }}
-            >
-              <MenuItem value={"any"}>
-                {t("service_search.payment_types.any")}
-              </MenuItem>
-              {PAYMENT_TYPES.slice(0, 3).map((paymentType) => (
-                <MenuItem key={paymentType.value} value={paymentType.value}>
-                  {t(`service_search.payment_types.${paymentType.value}`)}
-                </MenuItem>
-              ))}
-            </TextField>
-          </Grid>
+        <Grid item xs={12}>
+          <TextField
+            fullWidth
+            label={t("service_search.search")}
+            InputProps={{
+              startAdornment: <SearchIcon />,
+            }}
+            value={query}
+            onChange={handleQueryChange}
+            color={"secondary"}
+          />
         </Grid>
-      </Box>
+        <Grid item xs={12}>
+          <Typography variant={"subtitle2"} fontWeight={"bold"}>
+            {t("service_search.filtering")}
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <LanguageFilter
+            selectedLanguages={languageCodes}
+            onChange={handleLanguageCodesChange}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            select
+            fullWidth
+            value={kind}
+            label={t("service_search.contract_type")}
+            onChange={handleKindChange}
+            color={"secondary"}
+            SelectProps={{
+              IconComponent: KeyboardArrowDownRoundedIcon,
+            }}
+          >
+            <MenuItem value={"Any"}>
+              {t("service_search.contract_types.Any")}
+            </MenuItem>
+            {Object.keys(orderIcons).map((k) => (
+              <MenuItem value={k} key={k}>
+                {t(`orderKinds.${k}`, k)}
+              </MenuItem>
+            ))}
+          </TextField>
+        </Grid>
+        <Grid item xs={12}>
+          <Typography variant={"subtitle2"} fontWeight={"bold"}>
+            {t("recruiting_sidebar.sorting")}
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            select
+            fullWidth
+            label={t("recruiting_sidebar.sort_attribute")}
+            value={sort || ""}
+            onChange={handleSortChange}
+            color={"secondary"}
+            SelectProps={{
+              IconComponent: KeyboardArrowDownRoundedIcon,
+            }}
+          >
+            <MenuItem value={""}>{t("market.none")}</MenuItem>
+            <MenuItem value={"title"}>{t("market.title")}</MenuItem>
+            <MenuItem value={"price-low"}>
+              {t("market.price_low_to_high")}
+            </MenuItem>
+            <MenuItem value={"price-high"}>
+              {t("market.price_high_to_low")}
+            </MenuItem>
+            <MenuItem value={"date-new"}>
+              {t("market.date_old_to_new")}
+            </MenuItem>
+            <MenuItem value={"date-old"}>
+              {t("market.date_new_to_old")}
+            </MenuItem>
+          </TextField>
+        </Grid>
+        <Grid item xs={12}>
+          <Typography variant={"subtitle2"} fontWeight={"bold"}>
+            {t("service_search.cost")}
+          </Typography>
+        </Grid>
+
+        <Grid item xs={12}>
+          <TextField
+            fullWidth
+            value={minOffer}
+            label={t("service_search.min_cost")}
+            onChange={handleMinCostChange}
+            color={"secondary"}
+            inputProps={{
+              inputMode: "numeric",
+              pattern: "[0-9]*",
+            }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="start">{`aUEC`}</InputAdornment>
+              ),
+              inputMode: "numeric",
+            }}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            fullWidth
+            value={maxOffer == null ? "" : maxOffer}
+            label={t("service_search.max_cost")}
+            onChange={handleMaxCostChange}
+            color={"secondary"}
+            inputProps={{
+              inputMode: "numeric",
+              pattern: "[0-9]*",
+            }}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="start">{`aUEC`}</InputAdornment>
+              ),
+              inputMode: "numeric",
+            }}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            select
+            label={t("service_search.payment_type")}
+            value={paymentType}
+            onChange={handlePaymentTypeChange}
+            fullWidth
+            SelectProps={{
+              IconComponent: KeyboardArrowDownRoundedIcon,
+            }}
+          >
+            <MenuItem value={"any"}>
+              {t("service_search.payment_types.any")}
+            </MenuItem>
+            {PAYMENT_TYPES.slice(0, 3).map((paymentType) => (
+              <MenuItem key={paymentType.value} value={paymentType.value}>
+                {t(`service_search.payment_types.${paymentType.value}`)}
+              </MenuItem>
+            ))}
+          </TextField>
+        </Grid>
+      </Grid>
+    </Box>
   )
 
   // On mobile, use BottomSheet

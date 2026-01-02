@@ -48,7 +48,12 @@ export function ViewOrder() {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const [activeTab, setActiveTab] = useState(0)
 
-  const { data: order, error, isLoading, isFetching } = useGetOrderByIdQuery(id!)
+  const {
+    data: order,
+    error,
+    isLoading,
+    isFetching,
+  } = useGetOrderByIdQuery(id!)
   const { data: profile } = useGetUserProfileQuery()
   const [currentOrg] = useCurrentOrg()
 

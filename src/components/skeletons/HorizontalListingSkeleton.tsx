@@ -173,7 +173,12 @@ export function HorizontalListingSkeleton({
                 />
 
                 {/* Available quantity */}
-                <BaseSkeleton variant="text" width={90} height={18} sx={{ mb: 1 }} />
+                <BaseSkeleton
+                  variant="text"
+                  width={90}
+                  height={18}
+                  sx={{ mb: 1 }}
+                />
 
                 {/* Optional language chips (height: 20, fontSize: 0.7rem) */}
                 <Box

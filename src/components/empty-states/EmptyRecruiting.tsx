@@ -4,8 +4,10 @@ import { WorkOutlineOutlined } from "@mui/icons-material"
 import { EmptyState, EmptyStateProps } from "./EmptyState"
 import { useTranslation } from "react-i18next"
 
-export interface EmptyRecruitingProps
-  extends Omit<EmptyStateProps, "title" | "icon" | "action"> {
+export interface EmptyRecruitingProps extends Omit<
+  EmptyStateProps,
+  "title" | "icon" | "action"
+> {
   /**
    * Whether this is a search result (vs. a general empty state)
    */

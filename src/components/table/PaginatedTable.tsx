@@ -538,37 +538,40 @@ export function ControlledTable<T>(props: {
             disableSelect={disableSelect}
           />
           <TableBody>
-            {loading && LoadingRowComponent
-              ? Array.from({ length: pageSize }).map((_, index) => (
-                  <LoadingRowComponent key={`skeleton-${index}`} index={index} />
-                ))
-              : rows.length === 0 && !loading && emptyStateComponent
-                ? (
-                    <TableRow>
-                      <TableCell colSpan={headCells.length} sx={{ border: 0, padding: 0 }}>
-                        {emptyStateComponent}
-                      </TableCell>
-                    </TableRow>
-                  )
-                : rows.map((row, index) => {
-                    const isItemSelected = isSelected(row[keyAttr])
-                    const labelId = `enhanced-table-checkbox-${index}`
+            {loading && LoadingRowComponent ? (
+              Array.from({ length: pageSize }).map((_, index) => (
+                <LoadingRowComponent key={`skeleton-${index}`} index={index} />
+              ))
+            ) : rows.length === 0 && !loading && emptyStateComponent ? (
+              <TableRow>
+                <TableCell
+                  colSpan={headCells.length}
+                  sx={{ border: 0, padding: 0 }}
+                >
+                  {emptyStateComponent}
+                </TableCell>
+              </TableRow>
+            ) : (
+              rows.map((row, index) => {
+                const isItemSelected = isSelected(row[keyAttr])
+                const labelId = `enhanced-table-checkbox-${index}`
 
-                    return (
-                      <RowComponent
-                        key={row[keyAttr] as string | number}
-                        {...{
-                          row: row,
-                          index: index,
-                          onClick: (event) => {
-                            handleClick(event, row[keyAttr])
-                          },
-                          isItemSelected: isItemSelected,
-                          labelId: labelId,
-                        }}
-                      />
-                    )
-                  })}
+                return (
+                  <RowComponent
+                    key={row[keyAttr] as string | number}
+                    {...{
+                      row: row,
+                      index: index,
+                      onClick: (event) => {
+                        handleClick(event, row[keyAttr])
+                      },
+                      isItemSelected: isItemSelected,
+                      labelId: labelId,
+                    }}
+                  />
+                )
+              })
+            )}
             {!loading && emptyRows > 0 && rows.length > 0 && (
               <TableRow
                 style={{

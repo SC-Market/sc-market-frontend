@@ -491,7 +491,12 @@ export function OrgInfoSkeleton() {
                     <Grid item sm={8}>
                       <Grid container spacing={0}>
                         <Grid item>
-                          <Skeleton variant="text" width={200} height={28} sx={{ mb: 1 }} />
+                          <Skeleton
+                            variant="text"
+                            width={200}
+                            height={28}
+                            sx={{ mb: 1 }}
+                          />
                         </Grid>
                         <Grid
                           item
@@ -510,8 +515,17 @@ export function OrgInfoSkeleton() {
                           />
                         </Grid>
                         <Grid item>
-                          <Stack direction="row" spacing={0.5} alignItems="center" sx={{ mt: 0.5 }}>
-                            <Skeleton variant="circular" width={16} height={16} />
+                          <Stack
+                            direction="row"
+                            spacing={0.5}
+                            alignItems="center"
+                            sx={{ mt: 0.5 }}
+                          >
+                            <Skeleton
+                              variant="circular"
+                              width={16}
+                              height={16}
+                            />
                             <Skeleton variant="text" width={60} height={16} />
                           </Stack>
                         </Grid>
@@ -557,10 +571,30 @@ export function OrgInfoSkeleton() {
                   <Paper
                     sx={{ padding: 1, maxHeight: 350, overflow: "scroll" }}
                   >
-                    <Skeleton variant="text" width="100%" height={20} sx={{ mb: 0.5 }} />
-                    <Skeleton variant="text" width="100%" height={20} sx={{ mb: 0.5 }} />
-                    <Skeleton variant="text" width="90%" height={20} sx={{ mb: 0.5 }} />
-                    <Skeleton variant="text" width="80%" height={20} sx={{ mb: 2 }} />
+                    <Skeleton
+                      variant="text"
+                      width="100%"
+                      height={20}
+                      sx={{ mb: 0.5 }}
+                    />
+                    <Skeleton
+                      variant="text"
+                      width="100%"
+                      height={20}
+                      sx={{ mb: 0.5 }}
+                    />
+                    <Skeleton
+                      variant="text"
+                      width="90%"
+                      height={20}
+                      sx={{ mb: 0.5 }}
+                    />
+                    <Skeleton
+                      variant="text"
+                      width="80%"
+                      height={20}
+                      sx={{ mb: 2 }}
+                    />
                     <Stack direction="row" spacing={0.5} flexWrap="wrap">
                       <Skeleton
                         variant="rectangular"

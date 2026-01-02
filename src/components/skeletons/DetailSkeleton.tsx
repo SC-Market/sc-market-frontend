@@ -20,11 +20,22 @@ export function DetailSkeleton({
     <Stack spacing={3}>
       {/* Image section */}
       {showImage && (
-        <BaseSkeleton variant="rectangular" width="100%" height={400} sx={{ borderRadius: 2 }} />
+        <BaseSkeleton
+          variant="rectangular"
+          width="100%"
+          height={400}
+          sx={{ borderRadius: 2 }}
+        />
       )}
 
       {/* Title and actions */}
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "flex-start",
+        }}
+      >
         <Box sx={{ flex: 1 }}>
           <BaseSkeleton variant="text" width="60%" height={40} sx={{ mb: 1 }} />
           <BaseSkeleton variant="text" width="40%" height={24} />

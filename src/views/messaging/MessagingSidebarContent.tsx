@@ -34,7 +34,10 @@ import { Link, useNavigate, useParams } from "react-router-dom"
 import { useDrawerOpen } from "../../hooks/layout/Drawer"
 import { MenuRounded } from "@mui/icons-material"
 import { MessageListSkeleton } from "../../components/skeletons"
-import { EmptyMessages, EmptySearchResults } from "../../components/empty-states"
+import {
+  EmptyMessages,
+  EmptySearchResults,
+} from "../../components/empty-states"
 
 // Single chat entry in the chat list
 function ChatEntry(props: { chat: Chat }) {
@@ -260,6 +263,25 @@ export function MessagingSidebarContent(
               sx={{ py: 2 }}
             />
           </Box>
+        ) : (chats || []).filter((chat) => {
+            if (!searchQuery) return true
+            // Search in user usernames and contractor names
+            const searchLower = searchQuery.toLowerCase()
+            return chat.participants.some((p) => {
+              if (p.type === "user") {
+                return p.username.toLowerCase().includes(searchLower)
+              } else {
+                return p.name.toLowerCase().includes(searchLower)
+              }
+            })
+          }).length === 0 ? (
+          <Box sx={{ p: 3 }}>
+            <EmptySearchResults
+              searchQuery={searchQuery}
+              onClearFilters={() => setSearchQuery("")}
+              sx={{ py: 2 }}
+            />
+          </Box>
         ) : (
           (chats || [])
             .filter((chat) => {
@@ -274,30 +296,7 @@ export function MessagingSidebarContent(
                 }
               })
             })
-            .length === 0 ? (
-              <Box sx={{ p: 3 }}>
-                <EmptySearchResults
-                  searchQuery={searchQuery}
-                  onClearFilters={() => setSearchQuery("")}
-                  sx={{ py: 2 }}
-                />
-              </Box>
-            ) : (
-              (chats || [])
-                .filter((chat) => {
-                  if (!searchQuery) return true
-                  // Search in user usernames and contractor names
-                  const searchLower = searchQuery.toLowerCase()
-                  return chat.participants.some((p) => {
-                    if (p.type === "user") {
-                      return p.username.toLowerCase().includes(searchLower)
-                    } else {
-                      return p.name.toLowerCase().includes(searchLower)
-                    }
-                  })
-                })
-                .map((chat) => <ChatEntry chat={chat} key={chat.chat_id} />)
-            )
+            .map((chat) => <ChatEntry chat={chat} key={chat.chat_id} />)
         )}
       </List>
     </Box>

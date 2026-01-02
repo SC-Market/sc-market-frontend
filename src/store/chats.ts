@@ -1,7 +1,10 @@
 import { Chat } from "../datatypes/Chat"
 import { serviceApi } from "./service"
 import { unwrapResponse } from "./api-utils"
-import { generateTempId, createOptimisticUpdate } from "../util/optimisticUpdates"
+import {
+  generateTempId,
+  createOptimisticUpdate,
+} from "../util/optimisticUpdates"
 
 export const chatsApi = serviceApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -22,7 +25,10 @@ export const chatsApi = serviceApi.injectEndpoints({
         method: "POST",
         body: { content },
       }),
-      async onQueryStarted({ chat_id, content }, { dispatch, queryFulfilled, getState }) {
+      async onQueryStarted(
+        { chat_id, content },
+        { dispatch, queryFulfilled, getState },
+      ) {
         // Note: Messages are also updated via socket.io, but we add optimistic update
         // for immediate feedback before socket event arrives
         await createOptimisticUpdate(
@@ -87,20 +93,24 @@ export const chatsApi = serviceApi.injectEndpoints({
             // Note: We don't know the chat_id yet, so we'll create a temp one
             const tempChatId = generateTempId("chat")
             const myChatsPatch = dispatch(
-              chatsApi.util.updateQueryData("getMyChats", undefined, (draft) => {
-                const tempChat: Chat = {
-                  chat_id: tempChatId,
-                  title: null,
-                  participants: body.users.map((username) => ({
-                    type: "user" as const,
-                    username,
-                    avatar: "",
-                  })),
-                  messages: [],
-                  order_id: null,
-                }
-                draft.unshift(tempChat)
-              }),
+              chatsApi.util.updateQueryData(
+                "getMyChats",
+                undefined,
+                (draft) => {
+                  const tempChat: Chat = {
+                    chat_id: tempChatId,
+                    title: null,
+                    participants: body.users.map((username) => ({
+                      type: "user" as const,
+                      username,
+                      avatar: "",
+                    })),
+                    messages: [],
+                    order_id: null,
+                  }
+                  draft.unshift(tempChat)
+                },
+              ),
             )
             patches.push(myChatsPatch)
 

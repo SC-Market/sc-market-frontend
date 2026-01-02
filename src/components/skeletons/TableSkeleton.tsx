@@ -1,4 +1,11 @@
-import { Table, TableBody, TableCell, TableRow, TableHead, TableContainer } from "@mui/material"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+  TableHead,
+  TableContainer,
+} from "@mui/material"
 import { BaseSkeleton } from "./BaseSkeleton"
 
 export interface TableSkeletonProps {
@@ -35,7 +42,11 @@ export function TableSkeleton({
             <TableRow key={rowIndex}>
               {Array.from({ length: columns }).map((_, colIndex) => (
                 <TableCell key={colIndex}>
-                  <BaseSkeleton variant="text" width={colIndex === 0 ? "80%" : "60%"} height={20} />
+                  <BaseSkeleton
+                    variant="text"
+                    width={colIndex === 0 ? "80%" : "60%"}
+                    height={20}
+                  />
                 </TableCell>
               ))}
             </TableRow>

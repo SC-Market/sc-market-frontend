@@ -22,7 +22,9 @@ export interface RecruitingPostSkeletonProps {
   showVoteButton?: boolean
 }
 
-export function RecruitingPostSkeleton(props: RecruitingPostSkeletonProps = {}) {
+export function RecruitingPostSkeleton(
+  props: RecruitingPostSkeletonProps = {},
+) {
   const { showVoteButton = true } = props
   const theme = useTheme<ExtendedTheme>()
 
@@ -104,7 +106,12 @@ export function RecruitingPostSkeleton(props: RecruitingPostSkeletonProps = {}) 
                       />
                     </Grid>
                   </Grid>
-                  <Stack direction="row" spacing={0.5} alignItems="center" sx={{ mt: 0.5 }}>
+                  <Stack
+                    direction="row"
+                    spacing={0.5}
+                    alignItems="center"
+                    sx={{ mt: 0.5 }}
+                  >
                     <Skeleton variant="circular" width={16} height={16} />
                     <Skeleton variant="text" width={60} height={16} />
                   </Stack>
@@ -142,11 +149,7 @@ export function RecruitingPostSkeleton(props: RecruitingPostSkeletonProps = {}) 
                 height={20}
                 sx={{ mb: 0.5 }}
               />
-              <Skeleton
-                variant="text"
-                width="75%"
-                height={20}
-              />
+              <Skeleton variant="text" width="75%" height={20} />
             </CardContent>
             <CardActions>
               <Box>

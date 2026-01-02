@@ -40,7 +40,11 @@ export function ContractDetailsTableSkeleton() {
                   alignItems="center"
                 >
                   <Avatar>
-                    <BaseSkeleton variant="circular" width="100%" height="100%" />
+                    <BaseSkeleton
+                      variant="circular"
+                      width="100%"
+                      height="100%"
+                    />
                   </Avatar>
                   <Stack direction="column" justifyContent="left">
                     <BaseSkeleton variant="text" width={100} height={20} />
@@ -52,9 +56,7 @@ export function ContractDetailsTableSkeleton() {
           </TableRow>
 
           {/* Date row */}
-          <TableRow
-            sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-          >
+          <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
             <TableCell component="th" scope="row">
               <BaseSkeleton variant="text" width={80} height={20} />
             </TableCell>
@@ -64,9 +66,7 @@ export function ContractDetailsTableSkeleton() {
           </TableRow>
 
           {/* Title row */}
-          <TableRow
-            sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-          >
+          <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
             <TableCell component="th" scope="row">
               <BaseSkeleton variant="text" width={80} height={20} />
             </TableCell>
@@ -76,9 +76,7 @@ export function ContractDetailsTableSkeleton() {
           </TableRow>
 
           {/* Kind row */}
-          <TableRow
-            sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-          >
+          <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
             <TableCell component="th" scope="row">
               <BaseSkeleton variant="text" width={80} height={20} />
             </TableCell>
@@ -88,9 +86,7 @@ export function ContractDetailsTableSkeleton() {
           </TableRow>
 
           {/* Description row */}
-          <TableRow
-            sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-          >
+          <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
             <TableCell colSpan={2}>
               <Stack direction="column" spacing={theme.layoutSpacing.compact}>
                 <BaseSkeleton variant="text" width={100} height={20} />
@@ -104,9 +100,7 @@ export function ContractDetailsTableSkeleton() {
           </TableRow>
 
           {/* Offer row */}
-          <TableRow
-            sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-          >
+          <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
             <TableCell component="th" scope="row">
               <BaseSkeleton variant="text" width={80} height={20} />
             </TableCell>

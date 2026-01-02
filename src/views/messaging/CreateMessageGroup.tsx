@@ -423,10 +423,8 @@ export function CreateMessageGroupBody() {
     retrieve()
   }, [retrieve])
 
-  const [
-    createChatMutation,
-    { isLoading: isCreating },
-  ] = useCreateChatMutation()
+  const [createChatMutation, { isLoading: isCreating }] =
+    useCreateChatMutation()
   const issueAlert = useAlertHook()
 
   // Refetch chats after creation to get the new chat
@@ -469,7 +467,7 @@ export function CreateMessageGroupBody() {
         setError(
           err && "data" in err && err.data
             ? (err.data as { error?: { message?: string } })?.error?.message ||
-              "Failed to create chat"
+                "Failed to create chat"
             : "Failed to create chat",
         )
       })

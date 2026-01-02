@@ -54,7 +54,10 @@ export function usePeriodicBackgroundSync() {
         }
       } catch (error) {
         setIsSupported(false)
-        console.debug("Failed to check Periodic Background Sync support:", error)
+        console.debug(
+          "Failed to check Periodic Background Sync support:",
+          error,
+        )
       }
     }
 

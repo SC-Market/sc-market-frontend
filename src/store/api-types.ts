@@ -1,9 +1,9 @@
 /**
  * Shared API Response Types
- * 
+ *
  * These types match the backend response format from:
  * sc-market-backend/src/api/routes/v1/util/response.ts
- * 
+ *
  * This ensures type safety between frontend and backend.
  */
 

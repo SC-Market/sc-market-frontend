@@ -4,7 +4,10 @@ import { MinimalContractor } from "../datatypes/Contractor"
 import { OrderAvailability, Service } from "../datatypes/Order"
 import { UniqueListing } from "../datatypes/MarketListing"
 import { unwrapResponse } from "./api-utils"
-import { generateTempId, createOptimisticUpdate } from "../util/optimisticUpdates"
+import {
+  generateTempId,
+  createOptimisticUpdate,
+} from "../util/optimisticUpdates"
 
 export interface OfferSessionStub {
   id: string
@@ -201,36 +204,40 @@ export const offersApi = serviceApi.injectEndpoints({
 
             // Optimistically update offer session
             const sessionPatch = dispatch(
-              offersApi.util.updateQueryData("getOfferSessionByID", body.session_id, (draft) => {
-                // Add new offer to the session
-                const newOffer: Offer = {
-                  id: generateTempId("offer"),
-                  session_id: body.session_id,
-                  actor: null, // Will be filled by server
-                  kind: body.kind,
-                  cost: body.cost,
-                  title: body.title,
-                  description: body.description,
-                  timestamp: new Date().toISOString(),
-                  status: body.status,
-                  service: null, // Will be filled by server if service_id provided
-                  market_listings: body.market_listings.map((ml) => ({
-                    quantity: ml.quantity,
-                    listing_id: ml.listing_id,
-                    listing: {} as UniqueListing, // Will be filled by server
-                  })),
-                  payment_type: body.payment_type as any,
-                }
-                draft.offers.push(newOffer)
-                draft.status = body.status
-              }),
+              offersApi.util.updateQueryData(
+                "getOfferSessionByID",
+                body.session_id,
+                (draft) => {
+                  // Add new offer to the session
+                  const newOffer: Offer = {
+                    id: generateTempId("offer"),
+                    session_id: body.session_id,
+                    actor: null, // Will be filled by server
+                    kind: body.kind,
+                    cost: body.cost,
+                    title: body.title,
+                    description: body.description,
+                    timestamp: new Date().toISOString(),
+                    status: body.status,
+                    service: null, // Will be filled by server if service_id provided
+                    market_listings: body.market_listings.map((ml) => ({
+                      quantity: ml.quantity,
+                      listing_id: ml.listing_id,
+                      listing: {} as UniqueListing, // Will be filled by server
+                    })),
+                    payment_type: body.payment_type as any,
+                  }
+                  draft.offers.push(newOffer)
+                  draft.status = body.status
+                },
+              ),
             )
             patches.push(sessionPatch)
 
             // Optimistically update search results
             const state = getState() as any
             const cachedQueries = state.api?.queries || {}
-            
+
             Object.keys(cachedQueries).forEach((queryKey) => {
               if (queryKey.includes("searchOfferSessions")) {
                 try {
@@ -252,7 +259,8 @@ export const offersApi = serviceApi.injectEndpoints({
                               cost: body.cost,
                               title: body.title,
                               payment_type: body.payment_type,
-                              count: (session.most_recent_offer?.count || 0) + 1,
+                              count:
+                                (session.most_recent_offer?.count || 0) + 1,
                             }
                             // Note: Counter offer status is "counteroffered" which doesn't map directly
                             // to search statuses. The server will update the actual status.

@@ -3,8 +3,10 @@ import { NotificationsNoneOutlined } from "@mui/icons-material"
 import { EmptyState, EmptyStateProps } from "./EmptyState"
 import { useTranslation } from "react-i18next"
 
-export interface EmptyNotificationsProps
-  extends Omit<EmptyStateProps, "title" | "icon" | "action"> {
+export interface EmptyNotificationsProps extends Omit<
+  EmptyStateProps,
+  "title" | "icon" | "action"
+> {
   /**
    * Custom title override
    */
@@ -31,9 +33,12 @@ export function EmptyNotifications({
     defaultValue: "No notifications",
   })
 
-  const defaultDescription = t("emptyStates.notifications.noNotificationsDescription", {
-    defaultValue: "You're all caught up! New notifications will appear here",
-  })
+  const defaultDescription = t(
+    "emptyStates.notifications.noNotificationsDescription",
+    {
+      defaultValue: "You're all caught up! New notifications will appear here",
+    },
+  )
 
   return (
     <EmptyState

@@ -4,7 +4,10 @@ import { ChatBubbleOutlineOutlined, InboxOutlined } from "@mui/icons-material"
 import { EmptyState, EmptyStateProps } from "./EmptyState"
 import { useTranslation } from "react-i18next"
 
-export interface EmptyMessagesProps extends Omit<EmptyStateProps, "title" | "icon" | "action"> {
+export interface EmptyMessagesProps extends Omit<
+  EmptyStateProps,
+  "title" | "icon" | "action"
+> {
   /**
    * Whether this is for chat list (vs. message thread)
    */
@@ -44,7 +47,9 @@ export function EmptyMessages({
   const navigate = useNavigate()
 
   const defaultTitle = isChatList
-    ? t("emptyStates.messages.noChats", { defaultValue: "No conversations yet" })
+    ? t("emptyStates.messages.noChats", {
+        defaultValue: "No conversations yet",
+      })
     : t("emptyStates.messages.noMessages", { defaultValue: "No messages yet" })
 
   const defaultDescription = isChatList
@@ -58,8 +63,12 @@ export function EmptyMessages({
   const defaultAction = showCreateAction
     ? {
         label: isChatList
-          ? t("emptyStates.messages.startConversation", { defaultValue: "Start Conversation" })
-          : t("emptyStates.messages.sendMessage", { defaultValue: "Send Message" }),
+          ? t("emptyStates.messages.startConversation", {
+              defaultValue: "Start Conversation",
+            })
+          : t("emptyStates.messages.sendMessage", {
+              defaultValue: "Send Message",
+            }),
         onClick: () => {
           // For chat list, we could open the create chat dialog
           // For message thread, the action would be context-specific

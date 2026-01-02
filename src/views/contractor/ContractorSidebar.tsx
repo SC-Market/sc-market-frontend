@@ -88,137 +88,137 @@ export function ContractorSidebar() {
       }}
     >
       <Grid container spacing={theme.layoutSpacing.layout}>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label={t("contractorSidebar.search")}
-              InputProps={{
-                startAdornment: <SearchIcon />,
-              }}
-              value={query}
-              onChange={handleQueryChange}
-              color={"secondary"}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <Typography variant={"subtitle2"} fontWeight={"bold"}>
-              {t("contractorSidebar.sorting")}
-            </Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              select
-              fullWidth
-              value={sorting}
-              label={t("contractorSidebar.sort_attribute")}
-              onChange={handleSortChange}
-              color={"secondary"}
-              SelectProps={{
-                IconComponent: KeyboardArrowDownRoundedIcon,
-              }}
-            >
-              <MenuItem value={"rating"}>
-                {t("contractorSidebar.rating_high_low")}
-              </MenuItem>
-              <MenuItem value={"rating-reverse"}>
-                {t("contractorSidebar.rating_low_high")}
-              </MenuItem>
-              <MenuItem value={"name-reverse"}>
-                {t("contractorSidebar.name_a_z")}
-              </MenuItem>
-              <MenuItem value={"name"}>
-                {t("contractorSidebar.name_z_a")}
-              </MenuItem>
-              <MenuItem value={"members"}>
-                {t("contractorSidebar.members_high_low")}
-              </MenuItem>
-              <MenuItem value={"members-reverse"}>
-                {t("contractorSidebar.members_low_high")}
-              </MenuItem>
-              <MenuItem value={"date-reverse"}>
-                {t("contractorSidebar.date_old_new")}
-              </MenuItem>
-              <MenuItem value={"date"}>
-                {t("contractorSidebar.date_new_old")}
-              </MenuItem>
-            </TextField>
-          </Grid>
-          <Grid item xs={12}>
-            <Typography variant={"subtitle2"} fontWeight={"bold"}>
-              {t("contractorSidebar.filtering")}
-            </Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <LanguageFilter
-              selectedLanguages={languageCodes}
-              onChange={setLanguageCodes}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <Autocomplete
-              fullWidth
-              multiple
-              filterSelectedOptions
-              value={fields}
-              onChange={(event: any, newValue) => {
-                setFields(newValue || [])
-              }}
-              options={contractorKindIconsKeys}
-              defaultValue={[] as ContractorKindIconKey[]}
-              renderInput={(params: AutocompleteRenderInputParams) => (
-                <TextField
-                  {...params}
-                  variant="outlined"
-                  label={t("contractorSidebar.org_tags")}
-                  placeholder={t("contractorSidebar.mining")}
-                  fullWidth
-                  SelectProps={{
-                    IconComponent: KeyboardArrowDownRoundedIcon,
-                  }}
-                />
-              )}
-              renderTags={(tagValue, getTagProps) =>
-                tagValue.map((option: ContractorKindIconKey, index) => (
-                  <Chip
-                    color={"primary"}
-                    label={option}
-                    sx={{ marginRight: 1, textTransform: "capitalize" }}
-                    variant={"outlined"}
-                    icon={contractorKindIcons[option]}
-                    {...getTagProps({ index })}
-                  />
-                ))
-              }
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <Typography variant={"subtitle2"} fontWeight={"bold"}>
-              {t("contractorSidebar.min_rating")}
-            </Typography>
-          </Grid>
-
-          <Grid item xs={12}>
-            <Rating
-              name="half-rating"
-              defaultValue={0}
-              value={rating}
-              onChange={(event, newValue) => {
-                setRating(newValue!)
-              }}
-              precision={0.5}
-              size={"large"}
-              color={"white"}
-              icon={<StarRounded fontSize="inherit" />}
-              emptyIcon={
-                <StarRounded
-                  style={{ color: theme.palette.text.primary }}
-                  fontSize="inherit"
-                />
-              }
-            />
-          </Grid>
+        <Grid item xs={12}>
+          <TextField
+            fullWidth
+            label={t("contractorSidebar.search")}
+            InputProps={{
+              startAdornment: <SearchIcon />,
+            }}
+            value={query}
+            onChange={handleQueryChange}
+            color={"secondary"}
+          />
         </Grid>
-      </Box>
+        <Grid item xs={12}>
+          <Typography variant={"subtitle2"} fontWeight={"bold"}>
+            {t("contractorSidebar.sorting")}
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            select
+            fullWidth
+            value={sorting}
+            label={t("contractorSidebar.sort_attribute")}
+            onChange={handleSortChange}
+            color={"secondary"}
+            SelectProps={{
+              IconComponent: KeyboardArrowDownRoundedIcon,
+            }}
+          >
+            <MenuItem value={"rating"}>
+              {t("contractorSidebar.rating_high_low")}
+            </MenuItem>
+            <MenuItem value={"rating-reverse"}>
+              {t("contractorSidebar.rating_low_high")}
+            </MenuItem>
+            <MenuItem value={"name-reverse"}>
+              {t("contractorSidebar.name_a_z")}
+            </MenuItem>
+            <MenuItem value={"name"}>
+              {t("contractorSidebar.name_z_a")}
+            </MenuItem>
+            <MenuItem value={"members"}>
+              {t("contractorSidebar.members_high_low")}
+            </MenuItem>
+            <MenuItem value={"members-reverse"}>
+              {t("contractorSidebar.members_low_high")}
+            </MenuItem>
+            <MenuItem value={"date-reverse"}>
+              {t("contractorSidebar.date_old_new")}
+            </MenuItem>
+            <MenuItem value={"date"}>
+              {t("contractorSidebar.date_new_old")}
+            </MenuItem>
+          </TextField>
+        </Grid>
+        <Grid item xs={12}>
+          <Typography variant={"subtitle2"} fontWeight={"bold"}>
+            {t("contractorSidebar.filtering")}
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <LanguageFilter
+            selectedLanguages={languageCodes}
+            onChange={setLanguageCodes}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <Autocomplete
+            fullWidth
+            multiple
+            filterSelectedOptions
+            value={fields}
+            onChange={(event: any, newValue) => {
+              setFields(newValue || [])
+            }}
+            options={contractorKindIconsKeys}
+            defaultValue={[] as ContractorKindIconKey[]}
+            renderInput={(params: AutocompleteRenderInputParams) => (
+              <TextField
+                {...params}
+                variant="outlined"
+                label={t("contractorSidebar.org_tags")}
+                placeholder={t("contractorSidebar.mining")}
+                fullWidth
+                SelectProps={{
+                  IconComponent: KeyboardArrowDownRoundedIcon,
+                }}
+              />
+            )}
+            renderTags={(tagValue, getTagProps) =>
+              tagValue.map((option: ContractorKindIconKey, index) => (
+                <Chip
+                  color={"primary"}
+                  label={option}
+                  sx={{ marginRight: 1, textTransform: "capitalize" }}
+                  variant={"outlined"}
+                  icon={contractorKindIcons[option]}
+                  {...getTagProps({ index })}
+                />
+              ))
+            }
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <Typography variant={"subtitle2"} fontWeight={"bold"}>
+            {t("contractorSidebar.min_rating")}
+          </Typography>
+        </Grid>
+
+        <Grid item xs={12}>
+          <Rating
+            name="half-rating"
+            defaultValue={0}
+            value={rating}
+            onChange={(event, newValue) => {
+              setRating(newValue!)
+            }}
+            precision={0.5}
+            size={"large"}
+            color={"white"}
+            icon={<StarRounded fontSize="inherit" />}
+            emptyIcon={
+              <StarRounded
+                style={{ color: theme.palette.text.primary }}
+                fontSize="inherit"
+              />
+            }
+          />
+        </Grid>
+      </Grid>
+    </Box>
   )
 
   // On mobile, use BottomSheet

@@ -29,7 +29,7 @@ import "./util/i18n.ts"
 function App() {
   const { registerPeriodicSync, isSupported: periodicSyncSupported } =
     usePeriodicBackgroundSync()
-  
+
   // Track Core Web Vitals
   useWebVitals()
 

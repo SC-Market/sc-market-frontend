@@ -29,7 +29,7 @@ export function ContractInfo(props: {}) {
         <HeaderTitle>{t("contracts.contractTitle")}</HeaderTitle>
         {shouldRedirectTo404(error) && <Navigate to={"/404"} />}
         {shouldShowErrorPage(error) && <ErrorPage />}
-        {(isLoading || isFetching) ? (
+        {isLoading || isFetching ? (
           <Grid item xs={12} lg={appOpen ? 8 : 12}>
             <ContractDetailSkeleton />
           </Grid>

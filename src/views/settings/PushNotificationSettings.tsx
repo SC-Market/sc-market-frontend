@@ -280,9 +280,13 @@ export function PushNotificationSettings() {
                 onClick={async () => {
                   const success = await triggerInstall()
                   if (success) {
-                    setSuccess("App installed! You can now enable push notifications.")
+                    setSuccess(
+                      "App installed! You can now enable push notifications.",
+                    )
                   } else {
-                    setError("Installation was cancelled or failed. Please try again.")
+                    setError(
+                      "Installation was cancelled or failed. Please try again.",
+                    )
                   }
                 }}
               >
@@ -332,9 +336,13 @@ export function PushNotificationSettings() {
               onClick={async () => {
                 const success = await triggerInstall()
                 if (success) {
-                  setSuccess("App installed! You can now enable push notifications.")
+                  setSuccess(
+                    "App installed! You can now enable push notifications.",
+                  )
                 } else {
-                  setError("Installation was cancelled or failed. Please try again.")
+                  setError(
+                    "Installation was cancelled or failed. Please try again.",
+                  )
                 }
               }}
               sx={{ mb: 2 }}

@@ -61,11 +61,15 @@ export function PostCommentArea(props: { post: RecruitingPost }) {
 }
 
 export function RecruitingPostArea(props: { spectrum_id: string }) {
-  const { data: post, isLoading, isFetching } = useRecruitingGetPostByOrgQuery(props.spectrum_id)
+  const {
+    data: post,
+    isLoading,
+    isFetching,
+  } = useRecruitingGetPostByOrgQuery(props.spectrum_id)
 
   return (
     <>
-      {(isLoading || isFetching) ? (
+      {isLoading || isFetching ? (
         <RecruitingPostViewSkeleton />
       ) : post ? (
         <>
@@ -80,14 +84,19 @@ export function RecruitingPostArea(props: { spectrum_id: string }) {
 export function RecruitingPostPage() {
   const { post_id } = useParams<{ post_id: string }>()
   const { t } = useTranslation()
-  const { data: post, error, isLoading, isFetching } = useRecruitingGetPostByIDQuery(post_id!)
+  const {
+    data: post,
+    error,
+    isLoading,
+    isFetching,
+  } = useRecruitingGetPostByIDQuery(post_id!)
 
   return (
     <Page title={t("recruiting_post.page.createPost")}>
       <ContainerGrid maxWidth={"md"} sidebarOpen={true}>
         {shouldRedirectTo404(error) && <Navigate to={"/404"} />}
         {shouldShowErrorPage(error) && <ErrorPage />}
-        {(isLoading || isFetching) ? (
+        {isLoading || isFetching ? (
           <RecruitingPostViewSkeleton />
         ) : post ? (
           <>

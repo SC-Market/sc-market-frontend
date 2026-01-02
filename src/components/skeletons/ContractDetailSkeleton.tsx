@@ -32,9 +32,7 @@ export function ContractDetailSkeleton({
     >
       <CardHeader
         disableTypography
-        title={
-          <BaseSkeleton variant="text" width={300} height={28} />
-        }
+        title={<BaseSkeleton variant="text" width={300} height={28} />}
         subheader={
           <Box
             sx={{ padding: 1.5, paddingLeft: 0 }}
@@ -50,7 +48,12 @@ export function ContractDetailSkeleton({
             />
             {/* Customer name and time */}
             <BaseSkeleton variant="text" width={120} height={20} />
-            <BaseSkeleton variant="text" width={100} height={20} sx={{ ml: 1 }} />
+            <BaseSkeleton
+              variant="text"
+              width={100}
+              height={20}
+              sx={{ ml: 1 }}
+            />
           </Box>
         }
       />

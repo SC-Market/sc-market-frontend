@@ -4,7 +4,10 @@ import { AssignmentOutlined } from "@mui/icons-material"
 import { EmptyState, EmptyStateProps } from "./EmptyState"
 import { useTranslation } from "react-i18next"
 
-export interface EmptyOrdersProps extends Omit<EmptyStateProps, "title" | "icon" | "action"> {
+export interface EmptyOrdersProps extends Omit<
+  EmptyStateProps,
+  "title" | "icon" | "action"
+> {
   /**
    * Whether this is for offers (vs. orders)
    */
@@ -49,15 +52,19 @@ export function EmptyOrders({
 
   const defaultDescription = isOffers
     ? t("emptyStates.orders.noOffersDescription", {
-        defaultValue: "Offers will appear here when customers make purchase requests",
+        defaultValue:
+          "Offers will appear here when customers make purchase requests",
       })
     : t("emptyStates.orders.noOrdersDescription", {
-        defaultValue: "Create your first order to get started with contracting services",
+        defaultValue:
+          "Create your first order to get started with contracting services",
       })
 
   const defaultAction = showCreateAction
     ? {
-        label: t("emptyStates.orders.createOrder", { defaultValue: "Create Order" }),
+        label: t("emptyStates.orders.createOrder", {
+          defaultValue: "Create Order",
+        }),
         onClick: () => navigate("/order/create"),
         variant: "contained" as const,
       }

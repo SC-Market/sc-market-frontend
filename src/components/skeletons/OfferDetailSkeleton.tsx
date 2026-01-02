@@ -60,7 +60,11 @@ export function OfferDetailSkeleton({
                     alignItems="center"
                   >
                     <Avatar>
-                      <BaseSkeleton variant="circular" width="100%" height="100%" />
+                      <BaseSkeleton
+                        variant="circular"
+                        width="100%"
+                        height="100%"
+                      />
                     </Avatar>
                     <Stack direction="column" justifyContent="left">
                       <BaseSkeleton variant="text" width={100} height={20} />
@@ -93,9 +97,7 @@ export function OfferDetailSkeleton({
           )}
 
           {/* Seller row */}
-          <TableRow
-            sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-          >
+          <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
             <TableCell component="th" scope="row">
               <BaseSkeleton variant="text" width={80} height={20} />
             </TableCell>
@@ -109,7 +111,11 @@ export function OfferDetailSkeleton({
                       alignItems="center"
                     >
                       <Avatar>
-                        <BaseSkeleton variant="circular" width="100%" height="100%" />
+                        <BaseSkeleton
+                          variant="circular"
+                          width="100%"
+                          height="100%"
+                        />
                       </Avatar>
                       <Stack direction="column" justifyContent="left">
                         <BaseSkeleton variant="text" width={100} height={20} />
@@ -124,7 +130,11 @@ export function OfferDetailSkeleton({
                       alignItems="center"
                     >
                       <Avatar>
-                        <BaseSkeleton variant="circular" width="100%" height="100%" />
+                        <BaseSkeleton
+                          variant="circular"
+                          width="100%"
+                          height="100%"
+                        />
                       </Avatar>
                       <Stack direction="column" justifyContent="left">
                         <BaseSkeleton variant="text" width={100} height={20} />
@@ -142,9 +152,7 @@ export function OfferDetailSkeleton({
           </TableRow>
 
           {/* Date row */}
-          <TableRow
-            sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-          >
+          <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
             <TableCell component="th" scope="row">
               <BaseSkeleton variant="text" width={80} height={20} />
             </TableCell>
@@ -154,9 +162,7 @@ export function OfferDetailSkeleton({
           </TableRow>
 
           {/* Status row */}
-          <TableRow
-            sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-          >
+          <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
             <TableCell component="th" scope="row">
               <BaseSkeleton variant="text" width={80} height={20} />
             </TableCell>
@@ -171,9 +177,7 @@ export function OfferDetailSkeleton({
           </TableRow>
 
           {/* Title row */}
-          <TableRow
-            sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-          >
+          <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
             <TableCell component="th" scope="row">
               <BaseSkeleton variant="text" width={80} height={20} />
             </TableCell>
@@ -183,9 +187,7 @@ export function OfferDetailSkeleton({
           </TableRow>
 
           {/* Kind row */}
-          <TableRow
-            sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-          >
+          <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
             <TableCell component="th" scope="row">
               <BaseSkeleton variant="text" width={80} height={20} />
             </TableCell>
@@ -195,23 +197,29 @@ export function OfferDetailSkeleton({
           </TableRow>
 
           {/* Description row */}
-          <TableRow
-            sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-          >
+          <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
             <TableCell colSpan={2}>
               <Stack direction="column" spacing={theme.layoutSpacing.compact}>
                 <BaseSkeleton variant="text" width={100} height={20} />
-                <BaseSkeleton variant="text" width="100%" height={20} sx={{ mb: 0.5 }} />
-                <BaseSkeleton variant="text" width="95%" height={20} sx={{ mb: 0.5 }} />
+                <BaseSkeleton
+                  variant="text"
+                  width="100%"
+                  height={20}
+                  sx={{ mb: 0.5 }}
+                />
+                <BaseSkeleton
+                  variant="text"
+                  width="95%"
+                  height={20}
+                  sx={{ mb: 0.5 }}
+                />
                 <BaseSkeleton variant="text" width="90%" height={20} />
               </Stack>
             </TableCell>
           </TableRow>
 
           {/* Offer cost row */}
-          <TableRow
-            sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-          >
+          <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
             <TableCell component="th" scope="row">
               <BaseSkeleton variant="text" width={80} height={20} />
             </TableCell>
@@ -221,9 +229,7 @@ export function OfferDetailSkeleton({
           </TableRow>
 
           {/* Discord thread row (optional) */}
-          <TableRow
-            sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-          >
+          <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
             <TableCell component="th" scope="row">
               <BaseSkeleton variant="text" width={120} height={20} />
             </TableCell>

@@ -11,8 +11,17 @@ import { useTheme } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
 
 export function MyProfile() {
-  const { data: profile, error, isLoading, isFetching } = useGetUserProfileQuery()
-  const { data: user, isLoading: isLoadingUser, isFetching: isFetchingUser } = useGetUserByUsernameQuery(profile?.username!, {
+  const {
+    data: profile,
+    error,
+    isLoading,
+    isFetching,
+  } = useGetUserProfileQuery()
+  const {
+    data: user,
+    isLoading: isLoadingUser,
+    isFetching: isFetchingUser,
+  } = useGetUserByUsernameQuery(profile?.username!, {
     skip: !profile?.username,
   })
   const theme = useTheme()
@@ -21,7 +30,7 @@ export function MyProfile() {
   return (
     <Page title={t("viewProfile.myProfile")}>
       {error && <Navigate to={"/"} />}
-      {(isLoading || isFetching || isLoadingUser || isFetchingUser) ? (
+      {isLoading || isFetching || isLoadingUser || isFetchingUser ? (
         <ContainerGrid
           sidebarOpen={true}
           maxWidth={"xxl"}

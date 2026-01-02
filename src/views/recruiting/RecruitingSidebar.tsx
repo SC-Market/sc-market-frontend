@@ -93,157 +93,157 @@ export function RecruitingSidebar() {
       }}
     >
       <Grid container spacing={theme.layoutSpacing.layout}>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label={t("recruiting_sidebar.search")}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <IconButton>
-                      <SearchIcon />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-              value={query}
-              onChange={handleQueryChange}
-              color={"secondary"}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <Typography variant={"subtitle2"} fontWeight={"bold"}>
-              {t("recruiting_sidebar.sorting")}
-            </Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              select
-              fullWidth
-              value={sorting}
-              label={t("recruiting_sidebar.sort_attribute")}
-              onChange={handleSortChange}
-              color={"secondary"}
-              SelectProps={{
-                IconComponent: KeyboardArrowDownRoundedIcon,
-              }}
-            >
-              <MenuItem value={"activity"}>
-                {t("recruiting_sidebar.sort.activity")}
-              </MenuItem>
-              <MenuItem value={"all-time"}>
-                {t("recruiting_sidebar.sort.upvotes_all_time")}
-              </MenuItem>
-              <MenuItem value={"rating"}>
-                {t("recruiting_sidebar.sort.rating_high")}
-              </MenuItem>
-              <MenuItem value={"rating-reverse"}>
-                {t("recruiting_sidebar.sort.rating_low")}
-              </MenuItem>
-              <MenuItem value={"name-reverse"}>
-                {t("recruiting_sidebar.sort.name_a_z")}
-              </MenuItem>
-              <MenuItem value={"name"}>
-                {t("recruiting_sidebar.sort.name_z_a")}
-              </MenuItem>
-              <MenuItem value={"members"}>
-                {t("recruiting_sidebar.sort.members_high")}
-              </MenuItem>
-              <MenuItem value={"members-reverse"}>
-                {t("recruiting_sidebar.sort.members_low")}
-              </MenuItem>
-              <MenuItem value={"date-reverse"}>
-                {t("recruiting_sidebar.sort.date_old")}
-              </MenuItem>
-              <MenuItem value={"date"}>
-                {t("recruiting_sidebar.sort.date_new")}
-              </MenuItem>
-              <MenuItem value={"post-date-reverse"}>
-                {t("recruiting_sidebar.sort.post_old")}
-              </MenuItem>
-              <MenuItem value={"post-date"}>
-                {t("recruiting_sidebar.sort.post_new")}
-              </MenuItem>
-            </TextField>
-          </Grid>
-          <Grid item xs={12}>
-            <Typography variant={"subtitle2"} fontWeight={"bold"}>
-              {t("recruiting_sidebar.filtering")}
-            </Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <LanguageFilter
-              selectedLanguages={languageCodes}
-              onChange={setLanguageCodes}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <Autocomplete
-              fullWidth
-              multiple
-              filterSelectedOptions
-              value={fields}
-              onChange={(event: any, newValue) => {
-                setFields(newValue || [])
-              }}
-              options={contractorKindIconsKeys}
-              defaultValue={
-                [] /* I don't know why it needs this dumb thing, but the types error without */
-              }
-              renderInput={(params: AutocompleteRenderInputParams) => (
-                <TextField
-                  {...params}
-                  variant="outlined"
-                  label={t("recruiting_sidebar.org_tags")}
-                  placeholder={t("recruiting_sidebar.org_tags_placeholder")}
-                  fullWidth
-                  SelectProps={{
-                    IconComponent: KeyboardArrowDownRoundedIcon,
-                  }}
-                />
-              )}
-              renderTags={(tagValue, getTagProps) =>
-                tagValue.map((option: ContractorKindIconKey, index) => (
-                  <Chip
-                    color={"primary"}
-                    label={option}
-                    sx={{ marginRight: 1, textTransform: "capitalize" }}
-                    variant={"outlined"}
-                    icon={contractorKindIcons[option]}
-                    {...getTagProps({ index })}
-                  />
-                ))
-              }
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <Typography variant={"subtitle2"} fontWeight={"bold"}>
-              {t("recruiting_sidebar.min_rating")}
-            </Typography>
-          </Grid>
-
-          <Grid item xs={12}>
-            <Rating
-              name="half-rating"
-              defaultValue={0}
-              value={rating}
-              onChange={(event, newValue) => {
-                setRating(newValue!)
-              }}
-              precision={0.5}
-              size={"large"}
-              color={"white"}
-              icon={<StarRounded fontSize="inherit" />}
-              emptyIcon={
-                <StarRounded
-                  style={{ color: theme.palette.text.primary }}
-                  fontSize="inherit"
-                />
-              }
-            />
-          </Grid>
+        <Grid item xs={12}>
+          <TextField
+            fullWidth
+            label={t("recruiting_sidebar.search")}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <IconButton>
+                    <SearchIcon />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+            value={query}
+            onChange={handleQueryChange}
+            color={"secondary"}
+          />
         </Grid>
-      </Box>
+        <Grid item xs={12}>
+          <Typography variant={"subtitle2"} fontWeight={"bold"}>
+            {t("recruiting_sidebar.sorting")}
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <TextField
+            select
+            fullWidth
+            value={sorting}
+            label={t("recruiting_sidebar.sort_attribute")}
+            onChange={handleSortChange}
+            color={"secondary"}
+            SelectProps={{
+              IconComponent: KeyboardArrowDownRoundedIcon,
+            }}
+          >
+            <MenuItem value={"activity"}>
+              {t("recruiting_sidebar.sort.activity")}
+            </MenuItem>
+            <MenuItem value={"all-time"}>
+              {t("recruiting_sidebar.sort.upvotes_all_time")}
+            </MenuItem>
+            <MenuItem value={"rating"}>
+              {t("recruiting_sidebar.sort.rating_high")}
+            </MenuItem>
+            <MenuItem value={"rating-reverse"}>
+              {t("recruiting_sidebar.sort.rating_low")}
+            </MenuItem>
+            <MenuItem value={"name-reverse"}>
+              {t("recruiting_sidebar.sort.name_a_z")}
+            </MenuItem>
+            <MenuItem value={"name"}>
+              {t("recruiting_sidebar.sort.name_z_a")}
+            </MenuItem>
+            <MenuItem value={"members"}>
+              {t("recruiting_sidebar.sort.members_high")}
+            </MenuItem>
+            <MenuItem value={"members-reverse"}>
+              {t("recruiting_sidebar.sort.members_low")}
+            </MenuItem>
+            <MenuItem value={"date-reverse"}>
+              {t("recruiting_sidebar.sort.date_old")}
+            </MenuItem>
+            <MenuItem value={"date"}>
+              {t("recruiting_sidebar.sort.date_new")}
+            </MenuItem>
+            <MenuItem value={"post-date-reverse"}>
+              {t("recruiting_sidebar.sort.post_old")}
+            </MenuItem>
+            <MenuItem value={"post-date"}>
+              {t("recruiting_sidebar.sort.post_new")}
+            </MenuItem>
+          </TextField>
+        </Grid>
+        <Grid item xs={12}>
+          <Typography variant={"subtitle2"} fontWeight={"bold"}>
+            {t("recruiting_sidebar.filtering")}
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <LanguageFilter
+            selectedLanguages={languageCodes}
+            onChange={setLanguageCodes}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <Autocomplete
+            fullWidth
+            multiple
+            filterSelectedOptions
+            value={fields}
+            onChange={(event: any, newValue) => {
+              setFields(newValue || [])
+            }}
+            options={contractorKindIconsKeys}
+            defaultValue={
+              [] /* I don't know why it needs this dumb thing, but the types error without */
+            }
+            renderInput={(params: AutocompleteRenderInputParams) => (
+              <TextField
+                {...params}
+                variant="outlined"
+                label={t("recruiting_sidebar.org_tags")}
+                placeholder={t("recruiting_sidebar.org_tags_placeholder")}
+                fullWidth
+                SelectProps={{
+                  IconComponent: KeyboardArrowDownRoundedIcon,
+                }}
+              />
+            )}
+            renderTags={(tagValue, getTagProps) =>
+              tagValue.map((option: ContractorKindIconKey, index) => (
+                <Chip
+                  color={"primary"}
+                  label={option}
+                  sx={{ marginRight: 1, textTransform: "capitalize" }}
+                  variant={"outlined"}
+                  icon={contractorKindIcons[option]}
+                  {...getTagProps({ index })}
+                />
+              ))
+            }
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <Typography variant={"subtitle2"} fontWeight={"bold"}>
+            {t("recruiting_sidebar.min_rating")}
+          </Typography>
+        </Grid>
+
+        <Grid item xs={12}>
+          <Rating
+            name="half-rating"
+            defaultValue={0}
+            value={rating}
+            onChange={(event, newValue) => {
+              setRating(newValue!)
+            }}
+            precision={0.5}
+            size={"large"}
+            color={"white"}
+            icon={<StarRounded fontSize="inherit" />}
+            emptyIcon={
+              <StarRounded
+                style={{ color: theme.palette.text.primary }}
+                fontSize="inherit"
+              />
+            }
+          />
+        </Grid>
+      </Grid>
+    </Box>
   )
 
   // On mobile, use BottomSheet

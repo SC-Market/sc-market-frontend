@@ -3,7 +3,10 @@ import { StarBorderOutlined } from "@mui/icons-material"
 import { EmptyState, EmptyStateProps } from "./EmptyState"
 import { useTranslation } from "react-i18next"
 
-export interface EmptyReviewsProps extends Omit<EmptyStateProps, "title" | "icon" | "action"> {
+export interface EmptyReviewsProps extends Omit<
+  EmptyStateProps,
+  "title" | "icon" | "action"
+> {
   /**
    * Whether this is for a user profile (vs. contractor)
    */

@@ -37,7 +37,8 @@ export function ContractorSkeleton(props: ContractorSkeletonProps = {}) {
             borderRadius: theme.spacing(theme.borderRadius.topLevel),
             ...(theme.palette.mode === "dark" && showDarkOverlay
               ? {
-                  background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                  background:
+                    "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                 }
@@ -98,7 +99,12 @@ export function ContractorSkeleton(props: ContractorSkeletonProps = {}) {
                       />
                     </Grid>
                   </Grid>
-                  <Stack direction="row" spacing={0.5} alignItems="center" sx={{ mt: 0.5 }}>
+                  <Stack
+                    direction="row"
+                    spacing={0.5}
+                    alignItems="center"
+                    sx={{ mt: 0.5 }}
+                  >
                     <Skeleton variant="circular" width={16} height={16} />
                     <Skeleton variant="text" width={60} height={16} />
                   </Stack>
@@ -118,11 +124,7 @@ export function ContractorSkeleton(props: ContractorSkeletonProps = {}) {
                 height={20}
                 sx={{ mb: 0.5 }}
               />
-              <Skeleton
-                variant="text"
-                width="80%"
-                height={20}
-              />
+              <Skeleton variant="text" width="80%" height={20} />
             </CardContent>
             <CardActions>
               <Box>

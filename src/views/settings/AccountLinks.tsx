@@ -467,7 +467,9 @@ export function AccountLinks() {
               },
             )}
           </DialogContentText>
-          <Box sx={{ mt: 2, display: "flex", justifyContent: "flex-end", gap: 1 }}>
+          <Box
+            sx={{ mt: 2, display: "flex", justifyContent: "flex-end", gap: 1 }}
+          >
             <Button onClick={handleCancelUnlink}>
               {t("common.cancel", "Cancel")}
             </Button>

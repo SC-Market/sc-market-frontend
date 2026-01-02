@@ -29,7 +29,12 @@ import { ErrorPage } from "../errors/ErrorPage"
 
 export function CounterOfferPage() {
   const { id } = useParams<{ id: string }>()
-  const { data: session, error, isLoading, isFetching } = useGetOfferSessionByIDQuery(id!)
+  const {
+    data: session,
+    error,
+    isLoading,
+    isFetching,
+  } = useGetOfferSessionByIDQuery(id!)
   const { t } = useTranslation()
 
   const [counterOffer, setCounterOffer] = useState<CounterOfferBody>({
@@ -133,7 +138,9 @@ export function CounterOfferPage() {
             </Grid>
           )}
 
-          {!(isLoading || isFetching) && session && <CounterOfferSubmitArea session={session} />}
+          {!(isLoading || isFetching) && session && (
+            <CounterOfferSubmitArea session={session} />
+          )}
         </ContainerGrid>
       </CounterOfferDetailsContext.Provider>
     </Page>

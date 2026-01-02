@@ -4,13 +4,7 @@
  * Automatically handles responsive behavior
  */
 
-import {
-  Box,
-  Drawer,
-  IconButton,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material"
+import { Box, Drawer, IconButton, useMediaQuery, useTheme } from "@mui/material"
 import React, { ReactNode } from "react"
 import { CloseRounded } from "@mui/icons-material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"

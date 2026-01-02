@@ -5,12 +5,15 @@ import {
   OrderStub,
 } from "../datatypes/Order"
 import { serviceApi } from "./service"
-import { generateTempId, createOptimisticUpdate } from "../util/optimisticUpdates"
+import {
+  generateTempId,
+  createOptimisticUpdate,
+} from "../util/optimisticUpdates"
 import { unwrapResponse } from "./api-utils"
 
 /**
  * Re-export shared API types and utilities
- * 
+ *
  * For backward compatibility, we re-export from the shared files.
  * New code should import directly from ./api-types and ./api-utils
  */
@@ -193,7 +196,10 @@ const ordersApi = serviceApi.injectEndpoints({
         method: "PUT",
         body: arg,
       }),
-      async onQueryStarted({ order_id, status }, { dispatch, queryFulfilled, getState }) {
+      async onQueryStarted(
+        { order_id, status },
+        { dispatch, queryFulfilled, getState },
+      ) {
         await createOptimisticUpdate(
           (dispatch) => {
             const patches: any[] = []
@@ -203,10 +209,14 @@ const ordersApi = serviceApi.injectEndpoints({
 
             // Optimistically update individual order
             const orderPatch = dispatch(
-              ordersApi.util.updateQueryData("getOrderById", order_id, (draft) => {
-                oldStatus = draft.status
-                draft.status = status as any
-              }),
+              ordersApi.util.updateQueryData(
+                "getOrderById",
+                order_id,
+                (draft) => {
+                  oldStatus = draft.status
+                  draft.status = status as any
+                },
+              ),
             )
             patches.push(orderPatch)
 
@@ -214,7 +224,7 @@ const ordersApi = serviceApi.injectEndpoints({
             // Update all cached search queries
             const state = getState() as any
             const cachedQueries = state.api?.queries || {}
-            
+
             Object.keys(cachedQueries).forEach((queryKey) => {
               if (queryKey.includes("searchOrders")) {
                 try {
@@ -231,15 +241,32 @@ const ordersApi = serviceApi.injectEndpoints({
                           if (orderIndex !== -1) {
                             const order = draft.items[orderIndex]
                             // Update counts
-                            if (oldStatus && draft.item_counts[oldStatus as keyof typeof draft.item_counts] !== undefined) {
-                              draft.item_counts[oldStatus as keyof typeof draft.item_counts] = Math.max(
+                            if (
+                              oldStatus &&
+                              draft.item_counts[
+                                oldStatus as keyof typeof draft.item_counts
+                              ] !== undefined
+                            ) {
+                              draft.item_counts[
+                                oldStatus as keyof typeof draft.item_counts
+                              ] = Math.max(
                                 0,
-                                (draft.item_counts[oldStatus as keyof typeof draft.item_counts] as number) - 1,
+                                (draft.item_counts[
+                                  oldStatus as keyof typeof draft.item_counts
+                                ] as number) - 1,
                               )
                             }
-                            if (draft.item_counts[status as keyof typeof draft.item_counts] !== undefined) {
-                              draft.item_counts[status as keyof typeof draft.item_counts] = 
-                                ((draft.item_counts[status as keyof typeof draft.item_counts] as number) || 0) + 1
+                            if (
+                              draft.item_counts[
+                                status as keyof typeof draft.item_counts
+                              ] !== undefined
+                            ) {
+                              draft.item_counts[
+                                status as keyof typeof draft.item_counts
+                              ] =
+                                ((draft.item_counts[
+                                  status as keyof typeof draft.item_counts
+                                ] as number) || 0) + 1
                             }
                             // Update order status
                             order.status = status as any

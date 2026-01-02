@@ -603,12 +603,16 @@ export function SelectPhotosArea(props: {
                       setUrlInput(event.target.value)
                     }}
                     value={urlInput}
-                    error={!!urlInput && !urlInput.match(external_resource_regex)}
+                    error={
+                      !!urlInput && !urlInput.match(external_resource_regex)
+                    }
                   />
                 </Box>
               </Grid>
               <Grid item xs={12}>
-                <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1 }}>
+                <Box
+                  sx={{ display: "flex", justifyContent: "flex-end", gap: 1 }}
+                >
                   <Button
                     color={"error"}
                     variant={"contained"}

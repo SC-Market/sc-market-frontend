@@ -73,7 +73,12 @@ export function ServiceListingSkeleton({
               subheader={
                 <Box>
                   {/* ListingNameAndRating - user/contractor name and rating */}
-                  <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 0.5 }}>
+                  <Stack
+                    direction="row"
+                    spacing={1}
+                    alignItems="center"
+                    sx={{ mb: 0.5 }}
+                  >
                     <BaseSkeleton variant="text" width={100} height={20} />
                     <BaseSkeleton variant="circular" width={16} height={16} />
                     <BaseSkeleton variant="text" width={40} height={18} />

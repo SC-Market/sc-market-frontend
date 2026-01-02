@@ -175,9 +175,11 @@ export function OrgReviews(props: { contractor: MinimalContractor }) {
 
 export function UserReviews(props: { user: MinimalUser }) {
   const { t } = useTranslation()
-  const { data: rows, isLoading, isFetching } = useGetUserOrderReviews(
-    props.user.username,
-  )
+  const {
+    data: rows,
+    isLoading,
+    isFetching,
+  } = useGetUserOrderReviews(props.user.username)
 
   if (isLoading || isFetching) {
     // Show skeleton while loading - PaginatedTable doesn't have loading prop
