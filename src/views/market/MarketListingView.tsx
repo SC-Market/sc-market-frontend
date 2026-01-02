@@ -94,7 +94,7 @@ export function SellerOtherListings(props: {
     }
   }, [userSeller?.username, contractorSeller?.spectrum_id])
 
-  const { data: results, isLoading } = useSearchMarketQuery(searchParams!, {
+  const { data: results, isLoading, isFetching } = useSearchMarketQuery(searchParams!, {
     skip: !searchParams,
   })
 
@@ -108,7 +108,7 @@ export function SellerOtherListings(props: {
   const sellerName = userSeller?.username || contractorSeller?.spectrum_id || ""
 
   // Show skeletons while loading
-  if (isLoading) {
+  if (isLoading || isFetching) {
     return (
       <Grid item xs={12}>
         <Box sx={{ mb: 2 }}>
@@ -329,7 +329,7 @@ export function RelatedListings(props: {
     [itemType],
   )
 
-  const { data: results, isLoading } = useSearchMarketQuery(searchParams)
+  const { data: results, isLoading, isFetching } = useSearchMarketQuery(searchParams)
 
   // Filter out the current listing and convert to legacy format
   const relatedListings = useMemo(() => {
@@ -339,7 +339,7 @@ export function RelatedListings(props: {
   }, [results?.listings, currentListingId])
 
   // Show skeletons while loading
-  if (isLoading) {
+  if (isLoading || isFetching) {
     return (
       <Grid item xs={12}>
         <Box sx={{ mb: 2 }}>

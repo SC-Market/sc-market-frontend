@@ -15,6 +15,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material"
+import { OrderDetailSkeleton } from "../../components/skeletons"
 import {
   OrderDetailsArea,
   OrderMessagesArea,
@@ -263,7 +264,7 @@ export function ViewOrder() {
                     <OrderDetailsArea order={order} />
                   ) : (
                     <Grid item xs={12} lg={8} md={6}>
-                      <Skeleton width={"100%"} height={400} />
+                      <OrderDetailSkeleton showContractor showAssigned />
                     </Grid>
                   )}
                 </>

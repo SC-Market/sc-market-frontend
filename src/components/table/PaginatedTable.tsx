@@ -411,6 +411,8 @@ export function ControlledTable<T>(props: {
   onOrderChange: (order: Order) => void
   order: Order
   rowCount: number
+  loading?: boolean
+  loadingRowComponent?: React.ComponentType<{ index: number }>
 }) {
   const { t } = useTranslation()
 
@@ -431,6 +433,8 @@ export function ControlledTable<T>(props: {
     onOrderByChange,
     orderBy,
     rowCount,
+    loading = false,
+    loadingRowComponent: LoadingRowComponent,
   } = props
 
   const [internalSelected, setInternalSelected] = React.useState<
@@ -532,26 +536,30 @@ export function ControlledTable<T>(props: {
             disableSelect={disableSelect}
           />
           <TableBody>
-            {rows.map((row, index) => {
-              const isItemSelected = isSelected(row[keyAttr])
-              const labelId = `enhanced-table-checkbox-${index}`
+            {loading && LoadingRowComponent
+              ? Array.from({ length: pageSize }).map((_, index) => (
+                  <LoadingRowComponent key={`skeleton-${index}`} index={index} />
+                ))
+              : rows.map((row, index) => {
+                  const isItemSelected = isSelected(row[keyAttr])
+                  const labelId = `enhanced-table-checkbox-${index}`
 
-              return (
-                <RowComponent
-                  key={row[keyAttr] as string | number}
-                  {...{
-                    row: row,
-                    index: index,
-                    onClick: (event) => {
-                      handleClick(event, row[keyAttr])
-                    },
-                    isItemSelected: isItemSelected,
-                    labelId: labelId,
-                  }}
-                />
-              )
-            })}
-            {emptyRows > 0 && (
+                  return (
+                    <RowComponent
+                      key={row[keyAttr] as string | number}
+                      {...{
+                        row: row,
+                        index: index,
+                        onClick: (event) => {
+                          handleClick(event, row[keyAttr])
+                        },
+                        isItemSelected: isItemSelected,
+                        labelId: labelId,
+                      }}
+                    />
+                  )
+                })}
+            {!loading && emptyRows > 0 && (
               <TableRow
                 style={{
                   height: 73 * emptyRows,
