@@ -33,6 +33,7 @@ import { useTranslation } from "react-i18next"
 import { Link, useNavigate, useParams } from "react-router-dom"
 import { useDrawerOpen } from "../../hooks/layout/Drawer"
 import { MenuRounded } from "@mui/icons-material"
+import { MessageListSkeleton } from "../../components/skeletons"
 
 // Single chat entry in the chat list
 function ChatEntry(props: { chat: Chat }) {
@@ -170,7 +171,7 @@ export function MessagingSidebarContent(
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const { t } = useTranslation()
   const [, setCreatingMessageGroup] = useMessageGroupCreate()
-  const { data: chats } = useGetMyChatsQuery()
+  const { data: chats, isLoading, isFetching } = useGetMyChatsQuery()
   const [searchQuery, setSearchQuery] = useState("")
   const [drawerOpen, setDrawerOpen] = useDrawerOpen()
 
@@ -244,22 +245,30 @@ export function MessagingSidebarContent(
           overflow: "auto",
         }}
       >
-        {(chats || [])
-          .filter((chat) => {
-            if (!searchQuery) return true
-            // Search in user usernames and contractor names
-            const searchLower = searchQuery.toLowerCase()
-            return chat.participants.some((p) => {
-              if (p.type === "user") {
-                return p.username.toLowerCase().includes(searchLower)
-              } else {
-                return p.name.toLowerCase().includes(searchLower)
-              }
+        {isLoading || isFetching ? (
+          <>
+            {Array.from({ length: 5 }).map((_, i) => (
+              <MessageListSkeleton key={i} index={i} />
+            ))}
+          </>
+        ) : (
+          (chats || [])
+            .filter((chat) => {
+              if (!searchQuery) return true
+              // Search in user usernames and contractor names
+              const searchLower = searchQuery.toLowerCase()
+              return chat.participants.some((p) => {
+                if (p.type === "user") {
+                  return p.username.toLowerCase().includes(searchLower)
+                } else {
+                  return p.name.toLowerCase().includes(searchLower)
+                }
+              })
             })
-          })
-          .map((chat) => (
-            <ChatEntry chat={chat} key={chat.chat_id} />
-          ))}
+            .map((chat) => (
+              <ChatEntry chat={chat} key={chat.chat_id} />
+            ))
+        )}
       </List>
     </Box>
   )

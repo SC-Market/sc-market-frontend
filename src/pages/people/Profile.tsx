@@ -16,7 +16,9 @@ export function Profile() {
   const { username } = useParams<{ username: string }>()
   // const myProfile = useGetUserProfileQuery()
 
-  const user = useGetUserByUsernameQuery(username!)
+  const user = useGetUserByUsernameQuery(username!, {
+    skip: !username,
+  })
 
   return (
     <Page
@@ -29,13 +31,15 @@ export function Profile() {
       {/*{myProfile?.data?.username && myProfile?.data?.username === username ? <Navigate to={'/profile'}/> : null}*/}
       {shouldRedirectTo404(user.error) ? <Navigate to={"/404"} /> : null}
       {shouldShowErrorPage(user.error) ? <ErrorPage /> : null}
-      {!user.isLoading && !user.error ? (
-        <ViewProfile profile={user.data!} />
-      ) : (
+      {shouldRedirectTo404(user.error) ? <Navigate to={"/404"} /> : null}
+      {shouldShowErrorPage(user.error) ? <ErrorPage /> : null}
+      {user.isLoading || user.isFetching ? (
         <ContainerGrid sidebarOpen={true} maxWidth={"lg"}>
           <ProfileSkeleton />
         </ContainerGrid>
-      )}
+      ) : user.data ? (
+        <ViewProfile profile={user.data} />
+      ) : null}
     </Page>
   )
 }

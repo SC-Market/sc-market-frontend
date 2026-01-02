@@ -13,6 +13,7 @@ import { useGetChatByIDQuery } from "../../store/chats"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { CurrentChatIDContext } from "../../hooks/messaging/CurrentChatID"
 import { messagingDrawerWidth } from "../../views/messaging/MessagingSidebar"
+import { MessageThreadSkeleton } from "../../components/skeletons"
 
 export function Messages() {
   const { chat_id } = useParams<{ chat_id: string }>()
@@ -27,7 +28,7 @@ export function Messages() {
 
   const [currentChat, setCurrentChat] = useCurrentChat()
 
-  const { data: chatObj } = useGetChatByIDQuery(chat_id!, {
+  const { data: chatObj, isLoading, isFetching } = useGetChatByIDQuery(chat_id!, {
     skip: !chat_id,
   })
 
@@ -105,8 +106,24 @@ export function Messages() {
               />
               {creatingMessageGroup ? (
                 <CreateMessageGroupBody />
-              ) : chat_id && currentChat ? (
-                <MessagesBody />
+              ) : chat_id ? (
+                isLoading || isFetching ? (
+                  <MessageThreadSkeleton />
+                ) : currentChat ? (
+                  <MessagesBody />
+                ) : (
+                  <Box
+                    sx={{
+                      flexGrow: 1,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      color: "text.secondary",
+                    }}
+                  >
+                    Select a chat to start messaging
+                  </Box>
+                )
               ) : (
                 <Box
                   sx={{
