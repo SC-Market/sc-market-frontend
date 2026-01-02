@@ -10,6 +10,7 @@ import { ServiceSearchArea } from "../services/ServiceSearchArea"
 import CloseIcon from "@mui/icons-material/Close"
 import { Stack } from "@mui/system"
 import { useTranslation } from "react-i18next"
+import { BottomSheet } from "../../components/mobile/BottomSheet"
 
 export function ServiceSidebar() {
   const theme: ExtendedTheme = useTheme()
@@ -20,10 +21,44 @@ export function ServiceSidebar() {
   const [drawerOpen] = useDrawerOpen()
 
   const xs = useMediaQuery(theme.breakpoints.down("lg"))
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   useEffect(() => {
     setOpen(!xs)
   }, [setOpen, xs])
 
+  // Content component
+  const sidebarContent = (
+    <Stack justifyContent={"left"} direction={"column"}>
+      <ServiceSearchArea />
+    </Stack>
+  )
+
+  // On mobile, use BottomSheet
+  if (isMobile) {
+    return (
+      <>
+        <BottomSheet
+          open={open}
+          onClose={() => setOpen(false)}
+          title={t("service_market.filters", "Filters")}
+          maxHeight="90vh"
+        >
+          {sidebarContent}
+        </BottomSheet>
+        {/* Desktop drawer still needed for layout spacing */}
+        <Drawer
+          variant="permanent"
+          open={false}
+          sx={{
+            width: 0,
+            display: { xs: "none", md: "block" },
+          }}
+        />
+      </>
+    )
+  }
+
+  // On desktop, use permanent drawer
   return (
     <Drawer
       variant="permanent"
@@ -39,12 +74,7 @@ export function ServiceSidebar() {
           width: open ? marketDrawerWidth : 0,
           boxSizing: "border-box",
           overflow: "scroll",
-          [theme.breakpoints.up("sm")]: {
-            left: drawerOpen ? sidebarDrawerWidth : 0,
-          },
-          [theme.breakpoints.down("sm")]: {
-            left: 0,
-          },
+          left: drawerOpen ? sidebarDrawerWidth : 0,
           backgroundColor: theme.palette.background.default,
           transition: theme.transitions.create(
             ["width", "borderRight", "borderColor"],
@@ -58,10 +88,6 @@ export function ServiceSidebar() {
         },
         position: "relative",
         whiteSpace: "nowrap",
-        // backgroundColor: "#132321",
-        // backgroundRepeat: 'no-repeat',
-        // backgroundPosition: 'center',
-        // backgroundSize: "cover",
         background: "transparent",
         overflow: "scroll",
         borderRight: open ? 1 : 0,
@@ -80,24 +106,7 @@ export function ServiceSidebar() {
           width: "100%",
         }}
       />
-      <Stack justifyContent={"left"} direction={"column"}>
-        <Box
-          sx={{
-            paddingLeft: 2,
-            paddingTop: 4,
-            display: { xs: "block", md: "none" }, // Only show close button on mobile
-          }}
-        >
-          <IconButton
-            onClick={() => setOpen(false)}
-            color={"secondary"}
-            aria-label={t("service_market.toggle_sidebar")}
-          >
-            <CloseIcon />
-          </IconButton>
-        </Box>
-        <ServiceSearchArea />
-      </Stack>
+      {sidebarContent}
     </Drawer>
   )
 }

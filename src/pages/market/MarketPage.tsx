@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState, Suspense } from "react"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
 import {
+  Button,
   Container,
   Divider,
   Grid,
@@ -20,6 +21,7 @@ import {
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
 import CloseIcon from "@mui/icons-material/CloseRounded"
 import MenuIcon from "@mui/icons-material/MenuRounded"
+import FilterListIcon from "@mui/icons-material/FilterList"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { MarketSidebarContext } from "../../hooks/market/MarketSidebar"
@@ -127,8 +129,10 @@ export function MarketPage() {
                   <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                     {/* Market sidebar toggle - only show on mobile */}
                     {xs && tabPage === 1 && (
-                      <IconButton
+                      <Button
+                        variant="outlined"
                         color="secondary"
+                        startIcon={<FilterListIcon />}
                         aria-label={t("market.toggleSidebar")}
                         onClick={() => {
                           setMarketSidebarOpen((prev) => !prev)
@@ -137,15 +141,19 @@ export function MarketPage() {
                           [theme.breakpoints.up("md")]: {
                             display: "none",
                           },
+                          borderRadius: 2,
+                          textTransform: "none",
                         }}
                       >
-                        {marketSidebarOpen ? <CloseIcon /> : <MenuIcon />}
-                      </IconButton>
+                        {t("market.filters", "Filters")}
+                      </Button>
                     )}
                     {/* Services sidebar toggle - only show on mobile */}
                     {xs && tabPage === 0 && (
-                      <IconButton
+                      <Button
+                        variant="outlined"
                         color="secondary"
+                        startIcon={<FilterListIcon />}
                         aria-label={t("service_market.toggle_sidebar")}
                         onClick={() => {
                           setServiceSidebarOpen((prev) => !prev)
@@ -154,10 +162,12 @@ export function MarketPage() {
                           [theme.breakpoints.up("md")]: {
                             display: "none",
                           },
+                          borderRadius: 2,
+                          textTransform: "none",
                         }}
                       >
-                        {serviceSidebarOpen ? <CloseIcon /> : <MenuIcon />}
-                      </IconButton>
+                        {t("service_market.filters", "Filters")}
+                      </Button>
                     )}
                     <Typography
                       variant="h4"

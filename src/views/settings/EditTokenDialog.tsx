@@ -15,6 +15,7 @@ import {
   Divider,
   Grid,
   Chip,
+  useMediaQuery,
 } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import {
@@ -25,6 +26,7 @@ import {
 import { useGetUserProfileQuery } from "../../store/profile.ts"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { BottomSheet } from "../../components/mobile/BottomSheet"
 
 interface EditTokenDialogProps {
   open: boolean
@@ -250,13 +252,13 @@ export function EditTokenDialog({
 
   const isFormValid = formData.name.trim() && formData.scopes.length > 0
   const theme = useTheme<ExtendedTheme>()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
 
   if (!token) return null
 
-  return (
-    <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
-      <DialogTitle>Edit API Token</DialogTitle>
-      <DialogContent>
+  // Content to reuse
+  const dialogContent = (
+    <>
         {error && (
           <Alert severity="error" sx={{ mb: 2 }}>
             {error}
@@ -404,17 +406,45 @@ export function EditTokenDialog({
             />
           </Grid>
         </Grid>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button
-          onClick={handleSubmit}
-          variant="contained"
-          disabled={!isFormValid || isLoading}
-        >
-          {isLoading ? "Updating..." : "Update Token"}
-        </Button>
-      </DialogActions>
+    </>
+  )
+
+  const dialogActions = (
+    <>
+      <Button onClick={handleClose}>Cancel</Button>
+      <Button
+        onClick={handleSubmit}
+        variant="contained"
+        disabled={!isFormValid || isLoading}
+      >
+        {isLoading ? "Updating..." : "Update Token"}
+      </Button>
+    </>
+  )
+
+  // On mobile, use BottomSheet
+  if (isMobile) {
+    return (
+      <BottomSheet
+        open={open}
+        onClose={handleClose}
+        title="Edit API Token"
+        maxHeight="90vh"
+      >
+        {dialogContent}
+        <Box sx={{ mt: 2, display: "flex", justifyContent: "flex-end", gap: 1 }}>
+          {dialogActions}
+        </Box>
+      </BottomSheet>
+    )
+  }
+
+  // On desktop, use Dialog
+  return (
+    <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
+      <DialogTitle>Edit API Token</DialogTitle>
+      <DialogContent>{dialogContent}</DialogContent>
+      <DialogActions>{dialogActions}</DialogActions>
     </Dialog>
   )
 }

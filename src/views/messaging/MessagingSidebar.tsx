@@ -7,6 +7,7 @@ import { useMessagingSidebar } from "../../hooks/messaging/MessagingSidebar"
 import { MessagingSidebarContent } from "./MessagingSidebarContent"
 import { MenuRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
+import { BottomSheet } from "../../components/mobile/BottomSheet"
 
 export const messagingDrawerWidth = 360
 
@@ -18,52 +19,64 @@ export function MessagingSidebar() {
   const [messagingSidebar, setMessagingSidebar] = useMessagingSidebar()
   const { t } = useTranslation()
 
+  // On mobile, use BottomSheet instead of temporary drawer
+  if (isMobile) {
+    return (
+      <>
+        <BottomSheet
+          open={messagingSidebar ?? false}
+          onClose={() => setMessagingSidebar(false)}
+          title={t("MessagingSidebar.title", "Messages")}
+          maxHeight="90vh"
+        >
+          <MessagingSidebarContent />
+        </BottomSheet>
+        {/* Desktop drawer still needed for layout spacing */}
+        <Drawer
+          variant="permanent"
+          open={false}
+          sx={{
+            width: 0,
+            display: { xs: "none", md: "block" },
+          }}
+        />
+      </>
+    )
+  }
+
+  // On desktop, use permanent drawer
   return (
     <Drawer
-      variant={isMobile ? "temporary" : "permanent"}
-      open={isMobile ? messagingSidebar : true}
-      onClose={() => setMessagingSidebar(false)}
+      variant="permanent"
+      open={messagingSidebar}
       sx={{
-        width: isMobile
-          ? messagingDrawerWidth
-          : messagingSidebar
-            ? messagingDrawerWidth
-            : 0,
+        width: messagingSidebar ? messagingDrawerWidth : 0,
         flexShrink: 0,
         position: "relative",
-        transition: isMobile
-          ? undefined
-          : theme.transitions.create("width", {
-              easing: theme.transitions.easing.sharp,
-              duration: theme.transitions.duration.enteringScreen,
-            }),
+        transition: theme.transitions.create("width", {
+          easing: theme.transitions.easing.sharp,
+          duration: theme.transitions.duration.enteringScreen,
+        }),
         "& .MuiDrawer-paper": {
-          width: isMobile
-            ? messagingDrawerWidth
-            : messagingSidebar
-              ? messagingDrawerWidth
-              : 0,
+          width: messagingSidebar ? messagingDrawerWidth : 0,
           boxSizing: "border-box",
           position: "fixed",
           top: 65,
           bottom: 0,
-          zIndex: isMobile ? theme.zIndex.drawer : theme.zIndex.drawer - 1,
-          left: isMobile ? 0 : drawerOpen ? sidebarDrawerWidth : 0,
-          maxWidth: isMobile ? "85vw" : messagingDrawerWidth,
+          zIndex: theme.zIndex.drawer - 1,
+          left: drawerOpen ? sidebarDrawerWidth : 0,
           borderRight: 0,
           borderLeft: 0,
           borderColor: theme.palette.outline.main,
           overflow: "hidden",
-          transition: isMobile
-            ? undefined
-            : theme.transitions.create(["width", "left", "borderRight"], {
-                easing: theme.transitions.easing.sharp,
-                duration: theme.transitions.duration.enteringScreen,
-              }),
+          transition: theme.transitions.create(["width", "left", "borderRight"], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.enteringScreen,
+          }),
         },
       }}
       container={
-        window !== undefined && isMobile
+        window !== undefined
           ? () => window.document.getElementById("rootarea")
           : undefined
       }

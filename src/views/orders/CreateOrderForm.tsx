@@ -15,6 +15,7 @@ import {
   MenuItem,
   TextField,
   Typography,
+  useMediaQuery,
 } from "@mui/material"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { Section } from "../../components/paper/Section"
@@ -50,6 +51,68 @@ import { convertAvailability } from "../../pages/availability/Availability"
 import { OrderLimitsDisplay } from "../../components/orders/OrderLimitsDisplay"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { BottomSheet } from "../../components/mobile/BottomSheet"
+
+// Helper component for Availability Modal that uses BottomSheet on mobile
+function AvailabilityModalWrapper(props: {
+  open: boolean
+  onClose: () => void
+  title: string
+  onSave: (selections: any) => void
+  initialSelections: any
+}) {
+  const theme = useTheme<ExtendedTheme>()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const { t } = useTranslation()
+
+  if (isMobile) {
+    return (
+      <BottomSheet
+        open={props.open}
+        onClose={props.onClose}
+        title={props.title}
+        maxHeight="90vh"
+      >
+        <Box sx={{ mt: 1 }}>
+          <AvailabilitySelector
+            onSave={props.onSave}
+            initialSelections={props.initialSelections}
+          />
+        </Box>
+        <Box sx={{ mt: 2, display: "flex", justifyContent: "flex-end" }}>
+          <Button onClick={props.onClose}>
+            {t("accessibility.cancel", "Cancel")}
+          </Button>
+        </Box>
+      </BottomSheet>
+    )
+  }
+
+  return (
+    <Dialog
+      open={props.open}
+      onClose={props.onClose}
+      maxWidth="lg"
+      fullWidth
+      aria-labelledby="availability-modal-title"
+    >
+      <DialogTitle id="availability-modal-title">{props.title}</DialogTitle>
+      <DialogContent>
+        <Box sx={{ mt: 1 }}>
+          <AvailabilitySelector
+            onSave={props.onSave}
+            initialSelections={props.initialSelections}
+          />
+        </Box>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={props.onClose}>
+          {t("accessibility.cancel", "Cancel")}
+        </Button>
+      </DialogActions>
+    </Dialog>
+  )
+}
 
 interface WorkRequestState {
   title: string
@@ -443,30 +506,13 @@ const CreateOrderFormComponent = React.forwardRef<
       )}
 
       {/* Availability Modal */}
-      <Dialog
+      <AvailabilityModalWrapper
         open={isAvailabilityModalOpen}
         onClose={() => setIsAvailabilityModalOpen(false)}
-        maxWidth="lg"
-        fullWidth
-        aria-labelledby="availability-modal-title"
-      >
-        <DialogTitle id="availability-modal-title">
-          {t("availability.select_availability")} - {sellerName}
-        </DialogTitle>
-        <DialogContent>
-          <Box sx={{ mt: 1 }}>
-            <AvailabilitySelector
-              onSave={handleSaveAvailability}
-              initialSelections={availabilitySelections}
-            />
-          </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setIsAvailabilityModalOpen(false)}>
-            {t("accessibility.cancel", "Cancel")}
-          </Button>
-        </DialogActions>
-      </Dialog>
+        title={`${t("availability.select_availability")} - ${sellerName}`}
+        onSave={handleSaveAvailability}
+        initialSelections={availabilitySelections}
+      />
 
       {services && !!services.length && !props.service && (
         <Section xs={12}>

@@ -19,6 +19,7 @@ import {
   Chip,
   Divider,
   Grid,
+  useMediaQuery,
 } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import {
@@ -28,6 +29,7 @@ import {
 import { useGetUserProfileQuery } from "../../store/profile.ts"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { BottomSheet } from "../../components/mobile/BottomSheet"
 
 interface CreateTokenDialogProps {
   open: boolean
@@ -228,13 +230,11 @@ export function CreateTokenDialog({ open, onClose }: CreateTokenDialogProps) {
 
   const isFormValid = formData.name.trim() && formData.scopes.length > 0
   const theme = useTheme<ExtendedTheme>()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
 
-  return (
-    <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
-      <DialogTitle>
-        {showToken ? "Token Created Successfully" : "Create API Token"}
-      </DialogTitle>
-      <DialogContent>
+  // Content to reuse
+  const dialogContent = (
+    <>
         {showToken ? (
           <Box>
             <Alert severity="success" sx={{ mb: 2 }}>
@@ -433,19 +433,49 @@ export function CreateTokenDialog({ open, onClose }: CreateTokenDialogProps) {
             </Grid>
           </Box>
         )}
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose}>{showToken ? "Close" : "Cancel"}</Button>
-        {!showToken && (
-          <Button
-            onClick={handleSubmit}
-            variant="contained"
-            disabled={!isFormValid || isLoading}
-          >
-            {isLoading ? "Creating..." : "Create Token"}
-          </Button>
-        )}
-      </DialogActions>
+    </>
+  )
+
+  const dialogActions = (
+    <>
+      <Button onClick={handleClose}>{showToken ? "Close" : "Cancel"}</Button>
+      {!showToken && (
+        <Button
+          onClick={handleSubmit}
+          variant="contained"
+          disabled={!isFormValid || isLoading}
+        >
+          {isLoading ? "Creating..." : "Create Token"}
+        </Button>
+      )}
+    </>
+  )
+
+  // On mobile, use BottomSheet
+  if (isMobile) {
+    return (
+      <BottomSheet
+        open={open}
+        onClose={handleClose}
+        title={showToken ? "Token Created Successfully" : "Create API Token"}
+        maxHeight="90vh"
+      >
+        {dialogContent}
+        <Box sx={{ mt: 2, display: "flex", justifyContent: "flex-end", gap: 1 }}>
+          {dialogActions}
+        </Box>
+      </BottomSheet>
+    )
+  }
+
+  // On desktop, use Dialog
+  return (
+    <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
+      <DialogTitle>
+        {showToken ? "Token Created Successfully" : "Create API Token"}
+      </DialogTitle>
+      <DialogContent>{dialogContent}</DialogContent>
+      <DialogActions>{dialogActions}</DialogActions>
     </Dialog>
   )
 }
