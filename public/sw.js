@@ -16,7 +16,13 @@
 import { clientsClaim, skipWaiting } from "workbox-core"
 import { precacheAndRoute } from "workbox-precaching"
 import { registerRoute } from "workbox-routing"
-import { NetworkFirst, CacheFirst } from "workbox-strategies"
+import {
+  NetworkFirst,
+  CacheFirst,
+  StaleWhileRevalidate,
+} from "workbox-strategies"
+import { ExpirationPlugin } from "workbox-expiration"
+import { CacheableResponsePlugin } from "workbox-cacheable-response"
 
 // Take control of all clients immediately
 skipWaiting()
@@ -25,16 +31,27 @@ clientsClaim()
 // Precache assets (injected by vite-plugin-pwa during build)
 precacheAndRoute(self.__WB_MANIFEST || [])
 
-// Cache navigation requests
+// Cache navigation requests with better offline support
 registerRoute(
   ({ request }) => request.mode === "navigate",
   new NetworkFirst({
     cacheName: "pages-v1",
-    networkTimeoutSeconds: 5,
+    networkTimeoutSeconds: 3, // Faster timeout for better perceived performance
+    plugins: [
+      new CacheableResponsePlugin({
+        statuses: [0, 200], // Cache successful responses and opaque responses
+      }),
+      new ExpirationPlugin({
+        maxEntries: 100, // Increased from 50 to cache more pages
+        maxAgeSeconds: 60 * 60 * 24 * 7, // 7 days (increased from 1 day)
+        purgeOnQuotaError: true, // Automatically purge if quota exceeded
+      }),
+    ],
   }),
 )
 
-// Cache API calls
+// Cache API calls with StaleWhileRevalidate for better offline experience
+// This serves stale data immediately while updating in the background
 registerRoute(
   ({ url }) => {
     const isApiCall =
@@ -52,17 +69,73 @@ registerRoute(
 
     return isApiCall && isApiPath && !isExcluded
   },
-  new NetworkFirst({
+  new StaleWhileRevalidate({
     cacheName: "api-cache-v1",
-    networkTimeoutSeconds: 10,
+    plugins: [
+      new CacheableResponsePlugin({
+        statuses: [0, 200], // Cache successful responses
+      }),
+      new ExpirationPlugin({
+        maxEntries: 200, // Increased from 50 to cache more API responses
+        maxAgeSeconds: 60 * 60 * 24, // 24 hours (increased from 1 hour)
+        purgeOnQuotaError: true,
+      }),
+    ],
   }),
 )
 
-// Cache images
+// Cache images with expiration
 registerRoute(
   /\.(?:png|jpg|jpeg|svg|gif|webp)$/,
   new CacheFirst({
     cacheName: "images-v1",
+    plugins: [
+      new CacheableResponsePlugin({
+        statuses: [0, 200],
+      }),
+      new ExpirationPlugin({
+        maxEntries: 500, // Increased from 200
+        maxAgeSeconds: 60 * 60 * 24 * 30, // 30 days (increased from 7 days)
+        purgeOnQuotaError: true,
+      }),
+    ],
+  }),
+)
+
+// Cache fonts with CacheFirst strategy
+registerRoute(
+  /\.(?:woff|woff2|ttf|otf|eot)$/,
+  new CacheFirst({
+    cacheName: "fonts-v1",
+    plugins: [
+      new CacheableResponsePlugin({
+        statuses: [0, 200],
+      }),
+      new ExpirationPlugin({
+        maxEntries: 50,
+        maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year (fonts rarely change)
+        purgeOnQuotaError: true,
+      }),
+    ],
+  }),
+)
+
+// Cache CSS and JS files with StaleWhileRevalidate
+// This ensures users get cached assets immediately while updates happen in background
+registerRoute(
+  /\.(?:css|js)$/,
+  new StaleWhileRevalidate({
+    cacheName: "static-assets-v1",
+    plugins: [
+      new CacheableResponsePlugin({
+        statuses: [0, 200],
+      }),
+      new ExpirationPlugin({
+        maxEntries: 100,
+        maxAgeSeconds: 60 * 60 * 24 * 7, // 7 days
+        purgeOnQuotaError: true,
+      }),
+    ],
   }),
 )
 
@@ -205,3 +278,86 @@ self.addEventListener("message", (event) => {
     self.skipWaiting()
   }
 })
+
+// ============================================================================
+// Periodic Background Sync
+// ============================================================================
+
+/**
+ * Handle periodic background sync events
+ * This allows the app to sync data periodically even when not open
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/PeriodicBackgroundSync
+ */
+self.addEventListener("periodicsync", (event: any) => {
+  console.log("Periodic background sync event:", event.tag)
+
+  if (event.tag === "sync-notifications") {
+    event.waitUntil(syncNotifications())
+  } else if (event.tag === "sync-data") {
+    event.waitUntil(syncData())
+  }
+})
+
+/**
+ * Handle one-time background sync (when device comes back online)
+ * This is a fallback for browsers that don't support Periodic Background Sync
+ */
+self.addEventListener("sync", (event: any) => {
+  console.log("Background sync event (one-time):", event.tag)
+
+  if (event.tag === "sync-notifications") {
+    event.waitUntil(syncNotifications())
+  } else if (event.tag === "sync-data") {
+    event.waitUntil(syncData())
+  }
+})
+
+/**
+ * Sync notifications in the background
+ */
+async function syncNotifications() {
+  try {
+    // Get all clients (open windows/tabs)
+    const clients = await self.clients.matchAll({
+      includeUncontrolled: true,
+      type: "window",
+    })
+
+    // Notify all clients to refresh notifications
+    clients.forEach((client) => {
+      client.postMessage({
+        type: "SYNC_NOTIFICATIONS",
+        timestamp: Date.now(),
+      })
+    })
+
+    console.log("Background sync: Notifications sync requested")
+  } catch (error) {
+    console.error("Background sync: Failed to sync notifications", error)
+  }
+}
+
+/**
+ * Sync general app data in the background
+ */
+async function syncData() {
+  try {
+    // Get all clients (open windows/tabs)
+    const clients = await self.clients.matchAll({
+      includeUncontrolled: true,
+      type: "window",
+    })
+
+    // Notify all clients to refresh data
+    clients.forEach((client) => {
+      client.postMessage({
+        type: "SYNC_DATA",
+        timestamp: Date.now(),
+      })
+    })
+
+    console.log("Background sync: Data sync requested")
+  } catch (error) {
+    console.error("Background sync: Failed to sync data", error)
+  }
+}

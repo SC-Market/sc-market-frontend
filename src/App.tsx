@@ -20,25 +20,61 @@ import {
 } from "./components/router/LoggedInRoute"
 import { store } from "./store/store"
 import { notificationApi } from "./store/notification"
+import { usePeriodicBackgroundSync } from "./hooks/pwa/usePeriodicBackgroundSync"
 
 import "./util/i18n.ts"
 
 function App() {
+  const { registerPeriodicSync, isSupported: periodicSyncSupported } =
+    usePeriodicBackgroundSync()
+
   useEffect(() => {
     // Start background prefetching after the app loads
     startBackgroundPrefetch()
 
+    // Register periodic background sync if supported
+    if (periodicSyncSupported) {
+      // Register sync for notifications (every 12 hours)
+      registerPeriodicSync("sync-notifications", 12 * 60 * 60 * 1000).catch(
+        () => {
+          // Silently fail if registration fails (permission denied, etc.)
+        },
+      )
+
+      // Register sync for general data (every 24 hours)
+      registerPeriodicSync("sync-data", 24 * 60 * 60 * 1000).catch(() => {
+        // Silently fail if registration fails
+      })
+    }
+
     // Set up push notification handling
     if ("serviceWorker" in navigator) {
-      // Listen for push events from service worker
-      navigator.serviceWorker.addEventListener("message", (event) => {
-        if (event.data && event.data.type === "PUSH_NOTIFICATION_RECEIVED") {
+      // Listen for messages from service worker
+      const messageHandler = (event: MessageEvent) => {
+        if (event.data?.type === "PUSH_NOTIFICATION_RECEIVED") {
           // Invalidate notification cache to trigger refetch
           store.dispatch(
             notificationApi.util.invalidateTags(["Notifications" as const]),
           )
+        } else if (event.data?.type === "SYNC_NOTIFICATIONS") {
+          // Periodic background sync for notifications
+          store.dispatch(
+            notificationApi.util.invalidateTags(["Notifications" as const]),
+          )
+        } else if (event.data?.type === "SYNC_DATA") {
+          // Periodic background sync for general data
+          // Invalidate various caches to refresh data
+          store.dispatch(
+            notificationApi.util.invalidateTags([
+              "Notifications",
+              "Orders",
+              "MarketListings",
+            ] as const),
+          )
         }
-      })
+      }
+
+      navigator.serviceWorker.addEventListener("message", messageHandler)
 
       // Also listen for push events directly (when app is in foreground)
       navigator.serviceWorker.ready.then((registration) => {
@@ -49,6 +85,13 @@ function App() {
           // We just need to invalidate cache when notifications arrive
         }
       })
+
+      // Cleanup function
+      return () => {
+        navigator.serviceWorker.removeEventListener("message", messageHandler)
+        // Cleanup shared intersection observer
+        SharedIntersectionObserver.getInstance().cleanup()
+      }
     }
 
     // Cleanup function to prevent memory leaks
@@ -56,7 +99,8 @@ function App() {
       // Cleanup shared intersection observer
       SharedIntersectionObserver.getInstance().cleanup()
     }
-  }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [periodicSyncSupported])
 
   return <RouterProvider router={router} />
 }

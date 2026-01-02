@@ -52,6 +52,7 @@ import { useGetMarketListingQuery } from "../../store/market"
 import { OfferSession } from "../../store/offer"
 import { Trans, useTranslation } from "react-i18next"
 import { MarkdownRender } from "../markdown/Markdown"
+import { useBadgeAPI } from "../../hooks/pwa/useBadgeAPI"
 
 /*
 VALUES ('order_create', 'orders'),
@@ -632,6 +633,9 @@ export function NotificationsButton() {
   const notifications = notificationsData?.notifications || []
   const total = notificationsData?.pagination?.total || 0
   const unreadCount = notificationsData?.unread_count || 0
+
+  // Update app icon badge with unread count
+  useBadgeAPI(unreadCount)
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)

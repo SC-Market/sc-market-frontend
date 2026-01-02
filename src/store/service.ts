@@ -9,10 +9,12 @@ export const serviceApi = createApi({
   endpoints: (builder) => ({}),
   reducerPath: "serviceApi",
   refetchOnReconnect: true,
-  // Enhanced caching configuration for better mobile performance
-  keepUnusedDataFor: 300, // Keep unused data for 5 minutes (default is 60 seconds)
+  refetchOnFocus: false, // Don't refetch on window focus - service worker handles this
+  // Enhanced caching configuration for better offline PWA experience
+  keepUnusedDataFor: 600, // Increased from 5 minutes to 10 minutes for better offline support
   // This reduces API requests by keeping data in cache longer
   // Users navigating back/forth won't trigger unnecessary refetches
+  // Works in coordination with service worker cache for optimal offline experience
   tagTypes: [
     "RecruitingPostComments",
     "RecruitingPosts",
