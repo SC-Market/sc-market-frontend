@@ -63,6 +63,8 @@ export function Navbar(props: { children?: React.ReactNode }) {
         overflow: "hidden",
         // borderColor: theme.palette.outline.main,
         // borderBottom: 1,
+        // iOS safe area inset for notch/camera gap
+        paddingTop: "env(safe-area-inset-top)",
         "& .MuiAppBar-root": {
           backgroundColor: "transparent",
           // backgroundColor: theme.palette.background.default

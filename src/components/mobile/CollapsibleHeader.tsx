@@ -61,6 +61,8 @@ export function CollapsibleHeader({
         elevation={elevation}
         sx={{
           zIndex: theme.zIndex.appBar,
+          // iOS safe area inset for notch/camera gap
+          paddingTop: "env(safe-area-inset-top)",
         }}
       >
         <Toolbar>{children}</Toolbar>
@@ -94,6 +96,8 @@ export function CollapsibleHeader({
             : "none",
         opacity: variant === "fade" ? (isCollapsed ? 0 : 1) : 1,
         visibility: variant === "fade" && isCollapsed ? "hidden" : "visible",
+        // iOS safe area inset for notch/camera gap
+        paddingTop: "env(safe-area-inset-top)",
       }}
     >
       <Toolbar

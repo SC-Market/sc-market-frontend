@@ -10,6 +10,7 @@ import {
 } from "react-router-dom"
 import { PageFallback } from "./components/metadata/Page"
 import { FrontendErrorElement } from "./pages/errors/FrontendError"
+import { RouteErrorFallback } from "./components/error-boundaries"
 import { startBackgroundPrefetch } from "./util/prefetch"
 import { SharedIntersectionObserver } from "./hooks/prefetch/usePrefetchOnVisible"
 import {
@@ -158,6 +159,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/market/:id",
+        errorElement: <RouteErrorFallback />,
         lazy: async () => ({
           Component: (await import("./pages/market/ViewMarketListing"))
             .ViewMarketListing,
@@ -202,6 +204,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/market",
+        errorElement: <RouteErrorFallback />,
         lazy: async () => ({
           Component: (await import("./pages/market/MarketPage")).MarketPage,
         }),
@@ -227,6 +230,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/contracts",
+        errorElement: <RouteErrorFallback />,
         lazy: async () => ({
           Component: (await import("./pages/contracting/Contracts")).Contracts,
         }),
@@ -234,9 +238,11 @@ const router = createBrowserRouter([
       {
         path: "/messages",
         element: <LoggedInRoute />,
+        errorElement: <RouteErrorFallback />,
         children: [
           {
             index: true,
+            errorElement: <RouteErrorFallback />,
             lazy: async () => ({
               Component: (await import("./pages/messaging/MessagesList"))
                 .MessagesList,
@@ -244,6 +250,7 @@ const router = createBrowserRouter([
           },
           {
             path: ":chat_id",
+            errorElement: <RouteErrorFallback />,
             lazy: async () => ({
               Component: (await import("./pages/messaging/Messages")).Messages,
             }),
@@ -309,6 +316,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/order/:id",
+        errorElement: <RouteErrorFallback />,
         lazy: async () => ({
           Component: (await import("./pages/contracting/ViewOrder")).ViewOrder,
         }),
@@ -321,6 +329,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/user/:username",
+        errorElement: <RouteErrorFallback />,
         lazy: async () => ({
           Component: (await import("./pages/people/Profile")).Profile,
         }),
@@ -409,6 +418,7 @@ const router = createBrowserRouter([
           },
           {
             path: "/orders",
+            errorElement: <RouteErrorFallback />,
             lazy: async () => ({
               Component: (await import("./pages/contracting/CreateOrder"))
                 .CreateOrder,
@@ -495,6 +505,7 @@ const router = createBrowserRouter([
           },
           {
             path: "/profile",
+            errorElement: <RouteErrorFallback />,
             lazy: async () => ({
               Component: (await import("./pages/people/MyProfile")).MyProfile,
             }),

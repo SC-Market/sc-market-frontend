@@ -117,7 +117,8 @@ export function HideOnScroll(props: { children: React.ReactNode }) {
           zIndex: theme.zIndex.drawer - 1,
           transition: "opacity .25s linear, top .5s ease-in-out",
           top: isVisible ? -64 : 0,
-          paddingTop: 2,
+          // iOS safe area inset for notch/camera gap
+          paddingTop: `calc(${theme.spacing(2)} + env(safe-area-inset-top))`,
           // visibility: isVisible ? 'hidden' : undefined,
           opacity: isVisible ? "0" : "1",
           // height: isVisible ? undefined : 0,

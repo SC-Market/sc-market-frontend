@@ -1,66 +1,8 @@
-import React, { Suspense, Component, ReactNode } from "react"
-import { CircularProgress, Box, Typography, Button } from "@mui/material"
+import React, { Suspense, ReactNode } from "react"
+import { CircularProgress, Box } from "@mui/material"
 import { PageFallback } from "../components/metadata/Page"
-
-interface ErrorBoundaryState {
-  hasError: boolean
-  error?: Error
-}
-
-interface ErrorBoundaryProps {
-  children: ReactNode
-  fallback?: ReactNode
-}
-
-class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
-  constructor(props: ErrorBoundaryProps) {
-    super(props)
-    this.state = { hasError: false }
-  }
-
-  static getDerivedStateFromError(error: Error): ErrorBoundaryState {
-    return { hasError: true, error }
-  }
-
-  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error("Dynamic import error:", error, errorInfo)
-  }
-
-  render() {
-    if (this.state.hasError) {
-      if (this.props.fallback) {
-        return this.props.fallback
-      }
-
-      return (
-        <Box
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-          justifyContent="center"
-          p={3}
-          textAlign="center"
-        >
-          <Typography variant="h6" color="error" gutterBottom>
-            Failed to load component
-          </Typography>
-          <Typography variant="body2" color="text.secondary" gutterBottom>
-            {this.state.error?.message}
-          </Typography>
-          <Button
-            variant="outlined"
-            onClick={() => this.setState({ hasError: false })}
-            sx={{ mt: 2 }}
-          >
-            Retry
-          </Button>
-        </Box>
-      )
-    }
-
-    return this.props.children
-  }
-}
+import { ComponentErrorBoundary } from "../components/error-boundaries"
+import { ErrorFallback } from "../components/error-boundaries"
 
 interface DynamicImportOptions {
   fallback?: ReactNode
@@ -76,12 +18,31 @@ export function createDynamicImport<T extends React.ComponentType<any>>(
   const LazyComponent = React.lazy(importFn)
 
   return function DynamicComponent(props: React.ComponentProps<T>) {
+    const defaultErrorFallback = (error: Error, errorInfo: React.ErrorInfo, reset: () => void) => (
+      <ErrorFallback
+        error={error}
+        errorInfo={errorInfo}
+        resetErrorBoundary={reset}
+        isRouteError={false}
+        showDetails={import.meta.env.DEV}
+        showHomeButton={false}
+        title="Failed to load component"
+        message="The component failed to load. This may be due to a network issue or a problem with the component bundle."
+      />
+    )
+
     return (
-      <ErrorBoundary fallback={errorFallback}>
+      <ComponentErrorBoundary
+        componentName="DynamicImport"
+        fallback={errorFallback || defaultErrorFallback}
+        onError={(error, errorInfo) => {
+          console.error("Dynamic import error:", error, errorInfo)
+        }}
+      >
         <Suspense fallback={fallback}>
           <LazyComponent {...props} />
         </Suspense>
-      </ErrorBoundary>
+      </ComponentErrorBoundary>
     )
   }
 }
