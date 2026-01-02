@@ -5,6 +5,7 @@ import {
   OrderStub,
 } from "../datatypes/Order"
 import { serviceApi } from "./service"
+import { generateTempId, createOptimisticUpdate } from "../util/optimisticUpdates"
 
 export interface ErrorResponse<E> {
   error: E
@@ -51,6 +52,10 @@ const ordersApi = serviceApi.injectEndpoints({
         method: "POST",
         body,
       }),
+      // Note: No optimistic update here because:
+      // 1. This operation redirects to /offer/{session_id} which requires the real session_id from server
+      // 2. The order isn't immediately visible in search results (it's part of an offer session)
+      // 3. Optimistic updates for redirecting operations can cause navigation to non-existent resources
       invalidatesTags: ["Orders" as const],
       transformResponse: unwrapResponse,
     }),
@@ -186,6 +191,74 @@ const ordersApi = serviceApi.injectEndpoints({
         method: "PUT",
         body: arg,
       }),
+      async onQueryStarted({ order_id, status }, { dispatch, queryFulfilled, getState }) {
+        await createOptimisticUpdate(
+          (dispatch) => {
+            const patches: any[] = []
+
+            // Store old status for rollback
+            let oldStatus: string | null = null
+
+            // Optimistically update individual order
+            const orderPatch = dispatch(
+              ordersApi.util.updateQueryData("getOrderById", order_id, (draft) => {
+                oldStatus = draft.status
+                draft.status = status as any
+              }),
+            )
+            patches.push(orderPatch)
+
+            // Optimistically update search results
+            // Update all cached search queries
+            const state = getState() as any
+            const cachedQueries = state.api?.queries || {}
+            
+            Object.keys(cachedQueries).forEach((queryKey) => {
+              if (queryKey.includes("searchOrders")) {
+                try {
+                  const queryData = cachedQueries[queryKey]
+                  if (queryData?.data?.items) {
+                    const searchPatch = dispatch(
+                      ordersApi.util.updateQueryData(
+                        "searchOrders",
+                        queryData.originalArgs || ({} as OrderSearchQuery),
+                        (draft) => {
+                          const orderIndex = draft.items.findIndex(
+                            (o) => o.order_id === order_id,
+                          )
+                          if (orderIndex !== -1) {
+                            const order = draft.items[orderIndex]
+                            // Update counts
+                            if (oldStatus && draft.item_counts[oldStatus as keyof typeof draft.item_counts] !== undefined) {
+                              draft.item_counts[oldStatus as keyof typeof draft.item_counts] = Math.max(
+                                0,
+                                (draft.item_counts[oldStatus as keyof typeof draft.item_counts] as number) - 1,
+                              )
+                            }
+                            if (draft.item_counts[status as keyof typeof draft.item_counts] !== undefined) {
+                              draft.item_counts[status as keyof typeof draft.item_counts] = 
+                                ((draft.item_counts[status as keyof typeof draft.item_counts] as number) || 0) + 1
+                            }
+                            // Update order status
+                            order.status = status as any
+                          }
+                        },
+                      ),
+                    )
+                    patches.push(searchPatch)
+                  }
+                } catch (e) {
+                  // Ignore errors updating individual cached queries
+                }
+              }
+            })
+
+            return patches
+          },
+          queryFulfilled,
+          dispatch,
+        )
+      },
       invalidatesTags: (result, error, arg) => [
         { type: "Order" as const, id: arg.order_id },
       ],

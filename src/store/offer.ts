@@ -4,6 +4,7 @@ import { MinimalContractor } from "../datatypes/Contractor"
 import { OrderAvailability, Service } from "../datatypes/Order"
 import { UniqueListing } from "../datatypes/MarketListing"
 import { unwrapResponse } from "./orders"
+import { generateTempId, createOptimisticUpdate } from "../util/optimisticUpdates"
 
 export interface OfferSessionStub {
   id: string
@@ -193,6 +194,87 @@ export const offersApi = serviceApi.injectEndpoints({
         method: "PUT",
         body,
       }),
+      async onQueryStarted(body, { dispatch, queryFulfilled, getState }) {
+        await createOptimisticUpdate(
+          (dispatch) => {
+            const patches: any[] = []
+
+            // Optimistically update offer session
+            const sessionPatch = dispatch(
+              offersApi.util.updateQueryData("getOfferSessionByID", body.session_id, (draft) => {
+                // Add new offer to the session
+                const newOffer: Offer = {
+                  id: generateTempId("offer"),
+                  session_id: body.session_id,
+                  actor: null, // Will be filled by server
+                  kind: body.kind,
+                  cost: body.cost,
+                  title: body.title,
+                  description: body.description,
+                  timestamp: new Date().toISOString(),
+                  status: body.status,
+                  service: null, // Will be filled by server if service_id provided
+                  market_listings: body.market_listings.map((ml) => ({
+                    quantity: ml.quantity,
+                    listing_id: ml.listing_id,
+                    listing: {} as UniqueListing, // Will be filled by server
+                  })),
+                  payment_type: body.payment_type as any,
+                }
+                draft.offers.push(newOffer)
+                draft.status = body.status
+              }),
+            )
+            patches.push(sessionPatch)
+
+            // Optimistically update search results
+            const state = getState() as any
+            const cachedQueries = state.api?.queries || {}
+            
+            Object.keys(cachedQueries).forEach((queryKey) => {
+              if (queryKey.includes("searchOfferSessions")) {
+                try {
+                  const queryData = cachedQueries[queryKey]
+                  if (queryData?.data?.items) {
+                    const searchPatch = dispatch(
+                      offersApi.util.updateQueryData(
+                        "searchOfferSessions",
+                        queryData.originalArgs || {},
+                        (draft) => {
+                          const sessionIndex = draft.items.findIndex(
+                            (s) => s.id === body.session_id,
+                          )
+                          if (sessionIndex !== -1) {
+                            const session = draft.items[sessionIndex]
+                            // Update most recent offer info
+                            session.most_recent_offer = {
+                              service_name: body.service_id ? null : null, // Will be filled by server
+                              cost: body.cost,
+                              title: body.title,
+                              payment_type: body.payment_type,
+                              count: (session.most_recent_offer?.count || 0) + 1,
+                            }
+                            // Note: Counter offer status is "counteroffered" which doesn't map directly
+                            // to search statuses. The server will update the actual status.
+                            // We'll just update the offer count and let the server response handle status.
+                          }
+                        },
+                      ),
+                    )
+                    patches.push(searchPatch)
+                  }
+                } catch (e) {
+                  // Ignore errors updating individual cached queries
+                }
+              }
+            })
+
+            return patches
+          },
+          queryFulfilled,
+          dispatch,
+        )
+      },
       invalidatesTags: (result, error, body) => [
         { type: "Offer" as const, id: body.session_id },
         "Offers" as const,

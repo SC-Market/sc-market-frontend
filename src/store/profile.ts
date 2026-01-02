@@ -11,6 +11,7 @@ import { serviceApi } from "./service"
 import { DiscordSettings, OrderWebhook, Rating } from "../datatypes/Contractor"
 import { unwrapResponse } from "./orders"
 import { Language } from "../constants/languages"
+import { createOptimisticUpdate } from "../util/optimisticUpdates"
 
 export interface SerializedError {
   error?: string
@@ -105,6 +106,29 @@ export const userApi = serviceApi.injectEndpoints({
         method: "POST",
         body,
       }),
+      async onQueryStarted(body, { dispatch, queryFulfilled }) {
+        await createOptimisticUpdate(
+          (dispatch) => {
+            const patches: any[] = []
+
+            // Optimistically update settings in profile
+            const profilePatch = dispatch(
+              userApi.util.updateQueryData("profileGetUserProfile", undefined, (draft) => {
+                if (draft.settings) {
+                  Object.assign(draft.settings, body)
+                } else {
+                  draft.settings = body as any
+                }
+              }),
+            )
+            patches.push(profilePatch)
+
+            return patches
+          },
+          queryFulfilled,
+          dispatch,
+        )
+      },
       invalidatesTags: [{ type: "MyProfile" as const }, "MyProfile" as const],
     }),
     profileUpdateAvailability: builder.mutation<void, AccountAvailabilityBody>({
@@ -133,6 +157,29 @@ export const userApi = serviceApi.injectEndpoints({
         method: "POST",
         body,
       }),
+      async onQueryStarted(body, { dispatch, queryFulfilled, getState }) {
+        await createOptimisticUpdate(
+          (dispatch) => {
+            const patches: any[] = []
+
+            // Optimistically update user profile
+            const profilePatch = dispatch(
+              userApi.util.updateQueryData("profileGetUserProfile", undefined, (draft) => {
+                if (body.display_name !== undefined) draft.display_name = body.display_name
+                if (body.market_order_template !== undefined)
+                  draft.market_order_template = body.market_order_template
+                // 'about' maps to 'profile_description' in UserProfileState
+                if (body.about !== undefined) draft.profile_description = body.about
+              }),
+            )
+            patches.push(profilePatch)
+
+            return patches
+          },
+          queryFulfilled,
+          dispatch,
+        )
+      },
       invalidatesTags: (result, error, arg) => [
         {
           type: "Profile" as const,
@@ -155,6 +202,45 @@ export const userApi = serviceApi.injectEndpoints({
           body: formData,
           // Don't set Content-Type header, let the browser set it with boundary for multipart/form-data
         }
+      },
+      async onQueryStarted(file, { dispatch, queryFulfilled, getState }) {
+        // Create preview URL for immediate feedback
+        const previewUrl = URL.createObjectURL(file)
+
+        await createOptimisticUpdate(
+          (dispatch) => {
+            const patches: any[] = []
+
+            // Optimistically update avatar with preview
+            const profilePatch = dispatch(
+              userApi.util.updateQueryData("profileGetUserProfile", undefined, (draft) => {
+                draft.avatar = previewUrl
+              }),
+            )
+            patches.push(profilePatch)
+
+            // Also update if viewing own profile by username
+            const state = getState() as any
+            const profile = state?.api?.queries?.["profileGetUserProfile(undefined)"]?.data
+            if (profile?.username) {
+              const userProfilePatch = dispatch(
+                userApi.util.updateQueryData("profileGetUserByName", profile.username, (draft) => {
+                  draft.avatar = previewUrl
+                }),
+              )
+              patches.push(userProfilePatch)
+            }
+
+            // Clean up preview URL after server response
+            queryFulfilled.then(() => {
+              URL.revokeObjectURL(previewUrl)
+            })
+
+            return patches
+          },
+          queryFulfilled,
+          dispatch,
+        )
       },
       invalidatesTags: [
         { type: "MyProfile" as const },

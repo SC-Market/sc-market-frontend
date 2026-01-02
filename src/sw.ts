@@ -11,6 +11,19 @@
  * 3. Generate the final service worker
  */
 
+// Type definitions for service worker global scope
+declare const self: ServiceWorkerGlobalScope
+
+// Background sync event types (not in standard webworker lib yet)
+interface PeriodicSyncEvent extends ExtendableEvent {
+  tag: string
+}
+
+interface SyncEvent extends ExtendableEvent {
+  tag: string
+  lastChance: boolean
+}
+
 // These imports will be replaced by vite-plugin-pwa during build
 // In the final build, they'll be workbox CDN imports or bundled code
 import { clientsClaim, skipWaiting } from "workbox-core"
@@ -33,7 +46,7 @@ precacheAndRoute(self.__WB_MANIFEST || [])
 
 // Cache navigation requests with better offline support
 registerRoute(
-  ({ request }) => request.mode === "navigate",
+  ({ request }: { request: Request }) => request.mode === "navigate",
   new NetworkFirst({
     cacheName: "pages-v1",
     networkTimeoutSeconds: 3, // Faster timeout for better perceived performance
@@ -53,7 +66,7 @@ registerRoute(
 // Cache API calls with StaleWhileRevalidate for better offline experience
 // This serves stale data immediately while updating in the background
 registerRoute(
-  ({ url }) => {
+  ({ url }: { url: URL }) => {
     const isApiCall =
       url.hostname.includes("sc-market.space") ||
       url.hostname.includes("localhost")
@@ -143,15 +156,48 @@ registerRoute(
 // Push Notification Handling
 // ============================================================================
 
+interface NotificationData {
+  title: string
+  body: string
+  icon?: string
+  badge?: string
+  tag?: string
+  data?: {
+    url?: string
+    [key: string]: unknown
+  }
+  requireInteraction?: boolean
+  silent?: boolean
+  vibrate?: number[]
+  timestamp?: number
+}
+
+interface PushMessageData {
+  title?: string
+  body?: string
+  icon?: string
+  badge?: string
+  tag?: string
+  data?: {
+    url?: string
+    [key: string]: unknown
+  }
+  requireInteraction?: boolean
+  silent?: boolean
+  test?: boolean
+  vibrate?: number[]
+  timestamp?: number
+}
+
 /**
  * Handle push events (when a push notification is received)
  */
-self.addEventListener("push", (event) => {
+self.addEventListener("push", (event: PushEvent) => {
   console.log("Push event received:", event)
 
   // Default notification data optimized for Android
   // Android requires proper PNG icons (not favicon.ico)
-  let notificationData = {
+  let notificationData: NotificationData = {
     title: "SC Market",
     body: "You have a new notification",
     icon: "/android-chrome-192x192.png", // Android-optimized icon
@@ -168,7 +214,7 @@ self.addEventListener("push", (event) => {
   // Parse push event data if available
   if (event.data) {
     try {
-      const data = event.data.json()
+      const data = event.data.json() as PushMessageData
 
       // Skip silent/test notifications
       if (data.silent === true || data.test === true) {
@@ -195,34 +241,48 @@ self.addEventListener("push", (event) => {
   }
 
   // Show notification
+  const notificationOptions: NotificationOptions & {
+    vibrate?: number[]
+    timestamp?: number
+  } = {
+    body: notificationData.body,
+    icon: notificationData.icon,
+    badge: notificationData.badge,
+    tag: notificationData.tag,
+    data: notificationData.data,
+    requireInteraction: notificationData.requireInteraction,
+    silent: notificationData.silent,
+  }
+
+  // Add vibrate and timestamp if provided (these are valid but not in standard types)
+  if (notificationData.vibrate) {
+    notificationOptions.vibrate = notificationData.vibrate
+  }
+  if (notificationData.timestamp) {
+    notificationOptions.timestamp = notificationData.timestamp
+  }
+
   event.waitUntil(
-    self.registration.showNotification(notificationData.title, {
-      body: notificationData.body,
-      icon: notificationData.icon,
-      badge: notificationData.badge,
-      tag: notificationData.tag,
-      data: notificationData.data,
-      requireInteraction: notificationData.requireInteraction,
-      silent: notificationData.silent,
-      vibrate: notificationData.vibrate,
-      timestamp: notificationData.timestamp,
-    }),
+    self.registration.showNotification(notificationData.title, notificationOptions),
   )
 })
 
 /**
  * Handle notification click events
  */
-self.addEventListener("notificationclick", (event) => {
+self.addEventListener("notificationclick", (event: NotificationEvent) => {
   console.log("Notification clicked:", event)
 
   event.notification.close()
 
-  const notificationData = event.notification.data || {}
+  const notificationData = (event.notification.data || {}) as {
+    url?: string
+    [key: string]: unknown
+  }
   const urlToOpen = notificationData.url || "/"
 
   event.waitUntil(
-    clients
+    self.clients
       .matchAll({
         type: "window",
         includeUncontrolled: true,
@@ -246,15 +306,15 @@ self.addEventListener("notificationclick", (event) => {
 
         // If no matching window, open a new one
         // This works in both browser and PWA (standalone) mode on Android
-        if (clients.openWindow) {
-          return clients.openWindow(urlToOpen)
+        if (self.clients.openWindow) {
+          return self.clients.openWindow(urlToOpen)
         }
       })
       .catch((error) => {
         console.error("Failed to handle notification click:", error)
         // Fallback: try to open in a new window
-        if (clients.openWindow) {
-          return clients.openWindow(urlToOpen)
+        if (self.clients.openWindow) {
+          return self.clients.openWindow(urlToOpen)
         }
       }),
   )
@@ -263,18 +323,24 @@ self.addEventListener("notificationclick", (event) => {
 /**
  * Handle notification close events (optional)
  */
-self.addEventListener("notificationclose", (event) => {
+self.addEventListener("notificationclose", (event: NotificationEvent) => {
   console.log("Notification closed:", event)
   // Can be used for analytics if needed
 })
 
+interface ServiceWorkerMessage {
+  type: string
+  [key: string]: unknown
+}
+
 /**
  * Handle messages from the main app
  */
-self.addEventListener("message", (event) => {
+self.addEventListener("message", (event: ExtendableMessageEvent) => {
   console.log("Service worker received message:", event.data)
 
-  if (event.data && event.data.type === "SKIP_WAITING") {
+  const data = event.data as ServiceWorkerMessage | null
+  if (data && data.type === "SKIP_WAITING") {
     self.skipWaiting()
   }
 })
@@ -283,18 +349,24 @@ self.addEventListener("message", (event) => {
 // Periodic Background Sync
 // ============================================================================
 
+interface SyncMessage {
+  type: string
+  timestamp: number
+}
+
 /**
  * Handle periodic background sync events
  * This allows the app to sync data periodically even when not open
  * @see https://developer.mozilla.org/en-US/docs/Web/API/PeriodicBackgroundSync
  */
-self.addEventListener("periodicsync", (event) => {
-  console.log("Periodic background sync event:", event.tag)
+self.addEventListener("periodicsync", (event: Event) => {
+  const syncEvent = event as unknown as PeriodicSyncEvent
+  console.log("Periodic background sync event:", syncEvent.tag)
 
-  if (event.tag === "sync-notifications") {
-    event.waitUntil(syncNotifications())
-  } else if (event.tag === "sync-data") {
-    event.waitUntil(syncData())
+  if (syncEvent.tag === "sync-notifications") {
+    syncEvent.waitUntil(syncNotifications())
+  } else if (syncEvent.tag === "sync-data") {
+    syncEvent.waitUntil(syncData())
   }
 })
 
@@ -302,20 +374,21 @@ self.addEventListener("periodicsync", (event) => {
  * Handle one-time background sync (when device comes back online)
  * This is a fallback for browsers that don't support Periodic Background Sync
  */
-self.addEventListener("sync", (event) => {
-  console.log("Background sync event (one-time):", event.tag)
+self.addEventListener("sync", (event: Event) => {
+  const syncEvent = event as unknown as SyncEvent
+  console.log("Background sync event (one-time):", syncEvent.tag)
 
-  if (event.tag === "sync-notifications") {
-    event.waitUntil(syncNotifications())
-  } else if (event.tag === "sync-data") {
-    event.waitUntil(syncData())
+  if (syncEvent.tag === "sync-notifications") {
+    syncEvent.waitUntil(syncNotifications())
+  } else if (syncEvent.tag === "sync-data") {
+    syncEvent.waitUntil(syncData())
   }
 })
 
 /**
  * Sync notifications in the background
  */
-async function syncNotifications() {
+async function syncNotifications(): Promise<void> {
   try {
     // Get all clients (open windows/tabs)
     const clients = await self.clients.matchAll({
@@ -325,10 +398,11 @@ async function syncNotifications() {
 
     // Notify all clients to refresh notifications
     clients.forEach((client) => {
-      client.postMessage({
+      const message: SyncMessage = {
         type: "SYNC_NOTIFICATIONS",
         timestamp: Date.now(),
-      })
+      }
+      client.postMessage(message)
     })
 
     console.log("Background sync: Notifications sync requested")
@@ -340,7 +414,7 @@ async function syncNotifications() {
 /**
  * Sync general app data in the background
  */
-async function syncData() {
+async function syncData(): Promise<void> {
   try {
     // Get all clients (open windows/tabs)
     const clients = await self.clients.matchAll({
@@ -350,10 +424,11 @@ async function syncData() {
 
     // Notify all clients to refresh data
     clients.forEach((client) => {
-      client.postMessage({
+      const message: SyncMessage = {
         type: "SYNC_DATA",
         timestamp: Date.now(),
-      })
+      }
+      client.postMessage(message)
     })
 
     console.log("Background sync: Data sync requested")

@@ -1,6 +1,7 @@
 import { Chat } from "../datatypes/Chat"
 import { serviceApi } from "./service"
 import { unwrapResponse } from "./orders"
+import { generateTempId, createOptimisticUpdate } from "../util/optimisticUpdates"
 
 export const chatsApi = serviceApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -21,6 +22,38 @@ export const chatsApi = serviceApi.injectEndpoints({
         method: "POST",
         body: { content },
       }),
+      async onQueryStarted({ chat_id, content }, { dispatch, queryFulfilled, getState }) {
+        // Note: Messages are also updated via socket.io, but we add optimistic update
+        // for immediate feedback before socket event arrives
+        await createOptimisticUpdate(
+          (dispatch) => {
+            const patches: any[] = []
+
+            // Get current user from state (if available)
+            const state = getState() as any
+            const currentUser = state?.auth?.user || state?.profile?.data
+
+            // Optimistically add message to chat
+            const chatPatch = dispatch(
+              chatsApi.util.updateQueryData("getChatByID", chat_id, (draft) => {
+                const tempMessage = {
+                  author: currentUser?.username || null,
+                  content: content,
+                  timestamp: Date.now(),
+                  chat_id: chat_id,
+                }
+                draft.messages = draft.messages || []
+                draft.messages.push(tempMessage as any)
+              }),
+            )
+            patches.push(chatPatch)
+
+            return patches
+          },
+          queryFulfilled,
+          dispatch,
+        )
+      },
       invalidatesTags: ["Chat" as const],
       transformResponse: unwrapResponse,
     }),
@@ -45,6 +78,38 @@ export const chatsApi = serviceApi.injectEndpoints({
         method: "POST",
         body,
       }),
+      async onQueryStarted(body, { dispatch, queryFulfilled }) {
+        await createOptimisticUpdate(
+          (dispatch) => {
+            const patches: any[] = []
+
+            // Optimistically add chat to my chats list
+            // Note: We don't know the chat_id yet, so we'll create a temp one
+            const tempChatId = generateTempId("chat")
+            const myChatsPatch = dispatch(
+              chatsApi.util.updateQueryData("getMyChats", undefined, (draft) => {
+                const tempChat: Chat = {
+                  chat_id: tempChatId,
+                  title: null,
+                  participants: body.users.map((username) => ({
+                    type: "user" as const,
+                    username,
+                    avatar: "",
+                  })),
+                  messages: [],
+                  order_id: null,
+                }
+                draft.unshift(tempChat)
+              }),
+            )
+            patches.push(myChatsPatch)
+
+            return patches
+          },
+          queryFulfilled,
+          dispatch,
+        )
+      },
       transformResponse: unwrapResponse,
       invalidatesTags: ["Chat" as const],
     }),

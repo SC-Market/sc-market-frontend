@@ -16,8 +16,8 @@ export default defineConfig({
       injectRegister: false, // Disable auto-injection since we're handling registration manually
       // Use injectManifest to allow custom push notification handlers
       strategies: "injectManifest",
-      srcDir: "public",
-      filename: "sw.js", // Our custom service worker file
+      srcDir: "src",
+      filename: "sw.ts", // Our custom service worker file (TypeScript)
       injectManifest: {
         globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2,woff,ttf}"],
       },
