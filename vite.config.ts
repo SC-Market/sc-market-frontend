@@ -32,6 +32,7 @@ export default defineConfig({
         "android-chrome-512x512-maskable.png",
       ],
       manifest: {
+        id: "space.sc-market.app",
         name: "SC Market - Star Citizen Marketplace",
         short_name: "SC Market",
         description:
@@ -94,14 +95,66 @@ export default defineConfig({
             icons: [{ src: "/android-chrome-192x192.png", sizes: "192x192" }],
           },
           {
+            name: "Services",
+            short_name: "Services",
+            description: "Browse contractor services",
+            url: "/market/services",
+            icons: [{ src: "/android-chrome-192x192.png", sizes: "192x192" }],
+          },
+          {
+            name: "Messages",
+            short_name: "Messages",
+            description: "View messages",
+            url: "/messages",
+            icons: [{ src: "/android-chrome-192x192.png", sizes: "192x192" }],
+          },
+          {
             name: "Contracts",
             short_name: "Contracts",
             description: "View contracts",
             url: "/contracts",
             icons: [{ src: "/android-chrome-192x192.png", sizes: "192x192" }],
           },
+          {
+            name: "My Orders",
+            short_name: "Orders",
+            description: "View my orders",
+            url: "/orders",
+            icons: [{ src: "/android-chrome-192x192.png", sizes: "192x192" }],
+          },
+          {
+            name: "Dashboard",
+            short_name: "Dashboard",
+            description: "View dashboard",
+            url: "/dashboard",
+            icons: [{ src: "/android-chrome-192x192.png", sizes: "192x192" }],
+          },
+          {
+            name: "Recruiting",
+            short_name: "Recruiting",
+            description: "Browse recruiting posts",
+            url: "/recruiting",
+            icons: [{ src: "/android-chrome-192x192.png", sizes: "192x192" }],
+          },
         ],
         categories: ["games", "shopping", "social"],
+        // PWA Widgets - uses existing frontend routes
+        widgets: [
+          {
+            name: "Recent Orders",
+            short_name: "Orders",
+            description: "View your recent orders",
+            tag: "recent-orders",
+            template: "/widget/orders", // Use existing frontend route
+            ms_ac_template: "/widget/orders", // Windows-specific
+            data: "/api/orders/user/data", // Use existing backend endpoint
+            type: "application/json",
+            update: 300000, // Update every 5 minutes
+            icons: [
+              { src: "/android-chrome-192x192.png", sizes: "192x192" },
+            ],
+          },
+        ],
       },
       workbox: {
         globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2,woff,ttf}"],
