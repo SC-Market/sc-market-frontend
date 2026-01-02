@@ -15,25 +15,15 @@ import {
   CloseRounded,
   CheckCircleRounded,
 } from "@mui/icons-material"
-
-interface BeforeInstallPromptEvent extends Event {
-  prompt: () => Promise<void>
-  userChoice: Promise<{ outcome: "accepted" | "dismissed" }>
-}
+import { usePWAInstallPrompt } from "../../hooks/pwa/usePWAInstallPrompt"
 
 export function InstallPrompt() {
-  const [deferredPrompt, setDeferredPrompt] =
-    useState<BeforeInstallPromptEvent | null>(null)
+  const { canInstall, isInstalled, triggerInstall } = usePWAInstallPrompt()
   const [showPrompt, setShowPrompt] = useState(false)
-  const [isInstalled, setIsInstalled] = useState(false)
 
   useEffect(() => {
     // Check if app is already installed
-    if (
-      window.matchMedia("(display-mode: standalone)").matches ||
-      (window.navigator as any).standalone === true
-    ) {
-      setIsInstalled(true)
+    if (isInstalled) {
       return
     }
 
@@ -43,48 +33,17 @@ export function InstallPrompt() {
       return
     }
 
-    // Listen for beforeinstallprompt event
-    const handleBeforeInstallPrompt = (e: Event) => {
-      e.preventDefault()
-      setDeferredPrompt(e as BeforeInstallPromptEvent)
+    // Show prompt when install becomes available
+    if (canInstall) {
       setShowPrompt(true)
     }
-
-    window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt)
-
-    // Listen for app installed event
-    window.addEventListener("appinstalled", () => {
-      setIsInstalled(true)
-      setShowPrompt(false)
-      setDeferredPrompt(null)
-    })
-
-    return () => {
-      window.removeEventListener(
-        "beforeinstallprompt",
-        handleBeforeInstallPrompt,
-      )
-    }
-  }, [])
+  }, [canInstall, isInstalled])
 
   const handleInstall = async () => {
-    if (!deferredPrompt) return
-
-    // Show the install prompt
-    await deferredPrompt.prompt()
-
-    // Wait for user response
-    const { outcome } = await deferredPrompt.userChoice
-
-    if (outcome === "accepted") {
-      console.log("User accepted the install prompt")
-      setIsInstalled(true)
-    } else {
-      console.log("User dismissed the install prompt")
+    const success = await triggerInstall()
+    if (success) {
+      setShowPrompt(false)
     }
-
-    setDeferredPrompt(null)
-    setShowPrompt(false)
   }
 
   const handleDismiss = () => {
@@ -92,7 +51,7 @@ export function InstallPrompt() {
     sessionStorage.setItem("pwa-install-dismissed", "true")
   }
 
-  if (isInstalled || !showPrompt || !deferredPrompt) {
+  if (isInstalled || !showPrompt || !canInstall) {
     return null
   }
 

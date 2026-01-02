@@ -93,12 +93,12 @@ export function Navbar(props: { children?: React.ReactNode }) {
               }),
         }}
       >
-        {!drawerOpen && !isMessagingPage && (
+        {!drawerOpen && (
           <Tooltip title={t("navbar.toggle_drawer")}>
             <IconButton
               color={"secondary"}
               onClick={() => setDrawerOpen(true)}
-              sx={{ marginLeft: 2 }}
+              sx={{ marginLeft: 0 }}
               aria-label={t(
                 "accessibility.toggleSidebar",
                 "Toggle sidebar menu",
