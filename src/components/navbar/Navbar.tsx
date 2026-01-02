@@ -78,7 +78,7 @@ export function Navbar(props: { children?: React.ReactNode }) {
           // boxShadow: `0 3px 5px 3px ${theme.palette.primary.main}`,
           overflow: "visible",
           background: "transparent",
-          paddingLeft: 0,
+          paddingLeft: 2,
           ...(theme.navKind === "outlined"
             ? {
                 // borderBottom: 1,
