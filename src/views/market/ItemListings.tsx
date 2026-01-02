@@ -99,40 +99,8 @@ import {
   ListingOrAd,
   isListing,
   calculateRequestSize,
-} from "../../components/ads/adUtils" // const listingIcons = {
-
-export function ListingSkeleton(props: { index: number }) {
-  const { index } = props
-  const marketSidebarOpen = useMarketSidebarExp()
-  return (
-    <Grid
-      item
-      xs={marketSidebarOpen ? 12 : 6}
-      md={marketSidebarOpen ? 12 : 4}
-      lg={marketSidebarOpen ? 6 : 4}
-      xl={3}
-      sx={{ transition: "0.3s" }}
-    >
-      <Fade
-        in={true}
-        style={{
-          transitionDelay: `${50 + 50 * index}ms`,
-          transitionDuration: "500ms",
-        }}
-      >
-        <Skeleton
-          variant={"rectangular"}
-          height={400}
-          width={"100%"}
-          sx={{
-            borderRadius: (theme) =>
-              theme.spacing((theme as ExtendedTheme).borderRadius.image),
-          }}
-        />
-      </Fade>
-    </Grid>
-  )
-}
+} from "../../components/ads/adUtils"
+import { ListingSkeleton as StandardListingSkeleton } from "../../components/skeletons"
 
 export function ListingRefreshButton(props: {
   listing: ExtendedUniqueSearchResult
@@ -1165,6 +1133,7 @@ export function DisplayListings(props: {
   const { t } = useTranslation()
   const [perPage, setPerPage] = useState(48)
   const [page, setPage] = useState(0)
+  const marketSidebarOpen = useMarketSidebarExp()
 
   const { listings, loading, total, startIndex = 0, disableAds = false } = props
 
@@ -1222,7 +1191,13 @@ export function DisplayListings(props: {
       {loading
         ? new Array(perPage)
             .fill(undefined)
-            .map((o, i) => <ListingSkeleton index={i} key={i} />)
+            .map((o, i) => (
+              <StandardListingSkeleton
+                key={i}
+                index={i}
+                sidebarOpen={marketSidebarOpen}
+              />
+            ))
         : paginatedListings.map((item, index) => {
             // Generate unique key for each item (listing or ad)
             const key = isListing(item)
@@ -1310,10 +1285,15 @@ export function DisplayListingsMin(props: {
     useVirtualization && (listingsWithAds.length > 50 || isMobile)
 
   if (loading) {
+    const marketSidebarOpen = useMarketSidebarExp()
     return (
       <React.Fragment>
         {new Array(16).fill(undefined).map((o, i) => (
-          <ListingSkeleton index={i} key={i} />
+          <StandardListingSkeleton
+            index={i}
+            key={i}
+            sidebarOpen={marketSidebarOpen}
+          />
         ))}
       </React.Fragment>
     )
@@ -1410,6 +1390,7 @@ export function DisplayBuyOrderListings(props: {
   const [searchState] = useMarketSearch()
   const [perPage, setPerPage] = useState(48)
   const [page, setPage] = useState(0)
+  const marketSidebarOpen = useMarketSidebarExp()
 
   useEffect(() => {
     setPage(0)
@@ -1449,7 +1430,13 @@ export function DisplayBuyOrderListings(props: {
       {props.loading
         ? new Array(perPage)
             .fill(undefined)
-            .map((o, i) => <ListingSkeleton index={i} key={i} />)
+            .map((o, i) => (
+              <StandardListingSkeleton
+                key={i}
+                index={i}
+                sidebarOpen={marketSidebarOpen}
+              />
+            ))
         : listings.map((item, index) => (
             <AggregateBuyOrderListing
               aggregate={item}

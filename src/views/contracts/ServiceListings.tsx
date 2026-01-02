@@ -22,7 +22,7 @@ import { MarkdownRender } from "../../components/markdown/Markdown"
 import { useServiceSearch } from "../../hooks/contract/ServiceSearch"
 import { dateDiffInDays } from "../market/MarketListingView"
 import { ListingNameAndRating } from "../../components/rating/ListingRating"
-import { RecentListingsSkeleton } from "../../pages/home/LandingPage"
+import { ServiceListingSkeleton } from "../../components/skeletons"
 import { CURRENT_CUSTOM_ORG } from "../../hooks/contractor/CustomDomain"
 import { Stack } from "@mui/system"
 import { useTheme } from "@mui/material/styles"
@@ -328,9 +328,11 @@ export function ServiceListings(props: { user?: string; contractor?: string }) {
 
   if (isLoading) {
     return (
-      <Grid item xs={12}>
-        <RecentListingsSkeleton />
-      </Grid>
+      <>
+        {Array.from({ length: perPage }).map((_, i) => (
+          <ServiceListingSkeleton key={i} index={i} />
+        ))}
+      </>
     )
   }
 
@@ -481,7 +483,7 @@ export function OrgRecentServices(props: { org: string }) {
   return services ? (
     <HorizontalServiceListings listings={filteredServices} />
   ) : (
-    <RecentListingsSkeleton />
+    <RecentServicesSkeleton />
   )
 }
 
@@ -497,6 +499,6 @@ export function UserRecentServices(props: { user: string }) {
   return services ? (
     <HorizontalServiceListings listings={filteredServices} />
   ) : (
-    <RecentListingsSkeleton />
+    <RecentServicesSkeleton />
   )
 }

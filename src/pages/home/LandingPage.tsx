@@ -47,6 +47,7 @@ import BirdIncLogo from "../../assets/birdinc.jpg"
 import { useTranslation } from "react-i18next"
 import { useGetUserProfileQuery } from "../../store/profile"
 import { LoginArea } from "../../views/authentication/LoginArea"
+import { HorizontalListingSkeleton } from "../../components/skeletons"
 
 const bg = "https://media.tenor.com/4LKXThFQuHMAAAAd/perseus-star-citizen.gif"
 
@@ -114,34 +115,7 @@ export function RecentListingsSkeleton() {
     >
       {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map(
         (item, index) => (
-          <Box
-            sx={{
-              marginLeft: 1,
-              marginRight: 1,
-              width: 250,
-              display: "inline-block",
-              flexShrink: 0,
-            }}
-            key={index}
-          >
-            <Fade
-              in={true}
-              style={{
-                transitionDelay: `${50 + 50 * index}ms`,
-                transitionDuration: "500ms",
-              }}
-            >
-              <Skeleton
-                variant={"rectangular"}
-                height={400}
-                width={250}
-                sx={{
-                  borderRadius: (theme) =>
-                    theme.spacing((theme as ExtendedTheme).borderRadius.image),
-                }}
-              />
-            </Fade>
-          </Box>
+          <HorizontalListingSkeleton key={index} index={index} />
         ),
       )}
     </Box>

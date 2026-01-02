@@ -67,7 +67,7 @@ export function ListingNameAndRating(props: {
   const { user, contractor } = props
 
   return (
-    <Box display={"flex"} alignItems={"center"}>
+    <Box display={"flex"} alignItems={"center"} flexWrap={"wrap"} gap={0.5}>
       <MaterialLink
         component={Link}
         to={
@@ -96,7 +96,7 @@ export function ListingSellerRating(props: {
   const { user, contractor } = props
 
   return (
-    <Box display={"flex"} alignItems={"center"}>
+    <Box display={"flex"} alignItems={"center"} flexWrap={"wrap"} gap={0.5}>
       <SellerRatingStars user={user} contractor={contractor} />
       <SellerRatingCount user={user} contractor={contractor} />
     </Box>
