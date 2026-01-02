@@ -267,10 +267,29 @@ export function PushNotificationSettings() {
           <Typography variant="body2">{androidErrorMessage}</Typography>
         </Alert>
         {!pwaInstalled && (
-          <Typography variant="body2" color="text.secondary">
-            Please install this app as a PWA to enable push notifications on
-            Android.
-          </Typography>
+          <Box sx={{ mt: 2 }}>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Please install this app as a PWA to enable push notifications on
+              Android.
+            </Typography>
+            {canInstall && (
+              <Button
+                variant="contained"
+                color="primary"
+                startIcon={<GetAppRounded />}
+                onClick={async () => {
+                  const success = await triggerInstall()
+                  if (success) {
+                    setSuccess("App installed! You can now enable push notifications.")
+                  } else {
+                    setError("Installation was cancelled or failed. Please try again.")
+                  }
+                }}
+              >
+                Install App
+              </Button>
+            )}
+          </Box>
         )}
       </FlatSection>
     )
