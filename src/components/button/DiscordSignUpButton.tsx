@@ -5,7 +5,7 @@ import { useLocation, useSearchParams } from "react-router-dom"
 import { Discord } from "../icon/DiscordIcon"
 import { useTranslation } from "react-i18next"
 
-export function DiscordLoginButton() {
+export function DiscordSignUpButton() {
   const location = useLocation()
   const [searchParams] = useSearchParams()
   const { t } = useTranslation()
@@ -17,19 +17,19 @@ export function DiscordLoginButton() {
   return (
     <Button
       onClick={() => {
-        window.location.href = `${BACKEND_URL}/auth/discord?path=${encodeURIComponent(redirectPath)}&action=signin`
+        window.location.href = `${BACKEND_URL}/auth/discord?path=${encodeURIComponent(redirectPath)}&action=signup`
       }}
       color="secondary"
       variant="contained"
       startIcon={<Discord />}
-      aria-label={t("auth.signInWithDiscord", "Sign in with Discord")}
-      aria-describedby="discord-login-description"
+      aria-label={t("auth.signUpWithDiscord", "Sign up with Discord")}
+      aria-describedby="discord-signup-description"
     >
-      {t("auth.signInWithDiscord", "Sign in with Discord")}
-      <span id="discord-login-description" className="sr-only">
+      {t("auth.signUpWithDiscord", "Sign up with Discord")}
+      <span id="discord-signup-description" className="sr-only">
         {t(
-          "accessibility.signInWithDiscordDescription",
-          "Sign in using your Discord account",
+          "accessibility.signUpWithDiscordDescription",
+          "Create a new account using your Discord account",
         )}
       </span>
     </Button>

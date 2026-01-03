@@ -3,6 +3,7 @@ import { Box, useMediaQuery, useTheme } from "@mui/material"
 import { useParams, useNavigate } from "react-router-dom"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
 import { MessagesBody } from "../../views/messaging/MessagesBody"
+import { MessagesBodyMobile } from "../../views/messaging/MessagesBodyMobile"
 import { MessagingSidebar } from "../../views/messaging/MessagingSidebar"
 import { Message } from "../../datatypes/Chat"
 import { MessageGroupCreateContext } from "../../hooks/messaging/MessageGroupCreate"
@@ -117,7 +118,11 @@ export function Messages() {
                 isLoading || isFetching ? (
                   <MessageThreadSkeleton />
                 ) : currentChat ? (
-                  <MessagesBody />
+                  isMobile ? (
+                    <MessagesBodyMobile />
+                  ) : (
+                    <MessagesBody />
+                  )
                 ) : (
                   <EmptyMessages
                     isChatList={false}

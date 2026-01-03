@@ -345,87 +345,56 @@ function DateTimePickerBottomSheet(props: {
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
   const { dateTime, setDateTime, open, onClose } = props
-  const [datePickerOpen, setDatePickerOpen] = useState(false)
-
-  // Close nested sheet when parent closes
-  useEffect(() => {
-    if (!open) {
-      setDatePickerOpen(false)
-    }
-  }, [open])
 
   return (
-    <>
-      <BottomSheet
-        open={open && !datePickerOpen}
-        onClose={onClose}
-        title={t("MessagesBody.dateTimePicker", "Date & Time Picker")}
-        maxHeight="90vh"
-      >
-        <Stack spacing={2}>
+    <BottomSheet
+      open={open}
+      onClose={onClose}
+      title={t("MessagesBody.dateTimePicker", "Date & Time Picker")}
+      maxHeight="90vh"
+    >
+      <Stack spacing={2}>
+        <DateTimePicker
+          value={dateTime}
+          onChange={(newValue) => {
+            if (newValue) {
+              setDateTime(newValue)
+            }
+          }}
+          slotProps={{
+            textField: {
+              size: "medium",
+              fullWidth: true,
+            },
+          }}
+        />
+
+        <Stack direction="row" spacing={1}>
           <Button
+            onClick={() => {
+              navigator.clipboard.writeText(
+                `<t:${Math.trunc(dateTime.valueOf() / 1000)}:D>`,
+              )
+            }}
             variant="outlined"
             fullWidth
-            onClick={() => setDatePickerOpen(true)}
-            sx={{ justifyContent: "flex-start", textTransform: "none" }}
           >
-            {dateTime.format("MMMM D, YYYY h:mm A")}
+            {t("MessagesBody.copyDate")}
           </Button>
-
-          <Stack direction="row" spacing={1}>
-            <Button
-              onClick={() => {
-                navigator.clipboard.writeText(
-                  `<t:${Math.trunc(dateTime.valueOf() / 1000)}:D>`,
-                )
-              }}
-              variant="outlined"
-              fullWidth
-            >
-              {t("MessagesBody.copyDate")}
-            </Button>
-            <Button
-              onClick={() => {
-                navigator.clipboard.writeText(
-                  `<t:${Math.trunc(dateTime.valueOf() / 1000)}:t>`,
-                )
-              }}
-              variant="outlined"
-              fullWidth
-            >
-              {t("MessagesBody.copyTime")}
-            </Button>
-          </Stack>
-        </Stack>
-      </BottomSheet>
-      
-      {/* Nested bottom sheet for date picker */}
-      <BottomSheet
-        open={datePickerOpen}
-        onClose={() => setDatePickerOpen(false)}
-        title={t("MessagesBody.selectDateTime", "Select Date & Time")}
-        maxHeight="90vh"
-      >
-        <Stack spacing={2}>
-          <DateTimePicker
-            value={dateTime}
-            onChange={(newValue) => {
-              if (newValue) {
-                setDateTime(newValue)
-                // Close nested sheet after selection
-                setTimeout(() => setDatePickerOpen(false), 300)
-              }
+          <Button
+            onClick={() => {
+              navigator.clipboard.writeText(
+                `<t:${Math.trunc(dateTime.valueOf() / 1000)}:t>`,
+              )
             }}
-            slotProps={{
-              textField: {
-                size: "medium",
-                fullWidth: true,
-              },
-            }}
-          />
+            variant="outlined"
+            fullWidth
+          >
+            {t("MessagesBody.copyTime")}
+          </Button>
         </Stack>
-      </BottomSheet>
-    </>
+      </Stack>
+    </BottomSheet>
   )
 }
 
@@ -1252,6 +1221,7 @@ export function MessagesBody(props: { maxHeight?: number }) {
               >
                 <MobileFAB
                   color="primary"
+                  size="small"
                   aria-label={t("MessagesBody.dateTimePicker", "Date & Time Picker")}
                   onClick={() => setDateTimeSheetOpen(true)}
                   position="bottom-right"

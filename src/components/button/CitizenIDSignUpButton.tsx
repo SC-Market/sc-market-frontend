@@ -5,7 +5,7 @@ import { useLocation, useSearchParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { CitizenIDLogo } from "../icon/CitizenIDLogo"
 
-export function CitizenIDLoginButton() {
+export function CitizenIDSignUpButton() {
   const location = useLocation()
   const [searchParams] = useSearchParams()
   const { t } = useTranslation()
@@ -21,19 +21,19 @@ export function CitizenIDLoginButton() {
   return (
     <Button
       onClick={() => {
-        window.location.href = `${BACKEND_URL}/auth/citizenid?path=${encodeURIComponent(redirectPath)}&action=signin`
+        window.location.href = `${BACKEND_URL}/auth/citizenid?path=${encodeURIComponent(redirectPath)}&action=signup`
       }}
       color="primary"
       variant="contained"
       startIcon={<CitizenIDLogo />}
-      aria-label={t("auth.signInWithCitizenID", "Sign in with Citizen iD")}
-      aria-describedby="citizenid-login-description"
+      aria-label={t("auth.signUpWithCitizenID", "Sign up with Citizen iD")}
+      aria-describedby="citizenid-signup-description"
     >
-      {t("auth.signInWithCitizenID", "Sign in with Citizen iD")}
-      <span id="citizenid-login-description" className="sr-only">
+      {t("auth.signUpWithCitizenID", "Sign up with Citizen iD")}
+      <span id="citizenid-signup-description" className="sr-only">
         {t(
-          "accessibility.signInWithCitizenIDDescription",
-          "Sign in using your Citizen iD account",
+          "accessibility.signUpWithCitizenIDDescription",
+          "Create a new account using your Citizen iD account",
         )}
       </span>
     </Button>
