@@ -89,8 +89,8 @@ export function Messages() {
             <main
               style={{
                 flexGrow: 1,
-                overflow: "auto",
-                height: "100vh",
+                overflow: "hidden",
+                height: isMobile ? "100dvh" : "100vh", // Use dvh on mobile to account for dynamic viewport
                 display: "flex",
                 flexDirection: "column",
                 marginLeft: 0,
