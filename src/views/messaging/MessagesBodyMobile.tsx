@@ -472,12 +472,11 @@ function MessagesAreaMobile(props: {
         flex: 1,
         width: "100%",
         padding: 1,
-        paddingBottom: 1.5,
         overflow: "auto",
         WebkitOverflowScrolling: "touch",
         minHeight: 0,
         // Add bottom padding to account for fixed input area
-        marginBottom: `${inputAreaHeight}px`,
+        paddingBottom: inputAreaHeight > 0 ? `${inputAreaHeight + 12}px` : 1.5,
       }}
     >
       <Stack spacing={1.5}>
@@ -632,6 +631,7 @@ export function MessagesBodyMobile(props: { maxHeight?: number }) {
   const { isSuccess } = useGetUserProfileQuery()
   const { data: profile } = useGetUserProfileQuery()
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false)
+  const [viewportHeight, setViewportHeight] = useState(window.innerHeight)
   const inputAreaRef = useRef<HTMLDivElement>(null)
   const [inputAreaHeight, setInputAreaHeight] = useState(0)
 
@@ -639,15 +639,17 @@ export function MessagesBodyMobile(props: { maxHeight?: number }) {
   useEffect(() => {
     const handleResize = () => {
       if (window.visualViewport) {
-        const viewportHeight = window.visualViewport.height
+        const vh = window.visualViewport.height
         const screenHeight = window.screen.height
+        setViewportHeight(vh)
         // If viewport is less than 75% of screen height, assume keyboard is open
-        setIsKeyboardOpen(viewportHeight < screenHeight * 0.75)
+        setIsKeyboardOpen(vh < screenHeight * 0.75)
       } else {
         // Fallback for browsers without visualViewport
-        const viewportHeight = window.innerHeight
+        const vh = window.innerHeight
         const screenHeight = window.screen.height
-        setIsKeyboardOpen(viewportHeight < screenHeight * 0.75)
+        setViewportHeight(vh)
+        setIsKeyboardOpen(vh < screenHeight * 0.75)
       }
     }
 
@@ -786,12 +788,11 @@ export function MessagesBodyMobile(props: { maxHeight?: number }) {
           sx={{
             display: "flex",
             flexDirection: "column",
-            height: "100vh",
+            height: `${viewportHeight}px`,
             position: "fixed",
             top: 0,
             left: 0,
             right: 0,
-            bottom: 0,
             overflow: "hidden",
           }}
         >
