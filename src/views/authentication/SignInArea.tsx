@@ -1,5 +1,6 @@
-import React from "react"
+import React, { useEffect, useState } from "react"
 import {
+  Alert,
   Grid,
   Link as MuiLink,
   Paper,
@@ -12,10 +13,73 @@ import { useTranslation } from "react-i18next"
 import { isCitizenIdEnabled } from "../../util/constants"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { useSearchParams } from "react-router-dom"
 
 export function SignInArea() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
+  const [searchParams, setSearchParams] = useSearchParams()
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+
+  useEffect(() => {
+    const error = searchParams.get("error")
+    if (!error) {
+      setErrorMessage(null)
+      return
+    }
+
+    let message: string | null = null
+
+    // Handle specific error codes
+    if (error === "account_not_found") {
+      message =
+        searchParams.get("error_description") ||
+        t("auth.accountNotFound", "No account found. Please sign up first.")
+    } else if (isCitizenIdEnabled && error === "citizenid_account_not_verified") {
+      message =
+        searchParams.get("error_description") ||
+        t(
+          "auth.citizenidAccountNotVerified",
+          "Your Citizen iD account must be verified to sign up or log in.",
+        )
+    } else if (isCitizenIdEnabled && error === "citizenid_auth_failed") {
+      message =
+        searchParams.get("error_description") ||
+        t("auth.authFailed", "Authentication failed. Please try again.")
+    } else if (isCitizenIdEnabled && error === "citizenid_login_failed") {
+      message =
+        searchParams.get("error_description") ||
+        t("auth.loginFailed", "Failed to sign in. Please try again.")
+    } else if (isCitizenIdEnabled && error === "citizenid_oauth_error") {
+      message =
+        searchParams.get("error_description") ||
+        t(
+          "auth.oauthError",
+          "An error occurred during authentication. Please try again.",
+        )
+    } else {
+      // Fallback for any unhandled errors
+      const errorDescription = searchParams.get("error_description")
+      if (errorDescription) {
+        message = errorDescription
+      } else if (error.startsWith("citizenid_")) {
+        message = t(
+          "auth.genericAuthError",
+          "An authentication error occurred. Please try again or contact support if the problem persists.",
+        )
+      } else {
+        message = t("auth.genericError", "An error occurred. Please try again.")
+      }
+    }
+
+    if (message) {
+      setErrorMessage(message)
+      // Clear error from URL after displaying
+      searchParams.delete("error")
+      searchParams.delete("error_description")
+      setSearchParams(searchParams, { replace: true })
+    }
+  }, [searchParams, setSearchParams, t, isCitizenIdEnabled])
 
   return (
     <Grid
@@ -56,6 +120,12 @@ export function SignInArea() {
             </Typography>
           )}
         </Stack>
+
+        {errorMessage && (
+          <Alert severity="error" onClose={() => setErrorMessage(null)}>
+            {errorMessage}
+          </Alert>
+        )}
 
         <Stack spacing={theme.layoutSpacing.layout}>
           {isCitizenIdEnabled && <CitizenIDLoginButton />}

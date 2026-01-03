@@ -287,6 +287,12 @@
     "authenticateWithRSI": "Authenticate with RSI",
     "accountNotFound": "No account found. Please sign up first.",
     "accountAlreadyExists": "An account already exists. Please sign in instead.",
+    "authFailed": "Authentication failed. Please try again.",
+    "loginFailed": "Failed to sign in. Please try again.",
+    "oauthError": "An error occurred during authentication. Please try again.",
+    "genericAuthError": "An authentication error occurred. Please try again or contact support if the problem persists.",
+    "genericError": "An error occurred. Please try again.",
+    "citizenidAccountNotVerified": "Your Citizen iD account must be verified to sign up or log in.",
     "aria": {
       "outlinedGroup": "outlined button group"
     },

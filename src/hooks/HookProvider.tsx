@@ -146,7 +146,7 @@ export function HookProvider(props: { children: React.ReactElement }) {
 
     let errorMessage: string | null = null
 
-    // Handle new sign up/sign in error codes
+    // Handle specific error codes
     if (error === "account_not_found") {
       errorMessage =
         searchParams.get("error_description") ||
@@ -165,6 +165,46 @@ export function HookProvider(props: { children: React.ReactElement }) {
           "auth.citizenidAccountNotVerified",
           "Your Citizen iD account must be verified to sign up or log in.",
         )
+    } else if (isCitizenIdEnabled && error === "citizenid_auth_failed") {
+      errorMessage =
+        searchParams.get("error_description") ||
+        t(
+          "auth.authFailed",
+          "Authentication failed. Please try again.",
+        )
+    } else if (isCitizenIdEnabled && error === "citizenid_login_failed") {
+      errorMessage =
+        searchParams.get("error_description") ||
+        t(
+          "auth.loginFailed",
+          "Failed to sign in. Please try again.",
+        )
+    } else if (isCitizenIdEnabled && error === "citizenid_oauth_error") {
+      errorMessage =
+        searchParams.get("error_description") ||
+        t(
+          "auth.oauthError",
+          "An error occurred during authentication. Please try again.",
+        )
+    } else {
+      // Fallback for any unhandled errors - show the error description if available, or a generic message
+      const errorDescription = searchParams.get("error_description")
+      if (errorDescription) {
+        errorMessage = errorDescription
+      } else {
+        // Try to provide a user-friendly message based on error code
+        if (error.startsWith("citizenid_")) {
+          errorMessage = t(
+            "auth.genericAuthError",
+            "An authentication error occurred. Please try again or contact support if the problem persists.",
+          )
+        } else {
+          errorMessage = t(
+            "auth.genericError",
+            "An error occurred. Please try again.",
+          )
+        }
+      }
     }
 
     if (errorMessage) {
