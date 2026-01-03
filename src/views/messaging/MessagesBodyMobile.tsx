@@ -795,9 +795,9 @@ export function MessagesBodyMobile(props: { maxHeight?: number }) {
           sx={{
             display: "flex",
             flexDirection: "column",
-            height: "calc(100vh - 56px)", // Full viewport height minus app bar
+            height: "100vh",
             position: "fixed",
-            top: 56, // Account for app bar height on mobile
+            top: 0,
             left: 0,
             right: 0,
             bottom: 0,
@@ -808,8 +808,8 @@ export function MessagesBodyMobile(props: { maxHeight?: number }) {
           <Box
             sx={{
               ...theme.mixins.toolbar,
-              minHeight: 56,
-              height: 56,
+              minHeight: 64,
+              height: 64,
               flexShrink: 0,
             }}
           />

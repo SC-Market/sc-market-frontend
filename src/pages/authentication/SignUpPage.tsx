@@ -2,11 +2,11 @@ import React from "react"
 import { Navigate } from "react-router-dom"
 import { Page } from "../../components/metadata/Page"
 import { ContainerGrid } from "../../components/layout/ContainerGrid"
-import { SignInArea } from "../../views/authentication/SignInArea"
+import { SignUpArea } from "../../views/authentication/SignUpArea"
 import { useGetUserProfileQuery } from "../../store/profile"
 import { useTranslation } from "react-i18next"
 
-export function LoginPage() {
+export function SignUpPage() {
   const { t } = useTranslation()
   const profile = useGetUserProfileQuery()
 
@@ -15,7 +15,7 @@ export function LoginPage() {
   }
 
   return (
-    <Page title={t("auth.signInTitle", "Sign in to SC Market")}>
+    <Page title={t("auth.signUpTitle", "Sign up for SC Market")}>
       <ContainerGrid
         maxWidth="sm"
         sidebarOpen={false}
@@ -32,7 +32,7 @@ export function LoginPage() {
           paddingBottom: 0,
         }}
       >
-        <SignInArea />
+        <SignUpArea />
       </ContainerGrid>
     </Page>
   )
