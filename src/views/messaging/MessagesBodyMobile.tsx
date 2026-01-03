@@ -471,8 +471,8 @@ function MessagesAreaMobile(props: {
       sx={{
         flex: 1,
         width: "100%",
-        padding: 1.5,
-        paddingBottom: 2,
+        padding: 1,
+        paddingBottom: 1.5,
         overflow: "auto",
         WebkitOverflowScrolling: "touch",
         minHeight: 0,
@@ -513,16 +513,7 @@ function MessageSendAreaMobile(props: {
     }
   }
 
-  // Calculate bottom position: above keyboard if open, otherwise above bottom nav
-  // The input should be sticky on top of keyboard OR above bottom nav, whichever is higher
-  const bottomNavHeight = 64 // Bottom nav height
   const safeAreaBottom = "env(safe-area-inset-bottom)"
-  
-  // When keyboard is open, position at 0 (keyboard will push it up naturally)
-  // When keyboard is closed, position above bottom nav
-  const bottomPosition = props.isKeyboardOpen 
-    ? 0 
-    : `calc(${bottomNavHeight}px + ${safeAreaBottom})`
 
   return (
     <Box
@@ -833,23 +824,22 @@ export function MessagesBodyMobile(props: { maxHeight?: number }) {
             />
           </Box>
           
-          {/* Sticky container for FAB and input area - moves with keyboard */}
+          {/* Fixed container for FAB and input area - moves with keyboard */}
           <Box
             ref={inputAreaRef}
             sx={{
-              position: "sticky",
+              position: "fixed",
               bottom: isKeyboardOpen 
                 ? 0 
                 : `calc(64px + env(safe-area-inset-bottom))`,
               left: 0,
               right: 0,
               zIndex: theme.zIndex.drawer + 2,
-              flexShrink: 0,
               display: "flex",
               flexDirection: "column",
             }}
           >
-            {/* FAB for date/time picker - sticky, moves with input area */}
+            {/* FAB for date/time picker - fixed, moves with input area */}
             <Box
               sx={{
                 position: "absolute",
@@ -876,7 +866,7 @@ export function MessagesBodyMobile(props: { maxHeight?: number }) {
               </MobileFAB>
             </Box>
             
-            {/* Input area - inside sticky container */}
+            {/* Input area - inside fixed container */}
             <MessageSendAreaMobile 
               onSend={onSend} 
               isKeyboardOpen={isKeyboardOpen}
