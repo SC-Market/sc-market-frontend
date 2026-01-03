@@ -351,10 +351,18 @@ export function MarketNavArea(props: { top?: boolean }) {
                 <Button
                   component={RouterLink}
                   to="/login"
-                  variant="contained"
+                  variant="outlined"
                   color="primary"
                 >
                   {t("auth.signIn", "Sign in")}
+                </Button>
+                <Button
+                  component={RouterLink}
+                  to="/signup"
+                  variant="contained"
+                  color="primary"
+                >
+                  {t("auth.signUp", "Sign up")}
                 </Button>
               </Stack>
             )}

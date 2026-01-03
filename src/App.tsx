@@ -144,6 +144,13 @@ const router = createBrowserRouter([
         }),
       },
       {
+        path: "/signup",
+        lazy: async () => ({
+          Component: (await import("./pages/authentication/SignUpPage"))
+            .SignUpPage,
+        }),
+      },
+      {
         path: "/offer/:id",
         lazy: async () => ({
           Component: (await import("./pages/offers/ViewOfferPage"))

@@ -2,10 +2,9 @@ import React from "react"
 import { Navigate } from "react-router-dom"
 import { Page } from "../../components/metadata/Page"
 import { ContainerGrid } from "../../components/layout/ContainerGrid"
-import { LoginArea } from "../../views/authentication/LoginArea"
+import { SignInArea } from "../../views/authentication/SignInArea"
 import { useGetUserProfileQuery } from "../../store/profile"
 import { useTranslation } from "react-i18next"
-import { Grid } from "@mui/material"
 
 export function LoginPage() {
   const { t } = useTranslation()
@@ -33,7 +32,7 @@ export function LoginPage() {
           paddingBottom: 0,
         }}
       >
-        <LoginArea />
+        <SignInArea />
       </ContainerGrid>
     </Page>
   )
