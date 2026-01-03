@@ -439,7 +439,9 @@
     "allListings": "All Listings",
     "publicListings": "Public Listings",
     "internalListings": "Internal Listings",
-    "internalListing": "Internal Listing"
+    "internalListing": "Internal Listing",
+    "editListing": "Edit Listing",
+    "shareListing": "Share"
   },
   "marketActions": {
     "createListing": "Create Listing",
@@ -716,7 +718,18 @@
     "filters": "Filters",
     "contract_type": "Contract Type",
     "contract_types": {
-      "Any": "Any"
+      "Any": "Any",
+      "Support": "Support",
+      "Escort": "Escort",
+      "Transport": "Transport",
+      "Construction": "Construction",
+      "Resource Acquisition": "Resource Acquisition",
+      "Rental": "Rental",
+      "Delivery": "Delivery",
+      "Medical": "Medical",
+      "Intelligence Services": "Intelligence Services",
+      "Misc": "Misc",
+      "Custom": "Custom"
     },
     "cost": "Cost",
     "min_cost": "Minimum Cost",
@@ -833,7 +846,18 @@
     "no_description": "Description not defined",
     "active": "Active",
     "inactive": "Inactive",
-    "services": "Services"
+    "services": "Services",
+    "Support": "Support",
+    "Escort": "Escort",
+    "Transport": "Transport",
+    "Construction": "Construction",
+    "Resource Acquisition": "Resource Acquisition",
+    "Rental": "Rental",
+    "Delivery": "Delivery",
+    "Medical": "Medical",
+    "Intelligence Services": "Intelligence Services",
+    "Misc": "Misc",
+    "Custom": "Custom"
   },
   "recentOrders": {
     "title": "Recent Orders"
@@ -1665,7 +1689,9 @@
     "save": "Save",
     "discard": "Discard",
     "editListing": "Edit Listing",
-    "views": "Views"
+    "views": "Views",
+    "newListing": "New Listing",
+    "newListingPending": "New listing - tap to edit"
   },
   "itemMarket": {
     "toggleSidebar": "Toggle market sidebar"
