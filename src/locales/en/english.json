@@ -2342,11 +2342,20 @@
       "unlinkDialogTitle": "Confirm Account Unlink",
       "unlinkDialogDescription": "Are you sure you want to unlink your Star Citizen account? This will reset your profile to unverified status and change your username back to the default format. You can re-link your account at any time.",
       "unlinkDialogCancel": "Cancel",
-      "unlinkDialogConfirm": "Unlink Account"
+      "unlinkDialogConfirm": "Unlink Account",
+      "accountLinks": "Linked Accounts",
+      "accountLinksDescription": "Manage your linked authentication accounts. You can link multiple accounts and choose which one to use for login.",
+      "unlinkProviderTitle": "Unlink Account",
+      "unlinkProviderDescription": "Are you sure you want to unlink this account? You will no longer be able to log in using this method.",
+      "unlink": "Unlink"
     },
     "locale": {
       "title": "Organization Language",
       "select": "Select organization language"
+    },
+    "languages": {
+      "title": "Supported Languages",
+      "description": "Select the languages you can communicate in."
     }
   },
   "orgBlocklist": {
