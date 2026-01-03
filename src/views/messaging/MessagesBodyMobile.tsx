@@ -631,7 +631,6 @@ export function MessagesBodyMobile(props: { maxHeight?: number }) {
   const { isSuccess } = useGetUserProfileQuery()
   const { data: profile } = useGetUserProfileQuery()
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false)
-  const [viewportHeight, setViewportHeight] = useState(window.innerHeight)
   const inputAreaRef = useRef<HTMLDivElement>(null)
   const [inputAreaHeight, setInputAreaHeight] = useState(0)
 
@@ -641,14 +640,12 @@ export function MessagesBodyMobile(props: { maxHeight?: number }) {
       if (window.visualViewport) {
         const vh = window.visualViewport.height
         const screenHeight = window.screen.height
-        setViewportHeight(vh)
         // If viewport is less than 75% of screen height, assume keyboard is open
         setIsKeyboardOpen(vh < screenHeight * 0.75)
       } else {
         // Fallback for browsers without visualViewport
         const vh = window.innerHeight
         const screenHeight = window.screen.height
-        setViewportHeight(vh)
         setIsKeyboardOpen(vh < screenHeight * 0.75)
       }
     }
@@ -788,11 +785,12 @@ export function MessagesBodyMobile(props: { maxHeight?: number }) {
           sx={{
             display: "flex",
             flexDirection: "column",
-            height: `${viewportHeight}px`,
+            height: "100vh",
             position: "fixed",
             top: 0,
             left: 0,
             right: 0,
+            bottom: 0,
             overflow: "hidden",
           }}
         >
