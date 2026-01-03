@@ -41,7 +41,8 @@ import { useMessagingSidebar } from "../../hooks/messaging/MessagingSidebar"
 import MenuIcon from "@mui/icons-material/MenuRounded"
 import { ChevronLeftRounded } from "@mui/icons-material"
 import { useCurrentChat } from "../../hooks/messaging/CurrentChat"
-import { useSendChatMessageMutation } from "../../store/chats"
+import { useSendChatMessageMutation, useGetChatByIDQuery } from "../../store/chats"
+import { useParams } from "react-router-dom"
 import { io } from "socket.io-client"
 import { WS_URL } from "../../util/constants"
 import { Stack } from "@mui/system"
@@ -799,6 +800,7 @@ function MessagesArea(props: {
   maxHeight?: number
 }) {
   const theme = useTheme<ExtendedTheme>()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const { messageBoxRef } = props
   const [chat] = useCurrentChat()
 
@@ -807,7 +809,7 @@ function MessagesArea(props: {
     if (currentRef) {
       currentRef.scrollTop = currentRef.scrollHeight
     }
-  }, [messageBoxRef, chat])
+  }, [messageBoxRef, chat, props.messages])
 
   const { messages } = props
   return (
@@ -818,7 +820,7 @@ function MessagesArea(props: {
           flexGrow: 1,
           width: "100%",
           padding: { xs: 1.5, sm: 2 },
-          paddingBottom: { xs: 10, sm: 2 }, // Extra padding on mobile for bottom nav (64px + spacing)
+          paddingBottom: { xs: 2, sm: 2 }, // Reduced padding since input area is sticky
           borderColor: theme.palette.outline.main,
           boxSizing: "border-box",
           borderWidth: 0,
@@ -826,6 +828,9 @@ function MessagesArea(props: {
           overflow: "auto",
           maxHeight: props.maxHeight,
           WebkitOverflowScrolling: "touch", // Smooth scrolling on iOS
+          // On mobile, ensure this area can scroll independently
+          minHeight: 0,
+          flex: 1,
         }}
       >
         <Stack spacing={theme.layoutSpacing.compact}>
@@ -865,7 +870,6 @@ function MessageSendArea(props: { onSend: (content: string) => void }) {
       sx={{
         width: "100%",
         padding: { xs: 1.5, sm: 1 },
-        paddingBottom: { xs: 10, sm: 1 }, // Extra padding on mobile for bottom nav (64px + spacing)
         borderTopColor: theme.palette.outline.main,
         boxSizing: "border-box",
         borderWidth: 0,
@@ -875,6 +879,13 @@ function MessageSendArea(props: { onSend: (content: string) => void }) {
         gap: { xs: 1, sm: 0 },
         bgcolor: theme.palette.background.paper,
         alignItems: { xs: "flex-end", sm: "center" },
+        position: isMobile ? "sticky" : "relative",
+        bottom: isMobile ? "calc(64px + env(safe-area-inset-bottom))" : "auto", // Position above bottom nav (64px + safe area)
+        zIndex: isMobile ? 1000 : "auto", // High z-index to be above bottom nav
+        // On mobile, add safe area padding for iOS keyboard
+        paddingBottom: isMobile
+          ? `calc(1.5rem + env(safe-area-inset-bottom))`
+          : 1,
       }}
     >
       <TextField
@@ -940,10 +951,12 @@ export const socket = io(WS_URL, {
  */
 export function MessagesBody(props: { maxHeight?: number }) {
   const theme = useTheme<ExtendedTheme>()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const [currentChat, setCurrentChat] = useCurrentChat()
   const messageBoxRef = useRef<HTMLDivElement>(null)
   const [sendChatMessage] = useSendChatMessageMutation()
   const { isSuccess } = useGetUserProfileQuery()
+  const { data: profile } = useGetUserProfileQuery()
 
   useEffect(() => {
     if (isSuccess && !socket.connected) {
@@ -972,7 +985,7 @@ export function MessagesBody(props: { maxHeight?: number }) {
     return () => {
       socket.off("serverMessage", onServerMessage)
     }
-  }, [])
+  }, [setCurrentChat])
 
   useEffect(() => {
     if (currentChat) {
@@ -985,23 +998,74 @@ export function MessagesBody(props: { maxHeight?: number }) {
     }
   }, [currentChat?.chat_id])
 
+  // Subscribe to RTK Query cache updates to sync with currentChat state
+  const { chat_id } = useParams<{ chat_id: string }>()
+  const { data: chatFromCache } = useGetChatByIDQuery(chat_id!, {
+    skip: !chat_id,
+  })
+
+  useEffect(() => {
+    if (chatFromCache && currentChat && chatFromCache.chat_id === currentChat.chat_id) {
+      // Sync currentChat with cache updates (including optimistic updates)
+      const sortedMessages = [...chatFromCache.messages].sort(
+        (a: Message, b: Message) => a.timestamp - b.timestamp,
+      )
+      if (JSON.stringify(sortedMessages) !== JSON.stringify(currentChat.messages)) {
+        setCurrentChat({
+          ...chatFromCache,
+          messages: sortedMessages,
+        })
+      }
+    }
+  }, [chatFromCache, currentChat, setCurrentChat])
+
   const issueAlert = useAlertHook()
 
   const onSend = useCallback(
     (content: string) => {
-      if (content) {
-        sendChatMessage({ chat_id: currentChat!.chat_id, content })
+      if (content && currentChat) {
+        // Optimistically update currentChat state immediately
+        const optimisticMessage: Message = {
+          author: profile?.username || null,
+          content: content,
+          timestamp: Date.now(),
+          chat_id: currentChat.chat_id,
+        }
+        setCurrentChat({
+          ...currentChat,
+          messages: [...currentChat.messages, optimisticMessage],
+        })
+
+        // Then send to server
+        sendChatMessage({ chat_id: currentChat.chat_id, content })
           .unwrap()
-          .catch(issueAlert)
+          .catch((error) => {
+            // Rollback on error
+            setCurrentChat({
+              ...currentChat,
+              messages: currentChat.messages.filter(
+                (msg) => msg.timestamp !== optimisticMessage.timestamp,
+              ),
+            })
+            issueAlert(error)
+          })
       }
     },
-    [currentChat, sendChatMessage, issueAlert],
+    [currentChat, sendChatMessage, issueAlert, profile, setCurrentChat],
   )
 
   return (
     <>
       {currentChat && (
-        <React.Fragment>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            height: "100%",
+            minHeight: 0,
+            overflow: "hidden",
+          }}
+        >
           <MessageHeader />
           <MessagesArea
             messages={currentChat.messages}
@@ -1009,7 +1073,7 @@ export function MessagesBody(props: { maxHeight?: number }) {
             maxHeight={props.maxHeight}
           />
           <MessageSendArea onSend={onSend} />
-        </React.Fragment>
+        </Box>
       )}
     </>
   )

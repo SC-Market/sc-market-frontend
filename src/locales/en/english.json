@@ -1286,6 +1286,9 @@
     "scMarket": "SC Market",
     "typeMessage": "Type a message..."
   },
+  "messages": {
+    "copy": "Copy"
+  },
   "CreateMessageGroupBody": {
     "toggleSidebar": "Toggle sidebar",
     "usernames": "Usernames",
