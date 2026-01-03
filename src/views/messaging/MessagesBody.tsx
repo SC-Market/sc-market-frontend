@@ -39,7 +39,7 @@ import {
 import { getRelativeTime } from "../../util/time"
 import { useMessagingSidebar } from "../../hooks/messaging/MessagingSidebar"
 import MenuIcon from "@mui/icons-material/MenuRounded"
-import { ChevronLeftRounded } from "@mui/icons-material"
+import { ChevronLeftRounded, AccessTimeRounded } from "@mui/icons-material"
 import { useCurrentChat } from "../../hooks/messaging/CurrentChat"
 import { useSendChatMessageMutation, useGetChatByIDQuery } from "../../store/chats"
 import { useParams } from "react-router-dom"
@@ -52,8 +52,13 @@ import moment from "moment"
 import { useTranslation } from "react-i18next"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { LongPressMenu } from "../../components/gestures"
+import { MobileFAB } from "../../components/mobile/MobileFAB"
+import { BottomSheet } from "../../components/mobile"
 
-function MessageHeader() {
+function MessageHeader(props: {
+  dateTime: moment.Moment
+  setDateTime: (dateTime: moment.Moment) => void
+}) {
   const profile = useGetUserProfileQuery()
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
@@ -62,7 +67,7 @@ function MessageHeader() {
 
   const [chat] = useCurrentChat()
 
-  const [dateTime, setDateTime] = useState(moment())
+  const { dateTime, setDateTime } = props
   const { t } = useTranslation()
 
   return (
@@ -279,14 +284,76 @@ function MessageHeader() {
         </Box>
       ) : null}
 
-      <Stack
-        direction={{ xs: "column", sm: "row" }}
-        spacing={theme.layoutSpacing.compact}
-        useFlexGap
-        alignItems={{ xs: "stretch", sm: "center" }}
-        justifyContent={"right"}
-        sx={{ width: { xs: "100%", sm: "auto" } }}
-      >
+      {/* Desktop: Show date/time picker inline */}
+      {!isMobile && (
+        <Stack
+          direction="row"
+          spacing={theme.layoutSpacing.compact}
+          useFlexGap
+          alignItems="center"
+          justifyContent="right"
+          sx={{ width: "auto" }}
+        >
+          <DateTimePicker
+            value={dateTime}
+            onChange={(newValue) => {
+              if (newValue) {
+                setDateTime(newValue)
+              }
+            }}
+            slotProps={{
+              textField: {
+                size: "medium",
+                sx: { width: "auto" },
+              },
+            }}
+          />
+          <Stack direction="row" spacing={1}>
+            <Button
+              onClick={() => {
+                navigator.clipboard.writeText(
+                  `<t:${Math.trunc(dateTime.valueOf() / 1000)}:D>`,
+                )
+              }}
+              size="medium"
+            >
+              {t("MessagesBody.copyDate")}
+            </Button>
+            <Button
+              onClick={() => {
+                navigator.clipboard.writeText(
+                  `<t:${Math.trunc(dateTime.valueOf() / 1000)}:t>`,
+                )
+              }}
+              size="medium"
+            >
+              {t("MessagesBody.copyTime")}
+            </Button>
+          </Stack>
+        </Stack>
+      )}
+    </Box>
+  )
+}
+
+function DateTimePickerBottomSheet(props: {
+  open: boolean
+  onClose: () => void
+  dateTime: moment.Moment
+  setDateTime: (dateTime: moment.Moment) => void
+}) {
+  const theme = useTheme<ExtendedTheme>()
+  const { t } = useTranslation()
+  const { dateTime, setDateTime, open, onClose } = props
+
+  return (
+    <BottomSheet
+      open={open}
+      onClose={onClose}
+      title={t("MessagesBody.dateTimePicker", "Date & Time Picker")}
+      maxHeight="90vh"
+    >
+      <Stack spacing={2}>
         <DateTimePicker
           value={dateTime}
           onChange={(newValue) => {
@@ -296,24 +363,20 @@ function MessageHeader() {
           }}
           slotProps={{
             textField: {
-              size: isMobile ? "small" : "medium",
-              sx: { width: { xs: "100%", sm: "auto" } },
+              size: "medium",
+              fullWidth: true,
             },
           }}
         />
-        <Stack
-          direction="row"
-          spacing={1}
-          sx={{ width: { xs: "100%", sm: "auto" } }}
-        >
+        <Stack direction="row" spacing={1}>
           <Button
             onClick={() => {
               navigator.clipboard.writeText(
                 `<t:${Math.trunc(dateTime.valueOf() / 1000)}:D>`,
               )
             }}
-            size={isMobile ? "small" : "medium"}
-            fullWidth={isMobile}
+            variant="outlined"
+            fullWidth
           >
             {t("MessagesBody.copyDate")}
           </Button>
@@ -323,14 +386,14 @@ function MessageHeader() {
                 `<t:${Math.trunc(dateTime.valueOf() / 1000)}:t>`,
               )
             }}
-            size={isMobile ? "small" : "medium"}
-            fullWidth={isMobile}
+            variant="outlined"
+            fullWidth
           >
             {t("MessagesBody.copyTime")}
           </Button>
         </Stack>
       </Stack>
-    </Box>
+    </BottomSheet>
   )
 }
 
@@ -1054,6 +1117,10 @@ export function MessagesBody(props: { maxHeight?: number }) {
     [currentChat, sendChatMessage, issueAlert, profile, setCurrentChat],
   )
 
+  const { t } = useTranslation()
+  const [dateTime, setDateTime] = useState(moment())
+  const [dateTimeSheetOpen, setDateTimeSheetOpen] = useState(false)
+
   return (
     <>
       {currentChat && (
@@ -1064,15 +1131,39 @@ export function MessagesBody(props: { maxHeight?: number }) {
             height: "100%",
             minHeight: 0,
             overflow: "hidden",
+            position: "relative",
           }}
         >
-          <MessageHeader />
+          <MessageHeader 
+            dateTime={dateTime}
+            setDateTime={setDateTime}
+          />
           <MessagesArea
             messages={currentChat.messages}
             messageBoxRef={messageBoxRef}
             maxHeight={props.maxHeight}
           />
           <MessageSendArea onSend={onSend} />
+          
+          {/* Mobile FAB for date/time picker */}
+          {isMobile && (
+            <>
+              <MobileFAB
+                color="primary"
+                aria-label={t("MessagesBody.dateTimePicker", "Date & Time Picker")}
+                onClick={() => setDateTimeSheetOpen(true)}
+                position="bottom-right"
+              >
+                <AccessTimeRounded />
+              </MobileFAB>
+              <DateTimePickerBottomSheet
+                open={dateTimeSheetOpen}
+                onClose={() => setDateTimeSheetOpen(false)}
+                dateTime={dateTime}
+                setDateTime={setDateTime}
+              />
+            </>
+          )}
         </Box>
       )}
     </>
