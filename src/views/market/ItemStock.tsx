@@ -1090,11 +1090,11 @@ export function DisplayStock({
               <CardContent sx={{ p: 2 }}>
                 <Stack direction="row" spacing={2} alignItems="center" justifyContent="space-between">
                   <Box>
-                    <Typography variant="body1" color="text.secondary" fontWeight="medium">
+                    <Typography variant="body1" color="text.secondary" fontWeight="medium" component="div">
                       {newRowData?.item_name || t("ItemStock.newListingPending", "New listing - tap to edit")}
                     </Typography>
                     {newRowData?.item_name && (
-                      <Typography variant="body2" color="text.secondary">
+                      <Typography variant="body2" color="text.secondary" component="div">
                         {newRowData.price.toLocaleString(undefined)} aUEC • Qty: {newRowData.quantity_available}
                       </Typography>
                     )}
@@ -1431,25 +1431,36 @@ export function DisplayStock({
               label={currentStatus === "active" ? t("ItemStock.active") : t("ItemStock.inactive")}
             />
 
-            <Stack direction="row" spacing={1} justifyContent="flex-end" sx={{ pt: 2 }}>
-              <Button
-                variant="outlined"
-                color="error"
-                startIcon={<DeleteRounded />}
-                onClick={handleCancelFromBottomSheet}
-              >
-                {t("ItemStock.discard")}
-              </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                startIcon={<SaveRounded />}
-                onClick={handleSaveFromBottomSheet}
-                disabled={!hasValidItem}
-              >
-                {t("ItemStock.save")}
-              </Button>
-            </Stack>
+            <Box
+              sx={{
+                borderTop: 1,
+                borderColor: "divider",
+                pt: 2,
+                mt: 1,
+              }}
+            >
+              <Stack direction="row" spacing={1} justifyContent="flex-end">
+                <Button
+                  variant="outlined"
+                  color="error"
+                  startIcon={<DeleteRounded />}
+                  onClick={handleCancelFromBottomSheet}
+                  fullWidth
+                >
+                  {t("ItemStock.discard")}
+                </Button>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  startIcon={<SaveRounded />}
+                  onClick={handleSaveFromBottomSheet}
+                  disabled={!hasValidItem}
+                  fullWidth
+                >
+                  {t("ItemStock.save")}
+                </Button>
+              </Stack>
+            </Box>
           </Stack>
         </BottomSheet>
         {/* Mobile pagination */}

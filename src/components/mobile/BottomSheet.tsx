@@ -49,6 +49,8 @@ export function BottomSheet({
         sx: {
           maxHeight: fullHeight ? "100vh" : maxHeight,
           height: fullHeight ? "100vh" : "auto",
+          display: "flex",
+          flexDirection: "column",
           borderTopLeftRadius: theme.spacing(3),
           borderTopRightRadius: theme.spacing(3),
           borderBottomLeftRadius: 0,
@@ -116,9 +118,11 @@ export function BottomSheet({
       <Box
         sx={{
           flex: 1,
-          overflow: "auto",
+          overflowY: "auto",
+          overflowX: "hidden",
           px: 2,
           py: 2,
+          minHeight: 0, // Important for flex scrolling
           // Add safe area padding for iOS
           paddingBottom: isMobile
             ? `calc(${theme.spacing(2)} + env(safe-area-inset-bottom))`

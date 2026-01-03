@@ -21,7 +21,7 @@ import {
 } from "@mui/material"
 import { Rating } from "../../datatypes/Contractor"
 import React, { useEffect, useMemo } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { UnderlineLink } from "../typography/UnderlineLink"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -65,25 +65,33 @@ export function ListingNameAndRating(props: {
   contractor?: MinimalContractor | null
 }) {
   const { user, contractor } = props
+  const navigate = useNavigate()
+  const url = user
+    ? `/user/${user?.username}`
+    : `/contractor/${contractor?.spectrum_id}`
 
   return (
     <Box display={"flex"} alignItems={"center"} flexWrap={"wrap"} gap={0.5}>
-      <MaterialLink
-        component={Link}
-        to={
-          user
-            ? `/user/${user?.username}`
-            : `/contractor/${contractor?.spectrum_id}`
-        }
-        style={{
+      <Box
+        component="button"
+        onClick={(e) => {
+          e.stopPropagation()
+          navigate(url)
+        }}
+        sx={{
+          background: "none",
+          border: "none",
+          padding: 0,
+          cursor: "pointer",
           textDecoration: "none",
           color: "inherit",
+          font: "inherit",
         }}
       >
         <UnderlineLink variant={"subtitle2"}>
           {user?.display_name || contractor?.name}
         </UnderlineLink>
-      </MaterialLink>
+      </Box>
       <ListingSellerRating user={user} contractor={contractor} />
     </Box>
   )
