@@ -326,4 +326,8 @@ export default defineConfig({
       "@mui/icons-material",
     ],
   },
+  server: {
+    host: "0.0.0.0", // Listen on all network interfaces
+    port: 5173,
+  },
 })
