@@ -638,16 +638,21 @@ export function MessagesBodyMobile(props: { maxHeight?: number }) {
   useEffect(() => {
     const handleResize = () => {
       if (window.visualViewport) {
-        const vh = window.visualViewport.height
-        const screenHeight = window.screen.height
-        // If viewport is less than 75% of screen height, assume keyboard is open
-        setIsKeyboardOpen(vh < screenHeight * 0.75)
+        // Compare visual viewport height to initial browser viewport height
+        // If significantly less (e.g., < 80%), assume keyboard is open
+        const keyboardIsOpen = window.visualViewport.height < window.innerHeight * 0.8
+        setIsKeyboardOpen(keyboardIsOpen)
       } else {
         // Fallback for browsers without visualViewport
-        const vh = window.innerHeight
-        const screenHeight = window.screen.height
-        setIsKeyboardOpen(vh < screenHeight * 0.75)
+        // Compare current innerHeight to initial innerHeight (stored on mount)
+        const keyboardIsOpen = window.innerHeight < (window as any).initialInnerHeight * 0.8
+        setIsKeyboardOpen(keyboardIsOpen)
       }
+    }
+    
+    // Store initial innerHeight for fallback comparison
+    if (!(window as any).initialInnerHeight) {
+      (window as any).initialInnerHeight = window.innerHeight
     }
 
     if (window.visualViewport) {
@@ -823,11 +828,11 @@ export function MessagesBodyMobile(props: { maxHeight?: number }) {
             />
           </Box>
           
-          {/* Fixed container for FAB and input area - moves with keyboard */}
+          {/* Dynamic container for FAB and input area - absolute when closed, fixed when keyboard open */}
           <Box
             ref={inputAreaRef}
             sx={{
-              position: "fixed",
+              position: isKeyboardOpen ? "fixed" : "absolute",
               bottom: isKeyboardOpen 
                 ? 0 
                 : `calc(64px + env(safe-area-inset-bottom))`,
@@ -836,6 +841,7 @@ export function MessagesBodyMobile(props: { maxHeight?: number }) {
               zIndex: theme.zIndex.drawer + 2,
               display: "flex",
               flexDirection: "column",
+              transition: "transform 0.3s ease-in-out",
             }}
           >
             {/* FAB for date/time picker - fixed, moves with input area */}
