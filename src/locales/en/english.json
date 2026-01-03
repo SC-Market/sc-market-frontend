@@ -1284,7 +1284,8 @@
     "send": "Send",
     "system": "System",
     "scMarket": "SC Market",
-    "typeMessage": "Type a message..."
+    "typeMessage": "Type a message...",
+    "dateTimePicker": "Date & Time Picker"
   },
   "messages": {
     "copy": "Copy"
