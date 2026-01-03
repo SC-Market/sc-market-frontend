@@ -1285,7 +1285,8 @@
     "system": "System",
     "scMarket": "SC Market",
     "typeMessage": "Type a message...",
-    "dateTimePicker": "Date & Time Picker"
+    "dateTimePicker": "Date & Time Picker",
+    "selectDateTime": "Select Date & Time"
   },
   "messages": {
     "copy": "Copy"

@@ -61,6 +61,14 @@ export function BottomSheet({
       }}
       ModalProps={{
         keepMounted: false,
+        // Ensure nested bottom sheets work properly
+        disableAutoFocus: false,
+        disableEnforceFocus: false,
+        disableRestoreFocus: false,
+        sx: {
+          // Increase z-index for nested bottom sheets - each open sheet gets higher z-index
+          zIndex: open ? theme.zIndex.modal + 1 : undefined,
+        },
       }}
     >
       {/* Drag handle indicator */}
