@@ -30,9 +30,36 @@ export function MobileBottomNav() {
   const { t } = useTranslation()
   const { data: userProfile } = useGetUserProfileQuery()
   const isLoggedIn = !!userProfile
+  const [isKeyboardOpen, setIsKeyboardOpen] = useState(false)
 
   // Only show on xs devices (not sm) - check this BEFORE hooks to avoid hook order issues
   const isMobile = useMediaQuery(theme.breakpoints.only("xs"))
+
+  // Track keyboard visibility to hide bottom nav
+  useEffect(() => {
+    if (!isMobile) return
+
+    const handleResize = () => {
+      // On mobile, if viewport height is significantly reduced, keyboard is likely open
+      const viewportHeight = window.visualViewport?.height || window.innerHeight
+      const screenHeight = window.screen.height
+      // If viewport is less than 75% of screen height, assume keyboard is open
+      setIsKeyboardOpen(viewportHeight < screenHeight * 0.75)
+    }
+
+    // Use visualViewport API if available (better for mobile)
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener("resize", handleResize)
+      return () => {
+        window.visualViewport?.removeEventListener("resize", handleResize)
+      }
+    } else {
+      window.addEventListener("resize", handleResize)
+      return () => {
+        window.removeEventListener("resize", handleResize)
+      }
+    }
+  }, [isMobile])
 
   const navRef = useRef<HTMLDivElement>(null)
   const [indicatorStyle, setIndicatorStyle] = useState<{
@@ -122,9 +149,11 @@ export function MobileBottomNav() {
         right: 0,
         zIndex: theme.zIndex.drawer + 1, // Above sidebar but below modals
         borderTop: `1px solid ${theme.palette.outline.main}`,
-        display: { xs: "block", sm: "none" },
+        display: { xs: isKeyboardOpen ? "none" : "block", sm: "none" }, // Hide when keyboard is open
         // Add padding for safe area on iOS devices
         paddingBottom: "env(safe-area-inset-bottom)",
+        transition: "transform 0.2s ease-in-out",
+        transform: isKeyboardOpen ? "translateY(100%)" : "translateY(0)",
       }}
       elevation={3}
     >

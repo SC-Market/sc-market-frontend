@@ -90,7 +90,7 @@ export function Messages() {
               style={{
                 flexGrow: 1,
                 overflow: "hidden",
-                height: isMobile ? "100dvh" : "100vh", // Use dvh on mobile to account for dynamic viewport
+                height: isMobile ? "100vh" : "100vh", // Use fixed 100vh on mobile - input area will be fixed
                 display: "flex",
                 flexDirection: "column",
                 marginLeft: 0,

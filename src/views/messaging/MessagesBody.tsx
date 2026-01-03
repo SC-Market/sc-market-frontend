@@ -345,55 +345,87 @@ function DateTimePickerBottomSheet(props: {
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
   const { dateTime, setDateTime, open, onClose } = props
+  const [datePickerOpen, setDatePickerOpen] = useState(false)
+
+  // Close nested sheet when parent closes
+  useEffect(() => {
+    if (!open) {
+      setDatePickerOpen(false)
+    }
+  }, [open])
 
   return (
-    <BottomSheet
-      open={open}
-      onClose={onClose}
-      title={t("MessagesBody.dateTimePicker", "Date & Time Picker")}
-      maxHeight="90vh"
-    >
-      <Stack spacing={2}>
-        <DateTimePicker
-          value={dateTime}
-          onChange={(newValue) => {
-            if (newValue) {
-              setDateTime(newValue)
-            }
-          }}
-          slotProps={{
-            textField: {
-              size: "medium",
-              fullWidth: true,
-            },
-          }}
-        />
-        <Stack direction="row" spacing={1}>
+    <>
+      <BottomSheet
+        open={open && !datePickerOpen}
+        onClose={onClose}
+        title={t("MessagesBody.dateTimePicker", "Date & Time Picker")}
+        maxHeight="90vh"
+      >
+        <Stack spacing={2}>
           <Button
-            onClick={() => {
-              navigator.clipboard.writeText(
-                `<t:${Math.trunc(dateTime.valueOf() / 1000)}:D>`,
-              )
-            }}
             variant="outlined"
             fullWidth
+            onClick={() => setDatePickerOpen(true)}
+            sx={{ justifyContent: "flex-start", textTransform: "none" }}
           >
-            {t("MessagesBody.copyDate")}
+            {dateTime.format("MMMM D, YYYY h:mm A")}
           </Button>
-          <Button
-            onClick={() => {
-              navigator.clipboard.writeText(
-                `<t:${Math.trunc(dateTime.valueOf() / 1000)}:t>`,
-              )
-            }}
-            variant="outlined"
-            fullWidth
-          >
-            {t("MessagesBody.copyTime")}
-          </Button>
+
+          <Stack direction="row" spacing={1}>
+            <Button
+              onClick={() => {
+                navigator.clipboard.writeText(
+                  `<t:${Math.trunc(dateTime.valueOf() / 1000)}:D>`,
+                )
+              }}
+              variant="outlined"
+              fullWidth
+            >
+              {t("MessagesBody.copyDate")}
+            </Button>
+            <Button
+              onClick={() => {
+                navigator.clipboard.writeText(
+                  `<t:${Math.trunc(dateTime.valueOf() / 1000)}:t>`,
+                )
+              }}
+              variant="outlined"
+              fullWidth
+            >
+              {t("MessagesBody.copyTime")}
+            </Button>
+          </Stack>
         </Stack>
-      </Stack>
-    </BottomSheet>
+      </BottomSheet>
+      
+      {/* Nested bottom sheet for date picker */}
+      <BottomSheet
+        open={datePickerOpen}
+        onClose={() => setDatePickerOpen(false)}
+        title={t("MessagesBody.selectDateTime", "Select Date & Time")}
+        maxHeight="90vh"
+      >
+        <Stack spacing={2}>
+          <DateTimePicker
+            value={dateTime}
+            onChange={(newValue) => {
+              if (newValue) {
+                setDateTime(newValue)
+                // Close nested sheet after selection
+                setTimeout(() => setDatePickerOpen(false), 300)
+              }
+            }}
+            slotProps={{
+              textField: {
+                size: "medium",
+                fullWidth: true,
+              },
+            }}
+          />
+        </Stack>
+      </BottomSheet>
+    </>
   )
 }
 
@@ -861,10 +893,11 @@ function MessagesArea(props: {
   messages: Message[]
   messageBoxRef: RefObject<HTMLDivElement | null>
   maxHeight?: number
+  inputAreaHeight?: number
 }) {
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
-  const { messageBoxRef } = props
+  const { messageBoxRef, inputAreaHeight } = props
   const [chat] = useCurrentChat()
 
   useEffect(() => {
@@ -883,7 +916,7 @@ function MessagesArea(props: {
           flexGrow: 1,
           width: "100%",
           padding: { xs: 1.5, sm: 2 },
-          paddingBottom: { xs: 2, sm: 2 }, // Reduced padding since input area is sticky
+          paddingBottom: { xs: 2, sm: 2 },
           borderColor: theme.palette.outline.main,
           boxSizing: "border-box",
           borderWidth: 0,
@@ -891,9 +924,12 @@ function MessagesArea(props: {
           overflow: "auto",
           maxHeight: props.maxHeight,
           WebkitOverflowScrolling: "touch", // Smooth scrolling on iOS
-          // On mobile, ensure this area can scroll independently
           minHeight: 0,
           flex: 1,
+          // On mobile, add bottom padding to account for fixed input area
+          marginBottom: isMobile && inputAreaHeight ? `${inputAreaHeight}px` : 0,
+          position: "relative",
+          zIndex: 1, // Lower than FAB
         }}
       >
         <Stack spacing={theme.layoutSpacing.compact}>
@@ -912,6 +948,34 @@ function MessageSendArea(props: { onSend: (content: string) => void }) {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const [textEntry, setTextEntry] = useState("")
   const { t } = useTranslation()
+  const inputRef = useRef<HTMLDivElement>(null)
+  const [isKeyboardOpen, setIsKeyboardOpen] = useState(false)
+
+  // Track keyboard visibility
+  useEffect(() => {
+    if (!isMobile) return
+
+    const handleResize = () => {
+      // On mobile, if viewport height is significantly reduced, keyboard is likely open
+      const viewportHeight = window.visualViewport?.height || window.innerHeight
+      const screenHeight = window.screen.height
+      // If viewport is less than 75% of screen height, assume keyboard is open
+      setIsKeyboardOpen(viewportHeight < screenHeight * 0.75)
+    }
+
+    // Use visualViewport API if available (better for mobile)
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener("resize", handleResize)
+      return () => {
+        window.visualViewport?.removeEventListener("resize", handleResize)
+      }
+    } else {
+      window.addEventListener("resize", handleResize)
+      return () => {
+        window.removeEventListener("resize", handleResize)
+      }
+    }
+  }, [isMobile])
 
   const handleSend = () => {
     if (textEntry.trim()) {
@@ -930,6 +994,7 @@ function MessageSendArea(props: { onSend: (content: string) => void }) {
 
   return (
     <Box
+      ref={inputRef}
       sx={{
         width: "100%",
         padding: { xs: 1.5, sm: 1 },
@@ -942,9 +1007,13 @@ function MessageSendArea(props: { onSend: (content: string) => void }) {
         gap: { xs: 1, sm: 0 },
         bgcolor: theme.palette.background.paper,
         alignItems: { xs: "flex-end", sm: "center" },
-        position: isMobile ? "sticky" : "relative",
-        bottom: isMobile ? "calc(64px + env(safe-area-inset-bottom))" : "auto", // Position above bottom nav (64px + safe area)
-        zIndex: isMobile ? 1000 : "auto", // High z-index to be above bottom nav
+        position: isMobile ? "fixed" : "relative",
+        bottom: isMobile 
+          ? (isKeyboardOpen ? 0 : "calc(64px + env(safe-area-inset-bottom))")
+          : "auto",
+        left: isMobile ? 0 : "auto",
+        right: isMobile ? 0 : "auto",
+        zIndex: isMobile ? (theme.zIndex.drawer + 2) : "auto", // Above bottom nav but below modals
         // On mobile, add safe area padding for iOS keyboard
         paddingBottom: isMobile
           ? `calc(1.5rem + env(safe-area-inset-bottom))`
@@ -1120,6 +1189,21 @@ export function MessagesBody(props: { maxHeight?: number }) {
   const { t } = useTranslation()
   const [dateTime, setDateTime] = useState(moment())
   const [dateTimeSheetOpen, setDateTimeSheetOpen] = useState(false)
+  const inputAreaRef = useRef<HTMLDivElement>(null)
+  const [inputAreaHeight, setInputAreaHeight] = useState(0)
+
+  // Measure input area height for proper spacing
+  useEffect(() => {
+    if (isMobile && inputAreaRef.current) {
+      const updateHeight = () => {
+        setInputAreaHeight(inputAreaRef.current?.offsetHeight || 0)
+      }
+      updateHeight()
+      const resizeObserver = new ResizeObserver(updateHeight)
+      resizeObserver.observe(inputAreaRef.current)
+      return () => resizeObserver.disconnect()
+    }
+  }, [isMobile])
 
   return (
     <>
@@ -1132,37 +1216,78 @@ export function MessagesBody(props: { maxHeight?: number }) {
             minHeight: 0,
             overflow: "hidden",
             position: "relative",
+            isolation: "isolate", // Create new stacking context for FAB
           }}
         >
           <MessageHeader 
             dateTime={dateTime}
             setDateTime={setDateTime}
           />
-          <MessagesArea
-            messages={currentChat.messages}
-            messageBoxRef={messageBoxRef}
-            maxHeight={props.maxHeight}
-          />
-          <MessageSendArea onSend={onSend} />
-          
-          {/* Mobile FAB for date/time picker */}
-          {isMobile && (
-            <>
-              <MobileFAB
-                color="primary"
-                aria-label={t("MessagesBody.dateTimePicker", "Date & Time Picker")}
-                onClick={() => setDateTimeSheetOpen(true)}
-                position="bottom-right"
+          <Box
+            sx={{
+              flex: 1,
+              minHeight: 0,
+              display: "flex",
+              flexDirection: "column",
+              position: "relative",
+            }}
+          >
+            <MessagesArea
+              messages={currentChat.messages}
+              messageBoxRef={messageBoxRef}
+              maxHeight={props.maxHeight}
+              inputAreaHeight={inputAreaHeight}
+            />
+            
+            {/* Mobile FAB for date/time picker - positioned above input area */}
+            {isMobile && (
+              <Box
+                sx={{
+                  position: "absolute",
+                  bottom: inputAreaHeight ? `${inputAreaHeight + 64}px` : "144px", // Position 64px above input
+                  right: 16,
+                  zIndex: theme.zIndex.speedDial, // Use theme z-index for FABs (higher than messages)
+                  pointerEvents: "auto",
+                }}
               >
-                <AccessTimeRounded />
-              </MobileFAB>
-              <DateTimePickerBottomSheet
-                open={dateTimeSheetOpen}
-                onClose={() => setDateTimeSheetOpen(false)}
-                dateTime={dateTime}
-                setDateTime={setDateTime}
-              />
-            </>
+                <MobileFAB
+                  color="primary"
+                  aria-label={t("MessagesBody.dateTimePicker", "Date & Time Picker")}
+                  onClick={() => setDateTimeSheetOpen(true)}
+                  position="bottom-right"
+                  aboveBottomNav={false}
+                  sx={{
+                    position: "relative",
+                    bottom: "auto",
+                    right: "auto",
+                  }}
+                >
+                  <AccessTimeRounded />
+                </MobileFAB>
+              </Box>
+            )}
+          </Box>
+          
+          <Box
+            ref={inputAreaRef}
+            sx={{
+              position: isMobile ? "relative" : "static",
+              // Reserve space for input area on mobile
+              height: isMobile ? inputAreaHeight || "auto" : "auto",
+              minHeight: isMobile ? inputAreaHeight || 0 : 0,
+            }}
+          >
+            <MessageSendArea onSend={onSend} />
+          </Box>
+          
+          {/* Bottom sheets */}
+          {isMobile && (
+            <DateTimePickerBottomSheet
+              open={dateTimeSheetOpen}
+              onClose={() => setDateTimeSheetOpen(false)}
+              dateTime={dateTime}
+              setDateTime={setDateTime}
+            />
           )}
         </Box>
       )}
