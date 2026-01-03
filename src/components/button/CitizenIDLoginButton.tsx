@@ -21,19 +21,19 @@ export function CitizenIDLoginButton() {
   return (
     <Button
       onClick={() => {
-        window.location.href = `${BACKEND_URL}/auth/citizenid?path=${encodeURIComponent(redirectPath)}`
+        window.location.href = `${BACKEND_URL}/auth/citizenid?path=${encodeURIComponent(redirectPath)}&action=signin`
       }}
       color="primary"
       variant="contained"
       startIcon={<CitizenIDLogo />}
-      aria-label={t("auth.loginWithCitizenID", "Sign in with Citizen iD")}
+      aria-label={t("auth.signInWithCitizenID", "Sign in with Citizen iD")}
       aria-describedby="citizenid-login-description"
     >
-      {t("auth.loginWithCitizenID", "Sign in with Citizen iD")}
+      {t("auth.signInWithCitizenID", "Sign in with Citizen iD")}
       <span id="citizenid-login-description" className="sr-only">
         {t(
-          "accessibility.loginWithCitizenIDDescription",
-          "Authenticate using your Citizen iD account",
+          "accessibility.signInWithCitizenIDDescription",
+          "Sign in using your Citizen iD account",
         )}
       </span>
     </Button>

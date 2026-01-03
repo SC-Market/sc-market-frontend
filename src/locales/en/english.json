@@ -269,13 +269,32 @@
     "repeatPassword": "Repeat Password",
     "loginWith": "Login with",
     "signIn": "Sign in",
+    "signUp": "Sign up",
+    "signInTitle": "Sign in to SC Market",
+    "signUpTitle": "Sign up for SC Market",
+    "signInTab": "Sign in tab",
+    "signUpTab": "Sign up tab",
+    "authTabs": "Authentication tabs",
     "terms": "By clicking here, you agree to our Terms of Service",
     "submit": "Submit",
     "loginWithDiscord": "Login with Discord",
+    "signInWithDiscord": "Sign in with Discord",
+    "signUpWithDiscord": "Sign up with Discord",
+    "loginWithCitizenID": "Sign in with Citizen iD",
+    "signInWithCitizenID": "Sign in with Citizen iD",
+    "signUpWithCitizenID": "Sign up with Citizen iD",
     "accountLink": "Account Link",
     "authenticateWithRSI": "Authenticate with RSI",
+    "accountNotFound": "No account found. Please sign up first.",
+    "accountAlreadyExists": "An account already exists. Please sign in instead.",
     "aria": {
       "outlinedGroup": "outlined button group"
+    },
+    "accessibility": {
+      "signInWithDiscordDescription": "Sign in using your Discord account",
+      "signUpWithDiscordDescription": "Create a new account using your Discord account",
+      "signInWithCitizenIDDescription": "Sign in using your Citizen iD account",
+      "signUpWithCitizenIDDescription": "Create a new account using your Citizen iD account"
     }
   },
   "availability": {

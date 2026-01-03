@@ -139,30 +139,45 @@ export function HookProvider(props: { children: React.ReactElement }) {
   const [searchParams, setSearchParams] = useSearchParams()
   const { t } = useTranslation()
 
-  // Surface Citizen iD login/link errors coming back via query params
-  // Only show if feature is enabled
+  // Surface authentication errors coming back via query params
   useEffect(() => {
     const error = searchParams.get("error")
     if (!error) return
 
-    if (isCitizenIdEnabled && error === "citizenid_account_not_verified") {
-      const errorDescription =
+    let errorMessage: string | null = null
+
+    // Handle new sign up/sign in error codes
+    if (error === "account_not_found") {
+      errorMessage =
+        searchParams.get("error_description") ||
+        t("auth.accountNotFound", "No account found. Please sign up first.")
+    } else if (error === "account_already_exists") {
+      errorMessage =
+        searchParams.get("error_description") ||
+        t(
+          "auth.accountAlreadyExists",
+          "An account already exists. Please sign in instead.",
+        )
+    } else if (isCitizenIdEnabled && error === "citizenid_account_not_verified") {
+      errorMessage =
         searchParams.get("error_description") ||
         t(
           "auth.citizenidAccountNotVerified",
           "Your Citizen iD account must be verified to sign up or log in.",
         )
+    }
 
+    if (errorMessage) {
       issueAlert({
         severity: "error",
-        message: errorDescription,
+        message: errorMessage,
       })
 
       searchParams.delete("error")
       searchParams.delete("error_description")
       setSearchParams(searchParams, { replace: true })
     }
-  }, [searchParams, setSearchParams, issueAlert, t])
+  }, [searchParams, setSearchParams, issueAlert, t, isCitizenIdEnabled])
 
   return (
     <Provider store={store}>

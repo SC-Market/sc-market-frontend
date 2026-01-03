@@ -17,19 +17,19 @@ export function DiscordLoginButton() {
   return (
     <Button
       onClick={() => {
-        window.location.href = `${BACKEND_URL}/auth/discord?path=${encodeURIComponent(redirectPath)}`
+        window.location.href = `${BACKEND_URL}/auth/discord?path=${encodeURIComponent(redirectPath)}&action=signin`
       }}
       color="secondary"
       variant="contained"
       startIcon={<Discord />}
-      aria-label={t("auth.loginWithDiscord", "Login with Discord")}
+      aria-label={t("auth.signInWithDiscord", "Sign in with Discord")}
       aria-describedby="discord-login-description"
     >
-      {t("auth.loginWithDiscord", "Login with Discord")}
+      {t("auth.signInWithDiscord", "Sign in with Discord")}
       <span id="discord-login-description" className="sr-only">
         {t(
-          "accessibility.loginWithDiscordDescription",
-          "Authenticate using your Discord account",
+          "accessibility.signInWithDiscordDescription",
+          "Sign in using your Discord account",
         )}
       </span>
     </Button>
