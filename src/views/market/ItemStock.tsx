@@ -1016,9 +1016,14 @@ export function DisplayStock({
       const isNewRow = row.id.startsWith("new-")
       const newRowData = isNewRow ? newRows.find((r) => r.id === row.id) : null
       
+      // Check if we're in selection mode (any items selected)
+      const hasSelectedItems = selectionModel.ids.size > 0
+      const isInSelectionMode = hasSelectedItems
+      
       const handleLongPressForSelection = React.useCallback(
         (event: React.MouseEvent | React.TouchEvent) => {
           if (isNewRow) return // Don't allow selection for new rows
+          event.preventDefault() // Prevent default context menu
           const newIds = new Set(selectionModel.ids)
           if (newIds.has(row.id)) {
             newIds.delete(row.id)
@@ -1030,8 +1035,25 @@ export function DisplayStock({
         [selectionModel, row.id, setSelectionModel, isNewRow],
       )
 
+      const handleTapForSelection = React.useCallback(
+        (event: React.MouseEvent | React.TouchEvent) => {
+          if (isNewRow || !isInSelectionMode) return
+          event.preventDefault()
+          event.stopPropagation()
+          const newIds = new Set(selectionModel.ids)
+          if (newIds.has(row.id)) {
+            newIds.delete(row.id)
+          } else {
+            newIds.add(row.id)
+          }
+          setSelectionModel({ type: "include", ids: newIds })
+        },
+        [selectionModel, row.id, setSelectionModel, isNewRow, isInSelectionMode],
+      )
+
       const longPressHandlers = useLongPress({
         onLongPress: handleLongPressForSelection,
+        onClick: handleTapForSelection,
         enabled: !isNewRow,
         delay: 500,
       })
@@ -1117,82 +1139,97 @@ export function DisplayStock({
         )
       }
 
-      return (
-        <Grid item xs={12}>
-          <LongPressMenu actions={longPressActions}>
-            <Card
-              sx={{
-                border: isSelected ? 2 : 1,
-                borderColor: isSelected ? "primary.main" : "divider",
-                bgcolor: isSelected 
-                  ? (theme) => {
-                      const primaryColor = theme.palette.primary.main
-                      // Extract RGB values and add alpha
-                      if (primaryColor.startsWith('#')) {
-                        const r = parseInt(primaryColor.slice(1, 3), 16)
-                        const g = parseInt(primaryColor.slice(3, 5), 16)
-                        const b = parseInt(primaryColor.slice(5, 7), 16)
-                        return `rgba(${r}, ${g}, ${b}, ${theme.palette.mode === 'dark' ? 0.12 : 0.08})`
-                      }
-                      return theme.palette.primary.main
-                    }
-                  : "background.paper",
-              }}
-              {...longPressHandlers}
-            >
-              <CardActionArea
-                component={Link}
-                to={formatCompleteListingUrl({
-                  type: "unique",
-                  details: { title: row.title },
-                  listing: row,
-                })}
-                sx={{ p: 2 }}
-              >
-                <Stack direction="row" spacing={2} alignItems="center">
-                  <Avatar
-                    src={row.image_url}
-                    variant="rounded"
-                    sx={{ width: 64, height: 64 }}
+      const cardContent = (
+        <Card
+          sx={{
+            border: isSelected ? 2 : 1,
+            borderColor: isSelected ? "primary.main" : "divider",
+            bgcolor: isSelected 
+              ? (theme) => {
+                  const primaryColor = theme.palette.primary.main
+                  // Extract RGB values and add alpha
+                  if (primaryColor.startsWith('#')) {
+                    const r = parseInt(primaryColor.slice(1, 3), 16)
+                    const g = parseInt(primaryColor.slice(3, 5), 16)
+                    const b = parseInt(primaryColor.slice(5, 7), 16)
+                    return `rgba(${r}, ${g}, ${b}, ${theme.palette.mode === 'dark' ? 0.12 : 0.08})`
+                  }
+                  return theme.palette.primary.main
+                }
+              : "background.paper",
+          }}
+          {...(isInSelectionMode ? {} : longPressHandlers)}
+        >
+          <CardActionArea
+            component={isInSelectionMode ? "div" : Link}
+            to={isInSelectionMode ? undefined : formatCompleteListingUrl({
+              type: "unique",
+              details: { title: row.title },
+              listing: row,
+            })}
+            onClick={(e: React.MouseEvent) => {
+              if (isInSelectionMode) {
+                e.preventDefault()
+                e.stopPropagation()
+                handleTapForSelection(e)
+              }
+            }}
+            sx={{ p: 2 }}
+          >
+            <Stack direction="row" spacing={2} alignItems="center">
+              <Avatar
+                src={row.image_url}
+                variant="rounded"
+                sx={{ width: 64, height: 64 }}
+              />
+              <Box sx={{ flex: 1, minWidth: 0 }}>
+                <Typography variant="h6" noWrap>
+                  {row.title}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {row.price.toLocaleString(undefined)} aUEC
+                </Typography>
+                <Stack direction="row" spacing={1} sx={{ mt: 1 }} flexWrap="wrap">
+                  <Chip
+                    label={`${t("ItemStock.quantity")}: ${row.quantity_available.toLocaleString(undefined)}`}
+                    size="small"
+                    variant="outlined"
                   />
-                  <Box sx={{ flex: 1, minWidth: 0 }}>
-                    <Typography variant="h6" noWrap>
-                      {row.title}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {row.price.toLocaleString(undefined)} aUEC
-                    </Typography>
-                    <Stack direction="row" spacing={1} sx={{ mt: 1 }} flexWrap="wrap">
-                      <Chip
-                        label={`${t("ItemStock.quantity")}: ${row.quantity_available.toLocaleString(undefined)}`}
-                        size="small"
-                        variant="outlined"
-                      />
-                      <Chip
-                        label={
-                          row.status === "active"
-                            ? t("ItemStock.active")
-                            : t("ItemStock.inactive")
-                        }
-                        color={row.status === "active" ? "success" : "error"}
-                        size="small"
-                      />
-                      {row.order_count > 0 && (
-                        <Chip
-                          label={`${row.order_count} ${t("ItemStock.offersAccepted")}`}
-                          size="small"
-                          variant="outlined"
-                        />
-                      )}
-                    </Stack>
-                  </Box>
-                  {isSelected && (
-                    <RadioButtonCheckedRounded color="primary" />
+                  <Chip
+                    label={
+                      row.status === "active"
+                        ? t("ItemStock.active")
+                        : t("ItemStock.inactive")
+                    }
+                    color={row.status === "active" ? "success" : "error"}
+                    size="small"
+                  />
+                  {row.order_count > 0 && (
+                    <Chip
+                      label={`${row.order_count} ${t("ItemStock.offersAccepted")}`}
+                      size="small"
+                      variant="outlined"
+                    />
                   )}
                 </Stack>
-              </CardActionArea>
-            </Card>
-          </LongPressMenu>
+              </Box>
+              {isSelected && (
+                <RadioButtonCheckedRounded color="primary" />
+              )}
+            </Stack>
+          </CardActionArea>
+        </Card>
+      )
+
+      return (
+        <Grid item xs={12}>
+          {isInSelectionMode ? (
+            cardContent
+          ) : (
+            <LongPressMenu actions={longPressActions}>
+              {cardContent}
+            </LongPressMenu>
+          )}
         </Grid>
       )
     },
