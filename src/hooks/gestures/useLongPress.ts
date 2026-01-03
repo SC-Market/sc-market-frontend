@@ -65,9 +65,19 @@ export function useLongPress({
     (event: React.MouseEvent | React.TouchEvent) => {
       if (!enabled) return
 
+      // Prevent default context menu on long press
+      if (event.type === 'contextmenu' || (event.nativeEvent as any).button === 2) {
+        event.preventDefault()
+        return
+      }
+
       targetRef.current = event.target
 
       timeoutRef.current = setTimeout(() => {
+        // Prevent default context menu
+        if (event.nativeEvent) {
+          event.preventDefault()
+        }
         if (hapticFeedback) {
           triggerHaptic("medium")
         }
@@ -101,5 +111,11 @@ export function useLongPress({
     onMouseLeave: (e: React.MouseEvent) => clear(e, false),
     onTouchEnd: (e: React.TouchEvent) => clear(e, true),
     onTouchCancel: (e: React.TouchEvent) => clear(e, false),
+    onContextMenu: (e: React.MouseEvent) => {
+      // Prevent native context menu when long press is enabled
+      if (enabled) {
+        e.preventDefault()
+      }
+    },
   }
 }

@@ -134,6 +134,7 @@ export const ServiceListingBase = React.memo(
                 >
                   <Typography
                     variant={"body2"}
+                    component="div"
                     color={"text.secondary"}
                     sx={{
                       display: "-webkit-box",

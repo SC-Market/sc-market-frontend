@@ -196,6 +196,7 @@ export const RecruitingPostItem = React.memo(
                       // whiteSpace: "pre-line"
                     }}
                     variant={"body2"}
+                    component="div"
                   >
                     <MarkdownRender text={post.body} plainText />
                   </Typography>

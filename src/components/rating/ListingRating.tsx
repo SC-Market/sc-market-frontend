@@ -73,19 +73,15 @@ export function ListingNameAndRating(props: {
   return (
     <Box display={"flex"} alignItems={"center"} flexWrap={"wrap"} gap={0.5}>
       <Box
-        component="button"
+        component="span"
         onClick={(e) => {
           e.stopPropagation()
           navigate(url)
         }}
         sx={{
-          background: "none",
-          border: "none",
-          padding: 0,
           cursor: "pointer",
           textDecoration: "none",
           color: "inherit",
-          font: "inherit",
         }}
       >
         <UnderlineLink variant={"subtitle2"}>
