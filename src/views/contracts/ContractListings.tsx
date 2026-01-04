@@ -119,7 +119,7 @@ export function ContractListing(props: {
                   >
                     <MaterialLink
                       component={Link}
-                      to={`/user/${contract.customer}`}
+                      to={`/user/${contract.customer.username}`}
                       style={{ textDecoration: "none", color: "inherit" }}
                     >
                       <UnderlineLink
