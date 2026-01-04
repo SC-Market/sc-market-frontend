@@ -345,13 +345,27 @@ function DateTimePickerBottomSheet(props: {
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
   const { dateTime, setDateTime, open, onClose } = props
+  const [pickerOpen, setPickerOpen] = useState(false)
 
+  // Track when picker opens to hide bottom sheet content
+  const handlePickerOpen = () => {
+    setPickerOpen(true)
+  }
+
+  // Track when picker closes to show bottom sheet content again
+  const handlePickerClose = () => {
+    setPickerOpen(false)
+  }
+
+  // Keep bottom sheet mounted and visible when picker opens
+  // The MUI DateTimePicker modal will appear on top with higher z-index
   return (
     <BottomSheet
       open={open}
       onClose={onClose}
       title={t("MessagesBody.dateTimePicker", "Date & Time Picker")}
       maxHeight="90vh"
+      disableBackdropClose={pickerOpen}
     >
       <Stack spacing={2}>
         <DateTimePicker
@@ -361,10 +375,18 @@ function DateTimePickerBottomSheet(props: {
               setDateTime(newValue)
             }
           }}
+          onOpen={handlePickerOpen}
+          onClose={handlePickerClose}
           slotProps={{
             textField: {
               size: "medium",
               fullWidth: true,
+            },
+            // Ensure the picker modal appears above the bottom sheet
+            dialog: {
+              sx: {
+                zIndex: theme.zIndex.modal + 10,
+              },
             },
           }}
         />

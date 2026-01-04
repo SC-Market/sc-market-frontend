@@ -57,7 +57,7 @@ export function ListingSkeleton({
           >
             <Card
               sx={{
-                height: isMobile ? 280 : 400,
+                height: isMobile ? 300 : 420,
                 position: "relative",
               }}
             >
@@ -163,29 +163,19 @@ export function ListingSkeleton({
                   }}
                 />
 
-                {/* Seller name and rating (Stack with theme.layoutSpacing.text) */}
-                <Stack
-                  direction="row"
-                  spacing={isMobile ? 0.5 : theme.layoutSpacing.text}
-                  alignItems="center"
-                  sx={{ mb: 0.25, width: "100%", overflowX: "hidden" }}
-                >
+                {/* Seller name and rating (on separate lines) */}
+                <Box sx={{ mb: isMobile ? 0.25 : 0.5 }}>
                   <BaseSkeleton
                     variant="text"
                     width={isMobile ? 60 : 80}
                     height={isMobile ? 14 : 18}
+                    sx={{ mb: isMobile ? 0.25 : 0.5, display: "block" }}
                   />
-                  <BaseSkeleton
-                    variant="circular"
-                    width={isMobile ? 12 : 16}
-                    height={isMobile ? 12 : 16}
-                  />
-                  <BaseSkeleton
-                    variant="text"
-                    width={isMobile ? 30 : 40}
-                    height={isMobile ? 14 : 18}
-                  />
-                </Stack>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: isMobile ? 0.5 : theme.layoutSpacing.text }}>
+                    <BaseSkeleton variant="circular" width={isMobile ? 12 : 16} height={isMobile ? 12 : 16} />
+                    <BaseSkeleton variant="text" width={isMobile ? 30 : 40} height={isMobile ? 14 : 18} />
+                  </Box>
+                </Box>
 
                 {/* Optional auction/expiration time */}
                 {!isMobile && (

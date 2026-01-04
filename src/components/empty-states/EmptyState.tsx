@@ -145,6 +145,8 @@ export function EmptyState({
           sx={{
             width: "100%",
             maxWidth: 400,
+            alignItems: "center",
+            justifyContent: "center",
             "& > *": {
               width: { xs: "100%", sm: "auto" },
             },

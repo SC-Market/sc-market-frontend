@@ -103,7 +103,7 @@ import {
 } from "../../components/ads/adUtils"
 import { ListingSkeleton as StandardListingSkeleton } from "../../components/skeletons"
 import { EmptyListings } from "../../components/empty-states"
-import { PullToRefresh, LongPressMenu } from "../../components/gestures"
+import { LongPressMenu } from "../../components/gestures"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 
 export function ListingRefreshButton(props: {
@@ -268,7 +268,7 @@ export const ItemListingBase = React.memo(
             >
               <Card
                 sx={{
-                  height: 280,
+                  height: 300,
                   position: "relative",
                 }}
               >
@@ -386,16 +386,7 @@ export const ItemListingBase = React.memo(
                   >
                     {listing.title} ({listing.item_type})
                   </Typography>
-                  <Stack
-                    direction={"row"}
-                    spacing={0.5}
-                    alignItems={"center"}
-                    sx={{
-                      width: "100%",
-                      overflowX: "hidden",
-                      mb: 0.25,
-                    }}
-                  >
+                  <Box sx={{ mb: 0.25 }}>
                     <UnderlineLink
                       component="span"
                       display={"inline"}
@@ -416,14 +407,13 @@ export const ItemListingBase = React.memo(
                         whiteSpace: "nowrap",
                         cursor: "pointer",
                         fontSize: "0.7rem",
+                        display: "block",
+                        mb: 0.25,
                       }}
                     >
                       {user_seller || contractor_seller}
                     </UnderlineLink>
-                    <Typography
-                      variant={"caption"}
-                      sx={{ flexShrink: "0", fontSize: "0.7rem" }}
-                    >
+                    <Box sx={{ fontSize: "0.7rem", lineHeight: 1, display: "flex", alignItems: "center" }}>
                       <MarketListingRating
                         avg_rating={listing.avg_rating}
                         rating_count={listing.rating_count}
@@ -435,8 +425,8 @@ export const ItemListingBase = React.memo(
                         badge_ids={listing.badges?.badge_ids || null}
                         display_limit={2}
                       />
-                    </Typography>
-                  </Stack>
+                    </Box>
+                  </Box>
 
                   {listing.auction_end_time && (
                     <Typography
@@ -523,7 +513,7 @@ export const ItemListingBase = React.memo(
             >
               <Card
                 sx={{
-                  height: 400,
+                  height: 420,
                   position: "relative",
                 }}
               >
@@ -631,16 +621,7 @@ export const ItemListingBase = React.memo(
                       {listing.title} ({listing.item_type})
                     </span>{" "}
                   </Typography>
-                  <Stack
-                    direction={"row"}
-                    spacing={theme.layoutSpacing.text}
-                    alignItems={"center"}
-                    display={"flex"}
-                    sx={{
-                      width: "100%",
-                      overflowX: "hidden",
-                    }}
-                  >
+                  <Box sx={{ mb: 0.5 }}>
                     <UnderlineLink
                       component="span"
                       display={"inline"}
@@ -660,11 +641,13 @@ export const ItemListingBase = React.memo(
                         textOverflow: "ellipsis",
                         whiteSpace: "nowrap",
                         cursor: "pointer",
+                        display: "block",
+                        mb: 0.5,
                       }}
                     >
-                      {user_seller || contractor_seller}{" "}
+                      {user_seller || contractor_seller}
                     </UnderlineLink>
-                    <Typography variant={"subtitle2"} sx={{ flexShrink: "0" }}>
+                    <Box sx={{ lineHeight: 1, display: "flex", alignItems: "center" }}>
                       <MarketListingRating
                         avg_rating={listing.avg_rating}
                         rating_count={listing.rating_count}
@@ -676,8 +659,8 @@ export const ItemListingBase = React.memo(
                         badge_ids={listing.badges?.badge_ids || null}
                         display_limit={3}
                       />
-                    </Typography>
-                  </Stack>
+                    </Box>
+                  </Box>
 
                   {listing.auction_end_time && (
                     <Typography component="div" display={"block"}>
@@ -1685,7 +1668,7 @@ export function DisplayListingsMin(props: {
                 />
               )
             }}
-            itemHeight={{ xs: 280, sm: 280, md: 400, lg: 400 }}
+            itemHeight={{ xs: 300, sm: 300, md: 420, lg: 420 }}
             columns={{ xs: 2, sm: 2, md: 3, lg: 4 }}
             gap={{
               xs: theme.layoutSpacing.component,

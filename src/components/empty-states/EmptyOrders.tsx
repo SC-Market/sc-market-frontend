@@ -135,18 +135,29 @@ export function EmptyOrders({
         onClick: () => navigate("/market/services"),
       }
     } else {
-      // All orders (none) → generic message
-      defaultDescription = t("emptyStates.orders.noOrdersDescription", {
-        defaultValue:
-          "Create your first order to get started with contracting services",
-      })
+      // All orders (none) → point to create market listing or service listing
+      defaultDescription = t(
+        "emptyStates.orders.noReceivedOffersDescription",
+        {
+          defaultValue:
+            "Create market listings or service listings to start receiving offers from customers",
+        },
+      )
       defaultAction = showCreateAction
         ? {
-            label: t("emptyStates.orders.createOrder", {
-              defaultValue: "Create Order",
+            label: t("emptyStates.orders.createMarketListing", {
+              defaultValue: "Create Market Listing",
             }),
-            onClick: () => navigate("/order/create"),
+            onClick: () => navigate("/market/create"),
             variant: "contained" as const,
+          }
+        : undefined
+      defaultSecondaryAction = showCreateAction
+        ? {
+            label: t("emptyStates.orders.createServiceListing", {
+              defaultValue: "Create Service Listing",
+            }),
+            onClick: () => navigate("/order/service/create"),
           }
         : undefined
     }

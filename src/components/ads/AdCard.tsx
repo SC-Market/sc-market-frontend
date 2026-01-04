@@ -51,7 +51,7 @@ export function AdCard(props: AdCardProps) {
         <Paper
           elevation={3}
           sx={{
-            height: isMobile ? 280 : 400,
+            height: isMobile ? 300 : 420,
             position: "relative",
             overflow: "hidden",
             borderRadius: theme.spacing(theme.borderRadius.topLevel),

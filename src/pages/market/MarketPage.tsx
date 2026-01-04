@@ -42,7 +42,6 @@ import { Link, useLocation, useNavigate } from "react-router-dom"
 import { a11yProps, TabPanel } from "../../components/tabs/Tabs"
 import { Stack } from "@mui/system"
 import { useTranslation } from "react-i18next"
-import { SwipeableItem } from "../../components/gestures"
 
 // Dynamic imports for heavy components
 const ItemMarketView = React.lazy(() =>
@@ -223,32 +222,16 @@ export function MarketPage() {
               </Grid>
             </Container>
 
-            <SwipeableItem
-              onSwipeLeft={() => {
-                // Swipe left = next tab
-                if (tabPage === 1) {
-                  navigate("/market/services")
-                }
-              }}
-              onSwipeRight={() => {
-                // Swipe right = previous tab
-                if (tabPage === 0) {
-                  navigate("/market")
-                }
-              }}
-              enabled={xs}
-            >
-              <TabPanel value={tabPage} index={1}>
-                <Suspense fallback={<MarketTabLoader />}>
-                  <ItemMarketView />
-                </Suspense>
-              </TabPanel>
-              <TabPanel value={tabPage} index={0}>
-                <Suspense fallback={<MarketTabLoader />}>
-                  <ServiceMarketView />
-                </Suspense>
-              </TabPanel>
-            </SwipeableItem>
+            <TabPanel value={tabPage} index={1}>
+              <Suspense fallback={<MarketTabLoader />}>
+                <ItemMarketView />
+              </Suspense>
+            </TabPanel>
+            <TabPanel value={tabPage} index={0}>
+              <Suspense fallback={<MarketTabLoader />}>
+                <ServiceMarketView />
+              </Suspense>
+            </TabPanel>
           </OpenLayout>
         </ServiceSidebarContext.Provider>
       </MarketSidebarContext.Provider>
