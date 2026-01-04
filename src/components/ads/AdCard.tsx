@@ -1,4 +1,4 @@
-import { Paper, Fade, Grid, Box } from "@mui/material"
+import { Paper, Fade, Grid, Box, useMediaQuery } from "@mui/material"
 import React from "react"
 import { AdConfig } from "./types"
 import { useMarketSidebarExp } from "../../hooks/market/MarketSidebar"
@@ -22,6 +22,7 @@ export function AdCard(props: AdCardProps) {
   const { ad, index, noGridWrapper = false } = props
   const marketSidebarOpen = useMarketSidebarExp()
   const theme = useTheme<ExtendedTheme>()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault()
@@ -50,7 +51,7 @@ export function AdCard(props: AdCardProps) {
         <Paper
           elevation={3}
           sx={{
-            height: 400,
+            height: isMobile ? 280 : 400,
             position: "relative",
             overflow: "hidden",
             borderRadius: theme.spacing(theme.borderRadius.topLevel),

@@ -237,6 +237,264 @@ export const ItemListingBase = React.memo(
       ]
     }, [isMyListing, listing, navigate, t, issueAlert])
 
+    // Condensed mobile variant (vertical layout, smaller text and height)
+    const mobileListingContent = (
+      <Fade
+        in={true}
+        style={{
+          transitionDelay: `${50 + 50 * index}ms`,
+          transitionDuration: "500ms",
+        }}
+      >
+        <Box
+          sx={{
+            position: "relative",
+            borderRadius: theme.spacing(theme.borderRadius.topLevel),
+          }}
+        >
+          {showExpiration &&
+            moment(listing.expiration) <
+              moment().add(1, "months").subtract(3, "days") && (
+              <ListingRefreshButton listing={listing} />
+            )}
+          <Link
+            to={formatMarketUrl(listing)}
+            style={{ textDecoration: "none", color: "inherit" }}
+          >
+            <CardActionArea
+              sx={{
+                borderRadius: theme.spacing(theme.borderRadius.topLevel),
+              }}
+            >
+              <Card
+                sx={{
+                  height: 280,
+                  position: "relative",
+                }}
+              >
+                {moment(listing.timestamp) >
+                  moment().subtract(3, "days") && (
+                  <Chip
+                    label={t("market.new")}
+                    color={"secondary"}
+                    size="small"
+                    sx={{
+                      position: "absolute",
+                      top: 4,
+                      left: 4,
+                      zIndex: 2,
+                      textTransform: "uppercase",
+                      fontWeight: "bold",
+                      fontSize: "0.65rem",
+                      height: 18,
+                    }}
+                  />
+                )}
+                {listing.internal && (
+                  <Chip
+                    label={t("market.internalListing")}
+                    color={"warning"}
+                    size="small"
+                    sx={{
+                      position: "absolute",
+                      top: 4,
+                      right: 4,
+                      zIndex: 2,
+                      textTransform: "uppercase",
+                      fontWeight: "bold",
+                      fontSize: "0.65rem",
+                      height: 18,
+                    }}
+                  />
+                )}
+                <CardMedia
+                  component="img"
+                  loading="lazy"
+                  image={listing.photo || FALLBACK_IMAGE_URL}
+                  onError={({ currentTarget }) => {
+                    currentTarget.onerror = null
+                    currentTarget.src = FALLBACK_IMAGE_URL
+                  }}
+                  sx={{
+                    ...(theme.palette.mode === "dark"
+                      ? {
+                          height: "100%",
+                        }
+                      : {
+                          height: 150,
+                        }),
+                    overflow: "hidden",
+                  }}
+                  alt={`Image of ${listing.title}`}
+                />
+                <Box
+                  sx={{
+                    ...(theme.palette.mode === "light"
+                      ? {
+                          display: "none",
+                        }
+                      : {}),
+                    position: "absolute",
+                    zIndex: 3,
+                    top: 0,
+                    left: 0,
+                    height: "100%",
+                    width: "100%",
+                    borderRadius: theme.spacing(theme.borderRadius.topLevel),
+                    background: `linear-gradient(to bottom, transparent, transparent 50%, ${theme.palette.background.sidebar}AA 60%, ${theme.palette.background.sidebar} 100%)`,
+                  }}
+                />
+
+                <CardContent
+                  sx={{
+                    ...(theme.palette.mode === "dark"
+                      ? {
+                          position: "absolute",
+                          bottom: 0,
+                          zIndex: 4,
+                        }
+                      : {}),
+                    maxWidth: "100%",
+                    padding: "8px 12px !important",
+                  }}
+                >
+                  <Typography
+                    variant={"h6"}
+                    color={"primary"}
+                    fontWeight={"bold"}
+                    sx={{
+                      fontSize: "0.95rem",
+                      mb: 0.5,
+                    }}
+                  >
+                    {listing.price.toLocaleString(i18n.language)} aUEC
+                  </Typography>
+                  <Typography
+                    variant={"body2"}
+                    color={"text.secondary"}
+                    sx={{
+                      fontSize: "0.75rem",
+                      lineHeight: 1.3,
+                      maxHeight: 36,
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      display: "-webkit-box",
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: "vertical",
+                      mb: 0.5,
+                    }}
+                  >
+                    {listing.title} ({listing.item_type})
+                  </Typography>
+                  <Stack
+                    direction={"row"}
+                    spacing={0.5}
+                    alignItems={"center"}
+                    sx={{
+                      width: "100%",
+                      overflowX: "hidden",
+                      mb: 0.25,
+                    }}
+                  >
+                    <UnderlineLink
+                      component="span"
+                      display={"inline"}
+                      noWrap={true}
+                      variant={"caption"}
+                      onClick={(e) => {
+                        e.preventDefault()
+                        e.stopPropagation()
+                        navigate(
+                          user_seller
+                            ? `/user/${user_seller}`
+                            : `/contractor/${contractor_seller}`,
+                        )
+                      }}
+                      sx={{
+                        overflowX: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                        cursor: "pointer",
+                        fontSize: "0.7rem",
+                      }}
+                    >
+                      {user_seller || contractor_seller}
+                    </UnderlineLink>
+                    <Typography
+                      variant={"caption"}
+                      sx={{ flexShrink: "0", fontSize: "0.7rem" }}
+                    >
+                      <MarketListingRating
+                        avg_rating={listing.avg_rating}
+                        rating_count={listing.rating_count}
+                        total_rating={listing.total_rating}
+                        rating_streak={listing.rating_streak}
+                        total_orders={listing.total_orders}
+                        total_assignments={listing.total_assignments}
+                        response_rate={listing.response_rate}
+                        badge_ids={listing.badges?.badge_ids || null}
+                        display_limit={2}
+                      />
+                    </Typography>
+                  </Stack>
+
+                  {listing.auction_end_time && (
+                    <Typography
+                      component="div"
+                      display={"block"}
+                      sx={{ mb: 0.25 }}
+                    >
+                      <Typography
+                        component="span"
+                        display={"inline"}
+                        color={ending ? "error.light" : "inherit"}
+                        variant={"caption"}
+                        sx={{ fontSize: "0.7rem" }}
+                      >
+                        {timeDisplay.endsWith("ago")
+                          ? t("market.ended", { time: timeDisplay })
+                          : t("market.ending_in", { time: timeDisplay })}
+                      </Typography>
+                    </Typography>
+                  )}
+                  {showExpiration && (
+                    <Typography
+                      component="div"
+                      display={"block"}
+                      sx={{ mb: 0.25 }}
+                    >
+                      <Typography
+                        component="span"
+                        display={"inline"}
+                        color={ending ? "error.light" : "inherit"}
+                        variant={"caption"}
+                        sx={{ fontSize: "0.7rem" }}
+                      >
+                        {t("market.expiration", {
+                          time: getRelativeTime(new Date(listing.expiration!)),
+                        })}
+                      </Typography>
+                    </Typography>
+                  )}
+                  <Typography
+                    display={"block"}
+                    color={"text.primary"}
+                    variant={"caption"}
+                    sx={{ fontSize: "0.7rem" }}
+                  >
+                    {t("market.available", {
+                      count: listing.quantity_available,
+                    })}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </CardActionArea>
+          </Link>
+        </Box>
+      </Fade>
+    )
+
+    // Desktop variant (original layout)
     const listingContent = (
       <Fade
         in={true}
@@ -494,9 +752,14 @@ export const ItemListingBase = React.memo(
     if (longPressActions.length > 0 && isMobile) {
       return (
         <LongPressMenu actions={longPressActions} enabled={isMobile}>
-          {listingContent}
+          {mobileListingContent}
         </LongPressMenu>
       )
+    }
+
+    // Return mobile or desktop variant
+    if (isMobile) {
+      return mobileListingContent
     }
 
     return listingContent
@@ -1084,16 +1347,13 @@ export function DisplayListingsHorizontal(props: {
   listings: MarketListingSearchResult[]
 }) {
   const { listings } = props
+  const theme = useTheme<ExtendedTheme>()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
 
   return (
     <Grid item xs={12}>
       <Box
         sx={{
-          // "& > *": {
-          // [theme.breakpoints.up("xs")]: {
-          //     width: 250,
-          // },
-          // },
           width: "100%",
           overflowX: "scroll",
         }}
@@ -1105,7 +1365,7 @@ export function DisplayListingsHorizontal(props: {
                 sx={{
                   marginLeft: 1,
                   marginRight: 1,
-                  width: 250,
+                  width: isMobile ? 200 : 250,
                   display: "inline-block",
                   flexShrink: 0,
                 }}
@@ -1425,7 +1685,7 @@ export function DisplayListingsMin(props: {
                 />
               )
             }}
-            itemHeight={400}
+            itemHeight={{ xs: 280, sm: 280, md: 400, lg: 400 }}
             columns={{ xs: 2, sm: 2, md: 3, lg: 4 }}
             gap={{
               xs: theme.layoutSpacing.component,

@@ -7,6 +7,7 @@ import {
   CardContent,
   Box,
   Stack,
+  useMediaQuery,
 } from "@mui/material"
 import { BaseSkeleton } from "./BaseSkeleton"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -27,6 +28,7 @@ export function ListingSkeleton({
   sidebarOpen = false,
 }: ListingSkeletonProps) {
   const theme = useTheme<ExtendedTheme>()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
 
   return (
     <Grid
@@ -55,7 +57,7 @@ export function ListingSkeleton({
           >
             <Card
               sx={{
-                height: 400,
+                height: isMobile ? 280 : 400,
                 position: "relative",
               }}
             >
@@ -90,7 +92,12 @@ export function ListingSkeleton({
               {/* CardMedia - Image area */}
               <CardMedia
                 sx={{
-                  height: theme.palette.mode === "dark" ? "100%" : 244,
+                  height:
+                    theme.palette.mode === "dark"
+                      ? "100%"
+                      : isMobile
+                        ? 150
+                        : 244,
                   overflow: "hidden",
                 }}
               >
@@ -131,13 +138,14 @@ export function ListingSkeleton({
                       }
                     : {}),
                   maxWidth: "100%",
+                  padding: isMobile ? "8px 12px !important" : undefined,
                 }}
               >
                 {/* Price (h5, primary, bold) */}
                 <BaseSkeleton
                   variant="text"
-                  width={120}
-                  height={32}
+                  width={isMobile ? 100 : 120}
+                  height={isMobile ? 24 : 32}
                   sx={{ mb: 0.5 }}
                 />
 
@@ -145,9 +153,9 @@ export function ListingSkeleton({
                 <BaseSkeleton
                   variant="text"
                   width="95%"
-                  height={60}
+                  height={isMobile ? 36 : 60}
                   sx={{
-                    mb: 1,
+                    mb: isMobile ? 0.5 : 1,
                     display: "-webkit-box",
                     WebkitLineClamp: 2,
                     WebkitBoxOrient: "vertical",
@@ -158,53 +166,69 @@ export function ListingSkeleton({
                 {/* Seller name and rating (Stack with theme.layoutSpacing.text) */}
                 <Stack
                   direction="row"
-                  spacing={theme.layoutSpacing.text}
+                  spacing={isMobile ? 0.5 : theme.layoutSpacing.text}
                   alignItems="center"
-                  sx={{ mb: 0.5, width: "100%", overflowX: "hidden" }}
+                  sx={{ mb: 0.25, width: "100%", overflowX: "hidden" }}
                 >
-                  <BaseSkeleton variant="text" width={80} height={18} />
-                  <BaseSkeleton variant="circular" width={16} height={16} />
-                  <BaseSkeleton variant="text" width={40} height={18} />
+                  <BaseSkeleton
+                    variant="text"
+                    width={isMobile ? 60 : 80}
+                    height={isMobile ? 14 : 18}
+                  />
+                  <BaseSkeleton
+                    variant="circular"
+                    width={isMobile ? 12 : 16}
+                    height={isMobile ? 12 : 16}
+                  />
+                  <BaseSkeleton
+                    variant="text"
+                    width={isMobile ? 30 : 40}
+                    height={isMobile ? 14 : 18}
+                  />
                 </Stack>
 
                 {/* Optional auction/expiration time */}
-                <BaseSkeleton
-                  variant="text"
-                  width={100}
-                  height={18}
-                  sx={{ mb: 0.5 }}
-                />
+                {!isMobile && (
+                  <BaseSkeleton
+                    variant="text"
+                    width={100}
+                    height={18}
+                    sx={{ mb: 0.5 }}
+                  />
+                )}
 
                 {/* Available quantity */}
                 <BaseSkeleton
                   variant="text"
-                  width={90}
-                  height={18}
-                  sx={{ mb: 1 }}
+                  width={isMobile ? 70 : 90}
+                  height={isMobile ? 14 : 18}
+                  sx={{ mb: isMobile ? 0 : 1 }}
                 />
 
-                {/* Optional language chips (height: 20, fontSize: 0.7rem) */}
-                <Box
-                  sx={{
-                    display: "flex",
-                    gap: 0.5,
-                    flexWrap: "wrap",
-                    mt: 1,
-                  }}
-                >
-                  <BaseSkeleton
-                    variant="rectangular"
-                    width={60}
-                    height={20}
-                    sx={{ borderRadius: 1 }}
-                  />
-                  <BaseSkeleton
-                    variant="rectangular"
-                    width={50}
-                    height={20}
-                    sx={{ borderRadius: 1 }}
-                  />
-                </Box>
+                {/* Optional language chips (hidden on mobile for space) */}
+                {!isMobile && (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      gap: 0.5,
+                      flexWrap: "wrap",
+                      mt: 1,
+                    }}
+                  >
+                    <BaseSkeleton
+                      variant="rectangular"
+                      width={60}
+                      height={20}
+                      sx={{ borderRadius: 1 }}
+                    />
+                    <BaseSkeleton
+                      variant="rectangular"
+                      width={50}
+                      height={20}
+                      sx={{ borderRadius: 1 }}
+                    />
+                  </Box>
+                )}
               </CardContent>
             </Card>
           </CardActionArea>
