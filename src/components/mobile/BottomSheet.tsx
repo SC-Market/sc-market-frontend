@@ -57,6 +57,7 @@ export function BottomSheet({
           borderBottomRightRadius: 0,
           // Add safe area padding for iOS
           paddingBottom: isMobile ? "env(safe-area-inset-bottom)" : 0,
+          overflow: "hidden", // Prevent BottomSheet from scrolling
         },
       }}
       ModalProps={{

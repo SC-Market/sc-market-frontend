@@ -43,14 +43,31 @@ export function Messages() {
   } = useGetChatByIDQuery(chat_id!, {
     skip: !chat_id,
   })
+  
+  // Get notifications for this chat (need chatObj to determine order_id or session_id)
 
   // Get and mark as read message notifications for this chat
-  const { data: notificationsData } = useGetNotificationsQuery({
+  // Query based on chat's order_id or session_id
+  const { data: orderNotificationsData } = useGetNotificationsQuery({
     page: 0,
     pageSize: 100,
-    action: "chat_message",
-    entityId: chat_id,
-  }, { skip: !chat_id })
+    action: "order_message",
+    entityId: chatObj?.order_id || undefined,
+  }, { skip: !chat_id || !chatObj?.order_id })
+  
+  const { data: offerNotificationsData } = useGetNotificationsQuery({
+    page: 0,
+    pageSize: 100,
+    action: "offer_message",
+    entityId: chatObj?.session_id || undefined,
+  }, { skip: !chat_id || !chatObj?.session_id })
+  
+  // Use the appropriate notification data based on chat type
+  const notificationsData = chatObj?.order_id 
+    ? orderNotificationsData 
+    : chatObj?.session_id 
+    ? offerNotificationsData 
+    : undefined
   const notifications = notificationsData?.notifications || []
   const [updateNotification] = useNotificationUpdateMutation()
 
@@ -124,7 +141,7 @@ export function Messages() {
               style={{
                 flexGrow: 1,
                 overflow: "hidden",
-                height: isMobile ? "100dvh" : "100vh", // Use dynamic viewport height on mobile to accommodate keyboard resize
+                height: "100%", // Use 100% of parent instead of viewport height
                 display: "flex",
                 flexDirection: "column",
                 marginLeft: 0,
@@ -137,14 +154,17 @@ export function Messages() {
                 position: "relative",
               }}
             >
-              <Box
-                sx={{
-                  position: "relative",
-                  width: 0,
-                  height: { xs: 56, sm: 64 },
-                  minHeight: { xs: 56, sm: 64 },
-                }}
-              />
+              {/* Only add spacer on desktop or when not showing MessagesBodyMobile (which has its own spacer) */}
+              {!isMobile && (
+                <Box
+                  sx={{
+                    position: "relative",
+                    width: 0,
+                    height: { xs: 56, sm: 64 },
+                    minHeight: { xs: 56, sm: 64 },
+                  }}
+                />
+              )}
               {creatingMessageGroup ? (
                 <CreateMessageGroupBody />
               ) : chat_id ? (

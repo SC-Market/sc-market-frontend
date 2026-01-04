@@ -40,10 +40,12 @@ import {
 import { getRelativeTime } from "../../util/time"
 import { useMessagingSidebar } from "../../hooks/messaging/MessagingSidebar"
 import { useCurrentChat } from "../../hooks/messaging/CurrentChat"
-import { useSendChatMessageMutation, useGetChatByIDQuery } from "../../store/chats"
+import { useSendChatMessageMutation, useGetChatByIDQuery, chatsApi } from "../../store/chats"
 import { useParams } from "react-router-dom"
 import { io } from "socket.io-client"
 import { WS_URL } from "../../util/constants"
+import { useDispatch } from "react-redux"
+import type { AppDispatch } from "../../store/store"
 import SCMarketLogo from "../../assets/scmarket-logo.png"
 import { DateTimePicker } from "@mui/x-date-pickers"
 import moment from "moment"
@@ -560,7 +562,6 @@ function MessageSendAreaMobile(props: {
       <IconButton
         color="primary"
         onClick={handleSend}
-        disabled={!textEntry.trim()}
         sx={{
           flexShrink: 0,
           alignSelf: "flex-end",
@@ -659,6 +660,7 @@ function DateTimePickerBottomSheetMobile(props: {
 
 export function MessagesBodyMobile(props: { maxHeight?: number }) {
   const theme = useTheme<ExtendedTheme>()
+  const dispatch = useDispatch<AppDispatch>()
   const [currentChat, setCurrentChat] = useCurrentChat()
   const messageBoxRef = useRef<HTMLDivElement>(null)
   const [sendChatMessage] = useSendChatMessageMutation()
@@ -676,12 +678,16 @@ export function MessagesBodyMobile(props: { maxHeight?: number }) {
       // Use requestAnimationFrame to ensure we get the latest viewport values
       requestAnimationFrame(() => {
         // Store initial height on first load
-        if (!(window as any).initialInnerHeight) {
-          (window as any).initialInnerHeight = window.innerHeight
+        interface WindowWithInitialHeight extends Window {
+          initialInnerHeight?: number
+        }
+        const win = window as WindowWithInitialHeight
+        if (!win.initialInnerHeight) {
+          win.initialInnerHeight = window.innerHeight
         }
         
         const currentHeight = window.innerHeight
-        const initialHeight = (window as any).initialInnerHeight
+        const initialHeight = win.initialInnerHeight
         
         // Keyboard is open if viewport height is significantly reduced
         // Use a threshold (e.g., 75% of initial height) to detect keyboard
@@ -740,25 +746,63 @@ export function MessagesBodyMobile(props: { maxHeight?: number }) {
     }
   }, [isSuccess])
 
-  // Listen for server messages
+  // Listen for server messages from socket
   useEffect(() => {
     function onServerMessage(message: Message): void {
       setCurrentChat((chat) => {
         if (chat && message.chat_id === chat.chat_id) {
-          return {
-            ...chat,
-            messages: chat.messages.concat([message]),
+          // Find matching message by content + author (replace optimistic with server message)
+          const messageIndex = chat.messages.findIndex(
+            (msg) => msg.content === message.content && msg.author === message.author
+          )
+          
+          if (messageIndex >= 0) {
+            // Replace optimistic message with server message
+            const updatedMessages = [...chat.messages]
+            updatedMessages[messageIndex] = message
+            return {
+              ...chat,
+              messages: updatedMessages.sort(
+                (a: Message, b: Message) => a.timestamp - b.timestamp,
+              ),
+            }
+          } else {
+            // New message, add it
+            return {
+              ...chat,
+              messages: [...chat.messages, message].sort(
+                (a: Message, b: Message) => a.timestamp - b.timestamp,
+              ),
+            }
           }
-        } else {
-          return chat
         }
+        return chat
       })
+      
+      // Also update RTK Query cache so it stays in sync
+      dispatch(
+        chatsApi.util.updateQueryData("getChatByID", message.chat_id, (draft) => {
+          // Find matching message by content + author (replace optimistic with server message)
+          const messageIndex = draft.messages.findIndex(
+            (msg) => msg.content === message.content && msg.author === message.author
+          )
+          
+          if (messageIndex >= 0) {
+            // Replace optimistic message with server message
+            draft.messages[messageIndex] = message
+          } else {
+            // New message, add it
+            draft.messages.push(message)
+          }
+          draft.messages.sort((a: Message, b: Message) => a.timestamp - b.timestamp)
+        })
+      )
     }
     socket.on("serverMessage", onServerMessage)
     return () => {
       socket.off("serverMessage", onServerMessage)
     }
-  }, [setCurrentChat])
+  }, [setCurrentChat, dispatch])
 
   // Join/leave chat rooms
   useEffect(() => {
@@ -778,15 +822,58 @@ export function MessagesBodyMobile(props: { maxHeight?: number }) {
     skip: !chat_id,
   })
 
+  // Sync cache with local state, but merge messages to preserve optimistic updates and socket messages
   useEffect(() => {
     if (chatFromCache && currentChat && chatFromCache.chat_id === currentChat.chat_id) {
-      const sortedMessages = [...chatFromCache.messages].sort(
+      const sortedCacheMessages = [...chatFromCache.messages].sort(
         (a: Message, b: Message) => a.timestamp - b.timestamp,
       )
-      if (JSON.stringify(sortedMessages) !== JSON.stringify(currentChat.messages)) {
+      
+      // Merge messages: combine cache messages with any local messages that aren't in cache
+      // This preserves optimistic updates and socket messages that haven't been synced to cache yet
+      // Use composite key (content + author) to uniquely identify messages since timestamp is server-side
+      const getMessageKey = (msg: Message) => `${msg.content}-${msg.author || 'system'}`
+      
+      const localMessageMap = new Map<string, Message>()
+      currentChat.messages.forEach((msg) => {
+        const key = getMessageKey(msg)
+        localMessageMap.set(key, msg)
+      })
+      
+      const cacheMessageMap = new Map<string, Message>()
+      sortedCacheMessages.forEach((msg) => {
+        const key = getMessageKey(msg)
+        cacheMessageMap.set(key, msg)
+      })
+      
+      // Merge: start with cache messages, add any local messages not in cache
+      const mergedMessages = [...sortedCacheMessages]
+      localMessageMap.forEach((msg) => {
+        const key = getMessageKey(msg)
+        if (!cacheMessageMap.has(key)) {
+          mergedMessages.push(msg)
+        }
+      })
+      
+      // Sort merged messages
+      const sortedMerged = mergedMessages.sort(
+        (a: Message, b: Message) => a.timestamp - b.timestamp,
+      )
+      
+      // Only update if messages actually differ
+      const currentSorted = [...currentChat.messages].sort(
+        (a: Message, b: Message) => a.timestamp - b.timestamp,
+      )
+      
+      // Compare using content + author since timestamp may differ between optimistic and server
+      const mergedKeys = new Set(sortedMerged.map(getMessageKey))
+      const currentKeys = new Set(currentSorted.map(getMessageKey))
+      
+      if (mergedKeys.size !== currentKeys.size ||
+          !Array.from(mergedKeys).every(key => currentKeys.has(key))) {
         setCurrentChat({
           ...chatFromCache,
-          messages: sortedMessages,
+          messages: sortedMerged,
         })
       }
     }
@@ -797,34 +884,16 @@ export function MessagesBodyMobile(props: { maxHeight?: number }) {
   const onSend = useCallback(
     (content: string) => {
       if (content && currentChat) {
-        // Optimistically update currentChat state immediately
-        const optimisticMessage: Message = {
-          author: profile?.username || null,
-          content: content,
-          timestamp: Date.now(),
-          chat_id: currentChat.chat_id,
-        }
-        setCurrentChat({
-          ...currentChat,
-          messages: [...currentChat.messages, optimisticMessage],
-        })
-
-        // Then send to server
+        // RTK Query handles optimistic updates, so we just send the message
+        // The cache update will sync to currentChat via the useEffect
         sendChatMessage({ chat_id: currentChat.chat_id, content })
           .unwrap()
           .catch((error) => {
-            // Rollback on error
-            setCurrentChat({
-              ...currentChat,
-              messages: currentChat.messages.filter(
-                (msg) => msg.timestamp !== optimisticMessage.timestamp,
-              ),
-            })
             issueAlert(error)
           })
       }
     },
-    [currentChat, sendChatMessage, issueAlert, profile, setCurrentChat],
+    [currentChat, sendChatMessage, issueAlert],
   )
 
   const { t } = useTranslation()
@@ -838,12 +907,7 @@ export function MessagesBodyMobile(props: { maxHeight?: number }) {
           sx={{
             display: "flex",
             flexDirection: "column",
-            height: "100dvh", // Use dynamic viewport height to accommodate keyboard resize
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
+            height: "100%", // Use 100% of parent instead of viewport
             overflow: "hidden",
           }}
         >
@@ -876,27 +940,21 @@ export function MessagesBodyMobile(props: { maxHeight?: number }) {
             />
           </Box>
           
-          {/* Dynamic container for FAB and input area - positioned at bottom of viewport */}
+          {/* Input area - part of flex layout, not floating */}
           <Box
             ref={inputAreaRef}
             sx={{
-              position: "fixed",
-              bottom: isKeyboardOpen 
-                ? 0 // With resizes-content mode, viewport has already resized, so position at bottom: 0
-                : `calc(64px + env(safe-area-inset-bottom))`, // Position above bottom nav (64px height) + safe area when closed
-              left: 0,
-              right: 0,
-              zIndex: theme.zIndex.drawer + 2, // Above bottom nav (drawer + 1) but below modals
+              flexShrink: 0,
               display: "flex",
               flexDirection: "column",
-              transition: "bottom 0.2s ease-in-out",
+              position: "relative", // For absolute positioning of FAB
             }}
           >
-            {/* FAB for date/time picker - fixed, moves with input area */}
+            {/* FAB for date/time picker - positioned absolutely 2px above input area */}
             <Box
               sx={{
                 position: "absolute",
-                bottom: inputAreaHeight > 0 ? `${inputAreaHeight + 64}px` : "144px",
+                top: -48, // 8px above input area (40px FAB height + 8px gap)
                 right: 16,
                 zIndex: theme.zIndex.speedDial,
                 pointerEvents: "auto",
@@ -919,7 +977,6 @@ export function MessagesBodyMobile(props: { maxHeight?: number }) {
               </MobileFAB>
             </Box>
             
-            {/* Input area - inside fixed container */}
             <MessageSendAreaMobile 
               onSend={onSend} 
               isKeyboardOpen={isKeyboardOpen}

@@ -146,17 +146,18 @@ export function MobileBottomNav() {
   return (
     <Paper
       sx={{
-        position: "fixed",
+        position: "fixed", // Fixed at bottom, like navbar at top
         bottom: 0,
         left: 0,
         right: 0,
-        zIndex: theme.zIndex.drawer + 1, // Above sidebar but below modals
         borderTop: `1px solid ${theme.palette.outline.main}`,
         display: { xs: isKeyboardOpen ? "none" : "block", sm: "none" }, // Hide when keyboard is open
         // Add padding for safe area on iOS devices
         paddingBottom: "env(safe-area-inset-bottom)",
-        transition: "transform 0.2s ease-in-out",
+        transition: "opacity 0.2s ease-in-out, transform 0.2s ease-in-out",
+        opacity: isKeyboardOpen ? 0 : 1,
         transform: isKeyboardOpen ? "translateY(100%)" : "translateY(0)",
+        zIndex: theme.zIndex.drawer + 1, // Above sidebar but below modals
       }}
       elevation={3}
     >

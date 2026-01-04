@@ -10,13 +10,46 @@ export function useUnreadChatCount(): number {
   // Get all chats first
   const { data: chats } = useGetMyChatsQuery()
 
-  // Query chat message notifications with action filter
-  // Use action filter to only get chat-related notifications
-  const { data: allNotificationsData } = useGetNotificationsQuery({
+  // Query message notifications - chats use order_message or offer_message actions
+  // Query both types to get all chat-related notifications
+  const { data: orderMessageNotifications } = useGetNotificationsQuery({
     page: 0,
-    pageSize: 100, // API limit is 100
-    action: "chat_message",
+    pageSize: 100,
+    action: "order_message",
   })
+  
+  const { data: offerMessageNotifications } = useGetNotificationsQuery({
+    page: 0,
+    pageSize: 100,
+    action: "offer_message",
+  })
+  
+  // Combine both notification types
+  const allNotificationsData = useMemo(() => {
+    if (!orderMessageNotifications && !offerMessageNotifications) return undefined
+    
+    const combinedNotifications = [
+      ...(orderMessageNotifications?.notifications || []),
+      ...(offerMessageNotifications?.notifications || []),
+    ]
+    
+    // Combine unread counts
+    const totalUnread = (orderMessageNotifications?.unread_count || 0) + 
+                       (offerMessageNotifications?.unread_count || 0)
+    
+    return {
+      notifications: combinedNotifications,
+      unread_count: totalUnread,
+      pagination: orderMessageNotifications?.pagination || offerMessageNotifications?.pagination || {
+        total: combinedNotifications.length,
+        currentPage: 0,
+        pageSize: 100,
+        totalPages: 1,
+        hasNextPage: false,
+        hasPreviousPage: false,
+      },
+    }
+  }, [orderMessageNotifications, offerMessageNotifications])
 
   // Calculate count of unique chats with unread notifications
   const unreadChatCount = useMemo(() => {
@@ -47,8 +80,7 @@ export function useUnreadChatCount(): number {
         // Check if this is a message-related notification
         const isMessageNotification = 
           notif.action === "order_message" ||
-          notif.action === "offer_message" ||
-          notif.action === "chat_message"
+          notif.action === "offer_message"
         
         if (isMessageNotification) {
           // Try to find chat_id from the entity
@@ -69,13 +101,6 @@ export function useUnreadChatCount(): number {
               const chat = chats.find((c) => c.session_id === sessionId)
               if (chat) {
                 unreadChatIds.add(chat.chat_id)
-              }
-            }
-            // For chat_message, entity might have chat_id directly
-            else if (notif.action === "chat_message" && "chat_id" in notif.entity) {
-              const chatId = (notif.entity as any).chat_id
-              if (chatIds.has(chatId)) {
-                unreadChatIds.add(chatId)
               }
             }
           }

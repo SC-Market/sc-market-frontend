@@ -58,13 +58,29 @@ function ChatEntry(props: { chat: Chat; unreadCount?: number }) {
     chat_id === props.chat.chat_id || currentChatID === props.chat.chat_id
 
   // Query unread notifications for this specific chat
-  // Query by entityId (chat_id) and action type for chat messages
-  const { data: chatNotificationsData } = useGetNotificationsQuery({
+  // Chats can be associated with orders or offers, so we query based on order_id or session_id
+  // If chat has order_id, query order_message with that order_id as entityId
+  // If chat has session_id, query offer_message with that session_id as entityId
+  const { data: orderNotificationsData } = useGetNotificationsQuery({
     page: 0,
     pageSize: 100,
-    action: "chat_message",
-    entityId: props.chat.chat_id,
-  }, { skip: !props.chat.chat_id })
+    action: "order_message",
+    entityId: props.chat.order_id || undefined,
+  }, { skip: !props.chat.chat_id || !props.chat.order_id })
+  
+  const { data: offerNotificationsData } = useGetNotificationsQuery({
+    page: 0,
+    pageSize: 100,
+    action: "offer_message",
+    entityId: props.chat.session_id || undefined,
+  }, { skip: !props.chat.chat_id || !props.chat.session_id })
+  
+  // Use the appropriate notification data based on chat type
+  const chatNotificationsData = props.chat.order_id 
+    ? orderNotificationsData 
+    : props.chat.session_id 
+    ? offerNotificationsData 
+    : undefined
 
   // Calculate unread count from notifications
   const unreadCount = useMemo(() => {
@@ -256,6 +272,7 @@ export function MessagingSidebarContent(
         borderColor: props.asPageContent
           ? "transparent"
           : theme.palette.outline.main,
+        overflow: "hidden", // Prevent this container from scrolling
       }}
     >
       <Box
@@ -309,7 +326,8 @@ export function MessagingSidebarContent(
           borderTop: 1,
           borderColor: theme.palette.outline.main,
           flexGrow: props.asPageContent ? 1 : 0,
-          overflow: "auto",
+          minHeight: 0, // Allow flex item to shrink
+          overflow: "auto", // Only the list scrolls, not the whole sidebar
         }}
       >
           {isLoading || isFetching ? (

@@ -50,7 +50,7 @@ export function ContainerGrid(
         style={{
           flexGrow: 1,
           overflow: "auto",
-          height: "100vh",
+          height: "100%", // Use 100% of parent instead of 100vh
           position: "relative",
         }}
         ref={ref}

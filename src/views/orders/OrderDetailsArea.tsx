@@ -94,7 +94,7 @@ export function OrderMessagesArea(props: { order: Order }) {
           overflow: "hidden",
         }}
       >
-        {currentChat && <MessagesBody key={currentChat.chat_id} />}
+        {currentChat && <MessagesBody key={currentChat.chat_id} forceDesktop={true} />}
       </Paper>
     </Grid>
   )
