@@ -48,6 +48,7 @@ import SCMarketLogo from "../../assets/scmarket-logo.png"
 import { DateTimePicker } from "@mui/x-date-pickers"
 import moment from "moment"
 import { useTranslation } from "react-i18next"
+import { MarkdownRender } from "../../components/markdown/Markdown"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { LongPressMenu } from "../../components/gestures"
 import { MobileFAB } from "../../components/mobile/MobileFAB"
@@ -220,9 +221,9 @@ function MessageEntryMobile(props: { message: Message }) {
             {getRelativeTime(new Date(message.timestamp))}
           </Typography>
         </Stack>
-        <Typography variant={"body2"} sx={{ wordBreak: "break-word" }}>
-          {convertedContent}
-        </Typography>
+        <Box sx={{ wordBreak: "break-word", "& p": { margin: 0, marginBottom: 0.5, "&:last-child": { marginBottom: 0 } } }}>
+          <MarkdownRender text={convertedContent} />
+        </Box>
       </Stack>
     </Stack>
   )
@@ -546,20 +547,13 @@ function MessageSendAreaMobile(props: {
         }}
         onKeyPress={handleKeyPress}
         onFocus={(e) => {
-          // Scroll input into view and trigger viewport update
+          // With resizes-content mode, the browser will automatically resize the viewport
+          // We just need to ensure the input is visible - the resize event will handle positioning
           const inputElement = e.target as HTMLElement
-          inputElement.scrollIntoView({ behavior: "smooth", block: "end" })
-          
-          // Small delay to allow browser to adjust viewport after focus and scroll
+          // Small delay to allow browser to resize viewport, then scroll if needed
           setTimeout(() => {
-            if (window.visualViewport) {
-              // Trigger viewport events to update position
-              window.visualViewport.dispatchEvent(new Event("resize"))
-              window.visualViewport.dispatchEvent(new Event("scroll"))
-            }
-            // Also trigger window resize as fallback
-            window.dispatchEvent(new Event("resize"))
-          }, 150)
+            inputElement.scrollIntoView({ behavior: "smooth", block: "end" })
+          }, 100)
         }}
         placeholder={t("MessagesBody.typeMessage") || "Type a message..."}
       />
@@ -675,77 +669,49 @@ export function MessagesBodyMobile(props: { maxHeight?: number }) {
   const inputAreaRef = useRef<HTMLDivElement>(null)
   const [inputAreaHeight, setInputAreaHeight] = useState(0)
 
-  // Track keyboard position using visualViewport API
-  // With overlay mode, we calculate the keyboard top position from the visible viewport
+  // Track keyboard visibility using viewport resize mode
+  // With resizes-content mode, the viewport height actually shrinks when keyboard opens
   useEffect(() => {
-    const updateKeyboardPosition = () => {
+    const updateKeyboardState = () => {
       // Use requestAnimationFrame to ensure we get the latest viewport values
       requestAnimationFrame(() => {
-        if (window.visualViewport) {
-          const viewport = window.visualViewport
-          const screenHeight = window.innerHeight
-          const viewportHeight = viewport.height
-          const viewportTop = viewport.offsetTop
-          
-          // Calculate the bottom of the visible viewport (where keyboard starts)
-          // visibleBottom = viewportTop + viewportHeight (distance from top of screen)
-          // keyboardTop from bottom = screenHeight - visibleBottom
-          const visibleBottom = viewportTop + viewportHeight
-          const keyboardTopFromBottom = screenHeight - visibleBottom
-          
-          // Keyboard is open if visible area is significantly smaller than screen
-          // or if viewport has scrolled (offsetTop > 0) or keyboard height is significant
-          const keyboardIsOpen = viewportHeight < screenHeight * 0.75 || viewportTop > 0 || keyboardTopFromBottom > 50
-          
-          setIsKeyboardOpen(keyboardIsOpen)
-          
-          if (keyboardIsOpen) {
-            // Position input area at the top of the keyboard
-            // This is the distance from screen bottom to keyboard top
-            setKeyboardTop(Math.max(0, keyboardTopFromBottom))
-          } else {
-            setKeyboardTop(0)
-          }
-        } else {
-          // Fallback for browsers without visualViewport
-          const currentHeight = window.innerHeight
-          const initialHeight = (window as any).initialInnerHeight || currentHeight
-          const keyboardIsOpen = currentHeight < initialHeight * 0.8
-          setIsKeyboardOpen(keyboardIsOpen)
-          
-          if (keyboardIsOpen) {
-            setKeyboardTop(initialHeight - currentHeight)
-          } else {
-            setKeyboardTop(0)
-          }
+        // Store initial height on first load
+        if (!(window as any).initialInnerHeight) {
+          (window as any).initialInnerHeight = window.innerHeight
         }
+        
+        const currentHeight = window.innerHeight
+        const initialHeight = (window as any).initialInnerHeight
+        
+        // Keyboard is open if viewport height is significantly reduced
+        // Use a threshold (e.g., 75% of initial height) to detect keyboard
+        const keyboardIsOpen = currentHeight < initialHeight * 0.75
+        
+        setIsKeyboardOpen(keyboardIsOpen)
+        
+        // With resizes-content mode, when keyboard is open, the viewport has already resized
+        // So we position the input at bottom: 0 (it will sit right above the keyboard)
+        // When closed, position above bottom nav
+        setKeyboardTop(0)
       })
     }
     
-    // Store initial innerHeight for fallback comparison
-    if (!(window as any).initialInnerHeight) {
-      (window as any).initialInnerHeight = window.innerHeight
-    }
-
     // Initial check
-    updateKeyboardPosition()
+    updateKeyboardState()
 
+    // Listen to window resize events (viewport resizes when keyboard opens/closes)
+    window.addEventListener("resize", updateKeyboardState)
+    
+    // Also listen to visualViewport if available for more accurate detection
     if (window.visualViewport) {
-      // Listen to viewport changes (resize and scroll)
-      window.visualViewport.addEventListener("resize", updateKeyboardPosition)
-      window.visualViewport.addEventListener("scroll", updateKeyboardPosition)
-      // Also listen to window resize as fallback
-      window.addEventListener("resize", updateKeyboardPosition)
-      
+      window.visualViewport.addEventListener("resize", updateKeyboardState)
       return () => {
-        window.visualViewport?.removeEventListener("resize", updateKeyboardPosition)
-        window.visualViewport?.removeEventListener("scroll", updateKeyboardPosition)
-        window.removeEventListener("resize", updateKeyboardPosition)
+        window.removeEventListener("resize", updateKeyboardState)
+        window.visualViewport?.removeEventListener("resize", updateKeyboardState)
       }
     } else {
-      window.addEventListener("resize", updateKeyboardPosition)
       return () => {
-        window.removeEventListener("resize", updateKeyboardPosition)
+        window.removeEventListener("resize", updateKeyboardState)
       }
     }
   }, [])
@@ -872,7 +838,7 @@ export function MessagesBodyMobile(props: { maxHeight?: number }) {
           sx={{
             display: "flex",
             flexDirection: "column",
-            height: "100vh",
+            height: "100dvh", // Use dynamic viewport height to accommodate keyboard resize
             position: "fixed",
             top: 0,
             left: 0,
@@ -910,20 +876,20 @@ export function MessagesBodyMobile(props: { maxHeight?: number }) {
             />
           </Box>
           
-          {/* Dynamic container for FAB and input area - always fixed, positioned above bottom nav or keyboard */}
+          {/* Dynamic container for FAB and input area - positioned at bottom of viewport */}
           <Box
             ref={inputAreaRef}
             sx={{
               position: "fixed",
               bottom: isKeyboardOpen 
-                ? `${keyboardTop}px` // Position at keyboard top when open (calculated from visualViewport)
+                ? 0 // With resizes-content mode, viewport has already resized, so position at bottom: 0
                 : `calc(64px + env(safe-area-inset-bottom))`, // Position above bottom nav (64px height) + safe area when closed
               left: 0,
               right: 0,
               zIndex: theme.zIndex.drawer + 2, // Above bottom nav (drawer + 1) but below modals
               display: "flex",
               flexDirection: "column",
-              transition: "bottom 0.3s ease-in-out",
+              transition: "bottom 0.2s ease-in-out",
             }}
           >
             {/* FAB for date/time picker - fixed, moves with input area */}

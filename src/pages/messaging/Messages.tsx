@@ -48,6 +48,7 @@ export function Messages() {
   const { data: notificationsData } = useGetNotificationsQuery({
     page: 0,
     pageSize: 100,
+    action: "chat_message",
     entityId: chat_id,
   }, { skip: !chat_id })
   const notifications = notificationsData?.notifications || []
@@ -123,7 +124,7 @@ export function Messages() {
               style={{
                 flexGrow: 1,
                 overflow: "hidden",
-                height: isMobile ? "100vh" : "100vh", // Use fixed 100vh on mobile - input area will be fixed
+                height: isMobile ? "100dvh" : "100vh", // Use dynamic viewport height on mobile to accommodate keyboard resize
                 display: "flex",
                 flexDirection: "column",
                 marginLeft: 0,

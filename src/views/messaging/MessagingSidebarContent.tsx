@@ -39,8 +39,9 @@ import {
   EmptyMessages,
   EmptySearchResults,
 } from "../../components/empty-states"
-import { PullToRefresh } from "../../components/gestures"
 import { useGetNotificationsQuery } from "../../store/notification"
+import { getRelativeTime } from "../../util/time"
+import { MarkdownRender } from "../../components/markdown/Markdown"
 
 // Single chat entry in the chat list
 function ChatEntry(props: { chat: Chat; unreadCount?: number }) {
@@ -57,10 +58,11 @@ function ChatEntry(props: { chat: Chat; unreadCount?: number }) {
     chat_id === props.chat.chat_id || currentChatID === props.chat.chat_id
 
   // Query unread notifications for this specific chat
-  // Query by entityId (chat_id) - this should return notifications for this chat
+  // Query by entityId (chat_id) and action type for chat messages
   const { data: chatNotificationsData } = useGetNotificationsQuery({
     page: 0,
     pageSize: 100,
+    action: "chat_message",
     entityId: props.chat.chat_id,
   }, { skip: !props.chat.chat_id })
 
@@ -180,22 +182,39 @@ function ChatEntry(props: { chat: Chat; unreadCount?: number }) {
               </Badge>
             )}
           </Box>
-          <Typography
-            noWrap
-            align={"left"}
-            color={unreadCount > 0 ? "text.primary" : "text.secondary"}
-            sx={{ 
+          <Box
+            sx={{
               fontSize: "0.875rem",
               fontWeight: unreadCount > 0 ? 500 : 400,
+              color: unreadCount > 0 ? "text.primary" : "text.secondary",
+              flex: 1,
+              minWidth: 0,
+              overflow: "hidden",
+              "& p": {
+                margin: 0,
+                display: "inline",
+                fontSize: "inherit",
+              },
             }}
           >
-            {props.chat.messages.length > 0
-              ? (props.chat.messages[props.chat.messages.length - 1].author ||
-                  t("MessagesBody.system")) +
-                ": " +
-                props.chat.messages[props.chat.messages.length - 1].content
-              : t("MessagingSidebar.noMessages")}
-          </Typography>
+            {props.chat.messages.length > 0 ? (
+              <MarkdownRender
+                text={`**${props.chat.messages[props.chat.messages.length - 1].author || t("MessagesBody.system")}**: ${props.chat.messages[props.chat.messages.length - 1].content} *${getRelativeTime(new Date(props.chat.messages[props.chat.messages.length - 1].timestamp))}*`}
+                plainText
+              />
+            ) : (
+              <Typography
+                component="span"
+                sx={{ 
+                  fontSize: "0.875rem",
+                  fontWeight: unreadCount > 0 ? 500 : 400,
+                  color: unreadCount > 0 ? "text.primary" : "text.secondary",
+                }}
+              >
+                {t("MessagingSidebar.noMessages")}
+              </Typography>
+            )}
+          </Box>
         </Box>
       </Box>
     </ListItemButton>
@@ -285,26 +304,14 @@ export function MessagingSidebarContent(
           size={isMobile ? "small" : "medium"}
         />
       </Box>
-      <PullToRefresh
-        onRefresh={async () => {
-          await refetch()
+      <List
+        sx={{
+          borderTop: 1,
+          borderColor: theme.palette.outline.main,
+          flexGrow: props.asPageContent ? 1 : 0,
+          overflow: "auto",
         }}
-        enabled={isMobile}
       >
-      <PullToRefresh
-        onRefresh={async () => {
-          await refetch()
-        }}
-        enabled={isMobile}
-      >
-        <List
-          sx={{
-            borderTop: 1,
-            borderColor: theme.palette.outline.main,
-            flexGrow: props.asPageContent ? 1 : 0,
-            overflow: "auto",
-          }}
-        >
           {isLoading || isFetching ? (
             <>
               {Array.from({ length: 5 }).map((_, i) => (
@@ -361,9 +368,7 @@ export function MessagingSidebarContent(
                 />
               ))
           )}
-        </List>
-      </PullToRefresh>
-      </PullToRefresh>
+      </List>
     </Box>
   )
 

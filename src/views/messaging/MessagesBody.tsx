@@ -48,6 +48,7 @@ import { WS_URL } from "../../util/constants"
 import { Stack } from "@mui/system"
 import SCMarketLogo from "../../assets/scmarket-logo.png"
 import { DateTimePicker } from "@mui/x-date-pickers"
+import { MarkdownRender } from "../../components/markdown/Markdown"
 import moment from "moment"
 import { useTranslation } from "react-i18next"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
@@ -676,7 +677,9 @@ function MessageEntry2(props: { message: Message }) {
             {getRelativeTime(new Date(message.timestamp))}
           </Typography>
         </Stack>
-        <Typography variant={"subtitle2"}>{convertedContent}</Typography>
+        <Box sx={{ "& p": { margin: 0, marginBottom: 0.5, "&:last-child": { marginBottom: 0 } } }}>
+          <MarkdownRender text={convertedContent} />
+        </Box>
       </Stack>
     </Stack>
   )
