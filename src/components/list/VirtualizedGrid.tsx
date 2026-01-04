@@ -6,7 +6,7 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 interface VirtualizedGridProps<T> {
   items: T[]
   renderItem: (item: T, index: number) => React.ReactNode
-  itemHeight?: number
+  itemHeight?: number | { xs?: number; sm?: number; md?: number; lg?: number }
   columns?: { xs?: number; sm?: number; md?: number; lg?: number }
   gap?: number | { xs?: number; sm?: number; md?: number; lg?: number }
   overscan?: number
@@ -58,6 +58,19 @@ export function VirtualizedGrid<T>(props: VirtualizedGridProps<T>) {
     return 2 // Default
   }, [isXs, isSm, isMd, isLg, isBelowMd, gap])
 
+  // Determine item height based on breakpoint
+  const heightValue = useMemo(() => {
+    if (typeof itemHeight === "number") return itemHeight
+    if (typeof itemHeight === "object") {
+      if (isXs) return itemHeight.xs ?? itemHeight.sm ?? itemHeight.md ?? itemHeight.lg ?? 400
+      if (isBelowMd) return itemHeight.sm ?? itemHeight.md ?? itemHeight.lg ?? itemHeight.xs ?? 400
+      if (isMd) return itemHeight.md ?? itemHeight.lg ?? itemHeight.sm ?? itemHeight.xs ?? 400
+      if (isLg) return itemHeight.lg ?? itemHeight.md ?? itemHeight.sm ?? itemHeight.xs ?? 400
+      return itemHeight.xs ?? 400
+    }
+    return 400 // Default
+  }, [isXs, isSm, isMd, isLg, isBelowMd, itemHeight])
+
   // Calculate number of rows
   const rowCount = Math.ceil(items.length / cols)
 
@@ -81,7 +94,7 @@ export function VirtualizedGrid<T>(props: VirtualizedGridProps<T>) {
   const rowVirtualizer = useVirtualizer({
     count: rowCount,
     getScrollElement,
-    estimateSize: () => itemHeight + gapPx,
+    estimateSize: () => heightValue + gapPx,
     overscan,
   })
 
@@ -137,7 +150,7 @@ export function VirtualizedGrid<T>(props: VirtualizedGridProps<T>) {
               {rowItems.map((item, colIndex) => {
                 const index = startIndex + colIndex
                 return (
-                  <Box key={index} sx={{ height: itemHeight, width: "100%" }}>
+                  <Box key={index} sx={{ height: heightValue, width: "100%" }}>
                     {renderItem(item, index)}
                   </Box>
                 )
