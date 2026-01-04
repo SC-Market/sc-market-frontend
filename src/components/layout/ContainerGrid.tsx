@@ -12,6 +12,7 @@ import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
 import { Footer } from "../footer/Footer"
 import { MainRefContext } from "../../hooks/layout/MainRef"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
 
 export function ContainerGrid(
   props: {
@@ -24,6 +25,7 @@ export function ContainerGrid(
   } & ContainerProps,
 ): ReactElement {
   const theme = useTheme<ExtendedTheme>()
+  const bottomNavHeight = useBottomNavHeight()
 
   const [drawerOpen, setDrawerOpen] = useDrawerOpen()
 
@@ -81,7 +83,7 @@ export function ContainerGrid(
           }
           sx={{
             paddingTop: theme.spacing(4),
-            paddingBottom: { xs: theme.spacing(10), sm: theme.spacing(2) }, // Extra bottom padding on mobile for bottom nav
+            paddingBottom: { xs: theme.spacing(2) + bottomNavHeight, sm: theme.spacing(2) }, // Bottom padding accounts for bottom nav (dynamically adjusts)
             paddingLeft: {
               xs: noMobilePadding ? 0 : theme.spacing(1),
               sm: theme.spacing(3),
@@ -127,6 +129,7 @@ export function OpenGrid(
   } & GridProps,
 ) {
   const theme = useTheme<ExtendedTheme>()
+  const bottomNavHeight = useBottomNavHeight()
 
   const [drawerOpen, setDrawerOpen] = useDrawerOpen()
 
@@ -171,6 +174,9 @@ export function OpenGrid(
           container
           spacing={theme.layoutSpacing.layout * 4}
           justifyContent={"center"}
+          sx={{
+            paddingBottom: `${bottomNavHeight}px`, // Bottom spacer for mobile bottom nav (dynamically adjusts when keyboard opens)
+          }}
           {...gridProps}
         >
           {props.children}
@@ -191,6 +197,7 @@ export function OpenLayout(
   } & React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>,
 ) {
   const theme: Theme = useTheme()
+  const bottomNavHeight = useBottomNavHeight()
 
   const [drawerOpen, setDrawerOpen] = useDrawerOpen()
 

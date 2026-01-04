@@ -12,12 +12,14 @@ import { UpdateNotification } from "../pwa/UpdateNotification"
 import { InstallPrompt } from "../pwa/InstallPrompt"
 import { MobileBottomNav } from "../navigation/MobileBottomNav"
 import { useLocation } from "react-router-dom"
+import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
 
 export function Root(props: { children: React.ReactNode }) {
   const theme: Theme = useTheme()
   const [drawerOpen] = useDrawerOpen()
   const location = useLocation()
   const isMessagingPage = location.pathname.startsWith("/messages")
+  const bottomNavHeight = useBottomNavHeight()
 
   // Enable route-based prefetching
   useRoutePrefetch()
@@ -56,8 +58,8 @@ export function Root(props: { children: React.ReactNode }) {
           minHeight: 0, // Allow flex item to shrink below content size
           overflow: "hidden", // Prevent this container from scrolling
           position: "relative", // For absolute positioning of bottom nav
-          // Add padding bottom to account for bottom nav (64px height on mobile)
-          paddingBottom: { xs: "64px", sm: 0 },
+          // Add padding bottom to account for bottom nav (dynamically adjusts when keyboard opens)
+          paddingBottom: `${bottomNavHeight}px`,
         }}
       >
         <Box
