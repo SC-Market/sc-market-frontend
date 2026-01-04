@@ -279,29 +279,14 @@ export function ContractSidebar() {
   // On mobile, use BottomSheet
   if (isMobile) {
     return (
-      <>
-        <BottomSheet
-          open={open}
-          onClose={() => setOpen(false)}
-          title={t("service_search.filters", "Filters")}
-          maxHeight="90vh"
-        >
-          {sidebarContent}
-        </BottomSheet>
-        {/* Hidden drawer for layout spacing - completely disabled on mobile */}
-        <Drawer
-          variant="permanent"
-          open={false}
-          sx={{
-            display: { xs: "none", md: "block" },
-            width: 0,
-            "& .MuiDrawer-paper": {
-              width: 0,
-              pointerEvents: "none",
-            },
-          }}
-        />
-      </>
+      <BottomSheet
+        open={open}
+        onClose={() => setOpen(false)}
+        title={t("service_search.filters", "Filters")}
+        maxHeight="90vh"
+      >
+        {sidebarContent}
+      </BottomSheet>
     )
   }
 

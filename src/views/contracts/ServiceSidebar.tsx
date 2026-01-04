@@ -36,25 +36,14 @@ export function ServiceSidebar() {
   // On mobile, use BottomSheet
   if (isMobile) {
     return (
-      <>
-        <BottomSheet
-          open={open}
-          onClose={() => setOpen(false)}
-          title={t("service_market.filters", "Filters")}
-          maxHeight="90vh"
-        >
-          {sidebarContent}
-        </BottomSheet>
-        {/* Desktop drawer still needed for layout spacing */}
-        <Drawer
-          variant="permanent"
-          open={false}
-          sx={{
-            width: 0,
-            display: { xs: "none", md: "block" },
-          }}
-        />
-      </>
+      <BottomSheet
+        open={open}
+        onClose={() => setOpen(false)}
+        title={t("service_market.filters", "Filters")}
+        maxHeight="90vh"
+      >
+        {sidebarContent}
+      </BottomSheet>
     )
   }
 
