@@ -24,7 +24,7 @@ import React, {
   useRef,
   useState,
 } from "react"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate, useLocation } from "react-router-dom"
 import { useTheme as useMuiTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import BusinessIcon from "@mui/icons-material/BusinessRounded"
@@ -248,8 +248,12 @@ function MessageHeaderMobile() {
   const theme = useTheme<ExtendedTheme>()
   const [messageSidebarOpen, setMessageSidebar] = useMessagingSidebar()
   const navigate = useNavigate()
+  const location = useLocation()
   const [chat] = useCurrentChat()
   const { t } = useTranslation()
+  
+  // Check if we're viewing from orders or offers page
+  const isViewingFromOrderOrOffer = location.pathname.includes("/order/") || location.pathname.includes("/offer/")
 
   return (
     <Box
@@ -406,7 +410,24 @@ function MessageHeaderMobile() {
                         ))}
                       </>
                     )}
-                    {chat!.order_id ? (
+                    {isViewingFromOrderOrOffer && chat?.chat_id ? (
+                      <Chip
+                        icon={<DescriptionIcon sx={{ fontSize: 16 }} />}
+                        label={t("messages.viewChat", "View Chat")}
+                        size="small"
+                        component={Link}
+                        to={`/messages/${chat.chat_id}`}
+                        onClick={(e) => e.stopPropagation()}
+                        clickable
+                        sx={{
+                          height: 20,
+                          fontSize: "0.75rem",
+                          "& .MuiChip-icon": {
+                            marginLeft: 0.5,
+                          },
+                        }}
+                      />
+                    ) : chat!.order_id ? (
                       <Chip
                         icon={<DescriptionIcon sx={{ fontSize: 16 }} />}
                         label="View Order"
