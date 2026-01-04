@@ -456,17 +456,33 @@ function MessagesAreaMobile(props: {
   messages: Message[]
   messageBoxRef: RefObject<HTMLDivElement | null>
   inputAreaHeight: number
+  isKeyboardOpen?: boolean
 }) {
   const theme = useTheme<ExtendedTheme>()
-  const { messageBoxRef, inputAreaHeight } = props
+  const { messageBoxRef, inputAreaHeight, isKeyboardOpen } = props
   const [chat] = useCurrentChat()
 
+  // Scroll to bottom when messages change
   useEffect(() => {
     const currentRef = messageBoxRef.current
     if (currentRef) {
       currentRef.scrollTop = currentRef.scrollHeight
     }
   }, [messageBoxRef, chat, props.messages])
+
+  // Scroll to bottom when keyboard opens or input area height changes (viewport/layout resizes)
+  useEffect(() => {
+    const currentRef = messageBoxRef.current
+    if (currentRef) {
+      // Small delay to allow viewport/layout to finish resizing
+      const timeoutId = setTimeout(() => {
+        if (currentRef) {
+          currentRef.scrollTop = currentRef.scrollHeight
+        }
+      }, 150)
+      return () => clearTimeout(timeoutId)
+    }
+  }, [isKeyboardOpen, inputAreaHeight, messageBoxRef])
 
   const { messages } = props
   return (
@@ -889,6 +905,7 @@ export function MessagesBodyMobile(props: { maxHeight?: number }) {
               messages={currentChat.messages}
               messageBoxRef={messageBoxRef}
               inputAreaHeight={inputAreaHeight}
+              isKeyboardOpen={isKeyboardOpen}
             />
           </Box>
           
