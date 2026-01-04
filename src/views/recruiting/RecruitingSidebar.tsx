@@ -263,8 +263,12 @@ export function RecruitingSidebar() {
           variant="permanent"
           open={false}
           sx={{
-            width: 0,
             display: { xs: "none", md: "block" },
+            width: 0,
+            "& .MuiDrawer-paper": {
+              width: 0,
+              pointerEvents: "none",
+            },
           }}
         />
       </>
