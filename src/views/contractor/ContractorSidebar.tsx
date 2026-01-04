@@ -224,14 +224,29 @@ export function ContractorSidebar() {
   // On mobile, use BottomSheet
   if (isMobile) {
     return (
-      <BottomSheet
-        open={open}
-        onClose={() => setOpen(false)}
-        title={t("contractorSidebar.filters", "Filters")}
-        maxHeight="90vh"
-      >
-        {sidebarContent}
-      </BottomSheet>
+      <>
+        <BottomSheet
+          open={open}
+          onClose={() => setOpen(false)}
+          title={t("contractorSidebar.filters", "Filters")}
+          maxHeight="90vh"
+        >
+          {sidebarContent}
+        </BottomSheet>
+        {/* Desktop drawer still needed for layout spacing */}
+        <Drawer
+          variant="permanent"
+          open={false}
+          sx={{
+            display: { xs: "none", md: "block" },
+            width: 0,
+            "& .MuiDrawer-paper": {
+              width: 0,
+              pointerEvents: "none",
+            },
+          }}
+        />
+      </>
     )
   }
 
