@@ -118,6 +118,7 @@ export function MarketListingRating(props: {
   response_rate: number | null
   badge_ids?: string[] | null
   display_limit?: number // Default: 3 for market listings
+  iconSize?: string | number // Size for badge icons
 }) {
   const {
     avg_rating,
@@ -129,6 +130,7 @@ export function MarketListingRating(props: {
     response_rate,
     badge_ids,
     display_limit = 3, // Default to 3 for market listings
+    iconSize,
   } = props
 
   // Create a rating object that matches the expected structure
@@ -149,7 +151,7 @@ export function MarketListingRating(props: {
   return (
     <Box display={"flex"} alignItems={"center"} gap={0.5} sx={{ lineHeight: 1, margin: 0, padding: 0 }}>
       <MarketRatingStars rating={rating} />
-      <MarketRatingCount rating={rating} badges={badges} />
+      <MarketRatingCount rating={rating} badges={badges} iconSize={iconSize} />
     </Box>
   )
 }
@@ -248,22 +250,23 @@ export function SellerRatingCount(props: {
 export function MarketRatingCount(props: {
   rating: Rating
   badges?: string[]
+  iconSize?: string | number
 }) {
-  const { rating, badges = [] } = props
+  const { rating, badges = [], iconSize } = props
 
   return (
     <Box display={"flex"} alignItems={"center"} gap={0.5} sx={{ lineHeight: 1, margin: 0, padding: 0 }}>
       <Box component="span" sx={{ lineHeight: 1, margin: 0, padding: 0 }}>
         ({rating.rating_count.toLocaleString(undefined)})
       </Box>
-      <BadgeDisplay badges={badges} />
+      <BadgeDisplay badges={badges} iconSize={iconSize} />
     </Box>
   )
 }
 
 // Badge display component that renders badges based on badge IDs
-export function BadgeDisplay(props: { badges: string[] }) {
-  const { badges } = props
+export function BadgeDisplay(props: { badges: string[]; iconSize?: string | number }) {
+  const { badges, iconSize } = props
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
 
@@ -279,7 +282,7 @@ export function BadgeDisplay(props: { badges: string[] }) {
         alignItems: "center",
         lineHeight: 1,
         "& svg, & .MuiSvgIcon-root": {
-          fontSize: "1em",
+          fontSize: iconSize || "1em",
           verticalAlign: "middle",
           display: "inline-flex",
         },
