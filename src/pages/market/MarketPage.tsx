@@ -179,6 +179,13 @@ export function MarketPage() {
                 <Grid item xs={12} sm="auto">
                   <Tabs
                     value={tabPage}
+                    onChange={(_, newValue) => {
+                      if (newValue === 0) {
+                        navigate("/market/services")
+                      } else if (newValue === 1) {
+                        navigate("/market")
+                      }
+                    }}
                     aria-label={t("ui.aria.orgInfoArea")}
                     variant="scrollable"
                     scrollButtons="auto"
@@ -196,16 +203,12 @@ export function MarketPage() {
                     <Tab
                       label={t("market.itemsTab")}
                       value={1}
-                      component={Link}
-                      {...a11yProps(0)}
-                      to={"/market"}
+                      {...a11yProps(1)}
                     />
                     <Tab
                       label={t("market.servicesTab")}
                       value={0}
-                      component={Link}
-                      {...a11yProps(1)}
-                      to={"/market/services"}
+                      {...a11yProps(0)}
                     />
                   </Tabs>
                 </Grid>
