@@ -167,10 +167,12 @@ export function MobileBottomNav() {
             backgroundColor: theme.palette.background.paper,
             height: 64, // Standard bottom nav height
             position: "relative",
+            paddingLeft: 0,
+            paddingRight: 0,
             "& .MuiBottomNavigationAction-root": {
               color: theme.palette.text.secondary,
               minWidth: 0,
-              padding: "6px 12px",
+              padding: "6px 0",
               "&.Mui-selected": {
                 color: theme.palette.primary.main,
               },
