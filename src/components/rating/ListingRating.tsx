@@ -119,6 +119,7 @@ export function MarketListingRating(props: {
   badge_ids?: string[] | null
   display_limit?: number // Default: 3 for market listings
   iconSize?: string | number // Size for badge icons
+  showBadges?: boolean // Whether to show badges (default: true for backward compatibility)
 }) {
   const {
     avg_rating,
@@ -131,6 +132,7 @@ export function MarketListingRating(props: {
     badge_ids,
     display_limit = 3, // Default to 3 for market listings
     iconSize,
+    showBadges = true, // Default to true for backward compatibility
   } = props
 
   // Create a rating object that matches the expected structure
@@ -151,7 +153,7 @@ export function MarketListingRating(props: {
   return (
     <Box display={"flex"} alignItems={"center"} gap={0.5} sx={{ lineHeight: 1, margin: 0, padding: 0 }}>
       <MarketRatingStars rating={rating} />
-      <MarketRatingCount rating={rating} badges={badges} iconSize={iconSize} />
+      <MarketRatingCount rating={rating} badges={showBadges ? badges : []} iconSize={iconSize} />
     </Box>
   )
 }
@@ -259,7 +261,7 @@ export function MarketRatingCount(props: {
       <Box component="span" sx={{ lineHeight: 1, margin: 0, padding: 0 }}>
         ({rating.rating_count.toLocaleString(undefined)})
       </Box>
-      <BadgeDisplay badges={badges} iconSize={iconSize} />
+      {badges.length > 0 && <BadgeDisplay badges={badges} iconSize={iconSize} />}
     </Box>
   )
 }

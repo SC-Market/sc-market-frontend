@@ -307,25 +307,6 @@ export const ItemListingBase = React.memo(
                     }}
                   />
                 )}
-                {/* Badges at the top right */}
-                {badges.length > 0 && (
-                  <Box
-                    sx={{
-                      position: "absolute",
-                      top: 4,
-                      right: listing.internal ? 60 : 4,
-                      zIndex: 2,
-                      display: "flex",
-                      gap: 0.5,
-                      alignItems: "center",
-                      "& svg": {
-                        fontSize: "1rem",
-                      },
-                    }}
-                  >
-                    <BadgeDisplay badges={badges} />
-                  </Box>
-                )}
                 {listing.internal && (
                   <Chip
                     label={t("market.internalListing")}
@@ -423,40 +404,51 @@ export const ItemListingBase = React.memo(
                     {listing.title} ({listing.item_type})
                   </Typography>
                   <Box sx={{ mb: 0 }}>
-                    <UnderlineLink
-                      component="span"
-                      display={"inline"}
-                      noWrap={true}
-                      variant={"caption"}
-                      onClick={(e) => {
-                        e.preventDefault()
-                        e.stopPropagation()
-                        navigate(
-                          user_seller
-                            ? `/user/${user_seller}`
-                            : `/contractor/${contractor_seller}`,
-                        )
-                      }}
+                    <Box
                       sx={{
-                        overflowX: "hidden",
-                        textOverflow: "ellipsis",
-                        whiteSpace: "nowrap",
-                        cursor: "pointer",
-                        fontSize: "0.7rem",
-                        display: "block",
-                        mb: 0,
-                        lineHeight: 1.2,
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 0.5,
+                        mb: 0.25,
+                        flexWrap: "wrap",
                       }}
                     >
-                      {user_seller || contractor_seller}
-                    </UnderlineLink>
+                      <UnderlineLink
+                        component="span"
+                        display={"inline"}
+                        noWrap={true}
+                        variant={"caption"}
+                        onClick={(e) => {
+                          e.preventDefault()
+                          e.stopPropagation()
+                          navigate(
+                            user_seller
+                              ? `/user/${user_seller}`
+                              : `/contractor/${contractor_seller}`,
+                          )
+                        }}
+                        sx={{
+                          overflowX: "hidden",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                          cursor: "pointer",
+                          fontSize: "0.7rem",
+                          lineHeight: 1.2,
+                        }}
+                      >
+                        {user_seller || contractor_seller}
+                      </UnderlineLink>
+                      {badges.length > 0 && (
+                        <BadgeDisplay badges={badges} iconSize="0.7rem" />
+                      )}
+                    </Box>
                     <Box 
                       sx={{ 
                         fontSize: "0.7rem", 
                         lineHeight: 1, 
                         display: "flex", 
                         alignItems: "center",
-                        mt: 0.25,
+                        mt: 0,
                         mb: 0,
                       }}
                     >
@@ -470,6 +462,7 @@ export const ItemListingBase = React.memo(
                         response_rate={listing.response_rate}
                         badge_ids={[]}
                         display_limit={0}
+                        showBadges={false}
                       />
                     </Box>
                   </Box>
@@ -672,31 +665,42 @@ export const ItemListingBase = React.memo(
                     </span>{" "}
                   </Typography>
                   <Box sx={{ mb: 0.5 }}>
-                    <UnderlineLink
-                      component="span"
-                      display={"inline"}
-                      noWrap={true}
-                      variant={"subtitle2"}
-                      onClick={(e) => {
-                        e.preventDefault()
-                        e.stopPropagation()
-                        navigate(
-                          user_seller
-                            ? `/user/${user_seller}`
-                            : `/contractor/${contractor_seller}`,
-                        )
-                      }}
+                    <Box
                       sx={{
-                        overflowX: "hidden",
-                        textOverflow: "ellipsis",
-                        whiteSpace: "nowrap",
-                        cursor: "pointer",
-                        display: "block",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 0.5,
                         mb: 0.5,
+                        flexWrap: "wrap",
                       }}
                     >
-                      {user_seller || contractor_seller}
-                    </UnderlineLink>
+                      <UnderlineLink
+                        component="span"
+                        display={"inline"}
+                        noWrap={true}
+                        variant={"subtitle2"}
+                        onClick={(e) => {
+                          e.preventDefault()
+                          e.stopPropagation()
+                          navigate(
+                            user_seller
+                              ? `/user/${user_seller}`
+                              : `/contractor/${contractor_seller}`,
+                          )
+                        }}
+                        sx={{
+                          overflowX: "hidden",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                          cursor: "pointer",
+                        }}
+                      >
+                        {user_seller || contractor_seller}
+                      </UnderlineLink>
+                      {badges.length > 0 && (
+                        <BadgeDisplay badges={badges} iconSize={isMobile ? "1.5em" : undefined} />
+                      )}
+                    </Box>
                     <Box 
                       sx={{ 
                         lineHeight: 1, 
@@ -715,6 +719,7 @@ export const ItemListingBase = React.memo(
                         badge_ids={listing.badges?.badge_ids || null}
                         display_limit={3}
                         iconSize={isMobile ? "1.5em" : undefined}
+                        showBadges={false}
                       />
                     </Box>
                   </Box>
