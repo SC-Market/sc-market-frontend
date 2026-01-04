@@ -73,6 +73,7 @@ import { Stack } from "@mui/system"
 import SCMarketLogo from "../../assets/scmarket-logo.png"
 import { useTranslation } from "react-i18next"
 import { useUnreadChatCount } from "../../hooks/messaging/UnreadChatCount"
+import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
 
 export function SidebarDropdown(props: SidebarItemProps) {
   const [open, setOpen] = useState(false)
@@ -409,6 +410,7 @@ export function Sidebar() {
 
   const xs = useMediaQuery(theme.breakpoints.down("sm"))
   const location = useLocation()
+  const bottomNavHeight = useBottomNavHeight()
   const prevXs = React.useRef<boolean | undefined>(undefined)
 
   // Auto-close drawer on mobile when screen size changes
@@ -568,6 +570,7 @@ export function Sidebar() {
           // borderLeft: 0,
           borderTop: 1,
           padding: 1,
+          paddingBottom: `calc(${theme.spacing(1)} + ${bottomNavHeight}px)`, // Account for bottom nav (dynamically adjusts when keyboard opens)
           borderColor: theme.palette.outline.main,
           overflow: "auto",
         }}

@@ -144,7 +144,7 @@ export function Messages() {
                 height: "100%", // Use 100% of parent instead of viewport height
                 display: "flex",
                 flexDirection: "column",
-                marginLeft: 0,
+                marginLeft: !isMobile && messageSidebarOpen ? messagingDrawerWidth : 0,
                 transition: isMobile
                   ? undefined
                   : theme.transitions.create("marginLeft", {
@@ -177,6 +177,35 @@ export function Messages() {
                     <MessagesBody />
                   )
                 ) : (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      height: "100%",
+                      width: "100%",
+                    }}
+                  >
+                    <EmptyMessages
+                      isChatList={false}
+                      showCreateAction={false}
+                      title={t("emptyStates.messages.selectChat", {
+                        defaultValue: "Select a chat to start messaging",
+                      })}
+                      description={undefined}
+                    />
+                  </Box>
+                )
+              ) : (
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    height: "100%",
+                    width: "100%",
+                  }}
+                >
                   <EmptyMessages
                     isChatList={false}
                     showCreateAction={false}
@@ -185,16 +214,7 @@ export function Messages() {
                     })}
                     description={undefined}
                   />
-                )
-              ) : (
-                <EmptyMessages
-                  isChatList={false}
-                  showCreateAction={false}
-                  title={t("emptyStates.messages.selectChat", {
-                    defaultValue: "Select a chat to start messaging",
-                  })}
-                  description={undefined}
-                />
+                </Box>
               )}
             </main>
           </MessageGroupCreateContext.Provider>
