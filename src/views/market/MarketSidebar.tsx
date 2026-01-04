@@ -357,14 +357,25 @@ export function MarketSidebar(props: { status?: boolean }) {
   // On mobile, use BottomSheet
   if (isMobile) {
     return (
-      <BottomSheet
-        open={open}
-        onClose={() => setOpen(false)}
-        title={t("market.filters", "Filters")}
-        maxHeight="90vh"
-      >
-        <MarketSearchArea status={status} />
-      </BottomSheet>
+      <>
+        <BottomSheet
+          open={open}
+          onClose={() => setOpen(false)}
+          title={t("market.filters", "Filters")}
+          maxHeight="90vh"
+        >
+          <MarketSearchArea status={status} />
+        </BottomSheet>
+        {/* Desktop drawer still needed for layout spacing */}
+        <Drawer
+          variant="permanent"
+          open={false}
+          sx={{
+            width: 0,
+            display: { xs: "none", md: "block" },
+          }}
+        />
+      </>
     )
   }
 
