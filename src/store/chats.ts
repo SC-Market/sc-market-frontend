@@ -1,10 +1,12 @@
-import { Chat } from "../datatypes/Chat"
+import { Chat, Message } from "../datatypes/Chat"
 import { serviceApi } from "./service"
 import { unwrapResponse } from "./api-utils"
 import {
   generateTempId,
   createOptimisticUpdate,
+  OptimisticPatch,
 } from "../util/optimisticUpdates"
+import type { RootState } from "./store"
 
 export const chatsApi = serviceApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -33,23 +35,45 @@ export const chatsApi = serviceApi.injectEndpoints({
         // for immediate feedback before socket event arrives
         await createOptimisticUpdate(
           (dispatch) => {
-            const patches: any[] = []
+            const patches: OptimisticPatch[] = []
 
-            // Get current user from state (if available)
-            const state = getState() as any
-            const currentUser = state?.auth?.user || state?.profile?.data
+            // Get current user from RTK Query cache
+            // The query key format is "profileGetUserProfile(undefined)"
+            const state = getState() as RootState
+            const serviceApiState = state[serviceApi.reducerPath]
+            let profileData = serviceApiState?.queries?.["profileGetUserProfile(undefined)"]?.data as 
+              | { username?: string } 
+              | undefined
+            
+            // If not found, try alternative query key formats
+            if (!profileData?.username) {
+              const profileQueryKey = Object.keys(serviceApiState?.queries || {}).find(
+                (key) => key.includes("profileGetUserProfile") && serviceApiState.queries[key]?.data
+              )
+              if (profileQueryKey) {
+                profileData = serviceApiState.queries[profileQueryKey]?.data as { username?: string } | undefined
+              }
+            }
+            
+            const currentUser = profileData?.username || null
 
             // Optimistically add message to chat
             const chatPatch = dispatch(
               chatsApi.util.updateQueryData("getChatByID", chat_id, (draft) => {
-                const tempMessage = {
-                  author: currentUser?.username || null,
+                const tempMessage: Message = {
+                  author: currentUser,
                   content: content,
                   timestamp: Date.now(),
                   chat_id: chat_id,
                 }
                 draft.messages = draft.messages || []
-                draft.messages.push(tempMessage as any)
+                // Check if message already exists (avoid duplicates) - use content + author since timestamp is server-side
+                const messageExists = draft.messages.some(
+                  (msg) => msg.content === content && msg.author === currentUser
+                )
+                if (!messageExists) {
+                  draft.messages.push(tempMessage)
+                }
               }),
             )
             patches.push(chatPatch)
@@ -60,7 +84,8 @@ export const chatsApi = serviceApi.injectEndpoints({
           dispatch,
         )
       },
-      invalidatesTags: ["Chat" as const],
+      // Don't invalidate - we handle updates via optimistic updates and socket.io
+      // Invalidating would cause refetch and overwrite optimistic updates
       transformResponse: unwrapResponse,
     }),
     getChatByOrderID: builder.query<Chat, string>({

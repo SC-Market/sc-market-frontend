@@ -27,8 +27,11 @@ export function Root(props: { children: React.ReactNode }) {
       id={"rootarea"}
       sx={{
         display: "flex",
+        flexDirection: "row", // Horizontal layout for sidebar and main content
         background: theme.palette.background.default,
         backgroundSize: "400px",
+        height: "100vh",
+        overflow: "hidden", // Prevent root from scrolling
         // backgroundSize: 'cover',
       }}
     >
@@ -45,9 +48,30 @@ export function Root(props: { children: React.ReactNode }) {
       )}
       <Navbar />
       <Sidebar />
-      {props.children}
-      {!isMessagingPage && <PreferencesButton />}
-      <MobileBottomNav />
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column", // Vertical layout for main content
+          flex: 1,
+          minHeight: 0, // Allow flex item to shrink below content size
+          overflow: "hidden", // Prevent this container from scrolling
+          position: "relative", // For absolute positioning of bottom nav
+          // Add padding bottom to account for bottom nav (64px height on mobile)
+          paddingBottom: { xs: "64px", sm: 0 },
+        }}
+      >
+        <Box
+          sx={{
+            flex: 1,
+            minHeight: 0, // Allow flex item to shrink
+            overflow: "auto", // Main content can scroll internally
+          }}
+        >
+          {props.children}
+        </Box>
+        {!isMessagingPage && <PreferencesButton />}
+        <MobileBottomNav />
+      </Box>
     </Box>
   )
 }
