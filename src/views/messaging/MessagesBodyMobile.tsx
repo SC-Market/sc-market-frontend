@@ -529,8 +529,7 @@ function MessageSendAreaMobile(props: {
         gap: 1,
         bgcolor: theme.palette.background.paper,
         alignItems: "flex-end",
-        // Add safe area padding for iOS keyboard
-        paddingBottom: `calc(1.5rem + ${safeAreaBottom})`,
+        paddingBottom: 2,
       }}
     >
       <TextField
@@ -882,17 +881,17 @@ export function MessagesBodyMobile(props: { maxHeight?: number }) {
             />
           </Box>
           
-          {/* Dynamic container for FAB and input area - absolute when closed, fixed when keyboard open */}
+          {/* Dynamic container for FAB and input area - always fixed, positioned above bottom nav or keyboard */}
           <Box
             ref={inputAreaRef}
             sx={{
-              position: isKeyboardOpen ? "fixed" : "absolute",
+              position: "fixed",
               bottom: isKeyboardOpen 
-                ? `${keyboardHeight}px`
-                : `calc(64px + env(safe-area-inset-bottom))`,
+                ? `${keyboardHeight}px` // Position right above keyboard when open
+                : `calc(64px + env(safe-area-inset-bottom))`, // Position above bottom nav (64px height) + safe area when closed
               left: 0,
               right: 0,
-              zIndex: theme.zIndex.drawer + 2,
+              zIndex: theme.zIndex.drawer + 2, // Above bottom nav (drawer + 1) but below modals
               display: "flex",
               flexDirection: "column",
               transition: "bottom 0.3s ease-in-out",
