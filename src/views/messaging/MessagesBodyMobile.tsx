@@ -492,11 +492,13 @@ function MessagesAreaMobile(props: {
 function MessageSendAreaMobile(props: { 
   onSend: (content: string) => void
   isKeyboardOpen: boolean
+  inputRef?: React.RefObject<HTMLDivElement | null>
 }) {
   const theme = useTheme<ExtendedTheme>()
   const [textEntry, setTextEntry] = useState("")
   const { t } = useTranslation()
-  const inputRef = useRef<HTMLDivElement>(null)
+  const localInputRef = useRef<HTMLDivElement>(null)
+  const inputRef = props.inputRef || localInputRef
 
   const handleSend = () => {
     if (textEntry.trim()) {
@@ -543,6 +545,22 @@ function MessageSendAreaMobile(props: {
           setTextEntry(event.target.value)
         }}
         onKeyPress={handleKeyPress}
+        onFocus={(e) => {
+          // Scroll input into view and trigger viewport update
+          const inputElement = e.target as HTMLElement
+          inputElement.scrollIntoView({ behavior: "smooth", block: "end" })
+          
+          // Small delay to allow browser to adjust viewport after focus and scroll
+          setTimeout(() => {
+            if (window.visualViewport) {
+              // Trigger viewport events to update position
+              window.visualViewport.dispatchEvent(new Event("resize"))
+              window.visualViewport.dispatchEvent(new Event("scroll"))
+            }
+            // Also trigger window resize as fallback
+            window.dispatchEvent(new Event("resize"))
+          }, 150)
+        }}
         placeholder={t("MessagesBody.typeMessage") || "Type a message..."}
       />
       <IconButton
@@ -653,49 +671,55 @@ export function MessagesBodyMobile(props: { maxHeight?: number }) {
   const { isSuccess } = useGetUserProfileQuery()
   const { data: profile } = useGetUserProfileQuery()
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false)
-  const [keyboardHeight, setKeyboardHeight] = useState(0)
+  const [keyboardTop, setKeyboardTop] = useState(0)
   const inputAreaRef = useRef<HTMLDivElement>(null)
   const [inputAreaHeight, setInputAreaHeight] = useState(0)
 
-  // Track keyboard visibility and height using visualViewport API
+  // Track keyboard position using visualViewport API
+  // With overlay mode, we calculate the keyboard top position from the visible viewport
   useEffect(() => {
-    const handleResize = () => {
-      if (window.visualViewport) {
-        const viewportHeight = window.visualViewport.height
-        const screenHeight = window.innerHeight
-        const viewportTop = window.visualViewport.offsetTop
-        const viewportBottom = viewportTop + viewportHeight
-        
-        // With overlay mode, check if viewport is scrolled or resized
-        // Keyboard is likely open if viewport bottom is significantly less than screen height
-        const keyboardIsOpen = viewportBottom < screenHeight * 0.9 || viewportHeight < screenHeight * 0.75
-        
-        setIsKeyboardOpen(keyboardIsOpen)
-        
-        // Calculate position: when keyboard overlays, position input at bottom of visible viewport
-        // The visible viewport bottom is at (offsetTop + height) from the top
-        // So from the bottom, it's: screenHeight - (offsetTop + height)
-        if (keyboardIsOpen) {
-          // Position input area at the bottom of the visible viewport (right above keyboard)
-          // This is the distance from screen bottom to visible viewport bottom
-          const distanceFromBottom = screenHeight - viewportBottom
-          setKeyboardHeight(Math.max(0, distanceFromBottom))
+    const updateKeyboardPosition = () => {
+      // Use requestAnimationFrame to ensure we get the latest viewport values
+      requestAnimationFrame(() => {
+        if (window.visualViewport) {
+          const viewport = window.visualViewport
+          const screenHeight = window.innerHeight
+          const viewportHeight = viewport.height
+          const viewportTop = viewport.offsetTop
+          
+          // Calculate the bottom of the visible viewport (where keyboard starts)
+          // visibleBottom = viewportTop + viewportHeight (distance from top of screen)
+          // keyboardTop from bottom = screenHeight - visibleBottom
+          const visibleBottom = viewportTop + viewportHeight
+          const keyboardTopFromBottom = screenHeight - visibleBottom
+          
+          // Keyboard is open if visible area is significantly smaller than screen
+          // or if viewport has scrolled (offsetTop > 0) or keyboard height is significant
+          const keyboardIsOpen = viewportHeight < screenHeight * 0.75 || viewportTop > 0 || keyboardTopFromBottom > 50
+          
+          setIsKeyboardOpen(keyboardIsOpen)
+          
+          if (keyboardIsOpen) {
+            // Position input area at the top of the keyboard
+            // This is the distance from screen bottom to keyboard top
+            setKeyboardTop(Math.max(0, keyboardTopFromBottom))
+          } else {
+            setKeyboardTop(0)
+          }
         } else {
-          setKeyboardHeight(0)
+          // Fallback for browsers without visualViewport
+          const currentHeight = window.innerHeight
+          const initialHeight = (window as any).initialInnerHeight || currentHeight
+          const keyboardIsOpen = currentHeight < initialHeight * 0.8
+          setIsKeyboardOpen(keyboardIsOpen)
+          
+          if (keyboardIsOpen) {
+            setKeyboardTop(initialHeight - currentHeight)
+          } else {
+            setKeyboardTop(0)
+          }
         }
-      } else {
-        // Fallback for browsers without visualViewport
-        const currentHeight = window.innerHeight
-        const initialHeight = (window as any).initialInnerHeight || currentHeight
-        const keyboardIsOpen = currentHeight < initialHeight * 0.8
-        setIsKeyboardOpen(keyboardIsOpen)
-        
-        if (keyboardIsOpen) {
-          setKeyboardHeight(initialHeight - currentHeight)
-        } else {
-          setKeyboardHeight(0)
-        }
-      }
+      })
     }
     
     // Store initial innerHeight for fallback comparison
@@ -704,19 +728,24 @@ export function MessagesBodyMobile(props: { maxHeight?: number }) {
     }
 
     // Initial check
-    handleResize()
+    updateKeyboardPosition()
 
     if (window.visualViewport) {
-      window.visualViewport.addEventListener("resize", handleResize)
-      window.visualViewport.addEventListener("scroll", handleResize)
+      // Listen to viewport changes (resize and scroll)
+      window.visualViewport.addEventListener("resize", updateKeyboardPosition)
+      window.visualViewport.addEventListener("scroll", updateKeyboardPosition)
+      // Also listen to window resize as fallback
+      window.addEventListener("resize", updateKeyboardPosition)
+      
       return () => {
-        window.visualViewport?.removeEventListener("resize", handleResize)
-        window.visualViewport?.removeEventListener("scroll", handleResize)
+        window.visualViewport?.removeEventListener("resize", updateKeyboardPosition)
+        window.visualViewport?.removeEventListener("scroll", updateKeyboardPosition)
+        window.removeEventListener("resize", updateKeyboardPosition)
       }
     } else {
-      window.addEventListener("resize", handleResize)
+      window.addEventListener("resize", updateKeyboardPosition)
       return () => {
-        window.removeEventListener("resize", handleResize)
+        window.removeEventListener("resize", updateKeyboardPosition)
       }
     }
   }, [])
@@ -887,7 +916,7 @@ export function MessagesBodyMobile(props: { maxHeight?: number }) {
             sx={{
               position: "fixed",
               bottom: isKeyboardOpen 
-                ? `${keyboardHeight}px` // Position right above keyboard when open
+                ? `${keyboardTop}px` // Position at keyboard top when open (calculated from visualViewport)
                 : `calc(64px + env(safe-area-inset-bottom))`, // Position above bottom nav (64px height) + safe area when closed
               left: 0,
               right: 0,
@@ -928,6 +957,7 @@ export function MessagesBodyMobile(props: { maxHeight?: number }) {
             <MessageSendAreaMobile 
               onSend={onSend} 
               isKeyboardOpen={isKeyboardOpen}
+              inputRef={inputAreaRef}
             />
           </Box>
           
