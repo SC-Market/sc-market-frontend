@@ -1,5 +1,6 @@
 import {
   Avatar,
+  Badge,
   Box,
   Chip,
   Collapse,
@@ -71,6 +72,7 @@ import { CURRENT_CUSTOM_ORG } from "../../hooks/contractor/CustomDomain"
 import { Stack } from "@mui/system"
 import SCMarketLogo from "../../assets/scmarket-logo.png"
 import { useTranslation } from "react-i18next"
+import { useUnreadChatCount } from "../../hooks/messaging/UnreadChatCount"
 
 export function SidebarDropdown(props: SidebarItemProps) {
   const [open, setOpen] = useState(false)
@@ -177,6 +179,8 @@ export function SidebarLinkBody(props: SidebarItemProps & { to: string }) {
 
   const xs = useMediaQuery(theme.breakpoints.down("sm"))
   const [drawerOpen, setDrawerOpen] = useDrawerOpen()
+  const unreadChatCount = useUnreadChatCount()
+  const isMessagesLink = props.to === "/messages"
 
   const contrast = theme.palette.getContrastText(
     theme.palette.background.sidebar || "#000000",
@@ -212,7 +216,24 @@ export function SidebarLinkBody(props: SidebarItemProps & { to: string }) {
             fontSize: "0.9em",
           }}
         >
-          {icon}
+          {isMessagesLink && unreadChatCount > 0 ? (
+            <Badge
+              badgeContent={unreadChatCount}
+              color="primary"
+              sx={{
+                "& .MuiBadge-badge": {
+                  fontSize: "0.7rem",
+                  minWidth: "18px",
+                  height: "18px",
+                  padding: "0 6px",
+                },
+              }}
+            >
+              {icon}
+            </Badge>
+          ) : (
+            icon
+          )}
         </ListItemIcon>
         <ListItemText sx={{ marginLeft: -2 }}>
           <Typography

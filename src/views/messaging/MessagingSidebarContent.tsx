@@ -1,6 +1,7 @@
 import {
   Avatar,
   AvatarGroup,
+  Badge,
   Box,
   Button,
   Chip,
@@ -14,7 +15,7 @@ import {
   useMediaQuery,
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
-import React, { useState } from "react"
+import React, { useState, useMemo } from "react"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useCurrentChatID } from "../../hooks/messaging/CurrentChatID"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
@@ -39,9 +40,10 @@ import {
   EmptySearchResults,
 } from "../../components/empty-states"
 import { PullToRefresh } from "../../components/gestures"
+import { useGetNotificationsQuery } from "../../store/notification"
 
 // Single chat entry in the chat list
-function ChatEntry(props: { chat: Chat }) {
+function ChatEntry(props: { chat: Chat; unreadCount?: number }) {
   const theme: ExtendedTheme = useTheme<ExtendedTheme>()
   const { chat_id } = useParams<{ chat_id?: string }>()
   const [currentChatID, setCurrentChatID] = useCurrentChatID()
@@ -53,6 +55,21 @@ function ChatEntry(props: { chat: Chat }) {
 
   const isSelected =
     chat_id === props.chat.chat_id || currentChatID === props.chat.chat_id
+
+  // Query unread notifications for this specific chat
+  // Query by entityId (chat_id) - this should return notifications for this chat
+  const { data: chatNotificationsData } = useGetNotificationsQuery({
+    page: 0,
+    pageSize: 100,
+    entityId: props.chat.chat_id,
+  }, { skip: !props.chat.chat_id })
+
+  // Calculate unread count from notifications
+  const unreadCount = useMemo(() => {
+    if (props.unreadCount !== undefined) return props.unreadCount
+    if (!chatNotificationsData?.notifications) return 0
+    return chatNotificationsData.notifications.filter((n) => !n.read).length
+  }, [props.unreadCount, chatNotificationsData])
 
   // Separate user and contractor participants
   const userParticipants = props.chat.participants.filter(
@@ -126,31 +143,48 @@ function ChatEntry(props: { chat: Chat }) {
         <Box
           sx={{ marginLeft: 1, overflow: "hidden", flexGrow: 1, minWidth: 0 }}
         >
-          <Typography
-            noWrap
-            align={"left"}
-            color={"text.secondary"}
-            sx={{ fontWeight: 500 }}
-          >
-            {props.chat.title || (
-              <>
-                {otherUsers.length > 0 && (
-                  <span>{otherUsers.map((x) => x.username).join(", ")}</span>
-                )}
-                {contractorParticipants.length > 0 && (
-                  <>
-                    {otherUsers.length > 0 && ", "}
-                    {contractorParticipants.map((c) => c.name).join(", ")}
-                  </>
-                )}
-              </>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <Typography
+              noWrap
+              align={"left"}
+              color={unreadCount > 0 ? "primary.main" : "text.secondary"}
+              sx={{ fontWeight: unreadCount > 0 ? 600 : 500 }}
+            >
+              {props.chat.title || (
+                <>
+                  {otherUsers.length > 0 && (
+                    <span>{otherUsers.map((x) => x.username).join(", ")}</span>
+                  )}
+                  {contractorParticipants.length > 0 && (
+                    <>
+                      {otherUsers.length > 0 && ", "}
+                      {contractorParticipants.map((c) => c.name).join(", ")}
+                    </>
+                  )}
+                </>
+              )}
+            </Typography>
+            {unreadCount > 0 && (
+              <Badge
+                variant="dot"
+                color="primary"
+                sx={{
+                  "& .MuiBadge-badge": {
+                    right: -4,
+                    top: 4,
+                  },
+                }}
+              />
             )}
-          </Typography>
+          </Box>
           <Typography
             noWrap
             align={"left"}
-            color={"text.primary"}
-            sx={{ fontSize: "0.875rem" }}
+            color={unreadCount > 0 ? "text.primary" : "text.secondary"}
+            sx={{ 
+              fontSize: "0.875rem",
+              fontWeight: unreadCount > 0 ? 500 : 400,
+            }}
           >
             {props.chat.messages.length > 0
               ? (props.chat.messages[props.chat.messages.length - 1].author ||
@@ -179,6 +213,12 @@ export function MessagingSidebarContent(
   const { data: chats, isLoading, isFetching, refetch } = useGetMyChatsQuery()
   const [searchQuery, setSearchQuery] = useState("")
   const [drawerOpen, setDrawerOpen] = useDrawerOpen()
+
+  // Create a map of chat_id -> unread count
+  // We'll query notifications per chat using entityId for accurate counts
+  // This is done in the ChatEntry component to avoid N+1 queries
+  // For now, we'll pass 0 and let ChatEntry query its own notifications
+  const unreadCountsByChat: Record<string, number> = {}
 
   const content = (
     <Box
@@ -311,7 +351,12 @@ export function MessagingSidebarContent(
                   }
                 })
               })
-              .map((chat) => <ChatEntry chat={chat} key={chat.chat_id} />)
+              .map((chat) => (
+                <ChatEntry
+                  chat={chat}
+                  key={chat.chat_id}
+                />
+              ))
           )}
         </List>
       </PullToRefresh>

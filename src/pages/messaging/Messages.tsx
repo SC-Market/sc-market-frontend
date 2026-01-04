@@ -17,6 +17,10 @@ import { messagingDrawerWidth } from "../../views/messaging/MessagingSidebar"
 import { MessageThreadSkeleton } from "../../components/skeletons"
 import { EmptyMessages } from "../../components/empty-states"
 import { useTranslation } from "react-i18next"
+import {
+  useGetNotificationsQuery,
+  useNotificationUpdateMutation,
+} from "../../store/notification"
 
 export function Messages() {
   const { chat_id } = useParams<{ chat_id: string }>()
@@ -39,6 +43,34 @@ export function Messages() {
   } = useGetChatByIDQuery(chat_id!, {
     skip: !chat_id,
   })
+
+  // Get and mark as read message notifications for this chat
+  const { data: notificationsData } = useGetNotificationsQuery({
+    page: 0,
+    pageSize: 100,
+    entityId: chat_id,
+  }, { skip: !chat_id })
+  const notifications = notificationsData?.notifications || []
+  const [updateNotification] = useNotificationUpdateMutation()
+
+  // Mark chat notifications as read when viewing the chat
+  useEffect(() => {
+    if (chat_id && notifications.length > 0) {
+      const unreadNotifications = notifications.filter((n) => !n.read)
+      if (unreadNotifications.length > 0) {
+        // Mark each unread notification for this chat as read
+        unreadNotifications.forEach((notif) => {
+          updateNotification({
+            notification_id: notif.notification_id,
+            read: true,
+          }).catch((err) => {
+            // Silently fail - notifications will update on next query
+            console.error("Failed to mark notification as read:", err)
+          })
+        })
+      }
+    }
+  }, [chat_id, notifications, updateNotification])
 
   useEffect(() => {
     if (chatObj) {
