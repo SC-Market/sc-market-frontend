@@ -578,18 +578,12 @@ export function OffersViewPaginated(props: {
                 },
               }}
             >
-              <Tab
-                label={t("OffersViewPaginated.all")}
-                icon={<Chip label={totalCount} size={"small"} />}
-                {...a11yProps(0)}
-                onClick={() => setStatusFilter(null)}
-              />
               {tabs.map(([id, tag], index) => (
                 <Tab
                   key={id || "all"}
                   label={tag}
                   icon={<Chip label={id ? (totals.get(id) || 0) : totalCount} size={"small"} />}
-                  {...a11yProps(index + 1)}
+                  {...a11yProps(index)}
                   onClick={() => setStatusFilter(id)}
                 />
               ))}
