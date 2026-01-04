@@ -92,6 +92,27 @@ export function RecruitingSidebar() {
         borderColor: theme.palette.outline.main,
       }}
     >
+      {/* Close button for desktop drawer */}
+      {!isMobile && open && (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            marginBottom: theme.spacing(1),
+          }}
+        >
+          <IconButton
+            color="secondary"
+            aria-label={t("recruiting_sidebar.close", "Close filters")}
+            onClick={() => {
+              setOpen(false)
+            }}
+            size="small"
+          >
+            <CloseIcon />
+          </IconButton>
+        </Box>
+      )}
       <Grid container spacing={theme.layoutSpacing.layout}>
         <Grid item xs={12}>
           <TextField
