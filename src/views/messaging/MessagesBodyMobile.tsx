@@ -568,15 +568,30 @@ function DateTimePickerBottomSheetMobile(props: {
   dateTime: moment.Moment
   setDateTime: (dateTime: moment.Moment) => void
 }) {
+  const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
   const { dateTime, setDateTime, open, onClose } = props
+  const [pickerOpen, setPickerOpen] = useState(false)
 
+  // Track when picker opens
+  const handlePickerOpen = () => {
+    setPickerOpen(true)
+  }
+
+  // Track when picker closes
+  const handlePickerClose = () => {
+    setPickerOpen(false)
+  }
+
+  // Keep bottom sheet mounted and visible when picker opens
+  // The MUI DateTimePicker modal will appear on top with higher z-index
   return (
     <BottomSheet
       open={open}
       onClose={onClose}
       title={t("MessagesBody.dateTimePicker", "Date & Time Picker")}
       maxHeight="90vh"
+      disableBackdropClose={pickerOpen}
     >
       <Stack spacing={2}>
         <DateTimePicker
@@ -586,10 +601,18 @@ function DateTimePickerBottomSheetMobile(props: {
               setDateTime(newValue)
             }
           }}
+          onOpen={handlePickerOpen}
+          onClose={handlePickerClose}
           slotProps={{
             textField: {
               size: "medium",
               fullWidth: true,
+            },
+            // Ensure the picker modal appears above the bottom sheet
+            dialog: {
+              sx: {
+                zIndex: theme.zIndex.modal + 10,
+              },
             },
           }}
         />
@@ -631,22 +654,48 @@ export function MessagesBodyMobile(props: { maxHeight?: number }) {
   const { isSuccess } = useGetUserProfileQuery()
   const { data: profile } = useGetUserProfileQuery()
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false)
+  const [keyboardHeight, setKeyboardHeight] = useState(0)
   const inputAreaRef = useRef<HTMLDivElement>(null)
   const [inputAreaHeight, setInputAreaHeight] = useState(0)
 
-  // Track keyboard visibility using visualViewport API
+  // Track keyboard visibility and height using visualViewport API
   useEffect(() => {
     const handleResize = () => {
       if (window.visualViewport) {
-        // Compare visual viewport height to initial browser viewport height
-        // If significantly less (e.g., < 80%), assume keyboard is open
-        const keyboardIsOpen = window.visualViewport.height < window.innerHeight * 0.8
+        const viewportHeight = window.visualViewport.height
+        const screenHeight = window.innerHeight
+        const viewportTop = window.visualViewport.offsetTop
+        const viewportBottom = viewportTop + viewportHeight
+        
+        // With overlay mode, check if viewport is scrolled or resized
+        // Keyboard is likely open if viewport bottom is significantly less than screen height
+        const keyboardIsOpen = viewportBottom < screenHeight * 0.9 || viewportHeight < screenHeight * 0.75
+        
         setIsKeyboardOpen(keyboardIsOpen)
+        
+        // Calculate position: when keyboard overlays, position input at bottom of visible viewport
+        // The visible viewport bottom is at (offsetTop + height) from the top
+        // So from the bottom, it's: screenHeight - (offsetTop + height)
+        if (keyboardIsOpen) {
+          // Position input area at the bottom of the visible viewport (right above keyboard)
+          // This is the distance from screen bottom to visible viewport bottom
+          const distanceFromBottom = screenHeight - viewportBottom
+          setKeyboardHeight(Math.max(0, distanceFromBottom))
+        } else {
+          setKeyboardHeight(0)
+        }
       } else {
         // Fallback for browsers without visualViewport
-        // Compare current innerHeight to initial innerHeight (stored on mount)
-        const keyboardIsOpen = window.innerHeight < (window as any).initialInnerHeight * 0.8
+        const currentHeight = window.innerHeight
+        const initialHeight = (window as any).initialInnerHeight || currentHeight
+        const keyboardIsOpen = currentHeight < initialHeight * 0.8
         setIsKeyboardOpen(keyboardIsOpen)
+        
+        if (keyboardIsOpen) {
+          setKeyboardHeight(initialHeight - currentHeight)
+        } else {
+          setKeyboardHeight(0)
+        }
       }
     }
     
@@ -655,10 +704,15 @@ export function MessagesBodyMobile(props: { maxHeight?: number }) {
       (window as any).initialInnerHeight = window.innerHeight
     }
 
+    // Initial check
+    handleResize()
+
     if (window.visualViewport) {
       window.visualViewport.addEventListener("resize", handleResize)
+      window.visualViewport.addEventListener("scroll", handleResize)
       return () => {
         window.visualViewport?.removeEventListener("resize", handleResize)
+        window.visualViewport?.removeEventListener("scroll", handleResize)
       }
     } else {
       window.addEventListener("resize", handleResize)
@@ -834,14 +888,14 @@ export function MessagesBodyMobile(props: { maxHeight?: number }) {
             sx={{
               position: isKeyboardOpen ? "fixed" : "absolute",
               bottom: isKeyboardOpen 
-                ? 0 
+                ? `${keyboardHeight}px`
                 : `calc(64px + env(safe-area-inset-bottom))`,
               left: 0,
               right: 0,
               zIndex: theme.zIndex.drawer + 2,
               display: "flex",
               flexDirection: "column",
-              transition: "transform 0.3s ease-in-out",
+              transition: "bottom 0.3s ease-in-out",
             }}
           >
             {/* FAB for date/time picker - fixed, moves with input area */}

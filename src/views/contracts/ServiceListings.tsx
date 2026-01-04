@@ -25,7 +25,6 @@ import { dateDiffInDays } from "../market/MarketListingView"
 import { ListingNameAndRating } from "../../components/rating/ListingRating"
 import { ServiceListingSkeleton } from "../../components/skeletons"
 import { EmptyListings } from "../../components/empty-states"
-import { PullToRefresh } from "../../components/gestures"
 import { CURRENT_CUSTOM_ORG } from "../../hooks/contractor/CustomDomain"
 import { Stack } from "@mui/system"
 import { useTheme } from "@mui/material/styles"
@@ -358,37 +357,30 @@ export function ServiceListings(props: { user?: string; contractor?: string }) {
         <div ref={ref} />
       </Grid>
       <Grid item xs={12}>
-        <PullToRefresh
-          onRefresh={async () => {
-            await refetch()
-          }}
-          enabled={isMobile}
-        >
-          <Grid container spacing={theme.layoutSpacing.layout}>
-            {filteredServices.map((service, index) => (
-              <ServiceListing
-                service={service}
-                key={service.service_id}
-                index={index}
+        <Grid container spacing={theme.layoutSpacing.layout}>
+          {filteredServices.map((service, index) => (
+            <ServiceListing
+              service={service}
+              key={service.service_id}
+              index={index}
+            />
+          ))}
+          {servicesResponse && filteredServices.length === 0 && (
+            <Grid item xs={12}>
+              <EmptyListings
+                isSearchResult={false}
+                title={t("emptyStates.services.noServices", {
+                  defaultValue: "No services yet",
+                })}
+                description={t("emptyStates.services.noServicesDescription", {
+                  defaultValue:
+                    "Create your first service to start offering your expertise",
+                })}
+                showCreateAction={false}
               />
-            ))}
-            {servicesResponse && filteredServices.length === 0 && (
-              <Grid item xs={12}>
-                <EmptyListings
-                  isSearchResult={false}
-                  title={t("emptyStates.services.noServices", {
-                    defaultValue: "No services yet",
-                  })}
-                  description={t("emptyStates.services.noServicesDescription", {
-                    defaultValue:
-                      "Create your first service to start offering your expertise",
-                  })}
-                  showCreateAction={false}
-                />
-              </Grid>
-            )}
-          </Grid>
-        </PullToRefresh>
+            </Grid>
+          )}
+        </Grid>
       </Grid>
       <Grid item xs={12}>
         <Divider light />

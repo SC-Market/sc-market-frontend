@@ -147,7 +147,7 @@ export function MarketListingRating(props: {
   const badges = prioritizeBadges(allBadges, display_limit)
 
   return (
-    <Box display={"flex"} alignItems={"center"}>
+    <Box display={"flex"} alignItems={"center"} gap={0.5} sx={{ lineHeight: 1 }}>
       <MarketRatingStars rating={rating} />
       <MarketRatingCount rating={rating} badges={badges} />
     </Box>
@@ -190,19 +190,22 @@ export function MarketRatingStars(props: { rating: Rating }) {
 
   // Market listings use 0-5 scale from market_search view
   return (
-    <MuiRating
-      readOnly
-      precision={0.1}
-      value={rating.avg_rating}
-      icon={<StarRounded fontSize="inherit" />}
-      emptyIcon={
-        <StarRounded
-          style={{ color: theme.palette.text.primary }}
-          fontSize="inherit"
-        />
-      }
-      size={"small"}
-    />
+    <Box sx={{ display: "flex", alignItems: "center", lineHeight: 1 }}>
+      <MuiRating
+        readOnly
+        precision={0.1}
+        value={rating.avg_rating}
+        icon={<StarRounded fontSize="inherit" />}
+        emptyIcon={
+          <StarRounded
+            style={{ color: theme.palette.text.primary }}
+            fontSize="inherit"
+          />
+        }
+        size={"small"}
+        sx={{ "& .MuiRating-icon": { fontSize: "inherit" } }}
+      />
+    </Box>
   )
 }
 
@@ -249,10 +252,12 @@ export function MarketRatingCount(props: {
   const { rating, badges = [] } = props
 
   return (
-    <>
-      ({rating.rating_count.toLocaleString(undefined)}){" "}
+    <Box display={"flex"} alignItems={"center"} gap={0.5} sx={{ lineHeight: 1 }}>
+      <Box component="span" sx={{ lineHeight: 1 }}>
+        ({rating.rating_count.toLocaleString(undefined)})
+      </Box>
       <BadgeDisplay badges={badges} />
-    </>
+    </Box>
   )
 }
 
@@ -267,7 +272,23 @@ function BadgeDisplay(props: { badges: string[] }) {
 
   return (
     <Box
-      sx={{ display: "flex", flexWrap: "wrap", gap: 0.5, alignItems: "center" }}
+      sx={{
+        display: "flex",
+        flexWrap: "wrap",
+        gap: 0.5,
+        alignItems: "center",
+        lineHeight: 1,
+        "& svg, & .MuiSvgIcon-root": {
+          fontSize: "1em",
+          verticalAlign: "middle",
+          display: "inline-flex",
+        },
+        "& > *": {
+          display: "inline-flex",
+          alignItems: "center",
+          lineHeight: 1,
+        },
+      }}
     >
       {/* Rating badges */}
       {badges.includes(BADGE_RATING_99_9) && (
@@ -289,6 +310,8 @@ function BadgeDisplay(props: { badges: string[] }) {
             <AutoAwesomeRounded
               sx={{
                 fill: `url(#${gradientId})`,
+                fontSize: "inherit",
+                verticalAlign: "middle",
               }}
             />
           </Box>
