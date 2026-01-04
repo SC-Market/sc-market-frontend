@@ -22,25 +22,14 @@ export function MessagingSidebar() {
   // On mobile, use BottomSheet instead of temporary drawer
   if (isMobile) {
     return (
-      <>
-        <BottomSheet
-          open={messagingSidebar ?? false}
-          onClose={() => setMessagingSidebar(false)}
-          title={t("MessagingSidebar.title", "Messages")}
-          maxHeight="90vh"
-        >
-          <MessagingSidebarContent />
-        </BottomSheet>
-        {/* Desktop drawer still needed for layout spacing */}
-        <Drawer
-          variant="permanent"
-          open={false}
-          sx={{
-            width: 0,
-            display: { xs: "none", md: "block" },
-          }}
-        />
-      </>
+      <BottomSheet
+        open={messagingSidebar ?? false}
+        onClose={() => setMessagingSidebar(false)}
+        title={t("MessagingSidebar.title", "Messages")}
+        maxHeight="90vh"
+      >
+        <MessagingSidebarContent />
+      </BottomSheet>
     )
   }
 
