@@ -697,7 +697,13 @@ export const ItemListingBase = React.memo(
                     >
                       {user_seller || contractor_seller}
                     </UnderlineLink>
-                    <Box sx={{ lineHeight: 1, display: "flex", alignItems: "center" }}>
+                    <Box 
+                      sx={{ 
+                        lineHeight: 1, 
+                        display: "flex", 
+                        alignItems: "center",
+                      }}
+                    >
                       <MarketListingRating
                         avg_rating={listing.avg_rating}
                         rating_count={listing.rating_count}
@@ -708,6 +714,7 @@ export const ItemListingBase = React.memo(
                         response_rate={listing.response_rate}
                         badge_ids={listing.badges?.badge_ids || null}
                         display_limit={3}
+                        iconSize={isMobile ? "1.5em" : undefined}
                       />
                     </Box>
                   </Box>
