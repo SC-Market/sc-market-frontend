@@ -147,7 +147,7 @@ export function MarketListingRating(props: {
   const badges = prioritizeBadges(allBadges, display_limit)
 
   return (
-    <Box display={"flex"} alignItems={"center"} gap={0.5} sx={{ lineHeight: 1 }}>
+    <Box display={"flex"} alignItems={"center"} gap={0.5} sx={{ lineHeight: 1, margin: 0 }}>
       <MarketRatingStars rating={rating} />
       <MarketRatingCount rating={rating} badges={badges} />
     </Box>

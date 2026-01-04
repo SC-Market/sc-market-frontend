@@ -422,7 +422,7 @@ export const ItemListingBase = React.memo(
                   >
                     {listing.title} ({listing.item_type})
                   </Typography>
-                  <Box sx={{ mb: 0.25 }}>
+                  <Box sx={{ mb: 0 }}>
                     <UnderlineLink
                       component="span"
                       display={"inline"}
