@@ -56,6 +56,7 @@ import { LongPressMenu } from "../../components/gestures"
 import { MobileFAB } from "../../components/mobile/MobileFAB"
 import { BottomSheet } from "../../components/mobile"
 import { ContentCopyRounded } from "@mui/icons-material"
+import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
 
 // Replace Discord-like timestamp tags in messages with human-readable strings
 function replaceDiscordTimestamps(input: string) {
@@ -478,8 +479,8 @@ function MessagesAreaMobile(props: {
         overflow: "auto",
         WebkitOverflowScrolling: "touch",
         minHeight: 0,
-        // Add bottom padding to account for fixed input area
-        paddingBottom: inputAreaHeight > 0 ? `${inputAreaHeight + 12}px` : 1.5,
+        // Small bottom padding for visual spacing (input area is now in flex layout, not fixed)
+        paddingBottom: 1.5,
       }}
     >
       <Stack spacing={1.5}>
@@ -666,61 +667,12 @@ export function MessagesBodyMobile(props: { maxHeight?: number }) {
   const [sendChatMessage] = useSendChatMessageMutation()
   const { isSuccess } = useGetUserProfileQuery()
   const { data: profile } = useGetUserProfileQuery()
-  const [isKeyboardOpen, setIsKeyboardOpen] = useState(false)
-  const [keyboardTop, setKeyboardTop] = useState(0)
+  const bottomNavHeight = useBottomNavHeight()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  // isKeyboardOpen is derived from bottomNavHeight (0 when keyboard is open)
+  const isKeyboardOpen = bottomNavHeight === 0 && isMobile
   const inputAreaRef = useRef<HTMLDivElement>(null)
   const [inputAreaHeight, setInputAreaHeight] = useState(0)
-
-  // Track keyboard visibility using viewport resize mode
-  // With resizes-content mode, the viewport height actually shrinks when keyboard opens
-  useEffect(() => {
-    const updateKeyboardState = () => {
-      // Use requestAnimationFrame to ensure we get the latest viewport values
-      requestAnimationFrame(() => {
-        // Store initial height on first load
-        interface WindowWithInitialHeight extends Window {
-          initialInnerHeight?: number
-        }
-        const win = window as WindowWithInitialHeight
-        if (!win.initialInnerHeight) {
-          win.initialInnerHeight = window.innerHeight
-        }
-        
-        const currentHeight = window.innerHeight
-        const initialHeight = win.initialInnerHeight
-        
-        // Keyboard is open if viewport height is significantly reduced
-        // Use a threshold (e.g., 75% of initial height) to detect keyboard
-        const keyboardIsOpen = currentHeight < initialHeight * 0.75
-        
-        setIsKeyboardOpen(keyboardIsOpen)
-        
-        // With resizes-content mode, when keyboard is open, the viewport has already resized
-        // So we position the input at bottom: 0 (it will sit right above the keyboard)
-        // When closed, position above bottom nav
-        setKeyboardTop(0)
-      })
-    }
-    
-    // Initial check
-    updateKeyboardState()
-
-    // Listen to window resize events (viewport resizes when keyboard opens/closes)
-    window.addEventListener("resize", updateKeyboardState)
-    
-    // Also listen to visualViewport if available for more accurate detection
-    if (window.visualViewport) {
-      window.visualViewport.addEventListener("resize", updateKeyboardState)
-      return () => {
-        window.removeEventListener("resize", updateKeyboardState)
-        window.visualViewport?.removeEventListener("resize", updateKeyboardState)
-      }
-    } else {
-      return () => {
-        window.removeEventListener("resize", updateKeyboardState)
-      }
-    }
-  }, [])
 
   // Measure input area height
   useEffect(() => {
