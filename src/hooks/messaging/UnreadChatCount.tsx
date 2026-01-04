@@ -10,12 +10,12 @@ export function useUnreadChatCount(): number {
   // Get all chats first
   const { data: chats } = useGetMyChatsQuery()
 
-  // Query notifications for each chat using entityId
-  // We'll batch query all chats' notifications
-  // For efficiency, we query all notifications and filter client-side
+  // Query chat message notifications with action filter
+  // Use action filter to only get chat-related notifications
   const { data: allNotificationsData } = useGetNotificationsQuery({
     page: 0,
-    pageSize: 1000, // Get a large batch
+    pageSize: 100, // API limit is 100
+    action: "chat_message",
   })
 
   // Calculate count of unique chats with unread notifications
