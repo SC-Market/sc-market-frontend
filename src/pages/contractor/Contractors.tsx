@@ -19,6 +19,7 @@ import {
 import { ContractorSidebarContext } from "../../hooks/contractor/ContractorSidebar"
 import { ContractorSidebar } from "../../views/contractor/ContractorSidebar"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
+import { marketDrawerWidth } from "../../hooks/market/MarketSidebar"
 import CloseIcon from "@mui/icons-material/CloseRounded"
 import MenuIcon from "@mui/icons-material/MenuRounded"
 import FilterListIcon from "@mui/icons-material/FilterList"
@@ -135,7 +136,7 @@ export function Contractors() {
           )}
 
           <ContractorSidebar />
-          <ContainerGrid maxWidth={"md"} sidebarOpen={true}>
+          <ContainerGrid maxWidth={"md"} sidebarOpen={sidebarOpen} sidebarWidth={marketDrawerWidth}>
             <div ref={ref} />
             <HeaderTitle>{t("contractorsPage.title")}</HeaderTitle>
             {!(isLoading || isFetching)

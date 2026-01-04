@@ -6,6 +6,7 @@ import {
   Grid,
   GridProps,
   Theme,
+  useMediaQuery,
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
@@ -17,6 +18,7 @@ import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
 export function ContainerGrid(
   props: {
     sidebarOpen: boolean
+    sidebarWidth?: number // Width of the sidebar in pixels (e.g., marketDrawerWidth)
     noFooter?: boolean
     noSidebar?: boolean
     GridProps?: GridProps
@@ -26,11 +28,13 @@ export function ContainerGrid(
 ): ReactElement {
   const theme = useTheme<ExtendedTheme>()
   const bottomNavHeight = useBottomNavHeight()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
 
   const [drawerOpen, setDrawerOpen] = useDrawerOpen()
 
   const {
     sidebarOpen,
+    sidebarWidth = 0,
     noFooter,
     noSidebar,
     GridProps,
@@ -54,6 +58,13 @@ export function ContainerGrid(
           overflow: "auto",
           height: "100%", // Use 100% of parent instead of 100vh
           position: "relative",
+          marginLeft: !isMobile && sidebarOpen && sidebarWidth > 0 ? sidebarWidth : 0,
+          transition: !isMobile && sidebarWidth > 0
+            ? theme.transitions.create("marginLeft", {
+                easing: theme.transitions.easing.sharp,
+                duration: theme.transitions.duration.enteringScreen,
+              })
+            : undefined,
         }}
         ref={ref}
       >

@@ -20,6 +20,7 @@ import {
   RecruitingSearchContext,
   RecruitingSearchState,
 } from "../../hooks/recruiting/RecruitingSearch"
+import { marketDrawerWidth } from "../../hooks/market/MarketSidebar"
 import {
   useRecruitingGetAllPostsQuery,
   useRecruitingGetPostByOrgQuery,
@@ -144,7 +145,7 @@ export function Recruiting() {
           )}
 
           <RecruitingSidebar />
-          <ContainerGrid maxWidth={"md"} sidebarOpen={true}>
+          <ContainerGrid maxWidth={"md"} sidebarOpen={sidebarOpen} sidebarWidth={marketDrawerWidth}>
             <div ref={ref} />
             <Grid
               item
