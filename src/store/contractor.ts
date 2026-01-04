@@ -437,7 +437,19 @@ export const contractorsApi = serviceApi.injectEndpoints({
         body,
       }),
       invalidatesTags: (result, error, arg) => [
+        // Invalidate specific contractor
         { type: "Contractor" as const, id: arg.contractor },
+        // Invalidate contractor list queries (getContractors, searchContractors)
+        { type: "Contractor" as const, id: "LIST" },
+        // Invalidate market listings that show contractor info
+        "MarketListings" as const,
+        { type: "MarketListings" as const, id: "SEARCH" },
+        { type: "MarketListings" as const, id: `SEARCH_${arg.contractor}` },
+        "ContractorListings" as const,
+        // Invalidate user profile (includes contractor info)
+        "MyProfile" as const,
+        { type: "MyProfile" as const },
+        // Invalidate audit logs
         { type: "ContractorAuditLogs" as const, id: arg.contractor },
         "AdminAuditLogs" as const,
         { type: "AdminAuditLogs" as const, id: "LIST" },
