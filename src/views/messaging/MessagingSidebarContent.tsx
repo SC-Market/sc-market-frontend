@@ -15,7 +15,7 @@ import {
   useMediaQuery,
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
-import React, { useState, useMemo } from "react"
+import React, { useState, useMemo, useRef, useEffect, useCallback } from "react"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useCurrentChatID } from "../../hooks/messaging/CurrentChatID"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
@@ -44,7 +44,12 @@ import { getRelativeTime } from "../../util/time"
 import { MarkdownRender } from "../../components/markdown/Markdown"
 
 // Single chat entry in the chat list
-function ChatEntry(props: { chat: Chat; unreadCount?: number }) {
+function ChatEntry(props: { 
+  chat: Chat
+  unreadCount?: number
+  isVisible?: boolean
+  entryRef?: (el: HTMLElement | null) => void
+}) {
   const theme: ExtendedTheme = useTheme<ExtendedTheme>()
   const { chat_id } = useParams<{ chat_id?: string }>()
   const [currentChatID, setCurrentChatID] = useCurrentChatID()
@@ -57,7 +62,7 @@ function ChatEntry(props: { chat: Chat; unreadCount?: number }) {
   const isSelected =
     chat_id === props.chat.chat_id || currentChatID === props.chat.chat_id
 
-  // Query unread notifications for this specific chat
+  // Only query unread notifications for visible chats
   // Chats can be associated with orders or offers, so we query based on order_id or session_id
   // If chat has order_id, query order_message with that order_id as entityId
   // If chat has session_id, query offer_message with that session_id as entityId
@@ -66,14 +71,14 @@ function ChatEntry(props: { chat: Chat; unreadCount?: number }) {
     pageSize: 100,
     action: "order_message",
     entityId: props.chat.order_id || undefined,
-  }, { skip: !props.chat.chat_id || !props.chat.order_id })
+  }, { skip: !props.chat.chat_id || !props.chat.order_id || !props.isVisible })
   
   const { data: offerNotificationsData } = useGetNotificationsQuery({
     page: 0,
     pageSize: 100,
     action: "offer_message",
     entityId: props.chat.session_id || undefined,
-  }, { skip: !props.chat.chat_id || !props.chat.session_id })
+  }, { skip: !props.chat.chat_id || !props.chat.session_id || !props.isVisible })
   
   // Use the appropriate notification data based on chat type
   const chatNotificationsData = props.chat.order_id 
@@ -111,6 +116,8 @@ function ChatEntry(props: { chat: Chat; unreadCount?: number }) {
 
   return (
     <ListItemButton
+      ref={props.entryRef}
+      data-chat-id={props.chat.chat_id}
       sx={{
         width: "100%",
         borderBottom: 1,
@@ -258,6 +265,63 @@ export function MessagingSidebarContent(
   // For now, we'll pass 0 and let ChatEntry query its own notifications
   const unreadCountsByChat: Record<string, number> = {}
 
+  // Track visible chat entries using Intersection Observer
+  const [visibleChatIds, setVisibleChatIds] = useState<Set<string>>(new Set())
+  const chatEntryRefs = useRef<Map<string, HTMLElement>>(new Map())
+  const observerRef = useRef<IntersectionObserver | null>(null)
+
+  // Set up intersection observer once
+  useEffect(() => {
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        setVisibleChatIds((prev) => {
+          const next = new Set(prev)
+          entries.forEach((entry) => {
+            const chatId = entry.target.getAttribute("data-chat-id")
+            if (chatId) {
+              if (entry.isIntersecting) {
+                next.add(chatId)
+              } else {
+                next.delete(chatId)
+              }
+            }
+          })
+          return next
+        })
+      },
+      {
+        root: null, // Use viewport as root
+        rootMargin: "50px", // Start loading 50px before entry becomes visible
+        threshold: 0.1, // Trigger when 10% visible
+      }
+    )
+
+    return () => {
+      if (observerRef.current) {
+        observerRef.current.disconnect()
+        observerRef.current = null
+      }
+    }
+  }, [])
+
+  // Observe/unobserve elements as refs are set
+  const createEntryRef = useCallback((chatId: string) => {
+    return (el: HTMLElement | null) => {
+      if (el) {
+        chatEntryRefs.current.set(chatId, el)
+        if (observerRef.current) {
+          observerRef.current.observe(el)
+        }
+      } else {
+        const existing = chatEntryRefs.current.get(chatId)
+        if (existing && observerRef.current) {
+          observerRef.current.unobserve(existing)
+        }
+        chatEntryRefs.current.delete(chatId)
+      }
+    }
+  }, [])
+
   const content = (
     <Box
       sx={{
@@ -379,12 +443,17 @@ export function MessagingSidebarContent(
                   }
                 })
               })
-              .map((chat) => (
-                <ChatEntry
-                  chat={chat}
-                  key={chat.chat_id}
-                />
-              ))
+              .map((chat) => {
+                const isVisible = visibleChatIds.has(chat.chat_id)
+                return (
+                  <ChatEntry
+                    key={chat.chat_id}
+                    chat={chat}
+                    isVisible={isVisible}
+                    entryRef={createEntryRef(chat.chat_id)}
+                  />
+                )
+              })
           )}
       </List>
     </Box>
