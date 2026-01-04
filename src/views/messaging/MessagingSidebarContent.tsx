@@ -143,12 +143,12 @@ function ChatEntry(props: { chat: Chat; unreadCount?: number }) {
         <Box
           sx={{ marginLeft: 1, overflow: "hidden", flexGrow: 1, minWidth: 0 }}
         >
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1, flex: 1, minWidth: 0 }}>
             <Typography
               noWrap
               align={"left"}
               color={unreadCount > 0 ? "primary.main" : "text.secondary"}
-              sx={{ fontWeight: unreadCount > 0 ? 600 : 500 }}
+              sx={{ fontWeight: unreadCount > 0 ? 600 : 500, flex: 1, minWidth: 0 }}
             >
               {props.chat.title || (
                 <>
@@ -169,12 +169,15 @@ function ChatEntry(props: { chat: Chat; unreadCount?: number }) {
                 variant="dot"
                 color="primary"
                 sx={{
+                  flexShrink: 0,
                   "& .MuiBadge-badge": {
-                    right: -4,
-                    top: 4,
+                    width: 8,
+                    height: 8,
                   },
                 }}
-              />
+              >
+                <Box sx={{ width: 0, height: 0 }} />
+              </Badge>
             )}
           </Box>
           <Typography

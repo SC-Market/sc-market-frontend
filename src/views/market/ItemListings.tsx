@@ -85,7 +85,11 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { CURRENT_CUSTOM_ORG } from "../../hooks/contractor/CustomDomain"
 import { RecentListingsSkeleton } from "../../pages/home/LandingPage"
 import { getRelativeTime } from "../../util/time"
-import { MarketListingRating } from "../../components/rating/ListingRating"
+import { MarketListingRating, BadgeDisplay } from "../../components/rating/ListingRating"
+import {
+  calculateBadgesFromRating,
+  prioritizeBadges,
+} from "../../util/badges"
 import { useGetUserProfileQuery } from "../../store/profile"
 import { RefreshRounded, EditRounded, ShareRounded } from "@mui/icons-material"
 import moment from "moment/moment"
@@ -237,6 +241,19 @@ export const ItemListingBase = React.memo(
       ]
     }, [isMyListing, listing, navigate, t, issueAlert])
 
+    // Calculate badges for mobile display at top
+    const rating = {
+      avg_rating: listing.avg_rating,
+      rating_count: listing.rating_count || 0,
+      total_rating: listing.total_rating,
+      streak: listing.rating_streak || 0,
+      total_orders: listing.total_orders || 0,
+      total_assignments: listing.total_assignments || 0,
+      response_rate: listing.response_rate || 0,
+    }
+    const allBadges = listing.badges?.badge_ids || calculateBadgesFromRating(rating)
+    const badges = prioritizeBadges(allBadges, 3) // Show up to 3 badges at top
+
     // Condensed mobile variant (vertical layout, smaller text and height)
     const mobileListingContent = (
       <Fade
@@ -289,6 +306,25 @@ export const ItemListingBase = React.memo(
                       height: 18,
                     }}
                   />
+                )}
+                {/* Badges at the top right */}
+                {badges.length > 0 && (
+                  <Box
+                    sx={{
+                      position: "absolute",
+                      top: 4,
+                      right: listing.internal ? 60 : 4,
+                      zIndex: 2,
+                      display: "flex",
+                      gap: 0.5,
+                      alignItems: "center",
+                      "& svg": {
+                        fontSize: "1rem",
+                      },
+                    }}
+                  >
+                    <BadgeDisplay badges={badges} />
+                  </Box>
                 )}
                 {listing.internal && (
                   <Chip
@@ -408,12 +444,22 @@ export const ItemListingBase = React.memo(
                         cursor: "pointer",
                         fontSize: "0.7rem",
                         display: "block",
-                        mb: 0.25,
+                        mb: 0,
+                        lineHeight: 1.2,
                       }}
                     >
                       {user_seller || contractor_seller}
                     </UnderlineLink>
-                    <Box sx={{ fontSize: "0.7rem", lineHeight: 1, display: "flex", alignItems: "center" }}>
+                    <Box 
+                      sx={{ 
+                        fontSize: "0.7rem", 
+                        lineHeight: 1, 
+                        display: "flex", 
+                        alignItems: "center",
+                        mt: 0.25,
+                        mb: 0,
+                      }}
+                    >
                       <MarketListingRating
                         avg_rating={listing.avg_rating}
                         rating_count={listing.rating_count}
@@ -422,8 +468,8 @@ export const ItemListingBase = React.memo(
                         total_orders={listing.total_orders}
                         total_assignments={listing.total_assignments}
                         response_rate={listing.response_rate}
-                        badge_ids={listing.badges?.badge_ids || null}
-                        display_limit={2}
+                        badge_ids={[]}
+                        display_limit={0}
                       />
                     </Box>
                   </Box>
@@ -432,14 +478,14 @@ export const ItemListingBase = React.memo(
                     <Typography
                       component="div"
                       display={"block"}
-                      sx={{ mb: 0.25 }}
+                      sx={{ mb: 0, lineHeight: 1.2 }}
                     >
                       <Typography
                         component="span"
                         display={"inline"}
                         color={ending ? "error.light" : "inherit"}
                         variant={"caption"}
-                        sx={{ fontSize: "0.7rem" }}
+                        sx={{ fontSize: "0.7rem", lineHeight: 1.2 }}
                       >
                         {timeDisplay.endsWith("ago")
                           ? t("market.ended", { time: timeDisplay })
@@ -451,14 +497,14 @@ export const ItemListingBase = React.memo(
                     <Typography
                       component="div"
                       display={"block"}
-                      sx={{ mb: 0.25 }}
+                      sx={{ mb: 0, lineHeight: 1.2 }}
                     >
                       <Typography
                         component="span"
                         display={"inline"}
                         color={ending ? "error.light" : "inherit"}
                         variant={"caption"}
-                        sx={{ fontSize: "0.7rem" }}
+                        sx={{ fontSize: "0.7rem", lineHeight: 1.2 }}
                       >
                         {t("market.expiration", {
                           time: getRelativeTime(new Date(listing.expiration!)),
@@ -470,7 +516,11 @@ export const ItemListingBase = React.memo(
                     display={"block"}
                     color={"text.primary"}
                     variant={"caption"}
-                    sx={{ fontSize: "0.7rem" }}
+                    sx={{ 
+                      fontSize: "0.7rem", 
+                      lineHeight: 1.2, 
+                      mt: (listing.auction_end_time || showExpiration) ? 0.25 : 0 
+                    }}
                   >
                     {t("market.available", {
                       count: listing.quantity_available,

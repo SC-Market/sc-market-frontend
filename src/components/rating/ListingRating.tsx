@@ -262,7 +262,7 @@ export function MarketRatingCount(props: {
 }
 
 // Badge display component that renders badges based on badge IDs
-function BadgeDisplay(props: { badges: string[] }) {
+export function BadgeDisplay(props: { badges: string[] }) {
   const { badges } = props
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
