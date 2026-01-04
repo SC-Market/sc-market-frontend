@@ -82,7 +82,7 @@ export function MobileBottomNav() {
 
   const activeValue = getActiveValue()
 
-  // Update indicator position when active value changes
+  // Update indicator position when active value changes or login state changes
   useEffect(() => {
     if (!isMobile || !navRef.current) return
 
@@ -98,7 +98,7 @@ export function MobileBottomNav() {
         width: buttonRect.width,
       })
     }
-  }, [activeValue, location.pathname, isMobile])
+  }, [activeValue, location.pathname, isMobile, isLoggedIn])
 
   // Early return AFTER all hooks to maintain hook order
   if (!isMobile) {
