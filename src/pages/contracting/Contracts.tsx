@@ -9,6 +9,7 @@ import {
   ContractSearchState,
 } from "../../hooks/contract/ContractSearch"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
+import { marketDrawerWidth } from "../../hooks/market/MarketSidebar"
 import FilterListIcon from "@mui/icons-material/FilterList"
 import { Button, Grid, Box, useMediaQuery } from "@mui/material"
 import { Page } from "../../components/metadata/Page"
@@ -32,7 +33,7 @@ export function Contracts() {
       >
         <ContractSidebarContext.Provider value={[open, setOpen]}>
           <ContractSidebar />
-          <ContainerGrid maxWidth={"lg"} sidebarOpen={true}>
+          <ContainerGrid maxWidth={"lg"} sidebarOpen={open} sidebarWidth={marketDrawerWidth}>
             <Grid item xs={12}>
               <Grid
                 container
