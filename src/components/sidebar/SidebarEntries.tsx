@@ -346,6 +346,12 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
         site_admin: true,
         to: "/admin/audit-logs",
       },
+      {
+        text: "sidebar.notification_test.text",
+        icon: <NotificationsIcon />,
+        site_admin: true,
+        to: "/admin/notification-test",
+      },
     ],
   },
   {
