@@ -105,7 +105,7 @@ export const emailApi = serviceApi.injectEndpoints({
           message: string
         }
       },
-      invalidatesTags: ["UserEmail" as const],
+      invalidatesTags: ["UserEmail" as const, "EmailPreferences" as const],
     }),
 
     // Update email address
@@ -138,7 +138,7 @@ export const emailApi = serviceApi.injectEndpoints({
           message: string
         }
       },
-      invalidatesTags: ["UserEmail" as const],
+      invalidatesTags: ["UserEmail" as const, "EmailPreferences" as const],
     }),
 
     // Delete email address
@@ -162,6 +162,8 @@ export const emailApi = serviceApi.injectEndpoints({
       transformResponse: (response: { data: { message: string } }) => {
         return unwrapResponse(response) as { message: string }
       },
+      // Requesting verification doesn't change data, but invalidate to refetch email status
+      invalidatesTags: ["UserEmail" as const],
     }),
 
     // Get available notification types
@@ -215,11 +217,13 @@ export const emailApi = serviceApi.injectEndpoints({
           message: string
         }
       },
-      invalidatesTags: ["EmailPreferences" as const],
+      invalidatesTags: ["EmailPreferences" as const, "UserEmail" as const],
     }),
 
     // Verify email address via token
-    verifyEmail: builder.query<
+    // Note: This is a query but has side effects (verifies email)
+    // RTK Query queries can't invalidate tags, so we use a mutation instead
+    verifyEmail: builder.mutation<
       { success: boolean; message: string; userId: string; email: string },
       string
     >({
@@ -242,6 +246,7 @@ export const emailApi = serviceApi.injectEndpoints({
           email: string
         }
       },
+      invalidatesTags: ["UserEmail" as const, "EmailPreferences" as const],
     }),
 
     // Unsubscribe from email notifications via token
@@ -253,20 +258,40 @@ export const emailApi = serviceApi.injectEndpoints({
         url: `${apiBase}/email/unsubscribe/${token}?json=true`,
         method: "POST",
       }),
-      transformResponse: (response: {
-        data: {
-          success: boolean
-          message: string
-          userId: string
-          email: string
+      transformResponse: (response: any) => {
+        // Handle both wrapped and unwrapped responses
+        const data = unwrapResponse(response) as {
+          success?: boolean
+          message?: string
+          userId?: string
+          email?: string
         }
-      }) => {
-        return unwrapResponse(response) as {
-          success: boolean
-          message: string
-          userId: string
-          email: string
+        // Ensure we return the expected shape
+        if (data && typeof data === "object") {
+          return {
+            success: data.success ?? true,
+            message: data.message || "Successfully unsubscribed from email notifications",
+            userId: data.userId || "",
+            email: data.email || "",
+          }
         }
+        return {
+          success: false,
+          message: "Invalid response format",
+          userId: "",
+          email: "",
+        }
+      },
+      // Handle errors that might come through as 200 responses
+      transformErrorResponse: (response: any) => {
+        // If response has error structure, extract it
+        if (response?.data?.error) {
+          return response.data.error
+        }
+        if (response?.error) {
+          return response.error
+        }
+        return response
       },
       invalidatesTags: ["EmailPreferences" as const, "UserEmail" as const],
     }),
@@ -282,6 +307,6 @@ export const {
   useGetNotificationTypesQuery,
   useGetEmailPreferencesQuery,
   useUpdateEmailPreferencesMutation,
-  useVerifyEmailQuery,
+  useVerifyEmailMutation,
   useUnsubscribeMutation,
 } = emailApi

@@ -68,19 +68,26 @@ export function UnsubscribePage() {
       unsubscribe(token)
         .unwrap()
         .then(async (result) => {
+          console.log("Unsubscribe success result:", result)
           // Refetch preferences to ensure cache is updated
           await refetchPreferences()
           setStatus("success")
           setMessage(
-            result.message ||
+            result?.message ||
               "You have been successfully unsubscribed from all email notifications.",
           )
         })
         .catch((err) => {
+          console.error("Unsubscribe error caught:", err)
           setStatus("error")
+          // Check if error has the expected structure
+          // Sometimes RTK Query wraps errors differently
           const errorMessage =
             err?.data?.error?.message ||
-            "Unsubscribe failed. The token may be invalid or already used."
+            err?.data?.message ||
+            err?.error?.message ||
+            err?.message ||
+            (typeof err === "string" ? err : "Unsubscribe failed. The token may be invalid or already used.")
           setMessage(errorMessage)
         })
     } else if (!token) {
