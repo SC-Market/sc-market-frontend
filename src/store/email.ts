@@ -250,7 +250,7 @@ export const emailApi = serviceApi.injectEndpoints({
       string
     >({
       query: (token) => ({
-        url: `/email/unsubscribe/${token}?json=true`,
+        url: `${apiBase}/email/unsubscribe/${token}?json=true`,
         method: "POST",
       }),
       transformResponse: (response: {
