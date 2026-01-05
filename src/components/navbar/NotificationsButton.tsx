@@ -307,18 +307,18 @@ export function NotificationOrderComment(props: { notif: Notification }) {
   return (
     <NotificationBase
       icon={<CreateRoundedIcon />}
-      to={`/contract/${comment.order_id}`}
+      to={`/contract/${comment?.order_id}`}
       notif={notif}
     >
       {t("notifications.new_order_comment_by")}{" "}
       <Link
-        to={`/user/${comment.author.username}`}
+        to={`/user/${comment?.author?.username}`}
         style={{
           textDecoration: "none",
           color: theme.palette.secondary.main,
         }}
       >
-        <UnderlineLink>{comment.author.username}</UnderlineLink>
+        <UnderlineLink>{comment?.author?.username}</UnderlineLink>
       </Link>
     </NotificationBase>
   )
