@@ -12,7 +12,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle"
 import ErrorIcon from "@mui/icons-material/Error"
 import { Page } from "../../components/metadata/Page"
 import { ContainerGrid } from "../../components/layout/ContainerGrid"
-import { useVerifyEmailQuery } from "../../store/email"
+import { useVerifyEmailMutation } from "../../store/email"
 
 /**
  * Email Verification Page
@@ -32,15 +32,16 @@ export function EmailVerificationPage() {
   const error = searchParams.get("error")
   const success = searchParams.get("success")
 
-  // Use RTK Query to verify email (with ?json=true to get JSON response instead of redirect)
-  const {
-    data: verifyResult,
-    isLoading: isVerifying,
-    isError: verifyError,
-    error: verifyErrorData,
-  } = useVerifyEmailQuery(token || "", {
-    skip: !token || !!success || !!error, // Skip if no token, or already have success/error from redirect
-  })
+  // Use RTK Query mutation to verify email (with ?json=true to get JSON response instead of redirect)
+  const [
+    verifyEmail,
+    {
+      data: verifyResult,
+      isLoading: isVerifying,
+      isError: verifyError,
+      error: verifyErrorData,
+    },
+  ] = useVerifyEmailMutation()
 
   useEffect(() => {
     // If redirected from backend with success/error params (legacy support)
@@ -56,27 +57,29 @@ export function EmailVerificationPage() {
       } else {
         setMessage("An error occurred during verification.")
       }
+    } else if (token && !success && !error) {
+      // Trigger verification mutation when token is present
+      verifyEmail(token)
+        .unwrap()
+        .then((result) => {
+          setStatus("success")
+          setMessage(
+            result.message ||
+              "Your email address has been verified successfully!",
+          )
+        })
+        .catch((err) => {
+          setStatus("error")
+          const errorMessage =
+            err?.data?.error?.message ||
+            "Verification failed. The token may be invalid or expired."
+          setMessage(errorMessage)
+        })
     } else if (!token) {
       setStatus("invalid")
       setMessage("No verification token provided.")
     }
-  }, [searchParams, token, error, success])
-
-  // Handle RTK Query result
-  useEffect(() => {
-    if (verifyResult) {
-      setStatus("success")
-      setMessage(verifyResult.message || "Your email address has been verified successfully!")
-    } else if (verifyError) {
-      setStatus("error")
-      const errorMessage =
-        (verifyErrorData as any)?.data?.error?.message ||
-        "Verification failed. The token may be invalid or expired."
-      setMessage(errorMessage)
-    } else if (isVerifying && token) {
-      setStatus("loading")
-    }
-  }, [verifyResult, verifyError, verifyErrorData, isVerifying, token])
+  }, [searchParams, token, error, success, verifyEmail])
 
   return (
     <Page title="Email Verification">
@@ -92,7 +95,7 @@ export function EmailVerificationPage() {
               textAlign: "center",
             }}
           >
-            {(status === "loading" || isVerifying) && (
+            {(status === "loading" || (isVerifying && token)) && (
               <>
                 <CircularProgress size={60} sx={{ mb: 3 }} />
                 <Typography variant="h6" gutterBottom>
