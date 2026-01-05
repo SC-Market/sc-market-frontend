@@ -12,7 +12,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle"
 import ErrorIcon from "@mui/icons-material/Error"
 import { Page } from "../../components/metadata/Page"
 import { ContainerGrid } from "../../components/layout/ContainerGrid"
-import { useUnsubscribeMutation } from "../../store/email"
+import { useUnsubscribeMutation, useGetEmailPreferencesQuery } from "../../store/email"
 
 /**
  * Unsubscribe Page
@@ -42,6 +42,11 @@ export function UnsubscribePage() {
     },
   ] = useUnsubscribeMutation()
 
+  // Refetch preferences after unsubscribe to ensure cache is updated
+  const { refetch: refetchPreferences } = useGetEmailPreferencesQuery(undefined, {
+    skip: true, // Don't auto-fetch, only refetch when needed
+  })
+
   useEffect(() => {
     // If redirected from backend with success/error params (legacy support)
     if (success === "true") {
@@ -62,7 +67,9 @@ export function UnsubscribePage() {
       // Trigger unsubscribe mutation when token is present
       unsubscribe(token)
         .unwrap()
-        .then((result) => {
+        .then(async (result) => {
+          // Refetch preferences to ensure cache is updated
+          await refetchPreferences()
           setStatus("success")
           setMessage(
             result.message ||

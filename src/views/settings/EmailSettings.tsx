@@ -64,7 +64,11 @@ export function EmailSettings() {
     data: preferences,
     isLoading: preferencesLoading,
     isError: preferencesError,
-  } = useGetEmailPreferencesQuery()
+    refetch: refetchPreferences,
+  } = useGetEmailPreferencesQuery(undefined, {
+    // Refetch when component mounts to ensure fresh data after unsubscribe
+    refetchOnMountOrArgChange: true,
+  })
   const {
     data: notificationTypesData,
     isLoading: notificationTypesLoading,
