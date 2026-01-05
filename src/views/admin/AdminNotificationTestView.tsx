@@ -12,6 +12,7 @@ import {
   Paper,
   Alert,
   CircularProgress,
+  MenuProps,
 } from "@mui/material"
 import { useTestNotificationMutation } from "../../store/admin"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
@@ -56,6 +57,23 @@ export function AdminNotificationTestView() {
 
   const handleUserSelect = (user: User) => {
     setTargetUser(user)
+  }
+
+  // Custom menu props for 2-column layout
+  const menuProps: Partial<MenuProps> = {
+    PaperProps: {
+      style: {
+        maxHeight: 400,
+        width: 500,
+      },
+    },
+    MenuListProps: {
+      style: {
+        display: "grid",
+        gridTemplateColumns: "1fr 1fr",
+        gap: 0,
+      },
+    },
   }
 
   const handleTest = async () => {
@@ -126,6 +144,7 @@ export function AdminNotificationTestView() {
                 value={notificationType}
                 onChange={(e) => setNotificationType(e.target.value)}
                 label={t("admin.notificationTest.notificationType", "Notification Type")}
+                MenuProps={menuProps}
               >
                 {NOTIFICATION_TYPES.map((type) => (
                   <MenuItem key={type} value={type}>

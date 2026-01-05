@@ -112,15 +112,16 @@ export function EmailSettings() {
       }).unwrap()
 
       setSuccess(result.message || "Email added successfully!")
-      setAddEmailDialogOpen(false)
       setNewEmail("")
       setSelectedNotificationTypes([])
+      setAddEmailDialogOpen(false)
     } catch (error: any) {
       setError(
         error?.data?.error?.message ||
           error?.message ||
           "Failed to add email address",
       )
+      // Don't close dialog on error so user can retry
     }
   }, [newEmail, selectedNotificationTypes, addEmail])
 
