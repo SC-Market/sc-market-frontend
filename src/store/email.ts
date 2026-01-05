@@ -150,7 +150,7 @@ export const emailApi = serviceApi.injectEndpoints({
       transformResponse: (response: { data: { message: string } }) => {
         return unwrapResponse(response) as { message: string }
       },
-      invalidatesTags: ["UserEmail" as const],
+      invalidatesTags: ["UserEmail" as const, "EmailPreferences" as const],
     }),
 
     // Request verification email
@@ -268,7 +268,7 @@ export const emailApi = serviceApi.injectEndpoints({
           email: string
         }
       },
-      invalidatesTags: ["EmailPreferences" as const],
+      invalidatesTags: ["EmailPreferences" as const, "UserEmail" as const],
     }),
   }),
 })
