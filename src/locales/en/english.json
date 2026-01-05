@@ -612,6 +612,9 @@
     "audit_logs": {
       "text": "Audit Logs"
     },
+    "notification_test": {
+      "text": "Notification Test"
+    },
     "sc_market": "SC Market",
     "sc_market_home": "SC Market Home",
     "toggle_drawer": "Toggle Drawer"

@@ -11,6 +11,7 @@ import {
   Block,
   SecurityRounded,
   NotificationsActiveRounded,
+  Email as EmailIcon,
 } from "@mui/icons-material"
 import { PrivacySettings } from "../../views/settings/PrivacySettings"
 import { Discord } from "../../components/icon/DiscordIcon"
@@ -21,6 +22,7 @@ import { ContractorsSettings } from "../../views/settings/ContractorsSettings"
 import { BlocklistSettings } from "../../views/settings/BlocklistSettings"
 import { ApiTokensSettings } from "../../views/settings/ApiTokensSettings"
 import { PushNotificationSettings } from "../../views/settings/PushNotificationSettings"
+import { EmailSettings } from "../../views/settings/EmailSettings"
 import { useTranslation } from "react-i18next"
 
 export function SettingsPage() {
@@ -92,6 +94,12 @@ export function SettingsPage() {
               {...a11yProps(7)}
               value={7}
             />
+            <Tab
+              label="Email Notifications"
+              icon={<EmailIcon />}
+              {...a11yProps(8)}
+              value={8}
+            />
           </Tabs>
         </Grid>
 
@@ -120,6 +128,9 @@ export function SettingsPage() {
           </TabPanel>
           <TabPanel value={page} index={7}>
             <PushNotificationSettings />
+          </TabPanel>
+          <TabPanel value={page} index={8}>
+            <EmailSettings />
           </TabPanel>
         </Grid>
       </ContainerGrid>

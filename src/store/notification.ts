@@ -1,6 +1,7 @@
 import { BACKEND_URL } from "../util/constants"
 import { serviceApi } from "./service"
 import { Notification } from "../hooks/login/UserProfile"
+import { unwrapResponse } from "./api-utils"
 
 const baseUrl = `${BACKEND_URL}/api/notification`
 
@@ -59,6 +60,33 @@ export const notificationApi = serviceApi.injectEndpoints({
           ...(params.entityId && { entityId: params.entityId }),
         },
       }),
+      transformResponse: (response: {
+        data: {
+          notifications: Notification[]
+          pagination: {
+            total: number
+            currentPage: number
+            pageSize: number
+            totalPages: number
+            hasNextPage: boolean
+            hasPreviousPage: boolean
+          }
+          unread_count: number
+        }
+      }) => {
+        return unwrapResponse(response) as {
+          notifications: Notification[]
+          pagination: {
+            total: number
+            currentPage: number
+            pageSize: number
+            totalPages: number
+            hasNextPage: boolean
+            hasPreviousPage: boolean
+          }
+          unread_count: number
+        }
+      },
       providesTags: (result, error, arg) => [
         // Provide the general notifications tag
         "Notifications" as const,

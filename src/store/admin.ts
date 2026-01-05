@@ -153,6 +153,21 @@ export const adminApi = serviceApi.injectEndpoints({
       invalidatesTags: ["AdminAlerts" as const],
       transformResponse: unwrapResponse,
     }),
+    testNotification: builder.mutation<
+      { message: string; data?: any },
+      { notification_type: string; target_username: string }
+    >({
+      query: (body) => ({
+        url: `${baseUrl}/notifications/test`,
+        method: "POST",
+        body,
+      }),
+      transformResponse: unwrapResponse,
+      invalidatesTags: (result, error, arg) => [
+        // Invalidate notifications so the new test notification appears in the top bar
+        "Notifications" as const,
+      ],
+    }),
   }),
 })
 
@@ -168,4 +183,5 @@ export const {
   useUpdateAdminAlertMutation,
   useDeleteAdminAlertMutation,
   useAdminUnlinkUserAccountMutation,
+  useTestNotificationMutation,
 } = adminApi

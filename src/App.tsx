@@ -525,6 +525,34 @@ const router = createBrowserRouter([
             }),
           },
           {
+            path: "/email/verify/:token",
+            lazy: async () => ({
+              Component: (await import("./pages/email/EmailVerificationPage"))
+                .EmailVerificationPage,
+            }),
+          },
+          {
+            path: "/email/verify",
+            lazy: async () => ({
+              Component: (await import("./pages/email/EmailVerificationPage"))
+                .EmailVerificationPage,
+            }),
+          },
+          {
+            path: "/email/unsubscribe/:token",
+            lazy: async () => ({
+              Component: (await import("./pages/email/UnsubscribePage"))
+                .UnsubscribePage,
+            }),
+          },
+          {
+            path: "/email/unsubscribe",
+            lazy: async () => ({
+              Component: (await import("./pages/email/UnsubscribePage"))
+                .UnsubscribePage,
+            }),
+          },
+          {
             path: "/availability",
             lazy: async () => ({
               Component: (await import("./pages/availability/Availability"))
@@ -586,6 +614,13 @@ const router = createBrowserRouter([
                 lazy: async () => ({
                   Component: (await import("./pages/admin/AdminAuditLogs"))
                     .AdminAuditLogs,
+                }),
+              },
+              {
+                path: "/admin/notification-test",
+                lazy: async () => ({
+                  Component: (await import("./pages/admin/AdminNotificationTest"))
+                    .AdminNotificationTest,
                 }),
               },
             ],

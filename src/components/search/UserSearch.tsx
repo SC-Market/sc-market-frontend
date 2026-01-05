@@ -76,8 +76,10 @@ export function UserSearch({
   const handleUserSelect = (user: SearchResult | null) => {
     if (user) {
       // Convert SearchResult to User format
-      const userObj: User = {
+      // Explicitly preserve user_id even though it's not in User type
+      const userObj: User & { user_id?: string } = {
         ...user,
+        user_id: user.user_id, // Explicitly preserve user_id
         orders: 0,
         spent: 0,
         banner: "",
@@ -96,7 +98,7 @@ export function UserSearch({
         created_at: Date.now(),
         rsi_confirmed: false,
       }
-      onUserSelect(userObj)
+      onUserSelect(userObj as User)
       setQuery("")
       setOptions([])
       setOpen(false)
