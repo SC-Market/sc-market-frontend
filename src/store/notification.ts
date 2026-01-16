@@ -50,7 +50,14 @@ export const notificationApi = serviceApi.injectEndpoints({
         }
         unread_count: number
       },
-      { page?: number; pageSize?: number; action?: string; entityId?: string }
+      {
+        page?: number
+        pageSize?: number
+        action?: string
+        entityId?: string
+        scope?: "individual" | "organization" | "all"
+        contractorId?: string
+      }
     >({
       query: (params) => ({
         url: `${baseUrl}/${params.page || 0}`,
@@ -58,6 +65,8 @@ export const notificationApi = serviceApi.injectEndpoints({
           pageSize: params.pageSize || 20,
           ...(params.action && { action: params.action }),
           ...(params.entityId && { entityId: params.entityId }),
+          ...(params.scope && { scope: params.scope }),
+          ...(params.contractorId && { contractorId: params.contractorId }),
         },
       }),
       transformResponse: (response: {

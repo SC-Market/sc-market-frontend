@@ -78,7 +78,7 @@ export function OrgAdminRoute(props: {
   const { data: profile } = useGetUserProfileQuery()
 
   useEffect(() => {
-    if (profile){
+    if (profile) {
       Bugsnag.setUser(profile?.username)
     }
   }, [profile])

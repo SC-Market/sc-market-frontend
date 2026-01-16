@@ -2,11 +2,7 @@
  * Push subscription utilities for Web Push Protocol
  */
 
-import {
-  useSubscribePushMutation,
-  useUnsubscribePushMutation,
-  PushSubscriptionData,
-} from "../store/push-notifications"
+import { PushSubscriptionData } from "../store/push-notifications"
 
 /**
  * Convert VAPID public key from base64 URL-safe format to Uint8Array
@@ -171,8 +167,7 @@ export async function getCurrentPushSubscription(): Promise<globalThis.PushSubsc
 
   try {
     const registration = await navigator.serviceWorker.ready
-    const subscription = await registration.pushManager.getSubscription()
-    return subscription
+    return await registration.pushManager.getSubscription()
   } catch (error) {
     console.error("Failed to get push subscription:", error)
     return null

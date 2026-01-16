@@ -27,6 +27,18 @@ export interface EmailPreference {
   digest_time: string | null
   created_at: string
   updated_at: string
+  contractor_id?: string | null // NULL for individual preferences, UUID for org preferences
+}
+
+/**
+ * Grouped email preferences response
+ */
+export interface GroupedEmailPreferences {
+  individual: EmailPreference[]
+  organizations: Array<{
+    contractor_id: string
+    preferences: EmailPreference[]
+  }>
 }
 
 /**
@@ -63,6 +75,7 @@ export interface UpdateEmailPreferencesRequest {
     enabled?: boolean
     frequency?: "immediate" | "daily" | "weekly"
     digest_time?: string | null
+    contractor_id?: string | null // NULL for individual, UUID for org
   }>
 }
 
@@ -184,9 +197,9 @@ export const emailApi = serviceApi.injectEndpoints({
       },
     }),
 
-    // Get email notification preferences
+    // Get email notification preferences (grouped by individual and organizations)
     getEmailPreferences: builder.query<
-      { preferences: EmailPreference[]; email: UserEmail | null },
+      { preferences: GroupedEmailPreferences; email: UserEmail | null },
       void
     >({
       query: () => ({
@@ -194,10 +207,13 @@ export const emailApi = serviceApi.injectEndpoints({
         method: "GET",
       }),
       transformResponse: (response: {
-        data: { preferences: EmailPreference[]; email: UserEmail | null }
+        data: {
+          preferences: GroupedEmailPreferences
+          email: UserEmail | null
+        }
       }) => {
         return unwrapResponse(response) as {
-          preferences: EmailPreference[]
+          preferences: GroupedEmailPreferences
           email: UserEmail | null
         }
       },

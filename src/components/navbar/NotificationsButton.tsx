@@ -15,6 +15,13 @@ import {
   Tooltip,
   Typography,
   useMediaQuery,
+  Tabs,
+  Tab,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Chip,
 } from "@mui/material"
 import NotificationsActiveRoundedIcon from "@mui/icons-material/NotificationsActiveRounded"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
@@ -50,6 +57,7 @@ import {
   useNotificationBulkUpdateMutation,
   useNotificationBulkDeleteMutation,
 } from "../../store/notification"
+import { useGetUserOrganizationsQuery } from "../../store/organizations"
 import { useNotificationPollingInterval } from "../../hooks/notifications/useNotificationPolling"
 import { MarketBid } from "../../datatypes/MarketListing"
 import { useGetMarketListingQuery } from "../../store/market"
@@ -708,6 +716,12 @@ export function NotificationsButton() {
   const { t } = useTranslation()
   const [page, setPage] = useState(0)
   const [pageSize, setPageSize] = useState(5)
+  const [scopeFilter, setScopeFilter] = useState<
+    "individual" | "organization" | "all"
+  >("all")
+  const [contractorIdFilter, setContractorIdFilter] = useState<string>("")
+
+  const { data: organizationsData } = useGetUserOrganizationsQuery()
 
   // Calculate optimal polling interval based on push subscription and app visibility
   const pollingInterval = useNotificationPollingInterval()
@@ -716,6 +730,8 @@ export function NotificationsButton() {
     {
       page,
       pageSize,
+      scope: scopeFilter !== "all" ? scopeFilter : undefined,
+      contractorId: contractorIdFilter || undefined,
     },
     {
       pollingInterval: pollingInterval > 0 ? pollingInterval : undefined, // Disable polling if interval is 0
@@ -847,6 +863,101 @@ export function NotificationsButton() {
           </Box>
         </Box>
         <Divider light />
+        {/* Filter Section */}
+        <Box
+          sx={{
+            p: 1.5,
+            borderBottom: `1px solid ${theme.palette.outline.main}`,
+          }}
+        >
+          <Tabs
+            value={scopeFilter}
+            onChange={(_, newValue) => {
+              setScopeFilter(newValue)
+              setContractorIdFilter("") // Reset contractor filter when changing scope
+              setPage(0) // Reset to first page
+            }}
+            variant="scrollable"
+            scrollButtons="auto"
+            sx={{ minHeight: 40 }}
+          >
+            <Tab
+              label="All"
+              value="all"
+              sx={{ minHeight: 40, fontSize: "0.875rem" }}
+            />
+            <Tab
+              label="Individual"
+              value="individual"
+              sx={{ minHeight: 40, fontSize: "0.875rem" }}
+            />
+            <Tab
+              label="Organizations"
+              value="organization"
+              sx={{ minHeight: 40, fontSize: "0.875rem" }}
+            />
+          </Tabs>
+          {scopeFilter === "organization" &&
+            organizationsData &&
+            organizationsData.length > 0 && (
+              <FormControl fullWidth size="small" sx={{ mt: 1 }}>
+                <InputLabel id="org-filter-label">
+                  Filter by Organization
+                </InputLabel>
+                <Select
+                  labelId="org-filter-label"
+                  value={contractorIdFilter}
+                  label="Filter by Organization"
+                  onChange={(e) => {
+                    setContractorIdFilter(e.target.value)
+                    setPage(0) // Reset to first page
+                  }}
+                >
+                  <MenuItem value="">
+                    <em>All Organizations</em>
+                  </MenuItem>
+                  {organizationsData.map((org) => (
+                    <MenuItem key={org.contractor_id} value={org.contractor_id}>
+                      {org.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            )}
+          {(scopeFilter !== "all" || contractorIdFilter) && (
+            <Box sx={{ mt: 1, display: "flex", gap: 0.5, flexWrap: "wrap" }}>
+              {scopeFilter !== "all" && (
+                <Chip
+                  label={
+                    scopeFilter === "individual"
+                      ? "Individual"
+                      : "Organizations"
+                  }
+                  size="small"
+                  onDelete={() => {
+                    setScopeFilter("all")
+                    setContractorIdFilter("")
+                    setPage(0)
+                  }}
+                />
+              )}
+              {contractorIdFilter && (
+                <Chip
+                  label={
+                    organizationsData?.find(
+                      (o) => o.contractor_id === contractorIdFilter,
+                    )?.name || "Organization"
+                  }
+                  size="small"
+                  onDelete={() => {
+                    setContractorIdFilter("")
+                    setPage(0)
+                  }}
+                />
+              )}
+            </Box>
+          )}
+        </Box>
         <Box>
           <List
             sx={{

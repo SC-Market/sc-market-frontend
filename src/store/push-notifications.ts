@@ -39,6 +39,17 @@ export interface PushPreference {
 }
 
 /**
+ * Grouped push preferences response
+ */
+export interface GroupedPushPreferences {
+  individual: PushPreference[]
+  organizations: Array<{
+    contractor_id: string
+    preferences: PushPreference[]
+  }>
+}
+
+/**
  * Push notification API endpoints
  */
 export const pushNotificationApi = serviceApi.injectEndpoints({
@@ -87,18 +98,21 @@ export const pushNotificationApi = serviceApi.injectEndpoints({
       invalidatesTags: ["PushSubscriptions" as const],
     }),
 
-    // Get push notification preferences
-    getPushPreferences: builder.query<{ preferences: PushPreference[] }, void>({
+    // Get push notification preferences (grouped by individual and organizations)
+    getPushPreferences: builder.query<
+      { preferences: GroupedPushPreferences },
+      void
+    >({
       query: () => ({
         url: `${baseUrl}/preferences`,
         method: "GET",
       }),
       transformResponse: (response: {
-        data: { preferences: PushPreference[] }
+        data: { preferences: GroupedPushPreferences }
       }) => {
-        // Backend returns { data: { preferences: [...] } }
+        // Backend returns { data: { preferences: {...} } }
         const unwrapped = unwrapResponse(response) as {
-          preferences: PushPreference[]
+          preferences: GroupedPushPreferences
         }
         return unwrapped
       },
@@ -108,7 +122,7 @@ export const pushNotificationApi = serviceApi.injectEndpoints({
     // Update push notification preference
     updatePushPreference: builder.mutation<
       { message: string },
-      { action: string; enabled: boolean }
+      { action: string; enabled: boolean; contractor_id?: string | null }
     >({
       query: (body) => ({
         url: `${baseUrl}/preferences`,

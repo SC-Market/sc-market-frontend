@@ -69,5 +69,6 @@ export const serviceApi = createApi({
     "PushPreferences",
     "UserEmail",
     "EmailPreferences",
+    "UserOrganizations",
   ],
 })
