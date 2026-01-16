@@ -27,6 +27,8 @@ import {
   useUpdatePushPreferenceMutation,
   PushPreference,
 } from "../../store/push-notifications"
+import { EmailPreference } from "../../store/email"
+import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { useGetUserOrganizationsQuery } from "../../store/organizations"
 import { useGetNotificationTypesQuery } from "../../store/email"
 import { PreferenceSection } from "../../components/settings/PreferenceSection"
@@ -67,6 +69,7 @@ type PushSubscription = globalThis.PushSubscription
 export function PushNotificationSettings() {
   const { t } = useTranslation()
   const [isSubscribing, setIsSubscribing] = useState(false)
+  const issueAlert = useAlertHook()
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
 
@@ -228,7 +231,6 @@ export function PushNotificationSettings() {
       enabled: boolean,
       contractorId?: string | null,
     ) => {
-      setError(null)
       const action =
         (preference as PushPreference).action ||
         (preference as { action: string }).action
@@ -238,18 +240,70 @@ export function PushNotificationSettings() {
           enabled,
           contractor_id: contractorId ?? null,
         }).unwrap()
-        setSuccess(`Preference updated for ${action}`)
-        // Clear success message after 2 seconds
-        setTimeout(() => setSuccess(null), 2000)
+        issueAlert({
+          message: `Preference updated for ${action}`,
+          severity: "success",
+        })
       } catch (error) {
-        setError(
-          error instanceof Error
-            ? error.message
-            : "Failed to update preference",
-        )
+        issueAlert({
+          message:
+            error instanceof Error
+              ? error.message
+              : "Failed to update preference",
+          severity: "error",
+        })
       }
     },
-    [updatePreference],
+    [updatePreference, issueAlert],
+  )
+
+  // Handle batch preference update
+  const handleBatchPreferenceChange = useCallback(
+    async (
+      updates: Array<{
+        preference: EmailPreference | PushPreference
+        enabled: boolean
+      }>,
+      contractorId?: string | null,
+    ) => {
+      try {
+        // Use contractor_id from preference if available, otherwise use parameter
+        const pushPreferences = updates
+          .map(({ preference, enabled }) => {
+            const pushPref = preference as PushPreference & {
+              contractor_id?: string | null
+            }
+            if (pushPref.action) {
+              return {
+                action: pushPref.action,
+                enabled,
+                contractor_id: pushPref.contractor_id ?? contractorId ?? null,
+              }
+            }
+            return null
+          })
+          .filter((p): p is NonNullable<typeof p> => p !== null)
+
+        if (pushPreferences.length > 0) {
+          await updatePreference({
+            preferences: pushPreferences,
+          } as any).unwrap()
+          issueAlert({
+            message: `Updated ${pushPreferences.length} notification preference${pushPreferences.length !== 1 ? "s" : ""}`,
+            severity: "success",
+          })
+        }
+      } catch (error) {
+        issueAlert({
+          message:
+            error instanceof Error
+              ? error.message
+              : "Failed to update preferences",
+          severity: "error",
+        })
+      }
+    },
+    [updatePreference, issueAlert],
   )
 
   // Get available notification types formatted for display
@@ -596,6 +650,9 @@ export function PushNotificationSettings() {
             onPreferenceChange={(pref, enabled) =>
               handlePreferenceChange(pref as PushPreference, enabled, null)
             }
+            onBatchPreferenceChange={(updates) =>
+              handleBatchPreferenceChange(updates, null)
+            }
             type="push"
             contractorId={null}
             isLoading={preferencesLoading || !notificationTypesData}
@@ -618,6 +675,9 @@ export function PushNotificationSettings() {
                   enabled,
                   contractorId,
                 )
+              }
+              onBatchPreferenceChange={(updates, contractorId) =>
+                handleBatchPreferenceChange(updates, contractorId)
               }
               type="push"
               isLoading={organizationsLoading}
