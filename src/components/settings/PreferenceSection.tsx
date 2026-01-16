@@ -95,6 +95,55 @@ export function PreferenceSection({
     })
   }
 
+  const handleTurnAllOn = () => {
+    notificationTypes.forEach((typeItem) => {
+      const existingPreference = preferences.find((pref) => {
+        if (type === "email") {
+          return (pref as EmailPreference).action_type_id === typeItem.id
+        } else {
+          const actionString = (typeItem as any).action
+          if (actionString) {
+            return (pref as PushPreference).action === actionString
+          }
+          return false
+        }
+      })
+
+      if (existingPreference) {
+        onPreferenceChange(existingPreference, true)
+      } else {
+        // Create new preference object with enabled: true
+        if (type === "email") {
+          onPreferenceChange(
+            {
+              preference_id: "",
+              action_type_id: typeItem.id,
+              action_name: typeItem.name,
+              enabled: true,
+              frequency: "immediate",
+              digest_time: null,
+              created_at: "",
+              updated_at: "",
+              contractor_id: contractorId ?? null,
+            } as EmailPreference,
+            true,
+          )
+        } else {
+          const actionString = (typeItem as any).action
+          if (actionString) {
+            onPreferenceChange(
+              {
+                action: actionString,
+                enabled: true,
+              } as PushPreference,
+              true,
+            )
+          }
+        }
+      }
+    })
+  }
+
   const hasAnyEnabled = preferences.some((pref) => pref.enabled) || 
     notificationTypes.some((typeItem) => {
       const existingPreference = preferences.find((pref) => {
@@ -109,6 +158,20 @@ export function PreferenceSection({
       return existingPreference ? existingPreference.enabled : (type === "push")
     })
 
+  const hasAnyDisabled = preferences.some((pref) => !pref.enabled) ||
+    notificationTypes.some((typeItem) => {
+      const existingPreference = preferences.find((pref) => {
+        if (type === "email") {
+          return (pref as EmailPreference).action_type_id === typeItem.id
+        } else {
+          const actionString = (typeItem as any).action
+          return actionString && (pref as PushPreference).action === actionString
+        }
+      })
+      // If no preference exists, check default (email defaults to disabled)
+      return existingPreference ? !existingPreference.enabled : (type === "email")
+    })
+
   return (
     <FlatSection title={title}>
       <Grid container spacing={2}>
@@ -118,16 +181,28 @@ export function PreferenceSection({
               Choose which types of notifications you want to receive
               {contractorId ? " for this organization" : " individually"}.
             </Typography>
-            {hasAnyEnabled && (
-              <Button
-                size="small"
-                variant="outlined"
-                color="error"
-                onClick={handleTurnAllOff}
-              >
-                Turn All Off
-              </Button>
-            )}
+            <Box sx={{ display: "flex", gap: 1 }}>
+              {hasAnyEnabled && (
+                <Button
+                  size="small"
+                  variant="outlined"
+                  color="error"
+                  onClick={handleTurnAllOff}
+                >
+                  Turn All Off
+                </Button>
+              )}
+              {hasAnyDisabled && (
+                <Button
+                  size="small"
+                  variant="outlined"
+                  color="primary"
+                  onClick={handleTurnAllOn}
+                >
+                  Turn All On
+                </Button>
+              )}
+            </Box>
           </Box>
         </Grid>
 
@@ -153,8 +228,7 @@ export function PreferenceSection({
               }
             })
 
-            const enabled =
-              existingPreference?.enabled ?? (type === "push" ? true : false) // Push defaults to enabled, email to disabled
+            const enabled = existingPreference?.enabled ?? type === "push" // Push defaults to enabled, email to disabled
 
             return (
               <Grid item xs={12} sm={6} key={typeItem.id}>
