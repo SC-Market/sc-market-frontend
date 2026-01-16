@@ -34,7 +34,7 @@ import { MinimalUser } from "../../datatypes/User"
 import { store } from "../../store/store"
 
 export function SettingsManageContractors() {
-  const { t } = useTranslation() // ДОДАЙ ОЦЕ!
+  const { t } = useTranslation()
   const { data: profile } = useGetUserProfileQuery()
 
   const [leaveOrg] = useLeaveContractorMutation()

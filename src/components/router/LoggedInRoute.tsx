@@ -1,5 +1,5 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom"
-import React, { useMemo } from "react"
+import React, { useEffect, useMemo } from "react"
 import LoadingBar from "react-top-loading-bar"
 import { useGetUserProfileQuery } from "../../store/profile"
 import { BACKEND_URL } from "../../util/constants"
@@ -7,6 +7,7 @@ import { useGetContractorBySpectrumIDQuery } from "../../store/contractor"
 import { useCookies } from "react-cookie"
 import { has_permission } from "../../views/contractor/OrgRoles"
 import { ContractorRole } from "../../datatypes/Contractor"
+import Bugsnag from "@bugsnag/js"
 
 export function LoggedInRoute() {
   // const [profile, setProfile] = useUserProfile()
@@ -75,6 +76,13 @@ export function OrgAdminRoute(props: {
   })
 
   const { data: profile } = useGetUserProfileQuery()
+
+  useEffect(() => {
+    if (profile){
+      Bugsnag.setUser(profile?.username)
+    }
+  }, [profile])
+
   const canView = useMemo(() => {
     if (permission) {
       return has_permission(
