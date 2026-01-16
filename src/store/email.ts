@@ -238,6 +238,85 @@ export const emailApi = serviceApi.injectEndpoints({
           message: string
         }
       },
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        // Optimistically update the cache
+        const patchResult = dispatch(
+          emailApi.util.updateQueryData("getEmailPreferences", undefined, (draft) => {
+            if (!draft) return
+            arg.preferences.forEach((updatedPref) => {
+              // Update individual preferences
+              const individualIndex = draft.preferences.individual.findIndex(
+                (p) => p.action_type_id === updatedPref.action_type_id && !p.contractor_id
+              )
+              if (individualIndex !== -1) {
+                draft.preferences.individual[individualIndex].enabled = updatedPref.enabled ?? false
+              } else if (updatedPref.contractor_id === null || updatedPref.contractor_id === undefined) {
+                // Add new individual preference if it doesn't exist
+                draft.preferences.individual.push({
+                  preference_id: "",
+                  action_type_id: updatedPref.action_type_id,
+                  action_name: "",
+                  enabled: updatedPref.enabled ?? false,
+                  frequency: updatedPref.frequency || "immediate",
+                  digest_time: updatedPref.digest_time || null,
+                  created_at: "",
+                  updated_at: "",
+                  contractor_id: null,
+                })
+              }
+
+              // Update organization preferences
+              if (updatedPref.contractor_id) {
+                const orgIndex = draft.preferences.organizations.findIndex(
+                  (org) => org.contractor_id === updatedPref.contractor_id
+                )
+                if (orgIndex !== -1) {
+                  const prefIndex = draft.preferences.organizations[orgIndex].preferences.findIndex(
+                    (p) => p.action_type_id === updatedPref.action_type_id
+                  )
+                  if (prefIndex !== -1) {
+                    draft.preferences.organizations[orgIndex].preferences[prefIndex].enabled = updatedPref.enabled ?? false
+                  } else {
+                    draft.preferences.organizations[orgIndex].preferences.push({
+                      preference_id: "",
+                      action_type_id: updatedPref.action_type_id,
+                      action_name: "",
+                      enabled: updatedPref.enabled ?? false,
+                      frequency: updatedPref.frequency || "immediate",
+                      digest_time: updatedPref.digest_time || null,
+                      created_at: "",
+                      updated_at: "",
+                      contractor_id: updatedPref.contractor_id,
+                    })
+                  }
+                } else {
+                  // Add new organization if it doesn't exist
+                  draft.preferences.organizations.push({
+                    contractor_id: updatedPref.contractor_id,
+                    preferences: [{
+                      preference_id: "",
+                      action_type_id: updatedPref.action_type_id,
+                      action_name: "",
+                      enabled: updatedPref.enabled ?? false,
+                      frequency: updatedPref.frequency || "immediate",
+                      digest_time: updatedPref.digest_time || null,
+                      created_at: "",
+                      updated_at: "",
+                      contractor_id: updatedPref.contractor_id,
+                    }],
+                  })
+                }
+              }
+            })
+          })
+        )
+        try {
+          await queryFulfilled
+        } catch {
+          // Revert on error
+          patchResult.undo()
+        }
+      },
       invalidatesTags: ["EmailPreferences" as const, "UserEmail" as const],
     }),
 

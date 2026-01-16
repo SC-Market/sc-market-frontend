@@ -239,8 +239,6 @@ export function EmailSettings() {
             },
           ],
         }).unwrap()
-        // Immediately refetch preferences to show updated state
-        await refetchPreferences()
         setSuccess(
           `Preference updated for ${preference.action_name || (preference as EmailPreference).action_name || "notification"}`,
         )
@@ -253,7 +251,7 @@ export function EmailSettings() {
         )
       }
     },
-    [updatePreferences, refetchPreferences],
+    [updatePreferences],
   )
 
   // Get available notification types from API

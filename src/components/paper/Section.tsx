@@ -105,7 +105,7 @@ export function FlatSection(props: {
           {props.title}
         </Typography>
       </Grid>
-      <Grid item xs={12} lg={8}>
+      <Grid item xs={12} lg={8} sx={{ pr: 2 }}>
         <Grid
           container
           spacing={theme.layoutSpacing.component}
