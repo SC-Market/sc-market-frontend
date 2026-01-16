@@ -24,6 +24,8 @@ export interface Notification {
     | OfferSession
   timestamp: string
   actors: MinimalUser[]
+  scope?: "individual" | "organization"
+  contractor_id?: string | null
 }
 
 export interface AccountSettings {

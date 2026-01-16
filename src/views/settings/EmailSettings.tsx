@@ -37,6 +37,9 @@ import {
   useRequestVerificationMutation,
   EmailPreference,
 } from "../../store/email"
+import { useGetUserOrganizationsQuery } from "../../store/organizations"
+import { PreferenceSection } from "../../components/settings/PreferenceSection"
+import { OrganizationPreferenceSelector } from "../../components/settings/OrganizationPreferenceSelector"
 import { useTranslation } from "react-i18next"
 
 /**
@@ -71,6 +74,8 @@ export function EmailSettings() {
   })
   const { data: notificationTypesData, isLoading: notificationTypesLoading } =
     useGetNotificationTypesQuery()
+  const { data: organizationsData, isLoading: organizationsLoading } =
+    useGetUserOrganizationsQuery()
   const [addEmail] = useAddEmailMutation()
   const [updateEmail] = useUpdateEmailMutation()
   const [deleteEmail] = useDeleteEmailMutation()
@@ -218,6 +223,7 @@ export function EmailSettings() {
         | EmailPreference
         | { action_type_id: number; action_name?: string },
       enabled: boolean,
+      contractorId?: string | null,
     ) => {
       setError(null)
       try {
@@ -229,9 +235,12 @@ export function EmailSettings() {
               frequency:
                 (preference as EmailPreference).frequency || "immediate",
               digest_time: (preference as EmailPreference).digest_time || null,
+              contractor_id: contractorId ?? null,
             },
           ],
         }).unwrap()
+        // Immediately refetch preferences to show updated state
+        await refetchPreferences()
         setSuccess(
           `Preference updated for ${preference.action_name || (preference as EmailPreference).action_name || "notification"}`,
         )
@@ -244,7 +253,7 @@ export function EmailSettings() {
         )
       }
     },
-    [updatePreferences],
+    [updatePreferences, refetchPreferences],
   )
 
   // Get available notification types from API
@@ -253,184 +262,162 @@ export function EmailSettings() {
       id: type.action_type_id,
       name: formatActionName(type.action),
       description: type.description,
+      action: type.action, // Include for consistency with push preferences
     })) || []
 
   return (
-    <FlatSection title="Email Notifications">
+    <Grid container spacing={2}>
       {error && (
-        <Alert severity="error" sx={{ mb: 2 }} onClose={() => setError(null)}>
-          {error}
-        </Alert>
+        <Grid item xs={12}>
+          <Alert severity="error" sx={{ mb: 2 }} onClose={() => setError(null)}>
+            {error}
+          </Alert>
+        </Grid>
       )}
 
       {success && (
-        <Alert
-          severity="success"
-          sx={{ mb: 2 }}
-          onClose={() => setSuccess(null)}
-        >
-          {success}
-        </Alert>
+        <Grid item xs={12}>
+          <Alert
+            severity="success"
+            sx={{ mb: 2 }}
+            onClose={() => setSuccess(null)}
+          >
+            {success}
+          </Alert>
+        </Grid>
       )}
 
       {/* Email Status Section */}
       <Grid item xs={12}>
-        {preferencesLoading ? (
-          <CircularProgress />
-        ) : preferencesError ? (
-          <Alert severity="error">
-            Failed to load email settings. Please try again later.
-          </Alert>
-        ) : !hasEmail ? (
-          <Box>
-            <Typography variant="body2" color="text.secondary" gutterBottom>
-              You haven't added an email address yet. Add one to receive email
-              notifications.
-            </Typography>
-            <Button
-              variant="contained"
-              color="primary"
-              startIcon={<EmailIcon />}
-              onClick={() => setAddEmailDialogOpen(true)}
-              sx={{ mt: 2 }}
-            >
-              Add Email Address
-            </Button>
-          </Box>
-        ) : (
-          <Box>
-            <Typography variant="subtitle2" gutterBottom>
-              Email Address
-            </Typography>
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
-              <EmailIcon color="action" />
-              <Typography variant="body1">
-                {userEmail || "Email configured"}
-              </Typography>
-              <Chip
-                icon={
-                  emailVerified ? (
-                    <CheckCircleIcon />
-                  ) : (
-                    <CancelIcon color="error" />
-                  )
-                }
-                label={emailVerified ? "Verified" : "Not Verified"}
-                color={emailVerified ? "success" : "warning"}
-                size="small"
-              />
-            </Box>
-            <Box sx={{ display: "flex", gap: 1 }}>
-              <Button
-                variant="outlined"
-                size="small"
-                startIcon={<EditIcon />}
-                onClick={() => setEditEmailDialogOpen(true)}
-              >
-                Update Email
-              </Button>
-              {!emailVerified && (
-                <Button
-                  variant="outlined"
-                  size="small"
-                  onClick={handleRequestVerification}
-                  disabled={resendCooldown > 0}
-                >
-                  {resendCooldown > 0
-                    ? `Resend Verification (${resendCooldown}s)`
-                    : "Resend Verification"}
-                </Button>
+        <FlatSection title="Email Address">
+          <Grid container>
+            <Grid item xs={12}>
+              {preferencesLoading ? (
+                <CircularProgress />
+              ) : preferencesError ? (
+                <Alert severity="error">
+                  Failed to load email settings. Please try again later.
+                </Alert>
+              ) : !hasEmail ? (
+                <Box>
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    gutterBottom
+                  >
+                    You haven't added an email address yet. Add one to receive
+                    email notifications.
+                  </Typography>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    startIcon={<EmailIcon />}
+                    onClick={() => setAddEmailDialogOpen(true)}
+                    sx={{ mt: 2 }}
+                  >
+                    Add Email Address
+                  </Button>
+                </Box>
+              ) : (
+                <Box>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1,
+                      mb: 2,
+                    }}
+                  >
+                    <EmailIcon color="action" />
+                    <Typography variant="body1">
+                      {userEmail || "Email configured"}
+                    </Typography>
+                    <Chip
+                      icon={
+                        emailVerified ? (
+                          <CheckCircleIcon />
+                        ) : (
+                          <CancelIcon color="error" />
+                        )
+                      }
+                      label={emailVerified ? "Verified" : "Not Verified"}
+                      color={emailVerified ? "success" : "warning"}
+                      size="small"
+                    />
+                  </Box>
+                  <Box sx={{ display: "flex", gap: 1 }}>
+                    <Button
+                      variant="outlined"
+                      size="small"
+                      startIcon={<EditIcon />}
+                      onClick={() => setEditEmailDialogOpen(true)}
+                    >
+                      Update Email
+                    </Button>
+                    {!emailVerified && (
+                      <Button
+                        variant="outlined"
+                        size="small"
+                        onClick={handleRequestVerification}
+                        disabled={resendCooldown > 0}
+                      >
+                        {resendCooldown > 0
+                          ? `Resend Verification (${resendCooldown}s)`
+                          : "Resend Verification"}
+                      </Button>
+                    )}
+                    <Button
+                      variant="outlined"
+                      color="error"
+                      size="small"
+                      startIcon={<DeleteIcon />}
+                      onClick={() => setDeleteEmailDialogOpen(true)}
+                    >
+                      Remove Email
+                    </Button>
+                  </Box>
+                </Box>
               )}
-              <Button
-                variant="outlined"
-                color="error"
-                size="small"
-                startIcon={<DeleteIcon />}
-                onClick={() => setDeleteEmailDialogOpen(true)}
-              >
-                Remove Email
-              </Button>
-            </Box>
-          </Box>
-        )}
+            </Grid>
+          </Grid>
+        </FlatSection>
       </Grid>
 
-      {/* Preferences Section */}
+      {/* Individual Preferences Section */}
       {hasEmail && (
-        <>
-          <Grid item xs={12} sx={{ mt: 3 }}>
-            <Typography variant="h6" gutterBottom>
-              Notification Preferences
-            </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              Choose which types of notifications you want to receive via email.
-            </Typography>
-          </Grid>
+        <Grid item xs={12}>
+          <PreferenceSection
+            title="Individual Notifications"
+            preferences={preferences?.preferences?.individual || []}
+            notificationTypes={availableNotificationTypes}
+            onPreferenceChange={(pref, enabled) =>
+              handlePreferenceChange(pref as EmailPreference, enabled, null)
+            }
+            type="email"
+            contractorId={null}
+            isLoading={preferencesLoading || !notificationTypesData}
+          />
+        </Grid>
+      )}
 
-          {preferencesLoading || !notificationTypesData ? (
-            <Grid item xs={12}>
-              <CircularProgress />
-            </Grid>
-          ) : (
-            // Show all available notification types, with existing preferences merged in
-            availableNotificationTypes.map((type) => {
-              const existingPreference = preferences?.preferences?.find(
-                (pref) => pref.action_type_id === type.id,
+      {/* Organization Selector and Preferences */}
+      {hasEmail && organizationsData && organizationsData.length > 0 && (
+        <Grid item xs={12}>
+          <OrganizationPreferenceSelector
+            organizations={organizationsData}
+            preferences={preferences?.preferences?.organizations || []}
+            notificationTypes={availableNotificationTypes}
+            onPreferenceChange={(pref, enabled, contractorId) =>
+              handlePreferenceChange(
+                pref as EmailPreference,
+                enabled,
+                contractorId,
               )
-              const enabled = existingPreference?.enabled ?? false
-              const frequency = existingPreference?.frequency ?? "immediate"
-              const digestTime = existingPreference?.digest_time ?? null
-
-              return (
-                <Grid item xs={12} key={type.id}>
-                  <FormControlLabel
-                    control={
-                      <Switch
-                        checked={enabled}
-                        onChange={(e) => {
-                          // If preference doesn't exist, create it; otherwise update
-                          if (existingPreference) {
-                            handlePreferenceChange(
-                              existingPreference,
-                              e.target.checked,
-                            )
-                          } else {
-                            // Create new preference
-                            handlePreferenceChange(
-                              {
-                                preference_id: "",
-                                action_type_id: type.id,
-                                action_name: type.name,
-                                enabled: false,
-                                frequency: "immediate",
-                                digest_time: null,
-                                created_at: "",
-                                updated_at: "",
-                              },
-                              e.target.checked,
-                            )
-                          }
-                        }}
-                        color="primary"
-                      />
-                    }
-                    label={
-                      <Box>
-                        <Typography variant="body2">{type.name}</Typography>
-                        <Typography variant="caption" color="text.secondary">
-                          Frequency: {frequency}
-                          {digestTime && ` at ${digestTime}`}
-                        </Typography>
-                      </Box>
-                    }
-                    labelPlacement="start"
-                    sx={{ width: "100%", justifyContent: "space-between" }}
-                  />
-                </Grid>
-              )
-            })
-          )}
-        </>
+            }
+            type="email"
+            isLoading={organizationsLoading}
+          />
+        </Grid>
       )}
 
       {/* Add Email Dialog */}
@@ -550,7 +537,7 @@ export function EmailSettings() {
           </Button>
         </DialogActions>
       </Dialog>
-    </FlatSection>
+    </Grid>
   )
 }
 
