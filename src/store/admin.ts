@@ -155,18 +155,18 @@ export const adminApi = serviceApi.injectEndpoints({
     }),
     testNotification: builder.mutation<
       { message: string; data?: any },
-      { notification_type: string; target_username: string }
+      {
+        notification_type: string
+        target_username: string
+        contractor_id?: string | null
+      }
     >({
       query: (body) => ({
-        url: `${baseUrl}/notifications/test`,
+        url: `${baseUrl}/test-notification`,
         method: "POST",
         body,
       }),
       transformResponse: unwrapResponse,
-      invalidatesTags: (result, error, arg) => [
-        // Invalidate notifications so the new test notification appears in the top bar
-        "Notifications" as const,
-      ],
     }),
   }),
 })

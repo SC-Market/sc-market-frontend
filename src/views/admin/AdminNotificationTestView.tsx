@@ -21,6 +21,7 @@ import { UserSearch } from "../../components/search/UserSearch"
 import { User } from "../../datatypes/User"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { useGetUserOrganizationsQuery } from "../../store/organizations"
 
 const NOTIFICATION_TYPES = [
   "order_create",
@@ -47,11 +48,13 @@ export function AdminNotificationTestView() {
   const theme = useTheme<ExtendedTheme>()
   const [notificationType, setNotificationType] = useState<string>("")
   const [targetUser, setTargetUser] = useState<User | null>(null)
+  const [contractorId, setContractorId] = useState<string>("")
   const [testResult, setTestResult] = useState<any>(null)
   const [testError, setTestError] = useState<string>("")
 
   const [testNotification, { isLoading: isTesting }] =
     useTestNotificationMutation()
+  const { data: organizationsData } = useGetUserOrganizationsQuery()
 
   const issueAlert = useAlertHook()
 
@@ -95,6 +98,7 @@ export function AdminNotificationTestView() {
       const result = await testNotification({
         notification_type: notificationType,
         target_username: targetUser.username,
+        contractor_id: contractorId || null,
       }).unwrap()
 
       setTestResult(result)
@@ -200,6 +204,34 @@ export function AdminNotificationTestView() {
                 </Typography>
               )}
             </Box>
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <FormControl fullWidth>
+              <InputLabel>
+                {t(
+                  "admin.notificationTest.contractor",
+                  "Contractor (Optional - for org-scoped testing)",
+                )}
+              </InputLabel>
+              <Select
+                value={contractorId}
+                onChange={(e) => setContractorId(e.target.value)}
+                label={t(
+                  "admin.notificationTest.contractor",
+                  "Contractor (Optional - for org-scoped testing)",
+                )}
+              >
+                <MenuItem value="">
+                  <em>None (Individual)</em>
+                </MenuItem>
+                {organizationsData?.map((org) => (
+                  <MenuItem key={org.contractor_id} value={org.contractor_id}>
+                    {org.name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </Grid>
 
           <Grid item xs={12}>
