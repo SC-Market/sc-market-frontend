@@ -108,35 +108,27 @@ export function PushNotificationSettings() {
         return
       }
 
-      console.log("1")
       try {
         const currentSubscription = await getCurrentPushSubscription()
         if (!currentSubscription) {
-          console.log("2")
           setCurrentDeviceSubscribed(false)
           setCurrentSubscriptionId(null)
           return
         }
 
-        console.log("3")
         // Check if current device's endpoint matches any subscription
         const matchingSubscription = subscriptions.find(
           (sub) => sub.endpoint === currentSubscription.endpoint,
         )
-        console.log("4")
 
         if (matchingSubscription) {
-          console.log("5")
           setCurrentDeviceSubscribed(true)
           setCurrentSubscriptionId(matchingSubscription.subscription_id)
         } else {
-          console.log("6")
           setCurrentDeviceSubscribed(false)
           setCurrentSubscriptionId(null)
         }
       } catch (error) {
-        console.log("FAILURE FAILURE")
-        console.error("Failed to check current device subscription:", error)
         setCurrentDeviceSubscribed(false)
         setCurrentSubscriptionId(null)
       }
@@ -246,8 +238,6 @@ export function PushNotificationSettings() {
           enabled,
           contractor_id: contractorId ?? null,
         }).unwrap()
-        // Immediately refetch preferences to show updated state
-        await refetchPreferences()
         setSuccess(`Preference updated for ${action}`)
         // Clear success message after 2 seconds
         setTimeout(() => setSuccess(null), 2000)
@@ -259,7 +249,7 @@ export function PushNotificationSettings() {
         )
       }
     },
-    [updatePreference, refetchPreferences],
+    [updatePreference],
   )
 
   // Get available notification types formatted for display

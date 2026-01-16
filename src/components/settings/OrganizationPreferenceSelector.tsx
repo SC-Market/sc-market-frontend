@@ -57,42 +57,46 @@ export function OrganizationPreferenceSelector({
     []
 
   return (
-    <>
-      <FlatSection title="Organization Notifications">
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <FormControl fullWidth>
-              <InputLabel id="org-select-label">Select Organization</InputLabel>
-              <Select
-                labelId="org-select-label"
-                value={selectedOrgId}
-                label="Select Organization"
-                onChange={(e) => setSelectedOrgId(e.target.value)}
-              >
-                {organizations.map((org) => (
-                  <MenuItem key={org.contractor_id} value={org.contractor_id}>
-                    {org.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+    <Grid container spacing={2}>
+      <Grid item xs={12}>
+        <FlatSection title="Organization Notifications">
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <FormControl fullWidth>
+                <InputLabel id="org-select-label">Select Organization</InputLabel>
+                <Select
+                  labelId="org-select-label"
+                  value={selectedOrgId}
+                  label="Select Organization"
+                  onChange={(e) => setSelectedOrgId(e.target.value)}
+                >
+                  {organizations.map((org) => (
+                    <MenuItem key={org.contractor_id} value={org.contractor_id}>
+                      {org.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
           </Grid>
-        </Grid>
-      </FlatSection>
+        </FlatSection>
+      </Grid>
 
       {selectedOrg && (
-        <PreferenceSection
-          title={`Notifications for ${selectedOrg.name}`}
-          preferences={selectedOrgPreferences}
-          notificationTypes={notificationTypes}
-          onPreferenceChange={(pref, enabled) =>
-            onPreferenceChange(pref, enabled, selectedOrgId)
-          }
-          type={type}
-          contractorId={selectedOrgId}
-          isLoading={isLoading}
-        />
+        <Grid item xs={12}>
+          <PreferenceSection
+            title={`Notifications for ${selectedOrg.name}`}
+            preferences={selectedOrgPreferences}
+            notificationTypes={notificationTypes}
+            onPreferenceChange={(pref, enabled) =>
+              onPreferenceChange(pref, enabled, selectedOrgId)
+            }
+            type={type}
+            contractorId={selectedOrgId}
+            isLoading={isLoading}
+          />
+        </Grid>
       )}
-    </>
+    </Grid>
   )
 }
