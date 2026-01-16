@@ -66,7 +66,10 @@ export function useLongPress({
       if (!enabled) return
 
       // Prevent default context menu on long press
-      if (event.type === 'contextmenu' || (event.nativeEvent as any).button === 2) {
+      if (
+        event.type === "contextmenu" ||
+        (event.nativeEvent as any).button === 2
+      ) {
         event.preventDefault()
         return
       }
@@ -88,7 +91,10 @@ export function useLongPress({
   )
 
   const clear = useCallback(
-    (event: React.MouseEvent | React.TouchEvent, shouldTriggerClick = false) => {
+    (
+      event: React.MouseEvent | React.TouchEvent,
+      shouldTriggerClick = false,
+    ) => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current)
         timeoutRef.current = null

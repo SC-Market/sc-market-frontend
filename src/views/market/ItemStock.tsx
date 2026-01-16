@@ -80,7 +80,11 @@ import { ThemedDataGrid } from "../../components/grid/ThemedDataGrid"
 import { SelectGameItemStack } from "../../components/select/SelectGameItem"
 import { useGetUserProfileQuery } from "../../store/profile"
 import { useTranslation } from "react-i18next"
-import { PullToRefresh, LongPressMenu, useLongPress } from "../../components/gestures"
+import {
+  PullToRefresh,
+  LongPressMenu,
+  useLongPress,
+} from "../../components/gestures"
 import { Grid } from "@mui/material"
 import { EmptyListings } from "../../components/empty-states"
 import { BottomSheet } from "../../components/mobile"
@@ -296,7 +300,14 @@ function ItemStockToolbar(props: {
         }}
       >
         <ManageStockArea listings={props.listings} />
-        <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap", alignItems: "center" }}>
+        <Box
+          sx={{
+            display: "flex",
+            gap: 1,
+            flexWrap: "wrap",
+            alignItems: "center",
+          }}
+        >
           <LoadingButton
             color={"success"}
             startIcon={<RadioButtonCheckedRounded />}
@@ -981,8 +992,8 @@ export function DisplayStock({
 
   // Mobile card component - needs access to newRows, editingRows, rowModesModel, and handlers
   const StockCard = React.memo(
-    ({ 
-      row, 
+    ({
+      row,
       isSelected,
       newRows,
       editingRows,
@@ -993,13 +1004,15 @@ export function DisplayStock({
       handleEditClick,
       handleSaveClick,
       handleCancelClick,
-    }: { 
+    }: {
       row: StockRow & { id: string }
       isSelected: boolean
       newRows: NewListingRow[]
       editingRows: Record<string, Partial<NewListingRow>>
       rowModesModel: GridRowModesModel
-      setEditingRows: React.Dispatch<React.SetStateAction<Record<string, Partial<NewListingRow>>>>
+      setEditingRows: React.Dispatch<
+        React.SetStateAction<Record<string, Partial<NewListingRow>>>
+      >
       setRowModesModel: React.Dispatch<React.SetStateAction<GridRowModesModel>>
       setFetchingItemName: (name: string) => void
       handleEditClick: (id: GridRowId) => () => void
@@ -1011,15 +1024,15 @@ export function DisplayStock({
         return null // Context not available
       }
       const [selectionModel, setSelectionModel] = stockContext
-      
+
       // Check if this is a new row by ID pattern
       const isNewRow = row.id.startsWith("new-")
       const newRowData = isNewRow ? newRows.find((r) => r.id === row.id) : null
-      
+
       // Check if we're in selection mode (any items selected)
       const hasSelectedItems = selectionModel.ids.size > 0
       const isInSelectionMode = hasSelectedItems
-      
+
       const handleLongPressForSelection = React.useCallback(
         (event: React.MouseEvent | React.TouchEvent) => {
           if (isNewRow) return // Don't allow selection for new rows
@@ -1048,7 +1061,13 @@ export function DisplayStock({
           }
           setSelectionModel({ type: "include", ids: newIds })
         },
-        [selectionModel, row.id, setSelectionModel, isNewRow, isInSelectionMode],
+        [
+          selectionModel,
+          row.id,
+          setSelectionModel,
+          isNewRow,
+          isInSelectionMode,
+        ],
       )
 
       const longPressHandlers = useLongPress({
@@ -1110,14 +1129,33 @@ export function DisplayStock({
               onClick={handleEditClick(row.id)}
             >
               <CardContent sx={{ p: 2 }}>
-                <Stack direction="row" spacing={2} alignItems="center" justifyContent="space-between">
+                <Stack
+                  direction="row"
+                  spacing={2}
+                  alignItems="center"
+                  justifyContent="space-between"
+                >
                   <Box>
-                    <Typography variant="body1" color="text.secondary" fontWeight="medium" component="div">
-                      {newRowData?.item_name || t("ItemStock.newListingPending", "New listing - tap to edit")}
+                    <Typography
+                      variant="body1"
+                      color="text.secondary"
+                      fontWeight="medium"
+                      component="div"
+                    >
+                      {newRowData?.item_name ||
+                        t(
+                          "ItemStock.newListingPending",
+                          "New listing - tap to edit",
+                        )}
                     </Typography>
                     {newRowData?.item_name && (
-                      <Typography variant="body2" color="text.secondary" component="div">
-                        {newRowData.price.toLocaleString(undefined)} aUEC • Qty: {newRowData.quantity_available}
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        component="div"
+                      >
+                        {newRowData.price.toLocaleString(undefined)} aUEC • Qty:{" "}
+                        {newRowData.quantity_available}
                       </Typography>
                     )}
                   </Box>
@@ -1144,15 +1182,15 @@ export function DisplayStock({
           sx={{
             border: isSelected ? 2 : 1,
             borderColor: isSelected ? "primary.main" : "divider",
-            bgcolor: isSelected 
+            bgcolor: isSelected
               ? (theme) => {
                   const primaryColor = theme.palette.primary.main
                   // Extract RGB values and add alpha
-                  if (primaryColor.startsWith('#')) {
+                  if (primaryColor.startsWith("#")) {
                     const r = parseInt(primaryColor.slice(1, 3), 16)
                     const g = parseInt(primaryColor.slice(3, 5), 16)
                     const b = parseInt(primaryColor.slice(5, 7), 16)
-                    return `rgba(${r}, ${g}, ${b}, ${theme.palette.mode === 'dark' ? 0.12 : 0.08})`
+                    return `rgba(${r}, ${g}, ${b}, ${theme.palette.mode === "dark" ? 0.12 : 0.08})`
                   }
                   return theme.palette.primary.main
                 }
@@ -1162,11 +1200,15 @@ export function DisplayStock({
         >
           <CardActionArea
             component={isInSelectionMode ? "div" : Link}
-            to={isInSelectionMode ? undefined : formatCompleteListingUrl({
-              type: "unique",
-              details: { title: row.title },
-              listing: row,
-            })}
+            to={
+              isInSelectionMode
+                ? undefined
+                : formatCompleteListingUrl({
+                    type: "unique",
+                    details: { title: row.title },
+                    listing: row,
+                  })
+            }
             onClick={(e: React.MouseEvent) => {
               if (isInSelectionMode) {
                 e.preventDefault()
@@ -1189,7 +1231,12 @@ export function DisplayStock({
                 <Typography variant="body2" color="text.secondary">
                   {row.price.toLocaleString(undefined)} aUEC
                 </Typography>
-                <Stack direction="row" spacing={1} sx={{ mt: 1 }} flexWrap="wrap">
+                <Stack
+                  direction="row"
+                  spacing={1}
+                  sx={{ mt: 1 }}
+                  flexWrap="wrap"
+                >
                   <Chip
                     label={`${t("ItemStock.quantity")}: ${row.quantity_available.toLocaleString(undefined)}`}
                     size="small"
@@ -1213,9 +1260,7 @@ export function DisplayStock({
                   )}
                 </Stack>
               </Box>
-              {isSelected && (
-                <RadioButtonCheckedRounded color="primary" />
-              )}
+              {isSelected && <RadioButtonCheckedRounded color="primary" />}
             </Stack>
           </CardActionArea>
         </Card>
@@ -1305,11 +1350,16 @@ export function DisplayStock({
 
   if (isMobile) {
     const editingRow = editingRowId ? editingRows[editingRowId] : null
-    const newRowData = editingRowId ? newRows.find((r) => r.id === editingRowId) : null
-    const currentItemType = editingRow?.item_type ?? newRowData?.item_type ?? "Other"
-    const currentItemName = editingRow?.item_name ?? newRowData?.item_name ?? null
+    const newRowData = editingRowId
+      ? newRows.find((r) => r.id === editingRowId)
+      : null
+    const currentItemType =
+      editingRow?.item_type ?? newRowData?.item_type ?? "Other"
+    const currentItemName =
+      editingRow?.item_name ?? newRowData?.item_name ?? null
     const currentPrice = editingRow?.price ?? newRowData?.price ?? 1
-    const currentQuantity = editingRow?.quantity_available ?? newRowData?.quantity_available ?? 1
+    const currentQuantity =
+      editingRow?.quantity_available ?? newRowData?.quantity_available ?? 1
     const currentStatus = editingRow?.status ?? newRowData?.status ?? "active"
     const hasValidItem = !!currentItemName
 
@@ -1343,9 +1393,9 @@ export function DisplayStock({
                   const isSelected = rowSelectionModel.ids.has(row.id)
                   // Pass necessary props for editing functionality
                   return (
-                    <StockCard 
-                      key={row.id} 
-                      row={row} 
+                    <StockCard
+                      key={row.id}
+                      row={row}
                       isSelected={isSelected}
                       newRows={newRows}
                       editingRows={editingRows}
@@ -1353,7 +1403,9 @@ export function DisplayStock({
                       setEditingRows={setEditingRows}
                       setRowModesModel={setRowModesModel}
                       setFetchingItemName={setFetchingItemName}
-                      handleEditClick={(id) => () => handleOpenBottomSheet(id.toString())}
+                      handleEditClick={(id) => () =>
+                        handleOpenBottomSheet(id.toString())
+                      }
                       handleSaveClick={handleSaveClick}
                       handleCancelClick={handleCancelClick}
                     />
@@ -1363,7 +1415,7 @@ export function DisplayStock({
             )}
           </Paper>
         </PullToRefresh>
-        
+
         {/* Bottom Sheet for Quick Create */}
         <BottomSheet
           open={bottomSheetOpen}
@@ -1458,14 +1510,20 @@ export function DisplayStock({
                         ...prev,
                         [editingRowId]: {
                           ...prev[editingRowId],
-                          status: (e.target.checked ? "active" : "inactive") as "active" | "inactive",
+                          status: (e.target.checked ? "active" : "inactive") as
+                            | "active"
+                            | "inactive",
                         },
                       }))
                     }
                   }}
                 />
               }
-              label={currentStatus === "active" ? t("ItemStock.active") : t("ItemStock.inactive")}
+              label={
+                currentStatus === "active"
+                  ? t("ItemStock.active")
+                  : t("ItemStock.inactive")
+              }
             />
 
             <Box
@@ -1603,7 +1661,11 @@ export function MyItemStock() {
     ? { ...searchQueryParams, contractor_id: currentOrg?.spectrum_id }
     : searchQueryParams
 
-  const { data: searchResults, isLoading, refetch } = useGetMyListingsQuery(finalParams)
+  const {
+    data: searchResults,
+    isLoading,
+    refetch,
+  } = useGetMyListingsQuery(finalParams)
 
   const handleChangePage = useCallback((event: unknown, newPage: number) => {
     setPage(newPage)

@@ -77,7 +77,6 @@ import { AnimatedListItem } from "../../components/animations"
 
 ```tsx
 import { PageTransition } from "../../components/animations"
-
 ;<PageTransition in={true} variant="fade" timeout={300}>
   <YourPageContent />
 </PageTransition>
@@ -95,7 +94,6 @@ import { PageTransition } from "../../components/animations"
 
 ```tsx
 import { ParallaxContainer } from "../../components/animations"
-
 ;<ParallaxContainer speed={0.5}>
   <YourContent />
 </ParallaxContainer>
@@ -112,7 +110,6 @@ import { ParallaxContainer } from "../../components/animations"
 
 ```tsx
 import { ImageZoomPan } from "../../components/animations"
-
 ;<ImageZoomPan src={imageUrl} alt="Product image" maxZoom={3} minZoom={1} />
 ```
 
@@ -129,7 +126,6 @@ import { ImageZoomPan } from "../../components/animations"
 
 ```tsx
 import { AnimatedButton } from "../../components/animations"
-
 ;<AnimatedButton variant="contained" onClick={handleClick}>
   Click Me
 </AnimatedButton>

@@ -56,30 +56,30 @@ export function DashNotificationArea() {
             </Grid>
           ) : (
             <List
-            sx={{
-              "&>:first-child": {
-                borderTop: `1px solid ${theme.palette.outline.main}`,
-              },
-              "&>:last-child": {
-                borderBottom: "none",
-              },
-              "& > *": {
-                borderBottom: `1px solid ${theme.palette.outline.main}`,
-              },
-              padding: 0,
-              maxHeight: 400,
-              overflowY: "scroll",
-              width: "100%",
-              maxWidth: "100%",
-            }}
-          >
-            {(notifications || []).map(
-              (notification, idx) => (
-                // <Fade in={true} style={{transitionDelay: `${50 + 50 * idx}ms`, transitionDuration: '500ms'}} key={idx}>
-                <NotificationEntry notif={notification} key={idx} />
-              ),
-              // </Fade>
-            )}
+              sx={{
+                "&>:first-child": {
+                  borderTop: `1px solid ${theme.palette.outline.main}`,
+                },
+                "&>:last-child": {
+                  borderBottom: "none",
+                },
+                "& > *": {
+                  borderBottom: `1px solid ${theme.palette.outline.main}`,
+                },
+                padding: 0,
+                maxHeight: 400,
+                overflowY: "scroll",
+                width: "100%",
+                maxWidth: "100%",
+              }}
+            >
+              {(notifications || []).map(
+                (notification, idx) => (
+                  // <Fade in={true} style={{transitionDelay: `${50 + 50 * idx}ms`, transitionDuration: '500ms'}} key={idx}>
+                  <NotificationEntry notif={notification} key={idx} />
+                ),
+                // </Fade>
+              )}
             </List>
           )}
         </PullToRefresh>

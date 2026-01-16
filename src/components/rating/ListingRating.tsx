@@ -151,9 +151,18 @@ export function MarketListingRating(props: {
   const badges = prioritizeBadges(allBadges, display_limit)
 
   return (
-    <Box display={"flex"} alignItems={"center"} gap={0.5} sx={{ lineHeight: 1, margin: 0, padding: 0 }}>
+    <Box
+      display={"flex"}
+      alignItems={"center"}
+      gap={0.5}
+      sx={{ lineHeight: 1, margin: 0, padding: 0 }}
+    >
       <MarketRatingStars rating={rating} />
-      <MarketRatingCount rating={rating} badges={showBadges ? badges : []} iconSize={iconSize} />
+      <MarketRatingCount
+        rating={rating}
+        badges={showBadges ? badges : []}
+        iconSize={iconSize}
+      />
     </Box>
   )
 }
@@ -194,7 +203,15 @@ export function MarketRatingStars(props: { rating: Rating }) {
 
   // Market listings use 0-5 scale from market_search view
   return (
-    <Box sx={{ display: "flex", alignItems: "center", lineHeight: 1, margin: 0, padding: 0 }}>
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        lineHeight: 1,
+        margin: 0,
+        padding: 0,
+      }}
+    >
       <MuiRating
         readOnly
         precision={0.1}
@@ -257,17 +274,27 @@ export function MarketRatingCount(props: {
   const { rating, badges = [], iconSize } = props
 
   return (
-    <Box display={"flex"} alignItems={"center"} gap={0.5} sx={{ lineHeight: 1, margin: 0, padding: 0 }}>
+    <Box
+      display={"flex"}
+      alignItems={"center"}
+      gap={0.5}
+      sx={{ lineHeight: 1, margin: 0, padding: 0 }}
+    >
       <Box component="span" sx={{ lineHeight: 1, margin: 0, padding: 0 }}>
         ({rating.rating_count.toLocaleString(undefined)})
       </Box>
-      {badges.length > 0 && <BadgeDisplay badges={badges} iconSize={iconSize} />}
+      {badges.length > 0 && (
+        <BadgeDisplay badges={badges} iconSize={iconSize} />
+      )}
     </Box>
   )
 }
 
 // Badge display component that renders badges based on badge IDs
-export function BadgeDisplay(props: { badges: string[]; iconSize?: string | number }) {
+export function BadgeDisplay(props: {
+  badges: string[]
+  iconSize?: string | number
+}) {
   const { badges, iconSize } = props
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()

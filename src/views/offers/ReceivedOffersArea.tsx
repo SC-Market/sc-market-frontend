@@ -107,8 +107,15 @@ export function OfferRow(props: {
   hasSelectedItems?: boolean
 }) {
   const { t } = useTranslation()
-  const { row, index, isItemSelected, onClick, enableSelection, labelId, hasSelectedItems = false } =
-    props
+  const {
+    row,
+    index,
+    isItemSelected,
+    onClick,
+    enableSelection,
+    labelId,
+    hasSelectedItems = false,
+  } = props
   const date = useMemo(() => new Date(row.timestamp), [row.timestamp])
   const theme = useTheme<ExtendedTheme>()
   const navigate = useNavigate()
@@ -129,7 +136,7 @@ export function OfferRow(props: {
   }, [statusKey])
 
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
-  
+
   // When in selection mode (hasSelectedItems) on mobile, single tap should select
   const isInSelectionMode = isMobile && hasSelectedItems
 
@@ -166,11 +173,17 @@ export function OfferRow(props: {
   })
 
   const shouldUseDiv = isInSelectionMode || (isMobile && enableSelection)
-  
+
   return (
     <TableRow
       hover
-      onClick={isInSelectionMode ? handleRowClick : (isMobile && enableSelection ? undefined : handleRowClick)}
+      onClick={
+        isInSelectionMode
+          ? handleRowClick
+          : isMobile && enableSelection
+            ? undefined
+            : handleRowClick
+      }
       role={enableSelection ? "checkbox" : undefined}
       aria-checked={enableSelection ? isItemSelected : undefined}
       tabIndex={-1}
@@ -210,7 +223,13 @@ export function OfferRow(props: {
         </TableCell>
       )}
       <TableCell
-        onClick={isInSelectionMode ? handleRowClick : (isMobile && enableSelection ? () => navigate(`/offer/${row.id}`) : undefined)}
+        onClick={
+          isInSelectionMode
+            ? handleRowClick
+            : isMobile && enableSelection
+              ? () => navigate(`/offer/${row.id}`)
+              : undefined
+        }
         sx={{
           width: { xs: "45%", sm: "auto" },
           minWidth: { xs: 0, sm: "auto" },
@@ -582,7 +601,12 @@ export function OffersViewPaginated(props: {
                 <Tab
                   key={id || "all"}
                   label={tag}
-                  icon={<Chip label={id ? (totals.get(id) || 0) : totalCount} size={"small"} />}
+                  icon={
+                    <Chip
+                      label={id ? totals.get(id) || 0 : totalCount}
+                      size={"small"}
+                    />
+                  }
                   {...a11yProps(index)}
                   onClick={() => setStatusFilter(id)}
                 />

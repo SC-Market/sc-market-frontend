@@ -145,7 +145,11 @@ export function Recruiting() {
           )}
 
           <RecruitingSidebar />
-          <ContainerGrid maxWidth={"md"} sidebarOpen={sidebarOpen} sidebarWidth={marketDrawerWidth}>
+          <ContainerGrid
+            maxWidth={"md"}
+            sidebarOpen={sidebarOpen}
+            sidebarWidth={marketDrawerWidth}
+          >
             <div ref={ref} />
             <Grid
               item
@@ -200,7 +204,8 @@ export function Recruiting() {
                       <EmptyRecruiting
                         isSearchResult={
                           searchState.query !== "" ||
-                          (searchState.fields && searchState.fields.length > 0) ||
+                          (searchState.fields &&
+                            searchState.fields.length > 0) ||
                           searchState.rating > 0 ||
                           (searchState.language_codes &&
                             searchState.language_codes.length > 0)
@@ -211,7 +216,11 @@ export function Recruiting() {
                     </Grid>
                   ) : (
                     (posts?.items || []).map((item, index) => (
-                      <RecruitingPostItem post={item} key={index} index={index} />
+                      <RecruitingPostItem
+                        post={item}
+                        key={index}
+                        index={index}
+                      />
                     ))
                   )
                 ) : (

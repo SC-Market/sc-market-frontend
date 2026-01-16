@@ -12,7 +12,10 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle"
 import ErrorIcon from "@mui/icons-material/Error"
 import { Page } from "../../components/metadata/Page"
 import { ContainerGrid } from "../../components/layout/ContainerGrid"
-import { useUnsubscribeMutation, useGetEmailPreferencesQuery } from "../../store/email"
+import {
+  useUnsubscribeMutation,
+  useGetEmailPreferencesQuery,
+} from "../../store/email"
 
 /**
  * Unsubscribe Page
@@ -43,15 +46,20 @@ export function UnsubscribePage() {
   ] = useUnsubscribeMutation()
 
   // Refetch preferences after unsubscribe to ensure cache is updated
-  const { refetch: refetchPreferences } = useGetEmailPreferencesQuery(undefined, {
-    skip: true, // Don't auto-fetch, only refetch when needed
-  })
+  const { refetch: refetchPreferences } = useGetEmailPreferencesQuery(
+    undefined,
+    {
+      skip: true, // Don't auto-fetch, only refetch when needed
+    },
+  )
 
   useEffect(() => {
     // If redirected from backend with success/error params (legacy support)
     if (success === "true") {
       setStatus("success")
-      setMessage("You have been successfully unsubscribed from all email notifications.")
+      setMessage(
+        "You have been successfully unsubscribed from all email notifications.",
+      )
     } else if (error) {
       setStatus("error")
       if (error === "invalid_token") {
@@ -87,7 +95,9 @@ export function UnsubscribePage() {
             err?.data?.message ||
             err?.error?.message ||
             err?.message ||
-            (typeof err === "string" ? err : "Unsubscribe failed. The token may be invalid or already used.")
+            (typeof err === "string"
+              ? err
+              : "Unsubscribe failed. The token may be invalid or already used.")
           setMessage(errorMessage)
         })
     } else if (!token) {
@@ -142,9 +152,7 @@ export function UnsubscribePage() {
 
             {status === "error" && (
               <>
-                <ErrorIcon
-                  sx={{ fontSize: 60, color: "error.main", mb: 2 }}
-                />
+                <ErrorIcon sx={{ fontSize: 60, color: "error.main", mb: 2 }} />
                 <Typography variant="h5" gutterBottom>
                   Unsubscribe Failed
                 </Typography>

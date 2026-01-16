@@ -44,7 +44,7 @@ import { getRelativeTime } from "../../util/time"
 import { MarkdownRender } from "../../components/markdown/Markdown"
 
 // Single chat entry in the chat list
-function ChatEntry(props: { 
+function ChatEntry(props: {
   chat: Chat
   unreadCount?: number
   isVisible?: boolean
@@ -66,26 +66,32 @@ function ChatEntry(props: {
   // Chats can be associated with orders or offers, so we query based on order_id or session_id
   // If chat has order_id, query order_message with that order_id as entityId
   // If chat has session_id, query offer_message with that session_id as entityId
-  const { data: orderNotificationsData } = useGetNotificationsQuery({
-    page: 0,
-    pageSize: 100,
-    action: "order_message",
-    entityId: props.chat.order_id || undefined,
-  }, { skip: !props.chat.chat_id || !props.chat.order_id || !props.isVisible })
-  
-  const { data: offerNotificationsData } = useGetNotificationsQuery({
-    page: 0,
-    pageSize: 100,
-    action: "offer_message",
-    entityId: props.chat.session_id || undefined,
-  }, { skip: !props.chat.chat_id || !props.chat.session_id || !props.isVisible })
-  
+  const { data: orderNotificationsData } = useGetNotificationsQuery(
+    {
+      page: 0,
+      pageSize: 100,
+      action: "order_message",
+      entityId: props.chat.order_id || undefined,
+    },
+    { skip: !props.chat.chat_id || !props.chat.order_id || !props.isVisible },
+  )
+
+  const { data: offerNotificationsData } = useGetNotificationsQuery(
+    {
+      page: 0,
+      pageSize: 100,
+      action: "offer_message",
+      entityId: props.chat.session_id || undefined,
+    },
+    { skip: !props.chat.chat_id || !props.chat.session_id || !props.isVisible },
+  )
+
   // Use the appropriate notification data based on chat type
-  const chatNotificationsData = props.chat.order_id 
-    ? orderNotificationsData 
-    : props.chat.session_id 
-    ? offerNotificationsData 
-    : undefined
+  const chatNotificationsData = props.chat.order_id
+    ? orderNotificationsData
+    : props.chat.session_id
+      ? offerNotificationsData
+      : undefined
 
   // Calculate unread count from notifications
   const unreadCount = useMemo(() => {
@@ -168,12 +174,24 @@ function ChatEntry(props: {
         <Box
           sx={{ marginLeft: 1, overflow: "hidden", flexGrow: 1, minWidth: 0 }}
         >
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1, flex: 1, minWidth: 0 }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+              flex: 1,
+              minWidth: 0,
+            }}
+          >
             <Typography
               noWrap
               align={"left"}
               color={unreadCount > 0 ? "primary.main" : "text.secondary"}
-              sx={{ fontWeight: unreadCount > 0 ? 600 : 500, flex: 1, minWidth: 0 }}
+              sx={{
+                fontWeight: unreadCount > 0 ? 600 : 500,
+                flex: 1,
+                minWidth: 0,
+              }}
             >
               {props.chat.title || (
                 <>
@@ -228,7 +246,7 @@ function ChatEntry(props: {
             ) : (
               <Typography
                 component="span"
-                sx={{ 
+                sx={{
                   fontSize: "0.875rem",
                   fontWeight: unreadCount > 0 ? 500 : 400,
                   color: unreadCount > 0 ? "text.primary" : "text.secondary",
@@ -293,7 +311,7 @@ export function MessagingSidebarContent(
         root: null, // Use viewport as root
         rootMargin: "50px", // Start loading 50px before entry becomes visible
         threshold: 0.1, // Trigger when 10% visible
-      }
+      },
     )
 
     return () => {
@@ -394,67 +412,65 @@ export function MessagingSidebarContent(
           overflow: "auto", // Only the list scrolls, not the whole sidebar
         }}
       >
-          {isLoading || isFetching ? (
-            <>
-              {Array.from({ length: 5 }).map((_, i) => (
-                <MessageListSkeleton key={i} index={i} />
-              ))}
-            </>
-          ) : (chats || []).length === 0 ? (
-            <Box sx={{ p: 3 }}>
-              <EmptyMessages
-                isChatList={true}
-                showCreateAction={true}
-                sx={{ py: 2 }}
-              />
-            </Box>
-          ) : (chats || [])
-              .filter((chat) => {
-                if (!searchQuery) return true
-                // Search in user usernames and contractor names
-                const searchLower = searchQuery.toLowerCase()
-                return chat.participants.some((p) => {
-                  if (p.type === "user") {
-                    return p.username.toLowerCase().includes(searchLower)
-                  } else {
-                    return p.name.toLowerCase().includes(searchLower)
-                  }
-                })
+        {isLoading || isFetching ? (
+          <>
+            {Array.from({ length: 5 }).map((_, i) => (
+              <MessageListSkeleton key={i} index={i} />
+            ))}
+          </>
+        ) : (chats || []).length === 0 ? (
+          <Box sx={{ p: 3 }}>
+            <EmptyMessages
+              isChatList={true}
+              showCreateAction={true}
+              sx={{ py: 2 }}
+            />
+          </Box>
+        ) : (chats || []).filter((chat) => {
+            if (!searchQuery) return true
+            // Search in user usernames and contractor names
+            const searchLower = searchQuery.toLowerCase()
+            return chat.participants.some((p) => {
+              if (p.type === "user") {
+                return p.username.toLowerCase().includes(searchLower)
+              } else {
+                return p.name.toLowerCase().includes(searchLower)
+              }
+            })
+          }).length === 0 ? (
+          <Box sx={{ p: 3 }}>
+            <EmptySearchResults
+              searchQuery={searchQuery}
+              onClearFilters={() => setSearchQuery("")}
+              sx={{ py: 2 }}
+            />
+          </Box>
+        ) : (
+          (chats || [])
+            .filter((chat) => {
+              if (!searchQuery) return true
+              // Search in user usernames and contractor names
+              const searchLower = searchQuery.toLowerCase()
+              return chat.participants.some((p) => {
+                if (p.type === "user") {
+                  return p.username.toLowerCase().includes(searchLower)
+                } else {
+                  return p.name.toLowerCase().includes(searchLower)
+                }
               })
-              .length === 0 ? (
-            <Box sx={{ p: 3 }}>
-              <EmptySearchResults
-                searchQuery={searchQuery}
-                onClearFilters={() => setSearchQuery("")}
-                sx={{ py: 2 }}
-              />
-            </Box>
-          ) : (
-            (chats || [])
-              .filter((chat) => {
-                if (!searchQuery) return true
-                // Search in user usernames and contractor names
-                const searchLower = searchQuery.toLowerCase()
-                return chat.participants.some((p) => {
-                  if (p.type === "user") {
-                    return p.username.toLowerCase().includes(searchLower)
-                  } else {
-                    return p.name.toLowerCase().includes(searchLower)
-                  }
-                })
-              })
-              .map((chat) => {
-                const isVisible = visibleChatIds.has(chat.chat_id)
-                return (
-                  <ChatEntry
-                    key={chat.chat_id}
-                    chat={chat}
-                    isVisible={isVisible}
-                    entryRef={createEntryRef(chat.chat_id)}
-                  />
-                )
-              })
-          )}
+            })
+            .map((chat) => {
+              const isVisible = visibleChatIds.has(chat.chat_id)
+              return (
+                <ChatEntry
+                  key={chat.chat_id}
+                  chat={chat}
+                  isVisible={isVisible}
+                  entryRef={createEntryRef(chat.chat_id)}
+                />
+              )
+            })
+        )}
       </List>
     </Box>
   )

@@ -62,10 +62,38 @@ export function VirtualizedGrid<T>(props: VirtualizedGridProps<T>) {
   const heightValue = useMemo(() => {
     if (typeof itemHeight === "number") return itemHeight
     if (typeof itemHeight === "object") {
-      if (isXs) return itemHeight.xs ?? itemHeight.sm ?? itemHeight.md ?? itemHeight.lg ?? 400
-      if (isBelowMd) return itemHeight.sm ?? itemHeight.md ?? itemHeight.lg ?? itemHeight.xs ?? 400
-      if (isMd) return itemHeight.md ?? itemHeight.lg ?? itemHeight.sm ?? itemHeight.xs ?? 400
-      if (isLg) return itemHeight.lg ?? itemHeight.md ?? itemHeight.sm ?? itemHeight.xs ?? 400
+      if (isXs)
+        return (
+          itemHeight.xs ??
+          itemHeight.sm ??
+          itemHeight.md ??
+          itemHeight.lg ??
+          400
+        )
+      if (isBelowMd)
+        return (
+          itemHeight.sm ??
+          itemHeight.md ??
+          itemHeight.lg ??
+          itemHeight.xs ??
+          400
+        )
+      if (isMd)
+        return (
+          itemHeight.md ??
+          itemHeight.lg ??
+          itemHeight.sm ??
+          itemHeight.xs ??
+          400
+        )
+      if (isLg)
+        return (
+          itemHeight.lg ??
+          itemHeight.md ??
+          itemHeight.sm ??
+          itemHeight.xs ??
+          400
+        )
       return itemHeight.xs ?? 400
     }
     return 400 // Default

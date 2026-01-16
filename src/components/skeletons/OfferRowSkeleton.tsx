@@ -1,4 +1,11 @@
-import { TableRow, TableCell, Avatar, Stack, Paper, Checkbox } from "@mui/material"
+import {
+  TableRow,
+  TableCell,
+  Avatar,
+  Stack,
+  Paper,
+  Checkbox,
+} from "@mui/material"
 import { BaseSkeleton } from "./BaseSkeleton"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTheme } from "@mui/material/styles"

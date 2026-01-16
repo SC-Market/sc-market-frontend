@@ -7,9 +7,24 @@ import { initPWA } from "./util/pwa"
 
 const container = document.getElementById("root")
 const root = createRoot(container!)
+import Bugsnag from "@bugsnag/js"
+import BugsnagPluginReact from "@bugsnag/plugin-react"
+import BugsnagPerformance from "@bugsnag/browser-performance"
+
+Bugsnag.start({
+  apiKey: "0616958ac29ef75ceb01df23c74f4cbd",
+  plugins: [new BugsnagPluginReact()],
+})
+BugsnagPerformance.start({ apiKey: "0616958ac29ef75ceb01df23c74f4cbd" })
+
+const BugSnagErrorBoundary =
+  Bugsnag.getPlugin("react")!.createErrorBoundary(React)
+
 root.render(
   <React.StrictMode>
-    <App />
+    <BugSnagErrorBoundary>
+      <App />
+    </BugSnagErrorBoundary>
   </React.StrictMode>,
 )
 

@@ -1,6 +1,10 @@
 import React, { useState, useRef, useCallback, ReactNode } from "react"
 import { Box, IconButton } from "@mui/material"
-import { DeleteRounded, FavoriteRounded, MoreVertRounded } from "@mui/icons-material"
+import {
+  DeleteRounded,
+  FavoriteRounded,
+  MoreVertRounded,
+} from "@mui/icons-material"
 import { useHapticFeedback } from "../../hooks/gestures/useHapticFeedback"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -159,48 +163,59 @@ export function SwipeableItem({
     startX.current = null
     currentX.current = null
     hasTriggeredHaptic.current = false
-  }, [enabled, swipeOffset, threshold, onSwipeLeft, onSwipeRight, onSwipeAction, hapticFeedback, triggerHaptic])
+  }, [
+    enabled,
+    swipeOffset,
+    threshold,
+    onSwipeLeft,
+    onSwipeRight,
+    onSwipeAction,
+    hapticFeedback,
+    triggerHaptic,
+  ])
 
   // Determine which action to show
   const showLeftAction = swipeOffset > 0 && (onSwipeRight || showDefaultActions)
   const showRightAction = swipeOffset < 0 && (onSwipeLeft || showDefaultActions)
 
   // Default actions
-  const defaultLeftAction = showDefaultActions && onSwipeRight ? (
-    <IconButton
-      onClick={(e) => {
-        e.stopPropagation()
-        onSwipeRight()
-      }}
-      sx={{
-        backgroundColor: theme.palette.success.main,
-        color: theme.palette.success.contrastText,
-        "&:hover": {
-          backgroundColor: theme.palette.success.dark,
-        },
-      }}
-    >
-      <FavoriteRounded />
-    </IconButton>
-  ) : null
+  const defaultLeftAction =
+    showDefaultActions && onSwipeRight ? (
+      <IconButton
+        onClick={(e) => {
+          e.stopPropagation()
+          onSwipeRight()
+        }}
+        sx={{
+          backgroundColor: theme.palette.success.main,
+          color: theme.palette.success.contrastText,
+          "&:hover": {
+            backgroundColor: theme.palette.success.dark,
+          },
+        }}
+      >
+        <FavoriteRounded />
+      </IconButton>
+    ) : null
 
-  const defaultRightAction = showDefaultActions && onSwipeLeft ? (
-    <IconButton
-      onClick={(e) => {
-        e.stopPropagation()
-        onSwipeLeft()
-      }}
-      sx={{
-        backgroundColor: theme.palette.error.main,
-        color: theme.palette.error.contrastText,
-        "&:hover": {
-          backgroundColor: theme.palette.error.dark,
-        },
-      }}
-    >
-      <DeleteRounded />
-    </IconButton>
-  ) : null
+  const defaultRightAction =
+    showDefaultActions && onSwipeLeft ? (
+      <IconButton
+        onClick={(e) => {
+          e.stopPropagation()
+          onSwipeLeft()
+        }}
+        sx={{
+          backgroundColor: theme.palette.error.main,
+          color: theme.palette.error.contrastText,
+          "&:hover": {
+            backgroundColor: theme.palette.error.dark,
+          },
+        }}
+      >
+        <DeleteRounded />
+      </IconButton>
+    ) : null
 
   return (
     <Box

@@ -27,7 +27,11 @@ import { ListingSellerRating } from "../../components/rating/ListingRating"
 import { RecruitmentVotes } from "../../components/button/RecruitmentVotes"
 import { useTranslation } from "react-i18next"
 import { LongPressMenu } from "../../components/gestures"
-import { ShareRounded, VisibilityRounded, BusinessRounded } from "@mui/icons-material"
+import {
+  ShareRounded,
+  VisibilityRounded,
+  BusinessRounded,
+} from "@mui/icons-material"
 import { useNavigate } from "react-router-dom"
 
 export const RecruitingPostItem = React.memo(
@@ -43,7 +47,7 @@ export const RecruitingPostItem = React.memo(
     const longPressActions = useMemo(() => {
       const recruitingUrl = `/contractor/${contractor.spectrum_id}/recruiting`
       const contractorUrl = `/contractor/${contractor.spectrum_id}`
-      
+
       return [
         {
           label: t("recruiting.viewDetails", { defaultValue: "View Details" }),
@@ -51,7 +55,9 @@ export const RecruitingPostItem = React.memo(
           onClick: () => navigate(recruitingUrl),
         },
         {
-          label: t("recruiting.viewContractor", { defaultValue: "View Contractor" }),
+          label: t("recruiting.viewContractor", {
+            defaultValue: "View Contractor",
+          }),
           icon: <BusinessRounded />,
           onClick: () => navigate(contractorUrl),
         },
@@ -61,13 +67,15 @@ export const RecruitingPostItem = React.memo(
           onClick: () => {
             const url = `${window.location.origin}${recruitingUrl}`
             if (navigator.share) {
-              navigator.share({
-                title: post.title,
-                text: post.title,
-                url,
-              }).catch(() => {
-                // User cancelled or error occurred
-              })
+              navigator
+                .share({
+                  title: post.title,
+                  text: post.title,
+                  url,
+                })
+                .catch(() => {
+                  // User cancelled or error occurred
+                })
             } else {
               // Fallback: copy to clipboard
               navigator.clipboard.writeText(url)
@@ -234,11 +242,14 @@ export const RecruitingPostItem = React.memo(
     )
 
     // Wrap inner content with LongPressMenu on mobile, then wrap in Grid item
-    const wrappedContent = isMobile && longPressActions.length > 0 ? (
-      <LongPressMenu actions={longPressActions} enabled={isMobile}>
-        {cardInnerContent}
-      </LongPressMenu>
-    ) : cardInnerContent
+    const wrappedContent =
+      isMobile && longPressActions.length > 0 ? (
+        <LongPressMenu actions={longPressActions} enabled={isMobile}>
+          {cardInnerContent}
+        </LongPressMenu>
+      ) : (
+        cardInnerContent
+      )
 
     return (
       <Grid item xs={12} lg={12}>

@@ -168,7 +168,14 @@ export function usePullToRefresh({
         hasTriggeredHaptic.current = true
       }
     },
-    [enabled, isRefreshing, threshold, resistance, hapticFeedback, triggerHaptic],
+    [
+      enabled,
+      isRefreshing,
+      threshold,
+      resistance,
+      hapticFeedback,
+      triggerHaptic,
+    ],
   )
 
   const handleTouchEnd = useCallback(() => {

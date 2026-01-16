@@ -155,7 +155,7 @@ export function OrderRow(props: {
   const { t } = useTranslation()
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
   const navigate = useNavigate()
-  
+
   // When in selection mode (hasSelectedItems) on mobile, single tap should select
   const isInSelectionMode = isMobile && hasSelectedItems
 
@@ -203,13 +203,15 @@ export function OrderRow(props: {
         onClick: () => {
           const url = `${window.location.origin}/contract/${row.order_id}`
           if (navigator.share) {
-            navigator.share({
-              title: t("orders.orderLabel", { defaultValue: "Order" }),
-              text: `${t("orders.orderLabel", { defaultValue: "Order" })} ${row.order_id.substring(0, 8).toUpperCase()}`,
-              url,
-            }).catch(() => {
-              // User cancelled or error occurred
-            })
+            navigator
+              .share({
+                title: t("orders.orderLabel", { defaultValue: "Order" }),
+                text: `${t("orders.orderLabel", { defaultValue: "Order" })} ${row.order_id.substring(0, 8).toUpperCase()}`,
+                url,
+              })
+              .catch(() => {
+                // User cancelled or error occurred
+              })
           } else {
             // Fallback: copy to clipboard
             navigator.clipboard.writeText(url)
@@ -222,15 +224,23 @@ export function OrderRow(props: {
   const rowContent = (
     <TableRow
       hover
-      onClick={isInSelectionMode ? props.onClick : (isMobile ? undefined : props.onClick)}
+      onClick={
+        isInSelectionMode ? props.onClick : isMobile ? undefined : props.onClick
+      }
       role="checkbox"
       aria-checked={isItemSelected}
       tabIndex={-1}
       key={index}
       selected={isItemSelected}
       style={{ textDecoration: "none", color: "inherit" }}
-      component={isInSelectionMode ? "div" : (isMobile ? "div" : Link)}
-      to={isInSelectionMode ? undefined : (isMobile ? undefined : `/contract/${row.order_id}`)}
+      component={isInSelectionMode ? "div" : isMobile ? "div" : Link}
+      to={
+        isInSelectionMode
+          ? undefined
+          : isMobile
+            ? undefined
+            : `/contract/${row.order_id}`
+      }
       {...(isMobile ? longPressHandlers : {})}
       sx={{
         "& .MuiTableCell-root": {
@@ -267,7 +277,13 @@ export function OrderRow(props: {
         />
       </TableCell>
       <TableCell
-        onClick={isInSelectionMode ? props.onClick : (isMobile ? () => navigate(`/contract/${row.order_id}`) : undefined)}
+        onClick={
+          isInSelectionMode
+            ? props.onClick
+            : isMobile
+              ? () => navigate(`/contract/${row.order_id}`)
+              : undefined
+        }
         sx={{
           width: { xs: "45%", sm: "auto" },
           minWidth: { xs: 0, sm: "auto" },
@@ -762,43 +778,46 @@ export function OrdersViewPaginated(props: {
             }}
           >
             <ControlledTable
-            rows={(orders?.items || []).map((o) => ({
-              ...o,
-              other_name: mine
-                ? o.assigned_to?.username || o.contractor?.spectrum_id || null
-                : o.customer.username,
-              mine,
-            }))}
-            initialSort={"timestamp"}
-            onPageChange={setPage}
-            page={page}
-            onPageSizeChange={setPageSize}
-            pageSize={pageSize}
-            rowCount={+(totalCounts[statusFilter] || 0)}
-            onOrderChange={setOrder}
-            order={order}
-            onOrderByChange={setOrderBy}
-            orderBy={orderBy}
-            generateRow={OrderRow}
-            keyAttr={"order_id"}
-            headCells={(mine ? MyOrderHeadCells : OrderHeadCells).map((cell) => ({
-              ...cell,
-              label: t(cell.label),
-            }))}
-            disableSelect={false} // Selection enabled on both mobile and desktop
-            loading={isLoading || isFetching}
-            loadingRowComponent={OrderRowSkeleton}
-            emptyStateComponent={
-              !(isLoading || isFetching) && (orders?.items || []).length === 0 ? (
-                <EmptyOrders
-                  isOffers={false}
-                  isSent={mine}
-                  showCreateAction={mine}
-                  sx={{ py: 4 }}
-                />
-              ) : undefined
-            }
-          />
+              rows={(orders?.items || []).map((o) => ({
+                ...o,
+                other_name: mine
+                  ? o.assigned_to?.username || o.contractor?.spectrum_id || null
+                  : o.customer.username,
+                mine,
+              }))}
+              initialSort={"timestamp"}
+              onPageChange={setPage}
+              page={page}
+              onPageSizeChange={setPageSize}
+              pageSize={pageSize}
+              rowCount={+(totalCounts[statusFilter] || 0)}
+              onOrderChange={setOrder}
+              order={order}
+              onOrderByChange={setOrderBy}
+              orderBy={orderBy}
+              generateRow={OrderRow}
+              keyAttr={"order_id"}
+              headCells={(mine ? MyOrderHeadCells : OrderHeadCells).map(
+                (cell) => ({
+                  ...cell,
+                  label: t(cell.label),
+                }),
+              )}
+              disableSelect={false} // Selection enabled on both mobile and desktop
+              loading={isLoading || isFetching}
+              loadingRowComponent={OrderRowSkeleton}
+              emptyStateComponent={
+                !(isLoading || isFetching) &&
+                (orders?.items || []).length === 0 ? (
+                  <EmptyOrders
+                    isOffers={false}
+                    isSent={mine}
+                    showCreateAction={mine}
+                    sx={{ py: 4 }}
+                  />
+                ) : undefined
+              }
+            />
           </Box>
         </PullToRefresh>
       </Paper>

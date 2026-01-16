@@ -38,7 +38,7 @@ export function MobileBottomNav() {
 
   // Only show on xs devices (not sm) - check this BEFORE hooks to avoid hook order issues
   const isMobile = useMediaQuery(theme.breakpoints.only("xs"))
-  
+
   // Bottom nav is hidden when keyboard is open (height is 0)
   const isKeyboardOpen = bottomNavHeight === 0 && isMobile
 

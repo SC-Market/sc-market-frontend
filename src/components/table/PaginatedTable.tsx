@@ -583,7 +583,9 @@ export function ControlledTable<T>(props: {
                   height: 73 * emptyRows,
                 }}
               >
-                <TableCell colSpan={headCells.length + (disableSelect ? 0 : 1)} />
+                <TableCell
+                  colSpan={headCells.length + (disableSelect ? 0 : 1)}
+                />
               </TableRow>
             )}
           </TableBody>

@@ -40,7 +40,11 @@ import {
 import { getRelativeTime } from "../../util/time"
 import { useMessagingSidebar } from "../../hooks/messaging/MessagingSidebar"
 import { useCurrentChat } from "../../hooks/messaging/CurrentChat"
-import { useSendChatMessageMutation, useGetChatByIDQuery, chatsApi } from "../../store/chats"
+import {
+  useSendChatMessageMutation,
+  useGetChatByIDQuery,
+  chatsApi,
+} from "../../store/chats"
 import { useParams } from "react-router-dom"
 import { io } from "socket.io-client"
 import { WS_URL } from "../../util/constants"
@@ -170,11 +174,7 @@ function MessageEntryMobile(props: { message: Message }) {
   }, [message.content, t])
 
   const messageContent = (
-    <Stack
-      direction={"row"}
-      spacing={1.5}
-      justifyContent={"flex-start"}
-    >
+    <Stack direction={"row"} spacing={1.5} justifyContent={"flex-start"}>
       {message.author ? (
         <Link to={`/user/${author?.username}`}>
           <Avatar
@@ -200,11 +200,7 @@ function MessageEntryMobile(props: { message: Message }) {
       )}
 
       <Stack direction={"column"} sx={{ flex: 1, minWidth: 0 }}>
-        <Stack
-          direction={"row"}
-          spacing={1}
-          alignItems={"flex-end"}
-        >
+        <Stack direction={"row"} spacing={1} alignItems={"flex-end"}>
           {message.author ? (
             <Typography variant={"subtitle2"} sx={{ fontWeight: 500 }}>
               {author?.username}
@@ -224,7 +220,16 @@ function MessageEntryMobile(props: { message: Message }) {
             {getRelativeTime(new Date(message.timestamp))}
           </Typography>
         </Stack>
-        <Box sx={{ wordBreak: "break-word", "& p": { margin: 0, marginBottom: 0.5, "&:last-child": { marginBottom: 0 } } }}>
+        <Box
+          sx={{
+            wordBreak: "break-word",
+            "& p": {
+              margin: 0,
+              marginBottom: 0.5,
+              "&:last-child": { marginBottom: 0 },
+            },
+          }}
+        >
           <MarkdownRender text={convertedContent} />
         </Box>
       </Stack>
@@ -251,9 +256,11 @@ function MessageHeaderMobile() {
   const location = useLocation()
   const [chat] = useCurrentChat()
   const { t } = useTranslation()
-  
+
   // Check if we're viewing from orders or offers page
-  const isViewingFromOrderOrOffer = location.pathname.includes("/order/") || location.pathname.includes("/offer/")
+  const isViewingFromOrderOrOffer =
+    location.pathname.includes("/order/") ||
+    location.pathname.includes("/offer/")
 
   return (
     <Box
@@ -530,7 +537,7 @@ function MessagesAreaMobile(props: {
   )
 }
 
-function MessageSendAreaMobile(props: { 
+function MessageSendAreaMobile(props: {
   onSend: (content: string) => void
   isKeyboardOpen: boolean
   inputRef?: React.RefObject<HTMLDivElement | null>
@@ -742,9 +749,10 @@ export function MessagesBodyMobile(props: { maxHeight?: number }) {
         if (chat && message.chat_id === chat.chat_id) {
           // Find matching message by content + author (replace optimistic with server message)
           const messageIndex = chat.messages.findIndex(
-            (msg) => msg.content === message.content && msg.author === message.author
+            (msg) =>
+              msg.content === message.content && msg.author === message.author,
           )
-          
+
           if (messageIndex >= 0) {
             // Replace optimistic message with server message
             const updatedMessages = [...chat.messages]
@@ -767,24 +775,32 @@ export function MessagesBodyMobile(props: { maxHeight?: number }) {
         }
         return chat
       })
-      
+
       // Also update RTK Query cache so it stays in sync
       dispatch(
-        chatsApi.util.updateQueryData("getChatByID", message.chat_id, (draft) => {
-          // Find matching message by content + author (replace optimistic with server message)
-          const messageIndex = draft.messages.findIndex(
-            (msg) => msg.content === message.content && msg.author === message.author
-          )
-          
-          if (messageIndex >= 0) {
-            // Replace optimistic message with server message
-            draft.messages[messageIndex] = message
-          } else {
-            // New message, add it
-            draft.messages.push(message)
-          }
-          draft.messages.sort((a: Message, b: Message) => a.timestamp - b.timestamp)
-        })
+        chatsApi.util.updateQueryData(
+          "getChatByID",
+          message.chat_id,
+          (draft) => {
+            // Find matching message by content + author (replace optimistic with server message)
+            const messageIndex = draft.messages.findIndex(
+              (msg) =>
+                msg.content === message.content &&
+                msg.author === message.author,
+            )
+
+            if (messageIndex >= 0) {
+              // Replace optimistic message with server message
+              draft.messages[messageIndex] = message
+            } else {
+              // New message, add it
+              draft.messages.push(message)
+            }
+            draft.messages.sort(
+              (a: Message, b: Message) => a.timestamp - b.timestamp,
+            )
+          },
+        ),
       )
     }
     socket.on("serverMessage", onServerMessage)
@@ -813,28 +829,33 @@ export function MessagesBodyMobile(props: { maxHeight?: number }) {
 
   // Sync cache with local state, but merge messages to preserve optimistic updates and socket messages
   useEffect(() => {
-    if (chatFromCache && currentChat && chatFromCache.chat_id === currentChat.chat_id) {
+    if (
+      chatFromCache &&
+      currentChat &&
+      chatFromCache.chat_id === currentChat.chat_id
+    ) {
       const sortedCacheMessages = [...chatFromCache.messages].sort(
         (a: Message, b: Message) => a.timestamp - b.timestamp,
       )
-      
+
       // Merge messages: combine cache messages with any local messages that aren't in cache
       // This preserves optimistic updates and socket messages that haven't been synced to cache yet
       // Use composite key (content + author) to uniquely identify messages since timestamp is server-side
-      const getMessageKey = (msg: Message) => `${msg.content}-${msg.author || 'system'}`
-      
+      const getMessageKey = (msg: Message) =>
+        `${msg.content}-${msg.author || "system"}`
+
       const localMessageMap = new Map<string, Message>()
       currentChat.messages.forEach((msg) => {
         const key = getMessageKey(msg)
         localMessageMap.set(key, msg)
       })
-      
+
       const cacheMessageMap = new Map<string, Message>()
       sortedCacheMessages.forEach((msg) => {
         const key = getMessageKey(msg)
         cacheMessageMap.set(key, msg)
       })
-      
+
       // Merge: start with cache messages, add any local messages not in cache
       const mergedMessages = [...sortedCacheMessages]
       localMessageMap.forEach((msg) => {
@@ -843,23 +864,25 @@ export function MessagesBodyMobile(props: { maxHeight?: number }) {
           mergedMessages.push(msg)
         }
       })
-      
+
       // Sort merged messages
       const sortedMerged = mergedMessages.sort(
         (a: Message, b: Message) => a.timestamp - b.timestamp,
       )
-      
+
       // Only update if messages actually differ
       const currentSorted = [...currentChat.messages].sort(
         (a: Message, b: Message) => a.timestamp - b.timestamp,
       )
-      
+
       // Compare using content + author since timestamp may differ between optimistic and server
       const mergedKeys = new Set(sortedMerged.map(getMessageKey))
       const currentKeys = new Set(currentSorted.map(getMessageKey))
-      
-      if (mergedKeys.size !== currentKeys.size ||
-          !Array.from(mergedKeys).every(key => currentKeys.has(key))) {
+
+      if (
+        mergedKeys.size !== currentKeys.size ||
+        !Array.from(mergedKeys).every((key) => currentKeys.has(key))
+      ) {
         setCurrentChat({
           ...chatFromCache,
           messages: sortedMerged,
@@ -909,9 +932,9 @@ export function MessagesBodyMobile(props: { maxHeight?: number }) {
               flexShrink: 0,
             }}
           />
-          
+
           <MessageHeaderMobile />
-          
+
           <Box
             sx={{
               flex: 1,
@@ -929,7 +952,7 @@ export function MessagesBodyMobile(props: { maxHeight?: number }) {
               isKeyboardOpen={isKeyboardOpen}
             />
           </Box>
-          
+
           {/* Input area - part of flex layout, not floating */}
           <Box
             ref={inputAreaRef}
@@ -953,7 +976,10 @@ export function MessagesBodyMobile(props: { maxHeight?: number }) {
               <MobileFAB
                 color="primary"
                 size="small"
-                aria-label={t("MessagesBody.dateTimePicker", "Date & Time Picker")}
+                aria-label={t(
+                  "MessagesBody.dateTimePicker",
+                  "Date & Time Picker",
+                )}
                 onClick={() => setDateTimeSheetOpen(true)}
                 position="bottom-right"
                 aboveBottomNav={false}
@@ -966,14 +992,14 @@ export function MessagesBodyMobile(props: { maxHeight?: number }) {
                 <AccessTimeRounded />
               </MobileFAB>
             </Box>
-            
-            <MessageSendAreaMobile 
-              onSend={onSend} 
+
+            <MessageSendAreaMobile
+              onSend={onSend}
               isKeyboardOpen={isKeyboardOpen}
               inputRef={inputAreaRef}
             />
           </Box>
-          
+
           {/* Bottom sheet for date/time picker */}
           <DateTimePickerBottomSheetMobile
             open={dateTimeSheetOpen}

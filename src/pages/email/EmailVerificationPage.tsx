@@ -127,9 +127,7 @@ export function EmailVerificationPage() {
 
             {status === "error" && (
               <>
-                <ErrorIcon
-                  sx={{ fontSize: 60, color: "error.main", mb: 2 }}
-                />
+                <ErrorIcon sx={{ fontSize: 60, color: "error.main", mb: 2 }} />
                 <Typography variant="h5" gutterBottom>
                   Verification Failed
                 </Typography>

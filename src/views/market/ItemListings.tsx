@@ -85,11 +85,11 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { CURRENT_CUSTOM_ORG } from "../../hooks/contractor/CustomDomain"
 import { RecentListingsSkeleton } from "../../pages/home/LandingPage"
 import { getRelativeTime } from "../../util/time"
-import { MarketListingRating, BadgeDisplay } from "../../components/rating/ListingRating"
 import {
-  calculateBadgesFromRating,
-  prioritizeBadges,
-} from "../../util/badges"
+  MarketListingRating,
+  BadgeDisplay,
+} from "../../components/rating/ListingRating"
+import { calculateBadgesFromRating, prioritizeBadges } from "../../util/badges"
 import { useGetUserProfileQuery } from "../../store/profile"
 import { RefreshRounded, EditRounded, ShareRounded } from "@mui/icons-material"
 import moment from "moment/moment"
@@ -193,8 +193,7 @@ export const ItemListingBase = React.memo(
     const isMyListing = useMemo(
       () =>
         listing.user_seller === profile?.username ||
-        (currentOrg &&
-          currentOrg.spectrum_id === listing.contractor_seller),
+        (currentOrg && currentOrg.spectrum_id === listing.contractor_seller),
       [
         listing.user_seller,
         listing.contractor_seller,
@@ -217,13 +216,15 @@ export const ItemListingBase = React.memo(
           icon: <ShareRounded />,
           onClick: () => {
             if (navigator.share) {
-              navigator.share({
-                title: listing.title,
-                text: listing.title,
-                url: `${window.location.origin}${formatMarketUrl(listing)}`,
-              }).catch(() => {
-                // User cancelled or error occurred
-              })
+              navigator
+                .share({
+                  title: listing.title,
+                  text: listing.title,
+                  url: `${window.location.origin}${formatMarketUrl(listing)}`,
+                })
+                .catch(() => {
+                  // User cancelled or error occurred
+                })
             } else {
               // Fallback: copy to clipboard
               navigator.clipboard.writeText(
@@ -251,7 +252,8 @@ export const ItemListingBase = React.memo(
       total_assignments: listing.total_assignments || 0,
       response_rate: listing.response_rate || 0,
     }
-    const allBadges = listing.badges?.badge_ids || calculateBadgesFromRating(rating)
+    const allBadges =
+      listing.badges?.badge_ids || calculateBadgesFromRating(rating)
     const badges = prioritizeBadges(allBadges, 3) // Show up to 3 badges at top
 
     // Condensed mobile variant (vertical layout, smaller text and height)
@@ -289,8 +291,7 @@ export const ItemListingBase = React.memo(
                   position: "relative",
                 }}
               >
-                {moment(listing.timestamp) >
-                  moment().subtract(3, "days") && (
+                {moment(listing.timestamp) > moment().subtract(3, "days") && (
                   <Chip
                     label={t("market.new")}
                     color={"secondary"}
@@ -442,11 +443,11 @@ export const ItemListingBase = React.memo(
                         <BadgeDisplay badges={badges} iconSize="0.7rem" />
                       )}
                     </Box>
-                    <Box 
-                      sx={{ 
-                        fontSize: "0.7rem", 
-                        lineHeight: 1, 
-                        display: "flex", 
+                    <Box
+                      sx={{
+                        fontSize: "0.7rem",
+                        lineHeight: 1,
+                        display: "flex",
                         alignItems: "center",
                         mt: 0,
                         mb: 0,
@@ -509,10 +510,10 @@ export const ItemListingBase = React.memo(
                     display={"block"}
                     color={"text.primary"}
                     variant={"caption"}
-                    sx={{ 
-                      fontSize: "0.7rem", 
-                      lineHeight: 1.2, 
-                      mt: (listing.auction_end_time || showExpiration) ? 0.25 : 0 
+                    sx={{
+                      fontSize: "0.7rem",
+                      lineHeight: 1.2,
+                      mt: listing.auction_end_time || showExpiration ? 0.25 : 0,
                     }}
                   >
                     {t("market.available", {
@@ -698,13 +699,16 @@ export const ItemListingBase = React.memo(
                         {user_seller || contractor_seller}
                       </UnderlineLink>
                       {badges.length > 0 && (
-                        <BadgeDisplay badges={badges} iconSize={isMobile ? "1.5em" : undefined} />
+                        <BadgeDisplay
+                          badges={badges}
+                          iconSize={isMobile ? "1.5em" : undefined}
+                        />
                       )}
                     </Box>
-                    <Box 
-                      sx={{ 
-                        lineHeight: 1, 
-                        display: "flex", 
+                    <Box
+                      sx={{
+                        lineHeight: 1,
+                        display: "flex",
                         alignItems: "center",
                       }}
                     >

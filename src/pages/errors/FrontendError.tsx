@@ -76,7 +76,11 @@ export function FrontendErrorBody() {
           <Grid item xs={12} sm="auto">
             <a
               href={"/dashboard"}
-              style={{ color: "inherit", textDecoration: "none", width: "100%" }}
+              style={{
+                color: "inherit",
+                textDecoration: "none",
+                width: "100%",
+              }}
             >
               <Button
                 color={"secondary"}

@@ -167,7 +167,10 @@ export const emailApi = serviceApi.injectEndpoints({
     }),
 
     // Get available notification types
-    getNotificationTypes: builder.query<{ notificationTypes: NotificationType[] }, void>({
+    getNotificationTypes: builder.query<
+      { notificationTypes: NotificationType[] },
+      void
+    >({
       query: () => ({
         url: `${apiBase}/email/notification-types`,
         method: "GET",
@@ -175,7 +178,9 @@ export const emailApi = serviceApi.injectEndpoints({
       transformResponse: (response: {
         data: { notificationTypes: NotificationType[] }
       }) => {
-        return unwrapResponse(response) as { notificationTypes: NotificationType[] }
+        return unwrapResponse(response) as {
+          notificationTypes: NotificationType[]
+        }
       },
     }),
 
@@ -270,7 +275,9 @@ export const emailApi = serviceApi.injectEndpoints({
         if (data && typeof data === "object") {
           return {
             success: data.success ?? true,
-            message: data.message || "Successfully unsubscribed from email notifications",
+            message:
+              data.message ||
+              "Successfully unsubscribed from email notifications",
             userId: data.userId || "",
             email: data.email || "",
           }
