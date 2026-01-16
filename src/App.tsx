@@ -619,8 +619,9 @@ const router = createBrowserRouter([
               {
                 path: "/admin/notification-test",
                 lazy: async () => ({
-                  Component: (await import("./pages/admin/AdminNotificationTest"))
-                    .AdminNotificationTest,
+                  Component: (
+                    await import("./pages/admin/AdminNotificationTest")
+                  ).AdminNotificationTest,
                 }),
               },
             ],

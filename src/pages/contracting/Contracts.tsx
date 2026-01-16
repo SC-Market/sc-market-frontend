@@ -33,7 +33,11 @@ export function Contracts() {
       >
         <ContractSidebarContext.Provider value={[open, setOpen]}>
           <ContractSidebar />
-          <ContainerGrid maxWidth={"lg"} sidebarOpen={open} sidebarWidth={marketDrawerWidth}>
+          <ContainerGrid
+            maxWidth={"lg"}
+            sidebarOpen={open}
+            sidebarWidth={marketDrawerWidth}
+          >
             <Grid item xs={12}>
               <Grid
                 container

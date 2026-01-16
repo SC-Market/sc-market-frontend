@@ -41,20 +41,26 @@ export const chatsApi = serviceApi.injectEndpoints({
             // The query key format is "profileGetUserProfile(undefined)"
             const state = getState() as RootState
             const serviceApiState = state[serviceApi.reducerPath]
-            let profileData = serviceApiState?.queries?.["profileGetUserProfile(undefined)"]?.data as 
-              | { username?: string } 
-              | undefined
-            
+            let profileData = serviceApiState?.queries?.[
+              "profileGetUserProfile(undefined)"
+            ]?.data as { username?: string } | undefined
+
             // If not found, try alternative query key formats
             if (!profileData?.username) {
-              const profileQueryKey = Object.keys(serviceApiState?.queries || {}).find(
-                (key) => key.includes("profileGetUserProfile") && serviceApiState.queries[key]?.data
+              const profileQueryKey = Object.keys(
+                serviceApiState?.queries || {},
+              ).find(
+                (key) =>
+                  key.includes("profileGetUserProfile") &&
+                  serviceApiState.queries[key]?.data,
               )
               if (profileQueryKey) {
-                profileData = serviceApiState.queries[profileQueryKey]?.data as { username?: string } | undefined
+                profileData = serviceApiState.queries[profileQueryKey]?.data as
+                  | { username?: string }
+                  | undefined
               }
             }
-            
+
             const currentUser = profileData?.username || null
 
             // Optimistically add message to chat
@@ -69,7 +75,8 @@ export const chatsApi = serviceApi.injectEndpoints({
                 draft.messages = draft.messages || []
                 // Check if message already exists (avoid duplicates) - use content + author since timestamp is server-side
                 const messageExists = draft.messages.some(
-                  (msg) => msg.content === content && msg.author === currentUser
+                  (msg) =>
+                    msg.content === content && msg.author === currentUser,
                 )
                 if (!messageExists) {
                   draft.messages.push(tempMessage)

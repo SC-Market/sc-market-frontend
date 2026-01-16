@@ -158,7 +158,10 @@ export function HookProvider(props: { children: React.ReactElement }) {
           "auth.accountAlreadyExists",
           "An account already exists. Please sign in instead.",
         )
-    } else if (isCitizenIdEnabled && error === "citizenid_account_not_verified") {
+    } else if (
+      isCitizenIdEnabled &&
+      error === "citizenid_account_not_verified"
+    ) {
       errorMessage =
         searchParams.get("error_description") ||
         t(
@@ -168,17 +171,11 @@ export function HookProvider(props: { children: React.ReactElement }) {
     } else if (isCitizenIdEnabled && error === "citizenid_auth_failed") {
       errorMessage =
         searchParams.get("error_description") ||
-        t(
-          "auth.authFailed",
-          "Authentication failed. Please try again.",
-        )
+        t("auth.authFailed", "Authentication failed. Please try again.")
     } else if (isCitizenIdEnabled && error === "citizenid_login_failed") {
       errorMessage =
         searchParams.get("error_description") ||
-        t(
-          "auth.loginFailed",
-          "Failed to sign in. Please try again.",
-        )
+        t("auth.loginFailed", "Failed to sign in. Please try again.")
     } else if (isCitizenIdEnabled && error === "citizenid_oauth_error") {
       errorMessage =
         searchParams.get("error_description") ||

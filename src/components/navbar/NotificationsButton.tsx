@@ -133,11 +133,13 @@ export function NotificationBase(props: {
   // Long-press menu actions
   const longPressActions = useMemo(() => {
     const actions = []
-    
+
     // Mark as read/unread
     if (notif.read) {
       actions.push({
-        label: t("notifications.markAsUnread", { defaultValue: "Mark as Unread" }),
+        label: t("notifications.markAsUnread", {
+          defaultValue: "Mark as Unread",
+        }),
         icon: <MarkEmailUnreadRounded />,
         onClick: async () => {
           await updateNotification({
@@ -167,13 +169,19 @@ export function NotificationBase(props: {
         onClick: () => {
           const url = `${window.location.origin}${to}`
           if (navigator.share) {
-            navigator.share({
-              title: t("notifications.notification", { defaultValue: "Notification" }),
-              text: t("notifications.shareNotification", { defaultValue: "Check out this notification" }),
-              url,
-            }).catch(() => {
-              // User cancelled or error occurred
-            })
+            navigator
+              .share({
+                title: t("notifications.notification", {
+                  defaultValue: "Notification",
+                }),
+                text: t("notifications.shareNotification", {
+                  defaultValue: "Check out this notification",
+                }),
+                url,
+              })
+              .catch(() => {
+                // User cancelled or error occurred
+              })
           } else {
             // Fallback: copy to clipboard
             navigator.clipboard.writeText(url)

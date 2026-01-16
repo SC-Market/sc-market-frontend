@@ -171,9 +171,23 @@ export function ListingSkeleton({
                     height={isMobile ? 14 : 18}
                     sx={{ mb: isMobile ? 0.25 : 0.5, display: "block" }}
                   />
-                  <Box sx={{ display: "flex", alignItems: "center", gap: isMobile ? 0.5 : theme.layoutSpacing.text }}>
-                    <BaseSkeleton variant="circular" width={isMobile ? 12 : 16} height={isMobile ? 12 : 16} />
-                    <BaseSkeleton variant="text" width={isMobile ? 30 : 40} height={isMobile ? 14 : 18} />
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: isMobile ? 0.5 : theme.layoutSpacing.text,
+                    }}
+                  >
+                    <BaseSkeleton
+                      variant="circular"
+                      width={isMobile ? 12 : 16}
+                      height={isMobile ? 12 : 16}
+                    />
+                    <BaseSkeleton
+                      variant="text"
+                      width={isMobile ? 30 : 40}
+                      height={isMobile ? 14 : 18}
+                    />
                   </Box>
                 </Box>
 

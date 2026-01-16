@@ -58,13 +58,15 @@ export function ContainerGrid(
           overflow: "auto",
           height: "100%", // Use 100% of parent instead of 100vh
           position: "relative",
-          marginLeft: !isMobile && sidebarOpen && sidebarWidth > 0 ? sidebarWidth : 0,
-          transition: !isMobile && sidebarWidth > 0
-            ? theme.transitions.create("marginLeft", {
-                easing: theme.transitions.easing.sharp,
-                duration: theme.transitions.duration.enteringScreen,
-              })
-            : undefined,
+          marginLeft:
+            !isMobile && sidebarOpen && sidebarWidth > 0 ? sidebarWidth : 0,
+          transition:
+            !isMobile && sidebarWidth > 0
+              ? theme.transitions.create("marginLeft", {
+                  easing: theme.transitions.easing.sharp,
+                  duration: theme.transitions.duration.enteringScreen,
+                })
+              : undefined,
         }}
         ref={ref}
       >
@@ -94,7 +96,10 @@ export function ContainerGrid(
           }
           sx={{
             paddingTop: theme.spacing(4),
-            paddingBottom: { xs: theme.spacing(2) + bottomNavHeight, sm: theme.spacing(2) }, // Bottom padding accounts for bottom nav (dynamically adjusts)
+            paddingBottom: {
+              xs: theme.spacing(2) + bottomNavHeight,
+              sm: theme.spacing(2),
+            }, // Bottom padding accounts for bottom nav (dynamically adjusts)
             paddingLeft: {
               xs: noMobilePadding ? 0 : theme.spacing(1),
               sm: theme.spacing(3),

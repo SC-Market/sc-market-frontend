@@ -79,7 +79,10 @@ export function AdminNotificationTestView() {
   const handleTest = async () => {
     if (!notificationType || !targetUser || !targetUser.username) {
       issueAlert({
-        message: t("admin.notificationTest.fillAllFields", "Please fill all fields"),
+        message: t(
+          "admin.notificationTest.fillAllFields",
+          "Please fill all fields",
+        ),
         severity: "error",
       })
       return
@@ -96,7 +99,10 @@ export function AdminNotificationTestView() {
 
       setTestResult(result)
       issueAlert({
-        message: t("admin.notificationTest.success", "Notification test completed successfully"),
+        message: t(
+          "admin.notificationTest.success",
+          "Notification test completed successfully",
+        ),
         severity: "success",
       })
     } catch (error: any) {
@@ -113,7 +119,10 @@ export function AdminNotificationTestView() {
       } else if (error?.message) {
         errorMessage = error.message
       } else {
-        errorMessage = t("admin.notificationTest.error", "Failed to test notification")
+        errorMessage = t(
+          "admin.notificationTest.error",
+          "Failed to test notification",
+        )
       }
       setTestError(errorMessage)
       issueAlert({
@@ -125,7 +134,9 @@ export function AdminNotificationTestView() {
 
   return (
     <Box>
-      <HeaderTitle>{t("admin.notificationTest.title", "Test Notifications")}</HeaderTitle>
+      <HeaderTitle>
+        {t("admin.notificationTest.title", "Test Notifications")}
+      </HeaderTitle>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
         {t(
           "admin.notificationTest.description",
@@ -138,12 +149,18 @@ export function AdminNotificationTestView() {
           <Grid item xs={12} md={6}>
             <FormControl fullWidth>
               <InputLabel>
-                {t("admin.notificationTest.notificationType", "Notification Type")}
+                {t(
+                  "admin.notificationTest.notificationType",
+                  "Notification Type",
+                )}
               </InputLabel>
               <Select
                 value={notificationType}
                 onChange={(e) => setNotificationType(e.target.value)}
-                label={t("admin.notificationTest.notificationType", "Notification Type")}
+                label={t(
+                  "admin.notificationTest.notificationType",
+                  "Notification Type",
+                )}
                 MenuProps={menuProps}
               >
                 {NOTIFICATION_TYPES.map((type) => (
@@ -168,10 +185,18 @@ export function AdminNotificationTestView() {
                 )}
               />
               {targetUser && (
-                <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: "block" }}>
-                  {t("admin.notificationTest.selectedUser", "Selected: {{username}}", {
-                    username: targetUser.display_name || targetUser.username,
-                  })}
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  sx={{ mt: 1, display: "block" }}
+                >
+                  {t(
+                    "admin.notificationTest.selectedUser",
+                    "Selected: {{username}}",
+                    {
+                      username: targetUser.display_name || targetUser.username,
+                    },
+                  )}
                 </Typography>
               )}
             </Box>
@@ -181,7 +206,12 @@ export function AdminNotificationTestView() {
             <Button
               variant="contained"
               onClick={handleTest}
-              disabled={isTesting || !notificationType || !targetUser || !targetUser.username}
+              disabled={
+                isTesting ||
+                !notificationType ||
+                !targetUser ||
+                !targetUser.username
+              }
               startIcon={isTesting ? <CircularProgress size={20} /> : null}
             >
               {isTesting

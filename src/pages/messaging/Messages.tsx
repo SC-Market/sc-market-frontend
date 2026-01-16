@@ -43,31 +43,37 @@ export function Messages() {
   } = useGetChatByIDQuery(chat_id!, {
     skip: !chat_id,
   })
-  
+
   // Get notifications for this chat (need chatObj to determine order_id or session_id)
 
   // Get and mark as read message notifications for this chat
   // Query based on chat's order_id or session_id
-  const { data: orderNotificationsData } = useGetNotificationsQuery({
-    page: 0,
-    pageSize: 100,
-    action: "order_message",
-    entityId: chatObj?.order_id || undefined,
-  }, { skip: !chat_id || !chatObj?.order_id })
-  
-  const { data: offerNotificationsData } = useGetNotificationsQuery({
-    page: 0,
-    pageSize: 100,
-    action: "offer_message",
-    entityId: chatObj?.session_id || undefined,
-  }, { skip: !chat_id || !chatObj?.session_id })
-  
+  const { data: orderNotificationsData } = useGetNotificationsQuery(
+    {
+      page: 0,
+      pageSize: 100,
+      action: "order_message",
+      entityId: chatObj?.order_id || undefined,
+    },
+    { skip: !chat_id || !chatObj?.order_id },
+  )
+
+  const { data: offerNotificationsData } = useGetNotificationsQuery(
+    {
+      page: 0,
+      pageSize: 100,
+      action: "offer_message",
+      entityId: chatObj?.session_id || undefined,
+    },
+    { skip: !chat_id || !chatObj?.session_id },
+  )
+
   // Use the appropriate notification data based on chat type
-  const notificationsData = chatObj?.order_id 
-    ? orderNotificationsData 
-    : chatObj?.session_id 
-    ? offerNotificationsData 
-    : undefined
+  const notificationsData = chatObj?.order_id
+    ? orderNotificationsData
+    : chatObj?.session_id
+      ? offerNotificationsData
+      : undefined
   const notifications = notificationsData?.notifications || []
   const [updateNotification] = useNotificationUpdateMutation()
 
@@ -144,7 +150,8 @@ export function Messages() {
                 height: "100%", // Use 100% of parent instead of viewport height
                 display: "flex",
                 flexDirection: "column",
-                marginLeft: !isMobile && messageSidebarOpen ? messagingDrawerWidth : 0,
+                marginLeft:
+                  !isMobile && messageSidebarOpen ? messagingDrawerWidth : 0,
                 transition: isMobile
                   ? undefined
                   : theme.transitions.create("marginLeft", {

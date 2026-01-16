@@ -99,7 +99,9 @@ export function OfferMessagesArea(props: { offer: OfferSession }) {
           overflow: "hidden",
         }}
       >
-        {currentChat && <MessagesBody key={currentChat.chat_id} forceDesktop={true} />}
+        {currentChat && (
+          <MessagesBody key={currentChat.chat_id} forceDesktop={true} />
+        )}
       </Paper>
     </Grid>
   )

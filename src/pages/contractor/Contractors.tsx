@@ -136,7 +136,11 @@ export function Contractors() {
           )}
 
           <ContractorSidebar />
-          <ContainerGrid maxWidth={"md"} sidebarOpen={sidebarOpen} sidebarWidth={marketDrawerWidth}>
+          <ContainerGrid
+            maxWidth={"md"}
+            sidebarOpen={sidebarOpen}
+            sidebarWidth={marketDrawerWidth}
+          >
             <div ref={ref} />
             <HeaderTitle>{t("contractorsPage.title")}</HeaderTitle>
             {!(isLoading || isFetching)

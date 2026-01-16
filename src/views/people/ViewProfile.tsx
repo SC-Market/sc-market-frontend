@@ -901,7 +901,9 @@ export function ViewProfile(props: { profile: User }) {
                 </TabPanel>
                 <TabPanel index={page} value={4}>
                   <Grid container spacing={theme.layoutSpacing.layout}>
-                    {props.profile && <UserReviewSummary user={props.profile} />}
+                    {props.profile && (
+                      <UserReviewSummary user={props.profile} />
+                    )}
                     <Section xs={12} lg={8} disablePadding>
                       <UserReviews user={props.profile} />
                     </Section>

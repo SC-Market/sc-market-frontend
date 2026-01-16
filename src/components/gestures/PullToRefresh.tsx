@@ -1,6 +1,9 @@
 import React, { ReactNode } from "react"
 import { Box, CircularProgress, Fade } from "@mui/material"
-import { usePullToRefresh, UsePullToRefreshOptions } from "../../hooks/gestures/usePullToRefresh"
+import {
+  usePullToRefresh,
+  UsePullToRefreshOptions,
+} from "../../hooks/gestures/usePullToRefresh"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { RefreshRounded } from "@mui/icons-material"
@@ -47,12 +50,8 @@ export function PullToRefresh({
   ...options
 }: PullToRefreshProps) {
   const theme = useTheme<ExtendedTheme>()
-  const {
-    isRefreshing,
-    pullDistance,
-    isPulledPastThreshold,
-    handlers,
-  } = usePullToRefresh(options)
+  const { isRefreshing, pullDistance, isPulledPastThreshold, handlers } =
+    usePullToRefresh(options)
 
   const defaultIndicator = (
     <Box

@@ -70,13 +70,10 @@ export function EmptyOrders({
     // For offers
     if (isSent) {
       // Sent offers (none) → point to market and services pages
-      defaultDescription = t(
-        "emptyStates.orders.noSentOffersDescription",
-        {
-          defaultValue:
-            "Browse the market and services to find items and services to purchase",
-        },
-      )
+      defaultDescription = t("emptyStates.orders.noSentOffersDescription", {
+        defaultValue:
+          "Browse the market and services to find items and services to purchase",
+      })
       defaultAction = {
         label: t("emptyStates.orders.browseMarket", {
           defaultValue: "Browse Market",
@@ -92,13 +89,10 @@ export function EmptyOrders({
       }
     } else {
       // Received offers (none) → point to create market listing or service listing
-      defaultDescription = t(
-        "emptyStates.orders.noReceivedOffersDescription",
-        {
-          defaultValue:
-            "Create market listings or service listings to start receiving offers from customers",
-        },
-      )
+      defaultDescription = t("emptyStates.orders.noReceivedOffersDescription", {
+        defaultValue:
+          "Create market listings or service listings to start receiving offers from customers",
+      })
       defaultAction = {
         label: t("emptyStates.orders.createMarketListing", {
           defaultValue: "Create Market Listing",
@@ -136,13 +130,10 @@ export function EmptyOrders({
       }
     } else {
       // All orders (none) → point to create market listing or service listing
-      defaultDescription = t(
-        "emptyStates.orders.noReceivedOffersDescription",
-        {
-          defaultValue:
-            "Create market listings or service listings to start receiving offers from customers",
-        },
-      )
+      defaultDescription = t("emptyStates.orders.noReceivedOffersDescription", {
+        defaultValue:
+          "Create market listings or service listings to start receiving offers from customers",
+      })
       defaultAction = showCreateAction
         ? {
             label: t("emptyStates.orders.createMarketListing", {

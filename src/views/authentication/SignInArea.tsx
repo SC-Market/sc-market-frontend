@@ -35,7 +35,10 @@ export function SignInArea() {
       message =
         searchParams.get("error_description") ||
         t("auth.accountNotFound", "No account found. Please sign up first.")
-    } else if (isCitizenIdEnabled && error === "citizenid_account_not_verified") {
+    } else if (
+      isCitizenIdEnabled &&
+      error === "citizenid_account_not_verified"
+    ) {
       message =
         searchParams.get("error_description") ||
         t(

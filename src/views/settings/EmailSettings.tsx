@@ -69,10 +69,8 @@ export function EmailSettings() {
     // Refetch when component mounts to ensure fresh data after unsubscribe
     refetchOnMountOrArgChange: true,
   })
-  const {
-    data: notificationTypesData,
-    isLoading: notificationTypesLoading,
-  } = useGetNotificationTypesQuery()
+  const { data: notificationTypesData, isLoading: notificationTypesLoading } =
+    useGetNotificationTypesQuery()
   const [addEmail] = useAddEmailMutation()
   const [updateEmail] = useUpdateEmailMutation()
   const [deleteEmail] = useDeleteEmailMutation()
@@ -215,7 +213,12 @@ export function EmailSettings() {
 
   // Handle preference update or creation
   const handlePreferenceChange = useCallback(
-    async (preference: EmailPreference | { action_type_id: number; action_name?: string }, enabled: boolean) => {
+    async (
+      preference:
+        | EmailPreference
+        | { action_type_id: number; action_name?: string },
+      enabled: boolean,
+    ) => {
       setError(null)
       try {
         await updatePreferences({
@@ -223,12 +226,15 @@ export function EmailSettings() {
             {
               action_type_id: preference.action_type_id,
               enabled,
-              frequency: (preference as EmailPreference).frequency || "immediate",
+              frequency:
+                (preference as EmailPreference).frequency || "immediate",
               digest_time: (preference as EmailPreference).digest_time || null,
             },
           ],
         }).unwrap()
-        setSuccess(`Preference updated for ${preference.action_name || (preference as EmailPreference).action_name || "notification"}`)
+        setSuccess(
+          `Preference updated for ${preference.action_name || (preference as EmailPreference).action_name || "notification"}`,
+        )
         setTimeout(() => setSuccess(null), 2000)
       } catch (error: any) {
         setError(
@@ -384,7 +390,10 @@ export function EmailSettings() {
                         onChange={(e) => {
                           // If preference doesn't exist, create it; otherwise update
                           if (existingPreference) {
-                            handlePreferenceChange(existingPreference, e.target.checked)
+                            handlePreferenceChange(
+                              existingPreference,
+                              e.target.checked,
+                            )
                           } else {
                             // Create new preference
                             handlePreferenceChange(
@@ -407,9 +416,7 @@ export function EmailSettings() {
                     }
                     label={
                       <Box>
-                        <Typography variant="body2">
-                          {type.name}
-                        </Typography>
+                        <Typography variant="body2">{type.name}</Typography>
                         <Typography variant="caption" color="text.secondary">
                           Frequency: {frequency}
                           {digestTime && ` at ${digestTime}`}
@@ -464,7 +471,9 @@ export function EmailSettings() {
                         ])
                       } else {
                         setSelectedNotificationTypes(
-                          selectedNotificationTypes.filter((id) => id !== type.id),
+                          selectedNotificationTypes.filter(
+                            (id) => id !== type.id,
+                          ),
                         )
                       }
                     }}
@@ -508,7 +517,11 @@ export function EmailSettings() {
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setEditEmailDialogOpen(false)}>Cancel</Button>
-          <Button onClick={handleUpdateEmail} variant="contained" color="primary">
+          <Button
+            onClick={handleUpdateEmail}
+            variant="contained"
+            color="primary"
+          >
             Update Email
           </Button>
         </DialogActions>
@@ -529,12 +542,10 @@ export function EmailSettings() {
           </Typography>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setDeleteEmailDialogOpen(false)}>Cancel</Button>
-          <Button
-            onClick={handleDeleteEmail}
-            variant="contained"
-            color="error"
-          >
+          <Button onClick={() => setDeleteEmailDialogOpen(false)}>
+            Cancel
+          </Button>
+          <Button onClick={handleDeleteEmail} variant="contained" color="error">
             Remove Email
           </Button>
         </DialogActions>
@@ -548,7 +559,7 @@ export function EmailSettings() {
  */
 function formatActionName(actionName: string): string {
   if (!actionName) return "Unknown Notification"
-  
+
   const actionLabels: Record<string, string> = {
     // Order notifications
     order_create: "New Order Created",
