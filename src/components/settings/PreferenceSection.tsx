@@ -18,6 +18,12 @@ export interface PreferenceSectionProps {
     preference: EmailPreference | PushPreference,
     enabled: boolean,
   ) => void
+  onBatchPreferenceChange?: (
+    preferences: Array<{
+      preference: EmailPreference | PushPreference
+      enabled: boolean
+    }>,
+  ) => void
   type: "email" | "push"
   contractorId?: string | null
   isLoading?: boolean
@@ -32,6 +38,7 @@ export function PreferenceSection({
   preferences,
   notificationTypes,
   onPreferenceChange,
+  onBatchPreferenceChange,
   type,
   contractorId,
   isLoading = false,
@@ -47,6 +54,11 @@ export function PreferenceSection({
   }
 
   const handleTurnAllOff = () => {
+    const batchUpdates: Array<{
+      preference: EmailPreference | PushPreference
+      enabled: boolean
+    }> = []
+
     notificationTypes.forEach((typeItem) => {
       const existingPreference = preferences.find((pref) => {
         if (type === "email") {
@@ -61,12 +73,12 @@ export function PreferenceSection({
       })
 
       if (existingPreference) {
-        onPreferenceChange(existingPreference, false)
+        batchUpdates.push({ preference: existingPreference, enabled: false })
       } else {
         // Create new preference object with enabled: false
         if (type === "email") {
-          onPreferenceChange(
-            {
+          batchUpdates.push({
+            preference: {
               preference_id: "",
               action_type_id: typeItem.id,
               action_name: typeItem.name,
@@ -77,25 +89,40 @@ export function PreferenceSection({
               updated_at: "",
               contractor_id: contractorId ?? null,
             } as EmailPreference,
-            false,
-          )
+            enabled: false,
+          })
         } else {
           const actionString = (typeItem as any).action
           if (actionString) {
-            onPreferenceChange(
-              {
+            batchUpdates.push({
+              preference: {
                 action: actionString,
                 enabled: false,
+                contractor_id: contractorId ?? null,
               } as PushPreference,
-              false,
-            )
+              enabled: false,
+            })
           }
         }
       }
     })
+
+    // Use batch update if available, otherwise fall back to individual updates
+    if (onBatchPreferenceChange && batchUpdates.length > 0) {
+      onBatchPreferenceChange(batchUpdates)
+    } else {
+      batchUpdates.forEach(({ preference, enabled }) => {
+        onPreferenceChange(preference, enabled)
+      })
+    }
   }
 
   const handleTurnAllOn = () => {
+    const batchUpdates: Array<{
+      preference: EmailPreference | PushPreference
+      enabled: boolean
+    }> = []
+
     notificationTypes.forEach((typeItem) => {
       const existingPreference = preferences.find((pref) => {
         if (type === "email") {
@@ -110,12 +137,12 @@ export function PreferenceSection({
       })
 
       if (existingPreference) {
-        onPreferenceChange(existingPreference, true)
+        batchUpdates.push({ preference: existingPreference, enabled: true })
       } else {
         // Create new preference object with enabled: true
         if (type === "email") {
-          onPreferenceChange(
-            {
+          batchUpdates.push({
+            preference: {
               preference_id: "",
               action_type_id: typeItem.id,
               action_name: typeItem.name,
@@ -126,57 +153,80 @@ export function PreferenceSection({
               updated_at: "",
               contractor_id: contractorId ?? null,
             } as EmailPreference,
-            true,
-          )
+            enabled: true,
+          })
         } else {
           const actionString = (typeItem as any).action
           if (actionString) {
-            onPreferenceChange(
-              {
+            batchUpdates.push({
+              preference: {
                 action: actionString,
                 enabled: true,
+                contractor_id: contractorId ?? null,
               } as PushPreference,
-              true,
-            )
+              enabled: true,
+            })
           }
         }
       }
     })
+
+    // Use batch update if available, otherwise fall back to individual updates
+    if (onBatchPreferenceChange && batchUpdates.length > 0) {
+      onBatchPreferenceChange(batchUpdates)
+    } else {
+      batchUpdates.forEach(({ preference, enabled }) => {
+        onPreferenceChange(preference, enabled)
+      })
+    }
   }
 
-  const hasAnyEnabled = preferences.some((pref) => pref.enabled) || 
+  const hasAnyEnabled =
+    preferences.some((pref) => pref.enabled) ||
     notificationTypes.some((typeItem) => {
       const existingPreference = preferences.find((pref) => {
         if (type === "email") {
           return (pref as EmailPreference).action_type_id === typeItem.id
         } else {
           const actionString = (typeItem as any).action
-          return actionString && (pref as PushPreference).action === actionString
+          return (
+            actionString && (pref as PushPreference).action === actionString
+          )
         }
       })
       // If no preference exists, check default (push defaults to enabled)
-      return existingPreference ? existingPreference.enabled : (type === "push")
+      return existingPreference ? existingPreference.enabled : type === "push"
     })
 
-  const hasAnyDisabled = preferences.some((pref) => !pref.enabled) ||
+  const hasAnyDisabled =
+    preferences.some((pref) => !pref.enabled) ||
     notificationTypes.some((typeItem) => {
       const existingPreference = preferences.find((pref) => {
         if (type === "email") {
           return (pref as EmailPreference).action_type_id === typeItem.id
         } else {
           const actionString = (typeItem as any).action
-          return actionString && (pref as PushPreference).action === actionString
+          return (
+            actionString && (pref as PushPreference).action === actionString
+          )
         }
       })
       // If no preference exists, check default (email defaults to disabled)
-      return existingPreference ? !existingPreference.enabled : (type === "email")
+      return existingPreference ? !existingPreference.enabled : type === "email"
     })
 
   return (
     <FlatSection title={title}>
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 1 }}>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              mb: 1,
+            }}
+          >
             <Typography variant="body2" color="text.secondary">
               Choose which types of notifications you want to receive
               {contractorId ? " for this organization" : " individually"}.
@@ -209,22 +259,33 @@ export function PreferenceSection({
         <Grid container spacing={2} sx={{ mt: 1 }}>
           {notificationTypes.map((typeItem) => {
             // Find existing preference for this action type
+            // Must match both action and contractor_id to avoid cross-contamination
             const existingPreference = preferences.find((pref) => {
               if (type === "email") {
-                return (pref as EmailPreference).action_type_id === typeItem.id
+                const emailPref = pref as EmailPreference
+                const matchesAction = emailPref.action_type_id === typeItem.id
+                const matchesContractor =
+                  contractorId === null || contractorId === undefined
+                    ? emailPref.contractor_id === null ||
+                      emailPref.contractor_id === undefined
+                    : emailPref.contractor_id === contractorId
+                return matchesAction && matchesContractor
               } else {
-                // For push, match by action string
-                // Use the action property if available, otherwise try to derive it
+                // For push, match by action string and contractor_id
+                const pushPref = pref as PushPreference & {
+                  contractor_id?: string | null
+                }
                 const actionString = (typeItem as any).action
                 if (actionString) {
-                  return (pref as PushPreference).action === actionString
+                  const matchesAction = pushPref.action === actionString
+                  const matchesContractor =
+                    contractorId === null || contractorId === undefined
+                      ? pushPref.contractor_id === null ||
+                        pushPref.contractor_id === undefined
+                      : pushPref.contractor_id === contractorId
+                  return matchesAction && matchesContractor
                 }
-                // Fallback: try to match by converting name (less reliable)
-                const derivedAction = typeItem.name
-                  .toLowerCase()
-                  .replace(/\s+/g, "_")
-                  .replace(/([a-z])([A-Z])/g, "$1_$2")
-                return (pref as PushPreference).action === derivedAction
+                return false
               }
             })
 

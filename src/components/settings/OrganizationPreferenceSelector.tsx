@@ -30,6 +30,13 @@ export interface OrganizationPreferenceSelectorProps {
     enabled: boolean,
     contractorId: string,
   ) => void
+  onBatchPreferenceChange?: (
+    updates: Array<{
+      preference: EmailPreference | PushPreference
+      enabled: boolean
+    }>,
+    contractorId: string,
+  ) => void
   type: "email" | "push"
   isLoading?: boolean
 }
@@ -42,6 +49,7 @@ export function OrganizationPreferenceSelector({
   preferences,
   notificationTypes,
   onPreferenceChange,
+  onBatchPreferenceChange,
   type,
   isLoading = false,
 }: OrganizationPreferenceSelectorProps) {
@@ -63,7 +71,9 @@ export function OrganizationPreferenceSelector({
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <FormControl fullWidth>
-                <InputLabel id="org-select-label">Select Organization</InputLabel>
+                <InputLabel id="org-select-label">
+                  Select Organization
+                </InputLabel>
                 <Select
                   labelId="org-select-label"
                   value={selectedOrgId}
@@ -90,6 +100,11 @@ export function OrganizationPreferenceSelector({
             notificationTypes={notificationTypes}
             onPreferenceChange={(pref, enabled) =>
               onPreferenceChange(pref, enabled, selectedOrgId)
+            }
+            onBatchPreferenceChange={
+              onBatchPreferenceChange
+                ? (updates) => onBatchPreferenceChange(updates, selectedOrgId)
+                : undefined
             }
             type={type}
             contractorId={selectedOrgId}

@@ -37,6 +37,8 @@ import {
   useRequestVerificationMutation,
   EmailPreference,
 } from "../../store/email"
+import { PushPreference } from "../../store/push-notifications"
+import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { useGetUserOrganizationsQuery } from "../../store/organizations"
 import { PreferenceSection } from "../../components/settings/PreferenceSection"
 import { OrganizationPreferenceSelector } from "../../components/settings/OrganizationPreferenceSelector"
@@ -51,6 +53,7 @@ import { useTranslation } from "react-i18next"
  */
 export function EmailSettings() {
   const { t } = useTranslation()
+  const issueAlert = useAlertHook()
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
   const [addEmailDialogOpen, setAddEmailDialogOpen] = useState(false)
@@ -86,21 +89,6 @@ export function EmailSettings() {
   const hasEmail = !!preferences?.email
   const emailVerified = preferences?.email?.email_verified ?? false
   const userEmail = preferences?.email?.email || null
-
-  // Clear messages after 5 seconds
-  useEffect(() => {
-    if (error) {
-      const timer = setTimeout(() => setError(null), 5000)
-      return () => clearTimeout(timer)
-    }
-  }, [error])
-
-  useEffect(() => {
-    if (success) {
-      const timer = setTimeout(() => setSuccess(null), 5000)
-      return () => clearTimeout(timer)
-    }
-  }, [success])
 
   // Handle add email
   const handleAddEmail = useCallback(async () => {
@@ -225,7 +213,6 @@ export function EmailSettings() {
       enabled: boolean,
       contractorId?: string | null,
     ) => {
-      setError(null)
       try {
         await updatePreferences({
           preferences: [
@@ -239,19 +226,69 @@ export function EmailSettings() {
             },
           ],
         }).unwrap()
-        setSuccess(
-          `Preference updated for ${preference.action_name || (preference as EmailPreference).action_name || "notification"}`,
-        )
-        setTimeout(() => setSuccess(null), 2000)
+        issueAlert({
+          message: `Preference updated for ${preference.action_name || (preference as EmailPreference).action_name || "notification"}`,
+          severity: "success",
+        })
       } catch (error: any) {
-        setError(
-          error?.data?.error?.message ||
+        issueAlert({
+          message:
+            error?.data?.error?.message ||
             error?.message ||
             "Failed to update preference",
-        )
+          severity: "error",
+        })
       }
     },
-    [updatePreferences],
+    [updatePreferences, issueAlert],
+  )
+
+  const handleBatchPreferenceChange = useCallback(
+    async (
+      updates: Array<{
+        preference: EmailPreference | PushPreference
+        enabled: boolean
+      }>,
+      contractorId?: string | null,
+    ) => {
+      try {
+        // Use contractor_id from preference if available, otherwise use parameter
+        const emailPreferences = updates
+          .map(({ preference, enabled }) => {
+            const emailPref = preference as EmailPreference
+            if (emailPref.action_type_id) {
+              return {
+                action_type_id: emailPref.action_type_id,
+                enabled,
+                frequency: emailPref.frequency || "immediate",
+                digest_time: emailPref.digest_time || null,
+                contractor_id: emailPref.contractor_id ?? contractorId ?? null,
+              }
+            }
+            return null
+          })
+          .filter((p): p is NonNullable<typeof p> => p !== null)
+
+        if (emailPreferences.length > 0) {
+          await updatePreferences({
+            preferences: emailPreferences,
+          }).unwrap()
+          issueAlert({
+            message: `Updated ${emailPreferences.length} notification preference${emailPreferences.length !== 1 ? "s" : ""}`,
+            severity: "success",
+          })
+        }
+      } catch (error: any) {
+        issueAlert({
+          message:
+            error?.data?.error?.message ||
+            error?.message ||
+            "Failed to update preferences",
+          severity: "error",
+        })
+      }
+    },
+    [updatePreferences, issueAlert],
   )
 
   // Get available notification types from API
@@ -391,6 +428,9 @@ export function EmailSettings() {
             onPreferenceChange={(pref, enabled) =>
               handlePreferenceChange(pref as EmailPreference, enabled, null)
             }
+            onBatchPreferenceChange={(updates) =>
+              handleBatchPreferenceChange(updates, null)
+            }
             type="email"
             contractorId={null}
             isLoading={preferencesLoading || !notificationTypesData}
@@ -411,6 +451,9 @@ export function EmailSettings() {
                 enabled,
                 contractorId,
               )
+            }
+            onBatchPreferenceChange={(updates, contractorId) =>
+              handleBatchPreferenceChange(updates, contractorId)
             }
             type="email"
             isLoading={organizationsLoading}
