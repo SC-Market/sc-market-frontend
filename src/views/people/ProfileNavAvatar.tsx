@@ -21,6 +21,9 @@ import {
 import { Link } from "react-router-dom"
 import { BACKEND_URL } from "../../util/constants"
 import { useTranslation } from "react-i18next"
+import { useDispatch } from "react-redux"
+import { serviceApi } from "../../store/service"
+import { tokensApi } from "../../store/tokens"
 
 export function ProfileNavAvatar() {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
@@ -28,6 +31,7 @@ export function ProfileNavAvatar() {
   const theme = useTheme<ExtendedTheme>()
   const { data: profile } = useGetUserProfileQuery()
   const { t } = useTranslation()
+  const dispatch = useDispatch()
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
@@ -35,6 +39,19 @@ export function ProfileNavAvatar() {
 
   const handleClose = () => {
     setAnchorEl(null)
+  }
+
+  const handleLogout = (e: React.MouseEvent) => {
+    e.preventDefault()
+    // Clear all RTK Query cache before logout
+    dispatch(serviceApi.util.resetApiState())
+    dispatch(tokensApi.util.resetApiState())
+    // Invalidate all authentication-related tags
+    dispatch(serviceApi.util.invalidateTags(["MyProfile", "Profile"]))
+    // Close the popover
+    handleClose()
+    // Redirect to logout endpoint (which will redirect to frontend)
+    window.location.href = `${BACKEND_URL}/logout`
   }
 
   return (
@@ -122,28 +139,22 @@ export function ProfileNavAvatar() {
                 </ListItemText>
               </ListItemButton>
             </Link>
-            <a
-              href={`${BACKEND_URL}/logout`}
-              style={{ color: "inherit", textDecoration: "none" }}
-              onClick={handleClose}
-            >
-              <ListItemButton>
-                <ListItemIcon
-                  sx={{
-                    transition: "0.3s",
-                    fontSize: "0.9em",
-                    color: theme.palette.primary.main,
-                  }}
-                >
-                  <LogoutRounded />
-                </ListItemIcon>
-                <ListItemText sx={{ maxWidth: 300 }}>
-                  <Typography noWrap color={"text.secondary"}>
-                    {t("profileNavAvatar.logout")}
-                  </Typography>
-                </ListItemText>
-              </ListItemButton>
-            </a>
+            <ListItemButton onClick={handleLogout}>
+              <ListItemIcon
+                sx={{
+                  transition: "0.3s",
+                  fontSize: "0.9em",
+                  color: theme.palette.primary.main,
+                }}
+              >
+                <LogoutRounded />
+              </ListItemIcon>
+              <ListItemText sx={{ maxWidth: 300 }}>
+                <Typography noWrap color={"text.secondary"}>
+                  {t("profileNavAvatar.logout")}
+                </Typography>
+              </ListItemText>
+            </ListItemButton>
           </List>
         </Box>
       </Popover>
