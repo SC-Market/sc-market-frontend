@@ -793,9 +793,10 @@ export function AggregateChart(props: { aggregate: MarketAggregate }) {
         <DynamicKlineChart
           onInit={(kline) => {
             // initialize the chart
-            const chart = kline.init(`${aggregate.details.game_item_id}-chart`)!
+            const chart = kline.init(`${aggregate.details.game_item_id}-chart`)
+            if (chart){
             // add data to the chart
-            chart.applyNewData(chartData || [])
+            chart.applyNewData(chartData || [])}
           }}
           onDispose={(kline) => {
             // destroy chart
