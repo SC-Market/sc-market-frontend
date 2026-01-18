@@ -41,17 +41,63 @@ export function ProfileNavAvatar() {
     setAnchorEl(null)
   }
 
-  const handleLogout = (e: React.MouseEvent) => {
+  const handleLogout = async (e: React.MouseEvent) => {
     e.preventDefault()
-    // Clear all RTK Query cache before logout
-    dispatch(serviceApi.util.resetApiState())
-    dispatch(tokensApi.util.resetApiState())
-    // Invalidate all authentication-related tags
-    dispatch(serviceApi.util.invalidateTags(["MyProfile", "Profile"]))
-    // Close the popover
+    
+    // Close the popover first
     handleClose()
-    // Redirect to logout endpoint (which will redirect to frontend)
-    window.location.href = `${BACKEND_URL}/logout`
+    
+    try {
+      // Clear all RTK Query cache before logout
+      dispatch(serviceApi.util.resetApiState())
+      dispatch(tokensApi.util.resetApiState())
+      // Invalidate all authentication-related tags
+      dispatch(serviceApi.util.invalidateTags(["MyProfile", "Profile"]))
+      
+      // Clear service worker caches
+      if ("serviceWorker" in navigator && "caches" in window) {
+        try {
+          const cacheNames = await caches.keys()
+          await Promise.all(
+            cacheNames.map((cacheName) => {
+              // Clear API cache and other caches that might contain authenticated data
+              if (
+                cacheName.includes("api") ||
+                cacheName.includes("pages") ||
+                cacheName.includes("mutations")
+              ) {
+                return caches.delete(cacheName)
+              }
+              return Promise.resolve()
+            }),
+          )
+        } catch (error) {
+          console.error("Failed to clear service worker caches:", error)
+        }
+      }
+      
+      // Call logout endpoint via POST
+      const response = await fetch(`${BACKEND_URL}/logout`, {
+        method: "POST",
+        credentials: "include", // Include cookies for session
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      
+      if (response.ok) {
+        // Redirect to home page after successful logout
+        window.location.href = "/"
+      } else {
+        // Even if logout fails, redirect to home (session might be cleared anyway)
+        console.error("Logout request failed:", response.status)
+        window.location.href = "/"
+      }
+    } catch (error) {
+      // On error, still redirect to home (best effort)
+      console.error("Logout error:", error)
+      window.location.href = "/"
+    }
   }
 
   return (

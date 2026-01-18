@@ -29,6 +29,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment"
 import { isCitizenIdEnabled } from "../util/constants"
 import { useGetUserProfileQuery } from "../store/profile"
+import { serviceApi } from "../store/service"
 
 // Add moment and locale import + i18n
 import moment from "moment"
@@ -134,6 +135,48 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
   )
 }
 
+// Component to handle login cache invalidation (must be inside Provider)
+function LoginCacheInvalidator() {
+  const [searchParams] = useSearchParams()
+  const location = useLocation()
+  const dispatch = store.dispatch
+  
+  // Check if user profile query succeeds (indicates successful login)
+  const { data: userProfile, isSuccess: profileSuccess } =
+    useGetUserProfileQuery(undefined, {
+      // Skip if we're on an auth error page
+      skip: !!searchParams.get("error"),
+    })
+
+  // Handle successful login - invalidate cache to get fresh authenticated data
+  useEffect(() => {
+    // If user profile loads successfully and we're coming from an auth redirect
+    // (no error in URL), invalidate caches to refresh authenticated data
+    if (
+      profileSuccess &&
+      userProfile &&
+      !searchParams.get("error") &&
+      (location.pathname === "/" || location.pathname.startsWith("/market"))
+    ) {
+      // Invalidate all authentication-related and user-specific data
+      dispatch(
+        serviceApi.util.invalidateTags([
+          "MyProfile",
+          "Profile",
+          "Orders",
+          "Notifications",
+          "Chat",
+          "MarketListings",
+          "MyListings",
+          "Offers",
+        ]),
+      )
+    }
+  }, [profileSuccess, userProfile, searchParams, location.pathname, dispatch])
+
+  return null
+}
+
 export function HookProvider(props: { children: React.ReactElement }) {
   const [alert, issueAlert] = useState<AlertInterface | null>(null)
   const [searchParams, setSearchParams] = useSearchParams()
@@ -231,6 +274,7 @@ export function HookProvider(props: { children: React.ReactElement }) {
                   <CurrentChatMessagesContext.Provider
                     value={useState<Message[]>([])}
                   >
+                    <LoginCacheInvalidator />
                     <CssBaseline key="css-baseline" />
                     {props.children}
                     <Snackbar
