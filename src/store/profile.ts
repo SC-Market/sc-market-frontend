@@ -36,6 +36,38 @@ const baseUrl = `${BACKEND_URL}/api/profile`
 export const userApi = serviceApi.injectEndpoints({
   overrideExisting: false,
   endpoints: (builder) => ({
+    // Logout mutation
+    logout: builder.mutation<{ success: boolean; message: string }, void>({
+      query: () => ({
+        url: "/logout",
+        method: "POST",
+        credentials: "include",
+      }),
+      // Invalidate all cache on logout
+      async onQueryStarted(_, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled
+          // Clear all RTK Query cache
+          dispatch(serviceApi.util.resetApiState())
+          // Invalidate all authentication-related tags
+          dispatch(
+            serviceApi.util.invalidateTags([
+              "MyProfile",
+              "Profile",
+              "Orders",
+              "Notifications",
+              "Chat",
+              "MarketListings",
+              "MyListings",
+              "Offers",
+            ]),
+          )
+        } catch {
+          // Even if logout fails, clear cache (session might be destroyed anyway)
+          dispatch(serviceApi.util.resetApiState())
+        }
+      },
+    }),
     profileGetUserProfile: builder.query<UserProfileState, void>({
       query: () => `${baseUrl}`,
       // Keep user profile in cache for 5 minutes (frequently accessed)
@@ -451,6 +483,7 @@ export const useGetUserByUsernameQuery =
   userApi.endpoints.profileGetUserByName.useQuery
 export const useGetUserProfileQuery =
   userApi.endpoints.profileGetUserProfile.useQuery
+export const useLogoutMutation = userApi.endpoints.logout.useMutation
 export const useGetUserOrderReviews =
   userApi.endpoints.profileGetUserOrderReviews.useQuery
 export const useGetUserWebhooks =
