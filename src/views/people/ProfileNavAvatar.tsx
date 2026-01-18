@@ -18,7 +18,7 @@ import {
   PeopleRounded,
   SettingsRounded,
 } from "@mui/icons-material"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { useLogoutMutation } from "../../store/profile"
 import { useDispatch } from "react-redux"
@@ -33,6 +33,7 @@ export function ProfileNavAvatar() {
   const { t } = useTranslation()
   const [logout] = useLogoutMutation()
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget)
@@ -76,12 +77,13 @@ export function ProfileNavAvatar() {
       // Call logout mutation
       await logout().unwrap()
 
-      // Redirect to home page after successful logout
-      window.location.href = "/"
+      // Navigate to home page after successful logout
+      // Using navigate instead of window.location to avoid full page reload
+      navigate("/", { replace: true })
     } catch (error) {
-      // Even if logout fails, redirect to home (session might be cleared anyway)
+      // Even if logout fails, navigate to home (session might be cleared anyway)
       console.error("Logout error:", error)
-      window.location.href = "/"
+      navigate("/", { replace: true })
     }
   }
 
