@@ -794,9 +794,10 @@ export function AggregateChart(props: { aggregate: MarketAggregate }) {
           onInit={(kline) => {
             // initialize the chart
             const chart = kline.init(`${aggregate.details.game_item_id}-chart`)
-            if (chart){
-            // add data to the chart
-            chart.applyNewData(chartData || [])}
+            if (chart) {
+              // add data to the chart
+              chart.applyNewData(chartData || [])
+            }
           }}
           onDispose={(kline) => {
             // destroy chart
