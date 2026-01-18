@@ -735,6 +735,7 @@ export function NotificationsButton() {
     },
     {
       pollingInterval: pollingInterval > 0 ? pollingInterval : undefined, // Disable polling if interval is 0
+      refetchOnMountOrArgChange: true, // Refetch when component mounts or arguments change
     },
   )
 
