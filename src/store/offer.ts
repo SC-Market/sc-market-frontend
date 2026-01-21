@@ -36,6 +36,7 @@ export interface OfferSession {
   contract_id?: string | null
   discord_thread_id: string | null
   discord_server_id: string | null
+  discord_invite: string | null
   availability: OrderAvailability
   order_id?: string | null
 }

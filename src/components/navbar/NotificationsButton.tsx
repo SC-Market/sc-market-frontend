@@ -726,7 +726,7 @@ export function NotificationsButton() {
   // Calculate optimal polling interval based on push subscription and app visibility
   const pollingInterval = useNotificationPollingInterval()
 
-  const { data: notificationsData } = useGetNotificationsQuery(
+  const { data: notificationsData, refetch } = useGetNotificationsQuery(
     {
       page,
       pageSize,
@@ -738,6 +738,11 @@ export function NotificationsButton() {
       refetchOnMountOrArgChange: true, // Refetch when component mounts or arguments change
     },
   )
+
+  // Explicitly refetch when pagination changes
+  useEffect(() => {
+    refetch()
+  }, [page, pageSize, refetch])
 
   const notifications = notificationsData?.notifications || []
   const total = notificationsData?.pagination?.total || 0
