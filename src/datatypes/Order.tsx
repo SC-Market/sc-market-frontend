@@ -62,6 +62,7 @@ export interface Order {
   offer_session_id: string | null
   discord_thread_id: string | null
   discord_server_id: string | null
+  discord_invite: string | null
 }
 
 export interface OrderAvailability {

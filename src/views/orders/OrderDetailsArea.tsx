@@ -447,6 +447,33 @@ export function OrderDetailsArea(props: { order: Order }) {
                 </TableCell>
               </TableRow>
             )}
+            {order.discord_invite && (
+              <TableRow
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  {t("orderDetailsArea.discord_server_invite", {
+                    defaultValue: "Discord Server Invite",
+                  })}
+                </TableCell>
+                <TableCell align="right">
+                  <Stack direction="row" justifyContent={"right"}>
+                    <MaterialLink
+                      href={order.discord_invite}
+                      variant={"subtitle1"}
+                      underline={"hover"}
+                      color={"text.secondary"}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {t("orderDetailsArea.join_server", {
+                        defaultValue: "Join Server",
+                      })}
+                    </MaterialLink>
+                  </Stack>
+                </TableCell>
+              </TableRow>
+            )}
             <TableRow
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
