@@ -98,15 +98,18 @@ export function MarketListingEditView() {
   const [pendingFiles, setPendingFiles] = useState<File[]>([])
   const [internal, setInternal] = useState(listing.listing.internal)
 
-  // Watch for photo updates and sync local state
+  // Watch for listing updates and sync local state
   useEffect(() => {
+    setQuantity(listing.listing.quantity_available)
+    setPrice(listing.listing.price)
+    setIncrement(listing.auction_details?.minimum_bid_increment)
+    setDescription(listing.details.description)
+    setTitle(listing.details.title)
+    setType(listing.details.item_type)
+    setItem(listing.details.item_name)
     setPhotos(listing.photos)
-  }, [listing.photos])
-
-  // Watch for internal status updates and sync local state
-  useEffect(() => {
     setInternal(listing.listing.internal)
-  }, [listing.listing.internal])
+  }, [listing])
 
   const updateListingCallback = useCallback(
     (body: MarketListingUpdateBody) => {
