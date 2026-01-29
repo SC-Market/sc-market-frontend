@@ -7,8 +7,6 @@ import {
   Grid,
   IconButton,
   MenuItem,
-  Paper,
-  PaperProps,
   Rating,
   TextField,
   Typography,
@@ -138,13 +136,6 @@ export function ContractorSidebar() {
             color={"secondary"}
             SelectProps={{
               IconComponent: KeyboardArrowDownRoundedIcon,
-              MenuProps: {
-                PaperProps: {
-                  sx: {
-                    zIndex: theme.zIndex.modal + 20, // Above BottomSheet
-                  },
-                },
-              },
             }}
           >
             <MenuItem value={"rating"}>
@@ -195,20 +186,6 @@ export function ContractorSidebar() {
             }}
             options={contractorKindIconsKeys}
             defaultValue={[] as ContractorKindIconKey[]}
-            ListboxProps={{
-              sx: {
-                zIndex: theme.zIndex.modal + 20, // Above BottomSheet
-              },
-            }}
-            PaperComponent={(props: PaperProps) => (
-              <Paper
-                {...props}
-                sx={{
-                  ...props.sx,
-                  zIndex: theme.zIndex.modal + 20, // Above BottomSheet
-                }}
-              />
-            )}
             renderInput={(params: AutocompleteRenderInputParams) => (
               <TextField
                 {...params}

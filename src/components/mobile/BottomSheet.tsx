@@ -72,8 +72,8 @@ export function BottomSheet({
         disableEnforceFocus: false,
         disableRestoreFocus: false,
         sx: {
-          // Increase z-index for bottom sheets - high enough to be above most content
-          // Dropdown menus will use an even higher z-index (modal + 20)
+          // High z-index to be above most content
+          // Dropdowns use disablePortal so they render within the BottomSheet's z-index context
           zIndex: open ? theme.zIndex.modal + 10 : undefined,
         },
       }}
