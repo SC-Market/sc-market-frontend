@@ -77,14 +77,14 @@ export function Contractors() {
   })
 
   const [drawerOpen] = useDrawerOpen()
-  const [sidebarOpen, setSidebarOpen] = useState(true)
+  const theme = useTheme<ExtendedTheme>()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  // Start closed on mobile (BottomSheet), open on desktop (Drawer)
+  const [sidebarOpen, setSidebarOpen] = useState(!isMobile)
 
   useEffect(() => {
     setPage(0)
   }, [searchState])
-
-  const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
 
   return (
     <Page title={t("contractorsPage.title")}>
