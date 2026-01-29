@@ -176,6 +176,13 @@ export function MarketSearchArea(props: { status?: boolean }) {
             color={"secondary"}
             SelectProps={{
               IconComponent: KeyboardArrowDownRoundedIcon,
+              MenuProps: {
+                PaperProps: {
+                  sx: {
+                    zIndex: theme.zIndex.modal + 20, // Above BottomSheet
+                  },
+                },
+              },
             }}
           >
             <MenuItem value={""}>{t("MarketSearchArea.none")}</MenuItem>
@@ -247,6 +254,13 @@ export function MarketSearchArea(props: { status?: boolean }) {
               color={"secondary"}
               SelectProps={{
                 IconComponent: KeyboardArrowDownRoundedIcon,
+                MenuProps: {
+                  PaperProps: {
+                    sx: {
+                      zIndex: theme.zIndex.modal + 20, // Above BottomSheet
+                    },
+                  },
+                },
               }}
             >
               <MenuItem value={"active"}>
@@ -272,6 +286,13 @@ export function MarketSearchArea(props: { status?: boolean }) {
             size={"small"}
             SelectProps={{
               IconComponent: KeyboardArrowDownRoundedIcon,
+              MenuProps: {
+                PaperProps: {
+                  sx: {
+                    zIndex: theme.zIndex.modal + 20, // Above BottomSheet
+                  },
+                },
+              },
             }}
           >
             <MenuItem value={"any"}>{t("MarketSearchArea.any")}</MenuItem>

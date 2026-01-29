@@ -11,9 +11,7 @@ import {
 import { MinimalUser } from "../datatypes/User.ts"
 import { Order } from "../datatypes/Order.tsx"
 import { unwrapResponse } from "./api-utils"
-import { BaseQueryMeta } from "@reduxjs/toolkit/query"
 import {
-  generateTempId,
   createOptimisticUpdate,
 } from "../util/optimisticUpdates"
 
@@ -702,93 +700,6 @@ export const marketApi = serviceApi.injectEndpoints({
         method: "PUT",
         body,
       }),
-      async onQueryStarted(
-        { listing_id, body },
-        { dispatch, queryFulfilled, getState },
-      ) {
-        await createOptimisticUpdate(
-          (dispatch) => {
-            const patches: any[] = []
-
-            // Optimistically update search results
-            const searchPatch = dispatch(
-              marketApi.util.updateQueryData(
-                "searchMarketListings",
-                {},
-                (draft) => {
-                  const listingIndex = draft.listings.findIndex(
-                    (l) => l.listing_id === listing_id,
-                  )
-                  if (listingIndex !== -1) {
-                    draft.listings[listingIndex] = {
-                      ...draft.listings[listingIndex],
-                      ...body,
-                      updated_at: new Date().toISOString(),
-                    } as any
-                  }
-                },
-              ),
-            )
-            patches.push(searchPatch)
-
-            // Optimistically update "My Listings"
-            const myListingsPatch = dispatch(
-              marketApi.util.updateQueryData(
-                "getMyListings",
-                {} as any,
-                (draft) => {
-                  const listingIndex = draft.listings.findIndex(
-                    (l) => l.listing.listing_id === listing_id,
-                  )
-                  if (listingIndex !== -1) {
-                    const listing = draft.listings[listingIndex]
-                    // Update listing fields
-                    if (body.price !== undefined)
-                      listing.listing.price = body.price
-                    if (body.status !== undefined)
-                      listing.listing.status = body.status as any
-                    if (body.quantity_available !== undefined)
-                      listing.listing.quantity_available =
-                        body.quantity_available
-                    if (body.internal !== undefined)
-                      listing.listing.internal = body.internal
-                    // Update details fields
-                    if (body.title !== undefined)
-                      listing.details.title = body.title
-                    if (body.description !== undefined)
-                      listing.details.description = body.description
-                    if (body.item_type !== undefined)
-                      listing.details.item_type = body.item_type
-                    if (body.item_name !== undefined)
-                      listing.details.item_name = body.item_name
-                    if (body.photos !== undefined) listing.photos = body.photos
-                    listing.listing.timestamp = new Date().toISOString()
-                  }
-                },
-              ),
-            )
-            patches.push(myListingsPatch)
-
-            // Optimistically update individual listing cache
-            const listingPatch = dispatch(
-              marketApi.util.updateQueryData(
-                "getMarketListing",
-                listing_id,
-                (draft) => {
-                  Object.assign(draft, body, {
-                    updated_at: new Date().toISOString(),
-                  })
-                },
-              ),
-            )
-            patches.push(listingPatch)
-
-            return patches
-          },
-          queryFulfilled,
-          dispatch,
-        )
-      },
       invalidatesTags: (result, error, { listing_id }) => [
         // Invalidate all market-related caches aggressively
         "MarketListings",

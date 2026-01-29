@@ -162,6 +162,13 @@ export function ContractSidebar() {
             color={"secondary"}
             SelectProps={{
               IconComponent: KeyboardArrowDownRoundedIcon,
+              MenuProps: {
+                PaperProps: {
+                  sx: {
+                    zIndex: theme.zIndex.modal + 20, // Above BottomSheet
+                  },
+                },
+              },
             }}
           >
             <MenuItem value={"Any"}>
@@ -189,6 +196,13 @@ export function ContractSidebar() {
             color={"secondary"}
             SelectProps={{
               IconComponent: KeyboardArrowDownRoundedIcon,
+              MenuProps: {
+                PaperProps: {
+                  sx: {
+                    zIndex: theme.zIndex.modal + 20, // Above BottomSheet
+                  },
+                },
+              },
             }}
           >
             <MenuItem value={""}>{t("market.none")}</MenuItem>
@@ -260,6 +274,13 @@ export function ContractSidebar() {
             fullWidth
             SelectProps={{
               IconComponent: KeyboardArrowDownRoundedIcon,
+              MenuProps: {
+                PaperProps: {
+                  sx: {
+                    zIndex: theme.zIndex.modal + 20, // Above BottomSheet
+                  },
+                },
+              },
             }}
           >
             <MenuItem value={"any"}>
@@ -276,7 +297,7 @@ export function ContractSidebar() {
     </Box>
   )
 
-  // On mobile, use BottomSheet
+  // On mobile, use BottomSheet - don't render Drawer at all
   if (isMobile) {
     return (
       <BottomSheet
