@@ -308,6 +308,23 @@ export const ItemListingBase = React.memo(
                     }}
                   />
                 )}
+                {listing.quantity_available === 0 && (
+                  <Chip
+                    label={t("market.outOfStock")}
+                    color={"error"}
+                    size="small"
+                    sx={{
+                      position: "absolute",
+                      top: listing.internal ? 28 : 4,
+                      right: 4,
+                      zIndex: 2,
+                      textTransform: "uppercase",
+                      fontWeight: "bold",
+                      fontSize: "0.65rem",
+                      height: 18,
+                    }}
+                  />
+                )}
                 {listing.internal && (
                   <Chip
                     label={t("market.internalListing")}
@@ -569,6 +586,19 @@ export const ItemListingBase = React.memo(
                       position: "absolute",
                       top: 8,
                       left: 8,
+                      textTransform: "uppercase",
+                      fontWeight: "bold",
+                    }}
+                  />
+                )}
+                {listing.quantity_available === 0 && (
+                  <Chip
+                    label={t("market.outOfStock")}
+                    color={"error"}
+                    sx={{
+                      position: "absolute",
+                      top: listing.internal ? 48 : 8,
+                      right: 8,
                       textTransform: "uppercase",
                       fontWeight: "bold",
                     }}
