@@ -1,5 +1,5 @@
 import { Sidebar } from "../sidebar/Sidebar"
-import { Box, Theme, useTheme } from "@mui/material"
+import { Box, Theme, useTheme, useMediaQuery } from "@mui/material"
 import { Navbar } from "../navbar/Navbar"
 import React from "react"
 import { useDrawerOpen } from "../../hooks/layout/Drawer"
@@ -13,9 +13,11 @@ import { InstallPrompt } from "../pwa/InstallPrompt"
 import { MobileBottomNav } from "../navigation/MobileBottomNav"
 import { useLocation } from "react-router-dom"
 import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function Root(props: { children: React.ReactNode }) {
-  const theme: Theme = useTheme()
+  const theme: Theme = useTheme<ExtendedTheme>()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const [drawerOpen] = useDrawerOpen()
   const location = useLocation()
   const isMessagingPage = location.pathname.startsWith("/messages")
@@ -71,7 +73,7 @@ export function Root(props: { children: React.ReactNode }) {
         >
           {props.children}
         </Box>
-        {!isMessagingPage && <PreferencesButton />}
+        {!isMessagingPage && !isMobile && <PreferencesButton />}
         <MobileBottomNav />
       </Box>
     </Box>

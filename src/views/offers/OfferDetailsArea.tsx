@@ -165,10 +165,8 @@ export function OfferDetailsArea(props: { session: OfferSession }) {
 
   const showCancel =
     !showAccept &&
-    ![
-      t("OffersViewPaginated.rejected"),
-      t("OffersViewPaginated.accepted"),
-    ].includes(statusKey)
+    statusKey !== "rejected" &&
+    statusKey !== "accepted"
 
   const [updateStatus, { isLoading: isUpdatingStatus }] =
     useUpdateOfferStatusMutation()
@@ -558,6 +556,7 @@ export function OfferDetailsArea(props: { session: OfferSession }) {
                       variant={"contained"}
                       loading={isUpdatingStatus}
                       onClick={() => updateStatusCallback("cancelled")}
+                      disabled={statusKey === "rejected"}
                       fullWidth={isMobile}
                     >
                       {t("OfferDetailsArea.cancel")}
