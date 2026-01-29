@@ -452,6 +452,7 @@ export function DisplayStock({
   )
 
   const [createListing] = useCreateMarketListingMutation()
+  const [updateListing] = useUpdateMarketListingMutation()
   const issueAlert = useAlertHook()
 
   // Fetch item details when a listing is selected
@@ -486,10 +487,10 @@ export function DisplayStock({
     const editingRow = editingRows[id]
     if (!editingRow) return
 
-    const row = newRows.find((r) => r.id === id)
-    if (!row) return
+    const newRow = newRows.find((r) => r.id === id)
+    const existingRow = rows.find((r) => r.listing_id === id.toString())
 
-    if (row.isNew) {
+    if (newRow?.isNew) {
       // Create new listing
       if (!editingRow.item_name) {
         issueAlert({
@@ -533,6 +534,45 @@ export function DisplayStock({
         issueAlert({ message: t("ItemStock.createError"), severity: "error" })
         return
       }
+    } else if (existingRow) {
+      // Update existing listing
+      try {
+        const updateBody: Partial<MarketListingUpdateBody> = {}
+        
+        // Only include fields that have changed
+        if (editingRow.status !== undefined && editingRow.status !== existingRow.status) {
+          updateBody.status = editingRow.status as "active" | "inactive"
+        }
+        if (editingRow.quantity_available !== undefined && editingRow.quantity_available !== existingRow.quantity_available) {
+          updateBody.quantity_available = editingRow.quantity_available
+        }
+        if (editingRow.price !== undefined && editingRow.price !== existingRow.price) {
+          updateBody.price = editingRow.price
+        }
+
+        // Only call mutation if there are changes
+        if (Object.keys(updateBody).length > 0) {
+          await updateListing({
+            listing_id: existingRow.listing_id,
+            body: updateBody,
+          }).unwrap()
+
+          issueAlert({
+            message: t("ItemStock.updated"),
+            severity: "success",
+          })
+        }
+      } catch (error) {
+        issueAlert({ message: t("ItemStock.updateError", "Failed to update listing"), severity: "error" })
+        return
+      }
+    } else {
+      // Row not found in either newRows or rows
+      issueAlert({
+        message: t("ItemStock.rowNotFound", "Listing not found"),
+        severity: "error",
+      })
+      return
     }
 
     // Clear editing state

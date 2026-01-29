@@ -700,6 +700,160 @@ export const marketApi = serviceApi.injectEndpoints({
         method: "PUT",
         body,
       }),
+      async onQueryStarted({ listing_id, body }, { dispatch, queryFulfilled }) {
+        // Optimistically update the cache
+        await createOptimisticUpdate(
+          (dispatch) => {
+            const patches: any[] = []
+
+            // Optimistically update the individual listing query
+            const listingPatch = dispatch(
+              marketApi.util.updateQueryData(
+                "getMarketListing",
+                listing_id,
+                (draft) => {
+                  // Update the listing with the new values
+                  if (body.status !== undefined) {
+                    draft.listing.status = body.status as
+                      | "active"
+                      | "inactive"
+                      | "archived"
+                  }
+                  if (body.quantity_available !== undefined) {
+                    draft.listing.quantity_available = body.quantity_available
+                  }
+                  if (body.price !== undefined) {
+                    draft.listing.price = body.price
+                  }
+                  if (body.title !== undefined) {
+                    draft.details.title = body.title
+                  }
+                  if (body.description !== undefined) {
+                    draft.details.description = body.description
+                  }
+                  if (body.item_type !== undefined) {
+                    draft.details.item_type = body.item_type
+                  }
+                  if (body.item_name !== undefined) {
+                    draft.details.item_name = body.item_name
+                  }
+                  if (body.internal !== undefined) {
+                    draft.listing.internal = body.internal
+                  }
+                  if (
+                    body.minimum_bid_increment !== undefined &&
+                    "auction_details" in draft &&
+                    draft.auction_details
+                  ) {
+                    draft.auction_details.minimum_bid_increment =
+                      body.minimum_bid_increment
+                  }
+                  if (body.photos !== undefined) {
+                    draft.photos = body.photos
+                  }
+                },
+              ),
+            )
+            patches.push(listingPatch)
+
+            // Optimistically update search results
+            const searchPatch = dispatch(
+              marketApi.util.updateQueryData(
+                "searchMarketListings",
+                {},
+                (draft) => {
+                  const listing = draft.listings.find(
+                    (l) => l.listing_id === listing_id,
+                  )
+                  if (listing) {
+                    if (body.status !== undefined) {
+                      listing.status = body.status as
+                        | "active"
+                        | "inactive"
+                        | "archived"
+                    }
+                    if (body.quantity_available !== undefined) {
+                      listing.quantity_available = body.quantity_available
+                    }
+                    if (body.price !== undefined) {
+                      listing.price = body.price
+                    }
+                    if (body.title !== undefined) {
+                      listing.title = body.title
+                    }
+                    if (body.item_type !== undefined) {
+                      listing.item_type = body.item_type
+                    }
+                    if (body.item_name !== undefined) {
+                      listing.item_name = body.item_name
+                    }
+                  }
+                },
+              ),
+            )
+            patches.push(searchPatch)
+
+            // Optimistically update "My Listings"
+            const myListingsPatch = dispatch(
+              marketApi.util.updateQueryData(
+                "getMyListings",
+                {} as any,
+                (draft) => {
+                  const listingItem = draft.listings.find(
+                    (l) => l.listing.listing_id === listing_id,
+                  )
+                  if (listingItem) {
+                    if (body.status !== undefined) {
+                      listingItem.listing.status = body.status as
+                        | "active"
+                        | "inactive"
+                        | "archived"
+                    }
+                    if (body.quantity_available !== undefined) {
+                      listingItem.listing.quantity_available =
+                        body.quantity_available
+                    }
+                    if (body.price !== undefined) {
+                      listingItem.listing.price = body.price
+                    }
+                    if (body.title !== undefined) {
+                      listingItem.details.title = body.title
+                    }
+                    if (body.description !== undefined) {
+                      listingItem.details.description = body.description
+                    }
+                    if (body.item_type !== undefined) {
+                      listingItem.details.item_type = body.item_type
+                    }
+                    if (body.item_name !== undefined) {
+                      listingItem.details.item_name = body.item_name
+                    }
+                    if (body.internal !== undefined) {
+                      listingItem.listing.internal = body.internal
+                    }
+                    if (
+                      body.minimum_bid_increment !== undefined &&
+                      "auction_details" in listingItem &&
+                      listingItem.auction_details
+                    ) {
+                      listingItem.auction_details.minimum_bid_increment =
+                        body.minimum_bid_increment
+                    }
+                    if (body.photos !== undefined) {
+                      listingItem.photos = body.photos
+                    }
+                  }
+                },
+              ),
+            )
+            patches.push(myListingsPatch)
+
+            return patches
+          },
+          queryFulfilled,
+          dispatch,
+        )
+      },
       invalidatesTags: (result, error, { listing_id }) => [
         // Invalidate all market-related caches aggressively
         "MarketListings",
