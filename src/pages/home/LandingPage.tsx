@@ -99,6 +99,7 @@ export function RecentListings() {
     sale_type: "sale",
     listing_type: "unique",
     sort: "activity",
+    quantityAvailable: 1,
   })
 
   return !(isLoading || isFetching) ? (
