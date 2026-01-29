@@ -3,6 +3,8 @@ import {
   responsiveFontSizes,
   Theme,
   ThemeOptions,
+  Paper,
+  PaperProps,
 } from "@mui/material"
 
 declare module "@mui/material/styles" {
@@ -366,10 +368,20 @@ export const mainThemeOptions: ExtendedThemeOptions = {
       },
     },
     MuiSelect: {
+      defaultProps: {
+        MenuProps: {
+          disablePortal: true,
+        },
+      },
       styleOverrides: {
         icon: {
           color: "inherit",
         },
+      },
+    },
+    MuiAutocomplete: {
+      defaultProps: {
+        disablePortal: true,
       },
     },
     MuiCssBaseline: {
