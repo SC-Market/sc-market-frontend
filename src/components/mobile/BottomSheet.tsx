@@ -40,6 +40,11 @@ export function BottomSheet({
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
 
+  // Don't render anything when closed to prevent backdrop from blocking interaction
+  if (!open) {
+    return null
+  }
+
   return (
     <Drawer
       anchor="bottom"

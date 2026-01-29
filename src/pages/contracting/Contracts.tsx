@@ -23,7 +23,8 @@ export function Contracts() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
-  const [open, setOpen] = useState(true)
+  // Start closed on mobile (BottomSheet), open on desktop (Drawer)
+  const [open, setOpen] = useState(!isMobile)
   const [drawerOpen] = useDrawerOpen()
 
   return (
