@@ -67,8 +67,9 @@ export function BottomSheet({
         disableEnforceFocus: false,
         disableRestoreFocus: false,
         sx: {
-          // Increase z-index for nested bottom sheets - each open sheet gets higher z-index
-          zIndex: open ? theme.zIndex.modal + 1 : undefined,
+          // Increase z-index for bottom sheets - high enough to be above most content
+          // Dropdown menus will use an even higher z-index (modal + 20)
+          zIndex: open ? theme.zIndex.modal + 10 : undefined,
         },
       }}
     >

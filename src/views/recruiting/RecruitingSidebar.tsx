@@ -8,6 +8,8 @@ import {
   IconButton,
   InputAdornment,
   MenuItem,
+  Paper,
+  PaperProps,
   Rating,
   TextField,
   Typography,
@@ -147,6 +149,13 @@ export function RecruitingSidebar() {
             color={"secondary"}
             SelectProps={{
               IconComponent: KeyboardArrowDownRoundedIcon,
+              MenuProps: {
+                PaperProps: {
+                  sx: {
+                    zIndex: theme.zIndex.modal + 20, // Above BottomSheet
+                  },
+                },
+              },
             }}
           >
             <MenuItem value={"activity"}>
@@ -211,6 +220,20 @@ export function RecruitingSidebar() {
             defaultValue={
               [] /* I don't know why it needs this dumb thing, but the types error without */
             }
+            ListboxProps={{
+              sx: {
+                zIndex: theme.zIndex.modal + 20, // Above BottomSheet
+              },
+            }}
+            PaperComponent={(props: PaperProps) => (
+              <Paper
+                {...props}
+                sx={{
+                  ...props.sx,
+                  zIndex: theme.zIndex.modal + 20, // Above BottomSheet
+                }}
+              />
+            )}
             renderInput={(params: AutocompleteRenderInputParams) => (
               <TextField
                 {...params}

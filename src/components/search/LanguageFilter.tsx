@@ -1,7 +1,17 @@
 import React, { useMemo } from "react"
-import { Autocomplete, TextField, Chip, Box, Typography } from "@mui/material"
+import {
+  Autocomplete,
+  TextField,
+  Chip,
+  Box,
+  Typography,
+  useTheme,
+  Paper,
+  PaperProps,
+} from "@mui/material"
 import { SUPPORTED_LANGUAGES, Language } from "../../constants/languages"
 import { useTranslation } from "react-i18next"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 interface LanguageFilterProps {
   selectedLanguages: string[]
@@ -24,6 +34,7 @@ export function LanguageFilter({
   disabled = false,
 }: LanguageFilterProps) {
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
 
   // Map languages to include endonym and exonym (like in LanguageSelector)
   const languagesWithExonyms = useMemo(
@@ -58,6 +69,20 @@ export function LanguageFilter({
       onChange={handleChange}
       getOptionLabel={(option) => `${option.endonym} (${option.exonym})`}
       isOptionEqualToValue={(option, value) => option.code === value.code}
+      ListboxProps={{
+        sx: {
+          zIndex: theme.zIndex.modal + 20, // Above BottomSheet when used inside one
+        },
+      }}
+      PaperComponent={(props: PaperProps) => (
+        <Paper
+          {...props}
+          sx={{
+            ...props.sx,
+            zIndex: theme.zIndex.modal + 20, // Above BottomSheet when used inside one
+          }}
+        />
+      )}
       renderInput={(params) => (
         <TextField
           {...params}

@@ -1,10 +1,20 @@
-import { Autocomplete, Grid, TextField, TextFieldProps } from "@mui/material"
+import {
+  Autocomplete,
+  Grid,
+  TextField,
+  TextFieldProps,
+  useTheme,
+  Box,
+  Paper,
+  PaperProps,
+} from "@mui/material"
 import React, { useMemo } from "react"
 import {
   useGetMarketCategoriesQuery,
   useGetMarketItemsByCategoryQuery,
 } from "../../store/market"
 import { useTranslation } from "react-i18next"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export interface SelectGameItemProps {
   item_type: string
@@ -314,6 +324,7 @@ export function SelectGameCategoryOption(props: {
   TextfieldProps?: TextFieldProps
 }) {
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
   const { data: categories } = useGetMarketCategoriesQuery()
 
   const category_value = useMemo(
@@ -343,6 +354,20 @@ export function SelectGameCategoryOption(props: {
           }}
           groupBy={(o) => o.category}
           color={"secondary"}
+          ListboxProps={{
+            sx: {
+              zIndex: theme.zIndex.modal + 20, // Above BottomSheet when used inside one
+            },
+          }}
+          PaperComponent={(props: PaperProps) => (
+            <Paper
+              {...props}
+              sx={{
+                ...props.sx,
+                zIndex: theme.zIndex.modal + 20, // Above BottomSheet when used inside one
+              }}
+            />
+          )}
           renderInput={(params) => (
             <TextField
               {...params}
