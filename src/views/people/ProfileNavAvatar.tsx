@@ -8,6 +8,8 @@ import {
   ListItemText,
   Popover,
   Typography,
+  Divider,
+  useMediaQuery,
 } from "@mui/material"
 import React, { useState } from "react"
 import { useTheme } from "@mui/material/styles"
@@ -24,11 +26,13 @@ import { useLogoutMutation } from "../../store/profile"
 import { useDispatch } from "react-redux"
 import { serviceApi } from "../../store/service"
 import { tokensApi } from "../../store/tokens"
+import { PreferencesControls } from "../../components/settings/PreferencesControls"
 
 export function ProfileNavAvatar() {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
   const notifOpen = Boolean(anchorEl)
   const theme = useTheme<ExtendedTheme>()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const { data: profile } = useGetUserProfileQuery()
   const { t } = useTranslation()
   const [logout] = useLogoutMutation()
@@ -172,6 +176,12 @@ export function ProfileNavAvatar() {
                 </ListItemText>
               </ListItemButton>
             </Link>
+            {isMobile && (
+              <>
+                <PreferencesControls />
+                <Divider />
+              </>
+            )}
             <ListItemButton onClick={handleLogout}>
               <ListItemIcon
                 sx={{
