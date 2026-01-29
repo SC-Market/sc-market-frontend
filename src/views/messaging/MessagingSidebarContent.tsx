@@ -148,27 +148,33 @@ function ChatEntry(props: {
         alignItems={"center"}
       >
         <Tooltip title={participantNames.join(", ")}>
-          <AvatarGroup max={3} spacing={"small"}>
-            {otherUsers.map((part) => (
-              <Avatar
-                alt={part.username}
-                src={part.avatar}
-                key={part.username}
-              />
-            ))}
-            {contractorParticipants.map((part) => (
-              <Avatar
-                alt={part.name}
-                src={part.avatar}
-                key={part.spectrum_id}
-                sx={{
-                  bgcolor: theme.palette.primary.main,
-                }}
-              >
-                <BusinessIcon />
-              </Avatar>
-            ))}
-          </AvatarGroup>
+          <Badge
+            badgeContent={unreadCount > 0 ? unreadCount : undefined}
+            color="primary"
+            max={99}
+          >
+            <AvatarGroup max={3} spacing={"small"}>
+              {otherUsers.map((part) => (
+                <Avatar
+                  alt={part.username}
+                  src={part.avatar}
+                  key={part.username}
+                />
+              ))}
+              {contractorParticipants.map((part) => (
+                <Avatar
+                  alt={part.name}
+                  src={part.avatar}
+                  key={part.spectrum_id}
+                  sx={{
+                    bgcolor: theme.palette.primary.main,
+                  }}
+                >
+                  <BusinessIcon />
+                </Avatar>
+              ))}
+            </AvatarGroup>
+          </Badge>
         </Tooltip>
 
         <Box
@@ -207,21 +213,6 @@ function ChatEntry(props: {
                 </>
               )}
             </Typography>
-            {unreadCount > 0 && (
-              <Badge
-                variant="dot"
-                color="primary"
-                sx={{
-                  flexShrink: 0,
-                  "& .MuiBadge-badge": {
-                    width: 8,
-                    height: 8,
-                  },
-                }}
-              >
-                <Box sx={{ width: 0, height: 0 }} />
-              </Badge>
-            )}
           </Box>
           <Box
             sx={{
@@ -277,11 +268,93 @@ export function MessagingSidebarContent(
   const [searchQuery, setSearchQuery] = useState("")
   const [drawerOpen, setDrawerOpen] = useDrawerOpen()
 
-  // Create a map of chat_id -> unread count
-  // We'll query notifications per chat using entityId for accurate counts
-  // This is done in the ChatEntry component to avoid N+1 queries
-  // For now, we'll pass 0 and let ChatEntry query its own notifications
-  const unreadCountsByChat: Record<string, number> = {}
+  // Query recent notifications to calculate unread counts for sorting
+  // Using the same pattern as UnreadChatCount hook - query recent notifications
+  // and match them to chats. This avoids fetching all notifications ever.
+  const { data: orderMessageNotifications } = useGetNotificationsQuery({
+    page: 0,
+    pageSize: 100,
+    action: "order_message",
+  })
+
+  const { data: offerMessageNotifications } = useGetNotificationsQuery({
+    page: 0,
+    pageSize: 100,
+    action: "offer_message",
+  })
+
+  // Create a map of chat_id -> unread count from recent notifications
+  // Using the same matching logic as UnreadChatCount hook
+  const unreadCountsByChat = useMemo(() => {
+    const counts: Record<string, number> = {}
+    
+    if (!chats) return counts
+
+    // Initialize all chats with 0 unread
+    chats.forEach((chat) => {
+      counts[chat.chat_id] = 0
+    })
+
+    // Count unread notifications from order_message notifications
+    if (orderMessageNotifications?.notifications) {
+      orderMessageNotifications.notifications.forEach((notif) => {
+        if (notif.read) return
+        
+        // Match to chat by order_id (same logic as UnreadChatCount)
+        if (notif.entity && typeof notif.entity === "object" && "order_id" in notif.entity) {
+          const orderId = (notif.entity as any).order_id
+          const chat = chats.find((c) => c.order_id === orderId)
+          if (chat) {
+            counts[chat.chat_id] = (counts[chat.chat_id] || 0) + 1
+          }
+        }
+      })
+    }
+
+    // Count unread notifications from offer_message notifications
+    if (offerMessageNotifications?.notifications) {
+      offerMessageNotifications.notifications.forEach((notif) => {
+        if (notif.read) return
+        
+        // Match to chat by session_id (same logic as UnreadChatCount)
+        if (notif.entity && typeof notif.entity === "object" && "id" in notif.entity) {
+          const sessionId = (notif.entity as any).id
+          const chat = chats.find((c) => c.session_id === sessionId)
+          if (chat) {
+            counts[chat.chat_id] = (counts[chat.chat_id] || 0) + 1
+          }
+        }
+      })
+    }
+
+    return counts
+  }, [chats, orderMessageNotifications, offerMessageNotifications])
+
+  // Sort chats: unread first, then by last activity (most recent first)
+  const sortedChats = useMemo(() => {
+    if (!chats) return []
+    
+    return [...chats].sort((a, b) => {
+      const aUnread = unreadCountsByChat[a.chat_id] || 0
+      const bUnread = unreadCountsByChat[b.chat_id] || 0
+
+      // First, sort by unread status (unread chats first)
+      if (aUnread > 0 && bUnread === 0) return -1
+      if (aUnread === 0 && bUnread > 0) return 1
+
+      // Then sort by last activity (most recent first)
+      const aLastMessage = a.messages[a.messages.length - 1]
+      const bLastMessage = b.messages[b.messages.length - 1]
+      
+      // If no messages, put at the end
+      if (!aLastMessage && !bLastMessage) return 0
+      if (!aLastMessage) return 1
+      if (!bLastMessage) return -1
+
+      // Sort by timestamp descending (most recent first)
+      return bLastMessage.timestamp - aLastMessage.timestamp
+    })
+  }, [chats, unreadCountsByChat])
 
   // Track visible chat entries using Intersection Observer
   const [visibleChatIds, setVisibleChatIds] = useState<Set<string>>(new Set())
@@ -426,7 +499,7 @@ export function MessagingSidebarContent(
               sx={{ py: 2 }}
             />
           </Box>
-        ) : (chats || []).filter((chat) => {
+        ) : sortedChats.filter((chat) => {
             if (!searchQuery) return true
             // Search in user usernames and contractor names
             const searchLower = searchQuery.toLowerCase()
@@ -446,7 +519,7 @@ export function MessagingSidebarContent(
             />
           </Box>
         ) : (
-          (chats || [])
+          sortedChats
             .filter((chat) => {
               if (!searchQuery) return true
               // Search in user usernames and contractor names
@@ -465,6 +538,7 @@ export function MessagingSidebarContent(
                 <ChatEntry
                   key={chat.chat_id}
                   chat={chat}
+                  unreadCount={unreadCountsByChat[chat.chat_id]}
                   isVisible={isVisible}
                   entryRef={createEntryRef(chat.chat_id)}
                 />
