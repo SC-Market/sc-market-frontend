@@ -456,6 +456,7 @@
     "total_available": "total available",
     "starting_at": "Starting at {{price}} aUEC",
     "new": "New",
+    "outOfStock": "Out of Stock",
     "ended": "Ended",
     "ending_in": "Ending {{time}}",
     "expiration": "Expiration: {{time}}",
