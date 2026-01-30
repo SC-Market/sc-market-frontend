@@ -14,7 +14,7 @@ import {
 import React, { useCallback, useEffect, useState } from "react"
 import { Section } from "../../../components/paper/Section"
 import { ContainerGrid } from "../../../components/layout/ContainerGrid"
-import { external_resource_regex } from "../../../views/people/ViewProfile"
+import { external_resource_regex } from "../../profile"
 import { ExtendedTheme, MISSING_IMAGE_URL } from "../../../hooks/styles/Theme"
 // import { store } from "../../store/store"
 // import throttle from "lodash/throttle"

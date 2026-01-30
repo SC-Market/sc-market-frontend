@@ -1,7 +1,7 @@
 import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import React from "react"
 import { Navigate, useParams } from "react-router-dom"
-import { ProfileSkeleton, ViewProfile } from "../../views/people/ViewProfile"
+import { ProfileSkeleton, ViewProfile } from "../../features/profile"
 import { useGetUserByUsernameQuery } from "../../store/profile"
 import { Page } from "../../components/metadata/Page"
 import { useTranslation } from "react-i18next"

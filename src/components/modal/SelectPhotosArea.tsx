@@ -30,7 +30,7 @@ const ImageSearch = React.lazy(() =>
 )
 import { ContainerGrid } from "../layout/ContainerGrid"
 import { Section } from "../paper/Section"
-import { external_resource_regex } from "../../views/people/ViewProfile"
+import { external_resource_regex } from "../../features/profile"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { BottomSheet } from "../mobile/BottomSheet"
 

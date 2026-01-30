@@ -74,8 +74,7 @@ export function ServiceSearchArea() {
     <Stack
       direction={"column"}
       sx={{
-        padding: theme.spacing(3),
-        paddingTop: theme.spacing(3),
+        padding: theme.spacing(1),
         borderColor: theme.palette.outline.main,
       }}
     >

@@ -49,7 +49,7 @@ import {
   MarkdownEditor,
   MarkdownRender,
 } from "../../components/markdown/Markdown"
-import { external_resource_regex } from "../people/ViewProfile"
+import { external_resource_regex } from "../../features/profile"
 import { ListingSellerRating } from "../../components/rating/ListingRating"
 import { useTranslation } from "react-i18next"
 
