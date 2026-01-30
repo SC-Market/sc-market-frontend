@@ -233,7 +233,7 @@ export function NotificationBase(props: {
       </ListItemIcon>
       <ListItemText
         sx={{
-          maxWidth: { xs: "calc(100% - 80px)", sm: 300 }, // Responsive maxWidth: account for icon and delete button on mobile
+          // maxWidth: { xs: "calc(100% - 80px)", sm: 300 }, // Responsive maxWidth: account for icon and delete button on mobile
           color: "text.secondary",
           wordWrap: "break-word",
           overflowWrap: "break-word",
