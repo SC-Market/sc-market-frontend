@@ -13,7 +13,10 @@ import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../../hooks/styles/Theme"
-import type { ExtendedAggregateSearchResult, MarketAggregate } from "../../domain/types"
+import type {
+  ExtendedAggregateSearchResult,
+  MarketAggregate,
+} from "../../domain/types"
 import { useMarketSidebarExp } from "../../hooks/MarketSidebar"
 import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
 

@@ -5,7 +5,10 @@ import { AddAPhotoRounded, SaveRounded } from "@mui/icons-material"
 import { useTheme } from "@mui/material/styles"
 import { User } from "../../../datatypes/User"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
-import { useGetUserProfileQuery, useProfileUploadBannerMutation } from "../../../store/profile"
+import {
+  useGetUserProfileQuery,
+  useProfileUploadBannerMutation,
+} from "../../../store/profile"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { DarkBannerContainer, LightBannerContainer } from "./BannerContainers"
 

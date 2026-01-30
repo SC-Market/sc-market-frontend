@@ -228,7 +228,7 @@ export const marketApi = serviceApi.injectEndpoints({
 
     getBuyOrderListings: builder.query<MarketAggregate[], void>({
       query: () => "/api/market/aggregates/buyorders",
-      transformResponse: (response: unknown) => (response as MarketAggregate[]),
+      transformResponse: (response: unknown) => response as MarketAggregate[],
       providesTags: ["BuyOrderListings"],
     }),
 
@@ -353,7 +353,8 @@ export const marketApi = serviceApi.injectEndpoints({
         method: "POST",
       }),
       transformResponse: (response: unknown): FulfillBuyOrderResponse => {
-        const raw = (response as { data?: FulfillBuyOrderResponse }).data ?? response
+        const raw =
+          (response as { data?: FulfillBuyOrderResponse }).data ?? response
         return raw as FulfillBuyOrderResponse
       },
       invalidatesTags: [

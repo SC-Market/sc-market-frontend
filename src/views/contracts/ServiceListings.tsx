@@ -246,13 +246,22 @@ export function ServiceListings(props: { user?: string; contractor?: string }) {
   const ref = useRef<HTMLDivElement>(null)
   const { t } = useTranslation()
 
-  // Build query parameters for server-side filtering and pagination
+  // Build query parameters for server-side filtering and pagination.
+  // Pass contractor or user so the backend returns only that org/user's services and correct total count.
   const queryParams: ServicesQueryParams = useMemo(() => {
     const params: ServicesQueryParams = {
       page,
       pageSize: perPage,
       sortBy: "timestamp",
       sortOrder: "desc",
+    }
+
+    // Filter by org or user when viewing profile/org services tab (backend returns correct count)
+    if (contractor) {
+      params.contractor = contractor
+    }
+    if (user) {
+      params.user = user
     }
 
     // Add search filters
@@ -276,7 +285,7 @@ export function ServiceListings(props: { user?: string; contractor?: string }) {
     }
 
     return params
-  }, [page, perPage, searchState])
+  }, [page, perPage, searchState, contractor, user])
 
   const {
     data: servicesResponse,
@@ -306,32 +315,20 @@ export function ServiceListings(props: { user?: string; contractor?: string }) {
     setPage(0)
   }
 
-  // Apply client-side filters for user/contractor (these are specific to the component)
-  const filteredServices = useMemo(() => {
+  // When contractor or user is passed, the backend filters and returns correct count.
+  // Otherwise apply client-side filter only for CURRENT_CUSTOM_ORG (e.g. org context).
+  const displayedServices = useMemo(() => {
     if (!servicesResponse?.data) return []
-
-    return servicesResponse.data.filter((service) => {
-      // Filter by user if specified
-      if (user && service.user?.username !== user) {
-        return false
-      }
-
-      // Filter by contractor if specified
-      if (contractor && service.contractor?.spectrum_id !== contractor) {
-        return false
-      }
-
-      // Filter by custom org if specified
-      if (
-        CURRENT_CUSTOM_ORG &&
-        service.contractor?.spectrum_id !== CURRENT_CUSTOM_ORG
-      ) {
-        return false
-      }
-
-      return true
-    })
-  }, [servicesResponse?.data, user, contractor])
+    if (contractor ?? user) {
+      return servicesResponse.data
+    }
+    if (CURRENT_CUSTOM_ORG) {
+      return servicesResponse.data.filter(
+        (service) => service.contractor?.spectrum_id === CURRENT_CUSTOM_ORG,
+      )
+    }
+    return servicesResponse.data
+  }, [servicesResponse?.data, contractor, user])
 
   if (isLoading || isFetching) {
     return (
@@ -358,14 +355,14 @@ export function ServiceListings(props: { user?: string; contractor?: string }) {
       </Grid>
       <Grid item xs={12}>
         <Grid container spacing={theme.layoutSpacing.layout}>
-          {filteredServices.map((service, index) => (
+          {displayedServices.map((service, index) => (
             <ServiceListing
               service={service}
               key={service.service_id}
               index={index}
             />
           ))}
-          {servicesResponse && filteredServices.length === 0 && (
+          {servicesResponse && displayedServices.length === 0 && (
             <Grid item xs={12}>
               <EmptyListings
                 isSearchResult={false}
@@ -403,7 +400,7 @@ export function ServiceListings(props: { user?: string; contractor?: string }) {
           }}
           rowsPerPageOptions={[10, 20, 50]}
           component="div"
-          count={servicesResponse?.pagination.totalItems || 0}
+          count={servicesResponse?.pagination.totalItems ?? 0}
           rowsPerPage={perPage}
           page={page}
           onPageChange={handleChangePage}

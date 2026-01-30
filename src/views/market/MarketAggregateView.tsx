@@ -442,9 +442,7 @@ export function MarketAggregateView() {
             ...o,
             rating: o.buyer.rating,
             total:
-              o.negotiable || o.price == null
-                ? null
-                : o.price * o.quantity,
+              o.negotiable || o.price == null ? null : o.price * o.quantity,
           }))}
           initialSort={"price"}
           keyAttr={"buy_order_id"}
@@ -668,7 +666,9 @@ export function BuyOrderRow(props: {
       fulfillBuyOrder({
         buy_order_id: buy_order.buy_order_id,
         contractor_spectrum_id: currentOrg?.spectrum_id,
-        ...(buy_order.negotiable && agreedPricePerUnit != null && agreedPricePerUnit >= 1
+        ...(buy_order.negotiable &&
+        agreedPricePerUnit != null &&
+        agreedPricePerUnit >= 1
           ? { agreed_price: agreedPricePerUnit }
           : {}),
       })
@@ -685,7 +685,15 @@ export function BuyOrderRow(props: {
         })
         .catch((err) => issueAlert(err))
     },
-    [buy_order.buy_order_id, buy_order.negotiable, currentOrg?.spectrum_id, fulfillBuyOrder, issueAlert, navigate, t],
+    [
+      buy_order.buy_order_id,
+      buy_order.negotiable,
+      currentOrg?.spectrum_id,
+      fulfillBuyOrder,
+      issueAlert,
+      navigate,
+      t,
+    ],
   )
 
   const callback = useCallback(() => {
@@ -704,7 +712,10 @@ export function BuyOrderRow(props: {
       setFulfillDialogOpen(false)
     } else {
       issueAlert({
-        message: t("buyorder.agreedPriceRequired", "Please enter an agreed price per unit (at least 1 aUEC)."),
+        message: t(
+          "buyorder.agreedPriceRequired",
+          "Please enter an agreed price per unit (at least 1 aUEC).",
+        ),
         severity: "error",
       })
     }
@@ -761,9 +772,13 @@ export function BuyOrderRow(props: {
         <Typography variant={"subtitle2"} color={"primary"}>
           {buy_order.negotiable || buy_order.price == null
             ? buy_order.price != null && buy_order.price >= 1
-              ? t("buyorder.negotiableSuggested", "Negotiable (~{{price}} aUEC)", {
-                  price: buy_order.price.toLocaleString(i18n.language),
-                })
+              ? t(
+                  "buyorder.negotiableSuggested",
+                  "Negotiable (~{{price}} aUEC)",
+                  {
+                    price: buy_order.price.toLocaleString(i18n.language),
+                  },
+                )
               : t("buyorder.negotiable", "Negotiable")
             : `${buy_order.price.toLocaleString(i18n.language)} aUEC`}
         </Typography>
@@ -822,7 +837,10 @@ export function BuyOrderRow(props: {
           </Button>
         )}
       </TableCell>
-      <Dialog open={fulfillDialogOpen} onClose={() => setFulfillDialogOpen(false)}>
+      <Dialog
+        open={fulfillDialogOpen}
+        onClose={() => setFulfillDialogOpen(false)}
+      >
         <DialogTitle>
           {t("buyorder.agreePriceTitle", "Agreed price per unit")}
         </DialogTitle>
@@ -841,9 +859,7 @@ export function BuyOrderRow(props: {
             fullWidth
             label={t("buyorder.price_per_unit")}
             value={agreedPrice}
-            onValueChange={(values) =>
-              setAgreedPrice(values.floatValue ?? 0)
-            }
+            onValueChange={(values) => setAgreedPrice(values.floatValue ?? 0)}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="start">aUEC</InputAdornment>

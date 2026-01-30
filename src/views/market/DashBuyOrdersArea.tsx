@@ -96,24 +96,61 @@ function BuyOrderRowSkeleton({ index = 0 }: { index?: number }) {
             }}
           >
             <Stack direction="column" alignItems="center">
-              <BaseSkeleton variant="text" width={30} height={12} sx={{ mb: 0.5 }} />
+              <BaseSkeleton
+                variant="text"
+                width={30}
+                height={12}
+                sx={{ mb: 0.5 }}
+              />
               <BaseSkeleton variant="text" width={24} height={20} />
             </Stack>
           </Paper>
           <Stack direction="column" sx={{ flex: 1, minWidth: 0 }}>
-            <BaseSkeleton variant="text" width="80%" height={18} sx={{ mb: 0.5 }} />
+            <BaseSkeleton
+              variant="text"
+              width="80%"
+              height={18}
+              sx={{ mb: 0.5 }}
+            />
             <BaseSkeleton variant="text" width="60%" height={14} />
           </Stack>
         </Stack>
       </TableCell>
-      <TableCell align="right" sx={{ padding: { xs: theme.spacing(0.75), sm: theme.spacing(2) } }}>
-        <BaseSkeleton variant="text" width={40} height={18} sx={{ ml: "auto" }} />
+      <TableCell
+        align="right"
+        sx={{ padding: { xs: theme.spacing(0.75), sm: theme.spacing(2) } }}
+      >
+        <BaseSkeleton
+          variant="text"
+          width={40}
+          height={18}
+          sx={{ ml: "auto" }}
+        />
       </TableCell>
-      <TableCell align="right" sx={{ padding: { xs: theme.spacing(0.75), sm: theme.spacing(2) } }}>
-        <BaseSkeleton variant="text" width={60} height={18} sx={{ ml: "auto" }} />
+      <TableCell
+        align="right"
+        sx={{ padding: { xs: theme.spacing(0.75), sm: theme.spacing(2) } }}
+      >
+        <BaseSkeleton
+          variant="text"
+          width={60}
+          height={18}
+          sx={{ ml: "auto" }}
+        />
       </TableCell>
-      <TableCell align="right" sx={{ padding: { xs: theme.spacing(0.75), sm: theme.spacing(2) }, minWidth: 100 }}>
-        <BaseSkeleton variant="rectangular" width={70} height={32} sx={{ borderRadius: 1, ml: "auto" }} />
+      <TableCell
+        align="right"
+        sx={{
+          padding: { xs: theme.spacing(0.75), sm: theme.spacing(2) },
+          minWidth: 100,
+        }}
+      >
+        <BaseSkeleton
+          variant="rectangular"
+          width={70}
+          height={32}
+          sx={{ borderRadius: 1, ml: "auto" }}
+        />
       </TableCell>
     </TableRow>
   )
@@ -128,8 +165,7 @@ function flattenMyBuyOrders(
   for (const aggregate of listings) {
     if (!aggregate.buy_orders?.length) continue
     const gameItemId = aggregate.details.game_item_id ?? null
-    const title =
-      aggregate.details.title ?? aggregate.details.item_name ?? ""
+    const title = aggregate.details.title ?? aggregate.details.item_name ?? ""
     for (const bo of aggregate.buy_orders) {
       if (bo.buyer?.username !== username) continue
       rows.push({
@@ -159,7 +195,8 @@ export function BuyOrderRow(props: {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const issueAlert = useAlertHook()
-  const [cancelBuyOrder, { isLoading: isCancelling }] = useCancelBuyOrderMutation()
+  const [cancelBuyOrder, { isLoading: isCancelling }] =
+    useCancelBuyOrderMutation()
   const date = useMemo(() => new Date(row.expiry), [row.expiry])
 
   const handleCancel = (e: React.MouseEvent) => {
@@ -251,12 +288,17 @@ export function BuyOrderRow(props: {
                 whiteSpace: "nowrap",
               }}
             >
-              {row.quantity.toLocaleString(undefined)} {t("market.unit", "ea")} •{" "}
+              {row.quantity.toLocaleString(undefined)} {t("market.unit", "ea")}{" "}
+              •{" "}
               {row.negotiable || row.price == null
                 ? row.price != null && row.price >= 1
-                  ? t("buyorder.negotiableSuggested", "Negotiable (~{{price}} aUEC)", {
-                      price: (+row.price).toLocaleString(undefined),
-                    })
+                  ? t(
+                      "buyorder.negotiableSuggested",
+                      "Negotiable (~{{price}} aUEC)",
+                      {
+                        price: (+row.price).toLocaleString(undefined),
+                      },
+                    )
                   : t("buyorder.negotiable", "Negotiable")
                 : `${(+row.price).toLocaleString(undefined)} aUEC`}
             </Typography>
@@ -303,13 +345,18 @@ export function BuyOrdersViewPaginated() {
   const { t } = useTranslation()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const { data: profile } = useGetUserProfileQuery()
-  const { data: listings, isLoading, isFetching, refetch } =
-    useGetBuyOrderListingsQuery()
+  const {
+    data: listings,
+    isLoading,
+    isFetching,
+    refetch,
+  } = useGetBuyOrderListingsQuery()
 
   const [page, setPage] = useState(0)
   const [pageSize, setPageSize] = useState(5)
   const [order, setOrder] = useState<"asc" | "desc">("desc")
-  const [orderBy, setOrderBy] = useState<keyof BuyOrderDashboardRow>("aggregate_title")
+  const [orderBy, setOrderBy] =
+    useState<keyof BuyOrderDashboardRow>("aggregate_title")
 
   const rows = useMemo(
     () => flattenMyBuyOrders(listings, profile?.username),
@@ -325,15 +372,12 @@ export function BuyOrdersViewPaginated() {
         return order === "asc" ? aVal - bVal : bVal - aVal
       const sa = String(aVal ?? "")
       const sb = String(bVal ?? "")
-      return order === "asc"
-        ? sa.localeCompare(sb)
-        : sb.localeCompare(sa)
+      return order === "asc" ? sa.localeCompare(sb) : sb.localeCompare(sa)
     })
   }, [rows, order, orderBy])
 
   const paginatedRows = useMemo(
-    () =>
-      sortedRows.slice(page * pageSize, page * pageSize + pageSize),
+    () => sortedRows.slice(page * pageSize, page * pageSize + pageSize),
     [sortedRows, page, pageSize],
   )
 
@@ -404,7 +448,9 @@ export function BuyOrdersViewPaginated() {
               rowCount={rows.length}
               onOrderChange={setOrder}
               order={order}
-              onOrderByChange={(key) => setOrderBy(key as keyof BuyOrderDashboardRow)}
+              onOrderByChange={(key) =>
+                setOrderBy(key as keyof BuyOrderDashboardRow)
+              }
               orderBy={orderBy}
               generateRow={BuyOrderRow}
               keyAttr="buy_order_id"
