@@ -1,0 +1,9 @@
+{
+  "schemaFile": "./spec/sc-market.openapi.json",
+  "apiFile": "./src/store/service.ts",
+  "apiImport": "serviceApi",
+  "outputFile": "./src/store/generatedApi.ts",
+  "exportName": "generatedApi",
+  "hooks": true,
+  "tag": true
+}

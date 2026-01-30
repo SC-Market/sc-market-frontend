@@ -2,6 +2,10 @@
 
 This repository hosts the frontend for [SC Market](https://sc-market.space).
 
+## API (RTK Query)
+
+**The generated API should be preferred for new code.** API slices and types are generated from the OpenAPI spec; see [src/store/api/README.md](src/store/api/README.md) for usage, regeneration, and config.
+
 ## Local Development
 
 Please read through the guide for setting up the [backend](https://github.com/SC-Market/sc-market-backend/blob/main/README.md)
@@ -30,3 +34,4 @@ You can ensure your changes build with
 ```shell
 npm run build && npm run check
 ```
+
