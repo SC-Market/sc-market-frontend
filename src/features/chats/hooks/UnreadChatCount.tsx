@@ -1,6 +1,7 @@
 import { useMemo } from "react"
-import { useGetNotificationsQuery } from "../../store/notification"
-import { useGetMyChatsQuery } from "../../store/chats"
+import { useGetNotificationsQuery } from "../../../store/notification"
+import { useGetMyChatsQuery } from "../api/chatsApi"
+import type { Chat } from "../domain/types"
 
 /**
  * Hook to get the count of chats with unread messages
@@ -61,7 +62,7 @@ export function useUnreadChatCount(): number {
     }
 
     // Create a set of chat IDs
-    const chatIds = new Set(chats.map((chat) => chat.chat_id))
+    const chatIds = new Set(chats.map((chat: Chat) => chat.chat_id))
 
     // Track which chats have unread notifications
     // We need to query notifications with entityId for each chat to get accurate counts
@@ -94,7 +95,7 @@ export function useUnreadChatCount(): number {
               "order_id" in notif.entity
             ) {
               const orderId = (notif.entity as any).order_id
-              const chat = chats.find((c) => c.order_id === orderId)
+              const chat = chats.find((c: Chat) => c.order_id === orderId)
               if (chat) {
                 unreadChatIds.add(chat.chat_id)
               }
@@ -103,7 +104,7 @@ export function useUnreadChatCount(): number {
             // We need to find the chat for this session
             else if (notif.action === "offer_message" && "id" in notif.entity) {
               const sessionId = (notif.entity as any).id
-              const chat = chats.find((c) => c.session_id === sessionId)
+              const chat = chats.find((c: Chat) => c.session_id === sessionId)
               if (chat) {
                 unreadChatIds.add(chat.chat_id)
               }

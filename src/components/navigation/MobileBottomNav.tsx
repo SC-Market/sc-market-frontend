@@ -19,7 +19,7 @@ import {
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useGetUserProfileQuery } from "../../store/profile"
 import { useTranslation } from "react-i18next"
-import { useUnreadChatCount } from "../../hooks/messaging/UnreadChatCount"
+import { useUnreadChatCount } from "../../features/chats"
 import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
 
 /**

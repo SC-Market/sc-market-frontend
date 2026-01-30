@@ -2,18 +2,20 @@ import React, { useEffect, useState } from "react"
 import { Box, useMediaQuery, useTheme } from "@mui/material"
 import { useParams, useNavigate } from "react-router-dom"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
-import { MessagesBody } from "../../views/messaging/MessagesBody"
-import { MessagesBodyMobile } from "../../views/messaging/MessagesBodyMobile"
-import { MessagingSidebar } from "../../views/messaging/MessagingSidebar"
-import { Message } from "../../datatypes/Chat"
-import { MessageGroupCreateContext } from "../../hooks/messaging/MessageGroupCreate"
-import { MessagingSidebarContext } from "../../hooks/messaging/MessagingSidebar"
-import { CreateMessageGroupBody } from "../../views/messaging/CreateMessageGroup"
-import { useCurrentChat } from "../../hooks/messaging/CurrentChat"
-import { useGetChatByIDQuery } from "../../store/chats"
+import {
+  MessagesBody,
+  MessagesBodyMobile,
+  MessagingSidebar,
+  messagingDrawerWidth,
+  MessageGroupCreateContext,
+  MessagingSidebarContext,
+  CreateMessageGroupBody,
+  useCurrentChat,
+  useGetChatByIDQuery,
+  CurrentChatIDContext,
+  type Message,
+} from "../../features/chats"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { CurrentChatIDContext } from "../../hooks/messaging/CurrentChatID"
-import { messagingDrawerWidth } from "../../views/messaging/MessagingSidebar"
 import { MessageThreadSkeleton } from "../../components/skeletons"
 import { EmptyMessages } from "../../components/empty-states"
 import { useTranslation } from "react-i18next"

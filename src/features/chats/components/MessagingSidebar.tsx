@@ -1,13 +1,13 @@
 import { Box, Drawer, IconButton, Tooltip, useMediaQuery } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import React from "react"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
-import { useMessagingSidebar } from "../../hooks/messaging/MessagingSidebar"
+import { ExtendedTheme } from "../../../hooks/styles/Theme"
+import { sidebarDrawerWidth, useDrawerOpen } from "../../../hooks/layout/Drawer"
+import { useMessagingSidebar } from "../hooks/MessagingSidebar"
 import { MessagingSidebarContent } from "./MessagingSidebarContent"
 import { MenuRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
-import { BottomSheet } from "../../components/mobile/BottomSheet"
+import { BottomSheet } from "../../../components/mobile/BottomSheet"
 
 export const messagingDrawerWidth = 360
 

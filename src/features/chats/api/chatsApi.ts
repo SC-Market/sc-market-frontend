@@ -1,14 +1,18 @@
-import { Chat, Message } from "../datatypes/Chat"
-import { serviceApi } from "./service"
-import { unwrapResponse } from "./api-utils"
+import { serviceApi } from "../../../store/service"
+import { unwrapResponse } from "../../../store/api-utils"
 import {
   generateTempId,
   createOptimisticUpdate,
   OptimisticPatch,
-} from "../util/optimisticUpdates"
-import type { RootState } from "./store"
+} from "../../../util/optimisticUpdates"
+import type { RootState } from "../../../store/store"
+import type { Chat, Message } from "../domain/types"
 
+/**
+ * Chats API endpoints
+ */
 export const chatsApi = serviceApi.injectEndpoints({
+  overrideExisting: false,
   endpoints: (builder) => ({
     getChatByID: builder.query<Chat, string>({
       query: (chat_id) => `/api/chats/${chat_id}`,
@@ -162,6 +166,7 @@ export const chatsApi = serviceApi.injectEndpoints({
   }),
 })
 
+// Export hooks for usage in functional components
 export const {
   useCreateChatMutation,
   useGetMyChatsQuery,

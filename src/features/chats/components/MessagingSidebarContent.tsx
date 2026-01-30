@@ -16,32 +16,32 @@ import {
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import React, { useState, useMemo, useRef, useEffect, useCallback } from "react"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { useCurrentChatID } from "../../hooks/messaging/CurrentChatID"
-import { HeaderTitle } from "../../components/typography/HeaderTitle"
-import { useGetUserProfileQuery } from "../../store/profile"
+import { ExtendedTheme } from "../../../hooks/styles/Theme"
+import { useCurrentChatID } from "../hooks/CurrentChatID"
+import { HeaderTitle } from "../../../components/typography/HeaderTitle"
+import { useGetUserProfileQuery } from "../../../store/profile"
 import SearchIcon from "@mui/icons-material/Search"
 import CreateIcon from "@mui/icons-material/Create"
 import BusinessIcon from "@mui/icons-material/BusinessRounded"
-import { useMessageGroupCreate } from "../../hooks/messaging/MessageGroupCreate"
-import {
+import { useMessageGroupCreate } from "../hooks/MessageGroupCreate"
+import type {
   Chat,
   UserParticipant,
   ContractorParticipant,
-} from "../../datatypes/Chat"
-import { useGetMyChatsQuery } from "../../store/chats"
+} from "../domain/types"
+import { useGetMyChatsQuery } from "../api/chatsApi"
 import { useTranslation } from "react-i18next"
 import { Link, useNavigate, useParams } from "react-router-dom"
-import { useDrawerOpen } from "../../hooks/layout/Drawer"
+import { useDrawerOpen } from "../../../hooks/layout/Drawer"
 import { MenuRounded } from "@mui/icons-material"
-import { MessageListSkeleton } from "../../components/skeletons"
+import { MessageListSkeleton } from "../../../components/skeletons"
 import {
   EmptyMessages,
   EmptySearchResults,
-} from "../../components/empty-states"
-import { useGetNotificationsQuery } from "../../store/notification"
-import { getRelativeTime } from "../../util/time"
-import { MarkdownRender } from "../../components/markdown/Markdown"
+} from "../../../components/empty-states"
+import { useGetNotificationsQuery } from "../../../store/notification"
+import { getRelativeTime } from "../../../util/time"
+import { MarkdownRender } from "../../../components/markdown/Markdown"
 
 // Single chat entry in the chat list
 function ChatEntry(props: {

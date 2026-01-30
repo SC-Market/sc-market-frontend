@@ -1,5 +1,5 @@
 import React from "react"
-import { Message } from "../../datatypes/Chat"
+import type { Message } from "../domain/types"
 
 export const CurrentChatMessagesContext = React.createContext<
   [Message[], React.Dispatch<React.SetStateAction<Message[]>>] | null
