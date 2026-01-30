@@ -200,18 +200,18 @@ export function AggregateBuyOrderListingBase(props: {
   const maximum_price = useMemo(
     () =>
       aggregate.buy_orders.length
-        ? aggregate.buy_orders.reduce((prev, curr) =>
-            prev.price > curr.price ? prev : curr,
-          ).price
+        ? (aggregate.buy_orders.reduce((prev, curr) =>
+            (prev.price ?? 0) > (curr.price ?? 0) ? prev : curr,
+          ).price ?? 0)
         : 0,
     [aggregate.buy_orders],
   )
   const minimum_price = useMemo(
     () =>
       aggregate.buy_orders.length
-        ? aggregate.buy_orders.reduce((prev, curr) =>
-            prev.price < curr.price ? prev : curr,
-          ).price
+        ? (aggregate.buy_orders.reduce((prev, curr) =>
+            (prev.price ?? 0) < (curr.price ?? 0) ? prev : curr,
+          ).price ?? 0)
         : 0,
     [aggregate.buy_orders],
   )

@@ -35,7 +35,8 @@ export interface BuyOrderDashboardRow {
   aggregate_title: string
   game_item_id: string | null
   quantity: number
-  price: number
+  price: number | null
+  negotiable?: boolean
   expiry: string
   timestamp: number
   _actions?: undefined
@@ -136,7 +137,8 @@ function flattenMyBuyOrders(
         aggregate_title: title,
         game_item_id: gameItemId,
         quantity: bo.quantity,
-        price: bo.price,
+        price: bo.price ?? null,
+        negotiable: bo.negotiable,
         expiry: bo.expiry,
         timestamp: new Date(bo.expiry).getTime(),
       })
@@ -250,7 +252,13 @@ export function BuyOrderRow(props: {
               }}
             >
               {row.quantity.toLocaleString(undefined)} {t("market.unit", "ea")} •{" "}
-              {(+row.price).toLocaleString(undefined)} aUEC
+              {row.negotiable || row.price == null
+                ? row.price != null && row.price >= 1
+                  ? t("buyorder.negotiableSuggested", "Negotiable (~{{price}} aUEC)", {
+                      price: (+row.price).toLocaleString(undefined),
+                    })
+                  : t("buyorder.negotiable", "Negotiable")
+                : `${(+row.price).toLocaleString(undefined)} aUEC`}
             </Typography>
           </Stack>
         </Stack>
@@ -262,7 +270,9 @@ export function BuyOrderRow(props: {
       </TableCell>
       <TableCell align="right" sx={{ width: { xs: "30%", sm: "auto" } }}>
         <Typography variant="body2">
-          {(row.price * row.quantity).toLocaleString(undefined)} aUEC
+          {row.price != null
+            ? `${row.negotiable ? "~" : ""}${(row.price * row.quantity).toLocaleString(undefined)} aUEC`
+            : t("buyorder.negotiable", "Negotiable")}
         </Typography>
       </TableCell>
       <TableCell

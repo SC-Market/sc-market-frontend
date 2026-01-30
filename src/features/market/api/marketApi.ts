@@ -341,7 +341,11 @@ export const marketApi = serviceApi.injectEndpoints({
 
     fulfillBuyOrder: builder.mutation<
       FulfillBuyOrderResponse,
-      { buy_order_id: string; contractor_spectrum_id?: string }
+      {
+        buy_order_id: string
+        contractor_spectrum_id?: string
+        agreed_price?: number
+      }
     >({
       query: ({ buy_order_id, ...body }) => ({
         url: `/api/market/buyorder/${buy_order_id}/fulfill`,

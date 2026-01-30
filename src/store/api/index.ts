@@ -1,6 +1,6 @@
 /**
  * Generated RTK Query API slices (split by domain).
- * Import this module for side effects so all endpoints are injected into serviceApi.
+ * Import this module for side effects so all endpoints are injected into generatedApi.
  * For domain-specific types/hooks, import from the individual slice files, e.g.:
  *   import { starmapApi, useGetStarmapRouteQuery } from "@/store/api/starmap"
  */

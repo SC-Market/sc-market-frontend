@@ -1,7 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react"
 import { FlatSection } from "../../../components/paper/Section"
 import {
+  Checkbox,
   Divider,
+  FormControlLabel,
   Grid,
   InputAdornment,
   Paper,
@@ -29,6 +31,7 @@ export function BuyOrderForm(props: { aggregate: MarketAggregate }) {
     price: 0,
     quantity: 1,
     expiry: moment().add(3, "days").endOf("day"),
+    negotiable: false,
   })
 
   useEffect(() => {
@@ -40,7 +43,15 @@ export function BuyOrderForm(props: { aggregate: MarketAggregate }) {
   const navigate = useNavigate()
 
   const callback = useCallback(async () => {
-    createBuyOrder(state)
+    createBuyOrder({
+      game_item_id: state.game_item_id,
+      quantity: state.quantity,
+      expiry: state.expiry,
+      negotiable: state.negotiable,
+      price: state.negotiable
+        ? (state.price >= 1 ? state.price : undefined)
+        : state.price,
+    })
       .unwrap()
       .then(() => {
         issueAlert({
@@ -106,6 +117,23 @@ export function BuyOrderForm(props: { aggregate: MarketAggregate }) {
         <Grid container spacing={theme.layoutSpacing.layout}>
           <FlatSection title={t("buyorder.create_buy_order")}>
             <Grid item xs={12} display={"flex"} justifyContent={"right"}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={state.negotiable}
+                    onChange={(e) =>
+                      setState({
+                        ...state,
+                        negotiable: e.target.checked,
+                      })
+                    }
+                    color="secondary"
+                  />
+                }
+                label={t("buyorder.negotiable", "Negotiable (no fixed price)")}
+              />
+            </Grid>
+            <Grid item xs={12} display={"flex"} justifyContent={"right"}>
               <NumericFormat
                 decimalScale={0}
                 allowNegative={false}
@@ -114,14 +142,19 @@ export function BuyOrderForm(props: { aggregate: MarketAggregate }) {
                 onValueChange={async (values, sourceInfo) => {
                   setState({
                     ...state,
-                    price: values.floatValue || 0,
+                    price: values.floatValue ?? 0,
                   })
                 }}
                 fullWidth
-                label={t("buyorder.price_per_unit")}
+                label={
+                  state.negotiable
+                    ? t("buyorder.suggested_price_optional", "Suggested price (optional)")
+                    : t("buyorder.price_per_unit")
+                }
                 id="price-per-unit"
                 color={"secondary"}
-                value={state.price}
+                value={state.price || ""}
+                placeholder={state.negotiable ? t("buyorder.optional", "Optional") : undefined}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="start">{`aUEC`}</InputAdornment>
@@ -129,7 +162,7 @@ export function BuyOrderForm(props: { aggregate: MarketAggregate }) {
                   inputMode: "numeric",
                 }}
                 type={"tel"}
-                aria-required="true"
+                aria-required={!state.negotiable}
                 aria-describedby="price-per-unit-help"
                 inputProps={{
                   "aria-label": t(
@@ -140,10 +173,15 @@ export function BuyOrderForm(props: { aggregate: MarketAggregate }) {
                 }}
               />
               <div id="price-per-unit-help" className="sr-only">
-                {t(
-                  "accessibility.pricePerUnitHelp",
-                  "Enter the price you are willing to pay per unit in aUEC",
-                )}
+                {state.negotiable
+                  ? t(
+                      "accessibility.suggestedPriceHelp",
+                      "Optional suggested price per unit in aUEC when negotiable",
+                    )
+                  : t(
+                      "accessibility.pricePerUnitHelp",
+                      "Enter the price you are willing to pay per unit in aUEC",
+                    )}
               </div>
             </Grid>
             <Grid item xs={12} display={"flex"} justifyContent={"right"}>
@@ -192,7 +230,7 @@ export function BuyOrderForm(props: { aggregate: MarketAggregate }) {
                 id="total-price"
                 color={"secondary"}
                 variant={"standard"}
-                value={Math.ceil(state.price * state.quantity)}
+                value={state.negotiable && !state.price ? "" : Math.ceil(state.price * state.quantity)}
                 InputProps={{
                   readOnly: true,
                   endAdornment: (

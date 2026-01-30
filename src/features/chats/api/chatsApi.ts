@@ -1,4 +1,5 @@
 import { serviceApi } from "../../../store/service"
+import { generatedApi } from "../../../store/generatedApi"
 import { unwrapResponse } from "../../../store/api-utils"
 import {
   generateTempId,
@@ -41,27 +42,26 @@ export const chatsApi = serviceApi.injectEndpoints({
           (dispatch) => {
             const patches: OptimisticPatch[] = []
 
-            // Get current user from RTK Query cache
+            // Get current user from RTK Query cache (profile lives in generatedApi)
             // The query key format is "profileGetUserProfile(undefined)"
             const state = getState() as RootState
-            const serviceApiState = state[serviceApi.reducerPath]
-            let profileData = serviceApiState?.queries?.[
+            const generatedApiState = state[generatedApi.reducerPath]
+            let profileData = generatedApiState?.queries?.[
               "profileGetUserProfile(undefined)"
             ]?.data as { username?: string } | undefined
 
             // If not found, try alternative query key formats
             if (!profileData?.username) {
               const profileQueryKey = Object.keys(
-                serviceApiState?.queries || {},
+                generatedApiState?.queries || {},
               ).find(
                 (key) =>
                   key.includes("profileGetUserProfile") &&
-                  serviceApiState.queries[key]?.data,
+                  generatedApiState.queries[key]?.data,
               )
               if (profileQueryKey) {
-                profileData = serviceApiState.queries[profileQueryKey]?.data as
-                  | { username?: string }
-                  | undefined
+                profileData = generatedApiState.queries[profileQueryKey]
+                  ?.data as { username?: string } | undefined
               }
             }
 
