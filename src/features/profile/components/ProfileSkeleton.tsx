@@ -4,7 +4,6 @@ import {
   Container,
   Divider,
   Grid,
-  Paper,
   Skeleton,
   Stack,
   Tab,
@@ -44,6 +43,7 @@ export function ProfileSkeleton() {
           }}
         >
           <Grid container spacing={theme.layoutSpacing.layout}>
+            {/* Header: left = avatar + username/discord (lg=8), right = ratings summary (lg=4) */}
             <Grid item xs={12}>
               <Grid
                 spacing={theme.layoutSpacing.layout}
@@ -55,11 +55,12 @@ export function ProfileSkeleton() {
                   [theme.breakpoints.up("lg")]: { height: 400 },
                 }}
               >
-                <Grid item lg={6}>
+                <Grid item xs={12} lg={8}>
                   <Grid
                     container
                     spacing={theme.layoutSpacing.component}
                     alignItems={"end"}
+                    justifyContent={"flex-start"}
                   >
                     <Grid item>
                       <Skeleton
@@ -67,7 +68,9 @@ export function ProfileSkeleton() {
                         sx={{
                           height: 80,
                           width: 80,
-                          borderRadius: theme.spacing(theme.borderRadius.image),
+                          borderRadius: theme.spacing(
+                            theme.borderRadius.image,
+                          ),
                         }}
                       />
                     </Grid>
@@ -76,90 +79,28 @@ export function ProfileSkeleton() {
                         variant="text"
                         width={200}
                         height={28}
-                        sx={{ mb: 1 }}
+                        sx={{ mb: 0.5 }}
                       />
-                      <Stack
-                        direction="row"
-                        spacing={0.5}
-                        alignItems="center"
-                        sx={{ mb: 1 }}
-                      >
-                        <Skeleton variant="circular" width={16} height={16} />
-                        <Skeleton variant="text" width={60} height={16} />
-                      </Stack>
-                      <Skeleton variant="text" width={150} height={20} />
-                    </Grid>
-                    <Grid
-                      item
-                      xs={12}
-                      sx={{ maxHeight: 200, overflowX: "scroll" }}
-                    >
-                      <Stack direction="row" spacing={1}>
-                        <Skeleton
-                          variant="rectangular"
-                          width={120}
-                          height={80}
-                          sx={{ borderRadius: 1 }}
-                        />
-                        <Skeleton
-                          variant="rectangular"
-                          width={120}
-                          height={80}
-                          sx={{ borderRadius: 1 }}
-                        />
-                      </Stack>
+                      <Skeleton
+                        variant="text"
+                        width={120}
+                        height={20}
+                        sx={{ display: "block" }}
+                      />
                     </Grid>
                   </Grid>
                 </Grid>
-                <Grid item lg={6}>
-                  <Paper
+                <Grid item xs={12} lg={4}>
+                  <Skeleton
+                    variant="rectangular"
                     sx={{
-                      padding: 2,
-                      paddingTop: 1,
-                      position: "relative",
-                      maxHeight: 350,
-                      overflowY: "scroll",
+                      height: 120,
+                      width: "100%",
+                      borderRadius: 1,
+                      maxWidth: 320,
+                      ml: "auto",
                     }}
-                  >
-                    <Skeleton
-                      variant="text"
-                      width="100%"
-                      height={20}
-                      sx={{ mb: 0.5 }}
-                    />
-                    <Skeleton
-                      variant="text"
-                      width="100%"
-                      height={20}
-                      sx={{ mb: 0.5 }}
-                    />
-                    <Skeleton
-                      variant="text"
-                      width="90%"
-                      height={20}
-                      sx={{ mb: 0.5 }}
-                    />
-                    <Skeleton
-                      variant="text"
-                      width="80%"
-                      height={20}
-                      sx={{ mb: 2 }}
-                    />
-                    <Stack direction="row" spacing={0.5} flexWrap="wrap">
-                      <Skeleton
-                        variant="rectangular"
-                        width={80}
-                        height={24}
-                        sx={{ borderRadius: 1 }}
-                      />
-                      <Skeleton
-                        variant="rectangular"
-                        width={80}
-                        height={24}
-                        sx={{ borderRadius: 1 }}
-                      />
-                    </Stack>
-                  </Paper>
+                  />
                 </Grid>
               </Grid>
             </Grid>
@@ -172,10 +113,19 @@ export function ProfileSkeleton() {
                   textColor="secondary"
                   indicatorColor="secondary"
                 >
-                  <Tab label={<Skeleton width={60} />} icon={<StorefrontRounded />} />
-                  <Tab label={<Skeleton width={60} />} icon={<DesignServicesRounded />} />
+                  <Tab
+                    label={<Skeleton width={60} />}
+                    icon={<StorefrontRounded />}
+                  />
+                  <Tab
+                    label={<Skeleton width={60} />}
+                    icon={<DesignServicesRounded />}
+                  />
                   <Tab label={<Skeleton width={60} />} icon={<InfoRounded />} />
-                  <Tab label={<Skeleton width={60} />} icon={<CreateRounded />} />
+                  <Tab
+                    label={<Skeleton width={60} />}
+                    icon={<CreateRounded />}
+                  />
                   <Tab label={<Skeleton width={60} />} icon={<StarRounded />} />
                 </Tabs>
               </Box>

@@ -34,4 +34,3 @@ You can ensure your changes build with
 ```shell
 npm run build && npm run check
 ```
-

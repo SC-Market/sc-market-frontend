@@ -16,13 +16,19 @@ import { EditRounded } from "@mui/icons-material"
 import { useTheme } from "@mui/material/styles"
 import { User } from "../../../datatypes/User"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
-import { MarkdownEditor, MarkdownRender } from "../../../components/markdown/Markdown"
+import {
+  MarkdownEditor,
+  MarkdownRender,
+} from "../../../components/markdown/Markdown"
 import { UserContractorList } from "../../../components/list/UserContractorList"
 import { BottomSheet } from "../../../components/mobile/BottomSheet"
 
 export function ProfileAboutTab(props: {
   profile: User
-  submitUpdate: (data: { about?: string; display_name?: string }) => Promise<unknown>
+  submitUpdate: (data: {
+    about?: string
+    display_name?: string
+  }) => Promise<unknown>
   isMyProfile: boolean
 }) {
   const { profile, submitUpdate, isMyProfile } = props
@@ -40,9 +46,7 @@ export function ProfileAboutTab(props: {
         justifyContent={"center"}
       >
         <Grid item xs={12} lg={4}>
-          <UserContractorList
-            contractors={profile?.contractors || []}
-          />
+          <UserContractorList contractors={profile?.contractors || []} />
         </Grid>
         <Grid item xs={12} lg={8}>
           <Paper

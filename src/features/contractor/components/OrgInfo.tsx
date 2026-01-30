@@ -22,7 +22,10 @@ import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { contractorKindIcons } from "../../../views/contractor/ContractorList"
 import { CreateOrderForm } from "../../../views/orders/CreateOrderForm"
-import { ContractorReviewSummary, OrgReviews } from "../../../views/contractor/OrgReviews"
+import {
+  ContractorReviewSummary,
+  OrgReviews,
+} from "../../../views/contractor/OrgReviews"
 import { a11yProps, TabPanel } from "../../../components/tabs/Tabs"
 import {
   CreateRounded,
@@ -177,10 +180,7 @@ export function OrgInfo(props: { contractor: Contractor }) {
                         <PeopleAltRoundedIcon
                           style={{ color: theme.palette.text.primary }}
                         />
-                        <Typography
-                          color={"text.primary"}
-                          fontWeight={"bold"}
-                        >
+                        <Typography color={"text.primary"} fontWeight={"bold"}>
                           {contractor.size}
                         </Typography>
                       </Box>

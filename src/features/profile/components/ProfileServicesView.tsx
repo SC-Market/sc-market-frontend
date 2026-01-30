@@ -1,11 +1,5 @@
 import React, { useState } from "react"
-import {
-  Container,
-  Grid,
-  Paper,
-  useMediaQuery,
-  Button,
-} from "@mui/material"
+import { Container, Grid, Paper, useMediaQuery, Button } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
 import FilterListIcon from "@mui/icons-material/FilterList"

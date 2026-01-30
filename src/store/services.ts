@@ -37,6 +37,10 @@ interface ServicesQueryParams {
   sortBy?: "timestamp" | "cost" | "service_name"
   sortOrder?: "asc" | "desc"
   language_codes?: string
+  /** Filter by contractor (org) spectrum ID for correct counts on org services tab */
+  contractor?: string
+  /** Filter by user username for correct counts on user profile services tab */
+  user?: string
 }
 
 const servicesApi = serviceApi.injectEndpoints({
@@ -61,12 +65,13 @@ const servicesApi = serviceApi.injectEndpoints({
           sortBy: params.sortBy || "timestamp",
           sortOrder: params.sortOrder || "desc",
           language_codes: params.language_codes,
+          contractor: params.contractor,
+          user: params.user,
         },
       }),
       providesTags: (result, error, params) => ["Service" as const],
       transformResponse: unwrapResponse,
       serializeQueryArgs: ({ queryArgs }) => {
-        // Create a stable cache key based on the query parameters
         const {
           page,
           pageSize,
@@ -77,6 +82,8 @@ const servicesApi = serviceApi.injectEndpoints({
           paymentType,
           sortBy,
           sortOrder,
+          contractor,
+          user,
         } = queryArgs
         return JSON.stringify({
           page: page || 0,
@@ -89,6 +96,8 @@ const servicesApi = serviceApi.injectEndpoints({
           sortBy: sortBy || "timestamp",
           sortOrder: sortOrder || "desc",
           language_codes: queryArgs.language_codes || undefined,
+          contractor: contractor || undefined,
+          user: user || undefined,
         })
       },
     }),

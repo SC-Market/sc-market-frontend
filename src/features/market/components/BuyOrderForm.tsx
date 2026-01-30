@@ -49,7 +49,9 @@ export function BuyOrderForm(props: { aggregate: MarketAggregate }) {
       expiry: state.expiry,
       negotiable: state.negotiable,
       price: state.negotiable
-        ? (state.price >= 1 ? state.price : undefined)
+        ? state.price >= 1
+          ? state.price
+          : undefined
         : state.price,
     })
       .unwrap()
@@ -148,13 +150,20 @@ export function BuyOrderForm(props: { aggregate: MarketAggregate }) {
                 fullWidth
                 label={
                   state.negotiable
-                    ? t("buyorder.suggested_price_optional", "Suggested price (optional)")
+                    ? t(
+                        "buyorder.suggested_price_optional",
+                        "Suggested price (optional)",
+                      )
                     : t("buyorder.price_per_unit")
                 }
                 id="price-per-unit"
                 color={"secondary"}
                 value={state.price || ""}
-                placeholder={state.negotiable ? t("buyorder.optional", "Optional") : undefined}
+                placeholder={
+                  state.negotiable
+                    ? t("buyorder.optional", "Optional")
+                    : undefined
+                }
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="start">{`aUEC`}</InputAdornment>
@@ -230,7 +239,11 @@ export function BuyOrderForm(props: { aggregate: MarketAggregate }) {
                 id="total-price"
                 color={"secondary"}
                 variant={"standard"}
-                value={state.negotiable && !state.price ? "" : Math.ceil(state.price * state.quantity)}
+                value={
+                  state.negotiable && !state.price
+                    ? ""
+                    : Math.ceil(state.price * state.quantity)
+                }
                 InputProps={{
                   readOnly: true,
                   endAdornment: (

@@ -29,7 +29,10 @@ import { User } from "../../../datatypes/User"
 import { Section } from "../../../components/paper/Section"
 import { a11yProps, TabPanel } from "../../../components/tabs/Tabs"
 import { CreateOrderForm } from "../../../views/orders/CreateOrderForm"
-import { UserReviews, UserReviewSummary } from "../../../views/contractor/OrgReviews"
+import {
+  UserReviews,
+  UserReviewSummary,
+} from "../../../views/contractor/OrgReviews"
 import {
   useGetUserProfileQuery,
   useUpdateProfile,
@@ -93,18 +96,17 @@ export function ViewProfile(props: { profile: User }) {
   const [uploadAvatar, { isLoading: isUploadingAvatar }] =
     useProfileUploadAvatarMutation()
 
-  async function submitUpdate(data: {
-    about?: string
-    display_name?: string
-  }) {
+  async function submitUpdate(data: { about?: string; display_name?: string }) {
     const res: { data?: unknown; error?: unknown } = await updateProfile(data)
     if (res?.data && !res?.error) {
       issueAlert({ message: t("viewProfile.submitted"), severity: "success" })
     } else {
       issueAlert({
         message: `${t("viewProfile.failed")} ${
-          (res?.error as { error?: string; data?: { error?: string } })?.error ||
-          (res?.error as { error?: string; data?: { error?: string } })?.data?.error ||
+          (res?.error as { error?: string; data?: { error?: string } })
+            ?.error ||
+          (res?.error as { error?: string; data?: { error?: string } })?.data
+            ?.error ||
           res?.error
         }`,
         severity: "error",
@@ -256,7 +258,8 @@ export function ViewProfile(props: { profile: User }) {
                                 color: theme.palette.background.light,
                                 top: 20,
                                 left: 20,
-                                backgroundColor: theme.palette.background.overlay,
+                                backgroundColor:
+                                  theme.palette.background.overlay,
                                 "&:hover": {
                                   backgroundColor:
                                     theme.palette.background.overlayDark,
