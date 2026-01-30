@@ -55,7 +55,6 @@ export function MemberDashboard() {
                 {/*<MemberBalance/>*/}
                 <OrderMetrics />
                 <DashNotificationArea />
-                {/*<DashNotificationArea/>*/}
               </Grid>
             </Grid>
             <Grid item xs={12} lg={9}>

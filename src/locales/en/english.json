@@ -451,7 +451,10 @@
     "servicesTab": "Services",
     "bulkItems": "Bulk Items",
     "bulkListings": "Bulk Listings",
+    "buyOrder": "Buy order",
     "buyOrders": "Buy Orders",
+    "quantity": "Quantity",
+    "price": "Price",
     "total_requested": "total requested",
     "total_available": "total available",
     "starting_at": "Starting at {{price}} aUEC",
@@ -1031,7 +1034,8 @@
       "order": "Order",
       "customer": "Customer",
       "contractor": "Contractor",
-      "status": "Status"
+      "status": "Status",
+      "actions": "Actions"
     },
     "tabs": {
       "all": "All",
@@ -2219,7 +2223,10 @@
     }
   },
   "dashboard": {
-    "title": "Dashboard"
+    "title": "Dashboard",
+    "viewAllBuyOrders": "View all buy orders",
+    "noBuyOrders": "No buy orders",
+    "noBuyOrdersDescription": "Your active buy orders will appear here."
   },
   "contractors": {
     "contractor": "contractor"

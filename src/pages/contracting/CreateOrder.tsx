@@ -8,6 +8,7 @@ import { useGetServiceByIdQuery } from "../../store/services"
 import { Navigate, useParams } from "react-router-dom"
 import { ServiceView } from "../../views/contracts/ServiceView"
 import { SentOffersArea } from "../../views/offers/ReceivedOffersArea"
+import { BuyOrdersViewPaginated } from "../../views/market/DashBuyOrdersArea"
 import { CreatePublicContract } from "../../views/contracts/CreatePublicContract"
 import { useTranslation } from "react-i18next"
 import {
@@ -27,6 +28,7 @@ export function CreateOrder(props: {}) {
 
         <SentOffersArea />
         <MyOrders />
+        <BuyOrdersViewPaginated />
 
         <HeaderTitle>{t("contracts.createPublicContract")}</HeaderTitle>
         <CreatePublicContract />

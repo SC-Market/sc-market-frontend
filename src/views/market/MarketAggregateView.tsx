@@ -61,7 +61,6 @@ import { ImageSearch } from "../../features/market/components/ImageSearch"
 import { useCurrentMarketListing } from "../../features/market"
 import { BuyOrderForm } from "../../features/market"
 import { Rating } from "../../datatypes/Contractor"
-import { Order } from "../../datatypes/Order"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
 import { Section } from "../../components/paper/Section"
 import {
@@ -661,13 +660,15 @@ export function BuyOrderRow(props: {
       contractor_spectrum_id: currentOrg?.spectrum_id,
     })
       .unwrap()
-      .then((order: Order) => {
+      .then((result) => {
         issueAlert({
           message: t("MarketAggregateView.submitted"),
           severity: "success",
         })
-
-        navigate(`/contract/${order.order_id}`)
+        const sessionId = result.session?.id ?? result.offer?.session_id
+        if (sessionId) {
+          navigate(`/offer/${sessionId}`)
+        }
       })
       .catch((err) => issueAlert(err))
 
