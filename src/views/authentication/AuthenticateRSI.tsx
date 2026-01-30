@@ -23,7 +23,7 @@ import {
   extractProfileIdFromUrl,
   sanitizeAlphanumeric,
   isRsiUrl,
-} from "../../utils/rsiUrlUtils"
+} from "../../util/rsiUrlUtils.ts"
 import { SentinelCode } from "../../components/authentication/SentinelCode"
 
 export function isAlphaNumeric(str: string) {
