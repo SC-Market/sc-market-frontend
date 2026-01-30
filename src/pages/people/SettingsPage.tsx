@@ -20,9 +20,9 @@ import { DiscordIntegrationSettings } from "../../views/settings/DiscordIntegrat
 import { MarketSettings } from "../../views/settings/MarketSettings"
 import { ContractorsSettings } from "../../views/settings/ContractorsSettings"
 import { BlocklistSettings } from "../../views/settings/BlocklistSettings"
-import { ApiTokensSettings } from "../../views/settings/ApiTokensSettings"
-import { PushNotificationSettings } from "../../views/settings/PushNotificationSettings"
-import { EmailSettings } from "../../views/settings/EmailSettings"
+import { ApiTokensSettings } from "../../features/api-tokens"
+import { PushNotificationSettings } from "../../features/push-notifications"
+import { EmailSettings } from "../../features/email"
 import { useTranslation } from "react-i18next"
 
 export function SettingsPage() {
@@ -89,13 +89,13 @@ export function SettingsPage() {
               value={6}
             />
             <Tab
-              label="Push Notifications"
+              label={t("settings.pushNotifications.title")}
               icon={<NotificationsActiveRounded />}
               {...a11yProps(7)}
               value={7}
             />
             <Tab
-              label="Email Notifications"
+              label={t("settings.email.title")}
               icon={<EmailIcon />}
               {...a11yProps(8)}
               value={8}

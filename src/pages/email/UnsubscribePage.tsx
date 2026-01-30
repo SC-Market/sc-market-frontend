@@ -15,7 +15,7 @@ import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import {
   useUnsubscribeMutation,
   useGetEmailPreferencesQuery,
-} from "../../store/email"
+} from "../../features/email"
 
 /**
  * Unsubscribe Page

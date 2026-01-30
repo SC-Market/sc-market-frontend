@@ -1,32 +1,6 @@
 import { FlatSection } from "../../components/paper/Section"
 import React, { useCallback, useEffect, useState } from "react"
-import {
-  Button,
-  FormControlLabel,
-  Grid,
-  Switch,
-  Typography,
-  Alert,
-  CircularProgress,
-  Box,
-  TextField,
-  Chip,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Checkbox,
-  FormGroup,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-} from "@mui/material"
-import EmailIcon from "@mui/icons-material/Email"
-import CheckCircleIcon from "@mui/icons-material/CheckCircle"
-import CancelIcon from "@mui/icons-material/Cancel"
-import EditIcon from "@mui/icons-material/Edit"
-import DeleteIcon from "@mui/icons-material/Delete"
+import { Grid, Alert } from "@mui/material"
 import {
   useGetEmailPreferencesQuery,
   useGetNotificationTypesQuery,
@@ -42,7 +16,10 @@ import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { useGetUserOrganizationsQuery } from "../../store/organizations"
 import { PreferenceSection } from "../../components/settings/PreferenceSection"
 import { OrganizationPreferenceSelector } from "../../components/settings/OrganizationPreferenceSelector"
-import { useTranslation } from "react-i18next"
+import { EmailStatus } from "../../components/settings/EmailStatus"
+import { AddEmailDialog } from "../../components/settings/AddEmailDialog"
+import { EditEmailDialog } from "../../components/settings/EditEmailDialog"
+import { DeleteEmailDialog } from "../../components/settings/DeleteEmailDialog"
 
 /**
  * Email Settings Component
@@ -52,7 +29,6 @@ import { useTranslation } from "react-i18next"
  * - Manage email notification preferences per notification type
  */
 export function EmailSettings() {
-  const { t } = useTranslation()
   const issueAlert = useAlertHook()
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState<string | null>(null)
@@ -296,7 +272,7 @@ export function EmailSettings() {
     notificationTypesData?.notificationTypes.map((type) => ({
       id: type.action_type_id,
       name: formatActionName(type.action),
-      description: type.description,
+      description: type.description || undefined,
       action: type.action, // Include for consistency with push preferences
     })) || []
 
@@ -325,96 +301,20 @@ export function EmailSettings() {
       {/* Email Status Section */}
       <Grid item xs={12}>
         <FlatSection title="Email Address">
-          <Grid container>
-            <Grid item xs={12}>
-              {preferencesLoading ? (
-                <CircularProgress />
-              ) : preferencesError ? (
-                <Alert severity="error">
-                  Failed to load email settings. Please try again later.
-                </Alert>
-              ) : !hasEmail ? (
-                <Box>
-                  <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    gutterBottom
-                  >
-                    You haven't added an email address yet. Add one to receive
-                    email notifications.
-                  </Typography>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    startIcon={<EmailIcon />}
-                    onClick={() => setAddEmailDialogOpen(true)}
-                    sx={{ mt: 2 }}
-                  >
-                    Add Email Address
-                  </Button>
-                </Box>
-              ) : (
-                <Box>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 1,
-                      mb: 2,
-                    }}
-                  >
-                    <EmailIcon color="action" />
-                    <Typography variant="body1">
-                      {userEmail || "Email configured"}
-                    </Typography>
-                    <Chip
-                      icon={
-                        emailVerified ? (
-                          <CheckCircleIcon />
-                        ) : (
-                          <CancelIcon color="error" />
-                        )
-                      }
-                      label={emailVerified ? "Verified" : "Not Verified"}
-                      color={emailVerified ? "success" : "warning"}
-                      size="small"
-                    />
-                  </Box>
-                  <Box sx={{ display: "flex", gap: 1 }}>
-                    <Button
-                      variant="outlined"
-                      size="small"
-                      startIcon={<EditIcon />}
-                      onClick={() => setEditEmailDialogOpen(true)}
-                    >
-                      Update Email
-                    </Button>
-                    {!emailVerified && (
-                      <Button
-                        variant="outlined"
-                        size="small"
-                        onClick={handleRequestVerification}
-                        disabled={resendCooldown > 0}
-                      >
-                        {resendCooldown > 0
-                          ? `Resend Verification (${resendCooldown}s)`
-                          : "Resend Verification"}
-                      </Button>
-                    )}
-                    <Button
-                      variant="outlined"
-                      color="error"
-                      size="small"
-                      startIcon={<DeleteIcon />}
-                      onClick={() => setDeleteEmailDialogOpen(true)}
-                    >
-                      Remove Email
-                    </Button>
-                  </Box>
-                </Box>
-              )}
-            </Grid>
-          </Grid>
+          <EmailStatus
+            email={userEmail}
+            emailVerified={emailVerified}
+            isLoading={preferencesLoading}
+            isError={preferencesError}
+            resendCooldown={resendCooldown}
+            onAddEmail={() => setAddEmailDialogOpen(true)}
+            onEditEmail={() => {
+              setNewEmail(userEmail || "")
+              setEditEmailDialogOpen(true)
+            }}
+            onDeleteEmail={() => setDeleteEmailDialogOpen(true)}
+            onRequestVerification={handleRequestVerification}
+          />
         </FlatSection>
       </Grid>
 
@@ -462,122 +362,43 @@ export function EmailSettings() {
       )}
 
       {/* Add Email Dialog */}
-      <Dialog
+      <AddEmailDialog
         open={addEmailDialogOpen}
+        email={newEmail}
+        selectedNotificationTypes={selectedNotificationTypes}
+        availableNotificationTypes={availableNotificationTypes}
         onClose={() => setAddEmailDialogOpen(false)}
-        maxWidth="sm"
-        fullWidth
-      >
-        <DialogTitle>Add Email Address</DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            label="Email Address"
-            type="email"
-            fullWidth
-            variant="outlined"
-            value={newEmail}
-            onChange={(e) => setNewEmail(e.target.value)}
-            sx={{ mb: 2 }}
-          />
-          <Typography variant="body2" color="text.secondary" gutterBottom>
-            Select which notification types you want to enable:
-          </Typography>
-          <FormGroup>
-            {availableNotificationTypes.map((type) => (
-              <FormControlLabel
-                key={type.id}
-                control={
-                  <Checkbox
-                    checked={selectedNotificationTypes.includes(type.id)}
-                    onChange={(e) => {
-                      if (e.target.checked) {
-                        setSelectedNotificationTypes([
-                          ...selectedNotificationTypes,
-                          type.id,
-                        ])
-                      } else {
-                        setSelectedNotificationTypes(
-                          selectedNotificationTypes.filter(
-                            (id) => id !== type.id,
-                          ),
-                        )
-                      }
-                    }}
-                  />
-                }
-                label={type.name}
-              />
-            ))}
-          </FormGroup>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setAddEmailDialogOpen(false)}>Cancel</Button>
-          <Button onClick={handleAddEmail} variant="contained" color="primary">
-            Add Email
-          </Button>
-        </DialogActions>
-      </Dialog>
+        onEmailChange={setNewEmail}
+        onNotificationTypeToggle={(typeId) => {
+          if (selectedNotificationTypes.includes(typeId)) {
+            setSelectedNotificationTypes(
+              selectedNotificationTypes.filter((id) => id !== typeId),
+            )
+          } else {
+            setSelectedNotificationTypes([
+              ...selectedNotificationTypes,
+              typeId,
+            ])
+          }
+        }}
+        onSubmit={handleAddEmail}
+      />
 
       {/* Edit Email Dialog */}
-      <Dialog
+      <EditEmailDialog
         open={editEmailDialogOpen}
+        email={newEmail}
         onClose={() => setEditEmailDialogOpen(false)}
-        maxWidth="sm"
-        fullWidth
-      >
-        <DialogTitle>Update Email Address</DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            label="New Email Address"
-            type="email"
-            fullWidth
-            variant="outlined"
-            value={newEmail}
-            onChange={(e) => setNewEmail(e.target.value)}
-          />
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
-            You will need to verify your new email address after updating.
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setEditEmailDialogOpen(false)}>Cancel</Button>
-          <Button
-            onClick={handleUpdateEmail}
-            variant="contained"
-            color="primary"
-          >
-            Update Email
-          </Button>
-        </DialogActions>
-      </Dialog>
+        onEmailChange={setNewEmail}
+        onSubmit={handleUpdateEmail}
+      />
 
       {/* Delete Email Dialog */}
-      <Dialog
+      <DeleteEmailDialog
         open={deleteEmailDialogOpen}
         onClose={() => setDeleteEmailDialogOpen(false)}
-        maxWidth="sm"
-        fullWidth
-      >
-        <DialogTitle>Remove Email Address</DialogTitle>
-        <DialogContent>
-          <Typography variant="body2">
-            Are you sure you want to remove your email address? You will no
-            longer receive email notifications.
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setDeleteEmailDialogOpen(false)}>
-            Cancel
-          </Button>
-          <Button onClick={handleDeleteEmail} variant="contained" color="error">
-            Remove Email
-          </Button>
-        </DialogActions>
-      </Dialog>
+        onConfirm={handleDeleteEmail}
+      />
     </Grid>
   )
 }

@@ -10,8 +10,8 @@ import {
   Grid,
 } from "@mui/material"
 import { PreferenceSection } from "./PreferenceSection"
-import { EmailPreference } from "../../store/email"
-import { PushPreference } from "../../store/push-notifications"
+import type { EmailPreference } from "../../features/email/domain/types"
+import type { PushPreference } from "../../features/push-notifications/domain/types"
 
 export interface OrganizationPreferenceSelectorProps {
   organizations: Array<{ contractor_id: string; name: string }>

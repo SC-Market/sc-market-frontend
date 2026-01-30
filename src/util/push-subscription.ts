@@ -2,7 +2,7 @@
  * Push subscription utilities for Web Push Protocol
  */
 
-import { PushSubscriptionData } from "../store/push-notifications"
+import type { PushSubscriptionData } from "../features/push-notifications/domain/types"
 
 /**
  * Convert VAPID public key from base64 URL-safe format to Uint8Array

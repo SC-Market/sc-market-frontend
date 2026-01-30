@@ -70,5 +70,6 @@ export const serviceApi = createApi({
     "UserEmail",
     "EmailPreferences",
     "UserOrganizations",
+    "ApiToken",
   ],
 })
