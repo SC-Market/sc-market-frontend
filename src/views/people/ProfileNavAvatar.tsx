@@ -25,7 +25,7 @@ import { useTranslation } from "react-i18next"
 import { useLogoutMutation } from "../../store/profile"
 import { useDispatch } from "react-redux"
 import { serviceApi } from "../../store/service"
-import { tokensApi } from "../../store/tokens"
+import { tokensApi } from "../../features/api-tokens"
 import { PreferencesControls } from "../../components/settings/PreferencesControls"
 
 export function ProfileNavAvatar() {

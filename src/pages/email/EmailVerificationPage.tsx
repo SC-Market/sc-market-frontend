@@ -12,7 +12,7 @@ import CheckCircleIcon from "@mui/icons-material/CheckCircle"
 import ErrorIcon from "@mui/icons-material/Error"
 import { Page } from "../../components/metadata/Page"
 import { ContainerGrid } from "../../components/layout/ContainerGrid"
-import { useVerifyEmailMutation } from "../../store/email"
+import { useVerifyEmailMutation } from "../../features/email"
 
 /**
  * Email Verification Page

@@ -216,7 +216,12 @@ export function NotificationBase(props: {
       component={to ? Link : "div"}
       to={to}
       onClick={onClick || defaultClick}
-      sx={{ position: "relative" }}
+      sx={{ 
+        position: "relative",
+        width: "100%",
+        display: "flex",
+        alignItems: "center",
+      }}
     >
       <ListItemIcon
         sx={{
@@ -225,16 +230,19 @@ export function NotificationBase(props: {
             : theme.palette.primary.main,
           transition: "0.3s",
           fontSize: "0.9em",
+          minWidth: 40,
         }}
       >
         {icon}
       </ListItemIcon>
       <ListItemText
         sx={{
-          maxWidth: { xs: "calc(100% - 80px)", sm: 300 }, // Responsive maxWidth: account for icon and delete button on mobile
+          flex: 1,
+          width: "100%",
           color: "text.secondary",
           wordWrap: "break-word",
           overflowWrap: "break-word",
+          margin: 0,
         }}
       >
         <Typography sx={{ wordBreak: "break-word" }}>
@@ -244,7 +252,28 @@ export function NotificationBase(props: {
           {getRelativeTime(new Date(notif.timestamp))}
         </Typography>
       </ListItemText>
-      <NotificationDeleteButton notif={notif} />
+      <Box
+        sx={{
+          position: "absolute",
+          left: 0,
+          right: 0,
+          top: 0,
+          bottom: 0,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          pointerEvents: "none", // Allow clicks to pass through to button
+          zIndex: 1,
+        }}
+      >
+        <Box
+          sx={{
+            pointerEvents: "auto", // Re-enable clicks for delete button
+          }}
+        >
+          <NotificationDeleteButton notif={notif} />
+        </Box>
+      </Box>
     </ListItemButton>
   )
 
@@ -852,9 +881,32 @@ export function NotificationsButton() {
             alignItems: "center",
           }}
         >
-          <Typography variant={"h6"} sx={{ fontWeight: 600 }}>
-            {t("notifications.notifications")}
-          </Typography>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <Typography variant={"h6"} sx={{ fontWeight: 600 }}>
+              {t("notifications.notifications")}
+            </Typography>
+            <Link
+              to="/notifications"
+              onClick={handleClose}
+              style={{
+                textDecoration: "none",
+                color: "inherit",
+                fontSize: "0.875rem",
+                opacity: 0.9,
+              }}
+            >
+              <Typography
+                variant="body2"
+                sx={{
+                  "&:hover": {
+                    textDecoration: "underline",
+                  },
+                }}
+              >
+                {t("notifications.view_all", { defaultValue: "View All" })}
+              </Typography>
+            </Link>
+          </Box>
           <Box>
             <Tooltip title={t("notifications.clear_all")}>
               <IconButton onClick={deleteAllCallback}>

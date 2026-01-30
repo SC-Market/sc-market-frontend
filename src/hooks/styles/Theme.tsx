@@ -6,6 +6,7 @@ import {
   Paper,
   PaperProps,
 } from "@mui/material"
+import type {} from "@mui/x-data-grid/themeAugmentation"
 
 declare module "@mui/material/styles" {
   interface BreakpointOverrides {
@@ -279,6 +280,11 @@ export const mainThemeOptions: ExtendedThemeOptions = {
       secondary: "#e8e8e8",
       disabled: "#EEEEEEC0",
     },
+    DataGrid: {
+      bg: "transparent",
+      pinnedBg: "transparent",
+      headerBg: "transparent",
+    },
     background: {
       // default: "linear-gradient(45deg, #cb5cff, #9c61f8)",
       default: "#0b0f1a",
@@ -312,6 +318,14 @@ export const mainThemeOptions: ExtendedThemeOptions = {
   },
   navKind: "outlined",
   components: {
+    MuiDataGrid: {
+      styleOverrides: {
+        root: {
+          "--DataGrid-containerBackground":
+            "var(--mui-palette-background-paper)",
+        },
+      },
+    },
     MuiPaper: {
       defaultProps: {
         variant: "outlined",

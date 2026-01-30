@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useGetPushSubscriptionsQuery } from "../../store/push-notifications"
+import { useGetPushSubscriptionsQuery } from "../../features/push-notifications"
 
 /**
  * Calculate optimal polling interval based on:

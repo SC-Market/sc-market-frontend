@@ -2,8 +2,8 @@ import React from "react"
 import { FlatSection } from "../paper/Section"
 import { Grid, Typography, CircularProgress, Button, Box } from "@mui/material"
 import { PreferenceToggle } from "./PreferenceToggle"
-import { EmailPreference } from "../../store/email"
-import { PushPreference } from "../../store/push-notifications"
+import type { EmailPreference } from "../../features/email/domain/types"
+import type { PushPreference } from "../../features/push-notifications/domain/types"
 
 export interface PreferenceSectionProps {
   title: string

@@ -525,6 +525,13 @@ const router = createBrowserRouter([
             }),
           },
           {
+            path: "/notifications",
+            lazy: async () => ({
+              Component: (await import("./pages/notifications/NotificationsPage"))
+                .NotificationsPage,
+            }),
+          },
+          {
             path: "/email/verify/:token",
             lazy: async () => ({
               Component: (await import("./pages/email/EmailVerificationPage"))
