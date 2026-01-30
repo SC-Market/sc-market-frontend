@@ -1,6 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit"
 import { setupListeners } from "@reduxjs/toolkit/query"
 import { serviceApi } from "./service"
+// Generated API slices (inject endpoints into serviceApi)
+import "./api"
 // Import tokensApi to ensure it's registered (it uses injectEndpoints on serviceApi)
 import "../features/api-tokens"
 // import {wikiActionApi, wikiRestApi} from "./wiki";
