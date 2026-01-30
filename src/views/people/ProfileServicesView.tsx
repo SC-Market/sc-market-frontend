@@ -59,7 +59,7 @@ export function ProfileServicesView(props: { user: string }) {
             md={3}
             sx={{ display: { xs: "none", md: "block" } }}
           >
-            <Paper>
+            <Paper sx={{ padding: 1 }}>
               <ServiceSearchArea />
             </Paper>
           </Grid>
@@ -122,7 +122,7 @@ export function OrgServicesView(props: { org: string }) {
             md={3}
             sx={{ display: { xs: "none", md: "block" } }}
           >
-            <Paper>
+            <Paper sx={{ padding: 1 }}>
               <ServiceSearchArea />
             </Paper>
           </Grid>

@@ -34,6 +34,7 @@ import {
   LinkRounded,
   PersonAddRounded,
   RefreshRounded,
+  StarRounded,
   StorefrontRounded,
 } from "@mui/icons-material"
 import { MemberList } from "./OrgMembers"
@@ -54,7 +55,6 @@ import { OrgServicesView } from "../people/ProfileServicesView"
 import { OpenLayout } from "../../components/layout/ContainerGrid"
 import { useGetUserProfileQuery } from "../../store/profile"
 import { useRefetchContractorDetailsMutation } from "../../store/contractor"
-import { ListingSellerRating } from "../../components/rating/ListingRating"
 import { useGetServicesContractorQuery } from "../../store/services"
 import { useTranslation } from "react-i18next"
 import { ReportButton } from "../../components/button/ReportButton"
@@ -67,6 +67,7 @@ const name_to_index = new Map([
   ["order", 3],
   ["members", 4],
   ["recruiting", 5],
+  ["reviews", 6],
 ])
 
 export function OrgRelevantListingsArea(props: { org: string }) {
@@ -209,113 +210,100 @@ export function OrgInfo(props: { contractor: Contractor }) {
                 container
                 spacing={theme.layoutSpacing.component}
                 alignItems={"flex-end"}
-                justifyContent={"flex-start"}
+                justifyContent={"space-between"}
                 minHeight={375}
               >
-                <Grid item md={12}>
-                  <Grid
-                    container
-                    spacing={theme.layoutSpacing.text}
-                    justifyContent={"flex-start"}
+                <Grid item xs={12} md={8}>
+                  <Stack
+                    direction="row"
+                    spacing={2}
+                    alignItems="flex-start"
+                    flexWrap="wrap"
                   >
-                    <Grid item sm={4}>
-                      <Avatar
-                        src={contractor?.avatar}
-                        aria-label={t("contractors.contractor")}
-                        variant={"rounded"}
+                    <Avatar
+                      src={contractor?.avatar}
+                      aria-label={t("contractors.contractor")}
+                      variant={"rounded"}
+                      sx={{
+                        height: theme.spacing(12),
+                        width: theme.spacing(12),
+                        flexShrink: 0,
+                        objectFit: "cover",
+                      }}
+                    />
+                    <Stack spacing={0.5}>
+                      <Box
                         sx={{
-                          maxHeight: theme.spacing(12),
-                          maxWidth: theme.spacing(12),
-                          width: "100%",
-                          height: "100%",
-                          objectFit: "cover",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 0.5,
+                          flexWrap: "wrap",
                         }}
-                      />
-                    </Grid>
-                    <Grid item sm={8}>
-                      <Grid container spacing={0} justifyContent={"flex-start"}>
-                        <Grid item>
-                          <Box
-                            sx={{
-                              display: "flex",
-                              alignItems: "center",
-                              gap: 0.5,
-                              flexWrap: "wrap",
+                      >
+                        <Typography
+                          color={"text.secondary"}
+                          variant={"h6"}
+                          fontWeight={600}
+                        >
+                          {contractor.name}
+                        </Typography>
+                        {!contractor.spectrum_id.startsWith("~") && (
+                          <MaterialLink
+                            component={"a"}
+                            href={`https://robertsspaceindustries.com/orgs/${contractor.spectrum_id}`}
+                            target="_blank"
+                            style={{
+                              textDecoration: "none",
+                              color: "inherit",
                             }}
                           >
-                            <Typography
-                              color={"text.secondary"}
-                              variant={"h6"}
-                              fontWeight={600}
-                            >
-                              {contractor.name}
-                            </Typography>
-                            {!contractor.spectrum_id.startsWith("~") && (
-                              <MaterialLink
-                                component={"a"}
-                                href={`https://robertsspaceindustries.com/orgs/${contractor.spectrum_id}`}
-                                target="_blank"
-                                style={{
-                                  textDecoration: "none",
-                                  color: "inherit",
-                                }}
-                              >
-                                <IconButton color={"primary"} size="small">
-                                  <LinkRounded />
-                                </IconButton>
-                              </MaterialLink>
-                            )}
-                          </Box>
-                        </Grid>
-
-                        <Grid
-                          item
-                          xs={12}
-                          alignItems={"center"}
-                          display={"flex"}
+                            <IconButton color={"primary"} size="small">
+                              <LinkRounded />
+                            </IconButton>
+                          </MaterialLink>
+                        )}
+                      </Box>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 0.5,
+                        }}
+                      >
+                        <PeopleAltRoundedIcon
+                          style={{ color: theme.palette.text.primary }}
+                        />
+                        <Typography
+                          color={"text.primary"}
+                          fontWeight={"bold"}
                         >
-                          <PeopleAltRoundedIcon
-                            style={{ color: theme.palette.text.primary }}
-                          />
-                          <Typography
-                            sx={{ marginLeft: 1 }}
-                            color={"text.primary"}
-                            fontWeight={"bold"}
-                          >
-                            {contractor.size}
-                          </Typography>
-                        </Grid>
-
-                        <Grid item>
-                          <ListingSellerRating contractor={contractor} />
-                        </Grid>
-                      </Grid>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Box>
+                          {contractor.size}
+                        </Typography>
+                      </Box>
+                      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
                         {contractor.fields.map((field) => (
                           <Chip
                             key={field}
                             color={"primary"}
                             label={field}
                             sx={{
-                              marginRight: 0.5,
-                              padding: 1,
-                              marginBottom: 0.5,
+                              padding: 0.5,
                               textTransform: "capitalize",
                             }}
+                            size={'small'}
                             variant={"outlined"}
                             icon={contractorKindIcons[field]}
                             onClick={
-                              (event) => event.stopPropagation() // Don't highlight cell if button clicked
+                              (event) =>
+                                event.stopPropagation()
                             }
                           />
                         ))}
                       </Box>
-                    </Grid>
-                  </Grid>
+                    </Stack>
+                  </Stack>
                 </Grid>
-
+                <ContractorReviewSummary contractor={contractor} />
               </Grid>
             </Grid>
 
@@ -371,6 +359,13 @@ export function OrgInfo(props: { contractor: Contractor }) {
                       {...a11yProps(5)}
                     />
                   )}
+                  <Tab
+                    label={t("orgInfo.reviews")}
+                    component={Link}
+                    to={`/contractor/${contractor.spectrum_id}/reviews`}
+                    icon={<StarRounded />}
+                    {...a11yProps(6)}
+                  />
                 </Tabs>
               </Box>
             </Grid>
@@ -382,37 +377,46 @@ export function OrgInfo(props: { contractor: Contractor }) {
                 <OrgServicesView org={contractor.spectrum_id} />
               </TabPanel>
               <TabPanel value={page} index={2}>
-                <Grid container spacing={theme.layoutSpacing.layout}>
-                  <Paper
-                    sx={{ padding: 1, maxHeight: 400, overflow: "auto" }}
+                <Container maxWidth={"xl"} disableGutters>
+                  <Grid
+                    container
+                    spacing={theme.layoutSpacing.layout}
+                    justifyContent={"center"}
                   >
-                    <MarkdownRender text={contractor.description} />
-                    {contractor.languages &&
-                      contractor.languages.length > 0 && (
-                        <Box
-                          sx={{
-                            mt: 2,
-                            display: "flex",
-                            gap: 0.5,
-                            flexWrap: "wrap",
-                          }}
-                        >
-                          {contractor.languages.map((lang) => (
-                            <Chip
-                              key={lang.code}
-                              label={`${lang.name} (${t(`languages.${lang.code}`, lang.name)})`}
-                              size="small"
-                              variant="outlined"
-                            />
-                          ))}
-                        </Box>
-                      )}
-                  </Paper>
-                  <ContractorReviewSummary contractor={contractor} />
-                  <Section xs={12} lg={8} disablePadding>
-                    <OrgReviews contractor={contractor} />
-                  </Section>
-                </Grid>
+                    <Grid item xs={12}>
+                      <Paper
+                        sx={{
+                          padding: 2,
+                          paddingTop: 1,
+                          maxHeight: 400,
+                          overflow: "auto",
+                        }}
+                      >
+                        <MarkdownRender text={contractor.description} />
+                        {contractor.languages &&
+                          contractor.languages.length > 0 && (
+                            <Box
+                              sx={{
+                                mt: 2,
+                                display: "flex",
+                                gap: 0.5,
+                                flexWrap: "wrap",
+                              }}
+                            >
+                              {contractor.languages.map((lang) => (
+                                <Chip
+                                  key={lang.code}
+                                  label={`${lang.name} (${t(`languages.${lang.code}`, lang.name)})`}
+                                  size="small"
+                                  variant="outlined"
+                                />
+                              ))}
+                            </Box>
+                          )}
+                      </Paper>
+                    </Grid>
+                  </Grid>
+                </Container>
               </TabPanel>
               <TabPanel value={page} index={3}>
                 <Grid container spacing={theme.layoutSpacing.layout}>
@@ -427,6 +431,13 @@ export function OrgInfo(props: { contractor: Contractor }) {
               <TabPanel value={page} index={5}>
                 <Grid container spacing={theme.layoutSpacing.layout}>
                   <RecruitingPostArea spectrum_id={contractor.spectrum_id} />
+                </Grid>
+              </TabPanel>
+              <TabPanel value={page} index={6}>
+                <Grid container spacing={theme.layoutSpacing.layout}>
+                  <Section xs={12} lg={8} disablePadding>
+                    <OrgReviews contractor={contractor} />
+                  </Section>
                 </Grid>
               </TabPanel>
             </Grid>
@@ -651,6 +662,11 @@ export function OrgInfoSkeleton() {
                     label={<Skeleton width={60} />}
                     icon={<PersonAddRounded />}
                     {...a11yProps(5)}
+                  />
+                  <Tab
+                    label={<Skeleton width={60} />}
+                    icon={<StarRounded />}
+                    {...a11yProps(6)}
                   />
                 </Tabs>
               </Box>
