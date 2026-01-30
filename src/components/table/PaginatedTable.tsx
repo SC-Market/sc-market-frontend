@@ -18,7 +18,7 @@ import { visuallyHidden } from "@mui/utils"
 import { useTheme } from "@mui/material/styles"
 import { TransparentHeaderCell } from "./TransparentHeaderCell"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { useOnScreen } from "../navbar/MarketNavArea"
+import { useOnScreen } from "../../hooks/useOnScreen"
 import { useTranslation } from "react-i18next"
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {

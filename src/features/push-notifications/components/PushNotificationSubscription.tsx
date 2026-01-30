@@ -106,21 +106,17 @@ export function PushNotificationSubscription({
         <CircularProgress size={24} />
       ) : isCurrentDeviceSubscribed ? (
         <Box>
-          <Typography
-            variant="body2"
-            color="success.main"
-            gutterBottom
-          >
-            <NotificationsActiveIcon
-              sx={{ verticalAlign: "middle", mr: 1 }}
-            />
+          <Typography variant="body2" color="success.main" gutterBottom>
+            <NotificationsActiveIcon sx={{ verticalAlign: "middle", mr: 1 }} />
             {t("settings.pushNotifications.enabledOnDevice")}
             {hasSubscriptions && subscriptions.length > 1 && (
               <>
                 {" "}
-                ({t("settings.pushNotifications.totalDevices", {
+                (
+                {t("settings.pushNotifications.totalDevices", {
                   count: subscriptions.length,
-                })})
+                })}
+                )
               </>
             )}
           </Typography>
@@ -138,17 +134,14 @@ export function PushNotificationSubscription({
         </Box>
       ) : (
         <Box>
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            gutterBottom
-          >
+          <Typography variant="body2" color="text.secondary" gutterBottom>
             <NotificationsOffIcon sx={{ verticalAlign: "middle", mr: 1 }} />
             {t("settings.pushNotifications.notEnabledOnDevice")}
             {hasSubscriptions && (
               <>
                 {" "}
-                ({t("settings.pushNotifications.otherDevices", {
+                (
+                {t("settings.pushNotifications.otherDevices", {
                   count: subscriptions.length,
                 })}{" "}
                 {t("settings.pushNotifications.connected")})

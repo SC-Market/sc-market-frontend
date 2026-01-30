@@ -2,9 +2,7 @@
  * Format notification action names for display
  */
 export function formatNotificationAction(action: string): string {
-  return action
-    .replace(/_/g, " ")
-    .replace(/\b\w/g, (l) => l.toUpperCase())
+  return action.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())
 }
 
 /**

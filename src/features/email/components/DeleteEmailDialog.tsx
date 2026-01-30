@@ -29,7 +29,9 @@ export function DeleteEmailDialog({
         </Typography>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose}>{t("settings.email.deleteEmailDialog.cancel")}</Button>
+        <Button onClick={onClose}>
+          {t("settings.email.deleteEmailDialog.cancel")}
+        </Button>
         <Button onClick={onConfirm} variant="contained" color="error">
           {t("settings.email.deleteEmailDialog.confirm")}
         </Button>

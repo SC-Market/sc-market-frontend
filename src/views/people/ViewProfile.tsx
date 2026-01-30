@@ -66,7 +66,7 @@ import {
   UserRecentServices,
 } from "../contracts/ServiceListings"
 import { UserContractorList } from "../../components/list/UserContractorList"
-import { useSearchMarketListingsQuery } from "../../store/market"
+import { useSearchMarketListingsQuery } from "../../features/market"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"

@@ -34,7 +34,7 @@ import { MarkdownRender } from "../../components/markdown/Markdown"
 import {
   useGetMarketStatsQuery,
   useSearchMarketListingsQuery,
-} from "../../store/market"
+} from "../../features/market"
 import { DisplayListingsHorizontal } from "../../views/market/ItemListings"
 import { CURRENT_CUSTOM_ORG } from "../../hooks/contractor/CustomDomain"
 import { Link, Navigate } from "react-router-dom"

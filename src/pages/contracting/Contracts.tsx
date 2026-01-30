@@ -9,7 +9,7 @@ import {
   ContractSearchState,
 } from "../../hooks/contract/ContractSearch"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
-import { marketDrawerWidth } from "../../hooks/market/MarketSidebar"
+import { marketDrawerWidth } from "../../features/market"
 import FilterListIcon from "@mui/icons-material/FilterList"
 import { Button, Grid, Box, useMediaQuery } from "@mui/material"
 import { Page } from "../../components/metadata/Page"

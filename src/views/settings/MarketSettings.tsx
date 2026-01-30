@@ -1,6 +1,6 @@
 import { Grid } from "@mui/material"
 import React from "react"
-import { MarketEditTemplate } from "../market/MarketEditTemplate"
+import { MarketEditTemplate } from "../../features/market"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 

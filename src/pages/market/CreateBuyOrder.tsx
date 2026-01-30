@@ -2,9 +2,9 @@ import { FlatSection } from "../../components/paper/Section"
 import {
   useGetAggregateByIdQuery,
   useGetMarketItemsByCategoryQuery,
-} from "../../store/market"
+} from "../../features/market"
 import React, { useMemo, useState } from "react"
-import { BuyOrderForm } from "../../views/market/BuyOrderForm"
+import { BuyOrderForm } from "../../features/market"
 import { Page } from "../../components/metadata/Page"
 import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import { SelectGameItemStack } from "../../components/select/SelectGameItem"

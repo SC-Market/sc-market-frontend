@@ -291,7 +291,7 @@ export function MessagingSidebarContent(
   // Using the same matching logic as UnreadChatCount hook
   const unreadCountsByChat = useMemo(() => {
     const counts: Record<string, number> = {}
-    
+
     if (!chats) return counts
 
     // Initialize all chats with 0 unread
@@ -303,9 +303,13 @@ export function MessagingSidebarContent(
     if (orderMessageNotifications?.notifications) {
       orderMessageNotifications.notifications.forEach((notif) => {
         if (notif.read) return
-        
+
         // Match to chat by order_id (same logic as UnreadChatCount)
-        if (notif.entity && typeof notif.entity === "object" && "order_id" in notif.entity) {
+        if (
+          notif.entity &&
+          typeof notif.entity === "object" &&
+          "order_id" in notif.entity
+        ) {
           const orderId = (notif.entity as any).order_id
           const chat = chats.find((c) => c.order_id === orderId)
           if (chat) {
@@ -319,9 +323,13 @@ export function MessagingSidebarContent(
     if (offerMessageNotifications?.notifications) {
       offerMessageNotifications.notifications.forEach((notif) => {
         if (notif.read) return
-        
+
         // Match to chat by session_id (same logic as UnreadChatCount)
-        if (notif.entity && typeof notif.entity === "object" && "id" in notif.entity) {
+        if (
+          notif.entity &&
+          typeof notif.entity === "object" &&
+          "id" in notif.entity
+        ) {
           const sessionId = (notif.entity as any).id
           const chat = chats.find((c) => c.session_id === sessionId)
           if (chat) {
@@ -337,7 +345,7 @@ export function MessagingSidebarContent(
   // Sort chats: unread first, then by last activity (most recent first)
   const sortedChats = useMemo(() => {
     if (!chats) return []
-    
+
     return [...chats].sort((a, b) => {
       const aUnread = unreadCountsByChat[a.chat_id] || 0
       const bUnread = unreadCountsByChat[b.chat_id] || 0
@@ -349,7 +357,7 @@ export function MessagingSidebarContent(
       // Then sort by last activity (most recent first)
       const aLastMessage = a.messages[a.messages.length - 1]
       const bLastMessage = b.messages[b.messages.length - 1]
-      
+
       // If no messages, put at the end
       if (!aLastMessage && !bLastMessage) return 0
       if (!aLastMessage) return 1

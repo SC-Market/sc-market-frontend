@@ -3,14 +3,14 @@ import { Avatar, Typography, Link as MaterialLink } from "@mui/material"
 import { Stack } from "@mui/system"
 import React from "react"
 import { MinimalContractor } from "../../datatypes/Contractor"
-import { UniqueListing } from "../../datatypes/MarketListing"
+import { UniqueListing } from "../../features/market"
 import { Link } from "react-router-dom"
 import { formatCompleteListingUrl, formatMarketUrl } from "../../util/urls"
 import { FALLBACK_IMAGE_URL } from "../../util/constants"
 import {
   MarketListingSearchResult,
   MarketSearchResult,
-} from "../../store/market.ts"
+} from "../../features/market"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 

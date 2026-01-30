@@ -16,10 +16,7 @@ import {
   Tooltip,
   Divider,
 } from "@mui/material"
-import {
-  ClearAllRounded,
-  MarkEmailReadRounded,
-} from "@mui/icons-material"
+import { ClearAllRounded, MarkEmailReadRounded } from "@mui/icons-material"
 import { useTheme } from "@mui/material/styles"
 import { useMediaQuery } from "@mui/material"
 import { useTranslation } from "react-i18next"
@@ -194,13 +191,13 @@ export function NotificationsPage() {
             </FormControl>
           )}
         {(scopeFilter !== "all" || contractorIdFilter) && (
-          <Box sx={{ mt: 1, mb: 1, display: "flex", gap: 0.5, flexWrap: "wrap" }}>
+          <Box
+            sx={{ mt: 1, mb: 1, display: "flex", gap: 0.5, flexWrap: "wrap" }}
+          >
             {scopeFilter !== "all" && (
               <Chip
                 label={
-                  scopeFilter === "individual"
-                    ? "Individual"
-                    : "Organizations"
+                  scopeFilter === "individual" ? "Individual" : "Organizations"
                 }
                 size="small"
                 onDelete={() => {

@@ -6,12 +6,13 @@ export const refTheme = createTheme()
 
 export type ExtendedThemeOptions = ThemeOptions
 
-const defaultLayoutSpacing: NonNullable<ExtendedThemeOptions["layoutSpacing"]> = {
-  layout: 1,
-  component: 1.5,
-  text: 1,
-  compact: 0.5,
-}
+const defaultLayoutSpacing: NonNullable<ExtendedThemeOptions["layoutSpacing"]> =
+  {
+    layout: 1,
+    component: 1.5,
+    text: 1,
+    compact: 0.5,
+  }
 
 const defaultBorderRadius: NonNullable<ExtendedThemeOptions["borderRadius"]> = {
   topLevel: 0.375,

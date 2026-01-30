@@ -115,7 +115,7 @@ export function useEmailActions() {
       setError(
         error?.data?.error?.message ||
           error?.message ||
-            t("settings.email.verificationError"),
+          t("settings.email.verificationError"),
       )
       // Reset cooldown on error so user can retry
       setResendCooldown(0)

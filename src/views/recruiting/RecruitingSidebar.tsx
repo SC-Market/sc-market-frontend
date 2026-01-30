@@ -20,7 +20,7 @@ import React, { useEffect, useState } from "react"
 
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
-import { marketDrawerWidth } from "../../hooks/market/MarketSidebar"
+import { marketDrawerWidth } from "../../features/market"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import { StarRounded } from "@mui/icons-material"
 import {

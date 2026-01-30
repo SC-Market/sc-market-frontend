@@ -22,7 +22,10 @@ export type {
   NotificationQueryParams,
 } from "./domain/types"
 
-export { formatNotificationAction, getNotificationIcon } from "./domain/formatters"
+export {
+  formatNotificationAction,
+  getNotificationIcon,
+} from "./domain/formatters"
 
 // Hooks exports
 export { useNotifications } from "./hooks/useNotifications"

@@ -37,17 +37,17 @@ import {
   VisibilityRounded,
   StarRounded,
 } from "@mui/icons-material"
-import { useCurrentMarketListing } from "../../hooks/market/CurrentMarketItem"
-import { BaseListingType, UniqueListing } from "../../datatypes/MarketListing"
+import { useCurrentMarketListing } from "../../features/market"
+import { BaseListingType, UniqueListing } from "../../features/market"
 import {
   useMarketTrackListingViewMutation,
   useMarketGetListingOrdersQuery,
   useCreateListingBidMutation,
-} from "../../store/market"
+} from "../../features/market"
 import { OrderList } from "../../components/list/OrderList"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { MarkdownRender } from "../../components/markdown/Markdown"
-import { Bids } from "./Bids"
+import { Bids } from "../../features/market"
 import { Helmet } from "react-helmet"
 import { useCookies } from "react-cookie"
 import { Cart } from "../../datatypes/Cart"
@@ -64,7 +64,7 @@ import { ReportButton } from "../../components/button/ReportButton"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { DisplayListingsHorizontal } from "./ItemListings"
 import { useTheme } from "@mui/material/styles"
-import { useSearchMarketQuery } from "../../store/market"
+import { useSearchMarketQuery } from "../../features/market"
 import { useGetUserOrderReviews } from "../../store/profile"
 import { useGetContractorReviewsQuery } from "../../store/contractor"
 import { OrderReview } from "../../datatypes/Order"

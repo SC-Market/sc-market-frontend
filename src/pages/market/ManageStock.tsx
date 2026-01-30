@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react"
 import { Grid, Paper, useMediaQuery } from "@mui/material"
-import { MarketSearchArea } from "../../views/market/MarketSidebar"
+import { MarketSearchArea } from "../../features/market/components/MarketSidebar"
 import { ContainerGrid } from "../../components/layout/ContainerGrid"
-import { MarketSidebarContext } from "../../hooks/market/MarketSidebar"
+import { MarketSidebarContext } from "../../features/market"
 import { Page } from "../../components/metadata/Page"
-import { ItemStockContext, MyItemStock } from "../../views/market/ItemStock"
-import { useMarketSearch } from "../../hooks/market/MarketSearch"
+import {
+  ItemStockContext,
+  MyItemStock,
+} from "../../features/market/components/ItemStock"
+import { useMarketSearch } from "../../features/market"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { Link } from "react-router-dom"

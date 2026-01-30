@@ -108,9 +108,7 @@ export function PreferencesControls() {
             <ToggleButtonGroup
               value={lightTheme}
               exclusive
-              onChange={(e, newChoice) =>
-                newChoice && setLightTheme(newChoice)
-              }
+              onChange={(e, newChoice) => newChoice && setLightTheme(newChoice)}
               size="small"
               sx={{
                 backgroundColor: theme.palette.background.paper,
@@ -178,9 +176,7 @@ export function PreferencesControls() {
               }
             }}
             options={languagesWithExonyms}
-            getOptionLabel={(option) =>
-              `${option.endonym} (${option.exonym})`
-            }
+            getOptionLabel={(option) => `${option.endonym} (${option.exonym})`}
             renderInput={(params) => (
               <TextField
                 {...params}
