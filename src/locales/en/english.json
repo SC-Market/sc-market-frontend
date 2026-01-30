@@ -507,7 +507,29 @@
     "click_to_open_link": "Click to open link",
     "mark_all_read_failed": "Failed to mark notifications as read",
     "cleared_all": "Cleared {{count}} notifications",
-    "clear_all_failed": "Failed to clear notifications"
+    "clear_all_failed": "Failed to clear notifications",
+    "view_all": "View All"
+  },
+  "emptyStates": {
+    "profile": {
+      "noContent": "No listings or services yet",
+      "noContentDescription": "This user hasn't created any listings or services yet",
+      "noListings": "No listings yet",
+      "noListingsDescription": "Create your first listing to start selling items on the market",
+      "noServices": "No services yet",
+      "noServicesDescription": "Create your first service to start offering your expertise"
+    },
+    "services": {
+      "noServices": "No services yet",
+      "noServicesDescription": "Create your first service to start offering your expertise"
+    },
+    "listings": {
+      "noListings": "No listings yet",
+      "noListingsDescription": "Create your first listing to start selling items on the market",
+      "noSearchResults": "No listings found",
+      "noSearchResultsDescription": "Try adjusting your search or filters",
+      "createListing": "Create listing"
+    }
   },
   "recruitmentVotes": {
     "upvoteButtonTooltip": "Upvote this post"

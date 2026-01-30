@@ -34,7 +34,7 @@ export function ProfileStoreView(props: { user: string }) {
             md={3}
             sx={{ display: { xs: "none", md: "block" } }}
           >
-            <Paper sx={{ padding: 2 }}>
+            <Paper sx={{ padding: 1 }}>
               <MarketSearchArea />
             </Paper>
           </Grid>
@@ -75,7 +75,7 @@ export function OrgStoreView(props: { org: string }) {
             md={3}
             sx={{ display: { xs: "none", md: "block" } }}
           >
-            <Paper sx={{ padding: 2 }}>
+            <Paper sx={{ padding: 1 }}>
               <MarketSearchArea />
             </Paper>
           </Grid>

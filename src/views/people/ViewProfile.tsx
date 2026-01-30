@@ -35,15 +35,12 @@ import {
   LinkRounded,
   RefreshRounded,
   SaveRounded,
+  StarRounded,
   StorefrontRounded,
 } from "@mui/icons-material"
 import { CreateOrderForm } from "../orders/CreateOrderForm"
 import { UserReviews, UserReviewSummary } from "../contractor/OrgReviews"
 import { ItemListings, UserRecentListings } from "../market/ItemListings"
-import {
-  SellerRatingCount,
-  SellerRatingStars,
-} from "../../components/rating/ListingRating"
 import {
   useGetUserProfileQuery,
   useProfileRefetchMutation,
@@ -86,6 +83,7 @@ const name_to_index = new Map([
   ["services", 1],
   ["about", 2],
   ["order", 3],
+  ["reviews", 4],
 ])
 
 // const index_to_name = new Map([
@@ -365,6 +363,7 @@ export function ViewProfile(props: { profile: User }) {
       `/user/${props.profile.username}/services`,
       `/user/${props.profile.username}/about`,
       `/user/${props.profile.username}/order`,
+      `/user/${props.profile.username}/reviews`,
     ],
     [props.profile.username],
   )
@@ -536,11 +535,12 @@ export function ViewProfile(props: { profile: User }) {
                   },
                 }}
               >
-                <Grid item lg={12}>
+                <Grid item xs={12} lg={8}>
                   <Grid
                     container
                     spacing={theme.layoutSpacing.component}
                     alignItems={"end"}
+                    justifyContent={"flex-start"}
                   >
                     <Grid item>
                       {isMyProfile ? (
@@ -651,6 +651,7 @@ export function ViewProfile(props: { profile: User }) {
                     </Grid>
                   </Grid>
                 </Grid>
+                <UserReviewSummary user={props.profile} />
               </Grid>
             </Grid>
             {/*<Grid item xs={12} container justifyContent={'space-between'}>*/}
@@ -705,6 +706,13 @@ export function ViewProfile(props: { profile: User }) {
                   icon={<CreateRounded />}
                   {...a11yProps(3)}
                 />
+                <Tab
+                  label={t("viewProfile.reviews_tab")}
+                  component={Link}
+                  to={`/user/${props.profile?.username}/reviews`}
+                  icon={<StarRounded />}
+                  {...a11yProps(4)}
+                />
               </Tabs>
               <Divider light />
             </Grid>
@@ -731,9 +739,19 @@ export function ViewProfile(props: { profile: User }) {
                   <ProfileServicesView user={props.profile?.username} />
                 </TabPanel>
                 <TabPanel index={page} value={2}>
-                  <Grid container spacing={theme.layoutSpacing.layout}>
-                    <Grid item xs={12}>
-                      <Paper
+                  <Container maxWidth={"xl"} disableGutters>
+                    <Grid
+                      container
+                      spacing={theme.layoutSpacing.layout}
+                      justifyContent={"center"}
+                    >
+                      <Grid item xs={12} lg={4}>
+                        <UserContractorList
+                          contractors={props.profile?.contractors || []}
+                        />
+                      </Grid>
+                      <Grid item xs={12} lg={8}>
+                        <Paper
                         sx={{
                           padding: 2,
                           paddingTop: 1,
@@ -859,24 +877,21 @@ export function ViewProfile(props: { profile: User }) {
                           <EditRounded />
                         </Fab>
                       )}
-                      </Paper>
+                        </Paper>
+                      </Grid>
                     </Grid>
-                    <Grid item xs={12}>
-                      <UserContractorList
-                        contractors={props.profile?.contractors || []}
-                      />
-                    </Grid>
-                    {props.profile && (
-                      <UserReviewSummary user={props.profile} />
-                    )}
-                    <Section xs={12} lg={8} disablePadding>
-                      <UserReviews user={props.profile} />
-                    </Section>
-                  </Grid>
+                  </Container>
                 </TabPanel>
                 <TabPanel index={page} value={3}>
                   <Grid container spacing={theme.layoutSpacing.layout}>
                     <CreateOrderForm assigned_to={props.profile?.username} />
+                  </Grid>
+                </TabPanel>
+                <TabPanel index={page} value={4}>
+                  <Grid container spacing={theme.layoutSpacing.layout}>
+                    <Section xs={12} lg={8} disablePadding>
+                      <UserReviews user={props.profile} />
+                    </Section>
                   </Grid>
                 </TabPanel>
               </SwipeableItem>
@@ -1063,6 +1078,10 @@ export function ProfileSkeleton() {
                   <Tab
                     label={<Skeleton width={60} />}
                     icon={<CreateRounded />}
+                  />
+                  <Tab
+                    label={<Skeleton width={60} />}
+                    icon={<StarRounded />}
                   />
                 </Tabs>
               </Box>
