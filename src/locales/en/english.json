@@ -859,11 +859,15 @@
     "save": "Save",
     "no_user_description": "No user description",
     "myProfile": "My Profile",
+    "store_tab": "Store",
     "profile_tab": "Profile",
+    "about_tab": "About",
     "services_tab": "Services",
     "market_tab": "Market",
     "order_tab": "Order",
-    "reviews_tab": "Reviews"
+    "reviews_tab": "Reviews",
+    "store_market": "Market",
+    "store_services": "Services"
   },
   "viewPublicOrder": {
     "new": "New",
@@ -1989,11 +1993,13 @@
   },
   "orgInfo": {
     "about": "About",
+    "store": "Store",
     "services": "Services",
     "market": "Market",
     "order": "Order",
     "members": "Members",
-    "recruiting": "Recruiting"
+    "recruiting": "Recruiting",
+    "reviews": "Reviews"
   },
   "orgBalance": {
     "balance": "Org Balance",
