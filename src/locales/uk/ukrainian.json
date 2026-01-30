@@ -507,11 +507,15 @@
     "save": "Зберегти",
     "no_user_description": "Опис користувача відсутній",
     "myProfile": "Мій профіль",
+    "store_tab": "Магазин",
     "profile_tab": "Профіль",
+    "about_tab": "Про себе",
     "services_tab": "Послуги",
     "market_tab": "Маркет",
     "order_tab": "Замовлення",
-    "reviews_tab": "Відгуки"
+    "reviews_tab": "Відгуки",
+    "store_market": "Маркет",
+    "store_services": "Послуги"
   },
   "viewPublicOrder": {
     "new": "Новий",
@@ -1398,11 +1402,13 @@
   },
   "orgInfo": {
     "about": "Про організацію",
+    "store": "Магазин",
     "services": "Послуги",
     "market": "Маркет",
     "order": "Замовлення",
     "members": "Учасники",
-    "recruiting": "Набір"
+    "recruiting": "Набір",
+    "reviews": "Відгуки"
   },
   "orgBalance": {
     "balance": "Баланс організації",

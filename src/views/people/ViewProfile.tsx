@@ -31,12 +31,11 @@ import {
   CreateRounded,
   DesignServicesRounded,
   EditRounded,
-  GavelRounded,
   InfoRounded,
   LinkRounded,
   RefreshRounded,
   SaveRounded,
-  StarRounded,
+  StorefrontRounded,
 } from "@mui/icons-material"
 import { CreateOrderForm } from "../orders/CreateOrderForm"
 import { UserReviews, UserReviewSummary } from "../contractor/OrgReviews"
@@ -61,12 +60,11 @@ import {
 import { UserActionsDropdown } from "../../components/profile/UserActionsDropdown"
 import { Helmet } from "react-helmet"
 import { FRONTEND_URL } from "../../util/constants"
-import {
-  ServiceListings,
-  UserRecentServices,
-} from "../contracts/ServiceListings"
+import { UserRecentServices } from "../contracts/ServiceListings"
 import { UserContractorList } from "../../components/list/UserContractorList"
 import { useSearchMarketListingsQuery } from "../../features/market"
+import { ProfileStoreView } from "./ProfileStoreView"
+import { ProfileServicesView } from "./ProfileServicesView"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
@@ -84,10 +82,10 @@ export const external_resource_regex = new RegExp(external_resource_pattern)
 
 const name_to_index = new Map([
   ["", 0],
+  ["store", 0],
   ["services", 1],
-  ["market", 2],
+  ["about", 2],
   ["order", 3],
-  ["reviews", 4],
 ])
 
 // const index_to_name = new Map([
@@ -365,9 +363,8 @@ export function ViewProfile(props: { profile: User }) {
     () => [
       `/user/${props.profile.username}`,
       `/user/${props.profile.username}/services`,
-      `/user/${props.profile.username}/market`,
+      `/user/${props.profile.username}/about`,
       `/user/${props.profile.username}/order`,
-      `/user/${props.profile.username}/reviews`,
     ],
     [props.profile.username],
   )
@@ -455,7 +452,7 @@ export function ViewProfile(props: { profile: User }) {
           submitUpdate={submitUpdate}
         />
         <Container
-          maxWidth={"lg"}
+          maxWidth={"xl"}
           sx={{
             ...(theme.palette.mode === "dark"
               ? {
@@ -539,7 +536,7 @@ export function ViewProfile(props: { profile: User }) {
                   },
                 }}
               >
-                <Grid item lg={6}>
+                <Grid item lg={12}>
                   <Grid
                     container
                     spacing={theme.layoutSpacing.component}
@@ -628,20 +625,6 @@ export function ViewProfile(props: { profile: User }) {
                         {props.profile?.username}{" "}
                         <UserActionsDropdown user={props.profile} />
                       </Typography>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 0.5,
-                          mt: 0.5,
-                        }}
-                      >
-                        <SellerRatingStars user={props.profile} />
-                        <SellerRatingCount
-                          user={props.profile}
-                          display_limit={undefined}
-                        />
-                      </Box>
                       {props.profile?.discord_profile && (
                         <MaterialLink
                           component={"a"}
@@ -666,138 +649,7 @@ export function ViewProfile(props: { profile: User }) {
                         </MaterialLink>
                       )}
                     </Grid>
-                    <Grid item sx={{ maxHeight: 200, overflowX: "scroll" }}>
-                      <UserContractorList
-                        contractors={props.profile?.contractors || []}
-                      />
-                    </Grid>
                   </Grid>
-                </Grid>
-                <Grid item lg={6}>
-                  <Paper
-                    sx={{
-                      padding: 2,
-                      paddingTop: 1,
-                      position: "relative",
-                      maxHeight: 350,
-                      overflowY: "scroll",
-                    }}
-                  >
-                    <Typography sx={{ width: "100%" }}>
-                      {isMobile ? (
-                        <BottomSheet
-                          open={descriptionEditOpen}
-                          onClose={() => setDescriptionEditOpen(false)}
-                          title={t(
-                            "viewProfile.editDescription",
-                            "Edit Description",
-                          )}
-                          maxHeight="90vh"
-                          fullHeight
-                        >
-                          <MarkdownEditor
-                            sx={{ width: "100%" }}
-                            onChange={(value: string) => {
-                              setNewDescription(value)
-                            }}
-                            value={newDescription}
-                            BarItems={
-                              <Button
-                                variant={"contained"}
-                                onClick={async () => {
-                                  await submitUpdate({ about: newDescription })
-                                  setDescriptionEditOpen(false)
-                                }}
-                              >
-                                {t("ui.buttons.save")}
-                              </Button>
-                            }
-                          />
-                        </BottomSheet>
-                      ) : (
-                        <Modal
-                          open={descriptionEditOpen}
-                          onClose={() => setDescriptionEditOpen(false)}
-                        >
-                          <Container
-                            maxWidth={"lg"}
-                            sx={{
-                              height: "100%",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              display: "flex",
-                              flexDirection: "column",
-                            }}
-                          >
-                            <MarkdownEditor
-                              sx={{ width: "100%" }}
-                              onChange={(value: string) => {
-                                setNewDescription(value)
-                              }}
-                              value={newDescription}
-                              BarItems={
-                                <Button
-                                  variant={"contained"}
-                                  onClick={async () => {
-                                    await submitUpdate({
-                                      about: newDescription,
-                                    })
-                                    setDescriptionEditOpen(false)
-                                  }}
-                                >
-                                  {t("ui.buttons.save")}
-                                </Button>
-                              }
-                            />
-                          </Container>
-                        </Modal>
-                      )}
-                      <MarkdownRender
-                        text={
-                          props.profile.profile_description ||
-                          t("viewProfile.no_user_description")
-                        }
-                      />
-                    </Typography>
-                    {props.profile.languages &&
-                      props.profile.languages.length > 0 && (
-                        <Box
-                          sx={{
-                            mt: 2,
-                            display: "flex",
-                            gap: 0.5,
-                            flexWrap: "wrap",
-                          }}
-                        >
-                          {props.profile.languages.map((lang) => (
-                            <Chip
-                              key={lang.code}
-                              label={`${lang.name} (${t(`languages.${lang.code}`, lang.name)})`}
-                              size="small"
-                              variant="outlined"
-                            />
-                          ))}
-                        </Box>
-                      )}
-
-                    {isMyProfile && (
-                      <Fab
-                        color={"primary"}
-                        size={"small"}
-                        sx={{
-                          position: "absolute",
-                          top: 4,
-                          right: 4,
-                        }}
-                        onClick={() => {
-                          setDescriptionEditOpen(true)
-                          setNewDescription(props.profile.profile_description)
-                        }}
-                      >
-                        <EditRounded />
-                      </Fab>
-                    )}
-                  </Paper>
                 </Grid>
               </Grid>
             </Grid>
@@ -828,8 +680,8 @@ export function ViewProfile(props: { profile: User }) {
                 <Tab
                   component={Link}
                   to={`/user/${props.profile?.username}`}
-                  label={t("viewProfile.profile_tab")}
-                  icon={<InfoRounded />}
+                  label={t("viewProfile.store_tab")}
+                  icon={<StorefrontRounded />}
                   {...a11yProps(0)}
                 />
                 <Tab
@@ -840,10 +692,10 @@ export function ViewProfile(props: { profile: User }) {
                   {...a11yProps(1)}
                 />
                 <Tab
-                  label={t("viewProfile.market_tab")}
+                  label={t("viewProfile.about_tab")}
                   component={Link}
-                  to={`/user/${props.profile?.username}/market`}
-                  icon={<GavelRounded />}
+                  to={`/user/${props.profile?.username}/about`}
+                  icon={<InfoRounded />}
                   {...a11yProps(2)}
                 />
                 <Tab
@@ -852,13 +704,6 @@ export function ViewProfile(props: { profile: User }) {
                   to={`/user/${props.profile?.username}/order`}
                   icon={<CreateRounded />}
                   {...a11yProps(3)}
-                />
-                <Tab
-                  label={t("viewProfile.reviews_tab")}
-                  component={Link}
-                  to={`/user/${props.profile?.username}/reviews`}
-                  icon={<StarRounded />}
-                  {...a11yProps(4)}
                 />
               </Tabs>
               <Divider light />
@@ -880,33 +725,158 @@ export function ViewProfile(props: { profile: User }) {
                 enabled={isMobile}
               >
                 <TabPanel value={page} index={0}>
-                  <Grid container spacing={theme.layoutSpacing.layout}>
-                    <UserRelevantListingsArea user={props.profile.username} />
-                  </Grid>
+                  <ProfileStoreView user={props.profile.username} />
                 </TabPanel>
                 <TabPanel index={page} value={1}>
-                  <Grid container spacing={theme.layoutSpacing.layout}>
-                    <ServiceListings user={props.profile?.username} />
-                  </Grid>
+                  <ProfileServicesView user={props.profile?.username} />
                 </TabPanel>
                 <TabPanel index={page} value={2}>
                   <Grid container spacing={theme.layoutSpacing.layout}>
-                    <ItemListings user={props.profile?.username} />
-                  </Grid>
-                </TabPanel>
-                <TabPanel index={page} value={3}>
-                  <Grid container spacing={theme.layoutSpacing.layout}>
-                    <CreateOrderForm assigned_to={props.profile?.username} />
-                  </Grid>
-                </TabPanel>
-                <TabPanel index={page} value={4}>
-                  <Grid container spacing={theme.layoutSpacing.layout}>
+                    <Grid item xs={12}>
+                      <Paper
+                        sx={{
+                          padding: 2,
+                          paddingTop: 1,
+                          position: "relative",
+                          maxHeight: 400,
+                          overflowY: "auto",
+                        }}
+                      >
+                      <Typography sx={{ width: "100%" }}>
+                        {isMobile ? (
+                          <BottomSheet
+                            open={descriptionEditOpen}
+                            onClose={() => setDescriptionEditOpen(false)}
+                            title={t(
+                              "viewProfile.editDescription",
+                              "Edit Description",
+                            )}
+                            maxHeight="90vh"
+                            fullHeight
+                          >
+                            <MarkdownEditor
+                              sx={{ width: "100%" }}
+                              onChange={(value: string) => {
+                                setNewDescription(value)
+                              }}
+                              value={newDescription}
+                              BarItems={
+                                <Button
+                                  variant={"contained"}
+                                  onClick={async () => {
+                                    await submitUpdate({
+                                      about: newDescription,
+                                    })
+                                    setDescriptionEditOpen(false)
+                                  }}
+                                >
+                                  {t("ui.buttons.save")}
+                                </Button>
+                              }
+                            />
+                          </BottomSheet>
+                        ) : (
+                          <Modal
+                            open={descriptionEditOpen}
+                            onClose={() => setDescriptionEditOpen(false)}
+                          >
+                            <Container
+                              maxWidth={"lg"}
+                              sx={{
+                                height: "100%",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                display: "flex",
+                                flexDirection: "column",
+                              }}
+                            >
+                              <MarkdownEditor
+                                sx={{ width: "100%" }}
+                                onChange={(value: string) => {
+                                  setNewDescription(value)
+                                }}
+                                value={newDescription}
+                                BarItems={
+                                  <Button
+                                    variant={"contained"}
+                                    onClick={async () => {
+                                      await submitUpdate({
+                                        about: newDescription,
+                                      })
+                                      setDescriptionEditOpen(false)
+                                    }}
+                                  >
+                                    {t("ui.buttons.save")}
+                                  </Button>
+                                }
+                              />
+                            </Container>
+                          </Modal>
+                        )}
+                        <MarkdownRender
+                          text={
+                            props.profile.profile_description ||
+                            t("viewProfile.no_user_description")
+                          }
+                        />
+                      </Typography>
+                      {props.profile.languages &&
+                        props.profile.languages.length > 0 && (
+                          <Box
+                            sx={{
+                              mt: 2,
+                              display: "flex",
+                              gap: 0.5,
+                              flexWrap: "wrap",
+                            }}
+                          >
+                            {props.profile.languages.map((lang) => (
+                              <Chip
+                                key={lang.code}
+                                label={`${lang.name} (${t(`languages.${lang.code}`, lang.name)})`}
+                                size="small"
+                                variant="outlined"
+                              />
+                            ))}
+                          </Box>
+                        )}
+                      {isMyProfile && (
+                        <Fab
+                          color={"primary"}
+                          size={"small"}
+                          sx={{
+                            position: "absolute",
+                            top: 4,
+                            right: 4,
+                          }}
+                          onClick={() => {
+                            setDescriptionEditOpen(true)
+                            setNewDescription(
+                              props.profile.profile_description,
+                            )
+                          }}
+                        >
+                          <EditRounded />
+                        </Fab>
+                      )}
+                      </Paper>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <UserContractorList
+                        contractors={props.profile?.contractors || []}
+                      />
+                    </Grid>
                     {props.profile && (
                       <UserReviewSummary user={props.profile} />
                     )}
                     <Section xs={12} lg={8} disablePadding>
                       <UserReviews user={props.profile} />
                     </Section>
+                  </Grid>
+                </TabPanel>
+                <TabPanel index={page} value={3}>
+                  <Grid container spacing={theme.layoutSpacing.layout}>
+                    <CreateOrderForm assigned_to={props.profile?.username} />
                   </Grid>
                 </TabPanel>
               </SwipeableItem>
@@ -934,7 +904,7 @@ export function ProfileSkeleton() {
           }}
         />
         <Container
-          maxWidth={"lg"}
+          maxWidth={"xl"}
           sx={{
             ...(theme.palette.mode === "dark"
               ? {
@@ -1078,20 +1048,22 @@ export function ProfileSkeleton() {
                   textColor="secondary"
                   indicatorColor="secondary"
                 >
-                  <Tab label={<Skeleton width={60} />} icon={<InfoRounded />} />
+                  <Tab
+                    label={<Skeleton width={60} />}
+                    icon={<StorefrontRounded />}
+                  />
                   <Tab
                     label={<Skeleton width={60} />}
                     icon={<DesignServicesRounded />}
                   />
                   <Tab
                     label={<Skeleton width={60} />}
-                    icon={<GavelRounded />}
+                    icon={<InfoRounded />}
                   />
                   <Tab
                     label={<Skeleton width={60} />}
                     icon={<CreateRounded />}
                   />
-                  <Tab label={<Skeleton width={60} />} icon={<StarRounded />} />
                 </Tabs>
               </Box>
               <Divider light />

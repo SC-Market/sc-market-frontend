@@ -470,11 +470,15 @@
     "save": "",
     "no_user_description": "",
     "myProfile": "",
+    "store_tab": "",
     "profile_tab": "",
+    "about_tab": "",
     "services_tab": "",
     "market_tab": "",
     "order_tab": "",
-    "reviews_tab": ""
+    "reviews_tab": "",
+    "store_market": "",
+    "store_services": ""
   },
   "viewPublicOrder": {
     "new": "",
@@ -1359,11 +1363,13 @@
   },
   "orgInfo": {
     "about": "",
+    "store": "",
     "services": "",
     "market": "",
     "order": "",
     "members": "",
-    "recruiting": ""
+    "recruiting": "",
+    "reviews": ""
   },
   "orgBalance": {
     "balance": "",
