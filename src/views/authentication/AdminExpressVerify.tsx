@@ -9,7 +9,7 @@ import {
   extractOrgIdFromUrl,
   sanitizeAlphanumeric,
   isRsiUrl,
-} from "../../utils/rsiUrlUtils"
+} from "../../util/rsiUrlUtils.ts"
 
 export function AdminExpressVerify() {
   const { t } = useTranslation()
