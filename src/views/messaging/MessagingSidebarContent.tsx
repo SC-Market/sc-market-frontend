@@ -128,8 +128,8 @@ function ChatEntry(props: {
         width: "100%",
         borderBottom: 1,
         borderColor: theme.palette.outline.main,
-        padding: { xs: 2, sm: 3 },
-        minHeight: { xs: 72, sm: 80 },
+        padding: { xs: 1, sm: 1.5 },
+        minHeight: { xs: 56, sm: 64 },
       }}
       onClick={() => {
         setCurrentChatID(props.chat.chat_id)
@@ -222,9 +222,13 @@ function ChatEntry(props: {
               flex: 1,
               minWidth: 0,
               overflow: "hidden",
+              display: "-webkit-box",
+              WebkitLineClamp: 3,
+              WebkitBoxOrient: "vertical",
+              textOverflow: "ellipsis",
               "& p": {
                 margin: 0,
-                display: "inline",
+                display: "block",
                 fontSize: "inherit",
               },
             }}
