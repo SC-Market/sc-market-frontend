@@ -12,6 +12,10 @@ import {
   Card,
   CardContent,
   CardHeader,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   Divider,
   Fade,
   Grid,
@@ -103,7 +107,7 @@ const headCells: readonly HeadCell<
 ]
 
 const buyOrderHeadCells: readonly HeadCell<
-  BuyOrder & { rating: Rating; total: number }
+  BuyOrder & { rating: Rating; total: number | null }
 >[] = [
   {
     id: "rating",
@@ -437,7 +441,10 @@ export function MarketAggregateView() {
           rows={(complete?.buy_orders || []).map((o) => ({
             ...o,
             rating: o.buyer.rating,
-            total: o.price * o.quantity,
+            total:
+              o.negotiable || o.price == null
+                ? null
+                : o.price * o.quantity,
           }))}
           initialSort={"price"}
           keyAttr={"buy_order_id"}
@@ -637,7 +644,7 @@ export function AggregateRow(props: {
 }
 
 export function BuyOrderRow(props: {
-  row: BuyOrder & { rating: Rating; total: number }
+  row: BuyOrder & { rating: Rating; total: number | null }
   index: number
   onClick?: MouseEventHandler
   isItemSelected: boolean
@@ -646,6 +653,8 @@ export function BuyOrderRow(props: {
   const { t, i18n } = useTranslation()
   const { row: buy_order, index } = props
   const issueAlert = useAlertHook()
+  const [fulfillDialogOpen, setFulfillDialogOpen] = useState(false)
+  const [agreedPrice, setAgreedPrice] = useState<number>(0)
 
   const [fulfillBuyOrder, { isLoading }] = useMarketFulfillBuyOrderMutation()
   const [cancelBuyOrder, { isLoading: cancelIsLoading }] =
@@ -654,26 +663,52 @@ export function BuyOrderRow(props: {
   const [currentOrg] = useCurrentOrg()
   const { data: profile } = useGetUserProfileQuery()
 
-  const callback = useCallback(async () => {
-    fulfillBuyOrder({
-      buy_order_id: buy_order.buy_order_id,
-      contractor_spectrum_id: currentOrg?.spectrum_id,
-    })
-      .unwrap()
-      .then((result) => {
-        issueAlert({
-          message: t("MarketAggregateView.submitted"),
-          severity: "success",
-        })
-        const sessionId = result.session?.id ?? result.offer?.session_id
-        if (sessionId) {
-          navigate(`/offer/${sessionId}`)
-        }
+  const doFulfill = useCallback(
+    (agreedPricePerUnit?: number) => {
+      fulfillBuyOrder({
+        buy_order_id: buy_order.buy_order_id,
+        contractor_spectrum_id: currentOrg?.spectrum_id,
+        ...(buy_order.negotiable && agreedPricePerUnit != null && agreedPricePerUnit >= 1
+          ? { agreed_price: agreedPricePerUnit }
+          : {}),
       })
-      .catch((err) => issueAlert(err))
+        .unwrap()
+        .then((result) => {
+          issueAlert({
+            message: t("MarketAggregateView.submitted"),
+            severity: "success",
+          })
+          const sessionId = result.session?.id ?? result.offer?.session_id
+          if (sessionId) {
+            navigate(`/offer/${sessionId}`)
+          }
+        })
+        .catch((err) => issueAlert(err))
+    },
+    [buy_order.buy_order_id, buy_order.negotiable, currentOrg?.spectrum_id, fulfillBuyOrder, issueAlert, navigate, t],
+  )
 
+  const callback = useCallback(() => {
+    if (buy_order.negotiable || buy_order.price == null) {
+      setAgreedPrice(0)
+      setFulfillDialogOpen(true)
+      return false
+    }
+    doFulfill()
     return false
-  }, [buy_order, t, issueAlert, fulfillBuyOrder, currentOrg, navigate])
+  }, [buy_order.negotiable, buy_order.price, doFulfill])
+
+  const handleFulfillDialogSubmit = useCallback(() => {
+    if (agreedPrice >= 1) {
+      doFulfill(agreedPrice)
+      setFulfillDialogOpen(false)
+    } else {
+      issueAlert({
+        message: t("buyorder.agreedPriceRequired", "Please enter an agreed price per unit (at least 1 aUEC)."),
+        severity: "error",
+      })
+    }
+  }, [agreedPrice, doFulfill, issueAlert, t])
 
   const cancelCallback = useCallback(async () => {
     cancelBuyOrder(buy_order.buy_order_id)
@@ -724,7 +759,13 @@ export function BuyOrderRow(props: {
         }}
       >
         <Typography variant={"subtitle2"} color={"primary"}>
-          {buy_order.price.toLocaleString(i18n.language)} aUEC
+          {buy_order.negotiable || buy_order.price == null
+            ? buy_order.price != null && buy_order.price >= 1
+              ? t("buyorder.negotiableSuggested", "Negotiable (~{{price}} aUEC)", {
+                  price: buy_order.price.toLocaleString(i18n.language),
+                })
+              : t("buyorder.negotiable", "Negotiable")
+            : `${buy_order.price.toLocaleString(i18n.language)} aUEC`}
         </Typography>
       </TableCell>
 
@@ -746,7 +787,9 @@ export function BuyOrderRow(props: {
         }}
       >
         <Typography variant={"subtitle2"} color={"primary"}>
-          {buy_order.total.toLocaleString(i18n.language)} aUEC
+          {buy_order.total != null
+            ? `${buy_order.negotiable ? "~" : ""}${buy_order.total.toLocaleString(i18n.language)} aUEC`
+            : t("buyorder.negotiable", "Negotiable")}
         </Typography>
       </TableCell>
 
@@ -761,6 +804,7 @@ export function BuyOrderRow(props: {
           color={"primary"}
           size={"large"}
           onClick={callback}
+          disabled={isLoading}
         >
           {t("MarketAggregateView.fulfill")}
         </Button>
@@ -778,6 +822,48 @@ export function BuyOrderRow(props: {
           </Button>
         )}
       </TableCell>
+      <Dialog open={fulfillDialogOpen} onClose={() => setFulfillDialogOpen(false)}>
+        <DialogTitle>
+          {t("buyorder.agreePriceTitle", "Agreed price per unit")}
+        </DialogTitle>
+        <DialogContent>
+          <Typography variant="body2" sx={{ mb: 2 }}>
+            {t(
+              "buyorder.agreePriceDescription",
+              "This buy order is negotiable. Enter the agreed price per unit in aUEC to fulfill.",
+            )}
+          </Typography>
+          <NumericFormat
+            decimalScale={0}
+            allowNegative={false}
+            customInput={TextField}
+            thousandSeparator
+            fullWidth
+            label={t("buyorder.price_per_unit")}
+            value={agreedPrice}
+            onValueChange={(values) =>
+              setAgreedPrice(values.floatValue ?? 0)
+            }
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="start">aUEC</InputAdornment>
+              ),
+            }}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setFulfillDialogOpen(false)}>
+            {t("common.cancel", "Cancel")}
+          </Button>
+          <Button
+            variant="contained"
+            onClick={handleFulfillDialogSubmit}
+            disabled={isLoading}
+          >
+            {t("MarketAggregateView.fulfill")}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </TableRow>
   )
 }
@@ -829,10 +915,11 @@ export function AggregateBuySellWall(props: { aggregate: MarketAggregate }) {
           aggregate.listings[0].price,
         )
       : 0
-    const buyHigh = aggregate.buy_orders.length
-      ? aggregate.buy_orders.reduce(
-          (high, listing) => (listing.price > high ? listing.price : high),
-          aggregate.buy_orders[0].price,
+    const pricedBuyOrders = aggregate.buy_orders.filter((o) => o.price != null)
+    const buyHigh = pricedBuyOrders.length
+      ? pricedBuyOrders.reduce(
+          (high, listing) => (listing.price! > high ? listing.price! : high),
+          pricedBuyOrders[0].price!,
         )
       : 0
     const high = Math.max(sellHigh, buyHigh) * 1.1
@@ -841,8 +928,8 @@ export function AggregateBuySellWall(props: { aggregate: MarketAggregate }) {
     const sortedSell = [...aggregate.listings]
       .filter((s) => s.quantity_available)
       .sort((a, b) => a.price - b.price)
-    const sortedBuy = [...aggregate.buy_orders].sort(
-      (a, b) => a.price - b.price,
+    const sortedBuy = [...pricedBuyOrders].sort(
+      (a, b) => (a.price ?? 0) - (b.price ?? 0),
     )
 
     const sellPoints = new Array(bucketCount + 1)
@@ -857,7 +944,7 @@ export function AggregateBuySellWall(props: { aggregate: MarketAggregate }) {
     }
 
     for (const buy of sortedBuy) {
-      buyPoints[Math.floor(buy.price / interval)].y += 1
+      buyPoints[Math.floor((buy.price ?? 0) / interval)].y += 1
     }
 
     for (let i = 1; i < bucketCount + 1; i++) {

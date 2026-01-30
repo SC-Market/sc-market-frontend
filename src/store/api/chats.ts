@@ -1,4 +1,4 @@
-import { serviceApi as api } from "../service"
+import { generatedApi as api } from "../generatedApi"
 export const addTagTypes = ["Chats"] as const
 const injectedRtkApi = api
   .enhanceEndpoints({

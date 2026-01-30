@@ -100,7 +100,8 @@ export interface BuyOrder {
   aggregate_id: string
   buy_order_id: string
   quantity: number
-  price: number
+  price: number | null
+  negotiable?: boolean
   buyer: MinimalUser
   expiry: string
   fulfilled_timestamp: string
@@ -222,10 +223,11 @@ export interface MarketListingBody {
 }
 
 export interface MarketBuyOrderBody {
-  price: number
+  price?: number | null
   quantity: number
   game_item_id: string | null
   expiry: Moment
+  negotiable?: boolean
 }
 
 export interface MarketMultipleBody {

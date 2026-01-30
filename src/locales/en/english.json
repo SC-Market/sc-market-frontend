@@ -1744,6 +1744,10 @@
   },
   "buyorder": {
     "create_buy_order": "Create Buy Order",
+    "negotiable": "Negotiable",
+    "negotiableSuggested": "Negotiable (~{{price}} aUEC)",
+    "suggested_price_optional": "Suggested price (optional)",
+    "optional": "Optional",
     "price_per_unit": "Price per Unit",
     "quantity": "Quantity",
     "total_price": "Total Price",
@@ -1751,7 +1755,10 @@
     "submit": "Submit",
     "submitted": "Submitted!",
     "failed": "Failed to submit! {{error}}",
-    "unknown_error": "Unknown error"
+    "unknown_error": "Unknown error",
+    "agreePriceTitle": "Agreed price per unit",
+    "agreePriceDescription": "This buy order is negotiable. Enter the agreed price per unit in aUEC to fulfill.",
+    "agreedPriceRequired": "Please enter an agreed price per unit (at least 1 aUEC)."
   },
   "bids": {
     "title": "Bids",

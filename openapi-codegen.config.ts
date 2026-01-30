@@ -57,8 +57,8 @@ outputFiles[`${OUTPUT_DIR}/core.ts`] = {
 
 const config: ConfigFile = {
   schemaFile: "./spec/sc-market.openapi.json",
-  apiFile: "./src/store/service.ts",
-  apiImport: "serviceApi",
+  apiFile: "./src/store/generatedApi.ts",
+  apiImport: "generatedApi",
   hooks: true,
   tag: true,
   outputFiles,
