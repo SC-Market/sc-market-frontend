@@ -372,140 +372,88 @@ export function OrgInfoSkeleton() {
           }}
         >
           <Grid container spacing={theme.layoutSpacing.layout}>
+            {/* Header: left = avatar + name/size/chips (md=8), right = ratings summary (md=4) */}
             <Grid item xs={12}>
               <Grid
                 container
                 spacing={theme.layoutSpacing.component}
                 alignItems={"flex-end"}
+                justifyContent={"space-between"}
                 minHeight={375}
               >
-                <Grid item md={4}>
-                  <Grid container spacing={theme.layoutSpacing.text}>
-                    <Grid item sm={4}>
-                      <Skeleton
-                        variant="rectangular"
-                        sx={{
-                          maxHeight: theme.spacing(12),
-                          maxWidth: theme.spacing(12),
-                          width: "100%",
-                          height: "100%",
-                          borderRadius: theme.spacing(theme.borderRadius.image),
-                        }}
-                      />
-                    </Grid>
-                    <Grid item sm={8}>
-                      <Grid container spacing={0}>
-                        <Grid item>
-                          <Skeleton
-                            variant="text"
-                            width={200}
-                            height={28}
-                            sx={{ mb: 1 }}
-                          />
-                        </Grid>
-                        <Grid
-                          item
-                          xs={12}
-                          alignItems={"center"}
-                          display={"flex"}
-                        >
-                          <PeopleAltRoundedIcon
-                            style={{ color: theme.palette.text.primary }}
-                          />
-                          <Skeleton
-                            variant="text"
-                            width={40}
-                            height={20}
-                            sx={{ marginLeft: 1 }}
-                          />
-                        </Grid>
-                        <Grid item>
-                          <Stack
-                            direction="row"
-                            spacing={0.5}
-                            alignItems="center"
-                            sx={{ mt: 0.5 }}
-                          >
-                            <Skeleton
-                              variant="circular"
-                              width={16}
-                              height={16}
-                            />
-                            <Skeleton variant="text" width={60} height={16} />
-                          </Stack>
-                        </Grid>
-                      </Grid>
-                    </Grid>
-                    <Grid item xs={12}>
-                      <Box>
-                        <Stack direction="row" spacing={0.5} flexWrap="wrap">
-                          <Skeleton
-                            variant="rectangular"
-                            width={100}
-                            height={32}
-                            sx={{ borderRadius: 1, marginBottom: 0.5 }}
-                          />
-                          <Skeleton
-                            variant="rectangular"
-                            width={100}
-                            height={32}
-                            sx={{ borderRadius: 1, marginBottom: 0.5 }}
-                          />
-                          <Skeleton
-                            variant="rectangular"
-                            width={100}
-                            height={32}
-                            sx={{ borderRadius: 1, marginBottom: 0.5 }}
-                          />
-                        </Stack>
-                      </Box>
-                    </Grid>
-                  </Grid>
-                </Grid>
-
                 <Grid item xs={12} md={8}>
-                  <Paper
-                    sx={{ padding: 1, maxHeight: 350, overflow: "scroll" }}
+                  <Stack
+                    direction="row"
+                    spacing={2}
+                    alignItems="flex-start"
+                    flexWrap="wrap"
                   >
                     <Skeleton
-                      variant="text"
-                      width="100%"
-                      height={20}
-                      sx={{ mb: 0.5 }}
+                      variant="rectangular"
+                      sx={{
+                        height: theme.spacing(12),
+                        width: theme.spacing(12),
+                        flexShrink: 0,
+                        borderRadius: theme.spacing(theme.borderRadius.image),
+                      }}
                     />
-                    <Skeleton
-                      variant="text"
-                      width="100%"
-                      height={20}
-                      sx={{ mb: 0.5 }}
-                    />
-                    <Skeleton
-                      variant="text"
-                      width="90%"
-                      height={20}
-                      sx={{ mb: 0.5 }}
-                    />
-                    <Skeleton
-                      variant="text"
-                      width="80%"
-                      height={20}
-                      sx={{ mb: 2 }}
-                    />
-                    <Stack direction="row" spacing={0.5} flexWrap="wrap">
+                    <Stack spacing={0.5}>
                       <Skeleton
-                        variant="rectangular"
-                        width={80}
-                        height={24}
-                        sx={{ borderRadius: 1 }}
+                        variant="text"
+                        width={200}
+                        height={28}
+                        sx={{ display: "block" }}
                       />
-                      <Skeleton
-                        variant="rectangular"
-                        width={80}
-                        height={24}
-                        sx={{ borderRadius: 1 }}
-                      />
+                      <Stack
+                        direction="row"
+                        spacing={0.5}
+                        alignItems="center"
+                        sx={{ mt: 0.5 }}
+                      >
+                        <PeopleAltRoundedIcon
+                          style={{ color: theme.palette.text.primary }}
+                        />
+                        <Skeleton variant="text" width={40} height={20} />
+                      </Stack>
+                      <Stack
+                        direction="row"
+                        spacing={0.5}
+                        flexWrap="wrap"
+                        sx={{ mt: 0.5 }}
+                      >
+                        <Skeleton
+                          variant="rectangular"
+                          width={80}
+                          height={28}
+                          sx={{ borderRadius: 1 }}
+                        />
+                        <Skeleton
+                          variant="rectangular"
+                          width={80}
+                          height={28}
+                          sx={{ borderRadius: 1 }}
+                        />
+                        <Skeleton
+                          variant="rectangular"
+                          width={80}
+                          height={28}
+                          sx={{ borderRadius: 1 }}
+                        />
+                      </Stack>
                     </Stack>
-                  </Paper>
+                  </Stack>
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <Skeleton
+                    variant="rectangular"
+                    sx={{
+                      height: 120,
+                      width: "100%",
+                      borderRadius: 1,
+                      maxWidth: 320,
+                      ml: "auto",
+                    }}
+                  />
                 </Grid>
               </Grid>
             </Grid>
