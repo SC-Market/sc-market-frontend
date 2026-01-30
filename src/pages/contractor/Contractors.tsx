@@ -95,7 +95,7 @@ export function Contractors() {
               variant="outlined"
               color="secondary"
               startIcon={<FilterListIcon />}
-              aria-label={t("toggle_market_sidebar")}
+              aria-label={t("toggle_contractor_sidebar")}
               onClick={() => {
                 setSidebarOpen(true)
               }}
@@ -119,11 +119,11 @@ export function Contractors() {
           ) : (
             <IconButton
               color="secondary"
-              aria-label={t("toggle_market_sidebar")}
+              aria-label={t("toggle_contractor_sidebar")}
               sx={{
                 position: "absolute",
                 zIndex: 50,
-                left: (drawerOpen ? sidebarDrawerWidth : 0) + 24,
+                left: 16,
                 top: 64 + 24,
                 transition: "0.3s",
               }}

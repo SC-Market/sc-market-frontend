@@ -21,6 +21,34 @@ import { unwrapResponse } from "../../../store/api-utils"
 import { createOptimisticUpdate } from "../../../util/optimisticUpdates"
 import type { Order } from "../../../datatypes/Order"
 
+/** Response from POST /api/market/buyorder/:id/fulfill */
+export interface FulfillBuyOrderResponse {
+  offer: {
+    id: string
+    session_id: string
+    kind: string
+    cost: string
+    payment_type: string
+    collateral: string
+    title: string
+    description: string
+    timestamp: string
+    status: string
+    service_id: string | null
+    actor_id: string
+  }
+  session: {
+    id: string
+    assigned_id: string | null
+    customer_id: string
+    contractor_id: string
+    thread_id: string | null
+    status: string
+    timestamp: string
+  }
+  discord_invite: string | null
+}
+
 export const marketApi = serviceApi.injectEndpoints({
   overrideExisting: false,
   endpoints: (builder) => ({
@@ -287,7 +315,14 @@ export const marketApi = serviceApi.injectEndpoints({
         method: "POST",
         body: buyOrderData,
       }),
-      invalidatesTags: ["BuyOrderListings"],
+      invalidatesTags: (result, error, body) => [
+        "BuyOrderListings",
+        "MarketStats",
+        "MarketCategories",
+        ...(body.game_item_id
+          ? [{ type: "Aggregate" as const, id: String(body.game_item_id) }]
+          : []),
+      ],
       transformResponse: unwrapResponse,
     }),
 
@@ -296,11 +331,16 @@ export const marketApi = serviceApi.injectEndpoints({
         url: `/api/market/buyorder/${buyOrderId}/cancel`,
         method: "POST",
       }),
-      invalidatesTags: ["BuyOrderListings"],
+      invalidatesTags: [
+        "BuyOrderListings",
+        "MarketStats",
+        "MarketCategories",
+        "Aggregate",
+      ],
     }),
 
     fulfillBuyOrder: builder.mutation<
-      Order,
+      FulfillBuyOrderResponse,
       { buy_order_id: string; contractor_spectrum_id?: string }
     >({
       query: ({ buy_order_id, ...body }) => ({
@@ -308,7 +348,17 @@ export const marketApi = serviceApi.injectEndpoints({
         body,
         method: "POST",
       }),
-      invalidatesTags: ["BuyOrderListings"],
+      transformResponse: (response: unknown): FulfillBuyOrderResponse => {
+        const raw = (response as { data?: FulfillBuyOrderResponse }).data ?? response
+        return raw as FulfillBuyOrderResponse
+      },
+      invalidatesTags: [
+        "BuyOrderListings",
+        "MarketStats",
+        "MarketCategories",
+        "Aggregate",
+        "Orders",
+      ],
     }),
 
     getAggregateChart: builder.query<unknown, string>({
