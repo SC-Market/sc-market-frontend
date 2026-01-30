@@ -38,17 +38,11 @@
  */
 import {
   Box,
-  Card,
-  CardActionArea,
-  CardContent,
-  CardMedia,
   Chip,
   Divider,
   Fab,
-  Fade,
   Grid,
   Skeleton,
-  TablePagination,
   Typography,
   useMediaQuery,
 } from "@mui/material"
@@ -92,8 +86,6 @@ import { useGetUserProfileQuery } from "../../store/profile"
 import { RefreshRounded, EditRounded, ShareRounded } from "@mui/icons-material"
 import moment from "moment/moment"
 import { Stack } from "@mui/system"
-import { formatMarketMultipleUrl, formatMarketUrl } from "../../util/urls"
-import { FALLBACK_IMAGE_URL } from "../../util/constants"
 import { AdCard } from "../../components/ads/AdCard"
 import { MARKET_ADS } from "../../components/ads/adConfig"
 import { VirtualizedGrid } from "../../components/list/VirtualizedGrid"
@@ -112,6 +104,16 @@ import {
   ItemListingBase,
   ItemListing,
 } from "../../features/market/components/listings/ListingCard"
+import {
+  AggregateListing,
+  AggregateListingBase,
+  AggregateBuyOrderListing,
+  AggregateBuyOrderListingBase,
+} from "../../features/market/components/listings/AggregateListingCard"
+import {
+  MultipleListing,
+  MultipleListingBase,
+} from "../../features/market/components/listings/MultipleListingCard"
 import { ListingPagination } from "../../features/market/components/listings/ListingPagination"
 
 export {
@@ -119,511 +121,16 @@ export {
   ItemListingBase,
   ItemListing,
 } from "../../features/market/components/listings/ListingCard"
-
-export function AggregateListing(props: {
-  aggregate: ExtendedAggregateSearchResult
-  index: number
-}) {
-  const { aggregate, index } = props
-  const marketSidebarOpen = useMarketSidebarExp()
-
-  return (
-    <Grid
-      item
-      xs={marketSidebarOpen ? 12 : 6}
-      sm={marketSidebarOpen ? 12 : 6}
-      md={marketSidebarOpen ? 12 : 4}
-      lg={marketSidebarOpen ? 6 : 4}
-      xl={3}
-      sx={{ transition: "0.3s" }}
-      // key={aggregate.aggregate_id}
-    >
-      <AggregateListingBase aggregate={aggregate} index={index} />
-    </Grid>
-  )
-}
-
-export function AggregateBuyOrderListing(props: {
-  aggregate: MarketAggregate
-  index: number
-}) {
-  const { aggregate, index } = props
-  const marketSidebarOpen = useMarketSidebarExp()
-
-  return (
-    <Grid
-      item
-      xs={marketSidebarOpen ? 12 : 6}
-      sm={marketSidebarOpen ? 12 : 6}
-      md={marketSidebarOpen ? 12 : 4}
-      lg={marketSidebarOpen ? 6 : 4}
-      xl={3}
-      sx={{ transition: "0.3s" }}
-    >
-      <AggregateBuyOrderListingBase aggregate={aggregate} index={index} />
-    </Grid>
-  )
-}
-
-export function AggregateListingBase(props: {
-  aggregate: ExtendedAggregateSearchResult
-  index: number
-}) {
-  const { t } = useTranslation()
-  const { aggregate, index } = props
-  const theme = useTheme<ExtendedTheme>()
-  const { minimum_price, photo, quantity_available, title } = aggregate
-
-  return (
-    <Fade
-      in={true}
-      style={{
-        transitionDelay: `${50 + 50 * index}ms`,
-        transitionDuration: "500ms",
-      }}
-    >
-      <Link
-        to={`/market/aggregate/${aggregate.game_item_id}`}
-        style={{ textDecoration: "none", color: "inherit" }}
-      >
-        <CardActionArea
-          sx={{
-            borderRadius: (theme) =>
-              theme.spacing((theme as ExtendedTheme).borderRadius.topLevel),
-          }}
-        >
-          <Card
-            sx={{
-              borderRadius: (theme) =>
-                theme.spacing((theme as ExtendedTheme).borderRadius.topLevel),
-              height: 400,
-              postition: "relative",
-            }}
-          >
-            <CardMedia
-              component="img"
-              loading="lazy"
-              image={photo || FALLBACK_IMAGE_URL}
-              onError={({ currentTarget }) => {
-                currentTarget.onerror = null
-                currentTarget.src = FALLBACK_IMAGE_URL
-              }}
-              sx={{
-                ...(theme.palette.mode === "dark"
-                  ? {
-                      height: "100%",
-                    }
-                  : {
-                      height: 244,
-                    }),
-                // maxHeight: '100%',
-                overflow: "hidden",
-              }}
-              alt={`Image of ${title}`}
-            />
-            <Box
-              sx={{
-                ...(theme.palette.mode === "light"
-                  ? {
-                      display: "none",
-                    }
-                  : {}),
-                position: "absolute",
-                zIndex: 3,
-                top: 0,
-                left: 0,
-                height: "100%",
-                width: "100%",
-                borderRadius: (theme) =>
-                  theme.spacing((theme as ExtendedTheme).borderRadius.topLevel),
-                background: `linear-gradient(to bottom, transparent, transparent 25%, ${theme.palette.background.sidebar}AA 40%, ${theme.palette.background.sidebar} 100%)`,
-              }}
-            />
-
-            <Box
-              sx={{
-                ...(theme.palette.mode === "dark"
-                  ? {
-                      position: "absolute",
-                      bottom: 0,
-                      zIndex: 4,
-                    }
-                  : {}),
-              }}
-            >
-              <CardContent>
-                <Typography
-                  variant={"h5"}
-                  color={"primary"}
-                  fontWeight={"bold"}
-                >
-                  {minimum_price.toLocaleString(undefined)} aUEC{" "}
-                </Typography>
-                <Typography
-                  variant={"subtitle2"}
-                  color={"text.secondary"}
-                  maxHeight={60}
-                >
-                  <span
-                    style={{
-                      lineClamp: "2",
-                      textOverflow: "ellipsis",
-                      // whiteSpace: "pre-line",
-                      overflow: "hidden",
-                      WebkitBoxOrient: "vertical",
-                      display: "-webkit-box",
-                      WebkitLineClamp: "2",
-                    }}
-                  >
-                    {aggregate.title} ({aggregate.item_type})
-                  </span>{" "}
-                </Typography>
-                <Typography
-                  display={"block"}
-                  color={"text.primary"}
-                  variant={"subtitle2"}
-                >
-                  {quantity_available.toLocaleString(undefined)}{" "}
-                  {t("market.total_available")}
-                </Typography>
-              </CardContent>
-            </Box>
-
-            {/*<CardActions*/}
-            {/*    sx={{*/}
-            {/*        paddingLeft: 2,*/}
-            {/*        paddingRight: 2*/}
-            {/*    }}*/}
-            {/*>*/}
-            {/*    <Grid container justifyContent={'space-between'}>*/}
-            {/*        /!*<Grid item xs={6} container alignItems={'center'}>*!/*/}
-            {/*        /!*    <Rating name="read-only" value={listing.rating} readOnly precision={0.1}/>*!/*/}
-            {/*        /!*</Grid>*!/*/}
-            {/*        <Grid item xs={6} container justifyContent={'right'}>*/}
-            {/*            <Button color={'secondary'} variant={'outlined'}>*/}
-            {/*                Buy*/}
-            {/*            </Button>*/}
-            {/*        </Grid>*/}
-
-            {/*    </Grid>*/}
-
-            {/*</CardActions>*/}
-          </Card>
-        </CardActionArea>
-      </Link>
-    </Fade>
-  )
-}
-
-export function AggregateBuyOrderListingBase(props: {
-  aggregate: MarketAggregate
-  index: number
-}) {
-  const { t } = useTranslation()
-  const { aggregate, index } = props
-  const { details, listings, photos } = aggregate
-  const theme = useTheme<ExtendedTheme>()
-  const maximum_price = useMemo(
-    () =>
-      aggregate.buy_orders.length
-        ? aggregate.buy_orders.reduce((prev, curr) =>
-            prev.price > curr.price ? prev : curr,
-          ).price
-        : 0,
-    [aggregate.buy_orders],
-  )
-  const minimum_price = useMemo(
-    () =>
-      aggregate.buy_orders.length
-        ? aggregate.buy_orders.reduce((prev, curr) =>
-            prev.price < curr.price ? prev : curr,
-          ).price
-        : 0,
-    [aggregate.buy_orders],
-  )
-  const sum_requested = useMemo(
-    () => aggregate.buy_orders.reduce((prev, curr) => prev + curr.quantity, 0),
-    [aggregate.buy_orders],
-  )
-
-  return (
-    <Fade
-      in={true}
-      style={{
-        transitionDelay: `${50 + 50 * index}ms`,
-        transitionDuration: "500ms",
-      }}
-    >
-      <Link
-        to={`/market/aggregate/${aggregate.details.game_item_id}`}
-        style={{ textDecoration: "none", color: "inherit" }}
-      >
-        <CardActionArea
-          sx={{
-            borderRadius: (theme) =>
-              theme.spacing((theme as ExtendedTheme).borderRadius.topLevel),
-          }}
-        >
-          <Card
-            sx={{
-              borderRadius: (theme) =>
-                theme.spacing((theme as ExtendedTheme).borderRadius.topLevel),
-              height: 400,
-              postition: "relative",
-            }}
-          >
-            <CardMedia
-              component="img"
-              loading="lazy"
-              image={photos[0] || FALLBACK_IMAGE_URL}
-              onError={({ currentTarget }) => {
-                currentTarget.onerror = null
-                currentTarget.src = FALLBACK_IMAGE_URL
-              }}
-              sx={{
-                ...(theme.palette.mode === "dark"
-                  ? {
-                      height: "100%",
-                    }
-                  : {
-                      height: 244,
-                    }),
-                // maxHeight: '100%',
-                overflow: "hidden",
-              }}
-              alt={`Image of ${details.title}`}
-            />
-            <Box
-              sx={{
-                ...(theme.palette.mode === "light"
-                  ? {
-                      display: "none",
-                    }
-                  : {}),
-                position: "absolute",
-                zIndex: 3,
-                top: 0,
-                left: 0,
-                height: "100%",
-                width: "100%",
-                borderRadius: (theme) =>
-                  theme.spacing((theme as ExtendedTheme).borderRadius.topLevel),
-                background: `linear-gradient(to bottom, transparent, transparent 25%, ${theme.palette.background.sidebar}AA 40%, ${theme.palette.background.sidebar} 100%)`,
-              }}
-            />
-
-            <Box
-              sx={{
-                ...(theme.palette.mode === "dark"
-                  ? {
-                      position: "absolute",
-                      bottom: 0,
-                      zIndex: 4,
-                    }
-                  : {}),
-              }}
-            >
-              <CardContent>
-                <Typography
-                  variant={"h6"}
-                  color={"primary"}
-                  fontWeight={"bold"}
-                >
-                  {minimum_price.toLocaleString(undefined)} -{" "}
-                  {maximum_price.toLocaleString(undefined)} aUEC/
-                  {t("market.unit")}
-                </Typography>
-                <Typography
-                  variant={"subtitle2"}
-                  color={"text.secondary"}
-                  maxHeight={60}
-                >
-                  <span
-                    style={{
-                      lineClamp: "2",
-                      textOverflow: "ellipsis",
-                      // whiteSpace: "pre-line",
-                      overflow: "hidden",
-                      WebkitBoxOrient: "vertical",
-                      display: "-webkit-box",
-                      WebkitLineClamp: "2",
-                    }}
-                  >
-                    {details.title} ({details.item_type})
-                  </span>{" "}
-                </Typography>
-                <Typography
-                  display={"block"}
-                  color={"text.primary"}
-                  variant={"subtitle2"}
-                >
-                  {sum_requested.toLocaleString(undefined)}{" "}
-                  {t("market.total_requested")}
-                </Typography>
-              </CardContent>
-            </Box>
-          </Card>
-        </CardActionArea>
-      </Link>
-    </Fade>
-  )
-}
-
-export function MultipleListing(props: {
-  multiple: ExtendedMultipleSearchResult
-  index: number
-}) {
-  const { multiple, index } = props
-  const marketSidebarOpen = useMarketSidebarExp()
-
-  return (
-    <Grid
-      item
-      xs={marketSidebarOpen ? 12 : 6}
-      sm={marketSidebarOpen ? 12 : 6}
-      md={marketSidebarOpen ? 12 : 4}
-      lg={marketSidebarOpen ? 6 : 4}
-      xl={3}
-      sx={{ transition: "0.3s" }}
-      // key={multiple.multiple_id}
-    >
-      <MultipleListingBase multiple={multiple} index={index} />
-    </Grid>
-  )
-}
-
-export function MultipleListingBase(props: {
-  multiple: ExtendedMultipleSearchResult
-  index: number
-}) {
-  const { t } = useTranslation()
-  const { multiple, index } = props
-  const { photo, title } = multiple
-  const theme = useTheme<ExtendedTheme>()
-
-  return (
-    <Fade
-      in={true}
-      style={{
-        transitionDelay: `${50 + 50 * index}ms`,
-        transitionDuration: "500ms",
-      }}
-    >
-      <Link
-        to={formatMarketMultipleUrl(multiple)}
-        style={{ textDecoration: "none", color: "inherit" }}
-      >
-        <CardActionArea
-          sx={{
-            borderRadius: (theme) =>
-              theme.spacing((theme as ExtendedTheme).borderRadius.topLevel),
-          }}
-        >
-          <Card
-            sx={{
-              borderRadius: (theme) =>
-                theme.spacing((theme as ExtendedTheme).borderRadius.topLevel),
-              height: 400,
-              postition: "relative",
-            }}
-          >
-            <CardMedia
-              component="img"
-              loading="lazy"
-              image={photo || FALLBACK_IMAGE_URL}
-              onError={({ currentTarget }) => {
-                currentTarget.onerror = null
-                currentTarget.src = FALLBACK_IMAGE_URL
-              }}
-              sx={{
-                ...(theme.palette.mode === "dark"
-                  ? {
-                      height: "100%",
-                    }
-                  : {
-                      height: 244,
-                    }),
-                // maxHeight: '100%',
-                overflow: "hidden",
-              }}
-              alt={`Image of ${title}`}
-            />
-            <Box
-              sx={{
-                ...(theme.palette.mode === "light"
-                  ? {
-                      display: "none",
-                    }
-                  : {}),
-                position: "absolute",
-                zIndex: 3,
-                top: 0,
-                left: 0,
-                height: "100%",
-                width: "100%",
-                borderRadius: (theme) =>
-                  theme.spacing((theme as ExtendedTheme).borderRadius.topLevel),
-                background: `linear-gradient(to bottom, transparent, transparent 25%, ${theme.palette.background.sidebar}AA 40%, ${theme.palette.background.sidebar} 100%)`,
-              }}
-            />
-
-            <Box
-              sx={{
-                ...(theme.palette.mode === "dark"
-                  ? {
-                      position: "absolute",
-                      bottom: 0,
-                      zIndex: 4,
-                    }
-                  : {}),
-              }}
-            >
-              <CardContent>
-                <Typography
-                  variant={"h5"}
-                  color={"primary"}
-                  fontWeight={"bold"}
-                >
-                  {t("market.starting_at", {
-                    price: multiple.minimum_price.toLocaleString(undefined),
-                  })}{" "}
-                  aUEC
-                </Typography>
-                <Typography
-                  variant={"subtitle2"}
-                  color={"text.secondary"}
-                  maxHeight={60}
-                >
-                  <span
-                    style={{
-                      lineClamp: "2",
-                      textOverflow: "ellipsis",
-                      // whiteSpace: "pre-line",
-                      overflow: "hidden",
-                      WebkitBoxOrient: "vertical",
-                      display: "-webkit-box",
-                      WebkitLineClamp: "2",
-                    }}
-                  >
-                    {title} ({multiple.item_type})
-                  </span>{" "}
-                </Typography>
-                <Typography
-                  display={"block"}
-                  color={"text.primary"}
-                  variant={"subtitle2"}
-                >
-                  {multiple.quantity_available.toLocaleString(undefined)}{" "}
-                  {t("market.total_available")}
-                </Typography>
-              </CardContent>
-            </Box>
-          </Card>
-        </CardActionArea>
-      </Link>
-    </Fade>
-  )
-}
+export {
+  AggregateListing,
+  AggregateListingBase,
+  AggregateBuyOrderListing,
+  AggregateBuyOrderListingBase,
+} from "../../features/market/components/listings/AggregateListingCard"
+export {
+  MultipleListing,
+  MultipleListingBase,
+} from "../../features/market/components/listings/MultipleListingCard"
 
 export function getComparePrice(
   listing: MarketListingType | SellerListingType,
@@ -867,31 +374,12 @@ export function DisplayListings(props: {
       </Grid>
 
       <Grid item xs={12}>
-        <TablePagination
-          labelRowsPerPage={t("rows_per_page")}
-          labelDisplayedRows={({ from, to, count }) => (
-            <>
-              {t("displayed_rows", {
-                from: from.toLocaleString(undefined),
-                to: to.toLocaleString(undefined),
-                count: count,
-              })}
-            </>
-          )}
-          SelectProps={{
-            "aria-label": t("select_rows_per_page"),
-            color: "primary",
-          }}
-          rowsPerPageOptions={[12, 24, 48, 96]}
-          component="div"
+        <ListingPagination
           count={total ?? listingsWithAds.length}
-          rowsPerPage={perPage}
           page={page}
+          rowsPerPage={perPage}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
-          color={"primary"}
-          nextIconButtonProps={{ color: "primary" }}
-          backIconButtonProps={{ color: "primary" }}
         />
       </Grid>
     </React.Fragment>
@@ -1107,31 +595,12 @@ export function DisplayBuyOrderListings(props: {
       </Grid>
 
       <Grid item xs={12}>
-        <TablePagination
-          labelRowsPerPage={t("rows_per_page")}
-          labelDisplayedRows={({ from, to, count }) => (
-            <>
-              {t("displayed_rows", {
-                from: from.toLocaleString(undefined),
-                to: to.toLocaleString(undefined),
-                count: count,
-              })}
-            </>
-          )}
-          SelectProps={{
-            "aria-label": t("select_rows_per_page"),
-            color: "primary",
-          }}
-          rowsPerPageOptions={[12, 24, 48, 96]}
-          component="div"
+        <ListingPagination
           count={listings.length}
-          rowsPerPage={perPage}
           page={page}
+          rowsPerPage={perPage}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
-          color={"primary"}
-          nextIconButtonProps={{ color: "primary" }}
-          backIconButtonProps={{ color: "primary" }}
         />
       </Grid>
     </>
@@ -1233,31 +702,12 @@ export function ItemListings(props: {
       </Grid>
 
       <Grid item xs={12}>
-        <TablePagination
-          labelRowsPerPage={t("rows_per_page")}
-          labelDisplayedRows={({ from, to, count }) => (
-            <>
-              {t("displayed_rows", {
-                from: from.toLocaleString(undefined),
-                to: to.toLocaleString(undefined),
-                count: count,
-              })}
-            </>
-          )}
-          SelectProps={{
-            "aria-label": t("select_rows_per_page"),
-            color: "primary",
-          }}
-          rowsPerPageOptions={[12, 24, 48, 96]}
-          component="div"
+        <ListingPagination
           count={total}
-          rowsPerPage={perPage}
           page={page}
+          rowsPerPage={perPage}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
-          color={"primary"}
-          nextIconButtonProps={{ color: "primary" }}
-          backIconButtonProps={{ color: "primary" }}
         />
       </Grid>
     </>
@@ -1359,31 +809,12 @@ export function BulkListingsRefactor(props: {
       </Grid>
 
       <Grid item xs={12}>
-        <TablePagination
-          labelRowsPerPage={t("rows_per_page")}
-          labelDisplayedRows={({ from, to, count }) => (
-            <>
-              {t("displayed_rows", {
-                from: from.toLocaleString(undefined),
-                to: to.toLocaleString(undefined),
-                count: count,
-              })}
-            </>
-          )}
-          SelectProps={{
-            "aria-label": t("select_rows_per_page"),
-            color: "primary",
-          }}
-          rowsPerPageOptions={[12, 24, 48, 96]}
-          component="div"
+        <ListingPagination
           count={total}
-          rowsPerPage={perPage}
           page={page}
+          rowsPerPage={perPage}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
-          color={"primary"}
-          nextIconButtonProps={{ color: "primary" }}
-          backIconButtonProps={{ color: "primary" }}
         />
       </Grid>
     </>

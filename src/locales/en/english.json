@@ -635,7 +635,6 @@
   "displayed_rows_range": "{{from}}–{{to}} of {{count}}",
   "displayed_rows_range_more": "{{from}}–{{to}} of more than {{to}}",
   "all": "all",
-  "contractors": "Contractors",
   "recruiting_orgs": "Recruiting Orgs",
   "toggle_market_sidebar": "Toggle market sidebar",
   "update_post": "Update Post",

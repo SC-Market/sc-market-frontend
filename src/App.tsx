@@ -52,23 +52,23 @@ function App() {
       })
     }
 
-    // Set up push notification handling
+    // Set up push notification handling: service worker posts messages here;
+    // we invalidate RTK Query tags so any subscribed useGetNotificationsQuery
+    // (and other invalidated endpoints) refetch automatically.
     if ("serviceWorker" in navigator) {
-      // Listen for messages from service worker
       const messageHandler = (event: MessageEvent) => {
         if (event.data?.type === "PUSH_NOTIFICATION_RECEIVED") {
-          // Invalidate notification cache to trigger refetch
+          // SW sent this after showing a push; invalidate so notification queries refetch
           store.dispatch(
             notificationApi.util.invalidateTags(["Notifications" as const]),
           )
         } else if (event.data?.type === "SYNC_NOTIFICATIONS") {
-          // Periodic background sync for notifications
+          // SW background sync fetched notifications; invalidate to refetch
           store.dispatch(
             notificationApi.util.invalidateTags(["Notifications" as const]),
           )
         } else if (event.data?.type === "SYNC_DATA") {
-          // Periodic background sync for general data
-          // Invalidate various caches to refresh data
+          // SW periodic data sync; invalidate so dashboard/orders/market refetch
           store.dispatch(
             notificationApi.util.invalidateTags([
               "Notifications",
