@@ -6,13 +6,13 @@ import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
 import CloseIcon from "@mui/icons-material/CloseRounded"
 import MenuIcon from "@mui/icons-material/MenuRounded"
-import { MarketSidebarContext } from "../../hooks/market/MarketSidebar"
+import { MarketSidebarContext } from "../../features/market"
 import { Page } from "../../components/metadata/Page"
-import { MarketActions } from "../../components/button/MarketActions"
 import {
+  MarketActions,
   HideOnScroll,
   MarketNavArea,
-} from "../../components/navbar/MarketNavArea"
+} from "../../features/market"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"

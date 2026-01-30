@@ -193,13 +193,13 @@ const router = createBrowserRouter([
       {
         path: "/market/services",
         lazy: async () => ({
-          Component: (await import("./pages/market/MarketPage")).MarketPage,
+          Component: (await import("./features/market")).MarketPage,
         }),
       },
       {
         path: "/market/category/:name",
         lazy: async () => ({
-          Component: (await import("./pages/market/MarketPage")).MarketPage,
+          Component: (await import("./features/market")).MarketPage,
         }),
       },
       {
@@ -213,19 +213,20 @@ const router = createBrowserRouter([
         path: "/market",
         errorElement: <RouteErrorFallback />,
         lazy: async () => ({
-          Component: (await import("./pages/market/MarketPage")).MarketPage,
+          Component: (await import("./features/market")).MarketPage,
         }),
       },
       {
         path: "/bulk",
         lazy: async () => ({
-          Component: (await import("./pages/market/MarketPage")).BulkItems,
+          Component: (await import("./features/market-bulk")).BulkItemsPage,
         }),
       },
       {
         path: "/buyorders",
         lazy: async () => ({
-          Component: (await import("./pages/market/MarketPage")).BuyOrderItems,
+          Component: (await import("./features/market-buy-orders"))
+            .BuyOrderItemsPage,
         }),
       },
       {
@@ -527,8 +528,9 @@ const router = createBrowserRouter([
           {
             path: "/notifications",
             lazy: async () => ({
-              Component: (await import("./pages/notifications/NotificationsPage"))
-                .NotificationsPage,
+              Component: (
+                await import("./pages/notifications/NotificationsPage")
+              ).NotificationsPage,
             }),
           },
           {

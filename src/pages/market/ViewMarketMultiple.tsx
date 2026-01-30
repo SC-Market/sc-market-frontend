@@ -2,11 +2,11 @@ import { Link, Navigate, useParams } from "react-router-dom"
 import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import React from "react"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
-import { CurrentMarketListingContext } from "../../hooks/market/CurrentMarketItem"
+import { CurrentMarketListingContext } from "../../features/market"
 import {
   useGetMarketListingQuery,
   useGetMultipleByIdQuery,
-} from "../../store/market"
+} from "../../features/market"
 import { MarketListingView } from "../../views/market/MarketListingView"
 import { Page } from "../../components/metadata/Page"
 import { MarketListingEditView } from "../../views/market/MarketListingEditView"

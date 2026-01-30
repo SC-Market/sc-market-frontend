@@ -1,5 +1,5 @@
 import React from "react"
-import { SellMaterialsList } from "../../views/market/SellMaterialsList"
+import { SellMaterialsList } from "../../features/market/components/SellMaterialsList"
 import { Grid } from "@mui/material"
 import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"

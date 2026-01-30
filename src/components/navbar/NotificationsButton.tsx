@@ -59,8 +59,10 @@ import {
 } from "../../store/notification"
 import { useGetUserOrganizationsQuery } from "../../store/organizations"
 import { useNotificationPollingInterval } from "../../hooks/notifications/useNotificationPolling"
-import { MarketBid } from "../../datatypes/MarketListing"
-import { useGetMarketListingQuery } from "../../store/market"
+import {
+  DatatypesMarketBid,
+  useGetMarketListingQuery,
+} from "../../features/market"
 import { OfferSession } from "../../store/offer"
 import { Trans, useTranslation } from "react-i18next"
 import { MarkdownRender } from "../markdown/Markdown"
@@ -216,12 +218,7 @@ export function NotificationBase(props: {
       component={to ? Link : "div"}
       to={to}
       onClick={onClick || defaultClick}
-      sx={{ 
-        position: "relative",
-        width: "100%",
-        display: "flex",
-        alignItems: "center",
-      }}
+      sx={{ position: "relative" }}
     >
       <ListItemIcon
         sx={{
@@ -230,19 +227,16 @@ export function NotificationBase(props: {
             : theme.palette.primary.main,
           transition: "0.3s",
           fontSize: "0.9em",
-          minWidth: 40,
         }}
       >
         {icon}
       </ListItemIcon>
       <ListItemText
         sx={{
-          flex: 1,
-          width: "100%",
+          maxWidth: { xs: "calc(100% - 80px)", sm: 300 }, // Responsive maxWidth: account for icon and delete button on mobile
           color: "text.secondary",
           wordWrap: "break-word",
           overflowWrap: "break-word",
-          margin: 0,
         }}
       >
         <Typography sx={{ wordBreak: "break-word" }}>
@@ -252,28 +246,7 @@ export function NotificationBase(props: {
           {getRelativeTime(new Date(notif.timestamp))}
         </Typography>
       </ListItemText>
-      <Box
-        sx={{
-          position: "absolute",
-          left: 0,
-          right: 0,
-          top: 0,
-          bottom: 0,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          pointerEvents: "none", // Allow clicks to pass through to button
-          zIndex: 1,
-        }}
-      >
-        <Box
-          sx={{
-            pointerEvents: "auto", // Re-enable clicks for delete button
-          }}
-        >
-          <NotificationDeleteButton notif={notif} />
-        </Box>
-      </Box>
+      <NotificationDeleteButton notif={notif} />
     </ListItemButton>
   )
 
@@ -592,7 +565,10 @@ export function NotificationContractorInvite(props: { notif: Notification }) {
 export function NotificationBid(props: { notif: Notification }) {
   const { notif } = props
   const theme = useTheme<ExtendedTheme>()
-  const bid = useMemo(() => notif.entity as MarketBid, [notif.entity])
+  const bid = useMemo(
+    () => notif.entity as unknown as DatatypesMarketBid,
+    [notif.entity],
+  )
   const { data: listing } = useGetMarketListingQuery(bid.listing_id)
   const { t } = useTranslation()
 

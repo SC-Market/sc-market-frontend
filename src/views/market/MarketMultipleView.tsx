@@ -27,8 +27,8 @@ import {
   RefreshRounded,
   ZoomInRounded,
 } from "@mui/icons-material"
-import { useCurrentMarketListing } from "../../hooks/market/CurrentMarketItem"
-import { MarketMultiple } from "../../datatypes/MarketListing"
+import { useCurrentMarketListing } from "../../features/market"
+import { MarketMultiple } from "../../features/market"
 import { UserList } from "../../components/list/UserList"
 import { OrderList } from "../../components/list/OrderList"
 import { useAlertHook } from "../../hooks/alert/AlertHook"

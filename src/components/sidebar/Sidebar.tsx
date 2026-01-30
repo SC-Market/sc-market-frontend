@@ -29,7 +29,7 @@ const routePrefetchMap: Record<
   { importFn: () => Promise<any>; key: string }
 > = {
   "/market": {
-    importFn: () => import("../../pages/market/MarketPage"),
+    importFn: () => import("../../features/market"),
     key: "MarketPage",
   },
   "/contracts": {

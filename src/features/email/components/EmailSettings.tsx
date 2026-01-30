@@ -213,10 +213,7 @@ export function EmailSettings() {
               selectedNotificationTypes.filter((id) => id !== typeId),
             )
           } else {
-            setSelectedNotificationTypes([
-              ...selectedNotificationTypes,
-              typeId,
-            ])
+            setSelectedNotificationTypes([...selectedNotificationTypes, typeId])
           }
         }}
         onSubmit={handleAddEmail}

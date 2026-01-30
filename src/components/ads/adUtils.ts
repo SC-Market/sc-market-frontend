@@ -1,6 +1,6 @@
 import { AdConfig, isAdConfig } from "./types"
 import { AD_FREQUENCY } from "./adConfig"
-import { MarketListingSearchResult } from "../../store/market"
+import { MarketListingSearchResult } from "../../features/market"
 
 /**
  * Union type for items that can appear in the listing display

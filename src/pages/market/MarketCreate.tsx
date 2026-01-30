@@ -5,7 +5,7 @@ import {
   AggregateMarketListingForm,
   MarketListingForm,
   MarketMultipleForm,
-} from "../../views/market/MarketListingForm"
+} from "../../features/market/components/MarketListingForm"
 import { Page } from "../../components/metadata/Page"
 import { Alert, Grid, Tab, Tabs } from "@mui/material"
 import { Link } from "react-router-dom"

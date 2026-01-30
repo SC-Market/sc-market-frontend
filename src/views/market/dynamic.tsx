@@ -22,5 +22,7 @@ export const DynamicItemListings = createDynamicImport(() =>
 )
 
 export const DynamicItemStock = createDynamicImport(() =>
-  import("./ItemStock").then((m) => ({ default: m.MyItemStock })),
+  import("../../features/market/components/ItemStock").then((m) => ({
+    default: m.MyItemStock,
+  })),
 )

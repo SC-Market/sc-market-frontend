@@ -39,14 +39,14 @@ import {
   BuyOrder,
   MarketAggregate,
   MarketAggregateListing,
-} from "../../datatypes/MarketListing"
+} from "../../features/market"
 import {
   useMarketCancelBuyOrderMutation,
   useMarketFulfillBuyOrderMutation,
   useMarketGetAggregateChartByIDQuery,
   useMarketGetAggregateHistoryByIDQuery,
   useMarketUpdateAggregateAdminMutation,
-} from "../../store/market"
+} from "../../features/market"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { MarkdownRender } from "../../components/markdown/Markdown"
 import { useCookies } from "react-cookie"
@@ -57,9 +57,9 @@ import { ListingNameAndRating } from "../../components/rating/ListingRating"
 import { HeadCell, PaginatedTable } from "../../components/table/PaginatedTable"
 import { Helmet } from "react-helmet"
 import { ImagePreviewModal } from "../../components/modal/ImagePreviewModal"
-import { ImageSearch } from "./ImageSearch"
-import { useCurrentMarketListing } from "../../hooks/market/CurrentMarketItem"
-import { BuyOrderForm } from "./BuyOrderForm"
+import { ImageSearch } from "../../features/market/components/ImageSearch"
+import { useCurrentMarketListing } from "../../features/market"
+import { BuyOrderForm } from "../../features/market"
 import { Rating } from "../../datatypes/Contractor"
 import { Order } from "../../datatypes/Order"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"

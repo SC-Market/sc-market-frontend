@@ -1,11 +1,5 @@
 import React, { useMemo } from "react"
-import {
-  Autocomplete,
-  TextField,
-  Chip,
-  Box,
-  Typography,
-} from "@mui/material"
+import { Autocomplete, TextField, Chip, Box, Typography } from "@mui/material"
 import { SUPPORTED_LANGUAGES, Language } from "../../constants/languages"
 import { useTranslation } from "react-i18next"
 

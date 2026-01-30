@@ -28,7 +28,7 @@ import { useGetContractorBySpectrumIDQuery } from "../../store/contractor"
 import {
   useGetMarketListingQuery,
   usePurchaseMarketListingMutation,
-} from "../../store/market"
+} from "../../features/market"
 import { LocalOfferRounded } from "@mui/icons-material"
 import { TrashCan } from "mdi-material-ui"
 import LoadingButton from "@mui/lab/LoadingButton"
@@ -36,7 +36,7 @@ import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
 import { BackArrow } from "../../components/button/BackArrow"
 import { MarkdownEditor } from "../../components/markdown/Markdown"
-import { MarketAggregateListingComposite } from "../../datatypes/MarketListing"
+import { MarketAggregateListingComposite } from "../../features/market"
 import { NumericFormat } from "react-number-format"
 import { formatCompleteListingUrl, formatMarketUrl } from "../../util/urls"
 import { FALLBACK_IMAGE_URL } from "../../util/constants"

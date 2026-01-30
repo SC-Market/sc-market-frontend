@@ -25,22 +25,19 @@ import {
   RadioButtonUncheckedRounded,
 } from "@mui/icons-material"
 import { useGetContractorBySpectrumIDQuery } from "../../store/contractor"
-import { useCurrentMarketListing } from "../../hooks/market/CurrentMarketItem"
+import { useCurrentMarketListing } from "../../features/market"
 import {
   useMarketUpdateListingMutation,
   useMarketUploadListingPhotosMutation,
   useUpdateMarketListingMutation,
   validatePhotoUploadParams,
-} from "../../store/market"
+} from "../../features/market"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { MarkdownEditor } from "../../components/markdown/Markdown"
 import { Navigate } from "react-router-dom"
-import { ImageSearch } from "./ImageSearch"
+import { ImageSearch } from "../../features/market/components/ImageSearch"
 import { MISSING_IMAGE_URL } from "../../hooks/styles/Theme"
-import {
-  MarketListingUpdateBody,
-  UniqueListing,
-} from "../../datatypes/MarketListing"
+import { MarketListingUpdateBody, UniqueListing } from "../../features/market"
 import { has_permission } from "../contractor/OrgRoles"
 import { NumericFormat } from "react-number-format"
 import { SelectGameItemStack } from "../../components/select/SelectGameItem"
@@ -214,7 +211,7 @@ export function MarketListingEditView() {
             photos: uploadParams.photos,
           })
             .unwrap()
-            .then((uploadResult) => {
+            .then((uploadResult: { photo_urls?: string[] }) => {
               console.log(`[Photo Upload] Upload successful:`, {
                 listing_id: listing.listing.listing_id,
                 result: uploadResult,

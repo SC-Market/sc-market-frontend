@@ -1,14 +1,9 @@
-import {
-  Autocomplete,
-  Grid,
-  TextField,
-  TextFieldProps,
-} from "@mui/material"
+import { Autocomplete, Grid, TextField, TextFieldProps } from "@mui/material"
 import React, { useMemo } from "react"
 import {
   useGetMarketCategoriesQuery,
   useGetMarketItemsByCategoryQuery,
-} from "../../store/market"
+} from "../../features/market"
 import { useTranslation } from "react-i18next"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 

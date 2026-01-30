@@ -1,7 +1,7 @@
 import { Paper, Fade, Grid, Box, useMediaQuery } from "@mui/material"
 import React from "react"
 import { AdConfig } from "./types"
-import { useMarketSidebarExp } from "../../hooks/market/MarketSidebar"
+import { useMarketSidebarExp } from "../../features/market"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 

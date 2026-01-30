@@ -163,9 +163,7 @@ export function OfferDetailsArea(props: { session: OfferSession }) {
   }, [profile, org, session, statusKey, t])
 
   const showCancel =
-    !showAccept &&
-    statusKey !== "rejected" &&
-    statusKey !== "accepted"
+    !showAccept && statusKey !== "rejected" && statusKey !== "accepted"
 
   const [updateStatus, { isLoading: isUpdatingStatus }] =
     useUpdateOfferStatusMutation()

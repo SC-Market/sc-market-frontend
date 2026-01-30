@@ -24,7 +24,7 @@ import { useTranslation } from "react-i18next"
 
 // Lazy load heavy modal components
 const ImageSearch = React.lazy(() =>
-  import("../../views/market/ImageSearch").then((module) => ({
+  import("../../features/market/components/ImageSearch").then((module) => ({
     default: module.ImageSearch,
   })),
 )

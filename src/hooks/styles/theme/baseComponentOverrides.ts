@@ -3,7 +3,9 @@ import type { ExtendedTheme } from "./utils"
 
 const fontStack = `Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"`
 
-export function getBaseComponentOverrides(): Components<Omit<Theme, "components">> {
+export function getBaseComponentOverrides(): Components<
+  Omit<Theme, "components">
+> {
   return {
     MuiSvgIcon: {
       styleOverrides: {

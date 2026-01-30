@@ -44,11 +44,7 @@ export function EmailStatus({
   }
 
   if (isError) {
-    return (
-      <Alert severity="error">
-        {t("settings.email.loadError")}
-      </Alert>
-    )
+    return <Alert severity="error">{t("settings.email.loadError")}</Alert>
   }
 
   if (!hasEmail) {
@@ -86,11 +82,7 @@ export function EmailStatus({
         </Typography>
         <Chip
           icon={
-            emailVerified ? (
-              <CheckCircleIcon />
-            ) : (
-              <CancelIcon color="error" />
-            )
+            emailVerified ? <CheckCircleIcon /> : <CancelIcon color="error" />
           }
           label={
             emailVerified

@@ -45,7 +45,7 @@ import {
   ServiceListings,
 } from "../contracts/ServiceListings"
 import { Section } from "../../components/paper/Section"
-import { useSearchMarketQuery } from "../../store/market"
+import { useSearchMarketQuery } from "../../features/market"
 import { RecruitingPostArea } from "../../pages/recruiting/RecruitingPostPage"
 import { useRecruitingGetPostByOrgQuery } from "../../store/recruiting"
 import {
