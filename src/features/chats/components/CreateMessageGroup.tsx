@@ -19,13 +19,13 @@ import {
 } from "@mui/material"
 import React, { useEffect, useState } from "react"
 import { useTheme } from "@mui/material/styles"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { User } from "../../datatypes/User"
+import { ExtendedTheme } from "../../../hooks/styles/Theme"
+import { User } from "../../../datatypes/User"
 import {
   useGetUserProfileQuery,
   useSearchUsersQuery,
-} from "../../store/profile"
-import { useMessagingSidebar } from "../../hooks/messaging/MessagingSidebar"
+} from "../../../store/profile"
+import { useMessagingSidebar } from "../hooks/MessagingSidebar"
 import MenuIcon from "@mui/icons-material/MenuRounded"
 import {
   ChevronLeftRounded,
@@ -33,12 +33,12 @@ import {
   PersonAddRounded,
 } from "@mui/icons-material"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
-import { useMessageGroupCreate } from "../../hooks/messaging/MessageGroupCreate"
+import { useMessageGroupCreate } from "../hooks/MessageGroupCreate"
 import throttle from "lodash/throttle"
-import { useCreateChatMutation, useGetMyChatsQuery } from "../../store/chats"
+import { useCreateChatMutation, useGetMyChatsQuery } from "../api/chatsApi"
 import { useTranslation } from "react-i18next"
-import { useCurrentChatID } from "../../hooks/messaging/CurrentChatID"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
+import { useCurrentChatID } from "../hooks/CurrentChatID"
+import { useAlertHook } from "../../../hooks/alert/AlertHook"
 
 function MessageHeader(props: {
   target: string

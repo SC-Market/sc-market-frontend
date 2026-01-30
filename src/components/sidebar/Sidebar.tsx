@@ -72,7 +72,7 @@ import { CURRENT_CUSTOM_ORG } from "../../hooks/contractor/CustomDomain"
 import { Stack } from "@mui/system"
 import SCMarketLogo from "../../assets/scmarket-logo.png"
 import { useTranslation } from "react-i18next"
-import { useUnreadChatCount } from "../../hooks/messaging/UnreadChatCount"
+import { useUnreadChatCount } from "../../features/chats"
 import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
 
 export function SidebarDropdown(props: SidebarItemProps) {

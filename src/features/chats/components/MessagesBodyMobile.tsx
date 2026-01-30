@@ -26,41 +26,41 @@ import React, {
 } from "react"
 import { Link, useNavigate, useLocation } from "react-router-dom"
 import { useTheme as useMuiTheme } from "@mui/material/styles"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import BusinessIcon from "@mui/icons-material/BusinessRounded"
 import DescriptionIcon from "@mui/icons-material/DescriptionRounded"
 import SendIcon from "@mui/icons-material/SendRounded"
 import { ChevronLeftRounded, AccessTimeRounded } from "@mui/icons-material"
-import { UserParticipant, ContractorParticipant } from "../../datatypes/Chat"
-import { Message } from "../../datatypes/Chat"
+import type { UserParticipant, ContractorParticipant } from "../domain/types"
+import type { Message } from "../domain/types"
 import {
   useGetUserByUsernameQuery,
   useGetUserProfileQuery,
-} from "../../store/profile"
-import { getRelativeTime } from "../../util/time"
-import { useMessagingSidebar } from "../../hooks/messaging/MessagingSidebar"
-import { useCurrentChat } from "../../hooks/messaging/CurrentChat"
+} from "../../../store/profile"
+import { getRelativeTime } from "../../../util/time"
+import { useMessagingSidebar } from "../hooks/MessagingSidebar"
+import { useCurrentChat } from "../hooks/CurrentChat"
 import {
   useSendChatMessageMutation,
   useGetChatByIDQuery,
   chatsApi,
-} from "../../store/chats"
+} from "../api/chatsApi"
 import { useParams } from "react-router-dom"
 import { io } from "socket.io-client"
-import { WS_URL } from "../../util/constants"
+import { WS_URL } from "../../../util/constants"
 import { useDispatch } from "react-redux"
-import type { AppDispatch } from "../../store/store"
-import SCMarketLogo from "../../assets/scmarket-logo.png"
+import type { AppDispatch } from "../../../store/store"
+import SCMarketLogo from "../../../assets/scmarket-logo.png"
 import { DateTimePicker } from "@mui/x-date-pickers"
 import moment from "moment"
 import { useTranslation } from "react-i18next"
-import { MarkdownRender } from "../../components/markdown/Markdown"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
-import { LongPressMenu } from "../../components/gestures"
-import { MobileFAB } from "../../components/mobile/MobileFAB"
-import { BottomSheet } from "../../components/mobile"
+import { MarkdownRender } from "../../../components/markdown/Markdown"
+import { useAlertHook } from "../../../hooks/alert/AlertHook"
+import { LongPressMenu } from "../../../components/gestures"
+import { MobileFAB } from "../../../components/mobile/MobileFAB"
+import { BottomSheet } from "../../../components/mobile"
 import { ContentCopyRounded } from "@mui/icons-material"
-import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
+import { useBottomNavHeight } from "../../../hooks/layout/useBottomNavHeight"
 
 // Replace Discord-like timestamp tags in messages with human-readable strings
 function replaceDiscordTimestamps(input: string) {

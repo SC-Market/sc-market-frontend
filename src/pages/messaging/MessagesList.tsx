@@ -1,15 +1,17 @@
 import React, { useState } from "react"
 import { Box, useMediaQuery, useTheme } from "@mui/material"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
-import { MessagingSidebar } from "../../views/messaging/MessagingSidebar"
-import { MessagingSidebarContent } from "../../views/messaging/MessagingSidebarContent"
-import { MessageGroupCreateContext } from "../../hooks/messaging/MessageGroupCreate"
-import { MessagingSidebarContext } from "../../hooks/messaging/MessagingSidebar"
-import { CreateMessageGroupBody } from "../../views/messaging/CreateMessageGroup"
+import {
+  MessagingSidebar,
+  MessagingSidebarContent,
+  messagingDrawerWidth,
+  MessageGroupCreateContext,
+  MessagingSidebarContext,
+  CreateMessageGroupBody,
+  CurrentChatIDContext,
+} from "../../features/chats"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { CurrentChatIDContext } from "../../hooks/messaging/CurrentChatID"
 import { useNavigate } from "react-router-dom"
-import { messagingDrawerWidth } from "../../views/messaging/MessagingSidebar"
 
 export function MessagesList() {
   const [drawerOpen] = useDrawerOpen()

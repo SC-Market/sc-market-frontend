@@ -20,14 +20,13 @@ import { OrgDetails, UserDetails } from "../../components/list/UserDetails"
 import { Stack } from "@mui/system"
 import moment from "moment/moment"
 import { MarkdownRender } from "../../components/markdown/Markdown"
-import { useCurrentChat } from "../../hooks/messaging/CurrentChat"
-import { useGetChatByOrderIDQuery } from "../../store/chats"
+import { useCurrentChat, useGetChatByOrderIDQuery } from "../../features/chats"
 import {
   useGetNotificationsQuery,
   useNotificationDeleteMutation,
 } from "../../store/notification"
 import { Order } from "../../datatypes/Order"
-import { MessagesBody } from "../messaging/MessagesBody"
+import { MessagesBody } from "../../features/chats"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import {
   useGetUserByUsernameQuery,

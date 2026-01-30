@@ -26,14 +26,13 @@ import {
   HourglassTop,
 } from "@mui/icons-material"
 import { MarkdownRender } from "../../components/markdown/Markdown"
-import { useCurrentChat } from "../../hooks/messaging/CurrentChat"
-import { useGetChatByOfferIDQuery } from "../../store/chats"
+import { useCurrentChat, useGetChatByOfferIDQuery } from "../../features/chats"
 import {
   useGetNotificationsQuery,
   useNotificationDeleteMutation,
 } from "../../store/notification"
 import { Order } from "../../datatypes/Order"
-import { MessagesBody } from "../messaging/MessagesBody"
+import { MessagesBody } from "../../features/chats"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useGetUserProfileQuery } from "../../store/profile"
 import LoadingButton from "@mui/lab/LoadingButton"

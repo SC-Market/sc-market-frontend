@@ -9,12 +9,15 @@ import {
   responsiveFontSizes,
 } from "@mui/material"
 import { DrawerOpenContext } from "./layout/Drawer"
-import { CurrentChatIDContext } from "./messaging/CurrentChatID"
+import {
+  CurrentChatIDContext,
+  CurrentChatMessagesContext,
+  CurrentChatContext,
+  type Chat,
+  type Message,
+} from "../features/chats"
 import { lightTheme, mainTheme } from "./styles/Theme"
-import { Chat, Message } from "../datatypes/Chat"
 import { CurrentOrgProvider } from "./login/CurrentOrg"
-import { CurrentChatMessagesContext } from "./messaging/CurrentChatMessages"
-import { CurrentChatContext } from "./messaging/CurrentChat"
 import { Provider } from "react-redux"
 import { store } from "../store/store"
 import { AlertInterface } from "../datatypes/Alert"
