@@ -60,7 +60,7 @@ export function MarketSearchArea(props: { status?: boolean }) {
         height: "100%",
         flexDirection: "column",
         display: "flex",
-        padding: theme.spacing(2),
+        padding: theme.spacing(1),
         borderColor: theme.palette.outline.main,
       }}
     >
