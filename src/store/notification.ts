@@ -5,7 +5,12 @@ import { unwrapResponse } from "./api-utils"
 
 const baseUrl = `${BACKEND_URL}/api/notification`
 
-// Define a service using a base URL and expected endpoints
+/**
+ * Notification API. Uses tag "Notifications" so that when the service worker
+ * sends PUSH_NOTIFICATION_RECEIVED or SYNC_NOTIFICATIONS, App.tsx can call
+ * notificationApi.util.invalidateTags(["Notifications"]) and RTK Query will
+ * refetch any currently subscribed getNotifications queries (e.g. NotificationsButton).
+ */
 export const notificationApi = serviceApi.injectEndpoints({
   overrideExisting: false,
   endpoints: (builder) => ({

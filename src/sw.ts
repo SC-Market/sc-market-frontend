@@ -297,11 +297,25 @@ self.addEventListener("push", (event: PushEvent) => {
     notificationOptions.timestamp = notificationData.timestamp
   }
 
+  // Notify all window clients so the app can invalidate RTK Query cache and refetch
+  // notifications. App.tsx listens for PUSH_NOTIFICATION_RECEIVED and dispatches
+  // notificationApi.util.invalidateTags(["Notifications"]) so subscribed
+  // useGetNotificationsQuery hooks refetch.
+  const notifyClients = self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((clientList) => {
+    const message = { type: "PUSH_NOTIFICATION_RECEIVED" as const, timestamp: Date.now() }
+    clientList.forEach((client) => {
+      try {
+        client.postMessage(message)
+      } catch {
+        // Ignore if client is closed
+      }
+    })
+  })
+
   event.waitUntil(
-    self.registration.showNotification(
-      notificationData.title,
-      notificationOptions,
-    ),
+    self.registration
+      .showNotification(notificationData.title, notificationOptions)
+      .then(() => notifyClients),
   )
 })
 
