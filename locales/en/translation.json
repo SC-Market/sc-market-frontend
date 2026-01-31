@@ -137,13 +137,15 @@
     "selectOrderType": "Select order type",
     "orderTypeHelp": "Select the type of order you want to create (required)",
     "orderDescriptionInput": "Enter order description",
-    "orderDescriptionHelp": "Provide a detailed description of what you need",
+    "contract": {
+      "orderDescriptionHelp": "Provide a detailed description of what you need (required)",
+      "paymentTypeHelp": "Select how you want to handle payment for this contract (required)"
+    },
     "collateralInput": "Enter collateral amount",
     "collateralHelp": "Enter the collateral amount in aUEC (optional)",
     "offerInput": "Enter offer amount",
     "offerHelp": "Enter your offer amount in aUEC (required)",
     "selectPaymentType": "Select payment type",
-    "paymentTypeHelp": "Select how you want to handle payment for this service (required)",
     "submitContractOffer": "Submit contract offer",
     "submitContractHelp": "Submit your contract offer with the specified terms and conditions",
     "selectFleetFile": "Select fleet file to import",
@@ -173,6 +175,10 @@
     "selectServiceHelp": "Choose a service to base this order on, or select no service",
     "rushOrderToggle": "Toggle rush order",
     "rushOrderHelp": "Check this box if you need this order completed urgently",
+    "order": {
+      "orderDescriptionHelp": "Provide a detailed description of what you need (required)",
+      "paymentTypeHelp": "Select how you want to handle payment for this order (required)"
+    },
     "submitOrder": "Submit order",
     "submitOrderHelp": "Submit your order with the specified details and pricing",
     "serviceNameInput": "Enter service name",
@@ -182,6 +188,10 @@
     "serviceDescriptionInput": "Enter service description",
     "serviceDescriptionHelp": "Provide a detailed description of your service",
     "orderTypeOptionalHelp": "Select the type of order (optional)",
+    "service": {
+      "orderDescriptionHelp": "Provide a detailed description of what you need",
+      "paymentTypeHelp": "Select how you want to handle payment for this service (required)"
+    },
     "submitService": "Submit service",
     "submitServiceHelp": "Submit your service with the specified details and pricing"
   },
@@ -635,15 +645,23 @@
   "settings": {
     "languages": {
       "label": "Supported Languages",
-      "helperText": "Select the languages you can communicate in",
+      "field": {
+        "helperText": "Select the languages you can communicate in"
+      },
       "placeholder": "Select languages...",
       "saveSuccess": "Languages updated successfully",
       "saveError": "Failed to update languages",
       "title": "Supported Languages",
       "noPermission": "You do not have permission to manage organization languages",
-      "description": "Select the languages you can communicate in.",
+      "org": {
+        "description": "Select the languages your organization can communicate in.",
+        "helperText": "Select the languages your organization can communicate in"
+      },
       "loadError": "Failed to load languages",
-      "save": "Save Languages"
+      "save": "Save Languages",
+      "section": {
+        "description": "Select the languages you can communicate in."
+      }
     },
     "email": {
       "addEmailDialog": {
@@ -892,7 +910,9 @@
   "buyorder": {
     "submitted": "",
     "create_buy_order": "",
-    "negotiable": "Negotiable",
+    "field": {
+      "negotiable": "Negotiable (no fixed price)"
+    },
     "suggested_price_optional": "Suggested price (optional)",
     "price_per_unit": "",
     "optional": "Optional",
@@ -901,6 +921,9 @@
     "expiration": "",
     "submit": "",
     "negotiableSuggested": "Negotiable (~{{price}} aUEC)",
+    "status": {
+      "negotiable": "Negotiable"
+    },
     "agreedPriceRequired": "Please enter an agreed price per unit (at least 1 aUEC).",
     "agreePriceTitle": "Agreed price per unit",
     "agreePriceDescription": "This buy order is negotiable. Enter the agreed price per unit in aUEC to fulfill."
@@ -1104,19 +1127,25 @@
   },
   "admin": {
     "alerts": {
-      "invalidUrl": "Please enter a valid URL (http:// or https://)",
+      "validation": {
+        "invalidUrl": "Please enter a valid URL (http:// or https://)"
+      },
       "contractorRequired": "Please select a contractor",
       "created": "Alert created successfully",
       "updated": "Alert updated successfully",
       "deleted": "Alert deleted successfully",
-      "title": "Title",
+      "field": {
+        "title": "Title",
+        "link": "Link",
+        "linkOptional": "Link (Optional)"
+      },
       "targetType": "Target Type",
-      "link": "Link (Optional)",
       "openLink": "Open Link",
       "noLink": "No Link",
       "createdAt": "Created",
       "active": "Active",
       "actions": "Actions",
+      "pageTitle": "Admin Alerts",
       "targetTypeFilter": "Target Type",
       "activeFilter": "Active Status",
       "createAlert": "Create Alert",
@@ -1144,21 +1173,29 @@
       "deleted": "Attribute definition deleted successfully",
       "attributeName": "Attribute Name",
       "displayName": "Display Name",
-      "type": "Attribute Type",
+      "field": {
+        "type": "Type",
+        "applicableTypes": "Applicable Types",
+        "order": "Order",
+        "attributeType": "Attribute Type"
+      },
       "allowedValues": "Allowed Values",
       "anyValue": "Any value",
-      "applicableTypes": "Applicable Item Types",
       "allTypes": "All types",
-      "order": "Display Order",
       "actions": "Actions",
-      "create": "Create",
+      "button": {
+        "create": "Create Definition"
+      },
       "createDefinition": "Create Attribute Definition",
       "attributeNameHelp": "Internal name (e.g., 'size', 'class')",
       "displayNameHelp": "User-facing name (e.g., 'Component Size', 'Component Class')",
       "allowedValuesHelp": "Comma-separated values (leave empty for any value)",
+      "applicableTypes": "Applicable Item Types",
       "applicableTypesHelp": "Leave empty for all types, or specify types (e.g., 'Quantum Drive', 'Cooler')",
+      "order": "Display Order",
       "orderHelp": "Lower numbers appear first",
       "creating": "Creating...",
+      "create": "Create",
       "editDefinition": "Edit Attribute Definition",
       "attributeNameReadonly": "Attribute name cannot be changed",
       "updating": "Updating...",
@@ -1221,10 +1258,22 @@
       "retry": "Retry"
     },
     "moderation": {
-      "actions": "Actions",
-      "handleReport": "Handle Report",
+      "column": {
+        "actions": "Actions"
+      },
+      "button": {
+        "handle": "Handle"
+      },
       "title": "Moderation Dashboard",
-      "status": "Status",
+      "filter": {
+        "status": "Status Filter"
+      },
+      "dialog": {
+        "handleReport": "Handle Report"
+      },
+      "field": {
+        "status": "Status"
+      },
       "notes": "Notes",
       "notesPlaceholder": "Enter moderation notes or action taken...",
       "notesHelperText": "Optional notes about the moderation action (max 2000 characters)",
@@ -1232,7 +1281,9 @@
       "updateReport": "Update Report"
     },
     "notificationTest": {
-      "fillAllFields": "Please fill all fields",
+      "validation": {
+        "fillAllFields": "Please fill all fields"
+      },
       "success": "Notification test completed successfully",
       "error": "Failed to test notification",
       "title": "Test Notifications",

@@ -70,6 +70,8 @@ const injectedRtkApi = api
             ? { applicable_item_types: args.applicable_item_types }
             : undefined,
         }),
+        transformResponse: (response: { data: { definitions: AttributeDefinition[] } }) =>
+          response.data,
         providesTags: ["AttributeDefinitions"],
       }),
 
@@ -82,6 +84,8 @@ const injectedRtkApi = api
           method: "POST",
           body: payload,
         }),
+        transformResponse: (response: { data: { definition: AttributeDefinition } }) =>
+          response.data,
         invalidatesTags: ["AttributeDefinitions"],
       }),
 
@@ -94,6 +98,8 @@ const injectedRtkApi = api
           method: "PUT",
           body: data,
         }),
+        transformResponse: (response: { data: { definition: AttributeDefinition } }) =>
+          response.data,
         invalidatesTags: ["AttributeDefinitions"],
       }),
 
@@ -106,6 +112,8 @@ const injectedRtkApi = api
           method: "DELETE",
           params: cascade ? { cascade: "true" } : undefined,
         }),
+        transformResponse: (response: { data: { message: string; cascade: boolean } }) =>
+          response.data,
         invalidatesTags: ["AttributeDefinitions", "GameItemAttributes"],
       }),
 
@@ -117,6 +125,8 @@ const injectedRtkApi = api
         query: (gameItemId) => ({
           url: `/api/v1/game-items/${gameItemId}/attributes`,
         }),
+        transformResponse: (response: { data: { attributes: GameItemAttribute[] } }) =>
+          response.data,
         providesTags: (result, error, gameItemId) => [
           { type: "GameItemAttributes", id: gameItemId },
         ],
@@ -131,6 +141,8 @@ const injectedRtkApi = api
           method: "PUT",
           body: data,
         }),
+        transformResponse: (response: { data: { attribute: GameItemAttribute } }) =>
+          response.data,
         invalidatesTags: (result, error, { gameItemId }) => [
           { type: "GameItemAttributes", id: gameItemId },
         ],
@@ -144,6 +156,8 @@ const injectedRtkApi = api
           url: `/api/v1/game-items/${gameItemId}/attributes/${encodeURIComponent(attributeName)}`,
           method: "DELETE",
         }),
+        transformResponse: (response: { data: { message: string } }) =>
+          response.data,
         invalidatesTags: (result, error, { gameItemId }) => [
           { type: "GameItemAttributes", id: gameItemId },
         ],
@@ -155,6 +169,8 @@ const injectedRtkApi = api
           url: `/api/v1/attributes/import/${gameItemId}`,
           method: "POST",
         }),
+        transformResponse: (response: { data: ImportResult }) =>
+          response.data,
         invalidatesTags: (result, error, gameItemId) => [
           { type: "GameItemAttributes", id: gameItemId },
         ],
