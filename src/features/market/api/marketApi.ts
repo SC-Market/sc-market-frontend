@@ -226,8 +226,11 @@ export const marketApi = serviceApi.injectEndpoints({
       ],
     }),
 
-    getBuyOrderListings: builder.query<MarketAggregate[], void>({
-      query: () => "/api/market/aggregates/buyorders",
+    getBuyOrderListings: builder.query<MarketAggregate[], Partial<MarketSearchParams> | void>({
+      query: (params) => ({
+        url: "/api/market/aggregates/buyorders",
+        params: params || {},
+      }),
       transformResponse: (response: unknown) => response as MarketAggregate[],
       providesTags: ["BuyOrderListings"],
     }),

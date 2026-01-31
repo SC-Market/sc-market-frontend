@@ -646,6 +646,30 @@ const router = createBrowserRouter([
                   ).AdminNotificationTest,
                 }),
               },
+              {
+                path: "/admin/attribute-definitions",
+                lazy: async () => ({
+                  Component: (
+                    await import("./pages/admin/AdminAttributeDefinitions")
+                  ).AdminAttributeDefinitions,
+                }),
+              },
+              {
+                path: "/admin/game-item-attributes",
+                lazy: async () => ({
+                  Component: (
+                    await import("./pages/admin/AdminGameItemAttributes")
+                  ).AdminGameItemAttributes,
+                }),
+              },
+              {
+                path: "/admin/import-monitoring",
+                lazy: async () => ({
+                  Component: (
+                    await import("./pages/admin/AdminImportMonitoring")
+                  ).AdminImportMonitoring,
+                }),
+              },
             ],
           },
           {

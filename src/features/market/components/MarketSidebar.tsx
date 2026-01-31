@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  Drawer,
   Grid,
   IconButton,
   InputAdornment,
@@ -15,18 +14,19 @@ import SearchIcon from "@mui/icons-material/Search"
 import React from "react"
 import { useTranslation } from "react-i18next"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
-import { sidebarDrawerWidth, useDrawerOpen } from "../../../hooks/layout/Drawer"
-import { marketDrawerWidth, useMarketSidebar } from ".."
+import { useDrawerOpen } from "../../../hooks/layout/Drawer"
+import { useMarketSidebar } from ".."
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import { SearchRounded } from "@mui/icons-material"
 import { SelectGameCategoryOption } from "../../../components/select/SelectGameItem"
-import CloseIcon from "@mui/icons-material/CloseRounded"
-import MenuIcon from "@mui/icons-material/MenuRounded"
 import FilterListIcon from "@mui/icons-material/FilterList"
 import { LanguageFilter } from "../../../components/search/LanguageFilter"
 import { BottomSheet } from "../../../components/mobile/BottomSheet"
 import { useMarketFilters } from "../hooks/useMarketFilters"
 import type { SaleTypeSelect } from "../domain/types"
+import { AttributeFilterSection } from "../../../components/filters/AttributeFilterSection"
+import { Accordion, AccordionSummary, AccordionDetails } from "@mui/material"
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
 
 export function MarketSearchArea(props: { status?: boolean }) {
   const theme: ExtendedTheme = useTheme()
@@ -50,6 +50,9 @@ export function MarketSearchArea(props: { status?: boolean }) {
     setStatuses,
     languageCodes,
     setLanguageCodes,
+    attributes,
+    setAttributes,
+    availableAttributes,
     applyFilters,
   } = useMarketFilters()
 
@@ -271,6 +274,59 @@ export function MarketSearchArea(props: { status?: boolean }) {
             }}
           />
         </Grid>
+
+        {/* Attribute Filters Section */}
+        {availableAttributes.length > 0 && (
+          <Grid item xs={12}>
+            <Accordion
+              defaultExpanded
+              sx={{
+                boxShadow: "none",
+                "&:before": {
+                  display: "none",
+                },
+                backgroundColor: "transparent",
+              }}
+            >
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                sx={{
+                  padding: 0,
+                  minHeight: "auto",
+                  "& .MuiAccordionSummary-content": {
+                    margin: theme.spacing(1, 0),
+                  },
+                }}
+              >
+                <Typography variant={"subtitle2"} fontWeight={"bold"}>
+                  {t("MarketSearchArea.itemAttributes", "Item Attributes")}
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails sx={{ padding: theme.spacing(1, 0) }}>
+                <Box>
+                  {availableAttributes
+                    .sort((a, b) => a.display_order - b.display_order)
+                    .map((attr) => (
+                      <AttributeFilterSection
+                        key={attr.attribute_name}
+                        attributeName={attr.attribute_name}
+                        displayName={attr.display_name}
+                        attributeType={attr.attribute_type}
+                        allowedValues={attr.allowed_values}
+                        selectedValues={attributes[attr.attribute_name] || []}
+                        onChange={(values) =>
+                          setAttributes({
+                            ...attributes,
+                            [attr.attribute_name]: values,
+                          })
+                        }
+                      />
+                    ))}
+                </Box>
+              </AccordionDetails>
+            </Accordion>
+          </Grid>
+        )}
       </Grid>
     </Box>
   )
@@ -285,6 +341,7 @@ export function MarketSidebar(props: { status?: boolean }) {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const { t } = useTranslation()
 
+  // Mobile: Use bottom sheet
   if (isMobile) {
     return (
       <BottomSheet
@@ -293,111 +350,51 @@ export function MarketSidebar(props: { status?: boolean }) {
         title={t("market.filters", "Filters")}
         maxHeight="90vh"
       >
-        <MarketSearchArea status={status} />
+        <Box sx={{ overflowY: "auto", overflowX: "hidden", pb: 2 }}>
+          <MarketSearchArea status={status} />
+        </Box>
       </BottomSheet>
     )
   }
 
-  return (
-    <Drawer
-      variant="permanent"
-      open
-      sx={{
-        zIndex: theme.zIndex.drawer - 3,
-        width: open ? marketDrawerWidth : 0,
-        transition: theme.transitions.create(["width", "margin"], {
-          easing: theme.transitions.easing.sharp,
-          duration: theme.transitions.duration.enteringScreen,
-        }),
-        "& .MuiDrawer-paper": {
-          width: open ? marketDrawerWidth : 0,
-          boxSizing: "border-box",
-          overflow: "scroll",
-          left: drawerOpen ? sidebarDrawerWidth : 0,
-          transition: theme.transitions.create(
-            ["width", "borderRight", "borderColor"],
-            {
-              easing: theme.transitions.easing.easeOut,
-              duration: "0.3s",
-            },
-          ),
-          borderRight: open ? 1 : 0,
-          borderColor: open ? theme.palette.outline.main : "transparent",
-        },
-        position: "relative",
-        whiteSpace: "nowrap",
-        background: "transparent",
-        overflow: "scroll",
-        borderRight: open ? 1 : 0,
-        borderColor: open ? theme.palette.outline.main : "transparent",
-      }}
-      container={
-        window !== undefined
-          ? () => window.document.getElementById("rootarea")
-          : undefined
-      }
-    >
-      <Box
-        sx={{
-          ...theme.mixins.toolbar,
-          position: "relative",
-          width: "100%",
-        }}
-      />
-
-      <MarketSearchArea status={status} />
-    </Drawer>
-  )
+  // Desktop: Render as persistent sidebar content (no drawer)
+  return <MarketSearchArea status={status} />
 }
 
 export function MarketSideBarToggleButton() {
   const [open, setOpen] = useMarketSidebar()
   const theme = useTheme<ExtendedTheme>()
-  const [drawerOpen] = useDrawerOpen()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const { t } = useTranslation()
 
-  if (isMobile) {
-    return (
-      <Button
-        variant="outlined"
-        color="secondary"
-        startIcon={<FilterListIcon />}
-        aria-label={t("market.toggleSidebar")}
-        onClick={() => setOpen((value) => !value)}
-        sx={{
-          position: "fixed",
-          bottom: { xs: 80, sm: 24 },
-          right: 24,
-          zIndex: theme.zIndex.speedDial,
-          borderRadius: 2,
-          textTransform: "none",
-          boxShadow: theme.shadows[4],
-          backgroundColor: theme.palette.background.paper,
-          "&:hover": {
-            backgroundColor: theme.palette.background.paper,
-            boxShadow: theme.shadows[8],
-          },
-        }}
-      >
-        {t("market.filters", "Filters")}
-      </Button>
-    )
+  // Only show toggle button on mobile
+  if (!isMobile) {
+    return null
   }
 
   return (
-    <IconButton
+    <Button
+      variant="outlined"
       color="secondary"
+      startIcon={<FilterListIcon />}
       aria-label={t("market.toggleSidebar")}
-      sx={{
-        zIndex: theme.zIndex.drawer - 2,
-        position: "absolute",
-        left: (drawerOpen ? sidebarDrawerWidth : 0) + 24,
-        top: 64 + 24,
-      }}
       onClick={() => setOpen((value) => !value)}
+      sx={{
+        position: "fixed",
+        bottom: { xs: 80, sm: 24 },
+        right: 24,
+        zIndex: theme.zIndex.speedDial,
+        borderRadius: 2,
+        textTransform: "none",
+        boxShadow: theme.shadows[4],
+        backgroundColor: theme.palette.background.paper,
+        "&:hover": {
+          backgroundColor: theme.palette.background.paper,
+          boxShadow: theme.shadows[8],
+        },
+      }}
     >
-      {open ? <CloseIcon /> : <MenuIcon />}
-    </IconButton>
+      {t("market.filters", "Filters")}
+    </Button>
   )
 }

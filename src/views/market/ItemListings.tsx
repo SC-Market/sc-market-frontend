@@ -822,7 +822,26 @@ export function BulkListingsRefactor(props: {
 }
 
 export function BuyOrders() {
-  const { data: listings, isLoading } = useGetBuyOrderListingsQuery()
+  const [searchState] = useMarketSearch()
+  
+  // Convert attributes from URL format to API format
+  const searchParams = useMemo(() => {
+    const params: any = {}
+    
+    // Convert attributes to JSON string for API
+    if (searchState.attributes && Object.keys(searchState.attributes).length > 0) {
+      const attributeFilters = Object.entries(searchState.attributes).map(([name, values]) => ({
+        name,
+        values,
+        operator: 'in' as const,
+      }))
+      params.attributes = JSON.stringify(attributeFilters)
+    }
+    
+    return params
+  }, [searchState])
+  
+  const { data: listings, isLoading } = useGetBuyOrderListingsQuery(searchParams)
 
   return (
     <DisplayBuyOrderListings
