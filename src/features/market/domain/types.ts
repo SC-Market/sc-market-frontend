@@ -81,6 +81,7 @@ export interface BaseMarketListingSearchResult {
     metadata: unknown
   } | null
   languages?: Array<{ code: string; name: string }>
+  attributes?: Record<string, string> | null
 }
 
 export type ExtendedUniqueSearchResult = BaseMarketListingSearchResult & {
@@ -201,6 +202,13 @@ export type MarketSearchParams = Partial<{
   page_size: string | number
   listing_type: string | null
   language_codes: string
+  component_size: string | string[]
+  component_grade: string | string[]
+  component_class: string | string[]
+  manufacturer: string | string[]
+  component_type: string | string[]
+  armor_class: string | string[]
+  color: string | string[]
 }>
 
 export interface MarketSearchResult {
@@ -229,6 +237,24 @@ export interface MarketSearchState {
   page_size?: number
   listing_type?: string
   language_codes?: string[]
+  component_size?: number[]
+  component_grade?: string[]
+  component_class?: string[]
+  manufacturer?: string[]
+  component_type?: string[]
+  armor_class?: string[]
+  color?: string[]
 }
 
 export type SaleTypeSelect = SaleType | "any"
+
+/** Response from GET /api/market/filter-options */
+export interface ComponentFilterOptions {
+  component_size: string[]
+  component_grade: string[]
+  component_class: string[]
+  manufacturer: string[]
+  component_type: string[]
+  armor_class: string[]
+  color: string[]
+}

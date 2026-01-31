@@ -16,6 +16,7 @@ import {
   type MarketStats,
   type MarketBidApi,
   type CreateBidRequest,
+  type ComponentFilterOptions,
 } from "../domain/types"
 import { unwrapResponse } from "../../../store/api-utils"
 import { createOptimisticUpdate } from "../../../util/optimisticUpdates"
@@ -212,6 +213,28 @@ export const marketApi = serviceApi.injectEndpoints({
       query: () => "/api/market/categories",
       transformResponse: unwrapResponse,
       providesTags: ["MarketCategories"],
+    }),
+
+    getComponentFilterOptions: builder.query<ComponentFilterOptions, void>({
+      query: () => "/api/market/filter-options",
+      transformResponse: unwrapResponse,
+      providesTags: ["ComponentFilters"],
+    }),
+
+    getItemCustomAttributes: builder.query<Record<string, string>, string>({
+      query: (gameItemId) => `/api/market/game-item/${gameItemId}/attributes`,
+      transformResponse: unwrapResponse,
+      providesTags: (result, error, gameItemId) => [
+        { type: "GameItemAttributes" as const, id: gameItemId },
+      ],
+    }),
+
+    getItemAttributes: builder.query<Record<string, string>, string>({
+      query: (gameItemId) => `/api/market/game-item/${gameItemId}/attributes`,
+      transformResponse: unwrapResponse,
+      providesTags: (result, error, gameItemId) => [
+        { type: "GameItemAttributes" as const, id: gameItemId },
+      ],
     }),
 
     getMarketItemsByCategory: builder.query<
@@ -721,6 +744,9 @@ export const {
   useGetMarketListingQuery,
   useGetMyListingsQuery,
   useGetMarketCategoriesQuery,
+  useGetComponentFilterOptionsQuery,
+  useGetItemCustomAttributesQuery,
+  useGetItemAttributesQuery,
   useGetMarketItemsByCategoryQuery,
   useGetAggregateByIdQuery,
   useGetMultipleByIdQuery,

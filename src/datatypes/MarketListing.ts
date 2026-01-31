@@ -394,6 +394,14 @@ export interface GameItem {
   type: string
   name: string
   id: string
+  component_size?: number
+  component_grade?: string
+  component_class?: string
+  manufacturer?: string
+  component_type?: string
+  armor_class?: string
+  color?: string
+  attributes?: Record<string, string>
 }
 
 export interface GameItemDescription {
