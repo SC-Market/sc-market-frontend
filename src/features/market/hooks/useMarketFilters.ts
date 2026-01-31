@@ -18,7 +18,7 @@ export function useMarketFilters() {
   }, [searchState])
 
   const updateDraft = useCallback((partial: Partial<MarketSearchState>) => {
-    setDraft((prev) => ({ ...prev, ...partial }))
+    setDraft((prev: MarketSearchState) => ({ ...prev, ...partial }))
   }, [])
 
   const applyFilters = useCallback(() => {
@@ -48,5 +48,19 @@ export function useMarketFilters() {
     setStatuses: (v: string) => updateDraft({ statuses: v }),
     languageCodes: draft.language_codes ?? [],
     setLanguageCodes: (v: string[]) => updateDraft({ language_codes: v }),
+    componentSize: draft.component_size ?? [],
+    setComponentSize: (v: number[]) => updateDraft({ component_size: v }),
+    componentGrade: draft.component_grade ?? [],
+    setComponentGrade: (v: string[]) => updateDraft({ component_grade: v }),
+    componentClass: draft.component_class ?? [],
+    setComponentClass: (v: string[]) => updateDraft({ component_class: v }),
+    manufacturer: draft.manufacturer ?? [],
+    setManufacturer: (v: string[]) => updateDraft({ manufacturer: v }),
+    componentType: draft.component_type ?? [],
+    setComponentType: (v: string[]) => updateDraft({ component_type: v }),
+    armorClass: draft.armor_class ?? [],
+    setArmorClass: (v: string[]) => updateDraft({ armor_class: v }),
+    color: draft.color ?? [],
+    setColor: (v: string[]) => updateDraft({ color: v }),
   }
 }

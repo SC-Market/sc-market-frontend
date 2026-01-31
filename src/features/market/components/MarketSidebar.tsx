@@ -27,6 +27,8 @@ import { LanguageFilter } from "../../../components/search/LanguageFilter"
 import { BottomSheet } from "../../../components/mobile/BottomSheet"
 import { useMarketFilters } from "../hooks/useMarketFilters"
 import type { SaleTypeSelect } from "../domain/types"
+import { ComponentFilters } from "./ComponentFilters"
+import { useGetComponentFilterOptionsQuery } from "../api/marketApi"
 
 export function MarketSearchArea(props: { status?: boolean }) {
   const theme: ExtendedTheme = useTheme()
@@ -51,7 +53,70 @@ export function MarketSearchArea(props: { status?: boolean }) {
     languageCodes,
     setLanguageCodes,
     applyFilters,
+    componentSize,
+    setComponentSize,
+    componentGrade,
+    setComponentGrade,
+    componentClass,
+    setComponentClass,
+    manufacturer,
+    setManufacturer,
+    componentType,
+    setComponentType,
+    armorClass,
+    setArmorClass,
+    color,
+    setColor,
   } = useMarketFilters()
+
+  // Fetch available filter options
+  const { data: filterOptions } = useGetComponentFilterOptionsQuery()
+
+  // Transform filter options to match ComponentFilters expected format
+  const availableOptions = {
+    sizes: filterOptions?.component_size?.map((s) => parseInt(s, 10)) || [],
+    grades: filterOptions?.component_grade || [],
+    classes: filterOptions?.component_class || [],
+    manufacturers: filterOptions?.manufacturer || [],
+    types: filterOptions?.component_type || [],
+    armorClasses: filterOptions?.armor_class || [],
+    colors: filterOptions?.color || [],
+  }
+
+  // Handler for ComponentFilters onChange
+  const handleComponentFiltersChange = (
+    filters: Partial<{
+      component_size?: number[]
+      component_grade?: string[]
+      component_class?: string[]
+      manufacturer?: string[]
+      component_type?: string[]
+      armor_class?: string[]
+      color?: string[]
+    }>,
+  ) => {
+    if (filters.component_size !== undefined) {
+      setComponentSize(filters.component_size)
+    }
+    if (filters.component_grade !== undefined) {
+      setComponentGrade(filters.component_grade)
+    }
+    if (filters.component_class !== undefined) {
+      setComponentClass(filters.component_class)
+    }
+    if (filters.manufacturer !== undefined) {
+      setManufacturer(filters.manufacturer)
+    }
+    if (filters.component_type !== undefined) {
+      setComponentType(filters.component_type)
+    }
+    if (filters.armor_class !== undefined) {
+      setArmorClass(filters.armor_class)
+    }
+    if (filters.color !== undefined) {
+      setColor(filters.color)
+    }
+  }
 
   return (
     <Box
@@ -220,6 +285,24 @@ export function MarketSearchArea(props: { status?: boolean }) {
             TextfieldProps={{
               size: "small",
             }}
+          />
+        </Grid>
+
+        {/* Component Filters */}
+        <Grid item xs={12}>
+          <ComponentFilters
+            filters={{
+              component_size: componentSize,
+              component_grade: componentGrade,
+              component_class: componentClass,
+              manufacturer: manufacturer,
+              component_type: componentType,
+              armor_class: armorClass,
+              color: color,
+            }}
+            onChange={handleComponentFiltersChange}
+            availableOptions={availableOptions}
+            itemType={itemType}
           />
         </Grid>
 

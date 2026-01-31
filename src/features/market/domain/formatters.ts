@@ -38,6 +38,49 @@ export function paramsToSearchState(
           .map((s) => s.trim())
           .filter(Boolean)
       : undefined,
+    // Component attribute filters - parse comma-separated strings to arrays
+    component_size: getParam("component_size")
+      ? (getParam("component_size") ?? "")
+          .split(",")
+          .map((s) => parseInt(s.trim(), 10))
+          .filter((n) => !isNaN(n))
+      : undefined,
+    component_grade: getParam("component_grade")
+      ? (getParam("component_grade") ?? "")
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean)
+      : undefined,
+    component_class: getParam("component_class")
+      ? (getParam("component_class") ?? "")
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean)
+      : undefined,
+    manufacturer: getParam("manufacturer")
+      ? (getParam("manufacturer") ?? "")
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean)
+      : undefined,
+    component_type: getParam("component_type")
+      ? (getParam("component_type") ?? "")
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean)
+      : undefined,
+    armor_class: getParam("armor_class")
+      ? (getParam("armor_class") ?? "")
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean)
+      : undefined,
+    color: getParam("color")
+      ? (getParam("color") ?? "")
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean)
+      : undefined,
   } as MarketSearchState
 }
 
@@ -75,8 +118,85 @@ export function searchStateToParams(
     ...(state.language_codes && state.language_codes.length > 0
       ? { language_codes: state.language_codes.join(",") }
       : {}),
+    // Component attribute filters - serialize arrays as comma-separated strings
+    ...(state.component_size && state.component_size.length > 0
+      ? { component_size: state.component_size.map(String).join(",") }
+      : {}),
+    ...(state.component_grade && state.component_grade.length > 0
+      ? { component_grade: state.component_grade.join(",") }
+      : {}),
+    ...(state.component_class && state.component_class.length > 0
+      ? { component_class: state.component_class.join(",") }
+      : {}),
+    ...(state.manufacturer && state.manufacturer.length > 0
+      ? { manufacturer: state.manufacturer.join(",") }
+      : {}),
+    ...(state.component_type && state.component_type.length > 0
+      ? { component_type: state.component_type.join(",") }
+      : {}),
+    ...(state.armor_class && state.armor_class.length > 0
+      ? { armor_class: state.armor_class.join(",") }
+      : {}),
+    ...(state.color && state.color.length > 0
+      ? { color: state.color.join(",") }
+      : {}),
   }
   return Object.fromEntries(
     Object.entries(obj).filter(([, v]) => v !== undefined && v !== ""),
   )
+}
+
+/**
+ * Convert MarketSearchState to API query parameters.
+ * Serializes array fields properly for the backend API.
+ * Used when calling searchMarketListings endpoint.
+ */
+export function searchStateToApiParams(
+  state: MarketSearchState,
+): Record<string, string | string[] | number | undefined> {
+  return {
+    ...(state.query ? { query: state.query } : {}),
+    ...(state.sale_type && state.sale_type !== "any"
+      ? { sale_type: state.sale_type }
+      : {}),
+    ...(state.item_type && state.item_type !== "any"
+      ? { item_type: state.item_type }
+      : {}),
+    ...(state.quantityAvailable !== undefined
+      ? { quantityAvailable: state.quantityAvailable }
+      : {}),
+    ...(state.minCost !== undefined ? { minCost: state.minCost } : {}),
+    ...(state.maxCost !== undefined && state.maxCost !== null
+      ? { maxCost: state.maxCost }
+      : {}),
+    ...(state.sort ? { sort: state.sort } : {}),
+    ...(state.statuses ? { statuses: state.statuses } : {}),
+    ...(state.index !== undefined ? { index: state.index } : {}),
+    ...(state.page_size !== undefined ? { page_size: state.page_size } : {}),
+    ...(state.language_codes && state.language_codes.length > 0
+      ? { language_codes: state.language_codes.join(",") }
+      : {}),
+    // Component attribute filters - serialize arrays as comma-separated strings
+    ...(state.component_size && state.component_size.length > 0
+      ? { component_size: state.component_size.map(String).join(",") }
+      : {}),
+    ...(state.component_grade && state.component_grade.length > 0
+      ? { component_grade: state.component_grade.join(",") }
+      : {}),
+    ...(state.component_class && state.component_class.length > 0
+      ? { component_class: state.component_class.join(",") }
+      : {}),
+    ...(state.manufacturer && state.manufacturer.length > 0
+      ? { manufacturer: state.manufacturer.join(",") }
+      : {}),
+    ...(state.component_type && state.component_type.length > 0
+      ? { component_type: state.component_type.join(",") }
+      : {}),
+    ...(state.armor_class && state.armor_class.length > 0
+      ? { armor_class: state.armor_class.join(",") }
+      : {}),
+    ...(state.color && state.color.length > 0
+      ? { color: state.color.join(",") }
+      : {}),
+  }
 }

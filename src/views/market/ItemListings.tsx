@@ -68,6 +68,7 @@ import {
   marketApi,
   useMarketSearch,
   useMarketSidebarExp,
+  searchStateToApiParams,
 } from "../../features/market"
 import { Link, useNavigate } from "react-router-dom"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
@@ -640,11 +641,7 @@ export function ItemListings(props: {
       rating: 0,
       contractor_seller: CURRENT_CUSTOM_ORG || org,
       user_seller: user,
-      ...searchState,
-      language_codes:
-        searchState.language_codes && searchState.language_codes.length > 0
-          ? searchState.language_codes.join(",")
-          : undefined,
+      ...searchStateToApiParams(searchState),
       index: page,
       page_size: perPage,
       listing_type: "not-aggregate",
@@ -747,11 +744,7 @@ export function BulkListingsRefactor(props: {
       rating: 0,
       contractor_seller: CURRENT_CUSTOM_ORG || org,
       user_seller: user,
-      ...searchState,
-      language_codes:
-        searchState.language_codes && searchState.language_codes.length > 0
-          ? searchState.language_codes.join(",")
-          : undefined,
+      ...searchStateToApiParams(searchState),
       index: page,
       page_size: perPage,
       listing_type: "aggregate",
@@ -843,11 +836,7 @@ export function OrgListings(props: { org: string }) {
     index: 0,
     page_size: 96,
     listing_type: undefined,
-    ...searchState,
-    language_codes:
-      searchState.language_codes && searchState.language_codes.length > 0
-        ? searchState.language_codes.join(",")
-        : undefined,
+    ...searchStateToApiParams(searchState),
   })
 
   useEffect(() => {
@@ -1005,13 +994,7 @@ export function MyItemListings(props: {
     const baseParams = {
       page_size: perPage,
       index: page * perPage, // Convert page to index
-      quantityAvailable: searchState.quantityAvailable ?? 1,
-      query: searchState.query || "",
-      sort: searchState.sort || "activity",
-      minCost: searchState.minCost || undefined,
-      maxCost: searchState.maxCost || undefined,
-      item_type: searchState.item_type || undefined,
-      sale_type: searchState.sale_type || undefined,
+      ...searchStateToApiParams(searchState),
     }
 
     // Add status filter if provided

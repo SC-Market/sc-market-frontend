@@ -71,5 +71,7 @@ export const serviceApi = createApi({
     "EmailPreferences",
     "UserOrganizations",
     "ApiToken",
+    "ComponentFilters",
+    "GameItemAttributes",
   ],
 })

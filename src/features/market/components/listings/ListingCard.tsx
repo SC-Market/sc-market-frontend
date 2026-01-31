@@ -37,6 +37,12 @@ import {
 import { getRelativeTime } from "../../../../util/time"
 import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
 import { LongPressMenu } from "../../../../components/gestures"
+import {
+  getColorHex,
+  getContrastColor,
+  isComponentItem,
+  isArmorItem,
+} from "../../utils/attributeDisplay"
 
 export function ListingRefreshButton(props: {
   listing: ExtendedUniqueSearchResult
@@ -349,6 +355,64 @@ export const ItemListingBase = React.memo(
                   >
                     {listing.title} ({listing.item_type})
                   </Typography>
+                  
+                  {/* Component Attributes */}
+                  {listing.attributes && (isComponentItem(listing.attributes) || isArmorItem(listing.attributes)) && (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        gap: 0.5,
+                        flexWrap: "wrap",
+                        mb: 0.5,
+                      }}
+                    >
+                      {listing.attributes.component_size && (
+                        <Chip
+                          label={`Size ${listing.attributes.component_size}`}
+                          size="small"
+                          color="primary"
+                          sx={{ height: 18, fontSize: "0.65rem" }}
+                        />
+                      )}
+                      {listing.attributes.component_grade && listing.attributes.component_type !== "Ship Weapon" && (
+                        <Chip
+                          label={`Grade ${listing.attributes.component_grade}`}
+                          size="small"
+                          color="secondary"
+                          sx={{ height: 18, fontSize: "0.65rem" }}
+                        />
+                      )}
+                      {listing.attributes.component_class && (
+                        <Chip
+                          label={listing.attributes.component_class}
+                          size="small"
+                          variant="outlined"
+                          sx={{ height: 18, fontSize: "0.65rem" }}
+                        />
+                      )}
+                      {listing.attributes.armor_class && (
+                        <Chip
+                          label={`${listing.attributes.armor_class} Armor`}
+                          size="small"
+                          color="info"
+                          sx={{ height: 18, fontSize: "0.65rem" }}
+                        />
+                      )}
+                      {listing.attributes.color && (
+                        <Chip
+                          label={listing.attributes.color}
+                          size="small"
+                          sx={{
+                            height: 18,
+                            fontSize: "0.65rem",
+                            backgroundColor: getColorHex(listing.attributes.color),
+                            color: getContrastColor(listing.attributes.color),
+                          }}
+                        />
+                      )}
+                    </Box>
+                  )}
+                  
                   <Box sx={{ mb: 0 }}>
                     <Box
                       sx={{
@@ -388,6 +452,34 @@ export const ItemListingBase = React.memo(
                         <BadgeDisplay badges={badges} iconSize="0.7rem" />
                       )}
                     </Box>
+                    {listing.attributes?.manufacturer && (
+                      <Typography
+                        variant="caption"
+                        color="text.secondary"
+                        sx={{
+                          fontSize: "0.7rem",
+                          lineHeight: 1.2,
+                          display: "block",
+                          mb: 0.25,
+                        }}
+                      >
+                        {listing.attributes.manufacturer}
+                      </Typography>
+                    )}
+                    {listing.attributes?.component_type && (
+                      <Typography
+                        variant="caption"
+                        color="text.primary"
+                        sx={{
+                          fontSize: "0.7rem",
+                          lineHeight: 1.2,
+                          display: "block",
+                          mb: 0.25,
+                        }}
+                      >
+                        {listing.attributes.component_type}
+                      </Typography>
+                    )}
                     <Box
                       sx={{
                         fontSize: "0.7rem",
@@ -623,6 +715,64 @@ export const ItemListingBase = React.memo(
                       {listing.title} ({listing.item_type})
                     </span>{" "}
                   </Typography>
+                  
+                  {/* Component Attributes */}
+                  {listing.attributes && (isComponentItem(listing.attributes) || isArmorItem(listing.attributes)) && (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        gap: 0.5,
+                        flexWrap: "wrap",
+                        mb: 0.5,
+                      }}
+                    >
+                      {listing.attributes.component_size && (
+                        <Chip
+                          label={`Size ${listing.attributes.component_size}`}
+                          size="small"
+                          color="primary"
+                          sx={{ height: 20, fontSize: "0.7rem" }}
+                        />
+                      )}
+                      {listing.attributes.component_grade && listing.attributes.component_type !== "Ship Weapon" && (
+                        <Chip
+                          label={`Grade ${listing.attributes.component_grade}`}
+                          size="small"
+                          color="secondary"
+                          sx={{ height: 20, fontSize: "0.7rem" }}
+                        />
+                      )}
+                      {listing.attributes.component_class && (
+                        <Chip
+                          label={listing.attributes.component_class}
+                          size="small"
+                          variant="outlined"
+                          sx={{ height: 20, fontSize: "0.7rem" }}
+                        />
+                      )}
+                      {listing.attributes.armor_class && (
+                        <Chip
+                          label={`${listing.attributes.armor_class} Armor`}
+                          size="small"
+                          color="info"
+                          sx={{ height: 20, fontSize: "0.7rem" }}
+                        />
+                      )}
+                      {listing.attributes.color && (
+                        <Chip
+                          label={listing.attributes.color}
+                          size="small"
+                          sx={{
+                            height: 20,
+                            fontSize: "0.7rem",
+                            backgroundColor: getColorHex(listing.attributes.color),
+                            color: getContrastColor(listing.attributes.color),
+                          }}
+                        />
+                      )}
+                    </Box>
+                  )}
+                  
                   <Box sx={{ mb: 0.5 }}>
                     <Box
                       sx={{
@@ -663,6 +813,30 @@ export const ItemListingBase = React.memo(
                         />
                       )}
                     </Box>
+                    {listing.attributes?.manufacturer && (
+                      <Typography
+                        variant="subtitle2"
+                        color="text.secondary"
+                        sx={{
+                          fontSize: "0.875rem",
+                          mb: 0.25,
+                        }}
+                      >
+                        {listing.attributes.manufacturer}
+                      </Typography>
+                    )}
+                    {listing.attributes?.component_type && (
+                      <Typography
+                        variant="body2"
+                        color="text.primary"
+                        sx={{
+                          fontSize: "0.875rem",
+                          mb: 0.25,
+                        }}
+                      >
+                        {listing.attributes.component_type}
+                      </Typography>
+                    )}
                     <Box
                       sx={{
                         lineHeight: 1,

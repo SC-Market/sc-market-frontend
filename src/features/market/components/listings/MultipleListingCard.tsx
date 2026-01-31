@@ -4,6 +4,7 @@ import {
   CardActionArea,
   CardContent,
   CardMedia,
+  Chip,
   Fade,
   Grid,
   Typography,
@@ -17,6 +18,12 @@ import type { ExtendedMultipleSearchResult } from "../../domain/types"
 import { formatMarketMultipleUrl } from "../../domain/urls"
 import { useMarketSidebarExp } from "../../hooks/MarketSidebar"
 import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
+import {
+  getColorHex,
+  getContrastColor,
+  isComponentItem,
+  isArmorItem,
+} from "../../utils/attributeDisplay"
 
 export function MultipleListing(props: {
   multiple: ExtendedMultipleSearchResult
@@ -154,6 +161,89 @@ export function MultipleListingBase(props: {
                     {title} ({multiple.item_type})
                   </span>{" "}
                 </Typography>
+                
+                {/* Component Attributes */}
+                {multiple.attributes && (isComponentItem(multiple.attributes) || isArmorItem(multiple.attributes)) && (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      gap: 0.5,
+                      flexWrap: "wrap",
+                      mb: 0.5,
+                    }}
+                  >
+                    {multiple.attributes.component_size && (
+                      <Chip
+                        label={`Size ${multiple.attributes.component_size}`}
+                        size="small"
+                        color="primary"
+                        sx={{ height: 20, fontSize: "0.7rem" }}
+                      />
+                    )}
+                    {multiple.attributes.component_grade && multiple.attributes.component_type !== "Ship Weapon" && (
+                      <Chip
+                        label={`Grade ${multiple.attributes.component_grade}`}
+                        size="small"
+                        color="secondary"
+                        sx={{ height: 20, fontSize: "0.7rem" }}
+                      />
+                    )}
+                    {multiple.attributes.component_class && (
+                      <Chip
+                        label={multiple.attributes.component_class}
+                        size="small"
+                        variant="outlined"
+                        sx={{ height: 20, fontSize: "0.7rem" }}
+                      />
+                    )}
+                    {multiple.attributes.armor_class && (
+                      <Chip
+                        label={`${multiple.attributes.armor_class} Armor`}
+                        size="small"
+                        color="info"
+                        sx={{ height: 20, fontSize: "0.7rem" }}
+                      />
+                    )}
+                    {multiple.attributes.color && (
+                      <Chip
+                        label={multiple.attributes.color}
+                        size="small"
+                        sx={{
+                          height: 20,
+                          fontSize: "0.7rem",
+                          backgroundColor: getColorHex(multiple.attributes.color),
+                          color: getContrastColor(multiple.attributes.color),
+                        }}
+                      />
+                    )}
+                  </Box>
+                )}
+                
+                {multiple.attributes?.manufacturer && (
+                  <Typography
+                    variant="subtitle2"
+                    color="text.secondary"
+                    sx={{
+                      fontSize: "0.875rem",
+                      mb: 0.25,
+                    }}
+                  >
+                    {multiple.attributes.manufacturer}
+                  </Typography>
+                )}
+                {multiple.attributes?.component_type && (
+                  <Typography
+                    variant="body2"
+                    color="text.primary"
+                    sx={{
+                      fontSize: "0.875rem",
+                      mb: 0.25,
+                    }}
+                  >
+                    {multiple.attributes.component_type}
+                  </Typography>
+                )}
+                
                 <Typography
                   display={"block"}
                   color={"text.primary"}

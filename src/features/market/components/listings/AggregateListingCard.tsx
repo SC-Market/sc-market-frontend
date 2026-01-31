@@ -4,6 +4,7 @@ import {
   CardActionArea,
   CardContent,
   CardMedia,
+  Chip,
   Fade,
   Grid,
   Typography,
@@ -20,6 +21,12 @@ import type {
 } from "../../domain/types"
 import { useMarketSidebarExp } from "../../hooks/MarketSidebar"
 import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
+import {
+  getColorHex,
+  getContrastColor,
+  isComponentItem,
+  isArmorItem,
+} from "../../utils/attributeDisplay"
 
 export function AggregateListing(props: {
   aggregate: ExtendedAggregateSearchResult
@@ -156,6 +163,91 @@ export function AggregateListingBase(props: {
                 >
                   {aggregate.title} ({aggregate.item_type})
                 </Typography>
+                
+                {/* Component Attributes */}
+                {aggregate.attributes && (isComponentItem(aggregate.attributes) || isArmorItem(aggregate.attributes)) && (
+                  <Box
+                    sx={{
+                      display: "flex",
+                      gap: 0.5,
+                      flexWrap: "wrap",
+                      mb: 0.5,
+                    }}
+                  >
+                    {aggregate.attributes.component_size && (
+                      <Chip
+                        label={`Size ${aggregate.attributes.component_size}`}
+                        size="small"
+                        color="primary"
+                        sx={{ height: isMobile ? 18 : 20, fontSize: isMobile ? "0.65rem" : "0.7rem" }}
+                      />
+                    )}
+                    {aggregate.attributes.component_grade && aggregate.attributes.component_type !== "Ship Weapon" && (
+                      <Chip
+                        label={`Grade ${aggregate.attributes.component_grade}`}
+                        size="small"
+                        color="secondary"
+                        sx={{ height: isMobile ? 18 : 20, fontSize: isMobile ? "0.65rem" : "0.7rem" }}
+                      />
+                    )}
+                    {aggregate.attributes.component_class && (
+                      <Chip
+                        label={aggregate.attributes.component_class}
+                        size="small"
+                        variant="outlined"
+                        sx={{ height: isMobile ? 18 : 20, fontSize: isMobile ? "0.65rem" : "0.7rem" }}
+                      />
+                    )}
+                    {aggregate.attributes.armor_class && (
+                      <Chip
+                        label={`${aggregate.attributes.armor_class} Armor`}
+                        size="small"
+                        color="info"
+                        sx={{ height: isMobile ? 18 : 20, fontSize: isMobile ? "0.65rem" : "0.7rem" }}
+                      />
+                    )}
+                    {aggregate.attributes.color && (
+                      <Chip
+                        label={aggregate.attributes.color}
+                        size="small"
+                        sx={{
+                          height: isMobile ? 18 : 20,
+                          fontSize: isMobile ? "0.65rem" : "0.7rem",
+                          backgroundColor: getColorHex(aggregate.attributes.color),
+                          color: getContrastColor(aggregate.attributes.color),
+                        }}
+                      />
+                    )}
+                  </Box>
+                )}
+                
+                {aggregate.attributes?.manufacturer && (
+                  <Typography
+                    variant="caption"
+                    color="text.secondary"
+                    sx={{
+                      fontSize: isMobile ? "0.7rem" : "0.875rem",
+                      display: "block",
+                      mb: 0.25,
+                    }}
+                  >
+                    {aggregate.attributes.manufacturer}
+                  </Typography>
+                )}
+                {aggregate.attributes?.component_type && (
+                  <Typography
+                    variant="caption"
+                    color="text.primary"
+                    sx={{
+                      fontSize: isMobile ? "0.7rem" : "0.875rem",
+                      display: "block",
+                      mb: 0.25,
+                    }}
+                  >
+                    {aggregate.attributes.component_type}
+                  </Typography>
+                )}
+                
                 <Typography
                   display="block"
                   color="text.primary"
