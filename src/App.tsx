@@ -237,6 +237,14 @@ const router = createBrowserRouter([
         }),
       },
       {
+        path: "/contracts/create",
+        errorElement: <RouteErrorFallback />,
+        lazy: async () => ({
+          Component: (await import("./pages/contracting/CreatePublicContractPage"))
+            .CreatePublicContractPage,
+        }),
+      },
+      {
         path: "/contracts",
         errorElement: <RouteErrorFallback />,
         lazy: async () => ({
@@ -423,6 +431,10 @@ const router = createBrowserRouter([
               Component: (await import("./pages/market/SellMaterials"))
                 .SellMaterials,
             }),
+          },
+          {
+            path: "/orders/assigned",
+            element: <Navigate to="/dashboard" replace />,
           },
           {
             path: "/orders",

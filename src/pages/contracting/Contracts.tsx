@@ -77,7 +77,7 @@ export function Contracts() {
 
                 <Grid item>
                   <Link
-                    to={"/orders"}
+                    to={"/contracts/create"}
                     style={{ color: "inherit", textDecoration: "none" }}
                   >
                     <Button

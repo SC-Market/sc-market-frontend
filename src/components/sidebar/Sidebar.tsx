@@ -337,6 +337,8 @@ export interface SidebarItemProps {
   site_admin?: boolean
   custom?: boolean
   external?: boolean
+  /** When true, link goes to current org's public page; only shown when org is selected. */
+  toOrgPublic?: boolean
 }
 
 export interface SidebarSectionProps {
@@ -378,6 +380,8 @@ export function Sidebar() {
       ) {
         return false
       } else if ((item.org || item.org_admin) && !currentOrgObj) {
+        return false
+      } else if (item.toOrgPublic && !currentOrgObj) {
         return false
       } else if (item.org_admin) {
         if (
@@ -612,9 +616,20 @@ export function Sidebar() {
                   </ListSubheader>
                 }
               >
-                {item.items.filter(filterItems).map((item) => (
-                  <SidebarItem {...item} key={item.text} />
-                ))}
+                {item.items
+                  .filter(filterItems)
+                  .map((entry) => {
+                    const resolved =
+                      entry.toOrgPublic && currentOrgObj
+                        ? {
+                            ...entry,
+                            to: `/contractor/${currentOrgObj.spectrum_id}`,
+                          }
+                        : entry
+                    return (
+                      <SidebarItem {...resolved} key={resolved.text} />
+                    )
+                  })}
               </List>
             )
           })}

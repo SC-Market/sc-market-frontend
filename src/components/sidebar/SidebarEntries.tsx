@@ -3,6 +3,7 @@ import LocalShipping from "@mui/icons-material/LocalShipping"
 import ForumRoundedIcon from "@mui/icons-material/ForumRounded"
 import GavelIcon from "@mui/icons-material/GavelRounded"
 import {
+  AssignmentTurnedInRounded,
   CableRounded,
   CalendarMonthRounded,
   DashboardCustomizeRounded,
@@ -79,17 +80,17 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
         text: "sidebar.contractor_services",
         icon: <DesignServicesRounded />,
       },
-      // {
-      //   to: "/market/me",
-      //   text: "sidebar.my_listings",
-      //   icon: <ManageAccountsRounded />,
-      //   logged_in: true,
-      //   org: false,
-      // },
       {
-        to: "/market/me",
-        text: "sidebar.my_org_listings",
-        icon: <ManageAccountsRounded />,
+        to: "/contracts",
+        text: "sidebar.open_contracts",
+        icon: <AssignmentIcon />,
+        custom: false,
+      },
+      {
+        to: "/contracts",
+        text: "sidebar.open_contracts",
+        icon: <AssignmentIcon />,
+        custom: true,
         org: true,
       },
       {
@@ -102,23 +103,46 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
     ],
   },
   {
-    title: "sidebar.dashboard.title",
+    title: "sidebar.orders.title",
     items: [
       {
+        to: "/orders",
+        text: "sidebar.orders_ive_placed",
+        icon: <CreateIcon />,
+        logged_in: true,
+      },
+      {
         to: "/dashboard",
-        text: "sidebar.dashboard.text",
-        icon: <DashboardIcon />,
+        text: "sidebar.orders_assigned_to_me",
+        icon: <AssignmentTurnedInRounded />,
         logged_in: true,
         custom: false,
       },
       {
         to: "/dashboard",
-        text: "sidebar.dashboard.text",
-        icon: <DashboardIcon />,
+        text: "sidebar.orders_assigned_to_me",
+        icon: <AssignmentTurnedInRounded />,
         logged_in: true,
         custom: true,
         org: true,
       },
+      {
+        to: "/org/orders",
+        text: "sidebar.org_orders",
+        icon: <DashboardIcon />,
+        org_admin: true,
+      },
+      {
+        to: "/messages",
+        text: "sidebar.messaging",
+        icon: <ForumRoundedIcon />,
+        logged_in: true,
+      },
+    ],
+  },
+  {
+    title: "sidebar.dashboard.title",
+    items: [
       {
         to: "/market/manage?quantityAvailable=0",
         text: "sidebar.manage_market_listings",
@@ -147,23 +171,22 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
         hidden: true,
         logged_in: true,
       },
-      {
-        to: "/messages",
-        text: "sidebar.messaging",
-        icon: <ForumRoundedIcon />,
-        logged_in: true,
-      },
     ],
   },
   {
     title: "sidebar.my_organization.title",
     items: [
       {
-        to: "/org/orders",
-        text: "sidebar.orders.text",
-        icon: <DashboardIcon />,
-        // hidden: true,
-        org_admin: true,
+        toOrgPublic: true,
+        text: "sidebar.org_public_page",
+        icon: <StoreRounded />,
+        org: true,
+      },
+      {
+        to: "/market/me",
+        text: "sidebar.my_org_listings",
+        icon: <ManageAccountsRounded />,
+        org: true,
       },
       {
         to: "/availability",
@@ -248,38 +271,14 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
     ],
   },
   {
-    title: "sidebar.contracting.title",
+    title: "sidebar.organizations.title",
     items: [
-      {
-        to: "/orders",
-        text: "sidebar.my_orders",
-        icon: <CreateIcon />,
-        logged_in: true,
-      },
       {
         to: "/contractors",
         text: "sidebar.contractors",
         icon: <BusinessIcon />,
         custom: false,
       },
-      {
-        to: "/contracts",
-        text: "sidebar.open_contracts",
-        icon: <AssignmentIcon />,
-        custom: false,
-      },
-      {
-        to: "/contracts",
-        text: "sidebar.open_contracts",
-        icon: <AssignmentIcon />,
-        custom: true,
-        org: true,
-      },
-    ],
-  },
-  {
-    title: "sidebar.organizations.title",
-    items: [
       {
         to: "/recruiting",
         text: "sidebar.recruiting",

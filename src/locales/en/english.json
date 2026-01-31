@@ -586,6 +586,7 @@
       "text": "Orders"
     },
     "my_org": "My Org",
+    "org_public_page": "Org Page",
     "manage": "Manage",
     "settings": "Settings",
     "my_market_listings": "My Market Listings",
@@ -618,6 +619,9 @@
       "title": "Contracting"
     },
     "my_orders": "My Orders",
+    "orders_ive_placed": "My Orders",
+    "orders_assigned_to_me": "Assigned to Me",
+    "org_orders": "Org Orders",
     "contractors": "Contractors",
     "open_contracts": "Open Contracts",
     "organizations": {
@@ -886,7 +890,7 @@
     "about_tab": "About",
     "services_tab": "Services",
     "market_tab": "Market",
-    "order_tab": "Order",
+    "order_tab": "Custom Orders",
     "reviews_tab": "Reviews",
     "store_market": "Market",
     "store_services": "Services"
@@ -2018,7 +2022,7 @@
     "store": "Store",
     "services": "Services",
     "market": "Market",
-    "order": "Order",
+    "order": "Custom Orders",
     "members": "Members",
     "recruiting": "Recruiting",
     "reviews": "Reviews"

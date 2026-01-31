@@ -238,7 +238,8 @@
       "title": "订单",
       "text": "订单"
     },
-    "my_org": "我的组织",
+    "my_org": "我的組織",
+    "org_public_page": "組織頁",
     "manage": "管理",
     "settings": "设置",
     "my_market_listings": "我的市集商品页",
@@ -270,9 +271,12 @@
     "contracting": {
       "title": "合约"
     },
-    "my_orders": "我的订单",
-    "contractors": "合约组织",
-    "open_contracts": "开放合约",
+    "my_orders": "我的訂單",
+    "orders_ive_placed": "我下的訂單",
+    "orders_assigned_to_me": "分配給我的",
+    "org_orders": "組織訂單",
+    "contractors": "合約組織",
+    "open_contracts": "開放合約",
     "organizations": {
       "title": "组织"
     },

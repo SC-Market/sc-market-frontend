@@ -558,6 +558,12 @@ const CreateOrderFormComponent = React.forwardRef<
                     "accessibility.selectService",
                     "Select service",
                   ),
+                  MenuProps: {
+                    disablePortal: false,
+                    slotProps: {
+                      paper: { sx: { zIndex: 1300 } },
+                    },
+                  },
                 }}
                 aria-describedby="order-service-help"
               >
@@ -643,6 +649,12 @@ const CreateOrderFormComponent = React.forwardRef<
                   "accessibility.selectOrderType",
                   "Select order type",
                 ),
+                MenuProps: {
+                  disablePortal: false,
+                  slotProps: {
+                    paper: { sx: { zIndex: 1300 } },
+                  },
+                },
               }}
             >
               {Object.keys(orderIcons).map((k) => (
@@ -855,6 +867,12 @@ const CreateOrderFormComponent = React.forwardRef<
                   "accessibility.selectPaymentType",
                   "Select payment type",
                 ),
+                MenuProps: {
+                  disablePortal: false,
+                  slotProps: {
+                    paper: { sx: { zIndex: 1300 } },
+                  },
+                },
               }}
             >
               {PAYMENT_TYPES.map((paymentType) => (
