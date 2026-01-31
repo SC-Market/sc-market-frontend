@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react"
-import { Grid, Paper, useMediaQuery } from "@mui/material"
+import { Button, Grid, Paper, useMediaQuery } from "@mui/material"
+import AddRounded from "@mui/icons-material/AddRounded"
 import { MarketSearchArea } from "../../features/market/components/MarketSidebar"
 import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import { MarketSidebarContext } from "../../features/market"
@@ -43,7 +44,30 @@ export function ManageStock() {
       <ItemStockContext.Provider value={[selectionModel, setSelectionModel]}>
         <MarketSidebarContext.Provider value={[open, setOpen]}>
           <ContainerGrid maxWidth={"xl"} sidebarOpen={true}>
-            <HeaderTitle>{t("sidebar.manage_listings")}</HeaderTitle>
+            <Grid item xs={12}>
+              <Grid
+                container
+                alignItems="center"
+                justifyContent="space-between"
+                spacing={theme.layoutSpacing.layout}
+              >
+                <Grid item>
+                  <HeaderTitle>{t("sidebar.manage_listings")}</HeaderTitle>
+                </Grid>
+                <Grid item>
+                  <Link to="/market/create" style={{ textDecoration: "none" }}>
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      startIcon={<AddRounded />}
+                      size="large"
+                    >
+                      {t("market.createListing", "Create Listing")}
+                    </Button>
+                  </Link>
+                </Grid>
+              </Grid>
+            </Grid>
 
             {!isMobile && (
               <Grid item xs={12} md={3}>
