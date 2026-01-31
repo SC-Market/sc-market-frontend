@@ -80,9 +80,10 @@ export function SidebarDropdown(props: SidebarItemProps) {
   const { icon, text, chip, children } = props
   const theme = useTheme<ExtendedTheme>()
   const loc = useLocation()
-  const anyChild = props.children?.some(
-    (child) => !!matchPath(loc.pathname, child.to || ""),
-  )
+  const anyChild = props.children?.some((child) => {
+    const childPath = (child.to || "").split("?")[0]
+    return isSidebarPathSelected(childPath, loc.pathname)
+  })
   const { t } = useTranslation()
 
   const contrast = theme.palette.getContrastText(
@@ -171,9 +172,31 @@ export function SidebarDropdown(props: SidebarItemProps) {
   )
 }
 
+/** Canonical paths for org management routes when visited via /org/:contractor_id/rest */
+export const ORG_ROUTE_REST_TO_CANONICAL: Record<string, string> = {
+  dashboard: "/dashboard",
+  manage: "/org/manage",
+  orders: "/org/orders",
+  money: "/org/money",
+  fleet: "/org/fleet",
+  send: "/org/send",
+  members: "/org/members",
+  listings: "/market/manage",
+  services: "/order/services",
+}
+
+function isSidebarPathSelected(pathOnly: string, pathname: string): boolean {
+  if (matchPath(pathOnly, pathname)) return true
+  if (!pathname.startsWith("/org/")) return false
+  const m = matchPath("/org/:contractor_id/*", pathname)
+  const rest = (m?.params as { contractor_id?: string; "*"?: string })?.["*"]
+  return !!(rest && ORG_ROUTE_REST_TO_CANONICAL[rest] === pathOnly)
+}
+
 export function SidebarLinkBody(props: SidebarItemProps & { to: string }) {
   const loc = useLocation()
-  const selected = !!matchPath(loc.pathname, props.to || "")
+  const pathOnly = (props.to || "").split("?")[0]
+  const selected = isSidebarPathSelected(pathOnly, loc.pathname)
   const { icon, text, chip } = props
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
@@ -339,6 +362,8 @@ export interface SidebarItemProps {
   external?: boolean
   /** When true, link goes to current org's public page; only shown when org is selected. */
   toOrgPublic?: boolean
+  /** When set and pathname is /org/:contractor_id/*, link becomes /org/:contractor_id/orgRouteRest. */
+  orgRouteRest?: string
 }
 
 export interface SidebarSectionProps {
@@ -349,9 +374,19 @@ export interface SidebarSectionProps {
 export function Sidebar() {
   const theme: ExtendedTheme = useTheme()
   const { t } = useTranslation()
+  const location = useLocation()
   const { data: profile, error: profile_error } = useGetUserProfileQuery()
   const [drawerOpen, setDrawerOpen] = useDrawerOpen()
   const [currentOrgObj, setCurrentOrgObj] = useCurrentOrg()
+  const orgRouteContractorId = useMemo(() => {
+    const m = matchPath("/org/:contractor_id/*", location.pathname)
+    return (m?.params as { contractor_id?: string; "*"?: string })?.[
+      "contractor_id"
+    ]
+  }, [location.pathname])
+  /** Use explicit org path when on org route or when an org is selected in the sidebar. */
+  const effectiveOrgId =
+    orgRouteContractorId ?? currentOrgObj?.spectrum_id
   const { data: customOrgData } = useGetContractorBySpectrumIDQuery(
     CURRENT_CUSTOM_ORG!,
     { skip: !CURRENT_CUSTOM_ORG },
@@ -413,7 +448,6 @@ export function Sidebar() {
   )
 
   const xs = useMediaQuery(theme.breakpoints.down("sm"))
-  const location = useLocation()
   const bottomNavHeight = useBottomNavHeight()
   const prevXs = React.useRef<boolean | undefined>(undefined)
 
@@ -619,13 +653,37 @@ export function Sidebar() {
                 {item.items
                   .filter(filterItems)
                   .map((entry) => {
-                    const resolved =
-                      entry.toOrgPublic && currentOrgObj
-                        ? {
-                            ...entry,
-                            to: `/contractor/${currentOrgObj.spectrum_id}`,
-                          }
-                        : entry
+                    let resolved = entry
+                    if (entry.toOrgPublic && currentOrgObj) {
+                      resolved = {
+                        ...entry,
+                        to: `/contractor/${currentOrgObj.spectrum_id}`,
+                      }
+                    } else if (
+                      entry.orgRouteRest &&
+                      effectiveOrgId
+                    ) {
+                      resolved = {
+                        ...entry,
+                        to: `/org/${effectiveOrgId}/${entry.orgRouteRest}`,
+                      }
+                    }
+                    if (
+                      resolved.children?.length &&
+                      effectiveOrgId
+                    ) {
+                      resolved = {
+                        ...resolved,
+                        children: resolved.children.map((child) =>
+                          child.orgRouteRest
+                            ? {
+                                ...child,
+                                to: `/org/${effectiveOrgId}/${child.orgRouteRest}`,
+                              }
+                            : child
+                        ),
+                      }
+                    }
                     return (
                       <SidebarItem {...resolved} key={resolved.text} />
                     )

@@ -9,6 +9,7 @@ import {
   ThemeProvider,
   Typography,
 } from "@mui/material"
+import { useLocation, useNavigate, matchPath } from "react-router-dom"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useGetUserProfileQuery } from "../../store/profile"
 import { useCookies } from "react-cookie"
@@ -18,6 +19,7 @@ import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { Stack } from "@mui/system"
 import { useTranslation } from "react-i18next"
+import { ORG_ROUTE_REST_TO_CANONICAL } from "./Sidebar"
 
 const localTheme = createTheme({
   palette: {
@@ -27,6 +29,8 @@ const localTheme = createTheme({
 
 export function SidebarActorSelect() {
   const { t } = useTranslation()
+  const location = useLocation()
+  const navigate = useNavigate()
   const { data: profile } = useGetUserProfileQuery()
 
   const [cookies, setCookie, deleteCookie] = useCookies(["current_contractor"])
@@ -107,7 +111,18 @@ export function SidebarActorSelect() {
           fullWidth
           value={contractorSpectrumID}
           onChange={(event: React.ChangeEvent<{ value: string }>) => {
-            setContractorSpectrumID(event.target.value)
+            const newValue = event.target.value
+            setContractorSpectrumID(newValue)
+
+            const m = matchPath("/org/:contractor_id/*", location.pathname)
+            const rest = (m?.params as { contractor_id?: string; "*"?: string })?.["*"]
+            if (rest && ORG_ROUTE_REST_TO_CANONICAL[rest]) {
+              if (newValue === "_") {
+                navigate(ORG_ROUTE_REST_TO_CANONICAL[rest])
+              } else {
+                navigate(`/org/${newValue}/${rest}`)
+              }
+            }
           }}
           SelectProps={{
             IconComponent: KeyboardArrowDownRoundedIcon,

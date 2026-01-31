@@ -19,6 +19,7 @@ import {
   OrgRoute,
   OrgAdminRoute,
 } from "./components/router/LoggedInRoute"
+import { OrgContextFromRoute } from "./components/router/OrgContextFromRoute"
 import { store } from "./store/store"
 import { notificationApi } from "./store/notification"
 import { usePeriodicBackgroundSync } from "./hooks/pwa/usePeriodicBackgroundSync"
@@ -742,6 +743,108 @@ const router = createBrowserRouter([
                     }),
                   },
                 ],
+              },
+            ],
+          },
+          {
+            path: "/org/:contractor_id",
+            element: <OrgContextFromRoute />,
+            children: [
+              {
+                path: "dashboard",
+                lazy: async () => ({
+                  Component: (await import("./pages/contractor/MemberDashboard"))
+                    .MemberDashboard,
+                }),
+              },
+              {
+                path: "fleet",
+                lazy: async () => ({
+                  Component: (await import("./pages/fleet/Fleet")).Fleet,
+                }),
+              },
+              {
+                path: "send",
+                lazy: async () => {
+                  const component = (await import("./pages/money/SendMoney"))
+                    .SendMoney
+                  return {
+                    Component: () => createElement(component, { org: true }),
+                  }
+                },
+              },
+              {
+                path: "orders",
+                element: <OrgAdminRoute permission="manage_orders" />,
+                children: [
+                  {
+                    index: true,
+                    lazy: async () => ({
+                      Component: (await import("./pages/contractor/OrgOrders"))
+                        .OrgOrders,
+                    }),
+                  },
+                ],
+              },
+              {
+                path: "manage",
+                element: (
+                  <OrgAdminRoute
+                    anyPermission={[
+                      "manage_org_details",
+                      "manage_invites",
+                      "manage_roles",
+                      "manage_webhooks",
+                    ]}
+                  />
+                ),
+                children: [
+                  {
+                    index: true,
+                    lazy: async () => ({
+                      Component: (await import("./pages/contractor/OrgManage"))
+                        .OrgManage,
+                    }),
+                  },
+                ],
+              },
+              {
+                path: "money",
+                element: <OrgAdminRoute permission="manage_stock" />,
+                children: [
+                  {
+                    index: true,
+                    lazy: async () => ({
+                      Component: (await import("./pages/contractor/OrgMoney"))
+                        .OrgMoney,
+                    }),
+                  },
+                ],
+              },
+              {
+                path: "members",
+                lazy: async () => {
+                  const component = (await import("./pages/people/People"))
+                    .CustomerPage
+                  return {
+                    Component: () =>
+                      createElement(component, { members: true }),
+                  }
+                },
+              },
+              {
+                path: "listings",
+                lazy: async () => ({
+                  Component: (await import("./pages/market/ManageStock"))
+                    .ManageStock,
+                }),
+              },
+              {
+                path: "services",
+                lazy: async () => ({
+                  Component: (await import("./pages/contracting/MyServices"))
+                    .MyServicesPage,
+                }),
               },
             ],
           },
