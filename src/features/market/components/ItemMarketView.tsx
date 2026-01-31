@@ -1,5 +1,5 @@
 import { MarketSidebar } from "./MarketSidebar"
-import { Container, Divider, Grid, useMediaQuery } from "@mui/material"
+import { Container, Divider, Grid, Paper, useMediaQuery } from "@mui/material"
 import { HideOnScroll, MarketNavArea } from "./MarketNavArea"
 import { ItemListings } from "../../../views/market/ItemListings"
 import { useMarketSidebar } from ".."
@@ -14,6 +14,7 @@ export function ItemMarketView() {
 
   return (
     <>
+      {/* Mobile: Use bottom sheet */}
       {xs && <MarketSidebar />}
 
       <Container maxWidth={"lg"} sx={{ padding: 0 }}>
@@ -32,11 +33,28 @@ export function ItemMarketView() {
             <Divider light />
           </Grid>
 
+          {/* Desktop: Persistent sidebar */}
+          {!xs && (
+            <Grid item md={3}>
+              <Paper
+                sx={{
+                  position: "sticky",
+                  top: theme.spacing(2),
+                  maxHeight: `calc(100vh - ${theme.spacing(4)})`,
+                  overflowY: "auto",
+                }}
+              >
+                <MarketSidebar />
+              </Paper>
+            </Grid>
+          )}
+
+          {/* Main content area */}
           <Grid
             item
             container
             xs={12}
-            lg={12}
+            md={xs ? 12 : 9}
             spacing={theme.layoutSpacing.layout}
             sx={{ transition: "0.3s" }}
           >

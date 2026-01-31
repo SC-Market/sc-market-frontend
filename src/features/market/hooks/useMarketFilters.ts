@@ -8,14 +8,49 @@ import { useState, useCallback, useEffect } from "react"
 import type { MarketSearchState, SaleTypeSelect } from "../domain/types"
 import { useMarketSearch } from "./MarketSearch"
 
+export interface AttributeDefinition {
+  attribute_name: string
+  display_name: string
+  attribute_type: 'select' | 'multiselect' | 'range' | 'text'
+  allowed_values: string[] | null
+  applicable_item_types: string[]
+  display_order: number
+}
+
 export function useMarketFilters() {
   const [searchState, setSearchState] = useMarketSearch()
 
   const [draft, setDraft] = useState<MarketSearchState>(searchState)
+  const [availableAttributes, setAvailableAttributes] = useState<AttributeDefinition[]>([])
 
   useEffect(() => {
     setDraft(searchState)
   }, [searchState])
+
+  // Fetch available attributes when item_type changes
+  useEffect(() => {
+    const fetchAvailableAttributes = async () => {
+      if (!draft.item_type || draft.item_type === 'any') {
+        setAvailableAttributes([])
+        return
+      }
+
+      try {
+        // TODO: Replace with actual API call once endpoint is available
+        // const response = await fetch(`/api/v1/attributes/definitions?item_type=${draft.item_type}`)
+        // const data = await response.json()
+        // setAvailableAttributes(data)
+        
+        // Placeholder: empty array until API is implemented
+        setAvailableAttributes([])
+      } catch (error) {
+        console.error('Failed to fetch attribute definitions:', error)
+        setAvailableAttributes([])
+      }
+    }
+
+    fetchAvailableAttributes()
+  }, [draft.item_type])
 
   const updateDraft = useCallback((partial: Partial<MarketSearchState>) => {
     setDraft((prev) => ({ ...prev, ...partial }))
@@ -24,6 +59,10 @@ export function useMarketFilters() {
   const applyFilters = useCallback(() => {
     setSearchState(draft)
   }, [draft, setSearchState])
+
+  const setAttributes = useCallback((attributes: Record<string, string[]>) => {
+    updateDraft({ attributes })
+  }, [updateDraft])
 
   return {
     draft,
@@ -48,5 +87,8 @@ export function useMarketFilters() {
     setStatuses: (v: string) => updateDraft({ statuses: v }),
     languageCodes: draft.language_codes ?? [],
     setLanguageCodes: (v: string[]) => updateDraft({ language_codes: v }),
+    attributes: draft.attributes ?? {},
+    setAttributes,
+    availableAttributes,
   }
 }

@@ -2,36 +2,27 @@ import {
   AppBar,
   Box,
   Button,
-  Collapse,
   Grid,
-  IconButton,
-  InputAdornment,
-  MenuItem,
   Paper,
   PaperProps,
   TextField,
   Theme,
   Toolbar,
-  Tooltip,
   Typography,
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import React, { useCallback, useEffect, useRef, useState } from "react"
 import { useOnScreen } from "../../../hooks/useOnScreen"
-import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
-import SearchIcon from "@mui/icons-material/Search"
-import { FilterAltRounded, SearchRounded } from "@mui/icons-material"
+import { SearchRounded } from "@mui/icons-material"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../../hooks/layout/Drawer"
 import { NotificationsButton } from "../../../components/navbar/NotificationsButton"
 import { ProfileNavAvatar } from "../../../views/people/ProfileNavAvatar"
 import { useGetUserProfileQuery } from "../../../store/profile"
 import { Stack } from "@mui/system"
-import { useMarketSidebar, SaleTypeSelect, useMarketSearch } from ".."
+import { useMarketSidebar, useMarketSearch } from ".."
 import { Link as RouterLink, useSearchParams } from "react-router-dom"
-import { SelectGameCategoryOption } from "../../../components/select/SelectGameItem"
 import { useTranslation } from "react-i18next"
-import { LanguageFilter } from "../../../components/search/LanguageFilter"
 
 export function MarketNavEntry(
   props: { title: string; children: React.ReactElement } & PaperProps,
@@ -161,98 +152,27 @@ export function HideOnScroll(props: { children: React.ReactNode }) {
 
 export function MarketNavArea(props: { top?: boolean }) {
   const { t } = useTranslation()
-  const [filterOpen, setFilterOpen] = useState(false)
   const theme = useTheme<ExtendedTheme>()
   const profile = useGetUserProfileQuery()
 
   const [searchParams, setSearchParams] = useSearchParams()
 
   const [searchState, setMarketSearch] = useMarketSearch()
-  const [sort, setSort] = useState<string | null>(searchState.sort || null)
-  const [kind, setKind] = useState<SaleTypeSelect>(
-    searchState.sale_type || "any",
-  )
-  const [type, setType] = useState<string | null>(searchState.item_type || null)
-  const [quantityAvailable, setQuantityAvailable] = useState<number>(
-    searchState.quantityAvailable !== undefined
-      ? searchState.quantityAvailable
-      : 1,
-  )
-  const [minCost, setMinCost] = useState<number>(searchState.minCost || 0)
-  const [maxCost, setMaxCost] = useState<number | null>(
-    searchState.maxCost || null,
-  )
   const [query, setQuery] = useState<string>(searchState.query || "")
-  const [activity, setActivity] = useState<string>(
-    searchState.statuses || "active",
-  )
-  const [languageCodes, setLanguageCodes] = useState<string[]>(
-    searchState.language_codes || [],
-  )
 
-  // Sync language codes when search state changes
-  useEffect(() => {
-    setLanguageCodes(searchState.language_codes || [])
-  }, [searchState.language_codes])
   const [drawerOpen] = useDrawerOpen()
   const [open, setOpen] = useMarketSidebar()
 
-  const handleKindChange = (event: { target: { value: string } }) => {
-    setKind(event.target.value as SaleTypeSelect)
-  }
-  const handleSortChange = (event: { target: { value: string } }) => {
-    setSort(event.target.value || null)
-  }
-  const handleTypeChange = (value: string | null) => {
-    setType(value)
-  }
-  const handleQuantityChange = (event: { target: { value: string } }) => {
-    setQuantityAvailable(+event.target.value || 0)
-  }
-  const handleMinCostChange = (event: { target: { value: string } }) => {
-    setMinCost(+event.target.value || 0)
-  }
-  const handleMaxCostChange = (event: { target: { value: string } }) => {
-    setMaxCost(event.target.value ? +event.target.value || null : null)
-  }
   const handleQueryChange = (event: { target: { value: string } }) => {
     setQuery(event.target.value)
-  }
-  const handleActivityChange = (event: { target: { value: string } }) => {
-    setActivity(event.target.value)
-  }
-  const handleLanguageCodesChange = (codes: string[]) => {
-    setLanguageCodes(codes)
   }
 
   const searchClickCallback = useCallback(() => {
     setMarketSearch({
-      sale_type: kind,
-      item_type: type || undefined,
-      quantityAvailable,
-      minCost,
-      maxCost,
+      ...searchState,
       query,
-      sort,
-      statuses: activity,
-      language_codes: languageCodes.length > 0 ? languageCodes : undefined,
     })
-  }, [
-    activity,
-    kind,
-    maxCost,
-    minCost,
-    quantityAvailable,
-    query,
-    setMarketSearch,
-    sort,
-    type,
-    languageCodes,
-  ])
-
-  useEffect(() => {
-    setType(searchParams.get("type") || "any")
-  }, [searchParams])
+  }, [query, setMarketSearch, searchState])
 
   return (
     <>
@@ -275,22 +195,6 @@ export function MarketNavArea(props: { top?: boolean }) {
                 color={"secondary"}
                 size={"small"}
               />
-            </Grid>
-
-            <Grid item sx={{ paddingTop: 2 }}>
-              <Tooltip title={t("market.filters")}>
-                <IconButton onClick={() => setFilterOpen((o) => !o)}>
-                  <FilterAltRounded
-                    style={{
-                      color: filterOpen
-                        ? theme.palette.secondary.main
-                        : theme.palette.getContrastText(
-                            theme.palette.background.default,
-                          ),
-                    }}
-                  />
-                </IconButton>
-              </Tooltip>
             </Grid>
 
             <Grid item sx={{ paddingTop: 2 }}>
@@ -333,151 +237,6 @@ export function MarketNavArea(props: { top?: boolean }) {
             )}
           </Grid>
         )}
-        <Grid item xs={12} sx={{ paddingBottom: 1 }}>
-          <Collapse in={filterOpen}>
-            <Grid
-              container
-              spacing={theme.layoutSpacing.compact}
-              sx={{ padding: "none" }}
-            >
-              <Grid item xs={12} md={4} lg={4}>
-                <TextField
-                  select
-                  fullWidth
-                  label={t("market.sort_by")}
-                  color={"secondary"}
-                  value={sort || ""}
-                  onChange={handleSortChange}
-                  SelectProps={{
-                    IconComponent: KeyboardArrowDownRoundedIcon,
-                  }}
-                  size={"small"}
-                >
-                  <MenuItem value={""}>{t("market.none")}</MenuItem>
-                  <MenuItem value={"title"}>{t("market.title")}</MenuItem>
-                  <MenuItem value={"price-low"}>
-                    {t("market.price_low_to_high")}
-                  </MenuItem>
-                  <MenuItem value={"price-high"}>
-                    {t("market.price_high_to_low")}
-                  </MenuItem>
-                  <MenuItem value={"quantity-low"}>
-                    {t("market.quantity_low_to_high")}
-                  </MenuItem>
-                  <MenuItem value={"quantity-high"}>
-                    {t("market.quantity_high_to_low")}
-                  </MenuItem>
-                  <MenuItem value={"date-new"}>
-                    {t("market.date_old_to_new")}
-                  </MenuItem>
-                  <MenuItem value={"date-old"}>
-                    {t("market.date_new_to_old")}
-                  </MenuItem>
-                  <MenuItem value={"activity"}>
-                    {t("market.recent_activity")}
-                  </MenuItem>
-                  <MenuItem value={"rating"}>
-                    {t("market.rating_high_to_low")}
-                  </MenuItem>
-                </TextField>
-              </Grid>
-              <Grid item xs={12} md={4} lg={4}>
-                <TextField
-                  fullWidth
-                  label={t("market.quantity_available")}
-                  color={"secondary"}
-                  size={"small"}
-                  onChange={handleQuantityChange}
-                  value={quantityAvailable}
-                  inputProps={{
-                    inputMode: "numeric",
-                    pattern: "[0-9]*",
-                  }}
-                  InputProps={{
-                    inputMode: "numeric",
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12} md={4} lg={4}>
-                <TextField
-                  select
-                  fullWidth
-                  label={t("market.sale_type")}
-                  size={"small"}
-                  color={"secondary"}
-                  value={kind}
-                  onChange={handleKindChange}
-                  SelectProps={{
-                    IconComponent: KeyboardArrowDownRoundedIcon,
-                  }}
-                >
-                  <MenuItem value={"any"}>{t("market.any")}</MenuItem>
-                  <MenuItem value={"sale"}>{t("market.sale")}</MenuItem>
-                  <MenuItem value={"aggregate"}>
-                    {t("market.aggregate")}
-                  </MenuItem>
-                  <MenuItem value={"auction"}>{t("market.auction")}</MenuItem>
-                </TextField>
-              </Grid>
-              <Grid item xs={12} md={4} lg={4}>
-                <SelectGameCategoryOption
-                  item_type={type}
-                  onTypeChange={handleTypeChange}
-                  TextfieldProps={{
-                    size: "small",
-                  }}
-                />
-              </Grid>
-
-              <Grid item xs={12} md={4} lg={4}>
-                <TextField
-                  fullWidth
-                  label={t("market.min_cost")}
-                  size={"small"}
-                  color={"secondary"}
-                  onChange={handleMinCostChange}
-                  value={minCost}
-                  inputProps={{
-                    inputMode: "numeric",
-                    pattern: "[0-9]*",
-                  }}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="start">{`aUEC`}</InputAdornment>
-                    ),
-                    inputMode: "numeric",
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12} md={4} lg={4}>
-                <TextField
-                  fullWidth
-                  size={"small"}
-                  label={t("market.max_cost")}
-                  color={"secondary"}
-                  value={maxCost == null ? "" : maxCost}
-                  onChange={handleMaxCostChange}
-                  inputProps={{
-                    inputMode: "numeric",
-                    pattern: "[0-9]*",
-                  }}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="start">{`aUEC`}</InputAdornment>
-                    ),
-                    inputMode: "numeric",
-                  }}
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <LanguageFilter
-                  selectedLanguages={languageCodes}
-                  onChange={handleLanguageCodesChange}
-                />
-              </Grid>
-            </Grid>
-          </Collapse>
-        </Grid>
       </Grid>
     </>
   )

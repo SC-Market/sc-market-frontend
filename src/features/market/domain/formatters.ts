@@ -8,36 +8,64 @@ import type { MarketSearchState, SaleType } from "./types"
 /** Read URL params via a simple getter (e.g. URLSearchParams from react-router). */
 export type ParamsGetter = (key: string) => string | null
 
+/** Extended params getter that also provides access to all keys */
+export type ExtendedParamsGetter = {
+  get: (key: string) => string | null
+  keys: () => IterableIterator<string>
+}
+
 /**
  * Build MarketSearchState from URL params.
  * Used by useMarketSearch to derive state from the URL.
  */
 export function paramsToSearchState(
-  getParam: ParamsGetter,
+  getParam: ParamsGetter | ExtendedParamsGetter,
   defaultPageSize: number,
 ): MarketSearchState {
+  // Parse attribute parameters from URL
+  // Format: ?attr_size=4,5&attr_class=Military
+  const attributes: Record<string, string[]> = {}
+  
+  // Check if we have the extended getter with keys() method
+  if (typeof getParam === 'object' && 'keys' in getParam && 'get' in getParam) {
+    // Iterate through all params to find attr_* parameters
+    for (const key of getParam.keys()) {
+      if (key.startsWith('attr_')) {
+        const attrName = key.substring(5) // Remove 'attr_' prefix
+        const value = getParam.get(key)
+        if (value) {
+          attributes[attrName] = value.split(',').map(s => s.trim()).filter(Boolean)
+        }
+      }
+    }
+  }
+  
+  // Support both getter function and extended getter object
+  const get = typeof getParam === 'function' ? getParam : getParam.get
+  
   return {
-    sort: getParam("sort") || "activity",
-    sale_type: (getParam("kind") as SaleType) || undefined,
-    item_type: getParam("type") || undefined,
+    sort: get("sort") || "activity",
+    sale_type: (get("kind") as SaleType) || undefined,
+    item_type: get("type") || undefined,
     quantityAvailable:
-      getParam("quantityAvailable") !== null
-        ? +(getParam("quantityAvailable") ?? 0)
+      get("quantityAvailable") !== null
+        ? +(get("quantityAvailable") ?? 0)
         : 1,
-    minCost: +(getParam("minCost") ?? 0) || 0,
-    maxCost: getParam("maxCost") ? +(getParam("maxCost") ?? 0) : undefined,
-    query: getParam("query") || "",
-    statuses: getParam("statuses") || "active",
-    index: getParam("index") ? +(getParam("index") ?? 0) : undefined,
-    page_size: getParam("page_size")
-      ? +(getParam("page_size") ?? 0)
+    minCost: +(get("minCost") ?? 0) || 0,
+    maxCost: get("maxCost") ? +(get("maxCost") ?? 0) : undefined,
+    query: get("query") || "",
+    statuses: get("statuses") || "active",
+    index: get("index") ? +(get("index") ?? 0) : undefined,
+    page_size: get("page_size")
+      ? +(get("page_size") ?? 0)
       : defaultPageSize,
-    language_codes: getParam("language_codes")
-      ? (getParam("language_codes") ?? "")
+    language_codes: get("language_codes")
+      ? (get("language_codes") ?? "")
           .split(",")
           .map((s) => s.trim())
           .filter(Boolean)
       : undefined,
+    attributes: Object.keys(attributes).length > 0 ? attributes : undefined,
   } as MarketSearchState
 }
 
@@ -76,6 +104,17 @@ export function searchStateToParams(
       ? { language_codes: state.language_codes.join(",") }
       : {}),
   }
+
+  // Serialize attributes to URL query parameters
+  // Format: ?attr_size=4,5&attr_class=Military
+  if (state.attributes) {
+    Object.entries(state.attributes).forEach(([name, values]) => {
+      if (values && values.length > 0) {
+        obj[`attr_${name}`] = values.join(",")
+      }
+    })
+  }
+
   return Object.fromEntries(
     Object.entries(obj).filter(([, v]) => v !== undefined && v !== ""),
   )
