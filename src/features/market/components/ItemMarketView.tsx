@@ -17,7 +17,7 @@ export function ItemMarketView() {
       {/* Mobile: Use bottom sheet */}
       {xs && <MarketSidebar />}
 
-      <Container maxWidth={"lg"} sx={{ padding: 0 }}>
+      <Container maxWidth={"xxl"} sx={{ padding: 0 }}>
         <Grid
           container
           spacing={theme.layoutSpacing.layout}

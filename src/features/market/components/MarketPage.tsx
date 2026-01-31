@@ -70,7 +70,7 @@ export function MarketPage() {
         >
           <OpenLayout sidebarOpen={true} noMobilePadding={true}>
             <Container
-              maxWidth={"lg"}
+              maxWidth={"xxl"}
               sx={{
                 paddingTop: { xs: 2, sm: 8 },
                 paddingX: { xs: theme.spacing(1), sm: theme.spacing(3) },

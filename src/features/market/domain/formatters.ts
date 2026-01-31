@@ -40,9 +40,11 @@ export function paramsToSearchState(
     }
   }
   
-  // Support both getter function and extended getter object
-  const get = typeof getParam === 'function' ? getParam : getParam.get
-  
+  // Support both getter function and extended getter object.
+  // Use a wrapper so URLSearchParams.get is called with correct 'this' (don't extract .get).
+  const get = (key: string): string | null =>
+    typeof getParam === "function" ? getParam(key) : getParam.get(key)
+
   return {
     sort: get("sort") || "activity",
     sale_type: (get("kind") as SaleType) || undefined,
