@@ -202,31 +202,25 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
         hidden: true,
       },
       {
-        text: "sidebar.manage",
-        icon: <ManageAccountsRounded />,
+        to: "/org/manage",
+        text: "sidebar.settings",
+        icon: <SettingsIcon />,
         org_admin: true,
-        children: [
-          {
-            to: "/org/manage",
-            text: "sidebar.settings",
-            icon: <SettingsIcon />,
-          },
-          {
-            to: "/market/manage?quantityAvailable=0",
-            text: "sidebar.manage_listings",
-            icon: <WarehouseRounded />,
-            logged_in: true,
-            org: true,
-          },
-          {
-            to: "/order/services",
-            text: "sidebar.manage_services",
-            icon: <DashboardCustomizeRounded />,
-            org_admin: true,
-          },
-        ],
       },
-
+      {
+        to: "/market/manage?quantityAvailable=0",
+        text: "sidebar.manage_listings",
+        icon: <WarehouseRounded />,
+        logged_in: true,
+        org: true,
+        org_admin: true,
+      },
+      {
+        to: "/order/services",
+        text: "sidebar.manage_services",
+        icon: <DashboardCustomizeRounded />,
+        org_admin: true,
+      },
       {
         to: "/org/money",
         text: "sidebar.money",
