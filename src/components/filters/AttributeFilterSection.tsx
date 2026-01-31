@@ -15,7 +15,7 @@ import { useTranslation } from "react-i18next"
 export interface AttributeFilterSectionProps {
   attributeName: string
   displayName: string
-  attributeType: "select" | "multiselect" | "range"
+  attributeType: "select" | "multiselect" | "range" | "text"
   allowedValues: string[] | null
   selectedValues: string[]
   onChange: (values: string[]) => void
@@ -187,6 +187,26 @@ export function AttributeFilterSection({
             sx={{ flex: 1 }}
           />
         </Box>
+      </Box>
+    )
+  }
+
+  // Render text input for text attributes
+  if (attributeType === "text") {
+    return (
+      <Box sx={{ mb: 2 }}>
+        <TextField
+          fullWidth
+          size="small"
+          color="secondary"
+          label={displayName}
+          value={selectedValues[0] || ""}
+          onChange={(e) => {
+            const value = e.target.value
+            onChange(value ? [value] : [])
+          }}
+          aria-label={`${displayName} filter`}
+        />
       </Box>
     )
   }
