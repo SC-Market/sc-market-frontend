@@ -65,7 +65,7 @@ const injectedRtkApi = api
         { applicable_item_types?: string[] } | void
       >({
         query: (args) => ({
-          url: `/api/v1/attributes/definitions`,
+          url: `/api/attributes/definitions`,
           params: args?.applicable_item_types
             ? { applicable_item_types: args.applicable_item_types }
             : undefined,
@@ -80,7 +80,7 @@ const injectedRtkApi = api
         CreateAttributeDefinitionPayload
       >({
         query: (payload) => ({
-          url: `/api/v1/attributes/definitions`,
+          url: `/api/attributes/definitions`,
           method: "POST",
           body: payload,
         }),
@@ -94,7 +94,7 @@ const injectedRtkApi = api
         { name: string; data: UpdateAttributeDefinitionPayload }
       >({
         query: ({ name, data }) => ({
-          url: `/api/v1/attributes/definitions/${encodeURIComponent(name)}`,
+          url: `/api/attributes/definitions/${encodeURIComponent(name)}`,
           method: "PUT",
           body: data,
         }),
@@ -108,7 +108,7 @@ const injectedRtkApi = api
         { name: string; cascade?: boolean }
       >({
         query: ({ name, cascade }) => ({
-          url: `/api/v1/attributes/definitions/${encodeURIComponent(name)}`,
+          url: `/api/attributes/definitions/${encodeURIComponent(name)}`,
           method: "DELETE",
           params: cascade ? { cascade: "true" } : undefined,
         }),
@@ -123,7 +123,7 @@ const injectedRtkApi = api
         string
       >({
         query: (gameItemId) => ({
-          url: `/api/v1/game-items/${gameItemId}/attributes`,
+          url: `/api/game-items/${gameItemId}/attributes`,
         }),
         transformResponse: (response: { data: { attributes: GameItemAttribute[] } }) =>
           response.data,
@@ -137,7 +137,7 @@ const injectedRtkApi = api
         { gameItemId: string; data: UpsertGameItemAttributePayload }
       >({
         query: ({ gameItemId, data }) => ({
-          url: `/api/v1/game-items/${gameItemId}/attributes`,
+          url: `/api/game-items/${gameItemId}/attributes`,
           method: "PUT",
           body: data,
         }),
@@ -153,7 +153,7 @@ const injectedRtkApi = api
         { gameItemId: string; attributeName: string }
       >({
         query: ({ gameItemId, attributeName }) => ({
-          url: `/api/v1/game-items/${gameItemId}/attributes/${encodeURIComponent(attributeName)}`,
+          url: `/api/game-items/${gameItemId}/attributes/${encodeURIComponent(attributeName)}`,
           method: "DELETE",
         }),
         transformResponse: (response: { data: { message: string } }) =>
@@ -166,7 +166,7 @@ const injectedRtkApi = api
       // Import
       importGameItemAttributes: build.mutation<ImportResult, string>({
         query: (gameItemId) => ({
-          url: `/api/v1/attributes/import/${gameItemId}`,
+          url: `/api/attributes/import/${gameItemId}`,
           method: "POST",
         }),
         transformResponse: (response: { data: ImportResult }) =>

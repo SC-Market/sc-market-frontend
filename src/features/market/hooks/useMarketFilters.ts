@@ -37,7 +37,7 @@ export function useMarketFilters() {
 
       try {
         // TODO: Replace with actual API call once endpoint is available
-        // const response = await fetch(`/api/v1/attributes/definitions?item_type=${draft.item_type}`)
+        // const response = await fetch(`/api/attributes/definitions?item_type=${draft.item_type}`)
         // const data = await response.json()
         // setAvailableAttributes(data)
         
