@@ -363,7 +363,7 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
       },
       {
         text: "sidebar.import_monitoring.text",
-        icon: <CloudDownloadIcon />,
+        icon: <CloudDownloadRounded />,
         site_admin: true,
         to: "/admin/import-monitoring",
       },
