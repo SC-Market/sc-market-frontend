@@ -183,12 +183,6 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
         org: true,
       },
       {
-        to: "/market/me",
-        text: "sidebar.my_org_listings",
-        icon: <ManageAccountsRounded />,
-        org: true,
-      },
-      {
         to: "/availability",
         text: "sidebar.availability",
         icon: <CalendarMonthRounded />,
