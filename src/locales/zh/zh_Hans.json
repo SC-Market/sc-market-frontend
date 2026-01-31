@@ -255,6 +255,7 @@
       "text": "订单"
     },
     "my_org": "我的组织",
+    "org_public_page": "组织页",
     "manage": "管理",
     "settings": "设置",
     "my_market_listings": "我的市集商品页",
@@ -287,6 +288,9 @@
       "title": "合约"
     },
     "my_orders": "我的订单",
+    "orders_ive_placed": "我下的订单",
+    "orders_assigned_to_me": "分配给我的",
+    "org_orders": "组织订单",
     "contractors": "合约组织",
     "open_contracts": "开放合约",
     "organizations": {

@@ -254,6 +254,7 @@
       "text": "Orders"
     },
     "my_org": "My Org",
+    "org_public_page": "Página de org",
     "manage": "Manage",
     "settings": "Settings",
     "my_market_listings": "My Market Listings",
@@ -286,6 +287,9 @@
       "title": "Contracting"
     },
     "my_orders": "My Orders",
+    "orders_ive_placed": "Mis pedidos",
+    "orders_assigned_to_me": "Asignados a mí",
+    "org_orders": "Pedidos org",
     "contractors": "Contractors",
     "open_contracts": "Open Contracts",
     "organizations": {

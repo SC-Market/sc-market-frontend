@@ -250,6 +250,7 @@
       "text": "Замовлення"
     },
     "my_org": "Моя організація",
+    "org_public_page": "Сторінка орг",
     "manage": "Керування",
     "settings": "Налаштування",
     "my_market_listings": "Мої оголошення на ринку",
@@ -282,6 +283,9 @@
       "title": "Контракти"
     },
     "my_orders": "Мої замовлення",
+    "orders_ive_placed": "Мої замовлення",
+    "orders_assigned_to_me": "Призначені мені",
+    "org_orders": "Замовлення орг",
     "contractors": "Підрядники",
     "open_contracts": "Відкриті контракти",
     "organizations": {
