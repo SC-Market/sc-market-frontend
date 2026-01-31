@@ -167,7 +167,7 @@ export function AdminModerationView() {
     },
     {
       field: "actions",
-      headerName: t("admin.moderation.actions", "Actions"),
+      headerName: t("admin.moderation.column.actions", "Actions"),
       width: 120,
       display: "flex",
       flex: 1,
@@ -177,7 +177,7 @@ export function AdminModerationView() {
           size="small"
           onClick={() => handleOpenModal(params.row)}
         >
-          {t("admin.moderation.handleReport", "Handle")}
+          {t("admin.moderation.button.handle", "Handle")}
         </Button>
       ),
     },
@@ -207,11 +207,11 @@ export function AdminModerationView() {
         <Grid item xs={12} md={3}>
           <FormControl size="small" fullWidth>
             <InputLabel>
-              {t("admin.moderation.status", "Status Filter")}
+              {t("admin.moderation.filter.status", "Status Filter")}
             </InputLabel>
             <Select
               value={statusFilter}
-              label={t("admin.moderation.status", "Status Filter")}
+              label={t("admin.moderation.filter.status", "Status Filter")}
               onChange={(e) => setStatusFilter(e.target.value as any)}
             >
               <MenuItem value="">All Statuses</MenuItem>
@@ -262,15 +262,15 @@ export function AdminModerationView() {
         fullWidth
       >
         <DialogTitle>
-          {t("admin.moderation.handleReport", "Handle Report")}
+          {t("admin.moderation.dialog.handleReport", "Handle Report")}
         </DialogTitle>
         <DialogContent>
           <Box sx={{ mt: 2 }}>
             <FormControl fullWidth sx={{ mb: 2 }}>
-              <InputLabel>{t("admin.moderation.status", "Status")}</InputLabel>
+              <InputLabel>{t("admin.moderation.field.status", "Status")}</InputLabel>
               <Select
                 value={updateStatus}
-                label={t("admin.moderation.status", "Status")}
+                label={t("admin.moderation.field.status", "Status")}
                 onChange={(e) => setUpdateStatus(e.target.value)}
               >
                 <MenuItem value="pending">Pending</MenuItem>

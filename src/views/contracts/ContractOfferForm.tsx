@@ -256,7 +256,7 @@ export function ContractOfferForm(props: { contract: PublicContract }) {
             />
             <div id="description-help" className="sr-only">
               {t(
-                "accessibility.orderDescriptionHelp",
+                "accessibility.contract.orderDescriptionHelp",
                 "Provide a detailed description of what you need (required)",
               )}
             </div>
@@ -400,7 +400,7 @@ export function ContractOfferForm(props: { contract: PublicContract }) {
             </TextField>
             <div id="payment-type-help" className="sr-only">
               {t(
-                "accessibility.paymentTypeHelp",
+                "accessibility.contract.paymentTypeHelp",
                 "Select how you want to handle payment for this contract (required)",
               )}
             </div>
