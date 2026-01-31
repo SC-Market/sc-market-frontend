@@ -117,6 +117,7 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
         icon: <AssignmentTurnedInRounded />,
         logged_in: true,
         custom: false,
+        orgRouteRest: "dashboard",
       },
       {
         to: "/dashboard",
@@ -125,12 +126,14 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
         logged_in: true,
         custom: true,
         org: true,
+        orgRouteRest: "dashboard",
       },
       {
         to: "/org/orders",
         text: "sidebar.org_orders",
         icon: <DashboardIcon />,
         org_admin: true,
+        orgRouteRest: "orders",
       },
       {
         to: "/messages",
@@ -200,6 +203,7 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
         text: "sidebar.settings",
         icon: <SettingsIcon />,
         org_admin: true,
+        orgRouteRest: "manage",
       },
       {
         to: "/market/manage?quantityAvailable=0",
@@ -208,12 +212,14 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
         logged_in: true,
         org: true,
         org_admin: true,
+        orgRouteRest: "listings",
       },
       {
         to: "/order/services",
         text: "sidebar.manage_services",
         icon: <DashboardCustomizeRounded />,
         org_admin: true,
+        orgRouteRest: "services",
       },
       {
         to: "/org/money",
@@ -221,6 +227,7 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
         icon: <AttachMoneyRoundedIcon />,
         hidden: true,
         org_admin: true,
+        orgRouteRest: "money",
       },
       {
         to: "/invoices",
@@ -236,6 +243,7 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
         chip: "sidebar.new_chip",
         hidden: true,
         org_admin: true,
+        orgRouteRest: "fleet",
       },
 
       {
@@ -253,6 +261,7 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
             to: "/org/members",
             text: "sidebar.members",
             hidden: true,
+            orgRouteRest: "members",
           },
         ],
       },

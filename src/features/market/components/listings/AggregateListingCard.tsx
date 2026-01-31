@@ -7,6 +7,7 @@ import {
   Fade,
   Grid,
   Typography,
+  useMediaQuery,
 } from "@mui/material"
 import React, { useMemo } from "react"
 import { useTranslation } from "react-i18next"
@@ -49,7 +50,17 @@ export function AggregateListingBase(props: {
   const { t } = useTranslation()
   const { aggregate, index } = props
   const theme = useTheme<ExtendedTheme>()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const { minimum_price, photo, quantity_available, title } = aggregate
+
+  const cardHeight = isMobile ? 300 : 400
+  const mediaHeight =
+    theme.palette.mode === "dark" ? "100%" : isMobile ? 150 : 244
+
+  const contentSx =
+    theme.palette.mode === "dark"
+      ? { position: "absolute" as const, bottom: 0, zIndex: 4 }
+      : {}
 
   return (
     <Fade
@@ -73,8 +84,8 @@ export function AggregateListingBase(props: {
             sx={{
               borderRadius: (theme) =>
                 theme.spacing((theme as ExtendedTheme).borderRadius.topLevel),
-              height: 400,
-              postition: "relative",
+              height: cardHeight,
+              position: "relative",
             }}
           >
             <CardMedia
@@ -87,23 +98,15 @@ export function AggregateListingBase(props: {
               }}
               sx={{
                 ...(theme.palette.mode === "dark"
-                  ? {
-                      height: "100%",
-                    }
-                  : {
-                      height: 244,
-                    }),
+                  ? { height: "100%" }
+                  : { height: mediaHeight }),
                 overflow: "hidden",
               }}
               alt={`Image of ${title}`}
             />
             <Box
               sx={{
-                ...(theme.palette.mode === "light"
-                  ? {
-                      display: "none",
-                    }
-                  : {}),
+                ...(theme.palette.mode === "light" ? { display: "none" } : {}),
                 position: "absolute",
                 zIndex: 3,
                 top: 0,
@@ -116,47 +119,48 @@ export function AggregateListingBase(props: {
               }}
             />
 
-            <Box
-              sx={{
-                ...(theme.palette.mode === "dark"
-                  ? {
-                      position: "absolute",
-                      bottom: 0,
-                      zIndex: 4,
-                    }
-                  : {}),
-              }}
-            >
-              <CardContent>
+            <Box sx={contentSx}>
+              <CardContent
+                sx={
+                  isMobile
+                    ? { padding: "8px 12px !important", "&:last-child": { pb: 1 } }
+                    : undefined
+                }
+              >
                 <Typography
-                  variant={"h5"}
-                  color={"primary"}
-                  fontWeight={"bold"}
+                  variant={isMobile ? "body1" : "h5"}
+                  color="primary"
+                  fontWeight="bold"
+                  sx={isMobile ? { fontSize: "0.95rem", mb: 0.5 } : undefined}
                 >
-                  {minimum_price.toLocaleString(undefined)} aUEC{" "}
+                  {minimum_price.toLocaleString(undefined)} aUEC
                 </Typography>
                 <Typography
-                  variant={"subtitle2"}
-                  color={"text.secondary"}
-                  maxHeight={60}
+                  variant="subtitle2"
+                  color="text.secondary"
+                  sx={{
+                    ...(isMobile
+                      ? {
+                          fontSize: "0.75rem",
+                          lineHeight: 1.3,
+                          maxHeight: 36,
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          display: "-webkit-box",
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: "vertical" as const,
+                          mb: 0.5,
+                        }
+                      : { maxHeight: 60 }),
+                  }}
                 >
-                  <span
-                    style={{
-                      lineClamp: "2",
-                      textOverflow: "ellipsis",
-                      overflow: "hidden",
-                      WebkitBoxOrient: "vertical",
-                      display: "-webkit-box",
-                      WebkitLineClamp: "2",
-                    }}
-                  >
-                    {aggregate.title} ({aggregate.item_type})
-                  </span>{" "}
+                  {aggregate.title} ({aggregate.item_type})
                 </Typography>
                 <Typography
-                  display={"block"}
-                  color={"text.primary"}
-                  variant={"subtitle2"}
+                  display="block"
+                  color="text.primary"
+                  variant="subtitle2"
+                  sx={isMobile ? { fontSize: "0.7rem", lineHeight: 1.2 } : undefined}
                 >
                   {quantity_available.toLocaleString(undefined)}{" "}
                   {t("market.total_available")}
@@ -200,6 +204,7 @@ export function AggregateBuyOrderListingBase(props: {
   const { aggregate, index } = props
   const { details, photos } = aggregate
   const theme = useTheme<ExtendedTheme>()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const maximum_price = useMemo(
     () =>
       aggregate.buy_orders.length
@@ -223,6 +228,14 @@ export function AggregateBuyOrderListingBase(props: {
     [aggregate.buy_orders],
   )
 
+  const cardHeight = isMobile ? 300 : 400
+  const mediaHeight =
+    theme.palette.mode === "dark" ? "100%" : isMobile ? 150 : 244
+  const contentSx =
+    theme.palette.mode === "dark"
+      ? { position: "absolute" as const, bottom: 0, zIndex: 4 }
+      : {}
+
   return (
     <Fade
       in={true}
@@ -245,8 +258,8 @@ export function AggregateBuyOrderListingBase(props: {
             sx={{
               borderRadius: (theme) =>
                 theme.spacing((theme as ExtendedTheme).borderRadius.topLevel),
-              height: 400,
-              postition: "relative",
+              height: cardHeight,
+              position: "relative",
             }}
           >
             <CardMedia
@@ -259,23 +272,15 @@ export function AggregateBuyOrderListingBase(props: {
               }}
               sx={{
                 ...(theme.palette.mode === "dark"
-                  ? {
-                      height: "100%",
-                    }
-                  : {
-                      height: 244,
-                    }),
+                  ? { height: "100%" }
+                  : { height: mediaHeight }),
                 overflow: "hidden",
               }}
               alt={`Image of ${details.title}`}
             />
             <Box
               sx={{
-                ...(theme.palette.mode === "light"
-                  ? {
-                      display: "none",
-                    }
-                  : {}),
+                ...(theme.palette.mode === "light" ? { display: "none" } : {}),
                 position: "absolute",
                 zIndex: 3,
                 top: 0,
@@ -288,49 +293,50 @@ export function AggregateBuyOrderListingBase(props: {
               }}
             />
 
-            <Box
-              sx={{
-                ...(theme.palette.mode === "dark"
-                  ? {
-                      position: "absolute",
-                      bottom: 0,
-                      zIndex: 4,
-                    }
-                  : {}),
-              }}
-            >
-              <CardContent>
+            <Box sx={contentSx}>
+              <CardContent
+                sx={
+                  isMobile
+                    ? { padding: "8px 12px !important", "&:last-child": { pb: 1 } }
+                    : undefined
+                }
+              >
                 <Typography
-                  variant={"h6"}
-                  color={"primary"}
-                  fontWeight={"bold"}
+                  variant={isMobile ? "body1" : "h6"}
+                  color="primary"
+                  fontWeight="bold"
+                  sx={isMobile ? { fontSize: "0.95rem", mb: 0.5 } : undefined}
                 >
                   {minimum_price.toLocaleString(undefined)} -{" "}
                   {maximum_price.toLocaleString(undefined)} aUEC/
                   {t("market.unit")}
                 </Typography>
                 <Typography
-                  variant={"subtitle2"}
-                  color={"text.secondary"}
-                  maxHeight={60}
+                  variant="subtitle2"
+                  color="text.secondary"
+                  sx={{
+                    ...(isMobile
+                      ? {
+                          fontSize: "0.75rem",
+                          lineHeight: 1.3,
+                          maxHeight: 36,
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          display: "-webkit-box",
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: "vertical" as const,
+                          mb: 0.5,
+                        }
+                      : { maxHeight: 60 }),
+                  }}
                 >
-                  <span
-                    style={{
-                      lineClamp: "2",
-                      textOverflow: "ellipsis",
-                      overflow: "hidden",
-                      WebkitBoxOrient: "vertical",
-                      display: "-webkit-box",
-                      WebkitLineClamp: "2",
-                    }}
-                  >
-                    {details.title} ({details.item_type})
-                  </span>{" "}
+                  {details.title} ({details.item_type})
                 </Typography>
                 <Typography
-                  display={"block"}
-                  color={"text.primary"}
-                  variant={"subtitle2"}
+                  display="block"
+                  color="text.primary"
+                  variant="subtitle2"
+                  sx={isMobile ? { fontSize: "0.7rem", lineHeight: 1.2 } : undefined}
                 >
                   {sum_requested.toLocaleString(undefined)}{" "}
                   {t("market.total_requested")}
