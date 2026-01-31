@@ -228,7 +228,7 @@ export function AdminAttributeDefinitionsView() {
     },
     {
       field: "attribute_type",
-      headerName: t("admin.attributes.type", "Type"),
+      headerName: t("admin.attributes.field.type", "Type"),
       width: 120,
       display: "flex",
       flex: 1,
@@ -260,7 +260,7 @@ export function AdminAttributeDefinitionsView() {
     },
     {
       field: "applicable_item_types",
-      headerName: t("admin.attributes.applicableTypes", "Applicable Types"),
+      headerName: t("admin.attributes.field.applicableTypes", "Applicable Types"),
       width: 200,
       display: "flex",
       flex: 1,
@@ -277,7 +277,7 @@ export function AdminAttributeDefinitionsView() {
     },
     {
       field: "display_order",
-      headerName: t("admin.attributes.order", "Order"),
+      headerName: t("admin.attributes.field.order", "Order"),
       width: 80,
       display: "flex",
       flex: 1,
@@ -336,7 +336,7 @@ export function AdminAttributeDefinitionsView() {
             startIcon={<AddIcon />}
             onClick={handleOpenCreateModal}
           >
-            {t("admin.attributes.create", "Create Definition")}
+            {t("admin.attributes.button.create", "Create Definition")}
           </Button>
         </Grid>
       </Grid>
@@ -401,11 +401,11 @@ export function AdminAttributeDefinitionsView() {
             />
             <FormControl fullWidth sx={{ mb: 2 }}>
               <InputLabel>
-                {t("admin.attributes.type", "Attribute Type")}
+                {t("admin.attributes.field.attributeType", "Attribute Type")}
               </InputLabel>
               <Select
                 value={formData.attribute_type}
-                label={t("admin.attributes.type", "Attribute Type")}
+                label={t("admin.attributes.field.attributeType", "Attribute Type")}
                 onChange={(e) =>
                   setFormData({
                     ...formData,
@@ -530,11 +530,11 @@ export function AdminAttributeDefinitionsView() {
             />
             <FormControl fullWidth sx={{ mb: 2 }}>
               <InputLabel>
-                {t("admin.attributes.type", "Attribute Type")}
+                {t("admin.attributes.field.attributeType", "Attribute Type")}
               </InputLabel>
               <Select
                 value={formData.attribute_type}
-                label={t("admin.attributes.type", "Attribute Type")}
+                label={t("admin.attributes.field.attributeType", "Attribute Type")}
                 onChange={(e) =>
                   setFormData({
                     ...formData,

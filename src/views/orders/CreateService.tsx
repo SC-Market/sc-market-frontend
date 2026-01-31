@@ -766,7 +766,7 @@ export function CreateServiceForm(props: GridProps & { service?: Service }) {
             />
             <div id="description-help" className="sr-only">
               {t(
-                "accessibility.orderDescriptionHelp",
+                "accessibility.service.orderDescriptionHelp",
                 "Provide a detailed description of what you need",
               )}
             </div>
@@ -1019,7 +1019,7 @@ export function CreateServiceForm(props: GridProps & { service?: Service }) {
             </TextField>
             <div id="payment-type-help" className="sr-only">
               {t(
-                "accessibility.paymentTypeHelp",
+                "accessibility.service.paymentTypeHelp",
                 "Select how you want to handle payment for this service (required)",
               )}
             </div>

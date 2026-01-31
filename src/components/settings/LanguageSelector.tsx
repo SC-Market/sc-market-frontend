@@ -69,7 +69,7 @@ export function LanguageSelector({
           helperText={
             helperText ||
             t(
-              "settings.languages.helperText",
+              "settings.languages.field.helperText",
               "Select the languages you can communicate in",
             )
           }

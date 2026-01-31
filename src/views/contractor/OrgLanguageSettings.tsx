@@ -97,7 +97,7 @@ export function OrgLanguageSettings() {
       <Grid item xs={12}>
         <Typography variant="body2" color="text.secondary" paragraph>
           {t(
-            "settings.languages.description",
+            "settings.languages.org.description",
             "Select the languages your organization can communicate in.",
           )}
         </Typography>
@@ -125,7 +125,7 @@ export function OrgLanguageSettings() {
               onChange={setSelectedLanguages}
               label={t("settings.languages.label", "Supported Languages")}
               helperText={t(
-                "settings.languages.helperText",
+                "settings.languages.org.helperText",
                 "Select the languages your organization can communicate in",
               )}
             />
