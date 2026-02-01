@@ -8,6 +8,9 @@ import {
   Chip,
 } from "@mui/material"
 import { useTranslation } from "react-i18next"
+import { useState, useEffect, useMemo } from "react"
+import { useLazySearchAttributeValuesQuery } from "../../store/api/attributes"
+import { debounce } from "lodash"
 
 export interface AttributeFilterSectionProps {
   attributeName: string
@@ -16,6 +19,7 @@ export interface AttributeFilterSectionProps {
   allowedValues: string[] | null
   selectedValues: string[]
   onChange: (values: string[]) => void
+  itemType?: string // For fetching valid text values
 }
 
 export function AttributeFilterSection({
@@ -25,11 +29,38 @@ export function AttributeFilterSection({
   allowedValues,
   selectedValues,
   onChange,
+  itemType,
 }: AttributeFilterSectionProps) {
   const { t } = useTranslation()
+  const [searchTrigger] = useLazySearchAttributeValuesQuery()
+  const [textOptions, setTextOptions] = useState<string[]>([])
+  const [inputValue, setInputValue] = useState("")
 
   // Try to translate the display name, fall back to the raw value
   const translatedDisplayName = t(`attributes.${attributeName}`, displayName)
+
+  // Debounced search for text attributes
+  const debouncedSearch = useMemo(
+    () =>
+      debounce(async (query: string) => {
+        if (attributeType === "text" && query.length > 0) {
+          const result = await searchTrigger({
+            attributeName,
+            query,
+            itemType,
+            limit: 20,
+          })
+          if (result.data) {
+            setTextOptions(result.data)
+          }
+        }
+      }, 300),
+    [attributeName, attributeType, itemType, searchTrigger],
+  )
+
+  useEffect(() => {
+    debouncedSearch(inputValue)
+  }, [inputValue, debouncedSearch])
 
   // Render single-select dropdown
   if (attributeType === "select") {
@@ -162,16 +193,29 @@ export function AttributeFilterSection({
   if (attributeType === "text") {
     return (
       <Box sx={{ mb: 2 }}>
-        <TextField
-          fullWidth
+        <Autocomplete
+          freeSolo
           size="small"
-          color="secondary"
-          label={translatedDisplayName}
+          options={textOptions}
           value={selectedValues[0] || ""}
-          onChange={(e) => {
-            const value = e.target.value
-            onChange(value ? [value] : [])
+          inputValue={inputValue}
+          onChange={(event, newValue) => {
+            onChange(newValue ? [newValue] : [])
           }}
+          onInputChange={(event, newValue) => {
+            setInputValue(newValue)
+            if (!newValue) {
+              onChange([])
+            }
+          }}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label={translatedDisplayName}
+              size="small"
+              color="secondary"
+            />
+          )}
           aria-label={`${translatedDisplayName} filter`}
         />
       </Box>

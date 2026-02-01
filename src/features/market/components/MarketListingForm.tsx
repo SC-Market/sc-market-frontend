@@ -265,6 +265,9 @@ export function MarketListingForm(props: { sale_type: "sale" | "auction" }) {
               ),
               maxLength: 100,
             }}
+            helperText={
+              state.title.length > 80 ? `${state.title.length}/100` : undefined
+            }
           />
           <div id="listing-title-help" className="sr-only">
             {t(
@@ -319,12 +322,16 @@ export function MarketListingForm(props: { sale_type: "sale" | "auction" }) {
             value={state.description}
             TextFieldProps={{
               label: t("MarketListingForm.description"),
-              helperText: t("MarketListingForm.descriptionHelp"),
+              helperText:
+                state.description.length > 1900
+                  ? `${state.description.length}/2000`
+                  : t("MarketListingForm.descriptionHelp"),
               "aria-label": t(
                 "accessibility.listingDescriptionInput",
                 "Enter listing description",
               ),
               "aria-describedby": "listing-description-help",
+              inputProps: { maxLength: 2000 },
             }}
             variant={"vertical"}
           />
