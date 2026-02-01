@@ -127,7 +127,7 @@ export function Navbar(props: { children?: React.ReactNode }) {
           <React.Fragment>
             <Tooltip title={t("navbar.cart", "Cart")}>
               <IconButton
-                onClick={() => navigate("/cart")}
+                onClick={() => navigate("/market/cart")}
                 color="inherit"
                 aria-label={t("navbar.cart", "Cart")}
               >
