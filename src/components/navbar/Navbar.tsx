@@ -6,30 +6,36 @@ import {
   Tooltip,
   Typography,
   useMediaQuery,
+  Badge,
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import React from "react"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
-import { useLocation } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { messagingDrawerWidth } from "../../features/chats"
 import { NotificationsButton } from "./NotificationsButton"
-import { MenuRounded } from "@mui/icons-material"
+import { MenuRounded, ShoppingCartRounded } from "@mui/icons-material"
 import { ProfileNavAvatar } from "../../views/people/ProfileNavAvatar"
 import { useGetUserProfileQuery } from "../../store/profile"
 import { useTranslation } from "react-i18next"
 import { Stack } from "@mui/system"
 import { Link as RouterLink } from "react-router-dom"
+import { useCookies } from "react-cookie"
 
 export function Navbar(props: { children?: React.ReactNode }) {
   const theme: ExtendedTheme = useTheme()
   const profile = useGetUserProfileQuery()
+  const [cookies] = useCookies(["cart"])
+  const navigate = useNavigate()
   const location = useLocation()
   const isMessagingPage = location.pathname.startsWith("/messages")
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
 
   const [drawerOpen, setDrawerOpen] = useDrawerOpen()
   const { t } = useTranslation()
+
+  const cartItemCount = cookies.cart?.items?.length || 0
 
   // Calculate total sidebar width (main sidebar + messaging sidebar if on messaging page)
   // On desktop, messaging sidebar is always open (unless collapsed), so account for it
@@ -119,6 +125,17 @@ export function Navbar(props: { children?: React.ReactNode }) {
 
         {profile.data ? (
           <React.Fragment>
+            <Tooltip title={t("navbar.cart", "Cart")}>
+              <IconButton
+                onClick={() => navigate("/market/cart")}
+                color="inherit"
+                aria-label={t("navbar.cart", "Cart")}
+              >
+                <Badge badgeContent={cartItemCount} color="primary">
+                  <ShoppingCartRounded />
+                </Badge>
+              </IconButton>
+            </Tooltip>
             <NotificationsButton />
             <ProfileNavAvatar />
           </React.Fragment>

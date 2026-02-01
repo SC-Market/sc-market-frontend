@@ -727,7 +727,7 @@ const CreateOrderFormComponent = React.forwardRef<
             />
             <div id="description-help" className="sr-only">
               {t(
-                "accessibility.orderDescriptionHelp",
+                "accessibility.order.orderDescriptionHelp",
                 "Provide a detailed description of what you need (required)",
               )}
             </div>
@@ -883,7 +883,7 @@ const CreateOrderFormComponent = React.forwardRef<
             </TextField>
             <div id="payment-type-help" className="sr-only">
               {t(
-                "accessibility.paymentTypeHelp",
+                "accessibility.order.paymentTypeHelp",
                 "Select how you want to handle payment for this order (required)",
               )}
             </div>

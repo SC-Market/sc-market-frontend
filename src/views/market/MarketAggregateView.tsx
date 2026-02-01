@@ -779,7 +779,7 @@ export function BuyOrderRow(props: {
                     price: buy_order.price.toLocaleString(i18n.language),
                   },
                 )
-              : t("buyorder.negotiable", "Negotiable")
+              : t("buyorder.status.negotiable", "Negotiable")
             : `${buy_order.price.toLocaleString(i18n.language)} aUEC`}
         </Typography>
       </TableCell>
@@ -804,7 +804,7 @@ export function BuyOrderRow(props: {
         <Typography variant={"subtitle2"} color={"primary"}>
           {buy_order.total != null
             ? `${buy_order.negotiable ? "~" : ""}${buy_order.total.toLocaleString(i18n.language)} aUEC`
-            : t("buyorder.negotiable", "Negotiable")}
+            : t("buyorder.status.negotiable", "Negotiable")}
         </Typography>
       </TableCell>
 

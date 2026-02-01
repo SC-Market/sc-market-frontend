@@ -83,7 +83,7 @@ export function AdminNotificationTestView() {
     if (!notificationType || !targetUser || !targetUser.username) {
       issueAlert({
         message: t(
-          "admin.notificationTest.fillAllFields",
+          "admin.notificationTest.validation.fillAllFields",
           "Please fill all fields",
         ),
         severity: "error",

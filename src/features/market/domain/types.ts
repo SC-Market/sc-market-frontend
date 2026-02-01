@@ -229,6 +229,7 @@ export interface MarketSearchState {
   page_size?: number
   listing_type?: string
   language_codes?: string[]
+  attributes?: Record<string, string[]>
 }
 
 export type SaleTypeSelect = SaleType | "any"

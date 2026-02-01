@@ -130,7 +130,7 @@ export function AdminAlertsView() {
     if (newLink && !validateUrl(newLink)) {
       setLinkError(
         t(
-          "admin.alerts.invalidUrl",
+          "admin.alerts.validation.invalidUrl",
           "Please enter a valid URL (http:// or https://)",
         ),
       )
@@ -306,7 +306,7 @@ export function AdminAlertsView() {
   const columns: GridColDef[] = [
     {
       field: "title",
-      headerName: t("admin.alerts.title", "Title"),
+      headerName: t("admin.alerts.field.title", "Title"),
       width: 200,
       display: "flex",
       flex: 1,
@@ -328,7 +328,7 @@ export function AdminAlertsView() {
     },
     {
       field: "link",
-      headerName: t("admin.alerts.link", "Link"),
+      headerName: t("admin.alerts.field.link", "Link"),
       width: 200,
       display: "flex",
       flex: 1,
@@ -420,7 +420,7 @@ export function AdminAlertsView() {
         sx={{ mb: 2 }}
       >
         <HeaderTitle xs={12} md={6}>
-          {t("admin.alerts.title", "Admin Alerts")}
+          {t("admin.alerts.pageTitle", "Admin Alerts")}
         </HeaderTitle>
       </Grid>
 
@@ -526,7 +526,7 @@ export function AdminAlertsView() {
           <Box sx={{ mt: 2 }}>
             <TextField
               fullWidth
-              label={t("admin.alerts.title", "Title")}
+              label={t("admin.alerts.field.title", "Title")}
               value={formData.title}
               onChange={(e) =>
                 setFormData({ ...formData, title: e.target.value })
@@ -536,7 +536,7 @@ export function AdminAlertsView() {
             />
             <TextField
               fullWidth
-              label={t("admin.alerts.link", "Link (Optional)")}
+              label={t("admin.alerts.field.linkOptional", "Link (Optional)")}
               placeholder={t(
                 "admin.alerts.linkPlaceholder",
                 "https://example.com",
@@ -667,7 +667,7 @@ export function AdminAlertsView() {
           <Box sx={{ mt: 2 }}>
             <TextField
               fullWidth
-              label={t("admin.alerts.title", "Title")}
+              label={t("admin.alerts.field.title", "Title")}
               value={formData.title}
               onChange={(e) =>
                 setFormData({ ...formData, title: e.target.value })
@@ -677,7 +677,7 @@ export function AdminAlertsView() {
             />
             <TextField
               fullWidth
-              label={t("admin.alerts.link", "Link (Optional)")}
+              label={t("admin.alerts.field.linkOptional", "Link (Optional)")}
               placeholder={t(
                 "admin.alerts.linkPlaceholder",
                 "https://example.com",

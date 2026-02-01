@@ -20,7 +20,7 @@ export const useMarketSearch = () => {
   const defaultPageSize = isMobile ? 12 : 48
 
   const searchState = useMemo(
-    () => paramsToSearchState((key) => searchParams.get(key), defaultPageSize),
+    () => paramsToSearchState(searchParams, defaultPageSize),
     [searchParams, defaultPageSize],
   )
 
