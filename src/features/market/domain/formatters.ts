@@ -25,21 +25,24 @@ export function paramsToSearchState(
   // Parse attribute parameters from URL
   // Format: ?attr_size=4,5&attr_class=Military
   const attributes: Record<string, string[]> = {}
-  
+
   // Check if we have the extended getter with keys() method
-  if (typeof getParam === 'object' && 'keys' in getParam && 'get' in getParam) {
+  if (typeof getParam === "object" && "keys" in getParam && "get" in getParam) {
     // Iterate through all params to find attr_* parameters
     for (const key of getParam.keys()) {
-      if (key.startsWith('attr_')) {
+      if (key.startsWith("attr_")) {
         const attrName = key.substring(5) // Remove 'attr_' prefix
         const value = getParam.get(key)
         if (value) {
-          attributes[attrName] = value.split(',').map(s => s.trim()).filter(Boolean)
+          attributes[attrName] = value
+            .split(",")
+            .map((s) => s.trim())
+            .filter(Boolean)
         }
       }
     }
   }
-  
+
   // Support both getter function and extended getter object.
   // Use a wrapper so URLSearchParams.get is called with correct 'this' (don't extract .get).
   const get = (key: string): string | null =>
@@ -50,17 +53,13 @@ export function paramsToSearchState(
     sale_type: (get("kind") as SaleType) || undefined,
     item_type: get("type") || undefined,
     quantityAvailable:
-      get("quantityAvailable") !== null
-        ? +(get("quantityAvailable") ?? 0)
-        : 1,
+      get("quantityAvailable") !== null ? +(get("quantityAvailable") ?? 0) : 1,
     minCost: +(get("minCost") ?? 0) || 0,
     maxCost: get("maxCost") ? +(get("maxCost") ?? 0) : undefined,
     query: get("query") || "",
     statuses: get("statuses") || "active",
     index: get("index") ? +(get("index") ?? 0) : undefined,
-    page_size: get("page_size")
-      ? +(get("page_size") ?? 0)
-      : defaultPageSize,
+    page_size: get("page_size") ? +(get("page_size") ?? 0) : defaultPageSize,
     language_codes: get("language_codes")
       ? (get("language_codes") ?? "")
           .split(",")
@@ -107,14 +106,16 @@ export function searchStateToParams(
       : {}),
   }
 
-  // Serialize attributes to URL query parameters
-  // Format: ?attr_size=4,5&attr_class=Military
-  if (state.attributes) {
-    Object.entries(state.attributes).forEach(([name, values]) => {
-      if (values && values.length > 0) {
-        obj[`attr_${name}`] = values.join(",")
-      }
-    })
+  // Serialize attributes to JSON for backend
+  // Backend expects: ?attributes=[{"name":"size","values":["4","5"]}]
+  if (state.attributes && Object.keys(state.attributes).length > 0) {
+    const attributesArray = Object.entries(state.attributes)
+      .filter(([_, values]) => values && values.length > 0)
+      .map(([name, values]) => ({ name, values }))
+
+    if (attributesArray.length > 0) {
+      obj.attributes = JSON.stringify(attributesArray)
+    }
   }
 
   return Object.fromEntries(
