@@ -289,7 +289,7 @@ export function MarketSearchArea(props: {
               </Typography>
             </Grid>
             <Grid item xs={12}>
-              <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+              <Box sx={{ display: "flex", flexDirection: "column" }}>
                 {[...availableAttributes]
                   .sort((a, b) => a.display_order - b.display_order)
                   .map((attr) => (
