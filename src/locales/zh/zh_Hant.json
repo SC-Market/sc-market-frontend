@@ -997,6 +997,8 @@
     "failedSubmit": ""
   },
   "MarketListingView": {
+    "seeOtherListings": "查看此物品的其他{{count}}個列表",
+    "averagePrice": "平均價格",
     "addedToCart": "",
     "price": "",
     "ofAvailable": "",

@@ -44,6 +44,7 @@ import {
   useMarketGetListingOrdersQuery,
   useCreateListingBidMutation,
 } from "../../features/market"
+import { AggregateLink } from "../../features/market"
 import { OrderList } from "../../components/list/OrderList"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { MarkdownRender } from "../../components/markdown/Markdown"
@@ -1483,6 +1484,9 @@ export function MarketListingView() {
                           <Divider light />
                         </>
                       )}
+                      <Box sx={{ paddingTop: 2 }}>
+                        <AggregateLink listing={complete as UniqueListing} />
+                      </Box>
                       <Box sx={{ paddingTop: 2 }}>
                         <Typography
                           variant={"subtitle1"}
