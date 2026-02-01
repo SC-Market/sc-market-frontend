@@ -303,6 +303,9 @@ export function MarketSearchArea(props: {
                   "& .MuiAccordionSummary-content": {
                     margin: theme.spacing(1, 0),
                   },
+                  "& .MuiAccordionSummary-expandIconWrapper": {
+                    color: theme.palette.text.primary,
+                  },
                 }}
               >
                 <Typography variant={"subtitle2"} fontWeight={"bold"}>

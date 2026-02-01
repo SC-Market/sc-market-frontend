@@ -48,6 +48,7 @@ import { OrderList } from "../../components/list/OrderList"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { MarkdownRender } from "../../components/markdown/Markdown"
 import { Bids } from "../../features/market"
+import { useGetGameItemAttributesQuery } from "../../store/api/attributes"
 import { Helmet } from "react-helmet"
 import { useCookies } from "react-cookie"
 import { Cart } from "../../datatypes/Cart"
@@ -872,6 +873,47 @@ export function MarketListingViewSkeleton() {
   )
 }
 
+// Component for displaying item attributes
+function ItemAttributesSection({ gameItemId }: { gameItemId: string }) {
+  const { t } = useTranslation()
+  const { data: attributesData } = useGetGameItemAttributesQuery(gameItemId)
+
+  if (!attributesData?.attributes || attributesData.attributes.length === 0) {
+    return null
+  }
+
+  return (
+    <Box sx={{ paddingTop: 2 }}>
+      <Typography
+        variant={"subtitle1"}
+        fontWeight={"bold"}
+        color={"text.secondary"}
+        sx={{ mb: 1 }}
+      >
+        {t("MarketListingView.itemAttributes", "Item Attributes")}
+      </Typography>
+      <Box
+        sx={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
+          gap: 1,
+        }}
+      >
+        {attributesData.attributes.map((attr) => (
+          <Box key={attr.attribute_name}>
+            <Typography variant="caption" color="text.secondary">
+              {attr.display_name}
+            </Typography>
+            <Typography variant="body2" fontWeight="medium">
+              {attr.attribute_value}
+            </Typography>
+          </Box>
+        ))}
+      </Box>
+    </Box>
+  )
+}
+
 // Component for displaying paginated orders
 function ListingOrdersSection({ listingId }: { listingId: string }) {
   const { t } = useTranslation()
@@ -1453,6 +1495,11 @@ export function MarketListingView() {
                           <MarkdownRender text={details.description} />
                         </Typography>
                       </Box>
+                      {details.game_item_id && (
+                        <ItemAttributesSection
+                          gameItemId={details.game_item_id}
+                        />
+                      )}
                     </CardContent>
                   </Card>
                 </Fade>

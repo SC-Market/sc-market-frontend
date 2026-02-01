@@ -1,5 +1,5 @@
 import React from "react"
-import { Skeleton, Button, useMediaQuery, useTheme } from "@mui/material"
+import { Skeleton, Button, useMediaQuery, useTheme, Typography, Box } from "@mui/material"
 import { CompareArrowsRounded } from "@mui/icons-material"
 import { useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
@@ -69,12 +69,31 @@ export function calculateAveragePrice(
 }
 
 /**
+ * Helper function to format price with locale-specific formatting and aUEC suffix.
+ * Handles null/undefined values gracefully.
+ * 
+ * Sub-task 5.2: Implement price formatting
+ * Requirements: 2.5
+ * 
+ * @param price - Price value to format, or null/undefined
+ * @param locale - User's locale from i18n
+ * @returns Formatted price string with " aUEC" suffix, or null if price is null/undefined
+ */
+export function formatPrice(price: number | null | undefined, locale: string): string | null {
+  if (price === null || price === undefined) {
+    return null
+  }
+
+  return `${price.toLocaleString(locale)} aUEC`
+}
+
+/**
  * AggregateLink component displays a link to view all listings for the same game item.
  * Only renders when the listing has an associated game_item_id.
  */
 export function AggregateLink(props: AggregateLinkProps) {
   const { listing } = props
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const navigate = useNavigate()
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
@@ -125,26 +144,46 @@ export function AggregateLink(props: AggregateLinkProps) {
     return null
   }
 
+  // Calculate average price excluding current listing
+  const averagePrice = calculateAveragePrice(
+    aggregate.listings,
+    listing.listing.listing_id
+  )
+
   // Sub-task 4.2: Implement navigation on button click (Requirement 1.2)
   const handleClick = () => {
     navigate(`/market/aggregate/${listing.details.game_item_id}`)
   }
 
   // Sub-task 4.1: Create button component with listing count (Requirements 1.1, 1.4, 3.2)
+  // Sub-task 5.1: Create price comparison component (Requirements 2.1, 3.3)
   return (
-    <Button
-      variant="outlined"
-      startIcon={<CompareArrowsRounded />}
-      onClick={handleClick}
-      fullWidth={isMobile}
-      sx={{
-        width: isMobile ? "100%" : "auto",
-      }}
-    >
-      {t("MarketListingView.seeOtherListings", {
-        count: listingCount,
-        defaultValue: "See {{count}} other listings for this item",
-      })}
-    </Button>
+    <Box>
+      <Button
+        variant="outlined"
+        startIcon={<CompareArrowsRounded />}
+        onClick={handleClick}
+        fullWidth={isMobile}
+        sx={{
+          width: isMobile ? "100%" : "auto",
+        }}
+      >
+        {t("MarketListingView.seeOtherListings", {
+          count: listingCount,
+          defaultValue: "See {{count}} other listings for this item",
+        })}
+      </Button>
+      
+      {averagePrice !== null && (
+        <Typography 
+          variant="body2" 
+          color="text.secondary"
+          sx={{ mt: 1 }}
+        >
+          {t("MarketListingView.averagePrice", { defaultValue: "Average price" })}:{" "}
+          {formatPrice(averagePrice, i18n.language)}
+        </Typography>
+      )}
+    </Box>
   )
 }
