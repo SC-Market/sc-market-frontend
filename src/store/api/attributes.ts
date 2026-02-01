@@ -12,6 +12,7 @@ export interface AttributeDefinition {
   allowed_values: string[] | null
   applicable_item_types: string[] | null
   display_order: number
+  show_in_filters: boolean
   created_at: string
   updated_at: string
 }
@@ -23,6 +24,7 @@ export interface CreateAttributeDefinitionPayload {
   allowed_values?: string[] | null
   applicable_item_types?: string[] | null
   display_order?: number
+  show_in_filters?: boolean
 }
 
 export interface UpdateAttributeDefinitionPayload {
@@ -31,6 +33,7 @@ export interface UpdateAttributeDefinitionPayload {
   allowed_values?: string[] | null
   applicable_item_types?: string[] | null
   display_order?: number
+  show_in_filters?: boolean
 }
 
 export interface GameItemAttribute {
