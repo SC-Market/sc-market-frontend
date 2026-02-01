@@ -412,12 +412,12 @@ export function AdminGameItemAttributesView({
                 <Typography variant="body2">
                   <strong>Type:</strong> {selectedDefinition.attribute_type}
                 </Typography>
-                {selectedDefinition.applicable_item_types && (
-                  <Typography variant="body2">
-                    <strong>Applicable to:</strong>{" "}
-                    {selectedDefinition.applicable_item_types.join(", ")}
-                  </Typography>
-                )}
+                <Typography variant="body2">
+                  <strong>Applicable to:</strong>{" "}
+                  {selectedDefinition.applicable_item_types && selectedDefinition.applicable_item_types.length > 0
+                    ? selectedDefinition.applicable_item_types.join(", ")
+                    : "No types"}
+                </Typography>
               </Alert>
             )}
           </Box>
