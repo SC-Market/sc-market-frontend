@@ -68,12 +68,17 @@ const injectedRtkApi = api
       // Attribute Definitions
       getAttributeDefinitions: build.query<
         { definitions: AttributeDefinition[] },
-        { applicable_item_types?: string[] } | void
+        { applicable_item_types?: string[]; include_hidden?: boolean } | void
       >({
         query: (args) => ({
           url: `/api/attributes/definitions`,
-          params: args?.applicable_item_types
-            ? { applicable_item_types: args.applicable_item_types }
+          params: args
+            ? {
+                ...(args.applicable_item_types
+                  ? { applicable_item_types: args.applicable_item_types }
+                  : {}),
+                ...(args.include_hidden ? { include_hidden: 'true' } : {}),
+              }
             : undefined,
         }),
         transformResponse: (response: {
