@@ -34,7 +34,7 @@ export function AttributeFilterSection({
   // Render single-select dropdown
   if (attributeType === "select") {
     return (
-      <Box sx={{ mb: 2 }}>
+      <Box sx={{ mb: 1 }}>
         <TextField
           select
           fullWidth
