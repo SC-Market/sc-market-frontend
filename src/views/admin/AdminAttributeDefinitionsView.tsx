@@ -69,6 +69,7 @@ export function AdminAttributeDefinitionsView() {
     allowed_values: null,
     applicable_item_types: null,
     display_order: 0,
+    show_in_filters: false,
   })
 
   const [allowedValuesInput, setAllowedValuesInput] = useState<string>("")
@@ -96,6 +97,7 @@ export function AdminAttributeDefinitionsView() {
       allowed_values: definition.allowed_values,
       applicable_item_types: definition.applicable_item_types,
       display_order: definition.display_order,
+      show_in_filters: definition.show_in_filters,
     })
     setAllowedValuesInput(
       definition.allowed_values ? definition.allowed_values.join(", ") : "",
@@ -260,7 +262,10 @@ export function AdminAttributeDefinitionsView() {
     },
     {
       field: "applicable_item_types",
-      headerName: t("admin.attributes.field.applicableTypes", "Applicable Types"),
+      headerName: t(
+        "admin.attributes.field.applicableTypes",
+        "Applicable Types",
+      ),
       width: 200,
       display: "flex",
       flex: 1,
@@ -369,7 +374,10 @@ export function AdminAttributeDefinitionsView() {
         fullWidth
       >
         <DialogTitle>
-          {t("admin.attributes.createDefinition", "Create Attribute Definition")}
+          {t(
+            "admin.attributes.createDefinition",
+            "Create Attribute Definition",
+          )}
         </DialogTitle>
         <DialogContent>
           <Box sx={{ mt: 2 }}>
@@ -405,7 +413,10 @@ export function AdminAttributeDefinitionsView() {
               </InputLabel>
               <Select
                 value={formData.attribute_type}
-                label={t("admin.attributes.field.attributeType", "Attribute Type")}
+                label={t(
+                  "admin.attributes.field.attributeType",
+                  "Attribute Type",
+                )}
                 onChange={(e) =>
                   setFormData({
                     ...formData,
@@ -474,7 +485,29 @@ export function AdminAttributeDefinitionsView() {
                 "admin.attributes.orderHelp",
                 "Lower numbers appear first",
               )}
+              sx={{ mb: 2 }}
             />
+            <FormControl fullWidth>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <input
+                  type="checkbox"
+                  id="show-in-filters"
+                  checked={formData.show_in_filters || false}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      show_in_filters: e.target.checked,
+                    })
+                  }
+                />
+                <label htmlFor="show-in-filters">
+                  {t(
+                    "admin.attributes.showInFilters",
+                    "Show in market filters",
+                  )}
+                </label>
+              </Box>
+            </FormControl>
           </Box>
         </DialogContent>
         <DialogActions>
@@ -534,7 +567,10 @@ export function AdminAttributeDefinitionsView() {
               </InputLabel>
               <Select
                 value={formData.attribute_type}
-                label={t("admin.attributes.field.attributeType", "Attribute Type")}
+                label={t(
+                  "admin.attributes.field.attributeType",
+                  "Attribute Type",
+                )}
                 onChange={(e) =>
                   setFormData({
                     ...formData,
@@ -594,7 +630,29 @@ export function AdminAttributeDefinitionsView() {
                   display_order: parseInt(e.target.value) || 0,
                 })
               }
+              sx={{ mb: 2 }}
             />
+            <FormControl fullWidth>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                <input
+                  type="checkbox"
+                  id="edit-show-in-filters"
+                  checked={formData.show_in_filters || false}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      show_in_filters: e.target.checked,
+                    })
+                  }
+                />
+                <label htmlFor="edit-show-in-filters">
+                  {t(
+                    "admin.attributes.showInFilters",
+                    "Show in market filters",
+                  )}
+                </label>
+              </Box>
+            </FormControl>
           </Box>
         </DialogContent>
         <DialogActions>
@@ -621,7 +679,10 @@ export function AdminAttributeDefinitionsView() {
         fullWidth
       >
         <DialogTitle>
-          {t("admin.attributes.deleteDefinition", "Delete Attribute Definition")}
+          {t(
+            "admin.attributes.deleteDefinition",
+            "Delete Attribute Definition",
+          )}
         </DialogTitle>
         <DialogContent>
           <Typography>
