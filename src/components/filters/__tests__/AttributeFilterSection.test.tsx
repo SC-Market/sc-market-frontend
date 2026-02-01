@@ -44,8 +44,8 @@ describe("AttributeFilterSection", () => {
     })
   })
 
-  describe("multiselect type with checkboxes", () => {
-    it("renders checkboxes for few options", () => {
+  describe("multiselect type", () => {
+    it("renders Autocomplete for few options", () => {
       const onChange = jest.fn()
       render(
         <AttributeFilterSection
@@ -58,56 +58,12 @@ describe("AttributeFilterSection", () => {
         />,
       )
 
-      expect(screen.getByText("Component Class")).toBeInTheDocument()
-      expect(screen.getByLabelText("Military")).toBeInTheDocument()
-      expect(screen.getByLabelText("Stealth")).toBeInTheDocument()
-      expect(screen.getByLabelText("Industrial")).toBeInTheDocument()
+      expect(screen.getByLabelText("Component Class filter")).toBeInTheDocument()
     })
 
-    it("handles checkbox selection", () => {
-      const onChange = jest.fn()
-      render(
-        <AttributeFilterSection
-          attributeName="class"
-          displayName="Component Class"
-          attributeType="multiselect"
-          allowedValues={["Military", "Stealth"]}
-          selectedValues={[]}
-          onChange={onChange}
-        />,
-      )
-
-      const checkbox = screen.getByLabelText("Military")
-      fireEvent.click(checkbox)
-
-      expect(onChange).toHaveBeenCalledWith(["Military"])
-    })
-
-    it("handles checkbox deselection", () => {
-      const onChange = jest.fn()
-      render(
-        <AttributeFilterSection
-          attributeName="class"
-          displayName="Component Class"
-          attributeType="multiselect"
-          allowedValues={["Military", "Stealth"]}
-          selectedValues={["Military"]}
-          onChange={onChange}
-        />,
-      )
-
-      const checkbox = screen.getByLabelText("Military")
-      fireEvent.click(checkbox)
-
-      expect(onChange).toHaveBeenCalledWith([])
-    })
-  })
-
-  describe("multiselect type with autocomplete", () => {
-    it("renders autocomplete for many options", () => {
+    it("renders Autocomplete for many options", () => {
       const onChange = jest.fn()
       const manyValues = Array.from({ length: 10 }, (_, i) => `Value ${i}`)
-      
       render(
         <AttributeFilterSection
           attributeName="manufacturer"
@@ -120,6 +76,23 @@ describe("AttributeFilterSection", () => {
       )
 
       expect(screen.getByLabelText("Manufacturer filter")).toBeInTheDocument()
+    })
+
+    it("renders with selected values as chips", () => {
+      const onChange = jest.fn()
+      render(
+        <AttributeFilterSection
+          attributeName="class"
+          displayName="Component Class"
+          attributeType="multiselect"
+          allowedValues={["Military", "Stealth"]}
+          selectedValues={["Military"]}
+          onChange={onChange}
+        />,
+      )
+
+      expect(screen.getByLabelText("Component Class filter")).toBeInTheDocument()
+      expect(screen.getByText("Military")).toBeInTheDocument()
     })
   })
 
