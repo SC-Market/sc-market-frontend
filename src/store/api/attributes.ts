@@ -77,7 +77,7 @@ const injectedRtkApi = api
                 ...(args.applicable_item_types
                   ? { applicable_item_types: args.applicable_item_types }
                   : {}),
-                ...(args.include_hidden ? { include_hidden: 'true' } : {}),
+                ...(args.include_hidden ? { include_hidden: "true" } : {}),
               }
             : undefined,
         }),
@@ -191,6 +191,29 @@ const injectedRtkApi = api
           { type: "GameItemAttributes", id: gameItemId },
         ],
       }),
+
+      // Search attribute values
+      searchAttributeValues: build.query<
+        string[],
+        {
+          attributeName: string
+          query: string
+          itemType?: string
+          limit?: number
+        }
+      >({
+        query: ({ attributeName, query, itemType, limit }) => ({
+          url: "/api/attributes/values/search",
+          params: {
+            attribute_name: attributeName,
+            q: query,
+            item_type: itemType,
+            limit,
+          },
+        }),
+        transformResponse: (response: { data: { values: string[] } }) =>
+          response.data.values,
+      }),
     }),
     overrideExisting: false,
   })
@@ -206,4 +229,5 @@ export const {
   useUpsertGameItemAttributeMutation,
   useDeleteGameItemAttributeMutation,
   useImportGameItemAttributesMutation,
+  useLazySearchAttributeValuesQuery,
 } = injectedRtkApi
