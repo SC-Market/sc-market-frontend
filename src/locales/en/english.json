@@ -2582,5 +2582,14 @@
       "requestFailed": "Failed to request review revision",
       "updateFailed": "Failed to update review"
     }
+  },
+  "attributes": {
+    "size": "Size",
+    "class": "Class",
+    "manufacturer": "Manufacturer",
+    "grade": "Grade",
+    "component_type": "Type",
+    "color": "Color",
+    "quality": "Quality"
   }
 }
