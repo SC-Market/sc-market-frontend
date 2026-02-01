@@ -288,25 +288,28 @@ export function MarketSearchArea(props: {
                 {t("MarketSearchArea.itemAttributes", "Item Attributes")}
               </Typography>
             </Grid>
-            {[...availableAttributes]
-              .sort((a, b) => a.display_order - b.display_order)
-              .map((attr) => (
-                <Grid item xs={12} key={attr.attribute_name}>
-                  <AttributeFilterSection
-                    attributeName={attr.attribute_name}
-                    displayName={attr.display_name}
-                    attributeType={attr.attribute_type}
-                    allowedValues={attr.allowed_values}
-                    selectedValues={attributes[attr.attribute_name] || []}
-                    onChange={(values) =>
-                      setAttributes({
-                        ...attributes,
-                        [attr.attribute_name]: values,
-                      })
-                    }
-                  />
-                </Grid>
-              ))}
+            <Grid item xs={12}>
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+                {[...availableAttributes]
+                  .sort((a, b) => a.display_order - b.display_order)
+                  .map((attr) => (
+                    <AttributeFilterSection
+                      key={attr.attribute_name}
+                      attributeName={attr.attribute_name}
+                      displayName={attr.display_name}
+                      attributeType={attr.attribute_type}
+                      allowedValues={attr.allowed_values}
+                      selectedValues={attributes[attr.attribute_name] || []}
+                      onChange={(values) =>
+                        setAttributes({
+                          ...attributes,
+                          [attr.attribute_name]: values,
+                        })
+                      }
+                    />
+                  ))}
+              </Box>
+            </Grid>
           </>
         )}
       </Grid>

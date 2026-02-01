@@ -95,95 +95,57 @@ export function AggregateLink(props: AggregateLinkProps) {
   const { listing } = props
   const { t, i18n } = useTranslation()
   const navigate = useNavigate()
-  const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
 
-  // Early return when game_item_id is null (Requirement 1.3)
   if (!listing.details.game_item_id) {
     return null
   }
 
-  // Sub-task 2.1: Fetch aggregate data using RTK Query hook (Requirements 4.1, 4.2)
   const { data: aggregate, isLoading, error } = useGetAggregateByIdQuery(
-    listing.details.game_item_id,
-    {
-      skip: !listing.details.game_item_id, // Skip query when game_item_id is null
-    }
+    listing.details.game_item_id
   )
 
-  // Sub-task 2.3: Implement error handling (Requirement 4.3)
   if (error) {
     console.error("Failed to fetch aggregate data:", error)
-    return null // Graceful degradation - hide component on error
+    return null
   }
 
-  // Sub-task 2.2: Implement loading state with skeleton (Requirement 4.4)
   if (isLoading) {
-    return (
-      <Skeleton
-        variant="rectangular"
-        width="100%"
-        height={40}
-        sx={{ borderRadius: 1 }}
-      />
-    )
+    return <Skeleton variant="rectangular" width="100%" height={60} />
   }
 
-  // Calculate listing count excluding current listing
-  if (!aggregate) {
+  if (!aggregate?.listings) {
     return null
   }
 
-  const listingCount = calculateListingCount(
-    aggregate.listings,
-    listing.listing.listing_id
+  const otherListings = aggregate.listings.filter(
+    (l) => l.status === "active" && 
+           l.quantity_available > 0 && 
+           l.listing_id !== listing.listing.listing_id
   )
 
-  // Hide component if no other listings exist (Requirement 1.5)
-  if (listingCount === 0) {
+  if (otherListings.length === 0) {
     return null
   }
 
-  // Calculate average price excluding current listing
-  const averagePrice = calculateAveragePrice(
-    aggregate.listings,
-    listing.listing.listing_id
-  )
+  const avgPrice = otherListings.reduce((sum, l) => sum + l.price, 0) / otherListings.length
 
-  // Sub-task 4.2: Implement navigation on button click (Requirement 1.2)
-  const handleClick = () => {
-    navigate(`/market/aggregate/${listing.details.game_item_id}`)
-  }
-
-  // Sub-task 4.1: Create button component with listing count (Requirements 1.1, 1.4, 3.2)
-  // Sub-task 5.1: Create price comparison component (Requirements 2.1, 3.3)
   return (
     <Box>
       <Button
         variant="outlined"
         startIcon={<CompareArrowsRounded />}
-        onClick={handleClick}
-        fullWidth={isMobile}
-        sx={{
-          width: isMobile ? "100%" : "auto",
-        }}
+        onClick={() => navigate(`/market/aggregate/${listing.details.game_item_id}`)}
+        fullWidth
       >
         {t("MarketListingView.seeOtherListings", {
-          count: listingCount,
-          defaultValue: "See {{count}} other listings for this item",
+          count: otherListings.length,
+          defaultValue: `See ${otherListings.length} other listings`,
         })}
       </Button>
-      
-      {averagePrice !== null && (
-        <Typography 
-          variant="body2" 
-          color="text.secondary"
-          sx={{ mt: 1 }}
-        >
-          {t("MarketListingView.averagePrice", { defaultValue: "Average price" })}:{" "}
-          {formatPrice(averagePrice, i18n.language)}
-        </Typography>
-      )}
+      <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+        {t("MarketListingView.averagePrice", { defaultValue: "Average price" })}:{" "}
+        {avgPrice.toLocaleString(i18n.language)} aUEC
+      </Typography>
     </Box>
   )
 }
