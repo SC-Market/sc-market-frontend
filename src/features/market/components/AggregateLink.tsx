@@ -96,7 +96,14 @@ export function AggregateLink(props: AggregateLinkProps) {
   const { t, i18n } = useTranslation()
   const navigate = useNavigate()
 
+  console.log("[AggregateLink] Rendering with listing:", {
+    game_item_id: listing.details.game_item_id,
+    listing_id: listing.listing.listing_id,
+    title: listing.details.title
+  })
+
   if (!listing.details.game_item_id) {
+    console.log("[AggregateLink] No game_item_id, returning null")
     return null
   }
 
@@ -104,16 +111,25 @@ export function AggregateLink(props: AggregateLinkProps) {
     listing.details.game_item_id
   )
 
+  console.log("[AggregateLink] Query result:", { 
+    isLoading, 
+    hasError: !!error, 
+    hasAggregate: !!aggregate,
+    listingsCount: aggregate?.listings?.length 
+  })
+
   if (error) {
-    console.error("Failed to fetch aggregate data:", error)
+    console.error("[AggregateLink] Failed to fetch aggregate data:", error)
     return null
   }
 
   if (isLoading) {
+    console.log("[AggregateLink] Loading...")
     return <Skeleton variant="rectangular" width="100%" height={60} />
   }
 
   if (!aggregate?.listings) {
+    console.log("[AggregateLink] No aggregate or listings")
     return null
   }
 
@@ -123,7 +139,19 @@ export function AggregateLink(props: AggregateLinkProps) {
            l.listing_id !== listing.listing.listing_id
   )
 
+  console.log("[AggregateLink] Other listings:", {
+    total: aggregate.listings.length,
+    filtered: otherListings.length,
+    listings: aggregate.listings.map(l => ({
+      id: l.listing_id,
+      status: l.status,
+      qty: l.quantity_available,
+      isCurrent: l.listing_id === listing.listing.listing_id
+    }))
+  })
+
   if (otherListings.length === 0) {
+    console.log("[AggregateLink] No other listings, returning null")
     return null
   }
 

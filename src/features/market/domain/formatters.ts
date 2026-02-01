@@ -106,16 +106,14 @@ export function searchStateToParams(
       : {}),
   }
 
-  // Serialize attributes to JSON for backend
-  // Backend expects: ?attributes=[{"name":"size","values":["4","5"]}]
-  if (state.attributes && Object.keys(state.attributes).length > 0) {
-    const attributesArray = Object.entries(state.attributes)
-      .filter(([_, values]) => values && values.length > 0)
-      .map(([name, values]) => ({ name, values }))
-
-    if (attributesArray.length > 0) {
-      obj.attributes = JSON.stringify(attributesArray)
-    }
+  // Serialize attributes to URL query parameters
+  // Format: ?attr_size=4,5&attr_class=Military
+  if (state.attributes) {
+    Object.entries(state.attributes).forEach(([name, values]) => {
+      if (values && values.length > 0) {
+        obj[`attr_${name}`] = values.join(",")
+      }
+    })
   }
 
   return Object.fromEntries(
