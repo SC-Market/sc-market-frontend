@@ -1,7 +1,6 @@
 import React from "react"
-import { Skeleton, Button, Typography, Box } from "@mui/material"
-import { CompareArrowsRounded } from "@mui/icons-material"
-import { useNavigate } from "react-router-dom"
+import { Skeleton, Link, Typography } from "@mui/material"
+import { Link as RouterLink } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { UniqueListing, MarketAggregateListing } from "../domain/types"
 import { useGetAggregateByIdQuery } from "../api/marketApi"
@@ -102,7 +101,6 @@ function percentDiff(listingPrice: number, avgPrice: number): number {
 export function AggregateLink(props: AggregateLinkProps) {
   const { listing } = props
   const { t, i18n } = useTranslation()
-  const navigate = useNavigate()
 
   if (!listing.details.game_item_id) {
     return null
@@ -117,7 +115,7 @@ export function AggregateLink(props: AggregateLinkProps) {
   }
 
   if (isLoading) {
-    return <Skeleton variant="rounded" width={200} height={32} />
+    return <Skeleton variant="text" width={180} height={20} />
   }
 
   if (!aggregate?.listings) {
@@ -140,37 +138,27 @@ export function AggregateLink(props: AggregateLinkProps) {
   const listingPrice = listing.listing.price
   const pct = percentDiff(listingPrice, avgPrice)
   const pctFormatted =
-    pct >= 0
-      ? `+${pct.toFixed(0)}%`
-      : `${pct.toFixed(0)}%`
+    pct >= 0 ? `+${pct.toFixed(0)}%` : `${pct.toFixed(0)}%`
+  const to = `/market/aggregate/${listing.details.game_item_id}`
 
   return (
-    <Box>
-      <Button
-        variant="outlined"
-        size="small"
-        startIcon={<CompareArrowsRounded />}
-        onClick={() =>
-          navigate(`/market/aggregate/${listing.details.game_item_id}`)
-        }
+    <Link
+      component={RouterLink}
+      to={to}
+      underline="hover"
+      variant="body2"
+      color="text.secondary"
+      sx={{ display: "inline-block" }}
+    >
+      {t("MarketListingView.averagePrice", { defaultValue: "Average price" })}:{" "}
+      {avgPrice.toLocaleString(i18n.language)} aUEC{" "}
+      <Typography
+        component="span"
+        variant="body2"
+        color={pct > 0 ? "error.main" : pct < 0 ? "success.main" : "text.secondary"}
       >
-        {t("MarketListingView.seeOtherListings", {
-          count: otherListings.length,
-          defaultValue: `See ${otherListings.length} other listings`,
-        })}{" "}
-        <Typography
-          component="span"
-          variant="caption"
-          color={pct > 0 ? "error.main" : pct < 0 ? "success.main" : "text.secondary"}
-          sx={{ ml: 0.5 }}
-        >
-          ({pctFormatted})
-        </Typography>
-      </Button>
-      <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-        {t("MarketListingView.averagePrice", { defaultValue: "Average price" })}:{" "}
-        {avgPrice.toLocaleString(i18n.language)} aUEC
+        ({pctFormatted})
       </Typography>
-    </Box>
+    </Link>
   )
 }

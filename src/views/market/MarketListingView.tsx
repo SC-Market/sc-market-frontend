@@ -582,6 +582,12 @@ export function PurchaseArea(props: { listing: BaseListingType }) {
             >
               {listing.listing.price.toLocaleString(undefined)} aUEC
             </Typography>
+            {listing.type === "unique" &&
+              listing.details?.game_item_id && (
+                <Box sx={{ mt: 0.5 }}>
+                  <AggregateLink listing={listing as UniqueListing} />
+                </Box>
+              )}
           </Box>
           <NumericFormat
             decimalScale={0}
@@ -708,6 +714,11 @@ function BidArea(props: { listing: UniqueListing }) {
             price: listing.listing.price.toLocaleString(undefined),
           })}
         </Typography>
+        {listing.details?.game_item_id && (
+          <Box sx={{ mt: 0.5, mb: 1 }}>
+            <AggregateLink listing={listing} />
+          </Box>
+        )}
         <NumericFormat
           decimalScale={0}
           allowNegative={false}
@@ -1484,9 +1495,6 @@ export function MarketListingView() {
                           <Divider light />
                         </>
                       )}
-                      <Box sx={{ paddingTop: 2 }}>
-                        <AggregateLink listing={complete as UniqueListing} />
-                      </Box>
                       <Box sx={{ paddingTop: 2 }}>
                         <Typography
                           variant={"subtitle1"}
