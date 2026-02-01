@@ -309,8 +309,15 @@ export function MarketSearchArea(props: {
                   {t("MarketSearchArea.itemAttributes", "Item Attributes")}
                 </Typography>
               </AccordionSummary>
-              <AccordionDetails sx={{ padding: theme.spacing(1, 0) }}>
-                <Box>
+              <AccordionDetails sx={{ padding: 0 }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: theme.spacing(2),
+                    paddingTop: theme.spacing(1),
+                  }}
+                >
                   {[...availableAttributes]
                     .sort((a, b) => a.display_order - b.display_order)
                     .map((attr) => (
