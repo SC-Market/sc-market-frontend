@@ -7,11 +7,12 @@
 import { useState, useCallback, useEffect } from "react"
 import type { MarketSearchState, SaleTypeSelect } from "../domain/types"
 import { useMarketSearch } from "./MarketSearch"
+import { useGetAttributeDefinitionsQuery } from "../../../store/api/attributes"
 
 export interface AttributeDefinition {
   attribute_name: string
   display_name: string
-  attribute_type: 'select' | 'multiselect' | 'range' | 'text'
+  attribute_type: "select" | "multiselect" | "range" | "text"
   allowed_values: string[] | null
   applicable_item_types: string[]
   display_order: number
@@ -21,36 +22,20 @@ export function useMarketFilters() {
   const [searchState, setSearchState] = useMarketSearch()
 
   const [draft, setDraft] = useState<MarketSearchState>(searchState)
-  const [availableAttributes, setAvailableAttributes] = useState<AttributeDefinition[]>([])
 
   useEffect(() => {
     setDraft(searchState)
   }, [searchState])
 
   // Fetch available attributes when item_type changes
-  useEffect(() => {
-    const fetchAvailableAttributes = async () => {
-      if (!draft.item_type || draft.item_type === 'any') {
-        setAvailableAttributes([])
-        return
-      }
+  const { data: attributesData } = useGetAttributeDefinitionsQuery(
+    draft.item_type && draft.item_type !== "any"
+      ? { applicable_item_types: [draft.item_type] }
+      : undefined,
+    { skip: !draft.item_type || draft.item_type === "any" },
+  )
 
-      try {
-        // TODO: Replace with actual API call once endpoint is available
-        // const response = await fetch(`/api/attributes/definitions?item_type=${draft.item_type}`)
-        // const data = await response.json()
-        // setAvailableAttributes(data)
-        
-        // Placeholder: empty array until API is implemented
-        setAvailableAttributes([])
-      } catch (error) {
-        console.error('Failed to fetch attribute definitions:', error)
-        setAvailableAttributes([])
-      }
-    }
-
-    fetchAvailableAttributes()
-  }, [draft.item_type])
+  const availableAttributes = attributesData?.definitions || []
 
   const updateDraft = useCallback((partial: Partial<MarketSearchState>) => {
     setDraft((prev) => ({ ...prev, ...partial }))
@@ -60,9 +45,12 @@ export function useMarketFilters() {
     setSearchState(draft)
   }, [draft, setSearchState])
 
-  const setAttributes = useCallback((attributes: Record<string, string[]>) => {
-    updateDraft({ attributes })
-  }, [updateDraft])
+  const setAttributes = useCallback(
+    (attributes: Record<string, string[]>) => {
+      updateDraft({ attributes })
+    },
+    [updateDraft],
+  )
 
   return {
     draft,
