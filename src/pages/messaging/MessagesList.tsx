@@ -75,9 +75,9 @@ export function MessagesList() {
                     height: "100vh",
                     display: "flex",
                     flexDirection: "column",
+                    minWidth: 0,
                     marginLeft:
-                      (drawerOpen ? sidebarDrawerWidth : 0) +
-                      (messageSidebarOpen ? messagingDrawerWidth : 0),
+                      messageSidebarOpen ? messagingDrawerWidth : 0,
                     transition: theme.transitions.create("marginLeft", {
                       easing: theme.transitions.easing.sharp,
                       duration: theme.transitions.duration.enteringScreen,

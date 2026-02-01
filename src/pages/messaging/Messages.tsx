@@ -149,9 +149,11 @@ export function Messages() {
               style={{
                 flexGrow: 1,
                 overflow: "hidden",
-                height: "100%", // Use 100% of parent instead of viewport height
+                height: "100%",
                 display: "flex",
                 flexDirection: "column",
+                minWidth: 0,
+                position: "relative",
                 marginLeft:
                   !isMobile && messageSidebarOpen ? messagingDrawerWidth : 0,
                 transition: isMobile
@@ -160,7 +162,6 @@ export function Messages() {
                       easing: theme.transitions.easing.sharp,
                       duration: theme.transitions.duration.enteringScreen,
                     }),
-                position: "relative",
               }}
             >
               {/* Only add spacer on desktop or when not showing MessagesBodyMobile (which has its own spacer) */}
