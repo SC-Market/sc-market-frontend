@@ -31,6 +31,9 @@ export function AttributeFilterSection({
 }: AttributeFilterSectionProps) {
   const { t } = useTranslation()
 
+  // Try to translate the display name, fall back to the raw value
+  const translatedDisplayName = t(`attributes.${attributeName}`, displayName)
+
   // Render single-select dropdown
   if (attributeType === "select") {
     return (
@@ -40,13 +43,13 @@ export function AttributeFilterSection({
           fullWidth
           size="small"
           color="secondary"
-          label={displayName}
+          label={translatedDisplayName}
           value={selectedValues[0] || ""}
           onChange={(e) => {
             const value = e.target.value
             onChange(value ? [value] : [])
           }}
-          aria-label={`${displayName} filter`}
+          aria-label={`${translatedDisplayName} filter`}
         >
           <MenuItem value="">
             <em>{t("filters.none", "None")}</em>
@@ -78,7 +81,7 @@ export function AttributeFilterSection({
             renderInput={(params) => (
               <TextField
                 {...params}
-                label={displayName}
+                label={translatedDisplayName}
                 placeholder={
                   selectedValues.length === 0
                     ? t("filters.selectMultiple", "Select...")
@@ -104,7 +107,7 @@ export function AttributeFilterSection({
                 })}
               </Box>
             )}
-            aria-label={`${displayName} filter`}
+            aria-label={`${translatedDisplayName} filter`}
           />
         </Box>
       )
@@ -114,7 +117,7 @@ export function AttributeFilterSection({
     return (
       <Box sx={{ mb: 2 }}>
         <Typography variant="subtitle2" sx={{ mb: 1 }}>
-          {displayName}
+          {translatedDisplayName}
         </Typography>
         <FormGroup>
           {allowedValues?.map((value) => (
@@ -150,7 +153,7 @@ export function AttributeFilterSection({
     return (
       <Box sx={{ mb: 2 }}>
         <Typography variant="subtitle2" sx={{ mb: 1 }}>
-          {displayName}
+          {translatedDisplayName}
         </Typography>
         <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
           <TextField
@@ -164,7 +167,7 @@ export function AttributeFilterSection({
               onChange([newMin, maxValue].filter(Boolean))
             }}
             inputProps={{
-              "aria-label": `${displayName} minimum`,
+              "aria-label": `${translatedDisplayName} minimum`,
             }}
             sx={{ flex: 1 }}
           />
@@ -182,7 +185,7 @@ export function AttributeFilterSection({
               onChange([minValue, newMax].filter(Boolean))
             }}
             inputProps={{
-              "aria-label": `${displayName} maximum`,
+              "aria-label": `${translatedDisplayName} maximum`,
             }}
             sx={{ flex: 1 }}
           />
@@ -199,13 +202,13 @@ export function AttributeFilterSection({
           fullWidth
           size="small"
           color="secondary"
-          label={displayName}
+          label={translatedDisplayName}
           value={selectedValues[0] || ""}
           onChange={(e) => {
             const value = e.target.value
             onChange(value ? [value] : [])
           }}
-          aria-label={`${displayName} filter`}
+          aria-label={`${translatedDisplayName} filter`}
         />
       </Box>
     )
