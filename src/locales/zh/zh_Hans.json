@@ -1054,6 +1054,8 @@
     "failedSubmit": "Failed to submit! {{error}}"
   },
   "MarketListingView": {
+    "seeOtherListings": "查看此物品的其他{{count}}个列表",
+    "averagePrice": "平均价格",
     "addedToCart": "Added to cart!",
     "price": "Price",
     "ofAvailable": "of {{count}} available",
