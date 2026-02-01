@@ -50,7 +50,7 @@ export function AdminAttributeDefinitionsView() {
     data: definitionsData,
     isLoading,
     error,
-  } = useGetAttributeDefinitionsQuery()
+  } = useGetAttributeDefinitionsQuery({ include_hidden: true })
 
   const [createDefinition, { isLoading: isCreating }] =
     useCreateAttributeDefinitionMutation()
