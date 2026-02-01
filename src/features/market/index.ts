@@ -188,3 +188,5 @@ export {
 export { ListingPagination } from "./components/listings/ListingPagination"
 export type { ListingPaginationProps } from "./components/listings/ListingPagination"
 export { useListingPagination } from "./hooks/useListingPagination"
+export { AggregateLink } from "./components/AggregateLink"
+export type { AggregateLinkProps } from "./components/AggregateLink"

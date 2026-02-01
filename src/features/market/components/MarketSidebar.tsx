@@ -28,7 +28,10 @@ import { AttributeFilterSection } from "../../../components/filters/AttributeFil
 import { Accordion, AccordionSummary, AccordionDetails } from "@mui/material"
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
 
-export function MarketSearchArea(props: { status?: boolean }) {
+export function MarketSearchArea(props: {
+  status?: boolean
+  hideSearchBar?: boolean
+}) {
   const theme: ExtendedTheme = useTheme()
   const { t } = useTranslation()
   const {
@@ -68,34 +71,38 @@ export function MarketSearchArea(props: { status?: boolean }) {
       }}
     >
       <Grid container spacing={theme.layoutSpacing.layout}>
-        <Grid item xs={12}>
-          <Button
-            onClick={applyFilters}
-            startIcon={<SearchRounded />}
-            variant={"contained"}
-          >
-            {t("MarketSearchArea.searchBtn")}
-          </Button>
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            fullWidth
-            label={t("MarketSearchArea.search")}
-            size={"small"}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <IconButton>
-                    <SearchIcon />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            color={"secondary"}
-          />
-        </Grid>
+        {!props.hideSearchBar && (
+          <>
+            <Grid item xs={12}>
+              <Button
+                onClick={applyFilters}
+                startIcon={<SearchRounded />}
+                variant={"contained"}
+              >
+                {t("MarketSearchArea.searchBtn")}
+              </Button>
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                fullWidth
+                label={t("MarketSearchArea.search")}
+                size={"small"}
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <IconButton>
+                        <SearchIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                color={"secondary"}
+              />
+            </Grid>
+          </>
+        )}
         <Grid item xs={12}>
           <Typography variant={"subtitle2"} fontWeight={"bold"}>
             {t("MarketSearchArea.sorting")}
