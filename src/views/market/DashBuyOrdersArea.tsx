@@ -299,7 +299,7 @@ export function BuyOrderRow(props: {
                         price: (+row.price).toLocaleString(undefined),
                       },
                     )
-                  : t("buyorder.negotiable", "Negotiable")
+                  : t("buyorder.status.negotiable", "Negotiable")
                 : `${(+row.price).toLocaleString(undefined)} aUEC`}
             </Typography>
           </Stack>
@@ -314,7 +314,7 @@ export function BuyOrderRow(props: {
         <Typography variant="body2">
           {row.price != null
             ? `${row.negotiable ? "~" : ""}${(row.price * row.quantity).toLocaleString(undefined)} aUEC`
-            : t("buyorder.negotiable", "Negotiable")}
+            : t("buyorder.status.negotiable", "Negotiable")}
         </Typography>
       </TableCell>
       <TableCell

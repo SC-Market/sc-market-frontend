@@ -1049,6 +1049,8 @@
     "failedSubmit": "Не вдалося оновити! {{error}}"
   },
   "MarketListingView": {
+    "seeOtherListings": "Переглянути {{count}} інших оголошень для цього товару",
+    "averagePrice": "Середня ціна",
     "addedToCart": "Додано в кошик!",
     "price": "Ціна",
     "ofAvailable": "з {{count}} доступно",

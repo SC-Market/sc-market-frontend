@@ -67,7 +67,7 @@ export function LanguageSettings() {
       <Grid item xs={12}>
         <Typography variant="body2" color="text.secondary" paragraph>
           {t(
-            "settings.languages.description",
+            "settings.languages.section.description",
             "Select the languages you can communicate in.",
           )}
         </Typography>
@@ -95,7 +95,7 @@ export function LanguageSettings() {
               onChange={setSelectedLanguages}
               label={t("settings.languages.label", "Supported Languages")}
               helperText={t(
-                "settings.languages.helperText",
+                "settings.languages.field.helperText",
                 "Select the languages you can communicate in",
               )}
             />

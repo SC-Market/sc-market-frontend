@@ -1,0 +1,33 @@
+{
+  "accessibility": {
+    "orderDescriptionHelp": "Provide a detailed description of what you need",
+    "paymentTypeHelp": "Select how you want to handle payment for this service (required)"
+  },
+  "settings": {
+    "languages": {
+      "helperText": "Select the languages you can communicate in",
+      "description": "Select the languages you can communicate in."
+    }
+  },
+  "buyorder": {
+    "negotiable": "Negotiable"
+  },
+  "admin": {
+    "alerts": {
+      "invalidUrl": "Please enter a valid URL (http:// or https://)",
+      "title": "Title",
+      "link": "Link (Optional)"
+    },
+    "attributes": {
+      "type": "Attribute Type"
+    },
+    "moderation": {
+      "actions": "Actions",
+      "handleReport": "Handle Report",
+      "status": "Status"
+    },
+    "notificationTest": {
+      "fillAllFields": "Please fill all fields"
+    }
+  }
+}

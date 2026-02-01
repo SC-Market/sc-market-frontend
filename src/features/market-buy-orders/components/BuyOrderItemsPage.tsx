@@ -4,7 +4,7 @@ import { ContainerGrid } from "../../../components/layout/ContainerGrid"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../../hooks/layout/Drawer"
 import CloseIcon from "@mui/icons-material/CloseRounded"
 import MenuIcon from "@mui/icons-material/MenuRounded"
-import { IconButton, Grid, Divider } from "@mui/material"
+import { IconButton, Grid, Divider, Paper, useMediaQuery } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { Page } from "../../../components/metadata/Page"
@@ -12,6 +12,9 @@ import {
   BuyOrderActions,
   HideOnScroll,
   MarketNavArea,
+  MarketSidebar,
+  MarketSideBarToggleButton,
+  MarketSearchArea,
 } from "../../../features/market"
 import { MarketSidebarContext, useMarketSearch } from "../../market"
 import { useTranslation } from "react-i18next"
@@ -31,6 +34,7 @@ export function BuyOrderItemsPage() {
   const [open, setOpen] = useState(false)
   const [drawerOpen] = useDrawerOpen()
   const theme = useTheme<ExtendedTheme>()
+  const xs = useMediaQuery(theme.breakpoints.down("md"))
 
   const [marketSearch, setMarketSearch] = useMarketSearch()
   useEffect(() => {
@@ -43,31 +47,10 @@ export function BuyOrderItemsPage() {
 
   return (
     <Page title={t("market.buyOrders")}>
-      <IconButton
-        color="secondary"
-        aria-label={t("toggle_market_sidebar")}
-        sx={{
-          position: "absolute",
-          zIndex: 50,
-          [theme.breakpoints.up("sm")]: {
-            left: (drawerOpen ? sidebarDrawerWidth : 0) + 16,
-          },
-          [theme.breakpoints.down("sm")]: {
-            left: (drawerOpen ? sidebarDrawerWidth : 0) + 16,
-          },
-          [theme.breakpoints.up("md")]: {
-            display: "none",
-          },
-          top: 64 + 24,
-        }}
-        onClick={() => {
-          setOpen(true)
-        }}
-      >
-        {open ? <CloseIcon /> : <MenuIcon />}
-      </IconButton>
       <MarketSidebarContext.Provider value={[open, setOpen]}>
-        <ContainerGrid maxWidth={"lg"} sidebarOpen={true}>
+        {xs && <MarketSidebar />}
+        {xs && <MarketSideBarToggleButton />}
+        <ContainerGrid maxWidth={"xl"} sidebarOpen={false}>
           <Grid item xs={12}>
             <Grid
               container
@@ -94,9 +77,20 @@ export function BuyOrderItemsPage() {
 
           <Grid
             item
+            xs={0}
+            md={3}
+            sx={{ display: { xs: "none", md: "block" } }}
+          >
+            <Paper sx={{ padding: 1 }}>
+              <MarketSearchArea />
+            </Paper>
+          </Grid>
+
+          <Grid
+            item
             container
             xs={12}
-            lg={12}
+            md={9}
             spacing={theme.layoutSpacing.component}
             sx={{ transition: "0.3s" }}
           >

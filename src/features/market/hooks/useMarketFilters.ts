@@ -7,6 +7,16 @@
 import { useState, useCallback, useEffect } from "react"
 import type { MarketSearchState, SaleTypeSelect } from "../domain/types"
 import { useMarketSearch } from "./MarketSearch"
+import { useGetAttributeDefinitionsQuery } from "../../../store/api/attributes"
+
+export interface AttributeDefinition {
+  attribute_name: string
+  display_name: string
+  attribute_type: "select" | "multiselect" | "range" | "text"
+  allowed_values: string[] | null
+  applicable_item_types: string[]
+  display_order: number
+}
 
 export function useMarketFilters() {
   const [searchState, setSearchState] = useMarketSearch()
@@ -17,6 +27,16 @@ export function useMarketFilters() {
     setDraft(searchState)
   }, [searchState])
 
+  // Fetch available attributes when item_type changes
+  const { data: attributesData } = useGetAttributeDefinitionsQuery(
+    draft.item_type && draft.item_type !== "any"
+      ? { applicable_item_types: [draft.item_type] }
+      : undefined,
+    { skip: !draft.item_type || draft.item_type === "any" },
+  )
+
+  const availableAttributes = attributesData?.definitions || []
+
   const updateDraft = useCallback((partial: Partial<MarketSearchState>) => {
     setDraft((prev) => ({ ...prev, ...partial }))
   }, [])
@@ -24,6 +44,13 @@ export function useMarketFilters() {
   const applyFilters = useCallback(() => {
     setSearchState(draft)
   }, [draft, setSearchState])
+
+  const setAttributes = useCallback(
+    (attributes: Record<string, string[]>) => {
+      updateDraft({ attributes })
+    },
+    [updateDraft],
+  )
 
   return {
     draft,
@@ -48,5 +75,8 @@ export function useMarketFilters() {
     setStatuses: (v: string) => updateDraft({ statuses: v }),
     languageCodes: draft.language_codes ?? [],
     setLanguageCodes: (v: string[]) => updateDraft({ language_codes: v }),
+    attributes: draft.attributes ?? {},
+    setAttributes,
+    availableAttributes,
   }
 }

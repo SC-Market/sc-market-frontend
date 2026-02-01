@@ -1003,6 +1003,8 @@
     "failedSubmit": "Failed to submit! {{error}}"
   },
   "MarketListingView": {
+    "seeOtherListings": "このアイテムの他の{{count}}件の出品を見る",
+    "averagePrice": "平均価格",
     "addedToCart": "Added to cart!",
     "price": "Price",
     "ofAvailable": "of {{count}} available",

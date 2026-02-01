@@ -1012,6 +1012,8 @@
     "failedSubmit": "Failed to submit! {{error}}"
   },
   "MarketListingView": {
+    "seeOtherListings": "Siehe {{count}} weitere Angebote für diesen Artikel",
+    "averagePrice": "Durchschnittspreis",
     "addedToCart": "Added to cart!",
     "price": "Price",
     "ofAvailable": "of {{count}} available",
