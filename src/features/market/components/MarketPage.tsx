@@ -38,6 +38,11 @@ const ServiceActions = React.lazy(() =>
     default: module.ServiceActions,
   })),
 )
+const ContractListings = React.lazy(() =>
+  import("../../../views/contracts/ContractListings").then((module) => ({
+    default: module.ContractListings,
+  })),
+)
 
 function MarketTabLoader() {
   return null
@@ -51,7 +56,7 @@ export function MarketPage() {
   const xs = useMediaQuery(theme.breakpoints.down("md"))
   const [marketSidebarOpen, setMarketSidebarOpen] = useState(false)
   const [serviceSidebarOpen, setServiceSidebarOpen] = useState(false)
-  const pages = ["/market/services", "/market"]
+  const pages = ["/market/services", "/market", "/market/contracts"]
   const tabPage = useMemo(
     () =>
       pages.indexOf(
@@ -148,6 +153,8 @@ export function MarketPage() {
                         navigate("/market/services")
                       } else if (newValue === 1) {
                         navigate("/market")
+                      } else if (newValue === 2) {
+                        navigate("/market/contracts")
                       }
                     }}
                     aria-label={t("ui.aria.orgInfoArea")}
@@ -174,6 +181,11 @@ export function MarketPage() {
                       value={0}
                       {...a11yProps(0)}
                     />
+                    <Tab
+                      label={t("market.contractsTab", "Open Contracts")}
+                      value={2}
+                      {...a11yProps(2)}
+                    />
                   </Tabs>
                 </Grid>
                 <Grid item xs={12} sm="auto">
@@ -196,6 +208,11 @@ export function MarketPage() {
             <TabPanel value={tabPage} index={0}>
               <Suspense fallback={<MarketTabLoader />}>
                 <ServiceMarketView />
+              </Suspense>
+            </TabPanel>
+            <TabPanel value={tabPage} index={2}>
+              <Suspense fallback={<MarketTabLoader />}>
+                <ContractListings />
               </Suspense>
             </TabPanel>
           </OpenLayout>
