@@ -3,9 +3,6 @@ import {
   Box,
   TextField,
   MenuItem,
-  Checkbox,
-  FormControlLabel,
-  FormGroup,
   Typography,
   Autocomplete,
   Chip,
@@ -64,83 +61,50 @@ export function AttributeFilterSection({
     )
   }
 
-  // Render multi-select with checkboxes or autocomplete
+  // Render multi-select with Autocomplete
   if (attributeType === "multiselect") {
-    // Use Autocomplete for better UX with many options
-    if (allowedValues && allowedValues.length > 5) {
-      return (
-        <Box sx={{ mb: 2 }}>
-          <Autocomplete
-            multiple
-            size="small"
-            options={allowedValues}
-            value={selectedValues}
-            onChange={(event, newValue) => {
-              onChange(newValue)
-            }}
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label={translatedDisplayName}
-                placeholder={
-                  selectedValues.length === 0
-                    ? t("filters.selectMultiple", "Select...")
-                    : ""
-                }
-                size="small"
-                color="secondary"
-              />
-            )}
-            renderTags={(value, getTagProps) => (
-              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                {value.map((option, index) => {
-                  const { key, ...tagProps } = getTagProps({ index })
-                  return (
-                    <Chip
-                      key={key}
-                      label={option}
-                      {...tagProps}
-                      size="small"
-                      variant="outlined"
-                    />
-                  )
-                })}
-              </Box>
-            )}
-            aria-label={`${translatedDisplayName} filter`}
-          />
-        </Box>
-      )
-    }
-
-    // Use checkboxes for fewer options
+    const options = allowedValues ?? []
     return (
       <Box sx={{ mb: 2 }}>
-        <Typography variant="subtitle2" sx={{ mb: 1 }}>
-          {translatedDisplayName}
-        </Typography>
-        <FormGroup>
-          {allowedValues?.map((value) => (
-            <FormControlLabel
-              key={value}
-              control={
-                <Checkbox
-                  checked={selectedValues.includes(value)}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      onChange([...selectedValues, value])
-                    } else {
-                      onChange(selectedValues.filter((v) => v !== value))
-                    }
-                  }}
-                  size="small"
-                  color="secondary"
-                />
+        <Autocomplete
+          multiple
+          size="small"
+          options={options}
+          value={selectedValues}
+          onChange={(event, newValue) => {
+            onChange(newValue)
+          }}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label={translatedDisplayName}
+              placeholder={
+                selectedValues.length === 0
+                  ? t("filters.selectMultiple", "Select...")
+                  : ""
               }
-              label={value}
+              size="small"
+              color="secondary"
             />
-          ))}
-        </FormGroup>
+          )}
+          renderTags={(value, getTagProps) => (
+            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+              {value.map((option, index) => {
+                const { key, ...tagProps } = getTagProps({ index })
+                return (
+                  <Chip
+                    key={key}
+                    label={option}
+                    {...tagProps}
+                    size="small"
+                    variant="outlined"
+                  />
+                )
+              })}
+            </Box>
+          )}
+          aria-label={`${translatedDisplayName} filter`}
+        />
       </Box>
     )
   }
