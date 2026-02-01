@@ -211,9 +211,44 @@ export function MarketListingForm(props: { sale_type: "sale" | "auction" }) {
     // <FormControl component={Grid} item xs={12} container spacing={2}>
     <>
       <FormPaper title={t("MarketListingForm.about")}>
-        <Grid item xs={12} lg={12}>
+        {/* Item Selection Section */}
+        <Grid item xs={12}>
+          <Typography variant="h6" gutterBottom>
+            {t("MarketListingForm.itemSelection", "Item Selection")}
+          </Typography>
+        </Grid>
+
+        <SelectGameItemStack
+          onItemChange={(value) => {
+            setState((state) => ({
+              ...state,
+              item_name: value,
+              // Auto-populate title if empty
+              title: !state.title && value ? value : state.title,
+            }))
+          }}
+          onTypeChange={(value) =>
+            setState((state) => ({
+              ...state,
+              item_type: value,
+              item_name: null,
+            }))
+          }
+          item_type={state.item_type}
+          item_name={state.item_name}
+        />
+
+        {/* Listing Details Section */}
+        <Grid item xs={12} sx={{ mt: 2 }}>
+          <Typography variant="h6" gutterBottom>
+            {t("MarketListingForm.listingDetails", "Listing Details")}
+          </Typography>
+        </Grid>
+
+        <Grid item xs={12} md={6}>
           <TextField
             fullWidth
+            size="small"
             label={t("MarketListingForm.title")}
             id="order-title"
             value={state.title}
@@ -239,27 +274,13 @@ export function MarketListingForm(props: { sale_type: "sale" | "auction" }) {
           </div>
         </Grid>
 
-        <SelectGameItemStack
-          onItemChange={(value) =>
-            setState((state) => ({ ...state, item_name: value }))
-          }
-          onTypeChange={(value) =>
-            setState((state) => ({
-              ...state,
-              item_type: value,
-              item_name: null,
-            }))
-          }
-          item_type={state.item_type}
-          item_name={state.item_name}
-        />
-
-        <Grid item xs={12} lg={12}>
+        <Grid item xs={12} md={6}>
           <NumericFormat
             decimalScale={0}
             allowNegative={false}
             customInput={TextField}
             thousandSeparator
+            size="small"
             onValueChange={async (values, sourceInfo) => {
               setState((state) => ({
                 ...state,
@@ -417,12 +438,13 @@ export function MarketListingForm(props: { sale_type: "sale" | "auction" }) {
       </FormPaper>
 
       <FormPaper title={t("MarketListingForm.costs")}>
-        <Grid item xs={12}>
+        <Grid item xs={12} md={6}>
           <NumericFormat
             decimalScale={0}
             allowNegative={false}
             customInput={TextField}
             thousandSeparator
+            size="small"
             onValueChange={async (values, sourceInfo) => {
               setState((state) => ({
                 ...state,
