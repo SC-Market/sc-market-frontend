@@ -1,5 +1,5 @@
 import React from "react"
-import { Skeleton, Link, Typography } from "@mui/material"
+import { Skeleton, Link, Typography, Tooltip, Box } from "@mui/material"
 import { Link as RouterLink } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { UniqueListing, MarketAggregateListing } from "../domain/types"
@@ -141,24 +141,67 @@ export function AggregateLink(props: AggregateLinkProps) {
     pct >= 0 ? `+${pct.toFixed(0)}%` : `${pct.toFixed(0)}%`
   const to = `/market/aggregate/${listing.details.game_item_id}`
 
-  return (
-    <Link
-      component={RouterLink}
-      to={to}
-      underline="hover"
-      variant="body2"
-      color="text.secondary"
-      sx={{ display: "inline-block" }}
-    >
-      {t("MarketListingView.averagePrice", { defaultValue: "Average price" })}:{" "}
-      {avgPrice.toLocaleString(i18n.language)} aUEC{" "}
-      <Typography
-        component="span"
-        variant="body2"
-        color={pct > 0 ? "error.main" : pct < 0 ? "success.main" : "text.secondary"}
-      >
-        ({pctFormatted})
+  const tooltipTitle = (
+    <Box component="span" sx={{ display: "block" }}>
+      <Typography variant="caption" component="span" display="block">
+        {t("MarketListingView.tooltipThisListing", {
+          defaultValue: "This listing: {{price}} aUEC",
+          price: listingPrice.toLocaleString(i18n.language),
+        })}
       </Typography>
-    </Link>
+      <Typography variant="caption" component="span" display="block">
+        {t("MarketListingView.tooltipAvgOther", {
+          defaultValue: "Average of {{count}} other listings: {{price}} aUEC",
+          count: otherListings.length,
+          price: avgPrice.toLocaleString(i18n.language),
+        })}
+      </Typography>
+      <Typography variant="caption" component="span" display="block">
+        {pct > 0
+          ? t("MarketListingView.tooltipAboveAvg", {
+              defaultValue: "{{pct}}% above average",
+              pct: pct.toFixed(0),
+            })
+          : pct < 0
+            ? t("MarketListingView.tooltipBelowAvg", {
+                defaultValue: "{{pct}}% below average",
+                pct: Math.abs(pct).toFixed(0),
+              })
+            : t("MarketListingView.tooltipAtAvg", {
+                defaultValue: "At average price",
+              })}
+      </Typography>
+      <Typography variant="caption" component="span" display="block" sx={{ mt: 0.5 }}>
+        {t("MarketListingView.tooltipViewAll", {
+          defaultValue: "Click to view all listings for this item",
+        })}
+      </Typography>
+    </Box>
+  )
+
+  return (
+    <Tooltip title={tooltipTitle} placement="top" enterDelay={300}>
+      <Box component="span" sx={{ display: "inline-block" }}>
+        <Link
+          component={RouterLink}
+          to={to}
+          underline="hover"
+          variant="body2"
+          color="text.secondary"
+        >
+          {t("MarketListingView.averagePrice", { defaultValue: "Average price" })}:{" "}
+          {avgPrice.toLocaleString(i18n.language)} aUEC{" "}
+          <Typography
+            component="span"
+            variant="body2"
+            color={
+              pct > 0 ? "error.main" : pct < 0 ? "success.main" : "text.secondary"
+            }
+          >
+            ({pctFormatted})
+          </Typography>
+        </Link>
+      </Box>
+    </Tooltip>
   )
 }
