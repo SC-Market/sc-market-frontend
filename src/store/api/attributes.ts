@@ -1,6 +1,9 @@
 import { generatedApi as api } from "../generatedApi"
 
-export const addTagTypes = ["AttributeDefinitions", "GameItemAttributes"] as const
+export const addTagTypes = [
+  "AttributeDefinitions",
+  "GameItemAttributes",
+] as const
 
 export interface AttributeDefinition {
   attribute_name: string
@@ -70,8 +73,9 @@ const injectedRtkApi = api
             ? { applicable_item_types: args.applicable_item_types }
             : undefined,
         }),
-        transformResponse: (response: { data: { definitions: AttributeDefinition[] } }) =>
-          response.data,
+        transformResponse: (response: {
+          data: { definitions: AttributeDefinition[] }
+        }) => response.data,
         providesTags: ["AttributeDefinitions"],
       }),
 
@@ -84,8 +88,9 @@ const injectedRtkApi = api
           method: "POST",
           body: payload,
         }),
-        transformResponse: (response: { data: { definition: AttributeDefinition } }) =>
-          response.data,
+        transformResponse: (response: {
+          data: { definition: AttributeDefinition }
+        }) => response.data,
         invalidatesTags: ["AttributeDefinitions"],
       }),
 
@@ -98,8 +103,9 @@ const injectedRtkApi = api
           method: "PUT",
           body: data,
         }),
-        transformResponse: (response: { data: { definition: AttributeDefinition } }) =>
-          response.data,
+        transformResponse: (response: {
+          data: { definition: AttributeDefinition }
+        }) => response.data,
         invalidatesTags: ["AttributeDefinitions"],
       }),
 
@@ -112,8 +118,9 @@ const injectedRtkApi = api
           method: "DELETE",
           params: cascade ? { cascade: "true" } : undefined,
         }),
-        transformResponse: (response: { data: { message: string; cascade: boolean } }) =>
-          response.data,
+        transformResponse: (response: {
+          data: { message: string; cascade: boolean }
+        }) => response.data,
         invalidatesTags: ["AttributeDefinitions", "GameItemAttributes"],
       }),
 
@@ -123,10 +130,11 @@ const injectedRtkApi = api
         string
       >({
         query: (gameItemId) => ({
-          url: `/api/game-items/${gameItemId}/attributes`,
+          url: `/api/attributes/game-items/${gameItemId}`,
         }),
-        transformResponse: (response: { data: { attributes: GameItemAttribute[] } }) =>
-          response.data,
+        transformResponse: (response: {
+          data: { attributes: GameItemAttribute[] }
+        }) => response.data,
         providesTags: (result, error, gameItemId) => [
           { type: "GameItemAttributes", id: gameItemId },
         ],
@@ -137,12 +145,13 @@ const injectedRtkApi = api
         { gameItemId: string; data: UpsertGameItemAttributePayload }
       >({
         query: ({ gameItemId, data }) => ({
-          url: `/api/game-items/${gameItemId}/attributes`,
+          url: `/api/attributes/game-items/${gameItemId}`,
           method: "PUT",
           body: data,
         }),
-        transformResponse: (response: { data: { attribute: GameItemAttribute } }) =>
-          response.data,
+        transformResponse: (response: {
+          data: { attribute: GameItemAttribute }
+        }) => response.data,
         invalidatesTags: (result, error, { gameItemId }) => [
           { type: "GameItemAttributes", id: gameItemId },
         ],
@@ -153,7 +162,7 @@ const injectedRtkApi = api
         { gameItemId: string; attributeName: string }
       >({
         query: ({ gameItemId, attributeName }) => ({
-          url: `/api/game-items/${gameItemId}/attributes/${encodeURIComponent(attributeName)}`,
+          url: `/api/attributes/game-items/${gameItemId}/${encodeURIComponent(attributeName)}`,
           method: "DELETE",
         }),
         transformResponse: (response: { data: { message: string } }) =>
@@ -169,8 +178,7 @@ const injectedRtkApi = api
           url: `/api/attributes/import/${gameItemId}`,
           method: "POST",
         }),
-        transformResponse: (response: { data: ImportResult }) =>
-          response.data,
+        transformResponse: (response: { data: ImportResult }) => response.data,
         invalidatesTags: (result, error, gameItemId) => [
           { type: "GameItemAttributes", id: gameItemId },
         ],
