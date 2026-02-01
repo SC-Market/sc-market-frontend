@@ -635,12 +635,13 @@ export function ItemListings(props: {
   const [page, setPage] = useState(0)
 
   // Memoize search query parameters to prevent unnecessary re-renders
-  const searchQueryParams = useMemo(
-    () => ({
+  const searchQueryParams = useMemo(() => {
+    const { attributes, ...rest } = searchState
+    const params: any = {
       rating: 0,
       contractor_seller: CURRENT_CUSTOM_ORG || org,
       user_seller: user,
-      ...searchState,
+      ...rest,
       language_codes:
         searchState.language_codes && searchState.language_codes.length > 0
           ? searchState.language_codes.join(",")
@@ -648,9 +649,19 @@ export function ItemListings(props: {
       index: page,
       page_size: perPage,
       listing_type: "not-aggregate",
-    }),
-    [org, user, searchState, page, perPage],
-  )
+    }
+
+    // Convert attributes object to attr_* params
+    if (attributes) {
+      Object.entries(attributes).forEach(([name, values]) => {
+        if (values && values.length > 0) {
+          params[`attr_${name}`] = values.join(",")
+        }
+      })
+    }
+
+    return params
+  }, [org, user, searchState, page, perPage])
 
   const {
     data: results,
@@ -823,25 +834,31 @@ export function BulkListingsRefactor(props: {
 
 export function BuyOrders() {
   const [searchState] = useMarketSearch()
-  
+
   // Convert attributes from URL format to API format
   const searchParams = useMemo(() => {
     const params: any = {}
-    
+
     // Convert attributes to JSON string for API
-    if (searchState.attributes && Object.keys(searchState.attributes).length > 0) {
-      const attributeFilters = Object.entries(searchState.attributes).map(([name, values]) => ({
-        name,
-        values,
-        operator: 'in' as const,
-      }))
+    if (
+      searchState.attributes &&
+      Object.keys(searchState.attributes).length > 0
+    ) {
+      const attributeFilters = Object.entries(searchState.attributes).map(
+        ([name, values]) => ({
+          name,
+          values,
+          operator: "in" as const,
+        }),
+      )
       params.attributes = JSON.stringify(attributeFilters)
     }
-    
+
     return params
   }, [searchState])
-  
-  const { data: listings, isLoading } = useGetBuyOrderListingsQuery(searchParams)
+
+  const { data: listings, isLoading } =
+    useGetBuyOrderListingsQuery(searchParams)
 
   return (
     <DisplayBuyOrderListings
