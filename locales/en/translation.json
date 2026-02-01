@@ -1927,6 +1927,8 @@
     "updating": "Updating..."
   },
   "MarketListingView": {
+    "seeOtherListings": "See {{count}} other listings for this item",
+    "averagePrice": "Average price",
     "otherListingsFrom": "",
     "sellerReviews": "",
     "viewAllReviews_one": "View all {{count}} reviews",
