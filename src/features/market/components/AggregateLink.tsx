@@ -1,7 +1,11 @@
 import React from "react"
-import { Skeleton } from "@mui/material"
+import { Skeleton, Button, useMediaQuery, useTheme } from "@mui/material"
+import { CompareArrowsRounded } from "@mui/icons-material"
+import { useNavigate } from "react-router-dom"
+import { useTranslation } from "react-i18next"
 import { UniqueListing, MarketAggregate, MarketAggregateListing } from "../domain/types"
 import { useGetAggregateByIdQuery } from "../api/marketApi"
+import { ExtendedTheme } from "../../../hooks/styles/Theme"
 
 export interface AggregateLinkProps {
   listing: UniqueListing
@@ -70,6 +74,10 @@ export function calculateAveragePrice(
  */
 export function AggregateLink(props: AggregateLinkProps) {
   const { listing } = props
+  const { t } = useTranslation()
+  const navigate = useNavigate()
+  const theme = useTheme<ExtendedTheme>()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
 
   // Early return when game_item_id is null (Requirement 1.3)
   if (!listing.details.game_item_id) {
@@ -102,6 +110,41 @@ export function AggregateLink(props: AggregateLinkProps) {
     )
   }
 
-  // TODO: Implement button rendering and average price display
-  return null
+  // Calculate listing count excluding current listing
+  if (!aggregate) {
+    return null
+  }
+
+  const listingCount = calculateListingCount(
+    aggregate.listings,
+    listing.listing.listing_id
+  )
+
+  // Hide component if no other listings exist (Requirement 1.5)
+  if (listingCount === 0) {
+    return null
+  }
+
+  // Sub-task 4.2: Implement navigation on button click (Requirement 1.2)
+  const handleClick = () => {
+    navigate(`/market/aggregate/${listing.details.game_item_id}`)
+  }
+
+  // Sub-task 4.1: Create button component with listing count (Requirements 1.1, 1.4, 3.2)
+  return (
+    <Button
+      variant="outlined"
+      startIcon={<CompareArrowsRounded />}
+      onClick={handleClick}
+      fullWidth={isMobile}
+      sx={{
+        width: isMobile ? "100%" : "auto",
+      }}
+    >
+      {t("MarketListingView.seeOtherListings", {
+        count: listingCount,
+        defaultValue: "See {{count}} other listings for this item",
+      })}
+    </Button>
+  )
 }

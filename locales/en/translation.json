@@ -1958,6 +1958,9 @@
     "expires": "",
     "views": "",
     "languages": "Languages",
+    "seeOtherListings_one": "See {{count}} other listing for this item",
+    "seeOtherListings_other": "See {{count}} other listings for this item",
+    "averagePrice": "Average price",
     "description": ""
   },
   "MarketMultipleView": {
