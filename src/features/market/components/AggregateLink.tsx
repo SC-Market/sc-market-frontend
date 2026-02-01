@@ -1,11 +1,10 @@
 import React from "react"
-import { Skeleton, Button, useMediaQuery, useTheme, Typography, Box } from "@mui/material"
+import { Skeleton, Button, Typography, Box } from "@mui/material"
 import { CompareArrowsRounded } from "@mui/icons-material"
 import { useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import { UniqueListing, MarketAggregate, MarketAggregateListing } from "../domain/types"
+import { UniqueListing, MarketAggregateListing } from "../domain/types"
 import { useGetAggregateByIdQuery } from "../api/marketApi"
-import { ExtendedTheme } from "../../../hooks/styles/Theme"
 
 export interface AggregateLinkProps {
   listing: UniqueListing
@@ -91,19 +90,21 @@ export function formatPrice(price: number | null | undefined, locale: string): s
  * AggregateLink component displays a link to view all listings for the same game item.
  * Only renders when the listing has an associated game_item_id.
  */
+/**
+ * Compute percentage difference of listing price vs average: (listing - avg) / avg * 100.
+ * Positive = listing is more expensive, negative = listing is cheaper.
+ */
+function percentDiff(listingPrice: number, avgPrice: number): number {
+  if (avgPrice === 0) return 0
+  return ((listingPrice - avgPrice) / avgPrice) * 100
+}
+
 export function AggregateLink(props: AggregateLinkProps) {
   const { listing } = props
   const { t, i18n } = useTranslation()
   const navigate = useNavigate()
 
-  console.log("[AggregateLink] Rendering with listing:", {
-    game_item_id: listing.details.game_item_id,
-    listing_id: listing.listing.listing_id,
-    title: listing.details.title
-  })
-
   if (!listing.details.game_item_id) {
-    console.log("[AggregateLink] No game_item_id, returning null")
     return null
   }
 
@@ -111,66 +112,62 @@ export function AggregateLink(props: AggregateLinkProps) {
     listing.details.game_item_id
   )
 
-  console.log("[AggregateLink] Query result:", { 
-    isLoading, 
-    hasError: !!error, 
-    hasAggregate: !!aggregate,
-    listingsCount: aggregate?.listings?.length 
-  })
-
   if (error) {
-    console.error("[AggregateLink] Failed to fetch aggregate data:", error)
     return null
   }
 
   if (isLoading) {
-    console.log("[AggregateLink] Loading...")
-    return <Skeleton variant="rectangular" width="100%" height={60} />
+    return <Skeleton variant="rounded" width={200} height={32} />
   }
 
   if (!aggregate?.listings) {
-    console.log("[AggregateLink] No aggregate or listings")
     return null
   }
 
   const otherListings = aggregate.listings.filter(
-    (l) => l.status === "active" && 
-           l.quantity_available > 0 && 
-           l.listing_id !== listing.listing.listing_id
+    (l) =>
+      l.status === "active" &&
+      l.quantity_available > 0 &&
+      l.listing_id !== listing.listing.listing_id
   )
 
-  console.log("[AggregateLink] Other listings:", {
-    total: aggregate.listings.length,
-    filtered: otherListings.length,
-    listings: aggregate.listings.map(l => ({
-      id: l.listing_id,
-      status: l.status,
-      qty: l.quantity_available,
-      isCurrent: l.listing_id === listing.listing.listing_id
-    }))
-  })
-
   if (otherListings.length === 0) {
-    console.log("[AggregateLink] No other listings, returning null")
     return null
   }
 
-  const avgPrice = otherListings.reduce((sum, l) => sum + l.price, 0) / otherListings.length
+  const avgPrice =
+    otherListings.reduce((sum, l) => sum + l.price, 0) / otherListings.length
+  const listingPrice = listing.listing.price
+  const pct = percentDiff(listingPrice, avgPrice)
+  const pctFormatted =
+    pct >= 0
+      ? `+${pct.toFixed(0)}%`
+      : `${pct.toFixed(0)}%`
 
   return (
     <Box>
       <Button
         variant="outlined"
+        size="small"
         startIcon={<CompareArrowsRounded />}
-        onClick={() => navigate(`/market/aggregate/${listing.details.game_item_id}`)}
-        fullWidth
+        onClick={() =>
+          navigate(`/market/aggregate/${listing.details.game_item_id}`)
+        }
       >
         {t("MarketListingView.seeOtherListings", {
           count: otherListings.length,
           defaultValue: `See ${otherListings.length} other listings`,
-        })}
+        })}{" "}
+        <Typography
+          component="span"
+          variant="caption"
+          color={pct > 0 ? "error.main" : pct < 0 ? "success.main" : "text.secondary"}
+          sx={{ ml: 0.5 }}
+        >
+          ({pctFormatted})
+        </Typography>
       </Button>
-      <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+      <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
         {t("MarketListingView.averagePrice", { defaultValue: "Average price" })}:{" "}
         {avgPrice.toLocaleString(i18n.language)} aUEC
       </Typography>

@@ -648,6 +648,9 @@
     "attribute_definitions": {
       "text": "Attribute Definitions"
     },
+    "import_monitoring": {
+      "text": "Attribute Import Monitoring"
+    },
     "game_item_attributes": {
       "text": "Game Item Attributes"
     },
