@@ -25,8 +25,6 @@ import { BottomSheet } from "../../../components/mobile/BottomSheet"
 import { useMarketFilters } from "../hooks/useMarketFilters"
 import type { SaleTypeSelect } from "../domain/types"
 import { AttributeFilterSection } from "../../../components/filters/AttributeFilterSection"
-import { Accordion, AccordionSummary, AccordionDetails } from "@mui/material"
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
 
 export function MarketSearchArea(props: {
   status?: boolean
@@ -284,65 +282,32 @@ export function MarketSearchArea(props: {
 
         {/* Attribute Filters Section */}
         {availableAttributes.length > 0 && (
-          <Grid item xs={12}>
-            <Accordion
-              defaultExpanded
-              sx={{
-                boxShadow: "none",
-                "&:before": {
-                  display: "none",
-                },
-                backgroundColor: "transparent",
-              }}
-            >
-              <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
-                sx={{
-                  padding: 0,
-                  minHeight: "auto",
-                  "& .MuiAccordionSummary-content": {
-                    margin: theme.spacing(1, 0),
-                  },
-                  "& .MuiAccordionSummary-expandIconWrapper": {
-                    color: theme.palette.text.primary,
-                  },
-                }}
-              >
-                <Typography variant={"subtitle2"} fontWeight={"bold"}>
-                  {t("MarketSearchArea.itemAttributes", "Item Attributes")}
-                </Typography>
-              </AccordionSummary>
-              <AccordionDetails sx={{ padding: 0 }}>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: theme.spacing(2),
-                    paddingTop: theme.spacing(1),
-                  }}
-                >
-                  {[...availableAttributes]
-                    .sort((a, b) => a.display_order - b.display_order)
-                    .map((attr) => (
-                      <AttributeFilterSection
-                        key={attr.attribute_name}
-                        attributeName={attr.attribute_name}
-                        displayName={attr.display_name}
-                        attributeType={attr.attribute_type}
-                        allowedValues={attr.allowed_values}
-                        selectedValues={attributes[attr.attribute_name] || []}
-                        onChange={(values) =>
-                          setAttributes({
-                            ...attributes,
-                            [attr.attribute_name]: values,
-                          })
-                        }
-                      />
-                    ))}
-                </Box>
-              </AccordionDetails>
-            </Accordion>
-          </Grid>
+          <>
+            <Grid item xs={12}>
+              <Typography variant={"subtitle2"} fontWeight={"bold"}>
+                {t("MarketSearchArea.itemAttributes", "Item Attributes")}
+              </Typography>
+            </Grid>
+            {[...availableAttributes]
+              .sort((a, b) => a.display_order - b.display_order)
+              .map((attr) => (
+                <Grid item xs={12} key={attr.attribute_name}>
+                  <AttributeFilterSection
+                    attributeName={attr.attribute_name}
+                    displayName={attr.display_name}
+                    attributeType={attr.attribute_type}
+                    allowedValues={attr.allowed_values}
+                    selectedValues={attributes[attr.attribute_name] || []}
+                    onChange={(values) =>
+                      setAttributes({
+                        ...attributes,
+                        [attr.attribute_name]: values,
+                      })
+                    }
+                  />
+                </Grid>
+              ))}
+          </>
         )}
       </Grid>
     </Box>
