@@ -220,6 +220,7 @@ export interface MarketListingBody {
   status: string
   end_time: Moment | null
   spectrum_id?: string | null
+  delivery_preference?: string | null
 }
 
 export interface MarketBuyOrderBody {

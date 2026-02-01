@@ -7,6 +7,7 @@ import {
   Grid,
   IconButton,
   InputAdornment,
+  MenuItem,
   Switch,
   TextField,
   Typography,
@@ -73,6 +74,7 @@ export function MarketListingForm(props: { sale_type: "sale" | "auction" }) {
     status: "active",
     end_time: null,
     item_name: null,
+    delivery_preference: null,
   })
 
   const { data: searchResults, isLoading: isSearchLoading } =
@@ -343,9 +345,44 @@ export function MarketListingForm(props: { sale_type: "sale" | "auction" }) {
           </div>
         </Grid>
 
+        <Grid item xs={12} md={6}>
+          <TextField
+            select
+            fullWidth
+            size="small"
+            label={t("MarketListingForm.deliveryPreference", "Delivery Option")}
+            value={state.delivery_preference || ""}
+            onChange={(e) =>
+              setState((state) => ({
+                ...state,
+                delivery_preference: e.target.value || null,
+              }))
+            }
+            color="secondary"
+            helperText={t(
+              "MarketListingForm.deliveryPreferenceHelp",
+              "Optional: Specify if you offer delivery or require pickup",
+            )}
+          >
+            <MenuItem value="">
+              {t("MarketListingForm.deliveryNotSpecified", "Not specified")}
+            </MenuItem>
+            <MenuItem value="delivery">
+              {t("MarketListingForm.deliveryOnly", "Delivery available")}
+            </MenuItem>
+            <MenuItem value="pickup">
+              {t("MarketListingForm.pickupOnly", "Pickup only")}
+            </MenuItem>
+            <MenuItem value="any">
+              {t("MarketListingForm.deliveryOrPickup", "Delivery or pickup")}
+            </MenuItem>
+          </TextField>
+        </Grid>
+
         <Grid item xs={12}>
           <Typography color={"text.secondary"} variant={"body2"}>
-            {t("MarketListingForm.imageHint")}
+            {t("MarketListingForm.imageHint")}{" "}
+            {t("MarketListingForm.imageSizeLimit", "(Max 2.5MB per image)")}
           </Typography>
           <SelectPhotosArea
             setPhotos={(photos) => setState((state) => ({ ...state, photos }))}
