@@ -311,7 +311,7 @@ export function MarketSearchArea(props: {
               </AccordionSummary>
               <AccordionDetails sx={{ padding: theme.spacing(1, 0) }}>
                 <Box>
-                  {availableAttributes
+                  {[...availableAttributes]
                     .sort((a, b) => a.display_order - b.display_order)
                     .map((attr) => (
                       <AttributeFilterSection
