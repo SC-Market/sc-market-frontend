@@ -645,6 +645,12 @@
     "notification_test": {
       "text": "Notification Test"
     },
+    "attribute_definitions": {
+      "text": "Attribute Definitions"
+    },
+    "game_item_attributes": {
+      "text": "Game Item Attributes"
+    },
     "sc_market": "SC Market",
     "sc_market_home": "SC Market Home",
     "toggle_drawer": "Toggle Drawer"
