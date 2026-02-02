@@ -6,9 +6,9 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 interface VirtualizedGridProps<T> {
   items: T[]
   renderItem: (item: T, index: number) => React.ReactNode
-  itemHeight?: number | { xs?: number; sm?: number; md?: number; lg?: number }
-  columns?: { xs?: number; sm?: number; md?: number; lg?: number }
-  gap?: number | { xs?: number; sm?: number; md?: number; lg?: number }
+  itemHeight?: number | { xs?: number; sm?: number; md?: number; lg?: number; xl?: number; xxl?: number }
+  columns?: { xs?: number; sm?: number; md?: number; lg?: number; xl?: number; xxl?: number }
+  gap?: number | { xs?: number; sm?: number; md?: number; lg?: number; xl?: number; xxl?: number }
   overscan?: number
   containerRef?: React.RefObject<HTMLDivElement>
 }
@@ -32,7 +32,9 @@ export function VirtualizedGrid<T>(props: VirtualizedGridProps<T>) {
   const isXs = useMediaQuery(theme.breakpoints.down("sm"))
   const isSm = useMediaQuery(theme.breakpoints.between("sm", "md"))
   const isMd = useMediaQuery(theme.breakpoints.between("md", "lg"))
-  const isLg = useMediaQuery(theme.breakpoints.up("lg"))
+  const isLg = useMediaQuery(theme.breakpoints.between("lg", "xl"))
+  const isXl = useMediaQuery(theme.breakpoints.between("xl", "xxl"))
+  const isXxl = useMediaQuery(theme.breakpoints.up("xxl"))
   const isBelowMd = useMediaQuery(theme.breakpoints.down("md")) // < 900px
 
   // Determine number of columns based on breakpoint
@@ -42,21 +44,25 @@ export function VirtualizedGrid<T>(props: VirtualizedGridProps<T>) {
     if (isBelowMd) return columns.sm || 2 // Force 2 columns on <900px
     if (isMd) return columns.md || 3
     if (isLg) return columns.lg || 4
+    if (isXl) return columns.xl || 4
+    if (isXxl) return columns.xxl || 5
     return columns.xs || 1
-  }, [isXs, isSm, isMd, isLg, isBelowMd, columns])
+  }, [isXs, isSm, isMd, isLg, isXl, isXxl, isBelowMd, columns])
 
   // Determine gap value based on breakpoint
   const gapValue = useMemo(() => {
     if (typeof gap === "number") return gap
     if (typeof gap === "object") {
-      if (isXs) return gap.xs ?? gap.sm ?? gap.md ?? gap.lg ?? 2
-      if (isBelowMd) return gap.sm ?? gap.md ?? gap.lg ?? gap.xs ?? 2 // Use sm gap for <900px
-      if (isMd) return gap.md ?? gap.lg ?? gap.sm ?? gap.xs ?? 2
-      if (isLg) return gap.lg ?? gap.md ?? gap.sm ?? gap.xs ?? 2
+      if (isXs) return gap.xs ?? gap.sm ?? gap.md ?? gap.lg ?? gap.xl ?? gap.xxl ?? 2
+      if (isBelowMd) return gap.sm ?? gap.md ?? gap.lg ?? gap.xl ?? gap.xxl ?? gap.xs ?? 2 // Use sm gap for <900px
+      if (isMd) return gap.md ?? gap.lg ?? gap.xl ?? gap.xxl ?? gap.sm ?? gap.xs ?? 2
+      if (isLg) return gap.lg ?? gap.xl ?? gap.xxl ?? gap.md ?? gap.sm ?? gap.xs ?? 2
+      if (isXl) return gap.xl ?? gap.xxl ?? gap.lg ?? gap.md ?? gap.sm ?? gap.xs ?? 2
+      if (isXxl) return gap.xxl ?? gap.xl ?? gap.lg ?? gap.md ?? gap.sm ?? gap.xs ?? 2
       return gap.xs ?? 2
     }
     return 2 // Default
-  }, [isXs, isSm, isMd, isLg, isBelowMd, gap])
+  }, [isXs, isSm, isMd, isLg, isXl, isXxl, isBelowMd, gap])
 
   // Determine item height based on breakpoint
   const heightValue = useMemo(() => {
@@ -68,6 +74,8 @@ export function VirtualizedGrid<T>(props: VirtualizedGridProps<T>) {
           itemHeight.sm ??
           itemHeight.md ??
           itemHeight.lg ??
+          itemHeight.xl ??
+          itemHeight.xxl ??
           400
         )
       if (isBelowMd)
@@ -75,6 +83,8 @@ export function VirtualizedGrid<T>(props: VirtualizedGridProps<T>) {
           itemHeight.sm ??
           itemHeight.md ??
           itemHeight.lg ??
+          itemHeight.xl ??
+          itemHeight.xxl ??
           itemHeight.xs ??
           400
         )
@@ -82,12 +92,36 @@ export function VirtualizedGrid<T>(props: VirtualizedGridProps<T>) {
         return (
           itemHeight.md ??
           itemHeight.lg ??
+          itemHeight.xl ??
+          itemHeight.xxl ??
           itemHeight.sm ??
           itemHeight.xs ??
           400
         )
       if (isLg)
         return (
+          itemHeight.lg ??
+          itemHeight.xl ??
+          itemHeight.xxl ??
+          itemHeight.md ??
+          itemHeight.sm ??
+          itemHeight.xs ??
+          400
+        )
+      if (isXl)
+        return (
+          itemHeight.xl ??
+          itemHeight.xxl ??
+          itemHeight.lg ??
+          itemHeight.md ??
+          itemHeight.sm ??
+          itemHeight.xs ??
+          400
+        )
+      if (isXxl)
+        return (
+          itemHeight.xxl ??
+          itemHeight.xl ??
           itemHeight.lg ??
           itemHeight.md ??
           itemHeight.sm ??
@@ -97,7 +131,7 @@ export function VirtualizedGrid<T>(props: VirtualizedGridProps<T>) {
       return itemHeight.xs ?? 400
     }
     return 400 // Default
-  }, [isXs, isSm, isMd, isLg, isBelowMd, itemHeight])
+  }, [isXs, isSm, isMd, isLg, isXl, isXxl, isBelowMd, itemHeight])
 
   // Calculate number of rows
   const rowCount = Math.ceil(items.length / cols)
