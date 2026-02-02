@@ -449,7 +449,7 @@ export function DisplayStock({
           await onRefresh()
         }
       } catch (error) {
-        issueAlert(error)
+        issueAlert(error as any)
       }
     },
     [updateQuantity, issueAlert, t, onRefresh],
@@ -473,7 +473,6 @@ export function DisplayStock({
 
   const [createListing] = useCreateMarketListingMutation()
   const [updateListing] = useUpdateMarketListingMutation()
-  const issueAlert = useAlertHook()
 
   // Fetch item details when a listing is selected
   const [fetchingItemName, setFetchingItemName] = React.useState<string>("")
