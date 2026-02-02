@@ -113,7 +113,13 @@ export function BulkStockManagement({ listings, onRefresh }: BulkStockManagement
   }
 
   if (listings.length === 0) {
-    return null
+    return (
+      <Paper sx={{ p: { xs: 2, md: 3 } }}>
+        <Typography variant="body1" color="text.secondary" align="center">
+          {t("ItemStock.noListings", "No listings found. Create your first listing to get started.")}
+        </Typography>
+      </Paper>
+    )
   }
 
   return (
