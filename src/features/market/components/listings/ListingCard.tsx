@@ -799,7 +799,8 @@ export function ItemListing(props: {
       sm={marketSidebarOpen ? 12 : 6}
       md={marketSidebarOpen ? 12 : 4}
       lg={marketSidebarOpen ? 6 : 4}
-      xl={marketSidebarOpen ? 4.8 : 2.4}
+      xl={marketSidebarOpen ? 4 : 3}
+      xxl={marketSidebarOpen ? 4.8 : 2.4}
       sx={{ transition: "0.3s" }}
       // key={listing.listing.listing_id}
     >

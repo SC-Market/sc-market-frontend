@@ -36,7 +36,8 @@ export function ListingSkeleton({
       xs={sidebarOpen ? 12 : 6}
       md={sidebarOpen ? 12 : 4}
       lg={sidebarOpen ? 6 : 4}
-      xl={sidebarOpen ? 4.8 : 2.4}
+      xl={sidebarOpen ? 4 : 3}
+      xxl={sidebarOpen ? 4.8 : 2.4}
       sx={{ transition: "0.3s" }}
     >
       <Fade
