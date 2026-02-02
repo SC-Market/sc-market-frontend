@@ -15,7 +15,12 @@ import {
   Link as MuiLink,
   CircularProgress,
   Stack,
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  IconButton,
 } from "@mui/material"
+import { Close as CloseIcon } from "@mui/icons-material"
 import { NumericFormat } from "react-number-format"
 import { useTranslation } from "react-i18next"
 import {
@@ -23,6 +28,7 @@ import {
   useGetListingLotsQuery,
 } from "../../../store/api/stock-lots"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
+import { StockManager } from "./stock/StockManager"
 
 export interface SimpleStockInputProps {
   listingId: string
@@ -53,6 +59,9 @@ export function SimpleStockInput({
 
   // Local state for the input value
   const [quantity, setQuantity] = useState(initialQuantity)
+  
+  // State for stock manager dialog
+  const [stockManagerOpen, setStockManagerOpen] = useState(false)
 
   // Fetch lot details to determine if we should show advanced features
   const {
@@ -207,18 +216,10 @@ export function SimpleStockInput({
             <MuiLink
               href={`#manage-stock-${listingId}`}
               variant="caption"
-              sx={{ ml: "auto" }}
+              sx={{ ml: "auto", cursor: "pointer" }}
               onClick={(e) => {
                 e.preventDefault()
-                // TODO: Open advanced stock manager modal/drawer
-                // This will be implemented in task 7
-                issueAlert({
-                  message: t(
-                    "SimpleStockInput.advancedFeatureComingSoon",
-                    "Advanced stock management coming soon",
-                  ),
-                  severity: "info",
-                })
+                setStockManagerOpen(true)
               }}
             >
               {t("SimpleStockInput.manageStock", "Manage Stock")} →
@@ -226,6 +227,35 @@ export function SimpleStockInput({
           )}
         </Stack>
       )}
+
+      {/* Stock Manager Dialog */}
+      <Dialog
+        open={stockManagerOpen}
+        onClose={() => setStockManagerOpen(false)}
+        maxWidth="md"
+        fullWidth
+      >
+        <DialogTitle>
+          <Box display="flex" alignItems="center" justifyContent="space-between">
+            <Typography variant="h6">
+              {t("SimpleStockInput.stockManager", "Stock Management")}
+            </Typography>
+            <IconButton
+              edge="end"
+              onClick={() => setStockManagerOpen(false)}
+              aria-label={t("common.close", "Close")}
+            >
+              <CloseIcon />
+            </IconButton>
+          </Box>
+        </DialogTitle>
+        <DialogContent>
+          <StockManager
+            listingId={listingId}
+            onClose={() => setStockManagerOpen(false)}
+          />
+        </DialogContent>
+      </Dialog>
     </Box>
   )
 }

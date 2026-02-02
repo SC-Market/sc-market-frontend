@@ -111,6 +111,28 @@ export {
   useMarketGetListingOrdersQuery,
 } from "./api/marketApi"
 
+// Stock Lots API
+export {
+  stockLotsApi,
+  useUpdateSimpleStockMutation,
+  useGetListingLotsQuery,
+  useCreateLotMutation,
+  useUpdateLotMutation,
+  useDeleteLotMutation,
+  useTransferLotMutation,
+  useGetLocationsQuery,
+  useCreateLocationMutation,
+} from "../../store/api/stock-lots"
+export type {
+  StockLot,
+  Location,
+  StockAggregates,
+  UpdateSimpleStockRequest,
+  UpdateSimpleStockResponse,
+  GetListingLotsRequest,
+  GetListingLotsResponse,
+} from "../../store/api/stock-lots"
+
 // Hooks
 export {
   marketDrawerWidth,
@@ -159,6 +181,8 @@ export {
   MyItemStock,
   ManageStockArea,
 } from "./components/ItemStock"
+export { SimpleStockInput } from "./components/SimpleStockInput"
+export type { SimpleStockInputProps } from "./components/SimpleStockInput"
 export { ImageSearch } from "./components/ImageSearch"
 export { PageSearch } from "./components/PageSearch"
 export { SellMaterialsList } from "./components/SellMaterialsList"
