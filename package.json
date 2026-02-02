@@ -74,6 +74,7 @@
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.5.0",
     "eslint-plugin-react": "^7.37.5",
+    "i18next-parser": "^9.3.0",
     "jest-environment-jsdom": "^29.7.0",
     "prettier": "^3.5.3",
     "rollup-plugin-visualizer": "^6.0.3",
@@ -94,7 +95,9 @@
     "check": "tsc --noEmit",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest --config ./jest.config.cjs --coverage",
     "analyze": "npm run build:analyze && open dist/stats.html",
-    "analyze:detailed": "node scripts/analyze-bundle.js"
+    "analyze:detailed": "node scripts/analyze-bundle.js",
+    "i18n:extract": "i18next-parser",
+    "i18n:validate": "i18next-parser --fail-on-warnings --fail-on-update"
   },
   "webpackConfig": {
     "target": "web"
