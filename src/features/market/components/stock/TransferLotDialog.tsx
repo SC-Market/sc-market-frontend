@@ -1,8 +1,8 @@
 /**
  * Transfer Lot Dialog Component
- * 
+ *
  * Modal for transferring stock between locations.
- * 
+ *
  * Requirements: 11.1, 11.2, 11.3
  */
 
@@ -39,7 +39,7 @@ export interface TransferLotDialogProps {
 
 /**
  * TransferLotDialog Component
- * 
+ *
  * Provides a form for transferring stock with:
  * - Source location display
  * - Destination location selector
@@ -56,7 +56,9 @@ export function TransferLotDialog({
   const issueAlert = useAlertHook()
 
   // Form state
-  const [destinationLocationId, setDestinationLocationId] = useState<string | null>(null)
+  const [destinationLocationId, setDestinationLocationId] = useState<
+    string | null
+  >(null)
   const [quantity, setQuantity] = useState<number>(lot.quantity_total)
 
   // Validation errors
@@ -66,8 +68,12 @@ export function TransferLotDialog({
   const [transferLot, { isLoading }] = useTransferLotMutation()
 
   // Find location names
-  const sourceLocation = locations.find((loc) => loc.location_id === lot.location_id)
-  const destinationLocation = locations.find((loc) => loc.location_id === destinationLocationId)
+  const sourceLocation = locations.find(
+    (loc) => loc.location_id === lot.location_id,
+  )
+  const destinationLocation = locations.find(
+    (loc) => loc.location_id === destinationLocationId,
+  )
 
   // Reset form
   const resetForm = useCallback(() => {
@@ -91,10 +97,20 @@ export function TransferLotDialog({
 
     // Validate destination
     if (!destinationLocationId) {
-      setDestinationError(t("TransferLotDialog.destinationRequired", "Please select a destination location"))
+      setDestinationError(
+        t(
+          "TransferLotDialog.destinationRequired",
+          "Please select a destination location",
+        ),
+      )
       isValid = false
     } else if (destinationLocationId === lot.location_id) {
-      setDestinationError(t("TransferLotDialog.sameLocation", "Destination must be different from source"))
+      setDestinationError(
+        t(
+          "TransferLotDialog.sameLocation",
+          "Destination must be different from source",
+        ),
+      )
       isValid = false
     } else {
       setDestinationError("")
@@ -102,13 +118,22 @@ export function TransferLotDialog({
 
     // Validate quantity
     if (quantity <= 0) {
-      setQuantityError(t("TransferLotDialog.quantityRequired", "Quantity must be greater than 0"))
+      setQuantityError(
+        t(
+          "TransferLotDialog.quantityRequired",
+          "Quantity must be greater than 0",
+        ),
+      )
       isValid = false
     } else if (quantity > lot.quantity_total) {
       setQuantityError(
-        t("TransferLotDialog.quantityExceeds", "Quantity cannot exceed available amount ({max})", {
-          max: lot.quantity_total,
-        })
+        t(
+          "TransferLotDialog.quantityExceeds",
+          "Quantity cannot exceed available amount ({max})",
+          {
+            max: lot.quantity_total,
+          },
+        ),
       )
       isValid = false
     } else {
@@ -132,14 +157,20 @@ export function TransferLotDialog({
       }).unwrap()
 
       issueAlert({
-        message: t("TransferLotDialog.transferSuccess", "Stock transferred successfully"),
+        message: t(
+          "TransferLotDialog.transferSuccess",
+          "Stock transferred successfully",
+        ),
         severity: "success",
       })
 
       handleClose()
     } catch (error) {
       issueAlert({
-        message: t("TransferLotDialog.transferError", "Failed to transfer stock"),
+        message: t(
+          "TransferLotDialog.transferError",
+          "Failed to transfer stock",
+        ),
         severity: "error",
       })
     }
@@ -156,7 +187,9 @@ export function TransferLotDialog({
 
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-      <DialogTitle>{t("TransferLotDialog.title", "Transfer Stock")}</DialogTitle>
+      <DialogTitle>
+        {t("TransferLotDialog.title", "Transfer Stock")}
+      </DialogTitle>
       <DialogContent>
         <Stack spacing={3} sx={{ mt: 1 }}>
           {/* Transfer visualization */}
@@ -164,14 +197,20 @@ export function TransferLotDialog({
             <Stack direction="row" alignItems="center" spacing={2}>
               {/* Source */}
               <Box flex={1} sx={{ textAlign: "center" }}>
-                <Typography variant="caption" color="text.secondary" display="block">
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  display="block"
+                >
                   {t("TransferLotDialog.from", "From")}
                 </Typography>
                 <Typography variant="body1" fontWeight="medium">
-                  {sourceLocation?.name || t("TransferLotDialog.unspecified", "Unspecified")}
+                  {sourceLocation?.name ||
+                    t("TransferLotDialog.unspecified", "Unspecified")}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  {lot.quantity_total.toLocaleString()} {t("TransferLotDialog.available", "available")}
+                  {lot.quantity_total.toLocaleString()}{" "}
+                  {t("TransferLotDialog.available", "available")}
                 </Typography>
               </Box>
 
@@ -180,11 +219,19 @@ export function TransferLotDialog({
 
               {/* Destination */}
               <Box flex={1} sx={{ textAlign: "center" }}>
-                <Typography variant="caption" color="text.secondary" display="block">
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  display="block"
+                >
                   {t("TransferLotDialog.to", "To")}
                 </Typography>
                 <Typography variant="body1" fontWeight="medium">
-                  {destinationLocation?.name || t("TransferLotDialog.selectDestination", "Select destination")}
+                  {destinationLocation?.name ||
+                    t(
+                      "TransferLotDialog.selectDestination",
+                      "Select destination",
+                    )}
                 </Typography>
               </Box>
             </Stack>
@@ -202,7 +249,9 @@ export function TransferLotDialog({
             error={!!quantityError}
             helperText={
               quantityError ||
-              t("TransferLotDialog.quantityHelp", "Max: {max}", { max: lot.quantity_total })
+              t("TransferLotDialog.quantityHelp", "Max: {max}", {
+                max: lot.quantity_total,
+              })
             }
             inputProps={{ min: 1, max: lot.quantity_total }}
             disabled={isLoading}
@@ -218,7 +267,11 @@ export function TransferLotDialog({
               disabled={isLoading}
             />
             {destinationError && (
-              <Typography variant="caption" color="error" sx={{ mt: 0.5, display: "block" }}>
+              <Typography
+                variant="caption"
+                color="error"
+                sx={{ mt: 0.5, display: "block" }}
+              >
                 {destinationError}
               </Typography>
             )}
@@ -229,11 +282,11 @@ export function TransferLotDialog({
             {quantity === lot.quantity_total
               ? t(
                   "TransferLotDialog.fullTransferInfo",
-                  "This will move the entire lot to the destination location."
+                  "This will move the entire lot to the destination location.",
                 )
               : t(
                   "TransferLotDialog.partialTransferInfo",
-                  "This will create a new lot at the destination and reduce the source lot quantity."
+                  "This will create a new lot at the destination and reduce the source lot quantity.",
                 )}
           </Alert>
         </Stack>

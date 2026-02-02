@@ -385,8 +385,7 @@ export function Sidebar() {
     ]
   }, [location.pathname])
   /** Use explicit org path when on org route or when an org is selected in the sidebar. */
-  const effectiveOrgId =
-    orgRouteContractorId ?? currentOrgObj?.spectrum_id
+  const effectiveOrgId = orgRouteContractorId ?? currentOrgObj?.spectrum_id
   const { data: customOrgData } = useGetContractorBySpectrumIDQuery(
     CURRENT_CUSTOM_ORG!,
     { skip: !CURRENT_CUSTOM_ORG },
@@ -650,44 +649,34 @@ export function Sidebar() {
                   </ListSubheader>
                 }
               >
-                {item.items
-                  .filter(filterItems)
-                  .map((entry) => {
-                    let resolved = entry
-                    if (entry.toOrgPublic && currentOrgObj) {
-                      resolved = {
-                        ...entry,
-                        to: `/contractor/${currentOrgObj.spectrum_id}`,
-                      }
-                    } else if (
-                      entry.orgRouteRest &&
-                      effectiveOrgId
-                    ) {
-                      resolved = {
-                        ...entry,
-                        to: `/org/${effectiveOrgId}/${entry.orgRouteRest}`,
-                      }
+                {item.items.filter(filterItems).map((entry) => {
+                  let resolved = entry
+                  if (entry.toOrgPublic && currentOrgObj) {
+                    resolved = {
+                      ...entry,
+                      to: `/contractor/${currentOrgObj.spectrum_id}`,
                     }
-                    if (
-                      resolved.children?.length &&
-                      effectiveOrgId
-                    ) {
-                      resolved = {
-                        ...resolved,
-                        children: resolved.children.map((child) =>
-                          child.orgRouteRest
-                            ? {
-                                ...child,
-                                to: `/org/${effectiveOrgId}/${child.orgRouteRest}`,
-                              }
-                            : child
-                        ),
-                      }
+                  } else if (entry.orgRouteRest && effectiveOrgId) {
+                    resolved = {
+                      ...entry,
+                      to: `/org/${effectiveOrgId}/${entry.orgRouteRest}`,
                     }
-                    return (
-                      <SidebarItem {...resolved} key={resolved.text} />
-                    )
-                  })}
+                  }
+                  if (resolved.children?.length && effectiveOrgId) {
+                    resolved = {
+                      ...resolved,
+                      children: resolved.children.map((child) =>
+                        child.orgRouteRest
+                          ? {
+                              ...child,
+                              to: `/org/${effectiveOrgId}/${child.orgRouteRest}`,
+                            }
+                          : child,
+                      ),
+                    }
+                  }
+                  return <SidebarItem {...resolved} key={resolved.text} />
+                })}
               </List>
             )
           })}

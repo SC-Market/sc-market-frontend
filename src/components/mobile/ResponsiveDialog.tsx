@@ -1,10 +1,10 @@
 /**
  * ResponsiveDialog Component
- * 
+ *
  * A responsive dialog that uses:
  * - Dialog on desktop/tablet
  * - BottomSheet on mobile
- * 
+ *
  * This provides a better mobile UX while maintaining familiar desktop patterns.
  */
 
@@ -38,7 +38,7 @@ interface ResponsiveDialogProps {
 
 /**
  * ResponsiveDialog
- * 
+ *
  * Automatically switches between Dialog (desktop) and BottomSheet (mobile)
  * based on screen size.
  */

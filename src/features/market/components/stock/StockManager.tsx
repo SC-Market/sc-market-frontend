@@ -1,9 +1,9 @@
 /**
  * Stock Manager Component
- * 
+ *
  * Advanced stock management interface with lot breakdown, inline editing,
  * and progressive disclosure of complex features.
- * 
+ *
  * Requirements: 2.1, 3.3, 4.4, 8.3, 9.3, 9.5
  */
 
@@ -41,7 +41,7 @@ export interface StockManagerProps {
 
 /**
  * StockManager Component
- * 
+ *
  * Displays a comprehensive view of all stock lots for a listing.
  * Groups lots by location, shows aggregates, and provides inline editing.
  */
@@ -62,25 +62,27 @@ export function StockManager({ listingId, onClose }: StockManagerProps) {
     error: lotsError,
   } = useGetListingLotsQuery({ listing_id: listingId })
 
-  const {
-    data: locationsData,
-    isLoading: isLoadingLocations,
-  } = useGetLocationsQuery({})
+  const { data: locationsData, isLoading: isLoadingLocations } =
+    useGetLocationsQuery({})
 
   // Group lots by location
   const lotsByLocation = useMemo(() => {
     if (!lotsData?.lots || !locationsData?.locations) return new Map()
 
-    const grouped = new Map<string, { location: Location | null; lots: StockLot[] }>()
+    const grouped = new Map<
+      string,
+      { location: Location | null; lots: StockLot[] }
+    >()
 
     lotsData.lots.forEach((lot) => {
       const locationId = lot.location_id || "unspecified"
-      
+
       if (!grouped.has(locationId)) {
-        const location = locationsData.locations.find(
-          (loc) => loc.location_id === lot.location_id
-        ) || null
-        
+        const location =
+          locationsData.locations.find(
+            (loc) => loc.location_id === lot.location_id,
+          ) || null
+
         grouped.set(locationId, { location, lots: [] })
       }
 
@@ -120,7 +122,11 @@ export function StockManager({ listingId, onClose }: StockManagerProps) {
   }
 
   const lots = lotsData?.lots || []
-  const aggregates = lotsData?.aggregates || { total: 0, available: 0, reserved: 0 }
+  const aggregates = lotsData?.aggregates || {
+    total: 0,
+    available: 0,
+    reserved: 0,
+  }
   const locations = locationsData?.locations || []
 
   return (
@@ -160,7 +166,10 @@ export function StockManager({ listingId, onClose }: StockManagerProps) {
       {lots.length === 0 ? (
         <Paper sx={{ p: 3, textAlign: "center" }}>
           <Typography variant="body2" color="text.secondary" mb={2}>
-            {t("StockManager.noLots", "No stock lots found. Create your first lot to get started.")}
+            {t(
+              "StockManager.noLots",
+              "No stock lots found. Create your first lot to get started.",
+            )}
           </Typography>
           <Button
             variant="outlined"
@@ -172,41 +181,51 @@ export function StockManager({ listingId, onClose }: StockManagerProps) {
         </Paper>
       ) : (
         <Stack spacing={2}>
-          {Array.from(lotsByLocation.entries()).map(([locationId, { location, lots: locationLots }]) => (
-            <Paper key={locationId} sx={{ p: 2 }}>
-              {/* Location header */}
-              <Stack direction="row" alignItems="center" spacing={1} mb={2}>
-                <Typography variant="subtitle1" fontWeight="medium">
-                  {location?.name || t("StockManager.unspecifiedLocation", "Unspecified Location")}
-                </Typography>
-                {location?.is_preset && (
-                  <Chip
-                    label={t("StockManager.preset", "Preset")}
-                    size="small"
-                    color="primary"
-                    variant="outlined"
-                  />
-                )}
-                <Typography variant="body2" color="text.secondary">
-                  ({locationLots.length} {locationLots.length === 1 ? t("StockManager.lot", "lot") : t("StockManager.lots", "lots")})
-                </Typography>
-              </Stack>
+          {Array.from(lotsByLocation.entries()).map(
+            ([locationId, { location, lots: locationLots }]) => (
+              <Paper key={locationId} sx={{ p: 2 }}>
+                {/* Location header */}
+                <Stack direction="row" alignItems="center" spacing={1} mb={2}>
+                  <Typography variant="subtitle1" fontWeight="medium">
+                    {location?.name ||
+                      t(
+                        "StockManager.unspecifiedLocation",
+                        "Unspecified Location",
+                      )}
+                  </Typography>
+                  {location?.is_preset && (
+                    <Chip
+                      label={t("StockManager.preset", "Preset")}
+                      size="small"
+                      color="primary"
+                      variant="outlined"
+                    />
+                  )}
+                  <Typography variant="body2" color="text.secondary">
+                    ({locationLots.length}{" "}
+                    {locationLots.length === 1
+                      ? t("StockManager.lot", "lot")
+                      : t("StockManager.lots", "lots")}
+                    )
+                  </Typography>
+                </Stack>
 
-              <Divider sx={{ mb: 2 }} />
+                <Divider sx={{ mb: 2 }} />
 
-              {/* Lots in this location */}
-              <Stack spacing={1}>
-                {locationLots.map((lot: StockLot) => (
-                  <LotListItem
-                    key={lot.lot_id}
-                    lot={lot}
-                    locations={locations}
-                    onTransfer={handleTransferClick}
-                  />
-                ))}
-              </Stack>
-            </Paper>
-          ))}
+                {/* Lots in this location */}
+                <Stack spacing={1}>
+                  {locationLots.map((lot: StockLot) => (
+                    <LotListItem
+                      key={lot.lot_id}
+                      lot={lot}
+                      locations={locations}
+                      onTransfer={handleTransferClick}
+                    />
+                  ))}
+                </Stack>
+              </Paper>
+            ),
+          )}
         </Stack>
       )}
 

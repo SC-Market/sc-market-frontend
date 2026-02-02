@@ -15,6 +15,7 @@ The error handling system provides clear, actionable feedback to users when stoc
 **Requirements**: 13.1, 13.2
 
 **Features**:
+
 - Displays available quantity and shortfall clearly
 - Shows detailed stock breakdown (order quantity, available, shortfall)
 - Provides three actionable options:
@@ -23,6 +24,7 @@ The error handling system provides clear, actionable feedback to users when stoc
   - **Reduce Order Quantity**: Adjust order to match available stock
 
 **Usage**:
+
 ```tsx
 <InsufficientStockDialog
   open={open}
@@ -43,6 +45,7 @@ The error handling system provides clear, actionable feedback to users when stoc
 **Requirements**: 13.3, 2.4, 8.2
 
 **Error Types**:
+
 - **negative_quantity**: Prevents negative quantity values
 - **over_allocation**: Prevents allocating more than available
 - **character_limit**: Enforces character limits (notes: 1000 chars, location names: 255 chars)
@@ -51,12 +54,14 @@ The error handling system provides clear, actionable feedback to users when stoc
 - **generic**: Handles other error messages
 
 **Features**:
+
 - Consistent error message formatting
 - Helper functions for creating common validation errors
 - Dismissible alerts
 - Multiple error display support
 
 **Usage**:
+
 ```tsx
 import { ValidationErrorAlert, createValidationError } from './ValidationErrorAlert'
 
@@ -81,12 +86,14 @@ const errors = [
 **Requirements**: 13.4
 
 **Features**:
+
 - Detects version conflicts from optimistic locking
 - Shows detailed conflict information (field, your value, current value)
 - Provides "Reload and Retry" option
 - Explains what happens next to the user
 
 **Usage**:
+
 ```tsx
 <ConcurrentModificationDialog
   open={open}
@@ -95,7 +102,7 @@ const errors = [
   resourceType="stock lot"
   conflictDetails={[
     { field: "Quantity", yourValue: 100, currentValue: 95 },
-    { field: "Location", yourValue: "Orison", currentValue: "Lorville" }
+    { field: "Location", yourValue: "Orison", currentValue: "Lorville" },
   ]}
 />
 ```
@@ -112,14 +119,18 @@ The ManualAllocationDialog integrates all error handling components:
 ## Error Detection Patterns
 
 ### Insufficient Stock Detection
+
 ```typescript
-if (errorMessage.toLowerCase().includes("insufficient") || 
-    errorMessage.toLowerCase().includes("not enough")) {
+if (
+  errorMessage.toLowerCase().includes("insufficient") ||
+  errorMessage.toLowerCase().includes("not enough")
+) {
   // Show InsufficientStockDialog
 }
 ```
 
 ### Validation Error Creation
+
 ```typescript
 // Negative quantity
 if (quantity < 0) {
@@ -138,6 +149,7 @@ if (notes.length > 1000) {
 ```
 
 ### Concurrent Modification Detection
+
 ```typescript
 // Backend returns 409 Conflict with version mismatch
 if (error.status === 409 && error.data?.conflict) {
@@ -156,14 +168,14 @@ if (error.status === 409 && error.data?.conflict) {
 
 ## Requirements Coverage
 
-| Requirement | Component | Status |
-|------------|-----------|--------|
-| 13.1 - Display available quantity and shortfall | InsufficientStockDialog | ✅ Complete |
-| 13.2 - Offer resolution options | InsufficientStockDialog | ✅ Complete |
-| 13.3 - Prevent negative quantities | ValidationErrorAlert | ✅ Complete |
-| 13.3 - Validate character limits | ValidationErrorAlert | ✅ Complete |
-| 13.4 - Handle concurrent modifications | ConcurrentModificationDialog | ✅ Complete |
-| 9.5 - Loading states | ManualAllocationDialog | ✅ Complete |
+| Requirement                                     | Component                    | Status      |
+| ----------------------------------------------- | ---------------------------- | ----------- |
+| 13.1 - Display available quantity and shortfall | InsufficientStockDialog      | ✅ Complete |
+| 13.2 - Offer resolution options                 | InsufficientStockDialog      | ✅ Complete |
+| 13.3 - Prevent negative quantities              | ValidationErrorAlert         | ✅ Complete |
+| 13.3 - Validate character limits                | ValidationErrorAlert         | ✅ Complete |
+| 13.4 - Handle concurrent modifications          | ConcurrentModificationDialog | ✅ Complete |
+| 9.5 - Loading states                            | ManualAllocationDialog       | ✅ Complete |
 
 ## Future Enhancements
 

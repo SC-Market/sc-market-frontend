@@ -1,6 +1,6 @@
 /**
  * Stock Lots API
- * 
+ *
  * RTK Query API for stock lot management
  */
 

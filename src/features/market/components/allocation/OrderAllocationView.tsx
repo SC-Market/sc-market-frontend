@@ -1,9 +1,9 @@
 /**
  * OrderAllocationView Component
- * 
+ *
  * Displays current stock allocations for an order and provides
  * manual allocation management interface.
- * 
+ *
  * Requirements: 5.3, 7.1, 7.2
  */
 
@@ -56,25 +56,34 @@ export function OrderAllocationView({
   // Group allocations by location for better display
   const allocationsByLocation = useMemo(() => {
     const grouped = new Map<string, typeof allocations>()
-    
+
     allocations.forEach((allocation) => {
       const locationName = allocation.lot?.location_id || "Unspecified"
       const existing = grouped.get(locationName) || []
       grouped.set(locationName, [...existing, allocation])
     })
-    
+
     return grouped
   }, [allocations])
 
   const hasAllocations = allocations.length > 0
-  const isFullyAllocated = orderQuantity ? totalAllocated >= orderQuantity : false
-  const isPartiallyAllocated = orderQuantity ? totalAllocated > 0 && totalAllocated < orderQuantity : false
+  const isFullyAllocated = orderQuantity
+    ? totalAllocated >= orderQuantity
+    : false
+  const isPartiallyAllocated = orderQuantity
+    ? totalAllocated > 0 && totalAllocated < orderQuantity
+    : false
 
   if (isLoading) {
     return (
       <Card>
         <CardContent>
-          <Stack direction="row" spacing={2} alignItems="center" justifyContent="center">
+          <Stack
+            direction="row"
+            spacing={2}
+            alignItems="center"
+            justifyContent="center"
+          >
             <CircularProgress size={24} />
             <Typography>Loading allocations...</Typography>
           </Stack>
@@ -110,7 +119,7 @@ export function OrderAllocationView({
                 <InventoryRounded color="primary" />
                 <Typography variant="h6">Stock Allocation</Typography>
               </Stack>
-              
+
               {listingId && (
                 <Button
                   variant="outlined"
@@ -129,7 +138,13 @@ export function OrderAllocationView({
               </Typography>
               <Chip
                 label={`${totalAllocated}${orderQuantity ? ` / ${orderQuantity}` : ""}`}
-                color={isFullyAllocated ? "success" : isPartiallyAllocated ? "warning" : "default"}
+                color={
+                  isFullyAllocated
+                    ? "success"
+                    : isPartiallyAllocated
+                      ? "warning"
+                      : "default"
+                }
                 size="small"
               />
             </Stack>
@@ -137,7 +152,8 @@ export function OrderAllocationView({
             {/* Warning for partial allocation */}
             {isPartiallyAllocated && (
               <Alert severity="warning" icon={<WarningRounded />}>
-                This order is only partially allocated. {orderQuantity! - totalAllocated} units still need allocation.
+                This order is only partially allocated.{" "}
+                {orderQuantity! - totalAllocated} units still need allocation.
               </Alert>
             )}
 
@@ -145,7 +161,8 @@ export function OrderAllocationView({
             {!hasAllocations && (
               <Alert severity="info">
                 No stock has been allocated to this order yet.
-                {listingId && " Click 'Manage Allocation' to manually allocate stock."}
+                {listingId &&
+                  " Click 'Manage Allocation' to manually allocate stock."}
               </Alert>
             )}
 
@@ -171,7 +188,10 @@ export function OrderAllocationView({
                               <TableRow key={allocation.allocation_id}>
                                 <TableCell>
                                   {index === 0 && (
-                                    <Typography variant="body2" fontWeight="medium">
+                                    <Typography
+                                      variant="body2"
+                                      fontWeight="medium"
+                                    >
                                       {locationName}
                                     </Typography>
                                   )}
@@ -200,15 +220,15 @@ export function OrderAllocationView({
                                       allocation.status === "active"
                                         ? "primary"
                                         : allocation.status === "fulfilled"
-                                        ? "success"
-                                        : "default"
+                                          ? "success"
+                                          : "default"
                                     }
                                   />
                                 </TableCell>
                               </TableRow>
                             ))}
                           </React.Fragment>
-                        )
+                        ),
                       )}
                     </TableBody>
                   </Table>
@@ -220,8 +240,8 @@ export function OrderAllocationView({
             {hasAllocations && (
               <Box>
                 <Typography variant="caption" color="text.secondary">
-                  Stock allocations are automatically created when orders are placed.
-                  You can manually adjust allocations if needed.
+                  Stock allocations are automatically created when orders are
+                  placed. You can manually adjust allocations if needed.
                 </Typography>
               </Box>
             )}

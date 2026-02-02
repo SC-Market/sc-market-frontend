@@ -241,8 +241,9 @@ const router = createBrowserRouter([
         path: "/contracts/create",
         errorElement: <RouteErrorFallback />,
         lazy: async () => ({
-          Component: (await import("./pages/contracting/CreatePublicContractPage"))
-            .CreatePublicContractPage,
+          Component: (
+            await import("./pages/contracting/CreatePublicContractPage")
+          ).CreatePublicContractPage,
         }),
       },
       {
@@ -784,8 +785,9 @@ const router = createBrowserRouter([
               {
                 path: "dashboard",
                 lazy: async () => ({
-                  Component: (await import("./pages/contractor/MemberDashboard"))
-                    .MemberDashboard,
+                  Component: (
+                    await import("./pages/contractor/MemberDashboard")
+                  ).MemberDashboard,
                 }),
               },
               {

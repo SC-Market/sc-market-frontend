@@ -1,9 +1,9 @@
 /**
  * ConcurrentModificationDialog Component
- * 
+ *
  * Handles concurrent modification conflicts detected through optimistic locking.
  * Displays the conflict and allows user to review changes and retry.
- * 
+ *
  * Requirements: 13.4
  */
 
@@ -56,7 +56,8 @@ export function ConcurrentModificationDialog({
               <strong>This {resourceType} was modified by another user</strong>
             </Typography>
             <Typography variant="body2">
-              The {resourceType} has been updated since you started editing. Your changes could not be saved to prevent data loss.
+              The {resourceType} has been updated since you started editing.
+              Your changes could not be saved to prevent data loss.
             </Typography>
           </Alert>
 
@@ -69,12 +70,20 @@ export function ConcurrentModificationDialog({
               <Stack spacing={1.5} sx={{ mt: 1.5 }}>
                 {conflictDetails.map((conflict, index) => (
                   <Box key={index}>
-                    <Typography variant="body2" fontWeight="medium" gutterBottom>
+                    <Typography
+                      variant="body2"
+                      fontWeight="medium"
+                      gutterBottom
+                    >
                       {conflict.field}
                     </Typography>
                     <Stack spacing={0.5} sx={{ pl: 2 }}>
                       <Stack direction="row" spacing={1}>
-                        <Typography variant="caption" color="text.secondary" sx={{ minWidth: 80 }}>
+                        <Typography
+                          variant="caption"
+                          color="text.secondary"
+                          sx={{ minWidth: 80 }}
+                        >
                           Your value:
                         </Typography>
                         <Typography variant="caption" fontFamily="monospace">
@@ -82,15 +91,25 @@ export function ConcurrentModificationDialog({
                         </Typography>
                       </Stack>
                       <Stack direction="row" spacing={1}>
-                        <Typography variant="caption" color="text.secondary" sx={{ minWidth: 80 }}>
+                        <Typography
+                          variant="caption"
+                          color="text.secondary"
+                          sx={{ minWidth: 80 }}
+                        >
                           Current value:
                         </Typography>
-                        <Typography variant="caption" fontFamily="monospace" color="primary">
+                        <Typography
+                          variant="caption"
+                          fontFamily="monospace"
+                          color="primary"
+                        >
                           {String(conflict.currentValue)}
                         </Typography>
                       </Stack>
                     </Stack>
-                    {index < conflictDetails.length - 1 && <Divider sx={{ mt: 1 }} />}
+                    {index < conflictDetails.length - 1 && (
+                      <Divider sx={{ mt: 1 }} />
+                    )}
                   </Box>
                 ))}
               </Stack>

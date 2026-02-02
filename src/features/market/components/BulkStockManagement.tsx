@@ -1,6 +1,6 @@
 /**
  * Bulk Stock Management Component
- * 
+ *
  * Allows managing stock quantities across multiple listings at once
  */
 
@@ -35,80 +35,89 @@ export interface BulkStockManagementProps {
   onRefresh?: () => void
 }
 
-export function BulkStockManagement({ listings, onRefresh }: BulkStockManagementProps) {
+export function BulkStockManagement({
+  listings,
+  onRefresh,
+}: BulkStockManagementProps) {
   const { t } = useTranslation()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const [updateQuantity] = useUpdateListingQuantityMutation()
   const issueAlert = useAlertHook()
-  
+
   const [quantities, setQuantities] = useState<Record<string, number>>({})
   const [saving, setSaving] = useState<Record<string, boolean>>({})
 
   const handleQuantityChange = (listingId: string, newQuantity: number) => {
-    setQuantities(prev => ({ ...prev, [listingId]: Math.max(0, newQuantity) }))
+    setQuantities((prev) => ({
+      ...prev,
+      [listingId]: Math.max(0, newQuantity),
+    }))
   }
 
   const handleSave = async (listing: UniqueListing) => {
     const newQuantity = quantities[listing.listing.listing_id]
-    if (newQuantity === undefined || newQuantity === listing.listing.quantity_available) {
+    if (
+      newQuantity === undefined ||
+      newQuantity === listing.listing.quantity_available
+    ) {
       return
     }
 
-    setSaving(prev => ({ ...prev, [listing.listing.listing_id]: true }))
-    
+    setSaving((prev) => ({ ...prev, [listing.listing.listing_id]: true }))
+
     try {
       await updateQuantity({
         listing_id: listing.listing.listing_id,
         quantity: newQuantity,
       }).unwrap()
-      
+
       issueAlert({
         message: t("ItemStock.updated"),
         severity: "success",
       })
-      
+
       // Clear the pending change
-      setQuantities(prev => {
+      setQuantities((prev) => {
         const next = { ...prev }
         delete next[listing.listing.listing_id]
         return next
       })
-      
+
       if (onRefresh) {
         await onRefresh()
       }
     } catch (error) {
       issueAlert(error as any)
     } finally {
-      setSaving(prev => ({ ...prev, [listing.listing.listing_id]: false }))
+      setSaving((prev) => ({ ...prev, [listing.listing.listing_id]: false }))
     }
   }
 
   const handleQuickUpdate = async (listing: UniqueListing, delta: number) => {
     const currentQty = listing.listing.quantity_available
     const newQuantity = Math.max(0, currentQty + delta)
-    
-    setSaving(prev => ({ ...prev, [listing.listing.listing_id]: true }))
-    
+
+    setSaving((prev) => ({ ...prev, [listing.listing.listing_id]: true }))
+
     try {
       await updateQuantity({
         listing_id: listing.listing.listing_id,
         quantity: newQuantity,
       }).unwrap()
-      
+
       issueAlert({
         message: t("ItemStock.updated"),
         severity: "success",
       })
-      
+
       if (onRefresh) {
         await onRefresh()
       }
     } catch (error) {
       issueAlert(error as any)
     } finally {
-      setSaving(prev => ({ ...prev, [listing.listing.listing_id]: false }))
+      setSaving((prev) => ({ ...prev, [listing.listing.listing_id]: false }))
     }
   }
 
@@ -116,7 +125,10 @@ export function BulkStockManagement({ listings, onRefresh }: BulkStockManagement
     return (
       <Paper sx={{ p: { xs: 2, md: 3 } }}>
         <Typography variant="body1" color="text.secondary" align="center">
-          {t("ItemStock.noListings", "No listings found. Create your first listing to get started.")}
+          {t(
+            "ItemStock.noListings",
+            "No listings found. Create your first listing to get started.",
+          )}
         </Typography>
       </Paper>
     )
@@ -127,13 +139,14 @@ export function BulkStockManagement({ listings, onRefresh }: BulkStockManagement
       <Typography variant="h6" gutterBottom>
         {t("ItemStock.bulkStockManagement", "Quick Stock Updates")}
       </Typography>
-      
+
       <Stack spacing={2} sx={{ mt: 2 }}>
         {listings.map((listing) => {
           const listingId = listing.listing.listing_id
           const currentQty = listing.listing.quantity_available
           const pendingQty = quantities[listingId]
-          const hasChanges = pendingQty !== undefined && pendingQty !== currentQty
+          const hasChanges =
+            pendingQty !== undefined && pendingQty !== currentQty
           const isSaving = saving[listingId]
 
           return (
@@ -151,7 +164,12 @@ export function BulkStockManagement({ listings, onRefresh }: BulkStockManagement
                 alignItems={{ xs: "stretch", sm: "center" }}
               >
                 {/* Item info */}
-                <Stack direction="row" spacing={2} alignItems="center" sx={{ flex: 1, minWidth: 0 }}>
+                <Stack
+                  direction="row"
+                  spacing={2}
+                  alignItems="center"
+                  sx={{ flex: 1, minWidth: 0 }}
+                >
                   <Avatar
                     src={listing.photos[0]}
                     variant="rounded"
@@ -192,7 +210,7 @@ export function BulkStockManagement({ listings, onRefresh }: BulkStockManagement
                   >
                     <RemoveRounded />
                   </IconButton>
-                  
+
                   <IconButton
                     size="small"
                     color="warning"
@@ -201,7 +219,7 @@ export function BulkStockManagement({ listings, onRefresh }: BulkStockManagement
                   >
                     0
                   </IconButton>
-                  
+
                   <IconButton
                     size="small"
                     color="success"
@@ -216,7 +234,12 @@ export function BulkStockManagement({ listings, onRefresh }: BulkStockManagement
                     type="number"
                     size="small"
                     value={pendingQty ?? currentQty}
-                    onChange={(e) => handleQuantityChange(listingId, parseInt(e.target.value) || 0)}
+                    onChange={(e) =>
+                      handleQuantityChange(
+                        listingId,
+                        parseInt(e.target.value) || 0,
+                      )
+                    }
                     disabled={isSaving}
                     sx={{ width: 80 }}
                     inputProps={{ min: 0 }}

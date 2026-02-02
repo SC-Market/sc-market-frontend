@@ -1,8 +1,8 @@
 /**
  * Location Selector Component
- * 
+ *
  * Searchable dropdown for selecting locations with support for preset and custom locations.
- * 
+ *
  * Requirements: 15.1, 15.2, 15.3, 15.4, 15.5, 15.6
  */
 
@@ -35,7 +35,7 @@ export interface LocationSelectorProps {
 
 /**
  * LocationSelector Component
- * 
+ *
  * Provides a searchable dropdown with:
  * - Preset locations at the top with badges
  * - User's custom locations below
@@ -54,21 +54,20 @@ export function LocationSelector({
   const issueAlert = useAlertHook()
 
   const [inputValue, setInputValue] = useState("")
-  
+
   // Debounce the search input for API calls (Requirements: 15.4, 15.5)
   const debouncedSearch = useDebounce(inputValue, 300)
 
   // Fetch locations with debounced search
   // Skip if locations are provided externally
-  const {
-    data: locationsData,
-    isLoading: isLoadingLocations,
-  } = useGetLocationsQuery(
-    { search: debouncedSearch || undefined },
-    { skip: !!providedLocations }
-  )
+  const { data: locationsData, isLoading: isLoadingLocations } =
+    useGetLocationsQuery(
+      { search: debouncedSearch || undefined },
+      { skip: !!providedLocations },
+    )
 
-  const [createLocation, { isLoading: isCreating }] = useCreateLocationMutation()
+  const [createLocation, { isLoading: isCreating }] =
+    useCreateLocationMutation()
 
   // Use provided locations or fetched locations
   const locations = providedLocations || locationsData?.locations || []
@@ -95,14 +94,15 @@ export function LocationSelector({
       // Client-side filtering for provided locations
       const searchLower = inputValue.toLowerCase()
       return sortedLocations.filter((loc) =>
-        loc.name.toLowerCase().includes(searchLower)
+        loc.name.toLowerCase().includes(searchLower),
       )
     }
     return sortedLocations
   }, [sortedLocations, inputValue, providedLocations])
 
   // Find selected location
-  const selectedLocation = locations.find((loc) => loc.location_id === value) || null
+  const selectedLocation =
+    locations.find((loc) => loc.location_id === value) || null
 
   // Handle selection
   const handleChange = (_event: any, newValue: Location | string | null) => {
@@ -124,7 +124,10 @@ export function LocationSelector({
 
     if (name.length > 255) {
       issueAlert({
-        message: t("LocationSelector.nameTooLong", "Location name must be 255 characters or less"),
+        message: t(
+          "LocationSelector.nameTooLong",
+          "Location name must be 255 characters or less",
+        ),
         severity: "error",
       })
       return
@@ -156,7 +159,9 @@ export function LocationSelector({
         if (typeof option === "string") return option
         return option.name
       }}
-      isOptionEqualToValue={(option, value) => option.location_id === value.location_id}
+      isOptionEqualToValue={(option, value) =>
+        option.location_id === value.location_id
+      }
       freeSolo
       selectOnFocus
       clearOnBlur
@@ -168,7 +173,10 @@ export function LocationSelector({
         <TextField
           {...params}
           label={label || t("LocationSelector.location", "Location")}
-          placeholder={t("LocationSelector.searchOrCreate", "Search or create location...")}
+          placeholder={t(
+            "LocationSelector.searchOrCreate",
+            "Search or create location...",
+          )}
           InputProps={{
             ...params.InputProps,
             endAdornment: (
@@ -184,7 +192,14 @@ export function LocationSelector({
       )}
       renderOption={(props, option) => (
         <Box component="li" {...props}>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1, width: "100%" }}>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+              width: "100%",
+            }}
+          >
             <Typography variant="body2">{option.name}</Typography>
             {option.is_preset && (
               <Chip
@@ -200,9 +215,13 @@ export function LocationSelector({
       )}
       noOptionsText={
         inputValue
-          ? t("LocationSelector.pressEnterToCreate", 'Press Enter to create "{name}"', {
-              name: inputValue,
-            })
+          ? t(
+              "LocationSelector.pressEnterToCreate",
+              'Press Enter to create "{name}"',
+              {
+                name: inputValue,
+              },
+            )
           : t("LocationSelector.noLocations", "No locations found")
       }
     />

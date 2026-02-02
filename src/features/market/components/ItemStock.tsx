@@ -1091,7 +1091,10 @@ export function DisplayStock({
       handleEditClick: (id: GridRowId) => () => void
       handleSaveClick: (id: GridRowId) => () => Promise<void>
       handleCancelClick: (id: GridRowId) => () => void
-      handleUpdateQuantity: (listingId: string, newQuantity: number) => Promise<void>
+      handleUpdateQuantity: (
+        listingId: string,
+        newQuantity: number,
+      ) => Promise<void>
     }) => {
       const stockContext = useContext(ItemStockContext)
       if (!stockContext || !Array.isArray(stockContext)) {
@@ -1299,11 +1302,11 @@ export function DisplayStock({
                     handleTapForSelection(e)
                   }
                 }}
-                sx={{ 
-                  width: 'auto',
+                sx={{
+                  width: "auto",
                   borderRadius: 1,
                   flex: 1,
-                  minWidth: 0
+                  minWidth: 0,
                 }}
               >
                 <Stack direction="row" spacing={2} alignItems="center">
@@ -1351,7 +1354,7 @@ export function DisplayStock({
                   {isSelected && <RadioButtonCheckedRounded color="primary" />}
                 </Stack>
               </CardActionArea>
-              
+
               {!isInSelectionMode && (
                 <Stack direction="column" spacing={0.5}>
                   <IconButton
@@ -1381,7 +1384,10 @@ export function DisplayStock({
                     color="error"
                     onClick={(e) => {
                       e.stopPropagation()
-                      handleUpdateQuantity(row.id, Math.max(0, row.quantity_available - 1))
+                      handleUpdateQuantity(
+                        row.id,
+                        Math.max(0, row.quantity_available - 1),
+                      )
                     }}
                     sx={{ minWidth: 40 }}
                   >

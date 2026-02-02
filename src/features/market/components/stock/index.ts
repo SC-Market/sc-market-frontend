@@ -1,6 +1,6 @@
 /**
  * Stock Management Components
- * 
+ *
  * Export all stock-related components for easy importing.
  */
 

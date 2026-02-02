@@ -56,14 +56,7 @@ export function OrgContextFromRoute() {
       maxAge: 31536000,
     })
     setReady(true)
-  }, [
-    contractor_id,
-    contractor,
-    isSuccess,
-    profile,
-    setCurrentOrg,
-    setCookie,
-  ])
+  }, [contractor_id, contractor, isSuccess, profile, setCurrentOrg, setCookie])
 
   if (!contractor_id) {
     return <Navigate to="/" replace />

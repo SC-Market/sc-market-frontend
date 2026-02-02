@@ -1,9 +1,9 @@
 /**
  * ValidationErrorAlert Component
- * 
+ *
  * Displays validation errors with clear, actionable messages.
  * Handles different types of validation errors with appropriate formatting.
- * 
+ *
  * Requirements: 13.3, 2.4, 8.2
  */
 
@@ -40,11 +40,7 @@ export function ValidationErrorAlert({
   }
 
   return (
-    <Alert
-      severity="error"
-      icon={<ErrorOutlineRounded />}
-      onClose={onDismiss}
-    >
+    <Alert severity="error" icon={<ErrorOutlineRounded />} onClose={onDismiss}>
       <Stack spacing={0.5}>
         {errors.length === 1 ? (
           <Typography variant="body2">{errors[0].message}</Typography>
@@ -78,7 +74,7 @@ export const createValidationError = {
   overAllocation: (
     allocated: number,
     available: number,
-    field?: string
+    field?: string,
   ): ValidationError => ({
     type: "over_allocation",
     message: field
@@ -91,7 +87,7 @@ export const createValidationError = {
   characterLimit: (
     field: string,
     current: number,
-    limit: number
+    limit: number,
   ): ValidationError => ({
     type: "character_limit",
     message: `${field} exceeds maximum length of ${limit} characters (current: ${current})`,

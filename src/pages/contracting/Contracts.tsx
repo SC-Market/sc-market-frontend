@@ -79,7 +79,10 @@ export function Contracts() {
           value={[serviceSidebarOpen, setServiceSidebarOpen]}
         >
           <ContractSearchContext.Provider
-            value={useState<ContractSearchState>({ query: "", sort: "date-old" })}
+            value={useState<ContractSearchState>({
+              query: "",
+              sort: "date-old",
+            })}
           >
             <ContractSidebarContext.Provider
               value={[contractSidebarOpen, setContractSidebarOpen]}
@@ -103,14 +106,18 @@ export function Contracts() {
                     justifyContent="space-between"
                   >
                     <Grid item xs={12} sm="auto">
-                      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                      <Box
+                        sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                      >
                         {xs && tabPage === 1 && (
                           <Button
                             variant="outlined"
                             color="secondary"
                             startIcon={<FilterListIcon />}
                             aria-label={t("market.toggleSidebar")}
-                            onClick={() => setMarketSidebarOpen((prev) => !prev)}
+                            onClick={() =>
+                              setMarketSidebarOpen((prev) => !prev)
+                            }
                             sx={{
                               [theme.breakpoints.up("md")]: { display: "none" },
                               borderRadius: 2,
@@ -126,7 +133,9 @@ export function Contracts() {
                             color="secondary"
                             startIcon={<FilterListIcon />}
                             aria-label={t("service_market.toggle_sidebar")}
-                            onClick={() => setServiceSidebarOpen((prev) => !prev)}
+                            onClick={() =>
+                              setServiceSidebarOpen((prev) => !prev)
+                            }
                             sx={{
                               [theme.breakpoints.up("md")]: { display: "none" },
                               borderRadius: 2,
@@ -142,7 +151,9 @@ export function Contracts() {
                             color="secondary"
                             startIcon={<FilterListIcon />}
                             aria-label={t("contracts.toggleSidebar")}
-                            onClick={() => setContractSidebarOpen((prev) => !prev)}
+                            onClick={() =>
+                              setContractSidebarOpen((prev) => !prev)
+                            }
                             sx={{
                               [theme.breakpoints.up("md")]: { display: "none" },
                               borderRadius: 2,

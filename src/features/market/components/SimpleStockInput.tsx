@@ -1,9 +1,9 @@
 /**
  * Simple Stock Input Component
- * 
+ *
  * Provides a single number input for stock quantity with progressive disclosure
  * to advanced stock management features.
- * 
+ *
  * Requirements: 1.1, 1.2, 1.3, 1.5, 5.1, 9.1, 9.2, 9.4
  */
 
@@ -41,7 +41,7 @@ export interface SimpleStockInputProps {
 
 /**
  * SimpleStockInput Component
- * 
+ *
  * Displays a single number input for stock quantity.
  * Shows available and reserved quantities below the input.
  * Provides a "Manage Stock" link when multiple lots exist or non-Unspecified locations are present.
@@ -59,7 +59,7 @@ export function SimpleStockInput({
 
   // Local state for the input value
   const [quantity, setQuantity] = useState(initialQuantity)
-  
+
   // State for stock manager dialog
   const [stockManagerOpen, setStockManagerOpen] = useState(false)
 
@@ -68,10 +68,7 @@ export function SimpleStockInput({
     data: lotsData,
     isLoading: isLoadingLots,
     refetch: refetchLots,
-  } = useGetListingLotsQuery(
-    { listing_id: listingId },
-    { skip: !listingId },
-  )
+  } = useGetListingLotsQuery({ listing_id: listingId }, { skip: !listingId })
 
   // Update mutation
   const [updateStock, { isLoading: isUpdating }] =
@@ -183,9 +180,7 @@ export function SimpleStockInput({
         color="secondary"
         disabled={disabled || isUpdating}
         InputProps={{
-          endAdornment: isUpdating ? (
-            <CircularProgress size={20} />
-          ) : undefined,
+          endAdornment: isUpdating ? <CircularProgress size={20} /> : undefined,
         }}
       />
       <div id="stock-quantity-help" className="sr-only">
@@ -236,7 +231,11 @@ export function SimpleStockInput({
         fullWidth
       >
         <DialogTitle>
-          <Box display="flex" alignItems="center" justifyContent="space-between">
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+          >
             <Typography variant="h6">
               {t("SimpleStockInput.stockManager", "Stock Management")}
             </Typography>
