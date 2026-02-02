@@ -51,18 +51,20 @@ export function ManageStock() {
   const searchQueryParams = {
     page_size: 100,
     index: 0,
-    quantityAvailable: searchState.quantityAvailable ?? 1,
+    quantityAvailable: 0, // Changed from 1 to 0 to include all listings
     query: searchState.query || "",
     sort: searchState.sort || "activity",
-    statuses: searchState.statuses || undefined,
+    statuses: searchState.statuses || "active,inactive",
   }
   
   const finalParams = hasOrg
     ? { ...searchQueryParams, contractor_id: currentOrg?.spectrum_id }
     : searchQueryParams
 
-  const { data: searchResults, refetch } = useGetMyListingsQuery(finalParams)
+  const { data: searchResults, refetch, isLoading } = useGetMyListingsQuery(finalParams)
   const listings = searchResults?.listings || []
+
+  console.log("Bulk stock management - listings count:", listings.length, "isLoading:", isLoading)
 
   return (
     <Page title={t("sidebar.my_market_listings")}>
@@ -153,12 +155,18 @@ export function ManageStock() {
                 
                 {viewMode === "bulk" ? (
                   <Grid item xs={12}>
-                    <BulkStockManagement
-                      listings={listings}
-                      onRefresh={async () => {
-                        await refetch()
-                      }}
-                    />
+                    {isLoading ? (
+                      <Paper sx={{ p: 3, textAlign: "center" }}>
+                        <Typography>{t("common.loading", "Loading...")}</Typography>
+                      </Paper>
+                    ) : (
+                      <BulkStockManagement
+                        listings={listings}
+                        onRefresh={async () => {
+                          await refetch()
+                        }}
+                      />
+                    )}
                   </Grid>
                 ) : (
                   <Grid item xs={12}>
