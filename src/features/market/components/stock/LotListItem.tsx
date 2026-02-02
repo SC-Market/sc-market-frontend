@@ -1,8 +1,8 @@
 /**
  * Lot List Item Component
- * 
+ *
  * Displays a single stock lot with inline editing capabilities.
- * 
+ *
  * Requirements: 2.4, 4.1, 8.5
  */
 
@@ -44,7 +44,7 @@ export interface LotListItemProps {
 
 /**
  * LotListItem Component
- * 
+ *
  * Displays lot information with inline editing for quantity, location, owner, listed status, and notes.
  */
 export function LotListItem({ lot, locations, onTransfer }: LotListItemProps) {
@@ -54,7 +54,9 @@ export function LotListItem({ lot, locations, onTransfer }: LotListItemProps) {
   // Editing state
   const [isEditing, setIsEditing] = useState(false)
   const [editedQuantity, setEditedQuantity] = useState(lot.quantity_total)
-  const [editedLocationId, setEditedLocationId] = useState<string | null>(lot.location_id)
+  const [editedLocationId, setEditedLocationId] = useState<string | null>(
+    lot.location_id,
+  )
   const [editedListed, setEditedListed] = useState(lot.listed)
   const [editedNotes, setEditedNotes] = useState(lot.notes || "")
 
@@ -81,7 +83,10 @@ export function LotListItem({ lot, locations, onTransfer }: LotListItemProps) {
       // Validate quantity
       if (editedQuantity < 0) {
         issueAlert({
-          message: t("LotListItem.invalidQuantity", "Quantity must be non-negative"),
+          message: t(
+            "LotListItem.invalidQuantity",
+            "Quantity must be non-negative",
+          ),
           severity: "error",
         })
         return
@@ -90,7 +95,10 @@ export function LotListItem({ lot, locations, onTransfer }: LotListItemProps) {
       // Validate notes length
       if (editedNotes.length > 1000) {
         issueAlert({
-          message: t("LotListItem.notesTooLong", "Notes must be 1000 characters or less"),
+          message: t(
+            "LotListItem.notesTooLong",
+            "Notes must be 1000 characters or less",
+          ),
           severity: "error",
         })
         return
@@ -129,7 +137,14 @@ export function LotListItem({ lot, locations, onTransfer }: LotListItemProps) {
   ])
 
   const handleDelete = useCallback(async () => {
-    if (!window.confirm(t("LotListItem.confirmDelete", "Are you sure you want to delete this lot?"))) {
+    if (
+      !window.confirm(
+        t(
+          "LotListItem.confirmDelete",
+          "Are you sure you want to delete this lot?",
+        ),
+      )
+    ) {
       return
     }
 
@@ -148,7 +163,8 @@ export function LotListItem({ lot, locations, onTransfer }: LotListItemProps) {
   }, [lot.lot_id, deleteLot, issueAlert, t])
 
   // Find location name
-  const locationName = locations.find((loc) => loc.location_id === lot.location_id)?.name || 
+  const locationName =
+    locations.find((loc) => loc.location_id === lot.location_id)?.name ||
     t("LotListItem.unspecified", "Unspecified")
 
   return (
@@ -201,7 +217,11 @@ export function LotListItem({ lot, locations, onTransfer }: LotListItemProps) {
             />
           ) : (
             <Chip
-              label={lot.listed ? t("LotListItem.listed", "Listed") : t("LotListItem.unlisted", "Unlisted")}
+              label={
+                lot.listed
+                  ? t("LotListItem.listed", "Listed")
+                  : t("LotListItem.unlisted", "Unlisted")
+              }
               color={lot.listed ? "success" : "default"}
               size="small"
               variant="outlined"
@@ -223,7 +243,11 @@ export function LotListItem({ lot, locations, onTransfer }: LotListItemProps) {
                   </IconButton>
                 </Tooltip>
                 <Tooltip title={t("LotListItem.cancel", "Cancel")}>
-                  <IconButton size="small" onClick={handleCancelEdit} disabled={isUpdating}>
+                  <IconButton
+                    size="small"
+                    onClick={handleCancelEdit}
+                    disabled={isUpdating}
+                  >
                     <CancelIcon />
                   </IconButton>
                 </Tooltip>
@@ -247,7 +271,11 @@ export function LotListItem({ lot, locations, onTransfer }: LotListItemProps) {
                     disabled={isDeleting}
                     color="error"
                   >
-                    {isDeleting ? <CircularProgress size={20} /> : <DeleteIcon />}
+                    {isDeleting ? (
+                      <CircularProgress size={20} />
+                    ) : (
+                      <DeleteIcon />
+                    )}
                   </IconButton>
                 </Tooltip>
               </>
@@ -265,7 +293,8 @@ export function LotListItem({ lot, locations, onTransfer }: LotListItemProps) {
           />
         ) : (
           <Typography variant="body2" color="text.secondary">
-            <strong>{t("LotListItem.location", "Location")}:</strong> {locationName}
+            <strong>{t("LotListItem.location", "Location")}:</strong>{" "}
+            {locationName}
           </Typography>
         )}
 
@@ -285,13 +314,20 @@ export function LotListItem({ lot, locations, onTransfer }: LotListItemProps) {
             rows={2}
             size="small"
             label={t("LotListItem.notes", "Notes")}
-            placeholder={t("LotListItem.notesPlaceholder", "Add notes about this lot...")}
+            placeholder={t(
+              "LotListItem.notesPlaceholder",
+              "Add notes about this lot...",
+            )}
             inputProps={{ maxLength: 1000 }}
             helperText={`${editedNotes.length}/1000`}
           />
         ) : (
           lot.notes && (
-            <Typography variant="body2" color="text.secondary" sx={{ fontStyle: "italic" }}>
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{ fontStyle: "italic" }}
+            >
               {lot.notes}
             </Typography>
           )
@@ -299,7 +335,8 @@ export function LotListItem({ lot, locations, onTransfer }: LotListItemProps) {
 
         {/* Timestamps */}
         <Typography variant="caption" color="text.secondary">
-          {t("LotListItem.created", "Created")}: {new Date(lot.created_at).toLocaleString()}
+          {t("LotListItem.created", "Created")}:{" "}
+          {new Date(lot.created_at).toLocaleString()}
         </Typography>
       </Stack>
     </Box>

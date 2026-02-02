@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from "react"
-import { Button, Grid, Paper, useMediaQuery, Box, Tabs, Tab } from "@mui/material"
+import {
+  Button,
+  Grid,
+  Paper,
+  useMediaQuery,
+  Box,
+  Tabs,
+  Tab,
+  Typography,
+} from "@mui/material"
 import AddRounded from "@mui/icons-material/AddRounded"
 import FilterListIcon from "@mui/icons-material/FilterList"
 import { MarketSearchArea } from "../../features/market/components/MarketSidebar"
@@ -56,15 +65,24 @@ export function ManageStock() {
     sort: searchState.sort || "activity",
     statuses: searchState.statuses || "active,inactive",
   }
-  
+
   const finalParams = hasOrg
     ? { ...searchQueryParams, contractor_id: currentOrg?.spectrum_id }
     : searchQueryParams
 
-  const { data: searchResults, refetch, isLoading } = useGetMyListingsQuery(finalParams)
+  const {
+    data: searchResults,
+    refetch,
+    isLoading,
+  } = useGetMyListingsQuery(finalParams)
   const listings = searchResults?.listings || []
 
-  console.log("Bulk stock management - listings count:", listings.length, "isLoading:", isLoading)
+  console.log(
+    "Bulk stock management - listings count:",
+    listings.length,
+    "isLoading:",
+    isLoading,
+  )
 
   return (
     <Page title={t("sidebar.my_market_listings")}>
@@ -152,12 +170,14 @@ export function ManageStock() {
                     />
                   </Tabs>
                 </Grid>
-                
+
                 {viewMode === "bulk" ? (
                   <Grid item xs={12}>
                     {isLoading ? (
                       <Paper sx={{ p: 3, textAlign: "center" }}>
-                        <Typography>{t("common.loading", "Loading...")}</Typography>
+                        <Typography>
+                          {t("common.loading", "Loading...")}
+                        </Typography>
                       </Paper>
                     ) : (
                       <BulkStockManagement

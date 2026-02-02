@@ -1,8 +1,8 @@
 /**
  * Create Lot Dialog Component
- * 
+ *
  * Modal form for creating new stock lots with validation.
- * 
+ *
  * Requirements: 2.2, 2.4, 3.1, 4.1, 8.1, 8.2
  */
 
@@ -37,7 +37,7 @@ export interface CreateLotDialogProps {
 
 /**
  * CreateLotDialog Component
- * 
+ *
  * Provides a form for creating new stock lots with:
  * - Quantity input (required, positive integer)
  * - Location selector (searchable dropdown)
@@ -92,7 +92,12 @@ export function CreateLotDialog({
 
     // Validate quantity
     if (quantity <= 0) {
-      setQuantityError(t("CreateLotDialog.quantityRequired", "Quantity must be greater than 0"))
+      setQuantityError(
+        t(
+          "CreateLotDialog.quantityRequired",
+          "Quantity must be greater than 0",
+        ),
+      )
       isValid = false
     } else {
       setQuantityError("")
@@ -100,7 +105,12 @@ export function CreateLotDialog({
 
     // Validate notes length
     if (notes.length > 1000) {
-      setNotesError(t("CreateLotDialog.notesTooLong", "Notes must be 1000 characters or less"))
+      setNotesError(
+        t(
+          "CreateLotDialog.notesTooLong",
+          "Notes must be 1000 characters or less",
+        ),
+      )
       isValid = false
     } else {
       setNotesError("")
@@ -153,7 +163,9 @@ export function CreateLotDialog({
 
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-      <DialogTitle>{t("CreateLotDialog.title", "Create Stock Lot")}</DialogTitle>
+      <DialogTitle>
+        {t("CreateLotDialog.title", "Create Stock Lot")}
+      </DialogTitle>
       <DialogContent>
         <Stack spacing={2} sx={{ mt: 1 }}>
           {/* Quantity Input */}
@@ -166,7 +178,13 @@ export function CreateLotDialog({
             value={quantity}
             onChange={(e) => setQuantity(parseInt(e.target.value) || 0)}
             error={!!quantityError}
-            helperText={quantityError || t("CreateLotDialog.quantityHelp", "Enter the number of units in this lot")}
+            helperText={
+              quantityError ||
+              t(
+                "CreateLotDialog.quantityHelp",
+                "Enter the number of units in this lot",
+              )
+            }
             inputProps={{ min: 1 }}
             disabled={isLoading}
           />
@@ -186,9 +204,15 @@ export function CreateLotDialog({
             fullWidth
             value={ownerId || ""}
             onChange={(e) => setOwnerId(e.target.value || null)}
-            helperText={t("CreateLotDialog.ownerHelp", "Leave empty for unassigned")}
+            helperText={t(
+              "CreateLotDialog.ownerHelp",
+              "Leave empty for unassigned",
+            )}
             disabled={isLoading}
-            placeholder={t("CreateLotDialog.ownerPlaceholder", "Enter owner ID...")}
+            placeholder={t(
+              "CreateLotDialog.ownerPlaceholder",
+              "Enter owner ID...",
+            )}
           />
 
           {/* Listed Toggle */}
@@ -206,7 +230,10 @@ export function CreateLotDialog({
                   {t("CreateLotDialog.listed", "Listed")}
                 </Typography>
                 <Typography variant="caption" color="text.secondary">
-                  {t("CreateLotDialog.listedHelp", "Listed stock appears in public listings")}
+                  {t(
+                    "CreateLotDialog.listedHelp",
+                    "Listed stock appears in public listings",
+                  )}
                 </Typography>
               </Stack>
             }
@@ -224,7 +251,10 @@ export function CreateLotDialog({
             helperText={notesError || `${notes.length}/1000`}
             inputProps={{ maxLength: 1000 }}
             disabled={isLoading}
-            placeholder={t("CreateLotDialog.notesPlaceholder", "Add any notes about this lot...")}
+            placeholder={t(
+              "CreateLotDialog.notesPlaceholder",
+              "Add any notes about this lot...",
+            )}
           />
         </Stack>
       </DialogContent>

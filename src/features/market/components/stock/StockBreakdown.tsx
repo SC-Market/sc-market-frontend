@@ -1,8 +1,8 @@
 /**
  * Stock Breakdown Component
- * 
+ *
  * Displays aggregate stock information: total, available, and reserved quantities.
- * 
+ *
  * Requirements: 2.1, 2.5, 3.3, 3.4, 4.4, 5.1
  */
 
@@ -18,10 +18,14 @@ export interface StockBreakdownProps {
 
 /**
  * StockBreakdown Component
- * 
+ *
  * Shows total stock, available stock, and reserved stock with visual indicators.
  */
-export function StockBreakdown({ total, available, reserved }: StockBreakdownProps) {
+export function StockBreakdown({
+  total,
+  available,
+  reserved,
+}: StockBreakdownProps) {
   const { t } = useTranslation()
 
   return (

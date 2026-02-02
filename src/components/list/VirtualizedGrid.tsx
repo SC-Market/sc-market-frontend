@@ -6,9 +6,34 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 interface VirtualizedGridProps<T> {
   items: T[]
   renderItem: (item: T, index: number) => React.ReactNode
-  itemHeight?: number | { xs?: number; sm?: number; md?: number; lg?: number; xl?: number; xxl?: number }
-  columns?: { xs?: number; sm?: number; md?: number; lg?: number; xl?: number; xxl?: number }
-  gap?: number | { xs?: number; sm?: number; md?: number; lg?: number; xl?: number; xxl?: number }
+  itemHeight?:
+    | number
+    | {
+        xs?: number
+        sm?: number
+        md?: number
+        lg?: number
+        xl?: number
+        xxl?: number
+      }
+  columns?: {
+    xs?: number
+    sm?: number
+    md?: number
+    lg?: number
+    xl?: number
+    xxl?: number
+  }
+  gap?:
+    | number
+    | {
+        xs?: number
+        sm?: number
+        md?: number
+        lg?: number
+        xl?: number
+        xxl?: number
+      }
   overscan?: number
   containerRef?: React.RefObject<HTMLDivElement>
 }
@@ -53,12 +78,18 @@ export function VirtualizedGrid<T>(props: VirtualizedGridProps<T>) {
   const gapValue = useMemo(() => {
     if (typeof gap === "number") return gap
     if (typeof gap === "object") {
-      if (isXs) return gap.xs ?? gap.sm ?? gap.md ?? gap.lg ?? gap.xl ?? gap.xxl ?? 2
-      if (isBelowMd) return gap.sm ?? gap.md ?? gap.lg ?? gap.xl ?? gap.xxl ?? gap.xs ?? 2 // Use sm gap for <900px
-      if (isMd) return gap.md ?? gap.lg ?? gap.xl ?? gap.xxl ?? gap.sm ?? gap.xs ?? 2
-      if (isLg) return gap.lg ?? gap.xl ?? gap.xxl ?? gap.md ?? gap.sm ?? gap.xs ?? 2
-      if (isXl) return gap.xl ?? gap.xxl ?? gap.lg ?? gap.md ?? gap.sm ?? gap.xs ?? 2
-      if (isXxl) return gap.xxl ?? gap.xl ?? gap.lg ?? gap.md ?? gap.sm ?? gap.xs ?? 2
+      if (isXs)
+        return gap.xs ?? gap.sm ?? gap.md ?? gap.lg ?? gap.xl ?? gap.xxl ?? 2
+      if (isBelowMd)
+        return gap.sm ?? gap.md ?? gap.lg ?? gap.xl ?? gap.xxl ?? gap.xs ?? 2 // Use sm gap for <900px
+      if (isMd)
+        return gap.md ?? gap.lg ?? gap.xl ?? gap.xxl ?? gap.sm ?? gap.xs ?? 2
+      if (isLg)
+        return gap.lg ?? gap.xl ?? gap.xxl ?? gap.md ?? gap.sm ?? gap.xs ?? 2
+      if (isXl)
+        return gap.xl ?? gap.xxl ?? gap.lg ?? gap.md ?? gap.sm ?? gap.xs ?? 2
+      if (isXxl)
+        return gap.xxl ?? gap.xl ?? gap.lg ?? gap.md ?? gap.sm ?? gap.xs ?? 2
       return gap.xs ?? 2
     }
     return 2 // Default

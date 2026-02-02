@@ -68,9 +68,7 @@ export function ProfileSkeleton() {
                         sx={{
                           height: 80,
                           width: 80,
-                          borderRadius: theme.spacing(
-                            theme.borderRadius.image,
-                          ),
+                          borderRadius: theme.spacing(theme.borderRadius.image),
                         }}
                       />
                     </Grid>

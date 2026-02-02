@@ -1,9 +1,9 @@
 /**
  * InsufficientStockDialog Component
- * 
+ *
  * Displays detailed information when stock allocation fails due to insufficient quantity.
  * Provides actionable options to resolve the issue.
- * 
+ *
  * Requirements: 13.1, 13.2
  */
 
@@ -58,7 +58,8 @@ export function InsufficientStockDialog({
               <strong>Cannot allocate full order quantity</strong>
             </Typography>
             <Typography variant="body2">
-              The order requires {orderQuantity} units, but only {availableQuantity} units are available.
+              The order requires {orderQuantity} units, but only{" "}
+              {availableQuantity} units are available.
             </Typography>
           </Alert>
 
@@ -159,7 +160,8 @@ export function InsufficientStockDialog({
                       Reduce Order Quantity
                     </Typography>
                     <Typography variant="caption" color="text.secondary">
-                      Adjust order to match available stock ({availableQuantity} units)
+                      Adjust order to match available stock ({availableQuantity}{" "}
+                      units)
                     </Typography>
                   </Stack>
                 </Button>

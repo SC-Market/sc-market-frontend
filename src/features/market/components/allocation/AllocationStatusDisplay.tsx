@@ -1,9 +1,9 @@
 /**
  * AllocationStatusDisplay Component
- * 
+ *
  * Displays allocation status for an order in a compact format.
  * Shows total allocated quantity and provides a link to view details.
- * 
+ *
  * Requirements: 5.3, 6.1, 6.2, 6.3
  */
 
@@ -115,7 +115,10 @@ export function AllocationStatusDisplay({
   return (
     <Box>
       {hasActiveAllocations && (
-        <Alert severity={isPartial ? "warning" : "info"} icon={<InventoryRounded />}>
+        <Alert
+          severity={isPartial ? "warning" : "info"}
+          icon={<InventoryRounded />}
+        >
           <Typography variant="body2">
             <strong>{total_allocated}</strong> units allocated from stock
             {orderQuantity !== undefined && ` (of ${orderQuantity} requested)`}
@@ -157,4 +160,3 @@ export function AllocationStatusDisplay({
     </Box>
   )
 }
-

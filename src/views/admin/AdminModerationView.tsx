@@ -267,7 +267,9 @@ export function AdminModerationView() {
         <DialogContent>
           <Box sx={{ mt: 2 }}>
             <FormControl fullWidth sx={{ mb: 2 }}>
-              <InputLabel>{t("admin.moderation.field.status", "Status")}</InputLabel>
+              <InputLabel>
+                {t("admin.moderation.field.status", "Status")}
+              </InputLabel>
               <Select
                 value={updateStatus}
                 label={t("admin.moderation.field.status", "Status")}

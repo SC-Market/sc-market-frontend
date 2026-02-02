@@ -124,7 +124,10 @@ export function AggregateListingBase(props: {
               <CardContent
                 sx={
                   isMobile
-                    ? { padding: "8px 12px !important", "&:last-child": { pb: 1 } }
+                    ? {
+                        padding: "8px 12px !important",
+                        "&:last-child": { pb: 1 },
+                      }
                     : undefined
                 }
               >
@@ -161,7 +164,11 @@ export function AggregateListingBase(props: {
                   display="block"
                   color="text.primary"
                   variant="subtitle2"
-                  sx={isMobile ? { fontSize: "0.7rem", lineHeight: 1.2 } : undefined}
+                  sx={
+                    isMobile
+                      ? { fontSize: "0.7rem", lineHeight: 1.2 }
+                      : undefined
+                  }
                 >
                   {quantity_available.toLocaleString(undefined)}{" "}
                   {t("market.total_available")}
@@ -299,7 +306,10 @@ export function AggregateBuyOrderListingBase(props: {
               <CardContent
                 sx={
                   isMobile
-                    ? { padding: "8px 12px !important", "&:last-child": { pb: 1 } }
+                    ? {
+                        padding: "8px 12px !important",
+                        "&:last-child": { pb: 1 },
+                      }
                     : undefined
                 }
               >
@@ -338,7 +348,11 @@ export function AggregateBuyOrderListingBase(props: {
                   display="block"
                   color="text.primary"
                   variant="subtitle2"
-                  sx={isMobile ? { fontSize: "0.7rem", lineHeight: 1.2 } : undefined}
+                  sx={
+                    isMobile
+                      ? { fontSize: "0.7rem", lineHeight: 1.2 }
+                      : undefined
+                  }
                 >
                   {sum_requested.toLocaleString(undefined)}{" "}
                   {t("market.total_requested")}

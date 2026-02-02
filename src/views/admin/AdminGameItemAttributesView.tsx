@@ -215,7 +215,12 @@ export function AdminGameItemAttributesView({
       display: "flex",
       flex: 1,
       renderCell: (params: GridRenderCellParams) => (
-        <Chip label={params.value} color="primary" variant="outlined" size="small" />
+        <Chip
+          label={params.value}
+          color="primary"
+          variant="outlined"
+          size="small"
+        />
       ),
     },
     {
@@ -287,7 +292,11 @@ export function AdminGameItemAttributesView({
           <Button
             variant="outlined"
             startIcon={
-              isImporting ? <CircularProgress size={16} /> : <CloudDownloadIcon />
+              isImporting ? (
+                <CircularProgress size={16} />
+              ) : (
+                <CloudDownloadIcon />
+              )
             }
             onClick={handleImportAttributes}
             disabled={isImporting}
@@ -375,7 +384,10 @@ export function AdminGameItemAttributesView({
                   value={formData.attribute_value}
                   label={t("admin.gameItemAttributes.value", "Value")}
                   onChange={(e) =>
-                    setFormData({ ...formData, attribute_value: e.target.value })
+                    setFormData({
+                      ...formData,
+                      attribute_value: e.target.value,
+                    })
                   }
                 >
                   {selectedDefinition.allowed_values.map((value) => (
@@ -414,7 +426,8 @@ export function AdminGameItemAttributesView({
                 </Typography>
                 <Typography variant="body2">
                   <strong>Applicable to:</strong>{" "}
-                  {selectedDefinition.applicable_item_types && selectedDefinition.applicable_item_types.length > 0
+                  {selectedDefinition.applicable_item_types &&
+                  selectedDefinition.applicable_item_types.length > 0
                     ? selectedDefinition.applicable_item_types.join(", ")
                     : "No types"}
                 </Typography>
@@ -467,7 +480,8 @@ export function AdminGameItemAttributesView({
               }}
             >
               <Typography variant="h6">
-                {selectedAttribute.display_name || selectedAttribute.attribute_name}
+                {selectedAttribute.display_name ||
+                  selectedAttribute.attribute_name}
               </Typography>
               <Typography variant="body2" color="text.secondary">
                 {selectedAttribute.attribute_value}

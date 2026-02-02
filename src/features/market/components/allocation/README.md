@@ -13,11 +13,13 @@ This directory contains components for managing stock allocations to orders.
 Displays current stock allocations for an order and provides access to manual allocation management.
 
 **Props:**
+
 - `orderId` (string, required): The ID of the order
 - `listingId` (string, optional): The ID of the listing to allocate from
 - `orderQuantity` (number, optional): The total quantity ordered
 
 **Features:**
+
 - Displays current allocations grouped by location
 - Shows total allocated quantity vs order quantity
 - Provides "Manage Allocation" button for manual control
@@ -33,9 +35,9 @@ function OrderDetailsPage({ order }) {
   return (
     <div>
       <h1>Order Details</h1>
-      
+
       {/* Other order details */}
-      
+
       <OrderAllocationView
         orderId={order.order_id}
         listingId={order.market_listings?.[0]?.listing_id}
@@ -51,6 +53,7 @@ function OrderDetailsPage({ order }) {
 Provides interface for manually allocating stock lots to an order.
 
 **Props:**
+
 - `open` (boolean, required): Whether the dialog is open
 - `onClose` (function, required): Callback when dialog is closed
 - `orderId` (string, required): The ID of the order
@@ -62,6 +65,7 @@ Provides interface for manually allocating stock lots to an order.
 - `onReduceOrder` (function, optional): Callback to reduce order quantity
 
 **Features:**
+
 - Displays all available lots with quantities
 - Allows selecting lots and specifying quantities
 - Validates total doesn't exceed order quantity
@@ -78,14 +82,14 @@ import { ManualAllocationDialog } from "@/features/market/components/allocation"
 
 function MyComponent() {
   const [dialogOpen, setDialogOpen] = useState(false)
-  const { data: allocationsData } = useGetOrderAllocationsQuery({ order_id: orderId })
+  const { data: allocationsData } = useGetOrderAllocationsQuery({
+    order_id: orderId,
+  })
 
   return (
     <>
-      <Button onClick={() => setDialogOpen(true)}>
-        Manage Allocation
-      </Button>
-      
+      <Button onClick={() => setDialogOpen(true)}>Manage Allocation</Button>
+
       <ManualAllocationDialog
         open={dialogOpen}
         onClose={() => setDialogOpen(false)}
@@ -135,14 +139,14 @@ import { OrderAllocationView } from "../../features/market/components/allocation
 
 export function OrderDetailsArea(props: { order: Order }) {
   const { order } = props
-  
+
   // Extract listing ID from order if available
   const listingId = order.market_listings?.[0]?.listing_id
-  
+
   return (
     <Grid container spacing={2}>
       {/* Existing order details */}
-      
+
       {/* Add allocation view */}
       {listingId && (
         <Grid item xs={12}>

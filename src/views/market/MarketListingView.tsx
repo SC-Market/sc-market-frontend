@@ -582,12 +582,11 @@ export function PurchaseArea(props: { listing: BaseListingType }) {
             >
               {listing.listing.price.toLocaleString(undefined)} aUEC
             </Typography>
-            {listing.type === "unique" &&
-              listing.details?.game_item_id && (
-                <Box sx={{ mt: 0.5 }}>
-                  <AggregateLink listing={listing as UniqueListing} />
-                </Box>
-              )}
+            {listing.type === "unique" && listing.details?.game_item_id && (
+              <Box sx={{ mt: 0.5 }}>
+                <AggregateLink listing={listing as UniqueListing} />
+              </Box>
+            )}
           </Box>
           <NumericFormat
             decimalScale={0}

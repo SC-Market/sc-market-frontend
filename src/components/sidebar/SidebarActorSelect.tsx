@@ -115,7 +115,9 @@ export function SidebarActorSelect() {
             setContractorSpectrumID(newValue)
 
             const m = matchPath("/org/:contractor_id/*", location.pathname)
-            const rest = (m?.params as { contractor_id?: string; "*"?: string })?.["*"]
+            const rest = (
+              m?.params as { contractor_id?: string; "*"?: string }
+            )?.["*"]
             if (rest && ORG_ROUTE_REST_TO_CANONICAL[rest]) {
               if (newValue === "_") {
                 navigate(ORG_ROUTE_REST_TO_CANONICAL[rest])

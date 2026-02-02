@@ -18,11 +18,7 @@ export function CreatePublicContractPage() {
           to="/contracts"
           style={{ color: "inherit", textDecoration: "none", marginBottom: 8 }}
         >
-          <Button
-            startIcon={<ArrowBackRounded />}
-            size="small"
-            sx={{ mb: 1 }}
-          >
+          <Button startIcon={<ArrowBackRounded />} size="small" sx={{ mb: 1 }}>
             {t("contracts.backToOpenContracts", "Back to Open Contracts")}
           </Button>
         </Link>
