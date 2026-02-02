@@ -8,10 +8,11 @@ import {
   TextField,
   Typography,
   useMediaQuery,
+  Autocomplete,
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import SearchIcon from "@mui/icons-material/Search"
-import React from "react"
+import React, { useState, useEffect, useMemo } from "react"
 import { useTranslation } from "react-i18next"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { useDrawerOpen } from "../../../hooks/layout/Drawer"
@@ -25,6 +26,9 @@ import { BottomSheet } from "../../../components/mobile/BottomSheet"
 import { useMarketFilters } from "../hooks/useMarketFilters"
 import type { SaleTypeSelect } from "../domain/types"
 import { AttributeFilterSection } from "../../../components/filters/AttributeFilterSection"
+import { marketApi } from "../api/marketApi"
+import { debounce } from "lodash"
+import type { MarketListing } from "../../../datatypes/MarketListing"
 
 export function MarketSearchArea(props: {
   status?: boolean
@@ -57,6 +61,38 @@ export function MarketSearchArea(props: {
     applyFilters,
   } = useMarketFilters()
 
+  const [searchTrigger] = marketApi.useLazySearchMarketListingsQuery()
+  const [itemOptions, setItemOptions] = useState<string[]>([])
+
+  const debouncedSearch = useMemo(
+    () =>
+      debounce(async (searchQuery: string) => {
+        if (searchQuery.length > 1) {
+          const result = await searchTrigger({
+            query: searchQuery,
+            index: 0,
+            page_size: 10,
+            sort: "title",
+          })
+          if (result.data?.listings) {
+            const uniqueNames = [
+              ...new Set(
+                result.data.listings
+                  .map((item) => item.item_name)
+                  .filter((name): name is string => name !== null),
+              ),
+            ]
+            setItemOptions(uniqueNames)
+          }
+        }
+      }, 300),
+    [searchTrigger],
+  )
+
+  useEffect(() => {
+    debouncedSearch(query)
+  }, [query, debouncedSearch])
+
   return (
     <Box
       sx={{
@@ -81,22 +117,35 @@ export function MarketSearchArea(props: {
               </Button>
             </Grid>
             <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label={t("MarketSearchArea.search")}
-                size={"small"}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <IconButton>
-                        <SearchIcon />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
+              <Autocomplete
+                freeSolo
+                size="small"
+                options={itemOptions}
                 value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                color={"secondary"}
+                onInputChange={(event, newValue) => {
+                  setQuery(newValue)
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label={t("MarketSearchArea.search")}
+                    size="small"
+                    color="secondary"
+                    InputProps={{
+                      ...params.InputProps,
+                      startAdornment: (
+                        <>
+                          <InputAdornment position="start">
+                            <IconButton size="small">
+                              <SearchIcon />
+                            </IconButton>
+                          </InputAdornment>
+                          {params.InputProps.startAdornment}
+                        </>
+                      ),
+                    }}
+                  />
+                )}
               />
             </Grid>
           </>
