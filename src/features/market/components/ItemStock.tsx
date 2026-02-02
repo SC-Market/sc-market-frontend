@@ -51,6 +51,7 @@ import {
   SaveRounded,
   ShareRounded,
   VisibilityRounded,
+  InventoryRounded,
 } from "@mui/icons-material"
 import { useMarketSearch } from ".."
 import { formatCompleteListingUrl } from "../../../util/urls"
@@ -1160,6 +1161,13 @@ export function DisplayStock({
               details: { title: row.title },
               listing: row,
             })
+          },
+        },
+        {
+          label: t("ItemStock.manageStock", "Manage Stock"),
+          icon: <InventoryRounded />,
+          onClick: () => {
+            window.location.href = `/market/stock/${row.listing_id}`
           },
         },
         {
