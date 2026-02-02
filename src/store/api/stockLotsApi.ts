@@ -33,6 +33,21 @@ export interface StockAggregates {
   reserved: number
 }
 
+export interface Allocation {
+  allocation_id: string
+  lot_id: string
+  quantity: number
+  listing_id: string
+  status?: string
+  lot?: StockLot
+}
+
+export interface ManualAllocationInput {
+  listing_id: string
+  lot_id: string
+  quantity: number
+}
+
 export const stockLotsApi = serviceApi.injectEndpoints({
   endpoints: (builder) => ({
     // Get lots for a listing
@@ -120,6 +135,26 @@ export const stockLotsApi = serviceApi.injectEndpoints({
         body,
       }),
     }),
+
+    // Get order allocations
+    getOrderAllocations: builder.query<
+      { allocations: Allocation[]; total_allocated: number },
+      { order_id: string }
+    >({
+      query: ({ order_id }) => `/orders/${order_id}/allocations`,
+    }),
+
+    // Manual allocate order
+    manualAllocateOrder: builder.mutation<
+      { allocations: Allocation[] },
+      { order_id: string; allocations: ManualAllocationInput[] }
+    >({
+      query: ({ order_id, allocations }) => ({
+        url: `/orders/${order_id}/allocations/manual`,
+        method: "POST",
+        body: { allocations },
+      }),
+    }),
   }),
 })
 
@@ -131,4 +166,6 @@ export const {
   useTransferLotMutation,
   useGetLocationsQuery,
   useCreateLocationMutation,
+  useGetOrderAllocationsQuery,
+  useManualAllocateOrderMutation,
 } = stockLotsApi
