@@ -145,7 +145,7 @@ export interface ManualAllocateOrderResponse {
 export const stockLotsApi = createApi({
   reducerPath: "stockLotsApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "/api/v1",
+    baseUrl: "/api",
     credentials: "include",
   }),
   tagTypes: ["StockLots", "Locations", "MarketListings", "Allocations"],
