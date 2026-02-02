@@ -420,6 +420,8 @@ export function DisplayStock({
   onRefresh?: () => Promise<void>
 }) {
   const [refresh] = useMarketRefreshListingMutation()
+  const [updateQuantity] = useUpdateListingQuantityMutation()
+  const issueAlert = useAlertHook()
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
 
@@ -431,6 +433,27 @@ export function DisplayStock({
   const [editingRows, setEditingRows] = React.useState<
     Record<string, Partial<NewListingRow>>
   >({})
+
+  const handleUpdateQuantity = React.useCallback(
+    async (listingId: string, newQuantity: number) => {
+      try {
+        await updateQuantity({
+          listing_id: listingId,
+          quantity: newQuantity,
+        }).unwrap()
+        issueAlert({
+          message: t("ItemStock.updated"),
+          severity: "success",
+        })
+        if (onRefresh) {
+          await onRefresh()
+        }
+      } catch (error) {
+        issueAlert(error)
+      }
+    },
+    [updateQuantity, issueAlert, t, onRefresh],
+  )
 
   const rows: StockRow[] = useMemo(
     () =>
@@ -1053,6 +1076,7 @@ export function DisplayStock({
       handleEditClick,
       handleSaveClick,
       handleCancelClick,
+      handleUpdateQuantity,
     }: {
       row: StockRow & { id: string }
       isSelected: boolean
@@ -1067,6 +1091,7 @@ export function DisplayStock({
       handleEditClick: (id: GridRowId) => () => void
       handleSaveClick: (id: GridRowId) => () => Promise<void>
       handleCancelClick: (id: GridRowId) => () => void
+      handleUpdateQuantity: (listingId: string, newQuantity: number) => Promise<void>
     }) => {
       const stockContext = useContext(ItemStockContext)
       if (!stockContext || !Array.isArray(stockContext)) {
@@ -1247,71 +1272,118 @@ export function DisplayStock({
           }}
           {...(isInSelectionMode ? {} : longPressHandlers)}
         >
-          <CardActionArea
-            component={isInSelectionMode ? "div" : Link}
-            to={
-              isInSelectionMode
-                ? undefined
-                : formatCompleteListingUrl({
-                    type: "unique",
-                    details: { title: row.title },
-                    listing: row,
-                  })
-            }
-            onClick={(e: React.MouseEvent) => {
-              if (isInSelectionMode) {
-                e.preventDefault()
-                e.stopPropagation()
-                handleTapForSelection(e)
-              }
-            }}
-            sx={{ p: 2 }}
-          >
-            <Stack direction="row" spacing={2} alignItems="center">
-              <Avatar
-                src={row.image_url}
-                variant="rounded"
-                sx={{ width: 64, height: 64 }}
-              />
-              <Box sx={{ flex: 1, minWidth: 0 }}>
-                <Typography variant="h6" noWrap>
-                  {row.title}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {row.price.toLocaleString(undefined)} aUEC
-                </Typography>
-                <Stack
-                  direction="row"
-                  spacing={1}
-                  sx={{ mt: 1 }}
-                  flexWrap="wrap"
-                >
-                  <Chip
-                    label={`${t("ItemStock.quantity")}: ${row.quantity_available.toLocaleString(undefined)}`}
-                    size="small"
-                    variant="outlined"
+          <Box sx={{ p: 2 }}>
+            <Stack direction="row" spacing={2} alignItems="flex-start">
+              <CardActionArea
+                component={isInSelectionMode ? "div" : Link}
+                to={
+                  isInSelectionMode
+                    ? undefined
+                    : formatCompleteListingUrl({
+                        type: "unique",
+                        details: { title: row.title },
+                        listing: row,
+                      })
+                }
+                onClick={(e: React.MouseEvent) => {
+                  if (isInSelectionMode) {
+                    e.preventDefault()
+                    e.stopPropagation()
+                    handleTapForSelection(e)
+                  }
+                }}
+                sx={{ 
+                  width: 'auto',
+                  borderRadius: 1,
+                  flex: 1,
+                  minWidth: 0
+                }}
+              >
+                <Stack direction="row" spacing={2} alignItems="center">
+                  <Avatar
+                    src={row.image_url}
+                    variant="rounded"
+                    sx={{ width: 64, height: 64 }}
                   />
-                  <Chip
-                    label={
-                      row.status === "active"
-                        ? t("ItemStock.active")
-                        : t("ItemStock.inactive")
-                    }
-                    color={row.status === "active" ? "success" : "error"}
-                    size="small"
-                  />
-                  {row.order_count > 0 && (
-                    <Chip
-                      label={`${row.order_count} ${t("ItemStock.offersAccepted")}`}
-                      size="small"
-                      variant="outlined"
-                    />
-                  )}
+                  <Box sx={{ flex: 1, minWidth: 0 }}>
+                    <Typography variant="h6" noWrap>
+                      {row.title}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {row.price.toLocaleString(undefined)} aUEC
+                    </Typography>
+                    <Stack
+                      direction="row"
+                      spacing={1}
+                      sx={{ mt: 1 }}
+                      flexWrap="wrap"
+                    >
+                      <Chip
+                        label={`${t("ItemStock.quantity")}: ${row.quantity_available.toLocaleString(undefined)}`}
+                        size="small"
+                        variant="outlined"
+                      />
+                      <Chip
+                        label={
+                          row.status === "active"
+                            ? t("ItemStock.active")
+                            : t("ItemStock.inactive")
+                        }
+                        color={row.status === "active" ? "success" : "error"}
+                        size="small"
+                      />
+                      {row.order_count > 0 && (
+                        <Chip
+                          label={`${row.order_count} ${t("ItemStock.offersAccepted")}`}
+                          size="small"
+                          variant="outlined"
+                        />
+                      )}
+                    </Stack>
+                  </Box>
+                  {isSelected && <RadioButtonCheckedRounded color="primary" />}
                 </Stack>
-              </Box>
-              {isSelected && <RadioButtonCheckedRounded color="primary" />}
+              </CardActionArea>
+              
+              {!isInSelectionMode && (
+                <Stack direction="column" spacing={0.5}>
+                  <IconButton
+                    size="small"
+                    color="success"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleUpdateQuantity(row.id, row.quantity_available + 1)
+                    }}
+                    sx={{ minWidth: 40 }}
+                  >
+                    <AddRounded fontSize="small" />
+                  </IconButton>
+                  <IconButton
+                    size="small"
+                    color="warning"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleUpdateQuantity(row.id, 0)
+                    }}
+                    sx={{ minWidth: 40 }}
+                  >
+                    0
+                  </IconButton>
+                  <IconButton
+                    size="small"
+                    color="error"
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleUpdateQuantity(row.id, Math.max(0, row.quantity_available - 1))
+                    }}
+                    sx={{ minWidth: 40 }}
+                  >
+                    <RemoveRounded fontSize="small" />
+                  </IconButton>
+                </Stack>
+              )}
             </Stack>
-          </CardActionArea>
+          </Box>
         </Card>
       )
 
@@ -1457,6 +1529,7 @@ export function DisplayStock({
                       }
                       handleSaveClick={handleSaveClick}
                       handleCancelClick={handleCancelClick}
+                      handleUpdateQuantity={handleUpdateQuantity}
                     />
                   )
                 })}
