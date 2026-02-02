@@ -221,15 +221,6 @@ export function MarketSearchArea(props: {
             </MenuItem>
           </TextField>
         </Grid>
-        <Grid item xs={12}>
-          <SelectGameCategoryOption
-            item_type={itemType}
-            onTypeChange={setItemType}
-            TextfieldProps={{
-              size: "small",
-            }}
-          />
-        </Grid>
 
         <Grid item xs={12}>
           <Typography variant={"subtitle2"} fontWeight={"bold"}>
@@ -276,6 +267,21 @@ export function MarketSearchArea(props: {
                 <InputAdornment position="start">{`aUEC`}</InputAdornment>
               ),
               inputMode: "numeric",
+            }}
+          />
+        </Grid>
+
+        <Grid item xs={12}>
+          <Typography variant={"subtitle2"} fontWeight={"bold"}>
+            {t("MarketSearchArea.itemType", "Item Type")}
+          </Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <SelectGameCategoryOption
+            item_type={itemType}
+            onTypeChange={setItemType}
+            TextfieldProps={{
+              size: "small",
             }}
           />
         </Grid>
