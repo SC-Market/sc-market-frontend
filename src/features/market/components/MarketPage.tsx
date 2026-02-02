@@ -56,7 +56,7 @@ export function MarketPage() {
   const xs = useMediaQuery(theme.breakpoints.down("md"))
   const [marketSidebarOpen, setMarketSidebarOpen] = useState(false)
   const [serviceSidebarOpen, setServiceSidebarOpen] = useState(false)
-  const pages = ["/market/services", "/market", "/market/contracts"]
+  const pages = ["/market/services", "/market", "/contracts"]
   const tabPage = useMemo(
     () =>
       pages.indexOf(
@@ -154,7 +154,7 @@ export function MarketPage() {
                       } else if (newValue === 1) {
                         navigate("/market")
                       } else if (newValue === 2) {
-                        navigate("/market/contracts")
+                        navigate("/contracts")
                       }
                     }}
                     aria-label={t("ui.aria.orgInfoArea")}
