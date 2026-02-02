@@ -30,6 +30,12 @@ import {
   Alert,
   CircularProgress,
 } from "@mui/material"
+import {
+  useGetListingLotsQuery,
+  useManualAllocateOrderMutation,
+  Allocation,
+  ManualAllocationInput,
+} from "../../../../store/api/stockLotsApi"
 import { AddCircleOutlineRounded, RemoveCircleOutlineRounded } from "@mui/icons-material"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { InsufficientStockDialog } from "./InsufficientStockDialog"
@@ -133,7 +139,7 @@ export function ManualAllocationDialog({
 
     // Check each lot allocation doesn't exceed available
     selectedAllocations.forEach((quantity, lotId) => {
-      const lot = lotsWithAvailable.find((l) => l.lot_id === lotId)
+      const lot = lotsWithAvailable.find((l: typeof lotsWithAvailable[0]) => l.lot_id === lotId)
       if (lot && quantity > lot.available) {
         errors.push(
           createValidationError.overAllocation(
@@ -195,7 +201,7 @@ export function ManualAllocationDialog({
       selectedAllocations.entries(),
     )
       .filter(([_, quantity]) => quantity > 0)
-      .map(([lot_id, quantity]) => ({ lot_id, quantity }))
+      .map(([lot_id, quantity]) => ({ listing_id: listingId, lot_id, quantity }))
 
     if (allocations.length === 0) {
       setValidationErrors([
@@ -325,7 +331,7 @@ export function ManualAllocationDialog({
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {lotsWithAvailable.map((lot) => {
+                    {lotsWithAvailable.map((lot: typeof lotsWithAvailable[0]) => {
                       const selectedQty =
                         selectedAllocations.get(lot.lot_id) || 0
                       const hasError =

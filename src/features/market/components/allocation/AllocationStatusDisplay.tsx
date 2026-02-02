@@ -21,7 +21,7 @@ import {
   WarningRounded,
   InventoryRounded,
 } from "@mui/icons-material"
-import { useGetOrderAllocationsQuery } from "../../../store/api/stockLotsApi"
+import { useGetOrderAllocationsQuery } from "../../../../store/api/stockLotsApi"
 
 interface AllocationStatusDisplayProps {
   orderId: string
@@ -62,9 +62,9 @@ export function AllocationStatusDisplay({
   }
 
   const { allocations, total_allocated } = allocationsData
-  const hasActiveAllocations = allocations.some((a) => a.status === "active")
-  const allFulfilled = allocations.every((a) => a.status === "fulfilled")
-  const allReleased = allocations.every((a) => a.status === "released")
+  const hasActiveAllocations = allocations.some((a: any) => a.status === "active")
+  const allFulfilled = allocations.every((a: any) => a.status === "fulfilled")
+  const allReleased = allocations.every((a: any) => a.status === "released")
 
   const isPartial =
     orderQuantity !== undefined && total_allocated < orderQuantity

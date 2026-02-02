@@ -26,7 +26,7 @@ import {
   Alert,
   CircularProgress,
 } from "@mui/material"
-import { useGetOrderAllocationsQuery } from "../../../store/api/stockLotsApi"
+import { useGetOrderAllocationsQuery, Allocation } from "../../../../store/api/stockLotsApi"
 import { ManualAllocationDialog } from "./ManualAllocationDialog"
 import { InventoryRounded, WarningRounded } from "@mui/icons-material"
 
@@ -57,7 +57,7 @@ export function OrderAllocationView({
   const allocationsByLocation = useMemo(() => {
     const grouped = new Map<string, typeof allocations>()
 
-    allocations.forEach((allocation) => {
+    allocations.forEach((allocation: Allocation) => {
       const locationName = allocation.lot?.location_id || "Unspecified"
       const existing = grouped.get(locationName) || []
       grouped.set(locationName, [...existing, allocation])
@@ -184,7 +184,7 @@ export function OrderAllocationView({
                       {Array.from(allocationsByLocation.entries()).map(
                         ([locationName, locationAllocations]) => (
                           <React.Fragment key={locationName}>
-                            {locationAllocations.map((allocation, index) => (
+                            {locationAllocations.map((allocation: Allocation, index: number) => (
                               <TableRow key={allocation.allocation_id}>
                                 <TableCell>
                                   {index === 0 && (
