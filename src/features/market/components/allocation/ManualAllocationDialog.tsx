@@ -35,11 +35,16 @@ import {
   useManualAllocateOrderMutation,
   Allocation,
   ManualAllocationInput,
+<<<<<<< HEAD
 } from "../../../../store/api/stock-lots"
 import {
   AddCircleOutlineRounded,
   RemoveCircleOutlineRounded,
 } from "@mui/icons-material"
+=======
+} from "../../../store/api/stockLotsApi"
+import { AddCircleOutlineRounded, RemoveCircleOutlineRounded } from "@mui/icons-material"
+>>>>>>> d1d4e1a (Integrate stock lots API into main serviceApi with correct backend URL)
 import LoadingButton from "@mui/lab/LoadingButton"
 import { InsufficientStockDialog } from "./InsufficientStockDialog"
 import {

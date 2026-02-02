@@ -24,9 +24,9 @@ import { Close as CloseIcon } from "@mui/icons-material"
 import { NumericFormat } from "react-number-format"
 import { useTranslation } from "react-i18next"
 import {
-  useUpdateSimpleStockMutation,
   useGetListingLotsQuery,
-} from "../../../store/api/stock-lots"
+} from "../../../store/api/stockLotsApi"
+import { useUpdateListingQuantityMutation } from "../api/marketApi"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { StockManager } from "./stock/StockManager"
 
@@ -72,7 +72,7 @@ export function SimpleStockInput({
 
   // Update mutation
   const [updateStock, { isLoading: isUpdating }] =
-    useUpdateSimpleStockMutation()
+    useUpdateListingQuantityMutation()
 
   // Update local state when initial quantity changes
   useEffect(() => {

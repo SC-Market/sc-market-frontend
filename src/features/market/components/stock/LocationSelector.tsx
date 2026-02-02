@@ -20,7 +20,7 @@ import {
   useGetLocationsQuery,
   useCreateLocationMutation,
   Location,
-} from "../../../../store/api/stock-lots"
+} from "../../../../store/api/stockLotsApi"
 import { useAlertHook } from "../../../../hooks/alert/AlertHook"
 import { useDebounce } from "../../../../hooks/useDebounce"
 
