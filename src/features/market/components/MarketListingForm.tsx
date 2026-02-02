@@ -52,6 +52,7 @@ import {
   SelectGameCategory,
   SelectGameItemStack,
 } from "../../../components/select/SelectGameItem"
+import { ItemSearchAutocomplete } from "./ItemSearchAutocomplete"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { SelectPhotosArea } from "../../../components/modal/SelectPhotosArea"
 import { useTranslation } from "react-i18next" // Localization
@@ -220,25 +221,19 @@ export function MarketListingForm(props: { sale_type: "sale" | "auction" }) {
           </Typography>
         </Grid>
 
-        <SelectGameItemStack
-          onItemChange={(value) => {
-            setState((state) => ({
-              ...state,
-              item_name: value,
-              // Auto-populate title if empty
-              title: !state.title && value ? value : state.title,
-            }))
-          }}
-          onTypeChange={(value) =>
-            setState((state) => ({
-              ...state,
-              item_type: value,
-              item_name: null,
-            }))
-          }
-          item_type={state.item_type}
-          item_name={state.item_name}
-        />
+        <Grid item xs={12}>
+          <ItemSearchAutocomplete
+            value={state.item_name}
+            onChange={(itemName, itemType) => {
+              setState((state) => ({
+                ...state,
+                item_name: itemName,
+                item_type: itemType || state.item_type,
+                title: !state.title && itemName ? itemName : state.title,
+              }))
+            }}
+          />
+        </Grid>
 
         {/* Listing Details Section */}
         <Grid item xs={12} sx={{ mt: 2 }}>
