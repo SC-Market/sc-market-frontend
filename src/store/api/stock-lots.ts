@@ -108,13 +108,47 @@ export interface CreateLocationResponse {
   location: Location
 }
 
+export interface Allocation {
+  allocation_id: string
+  lot_id: string
+  order_id: string
+  quantity: number
+  status: "active" | "released" | "fulfilled"
+  created_at: string
+  updated_at: string
+  lot?: StockLot
+}
+
+export interface GetOrderAllocationsRequest {
+  order_id: string
+}
+
+export interface GetOrderAllocationsResponse {
+  allocations: Allocation[]
+  total_allocated: number
+}
+
+export interface ManualAllocationInput {
+  lot_id: string
+  quantity: number
+}
+
+export interface ManualAllocateOrderRequest {
+  order_id: string
+  allocations: ManualAllocationInput[]
+}
+
+export interface ManualAllocateOrderResponse {
+  allocations: Allocation[]
+}
+
 export const stockLotsApi = createApi({
   reducerPath: "stockLotsApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "/api/v1/market",
+    baseUrl: "/api/v1",
     credentials: "include",
   }),
-  tagTypes: ["StockLots", "Locations", "MarketListings"],
+  tagTypes: ["StockLots", "Locations", "MarketListings", "Allocations"],
   endpoints: (builder) => ({
     // Simple stock management
     updateSimpleStock: builder.mutation<
@@ -122,7 +156,7 @@ export const stockLotsApi = createApi({
       UpdateSimpleStockRequest
     >({
       query: ({ listing_id, quantity }) => ({
-        url: `/listings/${listing_id}/stock`,
+        url: `/market/listings/${listing_id}/stock`,
         method: "PUT",
         body: { quantity },
       }),
@@ -145,7 +179,7 @@ export const stockLotsApi = createApi({
         if (listed !== undefined) params.append("listed", String(listed))
 
         return {
-          url: `/listings/${listing_id}/lots?${params.toString()}`,
+          url: `/market/listings/${listing_id}/lots?${params.toString()}`,
           method: "GET",
         }
       },
@@ -157,7 +191,7 @@ export const stockLotsApi = createApi({
     // Create a new lot
     createLot: builder.mutation<CreateLotResponse, CreateLotRequest>({
       query: ({ listing_id, ...body }) => ({
-        url: `/listings/${listing_id}/lots`,
+        url: `/market/listings/${listing_id}/lots`,
         method: "POST",
         body,
       }),
@@ -171,7 +205,7 @@ export const stockLotsApi = createApi({
     // Update a lot
     updateLot: builder.mutation<UpdateLotResponse, UpdateLotRequest>({
       query: ({ lot_id, ...body }) => ({
-        url: `/lots/${lot_id}`,
+        url: `/market/lots/${lot_id}`,
         method: "PATCH",
         body,
       }),
@@ -185,7 +219,7 @@ export const stockLotsApi = createApi({
     // Delete a lot
     deleteLot: builder.mutation<{ success: boolean }, { lot_id: string }>({
       query: ({ lot_id }) => ({
-        url: `/lots/${lot_id}`,
+        url: `/market/lots/${lot_id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["StockLots", "MarketListings"],
@@ -194,7 +228,7 @@ export const stockLotsApi = createApi({
     // Transfer lot
     transferLot: builder.mutation<TransferLotResponse, TransferLotRequest>({
       query: ({ lot_id, ...body }) => ({
-        url: `/lots/${lot_id}/transfer`,
+        url: `/market/lots/${lot_id}/transfer`,
         method: "POST",
         body,
       }),
@@ -212,7 +246,7 @@ export const stockLotsApi = createApi({
         if (search) params.append("search", search)
 
         return {
-          url: `/locations?${params.toString()}`,
+          url: `/market/locations?${params.toString()}`,
           method: "GET",
         }
       },
@@ -225,11 +259,42 @@ export const stockLotsApi = createApi({
       CreateLocationRequest
     >({
       query: (body) => ({
-        url: `/locations`,
+        url: `/market/locations`,
         method: "POST",
         body,
       }),
       invalidatesTags: ["Locations"],
+    }),
+
+    // Get order allocations
+    getOrderAllocations: builder.query<
+      GetOrderAllocationsResponse,
+      GetOrderAllocationsRequest
+    >({
+      query: ({ order_id }) => ({
+        url: `/orders/${order_id}/allocations`,
+        method: "GET",
+      }),
+      providesTags: (result, error, { order_id }) => [
+        { type: "Allocations", id: order_id },
+      ],
+    }),
+
+    // Manual allocate order
+    manualAllocateOrder: builder.mutation<
+      ManualAllocateOrderResponse,
+      ManualAllocateOrderRequest
+    >({
+      query: ({ order_id, allocations }) => ({
+        url: `/orders/${order_id}/allocations/manual`,
+        method: "POST",
+        body: { allocations },
+      }),
+      invalidatesTags: (result, error, { order_id }) => [
+        { type: "Allocations", id: order_id },
+        "StockLots",
+        "MarketListings",
+      ],
     }),
   }),
 })
@@ -243,4 +308,6 @@ export const {
   useTransferLotMutation,
   useGetLocationsQuery,
   useCreateLocationMutation,
+  useGetOrderAllocationsQuery,
+  useManualAllocateOrderMutation,
 } = stockLotsApi
