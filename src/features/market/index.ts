@@ -114,7 +114,6 @@ export {
 // Stock Lots API
 export {
   stockLotsApi,
-  useUpdateSimpleStockMutation,
   useGetListingLotsQuery,
   useCreateLotMutation,
   useUpdateLotMutation,
@@ -122,16 +121,12 @@ export {
   useTransferLotMutation,
   useGetLocationsQuery,
   useCreateLocationMutation,
-} from "../../store/api/stock-lots"
+} from "../../store/api/stockLotsApi"
 export type {
   StockLot,
   Location,
   StockAggregates,
-  UpdateSimpleStockRequest,
-  UpdateSimpleStockResponse,
-  GetListingLotsRequest,
-  GetListingLotsResponse,
-} from "../../store/api/stock-lots"
+} from "../../store/api/stockLotsApi"
 
 // Hooks
 export {

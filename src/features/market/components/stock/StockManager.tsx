@@ -28,7 +28,7 @@ import {
   useGetLocationsQuery,
   StockLot,
   Location,
-} from "../../../../store/api/stock-lots"
+} from "../../../../store/api/stockLotsApi"
 import { StockBreakdown } from "./StockBreakdown"
 import { LotListItem } from "./LotListItem"
 import { CreateLotDialog } from "./CreateLotDialog"

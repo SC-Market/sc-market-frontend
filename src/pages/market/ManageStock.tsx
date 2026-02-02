@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react"
+<<<<<<< HEAD
 import {
   Button,
   Grid,
@@ -9,6 +10,9 @@ import {
   Tab,
   Typography,
 } from "@mui/material"
+=======
+import { Button, Grid, Paper, useMediaQuery, Box, Tabs, Tab, Typography } from "@mui/material"
+>>>>>>> d1d4e1a (Integrate stock lots API into main serviceApi with correct backend URL)
 import AddRounded from "@mui/icons-material/AddRounded"
 import FilterListIcon from "@mui/icons-material/FilterList"
 import { MarketSearchArea } from "../../features/market/components/MarketSidebar"

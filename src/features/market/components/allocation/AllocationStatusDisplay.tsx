@@ -21,7 +21,7 @@ import {
   WarningRounded,
   InventoryRounded,
 } from "@mui/icons-material"
-import { useGetOrderAllocationsQuery } from "../../../../store/api/stock-lots"
+import { useGetOrderAllocationsQuery } from "../../../store/api/stockLotsApi"
 
 interface AllocationStatusDisplayProps {
   orderId: string

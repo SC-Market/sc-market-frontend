@@ -26,7 +26,7 @@ import {
   Alert,
   CircularProgress,
 } from "@mui/material"
-import { useGetOrderAllocationsQuery } from "../../../../store/api/stock-lots"
+import { useGetOrderAllocationsQuery } from "../../../store/api/stockLotsApi"
 import { ManualAllocationDialog } from "./ManualAllocationDialog"
 import { InventoryRounded, WarningRounded } from "@mui/icons-material"
 
