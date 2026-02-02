@@ -35,7 +35,7 @@ export function AggregateListing(props: {
       sm={marketSidebarOpen ? 12 : 6}
       md={marketSidebarOpen ? 12 : 4}
       lg={marketSidebarOpen ? 6 : 4}
-      xl={3}
+      xl={marketSidebarOpen ? 4.8 : 2.4}
       sx={{ transition: "0.3s" }}
     >
       <AggregateListingBase aggregate={aggregate} index={index} />
@@ -188,7 +188,7 @@ export function AggregateBuyOrderListing(props: {
       sm={marketSidebarOpen ? 12 : 6}
       md={marketSidebarOpen ? 12 : 4}
       lg={marketSidebarOpen ? 6 : 4}
-      xl={3}
+      xl={marketSidebarOpen ? 4.8 : 2.4}
       sx={{ transition: "0.3s" }}
     >
       <AggregateBuyOrderListingBase aggregate={aggregate} index={index} />

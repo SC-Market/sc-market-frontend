@@ -32,7 +32,7 @@ export function MultipleListing(props: {
       sm={marketSidebarOpen ? 12 : 6}
       md={marketSidebarOpen ? 12 : 4}
       lg={marketSidebarOpen ? 6 : 4}
-      xl={3}
+      xl={marketSidebarOpen ? 4.8 : 2.4}
       sx={{ transition: "0.3s" }}
     >
       <MultipleListingBase multiple={multiple} index={index} />
