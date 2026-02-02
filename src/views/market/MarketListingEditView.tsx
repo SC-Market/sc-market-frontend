@@ -49,7 +49,7 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 export function MarketListingEditView() {
   const { t } = useTranslation() // Localization hook
   const theme = useTheme<ExtendedTheme>()
-  const [listing] = useCurrentMarketListing<UniqueListing>()
+  const [listing, refetch] = useCurrentMarketListing<UniqueListing>()
   const { data: profile } = useGetUserProfileQuery()
   const [currentOrg] = useCurrentOrg()
 
@@ -134,6 +134,9 @@ export function MarketListingEditView() {
             setPendingFiles([])
           }
 
+          // Refetch to ensure UI shows latest data
+          refetch()
+
           issueAlert({
             message: t("MarketListingEditView.updated"),
             severity: "success",
@@ -143,7 +146,7 @@ export function MarketListingEditView() {
           issueAlert(error)
         })
     },
-    [listing, issueAlert, updateListing, t, pendingFiles],
+    [listing, issueAlert, updateListing, t, pendingFiles, refetch],
   )
 
   const handleFileUpload = useCallback(
