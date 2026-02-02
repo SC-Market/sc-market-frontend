@@ -96,8 +96,8 @@
     "test": "NODE_OPTIONS=--experimental-vm-modules jest --config ./jest.config.cjs --coverage",
     "analyze": "npm run build:analyze && open dist/stats.html",
     "analyze:detailed": "node scripts/analyze-bundle.js",
-    "i18n:extract": "i18next-parser",
-    "i18n:validate": "i18next-parser --fail-on-warnings --fail-on-update"
+    "i18n:extract": "i18next-parser 'src/**/*.{ts,tsx}'",
+    "i18n:validate": "i18next-parser 'src/**/*.{ts,tsx}' --fail-on-warnings --fail-on-update"
   },
   "webpackConfig": {
     "target": "web"
