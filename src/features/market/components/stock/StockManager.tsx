@@ -18,6 +18,8 @@ import {
   Divider,
   Alert,
   CircularProgress,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material"
 import { Add as AddIcon } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
@@ -45,6 +47,8 @@ export interface StockManagerProps {
  */
 export function StockManager({ listingId, onClose }: StockManagerProps) {
   const { t } = useTranslation()
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
 
   // State for dialogs
   const [createDialogOpen, setCreateDialogOpen] = useState(false)
@@ -122,9 +126,15 @@ export function StockManager({ listingId, onClose }: StockManagerProps) {
   return (
     <Box>
       {/* Header with aggregates */}
-      <Paper sx={{ p: 2, mb: 2 }}>
-        <Stack direction="row" justifyContent="space-between" alignItems="center" mb={2}>
-          <Typography variant="h6">
+      <Paper sx={{ p: { xs: 1.5, sm: 2 }, mb: 2 }}>
+        <Stack
+          direction={{ xs: "column", sm: "row" }}
+          justifyContent="space-between"
+          alignItems={{ xs: "stretch", sm: "center" }}
+          spacing={2}
+          mb={2}
+        >
+          <Typography variant={isMobile ? "subtitle1" : "h6"}>
             {t("StockManager.title", "Stock Management")}
           </Typography>
           <Button
@@ -132,6 +142,7 @@ export function StockManager({ listingId, onClose }: StockManagerProps) {
             startIcon={<AddIcon />}
             onClick={() => setCreateDialogOpen(true)}
             size="small"
+            fullWidth={isMobile}
           >
             {t("StockManager.createLot", "Create Lot")}
           </Button>
