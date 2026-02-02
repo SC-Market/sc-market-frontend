@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react"
-import { Button, Grid, Paper, useMediaQuery } from "@mui/material"
+import { Button, Grid, Paper, useMediaQuery, Box } from "@mui/material"
 import AddRounded from "@mui/icons-material/AddRounded"
+import FilterListIcon from "@mui/icons-material/FilterList"
 import { MarketSearchArea } from "../../features/market/components/MarketSidebar"
 import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import { MarketSidebarContext } from "../../features/market"
@@ -17,6 +18,7 @@ import { useTranslation } from "react-i18next"
 import { GridRowSelectionModel } from "@mui/x-data-grid"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { BottomSheet } from "../../components/mobile/BottomSheet"
 
 export function ManageStock() {
   const { t } = useTranslation()
@@ -43,6 +45,20 @@ export function ManageStock() {
     <Page title={t("sidebar.my_market_listings")}>
       <ItemStockContext.Provider value={[selectionModel, setSelectionModel]}>
         <MarketSidebarContext.Provider value={[open, setOpen]}>
+          {/* Mobile filter bottom sheet */}
+          {isMobile && (
+            <BottomSheet
+              open={open}
+              onClose={() => setOpen(false)}
+              title={t("market.filters", "Filters")}
+              maxHeight="90vh"
+            >
+              <Box sx={{ overflowY: "auto", overflowX: "hidden", pb: 2 }}>
+                <MarketSearchArea status />
+              </Box>
+            </BottomSheet>
+          )}
+
           <ContainerGrid maxWidth={"xl"} sidebarOpen={true}>
             <Grid item xs={12}>
               <Grid
@@ -52,7 +68,23 @@ export function ManageStock() {
                 spacing={theme.layoutSpacing.layout}
               >
                 <Grid item>
-                  <HeaderTitle>{t("sidebar.manage_listings")}</HeaderTitle>
+                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                    {isMobile && (
+                      <Button
+                        variant="outlined"
+                        color="secondary"
+                        startIcon={<FilterListIcon />}
+                        onClick={() => setOpen((prev) => !prev)}
+                        sx={{
+                          borderRadius: 2,
+                          textTransform: "none",
+                        }}
+                      >
+                        {t("market.filters", "Filters")}
+                      </Button>
+                    )}
+                    <HeaderTitle>{t("sidebar.manage_listings")}</HeaderTitle>
+                  </Box>
                 </Grid>
                 <Grid item>
                   <Link to="/market/create" style={{ textDecoration: "none" }}>
