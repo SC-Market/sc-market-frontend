@@ -93,7 +93,9 @@ export function OrgMemberSearch({
         <TextField
           {...params}
           label={label || t("OrgMemberSearch.label", "Org Member")}
-          placeholder={placeholder || t("OrgMemberSearch.placeholder", "Search members...")}
+          placeholder={
+            placeholder || t("OrgMemberSearch.placeholder", "Search members...")
+          }
           InputProps={{
             ...params.InputProps,
             endAdornment: (
@@ -107,10 +109,7 @@ export function OrgMemberSearch({
       )}
       renderOption={(props, option) => (
         <Box component="li" {...props}>
-          <Avatar
-            src={option.avatar}
-            sx={{ width: 32, height: 32, mr: 1 }}
-          >
+          <Avatar src={option.avatar} sx={{ width: 32, height: 32, mr: 1 }}>
             {option.display_name?.[0] || option.username[0]}
           </Avatar>
           <Box>

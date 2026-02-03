@@ -26,7 +26,10 @@ import {
   Alert,
   CircularProgress,
 } from "@mui/material"
-import { useGetOrderAllocationsQuery, Allocation } from "../../../../store/api/stockLotsApi"
+import {
+  useGetOrderAllocationsQuery,
+  Allocation,
+} from "../../../../store/api/stockLotsApi"
 import { ManualAllocationDialog } from "./ManualAllocationDialog"
 import { InventoryRounded, WarningRounded } from "@mui/icons-material"
 
@@ -184,49 +187,51 @@ export function OrderAllocationView({
                       {Array.from(allocationsByLocation.entries()).map(
                         ([locationName, locationAllocations]) => (
                           <React.Fragment key={locationName}>
-                            {locationAllocations.map((allocation: Allocation, index: number) => (
-                              <TableRow key={allocation.allocation_id}>
-                                <TableCell>
-                                  {index === 0 && (
+                            {locationAllocations.map(
+                              (allocation: Allocation, index: number) => (
+                                <TableRow key={allocation.allocation_id}>
+                                  <TableCell>
+                                    {index === 0 && (
+                                      <Typography
+                                        variant="body2"
+                                        fontWeight="medium"
+                                      >
+                                        {locationName}
+                                      </Typography>
+                                    )}
+                                  </TableCell>
+                                  <TableCell>
                                     <Typography
                                       variant="body2"
-                                      fontWeight="medium"
+                                      sx={{
+                                        fontFamily: "monospace",
+                                        fontSize: "0.75rem",
+                                      }}
                                     >
-                                      {locationName}
+                                      {allocation.lot_id.substring(0, 8)}...
                                     </Typography>
-                                  )}
-                                </TableCell>
-                                <TableCell>
-                                  <Typography
-                                    variant="body2"
-                                    sx={{
-                                      fontFamily: "monospace",
-                                      fontSize: "0.75rem",
-                                    }}
-                                  >
-                                    {allocation.lot_id.substring(0, 8)}...
-                                  </Typography>
-                                </TableCell>
-                                <TableCell align="right">
-                                  <Typography variant="body2">
-                                    {allocation.quantity}
-                                  </Typography>
-                                </TableCell>
-                                <TableCell>
-                                  <Chip
-                                    label={allocation.status}
-                                    size="small"
-                                    color={
-                                      allocation.status === "active"
-                                        ? "primary"
-                                        : allocation.status === "fulfilled"
-                                          ? "success"
-                                          : "default"
-                                    }
-                                  />
-                                </TableCell>
-                              </TableRow>
-                            ))}
+                                  </TableCell>
+                                  <TableCell align="right">
+                                    <Typography variant="body2">
+                                      {allocation.quantity}
+                                    </Typography>
+                                  </TableCell>
+                                  <TableCell>
+                                    <Chip
+                                      label={allocation.status}
+                                      size="small"
+                                      color={
+                                        allocation.status === "active"
+                                          ? "primary"
+                                          : allocation.status === "fulfilled"
+                                            ? "success"
+                                            : "default"
+                                      }
+                                    />
+                                  </TableCell>
+                                </TableRow>
+                              ),
+                            )}
                           </React.Fragment>
                         ),
                       )}

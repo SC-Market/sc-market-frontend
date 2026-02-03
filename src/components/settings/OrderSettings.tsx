@@ -50,12 +50,18 @@ export function OrderSettings({ entityType, entityId }: OrderSettingsProps) {
   const [stockSubtractionTiming, setStockSubtractionTiming] = useState<
     "on_accepted" | "on_received" | "dont_subtract"
   >("on_accepted")
+  const [allocationMode, setAllocationMode] = useState<
+    "auto" | "manual" | "none"
+  >("auto")
   const [offerSettingId, setOfferSettingId] = useState<string | null>(null)
   const [orderSettingId, setOrderSettingId] = useState<string | null>(null)
   const [requireAvailabilitySettingId, setRequireAvailabilitySettingId] =
     useState<string | null>(null)
   const [stockSubtractionTimingSettingId, setStockSubtractionTimingSettingId] =
     useState<string | null>(null)
+  const [allocationModeSettingId, setAllocationModeSettingId] = useState<
+    string | null
+  >(null)
   const [minOrderSize, setMinOrderSize] = useState<string>("")
   const [maxOrderSize, setMaxOrderSize] = useState<string>("")
   const [minOrderValue, setMinOrderValue] = useState<string>("")
@@ -158,6 +164,25 @@ export function OrderSettings({ entityType, entityId }: OrderSettingsProps) {
         // No setting = default to "on_accepted"
         setStockSubtractionTiming("on_accepted")
         setStockSubtractionTimingSettingId(null)
+      }
+
+      const allocationModeSetting = settings.find(
+        (s) => s.setting_type === "allocation_mode",
+      )
+
+      if (allocationModeSetting) {
+        // If setting exists, use its value
+        setAllocationMode(
+          (allocationModeSetting.message_content as
+            | "auto"
+            | "manual"
+            | "none") || "auto",
+        )
+        setAllocationModeSettingId(allocationModeSetting.id)
+      } else {
+        // No setting = default to "auto"
+        setAllocationMode("auto")
+        setAllocationModeSettingId(null)
       }
 
       // Initialize order limits
@@ -544,6 +569,81 @@ export function OrderSettings({ entityType, entityId }: OrderSettingsProps) {
       )
     }
 
+    // Handle allocation mode
+    if (allocationMode === "auto") {
+      // "auto" is the default - delete setting if it exists
+      if (allocationModeSettingId) {
+        if (entityType === "user") {
+          promise = promise
+            .then(() => deleteUserSetting(allocationModeSettingId).unwrap())
+            .then(() => {
+              setAllocationModeSettingId(null)
+            })
+        } else {
+          promise = promise
+            .then(() =>
+              deleteContractorSetting({
+                contractorId: entityId!,
+                id: allocationModeSettingId,
+              }).unwrap(),
+            )
+            .then(() => {
+              setAllocationModeSettingId(null)
+            })
+        }
+      }
+      // If no setting exists, nothing to do (already at default)
+    } else {
+      // "manual" or "none" - create or update setting
+      const request: CreateOrderSettingRequest = {
+        setting_type: "allocation_mode",
+        message_content: allocationMode,
+        enabled: true,
+      }
+
+      if (allocationModeSettingId) {
+        // Update existing
+        if (entityType === "user") {
+          promise = promise.then(() =>
+            updateUserSetting({
+              id: allocationModeSettingId,
+              message_content: allocationMode,
+              enabled: true,
+            }).unwrap(),
+          )
+        } else {
+          promise = promise.then(() =>
+            updateContractorSetting({
+              contractorId: entityId!,
+              id: allocationModeSettingId,
+              message_content: allocationMode,
+              enabled: true,
+            }).unwrap(),
+          )
+        }
+      } else {
+        // Create new
+        if (entityType === "user") {
+          promise = promise
+            .then(() => createUserSetting(request).unwrap())
+            .then((result) => {
+              setAllocationModeSettingId(result.setting.id)
+            })
+        } else {
+          promise = promise
+            .then(() =>
+              createContractorSetting({
+                contractorId: entityId!,
+                ...request,
+              }).unwrap(),
+            )
+            .then((result) => {
+              setAllocationModeSettingId(result.setting.id)
+            })
+        }
+      }
+    }
+
     promise
       .then(() => {
         issueAlert({
@@ -590,6 +690,7 @@ export function OrderSettings({ entityType, entityId }: OrderSettingsProps) {
       | "order_message"
       | "require_availability"
       | "stock_subtraction_timing"
+      | "allocation_mode"
       | "min_order_size"
       | "max_order_size"
       | "min_order_value"
@@ -609,13 +710,15 @@ export function OrderSettings({ entityType, entityId }: OrderSettingsProps) {
             ? requireAvailabilitySettingId
             : settingType === "stock_subtraction_timing"
               ? stockSubtractionTimingSettingId
-              : settingType === "min_order_size"
-                ? minOrderSizeSettingId
-                : settingType === "max_order_size"
-                  ? maxOrderSizeSettingId
-                  : settingType === "min_order_value"
-                    ? minOrderValueSettingId
-                    : maxOrderValueSettingId
+              : settingType === "allocation_mode"
+                ? allocationModeSettingId
+                : settingType === "min_order_size"
+                  ? minOrderSizeSettingId
+                  : settingType === "max_order_size"
+                    ? maxOrderSizeSettingId
+                    : settingType === "min_order_value"
+                      ? minOrderValueSettingId
+                      : maxOrderValueSettingId
 
     if (!settingId) {
       setSaving(false)
@@ -647,6 +750,9 @@ export function OrderSettings({ entityType, entityId }: OrderSettingsProps) {
         } else if (settingType === "stock_subtraction_timing") {
           setStockSubtractionTiming("on_accepted")
           setStockSubtractionTimingSettingId(null)
+        } else if (settingType === "allocation_mode") {
+          setAllocationMode("auto")
+          setAllocationModeSettingId(null)
         } else if (settingType === "min_order_size") {
           setMinOrderSize("")
           setMinOrderSizeEnabled(false)
@@ -936,6 +1042,96 @@ export function OrderSettings({ entityType, entityId }: OrderSettingsProps) {
             <Typography variant="body2" color="text.secondary">
               {t("OrderSettings.stockSubtractionTimingDescription")}
             </Typography>
+          </Box>
+        </Grid>
+
+        {/* Allocation Mode Setting */}
+        <Grid item xs={12}>
+          <Box mb={3}>
+            <Typography variant="subtitle1" gutterBottom>
+              {t("OrderSettings.allocationMode", "Stock Allocation Mode")}
+            </Typography>
+
+            <FormControl component="fieldset" disabled={saving} sx={{ mb: 1 }}>
+              <FormLabel component="legend">
+                {t(
+                  "OrderSettings.allocationModeLabel",
+                  "How should stock be allocated to orders?",
+                )}
+              </FormLabel>
+              <RadioGroup
+                value={allocationMode}
+                onChange={(e) =>
+                  setAllocationMode(
+                    e.target.value as "auto" | "manual" | "none",
+                  )
+                }
+              >
+                <FormControlLabel
+                  value="auto"
+                  control={<Radio />}
+                  label={
+                    <Box>
+                      <Typography variant="body2">
+                        {t(
+                          "OrderSettings.allocationModeAuto",
+                          "Automatic (Recommended)",
+                        )}
+                      </Typography>
+                      <Typography variant="caption" color="text.secondary">
+                        {t(
+                          "OrderSettings.allocationModeAutoDescription",
+                          "Stock is automatically allocated when orders are created using FIFO (oldest stock first)",
+                        )}
+                      </Typography>
+                    </Box>
+                  }
+                />
+                <FormControlLabel
+                  value="manual"
+                  control={<Radio />}
+                  label={
+                    <Box>
+                      <Typography variant="body2">
+                        {t("OrderSettings.allocationModeManual", "Manual")}
+                      </Typography>
+                      <Typography variant="caption" color="text.secondary">
+                        {t(
+                          "OrderSettings.allocationModeManualDescription",
+                          "You manually select which stock lots to allocate to each order",
+                        )}
+                      </Typography>
+                    </Box>
+                  }
+                />
+                <FormControlLabel
+                  value="none"
+                  control={<Radio />}
+                  label={
+                    <Box>
+                      <Typography variant="body2">
+                        {t("OrderSettings.allocationModeNone", "None (Legacy)")}
+                      </Typography>
+                      <Typography variant="caption" color="text.secondary">
+                        {t(
+                          "OrderSettings.allocationModeNoneDescription",
+                          "No physical allocation - stock is tracked at listing level only",
+                        )}
+                      </Typography>
+                    </Box>
+                  }
+                />
+              </RadioGroup>
+            </FormControl>
+
+            <Alert severity="info" sx={{ mt: 2 }}>
+              <Typography variant="body2">
+                {t(
+                  "OrderSettings.allocationModeNote",
+                  "Note: This setting controls how stock is physically allocated to orders. It is independent of the stock subtraction timing setting above, which controls when stock becomes visible to buyers.",
+                )}
+              </Typography>
+            </Alert>
           </Box>
         </Grid>
       </FlatSection>

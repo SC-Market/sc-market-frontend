@@ -62,7 +62,9 @@ export function AllocationStatusDisplay({
   }
 
   const { allocations, total_allocated } = allocationsData
-  const hasActiveAllocations = allocations.some((a: any) => a.status === "active")
+  const hasActiveAllocations = allocations.some(
+    (a: any) => a.status === "active",
+  )
   const allFulfilled = allocations.every((a: any) => a.status === "fulfilled")
   const allReleased = allocations.every((a: any) => a.status === "released")
 

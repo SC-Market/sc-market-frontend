@@ -23,9 +23,7 @@ import {
 import { Close as CloseIcon } from "@mui/icons-material"
 import { NumericFormat } from "react-number-format"
 import { useTranslation } from "react-i18next"
-import {
-  useGetListingLotsQuery,
-} from "../../../store/api/stockLotsApi"
+import { useGetListingLotsQuery } from "../../../store/api/stockLotsApi"
 import { useUpdateListingQuantityMutation } from "../api/marketApi"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { StockManager } from "./stock/StockManager"

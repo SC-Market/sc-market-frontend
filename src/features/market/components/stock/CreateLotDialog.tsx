@@ -201,9 +201,14 @@ export function CreateLotDialog({
 
           {/* Owner Selector */}
           <OrgMemberSearch
-            onMemberSelect={(member) => setOwnerUsername(member?.username || null)}
+            onMemberSelect={(member) =>
+              setOwnerUsername(member?.username || null)
+            }
             label={t("CreateLotDialog.owner", "Owner (Optional)")}
-            placeholder={t("CreateLotDialog.ownerPlaceholder", "Search org members...")}
+            placeholder={t(
+              "CreateLotDialog.ownerPlaceholder",
+              "Search org members...",
+            )}
             disabled={isLoading}
           />
 

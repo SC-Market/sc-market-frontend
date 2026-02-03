@@ -1736,6 +1736,11 @@ export function DisplayStock({
         onRowEditStop={handleRowEditStop}
         rowModesModel={rowModesModel}
         onRowModesModelChange={setRowModesModel}
+        initialState={{
+          sorting: {
+            sortModel: [{ field: "title", sort: "asc" }],
+          },
+        }}
         slots={{
           toolbar: () => (
             <ItemStockToolbar

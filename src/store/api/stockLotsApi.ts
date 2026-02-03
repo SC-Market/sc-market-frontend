@@ -1,6 +1,6 @@
 /**
  * Stock Lots API Endpoints
- * 
+ *
  * Injected into serviceApi for stock lot management
  */
 
@@ -53,7 +53,12 @@ export const stockLotsApi = serviceApi.injectEndpoints({
     // Get lots for a listing
     getListingLots: builder.query<
       { lots: StockLot[]; aggregates: StockAggregates },
-      { listing_id: string; location_id?: string | null; owner_id?: string | null; listed?: boolean }
+      {
+        listing_id: string
+        location_id?: string | null
+        owner_id?: string | null
+        listed?: boolean
+      }
     >({
       query: ({ listing_id, location_id, owner_id, listed }) => {
         const params = new URLSearchParams()
@@ -63,7 +68,9 @@ export const stockLotsApi = serviceApi.injectEndpoints({
 
         return `/api/market/listings/${listing_id}/lots?${params.toString()}`
       },
-      transformResponse: (response: { data: { lots: StockLot[]; aggregates: StockAggregates } }) => response.data,
+      transformResponse: (response: {
+        data: { lots: StockLot[]; aggregates: StockAggregates }
+      }) => response.data,
       providesTags: (result, error, { listing_id }) => [
         { type: "MarketListings", id: listing_id },
       ],
@@ -72,14 +79,22 @@ export const stockLotsApi = serviceApi.injectEndpoints({
     // Create a new lot
     createLot: builder.mutation<
       { lot: StockLot },
-      { listing_id: string; quantity: number; location_id?: string | null; owner_username?: string | null; listed?: boolean; notes?: string | null }
+      {
+        listing_id: string
+        quantity: number
+        location_id?: string | null
+        owner_username?: string | null
+        listed?: boolean
+        notes?: string | null
+      }
     >({
       query: ({ listing_id, ...body }) => ({
         url: `/api/market/listings/${listing_id}/lots`,
         method: "POST",
         body,
       }),
-      transformResponse: (response: { data: { lot: StockLot } }) => response.data,
+      transformResponse: (response: { data: { lot: StockLot } }) =>
+        response.data,
       invalidatesTags: (result, error, { listing_id }) => [
         { type: "MarketListings", id: listing_id },
         { type: "MarketListings", id: "SEARCH" },
@@ -91,14 +106,23 @@ export const stockLotsApi = serviceApi.injectEndpoints({
     // Update a lot
     updateLot: builder.mutation<
       { lot: StockLot },
-      { lot_id: string; listing_id?: string; quantity?: number; location_id?: string | null; owner_id?: string | null; listed?: boolean; notes?: string | null }
+      {
+        lot_id: string
+        listing_id?: string
+        quantity?: number
+        location_id?: string | null
+        owner_id?: string | null
+        listed?: boolean
+        notes?: string | null
+      }
     >({
       query: ({ lot_id, ...body }) => ({
         url: `/api/market/lots/${lot_id}`,
         method: "PATCH",
         body,
       }),
-      transformResponse: (response: { data: { lot: StockLot } }) => response.data,
+      transformResponse: (response: { data: { lot: StockLot } }) =>
+        response.data,
       invalidatesTags: [
         { type: "MarketListings", id: "SEARCH" },
         "MarketListings",
@@ -112,7 +136,8 @@ export const stockLotsApi = serviceApi.injectEndpoints({
         url: `/api/market/lots/${lot_id}`,
         method: "DELETE",
       }),
-      transformResponse: (response: { data: { success: boolean } }) => response.data,
+      transformResponse: (response: { data: { success: boolean } }) =>
+        response.data,
       invalidatesTags: [
         { type: "MarketListings", id: "SEARCH" },
         "MarketListings",
@@ -130,7 +155,9 @@ export const stockLotsApi = serviceApi.injectEndpoints({
         method: "POST",
         body,
       }),
-      transformResponse: (response: { data: { source_lot: StockLot; destination_lot: StockLot } }) => response.data,
+      transformResponse: (response: {
+        data: { source_lot: StockLot; destination_lot: StockLot }
+      }) => response.data,
       invalidatesTags: [
         { type: "MarketListings", id: "SEARCH" },
         "MarketListings",
@@ -139,14 +166,17 @@ export const stockLotsApi = serviceApi.injectEndpoints({
     }),
 
     // Get locations
-    getLocations: builder.query<{ locations: Location[] }, { search?: string }>({
-      query: ({ search }) => {
-        const params = new URLSearchParams()
-        if (search) params.append("search", search)
-        return `/api/market/locations?${params.toString()}`
+    getLocations: builder.query<{ locations: Location[] }, { search?: string }>(
+      {
+        query: ({ search }) => {
+          const params = new URLSearchParams()
+          if (search) params.append("search", search)
+          return `/api/market/locations?${params.toString()}`
+        },
+        transformResponse: (response: { data: { locations: Location[] } }) =>
+          response.data,
       },
-      transformResponse: (response: { data: { locations: Location[] } }) => response.data,
-    }),
+    ),
 
     // Create location
     createLocation: builder.mutation<{ location: Location }, { name: string }>({
@@ -155,7 +185,8 @@ export const stockLotsApi = serviceApi.injectEndpoints({
         method: "POST",
         body,
       }),
-      transformResponse: (response: { data: { location: Location } }) => response.data,
+      transformResponse: (response: { data: { location: Location } }) =>
+        response.data,
     }),
 
     // Get order allocations
@@ -181,19 +212,35 @@ export const stockLotsApi = serviceApi.injectEndpoints({
     // Search all lots
     searchLots: builder.query<
       { lots: StockLot[]; total: number },
-      { user_id?: string; contractor_spectrum_id?: string; location_id?: string; listed?: boolean; page_size?: number; offset?: number }
+      {
+        user_id?: string
+        contractor_spectrum_id?: string
+        location_id?: string
+        listed?: boolean
+        page_size?: number
+        offset?: number
+      }
     >({
       query: (params) => {
         const searchParams = new URLSearchParams()
         if (params.user_id) searchParams.append("user_id", params.user_id)
-        if (params.contractor_spectrum_id) searchParams.append("contractor_spectrum_id", params.contractor_spectrum_id)
-        if (params.location_id) searchParams.append("location_id", params.location_id)
-        if (params.listed !== undefined) searchParams.append("listed", String(params.listed))
-        if (params.page_size) searchParams.append("page_size", String(params.page_size))
+        if (params.contractor_spectrum_id)
+          searchParams.append(
+            "contractor_spectrum_id",
+            params.contractor_spectrum_id,
+          )
+        if (params.location_id)
+          searchParams.append("location_id", params.location_id)
+        if (params.listed !== undefined)
+          searchParams.append("listed", String(params.listed))
+        if (params.page_size)
+          searchParams.append("page_size", String(params.page_size))
         if (params.offset) searchParams.append("offset", String(params.offset))
         return `/api/market/lots?${searchParams.toString()}`
       },
-      transformResponse: (response: { data: { lots: StockLot[]; total: number } }) => response.data,
+      transformResponse: (response: {
+        data: { lots: StockLot[]; total: number }
+      }) => response.data,
       providesTags: [{ type: "MarketListings", id: "SEARCH" }],
     }),
   }),

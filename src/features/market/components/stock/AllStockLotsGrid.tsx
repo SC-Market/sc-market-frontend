@@ -1,16 +1,43 @@
 /**
  * All Stock Lots Grid
- * 
+ *
  * Data grid showing all stock lots across all listings with inline editing
  */
 
 import React, { useState } from "react"
-import { DataGrid, GridColDef, GridRowsProp, GridRenderEditCellParams, useGridApiContext } from "@mui/x-data-grid"
-import { Paper, Typography, Chip, IconButton, Box, Button, Avatar, Autocomplete, TextField } from "@mui/material"
-import { Delete as DeleteIcon, Save as SaveIcon, Add as AddIcon } from "@mui/icons-material"
+import {
+  DataGrid,
+  GridColDef,
+  GridRowsProp,
+  GridRenderEditCellParams,
+  useGridApiContext,
+} from "@mui/x-data-grid"
+import {
+  Paper,
+  Typography,
+  Chip,
+  IconButton,
+  Box,
+  Button,
+  Avatar,
+  Autocomplete,
+  TextField,
+} from "@mui/material"
+import {
+  Delete as DeleteIcon,
+  Save as SaveIcon,
+  Add as AddIcon,
+} from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { useGetMyListingsQuery } from "../../api/marketApi"
-import { useSearchLotsQuery, useCreateLotMutation, useUpdateLotMutation, useDeleteLotMutation, useGetLocationsQuery, useCreateLocationMutation } from "../../../../store/api/stockLotsApi"
+import {
+  useSearchLotsQuery,
+  useCreateLotMutation,
+  useUpdateLotMutation,
+  useDeleteLotMutation,
+  useGetLocationsQuery,
+  useCreateLocationMutation,
+} from "../../../../store/api/stockLotsApi"
 import { useCurrentOrg } from "../../../../hooks/login/CurrentOrg"
 import { useAlertHook } from "../../../../hooks/alert/AlertHook"
 import type { StockManageType } from "../../domain/types"
@@ -77,7 +104,11 @@ export function AllStockLotsGrid() {
         options={listings}
         getOptionLabel={(option) => option.details.title}
         renderOption={(props, option) => (
-          <Box component="li" {...props} sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <Box
+            component="li"
+            {...props}
+            sx={{ display: "flex", alignItems: "center", gap: 1 }}
+          >
             <Avatar src={option.photos[0]} sx={{ width: 32, height: 32 }} />
             <Typography variant="body2">{option.details.title}</Typography>
           </Box>
@@ -95,7 +126,11 @@ export function AllStockLotsGrid() {
     const apiRef = useGridApiContext()
     const [inputValue, setInputValue] = useState("")
 
-    const handleChange = async (_: any, newValue: any | null, reason: string) => {
+    const handleChange = async (
+      _: any,
+      newValue: any | null,
+      reason: string,
+    ) => {
       if (reason === "createOption" && typeof newValue === "string") {
         // Create new location
         try {
@@ -126,12 +161,16 @@ export function AllStockLotsGrid() {
         inputValue={inputValue}
         onInputChange={(_, newInputValue) => setInputValue(newInputValue)}
         options={locations}
-        getOptionLabel={(option) => typeof option === "string" ? option : option.name}
+        getOptionLabel={(option) =>
+          typeof option === "string" ? option : option.name
+        }
         freeSolo
         selectOnFocus
         clearOnBlur
         handleHomeEndKeys
-        renderInput={(params) => <TextField {...params} placeholder="Select or create location" />}
+        renderInput={(params) => (
+          <TextField {...params} placeholder="Select or create location" />
+        )}
         fullWidth
         sx={{ height: "100%" }}
       />
@@ -161,17 +200,14 @@ export function AllStockLotsGrid() {
       editable: true,
       renderEditCell: ListingEditCell,
       renderCell: (params) => {
-        const listing = listings.find((l) => l.listing.listing_id === params.value)
+        const listing = listings.find(
+          (l) => l.listing.listing_id === params.value,
+        )
         if (!listing) return null
         return (
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <Avatar
-              src={listing.photos[0]}
-              sx={{ width: 32, height: 32 }}
-            />
-            <Typography variant="body2">
-              {listing.details.title}
-            </Typography>
+            <Avatar src={listing.photos[0]} sx={{ width: 32, height: 32 }} />
+            <Typography variant="body2">{listing.details.title}</Typography>
           </Box>
         )
       },
@@ -233,7 +269,11 @@ export function AllStockLotsGrid() {
             )}
             <IconButton
               size="small"
-              onClick={() => isNew ? handleCancelNew(params.row.id) : handleDelete(params.row.lot_id)}
+              onClick={() =>
+                isNew
+                  ? handleCancelNew(params.row.id)
+                  : handleDelete(params.row.lot_id)
+              }
             >
               <DeleteIcon />
             </IconButton>
@@ -338,7 +378,14 @@ export function AllStockLotsGrid() {
 
   return (
     <Paper sx={{ p: 2 }}>
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 2,
+        }}
+      >
         <Typography variant="h6">
           {t("AllStockLots.title", "All Stock Lots")}
         </Typography>
