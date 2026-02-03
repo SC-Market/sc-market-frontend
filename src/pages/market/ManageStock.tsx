@@ -51,7 +51,7 @@ export function ManageStock() {
   const searchQueryParams = {
     page_size: 100,
     index: 0,
-    quantityAvailable: 0, // Changed from 1 to 0 to include all listings
+    quantityAvailable: 0,
     query: searchState.query || "",
     sort: searchState.sort || "activity",
     statuses: searchState.statuses || "active,inactive",
@@ -65,7 +65,9 @@ export function ManageStock() {
     data: searchResults,
     refetch,
     isLoading,
-  } = useGetMyListingsQuery(finalParams)
+  } = useGetMyListingsQuery(finalParams, {
+    skip: viewMode !== "bulk", // Only fetch when in bulk view
+  })
   const listings = searchResults?.listings || []
 
   console.log(
