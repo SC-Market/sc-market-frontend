@@ -19,6 +19,7 @@ import { GridRowSelectionModel } from "@mui/x-data-grid"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { BottomSheet } from "../../components/mobile/BottomSheet"
+import { AllStockLotsGrid } from "../../features/market/components/stock/AllStockLotsGrid"
 
 export function ManageStock() {
   const { t } = useTranslation()
@@ -115,7 +116,9 @@ export function ManageStock() {
                   <MyItemStock />
                 </Grid>
 
-                {/* TODO: Add lot management data grid here */}
+                <Grid item xs={12}>
+                  <AllStockLotsGrid />
+                </Grid>
               </Grid>
             </Grid>
 
