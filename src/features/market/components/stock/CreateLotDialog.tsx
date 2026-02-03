@@ -27,6 +27,7 @@ import {
 } from "../../../../store/api/stockLotsApi"
 import { useAlertHook } from "../../../../hooks/alert/AlertHook"
 import { LocationSelector } from "./LocationSelector"
+import { OrgMemberSearch } from "../../../../components/search/OrgMemberSearch"
 
 export interface CreateLotDialogProps {
   open: boolean
@@ -57,7 +58,7 @@ export function CreateLotDialog({
   // Form state
   const [quantity, setQuantity] = useState<number>(0)
   const [locationId, setLocationId] = useState<string | null>(null)
-  const [ownerId, setOwnerId] = useState<string | null>(null)
+  const [ownerUsername, setOwnerUsername] = useState<string | null>(null)
   const [listed, setListed] = useState(true)
   const [notes, setNotes] = useState("")
 
@@ -71,7 +72,7 @@ export function CreateLotDialog({
   const resetForm = useCallback(() => {
     setQuantity(0)
     setLocationId(null)
-    setOwnerId(null)
+    setOwnerUsername(null)
     setListed(true)
     setNotes("")
     setQuantityError("")
@@ -130,7 +131,7 @@ export function CreateLotDialog({
         listing_id: listingId,
         quantity,
         location_id: locationId,
-        owner_id: ownerId,
+        owner_username: ownerUsername,
         listed,
         notes: notes.trim() || null,
       }).unwrap()
@@ -153,7 +154,7 @@ export function CreateLotDialog({
     listingId,
     quantity,
     locationId,
-    ownerId,
+    ownerUsername,
     listed,
     notes,
     issueAlert,
@@ -198,21 +199,12 @@ export function CreateLotDialog({
             disabled={isLoading}
           />
 
-          {/* Owner Selector - TODO: Implement org member selection */}
-          <TextField
+          {/* Owner Selector */}
+          <OrgMemberSearch
+            onMemberSelect={(member) => setOwnerUsername(member?.username || null)}
             label={t("CreateLotDialog.owner", "Owner (Optional)")}
-            fullWidth
-            value={ownerId || ""}
-            onChange={(e) => setOwnerId(e.target.value || null)}
-            helperText={t(
-              "CreateLotDialog.ownerHelp",
-              "Leave empty for unassigned",
-            )}
+            placeholder={t("CreateLotDialog.ownerPlaceholder", "Search org members...")}
             disabled={isLoading}
-            placeholder={t(
-              "CreateLotDialog.ownerPlaceholder",
-              "Enter owner ID...",
-            )}
           />
 
           {/* Listed Toggle */}
