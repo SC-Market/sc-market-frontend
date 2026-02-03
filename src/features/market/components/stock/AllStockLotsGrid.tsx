@@ -53,11 +53,11 @@ export function AllStockLotsGrid() {
   // Map lots to rows with listing names
   const allLots = (lotsData?.lots || []).map((lot) => {
     const listing = listings.find((l) => l.listing.listing_id === lot.listing_id)
+    const details = listing && "details" in listing.listing ? listing.listing.details : null
     return {
       id: lot.lot_id,
       lot_id: lot.lot_id,
       listing_id: lot.listing_id,
-      listing_name: (listing?.listing as any)?.item_name || lot.listing_id,
       quantity: lot.quantity_total,
       location_id: lot.location_id,
       owner_id: lot.owner_id,
@@ -76,22 +76,32 @@ export function AllStockLotsGrid() {
       flex: 2,
       editable: true,
       type: "singleSelect",
-      valueOptions: listings.map((l) => ({
-        value: l.listing.listing_id,
-        label: (l.listing as any).item_name || l.listing.listing_id,
-      })),
+      valueOptions: listings.map((l) => {
+        const details = "details" in l.listing ? (l.listing.details as { item_name?: string | null }) : null
+        return {
+          value: l.listing.listing_id,
+          label: details?.item_name || l.listing.listing_id,
+        }
+      }),
+      valueFormatter: (value) => {
+        const listing = listings.find((l) => l.listing.listing_id === value)
+        if (!listing) return value
+        const details = "details" in listing.listing ? (listing.listing.details as { item_name?: string | null }) : null
+        return details?.item_name || value
+      },
       renderCell: (params) => {
         const listing = listings.find((l) => l.listing.listing_id === params.value)
         if (!listing) return params.value
-        const listingData = listing.listing as any
+        const photos = "photos" in listing.listing ? (listing.listing.photos as string[]) : []
+        const details = "details" in listing.listing ? (listing.listing.details as { item_name?: string | null }) : null
         return (
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             <Avatar
-              src={listingData.photos?.[0]}
+              src={photos[0]}
               sx={{ width: 32, height: 32 }}
             />
             <Typography variant="body2">
-              {listingData.item_name || listing.listing.listing_id}
+              {details?.item_name || listing.listing.listing_id}
             </Typography>
           </Box>
         )
