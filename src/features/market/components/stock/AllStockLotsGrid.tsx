@@ -10,7 +10,7 @@ import { Paper, Typography, Chip, IconButton, Box, Button, Avatar, Autocomplete,
 import { Delete as DeleteIcon, Save as SaveIcon, Add as AddIcon } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { useGetMyListingsQuery } from "../../api/marketApi"
-import { useSearchLotsQuery, useCreateLotMutation, useUpdateLotMutation, useDeleteLotMutation } from "../../../../store/api/stockLotsApi"
+import { useSearchLotsQuery, useCreateLotMutation, useUpdateLotMutation, useDeleteLotMutation, useGetLocationsQuery } from "../../../../store/api/stockLotsApi"
 import { useCurrentOrg } from "../../../../hooks/login/CurrentOrg"
 import { useAlertHook } from "../../../../hooks/alert/AlertHook"
 import type { StockManageType } from "../../domain/types"
@@ -49,6 +49,9 @@ export function AllStockLotsGrid() {
   const [updateLot] = useUpdateLotMutation()
   const [deleteLot] = useDeleteLotMutation()
 
+  const { data: locationsData } = useGetLocationsQuery({ search: "" })
+  const locations = locationsData?.locations || []
+
   const [newRows, setNewRows] = useState<any[]>([])
 
   // Custom edit component for listing selection
@@ -79,6 +82,34 @@ export function AllStockLotsGrid() {
           </Box>
         )}
         renderInput={(params) => <TextField {...params} />}
+        fullWidth
+        sx={{ height: "100%" }}
+      />
+    )
+  }
+
+  // Custom edit component for location selection
+  function LocationEditCell(props: GridRenderEditCellParams) {
+    const { id, value, field } = props
+    const apiRef = useGridApiContext()
+
+    const handleChange = (_: any, newValue: any | null) => {
+      apiRef.current.setEditCellValue({
+        id,
+        field,
+        value: newValue?.location_id || null,
+      })
+    }
+
+    const selectedLocation = locations.find((l) => l.location_id === value)
+
+    return (
+      <Autocomplete
+        value={selectedLocation || null}
+        onChange={handleChange}
+        options={locations}
+        getOptionLabel={(option) => option.name}
+        renderInput={(params) => <TextField {...params} placeholder="Select location" />}
         fullWidth
         sx={{ height: "100%" }}
       />
@@ -135,6 +166,11 @@ export function AllStockLotsGrid() {
       headerName: t("AllStockLots.location", "Location"),
       flex: 1,
       editable: true,
+      renderEditCell: LocationEditCell,
+      valueFormatter: (value) => {
+        const location = locations.find((l) => l.location_id === value)
+        return location?.name || ""
+      },
     },
     {
       field: "listed",
