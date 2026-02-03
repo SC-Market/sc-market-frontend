@@ -22,7 +22,7 @@ export function AllStockLotsGrid() {
   // Fetch all listings using same approach as MyItemStock
   const hasOrg = currentOrg && currentOrg.spectrum_id
   const searchQueryParams = {
-    page_size: 1000,
+    page_size: 96,
     index: 0,
     quantityAvailable: 0,
     query: "",
@@ -34,10 +34,8 @@ export function AllStockLotsGrid() {
     ? { ...searchQueryParams, contractor_id: currentOrg?.spectrum_id }
     : searchQueryParams
 
-  const { data: listingsData, isLoading, error } = useGetMyListingsQuery(finalParams)
+  const { data: listingsData } = useGetMyListingsQuery(finalParams)
   const listings = listingsData?.listings || []
-
-  console.log("AllStockLotsGrid - listings:", listings.length, "hasOrg:", hasOrg, "isLoading:", isLoading, "error:", error, "finalParams:", finalParams, "listingsData:", listingsData)
 
   // Fetch lots for all listings
   const lotsQueries = listings.map((listing) =>
