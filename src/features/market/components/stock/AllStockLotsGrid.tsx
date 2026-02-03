@@ -241,7 +241,7 @@ export function AllStockLotsGrid() {
 
     // Handle existing row update
     try {
-      await updateLot({
+      const result = await updateLot({
         lot_id: newRow.lot_id,
         listing_id: newRow.listing_id,
         quantity: newRow.quantity,
@@ -255,7 +255,17 @@ export function AllStockLotsGrid() {
         severity: "success",
       })
 
-      return newRow
+      // Return the updated lot data from server
+      return {
+        id: result.lot.lot_id,
+        lot_id: result.lot.lot_id,
+        listing_id: result.lot.listing_id,
+        quantity: result.lot.quantity_total,
+        location_id: result.lot.location_id,
+        owner_id: result.lot.owner_id,
+        listed: result.lot.listed,
+        notes: result.lot.notes,
+      }
     } catch (error) {
       issueAlert(error as any)
       return oldRow
