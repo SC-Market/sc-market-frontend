@@ -13,6 +13,7 @@ import { useGetMyListingsQuery } from "../../api/marketApi"
 import { useSearchLotsQuery, useCreateLotMutation, useUpdateLotMutation, useDeleteLotMutation } from "../../../../store/api/stockLotsApi"
 import { useCurrentOrg } from "../../../../hooks/login/CurrentOrg"
 import { useAlertHook } from "../../../../hooks/alert/AlertHook"
+import type { StockManageType } from "../../domain/types"
 
 export function AllStockLotsGrid() {
   const { t } = useTranslation()
@@ -35,7 +36,7 @@ export function AllStockLotsGrid() {
     : searchQueryParams
 
   const { data: listingsData } = useGetMyListingsQuery(finalParams)
-  const listings = listingsData?.listings || []
+  const listings = (listingsData?.listings || []) as StockManageType[]
 
   // Fetch all lots using search endpoint
   const { data: lotsData } = useSearchLotsQuery({
@@ -50,21 +51,17 @@ export function AllStockLotsGrid() {
 
   const [newRows, setNewRows] = useState<any[]>([])
 
-  // Map lots to rows with listing names
-  const allLots = (lotsData?.lots || []).map((lot) => {
-    const listing = listings.find((l) => l.listing.listing_id === lot.listing_id)
-    const details = listing && "details" in listing.listing ? listing.listing.details : null
-    return {
-      id: lot.lot_id,
-      lot_id: lot.lot_id,
-      listing_id: lot.listing_id,
-      quantity: lot.quantity_total,
-      location_id: lot.location_id,
-      owner_id: lot.owner_id,
-      listed: lot.listed,
-      notes: lot.notes,
-    }
-  })
+  // Map lots to rows
+  const allLots = (lotsData?.lots || []).map((lot) => ({
+    id: lot.lot_id,
+    lot_id: lot.lot_id,
+    listing_id: lot.listing_id,
+    quantity: lot.quantity_total,
+    location_id: lot.location_id,
+    owner_id: lot.owner_id,
+    listed: lot.listed,
+    notes: lot.notes,
+  }))
 
   // Combine all lots into rows
   const rows: GridRowsProp = [...newRows, ...allLots]
@@ -76,32 +73,25 @@ export function AllStockLotsGrid() {
       flex: 2,
       editable: true,
       type: "singleSelect",
-      valueOptions: listings.map((l) => {
-        const details = "details" in l.listing ? (l.listing.details as { item_name?: string | null }) : null
-        return {
-          value: l.listing.listing_id,
-          label: details?.item_name || l.listing.listing_id,
-        }
-      }),
+      valueOptions: listings.map((l) => ({
+        value: l.listing.listing_id,
+        label: l.details.item_name || l.listing.listing_id,
+      })),
       valueFormatter: (value) => {
         const listing = listings.find((l) => l.listing.listing_id === value)
-        if (!listing) return value
-        const details = "details" in listing.listing ? (listing.listing.details as { item_name?: string | null }) : null
-        return details?.item_name || value
+        return listing?.details.item_name || value
       },
       renderCell: (params) => {
         const listing = listings.find((l) => l.listing.listing_id === params.value)
         if (!listing) return params.value
-        const photos = "photos" in listing.listing ? (listing.listing.photos as string[]) : []
-        const details = "details" in listing.listing ? (listing.listing.details as { item_name?: string | null }) : null
         return (
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             <Avatar
-              src={photos[0]}
+              src={listing.photos[0]}
               sx={{ width: 32, height: 32 }}
             />
             <Typography variant="body2">
-              {details?.item_name || listing.listing.listing_id}
+              {listing.details.item_name || listing.listing.listing_id}
             </Typography>
           </Box>
         )
