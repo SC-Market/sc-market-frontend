@@ -79,6 +79,7 @@ export const stockLotsApi = serviceApi.injectEndpoints({
         method: "POST",
         body,
       }),
+      transformResponse: (response: { data: { lot: StockLot } }) => response.data,
       invalidatesTags: (result, error, { listing_id }) => [
         { type: "MarketListings", id: listing_id },
         "MarketListings",
@@ -96,6 +97,7 @@ export const stockLotsApi = serviceApi.injectEndpoints({
         method: "PATCH",
         body,
       }),
+      transformResponse: (response: { data: { lot: StockLot } }) => response.data,
       invalidatesTags: ["MarketListings", "MyListings"],
     }),
 
@@ -105,6 +107,7 @@ export const stockLotsApi = serviceApi.injectEndpoints({
         url: `/api/market/lots/${lot_id}`,
         method: "DELETE",
       }),
+      transformResponse: (response: { data: { success: boolean } }) => response.data,
       invalidatesTags: ["MarketListings", "MyListings"],
     }),
 
@@ -118,6 +121,7 @@ export const stockLotsApi = serviceApi.injectEndpoints({
         method: "POST",
         body,
       }),
+      transformResponse: (response: { data: { source_lot: StockLot; destination_lot: StockLot } }) => response.data,
       invalidatesTags: ["MarketListings", "MyListings"],
     }),
 
@@ -138,6 +142,7 @@ export const stockLotsApi = serviceApi.injectEndpoints({
         method: "POST",
         body,
       }),
+      transformResponse: (response: { data: { location: Location } }) => response.data,
     }),
 
     // Get order allocations
