@@ -75,11 +75,11 @@ export function AllStockLotsGrid() {
       type: "singleSelect",
       valueOptions: listings.map((l) => ({
         value: l.listing.listing_id,
-        label: l.details.item_name || l.listing.listing_id,
+        label: l.details.title || l.listing.listing_id,
       })),
       valueFormatter: (value) => {
         const listing = listings.find((l) => l.listing.listing_id === value)
-        return listing?.details.item_name || value
+        return listing?.details.title || value
       },
       renderCell: (params) => {
         const listing = listings.find((l) => l.listing.listing_id === params.value)
@@ -91,7 +91,7 @@ export function AllStockLotsGrid() {
               sx={{ width: 32, height: 32 }}
             />
             <Typography variant="body2">
-              {listing.details.item_name || listing.listing.listing_id}
+              {listing.details.title || listing.listing.listing_id}
             </Typography>
           </Box>
         )
