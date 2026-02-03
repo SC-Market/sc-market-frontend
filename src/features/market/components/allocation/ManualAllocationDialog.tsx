@@ -36,7 +36,10 @@ import {
   Allocation,
   ManualAllocationInput,
 } from "../../../../store/api/stockLotsApi"
-import { AddCircleOutlineRounded, RemoveCircleOutlineRounded } from "@mui/icons-material"
+import {
+  AddCircleOutlineRounded,
+  RemoveCircleOutlineRounded,
+} from "@mui/icons-material"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { InsufficientStockDialog } from "./InsufficientStockDialog"
 import {
@@ -139,7 +142,9 @@ export function ManualAllocationDialog({
 
     // Check each lot allocation doesn't exceed available
     selectedAllocations.forEach((quantity, lotId) => {
-      const lot = lotsWithAvailable.find((l: typeof lotsWithAvailable[0]) => l.lot_id === lotId)
+      const lot = lotsWithAvailable.find(
+        (l: (typeof lotsWithAvailable)[0]) => l.lot_id === lotId,
+      )
       if (lot && quantity > lot.available) {
         errors.push(
           createValidationError.overAllocation(
@@ -201,7 +206,11 @@ export function ManualAllocationDialog({
       selectedAllocations.entries(),
     )
       .filter(([_, quantity]) => quantity > 0)
-      .map(([lot_id, quantity]) => ({ listing_id: listingId, lot_id, quantity }))
+      .map(([lot_id, quantity]) => ({
+        listing_id: listingId,
+        lot_id,
+        quantity,
+      }))
 
     if (allocations.length === 0) {
       setValidationErrors([
@@ -331,88 +340,90 @@ export function ManualAllocationDialog({
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {lotsWithAvailable.map((lot: typeof lotsWithAvailable[0]) => {
-                      const selectedQty =
-                        selectedAllocations.get(lot.lot_id) || 0
-                      const hasError =
-                        selectedQty > lot.available || selectedQty < 0
+                    {lotsWithAvailable.map(
+                      (lot: (typeof lotsWithAvailable)[0]) => {
+                        const selectedQty =
+                          selectedAllocations.get(lot.lot_id) || 0
+                        const hasError =
+                          selectedQty > lot.available || selectedQty < 0
 
-                      return (
-                        <TableRow key={lot.lot_id}>
-                          <TableCell>
-                            <Typography variant="body2">
-                              {lot.location_id || "Unspecified"}
-                            </Typography>
-                          </TableCell>
-                          <TableCell>
-                            <Typography
-                              variant="body2"
-                              sx={{
-                                fontFamily: "monospace",
-                                fontSize: "0.75rem",
-                              }}
-                            >
-                              {lot.lot_id.substring(0, 8)}...
-                            </Typography>
-                          </TableCell>
-                          <TableCell align="right">
-                            <Typography variant="body2">
-                              {lot.available}
-                              {lot.currentlyAllocated > 0 && (
-                                <Typography
-                                  variant="caption"
-                                  color="text.secondary"
-                                  display="block"
-                                >
-                                  ({lot.currentlyAllocated} allocated)
-                                </Typography>
-                              )}
-                            </Typography>
-                          </TableCell>
-                          <TableCell align="right">
-                            <Stack
-                              direction="row"
-                              spacing={1}
-                              alignItems="center"
-                              justifyContent="flex-end"
-                            >
-                              <IconButton
-                                size="small"
-                                onClick={() => handleDecrement(lot.lot_id)}
-                                disabled={selectedQty === 0}
-                              >
-                                <RemoveCircleOutlineRounded fontSize="small" />
-                              </IconButton>
-                              <TextField
-                                size="small"
-                                type="number"
-                                value={selectedQty}
-                                onChange={(e) =>
-                                  handleQuantityChange(
-                                    lot.lot_id,
-                                    parseInt(e.target.value) || 0,
-                                  )
-                                }
-                                error={hasError}
-                                inputProps={{
-                                  min: 0,
-                                  max: lot.available,
-                                  style: { textAlign: "center" },
+                        return (
+                          <TableRow key={lot.lot_id}>
+                            <TableCell>
+                              <Typography variant="body2">
+                                {lot.location_id || "Unspecified"}
+                              </Typography>
+                            </TableCell>
+                            <TableCell>
+                              <Typography
+                                variant="body2"
+                                sx={{
+                                  fontFamily: "monospace",
+                                  fontSize: "0.75rem",
                                 }}
-                                sx={{ width: 80 }}
-                              />
-                              <IconButton
-                                size="small"
-                                onClick={() => handleIncrement(lot.lot_id)}
-                                disabled={selectedQty >= lot.available}
                               >
-                                <AddCircleOutlineRounded fontSize="small" />
-                              </IconButton>
-                            </Stack>
-                          </TableCell>
-                        </TableRow>
-                      )
-                    })}
+                                {lot.lot_id.substring(0, 8)}...
+                              </Typography>
+                            </TableCell>
+                            <TableCell align="right">
+                              <Typography variant="body2">
+                                {lot.available}
+                                {lot.currentlyAllocated > 0 && (
+                                  <Typography
+                                    variant="caption"
+                                    color="text.secondary"
+                                    display="block"
+                                  >
+                                    ({lot.currentlyAllocated} allocated)
+                                  </Typography>
+                                )}
+                              </Typography>
+                            </TableCell>
+                            <TableCell align="right">
+                              <Stack
+                                direction="row"
+                                spacing={1}
+                                alignItems="center"
+                                justifyContent="flex-end"
+                              >
+                                <IconButton
+                                  size="small"
+                                  onClick={() => handleDecrement(lot.lot_id)}
+                                  disabled={selectedQty === 0}
+                                >
+                                  <RemoveCircleOutlineRounded fontSize="small" />
+                                </IconButton>
+                                <TextField
+                                  size="small"
+                                  type="number"
+                                  value={selectedQty}
+                                  onChange={(e) =>
+                                    handleQuantityChange(
+                                      lot.lot_id,
+                                      parseInt(e.target.value) || 0,
+                                    )
+                                  }
+                                  error={hasError}
+                                  inputProps={{
+                                    min: 0,
+                                    max: lot.available,
+                                    style: { textAlign: "center" },
+                                  }}
+                                  sx={{ width: 80 }}
+                                />
+                                <IconButton
+                                  size="small"
+                                  onClick={() => handleIncrement(lot.lot_id)}
+                                  disabled={selectedQty >= lot.available}
+                                >
+                                  <AddCircleOutlineRounded fontSize="small" />
+                                </IconButton>
+                              </Stack>
+                            </TableCell>
+                          </TableRow>
+                        )
+                      },
+                    )}
                   </TableBody>
                 </Table>
               </TableContainer>

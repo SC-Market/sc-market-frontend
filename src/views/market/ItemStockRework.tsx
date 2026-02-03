@@ -628,6 +628,11 @@ export function ItemStockRework() {
           newRow: GridValidRowModel,
         ) => GridValidRowModel
       }
+      initialState={{
+        sorting: {
+          sortModel: [{ field: "listing", sort: "asc" }],
+        },
+      }}
       showToolbar
       slots={{
         toolbar: () => {
