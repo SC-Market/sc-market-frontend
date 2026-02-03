@@ -40,8 +40,8 @@ export function AllStockLotsGrid() {
 
   // Fetch all lots using search endpoint
   const { data: lotsData } = useSearchLotsQuery({
-    contractor_spectrum_id: hasOrg && currentOrg?.spectrum_id ? currentOrg.spectrum_id : undefined,
-    page_size: 1000,
+    contractor_spectrum_id: hasOrg ? currentOrg?.spectrum_id : undefined,
+    page_size: 24,
     offset: 0,
   })
 
@@ -243,6 +243,7 @@ export function AllStockLotsGrid() {
     try {
       await updateLot({
         lot_id: newRow.lot_id,
+        listing_id: newRow.listing_id,
         quantity: newRow.quantity,
         location_id: newRow.location_id,
         listed: newRow.listed,
@@ -324,9 +325,16 @@ export function AllStockLotsGrid() {
           columns={columns}
           processRowUpdate={handleRowUpdate}
           onProcessRowUpdateError={(error) => console.error(error)}
-          pageSizeOptions={[25, 50, 100]}
+          pageSizeOptions={[24, 48, 96]}
           initialState={{
-            pagination: { paginationModel: { pageSize: 25 } },
+            pagination: { paginationModel: { pageSize: 24 } },
+          }}
+          disableRowSelectionOnClick
+          sx={{
+            "& .MuiDataGrid-cell": {
+              display: "flex",
+              alignItems: "center",
+            },
           }}
         />
       </Box>
