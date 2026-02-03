@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Button, Grid, Paper, useMediaQuery, Box, Tabs, Tab, Typography } from "@mui/material"
+import { Button, Grid, Paper, useMediaQuery, Box } from "@mui/material"
 import AddRounded from "@mui/icons-material/AddRounded"
 import FilterListIcon from "@mui/icons-material/FilterList"
 import { MarketSearchArea } from "../../features/market/components/MarketSidebar"
@@ -19,9 +19,6 @@ import { GridRowSelectionModel } from "@mui/x-data-grid"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { BottomSheet } from "../../components/mobile/BottomSheet"
-import { BulkStockManagement } from "../../features/market/components/BulkStockManagement"
-import { useGetMyListingsQuery } from "../../features/market/api/marketApi"
-import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 
 export function ManageStock() {
   const { t } = useTranslation()
@@ -29,8 +26,6 @@ export function ManageStock() {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const [open, setOpen] = useState(!isMobile) // Start closed on mobile
   const [searchState, setSearchState] = useMarketSearch()
-  const [currentOrg] = useCurrentOrg()
-  const [viewMode, setViewMode] = useState<"bulk" | "detailed">("bulk")
 
   useEffect(() => {
     setSearchState({
@@ -45,37 +40,6 @@ export function ManageStock() {
     type: "include",
     ids: new Set(),
   })
-
-  // Fetch listings for bulk management
-  const hasOrg = currentOrg && currentOrg.spectrum_id
-  const searchQueryParams = {
-    page_size: 100,
-    index: 0,
-    quantityAvailable: 0,
-    query: searchState.query || "",
-    sort: searchState.sort || "activity",
-    statuses: searchState.statuses || "active,inactive",
-  }
-
-  const finalParams = hasOrg
-    ? { ...searchQueryParams, contractor_id: currentOrg?.spectrum_id }
-    : searchQueryParams
-
-  const {
-    data: searchResults,
-    refetch,
-    isLoading,
-  } = useGetMyListingsQuery(finalParams, {
-    skip: viewMode !== "bulk", // Only fetch when in bulk view
-  })
-  const listings = searchResults?.listings || []
-
-  console.log(
-    "Bulk stock management - listings count:",
-    listings.length,
-    "isLoading:",
-    isLoading,
-  )
 
   return (
     <Page title={t("sidebar.my_market_listings")}>
@@ -148,44 +112,10 @@ export function ManageStock() {
             <Grid item xs={12} md={isMobile ? 12 : 9}>
               <Grid container spacing={theme.layoutSpacing.layout}>
                 <Grid item xs={12}>
-                  <Tabs
-                    value={viewMode}
-                    onChange={(_, newValue) => setViewMode(newValue)}
-                    sx={{ mb: 2 }}
-                  >
-                    <Tab
-                      label={t("ItemStock.bulkView", "Quick Updates")}
-                      value="bulk"
-                    />
-                    <Tab
-                      label={t("ItemStock.detailedView", "Detailed View")}
-                      value="detailed"
-                    />
-                  </Tabs>
+                  <MyItemStock />
                 </Grid>
 
-                {viewMode === "bulk" ? (
-                  <Grid item xs={12}>
-                    {isLoading ? (
-                      <Paper sx={{ p: 3, textAlign: "center" }}>
-                        <Typography>
-                          {t("common.loading", "Loading...")}
-                        </Typography>
-                      </Paper>
-                    ) : (
-                      <BulkStockManagement
-                        listings={listings}
-                        onRefresh={async () => {
-                          await refetch()
-                        }}
-                      />
-                    )}
-                  </Grid>
-                ) : (
-                  <Grid item xs={12}>
-                    <MyItemStock />
-                  </Grid>
-                )}
+                {/* TODO: Add lot management data grid here */}
               </Grid>
             </Grid>
 
