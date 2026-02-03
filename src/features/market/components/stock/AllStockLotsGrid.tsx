@@ -40,7 +40,7 @@ export function AllStockLotsGrid() {
 
   // Fetch all lots using search endpoint
   const { data: lotsData } = useSearchLotsQuery({
-    contractor_id: hasOrg ? currentOrg?.spectrum_id : undefined,
+    contractor_spectrum_id: hasOrg && currentOrg?.spectrum_id ? currentOrg.spectrum_id : undefined,
     page_size: 1000,
     offset: 0,
   })
