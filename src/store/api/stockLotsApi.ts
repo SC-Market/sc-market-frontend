@@ -82,6 +82,7 @@ export const stockLotsApi = serviceApi.injectEndpoints({
       transformResponse: (response: { data: { lot: StockLot } }) => response.data,
       invalidatesTags: (result, error, { listing_id }) => [
         { type: "MarketListings", id: listing_id },
+        { type: "MarketListings", id: "SEARCH" },
         "MarketListings",
         "MyListings",
       ],
@@ -98,7 +99,11 @@ export const stockLotsApi = serviceApi.injectEndpoints({
         body,
       }),
       transformResponse: (response: { data: { lot: StockLot } }) => response.data,
-      invalidatesTags: ["MarketListings", "MyListings"],
+      invalidatesTags: [
+        { type: "MarketListings", id: "SEARCH" },
+        "MarketListings",
+        "MyListings",
+      ],
     }),
 
     // Delete a lot
@@ -108,7 +113,11 @@ export const stockLotsApi = serviceApi.injectEndpoints({
         method: "DELETE",
       }),
       transformResponse: (response: { data: { success: boolean } }) => response.data,
-      invalidatesTags: ["MarketListings", "MyListings"],
+      invalidatesTags: [
+        { type: "MarketListings", id: "SEARCH" },
+        "MarketListings",
+        "MyListings",
+      ],
     }),
 
     // Transfer lot
@@ -122,7 +131,11 @@ export const stockLotsApi = serviceApi.injectEndpoints({
         body,
       }),
       transformResponse: (response: { data: { source_lot: StockLot; destination_lot: StockLot } }) => response.data,
-      invalidatesTags: ["MarketListings", "MyListings"],
+      invalidatesTags: [
+        { type: "MarketListings", id: "SEARCH" },
+        "MarketListings",
+        "MyListings",
+      ],
     }),
 
     // Get locations
@@ -181,7 +194,7 @@ export const stockLotsApi = serviceApi.injectEndpoints({
         return `/api/market/lots?${searchParams.toString()}`
       },
       transformResponse: (response: { data: { lots: StockLot[]; total: number } }) => response.data,
-      providesTags: ["MarketListings"],
+      providesTags: [{ type: "MarketListings", id: "SEARCH" }],
     }),
   }),
 })
