@@ -5,8 +5,8 @@
  */
 
 import React, { useState } from "react"
-import { DataGrid, GridColDef, GridRowsProp } from "@mui/x-data-grid"
-import { Paper, Typography, Chip, IconButton, Box, Button, Avatar } from "@mui/material"
+import { DataGrid, GridColDef, GridRowsProp, GridRenderEditCellParams, useGridApiContext } from "@mui/x-data-grid"
+import { Paper, Typography, Chip, IconButton, Box, Button, Avatar, Autocomplete, TextField } from "@mui/material"
 import { Delete as DeleteIcon, Save as SaveIcon, Add as AddIcon } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { useGetMyListingsQuery } from "../../api/marketApi"
@@ -51,6 +51,40 @@ export function AllStockLotsGrid() {
 
   const [newRows, setNewRows] = useState<any[]>([])
 
+  // Custom edit component for listing selection
+  function ListingEditCell(props: GridRenderEditCellParams) {
+    const { id, value, field } = props
+    const apiRef = useGridApiContext()
+
+    const handleChange = (_: any, newValue: StockManageType | null) => {
+      apiRef.current.setEditCellValue({
+        id,
+        field,
+        value: newValue?.listing.listing_id || "",
+      })
+    }
+
+    const selectedListing = listings.find((l) => l.listing.listing_id === value)
+
+    return (
+      <Autocomplete
+        value={selectedListing || null}
+        onChange={handleChange}
+        options={listings}
+        getOptionLabel={(option) => option.details.title}
+        renderOption={(props, option) => (
+          <Box component="li" {...props} sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <Avatar src={option.photos[0]} sx={{ width: 32, height: 32 }} />
+            <Typography variant="body2">{option.details.title}</Typography>
+          </Box>
+        )}
+        renderInput={(params) => <TextField {...params} />}
+        fullWidth
+        sx={{ height: "100%" }}
+      />
+    )
+  }
+
   // Map lots to rows
   const allLots = (lotsData?.lots || []).map((lot) => ({
     id: lot.lot_id,
@@ -72,31 +106,12 @@ export function AllStockLotsGrid() {
       headerName: t("AllStockLots.listing", "Listing"),
       flex: 2,
       editable: true,
-      type: "singleSelect",
-      valueOptions: listings.map((l) => ({
-        value: l.listing.listing_id,
-        label: l.details.title,
-      })),
+      renderEditCell: ListingEditCell,
       renderCell: (params) => {
         const listing = listings.find((l) => l.listing.listing_id === params.value)
         if (!listing) return null
         return (
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <Avatar
-              src={listing.photos[0]}
-              sx={{ width: 32, height: 32 }}
-            />
-            <Typography variant="body2">
-              {listing.details.title}
-            </Typography>
-          </Box>
-        )
-      },
-      renderEditCell: (params) => {
-        const listing = listings.find((l) => l.listing.listing_id === params.value)
-        if (!listing) return null
-        return (
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1, width: "100%" }}>
             <Avatar
               src={listing.photos[0]}
               sx={{ width: 32, height: 32 }}
@@ -242,7 +257,7 @@ export function AllStockLotsGrid() {
       {
         id: newId,
         lot_id: null,
-        listing_id: listings[0]?.listing.listing_id || "",
+        listing_id: "",
         quantity: 0,
         location_id: null,
         owner_id: null,
