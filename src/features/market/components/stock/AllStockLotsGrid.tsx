@@ -75,15 +75,11 @@ export function AllStockLotsGrid() {
       type: "singleSelect",
       valueOptions: listings.map((l) => ({
         value: l.listing.listing_id,
-        label: l.details.title || l.listing.listing_id,
+        label: l.details.title,
       })),
-      valueFormatter: (value) => {
-        const listing = listings.find((l) => l.listing.listing_id === value)
-        return listing?.details.title || value
-      },
       renderCell: (params) => {
         const listing = listings.find((l) => l.listing.listing_id === params.value)
-        if (!listing) return params.value
+        if (!listing) return null
         return (
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             <Avatar
@@ -91,7 +87,22 @@ export function AllStockLotsGrid() {
               sx={{ width: 32, height: 32 }}
             />
             <Typography variant="body2">
-              {listing.details.title || listing.listing.listing_id}
+              {listing.details.title}
+            </Typography>
+          </Box>
+        )
+      },
+      renderEditCell: (params) => {
+        const listing = listings.find((l) => l.listing.listing_id === params.value)
+        if (!listing) return null
+        return (
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1, width: "100%" }}>
+            <Avatar
+              src={listing.photos[0]}
+              sx={{ width: 32, height: 32 }}
+            />
+            <Typography variant="body2">
+              {listing.details.title}
             </Typography>
           </Box>
         )
