@@ -1771,5 +1771,17 @@
     "viewDetails": "查看详情",
     "share": "分享",
     "rowsPerPage": "每页行数"
+  },
+  "accessibility": {
+    "updateAmountInput": "输入更新库存的数量",
+    "updateAmountHelp": "输入要为选定库存物品添加、减少或设置的数量",
+    "addToStock": "增加库存",
+    "addToStockHelp": "为选定库存物品添加指定数量",
+    "zeroStock": "库存清零",
+    "zeroStockHelp": "将选定库存物品的数量设置为零",
+    "subtractFromStock": "减少库存",
+    "subtractFromStockHelp": "从选定库存物品中减去指定数量",
+    "editQuantityInput": "编辑在售数量",
+    "editQuantityHelp": "编辑此库存物品的在售数量"
   }
 }
