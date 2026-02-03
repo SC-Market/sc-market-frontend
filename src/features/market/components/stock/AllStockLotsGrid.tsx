@@ -6,7 +6,7 @@
 
 import React, { useState } from "react"
 import { DataGrid, GridColDef, GridRowsProp } from "@mui/x-data-grid"
-import { Paper, Typography, Chip, IconButton, Box, Button } from "@mui/material"
+import { Paper, Typography, Chip, IconButton, Box, Button, Avatar } from "@mui/material"
 import { Delete as DeleteIcon, Save as SaveIcon, Add as AddIcon } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { useGetMyListingsQuery } from "../../api/marketApi"
@@ -71,7 +71,7 @@ export function AllStockLotsGrid() {
 
   const columns: GridColDef[] = [
     {
-      field: "listing_name",
+      field: "listing_id",
       headerName: t("AllStockLots.listing", "Listing"),
       flex: 2,
       editable: true,
@@ -80,6 +80,22 @@ export function AllStockLotsGrid() {
         value: l.listing.listing_id,
         label: (l.listing as any).item_name || l.listing.listing_id,
       })),
+      renderCell: (params) => {
+        const listing = listings.find((l) => l.listing.listing_id === params.value)
+        if (!listing) return params.value
+        const listingData = listing.listing as any
+        return (
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <Avatar
+              src={listingData.photos?.[0]}
+              sx={{ width: 32, height: 32 }}
+            />
+            <Typography variant="body2">
+              {listingData.item_name || listing.listing.listing_id}
+            </Typography>
+          </Box>
+        )
+      },
     },
     {
       field: "quantity",
@@ -118,14 +134,28 @@ export function AllStockLotsGrid() {
       field: "actions",
       headerName: t("AllStockLots.actions", "Actions"),
       flex: 1,
-      renderCell: (params) => (
-        <IconButton
-          size="small"
-          onClick={() => handleDelete(params.row.lot_id)}
-        >
-          <DeleteIcon />
-        </IconButton>
-      ),
+      renderCell: (params) => {
+        const isNew = params.row.id.toString().startsWith("new-")
+        return (
+          <Box sx={{ display: "flex", gap: 0.5 }}>
+            {isNew && (
+              <IconButton
+                size="small"
+                color="primary"
+                onClick={() => handleSaveNew(params.row)}
+              >
+                <SaveIcon />
+              </IconButton>
+            )}
+            <IconButton
+              size="small"
+              onClick={() => isNew ? handleCancelNew(params.row.id) : handleDelete(params.row.lot_id)}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </Box>
+        )
+      },
     },
   ]
 
@@ -142,28 +172,9 @@ export function AllStockLotsGrid() {
   }
 
   const handleRowUpdate = async (newRow: any, oldRow: any) => {
-    // Handle new row creation
+    // Don't auto-save new rows
     if (newRow.id.toString().startsWith("new-")) {
-      try {
-        await createLot({
-          listing_id: newRow.listing_id,
-          quantity: newRow.quantity || 0,
-          location_id: newRow.location_id || null,
-          listed: newRow.listed ?? true,
-          notes: newRow.notes || null,
-        }).unwrap()
-
-        issueAlert({
-          message: t("AllStockLots.created", "Lot created"),
-          severity: "success",
-        })
-
-        setNewRows((prev) => prev.filter((r) => r.id !== newRow.id))
-        return newRow
-      } catch (error) {
-        issueAlert(error as any)
-        return oldRow
-      }
+      return newRow
     }
 
     // Handle existing row update
@@ -188,6 +199,31 @@ export function AllStockLotsGrid() {
     }
   }
 
+  const handleSaveNew = async (row: any) => {
+    try {
+      await createLot({
+        listing_id: row.listing_id,
+        quantity: row.quantity || 0,
+        location_id: row.location_id || null,
+        listed: row.listed ?? true,
+        notes: row.notes || null,
+      }).unwrap()
+
+      issueAlert({
+        message: t("AllStockLots.created", "Lot created"),
+        severity: "success",
+      })
+
+      setNewRows((prev) => prev.filter((r) => r.id !== row.id))
+    } catch (error) {
+      issueAlert(error as any)
+    }
+  }
+
+  const handleCancelNew = (rowId: string) => {
+    setNewRows((prev) => prev.filter((r) => r.id !== rowId))
+  }
+
   const handleAddRow = () => {
     const newId = `new-${Date.now()}`
     setNewRows((prev) => [
@@ -196,7 +232,6 @@ export function AllStockLotsGrid() {
         id: newId,
         lot_id: null,
         listing_id: listings[0]?.listing.listing_id || "",
-        listing_name: (listings[0]?.listing as any)?.item_name || "",
         quantity: 0,
         location_id: null,
         owner_id: null,
