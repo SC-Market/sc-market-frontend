@@ -10,7 +10,7 @@ import { Paper, Typography, Chip, IconButton, Box, Button, Avatar, Autocomplete,
 import { Delete as DeleteIcon, Save as SaveIcon, Add as AddIcon } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { useGetMyListingsQuery } from "../../api/marketApi"
-import { useSearchLotsQuery, useCreateLotMutation, useUpdateLotMutation, useDeleteLotMutation, useGetLocationsQuery } from "../../../../store/api/stockLotsApi"
+import { useSearchLotsQuery, useCreateLotMutation, useUpdateLotMutation, useDeleteLotMutation, useGetLocationsQuery, useCreateLocationMutation } from "../../../../store/api/stockLotsApi"
 import { useCurrentOrg } from "../../../../hooks/login/CurrentOrg"
 import { useAlertHook } from "../../../../hooks/alert/AlertHook"
 import type { StockManageType } from "../../domain/types"
@@ -51,6 +51,7 @@ export function AllStockLotsGrid() {
 
   const { data: locationsData } = useGetLocationsQuery({ search: "" })
   const locations = locationsData?.locations || []
+  const [createLocation] = useCreateLocationMutation()
 
   const [newRows, setNewRows] = useState<any[]>([])
 
@@ -92,13 +93,28 @@ export function AllStockLotsGrid() {
   function LocationEditCell(props: GridRenderEditCellParams) {
     const { id, value, field } = props
     const apiRef = useGridApiContext()
+    const [inputValue, setInputValue] = useState("")
 
-    const handleChange = (_: any, newValue: any | null) => {
-      apiRef.current.setEditCellValue({
-        id,
-        field,
-        value: newValue?.location_id || null,
-      })
+    const handleChange = async (_: any, newValue: any | null, reason: string) => {
+      if (reason === "createOption" && typeof newValue === "string") {
+        // Create new location
+        try {
+          const result = await createLocation({ name: newValue }).unwrap()
+          apiRef.current.setEditCellValue({
+            id,
+            field,
+            value: result.location.location_id,
+          })
+        } catch (error) {
+          console.error("Failed to create location", error)
+        }
+      } else {
+        apiRef.current.setEditCellValue({
+          id,
+          field,
+          value: newValue?.location_id || null,
+        })
+      }
     }
 
     const selectedLocation = locations.find((l) => l.location_id === value)
@@ -107,9 +123,15 @@ export function AllStockLotsGrid() {
       <Autocomplete
         value={selectedLocation || null}
         onChange={handleChange}
+        inputValue={inputValue}
+        onInputChange={(_, newInputValue) => setInputValue(newInputValue)}
         options={locations}
-        getOptionLabel={(option) => option.name}
-        renderInput={(params) => <TextField {...params} placeholder="Select location" />}
+        getOptionLabel={(option) => typeof option === "string" ? option : option.name}
+        freeSolo
+        selectOnFocus
+        clearOnBlur
+        handleHomeEndKeys
+        renderInput={(params) => <TextField {...params} placeholder="Select or create location" />}
         fullWidth
         sx={{ height: "100%" }}
       />
