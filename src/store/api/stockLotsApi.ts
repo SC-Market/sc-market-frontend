@@ -91,7 +91,7 @@ export const stockLotsApi = serviceApi.injectEndpoints({
     // Update a lot
     updateLot: builder.mutation<
       { lot: StockLot },
-      { lot_id: string; quantity?: number; location_id?: string | null; owner_id?: string | null; listed?: boolean; notes?: string | null }
+      { lot_id: string; listing_id?: string; quantity?: number; location_id?: string | null; owner_id?: string | null; listed?: boolean; notes?: string | null }
     >({
       query: ({ lot_id, ...body }) => ({
         url: `/api/market/lots/${lot_id}`,
