@@ -1273,10 +1273,24 @@
     "edit": "Edit",
     "save": "Save",
     "discard": "Discard",
-    "editListing": "Edit Listing"
+    "editListing": "Edit Listing",
+    "newListing": "新商品页",
+    "newListingPending": "新商品页 - 点击编辑",
+    "views": "浏览量"
   },
   "itemMarket": {
     "toggleSidebar": "Toggle market sidebar"
+  },
+  "SimpleStockInput": {
+    "quantity": "在售数量",
+    "quantityLabel": "输入在售数量",
+    "quantityHelp": "输入可供出售的物品总数量",
+    "available": "可用",
+    "reserved": "预留",
+    "manageStock": "管理库存",
+    "viewBreakdown": "查看明细",
+    "updateError": "更新库存数量失败",
+    "advancedFeatureComingSoon": "高级库存管理即将推出"
   },
   "image_search": {
     "select_image": "Select Image",
