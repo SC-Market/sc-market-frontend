@@ -4,13 +4,13 @@
  * Data grid showing all stock lots across all listings with inline editing
  */
 
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { DataGrid, GridColDef, GridRowsProp } from "@mui/x-data-grid"
 import { Paper, Typography, Chip, IconButton, Box, Button } from "@mui/material"
 import { Delete as DeleteIcon, Save as SaveIcon, Add as AddIcon } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { useGetMyListingsQuery } from "../../api/marketApi"
-import { useGetListingLotsQuery, useCreateLotMutation, useUpdateLotMutation, useDeleteLotMutation } from "../../../../store/api/stockLotsApi"
+import { useCreateLotMutation, useUpdateLotMutation, useDeleteLotMutation } from "../../../../store/api/stockLotsApi"
 import { useCurrentOrg } from "../../../../hooks/login/CurrentOrg"
 import { useAlertHook } from "../../../../hooks/alert/AlertHook"
 
@@ -37,36 +37,51 @@ export function AllStockLotsGrid() {
   const { data: listingsData } = useGetMyListingsQuery(finalParams)
   const listings = listingsData?.listings || []
 
-  // Fetch lots for all listings
-  const lotsQueries = listings.map((listing) =>
-    useGetListingLotsQuery({ listing_id: listing.listing.listing_id })
-  )
-
   const [createLot] = useCreateLotMutation()
   const [updateLot] = useUpdateLotMutation()
   const [deleteLot] = useDeleteLotMutation()
 
   const [newRows, setNewRows] = useState<any[]>([])
+  const [allLots, setAllLots] = useState<any[]>([])
+
+  // Fetch lots for all listings (can't use hooks in loop, so we'll fetch on mount)
+  useEffect(() => {
+    const fetchAllLots = async () => {
+      const lotsPromises = listings.map((listing) =>
+        fetch(`${window.location.origin}/api/market/listings/${listing.listing.listing_id}/lots`, {
+          credentials: "include",
+        })
+          .then((r) => r.json())
+          .then((data) => ({
+            listing,
+            lots: data.data?.lots || [],
+          }))
+          .catch(() => ({ listing, lots: [] }))
+      )
+      const results = await Promise.all(lotsPromises)
+      const lots = results.flatMap(({ listing, lots }) =>
+        lots.map((lot: any) => ({
+          id: lot.lot_id,
+          lot_id: lot.lot_id,
+          listing_id: lot.listing_id,
+          listing_name: (listing.listing as any).item_name || listing.listing.listing_id,
+          quantity: lot.quantity_total,
+          location_id: lot.location_id,
+          owner_id: lot.owner_id,
+          listed: lot.listed,
+          notes: lot.notes,
+        }))
+      )
+      setAllLots(lots)
+    }
+
+    if (listings.length > 0) {
+      fetchAllLots()
+    }
+  }, [listings])
 
   // Combine all lots into rows
-  const rows: GridRowsProp = [
-    ...newRows,
-    ...lotsQueries.flatMap((query, idx) => {
-      if (!query.data?.lots) return []
-      const listing = listings[idx]
-      return query.data.lots.map((lot) => ({
-        id: lot.lot_id,
-        lot_id: lot.lot_id,
-        listing_id: lot.listing_id,
-        listing_name: (listing.listing as any).item_name || listing.listing.listing_id,
-        quantity: lot.quantity_total,
-        location_id: lot.location_id,
-        owner_id: lot.owner_id,
-        listed: lot.listed,
-        notes: lot.notes,
-      }))
-    }),
-  ]
+  const rows: GridRowsProp = [...newRows, ...allLots]
 
   const columns: GridColDef[] = [
     {
