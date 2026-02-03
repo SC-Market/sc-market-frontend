@@ -63,6 +63,7 @@ export const stockLotsApi = serviceApi.injectEndpoints({
 
         return `/api/market/listings/${listing_id}/lots?${params.toString()}`
       },
+      transformResponse: (response: { data: { lots: StockLot[]; aggregates: StockAggregates } }) => response.data,
       providesTags: (result, error, { listing_id }) => [
         { type: "MarketListings", id: listing_id },
       ],
@@ -80,6 +81,8 @@ export const stockLotsApi = serviceApi.injectEndpoints({
       }),
       invalidatesTags: (result, error, { listing_id }) => [
         { type: "MarketListings", id: listing_id },
+        "MarketListings",
+        "MyListings",
       ],
     }),
 
@@ -93,7 +96,7 @@ export const stockLotsApi = serviceApi.injectEndpoints({
         method: "PATCH",
         body,
       }),
-      invalidatesTags: ["MarketListings"],
+      invalidatesTags: ["MarketListings", "MyListings"],
     }),
 
     // Delete a lot
@@ -102,7 +105,7 @@ export const stockLotsApi = serviceApi.injectEndpoints({
         url: `/api/market/lots/${lot_id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["MarketListings"],
+      invalidatesTags: ["MarketListings", "MyListings"],
     }),
 
     // Transfer lot
@@ -115,7 +118,7 @@ export const stockLotsApi = serviceApi.injectEndpoints({
         method: "POST",
         body,
       }),
-      invalidatesTags: ["MarketListings"],
+      invalidatesTags: ["MarketListings", "MyListings"],
     }),
 
     // Get locations
@@ -125,6 +128,7 @@ export const stockLotsApi = serviceApi.injectEndpoints({
         if (search) params.append("search", search)
         return `/api/market/locations?${params.toString()}`
       },
+      transformResponse: (response: { data: { locations: Location[] } }) => response.data,
     }),
 
     // Create location
