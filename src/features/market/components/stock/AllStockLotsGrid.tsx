@@ -6,8 +6,8 @@
 
 import React, { useState } from "react"
 import { DataGrid, GridColDef, GridRowsProp } from "@mui/x-data-grid"
-import { Paper, Typography, Chip, IconButton, Box } from "@mui/material"
-import { Delete as DeleteIcon, Save as SaveIcon } from "@mui/icons-material"
+import { Paper, Typography, Chip, IconButton, Box, Button } from "@mui/material"
+import { Delete as DeleteIcon, Save as SaveIcon, Add as AddIcon } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { useGetMyListingsQuery } from "../../api/marketApi"
 import { useGetListingLotsQuery, useCreateLotMutation, useUpdateLotMutation, useDeleteLotMutation } from "../../../../store/api/stockLotsApi"
@@ -41,29 +41,39 @@ export function AllStockLotsGrid() {
   const [updateLot] = useUpdateLotMutation()
   const [deleteLot] = useDeleteLotMutation()
 
+  const [newRow, setNewRow] = useState<any>(null)
+
   // Combine all lots into rows
-  const rows: GridRowsProp = lotsQueries.flatMap((query, idx) => {
-    if (!query.data?.lots) return []
-    const listing = listings[idx]
-    return query.data.lots.map((lot) => ({
-      id: lot.lot_id,
-      lot_id: lot.lot_id,
-      listing_id: lot.listing_id,
-      listing_name: (listing.listing as any).item_name || listing.listing.listing_id,
-      quantity: lot.quantity_total,
-      location_id: lot.location_id,
-      owner_id: lot.owner_id,
-      listed: lot.listed,
-      notes: lot.notes,
-    }))
-  })
+  const rows: GridRowsProp = [
+    ...(newRow ? [newRow] : []),
+    ...lotsQueries.flatMap((query, idx) => {
+      if (!query.data?.lots) return []
+      const listing = listings[idx]
+      return query.data.lots.map((lot) => ({
+        id: lot.lot_id,
+        lot_id: lot.lot_id,
+        listing_id: lot.listing_id,
+        listing_name: (listing.listing as any).item_name || listing.listing.listing_id,
+        quantity: lot.quantity_total,
+        location_id: lot.location_id,
+        owner_id: lot.owner_id,
+        listed: lot.listed,
+        notes: lot.notes,
+      }))
+    }),
+  ]
 
   const columns: GridColDef[] = [
     {
       field: "listing_name",
       headerName: t("AllStockLots.listing", "Listing"),
       flex: 2,
-      editable: false,
+      editable: true,
+      type: "singleSelect",
+      valueOptions: listings.map((l) => ({
+        value: l.listing.listing_id,
+        label: (l.listing as any).item_name || l.listing.listing_id,
+      })),
     },
     {
       field: "quantity",
@@ -126,6 +136,31 @@ export function AllStockLotsGrid() {
   }
 
   const handleRowUpdate = async (newRow: any, oldRow: any) => {
+    // Handle new row creation
+    if (newRow.id === "new") {
+      try {
+        await createLot({
+          listing_id: newRow.listing_id,
+          quantity: newRow.quantity || 0,
+          location_id: newRow.location_id || null,
+          listed: newRow.listed ?? true,
+          notes: newRow.notes || null,
+        }).unwrap()
+
+        issueAlert({
+          message: t("AllStockLots.created", "Lot created"),
+          severity: "success",
+        })
+
+        setNewRow(null)
+        return newRow
+      } catch (error) {
+        issueAlert(error as any)
+        return oldRow
+      }
+    }
+
+    // Handle existing row update
     try {
       await updateLot({
         lot_id: newRow.lot_id,
@@ -147,11 +182,35 @@ export function AllStockLotsGrid() {
     }
   }
 
+  const handleAddRow = () => {
+    setNewRow({
+      id: "new",
+      lot_id: null,
+      listing_id: listings[0]?.listing.listing_id || "",
+      listing_name: (listings[0]?.listing as any)?.item_name || "",
+      quantity: 0,
+      location_id: null,
+      owner_id: null,
+      listed: true,
+      notes: "",
+    })
+  }
+
   return (
     <Paper sx={{ p: 2 }}>
-      <Typography variant="h6" gutterBottom>
-        {t("AllStockLots.title", "All Stock Lots")}
-      </Typography>
+      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
+        <Typography variant="h6">
+          {t("AllStockLots.title", "All Stock Lots")}
+        </Typography>
+        <Button
+          variant="contained"
+          startIcon={<AddIcon />}
+          onClick={handleAddRow}
+          disabled={!!newRow || listings.length === 0}
+        >
+          {t("AllStockLots.addLot", "Add Lot")}
+        </Button>
+      </Box>
       <Box sx={{ height: 600, width: "100%" }}>
         <DataGrid
           rows={rows}
