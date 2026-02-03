@@ -19,17 +19,22 @@ export function AllStockLotsGrid() {
   const [currentOrg] = useCurrentOrg()
   const issueAlert = useAlertHook()
 
-  // Fetch all listings
-  const { data: listingsData } = useGetMyListingsQuery({
+  // Fetch all listings using same approach as MyItemStock
+  const hasOrg = currentOrg && currentOrg.spectrum_id
+  const searchQueryParams = {
     page_size: 1000,
     index: 0,
     quantityAvailable: 0,
     query: "",
     sort: "activity",
     statuses: "active,inactive",
-    ...(currentOrg?.spectrum_id && { contractor_id: currentOrg.spectrum_id }),
-  })
+  }
 
+  const finalParams = hasOrg
+    ? { ...searchQueryParams, contractor_id: currentOrg?.spectrum_id }
+    : searchQueryParams
+
+  const { data: listingsData } = useGetMyListingsQuery(finalParams)
   const listings = listingsData?.listings || []
 
   // Fetch lots for all listings
@@ -41,11 +46,11 @@ export function AllStockLotsGrid() {
   const [updateLot] = useUpdateLotMutation()
   const [deleteLot] = useDeleteLotMutation()
 
-  const [newRow, setNewRow] = useState<any>(null)
+  const [newRows, setNewRows] = useState<any[]>([])
 
   // Combine all lots into rows
   const rows: GridRowsProp = [
-    ...(newRow ? [newRow] : []),
+    ...newRows,
     ...lotsQueries.flatMap((query, idx) => {
       if (!query.data?.lots) return []
       const listing = listings[idx]
@@ -137,7 +142,7 @@ export function AllStockLotsGrid() {
 
   const handleRowUpdate = async (newRow: any, oldRow: any) => {
     // Handle new row creation
-    if (newRow.id === "new") {
+    if (newRow.id.toString().startsWith("new-")) {
       try {
         await createLot({
           listing_id: newRow.listing_id,
@@ -152,7 +157,7 @@ export function AllStockLotsGrid() {
           severity: "success",
         })
 
-        setNewRow(null)
+        setNewRows((prev) => prev.filter((r) => r.id !== newRow.id))
         return newRow
       } catch (error) {
         issueAlert(error as any)
@@ -183,17 +188,21 @@ export function AllStockLotsGrid() {
   }
 
   const handleAddRow = () => {
-    setNewRow({
-      id: "new",
-      lot_id: null,
-      listing_id: listings[0]?.listing.listing_id || "",
-      listing_name: (listings[0]?.listing as any)?.item_name || "",
-      quantity: 0,
-      location_id: null,
-      owner_id: null,
-      listed: true,
-      notes: "",
-    })
+    const newId = `new-${Date.now()}`
+    setNewRows((prev) => [
+      ...prev,
+      {
+        id: newId,
+        lot_id: null,
+        listing_id: listings[0]?.listing.listing_id || "",
+        listing_name: (listings[0]?.listing as any)?.item_name || "",
+        quantity: 0,
+        location_id: null,
+        owner_id: null,
+        listed: true,
+        notes: "",
+      },
+    ])
   }
 
   return (
@@ -206,7 +215,7 @@ export function AllStockLotsGrid() {
           variant="contained"
           startIcon={<AddIcon />}
           onClick={handleAddRow}
-          disabled={!!newRow || listings.length === 0}
+          disabled={listings.length === 0}
         >
           {t("AllStockLots.addLot", "Add Lot")}
         </Button>
