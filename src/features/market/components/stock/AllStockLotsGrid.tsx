@@ -37,6 +37,8 @@ export function AllStockLotsGrid() {
   const { data: listingsData } = useGetMyListingsQuery(finalParams)
   const listings = listingsData?.listings || []
 
+  console.log("AllStockLotsGrid - listings:", listings.length, "hasOrg:", hasOrg, "listingsData:", listingsData)
+
   // Fetch lots for all listings
   const lotsQueries = listings.map((listing) =>
     useGetListingLotsQuery({ listing_id: listing.listing.listing_id })
