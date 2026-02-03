@@ -164,6 +164,25 @@ export const stockLotsApi = serviceApi.injectEndpoints({
         body: { allocations },
       }),
     }),
+
+    // Search all lots
+    searchLots: builder.query<
+      { lots: StockLot[]; total: number },
+      { user_id?: string; contractor_id?: string; location_id?: string; listed?: boolean; page_size?: number; offset?: number }
+    >({
+      query: (params) => {
+        const searchParams = new URLSearchParams()
+        if (params.user_id) searchParams.append("user_id", params.user_id)
+        if (params.contractor_id) searchParams.append("contractor_id", params.contractor_id)
+        if (params.location_id) searchParams.append("location_id", params.location_id)
+        if (params.listed !== undefined) searchParams.append("listed", String(params.listed))
+        if (params.page_size) searchParams.append("page_size", String(params.page_size))
+        if (params.offset) searchParams.append("offset", String(params.offset))
+        return `/api/market/lots?${searchParams.toString()}`
+      },
+      transformResponse: (response: { data: { lots: StockLot[]; total: number } }) => response.data,
+      providesTags: ["MarketListings"],
+    }),
   }),
 })
 
@@ -177,4 +196,5 @@ export const {
   useCreateLocationMutation,
   useGetOrderAllocationsQuery,
   useManualAllocateOrderMutation,
+  useSearchLotsQuery,
 } = stockLotsApi
