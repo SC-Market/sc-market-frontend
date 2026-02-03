@@ -61,7 +61,7 @@ export const stockLotsApi = serviceApi.injectEndpoints({
         if (owner_id) params.append("owner_id", owner_id)
         if (listed !== undefined) params.append("listed", String(listed))
 
-        return `/market/listings/${listing_id}/lots?${params.toString()}`
+        return `/api/market/listings/${listing_id}/lots?${params.toString()}`
       },
       providesTags: (result, error, { listing_id }) => [
         { type: "MarketListings", id: listing_id },
@@ -74,7 +74,7 @@ export const stockLotsApi = serviceApi.injectEndpoints({
       { listing_id: string; quantity: number; location_id?: string | null; owner_id?: string | null; listed?: boolean; notes?: string | null }
     >({
       query: ({ listing_id, ...body }) => ({
-        url: `/market/listings/${listing_id}/lots`,
+        url: `/api/market/listings/${listing_id}/lots`,
         method: "POST",
         body,
       }),
@@ -89,7 +89,7 @@ export const stockLotsApi = serviceApi.injectEndpoints({
       { lot_id: string; quantity?: number; location_id?: string | null; owner_id?: string | null; listed?: boolean; notes?: string | null }
     >({
       query: ({ lot_id, ...body }) => ({
-        url: `/market/lots/${lot_id}`,
+        url: `/api/market/lots/${lot_id}`,
         method: "PATCH",
         body,
       }),
@@ -99,7 +99,7 @@ export const stockLotsApi = serviceApi.injectEndpoints({
     // Delete a lot
     deleteLot: builder.mutation<{ success: boolean }, { lot_id: string }>({
       query: ({ lot_id }) => ({
-        url: `/market/lots/${lot_id}`,
+        url: `/api/market/lots/${lot_id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["MarketListings"],
@@ -111,7 +111,7 @@ export const stockLotsApi = serviceApi.injectEndpoints({
       { lot_id: string; destination_location_id: string; quantity: number }
     >({
       query: ({ lot_id, ...body }) => ({
-        url: `/market/lots/${lot_id}/transfer`,
+        url: `/api/market/lots/${lot_id}/transfer`,
         method: "POST",
         body,
       }),
@@ -123,14 +123,14 @@ export const stockLotsApi = serviceApi.injectEndpoints({
       query: ({ search }) => {
         const params = new URLSearchParams()
         if (search) params.append("search", search)
-        return `/market/locations?${params.toString()}`
+        return `/api/market/locations?${params.toString()}`
       },
     }),
 
     // Create location
     createLocation: builder.mutation<{ location: Location }, { name: string }>({
       query: (body) => ({
-        url: "/market/locations",
+        url: "/api/market/locations",
         method: "POST",
         body,
       }),
@@ -141,7 +141,7 @@ export const stockLotsApi = serviceApi.injectEndpoints({
       { allocations: Allocation[]; total_allocated: number },
       { order_id: string }
     >({
-      query: ({ order_id }) => `/orders/${order_id}/allocations`,
+      query: ({ order_id }) => `/api/orders/${order_id}/allocations`,
     }),
 
     // Manual allocate order
@@ -150,7 +150,7 @@ export const stockLotsApi = serviceApi.injectEndpoints({
       { order_id: string; allocations: ManualAllocationInput[] }
     >({
       query: ({ order_id, allocations }) => ({
-        url: `/orders/${order_id}/allocations/manual`,
+        url: `/api/orders/${order_id}/allocations/manual`,
         method: "POST",
         body: { allocations },
       }),
