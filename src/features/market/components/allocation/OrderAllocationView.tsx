@@ -77,10 +77,9 @@ export function OrderAllocationView({
     { skip: !listingId },
   )
 
-  const { data: listingData } = useGetMarketListingQuery(
-    listingId!,
-    { skip: !listingId },
-  )
+  const { data: listingData } = useGetMarketListingQuery(listingId!, {
+    skip: !listingId,
+  })
 
   const [manualAllocate, { isLoading: allocating }] =
     useManualAllocateOrderMutation()
