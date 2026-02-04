@@ -201,6 +201,7 @@ export function ContractorSidebar() {
             renderTags={(tagValue, getTagProps) =>
               tagValue.map((option: ContractorKindIconKey, index) => (
                 <Chip
+                  key={option}
                   color={"primary"}
                   label={option}
                   sx={{ marginRight: 1, textTransform: "capitalize" }}

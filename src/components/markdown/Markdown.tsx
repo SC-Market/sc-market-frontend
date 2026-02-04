@@ -222,7 +222,6 @@ export function MarkdownRender(props: {
         },
 
         a({ node, className, children, ...props }) {
-          // eslint-disable-next-line react/prop-types
           const href = props.href
           if (href) {
             try {

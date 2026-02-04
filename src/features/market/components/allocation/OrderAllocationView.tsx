@@ -14,7 +14,7 @@ import {
   CardContent,
   Chip,
   Stack,
-  TextField,
+  IconButton,
   Typography,
   Alert,
   CircularProgress,
@@ -26,7 +26,7 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material"
-import { DataGrid, GridColDef } from "@mui/x-data-grid"
+import { DataGrid } from "@mui/x-data-grid"
 import LoadingButton from "@mui/lab/LoadingButton"
 import {
   useGetOrderAllocationsQuery,
@@ -35,8 +35,14 @@ import {
   ManualAllocationInput,
   Allocation,
 } from "../../../../store/api/stockLotsApi"
-import { InventoryRounded, WarningRounded } from "@mui/icons-material"
+import {
+  InventoryRounded,
+  WarningRounded,
+  AddCircleOutlineRounded,
+  RemoveCircleOutlineRounded,
+} from "@mui/icons-material"
 import { useAlertHook } from "../../../../hooks/alert/AlertHook"
+import { useGetMarketListingQuery } from "../../api/marketApi"
 
 interface OrderAllocationViewProps {
   orderId: string
@@ -65,12 +71,18 @@ export function OrderAllocationView({
     { skip: !listingId },
   )
 
+  const { data: listingData } = useGetMarketListingQuery(
+    { listing_id: listingId! },
+    { skip: !listingId },
+  )
+
   const [manualAllocate, { isLoading: allocating }] =
     useManualAllocateOrderMutation()
 
   const allocations = allocationsData?.allocations || []
   const totalAllocated = allocationsData?.total_allocated || 0
   const lots = (lotsData?.lots || []).filter((lot) => lot.quantity_total > 0)
+  const listingTitle = listingData?.listing?.details?.title || "Item"
 
   const totalSelected = useMemo(
     () =>
@@ -347,11 +359,9 @@ export function OrderAllocationView({
                   },
                   {
                     field: "title",
-                    headerName: "Lot",
+                    headerName: "Item",
                     flex: 2,
-                    valueGetter: (value, row) =>
-                      row.title ||
-                      `Lot ${row.lot_id.substring(0, 8)}`,
+                    valueGetter: () => listingTitle,
                   },
                   {
                     field: "quantity_total",
@@ -363,26 +373,53 @@ export function OrderAllocationView({
                   {
                     field: "allocate",
                     headerName: "Allocate",
-                    width: 120,
-                    renderCell: (params) => (
-                      <TextField
-                        type="number"
-                        size="small"
-                        value={selectedAllocations.get(params.row.lot_id) || ""}
-                        onChange={(e) => {
-                          const qty = parseInt(e.target.value) || 0
-                          const newMap = new Map(selectedAllocations)
-                          if (qty > 0 && qty <= params.row.quantity_total) {
-                            newMap.set(params.row.lot_id, qty)
-                          } else {
-                            newMap.delete(params.row.lot_id)
-                          }
-                          setSelectedAllocations(newMap)
-                        }}
-                        inputProps={{ min: 0, max: params.row.quantity_total }}
-                        sx={{ width: 100 }}
-                      />
-                    ),
+                    width: 180,
+                    renderCell: (params) => {
+                      const selectedQty =
+                        selectedAllocations.get(params.row.lot_id) || 0
+                      return (
+                        <Stack
+                          direction="row"
+                          spacing={1}
+                          alignItems="center"
+                          justifyContent="center"
+                        >
+                          <IconButton
+                            size="small"
+                            onClick={() => {
+                              const newMap = new Map(selectedAllocations)
+                              if (selectedQty > 0) {
+                                newMap.set(params.row.lot_id, selectedQty - 1)
+                              }
+                              if (selectedQty === 1) {
+                                newMap.delete(params.row.lot_id)
+                              }
+                              setSelectedAllocations(newMap)
+                            }}
+                            disabled={selectedQty === 0}
+                          >
+                            <RemoveCircleOutlineRounded fontSize="small" />
+                          </IconButton>
+                          <Typography
+                            variant="body2"
+                            sx={{ minWidth: 30, textAlign: "center" }}
+                          >
+                            {selectedQty}
+                          </Typography>
+                          <IconButton
+                            size="small"
+                            onClick={() => {
+                              const newMap = new Map(selectedAllocations)
+                              newMap.set(params.row.lot_id, selectedQty + 1)
+                              setSelectedAllocations(newMap)
+                            }}
+                            disabled={selectedQty >= params.row.quantity_total}
+                          >
+                            <AddCircleOutlineRounded fontSize="small" />
+                          </IconButton>
+                        </Stack>
+                      )
+                    },
                   },
                 ]}
                 autoHeight

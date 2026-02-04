@@ -394,8 +394,8 @@ export function OrderSettings({ entityType, entityId }: OrderSettingsProps) {
     }
 
     // Handle availability requirement
-    if (requireAvailabilitySettingId) {
-      // Update existing
+    if (requireAvailabilitySettingId && requireAvailabilityEnabled) {
+      // Update existing setting
       if (entityType === "user") {
         promise = promise.then(() =>
           updateUserSetting({
@@ -414,8 +414,8 @@ export function OrderSettings({ entityType, entityId }: OrderSettingsProps) {
           }).unwrap(),
         )
       }
-    } else if (requireAvailabilityEnabled) {
-      // Create new
+    } else if (!requireAvailabilitySettingId && requireAvailabilityEnabled) {
+      // Create new setting
       const request: CreateOrderSettingRequest = {
         setting_type: "require_availability",
         message_content: "", // Not used for require_availability
