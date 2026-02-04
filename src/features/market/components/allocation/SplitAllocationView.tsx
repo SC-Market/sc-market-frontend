@@ -24,11 +24,14 @@ import {
   TableBody,
   TableRow,
   TableCell,
+  InputAdornment,
 } from "@mui/material"
 import {
   ArrowForwardRounded,
   ArrowBackRounded,
   InventoryRounded,
+  KeyboardArrowRight,
+  KeyboardArrowLeft,
 } from "@mui/icons-material"
 import LoadingButton from "@mui/lab/LoadingButton"
 import {
@@ -254,8 +257,7 @@ function AvailableLots({
         <TableHead>
           <TableRow>
             <TableCell>Location</TableCell>
-            <TableCell>Item</TableCell>
-            <TableCell width={100}>Quantity</TableCell>
+            <TableCell width={120}>Quantity</TableCell>
             <TableCell width={50}></TableCell>
           </TableRow>
         </TableHead>
@@ -263,18 +265,6 @@ function AvailableLots({
           {lots.map((lot) => (
             <TableRow key={lot.lot_id}>
               <TableCell>{lot.location?.name || "Unknown"}</TableCell>
-              <TableCell>
-                <Stack direction="row" spacing={1} alignItems="center">
-                  <Avatar
-                    src={image}
-                    sx={{ width: 24, height: 24, borderRadius: 1 }}
-                    variant="rounded"
-                  >
-                    <InventoryRounded fontSize="small" />
-                  </Avatar>
-                  <Typography variant="body2">{title}</Typography>
-                </Stack>
-              </TableCell>
               <TableCell>
                 <TextField
                   type="number"
@@ -292,7 +282,13 @@ function AvailableLots({
                       e.target.value = ""
                     }
                   }}
-                  placeholder={`/ ${lot.quantity_available}`}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        / {lot.quantity_available}
+                      </InputAdornment>
+                    ),
+                  }}
                   inputProps={{
                     min: 0,
                     max: lot.quantity_available,
@@ -302,7 +298,7 @@ function AvailableLots({
               </TableCell>
               <TableCell>
                 <IconButton size="small" disabled>
-                  <ArrowForwardRounded />
+                  <KeyboardArrowRight />
                 </IconButton>
               </TableCell>
             </TableRow>
@@ -367,7 +363,7 @@ function AllocationTarget({
         <TableHead>
           <TableRow>
             <TableCell width={50}></TableCell>
-            <TableCell width={100}>Quantity</TableCell>
+            <TableCell width={120}>Quantity</TableCell>
             <TableCell>Location</TableCell>
           </TableRow>
         </TableHead>
@@ -391,14 +387,14 @@ function AllocationTarget({
                       setDeallocateQty(0)
                     }}
                   >
-                    <ArrowBackRounded />
+                    <KeyboardArrowLeft />
                   </IconButton>
                 </TableCell>
                 <TableCell>
                   <TextField
                     type="number"
                     size="small"
-                    value={deallocateQty}
+                    value={deallocateQty || ""}
                     onChange={(e) => {
                       const val = Math.max(
                         0,
@@ -406,7 +402,13 @@ function AllocationTarget({
                       )
                       setDeallocateQty(val)
                     }}
-                    placeholder={`/ ${alloc.quantity}`}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          / {alloc.quantity}
+                        </InputAdornment>
+                      ),
+                    }}
                     inputProps={{
                       min: 0,
                       max: alloc.quantity,
