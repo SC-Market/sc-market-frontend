@@ -41,8 +41,16 @@ export function LanguageSettings() {
   const handleSave = async () => {
     setSaving(true)
 
+    console.log("[Language Settings] Attempting to save languages:", {
+      selectedLanguages,
+      timestamp: new Date().toISOString(),
+    })
+
     try {
-      await setLanguages({ language_codes: selectedLanguages }).unwrap()
+      const result = await setLanguages({
+        language_codes: selectedLanguages,
+      }).unwrap()
+      console.log("[Language Settings] Save successful:", result)
       issueAlert({
         message: t(
           "settings.languages.saveSuccess",
@@ -51,6 +59,12 @@ export function LanguageSettings() {
         severity: "success",
       })
     } catch (err: any) {
+      console.error("[Language Settings] Save failed:", {
+        error: err,
+        status: err?.status,
+        data: err?.data,
+        message: err?.data?.error?.message,
+      })
       issueAlert({
         message:
           err?.data?.error?.message ||
