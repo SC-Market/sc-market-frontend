@@ -138,8 +138,7 @@ export function InviteRow(props: {
           <IconButton
             onClick={(event) => {
               navigator.clipboard.writeText(
-                `${window.location.origin}/contractor_invite/${row.invite_id}` ||
-                  "PLACEHOLDER",
+                `${window.location.origin}/contractor_invite/${row.invite_id}`,
               )
               issueAlert({
                 message: t("inviteCodes.copied"),

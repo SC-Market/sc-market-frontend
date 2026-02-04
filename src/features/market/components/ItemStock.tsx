@@ -1414,6 +1414,8 @@ export function DisplayStock({
     },
   )
 
+  StockCard.displayName = "StockCard"
+
   // Bottom sheet state for quick create
   const [bottomSheetOpen, setBottomSheetOpen] = useState(false)
   const [editingRowId, setEditingRowId] = useState<string | null>(null)
