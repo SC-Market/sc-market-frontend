@@ -6,42 +6,31 @@
 
 import { DataGrid, GridColDef } from "@mui/x-data-grid"
 import { Paper, Typography, Box, Chip } from "@mui/material"
-import { useSearchLotsQuery } from "../../../../store/api/stockLotsApi"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
-import { useGetUserProfileQuery } from "../../../../store/profile"
 import { useCurrentOrg } from "../../../../hooks/login/CurrentOrg"
+import { useGetContractorAllocationsQuery } from "../../../../store/api/stockLotsApi"
 
 export function AllAllocatedLotsGrid() {
   const { t } = useTranslation()
-  const { data: profile } = useGetUserProfileQuery()
   const [currentOrg] = useCurrentOrg()
 
-  const { data, isLoading } = useSearchLotsQuery({
-    contractor_spectrum_id: currentOrg?.spectrum_id,
-  })
+  const { data, isLoading } = useGetContractorAllocationsQuery(
+    { contractor_spectrum_id: currentOrg?.spectrum_id || "" },
+    { skip: !currentOrg?.spectrum_id },
+  )
 
-  // Get all lots
-  const allocatedLots = data?.lots || []
+  const allocations = data?.allocations || []
 
   const columns: GridColDef[] = [
     {
       field: "listing_id",
       headerName: t("stock.listing", "Listing"),
       flex: 1,
-      renderCell: (params) => (
-        <Link to={`/market/listing/${params.value}`}>
-          {params.value.substring(0, 8).toUpperCase()}
-        </Link>
-      ),
-    },
-    {
-      field: "order_id",
-      headerName: t("stock.order", "Order"),
-      flex: 1,
+      valueGetter: (value, row) => row.lot?.listing_id,
       renderCell: (params) =>
         params.value ? (
-          <Link to={`/contracts/${params.value}`}>
+          <Link to={`/market/listing/${params.value}`}>
             {params.value.substring(0, 8).toUpperCase()}
           </Link>
         ) : (
@@ -49,7 +38,17 @@ export function AllAllocatedLotsGrid() {
         ),
     },
     {
-      field: "quantity_total",
+      field: "order_id",
+      headerName: t("stock.order", "Order"),
+      flex: 1,
+      renderCell: (params) => (
+        <Link to={`/contracts/${params.value}`}>
+          {params.value.substring(0, 8).toUpperCase()}
+        </Link>
+      ),
+    },
+    {
+      field: "quantity",
       headerName: t("stock.quantity", "Quantity"),
       width: 120,
     },
@@ -57,13 +56,14 @@ export function AllAllocatedLotsGrid() {
       field: "location_name",
       headerName: t("stock.location", "Location"),
       flex: 1,
-      valueGetter: (value, row) => row.location?.name || "Unspecified",
+      valueGetter: (value, row) => row.lot?.location?.name || "Unspecified",
     },
     {
       field: "created_at",
       headerName: t("stock.allocatedAt", "Allocated"),
       width: 150,
-      valueFormatter: (value) => new Date(value).toLocaleDateString(),
+      valueFormatter: (value) =>
+        value ? new Date(value).toLocaleDateString() : "-",
     },
   ]
 
@@ -73,13 +73,13 @@ export function AllAllocatedLotsGrid() {
         <Typography variant="h6">
           {t("stock.allocatedStock", "Allocated Stock")}
         </Typography>
-        <Chip label={allocatedLots.length} size="small" color="primary" />
+        <Chip label={allocations.length} size="small" color="primary" />
       </Box>
       <DataGrid
-        rows={allocatedLots}
+        rows={allocations}
         columns={columns}
         loading={isLoading}
-        getRowId={(row) => row.lot_id}
+        getRowId={(row) => row.allocation_id}
         autoHeight
         pageSizeOptions={[10, 25, 50]}
         initialState={{

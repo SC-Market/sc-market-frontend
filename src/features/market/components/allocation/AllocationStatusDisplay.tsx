@@ -65,8 +65,12 @@ export function AllocationStatusDisplay({
   const hasActiveAllocations = grouped_allocations.some(
     (a: any) => a.status === "active",
   )
-  const allFulfilled = grouped_allocations.every((a: any) => a.status === "fulfilled")
-  const allReleased = grouped_allocations.every((a: any) => a.status === "released")
+  const allFulfilled = grouped_allocations.every(
+    (a: any) => a.status === "fulfilled",
+  )
+  const allReleased = grouped_allocations.every(
+    (a: any) => a.status === "released",
+  )
 
   const isPartial =
     orderQuantity !== undefined && total_allocated < orderQuantity

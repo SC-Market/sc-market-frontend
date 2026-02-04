@@ -217,6 +217,17 @@ export const stockLotsApi = serviceApi.injectEndpoints({
       ],
     }),
 
+    getContractorAllocations: builder.query<
+      { allocations: Allocation[] },
+      { contractor_spectrum_id: string }
+    >({
+      query: ({ contractor_spectrum_id }) => ({
+        url: `/api/contractors/${contractor_spectrum_id}/allocations`,
+        method: "GET",
+      }),
+      providesTags: ["Orders"],
+    }),
+
     // Manual allocate order
     manualAllocateOrder: builder.mutation<
       { allocations: Allocation[] },
@@ -288,6 +299,7 @@ export const {
   useGetLocationsQuery,
   useCreateLocationMutation,
   useGetOrderAllocationsQuery,
+  useGetContractorAllocationsQuery,
   useManualAllocateOrderMutation,
   useSearchLotsQuery,
 } = stockLotsApi

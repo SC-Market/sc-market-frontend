@@ -41,7 +41,9 @@ describe("DiscordLoginButton", () => {
 
   it("navigates to discord auth URL on click using current path", () => {
     const hrefSet = installHrefSpy()
-    const { DiscordLoginButton } = require("../DiscordLoginButton") as { DiscordLoginButton: React.ComponentType }
+    const { DiscordLoginButton } = require("../DiscordLoginButton") as {
+      DiscordLoginButton: React.ComponentType
+    }
 
     render(
       <MemoryRouter initialEntries={["/foo"]}>
@@ -58,7 +60,9 @@ describe("DiscordLoginButton", () => {
 
   it("uses /market when on root path", () => {
     const hrefSet = installHrefSpy()
-    const { DiscordLoginButton } = require("../DiscordLoginButton") as { DiscordLoginButton: React.ComponentType }
+    const { DiscordLoginButton } = require("../DiscordLoginButton") as {
+      DiscordLoginButton: React.ComponentType
+    }
 
     render(
       <MemoryRouter initialEntries={["/"]}>
