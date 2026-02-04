@@ -182,16 +182,19 @@ export function AllStockLotsGrid() {
   }
 
   // Map lots to rows
-  const allLots = (lotsData?.lots || []).map((lot) => ({
-    id: lot.lot_id,
-    lot_id: lot.lot_id,
-    listing_id: lot.listing_id,
-    quantity: lot.quantity_total,
-    location_id: lot.location_id,
-    owner_id: lot.owner_id,
-    listed: lot.listed,
-    notes: lot.notes,
-  }))
+  // Filter out allocated lots (they show in AllAllocatedLotsGrid)
+  const allLots = (lotsData?.lots || [])
+    .filter((lot: any) => !lot.is_allocated)
+    .map((lot) => ({
+      id: lot.lot_id,
+      lot_id: lot.lot_id,
+      listing_id: lot.listing_id,
+      quantity: lot.quantity_total,
+      location_id: lot.location_id,
+      owner_id: lot.owner_id,
+      listed: lot.listed,
+      notes: lot.notes,
+    }))
 
   // Combine all lots into rows
   const rows: GridRowsProp = [...newRows, ...allLots]
