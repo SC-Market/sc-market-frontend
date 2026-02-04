@@ -420,6 +420,7 @@ export const marketApi = serviceApi.injectEndpoints({
         "BuyOrderListings",
         "AllListings",
         "ContractorListings",
+        "StockLots",
         { type: "MarketListings" as const, id: listing_id },
       ],
     }),
