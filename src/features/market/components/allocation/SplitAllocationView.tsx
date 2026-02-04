@@ -171,6 +171,10 @@ export function SplitAllocationView({
                     listingData={group?.listing}
                     allocations={group?.allocations || []}
                     onAllocate={handleAllocate}
+                    orderQuantity={listing.quantity}
+                    currentAllocated={
+                      allocationsByListing.get(listing.listing_id) || 0
+                    }
                   />
                 )
               })}
@@ -212,11 +216,15 @@ function AvailableLots({
   listingData,
   allocations,
   onAllocate,
+  orderQuantity,
+  currentAllocated,
 }: {
   listingId: string
   listingData?: any
   allocations: Allocation[]
   onAllocate: (lotId: string, listingId: string, quantity: number) => void
+  orderQuantity: number
+  currentAllocated: number
 }) {
   const [allocateQtys, setAllocateQtys] = React.useState<Record<string, number>>(
     {},
@@ -280,6 +288,8 @@ function AvailableLots({
         <TableBody>
           {lots.map((lot) => {
             const allocateQty = allocateQtys[lot.lot_id] || 0
+            const wouldExceed =
+              allocateQty > 0 && currentAllocated + allocateQty > orderQuantity
             return (
               <TableRow key={lot.lot_id}>
                 <TableCell>{lot.location?.name || "Unknown"}</TableCell>
@@ -301,6 +311,12 @@ function AvailableLots({
                         [lot.lot_id]: val,
                       }))
                     }}
+                    error={wouldExceed}
+                    helperText={
+                      wouldExceed
+                        ? `Would exceed order quantity (${orderQuantity})`
+                        : undefined
+                    }
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="end">
@@ -314,7 +330,7 @@ function AvailableLots({
                 <TableCell>
                   <IconButton
                     size="small"
-                    disabled={allocateQty === 0}
+                    disabled={allocateQty === 0 || wouldExceed}
                     onClick={() => {
                       onAllocate(lot.lot_id, listingId, allocateQty)
                       setAllocateQtys((prev) => ({
