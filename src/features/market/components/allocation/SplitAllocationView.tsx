@@ -86,6 +86,22 @@ export function SplitAllocationView({
 
     if (allocationsToCreate.length === 0) return
 
+    // Validate we're not over-allocating
+    for (const listing of listings) {
+      const currentAllocated = allocationsByListing.get(listing.listing_id) || 0
+      const pendingForListing = allocationsToCreate
+        .filter((a) => a.listing_id === listing.listing_id)
+        .reduce((sum, a) => sum + a.quantity, 0)
+      
+      if (currentAllocated + pendingForListing > listing.quantity) {
+        issueAlert({
+          severity: "error",
+          message: `Cannot allocate ${currentAllocated + pendingForListing} units - order only needs ${listing.quantity}`,
+        })
+        return
+      }
+    }
+
     try {
       await manualAllocate({
         order_id: orderId,
