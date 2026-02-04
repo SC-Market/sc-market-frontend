@@ -200,7 +200,7 @@ export function ViewOrder() {
         {shouldRedirectTo404(error) ? <Navigate to={"/404"} /> : null}
         {shouldShowErrorPage(error) ? <ErrorPage /> : null}
 
-        {isMobile && order ? (
+        {order ? (
           <Grid item xs={12}>
             <Tabs
               value={activeTab}
@@ -214,7 +214,9 @@ export function ViewOrder() {
               }}
             >
               <Tab label={t("orders.details", "Details")} />
-              {isAssigned && <Tab label={t("orders.messages", "Messages")} />}
+              {isMobile && isAssigned && (
+                <Tab label={t("orders.messages", "Messages")} />
+              )}
               {session?.offers[0]?.service && (
                 <Tab label={t("orders.service", "Service")} />
               )}
@@ -268,7 +270,7 @@ export function ViewOrder() {
           return (
             <>
               {/* Details Tab */}
-              {(isMobile ? activeTab === detailsTab : true) && (
+              {activeTab === detailsTab && (
                 <>
                   {!(isLoading || isFetching) && order ? (
                     <OrderDetailsArea order={order} />
@@ -277,11 +279,23 @@ export function ViewOrder() {
                       <OrderDetailSkeleton showContractor showAssigned />
                     </Grid>
                   )}
+                  {/* Messages on desktop in details tab */}
+                  {!isMobile && isAssigned && (
+                    <>
+                      {!(isLoading || isFetching) && order ? (
+                        <OrderMessagesArea order={order} />
+                      ) : (
+                        <Grid item xs={12} lg={4} md={6}>
+                          <Skeleton width={"100%"} height={400} />
+                        </Grid>
+                      )}
+                    </>
+                  )}
                 </>
               )}
 
-              {/* Messages Tab - Desktop always shows if assigned, mobile only when tab is selected */}
-              {(isMobile ? activeTab === messagesTab : isAssigned) && (
+              {/* Messages Tab - mobile only */}
+              {isMobile && activeTab === messagesTab && (
                 <>
                   {!(isLoading || isFetching) && order ? (
                     isAssigned ? (
@@ -297,7 +311,7 @@ export function ViewOrder() {
 
               {/* Service Tab */}
               {session?.offers[0]?.service &&
-                (isMobile ? activeTab === serviceTab : true) &&
+                activeTab === serviceTab &&
                 (!(isLoading || isFetching) && session ? (
                   <OfferServiceArea offer={session} />
                 ) : (
@@ -309,7 +323,7 @@ export function ViewOrder() {
               {/* Market Listings Tab */}
               {session?.offers[0]?.market_listings &&
                 session.offers[0].market_listings.length > 0 &&
-                (isMobile ? activeTab === marketListingsTab : true) &&
+                activeTab === marketListingsTab &&
                 (!(isLoading || isFetching) && session ? (
                   <OfferMarketListings offer={session} />
                 ) : (
@@ -325,7 +339,7 @@ export function ViewOrder() {
                     !order.contractor_review) ||
                   order.customer_review ||
                   order.contractor_review) &&
-                (isMobile ? activeTab === reviewsTab : true) && (
+                activeTab === reviewsTab && (
                   <>
                     {amCustomer && !order.customer_review && (
                       <OrderReviewArea asCustomer order={order} />
@@ -343,27 +357,24 @@ export function ViewOrder() {
                   </>
                 )}
 
-              {/* Availability Tab */}
-              {amRelated &&
-                order &&
-                (isMobile ? activeTab === availabilityTab : true) && (
-                  <OrderAvailabilityArea order={order} />
-                )}
-
               {/* Stock Allocation Tab */}
-              {amContractorManager &&
-                order &&
-                (isMobile ? activeTab === allocationTab : true) && (
-                  <Grid item xs={12}>
-                    <OrderAllocationView orderId={order.order_id} />
-                  </Grid>
-                )}
+              {amContractorManager && order && activeTab === allocationTab && (
+                <Grid item xs={12}>
+                  <OrderAllocationView orderId={order.order_id} />
+                </Grid>
+              )}
+
+              {/* Availability Tab */}
+              {amRelated && order && activeTab === availabilityTab && (
+                <OrderAvailabilityArea order={order} />
+              )}
 
               {/* Member Assign Area - always show on desktop */}
               {amContractorManager &&
                 order &&
-                !["cancelled", "fulfilled"].includes(order.status) &&
-                !isMobile && <MemberAssignArea order={order} />}
+                !["cancelled", "fulfilled"].includes(order.status) && (
+                  <MemberAssignArea order={order} />
+                )}
             </>
           )
         })()}
