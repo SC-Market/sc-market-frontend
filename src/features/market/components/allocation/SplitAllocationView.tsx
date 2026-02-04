@@ -87,6 +87,19 @@ export function SplitAllocationView({
     listingId: string,
     quantity: number,
   ) => {
+    // Validate against order quantity
+    const listing = listings.find((l) => l.listing_id === listingId)
+    if (listing) {
+      const currentAllocated = allocationsByListing.get(listingId) || 0
+      if (currentAllocated + quantity > listing.quantity) {
+        issueAlert({
+          severity: "error",
+          message: `Cannot allocate ${currentAllocated + quantity} units. Order only requires ${listing.quantity}.`,
+        })
+        return
+      }
+    }
+
     try {
       await manualAllocate({
         order_id: orderId,

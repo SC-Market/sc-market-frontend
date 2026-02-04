@@ -3,6 +3,7 @@ import {
   OrderBody,
   OrderSearchQuery,
   OrderStub,
+  OrderStatus,
 } from "../datatypes/Order"
 import { serviceApi } from "./service"
 import {
@@ -215,7 +216,7 @@ const ordersApi = serviceApi.injectEndpoints({
                 order_id,
                 (draft) => {
                   oldStatus = draft.status
-                  draft.status = status
+                  draft.status = status as OrderStatus
                 },
               ),
             )
@@ -224,7 +225,13 @@ const ordersApi = serviceApi.injectEndpoints({
             // Optimistically update search results
             // Update all cached search queries
             const state = getState() as RootState
-            const cachedQueries = state.api?.queries || {}
+            const cachedQueries = (state.serviceApi?.queries || {}) as Record<
+              string,
+              {
+                data?: { items?: OrderStub[] }
+                originalArgs?: OrderSearchQuery
+              }
+            >
 
             Object.keys(cachedQueries).forEach((queryKey) => {
               if (queryKey.includes("searchOrders")) {
@@ -270,7 +277,7 @@ const ordersApi = serviceApi.injectEndpoints({
                                 ] as number) || 0) + 1
                             }
                             // Update order status
-                            order.status = status
+                            order.status = status as OrderStatus
                           }
                         },
                       ),

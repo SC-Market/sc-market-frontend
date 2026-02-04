@@ -152,8 +152,6 @@ export const userApi = serviceApi.injectEndpoints({
                 (draft) => {
                   if (draft.settings) {
                     Object.assign(draft.settings, body)
-                  } else {
-                    draft.settings = body as AccountSettingsBody & { discord_order_share: boolean }
                   }
                 },
               ),
@@ -269,7 +267,7 @@ export const userApi = serviceApi.injectEndpoints({
             // Also update if viewing own profile by username
             const state = getState() as RootState
             const profile =
-              state?.api?.queries?.["profileGetUserProfile(undefined)"]?.data
+              state?.serviceApi?.queries?.["profileGetUserProfile(undefined)"]?.data as UserProfileState | undefined
             if (profile?.username) {
               const userProfilePatch = dispatch(
                 userApi.util.updateQueryData(

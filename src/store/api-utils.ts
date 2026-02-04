@@ -59,11 +59,12 @@ export function unwrapResponse<T, E = StandardErrorResponse>(
  * ```
  */
 export function extractErrorMessage(
-  response: APIResponse<unknown, StandardErrorResponse>,
+  response: APIResponse<unknown>,
 ): string | undefined {
   // New standardized format: { error: { code, message, details? } }
   if (
-    response?.error &&
+    "error" in response &&
+    response.error &&
     typeof response.error === "object" &&
     "message" in response.error
   ) {
@@ -71,10 +72,14 @@ export function extractErrorMessage(
   }
 
   // Legacy formats
-  if (response?.error && typeof response.error === "string") {
+  if ("error" in response && response.error && typeof response.error === "string") {
     return response.error
   }
-  if (response?.message) {
+  if (
+    "message" in response &&
+    response.message &&
+    typeof response.message === "string"
+  ) {
     return response.message
   }
 
@@ -98,11 +103,11 @@ export function extractErrorMessage(
  * ```
  */
 export function extractErrorCode(
-  response: APIResponse<unknown, StandardErrorResponse>,
+  response: APIResponse<unknown>,
 ): string | undefined {
   // New standardized format
   if (
-    response?.error &&
+    "error" in response && response.error &&
     typeof response.error === "object" &&
     "code" in response.error
   ) {
