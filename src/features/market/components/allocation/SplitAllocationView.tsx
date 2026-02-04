@@ -214,7 +214,7 @@ function AvailableLots({
       <CardContent>
         <Stack spacing={1}>
           <Stack direction="row" spacing={1} alignItems="center">
-            <Avatar src={image} sx={{ width: 32, height: 32 }}>
+            <Avatar src={image} sx={{ width: 32, height: 32, borderRadius: 1 }} variant="rounded">
               <InventoryRounded />
             </Avatar>
             <Typography variant="subtitle2">{title}</Typography>
@@ -286,7 +286,7 @@ function AllocationTarget({
       <CardContent>
         <Stack spacing={1}>
           <Stack direction="row" spacing={1} alignItems="center">
-            <Avatar src={image} sx={{ width: 32, height: 32 }}>
+            <Avatar src={image} sx={{ width: 32, height: 32, borderRadius: 1 }} variant="rounded">
               <InventoryRounded />
             </Avatar>
             <Typography variant="subtitle2">{title}</Typography>
