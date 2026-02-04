@@ -54,7 +54,7 @@ export function OfflineIndicator() {
         variant="filled"
         sx={{ width: "100%" }}
       >
-        You're offline. Some features may be limited.
+        You&apos;re offline. Some features may be limited.
       </Alert>
     </Snackbar>
   )

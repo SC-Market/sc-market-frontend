@@ -297,7 +297,7 @@ export function OrderAllocationView({
                     <TableHead>
                       <TableRow>
                         <TableCell>Location</TableCell>
-                        <TableCell>Lot ID</TableCell>
+                        <TableCell>Item</TableCell>
                         <TableCell align="right">Quantity</TableCell>
                         <TableCell>Status</TableCell>
                       </TableRow>
@@ -320,14 +320,8 @@ export function OrderAllocationView({
                                     )}
                                   </TableCell>
                                   <TableCell>
-                                    <Typography
-                                      variant="body2"
-                                      sx={{
-                                        fontFamily: "monospace",
-                                        fontSize: "0.75rem",
-                                      }}
-                                    >
-                                      {allocation.lot_id.substring(0, 8)}...
+                                    <Typography variant="body2">
+                                      {listingTitle}
                                     </Typography>
                                   </TableCell>
                                   <TableCell align="right">
