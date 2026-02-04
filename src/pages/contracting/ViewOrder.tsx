@@ -291,6 +291,12 @@ export function ViewOrder() {
                       )}
                     </>
                   )}
+                  {/* Member Assign Area */}
+                  {amContractorManager &&
+                    order &&
+                    !["cancelled", "fulfilled"].includes(order.status) && (
+                      <MemberAssignArea order={order} />
+                    )}
                 </>
               )}
 
@@ -368,13 +374,6 @@ export function ViewOrder() {
               {amRelated && order && activeTab === availabilityTab && (
                 <OrderAvailabilityArea order={order} />
               )}
-
-              {/* Member Assign Area - always show on desktop */}
-              {amContractorManager &&
-                order &&
-                !["cancelled", "fulfilled"].includes(order.status) && (
-                  <MemberAssignArea order={order} />
-                )}
             </>
           )
         })()}
