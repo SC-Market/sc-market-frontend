@@ -267,6 +267,7 @@ export function AllStockLotsGrid() {
                 size="small"
                 color="primary"
                 onClick={() => handleSaveNew(params.row)}
+                disabled={!params.row.listing_id}
               >
                 <SaveIcon />
               </IconButton>
