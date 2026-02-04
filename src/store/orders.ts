@@ -202,7 +202,7 @@ const ordersApi = serviceApi.injectEndpoints({
       ) {
         await createOptimisticUpdate(
           (dispatch) => {
-            const patches: any[] = []
+            const patches: Array<{ undo: () => void }> = []
 
             // Store old status for rollback
             let oldStatus: string | null = null

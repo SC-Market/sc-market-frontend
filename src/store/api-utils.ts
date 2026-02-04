@@ -25,7 +25,9 @@ import type {
  * const data = unwrapResponse(response) // Returns T from { data: T }
  * ```
  */
-export function unwrapResponse<T, E = StandardErrorResponse>(response: Response<T, E>): T {
+export function unwrapResponse<T, E = StandardErrorResponse>(
+  response: Response<T, E>,
+): T {
   // New standardized format: { data: T }
   if (response && typeof response === "object" && "data" in response) {
     return (response as StandardSuccessResponse<T>).data
@@ -56,7 +58,9 @@ export function unwrapResponse<T, E = StandardErrorResponse>(response: Response<
  * }
  * ```
  */
-export function extractErrorMessage(response: APIResponse<unknown, StandardErrorResponse>): string | undefined {
+export function extractErrorMessage(
+  response: APIResponse<unknown, StandardErrorResponse>,
+): string | undefined {
   // New standardized format: { error: { code, message, details? } }
   if (
     response?.error &&
@@ -93,7 +97,9 @@ export function extractErrorMessage(response: APIResponse<unknown, StandardError
  * }
  * ```
  */
-export function extractErrorCode(response: APIResponse<unknown, StandardErrorResponse>): string | undefined {
+export function extractErrorCode(
+  response: APIResponse<unknown, StandardErrorResponse>,
+): string | undefined {
   // New standardized format
   if (
     response?.error &&

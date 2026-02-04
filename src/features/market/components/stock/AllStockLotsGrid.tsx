@@ -87,7 +87,10 @@ export function AllStockLotsGrid() {
     const { id, value, field } = props
     const apiRef = useGridApiContext()
 
-    const handleChange = (_: any, newValue: StockManageType | null) => {
+    const handleChange = (
+      _: React.SyntheticEvent,
+      newValue: StockManageType | null,
+    ) => {
       apiRef.current.setEditCellValue({
         id,
         field,
@@ -128,7 +131,7 @@ export function AllStockLotsGrid() {
 
     const handleChange = async (
       _: any,
-      newValue: any | null,
+      newValue: { name: string; location_id: string } | null,
       reason: string,
     ) => {
       if (reason === "createOption" && typeof newValue === "string") {
