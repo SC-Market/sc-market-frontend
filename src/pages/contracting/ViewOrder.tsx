@@ -366,7 +366,11 @@ export function ViewOrder() {
               {/* Stock Allocation Tab */}
               {amContractorManager && order && activeTab === allocationTab && (
                 <Grid item xs={12}>
-                  <OrderAllocationView orderId={order.order_id} />
+                  <OrderAllocationView
+                    orderId={order.order_id}
+                    listingId={order.market_listings?.[0]?.listing_id}
+                    orderQuantity={order.market_listings?.[0]?.quantity}
+                  />
                 </Grid>
               )}
 
