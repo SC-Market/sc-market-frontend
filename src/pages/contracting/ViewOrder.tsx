@@ -31,7 +31,10 @@ import { OrderReviewView } from "../../views/orders/OrderReviewView"
 import { useGetOfferSessionByIDQuery } from "../../store/offer"
 import { OfferMarketListings } from "../../views/offers/OfferMarketListings"
 import { OfferServiceArea } from "../../views/offers/OfferServiceArea"
-import { OrderAllocationView } from "../../features/market/components/allocation"
+import {
+  OrderAllocationView,
+  SplitAllocationView,
+} from "../../features/market/components/allocation"
 import { useTranslation } from "react-i18next"
 import {
   shouldRedirectTo404,
@@ -367,22 +370,18 @@ export function ViewOrder() {
               {/* Stock Allocation Tab */}
               {amContractorManager && order && activeTab === allocationTab && (
                 <Grid item xs={12}>
-                  <Stack spacing={2}>
-                    {order.market_listings?.map((listing: any, index) => {
-                      const listingId =
-                        typeof listing.listing_id === "string"
-                          ? listing.listing_id
-                          : listing.listing_id?.listing_id
-                      return (
-                        <OrderAllocationView
-                          key={listingId || index}
-                          orderId={order.order_id}
-                          listingId={listingId}
-                          orderQuantity={listing.quantity}
-                        />
-                      )
-                    })}
-                  </Stack>
+                  <SplitAllocationView
+                    orderId={order.order_id}
+                    listings={
+                      order.market_listings?.map((listing: any) => ({
+                        listing_id:
+                          typeof listing.listing_id === "string"
+                            ? listing.listing_id
+                            : listing.listing_id?.listing_id,
+                        quantity: listing.quantity,
+                      })) || []
+                    }
+                  />
                 </Grid>
               )}
 
