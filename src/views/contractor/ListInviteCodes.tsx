@@ -64,8 +64,7 @@ export function InviteRow(props: {
 
   const submitDelete = useCallback(async () => {
     // event.preventDefault();
-    let res: { data?: any; error?: any }
-    res = await deleteContractorInvite({
+    const res: { data?: any; error?: any } = await deleteContractorInvite({
       contractor: currentOrg!.spectrum_id,
       invite_id: row.invite_id,
     })
