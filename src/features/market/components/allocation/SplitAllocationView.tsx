@@ -233,11 +233,8 @@ function AvailableLots({
       .filter((lot) => lot.quantity_available > 0)
   }, [lotsData?.lots, allocatedByLot])
 
-  const title =
-    (listingData?.listing as any)?.details?.title ||
-    (listingData?.listing as any)?.title ||
-    "Item"
-  const image = (listingData?.listing as any)?.photos?.[0]
+  const title = getListingTitle(lotsData?.listing || listingData)
+  const image = getListingImage(lotsData?.listing || listingData)
 
   if (lots.length === 0) return null
 
