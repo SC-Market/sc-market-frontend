@@ -18,6 +18,12 @@ import {
   IconButton,
   Chip,
   Avatar,
+  Link,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
 } from "@mui/material"
 import {
   ArrowForwardRounded,
@@ -239,61 +245,107 @@ function AvailableLots({
   if (lots.length === 0) return null
 
   return (
-    <Card variant="outlined">
-      <CardContent>
-        <Stack spacing={1}>
-          <Stack direction="row" spacing={1} alignItems="center">
-            <Avatar
-              src={image}
-              sx={{ width: 32, height: 32, borderRadius: 1 }}
-              variant="rounded"
-            >
-              <InventoryRounded />
-            </Avatar>
-            <Typography variant="subtitle2">{title}</Typography>
-          </Stack>
-          {lots.map((lot) => (
-            <Stack
-              key={lot.lot_id}
-              direction="row"
-              spacing={1}
-              alignItems="center"
-            >
-              <Typography variant="caption" sx={{ minWidth: 80 }}>
-                {lot.location?.name || "Unspecified"}
-              </Typography>
-              <Typography variant="caption" color="text.secondary">
-                ({lot.quantity_available} avail)
-              </Typography>
-              <TextField
-                size="small"
-                type="number"
-                value={pendingAllocations.get(lot.lot_id)?.quantity || ""}
-                onChange={(e) => {
-                  const qty = parseInt(e.target.value) || 0
-                  const newMap = new Map(pendingAllocations)
-                  if (qty > 0 && qty <= lot.quantity_available) {
-                    newMap.set(lot.lot_id, {
-                      lot_id: lot.lot_id,
-                      listing_id: listingId,
-                      quantity: qty,
-                    })
-                  } else {
-                    newMap.delete(lot.lot_id)
-                  }
-                  setPendingAllocations(newMap)
-                }}
-                inputProps={{ min: 0, max: lot.quantity_available }}
-                sx={{ width: 80 }}
-              />
-              <IconButton size="small" disabled>
-                <ArrowForwardRounded fontSize="small" />
-              </IconButton>
-            </Stack>
-          ))}
-        </Stack>
-      </CardContent>
-    </Card>
+    <Box>
+      <Stack direction="row" spacing={1} alignItems="center" mb={2}>
+        <Avatar
+          src={image}
+          sx={{ width: 32, height: 32, borderRadius: 1 }}
+          variant="rounded"
+        >
+          <InventoryRounded />
+        </Avatar>
+        <Link
+          href={`/market/listing/${listingId}`}
+          target="_blank"
+          underline="hover"
+        >
+          <Typography variant="h6">{title}</Typography>
+        </Link>
+      </Stack>
+
+      <Table size="small">
+        <TableHead>
+          <TableRow>
+            <TableCell>Location</TableCell>
+            <TableCell>Item</TableCell>
+            <TableCell width={100}>Quantity</TableCell>
+            <TableCell width={50}></TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {lots.map((lot) => {
+            const pending = pendingAllocations.get(lot.lot_id)
+            const quantity = pending?.quantity || 0
+
+            return (
+              <TableRow key={lot.lot_id}>
+                <TableCell>{lot.location?.name || "Unknown"}</TableCell>
+                <TableCell>
+                  <Stack direction="row" spacing={1} alignItems="center">
+                    <Avatar
+                      src={image}
+                      sx={{ width: 24, height: 24, borderRadius: 1 }}
+                      variant="rounded"
+                    >
+                      <InventoryRounded fontSize="small" />
+                    </Avatar>
+                    <Typography variant="body2">{title}</Typography>
+                  </Stack>
+                </TableCell>
+                <TableCell>
+                  <TextField
+                    type="number"
+                    size="small"
+                    value={quantity}
+                    onChange={(e) => {
+                      const val = Math.max(
+                        0,
+                        Math.min(
+                          lot.quantity_available,
+                          parseInt(e.target.value) || 0,
+                        ),
+                      )
+                      const newMap = new Map(pendingAllocations)
+                      if (val > 0) {
+                        newMap.set(lot.lot_id, {
+                          lot_id: lot.lot_id,
+                          listing_id: listingId,
+                          quantity: val,
+                        })
+                      } else {
+                        newMap.delete(lot.lot_id)
+                      }
+                      setPendingAllocations(newMap)
+                    }}
+                    inputProps={{
+                      min: 0,
+                      max: lot.quantity_available,
+                    }}
+                    sx={{ width: 80 }}
+                  />
+                  <Typography variant="caption" color="text.secondary" ml={1}>
+                    / {lot.quantity_available}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  <IconButton
+                    size="small"
+                    disabled={quantity === 0}
+                    onClick={() => {
+                      const newMap = new Map(pendingAllocations)
+                      newMap.delete(lot.lot_id)
+                      setPendingAllocations(newMap)
+                    }}
+                  >
+                    <ArrowForwardRounded />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            )
+          })}
+        </TableBody>
+      </Table>
+    </Box>
   )
 }
 
@@ -316,50 +368,51 @@ function AllocationTarget({
   const isComplete = allocated >= required
 
   return (
-    <Card variant="outlined">
-      <CardContent>
-        <Stack spacing={1}>
-          <Stack direction="row" spacing={1} alignItems="center">
-            <Avatar
-              src={image}
-              sx={{ width: 32, height: 32, borderRadius: 1 }}
-              variant="rounded"
-            >
-              <InventoryRounded />
-            </Avatar>
-            <Typography variant="subtitle2">{title}</Typography>
-          </Stack>
-          <Stack direction="row" spacing={1} alignItems="center">
-            <Typography variant="body2" color="text.secondary">
-              Required:
-            </Typography>
-            <Chip
-              label={`${allocated} / ${required}`}
-              color={isComplete ? "success" : "warning"}
-              size="small"
-            />
-          </Stack>
+    <Box>
+      <Stack direction="row" spacing={1} alignItems="center" mb={2}>
+        <Avatar
+          src={image}
+          sx={{ width: 32, height: 32, borderRadius: 1 }}
+          variant="rounded"
+        >
+          <InventoryRounded />
+        </Avatar>
+        <Link
+          href={`/market/listing/${listingId}`}
+          target="_blank"
+          underline="hover"
+        >
+          <Typography variant="h6">{title}</Typography>
+        </Link>
+        <Chip
+          label={`${allocated} / ${required}`}
+          color={isComplete ? "success" : "warning"}
+          size="small"
+        />
+      </Stack>
+
+      <Table size="small">
+        <TableHead>
+          <TableRow>
+            <TableCell width={50}></TableCell>
+            <TableCell width={100}>Quantity</TableCell>
+            <TableCell>Location</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
           {allocations.map((alloc) => (
-            <Stack
-              key={alloc.allocation_id}
-              direction="row"
-              spacing={1}
-              alignItems="center"
-              justifyContent="space-between"
-            >
-              <Typography variant="caption">
-                {alloc.lot?.location?.name || "Unspecified"}
-              </Typography>
-              <Stack direction="row" spacing={1} alignItems="center">
-                <Typography variant="caption">{alloc.quantity}</Typography>
+            <TableRow key={alloc.allocation_id}>
+              <TableCell>
                 <IconButton size="small" disabled>
-                  <ArrowBackRounded fontSize="small" />
+                  <ArrowBackRounded />
                 </IconButton>
-              </Stack>
-            </Stack>
+              </TableCell>
+              <TableCell>{alloc.quantity}</TableCell>
+              <TableCell>{alloc.lot?.location?.name || "Unknown"}</TableCell>
+            </TableRow>
           ))}
-        </Stack>
-      </CardContent>
-    </Card>
+        </TableBody>
+      </Table>
+    </Box>
   )
 }
