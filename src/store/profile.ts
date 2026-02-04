@@ -141,7 +141,7 @@ export const userApi = serviceApi.injectEndpoints({
       async onQueryStarted(body, { dispatch, queryFulfilled }) {
         await createOptimisticUpdate(
           (dispatch) => {
-            const patches: any[] = []
+            const patches: Array<{ undo: () => void }> = []
 
             // Optimistically update settings in profile
             const profilePatch = dispatch(
@@ -152,7 +152,7 @@ export const userApi = serviceApi.injectEndpoints({
                   if (draft.settings) {
                     Object.assign(draft.settings, body)
                   } else {
-                    draft.settings = body as any
+                    draft.settings = body as AccountSettingsBody
                   }
                 },
               ),
@@ -196,7 +196,7 @@ export const userApi = serviceApi.injectEndpoints({
       async onQueryStarted(body, { dispatch, queryFulfilled, getState }) {
         await createOptimisticUpdate(
           (dispatch) => {
-            const patches: any[] = []
+            const patches: Array<{ undo: () => void }> = []
 
             // Optimistically update user profile
             const profilePatch = dispatch(
@@ -251,7 +251,7 @@ export const userApi = serviceApi.injectEndpoints({
 
         await createOptimisticUpdate(
           (dispatch) => {
-            const patches: any[] = []
+            const patches: Array<{ undo: () => void }> = []
 
             // Optimistically update avatar with preview
             const profilePatch = dispatch(
@@ -266,7 +266,7 @@ export const userApi = serviceApi.injectEndpoints({
             patches.push(profilePatch)
 
             // Also update if viewing own profile by username
-            const state = getState() as any
+            const state = getState() as { api?: { queries?: Record<string, { data?: UserProfileState }> } }
             const profile =
               state?.api?.queries?.["profileGetUserProfile(undefined)"]?.data
             if (profile?.username) {
@@ -379,7 +379,7 @@ export const userApi = serviceApi.injectEndpoints({
       void
     >({
       query: () => `${baseUrl}/links`,
-      transformResponse: (response: { data: { providers: any[] } }) =>
+      transformResponse: (response: { data: { providers: Array<{ provider_type: string; provider_id: string }> } }) =>
         response.data.providers,
       providesTags: [{ type: "MyProfile" as const }, "MyProfile" as const],
     }),

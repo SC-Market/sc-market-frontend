@@ -52,19 +52,11 @@ interface StockLotWithAvailable extends StockLot {
 }
 
 function getListingTitle(listingData: any): string {
-  return (
-    listingData?.listing?.details?.title ||
-    listingData?.listing?.title ||
-    listingData?.listing?.listing?.title ||
-    "Item"
-  )
+  return listingData?.details?.title || listingData?.title || "Item"
 }
 
 function getListingImage(listingData: any): string | undefined {
-  return (
-    listingData?.listing?.photos?.[0] ||
-    listingData?.listing?.listing?.photos?.[0]
-  )
+  return listingData?.photos?.[0]
 }
 
 export function SplitAllocationView({
@@ -175,7 +167,9 @@ export function SplitAllocationView({
                     listingId={listing.listing_id}
                     listingData={group?.listing}
                     required={listing.quantity}
-                    allocated={allocationsByListing.get(listing.listing_id) || 0}
+                    allocated={
+                      allocationsByListing.get(listing.listing_id) || 0
+                    }
                     allocations={group?.allocations || []}
                   />
                 )
@@ -319,8 +313,8 @@ function AllocationTarget({
   allocated: number
   allocations: Allocation[]
 }) {
-  const title = getListingTitle({ listing: listingData })
-  const image = getListingImage({ listing: listingData })
+  const title = getListingTitle(listingData)
+  const image = getListingImage(listingData)
 
   const isComplete = allocated >= required
 

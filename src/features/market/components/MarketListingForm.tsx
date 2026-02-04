@@ -666,10 +666,11 @@ export function AggregateMarketListingForm() {
 
   const submitMarketListing = useCallback(
     async (event: React.FormEvent) => {
-      const res: { data?: any; error?: any } = await createAggregateListing({
-        body: state,
-        spectrum_id: currentOrg?.spectrum_id,
-      })
+      const res: { data?: unknown; error?: unknown } =
+        await createAggregateListing({
+          body: state,
+          spectrum_id: currentOrg?.spectrum_id,
+        })
 
       if (res?.data && !res?.error) {
         setState({
@@ -966,7 +967,7 @@ export function MarketMultipleForm() {
 
   const submitMarketListing = useCallback(
     async (event: React.FormEvent) => {
-      const res: { data?: any; error?: any } = await createListing({
+      const res: { data?: unknown; error?: unknown } = await createListing({
         body: state,
         spectrum_id: currentOrg?.spectrum_id,
       })
