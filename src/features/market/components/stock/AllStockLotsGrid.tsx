@@ -4,7 +4,7 @@
  * Data grid showing all stock lots across all listings with inline editing
  */
 
-import React, { useState } from "react"
+import React, { useState, useCallback } from "react"
 import {
   DataGrid,
   GridColDef,
@@ -81,6 +81,17 @@ export function AllStockLotsGrid() {
   const [createLocation] = useCreateLocationMutation()
 
   const [newRows, setNewRows] = useState<any[]>([])
+
+  // Memoize edit cell renderers to prevent hook issues
+  const renderListingEditCell = useCallback(
+    (props: GridRenderEditCellParams) => <ListingEditCell {...props} />,
+    [],
+  )
+
+  const renderLocationEditCell = useCallback(
+    (props: GridRenderEditCellParams) => <LocationEditCell {...props} />,
+    [],
+  )
 
   // Custom edit component for listing selection
   function ListingEditCell(props: GridRenderEditCellParams) {
@@ -205,7 +216,7 @@ export function AllStockLotsGrid() {
       headerName: t("AllStockLots.listing", "Listing"),
       flex: 2,
       editable: true,
-      renderEditCell: ListingEditCell,
+      renderEditCell: renderListingEditCell,
       renderCell: (params) => {
         const listing = listings.find(
           (l) => l.listing.listing_id === params.value,
@@ -231,7 +242,7 @@ export function AllStockLotsGrid() {
       headerName: t("AllStockLots.location", "Location"),
       flex: 1,
       editable: true,
-      renderEditCell: LocationEditCell,
+      renderEditCell: renderLocationEditCell,
       valueFormatter: (value) => {
         const location = locations.find((l) => l.location_id === value)
         return location?.name || ""
