@@ -10,6 +10,7 @@ import {
   createOptimisticUpdate,
 } from "../util/optimisticUpdates"
 import { unwrapResponse } from "./api-utils"
+import type { RootState } from "./store"
 
 /**
  * Re-export shared API types and utilities
@@ -222,9 +223,7 @@ const ordersApi = serviceApi.injectEndpoints({
 
             // Optimistically update search results
             // Update all cached search queries
-            const state = getState() as {
-              api?: { queries?: Record<string, unknown> }
-            }
+            const state = getState() as RootState
             const cachedQueries = state.api?.queries || {}
 
             Object.keys(cachedQueries).forEach((queryKey) => {
