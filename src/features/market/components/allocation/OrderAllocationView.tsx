@@ -84,7 +84,7 @@ export function OrderAllocationView({
   const [manualAllocate, { isLoading: allocating }] =
     useManualAllocateOrderMutation()
 
-  const allocations = allocationsData?.allocations || []
+  const allocations = allocationsData?.grouped_allocations || []
   const totalAllocated = allocationsData?.total_allocated || 0
   const aggregates = lotsData?.aggregates
   const listingTitle =
@@ -95,9 +95,11 @@ export function OrderAllocationView({
   // Calculate available quantity per lot (total - allocated)
   const allocatedByLot = useMemo(() => {
     const map = new Map<string, number>()
-    allocations.forEach((alloc) => {
-      const current = map.get(alloc.lot_id) || 0
-      map.set(alloc.lot_id, current + alloc.quantity)
+    allocations.forEach((group) => {
+      group.allocations.forEach((alloc) => {
+        const current = map.get(alloc.lot_id) || 0
+        map.set(alloc.lot_id, current + alloc.quantity)
+      })
     })
     return map
   }, [allocations])

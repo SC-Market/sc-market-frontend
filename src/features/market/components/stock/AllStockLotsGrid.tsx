@@ -131,7 +131,7 @@ export function AllStockLotsGrid() {
 
     const handleChange = async (
       _: any,
-      newValue: { name: string; location_id: string } | null,
+      newValue: string | { name: string; location_id: string } | null,
       reason: string,
     ) => {
       if (reason === "createOption" && typeof newValue === "string") {
@@ -150,7 +150,10 @@ export function AllStockLotsGrid() {
         apiRef.current.setEditCellValue({
           id,
           field,
-          value: newValue?.location_id || null,
+          value:
+            typeof newValue === "string"
+              ? null
+              : newValue?.location_id || null,
         })
       }
     }
