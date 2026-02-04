@@ -512,6 +512,14 @@ function AllocationTarget({
                         [alloc.allocation_id]: val,
                       }))
                     }}
+                    onFocus={(e) => {
+                      if (!deallocateQty) {
+                        setDeallocateQtys((prev) => ({
+                          ...prev,
+                          [alloc.allocation_id]: alloc.quantity,
+                        }))
+                      }
+                    }}
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="end">
