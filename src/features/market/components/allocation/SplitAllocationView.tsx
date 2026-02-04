@@ -51,6 +51,22 @@ interface StockLotWithAvailable extends StockLot {
   location?: { name: string }
 }
 
+function getListingTitle(listingData: any): string {
+  return (
+    listingData?.listing?.details?.title ||
+    listingData?.listing?.title ||
+    listingData?.listing?.listing?.title ||
+    "Item"
+  )
+}
+
+function getListingImage(listingData: any): string | undefined {
+  return (
+    listingData?.listing?.photos?.[0] ||
+    listingData?.listing?.listing?.photos?.[0]
+  )
+}
+
 export function SplitAllocationView({
   orderId,
   listings,
