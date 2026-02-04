@@ -81,9 +81,28 @@ export function OrderAllocationView({
 
   const allocations = allocationsData?.allocations || []
   const totalAllocated = allocationsData?.total_allocated || 0
-  const lots = (lotsData?.lots || []).filter((lot) => lot.quantity_total > 0)
   const aggregates = lotsData?.aggregates
   const listingTitle = listingData?.listing?.details?.title || "Item"
+
+  // Calculate available quantity per lot (total - allocated)
+  const allocatedByLot = useMemo(() => {
+    const map = new Map<string, number>()
+    allocations.forEach((alloc) => {
+      const current = map.get(alloc.lot_id) || 0
+      map.set(alloc.lot_id, current + alloc.quantity)
+    })
+    return map
+  }, [allocations])
+
+  const lots = useMemo(() => {
+    return (lotsData?.lots || [])
+      .map((lot) => ({
+        ...lot,
+        quantity_available:
+          lot.quantity_total - (allocatedByLot.get(lot.lot_id) || 0),
+      }))
+      .filter((lot) => lot.quantity_available > 0)
+  }, [lotsData?.lots, allocatedByLot])
 
   const totalSelected = useMemo(
     () =>
@@ -106,10 +125,10 @@ export function OrderAllocationView({
 
     for (const [lotId, quantity] of selectedAllocations.entries()) {
       const lot = lots.find((l) => l.lot_id === lotId)
-      if (lot && quantity > lot.quantity_total) {
+      if (lot && quantity > lot.quantity_available) {
         issueAlert({
           severity: "error",
-          message: `Cannot allocate ${quantity} from lot - only ${lot.quantity_total} available`,
+          message: `Cannot allocate ${quantity} from lot - only ${lot.quantity_available} available`,
         })
         return
       }
@@ -376,7 +395,7 @@ export function OrderAllocationView({
                     valueGetter: () => listingTitle,
                   },
                   {
-                    field: "quantity_total",
+                    field: "quantity_available",
                     headerName: "Available",
                     width: 100,
                     align: "right",
@@ -425,7 +444,9 @@ export function OrderAllocationView({
                               newMap.set(params.row.lot_id, selectedQty + 1)
                               setSelectedAllocations(newMap)
                             }}
-                            disabled={selectedQty >= params.row.quantity_total}
+                            disabled={
+                              selectedQty >= params.row.quantity_available
+                            }
                           >
                             <AddCircleOutlineRounded fontSize="small" />
                           </IconButton>

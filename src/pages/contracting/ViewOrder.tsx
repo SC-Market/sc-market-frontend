@@ -366,15 +366,22 @@ export function ViewOrder() {
               {/* Stock Allocation Tab */}
               {amContractorManager && order && activeTab === allocationTab && (
                 <Grid item xs={12}>
-                  <OrderAllocationView
-                    orderId={order.order_id}
-                    listingId={
-                      typeof order.market_listings?.[0]?.listing_id === "string"
-                        ? order.market_listings[0].listing_id
-                        : order.market_listings?.[0]?.listing_id?.listing_id
-                    }
-                    orderQuantity={order.market_listings?.[0]?.quantity}
-                  />
+                  <Stack spacing={2}>
+                    {order.market_listings?.map((listing, index) => {
+                      const listingId =
+                        typeof listing.listing_id === "string"
+                          ? listing.listing_id
+                          : listing.listing_id?.listing_id
+                      return (
+                        <OrderAllocationView
+                          key={listingId || index}
+                          orderId={order.order_id}
+                          listingId={listingId}
+                          orderQuantity={listing.quantity}
+                        />
+                      )
+                    })}
+                  </Stack>
                 </Grid>
               )}
 
