@@ -10,6 +10,8 @@ export { LotListItem } from "./LotListItem"
 export { LocationSelector } from "./LocationSelector"
 export { CreateLotDialog } from "./CreateLotDialog"
 export { TransferLotDialog } from "./TransferLotDialog"
+export { AllStockLotsGrid } from "./AllStockLotsGrid"
+export { AllAllocatedLotsGrid } from "./AllAllocatedLotsGrid"
 
 export type { StockManagerProps } from "./StockManager"
 export type { StockBreakdownProps } from "./StockBreakdown"
