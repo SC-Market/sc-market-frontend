@@ -15,7 +15,6 @@ import {
   Skeleton,
   Tabs,
   Tab,
-  Box,
   useMediaQuery,
   useTheme,
 } from "@mui/material"
@@ -104,7 +103,7 @@ export function ViewOfferPage() {
         {shouldRedirectTo404(error) ? <Navigate to={"/404"} /> : null}
         {shouldShowErrorPage(error) ? <ErrorPage /> : null}
 
-        {isMobile && session ? (
+        {session ? (
           <Grid item xs={12}>
             <Tabs
               value={activeTab}
@@ -118,7 +117,7 @@ export function ViewOfferPage() {
               }}
             >
               <Tab label={t("offers.details", "Details")} />
-              <Tab label={t("offers.messages", "Messages")} />
+              {isMobile && <Tab label={t("offers.messages", "Messages")} />}
               {session.offers[0]?.service && (
                 <Tab label={t("offers.service", "Service")} />
               )}
@@ -134,7 +133,7 @@ export function ViewOfferPage() {
         ) : null}
 
         {/* Details Tab */}
-        {(isMobile ? activeTab === 0 : true) && (
+        {activeTab === 0 && (
           <>
             {!(isLoading || isFetching) && session ? (
               <OfferDetailsArea session={session} />
@@ -147,6 +146,18 @@ export function ViewOfferPage() {
                 />
               </Grid>
             )}
+            {/* Messages on desktop in details tab */}
+            {!isMobile && (
+              <>
+                {session ? (
+                  <OfferMessagesArea offer={session} />
+                ) : (
+                  <Grid item xs={12} lg={4} md={6}>
+                    <Skeleton width={"100%"} height={400} />
+                  </Grid>
+                )}
+              </>
+            )}
           </>
         )}
 
@@ -156,7 +167,7 @@ export function ViewOfferPage() {
 
           let tabIndex = 0
           const detailsTab = tabIndex++
-          const messagesTab = tabIndex++
+          const messagesTab = isMobile ? tabIndex++ : -1
           const serviceTab = session.offers[0]?.service ? tabIndex++ : -1
           const marketListingsTab =
             session.offers[0]?.market_listings &&
@@ -167,8 +178,8 @@ export function ViewOfferPage() {
 
           return (
             <>
-              {/* Messages Tab - Desktop always shows, mobile only when tab is selected */}
-              {(isMobile ? activeTab === messagesTab : true) && (
+              {/* Messages Tab - mobile only */}
+              {isMobile && activeTab === messagesTab && (
                 <>
                   {session ? (
                     <OfferMessagesArea offer={session} />
@@ -181,23 +192,22 @@ export function ViewOfferPage() {
               )}
 
               {/* Service Tab */}
-              {session.offers[0]?.service &&
-                (isMobile ? activeTab === serviceTab : true) && (
-                  <>
-                    {session ? (
-                      <OfferServiceArea offer={session} />
-                    ) : (
-                      <Grid item xs={12} lg={4}>
-                        <Skeleton width={"100%"} height={400} />
-                      </Grid>
-                    )}
-                  </>
-                )}
+              {session.offers[0]?.service && activeTab === serviceTab && (
+                <>
+                  {session ? (
+                    <OfferServiceArea offer={session} />
+                  ) : (
+                    <Grid item xs={12} lg={4}>
+                      <Skeleton width={"100%"} height={400} />
+                    </Grid>
+                  )}
+                </>
+              )}
 
               {/* Market Listings Tab */}
               {session.offers[0]?.market_listings &&
                 session.offers[0].market_listings.length > 0 &&
-                (isMobile ? activeTab === marketListingsTab : true) && (
+                activeTab === marketListingsTab && (
                   <>
                     {session ? (
                       <OfferMarketListings offer={session} />
@@ -210,10 +220,9 @@ export function ViewOfferPage() {
                 )}
 
               {/* Availability Tab */}
-              {session.availability &&
-                (isMobile ? activeTab === availabilityTab : true) && (
-                  <OrderAvailabilityArea order={session} />
-                )}
+              {session.availability && activeTab === availabilityTab && (
+                <OrderAvailabilityArea order={session} />
+              )}
             </>
           )
         })()}
