@@ -178,12 +178,14 @@ export function OrderAllocationView({
 
   // Group allocations by location for better display
   const allocationsByLocation = useMemo(() => {
-    const grouped = new Map<string, typeof allocations>()
+    const grouped = new Map<string, Allocation[]>()
 
-    allocations.forEach((allocation: Allocation) => {
-      const locationName = allocation.lot?.location_id || "Unspecified"
-      const existing = grouped.get(locationName) || []
-      grouped.set(locationName, [...existing, allocation])
+    allocations.forEach((group) => {
+      group.allocations.forEach((allocation) => {
+        const locationName = allocation.lot?.location_id || "Unspecified"
+        const existing = grouped.get(locationName) || []
+        grouped.set(locationName, [...existing, allocation])
+      })
     })
 
     return grouped

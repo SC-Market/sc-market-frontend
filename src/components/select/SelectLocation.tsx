@@ -42,8 +42,8 @@ export function romanize(num: number) {
       "VII",
       "VIII",
       "IX",
-    ],
-    roman = "",
+    ]
+  let roman = "",
     i = 3
   while (i--) {
     const digit = digits.pop()

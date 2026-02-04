@@ -144,6 +144,38 @@ export function SplitAllocationView({
     }
   }
 
+  // Update input values after allocations change
+  React.useEffect(() => {
+    setInputValues((prev) => {
+      const newValues: Record<string, Record<string, number>> = {}
+      listings.forEach((listing) => {
+        const currentAllocated = allocationsByListing.get(listing.listing_id) || 0
+        const remaining = listing.quantity - currentAllocated
+        const group = groupedAllocations.find(
+          (g) => g.listing_id === listing.listing_id,
+        )
+        const lotsData = group?.allocations || []
+        
+        newValues[listing.listing_id] = {}
+        // Only update if there's remaining to allocate
+        if (remaining > 0) {
+          lotsData.forEach((alloc) => {
+            if (alloc.lot) {
+              const lotId = alloc.lot_id
+              // Keep existing value if it exists and is valid, otherwise set to 0
+              newValues[listing.listing_id][lotId] = prev[listing.listing_id]?.[lotId] || 0
+            }
+          })
+        }
+      })
+      return newValues
+    })
+  }, [groupedAllocations, allocationsByListing, listings])
+
+  const [inputValues, setInputValues] = React.useState<
+    Record<string, Record<string, number>>
+  >({})
+
   const allocationsByListing = useMemo(() => {
     const map = new Map<string, number>()
     groupedAllocations.forEach((group) => {
@@ -174,6 +206,13 @@ export function SplitAllocationView({
                     orderQuantity={listing.quantity}
                     currentAllocated={
                       allocationsByListing.get(listing.listing_id) || 0
+                    }
+                    allocateQtys={inputValues[listing.listing_id] || {}}
+                    setAllocateQtys={(qtys) =>
+                      setInputValues((prev) => ({
+                        ...prev,
+                        [listing.listing_id]: qtys,
+                      }))
                     }
                   />
                 )
@@ -218,6 +257,8 @@ function AvailableLots({
   onAllocate,
   orderQuantity,
   currentAllocated,
+  allocateQtys,
+  setAllocateQtys,
 }: {
   listingId: string
   listingData?: any
@@ -225,10 +266,9 @@ function AvailableLots({
   onAllocate: (lotId: string, listingId: string, quantity: number) => void
   orderQuantity: number
   currentAllocated: number
+  allocateQtys: Record<string, number>
+  setAllocateQtys: (qtys: Record<string, number>) => void
 }) {
-  const [allocateQtys, setAllocateQtys] = React.useState<Record<string, number>>(
-    {},
-  )
   const { data: lotsData } = useGetListingLotsQuery({
     listing_id: listingId,
     listed: true,
@@ -308,10 +348,10 @@ function AvailableLots({
                           parseInt(e.target.value) || 0,
                         ),
                       )
-                      setAllocateQtys((prev) => ({
-                        ...prev,
+                      setAllocateQtys({
+                        ...allocateQtys,
                         [lot.lot_id]: val,
-                      }))
+                      })
                     }}
                     onFocus={(e) => {
                       if (!allocateQty) {
@@ -319,10 +359,10 @@ function AvailableLots({
                           lot.quantity_available,
                           remaining,
                         )
-                        setAllocateQtys((prev) => ({
-                          ...prev,
+                        setAllocateQtys({
+                          ...allocateQtys,
                           [lot.lot_id]: autoFill,
-                        }))
+                        })
                       }
                     }}
                     disabled={isFullyAllocated}
@@ -350,10 +390,10 @@ function AvailableLots({
                     }
                     onClick={() => {
                       onAllocate(lot.lot_id, listingId, allocateQty)
-                      setAllocateQtys((prev) => ({
-                        ...prev,
+                      setAllocateQtys({
+                        ...allocateQtys,
                         [lot.lot_id]: 0,
-                      }))
+                      })
                     }}
                   >
                     <KeyboardArrowRight />
