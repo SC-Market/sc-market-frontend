@@ -328,7 +328,9 @@ export function ViewOrder() {
                 <>
                   {!(isLoading || isFetching) && order ? (
                     isAssigned ? (
-                      <OrderMessagesArea order={order} />
+                      <Grid item xs={12}>
+                        <OrderMessagesArea order={order} />
+                      </Grid>
                     ) : null
                   ) : (
                     <Grid item xs={12} lg={4} md={6}>

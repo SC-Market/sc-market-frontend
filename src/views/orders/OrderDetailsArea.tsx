@@ -83,21 +83,19 @@ export function OrderMessagesArea(props: { order: Order }) {
   }, [chatObj, setCurrentChat])
 
   return (
-    <Grid item xs={12} lg={4} md={6}>
-      <Paper
-        sx={{
-          maxHeight: 600,
-          display: "flex",
-          alignItems: "space-between",
-          flexDirection: "column",
-          overflow: "hidden",
-        }}
-      >
-        {currentChat && (
-          <MessagesBody key={currentChat.chat_id} forceDesktop={true} />
-        )}
-      </Paper>
-    </Grid>
+    <Paper
+      sx={{
+        maxHeight: 600,
+        display: "flex",
+        alignItems: "space-between",
+        flexDirection: "column",
+        overflow: "hidden",
+      }}
+    >
+      {currentChat && (
+        <MessagesBody key={currentChat.chat_id} forceDesktop={true} />
+      )}
+    </Paper>
   )
 }
 
