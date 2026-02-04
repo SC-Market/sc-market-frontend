@@ -13,9 +13,16 @@ export default [
     plugins: {
       "react-hooks": reactHooks,
     },
+    settings: {
+      react: {
+        version: "detect",
+      },
+    },
     rules: {
       "prettier/prettier": "error",
       "react/jsx-no-target-blank": "off",
+      "react/react-in-jsx-scope": "off",
+      "react/prop-types": "off",
       "react-hooks/exhaustive-deps": "warn",
       "@typescript-eslint/no-explicit-any": "warn",
       "@typescript-eslint/no-unused-vars": "warn",

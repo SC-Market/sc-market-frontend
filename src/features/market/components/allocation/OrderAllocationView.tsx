@@ -52,7 +52,7 @@ export function OrderAllocationView({
   const [selectedAllocations, setSelectedAllocations] = useState<
     Map<string, number>
   >(new Map())
-  const [, setAlert] = useAlertHook()
+  const issueAlert = useAlertHook()
 
   const {
     data: allocationsData,
@@ -84,7 +84,7 @@ export function OrderAllocationView({
   const handleAllocate = async () => {
     // Validation
     if (orderQuantity && totalSelected > orderQuantity) {
-      setAlert({
+      issueAlert({
         severity: "error",
         message: `Cannot allocate ${totalSelected} units - order only needs ${orderQuantity}`,
       })
@@ -94,7 +94,7 @@ export function OrderAllocationView({
     for (const [lotId, quantity] of selectedAllocations.entries()) {
       const lot = lots.find((l) => l.lot_id === lotId)
       if (lot && quantity > lot.quantity_total) {
-        setAlert({
+        issueAlert({
           severity: "error",
           message: `Cannot allocate ${quantity} from lot - only ${lot.quantity_total} available`,
         })
@@ -120,12 +120,12 @@ export function OrderAllocationView({
         allocations: allocationsToCreate,
       }).unwrap()
       setSelectedAllocations(new Map())
-      setAlert({
+      issueAlert({
         severity: "success",
         message: "Stock allocated successfully",
       })
     } catch (error: any) {
-      setAlert({
+      issueAlert({
         severity: "error",
         message: error?.data?.message || "Failed to allocate stock",
       })
@@ -350,7 +350,8 @@ export function OrderAllocationView({
                     headerName: "Lot",
                     flex: 2,
                     valueGetter: (params) =>
-                      params.row.title || `Lot ${params.row.lot_id.substring(0, 8)}`,
+                      params.row.title ||
+                      `Lot ${params.row.lot_id.substring(0, 8)}`,
                   },
                   {
                     field: "quantity_total",
