@@ -28,7 +28,10 @@ import {
 } from "@mui/material"
 import {
   useGetOrderAllocationsQuery,
+  useGetListingLotsQuery,
+  useManualAllocateOrderMutation,
   Allocation,
+  ManualAllocationInput,
 } from "../../../../store/api/stockLotsApi"
 import { ManualAllocationDialog } from "./ManualAllocationDialog"
 import { InventoryRounded, WarningRounded } from "@mui/icons-material"
@@ -44,17 +47,31 @@ export function OrderAllocationView({
   listingId,
   orderQuantity,
 }: OrderAllocationViewProps) {
-  const [manualDialogOpen, setManualDialogOpen] = useState(false)
+  const [selectedAllocations, setSelectedAllocations] = useState<
+    Map<string, number>
+  >(new Map())
 
   // Fetch current allocations
   const {
     data: allocationsData,
-    isLoading,
+    isLoading: allocationsLoading,
     error,
   } = useGetOrderAllocationsQuery({ order_id: orderId })
 
+  // Fetch available lots if listingId provided
+  const { data: lotsData, isLoading: lotsLoading } = useGetListingLotsQuery(
+    { listing_id: listingId!, listed: true },
+    { skip: !listingId },
+  )
+
+  const [manualAllocate, { isLoading: allocating }] =
+    useManualAllocateOrderMutation()
+
   const allocations = allocationsData?.allocations || []
   const totalAllocated = allocationsData?.total_allocated || 0
+  const lots = lotsData?.lots || []
+
+  const isLoading = allocationsLoading || lotsLoading
 
   // Group allocations by location for better display
   const allocationsByLocation = useMemo(() => {
@@ -122,16 +139,6 @@ export function OrderAllocationView({
                 <InventoryRounded color="primary" />
                 <Typography variant="h6">Stock Allocation</Typography>
               </Stack>
-
-              {listingId && (
-                <Button
-                  variant="outlined"
-                  size="small"
-                  onClick={() => setManualDialogOpen(true)}
-                >
-                  Manage Allocation
-                </Button>
-              )}
             </Stack>
 
             {/* Allocation Status */}
@@ -254,11 +261,11 @@ export function OrderAllocationView({
         </CardContent>
       </Card>
 
-      {/* Manual Allocation Dialog */}
+      {/* Manual Allocation - Always Visible */}
       {listingId && (
         <ManualAllocationDialog
-          open={manualDialogOpen}
-          onClose={() => setManualDialogOpen(false)}
+          open={true}
+          onClose={() => {}}
           orderId={orderId}
           listingId={listingId}
           orderQuantity={orderQuantity}
