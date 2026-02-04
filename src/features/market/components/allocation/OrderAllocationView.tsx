@@ -82,6 +82,7 @@ export function OrderAllocationView({
   const allocations = allocationsData?.allocations || []
   const totalAllocated = allocationsData?.total_allocated || 0
   const lots = (lotsData?.lots || []).filter((lot) => lot.quantity_total > 0)
+  const aggregates = lotsData?.aggregates
   const listingTitle = listingData?.listing?.details?.title || "Item"
 
   const totalSelected = useMemo(
@@ -230,6 +231,17 @@ export function OrderAllocationView({
                 }
                 size="small"
               />
+              {aggregates && (
+                <>
+                  <Typography variant="body2" color="text.secondary">
+                    •
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Available Stock:
+                  </Typography>
+                  <Chip label={aggregates.available} size="small" />
+                </>
+              )}
             </Stack>
 
             {/* Warning for partial allocation */}
