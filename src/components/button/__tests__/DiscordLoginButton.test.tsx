@@ -3,7 +3,7 @@ import { render, screen, fireEvent } from "@testing-library/react"
 import { MemoryRouter } from "react-router-dom"
 
 // Type declaration for require in Jest tests
-declare const require: (module: string) => any
+declare const require: (module: string) => unknown
 
 // Mock i18n hook to return the key fallback
 jest.mock("react-i18next", () => ({

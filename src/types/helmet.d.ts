@@ -27,17 +27,17 @@ declare module "react-helmet" {
   type MetaProps = JSX.IntrinsicElements["meta"]
 
   export interface HelmetTags {
-    baseTag: any[]
+    baseTag: unknown[]
     linkTags: HTMLLinkElement[]
     metaTags: HTMLMetaElement[]
-    noscriptTags: any[]
+    noscriptTags: unknown[]
     scriptTags: HTMLScriptElement[]
     styleTags: HTMLStyleElement[]
   }
 
   export interface HelmetProps {
     async?: boolean | undefined
-    base?: any
+    base?: unknown
     bodyAttributes?: BodyProps | undefined
     children?: React.ReactNode
     defaultTitle?: string | undefined
@@ -46,16 +46,16 @@ declare module "react-helmet" {
     htmlAttributes?: HtmlProps | undefined
     onChangeClientState?:
       | ((
-          newState: any,
+          newState: unknown,
           addedTags: HelmetTags,
           removedTags: HelmetTags,
         ) => void)
       | undefined
     link?: LinkProps[] | undefined
     meta?: MetaProps[] | undefined
-    noscript?: any[] | undefined
-    script?: any[] | undefined
-    style?: any[] | undefined
+    noscript?: unknown[] | undefined
+    script?: unknown[] | undefined
+    style?: unknown[] | undefined
     title?: string | undefined
     titleAttributes?: object | undefined
     titleTemplate?: string | undefined

@@ -83,7 +83,7 @@ export function ReportButton({
     setIsSubmitting(true)
     reportContent({
       reported_url: getCurrentUrl(),
-      report_reason: reason as any,
+      report_reason: reason,
       report_details: details || undefined,
     })
       .unwrap()
