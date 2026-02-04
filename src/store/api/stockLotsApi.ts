@@ -195,6 +195,10 @@ export const stockLotsApi = serviceApi.injectEndpoints({
       { order_id: string }
     >({
       query: ({ order_id }) => `/api/orders/${order_id}/allocations`,
+      providesTags: (result, error, { order_id }) => [
+        { type: "Orders", id: order_id },
+        { type: "Orders", id: "ALLOCATIONS" },
+      ],
     }),
 
     // Manual allocate order
@@ -207,6 +211,15 @@ export const stockLotsApi = serviceApi.injectEndpoints({
         method: "POST",
         body: { allocations },
       }),
+      invalidatesTags: (result, error, { order_id, allocations }) => [
+        { type: "Orders", id: order_id },
+        { type: "Orders", id: "ALLOCATIONS" },
+        { type: "MarketListings", id: "SEARCH" },
+        ...allocations.map((a) => ({
+          type: "MarketListings" as const,
+          id: a.listing_id,
+        })),
+      ],
     }),
 
     // Search all lots

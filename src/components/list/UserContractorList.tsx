@@ -25,7 +25,9 @@ export function UserContractorList(props: {
   return (
     <List sx={{ paddingTop: 0, paddingBottom: 0 }}>
       {contractors ? (
-        contractors.map((c) => <UserContractorListItem membership={c} />)
+        contractors.map((c) => (
+          <UserContractorListItem key={c.contractor_id} membership={c} />
+        ))
       ) : (
         <Typography
           color={"text.primary"}

@@ -99,7 +99,6 @@ export function MarkdownRender(props: {
   return (
     <ReactMarkdown
       {...MarkdownProps}
-      children={props.text}
       remarkPlugins={[remarkGfm]}
       rehypePlugins={[rehypeRaw, [rehypeSanitize, sanitizeSchema]]}
       components={{
@@ -276,7 +275,9 @@ export function MarkdownRender(props: {
         },
         ...MarkdownProps?.components,
       }}
-    />
+    >
+      {props.text}
+    </ReactMarkdown>
   )
 }
 

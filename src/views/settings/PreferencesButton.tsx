@@ -1,8 +1,8 @@
+import React, { useState } from "react"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { Fab, Popover, useMediaQuery } from "@mui/material"
 import { SettingsRounded } from "@mui/icons-material"
-import { useState } from "react"
 import { useTranslation } from "react-i18next"
 import { PreferencesControls } from "../../components/settings/PreferencesControls"
 

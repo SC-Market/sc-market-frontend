@@ -10,32 +10,33 @@
 import React, { useState, useMemo } from "react"
 import {
   Box,
-  Button,
   Card,
   CardContent,
   Chip,
-  Divider,
   Stack,
+  TextField,
+  Typography,
+  Alert,
+  CircularProgress,
+  Divider,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  TextField,
-  Typography,
-  Alert,
-  CircularProgress,
 } from "@mui/material"
+import { DataGrid, GridColDef } from "@mui/x-data-grid"
+import LoadingButton from "@mui/lab/LoadingButton"
 import {
   useGetOrderAllocationsQuery,
   useGetListingLotsQuery,
   useManualAllocateOrderMutation,
-  Allocation,
   ManualAllocationInput,
+  Allocation,
 } from "../../../../store/api/stockLotsApi"
-import { ManualAllocationDialog } from "./ManualAllocationDialog"
 import { InventoryRounded, WarningRounded } from "@mui/icons-material"
+import { useAlertHook } from "../../../../hooks/alert/AlertHook"
 
 interface OrderAllocationViewProps {
   orderId: string
@@ -51,15 +52,14 @@ export function OrderAllocationView({
   const [selectedAllocations, setSelectedAllocations] = useState<
     Map<string, number>
   >(new Map())
+  const [, setAlert] = useAlertHook()
 
-  // Fetch current allocations
   const {
     data: allocationsData,
     isLoading: allocationsLoading,
-    error,
+    error: allocationsError,
   } = useGetOrderAllocationsQuery({ order_id: orderId })
 
-  // Fetch available lots if listingId provided
   const { data: lotsData, isLoading: lotsLoading } = useGetListingLotsQuery(
     { listing_id: listingId!, listed: true },
     { skip: !listingId },
@@ -70,7 +70,67 @@ export function OrderAllocationView({
 
   const allocations = allocationsData?.allocations || []
   const totalAllocated = allocationsData?.total_allocated || 0
-  const lots = lotsData?.lots || []
+  const lots = (lotsData?.lots || []).filter((lot) => lot.quantity_total > 0)
+
+  const totalSelected = useMemo(
+    () =>
+      Array.from(selectedAllocations.values()).reduce(
+        (sum, qty) => sum + qty,
+        0,
+      ),
+    [selectedAllocations],
+  )
+
+  const handleAllocate = async () => {
+    // Validation
+    if (orderQuantity && totalSelected > orderQuantity) {
+      setAlert({
+        severity: "error",
+        message: `Cannot allocate ${totalSelected} units - order only needs ${orderQuantity}`,
+      })
+      return
+    }
+
+    for (const [lotId, quantity] of selectedAllocations.entries()) {
+      const lot = lots.find((l) => l.lot_id === lotId)
+      if (lot && quantity > lot.quantity_total) {
+        setAlert({
+          severity: "error",
+          message: `Cannot allocate ${quantity} from lot - only ${lot.quantity_total} available`,
+        })
+        return
+      }
+    }
+
+    const allocationsToCreate: ManualAllocationInput[] = Array.from(
+      selectedAllocations.entries(),
+    )
+      .filter(([_, quantity]) => quantity > 0)
+      .map(([lot_id, quantity]) => ({
+        listing_id: listingId!,
+        lot_id,
+        quantity,
+      }))
+
+    if (allocationsToCreate.length === 0) return
+
+    try {
+      await manualAllocate({
+        order_id: orderId,
+        allocations: allocationsToCreate,
+      }).unwrap()
+      setSelectedAllocations(new Map())
+      setAlert({
+        severity: "success",
+        message: "Stock allocated successfully",
+      })
+    } catch (error: any) {
+      setAlert({
+        severity: "error",
+        message: error?.data?.message || "Failed to allocate stock",
+      })
+    }
+  }
 
   const isLoading = allocationsLoading || lotsLoading
 
@@ -113,7 +173,7 @@ export function OrderAllocationView({
     )
   }
 
-  if (error) {
+  if (allocationsError) {
     return (
       <Card>
         <CardContent>
@@ -173,7 +233,7 @@ export function OrderAllocationView({
               <Alert severity="info">
                 No stock has been allocated to this order yet.
                 {listingId &&
-                  " Click 'Manage Allocation' to manually allocate stock."}
+                  " Use the allocation interface below to assign stock."}
               </Alert>
             )}
 
@@ -248,16 +308,6 @@ export function OrderAllocationView({
                 </TableContainer>
               </>
             )}
-
-            {/* Notes about allocation */}
-            {hasAllocations && (
-              <Box>
-                <Typography variant="caption" color="text.secondary">
-                  Stock allocations are automatically created when orders are
-                  placed. You can manually adjust allocations if needed.
-                </Typography>
-              </Box>
-            )}
           </Stack>
         </CardContent>
       </Card>
@@ -268,87 +318,86 @@ export function OrderAllocationView({
           <CardContent>
             <Stack spacing={2}>
               <Typography variant="h6">Allocate Stock</Typography>
-              
+
               <Stack direction="row" spacing={2} alignItems="center">
                 <Typography variant="body2">Selected:</Typography>
                 <Chip
-                  label={`${Array.from(selectedAllocations.values()).reduce((sum, qty) => sum + qty, 0)}${orderQuantity ? ` / ${orderQuantity}` : ""}`}
-                  color="primary"
+                  label={`${totalSelected}${orderQuantity ? ` / ${orderQuantity}` : ""}`}
+                  color={
+                    orderQuantity && totalSelected > orderQuantity
+                      ? "error"
+                      : totalSelected > 0
+                        ? "primary"
+                        : "default"
+                  }
                   size="small"
                 />
               </Stack>
 
-              <TableContainer>
-                <Table size="small">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Location</TableCell>
-                      <TableCell>Lot ID</TableCell>
-                      <TableCell align="right">Available</TableCell>
-                      <TableCell align="right">Allocate</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {lots.map((lot) => (
-                      <TableRow key={lot.lot_id}>
-                        <TableCell>{lot.location_id || "Unspecified"}</TableCell>
-                        <TableCell>{lot.lot_id.substring(0, 8)}...</TableCell>
-                        <TableCell align="right">{lot.quantity_total}</TableCell>
-                        <TableCell align="right">
-                          <TextField
-                            type="number"
-                            size="small"
-                            value={selectedAllocations.get(lot.lot_id) || 0}
-                            onChange={(e) => {
-                              const qty = parseInt(e.target.value) || 0
-                              const newMap = new Map(selectedAllocations)
-                              if (qty > 0) {
-                                newMap.set(lot.lot_id, qty)
-                              } else {
-                                newMap.delete(lot.lot_id)
-                              }
-                              setSelectedAllocations(newMap)
-                            }}
-                            inputProps={{ min: 0, max: lot.quantity_total }}
-                            sx={{ width: 100 }}
-                          />
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
+              <DataGrid
+                rows={lots}
+                getRowId={(row) => row.lot_id}
+                columns={[
+                  {
+                    field: "location_name",
+                    headerName: "Location",
+                    flex: 1,
+                    valueGetter: (params) =>
+                      params.row.location?.name || "Unspecified",
+                  },
+                  {
+                    field: "title",
+                    headerName: "Lot",
+                    flex: 2,
+                    valueGetter: (params) =>
+                      params.row.title || `Lot ${params.row.lot_id.substring(0, 8)}`,
+                  },
+                  {
+                    field: "quantity_total",
+                    headerName: "Available",
+                    width: 100,
+                    align: "right",
+                    headerAlign: "right",
+                  },
+                  {
+                    field: "allocate",
+                    headerName: "Allocate",
+                    width: 120,
+                    renderCell: (params) => (
+                      <TextField
+                        type="number"
+                        size="small"
+                        value={selectedAllocations.get(params.row.lot_id) || ""}
+                        onChange={(e) => {
+                          const qty = parseInt(e.target.value) || 0
+                          const newMap = new Map(selectedAllocations)
+                          if (qty > 0 && qty <= params.row.quantity_total) {
+                            newMap.set(params.row.lot_id, qty)
+                          } else {
+                            newMap.delete(params.row.lot_id)
+                          }
+                          setSelectedAllocations(newMap)
+                        }}
+                        inputProps={{ min: 0, max: params.row.quantity_total }}
+                        sx={{ width: 100 }}
+                      />
+                    ),
+                  },
+                ]}
+                autoHeight
+                disableRowSelectionOnClick
+                hideFooter
+              />
 
               <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-                <Button
+                <LoadingButton
                   variant="contained"
-                  onClick={async () => {
-                    const allocationsToCreate: ManualAllocationInput[] = Array.from(
-                      selectedAllocations.entries(),
-                    )
-                      .filter(([_, quantity]) => quantity > 0)
-                      .map(([lot_id, quantity]) => ({
-                        listing_id: listingId!,
-                        lot_id,
-                        quantity,
-                      }))
-
-                    if (allocationsToCreate.length === 0) return
-
-                    try {
-                      await manualAllocate({
-                        order_id: orderId,
-                        allocations: allocationsToCreate,
-                      }).unwrap()
-                      setSelectedAllocations(new Map())
-                    } catch (error) {
-                      console.error("Failed to allocate:", error)
-                    }
-                  }}
-                  disabled={allocating || selectedAllocations.size === 0}
+                  onClick={handleAllocate}
+                  loading={allocating}
+                  disabled={selectedAllocations.size === 0}
                 >
-                  {allocating ? "Allocating..." : "Allocate Stock"}
-                </Button>
+                  Allocate Stock
+                </LoadingButton>
               </Box>
             </Stack>
           </CardContent>
