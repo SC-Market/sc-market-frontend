@@ -196,6 +196,9 @@ export const stockLotsApi = serviceApi.injectEndpoints({
       { order_id: string }
     >({
       query: ({ order_id }) => `/api/orders/${order_id}/allocations`,
+      transformResponse: (response: {
+        data: { allocations: Allocation[]; total_allocated: number }
+      }) => response.data,
       providesTags: (result, error, { order_id }) => [
         { type: "Orders", id: order_id },
         { type: "Orders", id: "ALLOCATIONS" },

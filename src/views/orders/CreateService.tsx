@@ -34,7 +34,7 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 function romanize(num: number) {
   if (isNaN(num)) return NaN
-  let digits = String(+num).split(""),
+  const digits = String(+num).split(""),
     key = [
       "",
       "C",
