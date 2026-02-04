@@ -7,7 +7,7 @@ interface BeforeInstallPromptEvent extends Event {
 
 // Global state to share the deferred prompt across components
 let globalDeferredPrompt: BeforeInstallPromptEvent | null = null
-let globalPromptListeners: Set<() => void> = new Set()
+const globalPromptListeners: Set<() => void> = new Set()
 
 /**
  * Hook to manage PWA install prompt

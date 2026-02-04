@@ -1,6 +1,6 @@
 /**
  * AllAllocatedLotsGrid Component
- * 
+ *
  * Displays all stock lots that are currently allocated to orders
  */
 
