@@ -330,6 +330,9 @@ function AllocationTarget({
     amountToRemove: number,
   ) => void
 }) {
+  const [deallocateQtys, setDeallocateQtys] = React.useState<
+    Record<string, number>
+  >({})
   const title = getListingTitle(listingData)
   const image = getListingImage(listingData)
 
@@ -369,7 +372,7 @@ function AllocationTarget({
         </TableHead>
         <TableBody>
           {allocations.map((alloc) => {
-            const [deallocateQty, setDeallocateQty] = React.useState(0)
+            const deallocateQty = deallocateQtys[alloc.allocation_id] || 0
             return (
               <TableRow key={alloc.allocation_id}>
                 <TableCell>
@@ -384,7 +387,10 @@ function AllocationTarget({
                         alloc.quantity,
                         deallocateQty,
                       )
-                      setDeallocateQty(0)
+                      setDeallocateQtys((prev) => ({
+                        ...prev,
+                        [alloc.allocation_id]: 0,
+                      }))
                     }}
                   >
                     <KeyboardArrowLeft />
@@ -400,7 +406,10 @@ function AllocationTarget({
                         0,
                         Math.min(alloc.quantity, parseInt(e.target.value) || 0),
                       )
-                      setDeallocateQty(val)
+                      setDeallocateQtys((prev) => ({
+                        ...prev,
+                        [alloc.allocation_id]: val,
+                      }))
                     }}
                     InputProps={{
                       endAdornment: (
