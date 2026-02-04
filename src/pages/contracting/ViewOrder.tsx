@@ -368,7 +368,11 @@ export function ViewOrder() {
                 <Grid item xs={12}>
                   <OrderAllocationView
                     orderId={order.order_id}
-                    listingId={order.market_listings?.[0]?.listing_id}
+                    listingId={
+                      typeof order.market_listings?.[0]?.listing_id === "string"
+                        ? order.market_listings[0].listing_id
+                        : order.market_listings?.[0]?.listing_id?.listing_id
+                    }
                     orderQuantity={order.market_listings?.[0]?.quantity}
                   />
                 </Grid>
