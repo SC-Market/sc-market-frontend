@@ -18,6 +18,7 @@ import {
   FetchBaseQueryError,
 } from "@reduxjs/toolkit/query"
 import type { ThunkDispatch, AnyAction } from "@reduxjs/toolkit"
+import type { RootState } from "../store/store"
 
 /**
  * Type for optimistic update patches that can be rolled back
@@ -51,8 +52,8 @@ export function isOptimisticItem(item: {
  */
 export type OptimisticUpdateHandler<TArg, TResult> = (
   arg: TArg,
-  dispatch: ThunkDispatch<unknown, unknown, AnyAction>,
-  getState: () => unknown,
+  dispatch: ThunkDispatch<RootState, unknown, AnyAction>,
+  getState: () => RootState,
 ) => OptimisticPatch | OptimisticPatch[]
 
 /**
@@ -91,10 +92,10 @@ export type OptimisticUpdateHandler<TArg, TResult> = (
  */
 export async function createOptimisticUpdate<TArg, TResult>(
   updateFn: (
-    dispatch: ThunkDispatch<unknown, unknown, AnyAction>,
+    dispatch: ThunkDispatch<RootState, unknown, AnyAction>,
   ) => OptimisticPatch | OptimisticPatch[],
   queryFulfilled: Promise<{ data: TResult }>,
-  dispatch: ThunkDispatch<unknown, unknown, AnyAction>,
+  dispatch: ThunkDispatch<RootState, unknown, AnyAction>,
 ): Promise<void> {
   // Perform optimistic update
   const patches = updateFn(dispatch)
