@@ -83,17 +83,16 @@ export function SplitAllocationView({
   const [manualAllocate, { isLoading: allocating }] =
     useManualAllocateOrderMutation()
 
-  const allocations = allocationsData?.allocations || []
+  const groupedAllocations = allocationsData?.grouped_allocations || []
 
-  // Group allocations by listing
+  // Create a map of listing_id to allocated quantity
   const allocationsByListing = useMemo(() => {
     const map = new Map<string, number>()
-    allocations.forEach((alloc) => {
-      const current = map.get(alloc.listing_id) || 0
-      map.set(alloc.listing_id, current + alloc.quantity)
+    groupedAllocations.forEach((group) => {
+      map.set(group.listing_id, group.total_allocated)
     })
     return map
-  }, [allocations])
+  }, [groupedAllocations])
 
   const handleAllocate = async () => {
     const allocationsToCreate: ManualAllocationInput[] = Array.from(
@@ -108,7 +107,7 @@ export function SplitAllocationView({
       const pendingForListing = allocationsToCreate
         .filter((a) => a.listing_id === listing.listing_id)
         .reduce((sum, a) => sum + a.quantity, 0)
-      
+
       if (currentAllocated + pendingForListing > listing.quantity) {
         issueAlert({
           severity: "error",
@@ -144,15 +143,21 @@ export function SplitAllocationView({
           <Grid item xs={12} md={6}>
             <Stack spacing={2}>
               <Typography variant="h6">Available Stock</Typography>
-              {listings.map((listing) => (
-                <AvailableLots
-                  key={listing.listing_id}
-                  listingId={listing.listing_id}
-                  pendingAllocations={pendingAllocations}
-                  setPendingAllocations={setPendingAllocations}
-                  allocations={allocations}
-                />
-              ))}
+              {listings.map((listing) => {
+                const group = groupedAllocations.find(
+                  (g) => g.listing_id === listing.listing_id,
+                )
+                return (
+                  <AvailableLots
+                    key={listing.listing_id}
+                    listingId={listing.listing_id}
+                    listingData={group?.listing}
+                    pendingAllocations={pendingAllocations}
+                    setPendingAllocations={setPendingAllocations}
+                    allocations={group?.allocations || []}
+                  />
+                )
+              })}
             </Stack>
           </Grid>
 
@@ -160,17 +165,21 @@ export function SplitAllocationView({
           <Grid item xs={12} md={6}>
             <Stack spacing={2}>
               <Typography variant="h6">Allocation Targets</Typography>
-              {listings.map((listing) => (
-                <AllocationTarget
-                  key={listing.listing_id}
-                  listingId={listing.listing_id}
-                  required={listing.quantity}
-                  allocated={allocationsByListing.get(listing.listing_id) || 0}
-                  allocations={allocations.filter(
-                    (a) => a.listing_id === listing.listing_id,
-                  )}
-                />
-              ))}
+              {listings.map((listing) => {
+                const group = groupedAllocations.find(
+                  (g) => g.listing_id === listing.listing_id,
+                )
+                return (
+                  <AllocationTarget
+                    key={listing.listing_id}
+                    listingId={listing.listing_id}
+                    listingData={group?.listing}
+                    required={listing.quantity}
+                    allocated={allocationsByListing.get(listing.listing_id) || 0}
+                    allocations={group?.allocations || []}
+                  />
+                )
+              })}
               <LoadingButton
                 variant="contained"
                 onClick={handleAllocate}
@@ -190,11 +199,13 @@ export function SplitAllocationView({
 
 function AvailableLots({
   listingId,
+  listingData,
   pendingAllocations,
   setPendingAllocations,
   allocations,
 }: {
   listingId: string
+  listingData?: any
   pendingAllocations: Map<
     string,
     { lot_id: string; listing_id: string; quantity: number }
@@ -208,7 +219,6 @@ function AvailableLots({
     listing_id: listingId,
     listed: true,
   })
-  const { data: listingData } = useGetMarketListingQuery(listingId)
 
   const allocatedByLot = useMemo(() => {
     const map = new Map<string, number>()
@@ -242,7 +252,11 @@ function AvailableLots({
       <CardContent>
         <Stack spacing={1}>
           <Stack direction="row" spacing={1} alignItems="center">
-            <Avatar src={image} sx={{ width: 32, height: 32, borderRadius: 1 }} variant="rounded">
+            <Avatar
+              src={image}
+              sx={{ width: 32, height: 32, borderRadius: 1 }}
+              variant="rounded"
+            >
               <InventoryRounded />
             </Avatar>
             <Typography variant="subtitle2">{title}</Typography>
@@ -294,22 +308,19 @@ function AvailableLots({
 
 function AllocationTarget({
   listingId,
+  listingData,
   required,
   allocated,
   allocations,
 }: {
   listingId: string
+  listingData?: any
   required: number
   allocated: number
   allocations: Allocation[]
 }) {
-  const { data: listingData } = useGetMarketListingQuery(listingId)
-
-  const title =
-    (listingData?.listing as any)?.details?.title ||
-    (listingData?.listing as any)?.title ||
-    "Item"
-  const image = (listingData?.listing as any)?.photos?.[0]
+  const title = getListingTitle({ listing: listingData })
+  const image = getListingImage({ listing: listingData })
 
   const isComplete = allocated >= required
 
@@ -318,7 +329,11 @@ function AllocationTarget({
       <CardContent>
         <Stack spacing={1}>
           <Stack direction="row" spacing={1} alignItems="center">
-            <Avatar src={image} sx={{ width: 32, height: 32, borderRadius: 1 }} variant="rounded">
+            <Avatar
+              src={image}
+              sx={{ width: 32, height: 32, borderRadius: 1 }}
+              variant="rounded"
+            >
               <InventoryRounded />
             </Avatar>
             <Typography variant="subtitle2">{title}</Typography>

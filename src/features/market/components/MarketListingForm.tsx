@@ -111,7 +111,7 @@ export function MarketListingForm(props: { sale_type: "sale" | "auction" }) {
   const navigate = useNavigate()
 
   const submitMarketListing = useCallback(
-    async (event: any) => {
+    async (event: React.FormEvent) => {
       createListing({
         ...state,
         spectrum_id: currentOrg?.spectrum_id,
@@ -665,7 +665,7 @@ export function AggregateMarketListingForm() {
   const navigate = useNavigate()
 
   const submitMarketListing = useCallback(
-    async (event: any) => {
+    async (event: React.FormEvent) => {
       const res: { data?: any; error?: any } = await createAggregateListing({
         body: state,
         spectrum_id: currentOrg?.spectrum_id,
@@ -965,7 +965,7 @@ export function MarketMultipleForm() {
   const navigate = useNavigate()
 
   const submitMarketListing = useCallback(
-    async (event: any) => {
+    async (event: React.FormEvent) => {
       const res: { data?: any; error?: any } = await createListing({
         body: state,
         spectrum_id: currentOrg?.spectrum_id,

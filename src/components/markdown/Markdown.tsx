@@ -479,7 +479,9 @@ export function MarkdownEditor(props: {
             fullWidth
             minRows={10}
             value={value}
-            onChange={(event: any) => onChange(event.target.value || "")}
+            onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) =>
+              onChange(event.target.value || "")
+            }
             helperText={"Markdown enabled"}
             inputRef={inputRef}
             {...TextFieldProps}

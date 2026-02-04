@@ -31,7 +31,7 @@ const ApexChartComponent = React.lazy(async () => {
   }
 })
 
-export const DynamicApexChart = (props: any) => (
+export const DynamicApexChart = (props: Record<string, unknown>) => (
   <Suspense fallback={<ChartLoadingFallback title="chart" />}>
     <ApexChartComponent {...props} />
   </Suspense>
@@ -39,7 +39,9 @@ export const DynamicApexChart = (props: any) => (
 
 // Dynamic KlineCharts utilities
 export const useDynamicKlineCharts = () => {
-  const [klineCharts, setKlineCharts] = React.useState<any>(null)
+  const [klineCharts, setKlineCharts] = React.useState<
+    typeof import("klinecharts") | null
+  >(null)
   const [loading, setLoading] = React.useState(false)
 
   const loadKlineCharts = React.useCallback(async () => {
@@ -72,9 +74,12 @@ export const DynamicKlineChart = ({
   children,
   ...props
 }: {
-  onInit?: (kline: any) => void
-  onDispose?: (kline: any) => void
-  children?: (kline: any, loading: boolean) => React.ReactNode
+  onInit?: (kline: typeof import("klinecharts")) => void
+  onDispose?: (kline: typeof import("klinecharts")) => void
+  children?: (
+    kline: typeof import("klinecharts"),
+    loading: boolean,
+  ) => React.ReactNode
 }) => {
   const { klineCharts, loadKlineCharts, loading } = useDynamicKlineCharts()
 

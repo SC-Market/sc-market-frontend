@@ -173,7 +173,10 @@ export function SelectLocation() {
                 } (${option.designation})`
               }}
               value={locationTargetObject}
-              onChange={(event: any, newValue: StarmapObject | null) => {
+              onChange={(
+                event: React.SyntheticEvent,
+                newValue: StarmapObject | null,
+              ) => {
                 setLocationTargetObject(newValue)
               }}
               inputValue={locationTarget}

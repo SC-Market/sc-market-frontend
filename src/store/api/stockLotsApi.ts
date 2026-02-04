@@ -44,6 +44,13 @@ export interface Allocation {
   }
 }
 
+export interface AllocationGroup {
+  listing_id: string
+  listing: any // MarketListing type
+  allocations: Allocation[]
+  total_allocated: number
+}
+
 export interface ManualAllocationInput {
   listing_id: string
   lot_id: string
@@ -194,12 +201,12 @@ export const stockLotsApi = serviceApi.injectEndpoints({
 
     // Get order allocations
     getOrderAllocations: builder.query<
-      { allocations: Allocation[]; total_allocated: number },
+      { grouped_allocations: AllocationGroup[]; total_allocated: number },
       { order_id: string }
     >({
       query: ({ order_id }) => `/api/orders/${order_id}/allocations`,
       transformResponse: (response: {
-        data: { allocations: Allocation[]; total_allocated: number }
+        data: { grouped_allocations: AllocationGroup[]; total_allocated: number }
       }) => response.data,
       providesTags: (result, error, { order_id }) => [
         { type: "Orders", id: order_id },
