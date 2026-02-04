@@ -69,58 +69,26 @@ export function SplitAllocationView({
   orderId,
   listings,
 }: SplitAllocationViewProps) {
-  const [pendingAllocations, setPendingAllocations] = useState<
-    Map<string, { lot_id: string; listing_id: string; quantity: number }>
-  >(new Map())
   const issueAlert = useAlertHook()
 
   const { data: allocationsData } = useGetOrderAllocationsQuery({
     order_id: orderId,
   })
 
-  const [manualAllocate, { isLoading: allocating }] =
-    useManualAllocateOrderMutation()
+  const [manualAllocate] = useManualAllocateOrderMutation()
 
   const groupedAllocations = allocationsData?.grouped_allocations || []
 
-  // Create a map of listing_id to allocated quantity
-  const allocationsByListing = useMemo(() => {
-    const map = new Map<string, number>()
-    groupedAllocations.forEach((group) => {
-      map.set(group.listing_id, group.total_allocated)
-    })
-    return map
-  }, [groupedAllocations])
-
-  const handleAllocate = async () => {
-    const allocationsToCreate: ManualAllocationInput[] = Array.from(
-      pendingAllocations.values(),
-    ).filter((alloc) => alloc.quantity > 0)
-
-    if (allocationsToCreate.length === 0) return
-
-    // Validate we're not over-allocating
-    for (const listing of listings) {
-      const currentAllocated = allocationsByListing.get(listing.listing_id) || 0
-      const pendingForListing = allocationsToCreate
-        .filter((a) => a.listing_id === listing.listing_id)
-        .reduce((sum, a) => sum + a.quantity, 0)
-
-      if (currentAllocated + pendingForListing > listing.quantity) {
-        issueAlert({
-          severity: "error",
-          message: `Cannot allocate ${currentAllocated + pendingForListing} units - order only needs ${listing.quantity}`,
-        })
-        return
-      }
-    }
-
+  const handleAllocate = async (
+    lotId: string,
+    listingId: string,
+    quantity: number,
+  ) => {
     try {
       await manualAllocate({
         order_id: orderId,
-        allocations: allocationsToCreate,
+        allocations: [{ lot_id: lotId, listing_id: listingId, quantity }],
       }).unwrap()
-      setPendingAllocations(new Map())
       issueAlert({
         severity: "success",
         message: "Stock allocated successfully",
@@ -132,6 +100,41 @@ export function SplitAllocationView({
       })
     }
   }
+
+  const handleDeallocate = async (
+    allocationId: string,
+    lotId: string,
+    listingId: string,
+    currentQuantity: number,
+    amountToRemove: number,
+  ) => {
+    const newQuantity = Math.max(0, currentQuantity - amountToRemove)
+    try {
+      await manualAllocate({
+        order_id: orderId,
+        allocations: [
+          { lot_id: lotId, listing_id: listingId, quantity: newQuantity },
+        ],
+      }).unwrap()
+      issueAlert({
+        severity: "success",
+        message: "Allocation updated successfully",
+      })
+    } catch (error: any) {
+      issueAlert({
+        severity: "error",
+        message: error?.data?.message || "Failed to update allocation",
+      })
+    }
+  }
+
+  const allocationsByListing = useMemo(() => {
+    const map = new Map<string, number>()
+    groupedAllocations.forEach((group) => {
+      map.set(group.listing_id, group.total_allocated)
+    })
+    return map
+  }, [groupedAllocations])
 
   return (
     <Card>
@@ -150,9 +153,8 @@ export function SplitAllocationView({
                     key={listing.listing_id}
                     listingId={listing.listing_id}
                     listingData={group?.listing}
-                    pendingAllocations={pendingAllocations}
-                    setPendingAllocations={setPendingAllocations}
                     allocations={group?.allocations || []}
+                    onAllocate={handleAllocate}
                   />
                 )
               })}
@@ -177,18 +179,10 @@ export function SplitAllocationView({
                       allocationsByListing.get(listing.listing_id) || 0
                     }
                     allocations={group?.allocations || []}
+                    onDeallocate={handleDeallocate}
                   />
                 )
               })}
-              <LoadingButton
-                variant="contained"
-                onClick={handleAllocate}
-                loading={allocating}
-                disabled={pendingAllocations.size === 0}
-                fullWidth
-              >
-                Allocate Stock
-              </LoadingButton>
             </Stack>
           </Grid>
         </Grid>
@@ -200,20 +194,13 @@ export function SplitAllocationView({
 function AvailableLots({
   listingId,
   listingData,
-  pendingAllocations,
-  setPendingAllocations,
   allocations,
+  onAllocate,
 }: {
   listingId: string
   listingData?: any
-  pendingAllocations: Map<
-    string,
-    { lot_id: string; listing_id: string; quantity: number }
-  >
-  setPendingAllocations: (
-    map: Map<string, { lot_id: string; listing_id: string; quantity: number }>,
-  ) => void
   allocations: Allocation[]
+  onAllocate: (lotId: string, listingId: string, quantity: number) => void
 }) {
   const { data: lotsData } = useGetListingLotsQuery({
     listing_id: listingId,
@@ -273,76 +260,53 @@ function AvailableLots({
           </TableRow>
         </TableHead>
         <TableBody>
-          {lots.map((lot) => {
-            const pending = pendingAllocations.get(lot.lot_id)
-            const quantity = pending?.quantity || 0
-
-            return (
-              <TableRow key={lot.lot_id}>
-                <TableCell>{lot.location?.name || "Unknown"}</TableCell>
-                <TableCell>
-                  <Stack direction="row" spacing={1} alignItems="center">
-                    <Avatar
-                      src={image}
-                      sx={{ width: 24, height: 24, borderRadius: 1 }}
-                      variant="rounded"
-                    >
-                      <InventoryRounded fontSize="small" />
-                    </Avatar>
-                    <Typography variant="body2">{title}</Typography>
-                  </Stack>
-                </TableCell>
-                <TableCell>
-                  <TextField
-                    type="number"
-                    size="small"
-                    value={quantity}
-                    onChange={(e) => {
-                      const val = Math.max(
-                        0,
-                        Math.min(
-                          lot.quantity_available,
-                          parseInt(e.target.value) || 0,
-                        ),
-                      )
-                      const newMap = new Map(pendingAllocations)
-                      if (val > 0) {
-                        newMap.set(lot.lot_id, {
-                          lot_id: lot.lot_id,
-                          listing_id: listingId,
-                          quantity: val,
-                        })
-                      } else {
-                        newMap.delete(lot.lot_id)
-                      }
-                      setPendingAllocations(newMap)
-                    }}
-                    inputProps={{
-                      min: 0,
-                      max: lot.quantity_available,
-                    }}
-                    sx={{ width: 80 }}
-                  />
-                  <Typography variant="caption" color="text.secondary" ml={1}>
-                    / {lot.quantity_available}
-                  </Typography>
-                </TableCell>
-                <TableCell>
-                  <IconButton
-                    size="small"
-                    disabled={quantity === 0}
-                    onClick={() => {
-                      const newMap = new Map(pendingAllocations)
-                      newMap.delete(lot.lot_id)
-                      setPendingAllocations(newMap)
-                    }}
+          {lots.map((lot) => (
+            <TableRow key={lot.lot_id}>
+              <TableCell>{lot.location?.name || "Unknown"}</TableCell>
+              <TableCell>
+                <Stack direction="row" spacing={1} alignItems="center">
+                  <Avatar
+                    src={image}
+                    sx={{ width: 24, height: 24, borderRadius: 1 }}
+                    variant="rounded"
                   >
-                    <ArrowForwardRounded />
-                  </IconButton>
-                </TableCell>
-              </TableRow>
-            )
-          })}
+                    <InventoryRounded fontSize="small" />
+                  </Avatar>
+                  <Typography variant="body2">{title}</Typography>
+                </Stack>
+              </TableCell>
+              <TableCell>
+                <TextField
+                  type="number"
+                  size="small"
+                  onChange={(e) => {
+                    const val = Math.max(
+                      0,
+                      Math.min(
+                        lot.quantity_available,
+                        parseInt(e.target.value) || 0,
+                      ),
+                    )
+                    if (val > 0) {
+                      onAllocate(lot.lot_id, listingId, val)
+                      e.target.value = ""
+                    }
+                  }}
+                  placeholder={`/ ${lot.quantity_available}`}
+                  inputProps={{
+                    min: 0,
+                    max: lot.quantity_available,
+                  }}
+                  sx={{ width: 120 }}
+                />
+              </TableCell>
+              <TableCell>
+                <IconButton size="small" disabled>
+                  <ArrowForwardRounded />
+                </IconButton>
+              </TableCell>
+            </TableRow>
+          ))}
         </TableBody>
       </Table>
     </Box>
@@ -355,12 +319,20 @@ function AllocationTarget({
   required,
   allocated,
   allocations,
+  onDeallocate,
 }: {
   listingId: string
   listingData?: any
   required: number
   allocated: number
   allocations: Allocation[]
+  onDeallocate: (
+    allocationId: string,
+    lotId: string,
+    listingId: string,
+    currentQuantity: number,
+    amountToRemove: number,
+  ) => void
 }) {
   const title = getListingTitle(listingData)
   const image = getListingImage(listingData)
@@ -400,17 +372,52 @@ function AllocationTarget({
           </TableRow>
         </TableHead>
         <TableBody>
-          {allocations.map((alloc) => (
-            <TableRow key={alloc.allocation_id}>
-              <TableCell>
-                <IconButton size="small" disabled>
-                  <ArrowBackRounded />
-                </IconButton>
-              </TableCell>
-              <TableCell>{alloc.quantity}</TableCell>
-              <TableCell>{alloc.lot?.location?.name || "Unknown"}</TableCell>
-            </TableRow>
-          ))}
+          {allocations.map((alloc) => {
+            const [deallocateQty, setDeallocateQty] = React.useState(0)
+            return (
+              <TableRow key={alloc.allocation_id}>
+                <TableCell>
+                  <IconButton
+                    size="small"
+                    disabled={deallocateQty === 0}
+                    onClick={() => {
+                      onDeallocate(
+                        alloc.allocation_id,
+                        alloc.lot_id,
+                        listingId,
+                        alloc.quantity,
+                        deallocateQty,
+                      )
+                      setDeallocateQty(0)
+                    }}
+                  >
+                    <ArrowBackRounded />
+                  </IconButton>
+                </TableCell>
+                <TableCell>
+                  <TextField
+                    type="number"
+                    size="small"
+                    value={deallocateQty}
+                    onChange={(e) => {
+                      const val = Math.max(
+                        0,
+                        Math.min(alloc.quantity, parseInt(e.target.value) || 0),
+                      )
+                      setDeallocateQty(val)
+                    }}
+                    placeholder={`/ ${alloc.quantity}`}
+                    inputProps={{
+                      min: 0,
+                      max: alloc.quantity,
+                    }}
+                    sx={{ width: 120 }}
+                  />
+                </TableCell>
+                <TableCell>{alloc.lot?.location?.name || "Unknown"}</TableCell>
+              </TableRow>
+            )
+          })}
         </TableBody>
       </Table>
     </Box>

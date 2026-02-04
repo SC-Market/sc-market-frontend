@@ -214,7 +214,7 @@ const ordersApi = serviceApi.injectEndpoints({
                 order_id,
                 (draft) => {
                   oldStatus = draft.status
-                  draft.status = status as any
+                  draft.status = status
                 },
               ),
             )
@@ -222,7 +222,9 @@ const ordersApi = serviceApi.injectEndpoints({
 
             // Optimistically update search results
             // Update all cached search queries
-            const state = getState() as any
+            const state = getState() as {
+              api?: { queries?: Record<string, unknown> }
+            }
             const cachedQueries = state.api?.queries || {}
 
             Object.keys(cachedQueries).forEach((queryKey) => {
@@ -269,7 +271,7 @@ const ordersApi = serviceApi.injectEndpoints({
                                 ] as number) || 0) + 1
                             }
                             // Update order status
-                            order.status = status as any
+                            order.status = status
                           }
                         },
                       ),
@@ -306,7 +308,9 @@ const ordersApi = serviceApi.injectEndpoints({
     >({
       query: (queryParams) => {
         // Convert boolean filters to strings for query params
-        const params: any = { ...queryParams }
+        const params: Record<string, string | number | boolean | undefined> = {
+          ...queryParams,
+        }
         if (params.has_market_listings !== undefined) {
           params.has_market_listings = String(params.has_market_listings)
         }

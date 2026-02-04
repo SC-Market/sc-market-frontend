@@ -8,6 +8,7 @@ import {
 } from "../hooks/login/UserProfile"
 import { OrderReview } from "../datatypes/Order"
 import { serviceApi } from "./service"
+import type { RootState } from "./store"
 import { DiscordSettings, OrderWebhook, Rating } from "../datatypes/Contractor"
 import { unwrapResponse } from "./api-utils"
 import { Language } from "../constants/languages"
@@ -266,7 +267,7 @@ export const userApi = serviceApi.injectEndpoints({
             patches.push(profilePatch)
 
             // Also update if viewing own profile by username
-            const state = getState() as { api?: { queries?: Record<string, { data?: UserProfileState }> } }
+            const state = getState() as RootState
             const profile =
               state?.api?.queries?.["profileGetUserProfile(undefined)"]?.data
             if (profile?.username) {
@@ -379,8 +380,11 @@ export const userApi = serviceApi.injectEndpoints({
       void
     >({
       query: () => `${baseUrl}/links`,
-      transformResponse: (response: { data: { providers: Array<{ provider_type: string; provider_id: string }> } }) =>
-        response.data.providers,
+      transformResponse: (response: {
+        data: {
+          providers: Array<{ provider_type: string; provider_id: string }>
+        }
+      }) => response.data.providers,
       providesTags: [{ type: "MyProfile" as const }, "MyProfile" as const],
     }),
     profileUnlinkProvider: builder.mutation<void, { provider_type: string }>({
