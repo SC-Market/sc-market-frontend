@@ -161,13 +161,14 @@ export function SplitAllocationView({
     setInputValues((prev) => {
       const newValues: Record<string, Record<string, number>> = {}
       listings.forEach((listing) => {
-        const currentAllocated = allocationsByListing.get(listing.listing_id) || 0
+        const currentAllocated =
+          allocationsByListing.get(listing.listing_id) || 0
         const remaining = listing.quantity - currentAllocated
         const group = groupedAllocations.find(
           (g) => g.listing_id === listing.listing_id,
         )
         const lotsData = group?.allocations || []
-        
+
         newValues[listing.listing_id] = {}
         // Only update if there's remaining to allocate
         if (remaining > 0) {
@@ -175,7 +176,8 @@ export function SplitAllocationView({
             if (alloc.lot) {
               const lotId = alloc.lot_id
               // Keep existing value if it exists and is valid, otherwise set to 0
-              newValues[listing.listing_id][lotId] = prev[listing.listing_id]?.[lotId] || 0
+              newValues[listing.listing_id][lotId] =
+                prev[listing.listing_id]?.[lotId] || 0
             }
           })
         }

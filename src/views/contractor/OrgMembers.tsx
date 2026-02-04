@@ -223,6 +223,7 @@ function PeopleRow(props: {
               )}
               renderTags={(value: readonly ContractorRole[], getTagProps) =>
                 value.map((option: ContractorRole, index: number) => (
+                  // eslint-disable-next-line react/jsx-key
                   <Chip
                     variant="filled"
                     label={option.name}

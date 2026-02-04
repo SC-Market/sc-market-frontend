@@ -151,9 +151,7 @@ export function AllStockLotsGrid() {
           id,
           field,
           value:
-            typeof newValue === "string"
-              ? null
-              : newValue?.location_id || null,
+            typeof newValue === "string" ? null : newValue?.location_id || null,
         })
       }
     }

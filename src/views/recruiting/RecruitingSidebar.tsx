@@ -225,6 +225,7 @@ export function RecruitingSidebar() {
             )}
             renderTags={(tagValue, getTagProps) =>
               tagValue.map((option: ContractorKindIconKey, index) => (
+                // eslint-disable-next-line react/jsx-key
                 <Chip
                   color={"primary"}
                   label={option}

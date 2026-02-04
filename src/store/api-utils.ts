@@ -72,7 +72,11 @@ export function extractErrorMessage(
   }
 
   // Legacy formats
-  if ("error" in response && response.error && typeof response.error === "string") {
+  if (
+    "error" in response &&
+    response.error &&
+    typeof response.error === "string"
+  ) {
     return response.error
   }
   if (
@@ -107,7 +111,8 @@ export function extractErrorCode(
 ): string | undefined {
   // New standardized format
   if (
-    "error" in response && response.error &&
+    "error" in response &&
+    response.error &&
     typeof response.error === "object" &&
     "code" in response.error
   ) {

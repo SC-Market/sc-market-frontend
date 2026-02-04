@@ -266,8 +266,9 @@ export const userApi = serviceApi.injectEndpoints({
 
             // Also update if viewing own profile by username
             const state = getState() as RootState
-            const profile =
-              state?.serviceApi?.queries?.["profileGetUserProfile(undefined)"]?.data as UserProfileState | undefined
+            const profile = state?.serviceApi?.queries?.[
+              "profileGetUserProfile(undefined)"
+            ]?.data as UserProfileState | undefined
             if (profile?.username) {
               const userProfilePatch = dispatch(
                 userApi.util.updateQueryData(

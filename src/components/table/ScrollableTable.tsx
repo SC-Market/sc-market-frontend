@@ -222,7 +222,7 @@ export function ScrollableTable<T>(props: {
 
                 return (
                   <RowComponent
-                    key={row[keyAttr]}
+                    key={String(row[keyAttr])}
                     {...{
                       row: row,
                       index: index,
