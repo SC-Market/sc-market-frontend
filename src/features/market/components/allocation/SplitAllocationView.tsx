@@ -144,6 +144,18 @@ export function SplitAllocationView({
     }
   }
 
+  const allocationsByListing = useMemo(() => {
+    const map = new Map<string, number>()
+    groupedAllocations.forEach((group) => {
+      map.set(group.listing_id, group.total_allocated)
+    })
+    return map
+  }, [groupedAllocations])
+
+  const [inputValues, setInputValues] = React.useState<
+    Record<string, Record<string, number>>
+  >({})
+
   // Update input values after allocations change
   React.useEffect(() => {
     setInputValues((prev) => {
@@ -171,18 +183,6 @@ export function SplitAllocationView({
       return newValues
     })
   }, [groupedAllocations, allocationsByListing, listings])
-
-  const [inputValues, setInputValues] = React.useState<
-    Record<string, Record<string, number>>
-  >({})
-
-  const allocationsByListing = useMemo(() => {
-    const map = new Map<string, number>()
-    groupedAllocations.forEach((group) => {
-      map.set(group.listing_id, group.total_allocated)
-    })
-    return map
-  }, [groupedAllocations])
 
   return (
     <Card>

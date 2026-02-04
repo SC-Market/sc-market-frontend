@@ -113,7 +113,7 @@ export function OrderReviewView(props: {
 
   return (
     <>
-      <Section xs={12} lg={6} title={t("orderReviewView.review")}>
+      <Section xs={12} title={t("orderReviewView.review")}>
         <Grid item xs={8}>
           <Box sx={{ display: "flex", flexDirection: "column", flexGrow: "1" }}>
             <MaterialLink
