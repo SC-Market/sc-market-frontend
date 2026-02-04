@@ -73,6 +73,7 @@ export const stockLotsApi = serviceApi.injectEndpoints({
       }) => response.data,
       providesTags: (result, error, { listing_id }) => [
         { type: "MarketListings", id: listing_id },
+        { type: "StockLots", id: listing_id },
       ],
     }),
 
@@ -217,6 +218,10 @@ export const stockLotsApi = serviceApi.injectEndpoints({
         { type: "MarketListings", id: "SEARCH" },
         ...allocations.map((a) => ({
           type: "MarketListings" as const,
+          id: a.listing_id,
+        })),
+        ...allocations.map((a) => ({
+          type: "StockLots" as const,
           id: a.listing_id,
         })),
       ],
