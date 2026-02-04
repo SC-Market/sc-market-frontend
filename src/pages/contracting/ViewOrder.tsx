@@ -30,6 +30,7 @@ import { OrderReviewView } from "../../views/orders/OrderReviewView"
 import { useGetOfferSessionByIDQuery } from "../../store/offer"
 import { OfferMarketListings } from "../../views/offers/OfferMarketListings"
 import { OfferServiceArea } from "../../views/offers/OfferServiceArea"
+import { OrderAllocationView } from "../../features/market/components/allocation"
 import { useTranslation } from "react-i18next"
 import {
   shouldRedirectTo404,
@@ -229,6 +230,9 @@ export function ViewOrder() {
                 order?.contractor_review) && (
                 <Tab label={t("orders.reviews", "Reviews")} />
               )}
+              {amContractorManager && (
+                <Tab label={t("orders.allocation", "Stock Allocation")} />
+              )}
               {amRelated && (
                 <Tab label={t("orders.availability", "Availability")} />
               )}
@@ -258,6 +262,7 @@ export function ViewOrder() {
             order?.contractor_review
               ? tabIndex++
               : -1
+          const allocationTab = amContractorManager ? tabIndex++ : -1
           const availabilityTab = amRelated ? tabIndex++ : -1
 
           return (
@@ -343,6 +348,15 @@ export function ViewOrder() {
                 order &&
                 (isMobile ? activeTab === availabilityTab : true) && (
                   <OrderAvailabilityArea order={order} />
+                )}
+
+              {/* Stock Allocation Tab */}
+              {amContractorManager &&
+                order &&
+                (isMobile ? activeTab === allocationTab : true) && (
+                  <Grid item xs={12}>
+                    <OrderAllocationView orderId={order.order_id} />
+                  </Grid>
                 )}
 
               {/* Member Assign Area - always show on desktop */}

@@ -20,6 +20,7 @@ import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { BottomSheet } from "../../components/mobile/BottomSheet"
 import { AllStockLotsGrid } from "../../features/market/components/stock/AllStockLotsGrid"
+import { AllAllocatedLotsGrid } from "../../features/market/components/stock/AllAllocatedLotsGrid"
 
 export function ManageStock() {
   const { t } = useTranslation()
@@ -118,6 +119,10 @@ export function ManageStock() {
 
                 <Grid item xs={12}>
                   <AllStockLotsGrid />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <AllAllocatedLotsGrid />
                 </Grid>
               </Grid>
             </Grid>
