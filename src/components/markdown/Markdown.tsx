@@ -307,7 +307,7 @@ export function MarkdownEditor(props: {
     ["# ", <span key={"#"}>H1</span>],
     ["## ", <span key={"##"}>H2</span>],
     ["- ", <span key={"-"}>•</span>],
-    ["> ", <span key={">"}>"</span>],
+    ["> ", <span key={">"}>&quot;</span>],
   ] as const
 
   const wrapText = useCallback(
