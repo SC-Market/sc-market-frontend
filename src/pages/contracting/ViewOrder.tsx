@@ -266,8 +266,38 @@ export function ViewOrder() {
                       <OrderDetailSkeleton showContractor showAssigned />
                     </Grid>
                   )}
-                  {/* Reviews in details tab */}
-                  {order && (
+                  {/* Right column: Reviews and Messages on desktop */}
+                  {!isMobile && (
+                    <Grid item xs={12} lg={4} md={6}>
+                      <Stack spacing={2}>
+                        {order && (
+                          <>
+                            {amCustomer && !order.customer_review && (
+                              <OrderReviewArea asCustomer order={order} />
+                            )}
+                            {(amContractorManager || amAssigned) &&
+                              !order.contractor_review && (
+                                <OrderReviewArea asContractor order={order} />
+                              )}
+                            {order.customer_review && (
+                              <OrderReviewView customer order={order} />
+                            )}
+                            {order.contractor_review && (
+                              <OrderReviewView contractor order={order} />
+                            )}
+                          </>
+                        )}
+                        {isAssigned &&
+                          (!(isLoading || isFetching) && order ? (
+                            <OrderMessagesArea order={order} />
+                          ) : (
+                            <Skeleton width={"100%"} height={400} />
+                          ))}
+                      </Stack>
+                    </Grid>
+                  )}
+                  {/* Reviews on mobile */}
+                  {isMobile && order && (
                     <>
                       {amCustomer && !order.customer_review && (
                         <OrderReviewArea asCustomer order={order} />
@@ -281,18 +311,6 @@ export function ViewOrder() {
                       )}
                       {order.contractor_review && (
                         <OrderReviewView contractor order={order} />
-                      )}
-                    </>
-                  )}
-                  {/* Messages on desktop in details tab */}
-                  {!isMobile && isAssigned && (
-                    <>
-                      {!(isLoading || isFetching) && order ? (
-                        <OrderMessagesArea order={order} />
-                      ) : (
-                        <Grid item xs={12} lg={4} md={6}>
-                          <Skeleton width={"100%"} height={400} />
-                        </Grid>
                       )}
                     </>
                   )}

@@ -685,12 +685,14 @@ export function AggregateMarketListingForm() {
           severity: "success",
         })
 
-        navigate(`/market/aggregate/${res.data.aggregate_id}`)
+        navigate(
+          `/market/aggregate/${(res.data as { aggregate_id: string }).aggregate_id}`,
+        )
       } else {
         issueAlert({
           message:
             t("AggregateMarketListingForm.failedSubmit") +
-            ` ${res.error?.error || res.error?.data?.error || res.error}`,
+            ` ${"error" in res && res.error ? (typeof res.error === "object" && "error" in res.error ? res.error.error : "data" in res.error && res.error.data ? res.error.data : res.error) : "Unknown error"}`,
           severity: "error",
         })
       }
@@ -985,12 +987,14 @@ export function MarketMultipleForm() {
           severity: "success",
         })
 
-        navigate(`/market/multiple/${res.data.multiple_id}`)
+        navigate(
+          `/market/multiple/${(res.data as { multiple_id: string }).multiple_id}`,
+        )
       } else {
         issueAlert({
           message:
             t("MarketMultipleForm.failedSubmit") +
-            ` ${res.error?.error || res.error?.data?.error || res.error}`,
+            ` ${"error" in res && res.error ? (typeof res.error === "object" && "error" in res.error ? res.error.error : "data" in res.error && res.error.data ? res.error.data : res.error) : "Unknown error"}`,
           severity: "error",
         })
       }
