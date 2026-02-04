@@ -205,6 +205,9 @@ function AvailableLots({
   allocations: Allocation[]
   onAllocate: (lotId: string, listingId: string, quantity: number) => void
 }) {
+  const [allocateQtys, setAllocateQtys] = React.useState<Record<string, number>>(
+    {},
+  )
   const { data: lotsData } = useGetListingLotsQuery({
     listing_id: listingId,
     listed: true,
@@ -262,47 +265,61 @@ function AvailableLots({
           </TableRow>
         </TableHead>
         <TableBody>
-          {lots.map((lot) => (
-            <TableRow key={lot.lot_id}>
-              <TableCell>{lot.location?.name || "Unknown"}</TableCell>
-              <TableCell>
-                <TextField
-                  type="number"
-                  size="small"
-                  onChange={(e) => {
-                    const val = Math.max(
-                      0,
-                      Math.min(
-                        lot.quantity_available,
-                        parseInt(e.target.value) || 0,
+          {lots.map((lot) => {
+            const allocateQty = allocateQtys[lot.lot_id] || 0
+            return (
+              <TableRow key={lot.lot_id}>
+                <TableCell>{lot.location?.name || "Unknown"}</TableCell>
+                <TableCell>
+                  <TextField
+                    type="number"
+                    size="small"
+                    value={allocateQty || ""}
+                    onChange={(e) => {
+                      const val = Math.max(
+                        0,
+                        Math.min(
+                          lot.quantity_available,
+                          parseInt(e.target.value) || 0,
+                        ),
+                      )
+                      setAllocateQtys((prev) => ({
+                        ...prev,
+                        [lot.lot_id]: val,
+                      }))
+                    }}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          / {lot.quantity_available}
+                        </InputAdornment>
                       ),
-                    )
-                    if (val > 0) {
-                      onAllocate(lot.lot_id, listingId, val)
-                      e.target.value = ""
-                    }
-                  }}
-                  InputProps={{
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        / {lot.quantity_available}
-                      </InputAdornment>
-                    ),
-                  }}
-                  inputProps={{
-                    min: 0,
-                    max: lot.quantity_available,
-                  }}
-                  sx={{ width: 120 }}
-                />
-              </TableCell>
-              <TableCell>
-                <IconButton size="small" disabled>
-                  <KeyboardArrowRight />
-                </IconButton>
-              </TableCell>
-            </TableRow>
-          ))}
+                    }}
+                    inputProps={{
+                      min: 0,
+                      max: lot.quantity_available,
+                    }}
+                    sx={{ width: 120 }}
+                  />
+                </TableCell>
+                <TableCell>
+                  <IconButton
+                    size="small"
+                    disabled={allocateQty === 0}
+                    onClick={() => {
+                      onAllocate(lot.lot_id, listingId, allocateQty)
+                      setAllocateQtys((prev) => ({
+                        ...prev,
+                        [lot.lot_id]: 0,
+                      }))
+                    }}
+                  >
+                    <KeyboardArrowRight />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            )
+          })}
         </TableBody>
       </Table>
     </Box>

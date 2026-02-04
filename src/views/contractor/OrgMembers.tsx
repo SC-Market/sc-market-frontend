@@ -224,7 +224,6 @@ function PeopleRow(props: {
               renderTags={(value: readonly ContractorRole[], getTagProps) =>
                 value.map((option: ContractorRole, index: number) => (
                   <Chip
-                    key={option.role_id}
                     variant="filled"
                     label={option.name}
                     {...getTagProps({ index })}

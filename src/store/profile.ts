@@ -153,7 +153,7 @@ export const userApi = serviceApi.injectEndpoints({
                   if (draft.settings) {
                     Object.assign(draft.settings, body)
                   } else {
-                    draft.settings = body as AccountSettingsBody
+                    draft.settings = body as AccountSettingsBody & { discord_order_share: boolean }
                   }
                 },
               ),
@@ -382,7 +382,13 @@ export const userApi = serviceApi.injectEndpoints({
       query: () => `${baseUrl}/links`,
       transformResponse: (response: {
         data: {
-          providers: Array<{ provider_type: string; provider_id: string }>
+          providers: Array<{
+            provider_type: string
+            provider_id: string
+            is_primary: boolean
+            linked_at: string
+            last_used_at: string | null
+          }>
         }
       }) => response.data.providers,
       providesTags: [{ type: "MyProfile" as const }, "MyProfile" as const],
