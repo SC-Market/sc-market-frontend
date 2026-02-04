@@ -10,6 +10,7 @@ import {
   Grid,
   Link as MaterialLink,
   Skeleton,
+  Stack,
   Tabs,
   Tab,
   useMediaQuery,
@@ -367,7 +368,7 @@ export function ViewOrder() {
               {amContractorManager && order && activeTab === allocationTab && (
                 <Grid item xs={12}>
                   <Stack spacing={2}>
-                    {order.market_listings?.map((listing, index) => {
+                    {order.market_listings?.map((listing: any, index) => {
                       const listingId =
                         typeof listing.listing_id === "string"
                           ? listing.listing_id

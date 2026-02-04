@@ -34,6 +34,7 @@ import {
   useManualAllocateOrderMutation,
   ManualAllocationInput,
   Allocation,
+  StockLot,
 } from "../../../../store/api/stockLotsApi"
 import {
   InventoryRounded,
@@ -43,6 +44,11 @@ import {
 } from "@mui/icons-material"
 import { useAlertHook } from "../../../../hooks/alert/AlertHook"
 import { useGetMarketListingQuery } from "../../api/marketApi"
+
+interface StockLotWithAvailable extends StockLot {
+  quantity_available: number
+  location?: { name: string }
+}
 
 interface OrderAllocationViewProps {
   orderId: string
@@ -72,7 +78,7 @@ export function OrderAllocationView({
   )
 
   const { data: listingData } = useGetMarketListingQuery(
-    { listing_id: listingId! },
+    listingId!,
     { skip: !listingId },
   )
 
@@ -82,7 +88,10 @@ export function OrderAllocationView({
   const allocations = allocationsData?.allocations || []
   const totalAllocated = allocationsData?.total_allocated || 0
   const aggregates = lotsData?.aggregates
-  const listingTitle = listingData?.listing?.details?.title || "Item"
+  const listingTitle =
+    (listingData?.listing as any)?.details?.title ||
+    (listingData?.listing as any)?.title ||
+    "Item"
 
   // Calculate available quantity per lot (total - allocated)
   const allocatedByLot = useMemo(() => {
@@ -94,7 +103,7 @@ export function OrderAllocationView({
     return map
   }, [allocations])
 
-  const lots = useMemo(() => {
+  const lots: StockLotWithAvailable[] = useMemo(() => {
     return (lotsData?.lots || [])
       .map((lot) => ({
         ...lot,
