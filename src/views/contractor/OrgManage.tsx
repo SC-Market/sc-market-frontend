@@ -439,7 +439,6 @@ export function OrgDetailEditForm(props: { contractor: Contractor }) {
                 renderTags={(tagValue, getTagProps) =>
                   tagValue.map((option, index) => (
                     <Chip
-                      key={option}
                       color={"primary"}
                       label={option}
                       sx={{ marginRight: 1, textTransform: "capitalize" }}

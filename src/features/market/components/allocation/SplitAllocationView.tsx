@@ -272,8 +272,8 @@ function AvailableLots({
                 <TableCell>{lot.location?.name || "Unknown"}</TableCell>
                 <TableCell>
                   <TextField
-                    type="number"
                     size="small"
+                    inputMode="numeric"
                     value={allocateQty || ""}
                     onChange={(e) => {
                       const val = Math.max(
@@ -294,10 +294,6 @@ function AvailableLots({
                           / {lot.quantity_available}
                         </InputAdornment>
                       ),
-                    }}
-                    inputProps={{
-                      min: 0,
-                      max: lot.quantity_available,
                     }}
                     sx={{ width: 120 }}
                   />
@@ -415,8 +411,8 @@ function AllocationTarget({
                 </TableCell>
                 <TableCell>
                   <TextField
-                    type="number"
                     size="small"
+                    inputMode="numeric"
                     value={deallocateQty || ""}
                     onChange={(e) => {
                       const val = Math.max(
@@ -434,10 +430,6 @@ function AllocationTarget({
                           / {alloc.quantity}
                         </InputAdornment>
                       ),
-                    }}
-                    inputProps={{
-                      min: 0,
-                      max: alloc.quantity,
                     }}
                     sx={{ width: 120 }}
                   />
