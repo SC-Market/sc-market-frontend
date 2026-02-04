@@ -248,7 +248,7 @@ export function ViewOrder() {
 
           let tabIndex = 0
           const detailsTab = tabIndex++
-          const messagesTab = isAssigned ? tabIndex++ : -1
+          const messagesTab = isMobile && isAssigned ? tabIndex++ : -1
           const serviceTab = session?.offers[0]?.service ? tabIndex++ : -1
           const marketListingsTab =
             session?.offers[0]?.market_listings &&
