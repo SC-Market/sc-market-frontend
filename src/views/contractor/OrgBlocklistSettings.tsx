@@ -40,8 +40,8 @@ function BlockedUserList(props: {
 
   const format_discord = (u: MinimalUser) => {
     return `@${u.discord_profile?.username}${
-      +u.discord_profile?.discriminator!
-        ? `#${u.discord_profile?.discriminator}`
+      u.discord_profile?.discriminator && +u.discord_profile.discriminator
+        ? `#${u.discord_profile.discriminator}`
         : ""
     }`
   }
