@@ -56,7 +56,7 @@ export function SplitAllocationView({
   listings,
 }: SplitAllocationViewProps) {
   const [pendingAllocations, setPendingAllocations] = useState<
-    Map<string, number>
+    Map<string, { lot_id: string; listing_id: string; quantity: number }>
   >(new Map())
   const issueAlert = useAlertHook()
 
@@ -81,17 +81,8 @@ export function SplitAllocationView({
 
   const handleAllocate = async () => {
     const allocationsToCreate: ManualAllocationInput[] = Array.from(
-      pendingAllocations.entries(),
-    )
-      .filter(([_, quantity]) => quantity > 0)
-      .map(([lot_id, quantity]) => {
-        const listing = listings.find((l) => lot_id.startsWith(l.listing_id))!
-        return {
-          listing_id: listing.listing_id,
-          lot_id,
-          quantity,
-        }
-      })
+      pendingAllocations.values(),
+    ).filter((alloc) => alloc.quantity > 0)
 
     if (allocationsToCreate.length === 0) return
 
@@ -172,8 +163,13 @@ function AvailableLots({
   allocations,
 }: {
   listingId: string
-  pendingAllocations: Map<string, number>
-  setPendingAllocations: (map: Map<string, number>) => void
+  pendingAllocations: Map<
+    string,
+    { lot_id: string; listing_id: string; quantity: number }
+  >
+  setPendingAllocations: (
+    map: Map<string, { lot_id: string; listing_id: string; quantity: number }>,
+  ) => void
   allocations: Allocation[]
 }) {
   const { data: lotsData } = useGetListingLotsQuery({
@@ -235,12 +231,16 @@ function AvailableLots({
               <TextField
                 size="small"
                 type="number"
-                value={pendingAllocations.get(lot.lot_id) || ""}
+                value={pendingAllocations.get(lot.lot_id)?.quantity || ""}
                 onChange={(e) => {
                   const qty = parseInt(e.target.value) || 0
                   const newMap = new Map(pendingAllocations)
                   if (qty > 0 && qty <= lot.quantity_available) {
-                    newMap.set(lot.lot_id, qty)
+                    newMap.set(lot.lot_id, {
+                      lot_id: lot.lot_id,
+                      listing_id: listingId,
+                      quantity: qty,
+                    })
                   } else {
                     newMap.delete(lot.lot_id)
                   }
