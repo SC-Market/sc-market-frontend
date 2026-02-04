@@ -334,6 +334,45 @@ export const offersApi = serviceApi.injectEndpoints({
       },
       transformResponse: unwrapResponse,
     }),
+    assignOffer: builder.mutation<
+      void,
+      {
+        session_id: string
+        user_id: string
+      }
+    >({
+      query: (arg) => ({
+        url: `/api/offer/${arg.session_id}`,
+        method: "PUT",
+        body: { assigned_to: arg.user_id },
+      }),
+      invalidatesTags: (result, error, { session_id }) => [
+        { type: "Offer" as const, id: session_id },
+        "Offer" as const,
+        "Offers" as const,
+        "Chat" as const,
+      ],
+      transformResponse: unwrapResponse,
+    }),
+    unassignOffer: builder.mutation<
+      void,
+      {
+        session_id: string
+      }
+    >({
+      query: (arg) => ({
+        url: `/api/offer/${arg.session_id}`,
+        method: "PUT",
+        body: { assigned_to: null },
+      }),
+      invalidatesTags: (result, error, { session_id }) => [
+        { type: "Offer" as const, id: session_id },
+        "Offer" as const,
+        "Offers" as const,
+        "Chat" as const,
+      ],
+      transformResponse: unwrapResponse,
+    }),
   }),
 })
 
@@ -344,4 +383,6 @@ export const {
   useCreateOfferThreadMutation,
   useSearchOfferSessionsQuery,
   useMergeOfferSessionsMutation,
+  useAssignOfferMutation,
+  useUnassignOfferMutation,
 } = offersApi
