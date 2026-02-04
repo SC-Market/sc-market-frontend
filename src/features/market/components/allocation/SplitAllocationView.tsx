@@ -253,8 +253,8 @@ function AvailableLots({
       .filter((lot) => lot.quantity_available > 0)
   }, [lotsData?.lots, allocatedByLot])
 
-  const title = getListingTitle(lotsData?.listing || listingData)
-  const image = getListingImage(lotsData?.listing || listingData)
+  const title = getListingTitle(listingData)
+  const image = getListingImage(listingData)
 
   if (lots.length === 0) return null
 
@@ -288,6 +288,8 @@ function AvailableLots({
         <TableBody>
           {lots.map((lot) => {
             const allocateQty = allocateQtys[lot.lot_id] || 0
+            const remaining = orderQuantity - currentAllocated
+            const isFullyAllocated = remaining <= 0
             const wouldExceed =
               allocateQty > 0 && currentAllocated + allocateQty > orderQuantity
             return (
@@ -311,6 +313,19 @@ function AvailableLots({
                         [lot.lot_id]: val,
                       }))
                     }}
+                    onFocus={(e) => {
+                      if (!allocateQty) {
+                        const autoFill = Math.min(
+                          lot.quantity_available,
+                          remaining,
+                        )
+                        setAllocateQtys((prev) => ({
+                          ...prev,
+                          [lot.lot_id]: autoFill,
+                        }))
+                      }
+                    }}
+                    disabled={isFullyAllocated}
                     error={wouldExceed}
                     helperText={
                       wouldExceed
@@ -330,7 +345,9 @@ function AvailableLots({
                 <TableCell>
                   <IconButton
                     size="small"
-                    disabled={allocateQty === 0 || wouldExceed}
+                    disabled={
+                      allocateQty === 0 || wouldExceed || isFullyAllocated
+                    }
                     onClick={() => {
                       onAllocate(lot.lot_id, listingId, allocateQty)
                       setAllocateQtys((prev) => ({

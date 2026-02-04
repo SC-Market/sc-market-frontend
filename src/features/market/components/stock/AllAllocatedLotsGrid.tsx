@@ -18,12 +18,11 @@ export function AllAllocatedLotsGrid() {
   const [currentOrg] = useCurrentOrg()
 
   const { data, isLoading } = useSearchLotsQuery({
-    user_id: profile?.user_id,
     contractor_spectrum_id: currentOrg?.spectrum_id,
   })
 
-  // Filter to only allocated lots (those with order_id)
-  const allocatedLots = data?.lots.filter((lot) => lot.order_id) || []
+  // Get all lots
+  const allocatedLots = data?.lots || []
 
   const columns: GridColDef[] = [
     {

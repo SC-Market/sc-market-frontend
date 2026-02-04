@@ -57,16 +57,16 @@ export function AllocationStatusDisplay({
     return null // Silently fail - allocations may not exist for all orders
   }
 
-  if (!allocationsData || allocationsData.allocations.length === 0) {
+  if (!allocationsData || allocationsData.grouped_allocations.length === 0) {
     return null // No allocations to display
   }
 
-  const { allocations, total_allocated } = allocationsData
-  const hasActiveAllocations = allocations.some(
+  const { grouped_allocations, total_allocated } = allocationsData
+  const hasActiveAllocations = grouped_allocations.some(
     (a: any) => a.status === "active",
   )
-  const allFulfilled = allocations.every((a: any) => a.status === "fulfilled")
-  const allReleased = allocations.every((a: any) => a.status === "released")
+  const allFulfilled = grouped_allocations.every((a: any) => a.status === "fulfilled")
+  const allReleased = grouped_allocations.every((a: any) => a.status === "released")
 
   const isPartial =
     orderQuantity !== undefined && total_allocated < orderQuantity
