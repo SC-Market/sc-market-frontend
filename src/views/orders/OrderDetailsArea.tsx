@@ -1,6 +1,8 @@
 import {
   useCreateOrderThreadMutation,
   useSetOrderStatusMutation,
+  useAssignOrderMutation,
+  useUnassignOrderMutation,
 } from "../../store/orders"
 import {
   ButtonGroup,
@@ -14,8 +16,13 @@ import {
   TableContainer,
   TableRow,
   Typography,
+  IconButton,
+  Autocomplete,
+  TextField,
+  Box,
+  Button,
 } from "@mui/material"
-import React, { useCallback, useEffect, useMemo } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { OrgDetails, UserDetails } from "../../components/list/UserDetails"
 import { Stack } from "@mui/system"
 import moment from "moment/moment"
@@ -35,11 +42,18 @@ import {
 import LoadingButton from "@mui/lab/LoadingButton"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { statusColors, statusNames } from "./OrderList"
-import { useGetContractorBySpectrumIDQuery } from "../../store/contractor"
+import {
+  useGetContractorBySpectrumIDQuery,
+  useGetContractorMembersQuery,
+  contractorsApi,
+} from "../../store/contractor"
 import {
   CancelRounded,
   DoneRounded,
   PlayArrowRounded,
+  Edit,
+  Close,
+  Check,
 } from "@mui/icons-material"
 import { has_permission } from "../contractor/OrgRoles"
 import { PAYMENT_TYPE_MAP } from "../../util/constants"
@@ -47,6 +61,10 @@ import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { useMediaQuery } from "@mui/material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { store } from "../../store/store"
+import { MinimalUser } from "../../datatypes/User"
+import throttle from "lodash/throttle"
+import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 
 export function OrderMessagesArea(props: { order: Order }) {
   const { order } = props
@@ -106,6 +124,61 @@ export function OrderDetailsArea(props: { order: Order }) {
   const { t } = useTranslation()
   const { data: profile } = useGetUserProfileQuery()
 
+  const [isEditingAssigned, setIsEditingAssigned] = useState(false)
+  const [target, setTarget] = useState("")
+  const [targetObject, setTargetObject] = useState<{
+    username: string
+    display_name: string
+  } | null>(null)
+  const [options, setOptions] = useState<MinimalUser[]>([])
+
+  const issueAlert = useAlertHook()
+  const [currentOrg] = useCurrentOrg()
+
+  const { data: membersData } = useGetContractorMembersQuery({
+    spectrum_id: currentOrg?.spectrum_id || "",
+    page: 0,
+    page_size: 100,
+    search: "",
+    role_filter: "",
+    sort: "username",
+  })
+
+  const members = membersData?.members || []
+
+  const fetchOptions = useCallback(
+    async (query: string) => {
+      if (query.length < 3) {
+        return
+      }
+
+      const { data } = await store.dispatch(
+        contractorsApi.endpoints.searchContractorMembers.initiate({
+          spectrum_id: currentOrg?.spectrum_id!,
+          query: query,
+        }),
+      )
+
+      setOptions(data || [])
+    },
+    [currentOrg?.spectrum_id],
+  )
+
+  const retrieve = useMemo(
+    () =>
+      throttle((query: string) => {
+        fetchOptions(query)
+      }, 400),
+    [fetchOptions],
+  )
+
+  useEffect(() => {
+    retrieve(target)
+  }, [target, retrieve])
+
+  const [assignUser] = useAssignOrderMutation()
+  const [unassignUser] = useUnassignOrderMutation()
+
   const statusColor = useMemo(
     () => statusColors.get(order.status),
     [order.status],
@@ -114,7 +187,6 @@ export function OrderDetailsArea(props: { order: Order }) {
     () => statusNames.get(order.status) || statusNames.get("not-started")!,
     [order.status],
   )
-  const issueAlert = useAlertHook()
 
   const [setOrderStatus] = useSetOrderStatusMutation()
   const updateOrderStatus = useCallback(
@@ -136,6 +208,61 @@ export function OrderDetailsArea(props: { order: Order }) {
     },
     [order.order_id, issueAlert, setOrderStatus, t],
   )
+
+  const handleAssignSave = useCallback(async () => {
+    if (!targetObject) {
+      return
+    }
+
+    const res: { data?: any; error?: any } = await assignUser({
+      order_id: order.order_id,
+      user_id: targetObject.username!,
+    })
+
+    if (res?.data && !res?.error) {
+      issueAlert({
+        message: t("memberAssignArea.assigned"),
+        severity: "success",
+      })
+      setIsEditingAssigned(false)
+      setTarget("")
+      setTargetObject(null)
+    } else {
+      issueAlert({
+        message: `${t("memberAssignArea.failed_assign")} ${
+          res.error?.error || res.error?.data?.error || res.error
+        }`,
+        severity: "error",
+      })
+    }
+  }, [assignUser, order.order_id, issueAlert, targetObject, t])
+
+  const handleAssignCancel = useCallback(() => {
+    setIsEditingAssigned(false)
+    setTarget("")
+    setTargetObject(null)
+  }, [])
+
+  const handleUnassign = useCallback(async () => {
+    const res: { data?: any; error?: any } = await unassignUser({
+      order_id: order.order_id,
+    })
+
+    if (res?.data && !res?.error) {
+      issueAlert({
+        message: t("memberAssignArea.unassigned"),
+        severity: "success",
+      })
+      setIsEditingAssigned(false)
+    } else {
+      issueAlert({
+        message: `${t("memberAssignArea.failed_unassign")} ${
+          res.error?.error || res.error?.data?.error || res.error
+        }`,
+        severity: "error",
+      })
+    }
+  }, [unassignUser, order.order_id, issueAlert, t])
 
   const [currentOrg] = useCurrentOrg()
 
@@ -253,17 +380,99 @@ export function OrderDetailsArea(props: { order: Order }) {
                 </TableCell>
               </TableRow>
             )}
-            {assigned && (
+            {(assigned || amContractorManager) && (
               <TableRow
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
-                  {t("orderDetailsArea.assigned")}
+                  <Stack direction="row" alignItems="center" spacing={1}>
+                    {t("orderDetailsArea.assigned")}
+                    {amContractorManager &&
+                      !["cancelled", "fulfilled"].includes(order.status) && (
+                        <IconButton
+                          size="small"
+                          onClick={() =>
+                            setIsEditingAssigned(!isEditingAssigned)
+                          }
+                        >
+                          {isEditingAssigned ? <Close /> : <Edit />}
+                        </IconButton>
+                      )}
+                  </Stack>
                 </TableCell>
                 <TableCell align="right">
-                  <Stack direction="row" justifyContent={"right"}>
-                    {order.assigned_to && <UserDetails user={assigned} />}
-                  </Stack>
+                  {isEditingAssigned ? (
+                    <Stack spacing={1}>
+                      <Autocomplete
+                        filterOptions={(x) => x}
+                        fullWidth
+                        size="small"
+                        options={
+                          target
+                            ? options
+                            : members
+                                .map((u) => ({
+                                  username: u.username,
+                                  display_name: u.username,
+                                }))
+                                .slice(0, 8)
+                        }
+                        getOptionLabel={(option) =>
+                          `${option.username} (${option.display_name})`
+                        }
+                        disablePortal
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            label={t("memberAssignArea.handle")}
+                            SelectProps={{
+                              IconComponent: KeyboardArrowDownRoundedIcon,
+                            }}
+                          />
+                        )}
+                        value={targetObject}
+                        onChange={(event: any, newValue) => {
+                          setTargetObject(newValue)
+                        }}
+                        inputValue={target}
+                        onInputChange={(event, newInputValue) => {
+                          setTarget(newInputValue)
+                        }}
+                      />
+                      <Box display="flex" gap={1} justifyContent="flex-end">
+                        {order.assigned_to && (
+                          <Button
+                            size="small"
+                            variant="outlined"
+                            color="error"
+                            onClick={handleUnassign}
+                          >
+                            {t("memberAssignArea.unassign")}
+                          </Button>
+                        )}
+                        <Button
+                          size="small"
+                          variant="outlined"
+                          onClick={handleAssignCancel}
+                        >
+                          {t("ui.cancel")}
+                        </Button>
+                        <Button
+                          size="small"
+                          variant="contained"
+                          onClick={handleAssignSave}
+                          disabled={!targetObject}
+                          startIcon={<Check />}
+                        >
+                          {t("ui.save")}
+                        </Button>
+                      </Box>
+                    </Stack>
+                  ) : (
+                    <Stack direction="row" justifyContent={"right"}>
+                      {order.assigned_to && <UserDetails user={assigned!} />}
+                    </Stack>
+                  )}
                 </TableCell>
               </TableRow>
             )}

@@ -24,7 +24,6 @@ import {
 import { useGetUserProfileQuery } from "../../store/profile"
 import { OrderAvailabilityArea } from "../../views/orders/OrderAvailabilityArea"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
-import { MemberAssignArea } from "../../views/orders/MemberAssignArea"
 import { has_permission } from "../../views/contractor/OrgRoles"
 import { OrderReviewArea } from "../../views/orders/OrderReviewArea"
 import { OrderReviewView } from "../../views/orders/OrderReviewView"
@@ -314,12 +313,6 @@ export function ViewOrder() {
                       )}
                     </>
                   )}
-                  {/* Member Assign Area */}
-                  {amContractorManager &&
-                    order &&
-                    !["cancelled", "fulfilled"].includes(order.status) && (
-                      <MemberAssignArea order={order} />
-                    )}
                 </>
               )}
 
