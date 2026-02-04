@@ -31,3 +31,5 @@ export const HeaderTitle = React.forwardRef<
     </Grid>
   )
 })
+
+HeaderTitle.displayName = "HeaderTitle"

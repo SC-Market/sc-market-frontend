@@ -27,6 +27,7 @@ export default [
       "no-empty-pattern": "off",
       "@typescript-eslint/ban-types": "off",
       "@typescript-eslint/no-empty-object-type": "off",
+      "@typescript-eslint/no-non-null-asserted-optional-chain": "off",
       "@typescript-eslint/no-explicit-any": "warn",
       "@typescript-eslint/no-unused-vars": "warn",
       "@typescript-eslint/ban-ts-comment": "warn",

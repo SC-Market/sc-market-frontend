@@ -30,13 +30,25 @@ import {
   useManualAllocateOrderMutation,
   useGetOrderAllocationsQuery,
   ManualAllocationInput,
+  Allocation,
+  StockLot,
 } from "../../../../store/api/stockLotsApi"
 import { useGetMarketListingQuery } from "../../api/marketApi"
 import { useAlertHook } from "../../../../hooks/alert/AlertHook"
 
+interface ListingAllocation {
+  listing_id: string
+  quantity: number
+}
+
 interface SplitAllocationViewProps {
   orderId: string
-  listings: Array<{ listing_id: string; quantity: number }>
+  listings: ListingAllocation[]
+}
+
+interface StockLotWithAvailable extends StockLot {
+  quantity_available: number
+  location?: { name: string }
 }
 
 export function SplitAllocationView({
@@ -73,9 +85,7 @@ export function SplitAllocationView({
     )
       .filter(([_, quantity]) => quantity > 0)
       .map(([lot_id, quantity]) => {
-        const listing = listings.find((l) =>
-          lot_id.startsWith(l.listing_id),
-        )!
+        const listing = listings.find((l) => lot_id.startsWith(l.listing_id))!
         return {
           listing_id: listing.listing_id,
           lot_id,
@@ -164,7 +174,7 @@ function AvailableLots({
   listingId: string
   pendingAllocations: Map<string, number>
   setPendingAllocations: (map: Map<string, number>) => void
-  allocations: any[]
+  allocations: Allocation[]
 }) {
   const { data: lotsData } = useGetListingLotsQuery({
     listing_id: listingId,
@@ -181,7 +191,7 @@ function AvailableLots({
     return map
   }, [allocations])
 
-  const lots = useMemo(() => {
+  const lots: StockLotWithAvailable[] = useMemo(() => {
     return (lotsData?.lots || [])
       .map((lot) => ({
         ...lot,
@@ -259,7 +269,7 @@ function AllocationTarget({
   listingId: string
   required: number
   allocated: number
-  allocations: any[]
+  allocations: Allocation[]
 }) {
   const { data: listingData } = useGetMarketListingQuery(listingId)
 

@@ -39,7 +39,9 @@ export interface Allocation {
   quantity: number
   listing_id: string
   status?: string
-  lot?: StockLot
+  lot?: StockLot & {
+    location?: Location | null
+  }
 }
 
 export interface ManualAllocationInput {
