@@ -264,8 +264,6 @@ export function OrderDetailsArea(props: { order: Order }) {
     }
   }, [unassignUser, order.order_id, issueAlert, t])
 
-  const [currentOrg] = useCurrentOrg()
-
   const { data: contractor } = useGetContractorBySpectrumIDQuery(
     order.contractor!,
     { skip: !order.contractor },

@@ -248,7 +248,6 @@ export function OfferDetailsArea(props: { session: OfferSession }) {
 
   const [updateStatus, { isLoading: isUpdatingStatus }] =
     useUpdateOfferStatusMutation()
-  const issueAlert = useAlertHook()
   const navigate = useNavigate()
 
   const updateStatusCallback = useCallback(
