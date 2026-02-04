@@ -468,7 +468,9 @@ export function OrderDetailsArea(props: { order: Order }) {
                     </Stack>
                   ) : (
                     <Stack direction="row" justifyContent={"right"}>
-                      {order.assigned_to && <UserDetails user={assigned!} />}
+                      {order.assigned_to && assigned && (
+                        <UserDetails user={assigned} />
+                      )}
                     </Stack>
                   )}
                 </TableCell>
