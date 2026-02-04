@@ -342,16 +342,16 @@ export function OrderAllocationView({
                     field: "location_name",
                     headerName: "Location",
                     flex: 1,
-                    valueGetter: (params) =>
-                      params.row.location?.name || "Unspecified",
+                    valueGetter: (value, row) =>
+                      row.location?.name || "Unspecified",
                   },
                   {
                     field: "title",
                     headerName: "Lot",
                     flex: 2,
-                    valueGetter: (params) =>
-                      params.row.title ||
-                      `Lot ${params.row.lot_id.substring(0, 8)}`,
+                    valueGetter: (value, row) =>
+                      row.title ||
+                      `Lot ${row.lot_id.substring(0, 8)}`,
                   },
                   {
                     field: "quantity_total",
