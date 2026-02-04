@@ -228,14 +228,6 @@ export function ViewOrder() {
                 session.offers[0].market_listings.length > 0 && (
                   <Tab label={t("orders.marketListings", "Market Listings")} />
                 )}
-              {((order && amCustomer && !order.customer_review) ||
-                (order &&
-                  (amContractorManager || amAssigned) &&
-                  !order.contractor_review) ||
-                order?.customer_review ||
-                order?.contractor_review) && (
-                <Tab label={t("orders.reviews", "Reviews")} />
-              )}
               {amContractorManager && (
                 <Tab label={t("orders.allocation", "Stock Allocation")} />
               )}
@@ -259,15 +251,6 @@ export function ViewOrder() {
             session.offers[0].market_listings.length > 0
               ? tabIndex++
               : -1
-          const reviewsTab =
-            (order && amCustomer && !order.customer_review) ||
-            (order &&
-              (amContractorManager || amAssigned) &&
-              !order.contractor_review) ||
-            order?.customer_review ||
-            order?.contractor_review
-              ? tabIndex++
-              : -1
           const allocationTab = amContractorManager ? tabIndex++ : -1
           const availabilityTab = amRelated ? tabIndex++ : -1
 
@@ -282,6 +265,24 @@ export function ViewOrder() {
                     <Grid item xs={12} lg={8} md={6}>
                       <OrderDetailSkeleton showContractor showAssigned />
                     </Grid>
+                  )}
+                  {/* Reviews in details tab */}
+                  {order && (
+                    <>
+                      {amCustomer && !order.customer_review && (
+                        <OrderReviewArea asCustomer order={order} />
+                      )}
+                      {(amContractorManager || amAssigned) &&
+                        !order.contractor_review && (
+                          <OrderReviewArea asContractor order={order} />
+                        )}
+                      {order.customer_review && (
+                        <OrderReviewView customer order={order} />
+                      )}
+                      {order.contractor_review && (
+                        <OrderReviewView contractor order={order} />
+                      )}
+                    </>
                   )}
                   {/* Messages on desktop in details tab */}
                   {!isMobile && isAssigned && (
@@ -341,31 +342,6 @@ export function ViewOrder() {
                     <Skeleton width={"100%"} height={400} />
                   </Grid>
                 ))}
-
-              {/* Reviews Tab */}
-              {order &&
-                ((amCustomer && !order.customer_review) ||
-                  ((amContractorManager || amAssigned) &&
-                    !order.contractor_review) ||
-                  order.customer_review ||
-                  order.contractor_review) &&
-                activeTab === reviewsTab && (
-                  <>
-                    {amCustomer && !order.customer_review && (
-                      <OrderReviewArea asCustomer order={order} />
-                    )}
-                    {(amContractorManager || amAssigned) &&
-                      !order.contractor_review && (
-                        <OrderReviewArea asContractor order={order} />
-                      )}
-                    {order.customer_review && (
-                      <OrderReviewView customer order={order} />
-                    )}
-                    {order.contractor_review && (
-                      <OrderReviewView contractor order={order} />
-                    )}
-                  </>
-                )}
 
               {/* Stock Allocation Tab */}
               {amContractorManager && order && activeTab === allocationTab && (
