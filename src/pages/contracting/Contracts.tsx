@@ -8,6 +8,7 @@ import {
 } from "../../hooks/contract/ContractSearch"
 import { marketDrawerWidth } from "../../features/market"
 import FilterListIcon from "@mui/icons-material/FilterList"
+import { FiltersFAB } from "../../components/mobile/FiltersFAB"
 import {
   Button,
   Grid,
@@ -109,60 +110,6 @@ export function Contracts() {
                       <Box
                         sx={{ display: "flex", alignItems: "center", gap: 1 }}
                       >
-                        {xs && tabPage === 1 && (
-                          <Button
-                            variant="outlined"
-                            color="secondary"
-                            startIcon={<FilterListIcon />}
-                            aria-label={t("market.toggleSidebar")}
-                            onClick={() =>
-                              setMarketSidebarOpen((prev) => !prev)
-                            }
-                            sx={{
-                              [theme.breakpoints.up("md")]: { display: "none" },
-                              borderRadius: 2,
-                              textTransform: "none",
-                            }}
-                          >
-                            {t("market.filters", "Filters")}
-                          </Button>
-                        )}
-                        {xs && tabPage === 0 && (
-                          <Button
-                            variant="outlined"
-                            color="secondary"
-                            startIcon={<FilterListIcon />}
-                            aria-label={t("service_market.toggle_sidebar")}
-                            onClick={() =>
-                              setServiceSidebarOpen((prev) => !prev)
-                            }
-                            sx={{
-                              [theme.breakpoints.up("md")]: { display: "none" },
-                              borderRadius: 2,
-                              textTransform: "none",
-                            }}
-                          >
-                            {t("service_market.filters", "Filters")}
-                          </Button>
-                        )}
-                        {xs && tabPage === 2 && (
-                          <Button
-                            variant="outlined"
-                            color="secondary"
-                            startIcon={<FilterListIcon />}
-                            aria-label={t("contracts.toggleSidebar")}
-                            onClick={() =>
-                              setContractSidebarOpen((prev) => !prev)
-                            }
-                            sx={{
-                              [theme.breakpoints.up("md")]: { display: "none" },
-                              borderRadius: 2,
-                              textTransform: "none",
-                            }}
-                          >
-                            {t("contracts.filters", "Filters")}
-                          </Button>
-                        )}
                         <Typography
                           variant="h4"
                           sx={{
@@ -289,6 +236,24 @@ export function Contracts() {
                   </Box>
                 </TabPanel>
               </OpenLayout>
+              {xs && tabPage === 1 && (
+                <FiltersFAB
+                  onClick={() => setMarketSidebarOpen((prev) => !prev)}
+                  label={t("market.toggleSidebar")}
+                />
+              )}
+              {xs && tabPage === 0 && (
+                <FiltersFAB
+                  onClick={() => setServiceSidebarOpen((prev) => !prev)}
+                  label={t("service_market.toggle_sidebar")}
+                />
+              )}
+              {xs && tabPage === 2 && (
+                <FiltersFAB
+                  onClick={() => setContractSidebarOpen((prev) => !prev)}
+                  label={t("contracts.toggleSidebar")}
+                />
+              )}
             </ContractSidebarContext.Provider>
           </ContractSearchContext.Provider>
         </ServiceSidebarContext.Provider>
