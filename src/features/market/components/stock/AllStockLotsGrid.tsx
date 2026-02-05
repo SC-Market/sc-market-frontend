@@ -188,7 +188,13 @@ export function AllStockLotsGrid() {
         clearOnBlur
         handleHomeEndKeys
         renderInput={(params) => (
-          <TextField {...params} placeholder="Select or create location" />
+          <TextField
+            {...params}
+            placeholder={t(
+              "AllStockLots.selectOrCreateLocation",
+              "Select or create location",
+            )}
+          />
         )}
         fullWidth
         sx={{ height: "100%" }}
@@ -264,7 +270,7 @@ export function AllStockLotsGrid() {
       editable: true,
       renderCell: (params) => (
         <Chip
-          label={params.value ? "Yes" : "No"}
+          label={params.value ? t("ui.yes", "Yes") : t("ui.no", "No")}
           color={params.value ? "success" : "default"}
           size="small"
         />
