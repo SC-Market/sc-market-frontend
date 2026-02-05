@@ -100,7 +100,7 @@ export function MarketSearchArea(props: {
         height: "100%",
         flexDirection: "column",
         display: "flex",
-        padding: theme.spacing(1),
+        padding: theme.spacing(2),
         borderColor: theme.palette.outline.main,
       }}
     >
