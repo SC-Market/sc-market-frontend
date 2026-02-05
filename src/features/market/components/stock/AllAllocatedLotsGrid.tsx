@@ -47,7 +47,7 @@ export function AllAllocatedLotsGrid() {
       flex: 1.5,
       renderCell: (params) => (
         <UnderlineLink to={`/contracts/${params.value}`}>
-          {params.value.substring(0, 8).toUpperCase()}
+          {params.row.order_title || params.value.substring(0, 8).toUpperCase()}
         </UnderlineLink>
       ),
     },
