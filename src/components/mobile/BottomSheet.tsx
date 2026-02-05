@@ -7,13 +7,13 @@
 
 import {
   Box,
-  Drawer,
   IconButton,
+  SwipeableDrawer,
   Typography,
   useMediaQuery,
   useTheme,
 } from "@mui/material"
-import React, { ReactNode, useRef, useState } from "react"
+import React, { ReactNode, useState } from "react"
 import { CloseRounded } from "@mui/icons-material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 
@@ -26,8 +26,8 @@ interface BottomSheetProps {
   showCloseButton?: boolean
   fullHeight?: boolean
   disableBackdropClose?: boolean
-  snapPoints?: ("peek" | "half" | "full")[]
-  defaultSnap?: "peek" | "half" | "full"
+  snapPoints?: ("peek" | "half" | "66" | "75" | "full")[]
+  defaultSnap?: "peek" | "half" | "66" | "75" | "full"
   peekHeight?: number
 }
 
@@ -49,13 +49,24 @@ export function BottomSheet({
   const dragHandleRef = useRef<HTMLDivElement>(null)
   const [dragStart, setDragStart] = useState<number | null>(null)
   const [dragOffset, setDragOffset] = useState(0)
-  const [currentSnap, setCurrentSnap] = useState<"peek" | "half" | "full">(
+  const [currentSnap, setCurrentSnap] = useState<"peek" | "half" | "66" | "75" | "full">(
     defaultSnap,
   )
 
-  const getSnapHeight = (snap: "peek" | "half" | "full") => {
+  const getSnapHeight = (snap: "peek" | "half" | "66" | "75" | "full") => {
     if (snap === "peek") return peekHeight
     if (snap === "half") return window.innerHeight * 0.5
+    if (snap === "66") return window.innerHeight * 0.66
+    if (snap === "75") return window.innerHeight * 0.75
+    
+    // For full snap, use maxHeight if provided, otherwise use fullHeight or 90%
+    if (typeof maxHeight === "string" && maxHeight.endsWith("vh")) {
+      const percentage = parseInt(maxHeight) / 100
+      return window.innerHeight * percentage
+    }
+    if (typeof maxHeight === "number") {
+      return maxHeight
+    }
     return fullHeight ? window.innerHeight : window.innerHeight * 0.9
   }
 
@@ -110,13 +121,14 @@ export function BottomSheet({
       SlideProps={{
         timeout: 300,
       }}
+      transitionDuration={300}
       PaperProps={{
         sx: {
           height: currentHeight,
           display: "flex",
           flexDirection: "column",
-          borderTopLeftRadius: theme.spacing(3),
-          borderTopRightRadius: theme.spacing(3),
+          borderTopLeftRadius: theme.spacing(2),
+          borderTopRightRadius: theme.spacing(2),
           borderBottomLeftRadius: 0,
           borderBottomRightRadius: 0,
           paddingBottom: isMobile ? "env(safe-area-inset-bottom)" : 0,

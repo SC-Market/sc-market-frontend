@@ -40,8 +40,7 @@ export function ServiceSidebar() {
         open={open}
         onClose={() => setOpen(false)}
         title={t("service_market.filters", "Filters")}
-        maxHeight="75vh"
-        defaultSnap="full"
+        defaultSnap="66"
       >
         {sidebarContent}
       </BottomSheet>

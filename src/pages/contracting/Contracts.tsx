@@ -51,6 +51,11 @@ const ServiceActions = React.lazy(() =>
     default: module.ServiceActions,
   })),
 )
+const ContractActions = React.lazy(() =>
+  import("../../views/contracts/ContractActions").then((module) => ({
+    default: module.ContractActions,
+  })),
+)
 
 export function Contracts() {
   const { t } = useTranslation()
@@ -175,19 +180,9 @@ export function Contracts() {
                           <ServiceActions />
                         </Suspense>
                       ) : (
-                        <Link
-                          to={"/contracts/create"}
-                          style={{ color: "inherit", textDecoration: "none" }}
-                        >
-                          <Button
-                            color={"secondary"}
-                            startIcon={<CreateRounded />}
-                            variant={"contained"}
-                            size={xs ? "small" : "large"}
-                          >
-                            {t("contracts.createOpenContract")}
-                          </Button>
-                        </Link>
+                        <Suspense fallback={<CircularProgress size={24} />}>
+                          <ContractActions />
+                        </Suspense>
                       )}
                     </Grid>
                   </Grid>

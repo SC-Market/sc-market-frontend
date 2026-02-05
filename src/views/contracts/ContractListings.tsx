@@ -233,6 +233,8 @@ export function ContractListings(props: { user?: string }) {
     data: contracts,
     isLoading,
     isFetching,
+    error,
+    refetch,
   } = useGetPublicContractsQuery()
 
   const filteredListings = useMemo(
@@ -278,6 +280,15 @@ export function ContractListings(props: { user?: string }) {
         .filter((listing, idx) => idx <= perPage),
     [contracts, perPage, searchState, user],
   )
+
+  // Show error state
+  if (error) {
+    return (
+      <Grid item xs={12}>
+        <EmptyContracts isError onRetry={() => refetch()} sx={{ py: 4 }} />
+      </Grid>
+    )
+  }
 
   // Show skeletons while loading
   if (isLoading || isFetching) {
