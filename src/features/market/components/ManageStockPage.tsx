@@ -1,30 +1,27 @@
 /**
  * Manage Stock Page
  *
- * Tabbed interface for managing stock across all listings
+ * Interface for managing stock lots and allocations
  */
 
-import React, { useState } from "react"
-import { Box, Paper, Tabs, Tab } from "@mui/material"
-import { useTranslation } from "react-i18next"
+import React from "react"
+import { Box, Grid } from "@mui/material"
+import { ContainerGrid } from "../../../components/layout/ContainerGrid"
 import { AllStockLotsGrid } from "./stock/AllStockLotsGrid"
 import { AllAllocatedLotsGrid } from "./stock/AllAllocatedLotsGrid"
 
 export function ManageStockPage() {
-  const { t } = useTranslation()
-  const [tab, setTab] = useState(0)
-
   return (
-    <Box sx={{ p: 3 }}>
-      <Paper sx={{ mb: 2 }}>
-        <Tabs value={tab} onChange={(_, newValue) => setTab(newValue)}>
-          <Tab label={t("stock.allStock", "All Stock")} />
-          <Tab label={t("stock.allocatedStock", "Allocated Stock")} />
-        </Tabs>
-      </Paper>
+    <ContainerGrid maxWidth="xl" sidebarOpen={true}>
+      <Grid item xs={12} />
 
-      {tab === 0 && <AllStockLotsGrid />}
-      {tab === 1 && <AllAllocatedLotsGrid />}
-    </Box>
+      <Grid item xs={12}>
+        <AllStockLotsGrid />
+      </Grid>
+
+      <Grid item xs={12}>
+        <AllAllocatedLotsGrid />
+      </Grid>
+    </ContainerGrid>
   )
 }
