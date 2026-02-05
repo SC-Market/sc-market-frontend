@@ -880,6 +880,13 @@ const router = createBrowserRouter([
                 }),
               },
               {
+                path: "manage-stock",
+                lazy: async () => ({
+                  Component: (await import("./pages/market/ManageStockLots"))
+                    .ManageStockLots,
+                }),
+              },
+              {
                 path: "services",
                 lazy: async () => ({
                   Component: (await import("./pages/contracting/MyServices"))
