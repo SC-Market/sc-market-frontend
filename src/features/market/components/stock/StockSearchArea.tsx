@@ -54,7 +54,6 @@ export function StockSearchArea() {
         onChange={(newValue) => setLocationId(newValue)}
         size="small"
         fullWidth
-        readOnly={false}
       />
 
       <TextField

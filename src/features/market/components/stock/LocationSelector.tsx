@@ -233,7 +233,6 @@ export function LocationSelector({
             )
           : t("LocationSelector.noLocations", "No locations found")
       }
-      fullWidth
     />
   )
 }
