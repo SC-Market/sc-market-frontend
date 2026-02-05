@@ -24,6 +24,7 @@ import { BottomSheet } from "../../../components/mobile/BottomSheet"
 import { AllStockLotsGrid } from "./stock/AllStockLotsGrid"
 import { AllAllocatedLotsGrid } from "./stock/AllAllocatedLotsGrid"
 import { StockSearchArea } from "./stock/StockSearchArea"
+import { StockSearchProvider } from "./stock/StockSearchContext"
 
 export function ManageStockPage() {
   const { t } = useTranslation()
@@ -44,7 +45,7 @@ export function ManageStockPage() {
   }
 
   return (
-    <>
+    <StockSearchProvider>
       {isMobile && (
         <BottomSheet
           open={sidebarOpen}
@@ -99,6 +100,6 @@ export function ManageStockPage() {
           </Grid>
         </Grid>
       </ContainerGrid>
-    </>
+    </StockSearchProvider>
   )
 }
