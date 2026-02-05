@@ -11,6 +11,7 @@ import FilterListIcon from "@mui/icons-material/FilterList"
 import { FiltersFAB } from "../../components/mobile/FiltersFAB"
 import {
   Button,
+  Divider,
   Grid,
   Box,
   useMediaQuery,
