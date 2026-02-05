@@ -20,6 +20,8 @@ import {
   Box,
   Button,
   Avatar,
+  Autocomplete,
+  TextField,
 } from "@mui/material"
 import {
   Delete as DeleteIcon,
@@ -76,7 +78,6 @@ export function AllStockLotsGrid() {
 
   const { data: locationsData } = useGetLocationsQuery({ search: "" })
   const locations = locationsData?.locations || []
-  const [createLocation] = useCreateLocationMutation()
 
   const [newRows, setNewRows] = useState<any[]>([])
 
