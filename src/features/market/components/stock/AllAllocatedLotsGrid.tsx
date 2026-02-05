@@ -5,7 +5,7 @@
  */
 
 import { DataGrid, GridColDef } from "@mui/x-data-grid"
-import { Paper, Typography, Box, Chip } from "@mui/material"
+import { Paper, Typography, Box, Chip, Avatar } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 import { useCurrentOrg } from "../../../../hooks/login/CurrentOrg"
@@ -26,24 +26,26 @@ export function AllAllocatedLotsGrid() {
     {
       field: "listing_id",
       headerName: t("stock.listing", "Listing"),
-      flex: 1,
+      flex: 1.5,
       valueGetter: (value, row) => row.lot?.listing_id,
-      renderCell: (params) =>
-        params.value ? (
-          <Link to={`/market/listing/${params.value}`}>
-            {params.value.substring(0, 8).toUpperCase()}
-          </Link>
-        ) : (
-          "-"
-        ),
+      renderCell: (params) => {
+        const photo = params.row.lot?.photos?.[0]
+        const title = params.row.lot?.title || "Untitled"
+        return (
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <Avatar src={photo} sx={{ width: 32, height: 32 }} />
+            <Link to={`/market/listing/${params.value}`}>{title}</Link>
+          </Box>
+        )
+      },
     },
     {
       field: "order_id",
       headerName: t("stock.order", "Order"),
-      flex: 1,
+      flex: 1.5,
       renderCell: (params) => (
         <Link to={`/contracts/${params.value}`}>
-          {params.value.substring(0, 8).toUpperCase()}
+          {params.row.order_title || params.value.substring(0, 8).toUpperCase()}
         </Link>
       ),
     },
