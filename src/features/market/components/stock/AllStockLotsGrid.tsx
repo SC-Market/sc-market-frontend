@@ -196,6 +196,14 @@ export function AllStockLotsGrid() {
             )}
           />
         )}
+        renderOption={(props, option) => {
+          const { key, ...otherProps } = props
+          return (
+            <Box component="li" key={key} {...otherProps}>
+              <Typography variant="body2">{option.name}</Typography>
+            </Box>
+          )
+        }}
         fullWidth
         sx={{ height: "100%" }}
       />
