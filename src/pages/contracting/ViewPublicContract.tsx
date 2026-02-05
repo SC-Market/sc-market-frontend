@@ -7,9 +7,9 @@ import { Helmet } from "react-helmet"
 import { Page } from "../../components/metadata/Page"
 import { FRONTEND_URL } from "../../util/constants"
 import { ContainerGrid } from "../../components/layout/ContainerGrid"
-import { Breadcrumbs, Grid, Link as MaterialLink } from "@mui/material"
+import { PageBreadcrumbs } from "../../components/navigation"
+import { Grid } from "@mui/material"
 import React from "react"
-import { BackArrow } from "../../components/button/BackArrow"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
 import { PageBody404 } from "../errors/Error404"
 import { ContractDetailsArea } from "../../views/contracts/ContractDetailsArea"
@@ -76,31 +76,24 @@ export function ViewPublicContract() {
       )}
       <ContainerGrid sidebarOpen={true} maxWidth={"lg"}>
         <Grid item xs={12}>
-          <Breadcrumbs>
-            <MaterialLink
-              component={Link}
-              to={"/contracts"}
-              underline="hover"
-              color={"text.primary"}
-            >
-              {t("contracts.publicContracts")}
-            </MaterialLink>
-
-            <MaterialLink
-              component={Link}
-              to={`/contracts/public/${contract_id}`}
-              underline="hover"
-              color={"text.secondary"}
-            >
-              {t("contracts.contractShort", {
-                id: (contract_id || "").substring(0, 8).toUpperCase(),
-              })}
-            </MaterialLink>
-          </Breadcrumbs>
+          <PageBreadcrumbs
+            items={[
+              {
+                label: t("contracts.publicContracts"),
+                href: "/contracts",
+              },
+              {
+                label:
+                  contract?.title ||
+                  t("contracts.contractShort", {
+                    id: (contract_id || "").substring(0, 8).toUpperCase(),
+                  }),
+              },
+            ]}
+          />
         </Grid>
         <HeaderTitle>
-          <BackArrow />
-          {t("contracts.viewContract")}
+          {contract?.title || t("contracts.viewContract")}
         </HeaderTitle>
 
         {isError ? (

@@ -15,7 +15,7 @@ export function ServiceMarketView() {
   return (
     <>
       {xs && <ServiceSidebar />}
-      <Container maxWidth={"xl"}>
+      <Container maxWidth={"xxl"}>
         <Grid
           container
           spacing={theme.layoutSpacing.layout}
