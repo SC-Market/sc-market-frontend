@@ -217,7 +217,7 @@ export function MobileBottomNav() {
               icon={
                 <Badge
                   badgeContent={pendingOrderCount}
-                  color="error"
+                  color="primary"
                   sx={{
                     "& .MuiBadge-badge": {
                       fontSize: "0.7rem",
