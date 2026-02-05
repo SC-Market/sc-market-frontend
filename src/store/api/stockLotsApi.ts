@@ -263,6 +263,10 @@ export const stockLotsApi = serviceApi.injectEndpoints({
         contractor_spectrum_id?: string
         location_id?: string
         listed?: boolean
+        status?: string
+        min_quantity?: string
+        max_quantity?: string
+        search?: string
         page_size?: number
         offset?: number
       }
@@ -279,6 +283,12 @@ export const stockLotsApi = serviceApi.injectEndpoints({
           searchParams.append("location_id", params.location_id)
         if (params.listed !== undefined)
           searchParams.append("listed", String(params.listed))
+        if (params.status) searchParams.append("status", params.status)
+        if (params.min_quantity)
+          searchParams.append("min_quantity", params.min_quantity)
+        if (params.max_quantity)
+          searchParams.append("max_quantity", params.max_quantity)
+        if (params.search) searchParams.append("search", params.search)
         if (params.page_size)
           searchParams.append("page_size", String(params.page_size))
         if (params.offset) searchParams.append("offset", String(params.offset))
