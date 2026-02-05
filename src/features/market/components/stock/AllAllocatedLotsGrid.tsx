@@ -40,7 +40,7 @@ export function AllAllocatedLotsGrid() {
               sx={{ width: 32, height: 32 }}
             />
             <Link
-              to={`/market/listing/${params.value}`}
+              to={`/market/${params.value}`}
               style={{ textDecoration: "none", color: "inherit" }}
             >
               <UnderlineLink>{title}</UnderlineLink>
@@ -55,7 +55,7 @@ export function AllAllocatedLotsGrid() {
       flex: 1.5,
       renderCell: (params) => (
         <Link
-          to={`/contracts/${params.value}`}
+          to={`/contract/${params.value}`}
           style={{ textDecoration: "none", color: "inherit" }}
         >
           <UnderlineLink>
