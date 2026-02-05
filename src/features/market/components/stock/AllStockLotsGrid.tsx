@@ -123,7 +123,11 @@ export function AllStockLotsGrid() {
             {...props}
             sx={{ display: "flex", alignItems: "center", gap: 1 }}
           >
-            <Avatar src={option.photos[0]} sx={{ width: 32, height: 32 }} />
+            <Avatar
+              src={option.photos[0]}
+              variant="rounded"
+              sx={{ width: 32, height: 32 }}
+            />
             <Typography variant="body2">{option.details.title}</Typography>
           </Box>
         )}
@@ -224,7 +228,11 @@ export function AllStockLotsGrid() {
         if (!listing) return null
         return (
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <Avatar src={listing.photos[0]} sx={{ width: 32, height: 32 }} />
+            <Avatar
+              src={listing.photos[0]}
+              variant="rounded"
+              sx={{ width: 32, height: 32 }}
+            />
             <Typography variant="body2">{listing.details.title}</Typography>
           </Box>
         )
