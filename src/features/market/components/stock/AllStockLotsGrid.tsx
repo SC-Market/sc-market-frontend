@@ -74,9 +74,9 @@ export function AllStockLotsGrid() {
     contractor_spectrum_id: hasOrg ? currentOrg?.spectrum_id : undefined,
     location_id: filters.locationId || undefined,
     status: filters.status !== "all" ? filters.status : undefined,
-    min_quantity: filters.minQuantity || undefined,
-    max_quantity: filters.maxQuantity || undefined,
-    search: filters.search || undefined,
+    min_quantity: filters.minQuantity ? filters.minQuantity : undefined,
+    max_quantity: filters.maxQuantity ? filters.maxQuantity : undefined,
+    search: filters.search ? filters.search : undefined,
     page_size: 100,
     offset: 0,
   })
@@ -115,10 +115,41 @@ export function AllStockLotsGrid() {
           onChange={handleChange}
           locations={locations}
           size="small"
+          fullWidth
         />
       )
     },
     [locations],
+  )
+
+  // Custom edit component for owner selection
+  function OwnerEditCell(props: GridRenderEditCellParams) {
+    const { id, value, field } = props
+    const apiRef = useGridApiContext()
+
+    const handleMemberSelect = (member: any) => {
+      // Convert username to user_id by looking up in contractor members
+      // For now, store the username and we'll need to resolve it on save
+      apiRef.current.setEditCellValue({
+        id,
+        field,
+        value: member?.username || null,
+      })
+    }
+
+    return (
+      <OrgMemberSearch
+        fullWidth
+        size="small"
+        onMemberSelect={handleMemberSelect}
+        placeholder={t("AllStockLots.selectOwner", "Select owner...")}
+      />
+    )
+  }
+
+  const renderOwnerEditCell = useCallback(
+    (props: GridRenderEditCellParams) => <OwnerEditCell {...props} />,
+    [],
   )
 
   // Custom edit component for listing selection
@@ -244,22 +275,7 @@ export function AllStockLotsGrid() {
       flex: 1.5,
       minWidth: 180,
       editable: true,
-      renderEditCell: (params) => {
-        return (
-          <OrgMemberSearch
-            fullWidth
-            size="small"
-            onMemberSelect={(member) => {
-              params.api.setEditCellValue({
-                id: params.id,
-                field: "owner_id",
-                value: member?.username || null,
-              })
-            }}
-            placeholder={t("AllStockLots.selectOwner", "Select owner...")}
-          />
-        )
-      },
+      renderEditCell: renderOwnerEditCell,
       renderCell: (params) => {
         if (!params.value) return <Typography variant="body2">Unassigned</Typography>
         
