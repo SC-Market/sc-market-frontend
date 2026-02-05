@@ -490,7 +490,6 @@ export function Sidebar() {
           easing: theme.transitions.easing.easeOut,
           duration: "0.3s",
         }),
-        // width: (drawerOpen ? sidebarDrawerWidth : 0),
 
         [theme.breakpoints.up("sm")]: {
           width: drawerOpen ? sidebarDrawerWidth : 0,
