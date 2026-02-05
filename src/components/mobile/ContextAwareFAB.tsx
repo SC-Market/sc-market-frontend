@@ -37,7 +37,7 @@ export function ContextAwareFAB() {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
   const bottomNavHeight = useBottomNavHeight()
   const [speedDialOpen, setSpeedDialOpen] = useState(false)
-  const longPressTimer = useRef<NodeJS.Timeout>()
+  const longPressTimer = useRef<number | undefined>()
 
   if (!isMobile) return null
 
@@ -45,27 +45,37 @@ export function ContextAwareFAB() {
     {
       icon: <StoreRounded />,
       name: "Create Listing",
-      onClick: () => navigate("/market/manage"),
+      onClick: () => {
+        navigate("/market/manage")
+      },
     },
     {
       icon: <MessageRounded />,
       name: "New Message",
-      onClick: () => navigate("/messages"),
+      onClick: () => {
+        navigate("/messages")
+      },
     },
     {
       icon: <DesignServicesRounded />,
       name: "Create Service",
-      onClick: () => navigate("/market/services"),
+      onClick: () => {
+        navigate("/market/services")
+      },
     },
     {
       icon: <InventoryRounded />,
       name: "Manage Stock",
-      onClick: () => navigate("/market/stock"),
+      onClick: () => {
+        navigate("/market/stock")
+      },
     },
     {
       icon: <DescriptionRounded />,
       name: "View Contracts",
-      onClick: () => navigate("/contracts"),
+      onClick: () => {
+        navigate("/contracts")
+      },
     },
   ]
 
@@ -95,7 +105,7 @@ export function ContextAwareFAB() {
   if (!primaryAction && !speedDialOpen) return null
 
   const handleTouchStart = () => {
-    longPressTimer.current = setTimeout(() => {
+    longPressTimer.current = window.setTimeout(() => {
       setSpeedDialOpen(true)
       if (navigator.vibrate) {
         navigator.vibrate(50)
@@ -105,7 +115,7 @@ export function ContextAwareFAB() {
 
   const handleTouchEnd = () => {
     if (longPressTimer.current) {
-      clearTimeout(longPressTimer.current)
+      window.clearTimeout(longPressTimer.current)
     }
   }
 

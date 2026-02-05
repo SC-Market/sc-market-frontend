@@ -11,6 +11,7 @@ import { OfflineIndicator } from "../pwa/OfflineIndicator"
 import { UpdateNotification } from "../pwa/UpdateNotification"
 import { InstallPrompt } from "../pwa/InstallPrompt"
 import { MobileBottomNav } from "../navigation/MobileBottomNav"
+import { ContextAwareFAB } from "../mobile/ContextAwareFAB"
 import { useLocation } from "react-router-dom"
 import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -75,6 +76,7 @@ export function Root(props: { children: React.ReactNode }) {
         </Box>
         {!isMessagingPage && !isMobile && <PreferencesButton />}
         <MobileBottomNav />
+        <ContextAwareFAB />
       </Box>
     </Box>
   )
