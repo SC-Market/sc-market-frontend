@@ -7,6 +7,7 @@
 import { DataGrid, GridColDef } from "@mui/x-data-grid"
 import { Paper, Typography, Box, Chip, Avatar } from "@mui/material"
 import { useTranslation } from "react-i18next"
+import { Link } from "react-router-dom"
 import { useCurrentOrg } from "../../../../hooks/login/CurrentOrg"
 import { useGetContractorAllocationsQuery } from "../../../../store/api/stockLotsApi"
 import { UnderlineLink } from "../../../../components/typography/UnderlineLink"
@@ -30,13 +31,17 @@ export function AllAllocatedLotsGrid() {
       valueGetter: (value, row) => row.lot?.listing_id,
       renderCell: (params) => {
         const photo = params.row.lot?.photos?.[0]
-        const title = params.row.lot?.title || "Untitled"
+        const title = params.row.lot?.title || params.value.substring(0, 8).toUpperCase()
         return (
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <Avatar src={photo} sx={{ width: 32, height: 32 }} />
-            <UnderlineLink to={`/market/listing/${params.value}`}>
-              {title}
-            </UnderlineLink>
+            <Avatar
+              src={photo}
+              variant="rounded"
+              sx={{ width: 32, height: 32 }}
+            />
+            <Link to={`/market/listing/${params.value}`}>
+              <UnderlineLink>{title}</UnderlineLink>
+            </Link>
           </Box>
         )
       },
@@ -46,9 +51,11 @@ export function AllAllocatedLotsGrid() {
       headerName: t("stock.order", "Order"),
       flex: 1.5,
       renderCell: (params) => (
-        <UnderlineLink to={`/contracts/${params.value}`}>
-          {params.row.order_title || params.value.substring(0, 8).toUpperCase()}
-        </UnderlineLink>
+        <Link to={`/contracts/${params.value}`}>
+          <UnderlineLink>
+            {params.row.order_title || params.value.substring(0, 8).toUpperCase()}
+          </UnderlineLink>
+        </Link>
       ),
     },
     {
