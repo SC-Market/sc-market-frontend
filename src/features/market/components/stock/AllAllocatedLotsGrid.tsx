@@ -20,7 +20,7 @@ export function AllAllocatedLotsGrid() {
     { skip: !currentOrg?.spectrum_id },
   )
 
-  const allocations = data?.allocations || []
+  const allocations = data?.data?.allocations || []
 
   const columns: GridColDef[] = [
     {
