@@ -4,7 +4,7 @@
  * Sidebar for filtering stock lots
  */
 
-import React, { useState } from "react"
+import React from "react"
 import {
   Stack,
   TextField,
@@ -15,14 +15,18 @@ import {
 import { useTranslation } from "react-i18next"
 import SearchIcon from "@mui/icons-material/Search"
 import { LocationSelector } from "./LocationSelector"
+import { useStockSearch } from "./StockSearchContext"
 
 export function StockSearchArea() {
   const { t } = useTranslation()
-  const [search, setSearch] = useState("")
-  const [locationId, setLocationId] = useState<string | null>(null)
-  const [status, setStatus] = useState("all")
-  const [minQuantity, setMinQuantity] = useState("")
-  const [maxQuantity, setMaxQuantity] = useState("")
+  const {
+    filters,
+    setSearch,
+    setLocationId,
+    setStatus,
+    setMinQuantity,
+    setMaxQuantity,
+  } = useStockSearch()
 
   return (
     <Stack spacing={1} sx={{ p: 2 }}>
@@ -34,7 +38,7 @@ export function StockSearchArea() {
         fullWidth
         size="small"
         placeholder={t("stock.searchLots", "Search lots...")}
-        value={search}
+        value={filters.search}
         onChange={(e) => setSearch(e.target.value)}
         InputProps={{
           startAdornment: (
@@ -46,7 +50,7 @@ export function StockSearchArea() {
       />
 
       <LocationSelector
-        value={locationId}
+        value={filters.locationId}
         onChange={(newValue) => setLocationId(newValue)}
         size="small"
         fullWidth
@@ -58,8 +62,10 @@ export function StockSearchArea() {
         fullWidth
         size="small"
         label={t("stock.status", "Status")}
-        value={status}
-        onChange={(e) => setStatus(e.target.value)}
+        value={filters.status}
+        onChange={(e) =>
+          setStatus(e.target.value as "all" | "available" | "allocated")
+        }
       >
         <MenuItem value="all">{t("common.all", "All")}</MenuItem>
         <MenuItem value="available">
@@ -76,7 +82,7 @@ export function StockSearchArea() {
           size="small"
           type="number"
           label={t("stock.minQuantity", "Min Qty")}
-          value={minQuantity}
+          value={filters.minQuantity}
           onChange={(e) => setMinQuantity(e.target.value)}
         />
         <TextField
@@ -84,7 +90,7 @@ export function StockSearchArea() {
           size="small"
           type="number"
           label={t("stock.maxQuantity", "Max Qty")}
-          value={maxQuantity}
+          value={filters.maxQuantity}
           onChange={(e) => setMaxQuantity(e.target.value)}
         />
       </Stack>

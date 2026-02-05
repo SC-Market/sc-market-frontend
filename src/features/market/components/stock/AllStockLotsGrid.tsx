@@ -41,11 +41,15 @@ import { useCurrentOrg } from "../../../../hooks/login/CurrentOrg"
 import { useAlertHook } from "../../../../hooks/alert/AlertHook"
 import type { StockManageType } from "../../domain/types"
 import { LocationSelector } from "./LocationSelector"
+import { useStockSearch } from "./StockSearchContext"
+import { OrgMemberSearch } from "../../../../components/search/OrgMemberSearch"
+import { Link } from "react-router-dom"
 
 export function AllStockLotsGrid() {
   const { t } = useTranslation()
   const [currentOrg] = useCurrentOrg()
   const issueAlert = useAlertHook()
+  const { filters } = useStockSearch()
 
   // Fetch all listings using same approach as MyItemStock
   const hasOrg = currentOrg && currentOrg.spectrum_id
@@ -65,10 +69,15 @@ export function AllStockLotsGrid() {
   const { data: listingsData } = useGetMyListingsQuery(finalParams)
   const listings = (listingsData?.listings || []) as StockManageType[]
 
-  // Fetch all lots using search endpoint
+  // Fetch all lots using search endpoint with filters
   const { data: lotsData } = useSearchLotsQuery({
     contractor_spectrum_id: hasOrg ? currentOrg?.spectrum_id : undefined,
-    page_size: 24,
+    location_id: filters.locationId || undefined,
+    status: filters.status !== "all" ? filters.status : undefined,
+    min_quantity: filters.minQuantity || undefined,
+    max_quantity: filters.maxQuantity || undefined,
+    search: filters.search || undefined,
+    page_size: 100,
     offset: 0,
   })
 
@@ -232,8 +241,38 @@ export function AllStockLotsGrid() {
     {
       field: "owner_id",
       headerName: t("AllStockLots.owner", "Owner"),
-      flex: 1,
-      valueFormatter: (value) => value || "Unassigned",
+      flex: 1.5,
+      minWidth: 180,
+      editable: true,
+      renderEditCell: (params) => {
+        return (
+          <OrgMemberSearch
+            onMemberSelect={(member) => {
+              params.api.setEditCellValue({
+                id: params.id,
+                field: "owner_id",
+                value: member?.username || null,
+              })
+            }}
+            placeholder={t("AllStockLots.selectOwner", "Select owner...")}
+          />
+        )
+      },
+      renderCell: (params) => {
+        if (!params.value) return <Typography variant="body2">Unassigned</Typography>
+        
+        return (
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <Avatar sx={{ width: 24, height: 24 }} />
+            <Link
+              to={`/user/${params.value}`}
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              <Typography variant="body2">{params.value}</Typography>
+            </Link>
+          </Box>
+        )
+      },
     },
     {
       field: "location_id",
