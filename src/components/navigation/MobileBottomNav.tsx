@@ -24,6 +24,7 @@ import { useTranslation } from "react-i18next"
 import { useUnreadChatCount } from "../../features/chats"
 import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
 import { usePendingOrderCount } from "../../hooks/orders/usePendingOrderCount"
+import { haptic } from "../../util/haptics"
 
 /**
  * Mobile bottom navigation bar for quick access to primary pages
@@ -93,10 +94,8 @@ export function MobileBottomNav() {
   }
 
   const handleChange = (_event: React.SyntheticEvent, newValue: string) => {
-    // Haptic feedback on tab switch (mobile only)
-    if (navigator.vibrate) {
-      navigator.vibrate(10) // Short 10ms vibration
-    }
+    // Haptic feedback on tab switch
+    haptic.selection()
 
     switch (newValue) {
       case "home":

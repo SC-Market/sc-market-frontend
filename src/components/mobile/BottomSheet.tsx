@@ -16,6 +16,7 @@ import {
 import React, { ReactNode, useState } from "react"
 import { CloseRounded } from "@mui/icons-material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { haptic } from "../../util/haptics"
 
 interface BottomSheetProps {
   open: boolean
@@ -68,12 +69,21 @@ export function BottomSheet({
 
   const currentHeight = getSnapHeight(currentSnap)
 
+  const handleOpen = () => {
+    haptic.light()
+  }
+
+  const handleClose = () => {
+    haptic.light()
+    onClose()
+  }
+
   return (
     <SwipeableDrawer
       anchor="bottom"
       open={open}
-      onClose={onClose}
-      onOpen={() => {}}
+      onClose={handleClose}
+      onOpen={handleOpen}
       disableSwipeToOpen
       PaperProps={{
         sx: {
