@@ -20,8 +20,6 @@ import {
   Box,
   Button,
   Avatar,
-  Autocomplete,
-  TextField,
 } from "@mui/material"
 import {
   Delete as DeleteIcon,
@@ -36,11 +34,11 @@ import {
   useUpdateLotMutation,
   useDeleteLotMutation,
   useGetLocationsQuery,
-  useCreateLocationMutation,
 } from "../../../../store/api/stockLotsApi"
 import { useCurrentOrg } from "../../../../hooks/login/CurrentOrg"
 import { useAlertHook } from "../../../../hooks/alert/AlertHook"
 import type { StockManageType } from "../../domain/types"
+import { LocationSelector } from "./LocationSelector"
 
 export function AllStockLotsGrid() {
   const { t } = useTranslation()
@@ -142,70 +140,21 @@ export function AllStockLotsGrid() {
   function LocationEditCell(props: GridRenderEditCellParams) {
     const { id, value, field } = props
     const apiRef = useGridApiContext()
-    const [inputValue, setInputValue] = useState("")
 
-    const handleChange = async (
-      _: any,
-      newValue: string | { name: string; location_id: string } | null,
-      reason: string,
-    ) => {
-      if (reason === "createOption" && typeof newValue === "string") {
-        // Create new location
-        try {
-          const result = await createLocation({ name: newValue }).unwrap()
-          apiRef.current.setEditCellValue({
-            id,
-            field,
-            value: result.location.location_id,
-          })
-        } catch (error) {
-          console.error("Failed to create location", error)
-        }
-      } else {
-        apiRef.current.setEditCellValue({
-          id,
-          field,
-          value:
-            typeof newValue === "string" ? null : newValue?.location_id || null,
-        })
-      }
+    const handleChange = (locationId: string | null) => {
+      apiRef.current.setEditCellValue({
+        id,
+        field,
+        value: locationId,
+      })
     }
 
-    const selectedLocation = locations.find((l) => l.location_id === value)
-
     return (
-      <Autocomplete
-        value={selectedLocation || null}
+      <LocationSelector
+        value={value}
         onChange={handleChange}
-        inputValue={inputValue}
-        onInputChange={(_, newInputValue) => setInputValue(newInputValue)}
-        options={locations}
-        getOptionLabel={(option) =>
-          typeof option === "string" ? option : option.name
-        }
-        freeSolo
-        selectOnFocus
-        clearOnBlur
-        handleHomeEndKeys
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            placeholder={t(
-              "AllStockLots.selectOrCreateLocation",
-              "Select or create location",
-            )}
-          />
-        )}
-        renderOption={(props, option) => {
-          const { key, ...otherProps } = props
-          return (
-            <Box component="li" key={key} {...otherProps}>
-              <Typography variant="body2">{option.name}</Typography>
-            </Box>
-          )
-        }}
-        fullWidth
-        sx={{ height: "100%" }}
+        locations={locations}
+        size="small"
       />
     )
   }
