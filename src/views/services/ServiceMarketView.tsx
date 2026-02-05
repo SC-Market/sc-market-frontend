@@ -21,18 +21,22 @@ export function ServiceMarketView() {
           spacing={theme.layoutSpacing.layout}
           justifyContent={"center"}
         >
-          {/* Hide search area on mobile - it's in the sidebar */}
-          <Grid
-            item
-            xs={0}
-            md={3}
-            sx={{ display: { xs: "none", md: "block" } }}
-          >
-            <Paper>
-              <ServiceSearchArea />
-            </Paper>
-          </Grid>
-          <Grid item xs={12} md={9}>
+          {/* Desktop: Persistent sidebar */}
+          {!xs && (
+            <Grid item md={2.25}>
+              <Paper
+                sx={{
+                  position: "sticky",
+                  top: theme.spacing(2),
+                  maxHeight: `calc(100vh - ${theme.spacing(4)})`,
+                  overflowY: "auto",
+                }}
+              >
+                <ServiceSearchArea />
+              </Paper>
+            </Grid>
+          )}
+          <Grid item xs={12} md={xs ? 12 : 9.75}>
             <Grid
               container
               spacing={theme.layoutSpacing.layout}
