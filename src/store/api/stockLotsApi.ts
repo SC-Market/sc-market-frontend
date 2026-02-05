@@ -225,6 +225,8 @@ export const stockLotsApi = serviceApi.injectEndpoints({
         url: `/api/contractors/${contractor_spectrum_id}/allocations`,
         method: "GET",
       }),
+      transformResponse: (response: { data: { allocations: Allocation[] } }) =>
+        response.data,
       providesTags: ["Orders"],
     }),
 
