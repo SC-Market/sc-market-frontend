@@ -87,7 +87,7 @@ export function ContextAwareFAB() {
     if (path.includes("/messages")) {
       return allActions[1] // New Message
     }
-    if (path.includes("/market/services")) {
+    if (path.includes("/order/services")) {
       return allActions[2] // Create Service
     }
     if (path.includes("/market/stock")) {
