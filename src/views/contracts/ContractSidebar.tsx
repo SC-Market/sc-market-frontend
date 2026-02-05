@@ -283,7 +283,8 @@ export function ContractSidebar() {
         open={open}
         onClose={() => setOpen(false)}
         title={t("service_search.filters", "Filters")}
-        maxHeight="90vh"
+        maxHeight="75vh"
+        defaultSnap="full"
       >
         {sidebarContent}
       </BottomSheet>
