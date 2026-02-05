@@ -257,8 +257,36 @@ export function Contracts() {
                   </Suspense>
                 </TabPanel>
                 <TabPanel value={tabPage} index={2}>
-                  <ContractSidebar />
-                  <ContractListings />
+                  <Box sx={{ display: "flex" }}>
+                    <ContractSidebar />
+                    <Box
+                      sx={{
+                        flex: 1,
+                        marginLeft: {
+                          xs: 0,
+                          lg: contractSidebarOpen
+                            ? `${marketDrawerWidth}px`
+                            : 0,
+                        },
+                        transition: theme.transitions.create("margin", {
+                          easing: theme.transitions.easing.sharp,
+                          duration: theme.transitions.duration.enteringScreen,
+                        }),
+                      }}
+                    >
+                      <Container maxWidth="xxl">
+                        <Grid
+                          container
+                          spacing={{
+                            xs: theme.layoutSpacing.component,
+                            sm: theme.layoutSpacing.layout,
+                          }}
+                        >
+                          <ContractListings />
+                        </Grid>
+                      </Container>
+                    </Box>
+                  </Box>
                 </TabPanel>
               </OpenLayout>
             </ContractSidebarContext.Provider>
