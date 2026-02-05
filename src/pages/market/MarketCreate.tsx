@@ -1,5 +1,6 @@
 import React, { useMemo } from "react"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
+import { PageBreadcrumbs } from "../../components/navigation"
 import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import {
   AggregateMarketListingForm,
@@ -11,7 +12,6 @@ import { Alert, Grid, Tab, Tabs } from "@mui/material"
 import { Link } from "react-router-dom"
 import { a11yProps, TabPanel } from "../../components/tabs/Tabs"
 import { useParams } from "react-router-dom"
-import { BackArrow } from "../../components/button/BackArrow"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -36,8 +36,20 @@ export function MarketCreate(props: {}) {
   return (
     <Page title={t("market.createMarketListing")}>
       <ContainerGrid maxWidth={"lg"} sidebarOpen={true}>
+        <Grid item xs={12}>
+          <PageBreadcrumbs
+            items={[
+              { label: t("market.title", "Market"), href: "/market" },
+              {
+                label: t("sidebar.my_market_listings"),
+                href: "/market/me",
+              },
+              { label: t("market.createMarketListing") },
+            ]}
+          />
+        </Grid>
         <HeaderTitle lg={12} xl={12}>
-          <BackArrow /> {t("market.createMarketListing")}
+          {t("market.createMarketListing")}
         </HeaderTitle>
 
         {!isVerified && (
