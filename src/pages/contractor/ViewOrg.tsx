@@ -8,7 +8,7 @@ import { Skeleton } from "@mui/material"
 import { useGetContractorBySpectrumIDQuery } from "../../store/contractor"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { Page } from "../../components/metadata/Page"
-import { BackArrow } from "../../components/button/BackArrow"
+import { PageBreadcrumbs } from "../../components/navigation"
 import { useTranslation } from "react-i18next"
 import {
   shouldRedirectTo404,

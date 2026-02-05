@@ -282,7 +282,7 @@ export function ContractSidebar() {
     </Box>
   )
 
-  // On mobile, use BottomSheet - don't render Drawer at all
+  // On mobile, use BottomSheet
   if (isMobile) {
     return (
       <BottomSheet
@@ -297,55 +297,6 @@ export function ContractSidebar() {
     )
   }
 
-  // On desktop, use permanent drawer
-  return (
-    <Drawer
-      variant="permanent"
-      open
-      sx={{
-        zIndex: theme.zIndex.drawer - 3,
-        width: open ? marketDrawerWidth : 0,
-        transition: theme.transitions.create(["width", "margin"], {
-          easing: theme.transitions.easing.sharp,
-          duration: theme.transitions.duration.enteringScreen,
-        }),
-        "& .MuiDrawer-paper": {
-          width: open ? marketDrawerWidth : 0,
-          boxSizing: "border-box",
-          overflow: "scroll",
-          left: drawerOpen ? sidebarDrawerWidth : 0,
-          backgroundColor: theme.palette.background.default,
-          transition: theme.transitions.create(
-            ["width", "borderRight", "borderColor"],
-            {
-              easing: theme.transitions.easing.easeOut,
-              duration: "0.3s",
-            },
-          ),
-          borderRight: open ? 1 : 0,
-          borderColor: open ? theme.palette.outline.main : "transparent",
-        },
-        position: "relative",
-        whiteSpace: "nowrap",
-        background: "transparent",
-        overflow: "scroll",
-        borderRight: open ? 1 : 0,
-        borderColor: open ? theme.palette.outline.main : "transparent",
-      }}
-      container={
-        window !== undefined
-          ? () => window.document.getElementById("rootarea")
-          : undefined
-      }
-    >
-      <Box
-        sx={{
-          ...theme.mixins.toolbar,
-          position: "relative",
-          width: "100%",
-        }}
-      />
-      {sidebarContent}
-    </Drawer>
-  )
+  // On desktop, return content directly (wrapped in Paper by parent)
+  return sidebarContent
 }

@@ -4,11 +4,9 @@ import React, { useMemo, useEffect, useState } from "react"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
 import { useGetOrderByIdQuery } from "../../store/orders"
 import { Page } from "../../components/metadata/Page"
-import { BackArrow } from "../../components/button/BackArrow"
+import { PageBreadcrumbs } from "../../components/navigation"
 import {
-  Breadcrumbs,
   Grid,
-  Link as MaterialLink,
   Skeleton,
   Stack,
   Tabs,
@@ -158,45 +156,29 @@ export function ViewOrder() {
     >
       <ContainerGrid sidebarOpen={true} maxWidth={"xl"}>
         <Grid item xs={12}>
-          <Breadcrumbs>
-            <MaterialLink
-              component={Link}
-              to={"/dashboard"}
-              underline="hover"
-              color={"text.primary"}
-            >
-              {t("dashboard.title")}
-            </MaterialLink>
-            {order?.offer_session_id && (
-              <MaterialLink
-                component={Link}
-                to={`/offer/${order?.offer_session_id}`}
-                underline="hover"
-                color={"text.secondary"}
-              >
-                {t("orders.offerShort", {
-                  id: (order?.offer_session_id || "")
-                    .substring(0, 8)
-                    .toUpperCase(),
-                })}
-              </MaterialLink>
-            )}
-
-            <MaterialLink
-              component={Link}
-              to={`/contracts/${id}`}
-              underline="hover"
-              color={"text.secondary"}
-            >
-              {t("orders.orderShort", {
-                id: (id || "").substring(0, 8).toUpperCase(),
-              })}
-            </MaterialLink>
-          </Breadcrumbs>
+          <PageBreadcrumbs
+            items={[
+              { label: t("dashboard.title"), href: "/dashboard" },
+              ...(order?.offer_session_id
+                ? [
+                    {
+                      label: t("orders.offerShort", {
+                        id: order.offer_session_id
+                          .substring(0, 8)
+                          .toUpperCase(),
+                      }),
+                      href: `/offer/${order.offer_session_id}`,
+                    },
+                  ]
+                : []),
+              {
+                label: order?.title || `Order ${id?.substring(0, 8).toUpperCase()}`,
+              },
+            ]}
+          />
         </Grid>
 
         <HeaderTitle lg={12} xl={12}>
-          <BackArrow />{" "}
           {order?.title || `Order ${id?.substring(0, 8).toUpperCase()}`}
         </HeaderTitle>
 

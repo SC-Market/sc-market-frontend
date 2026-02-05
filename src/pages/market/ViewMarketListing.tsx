@@ -10,10 +10,10 @@ import {
 import { MarketListingView } from "../../views/market/MarketListingView"
 import { MarketListingViewSkeleton } from "../../views/market/MarketListingView"
 import { Page } from "../../components/metadata/Page"
+import { PageBreadcrumbs } from "../../components/navigation"
 import { MarketListingEditView } from "../../views/market/MarketListingEditView"
 import { Button, Grid } from "@mui/material"
 import ShoppingCartRoundedIcon from "@mui/icons-material/ShoppingCartRounded"
-import { BackArrow } from "../../components/button/BackArrow"
 import { MarketMultipleEditView } from "../../features/market/components/MarketMultipleEditView"
 import { formatCompleteListingUrl, formatMarketUrl } from "../../util/urls"
 import { useTranslation } from "react-i18next"
@@ -52,6 +52,19 @@ export function ViewMarketListing() {
       canonUrl={listing && formatCompleteListingUrl(listing)}
     >
       <ContainerGrid sidebarOpen={true} maxWidth={"xl"}>
+        <Grid item xs={12}>
+          <PageBreadcrumbs
+            items={[
+              { label: t("market.title", "Market"), href: "/market" },
+              {
+                label:
+                  listing?.details?.title ||
+                  t("market.viewMarketListing", "Listing"),
+              },
+            ]}
+          />
+        </Grid>
+
         <Grid
           item
           container
@@ -60,7 +73,7 @@ export function ViewMarketListing() {
           xs={12}
         >
           <HeaderTitle md={7} lg={7} xl={7}>
-            <BackArrow /> {t("market.viewMarketListing")}
+            {listing?.details?.title || t("market.viewMarketListing")}
           </HeaderTitle>
 
           <Grid item>

@@ -19,6 +19,7 @@ import {
   Tabs,
   Typography,
   CircularProgress,
+  Paper,
 } from "@mui/material"
 import { Page } from "../../components/metadata/Page"
 import { Link, useLocation, useNavigate } from "react-router-dom"
@@ -199,36 +200,48 @@ export function Contracts() {
                   </Suspense>
                 </TabPanel>
                 <TabPanel value={tabPage} index={2}>
-                  <Box sx={{ display: "flex" }}>
-                    <ContractSidebar />
-                    <Box
-                      sx={{
-                        flex: 1,
-                        marginLeft: {
-                          xs: 0,
-                          lg: contractSidebarOpen
-                            ? `${marketDrawerWidth}px`
-                            : 0,
-                        },
-                        transition: theme.transitions.create("margin", {
-                          easing: theme.transitions.easing.sharp,
-                          duration: theme.transitions.duration.enteringScreen,
-                        }),
+                  <Container maxWidth="xxl">
+                    <Grid
+                      container
+                      spacing={{
+                        xs: theme.layoutSpacing.component,
+                        sm: theme.layoutSpacing.layout,
                       }}
                     >
-                      <Container maxWidth="xxl">
-                        <Grid
-                          container
-                          spacing={{
-                            xs: theme.layoutSpacing.component,
-                            sm: theme.layoutSpacing.layout,
-                          }}
-                        >
-                          <ContractListings />
+                      {/* Mobile: BottomSheet sidebar */}
+                      {xs && <ContractSidebar />}
+
+                      {/* Desktop: Sticky sidebar */}
+                      {!xs && contractSidebarOpen && (
+                        <Grid item lg={3}>
+                          <Paper
+                            sx={{
+                              position: "sticky",
+                              top: theme.spacing(2),
+                              maxHeight: `calc(100vh - ${theme.spacing(4)})`,
+                              overflowY: "auto",
+                            }}
+                          >
+                            <ContractSidebar />
+                          </Paper>
                         </Grid>
-                      </Container>
-                    </Box>
-                  </Box>
+                      )}
+
+                      {/* Main content */}
+                      <Grid
+                        item
+                        xs={12}
+                        lg={contractSidebarOpen ? 9 : 12}
+                        container
+                        spacing={{
+                          xs: theme.layoutSpacing.component,
+                          sm: theme.layoutSpacing.layout,
+                        }}
+                      >
+                        <ContractListings />
+                      </Grid>
+                    </Grid>
+                  </Container>
                 </TabPanel>
               </OpenLayout>
               {xs && tabPage === 1 && (
