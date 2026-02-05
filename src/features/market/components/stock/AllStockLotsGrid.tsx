@@ -396,45 +396,48 @@ export function AllStockLotsGrid() {
 
   return (
     <Paper sx={{ p: 2 }}>
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          mb: 2,
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        processRowUpdate={handleRowUpdate}
+        onProcessRowUpdateError={(error) => console.error(error)}
+        pageSizeOptions={[24, 48, 96]}
+        initialState={{
+          pagination: { paginationModel: { pageSize: 24 } },
         }}
-      >
-        <Typography variant="h6">
-          {t("AllStockLots.title", "All Stock Lots")}
-        </Typography>
-        <Button
-          variant="contained"
-          startIcon={<AddIcon />}
-          onClick={handleAddRow}
-          disabled={listings.length === 0}
-        >
-          {t("AllStockLots.addLot", "Add Lot")}
-        </Button>
-      </Box>
-      <Box sx={{ height: 600, width: "100%" }}>
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          processRowUpdate={handleRowUpdate}
-          onProcessRowUpdateError={(error) => console.error(error)}
-          pageSizeOptions={[24, 48, 96]}
-          initialState={{
-            pagination: { paginationModel: { pageSize: 24 } },
-          }}
-          disableRowSelectionOnClick
-          sx={{
-            "& .MuiDataGrid-cell": {
-              display: "flex",
-              alignItems: "center",
-            },
-          }}
-        />
-      </Box>
+        disableRowSelectionOnClick
+        slots={{
+          toolbar: () => (
+            <Box
+              sx={{
+                p: 2,
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Typography variant="h6">
+                {t("AllStockLots.title", "All Stock Lots")}
+              </Typography>
+              <Button
+                size="small"
+                variant="contained"
+                startIcon={<AddIcon />}
+                onClick={handleAddRow}
+                disabled={listings.length === 0}
+              >
+                {t("AllStockLots.addLot", "Add Lot")}
+              </Button>
+            </Box>
+          ),
+        }}
+        sx={{
+          "& .MuiDataGrid-cell": {
+            display: "flex",
+            alignItems: "center",
+          },
+        }}
+      />
     </Paper>
   )
 }
