@@ -7,6 +7,7 @@ import {
   Divider,
   Drawer,
   Grid,
+  IconButton,
   List,
   ListItemButton,
   ListItemIcon,
@@ -62,7 +63,8 @@ const routePrefetchMap: Record<
 import ExpandMore from "@mui/icons-material/ExpandMore"
 import ExpandLess from "@mui/icons-material/ExpandLess"
 import SearchRounded from "@mui/icons-material/SearchRounded"
-import IconButton from "@mui/material/IconButton"
+import StarRounded from "@mui/icons-material/StarRounded"
+import StarBorderRounded from "@mui/icons-material/StarBorderRounded"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
 import { ChevronLeftRounded } from "@mui/icons-material"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
@@ -77,6 +79,7 @@ import SCMarketLogo from "../../assets/scmarket-logo.png"
 import { useTranslation } from "react-i18next"
 import { useUnreadChatCount } from "../../features/chats"
 import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
+import { useCookies } from "react-cookie"
 
 export function SidebarDropdown(props: SidebarItemProps) {
   const [open, setOpen] = useState(false)
@@ -196,11 +199,17 @@ function isSidebarPathSelected(pathOnly: string, pathname: string): boolean {
   return !!(rest && ORG_ROUTE_REST_TO_CANONICAL[rest] === pathOnly)
 }
 
-export function SidebarLinkBody(props: SidebarItemProps & { to: string }) {
+export function SidebarLinkBody(
+  props: SidebarItemProps & {
+    to: string
+    isStarred?: boolean
+    onToggleStar?: (path: string) => void
+  },
+) {
   const loc = useLocation()
   const pathOnly = (props.to || "").split("?")[0]
   const selected = isSidebarPathSelected(pathOnly, loc.pathname)
-  const { icon, text, chip } = props
+  const { icon, text, chip, isStarred, onToggleStar } = props
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
 
@@ -276,6 +285,23 @@ export function SidebarLinkBody(props: SidebarItemProps & { to: string }) {
             {t(text)}
           </Typography>
         </ListItemText>
+        {xs && onToggleStar && (
+          <IconButton
+            size="small"
+            onClick={(e) => {
+              e.preventDefault()
+              e.stopPropagation()
+              onToggleStar(pathOnly)
+            }}
+            sx={{ ml: "auto", mr: 0.5 }}
+          >
+            {isStarred ? (
+              <StarRounded fontSize="small" color="primary" />
+            ) : (
+              <StarBorderRounded fontSize="small" />
+            )}
+          </IconButton>
+        )}
         {chip ? (
           <Chip
             label={
@@ -299,7 +325,13 @@ export function SidebarLinkBody(props: SidebarItemProps & { to: string }) {
   )
 }
 
-export function SidebarLink(props: SidebarItemProps & { to: string }) {
+export function SidebarLink(
+  props: SidebarItemProps & {
+    to: string
+    isStarred?: boolean
+    onToggleStar?: (path: string) => void
+  },
+) {
   const handleMouseEnter = useCallback(() => {
     // Find matching route for prefetching
     const matchingRoute = Object.keys(routePrefetchMap).find((route) =>
@@ -337,13 +369,23 @@ export function SidebarLink(props: SidebarItemProps & { to: string }) {
   )
 }
 
-export function SidebarItem(props: SidebarItemProps) {
+export function SidebarItem(
+  props: SidebarItemProps & {
+    isStarred?: boolean
+    onToggleStar?: (path: string) => void
+  },
+) {
   return (
     <React.Fragment>
       {props.children ? (
         <SidebarDropdown {...props} />
       ) : (
-        <SidebarLink {...props} to={props.to || "a"} />
+        <SidebarLink
+          {...props}
+          to={props.to || "a"}
+          isStarred={props.isStarred}
+          onToggleStar={props.onToggleStar}
+        />
       )}
     </React.Fragment>
   )
@@ -450,6 +492,15 @@ export function Sidebar() {
   )
 
   const [searchQuery, setSearchQuery] = useState("")
+  const [cookies, setCookie] = useCookies(["starred_sidebar"])
+  const starredItems: string[] = cookies.starred_sidebar || []
+
+  const toggleStar = (itemPath: string) => {
+    const newStarred = starredItems.includes(itemPath)
+      ? starredItems.filter((p) => p !== itemPath)
+      : [...starredItems, itemPath]
+    setCookie("starred_sidebar", newStarred, { path: "/", maxAge: 31536000 })
+  }
 
   const xs = useMediaQuery(theme.breakpoints.down("sm"))
   const bottomNavHeight = useBottomNavHeight()
@@ -628,6 +679,70 @@ export function Sidebar() {
           overflow: "auto",
         }}
       >
+        {/* Starred items section (mobile only) */}
+        {xs && starredItems.length > 0 && (
+          <List
+            sx={{ padding: xs ? 0.5 : 1 }}
+            subheader={
+              <ListSubheader
+                sx={{
+                  marginBottom: xs ? 0 : 0.5,
+                  backgroundColor: "inherit",
+                }}
+              >
+                <Typography
+                  sx={{
+                    bgcolor: "inherit",
+                    fontWeight: "bold",
+                    opacity: 0.7,
+                    textTransform: "uppercase",
+                    fontSize: xs ? "0.75em" : "0.85em",
+                    color: theme.palette.getContrastText(
+                      theme.palette.background.sidebar,
+                    ),
+                  }}
+                  variant={"body2"}
+                >
+                  {t("sidebar.starred", "Starred")}
+                </Typography>
+              </ListSubheader>
+            }
+          >
+            {all_sidebar_entries
+              .flatMap((section) => section.items)
+              .filter(filterItems)
+              .filter((entry) => !entry.children && entry.to)
+              .filter((entry) => {
+                const path =
+                  entry.orgRouteRest && effectiveOrgId
+                    ? `/org/${effectiveOrgId}/${entry.orgRouteRest}`
+                    : entry.to
+                return starredItems.includes(path?.split("?")[0] || "")
+              })
+              .map((entry) => {
+                let resolved = entry
+                if (entry.toOrgPublic && currentOrgObj) {
+                  resolved = {
+                    ...entry,
+                    to: `/contractor/${currentOrgObj.spectrum_id}`,
+                  }
+                } else if (entry.orgRouteRest && effectiveOrgId) {
+                  resolved = {
+                    ...entry,
+                    to: `/org/${effectiveOrgId}/${entry.orgRouteRest}`,
+                  }
+                }
+                return (
+                  <SidebarItem
+                    {...resolved}
+                    key={`starred-${resolved.text}`}
+                    isStarred={true}
+                    onToggleStar={toggleStar}
+                  />
+                )
+              })}
+          </List>
+        )}
         {all_sidebar_entries
           .filter((item) => item.items.filter(filterItems).length)
           .map((item) => {
@@ -704,7 +819,17 @@ export function Sidebar() {
                       ),
                     }
                   }
-                  return <SidebarItem {...resolved} key={resolved.text} />
+                  return (
+                    <SidebarItem
+                      {...resolved}
+                      key={resolved.text}
+                      isStarred={
+                        !resolved.children &&
+                        starredItems.includes(resolved.to?.split("?")[0] || "")
+                      }
+                      onToggleStar={!resolved.children ? toggleStar : undefined}
+                    />
+                  )
                 })}
               </List>
             )
