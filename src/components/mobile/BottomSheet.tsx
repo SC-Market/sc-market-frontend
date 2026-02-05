@@ -2,6 +2,7 @@
  * BottomSheet Component
  * A mobile-friendly modal that slides up from the bottom
  * Better UX than full-screen modals on mobile devices
+ * Supports swipe-down to dismiss gesture
  */
 
 import {
@@ -12,7 +13,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material"
-import React, { ReactNode } from "react"
+import React, { ReactNode, useRef, useState } from "react"
 import { CloseRounded } from "@mui/icons-material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 
@@ -39,10 +40,36 @@ export function BottomSheet({
 }: BottomSheetProps) {
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const dragHandleRef = useRef<HTMLDivElement>(null)
+  const [dragStart, setDragStart] = useState<number | null>(null)
+  const [dragOffset, setDragOffset] = useState(0)
 
   // Don't render anything when closed to prevent backdrop from blocking interaction
   if (!open) {
     return null
+  }
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setDragStart(e.touches[0].clientY)
+  }
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (dragStart === null) return
+    const currentY = e.touches[0].clientY
+    const offset = currentY - dragStart
+    // Only allow dragging down
+    if (offset > 0) {
+      setDragOffset(offset)
+    }
+  }
+
+  const handleTouchEnd = () => {
+    if (dragOffset > 100) {
+      // Threshold to close
+      onClose()
+    }
+    setDragStart(null)
+    setDragOffset(0)
   }
 
   return (
@@ -60,20 +87,20 @@ export function BottomSheet({
           borderTopRightRadius: theme.spacing(3),
           borderBottomLeftRadius: 0,
           borderBottomRightRadius: 0,
-          // Add safe area padding for iOS
           paddingBottom: isMobile ? "env(safe-area-inset-bottom)" : 0,
-          overflow: "hidden", // Prevent BottomSheet from scrolling
+          overflow: "hidden",
+        },
+        style: {
+          transform: `translateY(${dragOffset}px)`,
+          transition: dragStart === null ? "transform 0.2s ease-out" : "none",
         },
       }}
       ModalProps={{
         keepMounted: false,
-        // Ensure nested bottom sheets work properly
         disableAutoFocus: false,
         disableEnforceFocus: false,
         disableRestoreFocus: false,
         sx: {
-          // High z-index to be above most content
-          // Dropdowns use disablePortal so they render within the BottomSheet's z-index context
           zIndex: open ? theme.zIndex.modal + 10 : undefined,
         },
       }}
@@ -81,11 +108,17 @@ export function BottomSheet({
       {/* Drag handle indicator */}
       {isMobile && (
         <Box
+          ref={dragHandleRef}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
           sx={{
             display: "flex",
             justifyContent: "center",
             pt: 1.5,
             pb: 0.5,
+            cursor: "grab",
+            touchAction: "none",
           }}
         >
           <Box
@@ -137,8 +170,7 @@ export function BottomSheet({
           overflowX: "hidden",
           px: 2,
           py: 2,
-          minHeight: 0, // Important for flex scrolling
-          // Add safe area padding for iOS
+          minHeight: 0,
           paddingBottom: isMobile
             ? `calc(${theme.spacing(2)} + env(safe-area-inset-bottom))`
             : theme.spacing(2),
