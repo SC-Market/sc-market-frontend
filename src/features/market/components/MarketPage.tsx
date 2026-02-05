@@ -20,6 +20,7 @@ import { useLocation, useNavigate } from "react-router-dom"
 import { a11yProps, TabPanel } from "../../../components/tabs/Tabs"
 import { useTranslation } from "react-i18next"
 import FilterListIcon from "@mui/icons-material/FilterList"
+import { FiltersFAB } from "../../../components/mobile/FiltersFAB"
 import { Button } from "@mui/material"
 
 // Dynamic imports for heavy components
@@ -93,46 +94,6 @@ export function MarketPage() {
               >
                 <Grid item xs={12} sm="auto">
                   <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    {xs && tabPage === 1 && (
-                      <Button
-                        variant="outlined"
-                        color="secondary"
-                        startIcon={<FilterListIcon />}
-                        aria-label={t("market.toggleSidebar")}
-                        onClick={() => {
-                          setMarketSidebarOpen((prev) => !prev)
-                        }}
-                        sx={{
-                          [theme.breakpoints.up("md")]: {
-                            display: "none",
-                          },
-                          borderRadius: 2,
-                          textTransform: "none",
-                        }}
-                      >
-                        {t("market.filters", "Filters")}
-                      </Button>
-                    )}
-                    {xs && tabPage === 0 && (
-                      <Button
-                        variant="outlined"
-                        color="secondary"
-                        startIcon={<FilterListIcon />}
-                        aria-label={t("service_market.toggle_sidebar")}
-                        onClick={() => {
-                          setServiceSidebarOpen((prev) => !prev)
-                        }}
-                        sx={{
-                          [theme.breakpoints.up("md")]: {
-                            display: "none",
-                          },
-                          borderRadius: 2,
-                          textTransform: "none",
-                        }}
-                      >
-                        {t("service_market.filters", "Filters")}
-                      </Button>
-                    )}
                     <Typography
                       variant="h4"
                       sx={{
@@ -216,6 +177,18 @@ export function MarketPage() {
               </Suspense>
             </TabPanel>
           </OpenLayout>
+          {xs && tabPage === 1 && (
+            <FiltersFAB
+              onClick={() => setMarketSidebarOpen((prev) => !prev)}
+              label={t("market.toggleSidebar")}
+            />
+          )}
+          {xs && tabPage === 0 && (
+            <FiltersFAB
+              onClick={() => setServiceSidebarOpen((prev) => !prev)}
+              label={t("service_market.toggle_sidebar")}
+            />
+          )}
         </ServiceSidebarContext.Provider>
       </MarketSidebarContext.Provider>
     </Page>
