@@ -107,6 +107,7 @@ export function BottomSheet({
       anchor="bottom"
       open={open}
       onClose={disableBackdropClose ? undefined : onClose}
+      transitionDuration={300}
       PaperProps={{
         sx: {
           height: currentHeight,
