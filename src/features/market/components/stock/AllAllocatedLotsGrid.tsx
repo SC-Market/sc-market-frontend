@@ -39,7 +39,10 @@ export function AllAllocatedLotsGrid() {
               variant="rounded"
               sx={{ width: 32, height: 32 }}
             />
-            <Link to={`/market/listing/${params.value}`}>
+            <Link
+              to={`/market/listing/${params.value}`}
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
               <UnderlineLink>{title}</UnderlineLink>
             </Link>
           </Box>
@@ -51,7 +54,10 @@ export function AllAllocatedLotsGrid() {
       headerName: t("stock.order", "Order"),
       flex: 1.5,
       renderCell: (params) => (
-        <Link to={`/contracts/${params.value}`}>
+        <Link
+          to={`/contracts/${params.value}`}
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
           <UnderlineLink>
             {params.row.order_title || params.value.substring(0, 8).toUpperCase()}
           </UnderlineLink>
