@@ -202,6 +202,10 @@ export function Contracts() {
                 <TabPanel value={tabPage} index={2}>
                   <Container maxWidth="xxl">
                     <Grid container spacing={theme.layoutSpacing.layout}>
+                      <Grid item xs={12}>
+                        <Divider light />
+                      </Grid>
+
                       {/* Mobile: BottomSheet sidebar */}
                       {xs && <ContractSidebar />}
 

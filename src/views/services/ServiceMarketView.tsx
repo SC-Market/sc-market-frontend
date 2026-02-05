@@ -1,4 +1,4 @@
-import { Container, Grid, Paper, useMediaQuery } from "@mui/material"
+import { Container, Divider, Grid, Paper, useMediaQuery } from "@mui/material"
 import { ServiceSidebar } from "../contracts/ServiceSidebar"
 import { ServiceListings } from "../contracts/ServiceListings"
 import { useServiceSidebar } from "../../hooks/contract/ServiceSidebar"
@@ -21,6 +21,10 @@ export function ServiceMarketView() {
           spacing={theme.layoutSpacing.layout}
           justifyContent={"center"}
         >
+          <Grid item xs={12}>
+            <Divider light />
+          </Grid>
+
           {/* Desktop: Persistent sidebar */}
           {!xs && (
             <Grid item md={2.25}>
