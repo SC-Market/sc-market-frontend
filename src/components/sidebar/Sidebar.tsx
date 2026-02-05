@@ -657,8 +657,6 @@ export function Sidebar() {
                     sx={{
                       marginBottom: xs ? 0 : 0.5,
                       backgroundColor: "inherit",
-                      paddingTop: xs ? 0.5 : 1,
-                      paddingBottom: xs ? 0.5 : 1,
                     }}
                   >
                     <Typography
