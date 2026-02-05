@@ -15,6 +15,8 @@ import {
   DashboardRounded,
   DesignServicesRounded,
   ForumRounded,
+  DescriptionRounded,
+  WorkRounded,
 } from "@mui/icons-material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useGetUserProfileQuery } from "../../store/profile"
@@ -59,6 +61,8 @@ export function MobileBottomNav() {
     if (path.startsWith("/orders") && !path.startsWith("/org/orders"))
       return "orders"
     if (path.startsWith("/dashboard")) return "dashboard"
+    if (path.startsWith("/contracts")) return "contracts"
+    if (path.startsWith("/recruiting")) return "recruiting"
     if (path === "/") return "home"
     return ""
   }
@@ -125,6 +129,12 @@ export function MobileBottomNav() {
           navigate("/login")
         }
         break
+      case "contracts":
+        navigate("/contracts")
+        break
+      case "recruiting":
+        navigate("/recruiting")
+        break
     }
   }
 
@@ -187,6 +197,22 @@ export function MobileBottomNav() {
             icon={<DesignServicesRounded />}
             data-value="services"
           />
+          {!isLoggedIn && (
+            <BottomNavigationAction
+              label={t("sidebar.contracts_short", "Contracts")}
+              value="contracts"
+              icon={<DescriptionRounded />}
+              data-value="contracts"
+            />
+          )}
+          {!isLoggedIn && (
+            <BottomNavigationAction
+              label={t("sidebar.recruiting_short", "Recruiting")}
+              value="recruiting"
+              icon={<WorkRounded />}
+              data-value="recruiting"
+            />
+          )}
           {isLoggedIn && (
             <BottomNavigationAction
               label={t("sidebar.messaging", "Messages")}
