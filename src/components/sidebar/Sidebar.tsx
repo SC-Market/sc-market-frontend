@@ -12,6 +12,8 @@ import {
   ListItemIcon,
   ListItemText,
   ListSubheader,
+  TextField,
+  InputAdornment,
   Theme,
   Typography,
   useMediaQuery,
@@ -59,6 +61,7 @@ const routePrefetchMap: Record<
 }
 import ExpandMore from "@mui/icons-material/ExpandMore"
 import ExpandLess from "@mui/icons-material/ExpandLess"
+import SearchRounded from "@mui/icons-material/SearchRounded"
 import IconButton from "@mui/material/IconButton"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
 import { ChevronLeftRounded } from "@mui/icons-material"
@@ -85,6 +88,7 @@ export function SidebarDropdown(props: SidebarItemProps) {
     return isSidebarPathSelected(childPath, loc.pathname)
   })
   const { t } = useTranslation()
+  const xs = useMediaQuery(theme.breakpoints.down("sm"))
 
   const contrast = theme.palette.getContrastText(
     theme.palette.background.sidebar,
@@ -95,17 +99,15 @@ export function SidebarDropdown(props: SidebarItemProps) {
       <ListItemButton
         color={"primary"}
         sx={{
-          padding: 1,
-          paddingLeft: 2,
+          padding: xs ? 0.25 : 1,
+          paddingLeft: xs ? 1 : 2,
           borderRadius: theme.spacing(theme.borderRadius.topLevel),
-          marginBottom: 0.5,
+          marginBottom: xs ? 0.25 : 0.5,
           transition: "0.3s",
           "&:hover": {
             backgroundColor: theme.palette.action.hover,
           },
-          // ...makeCut('12px'),
         }}
-        // selected={open}
         key={text}
         onClick={() => setOpen((open) => !open)}
       >
@@ -113,7 +115,8 @@ export function SidebarDropdown(props: SidebarItemProps) {
           sx={{
             color: anyChild ? theme.palette.primary.main : contrast,
             transition: "0.3s",
-            fontSize: "0.9em",
+            fontSize: xs ? "0.85em" : "0.9em",
+            minWidth: xs ? 36 : 40,
           }}
         >
           {icon}
@@ -215,15 +218,14 @@ export function SidebarLinkBody(props: SidebarItemProps & { to: string }) {
       <ListItemButton
         color={"primary"}
         sx={{
-          padding: 0.5,
-          paddingLeft: 2,
+          padding: xs ? 0.25 : 0.5,
+          paddingLeft: xs ? 1 : 2,
           borderRadius: theme.spacing(theme.borderRadius.topLevel),
-          marginTop: 0.5,
+          marginTop: xs ? 0.25 : 0.5,
           transition: "0.3s",
           "&:hover": {
             backgroundColor: theme.palette.action.hover,
           },
-          // ...makeCut('12px'),
         }}
         selected={selected}
         key={text}
@@ -237,7 +239,8 @@ export function SidebarLinkBody(props: SidebarItemProps & { to: string }) {
           sx={{
             color: selected ? theme.palette.primary.main : contrast,
             transition: "0.3s",
-            fontSize: "0.9em",
+            fontSize: xs ? "0.85em" : "0.9em",
+            minWidth: xs ? 36 : 40,
           }}
         >
           {isMessagesLink && unreadChatCount > 0 ? (
@@ -446,6 +449,8 @@ export function Sidebar() {
     [currentOrgObj, profile?.role, profile?.username, profile_error, profile],
   )
 
+  const [searchQuery, setSearchQuery] = useState("")
+
   const xs = useMediaQuery(theme.breakpoints.down("sm"))
   const bottomNavHeight = useBottomNavHeight()
   const prevXs = React.useRef<boolean | undefined>(undefined)
@@ -495,16 +500,16 @@ export function Sidebar() {
           width: drawerOpen ? sidebarDrawerWidth : 0,
         },
         [theme.breakpoints.down("sm")]: {
-          width: drawerOpen ? "100%" : 0,
+          width: 0, // Always 0 on mobile so content doesn't shift
         },
 
         "& .MuiDrawer-paper": {
-          // width: (drawerOpen ? sidebarDrawerWidth : 0),
           [theme.breakpoints.up("sm")]: {
             width: drawerOpen ? sidebarDrawerWidth : 0,
           },
           [theme.breakpoints.down("sm")]: {
-            width: drawerOpen ? "100%" : 0,
+            width: "85%", // 85% width on mobile, not full width
+            maxWidth: 320,
             borderRight: 0,
           },
 
@@ -592,21 +597,33 @@ export function Sidebar() {
           </IconButton>
         </Grid>
         {profile && <SidebarActorSelect />}
+        {xs && (
+          <TextField
+            size="small"
+            placeholder={t("sidebar.search", "Search...")}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <SearchRounded fontSize="small" />
+                </InputAdornment>
+              ),
+            }}
+            sx={{ mt: 1 }}
+          />
+        )}
       </Stack>
       <Stack
         direction={"column"}
-        spacing={theme.layoutSpacing.component}
+        spacing={xs ? 0 : theme.layoutSpacing.component}
         sx={{
-          // backgroundColor: 'rgb(0,0,0,.6)',
           width: "100%",
           flex: 1,
-          // justifyContent: 'space-between',
           display: "flex",
-          // borderRight: 0,
-          // borderLeft: 0,
           borderTop: 1,
-          padding: 1,
-          paddingBottom: `calc(${theme.spacing(1)} + ${bottomNavHeight}px)`, // Account for bottom nav (dynamically adjusts when keyboard opens)
+          padding: xs ? 0.5 : 1,
+          paddingBottom: `calc(${theme.spacing(1)} + ${bottomNavHeight}px)`,
           borderColor: theme.palette.outline.main,
           overflow: "auto",
         }}
@@ -614,19 +631,34 @@ export function Sidebar() {
         {all_sidebar_entries
           .filter((item) => item.items.filter(filterItems).length)
           .map((item) => {
+            const filteredItems = item.items
+              .filter(filterItems)
+              .filter((entry) => {
+                if (!searchQuery) return true
+                const query = searchQuery.toLowerCase()
+                const text = t(entry.text).toLowerCase()
+                const childrenMatch = entry.children?.some((child) =>
+                  t(child.text).toLowerCase().includes(query),
+                )
+                return text.includes(query) || childrenMatch
+              })
+
+            if (!filteredItems.length) return null
+
             return (
               <List
                 key={item.title}
                 sx={{
-                  // height: '100%',
-                  padding: 1,
+                  padding: xs ? 0.5 : 1,
                   transition: "0.3s",
                 }}
                 subheader={
                   <ListSubheader
                     sx={{
-                      marginBottom: 0.5,
+                      marginBottom: xs ? 0 : 0.5,
                       backgroundColor: "inherit",
+                      paddingTop: xs ? 0.5 : 1,
+                      paddingBottom: xs ? 0.5 : 1,
                     }}
                   >
                     <Typography
@@ -635,7 +667,7 @@ export function Sidebar() {
                         fontWeight: "bold",
                         opacity: 0.7,
                         textTransform: "uppercase",
-                        fontSize: "0.85em",
+                        fontSize: xs ? "0.75em" : "0.85em",
                         color: theme.palette.getContrastText(
                           theme.palette.background.sidebar,
                         ),
@@ -648,7 +680,7 @@ export function Sidebar() {
                   </ListSubheader>
                 }
               >
-                {item.items.filter(filterItems).map((entry) => {
+                {filteredItems.map((entry) => {
                   let resolved = entry
                   if (entry.toOrgPublic && currentOrgObj) {
                     resolved = {

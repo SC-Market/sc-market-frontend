@@ -10,6 +10,7 @@ import {
   DashboardCustomizeRounded,
   DesignServicesRounded,
   HomeRounded,
+  InventoryRounded,
   ListAltRounded,
   ManageAccountsRounded,
   PersonAddRounded,
