@@ -7,7 +7,6 @@ import {
   GridRowModes,
   GridRowModesModel,
   GridRowSelectionModel,
-  Toolbar,
 } from "@mui/x-data-grid"
 import React, {
   useCallback,
@@ -21,7 +20,6 @@ import {
   Avatar,
   Box,
   Button,
-  ButtonGroup,
   Card,
   CardActionArea,
   CardContent,
@@ -40,18 +38,17 @@ import {
   useMediaQuery,
 } from "@mui/material"
 import {
-  AddRounded,
   CreateRounded,
   DeleteRounded,
   MoreVertRounded,
-  RadioButtonCheckedRounded,
-  RadioButtonUncheckedRounded,
   RefreshOutlined,
-  RemoveRounded,
   SaveRounded,
   ShareRounded,
   VisibilityRounded,
   InventoryRounded,
+  RadioButtonCheckedRounded,
+  AddRounded,
+  RemoveRounded,
 } from "@mui/icons-material"
 import { useMarketSearch } from ".."
 import { formatCompleteListingUrl } from "../../../util/urls"
@@ -86,322 +83,16 @@ import {
 import { Grid } from "@mui/material"
 import { EmptyListings } from "../../../components/empty-states"
 import { BottomSheet } from "../../../components/mobile"
+import {
+  StockRow,
+  NewListingRow,
+  ItemStockContext,
+  ManageStockArea,
+  ItemStockToolbar,
+} from "../stock"
 
-export const ItemStockContext = React.createContext<
-  | [
-      GridRowSelectionModel,
-      React.Dispatch<React.SetStateAction<GridRowSelectionModel>>,
-    ]
-  | null
->(null)
-
-export function ManageStockArea(props: { listings: UniqueListing[] }) {
-  const context = useContext(ItemStockContext)
-  if (!context || !Array.isArray(context)) {
-    return null // Context not available
-  }
-  const [selectionModel] = context
-  const [quantity, setQuantity] = useState(1)
-  const { listings } = props
-
-  const [updateListing] = useUpdateListingQuantityMutation()
-
-  const issueAlert = useAlertHook()
-  const { t } = useTranslation()
-
-  const updateListingCallback = useCallback(
-    async (listing_id: string, body: { quantity_available: number }) => {
-      updateListing({
-        listing_id: listing_id,
-        quantity: body.quantity_available,
-      })
-        .unwrap()
-        .then(() =>
-          issueAlert({
-            message: t("ItemStock.updated"),
-            severity: "success",
-          }),
-        )
-        .catch((err) => issueAlert(err))
-    },
-    [selectionModel, issueAlert, updateListing, t],
-  )
-
-  return (
-    <>
-      <NumericFormat
-        decimalScale={0}
-        allowNegative={false}
-        customInput={TextField}
-        thousandSeparator
-        onValueChange={async (values) => {
-          setQuantity(values.floatValue || 0)
-        }}
-        inputProps={{
-          inputMode: "numeric",
-          pattern: "[0-9]*",
-          type: "numeric",
-          size: "small",
-        }}
-        sx={{
-          minWidth: 200,
-        }}
-        size="small"
-        label={t("ItemStock.updateAmount")}
-        value={quantity}
-        color={"secondary"}
-      />
-
-      <ButtonGroup size={"small"}>
-        <Button
-          variant={"contained"}
-          onClick={() =>
-            [...selectionModel.ids].map((listing_id) => {
-              const listing = listings.find(
-                (l) => l.listing.listing_id === listing_id,
-              )
-              if (listing) {
-                updateListingCallback(listing_id.toString(), {
-                  quantity_available:
-                    listing.listing.quantity_available + quantity,
-                })
-              }
-            })
-          }
-          color={"success"}
-          startIcon={<AddRounded />}
-        >
-          {t("ItemStock.add")}
-        </Button>
-
-        <Button
-          variant={"contained"}
-          onClick={() =>
-            [...selectionModel.ids].map((listing_id) =>
-              updateListingCallback(listing_id.toString(), {
-                quantity_available: 0,
-              }),
-            )
-          }
-          color={"warning"}
-        >
-          {t("ItemStock.zero")}
-        </Button>
-        <Button
-          variant={"contained"}
-          onClick={() =>
-            [...selectionModel.ids].map((listing_id) => {
-              const listing = listings.find(
-                (l) => l.listing.listing_id === listing_id,
-              )
-              if (listing) {
-                updateListingCallback(listing_id.toString(), {
-                  quantity_available:
-                    listing.listing.quantity_available - quantity,
-                })
-              }
-            })
-          }
-          color={"error"}
-          startIcon={<RemoveRounded />}
-        >
-          {t("ItemStock.sub")}
-        </Button>
-      </ButtonGroup>
-    </>
-  )
-}
-
-export interface StockRow {
-  title: string
-  quantity_available: number
-  listing_id: string
-  price: number
-  status: string
-  image_url: string
-  expiration: string
-  order_count: number
-  offer_count: number
-}
-
-export interface NewListingRow {
-  id: string
-  item_type: string
-  item_name: string | null
-  price: number
-  quantity_available: number
-  status: "active" | "inactive"
-  isNew: boolean
-}
-
-declare module "@mui/x-data-grid" {
-  interface ToolbarPropsOverrides {
-    setNewRows: (newRows: (oldRows: NewListingRow[]) => NewListingRow[]) => void
-    setRowModesModel: (
-      newModel: (oldModel: GridRowModesModel) => GridRowModesModel,
-    ) => void
-    newRows: NewListingRow[]
-  }
-}
-
-function ItemStockToolbar(props: {
-  listings: UniqueListing[]
-  setNewRows: (newRows: (oldRows: NewListingRow[]) => NewListingRow[]) => void
-  setRowModesModel: (
-    newModel: (oldModel: GridRowModesModel) => GridRowModesModel,
-  ) => void
-  newRows: NewListingRow[]
-  isMobile?: boolean
-  onAddQuickListing?: () => void
-}) {
-  const context = useContext(ItemStockContext)
-  if (!context || !Array.isArray(context)) {
-    return null // Context not available
-  }
-  const [selectionModel] = context
-  const { t } = useTranslation()
-  const theme = useTheme<ExtendedTheme>()
-  const isMobile = props.isMobile ?? useMediaQuery(theme.breakpoints.down("md"))
-  const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null)
-
-  const [updateListing, { isLoading }] = useUpdateMarketListingMutation()
-  const updateListingCallback = useCallback(
-    async (body: MarketListingUpdateBody) => {
-      selectionModel.ids.forEach((row_id) => {
-        updateListing({
-          listing_id: row_id.toString(),
-          body,
-        })
-      })
-    },
-    [selectionModel, updateListing],
-  )
-
-  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setMenuAnchor(event.currentTarget)
-  }
-
-  const handleMenuClose = () => {
-    setMenuAnchor(null)
-  }
-
-  if (isMobile) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 1,
-          padding: 2,
-          borderBottom: 1,
-          borderColor: "divider",
-        }}
-      >
-        <ManageStockArea listings={props.listings} />
-        <Box
-          sx={{
-            display: "flex",
-            gap: 1,
-            flexWrap: "wrap",
-            alignItems: "center",
-          }}
-        >
-          <LoadingButton
-            color={"success"}
-            startIcon={<RadioButtonCheckedRounded />}
-            variant={"outlined"}
-            size={"small"}
-            loading={isLoading}
-            onClick={() => {
-              updateListingCallback({ status: "active" })
-            }}
-            fullWidth
-          >
-            {t("ItemStock.activate")}
-          </LoadingButton>
-          <LoadingButton
-            color={"error"}
-            startIcon={<RadioButtonUncheckedRounded />}
-            variant={"outlined"}
-            size={"small"}
-            loading={isLoading}
-            onClick={() => {
-              updateListingCallback({ status: "inactive" })
-            }}
-            fullWidth
-          >
-            {t("ItemStock.deactivate")}
-          </LoadingButton>
-          <Button
-            onClick={props.onAddQuickListing || handleMenuOpen}
-            color="primary"
-            variant="outlined"
-            size="small"
-            startIcon={<AddRounded />}
-            sx={{ flex: "0 0 auto" }}
-          >
-            {t("ItemStock.addQuickListing")}
-          </Button>
-        </Box>
-      </Box>
-    )
-  }
-
-  return (
-    <Toolbar>
-      <ManageStockArea listings={props.listings} />
-      <LoadingButton
-        color={"success"}
-        startIcon={<RadioButtonCheckedRounded />}
-        variant={"outlined"}
-        size={"small"}
-        loading={isLoading}
-        onClick={() => {
-          updateListingCallback({ status: "active" })
-        }}
-      >
-        {t("ItemStock.activate")}
-      </LoadingButton>
-      <LoadingButton
-        color={"error"}
-        startIcon={<RadioButtonUncheckedRounded />}
-        variant={"outlined"}
-        size={"small"}
-        loading={isLoading}
-        onClick={() => {
-          updateListingCallback({ status: "inactive" })
-        }}
-      >
-        {t("ItemStock.deactivate")}
-      </LoadingButton>
-      <Tooltip title={t("ItemStock.addQuickListing")}>
-        <IconButton
-          onClick={() => {
-            const id = `new-${Date.now()}`
-            const newRow: NewListingRow = {
-              id,
-              item_type: "Other",
-              item_name: null,
-              price: 1,
-              quantity_available: 1,
-              status: "active",
-              isNew: true,
-            }
-
-            props.setNewRows((prev) => [...prev, newRow])
-            props.setRowModesModel((oldModel) => ({
-              ...oldModel,
-              [id]: { mode: GridRowModes.Edit, fieldToFocus: "item_type" },
-            }))
-          }}
-          color="primary"
-        >
-          <AddRounded />
-        </IconButton>
-      </Tooltip>
-    </Toolbar>
-  )
-}
+// Re-export for backward compatibility
+export { ItemStockContext, ManageStockArea } from "../stock"
 
 export function DisplayStock({
   listings,
