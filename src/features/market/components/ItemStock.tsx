@@ -89,6 +89,7 @@ import {
   ItemStockContext,
   ManageStockArea,
   ItemStockToolbar,
+  useStockManagement,
 } from "../stock"
 
 // Re-export for backward compatibility
@@ -111,66 +112,30 @@ export function DisplayStock({
   onRowsPerPageChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
   onRefresh?: () => Promise<void>
 }) {
-  const [refresh] = useMarketRefreshListingMutation()
-  const [updateQuantity] = useUpdateListingQuantityMutation()
-  const issueAlert = useAlertHook()
-  const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
 
-  // State for new listing rows
-  const [newRows, setNewRows] = React.useState<NewListingRow[]>([])
-  const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>(
-    {},
-  )
-  const [editingRows, setEditingRows] = React.useState<
-    Record<string, Partial<NewListingRow>>
-  >({})
-
-  const handleUpdateQuantity = React.useCallback(
-    async (listingId: string, newQuantity: number) => {
-      try {
-        await updateQuantity({
-          listing_id: listingId,
-          quantity: newQuantity,
-        }).unwrap()
-        issueAlert({
-          message: t("ItemStock.updated"),
-          severity: "success",
-        })
-        if (onRefresh) {
-          await onRefresh()
-        }
-      } catch (error) {
-        issueAlert(error as any)
-      }
-    },
-    [updateQuantity, issueAlert, t, onRefresh],
-  )
-
-  const rows: StockRow[] = useMemo(
-    () =>
-      listings.map((listing) => ({
-        ...listing.details,
-        ...listing.listing,
-        ...(listing.stats || {
-          offer_count: 0,
-          order_count: 0,
-          view_count: 0,
-        }),
-        // Access view_count from both locations for backward compatibility
-        image_url: listing.photos[0],
-      })),
-    [listings],
-  )
-
-  const [createListing] = useCreateMarketListingMutation()
-  const [updateListing] = useUpdateMarketListingMutation()
-
-  // Fetch item details when a listing is selected
-  const [fetchingItemName, setFetchingItemName] = React.useState<string>("")
-  const { data: gameItem } = useMarketGetGameItemByNameQuery(fetchingItemName, {
-    skip: !fetchingItemName,
-  })
+  // Use stock management hook
+  const {
+    rows,
+    newRows,
+    setNewRows,
+    rowModesModel,
+    setRowModesModel,
+    editingRows,
+    setEditingRows,
+    fetchingItemName,
+    setFetchingItemName,
+    gameItem,
+    currentOrg,
+    refresh,
+    createListing,
+    updateListing,
+    handleUpdateQuantity,
+    handleEditClick,
+    handleCancelClick,
+    issueAlert,
+    t,
+  } = useStockManagement(listings, onRefresh)
 
   const handleRowEditStop: GridEventListener<"rowEditStop"> = (
     params,
@@ -180,19 +145,6 @@ export function DisplayStock({
       event.defaultMuiPrevented = true
     }
   }
-
-  const handleEditClick = (id: GridRowId) => () => {
-    const currentRow = newRows.find((row) => row.id === id)
-    if (currentRow) {
-      setEditingRows((prev) => ({
-        ...prev,
-        [id]: { ...currentRow },
-      }))
-    }
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } })
-  }
-
-  const [currentOrg] = useCurrentOrg()
 
   const handleSaveClick = (id: GridRowId) => async () => {
     const editingRow = editingRows[id]
@@ -305,24 +257,6 @@ export function DisplayStock({
       return newState
     })
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } })
-  }
-
-  const handleCancelClick = (id: GridRowId) => () => {
-    setRowModesModel({
-      ...rowModesModel,
-      [id]: { mode: GridRowModes.View, ignoreModifications: true },
-    })
-
-    const editedRow = newRows.find((row) => row.id === id)
-    if (editedRow?.isNew) {
-      setNewRows((prev) => prev.filter((row) => row.id !== id))
-    }
-
-    setEditingRows((prev) => {
-      const newState = { ...prev }
-      delete newState[id]
-      return newState
-    })
   }
 
   const columns: GridColDef[] = [
