@@ -135,6 +135,7 @@ export const stockLotsApi = serviceApi.injectEndpoints({
         response.data,
       invalidatesTags: [
         { type: "MarketListings", id: "SEARCH" },
+        { type: "StockLots", id: "SEARCH" },
         "MarketListings",
         "MyListings",
       ],
@@ -297,7 +298,10 @@ export const stockLotsApi = serviceApi.injectEndpoints({
       transformResponse: (response: {
         data: { lots: StockLot[]; total: number }
       }) => response.data,
-      providesTags: [{ type: "MarketListings", id: "SEARCH" }],
+      providesTags: [
+        { type: "MarketListings", id: "SEARCH" },
+        { type: "StockLots", id: "SEARCH" },
+      ],
     }),
   }),
 })
