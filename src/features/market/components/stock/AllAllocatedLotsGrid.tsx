@@ -113,6 +113,7 @@ export function AllAllocatedLotsGrid() {
             </Box>
           ),
         }}
+        showToolbar
         sx={{
           "& .MuiDataGrid-cell": {
             display: "flex",

@@ -162,22 +162,9 @@ export function MarketNavArea(props: { top?: boolean }) {
     <>
       <Grid
         container
-        justifyContent={"space-between"}
+        justifyContent={"flex-end"}
         spacing={theme.layoutSpacing.compact}
       >
-        <Grid item>
-          <Grid container spacing={theme.layoutSpacing.compact}>
-            <Grid item sx={{ paddingTop: 2 }}>
-              <Button
-                onClick={searchClickCallback}
-                startIcon={<SearchRounded />}
-                variant={"contained"}
-              >
-                {t("market.search")}
-              </Button>
-            </Grid>
-          </Grid>
-        </Grid>
         {props.top && (
           <Grid item sx={{ paddingTop: 1 }}>
             {profile.data ? (
