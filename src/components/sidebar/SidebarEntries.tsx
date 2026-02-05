@@ -209,11 +209,20 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
       {
         to: "/market/manage?quantityAvailable=0",
         text: "sidebar.manage_listings",
-        icon: <WarehouseRounded />,
+        icon: <ListAltRounded />,
         logged_in: true,
         org: true,
         org_admin: true,
         orgRouteRest: "listings",
+      },
+      {
+        to: "/market/manage-stock",
+        text: "sidebar.manage_stock",
+        icon: <WarehouseRounded />,
+        logged_in: true,
+        org: true,
+        org_admin: true,
+        orgRouteRest: "stock",
       },
       {
         to: "/order/services",

@@ -21,6 +21,7 @@ import { useGetUserProfileQuery } from "../../store/profile"
 import { useTranslation } from "react-i18next"
 import { useUnreadChatCount } from "../../features/chats"
 import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
+import { usePendingOrderCount } from "../../hooks/orders/usePendingOrderCount"
 
 /**
  * Mobile bottom navigation bar for quick access to primary pages
@@ -34,6 +35,7 @@ export function MobileBottomNav() {
   const { data: userProfile } = useGetUserProfileQuery()
   const isLoggedIn = !!userProfile
   const unreadChatCount = useUnreadChatCount()
+  const pendingOrderCount = usePendingOrderCount()
   const bottomNavHeight = useBottomNavHeight()
 
   // Only show on xs devices (not sm) - check this BEFORE hooks to avoid hook order issues
@@ -87,6 +89,11 @@ export function MobileBottomNav() {
   }
 
   const handleChange = (_event: React.SyntheticEvent, newValue: string) => {
+    // Haptic feedback on tab switch (mobile only)
+    if (navigator.vibrate) {
+      navigator.vibrate(10) // Short 10ms vibration
+    }
+
     switch (newValue) {
       case "home":
         navigate("/")
@@ -207,7 +214,22 @@ export function MobileBottomNav() {
             <BottomNavigationAction
               label={t("sidebar.orders.text", "Orders")}
               value="orders"
-              icon={<CreateRounded />}
+              icon={
+                <Badge
+                  badgeContent={pendingOrderCount}
+                  color="error"
+                  sx={{
+                    "& .MuiBadge-badge": {
+                      fontSize: "0.7rem",
+                      minWidth: "18px",
+                      height: "18px",
+                      padding: "0 6px",
+                    },
+                  }}
+                >
+                  <CreateRounded />
+                </Badge>
+              }
               data-value="orders"
             />
           )}
