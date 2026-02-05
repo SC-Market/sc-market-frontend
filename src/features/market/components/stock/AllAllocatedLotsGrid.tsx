@@ -89,6 +89,12 @@ export function AllAllocatedLotsGrid() {
         initialState={{
           pagination: { paginationModel: { pageSize: 10 } },
         }}
+        sx={{
+          "& .MuiDataGrid-cell": {
+            display: "flex",
+            alignItems: "center",
+          },
+        }}
       />
     </Paper>
   )
