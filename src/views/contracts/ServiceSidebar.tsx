@@ -40,6 +40,7 @@ export function ServiceSidebar() {
         open={open}
         onClose={() => setOpen(false)}
         title={t("service_market.filters", "Filters")}
+        snapPoints={["half", "66", "full"]}
         defaultSnap="66"
       >
         {sidebarContent}
