@@ -86,12 +86,6 @@ export function AllAllocatedLotsGrid() {
 
   return (
     <Paper sx={{ p: 2 }}>
-      <Box sx={{ mb: 2, display: "flex", alignItems: "center", gap: 1 }}>
-        <Typography variant="h6">
-          {t("stock.allocatedStock", "Allocated Stock")}
-        </Typography>
-        <Chip label={allocations.length} size="small" color="primary" />
-      </Box>
       <DataGrid
         rows={allocations}
         columns={columns}
@@ -101,6 +95,23 @@ export function AllAllocatedLotsGrid() {
         pageSizeOptions={[10, 25, 50]}
         initialState={{
           pagination: { paginationModel: { pageSize: 10 } },
+        }}
+        slots={{
+          toolbar: () => (
+            <Box
+              sx={{
+                p: 2,
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+              }}
+            >
+              <Typography variant="h6">
+                {t("stock.allocatedStock", "Allocated Stock")}
+              </Typography>
+              <Chip label={allocations.length} size="small" color="primary" />
+            </Box>
+          ),
         }}
         sx={{
           "& .MuiDataGrid-cell": {
