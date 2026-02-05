@@ -201,19 +201,13 @@ export function Contracts() {
                 </TabPanel>
                 <TabPanel value={tabPage} index={2}>
                   <Container maxWidth="xxl">
-                    <Grid
-                      container
-                      spacing={{
-                        xs: theme.layoutSpacing.component,
-                        sm: theme.layoutSpacing.layout,
-                      }}
-                    >
+                    <Grid container spacing={theme.layoutSpacing.layout}>
                       {/* Mobile: BottomSheet sidebar */}
                       {xs && <ContractSidebar />}
 
                       {/* Desktop: Sticky sidebar */}
                       {!xs && contractSidebarOpen && (
-                        <Grid item lg={3}>
+                        <Grid item md={2.25}>
                           <Paper
                             sx={{
                               position: "sticky",
@@ -231,12 +225,9 @@ export function Contracts() {
                       <Grid
                         item
                         xs={12}
-                        lg={contractSidebarOpen ? 9 : 12}
+                        md={contractSidebarOpen ? 9.75 : 12}
                         container
-                        spacing={{
-                          xs: theme.layoutSpacing.component,
-                          sm: theme.layoutSpacing.layout,
-                        }}
+                        spacing={theme.layoutSpacing.layout}
                       >
                         <ContractListings />
                       </Grid>
