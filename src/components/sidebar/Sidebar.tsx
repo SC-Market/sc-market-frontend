@@ -81,9 +81,15 @@ import { useUnreadChatCount } from "../../features/chats"
 import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
 import { useCookies } from "react-cookie"
 
-export function SidebarDropdown(props: SidebarItemProps) {
+export function SidebarDropdown(
+  props: SidebarItemProps & {
+    isStarred?: boolean
+    onToggleStar?: (path: string) => void
+    starredItems?: string[]
+  },
+) {
   const [open, setOpen] = useState(false)
-  const { icon, text, chip, children } = props
+  const { icon, text, chip, children, starredItems, onToggleStar } = props
   const theme = useTheme<ExtendedTheme>()
   const loc = useLocation()
   const anyChild = props.children?.some((child) => {
@@ -169,7 +175,15 @@ export function SidebarDropdown(props: SidebarItemProps) {
             }}
           >
             {children.map((child) => (
-              <SidebarLink {...child} to={child.to || "a"} key={child.text} />
+              <SidebarLink
+                {...child}
+                to={child.to || "a"}
+                key={child.text}
+                isStarred={starredItems?.includes(
+                  child.to?.split("?")[0] || "",
+                )}
+                onToggleStar={onToggleStar}
+              />
             ))}
           </Box>
         </Collapse>
@@ -373,12 +387,17 @@ export function SidebarItem(
   props: SidebarItemProps & {
     isStarred?: boolean
     onToggleStar?: (path: string) => void
+    starredItems?: string[]
   },
 ) {
   return (
     <React.Fragment>
       {props.children ? (
-        <SidebarDropdown {...props} />
+        <SidebarDropdown
+          {...props}
+          starredItems={props.starredItems}
+          onToggleStar={props.onToggleStar}
+        />
       ) : (
         <SidebarLink
           {...props}
@@ -823,11 +842,11 @@ export function Sidebar() {
                     <SidebarItem
                       {...resolved}
                       key={resolved.text}
-                      isStarred={
-                        !resolved.children &&
-                        starredItems.includes(resolved.to?.split("?")[0] || "")
-                      }
-                      onToggleStar={!resolved.children ? toggleStar : undefined}
+                      isStarred={starredItems.includes(
+                        resolved.to?.split("?")[0] || "",
+                      )}
+                      onToggleStar={toggleStar}
+                      starredItems={starredItems}
                     />
                   )
                 })}

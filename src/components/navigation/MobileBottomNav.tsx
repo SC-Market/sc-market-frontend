@@ -16,7 +16,7 @@ import {
   DesignServicesRounded,
   ForumRounded,
   DescriptionRounded,
-  WorkRounded,
+  PersonAddRounded,
 } from "@mui/icons-material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useGetUserProfileQuery } from "../../store/profile"
@@ -209,7 +209,7 @@ export function MobileBottomNav() {
             <BottomNavigationAction
               label={t("sidebar.recruiting_short", "Recruiting")}
               value="recruiting"
-              icon={<WorkRounded />}
+              icon={<PersonAddRounded />}
               data-value="recruiting"
             />
           )}
