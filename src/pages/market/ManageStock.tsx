@@ -19,8 +19,6 @@ import { GridRowSelectionModel } from "@mui/x-data-grid"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { BottomSheet } from "../../components/mobile/BottomSheet"
-import { AllStockLotsGrid } from "../../features/market/components/stock/AllStockLotsGrid"
-import { AllAllocatedLotsGrid } from "../../features/market/components/stock/AllAllocatedLotsGrid"
 
 export function ManageStock() {
   const { t } = useTranslation()
@@ -115,14 +113,6 @@ export function ManageStock() {
               <Grid container spacing={theme.layoutSpacing.layout}>
                 <Grid item xs={12}>
                   <MyItemStock />
-                </Grid>
-
-                <Grid item xs={12}>
-                  <AllStockLotsGrid />
-                </Grid>
-
-                <Grid item xs={12}>
-                  <AllAllocatedLotsGrid />
                 </Grid>
               </Grid>
             </Grid>
