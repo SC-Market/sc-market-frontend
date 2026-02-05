@@ -224,7 +224,7 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
         logged_in: true,
         org: true,
         org_admin: true,
-        orgRouteRest: "stock",
+        orgRouteRest: "manage-stock",
       },
       {
         to: "/order/services",
