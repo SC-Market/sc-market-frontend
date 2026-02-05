@@ -23,6 +23,7 @@ import {
 import { useLocation, useNavigate } from "react-router-dom"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
+import { haptic } from "../../util/haptics"
 
 interface Action {
   icon: React.ReactNode
@@ -111,9 +112,7 @@ export function ContextAwareFAB() {
   const handleTouchStart = () => {
     longPressTimer.current = window.setTimeout(() => {
       setSpeedDialOpen(true)
-      if (navigator.vibrate) {
-        navigator.vibrate(50)
-      }
+      haptic.medium()
     }, 500)
   }
 
@@ -125,6 +124,7 @@ export function ContextAwareFAB() {
 
   const handleClick = () => {
     if (primaryAction && !speedDialOpen) {
+      haptic.light()
       primaryAction.onClick()
     }
   }
@@ -155,6 +155,7 @@ export function ContextAwareFAB() {
               icon={action.icon}
               tooltipTitle={action.name}
               onClick={() => {
+                haptic.light()
                 action.onClick()
                 setSpeedDialOpen(false)
               }}

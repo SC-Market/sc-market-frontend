@@ -388,6 +388,7 @@ export function MarketSidebar(props: { status?: boolean }) {
         open={open}
         onClose={() => setOpen(false)}
         title={t("market.filters", "Filters")}
+        snapPoints={["half", "75", "full"]}
         defaultSnap="75"
       >
         <Box sx={{ overflowY: "auto", overflowX: "hidden", pb: 2 }}>

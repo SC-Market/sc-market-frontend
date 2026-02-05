@@ -13,7 +13,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material"
-import React, { ReactNode, useState } from "react"
+import React, { ReactNode, useState, useRef, useEffect } from "react"
 import { CloseRounded } from "@mui/icons-material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { haptic } from "../../util/haptics"
@@ -50,6 +50,18 @@ export function BottomSheet({
   const [currentSnap, setCurrentSnap] = useState<"peek" | "half" | "66" | "75" | "full">(
     defaultSnap,
   )
+  const [dragOffset, setDragOffset] = useState(0)
+  const [isDragging, setIsDragging] = useState(false)
+  const dragStartY = useRef<number | null>(null)
+  const dragStartHeight = useRef<number>(0)
+
+  // Reset snap when sheet opens
+  useEffect(() => {
+    if (open) {
+      setCurrentSnap(defaultSnap)
+      setDragOffset(0)
+    }
+  }, [open, defaultSnap])
 
   const getSnapHeight = (snap: "peek" | "half" | "66" | "75" | "full") => {
     if (snap === "peek") return peekHeight
@@ -69,6 +81,74 @@ export function BottomSheet({
 
   const currentHeight = getSnapHeight(currentSnap)
 
+  const findClosestSnap = (height: number): typeof currentSnap => {
+    const snapHeights = snapPoints.map(snap => ({
+      snap,
+      height: getSnapHeight(snap),
+    }))
+
+    return snapHeights.reduce((closest, current) => {
+      const closestDiff = Math.abs(closest.height - height)
+      const currentDiff = Math.abs(current.height - height)
+      return currentDiff < closestDiff ? current : closest
+    }).snap
+  }
+
+  const handleDragStart = (clientY: number) => {
+    setIsDragging(true)
+    dragStartY.current = clientY
+    dragStartHeight.current = currentHeight
+  }
+
+  const handleDragMove = (clientY: number) => {
+    if (!isDragging || dragStartY.current === null) return
+
+    const deltaY = dragStartY.current - clientY
+    const newHeight = dragStartHeight.current + deltaY
+
+    // Constrain between peek and full
+    const minHeight = getSnapHeight("peek")
+    const maxHeight = getSnapHeight("full")
+    const constrainedHeight = Math.max(minHeight, Math.min(maxHeight, newHeight))
+
+    setDragOffset(constrainedHeight - currentHeight)
+  }
+
+  const handleDragEnd = () => {
+    if (!isDragging) return
+
+    const finalHeight = currentHeight + dragOffset
+    const closestSnap = findClosestSnap(finalHeight)
+
+    // If dragged down significantly from peek, close
+    if (closestSnap === "peek" && dragOffset < -50) {
+      haptic.light()
+      onClose()
+    } else {
+      // Snap to closest point
+      if (closestSnap !== currentSnap) {
+        haptic.selection()
+      }
+      setCurrentSnap(closestSnap)
+    }
+
+    setIsDragging(false)
+    setDragOffset(0)
+    dragStartY.current = null
+  }
+
+  const handlePullerTouchStart = (e: React.TouchEvent) => {
+    handleDragStart(e.touches[0].clientY)
+  }
+
+  const handlePullerTouchMove = (e: React.TouchEvent) => {
+    handleDragMove(e.touches[0].clientY)
+  }
+
+  const handlePullerTouchEnd = () => {
+    handleDragEnd()
+  }
+
   const handleOpen = () => {
     haptic.light()
   }
@@ -77,6 +157,8 @@ export function BottomSheet({
     haptic.light()
     onClose()
   }
+
+  const displayHeight = isDragging ? currentHeight + dragOffset : currentHeight
 
   return (
     <SwipeableDrawer
@@ -87,10 +169,11 @@ export function BottomSheet({
       disableSwipeToOpen
       PaperProps={{
         sx: {
-          height: currentHeight,
+          height: displayHeight,
           borderTopLeftRadius: 16,
           borderTopRightRadius: 16,
           paddingBottom: isMobile ? "env(safe-area-inset-bottom)" : 0,
+          transition: isDragging ? "none" : "height 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
         },
       }}
       ModalProps={{
@@ -109,19 +192,34 @@ export function BottomSheet({
         },
       }}
     >
-      {/* Puller */}
+      {/* Puller - draggable handle */}
       <Box
+        onTouchStart={handlePullerTouchStart}
+        onTouchMove={handlePullerTouchMove}
+        onTouchEnd={handlePullerTouchEnd}
         sx={{
-          width: 30,
-          height: 6,
-          backgroundColor: theme.palette.action.active,
-          borderRadius: 3,
-          position: "absolute",
-          top: 8,
-          left: "calc(50% - 15px)",
-          opacity: 0.4,
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          pt: 1,
+          pb: 0.5,
+          cursor: "grab",
+          touchAction: "none",
+          "&:active": {
+            cursor: "grabbing",
+          },
         }}
-      />
+      >
+        <Box
+          sx={{
+            width: 30,
+            height: 6,
+            backgroundColor: theme.palette.action.active,
+            borderRadius: 3,
+            opacity: 0.4,
+          }}
+        />
+      </Box>
 
       {/* Header */}
       {(title || showCloseButton) && (
@@ -131,7 +229,7 @@ export function BottomSheet({
             alignItems: "center",
             justifyContent: "space-between",
             px: 2,
-            pt: 3,
+            pt: 1,
             pb: title ? 1 : 0,
             borderBottom: title ? 1 : 0,
             borderColor: theme.palette.divider,
@@ -144,7 +242,10 @@ export function BottomSheet({
           )}
           {showCloseButton && (
             <IconButton
-              onClick={onClose}
+              onClick={() => {
+                haptic.light()
+                onClose()
+              }}
               size="small"
               sx={{ ml: title ? "auto" : 0 }}
             >
