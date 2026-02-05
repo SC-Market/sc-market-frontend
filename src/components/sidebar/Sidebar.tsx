@@ -116,7 +116,7 @@ export function SidebarDropdown(props: SidebarItemProps) {
             color: anyChild ? theme.palette.primary.main : contrast,
             transition: "0.3s",
             fontSize: xs ? "0.85em" : "0.9em",
-            minWidth: xs ? 36 : 40,
+            ...(xs && { minWidth: 36 }),
           }}
         >
           {icon}
@@ -240,7 +240,7 @@ export function SidebarLinkBody(props: SidebarItemProps & { to: string }) {
             color: selected ? theme.palette.primary.main : contrast,
             transition: "0.3s",
             fontSize: xs ? "0.85em" : "0.9em",
-            minWidth: xs ? 36 : 40,
+            ...(xs && { minWidth: 36 }),
           }}
         >
           {isMessagesLink && unreadChatCount > 0 ? (
