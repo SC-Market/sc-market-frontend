@@ -24,6 +24,9 @@ interface OrgMemberSearchProps {
   placeholder?: string
   disabled?: boolean
   label?: string
+  fullWidth?: boolean
+  size?: "small" | "medium"
+  includeSelf?: boolean
 }
 
 export function OrgMemberSearch({
@@ -31,6 +34,9 @@ export function OrgMemberSearch({
   placeholder,
   disabled,
   label,
+  fullWidth = false,
+  size = "medium",
+  includeSelf = true,
 }: OrgMemberSearchProps) {
   const { t } = useTranslation()
   const [currentOrg] = useCurrentOrg()
@@ -41,17 +47,18 @@ export function OrgMemberSearch({
 
   const searchMembers = useCallback(
     async (searchQuery: string) => {
-      if (!currentOrg?.spectrum_id || searchQuery.length < 2) {
+      if (!currentOrg?.spectrum_id) {
         setOptions([])
         return
       }
 
+      // Show options even with empty search
       setLoading(true)
       try {
         const { data } = await store.dispatch(
           contractorsApi.endpoints.searchContractorMembers.initiate({
             spectrum_id: currentOrg.spectrum_id,
-            query: searchQuery,
+            query: searchQuery || "",
           }),
         )
         setOptions(data || [])
@@ -81,6 +88,8 @@ export function OrgMemberSearch({
 
   return (
     <Autocomplete
+      fullWidth={fullWidth}
+      size={size}
       value={selectedMember}
       onChange={(_, newValue) => handleMemberSelect(newValue)}
       inputValue={query}

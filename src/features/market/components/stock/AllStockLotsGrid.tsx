@@ -247,6 +247,8 @@ export function AllStockLotsGrid() {
       renderEditCell: (params) => {
         return (
           <OrgMemberSearch
+            fullWidth
+            size="small"
             onMemberSelect={(member) => {
               params.api.setEditCellValue({
                 id: params.id,
