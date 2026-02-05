@@ -86,7 +86,11 @@ function EnhancedTableHead<T>(props: EnhancedTableProps<T>) {
     <TableHead>
       <TableRow>
         {disableSelect ? null : (
-          <TransparentHeaderCell padding="checkbox" scope="col">
+          <TransparentHeaderCell
+            padding="checkbox"
+            scope="col"
+            sx={{ display: { xs: "none", sm: "table-cell" } }}
+          >
             <Checkbox
               color="primary"
               indeterminate={numSelected > 0 && numSelected < rowCount}
