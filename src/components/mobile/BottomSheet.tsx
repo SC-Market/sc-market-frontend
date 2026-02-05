@@ -107,7 +107,9 @@ export function BottomSheet({
       anchor="bottom"
       open={open}
       onClose={disableBackdropClose ? undefined : onClose}
-      transitionDuration={300}
+      SlideProps={{
+        timeout: 300,
+      }}
       PaperProps={{
         sx: {
           height: currentHeight,

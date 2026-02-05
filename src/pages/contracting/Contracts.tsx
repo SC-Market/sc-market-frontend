@@ -183,7 +183,7 @@ export function Contracts() {
                             color={"secondary"}
                             startIcon={<CreateRounded />}
                             variant={"contained"}
-                            size={"large"}
+                            size={xs ? "small" : "large"}
                           >
                             {t("contracts.createOpenContract")}
                           </Button>

@@ -388,7 +388,8 @@ export function MarketSidebar(props: { status?: boolean }) {
         open={open}
         onClose={() => setOpen(false)}
         title={t("market.filters", "Filters")}
-        maxHeight="90vh"
+        maxHeight="75vh"
+        defaultSnap="full"
       >
         <Box sx={{ overflowY: "auto", overflowX: "hidden", pb: 2 }}>
           <MarketSearchArea status={status} />
