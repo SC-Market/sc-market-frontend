@@ -31,6 +31,8 @@ export interface LocationSelectorProps {
   size?: "small" | "medium"
   label?: string
   disabled?: boolean
+  fullWidth?: boolean
+  sx?: any
 }
 
 /**
@@ -49,6 +51,8 @@ export function LocationSelector({
   size = "small",
   label,
   disabled = false,
+  fullWidth = false,
+  sx,
 }: LocationSelectorProps) {
   const { t } = useTranslation()
   const issueAlert = useAlertHook()
@@ -167,8 +171,10 @@ export function LocationSelector({
       clearOnBlur
       handleHomeEndKeys
       size={size}
+      fullWidth={fullWidth}
       disabled={disabled || isCreating}
       loading={isLoadingLocations}
+      sx={sx}
       renderInput={(params) => (
         <TextField
           {...params}

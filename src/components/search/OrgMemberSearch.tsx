@@ -27,6 +27,7 @@ interface OrgMemberSearchProps {
   fullWidth?: boolean
   size?: "small" | "medium"
   includeSelf?: boolean
+  sx?: any
 }
 
 export function OrgMemberSearch({
@@ -37,6 +38,7 @@ export function OrgMemberSearch({
   fullWidth = false,
   size = "medium",
   includeSelf = true,
+  sx,
 }: OrgMemberSearchProps) {
   const { t } = useTranslation()
   const [currentOrg] = useCurrentOrg()
@@ -90,6 +92,7 @@ export function OrgMemberSearch({
     <Autocomplete
       fullWidth={fullWidth}
       size={size}
+      sx={sx}
       value={selectedMember}
       onChange={(_, newValue) => handleMemberSelect(newValue)}
       inputValue={query}

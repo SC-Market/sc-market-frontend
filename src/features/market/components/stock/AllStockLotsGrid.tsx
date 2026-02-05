@@ -116,6 +116,7 @@ export function AllStockLotsGrid() {
           locations={locations}
           size="small"
           fullWidth
+          sx={{ height: "100%" }}
         />
       )
     },
@@ -143,6 +144,7 @@ export function AllStockLotsGrid() {
         size="small"
         onMemberSelect={handleMemberSelect}
         placeholder={t("AllStockLots.selectOwner", "Select owner...")}
+        sx={{ height: "100%" }}
       />
     )
   }
