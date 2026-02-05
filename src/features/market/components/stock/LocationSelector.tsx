@@ -190,29 +190,32 @@ export function LocationSelector({
           }}
         />
       )}
-      renderOption={(props, option) => (
-        <Box component="li" {...props}>
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: 1,
-              width: "100%",
-            }}
-          >
-            <Typography variant="body2">{option.name}</Typography>
-            {option.is_preset && (
-              <Chip
-                label={t("LocationSelector.preset", "Preset")}
-                size="small"
-                color="primary"
-                variant="outlined"
-                sx={{ ml: "auto" }}
-              />
-            )}
+      renderOption={(props, option) => {
+        const { key, ...otherProps } = props
+        return (
+          <Box component="li" key={key} {...otherProps}>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+                width: "100%",
+              }}
+            >
+              <Typography variant="body2">{option.name}</Typography>
+              {option.is_preset && (
+                <Chip
+                  label={t("LocationSelector.preset", "Preset")}
+                  size="small"
+                  color="primary"
+                  variant="outlined"
+                  sx={{ ml: "auto" }}
+                />
+              )}
+            </Box>
           </Box>
-        </Box>
-      )}
+        )
+      }}
       noOptionsText={
         inputValue
           ? t(
