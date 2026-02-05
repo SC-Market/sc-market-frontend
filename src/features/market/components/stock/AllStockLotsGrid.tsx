@@ -101,14 +101,12 @@ export function AllStockLotsGrid() {
       }
 
       return (
-        <Box sx={{ display: "flex", alignItems: "center", height: "100%" }}>
-          <LocationSelector
-            value={value}
-            onChange={handleChange}
-            locations={locations}
-            size="small"
-          />
-        </Box>
+        <LocationSelector
+          value={value}
+          onChange={handleChange}
+          locations={locations}
+          size="small"
+        />
       )
     },
     [locations],
