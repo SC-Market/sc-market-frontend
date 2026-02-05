@@ -88,8 +88,28 @@ export function AllStockLotsGrid() {
   )
 
   const renderLocationEditCell = useCallback(
-    (props: GridRenderEditCellParams) => <LocationEditCell {...props} />,
-    [],
+    (props: GridRenderEditCellParams) => {
+      const { id, value, field } = props
+      const apiRef = useGridApiContext()
+
+      const handleChange = (locationId: string | null) => {
+        apiRef.current.setEditCellValue({
+          id,
+          field,
+          value: locationId,
+        })
+      }
+
+      return (
+        <LocationSelector
+          value={value}
+          onChange={handleChange}
+          locations={locations}
+          size="small"
+        />
+      )
+    },
+    [locations],
   )
 
   // Custom edit component for listing selection
