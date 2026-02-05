@@ -490,6 +490,7 @@ export function AllStockLotsGrid() {
             </Box>
           ),
         }}
+        showToolbar
         sx={{
           "& .MuiDataGrid-cell": {
             display: "flex",
