@@ -60,25 +60,23 @@ export function ManageStockPage() {
 
       <ContainerGrid maxWidth="xl" sidebarOpen={true}>
         <Grid item xs={12}>
-          <Paper>
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1, px: 2 }}>
-              {isMobile && (
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  startIcon={<FilterListIcon />}
-                  onClick={() => setSidebarOpen((prev) => !prev)}
-                  sx={{ borderRadius: 2, textTransform: "none" }}
-                >
-                  {t("market.filters", "Filters")}
-                </Button>
-              )}
-              <Tabs value={currentTab} onChange={handleTabChange}>
-                <Tab label={t("sidebar.manage_listings", "Manage Listings")} />
-                <Tab label={t("sidebar.manage_stock", "Manage Stock")} />
-              </Tabs>
-            </Box>
-          </Paper>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            {isMobile && (
+              <Button
+                variant="outlined"
+                color="secondary"
+                startIcon={<FilterListIcon />}
+                onClick={() => setSidebarOpen((prev) => !prev)}
+                sx={{ borderRadius: 2, textTransform: "none" }}
+              >
+                {t("market.filters", "Filters")}
+              </Button>
+            )}
+            <Tabs value={currentTab} onChange={handleTabChange}>
+              <Tab label={t("sidebar.manage_listings", "Manage Listings")} />
+              <Tab label={t("sidebar.manage_stock", "Manage Stock")} />
+            </Tabs>
+          </Box>
         </Grid>
 
         {!isMobile && (
