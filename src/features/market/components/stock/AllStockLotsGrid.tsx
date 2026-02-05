@@ -101,12 +101,14 @@ export function AllStockLotsGrid() {
       }
 
       return (
-        <LocationSelector
-          value={value}
-          onChange={handleChange}
-          locations={locations}
-          size="small"
-        />
+        <Box sx={{ display: "flex", alignItems: "center", height: "100%" }}>
+          <LocationSelector
+            value={value}
+            onChange={handleChange}
+            locations={locations}
+            size="small"
+          />
+        </Box>
       )
     },
     [locations],
@@ -238,7 +240,8 @@ export function AllStockLotsGrid() {
     {
       field: "location_id",
       headerName: t("AllStockLots.location", "Location"),
-      flex: 1,
+      flex: 1.5,
+      minWidth: 200,
       editable: true,
       renderEditCell: renderLocationEditCell,
       valueFormatter: (value) => {
