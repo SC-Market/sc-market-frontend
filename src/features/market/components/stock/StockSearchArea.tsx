@@ -6,7 +6,7 @@
 
 import React, { useState } from "react"
 import {
-  Box,
+  Stack,
   TextField,
   MenuItem,
   Typography,
@@ -25,8 +25,8 @@ export function StockSearchArea() {
   const [maxQuantity, setMaxQuantity] = useState("")
 
   return (
-    <Box sx={{ p: 2 }}>
-      <Typography variant="h6" sx={{ mb: 2 }}>
+    <Stack spacing={1} sx={{ p: 2 }}>
+      <Typography variant="h6">
         {t("stock.filters", "Filters")}
       </Typography>
 
@@ -43,7 +43,6 @@ export function StockSearchArea() {
             </InputAdornment>
           ),
         }}
-        sx={{ mb: 2 }}
       />
 
       <LocationSelector
@@ -51,7 +50,6 @@ export function StockSearchArea() {
         onChange={(newValue) => setLocationId(newValue)}
         size="small"
         fullWidth
-        sx={{ mb: 2 }}
         readOnly={false}
       />
 
@@ -62,7 +60,6 @@ export function StockSearchArea() {
         label={t("stock.status", "Status")}
         value={status}
         onChange={(e) => setStatus(e.target.value)}
-        sx={{ mb: 2 }}
       >
         <MenuItem value="all">{t("common.all", "All")}</MenuItem>
         <MenuItem value="available">
@@ -73,7 +70,7 @@ export function StockSearchArea() {
         </MenuItem>
       </TextField>
 
-      <Box sx={{ display: "flex", gap: 1, mb: 2 }}>
+      <Stack direction="row" spacing={1}>
         <TextField
           fullWidth
           size="small"
@@ -90,7 +87,7 @@ export function StockSearchArea() {
           value={maxQuantity}
           onChange={(e) => setMaxQuantity(e.target.value)}
         />
-      </Box>
-    </Box>
+      </Stack>
+    </Stack>
   )
 }
