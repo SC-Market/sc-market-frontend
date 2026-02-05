@@ -93,6 +93,10 @@ export function ContextAwareFAB() {
     if (path.includes("/market/stock")) {
       return allActions[3] // Manage Stock
     }
+    // Don't show on /contracts page - it has its own FiltersFAB
+    if (path === "/contracts" || path.startsWith("/contracts/public")) {
+      return null
+    }
     if (path.includes("/contracts")) {
       return allActions[4] // View Contracts
     }

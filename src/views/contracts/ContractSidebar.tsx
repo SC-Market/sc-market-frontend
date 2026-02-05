@@ -132,6 +132,7 @@ export function ContractSidebar() {
         <Grid item xs={12}>
           <TextField
             fullWidth
+            size="small"
             label={t("service_search.search")}
             InputProps={{
               startAdornment: <SearchIcon />,
@@ -156,6 +157,7 @@ export function ContractSidebar() {
           <TextField
             select
             fullWidth
+            size="small"
             value={kind}
             label={t("service_search.contract_type")}
             onChange={handleKindChange}
@@ -183,6 +185,7 @@ export function ContractSidebar() {
           <TextField
             select
             fullWidth
+            size="small"
             label={t("recruiting_sidebar.sort_attribute")}
             value={sort || ""}
             onChange={handleSortChange}
@@ -216,6 +219,7 @@ export function ContractSidebar() {
         <Grid item xs={12}>
           <TextField
             fullWidth
+            size="small"
             value={minOffer}
             label={t("service_search.min_cost")}
             onChange={handleMinCostChange}
@@ -235,6 +239,7 @@ export function ContractSidebar() {
         <Grid item xs={12}>
           <TextField
             fullWidth
+            size="small"
             value={maxOffer == null ? "" : maxOffer}
             label={t("service_search.max_cost")}
             onChange={handleMaxCostChange}
@@ -254,6 +259,7 @@ export function ContractSidebar() {
         <Grid item xs={12}>
           <TextField
             select
+            size="small"
             label={t("service_search.payment_type")}
             value={paymentType}
             onChange={handlePaymentTypeChange}

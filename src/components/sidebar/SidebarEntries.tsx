@@ -30,7 +30,7 @@ import FolderOpenIcon from "@mui/icons-material/FolderOpenRounded"
 import PeopleAltIcon from "@mui/icons-material/PeopleAltRounded"
 import NotificationsIcon from "@mui/icons-material/NotificationsRounded"
 import React from "react"
-import { SidebarSectionProps } from "./Sidebar"
+import { SidebarSectionProps } from "./types"
 import { Pistol } from "mdi-material-ui"
 import { ModerationSidebarEntry } from "./ModerationSidebarEntry"
 

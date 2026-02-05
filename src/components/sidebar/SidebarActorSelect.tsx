@@ -19,7 +19,7 @@ import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { Stack } from "@mui/system"
 import { useTranslation } from "react-i18next"
-import { ORG_ROUTE_REST_TO_CANONICAL } from "./Sidebar"
+import { ORG_ROUTE_REST_TO_CANONICAL } from "./components/SidebarLinkBody"
 
 const localTheme = createTheme({
   palette: {

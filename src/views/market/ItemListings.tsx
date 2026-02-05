@@ -389,6 +389,8 @@ export function DisplayListings(props: {
 export function DisplayListingsMin(props: {
   listings: MarketListingSearchResult[]
   loading?: boolean
+  error?: boolean
+  onRetry?: () => void
   startIndex?: number
   disableAds?: boolean
   useVirtualization?: boolean
@@ -396,6 +398,8 @@ export function DisplayListingsMin(props: {
   const {
     listings,
     loading,
+    error,
+    onRetry,
     startIndex = 0,
     disableAds = false,
     useVirtualization = true,
@@ -509,7 +513,12 @@ export function DisplayListingsMin(props: {
   if (listingsWithAds.length === 0) {
     return (
       <Grid item xs={12}>
-        <EmptyListings isSearchResult={false} showCreateAction={false} />
+        <EmptyListings
+          isSearchResult={false}
+          isError={error}
+          onRetry={onRetry}
+          showCreateAction={false}
+        />
       </Grid>
     )
   }
@@ -667,6 +676,8 @@ export function ItemListings(props: {
     data: results,
     isLoading,
     isFetching,
+    error,
+    refetch,
   } = useSearchMarketListingsQuery(searchQueryParams)
 
   const { total, listings } = useMemo(
@@ -705,6 +716,8 @@ export function ItemListings(props: {
       <DisplayListingsMin
         listings={listings || []}
         loading={isLoading || isFetching}
+        error={!!error}
+        onRetry={() => refetch()}
         disableAds={!!(org || user)}
       />
 
@@ -812,6 +825,8 @@ export function BulkListingsRefactor(props: {
       <DisplayListingsMin
         listings={listings || []}
         loading={isLoading || isFetching}
+        error={!!error}
+        onRetry={() => refetch()}
         disableAds={!!(org || user)}
       />
 

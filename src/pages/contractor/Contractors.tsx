@@ -27,6 +27,7 @@ import { Page } from "../../components/metadata/Page"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { EmptyContractors } from "../../components/empty-states"
 
 export function Contractors() {
   const { t } = useTranslation()
@@ -66,6 +67,8 @@ export function Contractors() {
     data: contractors,
     isLoading,
     isFetching,
+    error,
+    refetch,
   } = useGetContractorsQuery({
     pageSize: perPage,
     index: page,
@@ -143,17 +146,36 @@ export function Contractors() {
           >
             <div ref={ref} />
             <HeaderTitle>{t("contractorsPage.title")}</HeaderTitle>
-            {!(isLoading || isFetching)
-              ? (contractors || { items: [] }).items.map((item, index) => (
-                  <ContractorListItem
-                    contractor={item}
-                    key={item.name}
-                    index={index}
-                  />
-                ))
-              : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
-                  <ContractorSkeleton key={i} />
-                ))}
+            
+            {error ? (
+              <Grid item xs={12}>
+                <EmptyContractors isError onRetry={() => refetch()} />
+              </Grid>
+            ) : isLoading || isFetching ? (
+              [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
+                <ContractorSkeleton key={i} />
+              ))
+            ) : contractors && contractors.items.length > 0 ? (
+              contractors.items.map((item, index) => (
+                <ContractorListItem
+                  contractor={item}
+                  key={item.name}
+                  index={index}
+                />
+              ))
+            ) : (
+              <Grid item xs={12}>
+                <EmptyContractors
+                  isSearchResult={
+                    !!(
+                      searchState.query ||
+                      searchState.fields?.length ||
+                      searchState.rating
+                    )
+                  }
+                />
+              </Grid>
+            )}
 
             <Grid item xs={12}>
               <Divider light />

@@ -4,7 +4,7 @@ export interface SidebarItemProps {
   to?: string
   params?: string
   text: string
-  icon: ReactNode
+  icon?: ReactNode
   chip?: ReactNode
   children?: SidebarItemProps[]
   hidden?: boolean
