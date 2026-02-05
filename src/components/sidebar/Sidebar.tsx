@@ -728,9 +728,14 @@ export function Sidebar() {
             }
           >
             {all_sidebar_entries
-              .flatMap((section) => section.items)
+              .flatMap((section) =>
+                section.items.flatMap((item) => [
+                  item,
+                  ...(item.children || []),
+                ]),
+              )
               .filter(filterItems)
-              .filter((entry) => !entry.children && entry.to)
+              .filter((entry) => entry.to)
               .filter((entry) => {
                 const path =
                   entry.orgRouteRest && effectiveOrgId

@@ -343,7 +343,22 @@ export function ServiceListings(props: { user?: string; contractor?: string }) {
   if (error) {
     return (
       <Grid item xs={12}>
-        <Typography color="error">{t("error_loading_services")}</Typography>
+        <EmptyListings
+          isSearchResult={false}
+          title={t("emptyStates.services.errorTitle", {
+            defaultValue: "Unable to load services",
+          })}
+          description={t("emptyStates.services.errorDescription", {
+            defaultValue:
+              "We encountered an error while loading services. Please try again.",
+          })}
+          showCreateAction={false}
+          action={{
+            label: t("emptyStates.services.retry", { defaultValue: "Retry" }),
+            onClick: () => refetch(),
+            variant: "contained",
+          }}
+        />
       </Grid>
     )
   }

@@ -22,6 +22,7 @@ import { useTranslation } from "react-i18next"
 import FilterListIcon from "@mui/icons-material/FilterList"
 import { FiltersFAB } from "../../../components/mobile/FiltersFAB"
 import { Button } from "@mui/material"
+import { FeatureErrorBoundary } from "../../../components/error-boundaries"
 
 // Dynamic imports for heavy components
 const ItemMarketView = React.lazy(() =>
@@ -37,6 +38,11 @@ const ServiceMarketView = React.lazy(() =>
 const ServiceActions = React.lazy(() =>
   import("../../../views/services/ServiceActions").then((module) => ({
     default: module.ServiceActions,
+  })),
+)
+const ContractActions = React.lazy(() =>
+  import("../../../views/contracts/ContractActions").then((module) => ({
+    default: module.ContractActions,
   })),
 )
 const ContractListings = React.lazy(() =>
@@ -152,9 +158,13 @@ export function MarketPage() {
                 <Grid item xs={12} sm="auto">
                   {tabPage === 1 ? (
                     <MarketActions />
-                  ) : (
+                  ) : tabPage === 0 ? (
                     <Suspense fallback={<CircularProgress size={24} />}>
                       <ServiceActions />
+                    </Suspense>
+                  ) : (
+                    <Suspense fallback={<CircularProgress size={24} />}>
+                      <ContractActions />
                     </Suspense>
                   )}
                 </Grid>
@@ -167,9 +177,11 @@ export function MarketPage() {
               </Suspense>
             </TabPanel>
             <TabPanel value={tabPage} index={0}>
-              <Suspense fallback={<MarketTabLoader />}>
-                <ServiceMarketView />
-              </Suspense>
+              <FeatureErrorBoundary featureName="Services">
+                <Suspense fallback={<MarketTabLoader />}>
+                  <ServiceMarketView />
+                </Suspense>
+              </FeatureErrorBoundary>
             </TabPanel>
             <TabPanel value={tabPage} index={2}>
               <Suspense fallback={<MarketTabLoader />}>
