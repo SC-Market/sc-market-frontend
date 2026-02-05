@@ -14,12 +14,15 @@ import {
 } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import SearchIcon from "@mui/icons-material/Search"
+import { LocationSelector } from "./LocationSelector"
 
 export function StockSearchArea() {
   const { t } = useTranslation()
   const [search, setSearch] = useState("")
-  const [location, setLocation] = useState("all")
+  const [locationId, setLocationId] = useState<string | null>(null)
   const [status, setStatus] = useState("all")
+  const [minQuantity, setMinQuantity] = useState("")
+  const [maxQuantity, setMaxQuantity] = useState("")
 
   return (
     <Box sx={{ p: 2 }}>
@@ -29,6 +32,7 @@ export function StockSearchArea() {
 
       <TextField
         fullWidth
+        size="small"
         placeholder={t("stock.searchLots", "Search lots...")}
         value={search}
         onChange={(e) => setSearch(e.target.value)}
@@ -42,29 +46,23 @@ export function StockSearchArea() {
         sx={{ mb: 2 }}
       />
 
-      <TextField
-        select
+      <LocationSelector
+        value={locationId}
+        onChange={(newValue) => setLocationId(newValue)}
+        size="small"
         fullWidth
-        label={t("stock.location", "Location")}
-        value={location}
-        onChange={(e) => setLocation(e.target.value)}
         sx={{ mb: 2 }}
-      >
-        <MenuItem value="all">{t("common.all", "All")}</MenuItem>
-        <MenuItem value="assigned">
-          {t("stock.assigned", "Assigned")}
-        </MenuItem>
-        <MenuItem value="unassigned">
-          {t("stock.unassigned", "Unassigned")}
-        </MenuItem>
-      </TextField>
+        readOnly={false}
+      />
 
       <TextField
         select
         fullWidth
+        size="small"
         label={t("stock.status", "Status")}
         value={status}
         onChange={(e) => setStatus(e.target.value)}
+        sx={{ mb: 2 }}
       >
         <MenuItem value="all">{t("common.all", "All")}</MenuItem>
         <MenuItem value="available">
@@ -74,6 +72,25 @@ export function StockSearchArea() {
           {t("stock.allocated", "Allocated")}
         </MenuItem>
       </TextField>
+
+      <Box sx={{ display: "flex", gap: 1, mb: 2 }}>
+        <TextField
+          fullWidth
+          size="small"
+          type="number"
+          label={t("stock.minQuantity", "Min Qty")}
+          value={minQuantity}
+          onChange={(e) => setMinQuantity(e.target.value)}
+        />
+        <TextField
+          fullWidth
+          size="small"
+          type="number"
+          label={t("stock.maxQuantity", "Max Qty")}
+          value={maxQuantity}
+          onChange={(e) => setMaxQuantity(e.target.value)}
+        />
+      </Box>
     </Box>
   )
 }
