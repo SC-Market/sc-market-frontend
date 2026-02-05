@@ -210,6 +210,12 @@ export function AllStockLotsGrid() {
       editable: true,
     },
     {
+      field: "owner_id",
+      headerName: t("AllStockLots.owner", "Owner"),
+      flex: 1,
+      valueFormatter: (value) => value || "Unassigned",
+    },
+    {
       field: "location_id",
       headerName: t("AllStockLots.location", "Location"),
       flex: 1,
@@ -217,7 +223,7 @@ export function AllStockLotsGrid() {
       renderEditCell: renderLocationEditCell,
       valueFormatter: (value) => {
         const location = locations.find((l) => l.location_id === value)
-        return location?.name || ""
+        return location?.name || "Unspecified"
       },
     },
     {
