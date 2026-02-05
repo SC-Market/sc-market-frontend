@@ -392,6 +392,13 @@ const router = createBrowserRouter([
             }),
           },
           {
+            path: "/market/manage-stock",
+            lazy: async () => ({
+              Component: (await import("./pages/market/ManageStockLots"))
+                .ManageStockLots,
+            }),
+          },
+          {
             path: "/market/stock/:listingId",
             lazy: async () => ({
               Component: (await import("./pages/market/ManageListingStock"))
