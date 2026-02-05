@@ -210,7 +210,7 @@ export function VirtualizedGrid<T>(props: VirtualizedGridProps<T>) {
     >
       <Box
         sx={{
-          height: `${totalHeight}px`,
+          height: isBelowMd ? "auto" : `${totalHeight}px`,
           width: "100%",
           position: "relative",
         }}
@@ -224,12 +224,14 @@ export function VirtualizedGrid<T>(props: VirtualizedGridProps<T>) {
             <Box
               key={virtualRow.key}
               sx={{
-                position: "absolute",
-                top: 0,
-                left: 0,
+                position: isBelowMd ? "relative" : "absolute",
+                top: isBelowMd ? undefined : 0,
+                left: isBelowMd ? undefined : 0,
                 width: "100%",
-                height: `${virtualRow.size}px`,
-                transform: `translateY(${virtualRow.start}px)`,
+                height: isBelowMd ? "auto" : `${virtualRow.size}px`,
+                transform: isBelowMd
+                  ? undefined
+                  : `translateY(${virtualRow.start}px)`,
                 display: "grid",
                 gridTemplateColumns: `repeat(${cols}, 1fr)`,
                 gap: theme.spacing(gapValue),
