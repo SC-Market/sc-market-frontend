@@ -37,7 +37,7 @@ export function ContextAwareFAB() {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
   const bottomNavHeight = useBottomNavHeight()
   const [speedDialOpen, setSpeedDialOpen] = useState(false)
-  const longPressTimer = useRef<number | undefined>()
+  const longPressTimer = useRef<number | undefined>(undefined)
 
   if (!isMobile) return null
 
