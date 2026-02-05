@@ -26,6 +26,9 @@ interface BottomSheetProps {
   showCloseButton?: boolean
   fullHeight?: boolean
   disableBackdropClose?: boolean
+  snapPoints?: ("peek" | "half" | "full")[]
+  defaultSnap?: "peek" | "half" | "full"
+  peekHeight?: number
 }
 
 export function BottomSheet({
@@ -37,12 +40,26 @@ export function BottomSheet({
   showCloseButton = true,
   fullHeight = false,
   disableBackdropClose = false,
+  snapPoints = ["full"],
+  defaultSnap = "full",
+  peekHeight = 120,
 }: BottomSheetProps) {
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const dragHandleRef = useRef<HTMLDivElement>(null)
   const [dragStart, setDragStart] = useState<number | null>(null)
   const [dragOffset, setDragOffset] = useState(0)
+  const [currentSnap, setCurrentSnap] = useState<"peek" | "half" | "full">(
+    defaultSnap,
+  )
+
+  const getSnapHeight = (snap: "peek" | "half" | "full") => {
+    if (snap === "peek") return peekHeight
+    if (snap === "half") return window.innerHeight * 0.5
+    return fullHeight ? window.innerHeight : window.innerHeight * 0.9
+  }
+
+  const currentHeight = getSnapHeight(currentSnap)
 
   // Don't render anything when closed to prevent backdrop from blocking interaction
   if (!open) {
@@ -65,8 +82,21 @@ export function BottomSheet({
 
   const handleTouchEnd = () => {
     if (dragOffset > 100) {
-      // Threshold to close
-      onClose()
+      // Snap to next lower snap point or close
+      const currentIndex = snapPoints.indexOf(currentSnap)
+      if (currentIndex > 0) {
+        setCurrentSnap(snapPoints[currentIndex - 1])
+      } else if (currentSnap === "peek") {
+        onClose()
+      } else {
+        onClose()
+      }
+    } else if (dragOffset < -100) {
+      // Snap to next higher snap point
+      const currentIndex = snapPoints.indexOf(currentSnap)
+      if (currentIndex < snapPoints.length - 1) {
+        setCurrentSnap(snapPoints[currentIndex + 1])
+      }
     }
     setDragStart(null)
     setDragOffset(0)
@@ -79,8 +109,7 @@ export function BottomSheet({
       onClose={disableBackdropClose ? undefined : onClose}
       PaperProps={{
         sx: {
-          maxHeight: fullHeight ? "100vh" : maxHeight,
-          height: fullHeight ? "100vh" : "auto",
+          height: currentHeight,
           display: "flex",
           flexDirection: "column",
           borderTopLeftRadius: theme.spacing(3),
@@ -92,7 +121,7 @@ export function BottomSheet({
         },
         style: {
           transform: `translateY(${dragOffset}px)`,
-          transition: dragStart === null ? "transform 0.2s ease-out" : "none",
+          transition: dragStart === null ? "transform 0.3s ease-out" : "none",
         },
       }}
       ModalProps={{
@@ -103,9 +132,17 @@ export function BottomSheet({
         sx: {
           zIndex: open ? theme.zIndex.modal + 10 : undefined,
         },
+        slotProps: {
+          backdrop: {
+            sx: {
+              backdropFilter: "blur(4px)",
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
+            },
+          },
+        },
       }}
     >
-      {/* Drag handle indicator */}
+      {/* Drag handle indicator - more prominent */}
       {isMobile && (
         <Box
           ref={dragHandleRef}
@@ -115,18 +152,23 @@ export function BottomSheet({
           sx={{
             display: "flex",
             justifyContent: "center",
+            alignItems: "center",
             pt: 1.5,
-            pb: 0.5,
+            pb: 1,
             cursor: "grab",
             touchAction: "none",
+            "&:active": {
+              cursor: "grabbing",
+            },
           }}
         >
           <Box
             sx={{
-              width: 40,
-              height: 4,
-              borderRadius: 2,
-              backgroundColor: theme.palette.divider,
+              width: 48,
+              height: 5,
+              borderRadius: 2.5,
+              backgroundColor: theme.palette.action.active,
+              opacity: 0.4,
             }}
           />
         </Box>
