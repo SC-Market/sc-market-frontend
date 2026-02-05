@@ -56,11 +56,7 @@ import {
 } from "@mui/icons-material"
 import { OrderRowSkeleton } from "../../components/skeletons"
 import { EmptyOrders } from "../../components/empty-states"
-import {
-  PullToRefresh,
-  LongPressMenu,
-  useLongPress,
-} from "../../components/gestures"
+import { LongPressMenu, useLongPress } from "../../components/gestures"
 
 export const statusColors = new Map<
   | "active"
@@ -763,63 +759,44 @@ export function OrdersViewPaginated(props: {
           </Paper>
         </Collapse>
 
-        <PullToRefresh
-          onRefresh={async () => {
-            await refetch()
-          }}
-          enabled={isMobile}
-        >
-          <Box
-            sx={{
-              // Hide checkbox column header on mobile
-              "& .MuiTableHead .MuiTableCell-root:first-of-type": {
-                display: { xs: "none", sm: "table-cell" },
-              },
-            }}
-          >
-            <ControlledTable
-              rows={(orders?.items || []).map((o) => ({
-                ...o,
-                other_name: mine
-                  ? o.assigned_to?.username || o.contractor?.spectrum_id || null
-                  : o.customer.username,
-                mine,
-              }))}
-              initialSort={"timestamp"}
-              onPageChange={setPage}
-              page={page}
-              onPageSizeChange={setPageSize}
-              pageSize={pageSize}
-              rowCount={+(totalCounts[statusFilter] || 0)}
-              onOrderChange={setOrder}
-              order={order}
-              onOrderByChange={setOrderBy}
-              orderBy={orderBy}
-              generateRow={OrderRow}
-              keyAttr={"order_id"}
-              headCells={(mine ? MyOrderHeadCells : OrderHeadCells).map(
-                (cell) => ({
-                  ...cell,
-                  label: t(cell.label),
-                }),
-              )}
-              disableSelect={false} // Selection enabled on both mobile and desktop
-              loading={isLoading || isFetching}
-              loadingRowComponent={OrderRowSkeleton}
-              emptyStateComponent={
-                !(isLoading || isFetching) &&
-                (orders?.items || []).length === 0 ? (
-                  <EmptyOrders
-                    isOffers={false}
-                    isSent={mine}
-                    showCreateAction={mine}
-                    sx={{ py: 4 }}
-                  />
-                ) : undefined
-              }
-            />
-          </Box>
-        </PullToRefresh>
+        <ControlledTable
+          rows={(orders?.items || []).map((o) => ({
+            ...o,
+            other_name: mine
+              ? o.assigned_to?.username || o.contractor?.spectrum_id || null
+              : o.customer.username,
+            mine,
+          }))}
+          initialSort={"timestamp"}
+          onPageChange={setPage}
+          page={page}
+          onPageSizeChange={setPageSize}
+          pageSize={pageSize}
+          rowCount={+(totalCounts[statusFilter] || 0)}
+          onOrderChange={setOrder}
+          order={order}
+          onOrderByChange={setOrderBy}
+          orderBy={orderBy}
+          generateRow={OrderRow}
+          keyAttr={"order_id"}
+          headCells={(mine ? MyOrderHeadCells : OrderHeadCells).map((cell) => ({
+            ...cell,
+            label: t(cell.label),
+          }))}
+          disableSelect={false}
+          loading={isLoading || isFetching}
+          loadingRowComponent={OrderRowSkeleton}
+          emptyStateComponent={
+            !(isLoading || isFetching) && (orders?.items || []).length === 0 ? (
+              <EmptyOrders
+                isOffers={false}
+                isSent={mine}
+                showCreateAction={mine}
+                sx={{ py: 4 }}
+              />
+            ) : undefined
+          }
+        />
       </Paper>
     </Grid>
   )
