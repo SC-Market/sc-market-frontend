@@ -11,6 +11,10 @@ export interface StockLot {
   listing_id: string
   quantity_total: number
   location_id: string | null
+  location?: {
+    location_id: string
+    name: string
+  } | null
   owner_id: string | null
   owner?: {
     user_id: string
