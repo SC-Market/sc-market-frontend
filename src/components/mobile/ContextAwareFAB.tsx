@@ -85,8 +85,12 @@ export function ContextAwareFAB() {
     if (path.includes("/market/manage")) {
       return allActions[0] // Create Listing
     }
-    if (path.includes("/messages")) {
+    if (path === "/messages") {
       return allActions[1] // New Message
+    }
+    // Don't show on individual message pages
+    if (path.includes("/messages/")) {
+      return null
     }
     if (path.includes("/order/services")) {
       return allActions[2] // Create Service
