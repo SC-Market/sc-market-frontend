@@ -165,8 +165,8 @@ export function AllStockLotsGrid() {
     const { data: searchData } = useSearchMarketListingsQuery({
       query: inputValue,
       page_size: 20,
-      userSeller: currentOrg ? undefined : profile?.username,
-      contractorSeller: currentOrg?.spectrum_id,
+      user_seller: currentOrg ? undefined : profile?.username,
+      contractor_seller: currentOrg?.spectrum_id,
       statuses: "active,inactive",
       listing_type: "unique",
     })
