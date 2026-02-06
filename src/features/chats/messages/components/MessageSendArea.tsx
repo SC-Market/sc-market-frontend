@@ -5,6 +5,7 @@ import {
   TextField,
   useMediaQuery,
 } from "@mui/material"
+import { HapticIconButton } from "../../../../components/haptic"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../../hooks/styles/Theme"
 import SendIcon from "@mui/icons-material/SendRounded"
