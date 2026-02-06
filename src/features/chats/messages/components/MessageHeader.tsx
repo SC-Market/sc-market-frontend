@@ -10,6 +10,7 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material"
+import { HapticIconButton } from "../../../../components/haptic"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../../hooks/styles/Theme"
 import BusinessIcon from "@mui/icons-material/BusinessRounded"
@@ -73,7 +74,7 @@ export function MessageHeader(props: {
           alignItems={"center"}
         >
           {messageSidebarOpen !== undefined && (
-            <IconButton
+            <HapticIconButton
               color="secondary"
               aria-label={t("MessagesBody.toggleSidebar")}
               onClick={() => {
@@ -97,7 +98,7 @@ export function MessageHeader(props: {
               ) : (
                 <ChevronLeftRounded />
               )}
-            </IconButton>
+            </HapticIconButton>
           )}
 
           {(() => {

@@ -16,6 +16,7 @@ import {
   Stack,
   Button,
 } from "@mui/material"
+import { HapticIconButton } from "../../../components/haptic"
 import React, {
   RefObject,
   useCallback,
@@ -291,7 +292,7 @@ function MessageHeaderMobile() {
           }}
           alignItems={"center"}
         >
-          <IconButton
+          <HapticIconButton
             color="secondary"
             aria-label={t("MessagesBody.toggleSidebar")}
             onClick={() => {
@@ -304,7 +305,7 @@ function MessageHeaderMobile() {
             size="small"
           >
             <ChevronLeftRounded />
-          </IconButton>
+          </HapticIconButton>
 
           {(() => {
             const userParticipants = chat!.participants.filter(
@@ -604,7 +605,7 @@ function MessageSendAreaMobile(props: {
         }}
         placeholder={t("MessagesBody.typeMessage") || "Type a message..."}
       />
-      <IconButton
+      <HapticIconButton
         color="primary"
         onClick={handleSend}
         sx={{
@@ -614,7 +615,7 @@ function MessageSendAreaMobile(props: {
         }}
       >
         <SendIcon />
-      </IconButton>
+      </HapticIconButton>
     </Box>
   )
 }

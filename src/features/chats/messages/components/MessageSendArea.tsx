@@ -103,7 +103,7 @@ export function MessageSendArea(props: { onSend: (content: string) => void }) {
         placeholder={t("MessagesBody.typeMessage") || "Type a message..."}
       />
       {isMobile ? (
-        <IconButton
+        <HapticIconButton
           color="primary"
           onClick={handleSend}
           sx={{
@@ -113,7 +113,7 @@ export function MessageSendArea(props: { onSend: (content: string) => void }) {
           }}
         >
           <SendIcon />
-        </IconButton>
+        </HapticIconButton>
       ) : (
         <Button
           variant={"contained"}
