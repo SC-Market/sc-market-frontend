@@ -345,9 +345,21 @@ function AvailableLots({
               <TableRow key={lot.lot_id}>
                 <TableCell>{lot.location?.name || "Unknown"}</TableCell>
                 <TableCell>
-                  <Typography variant="body2" color="text.secondary">
-                    {lot.owner?.display_name || lot.owner?.username || "—"}
-                  </Typography>
+                  {lot.owner ? (
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                      <Avatar
+                        src={lot.owner.avatar || undefined}
+                        sx={{ width: 24, height: 24 }}
+                      />
+                      <Typography variant="body2" color="text.secondary">
+                        {lot.owner.display_name || lot.owner.username}
+                      </Typography>
+                    </Box>
+                  ) : (
+                    <Typography variant="body2" color="text.disabled">
+                      —
+                    </Typography>
+                  )}
                 </TableCell>
                 <TableCell>
                   <TextField
@@ -545,9 +557,21 @@ function AllocationTarget({
                 </TableCell>
                 <TableCell>{alloc.lot?.location?.name || "Unknown"}</TableCell>
                 <TableCell>
-                  <Typography variant="body2" color="text.secondary">
-                    {alloc.lot?.owner?.display_name || alloc.lot?.owner?.username || "—"}
-                  </Typography>
+                  {alloc.lot?.owner ? (
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                      <Avatar
+                        src={alloc.lot.owner.avatar || undefined}
+                        sx={{ width: 24, height: 24 }}
+                      />
+                      <Typography variant="body2" color="text.secondary">
+                        {alloc.lot.owner.display_name || alloc.lot.owner.username}
+                      </Typography>
+                    </Box>
+                  ) : (
+                    <Typography variant="body2" color="text.disabled">
+                      —
+                    </Typography>
+                  )}
                 </TableCell>
               </TableRow>
             )

@@ -81,11 +81,26 @@ export function AllAllocatedLotsGrid() {
       flex: 1,
       valueGetter: (value, row) => 
         row.lot?.owner?.display_name || row.lot?.owner?.username || "—",
-      renderCell: (params) => (
-        <Typography variant="body2" color="text.secondary">
-          {params.value}
-        </Typography>
-      ),
+      renderCell: (params) => {
+        if (!params.row.lot?.owner) {
+          return (
+            <Typography variant="body2" color="text.disabled">
+              —
+            </Typography>
+          )
+        }
+        return (
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <Avatar
+              src={params.row.lot.owner.avatar || undefined}
+              sx={{ width: 24, height: 24 }}
+            />
+            <Typography variant="body2" color="text.secondary">
+              {params.value}
+            </Typography>
+          </Box>
+        )
+      },
     },
     {
       field: "created_at",

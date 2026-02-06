@@ -9,6 +9,7 @@
 
 import React, { useState, useMemo } from "react"
 import {
+  Avatar,
   Box,
   Card,
   CardContent,
@@ -326,9 +327,15 @@ export function OrderAllocationView({
                                   </TableCell>
                                   <TableCell>
                                     {allocation.lot?.owner ? (
-                                      <Typography variant="body2" color="text.secondary">
-                                        {allocation.lot.owner.display_name || allocation.lot.owner.username}
-                                      </Typography>
+                                      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                                        <Avatar
+                                          src={allocation.lot.owner.avatar || undefined}
+                                          sx={{ width: 24, height: 24 }}
+                                        />
+                                        <Typography variant="body2" color="text.secondary">
+                                          {allocation.lot.owner.display_name || allocation.lot.owner.username}
+                                        </Typography>
+                                      </Box>
                                     ) : (
                                       <Typography variant="body2" color="text.disabled">
                                         —
