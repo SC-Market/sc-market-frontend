@@ -14,6 +14,7 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material"
+import { HapticIconButton } from "../../../components/haptic"
 import { useTheme } from "@mui/material/styles"
 import React, { useState, useMemo, useRef, useEffect, useCallback } from "react"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
@@ -22,6 +23,7 @@ import { HeaderTitle } from "../../../components/typography/HeaderTitle"
 import { useGetUserProfileQuery } from "../../../store/profile"
 import SearchIcon from "@mui/icons-material/Search"
 import CreateIcon from "@mui/icons-material/Create"
+import AddIcon from "@mui/icons-material/AddRounded"
 import BusinessIcon from "@mui/icons-material/BusinessRounded"
 import { useMessageGroupCreate } from "../hooks/MessageGroupCreate"
 import type {
@@ -447,25 +449,33 @@ export function MessagingSidebarContent(
         sx={{
           width: "100%",
           padding: { xs: 1.5, sm: 2 },
-          flexDirection: { xs: "column", sm: "row" },
+          flexDirection: { xs: "row", sm: "row" },
           gap: { xs: 1, sm: 0 },
         }}
         justifyContent={"space-between"}
-        alignItems={{ xs: "stretch", sm: "center" }}
+        alignItems={{ xs: "center", sm: "center" }}
       >
         <HeaderTitle sx={{ fontSize: { xs: "1.25rem", sm: "1.5rem" } }}>
           {t("MessagingSidebar.messages")}
         </HeaderTitle>
-        <Button
-          variant={"contained"}
-          color={"secondary"}
-          startIcon={<CreateIcon />}
-          size={isMobile ? "medium" : "large"}
-          onClick={() => setCreatingMessageGroup(true)}
-          fullWidth={isMobile}
-        >
-          {t("MessagingSidebar.group")}
-        </Button>
+        {isMobile ? (
+          <HapticIconButton
+            color={"secondary"}
+            onClick={() => setCreatingMessageGroup(true)}
+          >
+            <AddIcon />
+          </HapticIconButton>
+        ) : (
+          <Button
+            variant={"contained"}
+            color={"secondary"}
+            startIcon={<CreateIcon />}
+            size={"large"}
+            onClick={() => setCreatingMessageGroup(true)}
+          >
+            {t("MessagingSidebar.group")}
+          </Button>
+        )}
       </Box>
       <Box sx={{ padding: { xs: 1.5, sm: 2 } }}>
         <TextField
