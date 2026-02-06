@@ -20,7 +20,9 @@ import {
   TablePagination,
   Tabs,
   Tab,
+  useMediaQuery,
 } from "@mui/material"
+import { HapticButton } from "../../components/haptic"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom"
 import { getRelativeTime } from "../../util/time"
@@ -443,6 +445,7 @@ export function dateDiffInDays(a: Date, b: Date) {
 export function PurchaseArea(props: { listing: BaseListingType }) {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
   const { listing } = props
   const [quantity, setQuantity] = useState(1)
   const [offer, setOffer] = useState(1)
@@ -559,7 +562,12 @@ export function PurchaseArea(props: { listing: BaseListingType }) {
         position: "relative",
       }}
     >
-      <Stack direction={"row"} justifyContent={"space-between"} padding={2}>
+      <Stack
+        direction={isMobile ? "column" : "row"}
+        justifyContent={"space-between"}
+        padding={2}
+        spacing={isMobile ? 2 : 0}
+      >
         <Stack
           spacing={theme.layoutSpacing.text}
           direction={"column"}
@@ -615,12 +623,14 @@ export function PurchaseArea(props: { listing: BaseListingType }) {
             label={t("MarketListingView.quantity")}
             value={quantity}
             color={"secondary"}
+            fullWidth={isMobile}
           />
         </Stack>
         <Stack
           spacing={theme.layoutSpacing.text}
           direction={"column"}
           justifyContent={"space-between"}
+          sx={{ width: isMobile ? "100%" : "auto" }}
         >
           <Box />
           {justAddedToCart ? (
@@ -631,6 +641,7 @@ export function PurchaseArea(props: { listing: BaseListingType }) {
               color={"secondary"}
               startIcon={<VisibilityRounded />}
               size={"large"}
+              fullWidth={isMobile}
               sx={{
                 display: purchaseOpen || offerOpen ? "none" : undefined,
                 marginBottom: 1,
@@ -639,19 +650,20 @@ export function PurchaseArea(props: { listing: BaseListingType }) {
               {t("MarketListingView.viewInCart")}
             </Button>
           ) : (
-            <Button
+            <HapticButton
               variant={"contained"}
               color={"primary"}
               startIcon={<AddShoppingCartRounded />}
               size={"large"}
               onClick={addToCart}
+              fullWidth={isMobile}
               sx={{
                 display: purchaseOpen || offerOpen ? "none" : undefined,
                 marginBottom: 1,
               }}
             >
               {t("MarketListingView.addToCart")}
-            </Button>
+            </HapticButton>
           )}
         </Stack>
       </Stack>
