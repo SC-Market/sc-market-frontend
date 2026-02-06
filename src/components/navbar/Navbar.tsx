@@ -1,7 +1,6 @@
 import {
   AppBar,
   Button,
-  IconButton,
   Toolbar,
   Tooltip,
   Typography,
@@ -22,6 +21,7 @@ import { useTranslation } from "react-i18next"
 import { Stack } from "@mui/system"
 import { Link as RouterLink } from "react-router-dom"
 import { useCookies } from "react-cookie"
+import { HapticIconButton } from "../haptic"
 
 export function Navbar(props: { children?: React.ReactNode }) {
   const theme: ExtendedTheme = useTheme()
@@ -56,12 +56,14 @@ export function Navbar(props: { children?: React.ReactNode }) {
         zIndex: props.children
           ? theme.zIndex.drawer - 2
           : theme.zIndex.drawer - 1,
-        // marginLeft: (drawerOpen ? sidebarDrawerWidth : 0),
-        // width: `calc(100% - ${(drawerOpen ? sidebarDrawerWidth : 1) - 1}px)`,
-        [theme.breakpoints.down("sm")]: {
-          width: drawerOpen ? 0 : "100%",
+        marginLeft: {
+          xs: 0,
+          md: drawerOpen ? `${sidebarDrawerWidth}px` : 0,
         },
-
+        width: {
+          xs: drawerOpen ? 0 : "100%",
+          md: `calc(100% - ${drawerOpen ? sidebarDrawerWidth : 0}px)`,
+        },
         transition: theme.transitions.create(["width", "margin"], {
           easing: theme.transitions.easing.easeOut,
           duration: "0.3s",
@@ -105,7 +107,7 @@ export function Navbar(props: { children?: React.ReactNode }) {
       >
         {!drawerOpen && (
           <Tooltip title={t("navbar.toggle_drawer")}>
-            <IconButton
+            <HapticIconButton
               color={"secondary"}
               onClick={() => setDrawerOpen(true)}
               sx={{ marginLeft: 0 }}
@@ -117,7 +119,7 @@ export function Navbar(props: { children?: React.ReactNode }) {
               aria-controls="sidebar-drawer"
             >
               <MenuRounded />
-            </IconButton>
+            </HapticIconButton>
           </Tooltip>
         )}
 
@@ -128,7 +130,7 @@ export function Navbar(props: { children?: React.ReactNode }) {
         {profile.data ? (
           <React.Fragment>
             <Tooltip title={t("navbar.cart", "Cart")}>
-              <IconButton
+              <HapticIconButton
                 onClick={() => navigate("/market/cart")}
                 color="inherit"
                 aria-label={t("navbar.cart", "Cart")}
@@ -137,7 +139,7 @@ export function Navbar(props: { children?: React.ReactNode }) {
                 <Badge badgeContent={cartItemCount} color="primary">
                   <ShoppingCartRounded />
                 </Badge>
-              </IconButton>
+              </HapticIconButton>
             </Tooltip>
             <NotificationsButton />
             <ProfileNavAvatar />

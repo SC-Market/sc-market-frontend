@@ -10,10 +10,10 @@ import {
   Skeleton,
   Stack,
   Tabs,
-  Tab,
   useMediaQuery,
   useTheme,
 } from "@mui/material"
+import { HapticTab } from "../../components/haptic"
 import { OrderDetailSkeleton } from "../../components/skeletons"
 import {
   OrderDetailsArea,
@@ -198,22 +198,22 @@ export function ViewOrder() {
                 marginBottom: 1,
               }}
             >
-              <Tab label={t("orders.details", "Details")} />
+              <HapticTab label={t("orders.details", "Details")} />
               {isMobile && isAssigned && (
-                <Tab label={t("orders.messages", "Messages")} />
+                <HapticTab label={t("orders.messages", "Messages")} />
               )}
               {session?.offers[0]?.service && (
-                <Tab label={t("orders.service", "Service")} />
+                <HapticTab label={t("orders.service", "Service")} />
               )}
               {session?.offers[0]?.market_listings &&
                 session.offers[0].market_listings.length > 0 && (
-                  <Tab label={t("orders.marketListings", "Market Listings")} />
+                  <HapticTab label={t("orders.marketListings", "Market Listings")} />
                 )}
               {amContractorManager && (
-                <Tab label={t("orders.allocation", "Stock Allocation")} />
+                <HapticTab label={t("orders.allocation", "Stock Allocation")} />
               )}
               {amRelated && (
-                <Tab label={t("orders.availability", "Availability")} />
+                <HapticTab label={t("orders.availability", "Availability")} />
               )}
             </Tabs>
           </Grid>
