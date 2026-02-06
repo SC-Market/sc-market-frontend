@@ -284,7 +284,6 @@ export function AllStockLotsGrid() {
     {
       field: "quantity",
       headerName: t("AllStockLots.quantity", "Quantity"),
-      type: "number",
       flex: 1,
       editable: true,
     },
@@ -329,7 +328,6 @@ export function AllStockLotsGrid() {
     {
       field: "listed",
       headerName: t("AllStockLots.listed", "Listed"),
-      type: "boolean",
       flex: 1,
       editable: true,
       renderCell: (params: GridRenderCellParams) => (
