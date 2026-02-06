@@ -1,7 +1,7 @@
 import { Section } from "../../components/paper/Section"
 import { Grid, List, TablePagination } from "@mui/material"
 import React, { useState, useCallback } from "react"
-import { NotificationEntry } from "../../components/navbar/NotificationsButton"
+import { NotificationEntry } from "../../features/notifications"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useGetNotificationsQuery } from "../../store/notification"
