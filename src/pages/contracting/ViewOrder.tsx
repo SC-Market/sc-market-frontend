@@ -247,10 +247,16 @@ export function ViewOrder() {
                       <OrderDetailSkeleton showContractor showAssigned />
                     </Grid>
                   )}
-                  {/* Right column: Reviews and Messages on desktop */}
+                  {/* Right column: Messages and Reviews on desktop */}
                   {!isMobile && (
                     <Grid item xs={12} lg={4} md={6}>
                       <Stack spacing={2}>
+                        {isAssigned &&
+                          (!(isLoading || isFetching) && order ? (
+                            <OrderMessagesArea order={order} />
+                          ) : (
+                            <Skeleton width={"100%"} height={400} />
+                          ))}
                         {order && (
                           <>
                             {amCustomer && !order.customer_review && (
@@ -268,12 +274,6 @@ export function ViewOrder() {
                             )}
                           </>
                         )}
-                        {isAssigned &&
-                          (!(isLoading || isFetching) && order ? (
-                            <OrderMessagesArea order={order} />
-                          ) : (
-                            <Skeleton width={"100%"} height={400} />
-                          ))}
                       </Stack>
                     </Grid>
                   )}
