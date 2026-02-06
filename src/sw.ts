@@ -64,9 +64,8 @@ registerRoute(
   }),
 )
 
-// Cache API calls with StaleWhileRevalidate for better offline experience
-// This serves stale data immediately while updating in the background
-// Includes BackgroundSyncPlugin to retry failed requests when back online
+// Cache API calls with NetworkFirst
+// Try network first, fall back to cache if offline
 registerRoute(
   ({ url }: { url: URL }) => {
     const isApiCall =
@@ -84,15 +83,16 @@ registerRoute(
 
     return isApiCall && isApiPath && !isExcluded
   },
-  new StaleWhileRevalidate({
+  new NetworkFirst({
     cacheName: "api-cache-v1",
+    networkTimeoutSeconds: 5,
     plugins: [
       new CacheableResponsePlugin({
-        statuses: [0, 200], // Cache successful responses
+        statuses: [0, 200],
       }),
       new ExpirationPlugin({
-        maxEntries: 200, // Increased from 50 to cache more API responses
-        maxAgeSeconds: 60 * 60 * 24, // 24 hours (increased from 1 hour)
+        maxEntries: 200,
+        maxAgeSeconds: 60 * 60 * 24,
         purgeOnQuotaError: true,
       }),
     ],

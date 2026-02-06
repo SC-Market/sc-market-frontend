@@ -201,12 +201,13 @@ export default defineConfig({
 
               return isApiCall && isApiPath && !isExcluded && isSecure
             },
-            handler: "StaleWhileRevalidate", // Changed from NetworkFirst for better offline experience
+            handler: "NetworkFirst",
             options: {
               cacheName: "api-cache-v1",
+              networkTimeoutSeconds: 5,
               expiration: {
-                maxEntries: 200, // Increased from 50
-                maxAgeSeconds: 60 * 60 * 24, // 24 hours (increased from 1 hour)
+                maxEntries: 200,
+                maxAgeSeconds: 60 * 60 * 24,
                 purgeOnQuotaError: true,
               },
               cacheableResponse: {
