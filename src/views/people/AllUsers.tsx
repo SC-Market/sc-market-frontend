@@ -23,9 +23,9 @@ import {
   TableBody,
   TableContainer,
   TableHead,
-  TablePagination,
   TableSortLabel,
 } from "@mui/material"
+import { HapticTablePagination } from "../../components/haptic"
 import { AdminUser } from "../../datatypes/User"
 import { Link } from "react-router-dom"
 import { styled } from "@mui/material/styles"
@@ -321,7 +321,7 @@ export function AdminUserList(props: {
 
               {/* Custom Pagination Controls */}
               {pagination && (
-                <TablePagination
+                <HapticTablePagination
                   component="div"
                   count={pagination.total_users}
                   page={page - 1} // MUI uses 0-based indexing

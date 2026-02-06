@@ -14,9 +14,9 @@ import {
   Fade,
   Grid,
   Link as MaterialLink,
-  TablePagination,
   Typography,
 } from "@mui/material"
+import { HapticTablePagination } from "../../components/haptic"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { Link } from "react-router-dom"
 import { getRelativeTime } from "../../util/time"
@@ -329,7 +329,7 @@ export function ContractListings(props: { user?: string }) {
         <Divider light />
       </Grid>
       <Grid item xs={12}>
-        <TablePagination
+        <HapticTablePagination
           labelRowsPerPage={t("rows_per_page")}
           labelDisplayedRows={({ from, to, count }) =>
             t("displayed_rows", { from, to, count })

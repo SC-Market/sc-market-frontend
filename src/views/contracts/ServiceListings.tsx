@@ -13,10 +13,10 @@ import {
   Fade,
   Grid,
   Skeleton,
-  TablePagination,
   Typography,
   useMediaQuery,
 } from "@mui/material"
+import { HapticTablePagination } from "../../components/haptic"
 import { Link } from "react-router-dom"
 import { ElectricBoltRounded } from "@mui/icons-material"
 import { MarkdownRender } from "../../components/markdown/Markdown"
@@ -398,7 +398,7 @@ export function ServiceListings(props: { user?: string; contractor?: string }) {
         <Divider light />
       </Grid>
       <Grid item xs={12}>
-        <TablePagination
+        <HapticTablePagination
           labelRowsPerPage={t("rows_per_page")}
           labelDisplayedRows={({ from, to, count }) => (
             <>
