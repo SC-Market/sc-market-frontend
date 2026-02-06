@@ -58,6 +58,12 @@ interface SplitAllocationViewProps {
 interface StockLotWithAvailable extends StockLot {
   quantity_available: number
   location?: { name: string }
+  owner?: {
+    user_id: string
+    username: string
+    display_name: string
+    avatar: string | null
+  } | null
 }
 
 function getListingTitle(listingData: any): string {
@@ -323,6 +329,7 @@ function AvailableLots({
         <TableHead>
           <TableRow>
             <TableCell>Location</TableCell>
+            <TableCell>User</TableCell>
             <TableCell width={120}>Quantity</TableCell>
             <TableCell width={50}></TableCell>
           </TableRow>
@@ -337,6 +344,11 @@ function AvailableLots({
             return (
               <TableRow key={lot.lot_id}>
                 <TableCell>{lot.location?.name || "Unknown"}</TableCell>
+                <TableCell>
+                  <Typography variant="body2" color="text.secondary">
+                    {lot.owner?.display_name || lot.owner?.username || "—"}
+                  </Typography>
+                </TableCell>
                 <TableCell>
                   <TextField
                     size="small"
