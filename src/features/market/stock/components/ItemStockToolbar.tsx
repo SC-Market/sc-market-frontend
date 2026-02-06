@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   IconButton,
+  Stack,
   Toolbar,
   Tooltip,
   useMediaQuery,
@@ -117,57 +118,59 @@ export function ItemStockToolbar(props: {
   }
 
   return (
-    <Toolbar>
-      <ManageStockArea listings={props.listings} />
-      <LoadingButton
-        color={"success"}
-        startIcon={<RadioButtonCheckedRounded />}
-        variant={"outlined"}
-        size={"small"}
-        loading={isLoading}
-        onClick={() => {
-          updateListingCallback({ status: "active" })
-        }}
-      >
-        {t("ItemStock.activate")}
-      </LoadingButton>
-      <LoadingButton
-        color={"error"}
-        startIcon={<RadioButtonUncheckedRounded />}
-        variant={"outlined"}
-        size={"small"}
-        loading={isLoading}
-        onClick={() => {
-          updateListingCallback({ status: "inactive" })
-        }}
-      >
-        {t("ItemStock.deactivate")}
-      </LoadingButton>
-      <Tooltip title={t("ItemStock.addQuickListing")}>
-        <IconButton
+    <Toolbar sx={{ justifyContent: "flex-end" }}>
+      <Stack direction="row" spacing="1px">
+        <ManageStockArea listings={props.listings} />
+        <LoadingButton
+          color={"success"}
+          startIcon={<RadioButtonCheckedRounded />}
+          variant={"outlined"}
+          size={"small"}
+          loading={isLoading}
           onClick={() => {
-            const id = `new-${Date.now()}`
-            const newRow: NewListingRow = {
-              id,
-              item_type: "Other",
-              item_name: null,
-              price: 1,
-              quantity_available: 1,
-              status: "active",
-              isNew: true,
-            }
-
-            props.setNewRows((prev) => [...prev, newRow])
-            props.setRowModesModel((oldModel) => ({
-              ...oldModel,
-              [id]: { mode: GridRowModes.Edit, fieldToFocus: "item_type" },
-            }))
+            updateListingCallback({ status: "active" })
           }}
-          color="primary"
         >
-          <AddRounded />
-        </IconButton>
-      </Tooltip>
+          {t("ItemStock.activate")}
+        </LoadingButton>
+        <LoadingButton
+          color={"error"}
+          startIcon={<RadioButtonUncheckedRounded />}
+          variant={"outlined"}
+          size={"small"}
+          loading={isLoading}
+          onClick={() => {
+            updateListingCallback({ status: "inactive" })
+          }}
+        >
+          {t("ItemStock.deactivate")}
+        </LoadingButton>
+        <Tooltip title={t("ItemStock.addQuickListing")}>
+          <IconButton
+            onClick={() => {
+              const id = `new-${Date.now()}`
+              const newRow: NewListingRow = {
+                id,
+                item_type: "Other",
+                item_name: null,
+                price: 1,
+                quantity_available: 1,
+                status: "active",
+                isNew: true,
+              }
+
+              props.setNewRows((prev) => [...prev, newRow])
+              props.setRowModesModel((oldModel) => ({
+                ...oldModel,
+                [id]: { mode: GridRowModes.Edit, fieldToFocus: "item_type" },
+              }))
+            }}
+            color="primary"
+          >
+            <AddRounded />
+          </IconButton>
+        </Tooltip>
+      </Stack>
     </Toolbar>
   )
 }
