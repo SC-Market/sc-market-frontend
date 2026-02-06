@@ -16,12 +16,12 @@ import {
   Box,
   useMediaQuery,
   Container,
-  Tab,
   Tabs,
   Typography,
   CircularProgress,
   Paper,
 } from "@mui/material"
+import { HapticTab } from "../../components/haptic"
 import { Page } from "../../components/metadata/Page"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import { CreateRounded } from "@mui/icons-material"
@@ -155,17 +155,17 @@ export function Contracts() {
                           },
                         }}
                       >
-                        <Tab
+                        <HapticTab
                           label={t("market.itemsTab")}
                           value={1}
                           {...a11yProps(1)}
                         />
-                        <Tab
+                        <HapticTab
                           label={t("market.servicesTab")}
                           value={0}
                           {...a11yProps(0)}
                         />
-                        <Tab
+                        <HapticTab
                           label={t("market.contractsTab", "Open Contracts")}
                           value={2}
                           {...a11yProps(2)}
