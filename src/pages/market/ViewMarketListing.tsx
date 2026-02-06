@@ -2,6 +2,7 @@ import { Link, Navigate, useParams } from "react-router-dom"
 import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import React from "react"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
+import { BackArrow } from "../../components/button/BackArrow"
 import { CurrentMarketListingContext } from "../../features/market"
 import {
   useGetMarketListingQuery,
