@@ -29,7 +29,9 @@ import {
   TextField,
   Typography,
   useTheme,
+  useMediaQuery,
 } from "@mui/material"
+import { HapticButton } from "../../components/haptic"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useGetUserProfileQuery } from "../../store/profile"
@@ -627,14 +629,14 @@ export function AggregateRow(props: {
             <VisibilityRounded />
           </Button>
         ) : (
-          <Button
+          <HapticButton
             variant={"contained"}
             color={"primary"}
             size={"large"}
             onClick={addToCart}
           >
             <AddShoppingCartRounded />
-          </Button>
+          </HapticButton>
         )}
       </TableCell>
     </TableRow>
