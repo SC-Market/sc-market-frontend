@@ -790,6 +790,8 @@ export function BulkListingsRefactor(props: {
     data: results,
     isLoading,
     isFetching,
+    error,
+    refetch,
   } = useSearchMarketListingsQuery(searchQueryParams)
 
   const { total, listings } = useMemo(

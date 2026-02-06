@@ -28,6 +28,7 @@ import { PullToRefresh } from "../../components/gestures"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { useGetUserOrganizationsQuery } from "../../store/organizations"
 import type { NotificationScope } from "../../features/notifications/domain/types"
+import type { Notification } from "../../hooks/login/UserProfile"
 
 export function NotificationsPage() {
   const theme = useTheme<ExtendedTheme>()
@@ -258,7 +259,7 @@ export function NotificationsPage() {
               overflow: "hidden",
             }}
           >
-            {notifications.map((notification, idx) => (
+            {notifications.map((notification: Notification, idx: number) => (
               <NotificationEntry notif={notification} key={idx} />
             ))}
           </List>
