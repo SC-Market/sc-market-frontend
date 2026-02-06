@@ -166,7 +166,7 @@ export function AllStockLotsGrid() {
       query: inputValue,
       page_size: 20,
       userSeller: currentOrg ? undefined : profile?.username,
-      contractorSeller: currentOrg?.id,
+      contractorSeller: currentOrg?.spectrum_id,
       statuses: "active,inactive",
     })
 
