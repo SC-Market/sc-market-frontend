@@ -2,13 +2,13 @@ import React, { useMemo, useState, Suspense } from "react"
 import {
   Container,
   Grid,
-  Tab,
   Tabs,
   Typography,
   CircularProgress,
   Box,
   useMediaQuery,
 } from "@mui/material"
+import { HapticTab } from "../../../components/haptic"
 import { OpenLayout } from "../../../components/layout/ContainerGrid"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
@@ -138,17 +138,17 @@ export function MarketPage() {
                       },
                     }}
                   >
-                    <Tab
+                    <HapticTab
                       label={t("market.itemsTab")}
                       value={1}
                       {...a11yProps(1)}
                     />
-                    <Tab
+                    <HapticTab
                       label={t("market.servicesTab")}
                       value={0}
                       {...a11yProps(0)}
                     />
-                    <Tab
+                    <HapticTab
                       label={t("market.contractsTab", "Open Contracts")}
                       value={2}
                       {...a11yProps(2)}
