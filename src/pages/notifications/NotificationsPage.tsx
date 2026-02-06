@@ -5,6 +5,7 @@ import {
   Typography,
   List,
   Tabs,
+  Tab,
   FormControl,
   InputLabel,
   Select,
@@ -14,7 +15,7 @@ import {
   Tooltip,
   Divider,
 } from "@mui/material"
-import { HapticTab, HapticTablePagination } from "../../components/haptic"
+import { HapticTablePagination } from "../../components/haptic"
 import { ClearAllRounded, MarkEmailReadRounded } from "@mui/icons-material"
 import { useTheme } from "@mui/material/styles"
 import { useMediaQuery } from "@mui/material"
