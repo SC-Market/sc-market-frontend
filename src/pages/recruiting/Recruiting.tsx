@@ -144,25 +144,26 @@ export function Recruiting() {
             </IconButton>
           )}
 
-          <RecruitingSidebar />
+          {!isMobile && <RecruitingSidebar />}
           <ContainerGrid
             maxWidth={"md"}
             sidebarOpen={sidebarOpen}
             sidebarWidth={marketDrawerWidth}
           >
             <div ref={ref} />
-            <Grid
-              item
-              container
-              justifyContent={"space-between"}
-              spacing={theme.layoutSpacing.layout}
-              xs={12}
-            >
-              <HeaderTitle lg={7} xl={7}>
-                {t("recruiting_orgs")}
-              </HeaderTitle>
-              {currentOrg && (
-                <Grid item>
+            <Grid container spacing={theme.layoutSpacing.layout}>
+              <Grid
+                item
+                container
+                justifyContent={"space-between"}
+                spacing={theme.layoutSpacing.layout}
+                xs={12}
+              >
+                <HeaderTitle lg={7} xl={7}>
+                  {t("recruiting_orgs")}
+                </HeaderTitle>
+                {currentOrg && (
+                  <Grid item>
                   {alreadyPosted ? (
                     <Link
                       to={`/recruiting/post/${mypost?.post_id}/update`}
@@ -190,7 +191,7 @@ export function Recruiting() {
                   )}
                 </Grid>
               )}
-            </Grid>
+              </Grid>
             <PullToRefresh
               onRefresh={async () => {
                 await refetch()
@@ -258,6 +259,7 @@ export function Recruiting() {
                 nextIconButtonProps={{ color: "primary" }}
                 backIconButtonProps={{ color: "primary" }}
               />
+            </Grid>
             </Grid>
           </ContainerGrid>
         </RecruitingSearchContext.Provider>

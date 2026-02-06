@@ -288,7 +288,6 @@ export function RecruitingSidebar() {
       variant="permanent"
       open
       sx={{
-        display: { xs: "none", md: "block" },
         zIndex: theme.zIndex.drawer - 3,
         width: open ? marketDrawerWidth : 0,
         transition: theme.transitions.create(["width", "margin"], {
