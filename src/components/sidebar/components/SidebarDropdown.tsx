@@ -101,7 +101,7 @@ export function SidebarDropdown(props: SidebarItemWithStarProps) {
             }}
           />
         ) : null}
-        {open ? <ExpandLess /> : <ExpandMore />}
+        {open ? <ExpandLess sx={{ color: contrast }} /> : <ExpandMore sx={{ color: contrast }} />}
       </ListItemButton>
       {children ? (
         <Collapse in={open} timeout="auto" unmountOnExit>
