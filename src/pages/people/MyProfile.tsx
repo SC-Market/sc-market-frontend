@@ -21,7 +21,7 @@ export function MyProfile() {
     data: user,
     isLoading: isLoadingUser,
     isFetching: isFetchingUser,
-  } = useGetUserByUsernameQuery(profile?.username!, {
+  } = useGetUserByUsernameQuery(profile?.username ?? "", {
     skip: !profile?.username,
   })
   const theme = useTheme()

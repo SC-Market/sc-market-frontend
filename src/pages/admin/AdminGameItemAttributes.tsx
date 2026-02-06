@@ -3,14 +3,7 @@ import { Page } from "../../components/metadata/Page"
 import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import { useTranslation } from "react-i18next"
 import { AdminGameItemAttributesView } from "../../views/admin/AdminGameItemAttributesView"
-import {
-  TextField,
-  Button,
-  Box,
-  Typography,
-  Grid,
-  Paper,
-} from "@mui/material"
+import { TextField, Button, Box, Typography, Grid, Paper } from "@mui/material"
 import SearchIcon from "@mui/icons-material/SearchRounded"
 
 export function AdminGameItemAttributes() {
@@ -54,7 +47,11 @@ export function AdminGameItemAttributes() {
                 {t("admin.gameItemAttributes.search", "Search")}
               </Button>
             </Box>
-            <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: "block" }}>
+            <Typography
+              variant="caption"
+              color="text.secondary"
+              sx={{ mt: 1, display: "block" }}
+            >
               {t(
                 "admin.gameItemAttributes.searchHelp",
                 "Enter the UUID of a game item to view and edit its attributes",

@@ -83,7 +83,14 @@ export function ReportButton({
     setIsSubmitting(true)
     reportContent({
       reported_url: getCurrentUrl(),
-      report_reason: reason as any,
+      report_reason: reason as
+        | "inappropriate_content"
+        | "spam"
+        | "harassment"
+        | "fake_listing"
+        | "scam"
+        | "copyright_violation"
+        | "other",
       report_details: details || undefined,
     })
       .unwrap()

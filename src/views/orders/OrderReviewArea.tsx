@@ -68,7 +68,7 @@ export function OrderReviewArea(props: {
 
   return (
     <>
-      <Section xs={12} lg={6} title={t("orderReviewArea.review")}>
+      <Section xs={12} title={t("orderReviewArea.review")}>
         <Grid item xs={12}>
           {t("orderReviewArea.leaveFor")}{" "}
           {props.asContractor

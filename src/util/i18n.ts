@@ -45,7 +45,7 @@ export async function loadLocale(locale: string): Promise<void> {
   }
 
   try {
-    let translation: any
+    let translation: Record<string, unknown>
 
     switch (locale) {
       case "uk":
@@ -76,9 +76,9 @@ export async function preloadLocales(locales: string[]): Promise<void> {
 }
 
 export function getMuiLocales(languageCode: string): {
-  core: any
-  pickers: any
-  grid: any
+  core: typeof coreEnUS
+  pickers: typeof pickersEnUS
+  grid: typeof gridEnUS
 } {
   switch (languageCode) {
     case "uk":

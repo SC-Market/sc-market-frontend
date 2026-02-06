@@ -7,7 +7,6 @@ import {
   GridRowModes,
   GridRowModesModel,
   GridRowSelectionModel,
-  Toolbar,
 } from "@mui/x-data-grid"
 import React, {
   useCallback,
@@ -21,7 +20,6 @@ import {
   Avatar,
   Box,
   Button,
-  ButtonGroup,
   Card,
   CardActionArea,
   CardContent,
@@ -40,17 +38,17 @@ import {
   useMediaQuery,
 } from "@mui/material"
 import {
-  AddRounded,
   CreateRounded,
   DeleteRounded,
   MoreVertRounded,
-  RadioButtonCheckedRounded,
-  RadioButtonUncheckedRounded,
   RefreshOutlined,
-  RemoveRounded,
   SaveRounded,
   ShareRounded,
   VisibilityRounded,
+  InventoryRounded,
+  RadioButtonCheckedRounded,
+  AddRounded,
+  RemoveRounded,
 } from "@mui/icons-material"
 import { useMarketSearch } from ".."
 import { formatCompleteListingUrl } from "../../../util/urls"
@@ -85,322 +83,19 @@ import {
 import { Grid } from "@mui/material"
 import { EmptyListings } from "../../../components/empty-states"
 import { BottomSheet } from "../../../components/mobile"
+import {
+  StockRow,
+  NewListingRow,
+  ItemStockContext,
+  ManageStockArea,
+  ItemStockToolbar,
+  useStockManagement,
+  MyItemStock,
+  StockCard,
+} from "../stock"
 
-export const ItemStockContext = React.createContext<
-  | [
-      GridRowSelectionModel,
-      React.Dispatch<React.SetStateAction<GridRowSelectionModel>>,
-    ]
-  | null
->(null)
-
-export function ManageStockArea(props: { listings: UniqueListing[] }) {
-  const context = useContext(ItemStockContext)
-  if (!context || !Array.isArray(context)) {
-    return null // Context not available
-  }
-  const [selectionModel] = context
-  const [quantity, setQuantity] = useState(1)
-  const { listings } = props
-
-  const [updateListing] = useUpdateListingQuantityMutation()
-
-  const issueAlert = useAlertHook()
-  const { t } = useTranslation()
-
-  const updateListingCallback = useCallback(
-    async (listing_id: string, body: { quantity_available: number }) => {
-      updateListing({
-        listing_id: listing_id,
-        quantity: body.quantity_available,
-      })
-        .unwrap()
-        .then(() =>
-          issueAlert({
-            message: t("ItemStock.updated"),
-            severity: "success",
-          }),
-        )
-        .catch((err) => issueAlert(err))
-    },
-    [selectionModel, issueAlert, updateListing, t],
-  )
-
-  return (
-    <>
-      <NumericFormat
-        decimalScale={0}
-        allowNegative={false}
-        customInput={TextField}
-        thousandSeparator
-        onValueChange={async (values) => {
-          setQuantity(values.floatValue || 0)
-        }}
-        inputProps={{
-          inputMode: "numeric",
-          pattern: "[0-9]*",
-          type: "numeric",
-          size: "small",
-        }}
-        sx={{
-          minWidth: 200,
-        }}
-        size="small"
-        label={t("ItemStock.updateAmount")}
-        value={quantity}
-        color={"secondary"}
-      />
-
-      <ButtonGroup size={"small"}>
-        <Button
-          variant={"contained"}
-          onClick={() =>
-            [...selectionModel.ids].map((listing_id) => {
-              const listing = listings.find(
-                (l) => l.listing.listing_id === listing_id,
-              )
-              if (listing) {
-                updateListingCallback(listing_id.toString(), {
-                  quantity_available:
-                    listing.listing.quantity_available + quantity,
-                })
-              }
-            })
-          }
-          color={"success"}
-          startIcon={<AddRounded />}
-        >
-          {t("ItemStock.add")}
-        </Button>
-
-        <Button
-          variant={"contained"}
-          onClick={() =>
-            [...selectionModel.ids].map((listing_id) =>
-              updateListingCallback(listing_id.toString(), {
-                quantity_available: 0,
-              }),
-            )
-          }
-          color={"warning"}
-        >
-          {t("ItemStock.zero")}
-        </Button>
-        <Button
-          variant={"contained"}
-          onClick={() =>
-            [...selectionModel.ids].map((listing_id) => {
-              const listing = listings.find(
-                (l) => l.listing.listing_id === listing_id,
-              )
-              if (listing) {
-                updateListingCallback(listing_id.toString(), {
-                  quantity_available:
-                    listing.listing.quantity_available - quantity,
-                })
-              }
-            })
-          }
-          color={"error"}
-          startIcon={<RemoveRounded />}
-        >
-          {t("ItemStock.sub")}
-        </Button>
-      </ButtonGroup>
-    </>
-  )
-}
-
-export interface StockRow {
-  title: string
-  quantity_available: number
-  listing_id: string
-  price: number
-  status: string
-  image_url: string
-  expiration: string
-  order_count: number
-  offer_count: number
-}
-
-export interface NewListingRow {
-  id: string
-  item_type: string
-  item_name: string | null
-  price: number
-  quantity_available: number
-  status: "active" | "inactive"
-  isNew: boolean
-}
-
-declare module "@mui/x-data-grid" {
-  interface ToolbarPropsOverrides {
-    setNewRows: (newRows: (oldRows: NewListingRow[]) => NewListingRow[]) => void
-    setRowModesModel: (
-      newModel: (oldModel: GridRowModesModel) => GridRowModesModel,
-    ) => void
-    newRows: NewListingRow[]
-  }
-}
-
-function ItemStockToolbar(props: {
-  listings: UniqueListing[]
-  setNewRows: (newRows: (oldRows: NewListingRow[]) => NewListingRow[]) => void
-  setRowModesModel: (
-    newModel: (oldModel: GridRowModesModel) => GridRowModesModel,
-  ) => void
-  newRows: NewListingRow[]
-  isMobile?: boolean
-  onAddQuickListing?: () => void
-}) {
-  const context = useContext(ItemStockContext)
-  if (!context || !Array.isArray(context)) {
-    return null // Context not available
-  }
-  const [selectionModel] = context
-  const { t } = useTranslation()
-  const theme = useTheme<ExtendedTheme>()
-  const isMobile = props.isMobile ?? useMediaQuery(theme.breakpoints.down("md"))
-  const [menuAnchor, setMenuAnchor] = useState<null | HTMLElement>(null)
-
-  const [updateListing, { isLoading }] = useUpdateMarketListingMutation()
-  const updateListingCallback = useCallback(
-    async (body: MarketListingUpdateBody) => {
-      selectionModel.ids.forEach((row_id) => {
-        updateListing({
-          listing_id: row_id.toString(),
-          body,
-        })
-      })
-    },
-    [selectionModel, updateListing],
-  )
-
-  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setMenuAnchor(event.currentTarget)
-  }
-
-  const handleMenuClose = () => {
-    setMenuAnchor(null)
-  }
-
-  if (isMobile) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 1,
-          padding: 2,
-          borderBottom: 1,
-          borderColor: "divider",
-        }}
-      >
-        <ManageStockArea listings={props.listings} />
-        <Box
-          sx={{
-            display: "flex",
-            gap: 1,
-            flexWrap: "wrap",
-            alignItems: "center",
-          }}
-        >
-          <LoadingButton
-            color={"success"}
-            startIcon={<RadioButtonCheckedRounded />}
-            variant={"outlined"}
-            size={"small"}
-            loading={isLoading}
-            onClick={() => {
-              updateListingCallback({ status: "active" })
-            }}
-            fullWidth
-          >
-            {t("ItemStock.activate")}
-          </LoadingButton>
-          <LoadingButton
-            color={"error"}
-            startIcon={<RadioButtonUncheckedRounded />}
-            variant={"outlined"}
-            size={"small"}
-            loading={isLoading}
-            onClick={() => {
-              updateListingCallback({ status: "inactive" })
-            }}
-            fullWidth
-          >
-            {t("ItemStock.deactivate")}
-          </LoadingButton>
-          <Button
-            onClick={props.onAddQuickListing || handleMenuOpen}
-            color="primary"
-            variant="outlined"
-            size="small"
-            startIcon={<AddRounded />}
-            sx={{ flex: "0 0 auto" }}
-          >
-            {t("ItemStock.addQuickListing")}
-          </Button>
-        </Box>
-      </Box>
-    )
-  }
-
-  return (
-    <Toolbar>
-      <ManageStockArea listings={props.listings} />
-      <LoadingButton
-        color={"success"}
-        startIcon={<RadioButtonCheckedRounded />}
-        variant={"outlined"}
-        size={"small"}
-        loading={isLoading}
-        onClick={() => {
-          updateListingCallback({ status: "active" })
-        }}
-      >
-        {t("ItemStock.activate")}
-      </LoadingButton>
-      <LoadingButton
-        color={"error"}
-        startIcon={<RadioButtonUncheckedRounded />}
-        variant={"outlined"}
-        size={"small"}
-        loading={isLoading}
-        onClick={() => {
-          updateListingCallback({ status: "inactive" })
-        }}
-      >
-        {t("ItemStock.deactivate")}
-      </LoadingButton>
-      <Tooltip title={t("ItemStock.addQuickListing")}>
-        <IconButton
-          onClick={() => {
-            const id = `new-${Date.now()}`
-            const newRow: NewListingRow = {
-              id,
-              item_type: "Other",
-              item_name: null,
-              price: 1,
-              quantity_available: 1,
-              status: "active",
-              isNew: true,
-            }
-
-            props.setNewRows((prev) => [...prev, newRow])
-            props.setRowModesModel((oldModel) => ({
-              ...oldModel,
-              [id]: { mode: GridRowModes.Edit, fieldToFocus: "item_type" },
-            }))
-          }}
-          color="primary"
-        >
-          <AddRounded />
-        </IconButton>
-      </Tooltip>
-    </Toolbar>
-  )
-}
+// Re-export for backward compatibility
+export { ItemStockContext, ManageStockArea, MyItemStock } from "../stock"
 
 export function DisplayStock({
   listings,
@@ -419,44 +114,30 @@ export function DisplayStock({
   onRowsPerPageChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
   onRefresh?: () => Promise<void>
 }) {
-  const [refresh] = useMarketRefreshListingMutation()
-  const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
 
-  // State for new listing rows
-  const [newRows, setNewRows] = React.useState<NewListingRow[]>([])
-  const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>(
-    {},
-  )
-  const [editingRows, setEditingRows] = React.useState<
-    Record<string, Partial<NewListingRow>>
-  >({})
-
-  const rows: StockRow[] = useMemo(
-    () =>
-      listings.map((listing) => ({
-        ...listing.details,
-        ...listing.listing,
-        ...(listing.stats || {
-          offer_count: 0,
-          order_count: 0,
-          view_count: 0,
-        }),
-        // Access view_count from both locations for backward compatibility
-        image_url: listing.photos[0],
-      })),
-    [listings],
-  )
-
-  const [createListing] = useCreateMarketListingMutation()
-  const [updateListing] = useUpdateMarketListingMutation()
-  const issueAlert = useAlertHook()
-
-  // Fetch item details when a listing is selected
-  const [fetchingItemName, setFetchingItemName] = React.useState<string>("")
-  const { data: gameItem } = useMarketGetGameItemByNameQuery(fetchingItemName, {
-    skip: !fetchingItemName,
-  })
+  // Use stock management hook
+  const {
+    rows,
+    newRows,
+    setNewRows,
+    rowModesModel,
+    setRowModesModel,
+    editingRows,
+    setEditingRows,
+    fetchingItemName,
+    setFetchingItemName,
+    gameItem,
+    currentOrg,
+    refresh,
+    createListing,
+    updateListing,
+    handleUpdateQuantity,
+    handleEditClick,
+    handleCancelClick,
+    issueAlert,
+    t,
+  } = useStockManagement(listings, onRefresh)
 
   const handleRowEditStop: GridEventListener<"rowEditStop"> = (
     params,
@@ -466,19 +147,6 @@ export function DisplayStock({
       event.defaultMuiPrevented = true
     }
   }
-
-  const handleEditClick = (id: GridRowId) => () => {
-    const currentRow = newRows.find((row) => row.id === id)
-    if (currentRow) {
-      setEditingRows((prev) => ({
-        ...prev,
-        [id]: { ...currentRow },
-      }))
-    }
-    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } })
-  }
-
-  const [currentOrg] = useCurrentOrg()
 
   const handleSaveClick = (id: GridRowId) => async () => {
     const editingRow = editingRows[id]
@@ -591,24 +259,6 @@ export function DisplayStock({
       return newState
     })
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } })
-  }
-
-  const handleCancelClick = (id: GridRowId) => () => {
-    setRowModesModel({
-      ...rowModesModel,
-      [id]: { mode: GridRowModes.View, ignoreModifications: true },
-    })
-
-    const editedRow = newRows.find((row) => row.id === id)
-    if (editedRow?.isNew) {
-      setNewRows((prev) => prev.filter((row) => row.id !== id))
-    }
-
-    setEditingRows((prev) => {
-      const newState = { ...prev }
-      delete newState[id]
-      return newState
-    })
   }
 
   const columns: GridColDef[] = [
@@ -1039,297 +689,7 @@ export function DisplayStock({
 
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
 
-  // Mobile card component - needs access to newRows, editingRows, rowModesModel, and handlers
-  const StockCard = React.memo(
-    ({
-      row,
-      isSelected,
-      newRows,
-      editingRows,
-      rowModesModel,
-      setEditingRows,
-      setRowModesModel,
-      setFetchingItemName,
-      handleEditClick,
-      handleSaveClick,
-      handleCancelClick,
-    }: {
-      row: StockRow & { id: string }
-      isSelected: boolean
-      newRows: NewListingRow[]
-      editingRows: Record<string, Partial<NewListingRow>>
-      rowModesModel: GridRowModesModel
-      setEditingRows: React.Dispatch<
-        React.SetStateAction<Record<string, Partial<NewListingRow>>>
-      >
-      setRowModesModel: React.Dispatch<React.SetStateAction<GridRowModesModel>>
-      setFetchingItemName: (name: string) => void
-      handleEditClick: (id: GridRowId) => () => void
-      handleSaveClick: (id: GridRowId) => () => Promise<void>
-      handleCancelClick: (id: GridRowId) => () => void
-    }) => {
-      const stockContext = useContext(ItemStockContext)
-      if (!stockContext || !Array.isArray(stockContext)) {
-        return null // Context not available
-      }
-      const [selectionModel, setSelectionModel] = stockContext
-
-      // Check if this is a new row by ID pattern
-      const isNewRow = row.id.startsWith("new-")
-      const newRowData = isNewRow ? newRows.find((r) => r.id === row.id) : null
-
-      // Check if we're in selection mode (any items selected)
-      const hasSelectedItems = selectionModel.ids.size > 0
-      const isInSelectionMode = hasSelectedItems
-
-      const handleLongPressForSelection = React.useCallback(
-        (event: React.MouseEvent | React.TouchEvent) => {
-          if (isNewRow) return // Don't allow selection for new rows
-          event.preventDefault() // Prevent default context menu
-          const newIds = new Set(selectionModel.ids)
-          if (newIds.has(row.id)) {
-            newIds.delete(row.id)
-          } else {
-            newIds.add(row.id)
-          }
-          setSelectionModel({ type: "include", ids: newIds })
-        },
-        [selectionModel, row.id, setSelectionModel, isNewRow],
-      )
-
-      const handleTapForSelection = React.useCallback(
-        (event: React.MouseEvent | React.TouchEvent) => {
-          if (isNewRow || !isInSelectionMode) return
-          event.preventDefault()
-          event.stopPropagation()
-          const newIds = new Set(selectionModel.ids)
-          if (newIds.has(row.id)) {
-            newIds.delete(row.id)
-          } else {
-            newIds.add(row.id)
-          }
-          setSelectionModel({ type: "include", ids: newIds })
-        },
-        [
-          selectionModel,
-          row.id,
-          setSelectionModel,
-          isNewRow,
-          isInSelectionMode,
-        ],
-      )
-
-      const longPressHandlers = useLongPress({
-        onLongPress: handleLongPressForSelection,
-        onClick: handleTapForSelection,
-        enabled: !isNewRow,
-        delay: 500,
-      })
-
-      const longPressActions = [
-        {
-          label: t("common.viewDetails", "View Details"),
-          icon: <VisibilityRounded />,
-          onClick: () => {
-            window.location.href = formatCompleteListingUrl({
-              type: "unique",
-              details: { title: row.title },
-              listing: row,
-            })
-          },
-        },
-        {
-          label: t("common.share"),
-          icon: <ShareRounded />,
-          onClick: () => {
-            if (navigator.share) {
-              navigator.share({
-                title: row.title,
-                url: formatCompleteListingUrl({
-                  type: "unique",
-                  details: { title: row.title },
-                  listing: row,
-                }),
-              })
-            }
-          },
-        },
-        {
-          label: t("ItemStock.editListing"),
-          icon: <CreateRounded />,
-          onClick: () => {
-            window.location.href = `/market_edit/${row.listing_id}`
-          },
-        },
-      ]
-
-      // New rows on mobile - show a simple card that opens bottom sheet on click
-      if (isNewRow) {
-        return (
-          <Grid item xs={12}>
-            <Card
-              sx={{
-                border: 1,
-                borderColor: "primary.main",
-                borderStyle: "dashed",
-                bgcolor: "action.hover",
-                cursor: "pointer",
-              }}
-              onClick={handleEditClick(row.id)}
-            >
-              <CardContent sx={{ p: 2 }}>
-                <Stack
-                  direction="row"
-                  spacing={2}
-                  alignItems="center"
-                  justifyContent="space-between"
-                >
-                  <Box>
-                    <Typography
-                      variant="body1"
-                      color="text.secondary"
-                      fontWeight="medium"
-                      component="div"
-                    >
-                      {newRowData?.item_name ||
-                        t(
-                          "ItemStock.newListingPending",
-                          "New listing - tap to edit",
-                        )}
-                    </Typography>
-                    {newRowData?.item_name && (
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                        component="div"
-                      >
-                        {newRowData.price.toLocaleString(undefined)} aUEC • Qty:{" "}
-                        {newRowData.quantity_available}
-                      </Typography>
-                    )}
-                  </Box>
-                  <Button
-                    size="small"
-                    variant="outlined"
-                    startIcon={<CreateRounded />}
-                    onClick={(e) => {
-                      e.stopPropagation()
-                      handleEditClick(row.id)()
-                    }}
-                  >
-                    {t("ItemStock.edit")}
-                  </Button>
-                </Stack>
-              </CardContent>
-            </Card>
-          </Grid>
-        )
-      }
-
-      const cardContent = (
-        <Card
-          sx={{
-            border: isSelected ? 2 : 1,
-            borderColor: isSelected ? "primary.main" : "divider",
-            bgcolor: isSelected
-              ? (theme) => {
-                  const primaryColor = theme.palette.primary.main
-                  // Extract RGB values and add alpha
-                  if (primaryColor.startsWith("#")) {
-                    const r = parseInt(primaryColor.slice(1, 3), 16)
-                    const g = parseInt(primaryColor.slice(3, 5), 16)
-                    const b = parseInt(primaryColor.slice(5, 7), 16)
-                    return `rgba(${r}, ${g}, ${b}, ${theme.palette.mode === "dark" ? 0.12 : 0.08})`
-                  }
-                  return theme.palette.primary.main
-                }
-              : "background.paper",
-          }}
-          {...(isInSelectionMode ? {} : longPressHandlers)}
-        >
-          <CardActionArea
-            component={isInSelectionMode ? "div" : Link}
-            to={
-              isInSelectionMode
-                ? undefined
-                : formatCompleteListingUrl({
-                    type: "unique",
-                    details: { title: row.title },
-                    listing: row,
-                  })
-            }
-            onClick={(e: React.MouseEvent) => {
-              if (isInSelectionMode) {
-                e.preventDefault()
-                e.stopPropagation()
-                handleTapForSelection(e)
-              }
-            }}
-            sx={{ p: 2 }}
-          >
-            <Stack direction="row" spacing={2} alignItems="center">
-              <Avatar
-                src={row.image_url}
-                variant="rounded"
-                sx={{ width: 64, height: 64 }}
-              />
-              <Box sx={{ flex: 1, minWidth: 0 }}>
-                <Typography variant="h6" noWrap>
-                  {row.title}
-                </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {row.price.toLocaleString(undefined)} aUEC
-                </Typography>
-                <Stack
-                  direction="row"
-                  spacing={1}
-                  sx={{ mt: 1 }}
-                  flexWrap="wrap"
-                >
-                  <Chip
-                    label={`${t("ItemStock.quantity")}: ${row.quantity_available.toLocaleString(undefined)}`}
-                    size="small"
-                    variant="outlined"
-                  />
-                  <Chip
-                    label={
-                      row.status === "active"
-                        ? t("ItemStock.active")
-                        : t("ItemStock.inactive")
-                    }
-                    color={row.status === "active" ? "success" : "error"}
-                    size="small"
-                  />
-                  {row.order_count > 0 && (
-                    <Chip
-                      label={`${row.order_count} ${t("ItemStock.offersAccepted")}`}
-                      size="small"
-                      variant="outlined"
-                    />
-                  )}
-                </Stack>
-              </Box>
-              {isSelected && <RadioButtonCheckedRounded color="primary" />}
-            </Stack>
-          </CardActionArea>
-        </Card>
-      )
-
-      return (
-        <Grid item xs={12}>
-          {isInSelectionMode ? (
-            cardContent
-          ) : (
-            <LongPressMenu actions={longPressActions}>
-              {cardContent}
-            </LongPressMenu>
-          )}
-        </Grid>
-      )
-    },
-  )
-
-  // Bottom sheet state for quick create
+  // Mobile bottom sheet state
   const [bottomSheetOpen, setBottomSheetOpen] = useState(false)
   const [editingRowId, setEditingRowId] = useState<string | null>(null)
 
@@ -1457,6 +817,7 @@ export function DisplayStock({
                       }
                       handleSaveClick={handleSaveClick}
                       handleCancelClick={handleCancelClick}
+                      handleUpdateQuantity={handleUpdateQuantity}
                     />
                   )
                 })}
@@ -1650,6 +1011,11 @@ export function DisplayStock({
         onRowEditStop={handleRowEditStop}
         rowModesModel={rowModesModel}
         onRowModesModelChange={setRowModesModel}
+        initialState={{
+          sorting: {
+            sortModel: [{ field: "title", sort: "asc" }],
+          },
+        }}
         slots={{
           toolbar: () => (
             <ItemStockToolbar
@@ -1676,75 +1042,5 @@ export function DisplayStock({
         pageSizeOptions={[24, 48, 96, 192]}
       />
     </Box>
-  )
-}
-
-export function MyItemStock() {
-  const [currentOrg] = useCurrentOrg()
-  const { data: profile, isLoading: profileLoading } = useGetUserProfileQuery()
-  const [page, setPage] = useState(0)
-  const [perPage, setPerPage] = useState(48)
-  const [searchState] = useMarketSearch()
-
-  // Determine if we should search by contractor or user
-  const hasOrg = currentOrg && currentOrg.spectrum_id
-
-  // Build search query parameters
-  const searchQueryParams = useMemo(() => {
-    return {
-      page_size: perPage,
-      index: page * perPage, // Convert page to index
-      quantityAvailable: searchState.quantityAvailable ?? 1,
-      query: searchState.query || "",
-      sort: searchState.sort || "activity",
-      statuses: searchState.statuses || undefined,
-      minCost: searchState.minCost || undefined,
-      maxCost: searchState.maxCost || undefined,
-      item_type: searchState.item_type || undefined,
-      sale_type: searchState.sale_type || undefined,
-    }
-  }, [perPage, page, searchState])
-
-  // Use unified endpoint with contractor_id parameter when needed
-  const finalParams = hasOrg
-    ? { ...searchQueryParams, contractor_id: currentOrg?.spectrum_id }
-    : searchQueryParams
-
-  const {
-    data: searchResults,
-    isLoading,
-    refetch,
-  } = useGetMyListingsQuery(finalParams)
-
-  const handleChangePage = useCallback((event: unknown, newPage: number) => {
-    setPage(newPage)
-  }, [])
-
-  const handleChangeRowsPerPage = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setPerPage(parseInt(event.target.value, 10))
-      setPage(0)
-    },
-    [],
-  )
-
-  const handleRefresh = useCallback(async () => {
-    await refetch()
-  }, [refetch])
-
-  const listings = searchResults?.listings || []
-
-  return (
-    <>
-      <DisplayStock
-        listings={listings}
-        total={searchResults?.total}
-        page={page}
-        perPage={perPage}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-        onRefresh={handleRefresh}
-      />
-    </>
   )
 }

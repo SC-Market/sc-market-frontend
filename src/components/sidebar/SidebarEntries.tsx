@@ -10,6 +10,8 @@ import {
   DashboardCustomizeRounded,
   DesignServicesRounded,
   HomeRounded,
+  InventoryRounded,
+  ListAltRounded,
   ManageAccountsRounded,
   PersonAddRounded,
   RequestQuoteRounded,
@@ -28,7 +30,7 @@ import FolderOpenIcon from "@mui/icons-material/FolderOpenRounded"
 import PeopleAltIcon from "@mui/icons-material/PeopleAltRounded"
 import NotificationsIcon from "@mui/icons-material/NotificationsRounded"
 import React from "react"
-import { SidebarSectionProps } from "./Sidebar"
+import { SidebarSectionProps } from "./types"
 import { Pistol } from "mdi-material-ui"
 import { ModerationSidebarEntry } from "./ModerationSidebarEntry"
 
@@ -150,6 +152,13 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
       {
         to: "/market/manage?quantityAvailable=0",
         text: "sidebar.manage_market_listings",
+        icon: <ListAltRounded />,
+        logged_in: true,
+        org: false,
+      },
+      {
+        to: "/market/manage-stock",
+        text: "sidebar.manage_stock",
         icon: <WarehouseRounded />,
         logged_in: true,
         org: false,
@@ -207,20 +216,37 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
         orgRouteRest: "manage",
       },
       {
-        to: "/market/manage?quantityAvailable=0",
-        text: "sidebar.manage_listings",
-        icon: <WarehouseRounded />,
-        logged_in: true,
+        text: "sidebar.manage",
+        icon: <DashboardCustomizeRounded />,
         org: true,
         org_admin: true,
-        orgRouteRest: "listings",
-      },
-      {
-        to: "/order/services",
-        text: "sidebar.manage_services",
-        icon: <DashboardCustomizeRounded />,
-        org_admin: true,
-        orgRouteRest: "services",
+        children: [
+          {
+            to: "/market/manage?quantityAvailable=0",
+            text: "sidebar.manage_listings",
+            icon: <ListAltRounded />,
+            logged_in: true,
+            org: true,
+            org_admin: true,
+            orgRouteRest: "listings",
+          },
+          {
+            to: "/market/manage-stock",
+            text: "sidebar.manage_stock",
+            icon: <WarehouseRounded />,
+            logged_in: true,
+            org: true,
+            org_admin: true,
+            orgRouteRest: "manage-stock",
+          },
+          {
+            to: "/order/services",
+            text: "sidebar.manage_services",
+            icon: <DesignServicesRounded />,
+            org_admin: true,
+            orgRouteRest: "services",
+          },
+        ],
       },
       {
         to: "/org/money",

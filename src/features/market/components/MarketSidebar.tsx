@@ -100,7 +100,7 @@ export function MarketSearchArea(props: {
         height: "100%",
         flexDirection: "column",
         display: "flex",
-        padding: theme.spacing(1),
+        padding: theme.spacing(2),
         borderColor: theme.palette.outline.main,
       }}
     >
@@ -388,7 +388,8 @@ export function MarketSidebar(props: { status?: boolean }) {
         open={open}
         onClose={() => setOpen(false)}
         title={t("market.filters", "Filters")}
-        maxHeight="90vh"
+        snapPoints={["half", "75", "full"]}
+        defaultSnap="75"
       >
         <Box sx={{ overflowY: "auto", overflowX: "hidden", pb: 2 }}>
           <MarketSearchArea status={status} />

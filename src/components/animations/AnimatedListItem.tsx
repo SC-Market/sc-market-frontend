@@ -84,14 +84,17 @@ export function AnimatedListItem({
   // If child is a React element (component that returns Grid item), clone with styles
   // This handles cases like <ItemListing /> which returns a Grid item
   if (isValidElement(children)) {
-    const childProps = children.props as any
-    return cloneElement(children as React.ReactElement<any>, {
-      sx: {
-        ...(childProps.sx || {}),
-        ...animationStyles,
-        width: "100%",
+    const childProps = children.props as Record<string, unknown>
+    return cloneElement(
+      children as React.ReactElement<Record<string, unknown>>,
+      {
+        sx: {
+          ...(childProps.sx || {}),
+          ...animationStyles,
+          width: "100%",
+        },
       },
-    })
+    )
   }
 
   // Fallback: wrap in a div (shouldn't happen in normal usage with Grid)

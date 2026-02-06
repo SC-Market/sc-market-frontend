@@ -62,6 +62,7 @@ import {
 import { convertAvailability } from "../../pages/availability/Availability"
 import { OrderLimitsDisplay } from "../../components/orders/OrderLimitsDisplay"
 import { BottomSheet } from "../../components/mobile/BottomSheet"
+import { EmptyCart } from "../../components/empty-states"
 
 export function CartItemEntry(props: {
   item: CartItem
@@ -806,8 +807,8 @@ export function MarketCart() {
               />
             ))}
             {(!cart || !cart.length) && (
-              <Grid item xs={12} display={"flex"} justifyContent={"center"}>
-                <Typography variant={"h5"}>{t("cart.empty")}</Typography>
+              <Grid item xs={12}>
+                <EmptyCart />
               </Grid>
             )}
           </Grid>

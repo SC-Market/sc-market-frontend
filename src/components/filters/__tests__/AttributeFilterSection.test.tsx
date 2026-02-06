@@ -58,7 +58,9 @@ describe("AttributeFilterSection", () => {
         />,
       )
 
-      expect(screen.getByLabelText("Component Class filter")).toBeInTheDocument()
+      expect(
+        screen.getByLabelText("Component Class filter"),
+      ).toBeInTheDocument()
     })
 
     it("renders Autocomplete for many options", () => {
@@ -91,7 +93,9 @@ describe("AttributeFilterSection", () => {
         />,
       )
 
-      expect(screen.getByLabelText("Component Class filter")).toBeInTheDocument()
+      expect(
+        screen.getByLabelText("Component Class filter"),
+      ).toBeInTheDocument()
       expect(screen.getByText("Military")).toBeInTheDocument()
     })
   })
@@ -111,8 +115,12 @@ describe("AttributeFilterSection", () => {
       )
 
       expect(screen.getByText("Component Size")).toBeInTheDocument()
-      expect(screen.getByLabelText("Component Size minimum")).toBeInTheDocument()
-      expect(screen.getByLabelText("Component Size maximum")).toBeInTheDocument()
+      expect(
+        screen.getByLabelText("Component Size minimum"),
+      ).toBeInTheDocument()
+      expect(
+        screen.getByLabelText("Component Size maximum"),
+      ).toBeInTheDocument()
     })
 
     it("handles min value change", () => {

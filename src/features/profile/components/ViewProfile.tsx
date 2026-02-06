@@ -51,6 +51,7 @@ import { ProfileBannerArea } from "./ProfileBannerArea"
 import { ProfileStoreView } from "./ProfileStoreView"
 import { ProfileServicesView } from "./ProfileServicesView"
 import { ProfileAboutTab } from "./ProfileAboutTab"
+import { PageBreadcrumbs } from "../../../components/navigation"
 
 const name_to_index = new Map([
   ["", 0],
@@ -212,6 +213,14 @@ export function ViewProfile(props: { profile: User }) {
             </script>
           </Helmet>
           <Grid container spacing={theme.layoutSpacing.layout}>
+            <Grid item xs={12}>
+              <PageBreadcrumbs
+                items={[
+                  { label: t("people.title", "People"), href: "/people" },
+                  { label: props.profile.display_name },
+                ]}
+              />
+            </Grid>
             <Grid item xs={12}>
               <Grid
                 spacing={theme.layoutSpacing.layout}

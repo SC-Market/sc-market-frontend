@@ -226,7 +226,10 @@ export const marketApi = serviceApi.injectEndpoints({
       ],
     }),
 
-    getBuyOrderListings: builder.query<MarketAggregate[], Partial<MarketSearchParams> | void>({
+    getBuyOrderListings: builder.query<
+      MarketAggregate[],
+      Partial<MarketSearchParams> | void
+    >({
       query: (params) => ({
         url: "/api/market/aggregates/buyorders",
         params: params || {},
@@ -417,6 +420,7 @@ export const marketApi = serviceApi.injectEndpoints({
         "BuyOrderListings",
         "AllListings",
         "ContractorListings",
+        "StockLots",
         { type: "MarketListings" as const, id: listing_id },
       ],
     }),

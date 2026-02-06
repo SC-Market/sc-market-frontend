@@ -199,7 +199,9 @@ export function AdminImportMonitoringView() {
               }}
             >
               <Box sx={{ flex: 1 }}>
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
+                <Box
+                  sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}
+                >
                   {job.success ? (
                     <CheckCircleIcon color="success" />
                   ) : job.attributesImported > 0 ? (
@@ -230,7 +232,11 @@ export function AdminImportMonitoringView() {
                   />
                 </Box>
 
-                <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ mb: 1 }}
+                >
                   {t("admin.importMonitoring.timestamp", "Time")}:{" "}
                   {job.timestamp.toLocaleString()}
                 </Typography>
@@ -253,11 +259,7 @@ export function AdminImportMonitoringView() {
                       {t("admin.importMonitoring.errors", "Errors")}:
                     </Typography>
                     {job.errors.map((error, errorIndex) => (
-                      <Alert
-                        key={errorIndex}
-                        severity="error"
-                        sx={{ mb: 1 }}
-                      >
+                      <Alert key={errorIndex} severity="error" sx={{ mb: 1 }}>
                         {error}
                       </Alert>
                     ))}

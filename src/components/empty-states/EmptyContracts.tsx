@@ -13,6 +13,10 @@ export interface EmptyContractsProps extends Omit<
    */
   isPublic?: boolean
   /**
+   * Whether this is an error state
+   */
+  isError?: boolean
+  /**
    * Custom title override
    */
   title?: string
@@ -28,6 +32,10 @@ export interface EmptyContractsProps extends Omit<
    * Custom action override
    */
   action?: EmptyStateProps["action"]
+  /**
+   * Retry function for error states
+   */
+  onRetry?: () => void
 }
 
 /**
@@ -37,14 +45,49 @@ export interface EmptyContractsProps extends Omit<
  */
 export function EmptyContracts({
   isPublic = false,
+  isError = false,
   title,
   description,
   showCreateAction = true,
   action,
+  onRetry,
   ...props
 }: EmptyContractsProps) {
   const { t } = useTranslation()
   const navigate = useNavigate()
+
+  if (isError) {
+    return (
+      <EmptyState
+        title={
+          title ||
+          t("emptyStates.contracts.errorTitle", {
+            defaultValue: "Unable to load contracts",
+          })
+        }
+        description={
+          description ||
+          t("emptyStates.contracts.errorDescription", {
+            defaultValue:
+              "We encountered an error while loading contracts. Please try again.",
+          })
+        }
+        icon={<DescriptionOutlined />}
+        action={
+          onRetry
+            ? {
+                label: t("emptyStates.contracts.retry", {
+                  defaultValue: "Retry",
+                }),
+                onClick: onRetry,
+                variant: "contained",
+              }
+            : undefined
+        }
+        {...props}
+      />
+    )
+  }
 
   const defaultTitle = isPublic
     ? t("emptyStates.contracts.noPublicContracts", {

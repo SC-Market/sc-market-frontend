@@ -13,7 +13,11 @@ import { Order } from "../../datatypes/Order"
 export function OrderListItem(props: { order: Order }) {
   const { order } = props
   // Use customer_minimal data from the order instead of making a separate API call
-  const customer = (order as any).customer_minimal
+  const customer = (
+    order as Order & {
+      customer_minimal?: { avatar: string; username: string }
+    }
+  ).customer_minimal
 
   return (
     <ListItemButton component={Link} to={`/contract/${order.order_id}`}>

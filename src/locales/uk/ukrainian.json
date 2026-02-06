@@ -316,7 +316,9 @@
   "displayed_rows_range": "{{from}}–{{to}} з {{count}}",
   "displayed_rows_range_more": "{{from}}–{{to}} з більш ніж {{to}}",
   "all": "Усі",
-  "contractors": "Підрядники",
+  "contractors": {
+    "contractor": "підрядник"
+  },
   "recruiting_orgs": "Рекрутингові організації",
   "toggle_market_sidebar": "Перемкнути панель маркету",
   "update_post": "Оновити публікацію",
@@ -772,7 +774,6 @@
     "cost": "Ціна",
     "costHelper": "Скільки має сплатити клієнт за цю послугу?",
     "paymentType": "Тип оплати",
-
     "submit": "Створити",
     "update": "Оновити",
     "alert": {
@@ -796,7 +797,6 @@
     "aUECOffer": "Пропозиція aUEC",
     "aUECOfferHelper": "Яку суму ви пропонуєте виконавцю за це замовлення?",
     "paymentType": "Тип оплати",
-
     "submit": "Створити",
     "alert": {
       "submitted": "Успішно надіслано!"
@@ -1230,7 +1230,10 @@
     "edit": "Редагувати",
     "save": "Зберегти",
     "discard": "Відхилити",
-    "editListing": "Редагувати оголошення"
+    "editListing": "Редагувати оголошення",
+    "newListing": "Нове оголошення",
+    "newListingPending": "Нове оголошення - натисніть для редагування",
+    "views": "Перегляди"
   },
   "itemMarket": {
     "toggleSidebar": "Перемкнути бічну панель ринку"
@@ -1650,9 +1653,6 @@
   "dashboard": {
     "title": "Панель управління"
   },
-  "contractors": {
-    "contractor": "підрядник"
-  },
   "contractorsPage": {
     "title": "Підрядники"
   },
@@ -1752,5 +1752,28 @@
     "viewDetails": "Переглянути деталі",
     "share": "Поділитися",
     "rowsPerPage": "Рядків на сторінку"
+  },
+  "SimpleStockInput": {
+    "quantity": "Доступна кількість",
+    "quantityLabel": "Введіть доступну кількість",
+    "quantityHelp": "Введіть загальну кількість товарів, доступних для продажу",
+    "available": "Доступно",
+    "reserved": "Зарезервовано",
+    "manageStock": "Керувати запасами",
+    "viewBreakdown": "Переглянути деталі",
+    "updateError": "Не вдалося оновити кількість запасів",
+    "advancedFeatureComingSoon": "Розширене управління запасами незабаром"
+  },
+  "accessibility": {
+    "updateAmountInput": "Введіть кількість для оновлення запасів",
+    "updateAmountHelp": "Введіть кількість для додавання, віднімання або встановлення для вибраних товарів",
+    "addToStock": "Додати до запасів",
+    "addToStockHelp": "Додати вказану кількість до вибраних товарів",
+    "zeroStock": "Обнулити запаси",
+    "zeroStockHelp": "Встановити кількість вибраних товарів на нуль",
+    "subtractFromStock": "Відняти від запасів",
+    "subtractFromStockHelp": "Відняти вказану кількість від вибраних товарів",
+    "editQuantityInput": "Редагувати доступну кількість",
+    "editQuantityHelp": "Редагувати доступну кількість для цього товару"
   }
 }

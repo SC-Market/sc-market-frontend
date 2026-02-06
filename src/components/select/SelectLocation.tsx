@@ -10,7 +10,7 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function romanize(num: number) {
   if (isNaN(num)) return NaN
-  let digits = String(+num).split(""),
+  const digits = String(+num).split(""),
     key = [
       "",
       "C",
@@ -42,8 +42,8 @@ export function romanize(num: number) {
       "VII",
       "VIII",
       "IX",
-    ],
-    roman = "",
+    ]
+  let roman = "",
     i = 3
   while (i--) {
     const digit = digits.pop()
@@ -173,7 +173,10 @@ export function SelectLocation() {
                 } (${option.designation})`
               }}
               value={locationTargetObject}
-              onChange={(event: any, newValue: StarmapObject | null) => {
+              onChange={(
+                event: React.SyntheticEvent,
+                newValue: StarmapObject | null,
+              ) => {
                 setLocationTargetObject(newValue)
               }}
               inputValue={locationTarget}

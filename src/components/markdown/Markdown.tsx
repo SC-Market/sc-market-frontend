@@ -99,7 +99,6 @@ export function MarkdownRender(props: {
   return (
     <ReactMarkdown
       {...MarkdownProps}
-      children={props.text}
       remarkPlugins={[remarkGfm]}
       rehypePlugins={[rehypeRaw, [rehypeSanitize, sanitizeSchema]]}
       components={{
@@ -223,7 +222,6 @@ export function MarkdownRender(props: {
         },
 
         a({ node, className, children, ...props }) {
-          // eslint-disable-next-line react/prop-types
           const href = props.href
           if (href) {
             try {
@@ -276,7 +274,9 @@ export function MarkdownRender(props: {
         },
         ...MarkdownProps?.components,
       }}
-    />
+    >
+      {props.text}
+    </ReactMarkdown>
   )
 }
 
@@ -307,7 +307,7 @@ export function MarkdownEditor(props: {
     ["# ", <span key={"#"}>H1</span>],
     ["## ", <span key={"##"}>H2</span>],
     ["- ", <span key={"-"}>•</span>],
-    ["> ", <span key={">"}>"</span>],
+    ["> ", <span key={">"}>&quot;</span>],
   ] as const
 
   const wrapText = useCallback(
@@ -479,7 +479,9 @@ export function MarkdownEditor(props: {
             fullWidth
             minRows={10}
             value={value}
-            onChange={(event: any) => onChange(event.target.value || "")}
+            onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) =>
+              onChange(event.target.value || "")
+            }
             helperText={"Markdown enabled"}
             inputRef={inputRef}
             {...TextFieldProps}

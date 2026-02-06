@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import { Page } from "../../components/metadata/Page"
+import { PageBreadcrumbs } from "../../components/navigation"
 import {
   RecruitingPost,
   useRecruitingCommentOnPostMutation,
@@ -94,6 +95,14 @@ export function RecruitingPostPage() {
   return (
     <Page title={t("recruiting_post.page.createPost")}>
       <ContainerGrid maxWidth={"md"} sidebarOpen={true}>
+        <Grid item xs={12}>
+          <PageBreadcrumbs
+            items={[
+              { label: t("recruiting.title", "Recruiting"), href: "/recruiting" },
+              { label: post?.title || t("recruiting_post.page.createPost") },
+            ]}
+          />
+        </Grid>
         {shouldRedirectTo404(error) && <Navigate to={"/404"} />}
         {shouldShowErrorPage(error) && <ErrorPage />}
         {isLoading || isFetching ? (

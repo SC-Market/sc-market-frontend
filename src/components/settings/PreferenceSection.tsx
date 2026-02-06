@@ -64,7 +64,7 @@ export function PreferenceSection({
         if (type === "email") {
           return (pref as EmailPreference).action_type_id === typeItem.id
         } else {
-          const actionString = (typeItem as any).action
+          const actionString = typeItem.action
           if (actionString) {
             return (pref as PushPreference).action === actionString
           }
@@ -92,7 +92,7 @@ export function PreferenceSection({
             enabled: false,
           })
         } else {
-          const actionString = (typeItem as any).action
+          const actionString = typeItem.action
           if (actionString) {
             batchUpdates.push({
               preference: {
@@ -128,7 +128,7 @@ export function PreferenceSection({
         if (type === "email") {
           return (pref as EmailPreference).action_type_id === typeItem.id
         } else {
-          const actionString = (typeItem as any).action
+          const actionString = typeItem.action
           if (actionString) {
             return (pref as PushPreference).action === actionString
           }
@@ -156,7 +156,7 @@ export function PreferenceSection({
             enabled: true,
           })
         } else {
-          const actionString = (typeItem as any).action
+          const actionString = typeItem.action
           if (actionString) {
             batchUpdates.push({
               preference: {
@@ -188,7 +188,7 @@ export function PreferenceSection({
         if (type === "email") {
           return (pref as EmailPreference).action_type_id === typeItem.id
         } else {
-          const actionString = (typeItem as any).action
+          const actionString = typeItem.action
           return (
             actionString && (pref as PushPreference).action === actionString
           )
@@ -205,7 +205,7 @@ export function PreferenceSection({
         if (type === "email") {
           return (pref as EmailPreference).action_type_id === typeItem.id
         } else {
-          const actionString = (typeItem as any).action
+          const actionString = typeItem.action
           return (
             actionString && (pref as PushPreference).action === actionString
           )
@@ -275,7 +275,7 @@ export function PreferenceSection({
                 const pushPref = pref as PushPreference & {
                   contractor_id?: string | null
                 }
-                const actionString = (typeItem as any).action
+                const actionString = typeItem.action
                 if (actionString) {
                   const matchesAction = pushPref.action === actionString
                   const matchesContractor =
@@ -319,7 +319,7 @@ export function PreferenceSection({
                         )
                       } else {
                         // For push, use the action string from typeItem
-                        const actionString = (typeItem as any).action
+                        const actionString = typeItem.action
                         if (!actionString) {
                           console.warn(
                             "Missing action string for push preference",

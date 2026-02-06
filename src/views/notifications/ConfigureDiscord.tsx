@@ -23,8 +23,8 @@ export function ConfigureDiscord(props: { org?: boolean }) {
     skip: !!props.org,
   })
   const { data: orgSettings } = useGetDiscordSettingsQuery(
-    currentOrg?.spectrum_id!,
-    { skip: !props.org },
+    currentOrg?.spectrum_id ?? "",
+    { skip: !props.org || !currentOrg?.spectrum_id },
   )
 
   const [setUseUserOfficial] = useProfileUseOfficialDiscordSettingsMutation()
@@ -35,8 +35,8 @@ export function ConfigureDiscord(props: { org?: boolean }) {
   const theme = useTheme<ExtendedTheme>()
 
   const callback = useCallback(async () => {
-    if (props.org) {
-      setUseContractorOfficial(currentOrg?.spectrum_id!)
+    if (props.org && currentOrg?.spectrum_id) {
+      setUseContractorOfficial(currentOrg.spectrum_id)
     } else {
       setUseUserOfficial()
     }

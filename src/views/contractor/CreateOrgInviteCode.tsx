@@ -20,8 +20,7 @@ export function CreateOrgInviteCode() {
   const submitCreateForm = useCallback(
     async (event: any) => {
       // event.preventDefault();
-      let res: { data?: any; error?: any }
-      res = await createContractorInvite({
+      const res: { data?: any; error?: any } = await createContractorInvite({
         contractor: currentOrg!.spectrum_id,
         body: {
           max_uses: maxUses,

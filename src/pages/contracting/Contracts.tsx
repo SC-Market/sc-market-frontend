@@ -8,8 +8,10 @@ import {
 } from "../../hooks/contract/ContractSearch"
 import { marketDrawerWidth } from "../../features/market"
 import FilterListIcon from "@mui/icons-material/FilterList"
+import { FiltersFAB } from "../../components/mobile/FiltersFAB"
 import {
   Button,
+  Divider,
   Grid,
   Box,
   useMediaQuery,
@@ -18,6 +20,7 @@ import {
   Tabs,
   Typography,
   CircularProgress,
+  Paper,
 } from "@mui/material"
 import { Page } from "../../components/metadata/Page"
 import { Link, useLocation, useNavigate } from "react-router-dom"
@@ -50,6 +53,11 @@ const ServiceActions = React.lazy(() =>
     default: module.ServiceActions,
   })),
 )
+const ContractActions = React.lazy(() =>
+  import("../../views/contracts/ContractActions").then((module) => ({
+    default: module.ContractActions,
+  })),
+)
 
 export function Contracts() {
   const { t } = useTranslation()
@@ -79,7 +87,10 @@ export function Contracts() {
           value={[serviceSidebarOpen, setServiceSidebarOpen]}
         >
           <ContractSearchContext.Provider
-            value={useState<ContractSearchState>({ query: "", sort: "date-old" })}
+            value={useState<ContractSearchState>({
+              query: "",
+              sort: "date-old",
+            })}
           >
             <ContractSidebarContext.Provider
               value={[contractSidebarOpen, setContractSidebarOpen]}
@@ -103,55 +114,9 @@ export function Contracts() {
                     justifyContent="space-between"
                   >
                     <Grid item xs={12} sm="auto">
-                      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                        {xs && tabPage === 1 && (
-                          <Button
-                            variant="outlined"
-                            color="secondary"
-                            startIcon={<FilterListIcon />}
-                            aria-label={t("market.toggleSidebar")}
-                            onClick={() => setMarketSidebarOpen((prev) => !prev)}
-                            sx={{
-                              [theme.breakpoints.up("md")]: { display: "none" },
-                              borderRadius: 2,
-                              textTransform: "none",
-                            }}
-                          >
-                            {t("market.filters", "Filters")}
-                          </Button>
-                        )}
-                        {xs && tabPage === 0 && (
-                          <Button
-                            variant="outlined"
-                            color="secondary"
-                            startIcon={<FilterListIcon />}
-                            aria-label={t("service_market.toggle_sidebar")}
-                            onClick={() => setServiceSidebarOpen((prev) => !prev)}
-                            sx={{
-                              [theme.breakpoints.up("md")]: { display: "none" },
-                              borderRadius: 2,
-                              textTransform: "none",
-                            }}
-                          >
-                            {t("service_market.filters", "Filters")}
-                          </Button>
-                        )}
-                        {xs && tabPage === 2 && (
-                          <Button
-                            variant="outlined"
-                            color="secondary"
-                            startIcon={<FilterListIcon />}
-                            aria-label={t("contracts.toggleSidebar")}
-                            onClick={() => setContractSidebarOpen((prev) => !prev)}
-                            sx={{
-                              [theme.breakpoints.up("md")]: { display: "none" },
-                              borderRadius: 2,
-                              textTransform: "none",
-                            }}
-                          >
-                            {t("contracts.filters", "Filters")}
-                          </Button>
-                        )}
+                      <Box
+                        sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                      >
                         <Typography
                           variant="h4"
                           sx={{
@@ -217,19 +182,9 @@ export function Contracts() {
                           <ServiceActions />
                         </Suspense>
                       ) : (
-                        <Link
-                          to={"/contracts/create"}
-                          style={{ color: "inherit", textDecoration: "none" }}
-                        >
-                          <Button
-                            color={"secondary"}
-                            startIcon={<CreateRounded />}
-                            variant={"contained"}
-                            size={"large"}
-                          >
-                            {t("contracts.createOpenContract")}
-                          </Button>
-                        </Link>
+                        <Suspense fallback={<CircularProgress size={24} />}>
+                          <ContractActions />
+                        </Suspense>
                       )}
                     </Grid>
                   </Grid>
@@ -246,10 +201,63 @@ export function Contracts() {
                   </Suspense>
                 </TabPanel>
                 <TabPanel value={tabPage} index={2}>
-                  <ContractSidebar />
-                  <ContractListings />
+                  <Container maxWidth="xxl">
+                    <Grid container spacing={theme.layoutSpacing.layout}>
+                      <Grid item xs={12}>
+                        <Divider light />
+                      </Grid>
+
+                      {/* Mobile: BottomSheet sidebar */}
+                      {xs && <ContractSidebar />}
+
+                      {/* Desktop: Sticky sidebar */}
+                      {!xs && contractSidebarOpen && (
+                        <Grid item md={2.25}>
+                          <Paper
+                            sx={{
+                              position: "sticky",
+                              top: theme.spacing(2),
+                              maxHeight: `calc(100vh - ${theme.spacing(4)})`,
+                              overflowY: "auto",
+                            }}
+                          >
+                            <ContractSidebar />
+                          </Paper>
+                        </Grid>
+                      )}
+
+                      {/* Main content */}
+                      <Grid
+                        item
+                        xs={12}
+                        md={contractSidebarOpen ? 9.75 : 12}
+                        container
+                        spacing={theme.layoutSpacing.layout}
+                      >
+                        <ContractListings />
+                      </Grid>
+                    </Grid>
+                  </Container>
                 </TabPanel>
               </OpenLayout>
+              {xs && tabPage === 1 && (
+                <FiltersFAB
+                  onClick={() => setMarketSidebarOpen((prev) => !prev)}
+                  label={t("market.toggleSidebar")}
+                />
+              )}
+              {xs && tabPage === 0 && (
+                <FiltersFAB
+                  onClick={() => setServiceSidebarOpen((prev) => !prev)}
+                  label={t("service_market.toggle_sidebar")}
+                />
+              )}
+              {xs && tabPage === 2 && (
+                <FiltersFAB
+                  onClick={() => setContractSidebarOpen((prev) => !prev)}
+                  label={t("contracts.toggleSidebar")}
+                />
+              )}
             </ContractSidebarContext.Provider>
           </ContractSearchContext.Provider>
         </ServiceSidebarContext.Provider>
