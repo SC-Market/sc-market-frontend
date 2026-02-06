@@ -481,6 +481,7 @@ function AllocationTarget({
             <TableCell width={50}></TableCell>
             <TableCell width={120}>Quantity</TableCell>
             <TableCell>Location</TableCell>
+            <TableCell>User</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -543,6 +544,11 @@ function AllocationTarget({
                   />
                 </TableCell>
                 <TableCell>{alloc.lot?.location?.name || "Unknown"}</TableCell>
+                <TableCell>
+                  <Typography variant="body2" color="text.secondary">
+                    {alloc.lot?.owner?.display_name || alloc.lot?.owner?.username || "—"}
+                  </Typography>
+                </TableCell>
               </TableRow>
             )
           })}
