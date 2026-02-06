@@ -454,7 +454,7 @@ export function AllStockLotsGrid() {
   }
 
   return (
-    <Paper sx={{ p: 2 }}>
+    <Paper>
       <DataGrid
         rows={rows}
         columns={columns}
