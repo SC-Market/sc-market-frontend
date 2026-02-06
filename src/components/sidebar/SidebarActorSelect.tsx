@@ -128,6 +128,13 @@ export function SidebarActorSelect() {
           }}
           SelectProps={{
             IconComponent: KeyboardArrowDownRoundedIcon,
+            sx: {
+              "& .MuiSvgIcon-root": {
+                color: theme.palette.getContrastText(
+                  theme.palette.background.sidebar,
+                ),
+              },
+            },
             MenuProps: {
               PaperProps: {
                 sx: {
