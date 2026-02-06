@@ -232,7 +232,7 @@ export function AllStockLotsGrid() {
       listing_id: lot.listing_id,
       quantity: lot.quantity_total,
       location_id: lot.location_id,
-      owner_id: lot.owner_id,
+      owner_username: lot.owner?.username || null,
       listed: lot.listed,
       notes: lot.notes,
     }))
@@ -272,7 +272,7 @@ export function AllStockLotsGrid() {
       editable: true,
     },
     {
-      field: "owner_id",
+      field: "owner_username",
       headerName: t("AllStockLots.owner", "Owner"),
       flex: 1.5,
       minWidth: 180,
@@ -385,6 +385,7 @@ export function AllStockLotsGrid() {
         listing_id: newRow.listing_id,
         quantity: newRow.quantity,
         location_id: newRow.location_id,
+        owner_username: newRow.owner_username || null,
         listed: newRow.listed,
         notes: newRow.notes,
       }).unwrap()
@@ -401,7 +402,7 @@ export function AllStockLotsGrid() {
         listing_id: result.lot.listing_id,
         quantity: result.lot.quantity_total,
         location_id: result.lot.location_id,
-        owner_id: result.lot.owner_id,
+        owner_username: result.lot.owner?.username || null,
         listed: result.lot.listed,
         notes: result.lot.notes,
       }
@@ -417,6 +418,7 @@ export function AllStockLotsGrid() {
         listing_id: row.listing_id,
         quantity: row.quantity || 0,
         location_id: row.location_id || null,
+        owner_username: row.owner_username || null,
         listed: row.listed ?? true,
         notes: row.notes || null,
       }).unwrap()
@@ -446,7 +448,7 @@ export function AllStockLotsGrid() {
         listing_id: "",
         quantity: 0,
         location_id: null,
-        owner_id: null,
+        owner_username: null,
         listed: true,
         notes: "",
       },
