@@ -6,9 +6,9 @@ import {
   Grid,
   Skeleton,
   Stack,
-  Tab,
   Tabs,
 } from "@mui/material"
+import { HapticTab } from "../../../components/haptic"
 import {
   CreateRounded,
   DesignServicesRounded,
@@ -111,20 +111,20 @@ export function ProfileSkeleton() {
                   textColor="secondary"
                   indicatorColor="secondary"
                 >
-                  <Tab
+                  <HapticTab
                     label={<Skeleton width={60} />}
                     icon={<StorefrontRounded />}
                   />
-                  <Tab
+                  <HapticTab
                     label={<Skeleton width={60} />}
                     icon={<DesignServicesRounded />}
                   />
-                  <Tab label={<Skeleton width={60} />} icon={<InfoRounded />} />
-                  <Tab
+                  <HapticTab label={<Skeleton width={60} />} icon={<InfoRounded />} />
+                  <HapticTab
                     label={<Skeleton width={60} />}
                     icon={<CreateRounded />}
                   />
-                  <Tab label={<Skeleton width={60} />} icon={<StarRounded />} />
+                  <HapticTab label={<Skeleton width={60} />} icon={<StarRounded />} />
                 </Tabs>
               </Box>
               <Divider light />

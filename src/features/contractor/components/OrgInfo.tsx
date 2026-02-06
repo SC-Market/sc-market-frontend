@@ -13,10 +13,10 @@ import {
   Paper,
   Skeleton,
   Stack,
-  Tab,
   Tabs,
   Typography,
 } from "@mui/material"
+import { HapticTab } from "../../../components/haptic"
 import PeopleAltRoundedIcon from "@mui/icons-material/PeopleAltRounded"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
@@ -227,35 +227,35 @@ export function OrgInfo(props: { contractor: Contractor }) {
                   aria-label={t("ui.aria.orgInfoArea")}
                   variant="scrollable"
                 >
-                  <Tab
+                  <HapticTab
                     label={t("orgInfo.store")}
                     component={Link}
                     to={`/contractor/${contractor.spectrum_id}`}
                     icon={<StorefrontRounded />}
                     {...a11yProps(0)}
                   />
-                  <Tab
+                  <HapticTab
                     label={t("orgInfo.services")}
                     component={Link}
                     to={`/contractor/${contractor.spectrum_id}/services`}
                     icon={<DesignServicesRounded />}
                     {...a11yProps(1)}
                   />
-                  <Tab
+                  <HapticTab
                     label={t("orgInfo.about")}
                     component={Link}
                     to={`/contractor/${contractor.spectrum_id}/about`}
                     icon={<InfoRounded />}
                     {...a11yProps(2)}
                   />
-                  <Tab
+                  <HapticTab
                     label={t("orgInfo.order")}
                     component={Link}
                     to={`/contractor/${contractor.spectrum_id}/order`}
                     icon={<CreateRounded />}
                     {...a11yProps(3)}
                   />
-                  <Tab
+                  <HapticTab
                     label={t("orgInfo.members")}
                     component={Link}
                     to={`/contractor/${contractor.spectrum_id}/members`}
@@ -263,7 +263,7 @@ export function OrgInfo(props: { contractor: Contractor }) {
                     {...a11yProps(4)}
                   />
                   {recruiting_post && (
-                    <Tab
+                    <HapticTab
                       label={t("orgInfo.recruiting")}
                       component={Link}
                       to={`/contractor/${contractor.spectrum_id}/recruiting`}
@@ -271,7 +271,7 @@ export function OrgInfo(props: { contractor: Contractor }) {
                       {...a11yProps(5)}
                     />
                   )}
-                  <Tab
+                  <HapticTab
                     label={t("orgInfo.reviews")}
                     component={Link}
                     to={`/contractor/${contractor.spectrum_id}/reviews`}
@@ -477,37 +477,37 @@ export function OrgInfoSkeleton() {
                   aria-label={t("ui.aria.orgInfoArea")}
                   variant="scrollable"
                 >
-                  <Tab
+                  <HapticTab
                     label={<Skeleton width={60} />}
                     icon={<StorefrontRounded />}
                     {...a11yProps(0)}
                   />
-                  <Tab
+                  <HapticTab
                     label={<Skeleton width={60} />}
                     icon={<DesignServicesRounded />}
                     {...a11yProps(1)}
                   />
-                  <Tab
+                  <HapticTab
                     label={<Skeleton width={60} />}
                     icon={<InfoRounded />}
                     {...a11yProps(2)}
                   />
-                  <Tab
+                  <HapticTab
                     label={<Skeleton width={60} />}
                     icon={<CreateRounded />}
                     {...a11yProps(3)}
                   />
-                  <Tab
+                  <HapticTab
                     label={<Skeleton width={60} />}
                     icon={<PeopleAltRoundedIcon />}
                     {...a11yProps(4)}
                   />
-                  <Tab
+                  <HapticTab
                     label={<Skeleton width={60} />}
                     icon={<PersonAddRounded />}
                     {...a11yProps(5)}
                   />
-                  <Tab
+                  <HapticTab
                     label={<Skeleton width={60} />}
                     icon={<StarRounded />}
                     {...a11yProps(6)}

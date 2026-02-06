@@ -10,11 +10,11 @@ import {
   Grid,
   IconButton,
   Link as MaterialLink,
-  Tab,
   Tabs,
   Typography,
   useMediaQuery,
 } from "@mui/material"
+import { HapticTab } from "../../../components/haptic"
 import {
   AddAPhotoRounded,
   CreateRounded,
@@ -357,35 +357,35 @@ export function ViewProfile(props: { profile: User }) {
                 textColor="secondary"
                 indicatorColor="secondary"
               >
-                <Tab
+                <HapticTab
                   component={Link}
                   to={`/user/${props.profile?.username}`}
                   label={t("viewProfile.store_tab")}
                   icon={<StorefrontRounded />}
                   {...a11yProps(0)}
                 />
-                <Tab
+                <HapticTab
                   label={t("viewProfile.services_tab")}
                   component={Link}
                   to={`/user/${props.profile?.username}/services`}
                   icon={<DesignServicesRounded />}
                   {...a11yProps(1)}
                 />
-                <Tab
+                <HapticTab
                   label={t("viewProfile.about_tab")}
                   component={Link}
                   to={`/user/${props.profile?.username}/about`}
                   icon={<InfoRounded />}
                   {...a11yProps(2)}
                 />
-                <Tab
+                <HapticTab
                   label={t("viewProfile.order_tab")}
                   component={Link}
                   to={`/user/${props.profile?.username}/order`}
                   icon={<CreateRounded />}
                   {...a11yProps(3)}
                 />
-                <Tab
+                <HapticTab
                   label={t("viewProfile.reviews_tab")}
                   component={Link}
                   to={`/user/${props.profile?.username}/reviews`}
