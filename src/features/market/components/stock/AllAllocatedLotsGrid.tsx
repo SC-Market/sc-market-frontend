@@ -85,7 +85,7 @@ export function AllAllocatedLotsGrid() {
   ]
 
   return (
-    <Paper sx={{ p: 2 }}>
+    <Paper>
       <DataGrid
         rows={allocations}
         columns={columns}
