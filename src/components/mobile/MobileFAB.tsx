@@ -7,6 +7,7 @@
 import { Fab, FabProps, useMediaQuery, useTheme } from "@mui/material"
 import React from "react"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { haptic } from "../../util/haptics"
 
 interface MobileFABProps extends FabProps {
   position?: "bottom-right" | "bottom-left" | "top-right" | "top-left"
@@ -18,11 +19,17 @@ export function MobileFAB({
   position = "bottom-right",
   offset = 16,
   aboveBottomNav = true,
+  onClick,
   sx,
   ...fabProps
 }: MobileFABProps) {
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    haptic.light()
+    onClick?.(event)
+  }
 
   // Calculate position
   const getPositionStyles = () => {
@@ -62,6 +69,7 @@ export function MobileFAB({
   return (
     <Fab
       {...fabProps}
+      onClick={handleClick}
       sx={{
         position: "fixed",
         zIndex: theme.zIndex.speedDial,
