@@ -10,10 +10,10 @@ import {
   Grid,
   Paper,
   Tabs,
-  Tab,
   Button,
   useMediaQuery,
 } from "@mui/material"
+import { HapticTab } from "../../../components/haptic"
 import { useNavigate, useLocation } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
@@ -74,8 +74,8 @@ export function ManageStockPage() {
               </Button>
             )}
             <Tabs value={currentTab} onChange={handleTabChange}>
-              <Tab label={t("sidebar.manage_listings", "Manage Listings")} />
-              <Tab label={t("sidebar.manage_stock", "Manage Stock")} />
+              <HapticTab label={t("sidebar.manage_listings", "Manage Listings")} />
+              <HapticTab label={t("sidebar.manage_stock", "Manage Stock")} />
             </Tabs>
           </Box>
         </Grid>

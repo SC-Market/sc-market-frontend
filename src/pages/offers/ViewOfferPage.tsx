@@ -14,10 +14,10 @@ import {
   Link as MaterialLink,
   Skeleton,
   Tabs,
-  Tab,
   useMediaQuery,
   useTheme,
 } from "@mui/material"
+import { HapticTab } from "../../components/haptic"
 import { OfferDetailSkeleton } from "../../components/skeletons"
 import { OfferMarketListings } from "../../views/offers/OfferMarketListings"
 import { OfferServiceArea } from "../../views/offers/OfferServiceArea"
@@ -116,17 +116,17 @@ export function ViewOfferPage() {
                 marginBottom: 1,
               }}
             >
-              <Tab label={t("offers.details", "Details")} />
-              {isMobile && <Tab label={t("offers.messages", "Messages")} />}
+              <HapticTab label={t("offers.details", "Details")} />
+              {isMobile && <HapticTab label={t("offers.messages", "Messages")} />}
               {session.offers[0]?.service && (
-                <Tab label={t("offers.service", "Service")} />
+                <HapticTab label={t("offers.service", "Service")} />
               )}
               {session.offers[0]?.market_listings &&
                 session.offers[0].market_listings.length > 0 && (
-                  <Tab label={t("offers.marketListings", "Market Listings")} />
+                  <HapticTab label={t("offers.marketListings", "Market Listings")} />
                 )}
               {session.availability && (
-                <Tab label={t("offers.availability", "Availability")} />
+                <HapticTab label={t("offers.availability", "Availability")} />
               )}
             </Tabs>
           </Grid>

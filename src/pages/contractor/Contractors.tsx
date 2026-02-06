@@ -7,9 +7,9 @@ import {
   Divider,
   Grid,
   IconButton,
-  TablePagination,
   useMediaQuery,
 } from "@mui/material"
+import { HapticTablePagination } from "../../components/haptic"
 import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import { useGetContractorsQuery } from "../../store/contractor"
 import {
@@ -182,7 +182,7 @@ export function Contractors() {
             </Grid>
 
             <Grid item xs={12}>
-              <TablePagination
+              <HapticTablePagination
                 labelRowsPerPage={t("rows_per_page")}
                 labelDisplayedRows={({ from, to, count }) =>
                   t("displayed_rows", { from, to, count })

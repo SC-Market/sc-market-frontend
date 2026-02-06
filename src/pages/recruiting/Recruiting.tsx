@@ -5,9 +5,9 @@ import {
   Divider,
   Grid,
   IconButton,
-  TablePagination,
   useMediaQuery,
 } from "@mui/material"
+import { HapticTablePagination } from "../../components/haptic"
 import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
 import CloseIcon from "@mui/icons-material/CloseRounded"
@@ -236,7 +236,7 @@ export function Recruiting() {
             </Grid>
 
             <Grid item xs={12}>
-              <TablePagination
+              <HapticTablePagination
                 labelRowsPerPage={t("rows_per_page")}
                 labelDisplayedRows={({ from, to, count }) =>
                   t("displayed_rows", { from, to, count })
