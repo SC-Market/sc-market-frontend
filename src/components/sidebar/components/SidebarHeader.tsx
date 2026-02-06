@@ -2,7 +2,6 @@ import React from "react"
 import {
   Avatar,
   Grid,
-  IconButton,
   InputAdornment,
   Stack,
   TextField,
@@ -16,6 +15,7 @@ import { useTranslation } from "react-i18next"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { useDrawerOpen } from "../../../hooks/layout/Drawer"
 import { SidebarActorSelect } from "../SidebarActorSelect"
+import { HapticIconButton } from "../../haptic"
 
 interface SidebarHeaderProps {
   avatar: string
@@ -85,13 +85,13 @@ export function SidebarHeader({
           </NavLink>
         </Grid>
 
-        <IconButton
+        <HapticIconButton
           color={"secondary"}
           onClick={() => setDrawerOpen(false)}
           sx={{ height: 40, width: 40 }}
         >
           <ChevronLeftRounded />
-        </IconButton>
+        </HapticIconButton>
       </Grid>
       {profile && <SidebarActorSelect />}
       {xs && (

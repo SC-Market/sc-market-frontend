@@ -1,7 +1,6 @@
 import {
   Avatar,
   Box,
-  IconButton,
   List,
   ListItemButton,
   ListItemIcon,
@@ -28,6 +27,7 @@ import { serviceApi } from "../../store/service"
 import { tokensApi } from "../../features/api-tokens"
 import { PreferencesControls } from "../../components/settings/PreferencesControls"
 import { haptic } from "../../util/haptics"
+import { HapticIconButton } from "../../components/haptic"
 
 export function ProfileNavAvatar() {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
@@ -41,8 +41,10 @@ export function ProfileNavAvatar() {
   const navigate = useNavigate()
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    haptic.light()
-    setAnchorEl(event.currentTarget)
+    if (notifOpen) {
+      haptic.light()
+    }
+    setAnchorEl(notifOpen ? null : event.currentTarget)
   }
 
   const handleClose = () => {
@@ -96,9 +98,9 @@ export function ProfileNavAvatar() {
   return (
     <React.Fragment>
       {/*{redirect && <Navigate to={redirect}/>}*/}
-      <IconButton onClick={handleClick}>
+      <HapticIconButton onClick={handleClick}>
         <Avatar src={profile?.avatar} />
-      </IconButton>
+      </HapticIconButton>
       <Popover
         open={notifOpen}
         anchorEl={anchorEl}

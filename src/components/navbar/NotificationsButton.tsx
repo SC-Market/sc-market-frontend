@@ -5,14 +5,12 @@ import {
   Chip,
   Divider,
   FormControl,
-  IconButton,
   InputLabel,
   List,
   MenuItem,
   Popover,
   Select,
   Tab,
-  TablePagination,
   Tabs,
   Tooltip,
   Typography,
@@ -37,6 +35,7 @@ import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { Link } from "react-router-dom"
 import { NotificationEntry } from "../../features/notifications"
 import { haptic } from "../../util/haptics"
+import { HapticIconButton, HapticTablePagination } from "../haptic"
 
 export function NotificationsButton() {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null)
@@ -83,8 +82,10 @@ export function NotificationsButton() {
   useBadgeAPI(unreadCount)
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    haptic.light()
-    setAnchorEl(event.currentTarget)
+    if (notifOpen) {
+      haptic.light()
+    }
+    setAnchorEl(notifOpen ? null : event.currentTarget)
   }
 
   const handleClose = () => {
@@ -143,11 +144,11 @@ export function NotificationsButton() {
 
   return (
     <>
-      <IconButton sx={{ marginRight: 2, color: iconColor }} onClick={handleClick} color="inherit">
+      <HapticIconButton sx={{ marginRight: 2, color: iconColor }} onClick={handleClick} color="inherit">
         <Badge badgeContent={unreadCount} color={"primary"}>
           <NotificationsActiveRoundedIcon />
         </Badge>
-      </IconButton>
+      </HapticIconButton>
       <Popover
         open={notifOpen}
         anchorEl={anchorEl}
@@ -341,7 +342,7 @@ export function NotificationsButton() {
           </List>
 
           {total > 5 && (
-            <TablePagination
+            <HapticTablePagination
               labelRowsPerPage={t("rows_per_page")}
               labelDisplayedRows={({ from, to, count }) =>
                 t("displayed_rows", { from, to, count })
