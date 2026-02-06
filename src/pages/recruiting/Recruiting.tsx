@@ -152,59 +152,60 @@ export function Recruiting() {
           >
             <div ref={ref} />
             <Grid container spacing={theme.layoutSpacing.layout}>
-              <Grid
-                item
-                container
-                justifyContent={"space-between"}
-                spacing={theme.layoutSpacing.layout}
-                xs={12}
-              >
-                <HeaderTitle lg={7} xl={7}>
-                  {t("recruiting_orgs")}
-                </HeaderTitle>
-                {currentOrg && (
-                  <Grid item>
-                  {alreadyPosted ? (
-                    <Link
-                      to={`/recruiting/post/${mypost?.post_id}/update`}
-                      style={{ color: "inherit", textDecoration: "none" }}
-                    >
-                      <Button
-                        startIcon={<NoteAddRounded />}
-                        variant={"contained"}
+              <Grid item xs={12}>
+                <Grid
+                  container
+                  justifyContent={"space-between"}
+                  spacing={theme.layoutSpacing.layout}
+                >
+                  <HeaderTitle lg={7} xl={7}>
+                    {t("recruiting_orgs")}
+                  </HeaderTitle>
+                  {currentOrg && (
+                    <Grid item>
+                    {alreadyPosted ? (
+                      <Link
+                        to={`/recruiting/post/${mypost?.post_id}/update`}
+                        style={{ color: "inherit", textDecoration: "none" }}
                       >
-                        {t("update_post")}
-                      </Button>
-                    </Link>
-                  ) : (
-                    <Link
-                      to={"/recruiting/post/create"}
-                      style={{ color: "inherit", textDecoration: "none" }}
-                    >
-                      <Button
-                        startIcon={<NoteAddRounded />}
-                        variant={"contained"}
+                        <Button
+                          startIcon={<NoteAddRounded />}
+                          variant={"contained"}
+                        >
+                          {t("update_post")}
+                        </Button>
+                      </Link>
+                    ) : (
+                      <Link
+                        to={"/recruiting/post/create"}
+                        style={{ color: "inherit", textDecoration: "none" }}
                       >
-                        {t("create_post")}
-                      </Button>
-                    </Link>
+                        <Button
+                          startIcon={<NoteAddRounded />}
+                          variant={"contained"}
+                        >
+                          {t("create_post")}
+                        </Button>
+                      </Link>
+                    )}
+                    </Grid>
                   )}
                 </Grid>
-              )}
               </Grid>
-            <PullToRefresh
-              onRefresh={async () => {
-                await refetch()
-              }}
-              enabled={isMobile}
-            >
-              <Grid 
-                container 
-                spacing={theme.layoutSpacing.layout}
-                sx={{
-                  px: { xs: 2, sm: 0 },
-                }}
-              >
+              <Grid item xs={12}>
+                <PullToRefresh
+                  onRefresh={async () => {
+                    await refetch()
+                  }}
+                  enabled={isMobile}
+                >
+                  <Grid 
+                    container 
+                    spacing={theme.layoutSpacing.layout}
+                    sx={{
+                      px: { xs: 2, sm: 0 },
+                    }}
+                  >
                 {!(isLoading || isFetching) ? (
                   (posts?.items || []).length === 0 ? (
                     <Grid item xs={12}>
@@ -236,7 +237,8 @@ export function Recruiting() {
                   ))
                 )}
               </Grid>
-            </PullToRefresh>
+                </PullToRefresh>
+              </Grid>
 
             <Grid item xs={12}>
               <Divider light />
