@@ -325,9 +325,15 @@ export function OrderAllocationView({
                                     )}
                                   </TableCell>
                                   <TableCell>
-                                    <Typography variant="body2" color="text.secondary">
-                                      {allocation.lot?.owner_id || "—"}
-                                    </Typography>
+                                    {allocation.lot?.owner ? (
+                                      <Typography variant="body2" color="text.secondary">
+                                        {allocation.lot.owner.display_name || allocation.lot.owner.username}
+                                      </Typography>
+                                    ) : (
+                                      <Typography variant="body2" color="text.disabled">
+                                        —
+                                      </Typography>
+                                    )}
                                   </TableCell>
                                   <TableCell>
                                     <Typography variant="body2">

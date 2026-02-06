@@ -27,7 +27,7 @@ export const lightThemeOptions: ExtendedThemeOptions = {
     background: {
       default: "#FFFFFF",
       paper: "#FFFFFF",
-      navbar: "#FFFFFF",
+      navbar: "#101827",
       sidebar: "#101827",
       overlay: "rgba(0, 0, 0, 0.5)",
       overlayDark: "rgba(0, 0, 0, 0.7)",
