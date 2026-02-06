@@ -10,6 +10,7 @@ import {
   GridColDef,
   GridRowsProp,
   GridRenderEditCellParams,
+  GridRenderCellParams,
   useGridApiContext,
 } from "@mui/x-data-grid"
 import {
@@ -263,7 +264,7 @@ export function AllStockLotsGrid() {
       flex: 2,
       editable: true,
       renderEditCell: renderListingEditCell,
-      renderCell: (params) => {
+      renderCell: (params: GridRenderCellParams) => {
         const listing = listings.find(
           (l) => l.listing.listing_id === params.value,
         )
@@ -294,7 +295,7 @@ export function AllStockLotsGrid() {
       minWidth: 180,
       editable: true,
       renderEditCell: renderOwnerEditCell,
-      renderCell: (params) => {
+      renderCell: (params: GridRenderCellParams) => {
         if (!params.value) return <Typography variant="body2">Unassigned</Typography>
         
         return (
@@ -320,7 +321,7 @@ export function AllStockLotsGrid() {
       minWidth: 200,
       editable: true,
       renderEditCell: renderLocationEditCell,
-      valueFormatter: (value) => {
+      valueFormatter: (value: string) => {
         const location = locations.find((l) => l.location_id === value)
         return location?.name || "Unspecified"
       },
@@ -331,7 +332,7 @@ export function AllStockLotsGrid() {
       type: "boolean",
       flex: 1,
       editable: true,
-      renderCell: (params) => (
+      renderCell: (params: GridRenderCellParams) => (
         <Chip
           label={params.value ? t("ui.yes", "Yes") : t("ui.no", "No")}
           color={params.value ? "success" : "default"}
@@ -349,7 +350,7 @@ export function AllStockLotsGrid() {
       field: "actions",
       headerName: t("AllStockLots.actions", "Actions"),
       flex: 1,
-      renderCell: (params) => {
+      renderCell: (params: GridRenderCellParams) => {
         const isNew = params.row.id.toString().startsWith("new-")
         return (
           <Box sx={{ display: "flex", gap: 0.5 }}>
