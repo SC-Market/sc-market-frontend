@@ -48,7 +48,6 @@ import { useGetMarketListingQuery } from "../../api/marketApi"
 
 interface StockLotWithAvailable extends StockLot {
   quantity_available: number
-  location?: { name: string }
 }
 
 interface OrderAllocationViewProps {

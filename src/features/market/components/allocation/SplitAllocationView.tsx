@@ -57,7 +57,6 @@ interface SplitAllocationViewProps {
 
 interface StockLotWithAvailable extends StockLot {
   quantity_available: number
-  location?: { name: string }
   owner?: {
     user_id: string
     username: string
