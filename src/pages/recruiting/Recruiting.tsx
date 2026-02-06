@@ -152,46 +152,38 @@ export function Recruiting() {
           >
             <div ref={ref} />
             <Grid container spacing={theme.layoutSpacing.layout}>
-              <Grid item xs={12}>
-                <Grid
-                  container
-                  justifyContent={"space-between"}
-                  spacing={theme.layoutSpacing.layout}
-                >
-                  <HeaderTitle lg={7} xl={7}>
-                    {t("recruiting_orgs")}
-                  </HeaderTitle>
-                  {currentOrg && (
-                    <Grid item>
-                    {alreadyPosted ? (
-                      <Link
-                        to={`/recruiting/post/${mypost?.post_id}/update`}
-                        style={{ color: "inherit", textDecoration: "none" }}
-                      >
-                        <Button
-                          startIcon={<NoteAddRounded />}
-                          variant={"contained"}
-                        >
-                          {t("update_post")}
-                        </Button>
-                      </Link>
-                    ) : (
-                      <Link
-                        to={"/recruiting/post/create"}
-                        style={{ color: "inherit", textDecoration: "none" }}
-                      >
-                        <Button
-                          startIcon={<NoteAddRounded />}
-                          variant={"contained"}
-                        >
-                          {t("create_post")}
-                        </Button>
-                      </Link>
-                    )}
-                    </Grid>
-                  )}
+              <HeaderTitle lg={7} xl={7}>
+                {t("recruiting_orgs")}
+              </HeaderTitle>
+              {currentOrg && (
+                <Grid item>
+                {alreadyPosted ? (
+                  <Link
+                    to={`/recruiting/post/${mypost?.post_id}/update`}
+                    style={{ color: "inherit", textDecoration: "none" }}
+                  >
+                    <Button
+                      startIcon={<NoteAddRounded />}
+                      variant={"contained"}
+                    >
+                      {t("update_post")}
+                    </Button>
+                  </Link>
+                ) : (
+                  <Link
+                    to={"/recruiting/post/create"}
+                    style={{ color: "inherit", textDecoration: "none" }}
+                  >
+                    <Button
+                      startIcon={<NoteAddRounded />}
+                      variant={"contained"}
+                    >
+                      {t("create_post")}
+                    </Button>
+                  </Link>
+                )}
                 </Grid>
-              </Grid>
+              )}
               <Grid item xs={12}>
                 <PullToRefresh
                   onRefresh={async () => {
@@ -202,9 +194,6 @@ export function Recruiting() {
                   <Grid 
                     container 
                     spacing={theme.layoutSpacing.layout}
-                    sx={{
-                      px: { xs: 2, sm: 0 },
-                    }}
                   >
                 {!(isLoading || isFetching) ? (
                   (posts?.items || []).length === 0 ? (
