@@ -41,6 +41,7 @@ export interface Allocation {
   status?: string
   lot?: StockLot & {
     location?: Location | null
+    owner_id?: string | null
   }
 }
 

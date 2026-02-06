@@ -301,6 +301,7 @@ export function OrderAllocationView({
                     <TableHead>
                       <TableRow>
                         <TableCell>Location</TableCell>
+                        <TableCell>User</TableCell>
                         <TableCell>Item</TableCell>
                         <TableCell align="right">Quantity</TableCell>
                         <TableCell>Status</TableCell>
@@ -322,6 +323,11 @@ export function OrderAllocationView({
                                         {locationName}
                                       </Typography>
                                     )}
+                                  </TableCell>
+                                  <TableCell>
+                                    <Typography variant="body2" color="text.secondary">
+                                      {allocation.lot?.owner_id || "—"}
+                                    </Typography>
                                   </TableCell>
                                   <TableCell>
                                     <Typography variant="body2">
