@@ -76,6 +76,18 @@ export function AllAllocatedLotsGrid() {
       valueGetter: (value, row) => row.lot?.location?.name || "Unspecified",
     },
     {
+      field: "owner",
+      headerName: t("stock.user", "User"),
+      flex: 1,
+      valueGetter: (value, row) => 
+        row.lot?.owner?.display_name || row.lot?.owner?.username || "—",
+      renderCell: (params) => (
+        <Typography variant="body2" color="text.secondary">
+          {params.value}
+        </Typography>
+      ),
+    },
+    {
       field: "created_at",
       headerName: t("stock.allocatedAt", "Allocated"),
       width: 150,
