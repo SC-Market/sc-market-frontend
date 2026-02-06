@@ -139,11 +139,9 @@ export function NotificationsButton() {
 
   return (
     <>
-      <IconButton sx={{ marginRight: 2 }} onClick={handleClick}>
+      <IconButton sx={{ marginRight: 2 }} onClick={handleClick} color="inherit">
         <Badge badgeContent={unreadCount} color={"primary"}>
-          <NotificationsActiveRoundedIcon
-            style={{ color: theme.palette.text.secondary }}
-          />
+          <NotificationsActiveRoundedIcon />
         </Badge>
       </IconButton>
       <Popover
