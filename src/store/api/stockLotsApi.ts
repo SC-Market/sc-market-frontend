@@ -202,6 +202,7 @@ export const stockLotsApi = serviceApi.injectEndpoints({
         },
         transformResponse: (response: { data: { locations: Location[] } }) =>
           response.data,
+        providesTags: [{ type: "StockLocations", id: "LIST" }],
       },
     ),
 
@@ -214,6 +215,7 @@ export const stockLotsApi = serviceApi.injectEndpoints({
       }),
       transformResponse: (response: { data: { location: Location } }) =>
         response.data,
+      invalidatesTags: [{ type: "StockLocations", id: "LIST" }],
     }),
 
     // Get order allocations

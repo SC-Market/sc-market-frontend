@@ -44,12 +44,14 @@ import { LocationSelector } from "./LocationSelector"
 import { useStockSearch } from "./StockSearchContext"
 import { OrgMemberSearch } from "../../../../components/search/OrgMemberSearch"
 import { Link } from "react-router-dom"
+import { useGetUserProfileQuery } from "../../../../store/profile"
 
 export function AllStockLotsGrid() {
   const { t } = useTranslation()
   const [currentOrg] = useCurrentOrg()
   const issueAlert = useAlertHook()
   const { filters } = useStockSearch()
+  const { data: profile } = useGetUserProfileQuery()
 
   // Fetch all listings using same approach as MyItemStock
   const hasOrg = currentOrg && currentOrg.spectrum_id
@@ -358,7 +360,13 @@ export function AllStockLotsGrid() {
         )
       },
     },
-  ]
+  ].filter(col => {
+    // Hide owner column when there's no org
+    if (col.field === 'owner_username' && !currentOrg) {
+      return false
+    }
+    return true
+  })
 
   const handleDelete = async (lotId: string) => {
     try {
@@ -414,11 +422,16 @@ export function AllStockLotsGrid() {
 
   const handleSaveNew = async (row: any) => {
     try {
+      // Auto-set owner to current user when no org
+      const ownerUsername = currentOrg 
+        ? (row.owner_username || null)
+        : (profile?.username || null)
+      
       await createLot({
         listing_id: row.listing_id,
         quantity: row.quantity || 0,
         location_id: row.location_id || null,
-        owner_username: row.owner_username || null,
+        owner_username: ownerUsername,
         listed: row.listed ?? true,
         notes: row.notes || null,
       }).unwrap()
