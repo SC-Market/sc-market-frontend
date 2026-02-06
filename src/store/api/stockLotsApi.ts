@@ -12,6 +12,12 @@ export interface StockLot {
   quantity_total: number
   location_id: string | null
   owner_id: string | null
+  owner?: {
+    user_id: string
+    username: string
+    display_name: string
+    avatar: string | null
+  } | null
   listed: boolean
   notes: string | null
   created_at: string
@@ -127,7 +133,7 @@ export const stockLotsApi = serviceApi.injectEndpoints({
         listing_id?: string
         quantity?: number
         location_id?: string | null
-        owner_id?: string | null
+        owner_username?: string | null
         listed?: boolean
         notes?: string | null
       }
