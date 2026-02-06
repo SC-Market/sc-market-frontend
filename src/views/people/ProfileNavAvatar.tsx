@@ -27,6 +27,7 @@ import { useDispatch } from "react-redux"
 import { serviceApi } from "../../store/service"
 import { tokensApi } from "../../features/api-tokens"
 import { PreferencesControls } from "../../components/settings/PreferencesControls"
+import { haptic } from "../../util/haptics"
 
 export function ProfileNavAvatar() {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
@@ -40,6 +41,7 @@ export function ProfileNavAvatar() {
   const navigate = useNavigate()
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    haptic.light()
     setAnchorEl(event.currentTarget)
   }
 

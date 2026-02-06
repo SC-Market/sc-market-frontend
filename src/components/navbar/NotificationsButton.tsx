@@ -36,6 +36,7 @@ import { useBadgeAPI } from "../../hooks/pwa/useBadgeAPI"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { Link } from "react-router-dom"
 import { NotificationEntry } from "../../features/notifications"
+import { haptic } from "../../util/haptics"
 
 export function NotificationsButton() {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null)
@@ -82,6 +83,7 @@ export function NotificationsButton() {
   useBadgeAPI(unreadCount)
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    haptic.light()
     setAnchorEl(event.currentTarget)
   }
 
