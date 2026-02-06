@@ -278,7 +278,7 @@ export const stockLotsApi = serviceApi.injectEndpoints({
     searchLots: builder.query<
       { lots: StockLot[]; total: number },
       {
-        user_id?: string
+        username?: string
         contractor_spectrum_id?: string
         location_id?: string
         listed?: boolean
@@ -292,7 +292,7 @@ export const stockLotsApi = serviceApi.injectEndpoints({
     >({
       query: (params) => {
         const searchParams = new URLSearchParams()
-        if (params.user_id) searchParams.append("user_id", params.user_id)
+        if (params.username) searchParams.append("username", params.username)
         if (params.contractor_spectrum_id)
           searchParams.append(
             "contractor_spectrum_id",
