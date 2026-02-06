@@ -197,7 +197,13 @@ export function Recruiting() {
               }}
               enabled={isMobile}
             >
-              <Grid container spacing={theme.layoutSpacing.layout}>
+              <Grid 
+                container 
+                spacing={theme.layoutSpacing.layout}
+                sx={{
+                  px: { xs: 2, sm: 0 },
+                }}
+              >
                 {!(isLoading || isFetching) ? (
                   (posts?.items || []).length === 0 ? (
                     <Grid item xs={12}>
