@@ -108,7 +108,7 @@ export function SidebarLinkBody(props: SidebarLinkProps) {
       </ListItemIcon>
       <ListItemText sx={{ marginLeft: -2 }}>
         <Typography
-          color={selected ? "primary" : contrast}
+          color={selected ? "primary" : "#FFFFFF"}
           sx={{
             display: "inline-block",
             position: "relative",

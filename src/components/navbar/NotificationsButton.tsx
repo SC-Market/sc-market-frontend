@@ -49,6 +49,8 @@ export function NotificationsButton() {
   >("all")
   const [contractorIdFilter, setContractorIdFilter] = useState<string>("")
 
+  const iconColor = theme.palette.getContrastText(theme.palette.background.navbar)
+
   const { data: organizationsData } = useGetUserOrganizationsQuery()
 
   // Calculate optimal polling interval based on push subscription and app visibility
@@ -139,7 +141,7 @@ export function NotificationsButton() {
 
   return (
     <>
-      <IconButton sx={{ marginRight: 2 }} onClick={handleClick} color="inherit">
+      <IconButton sx={{ marginRight: 2, color: iconColor }} onClick={handleClick} color="inherit">
         <Badge badgeContent={unreadCount} color={"primary"}>
           <NotificationsActiveRoundedIcon />
         </Badge>

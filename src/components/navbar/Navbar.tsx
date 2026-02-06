@@ -43,6 +43,8 @@ export function Navbar(props: { children?: React.ReactNode }) {
   const messagingSidebarWidth =
     isMessagingPage && !isMobile ? messagingDrawerWidth : 0
 
+  const cartIconColor = theme.palette.getContrastText(theme.palette.background.navbar)
+
   return (
     <AppBar
       elevation={0}
@@ -130,6 +132,7 @@ export function Navbar(props: { children?: React.ReactNode }) {
                 onClick={() => navigate("/market/cart")}
                 color="inherit"
                 aria-label={t("navbar.cart", "Cart")}
+                sx={{ color: cartIconColor }}
               >
                 <Badge badgeContent={cartItemCount} color="primary">
                   <ShoppingCartRounded />

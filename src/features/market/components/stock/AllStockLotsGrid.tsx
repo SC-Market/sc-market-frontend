@@ -29,7 +29,7 @@ import {
   Add as AddIcon,
 } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
-import { useGetMyListingsQuery } from "../../api/marketApi"
+import { useGetMyListingsQuery, useSearchMarketListingsQuery } from "../../api/marketApi"
 import {
   useSearchLotsQuery,
   useCreateLotMutation,
@@ -160,26 +160,37 @@ export function AllStockLotsGrid() {
   function ListingEditCell(props: GridRenderEditCellParams) {
     const { id, value, field } = props
     const apiRef = useGridApiContext()
+    const [inputValue, setInputValue] = React.useState("")
+
+    const { data: searchData } = useSearchMarketListingsQuery({
+      query: inputValue,
+      page_size: 20,
+      userSeller: currentOrg ? undefined : profile?.username,
+      contractorSeller: currentOrg?.id,
+    })
+
+    const options = searchData?.listings || []
+    const selectedListing = options.find((l) => l.listing_id === value)
 
     const handleChange = (
       _: React.SyntheticEvent,
-      newValue: StockManageType | null,
+      newValue: typeof options[0] | null,
     ) => {
       apiRef.current.setEditCellValue({
         id,
         field,
-        value: newValue?.listing.listing_id || "",
+        value: newValue?.listing_id || "",
       })
     }
-
-    const selectedListing = listings.find((l) => l.listing.listing_id === value)
 
     return (
       <Autocomplete
         value={selectedListing || null}
         onChange={handleChange}
-        options={listings}
-        getOptionLabel={(option) => option.details.title}
+        inputValue={inputValue}
+        onInputChange={(_, newValue) => setInputValue(newValue)}
+        options={options}
+        getOptionLabel={(option) => option.title}
         renderOption={(props, option) => (
           <Box
             component="li"
@@ -187,11 +198,11 @@ export function AllStockLotsGrid() {
             sx={{ display: "flex", alignItems: "center", gap: 1 }}
           >
             <Avatar
-              src={option.photos[0]}
+              src={option.photo}
               variant="rounded"
               sx={{ width: 32, height: 32 }}
             />
-            <Typography variant="body2">{option.details.title}</Typography>
+            <Typography variant="body2">{option.title}</Typography>
           </Box>
         )}
         renderInput={(params) => <TextField {...params} />}
