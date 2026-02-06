@@ -167,6 +167,7 @@ export function AllStockLotsGrid() {
       page_size: 20,
       userSeller: currentOrg ? undefined : profile?.username,
       contractorSeller: currentOrg?.id,
+      statuses: "active,inactive",
     })
 
     const options = searchData?.listings || []
