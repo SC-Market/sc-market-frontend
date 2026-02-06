@@ -2,7 +2,6 @@ import {
   Box,
   Drawer,
   Grid,
-  IconButton,
   InputAdornment,
   MenuItem,
   TextField,
@@ -11,7 +10,6 @@ import {
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import SearchIcon from "@mui/icons-material/Search"
-import CloseIcon from "@mui/icons-material/Close"
 import React, { useEffect, useState } from "react"
 
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -46,9 +44,13 @@ export function ContractSidebar() {
 
   const xs = useMediaQuery(theme.breakpoints.down("lg"))
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+
+  // Always open on desktop
   useEffect(() => {
-    setOpen(!xs)
-  }, [setOpen, xs])
+    if (!isMobile) {
+      setOpen(true)
+    }
+  }, [setOpen, isMobile])
 
   const handleKindChange = (event: { target: { value: string } }) => {
     setKind(event.target.value)
@@ -102,36 +104,15 @@ export function ContractSidebar() {
         height: "100%",
         flexDirection: "column",
         display: "flex",
-        padding: { xs: theme.spacing(2), md: theme.spacing(3) },
-        paddingTop: { xs: theme.spacing(2), md: theme.spacing(3) },
+        padding: theme.spacing(2),
         borderColor: theme.palette.outline.main,
       }}
     >
-      {/* Close button for desktop drawer */}
-      {!isMobile && open && (
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "flex-end",
-            marginBottom: theme.spacing(1),
-          }}
-        >
-          <IconButton
-            color="secondary"
-            aria-label={t("contracts.toggleSidebar")}
-            onClick={() => {
-              setOpen(false)
-            }}
-            size="small"
-          >
-            <CloseIcon />
-          </IconButton>
-        </Box>
-      )}
       <Grid container spacing={theme.layoutSpacing.layout}>
         <Grid item xs={12}>
           <TextField
             fullWidth
+            size="small"
             label={t("service_search.search")}
             InputProps={{
               startAdornment: <SearchIcon />,
@@ -156,6 +137,7 @@ export function ContractSidebar() {
           <TextField
             select
             fullWidth
+            size="small"
             value={kind}
             label={t("service_search.contract_type")}
             onChange={handleKindChange}
@@ -183,6 +165,7 @@ export function ContractSidebar() {
           <TextField
             select
             fullWidth
+            size="small"
             label={t("recruiting_sidebar.sort_attribute")}
             value={sort || ""}
             onChange={handleSortChange}
@@ -216,6 +199,7 @@ export function ContractSidebar() {
         <Grid item xs={12}>
           <TextField
             fullWidth
+            size="small"
             value={minOffer}
             label={t("service_search.min_cost")}
             onChange={handleMinCostChange}
@@ -235,6 +219,7 @@ export function ContractSidebar() {
         <Grid item xs={12}>
           <TextField
             fullWidth
+            size="small"
             value={maxOffer == null ? "" : maxOffer}
             label={t("service_search.max_cost")}
             onChange={handleMaxCostChange}
@@ -254,6 +239,7 @@ export function ContractSidebar() {
         <Grid item xs={12}>
           <TextField
             select
+            size="small"
             label={t("service_search.payment_type")}
             value={paymentType}
             onChange={handlePaymentTypeChange}
@@ -276,69 +262,21 @@ export function ContractSidebar() {
     </Box>
   )
 
-  // On mobile, use BottomSheet - don't render Drawer at all
+  // On mobile, use BottomSheet
   if (isMobile) {
     return (
       <BottomSheet
         open={open}
         onClose={() => setOpen(false)}
         title={t("service_search.filters", "Filters")}
-        maxHeight="90vh"
+        snapPoints={["half", "75", "full"]}
+        defaultSnap="75"
       >
         {sidebarContent}
       </BottomSheet>
     )
   }
 
-  // On desktop, use permanent drawer
-  return (
-    <Drawer
-      variant="permanent"
-      open
-      sx={{
-        zIndex: theme.zIndex.drawer - 3,
-        width: open ? marketDrawerWidth : 0,
-        transition: theme.transitions.create(["width", "margin"], {
-          easing: theme.transitions.easing.sharp,
-          duration: theme.transitions.duration.enteringScreen,
-        }),
-        "& .MuiDrawer-paper": {
-          width: open ? marketDrawerWidth : 0,
-          boxSizing: "border-box",
-          overflow: "scroll",
-          left: drawerOpen ? sidebarDrawerWidth : 0,
-          backgroundColor: theme.palette.background.default,
-          transition: theme.transitions.create(
-            ["width", "borderRight", "borderColor"],
-            {
-              easing: theme.transitions.easing.easeOut,
-              duration: "0.3s",
-            },
-          ),
-          borderRight: open ? 1 : 0,
-          borderColor: open ? theme.palette.outline.main : "transparent",
-        },
-        position: "relative",
-        whiteSpace: "nowrap",
-        background: "transparent",
-        overflow: "scroll",
-        borderRight: open ? 1 : 0,
-        borderColor: open ? theme.palette.outline.main : "transparent",
-      }}
-      container={
-        window !== undefined
-          ? () => window.document.getElementById("rootarea")
-          : undefined
-      }
-    >
-      <Box
-        sx={{
-          ...theme.mixins.toolbar,
-          position: "relative",
-          width: "100%",
-        }}
-      />
-      {sidebarContent}
-    </Drawer>
-  )
+  // On desktop, return content directly (wrapped in Paper by parent)
+  return sidebarContent
 }

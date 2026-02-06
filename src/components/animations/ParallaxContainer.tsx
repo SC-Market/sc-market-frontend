@@ -12,7 +12,7 @@ interface ParallaxContainerProps {
   children: ReactNode
   speed?: number // Parallax speed (0-1, where 0.5 is standard)
   disabled?: boolean
-  sx?: any
+  sx?: React.CSSProperties
 }
 
 export function ParallaxContainer({

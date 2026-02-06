@@ -20,7 +20,9 @@ import { useLocation, useNavigate } from "react-router-dom"
 import { a11yProps, TabPanel } from "../../../components/tabs/Tabs"
 import { useTranslation } from "react-i18next"
 import FilterListIcon from "@mui/icons-material/FilterList"
+import { FiltersFAB } from "../../../components/mobile/FiltersFAB"
 import { Button } from "@mui/material"
+import { FeatureErrorBoundary } from "../../../components/error-boundaries"
 
 // Dynamic imports for heavy components
 const ItemMarketView = React.lazy(() =>
@@ -36,6 +38,11 @@ const ServiceMarketView = React.lazy(() =>
 const ServiceActions = React.lazy(() =>
   import("../../../views/services/ServiceActions").then((module) => ({
     default: module.ServiceActions,
+  })),
+)
+const ContractActions = React.lazy(() =>
+  import("../../../views/contracts/ContractActions").then((module) => ({
+    default: module.ContractActions,
   })),
 )
 const ContractListings = React.lazy(() =>
@@ -93,46 +100,6 @@ export function MarketPage() {
               >
                 <Grid item xs={12} sm="auto">
                   <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    {xs && tabPage === 1 && (
-                      <Button
-                        variant="outlined"
-                        color="secondary"
-                        startIcon={<FilterListIcon />}
-                        aria-label={t("market.toggleSidebar")}
-                        onClick={() => {
-                          setMarketSidebarOpen((prev) => !prev)
-                        }}
-                        sx={{
-                          [theme.breakpoints.up("md")]: {
-                            display: "none",
-                          },
-                          borderRadius: 2,
-                          textTransform: "none",
-                        }}
-                      >
-                        {t("market.filters", "Filters")}
-                      </Button>
-                    )}
-                    {xs && tabPage === 0 && (
-                      <Button
-                        variant="outlined"
-                        color="secondary"
-                        startIcon={<FilterListIcon />}
-                        aria-label={t("service_market.toggle_sidebar")}
-                        onClick={() => {
-                          setServiceSidebarOpen((prev) => !prev)
-                        }}
-                        sx={{
-                          [theme.breakpoints.up("md")]: {
-                            display: "none",
-                          },
-                          borderRadius: 2,
-                          textTransform: "none",
-                        }}
-                      >
-                        {t("service_market.filters", "Filters")}
-                      </Button>
-                    )}
                     <Typography
                       variant="h4"
                       sx={{
@@ -191,9 +158,13 @@ export function MarketPage() {
                 <Grid item xs={12} sm="auto">
                   {tabPage === 1 ? (
                     <MarketActions />
-                  ) : (
+                  ) : tabPage === 0 ? (
                     <Suspense fallback={<CircularProgress size={24} />}>
                       <ServiceActions />
+                    </Suspense>
+                  ) : (
+                    <Suspense fallback={<CircularProgress size={24} />}>
+                      <ContractActions />
                     </Suspense>
                   )}
                 </Grid>
@@ -206,9 +177,11 @@ export function MarketPage() {
               </Suspense>
             </TabPanel>
             <TabPanel value={tabPage} index={0}>
-              <Suspense fallback={<MarketTabLoader />}>
-                <ServiceMarketView />
-              </Suspense>
+              <FeatureErrorBoundary featureName="Services">
+                <Suspense fallback={<MarketTabLoader />}>
+                  <ServiceMarketView />
+                </Suspense>
+              </FeatureErrorBoundary>
             </TabPanel>
             <TabPanel value={tabPage} index={2}>
               <Suspense fallback={<MarketTabLoader />}>
@@ -216,6 +189,18 @@ export function MarketPage() {
               </Suspense>
             </TabPanel>
           </OpenLayout>
+          {xs && tabPage === 1 && (
+            <FiltersFAB
+              onClick={() => setMarketSidebarOpen((prev) => !prev)}
+              label={t("market.toggleSidebar")}
+            />
+          )}
+          {xs && tabPage === 0 && (
+            <FiltersFAB
+              onClick={() => setServiceSidebarOpen((prev) => !prev)}
+              label={t("service_market.toggle_sidebar")}
+            />
+          )}
         </ServiceSidebarContext.Provider>
       </MarketSidebarContext.Provider>
     </Page>

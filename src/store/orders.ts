@@ -3,6 +3,7 @@ import {
   OrderBody,
   OrderSearchQuery,
   OrderStub,
+  OrderStatus,
 } from "../datatypes/Order"
 import { serviceApi } from "./service"
 import {
@@ -10,6 +11,7 @@ import {
   createOptimisticUpdate,
 } from "../util/optimisticUpdates"
 import { unwrapResponse } from "./api-utils"
+import type { RootState } from "./store"
 
 /**
  * Re-export shared API types and utilities
@@ -202,7 +204,7 @@ const ordersApi = serviceApi.injectEndpoints({
       ) {
         await createOptimisticUpdate(
           (dispatch) => {
-            const patches: any[] = []
+            const patches: Array<{ undo: () => void }> = []
 
             // Store old status for rollback
             let oldStatus: string | null = null
@@ -214,7 +216,7 @@ const ordersApi = serviceApi.injectEndpoints({
                 order_id,
                 (draft) => {
                   oldStatus = draft.status
-                  draft.status = status as any
+                  draft.status = status as OrderStatus
                 },
               ),
             )
@@ -222,8 +224,14 @@ const ordersApi = serviceApi.injectEndpoints({
 
             // Optimistically update search results
             // Update all cached search queries
-            const state = getState() as any
-            const cachedQueries = state.api?.queries || {}
+            const state = getState() as RootState
+            const cachedQueries = (state.serviceApi?.queries || {}) as Record<
+              string,
+              {
+                data?: { items?: OrderStub[] }
+                originalArgs?: OrderSearchQuery
+              }
+            >
 
             Object.keys(cachedQueries).forEach((queryKey) => {
               if (queryKey.includes("searchOrders")) {
@@ -269,7 +277,7 @@ const ordersApi = serviceApi.injectEndpoints({
                                 ] as number) || 0) + 1
                             }
                             // Update order status
-                            order.status = status as any
+                            order.status = status as OrderStatus
                           }
                         },
                       ),
@@ -306,7 +314,9 @@ const ordersApi = serviceApi.injectEndpoints({
     >({
       query: (queryParams) => {
         // Convert boolean filters to strings for query params
-        const params: any = { ...queryParams }
+        const params: Record<string, string | number | boolean | undefined> = {
+          ...queryParams,
+        }
         if (params.has_market_listings !== undefined) {
           params.has_market_listings = String(params.has_market_listings)
         }

@@ -241,8 +241,9 @@ const router = createBrowserRouter([
         path: "/contracts/create",
         errorElement: <RouteErrorFallback />,
         lazy: async () => ({
-          Component: (await import("./pages/contracting/CreatePublicContractPage"))
-            .CreatePublicContractPage,
+          Component: (
+            await import("./pages/contracting/CreatePublicContractPage")
+          ).CreatePublicContractPage,
         }),
       },
       {
@@ -388,6 +389,20 @@ const router = createBrowserRouter([
             lazy: async () => ({
               Component: (await import("./pages/market/ManageStock"))
                 .ManageStock,
+            }),
+          },
+          {
+            path: "/market/manage-stock",
+            lazy: async () => ({
+              Component: (await import("./pages/market/ManageStockLots"))
+                .ManageStockLots,
+            }),
+          },
+          {
+            path: "/market/stock/:listingId",
+            lazy: async () => ({
+              Component: (await import("./pages/market/ManageListingStock"))
+                .ManageListingStock,
             }),
           },
           {
@@ -777,8 +792,9 @@ const router = createBrowserRouter([
               {
                 path: "dashboard",
                 lazy: async () => ({
-                  Component: (await import("./pages/contractor/MemberDashboard"))
-                    .MemberDashboard,
+                  Component: (
+                    await import("./pages/contractor/MemberDashboard")
+                  ).MemberDashboard,
                 }),
               },
               {
@@ -861,6 +877,13 @@ const router = createBrowserRouter([
                 lazy: async () => ({
                   Component: (await import("./pages/market/ManageStock"))
                     .ManageStock,
+                }),
+              },
+              {
+                path: "manage-stock",
+                lazy: async () => ({
+                  Component: (await import("./pages/market/ManageStockLots"))
+                    .ManageStockLots,
                 }),
               },
               {

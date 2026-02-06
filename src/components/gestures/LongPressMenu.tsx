@@ -68,7 +68,7 @@ export interface LongPressMenuProps {
   /**
    * Additional props to pass to the wrapper component
    */
-  wrapperProps?: Record<string, any>
+  wrapperProps?: Record<string, unknown>
 }
 
 /**

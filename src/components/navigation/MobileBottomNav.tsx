@@ -15,12 +15,16 @@ import {
   DashboardRounded,
   DesignServicesRounded,
   ForumRounded,
+  DescriptionRounded,
+  PersonAddRounded,
 } from "@mui/icons-material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useGetUserProfileQuery } from "../../store/profile"
 import { useTranslation } from "react-i18next"
 import { useUnreadChatCount } from "../../features/chats"
 import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
+import { usePendingOrderCount } from "../../hooks/orders/usePendingOrderCount"
+import { haptic } from "../../util/haptics"
 
 /**
  * Mobile bottom navigation bar for quick access to primary pages
@@ -34,6 +38,7 @@ export function MobileBottomNav() {
   const { data: userProfile } = useGetUserProfileQuery()
   const isLoggedIn = !!userProfile
   const unreadChatCount = useUnreadChatCount()
+  const pendingOrderCount = usePendingOrderCount()
   const bottomNavHeight = useBottomNavHeight()
 
   // Only show on xs devices (not sm) - check this BEFORE hooks to avoid hook order issues
@@ -57,6 +62,8 @@ export function MobileBottomNav() {
     if (path.startsWith("/orders") && !path.startsWith("/org/orders"))
       return "orders"
     if (path.startsWith("/dashboard")) return "dashboard"
+    if (path.startsWith("/contracts")) return "contracts"
+    if (path.startsWith("/recruiting")) return "recruiting"
     if (path === "/") return "home"
     return ""
   }
@@ -87,6 +94,9 @@ export function MobileBottomNav() {
   }
 
   const handleChange = (_event: React.SyntheticEvent, newValue: string) => {
+    // Haptic feedback on tab switch
+    haptic.selection()
+
     switch (newValue) {
       case "home":
         navigate("/")
@@ -117,6 +127,12 @@ export function MobileBottomNav() {
         } else {
           navigate("/login")
         }
+        break
+      case "contracts":
+        navigate("/contracts")
+        break
+      case "recruiting":
+        navigate("/recruiting")
         break
     }
   }
@@ -180,6 +196,22 @@ export function MobileBottomNav() {
             icon={<DesignServicesRounded />}
             data-value="services"
           />
+          {!isLoggedIn && (
+            <BottomNavigationAction
+              label={t("sidebar.contracts_short", "Contracts")}
+              value="contracts"
+              icon={<DescriptionRounded />}
+              data-value="contracts"
+            />
+          )}
+          {!isLoggedIn && (
+            <BottomNavigationAction
+              label={t("sidebar.recruiting_short", "Recruiting")}
+              value="recruiting"
+              icon={<PersonAddRounded />}
+              data-value="recruiting"
+            />
+          )}
           {isLoggedIn && (
             <BottomNavigationAction
               label={t("sidebar.messaging", "Messages")}
@@ -207,7 +239,22 @@ export function MobileBottomNav() {
             <BottomNavigationAction
               label={t("sidebar.orders.text", "Orders")}
               value="orders"
-              icon={<CreateRounded />}
+              icon={
+                <Badge
+                  badgeContent={pendingOrderCount}
+                  color="primary"
+                  sx={{
+                    "& .MuiBadge-badge": {
+                      fontSize: "0.7rem",
+                      minWidth: "18px",
+                      height: "18px",
+                      padding: "0 6px",
+                    },
+                  }}
+                >
+                  <CreateRounded />
+                </Badge>
+              }
               data-value="orders"
             />
           )}

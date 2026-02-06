@@ -1,4 +1,4 @@
-import { Container, Grid, Paper, useMediaQuery } from "@mui/material"
+import { Container, Divider, Grid, Paper, useMediaQuery } from "@mui/material"
 import { ServiceSidebar } from "../contracts/ServiceSidebar"
 import { ServiceListings } from "../contracts/ServiceListings"
 import { useServiceSidebar } from "../../hooks/contract/ServiceSidebar"
@@ -15,24 +15,32 @@ export function ServiceMarketView() {
   return (
     <>
       {xs && <ServiceSidebar />}
-      <Container maxWidth={"xl"}>
+      <Container maxWidth={"xxl"}>
         <Grid
           container
           spacing={theme.layoutSpacing.layout}
           justifyContent={"center"}
         >
-          {/* Hide search area on mobile - it's in the sidebar */}
-          <Grid
-            item
-            xs={0}
-            md={3}
-            sx={{ display: { xs: "none", md: "block" } }}
-          >
-            <Paper>
-              <ServiceSearchArea />
-            </Paper>
+          <Grid item xs={12}>
+            <Divider light />
           </Grid>
-          <Grid item xs={12} md={9}>
+
+          {/* Desktop: Persistent sidebar */}
+          {!xs && (
+            <Grid item md={2.25}>
+              <Paper
+                sx={{
+                  position: "sticky",
+                  top: theme.spacing(2),
+                  maxHeight: `calc(100vh - ${theme.spacing(4)})`,
+                  overflowY: "auto",
+                }}
+              >
+                <ServiceSearchArea />
+              </Paper>
+            </Grid>
+          )}
+          <Grid item xs={12} md={xs ? 12 : 9.75}>
             <Grid
               container
               spacing={theme.layoutSpacing.layout}

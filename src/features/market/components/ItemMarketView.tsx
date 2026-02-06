@@ -35,7 +35,7 @@ export function ItemMarketView() {
 
           {/* Desktop: Persistent sidebar */}
           {!xs && (
-            <Grid item md={3}>
+            <Grid item md={2.25}>
               <Paper
                 sx={{
                   position: "sticky",
@@ -54,7 +54,7 @@ export function ItemMarketView() {
             item
             container
             xs={12}
-            md={xs ? 12 : 9}
+            md={xs ? 12 : 9.75}
             spacing={theme.layoutSpacing.layout}
             sx={{ transition: "0.3s" }}
           >

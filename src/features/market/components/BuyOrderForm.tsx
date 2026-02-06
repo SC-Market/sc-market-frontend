@@ -132,7 +132,10 @@ export function BuyOrderForm(props: { aggregate: MarketAggregate }) {
                     color="secondary"
                   />
                 }
-                label={t("buyorder.field.negotiable", "Negotiable (no fixed price)")}
+                label={t(
+                  "buyorder.field.negotiable",
+                  "Negotiable (no fixed price)",
+                )}
               />
             </Grid>
             <Grid item xs={12} display={"flex"} justifyContent={"right"}>

@@ -4,12 +4,11 @@ import React, { useMemo, useEffect, useState } from "react"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
 import { useGetOrderByIdQuery } from "../../store/orders"
 import { Page } from "../../components/metadata/Page"
-import { BackArrow } from "../../components/button/BackArrow"
+import { PageBreadcrumbs } from "../../components/navigation"
 import {
-  Breadcrumbs,
   Grid,
-  Link as MaterialLink,
   Skeleton,
+  Stack,
   Tabs,
   Tab,
   useMediaQuery,
@@ -23,13 +22,16 @@ import {
 import { useGetUserProfileQuery } from "../../store/profile"
 import { OrderAvailabilityArea } from "../../views/orders/OrderAvailabilityArea"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
-import { MemberAssignArea } from "../../views/orders/MemberAssignArea"
 import { has_permission } from "../../views/contractor/OrgRoles"
 import { OrderReviewArea } from "../../views/orders/OrderReviewArea"
 import { OrderReviewView } from "../../views/orders/OrderReviewView"
 import { useGetOfferSessionByIDQuery } from "../../store/offer"
 import { OfferMarketListings } from "../../views/offers/OfferMarketListings"
 import { OfferServiceArea } from "../../views/offers/OfferServiceArea"
+import {
+  OrderAllocationView,
+  SplitAllocationView,
+} from "../../features/market/components/allocation"
 import { useTranslation } from "react-i18next"
 import {
   shouldRedirectTo404,
@@ -154,52 +156,36 @@ export function ViewOrder() {
     >
       <ContainerGrid sidebarOpen={true} maxWidth={"xl"}>
         <Grid item xs={12}>
-          <Breadcrumbs>
-            <MaterialLink
-              component={Link}
-              to={"/dashboard"}
-              underline="hover"
-              color={"text.primary"}
-            >
-              {t("dashboard.title")}
-            </MaterialLink>
-            {order?.offer_session_id && (
-              <MaterialLink
-                component={Link}
-                to={`/offer/${order?.offer_session_id}`}
-                underline="hover"
-                color={"text.secondary"}
-              >
-                {t("orders.offerShort", {
-                  id: (order?.offer_session_id || "")
-                    .substring(0, 8)
-                    .toUpperCase(),
-                })}
-              </MaterialLink>
-            )}
-
-            <MaterialLink
-              component={Link}
-              to={`/contracts/${id}`}
-              underline="hover"
-              color={"text.secondary"}
-            >
-              {t("orders.orderShort", {
-                id: (id || "").substring(0, 8).toUpperCase(),
-              })}
-            </MaterialLink>
-          </Breadcrumbs>
+          <PageBreadcrumbs
+            items={[
+              { label: t("dashboard.title"), href: "/dashboard" },
+              ...(order?.offer_session_id
+                ? [
+                    {
+                      label: t("orders.offerShort", {
+                        id: order.offer_session_id
+                          .substring(0, 8)
+                          .toUpperCase(),
+                      }),
+                      href: `/offer/${order.offer_session_id}`,
+                    },
+                  ]
+                : []),
+              {
+                label: order?.title || `Order ${id?.substring(0, 8).toUpperCase()}`,
+              },
+            ]}
+          />
         </Grid>
 
         <HeaderTitle lg={12} xl={12}>
-          <BackArrow />{" "}
           {order?.title || `Order ${id?.substring(0, 8).toUpperCase()}`}
         </HeaderTitle>
 
         {shouldRedirectTo404(error) ? <Navigate to={"/404"} /> : null}
         {shouldShowErrorPage(error) ? <ErrorPage /> : null}
 
-        {isMobile && order ? (
+        {order ? (
           <Grid item xs={12}>
             <Tabs
               value={activeTab}
@@ -213,7 +199,9 @@ export function ViewOrder() {
               }}
             >
               <Tab label={t("orders.details", "Details")} />
-              {isAssigned && <Tab label={t("orders.messages", "Messages")} />}
+              {isMobile && isAssigned && (
+                <Tab label={t("orders.messages", "Messages")} />
+              )}
               {session?.offers[0]?.service && (
                 <Tab label={t("orders.service", "Service")} />
               )}
@@ -221,13 +209,8 @@ export function ViewOrder() {
                 session.offers[0].market_listings.length > 0 && (
                   <Tab label={t("orders.marketListings", "Market Listings")} />
                 )}
-              {((order && amCustomer && !order.customer_review) ||
-                (order &&
-                  (amContractorManager || amAssigned) &&
-                  !order.contractor_review) ||
-                order?.customer_review ||
-                order?.contractor_review) && (
-                <Tab label={t("orders.reviews", "Reviews")} />
+              {amContractorManager && (
+                <Tab label={t("orders.allocation", "Stock Allocation")} />
               )}
               {amRelated && (
                 <Tab label={t("orders.availability", "Availability")} />
@@ -242,28 +225,20 @@ export function ViewOrder() {
 
           let tabIndex = 0
           const detailsTab = tabIndex++
-          const messagesTab = isAssigned ? tabIndex++ : -1
+          const messagesTab = isMobile && isAssigned ? tabIndex++ : -1
           const serviceTab = session?.offers[0]?.service ? tabIndex++ : -1
           const marketListingsTab =
             session?.offers[0]?.market_listings &&
             session.offers[0].market_listings.length > 0
               ? tabIndex++
               : -1
-          const reviewsTab =
-            (order && amCustomer && !order.customer_review) ||
-            (order &&
-              (amContractorManager || amAssigned) &&
-              !order.contractor_review) ||
-            order?.customer_review ||
-            order?.contractor_review
-              ? tabIndex++
-              : -1
+          const allocationTab = amContractorManager ? tabIndex++ : -1
           const availabilityTab = amRelated ? tabIndex++ : -1
 
           return (
             <>
               {/* Details Tab */}
-              {(isMobile ? activeTab === detailsTab : true) && (
+              {activeTab === detailsTab && (
                 <>
                   {!(isLoading || isFetching) && order ? (
                     <OrderDetailsArea order={order} />
@@ -272,15 +247,65 @@ export function ViewOrder() {
                       <OrderDetailSkeleton showContractor showAssigned />
                     </Grid>
                   )}
+                  {/* Right column: Reviews and Messages on desktop */}
+                  {!isMobile && (
+                    <Grid item xs={12} lg={4} md={6}>
+                      <Stack spacing={2}>
+                        {order && (
+                          <>
+                            {amCustomer && !order.customer_review && (
+                              <OrderReviewArea asCustomer order={order} />
+                            )}
+                            {(amContractorManager || amAssigned) &&
+                              !order.contractor_review && (
+                                <OrderReviewArea asContractor order={order} />
+                              )}
+                            {order.customer_review && (
+                              <OrderReviewView customer order={order} />
+                            )}
+                            {order.contractor_review && (
+                              <OrderReviewView contractor order={order} />
+                            )}
+                          </>
+                        )}
+                        {isAssigned &&
+                          (!(isLoading || isFetching) && order ? (
+                            <OrderMessagesArea order={order} />
+                          ) : (
+                            <Skeleton width={"100%"} height={400} />
+                          ))}
+                      </Stack>
+                    </Grid>
+                  )}
+                  {/* Reviews on mobile */}
+                  {isMobile && order && (
+                    <>
+                      {amCustomer && !order.customer_review && (
+                        <OrderReviewArea asCustomer order={order} />
+                      )}
+                      {(amContractorManager || amAssigned) &&
+                        !order.contractor_review && (
+                          <OrderReviewArea asContractor order={order} />
+                        )}
+                      {order.customer_review && (
+                        <OrderReviewView customer order={order} />
+                      )}
+                      {order.contractor_review && (
+                        <OrderReviewView contractor order={order} />
+                      )}
+                    </>
+                  )}
                 </>
               )}
 
-              {/* Messages Tab - Desktop always shows if assigned, mobile only when tab is selected */}
-              {(isMobile ? activeTab === messagesTab : isAssigned) && (
+              {/* Messages Tab - mobile only */}
+              {isMobile && activeTab === messagesTab && (
                 <>
                   {!(isLoading || isFetching) && order ? (
                     isAssigned ? (
-                      <OrderMessagesArea order={order} />
+                      <Grid item xs={12}>
+                        <OrderMessagesArea order={order} />
+                      </Grid>
                     ) : null
                   ) : (
                     <Grid item xs={12} lg={4} md={6}>
@@ -292,7 +317,7 @@ export function ViewOrder() {
 
               {/* Service Tab */}
               {session?.offers[0]?.service &&
-                (isMobile ? activeTab === serviceTab : true) &&
+                activeTab === serviceTab &&
                 (!(isLoading || isFetching) && session ? (
                   <OfferServiceArea offer={session} />
                 ) : (
@@ -304,7 +329,7 @@ export function ViewOrder() {
               {/* Market Listings Tab */}
               {session?.offers[0]?.market_listings &&
                 session.offers[0].market_listings.length > 0 &&
-                (isMobile ? activeTab === marketListingsTab : true) &&
+                activeTab === marketListingsTab &&
                 (!(isLoading || isFetching) && session ? (
                   <OfferMarketListings offer={session} />
                 ) : (
@@ -313,43 +338,28 @@ export function ViewOrder() {
                   </Grid>
                 ))}
 
-              {/* Reviews Tab */}
-              {order &&
-                ((amCustomer && !order.customer_review) ||
-                  ((amContractorManager || amAssigned) &&
-                    !order.contractor_review) ||
-                  order.customer_review ||
-                  order.contractor_review) &&
-                (isMobile ? activeTab === reviewsTab : true) && (
-                  <>
-                    {amCustomer && !order.customer_review && (
-                      <OrderReviewArea asCustomer order={order} />
-                    )}
-                    {(amContractorManager || amAssigned) &&
-                      !order.contractor_review && (
-                        <OrderReviewArea asContractor order={order} />
-                      )}
-                    {order.customer_review && (
-                      <OrderReviewView customer order={order} />
-                    )}
-                    {order.contractor_review && (
-                      <OrderReviewView contractor order={order} />
-                    )}
-                  </>
-                )}
+              {/* Stock Allocation Tab */}
+              {amContractorManager && order && activeTab === allocationTab && (
+                <Grid item xs={12}>
+                  <SplitAllocationView
+                    orderId={order.order_id}
+                    listings={
+                      order.market_listings?.map((listing: any) => ({
+                        listing_id:
+                          typeof listing.listing_id === "string"
+                            ? listing.listing_id
+                            : listing.listing_id?.listing_id,
+                        quantity: listing.quantity,
+                      })) || []
+                    }
+                  />
+                </Grid>
+              )}
 
               {/* Availability Tab */}
-              {amRelated &&
-                order &&
-                (isMobile ? activeTab === availabilityTab : true) && (
-                  <OrderAvailabilityArea order={order} />
-                )}
-
-              {/* Member Assign Area - always show on desktop */}
-              {amContractorManager &&
-                order &&
-                !["cancelled", "fulfilled"].includes(order.status) &&
-                !isMobile && <MemberAssignArea order={order} />}
+              {amRelated && order && activeTab === availabilityTab && (
+                <OrderAvailabilityArea order={order} />
+              )}
             </>
           )
         })()}

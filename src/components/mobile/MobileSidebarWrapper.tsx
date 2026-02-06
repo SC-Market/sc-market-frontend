@@ -5,7 +5,7 @@
  */
 
 import { Box, Drawer, IconButton, useMediaQuery, useTheme } from "@mui/material"
-import React, { ReactNode } from "react"
+import React, { ReactNode, useEffect, useRef } from "react"
 import { CloseRounded } from "@mui/icons-material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { BottomSheet } from "./BottomSheet"
@@ -32,7 +32,7 @@ export function MobileSidebarWrapper({
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
 
-  // On mobile, use BottomSheet
+  // On mobile, use BottomSheet with swipe-down to dismiss
   if (isMobile) {
     return (
       <BottomSheet

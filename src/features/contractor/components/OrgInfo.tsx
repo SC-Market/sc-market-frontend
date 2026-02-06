@@ -46,6 +46,7 @@ import { OrgStoreView, OrgServicesView } from "../../profile"
 import { OpenLayout } from "../../../components/layout/ContainerGrid"
 import { useTranslation } from "react-i18next"
 import { OrgBannerArea } from "./OrgBannerArea"
+import { PageBreadcrumbs } from "../../../components/navigation"
 
 const name_to_index = new Map([
   ["", 0],
@@ -112,6 +113,17 @@ export function OrgInfo(props: { contractor: Contractor }) {
           }}
         >
           <Grid container spacing={theme.layoutSpacing.layout}>
+            <Grid item xs={12}>
+              <PageBreadcrumbs
+                items={[
+                  {
+                    label: t("contractors.title", "Contractors"),
+                    href: "/contractors",
+                  },
+                  { label: contractor.name },
+                ]}
+              />
+            </Grid>
             <Grid item xs={12}>
               <Grid
                 container

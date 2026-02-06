@@ -5,22 +5,20 @@ import {
   Grid,
   Paper,
   PaperProps,
-  TextField,
   Theme,
   Toolbar,
   Typography,
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
-import React, { useCallback, useEffect, useRef, useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { useOnScreen } from "../../../hooks/useOnScreen"
-import { SearchRounded } from "@mui/icons-material"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../../hooks/layout/Drawer"
 import { NotificationsButton } from "../../../components/navbar/NotificationsButton"
 import { ProfileNavAvatar } from "../../../views/people/ProfileNavAvatar"
 import { useGetUserProfileQuery } from "../../../store/profile"
 import { Stack } from "@mui/system"
-import { useMarketSidebar, useMarketSearch } from ".."
+import { useMarketSidebar } from ".."
 import { Link as RouterLink, useSearchParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 
@@ -157,57 +155,16 @@ export function MarketNavArea(props: { top?: boolean }) {
 
   const [searchParams, setSearchParams] = useSearchParams()
 
-  const [searchState, setMarketSearch] = useMarketSearch()
-  const [query, setQuery] = useState<string>(searchState.query || "")
-
   const [drawerOpen] = useDrawerOpen()
   const [open, setOpen] = useMarketSidebar()
-
-  const handleQueryChange = (event: { target: { value: string } }) => {
-    setQuery(event.target.value)
-  }
-
-  const searchClickCallback = useCallback(() => {
-    setMarketSearch({
-      ...searchState,
-      query,
-    })
-  }, [query, setMarketSearch, searchState])
 
   return (
     <>
       <Grid
         container
-        justifyContent={"space-between"}
+        justifyContent={"flex-end"}
         spacing={theme.layoutSpacing.compact}
       >
-        <Grid item>
-          <Grid container spacing={theme.layoutSpacing.compact}>
-            <Grid item sx={{ paddingTop: 2 }}>
-              <TextField
-                fullWidth
-                label={t("market.search_query")}
-                InputProps={{
-                  startAdornment: <SearchRounded />,
-                }}
-                value={query}
-                onChange={handleQueryChange}
-                color={"secondary"}
-                size={"small"}
-              />
-            </Grid>
-
-            <Grid item sx={{ paddingTop: 2 }}>
-              <Button
-                onClick={searchClickCallback}
-                startIcon={<SearchRounded />}
-                variant={"contained"}
-              >
-                {t("market.search")}
-              </Button>
-            </Grid>
-          </Grid>
-        </Grid>
         {props.top && (
           <Grid item sx={{ paddingTop: 1 }}>
             {profile.data ? (

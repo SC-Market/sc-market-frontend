@@ -13,6 +13,10 @@ export interface EmptyListingsProps extends Omit<
    */
   isSearchResult?: boolean
   /**
+   * Whether this is an error state
+   */
+  isError?: boolean
+  /**
    * Custom title override
    */
   title?: string
@@ -28,6 +32,10 @@ export interface EmptyListingsProps extends Omit<
    * Custom action override
    */
   action?: EmptyStateProps["action"]
+  /**
+   * Retry function for error states
+   */
+  onRetry?: () => void
 }
 
 /**
@@ -40,14 +48,49 @@ export interface EmptyListingsProps extends Omit<
  */
 export function EmptyListings({
   isSearchResult = false,
+  isError = false,
   title,
   description,
   showCreateAction = true,
   action,
+  onRetry,
   ...props
 }: EmptyListingsProps) {
   const { t } = useTranslation()
   const navigate = useNavigate()
+
+  if (isError) {
+    return (
+      <EmptyState
+        title={
+          title ||
+          t("emptyStates.listings.errorTitle", {
+            defaultValue: "Unable to load listings",
+          })
+        }
+        description={
+          description ||
+          t("emptyStates.listings.errorDescription", {
+            defaultValue:
+              "We encountered an error while loading listings. Please try again.",
+          })
+        }
+        icon={<Inventory2Outlined />}
+        action={
+          onRetry
+            ? {
+                label: t("emptyStates.listings.retry", {
+                  defaultValue: "Retry",
+                }),
+                onClick: onRetry,
+                variant: "contained",
+              }
+            : undefined
+        }
+        {...props}
+      />
+    )
+  }
 
   const defaultTitle = isSearchResult
     ? t("emptyStates.listings.noSearchResults", {

@@ -40,19 +40,11 @@ export function useNotifications(
   const [bulkDelete] = useNotificationBulkDeleteMutation()
 
   const markAllAsRead = useCallback(async () => {
-    try {
-      return await bulkUpdate({ read: true }).unwrap()
-    } catch (error) {
-      throw error
-    }
+    return await bulkUpdate({ read: true }).unwrap()
   }, [bulkUpdate])
 
   const deleteAll = useCallback(async () => {
-    try {
-      return await bulkDelete({}).unwrap()
-    } catch (error) {
-      throw error
-    }
+    return await bulkDelete({}).unwrap()
   }, [bulkDelete])
 
   return {

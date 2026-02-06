@@ -25,19 +25,21 @@ import type {
  * const data = unwrapResponse(response) // Returns T from { data: T }
  * ```
  */
-export function unwrapResponse<T, E = any>(response: Response<T, E>): T {
+export function unwrapResponse<T, E = StandardErrorResponse>(
+  response: Response<T, E>,
+): T {
   // New standardized format: { data: T }
   if (response && typeof response === "object" && "data" in response) {
     return (response as StandardSuccessResponse<T>).data
   }
 
   // Legacy format: check for data property
-  if ((response as any).data) {
-    return (response as any).data
+  if (typeof response === "object" && response !== null && "data" in response) {
+    return (response as { data: T }).data
   }
 
   // If no data property, return response as-is (might be error or legacy format)
-  return response as any
+  return response as T
 }
 
 /**
@@ -56,10 +58,13 @@ export function unwrapResponse<T, E = any>(response: Response<T, E>): T {
  * }
  * ```
  */
-export function extractErrorMessage(response: any): string | undefined {
+export function extractErrorMessage(
+  response: APIResponse<unknown>,
+): string | undefined {
   // New standardized format: { error: { code, message, details? } }
   if (
-    response?.error &&
+    "error" in response &&
+    response.error &&
     typeof response.error === "object" &&
     "message" in response.error
   ) {
@@ -67,10 +72,18 @@ export function extractErrorMessage(response: any): string | undefined {
   }
 
   // Legacy formats
-  if (response?.error && typeof response.error === "string") {
+  if (
+    "error" in response &&
+    response.error &&
+    typeof response.error === "string"
+  ) {
     return response.error
   }
-  if (response?.message) {
+  if (
+    "message" in response &&
+    response.message &&
+    typeof response.message === "string"
+  ) {
     return response.message
   }
 
@@ -93,10 +106,13 @@ export function extractErrorMessage(response: any): string | undefined {
  * }
  * ```
  */
-export function extractErrorCode(response: any): string | undefined {
+export function extractErrorCode(
+  response: APIResponse<unknown>,
+): string | undefined {
   // New standardized format
   if (
-    response?.error &&
+    "error" in response &&
+    response.error &&
     typeof response.error === "object" &&
     "code" in response.error
   ) {
@@ -127,9 +143,9 @@ export function isErrorResponse<T>(
     response !== null &&
     typeof response === "object" &&
     "error" in response &&
-    typeof (response as any).error === "object" &&
-    "code" in (response as any).error &&
-    "message" in (response as any).error
+    typeof (response as StandardErrorResponse).error === "object" &&
+    "code" in (response as StandardErrorResponse).error &&
+    "message" in (response as StandardErrorResponse).error
   )
 }
 

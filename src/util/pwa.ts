@@ -8,7 +8,7 @@ export interface ServiceWorkerRegistrationState {
   offline: boolean
 }
 
-let registrationState: ServiceWorkerRegistrationState = {
+const registrationState: ServiceWorkerRegistrationState = {
   registration: null,
   updateAvailable: false,
   offline: !navigator.onLine,

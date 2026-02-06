@@ -438,6 +438,7 @@ export function OrgDetailEditForm(props: { contractor: Contractor }) {
                 )}
                 renderTags={(tagValue, getTagProps) =>
                   tagValue.map((option, index) => (
+                    // eslint-disable-next-line react/jsx-key
                     <Chip
                       color={"primary"}
                       label={option}

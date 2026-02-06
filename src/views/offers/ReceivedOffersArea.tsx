@@ -55,7 +55,7 @@ import { Stack } from "@mui/system"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { EmptyOrders } from "../../components/empty-states"
-import { PullToRefresh, useLongPress } from "../../components/gestures"
+import { useLongPress } from "../../components/gestures"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useGetUserProfileQuery } from "../../store/profile"
 import { OrderSearchSortMethod } from "../../datatypes/Order"
@@ -768,55 +768,48 @@ export function OffersViewPaginated(props: {
           </Paper>
         </Collapse>
 
-        <PullToRefresh
-          onRefresh={async () => {
-            await refetch()
-          }}
-          enabled={useMediaQuery(theme.breakpoints.down("md"))}
-        >
-          <ControlledTable
-            rows={(data?.items || []).map((o) => ({
-              ...o,
-              customer_name: o.customer.username,
-            }))}
-            initialSort={"timestamp"}
-            generateRow={(props) => (
-              <OfferRow {...props} enableSelection={!mine} />
-            )}
-            keyAttr={"id"}
-            headCells={OffersHeadCells.map((cell) => ({
-              ...cell,
-              label: t(
-                `OffersViewPaginated.${cell.label.toLowerCase()}`,
-                cell.label,
-              ),
-            }))}
-            disableSelect={mine}
-            selected={!mine ? selectedOfferIds : undefined}
-            onSelectChange={!mine ? handleSelectChange : undefined}
-            onPageChange={setPage}
-            emptyStateComponent={
-              !(isLoading || isFetching) && (data?.items || []).length === 0 ? (
-                <EmptyOrders
-                  isOffers={true}
-                  isSent={mine}
-                  showCreateAction={false}
-                  sx={{ py: 4 }}
-                />
-              ) : undefined
-            }
-            page={page}
-            onPageSizeChange={setPageSize}
-            pageSize={pageSize}
-            rowCount={statusFilter ? totals.get(statusFilter) || 0 : totalCount}
-            onOrderChange={setOrder}
-            order={order}
-            onOrderByChange={setOrderBy}
-            orderBy={orderBy}
-            loading={isLoading || isFetching}
-            loadingRowComponent={OfferRowSkeleton}
-          />
-        </PullToRefresh>
+        <ControlledTable
+          rows={(data?.items || []).map((o) => ({
+            ...o,
+            customer_name: o.customer.username,
+          }))}
+          initialSort={"timestamp"}
+          generateRow={(props) => (
+            <OfferRow {...props} enableSelection={!mine} />
+          )}
+          keyAttr={"id"}
+          headCells={OffersHeadCells.map((cell) => ({
+            ...cell,
+            label: t(
+              `OffersViewPaginated.${cell.label.toLowerCase()}`,
+              cell.label,
+            ),
+          }))}
+          disableSelect={mine}
+          selected={!mine ? selectedOfferIds : undefined}
+          onSelectChange={!mine ? handleSelectChange : undefined}
+          onPageChange={setPage}
+          emptyStateComponent={
+            !(isLoading || isFetching) && (data?.items || []).length === 0 ? (
+              <EmptyOrders
+                isOffers={true}
+                isSent={mine}
+                showCreateAction={false}
+                sx={{ py: 4 }}
+              />
+            ) : undefined
+          }
+          page={page}
+          onPageSizeChange={setPageSize}
+          pageSize={pageSize}
+          rowCount={statusFilter ? totals.get(statusFilter) || 0 : totalCount}
+          onOrderChange={setOrder}
+          order={order}
+          onOrderByChange={setOrderBy}
+          orderBy={orderBy}
+          loading={isLoading || isFetching}
+          loadingRowComponent={OfferRowSkeleton}
+        />
         <Dialog
           open={mergeModalOpen}
           onClose={() => {

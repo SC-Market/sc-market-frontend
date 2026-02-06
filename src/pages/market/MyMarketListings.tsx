@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
+import { PageBreadcrumbs } from "../../components/navigation"
 import { Divider, Grid, IconButton } from "@mui/material"
 import { MyItemListings } from "../../views/market/ItemListings"
 import { MarketSidebar } from "../../features/market"
@@ -44,6 +45,14 @@ export function MyMarketListings(props: {}) {
       <MarketSidebarContext.Provider value={[open, setOpen]}>
         {/*<MarketSidebar/>*/}
         <ContainerGrid maxWidth={"lg"} sidebarOpen={true}>
+          <Grid item xs={12}>
+            <PageBreadcrumbs
+              items={[
+                { label: t("market.title", "Market"), href: "/market" },
+                { label: t("sidebar.my_market_listings") },
+              ]}
+            />
+          </Grid>
           <Grid
             item
             container

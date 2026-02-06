@@ -16,7 +16,7 @@ interface ImageZoomPanProps {
   maxZoom?: number
   minZoom?: number
   onClose?: () => void
-  sx?: any
+  sx?: React.CSSProperties
 }
 
 export function ImageZoomPan({
