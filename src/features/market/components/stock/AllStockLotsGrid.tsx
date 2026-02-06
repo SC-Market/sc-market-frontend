@@ -246,6 +246,7 @@ export function AllStockLotsGrid() {
       quantity: lot.quantity_total,
       location_id: lot.location_id,
       owner_username: lot.owner?.username || null,
+      owner_avatar: lot.owner?.avatar || null,
       listed: lot.listed,
       notes: lot.notes,
     }))
@@ -296,7 +297,10 @@ export function AllStockLotsGrid() {
         
         return (
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <Avatar sx={{ width: 24, height: 24 }} />
+            <Avatar 
+              src={params.row.owner_avatar || undefined}
+              sx={{ width: 24, height: 24 }} 
+            />
             <Link
               to={`/user/${params.value}`}
               style={{ textDecoration: "none", color: "inherit" }}
@@ -422,6 +426,7 @@ export function AllStockLotsGrid() {
         quantity: result.lot.quantity_total,
         location_id: result.lot.location_id,
         owner_username: result.lot.owner?.username || null,
+        owner_avatar: result.lot.owner?.avatar || null,
         listed: result.lot.listed,
         notes: result.lot.notes,
       }
@@ -473,6 +478,7 @@ export function AllStockLotsGrid() {
         quantity: 0,
         location_id: null,
         owner_username: null,
+        owner_avatar: null,
         listed: true,
         notes: "",
       },
