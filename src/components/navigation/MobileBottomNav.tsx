@@ -25,6 +25,7 @@ import { useUnreadChatCount } from "../../features/chats"
 import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
 import { usePendingOrderCount } from "../../hooks/orders/usePendingOrderCount"
 import { haptic } from "../../util/haptics"
+import { useBottomNavTabs, BottomNavTab } from "../../hooks/settings/useBottomNavTabs"
 
 /**
  * Mobile bottom navigation bar for quick access to primary pages
@@ -40,6 +41,7 @@ export function MobileBottomNav() {
   const unreadChatCount = useUnreadChatCount()
   const pendingOrderCount = usePendingOrderCount()
   const bottomNavHeight = useBottomNavHeight()
+  const { enabledTabs } = useBottomNavTabs(isLoggedIn)
 
   // Only show on xs devices (not sm) - check this BEFORE hooks to avoid hook order issues
   const isMobile = useMediaQuery(theme.breakpoints.only("xs"))
@@ -184,88 +186,88 @@ export function MobileBottomNav() {
             },
           }}
         >
-          <BottomNavigationAction
-            label={t("sidebar.market_short", "Market")}
-            value="market"
-            icon={<StoreRounded />}
-            data-value="market"
-          />
-          <BottomNavigationAction
-            label={t("sidebar.services_short", "Services")}
-            value="services"
-            icon={<DesignServicesRounded />}
-            data-value="services"
-          />
-          {!isLoggedIn && (
-            <BottomNavigationAction
-              label={t("sidebar.contracts_short", "Contracts")}
-              value="contracts"
-              icon={<DescriptionRounded />}
-              data-value="contracts"
-            />
-          )}
-          {!isLoggedIn && (
-            <BottomNavigationAction
-              label={t("sidebar.recruiting_short", "Recruiting")}
-              value="recruiting"
-              icon={<PersonAddRounded />}
-              data-value="recruiting"
-            />
-          )}
-          {isLoggedIn && (
-            <BottomNavigationAction
-              label={t("sidebar.messaging", "Messages")}
-              value="messages"
-              icon={
-                <Badge
-                  badgeContent={unreadChatCount}
-                  color="primary"
-                  sx={{
-                    "& .MuiBadge-badge": {
-                      fontSize: "0.7rem",
-                      minWidth: "18px",
-                      height: "18px",
-                      padding: "0 6px",
-                    },
-                  }}
-                >
-                  <ForumRounded />
-                </Badge>
+          {enabledTabs.map((tabId: BottomNavTab) => {
+            const getTabConfig = (id: BottomNavTab) => {
+              switch (id) {
+                case "market":
+                  return {
+                    label: t("sidebar.market_short", "Market"),
+                    icon: <StoreRounded />,
+                  }
+                case "services":
+                  return {
+                    label: t("sidebar.services_short", "Services"),
+                    icon: <DesignServicesRounded />,
+                  }
+                case "contracts":
+                  return {
+                    label: t("sidebar.contracts_short", "Contracts"),
+                    icon: <DescriptionRounded />,
+                  }
+                case "recruiting":
+                  return {
+                    label: t("sidebar.recruiting_short", "Recruiting"),
+                    icon: <PersonAddRounded />,
+                  }
+                case "messages":
+                  return {
+                    label: t("sidebar.messaging", "Messages"),
+                    icon: (
+                      <Badge
+                        badgeContent={unreadChatCount}
+                        color="primary"
+                        sx={{
+                          "& .MuiBadge-badge": {
+                            fontSize: "0.7rem",
+                            minWidth: "18px",
+                            height: "18px",
+                            padding: "0 6px",
+                          },
+                        }}
+                      >
+                        <ForumRounded />
+                      </Badge>
+                    ),
+                  }
+                case "orders":
+                  return {
+                    label: t("sidebar.orders.text", "Orders"),
+                    icon: (
+                      <Badge
+                        badgeContent={pendingOrderCount}
+                        color="primary"
+                        sx={{
+                          "& .MuiBadge-badge": {
+                            fontSize: "0.7rem",
+                            minWidth: "18px",
+                            height: "18px",
+                            padding: "0 6px",
+                          },
+                        }}
+                      >
+                        <CreateRounded />
+                      </Badge>
+                    ),
+                  }
+                case "dashboard":
+                  return {
+                    label: t("sidebar.dashboard", "Dashboard"),
+                    icon: <DashboardRounded />,
+                  }
               }
-              data-value="messages"
-            />
-          )}
-          {isLoggedIn && (
-            <BottomNavigationAction
-              label={t("sidebar.orders.text", "Orders")}
-              value="orders"
-              icon={
-                <Badge
-                  badgeContent={pendingOrderCount}
-                  color="primary"
-                  sx={{
-                    "& .MuiBadge-badge": {
-                      fontSize: "0.7rem",
-                      minWidth: "18px",
-                      height: "18px",
-                      padding: "0 6px",
-                    },
-                  }}
-                >
-                  <CreateRounded />
-                </Badge>
-              }
-              data-value="orders"
-            />
-          )}
-          {isLoggedIn && (
-            <BottomNavigationAction
-              label={t("sidebar.dashboard.text", "Dashboard")}
-              value="dashboard"
-              icon={<DashboardRounded />}
-              data-value="dashboard"
-            />
-          )}
+            }
+
+            const config = getTabConfig(tabId)
+            return (
+              <BottomNavigationAction
+                key={tabId}
+                label={config.label}
+                value={tabId}
+                icon={config.icon}
+                data-value={tabId}
+              />
+            )
+          })}
         </BottomNavigation>
         {/* Animated underline indicator */}
         {activeValue && (
