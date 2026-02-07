@@ -566,9 +566,11 @@
     "label": "Select Market Listing"
   },
   "navbar": {
-    "toggle_drawer": "Toggle sidebar"
+    "toggle_drawer": "Toggle sidebar",
+    "cart": "Cart"
   },
   "sidebar": {
+    "search": "Search",
     "dashboard": {
       "title": "Dashboard",
       "text": "Dashboard"
