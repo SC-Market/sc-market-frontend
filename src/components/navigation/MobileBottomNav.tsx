@@ -171,7 +171,8 @@ export function MobileBottomNav() {
   }
 
   const getActiveTabs = (): NavTabConfig[] => {
-    const userTabs = userProfile?.settings?.mobile_nav_tabs
+    const saved = localStorage.getItem("mobile_nav_tabs")
+    const userTabs = saved ? JSON.parse(saved) : null
     const defaultTabs = isLoggedIn
       ? DEFAULT_LOGGED_IN_TABS
       : DEFAULT_LOGGED_OUT_TABS
@@ -187,7 +188,13 @@ export function MobileBottomNav() {
       .slice(0, 5)
   }
 
-  const activeTabs = getActiveTabs()
+  const [activeTabs, setActiveTabs] = useState<NavTabConfig[]>(getActiveTabs())
+
+  useEffect(() => {
+    const handleUpdate = () => setActiveTabs(getActiveTabs())
+    window.addEventListener("mobile-nav-updated", handleUpdate)
+    return () => window.removeEventListener("mobile-nav-updated", handleUpdate)
+  }, [isLoggedIn])
 
   // Determine current active route
   const getActiveValue = () => {
