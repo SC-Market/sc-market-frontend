@@ -26,6 +26,7 @@ import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
 import { usePendingOrderCount } from "../../hooks/orders/usePendingOrderCount"
 import { haptic } from "../../util/haptics"
 import { useBottomNavTabs, BottomNavTab } from "../../hooks/settings/useBottomNavTabs"
+import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 
 /**
  * Mobile bottom navigation bar for quick access to primary pages
@@ -41,7 +42,8 @@ export function MobileBottomNav() {
   const unreadChatCount = useUnreadChatCount()
   const pendingOrderCount = usePendingOrderCount()
   const bottomNavHeight = useBottomNavHeight()
-  const { enabledTabs } = useBottomNavTabs(isLoggedIn)
+  const [currentOrg] = useCurrentOrg()
+  const { enabledTabs } = useBottomNavTabs(isLoggedIn, !!currentOrg)
 
   // Only show on xs devices (not sm) - check this BEFORE hooks to avoid hook order issues
   const isMobile = useMediaQuery(theme.breakpoints.only("xs"))
@@ -151,6 +153,25 @@ export function MobileBottomNav() {
           navigate("/market/manage-stock")
         } else {
           navigate("/login")
+        }
+        break
+      case "org_orders":
+        if (isLoggedIn && currentOrg) {
+          navigate("/org/orders")
+        } else {
+          navigate("/login")
+        }
+        break
+      case "org_manage":
+        if (isLoggedIn && currentOrg) {
+          navigate("/org/manage")
+        } else {
+          navigate("/login")
+        }
+        break
+      case "org_public":
+        if (currentOrg) {
+          navigate(`/contractor/${currentOrg.spectrum_id}`)
         }
         break
     }
@@ -273,7 +294,7 @@ export function MobileBottomNav() {
                   }
                 case "dashboard":
                   return {
-                    label: t("sidebar.orders_assigned_to_me", "Dashboard"),
+                    label: t("sidebar.dashboard.title", "Dashboard"),
                     icon: <DashboardRounded />,
                   }
                 case "manage_listings":
@@ -284,6 +305,21 @@ export function MobileBottomNav() {
                 case "manage_stock":
                   return {
                     label: t("sidebar.manage_stock", "Stock"),
+                    icon: <StoreRounded />,
+                  }
+                case "org_orders":
+                  return {
+                    label: t("sidebar.org_orders", "Org Orders"),
+                    icon: <DashboardRounded />,
+                  }
+                case "org_manage":
+                  return {
+                    label: t("sidebar.settings", "Settings"),
+                    icon: <CreateRounded />,
+                  }
+                case "org_public":
+                  return {
+                    label: t("sidebar.org_public_page", "Org Page"),
                     icon: <StoreRounded />,
                   }
               }
