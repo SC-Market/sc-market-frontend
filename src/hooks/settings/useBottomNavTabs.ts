@@ -61,17 +61,18 @@ export function useBottomNavTabs(isLoggedIn: boolean, hasOrg: boolean = false) {
     [isLoggedIn]
   )
 
-  const enabledTabs = useMemo(() => 
-    tabs
+  const enabledTabs = useMemo(() => {
+    if (!tabs || !Array.isArray(tabs)) return []
+    
+    return tabs
       .filter((tabId: BottomNavTab) => {
         const tab = AVAILABLE_TABS.find(t => t.id === tabId)
         if (!tab) return false
         if (tab.requiresOrg && !hasOrg) return false
         return availableTabs.some(t => t.id === tabId)
       })
-      .slice(0, MAX_TABS),
-    [tabs, hasOrg, availableTabs]
-  )
+      .slice(0, MAX_TABS)
+  }, [tabs, hasOrg, availableTabs])
 
   return {
     enabledTabs,
