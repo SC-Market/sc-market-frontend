@@ -446,6 +446,7 @@
     "uniqueListingTab": "Unique Listing",
     "auctionTab": "Auction",
     "combinedListingTab": "Combined Listing",
+    "contractsTab": "Open Contracts",
     "market": "Market",
     "itemsTab": "Items",
     "servicesTab": "Services",
@@ -787,7 +788,8 @@
     "create_service": "Create Service"
   },
   "service_market": {
-    "toggle_sidebar": "Toggle service sidebar"
+    "toggle_sidebar": "Toggle service sidebar",
+    "filters": "Filters"
   },
   "service_search": {
     "search": "Search",
@@ -987,6 +989,9 @@
       "Salvage": "Salvage",
       "Other": "Other"
     }
+  },
+  "contract_actions": {
+    "create_contract": "Create Contract"
   },
   "serviceListings": {
     "new": "New",
@@ -1470,7 +1475,8 @@
     "auction": "Auction",
     "cost": "Cost",
     "minCost": "Minimum Cost",
-    "maxCost": "Maximum Cost"
+    "maxCost": "Maximum Cost",
+    "itemType": "Item Type"
   },
   "OrderSettings": {
     "title": "Order Messages",
