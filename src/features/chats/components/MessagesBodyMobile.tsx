@@ -530,7 +530,7 @@ function MessagesAreaMobile(props: {
     >
       <Stack spacing={1.5}>
         {messages.map((message: Message) => (
-          <MessageEntryMobile message={message} key={message.timestamp} />
+          <MessageEntryMobile message={message} key={`${message.timestamp}-${message.author}-${message.content.substring(0, 20)}`} />
         ))}
       </Stack>
       <div ref={props.messageBoxRef} />
