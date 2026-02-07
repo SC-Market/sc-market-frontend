@@ -192,6 +192,13 @@ export function MobileBottomNav() {
 
   const [activeTabs, setActiveTabs] = useState<NavTabConfig[]>(getActiveTabs())
 
+  // Update tabs when login state changes
+  useEffect(() => {
+    setActiveTabs(getActiveTabs())
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoggedIn])
+
+  // Listen for settings updates
   useEffect(() => {
     const handleUpdate = () => setActiveTabs(getActiveTabs())
     window.addEventListener("mobile-nav-updated", handleUpdate)

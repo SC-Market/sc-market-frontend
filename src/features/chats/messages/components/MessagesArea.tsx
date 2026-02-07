@@ -51,7 +51,7 @@ export function MessagesArea(props: {
       >
         <Stack spacing={theme.layoutSpacing.compact}>
           {messages.map((message: Message) => (
-            <MessageEntry2 message={message} key={message.timestamp} />
+            <MessageEntry2 message={message} key={`${message.timestamp}-${message.author}-${message.content.substring(0, 20)}`} />
           ))}
         </Stack>
         <div ref={props.messageBoxRef} />
