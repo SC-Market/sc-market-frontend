@@ -12,7 +12,7 @@ import { useTranslation } from "react-i18next"
 import { useGetUserProfileQuery } from "../../store/profile"
 import { useBottomNavTabs, BottomNavTab } from "../../hooks/settings/useBottomNavTabs"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { FlatSection } from "../layout/FlatSection"
+import { FlatSection } from "../paper/Section"
 
 export function BottomNavSettings() {
   const { t } = useTranslation()
