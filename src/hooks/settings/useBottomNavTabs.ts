@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 
 export type BottomNavTab = 
   | "market"
@@ -56,18 +56,22 @@ export function useBottomNavTabs(isLoggedIn: boolean, hasOrg: boolean = false) {
     setTabsState(newTabs)
   }
 
-  const availableTabs = AVAILABLE_TABS.filter(
-    tab => !tab.requiresAuth || isLoggedIn
+  const availableTabs = useMemo(() => 
+    AVAILABLE_TABS.filter(tab => !tab.requiresAuth || isLoggedIn),
+    [isLoggedIn]
   )
 
-  const enabledTabs = tabs
-    .filter((tabId: BottomNavTab) => {
-      const tab = AVAILABLE_TABS.find(t => t.id === tabId)
-      if (!tab) return false
-      if (tab.requiresOrg && !hasOrg) return false
-      return availableTabs.some(t => t.id === tabId)
-    })
-    .slice(0, MAX_TABS)
+  const enabledTabs = useMemo(() => 
+    tabs
+      .filter((tabId: BottomNavTab) => {
+        const tab = AVAILABLE_TABS.find(t => t.id === tabId)
+        if (!tab) return false
+        if (tab.requiresOrg && !hasOrg) return false
+        return availableTabs.some(t => t.id === tabId)
+      })
+      .slice(0, MAX_TABS),
+    [tabs, hasOrg, availableTabs]
+  )
 
   return {
     enabledTabs,
