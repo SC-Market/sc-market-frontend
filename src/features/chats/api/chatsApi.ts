@@ -37,6 +37,7 @@ export const chatsApi = serviceApi.injectEndpoints({
         { chat_id, content, username },
         { dispatch, queryFulfilled },
       ) {
+        console.log('[sendMessage] Starting with:', { chat_id, content, username })
         // Note: Messages are also updated via socket.io, but we add optimistic update
         // for immediate feedback before socket event arrives
         await createOptimisticUpdate(
@@ -52,14 +53,17 @@ export const chatsApi = serviceApi.injectEndpoints({
                   timestamp: Date.now(),
                   chat_id: chat_id,
                 }
+                console.log('[sendMessage] Creating optimistic message:', tempMessage)
                 draft.messages = draft.messages || []
                 // Check if message already exists (avoid duplicates) - use content + author since timestamp is server-side
                 const messageExists = draft.messages.some(
                   (msg) =>
                     msg.content === content && msg.author === username,
                 )
+                console.log('[sendMessage] Message exists?', messageExists, 'Current messages:', draft.messages.length)
                 if (!messageExists) {
                   draft.messages.push(tempMessage)
+                  console.log('[sendMessage] Added optimistic message, total messages:', draft.messages.length)
                 }
               }),
             )
