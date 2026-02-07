@@ -8,6 +8,9 @@ export type BottomNavTab =
   | "messages"
   | "orders"
   | "dashboard"
+  | "contractors"
+  | "manage_listings"
+  | "manage_stock"
 
 export interface BottomNavTabConfig {
   id: BottomNavTab
@@ -16,13 +19,16 @@ export interface BottomNavTabConfig {
 }
 
 export const AVAILABLE_TABS: BottomNavTabConfig[] = [
-  { id: "market", labelKey: "sidebar.market_short", requiresAuth: false },
-  { id: "services", labelKey: "sidebar.services_short", requiresAuth: false },
-  { id: "contracts", labelKey: "sidebar.contracts_short", requiresAuth: false },
-  { id: "recruiting", labelKey: "sidebar.recruiting_short", requiresAuth: false },
+  { id: "market", labelKey: "sidebar.player_market", requiresAuth: false },
+  { id: "services", labelKey: "sidebar.contractor_services", requiresAuth: false },
+  { id: "contracts", labelKey: "sidebar.open_contracts", requiresAuth: false },
+  { id: "recruiting", labelKey: "sidebar.recruiting", requiresAuth: false },
+  { id: "contractors", labelKey: "sidebar.contractors", requiresAuth: false },
   { id: "messages", labelKey: "sidebar.messaging", requiresAuth: true },
-  { id: "orders", labelKey: "sidebar.orders.text", requiresAuth: true },
-  { id: "dashboard", labelKey: "sidebar.dashboard.text", requiresAuth: true },
+  { id: "orders", labelKey: "sidebar.orders_ive_placed", requiresAuth: true },
+  { id: "dashboard", labelKey: "sidebar.orders_assigned_to_me", requiresAuth: true },
+  { id: "manage_listings", labelKey: "sidebar.manage_listings", requiresAuth: true },
+  { id: "manage_stock", labelKey: "sidebar.manage_stock", requiresAuth: true },
 ]
 
 const DEFAULT_LOGGED_OUT_TABS: BottomNavTab[] = ["market", "services", "contracts", "recruiting"]

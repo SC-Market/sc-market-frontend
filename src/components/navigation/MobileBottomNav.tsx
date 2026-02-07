@@ -136,6 +136,23 @@ export function MobileBottomNav() {
       case "recruiting":
         navigate("/recruiting")
         break
+      case "contractors":
+        navigate("/contractors")
+        break
+      case "manage_listings":
+        if (isLoggedIn) {
+          navigate("/market/manage")
+        } else {
+          navigate("/login")
+        }
+        break
+      case "manage_stock":
+        if (isLoggedIn) {
+          navigate("/market/manage-stock")
+        } else {
+          navigate("/login")
+        }
+        break
     }
   }
 
@@ -191,23 +208,28 @@ export function MobileBottomNav() {
               switch (id) {
                 case "market":
                   return {
-                    label: t("sidebar.market_short", "Market"),
+                    label: t("sidebar.player_market", "Market"),
                     icon: <StoreRounded />,
                   }
                 case "services":
                   return {
-                    label: t("sidebar.services_short", "Services"),
+                    label: t("sidebar.contractor_services", "Services"),
                     icon: <DesignServicesRounded />,
                   }
                 case "contracts":
                   return {
-                    label: t("sidebar.contracts_short", "Contracts"),
+                    label: t("sidebar.open_contracts", "Contracts"),
                     icon: <DescriptionRounded />,
                   }
                 case "recruiting":
                   return {
-                    label: t("sidebar.recruiting_short", "Recruiting"),
+                    label: t("sidebar.recruiting", "Recruiting"),
                     icon: <PersonAddRounded />,
+                  }
+                case "contractors":
+                  return {
+                    label: t("sidebar.contractors", "Contractors"),
+                    icon: <CreateRounded />,
                   }
                 case "messages":
                   return {
@@ -231,7 +253,7 @@ export function MobileBottomNav() {
                   }
                 case "orders":
                   return {
-                    label: t("sidebar.orders.text", "Orders"),
+                    label: t("sidebar.orders_ive_placed", "Orders"),
                     icon: (
                       <Badge
                         badgeContent={pendingOrderCount}
@@ -251,8 +273,18 @@ export function MobileBottomNav() {
                   }
                 case "dashboard":
                   return {
-                    label: t("sidebar.dashboard.text", "Dashboard"),
+                    label: t("sidebar.orders_assigned_to_me", "Dashboard"),
                     icon: <DashboardRounded />,
+                  }
+                case "manage_listings":
+                  return {
+                    label: t("sidebar.manage_listings", "Listings"),
+                    icon: <StoreRounded />,
+                  }
+                case "manage_stock":
+                  return {
+                    label: t("sidebar.manage_stock", "Stock"),
+                    icon: <StoreRounded />,
                   }
               }
             }
