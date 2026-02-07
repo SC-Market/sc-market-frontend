@@ -2498,6 +2498,11 @@
       "otherDevices_plural": "{{count}} other devices",
       "connected": "connected",
       "disableOnDevice": "Disable on This Device",
+      "enablePushNotifications": "Enable Push Notifications",
+      "subscribing": "Subscribing...",
+      "connectedDevices": "Connected Devices:",
+      "unknownDevice": "Unknown Device",
+      "subscribedOn": "Subscribed {{date}}"
     },
     "mobileNav": {
       "title": "Mobile Navigation",
@@ -2506,12 +2511,6 @@
       "available": "Available Tabs",
       "saved": "Mobile navigation settings saved successfully",
       "error": "Failed to save mobile navigation settings"
-    },
-      "enablePushNotifications": "Enable Push Notifications",
-      "subscribing": "Subscribing...",
-      "connectedDevices": "Connected Devices:",
-      "unknownDevice": "Unknown Device",
-      "subscribedOn": "Subscribed {{date}}"
     },
     "email": {
       "title": "Email Notifications",

@@ -179,8 +179,8 @@ export function MobileBottomNav() {
     const tabIds = userTabs || defaultTabs
 
     return tabIds
-      .map((id) => getTabConfig(id))
-      .filter((tab): tab is NavTabConfig => {
+      .map((id: string) => getTabConfig(id))
+      .filter((tab: NavTabConfig | null): tab is NavTabConfig => {
         if (!tab) return false
         if (tab.requiresAuth && !isLoggedIn) return false
         return true
@@ -194,6 +194,7 @@ export function MobileBottomNav() {
     const handleUpdate = () => setActiveTabs(getActiveTabs())
     window.addEventListener("mobile-nav-updated", handleUpdate)
     return () => window.removeEventListener("mobile-nav-updated", handleUpdate)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoggedIn])
 
   // Determine current active route
