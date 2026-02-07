@@ -68,11 +68,12 @@ export function useBottomNavTabs(isLoggedIn: boolean, hasOrg: boolean = false) {
       .filter((tabId: BottomNavTab) => {
         const tab = AVAILABLE_TABS.find(t => t.id === tabId)
         if (!tab) return false
+        if (tab.requiresAuth && !isLoggedIn) return false
         if (tab.requiresOrg && !hasOrg) return false
-        return availableTabs.some(t => t.id === tabId)
+        return true
       })
       .slice(0, MAX_TABS)
-  }, [tabs, hasOrg, availableTabs])
+  }, [tabs, hasOrg, isLoggedIn])
 
   return {
     enabledTabs,
