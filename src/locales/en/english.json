@@ -2320,6 +2320,7 @@
   "ui": {
     "save": "Save",
     "remove": "Remove",
+    "reset": "Reset to Default",
     "buttons": {
       "save": "Save"
     },

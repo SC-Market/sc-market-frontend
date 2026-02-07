@@ -152,6 +152,12 @@ export function MobileNavSettings() {
     window.dispatchEvent(new Event("mobile-nav-updated"))
   }
 
+  const handleReset = () => {
+    localStorage.removeItem(STORAGE_KEY)
+    setSelectedTabs(DEFAULT_TABS)
+    window.dispatchEvent(new Event("mobile-nav-updated"))
+  }
+
   const getTabInfo = (tabId: string) =>
     ALL_NAV_TABS.find((tab) => tab.id === tabId)
 
@@ -249,9 +255,14 @@ export function MobileNavSettings() {
         </Stack>
       </Paper>
 
-      <Button variant="contained" onClick={handleSave} fullWidth>
-        {t("ui.save")}
-      </Button>
+      <Stack direction="row" spacing={2}>
+        <Button variant="outlined" onClick={handleReset} fullWidth>
+          {t("ui.reset")}
+        </Button>
+        <Button variant="contained" onClick={handleSave} fullWidth>
+          {t("ui.save")}
+        </Button>
+      </Stack>
     </Box>
   )
 }
