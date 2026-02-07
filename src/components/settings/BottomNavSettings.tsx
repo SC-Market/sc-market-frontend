@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import {
   Grid,
   Typography,
@@ -10,9 +10,8 @@ import {
   IconButton,
   useTheme,
   useMediaQuery,
-  Box,
 } from "@mui/material"
-import { DragHandle } from "@mui/icons-material"
+import { DragIndicator } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { useGetUserProfileQuery } from "../../store/profile"
 import { useBottomNavTabs, BottomNavTab, AVAILABLE_TABS } from "../../hooks/settings/useBottomNavTabs"
@@ -26,6 +25,7 @@ export function BottomNavSettings() {
   const { data: userProfile } = useGetUserProfileQuery()
   const isLoggedIn = !!userProfile
   const { enabledTabs, availableTabs, setTabs, maxTabs } = useBottomNavTabs(isLoggedIn)
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null)
 
   if (!isMobile) {
     return null
@@ -39,25 +39,31 @@ export function BottomNavSettings() {
     }
   }
 
-  const handleMoveUp = (index: number) => {
-    if (index === 0) return
-    const newTabs = [...enabledTabs]
-    ;[newTabs[index - 1], newTabs[index]] = [newTabs[index], newTabs[index - 1]]
-    setTabs(newTabs)
+  const handleDragStart = (index: number) => {
+    setDraggedIndex(index)
   }
 
-  const handleMoveDown = (index: number) => {
-    if (index === enabledTabs.length - 1) return
+  const handleDragOver = (e: React.DragEvent, index: number) => {
+    e.preventDefault()
+    if (draggedIndex === null || draggedIndex === index) return
+    
     const newTabs = [...enabledTabs]
-    ;[newTabs[index], newTabs[index + 1]] = [newTabs[index + 1], newTabs[index]]
+    const draggedTab = newTabs[draggedIndex]
+    newTabs.splice(draggedIndex, 1)
+    newTabs.splice(index, 0, draggedTab)
     setTabs(newTabs)
+    setDraggedIndex(index)
+  }
+
+  const handleDragEnd = () => {
+    setDraggedIndex(null)
   }
 
   return (
     <FlatSection title={t("settings.bottomNav.title", "Bottom Navigation")}>
       <Grid item xs={12}>
         <Typography variant="body2" color="text.secondary" paragraph>
-          {t("settings.bottomNav.description", "Choose up to 5 tabs and reorder them")}
+          {t("settings.bottomNav.description", "Choose up to 5 tabs and drag to reorder")}
         </Typography>
       </Grid>
       <Grid item xs={12}>
@@ -69,24 +75,20 @@ export function BottomNavSettings() {
             const tab = AVAILABLE_TABS.find(t => t.id === tabId)
             if (!tab) return null
             return (
-              <ListItem key={tabId}>
+              <ListItem 
+                key={tabId}
+                draggable
+                onDragStart={() => handleDragStart(index)}
+                onDragOver={(e) => handleDragOver(e, index)}
+                onDragEnd={handleDragEnd}
+                sx={{ 
+                  cursor: "grab",
+                  "&:active": { cursor: "grabbing" },
+                  opacity: draggedIndex === index ? 0.5 : 1,
+                }}
+              >
                 <ListItemIcon>
-                  <Box sx={{ display: "flex", flexDirection: "column" }}>
-                    <IconButton 
-                      size="small" 
-                      onClick={() => handleMoveUp(index)}
-                      disabled={index === 0}
-                    >
-                      <DragHandle sx={{ transform: "rotate(-90deg)" }} />
-                    </IconButton>
-                    <IconButton 
-                      size="small" 
-                      onClick={() => handleMoveDown(index)}
-                      disabled={index === enabledTabs.length - 1}
-                    >
-                      <DragHandle sx={{ transform: "rotate(90deg)" }} />
-                    </IconButton>
-                  </Box>
+                  <DragIndicator />
                 </ListItemIcon>
                 <ListItemText primary={t(tab.labelKey)} />
                 <Checkbox
