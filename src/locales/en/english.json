@@ -446,6 +446,7 @@
     "uniqueListingTab": "Unique Listing",
     "auctionTab": "Auction",
     "combinedListingTab": "Combined Listing",
+    "contractsTab": "Open Contracts",
     "market": "Market",
     "itemsTab": "Items",
     "servicesTab": "Services",
@@ -566,9 +567,11 @@
     "label": "Select Market Listing"
   },
   "navbar": {
-    "toggle_drawer": "Toggle sidebar"
+    "toggle_drawer": "Toggle sidebar",
+    "cart": "Cart"
   },
   "sidebar": {
+    "search": "Search",
     "dashboard": {
       "title": "Dashboard",
       "text": "Dashboard"
@@ -624,11 +627,18 @@
     "orders_assigned_to_me": "Assigned to Me",
     "org_orders": "Org Orders",
     "contractors": "Contractors",
+    "contractors_short": "Contractors",
     "open_contracts": "Open Contracts",
+    "contracts_short": "Contracts",
     "organizations": {
       "title": "Organizations"
     },
     "recruiting": "Recruiting",
+    "recruiting_short": "Recruiting",
+    "availability_short": "Availability",
+    "listings_short": "Listings",
+    "stock_short": "Stock",
+    "fleet_short": "Fleet",
     "register": "Register",
     "admin": {
       "title": "Admin"
@@ -688,6 +698,7 @@
   "preferences": {
     "page_settings": "Page settings",
     "theme": "Theme",
+    "select_theme": "Select theme",
     "light": "Light",
     "dark": "Dark",
     "language": "Language",
@@ -777,7 +788,8 @@
     "create_service": "Create Service"
   },
   "service_market": {
-    "toggle_sidebar": "Toggle service sidebar"
+    "toggle_sidebar": "Toggle service sidebar",
+    "filters": "Filters"
   },
   "service_search": {
     "search": "Search",
@@ -977,6 +989,9 @@
       "Salvage": "Salvage",
       "Other": "Other"
     }
+  },
+  "contract_actions": {
+    "create_contract": "Create Contract"
   },
   "serviceListings": {
     "new": "New",
@@ -1460,7 +1475,8 @@
     "auction": "Auction",
     "cost": "Cost",
     "minCost": "Minimum Cost",
-    "maxCost": "Maximum Cost"
+    "maxCost": "Maximum Cost",
+    "itemType": "Item Type"
   },
   "OrderSettings": {
     "title": "Order Messages",
@@ -2311,6 +2327,9 @@
     "authenticateWithRSI": "Authenticate with RSI"
   },
   "ui": {
+    "save": "Save",
+    "remove": "Remove",
+    "reset": "Reset to Default",
     "buttons": {
       "save": "Save"
     },
@@ -2455,7 +2474,20 @@
     },
     "languages": {
       "title": "Supported Languages",
-      "description": "Select the languages you can communicate in."
+      "description": "Select the languages you can communicate in.",
+      "label": "Supported Languages",
+      "placeholder": "Select languages...",
+      "section": {
+        "description": "Select the languages you can communicate in. This helps others know which languages you support."
+      },
+      "field": {
+        "helperText": "Select all languages you can communicate in"
+      },
+      "save": "Save Languages",
+      "saveSuccess": "Languages updated successfully",
+      "saveError": "Failed to update languages",
+      "loadError": "Failed to load languages",
+      "noPermission": "You don't have permission to edit organization languages"
     },
     "pushNotifications": {
       "title": "Push Notifications",
@@ -2496,6 +2528,14 @@
       "connectedDevices": "Connected Devices:",
       "unknownDevice": "Unknown Device",
       "subscribedOn": "Subscribed {{date}}"
+    },
+    "mobileNav": {
+      "title": "Mobile Navigation",
+      "description": "Customize which tabs appear in your mobile bottom navigation bar. Select up to 5 tabs and drag to reorder them.",
+      "selected": "Selected Tabs",
+      "available": "Available Tabs",
+      "saved": "Mobile navigation settings saved successfully",
+      "error": "Failed to save mobile navigation settings"
     },
     "email": {
       "title": "Email Notifications",

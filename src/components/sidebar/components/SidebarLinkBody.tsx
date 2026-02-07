@@ -110,12 +110,13 @@ export function SidebarLinkBody(props: SidebarLinkProps) {
       </ListItemIcon>
       <ListItemText sx={{ marginLeft: -2 }}>
         <Typography
-          color={selected ? "primary" : "#FFFFFF"}
+          color={selected ? "primary" : "inherit"}
           sx={{
             display: "inline-block",
             position: "relative",
             fontWeight: "bold",
             transition: "0.3s",
+            color: selected ? theme.palette.primary.main : contrast,
           }}
           variant={"subtitle2"}
         >
@@ -130,10 +131,14 @@ export function SidebarLinkBody(props: SidebarLinkProps) {
             e.stopPropagation()
             onToggleStar(pathOnly)
           }}
-          sx={{ ml: "auto", mr: 0.5 }}
+          sx={{ 
+            ml: "auto", 
+            mr: 0.5,
+            color: isStarred ? theme.palette.primary.main : contrast,
+          }}
         >
           {isStarred ? (
-            <StarRounded fontSize="small" color="primary" />
+            <StarRounded fontSize="small" />
           ) : (
             <StarBorderRounded fontSize="small" />
           )}

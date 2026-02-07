@@ -530,7 +530,7 @@ function MessagesAreaMobile(props: {
     >
       <Stack spacing={1.5}>
         {messages.map((message: Message) => (
-          <MessageEntryMobile message={message} key={message.timestamp} />
+          <MessageEntryMobile message={message} key={`${message.timestamp}-${message.author}-${message.content.substring(0, 20)}`} />
         ))}
       </Stack>
       <div ref={props.messageBoxRef} />
@@ -896,17 +896,21 @@ export function MessagesBodyMobile(props: { maxHeight?: number }) {
 
   const onSend = useCallback(
     (content: string) => {
-      if (content && currentChat) {
+      if (content && currentChat && profile?.username) {
         // RTK Query handles optimistic updates, so we just send the message
         // The cache update will sync to currentChat via the useEffect
-        sendChatMessage({ chat_id: currentChat.chat_id, content })
+        sendChatMessage({
+          chat_id: currentChat.chat_id,
+          content,
+          username: profile.username,
+        })
           .unwrap()
           .catch((error) => {
             issueAlert(error)
           })
       }
     },
-    [currentChat, sendChatMessage, issueAlert],
+    [currentChat, profile?.username, sendChatMessage, issueAlert],
   )
 
   const { t } = useTranslation()
