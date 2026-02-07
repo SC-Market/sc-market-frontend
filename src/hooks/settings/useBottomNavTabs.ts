@@ -62,8 +62,8 @@ export function useBottomNavTabs(isLoggedIn: boolean, hasOrg: boolean = false) {
 
   // Listen for storage changes
   useEffect(() => {
-    const handleStorage = (e: StorageEvent) => {
-      if (e.key === 'bottomNavTabs' && e.newValue) {
+    const handleStorage = (e: StorageEvent | Event) => {
+      if ('key' in e && e.key === 'bottomNavTabs' && 'newValue' in e && e.newValue) {
         setTabsState(JSON.parse(e.newValue))
       }
     }
