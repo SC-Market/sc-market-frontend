@@ -697,6 +697,7 @@
   "preferences": {
     "page_settings": "Page settings",
     "theme": "Theme",
+    "select_theme": "Select theme",
     "light": "Light",
     "dark": "Dark",
     "language": "Language",
