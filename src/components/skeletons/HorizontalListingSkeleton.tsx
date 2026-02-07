@@ -102,6 +102,7 @@ export function HorizontalListingSkeleton({
                   variant="rectangular"
                   width="100%"
                   height="100%"
+                  animation="wave"
                   sx={{
                     borderRadius: theme.spacing(theme.borderRadius.topLevel),
                   }}

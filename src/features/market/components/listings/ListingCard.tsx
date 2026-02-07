@@ -279,12 +279,16 @@ export const ItemListingBase = React.memo(
                     currentTarget.src = FALLBACK_IMAGE_URL
                   }}
                   sx={{
+                    width: "100%",
+                    objectFit: "cover",
                     ...(theme.palette.mode === "dark"
                       ? {
                           height: "100%",
+                          aspectRatio: "16/9",
                         }
                       : {
                           height: 150,
+                          aspectRatio: "16/9",
                         }),
                     overflow: "hidden",
                   }}
