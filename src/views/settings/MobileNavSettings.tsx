@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState } from "react"
 import {
   Box,
   Button,
@@ -25,7 +25,6 @@ import {
 } from "@mui/icons-material"
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd"
 import { useTranslation } from "react-i18next"
-import { useSnackbar } from "notistack"
 
 interface NavTab {
   id: string
@@ -120,7 +119,6 @@ const STORAGE_KEY = "mobile_nav_tabs"
 
 export function MobileNavSettings() {
   const { t } = useTranslation()
-  const { enqueueSnackbar } = useSnackbar()
 
   const [selectedTabs, setSelectedTabs] = useState<string[]>(() => {
     const saved = localStorage.getItem(STORAGE_KEY)
@@ -152,7 +150,6 @@ export function MobileNavSettings() {
   const handleSave = () => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(selectedTabs))
     window.dispatchEvent(new Event("mobile-nav-updated"))
-    enqueueSnackbar(t("settings.mobileNav.saved"), { variant: "success" })
   }
 
   const getTabInfo = (tabId: string) =>
