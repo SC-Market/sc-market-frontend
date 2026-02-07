@@ -2318,6 +2318,8 @@
     "authenticateWithRSI": "Authenticate with RSI"
   },
   "ui": {
+    "save": "Save",
+    "remove": "Remove",
     "buttons": {
       "save": "Save"
     },
