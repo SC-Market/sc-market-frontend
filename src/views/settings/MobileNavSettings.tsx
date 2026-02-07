@@ -17,19 +17,14 @@ import {
   CreateRounded,
   DashboardRounded,
   BusinessRounded,
-  PeopleAltRounded,
-  LocalShipping,
+  CalendarMonthRounded,
   ListAltRounded,
   WarehouseRounded,
   DashboardCustomizeRounded,
-  CalendarMonthRounded,
+  LocalShipping,
 } from "@mui/icons-material"
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd"
 import { useTranslation } from "react-i18next"
-import {
-  useGetUserProfileQuery,
-  useUpdateUserSettingsMutation,
-} from "../../store/profile"
 import { useSnackbar } from "notistack"
 
 interface NavTab {
@@ -121,20 +116,16 @@ const ALL_NAV_TABS: NavTab[] = [
 ]
 
 const DEFAULT_TABS = ["market", "services", "contracts", "recruiting", "messages"]
+const STORAGE_KEY = "mobile_nav_tabs"
 
 export function MobileNavSettings() {
   const { t } = useTranslation()
-  const { data: userProfile } = useGetUserProfileQuery()
-  const [updateSettings] = useUpdateUserSettingsMutation()
   const { enqueueSnackbar } = useSnackbar()
 
-  const [selectedTabs, setSelectedTabs] = useState<string[]>(DEFAULT_TABS)
-
-  useEffect(() => {
-    if (userProfile?.settings?.mobile_nav_tabs) {
-      setSelectedTabs(userProfile.settings.mobile_nav_tabs)
-    }
-  }, [userProfile])
+  const [selectedTabs, setSelectedTabs] = useState<string[]>(() => {
+    const saved = localStorage.getItem(STORAGE_KEY)
+    return saved ? JSON.parse(saved) : DEFAULT_TABS
+  })
 
   const handleDragEnd = (result: any) => {
     if (!result.destination) return
@@ -158,13 +149,10 @@ export function MobileNavSettings() {
     }
   }
 
-  const handleSave = async () => {
-    try {
-      await updateSettings({ mobile_nav_tabs: selectedTabs }).unwrap()
-      enqueueSnackbar(t("settings.mobileNav.saved"), { variant: "success" })
-    } catch (error) {
-      enqueueSnackbar(t("settings.mobileNav.error"), { variant: "error" })
-    }
+  const handleSave = () => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(selectedTabs))
+    window.dispatchEvent(new Event("mobile-nav-updated"))
+    enqueueSnackbar(t("settings.mobileNav.saved"), { variant: "success" })
   }
 
   const getTabInfo = (tabId: string) =>
