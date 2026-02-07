@@ -215,17 +215,21 @@ export function MessagesBody(props: {
 
   const onSend = useCallback(
     (content: string) => {
-      if (content && currentChat) {
+      if (content && currentChat && profile?.username) {
         // RTK Query handles optimistic updates, so we just send the message
         // The cache update will sync to currentChat via the useEffect
-        sendChatMessage({ chat_id: currentChat.chat_id, content })
+        sendChatMessage({
+          chat_id: currentChat.chat_id,
+          content,
+          username: profile.username,
+        })
           .unwrap()
           .catch((error) => {
             issueAlert(error)
           })
       }
     },
-    [currentChat, sendChatMessage, issueAlert],
+    [currentChat, profile?.username, sendChatMessage, issueAlert],
   )
 
   const { t } = useTranslation()
