@@ -9,6 +9,7 @@ import { ReVerifyProfile } from "./ReVerifyProfile"
 import { UnlinkProfile } from "./UnlinkProfile"
 import { AccountLinks } from "./AccountLinks"
 import { LanguageSettings } from "./LanguageSettings"
+import { BottomNavSettings } from "../../components/settings/BottomNavSettings"
 import { isCitizenIdEnabled } from "../../util/constants"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
@@ -85,6 +86,9 @@ export function ProfileSettings() {
       )}
       <Grid item xs={12}>
         <LanguageSettings />
+      </Grid>
+      <Grid item xs={12}>
+        <BottomNavSettings />
       </Grid>
     </Grid>
   )
