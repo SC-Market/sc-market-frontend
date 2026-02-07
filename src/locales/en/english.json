@@ -624,11 +624,18 @@
     "orders_assigned_to_me": "Assigned to Me",
     "org_orders": "Org Orders",
     "contractors": "Contractors",
+    "contractors_short": "Contractors",
     "open_contracts": "Open Contracts",
+    "contracts_short": "Contracts",
     "organizations": {
       "title": "Organizations"
     },
     "recruiting": "Recruiting",
+    "recruiting_short": "Recruiting",
+    "availability_short": "Availability",
+    "listings_short": "Listings",
+    "stock_short": "Stock",
+    "fleet_short": "Fleet",
     "register": "Register",
     "admin": {
       "title": "Admin"
@@ -2491,6 +2498,15 @@
       "otherDevices_plural": "{{count}} other devices",
       "connected": "connected",
       "disableOnDevice": "Disable on This Device",
+    },
+    "mobileNav": {
+      "title": "Mobile Navigation",
+      "description": "Customize which tabs appear in your mobile bottom navigation bar. Select up to 5 tabs and drag to reorder them.",
+      "selected": "Selected Tabs",
+      "available": "Available Tabs",
+      "saved": "Mobile navigation settings saved successfully",
+      "error": "Failed to save mobile navigation settings"
+    },
       "enablePushNotifications": "Enable Push Notifications",
       "subscribing": "Subscribing...",
       "connectedDevices": "Connected Devices:",

@@ -17,6 +17,12 @@ import {
   ForumRounded,
   DescriptionRounded,
   PersonAddRounded,
+  BusinessRounded,
+  ListAltRounded,
+  WarehouseRounded,
+  DashboardCustomizeRounded,
+  CalendarMonthRounded,
+  LocalShipping,
 } from "@mui/icons-material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useGetUserProfileQuery } from "../../store/profile"
@@ -25,6 +31,23 @@ import { useUnreadChatCount } from "../../features/chats"
 import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
 import { usePendingOrderCount } from "../../hooks/orders/usePendingOrderCount"
 import { haptic } from "../../util/haptics"
+
+interface NavTabConfig {
+  id: string
+  label: string
+  icon: React.ReactElement
+  route: string
+  requiresAuth?: boolean
+  badge?: number
+}
+
+const DEFAULT_LOGGED_OUT_TABS = [
+  "market",
+  "services",
+  "contracts",
+  "recruiting",
+]
+const DEFAULT_LOGGED_IN_TABS = ["market", "services", "messages", "orders", "dashboard"]
 
 /**
  * Mobile bottom navigation bar for quick access to primary pages
@@ -53,18 +76,125 @@ export function MobileBottomNav() {
     width: number
   }>({ left: 0, width: 0 })
 
+  const getTabConfig = (tabId: string): NavTabConfig | null => {
+    const configs: Record<string, NavTabConfig> = {
+      market: {
+        id: "market",
+        label: "sidebar.market_short",
+        icon: <StoreRounded />,
+        route: "/market",
+      },
+      services: {
+        id: "services",
+        label: "sidebar.services_short",
+        icon: <DesignServicesRounded />,
+        route: "/market/services",
+      },
+      contracts: {
+        id: "contracts",
+        label: "sidebar.contracts_short",
+        icon: <DescriptionRounded />,
+        route: "/contracts",
+      },
+      recruiting: {
+        id: "recruiting",
+        label: "sidebar.recruiting_short",
+        icon: <PersonAddRounded />,
+        route: "/recruiting",
+      },
+      messages: {
+        id: "messages",
+        label: "sidebar.messaging",
+        icon: <ForumRounded />,
+        route: "/messages",
+        requiresAuth: true,
+        badge: unreadChatCount,
+      },
+      orders: {
+        id: "orders",
+        label: "sidebar.orders.text",
+        icon: <CreateRounded />,
+        route: "/orders",
+        requiresAuth: true,
+        badge: pendingOrderCount,
+      },
+      dashboard: {
+        id: "dashboard",
+        label: "sidebar.dashboard.text",
+        icon: <DashboardRounded />,
+        route: "/dashboard",
+        requiresAuth: true,
+      },
+      contractors: {
+        id: "contractors",
+        label: "sidebar.contractors_short",
+        icon: <BusinessRounded />,
+        route: "/contractors",
+      },
+      availability: {
+        id: "availability",
+        label: "sidebar.availability_short",
+        icon: <CalendarMonthRounded />,
+        route: "/availability",
+        requiresAuth: true,
+      },
+      "manage-listings": {
+        id: "manage-listings",
+        label: "sidebar.listings_short",
+        icon: <ListAltRounded />,
+        route: "/market/manage?quantityAvailable=0",
+        requiresAuth: true,
+      },
+      "manage-stock": {
+        id: "manage-stock",
+        label: "sidebar.stock_short",
+        icon: <WarehouseRounded />,
+        route: "/market/manage-stock",
+        requiresAuth: true,
+      },
+      "manage-services": {
+        id: "manage-services",
+        label: "sidebar.services_short",
+        icon: <DashboardCustomizeRounded />,
+        route: "/order/services",
+        requiresAuth: true,
+      },
+      fleet: {
+        id: "fleet",
+        label: "sidebar.fleet_short",
+        icon: <LocalShipping />,
+        route: "/myfleet",
+        requiresAuth: true,
+      },
+    }
+    return configs[tabId] || null
+  }
+
+  const getActiveTabs = (): NavTabConfig[] => {
+    const userTabs = userProfile?.settings?.mobile_nav_tabs
+    const defaultTabs = isLoggedIn
+      ? DEFAULT_LOGGED_IN_TABS
+      : DEFAULT_LOGGED_OUT_TABS
+    const tabIds = userTabs || defaultTabs
+
+    return tabIds
+      .map((id) => getTabConfig(id))
+      .filter((tab): tab is NavTabConfig => {
+        if (!tab) return false
+        if (tab.requiresAuth && !isLoggedIn) return false
+        return true
+      })
+      .slice(0, 5)
+  }
+
+  const activeTabs = getActiveTabs()
+
   // Determine current active route
   const getActiveValue = () => {
     const path = location.pathname
-    if (path.startsWith("/market/services")) return "services"
-    if (path.startsWith("/market")) return "market"
-    if (path.startsWith("/messages")) return "messages"
-    if (path.startsWith("/orders") && !path.startsWith("/org/orders"))
-      return "orders"
-    if (path.startsWith("/dashboard")) return "dashboard"
-    if (path.startsWith("/contracts")) return "contracts"
-    if (path.startsWith("/recruiting")) return "recruiting"
-    if (path === "/") return "home"
+    for (const tab of activeTabs) {
+      if (path.startsWith(tab.route)) return tab.id
+    }
     return ""
   }
 
@@ -97,43 +227,13 @@ export function MobileBottomNav() {
     // Haptic feedback on tab switch
     haptic.selection()
 
-    switch (newValue) {
-      case "home":
-        navigate("/")
-        break
-      case "market":
-        navigate("/market")
-        break
-      case "services":
-        navigate("/market/services")
-        break
-      case "messages":
-        if (isLoggedIn) {
-          navigate("/messages")
-        } else {
-          navigate("/login")
-        }
-        break
-      case "orders":
-        if (isLoggedIn) {
-          navigate("/orders")
-        } else {
-          navigate("/login")
-        }
-        break
-      case "dashboard":
-        if (isLoggedIn) {
-          navigate("/dashboard")
-        } else {
-          navigate("/login")
-        }
-        break
-      case "contracts":
-        navigate("/contracts")
-        break
-      case "recruiting":
-        navigate("/recruiting")
-        break
+    const tab = activeTabs.find((t) => t.id === newValue)
+    if (tab) {
+      if (tab.requiresAuth && !isLoggedIn) {
+        navigate("/login")
+      } else {
+        navigate(tab.route)
+      }
     }
   }
 
@@ -184,88 +284,34 @@ export function MobileBottomNav() {
             },
           }}
         >
-          <BottomNavigationAction
-            label={t("sidebar.market_short", "Market")}
-            value="market"
-            icon={<StoreRounded />}
-            data-value="market"
-          />
-          <BottomNavigationAction
-            label={t("sidebar.services_short", "Services")}
-            value="services"
-            icon={<DesignServicesRounded />}
-            data-value="services"
-          />
-          {!isLoggedIn && (
+          {activeTabs.map((tab) => (
             <BottomNavigationAction
-              label={t("sidebar.contracts_short", "Contracts")}
-              value="contracts"
-              icon={<DescriptionRounded />}
-              data-value="contracts"
-            />
-          )}
-          {!isLoggedIn && (
-            <BottomNavigationAction
-              label={t("sidebar.recruiting_short", "Recruiting")}
-              value="recruiting"
-              icon={<PersonAddRounded />}
-              data-value="recruiting"
-            />
-          )}
-          {isLoggedIn && (
-            <BottomNavigationAction
-              label={t("sidebar.messaging", "Messages")}
-              value="messages"
+              key={tab.id}
+              label={t(tab.label)}
+              value={tab.id}
               icon={
-                <Badge
-                  badgeContent={unreadChatCount}
-                  color="primary"
-                  sx={{
-                    "& .MuiBadge-badge": {
-                      fontSize: "0.7rem",
-                      minWidth: "18px",
-                      height: "18px",
-                      padding: "0 6px",
-                    },
-                  }}
-                >
-                  <ForumRounded />
-                </Badge>
+                tab.badge ? (
+                  <Badge
+                    badgeContent={tab.badge}
+                    color="primary"
+                    sx={{
+                      "& .MuiBadge-badge": {
+                        fontSize: "0.7rem",
+                        minWidth: "18px",
+                        height: "18px",
+                        padding: "0 6px",
+                      },
+                    }}
+                  >
+                    {tab.icon}
+                  </Badge>
+                ) : (
+                  tab.icon
+                )
               }
-              data-value="messages"
+              data-value={tab.id}
             />
-          )}
-          {isLoggedIn && (
-            <BottomNavigationAction
-              label={t("sidebar.orders.text", "Orders")}
-              value="orders"
-              icon={
-                <Badge
-                  badgeContent={pendingOrderCount}
-                  color="primary"
-                  sx={{
-                    "& .MuiBadge-badge": {
-                      fontSize: "0.7rem",
-                      minWidth: "18px",
-                      height: "18px",
-                      padding: "0 6px",
-                    },
-                  }}
-                >
-                  <CreateRounded />
-                </Badge>
-              }
-              data-value="orders"
-            />
-          )}
-          {isLoggedIn && (
-            <BottomNavigationAction
-              label={t("sidebar.dashboard.text", "Dashboard")}
-              value="dashboard"
-              icon={<DashboardRounded />}
-              data-value="dashboard"
-            />
-          )}
+          ))}
         </BottomNavigation>
         {/* Animated underline indicator */}
         {activeValue && (
