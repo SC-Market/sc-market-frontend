@@ -1,6 +1,6 @@
 import React from "react"
 import {
-  Box,
+  Grid,
   Typography,
   FormGroup,
   FormControlLabel,
@@ -10,8 +10,9 @@ import {
 } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { useGetUserProfileQuery } from "../../store/profile"
-import { useBottomNavTabs, AVAILABLE_TABS, BottomNavTab } from "../../hooks/settings/useBottomNavTabs"
+import { useBottomNavTabs, BottomNavTab } from "../../hooks/settings/useBottomNavTabs"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { FlatSection } from "../layout/FlatSection"
 
 export function BottomNavSettings() {
   const { t } = useTranslation()
@@ -34,27 +35,28 @@ export function BottomNavSettings() {
   }
 
   return (
-    <Box>
-      <Typography variant="h6" gutterBottom>
-        {t("settings.bottom_nav_tabs", "Bottom Navigation Tabs")}
-      </Typography>
-      <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-        {t("settings.bottom_nav_tabs_description", "Choose which tabs appear in your mobile bottom navigation")}
-      </Typography>
-      <FormGroup>
-        {availableTabs.map((tab) => (
-          <FormControlLabel
-            key={tab.id}
-            control={
-              <Checkbox
-                checked={enabledTabs.includes(tab.id)}
-                onChange={() => handleToggle(tab.id)}
-              />
-            }
-            label={t(tab.labelKey)}
-          />
-        ))}
-      </FormGroup>
-    </Box>
+    <FlatSection title={t("settings.bottomNav.title", "Bottom Navigation")}>
+      <Grid item xs={12}>
+        <Typography variant="body2" color="text.secondary" paragraph>
+          {t("settings.bottomNav.description", "Choose which tabs appear in your mobile bottom navigation")}
+        </Typography>
+      </Grid>
+      <Grid item xs={12}>
+        <FormGroup>
+          {availableTabs.map((tab) => (
+            <FormControlLabel
+              key={tab.id}
+              control={
+                <Checkbox
+                  checked={enabledTabs.includes(tab.id)}
+                  onChange={() => handleToggle(tab.id)}
+                />
+              }
+              label={t(tab.labelKey)}
+            />
+          ))}
+        </FormGroup>
+      </Grid>
+    </FlatSection>
   )
 }
