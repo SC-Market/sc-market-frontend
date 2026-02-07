@@ -251,7 +251,7 @@ export function MobileBottomNav() {
                   }
                 case "dashboard":
                   return {
-                    label: t("sidebar.dashboard", "Dashboard"),
+                    label: t("sidebar.dashboard.text", "Dashboard"),
                     icon: <DashboardRounded />,
                   }
               }
