@@ -61,7 +61,12 @@ export function ManageStockPage() {
 
       <ContainerGrid maxWidth="xl" sidebarOpen={true}>
         <Grid item xs={12}>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <Box sx={{ 
+            display: "flex", 
+            flexDirection: { xs: "column", sm: "row" },
+            alignItems: { xs: "stretch", sm: "center" },
+            gap: 1 
+          }}>
             {isMobile && (
               <Button
                 variant="outlined"
