@@ -17,6 +17,11 @@ import {
   ForumRounded,
   DescriptionRounded,
   PersonAddRounded,
+  AssignmentRounded,
+  BusinessRounded,
+  SettingsRounded,
+  WarehouseRounded,
+  ListAltRounded,
 } from "@mui/icons-material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useGetUserProfileQuery } from "../../store/profile"
@@ -240,7 +245,7 @@ export function MobileBottomNav() {
                 case "contracts":
                   return {
                     label: t("sidebar.open_contracts", "Contracts"),
-                    icon: <DescriptionRounded />,
+                    icon: <AssignmentRounded />,
                   }
                 case "recruiting":
                   return {
@@ -250,7 +255,7 @@ export function MobileBottomNav() {
                 case "contractors":
                   return {
                     label: t("sidebar.contractors", "Contractors"),
-                    icon: <CreateRounded />,
+                    icon: <BusinessRounded />,
                   }
                 case "messages":
                   return {
@@ -300,12 +305,12 @@ export function MobileBottomNav() {
                 case "manage_listings":
                   return {
                     label: t("sidebar.manage_listings", "Listings"),
-                    icon: <StoreRounded />,
+                    icon: <ListAltRounded />,
                   }
                 case "manage_stock":
                   return {
                     label: t("sidebar.manage_stock", "Stock"),
-                    icon: <StoreRounded />,
+                    icon: <WarehouseRounded />,
                   }
                 case "org_orders":
                   return {
@@ -315,7 +320,7 @@ export function MobileBottomNav() {
                 case "org_manage":
                   return {
                     label: t("sidebar.settings", "Settings"),
-                    icon: <CreateRounded />,
+                    icon: <SettingsRounded />,
                   }
                 case "org_public":
                   return {

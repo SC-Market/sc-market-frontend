@@ -51,25 +51,10 @@ export function useBottomNavTabs(isLoggedIn: boolean, hasOrg: boolean = false) {
     return stored ? JSON.parse(stored) : defaultTabs
   })
 
-  useEffect(() => {
-    localStorage.setItem("bottomNavTabs", JSON.stringify(tabs))
-    // Trigger storage event for other components
-    window.dispatchEvent(new StorageEvent('storage', {
-      key: 'bottomNavTabs',
-      newValue: JSON.stringify(tabs),
-    }))
-  }, [tabs])
-
-  // Listen for storage changes
-  useEffect(() => {
-    const handleStorage = (e: StorageEvent | Event) => {
-      if ('key' in e && e.key === 'bottomNavTabs' && 'newValue' in e && e.newValue) {
-        setTabsState(JSON.parse(e.newValue))
-      }
-    }
-    window.addEventListener('storage', handleStorage)
-    return () => window.removeEventListener('storage', handleStorage)
-  }, [])
+  const saveTabs = (newTabs: BottomNavTab[]) => {
+    localStorage.setItem("bottomNavTabs", JSON.stringify(newTabs))
+    setTabsState(newTabs)
+  }
 
   const availableTabs = AVAILABLE_TABS.filter(
     tab => !tab.requiresAuth || isLoggedIn
@@ -88,6 +73,7 @@ export function useBottomNavTabs(isLoggedIn: boolean, hasOrg: boolean = false) {
     enabledTabs,
     availableTabs,
     setTabs: setTabsState,
+    saveTabs,
     maxTabs: MAX_TABS,
   }
 }
