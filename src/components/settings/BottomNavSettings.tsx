@@ -7,7 +7,7 @@ import {
   ListItemText,
   ListItemIcon,
   Checkbox,
-  IconButton,
+  Button,
   useTheme,
   useMediaQuery,
 } from "@mui/material"
@@ -24,7 +24,9 @@ export function BottomNavSettings() {
   const isMobile = useMediaQuery(theme.breakpoints.only("xs"))
   const { data: userProfile } = useGetUserProfileQuery()
   const isLoggedIn = !!userProfile
-  const { enabledTabs, availableTabs, setTabs, maxTabs } = useBottomNavTabs(isLoggedIn, true)
+  const { enabledTabs, availableTabs, saveTabs, maxTabs } = useBottomNavTabs(isLoggedIn, true)
+  
+  const [localTabs, setLocalTabs] = useState<BottomNavTab[]>(enabledTabs)
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null)
 
   if (!isMobile) {
@@ -32,10 +34,10 @@ export function BottomNavSettings() {
   }
 
   const handleToggle = (tabId: BottomNavTab) => {
-    if (enabledTabs.includes(tabId)) {
-      setTabs(enabledTabs.filter((t: BottomNavTab) => t !== tabId))
-    } else if (enabledTabs.length < maxTabs) {
-      setTabs([...enabledTabs, tabId])
+    if (localTabs.includes(tabId)) {
+      setLocalTabs(localTabs.filter((t: BottomNavTab) => t !== tabId))
+    } else if (localTabs.length < maxTabs) {
+      setLocalTabs([...localTabs, tabId])
     }
   }
 
@@ -47,16 +49,20 @@ export function BottomNavSettings() {
     e.preventDefault()
     if (draggedIndex === null || draggedIndex === index) return
     
-    const newTabs = [...enabledTabs]
+    const newTabs = [...localTabs]
     const draggedTab = newTabs[draggedIndex]
     newTabs.splice(draggedIndex, 1)
     newTabs.splice(index, 0, draggedTab)
-    setTabs(newTabs)
+    setLocalTabs(newTabs)
     setDraggedIndex(index)
   }
 
   const handleDragEnd = () => {
     setDraggedIndex(null)
+  }
+
+  const handleSave = () => {
+    saveTabs(localTabs)
   }
 
   return (
@@ -68,10 +74,10 @@ export function BottomNavSettings() {
       </Grid>
       <Grid item xs={12}>
         <Typography variant="subtitle2" gutterBottom>
-          {t("settings.bottomNav.selected", "Selected")} ({enabledTabs.length}/{maxTabs})
+          {t("settings.bottomNav.selected", "Selected")} ({localTabs.length}/{maxTabs})
         </Typography>
         <List dense>
-          {enabledTabs.map((tabId, index) => {
+          {localTabs.map((tabId, index) => {
             const tab = AVAILABLE_TABS.find(t => t.id === tabId)
             if (!tab) return null
             return (
@@ -107,7 +113,7 @@ export function BottomNavSettings() {
         </Typography>
         <List dense>
           {availableTabs
-            .filter(tab => !enabledTabs.includes(tab.id))
+            .filter(tab => !localTabs.includes(tab.id))
             .map((tab) => (
               <ListItem key={tab.id}>
                 <ListItemText primary={t(tab.labelKey)} />
@@ -115,11 +121,20 @@ export function BottomNavSettings() {
                   edge="end"
                   checked={false}
                   onChange={() => handleToggle(tab.id)}
-                  disabled={enabledTabs.length >= maxTabs}
+                  disabled={localTabs.length >= maxTabs}
                 />
               </ListItem>
             ))}
         </List>
+      </Grid>
+      <Grid item xs={12}>
+        <Button 
+          variant="contained" 
+          onClick={handleSave}
+          fullWidth
+        >
+          {t("common.save", "Save")}
+        </Button>
       </Grid>
     </FlatSection>
   )
