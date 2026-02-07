@@ -171,11 +171,13 @@ export function MobileBottomNav() {
   }
 
   const getActiveTabs = (): NavTabConfig[] => {
-    const saved = localStorage.getItem("mobile_nav_tabs")
-    const userTabs = saved ? JSON.parse(saved) : null
     const defaultTabs = isLoggedIn
       ? DEFAULT_LOGGED_IN_TABS
       : DEFAULT_LOGGED_OUT_TABS
+    
+    // Only use saved tabs if logged in
+    const saved = isLoggedIn ? localStorage.getItem("mobile_nav_tabs") : null
+    const userTabs = saved ? JSON.parse(saved) : null
     const tabIds = userTabs || defaultTabs
 
     return tabIds
