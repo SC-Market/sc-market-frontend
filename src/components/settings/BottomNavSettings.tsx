@@ -24,7 +24,7 @@ export function BottomNavSettings() {
   const isMobile = useMediaQuery(theme.breakpoints.only("xs"))
   const { data: userProfile } = useGetUserProfileQuery()
   const isLoggedIn = !!userProfile
-  const { enabledTabs, availableTabs, setTabs, maxTabs } = useBottomNavTabs(isLoggedIn)
+  const { enabledTabs, availableTabs, setTabs, maxTabs } = useBottomNavTabs(isLoggedIn, true)
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null)
 
   if (!isMobile) {
