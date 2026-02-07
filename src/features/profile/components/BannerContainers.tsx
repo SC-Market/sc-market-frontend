@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import { Box, Paper } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { User } from "../../../datatypes/User"
@@ -10,17 +10,30 @@ export function LightBannerContainer(props: {
   profile: User | Contractor
 }) {
   const { profile } = props
+  const theme = useTheme<ExtendedTheme>()
+  const [imageLoaded, setImageLoaded] = useState(false)
+
+  useEffect(() => {
+    if (profile.banner) {
+      const img = new Image()
+      img.src = profile.banner
+      img.onload = () => setImageLoaded(true)
+    }
+  }, [profile.banner])
 
   return (
     <Paper
       sx={{
         height: 250,
-        background: `url(${profile.banner})`,
+        background: imageLoaded
+          ? `url(${profile.banner})`
+          : theme.palette.background.paper,
         backgroundPosition: "center",
         backgroundSize: "cover",
         borderRadius: 0,
         position: "relative",
         padding: 3,
+        transition: "background 0.3s ease-in-out",
       }}
     >
       {props.children}
@@ -34,17 +47,29 @@ export function DarkBannerContainer(props: {
 }) {
   const { profile } = props
   const theme = useTheme<ExtendedTheme>()
+  const [imageLoaded, setImageLoaded] = useState(false)
+
+  useEffect(() => {
+    if (profile.banner) {
+      const img = new Image()
+      img.src = profile.banner
+      img.onload = () => setImageLoaded(true)
+    }
+  }, [profile.banner])
 
   return (
     <Paper
       sx={{
         height: 500,
-        background: `url(${profile.banner})`,
+        background: imageLoaded
+          ? `url(${profile.banner})`
+          : theme.palette.background.paper,
         backgroundSize: "cover",
         backgroundPosition: "center",
         borderRadius: 0,
         position: "relative",
         padding: 3,
+        transition: "background 0.3s ease-in-out",
       }}
     >
       <Box

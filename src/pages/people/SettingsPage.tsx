@@ -12,6 +12,7 @@ import {
   SecurityRounded,
   NotificationsActiveRounded,
   Email as EmailIcon,
+  PhoneAndroidRounded,
 } from "@mui/icons-material"
 import { PrivacySettings } from "../../views/settings/PrivacySettings"
 import { Discord } from "../../components/icon/DiscordIcon"
@@ -23,6 +24,7 @@ import { BlocklistSettings } from "../../views/settings/BlocklistSettings"
 import { ApiTokensSettings } from "../../features/api-tokens"
 import { PushNotificationSettings } from "../../features/push-notifications"
 import { EmailSettings } from "../../features/email"
+import { MobileNavSettings } from "../../views/settings/MobileNavSettings"
 import { useTranslation } from "react-i18next"
 
 export function SettingsPage() {
@@ -100,6 +102,12 @@ export function SettingsPage() {
               {...a11yProps(8)}
               value={8}
             />
+            <Tab
+              label={t("settings.mobileNav.title")}
+              icon={<PhoneAndroidRounded />}
+              {...a11yProps(9)}
+              value={9}
+            />
           </Tabs>
         </Grid>
 
@@ -131,6 +139,9 @@ export function SettingsPage() {
           </TabPanel>
           <TabPanel value={page} index={8}>
             <EmailSettings />
+          </TabPanel>
+          <TabPanel value={page} index={9}>
+            <MobileNavSettings />
           </TabPanel>
         </Grid>
       </ContainerGrid>

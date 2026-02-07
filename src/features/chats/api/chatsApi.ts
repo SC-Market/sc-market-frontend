@@ -25,6 +25,7 @@ export const chatsApi = serviceApi.injectEndpoints({
       {
         chat_id: string
         content: string
+        username: string
       }
     >({
       query: ({ chat_id, content }) => ({
@@ -33,8 +34,8 @@ export const chatsApi = serviceApi.injectEndpoints({
         body: { content },
       }),
       async onQueryStarted(
-        { chat_id, content },
-        { dispatch, queryFulfilled, getState },
+        { chat_id, content, username },
+        { dispatch, queryFulfilled },
       ) {
         // Note: Messages are also updated via socket.io, but we add optimistic update
         // for immediate feedback before socket event arrives
@@ -42,36 +43,11 @@ export const chatsApi = serviceApi.injectEndpoints({
           (dispatch) => {
             const patches: OptimisticPatch[] = []
 
-            // Get current user from RTK Query cache (profile lives in generatedApi)
-            // The query key format is "profileGetUserProfile(undefined)"
-            const state = getState() as RootState
-            const generatedApiState = state[generatedApi.reducerPath]
-            let profileData = generatedApiState?.queries?.[
-              "profileGetUserProfile(undefined)"
-            ]?.data as { username?: string } | undefined
-
-            // If not found, try alternative query key formats
-            if (!profileData?.username) {
-              const profileQueryKey = Object.keys(
-                generatedApiState?.queries || {},
-              ).find(
-                (key) =>
-                  key.includes("profileGetUserProfile") &&
-                  generatedApiState.queries[key]?.data,
-              )
-              if (profileQueryKey) {
-                profileData = generatedApiState.queries[profileQueryKey]
-                  ?.data as { username?: string } | undefined
-              }
-            }
-
-            const currentUser = profileData?.username || null
-
             // Optimistically add message to chat
             const chatPatch = dispatch(
               chatsApi.util.updateQueryData("getChatByID", chat_id, (draft) => {
                 const tempMessage: Message = {
-                  author: currentUser,
+                  author: username,
                   content: content,
                   timestamp: Date.now(),
                   chat_id: chat_id,
@@ -80,7 +56,7 @@ export const chatsApi = serviceApi.injectEndpoints({
                 // Check if message already exists (avoid duplicates) - use content + author since timestamp is server-side
                 const messageExists = draft.messages.some(
                   (msg) =>
-                    msg.content === content && msg.author === currentUser,
+                    msg.content === content && msg.author === username,
                 )
                 if (!messageExists) {
                   draft.messages.push(tempMessage)
