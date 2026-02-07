@@ -2468,7 +2468,20 @@
     },
     "languages": {
       "title": "Supported Languages",
-      "description": "Select the languages you can communicate in."
+      "description": "Select the languages you can communicate in.",
+      "label": "Supported Languages",
+      "placeholder": "Select languages...",
+      "section": {
+        "description": "Select the languages you can communicate in. This helps others know which languages you support."
+      },
+      "field": {
+        "helperText": "Select all languages you can communicate in"
+      },
+      "save": "Save Languages",
+      "saveSuccess": "Languages updated successfully",
+      "saveError": "Failed to update languages",
+      "loadError": "Failed to load languages",
+      "noPermission": "You don't have permission to edit organization languages"
     },
     "pushNotifications": {
       "title": "Push Notifications",
