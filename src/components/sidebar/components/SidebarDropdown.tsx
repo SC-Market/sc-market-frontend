@@ -17,6 +17,7 @@ import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { SidebarLink } from "./SidebarLink"
 import { SidebarItemWithStarProps } from "../types"
 import { isSidebarPathSelected } from "../utils/pathMatching"
+import { haptic } from "../../../util/haptics"
 
 /**
  * Collapsible dropdown for sidebar items with children
@@ -53,7 +54,10 @@ export function SidebarDropdown(props: SidebarItemWithStarProps) {
           },
         }}
         key={text}
-        onClick={() => setOpen((open) => !open)}
+        onClick={() => {
+          haptic.selection()
+          setOpen((open) => !open)
+        }}
       >
         <ListItemIcon
           sx={{

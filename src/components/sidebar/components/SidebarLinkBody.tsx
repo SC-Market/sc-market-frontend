@@ -17,6 +17,7 @@ import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { useDrawerOpen } from "../../../hooks/layout/Drawer"
 import { useUnreadChatCount } from "../../../features/chats"
 import { SidebarLinkProps } from "../types"
+import { haptic } from "../../../util/haptics"
 
 export const ORG_ROUTE_REST_TO_CANONICAL: Record<string, string> = {
   dashboard: "/dashboard",
@@ -74,6 +75,7 @@ export function SidebarLinkBody(props: SidebarLinkProps) {
       selected={selected}
       key={text}
       onClick={() => {
+        haptic.light()
         if (xs) {
           setDrawerOpen(false)
         }
