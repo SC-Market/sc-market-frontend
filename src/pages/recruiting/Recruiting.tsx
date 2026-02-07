@@ -151,7 +151,6 @@ export function Recruiting() {
             sidebarWidth={marketDrawerWidth}
           >
             <div ref={ref} />
-            <Grid container spacing={theme.layoutSpacing.layout}>
               <HeaderTitle lg={7} xl={7}>
                 {t("recruiting_orgs")}
               </HeaderTitle>
@@ -250,7 +249,6 @@ export function Recruiting() {
                 nextIconButtonProps={{ color: "primary" }}
                 backIconButtonProps={{ color: "primary" }}
               />
-            </Grid>
             </Grid>
           </ContainerGrid>
         </RecruitingSearchContext.Provider>
