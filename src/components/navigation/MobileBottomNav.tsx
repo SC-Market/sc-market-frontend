@@ -31,6 +31,7 @@ import { useUnreadChatCount } from "../../features/chats"
 import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
 import { usePendingOrderCount } from "../../hooks/orders/usePendingOrderCount"
 import { haptic } from "../../util/haptics"
+import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 
 interface NavTabConfig {
   id: string
@@ -59,6 +60,7 @@ export function MobileBottomNav() {
   const navigate = useNavigate()
   const { t } = useTranslation()
   const { data: userProfile } = useGetUserProfileQuery()
+  const [currentOrg] = useCurrentOrg()
   const isLoggedIn = !!userProfile
   const unreadChatCount = useUnreadChatCount()
   const pendingOrderCount = usePendingOrderCount()
@@ -170,7 +172,7 @@ export function MobileBottomNav() {
         id: "org-public",
         label: "sidebar.org_public_page",
         icon: <StoreRounded />,
-        route: userProfile?.current_org ? `/contractor/${userProfile.current_org}` : "/contractors",
+        route: currentOrg ? `/contractor/${currentOrg.spectrum_id}` : "/contractors",
         requiresAuth: true,
       },
       "org-availability": {
