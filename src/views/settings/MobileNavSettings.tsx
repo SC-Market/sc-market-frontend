@@ -21,7 +21,7 @@ import {
   ListAltRounded,
   WarehouseRounded,
   DashboardCustomizeRounded,
-  LocalShipping,
+  AssignmentTurnedInRounded,
 } from "@mui/icons-material"
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd"
 import { useTranslation } from "react-i18next"
@@ -107,10 +107,22 @@ const ALL_NAV_TABS: NavTab[] = [
     icon: <DashboardCustomizeRounded />,
   },
   {
-    id: "fleet",
-    label: "sidebar.my_fleet",
-    shortLabel: "sidebar.fleet_short",
-    icon: <LocalShipping />,
+    id: "org-dashboard",
+    label: "sidebar.orders_assigned_to_me",
+    shortLabel: "sidebar.dashboard.text",
+    icon: <AssignmentTurnedInRounded />,
+  },
+  {
+    id: "org-public",
+    label: "sidebar.org_public_page",
+    shortLabel: "sidebar.org_public_page",
+    icon: <StoreRounded />,
+  },
+  {
+    id: "org-availability",
+    label: "sidebar.availability",
+    shortLabel: "sidebar.availability_short",
+    icon: <CalendarMonthRounded />,
   },
 ]
 
