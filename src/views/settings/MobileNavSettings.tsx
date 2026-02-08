@@ -114,7 +114,7 @@ const ALL_NAV_TABS: NavTab[] = [
   },
 ]
 
-const DEFAULT_TABS = ["market", "services", "contracts", "recruiting", "messages"]
+const DEFAULT_TABS = ["market", "services", "messages", "orders", "dashboard"]
 const STORAGE_KEY = "mobile_nav_tabs"
 
 export function MobileNavSettings() {
