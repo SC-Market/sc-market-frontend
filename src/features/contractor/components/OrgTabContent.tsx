@@ -30,7 +30,7 @@ export function OrgTabContent({ currentTab, contractor }: OrgTabContentProps) {
         <OrgServicesView org={contractor.spectrum_id} />
       </TabPanel>
       <TabPanel value={currentTab} index={2}>
-        <Container maxWidth="xl" disableGutters>
+        <Container maxWidth="xl" sx={{ pt: 3 }}>
           <Grid
             container
             spacing={theme.layoutSpacing.layout}
@@ -71,26 +71,34 @@ export function OrgTabContent({ currentTab, contractor }: OrgTabContentProps) {
         </Container>
       </TabPanel>
       <TabPanel value={currentTab} index={3}>
-        <Grid container spacing={theme.layoutSpacing.layout}>
-          <CreateOrderForm contractor_id={contractor.spectrum_id} />
-        </Grid>
+        <Container maxWidth="xl" sx={{ pt: 3 }}>
+          <Grid container spacing={theme.layoutSpacing.layout}>
+            <CreateOrderForm contractor_id={contractor.spectrum_id} />
+          </Grid>
+        </Container>
       </TabPanel>
       <TabPanel value={currentTab} index={4}>
-        <Grid container spacing={theme.layoutSpacing.layout}>
-          <MemberList contractor={contractor} />
-        </Grid>
+        <Container maxWidth="xl" sx={{ pt: 3 }}>
+          <Grid container spacing={theme.layoutSpacing.layout}>
+            <MemberList contractor={contractor} />
+          </Grid>
+        </Container>
       </TabPanel>
       <TabPanel value={currentTab} index={5}>
-        <Grid container spacing={theme.layoutSpacing.layout}>
-          <RecruitingPostArea spectrum_id={contractor.spectrum_id} />
-        </Grid>
+        <Container maxWidth="xl" sx={{ pt: 3 }}>
+          <Grid container spacing={theme.layoutSpacing.layout}>
+            <RecruitingPostArea spectrum_id={contractor.spectrum_id} />
+          </Grid>
+        </Container>
       </TabPanel>
       <TabPanel value={currentTab} index={6}>
-        <Grid container spacing={theme.layoutSpacing.layout}>
-          <Section xs={12} lg={8} disablePadding>
-            <OrgReviews contractor={contractor} />
-          </Section>
-        </Grid>
+        <Container maxWidth="xl" sx={{ pt: 3 }}>
+          <Grid container spacing={theme.layoutSpacing.layout}>
+            <Section xs={12} lg={8} disablePadding>
+              <OrgReviews contractor={contractor} />
+            </Section>
+          </Grid>
+        </Container>
       </TabPanel>
     </>
   )
