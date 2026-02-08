@@ -85,8 +85,8 @@ export function OrgInfo(props: { contractor: Contractor }) {
               </Grid>
             </Grid>
           </Container>
+          <OrgTabContent currentTab={page} contractor={contractor} />
         </Box>
-        <OrgTabContent currentTab={page} contractor={contractor} />
       </Box>
     </OpenLayout>
   )
