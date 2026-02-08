@@ -22,7 +22,7 @@ import {
   WarehouseRounded,
   DashboardCustomizeRounded,
   CalendarMonthRounded,
-  LocalShipping,
+  AssignmentTurnedInRounded,
 } from "@mui/icons-material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useGetUserProfileQuery } from "../../store/profile"
@@ -159,11 +159,25 @@ export function MobileBottomNav() {
         route: "/order/services",
         requiresAuth: true,
       },
-      fleet: {
-        id: "fleet",
-        label: "sidebar.fleet_short",
-        icon: <LocalShipping />,
-        route: "/myfleet",
+      "org-dashboard": {
+        id: "org-dashboard",
+        label: "sidebar.dashboard.text",
+        icon: <AssignmentTurnedInRounded />,
+        route: "/dashboard",
+        requiresAuth: true,
+      },
+      "org-public": {
+        id: "org-public",
+        label: "sidebar.org_public_page",
+        icon: <StoreRounded />,
+        route: userProfile?.current_org ? `/contractor/${userProfile.current_org}` : "/contractors",
+        requiresAuth: true,
+      },
+      "org-availability": {
+        id: "org-availability",
+        label: "sidebar.availability_short",
+        icon: <CalendarMonthRounded />,
+        route: "/availability",
         requiresAuth: true,
       },
     }
