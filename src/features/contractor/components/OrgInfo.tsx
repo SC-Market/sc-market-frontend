@@ -41,53 +41,52 @@ export function OrgInfo(props: { contractor: Contractor }) {
       <OrgMetaTags contractor={contractor} />
       <Box sx={{ position: "relative" }}>
         <OrgBannerArea org={contractor} />
-        <Container
-          maxWidth="xl"
+        <Box
           sx={{
             ...(theme.palette.mode === "dark"
               ? { position: "relative", top: -450 }
               : { position: "relative", top: -200 }),
           }}
         >
-          <Grid container spacing={theme.layoutSpacing.layout}>
-            <Grid item xs={12}>
-              <PageBreadcrumbs
-                items={[
-                  {
-                    label: t("contractors.title", "Contractors"),
-                    href: "/contractors",
-                  },
-                  { label: contractor.name },
-                ]}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Grid
-                container
-                spacing={theme.layoutSpacing.component}
-                alignItems="flex-end"
-                justifyContent="space-between"
-                minHeight={375}
-              >
-                <Grid item xs={12} md={8}>
-                  <OrgHeader contractor={contractor} />
+          <Container maxWidth="xl">
+            <PageBreadcrumbs
+              items={[
+                {
+                  label: t("contractors.title", "Contractors"),
+                  href: "/contractors",
+                },
+                { label: contractor.name },
+              ]}
+            />
+          </Container>
+          <Container maxWidth="xl">
+            <Grid container spacing={theme.layoutSpacing.layout}>
+              <Grid item xs={12}>
+                <Grid
+                  container
+                  spacing={theme.layoutSpacing.component}
+                  alignItems="flex-end"
+                  justifyContent="space-between"
+                  minHeight={375}
+                >
+                  <Grid item xs={12} md={8}>
+                    <OrgHeader contractor={contractor} />
+                  </Grid>
+                  <ContractorReviewSummary contractor={contractor} />
                 </Grid>
-                <ContractorReviewSummary contractor={contractor} />
+              </Grid>
+
+              <Grid item xs={12}>
+                <OrgTabs
+                  spectrumId={contractor.spectrum_id}
+                  currentTab={page}
+                  hasRecruitingPost={!!recruiting_post}
+                />
               </Grid>
             </Grid>
-
-            <Grid item xs={12}>
-              <OrgTabs
-                spectrumId={contractor.spectrum_id}
-                currentTab={page}
-                hasRecruitingPost={!!recruiting_post}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <OrgTabContent currentTab={page} contractor={contractor} />
-            </Grid>
-          </Grid>
-        </Container>
+          </Container>
+        </Box>
+        <OrgTabContent currentTab={page} contractor={contractor} />
       </Box>
     </OpenLayout>
   )
