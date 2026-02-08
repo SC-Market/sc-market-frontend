@@ -28,6 +28,7 @@ import type { SaleTypeSelect } from "../domain/types"
 import { AttributeFilterSection } from "../../../components/filters/AttributeFilterSection"
 import { marketApi } from "../api/marketApi"
 import { debounce } from "lodash"
+import { useBottomNavHeight } from "../../../hooks/layout/useBottomNavHeight"
 import type { MarketListing } from "../../../datatypes/MarketListing"
 
 export function MarketSearchArea(props: {
@@ -406,6 +407,7 @@ export function MarketSideBarToggleButton() {
   const [open, setOpen] = useMarketSidebar()
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const bottomNavHeight = useBottomNavHeight()
   const { t } = useTranslation()
 
   // Only show toggle button on mobile
@@ -422,7 +424,7 @@ export function MarketSideBarToggleButton() {
       onClick={() => setOpen((value) => !value)}
       sx={{
         position: "fixed",
-        bottom: { xs: 80, sm: 24 },
+        bottom: bottomNavHeight + 16,
         right: 24,
         zIndex: theme.zIndex.speedDial,
         borderRadius: 2,
