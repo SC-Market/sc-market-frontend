@@ -1,5 +1,5 @@
 import React from "react"
-import { Grid, useTheme } from "@mui/material"
+import { Container, Grid, useTheme } from "@mui/material"
 import { TabPanel } from "../../../components/tabs/Tabs"
 import { Section } from "../../../components/paper/Section"
 import { CreateOrderForm } from "../../../views/orders/CreateOrderForm"
@@ -37,23 +37,29 @@ export function ProfileTabContent({
         <ProfileServicesView user={profile.username} />
       </TabPanel>
       <TabPanel index={currentTab} value={2}>
-        <ProfileAboutTab
-          profile={profile}
-          submitUpdate={submitUpdate}
-          isMyProfile={isMyProfile}
-        />
+        <Container maxWidth="xl" sx={{ pt: 3 }}>
+          <ProfileAboutTab
+            profile={profile}
+            submitUpdate={submitUpdate}
+            isMyProfile={isMyProfile}
+          />
+        </Container>
       </TabPanel>
       <TabPanel index={currentTab} value={3}>
-        <Grid container spacing={theme.layoutSpacing.layout}>
-          <CreateOrderForm assigned_to={profile.username} />
-        </Grid>
+        <Container maxWidth="xl" sx={{ pt: 3 }}>
+          <Grid container spacing={theme.layoutSpacing.layout}>
+            <CreateOrderForm assigned_to={profile.username} />
+          </Grid>
+        </Container>
       </TabPanel>
       <TabPanel index={currentTab} value={4}>
-        <Grid container spacing={theme.layoutSpacing.layout}>
-          <Section xs={12} lg={8} disablePadding>
-            <UserReviews user={profile} />
-          </Section>
-        </Grid>
+        <Container maxWidth="xl" sx={{ pt: 3 }}>
+          <Grid container spacing={theme.layoutSpacing.layout}>
+            <Section xs={12} lg={8} disablePadding>
+              <UserReviews user={profile} />
+            </Section>
+          </Grid>
+        </Container>
       </TabPanel>
     </>
   )
