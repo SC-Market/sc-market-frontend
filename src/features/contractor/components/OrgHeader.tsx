@@ -15,6 +15,7 @@ import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { Contractor } from "../../../datatypes/Contractor"
 import { contractorKindIcons } from "../../../views/contractor/ContractorList"
 import { useTranslation } from "react-i18next"
+import { ShareButton } from "../../../components/buttons/ShareButton"
 
 interface OrgHeaderProps {
   contractor: Contractor
@@ -64,6 +65,7 @@ export function OrgHeader({ contractor }: OrgHeaderProps) {
               </IconButton>
             </MaterialLink>
           )}
+          <ShareButton title={`${contractor.name} - SC Market`} />
         </Box>
         <Box
           sx={{
