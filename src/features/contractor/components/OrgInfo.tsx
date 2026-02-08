@@ -39,6 +39,17 @@ export function OrgInfo(props: { contractor: Contractor }) {
   return (
     <OpenLayout sidebarOpen={true}>
       <OrgMetaTags contractor={contractor} />
+      <Container maxWidth="xl">
+        <PageBreadcrumbs
+          items={[
+            {
+              label: t("contractors.title", "Contractors"),
+              href: "/contractors",
+            },
+            { label: contractor.name },
+          ]}
+        />
+      </Container>
       <Box sx={{ position: "relative" }}>
         <OrgBannerArea org={contractor} />
         <Box
@@ -48,17 +59,6 @@ export function OrgInfo(props: { contractor: Contractor }) {
               : { position: "relative", top: -200 }),
           }}
         >
-          <Container maxWidth="xl">
-            <PageBreadcrumbs
-              items={[
-                {
-                  label: t("contractors.title", "Contractors"),
-                  href: "/contractors",
-                },
-                { label: contractor.name },
-              ]}
-            />
-          </Container>
           <Container maxWidth="xl">
             <Grid container spacing={theme.layoutSpacing.layout}>
               <Grid item xs={12}>
