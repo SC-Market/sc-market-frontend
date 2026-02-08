@@ -286,6 +286,7 @@ export function MobileBottomNav() {
         left: 0,
         right: 0,
         borderTop: `1px solid ${theme.palette.outline.main}`,
+        borderRadius: 0,
         display: { xs: isKeyboardOpen ? "none" : "block", sm: "none" }, // Hide when keyboard is open
         // Add padding for safe area on iOS devices
         paddingBottom: "env(safe-area-inset-bottom)",

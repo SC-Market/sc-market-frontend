@@ -93,6 +93,7 @@ export function Sidebar() {
           overflow: "hidden",
           borderRight: drawerOpen ? 1 : 0,
           borderColor: drawerOpen ? theme.palette.outline.main : "transparent",
+          borderRadius: 0,
           scrollPadding: 0,
           display: "flex",
           flexDirection: "column",
