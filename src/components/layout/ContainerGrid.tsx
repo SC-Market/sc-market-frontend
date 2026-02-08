@@ -271,7 +271,7 @@ export function OpenLayout(
               xs: noMobilePadding ? 0 : theme.spacing(1),
               sm: theme.spacing(3),
             },
-            paddingTop: theme.spacing(4),
+            paddingTop: theme.spacing(2),
             paddingBottom: { xs: theme.spacing(10), sm: theme.spacing(2) }, // Extra bottom padding on mobile for bottom nav
           }}
         >

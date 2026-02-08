@@ -107,18 +107,18 @@ export function SidebarHeader({
               </InputAdornment>
             ),
           }}
-          sx={{ 
+          sx={{
             mt: 1,
-            '& .MuiOutlinedInput-root': {
+            "& .MuiOutlinedInput-root": {
               backgroundColor: theme.palette.background.paper,
-              '& fieldset': {
+              "& fieldset": {
                 borderColor: theme.palette.outline.main,
               },
-              '&:hover fieldset': {
+              "&:hover fieldset": {
                 borderColor: theme.palette.primary.main,
               },
             },
-            '& .MuiInputBase-input': {
+            "& .MuiInputBase-input": {
               color: theme.palette.text.primary,
             },
           }}

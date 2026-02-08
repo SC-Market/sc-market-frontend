@@ -1,9 +1,9 @@
 /**
  * Haptic Feedback Components
- * 
+ *
  * Thin wrappers around MUI components that add haptic feedback on interaction.
  * Use these instead of standard MUI components for better mobile UX.
- * 
+ *
  * Haptic patterns:
  * - light() - Buttons, IconButtons, Drawer/Dialog/Menu open
  * - selection() - Tabs, Checkboxes, Switches, MenuItem, Pagination

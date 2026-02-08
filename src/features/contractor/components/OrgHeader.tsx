@@ -25,12 +25,7 @@ export function OrgHeader({ contractor }: OrgHeaderProps) {
   const { t } = useTranslation()
 
   return (
-    <Stack
-      direction="row"
-      spacing={2}
-      alignItems="flex-start"
-      flexWrap="wrap"
-    >
+    <Stack direction="row" spacing={2} alignItems="flex-start" flexWrap="wrap">
       <Avatar
         src={contractor.avatar}
         aria-label={t("contractors.contractor")}
@@ -51,11 +46,7 @@ export function OrgHeader({ contractor }: OrgHeaderProps) {
             flexWrap: "wrap",
           }}
         >
-          <Typography
-            color="text.secondary"
-            variant="h6"
-            fontWeight={600}
-          >
+          <Typography color="text.secondary" variant="h6" fontWeight={600}>
             {contractor.name}
           </Typography>
           {!contractor.spectrum_id.startsWith("~") && (
@@ -81,9 +72,7 @@ export function OrgHeader({ contractor }: OrgHeaderProps) {
             gap: 0.5,
           }}
         >
-          <PeopleAltRoundedIcon
-            style={{ color: theme.palette.text.primary }}
-          />
+          <PeopleAltRoundedIcon style={{ color: theme.palette.text.primary }} />
           <Typography color="text.primary" fontWeight="bold">
             {contractor.size}
           </Typography>

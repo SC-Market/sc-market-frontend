@@ -2,13 +2,7 @@ import { HeaderTitle } from "../../components/typography/HeaderTitle"
 import React, { useCallback, useEffect, useRef, useState } from "react"
 import { ContractorListItem } from "../../views/contractor/ContractorList"
 import { ContractorSkeleton } from "../../components/skeletons"
-import {
-  Button,
-  Divider,
-  Grid,
-  IconButton,
-  useMediaQuery,
-} from "@mui/material"
+import { Button, Divider, Grid, IconButton, useMediaQuery } from "@mui/material"
 import { HapticTablePagination } from "../../components/haptic"
 import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import { useGetContractorsQuery } from "../../store/contractor"
@@ -146,7 +140,7 @@ export function Contractors() {
           >
             <div ref={ref} />
             <HeaderTitle>{t("contractorsPage.title")}</HeaderTitle>
-            
+
             {error ? (
               <Grid item xs={12}>
                 <EmptyContractors isError onRetry={() => refetch()} />

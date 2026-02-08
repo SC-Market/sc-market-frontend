@@ -30,9 +30,7 @@ export function StockSearchArea() {
 
   return (
     <Stack spacing={1} sx={{ p: 2 }}>
-      <Typography variant="h6">
-        {t("stock.filters", "Filters")}
-      </Typography>
+      <Typography variant="h6">{t("stock.filters", "Filters")}</Typography>
 
       <TextField
         fullWidth

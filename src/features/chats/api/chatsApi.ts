@@ -55,8 +55,7 @@ export const chatsApi = serviceApi.injectEndpoints({
                 draft.messages = draft.messages || []
                 // Check if message already exists (avoid duplicates) - use content + author since timestamp is server-side
                 const messageExists = draft.messages.some(
-                  (msg) =>
-                    msg.content === content && msg.author === username,
+                  (msg) => msg.content === content && msg.author === username,
                 )
                 if (!messageExists) {
                   draft.messages.push(tempMessage)

@@ -172,7 +172,8 @@ export function ViewOrder() {
                   ]
                 : []),
               {
-                label: order?.title || `Order ${id?.substring(0, 8).toUpperCase()}`,
+                label:
+                  order?.title || `Order ${id?.substring(0, 8).toUpperCase()}`,
               },
             ]}
           />
@@ -207,7 +208,9 @@ export function ViewOrder() {
               )}
               {session?.offers[0]?.market_listings &&
                 session.offers[0].market_listings.length > 0 && (
-                  <HapticTab label={t("orders.marketListings", "Market Listings")} />
+                  <HapticTab
+                    label={t("orders.marketListings", "Market Listings")}
+                  />
                 )}
               {amContractorManager && (
                 <HapticTab label={t("orders.allocation", "Stock Allocation")} />

@@ -20,7 +20,11 @@ interface OrgTabsProps {
   hasRecruitingPost: boolean
 }
 
-export function OrgTabs({ spectrumId, currentTab, hasRecruitingPost }: OrgTabsProps) {
+export function OrgTabs({
+  spectrumId,
+  currentTab,
+  hasRecruitingPost,
+}: OrgTabsProps) {
   const { t } = useTranslation()
 
   return (

@@ -43,7 +43,9 @@ export function Navbar(props: { children?: React.ReactNode }) {
   const messagingSidebarWidth =
     isMessagingPage && !isMobile ? messagingDrawerWidth : 0
 
-  const cartIconColor = theme.palette.getContrastText(theme.palette.background.navbar)
+  const cartIconColor = theme.palette.getContrastText(
+    theme.palette.background.navbar,
+  )
 
   return (
     <AppBar

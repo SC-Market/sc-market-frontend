@@ -30,12 +30,7 @@ export function ProfileHeader({
   const { t } = useTranslation()
 
   return (
-    <Grid
-      container
-      spacing={2}
-      alignItems="end"
-      justifyContent="flex-start"
-    >
+    <Grid container spacing={2} alignItems="end" justifyContent="flex-start">
       <Grid item>
         <ProfileAvatar
           avatar={profile.avatar}

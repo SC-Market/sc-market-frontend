@@ -119,12 +119,18 @@ export function ProfileSkeleton() {
                     label={<Skeleton width={60} />}
                     icon={<DesignServicesRounded />}
                   />
-                  <HapticTab label={<Skeleton width={60} />} icon={<InfoRounded />} />
+                  <HapticTab
+                    label={<Skeleton width={60} />}
+                    icon={<InfoRounded />}
+                  />
                   <HapticTab
                     label={<Skeleton width={60} />}
                     icon={<CreateRounded />}
                   />
-                  <HapticTab label={<Skeleton width={60} />} icon={<StarRounded />} />
+                  <HapticTab
+                    label={<Skeleton width={60} />}
+                    icon={<StarRounded />}
+                  />
                 </Tabs>
               </Box>
               <Divider light />

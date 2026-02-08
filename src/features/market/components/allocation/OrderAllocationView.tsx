@@ -326,17 +326,33 @@ export function OrderAllocationView({
                                   </TableCell>
                                   <TableCell>
                                     {allocation.lot?.owner ? (
-                                      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                                      <Box
+                                        sx={{
+                                          display: "flex",
+                                          alignItems: "center",
+                                          gap: 1,
+                                        }}
+                                      >
                                         <Avatar
-                                          src={allocation.lot.owner.avatar || undefined}
+                                          src={
+                                            allocation.lot.owner.avatar ||
+                                            undefined
+                                          }
                                           sx={{ width: 24, height: 24 }}
                                         />
-                                        <Typography variant="body2" color="text.secondary">
-                                          {allocation.lot.owner.display_name || allocation.lot.owner.username}
+                                        <Typography
+                                          variant="body2"
+                                          color="text.secondary"
+                                        >
+                                          {allocation.lot.owner.display_name ||
+                                            allocation.lot.owner.username}
                                         </Typography>
                                       </Box>
                                     ) : (
-                                      <Typography variant="body2" color="text.disabled">
+                                      <Typography
+                                        variant="body2"
+                                        color="text.disabled"
+                                      >
                                         —
                                       </Typography>
                                     )}

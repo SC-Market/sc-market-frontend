@@ -30,7 +30,10 @@ import {
   Add as AddIcon,
 } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
-import { useGetMyListingsQuery, useSearchMarketListingsQuery } from "../../api/marketApi"
+import {
+  useGetMyListingsQuery,
+  useSearchMarketListingsQuery,
+} from "../../api/marketApi"
 import {
   useSearchLotsQuery,
   useCreateLotMutation,
@@ -177,7 +180,7 @@ export function AllStockLotsGrid() {
 
     const handleChange = (
       _: React.SyntheticEvent,
-      newValue: typeof options[0] | null,
+      newValue: (typeof options)[0] | null,
     ) => {
       apiRef.current.setEditCellValue({
         id,
@@ -295,13 +298,14 @@ export function AllStockLotsGrid() {
       editable: true,
       renderEditCell: renderOwnerEditCell,
       renderCell: (params: GridRenderCellParams) => {
-        if (!params.value) return <Typography variant="body2">Unassigned</Typography>
-        
+        if (!params.value)
+          return <Typography variant="body2">Unassigned</Typography>
+
         return (
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <Avatar 
+            <Avatar
               src={params.row.owner_avatar || undefined}
-              sx={{ width: 24, height: 24 }} 
+              sx={{ width: 24, height: 24 }}
             />
             <Link
               to={`/user/${params.value}`}
@@ -376,9 +380,9 @@ export function AllStockLotsGrid() {
         )
       },
     },
-  ].filter(col => {
+  ].filter((col) => {
     // Hide owner column when there's no org
-    if (col.field === 'owner_username' && !currentOrg) {
+    if (col.field === "owner_username" && !currentOrg) {
       return false
     }
     return true
@@ -440,10 +444,10 @@ export function AllStockLotsGrid() {
   const handleSaveNew = async (row: any) => {
     try {
       // Auto-set owner to current user when no org
-      const ownerUsername = currentOrg 
-        ? (row.owner_username || null)
-        : (profile?.username || null)
-      
+      const ownerUsername = currentOrg
+        ? row.owner_username || null
+        : profile?.username || null
+
       await createLot({
         listing_id: row.listing_id,
         quantity: row.quantity || 0,

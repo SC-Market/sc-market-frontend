@@ -131,8 +131,8 @@ export function SidebarLinkBody(props: SidebarLinkProps) {
             e.stopPropagation()
             onToggleStar(pathOnly)
           }}
-          sx={{ 
-            ml: "auto", 
+          sx={{
+            ml: "auto",
             mr: 0.5,
             color: isStarred ? theme.palette.primary.main : contrast,
           }}

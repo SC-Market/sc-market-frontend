@@ -50,7 +50,9 @@ export function NotificationsButton() {
   >("all")
   const [contractorIdFilter, setContractorIdFilter] = useState<string>("")
 
-  const iconColor = theme.palette.getContrastText(theme.palette.background.navbar)
+  const iconColor = theme.palette.getContrastText(
+    theme.palette.background.navbar,
+  )
 
   const { data: organizationsData } = useGetUserOrganizationsQuery()
 
@@ -145,7 +147,11 @@ export function NotificationsButton() {
 
   return (
     <>
-      <HapticIconButton sx={{ marginRight: 2, color: iconColor }} onClick={handleClick} color="inherit">
+      <HapticIconButton
+        sx={{ marginRight: 2, color: iconColor }}
+        onClick={handleClick}
+        color="inherit"
+      >
         <Badge badgeContent={unreadCount} color={"primary"}>
           <NotificationsActiveRoundedIcon />
         </Badge>

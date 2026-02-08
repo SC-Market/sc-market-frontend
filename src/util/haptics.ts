@@ -1,12 +1,12 @@
 /**
  * Haptic Feedback Utility
- * 
+ *
  * Provides consistent haptic feedback across the app for better mobile UX.
  * Only works on devices that support the Vibration API (most modern mobile browsers).
- * 
+ *
  * Usage:
  * import { haptic } from '../util/haptics'
- * 
+ *
  * haptic.light()    // Light tap (10ms)
  * haptic.medium()   // Medium tap (20ms)
  * haptic.heavy()    // Heavy tap (30ms)
@@ -93,7 +93,7 @@ export const haptic = {
  * Check if haptic feedback is supported
  */
 export const isHapticSupported = (): boolean => {
-  return typeof navigator.vibrate === 'function'
+  return typeof navigator.vibrate === "function"
 }
 
 /**
@@ -101,7 +101,7 @@ export const isHapticSupported = (): boolean => {
  */
 export const withHaptic = <T extends (...args: any[]) => any>(
   handler: T,
-  hapticType: keyof typeof haptic = 'medium'
+  hapticType: keyof typeof haptic = "medium",
 ): T => {
   return ((...args: any[]) => {
     haptic[hapticType]()
