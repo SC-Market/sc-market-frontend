@@ -11,6 +11,7 @@ import { UserActionsDropdown } from "../../../components/profile/UserActionsDrop
 import { UnderlineLink } from "../../../components/typography/UnderlineLink"
 import { Discord } from "../../../components/icon/DiscordIcon"
 import { ProfileAvatar } from "./ProfileAvatar"
+import { ShareButton } from "../../../components/buttons/ShareButton"
 
 interface ProfileHeaderProps {
   profile: User
@@ -48,6 +49,7 @@ export function ProfileHeader({
           sx={{ display: "flex", alignItems: "center" }}
         >
           {profile.username} <UserActionsDropdown user={profile} />
+          <ShareButton title={`${profile.display_name} - SC Market`} />
         </Typography>
         {profile.discord_profile && (
           <MaterialLink
