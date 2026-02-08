@@ -117,13 +117,17 @@ export function ViewOfferPage() {
               }}
             >
               <HapticTab label={t("offers.details", "Details")} />
-              {isMobile && <HapticTab label={t("offers.messages", "Messages")} />}
+              {isMobile && (
+                <HapticTab label={t("offers.messages", "Messages")} />
+              )}
               {session.offers[0]?.service && (
                 <HapticTab label={t("offers.service", "Service")} />
               )}
               {session.offers[0]?.market_listings &&
                 session.offers[0].market_listings.length > 0 && (
-                  <HapticTab label={t("offers.marketListings", "Market Listings")} />
+                  <HapticTab
+                    label={t("offers.marketListings", "Market Listings")}
+                  />
                 )}
               {session.availability && (
                 <HapticTab label={t("offers.availability", "Availability")} />

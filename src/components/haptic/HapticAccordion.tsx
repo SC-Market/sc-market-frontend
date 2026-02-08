@@ -4,10 +4,7 @@ import { haptic } from "../../util/haptics"
 export function HapticAccordion(props: AccordionProps) {
   const { onChange, ...rest } = props
 
-  const handleChange = (
-    event: React.SyntheticEvent,
-    expanded: boolean,
-  ) => {
+  const handleChange = (event: React.SyntheticEvent, expanded: boolean) => {
     haptic.light()
     onChange?.(event, expanded)
   }

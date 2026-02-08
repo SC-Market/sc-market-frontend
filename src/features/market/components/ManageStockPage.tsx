@@ -5,14 +5,7 @@
  */
 
 import React, { useState } from "react"
-import {
-  Box,
-  Grid,
-  Paper,
-  Tabs,
-  Button,
-  useMediaQuery,
-} from "@mui/material"
+import { Box, Grid, Paper, Tabs, Button, useMediaQuery } from "@mui/material"
 import { HapticTab } from "../../../components/haptic"
 import { useNavigate, useLocation } from "react-router-dom"
 import { useTranslation } from "react-i18next"
@@ -61,12 +54,14 @@ export function ManageStockPage() {
 
       <ContainerGrid maxWidth="xl" sidebarOpen={true}>
         <Grid item xs={12}>
-          <Box sx={{ 
-            display: "flex", 
-            flexDirection: { xs: "column", sm: "row" },
-            alignItems: { xs: "stretch", sm: "center" },
-            gap: 1 
-          }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: { xs: "column", sm: "row" },
+              alignItems: { xs: "stretch", sm: "center" },
+              gap: 1,
+            }}
+          >
             {isMobile && (
               <Button
                 variant="outlined"
@@ -79,7 +74,9 @@ export function ManageStockPage() {
               </Button>
             )}
             <Tabs value={currentTab} onChange={handleTabChange}>
-              <HapticTab label={t("sidebar.manage_listings", "Manage Listings")} />
+              <HapticTab
+                label={t("sidebar.manage_listings", "Manage Listings")}
+              />
               <HapticTab label={t("sidebar.manage_stock", "Manage Stock")} />
             </Tabs>
           </Box>

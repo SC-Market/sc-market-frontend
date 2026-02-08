@@ -48,7 +48,13 @@ const DEFAULT_LOGGED_OUT_TABS = [
   "contracts",
   "recruiting",
 ]
-const DEFAULT_LOGGED_IN_TABS = ["market", "services", "messages", "orders", "dashboard"]
+const DEFAULT_LOGGED_IN_TABS = [
+  "market",
+  "services",
+  "messages",
+  "orders",
+  "dashboard",
+]
 
 /**
  * Mobile bottom navigation bar for quick access to primary pages
@@ -172,7 +178,9 @@ export function MobileBottomNav() {
         id: "org-public",
         label: "sidebar.org_public_page",
         icon: <StoreRounded />,
-        route: currentOrg ? `/contractor/${currentOrg.spectrum_id}` : "/contractors",
+        route: currentOrg
+          ? `/contractor/${currentOrg.spectrum_id}`
+          : "/contractors",
         requiresAuth: true,
       },
       "org-availability": {
@@ -190,7 +198,7 @@ export function MobileBottomNav() {
     const defaultTabs = isLoggedIn
       ? DEFAULT_LOGGED_IN_TABS
       : DEFAULT_LOGGED_OUT_TABS
-    
+
     // Only use saved tabs if logged in
     const saved = isLoggedIn ? localStorage.getItem("mobile_nav_tabs") : null
     const userTabs = saved ? JSON.parse(saved) : null

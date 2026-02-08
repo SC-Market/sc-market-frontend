@@ -216,7 +216,11 @@ export function MessagesBody(props: {
   const onSend = useCallback(
     (content: string) => {
       if (content && currentChat && profile?.username) {
-        console.log('[MessagesBody] Sending message:', { content, username: profile.username, chat_id: currentChat.chat_id })
+        console.log("[MessagesBody] Sending message:", {
+          content,
+          username: profile.username,
+          chat_id: currentChat.chat_id,
+        })
         // RTK Query handles optimistic updates, so we just send the message
         // The cache update will sync to currentChat via the useEffect
         sendChatMessage({
@@ -226,17 +230,17 @@ export function MessagesBody(props: {
         })
           .unwrap()
           .then((response) => {
-            console.log('[MessagesBody] Message sent successfully:', response)
+            console.log("[MessagesBody] Message sent successfully:", response)
           })
           .catch((error) => {
-            console.error('[MessagesBody] Message send failed:', error)
+            console.error("[MessagesBody] Message send failed:", error)
             issueAlert(error)
           })
       } else {
-        console.warn('[MessagesBody] Cannot send - missing data:', { 
-          hasContent: !!content, 
-          hasChat: !!currentChat, 
-          hasUsername: !!profile?.username 
+        console.warn("[MessagesBody] Cannot send - missing data:", {
+          hasContent: !!content,
+          hasChat: !!currentChat,
+          hasUsername: !!profile?.username,
         })
       }
     },

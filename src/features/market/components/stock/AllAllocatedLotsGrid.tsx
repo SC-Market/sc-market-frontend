@@ -31,7 +31,8 @@ export function AllAllocatedLotsGrid() {
       valueGetter: (value, row) => row.lot?.listing_id,
       renderCell: (params) => {
         const photo = params.row.lot?.photos?.[0]
-        const title = params.row.lot?.title || params.value.substring(0, 8).toUpperCase()
+        const title =
+          params.row.lot?.title || params.value.substring(0, 8).toUpperCase()
         return (
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             <Avatar
@@ -59,7 +60,8 @@ export function AllAllocatedLotsGrid() {
           style={{ textDecoration: "none", color: "inherit" }}
         >
           <UnderlineLink>
-            {params.row.order_title || params.value.substring(0, 8).toUpperCase()}
+            {params.row.order_title ||
+              params.value.substring(0, 8).toUpperCase()}
           </UnderlineLink>
         </Link>
       ),
@@ -79,7 +81,7 @@ export function AllAllocatedLotsGrid() {
       field: "owner",
       headerName: t("stock.user", "User"),
       flex: 1,
-      valueGetter: (value, row) => 
+      valueGetter: (value, row) =>
         row.lot?.owner?.display_name || row.lot?.owner?.username || "—",
       renderCell: (params) => {
         if (!params.row.lot?.owner) {

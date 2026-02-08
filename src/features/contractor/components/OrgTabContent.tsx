@@ -46,26 +46,25 @@ export function OrgTabContent({ currentTab, contractor }: OrgTabContentProps) {
                 }}
               >
                 <MarkdownRender text={contractor.description} />
-                {contractor.languages &&
-                  contractor.languages.length > 0 && (
-                    <Box
-                      sx={{
-                        mt: 2,
-                        display: "flex",
-                        gap: 0.5,
-                        flexWrap: "wrap",
-                      }}
-                    >
-                      {contractor.languages.map((lang) => (
-                        <Chip
-                          key={lang.code}
-                          label={`${lang.name} (${t(`languages.${lang.code}`, lang.name)})`}
-                          size="small"
-                          variant="outlined"
-                        />
-                      ))}
-                    </Box>
-                  )}
+                {contractor.languages && contractor.languages.length > 0 && (
+                  <Box
+                    sx={{
+                      mt: 2,
+                      display: "flex",
+                      gap: 0.5,
+                      flexWrap: "wrap",
+                    }}
+                  >
+                    {contractor.languages.map((lang) => (
+                      <Chip
+                        key={lang.code}
+                        label={`${lang.name} (${t(`languages.${lang.code}`, lang.name)})`}
+                        size="small"
+                        variant="outlined"
+                      />
+                    ))}
+                  </Box>
+                )}
               </Paper>
             </Grid>
           </Grid>

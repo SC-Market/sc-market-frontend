@@ -14,7 +14,10 @@ interface ProfileTabContentProps {
   currentTab: number
   profile: User
   isMyProfile: boolean
-  submitUpdate: (data: { about?: string; display_name?: string }) => Promise<boolean>
+  submitUpdate: (data: {
+    about?: string
+    display_name?: string
+  }) => Promise<boolean>
 }
 
 export function ProfileTabContent({

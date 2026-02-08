@@ -1,4 +1,11 @@
-import { Breadcrumbs, Link, Typography, useMediaQuery } from "@mui/material"
+import {
+  Breadcrumbs,
+  BreadcrumbsProps,
+  Link,
+  Typography,
+  TypographyProps,
+  useMediaQuery,
+} from "@mui/material"
 import { Link as RouterLink } from "react-router-dom"
 import { useTheme } from "@mui/material/styles"
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded"
@@ -12,17 +19,22 @@ interface BreadcrumbItem {
 
 interface PageBreadcrumbsProps {
   items: BreadcrumbItem[]
+  MuiBreadcrumbsProps?: BreadcrumbsProps
 }
 
-export function PageBreadcrumbs({ items }: PageBreadcrumbsProps) {
+export function PageBreadcrumbs({
+  items,
+  MuiBreadcrumbsProps,
+}: PageBreadcrumbsProps) {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
 
   return (
     <Breadcrumbs
+      {...MuiBreadcrumbsProps}
       separator={<NavigateNextRoundedIcon fontSize="small" />}
       maxItems={isMobile ? 2 : undefined}
-      sx={{ mb: 2 }}
+      sx={{ mb: 2, ...MuiBreadcrumbsProps?.sx }}
     >
       {items.map((item, index) => {
         const isLast = index === items.length - 1

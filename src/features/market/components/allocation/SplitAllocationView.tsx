@@ -563,7 +563,8 @@ function AllocationTarget({
                         sx={{ width: 24, height: 24 }}
                       />
                       <Typography variant="body2" color="text.secondary">
-                        {alloc.lot.owner.display_name || alloc.lot.owner.username}
+                        {alloc.lot.owner.display_name ||
+                          alloc.lot.owner.username}
                       </Typography>
                     </Box>
                   ) : (

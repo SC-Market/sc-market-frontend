@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Container, Grid, Paper, useMediaQuery } from "@mui/material"
+import { Grid, Paper, useMediaQuery } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { ItemListings } from "../../../views/market/ItemListings"
@@ -20,33 +20,26 @@ export function ProfileStoreView(props: { user: string }) {
     <MarketSidebarContext.Provider value={[sidebarOpen, setSidebarOpen]}>
       {xs && <MarketSidebar />}
       {xs && <MarketSideBarToggleButton />}
-      <Container maxWidth={"xl"}>
-        <Grid
-          container
-          spacing={theme.layoutSpacing.layout}
-          justifyContent={"center"}
-        >
+      <Grid
+        container
+        spacing={theme.layoutSpacing.layout}
+        justifyContent={"center"}
+      >
+        <Grid item xs={0} md={3} sx={{ display: { xs: "none", md: "block" } }}>
+          <Paper sx={{ padding: 1 }}>
+            <MarketSearchArea />
+          </Paper>
+        </Grid>
+        <Grid item xs={12} md={9}>
           <Grid
-            item
-            xs={0}
-            md={3}
-            sx={{ display: { xs: "none", md: "block" } }}
+            container
+            spacing={theme.layoutSpacing.layout}
+            justifyContent={"center"}
           >
-            <Paper sx={{ padding: 1 }}>
-              <MarketSearchArea />
-            </Paper>
-          </Grid>
-          <Grid item xs={12} md={9}>
-            <Grid
-              container
-              spacing={theme.layoutSpacing.layout}
-              justifyContent={"center"}
-            >
-              <ItemListings user={user} />
-            </Grid>
+            <ItemListings user={user} />
           </Grid>
         </Grid>
-      </Container>
+      </Grid>
     </MarketSidebarContext.Provider>
   )
 }
@@ -61,33 +54,26 @@ export function OrgStoreView(props: { org: string }) {
     <MarketSidebarContext.Provider value={[sidebarOpen, setSidebarOpen]}>
       {xs && <MarketSidebar />}
       {xs && <MarketSideBarToggleButton />}
-      <Container maxWidth={"xl"}>
-        <Grid
-          container
-          spacing={theme.layoutSpacing.layout}
-          justifyContent={"center"}
-        >
+      <Grid
+        container
+        spacing={theme.layoutSpacing.layout}
+        justifyContent={"center"}
+      >
+        <Grid item xs={0} md={3} sx={{ display: { xs: "none", md: "block" } }}>
+          <Paper sx={{ padding: 1 }}>
+            <MarketSearchArea />
+          </Paper>
+        </Grid>
+        <Grid item xs={12} md={9}>
           <Grid
-            item
-            xs={0}
-            md={3}
-            sx={{ display: { xs: "none", md: "block" } }}
+            container
+            spacing={theme.layoutSpacing.layout}
+            justifyContent={"center"}
           >
-            <Paper sx={{ padding: 1 }}>
-              <MarketSearchArea />
-            </Paper>
-          </Grid>
-          <Grid item xs={12} md={9}>
-            <Grid
-              container
-              spacing={theme.layoutSpacing.layout}
-              justifyContent={"center"}
-            >
-              <ItemListings org={org} />
-            </Grid>
+            <ItemListings org={org} />
           </Grid>
         </Grid>
-      </Container>
+      </Grid>
     </MarketSidebarContext.Provider>
   )
 }

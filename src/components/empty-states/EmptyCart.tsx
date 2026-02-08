@@ -4,8 +4,10 @@ import { ShoppingCartOutlined } from "@mui/icons-material"
 import { EmptyState, EmptyStateProps } from "./EmptyState"
 import { useTranslation } from "react-i18next"
 
-export interface EmptyCartProps
-  extends Omit<EmptyStateProps, "title" | "icon" | "action"> {
+export interface EmptyCartProps extends Omit<
+  EmptyStateProps,
+  "title" | "icon" | "action"
+> {
   /**
    * Whether this is an error state
    */

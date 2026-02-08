@@ -17,6 +17,7 @@ import { ProfileTabContent } from "./ProfileTabContent"
 import { useProfileData } from "../hooks/useProfileData"
 import { useProfileActions } from "../hooks/useProfileActions"
 import { useProfileTab } from "../hooks/useProfileTab"
+import { Stack } from "@mui/system"
 
 export function ViewProfile(props: { profile: User }) {
   const { t } = useTranslation()
@@ -35,13 +36,23 @@ export function ViewProfile(props: { profile: User }) {
 
   return (
     <OpenLayout sidebarOpen={true}>
+      <PageBreadcrumbs
+        items={[
+          { label: t("people.title", "People"), href: "/people" },
+          { label: props.profile.display_name },
+        ]}
+        MuiBreadcrumbsProps={{
+          sx: {
+            mb: 1,
+          },
+        }}
+      />
       <Box sx={{ position: "relative" }}>
         <ProfileBannerArea
           profile={props.profile}
           submitUpdate={submitUpdate}
         />
-        <Container
-          maxWidth="xl"
+        <Box
           sx={{
             ...(theme.palette.mode === "dark"
               ? { position: "relative", top: -500 }
@@ -49,16 +60,8 @@ export function ViewProfile(props: { profile: User }) {
           }}
         >
           <ProfileMetaTags profile={props.profile} />
-          <Grid container spacing={theme.layoutSpacing.layout}>
-            <Grid item xs={12}>
-              <PageBreadcrumbs
-                items={[
-                  { label: t("people.title", "People"), href: "/people" },
-                  { label: props.profile.display_name },
-                ]}
-              />
-            </Grid>
-            <Grid item xs={12}>
+          <Container maxWidth={"xl"}>
+            <Stack spacing={theme.layoutSpacing.layout}>
               <Grid
                 spacing={theme.layoutSpacing.layout}
                 container
@@ -80,32 +83,32 @@ export function ViewProfile(props: { profile: User }) {
                 </Grid>
                 <UserReviewSummary user={props.profile} />
               </Grid>
-            </Grid>
-            <Grid item xs={12}>
-              <ProfileTabs username={props.profile.username} currentTab={page} />
-            </Grid>
-            <Grid item xs={12}>
-              <SwipeableItem
-                onSwipeLeft={() => {
-                  if (page < tabPaths.length - 1) {
-                    navigate(tabPaths[page + 1])
-                  }
-                }}
-                onSwipeRight={() => {
-                  if (page > 0) navigate(tabPaths[page - 1])
-                }}
-                enabled={isMobile}
-              >
-                <ProfileTabContent
-                  currentTab={page}
-                  profile={props.profile}
-                  isMyProfile={isMyProfile}
-                  submitUpdate={submitUpdate}
-                />
-              </SwipeableItem>
-            </Grid>
-          </Grid>
-        </Container>
+              <ProfileTabs
+                username={props.profile.username}
+                currentTab={page}
+              />
+            </Stack>
+          </Container>
+
+          <SwipeableItem
+            onSwipeLeft={() => {
+              if (page < tabPaths.length - 1) {
+                navigate(tabPaths[page + 1])
+              }
+            }}
+            onSwipeRight={() => {
+              if (page > 0) navigate(tabPaths[page - 1])
+            }}
+            enabled={isMobile}
+          >
+            <ProfileTabContent
+              currentTab={page}
+              profile={props.profile}
+              isMyProfile={isMyProfile}
+              submitUpdate={submitUpdate}
+            />
+          </SwipeableItem>
+        </Box>
       </Box>
     </OpenLayout>
   )

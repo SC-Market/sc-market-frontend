@@ -3,8 +3,10 @@ import { BusinessOutlined } from "@mui/icons-material"
 import { EmptyState, EmptyStateProps } from "./EmptyState"
 import { useTranslation } from "react-i18next"
 
-export interface EmptyContractorsProps
-  extends Omit<EmptyStateProps, "title" | "icon"> {
+export interface EmptyContractorsProps extends Omit<
+  EmptyStateProps,
+  "title" | "icon"
+> {
   /**
    * Whether this is a search result (vs. general empty state)
    */

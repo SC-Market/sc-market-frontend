@@ -98,7 +98,10 @@ export function RecruitingPostPage() {
         <Grid item xs={12}>
           <PageBreadcrumbs
             items={[
-              { label: t("recruiting.title", "Recruiting"), href: "/recruiting" },
+              {
+                label: t("recruiting.title", "Recruiting"),
+                href: "/recruiting",
+              },
               { label: post?.title || t("recruiting_post.page.createPost") },
             ]}
           />

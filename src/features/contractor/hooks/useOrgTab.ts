@@ -15,6 +15,6 @@ const NAME_TO_INDEX = new Map([
 export function useOrgTab() {
   const { tab } = useParams<{ tab?: string }>()
   const page = useMemo(() => NAME_TO_INDEX.get(tab || "") ?? 0, [tab])
-  
+
   return page
 }

@@ -47,9 +47,9 @@ export function BottomSheet({
 }: BottomSheetProps) {
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
-  const [currentSnap, setCurrentSnap] = useState<"peek" | "half" | "66" | "75" | "full">(
-    defaultSnap,
-  )
+  const [currentSnap, setCurrentSnap] = useState<
+    "peek" | "half" | "66" | "75" | "full"
+  >(defaultSnap)
   const [dragOffset, setDragOffset] = useState(0)
   const [isDragging, setIsDragging] = useState(false)
   const dragStartY = useRef<number | null>(null)
@@ -68,7 +68,7 @@ export function BottomSheet({
     if (snap === "half") return window.innerHeight * 0.5
     if (snap === "66") return window.innerHeight * 0.66
     if (snap === "75") return window.innerHeight * 0.75
-    
+
     if (typeof maxHeight === "string" && maxHeight.endsWith("vh")) {
       const percentage = parseInt(maxHeight) / 100
       return window.innerHeight * percentage
@@ -82,7 +82,7 @@ export function BottomSheet({
   const currentHeight = getSnapHeight(currentSnap)
 
   const findClosestSnap = (height: number): typeof currentSnap => {
-    const snapHeights = snapPoints.map(snap => ({
+    const snapHeights = snapPoints.map((snap) => ({
       snap,
       height: getSnapHeight(snap),
     }))
@@ -109,7 +109,10 @@ export function BottomSheet({
     // Constrain between peek and full
     const minHeight = getSnapHeight("peek")
     const maxHeight = getSnapHeight("full")
-    const constrainedHeight = Math.max(minHeight, Math.min(maxHeight, newHeight))
+    const constrainedHeight = Math.max(
+      minHeight,
+      Math.min(maxHeight, newHeight),
+    )
 
     setDragOffset(constrainedHeight - currentHeight)
   }
@@ -173,7 +176,9 @@ export function BottomSheet({
           borderTopLeftRadius: 16,
           borderTopRightRadius: 16,
           paddingBottom: isMobile ? "env(safe-area-inset-bottom)" : 0,
-          transition: isDragging ? "none" : "height 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+          transition: isDragging
+            ? "none"
+            : "height 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
         },
       }}
       ModalProps={{
