@@ -20,6 +20,7 @@
     "@mui/x-date-pickers": "^7.29.4",
     "@reduxjs/toolkit": "^2.8.2",
     "@tanstack/react-virtual": "^3.13.13",
+    "@tauri-apps/api": "^2.10.1",
     "@vitejs/plugin-react-swc": "^3.10.2",
     "apexcharts": "^4.6.0",
     "i18next": "^25.3.2",
@@ -60,6 +61,7 @@
     "@rtk-query/codegen-openapi": "^2.2.0",
     "@swc/core": "^1.7.42",
     "@swc/jest": "^0.2.36",
+    "@tauri-apps/cli": "^2.10.0",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.0.1",
@@ -99,7 +101,10 @@
     "analyze": "npm run build:analyze && open dist/stats.html",
     "analyze:detailed": "node scripts/analyze-bundle.js",
     "i18n:extract": "i18next 'src/**/*.{ts,tsx}'",
-    "i18n:validate": "i18next 'src/**/*.{ts,tsx}' --fail-on-update"
+    "i18n:validate": "i18next 'src/**/*.{ts,tsx}' --fail-on-update",
+    "tauri": "tauri",
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build"
   },
   "webpackConfig": {
     "target": "web"
