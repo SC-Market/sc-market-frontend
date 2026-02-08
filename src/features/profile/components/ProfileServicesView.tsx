@@ -8,12 +8,14 @@ import { ServiceSidebarContext } from "../../../hooks/contract/ServiceSidebar"
 import { ServiceSidebar } from "../../../views/contracts/ServiceSidebar"
 import { ServiceSearchArea } from "../../../views/services/ServiceSearchArea"
 import { ServiceListings } from "../../../views/contracts/ServiceListings"
+import { useBottomNavHeight } from "../../../hooks/layout/useBottomNavHeight"
 
 export function ProfileServicesView(props: { user: string }) {
   const { user } = props
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
   const xs = useMediaQuery(theme.breakpoints.down("md"))
+  const bottomNavHeight = useBottomNavHeight()
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
@@ -28,7 +30,7 @@ export function ProfileServicesView(props: { user: string }) {
           onClick={() => setSidebarOpen((prev) => !prev)}
           sx={{
             position: "fixed",
-            bottom: { xs: 80, sm: 24 },
+            bottom: bottomNavHeight + 16,
             right: 24,
             zIndex: theme.zIndex.speedDial,
             borderRadius: 2,
@@ -77,6 +79,7 @@ export function OrgServicesView(props: { org: string }) {
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
   const xs = useMediaQuery(theme.breakpoints.down("md"))
+  const bottomNavHeight = useBottomNavHeight()
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
@@ -91,7 +94,7 @@ export function OrgServicesView(props: { org: string }) {
           onClick={() => setSidebarOpen((prev) => !prev)}
           sx={{
             position: "fixed",
-            bottom: { xs: 80, sm: 24 },
+            bottom: bottomNavHeight + 16,
             right: 24,
             zIndex: theme.zIndex.speedDial,
             borderRadius: 2,
