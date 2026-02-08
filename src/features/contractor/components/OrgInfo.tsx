@@ -1,111 +1,48 @@
 import { Contractor } from "../../../datatypes/Contractor"
-import React, { useMemo } from "react"
-import { Helmet } from "react-helmet"
-import { FRONTEND_URL } from "../../../util/constants"
-import {
-  Avatar,
-  Box,
-  Chip,
-  Container,
-  Grid,
-  IconButton,
-  Link as MaterialLink,
-  Paper,
-  Skeleton,
-  Stack,
-  Tabs,
-  Typography,
-} from "@mui/material"
+import React from "react"
+import { Box, Container, Grid, Skeleton, Stack, Tabs } from "@mui/material"
 import { HapticTab } from "../../../components/haptic"
 import PeopleAltRoundedIcon from "@mui/icons-material/PeopleAltRounded"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
-import { contractorKindIcons } from "../../../views/contractor/ContractorList"
-import { CreateOrderForm } from "../../../views/orders/CreateOrderForm"
-import {
-  ContractorReviewSummary,
-  OrgReviews,
-} from "../../../views/contractor/OrgReviews"
-import { a11yProps, TabPanel } from "../../../components/tabs/Tabs"
+import { ContractorReviewSummary } from "../../../views/contractor/OrgReviews"
+import { a11yProps } from "../../../components/tabs/Tabs"
 import {
   CreateRounded,
   DesignServicesRounded,
   InfoRounded,
-  LinkRounded,
   PersonAddRounded,
   StarRounded,
   StorefrontRounded,
 } from "@mui/icons-material"
-import { MemberList } from "../../../views/contractor/OrgMembers"
-import { MarkdownRender } from "../../../components/markdown/Markdown"
-import { Link, useParams } from "react-router-dom"
-import { Section } from "../../../components/paper/Section"
-import { RecruitingPostArea } from "../../../pages/recruiting/RecruitingPostPage"
-import { useRecruitingGetPostByOrgQuery } from "../../../store/recruiting"
-import { OrgStoreView, OrgServicesView } from "../../profile"
 import { OpenLayout } from "../../../components/layout/ContainerGrid"
 import { useTranslation } from "react-i18next"
 import { OrgBannerArea } from "./OrgBannerArea"
 import { PageBreadcrumbs } from "../../../components/navigation"
-
-const name_to_index = new Map([
-  ["", 0],
-  ["store", 0],
-  ["services", 1],
-  ["about", 2],
-  ["order", 3],
-  ["members", 4],
-  ["recruiting", 5],
-  ["reviews", 6],
-])
+import { OrgMetaTags } from "./OrgMetaTags"
+import { OrgHeader } from "./OrgHeader"
+import { OrgTabs } from "./OrgTabs"
+import { OrgTabContent } from "./OrgTabContent"
+import { useOrgTab } from "../hooks/useOrgTab"
+import { useRecruitingGetPostByOrgQuery } from "../../../store/recruiting"
 
 export function OrgInfo(props: { contractor: Contractor }) {
   const { contractor } = props
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
 
-  const { tab } = useParams<{ tab?: string }>()
-  const page = useMemo(() => name_to_index.get(tab || "") ?? 0, [tab])
+  const page = useOrgTab()
   const { data: recruiting_post } = useRecruitingGetPostByOrgQuery(
     contractor.spectrum_id,
   )
 
   return (
     <OpenLayout sidebarOpen={true}>
-      <Helmet>
-        <meta property="og:type" content="website" />
-        <meta
-          property="og:url"
-          content={`${FRONTEND_URL}/contractor/${contractor.spectrum_id}`}
-        />
-        <meta property="og:title" content={`${contractor.name} - SC Market`} />
-        <meta
-          property="og:description"
-          content={contractor.description || `${contractor.name} on SC Market`}
-        />
-        <meta
-          property="og:image"
-          content={contractor.banner || contractor.avatar}
-        />
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta
-          name="twitter:url"
-          content={`${FRONTEND_URL}/contractor/${contractor.spectrum_id}`}
-        />
-        <meta name="twitter:title" content={`${contractor.name} - SC Market`} />
-        <meta
-          name="twitter:description"
-          content={contractor.description || `${contractor.name} on SC Market`}
-        />
-        <meta
-          name="twitter:image"
-          content={contractor.banner || contractor.avatar}
-        />
-      </Helmet>
+      <OrgMetaTags contractor={contractor} />
       <Box sx={{ position: "relative" }}>
         <OrgBannerArea org={contractor} />
         <Container
-          maxWidth={"xl"}
+          maxWidth="xl"
           sx={{
             ...(theme.palette.mode === "dark"
               ? { position: "relative", top: -450 }
@@ -128,230 +65,26 @@ export function OrgInfo(props: { contractor: Contractor }) {
               <Grid
                 container
                 spacing={theme.layoutSpacing.component}
-                alignItems={"flex-end"}
-                justifyContent={"space-between"}
+                alignItems="flex-end"
+                justifyContent="space-between"
                 minHeight={375}
               >
                 <Grid item xs={12} md={8}>
-                  <Stack
-                    direction="row"
-                    spacing={2}
-                    alignItems="flex-start"
-                    flexWrap="wrap"
-                  >
-                    <Avatar
-                      src={contractor?.avatar}
-                      aria-label={t("contractors.contractor")}
-                      variant={"rounded"}
-                      sx={{
-                        height: theme.spacing(12),
-                        width: theme.spacing(12),
-                        flexShrink: 0,
-                        objectFit: "cover",
-                      }}
-                    />
-                    <Stack spacing={0.5}>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 0.5,
-                          flexWrap: "wrap",
-                        }}
-                      >
-                        <Typography
-                          color={"text.secondary"}
-                          variant={"h6"}
-                          fontWeight={600}
-                        >
-                          {contractor.name}
-                        </Typography>
-                        {!contractor.spectrum_id.startsWith("~") && (
-                          <MaterialLink
-                            component={"a"}
-                            href={`https://robertsspaceindustries.com/orgs/${contractor.spectrum_id}`}
-                            target="_blank"
-                            style={{
-                              textDecoration: "none",
-                              color: "inherit",
-                            }}
-                          >
-                            <IconButton color={"primary"} size="small">
-                              <LinkRounded />
-                            </IconButton>
-                          </MaterialLink>
-                        )}
-                      </Box>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 0.5,
-                        }}
-                      >
-                        <PeopleAltRoundedIcon
-                          style={{ color: theme.palette.text.primary }}
-                        />
-                        <Typography color={"text.primary"} fontWeight={"bold"}>
-                          {contractor.size}
-                        </Typography>
-                      </Box>
-                      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                        {contractor.fields.map((field) => (
-                          <Chip
-                            key={field}
-                            color={"primary"}
-                            label={field}
-                            sx={{
-                              padding: 0.5,
-                              textTransform: "capitalize",
-                            }}
-                            size="small"
-                            variant={"outlined"}
-                            icon={contractorKindIcons[field]}
-                            onClick={(event) => event.stopPropagation()}
-                          />
-                        ))}
-                      </Box>
-                    </Stack>
-                  </Stack>
+                  <OrgHeader contractor={contractor} />
                 </Grid>
                 <ContractorReviewSummary contractor={contractor} />
               </Grid>
             </Grid>
 
             <Grid item xs={12}>
-              <Box sx={{ borderBottom: 1, borderColor: "divider.light" }}>
-                <Tabs
-                  value={page}
-                  aria-label={t("ui.aria.orgInfoArea")}
-                  variant="scrollable"
-                >
-                  <HapticTab
-                    label={t("orgInfo.store")}
-                    component={Link}
-                    to={`/contractor/${contractor.spectrum_id}`}
-                    icon={<StorefrontRounded />}
-                    {...a11yProps(0)}
-                  />
-                  <HapticTab
-                    label={t("orgInfo.services")}
-                    component={Link}
-                    to={`/contractor/${contractor.spectrum_id}/services`}
-                    icon={<DesignServicesRounded />}
-                    {...a11yProps(1)}
-                  />
-                  <HapticTab
-                    label={t("orgInfo.about")}
-                    component={Link}
-                    to={`/contractor/${contractor.spectrum_id}/about`}
-                    icon={<InfoRounded />}
-                    {...a11yProps(2)}
-                  />
-                  <HapticTab
-                    label={t("orgInfo.order")}
-                    component={Link}
-                    to={`/contractor/${contractor.spectrum_id}/order`}
-                    icon={<CreateRounded />}
-                    {...a11yProps(3)}
-                  />
-                  <HapticTab
-                    label={t("orgInfo.members")}
-                    component={Link}
-                    to={`/contractor/${contractor.spectrum_id}/members`}
-                    icon={<PeopleAltRoundedIcon />}
-                    {...a11yProps(4)}
-                  />
-                  {recruiting_post && (
-                    <HapticTab
-                      label={t("orgInfo.recruiting")}
-                      component={Link}
-                      to={`/contractor/${contractor.spectrum_id}/recruiting`}
-                      icon={<PersonAddRounded />}
-                      {...a11yProps(5)}
-                    />
-                  )}
-                  <HapticTab
-                    label={t("orgInfo.reviews")}
-                    component={Link}
-                    to={`/contractor/${contractor.spectrum_id}/reviews`}
-                    icon={<StarRounded />}
-                    {...a11yProps(6)}
-                  />
-                </Tabs>
-              </Box>
+              <OrgTabs
+                spectrumId={contractor.spectrum_id}
+                currentTab={page}
+                hasRecruitingPost={!!recruiting_post}
+              />
             </Grid>
             <Grid item xs={12}>
-              <TabPanel value={page} index={0}>
-                <OrgStoreView org={contractor.spectrum_id} />
-              </TabPanel>
-              <TabPanel value={page} index={1}>
-                <OrgServicesView org={contractor.spectrum_id} />
-              </TabPanel>
-              <TabPanel value={page} index={2}>
-                <Container maxWidth={"xl"} disableGutters>
-                  <Grid
-                    container
-                    spacing={theme.layoutSpacing.layout}
-                    justifyContent={"center"}
-                  >
-                    <Grid item xs={12}>
-                      <Paper
-                        sx={{
-                          padding: 2,
-                          paddingTop: 1,
-                          maxHeight: 400,
-                          overflow: "auto",
-                        }}
-                      >
-                        <MarkdownRender text={contractor.description} />
-                        {contractor.languages &&
-                          contractor.languages.length > 0 && (
-                            <Box
-                              sx={{
-                                mt: 2,
-                                display: "flex",
-                                gap: 0.5,
-                                flexWrap: "wrap",
-                              }}
-                            >
-                              {contractor.languages.map((lang) => (
-                                <Chip
-                                  key={lang.code}
-                                  label={`${lang.name} (${t(`languages.${lang.code}`, lang.name)})`}
-                                  size="small"
-                                  variant="outlined"
-                                />
-                              ))}
-                            </Box>
-                          )}
-                      </Paper>
-                    </Grid>
-                  </Grid>
-                </Container>
-              </TabPanel>
-              <TabPanel value={page} index={3}>
-                <Grid container spacing={theme.layoutSpacing.layout}>
-                  <CreateOrderForm contractor_id={contractor.spectrum_id} />
-                </Grid>
-              </TabPanel>
-              <TabPanel value={page} index={4}>
-                <Grid container spacing={theme.layoutSpacing.layout}>
-                  <MemberList contractor={contractor} />
-                </Grid>
-              </TabPanel>
-              <TabPanel value={page} index={5}>
-                <Grid container spacing={theme.layoutSpacing.layout}>
-                  <RecruitingPostArea spectrum_id={contractor.spectrum_id} />
-                </Grid>
-              </TabPanel>
-              <TabPanel value={page} index={6}>
-                <Grid container spacing={theme.layoutSpacing.layout}>
-                  <Section xs={12} lg={8} disablePadding>
-                    <OrgReviews contractor={contractor} />
-                  </Section>
-                </Grid>
-              </TabPanel>
+              <OrgTabContent currentTab={page} contractor={contractor} />
             </Grid>
           </Grid>
         </Container>
