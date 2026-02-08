@@ -73,6 +73,7 @@ export function Navbar(props: { children?: React.ReactNode }) {
         background: theme.palette.background.navbar,
         // background: 'transparent',
         overflow: "hidden",
+        borderRadius: 0,
         // borderColor: theme.palette.outline.main,
         // borderBottom: 1,
         // iOS safe area inset for notch/camera gap
