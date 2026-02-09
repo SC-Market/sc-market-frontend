@@ -49,3 +49,9 @@ settings.gradle
 gradlew
 gradlew.bat
 local.properties
+
+# Tauri
+src-tauri/target/
+src-tauri/Cargo.lock
+src-tauri/WixTools/
+src-tauri/gen/
