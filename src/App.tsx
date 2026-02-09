@@ -24,6 +24,7 @@ import { store } from "./store/store"
 import { notificationApi } from "./store/notification"
 import { usePeriodicBackgroundSync } from "./hooks/pwa/usePeriodicBackgroundSync"
 import { useWebVitals } from "./hooks/performance/useWebVitals"
+import { useDeepLinkHandler } from "./hooks/tauri/useDeepLinkHandler"
 
 import "./util/i18n.ts"
 
@@ -33,6 +34,9 @@ function App() {
 
   // Track Core Web Vitals
   useWebVitals()
+
+  // Handle deep link callbacks (Tauri only)
+  useDeepLinkHandler()
 
   useEffect(() => {
     // Start background prefetching after the app loads

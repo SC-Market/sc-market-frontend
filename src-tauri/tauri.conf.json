@@ -29,16 +29,20 @@
     "active": true,
     "targets": ["app", "msi", "deb", "appimage", "dmg"],
     "icon": [
-      "icons/32x32.png",
-      "icons/128x128.png",
-      "icons/128x128@2x.png",
-      "icons/icon.icns",
-      "icons/icon.ico"
+      "icons/icon-bg.png"
     ],
     "publisher": "SC Market",
     "copyright": "Copyright © 2026 SC Market",
     "category": "Utility",
     "shortDescription": "Star Citizen Marketplace",
     "longDescription": "Buy, sell, and trade Star Citizen items and services. Connect with players, manage contracts, and browse the marketplace."
+  },
+  "plugins": {
+    "deepLink": {
+      "mobile": [],
+      "desktop": {
+        "schemes": ["scmarket"]
+      }
+    }
   }
 }
