@@ -4,6 +4,10 @@ import React from "react"
 import { useLocation, useSearchParams } from "react-router-dom"
 import { Discord } from "../icon/DiscordIcon"
 import { useTranslation } from "react-i18next"
+import { open } from "@tauri-apps/plugin-shell"
+
+// Check if running in Tauri
+const isTauri = typeof window !== "undefined" && "__TAURI__" in window
 
 export function DiscordSignUpButton() {
   const location = useLocation()
@@ -14,11 +18,21 @@ export function DiscordSignUpButton() {
   // Otherwise use current pathname
   const redirectPath = searchParams.get("redirect") || location.pathname
 
+  const handleSignUp = async () => {
+    const authUrl = `${BACKEND_URL}/auth/discord?path=${encodeURIComponent(redirectPath)}&action=signup`
+    
+    if (isTauri) {
+      // Open in system browser for Tauri
+      await open(authUrl)
+    } else {
+      // Normal web flow
+      window.location.href = authUrl
+    }
+  }
+
   return (
     <Button
-      onClick={() => {
-        window.location.href = `${BACKEND_URL}/auth/discord?path=${encodeURIComponent(redirectPath)}&action=signup`
-      }}
+      onClick={handleSignUp}
       color="secondary"
       variant="contained"
       startIcon={<Discord />}
