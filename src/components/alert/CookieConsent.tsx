@@ -10,12 +10,26 @@ import { useTranslation } from "react-i18next"
 
 const TRACKING_ID = "G-KT8SEND6F2" // OUR_TRACKING_ID
 
+// Check if running in Tauri
+const isTauri = typeof window !== "undefined" && "__TAURI__" in window
+
 export function CookieConsent() {
   const [cookies, setCookie] = useCookies(["cookie_consent"])
 
   const location = useLocation()
 
   const { t } = useTranslation()
+
+  // Auto-accept all cookies for Tauri users
+  useEffect(() => {
+    if (isTauri && cookies.cookie_consent === undefined) {
+      setCookie("cookie_consent", "all", {
+        path: "/",
+        sameSite: "strict",
+        maxAge: 31536000, // 1 year in seconds
+      })
+    }
+  }, [isTauri, cookies.cookie_consent, setCookie])
 
   useEffect(() => {
     if (cookies.cookie_consent === "all") {
@@ -54,6 +68,11 @@ export function CookieConsent() {
   }, [location, cookies.cookie_consent])
 
   const theme = useTheme<ExtendedTheme>()
+
+  // Don't show consent banner for Tauri users
+  if (isTauri) {
+    return null
+  }
 
   return (
     <Snackbar
