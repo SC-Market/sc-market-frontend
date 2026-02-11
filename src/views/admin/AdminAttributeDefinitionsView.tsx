@@ -31,9 +31,7 @@ import { ThemedDataGrid } from "../../components/grid/ThemedDataGrid"
 import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
-import AddIcon from "@mui/icons-material/AddRounded"
-import EditIcon from "@mui/icons-material/EditRounded"
-import DeleteIcon from "@mui/icons-material/DeleteRounded"
+import { AdminIcons } from "../../components/icons"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 
@@ -300,14 +298,14 @@ export function AdminAttributeDefinitionsView() {
             onClick={() => handleOpenEditModal(params.row)}
             color="primary"
           >
-            <EditIcon />
+            <AdminIcons.Edit />
           </IconButton>
           <IconButton
             size="small"
             onClick={() => handleOpenDeleteModal(params.row)}
             color="error"
           >
-            <DeleteIcon />
+            <AdminIcons.Delete />
           </IconButton>
         </Box>
       ),
@@ -338,7 +336,7 @@ export function AdminAttributeDefinitionsView() {
         <Grid item xs={12} md={6} sx={{ textAlign: "right" }}>
           <Button
             variant="contained"
-            startIcon={<AddIcon />}
+            startIcon={<AdminIcons.Add />}
             onClick={handleOpenCreateModal}
           >
             {t("admin.attributes.button.create", "Create Definition")}

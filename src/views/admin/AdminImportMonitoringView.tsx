@@ -14,10 +14,7 @@ import {
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
 import { useImportGameItemAttributesMutation } from "../../store/api/attributes"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
-import CloudDownloadIcon from "@mui/icons-material/CloudDownloadRounded"
-import CheckCircleIcon from "@mui/icons-material/CheckCircleRounded"
-import ErrorIcon from "@mui/icons-material/ErrorRounded"
-import WarningIcon from "@mui/icons-material/WarningRounded"
+import { AdminIcons } from "../../components/icons"
 
 interface ImportJobResult {
   gameItemId: string
@@ -146,7 +143,7 @@ export function AdminImportMonitoringView() {
                 isImporting ? (
                   <CircularProgress size={16} color="inherit" />
                 ) : (
-                  <CloudDownloadIcon />
+                  <AdminIcons.CloudDownload />
                 )
               }
               onClick={handleImport}
@@ -203,11 +200,11 @@ export function AdminImportMonitoringView() {
                   sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}
                 >
                   {job.success ? (
-                    <CheckCircleIcon color="success" />
+                    <AdminIcons.CheckCircle color="success" />
                   ) : job.attributesImported > 0 ? (
-                    <WarningIcon color="warning" />
+                    <AdminIcons.Warning color="warning" />
                   ) : (
-                    <ErrorIcon color="error" />
+                    <AdminIcons.Error color="error" />
                   )}
                   <Typography variant="h6">
                     {t("admin.importMonitoring.gameItem", "Game Item")}:{" "}
