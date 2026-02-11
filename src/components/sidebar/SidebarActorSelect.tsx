@@ -1,25 +1,34 @@
 import React, { useEffect, useState } from "react"
-import {
-  Avatar,
-  Box,
-  createTheme,
-  MenuItem,
-  Paper,
-  TextField,
-  ThemeProvider,
-  Typography,
-} from "@mui/material"
 import { useLocation, useNavigate, matchPath } from "react-router-dom"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useGetUserProfileQuery } from "../../store/profile"
 import { useCookies } from "react-cookie"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import { useGetContractorBySpectrumIDQuery } from "../../store/contractor"
-import { useTheme } from "@mui/material/styles"
+import { useTheme, createTheme, ThemeProvider } from "@mui/material/styles";
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { Stack } from "@mui/system"
 import { useTranslation } from "react-i18next"
 import { ORG_ROUTE_REST_TO_CANONICAL } from "./components/SidebarLinkBody"
+
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import CircularProgress from '@mui/material/CircularProgress';
+import Button from '@mui/material/Button';
+import Badge from '@mui/material/Badge';
+import IconButton from '@mui/material/IconButton';
+import Divider from '@mui/material/Divider';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import Avatar from '@mui/material/Avatar';
+import MenuItem from '@mui/material/MenuItem';
+import Paper from '@mui/material/Paper';
+import SecurityRounded from '@mui/icons-material/SecurityRounded';
 
 const localTheme = createTheme({
   palette: {

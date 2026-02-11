@@ -6,16 +6,15 @@ import GppGoodRoundedIcon from "@mui/icons-material/GppGoodRounded"
 import FlightRoundedIcon from "@mui/icons-material/FlightRounded"
 import ConstructionRoundedIcon from "@mui/icons-material/ConstructionRounded"
 import PublicRoundedIcon from "@mui/icons-material/PublicRounded"
-import {
-  CarRentalRounded,
-  InfoRounded,
-  LocalHospitalRounded,
-} from "@mui/icons-material"
 import MiscellaneousServicesRoundedIcon from "@mui/icons-material/MiscellaneousServicesRounded"
 import LocalShippingRoundedIcon from "@mui/icons-material/LocalShippingRounded"
 import React from "react"
 import { AvailabilitySelection } from "../hooks/login/UserProfile"
 import { OfferMarketListing } from "../store/offer"
+
+import CarRentalRounded from '@mui/icons-material/CarRentalRounded';
+import InfoRounded from '@mui/icons-material/InfoRounded';
+import LocalHospitalRounded from '@mui/icons-material/LocalHospitalRounded';
 
 export const orderIcons = {
   Support: <HandymanRoundedIcon />,

@@ -11,10 +11,19 @@ import {
   useProfileGetAvailabilityQuery,
   useProfileUpdateAvailabilityMutation,
 } from "../../store/profile"
-import { Grid, Skeleton } from "@mui/material"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { AvailabilitySelection } from "../../hooks/login/UserProfile"
 import { useTranslation } from "react-i18next"
+
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import Skeleton from '@mui/material/Skeleton';
 
 interface Span {
   start: number

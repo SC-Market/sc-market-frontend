@@ -6,9 +6,26 @@
  */
 
 import React, { useState, useRef, useCallback, useEffect } from "react"
-import { Box, IconButton, useMediaQuery, useTheme } from "@mui/material"
-import { ZoomIn, ZoomOut, FitScreen, Close } from "@mui/icons-material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+import Grid from '@mui/material/Grid';
+import Snackbar from '@mui/material/Snackbar';
+import Paper from '@mui/material/Paper';
+import Fade from '@mui/material/Fade';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { ButtonProps } from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import { useTheme } from '@mui/material/styles';
+import CookieRounded from '@mui/icons-material/CookieRounded';
+import ZoomIn from '@mui/icons-material/ZoomIn';
+import ZoomOut from '@mui/icons-material/ZoomOut';
+import FitScreen from '@mui/icons-material/FitScreen';
+import Close from '@mui/icons-material/Close';
 
 interface ImageZoomPanProps {
   src: string

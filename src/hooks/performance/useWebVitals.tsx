@@ -1,6 +1,11 @@
 import { useEffect } from "react"
 import { onCLS, onFID, onLCP, onFCP, onTTFB, onINP, Metric } from "web-vitals"
 
+import { SxProps } from '@mui/material/SxProps';
+import { Theme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+
 /**
  * Hook to track Core Web Vitals and send them to analytics
  *

@@ -25,6 +25,9 @@ import {
   ukUA as gridUkUA,
 } from "@mui/x-data-grid/locales"
 
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
+
 // Language configuration with endonyms
 export const languages = [
   { code: "en", endonym: "English" },

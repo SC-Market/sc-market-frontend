@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react"
-import { Box } from "@mui/material"
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 interface LiveRegionProps {
   message: string

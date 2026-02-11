@@ -1,6 +1,11 @@
 import { useEffect, useRef, useState, useCallback } from "react"
 import { prefetchModule } from "../../util/prefetch"
 
+import { SxProps } from '@mui/material/SxProps';
+import { Theme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+
 // Shared observer pool to avoid creating multiple observers
 class SharedIntersectionObserver {
   private static instance: SharedIntersectionObserver

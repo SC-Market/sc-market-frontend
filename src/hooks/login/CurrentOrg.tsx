@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react"
 import { Contractor } from "../../datatypes/Contractor"
 
+import { SxProps } from '@mui/material/SxProps';
+import { Theme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+
 export const CurrentOrgContext = React.createContext<
   | [Contractor | null, React.Dispatch<React.SetStateAction<Contractor | null>>]
   | null

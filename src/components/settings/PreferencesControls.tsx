@@ -1,13 +1,3 @@
-import {
-  Box,
-  Grid,
-  Divider,
-  Autocomplete,
-  TextField,
-  ToggleButton,
-  ToggleButtonGroup,
-  Typography,
-} from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTranslation } from "react-i18next"
@@ -19,6 +9,22 @@ import {
   useGetUserProfileQuery,
 } from "../../store/profile"
 import { useEffect } from "react"
+
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import CircularProgress from '@mui/material/CircularProgress';
+import Button from '@mui/material/Button';
+import Badge from '@mui/material/Badge';
+import IconButton from '@mui/material/IconButton';
+import Divider from '@mui/material/Divider';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import SecurityRounded from '@mui/icons-material/SecurityRounded';
 
 export function PreferencesControls() {
   const theme = useTheme<ExtendedTheme>()

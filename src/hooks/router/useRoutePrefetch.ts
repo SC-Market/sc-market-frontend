@@ -2,6 +2,11 @@ import { useEffect } from "react"
 import { useLocation } from "react-router-dom"
 import { prefetchRoutesForPath } from "../../router/routePrefetch"
 
+import { SxProps } from '@mui/material/SxProps';
+import { Theme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+
 /**
  * Hook to automatically prefetch routes based on current location
  * Uses the ROUTE_PREFETCH_MAP to determine which routes to prefetch

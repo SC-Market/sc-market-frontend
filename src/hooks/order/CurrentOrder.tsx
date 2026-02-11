@@ -1,6 +1,11 @@
 import React from "react"
 import { Order } from "../../datatypes/Order"
 
+import { SxProps } from '@mui/material/SxProps';
+import { Theme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+
 export const CurrentOrderContext = React.createContext<
   [Order, () => void] | null
 >(null)

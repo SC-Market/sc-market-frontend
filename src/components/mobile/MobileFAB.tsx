@@ -1,13 +1,31 @@
-/**
- * MobileFAB Component
- * Floating Action Button optimized for mobile
- * Automatically positions above bottom navigation
- */
-
-import { Fab, FabProps, useMediaQuery, useTheme } from "@mui/material"
 import React from "react"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { haptic } from "../../util/haptics"
+
+import Box from '@mui/material/Box';
+import { BoxProps } from '@mui/material/BoxProps';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import CircularProgress from '@mui/material/CircularProgress';
+import Fade from '@mui/material/Fade';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import useScrollTrigger from '@mui/material/useScrollTrigger';
+import { useTheme } from '@mui/material/styles';
+import SwipeableDrawer from '@mui/material/SwipeableDrawer';
+import Typography from '@mui/material/Typography';
+import Fab from '@mui/material/Fab';
+import { FabProps } from '@mui/material/FabProps';
+import DeleteRounded from '@mui/icons-material/DeleteRounded';
+import FavoriteRounded from '@mui/icons-material/FavoriteRounded';
+import MoreVertRounded from '@mui/icons-material/MoreVertRounded';
+import RefreshRounded from '@mui/icons-material/RefreshRounded';
+import CloseRounded from '@mui/icons-material/CloseRounded';
 
 interface MobileFABProps extends FabProps {
   position?: "bottom-right" | "bottom-left" | "top-right" | "top-left"

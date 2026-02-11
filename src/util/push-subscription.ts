@@ -4,6 +4,9 @@
 
 import type { PushSubscriptionData } from "../features/push-notifications/domain/types"
 
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
+
 /**
  * Convert VAPID public key from base64 URL-safe format to Uint8Array
  */

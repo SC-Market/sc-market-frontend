@@ -1,6 +1,11 @@
 import React from "react"
 import { CounterOfferBody } from "../../store/offer"
 
+import { SxProps } from '@mui/material/SxProps';
+import { Theme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+
 export const CounterOfferDetailsContext = React.createContext<
   | [CounterOfferBody, React.Dispatch<React.SetStateAction<CounterOfferBody>>]
   | null

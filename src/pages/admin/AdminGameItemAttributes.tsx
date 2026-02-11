@@ -3,8 +3,14 @@ import { Page } from "../../components/metadata/Page"
 import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import { useTranslation } from "react-i18next"
 import { AdminGameItemAttributesView } from "../../views/admin/AdminGameItemAttributesView"
-import { TextField, Button, Box, Typography, Grid, Paper } from "@mui/material"
 import SearchIcon from "@mui/icons-material/SearchRounded"
+
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
 
 export function AdminGameItemAttributes() {
   const { t } = useTranslation()

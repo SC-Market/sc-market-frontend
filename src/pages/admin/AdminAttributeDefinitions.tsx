@@ -4,6 +4,12 @@ import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import { useTranslation } from "react-i18next"
 import { AdminAttributeDefinitionsView } from "../../views/admin/AdminAttributeDefinitionsView"
 
+import { SxProps } from '@mui/material/SxProps';
+import { Theme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+import Breakpoint from '@mui/material/Breakpoint';
+
 export function AdminAttributeDefinitions() {
   const { t } = useTranslation()
 

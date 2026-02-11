@@ -1,19 +1,8 @@
-import { Grid, Tab, Tabs } from "@mui/material"
 import InfoIcon from "@mui/icons-material/Info"
 import { a11yProps, TabPanel } from "../../components/tabs/Tabs"
 import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import React from "react"
 import { Page } from "../../components/metadata/Page"
-import {
-  PeopleAltRounded,
-  PrivacyTipRounded,
-  StoreRounded,
-  Block,
-  SecurityRounded,
-  NotificationsActiveRounded,
-  Email as EmailIcon,
-  PhoneAndroidRounded,
-} from "@mui/icons-material"
 import { PrivacySettings } from "../../views/settings/PrivacySettings"
 import { Discord } from "../../components/icon/DiscordIcon"
 import { ProfileSettings } from "../../views/settings/ProfileSettings"
@@ -26,6 +15,38 @@ import { PushNotificationSettings } from "../../features/push-notifications"
 import { EmailSettings } from "../../features/email"
 import { MobileNavSettings } from "../../views/settings/MobileNavSettings"
 import { useTranslation } from "react-i18next"
+
+import Box from '@mui/material/Box';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import List from '@mui/material/List';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import Chip from '@mui/material/Chip';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import Divider from '@mui/material/Divider';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import Breadcrumbs from '@mui/material/Breadcrumbs';
+import MaterialLink from '@mui/material/Link';
+import Skeleton from '@mui/material/Skeleton';
+import ClearAllRounded from '@mui/icons-material/ClearAllRounded';
+import MarkEmailReadRounded from '@mui/icons-material/MarkEmailReadRounded';
+import PeopleAltRounded from '@mui/icons-material/PeopleAltRounded';
+import PrivacyTipRounded from '@mui/icons-material/PrivacyTipRounded';
+import StoreRounded from '@mui/icons-material/StoreRounded';
+import Block from '@mui/icons-material/Block';
+import SecurityRounded from '@mui/icons-material/SecurityRounded';
+import NotificationsActiveRounded from '@mui/icons-material/NotificationsActiveRounded';
+import EmailIcon from '@mui/icons-material/Email';
+import PhoneAndroidRounded from '@mui/icons-material/PhoneAndroidRounded';
 
 export function SettingsPage() {
   const { t } = useTranslation()

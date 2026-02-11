@@ -1,5 +1,8 @@
 import { ExtendedTheme } from "../hooks/styles/Theme"
 
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
+
 /**
  * Helper functions for standardized spacing and border radius
  *

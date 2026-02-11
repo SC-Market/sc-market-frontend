@@ -1,21 +1,3 @@
-/**
- * Mobile-specific messaging components
- * Handles keyboard visibility, sticky input, and bottom nav hiding
- */
-
-import {
-  Avatar,
-  AvatarGroup,
-  Box,
-  IconButton,
-  TextField,
-  Typography,
-  useMediaQuery,
-  useTheme,
-  Chip,
-  Stack,
-  Button,
-} from "@mui/material"
 import { HapticIconButton } from "../../../components/haptic"
 import React, {
   RefObject,
@@ -31,7 +13,6 @@ import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import BusinessIcon from "@mui/icons-material/BusinessRounded"
 import DescriptionIcon from "@mui/icons-material/DescriptionRounded"
 import SendIcon from "@mui/icons-material/SendRounded"
-import { ChevronLeftRounded, AccessTimeRounded } from "@mui/icons-material"
 import type { UserParticipant, ContractorParticipant } from "../domain/types"
 import type { Message } from "../domain/types"
 import {
@@ -60,8 +41,91 @@ import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { LongPressMenu } from "../../../components/gestures"
 import { MobileFAB } from "../../../components/mobile/MobileFAB"
 import { BottomSheet } from "../../../components/mobile"
-import { ContentCopyRounded } from "@mui/icons-material"
 import { useBottomNavHeight } from "../../../hooks/layout/useBottomNavHeight"
+
+import Grid from '@mui/material/Grid';
+import InputAdornment from '@mui/material/InputAdornment';
+import MenuItem from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import Alert from '@mui/material/Alert';
+import Chip from '@mui/material/Chip';
+import Box from '@mui/material/Box';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogActions from '@mui/material/DialogActions';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import Container from '@mui/material/Container';
+import Divider from '@mui/material/Divider';
+import Paper from '@mui/material/Paper';
+import List from '@mui/material/List';
+import CircularProgress from '@mui/material/CircularProgress';
+import Fab from '@mui/material/Fab';
+import Popover from '@mui/material/Popover';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
+import Checkbox from '@mui/material/Checkbox';
+import Stack from '@mui/material/Stack';
+import IconButton from '@mui/material/IconButton';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+import Avatar from '@mui/material/Avatar';
+import Collapse from '@mui/material/Collapse';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import { useTheme } from '@mui/material/styles';
+import ListSubheader from '@mui/material/ListSubheader';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
+import FormGroup from '@mui/material/FormGroup';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Tooltip from '@mui/material/Tooltip';
+import Fade from '@mui/material/Fade';
+import TableCell from '@mui/material/TableCell';
+import TableRow from '@mui/material/TableRow';
+import Badge from '@mui/material/Badge';
+import AvatarGroup from '@mui/material/AvatarGroup';
+import Autocomplete from '@mui/material/Autocomplete';
+import ListItem from '@mui/material/ListItem';
+import Drawer from '@mui/material/Drawer';
+import CreateRounded from '@mui/icons-material/CreateRounded';
+import SettingsRounded from '@mui/icons-material/SettingsRounded';
+import StoreRounded from '@mui/icons-material/StoreRounded';
+import DesignServicesRounded from '@mui/icons-material/DesignServicesRounded';
+import PersonAddRounded from '@mui/icons-material/PersonAddRounded';
+import ForumRounded from '@mui/icons-material/ForumRounded';
+import DashboardRounded from '@mui/icons-material/DashboardRounded';
+import CalendarMonthRounded from '@mui/icons-material/CalendarMonthRounded';
+import ListAltRounded from '@mui/icons-material/ListAltRounded';
+import WarehouseRounded from '@mui/icons-material/WarehouseRounded';
+import DashboardCustomizeRounded from '@mui/icons-material/DashboardCustomizeRounded';
+import AssignmentTurnedInRounded from '@mui/icons-material/AssignmentTurnedInRounded';
+import Block from '@mui/icons-material/Block';
+import PersonRemove from '@mui/icons-material/PersonRemove';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import ChevronLeftRounded from '@mui/icons-material/ChevronLeftRounded';
+import SearchRounded from '@mui/icons-material/SearchRounded';
+import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import CopyIcon from '@mui/icons-material/ContentCopy';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import SecurityIcon from '@mui/icons-material/Security';
+import ScheduleIcon from '@mui/icons-material/Schedule';
+import BusinessIcon1 from '@mui/icons-material/Business';
+import StarRounded from '@mui/icons-material/StarRounded';
+import StarBorderRounded from '@mui/icons-material/StarBorderRounded';
+import MenuRounded from '@mui/icons-material/MenuRounded';
+import CloseRounded from '@mui/icons-material/CloseRounded';
+import AccessTimeRounded from '@mui/icons-material/AccessTimeRounded';
+import ContentCopyRounded from '@mui/icons-material/ContentCopyRounded';
 
 // Replace Discord-like timestamp tags in messages with human-readable strings
 function replaceDiscordTimestamps(input: string) {
@@ -144,7 +208,7 @@ function replaceDiscordTimestamps(input: string) {
 
       return date.toLocaleString(undefined, options)
     },
-  )
+  );
 }
 
 function MessageEntryMobile(props: { message: Message }) {

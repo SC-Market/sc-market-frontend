@@ -1,5 +1,8 @@
 import React from "react"
 
+import { SxProps } from '@mui/material/SxProps';
+import { Theme } from '@mui/material/styles';
+
 export interface ContractSearchState {
   kind?: string | undefined
   // type?: string | undefined,

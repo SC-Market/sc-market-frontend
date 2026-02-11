@@ -1,18 +1,25 @@
 import React from "react"
 import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import { Box, Tabs } from "@mui/material"
-import {
-  CreateRounded,
-  DesignServicesRounded,
-  InfoRounded,
-  PersonAddRounded,
-  StarRounded,
-  StorefrontRounded,
-} from "@mui/icons-material"
 import PeopleAltRoundedIcon from "@mui/icons-material/PeopleAltRounded"
 import { HapticTab } from "../../../components/haptic"
 import { a11yProps } from "../../../components/tabs/Tabs"
+
+import { SxProps } from '@mui/material/SxProps';
+import { Theme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+import Breakpoint from '@mui/material/Breakpoint';
+import Fab from '@mui/material/Fab';
+import Box from '@mui/material/Box';
+import Tabs from '@mui/material/Tabs';
+import RefreshRounded from '@mui/icons-material/RefreshRounded';
+import CreateRounded from '@mui/icons-material/CreateRounded';
+import DesignServicesRounded from '@mui/icons-material/DesignServicesRounded';
+import InfoRounded from '@mui/icons-material/InfoRounded';
+import PersonAddRounded from '@mui/icons-material/PersonAddRounded';
+import StarRounded from '@mui/icons-material/StarRounded';
+import StorefrontRounded from '@mui/icons-material/StorefrontRounded';
 
 interface OrgTabsProps {
   spectrumId: string

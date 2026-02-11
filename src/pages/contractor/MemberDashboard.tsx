@@ -1,7 +1,6 @@
 import React from "react"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
 import { ContainerGrid } from "../../components/layout/ContainerGrid"
-import { Grid, Theme, useMediaQuery } from "@mui/material"
 import { OrderMetrics } from "../../views/orders/OrderMetrics"
 import { MemberAssignments } from "../../views/member/MemberAssignments"
 import { Page } from "../../components/metadata/Page"
@@ -12,6 +11,25 @@ import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import Skeleton from '@mui/material/Skeleton';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import Container from '@mui/material/Container';
+import Tabs from '@mui/material/Tabs';
+import CircularProgress from '@mui/material/CircularProgress';
+import Stack from '@mui/material/Stack';
+import useTheme1 from '@mui/material/styles';
+import { Theme } from '@mui/material/styles';
+import CreateRounded from '@mui/icons-material/CreateRounded';
+import ArrowBackRounded from '@mui/icons-material/ArrowBackRounded';
 
 export function MemberDashboard() {
   // TODO: Add a notifications section here, and maybe some other content

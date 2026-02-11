@@ -1,9 +1,32 @@
 import React, { useState, useEffect } from "react"
-import { Box, Paper } from "@mui/material"
-import { useTheme } from "@mui/material/styles"
+import { useTheme, ThemeProvider, createTheme } from "@mui/material/styles";
 import { User } from "../../../datatypes/User"
 import { Contractor } from "../../../datatypes/Contractor"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
+
+import Alert from '@mui/material/Alert';
+import CssBaseline from '@mui/material/CssBaseline';
+import Snackbar from '@mui/material/Snackbar';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { responsiveFontSizes } from '@mui/material/styles';
+import IconButton from '@mui/material/IconButton';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
+import Divider from '@mui/material/Divider';
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
+import CarRentalRounded from '@mui/icons-material/CarRentalRounded';
+import InfoRounded from '@mui/icons-material/InfoRounded';
+import LocalHospitalRounded from '@mui/icons-material/LocalHospitalRounded';
+import CloseRounded from '@mui/icons-material/CloseRounded';
+import DeleteRounded from '@mui/icons-material/DeleteRounded';
+import MarkEmailReadRounded from '@mui/icons-material/MarkEmailReadRounded';
+import MarkEmailUnreadRounded from '@mui/icons-material/MarkEmailUnreadRounded';
+import ShareRounded from '@mui/icons-material/ShareRounded';
 
 export function LightBannerContainer(props: {
   children?: React.ReactNode

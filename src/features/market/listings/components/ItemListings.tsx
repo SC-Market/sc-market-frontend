@@ -1,51 +1,3 @@
-/*
-<ListingSection xs={12}>
-            <Grid item xs={12} lg={10} container justifyContent={'left'}>
-<Grid item xs={.66}>
-    <Avatar src={userObject.avatar} variant={'rounded'}
-            sx={{width: theme.spacing(8), height: theme.spacing(8)}}/>
-</Grid>
-<Grid item xs={3}>
-    <Typography
-        color={"text.secondary"}
-        variant={'subtitle1'}
-        fontWeight={'bold'}
-    >
-        {listing.title}
-    </Typography>
-    <Link to={`/user/${userObject.username}`} style={{textDecoration: 'none', color: 'inherit'}}>
-        <Typography variant={'subtitle2'} color={'primary'}>
-            {userObject.username}
-        </Typography>
-    </Link>
-</Grid>
-<Grid item xs={12} lg={4}>
-    <Typography
-        color={"text.secondary"}
-        variant={'subtitle1'}
-        fontWeight={'bold'}
-    >
-        {listing.description}
-    </Typography>
-</Grid>
-</Grid>
-
-
-<Grid item xs={12} lg={2} container justifyContent={'right'}>
-
-</Grid>
-</ListingSection>
- */
-import {
-  Box,
-  Chip,
-  Divider,
-  Fab,
-  Grid,
-  Skeleton,
-  Typography,
-  useMediaQuery,
-} from "@mui/material"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import {
@@ -86,7 +38,6 @@ import {
   prioritizeBadges,
 } from "../../../../util/badges"
 import { useGetUserProfileQuery } from "../../../../store/profile"
-import { RefreshRounded, EditRounded, ShareRounded } from "@mui/icons-material"
 import moment from "moment/moment"
 import { Stack } from "@mui/system"
 import { AdCard } from "../../../../components/ads/AdCard"
@@ -118,6 +69,72 @@ import {
   MultipleListingBase,
 } from "../../components/listings/MultipleListingCard"
 import { ListingPagination } from "../../components/listings/ListingPagination"
+
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import MenuItem from '@mui/material/MenuItem';
+import Typography from '@mui/material/Typography';
+import Autocomplete from '@mui/material/Autocomplete';
+import Chip from '@mui/material/Chip';
+import Button from '@mui/material/Button';
+import Stack1 from '@mui/material/Stack';
+import useTheme1 from '@mui/material/styles';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+import Divider from '@mui/material/Divider';
+import Grid from '@mui/material/Grid';
+import MaterialLink from '@mui/material/Link';
+import { ButtonProps } from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import { DialogProps } from '@mui/material/DialogProps';
+import Menu from '@mui/material/Menu';
+import { MenuProps } from '@mui/material/MenuProps';
+import { MenuItemProps } from '@mui/material/MenuItemProps';
+import Accordion from '@mui/material/Accordion';
+import { AccordionProps } from '@mui/material/AccordionProps';
+import Switch from '@mui/material/Switch';
+import { SwitchProps } from '@mui/material/SwitchProps';
+import Tab from '@mui/material/Tab';
+import { TabProps } from '@mui/material/TabProps';
+import Collapse from '@mui/material/Collapse';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+import TablePagination from '@mui/material/TablePagination';
+import { TablePaginationProps } from '@mui/material/TablePaginationProps';
+import Avatar from '@mui/material/Avatar';
+import List from '@mui/material/List';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListSubheader from '@mui/material/ListSubheader';
+import { GridProps } from '@mui/material/Grid';
+import Drawer from '@mui/material/Drawer';
+import { DrawerProps } from '@mui/material/DrawerProps';
+import Checkbox from '@mui/material/Checkbox';
+import { CheckboxProps } from '@mui/material/CheckboxProps';
+import IconButton from '@mui/material/IconButton';
+import { IconButtonProps } from '@mui/material/IconButtonProps';
+import SvgIcon from '@mui/material/SvgIcon';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { BoxProps } from '@mui/material/BoxProps';
+import Fab from '@mui/material/Fab';
+import Skeleton from '@mui/material/Skeleton';
+import ShoppingCartOutlined from '@mui/icons-material/ShoppingCartOutlined';
+import DescriptionOutlined from '@mui/icons-material/DescriptionOutlined';
+import Inventory2Outlined from '@mui/icons-material/Inventory2Outlined';
+import BusinessOutlined from '@mui/icons-material/BusinessOutlined';
+import NotificationsNoneOutlined from '@mui/icons-material/NotificationsNoneOutlined';
+import AssignmentOutlined from '@mui/icons-material/AssignmentOutlined';
+import ChatBubbleOutlineOutlined from '@mui/icons-material/ChatBubbleOutlineOutlined';
+import InboxOutlined from '@mui/icons-material/InboxOutlined';
+import WorkOutlineOutlined from '@mui/icons-material/WorkOutlineOutlined';
+import StarBorderOutlined from '@mui/icons-material/StarBorderOutlined';
+import SearchOffOutlined from '@mui/icons-material/SearchOffOutlined';
+import RefreshRounded from '@mui/icons-material/RefreshRounded';
+import HomeRounded from '@mui/icons-material/HomeRounded';
+import ReportProblemRounded from '@mui/icons-material/ReportProblemRounded';
+import EditRounded from '@mui/icons-material/EditRounded';
+import ShareRounded from '@mui/icons-material/ShareRounded';
 
 export {
   ListingRefreshButton,

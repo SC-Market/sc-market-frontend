@@ -1,6 +1,5 @@
 import React from "react"
 import { useTranslation } from "react-i18next"
-import { Box, Chip, Container, Grid, Paper, useTheme } from "@mui/material"
 import { TabPanel } from "../../../components/tabs/Tabs"
 import { Section } from "../../../components/paper/Section"
 import { CreateOrderForm } from "../../../views/orders/CreateOrderForm"
@@ -11,6 +10,32 @@ import { OrgStoreView, OrgServicesView } from "../../profile"
 import { MarkdownRender } from "../../../components/markdown/Markdown"
 import { Contractor } from "../../../datatypes/Contractor"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
+
+import { SxProps } from '@mui/material/SxProps';
+import { Theme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+import Breakpoint from '@mui/material/Breakpoint';
+import Fab from '@mui/material/Fab';
+import Box from '@mui/material/Box';
+import Tabs from '@mui/material/Tabs';
+import Avatar from '@mui/material/Avatar';
+import Chip from '@mui/material/Chip';
+import IconButton from '@mui/material/IconButton';
+import MaterialLink from '@mui/material/Link';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import RefreshRounded from '@mui/icons-material/RefreshRounded';
+import CreateRounded from '@mui/icons-material/CreateRounded';
+import DesignServicesRounded from '@mui/icons-material/DesignServicesRounded';
+import InfoRounded from '@mui/icons-material/InfoRounded';
+import PersonAddRounded from '@mui/icons-material/PersonAddRounded';
+import StarRounded from '@mui/icons-material/StarRounded';
+import StorefrontRounded from '@mui/icons-material/StorefrontRounded';
+import LinkRounded from '@mui/icons-material/LinkRounded';
 
 interface OrgTabContentProps {
   currentTab: number

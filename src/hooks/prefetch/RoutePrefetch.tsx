@@ -2,6 +2,11 @@ import { useEffect } from "react"
 import { useLocation } from "react-router-dom"
 import { prefetchModule } from "../../util/prefetch"
 
+import { SxProps } from '@mui/material/SxProps';
+import { Theme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+
 // Define prefetch strategies for different routes
 const routePrefetchMap: Record<string, () => Promise<void>> = {
   // When on market page, prefetch related market components

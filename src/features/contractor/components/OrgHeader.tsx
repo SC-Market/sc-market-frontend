@@ -1,21 +1,34 @@
 import React from "react"
-import {
-  Avatar,
-  Box,
-  Chip,
-  IconButton,
-  Link as MaterialLink,
-  Stack,
-  Typography,
-} from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import PeopleAltRoundedIcon from "@mui/icons-material/PeopleAltRounded"
-import { LinkRounded } from "@mui/icons-material"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { Contractor } from "../../../datatypes/Contractor"
 import { contractorKindIcons } from "../../../views/contractor/ContractorList"
 import { useTranslation } from "react-i18next"
 import { ShareButton } from "../../../components/buttons/ShareButton"
+
+import { SxProps } from '@mui/material/SxProps';
+import { Theme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import useTheme1 from '@mui/material/styles';
+import Breakpoint from '@mui/material/Breakpoint';
+import Fab from '@mui/material/Fab';
+import Box from '@mui/material/Box';
+import Tabs from '@mui/material/Tabs';
+import Avatar from '@mui/material/Avatar';
+import Chip from '@mui/material/Chip';
+import IconButton from '@mui/material/IconButton';
+import MaterialLink from '@mui/material/Link';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+import RefreshRounded from '@mui/icons-material/RefreshRounded';
+import CreateRounded from '@mui/icons-material/CreateRounded';
+import DesignServicesRounded from '@mui/icons-material/DesignServicesRounded';
+import InfoRounded from '@mui/icons-material/InfoRounded';
+import PersonAddRounded from '@mui/icons-material/PersonAddRounded';
+import StarRounded from '@mui/icons-material/StarRounded';
+import StorefrontRounded from '@mui/icons-material/StorefrontRounded';
+import LinkRounded from '@mui/icons-material/LinkRounded';
 
 interface OrgHeaderProps {
   contractor: Contractor

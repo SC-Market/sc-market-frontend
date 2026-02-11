@@ -1,11 +1,13 @@
 /**
  * PWA installation detection utilities
  */
-
 /**
  * Check if the app is installed as a PWA
  * Works across iOS, Android, and desktop
  */
+import CircularProgress from '@mui/material/CircularProgress';
+
+import Box from '@mui/material/Box';
 export function isPWAInstalled(): boolean {
   // Check for standalone mode (iOS Safari, Android Chrome, desktop)
   if (window.matchMedia("(display-mode: standalone)").matches) {
@@ -35,7 +37,7 @@ export function isPWAInstalled(): boolean {
 export function isMobileDevice(): boolean {
   return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
     navigator.userAgent,
-  )
+  );
 }
 
 /**

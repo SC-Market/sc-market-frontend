@@ -1,5 +1,11 @@
 import React from "react"
 
+import { SxProps } from '@mui/material/SxProps';
+import { Theme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+import Breakpoint from '@mui/material/Breakpoint';
+
 export const MessagingSidebarContext = React.createContext<
   [boolean, React.Dispatch<React.SetStateAction<boolean>>] | null
 >(null)

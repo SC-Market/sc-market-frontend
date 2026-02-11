@@ -1,7 +1,9 @@
 // Prefetching utilities for proactive chunk loading
-
 // Cache to track which modules have been prefetched
-const prefetchedModules = new Set<string>()
+import CircularProgress from '@mui/material/CircularProgress';
+
+import Box from '@mui/material/Box';
+const prefetchedModules = new Set<string>();
 
 // Generic prefetch function
 export async function prefetchModule(

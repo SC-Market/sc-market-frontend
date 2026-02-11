@@ -2,8 +2,12 @@
  * Route Registry - Central registry for all route lazy imports
  * This enables prefetching and dynamic loading of route components
  */
+import CarRentalRounded from '@mui/icons-material/CarRentalRounded';
 
-export type RouteImportFunction = () => Promise<any>
+import InfoRounded from '@mui/icons-material/InfoRounded';
+import LocalHospitalRounded from '@mui/icons-material/LocalHospitalRounded';
+
+export type RouteImportFunction = () => Promise<any>;
 
 /**
  * Registry of all route imports by path

@@ -5,23 +5,30 @@ import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
 import CloseIcon from "@mui/icons-material/CloseRounded"
 import MenuIcon from "@mui/icons-material/MenuRounded"
 import FilterListIcon from "@mui/icons-material/FilterList"
-import {
-  Button,
-  Grid,
-  IconButton,
-  Box,
-  Typography,
-  useMediaQuery,
-} from "@mui/material"
 import { Page } from "../../components/metadata/Page"
 import { ServiceSidebar } from "../../views/contracts/ServiceSidebar"
 import { ServiceSidebarContext } from "../../hooks/contract/ServiceSidebar"
 import { ServiceListings } from "../../views/contracts/ServiceListings"
 import { Link } from "react-router-dom"
-import { CreateRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import Skeleton from '@mui/material/Skeleton';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import Container from '@mui/material/Container';
+import Tabs from '@mui/material/Tabs';
+import CircularProgress from '@mui/material/CircularProgress';
+import CreateRounded from '@mui/icons-material/CreateRounded';
+import ArrowBackRounded from '@mui/icons-material/ArrowBackRounded';
 
 export function Services() {
   const { t } = useTranslation()

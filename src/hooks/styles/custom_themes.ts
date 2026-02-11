@@ -1,4 +1,3 @@
-import { Theme } from "@mui/material"
 import { BWINCORP_theme } from "./themes/BWINCORP"
 import { MEDRUNNER_theme } from "./themes/MEDRUNNER"
 import { RSNM_theme } from "./themes/RSNM"
@@ -9,6 +8,11 @@ import { CYBERPUNK_theme } from "./themes/CYBERPUNK"
 import { OCEAN_theme } from "./themes/OCEAN"
 import { SUNSET_theme } from "./themes/SUNSET"
 import { SPACE_theme } from "./themes/SPACE"
+
+import { SxProps } from '@mui/material/SxProps';
+import { Theme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
 
 export const CUSTOM_THEMES = new Map<string, Theme>()
 CUSTOM_THEMES.set("BWINCORP", BWINCORP_theme)

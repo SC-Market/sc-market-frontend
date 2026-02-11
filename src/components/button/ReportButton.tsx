@@ -1,20 +1,4 @@
 import React, { useState } from "react"
-import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  TextField,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Typography,
-  Box,
-  Button,
-  useMediaQuery,
-} from "@mui/material"
-import { Report as ReportIcon } from "@mui/icons-material"
 import { useReportContentMutation } from "../../store/moderation"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { useTranslation } from "react-i18next"
@@ -24,6 +8,43 @@ import { UnderlineLink } from "../typography/UnderlineLink"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { BottomSheet } from "../mobile/BottomSheet"
+
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+import Grid from '@mui/material/Grid';
+import Snackbar from '@mui/material/Snackbar';
+import Paper from '@mui/material/Paper';
+import Fade from '@mui/material/Fade';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { ButtonProps } from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import useTheme1 from '@mui/material/styles';
+import Avatar from '@mui/material/Avatar';
+import MaterialLink from '@mui/material/Link';
+import Typography from '@mui/material/Typography';
+import { GridProps } from '@mui/material/Grid';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Tooltip from '@mui/material/Tooltip';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
+import TextField from '@mui/material/TextField';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import CookieRounded from '@mui/icons-material/CookieRounded';
+import ZoomIn from '@mui/icons-material/ZoomIn';
+import ZoomOut from '@mui/icons-material/ZoomOut';
+import FitScreen from '@mui/icons-material/FitScreen';
+import Close from '@mui/icons-material/Close';
+import KeyboardArrowDownRounded from '@mui/icons-material/KeyboardArrowDownRounded';
+import KeyboardArrowUpRounded from '@mui/icons-material/KeyboardArrowUpRounded';
+import ReportIcon from '@mui/icons-material/Report';
 
 interface ReportButtonProps {
   reportedUrl?: string // Optional custom URL, defaults to current page

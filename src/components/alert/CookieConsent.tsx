@@ -1,13 +1,20 @@
 import React, { useEffect } from "react"
-import { Alert, AlertTitle, Box, Button, Grid, Snackbar } from "@mui/material"
 import { useCookies } from "react-cookie"
-import { CookieRounded } from "@mui/icons-material"
 import ReactGA from "react-ga4"
 import { useLocation } from "react-router-dom"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTranslation } from "react-i18next"
 import { onPageInteractive } from "../../util/scripts/delayedScriptLoader"
+
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
+import Grid from '@mui/material/Grid';
+import Snackbar from '@mui/material/Snackbar';
+import CookieRounded from '@mui/icons-material/CookieRounded';
 
 const TRACKING_ID = "G-KT8SEND6F2" // OUR_TRACKING_ID
 

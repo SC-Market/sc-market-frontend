@@ -1,5 +1,8 @@
 import React from "react"
 
+import { SxProps } from '@mui/material/SxProps';
+import { Theme } from '@mui/material/styles';
+
 export const serviceDrawerWidth = 360
 
 export const ServiceSidebarContext = React.createContext<

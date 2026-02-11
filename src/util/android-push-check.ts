@@ -6,7 +6,7 @@
  * Check if the device is Android
  */
 export function isAndroidDevice(): boolean {
-  return /Android/i.test(navigator.userAgent)
+  return /Android/i.test(navigator.userAgent);
 }
 
 /**
@@ -14,10 +14,10 @@ export function isAndroidDevice(): boolean {
  */
 export function isAndroidChrome(): boolean {
   return (
-    isAndroidDevice() &&
-    /Chrome/i.test(navigator.userAgent) &&
-    !/Edg/i.test(navigator.userAgent) // Exclude Edge
-  )
+    // Exclude Edge
+    (isAndroidDevice() &&
+    /Chrome/i.test(navigator.userAgent) && !/Edg/i.test(navigator.userAgent))
+  );
 }
 
 /**

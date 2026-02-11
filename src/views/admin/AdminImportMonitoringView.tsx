@@ -1,20 +1,26 @@
 import React, { useState } from "react"
 import { useTranslation } from "react-i18next"
-import {
-  Typography,
-  Grid,
-  Button,
-  TextField,
-  Box,
-  Paper,
-  Alert,
-  CircularProgress,
-  Chip,
-} from "@mui/material"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
 import { useImportGameItemAttributesMutation } from "../../store/api/attributes"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { AdminIcons } from "../../components/icons"
+
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Chip from '@mui/material/Chip';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import TableRow from '@mui/material/TableRow';
+import TableCell from '@mui/material/TableCell';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import Collapse from '@mui/material/Collapse';
+import Autocomplete from '@mui/material/Autocomplete';
+import Alert from '@mui/material/Alert';
+import CircularProgress from '@mui/material/CircularProgress';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import ExpandLess from '@mui/icons-material/ExpandLess';
 
 interface ImportJobResult {
   gameItemId: string

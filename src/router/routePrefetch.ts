@@ -1,6 +1,10 @@
 import { routeRegistry, RouteImportFunction } from "./routeRegistry"
 import { ROUTE_PREFETCH_MAP } from "../types/routes"
 
+import CarRentalRounded from '@mui/icons-material/CarRentalRounded';
+import InfoRounded from '@mui/icons-material/InfoRounded';
+import LocalHospitalRounded from '@mui/icons-material/LocalHospitalRounded';
+
 /**
  * Cache to track which routes have been prefetched
  */

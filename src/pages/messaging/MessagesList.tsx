@@ -1,5 +1,4 @@
 import React, { useState } from "react"
-import { Box, useMediaQuery, useTheme } from "@mui/material"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
 import {
   MessagingSidebar,
@@ -12,6 +11,10 @@ import {
 } from "../../features/chats"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useNavigate } from "react-router-dom"
+
+import Box from '@mui/material/Box';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
 
 export function MessagesList() {
   const [drawerOpen] = useDrawerOpen()

@@ -1,10 +1,33 @@
 import React, { useState } from "react"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { Fab, Popover, useMediaQuery } from "@mui/material"
-import { SettingsRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { PreferencesControls } from "../../components/settings/PreferencesControls"
+
+import Grid from '@mui/material/Grid';
+import InputAdornment from '@mui/material/InputAdornment';
+import MenuItem from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import Alert from '@mui/material/Alert';
+import Chip from '@mui/material/Chip';
+import Box from '@mui/material/Box';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogActions from '@mui/material/DialogActions';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import Container from '@mui/material/Container';
+import Divider from '@mui/material/Divider';
+import Paper from '@mui/material/Paper';
+import List from '@mui/material/List';
+import CircularProgress from '@mui/material/CircularProgress';
+import Fab from '@mui/material/Fab';
+import Popover from '@mui/material/Popover';
+import CreateRounded from '@mui/icons-material/CreateRounded';
+import SettingsRounded from '@mui/icons-material/SettingsRounded';
 
 export function PreferencesButton() {
   const theme = useTheme<ExtendedTheme>()
