@@ -5,7 +5,7 @@ import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { OrderReview } from "../../datatypes/Order"
 
 import Box from '@mui/material/Box';
-import { BoxProps } from '@mui/material/BoxProps';
+import { BoxProps } from '@mui/material/Box';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -22,12 +22,13 @@ import { useTheme } from '@mui/material/styles';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import Typography from '@mui/material/Typography';
 import Fab from '@mui/material/Fab';
-import { FabProps } from '@mui/material/FabProps';
+import { FabProps } from '@mui/material/Fab';
 import Drawer from '@mui/material/Drawer';
 import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
 import TextField from '@mui/material/TextField';
-import { TextFieldProps } from '@mui/material/TextFieldProps';
+import { TextFieldProps } from '@mui/material/TextField';
+import MuiRating from '@mui/material/Rating';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Stack from '@mui/material/Stack';
@@ -43,9 +44,9 @@ import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
-import { BreadcrumbsProps } from '@mui/material/BreadcrumbsProps';
+import { BreadcrumbsProps } from '@mui/material/Breadcrumbs';
 import MaterialLink from '@mui/material/Link';
-import { TypographyProps } from '@mui/material/TypographyProps';
+import { TypographyProps } from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 import ButtonBase from '@mui/material/ButtonBase';
 import Grid from '@mui/material/Grid';
@@ -59,7 +60,7 @@ import Select from '@mui/material/Select';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import { GridProps } from '@mui/material/Grid';
-import { PaperProps } from '@mui/material/PaperProps';
+import { PaperProps } from '@mui/material/Paper';
 import CardActions from '@mui/material/CardActions';
 import ListItemButton from '@mui/material/ListItemButton';
 import DialogContentText from '@mui/material/DialogContentText';
@@ -248,7 +249,7 @@ export function EditableReview({ review }: EditableReviewProps) {
         <Typography variant="subtitle2" gutterBottom>
           {t("reviewRevision.label.rating")} *
         </Typography>
-        <Rating
+        <MuiRating
           value={rating}
           onChange={(_, newValue) => setRating(newValue || 0)}
           precision={0.5}

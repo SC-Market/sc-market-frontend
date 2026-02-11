@@ -2,7 +2,7 @@ import React from "react"
 import { OrderLimits } from "../../store/orderSettings"
 
 import Box from '@mui/material/Box';
-import { BoxProps } from '@mui/material/BoxProps';
+import { BoxProps } from '@mui/material/Box';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -19,12 +19,12 @@ import { useTheme } from '@mui/material/styles';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import Typography from '@mui/material/Typography';
 import Fab from '@mui/material/Fab';
-import { FabProps } from '@mui/material/FabProps';
+import { FabProps } from '@mui/material/Fab';
 import Drawer from '@mui/material/Drawer';
 import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialAction from '@mui/material/SpeedDialAction';
 import TextField from '@mui/material/TextField';
-import { TextFieldProps } from '@mui/material/TextFieldProps';
+import { TextFieldProps } from '@mui/material/TextField';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Stack from '@mui/material/Stack';
@@ -40,9 +40,9 @@ import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
-import { BreadcrumbsProps } from '@mui/material/BreadcrumbsProps';
+import { BreadcrumbsProps } from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
-import { TypographyProps } from '@mui/material/TypographyProps';
+import { TypographyProps } from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 import ButtonBase from '@mui/material/ButtonBase';
 import Grid from '@mui/material/Grid';

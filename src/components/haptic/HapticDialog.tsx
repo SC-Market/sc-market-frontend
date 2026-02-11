@@ -17,7 +17,7 @@ import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import { ButtonProps } from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import { DialogProps } from '@mui/material/DialogProps';
+import { DialogProps } from '@mui/material/Dialog';
 import ShoppingCartOutlined from '@mui/icons-material/ShoppingCartOutlined';
 import DescriptionOutlined from '@mui/icons-material/DescriptionOutlined';
 import Inventory2Outlined from '@mui/icons-material/Inventory2Outlined';

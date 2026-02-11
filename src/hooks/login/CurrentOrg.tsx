@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react"
 import { Contractor } from "../../datatypes/Contractor"
 
-import { SxProps } from '@mui/material/SxProps';
+import { SxProps } from '@mui/system';
 import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';

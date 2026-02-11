@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from "react"
 
-import { SxProps } from '@mui/material/SxProps';
+import { SxProps } from '@mui/system';
 import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';

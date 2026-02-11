@@ -4,11 +4,11 @@ import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import { useTranslation } from "react-i18next"
 import { AdminAlertsView } from "../../views/admin/AdminAlertsView"
 
-import { SxProps } from '@mui/material/SxProps';
+import { SxProps } from '@mui/system';
 import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
-import Breakpoint from '@mui/material/Breakpoint';
+import Breakpoint from '@mui/material/styles';
 
 export function AdminAlerts() {
   const { t } = useTranslation()

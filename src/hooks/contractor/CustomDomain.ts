@@ -1,4 +1,4 @@
-import { SxProps } from '@mui/material/SxProps';
+import { SxProps } from '@mui/system';
 import { Theme } from '@mui/material/styles';
 const domains = new Map<string, string>()
 domains.set("bwsc.sc-market.space", "BWINCORP")

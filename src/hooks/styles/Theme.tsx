@@ -2,7 +2,7 @@
  * Theme barrel – re-exports from the modular theme package.
  * Import from here for backward compatibility.
  */
-import { SxProps } from '@mui/material/SxProps';
+import { SxProps } from '@mui/system';
 
 import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';

@@ -15,11 +15,11 @@ import { useUpdateListingQuantityMutation } from "../api/marketApi"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { StockManager } from "./stock/StockManager"
 
-import { SxProps } from '@mui/material/SxProps';
+import { SxProps } from '@mui/system';
 import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
-import Breakpoint from '@mui/material/Breakpoint';
+import Breakpoint from '@mui/material/styles';
 import Fab from '@mui/material/Fab';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
@@ -54,7 +54,7 @@ import ButtonBase from '@mui/material/ButtonBase';
 import CardMedia from '@mui/material/CardMedia';
 import Modal from '@mui/material/Modal';
 import AppBar from '@mui/material/AppBar';
-import { PaperProps } from '@mui/material/PaperProps';
+import { PaperProps } from '@mui/material/Paper';
 import Toolbar from '@mui/material/Toolbar';
 import Collapse from '@mui/material/Collapse';
 import MenuItem from '@mui/material/MenuItem';
