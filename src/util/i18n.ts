@@ -8,23 +8,6 @@ import moment from "moment"
 import en from "../locales/en/english.json"
 import { useEffect, useState } from "react"
 
-// MUI locale bundles (centralized mapping here)
-import {
-  enUS as coreEnUS,
-  zhCN as coreZhCN,
-  ukUA as coreUkUA,
-} from "@mui/material/locale"
-import {
-  enUS as pickersEnUS,
-  zhCN as pickersZhCN,
-  ukUA as pickersUkUA,
-} from "@mui/x-date-pickers/locales"
-import {
-  enUS as gridEnUS,
-  zhCN as gridZhCN,
-  ukUA as gridUkUA,
-} from "@mui/x-data-grid/locales"
-
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 
@@ -78,18 +61,33 @@ export async function preloadLocales(locales: string[]): Promise<void> {
   await Promise.all(locales.map((locale) => loadLocale(locale)))
 }
 
-export function getMuiLocales(languageCode: string): {
-  core: typeof coreEnUS
-  pickers: typeof pickersEnUS
-  grid: typeof gridEnUS
-} {
+export async function getMuiLocales(languageCode: string): Promise<{
+  core: any
+  pickers: any
+  grid: any
+}> {
   switch (languageCode) {
     case "uk":
+      const [{ ukUA: coreUkUA }, { ukUA: pickersUkUA }, { ukUA: gridUkUA }] = await Promise.all([
+        import("@mui/material/locale"),
+        import("@mui/x-date-pickers/locales"),
+        import("@mui/x-data-grid/locales")
+      ])
       return { core: coreUkUA, pickers: pickersUkUA, grid: gridUkUA }
     case "zh-CN":
+      const [{ zhCN: coreZhCN }, { zhCN: pickersZhCN }, { zhCN: gridZhCN }] = await Promise.all([
+        import("@mui/material/locale"),
+        import("@mui/x-date-pickers/locales"),
+        import("@mui/x-data-grid/locales")
+      ])
       return { core: coreZhCN, pickers: pickersZhCN, grid: gridZhCN }
     case "en":
     default:
+      const [{ enUS: coreEnUS }, { enUS: pickersEnUS }, { enUS: gridEnUS }] = await Promise.all([
+        import("@mui/material/locale"),
+        import("@mui/x-date-pickers/locales"),
+        import("@mui/x-data-grid/locales")
+      ])
       return { core: coreEnUS, pickers: pickersEnUS, grid: gridEnUS }
   }
 }
