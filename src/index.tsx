@@ -5,29 +5,28 @@ import App from "./App"
 import reportWebVitals from "./reportWebVitals"
 import { createRoot } from "react-dom/client"
 import { initPWA } from "./util/pwa"
+import { initializeBugsnagAsync, getBugsnagErrorBoundary } from "./util/monitoring/bugsnagLoader"
 
 const container = document.getElementById("root")
 const root = createRoot(container!)
-import Bugsnag from "@bugsnag/js"
-import BugsnagPluginReact from "@bugsnag/plugin-react"
-import BugsnagPerformance from "@bugsnag/browser-performance"
 
-Bugsnag.start({
-  apiKey: import.meta.env.VITE_BUGSNAG_API_KEY || "",
-  plugins: [new BugsnagPluginReact()],
-})
-BugsnagPerformance.start({
-  apiKey: import.meta.env.VITE_BUGSNAG_API_KEY || "",
-})
+// Get error boundary (will use fallback if Bugsnag not loaded yet)
+const ErrorBoundary = getBugsnagErrorBoundary(React)
 
-const BugSnagErrorBoundary =
-  Bugsnag.getPlugin("react")!.createErrorBoundary(React)
+// Initialize Bugsnag asynchronously (non-blocking)
+// This happens after page is interactive to avoid blocking critical rendering
+initializeBugsnagAsync(import.meta.env.VITE_BUGSNAG_API_KEY || "").catch((error) => {
+  // Silently fail - error monitoring is not critical for app functionality
+  if (import.meta.env.DEV) {
+    console.warn("Bugsnag initialization failed (non-critical):", error)
+  }
+})
 
 root.render(
   <React.StrictMode>
-    <BugSnagErrorBoundary>
+    <ErrorBoundary>
       <App />
-    </BugSnagErrorBoundary>
+    </ErrorBoundary>
   </React.StrictMode>,
 )
 

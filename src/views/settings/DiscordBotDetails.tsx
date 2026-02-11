@@ -2,7 +2,7 @@ import React from "react"
 import { Grid, List, Typography } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { FAQQuestion } from "../../pages/home/LandingPage"
+import { FAQQuestion } from "../../components/landing"
 import { DISCORD_INVITE } from "../../util/constants"
 import { useTranslation } from "react-i18next"
 
