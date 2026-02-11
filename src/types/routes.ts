@@ -1,4 +1,4 @@
-import { ComponentType } from "react"
+import { ComponentType, ReactElement } from "react"
 
 /**
  * Route configuration interface for lazy loading and prefetching
@@ -17,7 +17,7 @@ export interface RouteConfig {
   prefetchOn?: string[]
   
   /** Optional error element for this route */
-  errorElement?: JSX.Element
+  errorElement?: ReactElement
   
   /** Child routes */
   children?: RouteConfig[]
