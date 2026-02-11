@@ -2,7 +2,7 @@ import React from "react"
 import { useTranslation } from "react-i18next"
 import { useState, useEffect, useMemo } from "react"
 import { useLazySearchAttributeValuesQuery } from "../../store/api/attributes"
-import { debounce } from "lodash"
+import { debounce } from "lodash-es"
 
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
