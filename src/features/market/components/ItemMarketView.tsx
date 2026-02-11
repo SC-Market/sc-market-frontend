@@ -55,7 +55,11 @@ export function ItemMarketView() {
             container
             xs={12}
             md={xs ? 12 : 9.75}
-            spacing={theme.layoutSpacing.layout}
+            spacing={{
+              xs: theme.layoutSpacing.component,
+              sm: theme.layoutSpacing.component,
+              md: theme.layoutSpacing.layout,
+            }}
             sx={{ transition: "0.3s" }}
           >
             <ItemListings />
