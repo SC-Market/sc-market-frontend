@@ -9,6 +9,7 @@ import {
   RouterProvider,
 } from "react-router-dom"
 import { PageFallback } from "./components/metadata/Page"
+import { PageSkeleton } from "./components/skeletons"
 import { FrontendErrorElement } from "./pages/errors/FrontendError"
 import { RouteErrorFallback } from "./components/error-boundaries"
 import { startBackgroundPrefetch } from "./util/prefetch"
@@ -24,6 +25,8 @@ import { store } from "./store/store"
 import { notificationApi } from "./store/notification"
 import { usePeriodicBackgroundSync } from "./hooks/pwa/usePeriodicBackgroundSync"
 import { useWebVitals } from "./hooks/performance/useWebVitals"
+import { useRoutePrefetch } from "./hooks/router/useRoutePrefetch"
+import { prefetchHighPriorityRoutes } from "./router/routePrefetch"
 
 import "./util/i18n.ts"
 
@@ -33,10 +36,16 @@ function App() {
 
   // Track Core Web Vitals
   useWebVitals()
+  
+  // Prefetch routes based on current location
+  useRoutePrefetch()
 
   useEffect(() => {
     // Start background prefetching after the app loads
     startBackgroundPrefetch()
+    
+    // Prefetch high-priority routes
+    prefetchHighPriorityRoutes()
 
     // Register periodic background sync if supported
     if (periodicSyncSupported) {
@@ -124,7 +133,7 @@ const router = createBrowserRouter([
     element: (
       <HookProvider>
         <Root>
-          <Suspense fallback={<PageFallback />}>
+          <Suspense fallback={<PageSkeleton />}>
             <Outlet />
           </Suspense>
         </Root>

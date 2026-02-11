@@ -36,7 +36,8 @@ export default defineConfig({
       includeAssets: [
         "favicon.ico",
         "apple-touch-icon.png",
-        "homepage-preview.png",
+        "homepage-preview.webp",
+        "android-splash-1080x1920.webp",
         "android-chrome-192x192.png",
         "android-chrome-192x192-safe.png",
         "android-chrome-512x512.png",
