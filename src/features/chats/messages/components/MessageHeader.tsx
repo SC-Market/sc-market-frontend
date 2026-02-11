@@ -339,9 +339,11 @@ export function MessageHeader(props: {
           <Stack direction="row" spacing={1}>
             <Button
               onClick={() => {
-                navigator.clipboard.writeText(
-                  `<t:${Math.trunc(dateTime.valueOf() / 1000)}:D>`,
-                )
+                if (dateTime) {
+                  navigator.clipboard.writeText(
+                    `<t:${Math.trunc(dateTime.valueOf() / 1000)}:D>`,
+                  )
+                }
               }}
               size="medium"
             >
@@ -349,9 +351,11 @@ export function MessageHeader(props: {
             </Button>
             <Button
               onClick={() => {
-                navigator.clipboard.writeText(
-                  `<t:${Math.trunc(dateTime.valueOf() / 1000)}:t>`,
-                )
+                if (dateTime) {
+                  navigator.clipboard.writeText(
+                    `<t:${Math.trunc(dateTime.valueOf() / 1000)}:t>`,
+                  )
+                }
               }}
               size="medium"
             >

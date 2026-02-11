@@ -254,7 +254,10 @@ export function StockManager({ listingId, onClose }: StockManagerProps) {
       ) : (
         <Stack spacing={2}>
           {Array.from(lotsByLocation.entries()).map(
-            ([locationId, { location, lots: locationLots }]) => (
+            ([locationId, { location, lots: locationLots }]: [
+              string,
+              { location: Location | null; lots: StockLot[] },
+            ]) => (
               <Paper key={locationId} sx={{ p: 2 }}>
                 {/* Location header */}
                 <Stack direction="row" alignItems="center" spacing={1} mb={2}>

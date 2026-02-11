@@ -111,9 +111,11 @@ export function DateTimePickerBottomSheet(props: {
         <Stack direction="row" spacing={1}>
           <Button
             onClick={() => {
-              navigator.clipboard.writeText(
-                `<t:${Math.trunc(dateTime.valueOf() / 1000)}:D>`,
-              )
+              if (dateTime) {
+                navigator.clipboard.writeText(
+                  `<t:${Math.trunc(dateTime.valueOf() / 1000)}:D>`,
+                )
+              }
             }}
             variant="outlined"
             fullWidth
@@ -122,9 +124,11 @@ export function DateTimePickerBottomSheet(props: {
           </Button>
           <Button
             onClick={() => {
-              navigator.clipboard.writeText(
-                `<t:${Math.trunc(dateTime.valueOf() / 1000)}:t>`,
-              )
+              if (dateTime) {
+                navigator.clipboard.writeText(
+                  `<t:${Math.trunc(dateTime.valueOf() / 1000)}:t>`,
+                )
+              }
             }}
             variant="outlined"
             fullWidth
