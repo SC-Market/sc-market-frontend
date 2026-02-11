@@ -3,7 +3,7 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { haptic } from "../../util/haptics"
 
 import Box from '@mui/material/Box';
-import { BoxProps } from '@mui/material/BoxProps';
+import { BoxProps } from '@mui/material/Box';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useGetPushSubscriptionsQuery } from "../../features/push-notifications"
 
-import { SxProps } from '@mui/material/SxProps';
+import { SxProps } from '@mui/system';
 import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';

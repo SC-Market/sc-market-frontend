@@ -31,7 +31,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { styled } from '@mui/material/styles';
 import { createTheme } from '@mui/material/styles';
 import { responsiveFontSizes } from '@mui/material/styles';
-import ThemeOptions from '@mui/material/ThemeOptions';
+import ThemeOptions from '@mui/material/styles';
 import CookieRounded from '@mui/icons-material/CookieRounded';
 import ZoomIn from '@mui/icons-material/ZoomIn';
 import ZoomOut from '@mui/icons-material/ZoomOut';

@@ -9,7 +9,7 @@ import { OCEAN_theme } from "./themes/OCEAN"
 import { SUNSET_theme } from "./themes/SUNSET"
 import { SPACE_theme } from "./themes/SPACE"
 
-import { SxProps } from '@mui/material/SxProps';
+import { SxProps } from '@mui/system';
 import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';

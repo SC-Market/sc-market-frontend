@@ -4,7 +4,7 @@
  * Provides different vibration patterns for different types of actions.
  * Gracefully degrades on unsupported devices.
  */
-import { SxProps } from '@mui/material/SxProps';
+import { SxProps } from '@mui/system';
 
 import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';

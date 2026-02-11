@@ -1,7 +1,7 @@
 import { ReactNode } from "react"
 
 import Box from '@mui/material/Box';
-import { BoxProps } from '@mui/material/BoxProps';
+import { BoxProps } from '@mui/material/Box';
 
 export interface ReservedSpaceProps extends Omit<BoxProps, "children"> {
   /**

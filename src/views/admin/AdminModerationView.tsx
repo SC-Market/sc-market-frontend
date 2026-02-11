@@ -32,7 +32,7 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import { MenuProps } from '@mui/material/MenuProps';
+import { MenuProps } from '@mui/material/Menu';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Divider from '@mui/material/Divider';
 import ExpandMore from '@mui/icons-material/ExpandMore';

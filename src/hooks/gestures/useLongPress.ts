@@ -1,7 +1,7 @@
 import { useCallback, useRef } from "react"
 import { useHapticFeedback } from "./useHapticFeedback"
 
-import { SxProps } from '@mui/material/SxProps';
+import { SxProps } from '@mui/system';
 import { Theme } from '@mui/material/styles';
 
 export interface UseLongPressOptions {

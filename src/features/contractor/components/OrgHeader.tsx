@@ -7,11 +7,11 @@ import { contractorKindIcons } from "../../../views/contractor/ContractorList"
 import { useTranslation } from "react-i18next"
 import { ShareButton } from "../../../components/buttons/ShareButton"
 
-import { SxProps } from '@mui/material/SxProps';
+import { SxProps } from '@mui/system';
 import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import useTheme1 from '@mui/material/styles';
-import Breakpoint from '@mui/material/Breakpoint';
+import Breakpoint from '@mui/material/styles';
 import Fab from '@mui/material/Fab';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';

@@ -24,7 +24,7 @@ import Stack from '@mui/material/Stack';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import useTheme1 from '@mui/material/styles';
 import Skeleton from '@mui/material/Skeleton';
-import { SkeletonProps } from '@mui/material/SkeletonProps';
+import { SkeletonProps } from '@mui/material/Skeleton';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
