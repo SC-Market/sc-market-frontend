@@ -57,7 +57,7 @@ export function useLongPress({
   onClick,
   enabled = true,
 }: UseLongPressOptions) {
-  const timeoutRef = useRef<number | null>(null)
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const targetRef = useRef<EventTarget | null>(null)
   const { trigger: triggerHaptic } = useHapticFeedback()
 

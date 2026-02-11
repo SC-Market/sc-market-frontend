@@ -5,6 +5,7 @@ export interface CardSkeletonProps {
   showHeader?: boolean
   showActions?: boolean
   lines?: number
+  height?: number
 }
 
 /**
@@ -15,9 +16,10 @@ export function CardSkeleton({
   showHeader = true,
   showActions = false,
   lines = 3,
+  height,
 }: CardSkeletonProps) {
   return (
-    <Card>
+    <Card sx={height ? { height } : undefined}>
       {showHeader && (
         <CardHeader
           avatar={<BaseSkeleton variant="circular" width={40} height={40} />}
