@@ -1,5 +1,5 @@
 import React, { useCallback } from "react"
-import { useMarketSearch } from ".."
+import { useMarketSearch } from "../hooks/MarketSearch"
 import { useTranslation } from "react-i18next"
 
 import { SxProps } from '@mui/system';

@@ -2,14 +2,14 @@ import { MinimalUser, User } from "../../datatypes/User"
 import { Stack } from "@mui/system"
 import React from "react"
 import { MinimalContractor } from "../../datatypes/Contractor"
-import { UniqueListing } from "../../features/market"
+import { UniqueListing } from "../../features/market/index"
 import { Link } from "react-router-dom"
 import { formatCompleteListingUrl, formatMarketUrl } from "../../util/urls"
 import { FALLBACK_IMAGE_URL } from "../../util/constants"
 import {
   MarketListingSearchResult,
   MarketSearchResult,
-} from "../../features/market"
+} from "../../features/market/index"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 

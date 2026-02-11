@@ -13,7 +13,7 @@ import {
   RecruitingSearchContext,
   RecruitingSearchState,
 } from "../../hooks/recruiting/RecruitingSearch"
-import { marketDrawerWidth } from "../../features/market"
+import { marketDrawerWidth } from "../../features/market/index"
 import {
   useRecruitingGetAllPostsQuery,
   useRecruitingGetPostByOrgQuery,

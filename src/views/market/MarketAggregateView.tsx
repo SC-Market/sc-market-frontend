@@ -13,14 +13,14 @@ import {
   BuyOrder,
   MarketAggregate,
   MarketAggregateListing,
-} from "../../features/market"
+} from "../../features/market/index"
 import {
   useMarketCancelBuyOrderMutation,
   useMarketFulfillBuyOrderMutation,
   useMarketGetAggregateChartByIDQuery,
   useMarketGetAggregateHistoryByIDQuery,
   useMarketUpdateAggregateAdminMutation,
-} from "../../features/market"
+} from "../../features/market/index"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { MarkdownRender } from "../../components/markdown/Markdown"
 import { useCookies } from "react-cookie"
@@ -32,8 +32,8 @@ import { HeadCell, PaginatedTable } from "../../components/table/PaginatedTable"
 import { Helmet } from "react-helmet"
 import { ImagePreviewModal } from "../../components/modal/ImagePreviewModal"
 import { ImageSearch } from "../../features/market/components/ImageSearch"
-import { useCurrentMarketListing } from "../../features/market"
-import { BuyOrderForm } from "../../features/market"
+import { useCurrentMarketListing } from "../../features/market/index"
+import { BuyOrderForm } from "../../features/market/index"
 import { Rating } from "../../datatypes/Contractor"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
 import { Section } from "../../components/paper/Section"

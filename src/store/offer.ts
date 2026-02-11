@@ -2,7 +2,7 @@ import { serviceApi } from "./service"
 import { MinimalUser } from "../datatypes/User"
 import { MinimalContractor } from "../datatypes/Contractor"
 import { OrderAvailability, Service } from "../datatypes/Order"
-import { UniqueListing } from "../features/market"
+import { UniqueListing } from "../features/market/domain/types"
 import { unwrapResponse } from "./api-utils"
 import {
   generateTempId,

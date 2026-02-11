@@ -1,6 +1,6 @@
 import { AdConfig, isAdConfig } from "./types"
 import { AD_FREQUENCY } from "./adConfig"
-import { MarketListingSearchResult } from "../../features/market"
+import { MarketListingSearchResult } from "../../features/market/index"
 
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';

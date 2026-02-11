@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react"
 
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
-import { marketDrawerWidth } from "../../features/market"
+import { marketDrawerWidth } from "../../features/market/index"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import { useContractSidebar } from "../../hooks/contract/ContractSidebar"
 import { useContractSearch } from "../../hooks/contract/ContractSearch"

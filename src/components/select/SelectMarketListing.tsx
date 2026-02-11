@@ -2,7 +2,7 @@ import React, { useMemo } from "react"
 import {
   ExtendedUniqueSearchResult,
   useSearchMarketListingsQuery,
-} from "../../features/market"
+} from "../../features/market/index"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useTranslation } from "react-i18next"
 

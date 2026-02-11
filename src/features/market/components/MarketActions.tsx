@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom"
 import React, { useCallback, useContext } from "react"
 import ShoppingCartRoundedIcon from "@mui/icons-material/ShoppingCartRounded"
-import { ItemStockContext, ManageStockArea } from ".."
+import { ItemStockContext, ManageStockArea } from "./ItemStock"
 import { MarketListingUpdateBody, UniqueListing } from "../domain/types"
 import { useUpdateMarketListingMutation } from "../api/marketApi"
 import LoadingButton from "@mui/lab/LoadingButton"

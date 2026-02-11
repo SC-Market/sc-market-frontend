@@ -65,7 +65,6 @@ import CardActions from '@mui/material/CardActions';
 import ListItemButton from '@mui/material/ListItemButton';
 import DialogContentText from '@mui/material/DialogContentText';
 import Snackbar from '@mui/material/Snackbar';
-import MuiRating from '@mui/material/Rating';
 import DeleteRounded from '@mui/icons-material/DeleteRounded';
 import FavoriteRounded from '@mui/icons-material/FavoriteRounded';
 import MoreVertRounded from '@mui/icons-material/MoreVertRounded';

@@ -3,7 +3,7 @@ import React, { useEffect } from "react"
 
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
-import { marketDrawerWidth } from "../../features/market"
+import { marketDrawerWidth } from "../../features/market/index"
 import { useServiceSidebar } from "../../hooks/contract/ServiceSidebar"
 import { ServiceSearchArea } from "../services/ServiceSearchArea"
 import CloseIcon from "@mui/icons-material/Close"

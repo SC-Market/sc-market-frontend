@@ -21,7 +21,7 @@ import {
   MarkdownEditor,
   MarkdownRender,
 } from "../../components/markdown/Markdown"
-import { external_resource_regex } from "../../features/profile"
+import { external_resource_regex } from "../../features/profile/index"
 import { ListingSellerRating } from "../../components/rating/ListingRating"
 import { useTranslation } from "react-i18next"
 

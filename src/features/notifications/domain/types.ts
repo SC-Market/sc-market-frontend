@@ -1,6 +1,6 @@
 import { Contractor, ContractorInvite } from "../../../datatypes/Contractor"
 import { Order, OrderComment, OrderReview } from "../../../datatypes/Order"
-import { MarketBid, MarketListing } from "../../../features/market"
+import { MarketBid, MarketListing } from "../../../features/market/index"
 import { MinimalUser } from "../../../datatypes/User"
 import { OfferSession } from "../../../store/offer"
 

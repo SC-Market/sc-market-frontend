@@ -87,7 +87,7 @@ import ReportIcon from '@mui/icons-material/Report';
 import KeyboardArrowLeftRounded from '@mui/icons-material/KeyboardArrowLeftRounded';
 import ShareRounded from '@mui/icons-material/ShareRounded';
 import PlayArrow from '@mui/icons-material/PlayArrow';
-import Map from '@mui/icons-material/Map';
+import MapIcon from '@mui/icons-material/Map';
 import VideoLibrary from '@mui/icons-material/VideoLibrary';
 import ChevronLeftRounded from '@mui/icons-material/ChevronLeftRounded';
 import CheckCircleRounded from '@mui/icons-material/CheckCircleRounded';

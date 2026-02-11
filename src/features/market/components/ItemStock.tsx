@@ -16,7 +16,7 @@ import React, {
   useState,
   useCallback as useCallbackAlias,
 } from "react"
-import { useMarketSearch } from ".."
+import { useMarketSearch } from "../hooks/MarketSearch"
 import { formatCompleteListingUrl } from "../../../util/urls"
 import { Link } from "react-router-dom"
 import { MarketListingUpdateBody, UniqueListing } from "../domain/types"

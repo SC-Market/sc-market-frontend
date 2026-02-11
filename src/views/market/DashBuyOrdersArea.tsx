@@ -4,7 +4,7 @@ import {
   useGetBuyOrderListingsQuery,
   useCancelBuyOrderMutation,
   type MarketAggregate,
-} from "../../features/market"
+} from "../../features/market/index"
 import { useGetUserProfileQuery } from "../../store/profile"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { useTheme } from "@mui/material/styles"

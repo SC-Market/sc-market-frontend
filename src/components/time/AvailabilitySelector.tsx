@@ -1,4 +1,4 @@
-import moment from "moment/moment"
+import { startOfDay, addHours, format, startOfWeek, addDays } from "date-fns"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import {
   AvailabilityHookContext,
@@ -173,11 +173,7 @@ export function AvailabilitySelector(props: {
   const daysOfWeek = useMemo(
     () =>
       [...Array(7).keys()].map((i) =>
-        moment()
-          .locale(i18n.language)
-          .startOf("week")
-          .add(i, "days")
-          .format("ddd"),
+        format(addDays(startOfWeek(new Date()), i), "EEE")
       ),
     [i18n.language],
   )
@@ -269,7 +265,7 @@ export function AvailabilitySelector(props: {
                       }}
                       draggable={"false"}
                     >
-                      {moment().startOf("day").add(i, "hours").format("HH:mm")}
+                      {format(addHours(startOfDay(new Date()), i), "HH:mm")}
                     </div>
                   </td>
                 </tr>
@@ -325,11 +321,7 @@ export function AvailabilityDisplay(
   const daysOfWeek = useMemo(
     () =>
       [...Array(7).keys()].map((i) =>
-        moment()
-          .locale(i18n.language)
-          .startOf("week")
-          .add(i, "days")
-          .format("ddd"),
+        format(addDays(startOfWeek(new Date()), i), "EEE")
       ),
     [i18n.language],
   )
@@ -380,7 +372,7 @@ export function AvailabilityDisplay(
                     }}
                     draggable={"false"}
                   >
-                    {moment().startOf("day").add(i, "hours").format("HH:mm")}
+                    {format(addHours(startOfDay(new Date()), i), "HH:mm")}
                   </div>
                 </td>
               </tr>

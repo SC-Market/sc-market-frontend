@@ -7,7 +7,7 @@ import {
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { OrgDetails, UserDetails } from "../../components/list/UserDetails"
 import { Stack } from "@mui/system"
-import moment from "moment/moment"
+import { format } from "date-fns"
 import { MarkdownRender } from "../../components/markdown/Markdown"
 import { useCurrentChat, useGetChatByOrderIDQuery } from "../../features/chats"
 import {
@@ -531,7 +531,7 @@ export function OrderDetailsArea(props: { order: Order }) {
               </TableCell>
               <TableCell align="right">
                 <Stack direction="row" justifyContent={"right"}>
-                  {moment(order.timestamp).format("MMMM Do YYYY, h:mm:ss a")}
+                  {format(new Date(order.timestamp), "MMMM Do YYYY, h:mm:ss a")}
                 </Stack>
               </TableCell>
             </TableRow>

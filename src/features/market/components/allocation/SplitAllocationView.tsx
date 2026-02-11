@@ -82,7 +82,7 @@ import ReportIcon from '@mui/icons-material/Report';
 import KeyboardArrowLeftRounded from '@mui/icons-material/KeyboardArrowLeftRounded';
 import ShareRounded from '@mui/icons-material/ShareRounded';
 import PlayArrow from '@mui/icons-material/PlayArrow';
-import Map from '@mui/icons-material/Map';
+import MapIcon from '@mui/icons-material/Map';
 import VideoLibrary from '@mui/icons-material/VideoLibrary';
 import ChevronLeftRounded from '@mui/icons-material/ChevronLeftRounded';
 import CheckCircleRounded from '@mui/icons-material/CheckCircleRounded';
@@ -202,7 +202,7 @@ export function SplitAllocationView({
   }
 
   const allocationsByListing = useMemo(() => {
-    const map = new Map<string, number>()
+    const map = (() => new Map<string, number>())()
     groupedAllocations.forEach((group) => {
       map.set(group.listing_id, group.total_allocated)
     })
@@ -334,7 +334,7 @@ function AvailableLots({
   })
 
   const allocatedByLot = useMemo(() => {
-    const map = new Map<string, number>()
+    const map = (() => new Map<string, number>())()
     allocations.forEach((alloc) => {
       const current = map.get(alloc.lot_id) || 0
       map.set(alloc.lot_id, current + alloc.quantity)

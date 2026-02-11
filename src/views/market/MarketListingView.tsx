@@ -6,18 +6,18 @@ import { getRelativeTime } from "../../util/time"
 import { Section } from "../../components/paper/Section"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useGetUserProfileQuery } from "../../store/profile"
-import { useCurrentMarketListing } from "../../features/market"
-import { BaseListingType, UniqueListing } from "../../features/market"
+import { useCurrentMarketListing } from "../../features/market/index"
+import { BaseListingType, UniqueListing } from "../../features/market/index"
 import {
   useMarketTrackListingViewMutation,
   useMarketGetListingOrdersQuery,
   useCreateListingBidMutation,
-} from "../../features/market"
-import { AggregateLink } from "../../features/market"
+} from "../../features/market/index"
+import { AggregateLink } from "../../features/market/index"
 import { OrderList } from "../../components/list/OrderList"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { MarkdownRender } from "../../components/markdown/Markdown"
-import { Bids } from "../../features/market"
+import { Bids } from "../../features/market/index"
 import { useGetGameItemAttributesQuery } from "../../store/api/attributes"
 import { Helmet } from "react-helmet"
 import { useCookies } from "react-cookie"
@@ -28,14 +28,14 @@ import { BACKEND_URL, FRONTEND_URL } from "../../util/constants"
 import { NumericFormat } from "react-number-format"
 import { Stack } from "@mui/system"
 import { ImagePreviewPaper } from "../../components/paper/ImagePreviewPaper"
-import moment from "moment"
+import { format, subDays } from "date-fns"
 import { ClockAlert } from "mdi-material-ui"
 import { useTranslation } from "react-i18next"
 import { ReportButton } from "../../components/button/ReportButton"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { DisplayListingsHorizontal } from "./ItemListings"
 import { useTheme } from "@mui/material/styles"
-import { useSearchMarketQuery } from "../../features/market"
+import { useSearchMarketQuery } from "../../features/market/index"
 import { useGetUserOrderReviews } from "../../store/profile"
 import { useGetContractorReviewsQuery } from "../../store/contractor"
 import { OrderReview } from "../../datatypes/Order"
@@ -1463,9 +1463,7 @@ export function MarketListingView() {
                             >
                               {t("MarketListingView.updated")}{" "}
                               {getRelativeTime(
-                                moment(listing.expiration)
-                                  .subtract(30, "days")
-                                  .toDate(),
+                                subDays(new Date(listing.expiration), 30),
                               )}
                             </ListingDetailItem>
 

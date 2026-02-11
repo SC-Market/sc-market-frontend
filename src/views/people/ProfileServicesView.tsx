@@ -1,6 +1,6 @@
 /**
  * Re-export from feature for backwards compatibility.
- * Prefer importing from "../../features/profile" in new code.
+ * Prefer importing from "../../features/profile/components/ProfileServicesView" in new code.
  */
 import Box from '@mui/material/Box';
 
@@ -90,4 +90,4 @@ import StarRounded from '@mui/icons-material/StarRounded';
 import ShareRounded from '@mui/icons-material/ShareRounded';
 import VisibilityRounded from '@mui/icons-material/VisibilityRounded';
 import KeyboardArrowRightRounded from '@mui/icons-material/KeyboardArrowRightRounded';
-export { ProfileServicesView, OrgServicesView } from "../../features/profile";
+export { ProfileServicesView, OrgServicesView } from "../../features/profile/components/ProfileServicesView";

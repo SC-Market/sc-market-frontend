@@ -2,12 +2,12 @@ import React, { useState } from "react"
 import { useTheme, ThemeProvider, createTheme } from "@mui/material/styles";
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { ItemListings } from "../../../views/market/ItemListings"
+import { MarketSidebarContext } from "../../market/hooks/MarketSidebar"
 import {
-  MarketSidebarContext,
   MarketSidebar,
   MarketSideBarToggleButton,
   MarketSearchArea,
-} from "../../market"
+} from "../../market/components/MarketSidebar"
 
 import Alert from '@mui/material/Alert';
 import CssBaseline from '@mui/material/CssBaseline';
