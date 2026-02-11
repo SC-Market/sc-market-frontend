@@ -34,10 +34,11 @@ export function ListingSkeleton({
     <Grid
       item
       xs={sidebarOpen ? 12 : 6}
-      md={sidebarOpen ? 12 : 4}
-      lg={sidebarOpen ? 6 : 4}
-      xl={sidebarOpen ? 4 : 3}
-      xxl={sidebarOpen ? 4.8 : 2.4}
+      sm={sidebarOpen ? 12 : 6}
+      md={sidebarOpen ? 6 : 3}
+      lg={sidebarOpen ? 4.8 : 2.4}
+      xl={sidebarOpen ? 4 : 2}
+      xxl={sidebarOpen ? 3.43 : 1.71}
       sx={{ transition: "0.3s" }}
     >
       <Fade
@@ -58,7 +59,7 @@ export function ListingSkeleton({
           >
             <Card
               sx={{
-                height: isMobile ? 300 : 420,
+                height: 300,
                 position: "relative",
               }}
             >
@@ -96,9 +97,7 @@ export function ListingSkeleton({
                   height:
                     theme.palette.mode === "dark"
                       ? "100%"
-                      : isMobile
-                        ? 150
-                        : 244,
+                      : 150,
                   overflow: "hidden",
                 }}
               >

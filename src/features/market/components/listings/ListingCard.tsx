@@ -768,12 +768,8 @@ export const ItemListingBase = React.memo(
       )
     }
 
-    // Return mobile or desktop variant
-    if (isMobile) {
-      return mobileListingContent
-    }
-
-    return listingContent
+    // Always use mobile variant for compact layout
+    return mobileListingContent
   },
   (prevProps, nextProps) => {
     // Custom comparison: only re-render if listing data actually changed
@@ -801,10 +797,10 @@ export function ItemListing(props: {
       item
       xs={marketSidebarOpen ? 12 : 6}
       sm={marketSidebarOpen ? 12 : 6}
-      md={marketSidebarOpen ? 12 : 4}
-      lg={marketSidebarOpen ? 6 : 4}
-      xl={marketSidebarOpen ? 4 : 3}
-      xxl={marketSidebarOpen ? 4.8 : 2.4}
+      md={marketSidebarOpen ? 6 : 3}
+      lg={marketSidebarOpen ? 4.8 : 2.4}
+      xl={marketSidebarOpen ? 4 : 2}
+      xxl={marketSidebarOpen ? 3.43 : 1.71}
       sx={{ transition: "0.3s" }}
       // key={listing.listing.listing_id}
     >
