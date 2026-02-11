@@ -7,7 +7,7 @@ import {
   useGetUserProfileQuery,
 } from "../../../../store/profile"
 import { getRelativeTime } from "../../../../util/time"
-import SCMarketLogo from "../../../../assets/scmarket-logo.png"
+import SCMarketLogo from "../../../../assets/scmarket-logo.webp"
 import { useMemo } from "react"
 import type { Message } from "../../domain/types"
 import { replaceDiscordTimestamps } from "../utils/timestampFormatter"

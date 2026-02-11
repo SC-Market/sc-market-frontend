@@ -24,10 +24,16 @@ module.exports = {
   testMatch: [
     "<rootDir>/src/components/**/__tests__/**/*.(test|spec).tsx",
     "<rootDir>/src/components/**/*.(test|spec).tsx",
+    "<rootDir>/src/router/**/__tests__/**/*.(test|spec).ts",
+    "<rootDir>/src/store/**/__tests__/**/*.(test|spec).ts",
   ],
   collectCoverage: true,
   collectCoverageFrom: [
     "src/components/**/*.{ts,tsx}",
+    "src/router/**/*.{ts,tsx}",
+    "src/store/**/*.{ts,tsx}",
     "!src/components/**/__tests__/**",
+    "!src/router/**/__tests__/**",
+    "!src/store/**/__tests__/**",
   ],
 }

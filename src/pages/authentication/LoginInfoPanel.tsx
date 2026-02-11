@@ -1,6 +1,6 @@
 import React from "react"
-import Screencap from "../../assets/screencap.png"
-import Screencap2 from "../../assets/screencap2.png"
+import Screencap from "../../assets/screencap.webp"
+import Screencap2 from "../../assets/screencap2.webp"
 import { Grid } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"

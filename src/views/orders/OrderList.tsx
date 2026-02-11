@@ -42,7 +42,7 @@ import {
 } from "../../components/table/PaginatedTable"
 import { Stack } from "@mui/system"
 import { a11yProps } from "../../components/tabs/Tabs"
-import SCMarketLogo from "../../assets/scmarket-logo.png"
+import SCMarketLogo from "../../assets/scmarket-logo.webp"
 import { useSearchOrdersQuery } from "../../store/orders"
 import { useGetUserProfileQuery } from "../../store/profile"
 import { useTranslation } from "react-i18next"
