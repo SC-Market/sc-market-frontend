@@ -379,6 +379,9 @@ export default defineConfig({
           // MUI data components (data grid and related)
           "mui-data": ["@mui/x-data-grid"],
 
+          // Date/time library
+          moment: ["moment"],
+
           // MUI icons (separate chunk for tree-shaking)
           "mui-icons": ["@mui/icons-material"],
 
@@ -390,7 +393,7 @@ export default defineConfig({
           "charts-kline": ["klinecharts"],
 
           // Utility libraries
-          utils: ["moment", "lodash"],
+          utils: ["lodash-es"],
         },
       },
     },
