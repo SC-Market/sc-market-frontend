@@ -129,7 +129,7 @@ export function ManualAllocationDialog({
 }: ManualAllocationDialogProps) {
   const [selectedAllocations, setSelectedAllocations] = useState<
     Map<string, number>
-  >(new Map())
+  >(new Map<string, number>())
   const [validationErrors, setValidationErrors] = useState<ValidationError[]>(
     [],
   )
@@ -283,7 +283,7 @@ export function ManualAllocationDialog({
 
       // Success - close dialog
       onClose()
-      setSelectedAllocations(new Map())
+      setSelectedAllocations(new Map<string, number>())
       setValidationErrors([])
     } catch (error: any) {
       // Handle API errors
@@ -314,7 +314,7 @@ export function ManualAllocationDialog({
 
   // Handle close
   const handleClose = () => {
-    setSelectedAllocations(new Map())
+    setSelectedAllocations(new Map<string, number>())
     setValidationErrors([])
     onClose()
   }
