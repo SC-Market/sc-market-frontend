@@ -30,15 +30,21 @@ import { prefetchHighPriorityRoutes } from "./router/routePrefetch"
 
 import "./util/i18n.ts"
 
+/**
+ * Component that runs inside the router context to enable route-based hooks
+ */
+function RouterEffects() {
+  // Prefetch routes based on current location
+  useRoutePrefetch()
+  return null
+}
+
 function App() {
   const { registerPeriodicSync, isSupported: periodicSyncSupported } =
     usePeriodicBackgroundSync()
 
   // Track Core Web Vitals
   useWebVitals()
-  
-  // Prefetch routes based on current location
-  useRoutePrefetch()
 
   useEffect(() => {
     // Start background prefetching after the app loads
@@ -133,6 +139,7 @@ const router = createBrowserRouter([
     element: (
       <HookProvider>
         <Root>
+          <RouterEffects />
           <Suspense fallback={<PageSkeleton />}>
             <Outlet />
           </Suspense>
