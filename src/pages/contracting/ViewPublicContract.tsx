@@ -54,7 +54,7 @@ export function ViewPublicContract() {
           <meta property="og:description" content={contract.description} />
           <meta
             property="og:image"
-            content={`${FRONTEND_URL}/homepage-preview.png`}
+            content={`${FRONTEND_URL}/homepage-preview.webp`}
           />
 
           {/* Twitter Card Meta Tags */}
@@ -70,7 +70,7 @@ export function ViewPublicContract() {
           <meta name="twitter:description" content={contract.description} />
           <meta
             name="twitter:image"
-            content={`${FRONTEND_URL}/homepage-preview.png`}
+            content={`${FRONTEND_URL}/homepage-preview.webp`}
           />
         </Helmet>
       )}

@@ -28,6 +28,18 @@ export { OfferRowSkeleton } from "./OfferRowSkeleton"
 export type { OfferRowSkeletonProps } from "./OfferRowSkeleton"
 export { ContractDetailSkeleton } from "./ContractDetailSkeleton"
 export type { ContractDetailSkeletonProps } from "./ContractDetailSkeleton"
+
+// Route-specific skeletons
+export {
+  PageSkeleton,
+  MarketPageSkeleton,
+  DashboardSkeleton,
+  ProfileSkeleton,
+  ListPageSkeleton,
+  DetailPageSkeleton,
+  FormPageSkeleton,
+  AdminPageSkeleton,
+} from "./RouteSkeleton"
 export { ContractDetailsTableSkeleton } from "./ContractDetailsTableSkeleton"
 export { MessageListSkeleton } from "./MessageListSkeleton"
 export type { MessageListSkeletonProps } from "./MessageListSkeleton"
