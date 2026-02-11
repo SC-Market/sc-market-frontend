@@ -389,7 +389,7 @@ export const ItemListingBase = React.memo(
                         {user_seller || contractor_seller}
                       </UnderlineLink>
                       {badges.length > 0 && (
-                        <BadgeDisplay badges={badges} iconSize="0.7rem" />
+                        <BadgeDisplay badges={badges} iconSize="1rem" />
                       )}
                     </Box>
                     <Box
@@ -663,7 +663,7 @@ export const ItemListingBase = React.memo(
                       {badges.length > 0 && (
                         <BadgeDisplay
                           badges={badges}
-                          iconSize={isMobile ? "1.5em" : undefined}
+                          iconSize={isMobile ? "1.5em" : "1em"}
                         />
                       )}
                     </Box>
@@ -684,7 +684,7 @@ export const ItemListingBase = React.memo(
                         response_rate={listing.response_rate}
                         badge_ids={listing.badges?.badge_ids || null}
                         display_limit={3}
-                        iconSize={isMobile ? "1.5em" : undefined}
+                        iconSize={isMobile ? "1.5em" : "1em"}
                         showBadges={false}
                       />
                     </Box>
