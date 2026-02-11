@@ -29,7 +29,7 @@ export function ProfileTabContent({
   const theme = useTheme<ExtendedTheme>()
 
   return (
-    <>
+    <Container maxWidth="xl" sx={{ pt: 3 }}>
       <TabPanel value={currentTab} index={0}>
         <ProfileStoreView user={profile.username} />
       </TabPanel>
@@ -37,30 +37,24 @@ export function ProfileTabContent({
         <ProfileServicesView user={profile.username} />
       </TabPanel>
       <TabPanel index={currentTab} value={2}>
-        <Container maxWidth="xl" sx={{ pt: 3 }}>
-          <ProfileAboutTab
-            profile={profile}
-            submitUpdate={submitUpdate}
-            isMyProfile={isMyProfile}
-          />
-        </Container>
+        <ProfileAboutTab
+          profile={profile}
+          submitUpdate={submitUpdate}
+          isMyProfile={isMyProfile}
+        />
       </TabPanel>
       <TabPanel index={currentTab} value={3}>
-        <Container maxWidth="xl" sx={{ pt: 3 }}>
-          <Grid container spacing={theme.layoutSpacing.layout}>
-            <CreateOrderForm assigned_to={profile.username} />
-          </Grid>
-        </Container>
+        <Grid container spacing={theme.layoutSpacing.layout}>
+          <CreateOrderForm assigned_to={profile.username} />
+        </Grid>
       </TabPanel>
       <TabPanel index={currentTab} value={4}>
-        <Container maxWidth="xl" sx={{ pt: 3 }}>
-          <Grid container spacing={theme.layoutSpacing.layout}>
-            <Section xs={12} lg={8} disablePadding>
-              <UserReviews user={profile} />
-            </Section>
-          </Grid>
-        </Container>
+        <Grid container spacing={theme.layoutSpacing.layout}>
+          <Section xs={12} lg={8} disablePadding>
+            <UserReviews user={profile} />
+          </Section>
+        </Grid>
       </TabPanel>
-    </>
+    </Container>
   )
 }
