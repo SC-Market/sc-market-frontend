@@ -499,8 +499,8 @@ export function DisplayListingsMin(props: {
                 />
               )
             }}
-            itemHeight={{ xs: 300, sm: 300, md: 420, lg: 420 }}
-            columns={{ xs: 2, sm: 2, md: 3, lg: 4, xl: 4, xxl: 5 }}
+            itemHeight={{ xs: 300, sm: 300, md: 300, lg: 300 }}
+            columns={{ xs: 2, sm: 2, md: 4, lg: 5, xl: 6, xxl: 7 }}
             gap={{
               xs: theme.layoutSpacing.component,
               sm: theme.layoutSpacing.layout,
