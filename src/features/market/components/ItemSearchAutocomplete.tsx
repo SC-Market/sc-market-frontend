@@ -2,7 +2,7 @@ import SearchIcon from "@mui/icons-material/Search"
 import React, { useState, useEffect, useMemo } from "react"
 import { useTranslation } from "react-i18next"
 import { marketApi } from "../api/marketApi"
-import { debounce } from "lodash"
+import { debounce } from "lodash-es"
 
 import { SxProps } from '@mui/system';
 import { Theme } from '@mui/material/styles';

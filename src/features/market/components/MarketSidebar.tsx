@@ -14,7 +14,7 @@ import { useMarketFilters } from "../hooks/useMarketFilters"
 import type { SaleTypeSelect } from "../domain/types"
 import { AttributeFilterSection } from "../../../components/filters/AttributeFilterSection"
 import { marketApi } from "../api/marketApi"
-import { debounce } from "lodash"
+import { debounce } from "lodash-es"
 import { useBottomNavHeight } from "../../../hooks/layout/useBottomNavHeight"
 import type { MarketListing } from "../../../datatypes/MarketListing"
 
