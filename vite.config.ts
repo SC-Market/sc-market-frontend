@@ -4,6 +4,7 @@ import viteTsconfigPaths from "vite-tsconfig-paths"
 import svgrPlugin from "vite-plugin-svgr"
 import { visualizer } from "rollup-plugin-visualizer"
 import { VitePWA } from "vite-plugin-pwa"
+import circularDependency from "vite-plugin-circular-dependency"
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -11,6 +12,16 @@ export default defineConfig({
     react(),
     viteTsconfigPaths(),
     svgrPlugin(),
+    // Circular dependency detection - reports circular imports in build output
+    // Note: Only enable when needed for analysis, as it can cause performance issues
+    ...(process.env.CHECK_CIRCULAR === "true"
+      ? [
+          circularDependency({
+            circleImportThrowErr: false, // Don't fail build, just warn
+            outputFilePath: "./dist/circular-dependencies.txt",
+          }),
+        ]
+      : []),
     VitePWA({
       registerType: "prompt", // Use prompt so we can handle registration manually for better control
       injectRegister: false, // Disable auto-injection since we're handling registration manually
@@ -20,6 +31,7 @@ export default defineConfig({
       filename: "sw.ts", // Our custom service worker file (TypeScript)
       injectManifest: {
         globPatterns: ["**/*.{js,css,html,ico,png,svg,woff2,woff,ttf}"],
+        globIgnores: ["**/stats.html"], // Exclude bundle analysis report
       },
       includeAssets: [
         "favicon.ico",
@@ -279,42 +291,74 @@ export default defineConfig({
         // For now, we'll use generateSW in dev and injectManifest in prod
       },
     }),
-    // Only enable bundle visualizer when ANALYZE_BUNDLE env var is set
-    ...(process.env.ANALYZE_BUNDLE === "true"
-      ? [
-          visualizer({
-            open: true,
-            filename: "dist/stats.html",
-            gzipSize: true,
-            brotliSize: true,
-          }),
-        ]
-      : []),
+    // Bundle analysis visualization - always generate report
+    visualizer({
+      open: process.env.ANALYZE_BUNDLE === "true", // Only auto-open when explicitly requested
+      filename: "dist/stats.html",
+      gzipSize: true,
+      brotliSize: true,
+      template: "treemap", // Use treemap for better visualization
+    }),
   ],
   build: {
     sourcemap: true,
-    chunkSizeWarningLimit: 1000, // 1MB limit
+    chunkSizeWarningLimit: 200, // 200KB limit for optimal HTTP/2 multiplexing
     rollupOptions: {
       output: {
+        // Consistent chunk file naming with content hashes for optimal caching
+        chunkFileNames: "assets/[name]-[hash].js",
+        entryFileNames: "assets/[name]-[hash].js",
+        assetFileNames: "assets/[name]-[hash].[ext]",
         manualChunks: {
-          // Vendor libraries
-          vendor: [
-            "react",
-            "react-dom",
-            "react-router-dom",
-            "@mui/material",
-            "@mui/icons-material",
+          // Core framework chunk
+          "react-core": ["react", "react-dom", "react-router-dom"],
+
+          // MUI base chunk (styles and system - used everywhere)
+          "mui-core": [
+            "@mui/material/styles",
+            "@mui/system",
             "@emotion/react",
             "@emotion/styled",
           ],
-          // Redux toolkit
+
+          // MUI common components (frequently used across the app)
+          "mui-common": [
+            "@mui/material/Button",
+            "@mui/material/TextField",
+            "@mui/material/Box",
+            "@mui/material/Typography",
+            "@mui/material/Container",
+            "@mui/material/Grid",
+            "@mui/material/Paper",
+            "@mui/material/Card",
+            "@mui/material/CardContent",
+            "@mui/material/CardActions",
+            "@mui/material/Dialog",
+            "@mui/material/DialogTitle",
+            "@mui/material/DialogContent",
+            "@mui/material/DialogActions",
+            "@mui/material/IconButton",
+            "@mui/material/Tooltip",
+            "@mui/material/CircularProgress",
+            "@mui/material/Alert",
+            "@mui/material/Snackbar",
+          ],
+
+          // MUI data components (data grid and related)
+          "mui-data": ["@mui/x-data-grid"],
+
+          // MUI icons (separate chunk for tree-shaking)
+          "mui-icons": ["@mui/icons-material"],
+
+          // State management
           redux: ["@reduxjs/toolkit", "react-redux"],
+
+          // Chart libraries (lazy loaded only when needed)
+          "charts-apex": ["react-apexcharts", "apexcharts"],
+          "charts-kline": ["klinecharts"],
+
           // Utility libraries
           utils: ["moment", "lodash"],
-          // Data grid
-          dataGrid: ["@mui/x-data-grid"],
-          // Chart libraries
-          charts: ["react-apexcharts", "apexcharts", "klinecharts"],
         },
       },
     },

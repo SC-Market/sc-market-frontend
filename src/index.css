@@ -1,12 +1,11 @@
 body {
   margin: 0;
+  /* Roboto with Arial fallback (similar metrics) for minimal CLS */
   font-family:
-    -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
+    "Roboto", Arial, -apple-system, BlinkMacSystemFont, "Segoe UI", "Oxygen", "Ubuntu",
     "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* Prevent font-related layout shift */
-  font-display: swap;
 }
 
 code {
