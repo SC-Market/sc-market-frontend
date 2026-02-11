@@ -1,7 +1,6 @@
 import { useTheme, createTheme } from "@mui/material/styles";
 import { ExtendedTheme } from "../../../../hooks/styles/Theme"
 import { DateTimePicker } from "@mui/x-date-pickers"
-import moment from "moment"
 import { useTranslation } from "react-i18next"
 import { BottomSheet } from "../../../../components/mobile"
 import { useState } from "react"
@@ -62,8 +61,8 @@ import ChevronLeftRounded from '@mui/icons-material/ChevronLeftRounded';
 export function DateTimePickerBottomSheet(props: {
   open: boolean
   onClose: () => void
-  dateTime: moment.Moment
-  setDateTime: (dateTime: moment.Moment) => void
+  dateTime: Date | null
+  setDateTime: (dateTime: Date | null) => void
 }) {
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()

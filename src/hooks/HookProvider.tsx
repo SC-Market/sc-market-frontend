@@ -20,12 +20,10 @@ import { CURRENT_CUSTOM_ORG } from "./contractor/CustomDomain"
 import { CUSTOM_THEMES } from "./styles/custom_themes"
 import { useLocation, useSearchParams } from "react-router-dom"
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
-import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment"
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns"
 import { isCitizenIdEnabled } from "../util/constants"
 import { useGetUserProfileQuery } from "../store/profile"
 
-// Add moment and locale import + i18n
-import moment from "moment"
 import { getMuiLocales } from "../util/i18n"
 import { useTranslation } from "react-i18next"
 
@@ -115,24 +113,13 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
     }
   }, [useLightTheme, setCookie, removeCookie])
 
-  // Add useEffect to support the moment.js language
-  useEffect(() => {
-    // Set moment.js locale according to current i18n language
-    moment.locale(i18n.language)
-    const handler = () => {
-      moment.locale(i18n.language)
-    }
-    i18n.on("languageChanged", handler)
-    return () => i18n.off("languageChanged", handler)
-  }, [i18n])
-
   const xs = useMediaQuery(localizedTheme.breakpoints.down("sm"))
   const drawerWidthState = useState(!xs)
 
   return (
     <LightThemeContext.Provider value={[useLightTheme, setUseLightTheme]}>
       <ThemeProvider theme={localizedTheme}>
-        <LocalizationProvider dateAdapter={AdapterMoment}>
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DrawerOpenContext.Provider value={drawerWidthState}>
             {props.children}
           </DrawerOpenContext.Provider>

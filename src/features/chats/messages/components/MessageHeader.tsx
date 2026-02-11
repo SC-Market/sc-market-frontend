@@ -9,7 +9,6 @@ import { useGetUserProfileQuery } from "../../../../store/profile"
 import { useMessagingSidebar } from "../../hooks/MessagingSidebar"
 import { useCurrentChat } from "../../hooks/CurrentChat"
 import { DateTimePicker } from "@mui/x-date-pickers"
-import moment from "moment"
 import { useTranslation } from "react-i18next"
 import type { UserParticipant, ContractorParticipant } from "../../domain/types"
 
@@ -67,8 +66,8 @@ import VideoLibrary from '@mui/icons-material/VideoLibrary';
 import ChevronLeftRounded from '@mui/icons-material/ChevronLeftRounded';
 
 export function MessageHeader(props: {
-  dateTime: moment.Moment
-  setDateTime: (dateTime: moment.Moment) => void
+  dateTime: Date | null
+  setDateTime: (dateTime: Date | null) => void
 }) {
   const profile = useGetUserProfileQuery()
   const theme = useTheme<ExtendedTheme>()

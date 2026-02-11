@@ -1,5 +1,5 @@
-import i18n from "../util/i18n" // // Import i18n instance for dynamic language support
-import moment, { Moment } from "moment"
+import i18n from "../util/i18n"
+import { isValid, isBefore, differenceInMonths, differenceInDays, differenceInHours, differenceInMinutes, differenceInSeconds, parseISO } from "date-fns"
 
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
@@ -35,37 +35,33 @@ export const getRelativeTime = (d1: Date, d2: Date = new Date()) => {
  * Returns the most significant time difference between now and a future date
  * in shorthand format (e.g., "1mo", "8d", "2h", "10m", "53s").
  *
- * @param future - The future date (Date object, string, or Moment instance)
+ * @param future - The future date (Date object or string)
  * @returns A shorthand string representing the most significant time unit
  */
 export function formatMostSignificantDiff(
-  future: Date | string | Moment,
+  future: Date | string,
 ): string {
-  const futureDate = moment(future)
-  const now = moment()
+  const futureDate = typeof future === 'string' ? parseISO(future) : future
+  const now = new Date()
 
-  if (!futureDate.isValid() || futureDate.isBefore(now)) {
-    return "0s" // or handle differently if desired
+  if (!isValid(futureDate) || isBefore(futureDate, now)) {
+    return "0s"
   }
 
-  let duration = moment.duration(futureDate.diff(now))
-
-  const months = Math.floor(duration.asMonths())
+  const months = differenceInMonths(futureDate, now)
   if (months > 0) return `${months}mo`
-  duration = duration.subtract(moment.duration(months, "months"))
 
-  const days = Math.floor(duration.asDays())
+  const days = differenceInDays(futureDate, now)
   if (days > 0) return `${days}d`
-  duration = duration.subtract(moment.duration(days, "days"))
 
-  const hours = duration.hours()
+  const hours = differenceInHours(futureDate, now)
   if (hours > 0) return `${hours}h`
 
-  const minutes = duration.minutes()
+  const minutes = differenceInMinutes(futureDate, now)
   if (minutes > 0) return `${minutes}m`
 
-  const seconds = duration.seconds()
+  const seconds = differenceInSeconds(futureDate, now)
   if (seconds > 0) return `${seconds}s`
 
-  return "0s" // Fallback if no difference
+  return "0s"
 }
