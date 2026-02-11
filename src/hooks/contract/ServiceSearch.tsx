@@ -1,5 +1,8 @@
 import React from "react"
 
+import { SxProps } from '@mui/material/SxProps';
+import { Theme } from '@mui/material/styles';
+
 interface ServiceSearchState {
   kind?: string | undefined
   // type?: string | undefined,

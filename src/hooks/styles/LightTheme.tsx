@@ -1,6 +1,11 @@
 import React from "react"
 import { CUSTOM_THEMES } from "./custom_themes"
 
+import { SxProps } from '@mui/material/SxProps';
+import { Theme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+
 export type ThemeChoice =
   | "light"
   | "dark"

@@ -1,13 +1,4 @@
 import React, { useEffect, useMemo, useState } from "react"
-import {
-  Alert,
-  CssBaseline,
-  Snackbar,
-  ThemeProvider,
-  useMediaQuery,
-  createTheme,
-  responsiveFontSizes,
-} from "@mui/material"
 import { DrawerOpenContext } from "./layout/Drawer"
 import {
   CurrentChatIDContext,
@@ -37,6 +28,16 @@ import { useGetUserProfileQuery } from "../store/profile"
 import moment from "moment"
 import { getMuiLocales } from "../util/i18n"
 import { useTranslation } from "react-i18next"
+
+import Alert from '@mui/material/Alert';
+import CssBaseline from '@mui/material/CssBaseline';
+import Snackbar from '@mui/material/Snackbar';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { responsiveFontSizes } from '@mui/material/styles';
+import CarRentalRounded from '@mui/icons-material/CarRentalRounded';
+import InfoRounded from '@mui/icons-material/InfoRounded';
+import LocalHospitalRounded from '@mui/icons-material/LocalHospitalRounded';
 
 // Component that handles theme logic - must be inside Redux Provider
 function ThemeProviderWrapper(props: { children: React.ReactElement }) {

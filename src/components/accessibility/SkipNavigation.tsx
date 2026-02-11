@@ -1,6 +1,9 @@
 import React from "react"
-import { Box, Button } from "@mui/material"
 import { useTranslation } from "react-i18next"
+
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 
 export function SkipNavigation() {
   const { t } = useTranslation()

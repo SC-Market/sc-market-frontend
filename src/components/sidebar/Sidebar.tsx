@@ -1,5 +1,4 @@
 import React, { useEffect } from "react"
-import { Drawer, Stack, useMediaQuery, useTheme } from "@mui/material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
 import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
@@ -11,6 +10,30 @@ import { useSidebarStarring } from "./hooks/useSidebarStarring"
 import { useSidebarSearch } from "./hooks/useSidebarSearch"
 import { useSidebarItems } from "./hooks/useSidebarItems"
 import { SidebarItemProps } from "./types"
+
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import CircularProgress from '@mui/material/CircularProgress';
+import Button from '@mui/material/Button';
+import Badge from '@mui/material/Badge';
+import IconButton from '@mui/material/IconButton';
+import Divider from '@mui/material/Divider';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import Avatar from '@mui/material/Avatar';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import MenuItem from '@mui/material/MenuItem';
+import Paper from '@mui/material/Paper';
+import Drawer from '@mui/material/Drawer';
+import Stack from '@mui/material/Stack';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+import SecurityRounded from '@mui/icons-material/SecurityRounded';
 
 /**
  * Main sidebar navigation component

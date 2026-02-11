@@ -1,10 +1,3 @@
-import {
-  Grid,
-  InputAdornment,
-  MenuItem,
-  TextField,
-  Typography,
-} from "@mui/material"
 import SearchIcon from "@mui/icons-material/Search"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import { orderIcons } from "../../datatypes/Order"
@@ -17,6 +10,12 @@ import { useTheme } from "@mui/material/styles"
 import { Stack } from "@mui/system"
 import { useTranslation } from "react-i18next"
 import { LanguageFilter } from "../../components/search/LanguageFilter"
+
+import Grid from '@mui/material/Grid';
+import InputAdornment from '@mui/material/InputAdornment';
+import MenuItem from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 
 export function ServiceSearchArea() {
   const theme: ExtendedTheme = useTheme()

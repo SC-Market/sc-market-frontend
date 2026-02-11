@@ -1,6 +1,10 @@
 /**
  * Configuration for a market ad
  */
+import CircularProgress from '@mui/material/CircularProgress';
+
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 export interface AdConfig {
   /** Unique identifier for the ad */
   id: string

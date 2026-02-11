@@ -1,7 +1,12 @@
 import React from "react"
-import { NotificationsNoneOutlined } from "@mui/icons-material"
 import { EmptyState, EmptyStateProps } from "./EmptyState"
 import { useTranslation } from "react-i18next"
+
+import ShoppingCartOutlined from '@mui/icons-material/ShoppingCartOutlined';
+import DescriptionOutlined from '@mui/icons-material/DescriptionOutlined';
+import Inventory2Outlined from '@mui/icons-material/Inventory2Outlined';
+import BusinessOutlined from '@mui/icons-material/BusinessOutlined';
+import NotificationsNoneOutlined from '@mui/icons-material/NotificationsNoneOutlined';
 
 export interface EmptyNotificationsProps extends Omit<
   EmptyStateProps,

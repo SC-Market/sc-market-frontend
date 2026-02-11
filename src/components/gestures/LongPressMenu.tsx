@@ -1,13 +1,14 @@
 import React, { ReactNode, useState } from "react"
-import {
-  Menu,
-  MenuItem,
-  ListItemIcon,
-  ListItemText,
-  Divider,
-} from "@mui/material"
 import { useLongPress } from "../../hooks/gestures/useLongPress"
 import { useHapticFeedback } from "../../hooks/gestures/useHapticFeedback"
+
+import Box from '@mui/material/Box';
+import { BoxProps } from '@mui/material/BoxProps';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Divider from '@mui/material/Divider';
 
 export interface LongPressMenuAction {
   /**

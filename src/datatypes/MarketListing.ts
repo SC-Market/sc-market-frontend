@@ -3,6 +3,10 @@ import { MinimalContractor } from "./Contractor"
 import { Order } from "./Order"
 import { Moment } from "moment/moment"
 
+import CarRentalRounded from '@mui/icons-material/CarRentalRounded';
+import InfoRounded from '@mui/icons-material/InfoRounded';
+import LocalHospitalRounded from '@mui/icons-material/LocalHospitalRounded';
+
 export const item_types = [
   "Armor",
   "Clothing",

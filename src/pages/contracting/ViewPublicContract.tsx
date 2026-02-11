@@ -8,7 +8,6 @@ import { Page } from "../../components/metadata/Page"
 import { FRONTEND_URL } from "../../util/constants"
 import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import { PageBreadcrumbs } from "../../components/navigation"
-import { Grid } from "@mui/material"
 import React from "react"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
 import { PageBody404 } from "../errors/Error404"
@@ -17,6 +16,22 @@ import { ContractOfferForm } from "../../views/contracts/ContractOfferForm"
 import { useGetUserProfileQuery } from "../../store/profile"
 import { useTranslation } from "react-i18next"
 import { ContractDetailsTableSkeleton } from "../../components/skeletons"
+
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import Skeleton from '@mui/material/Skeleton';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import Container from '@mui/material/Container';
+import Tabs from '@mui/material/Tabs';
+import CircularProgress from '@mui/material/CircularProgress';
+import CreateRounded from '@mui/icons-material/CreateRounded';
+import ArrowBackRounded from '@mui/icons-material/ArrowBackRounded';
 
 export function ViewPublicContractBody(props: { contract: PublicContract }) {
   const { contract } = props

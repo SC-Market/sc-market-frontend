@@ -1,21 +1,5 @@
-import {
-  IconButton,
-  ListItemButton,
-  ListItemIcon,
-  ListItemText,
-  Tooltip,
-  Typography,
-  useMediaQuery,
-} from "@mui/material"
-import { useTheme } from "@mui/material/styles"
+import { useTheme, ThemeProvider, createTheme } from "@mui/material/styles";
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
-import {
-  CloseRounded,
-  DeleteRounded,
-  MarkEmailReadRounded,
-  MarkEmailUnreadRounded,
-  ShareRounded,
-} from "@mui/icons-material"
 import { Link } from "react-router-dom"
 import { Notification } from "../../../hooks/login/UserProfile"
 import { getRelativeTime } from "../../../util/time"
@@ -26,6 +10,26 @@ import {
 import { useTranslation } from "react-i18next"
 import { useCallback, useMemo } from "react"
 import { LongPressMenu } from "../../../components/gestures"
+
+import Alert from '@mui/material/Alert';
+import CssBaseline from '@mui/material/CssBaseline';
+import Snackbar from '@mui/material/Snackbar';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { responsiveFontSizes } from '@mui/material/styles';
+import IconButton from '@mui/material/IconButton';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
+import CarRentalRounded from '@mui/icons-material/CarRentalRounded';
+import InfoRounded from '@mui/icons-material/InfoRounded';
+import LocalHospitalRounded from '@mui/icons-material/LocalHospitalRounded';
+import CloseRounded from '@mui/icons-material/CloseRounded';
+import DeleteRounded from '@mui/icons-material/DeleteRounded';
+import MarkEmailReadRounded from '@mui/icons-material/MarkEmailReadRounded';
+import MarkEmailUnreadRounded from '@mui/icons-material/MarkEmailUnreadRounded';
+import ShareRounded from '@mui/icons-material/ShareRounded';
 
 export function NotificationBase(props: {
   icon: React.ReactNode

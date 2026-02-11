@@ -1,6 +1,9 @@
 /**
  * PWA utility functions for service worker registration and management
  */
+import CircularProgress from '@mui/material/CircularProgress';
+
+import Box from '@mui/material/Box';
 
 export interface ServiceWorkerRegistrationState {
   registration: ServiceWorkerRegistration | null

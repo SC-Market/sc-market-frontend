@@ -5,36 +5,10 @@ import {
   useAssignOfferMutation,
   useUnassignOfferMutation,
 } from "../../store/offer"
-import {
-  Chip,
-  Grid,
-  Link as MaterialLink,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableRow,
-  Typography,
-  IconButton,
-  Autocomplete,
-  TextField,
-  Box,
-  Button,
-} from "@mui/material"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { OrgDetails, UserDetails } from "../../components/list/UserDetails"
 import { Stack } from "@mui/system"
 import moment from "moment/moment"
-import {
-  Announcement,
-  Cancel,
-  CheckCircle,
-  HourglassTop,
-  Edit,
-  Close,
-  Check,
-} from "@mui/icons-material"
 import { MarkdownRender } from "../../components/markdown/Markdown"
 import { useCurrentChat, useGetChatByOfferIDQuery } from "../../features/chats"
 import {
@@ -53,7 +27,6 @@ import { ListingSellerRating } from "../../components/rating/ListingRating"
 import { useTranslation } from "react-i18next"
 import { PAYMENT_TYPE_MAP } from "../../util/constants"
 import { useTheme } from "@mui/material/styles"
-import { useMediaQuery } from "@mui/material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import {
   useGetContractorMembersQuery,
@@ -64,6 +37,52 @@ import { MinimalUser } from "../../datatypes/User"
 import throttle from "lodash/throttle"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import { has_permission } from "../contractor/OrgRoles"
+
+import Box from '@mui/material/Box';
+import Breadcrumbs from '@mui/material/Breadcrumbs';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
+import Chip from '@mui/material/Chip';
+import Divider from '@mui/material/Divider';
+import Fade from '@mui/material/Fade';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import MaterialLink from '@mui/material/Link';
+import MenuItem from '@mui/material/MenuItem';
+import Paper from '@mui/material/Paper';
+import Select from '@mui/material/Select';
+import Typography from '@mui/material/Typography';
+import Alert from '@mui/material/Alert';
+import Button from '@mui/material/Button';
+import Snackbar from '@mui/material/Snackbar';
+import Avatar from '@mui/material/Avatar';
+import LinearProgress from '@mui/material/LinearProgress';
+import TableCell from '@mui/material/TableCell';
+import TableRow from '@mui/material/TableRow';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
+import CardActions from '@mui/material/CardActions';
+import CardMedia from '@mui/material/CardMedia';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableContainer from '@mui/material/TableContainer';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import CreateRounded from '@mui/icons-material/CreateRounded';
+import PersonRounded from '@mui/icons-material/PersonRounded';
+import RefreshRounded from '@mui/icons-material/RefreshRounded';
+import ZoomInRounded from '@mui/icons-material/ZoomInRounded';
+import LocalShipping from '@mui/icons-material/LocalShipping';
+import DeleteRounded from '@mui/icons-material/DeleteRounded';
+import Announcement from '@mui/icons-material/Announcement';
+import Cancel from '@mui/icons-material/Cancel';
+import CheckCircle from '@mui/icons-material/CheckCircle';
+import HourglassTop from '@mui/icons-material/HourglassTop';
+import Edit from '@mui/icons-material/Edit';
+import Close from '@mui/icons-material/Close';
+import Check from '@mui/icons-material/Check';
 
 // Status map for unified translation and colour coding
 const statusTextToKey: Record<string, string> = {

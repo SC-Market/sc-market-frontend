@@ -6,6 +6,11 @@
 
 import { useEffect, useRef } from "react"
 
+import { SxProps } from '@mui/material/SxProps';
+import { Theme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+
 /**
  * Hook to update the app icon badge with unread count
  * @param unreadCount The number of unread notifications

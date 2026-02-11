@@ -4,8 +4,7 @@ import { ContainerGrid } from "../../../components/layout/ContainerGrid"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../../hooks/layout/Drawer"
 import CloseIcon from "@mui/icons-material/CloseRounded"
 import MenuIcon from "@mui/icons-material/MenuRounded"
-import { IconButton, Grid, Divider, Paper, useMediaQuery } from "@mui/material"
-import { useTheme } from "@mui/material/styles"
+import { useTheme, ThemeProvider, createTheme } from "@mui/material/styles";
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { Page } from "../../../components/metadata/Page"
 import {
@@ -18,6 +17,38 @@ import {
 } from "../../../features/market"
 import { MarketSidebarContext, useMarketSearch } from "../../market"
 import { useTranslation } from "react-i18next"
+
+import Alert from '@mui/material/Alert';
+import CssBaseline from '@mui/material/CssBaseline';
+import Snackbar from '@mui/material/Snackbar';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { responsiveFontSizes } from '@mui/material/styles';
+import IconButton from '@mui/material/IconButton';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
+import Divider from '@mui/material/Divider';
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
+import Fab from '@mui/material/Fab';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import Chip from '@mui/material/Chip';
+import Container from '@mui/material/Container';
+import Modal from '@mui/material/Modal';
+import CarRentalRounded from '@mui/icons-material/CarRentalRounded';
+import InfoRounded from '@mui/icons-material/InfoRounded';
+import LocalHospitalRounded from '@mui/icons-material/LocalHospitalRounded';
+import DeleteRounded from '@mui/icons-material/DeleteRounded';
+import MarkEmailReadRounded from '@mui/icons-material/MarkEmailReadRounded';
+import MarkEmailUnreadRounded from '@mui/icons-material/MarkEmailUnreadRounded';
+import ShareRounded from '@mui/icons-material/ShareRounded';
+import AddAPhotoRounded from '@mui/icons-material/AddAPhotoRounded';
+import SaveRounded from '@mui/icons-material/SaveRounded';
+import EditRounded from '@mui/icons-material/EditRounded';
 
 const BuyOrders = React.lazy(() =>
   import("../../../views/market/ItemListings").then((module) => ({

@@ -1,5 +1,9 @@
 import React from "react"
-import { Breakpoint } from "@mui/material"
+import { SxProps } from '@mui/material/SxProps';
+import { Theme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+import Breakpoint from '@mui/material/Breakpoint';
 
 export const ContainerSizeContext = React.createContext<
   [Breakpoint, React.Dispatch<React.SetStateAction<Breakpoint>>] | null

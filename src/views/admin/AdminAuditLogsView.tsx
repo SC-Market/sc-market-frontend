@@ -1,19 +1,4 @@
 import React, { useState } from "react"
-import {
-  Box,
-  Button,
-  Chip,
-  Grid,
-  Paper,
-  TableRow,
-  TableCell,
-  TextField,
-  Typography,
-  IconButton,
-  Collapse,
-  Autocomplete,
-} from "@mui/material"
-import { ExpandMore, ExpandLess } from "@mui/icons-material"
 import { useGetAdminAuditLogsQuery } from "../../store/contractor"
 import { useTranslation } from "react-i18next"
 import { AuditLogEntry } from "../../datatypes/Contractor"
@@ -21,6 +6,21 @@ import {
   ControlledTable,
   HeadCell,
 } from "../../components/table/PaginatedTable"
+
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Chip from '@mui/material/Chip';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import TableRow from '@mui/material/TableRow';
+import TableCell from '@mui/material/TableCell';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import Collapse from '@mui/material/Collapse';
+import Autocomplete from '@mui/material/Autocomplete';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import ExpandLess from '@mui/icons-material/ExpandLess';
 
 // Date formatting helper
 function formatDate(dateString: string): string {

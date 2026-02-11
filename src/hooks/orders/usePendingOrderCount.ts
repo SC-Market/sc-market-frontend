@@ -1,5 +1,10 @@
 import { useGetNotificationsQuery } from "../../store/notification"
 
+import { SxProps } from '@mui/material/SxProps';
+import { Theme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+
 /**
  * Hook to get count of pending orders requiring attention
  * Uses unread_count from notifications API

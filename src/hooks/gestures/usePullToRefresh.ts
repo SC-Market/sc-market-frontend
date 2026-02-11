@@ -1,6 +1,11 @@
 import { useState, useCallback, useRef, useEffect } from "react"
 import { useHapticFeedback } from "./useHapticFeedback"
 
+import { SxProps } from '@mui/material/SxProps';
+import { Theme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+
 export interface UsePullToRefreshOptions {
   /**
    * Distance in pixels to pull before triggering refresh

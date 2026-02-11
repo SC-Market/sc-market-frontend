@@ -1,22 +1,29 @@
-/**
- * BottomSheet Component
- * A mobile-friendly modal that slides up from the bottom
- * Better UX than full-screen modals on mobile devices
- * Supports swipe-down to dismiss gesture
- */
-
-import {
-  Box,
-  IconButton,
-  SwipeableDrawer,
-  Typography,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material"
 import React, { ReactNode, useState, useRef, useEffect } from "react"
-import { CloseRounded } from "@mui/icons-material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { haptic } from "../../util/haptics"
+
+import Box from '@mui/material/Box';
+import { BoxProps } from '@mui/material/BoxProps';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import CircularProgress from '@mui/material/CircularProgress';
+import Fade from '@mui/material/Fade';
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import useScrollTrigger from '@mui/material/useScrollTrigger';
+import { useTheme } from '@mui/material/styles';
+import SwipeableDrawer from '@mui/material/SwipeableDrawer';
+import Typography from '@mui/material/Typography';
+import DeleteRounded from '@mui/icons-material/DeleteRounded';
+import FavoriteRounded from '@mui/icons-material/FavoriteRounded';
+import MoreVertRounded from '@mui/icons-material/MoreVertRounded';
+import RefreshRounded from '@mui/icons-material/RefreshRounded';
+import CloseRounded from '@mui/icons-material/CloseRounded';
 
 interface BottomSheetProps {
   open: boolean

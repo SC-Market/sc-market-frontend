@@ -1,7 +1,16 @@
 import React from "react"
-import { Badge, IconButton } from "@mui/material"
-import { SecurityRounded } from "@mui/icons-material"
 import { useGetAdminReportsQuery } from "../../store/moderation"
+
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import CircularProgress from '@mui/material/CircularProgress';
+import Button from '@mui/material/Button';
+import Badge from '@mui/material/Badge';
+import IconButton from '@mui/material/IconButton';
+import SecurityRounded from '@mui/icons-material/SecurityRounded';
 
 interface ModerationSidebarEntryProps {
   text: string

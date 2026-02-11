@@ -1,9 +1,16 @@
 import React from "react"
 import { FlatSection } from "../paper/Section"
-import { Grid, Typography, CircularProgress, Button, Box } from "@mui/material"
 import { PreferenceToggle } from "./PreferenceToggle"
 import type { EmailPreference } from "../../features/email/domain/types"
 import type { PushPreference } from "../../features/push-notifications/domain/types"
+
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import CircularProgress from '@mui/material/CircularProgress';
+import Button from '@mui/material/Button';
 
 export interface PreferenceSectionProps {
   title: string

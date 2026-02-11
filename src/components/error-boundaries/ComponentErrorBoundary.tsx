@@ -2,6 +2,18 @@ import React, { ReactNode } from "react"
 import { ErrorBoundary, ErrorBoundaryProps } from "./ErrorBoundary"
 import { ErrorFallback } from "./ErrorFallback"
 
+import ShoppingCartOutlined from '@mui/icons-material/ShoppingCartOutlined';
+import DescriptionOutlined from '@mui/icons-material/DescriptionOutlined';
+import Inventory2Outlined from '@mui/icons-material/Inventory2Outlined';
+import BusinessOutlined from '@mui/icons-material/BusinessOutlined';
+import NotificationsNoneOutlined from '@mui/icons-material/NotificationsNoneOutlined';
+import AssignmentOutlined from '@mui/icons-material/AssignmentOutlined';
+import ChatBubbleOutlineOutlined from '@mui/icons-material/ChatBubbleOutlineOutlined';
+import InboxOutlined from '@mui/icons-material/InboxOutlined';
+import WorkOutlineOutlined from '@mui/icons-material/WorkOutlineOutlined';
+import StarBorderOutlined from '@mui/icons-material/StarBorderOutlined';
+import SearchOffOutlined from '@mui/icons-material/SearchOffOutlined';
+
 export interface ComponentErrorBoundaryProps extends Omit<
   ErrorBoundaryProps,
   "fallback"

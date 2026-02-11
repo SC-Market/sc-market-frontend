@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react"
-import { useMediaQuery, useTheme } from "@mui/material"
 import { ExtendedTheme } from "../styles/Theme"
+
+import { SxProps } from '@mui/material/SxProps';
+import { Theme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
 
 /**
  * Hook to get the current bottom navigation bar height

@@ -1,8 +1,8 @@
 import React from "react"
 import { useNavigate } from "react-router-dom"
-import { ShoppingCartOutlined } from "@mui/icons-material"
 import { EmptyState, EmptyStateProps } from "./EmptyState"
 import { useTranslation } from "react-i18next"
+import ShoppingCartOutlined from '@mui/icons-material/ShoppingCartOutlined';
 
 export interface EmptyCartProps extends Omit<
   EmptyStateProps,

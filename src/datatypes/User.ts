@@ -1,5 +1,9 @@
 import { Rating } from "./Contractor"
 
+import CarRentalRounded from '@mui/icons-material/CarRentalRounded';
+import InfoRounded from '@mui/icons-material/InfoRounded';
+import LocalHospitalRounded from '@mui/icons-material/LocalHospitalRounded';
+
 export interface User {
   username: string
   display_name: string

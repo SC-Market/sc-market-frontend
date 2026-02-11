@@ -1,6 +1,11 @@
 import React from "react"
 import { ContractorKindIconKey } from "../../views/contractor/ContractorList"
 
+import { SxProps } from '@mui/material/SxProps';
+import { Theme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+
 export interface ContractorSearchState {
   fields: ContractorKindIconKey[]
   rating: number

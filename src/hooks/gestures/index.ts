@@ -1,3 +1,5 @@
+import { SxProps } from '@mui/material/SxProps';
+import { Theme } from '@mui/material/styles';
 export {
   useHapticFeedback,
   isHapticFeedbackSupported,

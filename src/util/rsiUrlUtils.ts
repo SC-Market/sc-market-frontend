@@ -6,6 +6,9 @@
  * - https://robertsspaceindustries.com/citizens/SomeUser -> SomeUser
  * - https://robertsspaceindustries.com/en/citizens/SomeUser/profile -> SomeUser
  */
+import CircularProgress from '@mui/material/CircularProgress';
+
+import Box from '@mui/material/Box';
 export function extractProfileIdFromUrl(url: string): string | null {
   try {
     const urlObj = new URL(url)
@@ -59,7 +62,7 @@ export function extractOrgIdFromUrl(url: string): string | null {
  * Removes all spaces and other invalid characters
  */
 export function sanitizeAlphanumeric(input: string): string {
-  return input.replace(/[^a-zA-Z0-9_-]/g, "")
+  return input.replace(/[^a-zA-Z0-9_-]/g, "");
 }
 
 /**
@@ -70,5 +73,5 @@ export function isRsiUrl(str: string): boolean {
   // Matches robertsspaceindustries.com with optional locale prefix before /citizens/ or /orgs/
   return /robertsspaceindustries\.com.*\/(?:[a-z]{2,5}\/)?(citizens|orgs)\//i.test(
     str,
-  )
+  );
 }

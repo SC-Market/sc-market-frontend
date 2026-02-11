@@ -5,7 +5,8 @@
  */
 
 import { useState, useCallback } from "react"
-import { SxProps, Theme } from "@mui/material"
+import { SxProps } from '@mui/material/SxProps';
+import { Theme } from '@mui/material/styles';
 
 interface UseMicroInteractionsOptions {
   scale?: number

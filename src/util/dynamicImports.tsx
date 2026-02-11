@@ -1,8 +1,10 @@
 import React, { Suspense, ReactNode } from "react"
-import { CircularProgress, Box } from "@mui/material"
 import { PageFallback } from "../components/metadata/Page"
 import { ComponentErrorBoundary } from "../components/error-boundaries"
 import { ErrorFallback } from "../components/error-boundaries"
+
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 interface DynamicImportOptions {
   fallback?: ReactNode

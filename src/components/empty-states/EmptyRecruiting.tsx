@@ -1,8 +1,17 @@
 import React from "react"
 import { useNavigate } from "react-router-dom"
-import { WorkOutlineOutlined } from "@mui/icons-material"
 import { EmptyState, EmptyStateProps } from "./EmptyState"
 import { useTranslation } from "react-i18next"
+
+import ShoppingCartOutlined from '@mui/icons-material/ShoppingCartOutlined';
+import DescriptionOutlined from '@mui/icons-material/DescriptionOutlined';
+import Inventory2Outlined from '@mui/icons-material/Inventory2Outlined';
+import BusinessOutlined from '@mui/icons-material/BusinessOutlined';
+import NotificationsNoneOutlined from '@mui/icons-material/NotificationsNoneOutlined';
+import AssignmentOutlined from '@mui/icons-material/AssignmentOutlined';
+import ChatBubbleOutlineOutlined from '@mui/icons-material/ChatBubbleOutlineOutlined';
+import InboxOutlined from '@mui/icons-material/InboxOutlined';
+import WorkOutlineOutlined from '@mui/icons-material/WorkOutlineOutlined';
 
 export interface EmptyRecruitingProps extends Omit<
   EmptyStateProps,

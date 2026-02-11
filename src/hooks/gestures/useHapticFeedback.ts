@@ -4,14 +4,18 @@
  * Provides different vibration patterns for different types of actions.
  * Gracefully degrades on unsupported devices.
  */
+import { SxProps } from '@mui/material/SxProps';
 
-export type HapticFeedbackType =
-  | "light"
-  | "medium"
-  | "heavy"
-  | "success"
-  | "error"
-  | "warning"
+import { Theme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+
+export type HapticFeedbackType = | "light"
+| "medium"
+| "heavy"
+| "success"
+| "error"
+| "warning";
 
 /**
  * Vibration patterns for different feedback types

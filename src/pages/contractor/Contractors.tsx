@@ -2,7 +2,6 @@ import { HeaderTitle } from "../../components/typography/HeaderTitle"
 import React, { useCallback, useEffect, useRef, useState } from "react"
 import { ContractorListItem } from "../../views/contractor/ContractorList"
 import { ContractorSkeleton } from "../../components/skeletons"
-import { Button, Divider, Grid, IconButton, useMediaQuery } from "@mui/material"
 import { HapticTablePagination } from "../../components/haptic"
 import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import { useGetContractorsQuery } from "../../store/contractor"
@@ -22,6 +21,24 @@ import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { EmptyContractors } from "../../components/empty-states"
+
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import Skeleton from '@mui/material/Skeleton';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import Container from '@mui/material/Container';
+import Tabs from '@mui/material/Tabs';
+import CircularProgress from '@mui/material/CircularProgress';
+import Stack from '@mui/material/Stack';
+import useTheme1 from '@mui/material/styles';
+import CreateRounded from '@mui/icons-material/CreateRounded';
+import ArrowBackRounded from '@mui/icons-material/ArrowBackRounded';
 
 export function Contractors() {
   const { t } = useTranslation()

@@ -15,6 +15,9 @@ import { Service } from "../datatypes/Order"
 import { Contractor } from "../datatypes/Contractor"
 import { formatListingSlug } from "../features/market/domain/urls"
 
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
+
 export function formatServiceUrl(service: Service) {
   return `/order/service/${service.service_id}/#/${formatListingSlug(
     service.title,
