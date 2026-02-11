@@ -5,6 +5,35 @@ import svgrPlugin from "vite-plugin-svgr"
 import { visualizer } from "rollup-plugin-visualizer"
 import { VitePWA } from "vite-plugin-pwa"
 import circularDependency from "vite-plugin-circular-dependency"
+import Critters from "critters"
+
+// Critical CSS extraction plugin using Critters
+function crittersPlugin() {
+  return {
+    name: 'vite-plugin-critters',
+    enforce: 'post' as const,
+    async transformIndexHtml(html: string) {
+      if (process.env.NODE_ENV !== 'production') return html
+      const critters = new Critters({
+        inline: true,
+        width: 1920,
+        height: 1080,
+        preload: 'media',
+        inlineThreshold: 10240,
+        pruneSource: false,
+        mergeStylesheets: true,
+        compress: true,
+        logLevel: 'warn',
+      })
+      try {
+        return await critters.process(html)
+      } catch (error) {
+        console.warn('Critters failed to process HTML:', error)
+        return html
+      }
+    },
+  }
+}
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -300,6 +329,8 @@ export default defineConfig({
       brotliSize: true,
       template: "treemap", // Use treemap for better visualization
     }),
+    // Critical CSS extraction for production builds
+    crittersPlugin(),
   ],
   build: {
     sourcemap: true,

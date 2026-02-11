@@ -48,6 +48,7 @@ import { useTranslation } from "react-i18next"
 import { useGetUserProfileQuery } from "../../store/profile"
 import { LoginArea } from "../../views/authentication/LoginArea"
 import { HorizontalListingSkeleton } from "../../components/skeletons"
+import { RecentListingsSkeleton, FAQQuestion } from "../../components/landing"
 
 const bg = "https://media.tenor.com/4LKXThFQuHMAAAAd/perseus-star-citizen.gif"
 
@@ -106,24 +107,6 @@ export function RecentListings() {
     <DisplayListingsHorizontal listings={results?.listings || []} />
   ) : (
     <RecentListingsSkeleton />
-  )
-}
-
-export function RecentListingsSkeleton() {
-  return (
-    <Box
-      display={"flex"}
-      sx={{
-        maxWidth: "100%",
-        overflowX: "scroll",
-      }}
-    >
-      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15].map(
-        (item, index) => (
-          <HorizontalListingSkeleton key={index} index={index} />
-        ),
-      )}
-    </Box>
   )
 }
 
@@ -461,65 +444,6 @@ export function LandingPage() {
         </Stack>
       </OpenLayout>
     </Page>
-  )
-}
-
-export function FAQQuestion(props: {
-  question: React.ReactNode
-  answer: string
-  last?: boolean
-  first?: boolean
-}) {
-  const [open, setOpen] = useState(false)
-  const { question, answer, last, first } = props
-  const theme = useTheme<ExtendedTheme>()
-
-  return (
-    <>
-      <ListItemButton
-        onClick={() => setOpen(!open)}
-        sx={{
-          ...(first
-            ? {
-                borderTopLeftRadius: theme.spacing(0.5),
-                borderTopRightRadius: theme.spacing(0.5),
-              }
-            : {}),
-          ...(last
-            ? {
-                borderBottomLeftRadius: theme.spacing(0.5),
-                borderBottomRightRadius: theme.spacing(0.5),
-              }
-            : {}),
-        }}
-      >
-        <ListItemText>
-          <Typography variant={"h5"} color={"text.secondary"}>
-            {question}
-          </Typography>
-        </ListItemText>
-        {open ? <ExpandLess /> : <ExpandMore />}
-      </ListItemButton>
-      <Collapse in={open} timeout="auto" unmountOnExit>
-        {/*<Box sx={{
-            padding: theme.spacing(1)
-        }}>*/}
-        <ListItem
-          sx={
-            {
-              // border: `1px solid ${theme.palette.outline.main}`,
-              // borderRadius: theme.spacing(1),
-            }
-          }
-        >
-          <Typography color={"text.secondary"} variant={"body1"}>
-            <MarkdownRender text={answer} />
-          </Typography>
-        </ListItem>
-        {/*</Box>*/}
-      </Collapse>
-      {!last && <Divider light />}
-    </>
   )
 }
 
