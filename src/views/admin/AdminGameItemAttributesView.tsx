@@ -32,10 +32,7 @@ import { ThemedDataGrid } from "../../components/grid/ThemedDataGrid"
 import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
-import AddIcon from "@mui/icons-material/AddRounded"
-import EditIcon from "@mui/icons-material/EditRounded"
-import DeleteIcon from "@mui/icons-material/DeleteRounded"
-import CloudDownloadIcon from "@mui/icons-material/CloudDownloadRounded"
+import { AdminIcons } from "../../components/icons"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 
@@ -248,14 +245,14 @@ export function AdminGameItemAttributesView({
             onClick={() => handleOpenEditModal(params.row)}
             color="primary"
           >
-            <EditIcon />
+            <AdminIcons.Edit />
           </IconButton>
           <IconButton
             size="small"
             onClick={() => handleOpenDeleteModal(params.row)}
             color="error"
           >
-            <DeleteIcon />
+            <AdminIcons.Delete />
           </IconButton>
         </Box>
       ),
@@ -295,7 +292,7 @@ export function AdminGameItemAttributesView({
               isImporting ? (
                 <CircularProgress size={16} />
               ) : (
-                <CloudDownloadIcon />
+                <AdminIcons.CloudDownload />
               )
             }
             onClick={handleImportAttributes}
@@ -308,7 +305,7 @@ export function AdminGameItemAttributesView({
           </Button>
           <Button
             variant="contained"
-            startIcon={<AddIcon />}
+            startIcon={<AdminIcons.Add />}
             onClick={handleOpenCreateModal}
           >
             {t("admin.gameItemAttributes.add", "Add Attribute")}

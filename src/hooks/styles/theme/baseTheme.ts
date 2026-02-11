@@ -17,7 +17,8 @@ export const themeBase: ExtendedThemeOptions = {
   },
   typography: {
     allVariants: {
-      fontFamily: `Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"`,
+      // Roboto with Arial fallback (similar metrics) for minimal CLS during font swap
+      fontFamily: `"Roboto", Arial, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"`,
     },
   },
   components: getBaseComponentOverrides(),
