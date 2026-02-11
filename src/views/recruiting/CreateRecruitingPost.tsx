@@ -242,7 +242,7 @@ export function CreateRecruitingPost(props: { post?: RecruitingPost }) {
           <Grid item xs={12}>
             <Typography variant={"body2"}>
               {t("recruiting_post.markdown_info") + " "}
-              <Link
+              <MaterialLink
                 rel="noopener noreferrer"
                 target="_blank"
                 href={
@@ -252,7 +252,7 @@ export function CreateRecruitingPost(props: { post?: RecruitingPost }) {
                 <UnderlineLink color={"text.secondary"}>
                   {t("recruiting_post.markdown_link")}
                 </UnderlineLink>
-              </Link>{" "}
+              </MaterialLink>{" "}
               {t("recruiting_post.markdown_info_end")}
             </Typography>
           </Grid>

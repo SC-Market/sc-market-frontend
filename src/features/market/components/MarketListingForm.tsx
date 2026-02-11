@@ -42,7 +42,7 @@ import { SxProps } from '@mui/system';
 import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
-import Breakpoint from '@mui/material/styles';
+import { Breakpoint } from '@mui/material/styles';
 import Fab from '@mui/material/Fab';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';

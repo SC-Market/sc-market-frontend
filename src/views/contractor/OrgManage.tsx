@@ -48,6 +48,7 @@ import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import { MenuProps } from '@mui/material/Menu';
+import MaterialLink from '@mui/material/Link';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Divider from '@mui/material/Divider';
 import Checkbox from '@mui/material/Checkbox';
@@ -374,7 +375,7 @@ export function OrgDetailEditForm(props: { contractor: Contractor }) {
                   </Grid>
                 </Grid>
               ) : (
-                <Link onClick={() => setEditingName(true)}>
+                <MaterialLink onClick={() => setEditingName(true)}>
                   <Typography
                     color={"text.secondary"}
                     variant={"subtitle1"}
@@ -386,7 +387,7 @@ export function OrgDetailEditForm(props: { contractor: Contractor }) {
                       <CreateIcon />
                     </IconButton>
                   </Typography>
-                </Link>
+                </MaterialLink>
               )
             }
             subheader={
