@@ -4,7 +4,7 @@ import { SxProps } from '@mui/system';
 import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
-import Breakpoint from '@mui/material/styles';
+import { Breakpoint } from '@mui/material/styles';
 
 export const MessageGroupCreateContext = React.createContext<
   [boolean, React.Dispatch<React.SetStateAction<boolean>>] | null

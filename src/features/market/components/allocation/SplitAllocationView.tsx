@@ -367,13 +367,13 @@ function AvailableLots({
         >
           <InventoryRounded />
         </Avatar>
-        <Link
+        <MaterialLink
           href={`/market/listing/${listingId}`}
           target="_blank"
           underline="hover"
         >
           <Typography variant="h6">{title}</Typography>
-        </Link>
+        </MaterialLink>
       </Stack>
 
       <Table size="small">
@@ -524,13 +524,13 @@ function AllocationTarget({
         >
           <InventoryRounded />
         </Avatar>
-        <Link
+        <MaterialLink
           href={`/market/listing/${listingId}`}
           target="_blank"
           underline="hover"
         >
           <Typography variant="h6">{title}</Typography>
-        </Link>
+        </MaterialLink>
         <Chip
           label={`${allocated} / ${required}`}
           color={isComplete ? "success" : "warning"}

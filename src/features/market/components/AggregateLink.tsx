@@ -8,7 +8,7 @@ import { SxProps } from '@mui/system';
 import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
-import Breakpoint from '@mui/material/styles';
+import { Breakpoint } from '@mui/material/styles';
 import Fab from '@mui/material/Fab';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
@@ -229,7 +229,7 @@ export function AggregateLink(props: AggregateLinkProps) {
   return (
     <Tooltip title={tooltipTitle} placement="top" enterDelay={300}>
       <Box component="span" sx={{ display: "inline-block" }}>
-        <Link
+        <MaterialLink
           component={RouterLink}
           to={to}
           underline="hover"
@@ -253,7 +253,7 @@ export function AggregateLink(props: AggregateLinkProps) {
           >
             ({pctFormatted})
           </Typography>
-        </Link>
+        </MaterialLink>
       </Box>
     </Tooltip>
   )

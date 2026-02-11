@@ -8,7 +8,7 @@ import { SxProps } from '@mui/system';
 import { Theme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
-import Breakpoint from '@mui/material/styles';
+import { Breakpoint } from '@mui/material/styles';
 
 export function AdminAttributeDefinitions() {
   const { t } = useTranslation()

@@ -36,7 +36,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { styled } from '@mui/material/styles';
 import { createTheme } from '@mui/material/styles';
 import { responsiveFontSizes } from '@mui/material/styles';
-import ThemeOptions from '@mui/material/styles';
+import { ThemeOptions } from '@mui/material/styles';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';

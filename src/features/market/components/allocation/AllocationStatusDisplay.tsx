@@ -180,13 +180,13 @@ export function AllocationStatusDisplay({
             </Typography>
           )}
           {showDetailsLink && (
-            <Link
+            <MaterialLink
               href="#allocations"
               variant="caption"
               sx={{ display: "block", mt: 0.5 }}
             >
               View allocation details
-            </Link>
+            </MaterialLink>
           )}
         </Alert>
       )}
