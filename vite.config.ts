@@ -5,16 +5,16 @@ import svgrPlugin from "vite-plugin-svgr"
 import { visualizer } from "rollup-plugin-visualizer"
 import { VitePWA } from "vite-plugin-pwa"
 import circularDependency from "vite-plugin-circular-dependency"
-import Critters from "critters"
+import Beasties from "beasties"
 
-// Critical CSS extraction plugin using Critters
-function crittersPlugin() {
+// Critical CSS extraction plugin using Beasties
+function beastiesPlugin() {
   return {
-    name: 'vite-plugin-critters',
+    name: 'vite-plugin-beasties',
     enforce: 'post' as const,
     async transformIndexHtml(html: string) {
       if (process.env.NODE_ENV !== 'production') return html
-      const critters = new Critters({
+      const beasties = new Beasties({
         inline: true,
         width: 1920,
         height: 1080,
@@ -26,9 +26,9 @@ function crittersPlugin() {
         logLevel: 'warn',
       })
       try {
-        return await critters.process(html)
+        return await beasties.process(html)
       } catch (error) {
-        console.warn('Critters failed to process HTML:', error)
+        console.warn('Beasties failed to process HTML:', error)
         return html
       }
     },
@@ -330,7 +330,7 @@ export default defineConfig({
       template: "treemap", // Use treemap for better visualization
     }),
     // Critical CSS extraction for production builds
-    crittersPlugin(),
+    beastiesPlugin(),
   ],
   build: {
     sourcemap: true,
