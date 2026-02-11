@@ -16,7 +16,7 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material"
-import YouTube from "react-youtube"
+import { YouTubeFacade } from "../embeds/YouTubeFacade"
 import { useTheme } from "@mui/material/styles"
 import { SxProps } from "@mui/system"
 
@@ -227,7 +227,10 @@ export function MarkdownRender(props: {
             try {
               const url = new URL(href)
               if (url.origin.includes("youtube.com") && !plainText) {
-                return <YouTube videoId={url.searchParams.get("v")!} />
+                const videoId = url.searchParams.get("v")
+                if (videoId) {
+                  return <YouTubeFacade videoId={videoId} />
+                }
               }
             } catch (e) {
               console.error(e)

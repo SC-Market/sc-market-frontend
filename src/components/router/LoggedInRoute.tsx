@@ -7,7 +7,7 @@ import { useGetContractorBySpectrumIDQuery } from "../../store/contractor"
 import { useCookies } from "react-cookie"
 import { has_permission } from "../../views/contractor/OrgRoles"
 import { ContractorRole } from "../../datatypes/Contractor"
-import Bugsnag from "@bugsnag/js"
+import { getBugsnagInstance } from "../../util/monitoring/bugsnagLoader"
 
 export function LoggedInRoute() {
   // const [profile, setProfile] = useUserProfile()
@@ -79,7 +79,10 @@ export function OrgAdminRoute(props: {
 
   useEffect(() => {
     if (profile) {
-      Bugsnag.setUser(profile?.username)
+      const Bugsnag = getBugsnagInstance()
+      if (Bugsnag) {
+        Bugsnag.setUser(profile?.username)
+      }
     }
   }, [profile])
 

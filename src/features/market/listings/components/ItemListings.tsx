@@ -75,7 +75,7 @@ import { UnderlineLink } from "../../../../components/typography/UnderlineLink"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../../hooks/styles/Theme"
 import { CURRENT_CUSTOM_ORG } from "../../../../hooks/contractor/CustomDomain"
-import { RecentListingsSkeleton } from "../../../../pages/home/LandingPage"
+import { RecentListingsSkeleton } from "../../../../components/landing"
 import { getRelativeTime } from "../../../../util/time"
 import {
   MarketListingRating,
