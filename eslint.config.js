@@ -32,6 +32,17 @@ export default [
       "@typescript-eslint/no-unused-vars": "warn",
       "@typescript-eslint/ban-ts-comment": "warn",
       "no-empty": "warn",
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            {
+              group: ["@mui/material", "!@mui/material/styles", "!@mui/material/colors"],
+              message: "Use path imports from @mui/material/* instead of barrel imports for better tree-shaking.",
+            },
+          ],
+        },
+      ],
     },
   },
 ]
