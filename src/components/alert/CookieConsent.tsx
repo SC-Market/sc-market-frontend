@@ -7,6 +7,7 @@ import { useLocation } from "react-router-dom"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTranslation } from "react-i18next"
+import { onPageInteractive } from "../../util/scripts/delayedScriptLoader"
 
 const TRACKING_ID = "G-KT8SEND6F2" // OUR_TRACKING_ID
 
@@ -18,25 +19,35 @@ export function CookieConsent() {
   const { t } = useTranslation()
 
   useEffect(() => {
-    if (cookies.cookie_consent === "all") {
-      ReactGA.initialize(TRACKING_ID, {
-        gtagOptions: {
-          analytics_storage: "granted",
-          ad_storage: "denied",
-          ad_user_data: "denied",
-          ad_personalization: "denied",
-        },
-      })
-    } else {
-      ReactGA.initialize(TRACKING_ID, {
-        gtagOptions: {
-          analytics_storage: "denied",
-          ad_storage: "denied",
-          ad_user_data: "denied",
-          ad_personalization: "denied",
-        },
-      })
-    }
+    // Delay analytics initialization until page is interactive
+    // This prevents analytics from blocking critical rendering path
+    onPageInteractive(() => {
+      // Initialize Google Analytics with async loading
+      // react-ga4 automatically loads the gtag script asynchronously
+      if (cookies.cookie_consent === "all") {
+        ReactGA.initialize(TRACKING_ID, {
+          gtagOptions: {
+            analytics_storage: "granted",
+            ad_storage: "denied",
+            ad_user_data: "denied",
+            ad_personalization: "denied",
+          },
+          // Ensure gtag script is loaded with async attribute
+          gaOptions: {
+            // react-ga4 loads scripts asynchronously by default
+          },
+        })
+      } else {
+        ReactGA.initialize(TRACKING_ID, {
+          gtagOptions: {
+            analytics_storage: "denied",
+            ad_storage: "denied",
+            ad_user_data: "denied",
+            ad_personalization: "denied",
+          },
+        })
+      }
+    })
   }, [cookies.cookie_consent])
 
   useEffect(() => {
