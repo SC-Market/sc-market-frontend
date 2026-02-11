@@ -1,8 +1,7 @@
 import i18n from "i18next"
 import { initReactI18next } from "react-i18next"
 import LanguageDetector from "i18next-browser-languagedetector"
-
-import moment from "moment"
+import { setDefaultOptions } from "date-fns"
 
 // Only import English as the fallback language
 import en from "../locales/en/english.json"
@@ -36,9 +35,13 @@ export async function loadLocale(locale: string): Promise<void> {
     switch (locale) {
       case "uk":
         translation = (await import("../locales/uk/ukrainian.json")).default
+        const { default: dateFnsUk } = await import("date-fns/locale/uk")
+        setDefaultOptions({ locale: dateFnsUk })
         break
       case "zh-CN":
         translation = (await import("../locales/zh/zh_Hans.json")).default
+        const { default: dateFnsZhCN } = await import("date-fns/locale/zh-CN")
+        setDefaultOptions({ locale: dateFnsZhCN })
         break
       default:
         return // Unknown locale
@@ -46,9 +49,6 @@ export async function loadLocale(locale: string): Promise<void> {
 
     // Add the locale to i18n
     i18n.addResourceBundle(locale, "translation", translation, true, true)
-
-    // Update moment locale
-    moment.locale(locale)
   } catch (error) {
     console.error(`Failed to load locale ${locale}:`, error)
     // Fallback to English if locale loading fails

@@ -34,7 +34,6 @@ import { useDispatch } from "react-redux"
 import type { AppDispatch } from "../../../store/store"
 import SCMarketLogo from "../../../assets/scmarket-logo.webp"
 import { DateTimePicker } from "@mui/x-date-pickers"
-import moment from "moment"
 import { useTranslation } from "react-i18next"
 import { MarkdownRender } from "../../../components/markdown/Markdown"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
@@ -690,8 +689,8 @@ function MessageSendAreaMobile(props: {
 function DateTimePickerBottomSheetMobile(props: {
   open: boolean
   onClose: () => void
-  dateTime: moment.Moment
-  setDateTime: (dateTime: moment.Moment) => void
+  dateTime: Date | null
+  setDateTime: (dateTime: Date | null) => void
 }) {
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
@@ -981,7 +980,7 @@ export function MessagesBodyMobile(props: { maxHeight?: number }) {
   )
 
   const { t } = useTranslation()
-  const [dateTime, setDateTime] = useState(moment())
+  const [dateTime, setDateTime] = useState<Date | null>(new Date())
   const [dateTimeSheetOpen, setDateTimeSheetOpen] = useState(false)
 
   return (
