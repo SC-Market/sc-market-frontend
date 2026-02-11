@@ -1,7 +1,8 @@
-import { DataGrid, DataGridProps } from "@mui/x-data-grid"
+import { DataGridProps } from "@mui/x-data-grid"
 import React from "react"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { LazyDataGrid } from "../lazy/LazyDataGrid"
 
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
@@ -47,7 +48,7 @@ import ReportProblemRounded from '@mui/icons-material/ReportProblemRounded';
 export function ThemedDataGrid(props: DataGridProps) {
   const theme = useTheme<ExtendedTheme>()
   return (
-    <DataGrid
+    <LazyDataGrid
       {...props}
       sx={{
         borderColor: "outline.main",

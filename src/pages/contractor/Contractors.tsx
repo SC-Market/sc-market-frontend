@@ -12,7 +12,7 @@ import {
 import { ContractorSidebarContext } from "../../hooks/contractor/ContractorSidebar"
 import { ContractorSidebar } from "../../views/contractor/ContractorSidebar"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
-import { marketDrawerWidth } from "../../features/market"
+import { marketDrawerWidth } from "../../features/market/index"
 import CloseIcon from "@mui/icons-material/CloseRounded"
 import MenuIcon from "@mui/icons-material/MenuRounded"
 import FilterListIcon from "@mui/icons-material/FilterList"

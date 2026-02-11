@@ -4,8 +4,8 @@ import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { MarketAggregate } from "../domain/types"
 import { HeaderTitle } from "../../../components/typography/HeaderTitle"
-import { DateTimePicker } from "@mui/x-date-pickers"
-import moment from "moment/moment"
+import { LazyDateTimePicker } from "../../../components/lazy/LazyDatePickers"
+import { addDays, endOfDay } from "date-fns"
 import { useCreateBuyOrderMutation } from "../api/marketApi"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { useNavigate } from "react-router-dom"
@@ -64,7 +64,7 @@ export function BuyOrderForm(props: { aggregate: MarketAggregate }) {
     game_item_id: aggregate.details.game_item_id,
     price: 0,
     quantity: 1,
-    expiry: moment().add(3, "days").endOf("day"),
+    expiry: endOfDay(addDays(new Date(), 3)),
     negotiable: false,
   })
 
@@ -309,7 +309,7 @@ export function BuyOrderForm(props: { aggregate: MarketAggregate }) {
               <Divider />
             </Grid>
             <Grid item xs={12} display={"flex"} justifyContent={"right"}>
-              <DateTimePicker
+              <LazyDateTimePicker
                 label={t("buyorder.expiration", {
                   tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
                 })}
@@ -317,7 +317,7 @@ export function BuyOrderForm(props: { aggregate: MarketAggregate }) {
                 onChange={(newValue) =>
                   setState({
                     ...state,
-                    expiry: newValue || moment().add(3, "days").endOf("day"),
+                    expiry: newValue || endOfDay(addDays(new Date(), 3)),
                   })
                 }
                 slotProps={{

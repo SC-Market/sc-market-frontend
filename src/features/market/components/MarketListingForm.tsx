@@ -18,7 +18,7 @@ import {
 } from "../domain/types"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { MarkdownEditor } from "../../../components/markdown/Markdown"
-import { DateTimePicker } from "@mui/x-date-pickers"
+import { LazyDateTimePicker } from "../../../components/lazy/LazyDatePickers"
 import { useNavigate } from "react-router-dom"
 import { Suspense, lazy } from "react"
 
@@ -604,7 +604,7 @@ export function MarketListingForm(props: { sale_type: "sale" | "auction" }) {
               </div>
             </Grid>
             <Grid item>
-              <DateTimePicker
+              <LazyDateTimePicker
                 label={t("MarketListingForm.endTime", {
                   tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
                 })}

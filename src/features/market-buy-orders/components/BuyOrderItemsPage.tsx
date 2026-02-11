@@ -7,15 +7,11 @@ import MenuIcon from "@mui/icons-material/MenuRounded"
 import { useTheme, ThemeProvider, createTheme } from "@mui/material/styles";
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { Page } from "../../../components/metadata/Page"
-import {
-  BuyOrderActions,
-  HideOnScroll,
-  MarketNavArea,
-  MarketSidebar,
-  MarketSideBarToggleButton,
-  MarketSearchArea,
-} from "../../../features/market"
-import { MarketSidebarContext, useMarketSearch } from "../../market"
+import { BuyOrderActions } from "../../market/components/MarketActions"
+import { HideOnScroll, MarketNavArea } from "../../market/components/MarketNavArea"
+import { MarketSidebar, MarketSideBarToggleButton, MarketSearchArea } from "../../market/components/MarketSidebar"
+import { MarketSidebarContext } from "../../market/hooks/MarketSidebar"
+import { useMarketSearch } from "../../market/hooks/MarketSearch"
 import { useTranslation } from "react-i18next"
 
 import Alert from '@mui/material/Alert';

@@ -4,12 +4,12 @@ import {
   useMarketGetMyListingsQuery,
   useMarketUpdateMultipleListingMutation,
   useSearchMarketListingsQuery,
-} from ".."
+} from "../api/marketApi"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { MarkdownEditor } from "../../../components/markdown/Markdown"
 import type { MarketMultiple, MarketMultipleBody } from "../domain/types"
 import { Section } from "../../../components/paper/Section"
-import { useCurrentMarketListing } from ".."
+import { useCurrentMarketListing } from "../hooks/CurrentMarketItem"
 import { SelectGameCategory } from "../../../components/select/SelectGameItem"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"

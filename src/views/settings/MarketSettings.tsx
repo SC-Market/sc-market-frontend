@@ -1,5 +1,5 @@
 import React from "react"
-import { MarketEditTemplate } from "../../features/market"
+import { MarketEditTemplate } from "../../features/market/index"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 

@@ -1,6 +1,6 @@
 import React from "react"
 import { AdConfig } from "./types"
-import { useMarketSidebarExp } from "../../features/market"
+import { useMarketSidebarExp } from "../../features/market/index"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 

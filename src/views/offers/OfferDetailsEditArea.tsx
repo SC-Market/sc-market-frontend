@@ -2,7 +2,7 @@ import { OfferSession } from "../../store/offer"
 import React from "react"
 import { OrgDetails, UserDetails } from "../../components/list/UserDetails"
 import { Stack } from "@mui/system"
-import moment from "moment/moment"
+import { format } from "date-fns"
 import { MarkdownEditor } from "../../components/markdown/Markdown"
 import { orderIcons } from "../../datatypes/Order"
 import { PAYMENT_TYPES } from "../../util/constants"
@@ -152,9 +152,7 @@ export function OfferDetailsEditArea(props: { session: OfferSession }) {
               </TableCell>
               <TableCell align="right">
                 <Stack direction="row" justifyContent={"right"}>
-                  {moment(session.offers[0].timestamp).format(
-                    "MMMM Do YYYY, h:mm:ss a",
-                  )}
+                  {format(new Date(session.offers[0].timestamp), "MMMM do yyyy, h:mm:ss a")}
                 </Stack>
               </TableCell>
             </TableRow>

@@ -10,7 +10,7 @@ import { NotificationBase } from "../components/NotificationBase"
 import {
   DatatypesMarketBid,
   useGetMarketListingQuery,
-} from "../../../features/market"
+} from "../../../features/market/index"
 
 import Alert from '@mui/material/Alert';
 import CssBaseline from '@mui/material/CssBaseline';

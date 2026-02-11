@@ -6,7 +6,7 @@ import {
   ContractSearchContext,
   ContractSearchState,
 } from "../../hooks/contract/ContractSearch"
-import { marketDrawerWidth } from "../../features/market"
+import { marketDrawerWidth } from "../../features/market/index"
 import FilterListIcon from "@mui/icons-material/FilterList"
 import { FiltersFAB } from "../../components/mobile/FiltersFAB"
 import { HapticTab } from "../../components/haptic"

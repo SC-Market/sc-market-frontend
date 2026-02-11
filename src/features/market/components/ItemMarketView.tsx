@@ -1,7 +1,7 @@
 import { MarketSidebar } from "./MarketSidebar"
 import { HideOnScroll, MarketNavArea } from "./MarketNavArea"
 import { ItemListings } from "../../../views/market/ItemListings"
-import { useMarketSidebar } from ".."
+import { useMarketSidebar } from "../hooks/MarketSidebar"
 import React from "react"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"

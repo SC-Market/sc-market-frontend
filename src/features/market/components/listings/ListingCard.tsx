@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link, useNavigate } from "react-router-dom"
-import moment from "moment/moment"
+import { addMonths, subDays, subDays as sub, isBefore, isAfter } from "date-fns"
 import { useTheme, createTheme } from "@mui/material/styles";
 import { ExtendedTheme } from "../../../../hooks/styles/Theme"
 import { ExtendedUniqueSearchResult } from "../../domain/types"
@@ -253,8 +253,8 @@ export const ItemListingBase = React.memo(
           }}
         >
           {showExpiration &&
-            moment(listing.expiration) <
-              moment().add(1, "months").subtract(3, "days") && (
+            isBefore(new Date(listing.expiration),
+              subDays(addMonths(new Date(), 1), 3)) && (
               <ListingRefreshButton listing={listing} />
             )}
           <Link
@@ -272,7 +272,7 @@ export const ItemListingBase = React.memo(
                   position: "relative",
                 }}
               >
-                {moment(listing.timestamp) > moment().subtract(3, "days") && (
+                {isAfter(new Date(listing.timestamp), subDays(new Date(), 3)) && (
                   <Chip
                     label={t("market.new")}
                     color={"secondary"}
@@ -546,8 +546,8 @@ export const ItemListingBase = React.memo(
           }}
         >
           {showExpiration &&
-            moment(listing.expiration) <
-              moment().add(1, "months").subtract(3, "days") && (
+            isBefore(new Date(listing.expiration),
+              subDays(addMonths(new Date(), 1), 3)) && (
               <ListingRefreshButton listing={listing} />
             )}
           <Link
@@ -563,7 +563,7 @@ export const ItemListingBase = React.memo(
                   position: "relative",
                 }}
               >
-                {moment(listing.timestamp) > moment().subtract(3, "days") && (
+                {isAfter(new Date(listing.timestamp), subDays(new Date(), 3)) && (
                   <Chip
                     label={t("market.new")}
                     color={"secondary"}

@@ -2,7 +2,7 @@ import React, { useMemo } from "react"
 import {
   useGetMarketCategoriesQuery,
   useGetMarketItemsByCategoryQuery,
-} from "../../features/market"
+} from "../../features/market/index"
 import { useTranslation } from "react-i18next"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 

@@ -6,7 +6,7 @@ import { MarketListingDetails } from "../../components/list/UserDetails"
 import {
   MarketListingSearchResult,
   useSearchMarketQuery,
-} from "../../features/market"
+} from "../../features/market/index"
 import { useCounterOffer } from "../../hooks/offer/CounterOfferDetails"
 import { marketListingHeadCells } from "./OfferMarketListings"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"

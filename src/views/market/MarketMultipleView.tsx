@@ -4,8 +4,8 @@ import { getRelativeTime } from "../../util/time"
 import { Section } from "../../components/paper/Section"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useGetUserProfileQuery } from "../../store/profile"
-import { useCurrentMarketListing } from "../../features/market"
-import { MarketMultiple } from "../../features/market"
+import { useCurrentMarketListing } from "../../features/market/index"
+import { MarketMultiple } from "../../features/market/index"
 import { UserList } from "../../components/list/UserList"
 import { OrderList } from "../../components/list/OrderList"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
@@ -23,7 +23,7 @@ import {
 import { Stack } from "@mui/system"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import moment from "moment/moment"
+import { format, subDays } from "date-fns"
 import { ClockAlert } from "mdi-material-ui"
 import { useTranslation } from "react-i18next"
 
@@ -356,9 +356,7 @@ export function MarketMultipleView() {
                           >
                             {t("MarketMultipleView.updated")}{" "}
                             {getRelativeTime(
-                              moment(listing.expiration)
-                                .subtract(30, "days")
-                                .toDate(),
+                              subDays(new Date(listing.expiration), 30),
                             )}
                           </ListingDetailItem>
                           <ListingDetailItem

@@ -1,6 +1,6 @@
 import { Section } from "../../components/paper/Section"
 import React, { useState, useCallback } from "react"
-import { NotificationEntry } from "../../features/notifications"
+import { NotificationEntry } from "../../features/notifications/components/NotificationEntry"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useGetNotificationsQuery } from "../../store/notification"

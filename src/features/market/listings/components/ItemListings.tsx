@@ -38,7 +38,7 @@ import {
   prioritizeBadges,
 } from "../../../../util/badges"
 import { useGetUserProfileQuery } from "../../../../store/profile"
-import moment from "moment/moment"
+import { format } from "date-fns"
 import { Stack } from "@mui/system"
 import { AdCard } from "../../../../components/ads/AdCard"
 import { MARKET_ADS } from "../../../../components/ads/adConfig"

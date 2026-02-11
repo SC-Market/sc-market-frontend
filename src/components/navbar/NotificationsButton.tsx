@@ -14,7 +14,7 @@ import { useTranslation } from "react-i18next"
 import { useBadgeAPI } from "../../hooks/pwa/useBadgeAPI"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { Link } from "react-router-dom"
-import { NotificationEntry } from "../../features/notifications"
+import { NotificationEntry } from "../../features/notifications/components/NotificationEntry"
 import { haptic } from "../../util/haptics"
 import { HapticIconButton, HapticTablePagination } from "../haptic"
 

@@ -376,8 +376,17 @@ export default defineConfig({
             "@mui/material/Snackbar",
           ],
 
-          // MUI data components (data grid and related)
+          // MUI data components (lazy loaded - only on pages with data grids)
           "mui-data": ["@mui/x-data-grid"],
+
+          // MUI date pickers (lazy loaded - only on forms with date inputs)
+          "mui-date-pickers": [
+            "@mui/x-date-pickers",
+            "@mui/x-date-pickers/LocalizationProvider",
+            "@mui/x-date-pickers/AdapterDateFns",
+            "@mui/x-date-pickers/DateTimePicker",
+            "@mui/x-date-pickers/DatePicker",
+          ],
 
           // MUI icons (separate chunk for tree-shaking)
           "mui-icons": ["@mui/icons-material"],
@@ -403,6 +412,7 @@ export default defineConfig({
       "@mui/material",
       "@mui/icons-material",
     ],
+    exclude: ["moment"],
   },
   server: {
     host: "0.0.0.0", // Listen on all network interfaces
