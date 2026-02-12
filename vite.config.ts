@@ -347,6 +347,10 @@ export default defineConfig({
             if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) {
               return 'react-core'
             }
+            // MUI utilities must be checked before @mui/material to avoid splitting
+            if (id.includes('@mui/utils') || id.includes('@mui/base')) {
+              return 'mui-core'
+            }
             if (id.includes('@mui/material/styles') || id.includes('@mui/system') || 
                 id.includes('@emotion')) {
               return 'mui-core'
