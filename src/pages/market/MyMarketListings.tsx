@@ -3,18 +3,15 @@ import { HeaderTitle } from "../../components/typography/HeaderTitle"
 import { PageBreadcrumbs } from "../../components/navigation"
 import { Divider, Grid, IconButton } from "@mui/material"
 import { MyItemListings } from "../../views/market/ItemListings"
-import { MarketSidebar } from "../../features/market"
+import { MarketSidebar } from "../../features/market/components/MarketSidebar"
 import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
 import CloseIcon from "@mui/icons-material/CloseRounded"
 import MenuIcon from "@mui/icons-material/MenuRounded"
-import { MarketSidebarContext } from "../../features/market"
+import { MarketSidebarContext } from "../../features/market/hooks/MarketSidebar"
 import { Page } from "../../components/metadata/Page"
-import {
-  MarketActions,
-  HideOnScroll,
-  MarketNavArea,
-} from "../../features/market"
+import { MarketActions } from "../../features/market/components/MarketActions"
+import { HideOnScroll, MarketNavArea } from "../../features/market/components/MarketNavArea"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
