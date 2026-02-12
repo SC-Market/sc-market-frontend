@@ -18,6 +18,7 @@ import { DateTimePicker } from "@mui/x-date-pickers"
 import { addDays, endOfDay } from "date-fns"
 import { useCreateBuyOrderMutation } from "../api/marketApi"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
+import { DatePickerProvider } from "../../../components/providers/DatePickerProvider"
 import { useNavigate } from "react-router-dom"
 import { NumericFormat } from "react-number-format"
 import { useTranslation } from "react-i18next"
@@ -275,18 +276,19 @@ export function BuyOrderForm(props: { aggregate: MarketAggregate }) {
               <Divider />
             </Grid>
             <Grid item xs={12} display={"flex"} justifyContent={"right"}>
-              <DateTimePicker
-                label={t("buyorder.expiration", {
-                  tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                })}
-                value={state.expiry}
-                onChange={(newValue) =>
-                  setState({
-                    ...state,
-                    expiry: newValue || endOfDay(addDays(new Date(), 3)),
-                  })
-                }
-                slotProps={{
+              <DatePickerProvider>
+                <DateTimePicker
+                  label={t("buyorder.expiration", {
+                    tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                  })}
+                  value={state.expiry}
+                  onChange={(newValue) =>
+                    setState({
+                      ...state,
+                      expiry: newValue || endOfDay(addDays(new Date(), 3)),
+                    })
+                  }
+                  slotProps={{
                   textField: {
                     id: "expiry-date",
                     "aria-label": t(
@@ -297,7 +299,8 @@ export function BuyOrderForm(props: { aggregate: MarketAggregate }) {
                     "aria-required": "true",
                   },
                 }}
-              />
+                />
+              </DatePickerProvider>
               <div id="expiry-date-help" className="sr-only">
                 {t(
                   "accessibility.expiryDateHelp",

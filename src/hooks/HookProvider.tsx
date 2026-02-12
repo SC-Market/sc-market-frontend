@@ -28,20 +28,11 @@ import { useCookies } from "react-cookie"
 import { CURRENT_CUSTOM_ORG } from "./contractor/CustomDomain"
 import { CUSTOM_THEMES } from "./styles/custom_themes"
 import { useLocation, useSearchParams } from "react-router-dom"
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns"
 import { isCitizenIdEnabled } from "../util/constants"
 import { useGetUserProfileQuery } from "../store/profile"
 
 import { getMuiLocales } from "../util/i18n"
 import { useTranslation } from "react-i18next"
-import { enUS, uk, zhCN } from "date-fns/locale"
-
-const dateFnsLocales = {
-  en: enUS,
-  uk: uk,
-  "zh-CN": zhCN,
-}
 
 function ThemeProviderWrapper(props: { children: React.ReactElement }) {
   const [cookies, setCookie, removeCookie] = useCookies(["theme"])
@@ -121,15 +112,9 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
   return (
     <LightThemeContext.Provider value={[useLightTheme, setUseLightTheme]}>
       <ThemeProvider theme={localizedTheme}>
-        <LocalizationProvider 
-          key={i18n.language}
-          dateAdapter={AdapterDateFns}
-          adapterLocale={dateFnsLocales[i18n.language as keyof typeof dateFnsLocales] || enUS}
-        >
-          <DrawerOpenContext.Provider value={drawerWidthState}>
-            {props.children}
-          </DrawerOpenContext.Provider>
-        </LocalizationProvider>
+        <DrawerOpenContext.Provider value={drawerWidthState}>
+          {props.children}
+        </DrawerOpenContext.Provider>
       </ThemeProvider>
     </LightThemeContext.Provider>
   )

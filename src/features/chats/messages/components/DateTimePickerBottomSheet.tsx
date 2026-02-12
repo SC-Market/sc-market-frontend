@@ -6,6 +6,7 @@ import { getTime } from "date-fns"
 import { useTranslation } from "react-i18next"
 import { BottomSheet } from "../../../../components/mobile"
 import { useState } from "react"
+import { DatePickerProvider } from "../../../../components/providers/DatePickerProvider"
 
 export function DateTimePickerBottomSheet(props: {
   open: boolean
@@ -35,27 +36,29 @@ export function DateTimePickerBottomSheet(props: {
       disableBackdropClose={pickerOpen}
     >
       <Stack spacing={2}>
-        <DateTimePicker
-          value={dateTime}
-          onChange={(newValue) => {
-            if (newValue) {
-              setDateTime(newValue)
-            }
-          }}
-          onOpen={handlePickerOpen}
-          onClose={handlePickerClose}
-          slotProps={{
-            textField: {
-              size: "medium",
-              fullWidth: true,
-            },
-            dialog: {
-              sx: {
-                zIndex: theme.zIndex.modal + 10,
+        <DatePickerProvider>
+          <DateTimePicker
+            value={dateTime}
+            onChange={(newValue) => {
+              if (newValue) {
+                setDateTime(newValue)
+              }
+            }}
+            onOpen={handlePickerOpen}
+            onClose={handlePickerClose}
+            slotProps={{
+              textField: {
+                size: "medium",
+                fullWidth: true,
               },
-            },
-          }}
-        />
+              dialog: {
+                sx: {
+                  zIndex: theme.zIndex.modal + 10,
+                },
+              },
+            }}
+          />
+        </DatePickerProvider>
 
         <Stack direction="row" spacing={1}>
           <Button
