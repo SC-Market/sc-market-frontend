@@ -29,16 +29,20 @@ import { CURRENT_CUSTOM_ORG } from "./contractor/CustomDomain"
 import { CUSTOM_THEMES } from "./styles/custom_themes"
 import { useLocation, useSearchParams } from "react-router-dom"
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider"
-import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment"
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns"
 import { isCitizenIdEnabled } from "../util/constants"
 import { useGetUserProfileQuery } from "../store/profile"
 
-// Add moment and locale import + i18n
-import moment from "moment"
 import { getMuiLocales } from "../util/i18n"
 import { useTranslation } from "react-i18next"
+import { enUS, uk, zhCN } from "date-fns/locale"
 
-// Component that handles theme logic - must be inside Redux Provider
+const dateFnsLocales = {
+  en: enUS,
+  uk: uk,
+  "zh-CN": zhCN,
+}
+
 function ThemeProviderWrapper(props: { children: React.ReactElement }) {
   const [cookies, setCookie, removeCookie] = useCookies(["theme"])
   const prefersLight = useMediaQuery("(prefers-color-scheme: light)")
@@ -49,14 +53,11 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
   const location = useLocation()
   const { i18n } = useTranslation()
 
-  // Only check admin status if a custom theme might be selected
-  // In dev mode, we don't need to check admin status (devs can always use custom themes)
   const mightBeCustomTheme =
     useLightTheme !== "light" &&
     useLightTheme !== "dark" &&
     useLightTheme !== "system" &&
     CUSTOM_THEMES.has(useLightTheme)
-  // Skip the query if we're in dev mode (no admin check needed) or if no custom theme is selected
   const { data: userProfile } = useGetUserProfileQuery(undefined, {
     skip: isDev || !mightBeCustomTheme,
   })
@@ -110,24 +111,17 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
     }
   }, [useLightTheme, setCookie, removeCookie])
 
-  // Add useEffect to support the moment.js language
-  useEffect(() => {
-    // Set moment.js locale according to current i18n language
-    moment.locale(i18n.language)
-    const handler = () => {
-      moment.locale(i18n.language)
-    }
-    i18n.on("languageChanged", handler)
-    return () => i18n.off("languageChanged", handler)
-  }, [i18n])
-
   const xs = useMediaQuery(localizedTheme.breakpoints.down("sm"))
   const drawerWidthState = useState(!xs)
 
   return (
     <LightThemeContext.Provider value={[useLightTheme, setUseLightTheme]}>
       <ThemeProvider theme={localizedTheme}>
-        <LocalizationProvider dateAdapter={AdapterMoment}>
+        <LocalizationProvider 
+          key={i18n.language}
+          dateAdapter={AdapterDateFns}
+          adapterLocale={dateFnsLocales[i18n.language as keyof typeof dateFnsLocales] || enUS}
+        >
           <DrawerOpenContext.Provider value={drawerWidthState}>
             {props.children}
           </DrawerOpenContext.Provider>

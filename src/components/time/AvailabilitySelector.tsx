@@ -1,4 +1,3 @@
-import moment from "moment/moment"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import {
   AvailabilityHookContext,
@@ -9,6 +8,8 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { Section } from "../paper/Section"
 import { useGetUserProfileQuery } from "../../store/profile"
 import CreateRoundedIcon from "@mui/icons-material/CreateRounded"
+import { addHours, startOfDay } from "date-fns"
+import { format } from "../../util/time"
 import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 
@@ -106,13 +107,13 @@ export function AvailabilitySelector(props: {
   // Days of the week always with current locality
   const daysOfWeek = useMemo(
     () =>
-      [...Array(7).keys()].map((i) =>
-        moment()
-          .locale(i18n.language)
-          .startOf("week")
-          .add(i, "days")
-          .format("ddd"),
-      ),
+      [...Array(7).keys()].map((i) => {
+        const date = new Date()
+        const startOfWeek = new Date(date.setDate(date.getDate() - date.getDay()))
+        const dayDate = new Date(startOfWeek)
+        dayDate.setDate(startOfWeek.getDate() + i)
+        return dayDate.toLocaleDateString(i18n.language, { weekday: 'short' })
+      }),
     [i18n.language],
   )
 
@@ -203,7 +204,7 @@ export function AvailabilitySelector(props: {
                       }}
                       draggable={"false"}
                     >
-                      {moment().startOf("day").add(i, "hours").format("HH:mm")}
+                      {format(addHours(startOfDay(new Date()), i), "HH:mm")}
                     </div>
                   </td>
                 </tr>
@@ -258,13 +259,13 @@ export function AvailabilityDisplay(
   // Days of the week always with current locality
   const daysOfWeek = useMemo(
     () =>
-      [...Array(7).keys()].map((i) =>
-        moment()
-          .locale(i18n.language)
-          .startOf("week")
-          .add(i, "days")
-          .format("ddd"),
-      ),
+      [...Array(7).keys()].map((i) => {
+        const date = new Date()
+        const startOfWeek = new Date(date.setDate(date.getDate() - date.getDay()))
+        const dayDate = new Date(startOfWeek)
+        dayDate.setDate(startOfWeek.getDate() + i)
+        return dayDate.toLocaleDateString(i18n.language, { weekday: 'short' })
+      }),
     [i18n.language],
   )
 
@@ -314,7 +315,7 @@ export function AvailabilityDisplay(
                     }}
                     draggable={"false"}
                   >
-                    {moment().startOf("day").add(i, "hours").format("HH:mm")}
+                    {format(addHours(startOfDay(new Date()), i), "HH:mm")}
                   </div>
                 </td>
               </tr>

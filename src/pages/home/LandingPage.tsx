@@ -130,7 +130,7 @@ export function OrderStatistics() {
     >
       <MetricSection
         title={t("landing.totalOrders")}
-        body={<AnimatedNumbers includeComma animateToNumber={total_orders} />}
+        body={<AnimatedNumbers useThousandsSeparator animateToNumber={total_orders} />}
       />
       <MetricSection
         title={t("landing.totalOrderValue")}
@@ -138,7 +138,7 @@ export function OrderStatistics() {
           <Box display={"flex"}>
             {
               <AnimatedNumbers
-                includeComma
+                useThousandsSeparator
                 animateToNumber={total_order_value}
               />
             }
@@ -152,7 +152,7 @@ export function OrderStatistics() {
             title={t("landing.ordersThisWeek")}
             body={
               <Box display={"flex"}>
-                {<AnimatedNumbers includeComma animateToNumber={week_orders} />}
+                {<AnimatedNumbers useThousandsSeparator animateToNumber={week_orders} />}
               </Box>
             }
           />
@@ -162,7 +162,7 @@ export function OrderStatistics() {
               <Box display={"flex"}>
                 {
                   <AnimatedNumbers
-                    includeComma
+                    useThousandsSeparator
                     animateToNumber={week_order_value}
                   />
                 }

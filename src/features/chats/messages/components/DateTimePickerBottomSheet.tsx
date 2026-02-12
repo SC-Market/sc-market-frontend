@@ -2,7 +2,7 @@ import { Button, Stack } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../../hooks/styles/Theme"
 import { DateTimePicker } from "@mui/x-date-pickers"
-import moment from "moment"
+import { getTime } from "date-fns"
 import { useTranslation } from "react-i18next"
 import { BottomSheet } from "../../../../components/mobile"
 import { useState } from "react"
@@ -10,8 +10,8 @@ import { useState } from "react"
 export function DateTimePickerBottomSheet(props: {
   open: boolean
   onClose: () => void
-  dateTime: moment.Moment
-  setDateTime: (dateTime: moment.Moment) => void
+  dateTime: Date
+  setDateTime: (dateTime: Date) => void
 }) {
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
@@ -61,7 +61,7 @@ export function DateTimePickerBottomSheet(props: {
           <Button
             onClick={() => {
               navigator.clipboard.writeText(
-                `<t:${Math.trunc(dateTime.valueOf() / 1000)}:D>`,
+                `<t:${Math.trunc(dateTime.getTime() / 1000)}:D>`,
               )
             }}
             variant="outlined"
@@ -72,7 +72,7 @@ export function DateTimePickerBottomSheet(props: {
           <Button
             onClick={() => {
               navigator.clipboard.writeText(
-                `<t:${Math.trunc(dateTime.valueOf() / 1000)}:t>`,
+                `<t:${Math.trunc(dateTime.getTime() / 1000)}:t>`,
               )
             }}
             variant="outlined"
