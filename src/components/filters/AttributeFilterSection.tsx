@@ -10,7 +10,7 @@ import {
 import { useTranslation } from "react-i18next"
 import { useState, useEffect, useMemo } from "react"
 import { useLazySearchAttributeValuesQuery } from "../../store/api/attributes"
-import { debounce } from "lodash"
+import { debounce } from "lodash-es"
 
 export interface AttributeFilterSectionProps {
   attributeName: string

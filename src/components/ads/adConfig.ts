@@ -1,7 +1,7 @@
 import { AdConfig } from "./types"
-import ionImage from "../../assets/ion.png"
-import infernoImage from "../../assets/inferno.png"
-import perseusImage from "../../assets/perseus.png"
+import ionImage from "../../assets/ion.webp"
+import infernoImage from "../../assets/inferno.webp"
+import perseusImage from "../../assets/perseus.webp"
 
 /**
  * Static configuration for market ads.
