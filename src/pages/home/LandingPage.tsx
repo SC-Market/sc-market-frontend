@@ -39,7 +39,7 @@ import { DisplayListingsHorizontal } from "../../views/market/ItemListings"
 import { CURRENT_CUSTOM_ORG } from "../../hooks/contractor/CustomDomain"
 import { Link, Navigate } from "react-router-dom"
 import { MetricSection } from "../../views/orders/OrderMetrics"
-import AnimatedNumbers from "react-animated-numbers"
+import CountUp from "react-countup"
 import { Stack } from "@mui/system"
 import CharLogo from "../../assets/CharHoldings_Logo.png"
 import UNNLogo from "../../assets/UNN_Traders_Logo.webp"
@@ -130,18 +130,13 @@ export function OrderStatistics() {
     >
       <MetricSection
         title={t("landing.totalOrders")}
-        body={<AnimatedNumbers useThousandsSeparator animateToNumber={total_orders} />}
+        body={<CountUp end={total_orders} separator="," duration={2} />}
       />
       <MetricSection
         title={t("landing.totalOrderValue")}
         body={
           <Box display={"flex"}>
-            {
-              <AnimatedNumbers
-                useThousandsSeparator
-                animateToNumber={total_order_value}
-              />
-            }
+            <CountUp end={total_order_value} separator="," duration={2} />
             &nbsp;aUEC
           </Box>
         }
@@ -152,7 +147,7 @@ export function OrderStatistics() {
             title={t("landing.ordersThisWeek")}
             body={
               <Box display={"flex"}>
-                {<AnimatedNumbers useThousandsSeparator animateToNumber={week_orders} />}
+                <CountUp end={week_orders} separator="," duration={2} />
               </Box>
             }
           />
@@ -160,12 +155,7 @@ export function OrderStatistics() {
             title={t("landing.valueOfOrdersThisWeek")}
             body={
               <Box display={"flex"}>
-                {
-                  <AnimatedNumbers
-                    useThousandsSeparator
-                    animateToNumber={week_order_value}
-                  />
-                }
+                <CountUp end={week_order_value} separator="," duration={2} />
                 &nbsp;aUEC
               </Box>
             }
