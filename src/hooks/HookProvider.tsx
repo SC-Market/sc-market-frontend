@@ -91,10 +91,14 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
   }, [actualTheme, location.pathname, isDev, isAdmin, useLightTheme])
 
   // Build a localized theme when language changes
-  const localizedTheme = useMemo(() => {
-    const { core, pickers, grid } = getMuiLocales(i18n.language)
-    // Merge locale bundles into the current base theme
-    return responsiveFontSizes(createTheme(baseTheme, core, pickers, grid))
+  const [localizedTheme, setLocalizedTheme] = useState(() => 
+    responsiveFontSizes(createTheme(baseTheme))
+  )
+
+  useEffect(() => {
+    getMuiLocales(i18n.language).then(({ core, pickers, grid }) => {
+      setLocalizedTheme(responsiveFontSizes(createTheme(baseTheme, core, pickers, grid)))
+    })
   }, [baseTheme, i18n.language])
 
   useEffect(() => {
