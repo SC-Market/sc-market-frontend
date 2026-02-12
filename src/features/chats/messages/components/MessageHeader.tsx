@@ -24,6 +24,7 @@ import { useCurrentChat } from "../../hooks/CurrentChat"
 import { DateTimePicker } from "@mui/x-date-pickers"
 import { useTranslation } from "react-i18next"
 import type { UserParticipant, ContractorParticipant } from "../../domain/types"
+import { DatePickerProvider } from "../../../../components/providers/DatePickerProvider"
 
 export function MessageHeader(props: {
   dateTime: Date
@@ -282,20 +283,22 @@ export function MessageHeader(props: {
           justifyContent="right"
           sx={{ width: "auto" }}
         >
-          <DateTimePicker
-            value={dateTime}
-            onChange={(newValue) => {
-              if (newValue) {
-                setDateTime(newValue)
-              }
-            }}
-            slotProps={{
-              textField: {
-                size: "medium",
-                sx: { width: "auto" },
-              },
-            }}
-          />
+          <DatePickerProvider>
+            <DateTimePicker
+              value={dateTime}
+              onChange={(newValue) => {
+                if (newValue) {
+                  setDateTime(newValue)
+                }
+              }}
+              slotProps={{
+                textField: {
+                  size: "medium",
+                  sx: { width: "auto" },
+                },
+              }}
+            />
+          </DatePickerProvider>
           <Stack direction="row" spacing={1}>
             <Button
               onClick={() => {

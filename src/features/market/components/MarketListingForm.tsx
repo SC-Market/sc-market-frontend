@@ -40,6 +40,7 @@ import { MarkdownEditor } from "../../../components/markdown/Markdown"
 import { DateTimePicker } from "@mui/x-date-pickers"
 import { useNavigate } from "react-router-dom"
 import { Suspense, lazy } from "react"
+import { DatePickerProvider } from "../../../components/providers/DatePickerProvider"
 
 // Lazy load heavy modal components
 const PageSearch = lazy(() =>
@@ -564,24 +565,26 @@ export function MarketListingForm(props: { sale_type: "sale" | "auction" }) {
               </div>
             </Grid>
             <Grid item>
-              <DateTimePicker
-                label={t("MarketListingForm.endTime", {
-                  tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                })}
-                value={state.end_time}
-                onChange={(newValue) =>
-                  setState((state) => ({ ...state, end_time: newValue }))
-                }
-                slotProps={{
-                  textField: {
-                    "aria-label": t(
-                      "accessibility.endTimeInput",
-                      "Select auction end time",
+              <DatePickerProvider>
+                <DateTimePicker
+                  label={t("MarketListingForm.endTime", {
+                    tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                  })}
+                  value={state.end_time}
+                  onChange={(newValue) =>
+                    setState((state) => ({ ...state, end_time: newValue }))
+                  }
+                  slotProps={{
+                    textField: {
+                      "aria-label": t(
+                        "accessibility.endTimeInput",
+                        "Select auction end time",
                     ),
                     "aria-describedby": "end-time-help",
                   },
                 }}
-              />
+                />
+              </DatePickerProvider>
               <div id="end-time-help" className="sr-only">
                 {t(
                   "accessibility.endTimeHelp",
