@@ -344,6 +344,10 @@ export default defineConfig({
         manualChunks(id) {
           // Vendor dependencies - split by library
           if (id.includes('node_modules')) {
+            // React and JSX runtime must stay together
+            if (id.includes('react/jsx-runtime') || id.includes('react/jsx-dev-runtime')) {
+              return 'react-core'
+            }
             if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) {
               return 'react-core'
             }
