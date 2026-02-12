@@ -10,16 +10,6 @@ import {
   zhCN as coreZhCN,
   ukUA as coreUkUA,
 } from "@mui/material/locale"
-import {
-  enUS as pickersEnUS,
-  zhCN as pickersZhCN,
-  ukUA as pickersUkUA,
-} from "@mui/x-date-pickers/locales"
-import {
-  enUS as gridEnUS,
-  zhCN as gridZhCN,
-  ukUA as gridUkUA,
-} from "@mui/x-data-grid/locales"
 
 export const languages = [
   { code: "en", endonym: "English" },
@@ -61,20 +51,27 @@ export async function preloadLocales(locales: string[]): Promise<void> {
   await Promise.all(locales.map((locale) => loadLocale(locale)))
 }
 
-export function getMuiLocales(languageCode: string): {
-  core: typeof coreEnUS
-  pickers: typeof pickersEnUS
-  grid: typeof gridEnUS
-} {
-  switch (languageCode) {
-    case "uk":
-      return { core: coreUkUA, pickers: pickersUkUA, grid: gridUkUA }
-    case "zh-CN":
-      return { core: coreZhCN, pickers: pickersZhCN, grid: gridZhCN }
-    case "en":
-    default:
-      return { core: coreEnUS, pickers: pickersEnUS, grid: gridEnUS }
-  }
+export async function getMuiLocales(languageCode: string) {
+  const [pickers, grid] = await Promise.all([
+    import("@mui/x-date-pickers/locales").then(m => {
+      switch (languageCode) {
+        case "uk": return m.ukUA
+        case "zh-CN": return m.zhCN
+        default: return m.enUS
+      }
+    }),
+    import("@mui/x-data-grid/locales").then(m => {
+      switch (languageCode) {
+        case "uk": return m.ukUA
+        case "zh-CN": return m.zhCN
+        default: return m.enUS
+      }
+    })
+  ])
+
+  const core = languageCode === "uk" ? coreUkUA : languageCode === "zh-CN" ? coreZhCN : coreEnUS
+
+  return { core, pickers, grid }
 }
 
 i18n
