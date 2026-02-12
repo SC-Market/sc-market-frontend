@@ -61,7 +61,7 @@ import { BACKEND_URL, FRONTEND_URL } from "../../util/constants"
 import { NumericFormat } from "react-number-format"
 import { Stack } from "@mui/system"
 import { ImagePreviewPaper } from "../../components/paper/ImagePreviewPaper"
-import moment from "moment"
+import { subDays } from "date-fns"
 import { ClockAlert } from "mdi-material-ui"
 import { useTranslation } from "react-i18next"
 import { ReportButton } from "../../components/button/ReportButton"
@@ -1399,9 +1399,7 @@ export function MarketListingView() {
                             >
                               {t("MarketListingView.updated")}{" "}
                               {getRelativeTime(
-                                moment(listing.expiration)
-                                  .subtract(30, "days")
-                                  .toDate(),
+                                subDays(new Date(listing.expiration), 30),
                               )}
                             </ListingDetailItem>
 

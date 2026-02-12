@@ -25,7 +25,7 @@ import {
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { OrgDetails, UserDetails } from "../../components/list/UserDetails"
 import { Stack } from "@mui/system"
-import moment from "moment/moment"
+import { format } from "../../util/time"
 import {
   Announcement,
   Cancel,
@@ -486,9 +486,7 @@ export function OfferDetailsArea(props: { session: OfferSession }) {
               </TableCell>
               <TableCell align="right">
                 <Stack direction="row" justifyContent={"right"}>
-                  {moment(session.offers[0].timestamp)
-                    .locale(i18n.language)
-                    .format("MMMM Do YYYY, h:mm:ss a")}
+                  {format(new Date(session.offers[0].timestamp), "MMMM do yyyy, h:mm:ss a")}
                 </Stack>
               </TableCell>
             </TableRow>

@@ -46,7 +46,7 @@ import {
 import { Stack } from "@mui/system"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import moment from "moment/moment"
+import { subDays } from "date-fns"
 import { ClockAlert } from "mdi-material-ui"
 import { useTranslation } from "react-i18next"
 
@@ -359,9 +359,7 @@ export function MarketMultipleView() {
                           >
                             {t("MarketMultipleView.updated")}{" "}
                             {getRelativeTime(
-                              moment(listing.expiration)
-                                .subtract(30, "days")
-                                .toDate(),
+                              subDays(new Date(listing.expiration), 30),
                             )}
                           </ListingDetailItem>
                           <ListingDetailItem

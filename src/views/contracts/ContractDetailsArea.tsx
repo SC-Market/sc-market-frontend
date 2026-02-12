@@ -10,7 +10,7 @@ import {
 } from "@mui/material"
 import { Stack } from "@mui/system"
 import { UserDetails } from "../../components/list/UserDetails"
-import moment from "moment"
+import { format } from "../../util/time"
 import { MarkdownRender } from "../../components/markdown/Markdown"
 import { PAYMENT_TYPE_MAP } from "../../util/constants"
 import React from "react"
@@ -52,9 +52,7 @@ export function ContractDetailsArea(props: { contract: PublicContract }) {
               </TableCell>
               <TableCell align="right">
                 <Stack direction="row" justifyContent={"right"}>
-                  {moment(contract.timestamp)
-                    .locale(i18n.language)
-                    .format("MMMM Do YYYY, h:mm:ss a")}
+                  {format(new Date(contract.timestamp), "MMMM do yyyy, h:mm:ss a")}
                 </Stack>
               </TableCell>
             </TableRow>
