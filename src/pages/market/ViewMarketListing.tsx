@@ -3,11 +3,11 @@ import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import React from "react"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
 import { BackArrow } from "../../components/button/BackArrow"
-import { CurrentMarketListingContext } from "../../features/market"
+import { CurrentMarketListingContext } from "../../features/market/hooks/CurrentMarketItem"
 import {
   useGetMarketListingQuery,
   useGetMultipleByIdQuery,
-} from "../../features/market"
+} from "../../features/market/api/marketApi"
 import { MarketListingView } from "../../views/market/MarketListingView"
 import { MarketListingViewSkeleton } from "../../views/market/MarketListingView"
 import { Page } from "../../components/metadata/Page"
