@@ -341,59 +341,40 @@ export default defineConfig({
         chunkFileNames: "assets/[name]-[hash].js",
         entryFileNames: "assets/[name]-[hash].js",
         assetFileNames: "assets/[name]-[hash].[ext]",
-        manualChunks: {
-          // Core framework chunk
-          "react-core": ["react", "react-dom", "react-router-dom"],
-
-          // MUI base chunk (styles and system - used everywhere)
-          "mui-core": [
-            "@mui/material/styles",
-            "@mui/system",
-            "@emotion/react",
-            "@emotion/styled",
-          ],
-
-          // MUI common components (frequently used across the app)
-          "mui-common": [
-            "@mui/material/Button",
-            "@mui/material/TextField",
-            "@mui/material/Box",
-            "@mui/material/Typography",
-            "@mui/material/Container",
-            "@mui/material/Grid",
-            "@mui/material/Paper",
-            "@mui/material/Card",
-            "@mui/material/CardContent",
-            "@mui/material/CardActions",
-            "@mui/material/Dialog",
-            "@mui/material/DialogTitle",
-            "@mui/material/DialogContent",
-            "@mui/material/DialogActions",
-            "@mui/material/IconButton",
-            "@mui/material/Tooltip",
-            "@mui/material/CircularProgress",
-            "@mui/material/Alert",
-            "@mui/material/Snackbar",
-          ],
-
-          // MUI data components (data grid and related)
-          "mui-data": ["@mui/x-data-grid"],
-
-          // MUI icons (separate chunk for tree-shaking)
-          "mui-icons": ["@mui/icons-material"],
-
-          // State management
-          redux: ["@reduxjs/toolkit", "react-redux"],
-
-          // Chart libraries (lazy loaded only when needed)
-          "charts-apex": ["react-apexcharts", "apexcharts"],
-          "charts-kline": ["klinecharts"],
-
-          // Utility libraries
-          utils: ["lodash-es"],
-        },
         manualChunks(id) {
-          // Market features in separate bundle
+          // Vendor dependencies - split by library
+          if (id.includes('node_modules')) {
+            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) {
+              return 'react-core'
+            }
+            if (id.includes('@mui/material/styles') || id.includes('@mui/system') || 
+                id.includes('@emotion')) {
+              return 'mui-core'
+            }
+            if (id.includes('@mui/material')) {
+              return 'mui-common'
+            }
+            if (id.includes('@mui/x-data-grid')) {
+              return 'mui-data'
+            }
+            if (id.includes('@mui/icons-material')) {
+              return 'mui-icons'
+            }
+            if (id.includes('@reduxjs/toolkit') || id.includes('react-redux')) {
+              return 'redux'
+            }
+            if (id.includes('apexcharts') || id.includes('react-apexcharts')) {
+              return 'charts-apex'
+            }
+            if (id.includes('klinecharts')) {
+              return 'charts-kline'
+            }
+            if (id.includes('lodash-es')) {
+              return 'utils'
+            }
+          }
+          
+          // Market features in separate bundle (code only, not dependencies)
           if (id.includes('/features/market/')) {
             return 'market'
           }
