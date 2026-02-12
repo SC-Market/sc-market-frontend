@@ -14,7 +14,7 @@ import { io } from "socket.io-client"
 import { WS_URL } from "../../../util/constants"
 import { useDispatch } from "react-redux"
 import type { AppDispatch } from "../../../store/store"
-import moment from "moment"
+import { getTime } from "date-fns"
 import { useTranslation } from "react-i18next"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { MobileFAB } from "../../../components/mobile/MobileFAB"
@@ -248,7 +248,7 @@ export function MessagesBody(props: {
   )
 
   const { t } = useTranslation()
-  const [dateTime, setDateTime] = useState(moment())
+  const [dateTime, setDateTime] = useState(new Date())
   const [dateTimeSheetOpen, setDateTimeSheetOpen] = useState(false)
   const inputAreaRef = useRef<HTMLDivElement>(null)
   const [inputAreaHeight, setInputAreaHeight] = useState(0)

@@ -1,7 +1,6 @@
 import { MinimalUser } from "./User"
 import { MinimalContractor } from "./Contractor"
 import { Order } from "./Order"
-import { Moment } from "moment/moment"
 
 export const item_types = [
   "Armor",
@@ -218,7 +217,7 @@ export interface MarketListingBody {
   minimum_bid_increment: number
   internal: boolean
   status: string
-  end_time: Moment | null
+  end_time: Date | null
   spectrum_id?: string | null
   delivery_preference?: string | null
 }
@@ -227,7 +226,7 @@ export interface MarketBuyOrderBody {
   price?: number | null
   quantity: number
   game_item_id: string | null
-  expiry: Moment
+  expiry: Date
   negotiable?: boolean
 }
 

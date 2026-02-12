@@ -15,7 +15,7 @@ import React, { useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link, useNavigate } from "react-router-dom"
 import { RefreshRounded, EditRounded, ShareRounded } from "@mui/icons-material"
-import moment from "moment/moment"
+import { isAfter, subDays, addMonths, subDays as subDaysFromDate } from "date-fns"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../../hooks/styles/Theme"
 import { ExtendedUniqueSearchResult } from "../../domain/types"
@@ -200,8 +200,7 @@ export const ItemListingBase = React.memo(
           }}
         >
           {showExpiration &&
-            moment(listing.expiration) <
-              moment().add(1, "months").subtract(3, "days") && (
+            isAfter(subDaysFromDate(addMonths(new Date(), 1), 3), new Date(listing.expiration)) && (
               <ListingRefreshButton listing={listing} />
             )}
           <Link
@@ -219,7 +218,7 @@ export const ItemListingBase = React.memo(
                   position: "relative",
                 }}
               >
-                {moment(listing.timestamp) > moment().subtract(3, "days") && (
+                {isAfter(new Date(listing.timestamp), subDays(new Date(), 3)) && (
                   <Chip
                     label={t("market.new")}
                     color={"secondary"}
@@ -493,8 +492,7 @@ export const ItemListingBase = React.memo(
           }}
         >
           {showExpiration &&
-            moment(listing.expiration) <
-              moment().add(1, "months").subtract(3, "days") && (
+            isAfter(subDaysFromDate(addMonths(new Date(), 1), 3), new Date(listing.expiration)) && (
               <ListingRefreshButton listing={listing} />
             )}
           <Link
@@ -510,7 +508,7 @@ export const ItemListingBase = React.memo(
                   position: "relative",
                 }}
               >
-                {moment(listing.timestamp) > moment().subtract(3, "days") && (
+                {isAfter(new Date(listing.timestamp), subDays(new Date(), 3)) && (
                   <Chip
                     label={t("market.new")}
                     color={"secondary"}

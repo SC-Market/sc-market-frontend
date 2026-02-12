@@ -390,7 +390,7 @@ export default defineConfig({
           "charts-kline": ["klinecharts"],
 
           // Utility libraries
-          utils: ["moment", "lodash"],
+          utils: ["lodash-es"],
         },
       },
     },

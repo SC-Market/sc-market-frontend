@@ -22,13 +22,12 @@ import { useGetUserProfileQuery } from "../../../../store/profile"
 import { useMessagingSidebar } from "../../hooks/MessagingSidebar"
 import { useCurrentChat } from "../../hooks/CurrentChat"
 import { DateTimePicker } from "@mui/x-date-pickers"
-import moment from "moment"
 import { useTranslation } from "react-i18next"
 import type { UserParticipant, ContractorParticipant } from "../../domain/types"
 
 export function MessageHeader(props: {
-  dateTime: moment.Moment
-  setDateTime: (dateTime: moment.Moment) => void
+  dateTime: Date
+  setDateTime: (dateTime: Date) => void
 }) {
   const profile = useGetUserProfileQuery()
   const theme = useTheme<ExtendedTheme>()
@@ -301,7 +300,7 @@ export function MessageHeader(props: {
             <Button
               onClick={() => {
                 navigator.clipboard.writeText(
-                  `<t:${Math.trunc(dateTime.valueOf() / 1000)}:D>`,
+                  `<t:${Math.trunc(dateTime.getTime() / 1000)}:D>`,
                 )
               }}
               size="medium"
@@ -311,7 +310,7 @@ export function MessageHeader(props: {
             <Button
               onClick={() => {
                 navigator.clipboard.writeText(
-                  `<t:${Math.trunc(dateTime.valueOf() / 1000)}:t>`,
+                  `<t:${Math.trunc(dateTime.getTime() / 1000)}:t>`,
                 )
               }}
               size="medium"
