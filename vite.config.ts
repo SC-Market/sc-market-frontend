@@ -343,25 +343,15 @@ export default defineConfig({
         assetFileNames: "assets/[name]-[hash].[ext]",
         manualChunks(id) {
           if (id.includes('node_modules')) {
-            if (id.includes('react/jsx-runtime') || id.includes('react/jsx-dev-runtime')) {
-              return 'react'
-            }
             if (id.includes('react') || id.includes('react-dom') || 
                 id.includes('react-router')) {
               return 'react'
             }
-            if (id.includes('@mui/material') || id.includes('@emotion') || 
-                id.includes('@mui/system') || id.includes('@mui/utils') || id.includes('@mui/base')) {
+            if (id.includes('@mui')) {
               return 'mui'
             }
-            if (id.includes('@mui/x-data-grid')) {
-              return 'mui-datagrid'
-            }
-            if (id.includes('@mui/x-date-pickers')) {
-              return 'mui-datepicker'
-            }
-            if (id.includes('@mui/icons-material')) {
-              return 'mui-icons'
+            if (id.includes('@emotion')) {
+              return 'mui'
             }
             if (id.includes('@reduxjs/toolkit') || id.includes('react-redux')) {
               return 'redux'
