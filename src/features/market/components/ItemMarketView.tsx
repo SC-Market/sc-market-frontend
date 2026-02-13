@@ -35,7 +35,7 @@ export function ItemMarketView() {
 
           {/* Desktop: Persistent sidebar */}
           {!xs && (
-            <Grid item md={2.25}>
+            <Grid item xs={12} md={2.25}>
               <Paper
                 sx={{
                   position: "sticky",
@@ -50,18 +50,16 @@ export function ItemMarketView() {
           )}
 
           {/* Main content area */}
-          <Grid
-            item
-            container
-            xs={12}
-            md={xs ? 12 : 9.75}
-            spacing={{
-              xs: theme.layoutSpacing.component,
-              sm: theme.layoutSpacing.layout,
-            }}
-            sx={{ transition: "0.3s" }}
-          >
-            <ItemListings />
+          <Grid item xs={12} md={xs ? 12 : 9.75}>
+            <Grid
+              container
+              spacing={{
+                xs: theme.layoutSpacing.component,
+                sm: theme.layoutSpacing.layout,
+              }}
+            >
+              <ItemListings />
+            </Grid>
           </Grid>
         </Grid>
       </Container>
