@@ -1,15 +1,3 @@
-/**
- * @deprecated This barrel export file increases bundle size.
- * Prefer direct imports from specific files:
- * 
- * API: import { useSearchMarketListingsQuery } from "./api/marketApi"
- * Hooks: import { useMarketSearch } from "./hooks/MarketSearch"
- * Components: import { MarketSidebar } from "./components/MarketSidebar"
- * Listings: import { ItemListings } from "./listings/components/ItemListings"
- * 
- * Types can still be imported from here as they have no runtime cost.
- */
-
 // Side-effect: register market API endpoints with serviceApi
 import "./api/marketApi"
 

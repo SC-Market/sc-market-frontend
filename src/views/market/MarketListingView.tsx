@@ -39,18 +39,18 @@ import {
   VisibilityRounded,
   StarRounded,
 } from "@mui/icons-material"
-import { useCurrentMarketListing } from "../../features/market/hooks/CurrentMarketItem"
+import { useCurrentMarketListing } from "../../features/market"
 import { BaseListingType, UniqueListing } from "../../features/market"
 import {
   useMarketTrackListingViewMutation,
   useMarketGetListingOrdersQuery,
   useCreateListingBidMutation,
-} from "../../features/market/api/marketApi"
-import { AggregateLink } from "../../features/market/components/AggregateLink"
+} from "../../features/market"
+import { AggregateLink } from "../../features/market"
 import { OrderList } from "../../components/list/OrderList"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { MarkdownRender } from "../../components/markdown/Markdown"
-import { Bids } from "../../features/market/components/Bids"
+import { Bids } from "../../features/market"
 import { useGetGameItemAttributesQuery } from "../../store/api/attributes"
 import { Helmet } from "react-helmet"
 import { useCookies } from "react-cookie"
