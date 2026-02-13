@@ -342,53 +342,21 @@ export default defineConfig({
         entryFileNames: "assets/[name]-[hash].js",
         assetFileNames: "assets/[name]-[hash].[ext]",
         manualChunks(id) {
-          // Vendor dependencies - split by library
           if (id.includes('node_modules')) {
-            // React and JSX runtime must stay together
-            if (id.includes('react/jsx-runtime') || id.includes('react/jsx-dev-runtime')) {
-              return 'react-core'
-            }
             if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) {
-              return 'react-core'
+              return 'react'
             }
-            
-            // MUI core - styles, system, emotion, utils, base
-            if (id.includes('@mui/utils') || id.includes('@mui/base')) {
+            if (id.includes('@emotion') || id.includes('@mui/system') || id.includes('@mui/utils') || id.includes('@mui/base')) {
               return 'mui-core'
             }
-            if (id.includes('@mui/material/styles') || id.includes('@mui/system') || 
-                id.includes('@emotion')) {
-              return 'mui-core'
-            }
-            
-            // MUI common components - frequently used across app
-            if (id.includes('@mui/material/Button') || 
-                id.includes('@mui/material/TextField') ||
-                id.includes('@mui/material/Box') ||
-                id.includes('@mui/material/Typography') ||
-                id.includes('@mui/material/Container') ||
-                id.includes('@mui/material/Grid') ||
-                id.includes('@mui/material/Paper') ||
-                id.includes('@mui/material/Card') ||
-                id.includes('@mui/material/Dialog') ||
-                id.includes('@mui/material/IconButton') ||
-                id.includes('@mui/material/Tooltip') ||
-                id.includes('@mui/material/CircularProgress') ||
-                id.includes('@mui/material/Alert') ||
-                id.includes('@mui/material/Snackbar')) {
-              return 'mui-common'
-            }
-            
-            // All other @mui/material components
             if (id.includes('@mui/material')) {
-              return 'mui-common'
+              return 'mui-material'
             }
-            
             if (id.includes('@mui/x-data-grid')) {
-              return 'mui-data'
+              return 'mui-datagrid'
             }
             if (id.includes('@mui/x-date-pickers')) {
-              return 'mui-date-pickers'
+              return 'mui-datepicker'
             }
             if (id.includes('@mui/icons-material')) {
               return 'mui-icons'
@@ -403,30 +371,27 @@ export default defineConfig({
               return 'charts-kline'
             }
             if (id.includes('lodash-es')) {
-              return 'utils'
+              return 'lodash'
             }
           }
           
-          // Market features in separate bundle (code only, not dependencies)
-          if (id.includes('/features/market/')) {
-            // Market listings and forms
-            if (id.includes('/listings/') || id.includes('ListingForm') || id.includes('ListingCard')) {
-              return 'market-listings'
-            }
-            // Market stock management
-            if (id.includes('/stock/') || id.includes('Stock')) {
+          // Split market by user journey (lazy-loaded routes)
+          if (!id.includes('node_modules')) {
+            // Stock management (seller journey)
+            if (id.includes('/features/market/stock/') || 
+                id.includes('/features/market/components/stock/') ||
+                id.includes('ManageStock') || id.includes('ItemStock')) {
               return 'market-stock'
             }
-            // Market allocation
-            if (id.includes('/allocation/')) {
+            // Order allocation (seller fulfillment)
+            if (id.includes('/features/market/components/allocation/')) {
               return 'market-allocation'
             }
-            // Market search and filters
-            if (id.includes('Search') || id.includes('Sidebar') || id.includes('Filter')) {
-              return 'market-search'
+            // Listing forms (create/edit journey)
+            if (id.includes('ListingForm') || id.includes('BuyOrderForm') || 
+                id.includes('MarketCreate') || id.includes('EditView')) {
+              return 'market-forms'
             }
-            // Everything else in market (API, types, hooks, smaller components)
-            return 'market-core'
           }
         },
       },
