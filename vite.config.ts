@@ -343,8 +343,11 @@ export default defineConfig({
         assetFileNames: "assets/[name]-[hash].[ext]",
         manualChunks(id) {
           if (id.includes('node_modules')) {
+            if (id.includes('react/jsx-runtime') || id.includes('react/jsx-dev-runtime')) {
+              return 'react'
+            }
             if (id.includes('react') || id.includes('react-dom') || 
-                id.includes('react-router') || id.includes('react/jsx-runtime')) {
+                id.includes('react-router')) {
               return 'react'
             }
             if (id.includes('@mui/material') || id.includes('@emotion') || 
