@@ -347,14 +347,14 @@ export default defineConfig({
                 id.includes('react-router')) {
               return 'react'
             }
+            if (id.includes('@reduxjs/toolkit') || id.includes('react-redux') || id.includes('redux')) {
+              return 'redux'
+            }
             if (id.includes('@mui')) {
               return 'mui'
             }
             if (id.includes('@emotion')) {
               return 'mui'
-            }
-            if (id.includes('@reduxjs/toolkit') || id.includes('react-redux')) {
-              return 'redux'
             }
             if (id.includes('apexcharts') || id.includes('react-apexcharts')) {
               return 'charts-apex'
