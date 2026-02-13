@@ -8,11 +8,11 @@ import {
   useGetMarketListingQuery,
   useGetMultipleByIdQuery,
 } from "../../features/market/api/marketApi"
-import { MarketListingView } from "../../views/market/MarketListingView"
-import { MarketListingViewSkeleton } from "../../views/market/MarketListingView"
+import { MarketListingView } from "../../features/market/views/MarketListingView"
+import { MarketListingViewSkeleton } from "../../features/market/views/MarketListingView"
 import { Page } from "../../components/metadata/Page"
 import { PageBreadcrumbs } from "../../components/navigation"
-import { MarketListingEditView } from "../../views/market/MarketListingEditView"
+import { MarketListingEditView } from "../../features/market/views/MarketListingEditView"
 import { Button, Grid } from "@mui/material"
 import ShoppingCartRoundedIcon from "@mui/icons-material/ShoppingCartRounded"
 import { MarketMultipleEditView } from "../../features/market/components/MarketMultipleEditView"

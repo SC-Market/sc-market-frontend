@@ -7,14 +7,14 @@ import {
   useGetMarketListingQuery,
   useGetMultipleByIdQuery,
 } from "../../features/market"
-import { MarketListingView } from "../../views/market/MarketListingView"
+import { MarketListingView } from "../../features/market/views/MarketListingView"
 import { Page } from "../../components/metadata/Page"
-import { MarketListingEditView } from "../../views/market/MarketListingEditView"
+import { MarketListingEditView } from "../../features/market/views/MarketListingEditView"
 import { Button, Grid } from "@mui/material"
 import ShoppingCartRoundedIcon from "@mui/icons-material/ShoppingCartRounded"
 import { BackArrow } from "../../components/button/BackArrow"
-import { MarketMultipleView } from "../../views/market/MarketMultipleView"
-import { MarketListingViewSkeleton } from "../../views/market/MarketListingView"
+import { MarketMultipleView } from "../../features/market/views/MarketMultipleView"
+import { MarketListingViewSkeleton } from "../../features/market/views/MarketListingView"
 import { useTranslation } from "react-i18next"
 import {
   shouldRedirectTo404,

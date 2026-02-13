@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
 import { Divider, Grid, IconButton } from "@mui/material"
-import { AllItemListings } from "../../views/market/ItemListings"
+import { AllItemListings } from "../../features/market/views/ItemListings"
 import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
 import CloseIcon from "@mui/icons-material/CloseRounded"
