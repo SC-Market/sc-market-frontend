@@ -351,7 +351,8 @@ export default defineConfig({
             if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) {
               return 'react-core'
             }
-            // MUI utilities must be checked before @mui/material to avoid splitting
+            
+            // MUI core - styles, system, emotion, utils, base
             if (id.includes('@mui/utils') || id.includes('@mui/base')) {
               return 'mui-core'
             }
@@ -359,9 +360,30 @@ export default defineConfig({
                 id.includes('@emotion')) {
               return 'mui-core'
             }
+            
+            // MUI common components - frequently used across app
+            if (id.includes('@mui/material/Button') || 
+                id.includes('@mui/material/TextField') ||
+                id.includes('@mui/material/Box') ||
+                id.includes('@mui/material/Typography') ||
+                id.includes('@mui/material/Container') ||
+                id.includes('@mui/material/Grid') ||
+                id.includes('@mui/material/Paper') ||
+                id.includes('@mui/material/Card') ||
+                id.includes('@mui/material/Dialog') ||
+                id.includes('@mui/material/IconButton') ||
+                id.includes('@mui/material/Tooltip') ||
+                id.includes('@mui/material/CircularProgress') ||
+                id.includes('@mui/material/Alert') ||
+                id.includes('@mui/material/Snackbar')) {
+              return 'mui-common'
+            }
+            
+            // All other @mui/material components
             if (id.includes('@mui/material')) {
               return 'mui-common'
             }
+            
             if (id.includes('@mui/x-data-grid')) {
               return 'mui-data'
             }
