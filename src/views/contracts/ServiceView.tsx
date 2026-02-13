@@ -33,7 +33,7 @@ import {
 } from "@mui/icons-material"
 import { orderIcons, Service } from "../../datatypes/Order"
 import { MarkdownRender } from "../../components/markdown/Markdown"
-import { dateDiffInDays } from "../market/MarketListingView"
+import { dateDiffInDays } from "../../util/dateDiff"
 import { statusColors } from "../orders/OrderList"
 import { ImagePreviewPaper } from "../../components/paper/ImagePreviewPaper"
 import { PAYMENT_TYPE_MAP } from "../../util/constants"

@@ -46,7 +46,7 @@ import { DatePickerProvider } from "../../../components/providers/DatePickerProv
 const PageSearch = lazy(() =>
   import("./PageSearch").then((module) => ({ default: module.PageSearch })),
 )
-import { DisplayListingsHorizontal } from "../../../views/market/ItemListings"
+import { DisplayListingsHorizontal } from "../views/ItemListings"
 import { NumericFormat } from "react-number-format"
 import { FormPaper } from "../../../components/paper/FormPaper"
 import {
