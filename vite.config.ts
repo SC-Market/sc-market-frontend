@@ -377,6 +377,10 @@ export default defineConfig({
           
           // Split market by user journey (lazy-loaded routes)
           if (!id.includes('node_modules')) {
+            // Cart/checkout (buyer journey)
+            if (id.includes('MarketCart')) {
+              return 'market-cart'
+            }
             // Stock management (seller journey)
             if (id.includes('/features/market/stock/') || 
                 id.includes('/features/market/components/stock/') ||
@@ -391,6 +395,11 @@ export default defineConfig({
             if (id.includes('ListingForm') || id.includes('BuyOrderForm') || 
                 id.includes('MarketCreate') || id.includes('EditView')) {
               return 'market-forms'
+            }
+            // Detailed views (single listing/aggregate pages)
+            if (id.includes('MarketListingView') || id.includes('MarketAggregateView') || 
+                id.includes('MarketMultipleView')) {
+              return 'market-views'
             }
           }
         },
