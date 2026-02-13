@@ -8,14 +8,12 @@ import { IconButton, Grid, Divider, Paper, useMediaQuery } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { Page } from "../../../components/metadata/Page"
-import {
-  BuyOrderActions,
-  HideOnScroll,
-  MarketNavArea,
-  MarketSidebar,
-  MarketSideBarToggleButton,
-  MarketSearchArea,
-} from "../../../features/market"
+import { BuyOrderActions } from "../../market/components/MarketActions"
+import { HideOnScroll } from "../../market/components/MarketNavArea"
+import { MarketNavArea } from "../../market/components/MarketNavArea"
+import { MarketSidebar } from "../../market/components/MarketSidebar"
+import { MarketSideBarToggleButton } from "../../market/components/MarketSidebar"
+import { MarketSearchArea } from "../../market/components/MarketSidebar"
 import { MarketSidebarContext, useMarketSearch } from "../../market"
 import { useTranslation } from "react-i18next"
 

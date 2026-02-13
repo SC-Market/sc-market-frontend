@@ -3,12 +3,10 @@ import { Grid, Paper, useMediaQuery } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { ItemListings } from "../../market/views/ItemListings"
-import {
-  MarketSidebarContext,
-  MarketSidebar,
-  MarketSideBarToggleButton,
-  MarketSearchArea,
-} from "../../market"
+import { MarketSidebarContext } from "../../market/hooks/MarketSidebar"
+import { MarketSidebar } from "../../market/components/MarketSidebar"
+import { MarketSideBarToggleButton } from "../../market/components/MarketSidebar"
+import { MarketSearchArea } from "../../market/components/MarketSidebar"
 
 export function ProfileStoreView(props: { user: string }) {
   const { user } = props
