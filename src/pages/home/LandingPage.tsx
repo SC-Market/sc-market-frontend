@@ -31,8 +31,10 @@ import { Footer } from "../../components/footer/Footer"
 import ExpandLess from "@mui/icons-material/ExpandLess"
 import ExpandMore from "@mui/icons-material/ExpandMore"
 import { MarkdownRender } from "../../components/markdown/Markdown"
-import { useGetMarketStatsQuery } from "../../features/market/api/marketApi"
-import { useSearchMarketListingsQuery } from "../../features/market/api/marketApi"
+import {
+  useGetMarketStatsQuery,
+  useSearchMarketListingsQuery,
+} from "../../features/market"
 import { DisplayListingsHorizontal } from "../../views/market/ItemListings"
 import { CURRENT_CUSTOM_ORG } from "../../hooks/contractor/CustomDomain"
 import { Link, Navigate } from "react-router-dom"
