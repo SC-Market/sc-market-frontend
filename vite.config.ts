@@ -392,12 +392,6 @@ export default defineConfig({
           // Utility libraries
           utils: ["lodash-es"],
         },
-        manualChunks(id) {
-          // Market features in separate bundle
-          if (id.includes('/features/market/')) {
-            return 'market'
-          }
-        },
       },
     },
   },
