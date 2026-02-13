@@ -1,7 +1,8 @@
 import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import React from "react"
 import { Navigate } from "react-router-dom"
-import { ProfileSkeleton, ViewProfile } from "../../features/profile"
+import { ProfileSkeleton } from "../../features/profile/components/ProfileSkeleton"
+import { ViewProfile } from "../../features/profile/components/ViewProfile"
 import {
   useGetUserByUsernameQuery,
   useGetUserProfileQuery,

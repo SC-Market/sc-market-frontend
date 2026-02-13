@@ -10,9 +10,9 @@ import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { Page } from "../../../components/metadata/Page"
 import {
   MarketActions,
-  HideOnScroll,
-  MarketNavArea,
-} from "../../../features/market"
+} from "../../market/components/MarketActions"
+import { HideOnScroll } from "../../market/components/MarketNavArea"
+import { MarketNavArea } from "../../market/components/MarketNavArea"
 import { MarketSidebarContext, useMarketSearch } from "../../market"
 import { useTranslation } from "react-i18next"
 
