@@ -357,9 +357,6 @@ export default defineConfig({
             if (id.includes('@mui/x-data-grid')) {
               return 'mui-data'
             }
-            if (id.includes('@mui/x-date-pickers')) {
-              return 'mui-date-pickers'
-            }
             if (id.includes('@mui/icons-material')) {
               return 'mui-icons'
             }
