@@ -346,11 +346,9 @@ export default defineConfig({
             if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) {
               return 'react'
             }
-            if (id.includes('@emotion') || id.includes('@mui/system') || id.includes('@mui/utils') || id.includes('@mui/base')) {
-              return 'mui-core'
-            }
-            if (id.includes('@mui/material')) {
-              return 'mui-material'
+            if (id.includes('@mui/material') || id.includes('@emotion') || 
+                id.includes('@mui/system') || id.includes('@mui/utils') || id.includes('@mui/base')) {
+              return 'mui'
             }
             if (id.includes('@mui/x-data-grid')) {
               return 'mui-datagrid'
