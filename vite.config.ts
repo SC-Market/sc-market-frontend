@@ -405,6 +405,8 @@ export default defineConfig({
       "react-router-dom",
       "@mui/material",
       "@mui/icons-material",
+      "@reduxjs/toolkit",
+      "react-redux",
     ],
   },
   server: {
