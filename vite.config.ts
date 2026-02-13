@@ -376,24 +376,7 @@ export default defineConfig({
           
           // Market features in separate bundle (code only, not dependencies)
           if (id.includes('/features/market/')) {
-            // Market listings and forms
-            if (id.includes('/listings/') || id.includes('ListingForm') || id.includes('ListingCard')) {
-              return 'market-listings'
-            }
-            // Market stock management
-            if (id.includes('/stock/') || id.includes('Stock')) {
-              return 'market-stock'
-            }
-            // Market allocation
-            if (id.includes('/allocation/')) {
-              return 'market-allocation'
-            }
-            // Market search and filters
-            if (id.includes('Search') || id.includes('Sidebar') || id.includes('Filter')) {
-              return 'market-search'
-            }
-            // Everything else in market (API, types, hooks, smaller components)
-            return 'market-core'
+            return 'market'
           }
         },
       },

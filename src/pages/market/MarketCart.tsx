@@ -28,7 +28,7 @@ import { useGetContractorBySpectrumIDQuery } from "../../store/contractor"
 import {
   useGetMarketListingQuery,
   usePurchaseMarketListingMutation,
-} from "../../features/market/api/marketApi"
+} from "../../features/market"
 import { LocalOfferRounded } from "@mui/icons-material"
 import { TrashCan } from "mdi-material-ui"
 import LoadingButton from "@mui/lab/LoadingButton"
