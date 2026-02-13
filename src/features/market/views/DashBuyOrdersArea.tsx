@@ -15,19 +15,19 @@ import {
   useGetBuyOrderListingsQuery,
   useCancelBuyOrderMutation,
   type MarketAggregate,
-} from "../../features/market"
-import { useGetUserProfileQuery } from "../../store/profile"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
+} from ".."
+import { useGetUserProfileQuery } from "../../../store/profile"
+import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { useTheme } from "@mui/material/styles"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { useTranslation } from "react-i18next"
 import {
   ControlledTable,
   HeadCell,
-} from "../../components/table/PaginatedTable"
-import { PullToRefresh } from "../../components/gestures"
-import { EmptyState } from "../../components/empty-states"
-import { BaseSkeleton } from "../../components/skeletons/BaseSkeleton"
+} from "../../../components/table/PaginatedTable"
+import { PullToRefresh } from "../../../components/gestures"
+import { EmptyState } from "../../../components/empty-states"
+import { BaseSkeleton } from "../../../components/skeletons/BaseSkeleton"
 
 /** Row shape for the buy orders table (flattened from aggregate + buy_order) */
 export interface BuyOrderDashboardRow {

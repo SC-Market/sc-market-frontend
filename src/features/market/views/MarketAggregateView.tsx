@@ -31,10 +31,10 @@ import {
   useTheme,
   useMediaQuery,
 } from "@mui/material"
-import { HapticButton } from "../../components/haptic"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
-import { useGetUserProfileQuery } from "../../store/profile"
+import { HapticButton } from "../../../components/haptic"
+import { ExtendedTheme } from "../../../hooks/styles/Theme"
+import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
+import { useGetUserProfileQuery } from "../../../store/profile"
 import {
   AddShoppingCartRounded,
   EditRounded,
@@ -45,34 +45,34 @@ import {
   BuyOrder,
   MarketAggregate,
   MarketAggregateListing,
-} from "../../features/market"
+} from ".."
 import {
   useMarketCancelBuyOrderMutation,
   useMarketFulfillBuyOrderMutation,
   useMarketGetAggregateChartByIDQuery,
   useMarketGetAggregateHistoryByIDQuery,
   useMarketUpdateAggregateAdminMutation,
-} from "../../features/market"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
-import { MarkdownRender } from "../../components/markdown/Markdown"
+} from ".."
+import { useAlertHook } from "../../../hooks/alert/AlertHook"
+import { MarkdownRender } from "../../../components/markdown/Markdown"
 import { useCookies } from "react-cookie"
-import { FRONTEND_URL } from "../../util/constants"
-import { Cart } from "../../datatypes/Cart"
+import { FRONTEND_URL } from "../../../util/constants"
+import { Cart } from "../../../datatypes/Cart"
 import { Link, Navigate, useNavigate } from "react-router-dom"
-import { ListingNameAndRating } from "../../components/rating/ListingRating"
-import { HeadCell, PaginatedTable } from "../../components/table/PaginatedTable"
+import { ListingNameAndRating } from "../../../components/rating/ListingRating"
+import { HeadCell, PaginatedTable } from "../../../components/table/PaginatedTable"
 import { Helmet } from "react-helmet"
-import { ImagePreviewModal } from "../../components/modal/ImagePreviewModal"
-import { ImageSearch } from "../../features/market/components/ImageSearch"
-import { useCurrentMarketListing } from "../../features/market"
-import { BuyOrderForm } from "../../features/market"
-import { Rating } from "../../datatypes/Contractor"
-import { HeaderTitle } from "../../components/typography/HeaderTitle"
-import { Section } from "../../components/paper/Section"
+import { ImagePreviewModal } from "../../../components/modal/ImagePreviewModal"
+import { ImageSearch } from "../components/ImageSearch"
+import { useCurrentMarketListing } from ".."
+import { BuyOrderForm } from ".."
+import { Rating } from "../../../datatypes/Contractor"
+import { HeaderTitle } from "../../../components/typography/HeaderTitle"
+import { Section } from "../../../components/paper/Section"
 import {
   DynamicApexChart,
   DynamicKlineChart,
-} from "../../components/charts/DynamicCharts"
+} from "../../../components/charts/DynamicCharts"
 import { NumericFormat } from "react-number-format"
 import { Stack } from "@mui/system"
 import { useTranslation } from "react-i18next" // Localization

@@ -17,7 +17,7 @@ import { getRelativeTime } from "../../util/time"
 import React from "react"
 import { useContractAppOpen } from "../../hooks/contract/ContractApp"
 import { MarkdownRender } from "../../components/markdown/Markdown"
-import { dateDiffInDays } from "../market/MarketListingView"
+import { dateDiffInDays } from "../../util/dateDiff"
 import { useTranslation } from "react-i18next" //  i18n
 
 export function ViewContract(props: { listing: Order }) {

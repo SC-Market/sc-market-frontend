@@ -8,7 +8,7 @@ import { useGetServiceByIdQuery } from "../../store/services"
 import { Navigate, useParams } from "react-router-dom"
 import { ServiceView } from "../../views/contracts/ServiceView"
 import { SentOffersArea } from "../../views/offers/ReceivedOffersArea"
-import { BuyOrdersViewPaginated } from "../../views/market/DashBuyOrdersArea"
+import { BuyOrdersViewPaginated } from "../../features/market/views/DashBuyOrdersArea"
 import { useTranslation } from "react-i18next"
 import {
   shouldRedirectTo404,

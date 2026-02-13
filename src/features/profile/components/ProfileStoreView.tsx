@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { Grid, Paper, useMediaQuery } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
-import { ItemListings } from "../../../views/market/ItemListings"
+import { ItemListings } from "../../market/views/ItemListings"
 import {
   MarketSidebarContext,
   MarketSidebar,

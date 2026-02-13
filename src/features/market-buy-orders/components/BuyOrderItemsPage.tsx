@@ -20,7 +20,7 @@ import { MarketSidebarContext, useMarketSearch } from "../../market"
 import { useTranslation } from "react-i18next"
 
 const BuyOrders = React.lazy(() =>
-  import("../../../views/market/ItemListings").then((module) => ({
+  import("../../market/views/ItemListings").then((module) => ({
     default: module.BuyOrders,
   })),
 )
