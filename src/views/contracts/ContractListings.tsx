@@ -26,7 +26,7 @@ import {
 } from "../../store/public_contracts"
 import { MarkdownRender } from "../../components/markdown/Markdown"
 import { useContractSearch } from "../../hooks/contract/ContractSearch"
-import { dateDiffInDays } from "../market/MarketListingView"
+import { dateDiffInDays } from "../../util/dateDiff"
 import { PAYMENT_TYPE_MAP } from "../../util/constants"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"

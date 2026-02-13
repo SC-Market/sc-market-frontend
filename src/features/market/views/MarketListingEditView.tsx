@@ -15,8 +15,8 @@ import {
   Paper,
   TextField,
 } from "@mui/material"
-import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
-import { useGetUserProfileQuery } from "../../store/profile"
+import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
+import { useGetUserProfileQuery } from "../../../store/profile"
 import {
   AddAPhotoRounded,
   ArchiveRounded,
@@ -24,27 +24,27 @@ import {
   RadioButtonCheckedRounded,
   RadioButtonUncheckedRounded,
 } from "@mui/icons-material"
-import { useGetContractorBySpectrumIDQuery } from "../../store/contractor"
-import { useCurrentMarketListing } from "../../features/market"
+import { useGetContractorBySpectrumIDQuery } from "../../../store/contractor"
+import { useCurrentMarketListing } from ".."
 import {
   useMarketUpdateListingMutation,
   useMarketUploadListingPhotosMutation,
   useUpdateMarketListingMutation,
   validatePhotoUploadParams,
-} from "../../features/market"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
-import { MarkdownEditor } from "../../components/markdown/Markdown"
+} from ".."
+import { useAlertHook } from "../../../hooks/alert/AlertHook"
+import { MarkdownEditor } from "../../../components/markdown/Markdown"
 import { Navigate } from "react-router-dom"
-import { ImageSearch } from "../../features/market/components/ImageSearch"
-import { MISSING_IMAGE_URL } from "../../hooks/styles/Theme"
-import { MarketListingUpdateBody, UniqueListing } from "../../features/market"
-import { has_permission } from "../contractor/OrgRoles"
+import { ImageSearch } from "../components/ImageSearch"
+import { MISSING_IMAGE_URL } from "../../../hooks/styles/Theme"
+import { MarketListingUpdateBody, UniqueListing } from ".."
+import { has_permission } from "../../../views/contractor/OrgRoles"
 import { NumericFormat } from "react-number-format"
-import { SelectGameItemStack } from "../../components/select/SelectGameItem"
-import { SelectPhotosArea } from "../../components/modal/SelectPhotosArea"
+import { SelectGameItemStack } from "../../../components/select/SelectGameItem"
+import { SelectPhotosArea } from "../../../components/modal/SelectPhotosArea"
 import { useTranslation } from "react-i18next" // Localization
 import { useTheme } from "@mui/material/styles"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { ExtendedTheme } from "../../../hooks/styles/Theme"
 
 export function MarketListingEditView() {
   const { t } = useTranslation() // Localization hook

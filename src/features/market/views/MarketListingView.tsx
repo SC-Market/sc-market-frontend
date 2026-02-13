@@ -14,7 +14,6 @@ import {
   InputAdornment,
   Link as MaterialLink,
   TextField,
-  Rating,
   Typography,
   Skeleton,
   TablePagination,
@@ -22,13 +21,13 @@ import {
   Tab,
   useMediaQuery,
 } from "@mui/material"
-import { HapticButton } from "../../components/haptic"
+import { HapticButton } from "../../../components/haptic"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom"
-import { getRelativeTime } from "../../util/time"
-import { Section } from "../../components/paper/Section"
-import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
-import { useGetUserProfileQuery } from "../../store/profile"
+import { getRelativeTime } from "../../../util/time"
+import { Section } from "../../../components/paper/Section"
+import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
+import { useGetUserProfileQuery } from "../../../store/profile"
 import {
   AddShoppingCartRounded,
   CreateRounded,
@@ -37,410 +36,40 @@ import {
   RefreshRounded,
   WarningRounded,
   VisibilityRounded,
-  StarRounded,
 } from "@mui/icons-material"
-import { useCurrentMarketListing } from "../../features/market"
-import { BaseListingType, UniqueListing } from "../../features/market"
+import { useCurrentMarketListing } from "../hooks/CurrentMarketItem"
+import { BaseListingType, UniqueListing } from ".."
 import {
   useMarketTrackListingViewMutation,
   useMarketGetListingOrdersQuery,
   useCreateListingBidMutation,
-} from "../../features/market"
-import { AggregateLink } from "../../features/market"
-import { OrderList } from "../../components/list/OrderList"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
-import { MarkdownRender } from "../../components/markdown/Markdown"
-import { Bids } from "../../features/market"
-import { useGetGameItemAttributesQuery } from "../../store/api/attributes"
+} from "../api/marketApi"
+import { AggregateLink } from "../components/AggregateLink"
+import { OrderList } from "../../../components/list/OrderList"
+import { useAlertHook } from "../../../hooks/alert/AlertHook"
+import { MarkdownRender } from "../../../components/markdown/Markdown"
+import { Bids } from "../components/Bids"
+import { useGetGameItemAttributesQuery } from "../../../store/api/attributes"
 import { Helmet } from "react-helmet"
 import { useCookies } from "react-cookie"
-import { Cart } from "../../datatypes/Cart"
-import { ListingNameAndRating } from "../../components/rating/ListingRating"
-import { has_permission } from "../contractor/OrgRoles"
-import { BACKEND_URL, FRONTEND_URL } from "../../util/constants"
+import { Cart } from "../../../datatypes/Cart"
+import { ListingNameAndRating } from "../../../components/rating/ListingRating"
+import { has_permission } from "../../../views/contractor/OrgRoles"
+import { BACKEND_URL, FRONTEND_URL } from "../../../util/constants"
 import { NumericFormat } from "react-number-format"
 import { Stack } from "@mui/system"
-import { ImagePreviewPaper } from "../../components/paper/ImagePreviewPaper"
+import { ImagePreviewPaper } from "../../../components/paper/ImagePreviewPaper"
 import { subDays } from "date-fns"
 import { ClockAlert } from "mdi-material-ui"
 import { useTranslation } from "react-i18next"
-import { ReportButton } from "../../components/button/ReportButton"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { DisplayListingsHorizontal } from "./ItemListings"
+import { ReportButton } from "../../../components/button/ReportButton"
+import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { useTheme } from "@mui/material/styles"
-import { useSearchMarketQuery } from "../../features/market"
-import { useGetUserOrderReviews } from "../../store/profile"
-import { useGetContractorReviewsQuery } from "../../store/contractor"
-import { OrderReview } from "../../datatypes/Order"
-import { HorizontalListingSkeleton } from "../../components/skeletons"
-
-export function SellerOtherListings(props: {
-  userSeller?: { username: string } | null
-  contractorSeller?: { spectrum_id: string } | null
-  currentListingId: string
-}) {
-  const { t } = useTranslation()
-  const theme = useTheme<ExtendedTheme>()
-  const { userSeller, contractorSeller, currentListingId } = props
-
-  // Get other listings from the same seller
-  const searchParams = useMemo(() => {
-    if (!userSeller && !contractorSeller) return null
-
-    return {
-      index: 0,
-      page_size: 8, // Get a few more than we need in case current listing is included
-      quantityAvailable: 1,
-      sort: "date-new",
-      listing_type: "not-aggregate",
-      user_seller: userSeller?.username || "",
-      contractor_seller: contractorSeller?.spectrum_id || "",
-    }
-  }, [userSeller?.username, contractorSeller?.spectrum_id])
-
-  const {
-    data: results,
-    isLoading,
-    isFetching,
-  } = useSearchMarketQuery(searchParams!, {
-    skip: !searchParams,
-  })
-
-  // Filter out the current listing and convert to legacy format
-  const otherListings = useMemo(() => {
-    if (!results?.listings) return []
-
-    return results.listings.filter((l) => l.listing_id !== currentListingId) // exclude current listing
-  }, [results?.listings, currentListingId])
-
-  const sellerName = userSeller?.username || contractorSeller?.spectrum_id || ""
-
-  // Show skeletons while loading
-  if (isLoading || isFetching) {
-    return (
-      <Grid item xs={12}>
-        <Box sx={{ mb: 2 }}>
-          <Typography
-            variant="h6"
-            color="text.secondary"
-            fontWeight="bold"
-            gutterBottom
-          >
-            {t("MarketListingView.otherListingsFrom", {
-              seller: sellerName,
-              defaultValue: `Other listings from ${sellerName}`,
-            })}
-          </Typography>
-          <Box
-            sx={{
-              maxWidth: "100%",
-              overflowX: "scroll",
-              pb: 1,
-              display: "flex",
-            }}
-          >
-            {[1, 2, 3, 4, 5, 6, 7, 8].map((item, index) => (
-              <HorizontalListingSkeleton key={index} index={index} />
-            ))}
-          </Box>
-        </Box>
-      </Grid>
-    )
-  }
-
-  // Don't show section if no other listings
-  if (!otherListings.length) return null
-
-  return (
-    <Grid item xs={12}>
-      <Box sx={{ mb: 2 }}>
-        <Typography
-          variant="h6"
-          color="text.secondary"
-          fontWeight="bold"
-          gutterBottom
-        >
-          {t("MarketListingView.otherListingsFrom", {
-            seller: sellerName,
-            defaultValue: `Other listings from ${sellerName}`,
-          })}
-        </Typography>
-        <Box
-          sx={{
-            maxWidth: "100%",
-            overflowX: "scroll",
-            pb: 1, // Add some padding for scrollbar
-          }}
-        >
-          <DisplayListingsHorizontal listings={otherListings} />
-        </Box>
-      </Box>
-    </Grid>
-  )
-}
-
-export function SellerReviews(props: {
-  userSeller?: { username: string } | null
-  contractorSeller?: { spectrum_id: string } | null
-}) {
-  const { t } = useTranslation()
-  const theme = useTheme<ExtendedTheme>()
-  const { userSeller, contractorSeller } = props
-
-  // Get reviews for user or contractor
-  const { data: userReviews, isLoading: userReviewsLoading } =
-    useGetUserOrderReviews(userSeller?.username || "", {
-      skip: !userSeller?.username,
-    })
-
-  const { data: contractorReviews, isLoading: contractorReviewsLoading } =
-    useGetContractorReviewsQuery(contractorSeller?.spectrum_id || "", {
-      skip: !contractorSeller?.spectrum_id,
-    })
-
-  const reviews = useMemo(() => {
-    const allReviews = userReviews || contractorReviews || []
-    return allReviews.slice(0, 3) // Show max 3 recent reviews
-  }, [userReviews, contractorReviews])
-
-  const isLoading = userReviewsLoading || contractorReviewsLoading
-  const sellerName = userSeller?.username || contractorSeller?.spectrum_id || ""
-  const totalReviews = userReviews?.length || contractorReviews?.length || 0
-
-  // Don't show section if no seller info, still loading, or no reviews
-  if (!sellerName || isLoading || !reviews.length) return null
-
-  return (
-    <Grid item xs={12}>
-      <Box sx={{ mb: 3 }}>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            mb: 2,
-          }}
-        >
-          <Typography variant="h6" color="text.secondary" fontWeight="bold">
-            {t("MarketListingView.sellerReviews", {
-              seller: sellerName,
-              defaultValue: `Reviews for ${sellerName}`,
-            })}
-          </Typography>
-          {totalReviews > 3 && (
-            <MaterialLink
-              component={Link}
-              to={
-                userSeller
-                  ? `/user/${userSeller.username}/reviews`
-                  : `/contractor/${contractorSeller?.spectrum_id}/reviews`
-              }
-              underline="hover"
-              color="primary"
-              variant="body2"
-            >
-              {t(
-                "MarketListingView.viewAllReviews",
-                "View all {{count}} reviews",
-                { count: totalReviews },
-              )}
-            </MaterialLink>
-          )}
-        </Box>
-        <Grid container spacing={theme.layoutSpacing.component}>
-          {reviews.map((review: OrderReview) => (
-            <Grid item xs={12} md={4} key={review.review_id}>
-              <Box
-                sx={{
-                  p: 2,
-                  border: 1,
-                  borderColor: "divider",
-                  height: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  transition: "border-color 0.2s",
-                  "&:hover": {
-                    borderColor: "primary.main",
-                  },
-                }}
-              >
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    mb: 1,
-                  }}
-                >
-                  <Rating
-                    value={review.rating}
-                    max={5}
-                    readOnly
-                    size="small"
-                    icon={<StarRounded fontSize="inherit" />}
-                  />
-                  <Typography variant="caption" color="text.secondary">
-                    {getRelativeTime(new Date(review.timestamp))}
-                  </Typography>
-                </Box>
-                <Typography
-                  variant="body2"
-                  color="text.primary"
-                  sx={{
-                    flexGrow: 1,
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    display: "-webkit-box",
-                    WebkitLineClamp: 3,
-                    WebkitBoxOrient: "vertical",
-                    mb: 1,
-                  }}
-                >
-                  {review.content ||
-                    t("MarketListingView.noReviewContent", "No review content")}
-                </Typography>
-                <Divider light sx={{ mb: 1 }} />
-                <Typography variant="caption" color="text.secondary">
-                  {t("MarketListingView.reviewBy", "by")}{" "}
-                  {review.user_author?.display_name ||
-                    review.contractor_author?.name ||
-                    t("MarketListingView.anonymousReviewer", "Anonymous")}
-                </Typography>
-              </Box>
-            </Grid>
-          ))}
-        </Grid>
-      </Box>
-    </Grid>
-  )
-}
-
-export function RelatedListings(props: {
-  itemType: string
-  currentListingId: string
-}) {
-  const { t } = useTranslation()
-  const { itemType, currentListingId } = props
-
-  // Get related listings from the same item type/category
-  const searchParams = useMemo(
-    () => ({
-      index: 0,
-      page_size: 8, // Get a few more than we need in case current listing is included
-      quantityAvailable: 1,
-      sort: "date-new",
-      listing_type: "not-aggregate",
-      item_type: itemType,
-      user_seller: "",
-      contractor_seller: "",
-    }),
-    [itemType],
-  )
-
-  const {
-    data: results,
-    isLoading,
-    isFetching,
-  } = useSearchMarketQuery(searchParams)
-
-  // Filter out the current listing and convert to legacy format
-  const relatedListings = useMemo(() => {
-    if (!results?.listings) return []
-
-    return results.listings.filter((l) => l.listing_id !== currentListingId) // Exclude current listing
-  }, [results?.listings, currentListingId])
-
-  // Show skeletons while loading
-  if (isLoading || isFetching) {
-    return (
-      <Grid item xs={12}>
-        <Box sx={{ mb: 2 }}>
-          <Typography
-            variant="h6"
-            color="text.secondary"
-            fontWeight="bold"
-            gutterBottom
-          >
-            {t("MarketListingView.relatedListings", {
-              category: itemType,
-              defaultValue: `Related ${itemType} listings`,
-            })}
-          </Typography>
-          <Box
-            sx={{
-              maxWidth: "100%",
-              overflowX: "scroll",
-              pb: 1,
-              display: "flex",
-            }}
-          >
-            {[1, 2, 3, 4, 5, 6, 7, 8].map((item, index) => (
-              <HorizontalListingSkeleton key={index} index={index} />
-            ))}
-          </Box>
-        </Box>
-      </Grid>
-    )
-  }
-
-  // Don't show section if no related listings
-  if (!relatedListings.length) return null
-
-  return (
-    <Grid item xs={12}>
-      <Box sx={{ mb: 2 }}>
-        <Typography
-          variant="h6"
-          color="text.secondary"
-          fontWeight="bold"
-          gutterBottom
-        >
-          {t("MarketListingView.relatedListings", {
-            category: itemType,
-            defaultValue: `Related ${itemType} listings`,
-          })}
-        </Typography>
-        <Box
-          sx={{
-            maxWidth: "100%",
-            overflowX: "scroll",
-            pb: 1, // Add some padding for scrollbar
-          }}
-        >
-          <DisplayListingsHorizontal listings={relatedListings} />
-        </Box>
-      </Box>
-    </Grid>
-  )
-}
-
-export function ListingDetailItem(props: {
-  icon: React.ReactNode
-  children: React.ReactNode
-}) {
-  const theme = useTheme<ExtendedTheme>()
-  return (
-    <Stack
-      direction={"row"}
-      alignItems={"center"}
-      spacing={theme.layoutSpacing.compact}
-    >
-      {props.icon}
-      <Typography color={"text.primary"} variant={"subtitle2"}>
-        {props.children}
-      </Typography>
-    </Stack>
-  )
-}
-
-export function dateDiffInDays(a: Date, b: Date) {
-  const _MS_PER_DAY = 1000 * 60 * 60 * 24
-  // Discard the time and time-zone information.
-  const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate())
-  const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate())
-
-  return Math.abs((utc2 - utc1) / _MS_PER_DAY)
-}
+import { SellerOtherListings } from "../listing-view/components/SellerOtherListings"
+import { SellerReviews } from "../listing-view/components/SellerReviews"
+import { RelatedListings } from "../listing-view/components/RelatedListings"
+import { ListingDetailItem } from "../listing-view/components/ListingDetailItem"
+import { dateDiffInDays } from "../../../util/dateDiff"
 
 export function PurchaseArea(props: { listing: BaseListingType }) {
   const { t } = useTranslation()

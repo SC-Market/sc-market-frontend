@@ -1,4 +1,4 @@
-import { createDynamicImport } from "../../util/dynamicImports"
+import { createDynamicImport } from "../../../util/dynamicImports"
 
 // Dynamic imports for heavy market components
 export const DynamicMarketListingView = createDynamicImport(() =>
@@ -22,7 +22,7 @@ export const DynamicItemListings = createDynamicImport(() =>
 )
 
 export const DynamicItemStock = createDynamicImport(() =>
-  import("../../features/market/components/ItemStock").then((m) => ({
+  import("../components/ItemStock").then((m) => ({
     default: m.MyItemStock,
   })),
 )

@@ -17,35 +17,33 @@ import {
   Typography,
 } from "@mui/material"
 import { Link } from "react-router-dom"
-import { getRelativeTime } from "../../util/time"
-import { Section } from "../../components/paper/Section"
-import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
-import { useGetUserProfileQuery } from "../../store/profile"
+import { getRelativeTime } from "../../../util/time"
+import { Section } from "../../../components/paper/Section"
+import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
+import { useGetUserProfileQuery } from "../../../store/profile"
 import {
   CreateRounded,
   PersonRounded,
   RefreshRounded,
   ZoomInRounded,
 } from "@mui/icons-material"
-import { useCurrentMarketListing } from "../../features/market"
-import { MarketMultiple } from "../../features/market"
-import { UserList } from "../../components/list/UserList"
-import { OrderList } from "../../components/list/OrderList"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
-import { MarkdownRender } from "../../components/markdown/Markdown"
+import { useCurrentMarketListing } from ".."
+import { MarketMultiple } from ".."
+import { UserList } from "../../../components/list/UserList"
+import { OrderList } from "../../../components/list/OrderList"
+import { useAlertHook } from "../../../hooks/alert/AlertHook"
+import { MarkdownRender } from "../../../components/markdown/Markdown"
 import { Helmet } from "react-helmet"
-import { FRONTEND_URL } from "../../util/constants"
-import { ListingNameAndRating } from "../../components/rating/ListingRating"
-import { has_permission } from "../contractor/OrgRoles"
-import { ImagePreviewModal } from "../../components/modal/ImagePreviewModal"
-import {
-  dateDiffInDays,
-  ListingDetailItem,
-  PurchaseArea,
-} from "./MarketListingView"
+import { FRONTEND_URL } from "../../../util/constants"
+import { ListingNameAndRating } from "../../../components/rating/ListingRating"
+import { has_permission } from "../../../views/contractor/OrgRoles"
+import { ImagePreviewModal } from "../../../components/modal/ImagePreviewModal"
+import { PurchaseArea } from "./MarketListingView"
+import { ListingDetailItem } from "../listing-view/components/ListingDetailItem"
+import { dateDiffInDays } from "../../../util/dateDiff"
 import { Stack } from "@mui/system"
 import { useTheme } from "@mui/material/styles"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { subDays } from "date-fns"
 import { ClockAlert } from "mdi-material-ui"
 import { useTranslation } from "react-i18next"

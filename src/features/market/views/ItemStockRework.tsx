@@ -15,7 +15,7 @@ import {
 } from "@mui/x-data-grid"
 import React, { useCallback, useEffect } from "react"
 import { Stack } from "@mui/system"
-import { MinimalUser } from "../../datatypes/User"
+import { MinimalUser } from "../../../datatypes/User"
 import {
   Autocomplete,
   Button,
@@ -41,15 +41,15 @@ import {
   SaveRounded,
   ShoppingCartRounded,
 } from "@mui/icons-material"
-import { useGetUserProfileQuery } from "../../store/profile"
-import { UserProfileState } from "../../hooks/login/UserProfile"
-import { UserAvatar } from "../../components/avatar/UserAvatar"
-import { ThemedDataGrid } from "../../components/grid/ThemedDataGrid"
-import { SelectMarketListing } from "../../components/select/SelectMarketListing.tsx"
-import { UniqueListing } from "../../features/market"
+import { useGetUserProfileQuery } from "../../../store/profile"
+import { UserProfileState } from "../../../hooks/login/UserProfile"
+import { UserAvatar } from "../../../components/avatar/UserAvatar"
+import { ThemedDataGrid } from "../../../components/grid/ThemedDataGrid"
+import { SelectMarketListing } from "../../../components/select/SelectMarketListing.tsx"
+import { UniqueListing } from ".."
 import { NumericFormat } from "react-number-format"
 import { useTheme } from "@mui/material/styles"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { useTranslation } from "react-i18next" // Added for localization
 
 interface StockEntry extends GridValidRowModel {
