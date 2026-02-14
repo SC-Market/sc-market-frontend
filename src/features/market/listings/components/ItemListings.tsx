@@ -421,8 +421,7 @@ export function DisplayListingsMin(props: {
   }, [listings, loading, startIndex, disableAds])
 
   // Use virtualization for large lists (50+ items)
-  const shouldVirtualize =
-    useVirtualization && listingsWithAds.length > 50
+  const shouldVirtualize = false // Disabled to maintain consistent fixed-width layout
 
   if (loading) {
     const marketSidebarOpen = useMarketSidebarExp()
