@@ -27,7 +27,7 @@ export function MultipleListing(props: {
   return (
     <Box
       sx={{
-        width: { xs: "calc(50% - 8px)", sm: "calc(50% - 12px)", md: 250 },
+        width: { xs: "calc(50% - 4px)", sm: "calc(50% - 8px)", md: 250 },
         flexShrink: 0,
       }}
     >
