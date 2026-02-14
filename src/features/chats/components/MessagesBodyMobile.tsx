@@ -52,13 +52,12 @@ import { WS_URL } from "../../../util/constants"
 import { useDispatch } from "react-redux"
 import type { AppDispatch } from "../../../store/store"
 import SCMarketLogo from "../../../assets/scmarket-logo.webp"
-import { DateTimePicker } from "@mui/x-date-pickers"
+import { LazyDateTimePicker as DateTimePicker } from "../../../components/providers/LazyDateTimePicker"
 import { getTime } from "date-fns"
 import { useTranslation } from "react-i18next"
 import { MarkdownRender } from "../../../components/markdown/Markdown"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { LongPressMenu } from "../../../components/gestures"
-import { DatePickerProvider } from "../../../components/providers/DatePickerProvider"
 import { MobileFAB } from "../../../components/mobile/MobileFAB"
 import { BottomSheet } from "../../../components/mobile"
 import { ContentCopyRounded } from "@mui/icons-material"
@@ -656,7 +655,7 @@ function DateTimePickerBottomSheetMobile(props: {
       disableBackdropClose={pickerOpen}
     >
       <Stack spacing={2}>
-        <DatePickerProvider>
+        
           <DateTimePicker
             value={dateTime}
             onChange={(newValue) => {
@@ -679,7 +678,7 @@ function DateTimePickerBottomSheetMobile(props: {
             },
           }}
           />
-        </DatePickerProvider>
+        
 
         <Stack direction="row" spacing={1}>
           <Button

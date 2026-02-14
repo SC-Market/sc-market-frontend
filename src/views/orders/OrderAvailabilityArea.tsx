@@ -1,6 +1,6 @@
 import { Order } from "../../datatypes/Order"
 import { AvailabilityDisplay } from "../../components/time/AvailabilitySelector"
-import { convertAvailability } from "../../pages/availability/Availability"
+import { convertAvailability } from "../../pages/availability/Availability.lazy"
 import React from "react"
 import { OfferSession } from "../../store/offer"
 import { MinimalUser } from "../../datatypes/User"

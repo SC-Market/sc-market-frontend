@@ -14,11 +14,10 @@ import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { MarketAggregate } from "../domain/types"
 import { HeaderTitle } from "../../../components/typography/HeaderTitle"
-import { DateTimePicker } from "@mui/x-date-pickers"
+import { LazyDateTimePicker as DateTimePicker } from "../../../components/providers/LazyDateTimePicker"
 import { addDays, endOfDay } from "date-fns"
 import { useCreateBuyOrderMutation } from "../api/marketApi"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
-import { DatePickerProvider } from "../../../components/providers/DatePickerProvider"
 import { useNavigate } from "react-router-dom"
 import { NumericFormat } from "react-number-format"
 import { useTranslation } from "react-i18next"
@@ -276,7 +275,7 @@ export function BuyOrderForm(props: { aggregate: MarketAggregate }) {
               <Divider />
             </Grid>
             <Grid item xs={12} display={"flex"} justifyContent={"right"}>
-              <DatePickerProvider>
+              
                 <DateTimePicker
                   label={t("buyorder.expiration", {
                     tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
@@ -300,7 +299,7 @@ export function BuyOrderForm(props: { aggregate: MarketAggregate }) {
                   },
                 }}
                 />
-              </DatePickerProvider>
+              
               <div id="expiry-date-help" className="sr-only">
                 {t(
                   "accessibility.expiryDateHelp",

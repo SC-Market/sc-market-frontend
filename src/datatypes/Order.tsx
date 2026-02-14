@@ -1,6 +1,6 @@
 import { MinimalUser, User } from "./User"
 import { Contractor, MinimalContractor } from "./Contractor"
-import { ContractKindIconKey } from "../views/contracts/ServiceListings"
+import { ContractKindIconKey } from "../views/contracts/ServiceListings.lazy"
 import HandymanRoundedIcon from "@mui/icons-material/HandymanRounded"
 import GppGoodRoundedIcon from "@mui/icons-material/GppGoodRounded"
 import FlightRoundedIcon from "@mui/icons-material/FlightRounded"

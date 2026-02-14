@@ -1,6 +1,6 @@
 import React from "react"
 import { Grid, Paper, Typography } from "@mui/material"
-import { ServiceListingBase } from "../contracts/ServiceListings"
+import { ServiceListingBase } from "../contracts/ServiceListings.lazy"
 import { Stack } from "@mui/system"
 import { Order } from "../../datatypes/Order"
 import { useGetServiceByIdQuery } from "../../store/services"

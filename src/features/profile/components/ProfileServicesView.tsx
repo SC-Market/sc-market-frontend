@@ -7,7 +7,7 @@ import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { ServiceSidebarContext } from "../../../hooks/contract/ServiceSidebar"
 import { ServiceSidebar } from "../../../views/contracts/ServiceSidebar"
 import { ServiceSearchArea } from "../../../views/services/ServiceSearchArea"
-import { ServiceListings } from "../../../views/contracts/ServiceListings"
+import { ServiceListings } from "../../../views/contracts/ServiceListings.lazy"
 import { useBottomNavHeight } from "../../../hooks/layout/useBottomNavHeight"
 
 export function ProfileServicesView(props: { user: string }) {

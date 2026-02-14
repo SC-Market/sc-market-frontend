@@ -4,7 +4,8 @@
  * Displays all stock lots that are currently allocated to orders
  */
 
-import { DataGrid, GridColDef } from "@mui/x-data-grid"
+import { GridColDef } from "@mui/x-data-grid"
+import { LazyDataGrid as DataGrid } from "../../../../components/grid/LazyDataGrid"
 import { Paper, Typography, Box, Chip, Avatar } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"

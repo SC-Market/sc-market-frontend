@@ -37,10 +37,9 @@ import {
   KeyboardArrowUpRounded,
 } from "@mui/icons-material"
 import { MarkdownEditor } from "../../../components/markdown/Markdown"
-import { DateTimePicker } from "@mui/x-date-pickers"
+import { LazyDateTimePicker as DateTimePicker } from "../../../components/providers/LazyDateTimePicker"
 import { useNavigate } from "react-router-dom"
 import { Suspense, lazy } from "react"
-import { DatePickerProvider } from "../../../components/providers/DatePickerProvider"
 
 // Lazy load heavy modal components
 const PageSearch = lazy(() =>
@@ -565,7 +564,7 @@ export function MarketListingForm(props: { sale_type: "sale" | "auction" }) {
               </div>
             </Grid>
             <Grid item>
-              <DatePickerProvider>
+              
                 <DateTimePicker
                   label={t("MarketListingForm.endTime", {
                     tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
@@ -584,7 +583,7 @@ export function MarketListingForm(props: { sale_type: "sale" | "auction" }) {
                   },
                 }}
                 />
-              </DatePickerProvider>
+              
               <div id="end-time-help" className="sr-only">
                 {t(
                   "accessibility.endTimeHelp",

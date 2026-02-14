@@ -57,6 +57,10 @@ export function ItemMarketView() {
                 xs: theme.layoutSpacing.component,
                 sm: theme.layoutSpacing.layout,
               }}
+              rowSpacing={{
+                xs: theme.layoutSpacing.component,
+                sm: theme.layoutSpacing.layout,
+              }}
             >
               <ItemListings />
             </Grid>

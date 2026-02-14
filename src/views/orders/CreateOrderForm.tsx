@@ -47,7 +47,7 @@ import {
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { CheckCircle, Warning } from "@mui/icons-material"
 import { AvailabilitySelector } from "../../components/time/AvailabilitySelector"
-import { convertAvailability } from "../../pages/availability/Availability"
+import { convertAvailability } from "../../pages/availability/Availability.lazy"
 import { OrderLimitsDisplay } from "../../components/orders/OrderLimitsDisplay"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"

@@ -6,13 +6,13 @@
 
 import React, { useState, useCallback } from "react"
 import {
-  DataGrid,
   GridColDef,
   GridRowsProp,
   GridRenderEditCellParams,
   GridRenderCellParams,
   useGridApiContext,
 } from "@mui/x-data-grid"
+import { LazyDataGrid as DataGrid } from "../../../../components/grid/LazyDataGrid"
 import {
   Paper,
   Typography,
