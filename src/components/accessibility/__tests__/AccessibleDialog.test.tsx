@@ -201,7 +201,7 @@ describe('AccessibleDialog', () => {
   
   it('manages focus with initialFocus prop', async () => {
     function TestComponent() {
-      const submitButtonRef = useRef<HTMLButtonElement>(null)
+      const submitButtonRef = useRef<HTMLButtonElement | null>(null)
       
       return (
         <TestWrapper>

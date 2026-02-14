@@ -148,7 +148,7 @@ export function AllStockLotsGrid() {
             <Typography variant="body2">{option.title}</Typography>
           </Box>
         )}
-        renderInput={(params) => <TextField {...params} size="large" />}
+        renderInput={(params) => <TextField {...params} size="medium" />}
         fullWidth
         size="medium"
         disablePortal={false}
@@ -191,7 +191,7 @@ export function AllStockLotsGrid() {
         renderInput={(params) => (
           <TextField
             {...params}
-            size="large"
+            size="medium"
             placeholder={t("AllStockLots.selectLocation", "Select location...")}
           />
         )}
@@ -288,7 +288,7 @@ export function AllStockLotsGrid() {
       headerName: t("AllStockLots.quantity", "Quantity"),
       flex: 1,
       editable: true,
-      type: "number",
+      type: "number" as const,
       valueParser: (value: string) => {
         const parsed = Number(value)
         return isNaN(parsed) ? 0 : Math.max(0, parsed)

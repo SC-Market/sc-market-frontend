@@ -52,26 +52,27 @@ export async function preloadLocales(locales: string[]): Promise<void> {
 }
 
 export async function getMuiLocales(languageCode: string) {
-  const [pickers, grid] = await Promise.all([
-    import("@mui/x-date-pickers/locales").then(m => {
-      switch (languageCode) {
-        case "uk": return m.ukUA
-        case "zh-CN": return m.zhCN
-        default: return m.enUS
-      }
-    }),
-    import("@mui/x-data-grid/locales").then(m => {
-      switch (languageCode) {
-        case "uk": return m.ukUA
-        case "zh-CN": return m.zhCN
-        default: return m.enUS
-      }
-    })
-  ])
+  const pickers = await import("@mui/x-date-pickers/locales").then(m => {
+    switch (languageCode) {
+      case "uk": return m.ukUA
+      case "zh-CN": return m.zhCN
+      default: return m.enUS
+    }
+  })
 
   const core = languageCode === "uk" ? coreUkUA : languageCode === "zh-CN" ? coreZhCN : coreEnUS
 
-  return { core, pickers, grid }
+  return { core, pickers }
+}
+
+export async function getMuiDataGridLocale(languageCode: string) {
+  return import("@mui/x-data-grid/locales").then(m => {
+    switch (languageCode) {
+      case "uk": return m.ukUA
+      case "zh-CN": return m.zhCN
+      default: return m.enUS
+    }
+  })
 }
 
 i18n
