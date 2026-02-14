@@ -54,6 +54,10 @@ export function Root(props: { children: React.ReactNode }) {
       <Navbar />
       <Sidebar />
       <Box
+        component="main"
+        id="main-content"
+        role="main"
+        aria-label="Main content"
         sx={{
           display: "flex",
           flexDirection: "column", // Vertical layout for main content

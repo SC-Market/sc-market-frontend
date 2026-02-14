@@ -98,148 +98,141 @@ export function AllStockLotsGrid() {
 
   // Memoize edit cell renderers to prevent hook issues
   const renderListingEditCell = useCallback(
-    (props: GridRenderEditCellParams) => <ListingEditCell {...props} />,
-    [],
+    (props: GridRenderEditCellParams) => {
+      const { id, value, field } = props
+      const apiRef = useGridApiContext()
+      const [inputValue, setInputValue] = React.useState("")
+
+      const { data: searchData } = useSearchMarketListingsQuery({
+        query: inputValue,
+        page_size: 20,
+        user_seller: currentOrg ? undefined : profile?.username,
+        contractor_seller: currentOrg?.spectrum_id,
+        statuses: "active,inactive",
+        listing_type: "unique",
+      })
+
+      const options = searchData?.listings || []
+      const selectedListing = options.find((l) => l.listing_id === value)
+
+      const handleChange = (
+        _: React.SyntheticEvent,
+        newValue: (typeof options)[0] | null,
+      ) => {
+        apiRef.current.setEditCellValue({
+          id,
+          field,
+          value: newValue?.listing_id || "",
+        })
+      }
+
+      return (
+        <Autocomplete
+          value={selectedListing || null}
+          onChange={handleChange}
+          inputValue={inputValue}
+          onInputChange={(_, newValue) => setInputValue(newValue)}
+          options={options}
+          getOptionLabel={(option) => option.title}
+          renderOption={(props, option) => (
+            <Box
+              component="li"
+              {...props}
+              sx={{ display: "flex", alignItems: "center", gap: 1 }}
+            >
+              <Avatar
+                src={option.photo}
+                variant="rounded"
+                sx={{ width: 32, height: 32 }}
+              />
+              <Typography variant="body2">{option.title}</Typography>
+            </Box>
+          )}
+          renderInput={(params) => (
+            <TextField {...params} size="small" />
+          )}
+          fullWidth
+          size="small"
+          sx={{ height: "100%" }}
+        />
+      )
+    },
+    [currentOrg, profile],
   )
 
   const renderLocationEditCell = useCallback(
     (props: GridRenderEditCellParams) => {
       const { id, value, field } = props
       const apiRef = useGridApiContext()
+      const [inputValue, setInputValue] = React.useState("")
 
-      const handleChange = (locationId: string | null) => {
+      const filteredLocations = locations.filter((loc) =>
+        loc.name.toLowerCase().includes(inputValue.toLowerCase()),
+      )
+
+      const selectedLocation = locations.find((l) => l.location_id === value)
+
+      const handleChange = (
+        _: React.SyntheticEvent,
+        newValue: (typeof locations)[0] | null,
+      ) => {
         apiRef.current.setEditCellValue({
           id,
           field,
-          value: locationId,
+          value: newValue?.location_id || null,
         })
       }
 
       return (
-        <LocationSelector
-          value={value}
+        <Autocomplete
+          value={selectedLocation || null}
           onChange={handleChange}
-          locations={locations}
-          size="small"
+          inputValue={inputValue}
+          onInputChange={(_, newValue) => setInputValue(newValue)}
+          options={filteredLocations}
+          getOptionLabel={(option) => option.name}
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              size="small"
+              placeholder={t("AllStockLots.selectLocation", "Select location...")}
+            />
+          )}
           fullWidth
+          size="small"
           sx={{ height: "100%" }}
         />
       )
     },
-    [locations],
+    [locations, t],
   )
 
   // Custom edit component for owner selection
-  function OwnerEditCell(props: GridRenderEditCellParams) {
-    const { id, value, field } = props
-    const apiRef = useGridApiContext()
-
-    const handleMemberSelect = (member: any) => {
-      // Convert username to user_id by looking up in contractor members
-      // For now, store the username and we'll need to resolve it on save
-      apiRef.current.setEditCellValue({
-        id,
-        field,
-        value: member?.username || null,
-      })
-    }
-
-    return (
-      <OrgMemberSearch
-        fullWidth
-        size="small"
-        onMemberSelect={handleMemberSelect}
-        placeholder={t("AllStockLots.selectOwner", "Select owner...")}
-        sx={{ height: "100%" }}
-      />
-    )
-  }
-
   const renderOwnerEditCell = useCallback(
-    (props: GridRenderEditCellParams) => <OwnerEditCell {...props} />,
-    [],
+    (props: GridRenderEditCellParams) => {
+      const { id, value, field } = props
+      const apiRef = useGridApiContext()
+
+      const handleMemberSelect = (member: any) => {
+        apiRef.current.setEditCellValue({
+          id,
+          field,
+          value: member?.username || null,
+        })
+      }
+
+      return (
+        <OrgMemberSearch
+          fullWidth
+          size="small"
+          onMemberSelect={handleMemberSelect}
+          placeholder={t("AllStockLots.selectOwner", "Select owner...")}
+          sx={{ height: "100%" }}
+        />
+      )
+    },
+    [t],
   )
-
-  // Custom edit component for listing selection
-  function ListingEditCell(props: GridRenderEditCellParams) {
-    const { id, value, field } = props
-    const apiRef = useGridApiContext()
-    const [inputValue, setInputValue] = React.useState("")
-
-    const { data: searchData } = useSearchMarketListingsQuery({
-      query: inputValue,
-      page_size: 20,
-      user_seller: currentOrg ? undefined : profile?.username,
-      contractor_seller: currentOrg?.spectrum_id,
-      statuses: "active,inactive",
-      listing_type: "unique",
-    })
-
-    const options = searchData?.listings || []
-    const selectedListing = options.find((l) => l.listing_id === value)
-
-    const handleChange = (
-      _: React.SyntheticEvent,
-      newValue: (typeof options)[0] | null,
-    ) => {
-      apiRef.current.setEditCellValue({
-        id,
-        field,
-        value: newValue?.listing_id || "",
-      })
-    }
-
-    return (
-      <Autocomplete
-        value={selectedListing || null}
-        onChange={handleChange}
-        inputValue={inputValue}
-        onInputChange={(_, newValue) => setInputValue(newValue)}
-        options={options}
-        getOptionLabel={(option) => option.title}
-        renderOption={(props, option) => (
-          <Box
-            component="li"
-            {...props}
-            sx={{ display: "flex", alignItems: "center", gap: 1 }}
-          >
-            <Avatar
-              src={option.photo}
-              variant="rounded"
-              sx={{ width: 32, height: 32 }}
-            />
-            <Typography variant="body2">{option.title}</Typography>
-          </Box>
-        )}
-        renderInput={(params) => <TextField {...params} />}
-        fullWidth
-        sx={{ height: "100%" }}
-      />
-    )
-  }
-
-  // Custom edit component for location selection
-  function LocationEditCell(props: GridRenderEditCellParams) {
-    const { id, value, field } = props
-    const apiRef = useGridApiContext()
-
-    const handleChange = (locationId: string | null) => {
-      apiRef.current.setEditCellValue({
-        id,
-        field,
-        value: locationId,
-      })
-    }
-
-    return (
-      <LocationSelector
-        value={value}
-        onChange={handleChange}
-        locations={locations}
-        size="small"
-      />
-    )
-  }
 
   // Map lots to rows
   // Filter out allocated lots (they show in AllAllocatedLotsGrid)
@@ -289,6 +282,11 @@ export function AllStockLotsGrid() {
       headerName: t("AllStockLots.quantity", "Quantity"),
       flex: 1,
       editable: true,
+      type: "number",
+      valueParser: (value: string) => {
+        const parsed = Number(value)
+        return isNaN(parsed) ? 0 : Math.max(0, parsed)
+      },
     },
     {
       field: "owner_username",
@@ -411,7 +409,7 @@ export function AllStockLotsGrid() {
       const result = await updateLot({
         lot_id: newRow.lot_id,
         listing_id: newRow.listing_id,
-        quantity: newRow.quantity,
+        quantity: Number(newRow.quantity),
         location_id: newRow.location_id,
         owner_username: newRow.owner_username || null,
         listed: newRow.listed,
@@ -450,7 +448,7 @@ export function AllStockLotsGrid() {
 
       await createLot({
         listing_id: row.listing_id,
-        quantity: row.quantity || 0,
+        quantity: Number(row.quantity) || 0,
         location_id: row.location_id || null,
         owner_username: ownerUsername,
         listed: row.listed ?? true,
