@@ -10,6 +10,7 @@ import {
 import { BaseSkeleton } from "./BaseSkeleton"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTheme } from "@mui/material/styles"
+import { ListingWrapper } from "../../features/market/components/listings/ListingCard"
 
 export interface HorizontalListingSkeletonProps {
   index?: number
@@ -26,15 +27,7 @@ export function HorizontalListingSkeleton({
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
 
   return (
-    <Box
-      sx={{
-        marginLeft: 1,
-        marginRight: 1,
-        width: isMobile ? 200 : 250,
-        display: "inline-block",
-        flexShrink: 0,
-      }}
-    >
+    <ListingWrapper>
       <CardActionArea
         sx={{ borderRadius: theme.spacing(theme.borderRadius.topLevel) }}
       >
@@ -220,6 +213,6 @@ export function HorizontalListingSkeleton({
               </CardContent>
             </Card>
           </CardActionArea>
-    </Box>
+    </ListingWrapper>
   )
 }
