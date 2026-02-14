@@ -424,9 +424,9 @@ export function DisplayListingsMin(props: {
     return injectAds(listings, MARKET_ADS, startIndex)
   }, [listings, loading, startIndex, disableAds])
 
-  // Use virtualization for large lists (50+ items) or on mobile
+  // Use virtualization for large lists (50+ items)
   const shouldVirtualize =
-    useVirtualization && (listingsWithAds.length > 50 || isMobile)
+    useVirtualization && listingsWithAds.length > 50
 
   if (loading) {
     const marketSidebarOpen = useMarketSidebarExp()
@@ -448,16 +448,9 @@ export function DisplayListingsMin(props: {
     // For virtualized grid, we render ItemListingBase directly (not wrapped in Grid item)
     return (
       <Grid item xs={12}>
-        <Box
-          sx={{
-            // Remove fixed height on <900px devices to allow natural page scrolling
-            height: { xs: "auto", sm: "auto", md: "calc(100vh - 400px)" },
-            minHeight: { xs: "auto", sm: "auto", md: 600 },
-          }}
-        >
-          <VirtualizedGrid
-            items={listingsWithAds}
-            renderItem={(item, index) => {
+        <VirtualizedGrid
+          items={listingsWithAds}
+          renderItem={(item, index) => {
               const key = isListing(item)
                 ? item.listing_id
                 : `ad-${item.id}-${index}`
@@ -508,7 +501,6 @@ export function DisplayListingsMin(props: {
             }}
             overscan={3}
           />
-        </Box>
       </Grid>
     )
   }
