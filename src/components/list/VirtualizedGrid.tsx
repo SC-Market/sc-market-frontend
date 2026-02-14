@@ -171,14 +171,11 @@ export function VirtualizedGrid<T>(props: VirtualizedGridProps<T>) {
   const internalRef = useRef<HTMLDivElement>(null)
   const parentRef = externalRef || internalRef
 
-  // On mobile and medium devices (<900px), use document element scroll instead of container scroll for better UX
+  // Use document element scroll for better UX
   const getScrollElement = (): Element | null => {
-    if (isBelowMd) {
-      return typeof document !== "undefined"
-        ? (document.documentElement as Element)
-        : null
-    }
-    return parentRef.current
+    return typeof document !== "undefined"
+      ? (document.documentElement as Element)
+      : null
   }
 
   // Create virtualizer for rows
@@ -199,18 +196,15 @@ export function VirtualizedGrid<T>(props: VirtualizedGridProps<T>) {
 
   return (
     <Box
-      ref={isBelowMd ? undefined : parentRef} // Don't attach ref on <900px devices since we use window scroll
       sx={{
-        height: isBelowMd ? "auto" : "100%", // Auto height on <900px devices for natural flow
+        height: "auto",
         width: "100%",
-        overflow: isBelowMd ? "visible" : "auto", // No overflow on <900px devices, use window scroll
-        // Smooth scrolling
-        scrollBehavior: "smooth",
+        overflow: "visible",
       }}
     >
       <Box
         sx={{
-          height: isBelowMd ? "auto" : `${totalHeight}px`,
+          height: "auto",
           width: "100%",
           position: "relative",
         }}
@@ -224,18 +218,13 @@ export function VirtualizedGrid<T>(props: VirtualizedGridProps<T>) {
             <Box
               key={virtualRow.key}
               sx={{
-                position: isBelowMd ? "relative" : "absolute",
-                top: isBelowMd ? undefined : 0,
-                left: isBelowMd ? undefined : 0,
+                position: "relative",
                 width: "100%",
-                height: isBelowMd ? "auto" : `${virtualRow.size}px`,
-                transform: isBelowMd
-                  ? undefined
-                  : `translateY(${virtualRow.start}px)`,
+                height: "auto",
                 display: "grid",
                 gridTemplateColumns: `repeat(${cols}, 1fr)`,
                 gap: theme.spacing(gapValue),
-                marginBottom: isBelowMd ? theme.spacing(gapValue) : undefined,
+                marginBottom: theme.spacing(gapValue),
                 paddingX: {
                   xs: theme.spacing(1),
                   sm: theme.spacing(gapValue / 2),
