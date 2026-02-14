@@ -1,12 +1,11 @@
 import { Button, Stack } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../../hooks/styles/Theme"
-import { DateTimePicker } from "@mui/x-date-pickers"
+import { LazyDateTimePicker as DateTimePicker } from "../../../../components/providers/LazyDateTimePicker"
 import { getTime } from "date-fns"
 import { useTranslation } from "react-i18next"
 import { BottomSheet } from "../../../../components/mobile"
 import { useState } from "react"
-import { DatePickerProvider } from "../../../../components/providers/DatePickerProvider"
 
 export function DateTimePickerBottomSheet(props: {
   open: boolean
@@ -36,7 +35,7 @@ export function DateTimePickerBottomSheet(props: {
       disableBackdropClose={pickerOpen}
     >
       <Stack spacing={2}>
-        <DatePickerProvider>
+        
           <DateTimePicker
             value={dateTime}
             onChange={(newValue) => {
@@ -58,7 +57,7 @@ export function DateTimePickerBottomSheet(props: {
               },
             }}
           />
-        </DatePickerProvider>
+        
 
         <Stack direction="row" spacing={1}>
           <Button

@@ -13,24 +13,12 @@ import {
 } from "../../store/profile"
 import { Grid, Skeleton } from "@mui/material"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
-import { AvailabilitySelection } from "../../hooks/login/UserProfile"
 import { useTranslation } from "react-i18next"
+import { convertAvailability } from "../../util/availability"
 
 interface Span {
   start: number
   finish: number
-}
-
-export function convertAvailability(availability: AvailabilitySelection[]) {
-  const result = generateInitialSelection()
-
-  for (const span of availability) {
-    for (let i = span.start; i <= span.finish; i++) {
-      result[i] = true
-    }
-  }
-
-  return result
 }
 
 export function Availability() {

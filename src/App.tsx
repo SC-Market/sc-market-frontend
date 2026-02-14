@@ -10,7 +10,7 @@ import {
 } from "react-router-dom"
 import { PageFallback } from "./components/metadata/Page"
 import { PageSkeleton } from "./components/skeletons"
-import { FrontendErrorElement } from "./pages/errors/FrontendError"
+import { FrontendErrorElement } from "./pages/errors/FrontendError.lazy"
 import { RouteErrorFallback } from "./components/error-boundaries"
 import { startBackgroundPrefetch } from "./util/prefetch"
 import { SharedIntersectionObserver } from "./hooks/prefetch/usePrefetchOnVisible"

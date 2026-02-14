@@ -235,6 +235,7 @@ export function VirtualizedGrid<T>(props: VirtualizedGridProps<T>) {
                 display: "grid",
                 gridTemplateColumns: `repeat(${cols}, 1fr)`,
                 gap: theme.spacing(gapValue),
+                marginBottom: isBelowMd ? theme.spacing(gapValue) : undefined,
                 paddingX: {
                   xs: theme.spacing(1),
                   sm: theme.spacing(gapValue / 2),

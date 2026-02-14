@@ -1,7 +1,7 @@
 import { OfferSession } from "../../store/offer"
 import React from "react"
 import { Grid, Paper, Typography } from "@mui/material"
-import { ServiceListingBase } from "../../views/contracts/ServiceListings"
+import { ServiceListingBase } from "../../views/contracts/ServiceListings.lazy"
 import { Stack } from "@mui/system"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"

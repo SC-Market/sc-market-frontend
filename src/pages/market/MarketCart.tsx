@@ -59,7 +59,7 @@ import {
   AvailabilitySelector,
   AvailabilityDisplay,
 } from "../../components/time/AvailabilitySelector"
-import { convertAvailability } from "../../pages/availability/Availability"
+import { convertAvailability } from "../../pages/availability/Availability.lazy"
 import { OrderLimitsDisplay } from "../../components/orders/OrderLimitsDisplay"
 import { BottomSheet } from "../../components/mobile/BottomSheet"
 import { EmptyCart } from "../../components/empty-states"

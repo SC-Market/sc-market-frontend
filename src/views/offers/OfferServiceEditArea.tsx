@@ -1,7 +1,7 @@
 import { OfferSession } from "../../store/offer"
 import React, { useMemo } from "react"
 import { Grid, MenuItem, Paper, TextField, Typography } from "@mui/material"
-import { ServiceListingBase } from "../contracts/ServiceListings"
+import { ServiceListingBase } from "../contracts/ServiceListings.lazy"
 import { Stack } from "@mui/system"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import { useCounterOffer } from "../../hooks/offer/CounterOfferDetails"

@@ -1,6 +1,6 @@
 import { Container, Divider, Grid, Paper, useMediaQuery } from "@mui/material"
 import { ServiceSidebar } from "../contracts/ServiceSidebar"
-import { ServiceListings } from "../contracts/ServiceListings"
+import { ServiceListings } from "../contracts/ServiceListings.lazy"
 import { useServiceSidebar } from "../../hooks/contract/ServiceSidebar"
 import React from "react"
 import { useTheme } from "@mui/material/styles"
