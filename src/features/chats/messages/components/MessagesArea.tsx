@@ -39,7 +39,6 @@ export function MessagesArea(props: {
           borderWidth: 0,
           borderStyle: "solid",
           overflow: "auto",
-          maxHeight: props.maxHeight,
           WebkitOverflowScrolling: "touch",
           minHeight: 0,
           flex: 1,
