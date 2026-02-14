@@ -182,21 +182,11 @@ export function AggregateBuyOrderListing(props: {
   index: number
 }) {
   const { aggregate, index } = props
-  const marketSidebarOpen = useMarketSidebarExp()
 
   return (
-    <Grid
-      item
-      xs={marketSidebarOpen ? 12 : 6}
-      sm={marketSidebarOpen ? 12 : 6}
-      md={marketSidebarOpen ? 12 : 4}
-      lg={marketSidebarOpen ? 6 : 4}
-      xl={marketSidebarOpen ? 4 : 3}
-      xxl={marketSidebarOpen ? 4.8 : 2.4}
-      sx={{ transition: "0.3s" }}
-    >
+    <ListingWrapper>
       <AggregateBuyOrderListingBase aggregate={aggregate} index={index} />
-    </Grid>
+    </ListingWrapper>
   )
 }
 
@@ -208,7 +198,6 @@ export function AggregateBuyOrderListingBase(props: {
   const { aggregate, index } = props
   const { details, photos } = aggregate
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const maximum_price = useMemo(
     () =>
       aggregate.buy_orders.length
@@ -232,9 +221,8 @@ export function AggregateBuyOrderListingBase(props: {
     [aggregate.buy_orders],
   )
 
-  const cardHeight = isMobile ? 300 : 400
-  const mediaHeight =
-    theme.palette.mode === "dark" ? "100%" : isMobile ? 150 : 244
+  const cardHeight = 300
+  const mediaHeight = theme.palette.mode === "dark" ? "100%" : 150
   const contentSx =
     theme.palette.mode === "dark"
       ? { position: "absolute" as const, bottom: 0, zIndex: 4 }
@@ -299,20 +287,16 @@ export function AggregateBuyOrderListingBase(props: {
 
             <Box sx={contentSx}>
               <CardContent
-                sx={
-                  isMobile
-                    ? {
-                        padding: "8px 12px !important",
-                        "&:last-child": { pb: 1 },
-                      }
-                    : undefined
-                }
+                sx={{
+                  padding: "8px 12px !important",
+                  "&:last-child": { pb: 1 },
+                }}
               >
                 <Typography
-                  variant={isMobile ? "body1" : "h6"}
+                  variant="body1"
                   color="primary"
                   fontWeight="bold"
-                  sx={isMobile ? { fontSize: "0.95rem", mb: 0.5 } : undefined}
+                  sx={{ fontSize: "0.95rem", mb: 0.5 }}
                 >
                   {minimum_price.toLocaleString(undefined)} -{" "}
                   {maximum_price.toLocaleString(undefined)} aUEC/
@@ -322,19 +306,15 @@ export function AggregateBuyOrderListingBase(props: {
                   variant="subtitle2"
                   color="text.secondary"
                   sx={{
-                    ...(isMobile
-                      ? {
-                          fontSize: "0.75rem",
-                          lineHeight: 1.3,
-                          maxHeight: 36,
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                          display: "-webkit-box",
-                          WebkitLineClamp: 2,
-                          WebkitBoxOrient: "vertical" as const,
-                          mb: 0.5,
-                        }
-                      : { maxHeight: 60 }),
+                    fontSize: "0.75rem",
+                    lineHeight: 1.3,
+                    maxHeight: 36,
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    display: "-webkit-box",
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: "vertical" as const,
+                    mb: 0.5,
                   }}
                 >
                   {details.title} ({details.item_type})
@@ -343,11 +323,7 @@ export function AggregateBuyOrderListingBase(props: {
                   display="block"
                   color="text.primary"
                   variant="subtitle2"
-                  sx={
-                    isMobile
-                      ? { fontSize: "0.7rem", lineHeight: 1.2 }
-                      : undefined
-                  }
+                  sx={{ fontSize: "0.7rem", lineHeight: 1.2 }}
                 >
                   {sum_requested.toLocaleString(undefined)}{" "}
                   {t("market.total_requested")}
