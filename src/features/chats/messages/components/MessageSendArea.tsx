@@ -90,7 +90,7 @@ export function MessageSendArea(props: { onSend: (content: string) => void }) {
         multiline
         maxRows={isMobile ? 3 : 4}
         variant={"outlined"}
-        size={isMobile ? "small" : "medium"}
+        size="small"
         sx={{
           marginRight: { xs: 0, sm: 2 },
           marginBottom: { xs: 0, sm: 0 },
