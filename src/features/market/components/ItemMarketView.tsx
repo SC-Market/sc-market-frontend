@@ -42,12 +42,14 @@ export function ItemMarketView() {
 
           {/* Desktop: Persistent sidebar */}
           {!xs && (
-            <Grid item xs={12} md={2.25}>
+            <Grid item xs={12} md="auto">
               <Paper
                 sx={{
                   position: "sticky",
                   top: theme.spacing(2),
                   maxHeight: `calc(100vh - ${theme.spacing(4)})`,
+                  width: 300,
+                  flexShrink: 0,
                   overflowY: "auto",
                 }}
               >
@@ -57,7 +59,7 @@ export function ItemMarketView() {
           )}
 
           {/* Main content area */}
-          <Grid item xs={12} md={xs ? 12 : 9.75}>
+          <Grid item xs={12} md>
             <Box
               sx={{
                 display: "flex",
