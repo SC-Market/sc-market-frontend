@@ -65,7 +65,6 @@ export function ItemMarketView() {
                 display: "flex",
                 flexWrap: "wrap",
                 gap: 1,
-                justifyContent: { xs: "flex-start", md: "center" },
               }}
             >
               <ItemListings />
