@@ -4,7 +4,7 @@ import { ContainerGrid } from "../../../components/layout/ContainerGrid"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../../hooks/layout/Drawer"
 import CloseIcon from "@mui/icons-material/CloseRounded"
 import MenuIcon from "@mui/icons-material/MenuRounded"
-import { IconButton, Grid, Divider, Paper, useMediaQuery } from "@mui/material"
+import { Box, IconButton, Grid, Divider, Paper, useMediaQuery } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { Page } from "../../../components/metadata/Page"
@@ -77,24 +77,26 @@ export function BuyOrderItemsPage() {
             item
             xs={0}
             md={3}
-            sx={{ display: { xs: "none", md: "block" } }}
+            sx={{ display: { xs: "none", md: "block" }, width: 300, flexShrink: 0 }}
           >
             <Paper sx={{ padding: 1 }}>
               <MarketSearchArea />
             </Paper>
           </Grid>
 
-          <Grid
-            item
-            container
-            xs={12}
-            md={9}
-            spacing={theme.layoutSpacing.component}
-            sx={{ transition: "0.3s" }}
-          >
-            <Suspense fallback={<MarketTabLoader />}>
-              <BuyOrders />
-            </Suspense>
+          <Grid item xs={12} md={9}>
+            <Box
+              sx={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: 1,
+                pb: 3,
+              }}
+            >
+              <Suspense fallback={<MarketTabLoader />}>
+                <BuyOrders />
+              </Suspense>
+            </Box>
           </Grid>
         </ContainerGrid>
       </MarketSidebarContext.Provider>
