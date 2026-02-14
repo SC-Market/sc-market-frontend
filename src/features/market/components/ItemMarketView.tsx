@@ -1,5 +1,12 @@
 import { MarketSidebar } from "./MarketSidebar"
-import { Container, Divider, Grid, Paper, useMediaQuery } from "@mui/material"
+import {
+  Box,
+  Container,
+  Divider,
+  Grid,
+  Paper,
+  useMediaQuery,
+} from "@mui/material"
 import { HideOnScroll, MarketNavArea } from "./MarketNavArea"
 import { ItemListings } from "../views/ItemListings"
 import { useMarketSidebar } from ".."
