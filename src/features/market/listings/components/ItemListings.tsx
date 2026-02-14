@@ -178,7 +178,6 @@ export function DisplayListingsHorizontal(props: {
 }) {
   const { listings } = props
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
 
   return (
     <Grid item xs={12}>
@@ -188,15 +187,12 @@ export function DisplayListingsHorizontal(props: {
           overflowX: "scroll",
         }}
       >
-        <Box display={"flex"}>
+        <Box display={"flex"} gap={1}>
           {listings.map((item, index) => {
             return (
               <Box
                 sx={{
-                  marginLeft: 1,
-                  marginRight: 1,
-                  width: isMobile ? 200 : 250,
-                  display: "inline-block",
+                  width: 200,
                   flexShrink: 0,
                 }}
                 key={item.details_id}
