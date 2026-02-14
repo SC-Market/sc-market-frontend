@@ -4,11 +4,11 @@ import type { orderIcons } from "../../datatypes/Order"
 // Re-export type
 export type ContractKindIconKey = keyof typeof orderIcons
 
-// Lazy load components
+// Lazy load components from features
 export const ServiceListings = lazy(() =>
-  import("./ServiceListings").then((m) => ({ default: m.ServiceListings }))
+  import("../../features/services").then((m) => ({ default: m.ServiceListings }))
 )
 
 export const ServiceListingBase = lazy(() =>
-  import("./ServiceListings").then((m) => ({ default: m.ServiceListingBase }))
+  import("../../features/services").then((m) => ({ default: m.ServiceListingBase }))
 )
