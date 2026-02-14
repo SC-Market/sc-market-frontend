@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
-import { Divider, Grid, IconButton } from "@mui/material"
+import { Box, Divider, Grid, IconButton } from "@mui/material"
 import { AllItemListings } from "../../features/market/views/ItemListings"
 import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
@@ -65,15 +65,17 @@ export function AllMarketListings(props: {}) {
             <Divider light />
           </Grid>
 
-          <Grid
-            item
-            container
-            xs={12}
-            lg={12}
-            spacing={theme.layoutSpacing.layout}
-            sx={{ transition: "0.3s" }}
-          >
-            <AllItemListings status={"active"} />
+          <Grid item xs={12}>
+            <Box
+              sx={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: 1,
+                pb: 3,
+              }}
+            >
+              <AllItemListings status={"active"} />
+            </Box>
           </Grid>
 
           <Grid
@@ -92,15 +94,17 @@ export function AllMarketListings(props: {}) {
             <Divider light />
           </Grid>
 
-          <Grid
-            item
-            container
-            xs={12}
-            lg={12}
-            spacing={theme.layoutSpacing.layout}
-            sx={{ transition: "0.3s" }}
-          >
-            <AllItemListings status={"inactive"} />
+          <Grid item xs={12}>
+            <Box
+              sx={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: 1,
+                pb: 3,
+              }}
+            >
+              <AllItemListings status={"inactive"} />
+            </Box>
           </Grid>
 
           <Grid
@@ -119,15 +123,17 @@ export function AllMarketListings(props: {}) {
             <Divider light />
           </Grid>
 
-          <Grid
-            item
-            container
-            xs={12}
-            lg={12}
-            spacing={theme.layoutSpacing.layout}
-            sx={{ transition: "0.3s" }}
-          >
-            <AllItemListings status={"archived"} />
+          <Grid item xs={12}>
+            <Box
+              sx={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: 1,
+                pb: 3,
+              }}
+            >
+              <AllItemListings status={"archived"} />
+            </Box>
           </Grid>
         </ContainerGrid>
       </MarketSidebarContext.Provider>
