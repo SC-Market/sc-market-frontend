@@ -77,6 +77,7 @@ import { ExtendedTheme } from "../../../../hooks/styles/Theme"
 import { CURRENT_CUSTOM_ORG } from "../../../../hooks/contractor/CustomDomain"
 import { RecentListingsSkeleton } from "../../../../components/landing"
 import { getRelativeTime } from "../../../../util/time"
+import { ListingWrapper } from "../../components/listings/ListingCard"
 import {
   MarketListingRating,
   BadgeDisplay,
@@ -190,15 +191,9 @@ export function DisplayListingsHorizontal(props: {
         <Box display={"flex"} gap={1}>
           {listings.map((item, index) => {
             return (
-              <Box
-                sx={{
-                  width: 200,
-                  flexShrink: 0,
-                }}
-                key={item.details_id}
-              >
+              <ListingWrapper key={item.details_id}>
                 <ListingBase listing={item} index={index} />
-              </Box>
+              </ListingWrapper>
             )
           })}
         </Box>
