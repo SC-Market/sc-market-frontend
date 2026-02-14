@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Grid, Paper, useMediaQuery } from "@mui/material"
+import { Box, Grid, Paper, useMediaQuery } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { ItemListings } from "../../market/views/ItemListings"
@@ -29,13 +29,16 @@ export function ProfileStoreView(props: { user: string }) {
           </Paper>
         </Grid>
         <Grid item xs={12} md={9}>
-          <Grid
-            container
-            spacing={theme.layoutSpacing.layout}
-            justifyContent={"center"}
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 1,
+              pb: 3,
+            }}
           >
             <ItemListings user={user} />
-          </Grid>
+          </Box>
         </Grid>
       </Grid>
     </MarketSidebarContext.Provider>
@@ -63,13 +66,16 @@ export function OrgStoreView(props: { org: string }) {
           </Paper>
         </Grid>
         <Grid item xs={12} md={9}>
-          <Grid
-            container
-            spacing={theme.layoutSpacing.layout}
-            justifyContent={"center"}
+          <Box
+            sx={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: 1,
+              pb: 3,
+            }}
           >
             <ItemListings org={org} />
-          </Grid>
+          </Box>
         </Grid>
       </Grid>
     </MarketSidebarContext.Provider>
