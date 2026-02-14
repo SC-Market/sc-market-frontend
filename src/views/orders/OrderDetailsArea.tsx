@@ -69,6 +69,8 @@ import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownR
 export function OrderMessagesArea(props: { order: Order }) {
   const { order } = props
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
 
   const [currentChat, setCurrentChat] = useCurrentChat()
   const { data: chatObj } = useGetChatByOrderIDQuery(order.order_id!, {
@@ -103,9 +105,8 @@ export function OrderMessagesArea(props: { order: Order }) {
   return (
     <Paper
       sx={{
-        maxHeight: 600,
+        height: isMobile ? "calc(100vh - 200px)" : 600,
         display: "flex",
-        alignItems: "space-between",
         flexDirection: "column",
         overflow: "hidden",
       }}

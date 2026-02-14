@@ -111,10 +111,16 @@ export function MessageEntry2(props: { message: Message }) {
         </Stack>
         <Box
           sx={{
+            wordBreak: "break-word",
+            overflowWrap: "anywhere",
+            maxWidth: "100%",
             "& p": {
               margin: 0,
               marginBottom: 0.5,
               "&:last-child": { marginBottom: 0 },
+            },
+            "& a": {
+              wordBreak: "break-all",
             },
           }}
         >

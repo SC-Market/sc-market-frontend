@@ -1,4 +1,4 @@
-import { Link, Navigate, useParams } from "react-router-dom"
+import { Link, Navigate, useParams, useNavigate } from "react-router-dom"
 import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import React, { useMemo, useEffect, useState } from "react"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
@@ -42,6 +42,7 @@ import {
   useGetNotificationsQuery,
   useNotificationDeleteMutation,
 } from "../../store/notification"
+import { useGetChatByOrderIDQuery } from "../../features/chats"
 
 export function ViewOrder() {
   const { t } = useTranslation()
@@ -49,6 +50,7 @@ export function ViewOrder() {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const [activeTab, setActiveTab] = useState(0)
+  const navigate = useNavigate()
 
   const {
     data: order,
@@ -58,6 +60,10 @@ export function ViewOrder() {
   } = useGetOrderByIdQuery(id!)
   const { data: profile } = useGetUserProfileQuery()
   const [currentOrg] = useCurrentOrg()
+
+  const { data: chatObj } = useGetChatByOrderIDQuery(order?.order_id!, {
+    skip: !order?.order_id,
+  })
 
   // Get and delete message notifications for this order
   const { data: notificationsData } = useGetNotificationsQuery({
@@ -190,7 +196,20 @@ export function ViewOrder() {
           <Grid item xs={12}>
             <Tabs
               value={activeTab}
-              onChange={(_, newValue) => setActiveTab(newValue)}
+              onChange={(_, newValue) => {
+                // Calculate messages tab index
+                let tabIndex = 0
+                const detailsTab = tabIndex++
+                const messagesTab = isMobile && isAssigned ? tabIndex++ : -1
+                
+                // If clicking messages tab on mobile, navigate to chat
+                if (isMobile && newValue === messagesTab && chatObj?.chat_id) {
+                  navigate(`/messages/${chatObj.chat_id}`)
+                  return
+                }
+                
+                setActiveTab(newValue)
+              }}
               variant="scrollable"
               scrollButtons="auto"
               sx={{

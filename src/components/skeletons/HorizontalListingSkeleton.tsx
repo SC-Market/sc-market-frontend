@@ -1,5 +1,4 @@
 import {
-  Fade,
   Card,
   CardActionArea,
   CardMedia,
@@ -228,7 +227,7 @@ export function HorizontalListingSkeleton({
             </Card>
           </CardActionArea>
         </Box>
-      </Fade>
+      </Box>
     </Box>
   )
 }
