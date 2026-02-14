@@ -53,7 +53,7 @@ export interface AccessibleDialogProps extends Omit<DialogProps, 'aria-labelledb
   /**
    * Optional ref to the element that should receive initial focus
    */
-  initialFocus?: RefObject<HTMLElement>
+  initialFocus?: RefObject<HTMLElement | null>
   
   /**
    * Dialog size

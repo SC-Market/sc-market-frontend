@@ -87,8 +87,8 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
   )
 
   useEffect(() => {
-    getMuiLocales(i18n.language).then(({ core, pickers, grid }) => {
-      setLocalizedTheme(responsiveFontSizes(createTheme(baseTheme, core, pickers, grid)))
+    getMuiLocales(i18n.language).then(({ core, pickers }) => {
+      setLocalizedTheme(responsiveFontSizes(createTheme(baseTheme, core, pickers)))
     })
   }, [baseTheme, i18n.language])
 

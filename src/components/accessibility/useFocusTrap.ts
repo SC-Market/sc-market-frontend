@@ -10,7 +10,7 @@ export interface UseFocusTrapOptions {
   /**
    * Optional ref to the element that should receive initial focus
    */
-  initialFocus?: RefObject<HTMLElement>
+  initialFocus?: RefObject<HTMLElement | null>
   
   /**
    * Whether to restore focus to the previously focused element when the trap is disabled
@@ -54,7 +54,7 @@ export interface UseFocusTrapOptions {
  * ```
  */
 export function useFocusTrap(
-  containerRef: RefObject<HTMLElement>,
+  containerRef: RefObject<HTMLElement | null>,
   options: UseFocusTrapOptions
 ) {
   const { enabled, initialFocus, returnFocus = true } = options
