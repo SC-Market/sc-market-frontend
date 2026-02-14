@@ -794,7 +794,6 @@ export function ListingWrapper({ children }: { children: React.ReactNode }) {
           sm: "calc(50% - 4px)", // Small: 2 columns
           md: 200,               // Desktop: Fixed width
         },
-        height: { xs: 300, md: 420 },
         flexShrink: 0,
       }}
     >
