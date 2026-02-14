@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom"
 import { useRegisterContractorMutation } from "../../store/contractor"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { isAlphaNumeric } from "./AuthenticateRSI"
-import { MarkdownEditor } from "../../components/markdown/Markdown"
+import { MarkdownEditor } from "../../components/markdown/Markdown.lazy"
 import { useTranslation } from "react-i18next"
 import { LanguageSelector } from "../../components/settings/LanguageSelector"
 

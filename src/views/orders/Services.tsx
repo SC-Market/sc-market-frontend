@@ -23,7 +23,7 @@ import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useGetUserProfileQuery } from "../../store/profile"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { Link } from "react-router-dom"
-import { MarkdownRender } from "../../components/markdown/Markdown"
+import { MarkdownRender } from "../../components/markdown/Markdown.lazy"
 import {
   useGetServicesContractorQuery,
   useGetServicesQuery,

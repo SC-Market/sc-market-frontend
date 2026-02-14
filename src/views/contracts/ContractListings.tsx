@@ -24,7 +24,7 @@ import {
   PublicContract,
   useGetPublicContractsQuery,
 } from "../../store/public_contracts"
-import { MarkdownRender } from "../../components/markdown/Markdown"
+import { MarkdownRender } from "../../components/markdown/Markdown.lazy"
 import { useContractSearch } from "../../hooks/contract/ContractSearch"
 import { dateDiffInDays } from "../../util/dateDiff"
 import { PAYMENT_TYPE_MAP } from "../../util/constants"

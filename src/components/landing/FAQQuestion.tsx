@@ -11,7 +11,7 @@ import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import ExpandLess from "@mui/icons-material/ExpandLess"
 import ExpandMore from "@mui/icons-material/ExpandMore"
-import { MarkdownRender } from "../markdown/Markdown"
+import { MarkdownRender } from "../markdown/Markdown.lazy"
 
 /**
  * Collapsible FAQ question component

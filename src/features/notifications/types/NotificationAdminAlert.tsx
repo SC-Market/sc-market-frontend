@@ -4,7 +4,7 @@ import { Notification } from "../../../hooks/login/UserProfile"
 import { useTranslation } from "react-i18next"
 import { NotificationBase } from "../components/NotificationBase"
 import { useNotificationUpdateMutation } from "../../../store/notification"
-import { MarkdownRender } from "../../../components/markdown/Markdown"
+import { MarkdownRender } from "../../../components/markdown/Markdown.lazy"
 
 export function NotificationAdminAlert(props: { notif: Notification }) {
   const { notif } = props

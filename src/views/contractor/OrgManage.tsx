@@ -48,7 +48,7 @@ import { useAlertHook } from "../../hooks/alert/AlertHook"
 import {
   MarkdownEditor,
   MarkdownRender,
-} from "../../components/markdown/Markdown"
+} from "../../components/markdown/Markdown.lazy"
 import { external_resource_regex } from "../../features/profile"
 import { ListingSellerRating } from "../../components/rating/ListingRating"
 import { useTranslation } from "react-i18next"

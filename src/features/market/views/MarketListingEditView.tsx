@@ -33,7 +33,7 @@ import {
   validatePhotoUploadParams,
 } from ".."
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
-import { MarkdownEditor } from "../../../components/markdown/Markdown"
+import { MarkdownEditor } from "../../../components/markdown/Markdown.lazy"
 import { Navigate } from "react-router-dom"
 import { ImageSearch } from "../components/ImageSearch"
 import { MISSING_IMAGE_URL } from "../../../hooks/styles/Theme"

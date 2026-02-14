@@ -26,7 +26,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { OrgDetails, UserDetails } from "../../components/list/UserDetails"
 import { Stack } from "@mui/system"
 import { format } from "../../util/time"
-import { MarkdownRender } from "../../components/markdown/Markdown"
+import { MarkdownRender } from "../../components/markdown/Markdown.lazy"
 import { useCurrentChat, useGetChatByOrderIDQuery } from "../../features/chats"
 import {
   useGetNotificationsQuery,

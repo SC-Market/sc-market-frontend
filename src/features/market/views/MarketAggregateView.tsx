@@ -54,7 +54,7 @@ import {
   useMarketUpdateAggregateAdminMutation,
 } from ".."
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
-import { MarkdownRender } from "../../../components/markdown/Markdown"
+import { MarkdownRender } from "../../../components/markdown/Markdown.lazy"
 import { useCookies } from "react-cookie"
 import { FRONTEND_URL } from "../../../util/constants"
 import { Cart } from "../../../datatypes/Cart"

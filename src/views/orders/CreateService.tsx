@@ -19,7 +19,7 @@ import throttle from "lodash/throttle"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { orderIcons, Service, PaymentType } from "../../datatypes/Order"
-import { MarkdownEditor } from "../../components/markdown/Markdown"
+import { MarkdownEditor } from "../../components/markdown/Markdown.lazy"
 import { NumericFormat } from "react-number-format"
 import { SelectPhotosArea } from "../../components/modal/SelectPhotosArea"
 import {

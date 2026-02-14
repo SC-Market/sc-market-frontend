@@ -36,7 +36,7 @@ import {
   AddCircleOutlineRounded,
   KeyboardArrowUpRounded,
 } from "@mui/icons-material"
-import { MarkdownEditor } from "../../../components/markdown/Markdown"
+import { MarkdownEditor } from "../../../components/markdown/Markdown.lazy"
 import { LazyDateTimePicker as DateTimePicker } from "../../../components/providers/LazyDateTimePicker"
 import { useNavigate } from "react-router-dom"
 import { Suspense, lazy } from "react"

@@ -19,7 +19,7 @@ import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import {
   MarkdownEditor,
   MarkdownRender,
-} from "../../../components/markdown/Markdown"
+} from "../../../components/markdown/Markdown.lazy"
 import { UserContractorList } from "../../../components/list/UserContractorList"
 import { BottomSheet } from "../../../components/mobile/BottomSheet"
 

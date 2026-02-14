@@ -13,7 +13,7 @@ import {
   useSearchMarketListingsQuery,
 } from ".."
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
-import { MarkdownEditor } from "../../../components/markdown/Markdown"
+import { MarkdownEditor } from "../../../components/markdown/Markdown.lazy"
 import type { MarketMultiple, MarketMultipleBody } from "../domain/types"
 import { Section } from "../../../components/paper/Section"
 import { useCurrentMarketListing } from ".."

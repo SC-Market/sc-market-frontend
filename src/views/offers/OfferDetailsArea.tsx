@@ -35,7 +35,7 @@ import {
   Close,
   Check,
 } from "@mui/icons-material"
-import { MarkdownRender } from "../../components/markdown/Markdown"
+import { MarkdownRender } from "../../components/markdown/Markdown.lazy"
 import { useCurrentChat, useGetChatByOfferIDQuery } from "../../features/chats"
 import {
   useGetNotificationsQuery,

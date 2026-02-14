@@ -32,7 +32,7 @@ import {
   ShoppingCartRounded,
 } from "@mui/icons-material"
 import { orderIcons, Service } from "../../datatypes/Order"
-import { MarkdownRender } from "../../components/markdown/Markdown"
+import { MarkdownRender } from "../../components/markdown/Markdown.lazy"
 import { dateDiffInDays } from "../../util/dateDiff"
 import { statusColors } from "../orders/OrderList"
 import { ImagePreviewPaper } from "../../components/paper/ImagePreviewPaper"
