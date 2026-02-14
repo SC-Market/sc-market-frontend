@@ -62,6 +62,9 @@ export function MessageSendArea(props: { onSend: (content: string) => void }) {
       sx={{
         width: "100%",
         padding: { xs: 1.5, sm: 1 },
+        paddingBottom: isMobile
+          ? `calc(1.5rem + env(safe-area-inset-bottom))`
+          : 2,
         borderTopColor: theme.palette.outline.main,
         boxSizing: "border-box",
         borderWidth: 0,
@@ -80,9 +83,6 @@ export function MessageSendArea(props: { onSend: (content: string) => void }) {
         left: isMobile ? 0 : "auto",
         right: isMobile ? 0 : "auto",
         zIndex: isMobile ? theme.zIndex.drawer + 2 : "auto",
-        paddingBottom: isMobile
-          ? `calc(1.5rem + env(safe-area-inset-bottom))`
-          : 1,
       }}
     >
       <TextField
