@@ -35,21 +35,15 @@ export function HorizontalListingSkeleton({
         flexShrink: 0,
       }}
     >
-      <Box
-        sx={{
-          position: "relative",
-          borderRadius: theme.spacing(theme.borderRadius.topLevel),
-        }}
+      <CardActionArea
+        sx={{ borderRadius: theme.spacing(theme.borderRadius.topLevel) }}
       >
-          <CardActionArea
-            sx={{ borderRadius: theme.spacing(theme.borderRadius.topLevel) }}
-          >
-            <Card
-              sx={{
-                height: isMobile ? 300 : 420,
-                position: "relative",
-              }}
-            >
+        <Card
+          sx={{
+            height: isMobile ? 300 : 420,
+            position: "relative",
+          }}
+        >
               {/* Optional "NEW" chip skeleton (top left) */}
               <BaseSkeleton
                 variant="rectangular"
@@ -226,8 +220,6 @@ export function HorizontalListingSkeleton({
               </CardContent>
             </Card>
           </CardActionArea>
-        </Box>
-      </Box>
     </Box>
   )
 }

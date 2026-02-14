@@ -6,7 +6,7 @@
  */
 
 import { axe, toHaveNoViolations, type JestAxeConfigureOptions } from "jest-axe"
-import { render, type RenderOptions, type RenderResult } from "@testing-library/react"
+import { render, type RenderOptions } from "@testing-library/react"
 import type { ReactElement } from "react"
 
 // Extend Jest matchers
