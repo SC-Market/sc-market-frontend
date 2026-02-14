@@ -29,7 +29,6 @@ export function ItemMarketView() {
           <Grid
             container
             spacing={theme.layoutSpacing.layout}
-            sx={{ maxWidth: 1400 }}
           >
           {xs && (
             <>
