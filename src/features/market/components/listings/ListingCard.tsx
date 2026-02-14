@@ -783,11 +783,17 @@ export const ItemListingBase = React.memo(
 )
 
 // Reusable wrapper for consistent listing sizing
+// Mobile: 50% width (2 columns)
+// Desktop: Fixed 200px width with proper centering
 export function ListingWrapper({ children }: { children: React.ReactNode }) {
   return (
     <Box
       sx={{
-        width: { xs: "calc(50% - 4px)", sm: "calc(50% - 4px)", md: "calc(33.333% - 5.33px)", lg: 200 },
+        width: { 
+          xs: "calc(50% - 4px)", // Mobile: 2 columns
+          sm: "calc(50% - 4px)", // Small: 2 columns
+          md: 200,               // Desktop: Fixed width
+        },
         flexShrink: 0,
       }}
     >
