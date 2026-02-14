@@ -16,7 +16,7 @@ import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { getRelativeTime } from "../../util/time"
 import React from "react"
 import { useContractAppOpen } from "../../hooks/contract/ContractApp"
-import { MarkdownRender } from "../../components/markdown/Markdown"
+import { MarkdownRender } from "../../components/markdown/Markdown.lazy"
 import { dateDiffInDays } from "../../util/dateDiff"
 import { useTranslation } from "react-i18next" //  i18n
 

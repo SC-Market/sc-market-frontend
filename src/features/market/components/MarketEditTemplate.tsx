@@ -1,6 +1,6 @@
 import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
 import { FlatSection } from "../../../components/paper/Section"
-import { MarkdownEditor } from "../../../components/markdown/Markdown"
+import { MarkdownEditor } from "../../../components/markdown/Markdown.lazy"
 import React, { useCallback, useEffect, useState } from "react"
 import {
   useGetUserProfileQuery,

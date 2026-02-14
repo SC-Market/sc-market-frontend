@@ -17,7 +17,7 @@ import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { getRelativeTime } from "../../util/time"
 import { useCurrentOrder } from "../../hooks/order/CurrentOrder"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
-import { MarkdownRender } from "../../components/markdown/Markdown"
+import { MarkdownRender } from "../../components/markdown/Markdown.lazy"
 import { orderIcons } from "../../datatypes/Order"
 import { useTranslation } from "react-i18next"
 

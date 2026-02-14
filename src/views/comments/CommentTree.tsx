@@ -23,7 +23,7 @@ import {
   useCommentsDeleteMutation,
   useCommentsReplyMutation,
 } from "../../store/comments"
-import { MarkdownRender } from "../../components/markdown/Markdown"
+import { MarkdownRender } from "../../components/markdown/Markdown.lazy"
 import { useGetUserProfileQuery } from "../../store/profile"
 import { TrashCan } from "mdi-material-ui"
 import { CommentVotes } from "../../components/button/CommentVotes"

@@ -11,7 +11,7 @@ import {
 import { Stack } from "@mui/system"
 import { UserDetails } from "../../components/list/UserDetails"
 import { format } from "../../util/time"
-import { MarkdownRender } from "../../components/markdown/Markdown"
+import { MarkdownRender } from "../../components/markdown/Markdown.lazy"
 import { PAYMENT_TYPE_MAP } from "../../util/constants"
 import React from "react"
 import { PublicContract } from "../../store/public_contracts"

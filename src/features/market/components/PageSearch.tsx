@@ -24,7 +24,7 @@ import throttle from "lodash/throttle"
 import { wikiActionApi, WikiPage } from "../../../store/wiki"
 import { useTheme } from "@mui/material/styles"
 import { UnderlineLink } from "../../../components/typography/UnderlineLink"
-import { MarkdownRender } from "../../../components/markdown/Markdown"
+import { MarkdownRender } from "../../../components/markdown/Markdown.lazy"
 import { useTranslation } from "react-i18next"
 import { BottomSheet } from "../../../components/mobile/BottomSheet"
 

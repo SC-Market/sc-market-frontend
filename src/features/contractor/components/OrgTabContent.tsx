@@ -9,7 +9,7 @@ import { MemberList } from "../../../views/contractor/OrgMembers"
 import { RecruitingPostArea } from "../../../pages/recruiting/RecruitingPostPage"
 import { OrgStoreView } from "../../profile/components/ProfileStoreView"
 import { OrgServicesView } from "../../profile/components/ProfileServicesView"
-import { MarkdownRender } from "../../../components/markdown/Markdown"
+import { MarkdownRender } from "../../../components/markdown/Markdown.lazy"
 import { Contractor } from "../../../datatypes/Contractor"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 

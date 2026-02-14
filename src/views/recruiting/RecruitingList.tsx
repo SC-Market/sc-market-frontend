@@ -20,7 +20,7 @@ import { UnderlineLink } from "../../components/typography/UnderlineLink"
 
 import { Link } from "react-router-dom"
 import PeopleAltRoundedIcon from "@mui/icons-material/PeopleAltRounded"
-import { MarkdownRender } from "../../components/markdown/Markdown"
+import { MarkdownRender } from "../../components/markdown/Markdown.lazy"
 import { RecruitingPost } from "../../store/recruiting"
 import { contractorKindIcons } from "../contractor/ContractorList"
 import { ListingSellerRating } from "../../components/rating/ListingRating"

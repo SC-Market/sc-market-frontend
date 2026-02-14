@@ -35,7 +35,7 @@ import { AdminIcons } from "../../components/icons"
 import {
   MarkdownRender,
   MarkdownEditor,
-} from "../../components/markdown/Markdown"
+} from "../../components/markdown/Markdown.lazy"
 import { MinimalContractor } from "../../datatypes/Contractor"
 import { useSearchContractorsQuery } from "../../store/contractor"
 import { useTheme } from "@mui/material/styles"

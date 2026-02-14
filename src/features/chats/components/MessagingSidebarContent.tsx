@@ -43,7 +43,7 @@ import {
 } from "../../../components/empty-states"
 import { useGetNotificationsQuery } from "../../../store/notification"
 import { getRelativeTime } from "../../../util/time"
-import { MarkdownRender } from "../../../components/markdown/Markdown"
+import { MarkdownRender } from "../../../components/markdown/Markdown.lazy"
 
 // Single chat entry in the chat list
 function ChatEntry(props: {
