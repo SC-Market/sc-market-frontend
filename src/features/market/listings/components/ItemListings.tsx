@@ -717,11 +717,11 @@ export function ItemListings(props: {
         disableAds={!!(org || user)}
       />
 
-      <Grid item xs={12}>
+      <Box sx={{ width: "100%" }}>
         <Divider light />
-      </Grid>
+      </Box>
 
-      <Grid item xs={12}>
+      <Box sx={{ width: "100%" }}>
         <ListingPagination
           count={total}
           page={page}
@@ -729,7 +729,7 @@ export function ItemListings(props: {
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
-      </Grid>
+      </Box>
     </>
   )
 }
