@@ -1,10 +1,7 @@
 import React, { useEffect, useState, Suspense } from "react"
 import { HeaderTitle } from "../../../components/typography/HeaderTitle"
 import { ContainerGrid } from "../../../components/layout/ContainerGrid"
-import { sidebarDrawerWidth, useDrawerOpen } from "../../../hooks/layout/Drawer"
-import CloseIcon from "@mui/icons-material/CloseRounded"
-import MenuIcon from "@mui/icons-material/MenuRounded"
-import { Box, IconButton, Grid, Divider, Paper, useMediaQuery } from "@mui/material"
+import { Box, Grid, Divider, Paper, useMediaQuery } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { Page } from "../../../components/metadata/Page"
@@ -12,16 +9,9 @@ import { BuyOrderActions } from "../../market/components/MarketActions"
 import { HideOnScroll } from "../../market/components/MarketNavArea"
 import { MarketNavArea } from "../../market/components/MarketNavArea"
 import { MarketSidebar } from "../../market/components/MarketSidebar"
-import { MarketSideBarToggleButton } from "../../market/components/MarketSidebar"
-import { MarketSearchArea } from "../../market/components/MarketSidebar"
 import { MarketSidebarContext, useMarketSearch } from "../../market"
 import { useTranslation } from "react-i18next"
-
-const BuyOrders = React.lazy(() =>
-  import("../../market/views/ItemListings").then((module) => ({
-    default: module.BuyOrders,
-  })),
-)
+import { BuyOrders } from "../../market/listings"
 
 function MarketTabLoader() {
   return null
@@ -30,7 +20,6 @@ function MarketTabLoader() {
 export function BuyOrderItemsPage() {
   const { t } = useTranslation()
   const [open, setOpen] = useState(false)
-  const [drawerOpen] = useDrawerOpen()
   const theme = useTheme<ExtendedTheme>()
   const xs = useMediaQuery(theme.breakpoints.down("md"))
 
@@ -47,56 +36,72 @@ export function BuyOrderItemsPage() {
     <Page title={t("market.buyOrders")}>
       <MarketSidebarContext.Provider value={[open, setOpen]}>
         {xs && <MarketSidebar />}
-        {xs && <MarketSideBarToggleButton />}
+        
         <ContainerGrid maxWidth={"xl"} sidebarOpen={false}>
-          <Grid item xs={12}>
-            <Grid
-              container
-              justifyContent={"space-between"}
-              spacing={theme.layoutSpacing.compact}
-            >
-              <HeaderTitle lg={7} xl={7}>
-                {t("market.buyOrders")}
-              </HeaderTitle>
+          <Grid
+            container
+            spacing={theme.layoutSpacing.layout}
+            justifyContent={"center"}
+          >
+            {xs && (
+              <>
+                <Grid item xs={12}>
+                  <HideOnScroll>
+                    <MarketNavArea />
+                  </HideOnScroll>
+                </Grid>
 
-              <BuyOrderActions />
+                <Grid item xs={12}>
+                  <Divider light />
+                </Grid>
+              </>
+            )}
 
-              <Grid item xs={12}>
-                <HideOnScroll>
-                  <MarketNavArea />
-                </HideOnScroll>
-              </Grid>
+            <Grid item xs={12}>
+              <Grid
+                container
+                justifyContent={"space-between"}
+                spacing={theme.layoutSpacing.compact}
+              >
+                <HeaderTitle lg={7} xl={7}>
+                  {t("market.buyOrders")}
+                </HeaderTitle>
 
-              <Grid item xs={12}>
-                <Divider light />
+                <BuyOrderActions />
               </Grid>
             </Grid>
-          </Grid>
 
-          <Grid
-            item
-            xs={0}
-            md={3}
-            sx={{ display: { xs: "none", md: "block" }, width: 300, flexShrink: 0 }}
-          >
-            <Paper sx={{ padding: 1 }}>
-              <MarketSearchArea />
-            </Paper>
-          </Grid>
+            {!xs && (
+              <Grid item xs={12} md="auto">
+                <Paper
+                  sx={{
+                    position: "sticky",
+                    top: theme.spacing(2),
+                    maxHeight: `calc(100vh - ${theme.spacing(4)})`,
+                    width: 300,
+                    flexShrink: 0,
+                    overflowY: "auto",
+                  }}
+                >
+                  <MarketSidebar />
+                </Paper>
+              </Grid>
+            )}
 
-          <Grid item xs={12} md={9}>
-            <Box
-              sx={{
-                display: "flex",
-                flexWrap: "wrap",
-                gap: 1,
-                pb: 3,
-              }}
-            >
-              <Suspense fallback={<MarketTabLoader />}>
-                <BuyOrders />
-              </Suspense>
-            </Box>
+            <Grid item xs={12} md sx={{ transition: "all 0.3s ease" }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: 1,
+                  pb: 3,
+                }}
+              >
+                <Suspense fallback={<MarketTabLoader />}>
+                  <BuyOrders />
+                </Suspense>
+              </Box>
+            </Grid>
           </Grid>
         </ContainerGrid>
       </MarketSidebarContext.Provider>
