@@ -21,6 +21,8 @@ import type {
 import { useMarketSidebarExp } from "../../hooks/MarketSidebar"
 import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
 
+import { ListingWrapper } from "./ListingCard"
+
 export function AggregateListing(props: {
   aggregate: ExtendedAggregateSearchResult
   index: number
@@ -28,14 +30,9 @@ export function AggregateListing(props: {
   const { aggregate, index } = props
 
   return (
-    <Box
-      sx={{
-        width: { xs: "calc(50% - 4px)", sm: "calc(50% - 4px)", md: "calc(33.333% - 5.33px)", lg: 200 },
-        flexShrink: 0,
-      }}
-    >
+    <ListingWrapper>
       <AggregateListingBase aggregate={aggregate} index={index} />
-    </Box>
+    </ListingWrapper>
   )
 }
 

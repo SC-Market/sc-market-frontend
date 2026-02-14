@@ -757,7 +757,7 @@ export const ItemListingBase = React.memo(
       </Fade>
     )
 
-    // Wrap with LongPressMenu if actions are available
+    // Always use mobile variant for consistent sizing
     if (longPressActions.length > 0 && isMobile) {
       return (
         <LongPressMenu actions={longPressActions} enabled={isMobile}>
@@ -766,12 +766,7 @@ export const ItemListingBase = React.memo(
       )
     }
 
-    // Return mobile or desktop variant
-    if (isMobile) {
-      return mobileListingContent
-    }
-
-    return listingContent
+    return mobileListingContent
   },
   (prevProps, nextProps) => {
     // Custom comparison: only re-render if listing data actually changed
@@ -787,12 +782,8 @@ export const ItemListingBase = React.memo(
   },
 )
 
-export function ItemListing(props: {
-  listing: ExtendedUniqueSearchResult
-  index: number
-}) {
-  const { listing, index } = props
-
+// Reusable wrapper for consistent listing sizing
+export function ListingWrapper({ children }: { children: React.ReactNode }) {
   return (
     <Box
       sx={{
@@ -800,7 +791,20 @@ export function ItemListing(props: {
         flexShrink: 0,
       }}
     >
-      <ItemListingBase listing={listing} index={index} />
+      {children}
     </Box>
+  )
+}
+
+export function ItemListing(props: {
+  listing: ExtendedUniqueSearchResult
+  index: number
+}) {
+  const { listing, index } = props
+
+  return (
+    <ListingWrapper>
+      <ItemListingBase listing={listing} index={index} />
+    </ListingWrapper>
   )
 }
