@@ -4,7 +4,7 @@ import { ContainerGrid } from "../../../components/layout/ContainerGrid"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../../hooks/layout/Drawer"
 import CloseIcon from "@mui/icons-material/CloseRounded"
 import MenuIcon from "@mui/icons-material/MenuRounded"
-import { IconButton, Grid, Divider } from "@mui/material"
+import { Box, IconButton, Grid, Divider } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { Page } from "../../../components/metadata/Page"
@@ -92,17 +92,19 @@ export function BulkItemsPage() {
             </Grid>
           </Grid>
 
-          <Grid
-            item
-            container
-            xs={12}
-            lg={12}
-            spacing={theme.layoutSpacing.component}
-            sx={{ transition: "0.3s" }}
-          >
-            <Suspense fallback={<MarketTabLoader />}>
-              <BulkListingsRefactor />
-            </Suspense>
+          <Grid item xs={12}>
+            <Box
+              sx={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: 1,
+                pb: 3,
+              }}
+            >
+              <Suspense fallback={<MarketTabLoader />}>
+                <BulkListingsRefactor />
+              </Suspense>
+            </Box>
           </Grid>
         </ContainerGrid>
       </MarketSidebarContext.Provider>
