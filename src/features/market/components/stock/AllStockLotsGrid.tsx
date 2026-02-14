@@ -97,113 +97,117 @@ export function AllStockLotsGrid() {
   const [newRows, setNewRows] = useState<any[]>([])
 
   // Memoize edit cell renderers to prevent hook issues
-  const renderListingEditCell = useCallback(
-    (props: GridRenderEditCellParams) => {
-      const { id, value, field } = props
-      const apiRef = useGridApiContext()
-      const [inputValue, setInputValue] = React.useState("")
+  // Custom edit component for listing selection
+  function ListingEditCell(props: GridRenderEditCellParams) {
+    const { id, value, field } = props
+    const apiRef = useGridApiContext()
+    const [inputValue, setInputValue] = React.useState("")
 
-      const { data: searchData } = useSearchMarketListingsQuery({
-        query: inputValue,
-        page_size: 20,
-        user_seller: currentOrg ? undefined : profile?.username,
-        contractor_seller: currentOrg?.spectrum_id,
-        statuses: "active,inactive",
-        listing_type: "unique",
+    const { data: searchData } = useSearchMarketListingsQuery({
+      query: inputValue,
+      page_size: 20,
+      user_seller: currentOrg ? undefined : profile?.username,
+      contractor_seller: currentOrg?.spectrum_id,
+      statuses: "active,inactive",
+      listing_type: "unique",
+    })
+
+    const options = searchData?.listings || []
+    const selectedListing = options.find((l) => l.listing_id === value)
+
+    const handleChange = (
+      _: React.SyntheticEvent,
+      newValue: (typeof options)[0] | null,
+    ) => {
+      apiRef.current.setEditCellValue({
+        id,
+        field,
+        value: newValue?.listing_id || "",
       })
+    }
 
-      const options = searchData?.listings || []
-      const selectedListing = options.find((l) => l.listing_id === value)
+    return (
+      <Autocomplete
+        value={selectedListing || null}
+        onChange={handleChange}
+        inputValue={inputValue}
+        onInputChange={(_, newValue) => setInputValue(newValue)}
+        options={options}
+        getOptionLabel={(option) => option.title}
+        renderOption={(props, option) => (
+          <Box
+            component="li"
+            {...props}
+            sx={{ display: "flex", alignItems: "center", gap: 1 }}
+          >
+            <Avatar
+              src={option.photo}
+              variant="rounded"
+              sx={{ width: 32, height: 32 }}
+            />
+            <Typography variant="body2">{option.title}</Typography>
+          </Box>
+        )}
+        renderInput={(params) => <TextField {...params} size="large" />}
+        fullWidth
+        size="medium"
+        sx={{ height: "100%" }}
+      />
+    )
+  }
 
-      const handleChange = (
-        _: React.SyntheticEvent,
-        newValue: (typeof options)[0] | null,
-      ) => {
-        apiRef.current.setEditCellValue({
-          id,
-          field,
-          value: newValue?.listing_id || "",
-        })
-      }
+  // Custom edit component for location selection
+  function LocationEditCell(props: GridRenderEditCellParams) {
+    const { id, value, field } = props
+    const apiRef = useGridApiContext()
+    const [inputValue, setInputValue] = React.useState("")
 
-      return (
-        <Autocomplete
-          value={selectedListing || null}
-          onChange={handleChange}
-          inputValue={inputValue}
-          onInputChange={(_, newValue) => setInputValue(newValue)}
-          options={options}
-          getOptionLabel={(option) => option.title}
-          renderOption={(props, option) => (
-            <Box
-              component="li"
-              {...props}
-              sx={{ display: "flex", alignItems: "center", gap: 1 }}
-            >
-              <Avatar
-                src={option.photo}
-                variant="rounded"
-                sx={{ width: 32, height: 32 }}
-              />
-              <Typography variant="body2">{option.title}</Typography>
-            </Box>
-          )}
-          renderInput={(params) => (
-            <TextField {...params} size="small" />
-          )}
-          fullWidth
-          size="small"
-          sx={{ height: "100%" }}
-        />
-      )
-    },
+    const filteredLocations = locations.filter((loc) =>
+      loc.name.toLowerCase().includes(inputValue.toLowerCase()),
+    )
+
+    const selectedLocation = locations.find((l) => l.location_id === value)
+
+    const handleChange = (
+      _: React.SyntheticEvent,
+      newValue: (typeof locations)[0] | null,
+    ) => {
+      apiRef.current.setEditCellValue({
+        id,
+        field,
+        value: newValue?.location_id || null,
+      })
+    }
+
+    return (
+      <Autocomplete
+        value={selectedLocation || null}
+        onChange={handleChange}
+        inputValue={inputValue}
+        onInputChange={(_, newValue) => setInputValue(newValue)}
+        options={filteredLocations}
+        getOptionLabel={(option) => option.name}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            size="large"
+            placeholder={t("AllStockLots.selectLocation", "Select location...")}
+          />
+        )}
+        fullWidth
+        size="medium"
+        sx={{ height: "100%" }}
+      />
+    )
+  }
+
+  const renderListingEditCell = useCallback(
+    (props: GridRenderEditCellParams) => <ListingEditCell {...props} />,
     [currentOrg, profile],
   )
 
   const renderLocationEditCell = useCallback(
-    (props: GridRenderEditCellParams) => {
-      const { id, value, field } = props
-      const apiRef = useGridApiContext()
-      const [inputValue, setInputValue] = React.useState("")
-
-      const filteredLocations = locations.filter((loc) =>
-        loc.name.toLowerCase().includes(inputValue.toLowerCase()),
-      )
-
-      const selectedLocation = locations.find((l) => l.location_id === value)
-
-      const handleChange = (
-        _: React.SyntheticEvent,
-        newValue: (typeof locations)[0] | null,
-      ) => {
-        apiRef.current.setEditCellValue({
-          id,
-          field,
-          value: newValue?.location_id || null,
-        })
-      }
-
-      return (
-        <Autocomplete
-          value={selectedLocation || null}
-          onChange={handleChange}
-          inputValue={inputValue}
-          onInputChange={(_, newValue) => setInputValue(newValue)}
-          options={filteredLocations}
-          getOptionLabel={(option) => option.name}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              size="small"
-              placeholder={t("AllStockLots.selectLocation", "Select location...")}
-            />
-          )}
-          fullWidth
-          size="small"
-          sx={{ height: "100%" }}
-        />
-      )
-    },
+    (props: GridRenderEditCellParams) => <LocationEditCell {...props} />,
     [locations, t],
   )
 
