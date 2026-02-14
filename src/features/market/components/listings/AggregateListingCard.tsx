@@ -26,21 +26,16 @@ export function AggregateListing(props: {
   index: number
 }) {
   const { aggregate, index } = props
-  const marketSidebarOpen = useMarketSidebarExp()
 
   return (
-    <Grid
-      item
-      xs={marketSidebarOpen ? 12 : 6}
-      sm={marketSidebarOpen ? 12 : 6}
-      md={marketSidebarOpen ? 12 : 4}
-      lg={marketSidebarOpen ? 6 : 4}
-      xl={marketSidebarOpen ? 4 : 3}
-      xxl={marketSidebarOpen ? 4.8 : 2.4}
-      sx={{ transition: "0.3s" }}
+    <Box
+      sx={{
+        width: { xs: "calc(50% - 8px)", sm: "calc(50% - 12px)", md: 250 },
+        flexShrink: 0,
+      }}
     >
       <AggregateListingBase aggregate={aggregate} index={index} />
-    </Grid>
+    </Box>
   )
 }
 

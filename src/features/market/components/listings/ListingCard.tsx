@@ -792,19 +792,15 @@ export function ItemListing(props: {
   index: number
 }) {
   const { listing, index } = props
-  const marketSidebarOpen = useMarketSidebarExp()
 
   return (
-    <Grid
-      item
-      xs={marketSidebarOpen ? 12 : 6}
-      sm={marketSidebarOpen ? 12 : 6}
-      md={marketSidebarOpen ? 12 : 4}
-      lg={marketSidebarOpen ? 6 : 4}
-      xl={marketSidebarOpen ? 4 : 3}
-      xxl={marketSidebarOpen ? 4.8 : 2.4}
+    <Box
+      sx={{
+        width: { xs: "calc(50% - 8px)", sm: "calc(50% - 12px)", md: 250 },
+        flexShrink: 0,
+      }}
     >
       <ItemListingBase listing={listing} index={index} />
-    </Grid>
+    </Box>
   )
 }

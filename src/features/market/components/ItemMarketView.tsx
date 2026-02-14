@@ -51,19 +51,15 @@ export function ItemMarketView() {
 
           {/* Main content area */}
           <Grid item xs={12} md={xs ? 12 : 9.75}>
-            <Grid
-              container
-              spacing={{
-                xs: theme.layoutSpacing.component,
-                sm: theme.layoutSpacing.layout,
-              }}
-              rowSpacing={{
-                xs: theme.layoutSpacing.component,
-                sm: theme.layoutSpacing.layout,
+            <Box
+              sx={{
+                display: "flex",
+                flexWrap: "wrap",
+                gap: { xs: 2, sm: 3 },
               }}
             >
               <ItemListings />
-            </Grid>
+            </Box>
           </Grid>
         </Grid>
       </Container>
