@@ -36,19 +36,12 @@ export function HorizontalListingSkeleton({
         flexShrink: 0,
       }}
     >
-      <Fade
-        in={true}
-        style={{
-          transitionDelay: `${50 + 50 * index}ms`,
-          transitionDuration: "500ms",
+      <Box
+        sx={{
+          position: "relative",
+          borderRadius: theme.spacing(theme.borderRadius.topLevel),
         }}
       >
-        <Box
-          sx={{
-            position: "relative",
-            borderRadius: theme.spacing(theme.borderRadius.topLevel),
-          }}
-        >
           <CardActionArea
             sx={{ borderRadius: theme.spacing(theme.borderRadius.topLevel) }}
           >
