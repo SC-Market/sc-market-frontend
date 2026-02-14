@@ -68,7 +68,7 @@ export function ItemMarketView() {
               sx={{
                 display: "flex",
                 flexWrap: "wrap",
-                gap: 1,
+                gap: "8px",
               }}
             >
               <ItemListings />
