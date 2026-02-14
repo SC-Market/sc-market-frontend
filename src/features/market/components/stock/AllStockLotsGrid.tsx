@@ -151,6 +151,7 @@ export function AllStockLotsGrid() {
         renderInput={(params) => <TextField {...params} size="large" />}
         fullWidth
         size="medium"
+        disablePortal={false}
         sx={{ height: "100%" }}
       />
     )
@@ -196,6 +197,7 @@ export function AllStockLotsGrid() {
         )}
         fullWidth
         size="medium"
+        disablePortal={false}
         sx={{ height: "100%" }}
       />
     )
