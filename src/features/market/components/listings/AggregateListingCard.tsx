@@ -30,7 +30,7 @@ export function AggregateListing(props: {
   return (
     <Box
       sx={{
-        width: { xs: "calc(50% - 4px)", sm: "calc(50% - 6px)", md: 200 },
+        width: { xs: "calc(50% - 4px)", sm: "calc(50% - 4px)", md: "calc(33.333% - 5.33px)", lg: 200 },
         flexShrink: 0,
       }}
     >
