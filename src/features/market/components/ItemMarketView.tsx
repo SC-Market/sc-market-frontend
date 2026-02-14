@@ -25,11 +25,12 @@ export function ItemMarketView() {
       {xs && <MarketSidebar />}
 
       <Container maxWidth={"xxl"} sx={{ padding: 0 }}>
-        <Grid
-          container
-          spacing={theme.layoutSpacing.layout}
-          justifyContent={"center"}
-        >
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
+          <Grid
+            container
+            spacing={theme.layoutSpacing.layout}
+            sx={{ maxWidth: 1400 }}
+          >
           {xs && (
             <>
               <Grid item xs={12}>
@@ -74,7 +75,8 @@ export function ItemMarketView() {
               <ItemListings />
             </Box>
           </Grid>
-        </Grid>
+          </Grid>
+        </Box>
       </Container>
     </>
   )

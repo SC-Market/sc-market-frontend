@@ -10,6 +10,7 @@ export function RecentListingsSkeleton() {
   return (
     <Box
       display={"flex"}
+      gap={1}
       sx={{
         maxWidth: "100%",
         overflowX: "scroll",

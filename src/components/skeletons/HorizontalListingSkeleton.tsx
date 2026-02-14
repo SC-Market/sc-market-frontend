@@ -29,11 +29,14 @@ export function HorizontalListingSkeleton({
   return (
     <ListingWrapper>
       <CardActionArea
-        sx={{ borderRadius: theme.spacing(theme.borderRadius.topLevel) }}
+        sx={{ 
+          borderRadius: theme.spacing(theme.borderRadius.topLevel),
+          height: "100%",
+        }}
       >
         <Card
           sx={{
-            height: isMobile ? 300 : 420,
+            height: "100%",
             position: "relative",
           }}
         >
