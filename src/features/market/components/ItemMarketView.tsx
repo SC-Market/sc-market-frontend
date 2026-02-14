@@ -30,15 +30,19 @@ export function ItemMarketView() {
           spacing={theme.layoutSpacing.layout}
           justifyContent={"center"}
         >
-          <Grid item xs={12}>
-            <HideOnScroll>
-              <MarketNavArea />
-            </HideOnScroll>
-          </Grid>
+          {xs && (
+            <>
+              <Grid item xs={12}>
+                <HideOnScroll>
+                  <MarketNavArea />
+                </HideOnScroll>
+              </Grid>
 
-          <Grid item xs={12}>
-            <Divider light />
-          </Grid>
+              <Grid item xs={12}>
+                <Divider light />
+              </Grid>
+            </>
+          )}
 
           {/* Desktop: Persistent sidebar */}
           {!xs && (
@@ -59,7 +63,7 @@ export function ItemMarketView() {
           )}
 
           {/* Main content area */}
-          <Grid item xs={12} md>
+          <Grid item xs={12} md sx={{ transition: "all 0.3s ease" }}>
             <Box
               sx={{
                 display: "flex",
