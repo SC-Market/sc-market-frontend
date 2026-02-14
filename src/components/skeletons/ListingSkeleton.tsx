@@ -51,7 +51,7 @@ export function ListingSkeleton({
           >
             <Card
               sx={{
-                height: isMobile ? 300 : 420,
+                height: 300,
                 position: "relative",
               }}
             >
