@@ -1,5 +1,4 @@
 import {
-  Grid,
   Fade,
   Card,
   CardActionArea,
@@ -21,7 +20,7 @@ export interface ListingSkeletonProps {
 /**
  * Skeleton component for market listing cards
  * Matches the detailed layout of actual listing cards
- * Returns a single Grid item (use in map functions)
+ * Returns a Box with fixed width (use in map functions)
  */
 export function ListingSkeleton({
   index = 0,
@@ -31,14 +30,11 @@ export function ListingSkeleton({
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
 
   return (
-    <Grid
-      item
-      xs={sidebarOpen ? 12 : 6}
-      md={sidebarOpen ? 12 : 4}
-      lg={sidebarOpen ? 6 : 4}
-      xl={sidebarOpen ? 4 : 3}
-      xxl={sidebarOpen ? 4.8 : 2.4}
-      sx={{ transition: "0.3s" }}
+    <Box
+      sx={{
+        width: { xs: "calc(50% - 4px)", sm: "calc(50% - 6px)", md: 200 },
+        flexShrink: 0,
+      }}
     >
       <Fade
         in={true}
@@ -240,6 +236,6 @@ export function ListingSkeleton({
           </CardActionArea>
         </Box>
       </Fade>
-    </Grid>
+    </Box>
   )
 }
