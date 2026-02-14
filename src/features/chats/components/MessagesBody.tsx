@@ -336,7 +336,7 @@ export function MessagesBody(props: {
             ref={inputAreaRef}
             sx={{
               position: isMobile ? "relative" : "static",
-              // Reserve space for input area on mobile
+              flexShrink: 0,
               height: isMobile ? inputAreaHeight || "auto" : "auto",
               minHeight: isMobile ? inputAreaHeight || 0 : 0,
             }}
