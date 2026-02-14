@@ -17,6 +17,8 @@ export interface ListingSkeletonProps {
   sidebarOpen?: boolean
 }
 
+import { ListingWrapper } from "../../features/market/components/listings/ListingCard"
+
 /**
  * Skeleton component for market listing cards
  * Matches the detailed layout of actual listing cards
@@ -30,12 +32,7 @@ export function ListingSkeleton({
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
 
   return (
-    <Box
-      sx={{
-        width: { xs: "calc(50% - 4px)", sm: "calc(50% - 4px)", md: "calc(33.333% - 5.33px)", lg: 200 },
-        flexShrink: 0,
-      }}
-    >
+    <ListingWrapper>
       <Fade
         in={true}
         style={{
@@ -236,6 +233,6 @@ export function ListingSkeleton({
           </CardActionArea>
         </Box>
       </Fade>
-    </Box>
+    </ListingWrapper>
   )
 }
