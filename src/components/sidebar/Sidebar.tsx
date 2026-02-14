@@ -72,6 +72,8 @@ export function Sidebar() {
       variant={xs ? "temporary" : "permanent"}
       open={drawerOpen}
       onClose={() => setDrawerOpen(false)}
+      id="sidebar-drawer"
+      aria-label="Site navigation"
       sx={{
         [theme.breakpoints.up("sm")]: {
           width: drawerOpen ? sidebarDrawerWidth : 0,

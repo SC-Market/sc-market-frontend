@@ -2652,5 +2652,132 @@
     "component_type": "Type",
     "color": "Color",
     "quality": "Quality"
+  },
+  "pages": {
+    "home": {
+      "title": "Home"
+    },
+    "login": {
+      "title": "Login"
+    },
+    "signup": {
+      "title": "Sign Up"
+    },
+    "market": {
+      "title": "Market"
+    },
+    "services": {
+      "title": "Services"
+    },
+    "createListing": {
+      "title": "Create Listing"
+    },
+    "myListings": {
+      "title": "My Listings"
+    },
+    "manageStock": {
+      "title": "Manage Stock"
+    },
+    "manageStockLots": {
+      "title": "Manage Stock Lots"
+    },
+    "cart": {
+      "title": "Shopping Cart"
+    },
+    "bulkItems": {
+      "title": "Bulk Items"
+    },
+    "buyOrders": {
+      "title": "Buy Orders"
+    },
+    "contractors": {
+      "title": "Contractors"
+    },
+    "contracts": {
+      "title": "Contracts"
+    },
+    "createContract": {
+      "title": "Create Contract"
+    },
+    "messages": {
+      "title": "Messages"
+    },
+    "recruiting": {
+      "title": "Recruiting"
+    },
+    "createRecruitingPost": {
+      "title": "Create Recruiting Post"
+    },
+    "orders": {
+      "title": "Orders"
+    },
+    "dashboard": {
+      "title": "Dashboard"
+    },
+    "profile": {
+      "title": "Profile"
+    },
+    "settings": {
+      "title": "Settings"
+    },
+    "notifications": {
+      "title": "Notifications"
+    },
+    "myFleet": {
+      "title": "My Fleet"
+    },
+    "availability": {
+      "title": "Availability"
+    },
+    "myOrg": {
+      "title": "My Organization"
+    },
+    "orgFleet": {
+      "title": "Organization Fleet"
+    },
+    "orgOrders": {
+      "title": "Organization Orders"
+    },
+    "orgManage": {
+      "title": "Manage Organization"
+    },
+    "orgMoney": {
+      "title": "Organization Finances"
+    },
+    "orgMembers": {
+      "title": "Organization Members"
+    },
+    "orgRegister": {
+      "title": "Register Organization"
+    },
+    "admin": {
+      "users": {
+        "title": "Admin - Users"
+      },
+      "market": {
+        "title": "Admin - Market"
+      },
+      "orders": {
+        "title": "Admin - Orders"
+      },
+      "moderation": {
+        "title": "Admin - Moderation"
+      },
+      "alerts": {
+        "title": "Admin - Alerts"
+      },
+      "auditLogs": {
+        "title": "Admin - Audit Logs"
+      },
+      "attributeDefinitions": {
+        "title": "Admin - Attribute Definitions"
+      },
+      "gameItemAttributes": {
+        "title": "Admin - Game Item Attributes"
+      },
+      "importMonitoring": {
+        "title": "Admin - Import Monitoring"
+      }
+    }
   }
 }

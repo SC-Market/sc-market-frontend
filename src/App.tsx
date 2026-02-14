@@ -27,6 +27,7 @@ import { usePeriodicBackgroundSync } from "./hooks/pwa/usePeriodicBackgroundSync
 import { useWebVitals } from "./hooks/performance/useWebVitals"
 import { useRoutePrefetch } from "./hooks/router/useRoutePrefetch"
 import { prefetchHighPriorityRoutes } from "./router/routePrefetch"
+import { usePageTitle } from "./hooks/router/usePageTitle"
 
 import "./util/i18n.ts"
 
@@ -36,6 +37,8 @@ import "./util/i18n.ts"
 function RouterEffects() {
   // Prefetch routes based on current location
   useRoutePrefetch()
+  // Update page title based on current route
+  usePageTitle()
   return null
 }
 
