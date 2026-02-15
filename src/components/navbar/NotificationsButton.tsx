@@ -28,6 +28,7 @@ import {
   useNotificationBulkUpdateMutation,
   useNotificationBulkDeleteMutation,
 } from "../../store/notification"
+import { useGetCurrentUserProfileQuery } from "../../store/api/profile"
 import { useGetUserOrganizationsQuery } from "../../store/organizations"
 import { useNotificationPollingInterval } from "../../hooks/notifications/useNotificationPolling"
 import { useTranslation } from "react-i18next"
@@ -54,6 +55,9 @@ export function NotificationsButton() {
     theme.palette.background.navbar,
   )
 
+  const { data: currentUser } = useGetCurrentUserProfileQuery()
+  const isLoggedIn = !!currentUser
+
   const { data: organizationsData } = useGetUserOrganizationsQuery()
 
   // Calculate optimal polling interval based on push subscription and app visibility
@@ -67,6 +71,7 @@ export function NotificationsButton() {
       contractorId: contractorIdFilter || undefined,
     },
     {
+      skip: !isLoggedIn,
       pollingInterval: pollingInterval > 0 ? pollingInterval : undefined, // Disable polling if interval is 0
       refetchOnMountOrArgChange: true, // Refetch when component mounts or arguments change
     },

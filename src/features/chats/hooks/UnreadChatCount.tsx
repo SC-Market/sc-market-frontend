@@ -2,28 +2,38 @@ import { useMemo } from "react"
 import { useGetNotificationsQuery } from "../../../store/notification"
 import { useGetMyChatsQuery } from "../api/chatsApi"
 import type { Chat } from "../domain/types"
+import { useGetCurrentUserProfileQuery } from "../../../store/api/profile"
 
 /**
  * Hook to get the count of chats with unread messages
  * @returns number of chats with unread notifications
  */
 export function useUnreadChatCount(): number {
+  const { data: currentUser } = useGetCurrentUserProfileQuery()
+  const isLoggedIn = !!currentUser
+
   // Get all chats first
-  const { data: chats } = useGetMyChatsQuery()
+  const { data: chats } = useGetMyChatsQuery(undefined, { skip: !isLoggedIn })
 
   // Query message notifications - chats use order_message or offer_message actions
   // Query both types to get all chat-related notifications
-  const { data: orderMessageNotifications } = useGetNotificationsQuery({
-    page: 0,
-    pageSize: 100,
-    action: "order_message",
-  })
+  const { data: orderMessageNotifications } = useGetNotificationsQuery(
+    {
+      page: 0,
+      pageSize: 100,
+      action: "order_message",
+    },
+    { skip: !isLoggedIn },
+  )
 
-  const { data: offerMessageNotifications } = useGetNotificationsQuery({
-    page: 0,
-    pageSize: 100,
-    action: "offer_message",
-  })
+  const { data: offerMessageNotifications } = useGetNotificationsQuery(
+    {
+      page: 0,
+      pageSize: 100,
+      action: "offer_message",
+    },
+    { skip: !isLoggedIn },
+  )
 
   // Combine both notification types
   const allNotificationsData = useMemo(() => {
