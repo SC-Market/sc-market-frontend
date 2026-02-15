@@ -22,7 +22,7 @@ import { Stack } from "@mui/system"
 import { Link as RouterLink } from "react-router-dom"
 import { useCookies } from "react-cookie"
 import { HapticIconButton } from "../haptic"
-import { PreferencesButton } from "../../views/settings/PreferencesButton"
+import { PreferencesIconButton } from "../../views/settings/PreferencesIconButton"
 
 export function Navbar(props: { children?: React.ReactNode }) {
   const theme: ExtendedTheme = useTheme()
@@ -149,7 +149,7 @@ export function Navbar(props: { children?: React.ReactNode }) {
             <ProfileNavAvatar />
           </React.Fragment>
         ) : isMobile ? (
-          <PreferencesButton />
+          <PreferencesIconButton />
         ) : (
           <Stack direction="row" spacing={theme.layoutSpacing.compact}>
             <Button
