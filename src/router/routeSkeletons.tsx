@@ -20,6 +20,8 @@ import {
   RecruitingListSkeleton,
   ContractsListSkeleton,
   LandingPageSkeleton,
+  MyListingsSkeleton,
+  ServicesListSkeleton,
 } from "../components/skeletons"
 
 /**
@@ -40,7 +42,7 @@ export const routeSkeletonMap: Record<string, React.ComponentType> = {
   "/market/multiple/:id/edit": FormPageSkeleton,
   "/market/create": FormPageSkeleton,
   "/market/create/:tab": FormPageSkeleton,
-  "/market/me": ListPageSkeleton,
+  "/market/me": MyListingsSkeleton,
   "/market/manage": ListPageSkeleton,
   "/market/manage-stock": ListPageSkeleton,
   "/market/stock/:listingId": ListPageSkeleton,
@@ -67,7 +69,7 @@ export const routeSkeletonMap: Record<string, React.ComponentType> = {
   "/order/service/:service_id": FormPageSkeleton,
   "/order/service/create": FormPageSkeleton,
   "/order/service/:service_id/edit": FormPageSkeleton,
-  "/order/services": ListPageSkeleton,
+  "/order/services": ServicesListSkeleton,
   "/orders": FormPageSkeleton,
 
   // Recruiting routes
@@ -119,7 +121,7 @@ export const routeSkeletonMap: Record<string, React.ComponentType> = {
   "/org/:contractor_id/members": ListPageSkeleton,
   "/org/:contractor_id/listings": ListPageSkeleton,
   "/org/:contractor_id/manage-stock": ListPageSkeleton,
-  "/org/:contractor_id/services": ListPageSkeleton,
+  "/org/:contractor_id/services": ServicesListSkeleton,
 
   // Admin routes
   "/admin/users": AdminPageSkeleton,
