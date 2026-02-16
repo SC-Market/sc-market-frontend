@@ -45,20 +45,20 @@ clientsClaim()
 // Precache assets (injected by vite-plugin-pwa during build)
 precacheAndRoute(self.__WB_MANIFEST || [])
 
-// Cache navigation requests with better offline support
+// Cache navigation requests with StaleWhileRevalidate for instant loads
+// Serves cached page immediately while updating in background
 registerRoute(
   ({ request }: { request: Request }) => request.mode === "navigate",
-  new NetworkFirst({
+  new StaleWhileRevalidate({
     cacheName: "pages-v1",
-    networkTimeoutSeconds: 3, // Faster timeout for better perceived performance
     plugins: [
       new CacheableResponsePlugin({
         statuses: [0, 200], // Cache successful responses and opaque responses
       }),
       new ExpirationPlugin({
-        maxEntries: 100, // Increased from 50 to cache more pages
-        maxAgeSeconds: 60 * 60 * 24 * 7, // 7 days (increased from 1 day)
-        purgeOnQuotaError: true, // Automatically purge if quota exceeded
+        maxEntries: 100,
+        maxAgeSeconds: 60 * 60 * 24 * 7, // 7 days
+        purgeOnQuotaError: true,
       }),
     ],
   }),
