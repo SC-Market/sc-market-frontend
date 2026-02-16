@@ -13,6 +13,13 @@ import {
   ContractDetailSkeleton,
   RecruitingPostViewSkeleton,
   OfferDetailSkeleton,
+  MarketListingDetailSkeleton,
+  MarketCartSkeleton,
+  ContractorsListSkeleton,
+  FleetSkeleton,
+  RecruitingListSkeleton,
+  ContractsListSkeleton,
+  LandingPageSkeleton,
 } from "../components/skeletons"
 
 /**
@@ -26,9 +33,9 @@ export const routeSkeletonMap: Record<string, React.ComponentType> = {
   "/market/category/:name": MarketPageSkeleton,
   "/bulk": MarketPageSkeleton,
   "/buyorders": MarketPageSkeleton,
-  "/market/:id": DetailPageSkeleton,
-  "/market/aggregate/:id": DetailPageSkeleton,
-  "/market/multiple/:id": DetailPageSkeleton,
+  "/market/:id": MarketListingDetailSkeleton,
+  "/market/aggregate/:id": MarketListingDetailSkeleton,
+  "/market/multiple/:id": MarketListingDetailSkeleton,
   "/market_edit/:id": FormPageSkeleton,
   "/market/multiple/:id/edit": FormPageSkeleton,
   "/market/create": FormPageSkeleton,
@@ -37,12 +44,12 @@ export const routeSkeletonMap: Record<string, React.ComponentType> = {
   "/market/manage": ListPageSkeleton,
   "/market/manage-stock": ListPageSkeleton,
   "/market/stock/:listingId": ListPageSkeleton,
-  "/market/cart": ListPageSkeleton,
+  "/market/cart": MarketCartSkeleton,
   "/buyorder/create": FormPageSkeleton,
   "/sell": FormPageSkeleton,
 
   // Contractor routes
-  "/contractors": ListPageSkeleton,
+  "/contractors": ContractorsListSkeleton,
   "/contractor/:id": ProfileSkeleton,
   "/contractor/:id/:tab": ProfileSkeleton,
   "/myorg": ProfileSkeleton,
@@ -50,7 +57,7 @@ export const routeSkeletonMap: Record<string, React.ComponentType> = {
   "/contractor_invite/:invite_id": PageSkeleton,
 
   // Contracting routes
-  "/contracts": ListPageSkeleton,
+  "/contracts": ContractsListSkeleton,
   "/contracts/create": FormPageSkeleton,
   "/contracts/public/:contract_id": ContractDetailSkeleton,
   "/contract/:id": OrderDetailSkeleton,
@@ -64,7 +71,7 @@ export const routeSkeletonMap: Record<string, React.ComponentType> = {
   "/orders": FormPageSkeleton,
 
   // Recruiting routes
-  "/recruiting": ListPageSkeleton,
+  "/recruiting": RecruitingListSkeleton,
   "/recruiting/post/:post_id": RecruitingPostViewSkeleton,
   "/recruiting/post/create": FormPageSkeleton,
   "/recruiting/post/:post_id/update": FormPageSkeleton,
@@ -93,9 +100,9 @@ export const routeSkeletonMap: Record<string, React.ComponentType> = {
   "/org/members": ListPageSkeleton,
 
   // Fleet routes
-  "/myfleet": ListPageSkeleton,
+  "/myfleet": FleetSkeleton,
   "/myfleet/import": FormPageSkeleton,
-  "/org/fleet": ListPageSkeleton,
+  "/org/fleet": FleetSkeleton,
   "/delivery/:delivery_id": ListPageSkeleton,
 
   // Org management routes
@@ -104,7 +111,7 @@ export const routeSkeletonMap: Record<string, React.ComponentType> = {
   "/org/money": ListPageSkeleton,
   "/org/send": FormPageSkeleton,
   "/org/:contractor_id/dashboard": DashboardSkeleton,
-  "/org/:contractor_id/fleet": ListPageSkeleton,
+  "/org/:contractor_id/fleet": FleetSkeleton,
   "/org/:contractor_id/send": FormPageSkeleton,
   "/org/:contractor_id/orders": ListPageSkeleton,
   "/org/:contractor_id/manage": FormPageSkeleton,
@@ -141,7 +148,7 @@ export const routeSkeletonMap: Record<string, React.ComponentType> = {
   "/signup": PageSkeleton,
 
   // Landing
-  "/": PageSkeleton,
+  "/": LandingPageSkeleton,
 }
 
 /**
