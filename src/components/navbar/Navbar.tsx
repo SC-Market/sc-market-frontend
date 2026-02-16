@@ -64,7 +64,7 @@ export function Navbar(props: { children?: React.ReactNode }) {
           md: drawerOpen ? `${sidebarDrawerWidth}px` : 0,
         },
         width: {
-          xs: drawerOpen ? 0 : "100%",
+          xs: "100%",
           md: `calc(100% - ${drawerOpen ? sidebarDrawerWidth : 0}px)`,
         },
         transition: theme.transitions.create(["width", "margin"], {
