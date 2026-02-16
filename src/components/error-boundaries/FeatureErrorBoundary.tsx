@@ -1,6 +1,7 @@
 import React, { ReactNode } from "react"
 import { ErrorBoundary, ErrorBoundaryProps } from "./ErrorBoundary"
 import { ErrorFallback } from "./ErrorFallback"
+import { getBugsnagInstance } from "../../util/monitoring/bugsnagLoader"
 
 export interface FeatureErrorBoundaryProps extends Omit<
   ErrorBoundaryProps,
@@ -51,12 +52,23 @@ export function FeatureErrorBoundary({
       )
     }
 
+    // Report to Bugsnag
+    const bugsnag = getBugsnagInstance()
+    if (bugsnag) {
+      bugsnag.notify(error, (event: any) => {
+        event.context = featureName
+        event.addMetadata("errorBoundary", {
+          type: "feature",
+          featureName,
+          componentStack: errorInfo.componentStack,
+        })
+      })
+    }
+
     // Call custom error handler
     if (onError) {
       onError(error, errorInfo)
     }
-
-    // TODO: Log to error tracking service with feature context
   }
 
   const defaultFallback = (

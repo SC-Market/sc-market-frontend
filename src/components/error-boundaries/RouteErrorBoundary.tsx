@@ -2,6 +2,7 @@ import React, { ReactNode } from "react"
 import { useLocation } from "react-router-dom"
 import { ErrorBoundary, ErrorBoundaryProps } from "./ErrorBoundary"
 import { ErrorFallback } from "./ErrorFallback"
+import { getBugsnagInstance } from "../../util/monitoring/bugsnagLoader"
 
 export interface RouteErrorBoundaryProps extends Omit<
   ErrorBoundaryProps,
@@ -54,12 +55,24 @@ export function RouteErrorBoundary({
       )
     }
 
+    // Report to Bugsnag
+    const bugsnag = getBugsnagInstance()
+    if (bugsnag) {
+      bugsnag.notify(error, (event: any) => {
+        event.context = `Route: ${location.pathname}`
+        event.addMetadata("errorBoundary", {
+          type: "route",
+          pathname: location.pathname,
+          search: location.search,
+          componentStack: errorInfo.componentStack,
+        })
+      })
+    }
+
     // Call custom error handler
     if (onError) {
       onError(error, errorInfo)
     }
-
-    // TODO: Log to error tracking service with route context
   }
 
   const defaultFallback = (
