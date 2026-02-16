@@ -1,5 +1,10 @@
 {
   "accessibility": {
+    "skipToMain": "Skip to main content",
+    "skipToNav": "Skip to navigation",
+    "skipToSearch": "Skip to search",
+    "skipToFilters": "Skip to filters",
+    "skipLinks": "Skip links",
     "skipToMainContent": "Skip to main content",
     "skipToNavigation": "Skip to navigation",
     "loading": "Loading...",
