@@ -38,17 +38,25 @@ export function PreferencesIconButton() {
         onClose={handleClose}
         anchorOrigin={{
           vertical: "bottom",
-          horizontal: "center",
+          horizontal: "right",
         }}
         transformOrigin={{
           vertical: "top",
-          horizontal: "center",
+          horizontal: "right",
         }}
-        PaperProps={{
-          variant: "outlined",
-          sx: {
-            borderRadius: (theme) => theme.spacing(theme.borderRadius.topLevel),
-            borderColor: theme.palette.outline.main,
+        slotProps={{
+          paper: {
+            variant: "outlined",
+            sx: {
+              borderRadius: (theme) => theme.spacing(theme.borderRadius.topLevel),
+              borderColor: theme.palette.outline.main,
+              overflow: "visible",
+            },
+          },
+        }}
+        sx={{
+          "& .MuiPopover-paper": {
+            overflow: "visible",
           },
         }}
       >
