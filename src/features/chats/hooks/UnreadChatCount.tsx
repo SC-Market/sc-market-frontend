@@ -2,14 +2,14 @@ import { useMemo } from "react"
 import { useGetNotificationsQuery } from "../../../store/notification"
 import { useGetMyChatsQuery } from "../api/chatsApi"
 import type { Chat } from "../domain/types"
-import { useGetCurrentUserProfileQuery } from "../../../store/api/profile"
+import { useGetUserProfileQuery } from "../../../store/profile"
 
 /**
  * Hook to get the count of chats with unread messages
  * @returns number of chats with unread notifications
  */
 export function useUnreadChatCount(): number {
-  const { data: currentUser } = useGetCurrentUserProfileQuery()
+  const { data: currentUser } = useGetUserProfileQuery()
   const isLoggedIn = !!currentUser
 
   // Get all chats first
