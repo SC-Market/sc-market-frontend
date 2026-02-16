@@ -8,28 +8,30 @@ import { HorizontalListingSkeleton } from "./HorizontalListingSkeleton"
  */
 export function LandingPageSkeleton() {
   return (
-    <Box sx={{ py: 3 }}>
-      {/* Hero section */}
-      <Container maxWidth="lg" sx={{ mb: 8 }}>
-        <Stack
-          direction={{ xs: "column", md: "row" }}
-          spacing={4}
-          alignItems="center"
-          justifyContent="center"
-        >
-          {/* Logo and title */}
-          <Stack alignItems="center" spacing={2} sx={{ flex: 1 }}>
-            <BaseSkeleton variant="circular" width={192} height={192} />
-            <BaseSkeleton variant="text" width={300} height={48} />
-            <BaseSkeleton variant="text" width={400} height={32} />
-          </Stack>
+    <Box sx={{ pt: 2.5, pb: 4 }}>
+      {/* Hero section with extra top padding */}
+      <Box sx={{ pb: 8 }}>
+        <Container maxWidth="lg">
+          <Stack
+            direction={{ xs: "column", md: "row" }}
+            spacing={4}
+            alignItems="center"
+            justifyContent="center"
+          >
+            {/* Logo and title */}
+            <Stack alignItems="center" spacing={2} sx={{ flex: 1 }}>
+              <BaseSkeleton variant="circular" width={192} height={192} />
+              <BaseSkeleton variant="text" width={300} height={48} />
+              <BaseSkeleton variant="text" width={400} height={32} />
+            </Stack>
 
-          {/* Login area (if not logged in) */}
-          <Box sx={{ width: { xs: "100%", md: 480 } }}>
-            <Box sx={{ border: 1, borderColor: "divider", borderRadius: 1, height: 300 }} />
-          </Box>
-        </Stack>
-      </Container>
+            {/* Login area (if not logged in) */}
+            <Box sx={{ width: { xs: "100%", md: 480 } }}>
+              <Box sx={{ border: 1, borderColor: "divider", borderRadius: 1, height: 300 }} />
+            </Box>
+          </Stack>
+        </Container>
+      </Box>
 
       <Container>
         <Stack spacing={6} alignItems="center">
