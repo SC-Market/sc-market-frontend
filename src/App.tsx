@@ -1,4 +1,4 @@
-import React, { createElement, Suspense, useEffect } from "react"
+import React, { createElement, useEffect } from "react"
 
 import { HookProvider } from "./hooks/HookProvider"
 import { Root } from "./components/layout/Root"
@@ -9,8 +9,8 @@ import {
   RouterProvider,
 } from "react-router-dom"
 import { PageFallback } from "./components/metadata/Page"
-import { PageSkeleton } from "./components/skeletons"
 import { FrontendErrorElement } from "./pages/errors/FrontendError.lazy"
+import { RouteSuspense } from "./components/router/RouteSuspense"
 import { RouteErrorFallback } from "./components/error-boundaries"
 import { startBackgroundPrefetch } from "./util/prefetch"
 import { SharedIntersectionObserver } from "./hooks/prefetch/usePrefetchOnVisible"
@@ -143,9 +143,9 @@ const router = createBrowserRouter([
       <HookProvider>
         <Root>
           <RouterEffects />
-          <Suspense fallback={<PageSkeleton />}>
+          <RouteSuspense>
             <Outlet />
-          </Suspense>
+          </RouteSuspense>
         </Root>
       </HookProvider>
     ),
