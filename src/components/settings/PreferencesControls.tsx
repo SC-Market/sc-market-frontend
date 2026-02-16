@@ -96,6 +96,11 @@ export function PreferencesControls() {
                 }
                 return option
               }}
+              slotProps={{
+                popper: {
+                  disablePortal: true,
+                },
+              }}
               renderInput={(params) => (
                 <TextField
                   {...params}
@@ -177,6 +182,11 @@ export function PreferencesControls() {
             }}
             options={languagesWithExonyms}
             getOptionLabel={(option) => `${option.endonym} (${option.exonym})`}
+            slotProps={{
+              popper: {
+                disablePortal: true,
+              },
+            }}
             renderInput={(params) => (
               <TextField
                 {...params}
