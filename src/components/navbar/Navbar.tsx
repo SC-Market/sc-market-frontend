@@ -148,29 +148,46 @@ export function Navbar(props: { children?: React.ReactNode }) {
             <NotificationsButton />
             <ProfileNavAvatar />
           </React.Fragment>
-        ) : (
+        ) : isMobile ? (
           <Stack direction="row" spacing={theme.layoutSpacing.compact} alignItems="center">
-            {!isMobile && (
-              <>
-                <Button
-                  component={RouterLink}
-                  to="/login"
-                  variant="outlined"
-                  color="primary"
-                >
-                  {t("auth.signIn", "Sign in")}
-                </Button>
-                <Button
-                  component={RouterLink}
-                  to="/signup"
-                  variant="contained"
-                  color="primary"
-                >
-                  {t("auth.signUp", "Sign up")}
-                </Button>
-              </>
-            )}
+            <Button
+              component={RouterLink}
+              to="/login"
+              variant="outlined"
+              color="primary"
+              size="small"
+            >
+              {t("auth.signIn", "Sign in")}
+            </Button>
+            <Button
+              component={RouterLink}
+              to="/signup"
+              variant="contained"
+              color="primary"
+              size="small"
+            >
+              {t("auth.signUp", "Sign up")}
+            </Button>
             <PreferencesIconButton />
+          </Stack>
+        ) : (
+          <Stack direction="row" spacing={theme.layoutSpacing.compact}>
+            <Button
+              component={RouterLink}
+              to="/login"
+              variant="outlined"
+              color="primary"
+            >
+              {t("auth.signIn", "Sign in")}
+            </Button>
+            <Button
+              component={RouterLink}
+              to="/signup"
+              variant="contained"
+              color="primary"
+            >
+              {t("auth.signUp", "Sign up")}
+            </Button>
           </Stack>
         )}
       </Toolbar>

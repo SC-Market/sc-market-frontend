@@ -75,7 +75,7 @@ function ChatEntry(props: {
       action: "order_message",
       entityId: props.chat.order_id || undefined,
     },
-    { skip: !props.chat.chat_id || !props.chat.order_id || !props.isVisible },
+    { skip: !props.chat.chat_id || !props.chat.order_id || !props.isVisible || !profile.data },
   )
 
   const { data: offerNotificationsData } = useGetNotificationsQuery(
@@ -85,7 +85,7 @@ function ChatEntry(props: {
       action: "offer_message",
       entityId: props.chat.session_id || undefined,
     },
-    { skip: !props.chat.chat_id || !props.chat.session_id || !props.isVisible },
+    { skip: !props.chat.chat_id || !props.chat.session_id || !props.isVisible || !profile.data },
   )
 
   // Use the appropriate notification data based on chat type
