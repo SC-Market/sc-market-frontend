@@ -237,7 +237,7 @@ export function MarketAggregateView() {
               margin: "auto",
             }}
             src={photos[0]}
-            alt={details.description}
+            alt={t("marketAggregateView.productImage", "Product image for {{title}}", { title: details.title })}
             onError={({ currentTarget }) => {
               currentTarget.onerror = null
               currentTarget.src =

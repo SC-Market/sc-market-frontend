@@ -53,6 +53,7 @@ function PageChoice(props: {
   onClick: () => void
 }) {
   const { i, onClick, page } = props
+  const { t } = useTranslation()
 
   return (
     <ImageListItem key={i}>
@@ -64,12 +65,13 @@ function PageChoice(props: {
             height={200}
             width={200}
             image={(page?.thumbnail?.source || "").replace(/\d+px/, "512px")}
-            onError={({ currentTarget }) => {
-              currentTarget.onerror = null
-              currentTarget.src =
+            onError={(event) => {
+              const target = event.currentTarget as HTMLImageElement
+              target.onerror = null
+              target.src =
                 "https://cdn.robertsspaceindustries.com/static/images/Temp/default-image.png"
             }}
-            alt={""}
+            alt={t("pageSearch.wikiPageThumbnail", "Thumbnail for {{title}}", { title: page.title })}
             sx={{
               borderRadius: (theme) =>
                 theme.spacing((theme as ExtendedTheme).borderRadius.image),
@@ -159,7 +161,7 @@ export function PageSearch(props: {
               (page?.thumbnail?.source || "").replace(/\d+px/, "512px") ||
               MISSING_IMAGE_URL
             }
-            alt={""}
+            alt={page?.title ? t("pageSearch.selectedPageThumbnail", "Selected page thumbnail for {{title}}", { title: page.title }) : t("pageSearch.noPageSelected", "No page selected")}
             sx={{
               borderRadius: theme.spacing(theme.borderRadius.image),
               transition: "0.5s",

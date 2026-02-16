@@ -25,7 +25,6 @@ export function CitizenIDLogo(props: { height?: number }) {
       component="img"
       src={logoSrc}
       alt=""
-      role="presentation"
       sx={{
         height: logoHeight,
         width: "auto",
