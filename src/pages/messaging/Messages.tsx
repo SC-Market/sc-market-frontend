@@ -23,6 +23,7 @@ import {
   useGetNotificationsQuery,
   useNotificationUpdateMutation,
 } from "../../store/notification"
+import { useGetUserProfileQuery } from "../../store/profile"
 
 export function Messages() {
   const { chat_id } = useParams<{ chat_id: string }>()
@@ -31,6 +32,8 @@ export function Messages() {
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const { t } = useTranslation()
+  const { data: profile } = useGetUserProfileQuery()
+  const isLoggedIn = !!profile
 
   // On desktop, always show sidebar (unless collapsed). On mobile, hide sidebar when viewing chat
   const [messageSidebarOpen, setMessageSidebar] = useState(!isMobile)
@@ -57,7 +60,7 @@ export function Messages() {
       action: "order_message",
       entityId: chatObj?.order_id || undefined,
     },
-    { skip: !chat_id || !chatObj?.order_id },
+    { skip: !chat_id || !chatObj?.order_id || !isLoggedIn },
   )
 
   const { data: offerNotificationsData } = useGetNotificationsQuery(
@@ -67,7 +70,7 @@ export function Messages() {
       action: "offer_message",
       entityId: chatObj?.session_id || undefined,
     },
-    { skip: !chat_id || !chatObj?.session_id },
+    { skip: !chat_id || !chatObj?.session_id || !isLoggedIn },
   )
 
   // Use the appropriate notification data based on chat type
