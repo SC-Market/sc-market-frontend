@@ -1439,6 +1439,22 @@
     "cancel": "Cancel",
     "saveAndClose": "Save and Close"
   },
+  "pageSearch": {
+    "wikiPageThumbnail": "Thumbnail for {{title}}",
+    "selectedPageThumbnail": "Selected page thumbnail for {{title}}",
+    "noPageSelected": "No page selected"
+  },
+  "imageSearch": {
+    "selectedImagePreview": "Preview of selected image from URL: {{url}}",
+    "noImageSelected": "No image selected",
+    "searchResultImage": "Search result image {{index}}"
+  },
+  "marketAggregateView": {
+    "productImage": "Product image for {{title}}"
+  },
+  "marketMultipleView": {
+    "productImage": "Product image for {{title}}"
+  },
   "MarketOffers": {
     "user": "User",
     "offer": "Offer",
