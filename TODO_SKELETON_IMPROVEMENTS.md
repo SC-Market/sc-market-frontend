@@ -54,15 +54,15 @@ Route-specific skeleton system is implemented, but many skeletons are too generi
   - ✅ Created: `FleetSkeleton.tsx` with ships grid and active deliveries
   - ✅ Mapped to routes: `/myfleet`, `/org/fleet`, `/org/:contractor_id/fleet`
 
-- [ ] **My Market Listings** (`/market/me`)
-  - Current: `ListPageSkeleton` (generic table)
-  - Needs: Listing cards with images, stock, status
-  - Create: `MyListingsSkeleton.tsx`
+- [x] **My Market Listings** (`/market/me`)
+  - ~~Current: `ListPageSkeleton` (generic table)~~
+  - ✅ Created: `MyListingsSkeleton.tsx` with nav tabs, listings grid
+  - ✅ Mapped to route: `/market/me`
 
-- [ ] **Order Services List** (`/order/services`)
-  - Current: `ListPageSkeleton` (generic table)
-  - Needs: Service cards with descriptions, pricing
-  - Create: `ServicesListSkeleton.tsx`
+- [x] **Order Services List** (`/order/services`)
+  - ~~Current: `ListPageSkeleton` (generic table)~~
+  - ✅ Created: `ServicesListSkeleton.tsx` with active/inactive sections
+  - ✅ Mapped to routes: `/order/services`, `/org/:contractor_id/services`
 
 ### Low Priority (Less Frequent)
 
