@@ -28,7 +28,7 @@ import {
   useNotificationBulkUpdateMutation,
   useNotificationBulkDeleteMutation,
 } from "../../store/notification"
-import { useGetCurrentUserProfileQuery } from "../../store/api/profile"
+import { useGetUserProfileQuery } from "../../store/profile"
 import { useGetUserOrganizationsQuery } from "../../store/organizations"
 import { useNotificationPollingInterval } from "../../hooks/notifications/useNotificationPolling"
 import { useTranslation } from "react-i18next"
@@ -55,7 +55,7 @@ export function NotificationsButton() {
     theme.palette.background.navbar,
   )
 
-  const { data: currentUser } = useGetCurrentUserProfileQuery()
+  const { data: currentUser } = useGetUserProfileQuery()
   const isLoggedIn = !!currentUser
 
   const { data: organizationsData } = useGetUserOrganizationsQuery()
