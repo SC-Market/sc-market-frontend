@@ -45,29 +45,7 @@ clientsClaim()
 // Precache assets (injected by vite-plugin-pwa during build)
 precacheAndRoute(self.__WB_MANIFEST || [])
 
-// Cache hashed JS/CSS assets aggressively (immutable due to content hashing)
-// These never change - new versions get new filenames
-registerRoute(
-  ({ url }: { url: URL }) => {
-    // Match Vite's hashed assets: /assets/index-abc123.js or /assets/style-xyz789.css
-    return /\/assets\/[^/]+-[a-f0-9]+\.(js|css)$/.test(url.pathname)
-  },
-  new CacheFirst({
-    cacheName: "vite-assets-v1",
-    plugins: [
-      new CacheableResponsePlugin({
-        statuses: [0, 200],
-      }),
-      new ExpirationPlugin({
-        maxEntries: 200,
-        maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year - these are immutable
-        purgeOnQuotaError: true,
-      }),
-    ],
-  }),
-)
-
-// Cache HTML navigation with StaleWhileRevalidate for instant loads
+// Cache navigation requests with StaleWhileRevalidate for instant loads
 // Serves cached page immediately while updating in background
 registerRoute(
   ({ request }: { request: Request }) => request.mode === "navigate",
@@ -75,12 +53,12 @@ registerRoute(
     cacheName: "pages-v1",
     plugins: [
       new CacheableResponsePlugin({
-        statuses: [0, 200],
+        statuses: [0, 200], // Cache successful responses and opaque responses
       }),
       new ExpirationPlugin({
-        maxEntries: 50,
-        maxAgeSeconds: 60 * 60 * 24, // 1 day
-        purgeOnQuotaError: true,
+        maxEntries: 100, // Increased from 50 to cache more pages
+        maxAgeSeconds: 60 * 60 * 24 * 7, // 7 days (increased from 1 day)
+        purgeOnQuotaError: true, // Automatically purge if quota exceeded
       }),
     ],
   }),
