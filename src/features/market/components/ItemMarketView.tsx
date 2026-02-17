@@ -5,6 +5,7 @@ import {
   Divider,
   Grid,
   Paper,
+  Stack,
   useMediaQuery,
 } from "@mui/material"
 import { HideOnScroll, MarketNavArea } from "./MarketNavArea"
@@ -26,13 +27,8 @@ export function ItemMarketView() {
 
       <Container maxWidth={"xxl"} sx={{ padding: 0 }}>
         <Box sx={{ display: "flex", justifyContent: "center" }}>
-          <Grid
-            container
-            spacing={theme.layoutSpacing.layout}
-            justifyContent="center"
-          >
-          {xs && (
-            <>
+          {xs ? (
+            <Grid container spacing={theme.layoutSpacing.layout}>
               <Grid item xs={12}>
                 <HideOnScroll>
                   <MarketNavArea />
@@ -42,12 +38,26 @@ export function ItemMarketView() {
               <Grid item xs={12}>
                 <Divider light />
               </Grid>
-            </>
-          )}
 
-          {/* Desktop: Persistent sidebar */}
-          {!xs && (
-            <Grid item xs={12} md="auto">
+              <Grid item xs={12}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: "8px",
+                  }}
+                >
+                  <ItemListings />
+                </Box>
+              </Grid>
+            </Grid>
+          ) : (
+            <Stack
+              direction="row"
+              spacing={theme.layoutSpacing.layout}
+              sx={{ width: '100%', maxWidth: 'xxl' }}
+            >
+              {/* Desktop: Persistent sidebar */}
               <Paper
                 sx={{
                   position: "sticky",
@@ -60,22 +70,20 @@ export function ItemMarketView() {
               >
                 <MarketSidebar />
               </Paper>
-            </Grid>
-          )}
 
-          {/* Main content area */}
-          <Grid item xs={12} md sx={{ transition: "all 0.3s ease" }}>
-            <Box
-              sx={{
-                display: "flex",
-                flexWrap: "wrap",
-                gap: "8px",
-              }}
-            >
-              <ItemListings />
-            </Box>
-          </Grid>
-          </Grid>
+              {/* Main content area */}
+              <Box
+                sx={{
+                  flex: 1,
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: "8px",
+                }}
+              >
+                <ItemListings />
+              </Box>
+            </Stack>
+          )}
         </Box>
       </Container>
     </>

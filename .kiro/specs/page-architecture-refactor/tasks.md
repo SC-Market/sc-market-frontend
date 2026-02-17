@@ -586,8 +586,8 @@ Each task builds on previous work, ensuring the system remains functional throug
 
 ### Availability Pages
 
-- [~] 27. Migrate availability pages
-  - [ ] 27.1 Migrate Availability page
+- [-] 27. Migrate availability pages
+  - [-] 27.1 Migrate Availability page
     - Update `src/pages/availability/Availability.tsx`
     - Use StandardPageLayout
     - Extract data fetching to page hook
