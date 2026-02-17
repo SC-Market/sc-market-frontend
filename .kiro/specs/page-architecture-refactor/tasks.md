@@ -595,14 +595,14 @@ Each task builds on previous work, ensuring the system remains functional throug
 
 ### Messaging Pages
 
-- [ ] 28. Migrate messaging pages
-  - [ ] 28.1 Migrate Messages page
+- [x] 28. Migrate messaging pages
+  - [x] 28.1 Migrate Messages page
     - Update `src/pages/messaging/Messages.tsx`
     - Use StandardPageLayout with custom layout
     - Extract data fetching to page hook
     - _Requirements: 1.1, 1.2, 12.2_
   
-  - [ ] 28.2 Migrate MessagesList page
+  - [x] 28.2 Migrate MessagesList page
     - Update `src/pages/messaging/MessagesList.tsx`
     - Use StandardPageLayout
     - Extract data fetching to page hook
@@ -610,8 +610,8 @@ Each task builds on previous work, ensuring the system remains functional throug
 
 ### Money Pages
 
-- [ ] 29. Migrate money pages
-  - [ ] 29.1 Migrate SendMoney page
+- [-] 29. Migrate money pages
+  - [-] 29.1 Migrate SendMoney page
     - Update `src/pages/money/SendMoney.tsx`
     - Use FormPageLayout
     - Extract form logic to page hook

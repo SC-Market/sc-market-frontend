@@ -12,18 +12,28 @@ import {
 } from "../../features/chats"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useNavigate } from "react-router-dom"
+import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
+import { useTranslation } from "react-i18next"
 
 export function MessagesList() {
   const [drawerOpen] = useDrawerOpen()
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const navigate = useNavigate()
+  const { t } = useTranslation()
 
   const [messageSidebarOpen, setMessageSidebar] = useState(true)
   const [creatingMessageGroup, setCreatingMessageGroup] = useState(false)
 
   return (
-    <React.Fragment>
+    <StandardPageLayout
+      title={t("messages.title", { defaultValue: "Messages" })}
+      noFooter
+      noSidebar
+      noMobilePadding
+      noTopSpacer
+      maxWidth={false}
+    >
       <CurrentChatIDContext.Provider
         value={[
           null,
@@ -42,8 +52,8 @@ export function MessagesList() {
           >
             {/* On mobile, show sidebar content as page content. On desktop, show as drawer */}
             {isMobile ? (
-              <main
-                style={{
+              <Box
+                sx={{
                   flexGrow: 1,
                   overflow: "auto",
                   height: "100vh",
@@ -64,19 +74,26 @@ export function MessagesList() {
                 ) : (
                   <MessagingSidebarContent asPageContent />
                 )}
-              </main>
+              </Box>
             ) : (
-              <>
+              <Box
+                sx={{
+                  display: "flex",
+                  height: "100%",
+                  width: "100%",
+                  position: "relative",
+                }}
+              >
                 <MessagingSidebar />
-                <main
-                  style={{
+                <Box
+                  sx={{
                     flexGrow: 1,
                     overflow: "auto",
                     height: "100vh",
                     display: "flex",
                     flexDirection: "column",
                     minWidth: 0,
-                    marginLeft: messageSidebarOpen ? messagingDrawerWidth : 0,
+                    marginLeft: messageSidebarOpen ? `${messagingDrawerWidth}px` : 0,
                     transition: theme.transitions.create("marginLeft", {
                       easing: theme.transitions.easing.sharp,
                       duration: theme.transitions.duration.enteringScreen,
@@ -103,15 +120,17 @@ export function MessagesList() {
                         color: "text.secondary",
                       }}
                     >
-                      Select a chat to start messaging
+                      {t("emptyStates.messages.selectChat", {
+                        defaultValue: "Select a chat to start messaging",
+                      })}
                     </Box>
                   )}
-                </main>
-              </>
+                </Box>
+              </Box>
             )}
           </MessageGroupCreateContext.Provider>
         </MessagingSidebarContext.Provider>
       </CurrentChatIDContext.Provider>
-    </React.Fragment>
+    </StandardPageLayout>
   )
 }
