@@ -75,7 +75,7 @@ export function DetailPageLayout(
       </Grid>
 
       {entityActions && (
-        <Grid item xs={12} sm="auto" sx={{ display: 'flex', justifyContent: { xs: 'flex-start', sm: 'flex-end' }, width: '100%' }}>
+        <Grid item xs={12} sm="auto" sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
           {entityActions}
         </Grid>
       )}

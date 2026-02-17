@@ -397,33 +397,33 @@ Each task builds on previous work, ensuring the system remains functional throug
     - Extract form logic to page hook
     - _Requirements: 1.1, 1.2, 2.6, 12.2_
 
-- [ ] 21. Migrate contracting list pages
-  - [ ] 21.1 Migrate Contracts page
+- [x] 21. Migrate contracting list pages
+  - [x] 21.1 Migrate Contracts page
     - Update `src/pages/contracting/Contracts.tsx`
     - Use StandardPageLayout with custom layout for tabs
     - Extract sidebar state management
     - Use LazySection for tab content
     - _Requirements: 1.1, 1.2, 3.1, 3.3, 12.2_
   
-  - [ ] 21.2 Migrate Services page
+  - [x] 21.2 Migrate Services page
     - Update `src/pages/contracting/Services.tsx`
     - Use StandardPageLayout
     - Extract data fetching to page hook
     - _Requirements: 1.1, 1.2, 12.2_
   
-  - [ ] 21.3 Migrate MyServices page
+  - [x] 21.3 Migrate MyServices page
     - Update `src/pages/contracting/MyServices.tsx`
     - Use StandardPageLayout
     - Extract data fetching to page hook
     - _Requirements: 1.1, 1.2, 12.2_
   
-  - [ ] 21.4 Migrate OrdersAssigned page
+  - [x] 21.4 Migrate OrdersAssigned page
     - Update `src/pages/contracting/OrdersAssigned.tsx`
     - Use StandardPageLayout
     - Extract data fetching to page hook
     - _Requirements: 1.1, 1.2, 12.2_
   
-  - [ ] 21.5 Migrate AcceptOrgInvite page
+  - [x] 21.5 Migrate AcceptOrgInvite page
     - Update `src/pages/contracting/AcceptOrgInvite.tsx`
     - Use StandardPageLayout
     - Extract logic to page hook
@@ -431,46 +431,46 @@ Each task builds on previous work, ensuring the system remains functional throug
 
 ### Contractor/Organization Pages
 
-- [ ] 22. Migrate contractor pages
-  - [ ] 22.1 Migrate Contractors page
+- [x] 22. Migrate contractor pages
+  - [x] 22.1 Migrate Contractors page
     - Update `src/pages/contractor/Contractors.tsx`
     - Use StandardPageLayout
     - Extract data fetching to page hook
     - _Requirements: 1.1, 1.2, 12.2_
   
-  - [ ] 22.2 Migrate OrgManage page
+  - [x] 22.2 Migrate OrgManage page
     - Update `src/pages/contractor/OrgManage.tsx`
     - Use StandardPageLayout
     - Extract data fetching to page hook
     - Use LazySection for management sections
     - _Requirements: 1.1, 1.2, 1.3, 12.2_
   
-  - [ ] 22.3 Migrate OrgMoney page
+  - [x] 22.3 Migrate OrgMoney page
     - Update `src/pages/contractor/OrgMoney.tsx`
     - Use StandardPageLayout
     - Extract data fetching to page hook
     - _Requirements: 1.1, 1.2, 12.2_
   
-  - [ ] 22.4 Migrate OrgOrders page
+  - [x] 22.4 Migrate OrgOrders page
     - Update `src/pages/contractor/OrgOrders.tsx`
     - Use StandardPageLayout
     - Extract data fetching to page hook
     - _Requirements: 1.1, 1.2, 12.2_
   
-  - [ ] 22.5 Migrate OrgRegister page
+  - [x] 22.5 Migrate OrgRegister page
     - Update `src/pages/contractor/OrgRegister.tsx`
     - Use FormPageLayout
     - Extract form logic to page hook
     - _Requirements: 1.1, 1.2, 2.6, 12.2_
   
-  - [ ] 22.6 Migrate MemberDashboard page
+  - [x] 22.6 Migrate MemberDashboard page
     - Update `src/pages/contractor/MemberDashboard.tsx`
     - Use StandardPageLayout
     - Extract data fetching to page hook
     - Use LazySection for dashboard sections
     - _Requirements: 1.1, 1.2, 1.3, 12.2_
   
-  - [ ] 22.7 Migrate MemberFleet page
+  - [x] 22.7 Migrate MemberFleet page
     - Update `src/pages/contractor/MemberFleet.tsx`
     - Use StandardPageLayout
     - Extract data fetching to page hook

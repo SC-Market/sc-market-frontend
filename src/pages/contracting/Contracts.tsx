@@ -1,4 +1,4 @@
-import React, { useState, Suspense, useMemo } from "react"
+import React, { useState, useMemo, lazy } from "react"
 import { ContractListings } from "../../views/contracts/ContractListings"
 import { ContractSidebar } from "../../views/contracts/ContractSidebar"
 import { ContractSidebarContext } from "../../hooks/contract/ContractSidebar"
@@ -6,11 +6,9 @@ import {
   ContractSearchContext,
   ContractSearchState,
 } from "../../hooks/contract/ContractSearch"
-import { marketDrawerWidth } from "../../features/market"
 import FilterListIcon from "@mui/icons-material/FilterList"
 import { FiltersFAB } from "../../components/mobile/FiltersFAB"
 import {
-  Button,
   Divider,
   Grid,
   Box,
@@ -18,42 +16,40 @@ import {
   Container,
   Tabs,
   Typography,
-  CircularProgress,
   Paper,
 } from "@mui/material"
 import { HapticTab } from "../../components/haptic"
-import { Page } from "../../components/metadata/Page"
-import { Link, useLocation, useNavigate } from "react-router-dom"
-import { CreateRounded } from "@mui/icons-material"
+import { useLocation, useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { OpenLayout } from "../../components/layout/ContainerGrid"
 import { MarketSidebarContext } from "../../features/market/hooks/MarketSidebar"
 import { ServiceSidebarContext } from "../../hooks/contract/ServiceSidebar"
 import { a11yProps, TabPanel } from "../../components/tabs/Tabs"
+import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
+import { LazySection } from "../../components/layout/LazySection"
 
-const ItemMarketView = React.lazy(() =>
+const ItemMarketView = lazy(() =>
   import("../../features/market/components/ItemMarketView").then((module) => ({
     default: module.ItemMarketView,
   })),
 )
-const ServiceMarketView = React.lazy(() =>
+const ServiceMarketView = lazy(() =>
   import("../../views/services/ServiceMarketView").then((module) => ({
     default: module.ServiceMarketView,
   })),
 )
-const MarketActions = React.lazy(() =>
+const MarketActions = lazy(() =>
   import("../../features/market/components/MarketActions").then((module) => ({
     default: module.MarketActions,
   })),
 )
-const ServiceActions = React.lazy(() =>
+const ServiceActions = lazy(() =>
   import("../../views/services/ServiceActions").then((module) => ({
     default: module.ServiceActions,
   })),
 )
-const ContractActions = React.lazy(() =>
+const ContractActions = lazy(() =>
   import("../../views/contracts/ContractActions").then((module) => ({
     default: module.ContractActions,
   })),
@@ -79,7 +75,13 @@ export function Contracts() {
   )
 
   return (
-    <Page title={t("contracts.contractsTitle")} dontUseDefaultCanonUrl={true}>
+    <StandardPageLayout
+      title={t("contracts.contractsTitle")}
+      canonicalUrl={undefined}
+      sidebarOpen={true}
+      noMobilePadding={true}
+      maxWidth={false}
+    >
       <MarketSidebarContext.Provider
         value={[marketSidebarOpen, setMarketSidebarOpen]}
       >
@@ -95,151 +97,150 @@ export function Contracts() {
             <ContractSidebarContext.Provider
               value={[contractSidebarOpen, setContractSidebarOpen]}
             >
-              <OpenLayout sidebarOpen={true} noMobilePadding={true}>
-                <Container
-                  maxWidth={"xxl"}
-                  sx={{
-                    paddingTop: { xs: 2, sm: 8 },
-                    paddingX: { xs: theme.spacing(1), sm: theme.spacing(3) },
+              <Container
+                maxWidth={"xxl"}
+                sx={{
+                  paddingTop: { xs: 2, sm: 8 },
+                  paddingX: { xs: theme.spacing(1), sm: theme.spacing(3) },
+                }}
+              >
+                <Grid
+                  container
+                  spacing={{
+                    xs: theme.layoutSpacing.component,
+                    sm: theme.layoutSpacing.layout,
                   }}
+                  sx={{ marginBottom: { xs: 2, sm: 4 } }}
+                  alignItems="center"
+                  justifyContent="space-between"
                 >
-                  <Grid
-                    container
-                    spacing={{
-                      xs: theme.layoutSpacing.component,
-                      sm: theme.layoutSpacing.layout,
-                    }}
-                    sx={{ marginBottom: { xs: 2, sm: 4 } }}
-                    alignItems="center"
-                    justifyContent="space-between"
-                  >
-                    <Grid item xs={12} sm="auto">
-                      <Box
-                        sx={{ display: "flex", alignItems: "center", gap: 1 }}
-                      >
-                        <Typography
-                          variant="h4"
-                          sx={{
-                            fontWeight: "bold",
-                            fontSize: { xs: "1.5rem", sm: "2.125rem" },
-                          }}
-                          color={"text.secondary"}
-                        >
-                          {t("market.market")}
-                        </Typography>
-                      </Box>
-                    </Grid>
-                    <Grid item xs={12} sm="auto">
-                      <Tabs
-                        value={tabPage}
-                        onChange={(_, newValue) => {
-                          if (newValue === 0) {
-                            navigate("/market/services")
-                          } else if (newValue === 1) {
-                            navigate("/market")
-                          } else if (newValue === 2) {
-                            navigate("/contracts")
-                          }
-                        }}
-                        aria-label={t("ui.aria.orgInfoArea")}
-                        variant="scrollable"
-                        scrollButtons="auto"
-                        textColor="secondary"
-                        indicatorColor="secondary"
+                  <Grid item xs={12} sm="auto">
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                      <Typography
+                        variant="h4"
                         sx={{
-                          minHeight: { xs: 48, sm: 64 },
-                          "& .MuiTab-root": {
-                            minHeight: { xs: 48, sm: 64 },
-                            fontSize: { xs: "0.875rem", sm: "1rem" },
-                            padding: { xs: "12px 16px", sm: "12px 24px" },
-                          },
+                          fontWeight: "bold",
+                          fontSize: { xs: "1.5rem", sm: "2.125rem" },
                         }}
+                        color={"text.secondary"}
                       >
-                        <HapticTab
-                          label={t("market.itemsTab")}
-                          value={1}
-                          {...a11yProps(1)}
-                        />
-                        <HapticTab
-                          label={t("market.servicesTab")}
-                          value={0}
-                          {...a11yProps(0)}
-                        />
-                        <HapticTab
-                          label={t("market.contractsTab", "Open Contracts")}
-                          value={2}
-                          {...a11yProps(2)}
-                        />
-                      </Tabs>
+                        {t("market.market")}
+                      </Typography>
+                    </Box>
+                  </Grid>
+                  <Grid item xs={12} sm="auto">
+                    <Tabs
+                      value={tabPage}
+                      onChange={(_, newValue) => {
+                        if (newValue === 0) {
+                          navigate("/market/services")
+                        } else if (newValue === 1) {
+                          navigate("/market")
+                        } else if (newValue === 2) {
+                          navigate("/contracts")
+                        }
+                      }}
+                      aria-label={t("ui.aria.orgInfoArea")}
+                      variant="scrollable"
+                      scrollButtons="auto"
+                      textColor="secondary"
+                      indicatorColor="secondary"
+                      sx={{
+                        minHeight: { xs: 48, sm: 64 },
+                        "& .MuiTab-root": {
+                          minHeight: { xs: 48, sm: 64 },
+                          fontSize: { xs: "0.875rem", sm: "1rem" },
+                          padding: { xs: "12px 16px", sm: "12px 24px" },
+                        },
+                      }}
+                    >
+                      <HapticTab
+                        label={t("market.itemsTab")}
+                        value={1}
+                        {...a11yProps(1)}
+                      />
+                      <HapticTab
+                        label={t("market.servicesTab")}
+                        value={0}
+                        {...a11yProps(0)}
+                      />
+                      <HapticTab
+                        label={t("market.contractsTab", "Open Contracts")}
+                        value={2}
+                        {...a11yProps(2)}
+                      />
+                    </Tabs>
+                  </Grid>
+                  <Grid item xs={12} sm="auto">
+                    {tabPage === 1 ? (
+                      <LazySection
+                        component={MarketActions}
+                        skeleton={() => null}
+                      />
+                    ) : tabPage === 0 ? (
+                      <LazySection
+                        component={ServiceActions}
+                        skeleton={() => null}
+                      />
+                    ) : (
+                      <LazySection
+                        component={ContractActions}
+                        skeleton={() => null}
+                      />
+                    )}
+                  </Grid>
+                </Grid>
+              </Container>
+
+              <TabPanel value={tabPage} index={1}>
+                <LazySection component={ItemMarketView} skeleton={() => null} />
+              </TabPanel>
+              <TabPanel value={tabPage} index={0}>
+                <LazySection
+                  component={ServiceMarketView}
+                  skeleton={() => null}
+                />
+              </TabPanel>
+              <TabPanel value={tabPage} index={2}>
+                <Container maxWidth="xxl">
+                  <Grid container spacing={theme.layoutSpacing.layout}>
+                    <Grid item xs={12}>
+                      <Divider light />
                     </Grid>
-                    <Grid item xs={12} sm="auto">
-                      {tabPage === 1 ? (
-                        <Suspense fallback={<CircularProgress size={24} />}>
-                          <MarketActions />
-                        </Suspense>
-                      ) : tabPage === 0 ? (
-                        <Suspense fallback={<CircularProgress size={24} />}>
-                          <ServiceActions />
-                        </Suspense>
-                      ) : (
-                        <Suspense fallback={<CircularProgress size={24} />}>
-                          <ContractActions />
-                        </Suspense>
-                      )}
+
+                    {/* Mobile: BottomSheet sidebar */}
+                    {xs && <ContractSidebar />}
+
+                    {/* Desktop: Sticky sidebar */}
+                    {!xs && contractSidebarOpen && (
+                      <Grid item md={2.25}>
+                        <Paper
+                          sx={{
+                            position: "sticky",
+                            top: theme.spacing(2),
+                            maxHeight: `calc(100vh - ${theme.spacing(4)})`,
+                            overflowY: "auto",
+                          }}
+                        >
+                          <ContractSidebar />
+                        </Paper>
+                      </Grid>
+                    )}
+
+                    {/* Main content */}
+                    <Grid
+                      item
+                      xs={12}
+                      md={contractSidebarOpen ? 9.75 : 12}
+                      container
+                      spacing={theme.layoutSpacing.layout}
+                    >
+                      <ContractListings />
                     </Grid>
                   </Grid>
                 </Container>
+              </TabPanel>
 
-                <TabPanel value={tabPage} index={1}>
-                  <Suspense fallback={null}>
-                    <ItemMarketView />
-                  </Suspense>
-                </TabPanel>
-                <TabPanel value={tabPage} index={0}>
-                  <Suspense fallback={null}>
-                    <ServiceMarketView />
-                  </Suspense>
-                </TabPanel>
-                <TabPanel value={tabPage} index={2}>
-                  <Container maxWidth="xxl">
-                    <Grid container spacing={theme.layoutSpacing.layout}>
-                      <Grid item xs={12}>
-                        <Divider light />
-                      </Grid>
-
-                      {/* Mobile: BottomSheet sidebar */}
-                      {xs && <ContractSidebar />}
-
-                      {/* Desktop: Sticky sidebar */}
-                      {!xs && contractSidebarOpen && (
-                        <Grid item md={2.25}>
-                          <Paper
-                            sx={{
-                              position: "sticky",
-                              top: theme.spacing(2),
-                              maxHeight: `calc(100vh - ${theme.spacing(4)})`,
-                              overflowY: "auto",
-                            }}
-                          >
-                            <ContractSidebar />
-                          </Paper>
-                        </Grid>
-                      )}
-
-                      {/* Main content */}
-                      <Grid
-                        item
-                        xs={12}
-                        md={contractSidebarOpen ? 9.75 : 12}
-                        container
-                        spacing={theme.layoutSpacing.layout}
-                      >
-                        <ContractListings />
-                      </Grid>
-                    </Grid>
-                  </Container>
-                </TabPanel>
-              </OpenLayout>
               {xs && tabPage === 1 && (
                 <FiltersFAB
                   onClick={() => setMarketSidebarOpen((prev) => !prev)}
@@ -262,6 +263,6 @@ export function Contracts() {
           </ContractSearchContext.Provider>
         </ServiceSidebarContext.Provider>
       </MarketSidebarContext.Provider>
-    </Page>
+    </StandardPageLayout>
   )
 }
