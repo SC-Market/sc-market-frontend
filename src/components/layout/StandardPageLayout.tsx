@@ -37,7 +37,7 @@ export interface StandardPageLayoutProps {
   // Layout configuration
   sidebarOpen?: boolean
   sidebarWidth?: number
-  maxWidth?: "xs" | "sm" | "md" | "lg" | "xl" | false
+  maxWidth?: "xs" | "sm" | "md" | "lg" | "xl" | "xxl" | false
   noFooter?: boolean
   noSidebar?: boolean
   noMobilePadding?: boolean
@@ -96,7 +96,7 @@ export function StandardPageLayout(
       <ContainerGrid
         sidebarOpen={sidebarOpen}
         sidebarWidth={sidebarWidth}
-        maxWidth={maxWidth}
+        maxWidth={maxWidth as any}
         noFooter={noFooter}
         noSidebar={noSidebar}
         noMobilePadding={noMobilePadding}

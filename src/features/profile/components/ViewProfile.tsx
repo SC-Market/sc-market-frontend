@@ -8,7 +8,6 @@ import { UserReviewSummary } from "../../../views/contractor/OrgReviews"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { OpenLayout } from "../../../components/layout/ContainerGrid"
 import { SwipeableItem } from "../../../components/gestures"
-import { PageBreadcrumbs } from "../../../components/navigation"
 import { ProfileBannerArea } from "./ProfileBannerArea"
 import { ProfileMetaTags } from "./ProfileMetaTags"
 import { ProfileHeader } from "./ProfileHeader"
@@ -36,17 +35,6 @@ export function ViewProfile(props: { profile: User }) {
 
   return (
     <OpenLayout sidebarOpen={true}>
-      <PageBreadcrumbs
-        items={[
-          { label: t("people.title", "People"), href: "/people" },
-          { label: props.profile.display_name },
-        ]}
-        MuiBreadcrumbsProps={{
-          sx: {
-            mb: 1,
-          },
-        }}
-      />
       <Box sx={{ position: "relative" }}>
         <ProfileBannerArea
           profile={props.profile}
