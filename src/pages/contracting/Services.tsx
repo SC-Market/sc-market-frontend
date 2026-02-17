@@ -28,6 +28,64 @@ export function Services() {
   const [open, setOpen] = useState(true)
   const pageData = usePageServices()
 
+  const headerContent = (
+    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+      {isMobile ? (
+        <Button
+          variant="outlined"
+          color="secondary"
+          startIcon={<FilterListIcon />}
+          aria-label={t("services.toggleSidebar")}
+          onClick={() => {
+            setOpen((prev) => !prev)
+          }}
+          sx={{
+            borderRadius: 2,
+            textTransform: "none",
+          }}
+        >
+          {t("services.filters", "Filters")}
+        </Button>
+      ) : (
+        <IconButton
+          color="secondary"
+          aria-label={t("services.toggleSidebar")}
+          onClick={() => {
+            setOpen((prev) => !prev)
+          }}
+          sx={{
+            transition: "0.3s",
+          }}
+        >
+          {open ? <CloseIcon /> : <MenuIcon />}
+        </IconButton>
+      )}
+      <Typography
+        variant="h4"
+        sx={{ fontWeight: "bold", margin: 0 }}
+        color={"text.secondary"}
+      >
+        {t("services.contractorServices")}
+      </Typography>
+    </Box>
+  )
+
+  const headerActions = (
+    <Link
+      to={"/order/service/create"}
+      style={{ color: "inherit", textDecoration: "none" }}
+    >
+      <Button
+        color={"secondary"}
+        startIcon={<CreateRounded />}
+        variant={"contained"}
+        size={"large"}
+      >
+        {t("services.createService")}
+      </Button>
+    </Link>
+  )
+
   return (
     <StandardPageLayout
       title={t("services.contractsTitle")}
@@ -35,74 +93,11 @@ export function Services() {
       maxWidth="lg"
       isLoading={pageData.isLoading}
       error={pageData.error}
+      headerTitle={headerContent}
+      headerActions={headerActions}
     >
       <ServiceSidebarContext.Provider value={[open, setOpen]}>
         <ServiceSidebar />
-        <Grid
-          item
-          container
-          justifyContent={"space-between"}
-          spacing={theme.layoutSpacing.layout}
-          xs={12}
-          alignItems="center"
-        >
-          <Grid item md={7} lg={7} xl={7}>
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              {isMobile ? (
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  startIcon={<FilterListIcon />}
-                  aria-label={t("services.toggleSidebar")}
-                  onClick={() => {
-                    setOpen((prev) => !prev)
-                  }}
-                  sx={{
-                    borderRadius: 2,
-                    textTransform: "none",
-                  }}
-                >
-                  {t("services.filters", "Filters")}
-                </Button>
-              ) : (
-                <IconButton
-                  color="secondary"
-                  aria-label={t("services.toggleSidebar")}
-                  onClick={() => {
-                    setOpen((prev) => !prev)
-                  }}
-                  sx={{
-                    transition: "0.3s",
-                  }}
-                >
-                  {open ? <CloseIcon /> : <MenuIcon />}
-                </IconButton>
-              )}
-              <Typography
-                variant="h4"
-                sx={{ fontWeight: "bold", margin: 0 }}
-                color={"text.secondary"}
-              >
-                {t("services.contractorServices")}
-              </Typography>
-            </Box>
-          </Grid>
-          <Grid item>
-            <Link
-              to={"/order/service/create"}
-              style={{ color: "inherit", textDecoration: "none" }}
-            >
-              <Button
-                color={"secondary"}
-                startIcon={<CreateRounded />}
-                variant={"contained"}
-                size={"large"}
-              >
-                {t("services.createService")}
-              </Button>
-            </Link>
-          </Grid>
-        </Grid>
         <ServiceListings />
       </ServiceSidebarContext.Provider>
     </StandardPageLayout>

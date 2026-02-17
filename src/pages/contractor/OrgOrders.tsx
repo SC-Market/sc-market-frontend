@@ -19,7 +19,7 @@ export function OrgOrders() {
       title={t("orders.orgOrdersTitle")}
       headerTitle={t("orders.ordersTitle")}
       sidebarOpen={true}
-      maxWidth="xxl"
+      maxWidth="xl"
     >
       {xxl && (
         <>

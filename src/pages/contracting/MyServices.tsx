@@ -1,5 +1,4 @@
 import React from "react"
-import { HeaderTitle } from "../../components/typography/HeaderTitle"
 import { Button, Divider, Grid } from "@mui/material"
 import { CreateRounded } from "@mui/icons-material"
 import { Link } from "react-router-dom"
@@ -15,6 +14,22 @@ export function MyServicesPage(props: {}) {
   const theme = useTheme<ExtendedTheme>()
   const pageData = usePageMyServices()
 
+  const headerActions = (
+    <Link
+      to={"/order/service/create"}
+      style={{ color: "inherit", textDecoration: "none" }}
+    >
+      <Button
+        color={"secondary"}
+        startIcon={<CreateRounded />}
+        variant={"contained"}
+        size={"large"}
+      >
+        {t("services.createService")}
+      </Button>
+    </Link>
+  )
+
   return (
     <StandardPageLayout
       title={t("services.myServices")}
@@ -22,35 +37,9 @@ export function MyServicesPage(props: {}) {
       maxWidth="lg"
       isLoading={pageData.isLoading}
       error={pageData.error}
+      headerTitle={t("services.myServices")}
+      headerActions={headerActions}
     >
-      <Grid
-        item
-        container
-        justifyContent={"space-between"}
-        spacing={theme.layoutSpacing.layout}
-        xs={12}
-      >
-        <HeaderTitle lg={8} xl={8}>
-          {t("services.myServices")}
-        </HeaderTitle>
-
-        <Grid item>
-          <Link
-            to={"/order/service/create"}
-            style={{ color: "inherit", textDecoration: "none" }}
-          >
-            <Button
-              color={"secondary"}
-              startIcon={<CreateRounded />}
-              variant={"contained"}
-              size={"large"}
-            >
-              {t("services.createService")}
-            </Button>
-          </Link>
-        </Grid>
-      </Grid>
-
       <Grid item xs={12}>
         <Divider light />
       </Grid>
