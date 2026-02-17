@@ -67,15 +67,15 @@ Each task builds on previous work, ensuring the system remains functional throug
     - Log errors to console
     - _Requirements: 3.1, 3.2, 3.5, 7.3, 7.5, 8.1, 8.2, 8.3, 8.4_
   
-  - [ ]* 3.2 Write property test for lazy loading skeleton display
+  - [x] 3.2 Write property test for lazy loading skeleton display
     - **Property 4: Lazy sections display skeletons during loading**
     - **Validates: Requirements 3.2, 8.2**
   
-  - [ ]* 3.3 Write property test for error isolation
+  - [x] 3.3 Write property test for error isolation
     - **Property 5: Error isolation between content sections**
     - **Validates: Requirements 3.4, 7.4**
   
-  - [ ]* 3.4 Write unit tests for LazySection
+  - [x] 3.4 Write unit tests for LazySection
     - Test multiple sections load in parallel
     - Test error boundary catches errors
     - Test errors are logged
@@ -84,23 +84,23 @@ Each task builds on previous work, ensuring the system remains functional throug
 - [ ] 4. Checkpoint - Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 5. Create page hook utilities and patterns
-  - [ ] 5.1 Create usePageMarketListing hook
+- [-] 5. Create page hook utilities and patterns
+  - [-] 5.1 Create usePageMarketListing hook
     - Create `src/features/market/hooks/usePageMarketListing.ts`
     - Compose useGetMarketListingQuery
     - Return data, isLoading, isFetching, error, refetch
     - Handle conditional queries for related data
     - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5_
   
-  - [ ]* 5.2 Write property test for page hook return shape
+  - [ ] 5.2 Write property test for page hook return shape
     - **Property 6: Page hooks return required properties**
     - **Validates: Requirements 5.2, 5.5**
   
-  - [ ]* 5.3 Write property test for page hook error handling
+  - [ ] 5.3 Write property test for page hook error handling
     - **Property 7: Page hooks expose error information**
     - **Validates: Requirements 5.3**
   
-  - [ ]* 5.4 Write unit test for page hook composition
+  - [ ] 5.4 Write unit test for page hook composition
     - Test hook composes multiple API queries
     - Test refetch function calls all queries
     - _Requirements: 5.4_

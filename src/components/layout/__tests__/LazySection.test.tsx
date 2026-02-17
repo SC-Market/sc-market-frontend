@@ -168,4 +168,119 @@ describe("LazySection", () => {
     const gridItem = container.querySelector(".custom-grid")
     expect(gridItem).toBeInTheDocument()
   })
+
+  it("loads multiple sections in parallel", async () => {
+    const Section1 = () => <div>Section 1 Content</div>
+    const Section2 = () => <div>Section 2 Content</div>
+    const Section3 = () => <div>Section 3 Content</div>
+
+    const LazySection1 = lazy(() =>
+      new Promise((resolve) => {
+        setTimeout(() => resolve({ default: Section1 }), 50)
+      }),
+    )
+    const LazySection2 = lazy(() =>
+      new Promise((resolve) => {
+        setTimeout(() => resolve({ default: Section2 }), 100)
+      }),
+    )
+    const LazySection3 = lazy(() =>
+      new Promise((resolve) => {
+        setTimeout(() => resolve({ default: Section3 }), 75)
+      }),
+    )
+
+    const startTime = Date.now()
+
+    render(
+      <div>
+        <LazySection component={LazySection1} skeleton={TestSkeleton} />
+        <LazySection component={LazySection2} skeleton={TestSkeleton} />
+        <LazySection component={LazySection3} skeleton={TestSkeleton} />
+      </div>,
+    )
+
+    // All sections should show skeletons initially
+    expect(screen.getAllByText("Loading Skeleton")).toHaveLength(3)
+
+    // Wait for all sections to load
+    await waitFor(() => {
+      expect(screen.getByText("Section 1 Content")).toBeInTheDocument()
+      expect(screen.getByText("Section 2 Content")).toBeInTheDocument()
+      expect(screen.getByText("Section 3 Content")).toBeInTheDocument()
+    })
+
+    const endTime = Date.now()
+    const totalTime = endTime - startTime
+
+    // If sections loaded in parallel, total time should be close to the longest delay (100ms)
+    // If they loaded sequentially, it would be 50 + 100 + 75 = 225ms
+    // Allow buffer for test execution time and React rendering
+    expect(totalTime).toBeLessThan(350)
+  })
+
+  it("error boundary catches errors in one section without affecting others", async () => {
+    const WorkingSection = () => <div>Working Section</div>
+    const LazyWorkingSection = lazy(() =>
+      Promise.resolve({ default: WorkingSection }),
+    )
+    const LazyErrorSection = lazy(() =>
+      Promise.resolve({ default: ErrorComponent }),
+    )
+
+    render(
+      <div>
+        <LazySection
+          component={LazyWorkingSection}
+          skeleton={TestSkeleton}
+          errorFallback={TestErrorFallback}
+        />
+        <LazySection
+          component={LazyErrorSection}
+          skeleton={TestSkeleton}
+          errorFallback={TestErrorFallback}
+        />
+        <LazySection
+          component={LazyWorkingSection}
+          skeleton={TestSkeleton}
+          errorFallback={TestErrorFallback}
+        />
+      </div>,
+    )
+
+    await waitFor(() => {
+      // Working sections should render successfully
+      expect(screen.getAllByText("Working Section")).toHaveLength(2)
+      // Error section should show error fallback
+      expect(screen.getByText("Error: Test error")).toBeInTheDocument()
+    })
+  })
+
+  it("logs errors when error boundary catches them", async () => {
+    const consoleErrorSpy = vi.spyOn(console, "error")
+    const LazyErrorComponent = lazy(() =>
+      Promise.resolve({ default: ErrorComponent }),
+    )
+
+    render(
+      <LazySection
+        component={LazyErrorComponent}
+        skeleton={TestSkeleton}
+        errorFallback={TestErrorFallback}
+      />,
+    )
+
+    await waitFor(() => {
+      expect(screen.getByText("Error: Test error")).toBeInTheDocument()
+    })
+
+    // Verify error was logged
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+      "Section error:",
+      expect.any(Error),
+      expect.any(Object),
+    )
+
+    consoleErrorSpy.mockRestore()
+  })
 })
