@@ -781,22 +781,20 @@ export function MarketCart() {
       isLoading={pageData.isLoading}
       error={pageData.error}
     >
-      <Grid item xs={12} lg={12}>
-        <Grid container spacing={theme.layoutSpacing.layout}>
-          {(cart || []).map((seller: CartSeller) => (
-            <CartSellerEntry
-              key={seller.contractor_seller_id || seller.user_seller_id}
-              seller={seller}
-              updateCart={updateCart}
-              removeSellerEntry={removeSellerEntry}
-            />
-          ))}
-          {(!cart || !cart.length) && (
-            <Grid item xs={12}>
-              <EmptyCart />
-            </Grid>
-          )}
-        </Grid>
+      <Grid item xs={12} container spacing={theme.layoutSpacing.layout}>
+        {(cart || []).map((seller: CartSeller) => (
+          <CartSellerEntry
+            key={seller.contractor_seller_id || seller.user_seller_id}
+            seller={seller}
+            updateCart={updateCart}
+            removeSellerEntry={removeSellerEntry}
+          />
+        ))}
+        {(!cart || !cart.length) && (
+          <Grid item xs={12}>
+            <EmptyCart />
+          </Grid>
+        )}
       </Grid>
     </StandardPageLayout>
   )

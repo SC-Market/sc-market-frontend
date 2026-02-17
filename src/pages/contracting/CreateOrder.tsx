@@ -2,8 +2,7 @@ import React, { useRef } from "react"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
 import { CreateOrderForm } from "../../views/orders/CreateOrderForm"
 import { MyOrders } from "../../views/orders/MyOrders"
-import { ContainerGrid } from "../../components/layout/ContainerGrid"
-import { Page } from "../../components/metadata/Page"
+import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { useGetServiceByIdQuery } from "../../store/services"
 import { Navigate, useParams } from "react-router-dom"
 import { ServiceView } from "../../views/contracts/ServiceView"
@@ -15,59 +14,54 @@ import {
   shouldShowErrorPage,
 } from "../../util/errorHandling"
 import { ErrorPage } from "../errors/ErrorPage"
+import { usePageServiceOrder } from "../../features/contracting/hooks/usePageServiceOrder"
 
 export function CreateOrder(props: {}) {
   const { t } = useTranslation()
   return (
-    <Page title={t("orders.ordersTitle")}>
-      <ContainerGrid maxWidth={"md"} sidebarOpen={true}>
-        <HeaderTitle lg={12} xl={12}>
-          {t("orders.ordersTitle")}
-        </HeaderTitle>
-
-        <SentOffersArea />
-        <MyOrders />
-        <BuyOrdersViewPaginated />
-      </ContainerGrid>
-    </Page>
+    <StandardPageLayout
+      title={t("orders.ordersTitle")}
+      headerTitle={t("orders.ordersTitle")}
+      maxWidth="md"
+      sidebarOpen={true}
+    >
+      <SentOffersArea />
+      <MyOrders />
+      <BuyOrdersViewPaginated />
+    </StandardPageLayout>
   )
 }
 
 export function ServiceCreateOrder() {
   const { t } = useTranslation()
   const { service_id } = useParams<{ service_id: string }>()
-  const { data: service, error, isError } = useGetServiceByIdQuery(service_id!)
+  const { service, isLoading, error } = usePageServiceOrder(service_id!)
   const orderHeaderRef = useRef<HTMLDivElement>(null)
 
   return (
-    <Page title={t("orders.createOrderTitle")}>
-      <ContainerGrid maxWidth={"lg"} sidebarOpen={true}>
-        {/*<HeaderTitle lg={12} xl={12}>*/}
-        {/*    Orders*/}
-        {/*</HeaderTitle>*/}
-
-        {shouldRedirectTo404(error) && <Navigate to={"/404"} />}
-        {shouldShowErrorPage(error) && <ErrorPage />}
-
-        {service && (
+    <StandardPageLayout
+      title={t("orders.createOrderTitle")}
+      maxWidth="lg"
+      sidebarOpen={true}
+      isLoading={isLoading}
+      error={error}
+    >
+      {service && (
+        <>
           <ServiceView service={service} orderFormRef={orderHeaderRef} />
-        )}
 
-        {service && (
           <HeaderTitle ref={orderHeaderRef} center>
             {t("serviceView.placeOrder", "Place Order")}
           </HeaderTitle>
-        )}
 
-        {service && (
           <CreateOrderForm
             key={service.service_id}
             service={service}
             contractor_id={service.contractor?.spectrum_id}
             assigned_to={service.user?.username}
           />
-        )}
-      </ContainerGrid>
-    </Page>
+        </>
+      )}
+    </StandardPageLayout>
   )
 }

@@ -81,7 +81,7 @@ Each task builds on previous work, ensuring the system remains functional throug
     - Test errors are logged
     - _Requirements: 3.3, 3.5, 7.5_
 
-- [ ] 4. Checkpoint - Ensure all tests pass
+- [x] 4. Checkpoint - Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
 - [x] 5. Create page hook utilities and patterns
@@ -140,23 +140,23 @@ Each task builds on previous work, ensuring the system remains functional throug
     - Test page handles server error
     - _Requirements: 7.1, 7.2, 12.2_
 
-- [ ] 8. Checkpoint - Validate pilot migration
+- [x] 8. Checkpoint - Validate pilot migration
   - Ensure all tests pass, ask the user if questions arise.
 
-- [ ] 9. Create migration documentation and examples
-  - [ ] 9.1 Document StandardPageLayout usage
+- [-] 9. Create migration documentation and examples
+  - [x] 9.1 Document StandardPageLayout usage
     - Create examples for common use cases
     - Document all props and their purposes
     - Include code snippets for typical pages
     - _Requirements: 12.3, 12.4_
   
-  - [ ] 9.2 Document DetailPageLayout usage
+  - [x] 9.2 Document DetailPageLayout usage
     - Create examples for entity detail pages
     - Show how to integrate with page hooks
     - Include breadcrumb and navigation examples
     - _Requirements: 12.3, 12.4_
   
-  - [ ] 9.3 Document FormPageLayout usage
+  - [x] 9.3 Document FormPageLayout usage
     - Create examples for create and edit pages
     - Show form action integration
     - Include validation and error handling patterns
@@ -331,14 +331,14 @@ Each task builds on previous work, ensuring the system remains functional throug
 
 ### Contracting Feature Pages
 
-- [ ] 19. Migrate contracting detail pages
-  - [ ] 19.1 Create usePageOrder hook
+- [x] 19. Migrate contracting detail pages
+  - [x] 19.1 Create usePageOrder hook
     - Create `src/features/contracting/hooks/usePageOrder.ts`
     - Compose order-related queries (order, chat, notifications, offer session)
     - Return standard page hook interface
     - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5_
   
-  - [ ] 19.2 Migrate ViewOrder page
+  - [x] 19.2 Migrate ViewOrder page
     - Update `src/pages/contracting/ViewOrder.tsx`
     - Use DetailPageLayout
     - Use usePageOrder hook
@@ -346,52 +346,52 @@ Each task builds on previous work, ensuring the system remains functional throug
     - Simplify tab logic with new architecture
     - _Requirements: 1.1, 1.2, 1.3, 3.1, 3.3, 12.2_
   
-  - [ ] 19.3 Create usePageContract hook
+  - [x] 19.3 Create usePageContract hook
     - Create `src/features/contracting/hooks/usePageContract.ts`
     - Compose contract-related queries
     - Return standard page hook interface
     - _Requirements: 5.1, 5.2, 5.3, 5.5_
   
-  - [ ] 19.4 Migrate ContractInfo page
+  - [x] 19.4 Migrate ContractInfo page
     - Update `src/pages/contracting/ContractInfo.tsx`
     - Use DetailPageLayout
     - Use usePageContract hook
     - Use LazySection for content sections
     - _Requirements: 1.1, 1.2, 1.3, 12.2_
   
-  - [ ] 19.5 Create usePagePublicContract hook
+  - [x] 19.5 Create usePagePublicContract hook
     - Create `src/features/contracting/hooks/usePagePublicContract.ts`
     - Compose public contract queries
     - Return standard page hook interface
     - _Requirements: 5.1, 5.2, 5.3, 5.5_
   
-  - [ ] 19.6 Migrate ViewPublicContract page
+  - [x] 19.6 Migrate ViewPublicContract page
     - Update `src/pages/contracting/ViewPublicContract.tsx`
     - Use DetailPageLayout
     - Use usePagePublicContract hook
     - Use LazySection for content sections
     - _Requirements: 1.1, 1.2, 1.3, 12.2_
 
-- [ ] 20. Migrate contracting form pages
-  - [ ] 20.1 Migrate CreateOrder page
+- [x] 20. Migrate contracting form pages
+  - [x] 20.1 Migrate CreateOrder page
     - Update `src/pages/contracting/CreateOrder.tsx`
     - Use StandardPageLayout (list view)
     - Extract data fetching to page hook
     - _Requirements: 1.1, 1.2, 12.2_
   
-  - [ ] 20.2 Migrate ServiceCreateOrder page
+  - [x] 20.2 Migrate ServiceCreateOrder page
     - Update `src/pages/contracting/CreateOrder.tsx` (ServiceCreateOrder component)
     - Use FormPageLayout
     - Create usePageServiceOrder hook
     - _Requirements: 1.1, 1.2, 2.6, 12.2_
   
-  - [ ] 20.3 Migrate CreateService page
+  - [x] 20.3 Migrate CreateService page
     - Update `src/pages/contracting/CreateService.tsx`
     - Use FormPageLayout
     - Extract form logic to page hook
     - _Requirements: 1.1, 1.2, 2.6, 12.2_
   
-  - [ ] 20.4 Migrate CreatePublicContractPage
+  - [x] 20.4 Migrate CreatePublicContractPage
     - Update `src/pages/contracting/CreatePublicContractPage.tsx`
     - Use FormPageLayout
     - Extract form logic to page hook

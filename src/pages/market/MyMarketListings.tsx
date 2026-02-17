@@ -79,86 +79,88 @@ export function MyMarketListings() {
         {open ? <CloseIcon /> : <MenuIcon />}
       </IconButton>
       <MarketSidebarContext.Provider value={[open, setOpen]}>
-        <Grid item xs={12}>
-          <HideOnScroll>
-            <MarketNavArea />
-          </HideOnScroll>
+        <Grid item xs={12} container spacing={theme.layoutSpacing.layout}>
+          <Grid item xs={12}>
+            <HideOnScroll>
+              <MarketNavArea />
+            </HideOnScroll>
+          </Grid>
+
+          <Grid item xs={12}>
+            <Divider light />
+          </Grid>
+
+          <LazySection
+            component={ActiveListings}
+            skeleton={ListingsSkeleton}
+            gridProps={{
+              item: true,
+              container: true,
+              xs: 12,
+              lg: 12,
+              spacing: theme.layoutSpacing.component,
+              sx: { transition: "0.3s" },
+            }}
+          />
+
+          <Grid
+            item
+            container
+            justifyContent="space-between"
+            spacing={theme.layoutSpacing.layout}
+            xs={12}
+          >
+            <HeaderTitle lg={12} xl={12}>
+              {t("market.inactiveListings")}
+            </HeaderTitle>
+          </Grid>
+
+          <Grid item xs={12}>
+            <Divider light />
+          </Grid>
+
+          <LazySection
+            component={InactiveListings}
+            skeleton={ListingsSkeleton}
+            gridProps={{
+              item: true,
+              container: true,
+              xs: 12,
+              lg: 12,
+              spacing: theme.layoutSpacing.component,
+              sx: { transition: "0.3s" },
+            }}
+          />
+
+          <Grid
+            item
+            container
+            justifyContent="space-between"
+            spacing={theme.layoutSpacing.layout}
+            xs={12}
+          >
+            <HeaderTitle lg={12} xl={12}>
+              {t("market.archivedListings")}
+            </HeaderTitle>
+          </Grid>
+
+          <Grid item xs={12}>
+            <Divider light />
+          </Grid>
+
+          <LazySection
+            component={ArchivedListings}
+            skeleton={ListingsSkeleton}
+            gridProps={{
+              item: true,
+              container: true,
+              xs: 12,
+              lg: 12,
+              spacing: theme.layoutSpacing.component,
+              sx: { transition: "0.3s" },
+            }}
+          />
         </Grid>
-
-        <Grid item xs={12}>
-          <Divider light />
-        </Grid>
-
-        <LazySection
-          component={ActiveListings}
-          skeleton={ListingsSkeleton}
-          gridProps={{
-            item: true,
-            container: true,
-            xs: 12,
-            lg: 12,
-            spacing: theme.layoutSpacing.component,
-            sx: { transition: "0.3s" },
-          }}
-        />
-
-        <Grid
-          item
-          container
-          justifyContent="space-between"
-          spacing={theme.layoutSpacing.layout}
-          xs={12}
-        >
-          <HeaderTitle lg={12} xl={12}>
-            {t("market.inactiveListings")}
-          </HeaderTitle>
-        </Grid>
-
-        <Grid item xs={12}>
-          <Divider light />
-        </Grid>
-
-        <LazySection
-          component={InactiveListings}
-          skeleton={ListingsSkeleton}
-          gridProps={{
-            item: true,
-            container: true,
-            xs: 12,
-            lg: 12,
-            spacing: theme.layoutSpacing.component,
-            sx: { transition: "0.3s" },
-          }}
-        />
-
-        <Grid
-          item
-          container
-          justifyContent="space-between"
-          spacing={theme.layoutSpacing.layout}
-          xs={12}
-        >
-          <HeaderTitle lg={12} xl={12}>
-            {t("market.archivedListings")}
-          </HeaderTitle>
-        </Grid>
-
-        <Grid item xs={12}>
-          <Divider light />
-        </Grid>
-
-        <LazySection
-          component={ArchivedListings}
-          skeleton={ListingsSkeleton}
-          gridProps={{
-            item: true,
-            container: true,
-            xs: 12,
-            lg: 12,
-            spacing: theme.layoutSpacing.component,
-            sx: { transition: "0.3s" },
-          }}
-        />
       </MarketSidebarContext.Provider>
     </StandardPageLayout>
   )
