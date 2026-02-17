@@ -1,8 +1,8 @@
-import React from "react"
+import React, { lazy, Suspense } from "react"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
 import { Navigate, useParams } from "react-router-dom"
 import { Contractor } from "../../datatypes/Contractor"
-import { OrgInfo, OrgInfoSkeleton } from "../../features/contractor"
+import { OrgInfoSkeleton, usePageOrg } from "../../features/contractor"
 import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import { Skeleton } from "@mui/material"
 import { useGetContractorBySpectrumIDQuery } from "../../store/contractor"
@@ -15,31 +15,51 @@ import {
   shouldShowErrorPage,
 } from "../../util/errorHandling"
 import { ErrorPage } from "../errors/ErrorPage"
+import { DetailPageLayout } from "../../components/layout/DetailPageLayout"
+import { LazySection } from "../../components/layout/LazySection"
+
+const OrgInfoLazy = lazy(() =>
+  import("../../features/contractor/components/OrgInfo").then((module) => ({
+    default: module.OrgInfo,
+  })),
+)
 
 export function ViewOrg() {
   const { id } = useParams<{ id: string }>()
   const { t } = useTranslation()
-
-  const contractor = useGetContractorBySpectrumIDQuery(id!)
+  const pageData = usePageOrg(id!)
 
   return (
-    <Page
+    <DetailPageLayout
       title={
-        contractor.data?.name
-          ? `${contractor.data?.name} - ${t("org.orgTitle")}`
-          : null
+        pageData.data?.contractor.name
+          ? `${pageData.data.contractor.name} - ${t("org.orgTitle")}`
+          : t("org.orgTitle")
       }
+      breadcrumbs={[
+        {
+          label: t("contractors.title", "Contractors"),
+          href: "/contractors",
+        },
+        {
+          label: pageData.data?.contractor.name || t("org.orgTitle"),
+        },
+      ]}
+      isLoading={pageData.isLoading}
+      error={pageData.error}
+      skeleton={<OrgInfoSkeleton />}
+      sidebarOpen={true}
+      maxWidth={false}
+      noFooter={false}
     >
-      {contractor.isLoading || contractor.isFetching ? (
-        <OrgInfoSkeleton />
-      ) : shouldRedirectTo404(contractor.error) ? (
-        <Navigate to={"/404"} />
-      ) : shouldShowErrorPage(contractor.error) ? (
-        <ErrorPage />
-      ) : (
-        <OrgInfo contractor={contractor.data!} />
+      {pageData.data && (
+        <LazySection
+          component={OrgInfoLazy}
+          componentProps={{ contractor: pageData.data.contractor }}
+          skeleton={OrgInfoSkeleton}
+        />
       )}
-    </Page>
+    </DetailPageLayout>
   )
 }
 
