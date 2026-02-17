@@ -45,7 +45,7 @@ export function DetailPageLayout(
 
   // Build the header content with entity information
   const detailHeader = (
-    <Grid container spacing={theme.layoutSpacing.layout} alignItems="center">
+    <Grid container spacing={theme.layoutSpacing.layout} alignItems="center" justifyContent="space-between">
       {backButton && (
         <Grid item>
           <IconButton
