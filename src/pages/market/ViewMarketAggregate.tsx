@@ -51,13 +51,14 @@ export function ViewMarketAggregate(props: {}) {
       entityActions={
         <Link
           to="/market/cart"
-          style={{ color: "inherit", textDecoration: "none" }}
+          style={{ color: "inherit", textDecoration: "none", width: '100%' }}
         >
           <Button
             color="secondary"
             startIcon={<ShoppingCartRoundedIcon />}
             variant="contained"
             size="large"
+            fullWidth
           >
             {t("marketActions.myCart")}
           </Button>
