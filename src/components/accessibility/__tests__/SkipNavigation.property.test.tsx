@@ -12,7 +12,7 @@ import fc from 'fast-check'
 import { SkipNavigation, SkipLink } from '../SkipNavigation'
 
 // Mock i18next
-jest.mock('react-i18next', () => ({
+vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key: string, defaultValue: string) => defaultValue
   })
@@ -166,7 +166,7 @@ describe('SkipNavigation Property-Based Tests', () => {
             document.body.appendChild(targetElement)
             
             // Mock scrollIntoView
-            targetElement.scrollIntoView = jest.fn()
+            targetElement.scrollIntoView = vi.fn()
             
             const { getByRole } = render(<SkipNavigation links={[link]} />)
             
@@ -211,7 +211,7 @@ describe('SkipNavigation Property-Based Tests', () => {
             document.body.appendChild(targetElement)
             
             // Mock scrollIntoView
-            targetElement.scrollIntoView = jest.fn()
+            targetElement.scrollIntoView = vi.fn()
             
             // Initially should not have tabindex
             expect(targetElement.hasAttribute('tabindex')).toBe(false)
