@@ -84,28 +84,28 @@ Each task builds on previous work, ensuring the system remains functional throug
 - [ ] 4. Checkpoint - Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
-- [-] 5. Create page hook utilities and patterns
-  - [-] 5.1 Create usePageMarketListing hook
+- [x] 5. Create page hook utilities and patterns
+  - [x] 5.1 Create usePageMarketListing hook
     - Create `src/features/market/hooks/usePageMarketListing.ts`
     - Compose useGetMarketListingQuery
     - Return data, isLoading, isFetching, error, refetch
     - Handle conditional queries for related data
     - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5_
   
-  - [ ] 5.2 Write property test for page hook return shape
+  - [x] 5.2 Write property test for page hook return shape
     - **Property 6: Page hooks return required properties**
     - **Validates: Requirements 5.2, 5.5**
   
-  - [ ] 5.3 Write property test for page hook error handling
+  - [x] 5.3 Write property test for page hook error handling
     - **Property 7: Page hooks expose error information**
     - **Validates: Requirements 5.3**
   
-  - [ ] 5.4 Write unit test for page hook composition
+  - [x] 5.4 Write unit test for page hook composition
     - Test hook composes multiple API queries
     - Test refetch function calls all queries
     - _Requirements: 5.4_
 
-- [ ] 6. Create content section components for market listing
+- [-] 6. Create content section components for market listing
   - [ ] 6.1 Extract MarketListingDetails section component
     - Create `src/features/market/components/MarketListingDetails.tsx`
     - Extract details section from MarketListingView
