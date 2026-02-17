@@ -570,7 +570,7 @@ Each task builds on previous work, ensuring the system remains functional throug
 
 ### Fleet Pages
 
-- [-] 26. Migrate fleet pages
+- [x] 26. Migrate fleet pages
   - [x] 26.1 Migrate Fleet page
     - Update `src/pages/fleet/Fleet.tsx`
     - Use StandardPageLayout
@@ -586,7 +586,7 @@ Each task builds on previous work, ensuring the system remains functional throug
 
 ### Availability Pages
 
-- [ ] 27. Migrate availability pages
+- [~] 27. Migrate availability pages
   - [ ] 27.1 Migrate Availability page
     - Update `src/pages/availability/Availability.tsx`
     - Use StandardPageLayout
