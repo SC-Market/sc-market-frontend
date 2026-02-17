@@ -1,7 +1,7 @@
-import { useGetServicesQuery } from "../../../store/services"
+import { useGetPublicServicesQuery } from "../../../store/services"
 
 interface UsePageServicesResult {
-  data: ReturnType<typeof useGetServicesQuery>["data"]
+  data: ReturnType<typeof useGetPublicServicesQuery>["data"]
   isLoading: boolean
   isFetching: boolean
   error: unknown
@@ -9,7 +9,7 @@ interface UsePageServicesResult {
 }
 
 export function usePageServices(): UsePageServicesResult {
-  const servicesQuery = useGetServicesQuery({})
+  const servicesQuery = useGetPublicServicesQuery({})
 
   return {
     data: servicesQuery.data,

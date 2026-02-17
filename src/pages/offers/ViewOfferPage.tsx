@@ -42,10 +42,10 @@ export function ViewOfferPage() {
       title={t("offers.viewOffer")}
       error={error}
       breadcrumbs={[
-        { label: t("offers.dashboard"), to: "/dashboard" },
+        { label: t("offers.dashboard"), href: "/dashboard" },
         {
           label: `${t("offers.offer")} ${(id || "").substring(0, 8).toUpperCase()}`,
-          to: `/offer/${id}`,
+          href: `/offer/${id}`,
         },
       ]}
       maxWidth="xl"
