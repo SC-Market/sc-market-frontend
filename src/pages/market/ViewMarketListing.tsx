@@ -13,6 +13,7 @@ import { DetailPageLayout } from "../../components/layout/DetailPageLayout"
 import { LazySection } from "../../components/layout/LazySection"
 import { usePageMarketListing } from "../../features/market/hooks/usePageMarketListing"
 
+// Lazy load the content component, but keep skeleton eager
 const MarketListingView = lazy(
   () => import("../../features/market/views/MarketListingView").then(module => ({
     default: module.MarketListingView
