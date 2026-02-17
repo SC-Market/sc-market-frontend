@@ -102,7 +102,7 @@ describe('AccessibleDialog', () => {
   
   it('calls onClose when Escape key is pressed', async () => {
     const user = userEvent.setup()
-    const onClose = jest.fn()
+    const onClose = vi.fn()
     
     render(
       <TestWrapper>

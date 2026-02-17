@@ -1,12 +1,9 @@
-// jest-dom adds custom jest matchers for asserting on DOM nodes.
-// allows you to do things like:
-// expect(element).toHaveTextContent(/react/i)
-// learn more: https://github.com/testing-library/jest-dom
-import "@testing-library/jest-dom"
+import '@testing-library/jest-dom'
+import { expect, afterEach } from 'vitest'
+import { cleanup } from '@testing-library/react'
+import * as matchers from '@testing-library/jest-dom/matchers'
+import { toHaveNoViolations } from 'jest-axe'
 
-// jest-axe adds custom matchers for accessibility testing
-// allows you to do things like:
-// expect(container).toHaveNoViolations()
-// learn more: https://github.com/nickcolley/jest-axe
-import "jest-axe/extend-expect"
-
+expect.extend(matchers)
+expect.extend({ toHaveNoViolations })
+afterEach(() => cleanup())

@@ -1,19 +1,30 @@
+import { vi } from "vitest"
 import React from "react"
 import { render, screen, fireEvent } from "@testing-library/react"
+import { Provider } from "react-redux"
+import { configureStore } from "@reduxjs/toolkit"
 import { AttributeFilterSection } from "../AttributeFilterSection"
 
 // Mock i18n
-jest.mock("react-i18next", () => ({
+vi.mock("react-i18next", () => ({
   useTranslation: () => ({
     t: (key: string, fallback?: string) => fallback || key,
   }),
 }))
 
+const mockStore = configureStore({
+  reducer: {},
+})
+
+const renderWithProvider = (component: React.ReactElement) => {
+  return render(<Provider store={mockStore}>{component}</Provider>)
+}
+
 describe("AttributeFilterSection", () => {
   describe("select type", () => {
     it("renders single-select dropdown", () => {
-      const onChange = jest.fn()
-      render(
+      const onChange = vi.fn()
+      renderWithProvider(
         <AttributeFilterSection
           attributeName="size"
           displayName="Component Size"
@@ -28,8 +39,8 @@ describe("AttributeFilterSection", () => {
     })
 
     it("renders with selected value", () => {
-      const onChange = jest.fn()
-      render(
+      const onChange = vi.fn()
+      renderWithProvider(
         <AttributeFilterSection
           attributeName="size"
           displayName="Component Size"
@@ -46,8 +57,8 @@ describe("AttributeFilterSection", () => {
 
   describe("multiselect type", () => {
     it("renders Autocomplete for few options", () => {
-      const onChange = jest.fn()
-      render(
+      const onChange = vi.fn()
+      renderWithProvider(
         <AttributeFilterSection
           attributeName="class"
           displayName="Component Class"
@@ -64,9 +75,9 @@ describe("AttributeFilterSection", () => {
     })
 
     it("renders Autocomplete for many options", () => {
-      const onChange = jest.fn()
+      const onChange = vi.fn()
       const manyValues = Array.from({ length: 10 }, (_, i) => `Value ${i}`)
-      render(
+      renderWithProvider(
         <AttributeFilterSection
           attributeName="manufacturer"
           displayName="Manufacturer"
@@ -81,8 +92,8 @@ describe("AttributeFilterSection", () => {
     })
 
     it("renders with selected values as chips", () => {
-      const onChange = jest.fn()
-      render(
+      const onChange = vi.fn()
+      renderWithProvider(
         <AttributeFilterSection
           attributeName="class"
           displayName="Component Class"
@@ -102,8 +113,8 @@ describe("AttributeFilterSection", () => {
 
   describe("range type", () => {
     it("renders min and max inputs", () => {
-      const onChange = jest.fn()
-      render(
+      const onChange = vi.fn()
+      renderWithProvider(
         <AttributeFilterSection
           attributeName="size"
           displayName="Component Size"
@@ -124,8 +135,8 @@ describe("AttributeFilterSection", () => {
     })
 
     it("handles min value change", () => {
-      const onChange = jest.fn()
-      render(
+      const onChange = vi.fn()
+      renderWithProvider(
         <AttributeFilterSection
           attributeName="size"
           displayName="Component Size"
@@ -143,8 +154,8 @@ describe("AttributeFilterSection", () => {
     })
 
     it("handles max value change", () => {
-      const onChange = jest.fn()
-      render(
+      const onChange = vi.fn()
+      renderWithProvider(
         <AttributeFilterSection
           attributeName="size"
           displayName="Component Size"

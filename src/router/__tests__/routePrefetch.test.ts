@@ -1,13 +1,14 @@
-import { describe, it, expect, beforeEach } from "@jest/globals"
+import { vi } from "vitest"
+import { describe, it, expect, beforeEach } from "vitest"
 
 // Mock the route registry to avoid importing actual modules
-jest.mock("../routeRegistry", () => {
-  const mockRegistry: Record<string, jest.Mock> = {
-    "/market": jest.fn(() => Promise.resolve({ default: {} })),
-    "/contractors": jest.fn(() => Promise.resolve({ default: {} })),
-    "/dashboard": jest.fn(() => Promise.resolve({ default: {} })),
-    "/market/cart": jest.fn(() => Promise.resolve({ default: {} })),
-    "/market/create": jest.fn(() => Promise.resolve({ default: {} })),
+vi.mock("../routeRegistry", () => {
+  const mockRegistry: Record<string, ReturnType<typeof vi.fn>> = {
+    "/market": vi.fn(() => Promise.resolve({ default: {} })),
+    "/contractors": vi.fn(() => Promise.resolve({ default: {} })),
+    "/dashboard": vi.fn(() => Promise.resolve({ default: {} })),
+    "/market/cart": vi.fn(() => Promise.resolve({ default: {} })),
+    "/market/create": vi.fn(() => Promise.resolve({ default: {} })),
   }
 
   return {
@@ -16,7 +17,7 @@ jest.mock("../routeRegistry", () => {
 })
 
 // Mock requestIdleCallback
-global.requestIdleCallback = jest.fn((callback) => {
+global.requestIdleCallback = vi.fn((callback) => {
   callback({ didTimeout: false, timeRemaining: () => 50 } as IdleDeadline)
   return 0
 }) as any
@@ -33,7 +34,7 @@ import { routeRegistry } from "../routeRegistry"
 describe("routePrefetch", () => {
   beforeEach(() => {
     clearPrefetchCache()
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   describe("prefetchRoute", () => {
@@ -51,7 +52,7 @@ describe("routePrefetch", () => {
     })
 
     it("should handle non-existent routes gracefully", async () => {
-      const consoleSpy = jest.spyOn(console, "debug").mockImplementation(() => {})
+      const consoleSpy = vi.spyOn(console, "debug").mockImplementation(() => {})
 
       await prefetchRoute("/non-existent")
 
@@ -67,9 +68,9 @@ describe("routePrefetch", () => {
       const mockError = new Error("Import failed")
 
       // Add a failing route to the registry
-      ;(routeRegistry as any)[errorRoute] = jest.fn(() => Promise.reject(mockError))
+      ;(routeRegistry as any)[errorRoute] = vi.fn(() => Promise.reject(mockError))
 
-      const consoleSpy = jest.spyOn(console, "warn").mockImplementation(() => {})
+      const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {})
 
       await prefetchRoute(errorRoute)
 
@@ -118,7 +119,7 @@ describe("routePrefetch", () => {
       const originalRequestIdleCallback = global.requestIdleCallback
       delete (global as any).requestIdleCallback
 
-      const setTimeoutSpy = jest.spyOn(global, "setTimeout")
+      const setTimeoutSpy = vi.spyOn(global, "setTimeout")
 
       prefetchRoutesForPath("/")
 
@@ -146,7 +147,7 @@ describe("routePrefetch", () => {
         configurable: true,
       })
 
-      const consoleSpy = jest.spyOn(console, "debug").mockImplementation(() => {})
+      const consoleSpy = vi.spyOn(console, "debug").mockImplementation(() => {})
 
       prefetchHighPriorityRoutes()
 
@@ -166,7 +167,7 @@ describe("routePrefetch", () => {
         configurable: true,
       })
 
-      const consoleSpy = jest.spyOn(console, "debug").mockImplementation(() => {})
+      const consoleSpy = vi.spyOn(console, "debug").mockImplementation(() => {})
 
       prefetchHighPriorityRoutes()
 
