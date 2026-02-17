@@ -17,7 +17,7 @@ vi.mock("../routeRegistry", () => {
 })
 
 // Mock requestIdleCallback
-global.requestIdleCallback = vi.fn((callback) => {
+;(globalThis as any).requestIdleCallback = vi.fn((callback) => {
   callback({ didTimeout: false, timeRemaining: () => 50 } as IdleDeadline)
   return 0
 }) as any
@@ -105,7 +105,7 @@ describe("routePrefetch", () => {
       prefetchRoutesForPath("/")
 
       // Should trigger requestIdleCallback
-      expect(global.requestIdleCallback).toHaveBeenCalled()
+      expect(globalThis.requestIdleCallback).toHaveBeenCalled()
     })
 
     it("should not prefetch if no routes configured for path", () => {
@@ -116,17 +116,17 @@ describe("routePrefetch", () => {
     })
 
     it("should use setTimeout fallback when requestIdleCallback unavailable", () => {
-      const originalRequestIdleCallback = global.requestIdleCallback
-      delete (global as any).requestIdleCallback
+      const originalRequestIdleCallback = globalThis.requestIdleCallback
+      delete (globalThis as any).requestIdleCallback
 
-      const setTimeoutSpy = vi.spyOn(global, "setTimeout")
+      const setTimeoutSpy = vi.spyOn(globalThis, "setTimeout")
 
       prefetchRoutesForPath("/")
 
       expect(setTimeoutSpy).toHaveBeenCalled()
 
       // Restore
-      global.requestIdleCallback = originalRequestIdleCallback
+      globalThis.requestIdleCallback = originalRequestIdleCallback
       setTimeoutSpy.mockRestore()
     })
   })
@@ -135,7 +135,7 @@ describe("routePrefetch", () => {
     it("should prefetch high-priority routes", () => {
       prefetchHighPriorityRoutes()
 
-      expect(global.requestIdleCallback).toHaveBeenCalled()
+      expect(globalThis.requestIdleCallback).toHaveBeenCalled()
     })
 
     it("should skip prefetch on slow connections", () => {

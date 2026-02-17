@@ -6,6 +6,7 @@
  * all valid inputs, providing stronger guarantees than example-based unit tests.
  */
 
+import { vi } from 'vitest'
 import { render, cleanup } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import fc from 'fast-check'

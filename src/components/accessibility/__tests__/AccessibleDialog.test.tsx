@@ -5,6 +5,7 @@
  * of the AccessibleDialog component.
  */
 
+import { vi } from 'vitest'
 import React, { useRef } from 'react'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'

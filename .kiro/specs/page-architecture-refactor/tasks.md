@@ -34,25 +34,25 @@ Each task builds on previous work, ensuring the system remains functional throug
     - Test empty breadcrumbs are not rendered
     - _Requirements: 2.2, 7.1, 7.2, 9.5_
 
-- [ ] 2. Create specialized layout components
-  - [ ] 2.1 Implement DetailPageLayout component
+- [x] 2. Create specialized layout components
+  - [x] 2.1 Implement DetailPageLayout component
     - Create `src/components/layout/DetailPageLayout.tsx`
     - Extend StandardPageLayout with back button and entity-specific props
     - Render entity title, subtitle, and actions
     - _Requirements: 2.4, 2.5_
   
-  - [ ] 2.2 Write property test for DetailPageLayout navigation
+  - [x] 2.2 Write property test for DetailPageLayout navigation
     - **Property 3: DetailPageLayout includes navigation elements**
     - **Validates: Requirements 2.5**
   
-  - [ ] 2.3 Implement FormPageLayout component
+  - [x] 2.3 Implement FormPageLayout component
     - Create `src/components/layout/FormPageLayout.tsx`
     - Extend StandardPageLayout with form-specific props
     - Position form actions (submit, cancel buttons)
     - Use narrower max width for forms
     - _Requirements: 2.6_
   
-  - [ ] 2.4 Write unit tests for specialized layouts
+  - [x] 2.4 Write unit tests for specialized layouts
     - Test DetailPageLayout renders back button when configured
     - Test FormPageLayout renders form actions
     - _Requirements: 2.5, 2.6_
