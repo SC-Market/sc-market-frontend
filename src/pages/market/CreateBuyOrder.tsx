@@ -1,53 +1,52 @@
 import { FlatSection } from "../../components/paper/Section"
-import {
-  useGetAggregateByIdQuery,
-  useGetMarketItemsByCategoryQuery,
-} from "../../features/market"
-import React, { useMemo, useState } from "react"
+import React from "react"
 import { BuyOrderForm } from "../../features/market"
-import { Page } from "../../components/metadata/Page"
-import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import { SelectGameItemStack } from "../../components/select/SelectGameItem"
 import { useTranslation } from "react-i18next"
+import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
+import { usePageCreateBuyOrder } from "../../features/market/hooks/usePageCreateBuyOrder"
+import { Grid } from "@mui/material"
 
 export function CreateBuyOrder() {
   const { t } = useTranslation()
-  const [itemType, setItemType] = useState<string>("Other")
-  const [itemName, setItemName] = useState<string | null>(null)
+  const pageData = usePageCreateBuyOrder()
 
-  const { data: items } = useGetMarketItemsByCategoryQuery(itemType!, {
-    skip: !itemType,
-  })
-
-  const item_name_value = useMemo(
-    () =>
-      itemName
-        ? (items || []).find((o) => o.name === itemName)?.id || null
-        : null,
-    [items, itemName],
-  )
-
-  const { data: aggregate } = useGetAggregateByIdQuery(item_name_value!, {
-    skip: !item_name_value,
-  })
+  const {
+    itemType,
+    itemName,
+    itemNameValue,
+    aggregate,
+    setItemType,
+    setItemName,
+  } = pageData.data || {}
 
   return (
-    <Page title={t("buyOrderActions.createBuyOrder")}>
-      <ContainerGrid sidebarOpen={true}>
+    <StandardPageLayout
+      title={t("buyOrderActions.createBuyOrder")}
+      headerTitle={t("buyOrderActions.createBuyOrder")}
+      sidebarOpen={true}
+      isLoading={pageData.isLoading}
+      error={pageData.error}
+    >
+      <Grid item xs={12}>
         <FlatSection title={t("buyOrderActions.selectMarketItem")}>
           <SelectGameItemStack
-            onItemChange={(value) => setItemName(value)}
+            onItemChange={(value) => setItemName?.(value)}
             onTypeChange={(value) => {
-              setItemType(value)
-              setItemName(null)
+              setItemType?.(value)
+              setItemName?.(null)
             }}
-            item_type={itemType}
+            item_type={itemType || "Other"}
             item_name={itemName}
           />
         </FlatSection>
+      </Grid>
 
-        {item_name_value && aggregate && <BuyOrderForm aggregate={aggregate} />}
-      </ContainerGrid>
-    </Page>
+      {itemNameValue && aggregate && (
+        <Grid item xs={12}>
+          <BuyOrderForm aggregate={aggregate} />
+        </Grid>
+      )}
+    </StandardPageLayout>
   )
 }

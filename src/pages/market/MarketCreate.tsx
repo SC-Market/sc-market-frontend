@@ -25,143 +25,116 @@ export function MarketCreate(props: {}) {
   const theme = useTheme<ExtendedTheme>()
   const { tab } = useParams<{ tab?: string }>()
   const page = useMemo(() => name_to_index.get(tab || "aggregate") || 0, [tab])
-  const { data: userProfile } = useGetUserProfileQuery()
+  const pageData = usePageMarketCreate()
 
-  const isVerified = userProfile?.rsi_confirmed
+  const isVerified = pageData.data?.isVerified
 
   return (
-    <Page title={t("market.createMarketListing")}>
-      <ContainerGrid maxWidth={"lg"} sidebarOpen={true}>
+    <StandardPageLayout
+      title={t("market.createMarketListing")}
+      breadcrumbs={[
+        { label: t("market.title", "Market"), href: "/market" },
+        {
+          label: t("sidebar.my_market_listings"),
+          href: "/market/me",
+        },
+        { label: t("market.createMarketListing") },
+      ]}
+      headerTitle={t("market.createMarketListing")}
+      sidebarOpen={true}
+      maxWidth="lg"
+      isLoading={pageData.isLoading}
+      error={pageData.error}
+    >
+      {!isVerified && (
         <Grid item xs={12}>
-          <PageBreadcrumbs
-            items={[
-              { label: t("market.title", "Market"), href: "/market" },
-              {
-                label: t("sidebar.my_market_listings"),
-                href: "/market/me",
-              },
-              { label: t("market.createMarketListing") },
-            ]}
+          <Alert severity="warning">
+            {t(
+              "market.verificationRequired",
+              "Your account must be verified to create market listings. Please verify your account with RSI/Citizen iD to continue.",
+            )}
+          </Alert>
+        </Grid>
+      )}
+
+      <Grid item xs={12}>
+        <Tabs
+          value={page}
+          aria-label={t("market.aria.listingTabs")}
+          variant="scrollable"
+          textColor="secondary"
+          indicatorColor="secondary"
+        >
+          <Tab
+            component={Link}
+            to={`/market/create/unique`}
+            label={t("market.uniqueListingTab")}
+            {...a11yProps(0)}
           />
-        </Grid>
-        <HeaderTitle lg={12} xl={12}>
-          {t("market.createMarketListing")}
-        </HeaderTitle>
-
-        {!isVerified && (
-          <Grid item xs={12}>
-            <Alert severity="warning">
-              {t(
-                "market.verificationRequired",
-                "Your account must be verified to create market listings. Please verify your account with RSI/Citizen iD to continue.",
-              )}
-            </Alert>
+          <Tab
+            component={Link}
+            to={`/market/create/auction`}
+            label={t("market.auctionTab")}
+            {...a11yProps(1)}
+          />
+          <Tab
+            component={Link}
+            to={`/market/create/combined`}
+            label={t("market.combinedListingTab")}
+            {...a11yProps(2)}
+          />
+        </Tabs>
+      </Grid>
+      <Grid item xs={12}>
+        <TabPanel value={page} index={0}>
+          <Grid container spacing={theme.layoutSpacing.layout}>
+            {isVerified ? (
+              <MarketListingForm sale_type={"sale"} key={"sale"} />
+            ) : (
+              <Grid item xs={12}>
+                <Alert severity="info">
+                  {t(
+                    "market.pleaseVerify",
+                    "Please verify your account to create market listings.",
+                  )}
+                </Alert>
+              </Grid>
+            )}
           </Grid>
-        )}
-
-        <Grid item xs={12}>
-          <Tabs
-            value={page}
-            // onChange={handleChange}
-            aria-label={t("market.aria.listingTabs")}
-            variant="scrollable"
-            textColor="secondary"
-            indicatorColor="secondary"
-          >
-            {/*<Tab
-              label={t("market.bulkListingTab")}
-              component={Link}
-              to={`/market/create/aggregate`}
-              // icon={
-              //     <DesignServicesRounded/>
-              // }
-              {...a11yProps(0)}
-            />*/}
-            <Tab
-              component={Link}
-              to={`/market/create/unique`}
-              label={t("market.uniqueListingTab")}
-              // icon={
-              //     <InfoRounded/>
-              // }
-              {...a11yProps(0)}
-            />
-            <Tab
-              component={Link}
-              to={`/market/create/auction`}
-              label={t("market.auctionTab")}
-              // icon={
-              //     <InfoRounded/>
-              // }
-              {...a11yProps(1)}
-            />
-            <Tab
-              component={Link}
-              to={`/market/create/combined`}
-              label={t("market.combinedListingTab")}
-              // icon={
-              //     <InfoRounded/>
-              // }
-              {...a11yProps(2)}
-            />
-          </Tabs>
-        </Grid>
-        <Grid item xs={12}>
-          {/*<TabPanel value={page} index={0}>
-            <Grid container spacing={theme.layoutSpacing.layout * 4}>
-              <AggregateMarketListingForm />
-            </Grid>
-          </TabPanel>*/}
-          <TabPanel value={page} index={0}>
-            <Grid container spacing={theme.layoutSpacing.layout}>
-              {isVerified ? (
-                <MarketListingForm sale_type={"sale"} key={"sale"} />
-              ) : (
-                <Grid item xs={12}>
-                  <Alert severity="info">
-                    {t(
-                      "market.pleaseVerify",
-                      "Please verify your account to create market listings.",
-                    )}
-                  </Alert>
-                </Grid>
-              )}
-            </Grid>
-          </TabPanel>
-          <TabPanel value={page} index={1}>
-            <Grid container spacing={theme.layoutSpacing.layout}>
-              {isVerified ? (
-                <MarketListingForm sale_type={"auction"} key={"auction"} />
-              ) : (
-                <Grid item xs={12}>
-                  <Alert severity="info">
-                    {t(
-                      "market.pleaseVerify",
-                      "Please verify your account to create market listings.",
-                    )}
-                  </Alert>
-                </Grid>
-              )}
-            </Grid>
-          </TabPanel>
-          <TabPanel value={page} index={2}>
-            <Grid container spacing={theme.layoutSpacing.layout}>
-              {isVerified ? (
-                <MarketMultipleForm />
-              ) : (
-                <Grid item xs={12}>
-                  <Alert severity="info">
-                    {t(
-                      "market.pleaseVerify",
-                      "Please verify your account to create market listings.",
-                    )}
-                  </Alert>
-                </Grid>
-              )}
-            </Grid>
-          </TabPanel>
-        </Grid>
-      </ContainerGrid>
-    </Page>
+        </TabPanel>
+        <TabPanel value={page} index={1}>
+          <Grid container spacing={theme.layoutSpacing.layout}>
+            {isVerified ? (
+              <MarketListingForm sale_type={"auction"} key={"auction"} />
+            ) : (
+              <Grid item xs={12}>
+                <Alert severity="info">
+                  {t(
+                    "market.pleaseVerify",
+                    "Please verify your account to create market listings.",
+                  )}
+                </Alert>
+              </Grid>
+            )}
+          </Grid>
+        </TabPanel>
+        <TabPanel value={page} index={2}>
+          <Grid container spacing={theme.layoutSpacing.layout}>
+            {isVerified ? (
+              <MarketMultipleForm />
+            ) : (
+              <Grid item xs={12}>
+                <Alert severity="info">
+                  {t(
+                    "market.pleaseVerify",
+                    "Please verify your account to create market listings.",
+                  )}
+                </Alert>
+              </Grid>
+            )}
+          </Grid>
+        </TabPanel>
+      </Grid>
+    </StandardPageLayout>
   )
 }
