@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
-import { Page } from "../../components/metadata/Page"
 import {
   Alert,
   AlertTitle,
@@ -18,9 +17,7 @@ import {
   useMediaQuery,
 } from "@mui/material"
 import { Section } from "../../components/paper/Section"
-import { useCookies } from "react-cookie"
 import { CartItem, CartSeller } from "../../datatypes/Cart"
-import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import { Link, useNavigate } from "react-router-dom"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { useGetUserByUsernameQuery } from "../../store/profile"
@@ -38,7 +35,7 @@ import { BackArrow } from "../../components/button/BackArrow"
 import { MarkdownEditor } from "../../components/markdown/Markdown.lazy"
 import { MarketAggregateListingComposite } from "../../features/market"
 import { NumericFormat } from "react-number-format"
-import { formatCompleteListingUrl, formatMarketUrl } from "../../util/urls"
+import { formatCompleteListingUrl } from "../../util/urls"
 import { FALLBACK_IMAGE_URL } from "../../util/constants"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
@@ -53,16 +50,16 @@ import {
   useProfileGetAvailabilityQuery,
   useProfileUpdateAvailabilityMutation,
 } from "../../store/profile"
-import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { CheckCircle, Warning } from "@mui/icons-material"
 import {
   AvailabilitySelector,
-  AvailabilityDisplay,
 } from "../../components/time/AvailabilitySelector"
 import { convertAvailability } from "../../pages/availability/Availability.lazy"
 import { OrderLimitsDisplay } from "../../components/orders/OrderLimitsDisplay"
 import { BottomSheet } from "../../components/mobile/BottomSheet"
 import { EmptyCart } from "../../components/empty-states"
+import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
+import { usePageMarketCart } from "../../features/market/hooks/usePageMarketCart"
 
 export function CartItemEntry(props: {
   item: CartItem
@@ -762,58 +759,44 @@ export function CartSellerEntry(props: {
 export function MarketCart() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
-  const [cookies, setCookie, deleteCookie] = useCookies(["market_cart"])
-  const cart = cookies.market_cart
+  const pageData = usePageMarketCart()
 
-  const updateCart = useCallback(() => {
-    setCookie("market_cart", cart, {
-      path: "/",
-      sameSite: "strict",
-      maxAge: 2592000, // 30 days in seconds - cart items may become unavailable or prices may change
-    })
-  }, [cart, setCookie])
+  if (!pageData.data) {
+    return null
+  }
 
-  const removeSellerEntry = useCallback(
-    (item: CartSeller) => {
-      const index = cart.indexOf(item)
-      cart.splice(index, 1)
-      updateCart()
-    },
-    [cart, updateCart],
-  )
+  const { cart, updateCart, removeSellerEntry } = pageData.data
 
   return (
-    <Page title={t("marketActions.myCart")}>
-      <ContainerGrid maxWidth={"md"} sidebarOpen={true}>
-        <Grid
-          item
-          container
-          justifyContent={"space-between"}
-          spacing={theme.layoutSpacing.layout}
-          xs={12}
-        >
-          <HeaderTitle>
-            <BackArrow /> {t("cart.yourCart")}
-          </HeaderTitle>
+    <StandardPageLayout
+      title={t("marketActions.myCart")}
+      headerTitle={
+        <>
+          <BackArrow /> {t("cart.yourCart")}
+        </>
+      }
+      sidebarOpen={true}
+      maxWidth="md"
+      isLoading={pageData.isLoading}
+      error={pageData.error}
+    >
+      <Grid item xs={12} lg={12}>
+        <Grid container spacing={theme.layoutSpacing.layout}>
+          {(cart || []).map((seller: CartSeller) => (
+            <CartSellerEntry
+              key={seller.contractor_seller_id || seller.user_seller_id}
+              seller={seller}
+              updateCart={updateCart}
+              removeSellerEntry={removeSellerEntry}
+            />
+          ))}
+          {(!cart || !cart.length) && (
+            <Grid item xs={12}>
+              <EmptyCart />
+            </Grid>
+          )}
         </Grid>
-        <Grid item xs={12} lg={12}>
-          <Grid container spacing={theme.layoutSpacing.layout}>
-            {(cart || []).map((seller: CartSeller) => (
-              <CartSellerEntry
-                key={seller.contractor_seller_id || seller.user_seller_id}
-                seller={seller}
-                updateCart={updateCart}
-                removeSellerEntry={removeSellerEntry}
-              />
-            ))}
-            {(!cart || !cart.length) && (
-              <Grid item xs={12}>
-                <EmptyCart />
-              </Grid>
-            )}
-          </Grid>
-        </Grid>
-      </ContainerGrid>
-    </Page>
+      </Grid>
+    </StandardPageLayout>
   )
 }

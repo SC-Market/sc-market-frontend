@@ -297,33 +297,33 @@ Each task builds on previous work, ensuring the system remains functional throug
     - Extract form logic to page hook
     - _Requirements: 1.1, 1.2, 2.6, 12.2_
 
-- [~] 18. Migrate market management pages
-  - [ ] 18.1 Migrate MyMarketListings page
+- [x] 18. Migrate market management pages
+  - [x] 18.1 Migrate MyMarketListings page
     - Update `src/pages/market/MyMarketListings.tsx`
     - Use StandardPageLayout
     - Create usePageMyMarketListings hook
     - Use LazySection for listing sections
     - _Requirements: 1.1, 1.2, 1.3, 12.2_
   
-  - [ ] 18.2 Migrate ManageStock page
+  - [x] 18.2 Migrate ManageStock page
     - Update `src/pages/market/ManageStock.tsx`
     - Use StandardPageLayout
     - Extract data fetching to page hook
     - _Requirements: 1.1, 1.2, 12.2_
   
-  - [ ] 18.3 Migrate ManageStockLots page
+  - [x] 18.3 Migrate ManageStockLots page
     - Update `src/pages/market/ManageStockLots.tsx`
     - Use StandardPageLayout
     - Extract data fetching to page hook
     - _Requirements: 1.1, 1.2, 12.2_
   
-  - [ ] 18.4 Migrate ManageListingStock page
+  - [x] 18.4 Migrate ManageListingStock page
     - Update `src/pages/market/ManageListingStock.tsx`
     - Use StandardPageLayout
     - Extract data fetching to page hook
     - _Requirements: 1.1, 1.2, 12.2_
   
-  - [ ] 18.5 Migrate MarketCart page
+  - [x] 18.5 Migrate MarketCart page
     - Update `src/pages/market/MarketCart.tsx`
     - Use StandardPageLayout
     - Extract cart logic to page hook
