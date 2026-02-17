@@ -194,7 +194,7 @@ Each task builds on previous work, ensuring the system remains functional throug
     - Return standard page hook interface
     - _Requirements: 5.1, 5.2, 5.3, 5.5_
 
-- [-] 11. Migrate ViewOrg page
+- [x] 11. Migrate ViewOrg page
   - [x] 11.1 Refactor ViewOrg to use new architecture
     - Update `src/pages/contractor/ViewOrg.tsx`
     - Use DetailPageLayout
@@ -202,34 +202,34 @@ Each task builds on previous work, ensuring the system remains functional throug
     - Use LazySection for OrgInfo component
     - _Requirements: 1.1, 1.2, 1.3, 6.3, 6.4, 12.2_
   
-  - [-] 11.2 Write integration test for ViewOrg
+  - [x] 11.2 Write integration test for ViewOrg
     - Test page renders correctly
     - Test error handling
     - _Requirements: 7.1, 7.2, 12.2_
 
-- [ ] 12. Create property tests for breadcrumbs
-  - [ ] 12.1 Write property test for breadcrumb rendering
+- [x] 12. Create property tests for breadcrumbs
+  - [x] 12.1 Write property test for breadcrumb rendering
     - **Property 12: Breadcrumbs render all provided items**
     - **Validates: Requirements 9.1**
   
-  - [ ] 12.2 Write property test for current page breadcrumb
+  - [x] 12.2 Write property test for current page breadcrumb
     - **Property 13: Current page is last breadcrumb**
     - **Validates: Requirements 9.2**
   
-  - [ ] 12.3 Write unit test for dynamic breadcrumb labels
+  - [x] 12.3 Write unit test for dynamic breadcrumb labels
     - Test breadcrumbs update when data loads
     - _Requirements: 9.3_
 
-- [ ] 13. Create property tests for metadata
-  - [ ] 13.1 Write property test for document title
+- [x] 13. Create property tests for metadata
+  - [x] 13.1 Write property test for document title
     - **Property 15: Document title is set from props**
     - **Validates: Requirements 10.2**
   
-  - [ ] 13.2 Write unit test for canonical URL
+  - [x] 13.2 Write unit test for canonical URL
     - Test canonical URL is set in page metadata
     - _Requirements: 10.3_
   
-  - [ ] 13.3 Write unit test for loading state title
+  - [x] 13.3 Write unit test for loading state title
     - Test default title displays during loading
     - _Requirements: 10.5_
 

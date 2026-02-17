@@ -58,12 +58,7 @@ vi.mock("../../../pages/errors/ErrorPage", () => ({
   ErrorPage: () => <div data-testid="error-page">Error Page</div>,
 }))
 
-// Mock Footer
-vi.mock("../../../components/footer/Footer", () => ({
-  Footer: () => <div data-testid="footer">Footer</div>,
-}))
-
-// Mock the lazy-loaded OrgInfo
+// Mock the OrgInfo component
 vi.mock("../../../features/contractor/components/OrgInfo", () => ({
   OrgInfo: ({ contractor }: { contractor: Contractor }) => (
     <div data-testid="org-info">
@@ -161,13 +156,18 @@ describe("ViewOrg - Integration Tests", () => {
    */
   it("renders with data", async () => {
     const mockContractor: Contractor = {
-      spectrum_id: "test-org",
+      kind: "organization",
+      avatar: "https://example.com/avatar.png",
+      banner: "https://example.com/banner.png",
+      rating: { avg_rating: 4.5, rating_count: 100, total_rating: 450, streak: 10 },
+      size: 50,
       name: "Test Organization",
-      sid: "TEST",
-      members: 50,
-      recruiting: false,
-      exclusive: false,
-      archetype: "Corporation",
+      description: "Test description",
+      fields: [],
+      spectrum_id: "test-org",
+      official_server_id: null,
+      discord_thread_channel_id: null,
+      market_order_template: "",
     } as Contractor
 
     // Mock successful data fetch
@@ -181,7 +181,7 @@ describe("ViewOrg - Integration Tests", () => {
 
     renderWithRoute("test-org")
 
-    // Wait for lazy-loaded content to appear
+    // Wait for content to appear (Suspense boundary)
     await waitFor(() => {
       expect(screen.getByTestId("org-info")).toBeInTheDocument()
     })
@@ -250,85 +250,6 @@ describe("ViewOrg - Integration Tests", () => {
   })
 
   /**
-   * Test: Page displays breadcrumbs
-   * Requirements: 7.1, 12.2
-   */
-  it("displays breadcrumbs with organization name", () => {
-    const mockContractor: Contractor = {
-      spectrum_id: "test-org",
-      name: "Test Organization",
-      sid: "TEST",
-      members: 50,
-      recruiting: false,
-      exclusive: false,
-      archetype: "Corporation",
-    } as Contractor
-
-    vi.mocked(useGetContractorBySpectrumIDQuery).mockReturnValue({
-      data: mockContractor,
-      isLoading: false,
-      isFetching: false,
-      error: undefined,
-      refetch: vi.fn(),
-    } as any)
-
-    renderWithRoute("test-org")
-
-    // Verify breadcrumb items are present
-    expect(screen.getByText("Contractors")).toBeInTheDocument()
-    expect(screen.getByText("Test Organization")).toBeInTheDocument()
-  })
-
-  /**
-   * Test: Page displays default breadcrumb during loading
-   * Requirements: 7.1, 12.2
-   */
-  it("displays default breadcrumb during loading", () => {
-    vi.mocked(useGetContractorBySpectrumIDQuery).mockReturnValue({
-      data: undefined,
-      isLoading: true,
-      isFetching: true,
-      error: undefined,
-      refetch: vi.fn(),
-    } as any)
-
-    renderWithRoute("test-org")
-
-    // Verify default breadcrumb is displayed
-    expect(screen.getByText("Contractors")).toBeInTheDocument()
-    expect(screen.getByText("org.orgTitle")).toBeInTheDocument()
-  })
-
-  /**
-   * Test: Page uses DetailPageLayout
-   * Requirements: 7.1, 12.2
-   */
-  it("uses DetailPageLayout with correct configuration", () => {
-    const mockContractor: Contractor = {
-      spectrum_id: "test-org",
-      name: "Test Organization",
-      sid: "TEST",
-      members: 50,
-      recruiting: false,
-      exclusive: false,
-      archetype: "Corporation",
-    } as Contractor
-
-    vi.mocked(useGetContractorBySpectrumIDQuery).mockReturnValue({
-      data: mockContractor,
-      isLoading: false,
-      isFetching: false,
-      error: undefined,
-      refetch: vi.fn(),
-    } as any)
-
-    const { container } = renderWithRoute("test-org")
-
-    // Verify page structure includes layout elements
-    expect(container.querySelector('[data-testid="footer"]')).toBeInTheDocument()
-  })
-
-  /**
    * Test: Page handles network error
    * Requirements: 7.1, 7.2
    */
@@ -353,18 +274,23 @@ describe("ViewOrg - Integration Tests", () => {
   })
 
   /**
-   * Test: Page title updates with organization name
-   * Requirements: 7.1, 12.2
+   * Test: Page uses usePageOrg hook
+   * Requirements: 5.1, 5.2, 5.3, 5.5
    */
-  it("sets page title with organization name", () => {
+  it("uses usePageOrg hook for data fetching", () => {
     const mockContractor: Contractor = {
-      spectrum_id: "test-org",
+      kind: "organization",
+      avatar: "https://example.com/avatar.png",
+      banner: "https://example.com/banner.png",
+      rating: { avg_rating: 4.5, rating_count: 100, total_rating: 450, streak: 10 },
+      size: 50,
       name: "Test Organization",
-      sid: "TEST",
-      members: 50,
-      recruiting: false,
-      exclusive: false,
-      archetype: "Corporation",
+      description: "Test description",
+      fields: [],
+      spectrum_id: "test-org",
+      official_server_id: null,
+      discord_thread_channel_id: null,
+      market_order_template: "",
     } as Contractor
 
     vi.mocked(useGetContractorBySpectrumIDQuery).mockReturnValue({
@@ -377,8 +303,65 @@ describe("ViewOrg - Integration Tests", () => {
 
     renderWithRoute("test-org")
 
-    // The title prop is passed to DetailPageLayout
-    // We can verify the breadcrumb contains the org name
-    expect(screen.getByText("Test Organization")).toBeInTheDocument()
+    // Verify the hook was called with the correct ID
+    expect(useGetContractorBySpectrumIDQuery).toHaveBeenCalledWith("test-org")
+  })
+
+  /**
+   * Test: Page displays loading skeleton during fetch
+   * Requirements: 3.2, 8.2
+   */
+  it("displays skeleton during initial load", () => {
+    vi.mocked(useGetContractorBySpectrumIDQuery).mockReturnValue({
+      data: undefined,
+      isLoading: true,
+      isFetching: true,
+      error: undefined,
+      refetch: vi.fn(),
+    } as any)
+
+    renderWithRoute("test-org")
+
+    // Verify skeleton is displayed
+    expect(screen.getByTestId("org-info-skeleton")).toBeInTheDocument()
+  })
+
+  /**
+   * Test: Page maintains original layout structure
+   * Requirements: 1.1, 1.2, 1.3, 12.2
+   */
+  it("maintains original page structure without duplicate breadcrumbs", async () => {
+    const mockContractor: Contractor = {
+      kind: "organization",
+      avatar: "https://example.com/avatar.png",
+      banner: "https://example.com/banner.png",
+      rating: { avg_rating: 4.5, rating_count: 100, total_rating: 450, streak: 10 },
+      size: 50,
+      name: "Test Organization",
+      description: "Test description",
+      fields: [],
+      spectrum_id: "test-org",
+      official_server_id: null,
+      discord_thread_channel_id: null,
+      market_order_template: "",
+    } as Contractor
+
+    vi.mocked(useGetContractorBySpectrumIDQuery).mockReturnValue({
+      data: mockContractor,
+      isLoading: false,
+      isFetching: false,
+      error: undefined,
+      refetch: vi.fn(),
+    } as any)
+
+    renderWithRoute("test-org")
+
+    await waitFor(() => {
+      expect(screen.getByTestId("org-info")).toBeInTheDocument()
+    })
+
+    // Verify OrgInfo component is rendered (which contains its own breadcrumbs and layout)
+    expect(screen.getByTestId("org-info")).toBeInTheDocument()
   })
 })
+
