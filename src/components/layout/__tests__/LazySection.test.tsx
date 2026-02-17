@@ -175,17 +175,17 @@ describe("LazySection", () => {
     const Section3 = () => <div>Section 3 Content</div>
 
     const LazySection1 = lazy(() =>
-      new Promise((resolve) => {
+      new Promise<{ default: React.ComponentType }>((resolve) => {
         setTimeout(() => resolve({ default: Section1 }), 50)
       }),
     )
     const LazySection2 = lazy(() =>
-      new Promise((resolve) => {
+      new Promise<{ default: React.ComponentType }>((resolve) => {
         setTimeout(() => resolve({ default: Section2 }), 100)
       }),
     )
     const LazySection3 = lazy(() =>
-      new Promise((resolve) => {
+      new Promise<{ default: React.ComponentType }>((resolve) => {
         setTimeout(() => resolve({ default: Section3 }), 75)
       }),
     )
