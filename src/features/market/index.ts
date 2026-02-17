@@ -209,3 +209,7 @@ export type { ListingPaginationProps } from "./components/listings/ListingPagina
 export { useListingPagination } from "./hooks/useListingPagination"
 export { AggregateLink } from "./components/AggregateLink"
 export type { AggregateLinkProps } from "./components/AggregateLink"
+
+// Lazy-loadable components
+export { MarketListingDetails } from "./components/MarketListingDetails"
+export { MarketListingDetailsSkeleton } from "./components/MarketListingDetails.skeleton"

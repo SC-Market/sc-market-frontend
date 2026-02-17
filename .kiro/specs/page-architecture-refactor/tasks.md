@@ -105,27 +105,27 @@ Each task builds on previous work, ensuring the system remains functional throug
     - Test refetch function calls all queries
     - _Requirements: 5.4_
 
-- [-] 6. Create content section components for market listing
-  - [ ] 6.1 Extract MarketListingDetails section component
+- [x] 6. Create content section components for market listing
+  - [x] 6.1 Extract MarketListingDetails section component
     - Create `src/features/market/components/MarketListingDetails.tsx`
     - Extract details section from MarketListingView
     - Accept listing data via props only
     - Focus on presentation without data fetching
     - _Requirements: 1.3, 6.1, 6.4_
   
-  - [ ] 6.2 Create MarketListingDetailsSkeleton component
+  - [x] 6.2 Create MarketListingDetailsSkeleton component
     - Create `src/features/market/components/MarketListingDetails.skeleton.tsx`
     - Match layout structure of MarketListingDetails
     - Use same grid layout and spacing
     - _Requirements: 4.1, 4.2, 4.3_
   
-  - [ ] 6.3 Make MarketListingDetails lazy-loadable
+  - [x] 6.3 Make MarketListingDetails lazy-loadable
     - Create lazy export in feature index
     - Ensure component is code-splittable
     - _Requirements: 8.1, 8.5_
 
-- [ ] 7. Migrate ViewMarketListing page as pilot
-  - [ ] 7.1 Refactor ViewMarketListing to use new architecture
+- [x] 7. Migrate ViewMarketListing page as pilot
+  - [x] 7.1 Refactor ViewMarketListing to use new architecture
     - Update `src/pages/market/ViewMarketListing.tsx`
     - Use DetailPageLayout instead of ContainerGrid
     - Use usePageMarketListing hook for data fetching
@@ -133,7 +133,7 @@ Each task builds on previous work, ensuring the system remains functional throug
     - Keep only orchestration logic in page component
     - _Requirements: 1.1, 1.2, 1.3, 1.4, 6.3, 6.4, 12.2_
   
-  - [ ]* 7.2 Write integration test for refactored page
+  - [x] 7.2 Write integration test for refactored page
     - Test page renders with loading state
     - Test page renders with data
     - Test page handles 404 error
@@ -202,7 +202,7 @@ Each task builds on previous work, ensuring the system remains functional throug
     - Use LazySection for OrgInfo component
     - _Requirements: 1.1, 1.2, 1.3, 6.3, 6.4, 12.2_
   
-  - [ ]* 11.2 Write integration test for ViewOrg
+  - [ ] 11.2 Write integration test for ViewOrg
     - Test page renders correctly
     - Test error handling
     - _Requirements: 7.1, 7.2, 12.2_

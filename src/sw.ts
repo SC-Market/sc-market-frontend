@@ -45,19 +45,42 @@ clientsClaim()
 // Precache assets (injected by vite-plugin-pwa during build)
 precacheAndRoute(self.__WB_MANIFEST || [])
 
-// Cache navigation requests with StaleWhileRevalidate for instant loads
-// Serves cached page immediately while updating in background
+// Cache hashed JS/CSS assets aggressively (immutable due to content hashing)
+// These never change - new versions get new filenames
 registerRoute(
-  ({ request }: { request: Request }) => request.mode === "navigate",
-  new StaleWhileRevalidate({
-    cacheName: "pages-v1",
+  ({ url }: { url: URL }) => {
+    // Match Vite's hashed assets: /assets/index-abc123.js or /assets/style-xyz789.css
+    return /\/assets\/[^/]+-[a-f0-9]+\.(js|css)$/.test(url.pathname)
+  },
+  new CacheFirst({
+    cacheName: "vite-assets-v1",
     plugins: [
       new CacheableResponsePlugin({
-        statuses: [0, 200], // Cache successful responses and opaque responses
+        statuses: [0, 200],
       }),
       new ExpirationPlugin({
-        maxEntries: 100,
-        maxAgeSeconds: 60 * 60 * 24 * 7, // 7 days
+        maxEntries: 200,
+        maxAgeSeconds: 60 * 60 * 24 * 365, // 1 year - these are immutable
+        purgeOnQuotaError: true,
+      }),
+    ],
+  }),
+)
+
+// Cache HTML navigation with NetworkFirst to always get latest entry point
+// This ensures we always reference the correct hashed JS/CSS bundles
+registerRoute(
+  ({ request }: { request: Request }) => request.mode === "navigate",
+  new NetworkFirst({
+    cacheName: "pages-v1",
+    networkTimeoutSeconds: 3,
+    plugins: [
+      new CacheableResponsePlugin({
+        statuses: [0, 200],
+      }),
+      new ExpirationPlugin({
+        maxEntries: 50,
+        maxAgeSeconds: 60 * 60 * 24, // 1 day
         purgeOnQuotaError: true,
       }),
     ],
