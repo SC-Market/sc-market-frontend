@@ -1,6 +1,12 @@
-import { Suspense } from "react"
+import { Suspense, lazy } from "react"
 import { Navigate, useParams } from "react-router-dom"
-import { OrgInfo, OrgInfoSkeleton, usePageOrg } from "../../features/contractor"
+import { OrgInfoSkeleton, usePageOrg } from "../../features/contractor"
+
+const OrgInfo = lazy(() =>
+  import("../../features/contractor").then((module) => ({
+    default: module.OrgInfo,
+  })),
+)
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { Page } from "../../components/metadata/Page"
 import { useTranslation } from "react-i18next"
