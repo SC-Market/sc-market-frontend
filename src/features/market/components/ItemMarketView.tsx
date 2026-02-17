@@ -74,7 +74,6 @@ export function ItemMarketView() {
               {/* Main content area */}
               <Box
                 sx={{
-                  flex: 1,
                   display: "flex",
                   flexWrap: "wrap",
                   gap: "8px",
