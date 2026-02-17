@@ -1,15 +1,19 @@
 import { vi } from "vitest"
 import { describe, it, expect, beforeEach } from "vitest"
+import type { Reducer } from "@reduxjs/toolkit"
 
 // Mock reducer
-const mockReducer = (state = {}, action: any) => state
+const mockReducer: Reducer = (state = {}, action: any) => state
 
-// Mock lazy reducers
-const mockLazyReducers: Record<string, ReturnType<typeof vi.fn>> = {
-  test: vi.fn(() => Promise.resolve({ default: mockReducer })),
-  test1: vi.fn(() => Promise.resolve({ default: mockReducer })),
-  test2: vi.fn(() => Promise.resolve({ default: mockReducer })),
-  valid: vi.fn(() => Promise.resolve({ default: mockReducer })),
+// Type for lazy reducer
+type LazyReducer = () => Promise<{ default: Reducer }>
+
+// Mock lazy reducers with proper typing
+const mockLazyReducers: Record<string, LazyReducer> = {
+  test: vi.fn(() => Promise.resolve({ default: mockReducer })) as LazyReducer,
+  test1: vi.fn(() => Promise.resolve({ default: mockReducer })) as LazyReducer,
+  test2: vi.fn(() => Promise.resolve({ default: mockReducer })) as LazyReducer,
+  valid: vi.fn(() => Promise.resolve({ default: mockReducer })) as LazyReducer,
 }
 
 // We need to mock the module before importing

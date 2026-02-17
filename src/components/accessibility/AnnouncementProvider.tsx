@@ -56,8 +56,8 @@ export function AnnouncementProvider({
   })
   
   // Timers for clearing announcements
-  const politeTimerRef = useRef<NodeJS.Timeout | null>(null)
-  const assertiveTimerRef = useRef<NodeJS.Timeout | null>(null)
+  const politeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const assertiveTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   
   /**
    * Process the next announcement in the queue

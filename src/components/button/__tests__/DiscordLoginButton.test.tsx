@@ -25,15 +25,17 @@ describe("DiscordLoginButton", () => {
   const installHrefSpy = () => {
     const hrefSet = vi.fn()
     delete (window as any).location
-    window.location = {
+    ;(window as any).location = {
       href: "",
-      set href(v: string) {
+    }
+    Object.defineProperty(window.location, "href", {
+      set(v: string) {
         hrefSet(v)
       },
-      get href() {
+      get() {
         return ""
       },
-    } as any
+    })
     return hrefSet
   }
 

@@ -78,12 +78,12 @@ export function StandardPageLayout(
   } = props
 
   // Handle 404 errors
-  if (shouldRedirectTo404(error)) {
+  if (shouldRedirectTo404(error as FetchBaseQueryError | SerializedError | undefined)) {
     return <Navigate to="/404" />
   }
 
   // Handle server errors
-  if (shouldShowErrorPage(error)) {
+  if (shouldShowErrorPage(error as FetchBaseQueryError | SerializedError | undefined)) {
     return <ErrorPage />
   }
 
