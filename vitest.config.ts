@@ -15,6 +15,11 @@ export default defineConfig({
         singleThread: true,
       },
     },
+    server: {
+      deps: {
+        inline: ['@exodus/bytes'],
+      },
+    },
     coverage: {
       provider: 'v8',
       include: [
