@@ -35,7 +35,13 @@ vi.mock("../../../store/contractor", () => ({
 // Mock i18next
 vi.mock("react-i18next", () => ({
   useTranslation: () => ({
-    t: (key: string, defaultValue?: string) => defaultValue || key,
+    t: (key: string, defaultValue?: string | Record<string, any>) => {
+      // Handle both string and object default values
+      if (typeof defaultValue === "string") {
+        return defaultValue
+      }
+      return key
+    },
     i18n: {
       language: "en",
       changeLanguage: vi.fn(),
