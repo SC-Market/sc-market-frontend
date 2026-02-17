@@ -253,6 +253,517 @@ Each task builds on previous work, ensuring the system remains functional throug
 - [ ] 15. Final checkpoint - Ensure all tests pass
   - Ensure all tests pass, ask the user if questions arise.
 
+## Phase 2: Full Application Migration
+
+### Market Feature Pages
+
+- [ ] 16. Migrate market detail pages
+  - [ ] 16.1 Create usePageMarketAggregate hook
+    - Create `src/features/market/hooks/usePageMarketAggregate.ts`
+    - Compose aggregate market data queries
+    - Return standard page hook interface
+    - _Requirements: 5.1, 5.2, 5.3, 5.5_
+  
+  - [ ] 16.2 Migrate ViewMarketAggregate page
+    - Update `src/pages/market/ViewMarketAggregate.tsx`
+    - Use DetailPageLayout
+    - Use usePageMarketAggregate hook
+    - Use LazySection for content sections
+    - _Requirements: 1.1, 1.2, 1.3, 12.2_
+  
+  - [ ] 16.3 Migrate ViewMarketMultiple page
+    - Update `src/pages/market/ViewMarketMultiple.tsx`
+    - Use DetailPageLayout
+    - Create usePageMarketMultiple hook if needed
+    - Use LazySection for content sections
+    - _Requirements: 1.1, 1.2, 1.3, 12.2_
+
+- [ ] 17. Migrate market form pages
+  - [ ] 17.1 Migrate MarketCreate page
+    - Update `src/pages/market/MarketCreate.tsx`
+    - Use FormPageLayout
+    - Extract form logic to page hook
+    - _Requirements: 1.1, 1.2, 2.6, 12.2_
+  
+  - [ ] 17.2 Migrate CreateBuyOrder page
+    - Update `src/pages/market/CreateBuyOrder.tsx`
+    - Use FormPageLayout
+    - Extract form logic to page hook
+    - _Requirements: 1.1, 1.2, 2.6, 12.2_
+  
+  - [ ] 17.3 Migrate SellMaterials page
+    - Update `src/pages/market/SellMaterials.tsx`
+    - Use FormPageLayout
+    - Extract form logic to page hook
+    - _Requirements: 1.1, 1.2, 2.6, 12.2_
+
+- [ ] 18. Migrate market management pages
+  - [ ] 18.1 Migrate MyMarketListings page
+    - Update `src/pages/market/MyMarketListings.tsx`
+    - Use StandardPageLayout
+    - Create usePageMyMarketListings hook
+    - Use LazySection for listing sections
+    - _Requirements: 1.1, 1.2, 1.3, 12.2_
+  
+  - [ ] 18.2 Migrate ManageStock page
+    - Update `src/pages/market/ManageStock.tsx`
+    - Use StandardPageLayout
+    - Extract data fetching to page hook
+    - _Requirements: 1.1, 1.2, 12.2_
+  
+  - [ ] 18.3 Migrate ManageStockLots page
+    - Update `src/pages/market/ManageStockLots.tsx`
+    - Use StandardPageLayout
+    - Extract data fetching to page hook
+    - _Requirements: 1.1, 1.2, 12.2_
+  
+  - [ ] 18.4 Migrate ManageListingStock page
+    - Update `src/pages/market/ManageListingStock.tsx`
+    - Use StandardPageLayout
+    - Extract data fetching to page hook
+    - _Requirements: 1.1, 1.2, 12.2_
+  
+  - [ ] 18.5 Migrate MarketCart page
+    - Update `src/pages/market/MarketCart.tsx`
+    - Use StandardPageLayout
+    - Extract cart logic to page hook
+    - _Requirements: 1.1, 1.2, 12.2_
+
+### Contracting Feature Pages
+
+- [ ] 19. Migrate contracting detail pages
+  - [ ] 19.1 Create usePageOrder hook
+    - Create `src/features/contracting/hooks/usePageOrder.ts`
+    - Compose order-related queries (order, chat, notifications, offer session)
+    - Return standard page hook interface
+    - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5_
+  
+  - [ ] 19.2 Migrate ViewOrder page
+    - Update `src/pages/contracting/ViewOrder.tsx`
+    - Use DetailPageLayout
+    - Use usePageOrder hook
+    - Use LazySection for OrderDetailsArea, OrderMessagesArea, etc.
+    - Simplify tab logic with new architecture
+    - _Requirements: 1.1, 1.2, 1.3, 3.1, 3.3, 12.2_
+  
+  - [ ] 19.3 Create usePageContract hook
+    - Create `src/features/contracting/hooks/usePageContract.ts`
+    - Compose contract-related queries
+    - Return standard page hook interface
+    - _Requirements: 5.1, 5.2, 5.3, 5.5_
+  
+  - [ ] 19.4 Migrate ContractInfo page
+    - Update `src/pages/contracting/ContractInfo.tsx`
+    - Use DetailPageLayout
+    - Use usePageContract hook
+    - Use LazySection for content sections
+    - _Requirements: 1.1, 1.2, 1.3, 12.2_
+  
+  - [ ] 19.5 Create usePagePublicContract hook
+    - Create `src/features/contracting/hooks/usePagePublicContract.ts`
+    - Compose public contract queries
+    - Return standard page hook interface
+    - _Requirements: 5.1, 5.2, 5.3, 5.5_
+  
+  - [ ] 19.6 Migrate ViewPublicContract page
+    - Update `src/pages/contracting/ViewPublicContract.tsx`
+    - Use DetailPageLayout
+    - Use usePagePublicContract hook
+    - Use LazySection for content sections
+    - _Requirements: 1.1, 1.2, 1.3, 12.2_
+
+- [ ] 20. Migrate contracting form pages
+  - [ ] 20.1 Migrate CreateOrder page
+    - Update `src/pages/contracting/CreateOrder.tsx`
+    - Use StandardPageLayout (list view)
+    - Extract data fetching to page hook
+    - _Requirements: 1.1, 1.2, 12.2_
+  
+  - [ ] 20.2 Migrate ServiceCreateOrder page
+    - Update `src/pages/contracting/CreateOrder.tsx` (ServiceCreateOrder component)
+    - Use FormPageLayout
+    - Create usePageServiceOrder hook
+    - _Requirements: 1.1, 1.2, 2.6, 12.2_
+  
+  - [ ] 20.3 Migrate CreateService page
+    - Update `src/pages/contracting/CreateService.tsx`
+    - Use FormPageLayout
+    - Extract form logic to page hook
+    - _Requirements: 1.1, 1.2, 2.6, 12.2_
+  
+  - [ ] 20.4 Migrate CreatePublicContractPage
+    - Update `src/pages/contracting/CreatePublicContractPage.tsx`
+    - Use FormPageLayout
+    - Extract form logic to page hook
+    - _Requirements: 1.1, 1.2, 2.6, 12.2_
+
+- [ ] 21. Migrate contracting list pages
+  - [ ] 21.1 Migrate Contracts page
+    - Update `src/pages/contracting/Contracts.tsx`
+    - Use StandardPageLayout with custom layout for tabs
+    - Extract sidebar state management
+    - Use LazySection for tab content
+    - _Requirements: 1.1, 1.2, 3.1, 3.3, 12.2_
+  
+  - [ ] 21.2 Migrate Services page
+    - Update `src/pages/contracting/Services.tsx`
+    - Use StandardPageLayout
+    - Extract data fetching to page hook
+    - _Requirements: 1.1, 1.2, 12.2_
+  
+  - [ ] 21.3 Migrate MyServices page
+    - Update `src/pages/contracting/MyServices.tsx`
+    - Use StandardPageLayout
+    - Extract data fetching to page hook
+    - _Requirements: 1.1, 1.2, 12.2_
+  
+  - [ ] 21.4 Migrate OrdersAssigned page
+    - Update `src/pages/contracting/OrdersAssigned.tsx`
+    - Use StandardPageLayout
+    - Extract data fetching to page hook
+    - _Requirements: 1.1, 1.2, 12.2_
+  
+  - [ ] 21.5 Migrate AcceptOrgInvite page
+    - Update `src/pages/contracting/AcceptOrgInvite.tsx`
+    - Use StandardPageLayout
+    - Extract logic to page hook
+    - _Requirements: 1.1, 1.2, 12.2_
+
+### Contractor/Organization Pages
+
+- [ ] 22. Migrate contractor pages
+  - [ ] 22.1 Migrate Contractors page
+    - Update `src/pages/contractor/Contractors.tsx`
+    - Use StandardPageLayout
+    - Extract data fetching to page hook
+    - _Requirements: 1.1, 1.2, 12.2_
+  
+  - [ ] 22.2 Migrate OrgManage page
+    - Update `src/pages/contractor/OrgManage.tsx`
+    - Use StandardPageLayout
+    - Extract data fetching to page hook
+    - Use LazySection for management sections
+    - _Requirements: 1.1, 1.2, 1.3, 12.2_
+  
+  - [ ] 22.3 Migrate OrgMoney page
+    - Update `src/pages/contractor/OrgMoney.tsx`
+    - Use StandardPageLayout
+    - Extract data fetching to page hook
+    - _Requirements: 1.1, 1.2, 12.2_
+  
+  - [ ] 22.4 Migrate OrgOrders page
+    - Update `src/pages/contractor/OrgOrders.tsx`
+    - Use StandardPageLayout
+    - Extract data fetching to page hook
+    - _Requirements: 1.1, 1.2, 12.2_
+  
+  - [ ] 22.5 Migrate OrgRegister page
+    - Update `src/pages/contractor/OrgRegister.tsx`
+    - Use FormPageLayout
+    - Extract form logic to page hook
+    - _Requirements: 1.1, 1.2, 2.6, 12.2_
+  
+  - [ ] 22.6 Migrate MemberDashboard page
+    - Update `src/pages/contractor/MemberDashboard.tsx`
+    - Use StandardPageLayout
+    - Extract data fetching to page hook
+    - Use LazySection for dashboard sections
+    - _Requirements: 1.1, 1.2, 1.3, 12.2_
+  
+  - [ ] 22.7 Migrate MemberFleet page
+    - Update `src/pages/contractor/MemberFleet.tsx`
+    - Use StandardPageLayout
+    - Extract data fetching to page hook
+    - _Requirements: 1.1, 1.2, 12.2_
+
+### People/Profile Pages
+
+- [ ] 23. Migrate profile pages
+  - [ ] 23.1 Create usePageUserProfile hook
+    - Create `src/features/profile/hooks/usePageUserProfile.ts`
+    - Compose user profile queries
+    - Return standard page hook interface
+    - _Requirements: 5.1, 5.2, 5.3, 5.5_
+  
+  - [ ] 23.2 Migrate Profile page
+    - Update `src/pages/people/Profile.tsx`
+    - Use DetailPageLayout
+    - Use usePageUserProfile hook
+    - Use LazySection for ViewProfile component
+    - _Requirements: 1.1, 1.2, 1.3, 12.2_
+  
+  - [ ] 23.3 Migrate MyProfile page
+    - Update `src/pages/people/MyProfile.tsx`
+    - Use StandardPageLayout
+    - Extract data fetching to page hook
+    - Use LazySection for profile sections
+    - _Requirements: 1.1, 1.2, 1.3, 12.2_
+  
+  - [ ] 23.4 Migrate People page
+    - Update `src/pages/people/People.tsx`
+    - Use StandardPageLayout
+    - Extract data fetching to page hook
+    - _Requirements: 1.1, 1.2, 12.2_
+  
+  - [ ] 23.5 Migrate SettingsPage
+    - Update `src/pages/people/SettingsPage.tsx`
+    - Use StandardPageLayout
+    - Extract settings logic to page hook
+    - Use LazySection for settings sections
+    - _Requirements: 1.1, 1.2, 1.3, 12.2_
+
+### Offers Pages
+
+- [ ] 24. Migrate offer pages
+  - [ ] 24.1 Create usePageOffer hook
+    - Create `src/features/offers/hooks/usePageOffer.ts`
+    - Compose offer-related queries
+    - Return standard page hook interface
+    - _Requirements: 5.1, 5.2, 5.3, 5.5_
+  
+  - [ ] 24.2 Migrate ViewOfferPage
+    - Update `src/pages/offers/ViewOfferPage.tsx`
+    - Use DetailPageLayout
+    - Use usePageOffer hook
+    - Use LazySection for offer sections
+    - _Requirements: 1.1, 1.2, 1.3, 12.2_
+  
+  - [ ] 24.3 Migrate CounterOfferPage
+    - Update `src/pages/offers/CounterOfferPage.tsx`
+    - Use FormPageLayout
+    - Extract form logic to page hook
+    - _Requirements: 1.1, 1.2, 2.6, 12.2_
+  
+  - [ ] 24.4 Migrate ReceivedOffersPage
+    - Update `src/pages/offers/ReceivedOffersPage.tsx`
+    - Use StandardPageLayout
+    - Extract data fetching to page hook
+    - _Requirements: 1.1, 1.2, 12.2_
+
+### Recruiting Pages
+
+- [ ] 25. Migrate recruiting pages
+  - [ ] 25.1 Create usePageRecruitingPost hook
+    - Create `src/features/recruiting/hooks/usePageRecruitingPost.ts`
+    - Compose recruiting post queries
+    - Return standard page hook interface
+    - _Requirements: 5.1, 5.2, 5.3, 5.5_
+  
+  - [ ] 25.2 Migrate RecruitingPostPage
+    - Update `src/pages/recruiting/RecruitingPostPage.tsx`
+    - Use DetailPageLayout
+    - Use usePageRecruitingPost hook
+    - Use LazySection for post sections
+    - _Requirements: 1.1, 1.2, 1.3, 12.2_
+  
+  - [ ] 25.3 Migrate CreateRecruitingPostPage
+    - Update `src/pages/recruiting/CreateRecruitingPostPage.tsx`
+    - Use FormPageLayout
+    - Extract form logic to page hook
+    - _Requirements: 1.1, 1.2, 2.6, 12.2_
+  
+  - [ ] 25.4 Migrate Recruiting page
+    - Update `src/pages/recruiting/Recruiting.tsx`
+    - Use StandardPageLayout
+    - Extract data fetching to page hook
+    - _Requirements: 1.1, 1.2, 12.2_
+
+### Fleet Pages
+
+- [ ] 26. Migrate fleet pages
+  - [ ] 26.1 Migrate Fleet page
+    - Update `src/pages/fleet/Fleet.tsx`
+    - Use StandardPageLayout
+    - Extract data fetching to page hook
+    - Use LazySection for fleet sections
+    - _Requirements: 1.1, 1.2, 1.3, 12.2_
+  
+  - [ ] 26.2 Migrate ImportFleet page
+    - Update `src/pages/fleet/ImportFleet.tsx`
+    - Use FormPageLayout
+    - Extract import logic to page hook
+    - _Requirements: 1.1, 1.2, 2.6, 12.2_
+
+### Availability Pages
+
+- [ ] 27. Migrate availability pages
+  - [ ] 27.1 Migrate Availability page
+    - Update `src/pages/availability/Availability.tsx`
+    - Use StandardPageLayout
+    - Extract data fetching to page hook
+    - _Requirements: 1.1, 1.2, 12.2_
+
+### Messaging Pages
+
+- [ ] 28. Migrate messaging pages
+  - [ ] 28.1 Migrate Messages page
+    - Update `src/pages/messaging/Messages.tsx`
+    - Use StandardPageLayout with custom layout
+    - Extract data fetching to page hook
+    - _Requirements: 1.1, 1.2, 12.2_
+  
+  - [ ] 28.2 Migrate MessagesList page
+    - Update `src/pages/messaging/MessagesList.tsx`
+    - Use StandardPageLayout
+    - Extract data fetching to page hook
+    - _Requirements: 1.1, 1.2, 12.2_
+
+### Money Pages
+
+- [ ] 29. Migrate money pages
+  - [ ] 29.1 Migrate SendMoney page
+    - Update `src/pages/money/SendMoney.tsx`
+    - Use FormPageLayout
+    - Extract form logic to page hook
+    - _Requirements: 1.1, 1.2, 2.6, 12.2_
+
+### Notifications Pages
+
+- [ ] 30. Migrate notifications pages
+  - [ ] 30.1 Migrate NotificationsPage
+    - Update `src/pages/notifications/NotificationsPage.tsx`
+    - Use StandardPageLayout
+    - Extract data fetching to page hook
+    - _Requirements: 1.1, 1.2, 12.2_
+
+### Admin Pages
+
+- [ ] 31. Migrate admin pages
+  - [ ] 31.1 Migrate AllMarketListings page
+    - Update `src/pages/admin/AllMarketListings.tsx`
+    - Use StandardPageLayout
+    - Extract data fetching to page hook
+    - Use LazySection for listing sections
+    - _Requirements: 1.1, 1.2, 1.3, 12.2_
+  
+  - [ ] 31.2 Migrate AdminAlerts page
+    - Update `src/pages/admin/AdminAlerts.tsx`
+    - Use StandardPageLayout
+    - Extract data fetching to page hook
+    - _Requirements: 1.1, 1.2, 12.2_
+  
+  - [ ] 31.3 Migrate AdminAttributeDefinitions page
+    - Update `src/pages/admin/AdminAttributeDefinitions.tsx`
+    - Use StandardPageLayout
+    - Extract data fetching to page hook
+    - _Requirements: 1.1, 1.2, 12.2_
+  
+  - [ ] 31.4 Migrate AdminAuditLogs page
+    - Update `src/pages/admin/AdminAuditLogs.tsx`
+    - Use StandardPageLayout
+    - Extract data fetching to page hook
+    - _Requirements: 1.1, 1.2, 12.2_
+  
+  - [ ] 31.5 Migrate AdminGameItemAttributes page
+    - Update `src/pages/admin/AdminGameItemAttributes.tsx`
+    - Use StandardPageLayout
+    - Extract data fetching to page hook
+    - _Requirements: 1.1, 1.2, 12.2_
+  
+  - [ ] 31.6 Migrate AdminImportMonitoring page
+    - Update `src/pages/admin/AdminImportMonitoring.tsx`
+    - Use StandardPageLayout
+    - Extract data fetching to page hook
+    - _Requirements: 1.1, 1.2, 12.2_
+  
+  - [ ] 31.7 Migrate AdminModeration page
+    - Update `src/pages/admin/AdminModeration.tsx`
+    - Use StandardPageLayout
+    - Extract data fetching to page hook
+    - _Requirements: 1.1, 1.2, 12.2_
+  
+  - [ ] 31.8 Migrate AdminNotificationTest page
+    - Update `src/pages/admin/AdminNotificationTest.tsx`
+    - Use StandardPageLayout
+    - Extract logic to page hook
+    - _Requirements: 1.1, 1.2, 12.2_
+  
+  - [ ] 31.9 Migrate AdminOrderStats page
+    - Update `src/pages/admin/AdminOrderStats.tsx`
+    - Use StandardPageLayout
+    - Extract data fetching to page hook
+    - Use LazySection for stats sections
+    - _Requirements: 1.1, 1.2, 1.3, 12.2_
+
+### Authentication Pages
+
+- [ ] 32. Migrate authentication pages
+  - [ ] 32.1 Migrate LoginPage
+    - Update `src/pages/authentication/LoginPage.tsx`
+    - Use FormPageLayout with minimal layout
+    - Extract auth logic to page hook
+    - _Requirements: 1.1, 1.2, 2.6, 12.2_
+  
+  - [ ] 32.2 Migrate SignUpPage
+    - Update `src/pages/authentication/SignUpPage.tsx`
+    - Use FormPageLayout with minimal layout
+    - Extract auth logic to page hook
+    - _Requirements: 1.1, 1.2, 2.6, 12.2_
+  
+  - [ ] 32.3 Migrate AuthenticateRSI page
+    - Update `src/pages/authentication/AuthenticateRSI.tsx`
+    - Use StandardPageLayout with minimal layout
+    - Extract auth logic to page hook
+    - _Requirements: 1.1, 1.2, 12.2_
+
+### Email Pages
+
+- [ ] 33. Migrate email pages
+  - [ ] 33.1 Migrate EmailVerificationPage
+    - Update `src/pages/email/EmailVerificationPage.tsx`
+    - Use StandardPageLayout with minimal layout
+    - Extract verification logic to page hook
+    - _Requirements: 1.1, 1.2, 12.2_
+  
+  - [ ] 33.2 Migrate UnsubscribePage
+    - Update `src/pages/email/UnsubscribePage.tsx`
+    - Use StandardPageLayout with minimal layout
+    - Extract unsubscribe logic to page hook
+    - _Requirements: 1.1, 1.2, 12.2_
+
+### Home Pages
+
+- [ ] 34. Migrate home pages
+  - [ ] 34.1 Migrate LandingPage
+    - Update `src/pages/home/LandingPage.tsx`
+    - Use StandardPageLayout with custom layout
+    - Use LazySection for landing sections
+    - Follow LANDING_PAGE_IMPORT_STRATEGY.md guidance
+    - _Requirements: 1.1, 1.2, 3.1, 12.2_
+
+### Widget Pages
+
+- [ ] 35. Migrate widget pages
+  - [ ] 35.1 Migrate OrdersWidget page
+    - Update `src/pages/widget/OrdersWidget.tsx`
+    - Use StandardPageLayout with minimal layout
+    - Extract data fetching to page hook
+    - _Requirements: 1.1, 1.2, 12.2_
+
+### Error Pages
+
+- [ ] 36. Migrate error pages
+  - [ ] 36.1 Migrate Error404 page
+    - Update `src/pages/errors/Error404.tsx`
+    - Use StandardPageLayout with minimal layout
+    - _Requirements: 1.1, 1.2, 12.2_
+  
+  - [ ] 36.2 Migrate ErrorPage
+    - Update `src/pages/errors/ErrorPage.tsx`
+    - Use StandardPageLayout with minimal layout
+    - _Requirements: 1.1, 1.2, 12.2_
+  
+  - [ ] 36.3 Migrate FrontendError page
+    - Update `src/pages/errors/FrontendError.tsx`
+    - Use StandardPageLayout with minimal layout
+    - _Requirements: 1.1, 1.2, 12.2_
+
+- [ ] 37. Final migration checkpoint
+  - Ensure all pages have been migrated
+  - Verify all tests pass
+  - Review migration completeness
+  - Ask the user if questions arise
+
 ## Notes
 
 - Tasks marked with `*` are optional and can be skipped for faster MVP
@@ -263,3 +774,7 @@ Each task builds on previous work, ensuring the system remains functional throug
 - Migration is incremental - old and new patterns coexist
 - Focus on two pilot pages (ViewMarketListing, ViewOrg) before broader migration
 - Documentation is created alongside implementation for immediate reference
+- Phase 2 migration tasks are organized by feature area for easier tracking
+- Complex pages (ViewOrder, Contracts) may require additional sub-tasks during implementation
+- Page hooks should be created before migrating pages that need them
+- LazySection usage is recommended for pages with multiple independent content areas
