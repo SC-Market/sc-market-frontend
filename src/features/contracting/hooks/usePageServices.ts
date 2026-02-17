@@ -1,4 +1,4 @@
-import { useGetServicesQuery } from "../../../store/service"
+import { useGetServicesQuery } from "../../../store/services"
 
 interface UsePageServicesResult {
   data: ReturnType<typeof useGetServicesQuery>["data"]

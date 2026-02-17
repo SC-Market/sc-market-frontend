@@ -1,9 +1,11 @@
-import { useGetMyServicesQuery } from "../../../store/service"
+import { useGetServicesQuery, useGetServicesContractorQuery } from "../../../store/services"
+import { useGetUserProfileQuery } from "../../../store/profile"
+import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
 
 interface UsePageMyServicesResult {
   data: {
-    active: ReturnType<typeof useGetMyServicesQuery>["data"]
-    inactive: ReturnType<typeof useGetMyServicesQuery>["data"]
+    active: ReturnType<typeof useGetServicesQuery>["data"]
+    inactive: ReturnType<typeof useGetServicesQuery>["data"]
   }
   isLoading: boolean
   isFetching: boolean
@@ -12,20 +14,30 @@ interface UsePageMyServicesResult {
 }
 
 export function usePageMyServices(): UsePageMyServicesResult {
-  const activeQuery = useGetMyServicesQuery({ status: "active" })
-  const inactiveQuery = useGetMyServicesQuery({ status: "inactive" })
+  const { data: profile } = useGetUserProfileQuery()
+  const [currentOrg] = useCurrentOrg()
+
+  // Get services for user or org
+  const userServicesQuery = useGetServicesQuery(profile?.username!, {
+    skip: !profile || !!currentOrg,
+  })
+  
+  const orgServicesQuery = useGetServicesContractorQuery(
+    currentOrg?.spectrum_id!,
+    { skip: !currentOrg },
+  )
+
+  // Use whichever query is active
+  const activeQuery = currentOrg ? orgServicesQuery : userServicesQuery
 
   return {
     data: {
       active: activeQuery.data,
-      inactive: inactiveQuery.data,
+      inactive: activeQuery.data,
     },
-    isLoading: activeQuery.isLoading || inactiveQuery.isLoading,
-    isFetching: activeQuery.isFetching || inactiveQuery.isFetching,
-    error: activeQuery.error || inactiveQuery.error,
-    refetch: () => {
-      activeQuery.refetch()
-      inactiveQuery.refetch()
-    },
+    isLoading: activeQuery.isLoading,
+    isFetching: activeQuery.isFetching,
+    error: activeQuery.error,
+    refetch: activeQuery.refetch,
   }
 }

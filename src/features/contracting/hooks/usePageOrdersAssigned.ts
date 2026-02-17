@@ -1,21 +1,11 @@
-import { useGetMyAssignedOrdersQuery } from "../../../store/orders"
-
-interface UsePageOrdersAssignedResult {
-  data: ReturnType<typeof useGetMyAssignedOrdersQuery>["data"]
-  isLoading: boolean
-  isFetching: boolean
-  error: unknown
-  refetch: () => void
-}
-
-export function usePageOrdersAssigned(): UsePageOrdersAssignedResult {
-  const ordersQuery = useGetMyAssignedOrdersQuery({})
-
+// OrdersAssigned page doesn't need a data fetching hook
+// The MemberAssignments and OrderMetrics components handle their own data fetching
+export function usePageOrdersAssigned() {
   return {
-    data: ordersQuery.data,
-    isLoading: ordersQuery.isLoading,
-    isFetching: ordersQuery.isFetching,
-    error: ordersQuery.error,
-    refetch: ordersQuery.refetch,
+    data: undefined,
+    isLoading: false,
+    isFetching: false,
+    error: undefined,
+    refetch: () => {},
   }
 }

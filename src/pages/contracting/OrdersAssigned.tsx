@@ -1,5 +1,4 @@
 import React from "react"
-import { HeaderTitle } from "../../components/typography/HeaderTitle"
 import { Grid } from "@mui/material"
 import { MemberAssignments } from "../../views/member/MemberAssignments"
 import { OrderMetrics } from "../../views/orders/OrderMetrics"
@@ -21,15 +20,13 @@ export function OrdersAssigned() {
       maxWidth="lg"
       isLoading={pageData.isLoading}
       error={pageData.error}
+      headerTitle={t("sidebar.orders_assigned_to_me")}
     >
-      <HeaderTitle>{t("sidebar.orders_assigned_to_me")}</HeaderTitle>
-      <Grid container spacing={theme.layoutSpacing.layout}>
-        <Grid item xs={12} lg={3}>
-          <OrderMetrics />
-        </Grid>
-        <Grid item xs={12} lg={9}>
-          <MemberAssignments />
-        </Grid>
+      <Grid item xs={12} lg={3}>
+        <OrderMetrics />
+      </Grid>
+      <Grid item xs={12} lg={9}>
+        <MemberAssignments />
       </Grid>
     </StandardPageLayout>
   )

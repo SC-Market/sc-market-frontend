@@ -113,3 +113,5 @@ export function ViewProfile(props: { profile: User }) {
     </OpenLayout>
   )
 }
+
+export default ViewProfile

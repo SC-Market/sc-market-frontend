@@ -478,34 +478,34 @@ Each task builds on previous work, ensuring the system remains functional throug
 
 ### People/Profile Pages
 
-- [ ] 23. Migrate profile pages
-  - [ ] 23.1 Create usePageUserProfile hook
+- [x] 23. Migrate profile pages
+  - [x] 23.1 Create usePageUserProfile hook
     - Create `src/features/profile/hooks/usePageUserProfile.ts`
     - Compose user profile queries
     - Return standard page hook interface
     - _Requirements: 5.1, 5.2, 5.3, 5.5_
   
-  - [ ] 23.2 Migrate Profile page
+  - [x] 23.2 Migrate Profile page
     - Update `src/pages/people/Profile.tsx`
     - Use DetailPageLayout
     - Use usePageUserProfile hook
     - Use LazySection for ViewProfile component
     - _Requirements: 1.1, 1.2, 1.3, 12.2_
   
-  - [ ] 23.3 Migrate MyProfile page
+  - [x] 23.3 Migrate MyProfile page
     - Update `src/pages/people/MyProfile.tsx`
     - Use StandardPageLayout
     - Extract data fetching to page hook
     - Use LazySection for profile sections
     - _Requirements: 1.1, 1.2, 1.3, 12.2_
   
-  - [ ] 23.4 Migrate People page
+  - [x] 23.4 Migrate People page
     - Update `src/pages/people/People.tsx`
     - Use StandardPageLayout
     - Extract data fetching to page hook
     - _Requirements: 1.1, 1.2, 12.2_
   
-  - [ ] 23.5 Migrate SettingsPage
+  - [x] 23.5 Migrate SettingsPage
     - Update `src/pages/people/SettingsPage.tsx`
     - Use StandardPageLayout
     - Extract settings logic to page hook
@@ -514,27 +514,27 @@ Each task builds on previous work, ensuring the system remains functional throug
 
 ### Offers Pages
 
-- [ ] 24. Migrate offer pages
-  - [ ] 24.1 Create usePageOffer hook
+- [-] 24. Migrate offer pages
+  - [x] 24.1 Create usePageOffer hook
     - Create `src/features/offers/hooks/usePageOffer.ts`
     - Compose offer-related queries
     - Return standard page hook interface
     - _Requirements: 5.1, 5.2, 5.3, 5.5_
   
-  - [ ] 24.2 Migrate ViewOfferPage
+  - [x] 24.2 Migrate ViewOfferPage
     - Update `src/pages/offers/ViewOfferPage.tsx`
     - Use DetailPageLayout
     - Use usePageOffer hook
     - Use LazySection for offer sections
     - _Requirements: 1.1, 1.2, 1.3, 12.2_
   
-  - [ ] 24.3 Migrate CounterOfferPage
+  - [x] 24.3 Migrate CounterOfferPage
     - Update `src/pages/offers/CounterOfferPage.tsx`
     - Use FormPageLayout
     - Extract form logic to page hook
     - _Requirements: 1.1, 1.2, 2.6, 12.2_
   
-  - [ ] 24.4 Migrate ReceivedOffersPage
+  - [x] 24.4 Migrate ReceivedOffersPage
     - Update `src/pages/offers/ReceivedOffersPage.tsx`
     - Use StandardPageLayout
     - Extract data fetching to page hook

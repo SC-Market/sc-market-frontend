@@ -23,7 +23,7 @@ export function MemberDashboard() {
       title={t("dashboard.title")}
       headerTitle={t("dashboard.title")}
       sidebarOpen={true}
-      maxWidth="xxl"
+      maxWidth="xl"
     >
       {xxl && (
         <>
