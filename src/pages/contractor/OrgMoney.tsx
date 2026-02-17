@@ -1,21 +1,24 @@
 import React from "react"
-import { HeaderTitle } from "../../components/typography/HeaderTitle"
 import { OrgBalance } from "../../views/contractor/OrgBalance"
 import { Grid } from "@mui/material"
 import { OrgTransactions } from "../../views/contractor/OrgTransactions"
 import { OrderMetrics } from "../../views/orders/OrderMetrics"
-import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 
 export function OrgMoney() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
+  
   return (
-    <ContainerGrid maxWidth={"lg"} sidebarOpen={true}>
-      <HeaderTitle>{t("org.moneyTitle")}</HeaderTitle>
-
+    <StandardPageLayout
+      title={t("org.moneyTitle")}
+      headerTitle={t("org.moneyTitle")}
+      sidebarOpen={true}
+      maxWidth="lg"
+    >
       <Grid
         item
         xs={12}
@@ -43,6 +46,6 @@ export function OrgMoney() {
           <OrgTransactions />
         </Grid>
       </Grid>
-    </ContainerGrid>
+    </StandardPageLayout>
   )
 }
