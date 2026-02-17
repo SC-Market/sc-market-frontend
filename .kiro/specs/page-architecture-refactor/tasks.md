@@ -514,7 +514,7 @@ Each task builds on previous work, ensuring the system remains functional throug
 
 ### Offers Pages
 
-- [-] 24. Migrate offer pages
+- [x] 24. Migrate offer pages
   - [x] 24.1 Create usePageOffer hook
     - Create `src/features/offers/hooks/usePageOffer.ts`
     - Compose offer-related queries
@@ -542,14 +542,14 @@ Each task builds on previous work, ensuring the system remains functional throug
 
 ### Recruiting Pages
 
-- [ ] 25. Migrate recruiting pages
-  - [ ] 25.1 Create usePageRecruitingPost hook
+- [-] 25. Migrate recruiting pages
+  - [x] 25.1 Create usePageRecruitingPost hook
     - Create `src/features/recruiting/hooks/usePageRecruitingPost.ts`
     - Compose recruiting post queries
     - Return standard page hook interface
     - _Requirements: 5.1, 5.2, 5.3, 5.5_
   
-  - [ ] 25.2 Migrate RecruitingPostPage
+  - [-] 25.2 Migrate RecruitingPostPage
     - Update `src/pages/recruiting/RecruitingPostPage.tsx`
     - Use DetailPageLayout
     - Use usePageRecruitingPost hook
@@ -570,7 +570,7 @@ Each task builds on previous work, ensuring the system remains functional throug
 
 ### Fleet Pages
 
-- [ ] 26. Migrate fleet pages
+- [~] 26. Migrate fleet pages
   - [ ] 26.1 Migrate Fleet page
     - Update `src/pages/fleet/Fleet.tsx`
     - Use StandardPageLayout
