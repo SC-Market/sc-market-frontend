@@ -1,7 +1,6 @@
 import React, { lazy, Suspense } from "react"
-import { Navigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
+import { BannerPageLayout } from "../../components/layout/BannerPageLayout"
 import { ProfileSkeleton } from "../../features/profile/components/ProfileSkeleton"
 import { usePageMyProfile } from "../../features/profile/hooks/usePageMyProfile"
 
@@ -14,21 +13,18 @@ export function MyProfile() {
   const pageData = usePageMyProfile()
 
   return (
-    <StandardPageLayout
+    <BannerPageLayout
       title={t("viewProfile.myProfile")}
       isLoading={pageData.isLoading}
       error={pageData.error}
       skeleton={<ProfileSkeleton />}
       sidebarOpen={true}
-      maxWidth={false}
-      noMobilePadding={true}
     >
-      {pageData.error && <Navigate to={"/"} />}
       {pageData.data && (
         <Suspense fallback={<ProfileSkeleton />}>
           <ViewProfile profile={pageData.data.user} />
         </Suspense>
       )}
-    </StandardPageLayout>
+    </BannerPageLayout>
   )
 }

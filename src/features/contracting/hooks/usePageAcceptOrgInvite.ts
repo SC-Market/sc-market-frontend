@@ -42,7 +42,7 @@ export function usePageAcceptOrgInvite(
       })
       navigate("/")
     } catch (error) {
-      issueAlert(error)
+      issueAlert(error as Error)
     }
   }, [acceptInviteMutation, inviteId, issueAlert, navigate, t])
 

@@ -542,27 +542,27 @@ Each task builds on previous work, ensuring the system remains functional throug
 
 ### Recruiting Pages
 
-- [-] 25. Migrate recruiting pages
+- [x] 25. Migrate recruiting pages
   - [x] 25.1 Create usePageRecruitingPost hook
     - Create `src/features/recruiting/hooks/usePageRecruitingPost.ts`
     - Compose recruiting post queries
     - Return standard page hook interface
     - _Requirements: 5.1, 5.2, 5.3, 5.5_
   
-  - [-] 25.2 Migrate RecruitingPostPage
+  - [x] 25.2 Migrate RecruitingPostPage
     - Update `src/pages/recruiting/RecruitingPostPage.tsx`
     - Use DetailPageLayout
     - Use usePageRecruitingPost hook
     - Use LazySection for post sections
     - _Requirements: 1.1, 1.2, 1.3, 12.2_
   
-  - [ ] 25.3 Migrate CreateRecruitingPostPage
+  - [x] 25.3 Migrate CreateRecruitingPostPage
     - Update `src/pages/recruiting/CreateRecruitingPostPage.tsx`
     - Use FormPageLayout
     - Extract form logic to page hook
     - _Requirements: 1.1, 1.2, 2.6, 12.2_
   
-  - [ ] 25.4 Migrate Recruiting page
+  - [x] 25.4 Migrate Recruiting page
     - Update `src/pages/recruiting/Recruiting.tsx`
     - Use StandardPageLayout
     - Extract data fetching to page hook
@@ -570,15 +570,15 @@ Each task builds on previous work, ensuring the system remains functional throug
 
 ### Fleet Pages
 
-- [~] 26. Migrate fleet pages
-  - [ ] 26.1 Migrate Fleet page
+- [-] 26. Migrate fleet pages
+  - [x] 26.1 Migrate Fleet page
     - Update `src/pages/fleet/Fleet.tsx`
     - Use StandardPageLayout
     - Extract data fetching to page hook
     - Use LazySection for fleet sections
     - _Requirements: 1.1, 1.2, 1.3, 12.2_
   
-  - [ ] 26.2 Migrate ImportFleet page
+  - [x] 26.2 Migrate ImportFleet page
     - Update `src/pages/fleet/ImportFleet.tsx`
     - Use FormPageLayout
     - Extract import logic to page hook
