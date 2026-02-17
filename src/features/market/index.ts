@@ -149,6 +149,15 @@ export {
   useCurrentMarketListing,
 } from "./hooks/CurrentMarketItem"
 export { useMarketFilters } from "./hooks/useMarketFilters"
+export { usePageMarketListing } from "./hooks/usePageMarketListing"
+export type {
+  UsePageResult,
+  MarketListingPageData,
+} from "./hooks/usePageMarketListing"
+export { usePageMarketAggregate } from "./hooks/usePageMarketAggregate"
+export type {
+  MarketAggregatePageData,
+} from "./hooks/usePageMarketAggregate"
 
 // Components
 export { MarketPage } from "./components/MarketPage"
