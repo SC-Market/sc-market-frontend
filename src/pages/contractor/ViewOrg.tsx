@@ -1,5 +1,5 @@
 import { Suspense, lazy } from "react"
-import { Navigate, useParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import { OrgInfoSkeleton, usePageOrg } from "../../features/contractor"
 
 const OrgInfo = lazy(() =>
@@ -8,15 +8,8 @@ const OrgInfo = lazy(() =>
   })),
 )
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
-import { Page } from "../../components/metadata/Page"
 import { useTranslation } from "react-i18next"
-import { ErrorPage } from "../errors/ErrorPage"
-import {
-  shouldRedirectTo404,
-  shouldShowErrorPage,
-} from "../../util/errorHandling"
-import { FetchBaseQueryError } from "@reduxjs/toolkit/query"
-import { SerializedError } from "@reduxjs/toolkit"
+import { BannerPageLayout } from "../../components/layout/BannerPageLayout"
 
 export function ViewOrg() {
   const { id } = useParams<{ id: string }>()
@@ -24,29 +17,32 @@ export function ViewOrg() {
   const pageData = usePageOrg(id!)
 
   return (
-    <Page
+    <BannerPageLayout
       title={
         pageData.data?.contractor.name
           ? `${pageData.data.contractor.name} - ${t("org.orgTitle")}`
           : t("org.orgTitle")
       }
+      breadcrumbs={[
+        {
+          label: t("contractors.title", "Contractors"),
+          href: "/contractors",
+        },
+        {
+          label: pageData.data?.contractor.name || t("org.loading"),
+        },
+      ]}
+      isLoading={pageData.isLoading}
+      error={pageData.error}
+      skeleton={<OrgInfoSkeleton />}
+      sidebarOpen={true}
     >
-      {pageData.isLoading ? (
-        <OrgInfoSkeleton />
-      ) : shouldRedirectTo404(
-          pageData.error as FetchBaseQueryError | SerializedError,
-        ) ? (
-        <Navigate to={"/404"} />
-      ) : shouldShowErrorPage(
-          pageData.error as FetchBaseQueryError | SerializedError,
-        ) ? (
-        <ErrorPage />
-      ) : pageData.data ? (
+      {pageData.data && (
         <Suspense fallback={<OrgInfoSkeleton />}>
           <OrgInfo contractor={pageData.data.contractor} />
         </Suspense>
-      ) : null}
-    </Page>
+      )}
+    </BannerPageLayout>
   )
 }
 
@@ -55,12 +51,13 @@ export function MyOrg() {
   const { t } = useTranslation()
 
   return (
-    <Page title={t("org.myOrgTitle")}>
-      {!contractor ? (
-        <Navigate to={"/404"} />
-      ) : (
-        <OrgInfo contractor={contractor} />
-      )}
-    </Page>
+    <BannerPageLayout
+      title={t("org.myOrgTitle")}
+      isLoading={!contractor}
+      skeleton={<OrgInfoSkeleton />}
+      sidebarOpen={true}
+    >
+      {contractor && <OrgInfo contractor={contractor} />}
+    </BannerPageLayout>
   )
 }

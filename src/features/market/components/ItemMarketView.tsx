@@ -29,6 +29,7 @@ export function ItemMarketView() {
           <Grid
             container
             spacing={theme.layoutSpacing.layout}
+            justifyContent="center"
           >
           {xs && (
             <>

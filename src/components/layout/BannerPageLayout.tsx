@@ -101,7 +101,7 @@ export function BannerPageLayout(props: BannerPageLayoutProps): ReactElement {
             items={breadcrumbs}
             MuiBreadcrumbsProps={{
               sx: {
-                mb: 1,
+                mb: 0,
               },
             }}
           />
