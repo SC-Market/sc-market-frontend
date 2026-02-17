@@ -58,6 +58,11 @@ vi.mock("../../../pages/errors/ErrorPage", () => ({
   ErrorPage: () => <div data-testid="error-page">Error Page</div>,
 }))
 
+// Mock the ReportButton to avoid AlertHookContext issues
+vi.mock("../../../components/button/ReportButton", () => ({
+  ReportButton: () => <button data-testid="report-button">Report</button>,
+}))
+
 // Mock the OrgInfo component
 vi.mock("../../../features/contractor/components/OrgInfo", () => ({
   OrgInfo: ({ contractor }: { contractor: Contractor }) => (
