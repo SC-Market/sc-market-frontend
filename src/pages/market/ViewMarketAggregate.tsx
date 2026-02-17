@@ -28,6 +28,9 @@ const MarketAggregateEditViewLazy = lazy(
     ),
 )
 
+// Skeleton is NOT lazy loaded - needs to be available immediately
+const SkeletonComponent = MarketListingViewSkeleton
+
 export function ViewMarketAggregate(props: {}) {
   const { id } = useParams<{ id: string }>()
   const { t } = useTranslation()
@@ -63,7 +66,7 @@ export function ViewMarketAggregate(props: {}) {
       }
       isLoading={pageData.isLoading}
       error={pageData.error}
-      skeleton={<MarketListingViewSkeleton />}
+      skeleton={<SkeletonComponent />}
       sidebarOpen={true}
       maxWidth={"lg"}
     >
@@ -74,7 +77,7 @@ export function ViewMarketAggregate(props: {}) {
           <LazySection
             component={MarketAggregateViewLazy}
             componentProps={{}}
-            skeleton={MarketListingViewSkeleton}
+            skeleton={SkeletonComponent}
           />
         </CurrentMarketListingContext.Provider>
       )}
@@ -110,7 +113,7 @@ export function EditMarketAggregate(props: {}) {
       entityTitle={t("market.editMarketListing")}
       isLoading={pageData.isLoading}
       error={pageData.error}
-      skeleton={<MarketListingViewSkeleton />}
+      skeleton={<SkeletonComponent />}
       sidebarOpen={true}
       maxWidth={"lg"}
     >
@@ -121,7 +124,7 @@ export function EditMarketAggregate(props: {}) {
           <LazySection
             component={MarketAggregateEditViewLazy}
             componentProps={{}}
-            skeleton={MarketListingViewSkeleton}
+            skeleton={SkeletonComponent}
           />
         </CurrentMarketAggregateContext.Provider>
       )}

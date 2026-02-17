@@ -113,6 +113,9 @@ This document defines requirements for refactoring the application's page archit
 3. THE System SHALL provide a LazySection wrapper component that handles lazy loading boilerplate
 4. THE LazySection SHALL accept a Section_Skeleton component as a prop
 5. THE System SHALL ensure lazy-loaded sections are code-split into separate bundles
+6. THE System SHALL NOT lazy load Layout_Components or Section_Skeleton components
+7. WHEN a page loads, THE Layout_Component and Section_Skeleton SHALL be available immediately without lazy loading
+8. THE System SHALL only apply lazy loading to Content_Section components that contain business logic and presentation
 
 ### Requirement 9: Breadcrumb and Navigation Integration
 

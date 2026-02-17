@@ -111,6 +111,24 @@ graph TD
 
 ## Components and Interfaces
 
+### Lazy Loading Strategy
+
+**Critical Design Principle:** Only Content_Section components are lazy loaded. Layout components, skeleton components, and the LazySection wrapper itself are imported directly and available immediately.
+
+**What IS lazy loaded:**
+- Content_Section components (e.g., MarketListingDetails, OrgInfo)
+- Feature-specific view components with business logic
+- Components that can be code-split into separate bundles
+
+**What is NOT lazy loaded:**
+- Layout components (StandardPageLayout, DetailPageLayout, FormPageLayout)
+- Skeleton components (e.g., MarketListingDetailsSkeleton)
+- LazySection wrapper component
+- Page components themselves
+- Shared UI components (buttons, inputs, etc.)
+
+This ensures that the page structure and loading states are available immediately, providing instant visual feedback to users while content loads in the background.
+
 ### StandardPageLayout Component
 
 A reusable layout component for standard pages with breadcrumbs, header, and content area.
@@ -236,6 +254,8 @@ function LazySection(props: LazySectionProps): ReactElement
 - Display error fallback on failure
 - Apply grid props to container
 
+**Important:** LazySection itself is NOT lazy loaded. It is imported directly and available immediately. Only the `component` prop (the actual content section) is lazy loaded. The `skeleton` component is also imported directly and rendered immediately while the content loads.
+
 ### Page Hook Pattern
 
 Page hooks encapsulate all data fetching logic for a page.
@@ -284,7 +304,7 @@ function usePageMarketListing(id: string): UsePageResult<MarketListingPageData> 
 Content sections are lazy-loadable presentation components with corresponding skeletons.
 
 ```typescript
-// Content section component
+// Content section component (LAZY LOADED)
 interface MarketListingDetailsProps {
   listing: MarketListing
   onUpdate?: () => void
@@ -292,7 +312,7 @@ interface MarketListingDetailsProps {
 
 function MarketListingDetails(props: MarketListingDetailsProps): ReactElement
 
-// Corresponding skeleton
+// Corresponding skeleton (NOT LAZY LOADED - imported directly)
 function MarketListingDetailsSkeleton(): ReactElement
 ```
 
@@ -301,6 +321,25 @@ function MarketListingDetailsSkeleton(): ReactElement
 - Focus on presentation only
 - No data fetching or business logic
 - Provide matching skeleton component
+
+**Import Strategy:**
+```typescript
+// In page component:
+import { LazySection } from '@/components/layout/LazySection'
+import { MarketListingDetailsSkeleton } from '@/features/market/components/MarketListingDetails.skeleton'
+
+// Lazy load the actual content
+const MarketListingDetails = lazy(() => import('@/features/market/components/MarketListingDetails'))
+
+// Use in render:
+<LazySection
+  component={MarketListingDetails}
+  skeleton={MarketListingDetailsSkeleton}
+  componentProps={{ listing: data.listing }}
+/>
+```
+
+Note: The skeleton is imported directly (not lazy loaded) so it's available immediately to show while the content section loads.
 
 ## Data Models
 

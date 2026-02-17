@@ -25,6 +25,9 @@ const MarketListingEditViewLazy = lazy(
     })),
 )
 
+// Skeleton is NOT lazy loaded - needs to be available immediately
+const SkeletonComponent = MarketListingViewSkeleton
+
 export function ViewMarketMultiple(props: {}) {
   const { id } = useParams<{ id: string }>()
 
@@ -68,7 +71,7 @@ export function ViewMarketMultiple(props: {}) {
       }
       isLoading={pageData.isLoading}
       error={pageData.error}
-      skeleton={<MarketListingViewSkeleton />}
+      skeleton={<SkeletonComponent />}
       sidebarOpen={true}
       maxWidth={"xl"}
     >
@@ -79,7 +82,7 @@ export function ViewMarketMultiple(props: {}) {
           <LazySection
             component={MarketMultipleViewLazy}
             componentProps={{}}
-            skeleton={MarketListingViewSkeleton}
+            skeleton={SkeletonComponent}
           />
         </CurrentMarketListingContext.Provider>
       )}
@@ -115,7 +118,7 @@ export function EditMarketMultiple(props: {}) {
       entityTitle={t("market.editMarketListing")}
       isLoading={pageData.isLoading}
       error={pageData.error}
-      skeleton={<MarketListingViewSkeleton />}
+      skeleton={<SkeletonComponent />}
       sidebarOpen={true}
       maxWidth={"lg"}
     >
@@ -126,7 +129,7 @@ export function EditMarketMultiple(props: {}) {
           <LazySection
             component={MarketListingEditViewLazy}
             componentProps={{}}
-            skeleton={MarketListingViewSkeleton}
+            skeleton={SkeletonComponent}
           />
         </CurrentMarketListingContext.Provider>
       )}
