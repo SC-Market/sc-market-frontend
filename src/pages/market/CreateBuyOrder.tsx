@@ -37,7 +37,7 @@ export function CreateBuyOrder() {
               setItemName?.(null)
             }}
             item_type={itemType || "Other"}
-            item_name={itemName}
+            item_name={itemName ?? null}
           />
         </FlatSection>
       </Grid>

@@ -11,9 +11,7 @@ import {
 import AddRounded from "@mui/icons-material/AddRounded"
 import FilterListIcon from "@mui/icons-material/FilterList"
 import { MarketSearchArea } from "../../features/market/components/MarketSidebar"
-import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import { MarketSidebarContext } from "../../features/market"
-import { Page } from "../../components/metadata/Page"
 import {
   ItemStockContext,
   MyItemStock,
@@ -26,6 +24,8 @@ import { GridRowSelectionModel } from "@mui/x-data-grid"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { BottomSheet } from "../../components/mobile/BottomSheet"
+import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
+import { usePageManageStock } from "../../features/market/hooks/usePageManageStock"
 
 export function ManageStock() {
   const { t } = useTranslation()
@@ -35,6 +35,7 @@ export function ManageStock() {
   const [searchState, setSearchState] = useMarketSearch()
   const navigate = useNavigate()
   const location = useLocation()
+  const pageData = usePageManageStock()
 
   useEffect(() => {
     setSearchState({
@@ -61,7 +62,13 @@ export function ManageStock() {
   }
 
   return (
-    <Page title={t("sidebar.manage_listings")}>
+    <StandardPageLayout
+      title={t("sidebar.manage_listings")}
+      sidebarOpen={true}
+      maxWidth="xl"
+      isLoading={pageData.isLoading}
+      error={pageData.error}
+    >
       <ItemStockContext.Provider value={[selectionModel, setSelectionModel]}>
         <MarketSidebarContext.Provider value={[open, setOpen]}>
           {isMobile && (
@@ -77,71 +84,69 @@ export function ManageStock() {
             </BottomSheet>
           )}
 
-          <ContainerGrid maxWidth={"xl"} sidebarOpen={true}>
-            <Grid item xs={12}>
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                {isMobile && (
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    startIcon={<FilterListIcon />}
-                    onClick={() => setOpen((prev) => !prev)}
-                    sx={{
-                      borderRadius: 2,
-                      textTransform: "none",
-                    }}
-                  >
-                    {t("market.filters", "Filters")}
-                  </Button>
-                )}
-                <Tabs value={currentTab} onChange={handleTabChange}>
-                  <Tab
-                    label={t("sidebar.manage_listings", "Manage Listings")}
-                  />
-                  <Tab label={t("sidebar.manage_stock", "Manage Stock")} />
-                </Tabs>
-                <Box sx={{ flexGrow: 1 }} />
-                <Link to="/market/create" style={{ textDecoration: "none" }}>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    startIcon={<AddRounded />}
-                    size="large"
-                  >
-                    {t("market.createListing", "Create Listing")}
-                  </Button>
-                </Link>
-              </Box>
-            </Grid>
-
-            {!isMobile && (
-              <Grid item xs={12} md={3}>
-                <Paper>
-                  <MarketSearchArea status />
-                </Paper>
-              </Grid>
-            )}
-
-            <Grid item xs={12} md={isMobile ? 12 : 9}>
-              <Grid container spacing={theme.layoutSpacing.layout}>
-                <Grid item xs={12}>
-                  <MyItemStock />
-                </Grid>
-              </Grid>
-            </Grid>
-
-            <Grid
-              item
-              xs={12}
-              sx={{ display: "flex", justifyContent: "flex-end" }}
-            >
-              <Link to={"/market/me"} style={{ color: "inherit" }}>
-                <UnderlineLink>{t("sidebar.archived_listings")}</UnderlineLink>
+          <Grid item xs={12}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              {isMobile && (
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  startIcon={<FilterListIcon />}
+                  onClick={() => setOpen((prev) => !prev)}
+                  sx={{
+                    borderRadius: 2,
+                    textTransform: "none",
+                  }}
+                >
+                  {t("market.filters", "Filters")}
+                </Button>
+              )}
+              <Tabs value={currentTab} onChange={handleTabChange}>
+                <Tab
+                  label={t("sidebar.manage_listings", "Manage Listings")}
+                />
+                <Tab label={t("sidebar.manage_stock", "Manage Stock")} />
+              </Tabs>
+              <Box sx={{ flexGrow: 1 }} />
+              <Link to="/market/create" style={{ textDecoration: "none" }}>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  startIcon={<AddRounded />}
+                  size="large"
+                >
+                  {t("market.createListing", "Create Listing")}
+                </Button>
               </Link>
+            </Box>
+          </Grid>
+
+          {!isMobile && (
+            <Grid item xs={12} md={3}>
+              <Paper>
+                <MarketSearchArea status />
+              </Paper>
             </Grid>
-          </ContainerGrid>
+          )}
+
+          <Grid item xs={12} md={isMobile ? 12 : 9}>
+            <Grid container spacing={theme.layoutSpacing.layout}>
+              <Grid item xs={12}>
+                <MyItemStock />
+              </Grid>
+            </Grid>
+          </Grid>
+
+          <Grid
+            item
+            xs={12}
+            sx={{ display: "flex", justifyContent: "flex-end" }}
+          >
+            <Link to={"/market/me"} style={{ color: "inherit" }}>
+              <UnderlineLink>{t("sidebar.archived_listings")}</UnderlineLink>
+            </Link>
+          </Grid>
         </MarketSidebarContext.Provider>
       </ItemStockContext.Provider>
-    </Page>
+    </StandardPageLayout>
   )
 }

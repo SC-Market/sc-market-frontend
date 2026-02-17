@@ -1,29 +1,68 @@
-import React, { useState } from "react"
-import { HeaderTitle } from "../../components/typography/HeaderTitle"
-import { PageBreadcrumbs } from "../../components/navigation"
+import React, { lazy, useState } from "react"
 import { Divider, Grid, IconButton } from "@mui/material"
-import { MyItemListings } from "../../features/market/views/ItemListings"
-import { MarketSidebar } from "../../features/market/components/MarketSidebar"
-import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
 import CloseIcon from "@mui/icons-material/CloseRounded"
 import MenuIcon from "@mui/icons-material/MenuRounded"
 import { MarketSidebarContext } from "../../features/market/hooks/MarketSidebar"
-import { Page } from "../../components/metadata/Page"
 import { MarketActions } from "../../features/market/components/MarketActions"
 import { HideOnScroll, MarketNavArea } from "../../features/market/components/MarketNavArea"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
+import { usePageMyMarketListings } from "../../features/market/hooks/usePageMyMarketListings"
+import { LazySection } from "../../components/layout/LazySection"
+import { HeaderTitle } from "../../components/typography/HeaderTitle"
 
-export function MyMarketListings(props: {}) {
+// Lazy load listing sections
+const ActiveListings = lazy(() =>
+  import("../../features/market/views/ItemListings").then((module) => ({
+    default: () => <module.MyItemListings status="active" />,
+  })),
+)
+
+const InactiveListings = lazy(() =>
+  import("../../features/market/views/ItemListings").then((module) => ({
+    default: () => <module.MyItemListings status="inactive" />,
+  })),
+)
+
+const ArchivedListings = lazy(() =>
+  import("../../features/market/views/ItemListings").then((module) => ({
+    default: () => <module.MyItemListings status="archived" />,
+  })),
+)
+
+// Simple skeleton for listing sections
+function ListingsSkeleton() {
+  return (
+    <Grid item xs={12}>
+      <div>Loading...</div>
+    </Grid>
+  )
+}
+
+export function MyMarketListings() {
   const [open, setOpen] = useState(false)
   const [drawerOpen] = useDrawerOpen()
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
+  const pageData = usePageMyMarketListings()
 
   return (
-    <Page title={t("sidebar.my_market_listings")}>
+    <StandardPageLayout
+      title={t("sidebar.my_market_listings")}
+      breadcrumbs={[
+        { label: t("market.title", "Market"), href: "/market" },
+        { label: t("sidebar.my_market_listings") },
+      ]}
+      headerTitle={t("market.activeListings")}
+      headerActions={<MarketActions />}
+      sidebarOpen={true}
+      maxWidth="lg"
+      isLoading={pageData.isLoading}
+      error={pageData.error}
+    >
       <IconButton
         color="secondary"
         aria-label={t("toggle_market_sidebar")}
@@ -40,106 +79,87 @@ export function MyMarketListings(props: {}) {
         {open ? <CloseIcon /> : <MenuIcon />}
       </IconButton>
       <MarketSidebarContext.Provider value={[open, setOpen]}>
-        {/*<MarketSidebar/>*/}
-        <ContainerGrid maxWidth={"lg"} sidebarOpen={true}>
-          <Grid item xs={12}>
-            <PageBreadcrumbs
-              items={[
-                { label: t("market.title", "Market"), href: "/market" },
-                { label: t("sidebar.my_market_listings") },
-              ]}
-            />
-          </Grid>
-          <Grid
-            item
-            container
-            justifyContent={"space-between"}
-            spacing={theme.layoutSpacing.layout}
-            xs={12}
-          >
-            <HeaderTitle lg={7} xl={7}>
-              {t("market.activeListings")}
-            </HeaderTitle>
+        <Grid item xs={12}>
+          <HideOnScroll>
+            <MarketNavArea />
+          </HideOnScroll>
+        </Grid>
 
-            <MarketActions />
-          </Grid>
+        <Grid item xs={12}>
+          <Divider light />
+        </Grid>
 
-          <Grid item xs={12}>
-            <HideOnScroll>
-              <MarketNavArea />
-            </HideOnScroll>
-          </Grid>
+        <LazySection
+          component={ActiveListings}
+          skeleton={ListingsSkeleton}
+          gridProps={{
+            item: true,
+            container: true,
+            xs: 12,
+            lg: 12,
+            spacing: theme.layoutSpacing.component,
+            sx: { transition: "0.3s" },
+          }}
+        />
 
-          <Grid item xs={12}>
-            <Divider light />
-          </Grid>
+        <Grid
+          item
+          container
+          justifyContent="space-between"
+          spacing={theme.layoutSpacing.layout}
+          xs={12}
+        >
+          <HeaderTitle lg={12} xl={12}>
+            {t("market.inactiveListings")}
+          </HeaderTitle>
+        </Grid>
 
-          <Grid
-            item
-            container
-            xs={12}
-            lg={12}
-            spacing={theme.layoutSpacing.component}
-            sx={{ transition: "0.3s" }}
-          >
-            <MyItemListings status={"active"} />
-          </Grid>
+        <Grid item xs={12}>
+          <Divider light />
+        </Grid>
 
-          <Grid
-            item
-            container
-            justifyContent={"space-between"}
-            spacing={theme.layoutSpacing.layout}
-            xs={12}
-          >
-            <HeaderTitle lg={12} xl={12}>
-              {t("market.inactiveListings")}
-            </HeaderTitle>
-          </Grid>
+        <LazySection
+          component={InactiveListings}
+          skeleton={ListingsSkeleton}
+          gridProps={{
+            item: true,
+            container: true,
+            xs: 12,
+            lg: 12,
+            spacing: theme.layoutSpacing.component,
+            sx: { transition: "0.3s" },
+          }}
+        />
 
-          <Grid item xs={12}>
-            <Divider light />
-          </Grid>
+        <Grid
+          item
+          container
+          justifyContent="space-between"
+          spacing={theme.layoutSpacing.layout}
+          xs={12}
+        >
+          <HeaderTitle lg={12} xl={12}>
+            {t("market.archivedListings")}
+          </HeaderTitle>
+        </Grid>
 
-          <Grid
-            item
-            container
-            xs={12}
-            lg={12}
-            spacing={theme.layoutSpacing.component}
-            sx={{ transition: "0.3s" }}
-          >
-            <MyItemListings status={"inactive"} />
-          </Grid>
+        <Grid item xs={12}>
+          <Divider light />
+        </Grid>
 
-          <Grid
-            item
-            container
-            justifyContent={"space-between"}
-            spacing={theme.layoutSpacing.layout}
-            xs={12}
-          >
-            <HeaderTitle lg={12} xl={12}>
-              {t("market.archivedListings")}
-            </HeaderTitle>
-          </Grid>
-
-          <Grid item xs={12}>
-            <Divider light />
-          </Grid>
-
-          <Grid
-            item
-            container
-            xs={12}
-            lg={12}
-            spacing={theme.layoutSpacing.component}
-            sx={{ transition: "0.3s" }}
-          >
-            <MyItemListings status={"archived"} />
-          </Grid>
-        </ContainerGrid>
+        <LazySection
+          component={ArchivedListings}
+          skeleton={ListingsSkeleton}
+          gridProps={{
+            item: true,
+            container: true,
+            xs: 12,
+            lg: 12,
+            spacing: theme.layoutSpacing.component,
+            sx: { transition: "0.3s" },
+          }}
+        />
       </MarketSidebarContext.Provider>
-    </Page>
+    </StandardPageLayout>
   )
 }

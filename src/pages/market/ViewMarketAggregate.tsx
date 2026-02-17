@@ -40,25 +40,24 @@ export function ViewMarketAggregate(props: {}) {
     <DetailPageLayout
       title={pageData.data?.aggregate.details?.title}
       breadcrumbs={[
-        { label: t("market.title"), href: "/market" },
+        { label: t("market.title", "Market"), href: "/market" },
         {
           label:
             pageData.data?.aggregate.details?.title ||
-            t("market.viewMarketListing"),
+            t("market.viewMarketListing", "Listing"),
         },
       ]}
-      backButton={true}
       entityTitle={pageData.data?.aggregate.details?.title}
       entityActions={
         <Link
-          to={"/market/cart"}
+          to="/market/cart"
           style={{ color: "inherit", textDecoration: "none" }}
         >
           <Button
-            color={"secondary"}
+            color="secondary"
             startIcon={<ShoppingCartRoundedIcon />}
-            variant={"contained"}
-            size={"large"}
+            variant="contained"
+            size="large"
           >
             {t("marketActions.myCart")}
           </Button>
@@ -68,7 +67,7 @@ export function ViewMarketAggregate(props: {}) {
       error={pageData.error}
       skeleton={<SkeletonComponent />}
       sidebarOpen={true}
-      maxWidth={"lg"}
+      maxWidth="xl"
     >
       {pageData.data && (
         <CurrentMarketListingContext.Provider
@@ -102,11 +101,11 @@ export function EditMarketAggregate(props: {}) {
     <DetailPageLayout
       title={pageData.data?.aggregate.details?.title}
       breadcrumbs={[
-        { label: t("market.title"), href: "/market" },
+        { label: t("market.title", "Market"), href: "/market" },
         {
           label:
             pageData.data?.aggregate.details?.title ||
-            t("market.editMarketListing"),
+            t("market.editMarketListing", "Edit Listing"),
         },
       ]}
       backButton={true}
@@ -115,7 +114,7 @@ export function EditMarketAggregate(props: {}) {
       error={pageData.error}
       skeleton={<SkeletonComponent />}
       sidebarOpen={true}
-      maxWidth={"lg"}
+      maxWidth="lg"
     >
       {pageData.data && (
         <CurrentMarketAggregateContext.Provider
