@@ -1,13 +1,8 @@
 import React, { useMemo } from "react"
-import { HeaderTitle } from "../../components/typography/HeaderTitle"
-import { PageBreadcrumbs } from "../../components/navigation"
-import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import {
-  AggregateMarketListingForm,
   MarketListingForm,
   MarketMultipleForm,
 } from "../../features/market/components/MarketListingForm"
-import { Page } from "../../components/metadata/Page"
 import { Alert, Grid, Tab, Tabs } from "@mui/material"
 import { Link } from "react-router-dom"
 import { a11yProps, TabPanel } from "../../components/tabs/Tabs"
@@ -15,7 +10,8 @@ import { useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { useGetUserProfileQuery } from "../../store/profile"
+import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
+import { usePageMarketCreate } from "../../features/market/hooks/usePageMarketCreate"
 
 const name_to_index = new Map([
   // ["aggregate", 0],

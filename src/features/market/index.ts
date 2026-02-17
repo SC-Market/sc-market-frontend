@@ -158,6 +158,10 @@ export { usePageMarketAggregate } from "./hooks/usePageMarketAggregate"
 export type {
   MarketAggregatePageData,
 } from "./hooks/usePageMarketAggregate"
+export { usePageMarketMultiple } from "./hooks/usePageMarketMultiple"
+export type {
+  MarketMultiplePageData,
+} from "./hooks/usePageMarketMultiple"
 
 // Components
 export { MarketPage } from "./components/MarketPage"

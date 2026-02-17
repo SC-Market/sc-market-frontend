@@ -27,7 +27,7 @@ export function MarketActions() {
       direction={{ xs: "row", sm: "row" }}
       justifyContent={{ xs: "stretch", sm: "flex-end" }}
     >
-      <Grid item xs={6} sm={6}>
+      <Grid item xs={6} sm="auto">
         <Link
           to={"/market/create"}
           style={{ color: "inherit", textDecoration: "none", display: "block" }}
@@ -59,7 +59,7 @@ export function MarketActions() {
         </Link>
       </Grid>
 
-      <Grid item xs={6} sm={6}>
+      <Grid item xs={6} sm="auto">
         <Link
           to={"/market/cart"}
           style={{ color: "inherit", textDecoration: "none", display: "block" }}
