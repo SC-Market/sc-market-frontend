@@ -58,7 +58,7 @@ export function DetailPageLayout(
         </Grid>
       )}
 
-      <Grid item xs>
+      <Grid item xs style={{ minWidth: 0 }}>
         {entityTitle && (
           <div>
             <div style={{ fontSize: "1.5rem", fontWeight: 600 }}>
@@ -75,7 +75,7 @@ export function DetailPageLayout(
       </Grid>
 
       {entityActions && (
-        <Grid item>
+        <Grid item style={{ marginLeft: "auto" }}>
           {entityActions}
         </Grid>
       )}

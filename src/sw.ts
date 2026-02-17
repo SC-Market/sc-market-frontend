@@ -67,13 +67,12 @@ registerRoute(
   }),
 )
 
-// Cache HTML navigation with NetworkFirst to always get latest entry point
-// This ensures we always reference the correct hashed JS/CSS bundles
+// Cache HTML navigation with StaleWhileRevalidate for instant loads
+// Serves cached page immediately while updating in background
 registerRoute(
   ({ request }: { request: Request }) => request.mode === "navigate",
-  new NetworkFirst({
+  new StaleWhileRevalidate({
     cacheName: "pages-v1",
-    networkTimeoutSeconds: 3,
     plugins: [
       new CacheableResponsePlugin({
         statuses: [0, 200],
