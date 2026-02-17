@@ -257,14 +257,14 @@ Each task builds on previous work, ensuring the system remains functional throug
 
 ### Market Feature Pages
 
-- [ ] 16. Migrate market detail pages
-  - [ ] 16.1 Create usePageMarketAggregate hook
+- [-] 16. Migrate market detail pages
+  - [x] 16.1 Create usePageMarketAggregate hook
     - Create `src/features/market/hooks/usePageMarketAggregate.ts`
     - Compose aggregate market data queries
     - Return standard page hook interface
     - _Requirements: 5.1, 5.2, 5.3, 5.5_
   
-  - [ ] 16.2 Migrate ViewMarketAggregate page
+  - [-] 16.2 Migrate ViewMarketAggregate page
     - Update `src/pages/market/ViewMarketAggregate.tsx`
     - Use DetailPageLayout
     - Use usePageMarketAggregate hook
@@ -278,7 +278,7 @@ Each task builds on previous work, ensuring the system remains functional throug
     - Use LazySection for content sections
     - _Requirements: 1.1, 1.2, 1.3, 12.2_
 
-- [ ] 17. Migrate market form pages
+- [~] 17. Migrate market form pages
   - [ ] 17.1 Migrate MarketCreate page
     - Update `src/pages/market/MarketCreate.tsx`
     - Use FormPageLayout
