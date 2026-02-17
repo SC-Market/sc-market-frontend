@@ -278,7 +278,7 @@ Each task builds on previous work, ensuring the system remains functional throug
     - Use LazySection for content sections
     - _Requirements: 1.1, 1.2, 1.3, 12.2_
 
-- [-] 17. Migrate market form pages
+- [x] 17. Migrate market form pages
   - [x] 17.1 Migrate MarketCreate page
     - Update `src/pages/market/MarketCreate.tsx`
     - Use FormPageLayout
@@ -291,13 +291,13 @@ Each task builds on previous work, ensuring the system remains functional throug
     - Extract form logic to page hook
     - _Requirements: 1.1, 1.2, 2.6, 12.2_
   
-  - [-] 17.3 Migrate SellMaterials page
+  - [x] 17.3 Migrate SellMaterials page
     - Update `src/pages/market/SellMaterials.tsx`
     - Use FormPageLayout
     - Extract form logic to page hook
     - _Requirements: 1.1, 1.2, 2.6, 12.2_
 
-- [ ] 18. Migrate market management pages
+- [~] 18. Migrate market management pages
   - [ ] 18.1 Migrate MyMarketListings page
     - Update `src/pages/market/MyMarketListings.tsx`
     - Use StandardPageLayout
