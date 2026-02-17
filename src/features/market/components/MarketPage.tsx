@@ -155,7 +155,7 @@ export function MarketPage() {
                     />
                   </Tabs>
                 </Grid>
-                <Grid item xs={12} sm="auto">
+                <Grid item xs={12} sm="auto" sx={{ display: 'flex', justifyContent: { xs: 'stretch', sm: 'flex-end' } }}>
                   {tabPage === 1 ? (
                     <MarketActions />
                   ) : tabPage === 0 ? (
