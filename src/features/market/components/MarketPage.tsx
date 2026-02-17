@@ -112,7 +112,7 @@ export function MarketPage() {
                     </Typography>
                   </Box>
                 </Grid>
-                <Grid item xs={12} sm="auto">
+                <Grid item xs={12} sm>
                   <Tabs
                     value={tabPage}
                     onChange={(_, newValue) => {
