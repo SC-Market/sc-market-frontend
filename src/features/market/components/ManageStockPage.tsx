@@ -1,18 +1,17 @@
 /**
- * Manage Stock Page
+ * Manage Stock Page Content
  *
  * Interface for managing stock lots and allocations with search sidebar
+ * This is a pure content component - layout is handled by the page component
  */
 
 import React, { useState } from "react"
-import { Box, Grid, Paper, Tabs, Button, useMediaQuery } from "@mui/material"
-import { HapticTab } from "../../../components/haptic"
+import { Box, Grid, Paper, Tabs, Button, useMediaQuery, Tab } from "@mui/material"
 import { useNavigate, useLocation } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import FilterListIcon from "@mui/icons-material/FilterList"
-import { ContainerGrid } from "../../../components/layout/ContainerGrid"
 import { BottomSheet } from "../../../components/mobile/BottomSheet"
 import { AllStockLotsGrid } from "./stock/AllStockLotsGrid"
 import { AllAllocatedLotsGrid } from "./stock/AllAllocatedLotsGrid"
@@ -52,7 +51,7 @@ export function ManageStockPage() {
         </BottomSheet>
       )}
 
-      <ContainerGrid maxWidth="xl" sidebarOpen={true}>
+      <Grid item xs={12} container spacing={theme.layoutSpacing.layout}>
         <Grid item xs={12}>
           <Box
             sx={{
@@ -74,10 +73,10 @@ export function ManageStockPage() {
               </Button>
             )}
             <Tabs value={currentTab} onChange={handleTabChange}>
-              <HapticTab
+              <Tab
                 label={t("sidebar.manage_listings", "Manage Listings")}
               />
-              <HapticTab label={t("sidebar.manage_stock", "Manage Stock")} />
+              <Tab label={t("sidebar.manage_stock", "Manage Stock")} />
             </Tabs>
           </Box>
         </Grid>
@@ -101,7 +100,7 @@ export function ManageStockPage() {
             </Grid>
           </Grid>
         </Grid>
-      </ContainerGrid>
+      </Grid>
     </StockSearchProvider>
   )
 }
