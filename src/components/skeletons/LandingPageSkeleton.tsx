@@ -5,6 +5,7 @@ import { HorizontalListingSkeleton } from "./HorizontalListingSkeleton"
 /**
  * Skeleton for landing page
  * Matches LandingPage layout: hero, stats, recent listings, features
+ * Note: LandingPage uses noTopSpacer={true} and paddingTop: 20 in ContainerProps
  */
 export function LandingPageSkeleton() {
   return (
