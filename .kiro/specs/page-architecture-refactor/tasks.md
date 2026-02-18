@@ -742,18 +742,18 @@ Each task builds on previous work, ensuring the system remains functional throug
 
 ### Error Pages
 
-- [ ] 36. Migrate error pages
-  - [ ] 36.1 Migrate Error404 page
+- [x] 36. Migrate error pages
+  - [x] 36.1 Migrate Error404 page
     - Update `src/pages/errors/Error404.tsx`
     - Use StandardPageLayout with minimal layout
     - _Requirements: 1.1, 1.2, 12.2_
   
-  - [ ] 36.2 Migrate ErrorPage
+  - [x] 36.2 Migrate ErrorPage
     - Update `src/pages/errors/ErrorPage.tsx`
     - Use StandardPageLayout with minimal layout
     - _Requirements: 1.1, 1.2, 12.2_
   
-  - [ ] 36.3 Migrate FrontendError page
+  - [x] 36.3 Migrate FrontendError page
     - Update `src/pages/errors/FrontendError.tsx`
     - Use StandardPageLayout with minimal layout
     - _Requirements: 1.1, 1.2, 12.2_

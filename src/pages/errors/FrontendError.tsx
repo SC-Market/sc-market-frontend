@@ -1,7 +1,6 @@
 import React, { Suspense } from "react"
-import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import { Button, Grid, Link, Typography } from "@mui/material"
-import { Page, PageFallback } from "../../components/metadata/Page"
+import { PageFallback } from "../../components/metadata/Page"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { DISCORD_INVITE } from "../../util/constants"
 import { HookProvider } from "../../hooks/HookProvider"
@@ -9,6 +8,7 @@ import { Root } from "../../components/layout/Root"
 import { useSearchParams, useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { ArrowBackRounded } from "@mui/icons-material"
+import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 
 export function FrontendErrorBody() {
   const { t } = useTranslation()
@@ -101,11 +101,14 @@ export function FrontendErrorBody() {
 export function FrontendErrorPage() {
   const { t } = useTranslation()
   return (
-    <Page title={t("frontendError.pageTitle")}>
-      <ContainerGrid maxWidth={"md"} sidebarOpen={true}>
-        <FrontendErrorBody />
-      </ContainerGrid>
-    </Page>
+    <StandardPageLayout
+      title={t("frontendError.pageTitle")}
+      maxWidth={"md"}
+      sidebarOpen={true}
+      noTopSpacer={false}
+    >
+      <FrontendErrorBody />
+    </StandardPageLayout>
   )
 }
 
