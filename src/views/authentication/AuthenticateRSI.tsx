@@ -12,8 +12,6 @@ import React, { useCallback, useMemo, useState } from "react"
 import OpenInNewIcon from "@mui/icons-material/OpenInNew"
 import {
   useActivateAccountLink,
-  useGetAuthenticatorIdentifier,
-  useGetUserProfileQuery,
 } from "../../store/profile"
 import { useNavigate } from "react-router-dom"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
@@ -45,9 +43,12 @@ export function isAlphaNumeric(str: string) {
   return true
 }
 
-export function AuthenticateRSI() {
+export interface AuthenticateRSIProps {
+  identifier?: string
+}
+
+export function AuthenticateRSI({ identifier: identifierProp }: AuthenticateRSIProps) {
   const { t } = useTranslation()
-  const identifier = useGetAuthenticatorIdentifier()
   const [username, setUsername] = useState("")
   const [error, setError] = useState(false)
 
@@ -154,7 +155,7 @@ export function AuthenticateRSI() {
             components={{
               sentinelCode: (
                 <SentinelCode
-                  code={identifier.data?.identifier || "PLACEHOLDER"}
+                  code={identifierProp || "PLACEHOLDER"}
                 />
               ),
               guideLink: (
@@ -210,7 +211,7 @@ export function AuthenticateRSI() {
             endIcon={<OpenInNewIcon />}
             onClick={async () => {
               await navigator.clipboard.writeText(
-                identifier.data?.identifier || "PLACEHOLDER",
+                identifierProp || "PLACEHOLDER",
               )
               window.open(
                 "https://robertsspaceindustries.com/account/profile",

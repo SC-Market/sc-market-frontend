@@ -1,6 +1,6 @@
 import React, { ReactElement, ReactNode } from "react"
 import { Navigate } from "react-router-dom"
-import { Grid } from "@mui/material"
+import { Grid, GridProps } from "@mui/material"
 import { Page } from "../metadata/Page"
 import { PageBreadcrumbs } from "../navigation/PageBreadcrumbs"
 import { ContainerGrid } from "./ContainerGrid"
@@ -50,6 +50,10 @@ export interface StandardPageLayoutProps {
   isLoading?: boolean
   error?: FetchBaseQueryError | SerializedError | unknown
   skeleton?: ReactNode
+
+  // Pass-through props for ContainerGrid
+  GridProps?: GridProps
+  ContainerProps?: Omit<React.ComponentProps<typeof ContainerGrid>, 'sidebarOpen' | 'sidebarWidth' | 'noFooter' | 'noSidebar' | 'GridProps' | 'noTopSpacer' | 'noMobilePadding' | 'maxWidth' | 'children'>
 }
 
 export function StandardPageLayout(
@@ -75,6 +79,8 @@ export function StandardPageLayout(
     isLoading = false,
     error,
     skeleton,
+    GridProps,
+    ContainerProps,
   } = props
 
   // Handle 404 errors
@@ -101,6 +107,8 @@ export function StandardPageLayout(
         noSidebar={noSidebar}
         noMobilePadding={noMobilePadding}
         noTopSpacer={noTopSpacer}
+        GridProps={GridProps}
+        {...ContainerProps}
       >
         {/* Breadcrumbs */}
         {breadcrumbs && breadcrumbs.length > 0 && (
