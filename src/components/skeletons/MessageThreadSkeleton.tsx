@@ -115,7 +115,11 @@ export function MessageThreadSkeleton({
                   flexShrink: 0,
                 }}
               >
-                <BaseSkeleton variant="rectangular" width="100%" height="100%" />
+                <BaseSkeleton
+                  variant="rectangular"
+                  width="100%"
+                  height="100%"
+                />
               </Avatar>
               <Stack direction="column" sx={{ flex: 1, minWidth: 0 }}>
                 <Stack

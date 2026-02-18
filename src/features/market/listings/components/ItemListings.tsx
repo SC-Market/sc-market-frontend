@@ -701,9 +701,7 @@ export function ItemListings(props: {
   return (
     <>
       <div ref={ref} style={{ position: "absolute", top: 0 }} />
-      <Stack
-        spacing={1}
-      >
+      <Stack spacing={1}>
         <Box
           sx={{
             display: "flex",
@@ -723,9 +721,11 @@ export function ItemListings(props: {
           />
         </Box>
 
-        <Box sx={{
-          maxWidth: `calc(100% - mod(100%, ${LISTING_CARD_WIDTH + 8}px))`,
-        }}>
+        <Box
+          sx={{
+            maxWidth: `calc(100% - mod(100%, ${LISTING_CARD_WIDTH + 8}px))`,
+          }}
+        >
           <Divider light />
           <ListingPagination
             count={total}
