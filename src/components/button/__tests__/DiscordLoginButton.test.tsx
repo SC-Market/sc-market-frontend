@@ -48,7 +48,9 @@ describe("DiscordLoginButton", () => {
       </MemoryRouter>,
     )
 
-    fireEvent.click(screen.getByRole("button", { name: /Sign in with Discord/i }))
+    fireEvent.click(
+      screen.getByRole("button", { name: /Sign in with Discord/i }),
+    )
 
     expect(hrefSet).toHaveBeenCalledWith(
       "http://backend/auth/discord?path=%2Ffoo&action=signin",
@@ -64,7 +66,9 @@ describe("DiscordLoginButton", () => {
       </MemoryRouter>,
     )
 
-    fireEvent.click(screen.getByRole("button", { name: /Sign in with Discord/i }))
+    fireEvent.click(
+      screen.getByRole("button", { name: /Sign in with Discord/i }),
+    )
 
     expect(hrefSet).toHaveBeenCalledWith(
       "http://backend/auth/discord?path=%2F&action=signin",

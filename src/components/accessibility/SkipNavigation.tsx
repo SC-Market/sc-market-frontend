@@ -18,7 +18,7 @@ export interface SkipNavigationProps {
 /**
  * SkipNavigation provides skip links that allow keyboard users to bypass
  * repetitive navigation and jump directly to important page sections.
- * 
+ *
  * Skip links are hidden off-screen by default and become visible when focused,
  * meeting WCAG 2.1 Level A requirement 2.4.1 (Bypass Blocks).
  */
@@ -62,10 +62,10 @@ export function SkipNavigation({ links }: SkipNavigationProps) {
       if (!htmlElement.hasAttribute("tabindex")) {
         htmlElement.setAttribute("tabindex", "-1")
       }
-      
+
       // Focus the element
       htmlElement.focus()
-      
+
       // Smooth scroll to element
       htmlElement.scrollIntoView({ behavior: "smooth", block: "start" })
     }

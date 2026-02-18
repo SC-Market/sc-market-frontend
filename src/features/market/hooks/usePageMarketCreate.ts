@@ -22,9 +22,9 @@ export interface MarketCreatePageData {
 /**
  * Page hook for MarketCreate page.
  * Encapsulates all data fetching logic for the market listing creation page.
- * 
+ *
  * @returns Page data with loading states, errors, and refetch function
- * 
+ *
  * Requirements: 5.1, 5.2, 5.3, 5.5
  */
 export function usePageMarketCreate(): UsePageResult<MarketCreatePageData> {

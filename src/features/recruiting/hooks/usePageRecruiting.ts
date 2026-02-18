@@ -1,4 +1,7 @@
-import { useRecruitingGetAllPostsQuery, useRecruitingGetPostByOrgQuery } from "../../../store/recruiting"
+import {
+  useRecruitingGetAllPostsQuery,
+  useRecruitingGetPostByOrgQuery,
+} from "../../../store/recruiting"
 import { RecruitingSearchState } from "../../../hooks/recruiting/RecruitingSearch"
 
 interface UsePageRecruitingParams {

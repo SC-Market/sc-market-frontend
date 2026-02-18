@@ -114,7 +114,10 @@ function TestWrapper({ children }: { children: React.ReactNode }) {
           <DrawerOpenContext.Provider value={drawerState}>
             <Routes>
               <Route path="/contractors/:id" element={children} />
-              <Route path="/404" element={<div data-testid="404-page">404 Page</div>} />
+              <Route
+                path="/404"
+                element={<div data-testid="404-page">404 Page</div>}
+              />
             </Routes>
           </DrawerOpenContext.Provider>
         </BrowserRouter>
@@ -129,7 +132,7 @@ function renderWithRoute(spectrumId: string) {
   return render(
     <TestWrapper>
       <ViewOrg />
-    </TestWrapper>
+    </TestWrapper>,
   )
 }
 
@@ -170,7 +173,12 @@ describe("ViewOrg - Integration Tests", () => {
       kind: "organization",
       avatar: "https://example.com/avatar.png",
       banner: "https://example.com/banner.png",
-      rating: { avg_rating: 4.5, rating_count: 100, total_rating: 450, streak: 10 },
+      rating: {
+        avg_rating: 4.5,
+        rating_count: 100,
+        total_rating: 450,
+        streak: 10,
+      },
       size: 50,
       name: "Test Organization",
       description: "Test description",
@@ -198,7 +206,9 @@ describe("ViewOrg - Integration Tests", () => {
     })
 
     // Verify organization name is displayed
-    expect(screen.getByTestId("org-name")).toHaveTextContent("Test Organization")
+    expect(screen.getByTestId("org-name")).toHaveTextContent(
+      "Test Organization",
+    )
 
     // Verify skeleton is not displayed
     expect(screen.queryByTestId("org-info-skeleton")).not.toBeInTheDocument()
@@ -293,7 +303,12 @@ describe("ViewOrg - Integration Tests", () => {
       kind: "organization",
       avatar: "https://example.com/avatar.png",
       banner: "https://example.com/banner.png",
-      rating: { avg_rating: 4.5, rating_count: 100, total_rating: 450, streak: 10 },
+      rating: {
+        avg_rating: 4.5,
+        rating_count: 100,
+        total_rating: 450,
+        streak: 10,
+      },
       size: 50,
       name: "Test Organization",
       description: "Test description",
@@ -346,7 +361,12 @@ describe("ViewOrg - Integration Tests", () => {
       kind: "organization",
       avatar: "https://example.com/avatar.png",
       banner: "https://example.com/banner.png",
-      rating: { avg_rating: 4.5, rating_count: 100, total_rating: 450, streak: 10 },
+      rating: {
+        avg_rating: 4.5,
+        rating_count: 100,
+        total_rating: 450,
+        streak: 10,
+      },
       size: 50,
       name: "Test Organization",
       description: "Test description",
@@ -375,4 +395,3 @@ describe("ViewOrg - Integration Tests", () => {
     expect(screen.getByTestId("org-info")).toBeInTheDocument()
   })
 })
-

@@ -1,11 +1,5 @@
 import React from "react"
-import {
-  Avatar,
-  Button,
-  Grid,
-  TextField,
-  Typography,
-} from "@mui/material"
+import { Avatar, Button, Grid, TextField, Typography } from "@mui/material"
 import { User, MinimalUser } from "../../../datatypes/User"
 import { Contractor, MinimalContractor } from "../../../datatypes/Contractor"
 import { useTranslation } from "react-i18next"

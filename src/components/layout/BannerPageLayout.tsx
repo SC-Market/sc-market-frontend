@@ -43,18 +43,18 @@ export interface BannerPageLayoutProps {
 
 /**
  * BannerPageLayout - Layout for pages with custom banner/header designs
- * 
+ *
  * Uses OpenLayout instead of ContainerGrid to allow for full-width banner areas
  * with custom positioning (like profile banners, org banners).
- * 
+ *
  * This layout is appropriate for:
  * - Profile pages with banner images
  * - Organization pages with banner images
  * - Landing pages with hero sections
  * - Any page requiring full-width header content
- * 
+ *
  * For standard pages with consistent container widths, use StandardPageLayout instead.
- * 
+ *
  * Requirements: 1.1, 1.2, 2.1, 2.2, 7.1, 7.2, 10.1, 10.2
  */
 export function BannerPageLayout(props: BannerPageLayoutProps): ReactElement {
@@ -74,12 +74,20 @@ export function BannerPageLayout(props: BannerPageLayoutProps): ReactElement {
   } = props
 
   // Handle 404 errors
-  if (shouldRedirectTo404(error as FetchBaseQueryError | SerializedError | undefined)) {
+  if (
+    shouldRedirectTo404(
+      error as FetchBaseQueryError | SerializedError | undefined,
+    )
+  ) {
     return <Navigate to="/404" />
   }
 
   // Handle server errors
-  if (shouldShowErrorPage(error as FetchBaseQueryError | SerializedError | undefined)) {
+  if (
+    shouldShowErrorPage(
+      error as FetchBaseQueryError | SerializedError | undefined,
+    )
+  ) {
     return <ErrorPage />
   }
 

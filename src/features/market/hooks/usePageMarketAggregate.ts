@@ -22,10 +22,10 @@ export interface MarketAggregatePageData {
 /**
  * Page hook for ViewMarketAggregate page.
  * Encapsulates all data fetching logic for the market aggregate detail page.
- * 
+ *
  * @param id - Market aggregate ID (game item ID)
  * @returns Page data with loading states, errors, and refetch function
- * 
+ *
  * Requirements: 5.1, 5.2, 5.3, 5.5
  */
 export function usePageMarketAggregate(

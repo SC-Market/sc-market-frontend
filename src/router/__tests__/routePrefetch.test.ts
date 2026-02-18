@@ -68,7 +68,9 @@ describe("routePrefetch", () => {
       const mockError = new Error("Import failed")
 
       // Add a failing route to the registry
-      ;(routeRegistry as any)[errorRoute] = vi.fn(() => Promise.reject(mockError))
+      ;(routeRegistry as any)[errorRoute] = vi.fn(() =>
+        Promise.reject(mockError),
+      )
 
       const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {})
 

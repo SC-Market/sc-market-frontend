@@ -2,7 +2,10 @@ import React, { ReactElement, ReactNode } from "react"
 import { useNavigate } from "react-router-dom"
 import { Grid, IconButton } from "@mui/material"
 import ArrowBackIcon from "@mui/icons-material/ArrowBack"
-import { StandardPageLayout, StandardPageLayoutProps } from "./StandardPageLayout"
+import {
+  StandardPageLayout,
+  StandardPageLayoutProps,
+} from "./StandardPageLayout"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 
@@ -17,9 +20,7 @@ export interface DetailPageLayoutProps extends StandardPageLayoutProps {
   entityActions?: ReactNode
 }
 
-export function DetailPageLayout(
-  props: DetailPageLayoutProps,
-): ReactElement {
+export function DetailPageLayout(props: DetailPageLayoutProps): ReactElement {
   const theme = useTheme<ExtendedTheme>()
   const navigate = useNavigate()
 
@@ -45,7 +46,12 @@ export function DetailPageLayout(
 
   // Build the header content with entity information
   const detailHeader = (
-    <Grid container spacing={theme.layoutSpacing.layout} alignItems="center" justifyContent="space-between">
+    <Grid
+      container
+      spacing={theme.layoutSpacing.layout}
+      alignItems="center"
+      justifyContent="space-between"
+    >
       {backButton && (
         <Grid item>
           <IconButton
@@ -65,7 +71,12 @@ export function DetailPageLayout(
               {entityTitle}
             </div>
             {entitySubtitle && (
-              <div style={{ fontSize: "0.875rem", color: theme.palette.text.secondary }}>
+              <div
+                style={{
+                  fontSize: "0.875rem",
+                  color: theme.palette.text.secondary,
+                }}
+              >
                 {entitySubtitle}
               </div>
             )}
@@ -75,7 +86,12 @@ export function DetailPageLayout(
       </Grid>
 
       {entityActions && (
-        <Grid item xs={12} sm="auto" sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
+        <Grid
+          item
+          xs={12}
+          sm="auto"
+          sx={{ display: "flex", justifyContent: "flex-end", width: "100%" }}
+        >
           {entityActions}
         </Grid>
       )}

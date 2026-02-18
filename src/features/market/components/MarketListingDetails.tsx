@@ -95,7 +95,8 @@ export function MarketListingDetails({
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const { listing, details } = complete
-  const auction_details = complete.type === "unique" ? complete.auction_details : undefined
+  const auction_details =
+    complete.type === "unique" ? complete.auction_details : undefined
   const { data: profile } = useGetUserProfileQuery()
   const actualProfile = profileProp || profile
 
@@ -154,8 +155,7 @@ export function MarketListingDetails({
   )
 
   const amRelated = useMemo(
-    () =>
-      amSeller || amContractorManager || actualProfile?.role === "admin",
+    () => amSeller || amContractorManager || actualProfile?.role === "admin",
     [amSeller, amContractorManager, actualProfile?.role],
   )
 
@@ -195,9 +195,7 @@ export function MarketListingDetails({
                   component={Link}
                   underline="hover"
                   color="inherit"
-                  to={`/market?type=${encodeURIComponent(
-                    details.item_type,
-                  )}`}
+                  to={`/market?type=${encodeURIComponent(details.item_type)}`}
                 >
                   {details.item_type}
                 </MaterialLink>
@@ -226,10 +224,8 @@ export function MarketListingDetails({
               >
                 {details.title}{" "}
                 <Typography display={"inline"} sx={{ marginLeft: 1 }}>
-                  {dateDiffInDays(
-                    new Date(),
-                    new Date(listing.timestamp),
-                  ) <= 1 && (
+                  {dateDiffInDays(new Date(), new Date(listing.timestamp)) <=
+                    1 && (
                     <Chip
                       color={"secondary"}
                       label={t("MarketListingView.new")}
@@ -279,9 +275,7 @@ export function MarketListingDetails({
                   icon={<RefreshRounded fontSize={"inherit"} />}
                 >
                   {t("MarketListingView.updated")}{" "}
-                  {getRelativeTime(
-                    subDays(new Date(listing.expiration), 30),
-                  )}
+                  {getRelativeTime(subDays(new Date(listing.expiration), 30))}
                 </ListingDetailItem>
 
                 <ListingDetailItem icon={<ClockAlert fontSize={"inherit"} />}>
@@ -302,9 +296,7 @@ export function MarketListingDetails({
                 <ListingDetailItem
                   icon={<WarningRounded fontSize={"inherit"} />}
                 >
-                  <ReportButton
-                    reportedUrl={`/market/${listing.listing_id}`}
-                  />
+                  <ReportButton reportedUrl={`/market/${listing.listing_id}`} />
                 </ListingDetailItem>
 
                 {listing.languages && listing.languages.length > 0 && (
@@ -338,10 +330,7 @@ export function MarketListingDetails({
             </Box>
           }
           action={
-            <Stack
-              direction={"row"}
-              spacing={theme.layoutSpacing.compact}
-            >
+            <Stack direction={"row"} spacing={theme.layoutSpacing.compact}>
               {amRelated &&
               listing.status !== "archived" &&
               listing.sale_type !== "auction" ? (

@@ -29,7 +29,9 @@ const mockTheme = createTheme({
 // Mock the Page component
 vi.mock("../../metadata/Page", async () => {
   return {
-    Page: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+    Page: ({ children }: { children: React.ReactNode }) => (
+      <div>{children}</div>
+    ),
   }
 })
 
@@ -55,7 +57,7 @@ const mockStore = configureStore({
 // Wrapper component to provide necessary context
 function TestWrapper({ children }: { children: React.ReactNode }) {
   const drawerState = React.useState(false)
-  
+
   return (
     <Provider store={mockStore}>
       <ThemeProvider theme={mockTheme}>
@@ -76,9 +78,16 @@ describe("DetailPageLayout - Property Tests", () => {
         // Generate arbitrary configurations with backButton enabled
         fc.record({
           backButton: fc.constant(true),
-          backTo: fc.option(fc.constantFrom("/", "/market", "/profile"), { nil: undefined }),
-          entityTitle: fc.option(fc.string({ minLength: 1, maxLength: 100 }), { nil: undefined }),
-          entitySubtitle: fc.option(fc.string({ minLength: 1, maxLength: 200 }), { nil: undefined }),
+          backTo: fc.option(fc.constantFrom("/", "/market", "/profile"), {
+            nil: undefined,
+          }),
+          entityTitle: fc.option(fc.string({ minLength: 1, maxLength: 100 }), {
+            nil: undefined,
+          }),
+          entitySubtitle: fc.option(
+            fc.string({ minLength: 1, maxLength: 200 }),
+            { nil: undefined },
+          ),
         }),
         (config) => {
           // Render with generated configuration
@@ -124,10 +133,7 @@ describe("DetailPageLayout - Unit Tests", () => {
   it("renders back button when configured", () => {
     render(
       <TestWrapper>
-        <DetailPageLayout
-          backButton={true}
-          entityTitle="Test Entity"
-        >
+        <DetailPageLayout backButton={true} entityTitle="Test Entity">
           <div>Test content</div>
         </DetailPageLayout>
       </TestWrapper>,
@@ -140,10 +146,7 @@ describe("DetailPageLayout - Unit Tests", () => {
   it("does not render back button when not configured", () => {
     render(
       <TestWrapper>
-        <DetailPageLayout
-          backButton={false}
-          entityTitle="Test Entity"
-        >
+        <DetailPageLayout backButton={false} entityTitle="Test Entity">
           <div>Test content</div>
         </DetailPageLayout>
       </TestWrapper>,
@@ -218,10 +221,7 @@ describe("FormPageLayout - Unit Tests", () => {
   it("renders back button when configured", () => {
     render(
       <TestWrapper>
-        <FormPageLayout
-          formTitle="Test Form"
-          backButton={true}
-        >
+        <FormPageLayout formTitle="Test Form" backButton={true}>
           <div>Form content</div>
         </FormPageLayout>
       </TestWrapper>,

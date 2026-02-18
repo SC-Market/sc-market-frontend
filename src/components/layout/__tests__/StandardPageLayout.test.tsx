@@ -28,7 +28,9 @@ const mockTheme = createTheme({
 // Mock the Page component
 vi.mock("../../metadata/Page", async () => {
   return {
-    Page: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+    Page: ({ children }: { children: React.ReactNode }) => (
+      <div>{children}</div>
+    ),
   }
 })
 
@@ -56,7 +58,7 @@ const mockStore = configureStore({
 // Wrapper component to provide necessary context
 function TestWrapper({ children }: { children: React.ReactNode }) {
   const drawerState = React.useState(false)
-  
+
   return (
     <Provider store={mockStore}>
       <ThemeProvider theme={mockTheme}>
@@ -205,7 +207,9 @@ describe("StandardPageLayout", () => {
     // Should render Navigate component (which will redirect)
     // We can't easily test the actual navigation in unit tests,
     // but we can verify the content is not rendered
-    expect(container.querySelector('[data-testid="test-content"]')).not.toBeInTheDocument()
+    expect(
+      container.querySelector('[data-testid="test-content"]'),
+    ).not.toBeInTheDocument()
   })
 
   it("displays error page when error status is 500", () => {
@@ -232,10 +236,7 @@ describe("StandardPageLayout", () => {
       <TestWrapper>
         <StandardPageLayout
           title="Test Page"
-          breadcrumbs={[
-            { label: "Home", href: "/" },
-            { label: "Test Page" },
-          ]}
+          breadcrumbs={[{ label: "Home", href: "/" }, { label: "Test Page" }]}
           headerTitle="Test Page Title"
           headerActions={<button>Action</button>}
           maxWidth="lg"
@@ -311,7 +312,7 @@ describe("StandardPageLayout - Property Tests", () => {
           // (ContainerGrid should be in the DOM with the content)
           const content = screen.getByTestId("test-content")
           expect(content).toBeInTheDocument()
-          
+
           // Clean up after each property test run
           unmount()
         },

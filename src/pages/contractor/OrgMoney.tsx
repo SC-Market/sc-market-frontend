@@ -11,7 +11,7 @@ import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 export function OrgMoney() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
-  
+
   return (
     <StandardPageLayout
       title={t("org.moneyTitle")}

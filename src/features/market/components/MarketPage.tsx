@@ -86,7 +86,7 @@ export function MarketPage() {
               sx={{
                 paddingTop: { xs: 2, sm: 8 },
                 paddingX: { xs: theme.spacing(1), sm: theme.spacing(3) },
-                marginX: 'auto',
+                marginX: "auto",
               }}
             >
               <Grid
@@ -156,7 +156,15 @@ export function MarketPage() {
                     />
                   </Tabs>
                 </Grid>
-                <Grid item xs={12} sm="auto" sx={{ display: 'flex', justifyContent: { xs: 'stretch', sm: 'flex-end' } }}>
+                <Grid
+                  item
+                  xs={12}
+                  sm="auto"
+                  sx={{
+                    display: "flex",
+                    justifyContent: { xs: "stretch", sm: "flex-end" },
+                  }}
+                >
                   {tabPage === 1 ? (
                     <MarketActions />
                   ) : tabPage === 0 ? (

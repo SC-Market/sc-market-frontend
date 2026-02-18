@@ -13,7 +13,9 @@ export function SellMaterials(props: {}) {
       headerTitle={
         <>
           <div>{t("sellMaterials.title")}</div>
-          <div style={{ fontSize: "1rem", fontWeight: 500, marginTop: "0.5rem" }}>
+          <div
+            style={{ fontSize: "1rem", fontWeight: 500, marginTop: "0.5rem" }}
+          >
             {t("sellMaterials.subtitle")}
           </div>
         </>

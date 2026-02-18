@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react"
-import { CounterOfferBody, useGetOfferSessionByIDQuery } from "../../../store/offer"
+import {
+  CounterOfferBody,
+  useGetOfferSessionByIDQuery,
+} from "../../../store/offer"
 
 /**
  * Page hook for counter offer form page

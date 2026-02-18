@@ -17,13 +17,16 @@ export function usePageSendMoney(isOrgTransaction: boolean = false) {
   const [recipientType, setRecipientType] = useState<RecipientType>("user")
   const [options, setOptions] = useState<(User | Contractor)[]>([])
   const [target, setTarget] = useState("")
-  const [targetObject, setTargetObject] = useState<User | Contractor | null>(null)
+  const [targetObject, setTargetObject] = useState<User | Contractor | null>(
+    null,
+  )
   const [amount, setAmount] = useState("")
   const [note, setNote] = useState("")
   const [error, setError] = useState("")
   const [step, setStep] = useState<"recipient" | "details">("recipient")
 
-  const [createTransaction, { isSuccess, isLoading: isSubmitting }] = useCreateTransaction()
+  const [createTransaction, { isSuccess, isLoading: isSubmitting }] =
+    useCreateTransaction()
 
   // Search for recipients
   const getOptions = useCallback(
@@ -96,7 +99,15 @@ export function usePageSendMoney(isOrgTransaction: boolean = false) {
           : null,
       },
     })
-  }, [target, targetObject, amount, note, isOrgTransaction, currentOrg, createTransaction])
+  }, [
+    target,
+    targetObject,
+    amount,
+    note,
+    isOrgTransaction,
+    currentOrg,
+    createTransaction,
+  ])
 
   return {
     // Recipient selection
@@ -107,7 +118,7 @@ export function usePageSendMoney(isOrgTransaction: boolean = false) {
     setTarget,
     targetObject,
     setTargetObject,
-    
+
     // Form state
     amount,
     setAmount,
@@ -117,7 +128,7 @@ export function usePageSendMoney(isOrgTransaction: boolean = false) {
     setError,
     step,
     setStep,
-    
+
     // Transaction
     submitTransaction,
     isSuccess,

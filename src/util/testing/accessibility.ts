@@ -1,6 +1,6 @@
 /**
  * Accessibility Testing Utilities
- * 
+ *
  * This module provides helper functions for testing accessibility compliance
  * in React components using jest-axe and Testing Library.
  */
@@ -29,12 +29,12 @@ export const defaultAxeConfig: JestAxeConfigureOptions = {
 
 /**
  * Renders a component and runs axe accessibility tests
- * 
+ *
  * @param ui - React component to test
  * @param options - Render options from Testing Library
  * @param axeOptions - Optional axe configuration
  * @returns Render result and accessibility results
- * 
+ *
  * @example
  * ```tsx
  * const { container, results } = await renderWithA11y(<MyComponent />)
@@ -44,11 +44,14 @@ export const defaultAxeConfig: JestAxeConfigureOptions = {
 export async function renderWithA11y(
   ui: ReactElement,
   options?: RenderOptions,
-  axeOptions?: JestAxeConfigureOptions
+  axeOptions?: JestAxeConfigureOptions,
 ) {
   const renderResult = render(ui, options)
-  const results = await axe(renderResult.container, axeOptions || defaultAxeConfig)
-  
+  const results = await axe(
+    renderResult.container,
+    axeOptions || defaultAxeConfig,
+  )
+
   return {
     ...renderResult,
     results,
@@ -57,11 +60,11 @@ export async function renderWithA11y(
 
 /**
  * Runs axe accessibility tests on a rendered component
- * 
+ *
  * @param container - DOM container to test
  * @param axeOptions - Optional axe configuration
  * @returns Accessibility test results
- * 
+ *
  * @example
  * ```tsx
  * const { container } = render(<MyComponent />)
@@ -71,7 +74,7 @@ export async function renderWithA11y(
  */
 export async function checkA11y(
   container: HTMLElement,
-  axeOptions?: JestAxeConfigureOptions
+  axeOptions?: JestAxeConfigureOptions,
 ) {
   return await axe(container, axeOptions || defaultAxeConfig)
 }
@@ -79,10 +82,10 @@ export async function checkA11y(
 /**
  * Gets all focusable elements within a container
  * Useful for testing keyboard navigation
- * 
+ *
  * @param container - DOM container to search
  * @returns Array of focusable elements
- * 
+ *
  * @example
  * ```tsx
  * const { container } = render(<MyForm />)
@@ -92,23 +95,23 @@ export async function checkA11y(
  */
 export function getFocusableElements(container: HTMLElement): HTMLElement[] {
   const selector = [
-    'a[href]',
-    'button:not([disabled])',
-    'textarea:not([disabled])',
-    'input:not([disabled])',
-    'select:not([disabled])',
+    "a[href]",
+    "button:not([disabled])",
+    "textarea:not([disabled])",
+    "input:not([disabled])",
+    "select:not([disabled])",
     '[tabindex]:not([tabindex="-1"])',
-  ].join(', ')
-  
+  ].join(", ")
+
   return Array.from(container.querySelectorAll<HTMLElement>(selector))
 }
 
 /**
  * Checks if an element has a visible focus indicator
- * 
+ *
  * @param element - Element to check
  * @returns True if element has visible focus styles
- * 
+ *
  * @example
  * ```tsx
  * const button = screen.getByRole('button')
@@ -118,20 +121,20 @@ export function getFocusableElements(container: HTMLElement): HTMLElement[] {
  */
 export function hasVisibleFocus(element: HTMLElement): boolean {
   const styles = window.getComputedStyle(element)
-  const outlineWidth = styles.getPropertyValue('outline-width')
-  const outlineStyle = styles.getPropertyValue('outline-style')
-  
+  const outlineWidth = styles.getPropertyValue("outline-width")
+  const outlineStyle = styles.getPropertyValue("outline-style")
+
   // Check if outline is visible (not 'none' and has width)
-  return outlineStyle !== 'none' && parseFloat(outlineWidth) > 0
+  return outlineStyle !== "none" && parseFloat(outlineWidth) > 0
 }
 
 /**
  * Gets the accessible name of an element
  * Uses the same algorithm as assistive technologies
- * 
+ *
  * @param element - Element to get name from
  * @returns Accessible name or null
- * 
+ *
  * @example
  * ```tsx
  * const button = screen.getByRole('button')
@@ -140,24 +143,26 @@ export function hasVisibleFocus(element: HTMLElement): boolean {
  */
 export function getAccessibleName(element: HTMLElement): string | null {
   // Check aria-label
-  const ariaLabel = element.getAttribute('aria-label')
+  const ariaLabel = element.getAttribute("aria-label")
   if (ariaLabel) return ariaLabel
-  
+
   // Check aria-labelledby
-  const labelledBy = element.getAttribute('aria-labelledby')
+  const labelledBy = element.getAttribute("aria-labelledby")
   if (labelledBy) {
     const labelElement = document.getElementById(labelledBy)
     if (labelElement) return labelElement.textContent
   }
-  
+
   // Check associated label
-  if (element instanceof HTMLInputElement || 
-      element instanceof HTMLTextAreaElement || 
-      element instanceof HTMLSelectElement) {
+  if (
+    element instanceof HTMLInputElement ||
+    element instanceof HTMLTextAreaElement ||
+    element instanceof HTMLSelectElement
+  ) {
     const label = document.querySelector(`label[for="${element.id}"]`)
     if (label) return label.textContent
   }
-  
+
   // Fall back to text content
   return element.textContent
 }
@@ -165,10 +170,10 @@ export function getAccessibleName(element: HTMLElement): string | null {
 /**
  * Checks if an element is keyboard accessible
  * Verifies element can receive focus and has proper role
- * 
+ *
  * @param element - Element to check
  * @returns True if element is keyboard accessible
- * 
+ *
  * @example
  * ```tsx
  * const button = screen.getByRole('button')
@@ -176,29 +181,35 @@ export function getAccessibleName(element: HTMLElement): string | null {
  * ```
  */
 export function isKeyboardAccessible(element: HTMLElement): boolean {
-  const tabIndex = element.getAttribute('tabindex')
-  const isDisabled = element.hasAttribute('disabled')
-  
+  const tabIndex = element.getAttribute("tabindex")
+  const isDisabled = element.hasAttribute("disabled")
+
   // Element should not be disabled
   if (isDisabled) return false
-  
+
   // Element should be focusable (tabindex >= 0 or naturally focusable)
-  if (tabIndex === '-1') return false
-  
+  if (tabIndex === "-1") return false
+
   // Check if element is naturally focusable or has tabindex
-  const naturallyFocusable = ['A', 'BUTTON', 'INPUT', 'SELECT', 'TEXTAREA'].includes(element.tagName)
+  const naturallyFocusable = [
+    "A",
+    "BUTTON",
+    "INPUT",
+    "SELECT",
+    "TEXTAREA",
+  ].includes(element.tagName)
   const hasFocusableTabIndex = tabIndex !== null && parseInt(tabIndex) >= 0
-  
+
   return naturallyFocusable || hasFocusableTabIndex
 }
 
 /**
  * Simulates keyboard navigation through focusable elements
- * 
+ *
  * @param container - Container to navigate within
  * @param direction - Navigation direction ('forward' or 'backward')
  * @returns Array of focused elements in order
- * 
+ *
  * @example
  * ```tsx
  * const { container } = render(<MyForm />)
@@ -208,29 +219,32 @@ export function isKeyboardAccessible(element: HTMLElement): boolean {
  */
 export function simulateTabNavigation(
   container: HTMLElement,
-  direction: 'forward' | 'backward' = 'forward'
+  direction: "forward" | "backward" = "forward",
 ): HTMLElement[] {
   const focusableElements = getFocusableElements(container)
-  const elements = direction === 'forward' ? focusableElements : [...focusableElements].reverse()
-  
+  const elements =
+    direction === "forward"
+      ? focusableElements
+      : [...focusableElements].reverse()
+
   const focusOrder: HTMLElement[] = []
-  
-  elements.forEach(element => {
+
+  elements.forEach((element) => {
     element.focus()
     if (document.activeElement === element) {
       focusOrder.push(element)
     }
   })
-  
+
   return focusOrder
 }
 
 /**
  * Checks if live region announcements are properly configured
- * 
+ *
  * @param element - Element to check
  * @returns True if element has proper live region attributes
- * 
+ *
  * @example
  * ```tsx
  * const alert = screen.getByRole('alert')
@@ -238,15 +252,15 @@ export function simulateTabNavigation(
  * ```
  */
 export function hasLiveRegion(element: HTMLElement): boolean {
-  const ariaLive = element.getAttribute('aria-live')
-  const role = element.getAttribute('role')
-  
+  const ariaLive = element.getAttribute("aria-live")
+  const role = element.getAttribute("role")
+
   // Check for aria-live attribute
-  if (ariaLive === 'polite' || ariaLive === 'assertive') return true
-  
+  if (ariaLive === "polite" || ariaLive === "assertive") return true
+
   // Check for implicit live region roles
-  if (role === 'alert' || role === 'status' || role === 'log') return true
-  
+  if (role === "alert" || role === "status" || role === "log") return true
+
   return false
 }
 

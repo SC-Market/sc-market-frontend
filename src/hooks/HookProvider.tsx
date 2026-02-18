@@ -82,13 +82,15 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
   }, [actualTheme, location.pathname, isDev, isAdmin, useLightTheme])
 
   // Build a localized theme when language changes
-  const [localizedTheme, setLocalizedTheme] = useState(() => 
-    responsiveFontSizes(createTheme(baseTheme))
+  const [localizedTheme, setLocalizedTheme] = useState(() =>
+    responsiveFontSizes(createTheme(baseTheme)),
   )
 
   useEffect(() => {
     getMuiLocales(i18n.language).then(({ core, pickers }) => {
-      setLocalizedTheme(responsiveFontSizes(createTheme(baseTheme, core, pickers)))
+      setLocalizedTheme(
+        responsiveFontSizes(createTheme(baseTheme, core, pickers)),
+      )
     })
   }, [baseTheme, i18n.language])
 

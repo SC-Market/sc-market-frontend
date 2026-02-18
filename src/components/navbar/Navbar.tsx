@@ -149,7 +149,11 @@ export function Navbar(props: { children?: React.ReactNode }) {
             <ProfileNavAvatar />
           </React.Fragment>
         ) : isMobile ? (
-          <Stack direction="row" spacing={theme.layoutSpacing.compact} alignItems="center">
+          <Stack
+            direction="row"
+            spacing={theme.layoutSpacing.compact}
+            alignItems="center"
+          >
             <Button
               component={RouterLink}
               to="/login"

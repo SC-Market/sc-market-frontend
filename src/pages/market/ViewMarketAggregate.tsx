@@ -12,20 +12,18 @@ import { DetailPageLayout } from "../../components/layout/DetailPageLayout"
 import { LazySection } from "../../components/layout/LazySection"
 import { usePageMarketAggregate } from "../../features/market/hooks/usePageMarketAggregate"
 
-const MarketAggregateViewLazy = lazy(
-  () =>
-    import("../../features/market/views/MarketAggregateView").then((m) => ({
-      default: m.MarketAggregateView,
-    })),
+const MarketAggregateViewLazy = lazy(() =>
+  import("../../features/market/views/MarketAggregateView").then((m) => ({
+    default: m.MarketAggregateView,
+  })),
 )
 
-const MarketAggregateEditViewLazy = lazy(
-  () =>
-    import("../../features/market/components/MarketAggregateEditView").then(
-      (m) => ({
-        default: m.MarketAggregateEditView,
-      }),
-    ),
+const MarketAggregateEditViewLazy = lazy(() =>
+  import("../../features/market/components/MarketAggregateEditView").then(
+    (m) => ({
+      default: m.MarketAggregateEditView,
+    }),
+  ),
 )
 
 // Skeleton is NOT lazy loaded - needs to be available immediately

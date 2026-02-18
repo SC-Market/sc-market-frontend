@@ -10,9 +10,21 @@ export function ContractorsListSkeleton() {
   return (
     <Container maxWidth="xl" sx={{ py: 3 }}>
       {/* Header with filter button */}
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 3,
+        }}
+      >
         <BaseSkeleton variant="text" width={200} height={40} />
-        <BaseSkeleton variant="rectangular" width={120} height={40} sx={{ borderRadius: 1 }} />
+        <BaseSkeleton
+          variant="rectangular"
+          width={120}
+          height={40}
+          sx={{ borderRadius: 1 }}
+        />
       </Box>
 
       {/* Contractor cards grid */}
@@ -26,7 +38,12 @@ export function ContractorsListSkeleton() {
 
       {/* Pagination */}
       <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
-        <BaseSkeleton variant="rectangular" width={400} height={52} sx={{ borderRadius: 1 }} />
+        <BaseSkeleton
+          variant="rectangular"
+          width={400}
+          height={52}
+          sx={{ borderRadius: 1 }}
+        />
       </Box>
     </Container>
   )

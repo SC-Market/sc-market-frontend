@@ -36,7 +36,7 @@ export function BulkItemsPage() {
     <Page title={t("market.bulkItems")}>
       <MarketSidebarContext.Provider value={[open, setOpen]}>
         {xs && <MarketSidebar />}
-        
+
         <ContainerGrid maxWidth={"xl"} sidebarOpen={false}>
           <Grid
             container

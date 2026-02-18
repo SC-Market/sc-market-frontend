@@ -11,18 +11,16 @@ import { LazySection } from "../../components/layout/LazySection"
 import { usePageMarketMultiple } from "../../features/market/hooks/usePageMarketMultiple"
 import { usePageMarketListing } from "../../features/market/hooks/usePageMarketListing"
 
-const MarketMultipleViewLazy = lazy(
-  () =>
-    import("../../features/market/views/MarketMultipleView").then((m) => ({
-      default: m.MarketMultipleView,
-    })),
+const MarketMultipleViewLazy = lazy(() =>
+  import("../../features/market/views/MarketMultipleView").then((m) => ({
+    default: m.MarketMultipleView,
+  })),
 )
 
-const MarketListingEditViewLazy = lazy(
-  () =>
-    import("../../features/market/views/MarketListingEditView").then((m) => ({
-      default: m.MarketListingEditView,
-    })),
+const MarketListingEditViewLazy = lazy(() =>
+  import("../../features/market/views/MarketListingEditView").then((m) => ({
+    default: m.MarketListingEditView,
+  })),
 )
 
 // Skeleton is NOT lazy loaded - needs to be available immediately

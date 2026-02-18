@@ -10,9 +10,7 @@ import {
 } from "@mui/material"
 import React, { useCallback, useMemo, useState } from "react"
 import OpenInNewIcon from "@mui/icons-material/OpenInNew"
-import {
-  useActivateAccountLink,
-} from "../../store/profile"
+import { useActivateAccountLink } from "../../store/profile"
 import { useNavigate } from "react-router-dom"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
@@ -47,7 +45,9 @@ export interface AuthenticateRSIProps {
   identifier?: string
 }
 
-export function AuthenticateRSI({ identifier: identifierProp }: AuthenticateRSIProps) {
+export function AuthenticateRSI({
+  identifier: identifierProp,
+}: AuthenticateRSIProps) {
   const { t } = useTranslation()
   const [username, setUsername] = useState("")
   const [error, setError] = useState(false)
@@ -154,9 +154,7 @@ export function AuthenticateRSI({ identifier: identifierProp }: AuthenticateRSIP
             i18nKey="authenticateRSI.instructions"
             components={{
               sentinelCode: (
-                <SentinelCode
-                  code={identifierProp || "PLACEHOLDER"}
-                />
+                <SentinelCode code={identifierProp || "PLACEHOLDER"} />
               ),
               guideLink: (
                 <UnderlineLink

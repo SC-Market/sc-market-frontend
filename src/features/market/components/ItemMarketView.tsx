@@ -56,7 +56,7 @@ export function ItemMarketView() {
             <Stack
               direction="row"
               spacing={theme.layoutSpacing.layout}
-              sx={{ width: '100%', maxWidth: 'xxl' }}
+              sx={{ width: "100%", maxWidth: "xxl" }}
             >
               {/* Desktop: Persistent sidebar */}
               <Paper

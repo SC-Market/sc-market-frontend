@@ -132,7 +132,11 @@ export function MarketMultipleView() {
                       margin: "auto",
                     }}
                     src={photos[0]}
-                    alt={t("marketMultipleView.productImage", "Product image for {{title}}", { title: details.title })}
+                    alt={t(
+                      "marketMultipleView.productImage",
+                      "Product image for {{title}}",
+                      { title: details.title },
+                    )}
                     onError={({ currentTarget }) => {
                       currentTarget.onerror = null
                       currentTarget.src =

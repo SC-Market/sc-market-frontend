@@ -11,7 +11,10 @@ import { configureStore } from "@reduxjs/toolkit"
 import fc from "fast-check"
 import { describe, it, expect, vi, beforeEach } from "vitest"
 import { usePageMarketListing } from "../usePageMarketListing"
-import type { UsePageResult, MarketListingPageData } from "../usePageMarketListing"
+import type {
+  UsePageResult,
+  MarketListingPageData,
+} from "../usePageMarketListing"
 import { marketApi } from "../../api/marketApi"
 import type { BaseListingType } from "../../domain/types"
 import React from "react"
@@ -229,12 +232,9 @@ describe("usePageMarketListing - Property Tests", () => {
             refetch: vi.fn(),
           } as any)
 
-          const { result } = renderHook(
-            () => usePageMarketListing(listingId),
-            {
-              wrapper: createWrapper(),
-            },
-          )
+          const { result } = renderHook(() => usePageMarketListing(listingId), {
+            wrapper: createWrapper(),
+          })
 
           // Verify all required properties are present
           expect(result.current).toHaveProperty("data")
@@ -288,12 +288,9 @@ describe("usePageMarketListing - Property Tests", () => {
             refetch: vi.fn(),
           } as any)
 
-          const { result } = renderHook(
-            () => usePageMarketListing(listingId),
-            {
-              wrapper: createWrapper(),
-            },
-          )
+          const { result } = renderHook(() => usePageMarketListing(listingId), {
+            wrapper: createWrapper(),
+          })
 
           // Verify error is exposed in the hook's error property
           expect(result.current.error).toBeDefined()

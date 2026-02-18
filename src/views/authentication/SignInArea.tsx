@@ -1,11 +1,5 @@
 import React from "react"
-import {
-  Alert,
-  Link as MuiLink,
-  Paper,
-  Stack,
-  Typography,
-} from "@mui/material"
+import { Alert, Link as MuiLink, Paper, Stack, Typography } from "@mui/material"
 import { DiscordLoginButton } from "../../components/button/DiscordLoginButton"
 import { CitizenIDLoginButton } from "../../components/button/CitizenIDLoginButton"
 import { useTranslation } from "react-i18next"

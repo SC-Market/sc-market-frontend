@@ -21,7 +21,10 @@ const loadedReducers: Record<string, Reducer> = {}
  * @param key - Reducer key in the store
  * @param lazyReducer - Function that returns a promise resolving to the reducer
  */
-export function registerLazyReducer(key: string, lazyReducer: LazyReducer): void {
+export function registerLazyReducer(
+  key: string,
+  lazyReducer: LazyReducer,
+): void {
   lazyReducerRegistry[key] = lazyReducer
 }
 
@@ -134,16 +137,16 @@ export function registerChartReducers(): void {
  * which handle their own reducer injection automatically through the
  * injectEndpoints pattern. This utility is provided for future use
  * when traditional Redux slices need to be lazy-loaded.
- * 
+ *
  * RTK Query APIs are already optimized for code splitting:
  * - Each API slice is in a separate file
  * - APIs are imported only where needed
  * - The store only includes the core API reducers
- * 
+ *
  * Core APIs (always loaded):
  * - serviceApi: Core backend API
  * - generatedApi: OpenAPI-generated endpoints
- * 
+ *
  * Feature APIs (lazy-loaded with routes):
  * - All other APIs are imported by the components that use them
  * - This provides automatic code splitting at the route level

@@ -24,9 +24,9 @@ export function ContainerGrid(
     GridProps?: GridProps
     noTopSpacer?: boolean
     noMobilePadding?: boolean // If true, removes padding on mobile (for market listings)
-  } & Omit<ContainerProps, 'maxWidth'> & {
-    maxWidth?: "xs" | "sm" | "md" | "lg" | "xl" | "xxl" | false
-  },
+  } & Omit<ContainerProps, "maxWidth"> & {
+      maxWidth?: "xs" | "sm" | "md" | "lg" | "xl" | "xxl" | false
+    },
 ): ReactElement {
   const theme = useTheme<ExtendedTheme>()
   const bottomNavHeight = useBottomNavHeight()

@@ -1,4 +1,7 @@
-import { useGetServicesQuery, useGetServicesContractorQuery } from "../../../store/services"
+import {
+  useGetServicesQuery,
+  useGetServicesContractorQuery,
+} from "../../../store/services"
 import { useGetUserProfileQuery } from "../../../store/profile"
 import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
 
@@ -21,7 +24,7 @@ export function usePageMyServices(): UsePageMyServicesResult {
   const userServicesQuery = useGetServicesQuery(profile?.username!, {
     skip: !profile || !!currentOrg,
   })
-  
+
   const orgServicesQuery = useGetServicesContractorQuery(
     currentOrg?.spectrum_id!,
     { skip: !currentOrg },

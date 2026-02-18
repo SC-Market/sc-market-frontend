@@ -6,7 +6,7 @@ import { DatePickerProvider } from "./DatePickerProvider"
 const DateTimePicker = lazy(() =>
   import("@mui/x-date-pickers").then((m) => ({
     default: m.DateTimePicker,
-  }))
+  })),
 )
 
 export function LazyDateTimePicker(props: DateTimePickerProps<Date>) {

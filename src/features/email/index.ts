@@ -32,9 +32,15 @@ export { formatActionName } from "./domain/formatters"
 export { useEmailSettings } from "./hooks/useEmailSettings"
 export { useEmailActions } from "./hooks/useEmailActions"
 export { usePageEmailVerification } from "./hooks/usePageEmailVerification"
-export type { UsePageEmailVerificationResult, EmailVerificationPageData } from "./hooks/usePageEmailVerification"
+export type {
+  UsePageEmailVerificationResult,
+  EmailVerificationPageData,
+} from "./hooks/usePageEmailVerification"
 export { usePageUnsubscribe } from "./hooks/usePageUnsubscribe"
-export type { UsePageUnsubscribeResult, UnsubscribePageData } from "./hooks/usePageUnsubscribe"
+export type {
+  UsePageUnsubscribeResult,
+  UnsubscribePageData,
+} from "./hooks/usePageUnsubscribe"
 
 // Component exports
 export { EmailSettings } from "./components/EmailSettings"

@@ -52,7 +52,7 @@ function App() {
   useEffect(() => {
     // Start background prefetching after the app loads
     startBackgroundPrefetch()
-    
+
     // Prefetch high-priority routes
     prefetchHighPriorityRoutes()
 

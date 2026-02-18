@@ -1,12 +1,5 @@
 import React from "react"
-import {
-  Avatar,
-  Box,
-  Container,
-  Grid,
-  Stack,
-  Typography,
-} from "@mui/material"
+import { Avatar, Box, Container, Grid, Stack, Typography } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTranslation } from "react-i18next"
@@ -66,10 +59,7 @@ export function LandingHero() {
           <Typography color="secondary" variant="h1">
             <b>SC MARKET</b>
           </Typography>
-          <Typography
-            variant="h2"
-            sx={{ width: "100%", textAlign: "center" }}
-          >
+          <Typography variant="h2" sx={{ width: "100%", textAlign: "center" }}>
             {t("landing.subtitle")}
           </Typography>
         </Stack>

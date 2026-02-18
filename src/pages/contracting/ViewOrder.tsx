@@ -159,13 +159,10 @@ export function ViewOrder() {
             ]
           : []),
         {
-          label:
-            order?.title || `Order ${id?.substring(0, 8).toUpperCase()}`,
+          label: order?.title || `Order ${id?.substring(0, 8).toUpperCase()}`,
         },
       ]}
-      entityTitle={
-        order?.title || `Order ${id?.substring(0, 8).toUpperCase()}`
-      }
+      entityTitle={order?.title || `Order ${id?.substring(0, 8).toUpperCase()}`}
       isLoading={pageData.isLoading}
       error={pageData.error}
       skeleton={<OrderDetailSkeleton showContractor showAssigned />}
@@ -344,22 +341,24 @@ export function ViewOrder() {
                   ))}
 
                 {/* Stock Allocation Tab */}
-                {amContractorManager && order && activeTab === allocationTab && (
-                  <Grid item xs={12}>
-                    <SplitAllocationView
-                      orderId={order.order_id}
-                      listings={
-                        order.market_listings?.map((listing: any) => ({
-                          listing_id:
-                            typeof listing.listing_id === "string"
-                              ? listing.listing_id
-                              : listing.listing_id?.listing_id,
-                          quantity: listing.quantity,
-                        })) || []
-                      }
-                    />
-                  </Grid>
-                )}
+                {amContractorManager &&
+                  order &&
+                  activeTab === allocationTab && (
+                    <Grid item xs={12}>
+                      <SplitAllocationView
+                        orderId={order.order_id}
+                        listings={
+                          order.market_listings?.map((listing: any) => ({
+                            listing_id:
+                              typeof listing.listing_id === "string"
+                                ? listing.listing_id
+                                : listing.listing_id?.listing_id,
+                            quantity: listing.quantity,
+                          })) || []
+                        }
+                      />
+                    </Grid>
+                  )}
 
                 {/* Availability Tab */}
                 {amRelated && order && activeTab === availabilityTab && (

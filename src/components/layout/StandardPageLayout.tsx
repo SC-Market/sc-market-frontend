@@ -53,7 +53,18 @@ export interface StandardPageLayoutProps {
 
   // Pass-through props for ContainerGrid
   GridProps?: GridProps
-  ContainerProps?: Omit<React.ComponentProps<typeof ContainerGrid>, 'sidebarOpen' | 'sidebarWidth' | 'noFooter' | 'noSidebar' | 'GridProps' | 'noTopSpacer' | 'noMobilePadding' | 'maxWidth' | 'children'>
+  ContainerProps?: Omit<
+    React.ComponentProps<typeof ContainerGrid>,
+    | "sidebarOpen"
+    | "sidebarWidth"
+    | "noFooter"
+    | "noSidebar"
+    | "GridProps"
+    | "noTopSpacer"
+    | "noMobilePadding"
+    | "maxWidth"
+    | "children"
+  >
 }
 
 export function StandardPageLayout(
@@ -84,12 +95,20 @@ export function StandardPageLayout(
   } = props
 
   // Handle 404 errors
-  if (shouldRedirectTo404(error as FetchBaseQueryError | SerializedError | undefined)) {
+  if (
+    shouldRedirectTo404(
+      error as FetchBaseQueryError | SerializedError | undefined,
+    )
+  ) {
     return <Navigate to="/404" />
   }
 
   // Handle server errors
-  if (shouldShowErrorPage(error as FetchBaseQueryError | SerializedError | undefined)) {
+  if (
+    shouldShowErrorPage(
+      error as FetchBaseQueryError | SerializedError | undefined,
+    )
+  ) {
     return <ErrorPage />
   }
 

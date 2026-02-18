@@ -1,10 +1,7 @@
 import React, { useState } from "react"
 import { AuthenticateContractor } from "../../views/authentication/AuthenticateContractor"
 import { Grid, Tab, Tabs } from "@mui/material"
-import {
-  CreateRounded,
-  HowToRegRounded,
-} from "@mui/icons-material"
+import { CreateRounded, HowToRegRounded } from "@mui/icons-material"
 import { a11yProps, TabPanel } from "../../components/tabs/Tabs"
 import { CreateNewContractor } from "../../views/authentication/CreateNewContractor"
 import { useTranslation } from "react-i18next"

@@ -22,7 +22,7 @@ vi.mock("react-router-dom", async () => {
 describe("BackArrow", () => {
   it("renders and triggers navigate(-1) on click", async () => {
     const { MemoryRouter } = await import("react-router-dom")
-    
+
     render(
       <MemoryRouter>
         <BackArrow />

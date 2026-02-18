@@ -7,7 +7,9 @@ interface UsePageRecruitingPostResult {
   data:
     | {
         post: ReturnType<typeof useRecruitingGetPostByIDQuery>["data"]
-        comments: ReturnType<typeof useRecruitingGetPostCommentsByIDQuery>["data"]
+        comments: ReturnType<
+          typeof useRecruitingGetPostCommentsByIDQuery
+        >["data"]
       }
     | undefined
   isLoading: boolean

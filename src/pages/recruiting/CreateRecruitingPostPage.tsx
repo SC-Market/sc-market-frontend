@@ -26,7 +26,11 @@ export function UpdateRecruitingPostPage() {
   const { post_id } = useParams<{ post_id: string }>()
   const { t } = useTranslation()
 
-  const { data: post, error, isLoading } = useRecruitingGetPostByIDQuery(post_id!)
+  const {
+    data: post,
+    error,
+    isLoading,
+  } = useRecruitingGetPostByIDQuery(post_id!)
   const [currentOrg] = useCurrentOrg()
 
   return (

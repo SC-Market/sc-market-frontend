@@ -10,7 +10,9 @@ import { DrawerOpenContext } from "../../../hooks/layout/Drawer"
 
 // Mock the ReceivedOffersArea component
 vi.mock("../../../views/offers/ReceivedOffersArea", () => ({
-  ReceivedOffersArea: () => <div data-testid="received-offers-area">Received Offers Area</div>,
+  ReceivedOffersArea: () => (
+    <div data-testid="received-offers-area">Received Offers Area</div>
+  ),
 }))
 
 // Mock the Page component to avoid RTK Query issues
@@ -66,7 +68,7 @@ const mockTheme = createTheme({
 const renderWithProviders = (ui: React.ReactElement) => {
   function Wrapper({ children }: { children: React.ReactNode }) {
     const drawerState = React.useState(false)
-    
+
     return (
       <Provider store={mockStore}>
         <ThemeProvider theme={mockTheme}>
@@ -77,7 +79,7 @@ const renderWithProviders = (ui: React.ReactElement) => {
       </Provider>
     )
   }
-  
+
   return render(<Wrapper>{ui}</Wrapper>)
 }
 

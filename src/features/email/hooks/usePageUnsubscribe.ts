@@ -36,8 +36,7 @@ export function usePageUnsubscribe(): UsePageUnsubscribeResult {
   const success = searchParams.get("success")
 
   // Use RTK Query mutation to unsubscribe
-  const [unsubscribe, { isLoading: isUnsubscribing }] =
-    useUnsubscribeMutation()
+  const [unsubscribe, { isLoading: isUnsubscribing }] = useUnsubscribeMutation()
 
   // Refetch preferences after unsubscribe to ensure cache is updated
   const { refetch: refetchPreferences } = useGetEmailPreferencesQuery(

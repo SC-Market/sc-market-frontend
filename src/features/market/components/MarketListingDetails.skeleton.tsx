@@ -1,17 +1,11 @@
 import React from "react"
-import {
-  Box,
-  Card,
-  CardContent,
-  CardHeader,
-  Skeleton,
-} from "@mui/material"
+import { Box, Card, CardContent, CardHeader, Skeleton } from "@mui/material"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { useTheme } from "@mui/material/styles"
 
 export function MarketListingDetailsSkeleton() {
   const theme = useTheme<ExtendedTheme>()
-  
+
   return (
     <Card
       sx={{
@@ -25,19 +19,9 @@ export function MarketListingDetailsSkeleton() {
             {/* Breadcrumbs skeleton */}
             <Skeleton variant="text" width="80%" height={24} />
             {/* Title skeleton */}
-            <Skeleton
-              variant="text"
-              width="70%"
-              height={40}
-              sx={{ mt: 1 }}
-            />
+            <Skeleton variant="text" width="70%" height={40} sx={{ mt: 1 }} />
             {/* Meta info skeleton */}
-            <Skeleton
-              variant="text"
-              width="50%"
-              height={24}
-              sx={{ mt: 1 }}
-            />
+            <Skeleton variant="text" width="50%" height={24} sx={{ mt: 1 }} />
           </Box>
         }
         subheader={

@@ -84,10 +84,7 @@ export function LandingPage() {
         }}
       >
         {/* Hero Section */}
-        <LazySection
-          component={LandingHero}
-          skeleton={LandingHeroSkeleton}
-        />
+        <LazySection component={LandingHero} skeleton={LandingHeroSkeleton} />
 
         <Container>
           <Stack
@@ -134,10 +131,7 @@ export function LandingPage() {
           />
 
           {/* FAQ Section */}
-          <LazySection
-            component={FAQSection}
-            skeleton={FAQSectionSkeleton}
-          />
+          <LazySection component={FAQSection} skeleton={FAQSectionSkeleton} />
         </Container>
 
         <Footer />

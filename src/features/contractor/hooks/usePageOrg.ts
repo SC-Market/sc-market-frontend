@@ -22,15 +22,13 @@ export interface OrgPageData {
 /**
  * Page hook for ViewOrg page.
  * Encapsulates all data fetching logic for the organization detail page.
- * 
+ *
  * @param spectrumId - Organization spectrum ID
  * @returns Page data with loading states, errors, and refetch function
- * 
+ *
  * Requirements: 5.1, 5.2, 5.3, 5.5
  */
-export function usePageOrg(
-  spectrumId: string,
-): UsePageResult<OrgPageData> {
+export function usePageOrg(spectrumId: string): UsePageResult<OrgPageData> {
   const contractor = useGetContractorBySpectrumIDQuery(spectrumId)
 
   return {
