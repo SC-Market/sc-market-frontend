@@ -65,6 +65,7 @@ export function LandingPage() {
       sidebarOpen={true}
       noFooter={true}
       noTopSpacer={true}
+      maxWidth={false}
       ContainerProps={{
         style: {
           position: "relative",
