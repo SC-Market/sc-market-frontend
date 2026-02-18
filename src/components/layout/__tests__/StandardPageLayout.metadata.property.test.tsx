@@ -31,14 +31,14 @@ let capturedCanonicalUrl: string | undefined = undefined
 
 vi.mock("../../metadata/Page", async () => {
   return {
-    Page: ({ 
-      children, 
-      title, 
-      canonUrl 
-    }: { 
-      children: React.ReactNode; 
-      title?: string | null;
-      canonUrl?: string;
+    Page: ({
+      children,
+      title,
+      canonUrl,
+    }: {
+      children: React.ReactNode
+      title?: string | null
+      canonUrl?: string
     }) => {
       capturedTitle = title
       capturedCanonicalUrl = canonUrl
@@ -96,10 +96,7 @@ describe("StandardPageLayout - Metadata Property Tests", () => {
     fc.assert(
       fc.property(
         // Generate arbitrary title strings, including null and undefined
-        fc.option(
-          fc.string({ minLength: 1, maxLength: 100 }),
-          { nil: null }
-        ),
+        fc.option(fc.string({ minLength: 1, maxLength: 100 }), { nil: null }),
         (title) => {
           // Reset captured title before each test
           capturedTitle = undefined
@@ -110,7 +107,7 @@ describe("StandardPageLayout - Metadata Property Tests", () => {
               <StandardPageLayout title={title}>
                 <div>Test content</div>
               </StandardPageLayout>
-            </TestWrapper>
+            </TestWrapper>,
           )
 
           // Verify that the Page component received the title prop
@@ -118,9 +115,9 @@ describe("StandardPageLayout - Metadata Property Tests", () => {
 
           // Clean up
           unmount()
-        }
+        },
       ),
-      { numRuns: 100 }
+      { numRuns: 100 },
     )
   })
 })
@@ -151,7 +148,7 @@ describe("StandardPageLayout - Metadata Unit Tests", () => {
         <StandardPageLayout canonicalUrl={testCanonicalUrl}>
           <div>Test content</div>
         </StandardPageLayout>
-      </TestWrapper>
+      </TestWrapper>,
     )
 
     // Verify Page component received the canonical URL
@@ -161,13 +158,10 @@ describe("StandardPageLayout - Metadata Unit Tests", () => {
   it("displays default title during loading state", () => {
     render(
       <TestWrapper>
-        <StandardPageLayout
-          isLoading={true}
-          skeleton={<div>Loading...</div>}
-        >
+        <StandardPageLayout isLoading={true} skeleton={<div>Loading...</div>}>
           <div>Test content</div>
         </StandardPageLayout>
-      </TestWrapper>
+      </TestWrapper>,
     )
 
     // When no title is provided during loading, capturedTitle should be undefined
@@ -187,7 +181,7 @@ describe("StandardPageLayout - Metadata Unit Tests", () => {
         >
           <div>Test content</div>
         </StandardPageLayout>
-      </TestWrapper>
+      </TestWrapper>,
     )
 
     // Title should be passed to Page component even during loading

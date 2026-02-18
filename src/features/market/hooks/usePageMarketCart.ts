@@ -25,7 +25,7 @@ export interface MarketCartPageData {
 /**
  * Page hook for MarketCart page.
  * Manages cart state from cookies and provides cart manipulation functions.
- * 
+ *
  * Requirements: 5.1, 5.2, 5.3, 5.5
  */
 export function usePageMarketCart(): UsePageResult<MarketCartPageData> {

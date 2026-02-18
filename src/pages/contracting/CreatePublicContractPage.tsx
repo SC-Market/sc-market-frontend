@@ -14,7 +14,10 @@ export function CreatePublicContractPage() {
       sidebarOpen={true}
       backButton={true}
       breadcrumbs={[
-        { label: t("contracts.openContracts", "Open Contracts"), href: "/contracts" },
+        {
+          label: t("contracts.openContracts", "Open Contracts"),
+          href: "/contracts",
+        },
         { label: t("contracts.createOpenContract") },
       ]}
     >

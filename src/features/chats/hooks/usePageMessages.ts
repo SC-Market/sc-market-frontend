@@ -24,7 +24,9 @@ export interface UsePageMessagesResult {
  * Page hook for Messages page
  * Encapsulates data fetching for a specific chat and notification handling
  */
-export function usePageMessages(chatId: string | undefined): UsePageMessagesResult {
+export function usePageMessages(
+  chatId: string | undefined,
+): UsePageMessagesResult {
   const { data: profile } = useGetUserProfileQuery()
   const isLoggedIn = !!profile
 

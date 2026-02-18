@@ -25,7 +25,9 @@ interface SendMoneyRecipientSectionProps {
   onNext: () => void
 }
 
-export function SendMoneyRecipientSection(props: SendMoneyRecipientSectionProps) {
+export function SendMoneyRecipientSection(
+  props: SendMoneyRecipientSectionProps,
+) {
   const { t } = useTranslation()
 
   return (
@@ -99,9 +101,7 @@ export function SendMoneyRecipientSection(props: SendMoneyRecipientSectionProps)
           aria-describedby="recipient-type-help"
         >
           <MenuItem value={"user"}>{t("sendMoney.user")}</MenuItem>
-          <MenuItem value={"contractor"}>
-            {t("sendMoney.contractor")}
-          </MenuItem>
+          <MenuItem value={"contractor"}>{t("sendMoney.contractor")}</MenuItem>
         </Select>
         <div id="recipient-type-help" className="sr-only">
           {t(

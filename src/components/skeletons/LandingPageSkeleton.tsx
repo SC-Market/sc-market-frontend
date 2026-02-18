@@ -27,7 +27,14 @@ export function LandingPageSkeleton() {
 
             {/* Login area (if not logged in) */}
             <Box sx={{ width: { xs: "100%", md: 480 } }}>
-              <Box sx={{ border: 1, borderColor: "divider", borderRadius: 1, height: 300 }} />
+              <Box
+                sx={{
+                  border: 1,
+                  borderColor: "divider",
+                  borderRadius: 1,
+                  height: 300,
+                }}
+              />
             </Box>
           </Stack>
         </Container>
@@ -39,9 +46,28 @@ export function LandingPageSkeleton() {
           <Grid container spacing={3} justifyContent="center">
             {[...Array(4)].map((_, i) => (
               <Grid item xs={12} sm={6} md={3} key={i}>
-                <Box sx={{ border: 1, borderColor: "divider", borderRadius: 1, p: 2, height: 120, textAlign: "center" }}>
-                  <BaseSkeleton variant="text" width="80%" height={20} sx={{ mx: "auto", mb: 1 }} />
-                  <BaseSkeleton variant="text" width="60%" height={40} sx={{ mx: "auto" }} />
+                <Box
+                  sx={{
+                    border: 1,
+                    borderColor: "divider",
+                    borderRadius: 1,
+                    p: 2,
+                    height: 120,
+                    textAlign: "center",
+                  }}
+                >
+                  <BaseSkeleton
+                    variant="text"
+                    width="80%"
+                    height={20}
+                    sx={{ mx: "auto", mb: 1 }}
+                  />
+                  <BaseSkeleton
+                    variant="text"
+                    width="60%"
+                    height={40}
+                    sx={{ mx: "auto" }}
+                  />
                 </Box>
               </Grid>
             ))}
@@ -63,7 +89,12 @@ export function LandingPageSkeleton() {
             {[...Array(3)].map((_, i) => (
               <Grid item xs={12} md={4} key={i}>
                 <Stack spacing={2} alignItems="center">
-                  <BaseSkeleton variant="rectangular" width="100%" height={200} sx={{ borderRadius: 2 }} />
+                  <BaseSkeleton
+                    variant="rectangular"
+                    width="100%"
+                    height={200}
+                    sx={{ borderRadius: 2 }}
+                  />
                   <BaseSkeleton variant="text" width="80%" height={28} />
                   <BaseSkeleton variant="text" width="100%" height={20} />
                   <BaseSkeleton variant="text" width="90%" height={20} />
@@ -74,11 +105,21 @@ export function LandingPageSkeleton() {
 
           {/* Trusted by section */}
           <Box sx={{ width: "100%", mt: 4 }}>
-            <BaseSkeleton variant="text" width={200} height={32} sx={{ mx: "auto", mb: 3 }} />
+            <BaseSkeleton
+              variant="text"
+              width={200}
+              height={32}
+              sx={{ mx: "auto", mb: 3 }}
+            />
             <Grid container spacing={3} justifyContent="center">
               {[...Array(3)].map((_, i) => (
                 <Grid item key={i}>
-                  <BaseSkeleton variant="rectangular" width={120} height={120} sx={{ borderRadius: 2 }} />
+                  <BaseSkeleton
+                    variant="rectangular"
+                    width={120}
+                    height={120}
+                    sx={{ borderRadius: 2 }}
+                  />
                 </Grid>
               ))}
             </Grid>
@@ -86,9 +127,23 @@ export function LandingPageSkeleton() {
 
           {/* FAQ section */}
           <Box sx={{ width: "100%", mt: 4 }}>
-            <BaseSkeleton variant="text" width={150} height={32} sx={{ mb: 3 }} />
+            <BaseSkeleton
+              variant="text"
+              width={150}
+              height={32}
+              sx={{ mb: 3 }}
+            />
             {[...Array(5)].map((_, i) => (
-              <Box key={i} sx={{ border: 1, borderColor: "divider", borderRadius: 1, height: 60, mb: 2 }} />
+              <Box
+                key={i}
+                sx={{
+                  border: 1,
+                  borderColor: "divider",
+                  borderRadius: 1,
+                  height: 60,
+                  mb: 2,
+                }}
+              />
             ))}
           </Box>
         </Stack>

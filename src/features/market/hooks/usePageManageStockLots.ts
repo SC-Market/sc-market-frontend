@@ -21,7 +21,7 @@ export interface ManageStockLotsPageData {
 /**
  * Page hook for ManageStockLots page.
  * Currently a placeholder as data fetching is handled by child components.
- * 
+ *
  * Requirements: 5.1, 5.2, 5.3, 5.5
  */
 export function usePageManageStockLots(): UsePageResult<ManageStockLotsPageData> {

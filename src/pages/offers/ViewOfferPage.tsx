@@ -4,13 +4,7 @@ import {
   OfferDetailsArea,
   OfferMessagesArea,
 } from "../../views/offers/OfferDetailsArea"
-import {
-  Grid,
-  Skeleton,
-  Tabs,
-  useMediaQuery,
-  useTheme,
-} from "@mui/material"
+import { Grid, Skeleton, Tabs, useMediaQuery, useTheme } from "@mui/material"
 import { HapticTab } from "../../components/haptic"
 import { OfferDetailSkeleton } from "../../components/skeletons"
 import { OfferMarketListings } from "../../views/offers/OfferMarketListings"
@@ -64,9 +58,7 @@ export function ViewOfferPage() {
             }}
           >
             <HapticTab label={t("offers.details", "Details")} />
-            {isMobile && (
-              <HapticTab label={t("offers.messages", "Messages")} />
-            )}
+            {isMobile && <HapticTab label={t("offers.messages", "Messages")} />}
             {session.offers[0]?.service && (
               <HapticTab label={t("offers.service", "Service")} />
             )}

@@ -20,17 +20,17 @@ export interface UsePageResult<T> {
 
 /**
  * Page hook for user profile page
- * 
+ *
  * Encapsulates data fetching for viewing a user's profile by username.
  * Returns standard page hook interface with user data, loading states, and error handling.
- * 
+ *
  * @param username - Username of the user to fetch profile for
  * @returns Page hook result with user profile data
- * 
+ *
  * Requirements: 5.1, 5.2, 5.3, 5.5
  */
 export function usePageUserProfile(
-  username: string
+  username: string,
 ): UsePageResult<UserProfilePageData> {
   const user = useGetUserByUsernameQuery(username, {
     skip: !username,

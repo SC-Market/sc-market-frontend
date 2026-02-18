@@ -14,10 +14,10 @@ import { LazySection } from "../../components/layout/LazySection"
 import { usePageMarketListing } from "../../features/market/hooks/usePageMarketListing"
 
 // Lazy load the content component, but keep skeleton eager
-const MarketListingView = lazy(
-  () => import("../../features/market/views/MarketListingView").then(module => ({
-    default: module.MarketListingView
-  }))
+const MarketListingView = lazy(() =>
+  import("../../features/market/views/MarketListingView").then((module) => ({
+    default: module.MarketListingView,
+  })),
 )
 
 export function ViewMarketListing() {
@@ -29,7 +29,8 @@ export function ViewMarketListing() {
     <DetailPageLayout
       title={pageData.data?.listing.details?.title}
       canonicalUrl={
-        pageData.data?.listing && formatCompleteListingUrl(pageData.data.listing)
+        pageData.data?.listing &&
+        formatCompleteListingUrl(pageData.data.listing)
       }
       breadcrumbs={[
         { label: t("market.title", "Market"), href: "/market" },

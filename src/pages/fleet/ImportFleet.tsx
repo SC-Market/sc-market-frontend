@@ -10,13 +10,8 @@ import { usePageImportFleet } from "../../features/fleet"
 export function ImportFleet() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
-  const {
-    selectedFile,
-    setSelectedFile,
-    onFileUpload,
-    isSuccess,
-    isLoading,
-  } = usePageImportFleet()
+  const { selectedFile, setSelectedFile, onFileUpload, isSuccess, isLoading } =
+    usePageImportFleet()
 
   return (
     <>
@@ -38,9 +33,26 @@ export function ImportFleet() {
               {t("ships.import.title")}
             </Typography>
           </Grid>
-          <Grid item xs={12} lg={8} container spacing={theme.layoutSpacing.layout}>
-            <Grid item container spacing={theme.layoutSpacing.layout} justifyContent="right">
-              <Grid item xs={12} lg={12} display="flex" justifyContent="flex-end">
+          <Grid
+            item
+            xs={12}
+            lg={8}
+            container
+            spacing={theme.layoutSpacing.layout}
+          >
+            <Grid
+              item
+              container
+              spacing={theme.layoutSpacing.layout}
+              justifyContent="right"
+            >
+              <Grid
+                item
+                xs={12}
+                lg={12}
+                display="flex"
+                justifyContent="flex-end"
+              >
                 <Typography variant="h6" align="right" sx={{ marginRight: 2 }}>
                   {selectedFile?.name}
                 </Typography>

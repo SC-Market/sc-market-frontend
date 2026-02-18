@@ -36,7 +36,12 @@ export function usePageNotifications(
 ): UsePageNotificationsResult {
   const { page, pageSize, scope, contractorId } = params
 
-  const notificationsData = useNotifications(page, pageSize, scope, contractorId)
+  const notificationsData = useNotifications(
+    page,
+    pageSize,
+    scope,
+    contractorId,
+  )
   const { data: organizationsData, isLoading: orgsLoading } =
     useGetUserOrganizationsQuery()
 

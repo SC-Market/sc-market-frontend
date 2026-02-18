@@ -283,19 +283,19 @@ export function MessageHeader(props: {
           sx={{ width: "auto" }}
         >
           <DateTimePicker
-              value={dateTime}
-              onChange={(newValue) => {
-                if (newValue) {
-                  setDateTime(newValue)
-                }
-              }}
-              slotProps={{
-                textField: {
-                  size: "medium",
-                  sx: { width: "auto" },
-                },
-              }}
-            />
+            value={dateTime}
+            onChange={(newValue) => {
+              if (newValue) {
+                setDateTime(newValue)
+              }
+            }}
+            slotProps={{
+              textField: {
+                size: "medium",
+                sx: { width: "auto" },
+              },
+            }}
+          />
           <Stack direction="row" spacing={1}>
             <Button
               onClick={() => {

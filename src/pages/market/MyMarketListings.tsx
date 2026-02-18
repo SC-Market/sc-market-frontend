@@ -5,7 +5,10 @@ import CloseIcon from "@mui/icons-material/CloseRounded"
 import MenuIcon from "@mui/icons-material/MenuRounded"
 import { MarketSidebarContext } from "../../features/market/hooks/MarketSidebar"
 import { MarketActions } from "../../features/market/components/MarketActions"
-import { HideOnScroll, MarketNavArea } from "../../features/market/components/MarketNavArea"
+import {
+  HideOnScroll,
+  MarketNavArea,
+} from "../../features/market/components/MarketNavArea"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"

@@ -111,7 +111,9 @@ export function Messages() {
                   minWidth: 0,
                   position: "relative",
                   marginLeft:
-                    !isMobile && messageSidebarOpen ? `${messagingDrawerWidth}px` : 0,
+                    !isMobile && messageSidebarOpen
+                      ? `${messagingDrawerWidth}px`
+                      : 0,
                   transition: isMobile
                     ? undefined
                     : theme.transitions.create("marginLeft", {

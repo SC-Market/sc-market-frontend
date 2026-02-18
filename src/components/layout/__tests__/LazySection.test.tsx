@@ -33,12 +33,7 @@ describe("LazySection", () => {
         }),
     )
 
-    render(
-      <LazySection
-        component={LazyTestContent}
-        skeleton={TestSkeleton}
-      />,
-    )
+    render(<LazySection component={LazyTestContent} skeleton={TestSkeleton} />)
 
     // Skeleton should be visible initially
     expect(screen.getByText("Loading Skeleton")).toBeInTheDocument()
@@ -57,12 +52,7 @@ describe("LazySection", () => {
       Promise.resolve({ default: TestContent }),
     )
 
-    render(
-      <LazySection
-        component={LazyTestContent}
-        skeleton={TestSkeleton}
-      />,
-    )
+    render(<LazySection component={LazyTestContent} skeleton={TestSkeleton} />)
 
     await waitFor(() => {
       expect(screen.getByText("Test Content Loaded")).toBeInTheDocument()
@@ -114,10 +104,7 @@ describe("LazySection", () => {
     )
 
     render(
-      <LazySection
-        component={LazyErrorComponent}
-        skeleton={TestSkeleton}
-      />,
+      <LazySection component={LazyErrorComponent} skeleton={TestSkeleton} />,
     )
 
     await waitFor(() => {
@@ -134,10 +121,7 @@ describe("LazySection", () => {
     )
 
     render(
-      <LazySection
-        component={LazyErrorComponent}
-        skeleton={TestSkeleton}
-      />,
+      <LazySection component={LazyErrorComponent} skeleton={TestSkeleton} />,
     )
 
     await waitFor(() => {
@@ -174,20 +158,23 @@ describe("LazySection", () => {
     const Section2 = () => <div>Section 2 Content</div>
     const Section3 = () => <div>Section 3 Content</div>
 
-    const LazySection1 = lazy(() =>
-      new Promise<{ default: React.ComponentType }>((resolve) => {
-        setTimeout(() => resolve({ default: Section1 }), 50)
-      }),
+    const LazySection1 = lazy(
+      () =>
+        new Promise<{ default: React.ComponentType }>((resolve) => {
+          setTimeout(() => resolve({ default: Section1 }), 50)
+        }),
     )
-    const LazySection2 = lazy(() =>
-      new Promise<{ default: React.ComponentType }>((resolve) => {
-        setTimeout(() => resolve({ default: Section2 }), 100)
-      }),
+    const LazySection2 = lazy(
+      () =>
+        new Promise<{ default: React.ComponentType }>((resolve) => {
+          setTimeout(() => resolve({ default: Section2 }), 100)
+        }),
     )
-    const LazySection3 = lazy(() =>
-      new Promise<{ default: React.ComponentType }>((resolve) => {
-        setTimeout(() => resolve({ default: Section3 }), 75)
-      }),
+    const LazySection3 = lazy(
+      () =>
+        new Promise<{ default: React.ComponentType }>((resolve) => {
+          setTimeout(() => resolve({ default: Section3 }), 75)
+        }),
     )
 
     const startTime = Date.now()

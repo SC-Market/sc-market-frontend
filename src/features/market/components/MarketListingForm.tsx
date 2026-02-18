@@ -564,26 +564,25 @@ export function MarketListingForm(props: { sale_type: "sale" | "auction" }) {
               </div>
             </Grid>
             <Grid item>
-              
-                <DateTimePicker
-                  label={t("MarketListingForm.endTime", {
-                    tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                  })}
-                  value={state.end_time}
-                  onChange={(newValue) =>
-                    setState((state) => ({ ...state, end_time: newValue }))
-                  }
-                  slotProps={{
-                    textField: {
-                      "aria-label": t(
-                        "accessibility.endTimeInput",
-                        "Select auction end time",
+              <DateTimePicker
+                label={t("MarketListingForm.endTime", {
+                  tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                })}
+                value={state.end_time}
+                onChange={(newValue) =>
+                  setState((state) => ({ ...state, end_time: newValue }))
+                }
+                slotProps={{
+                  textField: {
+                    "aria-label": t(
+                      "accessibility.endTimeInput",
+                      "Select auction end time",
                     ),
                     "aria-describedby": "end-time-help",
                   },
                 }}
-                />
-              
+              />
+
               <div id="end-time-help" className="sr-only">
                 {t(
                   "accessibility.endTimeHelp",

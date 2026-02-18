@@ -19,20 +19,45 @@ export function ContractsListSkeleton() {
 
       {/* Filter button */}
       <Box sx={{ mb: 3 }}>
-        <BaseSkeleton variant="rectangular" width={140} height={40} sx={{ borderRadius: 1 }} />
+        <BaseSkeleton
+          variant="rectangular"
+          width={140}
+          height={40}
+          sx={{ borderRadius: 1 }}
+        />
       </Box>
 
       {/* Contract cards */}
       <Grid container spacing={2}>
         {[...Array(6)].map((_, i) => (
           <Grid item xs={12} key={i}>
-            <Box sx={{ border: 1, borderColor: "divider", borderRadius: 1, p: 2, height: 140 }}>
-              <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
+            <Box
+              sx={{
+                border: 1,
+                borderColor: "divider",
+                borderRadius: 1,
+                p: 2,
+                height: 140,
+              }}
+            >
+              <Box
+                sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}
+              >
                 <BaseSkeleton variant="text" width="60%" height={24} />
-                <BaseSkeleton variant="rectangular" width={80} height={32} sx={{ borderRadius: 1 }} />
+                <BaseSkeleton
+                  variant="rectangular"
+                  width={80}
+                  height={32}
+                  sx={{ borderRadius: 1 }}
+                />
               </Box>
               <BaseSkeleton variant="text" width="40%" height={20} />
-              <BaseSkeleton variant="text" width="30%" height={20} sx={{ mt: 1 }} />
+              <BaseSkeleton
+                variant="text"
+                width="30%"
+                height={20}
+                sx={{ mt: 1 }}
+              />
             </Box>
           </Grid>
         ))}
@@ -40,7 +65,12 @@ export function ContractsListSkeleton() {
 
       {/* Pagination */}
       <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
-        <BaseSkeleton variant="rectangular" width={400} height={52} sx={{ borderRadius: 1 }} />
+        <BaseSkeleton
+          variant="rectangular"
+          width={400}
+          height={52}
+          sx={{ borderRadius: 1 }}
+        />
       </Box>
     </Container>
   )

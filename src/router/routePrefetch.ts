@@ -67,7 +67,7 @@ export async function prefetchRoutes(paths: string[]): Promise<void> {
  */
 export function prefetchRoutesForPath(currentPath: string): void {
   const routesToPrefetch = ROUTE_PREFETCH_MAP[currentPath]
-  
+
   if (!routesToPrefetch || routesToPrefetch.length === 0) {
     return
   }
@@ -144,11 +144,7 @@ export function prefetchHighPriorityRoutes(): void {
   }
 
   // High-priority routes to prefetch
-  const highPriorityRoutes = [
-    "/market",
-    "/contractors",
-    "/dashboard",
-  ]
+  const highPriorityRoutes = ["/market", "/contractors", "/dashboard"]
 
   // Use requestIdleCallback for non-blocking prefetch
   if ("requestIdleCallback" in window) {

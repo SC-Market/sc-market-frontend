@@ -655,19 +655,18 @@ function DateTimePickerBottomSheetMobile(props: {
       disableBackdropClose={pickerOpen}
     >
       <Stack spacing={2}>
-        
-          <DateTimePicker
-            value={dateTime}
-            onChange={(newValue) => {
-              if (newValue) {
-                setDateTime(newValue)
-              }
-            }}
-            onOpen={handlePickerOpen}
-            onClose={handlePickerClose}
-            slotProps={{
-              textField: {
-                size: "medium",
+        <DateTimePicker
+          value={dateTime}
+          onChange={(newValue) => {
+            if (newValue) {
+              setDateTime(newValue)
+            }
+          }}
+          onOpen={handlePickerOpen}
+          onClose={handlePickerClose}
+          slotProps={{
+            textField: {
+              size: "medium",
               fullWidth: true,
             },
             // Ensure the picker modal appears above the bottom sheet
@@ -677,8 +676,7 @@ function DateTimePickerBottomSheetMobile(props: {
               },
             },
           }}
-          />
-        
+        />
 
         <Stack direction="row" spacing={1}>
           <Button

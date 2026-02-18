@@ -19,9 +19,9 @@ export interface ManageListingStockPageData {
 /**
  * Page hook for ManageListingStock page.
  * Validates listing ID and provides it to child components.
- * 
+ *
  * @param listingId - Listing ID from route params
- * 
+ *
  * Requirements: 5.1, 5.2, 5.3, 5.5
  */
 export function usePageManageListingStock(

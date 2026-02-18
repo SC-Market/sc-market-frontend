@@ -25,12 +25,14 @@ Extracted shared components that were being imported by other files into a dedic
 ### Import Strategy
 
 **Before:**
+
 ```typescript
 // ❌ Static import from lazy-loaded module
 import { RecentListingsSkeleton } from "../../../../pages/home/LandingPage"
 ```
 
 **After:**
+
 ```typescript
 // ✅ Static import from dedicated component location
 import { RecentListingsSkeleton } from "../../../../components/landing"
@@ -64,5 +66,6 @@ grep -r "from.*pages/home/LandingPage" src/
 ## Related Requirements
 
 This fix addresses requirement 6.7 from the Core Web Vitals Optimization spec:
+
 - Ensure consistent dynamic import usage to prevent duplicate code
 - Verify no static imports of lazy-loaded modules

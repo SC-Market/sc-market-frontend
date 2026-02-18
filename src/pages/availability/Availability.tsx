@@ -2,9 +2,7 @@ import React, { useCallback, useMemo } from "react"
 import { Grid, Skeleton } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
-import {
-  AvailabilitySelector,
-} from "../../components/time/AvailabilitySelector"
+import { AvailabilitySelector } from "../../components/time/AvailabilitySelector"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useProfileUpdateAvailabilityMutation } from "../../store/profile"
 import { useAlertHook } from "../../hooks/alert/AlertHook"

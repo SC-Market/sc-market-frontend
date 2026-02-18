@@ -23,9 +23,9 @@ export interface OrgManagePageData {
 /**
  * Page hook for OrgManage page.
  * Encapsulates all data fetching logic for the organization management page.
- * 
+ *
  * @returns Page data with loading states, errors, and refetch function
- * 
+ *
  * Requirements: 5.1, 5.2, 5.3, 5.5
  */
 export function usePageOrgManage(): UsePageResult<OrgManagePageData> {

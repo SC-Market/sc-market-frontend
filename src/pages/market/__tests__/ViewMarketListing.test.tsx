@@ -66,8 +66,12 @@ vi.mock("../../../components/footer/Footer", () => ({
 
 // Mock the lazy-loaded MarketListingView
 vi.mock("../../../features/market/views/MarketListingView", () => ({
-  MarketListingView: () => <div data-testid="market-listing-view">Market Listing View</div>,
-  default: () => <div data-testid="market-listing-view">Market Listing View</div>,
+  MarketListingView: () => (
+    <div data-testid="market-listing-view">Market Listing View</div>
+  ),
+  default: () => (
+    <div data-testid="market-listing-view">Market Listing View</div>
+  ),
   MarketListingViewSkeleton: () => (
     <div data-testid="market-listing-skeleton">Loading skeleton</div>
   ),
@@ -76,7 +80,9 @@ vi.mock("../../../features/market/views/MarketListingView", () => ({
 // Mock CurrentMarketListingContext
 vi.mock("../../../features/market/hooks/CurrentMarketItem", () => ({
   CurrentMarketListingContext: {
-    Provider: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+    Provider: ({ children }: { children: React.ReactNode }) => (
+      <div>{children}</div>
+    ),
   },
 }))
 
@@ -120,7 +126,10 @@ function TestWrapper({ children }: { children: React.ReactNode }) {
           <DrawerOpenContext.Provider value={drawerState}>
             <Routes>
               <Route path="/market/listing/:id" element={children} />
-              <Route path="/404" element={<div data-testid="404-page">404 Page</div>} />
+              <Route
+                path="/404"
+                element={<div data-testid="404-page">404 Page</div>}
+              />
             </Routes>
           </DrawerOpenContext.Provider>
         </BrowserRouter>
@@ -135,7 +144,7 @@ function renderWithRoute(listingId: string) {
   return render(
     <TestWrapper>
       <ViewMarketListing />
-    </TestWrapper>
+    </TestWrapper>,
   )
 }
 
@@ -203,7 +212,9 @@ describe("ViewMarketListing - Integration Tests", () => {
     expect(titles.length).toBeGreaterThan(0)
 
     // Verify skeleton is not displayed
-    expect(screen.queryByTestId("market-listing-skeleton")).not.toBeInTheDocument()
+    expect(
+      screen.queryByTestId("market-listing-skeleton"),
+    ).not.toBeInTheDocument()
 
     // Verify cart button is displayed
     expect(screen.getByText("marketActions.myCart")).toBeInTheDocument()
@@ -339,7 +350,9 @@ describe("ViewMarketListing - Integration Tests", () => {
     const { container } = renderWithRoute("test-123")
 
     // Verify page structure includes layout elements
-    expect(container.querySelector('[data-testid="footer"]')).toBeInTheDocument()
+    expect(
+      container.querySelector('[data-testid="footer"]'),
+    ).toBeInTheDocument()
 
     // Verify entity title is displayed (check for multiple instances)
     const titles = screen.getAllByText("Test Listing Title")

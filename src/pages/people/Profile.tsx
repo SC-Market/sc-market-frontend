@@ -6,7 +6,7 @@ import { ProfileSkeleton } from "../../features/profile/components/ProfileSkelet
 import { usePageUserProfile } from "../../features/profile/hooks/usePageUserProfile"
 
 const ViewProfile = lazy(
-  () => import("../../features/profile/components/ViewProfile")
+  () => import("../../features/profile/components/ViewProfile"),
 )
 
 export function Profile() {

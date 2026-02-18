@@ -23,8 +23,12 @@ export function CreateService(props: {}) {
 export function UpdateService() {
   const { t } = useTranslation()
   const { service_id } = useParams<{ service_id: string }>()
-  const { data: service, isLoading, error } = useGetServiceByIdQuery(service_id!)
-  
+  const {
+    data: service,
+    isLoading,
+    error,
+  } = useGetServiceByIdQuery(service_id!)
+
   return (
     <FormPageLayout
       title={t("services.updateService")}

@@ -84,7 +84,15 @@ export function ImageSearch(props: {
             loading="lazy"
             height={200}
             image={image || MISSING_IMAGE_URL}
-            alt={image ? t("imageSearch.selectedImagePreview", "Preview of selected image from URL: {{url}}", { url: image }) : t("imageSearch.noImageSelected", "No image selected")}
+            alt={
+              image
+                ? t(
+                    "imageSearch.selectedImagePreview",
+                    "Preview of selected image from URL: {{url}}",
+                    { url: image },
+                  )
+                : t("imageSearch.noImageSelected", "No image selected")
+            }
             sx={{
               borderRadius: (theme) =>
                 theme.spacing((theme as ExtendedTheme).borderRadius.image),

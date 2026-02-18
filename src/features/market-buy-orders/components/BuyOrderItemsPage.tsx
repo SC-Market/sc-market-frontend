@@ -36,7 +36,7 @@ export function BuyOrderItemsPage() {
     <Page title={t("market.buyOrders")}>
       <MarketSidebarContext.Provider value={[open, setOpen]}>
         {xs && <MarketSidebar />}
-        
+
         <ContainerGrid maxWidth={"xl"} sidebarOpen={false}>
           <Grid
             container

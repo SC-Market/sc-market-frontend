@@ -93,7 +93,9 @@ export function MessagesList() {
                     display: "flex",
                     flexDirection: "column",
                     minWidth: 0,
-                    marginLeft: messageSidebarOpen ? `${messagingDrawerWidth}px` : 0,
+                    marginLeft: messageSidebarOpen
+                      ? `${messagingDrawerWidth}px`
+                      : 0,
                     transition: theme.transitions.create("marginLeft", {
                       easing: theme.transitions.easing.sharp,
                       duration: theme.transitions.duration.enteringScreen,

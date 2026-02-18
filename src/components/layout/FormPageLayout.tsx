@@ -2,7 +2,10 @@ import React, { ReactElement, ReactNode } from "react"
 import { useNavigate } from "react-router-dom"
 import { Grid, IconButton } from "@mui/material"
 import ArrowBackIcon from "@mui/icons-material/ArrowBack"
-import { StandardPageLayout, StandardPageLayoutProps } from "./StandardPageLayout"
+import {
+  StandardPageLayout,
+  StandardPageLayoutProps,
+} from "./StandardPageLayout"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 
@@ -14,9 +17,7 @@ export interface FormPageLayoutProps extends StandardPageLayoutProps {
   cancelButton?: ReactNode
 }
 
-export function FormPageLayout(
-  props: FormPageLayoutProps,
-): ReactElement {
+export function FormPageLayout(props: FormPageLayoutProps): ReactElement {
   const theme = useTheme<ExtendedTheme>()
   const navigate = useNavigate()
 
@@ -38,7 +39,11 @@ export function FormPageLayout(
 
   // Build the form header with back button
   const formHeader = (
-    <Grid container spacing={theme.layoutSpacing?.layout ?? 1} alignItems="center">
+    <Grid
+      container
+      spacing={theme.layoutSpacing?.layout ?? 1}
+      alignItems="center"
+    >
       {backButton && (
         <Grid item>
           <IconButton
@@ -52,26 +57,20 @@ export function FormPageLayout(
       )}
 
       <Grid item xs>
-        <div style={{ fontSize: "1.5rem", fontWeight: 600 }}>
-          {formTitle}
-        </div>
+        <div style={{ fontSize: "1.5rem", fontWeight: 600 }}>{formTitle}</div>
       </Grid>
     </Grid>
   )
 
   // Build form actions
   const formActions = (submitButton || cancelButton) && (
-    <Grid container spacing={theme.layoutSpacing?.component ?? 1.5} justifyContent="flex-end">
-      {cancelButton && (
-        <Grid item>
-          {cancelButton}
-        </Grid>
-      )}
-      {submitButton && (
-        <Grid item>
-          {submitButton}
-        </Grid>
-      )}
+    <Grid
+      container
+      spacing={theme.layoutSpacing?.component ?? 1.5}
+      justifyContent="flex-end"
+    >
+      {cancelButton && <Grid item>{cancelButton}</Grid>}
+      {submitButton && <Grid item>{submitButton}</Grid>}
     </Grid>
   )
 
@@ -83,7 +82,7 @@ export function FormPageLayout(
       headerActions={headerActions}
     >
       {props.children}
-      
+
       {/* Form actions at the bottom */}
       {formActions && (
         <Grid item xs={12} style={{ marginTop: theme.spacing(3) }}>

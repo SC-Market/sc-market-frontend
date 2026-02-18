@@ -27,7 +27,9 @@ const mockTheme = createTheme({
 // Mock the Page component
 vi.mock("../../metadata/Page", async () => {
   return {
-    Page: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+    Page: ({ children }: { children: React.ReactNode }) => (
+      <div>{children}</div>
+    ),
   }
 })
 
@@ -169,8 +171,7 @@ describe("StandardPageLayout - Breadcrumb Property Tests", () => {
           expect(breadcrumbItems.length).toBeGreaterThan(0)
 
           // Get the last breadcrumb item
-          const lastBreadcrumbItem =
-            breadcrumbItems[breadcrumbItems.length - 1]
+          const lastBreadcrumbItem = breadcrumbItems[breadcrumbItems.length - 1]
 
           // Verify it contains the last label
           expect(lastBreadcrumbItem.textContent).toContain(trimmedLabel)
@@ -190,7 +191,6 @@ describe("StandardPageLayout - Breadcrumb Property Tests", () => {
     )
   })
 })
-
 
 /**
  * Unit Test for Dynamic Breadcrumb Labels
@@ -296,10 +296,7 @@ describe("StandardPageLayout - Dynamic Breadcrumb Unit Tests", () => {
     rerender(
       <TestWrapper>
         <StandardPageLayout
-          breadcrumbs={[
-            { label: "Home", href: "/" },
-            { label: "Profile" },
-          ]}
+          breadcrumbs={[{ label: "Home", href: "/" }, { label: "Profile" }]}
         >
           <div>Content</div>
         </StandardPageLayout>

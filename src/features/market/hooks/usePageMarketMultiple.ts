@@ -22,10 +22,10 @@ export interface MarketMultiplePageData {
 /**
  * Page hook for ViewMarketMultiple page.
  * Encapsulates all data fetching logic for the market multiple detail page.
- * 
+ *
  * @param id - Market multiple ID (game item ID)
  * @returns Page data with loading states, errors, and refetch function
- * 
+ *
  * Requirements: 5.1, 5.2, 5.3, 5.5
  */
 export function usePageMarketMultiple(

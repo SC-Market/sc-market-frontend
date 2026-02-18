@@ -15,7 +15,10 @@ export function SendMoney(props: { org?: boolean }) {
     <FormPageLayout
       title={t("sendMoney.title")}
       breadcrumbs={[
-        { label: t("dashboard.title"), href: props.org ? "/org/money" : "/dashboard" },
+        {
+          label: t("dashboard.title"),
+          href: props.org ? "/org/money" : "/dashboard",
+        },
         { label: t("sendMoney.title") },
       ]}
       formTitle={t("sendMoney.title")}

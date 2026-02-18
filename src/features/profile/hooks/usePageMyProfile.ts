@@ -24,12 +24,12 @@ export interface UsePageResult<T> {
 
 /**
  * Page hook for my profile page
- * 
+ *
  * Encapsulates data fetching for viewing the current user's own profile.
  * Composes profile query and user query to get complete profile data.
- * 
+ *
  * @returns Page hook result with my profile data
- * 
+ *
  * Requirements: 5.1, 5.2, 5.3, 5.4, 5.5
  */
 export function usePageMyProfile(): UsePageResult<MyProfilePageData> {

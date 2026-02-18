@@ -1,4 +1,7 @@
-import { useGetUserProfileQuery, useGetAuthenticatorIdentifier } from "../../../store/profile"
+import {
+  useGetUserProfileQuery,
+  useGetAuthenticatorIdentifier,
+} from "../../../store/profile"
 
 export interface UsePageAuthenticateRSIResult {
   profile: ReturnType<typeof useGetUserProfileQuery>

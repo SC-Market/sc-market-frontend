@@ -31,9 +31,9 @@ export interface CreateBuyOrderPageData {
 /**
  * Page hook for CreateBuyOrder page.
  * Encapsulates all data fetching logic and state management for the buy order creation page.
- * 
+ *
  * @returns Page data with loading states, errors, and refetch function
- * 
+ *
  * Requirements: 5.1, 5.2, 5.3, 5.5
  */
 export function usePageCreateBuyOrder(): UsePageResult<CreateBuyOrderPageData> {

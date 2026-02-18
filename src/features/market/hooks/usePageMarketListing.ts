@@ -22,10 +22,10 @@ export interface MarketListingPageData {
 /**
  * Page hook for ViewMarketListing page.
  * Encapsulates all data fetching logic for the market listing detail page.
- * 
+ *
  * @param id - Market listing ID
  * @returns Page data with loading states, errors, and refetch function
- * 
+ *
  * Requirements: 5.1, 5.2, 5.3, 5.4, 5.5
  */
 export function usePageMarketListing(

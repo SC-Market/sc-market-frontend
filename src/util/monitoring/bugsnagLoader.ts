@@ -1,13 +1,13 @@
 /**
  * Optimized Bugsnag loader that doesn't block critical rendering path.
- * 
+ *
  * This module provides async initialization of Bugsnag with error boundary fallback.
- * 
+ *
  * Requirements: 7.4 - Optimize Bugsnag loading
  */
 
-import React from 'react'
-import { onPageInteractive } from '../scripts/delayedScriptLoader'
+import React from "react"
+import { onPageInteractive } from "../scripts/delayedScriptLoader"
 
 let bugsnagInitialized = false
 let bugsnagInstance: any = null
@@ -15,7 +15,7 @@ let bugsnagReactPlugin: any = null
 
 /**
  * Initialize Bugsnag asynchronously after page is interactive.
- * 
+ *
  * @param apiKey - Bugsnag API key
  * @returns Promise that resolves when Bugsnag is initialized
  */
@@ -29,11 +29,12 @@ export async function initializeBugsnagAsync(apiKey: string): Promise<void> {
     onPageInteractive(async () => {
       try {
         // Dynamically import Bugsnag modules
-        const [Bugsnag, BugsnagPluginReact, BugsnagPerformance] = await Promise.all([
-          import('@bugsnag/js'),
-          import('@bugsnag/plugin-react'),
-          import('@bugsnag/browser-performance'),
-        ])
+        const [Bugsnag, BugsnagPluginReact, BugsnagPerformance] =
+          await Promise.all([
+            import("@bugsnag/js"),
+            import("@bugsnag/plugin-react"),
+            import("@bugsnag/browser-performance"),
+          ])
 
         // Initialize Bugsnag
         bugsnagInstance = Bugsnag.default.start({
@@ -46,14 +47,14 @@ export async function initializeBugsnagAsync(apiKey: string): Promise<void> {
           apiKey,
         })
 
-        bugsnagReactPlugin = bugsnagInstance.getPlugin('react')
+        bugsnagReactPlugin = bugsnagInstance.getPlugin("react")
         bugsnagInitialized = true
-        
+
         resolve()
       } catch (error) {
         // Silently fail - error monitoring is not critical for app functionality
         if (import.meta.env.DEV) {
-          console.warn('Bugsnag initialization failed (non-critical):', error)
+          console.warn("Bugsnag initialization failed (non-critical):", error)
         }
         resolve()
       }
@@ -64,11 +65,13 @@ export async function initializeBugsnagAsync(apiKey: string): Promise<void> {
 /**
  * Get the Bugsnag error boundary component.
  * Returns a fallback error boundary if Bugsnag is not initialized.
- * 
+ *
  * @param React - React instance
  * @returns Error boundary component
  */
-export function getBugsnagErrorBoundary(ReactInstance: typeof React): React.ComponentType<any> {
+export function getBugsnagErrorBoundary(
+  ReactInstance: typeof React,
+): React.ComponentType<any> {
   if (bugsnagReactPlugin) {
     return bugsnagReactPlugin.createErrorBoundary(ReactInstance)
   }
@@ -90,39 +93,39 @@ export function getBugsnagErrorBoundary(ReactInstance: typeof React): React.Comp
     componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
       // Log to console in development
       if (import.meta.env.DEV) {
-        console.error('Error caught by fallback boundary:', error, errorInfo)
+        console.error("Error caught by fallback boundary:", error, errorInfo)
       }
     }
 
     render() {
       if (this.state.hasError) {
         return ReactInstance.createElement(
-          'div',
+          "div",
           {
             style: {
-              padding: '20px',
-              textAlign: 'center',
-              fontFamily: 'system-ui, sans-serif',
+              padding: "20px",
+              textAlign: "center",
+              fontFamily: "system-ui, sans-serif",
             },
           },
-          ReactInstance.createElement('h1', null, 'Something went wrong'),
+          ReactInstance.createElement("h1", null, "Something went wrong"),
           ReactInstance.createElement(
-            'p',
+            "p",
             null,
-            'Please refresh the page to continue.'
+            "Please refresh the page to continue.",
           ),
           ReactInstance.createElement(
-            'button',
+            "button",
             {
               onClick: () => window.location.reload(),
               style: {
-                padding: '10px 20px',
-                fontSize: '16px',
-                cursor: 'pointer',
+                padding: "10px 20px",
+                fontSize: "16px",
+                cursor: "pointer",
               },
             },
-            'Refresh Page'
-          )
+            "Refresh Page",
+          ),
         )
       }
 
@@ -133,7 +136,7 @@ export function getBugsnagErrorBoundary(ReactInstance: typeof React): React.Comp
 
 /**
  * Get the Bugsnag instance.
- * 
+ *
  * @returns Bugsnag instance or null if not initialized
  */
 export function getBugsnagInstance() {
@@ -142,7 +145,7 @@ export function getBugsnagInstance() {
 
 /**
  * Check if Bugsnag is initialized.
- * 
+ *
  * @returns true if Bugsnag is initialized
  */
 export function isBugsnagInitialized(): boolean {
@@ -151,18 +154,25 @@ export function isBugsnagInitialized(): boolean {
 
 /**
  * Notify Bugsnag of an error (only if initialized).
- * 
+ *
  * @param error - Error to report
  * @param metadata - Additional metadata
  */
-export function notifyBugsnag(error: Error, metadata?: Record<string, any>): void {
+export function notifyBugsnag(
+  error: Error,
+  metadata?: Record<string, any>,
+): void {
   if (bugsnagInstance) {
     bugsnagInstance.notify(error, (event: any) => {
       if (metadata) {
-        event.addMetadata('custom', metadata)
+        event.addMetadata("custom", metadata)
       }
     })
   } else if (import.meta.env.DEV) {
-    console.error('Bugsnag not initialized, error not reported:', error, metadata)
+    console.error(
+      "Bugsnag not initialized, error not reported:",
+      error,
+      metadata,
+    )
   }
 }

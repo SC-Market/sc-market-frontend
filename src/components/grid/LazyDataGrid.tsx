@@ -5,7 +5,7 @@ import { getMuiDataGridLocale } from "../../util/i18n"
 import { useTranslation } from "react-i18next"
 
 const DataGrid = lazy(() =>
-  import("@mui/x-data-grid").then((m) => ({ default: m.DataGrid }))
+  import("@mui/x-data-grid").then((m) => ({ default: m.DataGrid })),
 )
 
 export function LazyDataGrid(props: DataGridProps) {
@@ -18,7 +18,12 @@ export function LazyDataGrid(props: DataGridProps) {
 
   return (
     <Suspense fallback={<Skeleton variant="rectangular" height={400} />}>
-      <DataGrid {...props} localeText={gridLocale?.components?.MuiDataGrid?.defaultProps?.localeText} />
+      <DataGrid
+        {...props}
+        localeText={
+          gridLocale?.components?.MuiDataGrid?.defaultProps?.localeText
+        }
+      />
     </Suspense>
   )
 }

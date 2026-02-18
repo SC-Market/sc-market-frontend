@@ -52,9 +52,7 @@ import {
   useProfileUpdateAvailabilityMutation,
 } from "../../store/profile"
 import { CheckCircle, Warning } from "@mui/icons-material"
-import {
-  AvailabilitySelector,
-} from "../../components/time/AvailabilitySelector"
+import { AvailabilitySelector } from "../../components/time/AvailabilitySelector"
 import { convertAvailability } from "../../pages/availability/Availability.lazy"
 import { OrderLimitsDisplay } from "../../components/orders/OrderLimitsDisplay"
 import { BottomSheet } from "../../components/mobile/BottomSheet"

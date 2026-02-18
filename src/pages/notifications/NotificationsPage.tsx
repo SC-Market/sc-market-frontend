@@ -194,7 +194,9 @@ export function NotificationsPage() {
               {scopeFilter !== "all" && (
                 <Chip
                   label={
-                    scopeFilter === "individual" ? "Individual" : "Organizations"
+                    scopeFilter === "individual"
+                      ? "Individual"
+                      : "Organizations"
                   }
                   size="small"
                   onDelete={() => {

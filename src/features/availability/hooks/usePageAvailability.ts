@@ -1,9 +1,11 @@
-import { useProfileGetAvailabilityQuery } from '../../../store/profile'
+import { useProfileGetAvailabilityQuery } from "../../../store/profile"
 
 interface UsePageAvailabilityResult {
-  data: {
-    selections: Array<{ start: number; finish: number }>
-  } | undefined
+  data:
+    | {
+        selections: Array<{ start: number; finish: number }>
+      }
+    | undefined
   isLoading: boolean
   isFetching: boolean
   error: unknown

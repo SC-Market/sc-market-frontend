@@ -14,19 +14,27 @@ vi.mock("../../../features/offers/hooks/usePageCounterOffer")
 
 // Mock the view components
 vi.mock("../../../views/offers/OfferDetailsEditArea", () => ({
-  OfferDetailsEditArea: () => <div data-testid="offer-details-edit">Offer Details Edit</div>,
+  OfferDetailsEditArea: () => (
+    <div data-testid="offer-details-edit">Offer Details Edit</div>
+  ),
 }))
 
 vi.mock("../../../views/offers/CounterOfferSubmitArea", () => ({
-  CounterOfferSubmitArea: () => <div data-testid="counter-offer-submit">Submit Area</div>,
+  CounterOfferSubmitArea: () => (
+    <div data-testid="counter-offer-submit">Submit Area</div>
+  ),
 }))
 
 vi.mock("../../../views/offers/OfferServiceEditArea", () => ({
-  OfferServiceEditArea: () => <div data-testid="offer-service-edit">Service Edit</div>,
+  OfferServiceEditArea: () => (
+    <div data-testid="offer-service-edit">Service Edit</div>
+  ),
 }))
 
 vi.mock("../../../views/offers/OfferMarketListingsEditArea", () => ({
-  OfferMarketListingsEditArea: () => <div data-testid="offer-listings-edit">Listings Edit</div>,
+  OfferMarketListingsEditArea: () => (
+    <div data-testid="offer-listings-edit">Listings Edit</div>
+  ),
 }))
 
 // Mock the Page component to avoid RTK Query issues
@@ -82,7 +90,7 @@ const mockTheme = createTheme({
 const renderWithProviders = (ui: React.ReactElement) => {
   function Wrapper({ children }: { children: React.ReactNode }) {
     const drawerState = React.useState(false)
-    
+
     return (
       <Provider store={mockStore}>
         <ThemeProvider theme={mockTheme}>
@@ -93,7 +101,7 @@ const renderWithProviders = (ui: React.ReactElement) => {
       </Provider>
     )
   }
-  
+
   return render(<Wrapper>{ui}</Wrapper>)
 }
 

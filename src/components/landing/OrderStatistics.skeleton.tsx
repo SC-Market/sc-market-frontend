@@ -5,7 +5,7 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function OrderStatisticsSkeleton() {
   const theme = useTheme<ExtendedTheme>()
-  
+
   return (
     <Grid
       container

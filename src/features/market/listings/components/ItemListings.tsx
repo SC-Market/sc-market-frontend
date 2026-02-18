@@ -88,7 +88,12 @@ import {
 } from "../../../../util/badges"
 import { useGetUserProfileQuery } from "../../../../store/profile"
 import { RefreshRounded, EditRounded, ShareRounded } from "@mui/icons-material"
-import { isAfter, subDays, addMonths, subDays as subDaysFromDate } from "date-fns"
+import {
+  isAfter,
+  subDays,
+  addMonths,
+  subDays as subDaysFromDate,
+} from "date-fns"
 import { Stack } from "@mui/system"
 import { AdCard } from "../../../../components/ads/AdCard"
 import { MARKET_ADS } from "../../../../components/ads/adConfig"
@@ -334,7 +339,7 @@ export function DisplayListings(props: {
 
   return (
     <React.Fragment>
-      <div ref={ref} style={{ position: 'absolute', top: 0 }} />
+      <div ref={ref} style={{ position: "absolute", top: 0 }} />
 
       {loading
         ? new Array(perPage)
@@ -439,56 +444,56 @@ export function DisplayListingsMin(props: {
         <VirtualizedGrid
           items={listingsWithAds}
           renderItem={(item, index) => {
-              const key = isListing(item)
-                ? item.listing_id
-                : `ad-${item.id}-${index}`
-              // For virtualized grid, render the base component directly
-              // The grid handles layout, so we don't need Grid item wrapper
-              if (isListing(item)) {
-                if (item.listing_type === "unique") {
-                  return (
-                    <ItemListingBase
-                      listing={item as ExtendedUniqueSearchResult}
-                      index={index}
-                      key={key}
-                    />
-                  )
-                } else if (item.listing_type === "aggregate") {
-                  return (
-                    <AggregateListingBase
-                      aggregate={item as ExtendedAggregateSearchResult}
-                      index={index}
-                      key={key}
-                    />
-                  )
-                } else if (item.listing_type === "multiple") {
-                  return (
-                    <MultipleListingBase
-                      multiple={item as ExtendedMultipleSearchResult}
-                      index={index}
-                      key={key}
-                    />
-                  )
-                }
+            const key = isListing(item)
+              ? item.listing_id
+              : `ad-${item.id}-${index}`
+            // For virtualized grid, render the base component directly
+            // The grid handles layout, so we don't need Grid item wrapper
+            if (isListing(item)) {
+              if (item.listing_type === "unique") {
+                return (
+                  <ItemListingBase
+                    listing={item as ExtendedUniqueSearchResult}
+                    index={index}
+                    key={key}
+                  />
+                )
+              } else if (item.listing_type === "aggregate") {
+                return (
+                  <AggregateListingBase
+                    aggregate={item as ExtendedAggregateSearchResult}
+                    index={index}
+                    key={key}
+                  />
+                )
+              } else if (item.listing_type === "multiple") {
+                return (
+                  <MultipleListingBase
+                    multiple={item as ExtendedMultipleSearchResult}
+                    index={index}
+                    key={key}
+                  />
+                )
               }
-              // Ad card - render same as listings, no special handling
-              return (
-                <AdCard
-                  ad={item as any}
-                  index={index}
-                  key={key}
-                  noGridWrapper={true}
-                />
-              )
-            }}
-            itemHeight={300}
-            columns={{ xs: 2, sm: 2, md: 3, lg: 4, xl: 4, xxl: 5 }}
-            gap={{
-              xs: theme.layoutSpacing.component,
-              sm: theme.layoutSpacing.layout,
-            }}
-            overscan={3}
-          />
+            }
+            // Ad card - render same as listings, no special handling
+            return (
+              <AdCard
+                ad={item as any}
+                index={index}
+                key={key}
+                noGridWrapper={true}
+              />
+            )
+          }}
+          itemHeight={300}
+          columns={{ xs: 2, sm: 2, md: 3, lg: 4, xl: 4, xxl: 5 }}
+          gap={{
+            xs: theme.layoutSpacing.component,
+            sm: theme.layoutSpacing.layout,
+          }}
+          overscan={3}
+        />
       </Grid>
     )
   }
@@ -561,7 +566,7 @@ export function DisplayBuyOrderListings(props: {
 
   return (
     <>
-      <div ref={ref} style={{ position: 'absolute', top: 0 }} />
+      <div ref={ref} style={{ position: "absolute", top: 0 }} />
 
       {props.loading
         ? new Array(perPage)
@@ -692,7 +697,7 @@ export function ItemListings(props: {
 
   return (
     <>
-      <div ref={ref} style={{ position: 'absolute', top: 0 }} />
+      <div ref={ref} style={{ position: "absolute", top: 0 }} />
       <DisplayListingsMin
         listings={listings || []}
         loading={isLoading || isFetching}
@@ -801,7 +806,7 @@ export function BulkListingsRefactor(props: {
 
   return (
     <>
-      <div ref={ref} style={{ position: 'absolute', top: 0 }} />
+      <div ref={ref} style={{ position: "absolute", top: 0 }} />
       <DisplayListingsMin
         listings={listings || []}
         loading={isLoading || isFetching}
@@ -1038,7 +1043,7 @@ export function MyItemListings(props: {
 
   return (
     <>
-      <div ref={ref} style={{ position: 'absolute', top: 0 }} />
+      <div ref={ref} style={{ position: "absolute", top: 0 }} />
       <DisplayListingsMin
         listings={convertedListings}
         loading={isLoading || isFetching}

@@ -8,7 +8,8 @@ import { Grid } from "@mui/material"
 
 export function LoginPage() {
   const { t } = useTranslation()
-  const { isAuthenticated, isLoading, errorMessage, clearError } = usePageLogin()
+  const { isAuthenticated, isLoading, errorMessage, clearError } =
+    usePageLogin()
 
   if (isAuthenticated) {
     return <Navigate to="/dashboard" replace />

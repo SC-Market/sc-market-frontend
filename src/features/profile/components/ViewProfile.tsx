@@ -34,10 +34,7 @@ export function ViewProfile(props: { profile: User }) {
 
   return (
     <Box sx={{ position: "relative" }}>
-      <ProfileBannerArea
-        profile={props.profile}
-        submitUpdate={submitUpdate}
-      />
+      <ProfileBannerArea profile={props.profile} submitUpdate={submitUpdate} />
       <Box
         sx={{
           ...(theme.palette.mode === "dark"
@@ -69,10 +66,7 @@ export function ViewProfile(props: { profile: User }) {
               </Grid>
               <UserReviewSummary user={props.profile} />
             </Grid>
-            <ProfileTabs
-              username={props.profile.username}
-              currentTab={page}
-            />
+            <ProfileTabs username={props.profile.username} currentTab={page} />
           </Stack>
         </Container>
 
@@ -84,7 +78,7 @@ export function ViewProfile(props: { profile: User }) {
           }}
           onSwipeRight={() => {
             if (page > 0) navigate(tabPaths[page - 1])
-            }}
+          }}
           enabled={isMobile}
         >
           <ProfileTabContent

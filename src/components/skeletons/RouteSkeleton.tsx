@@ -180,12 +180,19 @@ export function FormPageSkeleton() {
       <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
         {[...Array(5)].map((_, index) => (
           <Box key={index}>
-            <BaseSkeleton variant="text" width="30%" height={24} sx={{ mb: 1 }} />
+            <BaseSkeleton
+              variant="text"
+              width="30%"
+              height={24}
+              sx={{ mb: 1 }}
+            />
             <BaseSkeleton variant="rectangular" width="100%" height={56} />
           </Box>
         ))}
 
-        <Box sx={{ display: "flex", gap: 2, justifyContent: "flex-end", mt: 2 }}>
+        <Box
+          sx={{ display: "flex", gap: 2, justifyContent: "flex-end", mt: 2 }}
+        >
           <BaseSkeleton variant="rectangular" width={100} height={40} />
           <BaseSkeleton variant="rectangular" width={100} height={40} />
         </Box>

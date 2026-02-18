@@ -1,4 +1,4 @@
-declare module '*.webp' {
+declare module "*.webp" {
   const value: string
   export default value
 }

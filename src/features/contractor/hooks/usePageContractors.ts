@@ -23,15 +23,17 @@ export interface ContractorsQueryParams extends ContractorSearchState {
 /**
  * Page hook for Contractors page.
  * Encapsulates all data fetching logic for the contractors list page.
- * 
+ *
  * @param params - Query parameters including pagination and search filters
  * @returns Page data with loading states, errors, and refetch function
- * 
+ *
  * Requirements: 5.1, 5.2, 5.3, 5.5
  */
-export function usePageContractors(params: ContractorsQueryParams): UsePageResult<any> {
+export function usePageContractors(
+  params: ContractorsQueryParams,
+): UsePageResult<any> {
   const { language_codes, ...restParams } = params
-  
+
   const contractors = useGetContractorsQuery({
     ...restParams,
     language_codes:

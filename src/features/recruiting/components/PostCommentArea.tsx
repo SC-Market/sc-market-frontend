@@ -1,7 +1,10 @@
 import React, { useState } from "react"
 import { Box, Button, Grid, TextField } from "@mui/material"
 import { useTranslation } from "react-i18next"
-import { RecruitingPost, useRecruitingCommentOnPostMutation } from "../../../store/recruiting"
+import {
+  RecruitingPost,
+  useRecruitingCommentOnPostMutation,
+} from "../../../store/recruiting"
 import { CommentTree } from "../../../views/comments/CommentTree"
 import { Comment } from "../../../store/recruiting"
 

@@ -145,7 +145,7 @@ export function Recruiting() {
         )}
 
         {!isMobile && <RecruitingSidebar />}
-        
+
         <StandardPageLayout
           title={t("recruiting_orgs")}
           headerTitle={t("recruiting_orgs")}
@@ -155,7 +155,7 @@ export function Recruiting() {
           maxWidth="md"
         >
           <div ref={ref} />
-          
+
           <Grid item xs={12}>
             <PullToRefresh
               onRefresh={async () => {
@@ -181,13 +181,15 @@ export function Recruiting() {
                       />
                     </Grid>
                   ) : (
-                    (pageData.data?.posts?.items || []).map((item: any, index: number) => (
-                      <RecruitingPostItem
-                        post={item}
-                        key={index}
-                        index={index}
-                      />
-                    ))
+                    (pageData.data?.posts?.items || []).map(
+                      (item: any, index: number) => (
+                        <RecruitingPostItem
+                          post={item}
+                          key={index}
+                          index={index}
+                        />
+                      ),
+                    )
                   )
                 ) : (
                   [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (

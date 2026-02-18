@@ -167,16 +167,8 @@ export function ListingSkeleton({
                       gap: 0.5,
                     }}
                   >
-                    <BaseSkeleton
-                      variant="circular"
-                      width={12}
-                      height={12}
-                    />
-                    <BaseSkeleton
-                      variant="text"
-                      width={30}
-                      height={14}
-                    />
+                    <BaseSkeleton variant="circular" width={12} height={12} />
+                    <BaseSkeleton variant="text" width={30} height={14} />
                   </Box>
                 </Box>
 

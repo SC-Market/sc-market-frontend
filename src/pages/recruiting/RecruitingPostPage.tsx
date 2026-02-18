@@ -6,8 +6,10 @@ import { LazySection } from "../../components/layout/LazySection"
 import { usePageRecruitingPost } from "../../features/recruiting/hooks/usePageRecruitingPost"
 import { RecruitingPostContentSkeleton } from "../../features/recruiting/components/RecruitingPostContent.skeleton"
 
-const RecruitingPostContent = lazy(
-  () => import("../../features/recruiting/components/RecruitingPostContent").then(m => ({ default: m.RecruitingPostContent }))
+const RecruitingPostContent = lazy(() =>
+  import("../../features/recruiting/components/RecruitingPostContent").then(
+    (m) => ({ default: m.RecruitingPostContent }),
+  ),
 )
 
 export function RecruitingPostPage() {
@@ -23,7 +25,10 @@ export function RecruitingPostPage() {
           label: t("recruiting.title", "Recruiting"),
           href: "/recruiting",
         },
-        { label: pageData.data?.post.title || t("recruiting_post.page.createPost") },
+        {
+          label:
+            pageData.data?.post.title || t("recruiting_post.page.createPost"),
+        },
       ]}
       entityTitle={pageData.data?.post.title}
       isLoading={pageData.isLoading}
