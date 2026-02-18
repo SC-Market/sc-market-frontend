@@ -77,7 +77,10 @@ import { ExtendedTheme } from "../../../../hooks/styles/Theme"
 import { CURRENT_CUSTOM_ORG } from "../../../../hooks/contractor/CustomDomain"
 import { RecentListingsSkeleton } from "../../../../components/landing"
 import { getRelativeTime } from "../../../../util/time"
-import { ListingWrapper } from "../../components/listings/ListingCard"
+import {
+  LISTING_CARD_WIDTH,
+  ListingWrapper,
+} from "../../components/listings/ListingCard"
 import {
   MarketListingRating,
   BadgeDisplay,
@@ -698,27 +701,41 @@ export function ItemListings(props: {
   return (
     <>
       <div ref={ref} style={{ position: "absolute", top: 0 }} />
-      <DisplayListingsMin
-        listings={listings || []}
-        loading={isLoading || isFetching}
-        error={!!error}
-        onRetry={() => refetch()}
-        disableAds={!!(org || user)}
-      />
+      <Stack
+        spacing={1}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "8px",
+            justifyContent: "flex-start",
+            width: "fit-content",
+            maxWidth: `calc(100% - mod(100%, ${LISTING_CARD_WIDTH + 8}px))`,
+          }}
+        >
+          <DisplayListingsMin
+            listings={listings || []}
+            loading={isLoading || isFetching}
+            error={!!error}
+            onRetry={() => refetch()}
+            disableAds={!!(org || user)}
+          />
+        </Box>
 
-      <Box sx={{ width: "100%" }}>
-        <Divider light />
-      </Box>
-
-      <Box sx={{ width: "100%" }}>
-        <ListingPagination
-          count={total}
-          page={page}
-          rowsPerPage={perPage}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Box>
+        <Box sx={{
+          maxWidth: `calc(100% - mod(100%, ${LISTING_CARD_WIDTH + 8}px))`,
+        }}>
+          <Divider light />
+          <ListingPagination
+            count={total}
+            page={page}
+            rowsPerPage={perPage}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Box>
+      </Stack>
     </>
   )
 }
