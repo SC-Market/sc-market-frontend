@@ -1,12 +1,5 @@
-import { Suspense, lazy } from "react"
 import { useParams } from "react-router-dom"
-import { OrgInfoSkeleton, usePageOrg } from "../../features/contractor"
-
-const OrgInfo = lazy(() =>
-  import("../../features/contractor").then((module) => ({
-    default: module.OrgInfo,
-  })),
-)
+import { OrgInfoSkeleton, usePageOrg, OrgInfo } from "../../features/contractor"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useTranslation } from "react-i18next"
 import { BannerPageLayout } from "../../components/layout/BannerPageLayout"
@@ -37,11 +30,7 @@ export function ViewOrg() {
       skeleton={<OrgInfoSkeleton />}
       sidebarOpen={true}
     >
-      {pageData.data && (
-        <Suspense fallback={<OrgInfoSkeleton />}>
-          <OrgInfo contractor={pageData.data.contractor} />
-        </Suspense>
-      )}
+      {pageData.data && <OrgInfo contractor={pageData.data.contractor} />}
     </BannerPageLayout>
   )
 }
