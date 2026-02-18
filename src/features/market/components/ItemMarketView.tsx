@@ -14,6 +14,7 @@ import { useMarketSidebar } from ".."
 import React from "react"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
+import { LISTING_CARD_WIDTH } from "./listings/ListingCard.tsx"
 
 export function ItemMarketView() {
   const theme = useTheme<ExtendedTheme>()
@@ -45,7 +46,8 @@ export function ItemMarketView() {
                     display: "flex",
                     flexWrap: "wrap",
                     gap: "8px",
-                    justifyContent: "flex-start",
+                    justifyContent: "center",
+                    flexDirection: "flex-start",
                   }}
                 >
                   <ItemListings />
@@ -74,16 +76,7 @@ export function ItemMarketView() {
               </Paper>
 
               {/* Main content area */}
-              <Box
-                sx={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                  gap: "8px",
-                  justifyContent: "flex-start",
-                }}
-              >
-                <ItemListings />
-              </Box>
+              <ItemListings />
             </Stack>
           )}
         </Box>
