@@ -12,7 +12,7 @@ import {
 } from "../../features/chats"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useNavigate } from "react-router-dom"
-import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
+import { Page } from "../../components/metadata/Page"
 import { useTranslation } from "react-i18next"
 
 export function MessagesList() {
@@ -26,14 +26,7 @@ export function MessagesList() {
   const [creatingMessageGroup, setCreatingMessageGroup] = useState(false)
 
   return (
-    <StandardPageLayout
-      title={t("messages.title", { defaultValue: "Messages" })}
-      noFooter
-      noSidebar
-      noMobilePadding
-      noTopSpacer
-      maxWidth={false}
-    >
+    <Page title={t("messages.title", { defaultValue: "Messages" })}>
       <CurrentChatIDContext.Provider
         value={[
           null,
@@ -52,8 +45,8 @@ export function MessagesList() {
           >
             {/* On mobile, show sidebar content as page content. On desktop, show as drawer */}
             {isMobile ? (
-              <Box
-                sx={{
+              <main
+                style={{
                   flexGrow: 1,
                   overflow: "auto",
                   height: "100vh",
@@ -74,28 +67,19 @@ export function MessagesList() {
                 ) : (
                   <MessagingSidebarContent asPageContent />
                 )}
-              </Box>
+              </main>
             ) : (
-              <Box
-                sx={{
-                  display: "flex",
-                  height: "100%",
-                  width: "100%",
-                  position: "relative",
-                }}
-              >
+              <>
                 <MessagingSidebar />
-                <Box
-                  sx={{
+                <main
+                  style={{
                     flexGrow: 1,
                     overflow: "auto",
                     height: "100vh",
                     display: "flex",
                     flexDirection: "column",
                     minWidth: 0,
-                    marginLeft: messageSidebarOpen
-                      ? `${messagingDrawerWidth}px`
-                      : 0,
+                    marginLeft: messageSidebarOpen ? messagingDrawerWidth : 0,
                     transition: theme.transitions.create("marginLeft", {
                       easing: theme.transitions.easing.sharp,
                       duration: theme.transitions.duration.enteringScreen,
@@ -127,12 +111,12 @@ export function MessagesList() {
                       })}
                     </Box>
                   )}
-                </Box>
-              </Box>
+                </main>
+              </>
             )}
           </MessageGroupCreateContext.Provider>
         </MessagingSidebarContext.Provider>
       </CurrentChatIDContext.Provider>
-    </StandardPageLayout>
+    </Page>
   )
 }

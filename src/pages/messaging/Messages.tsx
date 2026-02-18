@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { Box, useMediaQuery, useTheme } from "@mui/material"
 import { useParams, useNavigate } from "react-router-dom"
-import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
 import {
   MessagesBody,
   MessagesBodyMobile,
@@ -19,12 +18,11 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { MessageThreadSkeleton } from "../../components/skeletons"
 import { EmptyMessages } from "../../components/empty-states"
 import { useTranslation } from "react-i18next"
-import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
+import { Page } from "../../components/metadata/Page"
 
 export function Messages() {
   const { chat_id } = useParams<{ chat_id: string }>()
   const navigate = useNavigate()
-  const [drawerOpen] = useDrawerOpen()
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const { t } = useTranslation()
@@ -65,14 +63,7 @@ export function Messages() {
   }, [isMobile, chat_id])
 
   return (
-    <StandardPageLayout
-      title={t("messages.title", { defaultValue: "Messages" })}
-      noFooter
-      noSidebar
-      noMobilePadding
-      noTopSpacer
-      maxWidth={false}
-    >
+    <Page title={t("messages.title", { defaultValue: "Messages" })}>
       <CurrentChatIDContext.Provider
         value={[
           chat_id || null,
@@ -91,78 +82,48 @@ export function Messages() {
           <MessageGroupCreateContext.Provider
             value={[creatingMessageGroup, setCreatingMessageGroup]}
           >
-            <Box
-              sx={{
-                display: "flex",
+            {/* On desktop, always show sidebar. On mobile, only show if no chat selected */}
+            {(!isMobile || !chat_id) && <MessagingSidebar />}
+            <main
+              style={{
+                flexGrow: 1,
+                overflow: "hidden",
                 height: "100%",
-                width: "100%",
+                display: "flex",
+                flexDirection: "column",
+                minWidth: 0,
                 position: "relative",
+                marginLeft:
+                  !isMobile && messageSidebarOpen ? messagingDrawerWidth : 0,
+                transition: isMobile
+                  ? undefined
+                  : theme.transitions.create("marginLeft", {
+                      easing: theme.transitions.easing.sharp,
+                      duration: theme.transitions.duration.enteringScreen,
+                    }),
               }}
             >
-              {/* On desktop, always show sidebar. On mobile, only show if no chat selected */}
-              {(!isMobile || !chat_id) && <MessagingSidebar />}
-              <Box
-                sx={{
-                  flexGrow: 1,
-                  overflow: "hidden",
-                  height: "100%",
-                  display: "flex",
-                  flexDirection: "column",
-                  minWidth: 0,
-                  position: "relative",
-                  marginLeft:
-                    !isMobile && messageSidebarOpen
-                      ? `${messagingDrawerWidth}px`
-                      : 0,
-                  transition: isMobile
-                    ? undefined
-                    : theme.transitions.create("marginLeft", {
-                        easing: theme.transitions.easing.sharp,
-                        duration: theme.transitions.duration.enteringScreen,
-                      }),
-                }}
-              >
-                {/* Only add spacer on desktop or when not showing MessagesBodyMobile (which has its own spacer) */}
-                {!isMobile && (
-                  <Box
-                    sx={{
-                      position: "relative",
-                      width: 0,
-                      height: { xs: 56, sm: 64 },
-                      minHeight: { xs: 56, sm: 64 },
-                    }}
-                  />
-                )}
-                {creatingMessageGroup ? (
-                  <CreateMessageGroupBody />
-                ) : chat_id ? (
-                  pageData.isLoading || pageData.isFetching ? (
-                    <MessageThreadSkeleton />
-                  ) : currentChat ? (
-                    isMobile ? (
-                      <MessagesBodyMobile />
-                    ) : (
-                      <MessagesBody />
-                    )
+              {/* Only add spacer on desktop or when not showing MessagesBodyMobile (which has its own spacer) */}
+              {!isMobile && (
+                <Box
+                  sx={{
+                    position: "relative",
+                    width: 0,
+                    height: { xs: 56, sm: 64 },
+                    minHeight: { xs: 56, sm: 64 },
+                  }}
+                />
+              )}
+              {creatingMessageGroup ? (
+                <CreateMessageGroupBody />
+              ) : chat_id ? (
+                pageData.isLoading || pageData.isFetching ? (
+                  <MessageThreadSkeleton />
+                ) : currentChat ? (
+                  isMobile ? (
+                    <MessagesBodyMobile />
                   ) : (
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        height: "100%",
-                        width: "100%",
-                      }}
-                    >
-                      <EmptyMessages
-                        isChatList={false}
-                        showCreateAction={false}
-                        title={t("emptyStates.messages.selectChat", {
-                          defaultValue: "Select a chat to start messaging",
-                        })}
-                        description={undefined}
-                      />
-                    </Box>
+                    <MessagesBody />
                   )
                 ) : (
                   <Box
@@ -183,12 +144,31 @@ export function Messages() {
                       description={undefined}
                     />
                   </Box>
-                )}
-              </Box>
-            </Box>
+                )
+              ) : (
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    height: "100%",
+                    width: "100%",
+                  }}
+                >
+                  <EmptyMessages
+                    isChatList={false}
+                    showCreateAction={false}
+                    title={t("emptyStates.messages.selectChat", {
+                      defaultValue: "Select a chat to start messaging",
+                    })}
+                    description={undefined}
+                  />
+                </Box>
+              )}
+            </main>
           </MessageGroupCreateContext.Provider>
         </MessagingSidebarContext.Provider>
       </CurrentChatIDContext.Provider>
-    </StandardPageLayout>
+    </Page>
   )
 }
