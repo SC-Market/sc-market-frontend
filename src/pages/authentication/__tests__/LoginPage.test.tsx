@@ -5,6 +5,8 @@ import { LoginPage } from "../LoginPage"
 import { BrowserRouter } from "react-router-dom"
 import { Provider } from "react-redux"
 import { configureStore } from "@reduxjs/toolkit"
+import { ThemeProvider, createTheme } from "@mui/material/styles"
+import { DrawerOpenContext } from "../../../hooks/layout/Drawer"
 
 // Mock the hooks
 vi.mock("../../../features/authentication/hooks/usePageLogin", () => ({
@@ -24,6 +26,35 @@ vi.mock("../../../store/profile", () => ({
   })),
 }))
 
+// Mock the Page component to avoid RTK Query middleware issues
+vi.mock("../../../components/metadata/Page", () => ({
+  Page: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+}))
+
+// Mock i18next
+vi.mock("react-i18next", () => ({
+  useTranslation: () => ({
+    t: (key: string, defaultValue?: string) => defaultValue || key,
+    i18n: {
+      language: "en",
+      changeLanguage: vi.fn(),
+    },
+  }),
+  Trans: ({ children }: { children: React.ReactNode }) => children,
+  initReactI18next: {
+    type: "3rdParty",
+    init: vi.fn(),
+  },
+}))
+
+// Create a real MUI theme with layoutSpacing
+const mockTheme = createTheme({
+  layoutSpacing: {
+    component: 2,
+    layout: 3,
+  },
+} as any)
+
 // Create a minimal store
 const createMockStore = () =>
   configureStore({
@@ -32,16 +63,30 @@ const createMockStore = () =>
     },
   })
 
+// Test wrapper component
+function TestWrapper({ children }: { children: React.ReactNode }) {
+  const store = createMockStore()
+  const drawerState = React.useState(false)
+
+  return (
+    <Provider store={store}>
+      <ThemeProvider theme={mockTheme}>
+        <BrowserRouter>
+          <DrawerOpenContext.Provider value={drawerState}>
+            {children}
+          </DrawerOpenContext.Provider>
+        </BrowserRouter>
+      </ThemeProvider>
+    </Provider>
+  )
+}
+
 describe("LoginPage", () => {
   it("renders the login page with FormPageLayout", () => {
-    const store = createMockStore()
-
     render(
-      <Provider store={store}>
-        <BrowserRouter>
-          <LoginPage />
-        </BrowserRouter>
-      </Provider>,
+      <TestWrapper>
+        <LoginPage />
+      </TestWrapper>,
     )
 
     // Check that the sign in title is present
@@ -49,14 +94,10 @@ describe("LoginPage", () => {
   })
 
   it("uses FormPageLayout with minimal layout configuration", () => {
-    const store = createMockStore()
-
     const { container } = render(
-      <Provider store={store}>
-        <BrowserRouter>
-          <LoginPage />
-        </BrowserRouter>
-      </Provider>,
+      <TestWrapper>
+        <LoginPage />
+      </TestWrapper>,
     )
 
     // Verify the page structure exists

@@ -123,7 +123,7 @@ export function StandardPageLayout(
             item
             container
             justifyContent="space-between"
-            spacing={theme.layoutSpacing.layout}
+            spacing={theme.layoutSpacing?.layout ?? 1}
             xs={12}
           >
             {headerTitle && (

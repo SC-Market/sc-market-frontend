@@ -2,7 +2,7 @@ import { Section } from "../../components/paper/Section"
 import { OrderStub } from "../../datatypes/Order"
 import React, { useMemo } from "react"
 import { Grid, List, ListItem, Typography } from "@mui/material"
-import { DynamicApexChart } from "../../components/charts/DynamicCharts"
+import { MuiLineChart, MuiAreaChart } from "../../components/charts/MuiCharts"
 import { useTranslation } from "react-i18next"
 import {
   useGetContractorOrderDataQuery,
@@ -91,27 +91,14 @@ export function OrderTrendFromMetrics(props: { data: ContractorOrderData }) {
           </Typography>
         </Grid>
         <Grid item xs={12}>
-          <DynamicApexChart
-            type="line"
+          <MuiLineChart
             series={[
               {
                 name: t("orderTrend.orders_daily"),
                 data: dailyOrdersData,
               },
             ]}
-            options={{
-              chart: {
-                type: "line",
-                toolbar: { show: false },
-              },
-              xaxis: {
-                type: "datetime",
-              },
-              yaxis: {
-                title: { text: t("orderTrend.orders_daily") },
-              },
-              stroke: { curve: "smooth" },
-            }}
+            height={400}
           />
         </Grid>
       </Section>
@@ -127,27 +114,14 @@ export function OrderTrendFromMetrics(props: { data: ContractorOrderData }) {
           </Typography>
         </Grid>
         <Grid item xs={12}>
-          <DynamicApexChart
-            type="line"
+          <MuiLineChart
             series={[
               {
                 name: "Value (aUEC)",
                 data: dailyValueData,
               },
             ]}
-            options={{
-              chart: {
-                type: "line",
-                toolbar: { show: false },
-              },
-              xaxis: {
-                type: "datetime",
-              },
-              yaxis: {
-                title: { text: "Value (aUEC)" },
-              },
-              stroke: { curve: "smooth" },
-            }}
+            height={400}
           />
         </Grid>
       </Section>
@@ -163,23 +137,7 @@ export function OrderTrendFromMetrics(props: { data: ContractorOrderData }) {
           </Typography>
         </Grid>
         <Grid item xs={12}>
-          <DynamicApexChart
-            type="line"
-            series={statusTrendsData}
-            options={{
-              chart: {
-                type: "line",
-                toolbar: { show: false },
-              },
-              xaxis: {
-                type: "datetime",
-              },
-              yaxis: {
-                title: { text: "Order Count" },
-              },
-              stroke: { curve: "smooth" },
-            }}
-          />
+          <MuiLineChart series={statusTrendsData} height={400} />
         </Grid>
       </Section>
     </>
@@ -243,44 +201,7 @@ export function OrderTrendFromOrders(props: { orders: TrendOrder[] }) {
     <>
       <Section xs={12} title={t("orderTrend.order_count_daily")}>
         <Grid item xs={12}>
-          {/* @ts-ignore */}
-          <DynamicApexChart
-            width={"100%"}
-            height={400}
-            type={"area"}
-            options={{
-              xaxis: {
-                type: "datetime",
-                labels: {
-                  format: "yy/MM/dd",
-                },
-              },
-              yaxis: {
-                forceNiceScale: true,
-                min: 0,
-              },
-              dataLabels: {
-                enabled: false,
-              },
-              stroke: {
-                curve: "smooth",
-              },
-              fill: {
-                type: "gradient",
-                gradient: {
-                  shadeIntensity: 1,
-                  inverseColors: false,
-                  opacityFrom: 0.45,
-                  opacityTo: 0.05,
-                  stops: [20, 100, 100, 100],
-                },
-              },
-              tooltip: {
-                x: {
-                  format: "yy/MM/dd",
-                },
-              },
-            }}
+          <MuiAreaChart
             series={[
               {
                 name: t("orderTrend.orders_daily"),
@@ -292,54 +213,18 @@ export function OrderTrendFromOrders(props: { orders: TrendOrder[] }) {
                   t("orderTrend.fulfilled"),
                   t("orderTrend.cancelled"),
                   t("orderTrend.not_started"),
-                ][i],
+                ][i]!,
                 data,
               })),
             ]}
+            height={400}
           />
         </Grid>
       </Section>
 
       <Section xs={12} title={t("orderTrend.order_count_weekly")}>
         <Grid item xs={12}>
-          {/* @ts-ignore */}
-          <DynamicApexChart
-            width={"100%"}
-            height={400}
-            type={"area"}
-            options={{
-              xaxis: {
-                type: "datetime",
-                labels: {
-                  format: "yy/MM/dd",
-                },
-              },
-              yaxis: {
-                forceNiceScale: true,
-                min: 0,
-              },
-              dataLabels: {
-                enabled: false,
-              },
-              stroke: {
-                curve: "smooth",
-              },
-              fill: {
-                type: "gradient",
-                gradient: {
-                  shadeIntensity: 1,
-                  inverseColors: false,
-                  opacityFrom: 0.45,
-                  opacityTo: 0.05,
-                  stops: [20, 100, 100, 100],
-                },
-              },
-              tooltip: {
-                x: {
-                  format: "yy/MM/dd",
-                },
-              },
-            }}
+          <MuiAreaChart
             series={[
               {
                 name: t("orderTrend.orders_weekly"),
@@ -351,54 +236,18 @@ export function OrderTrendFromOrders(props: { orders: TrendOrder[] }) {
                   t("orderTrend.fulfilled"),
                   t("orderTrend.cancelled"),
                   t("orderTrend.not_started"),
-                ][i],
+                ][i]!,
                 data,
               })),
             ]}
+            height={400}
           />
         </Grid>
       </Section>
 
       <Section xs={12} title={t("orderTrend.order_count_monthly")}>
         <Grid item xs={12}>
-          {/* @ts-ignore */}
-          <DynamicApexChart
-            width={"100%"}
-            height={400}
-            type={"area"}
-            options={{
-              xaxis: {
-                type: "datetime",
-                labels: {
-                  format: "MM/yy",
-                },
-              },
-              yaxis: {
-                forceNiceScale: true,
-                min: 0,
-              },
-              dataLabels: {
-                enabled: false,
-              },
-              stroke: {
-                curve: "smooth",
-              },
-              fill: {
-                type: "gradient",
-                gradient: {
-                  shadeIntensity: 1,
-                  inverseColors: false,
-                  opacityFrom: 0.45,
-                  opacityTo: 0.05,
-                  stops: [20, 100, 100, 100],
-                },
-              },
-              tooltip: {
-                x: {
-                  format: "MM/yy",
-                },
-              },
-            }}
+          <MuiAreaChart
             series={[
               {
                 name: t("orderTrend.orders_monthly"),
@@ -410,10 +259,11 @@ export function OrderTrendFromOrders(props: { orders: TrendOrder[] }) {
                   t("orderTrend.fulfilled"),
                   t("orderTrend.cancelled"),
                   t("orderTrend.not_started"),
-                ][i],
+                ][i]!,
                 data,
               })),
             ]}
+            height={400}
           />
         </Grid>
       </Section>
