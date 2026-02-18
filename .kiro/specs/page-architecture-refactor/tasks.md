@@ -708,14 +708,14 @@ Each task builds on previous work, ensuring the system remains functional throug
 
 ### Email Pages
 
-- [-] 33. Migrate email pages
+- [x] 33. Migrate email pages
   - [x] 33.1 Migrate EmailVerificationPage
     - Update `src/pages/email/EmailVerificationPage.tsx`
     - Use StandardPageLayout with minimal layout
     - Extract verification logic to page hook
     - _Requirements: 1.1, 1.2, 12.2_
   
-  - [-] 33.2 Migrate UnsubscribePage
+  - [x] 33.2 Migrate UnsubscribePage
     - Update `src/pages/email/UnsubscribePage.tsx`
     - Use StandardPageLayout with minimal layout
     - Extract unsubscribe logic to page hook
@@ -723,8 +723,8 @@ Each task builds on previous work, ensuring the system remains functional throug
 
 ### Home Pages
 
-- [ ] 34. Migrate home pages
-  - [ ] 34.1 Migrate LandingPage
+- [x] 34. Migrate home pages
+  - [x] 34.1 Migrate LandingPage
     - Update `src/pages/home/LandingPage.tsx`
     - Use StandardPageLayout with custom layout
     - Use LazySection for landing sections

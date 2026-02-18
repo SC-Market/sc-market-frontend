@@ -70,7 +70,7 @@ export async function prefetchCommonComponents(): Promise<void> {
 // Prefetch chart libraries (heavy dependencies)
 export async function prefetchChartLibraries(): Promise<void> {
   const prefetchPromises = [
-    prefetchModule(() => import("react-apexcharts"), "react-apexcharts"),
+    prefetchModule(() => import("@mui/x-charts"), "@mui/x-charts"),
     prefetchModule(() => import("klinecharts"), "klinecharts"),
   ]
 

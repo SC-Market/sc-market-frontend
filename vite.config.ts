@@ -386,7 +386,7 @@ export default defineConfig({
           redux: ["@reduxjs/toolkit", "react-redux"],
 
           // Chart libraries (lazy loaded only when needed)
-          "charts-apex": ["react-apexcharts", "apexcharts"],
+          "charts-mui": ["@mui/x-charts"],
           "charts-kline": ["klinecharts"],
 
           // Utility libraries

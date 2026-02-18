@@ -1,596 +1,148 @@
-import React, { useMemo, useState } from "react"
-import { Page } from "../../components/metadata/Page"
-import {
-  Avatar,
-  Box,
-  Button,
-  ButtonBase,
-  Collapse,
-  Container,
-  Divider,
-  Fade,
-  Grid,
-  Grid2,
-  Link as MaterialLink,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-  Paper,
-  Skeleton,
-  Typography,
-} from "@mui/material"
-import { Theme, useTheme } from "@mui/material/styles"
+import React, { lazy } from "react"
+import { Box, Container, Stack } from "@mui/material"
+import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import logo from "../../assets/scmarket-logo.webp"
-import recruitingCap from "../../assets/recruiting.webp"
-import manageStockCap from "../../assets/manage-stock.webp"
-import servicesCap from "../../assets/services-cap.webp"
-import { OpenLayout } from "../../components/layout/ContainerGrid"
-import { Footer } from "../../components/footer/Footer"
-import ExpandLess from "@mui/icons-material/ExpandLess"
-import ExpandMore from "@mui/icons-material/ExpandMore"
-import { MarkdownRender } from "../../components/markdown/Markdown.lazy"
-import { useGetMarketStatsQuery } from "../../features/market/api/marketApi"
-import { useSearchMarketListingsQuery } from "../../features/market/api/marketApi"
-import { DisplayListingsHorizontal } from "../../features/market/views/ItemListings"
 import { CURRENT_CUSTOM_ORG } from "../../hooks/contractor/CustomDomain"
-import { Link, Navigate } from "react-router-dom"
-import { MetricSection } from "../../views/orders/OrderMetrics"
-import CountUp from "react-countup"
-import { Stack } from "@mui/system"
-import CharLogo from "../../assets/CharHoldings_Logo.png"
-import UNNLogo from "../../assets/UNN_Traders_Logo.webp"
-import BirdIncLogo from "../../assets/birdinc.jpg"
+import { Navigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import { useGetUserProfileQuery } from "../../store/profile"
-import { LoginArea } from "../../views/authentication/LoginArea"
-import { HorizontalListingSkeleton } from "../../components/skeletons"
-import { RecentListingsSkeleton, FAQQuestion } from "../../components/landing"
+import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
+import { LazySection } from "../../components/layout/LazySection"
+import { Footer } from "../../components/footer/Footer"
+import {
+  LandingHeroSkeleton,
+  OrderStatisticsSkeleton,
+  LandingFeaturesSkeleton,
+  LandingOrgFeaturesSkeleton,
+  SupportersSectionSkeleton,
+  FAQSectionSkeleton,
+} from "../../components/landing"
+import { RecentListings } from "../../components/landing"
 
-const bg = "https://media.tenor.com/4LKXThFQuHMAAAAd/perseus-star-citizen.gif"
-
-function LandingSmallImage(props: { src: string; title: string }) {
-  const { src, title } = props
-  const theme = useTheme<ExtendedTheme>()
-  const { t } = useTranslation()
-
-  return (
-    <Stack
-      direction={"column"}
-      display={"flex"}
-      justifyContent={"center"}
-      alignItems={"center"}
-    >
-      <img
-        src={src}
-        style={{
-          width: "100%",
-          aspectRatio: "1/1",
-          border: `1px solid ${theme.palette.outline.main}`,
-          marginBottom: theme.spacing(2),
-          objectFit: "cover",
-          borderRadius: theme.spacing(theme.borderRadius.button),
-        }}
-        alt={title}
-        loading="lazy"
-      />
-      <Typography
-        variant={"h5"}
-        sx={{ fontWeight: "bold", textAlign: "center" }}
-        color={"text.secondary"}
-      >
-        {title}
-      </Typography>
-    </Stack>
-  )
-}
-
-export function RecentListings() {
-  const { data: results, isLoading } = useSearchMarketListingsQuery({
-    page: 0,
-    page_size: 8,
-    statuses: "active",
-    sale_type: "sale",
-    listing_type: "unique",
-    sort: "activity",
-    quantityAvailable: 1,
-  })
-
-  return !isLoading && results ? (
-    <DisplayListingsHorizontal listings={results.listings || []} />
-  ) : (
-    <RecentListingsSkeleton />
-  )
-}
-
-export function OrderStatistics() {
-  const { t } = useTranslation()
-  const { data: stats } = useGetMarketStatsQuery()
-  const { total_orders, total_order_value, week_orders, week_order_value } =
-    stats || {
-      total_orders: 0,
-      total_order_value: 0,
-      week_orders: 0,
-      week_order_value: 0,
-    }
-
-  const theme = useTheme<ExtendedTheme>()
-  return (
-    <Grid
-      container
-      spacing={theme.layoutSpacing.layout}
-      justifyContent={"center"}
-    >
-      <MetricSection
-        title={t("landing.totalOrders")}
-        body={<CountUp end={total_orders} separator="," duration={2} />}
-      />
-      <MetricSection
-        title={t("landing.totalOrderValue")}
-        body={
-          <Box display={"flex"}>
-            <CountUp end={total_order_value} separator="," duration={2} />
-            &nbsp;aUEC
-          </Box>
-        }
-      />
-      {+week_orders > 0 && (
-        <>
-          <MetricSection
-            title={t("landing.ordersThisWeek")}
-            body={
-              <Box display={"flex"}>
-                <CountUp end={week_orders} separator="," duration={2} />
-              </Box>
-            }
-          />
-          <MetricSection
-            title={t("landing.valueOfOrdersThisWeek")}
-            body={
-              <Box display={"flex"}>
-                <CountUp end={week_order_value} separator="," duration={2} />
-                &nbsp;aUEC
-              </Box>
-            }
-          />
-        </>
-      )}
-    </Grid>
-  )
-}
+// Lazy load content sections
+const LandingHero = lazy(() =>
+  import("../../components/landing/LandingHero").then((m) => ({
+    default: m.LandingHero,
+  })),
+)
+const OrderStatistics = lazy(() =>
+  import("../../components/landing/OrderStatistics").then((m) => ({
+    default: m.OrderStatistics,
+  })),
+)
+const LandingFeatures = lazy(() =>
+  import("../../components/landing/LandingFeatures").then((m) => ({
+    default: m.LandingFeatures,
+  })),
+)
+const LandingOrgFeatures = lazy(() =>
+  import("../../components/landing/LandingOrgFeatures").then((m) => ({
+    default: m.LandingOrgFeatures,
+  })),
+)
+const SupportersSection = lazy(() =>
+  import("../../components/landing/SupportersSection").then((m) => ({
+    default: m.SupportersSection,
+  })),
+)
+const FAQSection = lazy(() =>
+  import("../../components/landing/FAQSection").then((m) => ({
+    default: m.FAQSection,
+  })),
+)
 
 export function LandingPage() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
-  const profile = useGetUserProfileQuery()
+
+  // Handle custom org redirect
+  if (CURRENT_CUSTOM_ORG) {
+    return <Navigate to={`/contractor/${CURRENT_CUSTOM_ORG}`} />
+  }
 
   return (
-    <Page>
-      <OpenLayout
-        sidebarOpen={true}
-        style={{
-          // "& > *": { paddingBottom: 4 },
+    <StandardPageLayout
+      title={t("landing.title", "SC Market")}
+      sidebarOpen={true}
+      noFooter={true}
+      noTopSpacer={true}
+      ContainerProps={{
+        style: {
           position: "relative",
           overflowY: "scroll",
           overflowX: "hidden",
           paddingTop: 20,
           background: `radial-gradient(at 100% 0%, ${theme.palette.primary.main}80 0px, transparent 60%),radial-gradient(at 0% 0%, ${theme.palette.secondary.main}80 0px, transparent 60%)`,
-        }}
-        noFooter
-      >
-        {CURRENT_CUSTOM_ORG && (
-          <Navigate to={`/contractor/${CURRENT_CUSTOM_ORG}`} />
-        )}
-        <Stack
-          direction={"column"}
-          sx={{
-            maxWidth: "100%",
-            paddingBottom: theme.spacing(4),
-            paddingTop: theme.spacing(2),
-          }}
-        >
-          <Box
-            sx={{
-              // background: `url(${bg})`,
-              backgroundSize: "cover",
-              display: "flex",
-              justifyContent: "center",
-              backgroundPosition: "center",
-              paddingBottom: theme.spacing(8),
-            }}
-          >
-            {/* corrected central block text */}
-            <Container
-              maxWidth="lg"
-              sx={{
-                display: "flex",
-                flexDirection: { xs: "column", sm: "column", md: "row" },
-                alignItems: "center",
-                justifyContent: "center",
-                gap: theme.spacing(4),
-              }}
-            >
-              <Stack
-                justifyContent="center"
-                alignItems="center"
-                flexDirection="column"
-                sx={{
-                  width: "100%",
-                  textAlign: "center",
-                  flex: { xs: "1 1 auto", md: "0 1 auto" },
-                }}
-              >
-                <Avatar
-                  sx={{
-                    [theme.breakpoints.up("lg")]: {
-                      width: theme.spacing(32),
-                      height: theme.spacing(32),
-                    },
-                    [theme.breakpoints.down("lg")]: {
-                      width: theme.spacing(24),
-                      height: theme.spacing(24),
-                    },
-                  }}
-                  src={logo}
-                  alt={t("accessibility.scMarketLogo", "SC Market logo")}
-                />
-                <Typography color="secondary" variant="h1">
-                  <b>SC MARKET</b>
-                </Typography>
-                <Typography
-                  variant="h2"
-                  sx={{ width: "100%", textAlign: "center" }}
-                >
-                  {t("landing.subtitle")}
-                </Typography>
-              </Stack>
-              {!profile.data && (
-                <Box
-                  sx={{
-                    width: { xs: "100%", md: "auto" },
-                    maxWidth: { xs: "100%", md: 480 },
-                    flex: { xs: "1 1 auto", md: "0 1 auto" },
-                  }}
-                >
-                  <Grid
-                    container
-                    spacing={theme.layoutSpacing.layout}
-                    justifyContent="center"
-                  >
-                    <LoginArea />
-                  </Grid>
-                </Box>
-              )}
-            </Container>
-          </Box>
-          <Container>
-            <Stack
-              spacing={theme.spacing(6)}
-              alignItems={"center"}
-              justifyContent={"center"}
-              direction={"column"}
-            >
-              <OrderStatistics />
-
-              <Box
-                maxWidth={"100%"}
-                sx={{
-                  overflowX: "scroll",
-                }}
-              >
-                <RecentListings />
-              </Box>
-
-              <Grid2
-                container
-                justifyContent={"center"}
-                spacing={theme.layoutSpacing.layout * 4}
-              >
-                <Grid2 size={{ xs: 12, md: 4 }}>
-                  <Stack direction={"column"}>
-                    <Typography
-                      variant={"h4"}
-                      sx={{ fontWeight: "bold", textAlign: "center" }}
-                      color={"text.secondary"}
-                    >
-                      {t("landing.buySellItemsTitle")}
-                    </Typography>
-                    <Typography
-                      variant={"body1"}
-                      sx={{ textAlign: "left" }}
-                      color={"text.secondary"}
-                    >
-                      {t("landing.buySellItemsText")}
-                    </Typography>
-                  </Stack>
-                </Grid2>
-
-                <Grid2 size={{ xs: 12, md: 4 }}>
-                  <Stack direction={"column"}>
-                    <Typography
-                      variant={"h4"}
-                      sx={{ fontWeight: "bold", textAlign: "center" }}
-                      color={"text.secondary"}
-                    >
-                      {t("landing.tradeInBulkTitle")}
-                    </Typography>
-                    <Typography
-                      variant={"body1"}
-                      sx={{ textAlign: "left" }}
-                      color={"text.secondary"}
-                    >
-                      {t("landing.tradeInBulkText")}
-                    </Typography>
-                  </Stack>
-                </Grid2>
-
-                <Grid2 size={{ xs: 12, md: 4 }}>
-                  <Stack direction={"column"}>
-                    <Typography
-                      variant={"h4"}
-                      sx={{ fontWeight: "bold", textAlign: "center" }}
-                      color={"text.secondary"}
-                    >
-                      {t("landing.orderServicesTitle")}
-                    </Typography>
-                    <Typography
-                      variant={"body1"}
-                      sx={{ textAlign: "left" }}
-                      color={"text.secondary"}
-                    >
-                      {t("landing.orderServicesText")}
-                    </Typography>
-                  </Stack>
-                </Grid2>
-              </Grid2>
-            </Stack>
-          </Container>
-          <Container>
-            <Stack
-              direction={"column"}
-              spacing={theme.spacing(8)}
-              sx={{
-                paddingTop: theme.spacing(3),
-                paddingBottom: theme.spacing(13),
-              }}
-            >
-              <Stack justifyContent={"center"} alignItems={"center"}>
-                <Typography
-                  variant={"h3"}
-                  sx={{ fontWeight: "bold", textAlign: "center" }}
-                  color={"text.secondary"}
-                >
-                  SC Market
-                </Typography>
-                <Typography
-                  variant={"h4"}
-                  sx={{ fontWeight: "bold", textAlign: "center" }}
-                  color={"text.secondary"}
-                >
-                  <span style={{ color: theme.palette.secondary.main }}>
-                    {t("landing.forOrgs")}
-                  </span>
-                </Typography>
-              </Stack>
-
-              <Grid2
-                container
-                justifyContent={"center"}
-                spacing={theme.layoutSpacing.layout * 2}
-              >
-                <Grid2 size={{ xs: 12, md: 4 }}>
-                  <LandingSmallImage
-                    src={recruitingCap}
-                    title={t("landing.orgRecruitment")}
-                  />
-                </Grid2>
-                <Grid2 size={{ xs: 12, md: 4 }}>
-                  <LandingSmallImage
-                    src={servicesCap}
-                    title={t("landing.serviceListings")}
-                  />
-                </Grid2>
-                <Grid2 size={{ xs: 12, md: 4 }}>
-                  <LandingSmallImage
-                    src={manageStockCap}
-                    title={t("landing.stockManagement")}
-                  />
-                </Grid2>
-              </Grid2>
-
-              <Stack
-                direction={"column"}
-                spacing={theme.spacing(8)}
-                justifyContent={"center"}
-                alignItems={"center"}
-              >
-                <Typography
-                  variant={"h5"}
-                  sx={{ textAlign: "center" }}
-                  color={"text.secondary"}
-                >
-                  {t("landing.orgsHelpText")}
-                </Typography>
-                <Button
-                  variant={"outlined"}
-                  color={"secondary"}
-                  href={`https://github.com/henry232323/sc-market/wiki`}
-                >
-                  {t("landing.learnMore")}
-                </Button>
-              </Stack>
-              <SupportersSection />
-              <FAQSection />
-            </Stack>
-          </Container>
-          <Footer />
-        </Stack>
-      </OpenLayout>
-    </Page>
-  )
-}
-
-function FAQSection() {
-  const { t } = useTranslation()
-  const theme = useTheme<ExtendedTheme>()
-
-  return (
-    <Stack
-      direction={"row"}
-      sx={{ flexWrap: "wrap" }}
-      spacing={theme.layoutSpacing.compact}
+        },
+      }}
     >
-      <Typography
-        variant={"h3"}
-        color={"text.secondary"}
-        sx={{ maxWidth: "min(400px, 100%)", flexShrink: "0", marginBottom: 2 }}
-      >
-        {t("landing.faqTitle")}
-      </Typography>
-      <Paper sx={{ flexGrow: "1" }}>
-        <List
-          sx={{
-            borderRadius: theme.spacing(theme.borderRadius.topLevel),
-            padding: 0,
-          }}
-        >
-          <FAQQuestion
-            question={t("landing.faqSellItemsQ")}
-            answer={t("landing.faqSellItemsA")}
-            first
-          />
-          <FAQQuestion
-            question={t("landing.faqSafeQ")}
-            answer={t("landing.faqSafeA")}
-          />
-          <FAQQuestion
-            question={t("landing.faqListThingsQ")}
-            answer={t("landing.faqListThingsA")}
-          />
-          <FAQQuestion
-            question={t("landing.faqFeeQ")}
-            answer={t("landing.faqFeeA")}
-          />
-          <FAQQuestion
-            question={t("landing.faqRealMoneyQ")}
-            answer={t("landing.faqRealMoneyA")}
-            last
-          />
-        </List>
-      </Paper>
-    </Stack>
-  )
-}
-
-function SupportersSection() {
-  const { t } = useTranslation()
-  const theme = useTheme<ExtendedTheme>()
-  const supporters = [
-    {
-      avatar: BirdIncLogo,
-      url: "https://robertsspaceindustries.com/en/orgs/BIRDINC",
-      name: "BIRD Inc",
-    },
-    {
-      avatar: UNNLogo,
-      url: "https://joinunn.com/",
-      name: "The Unnamed",
-    },
-    {
-      avatar: CharLogo,
-      url: "https://robertsspaceindustries.com/orgs/CHAR",
-      name: "Char Holdings",
-    },
-  ]
-
-  return (
-    <Stack spacing={theme.layoutSpacing.layout} sx={{ maxWidth: "100%" }}>
-      <Typography
-        variant={"h3"}
-        sx={{ fontWeight: "bold", textAlign: "center" }}
-        color={"text.secondary"}
-      >
-        {t("landing.supportersTitle")}
-      </Typography>
-      <Typography
-        variant={"h5"}
-        sx={{ textAlign: "center" }}
-        color={"text.primary"}
-      >
-        {t("landing.supportersThanks")}
-        <MaterialLink
-          color={"secondary"}
-          target={"_blank"}
-          rel="noopener noreferrer"
-          underline={"hover"}
-          href={"https://www.patreon.com/henry232323"}
-        >
-          Patreon
-        </MaterialLink>{" "}
-        {t("landing.supporters")}
-      </Typography>
       <Stack
-        sx={{ maxWidth: "100%", overflow: "scroll", flexWrap: "wrap" }}
-        useFlexGap
-        spacing={theme.layoutSpacing.layout}
-        direction={"row"}
-        justifyContent={"center"}
-        alignItems={"center"}
+        direction={"column"}
+        sx={{
+          maxWidth: "100%",
+          paddingBottom: theme.spacing(4),
+          paddingTop: theme.spacing(2),
+        }}
       >
-        {supporters.map((supporter) => (
-          <MaterialLink
-            href={supporter.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              color: "inherit",
-              textDecoration: "none",
-            }}
-            key={supporter.name}
-          >
-            <Stack
-              spacing={theme.layoutSpacing.text}
-              direction={"column"}
-              key={supporter.name}
-              justifyContent={"center"}
-              alignItems={"center"}
-            >
-              <ButtonBase
-                sx={{
-                  borderRadius: theme.spacing(theme.borderRadius.topLevel),
-                }}
-                aria-label={t(
-                  "accessibility.viewSupporterWebsite",
-                  "Visit {{name}} website",
-                  { name: supporter.name },
-                )}
-              >
-                <img
-                  src={supporter.avatar}
-                  style={{
-                    maxHeight: 128,
-                    maxWidth: "100%",
-                    borderRadius: `${theme.spacing(theme.borderRadius.button)}px`,
-                  }}
-                  alt={t("accessibility.supporterLogo", "{{name}} logo", {
-                    name: supporter.name,
-                  })}
-                />
-              </ButtonBase>
+        {/* Hero Section */}
+        <LazySection
+          component={LandingHero}
+          skeleton={LandingHeroSkeleton}
+        />
 
-              <Typography
-                variant={"body2"}
-                align={"center"}
-                color={"text.secondary"}
-              >
-                {supporter.name}
-              </Typography>
-            </Stack>
-          </MaterialLink>
-        ))}
+        <Container>
+          <Stack
+            spacing={theme.spacing(6)}
+            alignItems={"center"}
+            justifyContent={"center"}
+            direction={"column"}
+          >
+            {/* Order Statistics */}
+            <LazySection
+              component={OrderStatistics}
+              skeleton={OrderStatisticsSkeleton}
+            />
+
+            {/* Recent Listings */}
+            <Box
+              maxWidth={"100%"}
+              sx={{
+                overflowX: "scroll",
+              }}
+            >
+              <RecentListings />
+            </Box>
+
+            {/* Features Section */}
+            <LazySection
+              component={LandingFeatures}
+              skeleton={LandingFeaturesSkeleton}
+            />
+          </Stack>
+        </Container>
+
+        <Container>
+          {/* Org Features Section */}
+          <LazySection
+            component={LandingOrgFeatures}
+            skeleton={LandingOrgFeaturesSkeleton}
+          />
+
+          {/* Supporters Section */}
+          <LazySection
+            component={SupportersSection}
+            skeleton={SupportersSectionSkeleton}
+          />
+
+          {/* FAQ Section */}
+          <LazySection
+            component={FAQSection}
+            skeleton={FAQSectionSkeleton}
+          />
+        </Container>
+
+        <Footer />
       </Stack>
-    </Stack>
+    </StandardPageLayout>
   )
 }
 

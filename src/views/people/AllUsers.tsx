@@ -36,7 +36,7 @@ import {
   useGetActivityAdminQuery,
   useGetMembershipAnalyticsQuery,
 } from "../../store/admin"
-import { DynamicApexChart } from "../../components/charts/DynamicCharts"
+import { MuiAreaChart } from "../../components/charts/MuiCharts"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -355,145 +355,49 @@ export function AdminDailyActivity() {
     <>
       <Section xs={12} title={t("adminUsers.daily_activity")}>
         <Grid item xs={12}>
-          <DynamicApexChart
-            width={"100%"}
-            height={400}
-            type={"area"}
-            options={{
-              xaxis: {
-                type: "datetime",
-                // categories: data,
-                // labels: {
-                //     format: 'dd/MM',
-                // }
-              },
-              dataLabels: {
-                enabled: false,
-              },
-              stroke: {
-                curve: "smooth",
-              },
-              fill: {
-                type: "gradient",
-                gradient: {
-                  shadeIntensity: 1,
-                  inverseColors: false,
-                  opacityFrom: 0.45,
-                  opacityTo: 0.05,
-                  stops: [20, 100, 100, 100],
-                },
-              },
-              tooltip: {
-                x: {
-                  format: "dd/MM/yy",
-                },
-              },
-            }}
+          <MuiAreaChart
             series={[
               {
                 name: t("adminUsers.active_users"),
-                data: (data?.daily || []).map((u, i) => [
-                  +new Date(u.date),
-                  u.count,
-                ]),
+                data: (data?.daily || []).map((u) => ({
+                  x: new Date(u.date).toISOString(),
+                  y: u.count,
+                })),
               },
             ]}
+            height={400}
           />
         </Grid>
       </Section>
       <Section xs={12} title={t("adminUsers.weekly_activity")}>
         <Grid item xs={12}>
-          <DynamicApexChart
-            width={"100%"}
-            height={400}
-            type={"area"}
-            options={{
-              xaxis: {
-                type: "datetime",
-                // categories: data,
-                // labels: {
-                //     format: 'dd/MM',
-                // }
-              },
-              dataLabels: {
-                enabled: false,
-              },
-              stroke: {
-                curve: "smooth",
-              },
-              fill: {
-                type: "gradient",
-                gradient: {
-                  shadeIntensity: 1,
-                  inverseColors: false,
-                  opacityFrom: 0.45,
-                  opacityTo: 0.05,
-                  stops: [20, 100, 100, 100],
-                },
-              },
-              tooltip: {
-                x: {
-                  format: "dd/MM/yy",
-                },
-              },
-            }}
+          <MuiAreaChart
             series={[
               {
                 name: t("adminUsers.active_users"),
-                data: (data?.weekly || []).map((u, i) => [
-                  +new Date(u.date),
-                  u.count,
-                ]),
+                data: (data?.weekly || []).map((u) => ({
+                  x: new Date(u.date).toISOString(),
+                  y: u.count,
+                })),
               },
             ]}
+            height={400}
           />
         </Grid>
       </Section>
       <Section xs={12} title={t("adminUsers.monthly_activity")}>
         <Grid item xs={12}>
-          <DynamicApexChart
-            width={"100%"}
-            height={400}
-            type={"area"}
-            options={{
-              xaxis: {
-                type: "datetime",
-                // categories: data,
-                // labels: {
-                //     format: 'dd/MM',
-                // }
-              },
-              dataLabels: {
-                enabled: false,
-              },
-              stroke: {
-                curve: "smooth",
-              },
-              fill: {
-                type: "gradient",
-                gradient: {
-                  shadeIntensity: 1,
-                  inverseColors: false,
-                  opacityFrom: 0.45,
-                  opacityTo: 0.05,
-                  stops: [20, 100, 100, 100],
-                },
-              },
-              tooltip: {
-                x: {
-                  format: "dd/MM/yy",
-                },
-              },
-            }}
+          <MuiAreaChart
             series={[
               {
                 name: t("adminUsers.active_users"),
-                data: (data?.monthly || []).map((u, i) => [
-                  +new Date(u.date),
-                  u.count,
-                ]),
+                data: (data?.monthly || []).map((u) => ({
+                  x: new Date(u.date).toISOString(),
+                  y: u.count,
+                })),
               },
             ]}
+            height={400}
           />
         </Grid>
       </Section>
@@ -581,62 +485,31 @@ export function AdminMembershipAnalytics() {
 
       {/* Daily Membership Chart */}
       <Grid item xs={12}>
-        <DynamicApexChart
-          width={"100%"}
-          height={400}
-          type={"area"}
-          options={{
-            xaxis: {
-              type: "datetime",
-            },
-            dataLabels: {
-              enabled: false,
-            },
-            stroke: {
-              curve: "smooth",
-            },
-            fill: {
-              type: "gradient",
-              gradient: {
-                shadeIntensity: 1,
-                inverseColors: false,
-                opacityFrom: 0.45,
-                opacityTo: 0.05,
-                stops: [20, 100, 100, 100],
-              },
-            },
-            tooltip: {
-              x: {
-                format: "dd/MM/yy",
-              },
-            },
-            legend: {
-              position: "top",
-            },
-          }}
+        <MuiAreaChart
           series={[
             {
               name: "Total Members",
-              data: data.daily_totals.map((u) => [
-                +new Date(u.date),
-                parseInt(u.cumulative_members),
-              ]),
+              data: data.daily_totals.map((u) => ({
+                x: new Date(u.date).toISOString(),
+                y: parseInt(u.cumulative_members),
+              })),
             },
             {
               name: "RSI Verified",
-              data: data.daily_totals.map((u) => [
-                +new Date(u.date),
-                parseInt(u.cumulative_members_rsi_verified),
-              ]),
+              data: data.daily_totals.map((u) => ({
+                x: new Date(u.date).toISOString(),
+                y: parseInt(u.cumulative_members_rsi_verified),
+              })),
             },
             {
               name: "New Members",
-              data: data.daily_totals.map((u) => [
-                +new Date(u.date),
-                parseInt(u.new_members),
-              ]),
+              data: data.daily_totals.map((u) => ({
+                x: new Date(u.date).toISOString(),
+                y: parseInt(u.new_members),
+              })),
             },
           ]}
+          height={400}
         />
       </Grid>
     </Section>

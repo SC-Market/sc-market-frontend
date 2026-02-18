@@ -34,7 +34,7 @@ const packageJson = JSON.parse(fs.readFileSync("package.json", "utf8"))
 const heavyDependencies = [
   "moment",
   "lodash",
-  "apexcharts",
+  "@mui/x-charts",
   "klinecharts",
   "react-player",
   "react-youtube",
@@ -43,7 +43,7 @@ const heavyDependencies = [
 const optimizationSuggestions = {
   moment: "Consider using date-fns or dayjs for smaller bundle size",
   lodash: "Already using tree-shaking imports - good!",
-  apexcharts: "Consider lazy loading for chart components",
+  "@mui/x-charts": "Consider lazy loading for chart components",
   klinecharts: "Consider lazy loading for chart components",
   "react-player": "Consider lazy loading for media components",
   "react-youtube": "Consider lazy loading for media components",

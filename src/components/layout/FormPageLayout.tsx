@@ -38,7 +38,7 @@ export function FormPageLayout(
 
   // Build the form header with back button
   const formHeader = (
-    <Grid container spacing={theme.layoutSpacing.layout} alignItems="center">
+    <Grid container spacing={theme.layoutSpacing?.layout ?? 1} alignItems="center">
       {backButton && (
         <Grid item>
           <IconButton
@@ -61,7 +61,7 @@ export function FormPageLayout(
 
   // Build form actions
   const formActions = (submitButton || cancelButton) && (
-    <Grid container spacing={theme.layoutSpacing.component} justifyContent="flex-end">
+    <Grid container spacing={theme.layoutSpacing?.component ?? 1.5} justifyContent="flex-end">
       {cancelButton && (
         <Grid item>
           {cancelButton}
