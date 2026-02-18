@@ -6,7 +6,15 @@
  */
 
 import React, { useState } from "react"
-import { Box, Grid, Paper, Tabs, Button, useMediaQuery, Tab } from "@mui/material"
+import {
+  Box,
+  Grid,
+  Paper,
+  Tabs,
+  Button,
+  useMediaQuery,
+  Tab,
+} from "@mui/material"
 import { useNavigate, useLocation } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
@@ -73,9 +81,7 @@ export function ManageStockPage() {
               </Button>
             )}
             <Tabs value={currentTab} onChange={handleTabChange}>
-              <Tab
-                label={t("sidebar.manage_listings", "Manage Listings")}
-              />
+              <Tab label={t("sidebar.manage_listings", "Manage Listings")} />
               <Tab label={t("sidebar.manage_stock", "Manage Stock")} />
             </Tabs>
           </Box>
