@@ -51,6 +51,7 @@ export function DetailPageLayout(props: DetailPageLayoutProps): ReactElement {
       spacing={theme.layoutSpacing.layout}
       alignItems="center"
       justifyContent="space-between"
+      xs={12}
     >
       {backButton && (
         <Grid item>

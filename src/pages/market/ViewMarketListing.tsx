@@ -41,7 +41,7 @@ export function ViewMarketListing() {
         },
       ]}
       entityTitle={pageData.data?.listing.details?.title}
-      headerActions={
+      entityActions={
         <Link
           to="/market/cart"
           style={{ color: "inherit", textDecoration: "none" }}
