@@ -734,7 +734,7 @@ Each task builds on previous work, ensuring the system remains functional throug
 ### Widget Pages
 
 - [ ] 35. Migrate widget pages
-  - [ ] 35.1 Migrate OrdersWidget page
+  - [x] 35.1 Migrate OrdersWidget page
     - Update `src/pages/widget/OrdersWidget.tsx`
     - Use StandardPageLayout with minimal layout
     - Extract data fetching to page hook

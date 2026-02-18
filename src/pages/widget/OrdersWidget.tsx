@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import { Box, Typography, CircularProgress, ThemeProvider } from "@mui/material"
+import { Box, Typography, ThemeProvider } from "@mui/material"
 import { useGetUserOrderDataQuery } from "../../store/orders"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -7,13 +7,12 @@ import { Link } from "react-router-dom"
 import { getRelativeTime } from "../../util/time"
 import { HookProvider } from "../../hooks/HookProvider"
 import { lightTheme } from "../../hooks/styles/Theme"
+import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 
 /**
  * Widget view for recent orders
  * This is a simplified, standalone view designed for PWA widgets
  * Uses existing backend API and frontend components
- *
- * This component is wrapped in HookProvider and ThemeProvider to work standalone
  */
 function OrdersWidgetContent() {
   const theme = useTheme<ExtendedTheme>()
@@ -32,12 +31,6 @@ function OrdersWidgetContent() {
 
   // Widget-specific styling - minimal, focused layout
   const widgetStyles = {
-    container: {
-      padding: theme.spacing(2),
-      backgroundColor: theme.palette.background.default,
-      minHeight: "100vh",
-      color: theme.palette.text.primary,
-    },
     header: {
       display: "flex",
       justifyContent: "space-between",
@@ -104,38 +97,19 @@ function OrdersWidgetContent() {
     }).format(numCost)
   }
 
-  if (isLoading) {
-    return (
-      <Box sx={widgetStyles.container}>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            minHeight: "200px",
-          }}
-        >
-          <CircularProgress />
-        </Box>
-      </Box>
-    )
-  }
-
-  if (error) {
-    return (
-      <Box sx={widgetStyles.container}>
-        <Typography color="error">
-          Failed to load orders. Please try again.
-        </Typography>
-      </Box>
-    )
-  }
-
   const recentOrders = data?.recent_orders || []
   const maxOrders = 5
 
   return (
-    <Box sx={widgetStyles.container}>
+    <StandardPageLayout
+      title="Recent Orders"
+      noFooter
+      noSidebar
+      noMobilePadding
+      maxWidth="sm"
+      isLoading={isLoading}
+      error={error}
+    >
       <Box sx={widgetStyles.header}>
         <Typography variant="h6" fontWeight={600}>
           Recent Orders
@@ -187,13 +161,15 @@ function OrdersWidgetContent() {
           ))}
         </Box>
       )}
-    </Box>
+    </StandardPageLayout>
   )
 }
 
 /**
  * Standalone widget component with providers
  * Can be used in PWA widgets or embedded views
+ *
+ * This component is wrapped in HookProvider and ThemeProvider to work standalone
  */
 export function OrdersWidget() {
   return (
