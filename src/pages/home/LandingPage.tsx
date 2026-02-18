@@ -64,7 +64,6 @@ export function LandingPage() {
       title={t("landing.title", "SC Market")}
       sidebarOpen={true}
       noFooter={true}
-      noTopSpacer={true}
       maxWidth={false}
       ContainerProps={{
         style: {
