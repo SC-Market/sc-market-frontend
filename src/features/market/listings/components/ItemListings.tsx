@@ -334,9 +334,7 @@ export function DisplayListings(props: {
 
   return (
     <React.Fragment>
-      <Grid item xs={12}>
-        <div ref={ref} />
-      </Grid>
+      <div ref={ref} style={{ position: 'absolute', top: 0 }} />
 
       {loading
         ? new Array(perPage)
@@ -563,9 +561,7 @@ export function DisplayBuyOrderListings(props: {
 
   return (
     <>
-      <Grid item xs={12}>
-        <div ref={ref} />
-      </Grid>
+      <div ref={ref} style={{ position: 'absolute', top: 0 }} />
 
       {props.loading
         ? new Array(perPage)
@@ -696,9 +692,7 @@ export function ItemListings(props: {
 
   return (
     <>
-      <Grid item xs={12}>
-        <div ref={ref} />
-      </Grid>
+      <div ref={ref} style={{ position: 'absolute', top: 0 }} />
       <DisplayListingsMin
         listings={listings || []}
         loading={isLoading || isFetching}
@@ -807,9 +801,7 @@ export function BulkListingsRefactor(props: {
 
   return (
     <>
-      <Grid item xs={12}>
-        <div ref={ref} />
-      </Grid>
+      <div ref={ref} style={{ position: 'absolute', top: 0 }} />
       <DisplayListingsMin
         listings={listings || []}
         loading={isLoading || isFetching}
@@ -1046,9 +1038,7 @@ export function MyItemListings(props: {
 
   return (
     <>
-      <Grid item xs={12}>
-        <div ref={ref} />
-      </Grid>
+      <div ref={ref} style={{ position: 'absolute', top: 0 }} />
       <DisplayListingsMin
         listings={convertedListings}
         loading={isLoading || isFetching}

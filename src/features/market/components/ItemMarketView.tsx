@@ -45,6 +45,7 @@ export function ItemMarketView() {
                     display: "flex",
                     flexWrap: "wrap",
                     gap: "8px",
+                    justifyContent: "flex-start",
                   }}
                 >
                   <ItemListings />
@@ -77,6 +78,7 @@ export function ItemMarketView() {
                   display: "flex",
                   flexWrap: "wrap",
                   gap: "8px",
+                  justifyContent: "flex-start",
                 }}
               >
                 <ItemListings />
