@@ -1,17 +1,19 @@
 import React from "react"
-import { Page } from "../../components/metadata/Page"
-import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import { useTranslation } from "react-i18next"
+import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { AdminNotificationTestView } from "../../views/admin/AdminNotificationTestView"
 
 export function AdminNotificationTest() {
   const { t } = useTranslation()
 
   return (
-    <Page title={t("admin.notificationTest", "Notification Test")}>
-      <ContainerGrid maxWidth={"xl"} sidebarOpen={true}>
-        <AdminNotificationTestView />
-      </ContainerGrid>
-    </Page>
+    <StandardPageLayout
+      title={t("admin.notificationTest", "Notification Test")}
+      headerTitle={t("admin.notificationTest", "Notification Test")}
+      sidebarOpen={true}
+      maxWidth="xl"
+    >
+      <AdminNotificationTestView />
+    </StandardPageLayout>
   )
 }

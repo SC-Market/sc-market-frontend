@@ -610,8 +610,8 @@ Each task builds on previous work, ensuring the system remains functional throug
 
 ### Money Pages
 
-- [-] 29. Migrate money pages
-  - [-] 29.1 Migrate SendMoney page
+- [x] 29. Migrate money pages
+  - [x] 29.1 Migrate SendMoney page
     - Update `src/pages/money/SendMoney.tsx`
     - Use FormPageLayout
     - Extract form logic to page hook
@@ -619,8 +619,8 @@ Each task builds on previous work, ensuring the system remains functional throug
 
 ### Notifications Pages
 
-- [ ] 30. Migrate notifications pages
-  - [ ] 30.1 Migrate NotificationsPage
+- [x] 30. Migrate notifications pages
+  - [x] 30.1 Migrate NotificationsPage
     - Update `src/pages/notifications/NotificationsPage.tsx`
     - Use StandardPageLayout
     - Extract data fetching to page hook
@@ -628,57 +628,57 @@ Each task builds on previous work, ensuring the system remains functional throug
 
 ### Admin Pages
 
-- [ ] 31. Migrate admin pages
-  - [ ] 31.1 Migrate AllMarketListings page
+- [x] 31. Migrate admin pages
+  - [x] 31.1 Migrate AllMarketListings page
     - Update `src/pages/admin/AllMarketListings.tsx`
     - Use StandardPageLayout
     - Extract data fetching to page hook
     - Use LazySection for listing sections
     - _Requirements: 1.1, 1.2, 1.3, 12.2_
   
-  - [ ] 31.2 Migrate AdminAlerts page
+  - [x] 31.2 Migrate AdminAlerts page
     - Update `src/pages/admin/AdminAlerts.tsx`
     - Use StandardPageLayout
     - Extract data fetching to page hook
     - _Requirements: 1.1, 1.2, 12.2_
   
-  - [ ] 31.3 Migrate AdminAttributeDefinitions page
+  - [x] 31.3 Migrate AdminAttributeDefinitions page
     - Update `src/pages/admin/AdminAttributeDefinitions.tsx`
     - Use StandardPageLayout
     - Extract data fetching to page hook
     - _Requirements: 1.1, 1.2, 12.2_
   
-  - [ ] 31.4 Migrate AdminAuditLogs page
+  - [x] 31.4 Migrate AdminAuditLogs page
     - Update `src/pages/admin/AdminAuditLogs.tsx`
     - Use StandardPageLayout
     - Extract data fetching to page hook
     - _Requirements: 1.1, 1.2, 12.2_
   
-  - [ ] 31.5 Migrate AdminGameItemAttributes page
+  - [x] 31.5 Migrate AdminGameItemAttributes page
     - Update `src/pages/admin/AdminGameItemAttributes.tsx`
     - Use StandardPageLayout
     - Extract data fetching to page hook
     - _Requirements: 1.1, 1.2, 12.2_
   
-  - [ ] 31.6 Migrate AdminImportMonitoring page
+  - [x] 31.6 Migrate AdminImportMonitoring page
     - Update `src/pages/admin/AdminImportMonitoring.tsx`
     - Use StandardPageLayout
     - Extract data fetching to page hook
     - _Requirements: 1.1, 1.2, 12.2_
   
-  - [ ] 31.7 Migrate AdminModeration page
+  - [x] 31.7 Migrate AdminModeration page
     - Update `src/pages/admin/AdminModeration.tsx`
     - Use StandardPageLayout
     - Extract data fetching to page hook
     - _Requirements: 1.1, 1.2, 12.2_
   
-  - [ ] 31.8 Migrate AdminNotificationTest page
+  - [x] 31.8 Migrate AdminNotificationTest page
     - Update `src/pages/admin/AdminNotificationTest.tsx`
     - Use StandardPageLayout
     - Extract logic to page hook
     - _Requirements: 1.1, 1.2, 12.2_
   
-  - [ ] 31.9 Migrate AdminOrderStats page
+  - [x] 31.9 Migrate AdminOrderStats page
     - Update `src/pages/admin/AdminOrderStats.tsx`
     - Use StandardPageLayout
     - Extract data fetching to page hook
@@ -687,20 +687,20 @@ Each task builds on previous work, ensuring the system remains functional throug
 
 ### Authentication Pages
 
-- [ ] 32. Migrate authentication pages
-  - [ ] 32.1 Migrate LoginPage
+- [x] 32. Migrate authentication pages
+  - [x] 32.1 Migrate LoginPage
     - Update `src/pages/authentication/LoginPage.tsx`
     - Use FormPageLayout with minimal layout
     - Extract auth logic to page hook
     - _Requirements: 1.1, 1.2, 2.6, 12.2_
   
-  - [ ] 32.2 Migrate SignUpPage
+  - [x] 32.2 Migrate SignUpPage
     - Update `src/pages/authentication/SignUpPage.tsx`
     - Use FormPageLayout with minimal layout
     - Extract auth logic to page hook
     - _Requirements: 1.1, 1.2, 2.6, 12.2_
   
-  - [ ] 32.3 Migrate AuthenticateRSI page
+  - [x] 32.3 Migrate AuthenticateRSI page
     - Update `src/pages/authentication/AuthenticateRSI.tsx`
     - Use StandardPageLayout with minimal layout
     - Extract auth logic to page hook
@@ -708,14 +708,14 @@ Each task builds on previous work, ensuring the system remains functional throug
 
 ### Email Pages
 
-- [ ] 33. Migrate email pages
-  - [ ] 33.1 Migrate EmailVerificationPage
+- [-] 33. Migrate email pages
+  - [x] 33.1 Migrate EmailVerificationPage
     - Update `src/pages/email/EmailVerificationPage.tsx`
     - Use StandardPageLayout with minimal layout
     - Extract verification logic to page hook
     - _Requirements: 1.1, 1.2, 12.2_
   
-  - [ ] 33.2 Migrate UnsubscribePage
+  - [-] 33.2 Migrate UnsubscribePage
     - Update `src/pages/email/UnsubscribePage.tsx`
     - Use StandardPageLayout with minimal layout
     - Extract unsubscribe logic to page hook
