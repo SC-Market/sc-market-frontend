@@ -55,6 +55,7 @@ export function ItemMarketView() {
           ) : (
             <Stack
               direction="row"
+              justifyContent="center"
               spacing={theme.layoutSpacing.layout}
               sx={{ width: "100%", maxWidth: "xxl" }}
             >
