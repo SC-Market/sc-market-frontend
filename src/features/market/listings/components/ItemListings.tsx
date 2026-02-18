@@ -693,6 +693,7 @@ export function ItemListings(props: {
   return (
     <>
       <div ref={ref} style={{ position: 'absolute', top: 0 }} />
+      
       <DisplayListingsMin
         listings={listings || []}
         loading={isLoading || isFetching}
@@ -701,11 +702,8 @@ export function ItemListings(props: {
         disableAds={!!(org || user)}
       />
 
-      <Box sx={{ width: "100%" }}>
+      <Box sx={{ width: "100%", mt: 2 }}>
         <Divider light />
-      </Box>
-
-      <Box sx={{ width: "100%" }}>
         <ListingPagination
           count={total}
           page={page}
@@ -810,11 +808,8 @@ export function BulkListingsRefactor(props: {
         disableAds={!!(org || user)}
       />
 
-      <Grid item xs={12}>
+      <Box sx={{ width: "100%", mt: 2 }}>
         <Divider light />
-      </Grid>
-
-      <Grid item xs={12}>
         <ListingPagination
           count={total}
           page={page}
@@ -822,7 +817,7 @@ export function BulkListingsRefactor(props: {
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
-      </Grid>
+      </Box>
     </>
   )
 }
@@ -1044,11 +1039,8 @@ export function MyItemListings(props: {
         loading={isLoading || isFetching}
       />
 
-      <Grid item xs={12}>
+      <Box sx={{ width: "100%", mt: 2 }}>
         <Divider light />
-      </Grid>
-
-      <Grid item xs={12}>
         <ListingPagination
           count={searchResults?.total || 0}
           page={page}
@@ -1056,7 +1048,7 @@ export function MyItemListings(props: {
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
-      </Grid>
+      </Box>
     </>
   )
 }
