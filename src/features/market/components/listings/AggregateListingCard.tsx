@@ -46,9 +46,8 @@ export function AggregateListingBase(props: {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const { minimum_price, photo, quantity_available, title } = aggregate
 
-  const cardHeight = isMobile ? 300 : 400
-  const mediaHeight =
-    theme.palette.mode === "dark" ? "100%" : isMobile ? 150 : 244
+  const cardHeight = 300
+  const mediaHeight = theme.palette.mode === "dark" ? "100%" : 150
 
   const contentSx =
     theme.palette.mode === "dark"
