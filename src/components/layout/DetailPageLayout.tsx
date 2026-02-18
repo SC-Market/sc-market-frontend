@@ -51,7 +51,6 @@ export function DetailPageLayout(props: DetailPageLayoutProps): ReactElement {
       spacing={theme.layoutSpacing.layout}
       alignItems="center"
       justifyContent="space-between"
-      xs={12}
     >
       {backButton && (
         <Grid item>
@@ -65,7 +64,7 @@ export function DetailPageLayout(props: DetailPageLayoutProps): ReactElement {
         </Grid>
       )}
 
-      <Grid item xs style={{ minWidth: 0 }}>
+      <Grid item xs={12} sm style={{ minWidth: 0 }}>
         {entityTitle && (
           <div>
             <div style={{ fontSize: "1.5rem", fontWeight: 600 }}>
@@ -91,7 +90,7 @@ export function DetailPageLayout(props: DetailPageLayoutProps): ReactElement {
           item
           xs={12}
           sm="auto"
-          sx={{ display: "flex", justifyContent: "flex-end", width: "100%" }}
+          sx={{ display: "flex", justifyContent: { xs: "stretch", sm: "flex-end" } }}
         >
           {entityActions}
         </Grid>
