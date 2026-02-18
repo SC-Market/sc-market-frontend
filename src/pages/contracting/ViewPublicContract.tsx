@@ -29,11 +29,7 @@ export function ViewPublicContractBody(props: { contract: PublicContract }) {
   return (
     <>
       <ContractDetailsArea contract={contract} />
-      {profile && (
-        <Grid item xs={12}>
-          <ContractOfferForm contract={contract} />
-        </Grid>
-      )}
+      {profile && <ContractOfferForm contract={contract} />}
     </>
   )
 }
