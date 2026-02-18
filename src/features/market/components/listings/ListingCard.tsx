@@ -790,8 +790,8 @@ export function ListingWrapper({ children }: { children: React.ReactNode }) {
     <Box
       sx={{
         width: { 
-          xs: "calc(50% - 4px)", // Mobile: 2 columns
-          sm: "calc(50% - 4px)", // Small: 2 columns
+          xs: "calc(50% - 4px)", // Mobile: 2 columns with 8px gap
+          sm: "calc(50% - 4px)", // Small: 2 columns with 8px gap
           md: 200,               // Desktop: Fixed width
         },
         flexShrink: 0,
