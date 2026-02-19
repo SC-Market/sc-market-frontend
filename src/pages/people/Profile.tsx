@@ -1,7 +1,8 @@
-import React, { lazy, Suspense } from "react"
+import React, { lazy } from "react"
 import { useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { BannerPageLayout } from "../../components/layout/BannerPageLayout"
+import { LazySection } from "../../components/layout/LazySection"
 import { ProfileSkeleton } from "../../features/profile/components/ProfileSkeleton"
 import { usePageUserProfile } from "../../features/profile/hooks/usePageUserProfile"
 
@@ -33,9 +34,11 @@ export function Profile() {
       sidebarOpen={true}
     >
       {pageData.data && (
-        <Suspense fallback={<ProfileSkeleton />}>
-          <ViewProfile profile={pageData.data.user} />
-        </Suspense>
+        <LazySection
+          component={ViewProfile}
+          componentProps={{ profile: pageData.data.user }}
+          skeleton={ProfileSkeleton}
+        />
       )}
     </BannerPageLayout>
   )

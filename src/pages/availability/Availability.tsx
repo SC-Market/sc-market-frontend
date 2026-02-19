@@ -1,13 +1,20 @@
-import React, { useCallback, useMemo } from "react"
+import React, { useCallback, useMemo, lazy } from "react"
 import { Grid, Skeleton } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
-import { AvailabilitySelector } from "../../components/time/AvailabilitySelector"
+import { LazySection } from "../../components/layout/LazySection"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useProfileUpdateAvailabilityMutation } from "../../store/profile"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { convertAvailability } from "../../util/availability"
 import { usePageAvailability } from "../../features/availability/hooks/usePageAvailability"
+
+// Lazy load AvailabilitySelector
+const AvailabilitySelector = lazy(() =>
+  import("../../components/time/AvailabilitySelector").then((module) => ({
+    default: module.AvailabilitySelector,
+  })),
+)
 
 interface Span {
   start: number
@@ -92,9 +99,13 @@ export function Availability() {
       maxWidth="lg"
     >
       {pageData.data && (
-        <AvailabilitySelector
-          onSave={saveCallback}
-          initialSelections={initial}
+        <LazySection
+          component={AvailabilitySelector}
+          componentProps={{
+            onSave: saveCallback,
+            initialSelections: initial,
+          }}
+          skeleton={() => skeleton}
         />
       )}
     </StandardPageLayout>
