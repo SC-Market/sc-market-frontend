@@ -1,8 +1,16 @@
 import { useParams } from "react-router-dom"
-import { OrgInfoSkeleton, usePageOrg, OrgInfo } from "../../features/contractor"
+import { lazy, Suspense } from "react"
+import { OrgInfoSkeleton, usePageOrg } from "../../features/contractor"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useTranslation } from "react-i18next"
 import { BannerPageLayout } from "../../components/layout/BannerPageLayout"
+
+// Lazy load OrgInfo component
+const OrgInfo = lazy(() =>
+  import("../../features/contractor").then((module) => ({
+    default: module.OrgInfo,
+  })),
+)
 
 export function ViewOrg() {
   const { id } = useParams<{ id: string }>()
