@@ -41,6 +41,7 @@ export function ContainerGrid(
     noSidebar,
     GridProps,
     noMobilePadding,
+    noTopSpacer,
     ...containerProps
   } = props
 

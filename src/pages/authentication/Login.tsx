@@ -21,7 +21,11 @@ export function Login() {
 
   return (
     <Page title={t("login.title", "Login")}>
-      <ContainerGrid maxWidth={"xl"} sidebarOpen={true}>
+      <ContainerGrid
+        maxWidth={"xl"}
+        sidebarOpen={true}
+        sx={{ paddingTop: 2 }}
+      >
         {!profile.isLoading && !profile.error && <Navigate to={"/dashboard"} />}
         <Grid
           item

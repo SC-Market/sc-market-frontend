@@ -1,4 +1,4 @@
-import React, { lazy, Suspense } from "react"
+import React from "react"
 import { CURRENT_CUSTOM_ORG } from "../../hooks/contractor/CustomDomain"
 import { Navigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
@@ -6,48 +6,16 @@ import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { Footer } from "../../components/footer/Footer"
 import { LandingPageLayout } from "../../components/landing/LandingPageLayout"
 import {
-  LandingHeroSkeleton,
-  OrderStatisticsSkeleton,
-  LandingFeaturesSkeleton,
-  LandingOrgFeaturesSkeleton,
-  SupportersSectionSkeleton,
-  FAQSectionSkeleton,
+  LandingHero,
+  OrderStatistics,
+  LandingFeatures,
+  LandingOrgFeatures,
+  SupportersSection,
+  FAQSection,
   RecentListings,
 } from "../../components/landing"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-
-// Lazy load content sections
-const LandingHero = lazy(() =>
-  import("../../components/landing/LandingHero").then((m) => ({
-    default: m.LandingHero,
-  })),
-)
-const OrderStatistics = lazy(() =>
-  import("../../components/landing/OrderStatistics").then((m) => ({
-    default: m.OrderStatistics,
-  })),
-)
-const LandingFeatures = lazy(() =>
-  import("../../components/landing/LandingFeatures").then((m) => ({
-    default: m.LandingFeatures,
-  })),
-)
-const LandingOrgFeatures = lazy(() =>
-  import("../../components/landing/LandingOrgFeatures").then((m) => ({
-    default: m.LandingOrgFeatures,
-  })),
-)
-const SupportersSection = lazy(() =>
-  import("../../components/landing/SupportersSection").then((m) => ({
-    default: m.SupportersSection,
-  })),
-)
-const FAQSection = lazy(() =>
-  import("../../components/landing/FAQSection").then((m) => ({
-    default: m.FAQSection,
-  })),
-)
 
 export function LandingPage() {
   const { t } = useTranslation()
@@ -75,37 +43,13 @@ export function LandingPage() {
       }}
     >
       <LandingPageLayout
-        hero={
-          <Suspense fallback={<LandingHeroSkeleton />}>
-            <LandingHero />
-          </Suspense>
-        }
-        statistics={
-          <Suspense fallback={<OrderStatisticsSkeleton />}>
-            <OrderStatistics />
-          </Suspense>
-        }
+        hero={<LandingHero />}
+        statistics={<OrderStatistics />}
         recentListings={<RecentListings />}
-        features={
-          <Suspense fallback={<LandingFeaturesSkeleton />}>
-            <LandingFeatures />
-          </Suspense>
-        }
-        orgFeatures={
-          <Suspense fallback={<LandingOrgFeaturesSkeleton />}>
-            <LandingOrgFeatures />
-          </Suspense>
-        }
-        supporters={
-          <Suspense fallback={<SupportersSectionSkeleton />}>
-            <SupportersSection />
-          </Suspense>
-        }
-        faq={
-          <Suspense fallback={<FAQSectionSkeleton />}>
-            <FAQSection />
-          </Suspense>
-        }
+        features={<LandingFeatures />}
+        orgFeatures={<LandingOrgFeatures />}
+        supporters={<SupportersSection />}
+        faq={<FAQSection />}
         footer={<Footer />}
       />
     </StandardPageLayout>
