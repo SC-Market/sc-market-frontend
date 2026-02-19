@@ -1,9 +1,8 @@
-import React, { lazy } from "react"
+import React, { lazy, Suspense } from "react"
 import { CURRENT_CUSTOM_ORG } from "../../hooks/contractor/CustomDomain"
 import { Navigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
-import { LazySection } from "../../components/layout/LazySection"
 import { Footer } from "../../components/footer/Footer"
 import { LandingPageLayout } from "../../components/landing/LandingPageLayout"
 import {
@@ -76,33 +75,37 @@ export function LandingPage() {
       }}
     >
       <LandingPageLayout
-        hero={<LazySection component={LandingHero} skeleton={LandingHeroSkeleton} />}
+        hero={
+          <Suspense fallback={<LandingHeroSkeleton />}>
+            <LandingHero />
+          </Suspense>
+        }
         statistics={
-          <LazySection
-            component={OrderStatistics}
-            skeleton={OrderStatisticsSkeleton}
-          />
+          <Suspense fallback={<OrderStatisticsSkeleton />}>
+            <OrderStatistics />
+          </Suspense>
         }
         recentListings={<RecentListings />}
         features={
-          <LazySection
-            component={LandingFeatures}
-            skeleton={LandingFeaturesSkeleton}
-          />
+          <Suspense fallback={<LandingFeaturesSkeleton />}>
+            <LandingFeatures />
+          </Suspense>
         }
         orgFeatures={
-          <LazySection
-            component={LandingOrgFeatures}
-            skeleton={LandingOrgFeaturesSkeleton}
-          />
+          <Suspense fallback={<LandingOrgFeaturesSkeleton />}>
+            <LandingOrgFeatures />
+          </Suspense>
         }
         supporters={
-          <LazySection
-            component={SupportersSection}
-            skeleton={SupportersSectionSkeleton}
-          />
+          <Suspense fallback={<SupportersSectionSkeleton />}>
+            <SupportersSection />
+          </Suspense>
         }
-        faq={<LazySection component={FAQSection} skeleton={FAQSectionSkeleton} />}
+        faq={
+          <Suspense fallback={<FAQSectionSkeleton />}>
+            <FAQSection />
+          </Suspense>
+        }
         footer={<Footer />}
       />
     </StandardPageLayout>
