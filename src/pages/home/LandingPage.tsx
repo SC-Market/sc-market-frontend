@@ -1,13 +1,11 @@
 import React, { lazy } from "react"
-import { Box, Container, Stack } from "@mui/material"
-import { useTheme } from "@mui/material/styles"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { CURRENT_CUSTOM_ORG } from "../../hooks/contractor/CustomDomain"
 import { Navigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { LazySection } from "../../components/layout/LazySection"
 import { Footer } from "../../components/footer/Footer"
+import { LandingPageLayout } from "../../components/landing/LandingPageLayout"
 import {
   LandingHeroSkeleton,
   OrderStatisticsSkeleton,
@@ -15,8 +13,10 @@ import {
   LandingOrgFeaturesSkeleton,
   SupportersSectionSkeleton,
   FAQSectionSkeleton,
+  RecentListings,
 } from "../../components/landing"
-import { RecentListings } from "../../components/landing"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 // Lazy load content sections
 const LandingHero = lazy(() =>
@@ -75,67 +75,36 @@ export function LandingPage() {
         },
       }}
     >
-      <Stack
-        direction={"column"}
-        sx={{
-          maxWidth: "100%",
-          paddingBottom: theme.spacing(4),
-          paddingTop: theme.spacing(2),
-        }}
-      >
-        {/* Hero Section */}
-        <LazySection component={LandingHero} skeleton={LandingHeroSkeleton} />
-
-        <Container>
-          <Stack
-            spacing={theme.spacing(6)}
-            alignItems={"center"}
-            justifyContent={"center"}
-            direction={"column"}
-          >
-            {/* Order Statistics */}
-            <LazySection
-              component={OrderStatistics}
-              skeleton={OrderStatisticsSkeleton}
-            />
-
-            {/* Recent Listings */}
-            <Box
-              maxWidth={"100%"}
-              sx={{
-                overflowX: "scroll",
-              }}
-            >
-              <RecentListings />
-            </Box>
-
-            {/* Features Section */}
-            <LazySection
-              component={LandingFeatures}
-              skeleton={LandingFeaturesSkeleton}
-            />
-          </Stack>
-        </Container>
-
-        <Container>
-          {/* Org Features Section */}
+      <LandingPageLayout
+        hero={<LazySection component={LandingHero} skeleton={LandingHeroSkeleton} />}
+        statistics={
+          <LazySection
+            component={OrderStatistics}
+            skeleton={OrderStatisticsSkeleton}
+          />
+        }
+        recentListings={<RecentListings />}
+        features={
+          <LazySection
+            component={LandingFeatures}
+            skeleton={LandingFeaturesSkeleton}
+          />
+        }
+        orgFeatures={
           <LazySection
             component={LandingOrgFeatures}
             skeleton={LandingOrgFeaturesSkeleton}
           />
-
-          {/* Supporters Section */}
+        }
+        supporters={
           <LazySection
             component={SupportersSection}
             skeleton={SupportersSectionSkeleton}
           />
-
-          {/* FAQ Section */}
-          <LazySection component={FAQSection} skeleton={FAQSectionSkeleton} />
-        </Container>
-
-        <Footer />
-      </Stack>
+        }
+        faq={<LazySection component={FAQSection} skeleton={FAQSectionSkeleton} />}
+        footer={<Footer />}
+      />
     </StandardPageLayout>
   )
 }
