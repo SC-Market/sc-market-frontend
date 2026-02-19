@@ -38,7 +38,11 @@ export function ViewOrg() {
       skeleton={<OrgInfoSkeleton />}
       sidebarOpen={true}
     >
-      {pageData.data && <OrgInfo contractor={pageData.data.contractor} />}
+      {pageData.data && (
+        <Suspense fallback={<OrgInfoSkeleton />}>
+          <OrgInfo contractor={pageData.data.contractor} />
+        </Suspense>
+      )}
     </BannerPageLayout>
   )
 }
@@ -54,7 +58,11 @@ export function MyOrg() {
       skeleton={<OrgInfoSkeleton />}
       sidebarOpen={true}
     >
-      {contractor && <OrgInfo contractor={contractor} />}
+      {contractor && (
+        <Suspense fallback={<OrgInfoSkeleton />}>
+          <OrgInfo contractor={contractor} />
+        </Suspense>
+      )}
     </BannerPageLayout>
   )
 }
