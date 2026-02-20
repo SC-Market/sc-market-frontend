@@ -1,5 +1,5 @@
 import React, { ReactElement, ReactNode } from "react"
-import { Box, Grid, Stack, useMediaQuery } from "@mui/material"
+import { Box, Container, Divider, Grid, Stack, useMediaQuery } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import {
@@ -15,6 +15,7 @@ export interface SidebarPageLayoutProps extends StandardPageLayoutProps {
 /**
  * Layout for pages with a persistent sidebar on desktop and bottom sheet on mobile.
  * Used by Market, Contractors, Recruiting, Services, etc.
+ * Matches the market page layout structure.
  */
 export function SidebarPageLayout(
   props: SidebarPageLayoutProps,
@@ -25,36 +26,36 @@ export function SidebarPageLayout(
 
   return (
     <StandardPageLayout {...standardProps} maxWidth="xxl">
-      <Box sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
-        {isMobile ? (
-          <Grid
-            container
-            spacing={theme.layoutSpacing.layout}
-            sx={{ width: "100%" }}
-          >
-            {sidebar}
-            <Grid item xs={12}>
-              {children}
-            </Grid>
-          </Grid>
-        ) : (
-          <Stack
-            direction="row"
-            justifyContent="center"
-            spacing={theme.layoutSpacing.layout}
-            sx={{ width: "100%", maxWidth: "xxl" }}
-          >
-            {sidebar}
-            <Box sx={{ flex: 1, maxWidth: contentMaxWidth }}>
-              <Grid container spacing={theme.layoutSpacing.layout}>
-                <Grid item xs={12}>
-                  {children}
-                </Grid>
+      <Container maxWidth="xxl" sx={{ padding: 0 }}>
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
+          {isMobile ? (
+            <Grid container spacing={theme.layoutSpacing.layout}>
+              {sidebar}
+
+              <Grid item xs={12}>
+                <Divider light />
               </Grid>
-            </Box>
-          </Stack>
-        )}
-      </Box>
+
+              <Grid item xs={12}>
+                {children}
+              </Grid>
+            </Grid>
+          ) : (
+            <Stack
+              direction="row"
+              justifyContent="center"
+              spacing={theme.layoutSpacing.layout}
+              sx={{ width: "100%", maxWidth: "xxl" }}
+            >
+              {sidebar}
+
+              <Box sx={{ flex: 1, maxWidth: contentMaxWidth }}>
+                {children}
+              </Box>
+            </Stack>
+          )}
+        </Box>
+      </Container>
     </StandardPageLayout>
   )
 }
