@@ -1,47 +1,33 @@
-import { ContainerGrid } from "../../components/layout/ContainerGrid"
-import React from "react"
-import { Navigate } from "react-router-dom"
-import { ProfileSkeleton } from "../../features/profile/components/ProfileSkeleton"
-import { ViewProfile } from "../../features/profile/components/ViewProfile"
-import {
-  useGetUserByUsernameQuery,
-  useGetUserProfileQuery,
-} from "../../store/profile"
-import { Page } from "../../components/metadata/Page"
-import { useTheme } from "@mui/material/styles"
+import React, { lazy } from "react"
 import { useTranslation } from "react-i18next"
+import { BannerPageLayout } from "../../components/layout/BannerPageLayout"
+import { LazySection } from "../../components/layout/LazySection"
+import { ProfileSkeleton } from "../../features/profile/components/ProfileSkeleton"
+import { usePageMyProfile } from "../../features/profile/hooks/usePageMyProfile"
+
+const ViewProfile = lazy(
+  () => import("../../features/profile/components/ViewProfile"),
+)
 
 export function MyProfile() {
-  const {
-    data: profile,
-    error,
-    isLoading,
-    isFetching,
-  } = useGetUserProfileQuery()
-  const {
-    data: user,
-    isLoading: isLoadingUser,
-    isFetching: isFetchingUser,
-  } = useGetUserByUsernameQuery(profile?.username ?? "", {
-    skip: !profile?.username,
-  })
-  const theme = useTheme()
   const { t } = useTranslation()
+  const pageData = usePageMyProfile()
 
   return (
-    <Page title={t("viewProfile.myProfile")}>
-      {error && <Navigate to={"/"} />}
-      {isLoading || isFetching || isLoadingUser || isFetchingUser ? (
-        <ContainerGrid
-          sidebarOpen={true}
-          maxWidth={"xxl"}
-          sx={{ paddingTop: theme.spacing(4) }}
-        >
-          <ProfileSkeleton />
-        </ContainerGrid>
-      ) : user ? (
-        <ViewProfile profile={user} />
-      ) : null}
-    </Page>
+    <BannerPageLayout
+      title={t("viewProfile.myProfile")}
+      isLoading={pageData.isLoading}
+      error={pageData.error}
+      skeleton={<ProfileSkeleton />}
+      sidebarOpen={true}
+    >
+      {pageData.data && (
+        <LazySection
+          component={ViewProfile}
+          componentProps={{ profile: pageData.data.user }}
+          skeleton={ProfileSkeleton}
+        />
+      )}
+    </BannerPageLayout>
   )
 }

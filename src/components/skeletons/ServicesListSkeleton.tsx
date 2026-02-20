@@ -10,9 +10,21 @@ export function ServicesListSkeleton() {
   return (
     <Container maxWidth="lg" sx={{ py: 3 }}>
       {/* Header with create button */}
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 3,
+        }}
+      >
         <BaseSkeleton variant="text" width={200} height={40} />
-        <BaseSkeleton variant="rectangular" width={160} height={40} sx={{ borderRadius: 1 }} />
+        <BaseSkeleton
+          variant="rectangular"
+          width={160}
+          height={40}
+          sx={{ borderRadius: 1 }}
+        />
       </Box>
 
       <Box sx={{ mb: 3 }}>

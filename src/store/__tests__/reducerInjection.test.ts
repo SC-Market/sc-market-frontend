@@ -1,18 +1,23 @@
-import { describe, it, expect, beforeEach } from "@jest/globals"
+import { vi } from "vitest"
+import { describe, it, expect, beforeEach } from "vitest"
+import type { Reducer } from "@reduxjs/toolkit"
 
 // Mock reducer
-const mockReducer = (state = {}, action: any) => state
+const mockReducer: Reducer = (state = {}, action: any) => state
 
-// Mock lazy reducers
-const mockLazyReducers: Record<string, jest.Mock> = {
-  test: jest.fn(() => Promise.resolve({ default: mockReducer })),
-  test1: jest.fn(() => Promise.resolve({ default: mockReducer })),
-  test2: jest.fn(() => Promise.resolve({ default: mockReducer })),
-  valid: jest.fn(() => Promise.resolve({ default: mockReducer })),
+// Type for lazy reducer
+type LazyReducer = () => Promise<{ default: Reducer }>
+
+// Mock lazy reducers with proper typing
+const mockLazyReducers: Record<string, LazyReducer> = {
+  test: vi.fn(() => Promise.resolve({ default: mockReducer })) as LazyReducer,
+  test1: vi.fn(() => Promise.resolve({ default: mockReducer })) as LazyReducer,
+  test2: vi.fn(() => Promise.resolve({ default: mockReducer })) as LazyReducer,
+  valid: vi.fn(() => Promise.resolve({ default: mockReducer })) as LazyReducer,
 }
 
 // We need to mock the module before importing
-jest.mock("../reducerInjection", () => {
+vi.mock("../reducerInjection", () => {
   const lazyReducerRegistry: Record<string, any> = {}
   const loadedReducers: Record<string, any> = {}
 
@@ -41,7 +46,7 @@ jest.mock("../reducerInjection", () => {
       }
     },
     injectReducers: async (keys: string[]) => {
-      const { injectReducer } = require("../reducerInjection")
+      const { injectReducer } = await import("../reducerInjection")
       const loadPromises = keys.map((key: string) => injectReducer(key))
       await Promise.allSettled(loadPromises)
     },
@@ -67,7 +72,7 @@ import {
 describe("reducerInjection", () => {
   beforeEach(() => {
     clearReducerCache()
-    jest.clearAllMocks()
+    vi.clearAllMocks()
   })
 
   describe("registerLazyReducer", () => {
@@ -102,7 +107,7 @@ describe("reducerInjection", () => {
     })
 
     it("should handle unregistered reducers gracefully", async () => {
-      const consoleSpy = jest.spyOn(console, "warn").mockImplementation(() => {})
+      const consoleSpy = vi.spyOn(console, "warn").mockImplementation(() => {})
 
       await injectReducer("unregistered")
 
@@ -115,10 +120,10 @@ describe("reducerInjection", () => {
 
     it("should handle reducer loading errors", async () => {
       const error = new Error("Load failed")
-      const lazyReducer = jest.fn(() => Promise.reject(error))
+      const lazyReducer = vi.fn(() => Promise.reject(error))
       registerLazyReducer("error-reducer", lazyReducer)
 
-      const consoleSpy = jest.spyOn(console, "error").mockImplementation(() => {})
+      const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {})
 
       await injectReducer("error-reducer")
 

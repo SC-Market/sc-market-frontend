@@ -33,6 +33,8 @@ export {
   MessagingSidebarContext,
 } from "./hooks/MessagingSidebar"
 export { useUnreadChatCount } from "./hooks/UnreadChatCount"
+export { usePageMessages } from "./hooks/usePageMessages"
+export type { UsePageMessagesResult } from "./hooks/usePageMessages"
 
 // Component exports
 export {

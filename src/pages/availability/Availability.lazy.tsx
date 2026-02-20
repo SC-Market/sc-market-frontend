@@ -5,5 +5,5 @@ export { convertAvailability } from "../../util/availability"
 
 // Lazy load the component
 export const Availability = lazy(() =>
-  import("./Availability").then((m) => ({ default: m.Availability }))
+  import("./Availability").then((m) => ({ default: m.Availability })),
 )

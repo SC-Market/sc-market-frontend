@@ -55,7 +55,15 @@ export function FAQQuestion(props: {
       </ListItemButton>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <ListItem>
-          <Typography color={"text.secondary"} variant={"body1"}>
+          <Typography
+            color={"text.secondary"}
+            variant={"body1"}
+            sx={{
+              wordBreak: "break-word",
+              overflowWrap: "break-word",
+              width: "100%",
+            }}
+          >
             <MarkdownRender text={answer} />
           </Typography>
         </ListItem>

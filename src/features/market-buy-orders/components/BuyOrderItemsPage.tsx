@@ -36,7 +36,7 @@ export function BuyOrderItemsPage() {
     <Page title={t("market.buyOrders")}>
       <MarketSidebarContext.Provider value={[open, setOpen]}>
         {xs && <MarketSidebar />}
-        
+
         <ContainerGrid maxWidth={"xl"} sidebarOpen={false}>
           <Grid
             container
@@ -76,8 +76,8 @@ export function BuyOrderItemsPage() {
                 <Paper
                   sx={{
                     position: "sticky",
-                    top: theme.spacing(2),
-                    maxHeight: `calc(100vh - ${theme.spacing(4)})`,
+                    top: "calc(64px + 16px)",
+                    maxHeight: "calc(100vh - 64px - 32px)",
                     width: 300,
                     flexShrink: 0,
                     overflowY: "auto",

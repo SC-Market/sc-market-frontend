@@ -1,46 +1,45 @@
-import { ContainerGrid } from "../../components/layout/ContainerGrid"
-import React from "react"
-import { Navigate, useParams } from "react-router-dom"
-import { ProfileSkeleton } from "../../features/profile/components/ProfileSkeleton"
-import { ViewProfile } from "../../features/profile/components/ViewProfile"
-import { useGetUserByUsernameQuery } from "../../store/profile"
-import { Page } from "../../components/metadata/Page"
+import React, { lazy } from "react"
+import { useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import {
-  shouldRedirectTo404,
-  shouldShowErrorPage,
-} from "../../util/errorHandling"
-import { ErrorPage } from "../errors/ErrorPage"
+import { BannerPageLayout } from "../../components/layout/BannerPageLayout"
+import { LazySection } from "../../components/layout/LazySection"
+import { ProfileSkeleton } from "../../features/profile/components/ProfileSkeleton"
+import { usePageUserProfile } from "../../features/profile/hooks/usePageUserProfile"
+
+const ViewProfile = lazy(
+  () => import("../../features/profile/components/ViewProfile"),
+)
 
 export function Profile() {
   const { t } = useTranslation()
   const { username } = useParams<{ username: string }>()
-  // const myProfile = useGetUserProfileQuery()
-
-  const user = useGetUserByUsernameQuery(username!, {
-    skip: !username,
-  })
+  const pageData = usePageUserProfile(username!)
 
   return (
-    <Page
+    <BannerPageLayout
       title={
-        user.data?.display_name
-          ? `${user.data?.display_name} - ${t("viewProfile.store_tab")}`
-          : null
+        pageData.data?.user?.display_name
+          ? `${pageData.data.user.display_name} - ${t("viewProfile.store_tab")}`
+          : t("viewProfile.store_tab")
       }
+      breadcrumbs={[
+        { label: t("people.title", "People"), href: "/people" },
+        {
+          label: pageData.data?.user?.display_name || t("viewProfile.loading"),
+        },
+      ]}
+      isLoading={pageData.isLoading}
+      error={pageData.error}
+      skeleton={<ProfileSkeleton />}
+      sidebarOpen={true}
     >
-      {/*{myProfile?.data?.username && myProfile?.data?.username === username ? <Navigate to={'/profile'}/> : null}*/}
-      {shouldRedirectTo404(user.error) ? <Navigate to={"/404"} /> : null}
-      {shouldShowErrorPage(user.error) ? <ErrorPage /> : null}
-      {shouldRedirectTo404(user.error) ? <Navigate to={"/404"} /> : null}
-      {shouldShowErrorPage(user.error) ? <ErrorPage /> : null}
-      {user.isLoading || user.isFetching ? (
-        <ContainerGrid sidebarOpen={true} maxWidth={"lg"}>
-          <ProfileSkeleton />
-        </ContainerGrid>
-      ) : user.data ? (
-        <ViewProfile profile={user.data} />
-      ) : null}
-    </Page>
+      {pageData.data && (
+        <LazySection
+          component={ViewProfile}
+          componentProps={{ profile: pageData.data.user }}
+          skeleton={ProfileSkeleton}
+        />
+      )}
+    </BannerPageLayout>
   )
 }

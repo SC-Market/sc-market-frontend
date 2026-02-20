@@ -1,6 +1,5 @@
 import React, { Suspense } from "react"
 import { Box, CircularProgress, Typography } from "@mui/material"
-import { createDynamicImport } from "../../util/dynamicImports"
 
 // Loading component for charts
 const ChartLoadingFallback = ({ title }: { title?: string }) => (
@@ -17,24 +16,6 @@ const ChartLoadingFallback = ({ title }: { title?: string }) => (
       {title ? `Loading ${title}...` : "Loading chart..."}
     </Typography>
   </Box>
-)
-
-// Dynamic ApexCharts component
-const ApexChartComponent = React.lazy(async () => {
-  const [{ default: Chart }, { default: ApexCharts }] = await Promise.all([
-    import("react-apexcharts"),
-    import("apexcharts"),
-  ])
-
-  return {
-    default: Chart,
-  }
-})
-
-export const DynamicApexChart = (props: Record<string, unknown>) => (
-  <Suspense fallback={<ChartLoadingFallback title="chart" />}>
-    <ApexChartComponent {...props} />
-  </Suspense>
 )
 
 // Dynamic KlineCharts utilities

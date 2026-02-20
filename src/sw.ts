@@ -56,9 +56,9 @@ registerRoute(
         statuses: [0, 200], // Cache successful responses and opaque responses
       }),
       new ExpirationPlugin({
-        maxEntries: 100,
-        maxAgeSeconds: 60 * 60 * 24 * 7, // 7 days
-        purgeOnQuotaError: true,
+        maxEntries: 100, // Increased from 50 to cache more pages
+        maxAgeSeconds: 60 * 60 * 24 * 7, // 7 days (increased from 1 day)
+        purgeOnQuotaError: true, // Automatically purge if quota exceeded
       }),
     ],
   }),

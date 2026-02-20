@@ -11,9 +11,7 @@ import {
 import AddRounded from "@mui/icons-material/AddRounded"
 import FilterListIcon from "@mui/icons-material/FilterList"
 import { MarketSearchArea } from "../../features/market/components/MarketSidebar"
-import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import { MarketSidebarContext } from "../../features/market"
-import { Page } from "../../components/metadata/Page"
 import {
   ItemStockContext,
   MyItemStock,
@@ -26,6 +24,8 @@ import { GridRowSelectionModel } from "@mui/x-data-grid"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { BottomSheet } from "../../components/mobile/BottomSheet"
+import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
+import { usePageManageStock } from "../../features/market/hooks/usePageManageStock"
 
 export function ManageStock() {
   const { t } = useTranslation()
@@ -35,6 +35,7 @@ export function ManageStock() {
   const [searchState, setSearchState] = useMarketSearch()
   const navigate = useNavigate()
   const location = useLocation()
+  const pageData = usePageManageStock()
 
   useEffect(() => {
     setSearchState({
@@ -61,23 +62,29 @@ export function ManageStock() {
   }
 
   return (
-    <Page title={t("sidebar.manage_listings")}>
+    <StandardPageLayout
+      title={t("sidebar.manage_listings")}
+      sidebarOpen={true}
+      maxWidth="xl"
+      isLoading={pageData.isLoading}
+      error={pageData.error}
+    >
       <ItemStockContext.Provider value={[selectionModel, setSelectionModel]}>
         <MarketSidebarContext.Provider value={[open, setOpen]}>
-          {isMobile && (
-            <BottomSheet
-              open={open}
-              onClose={() => setOpen(false)}
-              title={t("market.filters", "Filters")}
-              maxHeight="90vh"
-            >
-              <Box sx={{ overflowY: "auto", overflowX: "hidden", pb: 2 }}>
-                <MarketSearchArea status />
-              </Box>
-            </BottomSheet>
-          )}
+          <Grid item xs={12} container spacing={theme.layoutSpacing.layout}>
+            {isMobile && (
+              <BottomSheet
+                open={open}
+                onClose={() => setOpen(false)}
+                title={t("market.filters", "Filters")}
+                maxHeight="90vh"
+              >
+                <Box sx={{ overflowY: "auto", overflowX: "hidden", pb: 2 }}>
+                  <MarketSearchArea status />
+                </Box>
+              </BottomSheet>
+            )}
 
-          <ContainerGrid maxWidth={"xl"} sidebarOpen={true}>
             <Grid item xs={12}>
               <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                 {isMobile && (
@@ -139,9 +146,9 @@ export function ManageStock() {
                 <UnderlineLink>{t("sidebar.archived_listings")}</UnderlineLink>
               </Link>
             </Grid>
-          </ContainerGrid>
+          </Grid>
         </MarketSidebarContext.Provider>
       </ItemStockContext.Provider>
-    </Page>
+    </StandardPageLayout>
   )
 }

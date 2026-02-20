@@ -1,10 +1,9 @@
 import React from "react"
-import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import { Button, Divider, Grid, Typography } from "@mui/material"
-import { Page } from "../../components/metadata/Page"
 import { useTranslation } from "react-i18next"
 import { useLocation, useNavigate } from "react-router-dom"
 import { RefreshRounded, ArrowBackRounded } from "@mui/icons-material"
+import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 
 export function ErrorPageBody() {
   const { t } = useTranslation()
@@ -47,9 +46,7 @@ export function ErrorPageBody() {
       </Grid>
 
       <Grid item xs={12}>
-        <Grid item xs={12}>
-          <Divider light />
-        </Grid>
+        <Divider light />
       </Grid>
 
       <Grid item xs={12}>
@@ -98,10 +95,13 @@ export function ErrorPageBody() {
 export function ErrorPage() {
   const { t } = useTranslation()
   return (
-    <Page title={t("errorPage.pageTitle", "Error")}>
-      <ContainerGrid maxWidth={"md"} sidebarOpen={true}>
-        <ErrorPageBody />
-      </ContainerGrid>
-    </Page>
+    <StandardPageLayout
+      title={t("errorPage.pageTitle", "Error")}
+      maxWidth={"md"}
+      sidebarOpen={true}
+      noTopSpacer={false}
+    >
+      <ErrorPageBody />
+    </StandardPageLayout>
   )
 }

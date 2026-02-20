@@ -486,7 +486,10 @@ export function OfferDetailsArea(props: { session: OfferSession }) {
               </TableCell>
               <TableCell align="right">
                 <Stack direction="row" justifyContent={"right"}>
-                  {format(new Date(session.offers[0].timestamp), "MMMM do yyyy, h:mm:ss a")}
+                  {format(
+                    new Date(session.offers[0].timestamp),
+                    "MMMM do yyyy, h:mm:ss a",
+                  )}
                 </Stack>
               </TableCell>
             </TableRow>

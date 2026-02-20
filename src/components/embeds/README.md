@@ -9,6 +9,7 @@ This directory contains facade components for heavy third-party embeds. Facades 
 A lightweight facade for YouTube video embeds that shows a preview thumbnail and only loads the full YouTube player when the user clicks to play.
 
 **Benefits:**
+
 - Reduces initial page load by ~500KB (YouTube iframe API)
 - Improves LCP by not loading heavy iframe content
 - Reduces network requests on initial page load
@@ -17,7 +18,7 @@ A lightweight facade for YouTube video embeds that shows a preview thumbnail and
 **Usage:**
 
 ```tsx
-import { YouTubeFacade } from '../embeds/YouTubeFacade'
+import { YouTubeFacade } from "../embeds/YouTubeFacade"
 
 function MyComponent() {
   return <YouTubeFacade videoId="dQw4w9WgXcQ" />
@@ -25,6 +26,7 @@ function MyComponent() {
 ```
 
 **Props:**
+
 - `videoId` (required): YouTube video ID
 - `title` (optional): Accessible title for the video
 
@@ -35,7 +37,7 @@ A generic facade component for any heavy embed. Shows a placeholder with a loadi
 **Usage:**
 
 ```tsx
-import { EmbedFacade } from '../embeds/EmbedFacade'
+import { EmbedFacade } from "../embeds/EmbedFacade"
 
 function MyComponent() {
   return (
@@ -45,15 +47,14 @@ function MyComponent() {
         // Load your heavy embed here
       }}
     >
-      {(isActive) => (
-        isActive ? <HeavyMapComponent /> : null
-      )}
+      {(isActive) => (isActive ? <HeavyMapComponent /> : null)}
     </EmbedFacade>
   )
 }
 ```
 
 **Props:**
+
 - `title` (required): Display title for the embed
 - `onActivate` (optional): Callback when user activates the embed
 - `children`: Render function receiving `isActive` boolean
@@ -88,8 +89,8 @@ To create a new facade for a different embed type:
 Example:
 
 ```tsx
-import React, { useState } from 'react'
-import { EmbedFacade } from './EmbedFacade'
+import React, { useState } from "react"
+import { EmbedFacade } from "./EmbedFacade"
 
 export function MapFacade({ location }: { location: string }) {
   const [isActive, setIsActive] = useState(false)
@@ -99,7 +100,7 @@ export function MapFacade({ location }: { location: string }) {
       title={`Map of ${location}`}
       onActivate={() => setIsActive(true)}
     >
-      {(active) => (
+      {(active) =>
         active ? (
           <iframe
             src={`https://maps.example.com/embed?q=${location}`}
@@ -107,7 +108,7 @@ export function MapFacade({ location }: { location: string }) {
             height="400"
           />
         ) : null
-      )}
+      }
     </EmbedFacade>
   )
 }

@@ -15,7 +15,12 @@ import React, { useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { Link, useNavigate } from "react-router-dom"
 import { RefreshRounded, EditRounded, ShareRounded } from "@mui/icons-material"
-import { isAfter, subDays, addMonths, subDays as subDaysFromDate } from "date-fns"
+import {
+  isAfter,
+  subDays,
+  addMonths,
+  subDays as subDaysFromDate,
+} from "date-fns"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../../hooks/styles/Theme"
 import { ExtendedUniqueSearchResult } from "../../domain/types"
@@ -200,9 +205,10 @@ export const ItemListingBase = React.memo(
           }}
         >
           {showExpiration &&
-            isAfter(subDaysFromDate(addMonths(new Date(), 1), 3), new Date(listing.expiration)) && (
-              <ListingRefreshButton listing={listing} />
-            )}
+            isAfter(
+              subDaysFromDate(addMonths(new Date(), 1), 3),
+              new Date(listing.expiration),
+            ) && <ListingRefreshButton listing={listing} />}
           <Link
             to={formatMarketUrl(listing)}
             style={{ textDecoration: "none", color: "inherit" }}
@@ -218,7 +224,10 @@ export const ItemListingBase = React.memo(
                   position: "relative",
                 }}
               >
-                {isAfter(new Date(listing.timestamp), subDays(new Date(), 3)) && (
+                {isAfter(
+                  new Date(listing.timestamp),
+                  subDays(new Date(), 3),
+                ) && (
                   <Chip
                     label={t("market.new")}
                     color={"secondary"}
@@ -492,9 +501,10 @@ export const ItemListingBase = React.memo(
           }}
         >
           {showExpiration &&
-            isAfter(subDaysFromDate(addMonths(new Date(), 1), 3), new Date(listing.expiration)) && (
-              <ListingRefreshButton listing={listing} />
-            )}
+            isAfter(
+              subDaysFromDate(addMonths(new Date(), 1), 3),
+              new Date(listing.expiration),
+            ) && <ListingRefreshButton listing={listing} />}
           <Link
             to={formatMarketUrl(listing)}
             style={{ textDecoration: "none", color: "inherit" }}
@@ -508,7 +518,10 @@ export const ItemListingBase = React.memo(
                   position: "relative",
                 }}
               >
-                {isAfter(new Date(listing.timestamp), subDays(new Date(), 3)) && (
+                {isAfter(
+                  new Date(listing.timestamp),
+                  subDays(new Date(), 3),
+                ) && (
                   <Chip
                     label={t("market.new")}
                     color={"secondary"}
@@ -782,6 +795,8 @@ export const ItemListingBase = React.memo(
   },
 )
 
+export const LISTING_CARD_WIDTH = 200
+
 // Reusable wrapper for consistent listing sizing
 // Mobile: 50% width (2 columns)
 // Desktop: Fixed 200px width with proper centering
@@ -789,10 +804,10 @@ export function ListingWrapper({ children }: { children: React.ReactNode }) {
   return (
     <Box
       sx={{
-        width: { 
-          xs: "calc(50% - 4px)", // Mobile: 2 columns
-          sm: "calc(50% - 4px)", // Small: 2 columns
-          md: 200,               // Desktop: Fixed width
+        width: {
+          xs: "calc(50% - 4px)", // Mobile: 2 columns with 8px gap
+          sm: "calc(50% - 4px)", // Small: 2 columns with 8px gap
+          md: LISTING_CARD_WIDTH, // Desktop: Fixed width
         },
         flexShrink: 0,
       }}

@@ -53,7 +53,7 @@ const ROUTE_TITLES: Record<string, string> = {
 /**
  * Hook that automatically updates the document title based on the current route
  * Falls back to a generic title if no specific mapping exists
- * 
+ *
  * This ensures WCAG 2.1 Level AA compliance for Requirement 2.8:
  * "Page title changes during navigation"
  */

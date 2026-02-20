@@ -12,18 +12,21 @@ import {
 } from "../../features/chats"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useNavigate } from "react-router-dom"
+import { Page } from "../../components/metadata/Page"
+import { useTranslation } from "react-i18next"
 
 export function MessagesList() {
   const [drawerOpen] = useDrawerOpen()
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const navigate = useNavigate()
+  const { t } = useTranslation()
 
   const [messageSidebarOpen, setMessageSidebar] = useState(true)
   const [creatingMessageGroup, setCreatingMessageGroup] = useState(false)
 
   return (
-    <React.Fragment>
+    <Page title={t("messages.title", { defaultValue: "Messages" })}>
       <CurrentChatIDContext.Provider
         value={[
           null,
@@ -103,7 +106,9 @@ export function MessagesList() {
                         color: "text.secondary",
                       }}
                     >
-                      Select a chat to start messaging
+                      {t("emptyStates.messages.selectChat", {
+                        defaultValue: "Select a chat to start messaging",
+                      })}
                     </Box>
                   )}
                 </main>
@@ -112,6 +117,6 @@ export function MessagesList() {
           </MessageGroupCreateContext.Provider>
         </MessagingSidebarContext.Provider>
       </CurrentChatIDContext.Provider>
-    </React.Fragment>
+    </Page>
   )
 }

@@ -1,4 +1,12 @@
-import { Container, Divider, Grid, Paper, useMediaQuery } from "@mui/material"
+import {
+  Box,
+  Container,
+  Divider,
+  Grid,
+  Paper,
+  Stack,
+  useMediaQuery,
+} from "@mui/material"
 import { ServiceSidebar } from "../contracts/ServiceSidebar"
 import { ServiceListings } from "../contracts/ServiceListings.lazy"
 import { useServiceSidebar } from "../../hooks/contract/ServiceSidebar"
@@ -15,41 +23,56 @@ export function ServiceMarketView() {
   return (
     <>
       {xs && <ServiceSidebar />}
-      <Container maxWidth={"xxl"}>
-        <Grid
-          container
-          spacing={theme.layoutSpacing.layout}
-          justifyContent={"center"}
-        >
-          <Grid item xs={12}>
-            <Divider light />
-          </Grid>
+      <Container maxWidth={"xxl"} sx={{ padding: 0 }}>
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
+          {xs ? (
+            <Grid container spacing={theme.layoutSpacing.layout}>
+              <Grid item xs={12}>
+                <Divider light />
+              </Grid>
 
-          {/* Desktop: Persistent sidebar */}
-          {!xs && (
-            <Grid item md={2.25}>
+              <Grid item xs={12}>
+                <Grid
+                  container
+                  spacing={theme.layoutSpacing.layout}
+                  justifyContent={"center"}
+                >
+                  <ServiceListings />
+                </Grid>
+              </Grid>
+            </Grid>
+          ) : (
+            <Stack
+              direction="row"
+              justifyContent="center"
+              spacing={theme.layoutSpacing.layout}
+              sx={{ width: "100%", maxWidth: "xxl" }}
+            >
               <Paper
                 sx={{
                   position: "sticky",
-                  top: theme.spacing(2),
-                  maxHeight: `calc(100vh - ${theme.spacing(4)})`,
+                  top: "calc(64px + 16px)",
+                  maxHeight: "calc(100vh - 64px - 32px)",
+                  width: 300,
+                  flexShrink: 0,
                   overflowY: "auto",
                 }}
               >
                 <ServiceSearchArea />
               </Paper>
-            </Grid>
+
+              <Box sx={{ flex: 1 }}>
+                <Grid
+                  container
+                  spacing={theme.layoutSpacing.layout}
+                  justifyContent={"center"}
+                >
+                  <ServiceListings />
+                </Grid>
+              </Box>
+            </Stack>
           )}
-          <Grid item xs={12} md={xs ? 12 : 9.75}>
-            <Grid
-              container
-              spacing={theme.layoutSpacing.layout}
-              justifyContent={"center"}
-            >
-              <ServiceListings />
-            </Grid>
-          </Grid>
-        </Grid>
+        </Box>
       </Container>
     </>
   )

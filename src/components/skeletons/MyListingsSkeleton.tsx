@@ -15,17 +15,42 @@ export function MyListingsSkeleton() {
       </Box>
 
       {/* Header with actions */}
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 3,
+        }}
+      >
         <BaseSkeleton variant="text" width={250} height={40} />
         <Box sx={{ display: "flex", gap: 2 }}>
-          <BaseSkeleton variant="rectangular" width={140} height={40} sx={{ borderRadius: 1 }} />
-          <BaseSkeleton variant="rectangular" width={140} height={40} sx={{ borderRadius: 1 }} />
+          <BaseSkeleton
+            variant="rectangular"
+            width={140}
+            height={40}
+            sx={{ borderRadius: 1 }}
+          />
+          <BaseSkeleton
+            variant="rectangular"
+            width={140}
+            height={40}
+            sx={{ borderRadius: 1 }}
+          />
         </Box>
       </Box>
 
       {/* Nav tabs */}
       <Box sx={{ mb: 2 }}>
-        <Box sx={{ display: "flex", gap: 3, borderBottom: 1, borderColor: "divider", pb: 1 }}>
+        <Box
+          sx={{
+            display: "flex",
+            gap: 3,
+            borderBottom: 1,
+            borderColor: "divider",
+            pb: 1,
+          }}
+        >
           <BaseSkeleton variant="rectangular" width={100} height={40} />
           <BaseSkeleton variant="rectangular" width={100} height={40} />
           <BaseSkeleton variant="rectangular" width={100} height={40} />

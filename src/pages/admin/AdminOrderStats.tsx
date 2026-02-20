@@ -1,63 +1,63 @@
-import React from "react"
-import { Page } from "../../components/metadata/Page"
-import { useGetOrderAnalyticsQuery } from "../../store/admin"
-import { ContainerGrid } from "../../components/layout/ContainerGrid"
-import {
-  OrderAnalyticsCharts,
-  TopContractorsAnalytics,
-  TopUsersAnalytics,
-  OrderSummary,
-} from "../../views/orders/OrderAnalytics"
-import { AdminRecentOrders } from "../../views/orders/RecentOrders"
+import React, { lazy, Suspense } from "react"
 import { useTranslation } from "react-i18next"
-import { Skeleton, Grid } from "@mui/material"
+import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
+import { usePageAdminOrderStats } from "../../features/admin/hooks/usePageAdminOrderStats"
+import { AdminOrderStatsSkeleton } from "../../features/admin/components/AdminOrderStatsSkeleton"
+import { Grid } from "@mui/material"
+
+const OrderAnalyticsCharts = lazy(() =>
+  import("../../views/orders/OrderAnalytics").then((m) => ({
+    default: m.OrderAnalyticsCharts,
+  })),
+)
+
+const TopContractorsAnalytics = lazy(() =>
+  import("../../views/orders/OrderAnalytics").then((m) => ({
+    default: m.TopContractorsAnalytics,
+  })),
+)
+
+const TopUsersAnalytics = lazy(() =>
+  import("../../views/orders/OrderAnalytics").then((m) => ({
+    default: m.TopUsersAnalytics,
+  })),
+)
+
+const OrderSummary = lazy(() =>
+  import("../../views/orders/OrderAnalytics").then((m) => ({
+    default: m.OrderSummary,
+  })),
+)
+
+const AdminRecentOrders = lazy(() =>
+  import("../../views/orders/RecentOrders").then((m) => ({
+    default: m.AdminRecentOrders,
+  })),
+)
 
 export function AdminOrderStats() {
   const { t } = useTranslation()
-  const { data: analytics, isLoading, error } = useGetOrderAnalyticsQuery()
-
-  if (isLoading) {
-    return (
-      <Page title={t("admin.orderStats", "Admin Order Stats")}>
-        <ContainerGrid maxWidth={"xl"} sidebarOpen={true}>
-          <Grid item xs={12}>
-            <Skeleton width={"100%"} height={400} />
-          </Grid>
-          <Grid item xs={12} lg={3}>
-            <Skeleton width={"100%"} height={300} />
-          </Grid>
-          <Grid item xs={12} lg={3}>
-            <Skeleton width={"100%"} height={300} />
-          </Grid>
-          <Grid item xs={12} lg={6}>
-            <Skeleton width={"100%"} height={200} />
-          </Grid>
-        </ContainerGrid>
-      </Page>
-    )
-  }
-
-  if (error || !analytics) {
-    return (
-      <Page title={t("admin.orderStats", "Admin Order Stats")}>
-        <ContainerGrid maxWidth={"xl"} sidebarOpen={true}>
-          <Grid item xs={12}>
-            <div>Error loading analytics data</div>
-          </Grid>
-        </ContainerGrid>
-      </Page>
-    )
-  }
+  const { data: analytics, isLoading, error } = usePageAdminOrderStats()
 
   return (
-    <Page title={t("admin.orderStats", "Admin Order Stats")}>
-      <ContainerGrid maxWidth={"xl"} sidebarOpen={true}>
-        <OrderAnalyticsCharts analytics={analytics} />
-        <TopContractorsAnalytics analytics={analytics} />
-        <TopUsersAnalytics analytics={analytics} />
-        <OrderSummary analytics={analytics} />
-        <AdminRecentOrders />
-      </ContainerGrid>
-    </Page>
+    <StandardPageLayout
+      title={t("admin.orderStats", "Admin Order Stats")}
+      headerTitle={t("admin.orderStats", "Admin Order Stats")}
+      sidebarOpen={true}
+      maxWidth="xl"
+      isLoading={isLoading}
+      error={error}
+      skeleton={<AdminOrderStatsSkeleton />}
+    >
+      {analytics && (
+        <Suspense fallback={<AdminOrderStatsSkeleton />}>
+          <OrderAnalyticsCharts analytics={analytics} />
+          <TopContractorsAnalytics analytics={analytics} />
+          <TopUsersAnalytics analytics={analytics} />
+          <OrderSummary analytics={analytics} />
+          <AdminRecentOrders />
+        </Suspense>
+      )}
+    </StandardPageLayout>
   )
 }

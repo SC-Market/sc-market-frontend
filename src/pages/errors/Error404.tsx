@@ -1,9 +1,8 @@
 import React from "react"
-import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import { Button, Divider, Grid, Typography } from "@mui/material"
 import { Link } from "react-router-dom"
-import { Page } from "../../components/metadata/Page"
 import { useTranslation } from "react-i18next"
+import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 
 export function PageBody404() {
   const { t } = useTranslation()
@@ -30,12 +29,10 @@ export function PageBody404() {
       </Grid>
 
       <Grid item xs={12}>
-        <Grid item xs={12}>
-          <Divider light />
-        </Grid>
+        <Divider light />
       </Grid>
 
-      <Grid item>
+      <Grid item xs={12} sx={{ display: "flex", justifyContent: "center" }}>
         <Link
           to={"/dashboard"}
           style={{ color: "inherit", textDecoration: "none" }}
@@ -52,10 +49,13 @@ export function PageBody404() {
 export function Error404() {
   const { t } = useTranslation()
   return (
-    <Page title={"404"}>
-      <ContainerGrid maxWidth={"md"} sidebarOpen={true}>
-        <PageBody404 />
-      </ContainerGrid>
-    </Page>
+    <StandardPageLayout
+      title={"404"}
+      maxWidth={"md"}
+      sidebarOpen={true}
+      noTopSpacer={false}
+    >
+      <PageBody404 />
+    </StandardPageLayout>
   )
 }

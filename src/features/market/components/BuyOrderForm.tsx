@@ -275,19 +275,18 @@ export function BuyOrderForm(props: { aggregate: MarketAggregate }) {
               <Divider />
             </Grid>
             <Grid item xs={12} display={"flex"} justifyContent={"right"}>
-              
-                <DateTimePicker
-                  label={t("buyorder.expiration", {
-                    tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                  })}
-                  value={state.expiry}
-                  onChange={(newValue) =>
-                    setState({
-                      ...state,
-                      expiry: newValue || endOfDay(addDays(new Date(), 3)),
-                    })
-                  }
-                  slotProps={{
+              <DateTimePicker
+                label={t("buyorder.expiration", {
+                  tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                })}
+                value={state.expiry}
+                onChange={(newValue) =>
+                  setState({
+                    ...state,
+                    expiry: newValue || endOfDay(addDays(new Date(), 3)),
+                  })
+                }
+                slotProps={{
                   textField: {
                     id: "expiry-date",
                     "aria-label": t(
@@ -298,8 +297,8 @@ export function BuyOrderForm(props: { aggregate: MarketAggregate }) {
                     "aria-required": "true",
                   },
                 }}
-                />
-              
+              />
+
               <div id="expiry-date-help" className="sr-only">
                 {t(
                   "accessibility.expiryDateHelp",

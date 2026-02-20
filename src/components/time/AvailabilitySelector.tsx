@@ -109,10 +109,12 @@ export function AvailabilitySelector(props: {
     () =>
       [...Array(7).keys()].map((i) => {
         const date = new Date()
-        const startOfWeek = new Date(date.setDate(date.getDate() - date.getDay()))
+        const startOfWeek = new Date(
+          date.setDate(date.getDate() - date.getDay()),
+        )
         const dayDate = new Date(startOfWeek)
         dayDate.setDate(startOfWeek.getDate() + i)
-        return dayDate.toLocaleDateString(i18n.language, { weekday: 'short' })
+        return dayDate.toLocaleDateString(i18n.language, { weekday: "short" })
       }),
     [i18n.language],
   )
@@ -261,10 +263,12 @@ export function AvailabilityDisplay(
     () =>
       [...Array(7).keys()].map((i) => {
         const date = new Date()
-        const startOfWeek = new Date(date.setDate(date.getDate() - date.getDay()))
+        const startOfWeek = new Date(
+          date.setDate(date.getDate() - date.getDay()),
+        )
         const dayDate = new Date(startOfWeek)
         dayDate.setDate(startOfWeek.getDate() + i)
-        return dayDate.toLocaleDateString(i18n.language, { weekday: 'short' })
+        return dayDate.toLocaleDateString(i18n.language, { weekday: "short" })
       }),
     [i18n.language],
   )

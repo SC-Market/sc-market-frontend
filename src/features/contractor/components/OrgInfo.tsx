@@ -18,7 +18,6 @@ import {
 import { OpenLayout } from "../../../components/layout/ContainerGrid"
 import { useTranslation } from "react-i18next"
 import { OrgBannerArea } from "./OrgBannerArea"
-import { PageBreadcrumbs } from "../../../components/navigation"
 import { OrgMetaTags } from "./OrgMetaTags"
 import { OrgHeader } from "./OrgHeader"
 import { OrgTabs } from "./OrgTabs"
@@ -29,7 +28,6 @@ import { useRecruitingGetPostByOrgQuery } from "../../../store/recruiting"
 export function OrgInfo(props: { contractor: Contractor }) {
   const { contractor } = props
   const theme = useTheme<ExtendedTheme>()
-  const { t } = useTranslation()
 
   const page = useOrgTab()
   const { data: recruiting_post } = useRecruitingGetPostByOrgQuery(
@@ -37,58 +35,45 @@ export function OrgInfo(props: { contractor: Contractor }) {
   )
 
   return (
-    <OpenLayout sidebarOpen={true}>
+    <Box sx={{ position: "relative" }}>
       <OrgMetaTags contractor={contractor} />
-      <Container maxWidth="xl">
-        <PageBreadcrumbs
-          items={[
-            {
-              label: t("contractors.title", "Contractors"),
-              href: "/contractors",
-            },
-            { label: contractor.name },
-          ]}
-        />
-      </Container>
-      <Box sx={{ position: "relative" }}>
-        <OrgBannerArea org={contractor} />
-        <Box
-          sx={{
-            ...(theme.palette.mode === "dark"
-              ? { position: "relative", top: -450 }
-              : { position: "relative", top: -200 }),
-          }}
-        >
-          <Container maxWidth="xl">
-            <Grid container spacing={theme.layoutSpacing.layout}>
-              <Grid item xs={12}>
-                <Grid
-                  container
-                  spacing={theme.layoutSpacing.component}
-                  alignItems="flex-end"
-                  justifyContent="space-between"
-                  minHeight={375}
-                >
-                  <Grid item xs={12} md={8}>
-                    <OrgHeader contractor={contractor} />
-                  </Grid>
-                  <ContractorReviewSummary contractor={contractor} />
+      <OrgBannerArea org={contractor} />
+      <Box
+        sx={{
+          ...(theme.palette.mode === "dark"
+            ? { position: "relative", top: -450 }
+            : { position: "relative", top: -200 }),
+        }}
+      >
+        <Container maxWidth="xl">
+          <Grid container spacing={theme.layoutSpacing.layout}>
+            <Grid item xs={12}>
+              <Grid
+                container
+                spacing={theme.layoutSpacing.component}
+                alignItems="flex-end"
+                justifyContent="space-between"
+                minHeight={375}
+              >
+                <Grid item xs={12} md={8}>
+                  <OrgHeader contractor={contractor} />
                 </Grid>
-              </Grid>
-
-              <Grid item xs={12}>
-                <OrgTabs
-                  spectrumId={contractor.spectrum_id}
-                  currentTab={page}
-                  hasRecruitingPost={!!recruiting_post}
-                />
+                <ContractorReviewSummary contractor={contractor} />
               </Grid>
             </Grid>
-          </Container>
-          <OrgTabContent currentTab={page} contractor={contractor} />
-        </Box>
+
+            <Grid item xs={12}>
+              <OrgTabs
+                spectrumId={contractor.spectrum_id}
+                currentTab={page}
+                hasRecruitingPost={!!recruiting_post}
+              />
+            </Grid>
+          </Grid>
+        </Container>
+        <OrgTabContent currentTab={page} contractor={contractor} />
       </Box>
-    </OpenLayout>
+    </Box>
   )
 }
 
