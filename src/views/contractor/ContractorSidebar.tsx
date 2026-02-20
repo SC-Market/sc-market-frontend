@@ -1,11 +1,8 @@
 import {
   Autocomplete,
   AutocompleteRenderInputParams,
-  Box,
-  Chip,
   Drawer,
   Grid,
-  IconButton,
   MenuItem,
   Rating,
   TextField,
@@ -14,7 +11,6 @@ import {
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import SearchIcon from "@mui/icons-material/Search"
-import CloseIcon from "@mui/icons-material/Close"
 import React, { useEffect, useState } from "react"
 
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -87,27 +83,6 @@ export function ContractorSidebar() {
         borderColor: theme.palette.outline.main,
       }}
     >
-      {/* Close button for desktop drawer */}
-      {!isMobile && open && (
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "flex-end",
-            marginBottom: theme.spacing(1),
-          }}
-        >
-          <IconButton
-            color="secondary"
-            aria-label={t("contractorSidebar.close", "Close filters")}
-            onClick={() => {
-              setOpen(false)
-            }}
-            size="small"
-          >
-            <CloseIcon />
-          </IconButton>
-        </Box>
-      )}
       <Grid container spacing={theme.layoutSpacing.layout}>
         <Grid item xs={12}>
           <TextField
