@@ -1,5 +1,5 @@
 import React, { ReactElement, ReactNode } from "react"
-import { Box, Container, Grid, Stack, useMediaQuery } from "@mui/material"
+import { Box, Grid, Stack, useMediaQuery } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import {
@@ -25,38 +25,36 @@ export function SidebarPageLayout(
 
   return (
     <StandardPageLayout {...standardProps} maxWidth="xxl">
-      <Container maxWidth="xxl" sx={{ padding: 0 }}>
-        <Box sx={{ display: "flex", justifyContent: "center" }}>
-          {isMobile ? (
-            <Grid
-              container
-              spacing={theme.layoutSpacing.layout}
-              sx={{ width: "100%" }}
-            >
-              {sidebar}
-              <Grid item xs={12}>
-                {children}
-              </Grid>
+      <Box sx={{ display: "flex", justifyContent: "center", width: "100%" }}>
+        {isMobile ? (
+          <Grid
+            container
+            spacing={theme.layoutSpacing.layout}
+            sx={{ width: "100%" }}
+          >
+            {sidebar}
+            <Grid item xs={12}>
+              {children}
             </Grid>
-          ) : (
-            <Stack
-              direction="row"
-              justifyContent="center"
-              spacing={theme.layoutSpacing.layout}
-              sx={{ width: "100%", maxWidth: "xxl" }}
-            >
-              {sidebar}
-              <Box sx={{ flex: 1, maxWidth: contentMaxWidth }}>
-                <Grid container spacing={theme.layoutSpacing.layout}>
-                  <Grid item xs={12}>
-                    {children}
-                  </Grid>
+          </Grid>
+        ) : (
+          <Stack
+            direction="row"
+            justifyContent="center"
+            spacing={theme.layoutSpacing.layout}
+            sx={{ width: "100%", maxWidth: "xxl" }}
+          >
+            {sidebar}
+            <Box sx={{ flex: 1, maxWidth: contentMaxWidth }}>
+              <Grid container spacing={theme.layoutSpacing.layout}>
+                <Grid item xs={12}>
+                  {children}
                 </Grid>
-              </Box>
-            </Stack>
-          )}
-        </Box>
-      </Container>
+              </Grid>
+            </Box>
+          </Stack>
+        )}
+      </Box>
     </StandardPageLayout>
   )
 }

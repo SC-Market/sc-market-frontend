@@ -8,6 +8,7 @@ import { configureStore } from "@reduxjs/toolkit"
 import { ThemeProvider, createTheme } from "@mui/material/styles"
 import { DrawerOpenContext } from "../../../hooks/layout/Drawer"
 import { AlertHookContext } from "../../../hooks/alert/AlertHook"
+import { CurrentOrgContext } from "../../../hooks/login/CurrentOrg"
 
 // Mock the hooks
 vi.mock("../../../features/authentication/hooks/usePageLogin", () => ({
@@ -48,6 +49,11 @@ vi.mock("react-i18next", () => ({
   },
 }))
 
+// Mock Footer to avoid rendering issues
+vi.mock("../../../components/footer/Footer", () => ({
+  Footer: () => <div data-testid="footer">Footer</div>,
+}))
+
 // Create a real MUI theme with layoutSpacing
 const mockTheme = createTheme({
   layoutSpacing: {
@@ -70,6 +76,7 @@ function TestWrapper({ children }: { children: React.ReactNode }) {
   const drawerState = React.useState(false)
   const alertState = React.useState<any>(null)
   const mockAlertContext: any = [alertState[0], alertState[1]]
+  const currentOrgState = React.useState<string | null>(null)
 
   return (
     <Provider store={store}>
@@ -77,7 +84,9 @@ function TestWrapper({ children }: { children: React.ReactNode }) {
         <BrowserRouter>
           <DrawerOpenContext.Provider value={drawerState}>
             <AlertHookContext.Provider value={mockAlertContext}>
-              {children}
+              <CurrentOrgContext.Provider value={currentOrgState}>
+                {children}
+              </CurrentOrgContext.Provider>
             </AlertHookContext.Provider>
           </DrawerOpenContext.Provider>
         </BrowserRouter>
