@@ -34,7 +34,6 @@ export function Login() {
           container
           spacing={theme.layoutSpacing.layout * 4}
         >
-          <HeaderTitle></HeaderTitle>
           <LoginInfoPanel />
         </Grid>
 
