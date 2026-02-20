@@ -36,9 +36,9 @@ export function ViewOfferPage() {
       title={t("offers.viewOffer")}
       error={error}
       breadcrumbs={[
-        { label: t("offers.dashboard"), href: "/dashboard" },
+        { label: t("offers.dashboard", "Dashboard"), href: "/dashboard" },
         {
-          label: `${t("offers.offer")} ${(id || "").substring(0, 8).toUpperCase()}`,
+          label: `${t("offers.offer", "Offer")} ${(id || "").substring(0, 8).toUpperCase()}`,
           href: `/offer/${id}`,
         },
       ]}

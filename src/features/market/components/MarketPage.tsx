@@ -1,6 +1,7 @@
 import React, { useMemo, useState, Suspense } from "react"
 import {
   Container,
+  Divider,
   Grid,
   Tabs,
   Typography,
@@ -178,6 +179,8 @@ export function MarketPage() {
                   )}
                 </Grid>
               </Grid>
+
+              <Divider light />
             </Container>
 
             <TabPanel value={tabPage} index={1}>

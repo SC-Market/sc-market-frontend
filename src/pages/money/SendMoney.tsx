@@ -16,10 +16,10 @@ export function SendMoney(props: { org?: boolean }) {
       title={t("sendMoney.title")}
       breadcrumbs={[
         {
-          label: t("dashboard.title"),
+          label: t("dashboard.title", "Dashboard"),
           href: props.org ? "/org/money" : "/dashboard",
         },
-        { label: t("sendMoney.title") },
+        { label: t("sendMoney.title", "Send Money") },
       ]}
       formTitle={t("sendMoney.title")}
       sidebarOpen={true}
