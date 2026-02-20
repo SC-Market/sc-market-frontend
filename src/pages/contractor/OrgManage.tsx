@@ -35,6 +35,7 @@ import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { usePageOrgManage } from "../../features/contractor/hooks/usePageOrgManage"
+import { OrgManageSkeleton } from "../../components/skeletons/OrgManageSkeleton"
 
 export function OrgManage() {
   const { t } = useTranslation()
@@ -106,11 +107,12 @@ export function OrgManage() {
   return (
     <StandardPageLayout
       title={t("org.manageOrgTitle")}
-      headerTitle={t("org.dashboard")}
+      headerTitle={t("org.manageOrgTitle")}
       sidebarOpen={true}
       maxWidth="xl"
       isLoading={pageData.isLoading}
       error={pageData.error}
+      skeleton={<OrgManageSkeleton />}
     >
       <Grid item xs={12}>
         <Box sx={{ borderBottom: 1, borderColor: "divider.light" }}>
