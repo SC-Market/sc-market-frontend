@@ -26,7 +26,13 @@ export function SidebarPageLayout(
 
   return (
     <StandardPageLayout {...standardProps} maxWidth="xxl">
-      <Container maxWidth="xxl" sx={{ padding: 0 }}>
+      <Container
+        maxWidth="xxl"
+        sx={{
+          padding: 0,
+          paddingTop: { xs: 2, sm: 4 },
+        }}
+      >
         <Box sx={{ display: "flex", justifyContent: "center" }}>
           {isMobile ? (
             <Grid container spacing={theme.layoutSpacing.layout}>
