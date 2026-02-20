@@ -31,8 +31,8 @@ export function ServiceMarketView() {
               <Paper
                 sx={{
                   position: "sticky",
-                  top: theme.spacing(2),
-                  maxHeight: `calc(100vh - ${theme.spacing(4)})`,
+                  top: "calc(64px + 16px)",
+                  maxHeight: "calc(100vh - 64px - 32px)",
                   overflowY: "auto",
                 }}
               >
