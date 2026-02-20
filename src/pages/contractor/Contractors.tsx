@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react"
 import { ContractorListItem } from "../../views/contractor/ContractorList"
 import { ContractorSkeleton } from "../../components/skeletons"
-import { Button, Divider, Grid, IconButton, useMediaQuery } from "@mui/material"
+import { Button, Divider, Grid, useMediaQuery } from "@mui/material"
 import { HapticTablePagination } from "../../components/haptic"
 import {
   ContractorSearchContext,
@@ -10,8 +10,6 @@ import {
 import { ContractorSidebarContext } from "../../hooks/contractor/ContractorSidebar"
 import { ContractorSidebar } from "../../views/contractor/ContractorSidebar"
 import { marketDrawerWidth } from "../../features/market"
-import CloseIcon from "@mui/icons-material/CloseRounded"
-import MenuIcon from "@mui/icons-material/MenuRounded"
 import FilterListIcon from "@mui/icons-material/FilterList"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
@@ -91,7 +89,7 @@ export function Contractors() {
     >
       <ContractorSidebarContext.Provider value={[sidebarOpen, setSidebarOpen]}>
         <ContractorSearchContext.Provider value={[searchState, setSearchState]}>
-          {isMobile ? (
+          {isMobile && (
             <Button
               variant="outlined"
               color="secondary"
@@ -117,23 +115,6 @@ export function Contractors() {
             >
               {t("contractorsPage.filters", "Filters")}
             </Button>
-          ) : (
-            <IconButton
-              color="secondary"
-              aria-label={t("toggle_contractor_sidebar")}
-              sx={{
-                position: "absolute",
-                zIndex: 50,
-                left: 16,
-                top: 64 + 24,
-                transition: "0.3s",
-              }}
-              onClick={() => {
-                setSidebarOpen(true)
-              }}
-            >
-              {sidebarOpen ? <CloseIcon /> : <MenuIcon />}
-            </IconButton>
           )}
 
           <ContractorSidebar />
