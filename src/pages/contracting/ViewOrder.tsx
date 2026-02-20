@@ -147,7 +147,7 @@ export function ViewOrder() {
             : "Order"
       }
       breadcrumbs={[
-        { label: t("dashboard.title"), href: "/dashboard" },
+        { label: t("dashboard.title", "Dashboard"), href: "/dashboard" },
         ...(order?.offer_session_id
           ? [
               {

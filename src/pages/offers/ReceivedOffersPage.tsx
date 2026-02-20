@@ -10,8 +10,8 @@ export function ReceivedOffersPage() {
     <StandardPageLayout
       title={t("offers.receivedOffers")}
       breadcrumbs={[
-        { label: t("offers.dashboard"), href: "/dashboard" },
-        { label: t("offers.receivedOffers") },
+        { label: t("offers.dashboard", "Dashboard"), href: "/dashboard" },
+        { label: t("offers.receivedOffers", "Received Offers") },
       ]}
       headerTitle={t("offers.receivedOffers")}
       sidebarOpen={true}

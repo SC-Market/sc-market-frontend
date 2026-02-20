@@ -12,6 +12,7 @@ import {
   Divider,
   Grid,
   Box,
+  Stack,
   useMediaQuery,
   Container,
   Tabs,
@@ -202,42 +203,59 @@ export function Contracts() {
                 />
               </TabPanel>
               <TabPanel value={tabPage} index={2}>
-                <Container maxWidth="xxl">
-                  <Grid container spacing={theme.layoutSpacing.layout}>
-                    <Grid item xs={12}>
-                      <Divider light />
-                    </Grid>
+                <Container maxWidth="xxl" sx={{ padding: 0 }}>
+                  <Box sx={{ display: "flex", justifyContent: "center" }}>
+                    {xs ? (
+                      <Grid container spacing={theme.layoutSpacing.layout}>
+                        <Grid item xs={12}>
+                          <Divider light />
+                        </Grid>
 
-                    {/* Mobile: BottomSheet sidebar */}
-                    {xs && <ContractSidebar />}
+                        {/* Mobile: BottomSheet sidebar */}
+                        <ContractSidebar />
 
-                    {/* Desktop: Sticky sidebar */}
-                    {!xs && contractSidebarOpen && (
-                      <Grid item md={2.25}>
-                        <Paper
-                          sx={{
-                            position: "sticky",
-                            top: "calc(64px + 16px)",
-                            maxHeight: "calc(100vh - 64px - 32px)",
-                            overflowY: "auto",
-                          }}
-                        >
-                          <ContractSidebar />
-                        </Paper>
+                        <Grid item xs={12}>
+                          <Grid
+                            container
+                            spacing={theme.layoutSpacing.layout}
+                          >
+                            <ContractListings />
+                          </Grid>
+                        </Grid>
                       </Grid>
-                    )}
+                    ) : (
+                      <Stack
+                        direction="row"
+                        justifyContent="center"
+                        spacing={theme.layoutSpacing.layout}
+                        sx={{ width: "100%", maxWidth: "xxl" }}
+                      >
+                        {contractSidebarOpen && (
+                          <Paper
+                            sx={{
+                              position: "sticky",
+                              top: "calc(64px + 16px)",
+                              maxHeight: "calc(100vh - 64px - 32px)",
+                              width: 300,
+                              flexShrink: 0,
+                              overflowY: "auto",
+                            }}
+                          >
+                            <ContractSidebar />
+                          </Paper>
+                        )}
 
-                    {/* Main content */}
-                    <Grid
-                      item
-                      xs={12}
-                      md={contractSidebarOpen ? 9.75 : 12}
-                      container
-                      spacing={theme.layoutSpacing.layout}
-                    >
-                      <ContractListings />
-                    </Grid>
-                  </Grid>
+                        <Box sx={{ flex: 1 }}>
+                          <Grid
+                            container
+                            spacing={theme.layoutSpacing.layout}
+                          >
+                            <ContractListings />
+                          </Grid>
+                        </Box>
+                      </Stack>
+                    )}
+                  </Box>
                 </Container>
               </TabPanel>
 

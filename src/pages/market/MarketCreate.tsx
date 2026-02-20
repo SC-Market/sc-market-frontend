@@ -33,12 +33,12 @@ export function MarketCreate(props: {}) {
     <StandardPageLayout
       title={t("market.createMarketListing")}
       breadcrumbs={[
-        { label: t("market.title"), href: "/market" },
+        { label: t("market.title", "Market"), href: "/market" },
         {
-          label: t("sidebar.my_market_listings"),
+          label: t("sidebar.my_market_listings", "My Listings"),
           href: "/market/me",
         },
-        { label: t("market.createMarketListing") },
+        { label: t("market.createMarketListing", "Create Listing") },
       ]}
       headerTitle={t("market.createMarketListing")}
       sidebarOpen={true}

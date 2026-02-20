@@ -20,13 +20,13 @@ export function CounterOfferPage() {
     <FormPageLayout
       title={t("offers.viewOffer")}
       breadcrumbs={[
-        { label: t("offers.dashboard"), href: "/dashboard" },
-        { label: t("offers.receivedOffers"), href: "/offers/received" },
+        { label: t("offers.dashboard", "Dashboard"), href: "/dashboard" },
+        { label: t("offers.receivedOffers", "Received Offers"), href: "/offers/received" },
         {
-          label: `${t("offers.offer")} ${(id || "").substring(0, 8).toUpperCase()}`,
+          label: `${t("offers.offer", "Offer")} ${(id || "").substring(0, 8).toUpperCase()}`,
           href: `/offer/${id}`,
         },
-        { label: t("offers.counterOffer") },
+        { label: t("offers.counterOffer", "Counter Offer") },
       ]}
       formTitle={t("offers.viewOffer")}
       backButton={true}
