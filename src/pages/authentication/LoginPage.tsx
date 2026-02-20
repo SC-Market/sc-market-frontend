@@ -1,13 +1,17 @@
 import React from "react"
 import { Navigate } from "react-router-dom"
-import { FormPageLayout } from "../../components/layout/FormPageLayout"
+import { Page } from "../../components/metadata/Page"
 import { SignInArea } from "../../views/authentication/SignInArea"
 import { usePageLogin } from "../../features/authentication/hooks/usePageLogin"
 import { useTranslation } from "react-i18next"
-import { Grid } from "@mui/material"
+import { Container, Grid } from "@mui/material"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { Footer } from "../../components/footer/Footer"
 
 export function LoginPage() {
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
   const { isAuthenticated, isLoading, errorMessage, clearError } =
     usePageLogin()
 
@@ -16,21 +20,43 @@ export function LoginPage() {
   }
 
   return (
-    <FormPageLayout
-      title={t("auth.signInTitle", "Sign in to SC Market")}
-      formTitle=""
-      maxWidth="sm"
-      isLoading={isLoading}
-      GridProps={{
-        sx: {
-          minHeight: "calc(100vh - 64px)",
-          alignItems: "center",
-        },
-      }}
-    >
-      <Grid item xs={12}>
-        <SignInArea errorMessage={errorMessage} onClearError={clearError} />
-      </Grid>
-    </FormPageLayout>
+    <Page title={t("auth.signInTitle", "Sign in to SC Market")}>
+      <main
+        style={{
+          flexGrow: 1,
+          overflow: "auto",
+          height: "100%",
+          position: "relative",
+        }}
+      >
+        {/* Top spacer for navbar */}
+        <div style={{ ...theme.mixins.toolbar }} />
+
+        {/* Form content in small container */}
+        <Container
+          maxWidth="sm"
+          sx={{
+            paddingTop: theme.spacing(4),
+            paddingBottom: theme.spacing(4),
+            minHeight: "calc(100vh - 200px)",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <Grid container spacing={theme.layoutSpacing.layout}>
+            <Grid item xs={12}>
+              <SignInArea errorMessage={errorMessage} onClearError={clearError} />
+            </Grid>
+          </Grid>
+        </Container>
+
+        {/* Footer in large container */}
+        <Container maxWidth="lg">
+          <Grid container>
+            <Footer />
+          </Grid>
+        </Container>
+      </main>
+    </Page>
   )
 }

@@ -7,6 +7,7 @@ import { Provider } from "react-redux"
 import { configureStore } from "@reduxjs/toolkit"
 import { ThemeProvider, createTheme } from "@mui/material/styles"
 import { DrawerOpenContext } from "../../../hooks/layout/Drawer"
+import { AlertHookContext } from "../../../hooks/alert/AlertHook"
 
 // Mock the hooks
 vi.mock("../../../features/authentication/hooks/usePageLogin", () => ({
@@ -67,13 +68,17 @@ const createMockStore = () =>
 function TestWrapper({ children }: { children: React.ReactNode }) {
   const store = createMockStore()
   const drawerState = React.useState(false)
+  const alertState = React.useState<any>(null)
+  const mockAlertContext: any = [alertState[0], alertState[1]]
 
   return (
     <Provider store={store}>
       <ThemeProvider theme={mockTheme}>
         <BrowserRouter>
           <DrawerOpenContext.Provider value={drawerState}>
-            {children}
+            <AlertHookContext.Provider value={mockAlertContext}>
+              {children}
+            </AlertHookContext.Provider>
           </DrawerOpenContext.Provider>
         </BrowserRouter>
       </ThemeProvider>
@@ -82,7 +87,7 @@ function TestWrapper({ children }: { children: React.ReactNode }) {
 }
 
 describe("LoginPage", () => {
-  it("renders the login page with FormPageLayout", () => {
+  it("renders the login page", () => {
     render(
       <TestWrapper>
         <LoginPage />
@@ -93,7 +98,7 @@ describe("LoginPage", () => {
     expect(screen.getByText(/sign in to sc market/i)).toBeInTheDocument()
   })
 
-  it("uses FormPageLayout with minimal layout configuration", () => {
+  it("renders with proper layout structure", () => {
     const { container } = render(
       <TestWrapper>
         <LoginPage />
