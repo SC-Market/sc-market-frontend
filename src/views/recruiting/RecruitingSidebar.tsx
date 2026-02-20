@@ -85,12 +85,10 @@ export function RecruitingSidebar() {
         height: "100%",
         flexDirection: "column",
         display: "flex",
-        padding: { xs: theme.spacing(2), md: theme.spacing(3) },
-        paddingTop: { xs: theme.spacing(2), md: theme.spacing(3) },
+        padding: theme.spacing(2),
         borderColor: theme.palette.outline.main,
       }}
     >
-      {/* Close button for desktop drawer */}
       <Grid container spacing={theme.layoutSpacing.layout}>
         <Grid item xs={12}>
           <TextField

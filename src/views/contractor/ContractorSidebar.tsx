@@ -80,8 +80,7 @@ export function ContractorSidebar() {
         height: "100%",
         flexDirection: "column",
         display: "flex",
-        padding: { xs: theme.spacing(2), md: theme.spacing(3) },
-        paddingTop: { xs: theme.spacing(2), md: theme.spacing(3) },
+        padding: theme.spacing(2),
         borderColor: theme.palette.outline.main,
       }}
     >
