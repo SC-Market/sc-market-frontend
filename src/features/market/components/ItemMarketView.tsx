@@ -64,8 +64,8 @@ export function ItemMarketView() {
               <Paper
                 sx={{
                   position: "sticky",
-                  top: theme.spacing(2),
-                  maxHeight: `calc(100vh - ${theme.spacing(4)})`,
+                  top: "calc(64px + 16px)",
+                  maxHeight: "calc(100vh - 64px - 32px)",
                   width: 300,
                   flexShrink: 0,
                   overflowY: "auto",
