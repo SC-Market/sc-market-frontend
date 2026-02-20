@@ -10,25 +10,25 @@ import Beasties from "beasties"
 // Critical CSS extraction plugin using Beasties
 function beastiesPlugin() {
   return {
-    name: 'vite-plugin-beasties',
-    enforce: 'post' as const,
+    name: "vite-plugin-beasties",
+    enforce: "post" as const,
     async transformIndexHtml(html: string) {
-      if (process.env.NODE_ENV !== 'production') return html
+      if (process.env.NODE_ENV !== "production") return html
       const beasties = new Beasties({
         inline: true,
         width: 1920,
         height: 1080,
-        preload: 'media',
+        preload: "media",
         inlineThreshold: 10240,
         pruneSource: false,
         mergeStylesheets: true,
         compress: true,
-        logLevel: 'warn',
+        logLevel: "warn",
       })
       try {
         return await beasties.process(html)
       } catch (error) {
-        console.warn('Beasties failed to process HTML:', error)
+        console.warn("Beasties failed to process HTML:", error)
         return html
       }
     },

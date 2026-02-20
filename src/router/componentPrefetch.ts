@@ -16,8 +16,7 @@ export const componentRegistry: Record<string, ComponentImportFunction> = {
   "order:reviewView": () => import("../views/orders/OrderReviewView"),
   "order:marketListings": () => import("../views/offers/OfferMarketListings"),
   "order:service": () => import("../views/offers/OfferServiceArea"),
-  "order:allocation": () =>
-    import("../features/market/components/allocation"),
+  "order:allocation": () => import("../features/market/components/allocation"),
   "order:availability": () => import("../views/orders/OrderAvailabilityArea"),
 
   // ViewOfferPage tab components (internal tabs, not route-based)
@@ -70,13 +69,13 @@ export const componentRegistry: Record<string, ComponentImportFunction> = {
   "market:items": () => import("../features/market/components/ItemMarketView"),
   "market:services": () => import("../views/services/ServiceMarketView"),
   "market:serviceActions": () => import("../views/services/ServiceActions"),
-  "market:contractActions": () =>
-    import("../views/contracts/ContractActions"),
+  "market:contractActions": () => import("../views/contracts/ContractActions"),
   "market:contractListings": () =>
     import("../views/contracts/ContractListings"),
 
   // Contracts page tab components
-  "contracts:items": () => import("../features/market/components/ItemMarketView"),
+  "contracts:items": () =>
+    import("../features/market/components/ItemMarketView"),
   "contracts:services": () => import("../views/services/ServiceMarketView"),
   "contracts:marketActions": () =>
     import("../features/market/components/MarketActions"),
@@ -209,9 +208,7 @@ export async function prefetchComponents(ids: string[]): Promise<void> {
 export function prefetchComponentsForPath(path: string): void {
   // Match path pattern (handle dynamic segments)
   const matchedPattern = Object.keys(COMPONENT_PREFETCH_MAP).find((pattern) => {
-    const regex = new RegExp(
-      "^" + pattern.replace(/:[^/]+/g, "[^/]+") + "$",
-    )
+    const regex = new RegExp("^" + pattern.replace(/:[^/]+/g, "[^/]+") + "$")
     return regex.test(path)
   })
 

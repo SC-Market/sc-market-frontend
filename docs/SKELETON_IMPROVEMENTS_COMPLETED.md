@@ -1,11 +1,13 @@
 # Skeleton Improvements - Completed
 
 ## Summary
+
 Implemented 9 new tailored skeleton components to replace generic placeholders, significantly improving the loading experience and reducing perceived CLS.
 
 ## Completed Skeletons
 
 ### High Priority ✅
+
 1. **LandingPageSkeleton** - Homepage
    - Hero section with logo and login area
    - Order statistics cards
@@ -36,6 +38,7 @@ Implemented 9 new tailored skeleton components to replace generic placeholders, 
    - Route: `/contractors`
 
 ### Medium Priority ✅
+
 5. **ContractsListSkeleton** - Contracts listing page
    - Tab navigation
    - Contract cards with status badges
@@ -68,6 +71,7 @@ Implemented 9 new tailored skeleton components to replace generic placeholders, 
    - Routes: `/order/services`, `/org/:contractor_id/services`
 
 ## Technical Implementation
+
 - All skeletons use existing base components (`BaseSkeleton`, `ListingSkeleton`, `ServiceListingSkeleton`)
 - Responsive design matching actual page breakpoints
 - Exported from `src/components/skeletons/index.ts`
@@ -75,11 +79,14 @@ Implemented 9 new tailored skeleton components to replace generic placeholders, 
 - Build and type checks verified successful
 
 ## Impact
+
 - **Before**: 9 routes using tailored skeletons
 - **After**: 19 routes using tailored skeletons (+111% coverage)
 - **Remaining generic**: ~35 routes still using generic skeletons (mostly forms and admin pages)
 
 ## Next Steps (Optional)
+
 See `TODO_SKELETON_IMPROVEMENTS.md` for remaining items:
+
 - Contractor profile enhancement
 - Low-priority form pages (buy order create, market create, service forms, org management)

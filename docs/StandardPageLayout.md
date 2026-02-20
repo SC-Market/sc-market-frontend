@@ -11,10 +11,7 @@ import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 
 function MyPage() {
   return (
-    <StandardPageLayout
-      title="My Page"
-      headerTitle="Welcome to My Page"
-    >
+    <StandardPageLayout title="My Page" headerTitle="Welcome to My Page">
       <div>Page content goes here</div>
     </StandardPageLayout>
   )
@@ -26,19 +23,19 @@ function MyPage() {
 ### Metadata Props
 
 #### `title?: string | null`
+
 Sets the document title (shown in browser tab). Also used for SEO.
 
 ```tsx
-<StandardPageLayout title="Market Listings">
-  {/* ... */}
-</StandardPageLayout>
+<StandardPageLayout title="Market Listings">{/* ... */}</StandardPageLayout>
 ```
 
 #### `canonicalUrl?: string`
+
 Sets the canonical URL for SEO purposes.
 
 ```tsx
-<StandardPageLayout 
+<StandardPageLayout
   title="Market Listing"
   canonicalUrl="https://example.com/market/123"
 >
@@ -47,13 +44,11 @@ Sets the canonical URL for SEO purposes.
 ```
 
 #### `dontUseDefaultCanonUrl?: boolean`
+
 Prevents automatic canonical URL generation. Use when you need full control over canonical URLs.
 
 ```tsx
-<StandardPageLayout 
-  title="Dynamic Page"
-  dontUseDefaultCanonUrl={true}
->
+<StandardPageLayout title="Dynamic Page" dontUseDefaultCanonUrl={true}>
   {/* ... */}
 </StandardPageLayout>
 ```
@@ -61,6 +56,7 @@ Prevents automatic canonical URL generation. Use when you need full control over
 ### Breadcrumb Props
 
 #### `breadcrumbs?: BreadcrumbItem[]`
+
 Array of breadcrumb items for navigation hierarchy.
 
 ```tsx
@@ -70,12 +66,12 @@ interface BreadcrumbItem {
   icon?: ReactNode
 }
 
-<StandardPageLayout
+;<StandardPageLayout
   title="Market Listing"
   breadcrumbs={[
     { label: "Home", href: "/" },
     { label: "Market", href: "/market" },
-    { label: "Listing Details" }
+    { label: "Listing Details" },
   ]}
 >
   {/* ... */}
@@ -87,18 +83,17 @@ interface BreadcrumbItem {
 ### Header Props
 
 #### `headerTitle?: ReactNode`
+
 Main title displayed at the top of the page content. Can be a string or custom component.
 
 ```tsx
-<StandardPageLayout
-  title="Market"
-  headerTitle="Browse Market Listings"
->
+<StandardPageLayout title="Market" headerTitle="Browse Market Listings">
   {/* ... */}
 </StandardPageLayout>
 ```
 
 With custom component:
+
 ```tsx
 <StandardPageLayout
   title="Market"
@@ -114,6 +109,7 @@ With custom component:
 ```
 
 #### `headerActions?: ReactNode`
+
 Actions displayed in the header (typically buttons). Automatically aligned to the right.
 
 ```tsx
@@ -133,30 +129,27 @@ Actions displayed in the header (typically buttons). Automatically aligned to th
 ### Layout Configuration Props
 
 #### `sidebarOpen?: boolean`
+
 Controls whether the sidebar is open. Default: `true`.
 
 ```tsx
-<StandardPageLayout
-  title="Full Width Page"
-  sidebarOpen={false}
->
+<StandardPageLayout title="Full Width Page" sidebarOpen={false}>
   {/* ... */}
 </StandardPageLayout>
 ```
 
 #### `sidebarWidth?: number`
+
 Custom sidebar width in pixels. Overrides the default theme value.
 
 ```tsx
-<StandardPageLayout
-  title="Custom Sidebar"
-  sidebarWidth={300}
->
+<StandardPageLayout title="Custom Sidebar" sidebarWidth={300}>
   {/* ... */}
 </StandardPageLayout>
 ```
 
 #### `maxWidth?: "xs" | "sm" | "md" | "lg" | "xl" | false`
+
 Maximum width of the content container. Default: `"lg"`.
 
 ```tsx
@@ -186,49 +179,41 @@ Maximum width of the content container. Default: `"lg"`.
 ```
 
 #### `noFooter?: boolean`
+
 Hides the footer. Default: `false`.
 
 ```tsx
-<StandardPageLayout
-  title="Minimal Page"
-  noFooter={true}
->
+<StandardPageLayout title="Minimal Page" noFooter={true}>
   {/* ... */}
 </StandardPageLayout>
 ```
 
 #### `noSidebar?: boolean`
+
 Hides the sidebar completely. Default: `false`.
 
 ```tsx
-<StandardPageLayout
-  title="Landing Page"
-  noSidebar={true}
->
+<StandardPageLayout title="Landing Page" noSidebar={true}>
   {/* ... */}
 </StandardPageLayout>
 ```
 
 #### `noMobilePadding?: boolean`
+
 Removes padding on mobile devices for full-width content. Default: `false`.
 
 ```tsx
-<StandardPageLayout
-  title="Mobile Full Width"
-  noMobilePadding={true}
->
+<StandardPageLayout title="Mobile Full Width" noMobilePadding={true}>
   {/* ... */}
 </StandardPageLayout>
 ```
 
 #### `noTopSpacer?: boolean`
+
 Removes top spacing above content. Default: `false`.
 
 ```tsx
-<StandardPageLayout
-  title="Compact Page"
-  noTopSpacer={true}
->
+<StandardPageLayout title="Compact Page" noTopSpacer={true}>
   {/* ... */}
 </StandardPageLayout>
 ```
@@ -236,6 +221,7 @@ Removes top spacing above content. Default: `false`.
 ### Content Props
 
 #### `children: ReactNode`
+
 The main page content. **Required**.
 
 ```tsx
@@ -251,6 +237,7 @@ The main page content. **Required**.
 ### Loading and Error Props
 
 #### `isLoading?: boolean`
+
 Indicates the page is loading data. When `true` and `skeleton` is provided, shows the skeleton instead of children.
 
 ```tsx
@@ -264,23 +251,23 @@ Indicates the page is loading data. When `true` and `skeleton` is provided, show
 ```
 
 #### `error?: FetchBaseQueryError | SerializedError | unknown`
+
 Error object from data fetching. Automatically handles 404 and server errors.
 
 ```tsx
-<StandardPageLayout
-  title="Market Listing"
-  error={error}
->
+<StandardPageLayout title="Market Listing" error={error}>
   <MarketListingContent data={data} />
 </StandardPageLayout>
 ```
 
 **Error Handling:**
+
 - 404 errors: Automatically redirects to `/404`
 - Server errors (5xx): Shows error page
 - Other errors: Page renders normally (handle in content)
 
 #### `skeleton?: ReactNode`
+
 Skeleton component to show during loading.
 
 ```tsx
@@ -313,7 +300,7 @@ function MyListingsPage() {
       breadcrumbs={[
         { label: "Home", href: "/" },
         { label: "Market", href: "/market" },
-        { label: "My Listings" }
+        { label: "My Listings" },
       ]}
       isLoading={isLoading}
       error={error}
@@ -383,7 +370,7 @@ function MarketListingPage() {
   const breadcrumbs = [
     { label: "Home", href: "/" },
     { label: "Market", href: "/market" },
-    { label: data?.title || "Loading..." }
+    { label: data?.title || "Loading..." },
   ]
 
   return (
@@ -410,7 +397,7 @@ function MarketListingPage() {
 
 4. **Handle errors at the layout level**: Let StandardPageLayout handle 404 and server errors automatically.
 
-5. **Choose appropriate maxWidth**: 
+5. **Choose appropriate maxWidth**:
    - `sm` for forms and reading content
    - `lg` (default) for most pages
    - `xl` for data-heavy pages
@@ -423,6 +410,7 @@ function MarketListingPage() {
 ## Migration from Old Pattern
 
 ### Before (Old Pattern)
+
 ```tsx
 function OldPage() {
   const { data, isLoading, error } = useGetDataQuery()
@@ -449,6 +437,7 @@ function OldPage() {
 ```
 
 ### After (New Pattern)
+
 ```tsx
 function NewPage() {
   const { data, isLoading, error } = useGetDataQuery()

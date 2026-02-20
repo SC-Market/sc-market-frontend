@@ -5,6 +5,7 @@ This document summarizes the critical CSS extraction and resource hints implemen
 ## Overview
 
 Critical CSS extraction and resource hints optimize the critical rendering path by:
+
 1. Inlining above-the-fold CSS to eliminate render-blocking requests
 2. Providing browser hints to optimize resource loading priority
 3. Prefetching likely next-page resources during idle time
@@ -16,6 +17,7 @@ Critical CSS extraction and resource hints optimize the critical rendering path 
 **Plugin:** `critters` via custom Vite plugin wrapper
 
 **Configuration:**
+
 ```typescript
 {
   inline: true,              // Inline critical CSS in HTML
@@ -31,6 +33,7 @@ Critical CSS extraction and resource hints optimize the critical rendering path 
 ```
 
 **How it works:**
+
 1. During production build, Critters analyzes the HTML
 2. Identifies CSS rules needed for above-the-fold content
 3. Inlines critical CSS in `<style>` tags in the HTML head
@@ -38,6 +41,7 @@ Critical CSS extraction and resource hints optimize the critical rendering path 
 5. Original CSS files remain available for progressive enhancement
 
 **Benefits:**
+
 - Eliminates render-blocking CSS requests
 - Improves First Contentful Paint (FCP)
 - Reduces Largest Contentful Paint (LCP)
@@ -48,27 +52,33 @@ Critical CSS extraction and resource hints optimize the critical rendering path 
 Added to `index.html` in the `<head>` section:
 
 #### DNS Prefetch
+
 ```html
 <link rel="dns-prefetch" href="https://sc-market.space" />
 <link rel="dns-prefetch" href="https://sessions.bugsnag.com" />
 ```
+
 - Resolves DNS early for third-party domains
 - Reduces connection latency when resources are requested
 
 #### Preconnect
+
 ```html
 <link rel="preconnect" href="https://sc-market.space" crossorigin />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 ```
+
 - Establishes early connections (DNS + TCP + TLS)
 - Critical for API calls and font loading
 - `crossorigin` attribute required for CORS resources
 
 #### Prefetch
+
 ```html
 <link rel="prefetch" href="/assets/market-*.js" as="script" />
 <link rel="prefetch" href="/assets/mui-common-*.js" as="script" />
 ```
+
 - Fetches likely next-page resources during idle time
 - Low priority - doesn't compete with critical resources
 - Improves navigation to market pages
@@ -76,9 +86,22 @@ Added to `index.html` in the `<head>` section:
 ### 3. Font Preloading (Already Implemented)
 
 ```html
-<link rel="preload" href="/fonts/roboto-v30-latin-regular.woff2" as="font" type="font/woff2" crossorigin />
-<link rel="preload" href="/fonts/roboto-v30-latin-500.woff2" as="font" type="font/woff2" crossorigin />
+<link
+  rel="preload"
+  href="/fonts/roboto-v30-latin-regular.woff2"
+  as="font"
+  type="font/woff2"
+  crossorigin
+/>
+<link
+  rel="preload"
+  href="/fonts/roboto-v30-latin-500.woff2"
+  as="font"
+  type="font/woff2"
+  crossorigin
+/>
 ```
+
 - Preloads critical fonts to prevent FOIT (Flash of Invisible Text)
 - Uses WOFF2 format for optimal compression
 - `crossorigin` required even for same-origin fonts
@@ -86,17 +109,20 @@ Added to `index.html` in the `<head>` section:
 ## Performance Impact
 
 ### Before Implementation
+
 - Multiple render-blocking CSS requests
 - DNS lookups delay third-party resource loading
 - Cold navigation to market pages requires full resource download
 
 ### After Implementation
+
 - ✅ Critical CSS inlined - no render-blocking CSS
 - ✅ DNS resolved early for third-party domains
 - ✅ Connections established before resources needed
 - ✅ Next-page resources prefetched during idle time
 
 ### Expected Improvements
+
 - **FCP:** 10-20% faster (no CSS blocking)
 - **LCP:** 15-25% faster (fonts and images load sooner)
 - **Navigation:** 30-50% faster (prefetched resources)
@@ -104,18 +130,21 @@ Added to `index.html` in the `<head>` section:
 ## Verification
 
 ### Check Critical CSS Inlining
+
 1. Build for production: `npm run build`
 2. Inspect `dist/index.html`
 3. Look for `<style>` tags with inlined CSS
 4. Verify `<link rel="preload" as="style">` for non-critical CSS
 
 ### Check Resource Hints
+
 1. Open Chrome DevTools → Network tab
 2. Filter by "All" or "Other"
 3. Look for early DNS/connection requests
 4. Verify prefetch requests during idle time
 
 ### Measure Performance
+
 1. Open Chrome DevTools → Lighthouse
 2. Run performance audit
 3. Check "Eliminate render-blocking resources" metric
@@ -131,17 +160,20 @@ Added to `index.html` in the `<head>` section:
 ## Maintenance
 
 ### Adding New Third-Party Domains
+
 1. Add `dns-prefetch` for all third-party domains
 2. Add `preconnect` for critical third-party resources (API, fonts)
 3. Test impact on connection timing
 
 ### Adding New Route Prefetch
+
 1. Identify high-traffic navigation patterns
 2. Add prefetch hints for likely next routes
 3. Use wildcard patterns for hashed filenames
 4. Monitor prefetch cache hit rate
 
 ### Updating Critical CSS Configuration
+
 1. Adjust viewport dimensions if targeting different devices
 2. Modify `inlineThreshold` based on CSS size
 3. Test with different pages to ensure coverage

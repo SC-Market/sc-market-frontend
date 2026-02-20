@@ -1,11 +1,13 @@
 # Component Prefetching Implementation
 
 ## Overview
+
 Implemented comprehensive prefetching for lazy-loaded components across the application, ensuring tab components and related views are ready before users navigate to them.
 
 ## What Was Added
 
 ### 1. Component Prefetch System (`src/router/componentPrefetch.ts`)
+
 A new module that manages prefetching of lazy-loaded components within pages:
 
 - **Component Registry**: Maps component identifiers to their import functions
@@ -14,28 +16,32 @@ A new module that manages prefetching of lazy-loaded components within pages:
 - **Caching**: Tracks prefetched components to avoid duplicate loads
 
 ### 2. Enhanced Route Prefetch Configuration (`src/types/routes.ts`)
+
 Extended the existing `ROUTE_PREFETCH_MAP` with comprehensive mappings:
 
 - Contract/Order detail pages → Related pages
 - User profiles → Tab variants
-- Contractor/Org pages → Tab variants  
+- Contractor/Org pages → Tab variants
 - Dashboard → Common next actions
 - Settings → Related pages
 - Market management → Related pages
 - Admin pages → Related admin pages
 
 ### 3. Updated Route Prefetch Hook (`src/hooks/router/useRoutePrefetch.ts`)
+
 Enhanced to prefetch both routes AND components when navigating.
 
 ## Pages with Prefetched Components
 
 ### Pages with Route-Based Tabs
+
 - `/contract/:id` and `/order/:id` - All order detail tabs
 - `/user/:username` - Profile tabs
 - `/contractor/:id` - Organization tabs
 - `/profile` - My profile tabs
 
 ### Pages with Internal Tabs (Not Route-Based)
+
 - `/offer/:id` - Offer detail tabs (details, messages, service, availability)
 - `/market` - Market tabs (items, services, actions)
 - `/contracts` - Contract tabs (items, services, actions)
@@ -65,6 +71,7 @@ Enhanced to prefetch both routes AND components when navigating.
 ## Technical Details
 
 ### Component Registry Structure
+
 ```typescript
 export const componentRegistry: Record<string, ComponentImportFunction> = {
   "order:details": () => import("../views/orders/OrderDetailsArea"),
@@ -74,6 +81,7 @@ export const componentRegistry: Record<string, ComponentImportFunction> = {
 ```
 
 ### Prefetch Map Structure
+
 ```typescript
 export const COMPONENT_PREFETCH_MAP: Record<string, string[]> = {
   "/order/:id": [
@@ -86,6 +94,7 @@ export const COMPONENT_PREFETCH_MAP: Record<string, string[]> = {
 ```
 
 ### Pattern Matching
+
 The system uses regex to match dynamic route segments (`:id`, `:username`, etc.) to determine which components to prefetch.
 
 ## Files Modified

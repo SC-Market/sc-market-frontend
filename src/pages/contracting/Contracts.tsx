@@ -215,10 +215,7 @@ export function Contracts() {
                         <ContractSidebar />
 
                         <Grid item xs={12}>
-                          <Grid
-                            container
-                            spacing={theme.layoutSpacing.layout}
-                          >
+                          <Grid container spacing={theme.layoutSpacing.layout}>
                             <ContractListings />
                           </Grid>
                         </Grid>
@@ -246,10 +243,7 @@ export function Contracts() {
                         )}
 
                         <Box sx={{ flex: 1 }}>
-                          <Grid
-                            container
-                            spacing={theme.layoutSpacing.layout}
-                          >
+                          <Grid container spacing={theme.layoutSpacing.layout}>
                             <ContractListings />
                           </Grid>
                         </Box>

@@ -1,5 +1,12 @@
 import React, { ReactElement, ReactNode } from "react"
-import { Box, Container, Divider, Grid, Stack, useMediaQuery } from "@mui/material"
+import {
+  Box,
+  Container,
+  Divider,
+  Grid,
+  Stack,
+  useMediaQuery,
+} from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import {
@@ -17,9 +24,7 @@ export interface SidebarPageLayoutProps extends StandardPageLayoutProps {
  * Used by Market, Contractors, Recruiting, Services, etc.
  * Matches the market page layout structure.
  */
-export function SidebarPageLayout(
-  props: SidebarPageLayoutProps,
-): ReactElement {
+export function SidebarPageLayout(props: SidebarPageLayoutProps): ReactElement {
   const { sidebar, contentMaxWidth = "md", children, ...standardProps } = props
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
@@ -55,9 +60,7 @@ export function SidebarPageLayout(
             >
               {sidebar}
 
-              <Box sx={{ flex: 1, maxWidth: contentMaxWidth }}>
-                {children}
-              </Box>
+              <Box sx={{ flex: 1, maxWidth: contentMaxWidth }}>{children}</Box>
             </Stack>
           )}
         </Box>

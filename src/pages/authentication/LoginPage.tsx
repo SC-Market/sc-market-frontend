@@ -45,7 +45,10 @@ export function LoginPage() {
         >
           <Grid container spacing={theme.layoutSpacing.layout}>
             <Grid item xs={12}>
-              <SignInArea errorMessage={errorMessage} onClearError={clearError} />
+              <SignInArea
+                errorMessage={errorMessage}
+                onClearError={clearError}
+              />
             </Grid>
           </Grid>
         </Container>

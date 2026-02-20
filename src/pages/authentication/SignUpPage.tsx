@@ -45,7 +45,10 @@ export function SignUpPage() {
         >
           <Grid container spacing={theme.layoutSpacing.layout}>
             <Grid item xs={12}>
-              <SignUpArea errorMessage={errorMessage} onClearError={clearError} />
+              <SignUpArea
+                errorMessage={errorMessage}
+                onClearError={clearError}
+              />
             </Grid>
           </Grid>
         </Container>

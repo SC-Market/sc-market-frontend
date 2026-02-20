@@ -22,7 +22,7 @@ function ViewMarketListing() {
       breadcrumbs={[
         { label: "Home", href: "/" },
         { label: "Market", href: "/market" },
-        { label: data?.title || "Loading..." }
+        { label: data?.title || "Loading..." },
       ]}
       isLoading={isLoading}
       error={error}
@@ -41,27 +41,28 @@ DetailPageLayout accepts all props from `StandardPageLayout` plus the following:
 ### Navigation Props
 
 #### `backButton?: boolean`
+
 Shows a back arrow button in the header. Default: `false`.
 
 ```tsx
-<DetailPageLayout
-  title="Market Listing"
-  backButton={true}
->
+<DetailPageLayout title="Market Listing" backButton={true}>
   {/* ... */}
 </DetailPageLayout>
 ```
 
 **When to use:**
+
 - Edit pages (always show back button)
 - Detail pages where users typically navigate from a list
 - Any page where going back is a common action
 
 **When NOT to use:**
+
 - View pages that are entry points (users might bookmark them)
 - Pages where back navigation is ambiguous
 
 #### `backTo?: string`
+
 Specific URL to navigate to when back button is clicked. If not provided, uses browser history (`navigate(-1)`).
 
 ```tsx
@@ -75,6 +76,7 @@ Specific URL to navigate to when back button is clicked. If not provided, uses b
 ```
 
 **Use cases:**
+
 - When you want to ensure users go to a specific page
 - When browser history might be unreliable
 - When you want to preserve query parameters or state
@@ -82,6 +84,7 @@ Specific URL to navigate to when back button is clicked. If not provided, uses b
 ### Entity-Specific Props
 
 #### `entityTitle?: string`
+
 The main title for the entity being viewed. Displayed prominently in the header.
 
 ```tsx
@@ -97,6 +100,7 @@ The main title for the entity being viewed. Displayed prominently in the header.
 **Note:** If `entityTitle` is provided, it takes precedence over `headerTitle`.
 
 #### `entitySubtitle?: ReactNode`
+
 Secondary information about the entity. Displayed below the entity title in a smaller, muted font.
 
 ```tsx
@@ -110,6 +114,7 @@ Secondary information about the entity. Displayed below the entity title in a sm
 ```
 
 Can be a custom component:
+
 ```tsx
 <DetailPageLayout
   title="Order Details"
@@ -128,6 +133,7 @@ Can be a custom component:
 ```
 
 #### `entityActions?: ReactNode`
+
 Actions specific to the entity (edit, delete, share, etc.). Displayed on the right side of the header.
 
 ```tsx
@@ -177,14 +183,16 @@ function ViewMarketListing() {
       breadcrumbs={[
         { label: "Home", href: "/" },
         { label: "Market", href: "/market" },
-        { label: data?.title || "Loading..." }
+        { label: data?.title || "Loading..." },
       ]}
       isLoading={isLoading}
       error={error}
       skeleton={<MarketListingSkeleton />}
     >
       <LazySection
-        component={lazy(() => import("../../features/market/components/MarketListingView"))}
+        component={lazy(
+          () => import("../../features/market/components/MarketListingView"),
+        )}
         skeleton={<MarketListingDetailsSkeleton />}
         componentProps={{ listing: data }}
       />
@@ -211,7 +219,7 @@ function EditMarketListing() {
         { label: "Home", href: "/" },
         { label: "Market", href: "/market" },
         { label: data?.title || "Loading...", href: `/market/${id}` },
-        { label: "Edit" }
+        { label: "Edit" },
       ]}
       isLoading={isLoading}
       error={error}
@@ -236,9 +244,7 @@ function ViewOrg() {
       entityTitle={data?.name}
       entitySubtitle={
         <Box display="flex" gap={2} alignItems="center">
-          <Typography variant="caption">
-            {data?.memberCount} members
-          </Typography>
+          <Typography variant="caption">{data?.memberCount} members</Typography>
           <Chip label={data?.type} size="small" />
         </Box>
       }
@@ -256,7 +262,7 @@ function ViewOrg() {
       breadcrumbs={[
         { label: "Home", href: "/" },
         { label: "Organizations", href: "/contractors" },
-        { label: data?.name || "Loading..." }
+        { label: data?.name || "Loading..." },
       ]}
       maxWidth="xl"
       isLoading={isLoading}
@@ -264,7 +270,9 @@ function ViewOrg() {
       skeleton={<OrgSkeleton />}
     >
       <LazySection
-        component={lazy(() => import("../../features/contractor/components/OrgInfo"))}
+        component={lazy(
+          () => import("../../features/contractor/components/OrgInfo"),
+        )}
         skeleton={<OrgInfoSkeleton />}
         componentProps={{ org: data }}
       />
@@ -282,10 +290,14 @@ function ViewOrder() {
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case "completed": return "success"
-      case "cancelled": return "error"
-      case "in_progress": return "info"
-      default: return "default"
+      case "completed":
+        return "success"
+      case "cancelled":
+        return "error"
+      case "in_progress":
+        return "info"
+      default:
+        return "default"
     }
   }
 
@@ -295,10 +307,10 @@ function ViewOrder() {
       entityTitle={`Order #${data?.id}`}
       entitySubtitle={
         <Box display="flex" gap={1} alignItems="center">
-          <Chip 
-            label={data?.status} 
+          <Chip
+            label={data?.status}
             color={getStatusColor(data?.status)}
-            size="small" 
+            size="small"
           />
           <Typography variant="caption">
             {formatDate(data?.createdAt)}
@@ -308,11 +320,7 @@ function ViewOrder() {
       entityActions={
         <Box display="flex" gap={1}>
           {data?.canCancel && (
-            <Button
-              variant="outlined"
-              color="error"
-              onClick={handleCancel}
-            >
+            <Button variant="outlined" color="error" onClick={handleCancel}>
               Cancel Order
             </Button>
           )}
@@ -328,7 +336,7 @@ function ViewOrder() {
       breadcrumbs={[
         { label: "Home", href: "/" },
         { label: "Orders", href: "/orders" },
-        { label: `Order #${data?.id || id}` }
+        { label: `Order #${data?.id || id}` },
       ]}
       isLoading={isLoading}
       error={error}
@@ -379,7 +387,7 @@ function ViewContract() {
       breadcrumbs={[
         { label: "Home", href: "/" },
         { label: "Contracts", href: "/contracts" },
-        { label: data?.title || "Loading..." }
+        { label: data?.title || "Loading..." },
       ]}
       isLoading={isLoading}
       error={error}
@@ -416,9 +424,10 @@ DetailPageLayout works seamlessly with page hooks:
 ```tsx
 function ViewMarketListing() {
   const { id } = useParams()
-  
+
   // Page hook handles all data fetching
-  const { data, isLoading, isFetching, error, refetch } = usePageMarketListing(id)
+  const { data, isLoading, isFetching, error, refetch } =
+    usePageMarketListing(id)
 
   return (
     <DetailPageLayout
@@ -433,7 +442,7 @@ function ViewMarketListing() {
       breadcrumbs={[
         { label: "Home", href: "/" },
         { label: "Market", href: "/market" },
-        { label: data?.title || "Loading..." }
+        { label: data?.title || "Loading..." },
       ]}
       isLoading={isLoading}
       error={error}
@@ -448,6 +457,7 @@ function ViewMarketListing() {
 ## Migration from Old Pattern
 
 ### Before (Old Pattern)
+
 ```tsx
 function OldViewPage() {
   const { id } = useParams()
@@ -483,6 +493,7 @@ function OldViewPage() {
 ```
 
 ### After (New Pattern)
+
 ```tsx
 function NewViewPage() {
   const { id } = useParams()
@@ -493,9 +504,7 @@ function NewViewPage() {
       title={data?.title || "Loading..."}
       entityTitle={data?.title}
       entitySubtitle={data?.subtitle}
-      entityActions={
-        <Button onClick={handleEdit}>Edit</Button>
-      }
+      entityActions={<Button onClick={handleEdit}>Edit</Button>}
       breadcrumbs={breadcrumbs}
       isLoading={isLoading}
       error={error}
