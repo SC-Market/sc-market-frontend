@@ -9,6 +9,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles"
 import { DrawerOpenContext } from "../../../hooks/layout/Drawer"
 import { AlertHookContext } from "../../../hooks/alert/AlertHook"
 import { CurrentOrgContext } from "../../../hooks/login/CurrentOrg"
+import type { Contractor } from "../../../datatypes/Contractor"
 
 // Mock the hooks
 vi.mock("../../../features/authentication/hooks/usePageLogin", () => ({
@@ -76,7 +77,7 @@ function TestWrapper({ children }: { children: React.ReactNode }) {
   const drawerState = React.useState(false)
   const alertState = React.useState<any>(null)
   const mockAlertContext: any = [alertState[0], alertState[1]]
-  const currentOrgState = React.useState<string | null>(null)
+  const currentOrgState = React.useState<Contractor | null>(null)
 
   return (
     <Provider store={store}>
