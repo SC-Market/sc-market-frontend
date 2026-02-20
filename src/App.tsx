@@ -28,6 +28,7 @@ import { useWebVitals } from "./hooks/performance/useWebVitals"
 import { useRoutePrefetch } from "./hooks/router/useRoutePrefetch"
 import { prefetchHighPriorityRoutes } from "./router/routePrefetch"
 import { usePageTitle } from "./hooks/router/usePageTitle"
+import { LandingPage } from "./pages/home/LandingPage"
 
 import "./util/i18n.ts"
 
@@ -152,9 +153,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        lazy: async () => ({
-          Component: (await import("./pages/home/LandingPage")).LandingPage,
-        }),
+        element: <LandingPage />,
       },
       {
         path: "/login",

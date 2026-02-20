@@ -180,7 +180,7 @@ export function MarketPage() {
                 </Grid>
               </Grid>
 
-              <Divider light />
+              <Divider light sx={{ mt: 2, mb: 2 }} />
             </Container>
 
             <TabPanel value={tabPage} index={1}>

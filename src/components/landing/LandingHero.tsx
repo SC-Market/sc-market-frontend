@@ -6,11 +6,16 @@ import { useTranslation } from "react-i18next"
 import { useGetUserProfileQuery } from "../../store/profile"
 import { LoginArea } from "../../views/authentication/LoginArea"
 import logo from "../../assets/scmarket-logo.webp"
+import { LandingHeroSkeleton } from "./LandingHero.skeleton"
 
 export function LandingHero() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
-  const profile = useGetUserProfileQuery()
+  const { data: profile, isLoading } = useGetUserProfileQuery()
+
+  if (isLoading) {
+    return <LandingHeroSkeleton />
+  }
 
   return (
     <Box
@@ -63,7 +68,7 @@ export function LandingHero() {
             {t("landing.subtitle")}
           </Typography>
         </Stack>
-        {!profile.data && (
+        {!profile && (
           <Box
             sx={{
               width: { xs: "100%", md: "auto" },

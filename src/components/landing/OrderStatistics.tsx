@@ -6,10 +6,11 @@ import { useTranslation } from "react-i18next"
 import CountUp from "react-countup"
 import { MetricSection } from "../../views/orders/OrderMetrics"
 import { useGetMarketStatsQuery } from "../../features/market/api/marketApi"
+import { OrderStatisticsSkeleton } from "./OrderStatistics.skeleton"
 
 export function OrderStatistics() {
   const { t } = useTranslation()
-  const { data: stats } = useGetMarketStatsQuery()
+  const { data: stats, isLoading } = useGetMarketStatsQuery()
   const { total_orders, total_order_value, week_orders, week_order_value } =
     stats || {
       total_orders: 0,
@@ -19,6 +20,11 @@ export function OrderStatistics() {
     }
 
   const theme = useTheme<ExtendedTheme>()
+
+  if (isLoading) {
+    return <OrderStatisticsSkeleton />
+  }
+
   return (
     <Grid
       container
