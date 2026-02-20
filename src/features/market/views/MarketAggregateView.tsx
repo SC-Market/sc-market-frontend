@@ -41,11 +41,7 @@ import {
   VisibilityRounded,
   ZoomInRounded,
 } from "@mui/icons-material"
-import {
-  BuyOrder,
-  MarketAggregate,
-  MarketAggregateListing,
-} from ".."
+import { BuyOrder, MarketAggregate, MarketAggregateListing } from ".."
 import {
   useMarketCancelBuyOrderMutation,
   useMarketFulfillBuyOrderMutation,
@@ -60,7 +56,10 @@ import { FRONTEND_URL } from "../../../util/constants"
 import { Cart } from "../../../datatypes/Cart"
 import { Link, Navigate, useNavigate } from "react-router-dom"
 import { ListingNameAndRating } from "../../../components/rating/ListingRating"
-import { HeadCell, PaginatedTable } from "../../../components/table/PaginatedTable"
+import {
+  HeadCell,
+  PaginatedTable,
+} from "../../../components/table/PaginatedTable"
 import { Helmet } from "react-helmet"
 import { ImagePreviewModal } from "../../../components/modal/ImagePreviewModal"
 import { ImageSearch } from "../components/ImageSearch"
@@ -69,10 +68,8 @@ import { BuyOrderForm } from ".."
 import { Rating } from "../../../datatypes/Contractor"
 import { HeaderTitle } from "../../../components/typography/HeaderTitle"
 import { Section } from "../../../components/paper/Section"
-import {
-  DynamicApexChart,
-  DynamicKlineChart,
-} from "../../../components/charts/DynamicCharts"
+import { DynamicKlineChart } from "../../../components/charts/DynamicCharts"
+import { MuiAreaChart } from "../../../components/charts/MuiCharts"
 import { NumericFormat } from "react-number-format"
 import { Stack } from "@mui/system"
 import { useTranslation } from "react-i18next" // Localization
@@ -237,7 +234,11 @@ export function MarketAggregateView() {
               margin: "auto",
             }}
             src={photos[0]}
-            alt={t("marketAggregateView.productImage", "Product image for {{title}}", { title: details.title })}
+            alt={t(
+              "marketAggregateView.productImage",
+              "Product image for {{title}}",
+              { title: details.title },
+            )}
             onError={({ currentTarget }) => {
               currentTarget.onerror = null
               currentTarget.src =
@@ -995,80 +996,19 @@ export function AggregateBuySellWall(props: { aggregate: MarketAggregate }) {
     <Section xs={12}>
       <Grid item xs={12}>
         <Box>
-          <DynamicApexChart
-            width={"100%"}
-            height={400}
-            type={"area"}
-            options={{
-              tooltip: {
-                x: {
-                  formatter: (value: number) =>
-                    `${value.toLocaleString(undefined)} aUEC`,
-                },
-                y: {
-                  formatter: (
-                    value: number,
-                    { series: _, seriesIndex, dataPointIndex, w }: any,
-                  ) =>
-                    `${value} ${
-                      seriesIndex
-                        ? t("MarketAggregateView.sellOrdersChart")
-                        : t("MarketAggregateView.buyOrdersChart")
-                    } ${t("MarketAggregateView.atPrice", {
-                      price:
-                        series[seriesIndex][dataPointIndex].x.toLocaleString(
-                          undefined,
-                        ),
-                      direction: seriesIndex
-                        ? t("MarketAggregateView.orLower")
-                        : t("MarketAggregateView.orHigher"),
-                    })}`,
-                  title: { formatter: (seriesName: string) => "" },
-                },
-              },
-              xaxis: {
-                type: "numeric",
-                labels: {
-                  formatter: (value: number, timestamp?: any, opts?: any) =>
-                    `${(+value).toLocaleString()} aUEC`,
-                },
-              },
-              yaxis: {
-                forceNiceScale: true,
-                min: 0,
-                max: yMax,
-                labels: {
-                  formatter: (value: number, opts?: any) =>
-                    Math.floor(value).toLocaleString(undefined),
-                },
-              },
-              dataLabels: {
-                enabled: false,
-              },
-              stroke: {
-                curve: "smooth",
-              },
-              fill: {
-                type: "gradient",
-                gradient: {
-                  shadeIntensity: 1,
-                  inverseColors: false,
-                  opacityFrom: 0.45,
-                  opacityTo: 0.05,
-                  stops: [20, 100, 100, 100],
-                },
-              },
-            }}
+          <MuiAreaChart
             series={[
               {
                 name: t("MarketAggregateView.buyOrdersChart"),
-                data: buyWall,
+                data: buyWall.map((d) => ({ x: d.x.toString(), y: d.y })),
               },
               {
                 name: t("MarketAggregateView.sellOrdersChart"),
-                data: sellWall,
+                data: sellWall.map((d) => ({ x: d.x.toString(), y: d.y })),
               },
             ]}
+            height={400}
+            xAxisType="category"
           />
         </Box>
       </Grid>

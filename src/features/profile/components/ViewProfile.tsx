@@ -6,9 +6,7 @@ import { useTheme } from "@mui/material/styles"
 import { User } from "../../../datatypes/User"
 import { UserReviewSummary } from "../../../views/contractor/OrgReviews"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
-import { OpenLayout } from "../../../components/layout/ContainerGrid"
 import { SwipeableItem } from "../../../components/gestures"
-import { PageBreadcrumbs } from "../../../components/navigation"
 import { ProfileBannerArea } from "./ProfileBannerArea"
 import { ProfileMetaTags } from "./ProfileMetaTags"
 import { ProfileHeader } from "./ProfileHeader"
@@ -35,81 +33,64 @@ export function ViewProfile(props: { profile: User }) {
   } = useProfileActions()
 
   return (
-    <OpenLayout sidebarOpen={true}>
-      <PageBreadcrumbs
-        items={[
-          { label: t("people.title", "People"), href: "/people" },
-          { label: props.profile.display_name },
-        ]}
-        MuiBreadcrumbsProps={{
-          sx: {
-            mb: 1,
-          },
+    <Box sx={{ position: "relative" }}>
+      <ProfileBannerArea profile={props.profile} submitUpdate={submitUpdate} />
+      <Box
+        sx={{
+          ...(theme.palette.mode === "dark"
+            ? { position: "relative", top: -500 }
+            : { position: "relative", top: -250 }),
         }}
-      />
-      <Box sx={{ position: "relative" }}>
-        <ProfileBannerArea
-          profile={props.profile}
-          submitUpdate={submitUpdate}
-        />
-        <Box
-          sx={{
-            ...(theme.palette.mode === "dark"
-              ? { position: "relative", top: -500 }
-              : { position: "relative", top: -250 }),
-          }}
-        >
-          <ProfileMetaTags profile={props.profile} />
-          <Container maxWidth={"xl"}>
-            <Stack spacing={theme.layoutSpacing.layout}>
-              <Grid
-                spacing={theme.layoutSpacing.layout}
-                container
-                justifyContent="space-between"
-                alignItems="end"
-                sx={{
-                  marginTop: 1,
-                  [theme.breakpoints.up("lg")]: { height: 400 },
-                }}
-              >
-                <Grid item xs={12} lg={8}>
-                  <ProfileHeader
-                    profile={props.profile}
-                    isMyProfile={isMyProfile}
-                    isUploadingAvatar={isUploadingAvatar}
-                    onAvatarUpload={handleAvatarUpload}
-                    setAvatarFileInputRef={setAvatarFileInputRef}
-                  />
-                </Grid>
-                <UserReviewSummary user={props.profile} />
+      >
+        <ProfileMetaTags profile={props.profile} />
+        <Container maxWidth={"xl"}>
+          <Stack spacing={theme.layoutSpacing.layout}>
+            <Grid
+              spacing={theme.layoutSpacing.layout}
+              container
+              justifyContent="space-between"
+              alignItems="end"
+              sx={{
+                marginTop: 1,
+                [theme.breakpoints.up("lg")]: { height: 400 },
+              }}
+            >
+              <Grid item xs={12} lg={8}>
+                <ProfileHeader
+                  profile={props.profile}
+                  isMyProfile={isMyProfile}
+                  isUploadingAvatar={isUploadingAvatar}
+                  onAvatarUpload={handleAvatarUpload}
+                  setAvatarFileInputRef={setAvatarFileInputRef}
+                />
               </Grid>
-              <ProfileTabs
-                username={props.profile.username}
-                currentTab={page}
-              />
-            </Stack>
-          </Container>
+              <UserReviewSummary user={props.profile} />
+            </Grid>
+            <ProfileTabs username={props.profile.username} currentTab={page} />
+          </Stack>
+        </Container>
 
-          <SwipeableItem
-            onSwipeLeft={() => {
-              if (page < tabPaths.length - 1) {
-                navigate(tabPaths[page + 1])
-              }
-            }}
-            onSwipeRight={() => {
-              if (page > 0) navigate(tabPaths[page - 1])
-            }}
-            enabled={isMobile}
-          >
-            <ProfileTabContent
-              currentTab={page}
-              profile={props.profile}
-              isMyProfile={isMyProfile}
-              submitUpdate={submitUpdate}
-            />
-          </SwipeableItem>
-        </Box>
+        <SwipeableItem
+          onSwipeLeft={() => {
+            if (page < tabPaths.length - 1) {
+              navigate(tabPaths[page + 1])
+            }
+          }}
+          onSwipeRight={() => {
+            if (page > 0) navigate(tabPaths[page - 1])
+          }}
+          enabled={isMobile}
+        >
+          <ProfileTabContent
+            currentTab={page}
+            profile={props.profile}
+            isMyProfile={isMyProfile}
+            submitUpdate={submitUpdate}
+          />
+        </SwipeableItem>
       </Box>
-    </OpenLayout>
+    </Box>
   )
 }
+
+export default ViewProfile

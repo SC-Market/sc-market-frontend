@@ -52,7 +52,10 @@ export function ContractDetailsArea(props: { contract: PublicContract }) {
               </TableCell>
               <TableCell align="right">
                 <Stack direction="row" justifyContent={"right"}>
-                  {format(new Date(contract.timestamp), "MMMM do yyyy, h:mm:ss a")}
+                  {format(
+                    new Date(contract.timestamp),
+                    "MMMM do yyyy, h:mm:ss a",
+                  )}
                 </Stack>
               </TableCell>
             </TableRow>

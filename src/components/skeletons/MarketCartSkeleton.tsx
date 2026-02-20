@@ -21,19 +21,41 @@ export function MarketCartSkeleton() {
               <Grid container spacing={2} alignItems="center">
                 {/* Item image */}
                 <Grid item>
-                  <BaseSkeleton variant="rectangular" width={128} height={128} sx={{ borderRadius: 1 }} />
+                  <BaseSkeleton
+                    variant="rectangular"
+                    width={128}
+                    height={128}
+                    sx={{ borderRadius: 1 }}
+                  />
                 </Grid>
-                
+
                 {/* Item details */}
                 <Grid item xs>
                   <BaseSkeleton variant="text" width="70%" height={24} />
-                  <BaseSkeleton variant="text" width="40%" height={20} sx={{ mt: 1 }} />
-                  <Box sx={{ display: "flex", gap: 2, mt: 2, alignItems: "center" }}>
-                    <BaseSkeleton variant="rectangular" width={120} height={40} sx={{ borderRadius: 1 }} />
+                  <BaseSkeleton
+                    variant="text"
+                    width="40%"
+                    height={20}
+                    sx={{ mt: 1 }}
+                  />
+                  <Box
+                    sx={{
+                      display: "flex",
+                      gap: 2,
+                      mt: 2,
+                      alignItems: "center",
+                    }}
+                  >
+                    <BaseSkeleton
+                      variant="rectangular"
+                      width={120}
+                      height={40}
+                      sx={{ borderRadius: 1 }}
+                    />
                     <BaseSkeleton variant="text" width={80} height={24} />
                   </Box>
                 </Grid>
-                
+
                 {/* Remove button */}
                 <Grid item>
                   <BaseSkeleton variant="circular" width={40} height={40} />
@@ -48,12 +70,45 @@ export function MarketCartSkeleton() {
 
         {/* Checkout sidebar - Right side */}
         <Grid item xs={12} md={4}>
-          <Box sx={{ border: 1, borderColor: "divider", borderRadius: 1, p: 2, height: 300 }}>
-            <BaseSkeleton variant="text" width="60%" height={28} sx={{ mb: 2 }} />
-            <BaseSkeleton variant="text" width="100%" height={20} sx={{ mb: 1 }} />
-            <BaseSkeleton variant="text" width="100%" height={20} sx={{ mb: 1 }} />
-            <BaseSkeleton variant="text" width="100%" height={20} sx={{ mb: 3 }} />
-            <BaseSkeleton variant="rectangular" width="100%" height={48} sx={{ borderRadius: 1 }} />
+          <Box
+            sx={{
+              border: 1,
+              borderColor: "divider",
+              borderRadius: 1,
+              p: 2,
+              height: 300,
+            }}
+          >
+            <BaseSkeleton
+              variant="text"
+              width="60%"
+              height={28}
+              sx={{ mb: 2 }}
+            />
+            <BaseSkeleton
+              variant="text"
+              width="100%"
+              height={20}
+              sx={{ mb: 1 }}
+            />
+            <BaseSkeleton
+              variant="text"
+              width="100%"
+              height={20}
+              sx={{ mb: 1 }}
+            />
+            <BaseSkeleton
+              variant="text"
+              width="100%"
+              height={20}
+              sx={{ mb: 3 }}
+            />
+            <BaseSkeleton
+              variant="rectangular"
+              width="100%"
+              height={48}
+              sx={{ borderRadius: 1 }}
+            />
           </Box>
         </Grid>
       </Grid>

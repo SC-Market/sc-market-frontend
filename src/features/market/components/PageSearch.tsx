@@ -71,7 +71,9 @@ function PageChoice(props: {
               target.src =
                 "https://cdn.robertsspaceindustries.com/static/images/Temp/default-image.png"
             }}
-            alt={t("pageSearch.wikiPageThumbnail", "Thumbnail for {{title}}", { title: page.title })}
+            alt={t("pageSearch.wikiPageThumbnail", "Thumbnail for {{title}}", {
+              title: page.title,
+            })}
             sx={{
               borderRadius: (theme) =>
                 theme.spacing((theme as ExtendedTheme).borderRadius.image),
@@ -161,7 +163,15 @@ export function PageSearch(props: {
               (page?.thumbnail?.source || "").replace(/\d+px/, "512px") ||
               MISSING_IMAGE_URL
             }
-            alt={page?.title ? t("pageSearch.selectedPageThumbnail", "Selected page thumbnail for {{title}}", { title: page.title }) : t("pageSearch.noPageSelected", "No page selected")}
+            alt={
+              page?.title
+                ? t(
+                    "pageSearch.selectedPageThumbnail",
+                    "Selected page thumbnail for {{title}}",
+                    { title: page.title },
+                  )
+                : t("pageSearch.noPageSelected", "No page selected")
+            }
             sx={{
               borderRadius: theme.spacing(theme.borderRadius.image),
               transition: "0.5s",

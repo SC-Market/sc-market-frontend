@@ -23,6 +23,7 @@ All third-party scripts are configured with appropriate loading strategies:
   - Enhancement scripts that don't affect initial render
 
 **Benefits:**
+
 - Prevents blocking of HTML parsing
 - Allows critical content to render faster
 - Improves LCP by 200-500ms
@@ -37,11 +38,13 @@ Scripts are loaded only after the page becomes interactive, using:
 - `setTimeout`: Fallback with 2-second delay
 
 **Applied to:**
+
 - Analytics scripts (Google Analytics, Plausible)
 - Cookie consent tracking
 - Non-critical monitoring
 
 **Benefits:**
+
 - Reduces initial JavaScript execution time
 - Improves TBT by 300-800ms
 - Allows critical resources to load first
@@ -49,12 +52,12 @@ Scripts are loaded only after the page becomes interactive, using:
 **Usage:**
 
 ```typescript
-import { loadScriptWhenIdle } from './delayedScriptLoader'
+import { loadScriptWhenIdle } from "./delayedScriptLoader"
 
 // Load analytics after page is interactive
 loadScriptWhenIdle(() => {
   // Initialize analytics
-  window.gtag('config', 'GA_MEASUREMENT_ID')
+  window.gtag("config", "GA_MEASUREMENT_ID")
 })
 ```
 
@@ -69,6 +72,7 @@ Bugsnag is loaded asynchronously with error boundary fallback:
 - Safe access pattern for all Bugsnag calls
 
 **Benefits:**
+
 - No blocking of critical rendering path
 - Maintains error monitoring capability
 - Improves LCP by 100-200ms
@@ -76,7 +80,7 @@ Bugsnag is loaded asynchronously with error boundary fallback:
 **Usage:**
 
 ```typescript
-import { getBugsnagInstance } from './bugsnagLoader'
+import { getBugsnagInstance } from "./bugsnagLoader"
 
 // Safely access Bugsnag
 const Bugsnag = getBugsnagInstance()
@@ -96,6 +100,7 @@ Heavy embeds (YouTube videos, maps) use the facade pattern:
 - Defer ~500KB+ of resources per embed
 
 **Benefits:**
+
 - Massive reduction in initial page weight
 - Improves LCP by 500-1500ms (depending on number of embeds)
 - Reduces network requests by 5-10 per embed
@@ -104,13 +109,13 @@ Heavy embeds (YouTube videos, maps) use the facade pattern:
 **Usage:**
 
 ```tsx
-import { YouTubeFacade } from '../embeds/YouTubeFacade'
+import { YouTubeFacade } from "../embeds/YouTubeFacade"
 
 // Instead of:
 // <YouTube videoId="abc123" />
 
 // Use:
-<YouTubeFacade videoId="abc123" />
+;<YouTubeFacade videoId="abc123" />
 ```
 
 ## Performance Impact
@@ -144,6 +149,7 @@ import { YouTubeFacade } from '../embeds/YouTubeFacade'
 ## Files Modified
 
 ### New Files
+
 - `src/util/scripts/thirdPartyScripts.ts` - Script loading utilities
 - `src/util/scripts/delayedScriptLoader.ts` - Delayed loading implementation
 - `src/util/monitoring/bugsnagLoader.ts` - Optimized Bugsnag loader
@@ -152,6 +158,7 @@ import { YouTubeFacade } from '../embeds/YouTubeFacade'
 - `src/components/embeds/index.ts` - Embed exports
 
 ### Modified Files
+
 - `src/components/alert/CookieConsent.tsx` - Uses delayed analytics loading
 - `src/index.tsx` - Uses optimized Bugsnag loader
 - `src/components/router/LoggedInRoute.tsx` - Uses optimized Bugsnag loader
@@ -162,11 +169,13 @@ import { YouTubeFacade } from '../embeds/YouTubeFacade'
 ### When to Use Async vs Defer
 
 **Use `async`:**
+
 - Analytics scripts that can execute independently
 - Scripts that don't depend on DOM being ready
 - Scripts that don't depend on other scripts
 
 **Use `defer`:**
+
 - Scripts that need DOM to be ready
 - Scripts that depend on other scripts
 - Scripts that should execute in order
@@ -174,12 +183,14 @@ import { YouTubeFacade } from '../embeds/YouTubeFacade'
 ### When to Use Delayed Loading
 
 Use delayed loading for:
+
 - Analytics and tracking scripts
 - Non-critical monitoring
 - Enhancement features
 - Scripts that don't affect initial user experience
 
 **Don't use delayed loading for:**
+
 - Error monitoring (use async instead)
 - Critical functionality
 - Scripts needed for first interaction
@@ -187,12 +198,14 @@ Use delayed loading for:
 ### When to Use Facades
 
 Use facades for:
+
 - Video embeds (YouTube, Vimeo)
 - Map embeds (Google Maps, Mapbox)
 - Social media embeds (Twitter, Instagram)
 - Any embed > 100KB
 
 **Don't use facades for:**
+
 - Critical content
 - Above-the-fold content
 - Small, lightweight embeds

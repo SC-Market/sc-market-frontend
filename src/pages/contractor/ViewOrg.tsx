@@ -1,45 +1,49 @@
-import React from "react"
-import { HeaderTitle } from "../../components/typography/HeaderTitle"
-import { Navigate, useParams } from "react-router-dom"
-import { Contractor } from "../../datatypes/Contractor"
-import { OrgInfo, OrgInfoSkeleton } from "../../features/contractor"
-import { ContainerGrid } from "../../components/layout/ContainerGrid"
-import { Skeleton } from "@mui/material"
-import { useGetContractorBySpectrumIDQuery } from "../../store/contractor"
+import { useParams } from "react-router-dom"
+import { lazy, Suspense } from "react"
+import { OrgInfoSkeleton, usePageOrg } from "../../features/contractor"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
-import { Page } from "../../components/metadata/Page"
-import { PageBreadcrumbs } from "../../components/navigation"
 import { useTranslation } from "react-i18next"
-import {
-  shouldRedirectTo404,
-  shouldShowErrorPage,
-} from "../../util/errorHandling"
-import { ErrorPage } from "../errors/ErrorPage"
+import { BannerPageLayout } from "../../components/layout/BannerPageLayout"
+
+// Lazy load OrgInfo component
+const OrgInfo = lazy(() =>
+  import("../../features/contractor").then((module) => ({
+    default: module.OrgInfo,
+  })),
+)
 
 export function ViewOrg() {
   const { id } = useParams<{ id: string }>()
   const { t } = useTranslation()
-
-  const contractor = useGetContractorBySpectrumIDQuery(id!)
+  const pageData = usePageOrg(id!)
 
   return (
-    <Page
+    <BannerPageLayout
       title={
-        contractor.data?.name
-          ? `${contractor.data?.name} - ${t("org.orgTitle")}`
-          : null
+        pageData.data?.contractor.name
+          ? `${pageData.data.contractor.name} - ${t("org.orgTitle")}`
+          : t("org.orgTitle")
       }
+      breadcrumbs={[
+        {
+          label: t("contractors.title", "Contractors"),
+          href: "/contractors",
+        },
+        {
+          label: pageData.data?.contractor.name || t("org.loading"),
+        },
+      ]}
+      isLoading={pageData.isLoading}
+      error={pageData.error}
+      skeleton={<OrgInfoSkeleton />}
+      sidebarOpen={true}
     >
-      {contractor.isLoading || contractor.isFetching ? (
-        <OrgInfoSkeleton />
-      ) : shouldRedirectTo404(contractor.error) ? (
-        <Navigate to={"/404"} />
-      ) : shouldShowErrorPage(contractor.error) ? (
-        <ErrorPage />
-      ) : (
-        <OrgInfo contractor={contractor.data!} />
+      {pageData.data && (
+        <Suspense fallback={<OrgInfoSkeleton />}>
+          <OrgInfo contractor={pageData.data.contractor} />
+        </Suspense>
       )}
-    </Page>
+    </BannerPageLayout>
   )
 }
 
@@ -48,23 +52,17 @@ export function MyOrg() {
   const { t } = useTranslation()
 
   return (
-    <Page title={t("org.myOrgTitle")}>
-      {!contractor ? (
-        <Navigate to={"/404"} />
-      ) : (
-        <OrgInfo contractor={contractor} />
+    <BannerPageLayout
+      title={t("org.myOrgTitle")}
+      isLoading={!contractor}
+      skeleton={<OrgInfoSkeleton />}
+      sidebarOpen={true}
+    >
+      {contractor && (
+        <Suspense fallback={<OrgInfoSkeleton />}>
+          <OrgInfo contractor={contractor} />
+        </Suspense>
       )}
-    </Page>
-  )
-}
-
-export function OrgSectionSkeleton() {
-  return (
-    <React.Fragment>
-      <HeaderTitle>
-        <Skeleton width={500} variant={"text"} />
-      </HeaderTitle>
-      <OrgInfoSkeleton />
-    </React.Fragment>
+    </BannerPageLayout>
   )
 }

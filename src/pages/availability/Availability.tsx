@@ -1,20 +1,20 @@
-import { Page } from "../../components/metadata/Page"
-import { HeaderTitle } from "../../components/typography/HeaderTitle"
-import { ContainerGrid } from "../../components/layout/ContainerGrid"
-import React, { useCallback, useMemo, useState } from "react"
-import {
-  AvailabilitySelector,
-  generateInitialSelection,
-} from "../../components/time/AvailabilitySelector"
-import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
-import {
-  useProfileGetAvailabilityQuery,
-  useProfileUpdateAvailabilityMutation,
-} from "../../store/profile"
+import React, { useCallback, useMemo, lazy } from "react"
 import { Grid, Skeleton } from "@mui/material"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { useTranslation } from "react-i18next"
+import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
+import { LazySection } from "../../components/layout/LazySection"
+import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
+import { useProfileUpdateAvailabilityMutation } from "../../store/profile"
+import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { convertAvailability } from "../../util/availability"
+import { usePageAvailability } from "../../features/availability/hooks/usePageAvailability"
+
+// Lazy load AvailabilitySelector
+const AvailabilitySelector = lazy(() =>
+  import("../../components/time/AvailabilitySelector").then((module) => ({
+    default: module.AvailabilitySelector,
+  })),
+)
 
 interface Span {
   start: number
@@ -23,18 +23,9 @@ interface Span {
 
 export function Availability() {
   const { t } = useTranslation()
-  const [savedSelections, setSavedSelections] = useState<boolean[][] | null>(
-    null,
-  )
-
   const [currentOrg] = useCurrentOrg()
-
+  const pageData = usePageAvailability(currentOrg?.spectrum_id)
   const [updateAvailability] = useProfileUpdateAvailabilityMutation()
-
-  const { data: availability } = useProfileGetAvailabilityQuery(
-    currentOrg?.spectrum_id,
-  )
-
   const issueAlert = useAlertHook()
 
   const saveCallback = useCallback(
@@ -87,26 +78,36 @@ export function Availability() {
   )
 
   const initial = useMemo(
-    () => convertAvailability(availability?.selections || []),
-    [availability],
+    () => convertAvailability(pageData.data?.selections || []),
+    [pageData.data],
+  )
+
+  const skeleton = (
+    <Grid item xs={12}>
+      <Skeleton width={"100%"} height={400} />
+    </Grid>
   )
 
   return (
-    <Page title={t("availability.title")}>
-      <ContainerGrid maxWidth={"lg"} sidebarOpen={true}>
-        <HeaderTitle xs={12}>{t("availability.title")}</HeaderTitle>
-
-        {availability ? (
-          <AvailabilitySelector
-            onSave={saveCallback}
-            initialSelections={initial}
-          />
-        ) : (
-          <Grid item xs={12}>
-            <Skeleton width={"100%"} height={400} />
-          </Grid>
-        )}
-      </ContainerGrid>
-    </Page>
+    <StandardPageLayout
+      title={t("availability.title")}
+      headerTitle={t("availability.title")}
+      isLoading={pageData.isLoading}
+      error={pageData.error}
+      skeleton={skeleton}
+      sidebarOpen={true}
+      maxWidth="lg"
+    >
+      {pageData.data && (
+        <LazySection
+          component={AvailabilitySelector}
+          componentProps={{
+            onSave: saveCallback,
+            initialSelections: initial,
+          }}
+          skeleton={() => skeleton}
+        />
+      )}
+    </StandardPageLayout>
   )
 }

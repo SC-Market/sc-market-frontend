@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react"
 import { Box, useMediaQuery, useTheme } from "@mui/material"
 import { useParams, useNavigate } from "react-router-dom"
-import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
 import {
   MessagesBody,
   MessagesBodyMobile,
@@ -11,29 +10,25 @@ import {
   MessagingSidebarContext,
   CreateMessageGroupBody,
   useCurrentChat,
-  useGetChatByIDQuery,
   CurrentChatIDContext,
+  usePageMessages,
   type Message,
 } from "../../features/chats"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { MessageThreadSkeleton } from "../../components/skeletons"
 import { EmptyMessages } from "../../components/empty-states"
 import { useTranslation } from "react-i18next"
-import {
-  useGetNotificationsQuery,
-  useNotificationUpdateMutation,
-} from "../../store/notification"
-import { useGetUserProfileQuery } from "../../store/profile"
+import { Page } from "../../components/metadata/Page"
 
 export function Messages() {
   const { chat_id } = useParams<{ chat_id: string }>()
   const navigate = useNavigate()
-  const [drawerOpen] = useDrawerOpen()
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const { t } = useTranslation()
-  const { data: profile } = useGetUserProfileQuery()
-  const isLoggedIn = !!profile
+
+  // Use page hook for data fetching
+  const pageData = usePageMessages(chat_id)
 
   // On desktop, always show sidebar (unless collapsed). On mobile, hide sidebar when viewing chat
   const [messageSidebarOpen, setMessageSidebar] = useState(!isMobile)
@@ -41,79 +36,20 @@ export function Messages() {
 
   const [currentChat, setCurrentChat] = useCurrentChat()
 
-  const {
-    data: chatObj,
-    isLoading,
-    isFetching,
-  } = useGetChatByIDQuery(chat_id!, {
-    skip: !chat_id,
-  })
-
-  // Get notifications for this chat (need chatObj to determine order_id or session_id)
-
-  // Get and mark as read message notifications for this chat
-  // Query based on chat's order_id or session_id
-  const { data: orderNotificationsData } = useGetNotificationsQuery(
-    {
-      page: 0,
-      pageSize: 100,
-      action: "order_message",
-      entityId: chatObj?.order_id || undefined,
-    },
-    { skip: !chat_id || !chatObj?.order_id || !isLoggedIn },
-  )
-
-  const { data: offerNotificationsData } = useGetNotificationsQuery(
-    {
-      page: 0,
-      pageSize: 100,
-      action: "offer_message",
-      entityId: chatObj?.session_id || undefined,
-    },
-    { skip: !chat_id || !chatObj?.session_id || !isLoggedIn },
-  )
-
-  // Use the appropriate notification data based on chat type
-  const notificationsData = chatObj?.order_id
-    ? orderNotificationsData
-    : chatObj?.session_id
-      ? offerNotificationsData
-      : undefined
-  const notifications = notificationsData?.notifications || []
-  const [updateNotification] = useNotificationUpdateMutation()
-
-  // Mark chat notifications as read when viewing the chat
+  // Update current chat when data loads
   useEffect(() => {
-    if (chat_id && notifications.length > 0) {
-      const unreadNotifications = notifications.filter((n) => !n.read)
-      if (unreadNotifications.length > 0) {
-        // Mark each unread notification for this chat as read
-        unreadNotifications.forEach((notif) => {
-          updateNotification({
-            notification_id: notif.notification_id,
-            read: true,
-          }).catch((err) => {
-            // Silently fail - notifications will update on next query
-            console.error("Failed to mark notification as read:", err)
-          })
-        })
-      }
-    }
-  }, [chat_id, notifications, updateNotification])
-
-  useEffect(() => {
-    if (chatObj) {
-      const newObj = { ...chatObj }
+    if (pageData.data?.chat) {
+      const newObj = { ...pageData.data.chat }
       newObj.messages = [...newObj.messages].sort(
         (a: Message, b: Message) => a.timestamp - b.timestamp,
       )
-      setCurrentChat(chatObj)
+      setCurrentChat(pageData.data.chat)
     }
 
     return () => {
       setCurrentChat(null)
     }
-  }, [chatObj, setCurrentChat])
+  }, [pageData.data?.chat, setCurrentChat])
 
   // On mobile, hide sidebar when viewing a chat
   useEffect(() => {
@@ -127,7 +63,7 @@ export function Messages() {
   }, [isMobile, chat_id])
 
   return (
-    <React.Fragment>
+    <Page title={t("messages.title", { defaultValue: "Messages" })}>
       <CurrentChatIDContext.Provider
         value={[
           chat_id || null,
@@ -181,7 +117,7 @@ export function Messages() {
               {creatingMessageGroup ? (
                 <CreateMessageGroupBody />
               ) : chat_id ? (
-                isLoading || isFetching ? (
+                pageData.isLoading || pageData.isFetching ? (
                   <MessageThreadSkeleton />
                 ) : currentChat ? (
                   isMobile ? (
@@ -233,6 +169,6 @@ export function Messages() {
           </MessageGroupCreateContext.Provider>
         </MessagingSidebarContext.Provider>
       </CurrentChatIDContext.Provider>
-    </React.Fragment>
+    </Page>
   )
 }

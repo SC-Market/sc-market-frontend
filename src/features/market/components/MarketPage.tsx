@@ -1,6 +1,7 @@
 import React, { useMemo, useState, Suspense } from "react"
 import {
   Container,
+  Divider,
   Grid,
   Tabs,
   Typography,
@@ -86,6 +87,7 @@ export function MarketPage() {
               sx={{
                 paddingTop: { xs: 2, sm: 8 },
                 paddingX: { xs: theme.spacing(1), sm: theme.spacing(3) },
+                marginX: "auto",
               }}
             >
               <Grid
@@ -155,7 +157,15 @@ export function MarketPage() {
                     />
                   </Tabs>
                 </Grid>
-                <Grid item xs={12} sm="auto">
+                <Grid
+                  item
+                  xs={12}
+                  sm="auto"
+                  sx={{
+                    display: "flex",
+                    justifyContent: { xs: "stretch", sm: "flex-end" },
+                  }}
+                >
                   {tabPage === 1 ? (
                     <MarketActions />
                   ) : tabPage === 0 ? (
@@ -169,6 +179,8 @@ export function MarketPage() {
                   )}
                 </Grid>
               </Grid>
+
+              <Divider light sx={{ mt: 2, mb: 2 }} />
             </Container>
 
             <TabPanel value={tabPage} index={1}>

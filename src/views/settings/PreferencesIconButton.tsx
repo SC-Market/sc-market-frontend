@@ -48,7 +48,8 @@ export function PreferencesIconButton() {
           paper: {
             variant: "outlined",
             sx: {
-              borderRadius: (theme) => theme.spacing(theme.borderRadius.topLevel),
+              borderRadius: (theme) =>
+                theme.spacing(theme.borderRadius.topLevel),
               borderColor: theme.palette.outline.main,
               overflow: "visible",
             },

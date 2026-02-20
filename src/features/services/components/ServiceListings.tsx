@@ -120,9 +120,7 @@ export function ServiceListings(props: { user?: string; contractor?: string }) {
 
   return (
     <React.Fragment>
-      <Grid item xs={12} sx={{ paddingTop: 0 }}>
-        <div ref={ref} />
-      </Grid>
+      <div ref={ref} style={{ position: "absolute", top: 0 }} />
       <Grid item xs={12}>
         <Grid container spacing={theme.layoutSpacing.layout}>
           {displayedServices.map((service, index) => (

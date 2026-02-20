@@ -77,7 +77,10 @@ import { ExtendedTheme } from "../../../../hooks/styles/Theme"
 import { CURRENT_CUSTOM_ORG } from "../../../../hooks/contractor/CustomDomain"
 import { RecentListingsSkeleton } from "../../../../components/landing"
 import { getRelativeTime } from "../../../../util/time"
-import { ListingWrapper } from "../../components/listings/ListingCard"
+import {
+  LISTING_CARD_WIDTH,
+  ListingWrapper,
+} from "../../components/listings/ListingCard"
 import {
   MarketListingRating,
   BadgeDisplay,
@@ -88,7 +91,12 @@ import {
 } from "../../../../util/badges"
 import { useGetUserProfileQuery } from "../../../../store/profile"
 import { RefreshRounded, EditRounded, ShareRounded } from "@mui/icons-material"
-import { isAfter, subDays, addMonths, subDays as subDaysFromDate } from "date-fns"
+import {
+  isAfter,
+  subDays,
+  addMonths,
+  subDays as subDaysFromDate,
+} from "date-fns"
 import { Stack } from "@mui/system"
 import { AdCard } from "../../../../components/ads/AdCard"
 import { MARKET_ADS } from "../../../../components/ads/adConfig"
@@ -334,29 +342,36 @@ export function DisplayListings(props: {
 
   return (
     <React.Fragment>
-      <Grid item xs={12}>
-        <div ref={ref} />
-      </Grid>
+      <div ref={ref} style={{ position: "absolute", top: 0 }} />
 
-      {loading
-        ? new Array(perPage)
-            .fill(undefined)
-            .map((o, i) => (
-              <StandardListingSkeleton
-                key={i}
-                index={i}
-                sidebarOpen={marketSidebarOpen}
-              />
-            ))
-        : paginatedListings.map((item, index) => {
-            // Generate unique key for each item (listing or ad)
-            const key = isListing(item)
-              ? item.listing_id
-              : `ad-${item.id}-${index}`
-            // Note: Listing components (ItemListingBase, AggregateListingBase, MultipleListingBase)
-            // already have Material-UI Fade animations built in, so no need for AnimatedListItem wrapper
-            return <Listing listing={item} index={index} key={key} />
-          })}
+      <Box
+        sx={{
+          display: "flex",
+          flexWrap: "wrap",
+          gap: "8px",
+          width: "100%",
+        }}
+      >
+        {loading
+          ? new Array(perPage)
+              .fill(undefined)
+              .map((o, i) => (
+                <StandardListingSkeleton
+                  key={i}
+                  index={i}
+                  sidebarOpen={marketSidebarOpen}
+                />
+              ))
+          : paginatedListings.map((item, index) => {
+              // Generate unique key for each item (listing or ad)
+              const key = isListing(item)
+                ? item.listing_id
+                : `ad-${item.id}-${index}`
+              // Note: Listing components (ItemListingBase, AggregateListingBase, MultipleListingBase)
+              // already have Material-UI Fade animations built in, so no need for AnimatedListItem wrapper
+              return <Listing listing={item} index={index} key={key} />
+            })}
+      </Box>
 
       {listings !== undefined && !listings.length && !props.loading && (
         <Grid item xs={12}>
@@ -421,7 +436,14 @@ export function DisplayListingsMin(props: {
   if (loading) {
     const marketSidebarOpen = useMarketSidebarExp()
     return (
-      <React.Fragment>
+      <Box
+        sx={{
+          display: "flex",
+          flexWrap: "wrap",
+          gap: "8px",
+          width: "100%",
+        }}
+      >
         {new Array(16).fill(undefined).map((o, i) => (
           <StandardListingSkeleton
             index={i}
@@ -429,7 +451,7 @@ export function DisplayListingsMin(props: {
             sidebarOpen={marketSidebarOpen}
           />
         ))}
-      </React.Fragment>
+      </Box>
     )
   }
 
@@ -441,56 +463,56 @@ export function DisplayListingsMin(props: {
         <VirtualizedGrid
           items={listingsWithAds}
           renderItem={(item, index) => {
-              const key = isListing(item)
-                ? item.listing_id
-                : `ad-${item.id}-${index}`
-              // For virtualized grid, render the base component directly
-              // The grid handles layout, so we don't need Grid item wrapper
-              if (isListing(item)) {
-                if (item.listing_type === "unique") {
-                  return (
-                    <ItemListingBase
-                      listing={item as ExtendedUniqueSearchResult}
-                      index={index}
-                      key={key}
-                    />
-                  )
-                } else if (item.listing_type === "aggregate") {
-                  return (
-                    <AggregateListingBase
-                      aggregate={item as ExtendedAggregateSearchResult}
-                      index={index}
-                      key={key}
-                    />
-                  )
-                } else if (item.listing_type === "multiple") {
-                  return (
-                    <MultipleListingBase
-                      multiple={item as ExtendedMultipleSearchResult}
-                      index={index}
-                      key={key}
-                    />
-                  )
-                }
+            const key = isListing(item)
+              ? item.listing_id
+              : `ad-${item.id}-${index}`
+            // For virtualized grid, render the base component directly
+            // The grid handles layout, so we don't need Grid item wrapper
+            if (isListing(item)) {
+              if (item.listing_type === "unique") {
+                return (
+                  <ItemListingBase
+                    listing={item as ExtendedUniqueSearchResult}
+                    index={index}
+                    key={key}
+                  />
+                )
+              } else if (item.listing_type === "aggregate") {
+                return (
+                  <AggregateListingBase
+                    aggregate={item as ExtendedAggregateSearchResult}
+                    index={index}
+                    key={key}
+                  />
+                )
+              } else if (item.listing_type === "multiple") {
+                return (
+                  <MultipleListingBase
+                    multiple={item as ExtendedMultipleSearchResult}
+                    index={index}
+                    key={key}
+                  />
+                )
               }
-              // Ad card - render same as listings, no special handling
-              return (
-                <AdCard
-                  ad={item as any}
-                  index={index}
-                  key={key}
-                  noGridWrapper={true}
-                />
-              )
-            }}
-            itemHeight={300}
-            columns={{ xs: 2, sm: 2, md: 3, lg: 4, xl: 4, xxl: 5 }}
-            gap={{
-              xs: theme.layoutSpacing.component,
-              sm: theme.layoutSpacing.layout,
-            }}
-            overscan={3}
-          />
+            }
+            // Ad card - render same as listings, no special handling
+            return (
+              <AdCard
+                ad={item as any}
+                index={index}
+                key={key}
+                noGridWrapper={true}
+              />
+            )
+          }}
+          itemHeight={300}
+          columns={{ xs: 2, sm: 2, md: 3, lg: 4, xl: 4, xxl: 5 }}
+          gap={{
+            xs: theme.layoutSpacing.component,
+            sm: theme.layoutSpacing.layout,
+          }}
+          overscan={3}
+        />
       </Grid>
     )
   }
@@ -511,14 +533,21 @@ export function DisplayListingsMin(props: {
 
   // Fallback to regular rendering for small lists
   return (
-    <React.Fragment>
+    <Box
+      sx={{
+        display: "flex",
+        flexWrap: "wrap",
+        gap: "8px",
+        width: "100%",
+      }}
+    >
       {listingsWithAds.map((item, index) => {
         // Generate unique key for each item (listing or ad)
         const key = isListing(item) ? item.listing_id : `ad-${item.id}-${index}`
         // Note: Listing components already have Material-UI Fade animations built in
         return <Listing listing={item} index={index} key={key} />
       })}
-    </React.Fragment>
+    </Box>
   )
 }
 
@@ -563,27 +592,34 @@ export function DisplayBuyOrderListings(props: {
 
   return (
     <>
-      <Grid item xs={12}>
-        <div ref={ref} />
-      </Grid>
+      <div ref={ref} style={{ position: "absolute", top: 0 }} />
 
-      {props.loading
-        ? new Array(perPage)
-            .fill(undefined)
-            .map((o, i) => (
-              <StandardListingSkeleton
-                key={i}
-                index={i}
-                sidebarOpen={marketSidebarOpen}
+      <Box
+        sx={{
+          display: "flex",
+          flexWrap: "wrap",
+          gap: "8px",
+          width: "100%",
+        }}
+      >
+        {props.loading
+          ? new Array(perPage)
+              .fill(undefined)
+              .map((o, i) => (
+                <StandardListingSkeleton
+                  key={i}
+                  index={i}
+                  sidebarOpen={marketSidebarOpen}
+                />
+              ))
+          : listings.map((item, index) => (
+              <AggregateBuyOrderListing
+                aggregate={item}
+                index={index}
+                key={item.details.game_item_id}
               />
-            ))
-        : listings.map((item, index) => (
-            <AggregateBuyOrderListing
-              aggregate={item}
-              index={index}
-              key={item.details.game_item_id}
-            />
-          ))}
+            ))}
+      </Box>
 
       <Grid item xs={12}>
         <Divider light />
@@ -696,9 +732,7 @@ export function ItemListings(props: {
 
   return (
     <>
-      <Grid item xs={12}>
-        <div ref={ref} />
-      </Grid>
+      <div ref={ref} style={{ position: "absolute", top: 0 }} />
       <DisplayListingsMin
         listings={listings || []}
         loading={isLoading || isFetching}
@@ -709,9 +743,6 @@ export function ItemListings(props: {
 
       <Box sx={{ width: "100%" }}>
         <Divider light />
-      </Box>
-
-      <Box sx={{ width: "100%" }}>
         <ListingPagination
           count={total}
           page={page}
@@ -807,9 +838,7 @@ export function BulkListingsRefactor(props: {
 
   return (
     <>
-      <Grid item xs={12}>
-        <div ref={ref} />
-      </Grid>
+      <div ref={ref} style={{ position: "absolute", top: 0 }} />
       <DisplayListingsMin
         listings={listings || []}
         loading={isLoading || isFetching}
@@ -1046,9 +1075,7 @@ export function MyItemListings(props: {
 
   return (
     <>
-      <Grid item xs={12}>
-        <div ref={ref} />
-      </Grid>
+      <div ref={ref} style={{ position: "absolute", top: 0 }} />
       <DisplayListingsMin
         listings={convertedListings}
         loading={isLoading || isFetching}

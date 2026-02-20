@@ -3,11 +3,10 @@ import {
   AutocompleteRenderInputParams,
   Box,
   Chip,
-  Drawer,
   Grid,
-  IconButton,
   InputAdornment,
   MenuItem,
+  Paper,
   Rating,
   TextField,
   Typography,
@@ -15,7 +14,6 @@ import {
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import SearchIcon from "@mui/icons-material/Search"
-import CloseIcon from "@mui/icons-material/Close"
 import React, { useEffect, useState } from "react"
 
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -87,32 +85,10 @@ export function RecruitingSidebar() {
         height: "100%",
         flexDirection: "column",
         display: "flex",
-        padding: { xs: theme.spacing(2), md: theme.spacing(3) },
-        paddingTop: { xs: theme.spacing(2), md: theme.spacing(3) },
+        padding: theme.spacing(2),
         borderColor: theme.palette.outline.main,
       }}
     >
-      {/* Close button for desktop drawer */}
-      {!isMobile && open && (
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "flex-end",
-            marginBottom: theme.spacing(1),
-          }}
-        >
-          <IconButton
-            color="secondary"
-            aria-label={t("recruiting_sidebar.close", "Close filters")}
-            onClick={() => {
-              setOpen(false)
-            }}
-            size="small"
-          >
-            <CloseIcon />
-          </IconButton>
-        </Box>
-      )}
       <Grid container spacing={theme.layoutSpacing.layout}>
         <Grid item xs={12}>
           <TextField
@@ -121,9 +97,7 @@ export function RecruitingSidebar() {
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
-                  <IconButton>
-                    <SearchIcon />
-                  </IconButton>
+                  <SearchIcon />
                 </InputAdornment>
               ),
             }}
@@ -282,51 +256,19 @@ export function RecruitingSidebar() {
     )
   }
 
-  // On desktop, use permanent drawer
+  // On desktop, use persistent Paper sidebar
   return (
-    <Drawer
-      variant="permanent"
-      open
+    <Paper
       sx={{
-        zIndex: theme.zIndex.drawer - 3,
-        width: open ? marketDrawerWidth : 0,
-        transition: theme.transitions.create(["width", "margin"], {
-          easing: theme.transitions.easing.sharp,
-          duration: theme.transitions.duration.enteringScreen,
-        }),
-        "& .MuiDrawer-paper": {
-          width: open ? marketDrawerWidth : 0,
-          boxSizing: "border-box",
-          overflow: "scroll",
-          left: drawerOpen ? sidebarDrawerWidth : 0,
-          backgroundColor: theme.palette.background.default,
-          transition: theme.transitions.create(
-            ["width", "borderRight", "borderColor"],
-            {
-              easing: theme.transitions.easing.easeOut,
-              duration: "0.3s",
-            },
-          ),
-          borderRight: open ? 1 : 0,
-          borderColor: open ? theme.palette.outline.main : "transparent",
-        },
-        position: "relative",
-        whiteSpace: "nowrap",
-        background: "transparent",
-        overflow: "scroll",
-        borderRight: open ? 1 : 0,
-        borderColor: open ? theme.palette.outline.main : "transparent",
+        position: "sticky",
+        top: "calc(64px + 16px)",
+        maxHeight: "calc(100vh - 64px - 32px)",
+        width: 300,
+        flexShrink: 0,
+        overflowY: "auto",
       }}
-      container={
-        window !== undefined
-          ? () => window.document.getElementById("rootarea")
-          : undefined
-      }
     >
-      <Box
-        sx={{ ...theme.mixins.toolbar, position: "relative", width: "100%" }}
-      />
       {sidebarContent}
-    </Drawer>
+    </Paper>
   )
 }

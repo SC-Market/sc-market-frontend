@@ -35,29 +35,27 @@ export function DateTimePickerBottomSheet(props: {
       disableBackdropClose={pickerOpen}
     >
       <Stack spacing={2}>
-        
-          <DateTimePicker
-            value={dateTime}
-            onChange={(newValue) => {
-              if (newValue) {
-                setDateTime(newValue)
-              }
-            }}
-            onOpen={handlePickerOpen}
-            onClose={handlePickerClose}
-            slotProps={{
-              textField: {
-                size: "medium",
-                fullWidth: true,
+        <DateTimePicker
+          value={dateTime}
+          onChange={(newValue) => {
+            if (newValue) {
+              setDateTime(newValue)
+            }
+          }}
+          onOpen={handlePickerOpen}
+          onClose={handlePickerClose}
+          slotProps={{
+            textField: {
+              size: "medium",
+              fullWidth: true,
+            },
+            dialog: {
+              sx: {
+                zIndex: theme.zIndex.modal + 10,
               },
-              dialog: {
-                sx: {
-                  zIndex: theme.zIndex.modal + 10,
-                },
-              },
-            }}
-          />
-        
+            },
+          }}
+        />
 
         <Stack direction="row" spacing={1}>
           <Button

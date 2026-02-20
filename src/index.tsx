@@ -5,7 +5,10 @@ import App from "./App"
 import reportWebVitals from "./reportWebVitals"
 import { createRoot } from "react-dom/client"
 import { initPWA } from "./util/pwa"
-import { initializeBugsnagAsync, getBugsnagErrorBoundary } from "./util/monitoring/bugsnagLoader"
+import {
+  initializeBugsnagAsync,
+  getBugsnagErrorBoundary,
+} from "./util/monitoring/bugsnagLoader"
 
 const container = document.getElementById("root")
 const root = createRoot(container!)
@@ -15,12 +18,14 @@ const ErrorBoundary = getBugsnagErrorBoundary(React)
 
 // Initialize Bugsnag asynchronously (non-blocking)
 // This happens after page is interactive to avoid blocking critical rendering
-initializeBugsnagAsync(import.meta.env.VITE_BUGSNAG_API_KEY || "").catch((error) => {
-  // Silently fail - error monitoring is not critical for app functionality
-  if (import.meta.env.DEV) {
-    console.warn("Bugsnag initialization failed (non-critical):", error)
-  }
-})
+initializeBugsnagAsync(import.meta.env.VITE_BUGSNAG_API_KEY || "").catch(
+  (error) => {
+    // Silently fail - error monitoring is not critical for app functionality
+    if (import.meta.env.DEV) {
+      console.warn("Bugsnag initialization failed (non-critical):", error)
+    }
+  },
+)
 
 root.render(
   <React.StrictMode>

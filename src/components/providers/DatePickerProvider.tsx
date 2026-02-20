@@ -9,14 +9,20 @@ const dateFnsLocales = {
   "zh-CN": zhCN,
 }
 
-export function DatePickerProvider({ children }: { children: React.ReactNode }) {
+export function DatePickerProvider({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   const { i18n } = useTranslation()
-  
+
   return (
-    <LocalizationProvider 
+    <LocalizationProvider
       key={i18n.language}
       dateAdapter={AdapterDateFns}
-      adapterLocale={dateFnsLocales[i18n.language as keyof typeof dateFnsLocales] || enUS}
+      adapterLocale={
+        dateFnsLocales[i18n.language as keyof typeof dateFnsLocales] || enUS
+      }
     >
       {children}
     </LocalizationProvider>

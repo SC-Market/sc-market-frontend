@@ -5,6 +5,7 @@ import {
   Divider,
   Grid,
   Paper,
+  Stack,
   useMediaQuery,
 } from "@mui/material"
 import { HideOnScroll, MarketNavArea } from "./MarketNavArea"
@@ -13,6 +14,7 @@ import { useMarketSidebar } from ".."
 import React from "react"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
+import { LISTING_CARD_WIDTH } from "./listings/ListingCard.tsx"
 
 export function ItemMarketView() {
   const theme = useTheme<ExtendedTheme>()
@@ -26,12 +28,8 @@ export function ItemMarketView() {
 
       <Container maxWidth={"xxl"} sx={{ padding: 0 }}>
         <Box sx={{ display: "flex", justifyContent: "center" }}>
-          <Grid
-            container
-            spacing={theme.layoutSpacing.layout}
-          >
-          {xs && (
-            <>
+          {xs ? (
+            <Grid container spacing={theme.layoutSpacing.layout}>
               <Grid item xs={12}>
                 <HideOnScroll>
                   <MarketNavArea />
@@ -41,17 +39,33 @@ export function ItemMarketView() {
               <Grid item xs={12}>
                 <Divider light />
               </Grid>
-            </>
-          )}
 
-          {/* Desktop: Persistent sidebar */}
-          {!xs && (
-            <Grid item xs={12} md="auto">
+              <Grid item xs={12}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: "8px",
+                    justifyContent: "center",
+                  }}
+                >
+                  <ItemListings />
+                </Box>
+              </Grid>
+            </Grid>
+          ) : (
+            <Stack
+              direction="row"
+              justifyContent="center"
+              spacing={theme.layoutSpacing.layout}
+              sx={{ width: "100%", maxWidth: "xxl" }}
+            >
+              {/* Desktop: Persistent sidebar */}
               <Paper
                 sx={{
                   position: "sticky",
-                  top: theme.spacing(2),
-                  maxHeight: `calc(100vh - ${theme.spacing(4)})`,
+                  top: "calc(64px + 16px)",
+                  maxHeight: "calc(100vh - 64px - 32px)",
                   width: 300,
                   flexShrink: 0,
                   overflowY: "auto",
@@ -59,22 +73,20 @@ export function ItemMarketView() {
               >
                 <MarketSidebar />
               </Paper>
-            </Grid>
-          )}
 
-          {/* Main content area */}
-          <Grid item xs={12} md sx={{ transition: "all 0.3s ease" }}>
-            <Box
-              sx={{
-                display: "flex",
-                flexWrap: "wrap",
-                gap: "8px",
-              }}
-            >
-              <ItemListings />
-            </Box>
-          </Grid>
-          </Grid>
+              {/* Main content area */}
+              <Box
+                sx={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: "8px",
+                  flex: 1,
+                }}
+              >
+                <ItemListings />
+              </Box>
+            </Stack>
+          )}
         </Box>
       </Container>
     </>

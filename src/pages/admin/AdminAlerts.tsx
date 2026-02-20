@@ -1,17 +1,19 @@
 import React from "react"
-import { Page } from "../../components/metadata/Page"
-import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import { useTranslation } from "react-i18next"
+import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { AdminAlertsView } from "../../views/admin/AdminAlertsView"
 
 export function AdminAlerts() {
   const { t } = useTranslation()
 
   return (
-    <Page title={t("admin.alerts", "Admin Alerts")}>
-      <ContainerGrid maxWidth={"xl"} sidebarOpen={true}>
-        <AdminAlertsView />
-      </ContainerGrid>
-    </Page>
+    <StandardPageLayout
+      title={t("admin.alerts", "Admin Alerts")}
+      headerTitle={t("admin.alerts", "Admin Alerts")}
+      sidebarOpen={true}
+      maxWidth="xl"
+    >
+      <AdminAlertsView />
+    </StandardPageLayout>
   )
 }

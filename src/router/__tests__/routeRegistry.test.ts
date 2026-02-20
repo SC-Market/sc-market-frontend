@@ -1,26 +1,27 @@
-import { describe, it, expect } from "@jest/globals"
+import { vi } from "vitest"
+import { describe, it, expect } from "vitest"
 
 // Mock the module before importing
-jest.mock("../routeRegistry", () => {
+vi.mock("../routeRegistry", () => {
   const mockRegistry: Record<string, () => Promise<any>> = {
-    "/": jest.fn(() => Promise.resolve({ default: {} })),
-    "/login": jest.fn(() => Promise.resolve({ default: {} })),
-    "/signup": jest.fn(() => Promise.resolve({ default: {} })),
-    "/market": jest.fn(() => Promise.resolve({ default: {} })),
-    "/contractors": jest.fn(() => Promise.resolve({ default: {} })),
-    "/dashboard": jest.fn(() => Promise.resolve({ default: {} })),
-    "/profile": jest.fn(() => Promise.resolve({ default: {} })),
-    "/settings": jest.fn(() => Promise.resolve({ default: {} })),
-    "/notifications": jest.fn(() => Promise.resolve({ default: {} })),
-    "/admin/users": jest.fn(() => Promise.resolve({ default: {} })),
-    "/admin/market": jest.fn(() => Promise.resolve({ default: {} })),
-    "/admin/orders": jest.fn(() => Promise.resolve({ default: {} })),
-    "/market/create": jest.fn(() => Promise.resolve({ default: {} })),
-    "/market/cart": jest.fn(() => Promise.resolve({ default: {} })),
-    "/market/manage": jest.fn(() => Promise.resolve({ default: {} })),
-    "/org/register": jest.fn(() => Promise.resolve({ default: {} })),
-    "/org/fleet": jest.fn(() => Promise.resolve({ default: {} })),
-    "/org/manage": jest.fn(() => Promise.resolve({ default: {} })),
+    "/": vi.fn(() => Promise.resolve({ default: {} })),
+    "/login": vi.fn(() => Promise.resolve({ default: {} })),
+    "/signup": vi.fn(() => Promise.resolve({ default: {} })),
+    "/market": vi.fn(() => Promise.resolve({ default: {} })),
+    "/contractors": vi.fn(() => Promise.resolve({ default: {} })),
+    "/dashboard": vi.fn(() => Promise.resolve({ default: {} })),
+    "/profile": vi.fn(() => Promise.resolve({ default: {} })),
+    "/settings": vi.fn(() => Promise.resolve({ default: {} })),
+    "/notifications": vi.fn(() => Promise.resolve({ default: {} })),
+    "/admin/users": vi.fn(() => Promise.resolve({ default: {} })),
+    "/admin/market": vi.fn(() => Promise.resolve({ default: {} })),
+    "/admin/orders": vi.fn(() => Promise.resolve({ default: {} })),
+    "/market/create": vi.fn(() => Promise.resolve({ default: {} })),
+    "/market/cart": vi.fn(() => Promise.resolve({ default: {} })),
+    "/market/manage": vi.fn(() => Promise.resolve({ default: {} })),
+    "/org/register": vi.fn(() => Promise.resolve({ default: {} })),
+    "/org/fleet": vi.fn(() => Promise.resolve({ default: {} })),
+    "/org/manage": vi.fn(() => Promise.resolve({ default: {} })),
   }
 
   return {

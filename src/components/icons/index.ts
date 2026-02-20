@@ -1,1 +1,1 @@
-export { lazyIcon, AdminIcons } from './LazyIcon'
+export { lazyIcon, AdminIcons } from "./LazyIcon"

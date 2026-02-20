@@ -1,32 +1,33 @@
-import { Link, Navigate, useParams } from "react-router-dom"
-import { ContainerGrid } from "../../components/layout/ContainerGrid"
+import { lazy } from "react"
+import { Link, useParams } from "react-router-dom"
 import React from "react"
-import { HeaderTitle } from "../../components/typography/HeaderTitle"
 import { CurrentMarketListingContext } from "../../features/market"
-import {
-  useGetMarketListingQuery,
-  useGetMultipleByIdQuery,
-} from "../../features/market"
-import { MarketListingView } from "../../features/market/views/MarketListingView"
-import { Page } from "../../components/metadata/Page"
-import { MarketListingEditView } from "../../features/market/views/MarketListingEditView"
-import { Button, Grid } from "@mui/material"
+import { Button } from "@mui/material"
 import ShoppingCartRoundedIcon from "@mui/icons-material/ShoppingCartRounded"
-import { BackArrow } from "../../components/button/BackArrow"
-import { MarketMultipleView } from "../../features/market/views/MarketMultipleView"
 import { MarketListingViewSkeleton } from "../../features/market/views/MarketListingView"
 import { useTranslation } from "react-i18next"
-import {
-  shouldRedirectTo404,
-  shouldShowErrorPage,
-} from "../../util/errorHandling"
-import { ErrorPage } from "../errors/ErrorPage"
-import { useTheme } from "@mui/material/styles"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { DetailPageLayout } from "../../components/layout/DetailPageLayout"
+import { LazySection } from "../../components/layout/LazySection"
+import { usePageMarketMultiple } from "../../features/market/hooks/usePageMarketMultiple"
+import { usePageMarketListing } from "../../features/market/hooks/usePageMarketListing"
+
+const MarketMultipleViewLazy = lazy(() =>
+  import("../../features/market/views/MarketMultipleView").then((m) => ({
+    default: m.MarketMultipleView,
+  })),
+)
+
+const MarketListingEditViewLazy = lazy(() =>
+  import("../../features/market/views/MarketListingEditView").then((m) => ({
+    default: m.MarketListingEditView,
+  })),
+)
+
+// Skeleton is NOT lazy loaded - needs to be available immediately
+const SkeletonComponent = MarketListingViewSkeleton
 
 export function ViewMarketMultiple(props: {}) {
   const { id } = useParams<{ id: string }>()
-  const theme = useTheme<ExtendedTheme>()
 
   /*
    * TODO:
@@ -36,66 +37,53 @@ export function ViewMarketMultiple(props: {}) {
    *   assigned person, payment
    */
   const { t } = useTranslation()
-
-  const {
-    data: listing,
-    error,
-    refetch,
-    isLoading,
-  } = useGetMultipleByIdQuery(id!)
+  const pageData = usePageMarketMultiple(id!)
 
   return (
-    <Page title={listing?.details?.title}>
-      <ContainerGrid sidebarOpen={true} maxWidth={"xl"}>
-        <Grid
-          item
-          container
-          justifyContent={"space-between"}
-          spacing={theme.layoutSpacing.layout}
-          xs={12}
+    <DetailPageLayout
+      title={pageData.data?.multiple.details?.title}
+      breadcrumbs={[
+        { label: t("market.title", "Market"), href: "/market" },
+        {
+          label:
+            pageData.data?.multiple.details?.title ||
+            t("market.viewMarketListing", "Listing"),
+        },
+      ]}
+      entityTitle={pageData.data?.multiple.details?.title}
+      entityActions={
+        <Link
+          to="/market/cart"
+          style={{ color: "inherit", textDecoration: "none" }}
         >
-          <HeaderTitle md={7} lg={7} xl={7}>
-            <BackArrow /> {t("market.viewMarketListing")}
-          </HeaderTitle>
-
-          <Grid item>
-            <Link
-              to={"/market/cart"}
-              style={{ color: "inherit", textDecoration: "none" }}
-            >
-              <Button
-                color={"secondary"}
-                startIcon={<ShoppingCartRoundedIcon />}
-                variant={"contained"}
-                size={"large"}
-              >
-                {t("marketActions.myCart")}
-              </Button>
-            </Link>
-          </Grid>
-        </Grid>
-
-        {shouldRedirectTo404(error) ? <Navigate to={"/404"} /> : null}
-        {shouldShowErrorPage(error) ? <ErrorPage /> : null}
-        {isLoading ? (
-          <MarketListingViewSkeleton />
-        ) : listing ? (
-          <CurrentMarketListingContext.Provider value={[listing!, refetch]}>
-            {(() => {
-              return <MarketMultipleView />
-
-              // if (order.data!.customer === profile.data?.username) {
-              //     return <ManageOrderOwner/>
-              // } else if (order.data!.assigned_to === profile.data?.username) {
-              //     return <ManageOrderOrg/>
-              // } else {
-              //     return <ViewPublicOrder/>
-              // }
-            })()}
-          </CurrentMarketListingContext.Provider>
-        ) : null}
-      </ContainerGrid>
-    </Page>
+          <Button
+            color="secondary"
+            startIcon={<ShoppingCartRoundedIcon />}
+            variant="contained"
+            size="large"
+          >
+            {t("marketActions.myCart")}
+          </Button>
+        </Link>
+      }
+      isLoading={pageData.isLoading}
+      error={pageData.error}
+      skeleton={<SkeletonComponent />}
+      sidebarOpen={true}
+      maxWidth="xl"
+    >
+      {pageData.data && (
+        <CurrentMarketListingContext.Provider
+          value={[pageData.data.multiple, pageData.refetch]}
+        >
+          <LazySection
+            component={MarketMultipleViewLazy}
+            componentProps={{}}
+            skeleton={SkeletonComponent}
+          />
+        </CurrentMarketListingContext.Provider>
+      )}
+    </DetailPageLayout>
   )
 }
 
@@ -110,41 +98,38 @@ export function EditMarketMultiple(props: {}) {
    *   assigned person, payment
    */
   const { t } = useTranslation()
-
-  const {
-    data: listing,
-    error,
-    refetch,
-    isLoading,
-  } = useGetMarketListingQuery(id!)
+  const pageData = usePageMarketListing(id!)
 
   return (
-    <Page title={listing?.details?.title}>
-      <ContainerGrid sidebarOpen={true} maxWidth={"lg"}>
-        <HeaderTitle>
-          <BackArrow /> {t("market.editMarketListing")}
-        </HeaderTitle>
-
-        {shouldRedirectTo404(error) ? <Navigate to={"/404"} /> : null}
-        {shouldShowErrorPage(error) ? <ErrorPage /> : null}
-        {isLoading ? (
-          <MarketListingViewSkeleton />
-        ) : listing ? (
-          <CurrentMarketListingContext.Provider value={[listing!, refetch]}>
-            {(() => {
-              return <MarketListingEditView />
-
-              // if (order.data!.customer === profile.data?.username) {
-              //     return <ManageOrderOwner/>
-              // } else if (order.data!.assigned_to === profile.data?.username) {
-              //     return <ManageOrderOrg/>
-              // } else {
-              //     return <ViewPublicOrder/>
-              // }
-            })()}
-          </CurrentMarketListingContext.Provider>
-        ) : null}
-      </ContainerGrid>
-    </Page>
+    <DetailPageLayout
+      title={pageData.data?.listing.details?.title}
+      breadcrumbs={[
+        { label: t("market.title", "Market"), href: "/market" },
+        {
+          label:
+            pageData.data?.listing.details?.title ||
+            t("market.editMarketListing", "Edit Listing"),
+        },
+      ]}
+      backButton={true}
+      entityTitle={t("market.editMarketListing")}
+      isLoading={pageData.isLoading}
+      error={pageData.error}
+      skeleton={<SkeletonComponent />}
+      sidebarOpen={true}
+      maxWidth="lg"
+    >
+      {pageData.data && (
+        <CurrentMarketListingContext.Provider
+          value={[pageData.data.listing, pageData.refetch]}
+        >
+          <LazySection
+            component={MarketListingEditViewLazy}
+            componentProps={{}}
+            skeleton={SkeletonComponent}
+          />
+        </CurrentMarketListingContext.Provider>
+      )}
+    </DetailPageLayout>
   )
 }

@@ -1,81 +1,84 @@
-import { Navigate, useParams } from "react-router-dom"
-import { ContainerGrid } from "../../components/layout/ContainerGrid"
+import { lazy } from "react"
+import { useParams } from "react-router-dom"
 import React from "react"
-import { HeaderTitle } from "../../components/typography/HeaderTitle"
-import { useGetAggregateByIdQuery } from "../../features/market/api/marketApi"
-import { Page } from "../../components/metadata/Page"
 import { Link } from "react-router-dom"
-import { Button, Grid } from "@mui/material"
+import { Button } from "@mui/material"
 import ShoppingCartRoundedIcon from "@mui/icons-material/ShoppingCartRounded"
-import { CurrentMarketAggregateContext } from "../../features/market/hooks/CurrentMarketAggregate"
-import { MarketAggregateEditView } from "../../features/market/components/MarketAggregateEditView"
-import { MarketAggregateView } from "../../features/market/views/MarketAggregateView"
-import { MarketListingViewSkeleton } from "../../features/market/views/MarketListingView"
-import { BackArrow } from "../../components/button/BackArrow"
 import { CurrentMarketListingContext } from "../../features/market/hooks/CurrentMarketItem"
+import { CurrentMarketAggregateContext } from "../../features/market/hooks/CurrentMarketAggregate"
+import { MarketListingViewSkeleton } from "../../features/market/views/MarketListingView"
 import { useTranslation } from "react-i18next"
-import {
-  shouldRedirectTo404,
-  shouldShowErrorPage,
-} from "../../util/errorHandling"
-import { ErrorPage } from "../errors/ErrorPage"
-import { useTheme } from "@mui/material/styles"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { DetailPageLayout } from "../../components/layout/DetailPageLayout"
+import { LazySection } from "../../components/layout/LazySection"
+import { usePageMarketAggregate } from "../../features/market/hooks/usePageMarketAggregate"
+
+const MarketAggregateViewLazy = lazy(() =>
+  import("../../features/market/views/MarketAggregateView").then((m) => ({
+    default: m.MarketAggregateView,
+  })),
+)
+
+const MarketAggregateEditViewLazy = lazy(() =>
+  import("../../features/market/components/MarketAggregateEditView").then(
+    (m) => ({
+      default: m.MarketAggregateEditView,
+    }),
+  ),
+)
+
+// Skeleton is NOT lazy loaded - needs to be available immediately
+const SkeletonComponent = MarketListingViewSkeleton
 
 export function ViewMarketAggregate(props: {}) {
   const { id } = useParams<{ id: string }>()
   const { t } = useTranslation()
-  const theme = useTheme<ExtendedTheme>()
-
-  const {
-    data: aggregate,
-    error,
-    refetch,
-    isLoading,
-  } = useGetAggregateByIdQuery(id!)
+  const pageData = usePageMarketAggregate(id!)
 
   return (
-    <Page title={aggregate?.details?.title}>
-      <ContainerGrid sidebarOpen={true} maxWidth={"lg"}>
-        <Grid
-          item
-          container
-          justifyContent={"space-between"}
-          spacing={theme.layoutSpacing.layout}
-          xs={12}
+    <DetailPageLayout
+      title={pageData.data?.aggregate.details?.title}
+      breadcrumbs={[
+        { label: t("market.title", "Market"), href: "/market" },
+        {
+          label:
+            pageData.data?.aggregate.details?.title ||
+            t("market.viewMarketListing", "Listing"),
+        },
+      ]}
+      entityTitle={pageData.data?.aggregate.details?.title}
+      entityActions={
+        <Link
+          to="/market/cart"
+          style={{ color: "inherit", textDecoration: "none" }}
         >
-          <HeaderTitle md={7} lg={7} xl={7}>
-            <BackArrow /> {t("market.viewMarketListing")}
-          </HeaderTitle>
-
-          <Grid item>
-            <Link
-              to={"/market/cart"}
-              style={{ color: "inherit", textDecoration: "none" }}
-            >
-              <Button
-                color={"secondary"}
-                startIcon={<ShoppingCartRoundedIcon />}
-                variant={"contained"}
-                size={"large"}
-              >
-                {t("marketActions.myCart")}
-              </Button>
-            </Link>
-          </Grid>
-        </Grid>
-
-        {shouldRedirectTo404(error) ? <Navigate to={"/404"} /> : null}
-        {shouldShowErrorPage(error) ? <ErrorPage /> : null}
-        {isLoading ? (
-          <MarketListingViewSkeleton />
-        ) : aggregate ? (
-          <CurrentMarketListingContext.Provider value={[aggregate!, refetch]}>
-            <MarketAggregateView />
-          </CurrentMarketListingContext.Provider>
-        ) : null}
-      </ContainerGrid>
-    </Page>
+          <Button
+            color="secondary"
+            startIcon={<ShoppingCartRoundedIcon />}
+            variant="contained"
+            size="large"
+          >
+            {t("marketActions.myCart")}
+          </Button>
+        </Link>
+      }
+      isLoading={pageData.isLoading}
+      error={pageData.error}
+      skeleton={<SkeletonComponent />}
+      sidebarOpen={true}
+      maxWidth="xl"
+    >
+      {pageData.data && (
+        <CurrentMarketListingContext.Provider
+          value={[pageData.data.aggregate, pageData.refetch]}
+        >
+          <LazySection
+            component={MarketAggregateViewLazy}
+            componentProps={{}}
+            skeleton={SkeletonComponent}
+          />
+        </CurrentMarketListingContext.Provider>
+      )}
+    </DetailPageLayout>
   )
 }
 
@@ -90,31 +93,38 @@ export function EditMarketAggregate(props: {}) {
    *   assigned person, payment
    */
   const { t } = useTranslation()
-
-  const {
-    data: aggregate,
-    error,
-    refetch,
-    isLoading,
-  } = useGetAggregateByIdQuery(id!)
+  const pageData = usePageMarketAggregate(id!)
 
   return (
-    <Page title={aggregate?.details?.title}>
-      <ContainerGrid sidebarOpen={true} maxWidth={"lg"}>
-        <HeaderTitle>
-          <BackArrow /> {t("market.editMarketListing")}
-        </HeaderTitle>
-
-        {shouldRedirectTo404(error) ? <Navigate to={"/404"} /> : null}
-        {shouldShowErrorPage(error) ? <ErrorPage /> : null}
-        {isLoading ? (
-          <MarketListingViewSkeleton />
-        ) : aggregate ? (
-          <CurrentMarketAggregateContext.Provider value={[aggregate!, refetch]}>
-            <MarketAggregateEditView />
-          </CurrentMarketAggregateContext.Provider>
-        ) : null}
-      </ContainerGrid>
-    </Page>
+    <DetailPageLayout
+      title={pageData.data?.aggregate.details?.title}
+      breadcrumbs={[
+        { label: t("market.title", "Market"), href: "/market" },
+        {
+          label:
+            pageData.data?.aggregate.details?.title ||
+            t("market.editMarketListing", "Edit Listing"),
+        },
+      ]}
+      backButton={true}
+      entityTitle={t("market.editMarketListing")}
+      isLoading={pageData.isLoading}
+      error={pageData.error}
+      skeleton={<SkeletonComponent />}
+      sidebarOpen={true}
+      maxWidth="lg"
+    >
+      {pageData.data && (
+        <CurrentMarketAggregateContext.Provider
+          value={[pageData.data.aggregate, pageData.refetch]}
+        >
+          <LazySection
+            component={MarketAggregateEditViewLazy}
+            componentProps={{}}
+            skeleton={SkeletonComponent}
+          />
+        </CurrentMarketAggregateContext.Provider>
+      )}
+    </DetailPageLayout>
   )
 }
