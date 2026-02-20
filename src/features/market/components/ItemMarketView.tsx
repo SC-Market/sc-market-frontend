@@ -47,7 +47,6 @@ export function ItemMarketView() {
                     flexWrap: "wrap",
                     gap: "8px",
                     justifyContent: "center",
-                    flexDirection: "flex-start",
                   }}
                 >
                   <ItemListings />
@@ -76,7 +75,16 @@ export function ItemMarketView() {
               </Paper>
 
               {/* Main content area */}
-              <ItemListings />
+              <Box
+                sx={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  gap: "8px",
+                  flex: 1,
+                }}
+              >
+                <ItemListings />
+              </Box>
             </Stack>
           )}
         </Box>
