@@ -38,6 +38,7 @@ The page architecture consists of four distinct layers:
 ```
 
 **Layer 1: Page Component**
+
 - Lives in `src/pages/`
 - Minimal orchestration logic only
 - Selects appropriate layout
@@ -46,6 +47,7 @@ The page architecture consists of four distinct layers:
 - Handles routing concerns (params, navigation)
 
 **Layer 2: Layout Components**
+
 - Lives in `src/components/layout/`
 - Provides consistent page structure
 - Handles metadata, breadcrumbs, containers
@@ -53,6 +55,7 @@ The page architecture consists of four distinct layers:
 - Accepts content via children props
 
 **Layer 3: Page Hooks**
+
 - Lives in `src/features/{domain}/hooks/`
 - Encapsulates data fetching logic
 - Composes multiple API queries
@@ -60,6 +63,7 @@ The page architecture consists of four distinct layers:
 - Provides refetch functions
 
 **Layer 4: Content Sections**
+
 - Lives in `src/features/{domain}/components/`
 - Lazy-loadable presentation components
 - Receives data via props
@@ -116,11 +120,13 @@ graph TD
 **Critical Design Principle:** Only Content_Section components are lazy loaded. Layout components, skeleton components, and the LazySection wrapper itself are imported directly and available immediately.
 
 **What IS lazy loaded:**
+
 - Content_Section components (e.g., MarketListingDetails, OrgInfo)
 - Feature-specific view components with business logic
 - Components that can be code-split into separate bundles
 
 **What is NOT lazy loaded:**
+
 - Layout components (StandardPageLayout, DetailPageLayout, FormPageLayout)
 - Skeleton components (e.g., MarketListingDetailsSkeleton)
 - LazySection wrapper component
@@ -138,25 +144,25 @@ interface StandardPageLayoutProps {
   // Metadata
   title?: string
   canonicalUrl?: string
-  
+
   // Breadcrumbs
   breadcrumbs?: Array<{ label: string; href?: string }>
-  
+
   // Header
   headerTitle?: React.ReactNode
   headerActions?: React.ReactNode
-  
+
   // Layout configuration
   sidebarOpen?: boolean
   sidebarWidth?: number
-  maxWidth?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | false
+  maxWidth?: "xs" | "sm" | "md" | "lg" | "xl" | false
   noFooter?: boolean
   noSidebar?: boolean
   noMobilePadding?: boolean
-  
+
   // Content
   children: React.ReactNode
-  
+
   // Loading and error states
   isLoading?: boolean
   error?: unknown
@@ -167,6 +173,7 @@ function StandardPageLayout(props: StandardPageLayoutProps): ReactElement
 ```
 
 **Responsibilities:**
+
 - Render Page metadata component
 - Render breadcrumbs if provided
 - Render header with title and actions
@@ -184,7 +191,7 @@ interface DetailPageLayoutProps extends StandardPageLayoutProps {
   // Back navigation
   backButton?: boolean
   backTo?: string
-  
+
   // Entity-specific
   entityTitle?: string
   entitySubtitle?: string
@@ -195,6 +202,7 @@ function DetailPageLayout(props: DetailPageLayoutProps): ReactElement
 ```
 
 **Responsibilities:**
+
 - All StandardPageLayout responsibilities
 - Render back button if configured
 - Render entity title with subtitle
@@ -217,6 +225,7 @@ function FormPageLayout(props: FormPageLayoutProps): ReactElement
 ```
 
 **Responsibilities:**
+
 - All StandardPageLayout responsibilities
 - Render form title with back button
 - Position form actions (submit, cancel)
@@ -230,16 +239,16 @@ A wrapper component that handles lazy loading of content sections with skeleton 
 interface LazySectionProps {
   // Lazy-loaded component
   component: React.LazyExoticComponent<React.ComponentType<any>>
-  
+
   // Props to pass to the component
   componentProps?: Record<string, any>
-  
+
   // Loading state
   skeleton: React.ComponentType
-  
+
   // Error handling
   errorFallback?: React.ComponentType<{ error: Error }>
-  
+
   // Grid configuration
   gridProps?: GridProps
 }
@@ -248,6 +257,7 @@ function LazySection(props: LazySectionProps): ReactElement
 ```
 
 **Responsibilities:**
+
 - Wrap lazy component in React.Suspense
 - Display skeleton during loading
 - Wrap in error boundary
@@ -269,30 +279,35 @@ interface UsePageResult<T> {
   refetch: () => void
 }
 
-function usePageMarketListing(id: string): UsePageResult<MarketListingPageData> {
+function usePageMarketListing(
+  id: string,
+): UsePageResult<MarketListingPageData> {
   const listing = useGetMarketListingQuery(id)
   const relatedListings = useGetRelatedListingsQuery(
     { itemId: listing.data?.item_id },
-    { skip: !listing.data }
+    { skip: !listing.data },
   )
-  
+
   return {
-    data: listing.data ? {
-      listing: listing.data,
-      relatedListings: relatedListings.data
-    } : undefined,
+    data: listing.data
+      ? {
+          listing: listing.data,
+          relatedListings: relatedListings.data,
+        }
+      : undefined,
     isLoading: listing.isLoading,
     isFetching: listing.isFetching || relatedListings.isFetching,
     error: listing.error || relatedListings.error,
     refetch: () => {
       listing.refetch()
       relatedListings.refetch()
-    }
+    },
   }
 }
 ```
 
 **Responsibilities:**
+
 - Compose multiple RTK Query hooks
 - Aggregate loading states
 - Aggregate error states
@@ -317,12 +332,14 @@ function MarketListingDetailsSkeleton(): ReactElement
 ```
 
 **Responsibilities:**
+
 - Receive all data via props
 - Focus on presentation only
 - No data fetching or business logic
 - Provide matching skeleton component
 
 **Import Strategy:**
+
 ```typescript
 // In page component:
 import { LazySection } from '@/components/layout/LazySection'
@@ -351,7 +368,7 @@ function ViewMarketListing() {
   const { id } = useParams<{ id: string }>()
   const { t } = useTranslation()
   const pageData = usePageMarketListing(id!)
-  
+
   return (
     <DetailPageLayout
       title={pageData.data?.listing.details?.title}
@@ -393,20 +410,20 @@ function ViewMarketListing() {
 ```typescript
 interface LayoutConfig {
   // Which layout to use
-  layout: 'standard' | 'detail' | 'form'
-  
+  layout: "standard" | "detail" | "form"
+
   // Sidebar configuration
   sidebar: {
     enabled: boolean
     width?: number
   }
-  
+
   // Container configuration
   container: {
-    maxWidth: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | false
+    maxWidth: "xs" | "sm" | "md" | "lg" | "xl" | false
     noMobilePadding?: boolean
   }
-  
+
   // Footer configuration
   footer: {
     enabled: boolean
@@ -437,25 +454,24 @@ interface PageLoadingState {
 interface PageMigrationPlan {
   // Original page location
   originalPath: string
-  
+
   // Target feature module
   targetFeature: string
-  
+
   // Components to create
   components: {
     pageHook: string
     contentSections: string[]
     skeletons: string[]
   }
-  
+
   // Layout to use
-  layout: 'standard' | 'detail' | 'form'
-  
+  layout: "standard" | "detail" | "form"
+
   // Migration complexity
-  complexity: 'simple' | 'moderate' | 'complex'
+  complexity: "simple" | "moderate" | "complex"
 }
 ```
-
 
 ## Correctness Properties
 
@@ -463,115 +479,115 @@ A property is a characteristic or behavior that should hold true across all vali
 
 ### Property 1: Layout components render required elements
 
-*For any* StandardPageLayout with valid props, the rendered output should contain page metadata, breadcrumbs (if provided), header, and container elements.
+_For any_ StandardPageLayout with valid props, the rendered output should contain page metadata, breadcrumbs (if provided), header, and container elements.
 
 **Validates: Requirements 2.2**
 
 ### Property 2: Layout configuration is applied correctly
 
-*For any* StandardPageLayout with sidebar and container configuration props, the rendered component should apply those configurations without errors and reflect them in the DOM structure.
+_For any_ StandardPageLayout with sidebar and container configuration props, the rendered component should apply those configurations without errors and reflect them in the DOM structure.
 
 **Validates: Requirements 2.3, 2.7, 10.4**
 
 ### Property 3: DetailPageLayout includes navigation elements
 
-*For any* DetailPageLayout with backButton prop set to true, the rendered output should include a back button element.
+_For any_ DetailPageLayout with backButton prop set to true, the rendered output should include a back button element.
 
 **Validates: Requirements 2.5**
 
 ### Property 4: Lazy sections display skeletons during loading
 
-*For any* LazySection with a lazy-loaded component and skeleton, the skeleton should be displayed during the loading phase before the actual component renders.
+_For any_ LazySection with a lazy-loaded component and skeleton, the skeleton should be displayed during the loading phase before the actual component renders.
 
 **Validates: Requirements 3.2, 8.2**
 
 ### Property 5: Error isolation between content sections
 
-*For any* page with multiple Content_Sections where one section throws an error, the other sections should continue to render successfully without being affected by the failing section.
+_For any_ page with multiple Content_Sections where one section throws an error, the other sections should continue to render successfully without being affected by the failing section.
 
 **Validates: Requirements 3.4, 7.4**
 
 ### Property 6: Page hooks return required properties
 
-*For any* Page_Hook implementation, the returned object should include data, isLoading, isFetching, error, and refetch properties with appropriate types.
+_For any_ Page_Hook implementation, the returned object should include data, isLoading, isFetching, error, and refetch properties with appropriate types.
 
 **Validates: Requirements 5.2, 5.5**
 
 ### Property 7: Page hooks expose error information
 
-*For any* Page_Hook when an underlying API query returns an error, the hook should expose that error in its error property.
+_For any_ Page_Hook when an underlying API query returns an error, the hook should expose that error in its error property.
 
 **Validates: Requirements 5.3**
 
 ### Property 8: 404 errors trigger navigation
 
-*For any* page component that receives a 404 error from data fetching, the system should navigate to the /404 route.
+_For any_ page component that receives a 404 error from data fetching, the system should navigate to the /404 route.
 
 **Validates: Requirements 7.1**
 
 ### Property 9: Server errors display error page
 
-*For any* page component that receives a server error (5xx) from data fetching, the system should display an error page component.
+_For any_ page component that receives a server error (5xx) from data fetching, the system should display an error page component.
 
 **Validates: Requirements 7.2**
 
 ### Property 10: Errors are logged for debugging
 
-*For any* error that occurs in a Content_Section or during data fetching, the error should be logged to the console or error tracking system.
+_For any_ error that occurs in a Content_Section or during data fetching, the error should be logged to the console or error tracking system.
 
 **Validates: Requirements 7.5**
 
 ### Property 11: LazySection accepts and uses skeleton prop
 
-*For any* LazySection component with a valid skeleton component prop, that skeleton should be rendered during the loading phase.
+_For any_ LazySection component with a valid skeleton component prop, that skeleton should be rendered during the loading phase.
 
 **Validates: Requirements 8.4**
 
 ### Property 12: Breadcrumbs render all provided items
 
-*For any* Layout_Component with a breadcrumbs array prop, all items in the array should be rendered in the breadcrumb navigation.
+_For any_ Layout_Component with a breadcrumbs array prop, all items in the array should be rendered in the breadcrumb navigation.
 
 **Validates: Requirements 9.1**
 
 ### Property 13: Current page is last breadcrumb
 
-*For any* Layout_Component with breadcrumbs, the last item in the breadcrumb array should represent the current page and should not be a link.
+_For any_ Layout_Component with breadcrumbs, the last item in the breadcrumb array should represent the current page and should not be a link.
 
 **Validates: Requirements 9.2**
 
 ### Property 14: Empty breadcrumbs are not rendered
 
-*For any* Layout_Component when the breadcrumbs prop is undefined or an empty array, no breadcrumb navigation should be rendered.
+_For any_ Layout_Component when the breadcrumbs prop is undefined or an empty array, no breadcrumb navigation should be rendered.
 
 **Validates: Requirements 9.5**
 
 ### Property 15: Document title is set from props
 
-*For any* Layout_Component with a title prop, the document.title should be updated to reflect that title.
+_For any_ Layout_Component with a title prop, the document.title should be updated to reflect that title.
 
 **Validates: Requirements 10.2**
 
 ### Property 16: Mobile viewports adjust layout
 
-*For any* Layout_Component when rendered at mobile viewport widths, the padding and spacing should be reduced compared to desktop viewports.
+_For any_ Layout_Component when rendered at mobile viewport widths, the padding and spacing should be reduced compared to desktop viewports.
 
 **Validates: Requirements 11.1**
 
 ### Property 17: Mobile sidebar behavior adapts
 
-*For any* Layout_Component with sidebar enabled when rendered at mobile viewport widths, the sidebar should behave differently (e.g., overlay instead of push).
+_For any_ Layout_Component with sidebar enabled when rendered at mobile viewport widths, the sidebar should behave differently (e.g., overlay instead of push).
 
 **Validates: Requirements 11.2**
 
 ### Property 18: Bottom navigation spacing on mobile
 
-*For any* Layout_Component when rendered at mobile viewport widths, the bottom padding should account for the bottom navigation height to prevent content overlap.
+_For any_ Layout_Component when rendered at mobile viewport widths, the bottom padding should account for the bottom navigation height to prevent content overlap.
 
 **Validates: Requirements 11.3**
 
 ### Property 19: Mobile padding can be disabled
 
-*For any* Layout_Component with noMobilePadding prop set to true when rendered at mobile viewport widths, the horizontal padding should be removed or set to zero.
+_For any_ Layout_Component with noMobilePadding prop set to true when rendered at mobile viewport widths, the horizontal padding should be removed or set to zero.
 
 **Validates: Requirements 11.4**
 
@@ -623,11 +639,11 @@ Error detection uses utility functions:
 
 ```typescript
 function shouldRedirectTo404(error: unknown): boolean {
-  return error && 'status' in error && error.status === 404
+  return error && "status" in error && error.status === 404
 }
 
 function shouldShowErrorPage(error: unknown): boolean {
-  return error && 'status' in error && error.status >= 500
+  return error && "status" in error && error.status >= 500
 }
 ```
 
@@ -711,7 +727,7 @@ test('all breadcrumb items are rendered', () => {
             <div>Content</div>
           </StandardPageLayout>
         )
-        
+
         breadcrumbs.forEach(item => {
           expect(container).toHaveTextContent(item.label)
         })

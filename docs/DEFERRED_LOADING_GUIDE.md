@@ -22,6 +22,7 @@ Provides utilities for loading external scripts with async/defer attributes:
 - `removeScript()` - Remove loaded scripts
 
 **Features:**
+
 - Prevents duplicate script loading
 - Supports custom attributes
 - Promise-based API for easy integration
@@ -37,6 +38,7 @@ Optimized Bugsnag initialization that doesn't block rendering:
 - Gracefully handles initialization failures
 
 **Key Functions:**
+
 - `initializeBugsnagAsync()` - Initialize Bugsnag after page interactive
 - `getBugsnagErrorBoundary()` - Get error boundary with fallback
 - `notifyBugsnag()` - Report errors (only if initialized)
@@ -52,12 +54,14 @@ Provides timing utilities for delaying script execution:
 ## Script Loading Strategy
 
 ### Critical Scripts (Loaded Immediately)
+
 - React core bundle
 - MUI core styles
 - Redux store
 - Router configuration
 
 ### Non-Critical Scripts (Deferred Loading)
+
 1. **Analytics** - Loaded after page interactive
 2. **Bugsnag** - Loaded after page interactive with fallback
 3. **Third-party embeds** - Loaded on user interaction (facade pattern)
@@ -80,6 +84,7 @@ To verify deferred loading is working:
 4. Verify non-critical scripts execute after FCP/LCP
 
 Expected behavior:
+
 - Analytics scripts appear after page interactive event
 - Bugsnag initialization happens during idle time
 - No long tasks blocking initial render

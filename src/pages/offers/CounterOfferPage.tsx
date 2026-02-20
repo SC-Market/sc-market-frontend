@@ -21,7 +21,10 @@ export function CounterOfferPage() {
       title={t("offers.viewOffer")}
       breadcrumbs={[
         { label: t("offers.dashboard", "Dashboard"), href: "/dashboard" },
-        { label: t("offers.receivedOffers", "Received Offers"), href: "/offers/received" },
+        {
+          label: t("offers.receivedOffers", "Received Offers"),
+          href: "/offers/received",
+        },
         {
           label: `${t("offers.offer", "Offer")} ${(id || "").substring(0, 8).toUpperCase()}`,
           href: `/offer/${id}`,

@@ -37,7 +37,7 @@ function CreateListingPage() {
       breadcrumbs={[
         { label: "Home", href: "/" },
         { label: "Market", href: "/market" },
-        { label: "Create Listing" }
+        { label: "Create Listing" },
       ]}
     >
       <ListingForm />
@@ -53,13 +53,11 @@ FormPageLayout accepts all props from `StandardPageLayout` plus the following:
 ### Form-Specific Props
 
 #### `formTitle: string` (Required)
+
 The title of the form displayed in the header.
 
 ```tsx
-<FormPageLayout
-  title="Create Listing"
-  formTitle="Create New Market Listing"
->
+<FormPageLayout title="Create Listing" formTitle="Create New Market Listing">
   {/* ... */}
 </FormPageLayout>
 ```
@@ -67,6 +65,7 @@ The title of the form displayed in the header.
 **Note:** This is different from the `title` prop (which sets the document title). The `formTitle` is what users see on the page.
 
 #### `backButton?: boolean`
+
 Shows a back arrow button in the header. Default: `false`.
 
 ```tsx
@@ -82,6 +81,7 @@ Shows a back arrow button in the header. Default: `false`.
 **Best practice:** Always use `backButton={true}` on form pages to provide an easy way to cancel/exit.
 
 #### `submitButton?: ReactNode`
+
 The primary action button (usually "Save", "Create", "Submit"). Positioned on the right at the bottom of the form.
 
 ```tsx
@@ -89,8 +89,8 @@ The primary action button (usually "Save", "Create", "Submit"). Positioned on th
   title="Create Listing"
   formTitle="Create New Market Listing"
   submitButton={
-    <Button 
-      variant="contained" 
+    <Button
+      variant="contained"
       onClick={handleSubmit}
       disabled={!isValid || isSubmitting}
     >
@@ -103,6 +103,7 @@ The primary action button (usually "Save", "Create", "Submit"). Positioned on th
 ```
 
 #### `cancelButton?: ReactNode`
+
 The secondary action button (usually "Cancel"). Positioned to the left of the submit button at the bottom of the form.
 
 ```tsx
@@ -111,10 +112,7 @@ The secondary action button (usually "Cancel"). Positioned to the left of the su
   formTitle="Create New Market Listing"
   submitButton={<Button variant="contained">Create</Button>}
   cancelButton={
-    <Button 
-      variant="outlined" 
-      onClick={() => navigate("/market")}
-    >
+    <Button variant="outlined" onClick={() => navigate("/market")}>
       Cancel
     </Button>
   }
@@ -132,11 +130,7 @@ FormPageLayout overrides some StandardPageLayout defaults:
 You can still override these:
 
 ```tsx
-<FormPageLayout
-  title="Wide Form"
-  formTitle="Complex Data Entry"
-  maxWidth="xl"
->
+<FormPageLayout title="Wide Form" formTitle="Complex Data Entry" maxWidth="xl">
   {/* ... */}
 </FormPageLayout>
 ```
@@ -166,17 +160,13 @@ function CreateMarketListing() {
       formTitle="Create New Market Listing"
       backButton={true}
       submitButton={
-        <Button 
-          variant="contained" 
-          onClick={handleSubmit}
-          disabled={isLoading}
-        >
+        <Button variant="contained" onClick={handleSubmit} disabled={isLoading}>
           {isLoading ? "Creating..." : "Create Listing"}
         </Button>
       }
       cancelButton={
-        <Button 
-          variant="outlined" 
+        <Button
+          variant="outlined"
           onClick={() => navigate("/market")}
           disabled={isLoading}
         >
@@ -186,7 +176,7 @@ function CreateMarketListing() {
       breadcrumbs={[
         { label: "Home", href: "/" },
         { label: "Market", href: "/market" },
-        { label: "Create Listing" }
+        { label: "Create Listing" },
       ]}
     >
       <Grid container spacing={3}>
@@ -195,7 +185,9 @@ function CreateMarketListing() {
             label="Title"
             fullWidth
             value={formData.title}
-            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, title: e.target.value })
+            }
           />
         </Grid>
         <Grid item xs={12}>
@@ -205,7 +197,9 @@ function CreateMarketListing() {
             multiline
             rows={4}
             value={formData.description}
-            onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, description: e.target.value })
+            }
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -214,7 +208,9 @@ function CreateMarketListing() {
             type="number"
             fullWidth
             value={formData.price}
-            onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, price: e.target.value })
+            }
           />
         </Grid>
         <Grid item xs={12} sm={6}>
@@ -223,7 +219,9 @@ function CreateMarketListing() {
             type="number"
             fullWidth
             value={formData.quantity}
-            onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, quantity: e.target.value })
+            }
           />
         </Grid>
       </Grid>
@@ -263,8 +261,8 @@ function EditMarketListing() {
       formTitle="Edit Market Listing"
       backButton={true}
       submitButton={
-        <Button 
-          variant="contained" 
+        <Button
+          variant="contained"
           onClick={handleSubmit}
           disabled={isUpdating}
         >
@@ -272,8 +270,8 @@ function EditMarketListing() {
         </Button>
       }
       cancelButton={
-        <Button 
-          variant="outlined" 
+        <Button
+          variant="outlined"
           onClick={() => navigate(`/market/${id}`)}
           disabled={isUpdating}
         >
@@ -284,7 +282,7 @@ function EditMarketListing() {
         { label: "Home", href: "/" },
         { label: "Market", href: "/market" },
         { label: data?.title || "Loading...", href: `/market/${id}` },
-        { label: "Edit" }
+        { label: "Edit" },
       ]}
       isLoading={isLoading}
       error={error}
@@ -309,8 +307,9 @@ function CreateOrder() {
     const newErrors = {}
     if (!formData.service) newErrors.service = "Service is required"
     if (!formData.contractor) newErrors.contractor = "Contractor is required"
-    if (!formData.price || formData.price <= 0) newErrors.price = "Valid price is required"
-    
+    if (!formData.price || formData.price <= 0)
+      newErrors.price = "Valid price is required"
+
     setErrors(newErrors)
     return Object.keys(newErrors).length === 0
   }
@@ -334,8 +333,8 @@ function CreateOrder() {
       formTitle="Create New Service Order"
       backButton={true}
       submitButton={
-        <Button 
-          variant="contained" 
+        <Button
+          variant="contained"
           onClick={handleSubmit}
           disabled={!isValid || isLoading}
         >
@@ -343,8 +342,8 @@ function CreateOrder() {
         </Button>
       }
       cancelButton={
-        <Button 
-          variant="outlined" 
+        <Button
+          variant="outlined"
           onClick={() => navigate("/orders")}
           disabled={isLoading}
         >
@@ -354,7 +353,7 @@ function CreateOrder() {
       breadcrumbs={[
         { label: "Home", href: "/" },
         { label: "Orders", href: "/orders" },
-        { label: "Create Order" }
+        { label: "Create Order" },
       ]}
     >
       <Grid container spacing={3}>
@@ -364,7 +363,9 @@ function CreateOrder() {
             fullWidth
             required
             value={formData.service}
-            onChange={(e) => setFormData({ ...formData, service: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, service: e.target.value })
+            }
             error={!!errors.service}
             helperText={errors.service}
           />
@@ -408,8 +409,8 @@ function CreateComplexOrder() {
       backButton={true}
       submitButton={
         isLastStep ? (
-          <Button 
-            variant="contained" 
+          <Button
+            variant="contained"
             onClick={handleSubmit}
             disabled={isLoading}
           >
@@ -435,7 +436,7 @@ function CreateComplexOrder() {
       breadcrumbs={[
         { label: "Home", href: "/" },
         { label: "Orders", href: "/orders" },
-        { label: "Create Order" }
+        { label: "Create Order" },
       ]}
     >
       <Grid container spacing={3}>
@@ -449,8 +450,12 @@ function CreateComplexOrder() {
           </Stepper>
         </Grid>
         <Grid item xs={12}>
-          {step === 0 && <ServiceDetailsStep data={formData} onChange={setFormData} />}
-          {step === 1 && <ContractorSelectionStep data={formData} onChange={setFormData} />}
+          {step === 0 && (
+            <ServiceDetailsStep data={formData} onChange={setFormData} />
+          )}
+          {step === 1 && (
+            <ContractorSelectionStep data={formData} onChange={setFormData} />
+          )}
           {step === 2 && <ReviewStep data={formData} />}
         </Grid>
       </Grid>
@@ -493,15 +498,15 @@ function CreateListing() {
       backButton={true}
       submitButton={
         <Box display="flex" gap={1}>
-          <Button 
-            variant="outlined" 
+          <Button
+            variant="outlined"
             onClick={handleSaveDraft}
             disabled={isLoading || isSavingDraft}
           >
             Save as Draft
           </Button>
-          <Button 
-            variant="contained" 
+          <Button
+            variant="contained"
             onClick={handleSubmit}
             disabled={isLoading || isSavingDraft}
           >
@@ -510,8 +515,8 @@ function CreateListing() {
         </Box>
       }
       cancelButton={
-        <Button 
-          variant="outlined" 
+        <Button
+          variant="outlined"
           onClick={() => navigate("/market")}
           disabled={isLoading || isSavingDraft}
         >
@@ -521,7 +526,7 @@ function CreateListing() {
       breadcrumbs={[
         { label: "Home", href: "/" },
         { label: "Market", href: "/market" },
-        { label: "Create Listing" }
+        { label: "Create Listing" },
       ]}
     >
       <ListingForm data={formData} onChange={setFormData} />
@@ -542,7 +547,7 @@ function CreateListing() {
 
 5. **Handle errors gracefully**: Show error messages and allow users to retry.
 
-6. **Use appropriate maxWidth**: 
+6. **Use appropriate maxWidth**:
    - `sm` for simple forms (login, signup)
    - `lg` (default) for most forms
    - `xl` for complex forms with many fields
@@ -563,13 +568,13 @@ FormPageLayout works well with React Hook Form:
 function CreateListingWithHookForm() {
   const navigate = useNavigate()
   const [createListing, { isLoading }] = useCreateListingMutation()
-  
-  const { 
-    register, 
-    handleSubmit, 
-    formState: { errors, isValid } 
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
   } = useForm({
-    mode: "onChange"
+    mode: "onChange",
   })
 
   const onSubmit = async (data) => {
@@ -587,8 +592,8 @@ function CreateListingWithHookForm() {
       formTitle="Create New Market Listing"
       backButton={true}
       submitButton={
-        <Button 
-          variant="contained" 
+        <Button
+          variant="contained"
           onClick={handleSubmit(onSubmit)}
           disabled={!isValid || isLoading}
         >
@@ -596,8 +601,8 @@ function CreateListingWithHookForm() {
         </Button>
       }
       cancelButton={
-        <Button 
-          variant="outlined" 
+        <Button
+          variant="outlined"
           onClick={() => navigate("/market")}
           disabled={isLoading}
         >
@@ -607,7 +612,7 @@ function CreateListingWithHookForm() {
       breadcrumbs={[
         { label: "Home", href: "/" },
         { label: "Market", href: "/market" },
-        { label: "Create Listing" }
+        { label: "Create Listing" },
       ]}
     >
       <form>
@@ -632,6 +637,7 @@ function CreateListingWithHookForm() {
 ## Migration from Old Pattern
 
 ### Before (Old Pattern)
+
 ```tsx
 function OldCreatePage() {
   const [formData, setFormData] = useState({})
@@ -668,6 +674,7 @@ function OldCreatePage() {
 ```
 
 ### After (New Pattern)
+
 ```tsx
 function NewCreatePage() {
   const [formData, setFormData] = useState({})
@@ -683,19 +690,11 @@ function NewCreatePage() {
       formTitle="Create New Item"
       backButton={true}
       submitButton={
-        <Button 
-          variant="contained" 
-          onClick={handleSubmit}
-          disabled={isLoading}
-        >
+        <Button variant="contained" onClick={handleSubmit} disabled={isLoading}>
           {isLoading ? "Creating..." : "Create"}
         </Button>
       }
-      cancelButton={
-        <Button onClick={() => navigate(-1)}>
-          Cancel
-        </Button>
-      }
+      cancelButton={<Button onClick={() => navigate(-1)}>Cancel</Button>}
       breadcrumbs={breadcrumbs}
     >
       <ItemForm data={formData} onChange={setFormData} />

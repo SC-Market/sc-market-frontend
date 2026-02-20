@@ -1,9 +1,11 @@
 # TODO: Skeleton Improvements
 
 ## Current Status
+
 Route-specific skeleton system is implemented, but many skeletons are too generic and don't match actual page layouts.
 
 ## Well-Tailored Skeletons ✅
+
 - `OrderDetailSkeleton` - Matches order table with avatars, status, description
 - `MessageListSkeleton` - Matches chat entries with avatar groups
 - `ContractDetailSkeleton` - Tailored for contract details
@@ -94,6 +96,7 @@ Route-specific skeleton system is implemented, but many skeletons are too generi
 ## Implementation Guidelines
 
 ### When Creating New Skeletons:
+
 1. **Match actual layout structure** - Same grid, same spacing
 2. **Include key visual elements** - Avatars, images, chips, buttons
 3. **Use existing skeleton components** - `BaseSkeleton`, `CardSkeleton`, `ListingSkeleton`
@@ -101,6 +104,7 @@ Route-specific skeleton system is implemented, but many skeletons are too generi
 5. **Test on mobile** - Ensure responsive breakpoints match
 
 ### Pattern to Follow:
+
 ```tsx
 // src/components/skeletons/MarketListingDetailSkeleton.tsx
 import { Container, Grid, Box } from "@mui/material"
@@ -114,7 +118,7 @@ export function MarketListingDetailSkeleton() {
         <Grid item xs={12} md={6}>
           <BaseSkeleton variant="rectangular" width="100%" height={400} />
         </Grid>
-        
+
         {/* Details sidebar */}
         <Grid item xs={12} md={6}>
           <BaseSkeleton variant="text" width="80%" height={40} />
@@ -128,11 +132,13 @@ export function MarketListingDetailSkeleton() {
 ```
 
 ### After Creating:
+
 1. Export from `src/components/skeletons/index.ts`
 2. Add to `routeSkeletonMap` in `src/router/routeSkeletons.tsx`
 3. Test navigation to verify no CLS
 
 ## Metrics to Track
+
 - [ ] Measure CLS before/after improvements
 - [ ] User feedback on loading states
 - [ ] Identify most-visited routes for prioritization

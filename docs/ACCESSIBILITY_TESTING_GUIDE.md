@@ -27,11 +27,13 @@ SC Market aims to be WCAG 2.1 Level AA compliant. This guide covers:
 The project uses `eslint-plugin-jsx-a11y` to catch accessibility issues during development.
 
 **Run linting:**
+
 ```bash
 npm run lint
 ```
 
 **Common rules enforced:**
+
 - `jsx-a11y/alt-text` - Images must have alt text
 - `jsx-a11y/label-has-associated-control` - Form inputs must have labels
 - `jsx-a11y/aria-props` - ARIA attributes must be valid
@@ -43,6 +45,7 @@ npm run lint
 Use `jest-axe` to run automated accessibility tests in your component tests.
 
 **Basic usage:**
+
 ```tsx
 import { renderWithA11y } from "@/util/testing/accessibility"
 
@@ -53,19 +56,20 @@ test("component has no accessibility violations", async () => {
 ```
 
 **Advanced usage with custom rules:**
+
 ```tsx
 import { checkA11y } from "@/util/testing/accessibility"
 
 test("form is accessible", async () => {
   const { container } = render(<MyForm />)
-  
+
   const results = await checkA11y(container, {
     rules: {
       "color-contrast": { enabled: true },
-      "label": { enabled: true },
-    }
+      label: { enabled: true },
+    },
   })
-  
+
   expect(results).toHaveNoViolations()
 })
 ```
@@ -73,16 +77,19 @@ test("form is accessible", async () => {
 ### Running Tests
 
 **Run all tests:**
+
 ```bash
 npm test
 ```
 
 **Run tests in watch mode:**
+
 ```bash
 npm test -- --watch
 ```
 
 **Run tests with coverage:**
+
 ```bash
 npm test -- --coverage
 ```
@@ -94,6 +101,7 @@ npm test -- --coverage
 Test all interactive elements with keyboard only (no mouse).
 
 **Key combinations to test:**
+
 - `Tab` - Move focus forward
 - `Shift + Tab` - Move focus backward
 - `Enter` - Activate buttons and links
@@ -103,6 +111,7 @@ Test all interactive elements with keyboard only (no mouse).
 - `Home/End` - Navigate to first/last item in lists
 
 **Checklist:**
+
 - [ ] All interactive elements are reachable via keyboard
 - [ ] Focus indicator is visible on all elements
 - [ ] Tab order follows logical reading order
@@ -115,12 +124,14 @@ Test all interactive elements with keyboard only (no mouse).
 Test with popular screen readers to ensure content is announced correctly.
 
 **Screen readers to test:**
+
 - **NVDA** (Windows, free) - https://www.nvaccess.org/
 - **JAWS** (Windows, paid) - https://www.freedomscientific.com/products/software/jaws/
 - **VoiceOver** (macOS/iOS, built-in) - Cmd+F5 to enable
 - **TalkBack** (Android, built-in)
 
 **Testing checklist:**
+
 - [ ] All images have appropriate alt text
 - [ ] Form labels are announced with inputs
 - [ ] Error messages are announced
@@ -131,6 +142,7 @@ Test with popular screen readers to ensure content is announced correctly.
 - [ ] Dialogs announce title and description
 
 **VoiceOver quick start (macOS):**
+
 ```
 Cmd + F5          - Enable/disable VoiceOver
 VO + A            - Start reading
@@ -144,6 +156,7 @@ VO = Control + Option
 Test visual accessibility features.
 
 **Checklist:**
+
 - [ ] Text has sufficient color contrast (4.5:1 for normal, 3:1 for large)
 - [ ] UI components have 3:1 contrast ratio
 - [ ] Information is not conveyed by color alone
@@ -152,6 +165,7 @@ Test visual accessibility features.
 - [ ] Page works in high contrast mode
 
 **Tools:**
+
 - Chrome DevTools - Lighthouse accessibility audit
 - WAVE browser extension - https://wave.webaim.org/extension/
 - axe DevTools browser extension - https://www.deque.com/axe/devtools/
@@ -163,6 +177,7 @@ Test visual accessibility features.
 The project provides several utilities in `src/util/testing/accessibility.ts`:
 
 #### `renderWithA11y(ui, options?, axeOptions?)`
+
 Renders a component and runs axe accessibility tests.
 
 ```tsx
@@ -171,6 +186,7 @@ expect(results).toHaveNoViolations()
 ```
 
 #### `checkA11y(container, axeOptions?)`
+
 Runs axe tests on a rendered container.
 
 ```tsx
@@ -180,6 +196,7 @@ expect(results).toHaveNoViolations()
 ```
 
 #### `getFocusableElements(container)`
+
 Gets all focusable elements within a container.
 
 ```tsx
@@ -188,6 +205,7 @@ expect(focusable).toHaveLength(5)
 ```
 
 #### `simulateTabNavigation(container, direction)`
+
 Simulates keyboard navigation through focusable elements.
 
 ```tsx
@@ -196,6 +214,7 @@ expect(focusOrder[0]).toHaveAttribute("name", "firstName")
 ```
 
 #### `getAccessibleName(element)`
+
 Gets the accessible name of an element.
 
 ```tsx
@@ -204,6 +223,7 @@ expect(getAccessibleName(button)).toBe("Submit Form")
 ```
 
 #### `isKeyboardAccessible(element)`
+
 Checks if an element is keyboard accessible.
 
 ```tsx
@@ -212,6 +232,7 @@ expect(isKeyboardAccessible(button)).toBe(true)
 ```
 
 #### `hasLiveRegion(element)`
+
 Checks if element has proper live region attributes.
 
 ```tsx
@@ -229,17 +250,17 @@ test("button is accessible", async () => {
   const { container } = render(
     <button onClick={handleClick} aria-label="Close dialog">
       X
-    </button>
+    </button>,
   )
-  
+
   // Check for violations
   const results = await checkA11y(container)
   expect(results).toHaveNoViolations()
-  
+
   // Check accessible name
   const button = screen.getByRole("button")
   expect(getAccessibleName(button)).toBe("Close dialog")
-  
+
   // Test keyboard activation
   button.focus()
   await userEvent.keyboard("{Enter}")
@@ -262,17 +283,17 @@ test("form is accessible", async () => {
         aria-describedby="email-hint"
       />
       <span id="email-hint">We'll never share your email</span>
-    </form>
+    </form>,
   )
-  
+
   // Check for violations
   const results = await checkA11y(container)
   expect(results).toHaveNoViolations()
-  
+
   // Verify label association
   const input = screen.getByLabelText(/email/i)
   expect(input).toBeInTheDocument()
-  
+
   // Verify required indication
   expect(input).toHaveAttribute("required")
   expect(input).toHaveAttribute("aria-required", "true")
@@ -284,26 +305,22 @@ test("form is accessible", async () => {
 ```tsx
 test("dialog is accessible", async () => {
   const { container } = render(
-    <div
-      role="dialog"
-      aria-labelledby="dialog-title"
-      aria-modal="true"
-    >
+    <div role="dialog" aria-labelledby="dialog-title" aria-modal="true">
       <h2 id="dialog-title">Confirm Action</h2>
       <button>Cancel</button>
       <button>Confirm</button>
-    </div>
+    </div>,
   )
-  
+
   // Check for violations
   const results = await checkA11y(container)
   expect(results).toHaveNoViolations()
-  
+
   // Verify ARIA attributes
   const dialog = screen.getByRole("dialog")
   expect(dialog).toHaveAttribute("aria-labelledby", "dialog-title")
   expect(dialog).toHaveAttribute("aria-modal", "true")
-  
+
   // Verify focus trap
   const focusable = getFocusableElements(dialog)
   expect(focusable.length).toBeGreaterThan(0)
@@ -319,11 +336,11 @@ test("maintains logical tab order", () => {
       <input name="first" />
       <input name="second" />
       <button>Submit</button>
-    </form>
+    </form>,
   )
-  
+
   const focusOrder = simulateTabNavigation(container)
-  
+
   expect(focusOrder[0]).toHaveAttribute("name", "first")
   expect(focusOrder[1]).toHaveAttribute("name", "second")
   expect(focusOrder[2]).toHaveTextContent("Submit")
@@ -337,10 +354,10 @@ test("announces dynamic content", () => {
   const { container } = render(
     <div aria-live="polite" aria-atomic="true">
       5 results found
-    </div>
+    </div>,
   )
-  
-  const liveRegion = container.querySelector('[aria-live]')!
+
+  const liveRegion = container.querySelector("[aria-live]")!
   expect(hasLiveRegion(liveRegion)).toBe(true)
 })
 ```
@@ -364,7 +381,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: "18"
       - run: npm ci
       - run: npm run lint
       - run: npm test -- --testPathPattern=accessibility
@@ -388,18 +405,21 @@ Add accessibility checks to pre-commit hooks:
 ## Resources
 
 ### Documentation
+
 - [WCAG 2.1 Guidelines](https://www.w3.org/WAI/WCAG21/quickref/)
 - [ARIA Authoring Practices](https://www.w3.org/WAI/ARIA/apg/)
 - [jest-axe Documentation](https://github.com/nickcolley/jest-axe)
 - [Testing Library Accessibility](https://testing-library.com/docs/queries/about/#priority)
 
 ### Tools
+
 - [axe DevTools](https://www.deque.com/axe/devtools/)
 - [WAVE Browser Extension](https://wave.webaim.org/extension/)
 - [Lighthouse](https://developers.google.com/web/tools/lighthouse)
 - [Color Contrast Checker](https://webaim.org/resources/contrastchecker/)
 
 ### Screen Readers
+
 - [NVDA](https://www.nvaccess.org/) (Windows, free)
 - [JAWS](https://www.freedomscientific.com/products/software/jaws/) (Windows, paid)
 - [VoiceOver](https://www.apple.com/accessibility/voiceover/) (macOS/iOS, built-in)

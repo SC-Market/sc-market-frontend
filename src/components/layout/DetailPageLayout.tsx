@@ -90,7 +90,10 @@ export function DetailPageLayout(props: DetailPageLayoutProps): ReactElement {
           item
           xs={12}
           sm="auto"
-          sx={{ display: "flex", justifyContent: { xs: "stretch", sm: "flex-end" } }}
+          sx={{
+            display: "flex",
+            justifyContent: { xs: "stretch", sm: "flex-end" },
+          }}
         >
           {entityActions}
         </Grid>
