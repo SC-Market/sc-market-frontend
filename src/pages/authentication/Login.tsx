@@ -24,7 +24,8 @@ export function Login() {
       <ContainerGrid
         maxWidth={"xl"}
         sidebarOpen={true}
-        sx={{ paddingTop: 2 }}
+        noTopSpacer
+        sx={{ paddingTop: 0 }}
       >
         {!profile.isLoading && !profile.error && <Navigate to={"/dashboard"} />}
         <Grid

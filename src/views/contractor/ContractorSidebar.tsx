@@ -3,9 +3,9 @@ import {
   AutocompleteRenderInputParams,
   Box,
   Chip,
-  Drawer,
   Grid,
   MenuItem,
+  Paper,
   Rating,
   TextField,
   Typography,
@@ -234,55 +234,19 @@ export function ContractorSidebar() {
     )
   }
 
-  // On desktop, use permanent drawer
+  // On desktop, use persistent Paper sidebar
   return (
-    <Drawer
-      variant="permanent"
-      open
+    <Paper
       sx={{
-        zIndex: theme.zIndex.drawer - 3,
-        width: open ? marketDrawerWidth : 0,
-        transition: theme.transitions.create(["width", "margin"], {
-          easing: theme.transitions.easing.sharp,
-          duration: theme.transitions.duration.enteringScreen,
-        }),
-        "& .MuiDrawer-paper": {
-          width: open ? marketDrawerWidth : 0,
-          boxSizing: "border-box",
-          overflow: "scroll",
-          left: drawerOpen ? sidebarDrawerWidth : 0,
-          backgroundColor: theme.palette.background.default,
-          transition: theme.transitions.create(
-            ["width", "borderRight", "borderColor"],
-            {
-              easing: theme.transitions.easing.easeOut,
-              duration: "0.3s",
-            },
-          ),
-          borderRight: open ? 1 : 0,
-          borderColor: open ? theme.palette.outline.main : "transparent",
-        },
-        position: "relative",
-        whiteSpace: "nowrap",
-        background: "transparent",
-        overflow: "scroll",
-        borderRight: open ? 1 : 0,
-        borderColor: open ? theme.palette.outline.main : "transparent",
+        position: "sticky",
+        top: "calc(64px + 16px)",
+        maxHeight: "calc(100vh - 64px - 32px)",
+        width: 300,
+        flexShrink: 0,
+        overflowY: "auto",
       }}
-      container={
-        window !== undefined
-          ? () => window.document.getElementById("rootarea")
-          : undefined
-      }
     >
-      <Box
-        sx={{
-          ...theme.mixins.toolbar,
-          position: "relative",
-          width: "100%",
-        }}
-      />
       {sidebarContent}
-    </Drawer>
+    </Paper>
   )
 }

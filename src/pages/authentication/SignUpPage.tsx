@@ -18,22 +18,13 @@ export function SignUpPage() {
   return (
     <FormPageLayout
       title={t("auth.signUpTitle", "Sign up for SC Market")}
-      formTitle="" // Empty title since SignUpArea has its own title
+      formTitle=""
       maxWidth="sm"
-      noFooter
-      noSidebar
-      noTopSpacer
       isLoading={isLoading}
       GridProps={{
         sx: {
           minHeight: "calc(100vh - 64px)",
           alignItems: "center",
-        },
-      }}
-      ContainerProps={{
-        sx: {
-          paddingTop: 0,
-          paddingBottom: 0,
         },
       }}
     >
