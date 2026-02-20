@@ -1,15 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react"
 import { ContractorListItem } from "../../views/contractor/ContractorList"
 import { ContractorSkeleton } from "../../components/skeletons"
-import {
-  Box,
-  Button,
-  Container,
-  Divider,
-  Grid,
-  Stack,
-  useMediaQuery,
-} from "@mui/material"
+import { Button, Divider, Grid, useMediaQuery } from "@mui/material"
 import { HapticTablePagination } from "../../components/haptic"
 import {
   ContractorSearchContext,
@@ -22,7 +14,7 @@ import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { EmptyContractors } from "../../components/empty-states"
-import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
+import { SidebarPageLayout } from "../../components/layout/SidebarPageLayout"
 import { usePageContractors } from "../../features/contractor/hooks/usePageContractors"
 
 export function Contractors() {
@@ -84,178 +76,99 @@ export function Contractors() {
   )
 
   return (
-    <StandardPageLayout
+    <SidebarPageLayout
       title={t("contractorsPage.title")}
       headerTitle={t("contractorsPage.title")}
-      maxWidth="xxl"
       isLoading={pageData.isLoading}
       error={pageData.error}
       skeleton={skeleton}
+      sidebar={
+        <ContractorSidebarContext.Provider
+          value={[sidebarOpen, setSidebarOpen]}
+        >
+          <ContractorSearchContext.Provider
+            value={[searchState, setSearchState]}
+          >
+            {isMobile && (
+              <Button
+                variant="outlined"
+                color="secondary"
+                startIcon={<FilterListIcon />}
+                aria-label={t("toggle_contractor_sidebar")}
+                onClick={() => {
+                  setSidebarOpen(true)
+                }}
+                sx={{
+                  position: "fixed",
+                  bottom: { xs: 80, sm: 24 },
+                  right: 24,
+                  zIndex: theme.zIndex.speedDial,
+                  borderRadius: 2,
+                  textTransform: "none",
+                  boxShadow: theme.shadows[4],
+                  backgroundColor: theme.palette.background.paper,
+                  "&:hover": {
+                    backgroundColor: theme.palette.background.paper,
+                    boxShadow: theme.shadows[8],
+                  },
+                }}
+              >
+                {t("contractorsPage.filters", "Filters")}
+              </Button>
+            )}
+            <ContractorSidebar />
+          </ContractorSearchContext.Provider>
+        </ContractorSidebarContext.Provider>
+      }
     >
       <ContractorSidebarContext.Provider value={[sidebarOpen, setSidebarOpen]}>
         <ContractorSearchContext.Provider value={[searchState, setSearchState]}>
-          <Container maxWidth="xxl" sx={{ padding: 0 }}>
-            <Box sx={{ display: "flex", justifyContent: "center" }}>
-              {isMobile ? (
-                <Grid container spacing={theme.layoutSpacing.layout}>
-                  <Grid item xs={12}>
-                    <Button
-                      variant="outlined"
-                      color="secondary"
-                      startIcon={<FilterListIcon />}
-                      aria-label={t("toggle_contractor_sidebar")}
-                      onClick={() => {
-                        setSidebarOpen(true)
-                      }}
-                      sx={{
-                        position: "fixed",
-                        bottom: { xs: 80, sm: 24 },
-                        right: 24,
-                        zIndex: theme.zIndex.speedDial,
-                        borderRadius: 2,
-                        textTransform: "none",
-                        boxShadow: theme.shadows[4],
-                        backgroundColor: theme.palette.background.paper,
-                        "&:hover": {
-                          backgroundColor: theme.palette.background.paper,
-                          boxShadow: theme.shadows[8],
-                        },
-                      }}
-                    >
-                      {t("contractorsPage.filters", "Filters")}
-                    </Button>
-                  </Grid>
+          <div ref={ref} />
+          {pageData.error ? (
+            <EmptyContractors isError onRetry={() => pageData.refetch()} />
+          ) : pageData.isFetching ? (
+            skeleton
+          ) : pageData.data && pageData.data.items.length > 0 ? (
+            pageData.data.items.map((item: any, index: number) => (
+              <ContractorListItem
+                contractor={item}
+                key={item.name}
+                index={index}
+              />
+            ))
+          ) : (
+            <EmptyContractors
+              isSearchResult={
+                !!(
+                  searchState.query ||
+                  searchState.fields?.length ||
+                  searchState.rating
+                )
+              }
+            />
+          )}
 
-                  <ContractorSidebar />
+          <Divider light sx={{ mt: 2 }} />
 
-                  <Grid item xs={12}>
-                    <div ref={ref} />
-                    {pageData.error ? (
-                      <EmptyContractors
-                        isError
-                        onRetry={() => pageData.refetch()}
-                      />
-                    ) : pageData.isFetching ? (
-                      skeleton
-                    ) : pageData.data && pageData.data.items.length > 0 ? (
-                      pageData.data.items.map((item: any, index: number) => (
-                        <ContractorListItem
-                          contractor={item}
-                          key={item.name}
-                          index={index}
-                        />
-                      ))
-                    ) : (
-                      <EmptyContractors
-                        isSearchResult={
-                          !!(
-                            searchState.query ||
-                            searchState.fields?.length ||
-                            searchState.rating
-                          )
-                        }
-                      />
-                    )}
-                  </Grid>
-
-                  <Grid item xs={12}>
-                    <Divider light />
-                  </Grid>
-
-                  <Grid item xs={12}>
-                    <HapticTablePagination
-                      labelRowsPerPage={t("rows_per_page")}
-                      labelDisplayedRows={({ from, to, count }) =>
-                        t("displayed_rows", { from, to, count })
-                      }
-                      rowsPerPageOptions={[5, 10, 25]}
-                      component="div"
-                      count={pageData.isLoading ? 0 : pageData.data?.total || 0}
-                      rowsPerPage={perPage}
-                      page={page}
-                      onPageChange={handleChangePage}
-                      onRowsPerPageChange={handleChangeRowsPerPage}
-                      color={"primary"}
-                      nextIconButtonProps={{ color: "primary" }}
-                      backIconButtonProps={{ color: "primary" }}
-                    />
-                  </Grid>
-                </Grid>
-              ) : (
-                <Stack
-                  direction="row"
-                  justifyContent="center"
-                  spacing={theme.layoutSpacing.layout}
-                  sx={{ width: "100%", maxWidth: "xxl" }}
-                >
-                  <ContractorSidebar />
-
-                  <Box sx={{ flex: 1, maxWidth: "md" }}>
-                    <Grid container spacing={theme.layoutSpacing.layout}>
-                      <Grid item xs={12}>
-                        <div ref={ref} />
-                        {pageData.error ? (
-                          <EmptyContractors
-                            isError
-                            onRetry={() => pageData.refetch()}
-                          />
-                        ) : pageData.isFetching ? (
-                          skeleton
-                        ) : pageData.data && pageData.data.items.length > 0 ? (
-                          pageData.data.items.map(
-                            (item: any, index: number) => (
-                              <ContractorListItem
-                                contractor={item}
-                                key={item.name}
-                                index={index}
-                              />
-                            ),
-                          )
-                        ) : (
-                          <EmptyContractors
-                            isSearchResult={
-                              !!(
-                                searchState.query ||
-                                searchState.fields?.length ||
-                                searchState.rating
-                              )
-                            }
-                          />
-                        )}
-                      </Grid>
-
-                      <Grid item xs={12}>
-                        <Divider light />
-                      </Grid>
-
-                      <Grid item xs={12}>
-                        <HapticTablePagination
-                          labelRowsPerPage={t("rows_per_page")}
-                          labelDisplayedRows={({ from, to, count }) =>
-                            t("displayed_rows", { from, to, count })
-                          }
-                          rowsPerPageOptions={[5, 10, 25]}
-                          component="div"
-                          count={
-                            pageData.isLoading ? 0 : pageData.data?.total || 0
-                          }
-                          rowsPerPage={perPage}
-                          page={page}
-                          onPageChange={handleChangePage}
-                          onRowsPerPageChange={handleChangeRowsPerPage}
-                          color={"primary"}
-                          nextIconButtonProps={{ color: "primary" }}
-                          backIconButtonProps={{ color: "primary" }}
-                        />
-                      </Grid>
-                    </Grid>
-                  </Box>
-                </Stack>
-              )}
-            </Box>
-          </Container>
+          <HapticTablePagination
+            labelRowsPerPage={t("rows_per_page")}
+            labelDisplayedRows={({ from, to, count }) =>
+              t("displayed_rows", { from, to, count })
+            }
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={pageData.isLoading ? 0 : pageData.data?.total || 0}
+            rowsPerPage={perPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+            color={"primary"}
+            nextIconButtonProps={{ color: "primary" }}
+            backIconButtonProps={{ color: "primary" }}
+            sx={{ mt: 2 }}
+          />
         </ContractorSearchContext.Provider>
       </ContractorSidebarContext.Provider>
-    </StandardPageLayout>
+    </SidebarPageLayout>
   )
 }
