@@ -42,7 +42,7 @@ export function isAlphaNumeric(str: string) {
 }
 
 export interface AuthenticateRSIProps {
-  identifier?: string
+  identifier: string
 }
 
 export function AuthenticateRSI({
@@ -153,9 +153,7 @@ export function AuthenticateRSI({
           <Trans
             i18nKey="authenticateRSI.instructions"
             components={{
-              sentinelCode: (
-                <SentinelCode code={identifierProp || "PLACEHOLDER"} />
-              ),
+              sentinelCode: <SentinelCode code={identifierProp} />,
               guideLink: (
                 <UnderlineLink
                   component={"a"}
@@ -208,9 +206,7 @@ export function AuthenticateRSI({
             color={"secondary"}
             endIcon={<OpenInNewIcon />}
             onClick={async () => {
-              await navigator.clipboard.writeText(
-                identifierProp || "PLACEHOLDER",
-              )
+              await navigator.clipboard.writeText(identifierProp)
               window.open(
                 "https://robertsspaceindustries.com/account/profile",
                 "_blank",
