@@ -18,13 +18,15 @@ export function AuthenticateRSIPage() {
     return <Navigate to="/dashboard" />
   }
 
+  const showSkeleton = identifier.isLoading || !identifier.data?.identifier
+
   return (
     <StandardPageLayout
       title={t("login.accountLink")}
       headerTitle={t("login.authenticateWithRSI")}
       maxWidth="xl"
       noSidebar
-      isLoading={identifier.isLoading}
+      isLoading={showSkeleton}
       skeleton={
         <Grid item xs={12} lg={4}>
           <Grid
@@ -37,17 +39,17 @@ export function AuthenticateRSIPage() {
         </Grid>
       }
     >
-      <Grid item xs={12} lg={4}>
-        <Grid
-          container
-          spacing={theme.layoutSpacing.layout * 4}
-          alignItems="flex-start"
-        >
-          {identifier.data?.identifier && (
+      {identifier.data?.identifier && (
+        <Grid item xs={12} lg={4}>
+          <Grid
+            container
+            spacing={theme.layoutSpacing.layout * 4}
+            alignItems="flex-start"
+          >
             <AuthenticateRSI identifier={identifier.data.identifier} />
-          )}
+          </Grid>
         </Grid>
-      </Grid>
+      )}
     </StandardPageLayout>
   )
 }
