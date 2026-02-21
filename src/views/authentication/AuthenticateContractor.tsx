@@ -20,6 +20,7 @@ import {
   isRsiUrl,
 } from "../../util/rsiUrlUtils.ts"
 import { SentinelCode } from "../../components/authentication/SentinelCode"
+import { AuthenticateContractorSkeleton } from "./AuthenticateContractor.skeleton"
 
 export function AuthenticateContractor() {
   const identifier = useGetAuthenticatorIdentifier()
@@ -59,6 +60,10 @@ export function AuthenticateContractor() {
     },
     [activateContractorLink, orgName, issueAlert, t, navigate],
   )
+
+  if (identifier.isLoading || !identifier.data?.identifier) {
+    return <AuthenticateContractorSkeleton />
+  }
 
   return (
     <Section xs={12} lg={12}>
@@ -120,9 +125,7 @@ export function AuthenticateContractor() {
             i18nKey="authenticateContractor.instructions"
             components={{
               sentinelCode: (
-                <SentinelCode
-                  code={identifier.data?.identifier || "PLACEHOLDER"}
-                />
+                <SentinelCode code={identifier.data.identifier} />
               ),
             }}
           />
@@ -138,9 +141,7 @@ export function AuthenticateContractor() {
             color={"secondary"}
             endIcon={<OpenInNewIcon />}
             onClick={async () => {
-              await navigator.clipboard.writeText(
-                identifier.data?.identifier || "PLACEHOLDER",
-              )
+              await navigator.clipboard.writeText(identifier.data.identifier)
               window.open(
                 `https://robertsspaceindustries.com/orgs/${orgName}/admin/content`,
                 "_blank",

@@ -2,6 +2,7 @@ import React from "react"
 import { Navigate } from "react-router-dom"
 import { Grid } from "@mui/material"
 import { AuthenticateRSI } from "../../views/authentication/AuthenticateRSI"
+import { AuthenticateRSISkeleton } from "../../views/authentication/AuthenticateRSI.skeleton"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -24,6 +25,17 @@ export function AuthenticateRSIPage() {
       maxWidth="xl"
       noSidebar
       isLoading={identifier.isLoading}
+      skeleton={
+        <Grid item xs={12} lg={4}>
+          <Grid
+            container
+            spacing={theme.layoutSpacing.layout * 4}
+            alignItems="flex-start"
+          >
+            <AuthenticateRSISkeleton />
+          </Grid>
+        </Grid>
+      }
     >
       <Grid item xs={12} lg={4}>
         <Grid
@@ -31,7 +43,9 @@ export function AuthenticateRSIPage() {
           spacing={theme.layoutSpacing.layout * 4}
           alignItems="flex-start"
         >
-          <AuthenticateRSI identifier={identifier.data?.identifier} />
+          {identifier.data?.identifier && (
+            <AuthenticateRSI identifier={identifier.data.identifier} />
+          )}
         </Grid>
       </Grid>
     </StandardPageLayout>
