@@ -65,6 +65,8 @@ export function AuthenticateContractor() {
     return <AuthenticateContractorSkeleton />
   }
 
+  const identifierCode = identifier.data.identifier
+
   return (
     <Section xs={12} lg={12}>
       <Grid item xs={12}>
@@ -124,9 +126,7 @@ export function AuthenticateContractor() {
           <Trans
             i18nKey="authenticateContractor.instructions"
             components={{
-              sentinelCode: (
-                <SentinelCode code={identifier.data.identifier} />
-              ),
+              sentinelCode: <SentinelCode code={identifierCode} />,
             }}
           />
         </Typography>
@@ -141,7 +141,7 @@ export function AuthenticateContractor() {
             color={"secondary"}
             endIcon={<OpenInNewIcon />}
             onClick={async () => {
-              await navigator.clipboard.writeText(identifier.data.identifier)
+              await navigator.clipboard.writeText(identifierCode)
               window.open(
                 `https://robertsspaceindustries.com/orgs/${orgName}/admin/content`,
                 "_blank",
