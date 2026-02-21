@@ -3,8 +3,10 @@ import { Grid, Typography, Divider } from "@mui/material"
 import {
   useGetUserProfileQuery,
   useProfileGetLinksQuery,
+  useGetAuthenticatorIdentifier,
 } from "../../store/profile"
 import { AuthenticateRSI } from "../authentication/AuthenticateRSI"
+import { AuthenticateRSISkeleton } from "../authentication/AuthenticateRSI.skeleton"
 import { ReVerifyProfile } from "./ReVerifyProfile"
 import { UnlinkProfile } from "./UnlinkProfile"
 import { AccountLinks } from "./AccountLinks"
@@ -19,6 +21,7 @@ export function ProfileSettings() {
   const theme = useTheme<ExtendedTheme>()
   const { data: profile } = useGetUserProfileQuery()
   const { data: links } = useProfileGetLinksQuery()
+  const identifier = useGetAuthenticatorIdentifier()
 
   // Check if Citizen iD is linked - if so, hide unlink section
   // Citizen iD is the authoritative source for RSI details when linked
@@ -63,7 +66,11 @@ export function ProfileSettings() {
           <Typography variant="h6" gutterBottom>
             {t("settings.profile.manualVerification", "Manual Verification")}
           </Typography>
-          <AuthenticateRSI />
+          {identifier.isLoading || !identifier.data?.identifier ? (
+            <AuthenticateRSISkeleton />
+          ) : (
+            <AuthenticateRSI identifier={identifier.data.identifier} />
+          )}
         </Grid>
       </Grid>
     )
