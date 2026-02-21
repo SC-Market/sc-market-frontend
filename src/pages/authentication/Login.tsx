@@ -3,13 +3,17 @@ import React from "react"
 import { Authenticate } from "../../views/authentication/Authenticate"
 import { Page } from "../../components/metadata/Page"
 import { ContainerGrid } from "../../components/layout/ContainerGrid"
-import { useGetUserProfileQuery } from "../../store/profile"
+import {
+  useGetUserProfileQuery,
+  useGetAuthenticatorIdentifier,
+} from "../../store/profile"
 import { Navigate } from "react-router-dom"
 import { LoginInfoPanel } from "./LoginInfoPanel"
 import { Grid } from "@mui/material"
 import { RegisterShip } from "../../views/fleet/RegisterShip"
 import { DashNotificationArea } from "../../views/notifications/DashNotificationArea"
 import { AuthenticateRSI } from "../../views/authentication/AuthenticateRSI"
+import { AuthenticateRSISkeleton } from "../../views/authentication/AuthenticateRSI.skeleton"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -18,6 +22,7 @@ export function Login() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const profile = useGetUserProfileQuery()
+  const identifier = useGetAuthenticatorIdentifier()
 
   return (
     <Page title={t("login.title", "Login")}>
@@ -45,7 +50,11 @@ export function Login() {
             alignItems={"flex-start"}
           >
             <HeaderTitle>{t("login.title")}</HeaderTitle>
-            <AuthenticateRSI />
+            {identifier.isLoading || !identifier.data?.identifier ? (
+              <AuthenticateRSISkeleton />
+            ) : (
+              <AuthenticateRSI identifier={identifier.data.identifier} />
+            )}
           </Grid>
         </Grid>
 
