@@ -4,7 +4,7 @@ import { BuyOrderForm } from "../../features/market"
 import { useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { usePageCreateBuyOrder } from "../../features/market/hooks/usePageCreateBuyOrder"
-import { ItemSearchAutocomplete } from "../../features/market/components/ItemSearchAutocomplete"
+import { GameItemSearchAutocomplete } from "../../features/market/components/GameItemSearchAutocomplete"
 
 export function CreateBuyOrder() {
   const { t } = useTranslation()
@@ -28,7 +28,7 @@ export function CreateBuyOrder() {
       error={pageData.error}
     >
       <FlatSection title={t("buyOrderActions.selectMarketItem")}>
-        <ItemSearchAutocomplete
+        <GameItemSearchAutocomplete
           value={itemName ?? null}
           onChange={(name, type) => {
             if (name) setItemName?.(name)

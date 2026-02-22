@@ -226,6 +226,18 @@ export const marketApi = serviceApi.injectEndpoints({
       ],
     }),
 
+    searchGameItems: builder.query<
+      { name: string; type: string }[],
+      string
+    >({
+      query: (searchQuery) => ({
+        url: "/api/market/items/search",
+        params: { query: searchQuery },
+      }),
+      transformResponse: unwrapResponse,
+      providesTags: ["MarketItems"],
+    }),
+
     getBuyOrderListings: builder.query<
       MarketAggregate[],
       Partial<MarketSearchParams> | void
@@ -729,6 +741,7 @@ export const {
   useGetMyListingsQuery,
   useGetMarketCategoriesQuery,
   useGetMarketItemsByCategoryQuery,
+  useLazySearchGameItemsQuery,
   useGetAggregateByIdQuery,
   useGetMultipleByIdQuery,
   useGetStatsForListingsQuery,

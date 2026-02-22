@@ -40,7 +40,7 @@ import { MISSING_IMAGE_URL } from "../../../hooks/styles/Theme"
 import { MarketListingUpdateBody, UniqueListing } from ".."
 import { has_permission } from "../../../views/contractor/OrgRoles"
 import { NumericFormat } from "react-number-format"
-import { ItemSearchAutocomplete } from "../components/ItemSearchAutocomplete"
+import { GameItemSearchAutocomplete } from "../components/GameItemSearchAutocomplete"
 import { SelectPhotosArea } from "../../../components/modal/SelectPhotosArea"
 import { useTranslation } from "react-i18next" // Localization
 import { useTheme } from "@mui/material/styles"
@@ -382,7 +382,7 @@ export function MarketListingEditView() {
                         alignItems: "flex-start",
                       }}
                     >
-                      <ItemSearchAutocomplete
+                      <GameItemSearchAutocomplete
                         value={item}
                         onChange={(name, itemType) => {
                           if (name) setItem(name)
