@@ -239,7 +239,16 @@ export function MobileBottomNav() {
       (a, b) => b.route.length - a.route.length,
     )
     for (const tab of sortedTabs) {
-      if (path === tab.route || path.startsWith(tab.route + "/")) {
+      // Exact match (with or without query params)
+      if (path === tab.route) {
+        return tab.id
+      }
+      // Match if path starts with route followed by query params (not further path)
+      if (path.startsWith(tab.route + "?")) {
+        return tab.id
+      }
+      // Match if path starts with route followed by slash (further path)
+      if (path.startsWith(tab.route + "/")) {
         return tab.id
       }
     }
