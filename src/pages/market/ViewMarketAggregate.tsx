@@ -7,6 +7,7 @@ import ShoppingCartRoundedIcon from "@mui/icons-material/ShoppingCartRounded"
 import { CurrentMarketListingContext } from "../../features/market/hooks/CurrentMarketItem"
 import { CurrentMarketAggregateContext } from "../../features/market/hooks/CurrentMarketAggregate"
 import { MarketListingViewSkeleton } from "../../features/market/views/MarketListingView"
+import { FormSkeleton } from "../../components/skeletons/FormSkeleton"
 import { useTranslation } from "react-i18next"
 import { DetailPageLayout } from "../../components/layout/DetailPageLayout"
 import { LazySection } from "../../components/layout/LazySection"
@@ -27,7 +28,8 @@ const MarketAggregateEditViewLazy = lazy(() =>
 )
 
 // Skeleton is NOT lazy loaded - needs to be available immediately
-const SkeletonComponent = MarketListingViewSkeleton
+const ViewSkeleton = MarketListingViewSkeleton
+const EditSkeleton = () => <FormSkeleton fields={6} />
 
 export function ViewMarketAggregate(props: {}) {
   const { id } = useParams<{ id: string }>()
@@ -63,7 +65,7 @@ export function ViewMarketAggregate(props: {}) {
       }
       isLoading={pageData.isLoading}
       error={pageData.error}
-      skeleton={<SkeletonComponent />}
+      skeleton={<ViewSkeleton />}
       sidebarOpen={true}
       maxWidth="xl"
     >
@@ -75,7 +77,7 @@ export function ViewMarketAggregate(props: {}) {
             <LazySection
               component={MarketAggregateViewLazy}
               componentProps={{}}
-              skeleton={SkeletonComponent}
+              skeleton={ViewSkeleton}
             />
           </Grid>
         </CurrentMarketListingContext.Provider>
@@ -112,7 +114,7 @@ export function EditMarketAggregate(props: {}) {
       entityTitle={t("market.editMarketListing")}
       isLoading={pageData.isLoading}
       error={pageData.error}
-      skeleton={<SkeletonComponent />}
+      skeleton={<EditSkeleton />}
       sidebarOpen={true}
       maxWidth="lg"
     >
@@ -124,7 +126,7 @@ export function EditMarketAggregate(props: {}) {
             <LazySection
               component={MarketAggregateEditViewLazy}
               componentProps={{}}
-              skeleton={SkeletonComponent}
+              skeleton={EditSkeleton}
             />
           </Grid>
         </CurrentMarketAggregateContext.Provider>
