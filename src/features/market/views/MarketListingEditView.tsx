@@ -390,6 +390,7 @@ export function MarketListingEditView() {
                         }}
                         label={t("market.search_query")}
                         size="small"
+                        sx={{ width: "75%" }}
                       />
                       <Button
                         onClick={() =>

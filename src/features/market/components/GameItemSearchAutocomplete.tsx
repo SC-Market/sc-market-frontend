@@ -3,6 +3,8 @@ import {
   TextField,
   InputAdornment,
   IconButton,
+  SxProps,
+  Theme,
 } from "@mui/material"
 import SearchIcon from "@mui/icons-material/Search"
 import React, { useState, useEffect, useMemo } from "react"
@@ -15,6 +17,7 @@ interface GameItemSearchAutocompleteProps {
   onChange: (itemName: string | null, itemType: string | null) => void
   label?: string
   size?: "small" | "medium"
+  sx?: SxProps<Theme>
 }
 
 export function GameItemSearchAutocomplete({
@@ -22,6 +25,7 @@ export function GameItemSearchAutocomplete({
   onChange,
   label,
   size = "medium",
+  sx,
 }: GameItemSearchAutocompleteProps) {
   const { t } = useTranslation()
   const [searchTrigger] = useLazySearchGameItemsQuery()
@@ -52,6 +56,7 @@ export function GameItemSearchAutocomplete({
   return (
     <Autocomplete
       size={size}
+      sx={sx}
       options={itemOptions}
       value={itemOptions.find((opt) => opt.name === value) || null}
       inputValue={inputValue}
