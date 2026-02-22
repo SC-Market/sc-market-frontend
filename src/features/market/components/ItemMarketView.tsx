@@ -66,6 +66,7 @@ export function ItemMarketView() {
                   position: "sticky",
                   top: "calc(64px + 16px)",
                   maxHeight: "calc(100vh - 64px - 32px)",
+                  height: "fit-content",
                   width: 300,
                   flexShrink: 0,
                   overflowY: "auto",
