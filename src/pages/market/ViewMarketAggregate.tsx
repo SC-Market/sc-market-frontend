@@ -38,7 +38,7 @@ export function ViewMarketAggregate(props: {}) {
     <DetailPageLayout
       title={pageData.data?.aggregate.details?.title}
       breadcrumbs={[
-        { label: t("market.title", "Market"), href: "/market" },
+        { label: t("market_short"), href: "/market" },
         {
           label:
             pageData.data?.aggregate.details?.title ||
@@ -101,7 +101,7 @@ export function EditMarketAggregate(props: {}) {
     <DetailPageLayout
       title={pageData.data?.aggregate.details?.title}
       breadcrumbs={[
-        { label: t("market.title", "Market"), href: "/market" },
+        { label: t("market_short"), href: "/market" },
         {
           label:
             pageData.data?.aggregate.details?.title ||

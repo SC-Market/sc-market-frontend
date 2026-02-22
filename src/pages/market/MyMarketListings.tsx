@@ -56,7 +56,7 @@ export function MyMarketListings() {
     <StandardPageLayout
       title={t("sidebar.my_market_listings")}
       breadcrumbs={[
-        { label: t("market.title", "Market"), href: "/market" },
+        { label: t("market_short"), href: "/market" },
         { label: t("sidebar.my_market_listings") },
       ]}
       headerTitle={t("market.activeListings")}
