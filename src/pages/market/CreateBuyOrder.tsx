@@ -35,6 +35,7 @@ export function CreateBuyOrder() {
             if (type) setItemType?.(type)
           }}
           label={t("market.selectGameItem", "Select Game Item")}
+          sx={{ width: "100%" }}
         />
       </FlatSection>
 

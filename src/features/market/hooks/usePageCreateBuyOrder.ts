@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react"
 import {
-  useGetAggregateByIdQuery,
+  useGetOrCreateAggregateQuery,
   useGetMarketItemsByCategoryQuery,
 } from "../api/marketApi"
 
@@ -52,7 +52,7 @@ export function usePageCreateBuyOrder(): UsePageResult<CreateBuyOrderPageData> {
     [itemsQuery.data, itemName],
   )
 
-  const aggregateQuery = useGetAggregateByIdQuery(itemNameValue!, {
+  const aggregateQuery = useGetOrCreateAggregateQuery(itemNameValue!, {
     skip: !itemNameValue,
   })
 

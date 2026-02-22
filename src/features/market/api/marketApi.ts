@@ -238,6 +238,14 @@ export const marketApi = serviceApi.injectEndpoints({
       providesTags: ["MarketItems"],
     }),
 
+    getOrCreateAggregate: builder.query<MarketAggregate, string>({
+      query: (gameItemId) => `/api/market/items/${gameItemId}/aggregate`,
+      transformResponse: unwrapResponse,
+      providesTags: (result, error, gameItemId) => [
+        { type: "Aggregate" as const, id: gameItemId },
+      ],
+    }),
+
     getBuyOrderListings: builder.query<
       MarketAggregate[],
       Partial<MarketSearchParams> | void
@@ -742,6 +750,7 @@ export const {
   useGetMarketCategoriesQuery,
   useGetMarketItemsByCategoryQuery,
   useLazySearchGameItemsQuery,
+  useGetOrCreateAggregateQuery,
   useGetAggregateByIdQuery,
   useGetMultipleByIdQuery,
   useGetStatsForListingsQuery,
