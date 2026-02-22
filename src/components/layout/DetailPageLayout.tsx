@@ -44,68 +44,43 @@ export function DetailPageLayout(props: DetailPageLayoutProps): ReactElement {
     }
   }
 
-  // Build the header content with entity information
-  const detailHeader = (
-    <Grid
-      container
-      spacing={theme.layoutSpacing.layout}
-      alignItems="center"
-      justifyContent="space-between"
-    >
+  // Build entity header content
+  const entityHeader = entityTitle ? (
+    <div>
       {backButton && (
-        <Grid item>
-          <IconButton
-            onClick={handleBackClick}
-            aria-label="Go back"
-            size="large"
-          >
-            <ArrowBackIcon />
-          </IconButton>
-        </Grid>
+        <IconButton
+          onClick={handleBackClick}
+          aria-label="Go back"
+          size="large"
+          sx={{ mr: 1, ml: -1 }}
+        >
+          <ArrowBackIcon />
+        </IconButton>
       )}
-
-      <Grid item xs={12} sm style={{ minWidth: 0 }}>
-        {entityTitle && (
-          <div>
-            <div style={{ fontSize: "1.5rem", fontWeight: 600 }}>
-              {entityTitle}
-            </div>
-            {entitySubtitle && (
-              <div
-                style={{
-                  fontSize: "0.875rem",
-                  color: theme.palette.text.secondary,
-                }}
-              >
-                {entitySubtitle}
-              </div>
-            )}
-          </div>
-        )}
-        {!entityTitle && headerTitle}
-      </Grid>
-
-      {entityActions && (
-        <Grid
-          item
-          xs={12}
-          sm="auto"
-          sx={{
-            display: "flex",
-            justifyContent: { xs: "stretch", sm: "flex-end" },
+      <span style={{ fontSize: "1.5rem", fontWeight: 600 }}>
+        {entityTitle}
+      </span>
+      {entitySubtitle && (
+        <div
+          style={{
+            fontSize: "0.875rem",
+            color: theme.palette.text.secondary,
+            marginTop: 4,
           }}
         >
-          {entityActions}
-        </Grid>
+          {entitySubtitle}
+        </div>
       )}
-    </Grid>
+    </div>
+  ) : (
+    headerTitle
   )
 
   return (
     <StandardPageLayout
       {...standardProps}
-      headerTitle={detailHeader}
-      headerActions={!entityActions ? headerActions : undefined}
+      headerTitle={entityHeader}
+      headerActions={entityActions || headerActions}
     >
       {props.children}
     </StandardPageLayout>
