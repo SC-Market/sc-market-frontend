@@ -13,10 +13,11 @@ export function CreateBuyOrder() {
   const {
     itemType,
     itemName,
-    itemNameValue,
+    itemId,
     aggregate,
     setItemType,
     setItemName,
+    setItemId,
   } = pageData.data || {}
 
   return (
@@ -30,16 +31,17 @@ export function CreateBuyOrder() {
       <FlatSection title={t("buyOrderActions.selectMarketItem")}>
         <GameItemSearchAutocomplete
           value={itemName ?? null}
-          onChange={(name, type) => {
+          onChange={(name, type, id) => {
             if (name) setItemName?.(name)
             if (type) setItemType?.(type)
+            if (id) setItemId?.(id)
           }}
           label={t("market.selectGameItem", "Select Game Item")}
           sx={{ width: "100%" }}
         />
       </FlatSection>
 
-      {itemNameValue && aggregate && <BuyOrderForm aggregate={aggregate} />}
+      {itemId && aggregate && <BuyOrderForm aggregate={aggregate} />}
     </StandardPageLayout>
   )
 }

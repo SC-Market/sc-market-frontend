@@ -14,7 +14,7 @@ import { debounce } from "lodash-es"
 
 interface GameItemSearchAutocompleteProps {
   value: string | null
-  onChange: (itemName: string | null, itemType: string | null) => void
+  onChange: (itemName: string | null, itemType: string | null, itemId: string | null) => void
   label?: string
   size?: "small" | "medium"
   sx?: SxProps<Theme>
@@ -30,7 +30,7 @@ export function GameItemSearchAutocomplete({
   const { t } = useTranslation()
   const [searchTrigger] = useLazySearchGameItemsQuery()
   const [itemOptions, setItemOptions] = useState<
-    Array<{ name: string; type: string }>
+    Array<{ name: string; type: string; id: string }>
   >([])
   const [inputValue, setInputValue] = useState("")
 
@@ -64,7 +64,7 @@ export function GameItemSearchAutocomplete({
         setInputValue(newValue)
       }}
       onChange={(event, newValue) => {
-        onChange(newValue?.name || null, newValue?.type || null)
+        onChange(newValue?.name || null, newValue?.type || null, newValue?.id || null)
       }}
       getOptionLabel={(option) => option.name}
       renderInput={(params) => (

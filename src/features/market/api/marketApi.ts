@@ -227,7 +227,7 @@ export const marketApi = serviceApi.injectEndpoints({
     }),
 
     searchGameItems: builder.query<
-      { name: string; type: string }[],
+      { name: string; type: string; id: string }[],
       string
     >({
       query: (searchQuery) => ({

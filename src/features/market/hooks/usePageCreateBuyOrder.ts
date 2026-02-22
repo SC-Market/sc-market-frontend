@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react"
+import { useState } from "react"
 import {
   useGetOrCreateAggregateQuery,
   useGetMarketItemsByCategoryQuery,
@@ -23,9 +23,10 @@ export interface CreateBuyOrderPageData {
   aggregate: any | undefined
   itemType: string
   itemName: string | null
-  itemNameValue: string | null
+  itemId: string | null
   setItemType: (value: string) => void
   setItemName: (value: string | null) => void
+  setItemId: (value: string | null) => void
 }
 
 /**
@@ -39,21 +40,14 @@ export interface CreateBuyOrderPageData {
 export function usePageCreateBuyOrder(): UsePageResult<CreateBuyOrderPageData> {
   const [itemType, setItemType] = useState<string>("Other")
   const [itemName, setItemName] = useState<string | null>(null)
+  const [itemId, setItemId] = useState<string | null>(null)
 
   const itemsQuery = useGetMarketItemsByCategoryQuery(itemType!, {
     skip: !itemType,
   })
 
-  const itemNameValue = useMemo(
-    () =>
-      itemName
-        ? (itemsQuery.data || []).find((o) => o.name === itemName)?.id || null
-        : null,
-    [itemsQuery.data, itemName],
-  )
-
-  const aggregateQuery = useGetOrCreateAggregateQuery(itemNameValue!, {
-    skip: !itemNameValue,
+  const aggregateQuery = useGetOrCreateAggregateQuery(itemId!, {
+    skip: !itemId,
   })
 
   return {
@@ -62,9 +56,10 @@ export function usePageCreateBuyOrder(): UsePageResult<CreateBuyOrderPageData> {
       aggregate: aggregateQuery.data,
       itemType,
       itemName,
-      itemNameValue,
+      itemId,
       setItemType,
       setItemName,
+      setItemId,
     },
     isLoading: itemsQuery.isLoading || aggregateQuery.isLoading,
     isFetching: itemsQuery.isFetching || aggregateQuery.isFetching,
