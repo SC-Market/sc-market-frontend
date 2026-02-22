@@ -224,7 +224,7 @@ export function MarketListingForm(props: { sale_type: "sale" | "auction" }) {
         <Grid item xs={12}>
           <GameItemSearchAutocomplete
             value={state.item_name}
-            onChange={(itemName, itemType) => {
+            onChange={(itemName, itemType, itemId) => {
               setState((state) => ({
                 ...state,
                 item_name: itemName,

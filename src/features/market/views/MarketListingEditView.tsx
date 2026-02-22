@@ -384,7 +384,7 @@ export function MarketListingEditView() {
                     >
                       <GameItemSearchAutocomplete
                         value={item}
-                        onChange={(name, itemType) => {
+                        onChange={(name, itemType, itemId) => {
                           if (name) setItem(name)
                           if (itemType) setType(itemType)
                         }}
