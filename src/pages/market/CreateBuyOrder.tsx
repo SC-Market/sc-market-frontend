@@ -1,10 +1,10 @@
 import { FlatSection } from "../../components/paper/Section"
 import React from "react"
 import { BuyOrderForm } from "../../features/market"
-import { SelectGameItemStack } from "../../components/select/SelectGameItem"
 import { useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { usePageCreateBuyOrder } from "../../features/market/hooks/usePageCreateBuyOrder"
+import { ItemSearchAutocomplete } from "../../features/market/components/ItemSearchAutocomplete"
 
 export function CreateBuyOrder() {
   const { t } = useTranslation()
@@ -28,14 +28,13 @@ export function CreateBuyOrder() {
       error={pageData.error}
     >
       <FlatSection title={t("buyOrderActions.selectMarketItem")}>
-        <SelectGameItemStack
-          onItemChange={(value) => setItemName?.(value)}
-          onTypeChange={(value) => {
-            setItemType?.(value)
-            setItemName?.(null)
+        <ItemSearchAutocomplete
+          value={itemName ?? null}
+          onChange={(name, type) => {
+            if (name) setItemName?.(name)
+            if (type) setItemType?.(type)
           }}
-          item_type={itemType || "Other"}
-          item_name={itemName ?? null}
+          label={t("market.search_query")}
         />
       </FlatSection>
 
