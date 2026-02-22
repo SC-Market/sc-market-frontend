@@ -52,7 +52,7 @@ import {
   SelectGameCategory,
   SelectGameItemStack,
 } from "../../../components/select/SelectGameItem"
-import { ItemSearchAutocomplete } from "./ItemSearchAutocomplete"
+import { GameItemSearchAutocomplete } from "./GameItemSearchAutocomplete"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { SelectPhotosArea } from "../../../components/modal/SelectPhotosArea"
 import { useTranslation } from "react-i18next" // Localization
@@ -222,7 +222,7 @@ export function MarketListingForm(props: { sale_type: "sale" | "auction" }) {
         </Grid>
 
         <Grid item xs={12}>
-          <ItemSearchAutocomplete
+          <GameItemSearchAutocomplete
             value={state.item_name}
             onChange={(itemName, itemType) => {
               setState((state) => ({
