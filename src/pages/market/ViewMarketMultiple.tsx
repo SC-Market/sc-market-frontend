@@ -43,7 +43,7 @@ export function ViewMarketMultiple(props: {}) {
     <DetailPageLayout
       title={pageData.data?.multiple.details?.title}
       breadcrumbs={[
-        { label: t("market_short"), href: "/market" },
+        { label: t("market.market_short"), href: "/market" },
         {
           label:
             pageData.data?.multiple.details?.title ||
@@ -104,7 +104,7 @@ export function EditMarketMultiple(props: {}) {
     <DetailPageLayout
       title={pageData.data?.listing.details?.title}
       breadcrumbs={[
-        { label: t("market_short"), href: "/market" },
+        { label: t("market.market_short"), href: "/market" },
         {
           label:
             pageData.data?.listing.details?.title ||

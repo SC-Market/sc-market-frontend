@@ -33,7 +33,7 @@ export function ViewMarketListing() {
         formatCompleteListingUrl(pageData.data.listing)
       }
       breadcrumbs={[
-        { label: t("market_short"), href: "/market" },
+        { label: t("market.market_short"), href: "/market" },
         {
           label:
             pageData.data?.listing.details?.title ||
@@ -94,7 +94,7 @@ export function EditMarketListing() {
     <DetailPageLayout
       title={pageData.data?.listing.details?.title}
       breadcrumbs={[
-        { label: t("market_short"), href: "/market" },
+        { label: t("market.market_short"), href: "/market" },
         {
           label:
             pageData.data?.listing.details?.title ||
@@ -135,7 +135,7 @@ export function EditMultipleListing() {
     <DetailPageLayout
       title={listing?.details?.title}
       breadcrumbs={[
-        { label: t("market_short"), href: "/market" },
+        { label: t("market.market_short"), href: "/market" },
         {
           label:
             listing?.details?.title ||
