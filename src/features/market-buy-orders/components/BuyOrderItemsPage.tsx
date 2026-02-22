@@ -37,7 +37,13 @@ export function BuyOrderItemsPage() {
       <MarketSidebarContext.Provider value={[open, setOpen]}>
         {xs && <MarketSidebar />}
 
-        <ContainerGrid maxWidth={"xl"} sidebarOpen={false}>
+        <ContainerGrid
+          maxWidth={"xl"}
+          sidebarOpen={false}
+          sx={{
+            paddingX: { xs: theme.spacing(1), sm: theme.spacing(3) },
+          }}
+        >
           <Grid
             container
             spacing={theme.layoutSpacing.layout}

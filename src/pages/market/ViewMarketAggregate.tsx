@@ -71,11 +71,13 @@ export function ViewMarketAggregate(props: {}) {
         <CurrentMarketListingContext.Provider
           value={[pageData.data.aggregate, pageData.refetch]}
         >
-          <LazySection
-            component={MarketAggregateViewLazy}
-            componentProps={{}}
-            skeleton={SkeletonComponent}
-          />
+          <Grid container spacing={2}>
+            <LazySection
+              component={MarketAggregateViewLazy}
+              componentProps={{}}
+              skeleton={SkeletonComponent}
+            />
+          </Grid>
         </CurrentMarketListingContext.Provider>
       )}
     </DetailPageLayout>
@@ -118,11 +120,13 @@ export function EditMarketAggregate(props: {}) {
         <CurrentMarketAggregateContext.Provider
           value={[pageData.data.aggregate, pageData.refetch]}
         >
-          <LazySection
-            component={MarketAggregateEditViewLazy}
-            componentProps={{}}
-            skeleton={SkeletonComponent}
-          />
+          <Grid container spacing={2}>
+            <LazySection
+              component={MarketAggregateEditViewLazy}
+              componentProps={{}}
+              skeleton={SkeletonComponent}
+            />
+          </Grid>
         </CurrentMarketAggregateContext.Provider>
       )}
     </DetailPageLayout>

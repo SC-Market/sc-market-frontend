@@ -233,8 +233,15 @@ export function MobileBottomNav() {
   // Determine current active route
   const getActiveValue = () => {
     const path = location.pathname
-    for (const tab of activeTabs) {
-      if (path.startsWith(tab.route)) return tab.id
+    // Check for exact matches first, then prefix matches
+    // Sort by route length descending to match most specific first
+    const sortedTabs = [...activeTabs].sort(
+      (a, b) => b.route.length - a.route.length,
+    )
+    for (const tab of sortedTabs) {
+      if (path === tab.route || path.startsWith(tab.route + "/")) {
+        return tab.id
+      }
     }
     return ""
   }
