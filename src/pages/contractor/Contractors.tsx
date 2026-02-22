@@ -68,11 +68,13 @@ export function Contractors() {
   }, [searchState])
 
   const skeleton = (
-    <>
+    <Grid container spacing={2}>
       {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
-        <ContractorSkeleton key={i} />
+        <Grid item xs={12} key={i}>
+          <ContractorSkeleton />
+        </Grid>
       ))}
-    </>
+    </Grid>
   )
 
   return (
@@ -129,13 +131,15 @@ export function Contractors() {
           ) : pageData.isFetching ? (
             skeleton
           ) : pageData.data && pageData.data.items.length > 0 ? (
-            pageData.data.items.map((item: any, index: number) => (
-              <ContractorListItem
-                contractor={item}
-                key={item.name}
-                index={index}
-              />
-            ))
+            <Grid container spacing={2}>
+              {pageData.data.items.map((item: any, index: number) => (
+                <ContractorListItem
+                  contractor={item}
+                  key={item.name}
+                  index={index}
+                />
+              ))}
+            </Grid>
           ) : (
             <EmptyContractors
               isSearchResult={
