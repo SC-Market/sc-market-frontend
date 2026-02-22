@@ -40,7 +40,7 @@ import { MISSING_IMAGE_URL } from "../../../hooks/styles/Theme"
 import { MarketListingUpdateBody, UniqueListing } from ".."
 import { has_permission } from "../../../views/contractor/OrgRoles"
 import { NumericFormat } from "react-number-format"
-import { SelectGameItemStack } from "../../../components/select/SelectGameItem"
+import { ItemSearchAutocomplete } from "../components/ItemSearchAutocomplete"
 import { SelectPhotosArea } from "../../../components/modal/SelectPhotosArea"
 import { useTranslation } from "react-i18next" // Localization
 import { useTheme } from "@mui/material/styles"
@@ -377,18 +377,15 @@ export function MarketListingEditView() {
                     <Box
                       sx={{
                         paddingBottom: 2,
-                        display: "flex",
-                        "& > *": { marginRight: 2 },
                       }}
                     >
-                      <SelectGameItemStack
-                        onItemChange={(value) => setItem(value)}
-                        onTypeChange={(value) => {
-                          setType(value)
-                          setItem(null)
+                      <ItemSearchAutocomplete
+                        value={item}
+                        onChange={(name, itemType) => {
+                          if (name) setItem(name)
+                          if (itemType) setType(itemType)
                         }}
-                        item_type={type}
-                        item_name={item}
+                        label={t("market.search_query")}
                       />
                       <Button
                         onClick={() =>
