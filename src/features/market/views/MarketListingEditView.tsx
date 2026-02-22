@@ -377,6 +377,9 @@ export function MarketListingEditView() {
                     <Box
                       sx={{
                         paddingBottom: 2,
+                        display: "flex",
+                        gap: 2,
+                        alignItems: "flex-start",
                       }}
                     >
                       <ItemSearchAutocomplete
@@ -386,6 +389,7 @@ export function MarketListingEditView() {
                           if (itemType) setType(itemType)
                         }}
                         label={t("market.search_query")}
+                        size="small"
                       />
                       <Button
                         onClick={() =>
@@ -395,6 +399,7 @@ export function MarketListingEditView() {
                           })
                         }
                         variant={"contained"}
+                        sx={{ mt: 0.5 }}
                       >
                         {t("MarketListingEditView.updateBtn")}
                       </Button>
