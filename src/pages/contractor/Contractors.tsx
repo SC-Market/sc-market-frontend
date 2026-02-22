@@ -67,23 +67,10 @@ export function Contractors() {
     setPage(0)
   }, [searchState])
 
-  const skeleton = (
-    <Grid container spacing={2}>
-      {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
-        <Grid item xs={12} key={i}>
-          <ContractorSkeleton />
-        </Grid>
-      ))}
-    </Grid>
-  )
-
   return (
     <SidebarPageLayout
       title={t("contractorsPage.title")}
       headerTitle={t("contractorsPage.title")}
-      isLoading={pageData.isLoading}
-      error={pageData.error}
-      skeleton={skeleton}
       sidebar={
         <ContractorSidebarContext.Provider
           value={[sidebarOpen, setSidebarOpen]}
@@ -129,7 +116,13 @@ export function Contractors() {
           {pageData.error ? (
             <EmptyContractors isError onRetry={() => pageData.refetch()} />
           ) : pageData.isFetching ? (
-            skeleton
+            <Grid container spacing={2}>
+              {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
+                <Grid item xs={12} key={i}>
+                  <ContractorSkeleton />
+                </Grid>
+              ))}
+            </Grid>
           ) : pageData.data && pageData.data.items.length > 0 ? (
             <Grid container spacing={2}>
               {pageData.data.items.map((item: any, index: number) => (
