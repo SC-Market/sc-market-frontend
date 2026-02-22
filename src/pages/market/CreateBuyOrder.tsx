@@ -34,7 +34,7 @@ export function CreateBuyOrder() {
             if (name) setItemName?.(name)
             if (type) setItemType?.(type)
           }}
-          label={t("market.search_query")}
+          label={t("market.selectGameItem", "Select Game Item")}
         />
       </FlatSection>
 

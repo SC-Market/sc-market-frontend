@@ -388,7 +388,7 @@ export function MarketListingEditView() {
                           if (name) setItem(name)
                           if (itemType) setType(itemType)
                         }}
-                        label={t("market.search_query")}
+                        label={t("market.selectGameItem", "Select Game Item")}
                         size="small"
                         sx={{ width: "75%" }}
                       />

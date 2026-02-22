@@ -232,6 +232,7 @@ export function MarketListingForm(props: { sale_type: "sale" | "auction" }) {
                 title: !state.title && itemName ? itemName : state.title,
               }))
             }}
+            label={t("market.selectGameItem", "Select Game Item")}
           />
         </Grid>
 
