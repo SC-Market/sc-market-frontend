@@ -397,7 +397,7 @@ export function DisplayListings(props: {
           </Grid>
         )}
 
-        <Grid item xs={12} sx={{ mt: 2 }}>
+        <Grid item xs={12} sx={{ mt: 4 }}>
           <Divider light />
         </Grid>
 
