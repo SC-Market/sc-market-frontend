@@ -344,53 +344,34 @@ export function DisplayListings(props: {
     <React.Fragment>
       <div ref={ref} style={{ position: "absolute", top: 0 }} />
 
-      <Grid
-        container
-        spacing={1}
-        sx={{ width: "100%" }}
+      <Box
+        sx={{
+          display: "flex",
+          flexWrap: "wrap",
+          gap: "8px",
+          width: "100%",
+        }}
       >
         {loading
           ? new Array(perPage)
               .fill(undefined)
               .map((o, i) => (
-                <Grid
-                  item
-                  xs={6}
-                  sm={4}
-                  md={3}
-                  lg={2.4}
-                  xl={2}
-                  xxl={2}
-                  xxxl={1.714}
+                <StandardListingSkeleton
                   key={i}
-                >
-                  <StandardListingSkeleton
-                    index={i}
-                    sidebarOpen={marketSidebarOpen}
-                  />
-                </Grid>
+                  index={i}
+                  sidebarOpen={marketSidebarOpen}
+                />
               ))
           : paginatedListings.map((item, index) => {
+              // Generate unique key for each item (listing or ad)
               const key = isListing(item)
                 ? item.listing_id
                 : `ad-${item.id}-${index}`
-              return (
-                <Grid
-                  item
-                  xs={6}
-                  sm={4}
-                  md={3}
-                  lg={2.4}
-                  xl={2}
-                  xxl={2}
-                  xxxl={1.714}
-                  key={key}
-                >
-                  <Listing listing={item} index={index} />
-                </Grid>
-              )
+              // Note: Listing components (ItemListingBase, AggregateListingBase, MultipleListingBase)
+              // already have Material-UI Fade animations built in, so no need for AnimatedListItem wrapper
+              return <Listing listing={item} index={index} key={key} />
             })}
-      </Grid>
+      </Box>
 
       {listings !== undefined && !listings.length && !props.loading && (
         <Grid item xs={12}>
