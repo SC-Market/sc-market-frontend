@@ -171,7 +171,7 @@ export function MarketAggregateView() {
   const [updateAggregate] = useMarketUpdateAggregateAdminMutation()
 
   return (
-    <>
+    <Grid container spacing={2}>
       <Grid item xs={12} lg={4}>
         <ImagePreviewModal
           images={photos}
@@ -470,7 +470,7 @@ export function MarketAggregateView() {
       <Grid item xs={12}>
         <AggregateChart aggregate={complete} />
       </Grid>
-    </>
+    </Grid>
   )
 }
 
