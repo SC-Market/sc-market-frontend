@@ -458,9 +458,7 @@ export function MarketAggregateView() {
         />
         {/*{listing.listings.map((l, index) => <AggregateRow listing={l} index={index}/>)}*/}
       </Grid>
-      <Grid item xs={12}>
-        <BuyOrderForm aggregate={complete} />
-      </Grid>
+      <BuyOrderForm aggregate={complete} />
       <Grid item xs={12}>
         <AggregateBuySellWall aggregate={complete} />
       </Grid>

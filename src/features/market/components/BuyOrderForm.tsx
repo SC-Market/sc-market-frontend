@@ -77,7 +77,9 @@ export function BuyOrderForm(props: { aggregate: MarketAggregate }) {
 
   return (
     <>
-      <HeaderTitle>{aggregate.details.title}</HeaderTitle>
+      <Grid item xs={12}>
+        <HeaderTitle>{aggregate.details.title}</HeaderTitle>
+      </Grid>
       <Grid item xs={12} lg={4}>
         <Paper
           sx={{
