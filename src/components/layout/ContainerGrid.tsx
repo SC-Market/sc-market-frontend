@@ -25,7 +25,7 @@ export function ContainerGrid(
     noTopSpacer?: boolean
     noMobilePadding?: boolean // If true, removes padding on mobile (for market listings)
   } & Omit<ContainerProps, "maxWidth"> & {
-      maxWidth?: "xs" | "sm" | "md" | "lg" | "xl" | "xxl" | false
+      maxWidth?: "xs" | "sm" | "md" | "lg" | "xl" | "xxl" | "xxxl" | false
     },
 ): ReactElement {
   const theme = useTheme<ExtendedTheme>()
