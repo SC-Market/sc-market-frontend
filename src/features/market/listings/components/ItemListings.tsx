@@ -591,35 +591,37 @@ export function DisplayBuyOrderListings(props: {
   )
 
   return (
-    <>
+    <Grid container spacing={2} sx={{ width: "100%" }}>
       <div ref={ref} style={{ position: "absolute", top: 0 }} />
 
-      <Box
-        sx={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: "8px",
-          width: "100%",
-        }}
-      >
-        {props.loading
-          ? new Array(perPage)
-              .fill(undefined)
-              .map((o, i) => (
-                <StandardListingSkeleton
-                  key={i}
-                  index={i}
-                  sidebarOpen={marketSidebarOpen}
+      <Grid item xs={12}>
+        <Box
+          sx={{
+            display: "flex",
+            flexWrap: "wrap",
+            gap: "8px",
+            width: "100%",
+          }}
+        >
+          {props.loading
+            ? new Array(perPage)
+                .fill(undefined)
+                .map((o, i) => (
+                  <StandardListingSkeleton
+                    key={i}
+                    index={i}
+                    sidebarOpen={marketSidebarOpen}
+                  />
+                ))
+            : listings.map((item, index) => (
+                <AggregateBuyOrderListing
+                  aggregate={item}
+                  index={index}
+                  key={item.details.game_item_id}
                 />
-              ))
-          : listings.map((item, index) => (
-              <AggregateBuyOrderListing
-                aggregate={item}
-                index={index}
-                key={item.details.game_item_id}
-              />
-            ))}
-      </Box>
+              ))}
+        </Box>
+      </Grid>
 
       <Grid item xs={12}>
         <Divider light />
@@ -634,7 +636,7 @@ export function DisplayBuyOrderListings(props: {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Grid>
-    </>
+    </Grid>
   )
 }
 
