@@ -69,7 +69,7 @@ import {
   useMarketSearch,
   useMarketSidebarExp,
 } from "../../index"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate, useLocation } from "react-router-dom"
 import { useCurrentOrg } from "../../../../hooks/login/CurrentOrg"
 import { UnderlineLink } from "../../../../components/typography/UnderlineLink"
 import { useTheme } from "@mui/material/styles"
@@ -344,53 +344,72 @@ export function DisplayListings(props: {
     <React.Fragment>
       <div ref={ref} style={{ position: "absolute", top: 0 }} />
 
-      <Box
-        sx={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: "8px",
-          width: "100%",
-        }}
+      <Grid
+        container
+        spacing={1}
+        sx={{ width: "100%" }}
       >
         {loading
           ? new Array(perPage)
               .fill(undefined)
               .map((o, i) => (
-                <StandardListingSkeleton
+                <Grid
+                  item
+                  xs={6}
+                  sm={4}
+                  md={4}
+                  lg={3}
+                  xl={2.4}
+                  xxl={2}
+                  xxxl={12 / 7}
                   key={i}
-                  index={i}
-                  sidebarOpen={marketSidebarOpen}
-                />
+                >
+                  <StandardListingSkeleton
+                    index={i}
+                    sidebarOpen={marketSidebarOpen}
+                  />
+                </Grid>
               ))
           : paginatedListings.map((item, index) => {
-              // Generate unique key for each item (listing or ad)
               const key = isListing(item)
                 ? item.listing_id
                 : `ad-${item.id}-${index}`
-              // Note: Listing components (ItemListingBase, AggregateListingBase, MultipleListingBase)
-              // already have Material-UI Fade animations built in, so no need for AnimatedListItem wrapper
-              return <Listing listing={item} index={index} key={key} />
+              return (
+                <Grid
+                  item
+                  xs={6}
+                  sm={4}
+                  md={4}
+                  lg={3}
+                  xl={2.4}
+                  xxl={2}
+                  xxxl={12 / 7}
+                  key={key}
+                >
+                  <Listing listing={item} index={index} />
+                </Grid>
+              )
             })}
-      </Box>
 
-      {listings !== undefined && !listings.length && !props.loading && (
-        <Grid item xs={12}>
-          <EmptyListings isSearchResult={true} />
+        {listings !== undefined && !listings.length && !props.loading && (
+          <Grid item xs={12}>
+            <EmptyListings isSearchResult={true} />
+          </Grid>
+        )}
+
+        <Grid item xs={12} sx={{ mt: 4 }}>
+          <Divider light />
         </Grid>
-      )}
 
-      <Grid item xs={12}>
-        <Divider light />
-      </Grid>
-
-      <Grid item xs={12}>
-        <ListingPagination
-          count={total ?? listingsWithAds.length}
-          page={page}
-          rowsPerPage={perPage}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
+        <Grid item xs={12}>
+          <ListingPagination
+            count={total ?? listingsWithAds.length}
+            page={page}
+            rowsPerPage={perPage}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Grid>
       </Grid>
     </React.Fragment>
   )
@@ -436,22 +455,30 @@ export function DisplayListingsMin(props: {
   if (loading) {
     const marketSidebarOpen = useMarketSidebarExp()
     return (
-      <Box
-        sx={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: "8px",
-          width: "100%",
-        }}
+      <Grid
+        container
+        spacing={1}
+        sx={{ width: "100%" }}
       >
         {new Array(16).fill(undefined).map((o, i) => (
-          <StandardListingSkeleton
-            index={i}
+          <Grid
+            item
+            xs={6}
+            sm={4}
+            md={4}
+            lg={3}
+            xl={2.4}
+            xxl={2}
+            xxxl={12 / 7}
             key={i}
-            sidebarOpen={marketSidebarOpen}
-          />
+          >
+            <StandardListingSkeleton
+              index={i}
+              sidebarOpen={marketSidebarOpen}
+            />
+          </Grid>
         ))}
-      </Box>
+      </Grid>
     )
   }
 
@@ -533,21 +560,30 @@ export function DisplayListingsMin(props: {
 
   // Fallback to regular rendering for small lists
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexWrap: "wrap",
-        gap: "8px",
-        width: "100%",
-      }}
+    <Grid
+      container
+      spacing={1}
+      sx={{ width: "100%" }}
     >
       {listingsWithAds.map((item, index) => {
-        // Generate unique key for each item (listing or ad)
         const key = isListing(item) ? item.listing_id : `ad-${item.id}-${index}`
-        // Note: Listing components already have Material-UI Fade animations built in
-        return <Listing listing={item} index={index} key={key} />
+        return (
+          <Grid
+            item
+            xs={6}
+            sm={4}
+            md={4}
+            lg={3}
+            xl={2.4}
+            xxl={2}
+            xxxl={12 / 7}
+            key={key}
+          >
+            <Listing listing={item} index={index} />
+          </Grid>
+        )
       })}
-    </Box>
+    </Grid>
   )
 }
 
@@ -591,36 +627,51 @@ export function DisplayBuyOrderListings(props: {
   )
 
   return (
-    <Grid container spacing={2} sx={{ width: "100%" }}>
+    <Grid container spacing={1} sx={{ width: "100%" }}>
       <div ref={ref} style={{ position: "absolute", top: 0 }} />
 
       <Grid item xs={12}>
-        <Box
-          sx={{
-            display: "flex",
-            flexWrap: "wrap",
-            gap: "8px",
-            width: "100%",
-          }}
-        >
+        <Grid container spacing={1}>
           {props.loading
             ? new Array(perPage)
                 .fill(undefined)
                 .map((o, i) => (
-                  <StandardListingSkeleton
+                  <Grid
+                    item
+                    xs={6}
+                    sm={4}
+                    md={4}
+                    lg={3}
+                    xl={2.4}
+                    xxl={2}
+                    xxxl={12 / 7}
                     key={i}
-                    index={i}
-                    sidebarOpen={marketSidebarOpen}
-                  />
+                  >
+                    <StandardListingSkeleton
+                      index={i}
+                      sidebarOpen={marketSidebarOpen}
+                    />
+                  </Grid>
                 ))
             : listings.map((item, index) => (
-                <AggregateBuyOrderListing
-                  aggregate={item}
-                  index={index}
+                <Grid
+                  item
+                  xs={6}
+                  sm={4}
+                  md={4}
+                  lg={3}
+                  xl={2.4}
+                  xxl={2}
+                  xxxl={12 / 7}
                   key={item.details.game_item_id}
-                />
+                >
+                  <AggregateBuyOrderListing
+                    aggregate={item}
+                    index={index}
+                  />
+                </Grid>
               ))}
-        </Box>
+        </Grid>
       </Grid>
 
       <Grid item xs={12}>
@@ -650,8 +701,16 @@ export function ItemListings(props: {
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const [searchState, setSearchState] = useMarketSearch()
+  const location = useLocation()
 
   const { org, user, status } = props
+
+  // Determine which view to show based on route
+  const viewMode = useMemo(() => {
+    if (location.pathname.startsWith("/bulk")) return "bulk"
+    if (location.pathname.startsWith("/buyorders")) return "buyorders"
+    return "market"
+  }, [location.pathname])
 
   useEffect(() => {
     setSearchState({
@@ -732,19 +791,34 @@ export function ItemListings(props: {
     [],
   )
 
-  return (
-    <>
-      <div ref={ref} style={{ position: "absolute", top: 0 }} />
-      <DisplayListingsMin
-        listings={listings || []}
-        loading={isLoading || isFetching}
-        error={!!error}
-        onRetry={() => refetch()}
-        disableAds={!!(org || user)}
-      />
+  // Render different components based on view mode
+  if (viewMode === "bulk") {
+    return <BulkListingsRefactor />
+  }
 
-      <Box sx={{ width: "100%" }}>
+  if (viewMode === "buyorders") {
+    return <BuyOrders />
+  }
+
+  return (
+    <Grid container spacing={1} sx={{ width: "100%" }}>
+      <div ref={ref} style={{ position: "absolute", top: 0 }} />
+      
+      <Grid item xs={12}>
+        <DisplayListingsMin
+          listings={listings || []}
+          loading={isLoading || isFetching}
+          error={!!error}
+          onRetry={() => refetch()}
+          disableAds={!!(org || user)}
+        />
+      </Grid>
+
+      <Grid item xs={12}>
         <Divider light />
+      </Grid>
+
+      <Grid item xs={12}>
         <ListingPagination
           count={total}
           page={page}
@@ -752,8 +826,8 @@ export function ItemListings(props: {
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
-      </Box>
-    </>
+      </Grid>
+    </Grid>
   )
 }
 
@@ -839,15 +913,18 @@ export function BulkListingsRefactor(props: {
   )
 
   return (
-    <>
+    <Grid container spacing={1} sx={{ width: "100%" }}>
       <div ref={ref} style={{ position: "absolute", top: 0 }} />
-      <DisplayListingsMin
-        listings={listings || []}
-        loading={isLoading || isFetching}
-        error={!!error}
-        onRetry={() => refetch()}
-        disableAds={!!(org || user)}
-      />
+      
+      <Grid item xs={12}>
+        <DisplayListingsMin
+          listings={listings || []}
+          loading={isLoading || isFetching}
+          error={!!error}
+          onRetry={() => refetch()}
+          disableAds={!!(org || user)}
+        />
+      </Grid>
 
       <Grid item xs={12}>
         <Divider light />
@@ -862,7 +939,7 @@ export function BulkListingsRefactor(props: {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Grid>
-    </>
+    </Grid>
   )
 }
 

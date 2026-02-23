@@ -37,7 +37,7 @@ export function BulkItemsPage() {
       <MarketSidebarContext.Provider value={[open, setOpen]}>
         {xs && <MarketSidebar />}
 
-        <ContainerGrid maxWidth={"xl"} sidebarOpen={false}>
+        <ContainerGrid maxWidth={"xxxl"} sidebarOpen={false}>
           <Grid
             container
             spacing={theme.layoutSpacing.layout}
@@ -89,18 +89,9 @@ export function BulkItemsPage() {
             )}
 
             <Grid item xs={12} md sx={{ transition: "all 0.3s ease" }}>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                  gap: 1,
-                  pb: 3,
-                }}
-              >
-                <Suspense fallback={<MarketTabLoader />}>
-                  <BulkListingsRefactor />
-                </Suspense>
-              </Box>
+              <Suspense fallback={<MarketTabLoader />}>
+                <BulkListingsRefactor />
+              </Suspense>
             </Grid>
           </Grid>
         </ContainerGrid>

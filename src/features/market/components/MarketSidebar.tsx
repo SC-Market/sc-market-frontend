@@ -9,6 +9,8 @@ import {
   Typography,
   useMediaQuery,
   Autocomplete,
+  ToggleButtonGroup,
+  ToggleButton,
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import SearchIcon from "@mui/icons-material/Search"
@@ -30,6 +32,7 @@ import { marketApi } from "../api/marketApi"
 import { debounce } from "lodash-es"
 import { useBottomNavHeight } from "../../../hooks/layout/useBottomNavHeight"
 import type { MarketListing } from "../../../datatypes/MarketListing"
+import { useNavigate, useLocation } from "react-router-dom"
 
 export function MarketSearchArea(props: {
   status?: boolean
@@ -37,6 +40,15 @@ export function MarketSearchArea(props: {
 }) {
   const theme: ExtendedTheme = useTheme()
   const { t } = useTranslation()
+  const navigate = useNavigate()
+  const location = useLocation()
+  
+  const viewMode = useMemo(() => {
+    if (location.pathname.startsWith("/bulk")) return "bulk"
+    if (location.pathname.startsWith("/buyorders")) return "buyorders"
+    return "market"
+  }, [location.pathname])
+
   const {
     sort,
     setSort,
@@ -106,6 +118,39 @@ export function MarketSearchArea(props: {
       }}
     >
       <Grid container spacing={theme.layoutSpacing.layout}>
+        <Grid item xs={12}>
+          <ToggleButtonGroup
+            value={viewMode}
+            exclusive
+            onChange={(_, newValue) => {
+              if (newValue === "market") navigate("/market")
+              else if (newValue === "bulk") navigate("/bulk")
+              else if (newValue === "buyorders") navigate("/buyorders")
+            }}
+            fullWidth
+            size="small"
+            color="secondary"
+            sx={{
+              "& .MuiToggleButton-root": {
+                color: theme.palette.text.secondary,
+                "&.Mui-selected": {
+                  color: theme.palette.secondary.main,
+                  backgroundColor: theme.palette.action.selected,
+                },
+              },
+            }}
+          >
+            <ToggleButton value="market">
+              {t("market.listings", "Listings")}
+            </ToggleButton>
+            <ToggleButton value="bulk">
+              {t("market.bulk", "Bulk")}
+            </ToggleButton>
+            <ToggleButton value="buyorders">
+              {t("market.buyOrders", "Buy Orders")}
+            </ToggleButton>
+          </ToggleButtonGroup>
+        </Grid>
         {!props.hideSearchBar && (
           <>
             <Grid item xs={12}>
@@ -379,10 +424,10 @@ export function MarketSidebar(props: { status?: boolean }) {
   const [drawerOpen] = useDrawerOpen()
   const [open, setOpen] = useMarketSidebar()
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useMediaQuery(theme.breakpoints.down("lg"))
   const { t } = useTranslation()
 
-  // Mobile: Use bottom sheet
+  // Mobile/Tablet: Use bottom sheet
   if (isMobile) {
     return (
       <BottomSheet
@@ -404,11 +449,11 @@ export function MarketSidebar(props: { status?: boolean }) {
 export function MarketSideBarToggleButton() {
   const [open, setOpen] = useMarketSidebar()
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useMediaQuery(theme.breakpoints.down("lg"))
   const bottomNavHeight = useBottomNavHeight()
   const { t } = useTranslation()
 
-  // Only show toggle button on mobile
+  // Only show toggle button on mobile/tablet
   if (!isMobile) {
     return null
   }

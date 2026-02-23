@@ -61,17 +61,18 @@ export function MarketPage() {
   const location = useLocation()
   const navigate = useNavigate()
   const theme = useTheme<ExtendedTheme>()
-  const xs = useMediaQuery(theme.breakpoints.down("md"))
+  const showMobileSidebar = useMediaQuery(theme.breakpoints.down("lg"))
   const [marketSidebarOpen, setMarketSidebarOpen] = useState(false)
   const [serviceSidebarOpen, setServiceSidebarOpen] = useState(false)
-  const pages = ["/market/services", "/market", "/contracts"]
-  const tabPage = useMemo(
-    () =>
-      pages.indexOf(
-        pages.find((p) => location.pathname.startsWith(p)) || "/market",
-      ),
-    [location.pathname],
-  )
+  
+  const tabPage = useMemo(() => {
+    if (location.pathname.startsWith("/market/services")) return 0
+    if (location.pathname.startsWith("/market") || 
+        location.pathname.startsWith("/bulk") || 
+        location.pathname.startsWith("/buyorders")) return 1
+    if (location.pathname.startsWith("/contracts")) return 2
+    return 1 // default to market tab
+  }, [location.pathname])
 
   return (
     <Page title={t("market.market")} dontUseDefaultCanonUrl={true}>
@@ -201,13 +202,13 @@ export function MarketPage() {
               </Suspense>
             </TabPanel>
           </OpenLayout>
-          {xs && tabPage === 1 && (
+          {showMobileSidebar && tabPage === 1 && (
             <FiltersFAB
               onClick={() => setMarketSidebarOpen((prev) => !prev)}
               label={t("market.toggleSidebar")}
             />
           )}
-          {xs && tabPage === 0 && (
+          {showMobileSidebar && tabPage === 0 && (
             <FiltersFAB
               onClick={() => setServiceSidebarOpen((prev) => !prev)}
               label={t("service_market.toggle_sidebar")}

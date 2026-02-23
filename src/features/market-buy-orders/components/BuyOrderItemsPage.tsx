@@ -38,7 +38,7 @@ export function BuyOrderItemsPage() {
         {xs && <MarketSidebar />}
 
         <ContainerGrid
-          maxWidth={"xl"}
+          maxWidth={"xxxl"}
           sidebarOpen={false}
           sx={{
             paddingX: { xs: theme.spacing(1), sm: theme.spacing(3) },
@@ -96,18 +96,9 @@ export function BuyOrderItemsPage() {
             )}
 
             <Grid item xs={12} md sx={{ transition: "all 0.3s ease" }}>
-              <Box
-                sx={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                  gap: 1,
-                  pb: 3,
-                }}
-              >
-                <Suspense fallback={<MarketTabLoader />}>
-                  <BuyOrders />
-                </Suspense>
-              </Box>
+              <Suspense fallback={<MarketTabLoader />}>
+                <BuyOrders />
+              </Suspense>
             </Grid>
           </Grid>
         </ContainerGrid>
