@@ -627,7 +627,7 @@ export function DisplayBuyOrderListings(props: {
   )
 
   return (
-    <Grid container spacing={2} sx={{ width: "100%" }}>
+    <Grid container spacing={1} sx={{ width: "100%" }}>
       <div ref={ref} style={{ position: "absolute", top: 0 }} />
 
       <Grid item xs={12}>
@@ -913,15 +913,18 @@ export function BulkListingsRefactor(props: {
   )
 
   return (
-    <>
+    <Grid container spacing={1} sx={{ width: "100%" }}>
       <div ref={ref} style={{ position: "absolute", top: 0 }} />
-      <DisplayListingsMin
-        listings={listings || []}
-        loading={isLoading || isFetching}
-        error={!!error}
-        onRetry={() => refetch()}
-        disableAds={!!(org || user)}
-      />
+      
+      <Grid item xs={12}>
+        <DisplayListingsMin
+          listings={listings || []}
+          loading={isLoading || isFetching}
+          error={!!error}
+          onRetry={() => refetch()}
+          disableAds={!!(org || user)}
+        />
+      </Grid>
 
       <Grid item xs={12}>
         <Divider light />
@@ -936,7 +939,7 @@ export function BulkListingsRefactor(props: {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Grid>
-    </>
+    </Grid>
   )
 }
 
