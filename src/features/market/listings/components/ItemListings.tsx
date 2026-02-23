@@ -359,7 +359,7 @@ export function DisplayListings(props: {
                   sm={4}
                   md={3}
                   lg={2.4}
-                  xl={2}
+                  xl={2.4}
                   xxl={2}
                   xxxl={12 / 7}
                   key={i}
@@ -381,7 +381,7 @@ export function DisplayListings(props: {
                   sm={4}
                   md={3}
                   lg={2.4}
-                  xl={2}
+                  xl={2.4}
                   xxl={2}
                   xxxl={12 / 7}
                   key={key}
@@ -467,7 +467,7 @@ export function DisplayListingsMin(props: {
             sm={4}
             md={3}
             lg={2.4}
-            xl={2}
+            xl={2.4}
             xxl={2}
             xxxl={12 / 7}
             key={i}
@@ -574,7 +574,7 @@ export function DisplayListingsMin(props: {
             sm={4}
             md={3}
             lg={2.4}
-            xl={2}
+            xl={2.4}
             xxl={2}
             xxxl={12 / 7}
             key={key}
@@ -642,7 +642,7 @@ export function DisplayBuyOrderListings(props: {
                     sm={4}
                     md={3}
                     lg={2.4}
-                    xl={2}
+                    xl={2.4}
                     xxl={2}
                     xxxl={12 / 7}
                     key={i}
@@ -660,7 +660,7 @@ export function DisplayBuyOrderListings(props: {
                   sm={4}
                   md={3}
                   lg={2.4}
-                  xl={2}
+                  xl={2.4}
                   xxl={2}
                   xxxl={12 / 7}
                   key={item.details.game_item_id}
