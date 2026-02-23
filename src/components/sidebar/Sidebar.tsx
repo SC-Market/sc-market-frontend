@@ -1,5 +1,5 @@
-import React, { useEffect } from "react"
-import { Drawer, Stack, useMediaQuery, useTheme } from "@mui/material"
+import React, { useEffect, useMemo } from "react"
+import { Drawer, Stack, useMediaQuery, useTheme, Chip } from "@mui/material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
 import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
@@ -11,6 +11,7 @@ import { useSidebarStarring } from "./hooks/useSidebarStarring"
 import { useSidebarSearch } from "./hooks/useSidebarSearch"
 import { useSidebarItems } from "./hooks/useSidebarItems"
 import { SidebarItemProps } from "./types"
+import { useSearchOffersQuery } from "../../store/api/offers"
 
 /**
  * Main sidebar navigation component
@@ -33,6 +34,29 @@ export function Sidebar() {
     filterItems,
     resolveItem,
   } = useSidebarItems()
+
+  // Fetch pending offer counts
+  const { data: myOffersData } = useSearchOffersQuery(
+    { assigned: profile?.username, status: "to-customer", pageSize: 1 },
+    { skip: !profile?.username },
+  )
+  const { data: assignedOffersData } = useSearchOffersQuery(
+    { assigned: profile?.username, status: "to-seller", pageSize: 1 },
+    { skip: !profile?.username },
+  )
+  const { data: orgOffersData } = useSearchOffersQuery(
+    { contractor: currentOrgObj?.spectrum_id, status: "to-seller", pageSize: 1 },
+    { skip: !currentOrgObj?.spectrum_id },
+  )
+
+  const offerCounts = useMemo(
+    () => ({
+      myOrders: myOffersData?.data?.item_count || 0,
+      assignedToMe: assignedOffersData?.data?.item_count || 0,
+      orgOrders: orgOffersData?.data?.item_count || 0,
+    }),
+    [myOffersData, assignedOffersData, orgOffersData],
+  )
 
   // Track previous screen size for auto-close behavior
   const prevXs = React.useRef<boolean | undefined>(undefined)
@@ -66,6 +90,20 @@ export function Sidebar() {
       ...(item.children || []),
     ]),
   )
+
+  // Add badges to items
+  const addBadgesToItem = (item: SidebarItemProps): SidebarItemProps => {
+    if (item.text === "sidebar.orders_ive_placed" && offerCounts.myOrders > 0) {
+      return { ...item, chip: <Chip label={offerCounts.myOrders} size="small" color="primary" /> }
+    }
+    if (item.text === "sidebar.orders_assigned_to_me" && offerCounts.assignedToMe > 0) {
+      return { ...item, chip: <Chip label={offerCounts.assignedToMe} size="small" color="primary" /> }
+    }
+    if (item.text === "sidebar.org_orders" && offerCounts.orgOrders > 0) {
+      return { ...item, chip: <Chip label={offerCounts.orgOrders} size="small" color="primary" /> }
+    }
+    return item
+  }
 
   return (
     <Drawer
@@ -155,6 +193,7 @@ export function Sidebar() {
               .filter(filterItems)
               .filter(filterBySearch)
               .map(resolveItem)
+              .map(addBadgesToItem)
 
             if (!filteredItems.length) return null
 
