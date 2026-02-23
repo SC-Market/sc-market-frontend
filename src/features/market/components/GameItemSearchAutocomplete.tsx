@@ -53,6 +53,13 @@ export function GameItemSearchAutocomplete({
     debouncedSearch(inputValue)
   }, [inputValue, debouncedSearch])
 
+  // Initialize inputValue with the current value
+  useEffect(() => {
+    if (value && !inputValue) {
+      setInputValue(value)
+    }
+  }, [value, inputValue])
+
   return (
     <Autocomplete
       size={size}
@@ -60,11 +67,16 @@ export function GameItemSearchAutocomplete({
       options={itemOptions}
       value={itemOptions.find((opt) => opt.name === value) || null}
       inputValue={inputValue}
-      onInputChange={(event, newValue) => {
-        setInputValue(newValue)
+      onInputChange={(event, newValue, reason) => {
+        if (reason !== 'reset') {
+          setInputValue(newValue)
+        }
       }}
       onChange={(event, newValue) => {
         onChange(newValue?.name || null, newValue?.type || null, newValue?.id || null)
+        if (newValue) {
+          setInputValue(newValue.name)
+        }
       }}
       getOptionLabel={(option) => option.name}
       renderInput={(params) => (
