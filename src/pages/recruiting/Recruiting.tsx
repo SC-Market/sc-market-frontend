@@ -94,6 +94,8 @@ export function Recruiting() {
   return (
     <SidebarPageLayout
       title={t("recruiting_orgs")}
+      breadcrumbs={[{ label: t("recruiting_orgs") }]}
+      showOrgInBreadcrumbs={true}
       headerTitle={t("recruiting_orgs")}
       headerActions={headerActions}
       sidebar={

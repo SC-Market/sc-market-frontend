@@ -14,6 +14,11 @@ export function CreateRecruitingPostPage() {
     <FormPageLayout
       formTitle={t("recruiting_post.page.createPost")}
       title={t("recruiting_post.page.createPost")}
+      breadcrumbs={[
+        { label: t("recruiting.title", "Recruiting"), href: "/recruiting" },
+        { label: t("recruiting_post.page.createPost") },
+      ]}
+      showOrgInBreadcrumbs={true}
       sidebarOpen={true}
       maxWidth="md"
     >
