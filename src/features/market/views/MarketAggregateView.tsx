@@ -417,7 +417,9 @@ export function MarketAggregateView() {
           </Card>
         </Fade>
       </Grid>
-      <HeaderTitle>{t("MarketAggregateView.sellOrders")}</HeaderTitle>
+      <Grid item xs={12}>
+        <HeaderTitle>{t("MarketAggregateView.sellOrders")}</HeaderTitle>
+      </Grid>
       <Grid item xs={12}>
         <PaginatedTable
           disableSelect
@@ -437,7 +439,9 @@ export function MarketAggregateView() {
         />
         {/*{listing.listings.map((l, index) => <AggregateRow listing={l} index={index}/>)}*/}
       </Grid>
-      <HeaderTitle>{t("MarketAggregateView.buyOrders")}</HeaderTitle>
+      <Grid item xs={12}>
+        <HeaderTitle>{t("MarketAggregateView.buyOrders")}</HeaderTitle>
+      </Grid>
       <Grid item xs={12}>
         <PaginatedTable
           disableSelect
@@ -454,10 +458,18 @@ export function MarketAggregateView() {
         />
         {/*{listing.listings.map((l, index) => <AggregateRow listing={l} index={index}/>)}*/}
       </Grid>
-      <BuyOrderForm aggregate={complete} />
-      <AggregateBuySellWall aggregate={complete} />
-      <HeaderTitle>{t("MarketAggregateView.priceHistory")}</HeaderTitle>
-      <AggregateChart aggregate={complete} />
+      <Grid item xs={12}>
+        <BuyOrderForm aggregate={complete} />
+      </Grid>
+      <Grid item xs={12}>
+        <AggregateBuySellWall aggregate={complete} />
+      </Grid>
+      <Grid item xs={12}>
+        <HeaderTitle>{t("MarketAggregateView.priceHistory")}</HeaderTitle>
+      </Grid>
+      <Grid item xs={12}>
+        <AggregateChart aggregate={complete} />
+      </Grid>
     </>
   )
 }
