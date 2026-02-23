@@ -356,9 +356,9 @@ export function DisplayListings(props: {
                 <Grid
                   item
                   xs={6}
-                  sm={4}
-                  md={3}
-                  lg={2.4}
+                  sm={6}
+                  md={4}
+                  lg={3}
                   xl={2.4}
                   xxl={2}
                   xxxl={12 / 7}
@@ -378,9 +378,9 @@ export function DisplayListings(props: {
                 <Grid
                   item
                   xs={6}
-                  sm={4}
-                  md={3}
-                  lg={2.4}
+                  sm={6}
+                  md={4}
+                  lg={3}
                   xl={2.4}
                   xxl={2}
                   xxxl={12 / 7}
@@ -464,9 +464,9 @@ export function DisplayListingsMin(props: {
           <Grid
             item
             xs={6}
-            sm={4}
-            md={3}
-            lg={2.4}
+            sm={6}
+            md={4}
+            lg={3}
             xl={2.4}
             xxl={2}
             xxxl={12 / 7}
@@ -571,9 +571,9 @@ export function DisplayListingsMin(props: {
           <Grid
             item
             xs={6}
-            sm={4}
-            md={3}
-            lg={2.4}
+            sm={6}
+            md={4}
+            lg={3}
             xl={2.4}
             xxl={2}
             xxxl={12 / 7}
@@ -639,9 +639,9 @@ export function DisplayBuyOrderListings(props: {
                   <Grid
                     item
                     xs={6}
-                    sm={4}
-                    md={3}
-                    lg={2.4}
+                    sm={6}
+                    md={4}
+                    lg={3}
                     xl={2.4}
                     xxl={2}
                     xxxl={12 / 7}
@@ -657,9 +657,9 @@ export function DisplayBuyOrderListings(props: {
                 <Grid
                   item
                   xs={6}
-                  sm={4}
-                  md={3}
-                  lg={2.4}
+                  sm={6}
+                  md={4}
+                  lg={3}
                   xl={2.4}
                   xxl={2}
                   xxxl={12 / 7}

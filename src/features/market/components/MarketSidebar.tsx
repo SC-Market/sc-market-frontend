@@ -130,6 +130,15 @@ export function MarketSearchArea(props: {
             fullWidth
             size="small"
             color="secondary"
+            sx={{
+              "& .MuiToggleButton-root": {
+                color: theme.palette.text.secondary,
+                "&.Mui-selected": {
+                  color: theme.palette.secondary.main,
+                  backgroundColor: theme.palette.action.selected,
+                },
+              },
+            }}
           >
             <ToggleButton value="market">
               {t("market.listings", "Listings")}
