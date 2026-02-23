@@ -17,16 +17,30 @@ export function usePendingOrderCount(): number {
     { skip: !isLoggedIn },
   )
 
-  // Get unread count for order status changes
-  const { data: statusData } = useGetNotificationsQuery(
-    {
-      action: "order_status",
-    },
+  // Get unread count for each order status change type
+  const { data: fulfilledData } = useGetNotificationsQuery(
+    { action: "order_status_fulfilled" },
+    { skip: !isLoggedIn },
+  )
+  const { data: inProgressData } = useGetNotificationsQuery(
+    { action: "order_status_in_progress" },
+    { skip: !isLoggedIn },
+  )
+  const { data: notStartedData } = useGetNotificationsQuery(
+    { action: "order_status_not_started" },
+    { skip: !isLoggedIn },
+  )
+  const { data: cancelledData } = useGetNotificationsQuery(
+    { action: "order_status_cancelled" },
     { skip: !isLoggedIn },
   )
 
   const assignmentCount = assignmentData?.unread_count ?? 0
-  const statusCount = statusData?.unread_count ?? 0
+  const statusCount =
+    (fulfilledData?.unread_count ?? 0) +
+    (inProgressData?.unread_count ?? 0) +
+    (notStartedData?.unread_count ?? 0) +
+    (cancelledData?.unread_count ?? 0)
 
   return assignmentCount + statusCount
 }
