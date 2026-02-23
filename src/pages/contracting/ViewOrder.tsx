@@ -162,6 +162,7 @@ export function ViewOrder() {
           label: order?.title || `Order ${id?.substring(0, 8).toUpperCase()}`,
         },
       ]}
+      showOrgInBreadcrumbs={true}
       entityTitle={order?.title || `Order ${id?.substring(0, 8).toUpperCase()}`}
       isLoading={pageData.isLoading}
       error={pageData.error}

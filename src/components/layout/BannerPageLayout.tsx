@@ -1,4 +1,4 @@
-import React, { ReactElement, ReactNode } from "react"
+import React, { ReactElement, ReactNode, useMemo } from "react"
 import { Navigate } from "react-router-dom"
 import { Page } from "../metadata/Page"
 import { PageBreadcrumbs } from "../navigation/PageBreadcrumbs"
@@ -10,6 +10,7 @@ import {
 import { ErrorPage } from "../../pages/errors/ErrorPage"
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query"
 import { SerializedError } from "@reduxjs/toolkit"
+import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 
 export interface BreadcrumbItem {
   label: string
@@ -25,6 +26,7 @@ export interface BannerPageLayoutProps {
 
   // Breadcrumbs
   breadcrumbs?: BreadcrumbItem[]
+  showOrgInBreadcrumbs?: boolean
 
   // Layout configuration
   sidebarOpen?: boolean
@@ -58,11 +60,14 @@ export interface BannerPageLayoutProps {
  * Requirements: 1.1, 1.2, 2.1, 2.2, 7.1, 7.2, 10.1, 10.2
  */
 export function BannerPageLayout(props: BannerPageLayoutProps): ReactElement {
+  const [currentOrg] = useCurrentOrg()
+  
   const {
     title,
     canonicalUrl,
     dontUseDefaultCanonUrl,
     breadcrumbs,
+    showOrgInBreadcrumbs = false,
     sidebarOpen = true,
     noFooter = false,
     noSidebar = false,
@@ -72,6 +77,21 @@ export function BannerPageLayout(props: BannerPageLayoutProps): ReactElement {
     error,
     skeleton,
   } = props
+
+  // Inject currentOrg into breadcrumbs if it exists and is enabled
+  const enhancedBreadcrumbs = useMemo(() => {
+    if (!breadcrumbs || !currentOrg || !showOrgInBreadcrumbs) return breadcrumbs
+    
+    // Insert org after first breadcrumb (home)
+    return [
+      breadcrumbs[0],
+      {
+        label: currentOrg.name || currentOrg.spectrum_id,
+        href: `/contractor/${currentOrg.spectrum_id}`,
+      },
+      ...breadcrumbs.slice(1),
+    ]
+  }, [breadcrumbs, currentOrg, showOrgInBreadcrumbs])
 
   // Handle 404 errors
   if (
@@ -104,9 +124,9 @@ export function BannerPageLayout(props: BannerPageLayoutProps): ReactElement {
         noMobilePadding={noMobilePadding}
       >
         {/* Breadcrumbs - only render if provided and not loading */}
-        {!isLoading && breadcrumbs && breadcrumbs.length > 0 && (
+        {!isLoading && enhancedBreadcrumbs && enhancedBreadcrumbs.length > 0 && (
           <PageBreadcrumbs
-            items={breadcrumbs}
+            items={enhancedBreadcrumbs}
             MuiBreadcrumbsProps={{
               sx: {
                 mb: 0,
