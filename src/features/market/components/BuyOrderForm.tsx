@@ -103,7 +103,7 @@ export function BuyOrderForm(props: { aggregate: MarketAggregate }) {
             }}
             loading="lazy"
             src={
-              aggregate.photos[0] ||
+              aggregate.photos?.[0] ||
               "https://cdn.robertsspaceindustries.com/static/images/Temp/default-image.png"
             }
             alt={aggregate.details.title}
