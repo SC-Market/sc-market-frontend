@@ -30,6 +30,7 @@ export interface StandardPageLayoutProps {
 
   // Breadcrumbs
   breadcrumbs?: BreadcrumbItem[]
+  showOrgInBreadcrumbs?: boolean
 
   // Header
   headerTitle?: ReactNode
@@ -79,6 +80,7 @@ export function StandardPageLayout(
     canonicalUrl,
     dontUseDefaultCanonUrl,
     breadcrumbs,
+    showOrgInBreadcrumbs = false,
     headerTitle,
     headerActions,
     sidebarOpen = true,
@@ -96,9 +98,9 @@ export function StandardPageLayout(
     ContainerProps,
   } = props
 
-  // Inject currentOrg into breadcrumbs if it exists
+  // Inject currentOrg into breadcrumbs if it exists and is enabled
   const enhancedBreadcrumbs = useMemo(() => {
-    if (!breadcrumbs || !currentOrg) return breadcrumbs
+    if (!breadcrumbs || !currentOrg || !showOrgInBreadcrumbs) return breadcrumbs
     
     // Insert org after first breadcrumb (home)
     return [
@@ -109,7 +111,7 @@ export function StandardPageLayout(
       },
       ...breadcrumbs.slice(1),
     ]
-  }, [breadcrumbs, currentOrg])
+  }, [breadcrumbs, currentOrg, showOrgInBreadcrumbs])
 
   // Handle 404 errors
   if (
