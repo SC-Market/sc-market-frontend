@@ -238,13 +238,13 @@ const router = createBrowserRouter([
       {
         path: "/bulk",
         lazy: async () => ({
-          Component: (await import("./features/market")).ItemMarketView,
+          Component: (await import("./features/market")).MarketPage,
         }),
       },
       {
         path: "/buyorders",
         lazy: async () => ({
-          Component: (await import("./features/market")).ItemMarketView,
+          Component: (await import("./features/market")).MarketPage,
         }),
       },
       {
