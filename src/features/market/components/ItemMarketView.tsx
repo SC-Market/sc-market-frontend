@@ -18,17 +18,17 @@ import { LISTING_CARD_WIDTH } from "./listings/ListingCard.tsx"
 
 export function ItemMarketView() {
   const theme = useTheme<ExtendedTheme>()
-  const xs = useMediaQuery(theme.breakpoints.down("md"))
+  const showMobileSidebar = useMediaQuery(theme.breakpoints.down("lg"))
   const [open, setOpen] = useState(false)
 
   return (
     <MarketSidebarContext.Provider value={[open, setOpen]}>
-      {/* Mobile: Use bottom sheet */}
-      {xs && <MarketSidebar />}
+      {/* Mobile/Tablet: Use bottom sheet */}
+      {showMobileSidebar && <MarketSidebar />}
 
       <Container maxWidth={"xxxl"} sx={{ padding: 0 }}>
         <Box sx={{ display: "flex", justifyContent: "center" }}>
-          {xs ? (
+          {showMobileSidebar ? (
             <Grid container spacing={theme.layoutSpacing.layout}>
               <Grid item xs={12}>
                 <HideOnScroll>

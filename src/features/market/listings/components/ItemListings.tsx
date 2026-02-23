@@ -356,7 +356,7 @@ export function DisplayListings(props: {
                 <Grid
                   item
                   xs={6}
-                  sm={6}
+                  sm={4}
                   md={4}
                   lg={3}
                   xl={2.4}
@@ -378,7 +378,7 @@ export function DisplayListings(props: {
                 <Grid
                   item
                   xs={6}
-                  sm={6}
+                  sm={4}
                   md={4}
                   lg={3}
                   xl={2.4}
@@ -464,7 +464,7 @@ export function DisplayListingsMin(props: {
           <Grid
             item
             xs={6}
-            sm={6}
+            sm={4}
             md={4}
             lg={3}
             xl={2.4}
@@ -571,7 +571,7 @@ export function DisplayListingsMin(props: {
           <Grid
             item
             xs={6}
-            sm={6}
+            sm={4}
             md={4}
             lg={3}
             xl={2.4}
@@ -639,7 +639,7 @@ export function DisplayBuyOrderListings(props: {
                   <Grid
                     item
                     xs={6}
-                    sm={6}
+                    sm={4}
                     md={4}
                     lg={3}
                     xl={2.4}
@@ -657,7 +657,7 @@ export function DisplayBuyOrderListings(props: {
                 <Grid
                   item
                   xs={6}
-                  sm={6}
+                  sm={4}
                   md={4}
                   lg={3}
                   xl={2.4}
