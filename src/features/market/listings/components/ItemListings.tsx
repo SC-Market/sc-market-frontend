@@ -784,18 +784,24 @@ export function ItemListings(props: {
   )
 
   return (
-    <>
+    <Grid container spacing={1} sx={{ width: "100%" }}>
       <div ref={ref} style={{ position: "absolute", top: 0 }} />
-      <DisplayListingsMin
-        listings={listings || []}
-        loading={isLoading || isFetching}
-        error={!!error}
-        onRetry={() => refetch()}
-        disableAds={!!(org || user)}
-      />
+      
+      <Grid item xs={12}>
+        <DisplayListingsMin
+          listings={listings || []}
+          loading={isLoading || isFetching}
+          error={!!error}
+          onRetry={() => refetch()}
+          disableAds={!!(org || user)}
+        />
+      </Grid>
 
-      <Box sx={{ width: "100%", mt: 4 }}>
+      <Grid item xs={12}>
         <Divider light />
+      </Grid>
+
+      <Grid item xs={12}>
         <ListingPagination
           count={total}
           page={page}
@@ -803,8 +809,8 @@ export function ItemListings(props: {
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
-      </Box>
-    </>
+      </Grid>
+    </Grid>
   )
 }
 
