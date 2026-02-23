@@ -69,7 +69,7 @@ import {
   useMarketSearch,
   useMarketSidebarExp,
 } from "../../index"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate, useLocation } from "react-router-dom"
 import { useCurrentOrg } from "../../../../hooks/login/CurrentOrg"
 import { UnderlineLink } from "../../../../components/typography/UnderlineLink"
 import { useTheme } from "@mui/material/styles"
@@ -701,8 +701,16 @@ export function ItemListings(props: {
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const [searchState, setSearchState] = useMarketSearch()
+  const location = useLocation()
 
   const { org, user, status } = props
+
+  // Determine which view to show based on route
+  const viewMode = useMemo(() => {
+    if (location.pathname.startsWith("/bulk")) return "bulk"
+    if (location.pathname.startsWith("/buyorders")) return "buyorders"
+    return "market"
+  }, [location.pathname])
 
   useEffect(() => {
     setSearchState({
@@ -782,6 +790,15 @@ export function ItemListings(props: {
     },
     [],
   )
+
+  // Render different components based on view mode
+  if (viewMode === "bulk") {
+    return <BulkListingsRefactor />
+  }
+
+  if (viewMode === "buyorders") {
+    return <BuyOrders />
+  }
 
   return (
     <Grid container spacing={1} sx={{ width: "100%" }}>

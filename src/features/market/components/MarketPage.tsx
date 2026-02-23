@@ -62,9 +62,10 @@ export function MarketPage() {
   const navigate = useNavigate()
   const theme = useTheme<ExtendedTheme>()
   const xs = useMediaQuery(theme.breakpoints.down("md"))
+  const xl = useMediaQuery(theme.breakpoints.up("xl"))
   const [marketSidebarOpen, setMarketSidebarOpen] = useState(false)
   const [serviceSidebarOpen, setServiceSidebarOpen] = useState(false)
-  const pages = ["/market/services", "/market", "/contracts"]
+  const pages = ["/market/services", "/market", "/contracts", "/bulk", "/buyorders"]
   const tabPage = useMemo(
     () =>
       pages.indexOf(
