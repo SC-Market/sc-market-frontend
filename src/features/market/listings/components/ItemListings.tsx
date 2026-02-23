@@ -361,7 +361,7 @@ export function DisplayListings(props: {
                   lg={2.4}
                   xl={2}
                   xxl={2}
-                  xxxl={12 / 7}
+                  xxxl={1.714}
                   key={i}
                 >
                   <StandardListingSkeleton
@@ -383,7 +383,7 @@ export function DisplayListings(props: {
                   lg={2.4}
                   xl={2}
                   xxl={2}
-                  xxxl={12 / 7}
+                  xxxl={1.714}
                   key={key}
                 >
                   <Listing listing={item} index={index} />
@@ -469,7 +469,7 @@ export function DisplayListingsMin(props: {
             lg={2.4}
             xl={2}
             xxl={2}
-            xxxl={12 / 7}
+            xxxl={1.714}
             key={i}
           >
             <StandardListingSkeleton
@@ -576,7 +576,7 @@ export function DisplayListingsMin(props: {
             lg={2.4}
             xl={2}
             xxl={2}
-            xxxl={12 / 7}
+            xxxl={1.714}
             key={key}
           >
             <Listing listing={item} index={index} />
@@ -644,7 +644,7 @@ export function DisplayBuyOrderListings(props: {
                     lg={2.4}
                     xl={2}
                     xxl={2}
-                    xxxl={12 / 7}
+                    xxxl={1.714}
                     key={i}
                   >
                     <StandardListingSkeleton
@@ -662,7 +662,7 @@ export function DisplayBuyOrderListings(props: {
                   lg={2.4}
                   xl={2}
                   xxl={2}
-                  xxxl={12 / 7}
+                  xxxl={1.714}
                   key={item.details.game_item_id}
                 >
                   <AggregateBuyOrderListing
