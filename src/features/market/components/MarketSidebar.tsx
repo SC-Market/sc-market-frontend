@@ -424,10 +424,10 @@ export function MarketSidebar(props: { status?: boolean }) {
   const [drawerOpen] = useDrawerOpen()
   const [open, setOpen] = useMarketSidebar()
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useMediaQuery(theme.breakpoints.down("lg"))
   const { t } = useTranslation()
 
-  // Mobile: Use bottom sheet
+  // Mobile/Tablet: Use bottom sheet
   if (isMobile) {
     return (
       <BottomSheet
@@ -449,11 +449,11 @@ export function MarketSidebar(props: { status?: boolean }) {
 export function MarketSideBarToggleButton() {
   const [open, setOpen] = useMarketSidebar()
   const theme = useTheme<ExtendedTheme>()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useMediaQuery(theme.breakpoints.down("lg"))
   const bottomNavHeight = useBottomNavHeight()
   const { t } = useTranslation()
 
-  // Only show toggle button on mobile
+  // Only show toggle button on mobile/tablet
   if (!isMobile) {
     return null
   }

@@ -61,7 +61,7 @@ export function MarketPage() {
   const location = useLocation()
   const navigate = useNavigate()
   const theme = useTheme<ExtendedTheme>()
-  const xs = useMediaQuery(theme.breakpoints.down("md"))
+  const showMobileSidebar = useMediaQuery(theme.breakpoints.down("lg"))
   const [marketSidebarOpen, setMarketSidebarOpen] = useState(false)
   const [serviceSidebarOpen, setServiceSidebarOpen] = useState(false)
   
@@ -202,13 +202,13 @@ export function MarketPage() {
               </Suspense>
             </TabPanel>
           </OpenLayout>
-          {xs && tabPage === 1 && (
+          {showMobileSidebar && tabPage === 1 && (
             <FiltersFAB
               onClick={() => setMarketSidebarOpen((prev) => !prev)}
               label={t("market.toggleSidebar")}
             />
           )}
-          {xs && tabPage === 0 && (
+          {showMobileSidebar && tabPage === 0 && (
             <FiltersFAB
               onClick={() => setServiceSidebarOpen((prev) => !prev)}
               label={t("service_market.toggle_sidebar")}
