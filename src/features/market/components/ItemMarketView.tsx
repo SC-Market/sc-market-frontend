@@ -10,25 +10,25 @@ import {
 } from "@mui/material"
 import { HideOnScroll, MarketNavArea } from "./MarketNavArea"
 import { ItemListings } from "../views/ItemListings"
-import { useMarketSidebar } from ".."
-import React from "react"
+import { useMarketSidebar, MarketSidebarContext } from ".."
+import React, { useState } from "react"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { LISTING_CARD_WIDTH } from "./listings/ListingCard.tsx"
 
 export function ItemMarketView() {
   const theme = useTheme<ExtendedTheme>()
-  const xs = useMediaQuery(theme.breakpoints.down("md"))
-  const [open] = useMarketSidebar()
+  const showMobileSidebar = useMediaQuery(theme.breakpoints.down("lg"))
+  const [open, setOpen] = useState(false)
 
   return (
-    <>
-      {/* Mobile: Use bottom sheet */}
-      {xs && <MarketSidebar />}
+    <MarketSidebarContext.Provider value={[open, setOpen]}>
+      {/* Mobile/Tablet: Use bottom sheet */}
+      {showMobileSidebar && <MarketSidebar />}
 
-      <Container maxWidth={"xxl"} sx={{ padding: 0 }}>
+      <Container maxWidth={"xxxl"} sx={{ padding: 0 }}>
         <Box sx={{ display: "flex", justifyContent: "center" }}>
-          {xs ? (
+          {showMobileSidebar ? (
             <Grid container spacing={theme.layoutSpacing.layout}>
               <Grid item xs={12}>
                 <HideOnScroll>
@@ -41,16 +41,7 @@ export function ItemMarketView() {
               </Grid>
 
               <Grid item xs={12}>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexWrap: "wrap",
-                    gap: "8px",
-                    justifyContent: "center",
-                  }}
-                >
-                  <ItemListings />
-                </Box>
+                <ItemListings />
               </Grid>
             </Grid>
           ) : (
@@ -58,7 +49,7 @@ export function ItemMarketView() {
               direction="row"
               justifyContent="center"
               spacing={theme.layoutSpacing.layout}
-              sx={{ width: "100%", maxWidth: "xxl" }}
+              sx={{ width: "100%", maxWidth: "xxxl" }}
             >
               {/* Desktop: Persistent sidebar */}
               <Paper
@@ -76,20 +67,13 @@ export function ItemMarketView() {
               </Paper>
 
               {/* Main content area */}
-              <Box
-                sx={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                  gap: "8px",
-                  flex: 1,
-                }}
-              >
+              <Box sx={{ flex: 1 }}>
                 <ItemListings />
               </Box>
             </Stack>
           )}
         </Box>
       </Container>
-    </>
+    </MarketSidebarContext.Provider>
   )
 }
