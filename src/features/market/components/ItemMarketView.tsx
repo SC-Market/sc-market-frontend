@@ -26,7 +26,7 @@ export function ItemMarketView() {
       {/* Mobile: Use bottom sheet */}
       {xs && <MarketSidebar />}
 
-      <Container maxWidth={"xxl"} sx={{ padding: 0 }}>
+      <Container maxWidth={"xxxl"} sx={{ padding: 0 }}>
         <Box sx={{ display: "flex", justifyContent: "center" }}>
           {xs ? (
             <Grid container spacing={theme.layoutSpacing.layout}>
@@ -49,7 +49,7 @@ export function ItemMarketView() {
               direction="row"
               justifyContent="center"
               spacing={theme.layoutSpacing.layout}
-              sx={{ width: "100%", maxWidth: "xxl" }}
+              sx={{ width: "100%", maxWidth: "xxxl" }}
             >
               {/* Desktop: Persistent sidebar */}
               <Paper
