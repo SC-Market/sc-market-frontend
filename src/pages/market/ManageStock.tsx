@@ -64,6 +64,10 @@ export function ManageStock() {
   return (
     <StandardPageLayout
       title={t("sidebar.manage_listings")}
+      breadcrumbs={[
+        { label: t("sidebar.market_short"), href: "/market" },
+        { label: t("sidebar.manage_listings", "Manage Listings") },
+      ]}
       sidebarOpen={true}
       maxWidth="xl"
       isLoading={pageData.isLoading}

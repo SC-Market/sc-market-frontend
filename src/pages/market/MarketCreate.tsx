@@ -35,8 +35,8 @@ export function MarketCreate(props: {}) {
       breadcrumbs={[
         { label: t("sidebar.market_short"), href: "/market" },
         {
-          label: t("sidebar.my_market_listings", "My Listings"),
-          href: "/market/me",
+          label: t("market.manage_listings", "Manage Listings"),
+          href: "/market/manage",
         },
         { label: t("market.createMarketListing", "Create Listing") },
       ]}
