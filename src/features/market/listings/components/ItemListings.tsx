@@ -794,7 +794,7 @@ export function ItemListings(props: {
         disableAds={!!(org || user)}
       />
 
-      <Box sx={{ width: "100%" }}>
+      <Box sx={{ width: "100%", mt: 4 }}>
         <Divider light />
         <ListingPagination
           count={total}
