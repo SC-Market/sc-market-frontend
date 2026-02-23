@@ -455,22 +455,30 @@ export function DisplayListingsMin(props: {
   if (loading) {
     const marketSidebarOpen = useMarketSidebarExp()
     return (
-      <Box
-        sx={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: "8px",
-          width: "100%",
-        }}
+      <Grid
+        container
+        spacing={1}
+        sx={{ width: "100%" }}
       >
         {new Array(16).fill(undefined).map((o, i) => (
-          <StandardListingSkeleton
-            index={i}
+          <Grid
+            item
+            xs={6}
+            sm={4}
+            md={3}
+            lg={2.4}
+            xl={2}
+            xxl={2}
+            xxxl={1.714}
             key={i}
-            sidebarOpen={marketSidebarOpen}
-          />
+          >
+            <StandardListingSkeleton
+              index={i}
+              sidebarOpen={marketSidebarOpen}
+            />
+          </Grid>
         ))}
-      </Box>
+      </Grid>
     )
   }
 
@@ -552,21 +560,30 @@ export function DisplayListingsMin(props: {
 
   // Fallback to regular rendering for small lists
   return (
-    <Box
-      sx={{
-        display: "flex",
-        flexWrap: "wrap",
-        gap: "8px",
-        width: "100%",
-      }}
+    <Grid
+      container
+      spacing={1}
+      sx={{ width: "100%" }}
     >
       {listingsWithAds.map((item, index) => {
-        // Generate unique key for each item (listing or ad)
         const key = isListing(item) ? item.listing_id : `ad-${item.id}-${index}`
-        // Note: Listing components already have Material-UI Fade animations built in
-        return <Listing listing={item} index={index} key={key} />
+        return (
+          <Grid
+            item
+            xs={6}
+            sm={4}
+            md={3}
+            lg={2.4}
+            xl={2}
+            xxl={2}
+            xxxl={1.714}
+            key={key}
+          >
+            <Listing listing={item} index={index} />
+          </Grid>
+        )
       })}
-    </Box>
+    </Grid>
   )
 }
 
@@ -614,32 +631,47 @@ export function DisplayBuyOrderListings(props: {
       <div ref={ref} style={{ position: "absolute", top: 0 }} />
 
       <Grid item xs={12}>
-        <Box
-          sx={{
-            display: "flex",
-            flexWrap: "wrap",
-            gap: "8px",
-            width: "100%",
-          }}
-        >
+        <Grid container spacing={1}>
           {props.loading
             ? new Array(perPage)
                 .fill(undefined)
                 .map((o, i) => (
-                  <StandardListingSkeleton
+                  <Grid
+                    item
+                    xs={6}
+                    sm={4}
+                    md={3}
+                    lg={2.4}
+                    xl={2}
+                    xxl={2}
+                    xxxl={1.714}
                     key={i}
-                    index={i}
-                    sidebarOpen={marketSidebarOpen}
-                  />
+                  >
+                    <StandardListingSkeleton
+                      index={i}
+                      sidebarOpen={marketSidebarOpen}
+                    />
+                  </Grid>
                 ))
             : listings.map((item, index) => (
-                <AggregateBuyOrderListing
-                  aggregate={item}
-                  index={index}
+                <Grid
+                  item
+                  xs={6}
+                  sm={4}
+                  md={3}
+                  lg={2.4}
+                  xl={2}
+                  xxl={2}
+                  xxxl={1.714}
                   key={item.details.game_item_id}
-                />
+                >
+                  <AggregateBuyOrderListing
+                    aggregate={item}
+                    index={index}
+                  />
+                </Grid>
               ))}
-        </Box>
+        </Grid>
       </Grid>
 
       <Grid item xs={12}>
