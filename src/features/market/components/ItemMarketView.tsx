@@ -41,16 +41,7 @@ export function ItemMarketView() {
               </Grid>
 
               <Grid item xs={12}>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexWrap: "wrap",
-                    gap: "8px",
-                    justifyContent: "center",
-                  }}
-                >
-                  <ItemListings />
-                </Box>
+                <ItemListings />
               </Grid>
             </Grid>
           ) : (
@@ -76,14 +67,7 @@ export function ItemMarketView() {
               </Paper>
 
               {/* Main content area */}
-              <Box
-                sx={{
-                  display: "flex",
-                  flexWrap: "wrap",
-                  gap: "8px",
-                  flex: 1,
-                }}
-              >
+              <Box sx={{ flex: 1 }}>
                 <ItemListings />
               </Box>
             </Stack>

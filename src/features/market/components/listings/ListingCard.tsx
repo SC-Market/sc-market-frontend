@@ -798,18 +798,13 @@ export const ItemListingBase = React.memo(
 export const LISTING_CARD_WIDTH = 200
 
 // Reusable wrapper for consistent listing sizing
-// Mobile: 50% width (2 columns)
-// Desktop: Fixed 200px width with proper centering
+// Now uses 100% width to work with Grid layout
 export function ListingWrapper({ children }: { children: React.ReactNode }) {
   return (
     <Box
       sx={{
-        width: {
-          xs: "calc(50% - 4px)", // Mobile: 2 columns with 8px gap
-          sm: "calc(50% - 4px)", // Small: 2 columns with 8px gap
-          md: LISTING_CARD_WIDTH, // Desktop: Fixed width
-        },
-        flexShrink: 0,
+        width: "100%",
+        height: "100%",
       }}
     >
       {children}
