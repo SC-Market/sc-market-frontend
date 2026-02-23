@@ -1,4 +1,4 @@
-import React, { ReactElement, ReactNode } from "react"
+import React, { ReactElement, ReactNode, useMemo } from "react"
 import { Navigate } from "react-router-dom"
 import { Grid, GridProps } from "@mui/material"
 import { Page } from "../metadata/Page"
@@ -14,6 +14,7 @@ import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query"
 import { SerializedError } from "@reduxjs/toolkit"
+import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 
 export interface BreadcrumbItem {
   label: string
@@ -71,6 +72,7 @@ export function StandardPageLayout(
   props: StandardPageLayoutProps,
 ): ReactElement {
   const theme = useTheme<ExtendedTheme>()
+  const [currentOrg] = useCurrentOrg()
 
   const {
     title,
@@ -93,6 +95,21 @@ export function StandardPageLayout(
     GridProps,
     ContainerProps,
   } = props
+
+  // Inject currentOrg into breadcrumbs if it exists
+  const enhancedBreadcrumbs = useMemo(() => {
+    if (!breadcrumbs || !currentOrg) return breadcrumbs
+    
+    // Insert org after first breadcrumb (home)
+    return [
+      breadcrumbs[0],
+      {
+        label: currentOrg.name || currentOrg.spectrum_id,
+        href: `/contractor/${currentOrg.spectrum_id}`,
+      },
+      ...breadcrumbs.slice(1),
+    ]
+  }, [breadcrumbs, currentOrg])
 
   // Handle 404 errors
   if (
@@ -130,9 +147,9 @@ export function StandardPageLayout(
         {...ContainerProps}
       >
         {/* Breadcrumbs */}
-        {breadcrumbs && breadcrumbs.length > 0 && (
+        {enhancedBreadcrumbs && enhancedBreadcrumbs.length > 0 && (
           <Grid item xs={12}>
-            <PageBreadcrumbs items={breadcrumbs} />
+            <PageBreadcrumbs items={enhancedBreadcrumbs} />
           </Grid>
         )}
 
