@@ -769,6 +769,11 @@ export function MarketCart() {
   return (
     <StandardPageLayout
       title={t("marketActions.myCart")}
+      breadcrumbs={[
+        { label: t("sidebar.market_short"), href: "/market" },
+        { label: t("cart.yourCart") },
+      ]}
+      showOrgInBreadcrumbs={true}
       headerTitle={
         <>
           <BackArrow /> {t("cart.yourCart")}

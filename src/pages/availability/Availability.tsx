@@ -91,6 +91,11 @@ export function Availability() {
   return (
     <StandardPageLayout
       title={t("availability.title")}
+      breadcrumbs={[
+        { label: t("dashboard.title", "Dashboard"), href: "/dashboard" },
+        { label: t("availability.title") },
+      ]}
+      showOrgInBreadcrumbs={true}
       headerTitle={t("availability.title")}
       isLoading={pageData.isLoading}
       error={pageData.error}

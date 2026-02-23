@@ -21,6 +21,8 @@ export function MemberDashboard() {
   return (
     <StandardPageLayout
       title={t("dashboard.title")}
+      breadcrumbs={[{ label: t("dashboard.title") }]}
+      showOrgInBreadcrumbs={true}
       headerTitle={t("dashboard.title")}
       sidebarOpen={true}
       maxWidth="xl"
