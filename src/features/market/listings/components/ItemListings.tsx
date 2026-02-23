@@ -390,26 +390,26 @@ export function DisplayListings(props: {
                 </Grid>
               )
             })}
-      </Grid>
 
-      {listings !== undefined && !listings.length && !props.loading && (
-        <Grid item xs={12}>
-          <EmptyListings isSearchResult={true} />
+        {listings !== undefined && !listings.length && !props.loading && (
+          <Grid item xs={12}>
+            <EmptyListings isSearchResult={true} />
+          </Grid>
+        )}
+
+        <Grid item xs={12} sx={{ mt: 2 }}>
+          <Divider light />
         </Grid>
-      )}
 
-      <Grid item xs={12} sx={{ mt: 2 }}>
-        <Divider light />
-      </Grid>
-
-      <Grid item xs={12}>
-        <ListingPagination
-          count={total ?? listingsWithAds.length}
-          page={page}
-          rowsPerPage={perPage}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
+        <Grid item xs={12}>
+          <ListingPagination
+            count={total ?? listingsWithAds.length}
+            page={page}
+            rowsPerPage={perPage}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Grid>
       </Grid>
     </React.Fragment>
   )
