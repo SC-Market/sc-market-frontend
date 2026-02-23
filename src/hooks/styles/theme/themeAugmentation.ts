@@ -8,6 +8,7 @@ declare module "@mui/material/styles" {
     lg: true
     xl: true
     xxl: true
+    xxxl: true
   }
 
   interface TypeBackground {

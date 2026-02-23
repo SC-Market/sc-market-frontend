@@ -29,6 +29,7 @@ export const breakpointsValues = {
   lg: 1200,
   xl: 1536,
   xxl: 1900,
+  xxxl: 2200,
 } as const
 
 export const MISSING_IMAGE_URL =
