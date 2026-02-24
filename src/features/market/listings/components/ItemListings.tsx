@@ -344,32 +344,26 @@ export function DisplayListings(props: {
     <React.Fragment>
       <div ref={ref} style={{ position: "absolute", top: 0 }} />
 
-      <Grid
-        container
-        spacing={1}
-        sx={{ width: "100%" }}
-      >
+      <Grid container spacing={1} sx={{ width: "100%" }}>
         {loading
-          ? new Array(perPage)
-              .fill(undefined)
-              .map((o, i) => (
-                <Grid
-                  item
-                  xs={6}
-                  sm={4}
-                  md={4}
-                  lg={3}
-                  xl={2.4}
-                  xxl={2}
-                  xxxl={12 / 7}
-                  key={i}
-                >
-                  <StandardListingSkeleton
-                    index={i}
-                    sidebarOpen={marketSidebarOpen}
-                  />
-                </Grid>
-              ))
+          ? new Array(perPage).fill(undefined).map((o, i) => (
+              <Grid
+                item
+                xs={6}
+                sm={4}
+                md={4}
+                lg={3}
+                xl={2.4}
+                xxl={2}
+                xxxl={12 / 7}
+                key={i}
+              >
+                <StandardListingSkeleton
+                  index={i}
+                  sidebarOpen={marketSidebarOpen}
+                />
+              </Grid>
+            ))
           : paginatedListings.map((item, index) => {
               const key = isListing(item)
                 ? item.listing_id
@@ -455,11 +449,7 @@ export function DisplayListingsMin(props: {
   if (loading) {
     const marketSidebarOpen = useMarketSidebarExp()
     return (
-      <Grid
-        container
-        spacing={1}
-        sx={{ width: "100%" }}
-      >
+      <Grid container spacing={1} sx={{ width: "100%" }}>
         {new Array(16).fill(undefined).map((o, i) => (
           <Grid
             item
@@ -560,11 +550,7 @@ export function DisplayListingsMin(props: {
 
   // Fallback to regular rendering for small lists
   return (
-    <Grid
-      container
-      spacing={1}
-      sx={{ width: "100%" }}
-    >
+    <Grid container spacing={1} sx={{ width: "100%" }}>
       {listingsWithAds.map((item, index) => {
         const key = isListing(item) ? item.listing_id : `ad-${item.id}-${index}`
         return (
@@ -633,26 +619,24 @@ export function DisplayBuyOrderListings(props: {
       <Grid item xs={12}>
         <Grid container spacing={1}>
           {props.loading
-            ? new Array(perPage)
-                .fill(undefined)
-                .map((o, i) => (
-                  <Grid
-                    item
-                    xs={6}
-                    sm={4}
-                    md={4}
-                    lg={3}
-                    xl={2.4}
-                    xxl={2}
-                    xxxl={12 / 7}
-                    key={i}
-                  >
-                    <StandardListingSkeleton
-                      index={i}
-                      sidebarOpen={marketSidebarOpen}
-                    />
-                  </Grid>
-                ))
+            ? new Array(perPage).fill(undefined).map((o, i) => (
+                <Grid
+                  item
+                  xs={6}
+                  sm={4}
+                  md={4}
+                  lg={3}
+                  xl={2.4}
+                  xxl={2}
+                  xxxl={12 / 7}
+                  key={i}
+                >
+                  <StandardListingSkeleton
+                    index={i}
+                    sidebarOpen={marketSidebarOpen}
+                  />
+                </Grid>
+              ))
             : listings.map((item, index) => (
                 <Grid
                   item
@@ -665,10 +649,7 @@ export function DisplayBuyOrderListings(props: {
                   xxxl={12 / 7}
                   key={item.details.game_item_id}
                 >
-                  <AggregateBuyOrderListing
-                    aggregate={item}
-                    index={index}
-                  />
+                  <AggregateBuyOrderListing aggregate={item} index={index} />
                 </Grid>
               ))}
         </Grid>
@@ -803,7 +784,7 @@ export function ItemListings(props: {
   return (
     <Grid container spacing={1} sx={{ width: "100%" }}>
       <div ref={ref} style={{ position: "absolute", top: 0 }} />
-      
+
       <Grid item xs={12}>
         <DisplayListingsMin
           listings={listings || []}
@@ -915,7 +896,7 @@ export function BulkListingsRefactor(props: {
   return (
     <Grid container spacing={1} sx={{ width: "100%" }}>
       <div ref={ref} style={{ position: "absolute", top: 0 }} />
-      
+
       <Grid item xs={12}>
         <DisplayListingsMin
           listings={listings || []}

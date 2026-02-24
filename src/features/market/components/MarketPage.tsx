@@ -64,12 +64,15 @@ export function MarketPage() {
   const showMobileSidebar = useMediaQuery(theme.breakpoints.down("lg"))
   const [marketSidebarOpen, setMarketSidebarOpen] = useState(false)
   const [serviceSidebarOpen, setServiceSidebarOpen] = useState(false)
-  
+
   const tabPage = useMemo(() => {
     if (location.pathname.startsWith("/market/services")) return 0
-    if (location.pathname.startsWith("/market") || 
-        location.pathname.startsWith("/bulk") || 
-        location.pathname.startsWith("/buyorders")) return 1
+    if (
+      location.pathname.startsWith("/market") ||
+      location.pathname.startsWith("/bulk") ||
+      location.pathname.startsWith("/buyorders")
+    )
+      return 1
     if (location.pathname.startsWith("/contracts")) return 2
     return 1 // default to market tab
   }, [location.pathname])

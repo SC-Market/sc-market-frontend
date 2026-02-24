@@ -12,7 +12,12 @@ export function AuthenticateRSISkeleton() {
         <Box sx={{ py: 2 }}>
           <Skeleton variant="text" width="80%" height={24} />
           <Skeleton variant="text" width="60%" height={24} />
-          <Skeleton variant="rectangular" width={200} height={40} sx={{ mt: 1 }} />
+          <Skeleton
+            variant="rectangular"
+            width={200}
+            height={40}
+            sx={{ mt: 1 }}
+          />
         </Box>
       </Grid>
       <Grid item xs={12} display="flex" alignItems="center">

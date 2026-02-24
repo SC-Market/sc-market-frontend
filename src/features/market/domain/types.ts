@@ -57,22 +57,22 @@ export interface BaseMarketListingSearchResult {
   item_name: string | null
   game_item_id: string | null
   price: number
-  expiration: string
+  expiration: string | null
   minimum_price: number
   maximum_price: number
   quantity_available: number
   timestamp: string
   total_rating: number
   avg_rating: number
-  details_id: string
+  details_id: string | null
   status: "active" | "inactive" | "archived"
   user_seller: string | null
   contractor_seller: string | null
-  rating_count: number
-  rating_streak: number
-  total_orders: number
-  total_assignments: number
-  response_rate: number
+  rating_count: number | null
+  rating_streak: number | null
+  total_orders: number | null
+  total_assignments: number | null
+  response_rate: number | null
   title: string
   photo: string
   internal: boolean

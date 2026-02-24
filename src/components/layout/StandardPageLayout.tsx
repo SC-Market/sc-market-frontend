@@ -101,7 +101,7 @@ export function StandardPageLayout(
   // Inject currentOrg into breadcrumbs if it exists and is enabled
   const enhancedBreadcrumbs = useMemo(() => {
     if (!breadcrumbs || !currentOrg || !showOrgInBreadcrumbs) return breadcrumbs
-    
+
     // Insert org after first breadcrumb (home)
     return [
       breadcrumbs[0],

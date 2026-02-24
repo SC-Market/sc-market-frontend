@@ -61,7 +61,7 @@ export interface BannerPageLayoutProps {
  */
 export function BannerPageLayout(props: BannerPageLayoutProps): ReactElement {
   const [currentOrg] = useCurrentOrg()
-  
+
   const {
     title,
     canonicalUrl,
@@ -81,7 +81,7 @@ export function BannerPageLayout(props: BannerPageLayoutProps): ReactElement {
   // Inject currentOrg into breadcrumbs if it exists and is enabled
   const enhancedBreadcrumbs = useMemo(() => {
     if (!breadcrumbs || !currentOrg || !showOrgInBreadcrumbs) return breadcrumbs
-    
+
     // Insert org after first breadcrumb (home)
     return [
       breadcrumbs[0],
@@ -124,16 +124,18 @@ export function BannerPageLayout(props: BannerPageLayoutProps): ReactElement {
         noMobilePadding={noMobilePadding}
       >
         {/* Breadcrumbs - only render if provided and not loading */}
-        {!isLoading && enhancedBreadcrumbs && enhancedBreadcrumbs.length > 0 && (
-          <PageBreadcrumbs
-            items={enhancedBreadcrumbs}
-            MuiBreadcrumbsProps={{
-              sx: {
-                mb: 0,
-              },
-            }}
-          />
-        )}
+        {!isLoading &&
+          enhancedBreadcrumbs &&
+          enhancedBreadcrumbs.length > 0 && (
+            <PageBreadcrumbs
+              items={enhancedBreadcrumbs}
+              MuiBreadcrumbsProps={{
+                sx: {
+                  mb: 0,
+                },
+              }}
+            />
+          )}
 
         {/* Content or skeleton */}
         {isLoading && skeleton ? skeleton : children}

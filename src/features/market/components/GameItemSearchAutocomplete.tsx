@@ -14,7 +14,11 @@ import { debounce } from "lodash-es"
 
 interface GameItemSearchAutocompleteProps {
   value: string | null
-  onChange: (itemName: string | null, itemType: string | null, itemId: string | null) => void
+  onChange: (
+    itemName: string | null,
+    itemType: string | null,
+    itemId: string | null,
+  ) => void
   label?: string
   size?: "small" | "medium"
   sx?: SxProps<Theme>
@@ -68,12 +72,16 @@ export function GameItemSearchAutocomplete({
       value={itemOptions.find((opt) => opt.name === value) || null}
       inputValue={inputValue}
       onInputChange={(event, newValue, reason) => {
-        if (reason !== 'reset') {
+        if (reason !== "reset") {
           setInputValue(newValue)
         }
       }}
       onChange={(event, newValue) => {
-        onChange(newValue?.name || null, newValue?.type || null, newValue?.id || null)
+        onChange(
+          newValue?.name || null,
+          newValue?.type || null,
+          newValue?.id || null,
+        )
         if (newValue) {
           setInputValue(newValue.name)
         }
