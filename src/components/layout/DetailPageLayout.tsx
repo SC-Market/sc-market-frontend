@@ -57,9 +57,7 @@ export function DetailPageLayout(props: DetailPageLayoutProps): ReactElement {
           <ArrowBackIcon />
         </IconButton>
       )}
-      <span style={{ fontSize: "1.5rem", fontWeight: 600 }}>
-        {entityTitle}
-      </span>
+      <span style={{ fontSize: "1.5rem", fontWeight: 600 }}>{entityTitle}</span>
       {entitySubtitle && (
         <div
           style={{

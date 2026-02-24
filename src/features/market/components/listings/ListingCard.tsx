@@ -205,6 +205,7 @@ export const ItemListingBase = React.memo(
           }}
         >
           {showExpiration &&
+            listing.expiration &&
             isAfter(
               subDaysFromDate(addMonths(new Date(), 1), 3),
               new Date(listing.expiration),
@@ -501,6 +502,7 @@ export const ItemListingBase = React.memo(
           }}
         >
           {showExpiration &&
+            listing.expiration &&
             isAfter(
               subDaysFromDate(addMonths(new Date(), 1), 3),
               new Date(listing.expiration),

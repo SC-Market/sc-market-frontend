@@ -45,7 +45,11 @@ export function Sidebar() {
     { skip: !profile?.username },
   )
   const { data: orgOffersData } = useSearchOffersQuery(
-    { contractor: currentOrgObj?.spectrum_id, status: "to-seller", pageSize: 1 },
+    {
+      contractor: currentOrgObj?.spectrum_id,
+      status: "to-seller",
+      pageSize: 1,
+    },
     { skip: !currentOrgObj?.spectrum_id },
   )
 
@@ -94,13 +98,31 @@ export function Sidebar() {
   // Add badges to items
   const addBadgesToItem = (item: SidebarItemProps): SidebarItemProps => {
     if (item.text === "sidebar.orders_ive_placed" && offerCounts.myOrders > 0) {
-      return { ...item, chip: <Chip label={offerCounts.myOrders} size="small" color="primary" /> }
+      return {
+        ...item,
+        chip: (
+          <Chip label={offerCounts.myOrders} size="small" color="primary" />
+        ),
+      }
     }
-    if (item.text === "sidebar.orders_assigned_to_me" && offerCounts.assignedToMe > 0) {
-      return { ...item, chip: <Chip label={offerCounts.assignedToMe} size="small" color="primary" /> }
+    if (
+      item.text === "sidebar.orders_assigned_to_me" &&
+      offerCounts.assignedToMe > 0
+    ) {
+      return {
+        ...item,
+        chip: (
+          <Chip label={offerCounts.assignedToMe} size="small" color="primary" />
+        ),
+      }
     }
     if (item.text === "sidebar.org_orders" && offerCounts.orgOrders > 0) {
-      return { ...item, chip: <Chip label={offerCounts.orgOrders} size="small" color="primary" /> }
+      return {
+        ...item,
+        chip: (
+          <Chip label={offerCounts.orgOrders} size="small" color="primary" />
+        ),
+      }
     }
     return item
   }

@@ -1,28 +1,26 @@
 import { Autocomplete, TextField, TextFieldProps } from "@mui/material"
 import React, { useMemo } from "react"
-import {
-  ExtendedUniqueSearchResult,
-  useSearchMarketListingsQuery,
-} from "../../features/market"
+import { useSearchListingsQuery } from "../../store/api/v2/market"
+import type { ListingSearchResult } from "../../store/api/v2/market"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useTranslation } from "react-i18next"
 
 export interface SelectMarketListingProps {
   listing_id: string | null
-  onListingChange: (newValue: ExtendedUniqueSearchResult | null) => void
+  onListingChange: (newValue: ListingSearchResult | null) => void
   TextfieldProps?: TextFieldProps
 }
 
 export function SelectMarketListing(props: SelectMarketListingProps) {
   const { t } = useTranslation()
   const [currentOrg] = useCurrentOrg()
-  const { data: searchResults } = useSearchMarketListingsQuery({
-    contractor_seller: currentOrg?.spectrum_id,
-    listing_type: "unique",
+  const { data: results } = useSearchListingsQuery({
+    contractorSellerId: currentOrg?.spectrum_id,
+    listingType: "unique",
   })
 
-  const listings =
-    (searchResults?.listings as ExtendedUniqueSearchResult[]) || []
+  // Use v2 types directly - they accurately reflect the database schema
+  const listings = (results?.listings || []) as ListingSearchResult[]
 
   const selectedListing = useMemo(() => {
     if (!props.listing_id) return null
@@ -32,7 +30,7 @@ export function SelectMarketListing(props: SelectMarketListingProps) {
     )
   }, [listings, props.listing_id])
 
-  const getOptionLabel = (option: ExtendedUniqueSearchResult) => {
+  const getOptionLabel = (option: ListingSearchResult) => {
     return `${option.item_type} / ${option.item_name || option.title}`
   }
 

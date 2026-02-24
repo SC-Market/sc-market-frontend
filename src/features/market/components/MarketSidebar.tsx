@@ -42,7 +42,7 @@ export function MarketSearchArea(props: {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const location = useLocation()
-  
+
   const viewMode = useMemo(() => {
     if (location.pathname.startsWith("/bulk")) return "bulk"
     if (location.pathname.startsWith("/buyorders")) return "buyorders"
@@ -143,9 +143,7 @@ export function MarketSearchArea(props: {
             <ToggleButton value="market">
               {t("market.listings", "Listings")}
             </ToggleButton>
-            <ToggleButton value="bulk">
-              {t("market.bulk", "Bulk")}
-            </ToggleButton>
+            <ToggleButton value="bulk">{t("market.bulk", "Bulk")}</ToggleButton>
             <ToggleButton value="buyorders">
               {t("market.buyOrders", "Buy Orders")}
             </ToggleButton>
