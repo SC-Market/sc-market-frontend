@@ -29,7 +29,7 @@ export const tokensApi = serviceApi.injectEndpoints({
   endpoints: (builder) => ({
     // Get all tokens for the current user
     getTokens: builder.query<ApiToken[], void>({
-      query: () => "/tokens",
+      query: () => "/api/tokens",
       transformResponse: unwrapResponse,
       providesTags: (result) =>
         result
@@ -42,7 +42,7 @@ export const tokensApi = serviceApi.injectEndpoints({
 
     // Get a specific token
     getToken: builder.query<ApiToken, string>({
-      query: (tokenId) => `/tokens/${tokenId}`,
+      query: (tokenId) => `/api/tokens/${tokenId}`,
       transformResponse: unwrapResponse,
       providesTags: (result, error, tokenId) => [
         { type: "ApiToken", id: tokenId },
@@ -55,7 +55,7 @@ export const tokensApi = serviceApi.injectEndpoints({
       CreateTokenRequest
     >({
       query: (body) => ({
-        url: "/tokens",
+        url: "/api/tokens",
         method: "POST",
         body,
       }),
@@ -69,7 +69,7 @@ export const tokensApi = serviceApi.injectEndpoints({
       { tokenId: string; body: UpdateTokenRequest }
     >({
       query: ({ tokenId, body }) => ({
-        url: `/tokens/${tokenId}`,
+        url: `/api/tokens/${tokenId}`,
         method: "PUT",
         body,
       }),
@@ -83,7 +83,7 @@ export const tokensApi = serviceApi.injectEndpoints({
     // Delete a token
     deleteToken: builder.mutation<void, string>({
       query: (tokenId) => ({
-        url: `/tokens/${tokenId}`,
+        url: `/api/tokens/${tokenId}`,
         method: "DELETE",
       }),
       invalidatesTags: (result, error, tokenId) => [
@@ -98,7 +98,7 @@ export const tokensApi = serviceApi.injectEndpoints({
       { tokenId: string; body: ExtendTokenRequest }
     >({
       query: ({ tokenId, body }) => ({
-        url: `/tokens/${tokenId}/extend`,
+        url: `/api/tokens/${tokenId}/extend`,
         method: "POST",
         body,
       }),
@@ -111,7 +111,7 @@ export const tokensApi = serviceApi.injectEndpoints({
 
     // Get token statistics
     getTokenStats: builder.query<TokenStats, string>({
-      query: (tokenId) => `/tokens/${tokenId}/stats`,
+      query: (tokenId) => `/api/tokens/${tokenId}/stats`,
       transformResponse: unwrapResponse,
       providesTags: (result, error, tokenId) => [
         { type: "ApiToken", id: tokenId },
@@ -120,7 +120,7 @@ export const tokensApi = serviceApi.injectEndpoints({
 
     // Get contractors for token creation
     getContractorsForTokens: builder.query<Contractor[], void>({
-      query: () => "/contractors",
+      query: () => "/api/contractors",
       transformResponse: (response: { data: Contractor[] }) => response.data,
     }),
   }),
