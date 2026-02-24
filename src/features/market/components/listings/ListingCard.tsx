@@ -800,13 +800,20 @@ export const ItemListingBase = React.memo(
 export const LISTING_CARD_WIDTH = 200
 
 // Reusable wrapper for consistent listing sizing
-// Now uses 100% width to work with Grid layout
-export function ListingWrapper({ children }: { children: React.ReactNode }) {
+// useFixedWidth: true for horizontal scrolling (landing page), false for Grid layout
+export function ListingWrapper({ 
+  children, 
+  useFixedWidth = false 
+}: { 
+  children: React.ReactNode
+  useFixedWidth?: boolean
+}) {
   return (
     <Box
       sx={{
-        width: "100%",
+        width: useFixedWidth ? { xs: "min(50vw, 200px)", sm: LISTING_CARD_WIDTH } : "100%",
         height: "100%",
+        flexShrink: useFixedWidth ? 0 : undefined,
       }}
     >
       {children}
