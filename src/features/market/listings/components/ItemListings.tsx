@@ -199,7 +199,7 @@ export function DisplayListingsHorizontal(props: {
         <Box display={"flex"} gap={1}>
           {listings.map((item, index) => {
             return (
-              <ListingWrapper key={item.details_id}>
+              <ListingWrapper key={item.details_id} useFixedWidth={true}>
                 <ListingBase listing={item} index={index} />
               </ListingWrapper>
             )
