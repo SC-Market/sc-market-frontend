@@ -1,4 +1,6 @@
 import { Grid, Tab, Tabs } from "@mui/material"
+import { useTheme } from "@mui/material/styles"
+import useMediaQuery from "@mui/material/useMediaQuery"
 import InfoIcon from "@mui/icons-material/Info"
 import { a11yProps, TabPanel } from "../../components/tabs/Tabs"
 import React from "react"
@@ -26,10 +28,20 @@ import { MobileNavSettings } from "../../views/settings/MobileNavSettings"
 import { useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 
+const MOBILE_NAV_TAB_INDEX = 9
+
 export function SettingsPage() {
   const { t } = useTranslation()
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
 
   const [page, setPage] = React.useState(0)
+
+  React.useEffect(() => {
+    if (!isMobile && page === MOBILE_NAV_TAB_INDEX) {
+      setPage(8)
+    }
+  }, [isMobile, page])
 
   const handleChange = (event: React.SyntheticEvent, newPage: number) => {
     setPage(newPage)
@@ -104,12 +116,14 @@ export function SettingsPage() {
             {...a11yProps(8)}
             value={8}
           />
-          <Tab
-            label={t("settings.mobileNav.title")}
-            icon={<PhoneAndroidRounded />}
-            {...a11yProps(9)}
-            value={9}
-          />
+          {isMobile && (
+            <Tab
+              label={t("settings.mobileNav.title")}
+              icon={<PhoneAndroidRounded />}
+              {...a11yProps(9)}
+              value={9}
+            />
+          )}
         </Tabs>
       </Grid>
 
@@ -142,9 +156,11 @@ export function SettingsPage() {
         <TabPanel value={page} index={8}>
           <EmailSettings />
         </TabPanel>
-        <TabPanel value={page} index={9}>
-          <MobileNavSettings />
-        </TabPanel>
+        {isMobile && (
+          <TabPanel value={page} index={9}>
+            <MobileNavSettings />
+          </TabPanel>
+        )}
       </Grid>
     </StandardPageLayout>
   )

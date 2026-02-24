@@ -49,7 +49,7 @@ export function ItemMarketView() {
               direction="row"
               justifyContent="center"
               spacing={theme.layoutSpacing.layout}
-              sx={{ width: "100%", maxWidth: "xxxl" }}
+              sx={{ maxWidth: "xxxl" }}
             >
               {/* Desktop: Persistent sidebar */}
               <Paper

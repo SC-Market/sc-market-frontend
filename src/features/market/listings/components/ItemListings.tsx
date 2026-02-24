@@ -801,7 +801,7 @@ export function ItemListings(props: {
   }
 
   return (
-    <Grid container spacing={1} sx={{ width: "100%" }}>
+    <Grid container spacing={1}>
       <div ref={ref} style={{ position: "absolute", top: 0 }} />
       
       <Grid item xs={12}>
