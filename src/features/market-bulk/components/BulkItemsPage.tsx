@@ -1,10 +1,9 @@
 import React, { useEffect, useState, Suspense } from "react"
-import { HeaderTitle } from "../../../components/typography/HeaderTitle"
-import { ContainerGrid } from "../../../components/layout/ContainerGrid"
-import { Box, Grid, Divider, Paper, useMediaQuery } from "@mui/material"
+import { Box, Container, Divider, Grid, Paper, Stack, Typography, useMediaQuery } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { Page } from "../../../components/metadata/Page"
+import { OpenLayout } from "../../../components/layout/ContainerGrid"
 import { MarketActions } from "../../market/components/MarketActions"
 import { HideOnScroll } from "../../market/components/MarketNavArea"
 import { MarketNavArea } from "../../market/components/MarketNavArea"
@@ -21,7 +20,7 @@ export function BulkItemsPage() {
   const { t } = useTranslation()
   const [open, setOpen] = useState(false)
   const theme = useTheme<ExtendedTheme>()
-  const xs = useMediaQuery(theme.breakpoints.down("md"))
+  const showMobileSidebar = useMediaQuery(theme.breakpoints.down("lg"))
 
   const [marketSearch, setMarketSearch] = useMarketSearch()
   useEffect(() => {
@@ -35,66 +34,93 @@ export function BulkItemsPage() {
   return (
     <Page title={t("market.bulkItems")}>
       <MarketSidebarContext.Provider value={[open, setOpen]}>
-        {xs && <MarketSidebar />}
+        {showMobileSidebar && <MarketSidebar />}
 
-        <ContainerGrid maxWidth={"xxxl"} sidebarOpen={false}>
-          <Grid
-            container
-            spacing={theme.layoutSpacing.layout}
-            justifyContent={"center"}
+        <OpenLayout sidebarOpen={true} noMobilePadding={true}>
+          {/* Header: same structure as MarketPage (title + actions, no tabs) */}
+          <Container
+            maxWidth="xxl"
+            sx={{
+              paddingTop: { xs: 2, sm: 8 },
+              paddingX: { xs: theme.spacing(1), sm: theme.spacing(3) },
+              marginX: "auto",
+            }}
           >
-            {xs && (
-              <>
-                <Grid item xs={12}>
-                  <HideOnScroll>
-                    <MarketNavArea />
-                  </HideOnScroll>
-                </Grid>
-
-                <Grid item xs={12}>
-                  <Divider light />
-                </Grid>
-              </>
-            )}
-
-            <Grid item xs={12}>
-              <Grid
-                container
-                justifyContent={"space-between"}
-                spacing={theme.layoutSpacing.compact}
-              >
-                <HeaderTitle lg={7} xl={7}>
+            <Grid
+              container
+              spacing={{ xs: theme.layoutSpacing.component, sm: theme.layoutSpacing.layout }}
+              sx={{ marginBottom: { xs: 2, sm: 4 } }}
+              alignItems="center"
+              justifyContent="space-between"
+            >
+              <Grid item xs={12} sm="auto">
+                <Typography
+                  variant="h4"
+                  sx={{
+                    fontWeight: "bold",
+                    fontSize: { xs: "1.5rem", sm: "2.125rem" },
+                  }}
+                  color="text.secondary"
+                >
                   {t("market.bulkListings")}
-                </HeaderTitle>
-
+                </Typography>
+              </Grid>
+              <Grid item xs={12} sm="auto" sx={{ display: "flex", justifyContent: { xs: "stretch", sm: "flex-end" } }}>
                 <MarketActions />
               </Grid>
             </Grid>
+            <Divider light sx={{ mt: 2, mb: 2 }} />
+          </Container>
 
-            {!xs && (
-              <Grid item xs={12} md="auto">
-                <Paper
-                  sx={{
-                    position: "sticky",
-                    top: "calc(64px + 16px)",
-                    maxHeight: "calc(100vh - 64px - 32px)",
-                    width: 300,
-                    flexShrink: 0,
-                    overflowY: "auto",
-                  }}
+          {/* Content: same as ItemMarketView – Container xxxl, sidebar + listings */}
+          <Container maxWidth="xxxl" sx={{ padding: 0 }}>
+            <Box sx={{ display: "flex", justifyContent: "center" }}>
+              {showMobileSidebar ? (
+                <Grid container spacing={theme.layoutSpacing.layout}>
+                  <Grid item xs={12}>
+                    <HideOnScroll>
+                      <MarketNavArea />
+                    </HideOnScroll>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Divider light />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Suspense fallback={<MarketTabLoader />}>
+                      <BulkListingsRefactor />
+                    </Suspense>
+                  </Grid>
+                </Grid>
+              ) : (
+                <Stack
+                  direction="row"
+                  justifyContent="center"
+                  spacing={theme.layoutSpacing.layout}
+                  sx={{ width: "100%", maxWidth: "xxxl" }}
                 >
-                  <MarketSidebar />
-                </Paper>
-              </Grid>
-            )}
-
-            <Grid item xs={12} md sx={{ transition: "all 0.3s ease" }}>
-              <Suspense fallback={<MarketTabLoader />}>
-                <BulkListingsRefactor />
-              </Suspense>
-            </Grid>
-          </Grid>
-        </ContainerGrid>
+                  <Paper
+                    sx={{
+                      position: "sticky",
+                      top: "calc(64px + 16px)",
+                      maxHeight: "calc(100vh - 64px - 32px)",
+                      height: "fit-content",
+                      width: 300,
+                      flexShrink: 0,
+                      overflowY: "auto",
+                    }}
+                  >
+                    <MarketSidebar />
+                  </Paper>
+                  <Box sx={{ flex: 1 }}>
+                    <Suspense fallback={<MarketTabLoader />}>
+                      <BulkListingsRefactor />
+                    </Suspense>
+                  </Box>
+                </Stack>
+              )}
+            </Box>
+          </Container>
+        </OpenLayout>
       </MarketSidebarContext.Provider>
     </Page>
   )
