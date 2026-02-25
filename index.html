@@ -119,9 +119,30 @@
     <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
 
     <script language="javascript">
-      window.addEventListener("vite:preloadError", (event) => {
+      window.addEventListener("vite:preloadError", () => {
         window.location.reload() // Reload the page on a vite preload error
       })
+      // Reload once when a critical app script fails to load (e.g. 404 after deploy)
+      // Uses sessionStorage to avoid an infinite reload loop; cleared when app loads (see index.tsx)
+      ;(function () {
+        var RELOAD_KEY = "scmarket_asset_404_reload"
+        window.addEventListener(
+          "error",
+          function (event) {
+            if (event.target && event.target.tagName === "SCRIPT") {
+              var src = (event.target.src || event.target.getAttribute("src") || "").toString()
+              var isOurAsset =
+                src.indexOf("/assets/") !== -1 ||
+                (src.indexOf(window.location.origin) === 0 && /\.(js|mjs)$/.test(src))
+              if (isOurAsset && !sessionStorage.getItem(RELOAD_KEY)) {
+                sessionStorage.setItem(RELOAD_KEY, "1")
+                window.location.reload()
+              }
+            }
+          },
+          true
+        )
+      })()
     </script>
   </head>
   <body>
