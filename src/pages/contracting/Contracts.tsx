@@ -6,7 +6,6 @@ import {
   ContractSearchContext,
   ContractSearchState,
 } from "../../hooks/contract/ContractSearch"
-import FilterListIcon from "@mui/icons-material/FilterList"
 import { FiltersFAB } from "../../components/mobile/FiltersFAB"
 import {
   Divider,
@@ -27,7 +26,8 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { MarketSidebarContext } from "../../features/market/hooks/MarketSidebar"
 import { ServiceSidebarContext } from "../../hooks/contract/ServiceSidebar"
 import { a11yProps, TabPanel } from "../../components/tabs/Tabs"
-import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
+import { OpenLayout } from "../../components/layout/ContainerGrid"
+import { Page } from "../../components/metadata/Page"
 import { LazySection } from "../../components/layout/LazySection"
 
 const ItemMarketView = lazy(() =>
@@ -61,10 +61,15 @@ export function Contracts() {
   const theme = useTheme<ExtendedTheme>()
   const location = useLocation()
   const navigate = useNavigate()
-  const xs = useMediaQuery(theme.breakpoints.down("md"))
+  const showMobileSidebar = useMediaQuery(theme.breakpoints.down("lg"))
   const [marketSidebarOpen, setMarketSidebarOpen] = useState(false)
   const [serviceSidebarOpen, setServiceSidebarOpen] = useState(false)
-  const [contractSidebarOpen, setContractSidebarOpen] = useState(!xs)
+  const [contractSearchState, setContractSearchState] = useState<
+    ContractSearchState
+  >({ query: "", sort: "date-old" })
+  const [contractSidebarOpen, setContractSidebarOpen] = useState(
+    !showMobileSidebar,
+  )
 
   const pages = ["/market/services", "/market", "/contracts"]
   const tabPage = useMemo(
@@ -76,13 +81,7 @@ export function Contracts() {
   )
 
   return (
-    <StandardPageLayout
-      title={t("contracts.contractsTitle")}
-      canonicalUrl={undefined}
-      sidebarOpen={true}
-      noMobilePadding={true}
-      maxWidth={false}
-    >
+    <Page title={t("contracts.contractsTitle")}>
       <MarketSidebarContext.Provider
         value={[marketSidebarOpen, setMarketSidebarOpen]}
       >
@@ -90,21 +89,21 @@ export function Contracts() {
           value={[serviceSidebarOpen, setServiceSidebarOpen]}
         >
           <ContractSearchContext.Provider
-            value={useState<ContractSearchState>({
-              query: "",
-              sort: "date-old",
-            })}
+            value={[contractSearchState, setContractSearchState]}
           >
             <ContractSidebarContext.Provider
               value={[contractSidebarOpen, setContractSidebarOpen]}
             >
-              <Container
-                maxWidth={"xxl"}
-                sx={{
-                  paddingTop: { xs: 2, sm: 8 },
-                  paddingX: { xs: theme.spacing(1), sm: theme.spacing(3) },
-                }}
-              >
+              <OpenLayout sidebarOpen={true} noMobilePadding={true}>
+                {/* Header: same structure as MarketPage for consistent padding */}
+                <Container
+                  maxWidth="xxl"
+                  sx={{
+                    paddingTop: { xs: 2, sm: 8 },
+                    paddingX: { xs: theme.spacing(1), sm: theme.spacing(3) },
+                    marginX: "auto",
+                  }}
+                >
                 <Grid
                   container
                   spacing={{
@@ -191,6 +190,7 @@ export function Contracts() {
                     )}
                   </Grid>
                 </Grid>
+                <Divider light sx={{ mt: 2, mb: 2 }} />
               </Container>
 
               <TabPanel value={tabPage} index={1}>
@@ -203,17 +203,17 @@ export function Contracts() {
                 />
               </TabPanel>
               <TabPanel value={tabPage} index={2}>
-                <Container maxWidth="xxl" sx={{ padding: 0 }}>
+                {/* Content: same as MarketPage/BuyOrderItemsPage – Container xxxl, sidebar + listings */}
+                <Container maxWidth="xxxl" sx={{ padding: 0 }}>
                   <Box sx={{ display: "flex", justifyContent: "center" }}>
-                    {xs ? (
+                    {showMobileSidebar ? (
                       <Grid container spacing={theme.layoutSpacing.layout}>
                         <Grid item xs={12}>
                           <Divider light />
                         </Grid>
-
-                        {/* Mobile: BottomSheet sidebar */}
-                        <ContractSidebar />
-
+                        <Grid item xs={12}>
+                          <ContractSidebar />
+                        </Grid>
                         <Grid item xs={12}>
                           <Grid container spacing={theme.layoutSpacing.layout}>
                             <ContractListings />
@@ -225,7 +225,7 @@ export function Contracts() {
                         direction="row"
                         justifyContent="center"
                         spacing={theme.layoutSpacing.layout}
-                        sx={{ width: "100%", maxWidth: "xxl" }}
+                        sx={{ width: "100%", maxWidth: "xxxl" }}
                       >
                         {contractSidebarOpen && (
                           <Paper
@@ -243,7 +243,7 @@ export function Contracts() {
                           </Paper>
                         )}
 
-                        <Box sx={{ flex: 1 }}>
+                        <Box sx={{ flex: 1, minWidth: 0 }}>
                           <Grid container spacing={theme.layoutSpacing.layout}>
                             <ContractListings />
                           </Grid>
@@ -254,28 +254,29 @@ export function Contracts() {
                 </Container>
               </TabPanel>
 
-              {xs && tabPage === 1 && (
+              {showMobileSidebar && tabPage === 1 && (
                 <FiltersFAB
                   onClick={() => setMarketSidebarOpen((prev) => !prev)}
                   label={t("market.toggleSidebar")}
                 />
               )}
-              {xs && tabPage === 0 && (
+              {showMobileSidebar && tabPage === 0 && (
                 <FiltersFAB
                   onClick={() => setServiceSidebarOpen((prev) => !prev)}
                   label={t("service_market.toggle_sidebar")}
                 />
               )}
-              {xs && tabPage === 2 && (
+              {showMobileSidebar && tabPage === 2 && (
                 <FiltersFAB
                   onClick={() => setContractSidebarOpen((prev) => !prev)}
                   label={t("contracts.toggleSidebar")}
                 />
               )}
+            </OpenLayout>
             </ContractSidebarContext.Provider>
           </ContractSearchContext.Provider>
         </ServiceSidebarContext.Provider>
       </MarketSidebarContext.Provider>
-    </StandardPageLayout>
+    </Page>
   )
 }
