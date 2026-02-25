@@ -262,6 +262,9 @@ export function AggregateBuyOrderListingBase(props: {
                 currentTarget.src = FALLBACK_IMAGE_URL
               }}
               sx={{
+                width: "100%",
+                objectFit: "cover",
+                aspectRatio: "16/9",
                 ...(theme.palette.mode === "dark"
                   ? { height: "100%" }
                   : { height: mediaHeight }),

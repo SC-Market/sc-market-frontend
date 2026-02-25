@@ -111,7 +111,7 @@ export function BulkItemsPage() {
                   >
                     <MarketSidebar />
                   </Paper>
-                  <Box sx={{ flex: 1 }}>
+                  <Box sx={{ flex: 1, minWidth: 0 }}>
                     <Suspense fallback={<MarketTabLoader />}>
                       <BulkListingsRefactor />
                     </Suspense>

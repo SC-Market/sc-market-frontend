@@ -89,14 +89,12 @@ export class ErrorBoundary extends Component<
       this.props.onError(error, errorInfo)
     }
 
-    // Log to console in development
-    if (import.meta.env.DEV) {
-      console.error(
-        `[ErrorBoundary${this.props.name ? ` ${this.props.name}` : ""}] Error caught:`,
-        error,
-        errorInfo,
-      )
-    }
+    // Always log so it's visible in console when "Something went wrong" is shown
+    console.error(
+      `[ErrorBoundary${this.props.name ? ` ${this.props.name}` : ""}] Error caught:`,
+      error,
+      errorInfo,
+    )
 
     // TODO: Log to error tracking service (e.g., Sentry)
     // Example:

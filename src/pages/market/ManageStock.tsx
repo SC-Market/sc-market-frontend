@@ -5,8 +5,6 @@ import {
   Paper,
   useMediaQuery,
   Box,
-  Tabs,
-  Tab,
 } from "@mui/material"
 import AddRounded from "@mui/icons-material/AddRounded"
 import FilterListIcon from "@mui/icons-material/FilterList"
@@ -18,7 +16,7 @@ import {
 } from "../../features/market/components/ItemStock"
 import { useMarketSearch } from "../../features/market"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
-import { Link, useNavigate, useLocation } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { GridRowSelectionModel } from "@mui/x-data-grid"
 import { useTheme } from "@mui/material/styles"
@@ -26,6 +24,7 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { BottomSheet } from "../../components/mobile/BottomSheet"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { usePageManageStock } from "../../features/market/hooks/usePageManageStock"
+import { ManageListingsTabBar } from "../../features/market/components/ManageListingsTabBar"
 
 export function ManageStock() {
   const { t } = useTranslation()
@@ -33,8 +32,6 @@ export function ManageStock() {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const [open, setOpen] = useState(!isMobile)
   const [searchState, setSearchState] = useMarketSearch()
-  const navigate = useNavigate()
-  const location = useLocation()
   const pageData = usePageManageStock()
 
   useEffect(() => {
@@ -50,16 +47,6 @@ export function ManageStock() {
     type: "include",
     ids: new Set(),
   })
-
-  const currentTab = location.pathname === "/market/manage" ? 0 : 1
-
-  const handleTabChange = (_: any, newValue: number) => {
-    if (newValue === 0) {
-      navigate("/market/manage")
-    } else {
-      navigate("/market/manage-stock")
-    }
-  }
 
   return (
     <StandardPageLayout
@@ -90,7 +77,7 @@ export function ManageStock() {
             )}
 
             <Grid item xs={12}>
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1, flexWrap: "wrap" }}>
                 {isMobile && (
                   <Button
                     variant="outlined"
@@ -105,23 +92,21 @@ export function ManageStock() {
                     {t("market.filters", "Filters")}
                   </Button>
                 )}
-                <Tabs value={currentTab} onChange={handleTabChange}>
-                  <Tab
-                    label={t("sidebar.manage_listings", "Manage Listings")}
-                  />
-                  <Tab label={t("sidebar.manage_stock", "Manage Stock")} />
-                </Tabs>
-                <Box sx={{ flexGrow: 1 }} />
-                <Link to="/market/create" style={{ textDecoration: "none" }}>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    startIcon={<AddRounded />}
-                    size="large"
-                  >
-                    {t("market.createListing", "Create Listing")}
-                  </Button>
-                </Link>
+                <ManageListingsTabBar
+                  title={t("sidebar.manage_listings", "Manage Listings")}
+                  rightAction={
+                    <Link to="/market/create" style={{ textDecoration: "none" }}>
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        startIcon={<AddRounded />}
+                        size="large"
+                      >
+                        {t("market.createListing", "Create Listing")}
+                      </Button>
+                    </Link>
+                  }
+                />
               </Box>
             </Grid>
 

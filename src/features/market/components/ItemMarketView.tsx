@@ -49,7 +49,7 @@ export function ItemMarketView() {
               direction="row"
               justifyContent="center"
               spacing={theme.layoutSpacing.layout}
-              sx={{ maxWidth: "xxxl" }}
+              sx={{ width: "100%", maxWidth: "xxxl" }}
             >
               {/* Desktop: Persistent sidebar */}
               <Paper
@@ -66,8 +66,8 @@ export function ItemMarketView() {
                 <MarketSidebar />
               </Paper>
 
-              {/* Main content area */}
-              <Box sx={{ flex: 1 }}>
+              {/* Main content area – minWidth: 0 so flex child can shrink and grid gets full width */}
+              <Box sx={{ flex: 1, minWidth: 0 }}>
                 <ItemListings />
               </Box>
             </Stack>
