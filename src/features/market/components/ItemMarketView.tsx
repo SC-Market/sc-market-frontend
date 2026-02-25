@@ -10,20 +10,17 @@ import {
 } from "@mui/material"
 import { HideOnScroll, MarketNavArea } from "./MarketNavArea"
 import { ItemListings } from "../views/ItemListings"
-import { useMarketSidebar, MarketSidebarContext } from ".."
-import React, { useState } from "react"
+import React from "react"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
-import { LISTING_CARD_WIDTH } from "./listings/ListingCard.tsx"
 
 export function ItemMarketView() {
   const theme = useTheme<ExtendedTheme>()
   const showMobileSidebar = useMediaQuery(theme.breakpoints.down("lg"))
-  const [open, setOpen] = useState(false)
 
   return (
-    <MarketSidebarContext.Provider value={[open, setOpen]}>
-      {/* Mobile/Tablet: Use bottom sheet */}
+    <>
+      {/* Mobile/Tablet: Use bottom sheet – controlled by MarketPage's FAB via MarketSidebarContext */}
       {showMobileSidebar && <MarketSidebar />}
 
       <Container maxWidth={"xxxl"} sx={{ padding: 0 }}>
@@ -74,6 +71,6 @@ export function ItemMarketView() {
           )}
         </Box>
       </Container>
-    </MarketSidebarContext.Provider>
+    </>
   )
 }

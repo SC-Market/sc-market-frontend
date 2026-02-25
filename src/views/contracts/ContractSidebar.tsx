@@ -42,10 +42,9 @@ export function ContractSidebar() {
   const [, setSearchState] = useContractSearch()
   const [drawerOpen] = useDrawerOpen()
 
-  const xs = useMediaQuery(theme.breakpoints.down("lg"))
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const isMobile = useMediaQuery(theme.breakpoints.down("lg"))
 
-  // Always open on desktop
+  // Always open on desktop (lg and up)
   useEffect(() => {
     if (!isMobile) {
       setOpen(true)
