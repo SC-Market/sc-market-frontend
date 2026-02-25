@@ -447,6 +447,7 @@
     "editMarketListing": "Edit Market Listing",
     "editMultipleListing": "Edit Multiple Listing",
     "createMarketListing": "Create Market Listing",
+    "createListing": "Create Listing",
     "bulkListingTab": "Bulk Listing",
     "uniqueListingTab": "Unique Listing",
     "auctionTab": "Auction",
@@ -483,6 +484,38 @@
     "createListingTooltip": "Create a new listing",
     "myCart": "My Cart",
     "myCartTooltip": "View your shopping cart"
+  },
+  "LocationSelector": {
+    "noLocations": "No locations found",
+    "location": "Location",
+    "searchOrCreate": "Search or create location..."
+  },
+  "AllStockLots": {
+    "listing": "Listing",
+    "quantity": "Quantity",
+    "owner": "Owner",
+    "location": "Location",
+    "listed": "Listed",
+    "notes": "Notes",
+    "actions": "Actions",
+    "title": "All Stock Lots",
+    "addLot": "Add Lot"
+  },
+  "stock": {
+    "listing": "Listing",
+    "order": "Order",
+    "quantity": "Quantity",
+    "location": "Location",
+    "user": "User",
+    "allocatedAt": "Allocated",
+    "allocatedStock": "Allocated Stock",
+    "filters": "Filters",
+    "searchLots": "Search lots...",
+    "status": "Status",
+    "available": "Available",
+    "allocated": "Allocated",
+    "minQuantity": "Min Qty",
+    "maxQuantity": "Max Qty"
   },
   "navigation": {
     "goBack": "Go Back"
@@ -2351,6 +2384,7 @@
     "save": "Save",
     "remove": "Remove",
     "reset": "Reset to Default",
+    "yes": "Yes",
     "buttons": {
       "save": "Save"
     },
@@ -2403,6 +2437,7 @@
     "error": "Failed to unblock user"
   },
   "common": {
+    "all": "All",
     "cancel": "Cancel",
     "loading": "Loading",
     "error": "Error",

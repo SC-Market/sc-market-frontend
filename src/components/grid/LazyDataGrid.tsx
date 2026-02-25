@@ -22,28 +22,20 @@ export function LazyDataGrid(props: DataGridProps) {
     getMuiDataGridLocale(i18n.language).then(setGridLocale)
   }, [i18n.language])
 
-  const existingBasePagination = props.slotProps?.basePagination as Record<string, unknown> | undefined
-  const existingSelectProps =
-    existingBasePagination && typeof existingBasePagination.SelectProps === "object"
-      ? (existingBasePagination.SelectProps as Record<string, unknown>)
-      : {}
-  const existingMenuProps =
-    existingSelectProps && typeof existingSelectProps.MenuProps === "object"
-      ? (existingSelectProps.MenuProps as Record<string, unknown>)
-      : {}
-  const slotProps: DataGridProps["slotProps"] = {
+  const existing = props.slotProps?.basePagination as { SelectProps?: { MenuProps?: Record<string, unknown> } } | undefined
+  const slotProps = {
     ...props.slotProps,
     basePagination: {
-      ...(existingBasePagination ?? {}),
+      ...existing,
       SelectProps: {
         MenuProps: {
           ...PAGINATION_SELECT_MENU_PROPS,
-          ...existingMenuProps,
+          ...existing?.SelectProps?.MenuProps,
         },
-        ...existingSelectProps,
+        ...existing?.SelectProps,
       },
-    } as DataGridProps["slotProps"] extends { basePagination?: infer P } ? P : never,
-  }
+    },
+  } as DataGridProps["slotProps"]
 
   return (
     <Suspense fallback={<Skeleton variant="rectangular" height={400} />}>

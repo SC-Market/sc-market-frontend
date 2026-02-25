@@ -10,12 +10,9 @@ import {
   Box,
   Grid,
   Paper,
-  Tabs,
   Button,
   useMediaQuery,
-  Tab,
 } from "@mui/material"
-import { useNavigate, useLocation } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
@@ -28,21 +25,9 @@ import { StockSearchProvider } from "./stock/StockSearchContext"
 
 export function ManageStockPage() {
   const { t } = useTranslation()
-  const navigate = useNavigate()
-  const location = useLocation()
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const [sidebarOpen, setSidebarOpen] = useState(!isMobile)
-
-  const currentTab = location.pathname === "/market/manage" ? 0 : 1
-
-  const handleTabChange = (_: any, newValue: number) => {
-    if (newValue === 0) {
-      navigate("/market/manage")
-    } else {
-      navigate("/market/manage-stock")
-    }
-  }
 
   return (
     <StockSearchProvider>
@@ -80,10 +65,6 @@ export function ManageStockPage() {
                 {t("market.filters", "Filters")}
               </Button>
             )}
-            <Tabs value={currentTab} onChange={handleTabChange}>
-              <Tab label={t("sidebar.manage_listings", "Manage Listings")} />
-              <Tab label={t("sidebar.manage_stock", "Manage Stock")} />
-            </Tabs>
           </Box>
         </Grid>
 

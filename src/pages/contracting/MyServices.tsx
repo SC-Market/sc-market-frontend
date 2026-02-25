@@ -8,38 +8,46 @@ import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { usePageMyServices } from "../../features/contracting/hooks/usePageMyServices"
+import { ManageListingsTabBar } from "../../features/market/components/ManageListingsTabBar"
 
 export function MyServicesPage(props: {}) {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const pageData = usePageMyServices()
 
-  const headerActions = (
-    <Link
-      to={"/order/service/create"}
-      style={{ color: "inherit", textDecoration: "none" }}
-    >
-      <Button
-        color={"secondary"}
-        startIcon={<CreateRounded />}
-        variant={"contained"}
-        size={"large"}
-      >
-        {t("services.createService")}
-      </Button>
-    </Link>
-  )
-
   return (
     <StandardPageLayout
-      title={t("services.myServices")}
+      title={t("sidebar.manage_services", "Manage Services")}
+      breadcrumbs={[
+        { label: t("sidebar.market_short"), href: "/market" },
+        { label: t("sidebar.manage_services", "Manage Services") },
+      ]}
       sidebarOpen={true}
       maxWidth="lg"
       isLoading={pageData.isLoading}
       error={pageData.error}
-      headerTitle={t("services.myServices")}
-      headerActions={headerActions}
     >
+      <Grid item xs={12}>
+        <ManageListingsTabBar
+          title={t("sidebar.manage_services", "Manage Services")}
+          rightAction={
+            <Link
+              to={"/order/service/create"}
+              style={{ color: "inherit", textDecoration: "none" }}
+            >
+              <Button
+                color={"secondary"}
+                startIcon={<CreateRounded />}
+                variant={"contained"}
+                size={"large"}
+              >
+                {t("services.createService")}
+              </Button>
+            </Link>
+          }
+        />
+      </Grid>
+
       <Grid item xs={12}>
         <Divider light />
       </Grid>

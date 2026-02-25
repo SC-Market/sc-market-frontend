@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import {
   Box,
   Button,
@@ -111,6 +111,15 @@ export function ErrorFallback({
         defaultValue:
           "This component encountered an error. You can try again or continue using other parts of the application.",
       })
+
+  useEffect(() => {
+    console.error("[ErrorFallback] Showing error UI", {
+      path: typeof window !== "undefined" ? window.location.pathname : undefined,
+      error: error?.message ?? String(error),
+      stack: error?.stack,
+      componentStack: errorInfo?.componentStack,
+    })
+  }, [error, errorInfo])
 
   const handleGoHome = () => {
     navigate(homePath)

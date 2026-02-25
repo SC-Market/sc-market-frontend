@@ -67,8 +67,10 @@ export const ROUTE_PREFETCH_MAP: Record<string, string[]> = {
   "/profile": ["/profile/:tab"],
 
   // Market listings management - prefetch related pages
-  "/market/me": ["/market/manage", "/market/manage-stock"],
-  "/market/manage": ["/market/manage-stock"],
+  "/market/me": ["/market/manage", "/market/manage-stock", "/order/services"],
+  "/market/manage": ["/market/manage-stock", "/order/services"],
+  "/market/manage-stock": ["/market/manage", "/order/services"],
+  "/order/services": ["/market/manage", "/market/manage-stock"],
 
   // Dashboard - prefetch common next actions
   "/dashboard": ["/orders", "/myfleet", "/market/cart"],

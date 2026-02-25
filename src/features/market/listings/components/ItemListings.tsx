@@ -630,8 +630,8 @@ export function DisplayBuyOrderListings(props: {
     <Grid container spacing={1} sx={{ width: "100%" }}>
       <div ref={ref} style={{ position: "absolute", top: 0 }} />
 
-      <Grid item xs={12}>
-        <Grid container spacing={1}>
+      <Grid item xs={12} sx={{ width: "100%", minWidth: 0 }}>
+        <Grid container spacing={1} sx={{ width: "100%" }}>
           {props.loading
             ? new Array(perPage)
                 .fill(undefined)

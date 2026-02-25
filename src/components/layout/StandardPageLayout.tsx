@@ -128,6 +128,11 @@ export function StandardPageLayout(
       error as FetchBaseQueryError | SerializedError | undefined,
     )
   ) {
+    console.error("[StandardPageLayout] Page error – showing error page", {
+      path: typeof window !== "undefined" ? window.location.pathname : undefined,
+      title: title ?? undefined,
+      error,
+    })
     return <ErrorPage />
   }
 
