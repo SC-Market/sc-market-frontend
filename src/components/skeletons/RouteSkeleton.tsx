@@ -1,8 +1,12 @@
-import { Box, Container, Grid } from "@mui/material"
+import { Box, Container, Divider, Grid, Paper, Stack } from "@mui/material"
+import { useTheme } from "@mui/material/styles"
+import useMediaQuery from "@mui/material/useMediaQuery"
 import { BaseSkeleton } from "./BaseSkeleton"
 import { CardSkeleton } from "./CardSkeleton"
 import { TableSkeleton } from "./TableSkeleton"
 import { ListingSkeleton } from "./ListingSkeleton"
+import { OpenLayout } from "../layout/ContainerGrid"
+import type { ExtendedTheme } from "../../hooks/styles/Theme"
 
 /**
  * Generic page skeleton with header and content area
@@ -19,37 +23,124 @@ export function PageSkeleton() {
   )
 }
 
+const LISTING_GRID_BREAKPOINTS = {
+  xs: 6,
+  sm: 4,
+  md: 4,
+  lg: 3,
+  xl: 2.4,
+  xxl: 2,
+  xxxl: 12 / 7,
+} as const
+
 /**
- * Market page skeleton with filters and listings
+ * Market page skeleton – matches MarketPage + ItemMarketView layout (OpenLayout, xxl/xxxl, sidebar + listings grid)
  */
 export function MarketPageSkeleton() {
-  return (
-    <Container maxWidth="xl" sx={{ py: 3 }}>
-      <Grid container spacing={3}>
-        {/* Filters sidebar */}
-        <Grid item xs={12} md={3}>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-            <BaseSkeleton variant="rectangular" width="100%" height={200} />
-            <BaseSkeleton variant="rectangular" width="100%" height={150} />
-            <BaseSkeleton variant="rectangular" width="100%" height={150} />
-          </Box>
-        </Grid>
+  const theme = useTheme<ExtendedTheme>()
+  const showMobileSidebar = useMediaQuery(theme.breakpoints.down("lg"))
 
-        {/* Listings grid */}
-        <Grid item xs={12} md={9}>
-          <Box sx={{ mb: 2 }}>
-            <BaseSkeleton variant="text" width="30%" height={32} />
-          </Box>
-          <Grid container spacing={2}>
-            {[...Array(6)].map((_, index) => (
-              <Grid item xs={12} sm={6} md={4} key={index}>
-                <ListingSkeleton />
-              </Grid>
-            ))}
+  return (
+    <OpenLayout sidebarOpen={true} noMobilePadding={true}>
+      {/* Header: same as MarketPage – Container xxl, title + tabs + actions */}
+      <Container
+        maxWidth="xxl"
+        sx={{
+          paddingTop: { xs: 2, sm: 8 },
+          paddingX: { xs: theme.spacing(1), sm: theme.spacing(3) },
+          marginX: "auto",
+        }}
+      >
+        <Grid
+          container
+          spacing={{
+            xs: theme.layoutSpacing.component,
+            sm: theme.layoutSpacing.layout,
+          }}
+          sx={{ marginBottom: { xs: 2, sm: 4 } }}
+          alignItems="center"
+          justifyContent="space-between"
+        >
+          <Grid item xs={12} sm="auto">
+            <BaseSkeleton
+              variant="text"
+              width={160}
+              height={34}
+              sx={{ fontSize: "2.125rem" }}
+            />
+          </Grid>
+          <Grid item xs={12} sm="auto">
+            <BaseSkeleton
+              variant="rectangular"
+              width={320}
+              height={64}
+              sx={{ borderRadius: 1 }}
+            />
+          </Grid>
+          <Grid item xs={12} sm="auto">
+            <BaseSkeleton variant="rectangular" width={120} height={40} />
           </Grid>
         </Grid>
-      </Grid>
-    </Container>
+        <Divider light sx={{ mt: 2, mb: 2 }} />
+      </Container>
+
+      {/* Content: same as ItemMarketView – Container xxxl, sidebar + listings grid */}
+      <Container maxWidth="xxxl" sx={{ padding: 0 }}>
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
+          {showMobileSidebar ? (
+            <Grid container spacing={theme.layoutSpacing.layout}>
+              <Grid item xs={12}>
+                <BaseSkeleton variant="rectangular" height={64} />
+              </Grid>
+              <Grid item xs={12}>
+                <Divider light />
+              </Grid>
+              <Grid item xs={12}>
+                <Grid container spacing={1} sx={{ width: "100%" }}>
+                  {[...Array(12)].map((_, i) => (
+                    <Grid item key={i} {...LISTING_GRID_BREAKPOINTS}>
+                      <ListingSkeleton index={i} sidebarOpen={false} />
+                    </Grid>
+                  ))}
+                </Grid>
+              </Grid>
+            </Grid>
+          ) : (
+            <Stack
+              direction="row"
+              justifyContent="center"
+              spacing={theme.layoutSpacing.layout}
+              sx={{ width: "100%", maxWidth: "xxxl" }}
+            >
+              <Paper
+                sx={{
+                  width: 300,
+                  flexShrink: 0,
+                  height: 400,
+                  overflow: "hidden",
+                }}
+              >
+                <Box sx={{ p: 2, display: "flex", flexDirection: "column", gap: 2 }}>
+                  <BaseSkeleton variant="rectangular" height={40} />
+                  <BaseSkeleton variant="rectangular" height={56} />
+                  <BaseSkeleton variant="rectangular" height={56} />
+                  <BaseSkeleton variant="rectangular" height={56} />
+                </Box>
+              </Paper>
+              <Box sx={{ flex: 1 }}>
+                <Grid container spacing={1} sx={{ width: "100%" }}>
+                  {[...Array(16)].map((_, i) => (
+                    <Grid item key={i} {...LISTING_GRID_BREAKPOINTS}>
+                      <ListingSkeleton index={i} sidebarOpen={false} />
+                    </Grid>
+                  ))}
+                </Grid>
+              </Box>
+            </Stack>
+          )}
+        </Box>
+      </Container>
+    </OpenLayout>
   )
 }
 

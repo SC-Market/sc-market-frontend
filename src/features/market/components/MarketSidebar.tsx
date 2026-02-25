@@ -37,6 +37,8 @@ import { useNavigate, useLocation } from "react-router-dom"
 export function MarketSearchArea(props: {
   status?: boolean
   hideSearchBar?: boolean
+  /** When true, hide the Listings / Bulk / Buy Orders selector (e.g. on manage listings page) */
+  hideViewModeSelector?: boolean
 }) {
   const theme: ExtendedTheme = useTheme()
   const { t } = useTranslation()
@@ -118,39 +120,41 @@ export function MarketSearchArea(props: {
       }}
     >
       <Grid container spacing={theme.layoutSpacing.layout}>
-        <Grid item xs={12}>
-          <ToggleButtonGroup
-            value={viewMode}
-            exclusive
-            onChange={(_, newValue) => {
-              if (newValue === "market") navigate("/market")
-              else if (newValue === "bulk") navigate("/bulk")
-              else if (newValue === "buyorders") navigate("/buyorders")
-            }}
-            fullWidth
-            size="small"
-            color="secondary"
-            sx={{
-              "& .MuiToggleButton-root": {
-                color: theme.palette.text.secondary,
-                "&.Mui-selected": {
-                  color: theme.palette.secondary.main,
-                  backgroundColor: theme.palette.action.selected,
+        {!props.hideViewModeSelector && (
+          <Grid item xs={12}>
+            <ToggleButtonGroup
+              value={viewMode}
+              exclusive
+              onChange={(_, newValue) => {
+                if (newValue === "market") navigate("/market")
+                else if (newValue === "bulk") navigate("/bulk")
+                else if (newValue === "buyorders") navigate("/buyorders")
+              }}
+              fullWidth
+              size="small"
+              color="secondary"
+              sx={{
+                "& .MuiToggleButton-root": {
+                  color: theme.palette.text.secondary,
+                  "&.Mui-selected": {
+                    color: theme.palette.secondary.main,
+                    backgroundColor: theme.palette.action.selected,
+                  },
                 },
-              },
-            }}
-          >
-            <ToggleButton value="market">
-              {t("market.listings", "Listings")}
-            </ToggleButton>
-            <ToggleButton value="bulk">
-              {t("market.bulk", "Bulk")}
-            </ToggleButton>
-            <ToggleButton value="buyorders">
-              {t("market.buyOrders", "Buy Orders")}
-            </ToggleButton>
-          </ToggleButtonGroup>
-        </Grid>
+              }}
+            >
+              <ToggleButton value="market">
+                {t("market.listings", "Listings")}
+              </ToggleButton>
+              <ToggleButton value="bulk">
+                {t("market.bulk", "Bulk")}
+              </ToggleButton>
+              <ToggleButton value="buyorders">
+                {t("market.buyOrders", "Buy Orders")}
+              </ToggleButton>
+            </ToggleButtonGroup>
+          </Grid>
+        )}
         {!props.hideSearchBar && (
           <>
             <Grid item xs={12}>

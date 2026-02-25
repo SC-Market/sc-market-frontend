@@ -84,7 +84,7 @@ export function ManageStock() {
                 maxHeight="90vh"
               >
                 <Box sx={{ overflowY: "auto", overflowX: "hidden", pb: 2 }}>
-                  <MarketSearchArea status />
+                  <MarketSearchArea status hideViewModeSelector />
                 </Box>
               </BottomSheet>
             )}
@@ -128,7 +128,7 @@ export function ManageStock() {
             {!isMobile && (
               <Grid item xs={12} md={3}>
                 <Paper>
-                  <MarketSearchArea status />
+                  <MarketSearchArea status hideViewModeSelector />
                 </Paper>
               </Grid>
             )}
