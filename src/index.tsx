@@ -10,6 +10,11 @@ import {
   getBugsnagErrorBoundary,
 } from "./util/monitoring/bugsnagLoader"
 
+// Allow future 404-on-deploy reloads: clear the guard set by index.html when we reload after asset 404
+try {
+  sessionStorage.removeItem("scmarket_asset_404_reload")
+} catch (_) {}
+
 const container = document.getElementById("root")
 const root = createRoot(container!)
 
