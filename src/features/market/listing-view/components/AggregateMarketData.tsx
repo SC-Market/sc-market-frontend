@@ -1,5 +1,5 @@
-import React, { useMemo } from "react"
-import { Box, Card, CardContent, Chip, Grid, Typography } from "@mui/material"
+import React, { useMemo, useState } from "react"
+import { Box, Card, CardContent, Chip, Grid, Typography, Tabs, Tab } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import {
   useGetOrCreateAggregateQuery,
@@ -27,6 +27,7 @@ export function AggregateMarketData({
   const theme = useTheme<ExtendedTheme>()
   const { data: aggregate } = useGetOrCreateAggregateQuery(gameItemId)
   const { data: chartData } = useMarketGetAggregateHistoryByIDQuery(gameItemId)
+  const [selectedTab, setSelectedTab] = useState(0)
 
   const priceComparison = useMemo(() => {
     if (!aggregate?.listings.length) return null
@@ -173,65 +174,77 @@ export function AggregateMarketData({
         </Grid>
       )}
 
-      <Section xs={12}>
-        <Grid item xs={12}>
-          <Typography variant="subtitle1" gutterBottom>
-            {t("AggregateMarketData.priceHistory", "Price History")}
-          </Typography>
-          <DynamicKlineChart
-            onInit={(kline: typeof import("klinecharts")) => {
-              const chart = kline.init(`listing-aggregate-chart-${gameItemId}`)
-              if (chart) {
-                chart.setPriceVolumePrecision(0, 0)
-                chart.applyNewData(Array.isArray(chartData) ? chartData : [])
-              }
-            }}
-            onDispose={(kline: typeof import("klinecharts")) => {
-              kline.dispose(`listing-aggregate-chart-${gameItemId}`)
-            }}
-          >
-            {(kline: typeof import("klinecharts"), loading: boolean) => (
-              <div
-                id={`listing-aggregate-chart-${gameItemId}`}
-                style={{ width: "100%", height: 300 }}
-              />
-            )}
-          </DynamicKlineChart>
-        </Grid>
-      </Section>
-
-      <Section xs={12}>
-        <Grid item xs={12}>
-          <Typography variant="subtitle1" gutterBottom>
-            {t("AggregateMarketData.marketDepth", "Market Depth")}
-          </Typography>
-          <MuiAreaChart
-            series={[
-              {
-                name: t("AggregateMarketData.buyOrders", "Buy Orders"),
-                data: buyWall.map((d) => ({ x: d.x.toString(), y: d.y })),
-              },
-              {
-                name: t("AggregateMarketData.sellOrders", "Sell Orders"),
-                data: sellWall.map((d) => ({ x: d.x.toString(), y: d.y })),
-              },
-              {
-                name: t("AggregateMarketData.stockAvailable", "Stock Available"),
-                data: sellWall.map((d) => ({ x: d.x.toString(), y: totalStockAvailable })),
-                yAxisKey: "rightAxis",
-              },
-              {
-                name: t("AggregateMarketData.quantityRequested", "Quantity Requested"),
-                data: buyWall.map((d) => ({ x: d.x.toString(), y: totalQuantityRequested })),
-                yAxisKey: "rightAxis",
-              },
-            ]}
-            height={300}
-            xAxisType="category"
-            rightYAxis={true}
-          />
-        </Grid>
-      </Section>
+      <Grid item xs={12}>
+        <Card>
+          <Box display="flex">
+            <Tabs
+              orientation="vertical"
+              value={selectedTab}
+              onChange={(e, newValue) => setSelectedTab(newValue)}
+              sx={{ borderRight: 1, borderColor: "divider", minWidth: 150 }}
+            >
+              <Tab label={t("AggregateMarketData.priceHistory", "Price History")} />
+              <Tab label={t("AggregateMarketData.orderDepth", "Order Depth")} />
+              <Tab label={t("AggregateMarketData.supplyDemand", "Supply & Demand")} />
+            </Tabs>
+            <Box sx={{ flexGrow: 1, p: 2 }}>
+              {selectedTab === 0 && (
+                <DynamicKlineChart
+                  onInit={(kline: typeof import("klinecharts")) => {
+                    const chart = kline.init(`listing-aggregate-chart-${gameItemId}`)
+                    if (chart) {
+                      chart.setPriceVolumePrecision(0, 0)
+                      chart.applyNewData(Array.isArray(chartData) ? chartData : [])
+                    }
+                  }}
+                  onDispose={(kline: typeof import("klinecharts")) => {
+                    kline.dispose(`listing-aggregate-chart-${gameItemId}`)
+                  }}
+                >
+                  {(kline: typeof import("klinecharts"), loading: boolean) => (
+                    <div
+                      id={`listing-aggregate-chart-${gameItemId}`}
+                      style={{ width: "100%", height: 400 }}
+                    />
+                  )}
+                </DynamicKlineChart>
+              )}
+              {selectedTab === 1 && (
+                <MuiAreaChart
+                  series={[
+                    {
+                      name: t("AggregateMarketData.buyOrders", "Buy Orders"),
+                      data: buyWall.map((d) => ({ x: d.x.toString(), y: d.y })),
+                    },
+                    {
+                      name: t("AggregateMarketData.sellOrders", "Sell Orders"),
+                      data: sellWall.map((d) => ({ x: d.x.toString(), y: d.y })),
+                    },
+                  ]}
+                  height={400}
+                  xAxisType="category"
+                />
+              )}
+              {selectedTab === 2 && (
+                <MuiAreaChart
+                  series={[
+                    {
+                      name: t("AggregateMarketData.stockAvailable", "Stock Available"),
+                      data: sellWall.map((d) => ({ x: d.x.toString(), y: totalStockAvailable })),
+                    },
+                    {
+                      name: t("AggregateMarketData.quantityRequested", "Quantity Requested"),
+                      data: buyWall.map((d) => ({ x: d.x.toString(), y: totalQuantityRequested })),
+                    },
+                  ]}
+                  height={400}
+                  xAxisType="category"
+                />
+              )}
+            </Box>
+          </Box>
+        </Card>
+      </Grid>
     </Grid>
   )
 }
