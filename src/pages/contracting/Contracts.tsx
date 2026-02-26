@@ -14,19 +14,16 @@ import {
   Stack,
   useMediaQuery,
   Container,
-  Tabs,
-  Typography,
   Paper,
 } from "@mui/material"
-import { HapticTab } from "../../components/haptic"
 import { useLocation, useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { MarketSidebarContext } from "../../features/market/hooks/MarketSidebar"
 import { ServiceSidebarContext } from "../../hooks/contract/ServiceSidebar"
-import { a11yProps, TabPanel } from "../../components/tabs/Tabs"
-import { OpenLayout } from "../../components/layout/ContainerGrid"
+import { TabPanel } from "../../components/tabs/Tabs"
+import { MarketTabsLayout } from "../../components/layout/MarketTabsLayout"
 import { Page } from "../../components/metadata/Page"
 import { LazySection } from "../../components/layout/LazySection"
 
@@ -71,14 +68,29 @@ export function Contracts() {
     !showMobileSidebar,
   )
 
-  const pages = ["/market/services", "/market", "/contracts"]
-  const tabPage = useMemo(
-    () =>
-      pages.indexOf(
-        pages.find((p) => location.pathname.startsWith(p)) || "/contracts",
-      ),
-    [location.pathname],
-  )
+  const tabPage = useMemo(() => {
+    if (location.pathname.startsWith("/market/services")) return 1 // Services
+    if (
+      location.pathname.startsWith("/market") ||
+      location.pathname.startsWith("/bulk") ||
+      location.pathname.startsWith("/buyorders")
+    )
+      return 0 // Items
+    if (location.pathname.startsWith("/contracts")) return 2 // Contracts
+    return 2 // default to Contracts (standalone contracts page)
+  }, [location.pathname])
+
+  const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
+    if (newValue === 0) navigate("/market")
+    else if (newValue === 1) navigate("/market/services")
+    else if (newValue === 2) navigate("/contracts")
+  }
+
+  const tabs = [
+    { value: 0, label: t("market.itemsTab") },
+    { value: 1, label: t("market.servicesTab") },
+    { value: 2, label: t("market.contractsTab", "Open Contracts") },
+  ]
 
   return (
     <Page title={t("contracts.contractsTitle")}>
@@ -94,185 +106,114 @@ export function Contracts() {
             <ContractSidebarContext.Provider
               value={[contractSidebarOpen, setContractSidebarOpen]}
             >
-              <OpenLayout sidebarOpen={true} noMobilePadding={true}>
-                {/* Header: same structure as MarketPage for consistent padding */}
-                <Container
-                  maxWidth="xxl"
-                  sx={{
-                    paddingTop: { xs: 2, sm: 8 },
-                    paddingX: { xs: theme.spacing(1), sm: theme.spacing(3) },
-                    marginX: "auto",
-                  }}
-                >
-                <Grid
-                  container
-                  spacing={{
-                    xs: theme.layoutSpacing.component,
-                    sm: theme.layoutSpacing.layout,
-                  }}
-                  sx={{ marginBottom: { xs: 2, sm: 4 } }}
-                  alignItems="center"
-                  justifyContent="space-between"
-                >
-                  <Grid item xs={12} sm="auto">
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                      <Typography
-                        variant="h4"
-                        sx={{
-                          fontWeight: "bold",
-                          fontSize: { xs: "1.5rem", sm: "2.125rem" },
-                        }}
-                        color={"text.secondary"}
-                      >
-                        {t("market.market")}
-                      </Typography>
-                    </Box>
-                  </Grid>
-                  <Grid item xs={12} sm="auto">
-                    <Tabs
-                      value={tabPage}
-                      onChange={(_, newValue) => {
-                        if (newValue === 0) {
-                          navigate("/market/services")
-                        } else if (newValue === 1) {
-                          navigate("/market")
-                        } else if (newValue === 2) {
-                          navigate("/contracts")
-                        }
-                      }}
-                      aria-label={t("ui.aria.orgInfoArea")}
-                      variant="scrollable"
-                      scrollButtons="auto"
-                      textColor="secondary"
-                      indicatorColor="secondary"
-                      sx={{
-                        minHeight: { xs: 48, sm: 64 },
-                        "& .MuiTab-root": {
-                          minHeight: { xs: 48, sm: 64 },
-                          fontSize: { xs: "0.875rem", sm: "1rem" },
-                          padding: { xs: "12px 16px", sm: "12px 24px" },
-                        },
-                      }}
-                    >
-                      <HapticTab
-                        label={t("market.itemsTab")}
-                        value={1}
-                        {...a11yProps(1)}
-                      />
-                      <HapticTab
-                        label={t("market.servicesTab")}
-                        value={0}
-                        {...a11yProps(0)}
-                      />
-                      <HapticTab
-                        label={t("market.contractsTab", "Open Contracts")}
-                        value={2}
-                        {...a11yProps(2)}
-                      />
-                    </Tabs>
-                  </Grid>
-                  <Grid item xs={12} sm="auto">
-                    {tabPage === 1 ? (
-                      <LazySection
-                        component={MarketActions}
-                        skeleton={() => null}
-                      />
-                    ) : tabPage === 0 ? (
-                      <LazySection
-                        component={ServiceActions}
-                        skeleton={() => null}
-                      />
-                    ) : (
-                      <LazySection
-                        component={ContractActions}
-                        skeleton={() => null}
-                      />
-                    )}
-                  </Grid>
-                </Grid>
-                <Divider light sx={{ mt: 2, mb: 2 }} />
-              </Container>
-
-              <TabPanel value={tabPage} index={1}>
-                <LazySection component={ItemMarketView} skeleton={() => null} />
-              </TabPanel>
-              <TabPanel value={tabPage} index={0}>
-                <LazySection
-                  component={ServiceMarketView}
-                  skeleton={() => null}
-                />
-              </TabPanel>
-              <TabPanel value={tabPage} index={2}>
-                {/* Content: same as MarketPage/BuyOrderItemsPage – Container xxxl, sidebar + listings */}
-                <Container maxWidth="xxxl" sx={{ padding: 0 }}>
-                  <Box sx={{ display: "flex", justifyContent: "center" }}>
-                    {showMobileSidebar ? (
-                      <Grid container spacing={theme.layoutSpacing.layout}>
-                        <Grid item xs={12}>
-                          <Divider light />
-                        </Grid>
-                        <Grid item xs={12}>
-                          <ContractSidebar />
-                        </Grid>
-                        <Grid item xs={12}>
-                          <Grid container spacing={theme.layoutSpacing.layout}>
-                            <ContractListings />
+              <MarketTabsLayout
+                title={t("market.market")}
+                tabIndex={tabPage}
+                onTabChange={handleTabChange}
+                tabs={tabs}
+                headerActions={
+                  tabPage === 0 ? (
+                    <LazySection
+                      component={MarketActions}
+                      skeleton={() => null}
+                    />
+                  ) : tabPage === 1 ? (
+                    <LazySection
+                      component={ServiceActions}
+                      skeleton={() => null}
+                    />
+                  ) : (
+                    <LazySection
+                      component={ContractActions}
+                      skeleton={() => null}
+                    />
+                  )
+                }
+                fab={
+                  showMobileSidebar && tabPage === 0 ? (
+                    <FiltersFAB
+                      onClick={() => setMarketSidebarOpen((prev) => !prev)}
+                      label={t("market.toggleSidebar")}
+                    />
+                  ) : showMobileSidebar && tabPage === 1 ? (
+                    <FiltersFAB
+                      onClick={() => setServiceSidebarOpen((prev) => !prev)}
+                      label={t("service_market.toggle_sidebar")}
+                    />
+                  ) : showMobileSidebar && tabPage === 2 ? (
+                    <FiltersFAB
+                      onClick={() => setContractSidebarOpen((prev) => !prev)}
+                      label={t("contracts.toggleSidebar")}
+                    />
+                  ) : undefined
+                }
+              >
+                <TabPanel value={tabPage} index={0}>
+                  <LazySection
+                    component={ItemMarketView}
+                    skeleton={() => null}
+                  />
+                </TabPanel>
+                <TabPanel value={tabPage} index={1}>
+                  <LazySection
+                    component={ServiceMarketView}
+                    skeleton={() => null}
+                  />
+                </TabPanel>
+                <TabPanel value={tabPage} index={2}>
+                  <Container maxWidth="xxxl" sx={{ padding: 0 }}>
+                    <Box sx={{ display: "flex", justifyContent: "center" }}>
+                      {showMobileSidebar ? (
+                        <Grid container spacing={theme.layoutSpacing.layout}>
+                          <Grid item xs={12}>
+                            <Divider light />
                           </Grid>
-                        </Grid>
-                      </Grid>
-                    ) : (
-                      <Stack
-                        direction="row"
-                        justifyContent="center"
-                        spacing={theme.layoutSpacing.layout}
-                        sx={{ width: "100%", maxWidth: "xxxl" }}
-                      >
-                        {contractSidebarOpen && (
-                          <Paper
-                            sx={{
-                              position: "sticky",
-                              top: "calc(64px + 16px)",
-                              maxHeight: "calc(100vh - 64px - 32px)",
-                              height: "fit-content",
-                              width: 300,
-                              flexShrink: 0,
-                              overflowY: "auto",
-                            }}
-                          >
+                          <Grid item xs={12}>
                             <ContractSidebar />
-                          </Paper>
-                        )}
-
-                        <Box sx={{ flex: 1, minWidth: 0 }}>
-                          <Grid container spacing={theme.layoutSpacing.layout}>
-                            <ContractListings />
                           </Grid>
-                        </Box>
-                      </Stack>
-                    )}
-                  </Box>
-                </Container>
-              </TabPanel>
+                          <Grid item xs={12}>
+                            <Grid container spacing={theme.layoutSpacing.layout}>
+                              <ContractListings />
+                            </Grid>
+                          </Grid>
+                        </Grid>
+                      ) : (
+                        <Stack
+                          direction="row"
+                          justifyContent="center"
+                          spacing={theme.layoutSpacing.layout}
+                          sx={{ width: "100%", maxWidth: "xxxl" }}
+                        >
+                          {contractSidebarOpen && (
+                            <Paper
+                              sx={{
+                                position: "sticky",
+                                top: "calc(64px + 16px)",
+                                maxHeight: "calc(100vh - 64px - 32px)",
+                                height: "fit-content",
+                                width: 300,
+                                flexShrink: 0,
+                                overflowY: "auto",
+                              }}
+                            >
+                              <ContractSidebar />
+                            </Paper>
+                          )}
 
-              {showMobileSidebar && tabPage === 1 && (
-                <FiltersFAB
-                  onClick={() => setMarketSidebarOpen((prev) => !prev)}
-                  label={t("market.toggleSidebar")}
-                />
-              )}
-              {showMobileSidebar && tabPage === 0 && (
-                <FiltersFAB
-                  onClick={() => setServiceSidebarOpen((prev) => !prev)}
-                  label={t("service_market.toggle_sidebar")}
-                />
-              )}
-              {showMobileSidebar && tabPage === 2 && (
-                <FiltersFAB
-                  onClick={() => setContractSidebarOpen((prev) => !prev)}
-                  label={t("contracts.toggleSidebar")}
-                />
-              )}
-            </OpenLayout>
+                          <Box sx={{ flex: 1, minWidth: 0 }}>
+                            <Grid
+                              container
+                              spacing={theme.layoutSpacing.layout}
+                            >
+                              <ContractListings />
+                            </Grid>
+                          </Box>
+                        </Stack>
+                      )}
+                    </Box>
+                  </Container>
+                </TabPanel>
+              </MarketTabsLayout>
             </ContractSidebarContext.Provider>
           </ContractSearchContext.Provider>
         </ServiceSidebarContext.Provider>

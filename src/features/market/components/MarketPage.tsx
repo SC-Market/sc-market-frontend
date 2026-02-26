@@ -1,16 +1,5 @@
 import React, { useMemo, useState, Suspense } from "react"
-import {
-  Container,
-  Divider,
-  Grid,
-  Tabs,
-  Typography,
-  CircularProgress,
-  Box,
-  useMediaQuery,
-} from "@mui/material"
-import { HapticTab } from "../../../components/haptic"
-import { OpenLayout } from "../../../components/layout/ContainerGrid"
+import { CircularProgress, useMediaQuery } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { MarketSidebarContext } from "../hooks/MarketSidebar"
@@ -18,11 +7,10 @@ import { ServiceSidebarContext } from "../../../hooks/contract/ServiceSidebar"
 import { Page } from "../../../components/metadata/Page"
 import { MarketActions } from "./MarketActions"
 import { useLocation, useNavigate } from "react-router-dom"
-import { a11yProps, TabPanel } from "../../../components/tabs/Tabs"
+import { TabPanel } from "../../../components/tabs/Tabs"
+import { MarketTabsLayout } from "../../../components/layout/MarketTabsLayout"
 import { useTranslation } from "react-i18next"
-import FilterListIcon from "@mui/icons-material/FilterList"
 import { FiltersFAB } from "../../../components/mobile/FiltersFAB"
-import { Button } from "@mui/material"
 import { FeatureErrorBoundary } from "../../../components/error-boundaries"
 
 // Dynamic imports for heavy components
@@ -66,13 +54,28 @@ export function MarketPage() {
   const [serviceSidebarOpen, setServiceSidebarOpen] = useState(false)
   
   const tabPage = useMemo(() => {
-    if (location.pathname.startsWith("/market/services")) return 0
-    if (location.pathname.startsWith("/market") || 
-        location.pathname.startsWith("/bulk") || 
-        location.pathname.startsWith("/buyorders")) return 1
-    if (location.pathname.startsWith("/contracts")) return 2
-    return 1 // default to market tab
+    if (location.pathname.startsWith("/market/services")) return 1 // Services
+    if (
+      location.pathname.startsWith("/market") ||
+      location.pathname.startsWith("/bulk") ||
+      location.pathname.startsWith("/buyorders")
+    )
+      return 0 // Items
+    if (location.pathname.startsWith("/contracts")) return 2 // Contracts
+    return 0 // default to Items
   }, [location.pathname])
+
+  const handleTabChange = (_: React.SyntheticEvent, newValue: number) => {
+    if (newValue === 0) navigate("/market")
+    else if (newValue === 1) navigate("/market/services")
+    else if (newValue === 2) navigate("/contracts")
+  }
+
+  const tabs = [
+    { value: 0, label: t("market.itemsTab") },
+    { value: 1, label: t("market.servicesTab") },
+    { value: 2, label: t("market.contractsTab", "Open Contracts") },
+  ]
 
   return (
     <Page title={t("market.market")} dontUseDefaultCanonUrl={true}>
@@ -82,114 +85,44 @@ export function MarketPage() {
         <ServiceSidebarContext.Provider
           value={[serviceSidebarOpen, setServiceSidebarOpen]}
         >
-          <OpenLayout sidebarOpen={true} noMobilePadding={true}>
-            <Container
-              maxWidth={"xxl"}
-              sx={{
-                paddingTop: { xs: 2, sm: 8 },
-                paddingX: { xs: theme.spacing(1), sm: theme.spacing(3) },
-                marginX: "auto",
-              }}
-            >
-              <Grid
-                container
-                spacing={{
-                  xs: theme.layoutSpacing.component,
-                  sm: theme.layoutSpacing.layout,
-                }}
-                sx={{ marginBottom: { xs: 2, sm: 4 } }}
-                alignItems="center"
-                justifyContent="space-between"
-              >
-                <Grid item xs={12} sm="auto">
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                    <Typography
-                      variant="h4"
-                      sx={{
-                        fontWeight: "bold",
-                        fontSize: { xs: "1.5rem", sm: "2.125rem" },
-                      }}
-                      color={"text.secondary"}
-                    >
-                      {t("market.market")}
-                    </Typography>
-                  </Box>
-                </Grid>
-                <Grid item xs={12} sm="auto">
-                  <Tabs
-                    value={tabPage}
-                    onChange={(_, newValue) => {
-                      if (newValue === 0) {
-                        navigate("/market/services")
-                      } else if (newValue === 1) {
-                        navigate("/market")
-                      } else if (newValue === 2) {
-                        navigate("/contracts")
-                      }
-                    }}
-                    aria-label={t("ui.aria.orgInfoArea")}
-                    variant="scrollable"
-                    scrollButtons="auto"
-                    textColor="secondary"
-                    indicatorColor="secondary"
-                    sx={{
-                      minHeight: { xs: 48, sm: 64 },
-                      "& .MuiTab-root": {
-                        minHeight: { xs: 48, sm: 64 },
-                        fontSize: { xs: "0.875rem", sm: "1rem" },
-                        padding: { xs: "12px 16px", sm: "12px 24px" },
-                      },
-                    }}
-                  >
-                    <HapticTab
-                      label={t("market.itemsTab")}
-                      value={1}
-                      {...a11yProps(1)}
-                    />
-                    <HapticTab
-                      label={t("market.servicesTab")}
-                      value={0}
-                      {...a11yProps(0)}
-                    />
-                    <HapticTab
-                      label={t("market.contractsTab", "Open Contracts")}
-                      value={2}
-                      {...a11yProps(2)}
-                    />
-                  </Tabs>
-                </Grid>
-                <Grid
-                  item
-                  xs={12}
-                  sm="auto"
-                  sx={{
-                    display: "flex",
-                    justifyContent: { xs: "stretch", sm: "flex-end" },
-                  }}
-                >
-                  {tabPage === 1 ? (
-                    <MarketActions />
-                  ) : tabPage === 0 ? (
-                    <Suspense fallback={<CircularProgress size={24} />}>
-                      <ServiceActions />
-                    </Suspense>
-                  ) : (
-                    <Suspense fallback={<CircularProgress size={24} />}>
-                      <ContractActions />
-                    </Suspense>
-                  )}
-                </Grid>
-              </Grid>
-
-              <Divider light sx={{ mt: 2, mb: 2 }} />
-            </Container>
-
-            <TabPanel value={tabPage} index={1}>
+          <MarketTabsLayout
+            title={t("market.market")}
+            tabIndex={tabPage}
+            onTabChange={handleTabChange}
+            tabs={tabs}
+            headerActions={
+              tabPage === 0 ? (
+                <MarketActions />
+              ) : tabPage === 1 ? (
+                <Suspense fallback={<CircularProgress size={24} />}>
+                  <ServiceActions />
+                </Suspense>
+              ) : (
+                <Suspense fallback={<CircularProgress size={24} />}>
+                  <ContractActions />
+                </Suspense>
+              )
+            }
+            fab={
+              showMobileSidebar && tabPage === 0 ? (
+                <FiltersFAB
+                  onClick={() => setMarketSidebarOpen((prev) => !prev)}
+                  label={t("market.toggleSidebar")}
+                />
+              ) : showMobileSidebar && tabPage === 1 ? (
+                <FiltersFAB
+                  onClick={() => setServiceSidebarOpen((prev) => !prev)}
+                  label={t("service_market.toggle_sidebar")}
+                />
+              ) : undefined
+            }
+          >
+            <TabPanel value={tabPage} index={0}>
               <Suspense fallback={<MarketTabLoader />}>
                 <ItemMarketView />
               </Suspense>
             </TabPanel>
-            <TabPanel value={tabPage} index={0}>
+            <TabPanel value={tabPage} index={1}>
               <FeatureErrorBoundary featureName="Services">
                 <Suspense fallback={<MarketTabLoader />}>
                   <ServiceMarketView />
@@ -201,19 +134,7 @@ export function MarketPage() {
                 <ContractListings />
               </Suspense>
             </TabPanel>
-          </OpenLayout>
-          {showMobileSidebar && tabPage === 1 && (
-            <FiltersFAB
-              onClick={() => setMarketSidebarOpen((prev) => !prev)}
-              label={t("market.toggleSidebar")}
-            />
-          )}
-          {showMobileSidebar && tabPage === 0 && (
-            <FiltersFAB
-              onClick={() => setServiceSidebarOpen((prev) => !prev)}
-              label={t("service_market.toggle_sidebar")}
-            />
-          )}
+          </MarketTabsLayout>
         </ServiceSidebarContext.Provider>
       </MarketSidebarContext.Provider>
     </Page>
