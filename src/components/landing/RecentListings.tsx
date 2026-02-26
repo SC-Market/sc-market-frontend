@@ -23,7 +23,7 @@ function adaptV2ToV1Listing(
     total_rating: listing.total_rating,
     avg_rating: listing.avg_rating,
     details_id: listing.details_id,
-    status: listing.status,
+    status: listing.status as "active" | "inactive" | "archived",
     user_seller: listing.user_seller,
     contractor_seller: listing.contractor_seller,
     rating_count: listing.rating_count,

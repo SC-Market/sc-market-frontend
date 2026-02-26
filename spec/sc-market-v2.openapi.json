@@ -165,7 +165,10 @@
             "type": "array"
           }
         },
-        "required": ["total", "listings"],
+        "required": [
+          "total",
+          "listings"
+        ],
         "type": "object",
         "additionalProperties": false
       },
@@ -174,7 +177,11 @@
         "properties": {
           "type": {
             "type": "string",
-            "enum": ["unique", "aggregate", "multiple"]
+            "enum": [
+              "unique",
+              "aggregate",
+              "multiple"
+            ]
           },
           "listing": {
             "properties": {
@@ -231,7 +238,12 @@
                 "type": "string"
               }
             },
-            "required": ["game_item_id", "item_type", "description", "title"],
+            "required": [
+              "game_item_id",
+              "item_type",
+              "description",
+              "title"
+            ],
             "type": "object"
           },
           "photos": {
@@ -262,7 +274,9 @@
                 "format": "double"
               }
             },
-            "required": ["view_count"],
+            "required": [
+              "view_count"
+            ],
             "type": "object"
           },
           "accept_offers": {
@@ -278,7 +292,13 @@
             "type": "array"
           }
         },
-        "required": ["type", "listing", "details", "photos", "stats"],
+        "required": [
+          "type",
+          "listing",
+          "details",
+          "photos",
+          "stats"
+        ],
         "type": "object",
         "additionalProperties": false
       },
@@ -332,7 +352,13 @@
             "description": "Whether listing is internal to contractor"
           }
         },
-        "required": ["title", "description", "price", "quantity", "item_type"],
+        "required": [
+          "title",
+          "description",
+          "price",
+          "quantity",
+          "item_type"
+        ],
         "type": "object",
         "additionalProperties": false
       },
@@ -397,7 +423,11 @@
             "type": "string"
           }
         },
-        "required": ["status", "version", "timestamp"],
+        "required": [
+          "status",
+          "version",
+          "timestamp"
+        ],
         "type": "object",
         "additionalProperties": false
       }
@@ -414,7 +444,7 @@
     "contact": {}
   },
   "paths": {
-    "/v2/market/listings": {
+    "/market/listings": {
       "get": {
         "operationId": "SearchListings",
         "responses": {
@@ -431,7 +461,9 @@
         },
         "description": "Search market listings\nReturns flat search results optimized for list views",
         "summary": "Search market listings",
-        "tags": ["Market"],
+        "tags": [
+          "Market"
+        ],
         "security": [],
         "parameters": [
           {
@@ -564,7 +596,9 @@
         },
         "description": "Create a new market listing",
         "summary": "Create listing",
-        "tags": ["Market"],
+        "tags": [
+          "Market"
+        ],
         "security": [
           {
             "jwt": []
@@ -583,7 +617,7 @@
         }
       }
     },
-    "/v2/market/listings/{listing_id}/details": {
+    "/market/listings/{listing_id}/details": {
       "get": {
         "operationId": "GetListingDetails",
         "responses": {
@@ -600,7 +634,9 @@
         },
         "description": "Get detailed listing information\nReturns nested format with full details, photos, and stats",
         "summary": "Get listing details",
-        "tags": ["Market"],
+        "tags": [
+          "Market"
+        ],
         "security": [],
         "parameters": [
           {
@@ -614,7 +650,7 @@
         ]
       }
     },
-    "/v2/market/listings/{listing_id}": {
+    "/market/listings/{listing_id}": {
       "put": {
         "operationId": "UpdateListing",
         "responses": {
@@ -631,7 +667,9 @@
         },
         "description": "Update an existing listing",
         "summary": "Update listing",
-        "tags": ["Market"],
+        "tags": [
+          "Market"
+        ],
         "security": [
           {
             "jwt": []
@@ -667,7 +705,9 @@
         },
         "description": "Delete a listing (archives it)",
         "summary": "Delete listing",
-        "tags": ["Market"],
+        "tags": [
+          "Market"
+        ],
         "security": [
           {
             "jwt": []
@@ -702,7 +742,9 @@
         },
         "description": "Health check endpoint",
         "summary": "Check API health status",
-        "tags": ["Health"],
+        "tags": [
+          "Health"
+        ],
         "security": [],
         "parameters": []
       }
