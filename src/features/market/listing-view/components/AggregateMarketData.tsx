@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react"
-import { Box, Card, CardContent, Chip, Grid, Typography, Tabs, Tab } from "@mui/material"
+import { Box, Card, CardContent, Chip, Grid, Typography } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import {
   useGetOrCreateAggregateQuery,
@@ -7,7 +7,7 @@ import {
 } from "../../api/marketApi"
 import { DynamicKlineChart } from "../../../../components/charts/DynamicCharts"
 import { MuiAreaChart } from "../../../../components/charts/MuiCharts"
-import { Section } from "../../../../components/paper/Section"
+import { TabbedChartLayout } from "../../../../components/charts/TabbedChartLayout"
 import { ExtendedTheme } from "../../../../hooks/styles/Theme"
 import { useTheme } from "@mui/material/styles"
 import TrendingUpIcon from "@mui/icons-material/TrendingUp"
@@ -129,6 +129,12 @@ export function AggregateMarketData({
 
   const [sellWall, buyWall] = series
 
+  const tabs = [
+    t("AggregateMarketData.priceHistory", "Price History"),
+    t("AggregateMarketData.orderDepth", "Order Depth"),
+    t("AggregateMarketData.supplyDemand", "Supply & Demand"),
+  ]
+
   return (
     <Grid container spacing={theme.layoutSpacing.layout} sx={{ mt: 2 }}>
       <Grid item xs={12}>
@@ -175,75 +181,65 @@ export function AggregateMarketData({
       )}
 
       <Grid item xs={12}>
-        <Card>
-          <Box display="flex">
-            <Tabs
-              orientation="vertical"
-              value={selectedTab}
-              onChange={(e, newValue) => setSelectedTab(newValue)}
-              sx={{ borderRight: 1, borderColor: "divider", minWidth: 150 }}
+        <TabbedChartLayout
+          tabs={tabs}
+          selectedTab={selectedTab}
+          onTabChange={setSelectedTab}
+        >
+          {selectedTab === 0 && (
+            <DynamicKlineChart
+              onInit={(kline: typeof import("klinecharts")) => {
+                const chart = kline.init(`listing-aggregate-chart-${gameItemId}`)
+                if (chart) {
+                  chart.setPriceVolumePrecision(0, 0)
+                  chart.applyNewData(Array.isArray(chartData) ? chartData : [])
+                }
+              }}
+              onDispose={(kline: typeof import("klinecharts")) => {
+                kline.dispose(`listing-aggregate-chart-${gameItemId}`)
+              }}
             >
-              <Tab label={t("AggregateMarketData.priceHistory", "Price History")} />
-              <Tab label={t("AggregateMarketData.orderDepth", "Order Depth")} />
-              <Tab label={t("AggregateMarketData.supplyDemand", "Supply & Demand")} />
-            </Tabs>
-            <Box sx={{ flexGrow: 1, p: 2 }}>
-              {selectedTab === 0 && (
-                <DynamicKlineChart
-                  onInit={(kline: typeof import("klinecharts")) => {
-                    const chart = kline.init(`listing-aggregate-chart-${gameItemId}`)
-                    if (chart) {
-                      chart.setPriceVolumePrecision(0, 0)
-                      chart.applyNewData(Array.isArray(chartData) ? chartData : [])
-                    }
-                  }}
-                  onDispose={(kline: typeof import("klinecharts")) => {
-                    kline.dispose(`listing-aggregate-chart-${gameItemId}`)
-                  }}
-                >
-                  {(kline: typeof import("klinecharts"), loading: boolean) => (
-                    <div
-                      id={`listing-aggregate-chart-${gameItemId}`}
-                      style={{ width: "100%", height: 400 }}
-                    />
-                  )}
-                </DynamicKlineChart>
-              )}
-              {selectedTab === 1 && (
-                <MuiAreaChart
-                  series={[
-                    {
-                      name: t("AggregateMarketData.buyOrders", "Buy Orders"),
-                      data: buyWall.map((d) => ({ x: d.x.toString(), y: d.y })),
-                    },
-                    {
-                      name: t("AggregateMarketData.sellOrders", "Sell Orders"),
-                      data: sellWall.map((d) => ({ x: d.x.toString(), y: d.y })),
-                    },
-                  ]}
-                  height={400}
-                  xAxisType="category"
+              {(kline: typeof import("klinecharts"), loading: boolean) => (
+                <div
+                  id={`listing-aggregate-chart-${gameItemId}`}
+                  style={{ width: "100%", height: 400 }}
                 />
               )}
-              {selectedTab === 2 && (
-                <MuiAreaChart
-                  series={[
-                    {
-                      name: t("AggregateMarketData.stockAvailable", "Stock Available"),
-                      data: sellWall.map((d) => ({ x: d.x.toString(), y: totalStockAvailable })),
-                    },
-                    {
-                      name: t("AggregateMarketData.quantityRequested", "Quantity Requested"),
-                      data: buyWall.map((d) => ({ x: d.x.toString(), y: totalQuantityRequested })),
-                    },
-                  ]}
-                  height={400}
-                  xAxisType="category"
-                />
-              )}
-            </Box>
-          </Box>
-        </Card>
+            </DynamicKlineChart>
+          )}
+          {selectedTab === 1 && (
+            <MuiAreaChart
+              series={[
+                {
+                  name: t("AggregateMarketData.buyOrders", "Buy Orders"),
+                  data: buyWall.map((d) => ({ x: d.x.toString(), y: d.y })),
+                },
+                {
+                  name: t("AggregateMarketData.sellOrders", "Sell Orders"),
+                  data: sellWall.map((d) => ({ x: d.x.toString(), y: d.y })),
+                },
+              ]}
+              height={400}
+              xAxisType="category"
+            />
+          )}
+          {selectedTab === 2 && (
+            <MuiAreaChart
+              series={[
+                {
+                  name: t("AggregateMarketData.stockAvailable", "Stock Available"),
+                  data: sellWall.map((d) => ({ x: d.x.toString(), y: totalStockAvailable })),
+                },
+                {
+                  name: t("AggregateMarketData.quantityRequested", "Quantity Requested"),
+                  data: buyWall.map((d) => ({ x: d.x.toString(), y: totalQuantityRequested })),
+                },
+              ]}
+              height={400}
+              xAxisType="category"
+            />
+          )}
+        </TabbedChartLayout>
       </Grid>
     </Grid>
   )
