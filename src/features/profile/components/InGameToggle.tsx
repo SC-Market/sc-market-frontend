@@ -1,9 +1,11 @@
 import { Switch, FormControlLabel } from "@mui/material"
 import { useProfileUpdateInGameStatusMutation } from "../../../store/profile"
-import { useProfile } from "../../../hooks/login/UserProfile"
+import { useGetUserProfileQuery } from "../../../store/profile"
+import { useTranslation } from "react-i18next"
 
 export function InGameToggle() {
-  const { profile } = useProfile()
+  const { t } = useTranslation()
+  const { data: profile } = useGetUserProfileQuery()
   const [updateStatus] = useProfileUpdateInGameStatusMutation()
 
   const handleToggle = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -15,7 +17,7 @@ export function InGameToggle() {
       control={
         <Switch checked={profile?.in_game || false} onChange={handleToggle} />
       }
-      label="Show as In Game"
+      label={t("settings.profile.showAsInGame")}
     />
   )
 }

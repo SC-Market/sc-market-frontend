@@ -26,6 +26,7 @@ import { UnderlineLink } from "../typography/UnderlineLink"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTranslation } from "react-i18next"
+import { SellerStatusBadge } from "../presence/SellerStatusBadge"
 import {
   prioritizeBadges,
   calculateBadgesFromRating,
@@ -88,6 +89,13 @@ export function ListingNameAndRating(props: {
           {user?.display_name || contractor?.name}
         </UnderlineLink>
       </Box>
+      {user && (
+        <SellerStatusBadge
+          inGame={user.in_game}
+          lastSeen={user.last_seen}
+          compact
+        />
+      )}
       <ListingSellerRating user={user} contractor={contractor} />
     </Box>
   )

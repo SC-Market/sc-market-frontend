@@ -47,6 +47,8 @@ export interface MinimalUser {
     discriminator: string
     username: string
   }
+  last_seen?: string
+  in_game?: boolean
 }
 
 export interface AdminUser {

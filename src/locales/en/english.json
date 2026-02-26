@@ -2497,6 +2497,9 @@
       "blocklist": "Blocked Users"
     },
     "profile": {
+      "presence": "Presence",
+      "inGame": "In Game",
+      "showAsInGame": "Show as In Game",
       "updateAndVerify": "Update Username and Re-Verify Account",
       "authenticateWithRSI": "Authenticate with RSI",
       "viewUserProfile": "View User Profile",
