@@ -4,14 +4,15 @@ import { useTranslation } from "react-i18next"
 import {
   useGetOrCreateAggregateQuery,
   useMarketGetAggregateHistoryByIDQuery,
-} from "../api/marketApi"
-import { DynamicKlineChart } from "../../../components/charts/DynamicCharts"
-import { MuiAreaChart } from "../../../components/charts/MuiCharts"
-import { Section } from "../../../components/paper/Section"
-import { ExtendedTheme } from "../../../hooks/styles/Theme"
+} from "../../api/marketApi"
+import { DynamicKlineChart } from "../../../../components/charts/DynamicCharts"
+import { MuiAreaChart } from "../../../../components/charts/MuiCharts"
+import { Section } from "../../../../components/paper/Section"
+import { ExtendedTheme } from "../../../../hooks/styles/Theme"
 import { useTheme } from "@mui/material/styles"
 import TrendingUpIcon from "@mui/icons-material/TrendingUp"
 import TrendingDownIcon from "@mui/icons-material/TrendingDown"
+import type { MarketAggregateListing, BuyOrder } from "../../../../datatypes/MarketListing"
 
 interface AggregateMarketDataProps {
   gameItemId: string
@@ -30,12 +31,12 @@ export function AggregateMarketData({
   const priceComparison = useMemo(() => {
     if (!aggregate?.listings.length) return null
 
-    const prices = aggregate.listings.map((l) => l.price)
-    const avgPrice = prices.reduce((a, b) => a + b, 0) / prices.length
+    const prices = aggregate.listings.map((l: MarketAggregateListing) => l.price)
+    const avgPrice = prices.reduce((a: number, b: number) => a + b, 0) / prices.length
     const minPrice = Math.min(...prices)
     const maxBuyOrder = aggregate.buy_orders
-      .filter((o) => o.price != null)
-      .reduce((max, o) => Math.max(max, o.price!), 0)
+      .filter((o: BuyOrder) => o.price != null)
+      .reduce((max: number, o: BuyOrder) => Math.max(max, o.price!), 0)
 
     const percentVsAvg = ((currentPrice - avgPrice) / avgPrice) * 100
     const percentVsMin = ((currentPrice - minPrice) / minPrice) * 100
@@ -57,14 +58,14 @@ export function AggregateMarketData({
     const bucketCount = 100
     const sellHigh = aggregate.listings.length
       ? aggregate.listings.reduce(
-          (high, listing) => (listing.price > high ? listing.price : high),
+          (high: number, listing: MarketAggregateListing) => (listing.price > high ? listing.price : high),
           aggregate.listings[0].price,
         )
       : 0
-    const pricedBuyOrders = aggregate.buy_orders.filter((o) => o.price != null)
+    const pricedBuyOrders = aggregate.buy_orders.filter((o: BuyOrder) => o.price != null)
     const buyHigh = pricedBuyOrders.length
       ? pricedBuyOrders.reduce(
-          (high, listing) => (listing.price! > high ? listing.price! : high),
+          (high: number, listing: BuyOrder) => (listing.price! > high ? listing.price! : high),
           pricedBuyOrders[0].price!,
         )
       : 0
@@ -72,18 +73,18 @@ export function AggregateMarketData({
     const interval = high / bucketCount
 
     const sortedSell = [...aggregate.listings]
-      .filter((s) => s.quantity_available)
-      .sort((a, b) => a.price - b.price)
+      .filter((s: MarketAggregateListing) => s.quantity_available)
+      .sort((a: MarketAggregateListing, b: MarketAggregateListing) => a.price - b.price)
     const sortedBuy = [...pricedBuyOrders].sort(
-      (a, b) => (a.price ?? 0) - (b.price ?? 0),
+      (a: BuyOrder, b: BuyOrder) => (a.price ?? 0) - (b.price ?? 0),
     )
 
     const sellPoints = new Array(bucketCount + 1)
       .fill(undefined)
-      .map((o, i) => ({ x: interval * i, y: 0 }))
+      .map((_o, i: number) => ({ x: interval * i, y: 0 }))
     const buyPoints = new Array(bucketCount + 1)
       .fill(undefined)
-      .map((o, i) => ({ x: interval * i, y: 0 }))
+      .map((_o, i: number) => ({ x: interval * i, y: 0 }))
 
     for (const sell of sortedSell) {
       sellPoints[Math.floor(sell.price / interval)].y += 1
@@ -106,11 +107,11 @@ export function AggregateMarketData({
     const buyMax = buyPoints[0].y
 
     const totalStockAvailable = aggregate.listings.reduce(
-      (sum, listing) => sum + listing.quantity_available,
+      (sum: number, listing: MarketAggregateListing) => sum + listing.quantity_available,
       0,
     )
     const totalQuantityRequested = aggregate.buy_orders.reduce(
-      (sum, order) => sum + order.quantity,
+      (sum: number, order: BuyOrder) => sum + order.quantity,
       0,
     )
 
@@ -178,27 +179,18 @@ export function AggregateMarketData({
             {t("AggregateMarketData.priceHistory", "Price History")}
           </Typography>
           <DynamicKlineChart
-            onInit={(kline) => {
+            onInit={(kline: typeof import("klinecharts")) => {
               const chart = kline.init(`listing-aggregate-chart-${gameItemId}`)
               if (chart) {
-                chart.setStyles({
-                  yAxis: {
-                    type: "normal",
-                    inside: false,
-                    reverse: false,
-                    axisLine: { show: true },
-                    tickText: { show: true },
-                  },
-                })
                 chart.setPriceVolumePrecision(0, 0)
                 chart.applyNewData(Array.isArray(chartData) ? chartData : [])
               }
             }}
-            onDispose={(kline) => {
+            onDispose={(kline: typeof import("klinecharts")) => {
               kline.dispose(`listing-aggregate-chart-${gameItemId}`)
             }}
           >
-            {(kline, loading) => (
+            {(kline: typeof import("klinecharts"), loading: boolean) => (
               <div
                 id={`listing-aggregate-chart-${gameItemId}`}
                 style={{ width: "100%", height: 300 }}
