@@ -911,6 +911,21 @@ export function AggregateChart(props: { aggregate: MarketAggregate }) {
             // initialize the chart
             const chart = kline.init(`${aggregate.details.game_item_id}-chart`)
             if (chart) {
+              // Configure Y-axis to show whole numbers
+              chart.setStyles({
+                yAxis: {
+                  type: 'normal',
+                  inside: false,
+                  reverse: false,
+                  axisLine: {
+                    show: true,
+                  },
+                  tickText: {
+                    show: true,
+                  },
+                },
+              })
+              chart.setPriceVolumePrecision(0, 0)
               // add data to the chart
               chart.applyNewData(Array.isArray(chartData) ? chartData : [])
             }
@@ -936,7 +951,7 @@ export function AggregateBuySellWall(props: { aggregate: MarketAggregate }) {
   const { t } = useTranslation()
   const { aggregate } = props
 
-  const { series, buyMax, sellMax } = useMemo(() => {
+  const { series, buyMax, sellMax, totalStockAvailable, totalQuantityRequested } = useMemo(() => {
     const bucketCount = 100
     const sellHigh = aggregate.listings.length
       ? aggregate.listings.reduce(
@@ -988,14 +1003,25 @@ export function AggregateBuySellWall(props: { aggregate: MarketAggregate }) {
 
     const buyMax = buyPoints[0].y
 
+    const totalStockAvailable = aggregate.listings.reduce(
+      (sum, listing) => sum + listing.quantity_available,
+      0,
+    )
+    const totalQuantityRequested = aggregate.buy_orders.reduce(
+      (sum, order) => sum + order.quantity,
+      0,
+    )
+
     return {
       series: [
-        sellPoints, //.filter(item => item.y),
-        buyPoints, //.filter(item => item.y)
+        sellPoints,
+        buyPoints,
       ],
       high,
       buyMax,
       sellMax,
+      totalStockAvailable,
+      totalQuantityRequested,
     }
   }, [aggregate])
 
@@ -1016,9 +1042,20 @@ export function AggregateBuySellWall(props: { aggregate: MarketAggregate }) {
                 name: t("MarketAggregateView.sellOrdersChart"),
                 data: sellWall.map((d) => ({ x: d.x.toString(), y: d.y })),
               },
+              {
+                name: t("MarketAggregateView.stockAvailable", "Stock Available"),
+                data: sellWall.map((d) => ({ x: d.x.toString(), y: totalStockAvailable })),
+                yAxisKey: "rightAxis",
+              },
+              {
+                name: t("MarketAggregateView.quantityRequested", "Quantity Requested"),
+                data: buyWall.map((d) => ({ x: d.x.toString(), y: totalQuantityRequested })),
+                yAxisKey: "rightAxis",
+              },
             ]}
             height={400}
             xAxisType="category"
+            rightYAxis={true}
           />
         </Box>
       </Grid>

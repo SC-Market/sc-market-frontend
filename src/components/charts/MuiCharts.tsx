@@ -36,7 +36,7 @@ export function MuiLineChart({
   const seriesData = series.map((s) => ({
     label: s.name,
     data: s.data.map((d) => d.y),
-    curve: smooth ? ("natural" as const) : ("linear" as const),
+    curve: "linear" as const,
     showMark: false,
   }))
 
@@ -50,7 +50,12 @@ export function MuiLineChart({
             xAxisType === "time"
               ? (value: Date | number | string) =>
                   new Date(value).toLocaleDateString()
-              : undefined,
+              : (value: Date | number | string) => Math.round(Number(value)).toLocaleString(),
+        },
+      ]}
+      yAxis={[
+        {
+          valueFormatter: (value: number) => Math.round(value).toLocaleString(),
         },
       ]}
       series={seriesData}
@@ -67,6 +72,7 @@ export function MuiLineChart({
 
 interface MuiAreaChartProps extends MuiLineChartProps {
   gradient?: boolean
+  rightYAxis?: boolean
 }
 
 export function MuiAreaChart({
@@ -77,6 +83,7 @@ export function MuiAreaChart({
   yAxisLabel,
   smooth = true,
   gradient = true,
+  rightYAxis = false,
 }: MuiAreaChartProps) {
   const xData = series[0]?.data.map((d) =>
     xAxisType === "time" ? new Date(d.x) : d.x,
@@ -85,10 +92,28 @@ export function MuiAreaChart({
   const seriesData = series.map((s) => ({
     label: s.name,
     data: s.data.map((d) => d.y),
-    curve: smooth ? ("natural" as const) : ("linear" as const),
+    curve: "linear" as const,
     showMark: false,
     area: true,
+    yAxisKey: (s as any).yAxisKey,
   }))
+
+  const yAxisConfig = rightYAxis
+    ? [
+        {
+          id: "leftAxis",
+          valueFormatter: (value: number) => Math.round(value).toLocaleString(),
+        },
+        {
+          id: "rightAxis",
+          valueFormatter: (value: number) => Math.round(value).toLocaleString(),
+        },
+      ]
+    : [
+        {
+          valueFormatter: (value: number) => Math.round(value).toLocaleString(),
+        },
+      ]
 
   return (
     <LineChart
@@ -100,9 +125,10 @@ export function MuiAreaChart({
             xAxisType === "time"
               ? (value: Date | number | string) =>
                   new Date(value).toLocaleDateString()
-              : undefined,
+              : (value: Date | number | string) => Math.round(Number(value)).toLocaleString(),
         },
       ]}
+      yAxis={yAxisConfig}
       series={seriesData}
       height={height}
       sx={{
@@ -152,7 +178,12 @@ export function MuiBarChart({
             xAxisType === "time"
               ? (value: Date | number | string) =>
                   new Date(value).toLocaleDateString()
-              : undefined,
+              : (value: Date | number | string) => Math.round(Number(value)).toLocaleString(),
+        },
+      ]}
+      yAxis={[
+        {
+          valueFormatter: (value: number) => Math.round(value).toLocaleString(),
         },
       ]}
       series={seriesData}
