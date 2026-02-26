@@ -42,6 +42,7 @@ import {
 import { getRelativeTime } from "../../../../util/time"
 import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
 import { LongPressMenu } from "../../../../components/gestures"
+import { SellerStatusBadge } from "../../../../components/presence/SellerStatusBadge"
 
 export function ListingRefreshButton(props: {
   listing: ExtendedUniqueSearchResult

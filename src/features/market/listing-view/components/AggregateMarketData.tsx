@@ -53,8 +53,8 @@ export function AggregateMarketData({
     }
   }, [aggregate, currentPrice])
 
-  const { series, buyMax, sellMax, totalStockAvailable, totalQuantityRequested } = useMemo(() => {
-    if (!aggregate) return { series: [[], []], buyMax: 0, sellMax: 0, totalStockAvailable: 0, totalQuantityRequested: 0 }
+  const { series, supplyDemand, buyMax, sellMax, totalStockAvailable, totalQuantityRequested } = useMemo(() => {
+    if (!aggregate) return { series: [[], []], supplyDemand: [[], []], buyMax: 0, sellMax: 0, totalStockAvailable: 0, totalQuantityRequested: 0 }
 
     const bucketCount = 100
     const sellHigh = aggregate.listings.length
@@ -109,6 +109,30 @@ export function AggregateMarketData({
 
     const buyMax = buyPoints[0].y
 
+    // Calculate cumulative supply (stock available at or below each price)
+    const supplyPoints = new Array(bucketCount + 1)
+      .fill(undefined)
+      .map((_o, i: number) => ({ x: interval * i, y: 0 }))
+    
+    for (const sell of sortedSell) {
+      const index = Math.min(Math.floor(sell.price / interval), bucketCount)
+      for (let i = index; i < bucketCount + 1; i++) {
+        supplyPoints[i].y += sell.quantity_available
+      }
+    }
+
+    // Calculate cumulative demand (quantity requested at or above each price)
+    const demandPoints = new Array(bucketCount + 1)
+      .fill(undefined)
+      .map((_o, i: number) => ({ x: interval * i, y: 0 }))
+    
+    for (const buy of sortedBuy) {
+      const index = Math.min(Math.floor((buy.price ?? 0) / interval), bucketCount)
+      for (let i = 0; i <= index; i++) {
+        demandPoints[i].y += buy.quantity
+      }
+    }
+
     const totalStockAvailable = aggregate.listings.reduce(
       (sum: number, listing: MarketAggregateListing) => sum + listing.quantity_available,
       0,
@@ -120,6 +144,7 @@ export function AggregateMarketData({
 
     return {
       series: [sellPoints, buyPoints],
+      supplyDemand: [supplyPoints, demandPoints],
       buyMax,
       sellMax,
       totalStockAvailable,
@@ -130,6 +155,7 @@ export function AggregateMarketData({
   if (!aggregate) return null
 
   const [sellWall, buyWall] = series
+  const [supplyPoints, demandPoints] = supplyDemand
 
   const tabs = [
     t("AggregateMarketData.priceHistory", "Price History"),
@@ -229,12 +255,12 @@ export function AggregateMarketData({
             <MuiAreaChart
               series={[
                 {
-                  name: t("AggregateMarketData.stockAvailable", "Stock Available"),
-                  data: sellWall.map((d) => ({ x: d.x.toString(), y: totalStockAvailable })),
+                  name: t("AggregateMarketData.stockAvailable", "Stock Available ≤ Price"),
+                  data: supplyPoints.map((d: { x: number; y: number }) => ({ x: d.x.toString(), y: d.y })),
                 },
                 {
-                  name: t("AggregateMarketData.quantityRequested", "Quantity Requested"),
-                  data: buyWall.map((d) => ({ x: d.x.toString(), y: totalQuantityRequested })),
+                  name: t("AggregateMarketData.quantityRequested", "Quantity Requested ≥ Price"),
+                  data: demandPoints.map((d: { x: number; y: number }) => ({ x: d.x.toString(), y: d.y })),
                 },
               ]}
               height={400}

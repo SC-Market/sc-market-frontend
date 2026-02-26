@@ -1,5 +1,5 @@
 import { Link, useParams } from "react-router-dom"
-import { lazy } from "react"
+import { lazy, useMemo } from "react"
 import { CurrentMarketListingContext } from "../../features/market/hooks/CurrentMarketItem"
 import { useGetMultipleByIdQuery } from "../../features/market/api/marketApi"
 import { MarketListingViewSkeleton } from "../../features/market/views/MarketListingView"
@@ -25,22 +25,50 @@ export function ViewMarketListing() {
   const { t } = useTranslation()
   const pageData = usePageMarketListing(id!)
 
+  const breadcrumbs = useMemo(() => {
+    const crumbs = [{ label: t("sidebar.market_short"), href: "/market" }]
+
+    if (pageData.data?.listing) {
+      const { details } = pageData.data.listing.listing
+
+      // Add item type/category
+      if (details.item_type) {
+        crumbs.push({
+          label: details.item_type,
+          href: `/market?type=${encodeURIComponent(details.item_type)}`,
+        })
+      }
+
+      // Add aggregate link if game_item_id exists
+      if (details.game_item_id) {
+        crumbs.push({
+          label: details.item_name || details.title,
+          href: `/market/aggregate/${details.game_item_id}`,
+        })
+      }
+
+      // Add current page
+      crumbs.push({
+        label: details.title,
+      })
+    } else {
+      crumbs.push({
+        label: t("market.viewMarketListing", "Listing"),
+      })
+    }
+
+    return crumbs
+  }, [pageData.data, t])
+
   return (
     <DetailPageLayout
-      title={pageData.data?.listing.details?.title}
+      title={pageData.data?.listing.listing.details?.title}
       canonicalUrl={
         pageData.data?.listing &&
         formatCompleteListingUrl(pageData.data.listing)
       }
-      breadcrumbs={[
-        { label: t("sidebar.market_short"), href: "/market" },
-        {
-          label:
-            pageData.data?.listing.details?.title ||
-            t("market.viewMarketListing", "Listing"),
-        },
-      ]}
-      entityTitle={pageData.data?.listing.details?.title}
+      breadcrumbs={breadcrumbs}
+      entityTitle={pageData.data?.listing.listing.details?.title}
       entityActions={
         <Link
           to="/market/cart"
