@@ -140,19 +140,11 @@ export function AggregateMarketData({
   ]
 
   return (
-    <Grid container spacing={theme.layoutSpacing.layout} sx={{ mt: 2 }}>
-      <Grid item xs={12}>
-        <Typography variant="h6" gutterBottom>
-          {t("AggregateMarketData.marketAnalysis", "Market Analysis")}
-        </Typography>
-      </Grid>
-
-      <Grid item xs={12}>
-        <TabbedChartLayout
-          tabs={tabs}
-          selectedTab={selectedTab}
-          onTabChange={setSelectedTab}
-        >
+    <TabbedChartLayout
+      tabs={tabs}
+      selectedTab={selectedTab}
+      onTabChange={setSelectedTab}
+    >
           {selectedTab === 0 && (
             <DynamicKlineChart
               onInit={(kline: typeof import("klinecharts")) => {
@@ -207,7 +199,5 @@ export function AggregateMarketData({
             />
           )}
         </TabbedChartLayout>
-      </Grid>
-    </Grid>
   )
 }

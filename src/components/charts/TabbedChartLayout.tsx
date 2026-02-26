@@ -26,7 +26,7 @@ export function TabbedChartLayout({
           <Tab key={index} label={label} />
         ))}
       </Tabs>
-      <Box sx={{ flexGrow: 1, p: 2 }}>{children}</Box>
+      <Box sx={{ flexGrow: 1 }}>{children}</Box>
     </Box>
   )
 }
