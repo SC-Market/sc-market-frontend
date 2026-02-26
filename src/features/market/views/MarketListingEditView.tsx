@@ -45,6 +45,7 @@ import { SelectPhotosArea } from "../../../components/modal/SelectPhotosArea"
 import { useTranslation } from "react-i18next" // Localization
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
+import { PriceComparisonAlert } from "../components/PriceComparisonAlert"
 
 export function MarketListingEditView() {
   const { t } = useTranslation() // Localization hook
@@ -494,6 +495,12 @@ export function MarketListingEditView() {
                       {t("MarketListingEditView.updateBtn")}
                     </Button>
                   </Box>
+                  {listing.details.game_item_id && price > 0 && (
+                    <PriceComparisonAlert
+                      gameItemId={listing.details.game_item_id}
+                      currentPrice={price}
+                    />
+                  )}
                   {listing.listing.sale_type === "auction" ? (
                     <Box
                       sx={{
