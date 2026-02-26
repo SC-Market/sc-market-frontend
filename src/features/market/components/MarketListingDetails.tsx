@@ -1,7 +1,6 @@
 import React, { useMemo } from "react"
 import {
   Box,
-  Breadcrumbs,
   Card,
   CardContent,
   CardHeader,
@@ -9,7 +8,6 @@ import {
   Divider,
   Fade,
   IconButton,
-  Link as MaterialLink,
   Stack,
   Typography,
 } from "@mui/material"
@@ -179,39 +177,6 @@ export function MarketListingDetails({
               spacing={theme.layoutSpacing.text}
               justifyContent={"left"}
             >
-              <Breadcrumbs
-                aria-label={t("ui.aria.breadcrumb")}
-                color={"text.primary"}
-              >
-                <MaterialLink
-                  component={Link}
-                  underline="hover"
-                  color="inherit"
-                  to="/market"
-                >
-                  {t("MarketListingView.market")}
-                </MaterialLink>
-                <MaterialLink
-                  component={Link}
-                  underline="hover"
-                  color="inherit"
-                  to={`/market?type=${encodeURIComponent(details.item_type)}`}
-                >
-                  {details.item_type}
-                </MaterialLink>
-                {details.item_name && (
-                  <MaterialLink
-                    component={Link}
-                    underline="hover"
-                    color="text.secondary"
-                    to={`/market?query=${encodeURIComponent(
-                      details.item_name,
-                    )}`}
-                  >
-                    {details.item_name}
-                  </MaterialLink>
-                )}
-              </Breadcrumbs>
               <Typography
                 sx={{
                   marginRight: 1,

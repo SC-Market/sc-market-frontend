@@ -940,7 +940,7 @@ export function AggregateBuySellWall(props: { aggregate: MarketAggregate }) {
   const { aggregate } = props
   const [selectedTab, setSelectedTab] = React.useState(0)
 
-  const { series, buyMax, sellMax, totalStockAvailable, totalQuantityRequested } = useMemo(() => {
+  const { series, supplyDemand, buyMax, sellMax, totalStockAvailable, totalQuantityRequested } = useMemo(() => {
     const bucketCount = 100
     const sellHigh = aggregate.listings.length
       ? aggregate.listings.reduce(
@@ -994,6 +994,30 @@ export function AggregateBuySellWall(props: { aggregate: MarketAggregate }) {
 
     const buyMax = buyPoints[0].y
 
+    // Calculate cumulative supply (stock available at or below each price)
+    const supplyPoints = new Array(bucketCount + 1)
+      .fill(undefined)
+      .map((o, i) => ({ x: interval * i, y: 0 }))
+    
+    for (const sell of sortedSell) {
+      const index = Math.min(Math.floor(sell.price / interval), bucketCount)
+      for (let i = index; i < bucketCount + 1; i++) {
+        supplyPoints[i].y += sell.quantity_available
+      }
+    }
+
+    // Calculate cumulative demand (quantity requested at or above each price)
+    const demandPoints = new Array(bucketCount + 1)
+      .fill(undefined)
+      .map((o, i) => ({ x: interval * i, y: 0 }))
+    
+    for (const buy of sortedBuy) {
+      const index = Math.min(Math.floor((buy.price ?? 0) / interval), bucketCount)
+      for (let i = 0; i <= index; i++) {
+        demandPoints[i].y += buy.quantity
+      }
+    }
+
     const totalStockAvailable = aggregate.listings.reduce(
       (sum, listing) => sum + listing.quantity_available,
       0,
@@ -1008,6 +1032,7 @@ export function AggregateBuySellWall(props: { aggregate: MarketAggregate }) {
         sellPoints,
         buyPoints,
       ],
+      supplyDemand: [supplyPoints, demandPoints],
       high,
       buyMax,
       sellMax,
@@ -1017,6 +1042,7 @@ export function AggregateBuySellWall(props: { aggregate: MarketAggregate }) {
   }, [aggregate])
 
   const [sellWall, buyWall] = series
+  const [supplyPoints, demandPoints] = supplyDemand
   const yMax = useMemo(() => Math.max(buyMax, sellMax), [buyMax, sellMax])
 
   const tabs = [
@@ -1052,12 +1078,12 @@ export function AggregateBuySellWall(props: { aggregate: MarketAggregate }) {
             <MuiAreaChart
               series={[
                 {
-                  name: t("MarketAggregateView.stockAvailable", "Stock Available"),
-                  data: sellWall.map((d) => ({ x: d.x.toString(), y: totalStockAvailable })),
+                  name: t("MarketAggregateView.stockAvailable", "Stock Available ≤ Price"),
+                  data: supplyPoints.map((d: { x: number; y: number }) => ({ x: d.x.toString(), y: d.y })),
                 },
                 {
-                  name: t("MarketAggregateView.quantityRequested", "Quantity Requested"),
-                  data: buyWall.map((d) => ({ x: d.x.toString(), y: totalQuantityRequested })),
+                  name: t("MarketAggregateView.quantityRequested", "Quantity Requested ≥ Price"),
+                  data: demandPoints.map((d: { x: number; y: number }) => ({ x: d.x.toString(), y: d.y })),
                 },
               ]}
               height={400}

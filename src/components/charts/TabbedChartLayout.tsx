@@ -1,5 +1,5 @@
 import React from "react"
-import { Box, Card, Tabs, Tab } from "@mui/material"
+import { Box, Tabs, Tab } from "@mui/material"
 
 interface TabbedChartLayoutProps {
   tabs: string[]
@@ -15,20 +15,18 @@ export function TabbedChartLayout({
   children,
 }: TabbedChartLayoutProps) {
   return (
-    <Card>
-      <Box display="flex">
-        <Tabs
-          orientation="vertical"
-          value={selectedTab}
-          onChange={(e, newValue) => onTabChange(newValue)}
-          sx={{ borderRight: 1, borderColor: "divider", minWidth: 150 }}
-        >
-          {tabs.map((label, index) => (
-            <Tab key={index} label={label} />
-          ))}
-        </Tabs>
-        <Box sx={{ flexGrow: 1, p: 2 }}>{children}</Box>
-      </Box>
-    </Card>
+    <Box display="flex" sx={{ border: 1, borderColor: "divider", borderRadius: 1 }}>
+      <Tabs
+        orientation="vertical"
+        value={selectedTab}
+        onChange={(e, newValue) => onTabChange(newValue)}
+        sx={{ borderRight: 1, borderColor: "divider", minWidth: 150 }}
+      >
+        {tabs.map((label, index) => (
+          <Tab key={index} label={label} />
+        ))}
+      </Tabs>
+      <Box sx={{ flexGrow: 1, p: 2 }}>{children}</Box>
+    </Box>
   )
 }

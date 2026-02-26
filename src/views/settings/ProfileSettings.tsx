@@ -11,6 +11,7 @@ import { ReVerifyProfile } from "./ReVerifyProfile"
 import { UnlinkProfile } from "./UnlinkProfile"
 import { AccountLinks } from "./AccountLinks"
 import { LanguageSettings } from "./LanguageSettings"
+import { InGameToggle } from "../../features/profile/components/InGameToggle"
 import { isCitizenIdEnabled } from "../../util/constants"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
@@ -79,6 +80,12 @@ export function ProfileSettings() {
   // User is verified - show normal settings
   return (
     <Grid container spacing={theme.layoutSpacing.layout}>
+      <Grid item xs={12}>
+        <Typography variant="h6" gutterBottom>
+          {t("settings.profile.presence", "Presence")}
+        </Typography>
+        <InGameToggle />
+      </Grid>
       <Grid item xs={12}>
         <AccountLinks />
       </Grid>
