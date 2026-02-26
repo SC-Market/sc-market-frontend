@@ -973,11 +973,13 @@ export function AggregateBuySellWall(props: { aggregate: MarketAggregate }) {
       .map((o, i) => ({ x: interval * i, y: 0 }))
 
     for (const sell of sortedSell) {
-      sellPoints[Math.floor(sell.price / interval)].y += 1
+      const index = Math.min(Math.floor(sell.price / interval), bucketCount)
+      sellPoints[index].y += 1
     }
 
     for (const buy of sortedBuy) {
-      buyPoints[Math.floor((buy.price ?? 0) / interval)].y += 1
+      const index = Math.min(Math.floor((buy.price ?? 0) / interval), bucketCount)
+      buyPoints[index].y += 1
     }
 
     for (let i = 1; i < bucketCount + 1; i++) {
