@@ -30,6 +30,8 @@ import {
   Typography,
   useTheme,
   useMediaQuery,
+  Tabs,
+  Tab,
 } from "@mui/material"
 import { HapticButton } from "../../../components/haptic"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
@@ -937,6 +939,7 @@ export function AggregateChart(props: { aggregate: MarketAggregate }) {
 export function AggregateBuySellWall(props: { aggregate: MarketAggregate }) {
   const { t } = useTranslation()
   const { aggregate } = props
+  const [selectedTab, setSelectedTab] = React.useState(0)
 
   const { series, buyMax, sellMax, totalStockAvailable, totalQuantityRequested } = useMemo(() => {
     const bucketCount = 100
@@ -1018,33 +1021,53 @@ export function AggregateBuySellWall(props: { aggregate: MarketAggregate }) {
   return (
     <Section xs={12}>
       <Grid item xs={12}>
-        <Box>
-          <MuiAreaChart
-            series={[
-              {
-                name: t("MarketAggregateView.buyOrdersChart"),
-                data: buyWall.map((d) => ({ x: d.x.toString(), y: d.y })),
-              },
-              {
-                name: t("MarketAggregateView.sellOrdersChart"),
-                data: sellWall.map((d) => ({ x: d.x.toString(), y: d.y })),
-              },
-              {
-                name: t("MarketAggregateView.stockAvailable", "Stock Available"),
-                data: sellWall.map((d) => ({ x: d.x.toString(), y: totalStockAvailable })),
-                yAxisKey: "rightAxis",
-              },
-              {
-                name: t("MarketAggregateView.quantityRequested", "Quantity Requested"),
-                data: buyWall.map((d) => ({ x: d.x.toString(), y: totalQuantityRequested })),
-                yAxisKey: "rightAxis",
-              },
-            ]}
-            height={400}
-            xAxisType="category"
-            rightYAxis={true}
-          />
-        </Box>
+        <Card>
+          <Box display="flex">
+            <Tabs
+              orientation="vertical"
+              value={selectedTab}
+              onChange={(e, newValue) => setSelectedTab(newValue)}
+              sx={{ borderRight: 1, borderColor: "divider", minWidth: 150 }}
+            >
+              <Tab label={t("MarketAggregateView.orderDepth", "Order Depth")} />
+              <Tab label={t("MarketAggregateView.supplyDemand", "Supply & Demand")} />
+            </Tabs>
+            <Box sx={{ flexGrow: 1, p: 2 }}>
+              {selectedTab === 0 && (
+                <MuiAreaChart
+                  series={[
+                    {
+                      name: t("MarketAggregateView.buyOrdersChart"),
+                      data: buyWall.map((d) => ({ x: d.x.toString(), y: d.y })),
+                    },
+                    {
+                      name: t("MarketAggregateView.sellOrdersChart"),
+                      data: sellWall.map((d) => ({ x: d.x.toString(), y: d.y })),
+                    },
+                  ]}
+                  height={400}
+                  xAxisType="category"
+                />
+              )}
+              {selectedTab === 1 && (
+                <MuiAreaChart
+                  series={[
+                    {
+                      name: t("MarketAggregateView.stockAvailable", "Stock Available"),
+                      data: sellWall.map((d) => ({ x: d.x.toString(), y: totalStockAvailable })),
+                    },
+                    {
+                      name: t("MarketAggregateView.quantityRequested", "Quantity Requested"),
+                      data: buyWall.map((d) => ({ x: d.x.toString(), y: totalQuantityRequested })),
+                    },
+                  ]}
+                  height={400}
+                  xAxisType="category"
+                />
+              )}
+            </Box>
+          </Box>
+        </Card>
       </Grid>
     </Section>
   )
