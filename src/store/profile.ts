@@ -330,6 +330,35 @@ export const userApi = serviceApi.injectEndpoints({
       }),
       invalidatesTags: [{ type: "MyProfile" as const }, "MyProfile" as const],
     }),
+    profileUpdateInGameStatus: builder.mutation<
+      { in_game: boolean },
+      { in_game: boolean }
+    >({
+      query: (body) => ({
+        url: `${baseUrl}/in-game`,
+        method: "PATCH",
+        body,
+      }),
+      async onQueryStarted({ in_game }, { dispatch, queryFulfilled }) {
+        // Optimistically update the profile
+        const patchResult = dispatch(
+          userApi.util.updateQueryData(
+            "profileGetUserProfile",
+            undefined,
+            (draft) => {
+              draft.in_game = in_game
+              draft.last_seen = new Date().toISOString()
+            },
+          ),
+        )
+        try {
+          await queryFulfilled
+        } catch {
+          patchResult.undo()
+        }
+      },
+      invalidatesTags: [{ type: "MyProfile" as const }, "MyProfile" as const],
+    }),
     profileCreateWebhook: builder.mutation<
       void,
       {
@@ -530,4 +559,5 @@ export const {
   useProfileSetPrimaryProviderMutation,
   useProfileGetLanguagesQuery,
   useProfileSetLanguagesMutation,
+  useProfileUpdateInGameStatusMutation,
 } = userApi
