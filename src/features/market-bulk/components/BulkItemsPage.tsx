@@ -34,7 +34,7 @@ export function BulkItemsPage() {
   return (
     <Page title={t("market.bulkItems")}>
       <MarketSidebarContext.Provider value={[open, setOpen]}>
-        {showMobileSidebar && <MarketSidebar />}
+        {showMobileSidebar && <MarketSidebar showViewModeSelector />}
 
         <OpenLayout sidebarOpen={true} noMobilePadding={true}>
           {/* Header: same structure as MarketPage (title + actions, no tabs) */}
@@ -109,7 +109,7 @@ export function BulkItemsPage() {
                       overflowY: "auto",
                     }}
                   >
-                    <MarketSidebar />
+                    <MarketSidebar showViewModeSelector />
                   </Paper>
                   <Box sx={{ flex: 1, minWidth: 0 }}>
                     <Suspense fallback={<MarketTabLoader />}>

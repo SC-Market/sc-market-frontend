@@ -37,8 +37,8 @@ import { useNavigate, useLocation } from "react-router-dom"
 export function MarketSearchArea(props: {
   status?: boolean
   hideSearchBar?: boolean
-  /** When true, hide the Listings / Bulk / Buy Orders selector (e.g. on manage listings page) */
-  hideViewModeSelector?: boolean
+  /** When true, show the Listings / Bulk / Buy Orders selector. Only set on /market, /bulk, /buyorders pages. */
+  showViewModeSelector?: boolean
 }) {
   const theme: ExtendedTheme = useTheme()
   const { t } = useTranslation()
@@ -120,7 +120,7 @@ export function MarketSearchArea(props: {
       }}
     >
       <Grid container spacing={theme.layoutSpacing.layout}>
-        {!props.hideViewModeSelector && (
+        {props.showViewModeSelector && (
           <Grid item xs={12}>
             <ToggleButtonGroup
               value={viewMode}
@@ -422,8 +422,12 @@ export function MarketSearchArea(props: {
   )
 }
 
-export function MarketSidebar(props: { status?: boolean }) {
-  const { status } = props
+export function MarketSidebar(props: {
+  status?: boolean
+  /** When true, show the Listings / Bulk / Buy Orders selector. Only set on /market, /bulk, /buyorders pages. */
+  showViewModeSelector?: boolean
+}) {
+  const { status, showViewModeSelector } = props
 
   const [drawerOpen] = useDrawerOpen()
   const [open, setOpen] = useMarketSidebar()
@@ -441,13 +445,15 @@ export function MarketSidebar(props: { status?: boolean }) {
         snapPoints={["half", "75", "full"]}
         defaultSnap="75"
       >
-        <MarketSearchArea status={status} />
+        <MarketSearchArea status={status} showViewModeSelector={showViewModeSelector} />
       </BottomSheet>
     )
   }
 
   // Desktop: Render as persistent sidebar content (no drawer)
-  return <MarketSearchArea status={status} />
+  return (
+    <MarketSearchArea status={status} showViewModeSelector={showViewModeSelector} />
+  )
 }
 
 export function MarketSideBarToggleButton() {

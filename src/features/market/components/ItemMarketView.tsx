@@ -10,18 +10,27 @@ import {
 } from "@mui/material"
 import { HideOnScroll, MarketNavArea } from "./MarketNavArea"
 import { ItemListings } from "../views/ItemListings"
-import React from "react"
+import React, { useMemo } from "react"
+import { useLocation } from "react-router-dom"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 
 export function ItemMarketView() {
   const theme = useTheme<ExtendedTheme>()
+  const location = useLocation()
   const showMobileSidebar = useMediaQuery(theme.breakpoints.down("lg"))
+  const showViewModeSelector = useMemo(() => {
+    if (location.pathname.startsWith("/market/services")) return false
+    if (location.pathname.startsWith("/market")) return true
+    if (location.pathname.startsWith("/bulk")) return true
+    if (location.pathname.startsWith("/buyorders")) return true
+    return false
+  }, [location.pathname])
 
   return (
     <>
       {/* Mobile/Tablet: Use bottom sheet – controlled by MarketPage's FAB via MarketSidebarContext */}
-      {showMobileSidebar && <MarketSidebar />}
+      {showMobileSidebar && <MarketSidebar showViewModeSelector={showViewModeSelector} />}
 
       <Container maxWidth={"xxxl"} sx={{ padding: 0 }}>
         <Box sx={{ display: "flex", justifyContent: "center" }}>
@@ -60,7 +69,7 @@ export function ItemMarketView() {
                   overflowY: "auto",
                 }}
               >
-                <MarketSidebar />
+                <MarketSidebar showViewModeSelector={showViewModeSelector} />
               </Paper>
 
               {/* Main content area – minWidth: 0 so flex child can shrink and grid gets full width */}
