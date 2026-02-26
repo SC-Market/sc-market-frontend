@@ -1051,7 +1051,7 @@ export function AggregateBuySellWall(props: { aggregate: MarketAggregate }) {
   ]
 
   return (
-    <Section xs={12}>
+    <Section xs={12} disablePadding>
       <Grid item xs={12}>
         <TabbedChartLayout
           tabs={tabs}
