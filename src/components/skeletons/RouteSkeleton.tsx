@@ -30,7 +30,7 @@ const LISTING_GRID_BREAKPOINTS = {
   lg: 3,
   xl: 2.4,
   xxl: 2,
-  xxxl: 12 / 7,
+  xxxl: 12 / 8,
 } as const
 
 /**

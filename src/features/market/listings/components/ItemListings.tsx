@@ -75,6 +75,7 @@ import { UnderlineLink } from "../../../../components/typography/UnderlineLink"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../../hooks/styles/Theme"
 import { CURRENT_CUSTOM_ORG } from "../../../../hooks/contractor/CustomDomain"
+import { useDrawerOpen } from "../../../../hooks/layout/Drawer"
 import { RecentListingsSkeleton } from "../../../../components/landing"
 import { getRelativeTime } from "../../../../util/time"
 import {
@@ -281,6 +282,18 @@ export function Listing(props: {
   }
 }
 
+/** Listing grid breakpoints. Market filter sidebar floats (BottomSheet) below lg; at lg+ it takes layout space. When main app drawer is closed at lg/xl/xxl we add one column; xxxl unchanged. */
+function useListingGridBreakpoints() {
+  const theme = useTheme<ExtendedTheme>()
+  const sidebarInLayout = useMediaQuery(theme.breakpoints.up("lg"))
+  const [drawerOpen] = useDrawerOpen()
+  return useMemo(() => {
+    const base = { xs: 6, sm: 4, md: 4, lg: 3, xl: 2.4, xxl: 2, xxxl: 12 / 8 }
+    if (!sidebarInLayout || drawerOpen) return base
+    return { xs: 6, sm: 4, md: 4, lg: 2.4, xl: 2, xxl: 12 / 7, xxxl: 12 / 8 }
+  }, [sidebarInLayout, drawerOpen])
+}
+
 export function DisplayListings(props: {
   listings: MarketListingSearchResult[]
   loading?: boolean
@@ -292,6 +305,7 @@ export function DisplayListings(props: {
   const [perPage, setPerPage] = useState(48)
   const [page, setPage] = useState(0)
   const marketSidebarOpen = useMarketSidebarExp()
+  const gridBreakpoints = useListingGridBreakpoints()
 
   const { listings, loading, total, startIndex = 0, disableAds = false } = props
 
@@ -353,17 +367,7 @@ export function DisplayListings(props: {
           ? new Array(perPage)
               .fill(undefined)
               .map((o, i) => (
-                <Grid
-                  item
-                  xs={6}
-                  sm={4}
-                  md={4}
-                  lg={3}
-                  xl={2.4}
-                  xxl={2}
-                  xxxl={12 / 7}
-                  key={i}
-                >
+                <Grid item {...gridBreakpoints} key={i}>
                   <StandardListingSkeleton
                     index={i}
                     sidebarOpen={marketSidebarOpen}
@@ -375,17 +379,7 @@ export function DisplayListings(props: {
                 ? item.listing_id
                 : `ad-${item.id}-${index}`
               return (
-                <Grid
-                  item
-                  xs={6}
-                  sm={4}
-                  md={4}
-                  lg={3}
-                  xl={2.4}
-                  xxl={2}
-                  xxxl={12 / 7}
-                  key={key}
-                >
+                <Grid item {...gridBreakpoints} key={key}>
                   <Listing listing={item} index={index} />
                 </Grid>
               )
@@ -454,6 +448,7 @@ export function DisplayListingsMin(props: {
 
   if (loading) {
     const marketSidebarOpen = useMarketSidebarExp()
+    const gridBreakpoints = useListingGridBreakpoints()
     return (
       <Grid
         container
@@ -461,17 +456,7 @@ export function DisplayListingsMin(props: {
         sx={{ width: "100%" }}
       >
         {new Array(16).fill(undefined).map((o, i) => (
-          <Grid
-            item
-            xs={6}
-            sm={4}
-            md={4}
-            lg={3}
-            xl={2.4}
-            xxl={2}
-            xxxl={12 / 7}
-            key={i}
-          >
+          <Grid item {...gridBreakpoints} key={i}>
             <StandardListingSkeleton
               index={i}
               sidebarOpen={marketSidebarOpen}
@@ -559,6 +544,7 @@ export function DisplayListingsMin(props: {
   }
 
   // Fallback to regular rendering for small lists
+  const gridBreakpoints = useListingGridBreakpoints()
   return (
     <Grid
       container
@@ -568,17 +554,7 @@ export function DisplayListingsMin(props: {
       {listingsWithAds.map((item, index) => {
         const key = isListing(item) ? item.listing_id : `ad-${item.id}-${index}`
         return (
-          <Grid
-            item
-            xs={6}
-            sm={4}
-            md={4}
-            lg={3}
-            xl={2.4}
-            xxl={2}
-            xxxl={12 / 7}
-            key={key}
-          >
+          <Grid item {...gridBreakpoints} key={key}>
             <Listing listing={item} index={index} />
           </Grid>
         )
@@ -596,6 +572,7 @@ export function DisplayBuyOrderListings(props: {
   const [perPage, setPerPage] = useState(48)
   const [page, setPage] = useState(0)
   const marketSidebarOpen = useMarketSidebarExp()
+  const gridBreakpoints = useListingGridBreakpoints()
 
   useEffect(() => {
     setPage(0)
@@ -636,17 +613,7 @@ export function DisplayBuyOrderListings(props: {
             ? new Array(perPage)
                 .fill(undefined)
                 .map((o, i) => (
-                  <Grid
-                    item
-                    xs={6}
-                    sm={4}
-                    md={4}
-                    lg={3}
-                    xl={2.4}
-                    xxl={2}
-                    xxxl={12 / 7}
-                    key={i}
-                  >
+                  <Grid item {...gridBreakpoints} key={i}>
                     <StandardListingSkeleton
                       index={i}
                       sidebarOpen={marketSidebarOpen}
@@ -654,17 +621,7 @@ export function DisplayBuyOrderListings(props: {
                   </Grid>
                 ))
             : listings.map((item, index) => (
-                <Grid
-                  item
-                  xs={6}
-                  sm={4}
-                  md={4}
-                  lg={3}
-                  xl={2.4}
-                  xxl={2}
-                  xxxl={12 / 7}
-                  key={item.details.game_item_id}
-                >
+                <Grid item {...gridBreakpoints} key={item.details.game_item_id}>
                   <AggregateBuyOrderListing
                     aggregate={item}
                     index={index}
