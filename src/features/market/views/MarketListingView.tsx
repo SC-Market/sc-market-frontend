@@ -1180,10 +1180,12 @@ export function MarketListingView() {
 
         {/* Aggregate Market Data - Full Width */}
         {details.game_item_id && (
-          <AggregateMarketData
-            gameItemId={details.game_item_id}
-            currentPrice={listing.price}
-          />
+          <Section xs={12}>
+            <AggregateMarketData
+              gameItemId={details.game_item_id}
+              currentPrice={listing.price}
+            />
+          </Section>
         )}
 
         {/* Seller's Other Listings Section - Full Width */}
