@@ -98,6 +98,7 @@ export function MarketListingDetails({
   const auction_details =
     complete.type === "unique" ? complete.auction_details : undefined
   const { data: profile } = useGetUserProfileQuery()
+  const seller = listing.user_seller || listing.contractor_seller
   const actualProfile = profileProp || profile
 
   const [timeDisplay, setTimeDisplay] = React.useState(
@@ -260,13 +261,13 @@ export function MarketListingDetails({
                   ).toLocaleString()}
                 </ListingDetailItem>
 
-                {(listing.user_seller || listing.contractor_seller) && (
+                {seller && (
                   <ListingDetailItem
                     icon={<SportsEsportsRounded fontSize={"inherit"} />}
                   >
                     <SellerStatusBadge
                       inGame={listing.user_seller?.in_game}
-                      lastSeen={listing.user_seller?.last_seen}
+                      lastSeen={seller.last_seen}
                       membersOnline={listing.contractor_seller?.members_online}
                     />
                   </ListingDetailItem>
