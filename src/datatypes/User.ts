@@ -29,6 +29,8 @@ export interface User {
   market_order_template: string
   rsi_confirmed: boolean
   languages?: Array<{ code: string; name: string }>
+  last_seen?: string
+  in_game?: boolean
 }
 
 export interface MinimalUser {
