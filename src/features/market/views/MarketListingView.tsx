@@ -69,6 +69,7 @@ import { SellerOtherListings } from "../listing-view/components/SellerOtherListi
 import { SellerReviews } from "../listing-view/components/SellerReviews"
 import { RelatedListings } from "../listing-view/components/RelatedListings"
 import { ListingDetailItem } from "../listing-view/components/ListingDetailItem"
+import { AggregateMarketData } from "../listing-view/components/AggregateMarketData"
 import { dateDiffInDays } from "../../../util/dateDiff"
 
 export function PurchaseArea(props: { listing: BaseListingType }) {
@@ -1176,6 +1177,14 @@ export function MarketListingView() {
           userSeller={listing.user_seller}
           contractorSeller={listing.contractor_seller}
         />
+
+        {/* Aggregate Market Data - Full Width */}
+        {details.game_item_id && (
+          <AggregateMarketData
+            gameItemId={details.game_item_id}
+            currentPrice={listing.price}
+          />
+        )}
 
         {/* Seller's Other Listings Section - Full Width */}
         <SellerOtherListings
