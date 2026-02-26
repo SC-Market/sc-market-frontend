@@ -1,4 +1,4 @@
-import { Chip, Tooltip } from "@mui/material"
+import { Chip, Tooltip, Box } from "@mui/material"
 import { formatDistanceToNow } from "date-fns"
 import SportsEsportsRoundedIcon from "@mui/icons-material/SportsEsportsRounded"
 import AccessTimeRoundedIcon from "@mui/icons-material/AccessTimeRounded"
@@ -16,45 +16,44 @@ export function SellerStatusBadge({
   membersOnline,
   compact,
 }: SellerStatusBadgeProps) {
-  // For contractors, show members online count
-  if (membersOnline !== undefined && membersOnline > 0) {
-    return (
-      <Chip
-        icon={<SportsEsportsRoundedIcon />}
-        label={compact ? membersOnline : `${membersOnline} online`}
-        size="small"
-        color="success"
-        sx={{ fontWeight: 600 }}
-      />
-    )
-  }
-
-  // For individual users, show in-game status
-  if (inGame) {
-    return (
-      <Chip
-        icon={<SportsEsportsRoundedIcon />}
-        label={compact ? undefined : "In Game"}
-        size="small"
-        color="success"
-        sx={{ fontWeight: 600 }}
-      />
-    )
-  }
-
-  if (!lastSeen) return null
-
-  const lastSeenDate = new Date(lastSeen)
-  const lastSeenText = formatDistanceToNow(lastSeenDate, { addSuffix: true })
+  const lastSeenDate = lastSeen ? new Date(lastSeen) : null
+  const lastSeenText = lastSeenDate
+    ? formatDistanceToNow(lastSeenDate, { addSuffix: true })
+    : null
 
   return (
-    <Tooltip title={`Last active ${lastSeenText}`}>
-      <Chip
-        icon={<AccessTimeRoundedIcon />}
-        label={compact ? undefined : `Active ${lastSeenText}`}
-        size="small"
-        variant="outlined"
-      />
-    </Tooltip>
+    <Box display="flex" gap={0.5} alignItems="center">
+      {/* Show online status if applicable */}
+      {membersOnline !== undefined && membersOnline > 0 && (
+        <Chip
+          icon={<SportsEsportsRoundedIcon />}
+          label={compact ? membersOnline : `${membersOnline} online`}
+          size="small"
+          color="success"
+          sx={{ fontWeight: 600 }}
+        />
+      )}
+      {inGame && (
+        <Chip
+          icon={<SportsEsportsRoundedIcon />}
+          label={compact ? undefined : "In Game"}
+          size="small"
+          color="success"
+          sx={{ fontWeight: 600 }}
+        />
+      )}
+
+      {/* Always show last active if available */}
+      {lastSeenText && (
+        <Tooltip title={`Last active ${lastSeenText}`}>
+          <Chip
+            icon={<AccessTimeRoundedIcon />}
+            label={compact ? undefined : `Active ${lastSeenText}`}
+            size="small"
+            variant="outlined"
+          />
+        </Tooltip>
+      )}
+    </Box>
   )
 }
