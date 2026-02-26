@@ -12,6 +12,7 @@ import { useTranslation } from "react-i18next"
 import { DetailPageLayout } from "../../components/layout/DetailPageLayout"
 import { LazySection } from "../../components/layout/LazySection"
 import { usePageMarketListing } from "../../features/market/hooks/usePageMarketListing"
+import type { ListingDetails } from "../../datatypes/MarketListing"
 
 // Lazy load the content component, but keep skeleton eager
 const MarketListingView = lazy(() =>
@@ -26,49 +27,73 @@ export function ViewMarketListing() {
   const pageData = usePageMarketListing(id!)
 
   const breadcrumbs = useMemo(() => {
-    const crumbs = [{ label: t("sidebar.market_short"), href: "/market" }]
+    const crumbs: Array<{ label: string; href?: string }> = [
+      { label: t("sidebar.market_short"), href: "/market" },
+    ]
 
     if (pageData.data?.listing) {
-      const { details } = pageData.data.listing.listing
+      const listing = pageData.data.listing
+      let details: ListingDetails | undefined
 
-      // Add item type/category
-      if (details.item_type) {
-        crumbs.push({
-          label: details.item_type,
-          href: `/market?type=${encodeURIComponent(details.item_type)}`,
-        })
+      switch (listing.type) {
+        case "unique":
+        case "multiple_listing":
+        case "aggregate_composite":
+          details = listing.details
+          break
       }
 
-      // Add aggregate link if game_item_id exists
-      if (details.game_item_id) {
-        crumbs.push({
-          label: details.item_name || details.title,
-          href: `/market/aggregate/${details.game_item_id}`,
-        })
-      }
+      if (details) {
+        if (details.item_type) {
+          crumbs.push({
+            label: details.item_type,
+            href: `/market?type=${encodeURIComponent(details.item_type)}`,
+          })
+        }
 
-      // Add current page
-      crumbs.push({
-        label: details.title,
-      })
+        if (details.game_item_id) {
+          crumbs.push({
+            label: details.item_name || details.title,
+            href: `/market/aggregate/${details.game_item_id}`,
+          })
+        }
+
+        crumbs.push({ label: details.title })
+      } else {
+        crumbs.push({ label: t("market.viewMarketListing", "Listing") })
+      }
     } else {
-      crumbs.push({
-        label: t("market.viewMarketListing", "Listing"),
-      })
+      crumbs.push({ label: t("market.viewMarketListing", "Listing") })
     }
 
     return crumbs
   }, [pageData.data, t])
 
+  const getTitle = (): string | undefined => {
+    if (!pageData.data?.listing) return undefined
+    const listing = pageData.data.listing
+    
+    switch (listing.type) {
+      case "unique":
+      case "multiple_listing":
+      case "aggregate_composite":
+        return listing.details?.title
+      default:
+        return undefined
+    }
+  }
+
+  const title = getTitle()
+
   return (
     <DetailPageLayout
-      title={pageData.data?.listing.listing.details?.title}
+      title={title}
       canonicalUrl={
         pageData.data?.listing &&
         formatCompleteListingUrl(pageData.data.listing)
       }
       breadcrumbs={breadcrumbs}
-      entityTitle={pageData.data?.listing.listing.details?.title}
+      entityTitle={title}
       entityActions={
         <Link
           to="/market/cart"
