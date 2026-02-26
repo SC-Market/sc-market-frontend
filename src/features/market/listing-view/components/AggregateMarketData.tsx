@@ -29,30 +29,6 @@ export function AggregateMarketData({
   const { data: chartData } = useMarketGetAggregateHistoryByIDQuery(gameItemId)
   const [selectedTab, setSelectedTab] = useState(0)
 
-  const priceComparison = useMemo(() => {
-    if (!aggregate?.listings.length) return null
-
-    const prices = aggregate.listings.map((l: MarketAggregateListing) => l.price)
-    const avgPrice = prices.reduce((a: number, b: number) => a + b, 0) / prices.length
-    const minPrice = Math.min(...prices)
-    const maxBuyOrder = aggregate.buy_orders
-      .filter((o: BuyOrder) => o.price != null)
-      .reduce((max: number, o: BuyOrder) => Math.max(max, o.price!), 0)
-
-    const percentVsAvg = ((currentPrice - avgPrice) / avgPrice) * 100
-    const percentVsMin = ((currentPrice - minPrice) / minPrice) * 100
-
-    return {
-      avgPrice,
-      minPrice,
-      maxBuyOrder,
-      percentVsAvg,
-      percentVsMin,
-      isBelowAvg: currentPrice < avgPrice,
-      isLowest: currentPrice === minPrice,
-    }
-  }, [aggregate, currentPrice])
-
   const { series, supplyDemand, buyMax, sellMax, totalStockAvailable, totalQuantityRequested } = useMemo(() => {
     if (!aggregate) return { series: [[], []], supplyDemand: [[], []], buyMax: 0, sellMax: 0, totalStockAvailable: 0, totalQuantityRequested: 0 }
 
@@ -170,43 +146,6 @@ export function AggregateMarketData({
           {t("AggregateMarketData.marketAnalysis", "Market Analysis")}
         </Typography>
       </Grid>
-
-      {priceComparison && (
-        <Grid item xs={12}>
-          <Card>
-            <CardContent>
-              <Typography variant="subtitle2" gutterBottom>
-                {t("AggregateMarketData.priceComparison", "Price Comparison")}
-              </Typography>
-              <Box display="flex" gap={1} flexWrap="wrap">
-                <Chip
-                  icon={
-                    priceComparison.isBelowAvg ? (
-                      <TrendingDownIcon />
-                    ) : (
-                      <TrendingUpIcon />
-                    )
-                  }
-                  label={`${priceComparison.percentVsAvg > 0 ? "+" : ""}${priceComparison.percentVsAvg.toFixed(1)}% vs Avg (${priceComparison.avgPrice.toLocaleString()} aUEC)`}
-                  color={priceComparison.isBelowAvg ? "success" : "default"}
-                  size="small"
-                />
-                <Chip
-                  label={`Lowest: ${priceComparison.minPrice.toLocaleString()} aUEC`}
-                  color={priceComparison.isLowest ? "success" : "default"}
-                  size="small"
-                />
-                {priceComparison.maxBuyOrder > 0 && (
-                  <Chip
-                    label={`Top Buy Order: ${priceComparison.maxBuyOrder.toLocaleString()} aUEC`}
-                    size="small"
-                  />
-                )}
-              </Box>
-            </CardContent>
-          </Card>
-        </Grid>
-      )}
 
       <Grid item xs={12}>
         <TabbedChartLayout

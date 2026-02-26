@@ -22,7 +22,7 @@ export function PriceComparisonAlert({
   const priceComparison = useMemo(() => {
     if (!aggregate?.listings.length || currentPrice <= 0) return null
 
-    const prices = aggregate.listings.map((l) => l.price)
+    const prices = aggregate.listings.map((l) => Number(l.price))
     const avgPrice = prices.reduce((a, b) => a + b, 0) / prices.length
     const minPrice = Math.min(...prices)
     const percentVsAvg = ((currentPrice - avgPrice) / avgPrice) * 100
