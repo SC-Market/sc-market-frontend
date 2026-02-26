@@ -68,4 +68,6 @@ export interface UserProfileState {
   // TODO: Factor this out of user and move it to shop
   market_order_template: string
   locale: string
+  last_seen?: string
+  in_game?: boolean
 }
