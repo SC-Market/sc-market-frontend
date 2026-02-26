@@ -80,6 +80,8 @@ export interface MinimalContractor {
   } | null
   role?: string
   role_id?: string
+  last_seen?: string
+  members_online?: number
 }
 
 export interface UserContractorState {

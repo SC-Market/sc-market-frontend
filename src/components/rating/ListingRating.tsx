@@ -96,6 +96,13 @@ export function ListingNameAndRating(props: {
           compact
         />
       )}
+      {contractor && (
+        <SellerStatusBadge
+          membersOnline={contractor.members_online}
+          lastSeen={contractor.last_seen}
+          compact
+        />
+      )}
       <ListingSellerRating user={user} contractor={contractor} />
     </Box>
   )
