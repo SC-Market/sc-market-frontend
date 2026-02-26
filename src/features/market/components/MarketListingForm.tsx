@@ -56,6 +56,7 @@ import { GameItemSearchAutocomplete } from "./GameItemSearchAutocomplete"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { SelectPhotosArea } from "../../../components/modal/SelectPhotosArea"
 import { useTranslation } from "react-i18next" // Localization
+import { PriceComparisonAlert } from "./PriceComparisonAlert"
 
 export function MarketListingForm(props: { sale_type: "sale" | "auction" }) {
   const { t } = useTranslation()
@@ -77,6 +78,8 @@ export function MarketListingForm(props: { sale_type: "sale" | "auction" }) {
     item_name: null,
     delivery_preference: null,
   })
+
+  const [gameItemId, setGameItemId] = React.useState<string | null>(null)
 
   const { data: searchResults, isLoading: isSearchLoading } =
     useSearchMarketQuery(
@@ -231,6 +234,7 @@ export function MarketListingForm(props: { sale_type: "sale" | "auction" }) {
                 item_type: itemType || "Other",
                 title: !state.title && itemName ? itemName : state.title,
               }))
+              setGameItemId(itemId)
             }}
             label={t("market.selectGameItem", "Select Game Item")}
           />
@@ -550,6 +554,14 @@ export function MarketListingForm(props: { sale_type: "sale" | "auction" }) {
             {t("accessibility.priceHelp", "Enter the price per unit in aUEC")}
           </div>
         </Grid>
+        {gameItemId && state.price > 0 && (
+          <Grid item xs={12}>
+            <PriceComparisonAlert
+              gameItemId={gameItemId}
+              currentPrice={state.price}
+            />
+          </Grid>
+        )}
         {state.sale_type === "auction" ? (
           <>
             <Grid item xs={12}>
@@ -944,6 +956,14 @@ export function AggregateMarketListingForm() {
             {t("accessibility.priceHelp", "Enter the price per unit in aUEC")}
           </div>
         </Grid>
+        {aggregate?.details.game_item_id && state.price > 0 && (
+          <Grid item xs={12}>
+            <PriceComparisonAlert
+              gameItemId={aggregate.details.game_item_id}
+              currentPrice={state.price}
+            />
+          </Grid>
+        )}
       </FormPaper>
       <Grid item xs={12} container justifyContent={"right"}>
         <LoadingButton

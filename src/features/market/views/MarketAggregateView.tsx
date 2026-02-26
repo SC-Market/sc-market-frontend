@@ -912,19 +912,6 @@ export function AggregateChart(props: { aggregate: MarketAggregate }) {
             const chart = kline.init(`${aggregate.details.game_item_id}-chart`)
             if (chart) {
               // Configure Y-axis to show whole numbers
-              chart.setStyles({
-                yAxis: {
-                  type: 'normal',
-                  inside: false,
-                  reverse: false,
-                  axisLine: {
-                    show: true,
-                  },
-                  tickText: {
-                    show: true,
-                  },
-                },
-              })
               chart.setPriceVolumePrecision(0, 0)
               // add data to the chart
               chart.applyNewData(Array.isArray(chartData) ? chartData : [])

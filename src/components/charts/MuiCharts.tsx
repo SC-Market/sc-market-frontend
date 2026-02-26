@@ -10,6 +10,7 @@ interface DataPoint {
 interface Series {
   name: string
   data: DataPoint[]
+  yAxisKey?: string
 }
 
 interface MuiLineChartProps {
@@ -95,7 +96,7 @@ export function MuiAreaChart({
     curve: "linear" as const,
     showMark: false,
     area: true,
-    yAxisKey: (s as any).yAxisKey,
+    yAxisKey: s.yAxisKey,
   }))
 
   const yAxisConfig = rightYAxis
