@@ -20,6 +20,7 @@ import {
   RefreshRounded,
   VisibilityRounded,
   WarningRounded,
+  SportsEsportsRounded,
 } from "@mui/icons-material"
 import { BaseListingType, UniqueListing } from ".."
 import { MarkdownRender } from "../../../components/markdown/Markdown.lazy"
@@ -34,6 +35,7 @@ import { useTheme } from "@mui/material/styles"
 import { ListingDetailItem } from "../listing-view/components/ListingDetailItem"
 import { dateDiffInDays } from "../../../util/dateDiff"
 import { useGetGameItemAttributesQuery } from "../../../store/api/attributes"
+import { SellerStatusBadge } from "../../../components/presence/SellerStatusBadge"
 interface MarketListingDetailsProps {
   listing: BaseListingType
   currentOrg?: any
@@ -257,6 +259,18 @@ export function MarketListingDetails({
                     : 0
                   ).toLocaleString()}
                 </ListingDetailItem>
+
+                {(listing.user_seller || listing.contractor_seller) && (
+                  <ListingDetailItem
+                    icon={<SportsEsportsRounded fontSize={"inherit"} />}
+                  >
+                    <SellerStatusBadge
+                      inGame={listing.user_seller?.in_game}
+                      lastSeen={listing.user_seller?.last_seen}
+                      membersOnline={listing.contractor_seller?.members_online}
+                    />
+                  </ListingDetailItem>
+                )}
 
                 <ListingDetailItem
                   icon={<WarningRounded fontSize={"inherit"} />}
