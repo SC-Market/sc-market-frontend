@@ -50,7 +50,7 @@ import { NumericFormat } from "react-number-format"
 import { FormPaper } from "../../../components/paper/FormPaper"
 import {
   SelectGameCategory,
-  SelectGameItemStack,
+  SelectGameItemOnly,
 } from "../../../components/select/SelectGameItem"
 import { GameItemSearchAutocomplete } from "./GameItemSearchAutocomplete"
 import LoadingButton from "@mui/lab/LoadingButton"
@@ -228,11 +228,40 @@ export function MarketListingForm(props: { sale_type: "sale" | "auction" }) {
               setState((state) => ({
                 ...state,
                 item_name: itemName,
-                item_type: itemType || state.item_type,
+                item_type: itemType || "Other",
                 title: !state.title && itemName ? itemName : state.title,
               }))
             }}
             label={t("market.selectGameItem", "Select Game Item")}
+          />
+        </Grid>
+
+        <Grid item xs={12} md={6}>
+          <SelectGameCategory
+            value={state.item_type}
+            onChange={(newType) => {
+              setState((state) => ({
+                ...state,
+                item_type: newType,
+                item_name: null,
+              }))
+            }}
+            size="small"
+          />
+        </Grid>
+
+        <Grid item xs={12} md={6}>
+          <SelectGameItemOnly
+            item_type={state.item_type}
+            item_name={state.item_name}
+            onItemChange={(newItem) => {
+              setState((state) => ({
+                ...state,
+                item_name: newItem,
+                title: !state.title && newItem ? newItem : state.title,
+              }))
+            }}
+            size="small"
           />
         </Grid>
 
