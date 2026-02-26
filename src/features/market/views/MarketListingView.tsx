@@ -1180,12 +1180,19 @@ export function MarketListingView() {
 
         {/* Aggregate Market Data - Full Width */}
         {details.game_item_id && (
-          <Section xs={12}>
-            <AggregateMarketData
-              gameItemId={details.game_item_id}
-              currentPrice={listing.price}
-            />
-          </Section>
+          <Grid item xs={12}>
+            <Box sx={{ mb: 3 }}>
+              <Typography variant="h6" color="text.secondary" fontWeight="bold" sx={{ mb: 2 }}>
+                {t("MarketListingView.marketAnalysis", "Market Analysis")}
+              </Typography>
+              <Section xs={12}>
+                <AggregateMarketData
+                  gameItemId={details.game_item_id}
+                  currentPrice={listing.price}
+                />
+              </Section>
+            </Box>
+          </Grid>
         )}
 
         {/* Seller's Other Listings Section - Full Width */}
