@@ -29,6 +29,17 @@ export function InstallPrompt() {
       return
     }
 
+    // Migrate from old sessionStorage to cookie
+    const oldDismissed = sessionStorage.getItem("pwa-install-dismissed")
+    if (oldDismissed === "true" && cookies["pwa-install-dismissed"] !== "true") {
+      setCookie("pwa-install-dismissed", "true", {
+        path: "/",
+        maxAge: 365 * 24 * 60 * 60,
+      })
+      sessionStorage.removeItem("pwa-install-dismissed")
+      return
+    }
+
     // Check if prompt was dismissed (cookie lasts 1 year)
     if (cookies["pwa-install-dismissed"] === "true") {
       return
@@ -38,7 +49,7 @@ export function InstallPrompt() {
     if (canInstall) {
       setShowPrompt(true)
     }
-  }, [canInstall, isInstalled, cookies])
+  }, [canInstall, isInstalled, cookies, setCookie])
 
   const handleInstall = async () => {
     const success = await triggerInstall()
