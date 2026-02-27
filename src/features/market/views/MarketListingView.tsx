@@ -1021,40 +1021,6 @@ export function MarketListingView() {
                                 />
                               </ListingDetailItem>
 
-                              <ListingDetailItem
-                                icon={<CreateRounded fontSize={"inherit"} />}
-                              >
-                                {t("MarketListingView.listed")}{" "}
-                                {getRelativeTime(new Date(listing.timestamp))}
-                              </ListingDetailItem>
-
-                              <ListingDetailItem
-                                icon={<RefreshRounded fontSize={"inherit"} />}
-                              >
-                                {t("MarketListingView.updated")}{" "}
-                                {getRelativeTime(
-                                  subDays(new Date(listing.expiration), 30),
-                                )}
-                              </ListingDetailItem>
-
-                              <ListingDetailItem
-                                icon={<ClockAlert fontSize={"inherit"} />}
-                              >
-                                {t("MarketListingView.expires")}{" "}
-                                {getRelativeTime(new Date(listing.expiration))}
-                              </ListingDetailItem>
-
-                              <ListingDetailItem
-                                icon={<VisibilityRounded fontSize={"inherit"} />}
-                              >
-                                {t("MarketListingView.views")}{" "}
-                                {(
-                                  complete.stats?.view_count || 0
-                                ).toLocaleString()}
-                              </ListingDetailItem>
-                            </Stack>
-
-                            <Stack direction="column" spacing={0.5} flex={1}>
                               {listing.user_seller?.in_game && (
                                 <ListingDetailItem
                                   icon={<SportsEsportsRounded fontSize={"inherit"} sx={{ color: "success.main" }} />}
@@ -1087,14 +1053,6 @@ export function MarketListingView() {
                                   {t("MarketListingView.stockLocations", "Available at")}: {listing.stock_locations.join(", ")}
                                 </ListingDetailItem>
                               )}
-
-                              <ListingDetailItem
-                                icon={<WarningRounded fontSize={"inherit"} />}
-                              >
-                                <ReportButton
-                                  reportedUrl={`/market/${listing.listing_id}`}
-                                />
-                              </ListingDetailItem>
 
                               {listing.languages &&
                                 listing.languages.length > 0 && (
@@ -1131,6 +1089,48 @@ export function MarketListingView() {
                                     </Box>
                                   </ListingDetailItem>
                                 )}
+                            </Stack>
+
+                            <Stack direction="column" spacing={0.5} flex={1}>
+                              <ListingDetailItem
+                                icon={<CreateRounded fontSize={"inherit"} />}
+                              >
+                                {t("MarketListingView.listed")}{" "}
+                                {getRelativeTime(new Date(listing.timestamp))}
+                              </ListingDetailItem>
+
+                              <ListingDetailItem
+                                icon={<RefreshRounded fontSize={"inherit"} />}
+                              >
+                                {t("MarketListingView.updated")}{" "}
+                                {getRelativeTime(
+                                  subDays(new Date(listing.expiration), 30),
+                                )}
+                              </ListingDetailItem>
+
+                              <ListingDetailItem
+                                icon={<ClockAlert fontSize={"inherit"} />}
+                              >
+                                {t("MarketListingView.expires")}{" "}
+                                {getRelativeTime(new Date(listing.expiration))}
+                              </ListingDetailItem>
+
+                              <ListingDetailItem
+                                icon={<VisibilityRounded fontSize={"inherit"} />}
+                              >
+                                {t("MarketListingView.views")}{" "}
+                                {(
+                                  complete.stats?.view_count || 0
+                                ).toLocaleString()}
+                              </ListingDetailItem>
+
+                              <ListingDetailItem
+                                icon={<WarningRounded fontSize={"inherit"} />}
+                              >
+                                <ReportButton
+                                  reportedUrl={`/market/${listing.listing_id}`}
+                                />
+                              </ListingDetailItem>
                             </Stack>
                           </Stack>
                         </Box>
