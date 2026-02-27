@@ -63,6 +63,7 @@ export interface MarketListing {
   expiration: string
   internal: boolean
   languages?: Array<{ code: string; name: string }>
+  stock_locations?: string[]
 }
 
 export interface UniqueListing {

@@ -49,44 +49,6 @@ export interface FulfillBuyOrderResponse {
   discord_invite: string | null
 }
 
-export interface StockLot {
-  lot_id: string
-  listing_id: string
-  location_id: string | null
-  owner_id: string | null
-  quantity_total: number
-  listed: boolean
-  created_at: string
-  updated_at: string
-  location: {
-    location_id: string
-    name: string
-  } | null
-  owner: {
-    user_id: string
-    username: string
-    display_name: string
-    avatar: string | null
-  } | null
-  is_allocated: boolean
-  allocated_quantity: number
-  allocations: Array<{
-    allocation_id: string
-    order_id: string
-    quantity: number
-  }>
-}
-
-export interface ListingLotsResponse {
-  lots: StockLot[]
-  listing: UniqueListing
-  aggregates: {
-    total: number
-    available: number
-    reserved: number
-  }
-}
-
 export const marketApi = serviceApi.injectEndpoints({
   overrideExisting: false,
   endpoints: (builder) => ({
@@ -480,15 +442,6 @@ export const marketApi = serviceApi.injectEndpoints({
         "ContractorListings",
         "StockLots",
         { type: "MarketListings" as const, id: listing_id },
-      ],
-    }),
-
-    getListingLots: builder.query<ListingLotsResponse, string>({
-      query: (listing_id) => `/api/v1/market/listings/${listing_id}/lots`,
-      transformResponse: unwrapResponse,
-      providesTags: (result, error, listing_id) => [
-        "StockLots",
-        { type: "StockLots" as const, id: listing_id },
       ],
     }),
 
