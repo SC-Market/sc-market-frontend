@@ -429,6 +429,8 @@ export function DisplayListingsMin(props: {
   } = props
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const marketSidebarOpen = useMarketSidebarExp()
+  const gridBreakpoints = useListingGridBreakpoints()
 
   // Inject ads into listings array
   const listingsWithAds = useMemo(() => {
@@ -447,8 +449,6 @@ export function DisplayListingsMin(props: {
   const shouldVirtualize = false // Disabled to maintain consistent fixed-width layout
 
   if (loading) {
-    const marketSidebarOpen = useMarketSidebarExp()
-    const gridBreakpoints = useListingGridBreakpoints()
     return (
       <Grid
         container
@@ -544,7 +544,6 @@ export function DisplayListingsMin(props: {
   }
 
   // Fallback to regular rendering for small lists
-  const gridBreakpoints = useListingGridBreakpoints()
   return (
     <Grid
       container
