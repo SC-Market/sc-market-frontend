@@ -11,7 +11,7 @@ const injectedRtkApi = api
         SearchListingsApiArg
       >({
         query: (queryArg) => ({
-          url: `/market/listings`,
+          url: `/v2/market/listings`,
           params: {
             query: queryArg.query,
             item_type: queryArg.itemType,
@@ -35,7 +35,7 @@ const injectedRtkApi = api
         CreateListingApiArg
       >({
         query: (queryArg) => ({
-          url: `/market/listings`,
+          url: `/v2/market/listings`,
           method: "POST",
           body: queryArg.createListingRequest,
         }),
@@ -46,7 +46,7 @@ const injectedRtkApi = api
         GetListingDetailsApiArg
       >({
         query: (queryArg) => ({
-          url: `/market/listings/${queryArg.listingId}/details`,
+          url: `/v2/market/listings/${queryArg.listingId}/details`,
         }),
         providesTags: ["Market"],
       }),
@@ -55,7 +55,7 @@ const injectedRtkApi = api
         UpdateListingApiArg
       >({
         query: (queryArg) => ({
-          url: `/market/listings/${queryArg.listingId}`,
+          url: `/v2/market/listings/${queryArg.listingId}`,
           method: "PUT",
           body: queryArg.updateListingRequest,
         }),
@@ -66,7 +66,7 @@ const injectedRtkApi = api
         DeleteListingApiArg
       >({
         query: (queryArg) => ({
-          url: `/market/listings/${queryArg.listingId}`,
+          url: `/v2/market/listings/${queryArg.listingId}`,
           method: "DELETE",
         }),
         invalidatesTags: ["Market"],
@@ -128,7 +128,7 @@ export type ListingSearchResult = {
   total_rating: number
   avg_rating: number
   details_id: string | null
-  status: string
+  status: "active" | "inactive" | "archived"
   user_seller: string | null
   contractor_seller: string | null
   auction_end_time: string | null
