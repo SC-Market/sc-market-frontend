@@ -1050,7 +1050,7 @@ export function MarketListingView() {
                                 <ListingDetailItem
                                   icon={<LocationOnRounded fontSize={"inherit"} />}
                                 >
-                                  {t("MarketListingView.stockLocations", "Available at")}: {listing.stock_locations.join(", ")}
+                                  {t("MarketListingView.stockLocations", "Available from")}: {listing.stock_locations.join(", ")}
                                 </ListingDetailItem>
                               )}
 
