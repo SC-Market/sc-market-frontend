@@ -16,10 +16,12 @@ import {
   CheckCircleRounded,
 } from "@mui/icons-material"
 import { usePWAInstallPrompt } from "../../hooks/pwa/usePWAInstallPrompt"
+import { useCookies } from "react-cookie"
 
 export function InstallPrompt() {
   const { canInstall, isInstalled, triggerInstall } = usePWAInstallPrompt()
   const [showPrompt, setShowPrompt] = useState(false)
+  const [cookies, setCookie] = useCookies(["pwa-install-dismissed"])
 
   useEffect(() => {
     // Check if app is already installed
@@ -27,9 +29,8 @@ export function InstallPrompt() {
       return
     }
 
-    // Check if prompt was dismissed in this session
-    const dismissed = sessionStorage.getItem("pwa-install-dismissed")
-    if (dismissed === "true") {
+    // Check if prompt was dismissed (cookie lasts 1 year)
+    if (cookies["pwa-install-dismissed"] === "true") {
       return
     }
 
@@ -37,7 +38,7 @@ export function InstallPrompt() {
     if (canInstall) {
       setShowPrompt(true)
     }
-  }, [canInstall, isInstalled])
+  }, [canInstall, isInstalled, cookies])
 
   const handleInstall = async () => {
     const success = await triggerInstall()
@@ -48,7 +49,11 @@ export function InstallPrompt() {
 
   const handleDismiss = () => {
     setShowPrompt(false)
-    sessionStorage.setItem("pwa-install-dismissed", "true")
+    // Set cookie to expire in 1 year
+    setCookie("pwa-install-dismissed", "true", {
+      path: "/",
+      maxAge: 365 * 24 * 60 * 60, // 1 year in seconds
+    })
   }
 
   if (isInstalled || !showPrompt || !canInstall) {
