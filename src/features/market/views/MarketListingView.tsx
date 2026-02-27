@@ -1010,131 +1010,129 @@ export function MarketListingView() {
                       }
                       subheader={
                         <Box>
-                          <Box
-                            sx={{
-                              display: "grid",
-                              gridTemplateColumns: "1fr 1fr",
-                              gap: 1,
-                            }}
-                          >
-                            <ListingDetailItem
-                              icon={<PersonRounded fontSize={"inherit"} />}
-                            >
-                              <ListingNameAndRating
-                                user={listing.user_seller}
-                                contractor={listing.contractor_seller}
-                              />
-                            </ListingDetailItem>
-
-                            <ListingDetailItem
-                              icon={<CreateRounded fontSize={"inherit"} />}
-                            >
-                              {t("MarketListingView.listed")}{" "}
-                              {getRelativeTime(new Date(listing.timestamp))}
-                            </ListingDetailItem>
-
-                            <ListingDetailItem
-                              icon={<RefreshRounded fontSize={"inherit"} />}
-                            >
-                              {t("MarketListingView.updated")}{" "}
-                              {getRelativeTime(
-                                subDays(new Date(listing.expiration), 30),
-                              )}
-                            </ListingDetailItem>
-
-                            <ListingDetailItem
-                              icon={<ClockAlert fontSize={"inherit"} />}
-                            >
-                              {t("MarketListingView.expires")}{" "}
-                              {getRelativeTime(new Date(listing.expiration))}
-                            </ListingDetailItem>
-
-                            <ListingDetailItem
-                              icon={<VisibilityRounded fontSize={"inherit"} />}
-                            >
-                              {t("MarketListingView.views")}{" "}
-                              {(
-                                complete.stats?.view_count || 0
-                              ).toLocaleString()}
-                            </ListingDetailItem>
-
-                            {listing.user_seller?.in_game && (
+                          <Stack direction="row" spacing={2}>
+                            <Stack direction="column" spacing={0.5} flex={1}>
                               <ListingDetailItem
-                                icon={<SportsEsportsRounded fontSize={"inherit"} sx={{ color: "success.main" }} />}
+                                icon={<PersonRounded fontSize={"inherit"} />}
                               >
-                                {t("MarketListingView.online", "Online")}
+                                <ListingNameAndRating
+                                  user={listing.user_seller}
+                                  contractor={listing.contractor_seller}
+                                />
                               </ListingDetailItem>
-                            )}
 
-                            {listing.contractor_seller?.members_online !== undefined && listing.contractor_seller.members_online > 0 && (
                               <ListingDetailItem
-                                icon={<SportsEsportsRounded fontSize={"inherit"} sx={{ color: "success.main" }} />}
+                                icon={<CreateRounded fontSize={"inherit"} />}
                               >
-                                {t("MarketListingView.membersOnline", "{{count}} members online", { count: listing.contractor_seller.members_online })}
+                                {t("MarketListingView.listed")}{" "}
+                                {getRelativeTime(new Date(listing.timestamp))}
                               </ListingDetailItem>
-                            )}
 
-                            {(listing.user_seller?.last_seen || listing.contractor_seller?.last_seen) && (
                               <ListingDetailItem
-                                icon={<AccessTimeRounded fontSize={"inherit"} />}
+                                icon={<RefreshRounded fontSize={"inherit"} />}
                               >
-                                {t("MarketListingView.lastSeen", "Last seen")}{" "}
-                                {getRelativeTime(new Date(listing.user_seller?.last_seen || listing.contractor_seller?.last_seen || ""))}
+                                {t("MarketListingView.updated")}{" "}
+                                {getRelativeTime(
+                                  subDays(new Date(listing.expiration), 30),
+                                )}
                               </ListingDetailItem>
-                            )}
 
-                            {listing.stock_locations && listing.stock_locations.length > 0 && (
                               <ListingDetailItem
-                                icon={<LocationOnRounded fontSize={"inherit"} />}
+                                icon={<ClockAlert fontSize={"inherit"} />}
                               >
-                                {t("MarketListingView.stockLocations", "Available at")}: {listing.stock_locations.join(", ")}
+                                {t("MarketListingView.expires")}{" "}
+                                {getRelativeTime(new Date(listing.expiration))}
                               </ListingDetailItem>
-                            )}
 
-                            <ListingDetailItem
-                              icon={<WarningRounded fontSize={"inherit"} />}
-                            >
-                              <ReportButton
-                                reportedUrl={`/market/${listing.listing_id}`}
-                              />
-                            </ListingDetailItem>
+                              <ListingDetailItem
+                                icon={<VisibilityRounded fontSize={"inherit"} />}
+                              >
+                                {t("MarketListingView.views")}{" "}
+                                {(
+                                  complete.stats?.view_count || 0
+                                ).toLocaleString()}
+                              </ListingDetailItem>
+                            </Stack>
 
-                            {listing.languages &&
-                              listing.languages.length > 0 && (
+                            <Stack direction="column" spacing={0.5} flex={1}>
+                              {listing.user_seller?.in_game && (
                                 <ListingDetailItem
-                                  icon={<PersonRounded fontSize={"inherit"} />}
+                                  icon={<SportsEsportsRounded fontSize={"inherit"} sx={{ color: "success.main" }} />}
                                 >
-                                  <Box
-                                    sx={{
-                                      display: "flex",
-                                      gap: 0.5,
-                                      flexWrap: "wrap",
-                                      alignItems: "center",
-                                    }}
-                                  >
-                                    <Typography
-                                      variant="subtitle2"
-                                      color="text.secondary"
-                                    >
-                                      {t(
-                                        "MarketListingView.languages",
-                                        "Languages",
-                                      )}
-                                      :
-                                    </Typography>
-                                    {listing.languages.map((lang) => (
-                                      <Chip
-                                        key={lang.code}
-                                        label={lang.name}
-                                        size="small"
-                                        variant="outlined"
-                                        sx={{ height: 22, fontSize: "0.7rem" }}
-                                      />
-                                    ))}
-                                  </Box>
+                                  {t("MarketListingView.online", "Online")}
                                 </ListingDetailItem>
                               )}
-                          </Box>
+
+                              {listing.contractor_seller?.members_online !== undefined && listing.contractor_seller.members_online > 0 && (
+                                <ListingDetailItem
+                                  icon={<SportsEsportsRounded fontSize={"inherit"} sx={{ color: "success.main" }} />}
+                                >
+                                  {t("MarketListingView.membersOnline", "{{count}} members online", { count: listing.contractor_seller.members_online })}
+                                </ListingDetailItem>
+                              )}
+
+                              {(listing.user_seller?.last_seen || listing.contractor_seller?.last_seen) && (
+                                <ListingDetailItem
+                                  icon={<AccessTimeRounded fontSize={"inherit"} />}
+                                >
+                                  {t("MarketListingView.lastSeen", "Last seen")}{" "}
+                                  {getRelativeTime(new Date(listing.user_seller?.last_seen || listing.contractor_seller?.last_seen || ""))}
+                                </ListingDetailItem>
+                              )}
+
+                              {listing.stock_locations && listing.stock_locations.length > 0 && (
+                                <ListingDetailItem
+                                  icon={<LocationOnRounded fontSize={"inherit"} />}
+                                >
+                                  {t("MarketListingView.stockLocations", "Available at")}: {listing.stock_locations.join(", ")}
+                                </ListingDetailItem>
+                              )}
+
+                              <ListingDetailItem
+                                icon={<WarningRounded fontSize={"inherit"} />}
+                              >
+                                <ReportButton
+                                  reportedUrl={`/market/${listing.listing_id}`}
+                                />
+                              </ListingDetailItem>
+
+                              {listing.languages &&
+                                listing.languages.length > 0 && (
+                                  <ListingDetailItem
+                                    icon={<PersonRounded fontSize={"inherit"} />}
+                                  >
+                                    <Box
+                                      sx={{
+                                        display: "flex",
+                                        gap: 0.5,
+                                        flexWrap: "wrap",
+                                        alignItems: "center",
+                                      }}
+                                    >
+                                      <Typography
+                                        variant="subtitle2"
+                                        color="text.secondary"
+                                      >
+                                        {t(
+                                          "MarketListingView.languages",
+                                          "Languages",
+                                        )}
+                                        :
+                                      </Typography>
+                                      {listing.languages.map((lang) => (
+                                        <Chip
+                                          key={lang.code}
+                                          label={lang.name}
+                                          size="small"
+                                          variant="outlined"
+                                          sx={{ height: 22, fontSize: "0.7rem" }}
+                                        />
+                                      ))}
+                                    </Box>
+                                  </ListingDetailItem>
+                                )}
+                            </Stack>
+                          </Stack>
                         </Box>
                       }
                       action={
