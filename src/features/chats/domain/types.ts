@@ -34,4 +34,5 @@ export interface Chat {
   order_id: string | null
   session_id?: string | null
   title?: string | null
+  unread_count?: number
 }

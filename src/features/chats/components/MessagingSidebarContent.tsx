@@ -41,7 +41,6 @@ import {
   EmptyMessages,
   EmptySearchResults,
 } from "../../../components/empty-states"
-import { useGetNotificationsQuery } from "../../../store/notification"
 import { getRelativeTime } from "../../../util/time"
 import { MarkdownRender } from "../../../components/markdown/Markdown.lazy"
 
@@ -163,9 +162,9 @@ function ChatEntry(props: {
       >
         <Tooltip title={participantNames.join(", ")}>
           <Badge
-            badgeContent={unreadCount > 0 ? unreadCount : undefined}
+            variant="dot"
+            invisible={!unreadCount || unreadCount === 0}
             color="primary"
-            max={99}
           >
             <AvatarGroup max={3} spacing={"small"}>
               {otherUsers.map((part) => (
@@ -286,75 +285,19 @@ export function MessagingSidebarContent(
   const [searchQuery, setSearchQuery] = useState("")
   const [drawerOpen, setDrawerOpen] = useDrawerOpen()
 
-  // Query recent notifications to calculate unread counts for sorting
-  // Using the same pattern as UnreadChatCount hook - query recent notifications
-  // and match them to chats. This avoids fetching all notifications ever.
-  const { data: orderMessageNotifications } = useGetNotificationsQuery({
-    page: 0,
-    pageSize: 100,
-    action: "order_message",
-  })
-
-  const { data: offerMessageNotifications } = useGetNotificationsQuery({
-    page: 0,
-    pageSize: 100,
-    action: "offer_message",
-  })
-
-  // Create a map of chat_id -> unread count from recent notifications
-  // Using the same matching logic as UnreadChatCount hook
+  // Create a map of chat_id -> unread count from the chats data
+  // The backend now provides unread_count for each chat
   const unreadCountsByChat = useMemo(() => {
     const counts: Record<string, number> = {}
 
     if (!chats) return counts
 
-    // Initialize all chats with 0 unread
     chats.forEach((chat) => {
-      counts[chat.chat_id] = 0
+      counts[chat.chat_id] = chat.unread_count || 0
     })
 
-    // Count unread notifications from order_message notifications
-    if (orderMessageNotifications?.notifications) {
-      orderMessageNotifications.notifications.forEach((notif) => {
-        if (notif.read) return
-
-        // Match to chat by order_id (same logic as UnreadChatCount)
-        if (
-          notif.entity &&
-          typeof notif.entity === "object" &&
-          "order_id" in notif.entity
-        ) {
-          const orderId = (notif.entity as any).order_id
-          const chat = chats.find((c) => c.order_id === orderId)
-          if (chat) {
-            counts[chat.chat_id] = (counts[chat.chat_id] || 0) + 1
-          }
-        }
-      })
-    }
-
-    // Count unread notifications from offer_message notifications
-    if (offerMessageNotifications?.notifications) {
-      offerMessageNotifications.notifications.forEach((notif) => {
-        if (notif.read) return
-
-        // Match to chat by session_id (same logic as UnreadChatCount)
-        if (
-          notif.entity &&
-          typeof notif.entity === "object" &&
-          "id" in notif.entity
-        ) {
-          const sessionId = (notif.entity as any).id
-          const chat = chats.find((c) => c.session_id === sessionId)
-          if (chat) {
-            counts[chat.chat_id] = (counts[chat.chat_id] || 0) + 1
-          }
-        }
-      })
-    }
-
     return counts
-  }, [chats, orderMessageNotifications, offerMessageNotifications])
+  }, [chats])
 
   // Sort chats: unread first, then by last activity (most recent first)
   const sortedChats = useMemo(() => {
