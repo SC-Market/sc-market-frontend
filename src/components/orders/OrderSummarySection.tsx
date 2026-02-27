@@ -58,11 +58,19 @@ export function OrderSummarySection({
             alignItems: "center",
           }}
         >
-          <Typography variant="body1" fontWeight="medium">
+          <Typography variant="subtitle2" color="text.secondary">
             {t("orderSummary.total", "Total")}
           </Typography>
-          <Typography variant="body1" fontWeight="bold">
-            {total_cost.toLocaleString()} aUEC
+          <Typography variant="subtitle2" color="text.secondary" fontWeight="bold">
+            {total_cost.toLocaleString()}{" "}
+            <Typography
+              variant="subtitle2"
+              color="text.primary"
+              display="inline"
+              fontWeight="bold"
+            >
+              aUEC
+            </Typography>
           </Typography>
         </Box>
       </Stack>
