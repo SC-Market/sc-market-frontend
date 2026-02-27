@@ -63,55 +63,8 @@ function ChatEntry(props: {
   const isSelected =
     chat_id === props.chat.chat_id || currentChatID === props.chat.chat_id
 
-  // Only query unread notifications for visible chats
-  // Chats can be associated with orders or offers, so we query based on order_id or session_id
-  // If chat has order_id, query order_message with that order_id as entityId
-  // If chat has session_id, query offer_message with that session_id as entityId
-  const { data: orderNotificationsData } = useGetNotificationsQuery(
-    {
-      page: 0,
-      pageSize: 100,
-      action: "order_message",
-      entityId: props.chat.order_id || undefined,
-    },
-    {
-      skip:
-        !props.chat.chat_id ||
-        !props.chat.order_id ||
-        !props.isVisible ||
-        !profile.data,
-    },
-  )
-
-  const { data: offerNotificationsData } = useGetNotificationsQuery(
-    {
-      page: 0,
-      pageSize: 100,
-      action: "offer_message",
-      entityId: props.chat.session_id || undefined,
-    },
-    {
-      skip:
-        !props.chat.chat_id ||
-        !props.chat.session_id ||
-        !props.isVisible ||
-        !profile.data,
-    },
-  )
-
-  // Use the appropriate notification data based on chat type
-  const chatNotificationsData = props.chat.order_id
-    ? orderNotificationsData
-    : props.chat.session_id
-      ? offerNotificationsData
-      : undefined
-
-  // Calculate unread count from notifications
-  const unreadCount = useMemo(() => {
-    if (props.unreadCount !== undefined) return props.unreadCount
-    if (!chatNotificationsData?.notifications) return 0
-    return chatNotificationsData.notifications.filter((n) => !n.read).length
-  }, [props.unreadCount, chatNotificationsData])
+  // Use unread count from props (provided by backend)
+  const unreadCount = props.unreadCount || 0
 
   // Separate user and contractor participants
   const userParticipants = props.chat.participants.filter(
