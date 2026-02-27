@@ -36,6 +36,9 @@ import {
   RefreshRounded,
   WarningRounded,
   VisibilityRounded,
+  SportsEsportsRounded,
+  AccessTimeRounded,
+  LocationOnRounded,
 } from "@mui/icons-material"
 import { useCurrentMarketListing } from "../hooks/CurrentMarketItem"
 import { BaseListingType, UniqueListing } from ".."
@@ -78,8 +81,6 @@ export function PurchaseArea(props: { listing: BaseListingType }) {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
   const { listing } = props
   const [quantity, setQuantity] = useState(1)
-  
-  const stockLocations = listing.listing.stock_locations?.filter((loc) => loc) || []
   const [offer, setOffer] = useState(1)
   const [purchaseOpen, setPurchaseOpen] = useState(false)
   const [offerOpen, setOfferOpen] = useState(false)
@@ -257,11 +258,6 @@ export function PurchaseArea(props: { listing: BaseListingType }) {
             color={"secondary"}
             fullWidth={isMobile}
           />
-          {stockLocations.length > 0 && (
-            <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5 }}>
-              {t("MarketListingView.stockLocations", "Available at")}: {stockLocations.join(", ")}
-            </Typography>
-          )}
         </Stack>
         <Stack
           spacing={theme.layoutSpacing.text}
@@ -1055,6 +1051,39 @@ export function MarketListingView() {
                                 complete.stats?.view_count || 0
                               ).toLocaleString()}
                             </ListingDetailItem>
+
+                            {listing.user_seller?.in_game && (
+                              <ListingDetailItem
+                                icon={<SportsEsportsRounded fontSize={"inherit"} sx={{ color: "success.main" }} />}
+                              >
+                                {t("MarketListingView.online", "Online")}
+                              </ListingDetailItem>
+                            )}
+
+                            {listing.contractor_seller?.members_online !== undefined && listing.contractor_seller.members_online > 0 && (
+                              <ListingDetailItem
+                                icon={<SportsEsportsRounded fontSize={"inherit"} sx={{ color: "success.main" }} />}
+                              >
+                                {t("MarketListingView.membersOnline", "{{count}} members online", { count: listing.contractor_seller.members_online })}
+                              </ListingDetailItem>
+                            )}
+
+                            {(listing.user_seller?.last_seen || listing.contractor_seller?.last_seen) && (
+                              <ListingDetailItem
+                                icon={<AccessTimeRounded fontSize={"inherit"} />}
+                              >
+                                {t("MarketListingView.lastSeen", "Last seen")}{" "}
+                                {getRelativeTime(new Date(listing.user_seller?.last_seen || listing.contractor_seller?.last_seen || ""))}
+                              </ListingDetailItem>
+                            )}
+
+                            {listing.stock_locations && listing.stock_locations.length > 0 && (
+                              <ListingDetailItem
+                                icon={<LocationOnRounded fontSize={"inherit"} />}
+                              >
+                                {t("MarketListingView.stockLocations", "Available at")}: {listing.stock_locations.join(", ")}
+                              </ListingDetailItem>
+                            )}
 
                             <ListingDetailItem
                               icon={<WarningRounded fontSize={"inherit"} />}
