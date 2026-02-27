@@ -23,7 +23,7 @@ export function MyServicesPage(props: {}) {
         { label: t("sidebar.manage_services", "Manage Services") },
       ]}
       sidebarOpen={true}
-      maxWidth="lg"
+      maxWidth="xl"
       isLoading={pageData.isLoading}
       error={pageData.error}
     >

@@ -260,7 +260,7 @@ export const marketApi = serviceApi.injectEndpoints({
 
     refreshMarketListing: builder.mutation<void, string>({
       query: (id) => ({
-        url: `/api/market/listings/${id}/refresh`,
+        url: `/api/market/listing/${id}/refresh`,
         method: "POST",
       }),
       invalidatesTags: (result, error, id) => [
