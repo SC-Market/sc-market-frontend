@@ -21,6 +21,10 @@ import {
   TextField,
   Box,
   Button,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
 } from "@mui/material"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { OrgDetails, UserDetails } from "../../components/list/UserDetails"
@@ -49,6 +53,7 @@ import LoadingButton from "@mui/lab/LoadingButton"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { Link, useNavigate } from "react-router-dom"
 import { OrderSummarySection } from "../../components/orders/OrderSummarySection"
+import { detectOfferChanges } from "../../util/offerChanges"
 import { useGetPublicContractQuery } from "../../store/public_contracts"
 import { ListingSellerRating } from "../../components/rating/ListingRating"
 import { useTranslation } from "react-i18next"
@@ -138,6 +143,7 @@ export function OfferDetailsArea(props: { session: OfferSession }) {
     { skip: !session?.contract_id },
   )
 
+  const [selectedOfferIndex, setSelectedOfferIndex] = useState(0)
   const [isEditingAssigned, setIsEditingAssigned] = useState(false)
   const [target, setTarget] = useState("")
   const [targetObject, setTargetObject] = useState<{
@@ -188,6 +194,14 @@ export function OfferDetailsArea(props: { session: OfferSession }) {
   useEffect(() => {
     retrieve(target)
   }, [target, retrieve])
+
+  // Get current offer and detect changes
+  const currentOffer = session.offers[selectedOfferIndex]
+  const previousOffer =
+    selectedOfferIndex < session.offers.length - 1
+      ? session.offers[selectedOfferIndex + 1]
+      : undefined
+  const offerChanges = detectOfferChanges(currentOffer, previousOffer)
 
   const [assignUser] = useAssignOfferMutation()
   const [unassignUser] = useUnassignOfferMutation()
@@ -325,6 +339,26 @@ export function OfferDetailsArea(props: { session: OfferSession }) {
 
   return (
     <Grid item xs={12} lg={8} md={6} sx={{ minWidth: 0 }}>
+      {session.offers.length > 1 && (
+        <Box sx={{ mb: 2 }}>
+          <FormControl size="small" sx={{ minWidth: 200 }}>
+            <InputLabel>Offer Version</InputLabel>
+            <Select
+              value={selectedOfferIndex}
+              label="Offer Version"
+              onChange={(e) => setSelectedOfferIndex(Number(e.target.value))}
+            >
+              {session.offers.map((_, index) => (
+                <MenuItem key={index} value={index}>
+                  {index === 0
+                    ? "Most Recent"
+                    : `Offer ${session.offers.length - index}`}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Box>
+      )}
       <TableContainer
         component={Paper}
         sx={{
@@ -488,7 +522,7 @@ export function OfferDetailsArea(props: { session: OfferSession }) {
               <TableCell align="right">
                 <Stack direction="row" justifyContent={"right"}>
                   {format(
-                    new Date(session.offers[0].timestamp),
+                    new Date(currentOffer.timestamp),
                     "MMMM do yyyy, h:mm:ss a",
                   )}
                 </Stack>
@@ -533,7 +567,7 @@ export function OfferDetailsArea(props: { session: OfferSession }) {
                       textAlign: "right",
                     }}
                   >
-                    {session.offers[0].title}
+                    {currentOffer.title}
                   </Typography>
                 </Stack>
               </TableCell>
@@ -558,7 +592,7 @@ export function OfferDetailsArea(props: { session: OfferSession }) {
                       textAlign: "right",
                     }}
                   >
-                    {session.offers[0].kind}
+                    {currentOffer.kind}
                   </Typography>
                 </Stack>
               </TableCell>
@@ -580,11 +614,12 @@ export function OfferDetailsArea(props: { session: OfferSession }) {
                     variant={"subtitle2"}
                     sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}
                   >
-                    <MarkdownRender text={session.offers[0].description} />
+                    <MarkdownRender text={currentOffer.description} />
                   </Typography>
                   <OrderSummarySection
-                    market_listings={session.offers[0].market_listings}
-                    total_cost={+session.offers[0].cost}
+                    market_listings={currentOffer.market_listings}
+                    total_cost={+currentOffer.cost}
+                    offerChanges={offerChanges}
                   />
                 </Stack>
               </TableCell>
@@ -599,7 +634,7 @@ export function OfferDetailsArea(props: { session: OfferSession }) {
                 align="right"
                 sx={{ wordBreak: "break-word", overflowWrap: "break-word" }}
               >
-                <Stack direction="row" justifyContent={"right"}>
+                <Stack direction="row" justifyContent={"right"} spacing={1} alignItems="center">
                   <Typography
                     color={"text.secondary"}
                     variant={"subtitle2"}
@@ -609,7 +644,7 @@ export function OfferDetailsArea(props: { session: OfferSession }) {
                       textAlign: "right",
                     }}
                   >
-                    {(+session.offers[0].cost).toLocaleString(undefined)}{" "}
+                    {(+currentOffer.cost).toLocaleString(undefined)}{" "}
                     <Typography
                       color={"text.primary"}
                       variant={"subtitle2"}
@@ -621,11 +656,14 @@ export function OfferDetailsArea(props: { session: OfferSession }) {
                     >
                       aUEC{" "}
                       {t(
-                        PAYMENT_TYPE_MAP.get(session.offers[0].payment_type) ||
+                        PAYMENT_TYPE_MAP.get(currentOffer.payment_type) ||
                           "",
                       )}
                     </Typography>
                   </Typography>
+                  {offerChanges?.costChanged && (
+                    <Chip label="NEW!" size="small" color="primary" />
+                  )}
                 </Stack>
               </TableCell>
             </TableRow>
