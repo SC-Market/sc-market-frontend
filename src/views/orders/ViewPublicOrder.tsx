@@ -20,6 +20,7 @@ import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { MarkdownRender } from "../../components/markdown/Markdown.lazy"
 import { orderIcons } from "../../datatypes/Order"
 import { useTranslation } from "react-i18next"
+import { OrderSummarySection } from "../../components/orders/OrderSummarySection"
 
 export function ViewPublicOrder() {
   const [order, refresh] = useCurrentOrder()
@@ -91,6 +92,10 @@ export function ViewPublicOrder() {
             {
               <Typography>
                 <MarkdownRender text={order.description} />
+                <OrderSummarySection
+                  market_listings={order.market_listings}
+                  total_cost={+order.cost}
+                />
               </Typography>
             }
           </CardContent>

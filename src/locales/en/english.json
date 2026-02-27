@@ -1186,6 +1186,10 @@
     "begin_work": "Begin Work",
     "not_started": "Not Started"
   },
+  "orderSummary": {
+    "title": "Order Summary",
+    "total": "Total"
+  },
   "orderAvailabilityArea": {
     "customer_name": "{{name}} (Customer)",
     "assigned_name": "{{name}} (Assigned)"
