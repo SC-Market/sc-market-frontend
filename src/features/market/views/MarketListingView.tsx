@@ -1010,7 +1010,13 @@ export function MarketListingView() {
                       }
                       subheader={
                         <Box>
-                          <Stack direction={"column"} alignItems={"left"}>
+                          <Box
+                            sx={{
+                              display: "grid",
+                              gridTemplateColumns: "1fr 1fr",
+                              gap: 1,
+                            }}
+                          >
                             <ListingDetailItem
                               icon={<PersonRounded fontSize={"inherit"} />}
                             >
@@ -1128,7 +1134,7 @@ export function MarketListingView() {
                                   </Box>
                                 </ListingDetailItem>
                               )}
-                          </Stack>
+                          </Box>
                         </Box>
                       }
                       action={
