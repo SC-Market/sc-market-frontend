@@ -1,4 +1,5 @@
 import React, { Component, ErrorInfo, ReactNode } from "react"
+import { notifyBugsnag } from "../../util/monitoring/bugsnagLoader"
 
 export interface ErrorBoundaryProps {
   /**
@@ -84,6 +85,13 @@ export class ErrorBoundary extends Component<
       errorInfo,
     })
 
+    // Report to Bugsnag
+    notifyBugsnag(error, {
+      errorBoundary: this.props.name || "ErrorBoundary",
+      componentStack: errorInfo.componentStack,
+      errorInfo,
+    })
+
     // Call custom error handler
     if (this.props.onError) {
       this.props.onError(error, errorInfo)
@@ -95,18 +103,6 @@ export class ErrorBoundary extends Component<
       error,
       errorInfo,
     )
-
-    // TODO: Log to error tracking service (e.g., Sentry)
-    // Example:
-    // if (window.Sentry) {
-    //   window.Sentry.captureException(error, {
-    //     contexts: {
-    //       react: {
-    //         componentStack: errorInfo.componentStack,
-    //       },
-    //     },
-    //   })
-    // }
   }
 
   componentDidUpdate(prevProps: ErrorBoundaryProps) {
