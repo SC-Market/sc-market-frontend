@@ -20,10 +20,8 @@ export function OrderSummarySection({
   return (
     <Box sx={{ mt: 2 }}>
       <Divider sx={{ my: 2 }} />
-      <Typography variant="h6" gutterBottom>
-        {t("orderSummary.title", "Order Summary")}
-      </Typography>
-      <Stack spacing={1}>
+      {t("orderSummary.title", "Order Summary")}
+      <Stack spacing={1} sx={{ mt: 1 }}>
         {market_listings.map(({ listing, quantity }) => {
           const subtotal = quantity * +listing.listing.price
           return (
@@ -60,10 +58,10 @@ export function OrderSummarySection({
             alignItems: "center",
           }}
         >
-          <Typography variant="h6">
+          <Typography variant="body1" fontWeight="medium">
             {t("orderSummary.total", "Total")}
           </Typography>
-          <Typography variant="h6" fontWeight="bold">
+          <Typography variant="body1" fontWeight="bold">
             {total_cost.toLocaleString()} aUEC
           </Typography>
         </Box>
