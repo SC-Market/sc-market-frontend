@@ -1,758 +1,763 @@
 {
-  "openapi": "3.0.0",
-  "components": {
-    "examples": {},
-    "headers": {},
-    "parameters": {},
-    "requestBodies": {},
-    "responses": {},
-    "schemas": {
-      "ListingSearchResult": {
-        "description": "Search result listing (flat format from materialized view)\nMatches v1 /api/market search response format",
-        "properties": {
-          "listing_id": {
-            "type": "string"
-          },
-          "listing_type": {
-            "type": "string"
-          },
-          "item_type": {
-            "type": "string"
-          },
-          "item_name": {
-            "type": "string",
-            "nullable": true
-          },
-          "game_item_id": {
-            "type": "string",
-            "nullable": true
-          },
-          "sale_type": {
-            "type": "string"
-          },
-          "price": {
-            "type": "number",
-            "format": "double"
-          },
-          "expiration": {
-            "type": "string",
-            "nullable": true
-          },
-          "minimum_price": {
-            "type": "number",
-            "format": "double"
-          },
-          "maximum_price": {
-            "type": "number",
-            "format": "double"
-          },
-          "quantity_available": {
-            "type": "number",
-            "format": "double"
-          },
-          "timestamp": {
-            "type": "string"
-          },
-          "total_rating": {
-            "type": "number",
-            "format": "double"
-          },
-          "avg_rating": {
-            "type": "number",
-            "format": "double"
-          },
-          "details_id": {
-            "type": "string",
-            "nullable": true
-          },
-          "status": {
-            "type": "string"
-          },
-          "user_seller": {
-            "type": "string",
-            "nullable": true
-          },
-          "contractor_seller": {
-            "type": "string",
-            "nullable": true
-          },
-          "auction_end_time": {
-            "type": "string",
-            "nullable": true
-          },
-          "rating_count": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "rating_streak": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "total_orders": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "total_assignments": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "response_rate": {
-            "type": "number",
-            "format": "double",
-            "nullable": true
-          },
-          "title": {
-            "type": "string"
-          },
-          "photo": {
-            "type": "string"
-          },
-          "internal": {
-            "type": "boolean"
-          },
-          "badges": {
-            "nullable": true
-          }
-        },
-        "required": [
-          "listing_id",
-          "listing_type",
-          "item_type",
-          "item_name",
-          "game_item_id",
-          "sale_type",
-          "price",
-          "expiration",
-          "minimum_price",
-          "maximum_price",
-          "quantity_available",
-          "timestamp",
-          "total_rating",
-          "avg_rating",
-          "details_id",
-          "status",
-          "user_seller",
-          "contractor_seller",
-          "auction_end_time",
-          "rating_count",
-          "rating_streak",
-          "total_orders",
-          "total_assignments",
-          "response_rate",
-          "title",
-          "photo",
-          "internal",
-          "badges"
-        ],
-        "type": "object",
-        "additionalProperties": false
-      },
-      "ListingSearchResponse": {
-        "description": "Paginated search results response\nMatches v1 /api/market response format",
-        "properties": {
-          "total": {
-            "type": "number",
-            "format": "double"
-          },
-          "listings": {
-            "items": {
-              "$ref": "#/components/schemas/ListingSearchResult"
-            },
-            "type": "array"
-          }
-        },
-        "required": [
-          "total",
-          "listings"
-        ],
-        "type": "object",
-        "additionalProperties": false
-      },
-      "ListingDetailResponse": {
-        "description": "Detailed listing response (nested format)\nMatches v1 /api/market/:id response format\nThis is the exact return type from formatListing()",
-        "properties": {
-          "type": {
-            "type": "string",
-            "enum": [
-              "unique",
-              "aggregate",
-              "multiple"
-            ]
-          },
-          "listing": {
-            "properties": {
-              "expiration": {
-                "type": "string",
-                "format": "date-time"
-              },
-              "timestamp": {
-                "type": "string",
-                "format": "date-time"
-              },
-              "status": {
-                "type": "string"
-              },
-              "quantity_available": {
-                "type": "number",
-                "format": "double"
-              },
-              "price": {
-                "type": "number",
-                "format": "double"
-              },
-              "sale_type": {
-                "type": "string"
-              },
-              "listing_id": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "expiration",
-              "timestamp",
-              "status",
-              "quantity_available",
-              "price",
-              "sale_type",
-              "listing_id"
-            ],
-            "type": "object"
-          },
-          "details": {
-            "properties": {
-              "game_item_id": {
-                "type": "string",
-                "nullable": true
-              },
-              "item_type": {
-                "type": "string"
-              },
-              "description": {
-                "type": "string"
-              },
-              "title": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "game_item_id",
-              "item_type",
-              "description",
-              "title"
-            ],
-            "type": "object"
-          },
-          "photos": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array"
-          },
-          "stats": {
-            "properties": {
-              "view_count": {
-                "anyOf": [
-                  {
-                    "type": "number",
-                    "format": "double"
-                  },
-                  {
-                    "type": "string"
-                  }
-                ]
-              },
-              "offer_count": {
-                "type": "number",
-                "format": "double"
-              },
-              "order_count": {
-                "type": "number",
-                "format": "double"
-              }
-            },
-            "required": [
-              "view_count"
-            ],
-            "type": "object"
-          },
-          "accept_offers": {
-            "type": "boolean"
-          },
-          "auction_details": {},
-          "buy_orders": {
-            "items": {},
-            "type": "array"
-          },
-          "listings": {
-            "items": {},
-            "type": "array"
-          }
-        },
-        "required": [
-          "type",
-          "listing",
-          "details",
-          "photos",
-          "stats"
-        ],
-        "type": "object",
-        "additionalProperties": false
-      },
-      "CreateListingRequest": {
-        "description": "Request body for creating a new listing",
-        "properties": {
-          "title": {
-            "type": "string",
-            "description": "Listing title"
-          },
-          "description": {
-            "type": "string",
-            "description": "Listing description"
-          },
-          "price": {
-            "type": "number",
-            "format": "double",
-            "description": "Price in aUEC"
-          },
-          "quantity": {
-            "type": "number",
-            "format": "double",
-            "description": "Available quantity"
-          },
-          "game_item_id": {
-            "type": "string",
-            "nullable": true,
-            "description": "Game item ID (optional)"
-          },
-          "item_type": {
-            "type": "string",
-            "description": "Item type (e.g., \"ship\", \"component\", \"commodity\")"
-          },
-          "sale_type": {
-            "type": "string",
-            "description": "Sale type (e.g., \"sale\", \"auction\")"
-          },
-          "photos": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array",
-            "description": "Photo URLs"
-          },
-          "spectrum_id": {
-            "type": "string",
-            "description": "Contractor spectrum ID (for contractor listings)"
-          },
-          "internal": {
-            "type": "boolean",
-            "description": "Whether listing is internal to contractor"
-          }
-        },
-        "required": [
-          "title",
-          "description",
-          "price",
-          "quantity",
-          "item_type"
-        ],
-        "type": "object",
-        "additionalProperties": false
-      },
-      "UpdateListingRequest": {
-        "description": "Request body for updating an existing listing",
-        "properties": {
-          "title": {
-            "type": "string",
-            "description": "Updated title"
-          },
-          "description": {
-            "type": "string",
-            "description": "Updated description"
-          },
-          "price": {
-            "type": "number",
-            "format": "double",
-            "description": "Updated price"
-          },
-          "quantity_available": {
-            "type": "number",
-            "format": "double",
-            "description": "Updated quantity"
-          },
-          "status": {
-            "type": "string",
-            "description": "Updated status"
-          },
-          "item_type": {
-            "type": "string",
-            "description": "Updated item type"
-          },
-          "item_name": {
-            "type": "string",
-            "nullable": true,
-            "description": "Updated game item name"
-          },
-          "photos": {
-            "items": {
-              "type": "string"
-            },
-            "type": "array",
-            "description": "Updated photos"
-          },
-          "internal": {
-            "type": "boolean",
-            "description": "Updated internal flag"
-          }
-        },
-        "type": "object",
-        "additionalProperties": false
-      },
-      "HealthResponse": {
-        "properties": {
-          "status": {
-            "type": "string"
-          },
-          "version": {
-            "type": "string"
-          },
-          "timestamp": {
-            "type": "string"
-          }
-        },
-        "required": [
-          "status",
-          "version",
-          "timestamp"
-        ],
-        "type": "object",
-        "additionalProperties": false
-      }
-    },
-    "securitySchemes": {}
-  },
-  "info": {
-    "title": "SC Market API v2",
-    "version": "2.0.0",
-    "description": "Star Citizen Market API v2 - TSOA-based with auto-generated routes and OpenAPI specification",
-    "license": {
-      "name": "MIT"
-    },
-    "contact": {}
-  },
-  "paths": {
-    "/market/listings": {
-      "get": {
-        "operationId": "SearchListings",
-        "responses": {
-          "200": {
-            "description": "Successfully retrieved listings",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ListingSearchResponse"
-                }
-              }
-            }
-          }
-        },
-        "description": "Search market listings\nReturns flat search results optimized for list views",
-        "summary": "Search market listings",
-        "tags": [
-          "Market"
-        ],
-        "security": [],
-        "parameters": [
-          {
-            "in": "query",
-            "name": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "item_type",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "sale_type",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "min_price",
-            "required": false,
-            "schema": {
-              "format": "double",
-              "type": "number"
-            }
-          },
-          {
-            "in": "query",
-            "name": "max_price",
-            "required": false,
-            "schema": {
-              "format": "double",
-              "type": "number"
-            }
-          },
-          {
-            "in": "query",
-            "name": "quantity_available",
-            "required": false,
-            "schema": {
-              "format": "double",
-              "type": "number"
-            }
-          },
-          {
-            "in": "query",
-            "name": "user_seller_id",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "contractor_seller_id",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "statuses",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "listing_type",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "sort",
-            "required": false,
-            "schema": {
-              "default": "timestamp",
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "page",
-            "required": false,
-            "schema": {
-              "default": 0,
-              "format": "double",
-              "type": "number"
-            }
-          },
-          {
-            "in": "query",
-            "name": "pageSize",
-            "required": false,
-            "schema": {
-              "default": 20,
-              "format": "double",
-              "type": "number"
-            }
-          }
-        ]
-      },
-      "post": {
-        "operationId": "CreateListing",
-        "responses": {
-          "201": {
-            "description": "Successfully created listing",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ListingDetailResponse"
-                }
-              }
-            }
-          }
-        },
-        "description": "Create a new market listing",
-        "summary": "Create listing",
-        "tags": [
-          "Market"
-        ],
-        "security": [
-          {
-            "jwt": []
-          }
-        ],
-        "parameters": [],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateListingRequest"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/market/listings/{listing_id}/details": {
-      "get": {
-        "operationId": "GetListingDetails",
-        "responses": {
-          "200": {
-            "description": "Successfully retrieved listing details",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ListingDetailResponse"
-                }
-              }
-            }
-          }
-        },
-        "description": "Get detailed listing information\nReturns nested format with full details, photos, and stats",
-        "summary": "Get listing details",
-        "tags": [
-          "Market"
-        ],
-        "security": [],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "listing_id",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ]
-      }
-    },
-    "/market/listings/{listing_id}": {
-      "put": {
-        "operationId": "UpdateListing",
-        "responses": {
-          "200": {
-            "description": "Successfully updated listing",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ListingDetailResponse"
-                }
-              }
-            }
-          }
-        },
-        "description": "Update an existing listing",
-        "summary": "Update listing",
-        "tags": [
-          "Market"
-        ],
-        "security": [
-          {
-            "jwt": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "listing_id",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateListingRequest"
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "operationId": "DeleteListing",
-        "responses": {
-          "204": {
-            "description": "Successfully deleted listing"
-          }
-        },
-        "description": "Delete a listing (archives it)",
-        "summary": "Delete listing",
-        "tags": [
-          "Market"
-        ],
-        "security": [
-          {
-            "jwt": []
-          }
-        ],
-        "parameters": [
-          {
-            "in": "path",
-            "name": "listing_id",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ]
-      }
-    },
-    "/health": {
-      "get": {
-        "operationId": "GetHealth",
-        "responses": {
-          "200": {
-            "description": "Ok",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/HealthResponse"
-                }
-              }
-            }
-          }
-        },
-        "description": "Health check endpoint",
-        "summary": "Check API health status",
-        "tags": [
-          "Health"
-        ],
-        "security": [],
-        "parameters": []
-      }
-    }
-  },
-  "servers": [
-    {
-      "url": "/api/v2"
-    }
-  ]
+	"openapi": "3.0.0",
+	"components": {
+		"examples": {},
+		"headers": {},
+		"parameters": {},
+		"requestBodies": {},
+		"responses": {},
+		"schemas": {
+			"ListingSearchResult": {
+				"description": "Search result listing (flat format from materialized view)\nMatches v1 /api/market search response format",
+				"properties": {
+					"listing_id": {
+						"type": "string"
+					},
+					"listing_type": {
+						"type": "string"
+					},
+					"item_type": {
+						"type": "string"
+					},
+					"item_name": {
+						"type": "string",
+						"nullable": true
+					},
+					"game_item_id": {
+						"type": "string",
+						"nullable": true
+					},
+					"sale_type": {
+						"type": "string"
+					},
+					"price": {
+						"type": "number",
+						"format": "double"
+					},
+					"expiration": {
+						"type": "string",
+						"nullable": true
+					},
+					"minimum_price": {
+						"type": "number",
+						"format": "double"
+					},
+					"maximum_price": {
+						"type": "number",
+						"format": "double"
+					},
+					"quantity_available": {
+						"type": "number",
+						"format": "double"
+					},
+					"timestamp": {
+						"type": "string"
+					},
+					"total_rating": {
+						"type": "number",
+						"format": "double"
+					},
+					"avg_rating": {
+						"type": "number",
+						"format": "double"
+					},
+					"details_id": {
+						"type": "string",
+						"nullable": true
+					},
+					"status": {
+						"type": "string",
+						"enum": [
+							"active",
+							"inactive",
+							"archived"
+						]
+					},
+					"user_seller": {
+						"type": "string",
+						"nullable": true
+					},
+					"contractor_seller": {
+						"type": "string",
+						"nullable": true
+					},
+					"auction_end_time": {
+						"type": "string",
+						"nullable": true
+					},
+					"rating_count": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					},
+					"rating_streak": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					},
+					"total_orders": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					},
+					"total_assignments": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					},
+					"response_rate": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					},
+					"title": {
+						"type": "string"
+					},
+					"photo": {
+						"type": "string"
+					},
+					"internal": {
+						"type": "boolean"
+					},
+					"badges": {
+						"nullable": true
+					}
+				},
+				"required": [
+					"listing_id",
+					"listing_type",
+					"item_type",
+					"item_name",
+					"game_item_id",
+					"sale_type",
+					"price",
+					"expiration",
+					"minimum_price",
+					"maximum_price",
+					"quantity_available",
+					"timestamp",
+					"total_rating",
+					"avg_rating",
+					"details_id",
+					"status",
+					"user_seller",
+					"contractor_seller",
+					"auction_end_time",
+					"rating_count",
+					"rating_streak",
+					"total_orders",
+					"total_assignments",
+					"response_rate",
+					"title",
+					"photo",
+					"internal",
+					"badges"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ListingSearchResponse": {
+				"description": "Paginated search results response\nMatches v1 /api/market response format",
+				"properties": {
+					"total": {
+						"type": "number",
+						"format": "double"
+					},
+					"listings": {
+						"items": {
+							"$ref": "#/components/schemas/ListingSearchResult"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"total",
+					"listings"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ListingDetailResponse": {
+				"description": "Detailed listing response (nested format)\nMatches v1 /api/market/:id response format\nThis is the exact return type from formatListing()",
+				"properties": {
+					"type": {
+						"type": "string",
+						"enum": [
+							"unique",
+							"aggregate",
+							"multiple"
+						]
+					},
+					"listing": {
+						"properties": {
+							"expiration": {
+								"type": "string",
+								"format": "date-time"
+							},
+							"timestamp": {
+								"type": "string",
+								"format": "date-time"
+							},
+							"status": {
+								"type": "string"
+							},
+							"quantity_available": {
+								"type": "number",
+								"format": "double"
+							},
+							"price": {
+								"type": "number",
+								"format": "double"
+							},
+							"sale_type": {
+								"type": "string"
+							},
+							"listing_id": {
+								"type": "string"
+							}
+						},
+						"required": [
+							"expiration",
+							"timestamp",
+							"status",
+							"quantity_available",
+							"price",
+							"sale_type",
+							"listing_id"
+						],
+						"type": "object"
+					},
+					"details": {
+						"properties": {
+							"game_item_id": {
+								"type": "string",
+								"nullable": true
+							},
+							"item_type": {
+								"type": "string"
+							},
+							"description": {
+								"type": "string"
+							},
+							"title": {
+								"type": "string"
+							}
+						},
+						"required": [
+							"game_item_id",
+							"item_type",
+							"description",
+							"title"
+						],
+						"type": "object"
+					},
+					"photos": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"stats": {
+						"properties": {
+							"view_count": {
+								"anyOf": [
+									{
+										"type": "number",
+										"format": "double"
+									},
+									{
+										"type": "string"
+									}
+								]
+							},
+							"offer_count": {
+								"type": "number",
+								"format": "double"
+							},
+							"order_count": {
+								"type": "number",
+								"format": "double"
+							}
+						},
+						"required": [
+							"view_count"
+						],
+						"type": "object"
+					},
+					"accept_offers": {
+						"type": "boolean"
+					},
+					"auction_details": {},
+					"buy_orders": {
+						"items": {},
+						"type": "array"
+					},
+					"listings": {
+						"items": {},
+						"type": "array"
+					}
+				},
+				"required": [
+					"type",
+					"listing",
+					"details",
+					"photos",
+					"stats"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CreateListingRequest": {
+				"description": "Request body for creating a new listing",
+				"properties": {
+					"title": {
+						"type": "string",
+						"description": "Listing title"
+					},
+					"description": {
+						"type": "string",
+						"description": "Listing description"
+					},
+					"price": {
+						"type": "number",
+						"format": "double",
+						"description": "Price in aUEC"
+					},
+					"quantity": {
+						"type": "number",
+						"format": "double",
+						"description": "Available quantity"
+					},
+					"game_item_id": {
+						"type": "string",
+						"nullable": true,
+						"description": "Game item ID (optional)"
+					},
+					"item_type": {
+						"type": "string",
+						"description": "Item type (e.g., \"ship\", \"component\", \"commodity\")"
+					},
+					"sale_type": {
+						"type": "string",
+						"description": "Sale type (e.g., \"sale\", \"auction\")"
+					},
+					"photos": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array",
+						"description": "Photo URLs"
+					},
+					"spectrum_id": {
+						"type": "string",
+						"description": "Contractor spectrum ID (for contractor listings)"
+					},
+					"internal": {
+						"type": "boolean",
+						"description": "Whether listing is internal to contractor"
+					}
+				},
+				"required": [
+					"title",
+					"description",
+					"price",
+					"quantity",
+					"item_type"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UpdateListingRequest": {
+				"description": "Request body for updating an existing listing",
+				"properties": {
+					"title": {
+						"type": "string",
+						"description": "Updated title"
+					},
+					"description": {
+						"type": "string",
+						"description": "Updated description"
+					},
+					"price": {
+						"type": "number",
+						"format": "double",
+						"description": "Updated price"
+					},
+					"quantity_available": {
+						"type": "number",
+						"format": "double",
+						"description": "Updated quantity"
+					},
+					"status": {
+						"type": "string",
+						"description": "Updated status"
+					},
+					"item_type": {
+						"type": "string",
+						"description": "Updated item type"
+					},
+					"item_name": {
+						"type": "string",
+						"nullable": true,
+						"description": "Updated game item name"
+					},
+					"photos": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array",
+						"description": "Updated photos"
+					},
+					"internal": {
+						"type": "boolean",
+						"description": "Updated internal flag"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"HealthResponse": {
+				"properties": {
+					"status": {
+						"type": "string"
+					},
+					"version": {
+						"type": "string"
+					},
+					"timestamp": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"status",
+					"version",
+					"timestamp"
+				],
+				"type": "object",
+				"additionalProperties": false
+			}
+		},
+		"securitySchemes": {}
+	},
+	"info": {
+		"title": "SC Market API v2",
+		"version": "2.0.0",
+		"description": "Star Citizen Market API v2 - TSOA-based with auto-generated routes and OpenAPI specification",
+		"license": {
+			"name": "MIT"
+		},
+		"contact": {}
+	},
+	"paths": {
+		"/v2/market/listings": {
+			"get": {
+				"operationId": "SearchListings",
+				"responses": {
+					"200": {
+						"description": "Successfully retrieved listings",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ListingSearchResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Search market listings\nReturns flat search results optimized for list views",
+				"summary": "Search market listings",
+				"tags": [
+					"Market"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "query",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "item_type",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "sale_type",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "min_price",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "max_price",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "quantity_available",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "user_seller_id",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "contractor_seller_id",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "statuses",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "listing_type",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "sort",
+						"required": false,
+						"schema": {
+							"default": "timestamp",
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "page",
+						"required": false,
+						"schema": {
+							"default": 0,
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "pageSize",
+						"required": false,
+						"schema": {
+							"default": 20,
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"post": {
+				"operationId": "CreateListing",
+				"responses": {
+					"201": {
+						"description": "Successfully created listing",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ListingDetailResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Create a new market listing",
+				"summary": "Create listing",
+				"tags": [
+					"Market"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateListingRequest"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/v2/market/listings/{listing_id}/details": {
+			"get": {
+				"operationId": "GetListingDetails",
+				"responses": {
+					"200": {
+						"description": "Successfully retrieved listing details",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ListingDetailResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get detailed listing information\nReturns nested format with full details, photos, and stats",
+				"summary": "Get listing details",
+				"tags": [
+					"Market"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "listing_id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/v2/market/listings/{listing_id}": {
+			"put": {
+				"operationId": "UpdateListing",
+				"responses": {
+					"200": {
+						"description": "Successfully updated listing",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ListingDetailResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Update an existing listing",
+				"summary": "Update listing",
+				"tags": [
+					"Market"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "listing_id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/UpdateListingRequest"
+							}
+						}
+					}
+				}
+			},
+			"delete": {
+				"operationId": "DeleteListing",
+				"responses": {
+					"204": {
+						"description": "Successfully deleted listing"
+					}
+				},
+				"description": "Delete a listing (archives it)",
+				"summary": "Delete listing",
+				"tags": [
+					"Market"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "listing_id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/health": {
+			"get": {
+				"operationId": "GetHealth",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/HealthResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Health check endpoint",
+				"summary": "Check API health status",
+				"tags": [
+					"Health"
+				],
+				"security": [],
+				"parameters": []
+			}
+		}
+	},
+	"servers": [
+		{
+			"url": "/api/v2"
+		}
+	]
 }
