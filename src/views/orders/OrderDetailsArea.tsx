@@ -47,6 +47,7 @@ import {
   useGetContractorMembersQuery,
   contractorsApi,
 } from "../../store/contractor"
+import { OrderSummarySection } from "../../components/orders/OrderSummarySection"
 import {
   CancelRounded,
   DoneRounded,
@@ -570,6 +571,10 @@ export function OrderDetailsArea(props: { order: Order }) {
                   >
                     <MarkdownRender text={order.description} />
                   </Typography>
+                  <OrderSummarySection
+                    market_listings={order.market_listings}
+                    total_cost={+order.cost}
+                  />
                 </Stack>
               </TableCell>
             </TableRow>

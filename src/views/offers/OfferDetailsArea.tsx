@@ -48,6 +48,7 @@ import { useGetUserProfileQuery } from "../../store/profile"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { Link, useNavigate } from "react-router-dom"
+import { OrderSummarySection } from "../../components/orders/OrderSummarySection"
 import { useGetPublicContractQuery } from "../../store/public_contracts"
 import { ListingSellerRating } from "../../components/rating/ListingRating"
 import { useTranslation } from "react-i18next"
@@ -581,6 +582,10 @@ export function OfferDetailsArea(props: { session: OfferSession }) {
                   >
                     <MarkdownRender text={session.offers[0].description} />
                   </Typography>
+                  <OrderSummarySection
+                    market_listings={session.offers[0].market_listings}
+                    total_cost={+session.offers[0].cost}
+                  />
                 </Stack>
               </TableCell>
             </TableRow>
