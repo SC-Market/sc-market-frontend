@@ -78,6 +78,8 @@ export function PurchaseArea(props: { listing: BaseListingType }) {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
   const { listing } = props
   const [quantity, setQuantity] = useState(1)
+  
+  const stockLocations = listing.listing.stock_locations?.filter((loc) => loc) || []
   const [offer, setOffer] = useState(1)
   const [purchaseOpen, setPurchaseOpen] = useState(false)
   const [offerOpen, setOfferOpen] = useState(false)
@@ -255,6 +257,11 @@ export function PurchaseArea(props: { listing: BaseListingType }) {
             color={"secondary"}
             fullWidth={isMobile}
           />
+          {stockLocations.length > 0 && (
+            <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5 }}>
+              {t("MarketListingView.stockLocations", "Available at")}: {stockLocations.join(", ")}
+            </Typography>
+          )}
         </Stack>
         <Stack
           spacing={theme.layoutSpacing.text}
