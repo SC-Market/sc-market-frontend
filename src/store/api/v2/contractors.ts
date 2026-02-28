@@ -1,5 +1,5 @@
-import { generatedApi as api } from "../../generatedApi"
-export const addTagTypes = [] as const
+import { generatedApi as api } from "../../generatedApi";
+export const addTagTypes = [] as const;
 const injectedRtkApi = api
   .enhanceEndpoints({
     addTagTypes,
@@ -7,6 +7,6 @@ const injectedRtkApi = api
   .injectEndpoints({
     endpoints: (build) => ({}),
     overrideExisting: false,
-  })
-export { injectedRtkApi as v2_contractorsApi }
-export const {} = injectedRtkApi
+  });
+export { injectedRtkApi as v2_contractorsApi };
+export const {} = injectedRtkApi;
