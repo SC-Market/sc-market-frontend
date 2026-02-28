@@ -7,7 +7,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 
 export const generatedApi = createApi({
   baseQuery: fetchBaseQuery({
-    baseUrl: `${BACKEND_URL}`,
+    baseUrl: `${BACKEND_URL}/api/v2`,
     credentials: "include",
   }),
   endpoints: () => ({}),
