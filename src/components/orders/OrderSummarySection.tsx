@@ -20,6 +20,11 @@ export function OrderSummarySection({
     return null
   }
 
+  const listingsTotal = market_listings.reduce(
+    (sum, { listing, quantity }) => sum + quantity * +listing.listing.price,
+    0,
+  )
+
   return (
     <Box sx={{ mt: 2 }}>
       <Divider sx={{ my: 2 }} />
@@ -85,7 +90,7 @@ export function OrderSummarySection({
             {t("orderSummary.total", "Total")}
           </Typography>
           <Typography variant="subtitle2" color="text.secondary" fontWeight="bold">
-            {total_cost.toLocaleString()}{" "}
+            {listingsTotal.toLocaleString()}{" "}
             <Typography
               variant="subtitle2"
               color="text.primary"
