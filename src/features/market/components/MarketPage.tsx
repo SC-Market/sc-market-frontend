@@ -5,7 +5,7 @@ import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { MarketSidebarContext } from "../hooks/MarketSidebar"
 import { ServiceSidebarContext } from "../../../hooks/contract/ServiceSidebar"
 import { Page } from "../../../components/metadata/Page"
-import { MarketActions } from "./MarketActions"
+import { MarketActions, BuyOrderActions } from "./MarketActions"
 import { useLocation, useNavigate } from "react-router-dom"
 import { TabPanel } from "../../../components/tabs/Tabs"
 import { MarketTabsLayout } from "../../../components/layout/MarketTabsLayout"
@@ -77,6 +77,8 @@ export function MarketPage() {
     { value: 2, label: t("market.contractsTab", "Open Contracts") },
   ]
 
+  const isBuyOrders = location.pathname.startsWith("/buyorders")
+
   return (
     <Page title={t("market.market")} dontUseDefaultCanonUrl={true}>
       <MarketSidebarContext.Provider
@@ -92,7 +94,7 @@ export function MarketPage() {
             tabs={tabs}
             headerActions={
               tabPage === 0 ? (
-                <MarketActions />
+                isBuyOrders ? <BuyOrderActions /> : <MarketActions />
               ) : tabPage === 1 ? (
                 <Suspense fallback={<CircularProgress size={24} />}>
                   <ServiceActions />
