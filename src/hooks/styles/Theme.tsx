@@ -5,6 +5,7 @@
 export {
   makeCut,
   makeReverseCut,
+  getNavbarContrastText,
   refTheme,
   themeBase,
   mainThemeOptions,

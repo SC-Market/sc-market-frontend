@@ -20,7 +20,7 @@ import {
 import NotificationsActiveRoundedIcon from "@mui/icons-material/NotificationsActiveRounded"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { useTheme } from "@mui/material/styles"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { ExtendedTheme, getNavbarContrastText } from "../../hooks/styles/Theme"
 import { Notification } from "../../hooks/login/UserProfile"
 import { ClearAllRounded, MarkEmailReadRounded } from "@mui/icons-material"
 import {
@@ -51,9 +51,7 @@ export function NotificationsButton() {
   >("all")
   const [contractorIdFilter, setContractorIdFilter] = useState<string>("")
 
-  const iconColor = theme.palette.getContrastText(
-    theme.palette.background.navbar,
-  )
+  const iconColor = getNavbarContrastText(theme)
 
   const { data: currentUser } = useGetUserProfileQuery()
   const isLoggedIn = !!currentUser

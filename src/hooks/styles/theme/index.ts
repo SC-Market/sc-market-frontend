@@ -12,7 +12,7 @@ export {
 export type { ExtendedThemeOptions } from "./constants"
 
 export type { ExtendedTheme } from "./utils"
-export { makeCut, makeReverseCut } from "./utils"
+export { makeCut, makeReverseCut, getNavbarContrastText } from "./utils"
 
 export { themeBase } from "./baseTheme"
 export { getBaseComponentOverrides } from "./baseComponentOverrides"
