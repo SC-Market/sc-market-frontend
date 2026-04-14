@@ -5,7 +5,7 @@ import { NumericFormat } from "react-number-format"
 import { useTranslation } from "react-i18next"
 import { GridRowSelectionModel } from "@mui/x-data-grid"
 import { UniqueListing } from "../../domain/types"
-import { useUpdateListingQuantityMutation } from "../../api/marketApi"
+import { useBatchUpdateListingQuantitiesMutation } from "../../api/marketApi"
 import { useAlertHook } from "../../../../hooks/alert/AlertHook"
 
 export const ItemStockContext = React.createContext<
@@ -25,16 +25,14 @@ export function ManageStockArea(props: { listings: UniqueListing[] }) {
   const [quantity, setQuantity] = useState(1)
   const { listings } = props
 
-  const [updateListing] = useUpdateListingQuantityMutation()
+  const [batchUpdateQuantities] = useBatchUpdateListingQuantitiesMutation()
   const issueAlert = useAlertHook()
   const { t } = useTranslation()
 
-  const updateListingCallback = useCallback(
-    async (listing_id: string, body: { quantity_available: number }) => {
-      updateListing({
-        listing_id: listing_id,
-        quantity: body.quantity_available,
-      })
+  const runBatchQuantityUpdate = useCallback(
+    async (updates: { listing_id: string; quantity_available: number }[]) => {
+      if (updates.length === 0) return
+      batchUpdateQuantities({ updates })
         .unwrap()
         .then(() =>
           issueAlert({
@@ -44,7 +42,7 @@ export function ManageStockArea(props: { listings: UniqueListing[] }) {
         )
         .catch((err) => issueAlert(err))
     },
-    [selectionModel, issueAlert, updateListing, t],
+    [batchUpdateQuantities, issueAlert, t],
   )
 
   return (
@@ -75,19 +73,25 @@ export function ManageStockArea(props: { listings: UniqueListing[] }) {
       <ButtonGroup size={"small"}>
         <Button
           variant={"contained"}
-          onClick={() =>
-            [...selectionModel.ids].map((listing_id) => {
-              const listing = listings.find(
-                (l) => l.listing.listing_id === listing_id,
-              )
-              if (listing) {
-                updateListingCallback(listing_id.toString(), {
+          onClick={() => {
+            const updates = [...selectionModel.ids]
+              .map((listing_id) => {
+                const listing = listings.find(
+                  (l) => l.listing.listing_id === listing_id,
+                )
+                if (!listing) return null
+                return {
+                  listing_id: listing_id.toString(),
                   quantity_available:
                     listing.listing.quantity_available + quantity,
-                })
-              }
-            })
-          }
+                }
+              })
+              .filter(
+                (u): u is { listing_id: string; quantity_available: number } =>
+                  u !== null,
+              )
+            void runBatchQuantityUpdate(updates)
+          }}
           color={"success"}
           startIcon={<AddRounded />}
         >
@@ -96,32 +100,40 @@ export function ManageStockArea(props: { listings: UniqueListing[] }) {
 
         <Button
           variant={"contained"}
-          onClick={() =>
-            [...selectionModel.ids].map((listing_id) =>
-              updateListingCallback(listing_id.toString(), {
-                quantity_available: 0,
-              }),
-            )
-          }
+          onClick={() => {
+            const updates = [...selectionModel.ids].map((listing_id) => ({
+              listing_id: listing_id.toString(),
+              quantity_available: 0,
+            }))
+            void runBatchQuantityUpdate(updates)
+          }}
           color={"warning"}
         >
           {t("ItemStock.zero")}
         </Button>
         <Button
           variant={"contained"}
-          onClick={() =>
-            [...selectionModel.ids].map((listing_id) => {
-              const listing = listings.find(
-                (l) => l.listing.listing_id === listing_id,
-              )
-              if (listing) {
-                updateListingCallback(listing_id.toString(), {
-                  quantity_available:
+          onClick={() => {
+            const updates = [...selectionModel.ids]
+              .map((listing_id) => {
+                const listing = listings.find(
+                  (l) => l.listing.listing_id === listing_id,
+                )
+                if (!listing) return null
+                return {
+                  listing_id: listing_id.toString(),
+                  quantity_available: Math.max(
+                    0,
                     listing.listing.quantity_available - quantity,
-                })
-              }
-            })
-          }
+                  ),
+                }
+              })
+              .filter(
+                (u): u is { listing_id: string; quantity_available: number } =>
+                  u !== null,
+              )
+            void runBatchQuantityUpdate(updates)
+          }}
           color={"error"}
           startIcon={<RemoveRounded />}
         >
