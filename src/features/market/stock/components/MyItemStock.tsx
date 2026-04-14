@@ -5,6 +5,15 @@ import { useGetMyListingsQuery } from "../../api/marketApi"
 import { useMarketSearch } from "../../index"
 import { DisplayStock } from "../../components/ItemStock"
 
+/** Manage listings excludes archived; archived-only lives under My Listings. */
+function statusesForManageStock(raw: string | undefined): string {
+  const parts = (raw || "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter((s) => s && s !== "archived")
+  return parts.length ? parts.join(",") : "active,inactive"
+}
+
 export function MyItemStock() {
   const [currentOrg] = useCurrentOrg()
   const { data: profile, isLoading: profileLoading } = useGetUserProfileQuery()
@@ -21,7 +30,7 @@ export function MyItemStock() {
       quantityAvailable: searchState.quantityAvailable ?? 1,
       query: searchState.query || "",
       sort: searchState.sort || "activity",
-      statuses: searchState.statuses || undefined,
+      statuses: statusesForManageStock(searchState.statuses),
       minCost: searchState.minCost || undefined,
       maxCost: searchState.maxCost || undefined,
       item_type: searchState.item_type || undefined,
