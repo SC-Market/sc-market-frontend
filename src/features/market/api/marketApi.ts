@@ -751,6 +751,32 @@ export const marketApi = serviceApi.injectEndpoints({
       ],
     }),
 
+    batchUpdateListingQuantities: builder.mutation<
+      { result: string; updated: number },
+      { updates: { listing_id: string; quantity_available: number }[] }
+    >({
+      query: (body) => ({
+        url: "/api/market/listings/batch-update-quantity",
+        method: "POST",
+        body,
+      }),
+      transformResponse: unwrapResponse,
+      invalidatesTags: (result, error, { updates }) => [
+        "MarketListings",
+        "MyListings",
+        "MarketStats",
+        "MarketCategories",
+        "BuyOrderListings",
+        "AllListings",
+        "ContractorListings",
+        "StockLots",
+        ...updates.map((u) => ({
+          type: "MarketListings" as const,
+          id: u.listing_id,
+        })),
+      ],
+    }),
+
     acceptBid: builder.mutation<unknown, { bidId: string }>({
       query: ({ bidId }) => ({
         url: `/api/market/bids/${bidId}/accept`,
@@ -801,6 +827,7 @@ export const {
   useUpdateMultipleListingMutation,
   useUpdateMarketListingMutation,
   useBatchUpdateMarketListingsMutation,
+  useBatchUpdateListingQuantitiesMutation,
   useCreateListingBidMutation,
   useAcceptBidMutation,
 } = marketApi
