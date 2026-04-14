@@ -24,8 +24,8 @@ import { useTheme } from "@mui/material/styles"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { GridRowModes, GridRowModesModel } from "@mui/x-data-grid"
 import { ExtendedTheme } from "../../../../hooks/styles/Theme"
-import { UniqueListing, MarketListingUpdateBody } from "../../domain/types"
-import { useUpdateMarketListingMutation } from "../../api/marketApi"
+import { UniqueListing } from "../../domain/types"
+import { useBatchUpdateMarketListingsMutation } from "../../api/marketApi"
 import { NewListingRow } from "../types"
 import { ManageStockArea, ItemStockContext } from "./ManageStockArea"
 import { useAlertHook } from "../../../../hooks/alert/AlertHook"
@@ -53,35 +53,39 @@ export function ItemStockToolbar(props: {
   const [archiveDialogOpen, setArchiveDialogOpen] = useState(false)
   const [archiving, setArchiving] = useState(false)
 
-  const [updateListing, { isLoading }] = useUpdateMarketListingMutation()
-  const updateListingCallback = useCallback(
-    async (body: MarketListingUpdateBody) => {
-      selectionModel.ids.forEach((row_id) => {
-        updateListing({
-          listing_id: row_id.toString(),
-          body,
-        })
-      })
-    },
-    [selectionModel, updateListing],
-  )
+  const [batchUpdateListings, { isLoading }] =
+    useBatchUpdateMarketListingsMutation()
 
   const selectedCount = selectionModel.ids.size
   const hasSelection = selectedCount > 0
+
+  const listingIdsFromSelection = useCallback(
+    () => [...selectionModel.ids].map((id) => id.toString()),
+    [selectionModel.ids],
+  )
+
+  const handleBulkStatus = useCallback(
+    async (status: "active" | "inactive") => {
+      const listing_ids = listingIdsFromSelection()
+      if (listing_ids.length === 0) return
+      try {
+        await batchUpdateListings({ listing_ids, status }).unwrap()
+      } catch (e) {
+        issueAlert(e as Error)
+      }
+    },
+    [batchUpdateListings, listingIdsFromSelection, issueAlert],
+  )
 
   const handleConfirmBulkArchive = useCallback(async () => {
     const ids = [...selectionModel.ids]
     if (ids.length === 0) return
     setArchiving(true)
     try {
-      await Promise.all(
-        ids.map((row_id) =>
-          updateListing({
-            listing_id: row_id.toString(),
-            body: { status: "archived" },
-          }).unwrap(),
-        ),
-      )
+      await batchUpdateListings({
+        listing_ids: ids.map((id) => String(id)),
+        status: "archived",
+      }).unwrap()
       setArchiveDialogOpen(false)
       issueAlert({
         message: t("ItemStock.bulkArchivedSuccess", { count: ids.length }),
@@ -92,7 +96,7 @@ export function ItemStockToolbar(props: {
     } finally {
       setArchiving(false)
     }
-  }, [selectionModel.ids, updateListing, issueAlert, t])
+  }, [selectionModel.ids, batchUpdateListings, issueAlert, t])
 
   const archiveDialog = (
     <Dialog
@@ -156,9 +160,7 @@ export function ItemStockToolbar(props: {
               variant={"outlined"}
               size={"small"}
               loading={isLoading}
-              onClick={() => {
-                updateListingCallback({ status: "active" })
-              }}
+              onClick={() => void handleBulkStatus("active")}
               fullWidth
               disabled={!hasSelection}
             >
@@ -170,9 +172,7 @@ export function ItemStockToolbar(props: {
             variant={"outlined"}
             size={"small"}
             loading={isLoading}
-            onClick={() => {
-              updateListingCallback({ status: "inactive" })
-            }}
+            onClick={() => void handleBulkStatus("inactive")}
             fullWidth
             disabled={!hasSelection}
           >
@@ -217,9 +217,7 @@ export function ItemStockToolbar(props: {
           variant={"outlined"}
           size={"small"}
           loading={isLoading}
-          onClick={() => {
-            updateListingCallback({ status: "active" })
-          }}
+          onClick={() => void handleBulkStatus("active")}
           disabled={!hasSelection}
         >
           {t("ItemStock.activate")}
@@ -230,9 +228,7 @@ export function ItemStockToolbar(props: {
           variant={"outlined"}
           size={"small"}
           loading={isLoading}
-          onClick={() => {
-            updateListingCallback({ status: "inactive" })
-          }}
+          onClick={() => void handleBulkStatus("inactive")}
           disabled={!hasSelection}
         >
           {t("ItemStock.deactivate")}
