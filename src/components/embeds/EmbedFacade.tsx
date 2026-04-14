@@ -57,7 +57,7 @@ const FacadeContainer = styled(Box)(({ theme }) => ({
   position: "relative",
   width: "100%",
   minHeight: 300,
-  backgroundColor: theme.palette.mode === "dark" ? "#1a1a1a" : "#f5f5f5",
+  backgroundColor: theme.palette.background.subtleHover,
   display: "flex",
   flexDirection: "column",
   alignItems: "center",
@@ -68,7 +68,7 @@ const FacadeContainer = styled(Box)(({ theme }) => ({
   border: `1px solid ${theme.palette.divider}`,
   transition: "all 0.2s ease",
   "&:hover": {
-    backgroundColor: theme.palette.mode === "dark" ? "#252525" : "#eeeeee",
+    backgroundColor: theme.palette.background.subtleHover,
     borderColor: theme.palette.primary.main,
   },
 }))

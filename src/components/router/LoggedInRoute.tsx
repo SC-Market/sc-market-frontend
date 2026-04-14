@@ -3,6 +3,7 @@ import React, { useEffect, useMemo } from "react"
 import LoadingBar from "react-top-loading-bar"
 import { useGetUserProfileQuery } from "../../store/profile"
 import { BACKEND_URL } from "../../util/constants"
+import { useTheme } from "@mui/material/styles"
 import { useGetContractorBySpectrumIDQuery } from "../../store/contractor"
 import { useCookies } from "react-cookie"
 import { has_permission } from "../../views/contractor/OrgRoles"
@@ -13,9 +14,10 @@ export function LoggedInRoute() {
   // const [profile, setProfile] = useUserProfile()
   const { data: profile, isLoading, isSuccess } = useGetUserProfileQuery()
   const location = useLocation()
+  const theme = useTheme()
 
   if (isLoading) {
-    return <LoadingBar color="#f11946" progress={0.5} />
+    return <LoadingBar color={theme.palette.primary.main} progress={0.5} />
   } else if (isSuccess) {
     if (
       !profile.rsi_confirmed &&

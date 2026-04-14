@@ -3,7 +3,7 @@ import { Box, Paper } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { User } from "../../../datatypes/User"
 import { Contractor } from "../../../datatypes/Contractor"
-import { ExtendedTheme } from "../../../hooks/styles/Theme"
+import { ExtendedTheme, bannerFadeGradient } from "../../../hooks/styles/Theme"
 
 export function LightBannerContainer(props: {
   children?: React.ReactNode
@@ -79,7 +79,7 @@ export function DarkBannerContainer(props: {
           height: 500,
           top: 0,
           left: 0,
-          background: `linear-gradient(to bottom, transparent, ${theme.palette.background.default}99 60%, ${theme.palette.background.default} 100%)`,
+          background: bannerFadeGradient(theme),
         }}
       />
       {props.children}

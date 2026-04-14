@@ -27,6 +27,10 @@ import { LightThemeContext, ThemeChoice } from "./styles/LightTheme"
 import { useCookies } from "react-cookie"
 import { CURRENT_CUSTOM_ORG } from "./contractor/CustomDomain"
 import { CUSTOM_THEMES } from "./styles/custom_themes"
+import {
+  getCachedOrgTheme,
+  getCachedFaviconUrl,
+} from "./styles/themeCache"
 import { useLocation, useSearchParams } from "react-router-dom"
 import { isCitizenIdEnabled } from "../util/constants"
 import { useGetUserProfileQuery } from "../store/profile"
@@ -75,6 +79,10 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
 
     // Normal theme selection logic
     if (CURRENT_CUSTOM_ORG) {
+      const resolvedMode =
+        actualTheme === "light" ? ("light" as const) : ("dark" as const)
+      const cached = getCachedOrgTheme(CURRENT_CUSTOM_ORG, resolvedMode)
+      if (cached) return cached
       const theme = CUSTOM_THEMES.get(CURRENT_CUSTOM_ORG)
       if (theme) return theme
     }
@@ -93,6 +101,21 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
       )
     })
   }, [baseTheme, i18n.language])
+
+  // Sync <meta name="theme-color"> and favicon with active theme
+  useEffect(() => {
+    document
+      .querySelector('meta[name="theme-color"]')
+      ?.setAttribute("content", localizedTheme.palette.background.navbar)
+    if (CURRENT_CUSTOM_ORG) {
+      const favicon = getCachedFaviconUrl(CURRENT_CUSTOM_ORG)
+      if (favicon) {
+        document
+          .querySelector('link[rel="icon"]')
+          ?.setAttribute("href", favicon)
+      }
+    }
+  }, [localizedTheme])
 
   useEffect(() => {
     if (useLightTheme === "system") {

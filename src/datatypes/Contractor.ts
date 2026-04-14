@@ -67,6 +67,7 @@ export interface Contractor {
   locale?: string
   archived?: boolean
   languages?: Array<{ code: string; name: string }>
+  premium_tier?: string | null
 }
 
 export interface MinimalContractor {
