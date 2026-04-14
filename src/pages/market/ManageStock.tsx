@@ -35,13 +35,22 @@ export function ManageStock() {
   const pageData = usePageManageStock()
 
   useEffect(() => {
-    setSearchState({
-      query: "",
-      quantityAvailable: 0,
-      sort: searchState.sort || "activity",
-      statuses: "active,inactive",
+    setSearchState((prev) => {
+      const statuses =
+        (prev.statuses || "")
+          .split(",")
+          .map((s) => s.trim())
+          .filter((s) => s && s !== "archived")
+          .join(",") || "active,inactive"
+      return {
+        ...prev,
+        query: "",
+        quantityAvailable: 0,
+        sort: prev.sort || "activity",
+        statuses,
+      }
     })
-  }, [])
+  }, [setSearchState])
 
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>({
     type: "include",

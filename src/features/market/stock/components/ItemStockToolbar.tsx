@@ -2,6 +2,11 @@ import React, { useCallback, useContext, useState } from "react"
 import {
   Box,
   Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   IconButton,
   Stack,
   Toolbar,
@@ -10,6 +15,7 @@ import {
 } from "@mui/material"
 import {
   AddRounded,
+  ArchiveOutlined,
   RadioButtonCheckedRounded,
   RadioButtonUncheckedRounded,
 } from "@mui/icons-material"
@@ -22,6 +28,7 @@ import { UniqueListing, MarketListingUpdateBody } from "../../domain/types"
 import { useUpdateMarketListingMutation } from "../../api/marketApi"
 import { NewListingRow } from "../types"
 import { ManageStockArea, ItemStockContext } from "./ManageStockArea"
+import { useAlertHook } from "../../../../hooks/alert/AlertHook"
 
 export function ItemStockToolbar(props: {
   listings: UniqueListing[]
@@ -41,6 +48,10 @@ export function ItemStockToolbar(props: {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const isMobile = props.isMobile ?? useMediaQuery(theme.breakpoints.down("md"))
+  const issueAlert = useAlertHook()
+
+  const [archiveDialogOpen, setArchiveDialogOpen] = useState(false)
+  const [archiving, setArchiving] = useState(false)
 
   const [updateListing, { isLoading }] = useUpdateMarketListingMutation()
   const updateListingCallback = useCallback(
@@ -55,40 +66,104 @@ export function ItemStockToolbar(props: {
     [selectionModel, updateListing],
   )
 
+  const selectedCount = selectionModel.ids.size
+  const hasSelection = selectedCount > 0
+
+  const handleConfirmBulkArchive = useCallback(async () => {
+    const ids = [...selectionModel.ids]
+    if (ids.length === 0) return
+    setArchiving(true)
+    try {
+      await Promise.all(
+        ids.map((row_id) =>
+          updateListing({
+            listing_id: row_id.toString(),
+            body: { status: "archived" },
+          }).unwrap(),
+        ),
+      )
+      setArchiveDialogOpen(false)
+      issueAlert({
+        message: t("ItemStock.bulkArchivedSuccess", { count: ids.length }),
+        severity: "success",
+      })
+    } catch (e) {
+      issueAlert(e as Error)
+    } finally {
+      setArchiving(false)
+    }
+  }, [selectionModel.ids, updateListing, issueAlert, t])
+
+  const archiveDialog = (
+    <Dialog
+      open={archiveDialogOpen}
+      onClose={() => !archiving && setArchiveDialogOpen(false)}
+      aria-labelledby="bulk-archive-title"
+    >
+      <DialogTitle id="bulk-archive-title">
+        {t("ItemStock.bulkArchiveTitle")}
+      </DialogTitle>
+      <DialogContent>
+        <DialogContentText>
+          {t("ItemStock.bulkArchiveBody", { count: selectedCount })}
+        </DialogContentText>
+      </DialogContent>
+      <DialogActions>
+        <Button
+          onClick={() => setArchiveDialogOpen(false)}
+          disabled={archiving}
+          color="inherit"
+        >
+          {t("ItemStock.bulkArchiveCancel")}
+        </Button>
+        <LoadingButton
+          onClick={handleConfirmBulkArchive}
+          loading={archiving}
+          color="error"
+          variant="contained"
+        >
+          {t("ItemStock.bulkArchiveConfirm")}
+        </LoadingButton>
+      </DialogActions>
+    </Dialog>
+  )
+
   if (isMobile) {
     return (
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          gap: 1,
-          padding: 2,
-          borderBottom: 1,
-          borderColor: "divider",
-        }}
-      >
-        <ManageStockArea listings={props.listings} />
+      <>
         <Box
           sx={{
             display: "flex",
+            flexDirection: "column",
             gap: 1,
-            flexWrap: "wrap",
-            alignItems: "center",
+            padding: 2,
+            borderBottom: 1,
+            borderColor: "divider",
           }}
         >
-          <LoadingButton
-            color={"success"}
-            startIcon={<RadioButtonCheckedRounded />}
-            variant={"outlined"}
-            size={"small"}
-            loading={isLoading}
-            onClick={() => {
-              updateListingCallback({ status: "active" })
+          <ManageStockArea listings={props.listings} />
+          <Box
+            sx={{
+              display: "flex",
+              gap: 1,
+              flexWrap: "wrap",
+              alignItems: "center",
             }}
-            fullWidth
           >
-            {t("ItemStock.activate")}
-          </LoadingButton>
+            <LoadingButton
+              color={"success"}
+              startIcon={<RadioButtonCheckedRounded />}
+              variant={"outlined"}
+              size={"small"}
+              loading={isLoading}
+              onClick={() => {
+                updateListingCallback({ status: "active" })
+              }}
+              fullWidth
+              disabled={!hasSelection}
+            >
+              {t("ItemStock.activate")}
+            </LoadingButton>
           <LoadingButton
             color={"error"}
             startIcon={<RadioButtonUncheckedRounded />}
@@ -99,8 +174,21 @@ export function ItemStockToolbar(props: {
               updateListingCallback({ status: "inactive" })
             }}
             fullWidth
+            disabled={!hasSelection}
           >
             {t("ItemStock.deactivate")}
+          </LoadingButton>
+          <LoadingButton
+            color="warning"
+            startIcon={<ArchiveOutlined />}
+            variant="outlined"
+            size="small"
+            loading={isLoading}
+            onClick={() => setArchiveDialogOpen(true)}
+            fullWidth
+            disabled={!hasSelection}
+          >
+            {t("ItemStock.archive")}
           </LoadingButton>
           <Button
             onClick={props.onAddQuickListing}
@@ -112,8 +200,10 @@ export function ItemStockToolbar(props: {
           >
             {t("ItemStock.addQuickListing")}
           </Button>
+          </Box>
         </Box>
-      </Box>
+        {archiveDialog}
+      </>
     )
   }
 
@@ -130,6 +220,7 @@ export function ItemStockToolbar(props: {
           onClick={() => {
             updateListingCallback({ status: "active" })
           }}
+          disabled={!hasSelection}
         >
           {t("ItemStock.activate")}
         </LoadingButton>
@@ -142,8 +233,20 @@ export function ItemStockToolbar(props: {
           onClick={() => {
             updateListingCallback({ status: "inactive" })
           }}
+          disabled={!hasSelection}
         >
           {t("ItemStock.deactivate")}
+        </LoadingButton>
+        <LoadingButton
+          color="warning"
+          startIcon={<ArchiveOutlined />}
+          variant="outlined"
+          size="small"
+          loading={isLoading}
+          onClick={() => setArchiveDialogOpen(true)}
+          disabled={!hasSelection}
+        >
+          {t("ItemStock.archive")}
         </LoadingButton>
         <Tooltip title={t("ItemStock.addQuickListing")}>
           <IconButton
@@ -171,6 +274,7 @@ export function ItemStockToolbar(props: {
           </IconButton>
         </Tooltip>
       </Stack>
+      {archiveDialog}
     </Toolbar>
   )
 }

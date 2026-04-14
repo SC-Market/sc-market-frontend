@@ -288,11 +288,11 @@ export function MarketSearchArea(props: {
               <MenuItem value={"active"}>
                 {t("MarketSearchArea.active")}
               </MenuItem>
+              <MenuItem value={"inactive"}>
+                {t("MarketSearchArea.inactive")}
+              </MenuItem>
               <MenuItem value={"active,inactive"}>
                 {t("MarketSearchArea.activeAndInactive")}
-              </MenuItem>
-              <MenuItem value={"active,inactive,archived"}>
-                {t("MarketSearchArea.allStatuses")}
               </MenuItem>
             </TextField>
           </Grid>
