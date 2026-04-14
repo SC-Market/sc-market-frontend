@@ -10,7 +10,7 @@ import {
   Skeleton,
   Stack,
 } from "@mui/material"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { ExtendedTheme, bannerFadeGradient } from "../../hooks/styles/Theme"
 import { useTheme } from "@mui/material/styles"
 import PeopleAltRoundedIcon from "@mui/icons-material/PeopleAltRounded"
 
@@ -38,7 +38,7 @@ export function ContractorSkeleton(props: ContractorSkeletonProps = {}) {
             ...(theme.palette.mode === "dark" && showDarkOverlay
               ? {
                   background:
-                    "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                    "linear-gradient(135deg, " + theme.palette.primary.main + " 0%, " + theme.palette.secondary.main + " 100%)",
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                 }
@@ -49,7 +49,7 @@ export function ContractorSkeleton(props: ContractorSkeletonProps = {}) {
             sx={{
               ...(theme.palette.mode === "dark" && showDarkOverlay
                 ? {
-                    background: `linear-gradient(to bottom, ${theme.palette.background.default}AA, ${theme.palette.background.default} 100%)`,
+                    background: bannerFadeGradient(theme),
                   }
                 : {}),
               height: "100%",

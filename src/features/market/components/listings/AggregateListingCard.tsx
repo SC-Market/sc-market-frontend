@@ -13,7 +13,7 @@ import React, { useMemo } from "react"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 import { useTheme } from "@mui/material/styles"
-import { ExtendedTheme } from "../../../../hooks/styles/Theme"
+import { ExtendedTheme, cardFadeGradient } from "../../../../hooks/styles/Theme"
 import type {
   ExtendedAggregateSearchResult,
   MarketAggregate,
@@ -110,7 +110,7 @@ export function AggregateListingBase(props: {
                 width: "100%",
                 borderRadius: (theme) =>
                   theme.spacing((theme as ExtendedTheme).borderRadius.topLevel),
-                background: `linear-gradient(to bottom, transparent, transparent 25%, ${theme.palette.background.sidebar}AA 40%, ${theme.palette.background.sidebar} 100%)`,
+                background: cardFadeGradient(theme, 25, 40),
               }}
             />
 
@@ -283,7 +283,7 @@ export function AggregateBuyOrderListingBase(props: {
                 width: "100%",
                 borderRadius: (theme) =>
                   theme.spacing((theme as ExtendedTheme).borderRadius.topLevel),
-                background: `linear-gradient(to bottom, transparent, transparent 25%, ${theme.palette.background.sidebar}AA 40%, ${theme.palette.background.sidebar} 100%)`,
+                background: cardFadeGradient(theme, 25, 40),
               }}
             />
 

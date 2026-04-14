@@ -29,10 +29,7 @@ export function BaseSkeleton({
       height={height}
       animation={animation}
       sx={{
-        bgcolor:
-          theme.palette.mode === "dark"
-            ? "rgba(255, 255, 255, 0.11)"
-            : "rgba(0, 0, 0, 0.11)",
+        bgcolor: theme.palette.background.subtleDivider,
         ...sx,
       }}
       {...props}
