@@ -12,6 +12,7 @@ import {
   SettingsRounded,
   Block,
   HistoryRounded,
+  PaletteRounded,
 } from "@mui/icons-material"
 import { a11yProps, TabPanel } from "../../components/tabs/Tabs"
 import { CreateOrgInviteCode } from "../../views/contractor/CreateOrgInviteCode"
@@ -36,6 +37,13 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { usePageOrgManage } from "../../features/contractor/hooks/usePageOrgManage"
 import { OrgManageSkeleton } from "../../components/skeletons/OrgManageSkeleton"
+import { ThemeEditor } from "../../components/theme-editor/ThemeEditor"
+import {
+  useGetOrgThemeQuery,
+  useUpdateOrgThemeMutation,
+  useDeleteOrgThemeMutation,
+} from "../../store/api/contractors"
+import { clearCachedOrgTheme } from "../../hooks/styles/themeCache"
 
 export function OrgManage() {
   const { t } = useTranslation()
@@ -103,6 +111,17 @@ export function OrgManage() {
   const handleChange = (event: React.SyntheticEvent, newPage: number) => {
     setPage(newPage)
   }
+
+  const contractor = pageData.data?.contractor
+  const hasWhiteLabel = contractor?.premium_tier === "white_label"
+  const spectrumId = contractor?.spectrum_id
+
+  const { data: orgTheme } = useGetOrgThemeQuery(spectrumId!, {
+    skip: !hasWhiteLabel || !spectrumId,
+  })
+  const [updateOrgTheme, { isLoading: isThemeSaving }] =
+    useUpdateOrgThemeMutation()
+  const [deleteOrgTheme] = useDeleteOrgThemeMutation()
 
   return (
     <StandardPageLayout
@@ -177,6 +196,13 @@ export function OrgManage() {
               icon={<HistoryRounded />}
               {...a11yProps(7)}
             />
+            {hasWhiteLabel && canManageOrgDetails && (
+              <Tab
+                label={t("org.themeTab", "Theme")}
+                icon={<PaletteRounded />}
+                {...a11yProps(8)}
+              />
+            )}
           </Tabs>
         </Box>
       </Grid>
@@ -227,6 +253,33 @@ export function OrgManage() {
             <CustomerList />
           </Grid>
         </TabPanel>
+        {hasWhiteLabel && canManageOrgDetails && spectrumId && (
+          <TabPanel value={page} index={9}>
+            <ThemeEditor
+              initialThemeData={
+                (orgTheme as any)?.data?.theme_data ?? {
+                  light: {},
+                  dark: {},
+                }
+              }
+              initialFaviconUrl={
+                (orgTheme as any)?.data?.favicon_url ?? null
+              }
+              onSave={async (data) => {
+                await updateOrgTheme({
+                  spectrum_id: spectrumId,
+                  ...data,
+                })
+                clearCachedOrgTheme(spectrumId)
+              }}
+              onReset={async () => {
+                await deleteOrgTheme(spectrumId)
+                clearCachedOrgTheme(spectrumId)
+              }}
+              isSaving={isThemeSaving}
+            />
+          </TabPanel>
+        )}
       </Grid>
     </StandardPageLayout>
   )
