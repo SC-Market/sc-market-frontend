@@ -8,7 +8,7 @@ import {
   Badge,
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { ExtendedTheme, getNavbarContrastText } from "../../hooks/styles/Theme"
 import React from "react"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
 import { useLocation, useNavigate } from "react-router-dom"
@@ -44,9 +44,7 @@ export function Navbar(props: { children?: React.ReactNode }) {
   const messagingSidebarWidth =
     isMessagingPage && !isMobile ? messagingDrawerWidth : 0
 
-  const cartIconColor = theme.palette.getContrastText(
-    theme.palette.background.navbar,
-  )
+  const cartIconColor = getNavbarContrastText(theme)
 
   return (
     <AppBar
