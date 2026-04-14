@@ -567,6 +567,7 @@ export function DisplayBuyOrderListings(props: {
   loading?: boolean
 }) {
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const [searchState] = useMarketSearch()
   const [perPage, setPerPage] = useState(48)
   const [page, setPage] = useState(0)
@@ -619,7 +620,21 @@ export function DisplayBuyOrderListings(props: {
                     />
                   </Grid>
                 ))
-            : listings.map((item, index) => (
+            : listings.length === 0
+              ? (
+                <Grid item xs={12}>
+                  <EmptyListings
+                    isSearchResult={!!searchState.query}
+                    showCreateAction={false}
+                    action={{
+                      label: t("buyOrderActions.createBuyOrder", "Create Buy Order"),
+                      onClick: () => navigate("/buyorder/create"),
+                      variant: "contained" as const,
+                    }}
+                  />
+                </Grid>
+              )
+              : listings.map((item, index) => (
                 <Grid item {...gridBreakpoints} key={item.details.game_item_id}>
                   <AggregateBuyOrderListing
                     aggregate={item}
