@@ -42,10 +42,10 @@ export const premiumApi = serviceApi.injectEndpoints({
     }),
     setOrgPremium: builder.mutation<
       PremiumTier,
-      { contractor_id: string; tier: string; custom_domain?: string | null }
+      { spectrum_id: string; tier: string; custom_domain?: string | null }
     >({
-      query: ({ contractor_id, ...body }) => ({
-        url: `${baseUrl}/${contractor_id}`,
+      query: ({ spectrum_id, ...body }) => ({
+        url: `${baseUrl}/${spectrum_id}`,
         method: "PUT",
         body,
       }),
@@ -53,8 +53,8 @@ export const premiumApi = serviceApi.injectEndpoints({
       invalidatesTags: ["Contractor" as const],
     }),
     revokeOrgPremium: builder.mutation<{ message: string }, string>({
-      query: (contractor_id) => ({
-        url: `${baseUrl}/${contractor_id}`,
+      query: (spectrum_id) => ({
+        url: `${baseUrl}/${spectrum_id}`,
         method: "DELETE",
       }),
       transformResponse: unwrapResponse,

@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import {
+  Avatar,
   Box,
   Button,
   Chip,
@@ -26,13 +27,14 @@ import {
 } from "../../store/api/premium"
 import { useSearchContractorsQuery } from "../../store/api/contractors"
 import { useTranslation } from "react-i18next"
+import { MinimalContractor } from "../../datatypes/Contractor"
 
 export function AdminPremiumManagementView() {
   const { t } = useTranslation()
   const [page, setPage] = useState(1)
   const [grantDialogOpen, setGrantDialogOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
-  const [selectedContractorId, setSelectedContractorId] = useState("")
+  const [selectedOrg, setSelectedOrg] = useState<MinimalContractor | null>(null)
   const [selectedTier, setSelectedTier] = useState("white_label")
   const [selectedDomain, setSelectedDomain] = useState("")
 
@@ -45,21 +47,23 @@ export function AdminPremiumManagementView() {
   const [revokeOrgPremium, { isLoading: isRevoking }] =
     useRevokeOrgPremiumMutation()
 
+  const searchOrgs = ((searchResults as any)?.data ?? []) as MinimalContractor[]
+
   const handleGrant = async () => {
-    if (!selectedContractorId) return
+    if (!selectedOrg) return
     await setOrgPremium({
-      contractor_id: selectedContractorId,
+      spectrum_id: selectedOrg.spectrum_id,
       tier: selectedTier,
       custom_domain: selectedDomain || null,
     })
     setGrantDialogOpen(false)
-    setSelectedContractorId("")
+    setSelectedOrg(null)
     setSearchQuery("")
     setSelectedDomain("")
   }
 
-  const handleRevoke = async (contractorId: string) => {
-    await revokeOrgPremium(contractorId)
+  const handleRevoke = async (spectrumId: string) => {
+    await revokeOrgPremium(spectrumId)
   }
 
   const columns: GridColDef[] = [
@@ -128,7 +132,7 @@ export function AdminPremiumManagementView() {
           <Button
             size="small"
             color="error"
-            onClick={() => handleRevoke(params.row.contractor_id)}
+            onClick={() => handleRevoke(params.row.spectrum_id!)}
             disabled={isRevoking}
           >
             {t("admin.premium.revoke", "Revoke")}
@@ -190,28 +194,52 @@ export function AdminPremiumManagementView() {
             onChange={(e) => setSearchQuery(e.target.value)}
             sx={{ mt: 1, mb: 2 }}
           />
-          {searchResults && searchQuery.length >= 2 && (
+          {searchOrgs.length > 0 && searchQuery.length >= 2 && (
             <Box sx={{ mb: 2, maxHeight: 200, overflow: "auto" }}>
-              {((searchResults as any)?.data ?? []).map((org: any) => (
+              {searchOrgs.map((org) => (
                 <Button
                   key={org.spectrum_id}
                   fullWidth
                   variant={
-                    selectedContractorId === org.contractor_id
+                    selectedOrg?.spectrum_id === org.spectrum_id
                       ? "contained"
                       : "text"
                   }
-                  onClick={() => setSelectedContractorId(org.contractor_id)}
-                  sx={{ justifyContent: "flex-start", textTransform: "none" }}
+                  onClick={() => setSelectedOrg(org)}
+                  sx={{
+                    justifyContent: "flex-start",
+                    textTransform: "none",
+                    py: 1,
+                    px: 1.5,
+                  }}
                 >
-                  <Typography>{org.name}</Typography>
-                  <Typography
-                    variant="caption"
-                    color="text.secondary"
-                    sx={{ ml: 1 }}
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 1.5,
+                      width: "100%",
+                    }}
                   >
-                    {org.spectrum_id}
-                  </Typography>
+                    <Avatar
+                      src={org.avatar}
+                      alt={org.name}
+                      sx={{ width: 32, height: 32 }}
+                    />
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "flex-start",
+                        lineHeight: 1.3,
+                      }}
+                    >
+                      <Typography variant="body2">{org.name}</Typography>
+                      <Typography variant="caption" color="text.secondary">
+                        {org.spectrum_id}
+                      </Typography>
+                    </Box>
+                  </Box>
                 </Button>
               ))}
             </Box>
@@ -246,7 +274,7 @@ export function AdminPremiumManagementView() {
           <Button
             variant="contained"
             onClick={handleGrant}
-            disabled={!selectedContractorId || isSetting}
+            disabled={!selectedOrg || isSetting}
           >
             {t("admin.premium.grant", "Grant Premium")}
           </Button>
