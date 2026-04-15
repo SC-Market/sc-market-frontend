@@ -102,6 +102,7 @@ export function ThemeEditor({
 
   const currentMode = themeData[editMode] as Record<string, any>
   const paperVariant = currentMode?.components?.MuiPaper?.defaultProps?.variant ?? "outlined"
+  const cardVariant = currentMode?.components?.MuiCard?.defaultProps?.variant ?? "outlined"
   const navKind = currentMode?.navKind ?? "outlined"
 
   const updateValue = useCallback(
@@ -114,15 +115,15 @@ export function ThemeEditor({
     [editMode],
   )
 
-  const updatePaperVariant = useCallback(
-    (variant: string) => {
+  const updateComponentVariant = useCallback(
+    (component: string, variant: string) => {
       setThemeData((prev) => ({
         ...prev,
         [editMode]: {
           ...prev[editMode],
           components: {
-            MuiPaper: { defaultProps: { variant } },
-            MuiCard: { defaultProps: { variant } },
+            ...(prev[editMode] as any)?.components,
+            [component]: { defaultProps: { variant } },
           },
         },
       }))
@@ -205,20 +206,33 @@ export function ThemeEditor({
             {t("theme.style", "Style")}
           </Typography>
           <Grid container spacing={1.5}>
-            <Grid item xs={6}>
+            <Grid item xs={4}>
               <FormControl fullWidth size="small">
                 <InputLabel>{t("theme.paperStyle", "Paper Style")}</InputLabel>
                 <Select
                   value={paperVariant}
                   label={t("theme.paperStyle", "Paper Style")}
-                  onChange={(e) => updatePaperVariant(e.target.value)}
+                  onChange={(e) => updateComponentVariant("MuiPaper", e.target.value)}
                 >
-                  <MenuItem value="outlined">{t("theme.outlined", "Outlined (border)")}</MenuItem>
-                  <MenuItem value="elevation">{t("theme.elevation", "Elevation (shadow)")}</MenuItem>
+                  <MenuItem value="outlined">{t("theme.outlined", "Outlined")}</MenuItem>
+                  <MenuItem value="elevation">{t("theme.elevation", "Elevation")}</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={4}>
+              <FormControl fullWidth size="small">
+                <InputLabel>{t("theme.cardStyle", "Card Style")}</InputLabel>
+                <Select
+                  value={cardVariant}
+                  label={t("theme.cardStyle", "Card Style")}
+                  onChange={(e) => updateComponentVariant("MuiCard", e.target.value)}
+                >
+                  <MenuItem value="outlined">{t("theme.outlined", "Outlined")}</MenuItem>
+                  <MenuItem value="elevation">{t("theme.elevation", "Elevation")}</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={4}>
               <FormControl fullWidth size="small">
                 <InputLabel>{t("theme.navStyle", "Nav Style")}</InputLabel>
                 <Select
