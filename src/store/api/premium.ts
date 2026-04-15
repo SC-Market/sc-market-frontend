@@ -5,6 +5,7 @@ export interface PremiumTier {
   id: string
   contractor_id: string
   tier: string
+  custom_domain: string | null
   granted_by: string
   granted_at: string
   revoked_at: string | null
@@ -41,12 +42,12 @@ export const premiumApi = serviceApi.injectEndpoints({
     }),
     setOrgPremium: builder.mutation<
       PremiumTier,
-      { contractor_id: string; tier: string }
+      { contractor_id: string; tier: string; custom_domain?: string | null }
     >({
-      query: ({ contractor_id, tier }) => ({
+      query: ({ contractor_id, ...body }) => ({
         url: `${baseUrl}/${contractor_id}`,
         method: "PUT",
-        body: { tier },
+        body,
       }),
       transformResponse: unwrapResponse,
       invalidatesTags: ["Contractor" as const],

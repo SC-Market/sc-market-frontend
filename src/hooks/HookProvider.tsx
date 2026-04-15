@@ -25,14 +25,17 @@ import { AlertHookContext } from "./alert/AlertHook"
 import { ServiceSearchContext } from "./contract/ServiceSearch"
 import { LightThemeContext, ThemeChoice } from "./styles/LightTheme"
 import { useCookies } from "react-cookie"
-import { CURRENT_CUSTOM_ORG } from "./contractor/CustomDomain"
+import { CURRENT_CUSTOM_ORG, IS_CUSTOM_DOMAIN, cacheDomainOrg } from "./contractor/CustomDomain"
 import { CUSTOM_THEMES } from "./styles/custom_themes"
 import {
   getCachedOrgTheme,
   getCachedFaviconUrl,
+  getCachedUpdatedAt,
+  cacheOrgTheme,
+  buildOrgTheme,
 } from "./styles/themeCache"
 import { useLocation, useSearchParams } from "react-router-dom"
-import { isCitizenIdEnabled } from "../util/constants"
+import { isCitizenIdEnabled, BACKEND_URL } from "../util/constants"
 import { useGetUserProfileQuery } from "../store/profile"
 
 import { getMuiLocales } from "../util/i18n"
@@ -70,6 +73,11 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
     return useLightTheme
   }, [useLightTheme, prefersLight, isDev, isAdmin])
 
+  // Track dynamically-fetched org theme (populated by background revalidation)
+  const [dynamicOrgTheme, setDynamicOrgTheme] = useState<ReturnType<typeof getCachedOrgTheme>>(null)
+
+  const resolvedMode = actualTheme === "light" ? ("light" as const) : ("dark" as const)
+
   const baseTheme = useMemo(() => {
     // In dev mode or for admins, check if a custom theme is selected
     if ((isDev || isAdmin) && CUSTOM_THEMES.has(useLightTheme)) {
@@ -77,17 +85,57 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
       if (customTheme) return customTheme
     }
 
-    // Normal theme selection logic
+    // Dynamic org theme (fetched from API)
+    if (dynamicOrgTheme) return dynamicOrgTheme
+
+    // Cached org theme from localStorage
     if (CURRENT_CUSTOM_ORG) {
-      const resolvedMode =
-        actualTheme === "light" ? ("light" as const) : ("dark" as const)
       const cached = getCachedOrgTheme(CURRENT_CUSTOM_ORG, resolvedMode)
       if (cached) return cached
+      // Legacy hardcoded fallback
       const theme = CUSTOM_THEMES.get(CURRENT_CUSTOM_ORG)
       if (theme) return theme
     }
     return actualTheme === "light" ? lightTheme : mainTheme
-  }, [actualTheme, location.pathname, isDev, isAdmin, useLightTheme])
+  }, [actualTheme, location.pathname, isDev, isAdmin, useLightTheme, dynamicOrgTheme, resolvedMode])
+
+  // Background: resolve domain + fetch theme for white-label sites
+  useEffect(() => {
+    if (!IS_CUSTOM_DOMAIN) return
+    const hostname = window.location.hostname
+
+    async function resolveAndFetchTheme() {
+      try {
+        // Step 1: Resolve domain → spectrum_id
+        const domainRes = await fetch(`${BACKEND_URL}/api/domain/${hostname}`, { credentials: "include" })
+        if (!domainRes.ok) return
+        const domainData = await domainRes.json()
+        const { spectrum_id } = domainData.data
+        if (!spectrum_id) return
+        cacheDomainOrg(domainData.data)
+
+        // Step 2: Fetch org theme
+        const themeRes = await fetch(`${BACKEND_URL}/api/contractors/${spectrum_id}/theme`, { credentials: "include" })
+        if (!themeRes.ok) return
+        const themeJson = await themeRes.json()
+        const { theme_data, favicon_url, updated_at } = themeJson.data
+
+        // Step 3: Check if newer than cache
+        const cachedUpdatedAt = getCachedUpdatedAt(spectrum_id)
+        if (!cachedUpdatedAt || updated_at > cachedUpdatedAt) {
+          cacheOrgTheme(spectrum_id, theme_data, favicon_url, updated_at)
+        }
+
+        // Step 4: Build and apply theme
+        const built = buildOrgTheme(theme_data, resolvedMode)
+        setDynamicOrgTheme(built)
+      } catch {
+        // API unavailable — cached/hardcoded theme continues to work
+      }
+    }
+
+    resolveAndFetchTheme()
+  }, [resolvedMode])
 
   // Build a localized theme when language changes
   const [localizedTheme, setLocalizedTheme] = useState(() =>
