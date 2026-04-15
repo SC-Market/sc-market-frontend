@@ -706,7 +706,9 @@
     "premium": {
       "text": "Premium"
     },
-    "sc_market": "SC Market",
+    "sc_market": {
+      "title": "SC Market"
+    },
     "sc_market_home": "SC Market Home",
     "toggle_drawer": "Toggle Drawer"
   },
