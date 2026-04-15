@@ -13,8 +13,9 @@ import {
   Block,
   HistoryRounded,
   PaletteRounded,
+  PeopleAltRounded,
 } from "@mui/icons-material"
-import { a11yProps, TabPanel } from "../../components/tabs/Tabs"
+import { TabPanel } from "../../components/tabs/Tabs"
 import { CreateOrgInviteCode } from "../../views/contractor/CreateOrgInviteCode"
 import { ListInviteCodes } from "../../views/contractor/ListInviteCodes"
 import { ManageMemberList } from "../../views/contractor/OrgMembers"
@@ -106,9 +107,9 @@ export function OrgManage() {
     [pageData.data],
   )
 
-  const [page, setPage] = React.useState(0)
+  const [page, setPage] = React.useState("about")
 
-  const handleChange = (event: React.SyntheticEvent, newPage: number) => {
+  const handleChange = (event: React.SyntheticEvent, newPage: string) => {
     setPage(newPage)
   }
 
@@ -142,91 +143,55 @@ export function OrgManage() {
             variant="scrollable"
           >
             {canManageOrgDetails && (
-              <Tab
-                label={t("org.aboutTab")}
-                icon={<InfoRounded />}
-                {...a11yProps(0)}
-              />
+              <Tab label={t("org.aboutTab")} icon={<InfoRounded />} value="about" iconPosition="start" sx={{ minHeight: 48 }} />
             )}
-
             {canManageInvites && (
-              <Tab
-                label={t("org.invitesTab")}
-                icon={<PersonAddRounded />}
-                {...a11yProps(1)}
-              />
+              <Tab label={t("org.invitesTab")} icon={<PersonAddRounded />} value="invites" iconPosition="start" sx={{ minHeight: 48 }} />
             )}
             {canManageRoles && (
-              <Tab
-                label={t("org.rolesTab")}
-                icon={<AccountBoxRounded />}
-                {...a11yProps(2)}
-              />
+              <Tab label={t("org.rolesTab")} icon={<AccountBoxRounded />} value="roles" iconPosition="start" sx={{ minHeight: 48 }} />
             )}
             {canManageWebhooks && (
-              <Tab
-                label={t("org.discordTab")}
-                icon={<Discord />}
-                {...a11yProps(3)}
-              />
+              <Tab label={t("org.discordTab")} icon={<Discord />} value="discord" iconPosition="start" sx={{ minHeight: 48 }} />
             )}
             {canManageOrgDetails && (
-              <Tab
-                label={t("org.marketTab")}
-                icon={<StoreRounded />}
-                {...a11yProps(4)}
-              />
+              <Tab label={t("org.marketTab")} icon={<StoreRounded />} value="market" iconPosition="start" sx={{ minHeight: 48 }} />
             )}
             {canManageOrgDetails && (
-              <Tab
-                label={t("org.settingsTab")}
-                icon={<SettingsRounded />}
-                {...a11yProps(5)}
-              />
+              <Tab label={t("org.settingsTab")} icon={<SettingsRounded />} value="settings" iconPosition="start" sx={{ minHeight: 48 }} />
             )}
             {canManageOrders && (
-              <Tab
-                label={t("org.blocklistTab")}
-                icon={<Block />}
-                {...a11yProps(6)}
-              />
+              <Tab label={t("org.blocklistTab")} icon={<Block />} value="blocklist" iconPosition="start" sx={{ minHeight: 48 }} />
             )}
-            <Tab
-              label={t("org.auditLogsTab")}
-              icon={<HistoryRounded />}
-              {...a11yProps(7)}
-            />
+            <Tab label={t("org.auditLogsTab")} icon={<HistoryRounded />} value="audit" iconPosition="start" sx={{ minHeight: 48 }} />
+            <Tab label={t("org.customersTab", "Customers")} icon={<PeopleAltRounded />} value="customers" iconPosition="start" sx={{ minHeight: 48 }} />
             {hasWhiteLabel && canManageOrgDetails && (
-              <Tab
-                label={t("org.themeTab", "Theme")}
-                icon={<PaletteRounded />}
-                {...a11yProps(8)}
-              />
+              <Tab label={t("org.themeTab", "Theme")} icon={<PaletteRounded />} value="theme" iconPosition="start" sx={{ minHeight: 48 }} />
             )}
           </Tabs>
         </Box>
       </Grid>
       <Grid item xs={12}>
-        <TabPanel value={page} index={0}>
+        <TabPanel value={page} index={"about"}>
           <Grid container spacing={theme.layoutSpacing.layout}>
             <OrgDetailEdit />
           </Grid>
         </TabPanel>
-        <TabPanel value={page} index={1}>
+        <TabPanel value={page} index={"invites"}>
           <Grid container spacing={theme.layoutSpacing.layout}>
             <OrgInvite />
             <CreateOrgInviteCode />
             <ListInviteCodes />
           </Grid>
         </TabPanel>
-        <TabPanel value={page} index={2}>
+        <TabPanel value={page} index={"roles"}>
           <Grid container spacing={theme.layoutSpacing.layout}>
             <ManageRoles />
             <ManageMemberList />
             <AddRole />
           </Grid>
         </TabPanel>
-        <TabPanel value={page} index={3}>
+        <TabPanel value={page} index={"discord"}>
           <Grid container spacing={theme.layoutSpacing.layout}>
             <DiscordBotDetails org />
             <ConfigureDiscord org />
@@ -234,27 +199,27 @@ export function OrgManage() {
             <MyWebhooks org />
           </Grid>
         </TabPanel>
-        <TabPanel value={page} index={4}>
+        <TabPanel value={page} index={"market"}>
           <Grid container spacing={theme.layoutSpacing.layout}>
             <MarketEditTemplate org />
           </Grid>
         </TabPanel>
-        <TabPanel value={page} index={5}>
+        <TabPanel value={page} index={"settings"}>
           <OrgSettings />
         </TabPanel>
-        <TabPanel value={page} index={6}>
+        <TabPanel value={page} index={"blocklist"}>
           <OrgBlocklistSettings />
         </TabPanel>
-        <TabPanel value={page} index={7}>
+        <TabPanel value={page} index={"audit"}>
           <OrgAuditLogs />
         </TabPanel>
-        <TabPanel value={page} index={9}>
+        <TabPanel value={page} index={"customers"}>
           <Grid container spacing={theme.layoutSpacing.layout}>
             <CustomerList />
           </Grid>
         </TabPanel>
         {hasWhiteLabel && canManageOrgDetails && spectrumId && (
-          <TabPanel value={page} index={8}>
+          <TabPanel value={page} index={"theme"}>
             <ThemeEditor
               initialThemeData={
                 (orgTheme as any)?.data?.theme_data ?? {
