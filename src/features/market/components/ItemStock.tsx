@@ -985,7 +985,7 @@ export function DisplayStock({
               } as React.ChangeEvent<HTMLInputElement>)
             }
           }}
-          rowsPerPageOptions={[24, 48, 96, 192]}
+          rowsPerPageOptions={[24, 48, 96]}
           labelRowsPerPage={t("common.rowsPerPage", "Rows per page")}
           labelDisplayedRows={({ from, to, count }) =>
             count !== -1
@@ -1039,7 +1039,7 @@ export function DisplayStock({
             } as React.ChangeEvent<HTMLInputElement>)
           }
         }}
-        pageSizeOptions={[24, 48, 96, 192]}
+        pageSizeOptions={[24, 48, 96]}
       />
     </Box>
   )
