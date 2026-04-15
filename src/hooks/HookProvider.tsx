@@ -1,9 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react"
 import {
   Alert,
+  Box,
   CssBaseline,
   Snackbar,
   ThemeProvider,
+  Typography,
   useMediaQuery,
   createTheme,
   responsiveFontSizes,
