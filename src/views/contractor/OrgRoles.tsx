@@ -366,6 +366,12 @@ function RoleDetailsRow(props: { role: ContractorRole; open: boolean }) {
                   <RolePermissionCheck
                     role={newRole}
                     setRole={setNewRole}
+                    label={"Claim Orders"}
+                    permission_name={"claim_orders"}
+                  />
+                  <RolePermissionCheck
+                    role={newRole}
+                    setRole={setNewRole}
                     label={"Kick Members"}
                     permission_name={"kick_members"}
                   />
@@ -529,6 +535,7 @@ const defaultRole = {
   manage_recruiting: false,
   manage_webhooks: false,
   manage_blocklist: false,
+  claim_orders: false,
   role_id: "",
   contractor_id: "",
 }
@@ -629,6 +636,12 @@ export function AddRole() {
           setRole={setNewRole}
           label={"Manage Blocklist"}
           permission_name={"manage_blocklist"}
+        />
+        <RolePermissionCheck
+          role={newRole}
+          setRole={setNewRole}
+          label={"Claim Orders"}
+          permission_name={"claim_orders"}
         />
         <RolePermissionCheck
           role={newRole}
