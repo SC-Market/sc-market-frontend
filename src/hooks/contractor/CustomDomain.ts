@@ -4,12 +4,6 @@
 const CACHE_KEY = "sc-market-domain-org"
 const hostname = window.location.hostname
 
-// Legacy hardcoded fallback (used until cache is populated)
-const legacyDomains = new Map<string, string>()
-legacyDomains.set("bwsc.sc-market.space", "BWINCORP")
-legacyDomains.set("medrunner.sc-market.space", "MEDRUNNER")
-legacyDomains.set("redscar.sc-market.space", "RSNM")
-
 interface CachedDomainOrg {
   spectrum_id: string
   contractor_id: string
@@ -23,7 +17,6 @@ function getCachedDomainOrg(): CachedDomainOrg | null {
     const raw = localStorage.getItem(CACHE_KEY)
     if (!raw) return null
     const cached: CachedDomainOrg = JSON.parse(raw)
-    // Only use if it matches current hostname
     if (cached.hostname !== hostname) return null
     return cached
   } catch {
@@ -53,16 +46,14 @@ const isMainSite =
   hostname === "www.sc-market.space" ||
   hostname.endsWith(".localhost")
 
-// Resolve: try cache first, then legacy fallback
 const cached = getCachedDomainOrg()
-const legacyId = legacyDomains.get(hostname)
 
 /**
  * The spectrum_id of the org whose white-label domain we're on, or undefined if main site.
  */
 export const CURRENT_CUSTOM_ORG: string | undefined = isMainSite
   ? undefined
-  : cached?.spectrum_id ?? legacyId
+  : cached?.spectrum_id
 
 /**
  * Whether the current hostname is a custom white-label domain (not the main site).
