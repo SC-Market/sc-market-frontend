@@ -3,14 +3,13 @@ import { unwrapResponse } from "../api-utils"
 
 export interface PremiumTier {
   id: string
-  contractor_id: string
+  spectrum_id: string
   tier: string
   custom_domain: string | null
   granted_by: string
   granted_at: string
   revoked_at: string | null
   contractor_name?: string
-  spectrum_id?: string
 }
 
 export interface PremiumListResponse {
@@ -34,7 +33,7 @@ export const premiumApi = serviceApi.injectEndpoints({
       providesTags: ["Contractor" as const],
     }),
     getOrgPremium: builder.query<PremiumTier, string>({
-      query: (contractor_id) => `${baseUrl}/${contractor_id}`,
+      query: (spectrum_id) => `${baseUrl}/${spectrum_id}`,
       transformResponse: unwrapResponse,
       providesTags: (result, error, arg) => [
         { type: "Contractor" as const, id: arg },
