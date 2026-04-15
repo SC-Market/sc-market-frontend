@@ -18,7 +18,6 @@ import {
 } from "@mui/material"
 import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid"
 import { ThemedDataGrid } from "../../components/grid/ThemedDataGrid"
-import { HeaderTitle } from "../../components/typography/HeaderTitle"
 import {
   useGetPremiumOrgsQuery,
   useSetOrgPremiumMutation,
@@ -144,16 +143,7 @@ export function AdminPremiumManagementView() {
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <HeaderTitle>
-            {t("admin.premium.title", "Premium Management")}
-          </HeaderTitle>
+        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
           <Button
             variant="contained"
             onClick={() => setGrantDialogOpen(true)}
