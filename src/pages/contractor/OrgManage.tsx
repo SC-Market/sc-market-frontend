@@ -269,11 +269,11 @@ export function OrgManage() {
                 await updateOrgTheme({
                   spectrum_id: spectrumId,
                   ...data,
-                })
+                }).unwrap()
                 clearCachedOrgTheme(spectrumId)
               }}
               onReset={async () => {
-                await deleteOrgTheme(spectrumId)
+                await deleteOrgTheme(spectrumId).unwrap()
                 clearCachedOrgTheme(spectrumId)
               }}
               isSaving={isThemeSaving}

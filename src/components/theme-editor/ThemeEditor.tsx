@@ -2,12 +2,19 @@ import React, { useCallback, useMemo, useState } from "react"
 import {
   Box,
   Button,
+  CircularProgress,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   FormControl,
   Grid,
   InputLabel,
   MenuItem,
   Paper,
   Select,
+  Slider,
   Tab,
   Tabs,
   TextField,
@@ -16,6 +23,7 @@ import {
 import { SaveRounded, RestoreRounded } from "@mui/icons-material"
 import { ThemePreview } from "./ThemePreview"
 import { useTranslation } from "react-i18next"
+import { useAlertHook } from "../../hooks/alert/AlertHook"
 import type { ThemeOptions } from "@mui/material"
 
 interface ThemeEditorProps {
@@ -24,40 +32,45 @@ interface ThemeEditorProps {
   onSave: (data: {
     theme_data: { light: Record<string, any>; dark: Record<string, any> }
     favicon_url: string | null
-  }) => void
-  onReset: () => void
+  }) => Promise<any>
+  onReset: () => Promise<any>
   isSaving?: boolean
 }
 
 interface ColorField {
   key: string
-  label: string
-  path: string[] // path into ThemeOptions, e.g. ["palette", "primary", "main"]
+  labelKey: string
+  fallback: string
+  path: string[]
 }
 
 const COLOR_FIELDS: ColorField[] = [
-  { key: "primary", label: "Primary", path: ["palette", "primary", "main"] },
-  { key: "secondary", label: "Secondary", path: ["palette", "secondary", "main"] },
-  { key: "bgDefault", label: "Background", path: ["palette", "background", "default"] },
-  { key: "bgPaper", label: "Paper", path: ["palette", "background", "paper"] },
-  { key: "bgSidebar", label: "Sidebar", path: ["palette", "background", "sidebar"] },
-  { key: "bgNavbar", label: "Navbar", path: ["palette", "background", "navbar"] },
+  { key: "primary", labelKey: "theme.primary", fallback: "Primary", path: ["palette", "primary", "main"] },
+  { key: "secondary", labelKey: "theme.secondary", fallback: "Secondary", path: ["palette", "secondary", "main"] },
+  { key: "bgDefault", labelKey: "theme.bgDefault", fallback: "Background", path: ["palette", "background", "default"] },
+  { key: "bgPaper", labelKey: "theme.bgPaper", fallback: "Paper", path: ["palette", "background", "paper"] },
+  { key: "bgSidebar", labelKey: "theme.bgSidebar", fallback: "Sidebar", path: ["palette", "background", "sidebar"] },
+  { key: "bgNavbar", labelKey: "theme.bgNavbar", fallback: "Navbar", path: ["palette", "background", "navbar"] },
+  { key: "textPrimary", labelKey: "theme.textPrimary", fallback: "Text", path: ["palette", "text", "primary"] },
+  { key: "textSecondary", labelKey: "theme.textSecondary", fallback: "Text Secondary", path: ["palette", "text", "secondary"] },
 ]
 
-function getNestedValue(obj: Record<string, any>, path: string[]): string {
+const BORDER_RADIUS_FIELDS = [
+  { key: "topLevel", labelKey: "theme.borderRadiusTopLevel", fallback: "Cards", path: ["borderRadius", "topLevel"] },
+  { key: "button", labelKey: "theme.borderRadiusButton", fallback: "Buttons", path: ["borderRadius", "button"] },
+  { key: "image", labelKey: "theme.borderRadiusImage", fallback: "Images", path: ["borderRadius", "image"] },
+]
+
+function getNestedValue(obj: Record<string, any>, path: string[]): any {
   let current: any = obj
   for (const key of path) {
-    if (!current || typeof current !== "object") return ""
+    if (!current || typeof current !== "object") return undefined
     current = current[key]
   }
-  return typeof current === "string" ? current : ""
+  return current
 }
 
-function setNestedValue(
-  obj: Record<string, any>,
-  path: string[],
-  value: string,
-): Record<string, any> {
+function setNestedValue(obj: Record<string, any>, path: string[], value: any): Record<string, any> {
   const result = { ...obj }
   let current: any = result
   for (let i = 0; i < path.length - 1; i++) {
@@ -76,18 +89,19 @@ export function ThemeEditor({
   isSaving,
 }: ThemeEditorProps) {
   const { t } = useTranslation()
+  const issueAlert = useAlertHook()
   const [editMode, setEditMode] = useState<"dark" | "light">("dark")
   const [themeData, setThemeData] = useState(initialThemeData)
   const [faviconUrl, setFaviconUrl] = useState(initialFaviconUrl ?? "")
+  const [resetDialogOpen, setResetDialogOpen] = useState(false)
+  const [isResetting, setIsResetting] = useState(false)
 
-  // Paper variant and navKind
   const currentMode = themeData[editMode] as Record<string, any>
-  const paperVariant =
-    currentMode?.components?.MuiPaper?.defaultProps?.variant ?? "outlined"
+  const paperVariant = currentMode?.components?.MuiPaper?.defaultProps?.variant ?? "outlined"
   const navKind = currentMode?.navKind ?? "outlined"
 
-  const updateColor = useCallback(
-    (path: string[], value: string) => {
+  const updateValue = useCallback(
+    (path: string[], value: any) => {
       setThemeData((prev) => ({
         ...prev,
         [editMode]: setNestedValue(prev[editMode], path, value),
@@ -112,21 +126,28 @@ export function ThemeEditor({
     [editMode],
   )
 
-  const updateNavKind = useCallback(
-    (value: string) => {
-      setThemeData((prev) => ({
-        ...prev,
-        [editMode]: { ...prev[editMode], navKind: value },
-      }))
-    },
-    [editMode],
-  )
+  const handleSave = async () => {
+    try {
+      await onSave({ theme_data: themeData, favicon_url: faviconUrl || null })
+      issueAlert({ severity: "success", message: t("theme.saveSuccess", "Theme saved successfully") })
+    } catch {
+      issueAlert({ severity: "error", message: t("theme.saveError", "Failed to save theme") })
+    }
+  }
 
-  const handleSave = () => {
-    onSave({
-      theme_data: themeData,
-      favicon_url: faviconUrl || null,
-    })
+  const handleReset = async () => {
+    setIsResetting(true)
+    try {
+      await onReset()
+      setThemeData({ light: {}, dark: {} })
+      setFaviconUrl("")
+      issueAlert({ severity: "success", message: t("theme.resetSuccess", "Theme reset to default") })
+    } catch {
+      issueAlert({ severity: "error", message: t("theme.resetError", "Failed to reset theme") })
+    } finally {
+      setIsResetting(false)
+      setResetDialogOpen(false)
+    }
   }
 
   const previewThemeOptions = useMemo(
@@ -137,18 +158,15 @@ export function ThemeEditor({
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>
-        <Tabs
-          value={editMode}
-          onChange={(_, v) => setEditMode(v)}
-        >
+        <Tabs value={editMode} onChange={(_, v) => setEditMode(v)}>
           <Tab value="dark" label={t("theme.darkMode", "Dark Mode")} />
           <Tab value="light" label={t("theme.lightMode", "Light Mode")} />
         </Tabs>
       </Grid>
 
-      {/* Color pickers */}
       <Grid item xs={12} md={7}>
         <Paper sx={{ p: 2 }}>
+          {/* Colors */}
           <Typography variant="subtitle2" gutterBottom>
             {t("theme.colors", "Colors")}
           </Typography>
@@ -159,18 +177,18 @@ export function ThemeEditor({
                   <input
                     type="color"
                     value={getNestedValue(currentMode, field.path) || "#000000"}
-                    onChange={(e) => updateColor(field.path, e.target.value)}
-                    style={{ width: 32, height: 32, border: "none", cursor: "pointer" }}
+                    onChange={(e) => updateValue(field.path, e.target.value)}
+                    style={{ width: 32, height: 32, border: "none", cursor: "pointer", flexShrink: 0 }}
                   />
-                  <Box>
-                    <Typography variant="caption" display="block">
-                      {field.label}
+                  <Box sx={{ minWidth: 0 }}>
+                    <Typography variant="caption" display="block" noWrap>
+                      {t(field.labelKey, field.fallback)}
                     </Typography>
                     <TextField
                       size="small"
-                      value={getNestedValue(currentMode, field.path)}
-                      onChange={(e) => updateColor(field.path, e.target.value)}
-                      sx={{ "& input": { fontSize: 12, py: 0.5, px: 1 } }}
+                      value={getNestedValue(currentMode, field.path) ?? ""}
+                      onChange={(e) => updateValue(field.path, e.target.value)}
+                      sx={{ "& input": { fontSize: 11, py: 0.5, px: 0.75 } }}
                     />
                   </Box>
                 </Box>
@@ -178,7 +196,8 @@ export function ThemeEditor({
             ))}
           </Grid>
 
-          <Typography variant="subtitle2" sx={{ mt: 2, mb: 1 }}>
+          {/* Style */}
+          <Typography variant="subtitle2" sx={{ mt: 2.5, mb: 1 }}>
             {t("theme.style", "Style")}
           </Typography>
           <Grid container spacing={1.5}>
@@ -190,8 +209,8 @@ export function ThemeEditor({
                   label={t("theme.paperStyle", "Paper Style")}
                   onChange={(e) => updatePaperVariant(e.target.value)}
                 >
-                  <MenuItem value="outlined">Outlined (border)</MenuItem>
-                  <MenuItem value="elevation">Elevation (shadow)</MenuItem>
+                  <MenuItem value="outlined">{t("theme.outlined", "Outlined (border)")}</MenuItem>
+                  <MenuItem value="elevation">{t("theme.elevation", "Elevation (shadow)")}</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
@@ -201,25 +220,60 @@ export function ThemeEditor({
                 <Select
                   value={navKind}
                   label={t("theme.navStyle", "Nav Style")}
-                  onChange={(e) => updateNavKind(e.target.value)}
+                  onChange={(e) => updateValue(["navKind"], e.target.value)}
                 >
-                  <MenuItem value="outlined">Outlined</MenuItem>
-                  <MenuItem value="elevation">Elevation</MenuItem>
+                  <MenuItem value="outlined">{t("theme.outlined", "Outlined")}</MenuItem>
+                  <MenuItem value="elevation">{t("theme.elevation", "Elevation")}</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
           </Grid>
 
-          <Typography variant="subtitle2" sx={{ mt: 2, mb: 1 }}>
+          {/* Border Radius */}
+          <Typography variant="subtitle2" sx={{ mt: 2.5, mb: 1 }}>
+            {t("theme.borderRadius", "Border Radius")}
+          </Typography>
+          <Grid container spacing={1.5}>
+            {BORDER_RADIUS_FIELDS.map((field) => (
+              <Grid item xs={4} key={field.key}>
+                <Typography variant="caption">
+                  {t(field.labelKey, field.fallback)}
+                </Typography>
+                <Slider
+                  size="small"
+                  min={0}
+                  max={3}
+                  step={0.25}
+                  value={getNestedValue(currentMode, field.path) ?? 0.375}
+                  onChange={(_, v) => updateValue(field.path, v as number)}
+                  valueLabelDisplay="auto"
+                  valueLabelFormat={(v) => `${(v * 8).toFixed(0)}px`}
+                />
+              </Grid>
+            ))}
+          </Grid>
+
+          {/* Favicon */}
+          <Typography variant="subtitle2" sx={{ mt: 2.5, mb: 1 }}>
             {t("theme.favicon", "Favicon")}
           </Typography>
-          <TextField
-            fullWidth
-            size="small"
-            placeholder="https://example.com/favicon.ico"
-            value={faviconUrl}
-            onChange={(e) => setFaviconUrl(e.target.value)}
-          />
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            {faviconUrl && (
+              <img
+                src={faviconUrl}
+                alt="favicon"
+                style={{ width: 24, height: 24 }}
+                onError={(e) => { (e.target as HTMLImageElement).style.display = "none" }}
+              />
+            )}
+            <TextField
+              fullWidth
+              size="small"
+              placeholder="https://example.com/favicon.ico"
+              value={faviconUrl}
+              onChange={(e) => setFaviconUrl(e.target.value)}
+            />
+          </Box>
         </Paper>
       </Grid>
 
@@ -235,22 +289,41 @@ export function ThemeEditor({
       <Grid item xs={12}>
         <Box sx={{ display: "flex", gap: 1, justifyContent: "flex-end" }}>
           <Button
-            startIcon={<RestoreRounded />}
-            onClick={onReset}
+            startIcon={isResetting ? <CircularProgress size={16} /> : <RestoreRounded />}
+            onClick={() => setResetDialogOpen(true)}
             color="error"
+            disabled={isResetting}
           >
             {t("theme.reset", "Reset to Default")}
           </Button>
           <Button
             variant="contained"
-            startIcon={<SaveRounded />}
+            startIcon={isSaving ? <CircularProgress size={16} color="inherit" /> : <SaveRounded />}
             onClick={handleSave}
             disabled={isSaving}
           >
-            {t("theme.save", "Save Theme")}
+            {isSaving ? t("theme.saving", "Saving...") : t("theme.save", "Save Theme")}
           </Button>
         </Box>
       </Grid>
+
+      {/* Reset confirmation dialog */}
+      <Dialog open={resetDialogOpen} onClose={() => setResetDialogOpen(false)}>
+        <DialogTitle>{t("theme.resetConfirmTitle", "Reset Theme?")}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            {t("theme.resetConfirmMessage", "This will remove all custom theme settings and revert to the default theme. This action cannot be undone.")}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setResetDialogOpen(false)}>
+            {t("common.cancel", "Cancel")}
+          </Button>
+          <Button onClick={handleReset} color="error" disabled={isResetting}>
+            {t("theme.reset", "Reset to Default")}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Grid>
   )
 }
