@@ -248,13 +248,13 @@ export function OrgManage() {
         <TabPanel value={page} index={7}>
           <OrgAuditLogs />
         </TabPanel>
-        <TabPanel value={page} index={8}>
+        <TabPanel value={page} index={9}>
           <Grid container spacing={theme.layoutSpacing.layout}>
             <CustomerList />
           </Grid>
         </TabPanel>
         {hasWhiteLabel && canManageOrgDetails && spectrumId && (
-          <TabPanel value={page} index={9}>
+          <TabPanel value={page} index={8}>
             <ThemeEditor
               initialThemeData={
                 (orgTheme as any)?.data?.theme_data ?? {
