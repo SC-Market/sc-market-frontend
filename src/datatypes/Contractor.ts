@@ -134,6 +134,7 @@ export interface ContractorRole {
   manage_recruiting: boolean
   manage_webhooks: boolean
   manage_blocklist: boolean
+  claim_orders: boolean
 }
 
 export interface ContractorMember extends MinimalUser {
