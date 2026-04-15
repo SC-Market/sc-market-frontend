@@ -34,6 +34,7 @@ export function AdminPremiumManagementView() {
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedContractorId, setSelectedContractorId] = useState("")
   const [selectedTier, setSelectedTier] = useState("white_label")
+  const [selectedDomain, setSelectedDomain] = useState("")
 
   const { data, isLoading } = useGetPremiumOrgsQuery({ page, page_size: 20 })
   const { data: searchResults } = useSearchContractorsQuery(
@@ -49,10 +50,12 @@ export function AdminPremiumManagementView() {
     await setOrgPremium({
       contractor_id: selectedContractorId,
       tier: selectedTier,
+      custom_domain: selectedDomain || null,
     })
     setGrantDialogOpen(false)
     setSelectedContractorId("")
     setSearchQuery("")
+    setSelectedDomain("")
   }
 
   const handleRevoke = async (contractorId: string) => {
@@ -82,6 +85,19 @@ export function AdminPremiumManagementView() {
           variant="outlined"
         />
       ),
+    },
+    {
+      field: "custom_domain",
+      headerName: t("admin.premium.domain", "Custom Domain"),
+      flex: 1,
+      renderCell: (params: GridRenderCellParams) =>
+        params.value ? (
+          <Chip label={params.value} size="small" variant="outlined" />
+        ) : (
+          <Typography variant="caption" color="text.secondary">
+            —
+          </Typography>
+        ),
     },
     {
       field: "granted_at",
@@ -210,6 +226,18 @@ export function AdminPremiumManagementView() {
               <MenuItem value="white_label">White Label</MenuItem>
             </Select>
           </FormControl>
+          <TextField
+            fullWidth
+            label={t("admin.premium.domain", "Custom Domain")}
+            placeholder="org.sc-market.space"
+            value={selectedDomain}
+            onChange={(e) => setSelectedDomain(e.target.value)}
+            sx={{ mt: 2 }}
+            helperText={t(
+              "admin.premium.domainHelp",
+              "The hostname for this org's white-label site. Configure DNS to point here.",
+            )}
+          />
         </DialogContent>
         <DialogActions>
           <Button onClick={() => setGrantDialogOpen(false)}>
