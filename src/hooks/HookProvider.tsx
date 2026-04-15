@@ -94,9 +94,6 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
     if (CURRENT_CUSTOM_ORG) {
       const cached = getCachedOrgTheme(CURRENT_CUSTOM_ORG, resolvedMode)
       if (cached) return cached
-      // Legacy hardcoded fallback
-      const theme = CUSTOM_THEMES.get(CURRENT_CUSTOM_ORG)
-      if (theme) return theme
     }
     return actualTheme === "light" ? lightTheme : mainTheme
   }, [actualTheme, location.pathname, isDev, isAdmin, useLightTheme, dynamicOrgTheme, resolvedMode])
