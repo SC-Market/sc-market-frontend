@@ -21,7 +21,7 @@ export function CitizenIDSignUpButton() {
   return (
     <Button
       onClick={() => {
-        window.location.href = `${BACKEND_URL}/auth/citizenid?path=${encodeURIComponent(redirectPath)}&action=signup`
+        window.location.href = `${BACKEND_URL}/auth/citizenid?path=${encodeURIComponent(redirectPath)}&action=signup&origin=${encodeURIComponent(window.location.origin)}`
       }}
       color="primary"
       variant="contained"
