@@ -103,7 +103,10 @@ export function ThemeEditor({
   const currentMode = themeData[editMode] as Record<string, any>
   const paperVariant = currentMode?.components?.MuiPaper?.defaultProps?.variant ?? "outlined"
   const cardVariant = currentMode?.components?.MuiCard?.defaultProps?.variant ?? "outlined"
+  const paperElevation = currentMode?.components?.MuiPaper?.defaultProps?.elevation ?? 4
+  const cardElevation = currentMode?.components?.MuiCard?.defaultProps?.elevation ?? 4
   const navKind = currentMode?.navKind ?? "outlined"
+  const borderRadiusUnit = currentMode?.borderRadiusUnit ?? "px"
 
   const updateValue = useCallback(
     (path: string[], value: any) => {
@@ -123,7 +126,33 @@ export function ThemeEditor({
           ...prev[editMode],
           components: {
             ...(prev[editMode] as any)?.components,
-            [component]: { defaultProps: { variant } },
+            [component]: {
+              defaultProps: {
+                variant,
+                ...(variant === "elevation" ? { elevation: (prev[editMode] as any)?.components?.[component]?.defaultProps?.elevation ?? 4 } : {}),
+              },
+            },
+          },
+        },
+      }))
+    },
+    [editMode],
+  )
+
+  const updateComponentElevation = useCallback(
+    (component: string, elevation: number) => {
+      setThemeData((prev) => ({
+        ...prev,
+        [editMode]: {
+          ...prev[editMode],
+          components: {
+            ...(prev[editMode] as any)?.components,
+            [component]: {
+              defaultProps: {
+                ...(prev[editMode] as any)?.components?.[component]?.defaultProps,
+                elevation,
+              },
+            },
           },
         },
       }))
@@ -218,6 +247,12 @@ export function ThemeEditor({
                   <MenuItem value="elevation">{t("theme.elevation", "Elevation")}</MenuItem>
                 </Select>
               </FormControl>
+              {paperVariant === "elevation" && (
+                <Box sx={{ mt: 1 }}>
+                  <Typography variant="caption">{t("theme.elevationLevel", "Elevation Level")}</Typography>
+                  <Slider size="small" min={0} max={24} value={paperElevation} onChange={(_, v) => updateComponentElevation("MuiPaper", v as number)} valueLabelDisplay="auto" />
+                </Box>
+              )}
             </Grid>
             <Grid item xs={4}>
               <FormControl fullWidth size="small">
@@ -231,6 +266,12 @@ export function ThemeEditor({
                   <MenuItem value="elevation">{t("theme.elevation", "Elevation")}</MenuItem>
                 </Select>
               </FormControl>
+              {cardVariant === "elevation" && (
+                <Box sx={{ mt: 1 }}>
+                  <Typography variant="caption">{t("theme.elevationLevel", "Elevation Level")}</Typography>
+                  <Slider size="small" min={0} max={24} value={cardElevation} onChange={(_, v) => updateComponentElevation("MuiCard", v as number)} valueLabelDisplay="auto" />
+                </Box>
+              )}
             </Grid>
             <Grid item xs={4}>
               <FormControl fullWidth size="small">
@@ -251,6 +292,21 @@ export function ThemeEditor({
           <Typography variant="subtitle2" sx={{ mt: 2.5, mb: 1 }}>
             {t("theme.borderRadius", "Border Radius")}
           </Typography>
+          <Box sx={{ mb: 1 }}>
+            <FormControl size="small" sx={{ minWidth: 100 }}>
+              <InputLabel>{t("theme.unit", "Unit")}</InputLabel>
+              <Select
+                value={borderRadiusUnit}
+                label={t("theme.unit", "Unit")}
+                onChange={(e) => updateValue(["borderRadiusUnit"], e.target.value)}
+              >
+                <MenuItem value="px">px</MenuItem>
+                <MenuItem value="rem">rem</MenuItem>
+                <MenuItem value="em">em</MenuItem>
+                <MenuItem value="%">%</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
           <Grid container spacing={1.5}>
             {BORDER_RADIUS_FIELDS.map((field) => (
               <Grid item xs={4} key={field.key}>
@@ -260,13 +316,27 @@ export function ThemeEditor({
                 <Slider
                   size="small"
                   min={0}
-                  max={3}
-                  step={0.25}
-                  value={getNestedValue(currentMode, field.path) ?? 0.375}
+                  max={borderRadiusUnit === "px" ? 32 : borderRadiusUnit === "%" ? 50 : 3}
+                  step={borderRadiusUnit === "px" ? 1 : borderRadiusUnit === "%" ? 1 : 0.125}
+                  value={getNestedValue(currentMode, field.path) ?? (borderRadiusUnit === "px" ? 3 : 0.375)}
                   onChange={(_, v) => updateValue(field.path, v as number)}
                   valueLabelDisplay="auto"
-                  valueLabelFormat={(v) => `${(v * 8).toFixed(0)}px`}
+                  valueLabelFormat={(v) => `${v}${borderRadiusUnit}`}
                 />
+                {field.key === "image" && (
+                  <Box
+                    component="img"
+                    src="https://media.starcitizen.tools/thumb/9/93/Placeholderv2.png/399px-Placeholderv2.png.webp"
+                    alt="Image radius preview"
+                    sx={{
+                      width: "100%",
+                      height: 80,
+                      objectFit: "cover",
+                      borderRadius: `${getNestedValue(currentMode, field.path) ?? 3}${borderRadiusUnit}`,
+                      mt: 0.5,
+                    }}
+                  />
+                )}
               </Grid>
             ))}
           </Grid>
