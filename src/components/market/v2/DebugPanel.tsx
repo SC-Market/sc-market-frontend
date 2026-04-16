@@ -25,7 +25,7 @@ import { useFeatureFlag, MarketVersion } from "../../../hooks/market/useFeatureF
  * - Switch between V1 and V2 experiences
  * - Persist panel open/closed state in local storage
  * 
- * The panel is only visible to users with developer privileges.
+ * The panel is only visible in Vite dev mode or for site admins (see useFeatureFlag).
  * 
  * Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6
  */
