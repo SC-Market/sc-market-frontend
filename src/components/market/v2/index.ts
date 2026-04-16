@@ -5,5 +5,8 @@
  * V2 components implement the unified listing model with variant support.
  */
 
-// Export V2 components here as they are created
-export {};
+export { MarketPageV2 } from "./MarketPageV2"
+export { DebugPanel } from "./DebugPanel"
+export { ListingSearchV2 } from "./ListingSearchV2"
+export { QualityFilter } from "./QualityFilter"
+export type { QualityFilterProps } from "./QualityFilter"
