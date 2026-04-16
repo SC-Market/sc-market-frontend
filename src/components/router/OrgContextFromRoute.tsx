@@ -6,7 +6,6 @@ import { useGetContractorBySpectrumIDQuery } from "../../store/contractor"
 import { useGetUserProfileQuery } from "../../store/profile"
 import LoadingBar from "react-top-loading-bar"
 import { Navigate } from "react-router-dom"
-import { useTheme } from "@mui/material/styles"
 
 /**
  * When rendered under a route with :contractor_id (e.g. /org/:contractor_id/manage),
@@ -16,7 +15,6 @@ import { useTheme } from "@mui/material/styles"
  */
 export function OrgContextFromRoute() {
   const { contractor_id } = useParams<{ contractor_id: string }>()
-  const theme = useTheme()
   const currentOrgState = useCurrentOrg()
   const setCurrentOrg =
     typeof currentOrgState?.[1] === "function" ? currentOrgState[1] : null
@@ -64,7 +62,7 @@ export function OrgContextFromRoute() {
     return <Navigate to="/" replace />
   }
   if (isLoading) {
-    return <LoadingBar color={theme.palette.primary.main} progress={0.5} />
+    return <LoadingBar color="#f11946" progress={0.5} />
   }
   if (isError || !contractor) {
     return <Navigate to="/" replace />
@@ -77,7 +75,7 @@ export function OrgContextFromRoute() {
   }
 
   if (!ready) {
-    return <LoadingBar color={theme.palette.primary.main} progress={0.5} />
+    return <LoadingBar color="#f11946" progress={0.5} />
   }
 
   return <Outlet />

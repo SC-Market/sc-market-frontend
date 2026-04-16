@@ -15,7 +15,7 @@ import {
   RecentListings,
 } from "../../components/landing"
 import { useTheme } from "@mui/material/styles"
-import { ExtendedTheme, radialGlowGradient } from "../../hooks/styles/Theme"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function LandingPage() {
   const { t } = useTranslation()
@@ -38,7 +38,7 @@ export function LandingPage() {
           overflowY: "scroll",
           overflowX: "hidden",
           paddingTop: 20,
-          background: radialGlowGradient(theme),
+          background: `radial-gradient(at 100% 0%, ${theme.palette.primary.main}80 0px, transparent 60%),radial-gradient(at 0% 0%, ${theme.palette.secondary.main}80 0px, transparent 60%)`,
         },
       }}
     >

@@ -17,7 +17,7 @@ export function DiscordSignUpButton() {
   return (
     <Button
       onClick={() => {
-        window.location.href = `${BACKEND_URL}/auth/discord?path=${encodeURIComponent(redirectPath)}&action=signup&origin=${encodeURIComponent(window.location.origin)}`
+        window.location.href = `${BACKEND_URL}/auth/discord?path=${encodeURIComponent(redirectPath)}&action=signup`
       }}
       color="secondary"
       variant="contained"

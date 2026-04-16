@@ -23,7 +23,6 @@ export const lightThemeOptions: ExtendedThemeOptions = {
       primary: "#000000AA",
       secondary: "#000000",
       disabled: "#EEEEEEC0",
-      subtle: "rgba(0, 0, 0, 0.4)",
     },
     background: {
       default: "#FFFFFF",
@@ -34,8 +33,6 @@ export const lightThemeOptions: ExtendedThemeOptions = {
       overlayDark: "rgba(0, 0, 0, 0.7)",
       imageOverlay: "rgba(0, 0, 0, 0.6)",
       imageOverlayHover: "rgba(0, 0, 0, 0.8)",
-      subtleDivider: "rgba(0, 0, 0, 0.11)",
-      subtleHover: "#f5f5f5",
     },
     action: {
       hover: "rgba(0, 0, 0, 0.04)",

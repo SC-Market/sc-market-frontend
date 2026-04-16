@@ -19,7 +19,6 @@ import {
   StoreRounded,
   WarehouseRounded,
   SecurityRounded,
-  StarRounded,
 } from "@mui/icons-material"
 import PaidIcon from "@mui/icons-material/PaidRounded"
 import CreateIcon from "@mui/icons-material/CreateRounded"
@@ -393,12 +392,6 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
         icon: <CloudDownloadRounded />,
         site_admin: true,
         to: "/admin/import-monitoring",
-      },
-      {
-        text: "sidebar.premium.text",
-        icon: <StarRounded />,
-        site_admin: true,
-        to: "/admin/premium",
       },
     ],
   },
