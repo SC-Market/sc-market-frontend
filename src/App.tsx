@@ -212,13 +212,13 @@ const router = createBrowserRouter([
       {
         path: "/market/services",
         lazy: async () => ({
-          Component: (await import("./features/market")).MarketPage,
+          Component: (await import("./components/market/MarketRouter")).MarketRouter,
         }),
       },
       {
         path: "/market/category/:name",
         lazy: async () => ({
-          Component: (await import("./features/market")).MarketPage,
+          Component: (await import("./components/market/MarketRouter")).MarketRouter,
         }),
       },
       {
@@ -232,19 +232,19 @@ const router = createBrowserRouter([
         path: "/market",
         errorElement: <RouteErrorFallback />,
         lazy: async () => ({
-          Component: (await import("./features/market")).MarketPage,
+          Component: (await import("./components/market/MarketRouter")).MarketRouter,
         }),
       },
       {
         path: "/bulk",
         lazy: async () => ({
-          Component: (await import("./features/market")).MarketPage,
+          Component: (await import("./components/market/MarketRouter")).MarketRouter,
         }),
       },
       {
         path: "/buyorders",
         lazy: async () => ({
-          Component: (await import("./features/market")).MarketPage,
+          Component: (await import("./components/market/MarketRouter")).MarketRouter,
         }),
       },
       {

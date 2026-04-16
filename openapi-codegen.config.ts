@@ -7,6 +7,7 @@ import type { ConfigFile } from "@rtk-query/codegen-openapi"
  * come before broader ones (e.g. /api/market) if both exist.
  */
 const API_DOMAINS: { pathPrefix: string; fileName: string }[] = [
+  { pathPrefix: "/api/v2", fileName: "marketV2" }, // V2 API (TSOA-based)
   { pathPrefix: "/api/starmap", fileName: "starmap" },
   { pathPrefix: "/api/profile", fileName: "profile" },
   { pathPrefix: "/api/notification", fileName: "notifications" },
