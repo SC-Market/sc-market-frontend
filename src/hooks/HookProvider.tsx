@@ -26,7 +26,7 @@ import { AlertInterface } from "../datatypes/Alert"
 import { AlertHookContext } from "./alert/AlertHook"
 import { ServiceSearchContext } from "./contract/ServiceSearch"
 import { LightThemeContext, ThemeChoice } from "./styles/LightTheme"
-import { useCookies } from "react-cookie"
+import { useCookies, CookiesProvider } from "react-cookie"
 import { CURRENT_CUSTOM_ORG, IS_CUSTOM_DOMAIN, cacheDomainOrg } from "./contractor/CustomDomain"
 import { CUSTOM_THEMES } from "./styles/custom_themes"
 import {
@@ -275,6 +275,7 @@ export function HookProvider(props: { children: React.ReactElement }) {
   }, [searchParams, setSearchParams, issueAlert, t, isCitizenIdEnabled])
 
   return (
+    <CookiesProvider>
     <Provider store={store}>
       <ThemeProviderWrapper>
         <AlertHookContext.Provider value={[alert, issueAlert]}>
@@ -313,5 +314,6 @@ export function HookProvider(props: { children: React.ReactElement }) {
         </AlertHookContext.Provider>
       </ThemeProviderWrapper>
     </Provider>
+    </CookiesProvider>
   )
 }
