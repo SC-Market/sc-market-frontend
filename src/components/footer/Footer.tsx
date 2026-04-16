@@ -125,6 +125,17 @@ export function Footer() {
               </UnderlineLink>
             </Link>
             &nbsp;|&nbsp;
+            <Link
+              rel="noopener noreferrer"
+              target="_blank"
+              href={"https://sc-orgs.space"}
+              aria-label={t("footer.scOrgs", "SC Orgs")}
+            >
+              <UnderlineLink color={"text.secondary"}>
+                {t("footer.scOrgs", "SC Orgs")}
+              </UnderlineLink>
+            </Link>
+            &nbsp;|&nbsp;
             <ReportButton />
           </Typography>
           <br />

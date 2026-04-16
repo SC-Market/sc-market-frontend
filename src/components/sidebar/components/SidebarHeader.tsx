@@ -79,7 +79,7 @@ export function SidebarHeader({
                 )}
                 fontWeight={600}
               >
-                {t("sidebar.sc_market")}
+                {t("sidebar.sc_market.title")}
               </Typography>
             </Stack>
           </NavLink>

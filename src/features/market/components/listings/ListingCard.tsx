@@ -22,7 +22,7 @@ import {
   subDays as subDaysFromDate,
 } from "date-fns"
 import { useTheme } from "@mui/material/styles"
-import { ExtendedTheme } from "../../../../hooks/styles/Theme"
+import { ExtendedTheme, cardFadeGradient } from "../../../../hooks/styles/Theme"
 import { ExtendedUniqueSearchResult } from "../../domain/types"
 import { useRefreshMarketListingMutation } from "../../api/marketApi"
 import { formatMarketUrl } from "../../domain/urls"
@@ -317,7 +317,7 @@ export const ItemListingBase = React.memo(
                     height: "100%",
                     width: "100%",
                     borderRadius: theme.spacing(theme.borderRadius.topLevel),
-                    background: `linear-gradient(to bottom, transparent, transparent 50%, ${theme.palette.background.sidebar}AA 60%, ${theme.palette.background.sidebar} 100%)`,
+                    background: cardFadeGradient(theme, 50, 60),
                   }}
                 />
 
@@ -597,7 +597,7 @@ export const ItemListingBase = React.memo(
                     height: "100%",
                     width: "100%",
                     borderRadius: theme.spacing(theme.borderRadius.topLevel),
-                    background: `linear-gradient(to bottom, transparent, transparent 60%, ${theme.palette.background.sidebar}AA 70%, ${theme.palette.background.sidebar} 100%)`,
+                    background: cardFadeGradient(theme, 60, 70),
                   }}
                 />
 

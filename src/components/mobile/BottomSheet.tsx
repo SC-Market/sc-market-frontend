@@ -190,7 +190,7 @@ export function BottomSheet({
           backdrop: {
             sx: {
               backdropFilter: "blur(4px)",
-              backgroundColor: "rgba(0, 0, 0, 0.5)",
+              backgroundColor: theme.palette.background.overlay,
             },
             onClick: disableBackdropClose ? undefined : onClose,
           },

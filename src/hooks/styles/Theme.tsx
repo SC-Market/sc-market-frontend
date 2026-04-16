@@ -13,6 +13,10 @@ export {
   lightThemeOptions,
   lightTheme,
   MISSING_IMAGE_URL,
+  cardFadeGradient,
+  bannerFadeGradient,
+  radialGlowGradient,
+  navbarShadow,
 } from "./theme/index"
 
 export type { ExtendedTheme } from "./theme/index"

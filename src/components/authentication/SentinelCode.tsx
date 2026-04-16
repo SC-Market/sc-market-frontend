@@ -22,7 +22,7 @@ export function SentinelCode({ code }: SentinelCodeProps) {
         }}
         style={{
           color: theme.palette.primary.main,
-          backgroundColor: "rgba(0, 0, 0, 0.05)",
+          backgroundColor: theme.palette.action.hover,
           padding: "2px 6px",
           borderRadius: "4px",
           cursor: "pointer",
