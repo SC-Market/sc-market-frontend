@@ -21,7 +21,7 @@ export function CitizenIDLoginButton() {
   return (
     <Button
       onClick={() => {
-        window.location.href = `${BACKEND_URL}/auth/citizenid?path=${encodeURIComponent(redirectPath)}&action=signin&origin=${encodeURIComponent(window.location.origin)}`
+        window.location.href = `${BACKEND_URL}/auth/citizenid?path=${encodeURIComponent(redirectPath)}&action=signin`
       }}
       color="primary"
       variant="contained"

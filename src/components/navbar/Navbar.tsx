@@ -8,7 +8,7 @@ import {
   Badge,
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
-import { ExtendedTheme, getNavbarContrastText, navbarShadow } from "../../hooks/styles/Theme"
+import { ExtendedTheme, getNavbarContrastText } from "../../hooks/styles/Theme"
 import React from "react"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
 import { useLocation, useNavigate } from "react-router-dom"
@@ -103,7 +103,7 @@ export function Navbar(props: { children?: React.ReactNode }) {
               }
             : {
                 border: "none",
-                boxShadow: navbarShadow(theme),
+                boxShadow: `0px 5px 5px 0px ${theme.palette.mode === "dark" ? "rgba(0, 0, 0, 0.5)" : "rgba(0, 0, 0, 0.1)"}`,
               }),
         }}
       >

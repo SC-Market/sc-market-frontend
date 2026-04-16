@@ -161,9 +161,9 @@ export function ImagePreviewModal(props: {
                     left: 8,
                     top: "50%",
                     transform: "translateY(-50%)",
-                    backgroundColor: theme.palette.background.overlay,
-                    color: theme.palette.common.white,
-                    "&:hover": { backgroundColor: theme.palette.background.overlayDark },
+                    backgroundColor: "rgba(0, 0, 0, 0.5)",
+                    color: "white",
+                    "&:hover": { backgroundColor: "rgba(0, 0, 0, 0.7)" },
                   }}
                   aria-label={t(
                     "accessibility.previousImage",
@@ -179,9 +179,9 @@ export function ImagePreviewModal(props: {
                     right: 8,
                     top: "50%",
                     transform: "translateY(-50%)",
-                    backgroundColor: theme.palette.background.overlay,
-                    color: theme.palette.common.white,
-                    "&:hover": { backgroundColor: theme.palette.background.overlayDark },
+                    backgroundColor: "rgba(0, 0, 0, 0.5)",
+                    color: "white",
+                    "&:hover": { backgroundColor: "rgba(0, 0, 0, 0.7)" },
                   }}
                   aria-label={t("accessibility.nextImage", "Next image")}
                 >
@@ -199,8 +199,8 @@ export function ImagePreviewModal(props: {
                   top: 16,
                   left: "50%",
                   transform: "translateX(-50%)",
-                  backgroundColor: theme.palette.background.overlay,
-                  color: theme.palette.common.white,
+                  backgroundColor: "rgba(0, 0, 0, 0.5)",
+                  color: "white",
                   px: 2,
                   py: 0.5,
                   borderRadius: 1,
@@ -309,9 +309,9 @@ export function ImagePreviewModal(props: {
             top: 8,
             right: 8,
             zIndex: 10,
-            backgroundColor: theme.palette.background.overlay,
-            color: theme.palette.common.white,
-            "&:hover": { backgroundColor: theme.palette.background.overlayDark },
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            color: "white",
+            "&:hover": { backgroundColor: "rgba(0, 0, 0, 0.7)" },
           }}
           aria-label={t("accessibility.close", "Close")}
         >
@@ -379,7 +379,7 @@ export function ImagePreviewModal(props: {
                   top: "50%",
                   transform: "translateY(-50%)",
                   backgroundColor: "rgba(255, 255, 255, 0.1)",
-                  color: theme.palette.common.white,
+                  color: "white",
                   "&:hover": { backgroundColor: "rgba(255, 255, 255, 0.2)" },
                 }}
                 aria-label={t("accessibility.previousImage", "Previous image")}
@@ -394,7 +394,7 @@ export function ImagePreviewModal(props: {
                   top: "50%",
                   transform: "translateY(-50%)",
                   backgroundColor: "rgba(255, 255, 255, 0.1)",
-                  color: theme.palette.common.white,
+                  color: "white",
                   "&:hover": { backgroundColor: "rgba(255, 255, 255, 0.2)" },
                 }}
                 aria-label={t("accessibility.nextImage", "Next image")}
@@ -413,8 +413,8 @@ export function ImagePreviewModal(props: {
                 top: 16,
                 left: "50%",
                 transform: "translateX(-50%)",
-                backgroundColor: theme.palette.background.overlayDark,
-                color: theme.palette.common.white,
+                backgroundColor: "rgba(0, 0, 0, 0.7)",
+                color: "white",
                 px: 2,
                 py: 0.5,
                 borderRadius: 1,

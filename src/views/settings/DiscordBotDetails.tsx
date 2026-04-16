@@ -25,7 +25,7 @@ export function DiscordBotDetails(props: { org?: boolean }) {
         <List
           sx={{
             borderRadius: theme.spacing(2),
-            backgroundColor: theme.palette.background.overlay,
+            backgroundColor: "#000000A0",
             padding: 0,
           }}
         >

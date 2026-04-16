@@ -40,7 +40,9 @@ export function ReservedSpace({
         position: "relative",
         ...(showSkeleton && {
           backgroundColor: (theme) =>
-            theme.palette.background.subtleDivider,
+            theme.palette.mode === "dark"
+              ? "rgba(255, 255, 255, 0.11)"
+              : "rgba(0, 0, 0, 0.11)",
           animation: "pulse 1.5s ease-in-out infinite",
           "@keyframes pulse": {
             "0%, 100%": {

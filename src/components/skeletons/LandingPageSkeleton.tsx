@@ -12,7 +12,7 @@ import {
 import { RecentListingsSkeleton } from "../landing/RecentListingsSkeleton"
 import { Footer } from "../footer/Footer"
 import { StandardPageLayout } from "../layout/StandardPageLayout"
-import { ExtendedTheme, radialGlowGradient } from "../../hooks/styles/Theme"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 /**
  * Skeleton for landing page
@@ -34,7 +34,7 @@ export function LandingPageSkeleton() {
           overflowY: "scroll",
           overflowX: "hidden",
           paddingTop: 20,
-          background: radialGlowGradient(theme),
+          background: `radial-gradient(at 100% 0%, ${theme.palette.primary.main}80 0px, transparent 60%),radial-gradient(at 0% 0%, ${theme.palette.secondary.main}80 0px, transparent 60%)`,
         },
       }}
     >

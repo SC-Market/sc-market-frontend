@@ -703,12 +703,7 @@
     "game_item_attributes": {
       "text": "Game Item Attributes"
     },
-    "premium": {
-      "text": "Premium"
-    },
-    "sc_market": {
-      "title": "SC Market"
-    },
+    "sc_market": "SC Market",
     "sc_market_home": "SC Market Home",
     "toggle_drawer": "Toggle Drawer"
   },

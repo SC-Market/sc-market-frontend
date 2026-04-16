@@ -219,7 +219,7 @@ export function ImageZoomPan({
           display: "flex",
           flexDirection: "column",
           gap: 1,
-          backgroundColor: theme.palette.background.overlay,
+          backgroundColor: "rgba(0, 0, 0, 0.5)",
           borderRadius: 1,
           p: 0.5,
         }}
@@ -228,7 +228,7 @@ export function ImageZoomPan({
           size="small"
           onClick={handleZoomIn}
           disabled={zoom >= maxZoom}
-          sx={{ color: theme.palette.common.white }}
+          sx={{ color: "white" }}
           aria-label="Zoom in"
         >
           <ZoomIn />
@@ -237,7 +237,7 @@ export function ImageZoomPan({
           size="small"
           onClick={handleZoomOut}
           disabled={zoom <= minZoom}
-          sx={{ color: theme.palette.common.white }}
+          sx={{ color: "white" }}
           aria-label="Zoom out"
         >
           <ZoomOut />
@@ -246,7 +246,7 @@ export function ImageZoomPan({
           size="small"
           onClick={handleReset}
           disabled={zoom === 1}
-          sx={{ color: theme.palette.common.white }}
+          sx={{ color: "white" }}
           aria-label="Reset zoom"
         >
           <FitScreen />
@@ -255,7 +255,7 @@ export function ImageZoomPan({
           <IconButton
             size="small"
             onClick={onClose}
-            sx={{ color: theme.palette.common.white }}
+            sx={{ color: "white" }}
             aria-label="Close"
           >
             <Close />

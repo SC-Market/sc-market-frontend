@@ -13,8 +13,8 @@ export function a11yProps(index: number) {
 
 export interface TabPanelProps {
   children?: React.ReactNode
-  index: number | string
-  value: number | string
+  index: number
+  value: number
 }
 
 export function TabPanel(props: TabPanelProps) {

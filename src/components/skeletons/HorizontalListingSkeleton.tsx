@@ -8,7 +8,7 @@ import {
   useMediaQuery,
 } from "@mui/material"
 import { BaseSkeleton } from "./BaseSkeleton"
-import { ExtendedTheme, cardFadeGradient } from "../../hooks/styles/Theme"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTheme } from "@mui/material/styles"
 import { ListingWrapper } from "../../features/market/components/listings/ListingCard"
 
@@ -98,7 +98,7 @@ export function HorizontalListingSkeleton({
                 height: "100%",
                 width: "100%",
                 borderRadius: theme.spacing(theme.borderRadius.topLevel),
-                background: cardFadeGradient(theme, 60, 70),
+                background: `linear-gradient(to bottom, transparent, transparent 60%, ${theme.palette.background.sidebar}AA 70%, ${theme.palette.background.sidebar} 100%)`,
               }}
             />
           )}

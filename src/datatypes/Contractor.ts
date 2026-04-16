@@ -67,7 +67,6 @@ export interface Contractor {
   locale?: string
   archived?: boolean
   languages?: Array<{ code: string; name: string }>
-  premium_tier?: string | null
 }
 
 export interface MinimalContractor {
@@ -134,7 +133,6 @@ export interface ContractorRole {
   manage_recruiting: boolean
   manage_webhooks: boolean
   manage_blocklist: boolean
-  claim_orders: boolean
 }
 
 export interface ContractorMember extends MinimalUser {
