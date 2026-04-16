@@ -76,7 +76,7 @@ export type CreateChatApiResponse =
     data: {}
   }
 export type CreateChatApiArg = {
-  chatBody: Chat2
+  chatBody: ChatBody
 }
 export type GetChatsApiResponse =
   /** status 200 OK - Successful request with response body */ Chat[]
@@ -137,8 +137,8 @@ export type RateLimitError = {
 export type MessageBody = {
   content: string
 }
-export type Chat2 = {
-  users?: string[]
+export type ChatBody = {
+  users: string[]
 }
 export const {
   useGetChatByOrderIdQuery,

@@ -432,49 +432,40 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["Contractor", "Contractors"],
       }),
-      getOrgTheme: build.query<GetOrgThemeApiResponse, string>({
-        query: (spectrum_id) => `/api/contractors/${spectrum_id}/theme`,
-        providesTags: (result, error, arg) => [
-          { type: "Contractor" as const, id: arg },
-        ],
+      getOrgTheme: build.query<GetOrgThemeApiResponse, GetOrgThemeApiArg>({
+        query: (queryArg) => ({
+          url: `/api/contractors/${queryArg}/theme`,
+        }),
+        providesTags: ["Contractor", "Contractors"],
       }),
       updateOrgTheme: build.mutation<
-        GetOrgThemeApiResponse,
-        {
-          spectrum_id: string
-          theme_data: { light: Record<string, any>; dark: Record<string, any> }
-          favicon_url?: string | null
-        }
+        UpdateOrgThemeApiResponse,
+        UpdateOrgThemeApiArg
       >({
-        query: ({ spectrum_id, ...body }) => ({
-          url: `/api/contractors/${spectrum_id}/theme`,
+        query: (queryArg) => ({
+          url: `/api/contractors/${queryArg.spectrum_id}/theme`,
           method: "PUT",
-          body,
+          body: {
+            theme_data: queryArg.theme_data,
+            favicon_url: queryArg.favicon_url,
+          },
         }),
-        invalidatesTags: (result, error, arg) => [
-          { type: "Contractor" as const, id: arg.spectrum_id },
-        ],
+        invalidatesTags: ["Contractor", "Contractors"],
       }),
-      deleteOrgTheme: build.mutation<{ data: { message: string } }, string>({
-        query: (spectrum_id) => ({
-          url: `/api/contractors/${spectrum_id}/theme`,
+      deleteOrgTheme: build.mutation<
+        DeleteOrgThemeApiResponse,
+        DeleteOrgThemeApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/contractors/${queryArg}/theme`,
           method: "DELETE",
         }),
-        invalidatesTags: (result, error, arg) => [
-          { type: "Contractor" as const, id: arg },
-        ],
+        invalidatesTags: ["Contractor", "Contractors"],
       }),
     }),
     overrideExisting: false,
   })
 export { injectedRtkApi as contractorsApi }
-export type GetOrgThemeApiResponse = {
-  data: {
-    theme_data: { light: Record<string, any>; dark: Record<string, any> }
-    favicon_url: string | null
-    updated_at: string
-  }
-}
 export type AuthLinkApiResponse =
   /** status 201 Created - Resource successfully created */ {
     data: {}
@@ -926,6 +917,44 @@ export type UnblockUserForOrgApiArg = {
   /** Username of the user to unblock */
   username: string
 }
+export type GetOrgThemeApiResponse =
+  /** status 200 OK - Org theme retrieved successfully */ {
+    data: {
+      theme_data: {
+        light: Record<string, any>
+        dark: Record<string, any>
+      }
+      favicon_url: string | null
+      updated_at: string
+    }
+  }
+export type GetOrgThemeApiArg = string
+export type UpdateOrgThemeApiResponse =
+  /** status 200 OK - Theme updated successfully */ {
+    data: {
+      theme_data: {
+        light: Record<string, any>
+        dark: Record<string, any>
+      }
+      favicon_url: string | null
+      updated_at: string
+    }
+  }
+export type UpdateOrgThemeApiArg = {
+  spectrum_id: string
+  theme_data: {
+    light: Record<string, any>
+    dark: Record<string, any>
+  }
+  favicon_url?: string | null
+}
+export type DeleteOrgThemeApiResponse =
+  /** status 200 OK - Theme deleted successfully */ {
+    data: {
+      message: string
+    }
+  }
+export type DeleteOrgThemeApiArg = string
 export type BadRequest = {
   errors?: {
     message: string
