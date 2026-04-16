@@ -72,19 +72,27 @@ export function ListingDetailV2({
   // ⚠️ CRITICAL: Use RTK Query hook from generated API
   const { data: listingData, isLoading, error } = useGetListingDetailsQuery({ listingId })
 
+  // Single documented type extension for V1 fields the API may still return
+  type ListingWithV1Fields = NonNullable<typeof listingData>["listing"] & {
+    user_seller?: any
+    contractor_seller?: any
+    languages?: Array<{ code: string; name: string }>
+  }
+  const listing = listingData?.listing as ListingWithV1Fields
+
   const amContractor = useMemo(
     () =>
       profile &&
-      currentOrg?.spectrum_id === (listingData?.listing as any)?.contractor_seller?.spectrum_id,
-    [currentOrg?.spectrum_id, listingData?.listing, profile],
+      currentOrg?.spectrum_id === listing?.contractor_seller?.spectrum_id,
+    [currentOrg?.spectrum_id, listing, profile],
   )
 
   const amSeller = useMemo(
     () =>
       profile &&
-      profile?.username === (listingData?.listing as any)?.user_seller?.username &&
+      profile?.username === listing?.user_seller?.username &&
       !currentOrg,
-    [currentOrg, listingData?.listing, profile?.username],
+    [currentOrg, listing, profile?.username],
   )
 
   const amRelated = useMemo(
@@ -114,9 +122,23 @@ export function ListingDetailV2({
     )
   }
 
-  const { listing, details, stats } = listingData
-  const seller = (listing as any).user_seller || (listing as any).contractor_seller
-  const languages = (listing as any).languages || []
+  const { details, stats } = listingData
+  const seller = listing?.user_seller || listing?.contractor_seller
+  const languages = listing?.languages || []
+
+  // Map variant data from the listings field
+  const variants = (listingData.listings || []).map((l: any) => ({
+    variant_id: l.listing_id || '',
+    display_name: l.title || 'Variant',
+    short_name: l.item_type || '',
+    attributes: {
+      quality_tier: l.quality_tier,
+      quality_value: l.quality_value,
+      quality_source: l.crafted_source,
+    },
+    quantity: l.quantity_available || 0,
+    price: l.price || 0,
+  }))
 
   return (
     <Fade in={true}>
@@ -174,8 +196,8 @@ export function ListingDetailV2({
                   icon={<PersonRounded fontSize={"inherit"} />}
                 >
                   <ListingNameAndRating
-                    user={(listing as any).user_seller}
-                    contractor={(listing as any).contractor_seller}
+                    user={listing?.user_seller}
+                    contractor={listing?.contractor_seller}
                   />
                 </ListingDetailItem>
 
@@ -210,9 +232,9 @@ export function ListingDetailV2({
                     icon={<SportsEsportsRounded fontSize={"inherit"} />}
                   >
                     <SellerStatusBadge
-                      inGame={(listing as any).user_seller?.in_game}
+                      inGame={listing?.user_seller?.in_game}
                       lastSeen={seller.last_seen}
-                      membersOnline={(listing as any).contractor_seller?.members_online}
+                      membersOnline={listing?.contractor_seller?.members_online}
                     />
                   </ListingDetailItem>
                 )}
@@ -238,7 +260,7 @@ export function ListingDetailV2({
                       <Typography variant="subtitle2" color="text.secondary">
                         {t("MarketListingView.languages", "Languages")}:
                       </Typography>
-                      {languages.map((lang: any) => (
+                      {languages.map((lang) => (
                         <Chip
                           key={lang.code}
                           label={lang.name}
@@ -259,7 +281,7 @@ export function ListingDetailV2({
               listing.status !== "archived" &&
               listing.sale_type !== "auction" ? (
                 <Link
-                  to={`/market_edit/${listing.listing_id}`}
+                  to={`/market/edit/${listing.listing_id}`}
                   style={{ color: "inherit" }}
                 >
                   <IconButton>
@@ -314,7 +336,7 @@ export function ListingDetailV2({
                 {t("MarketListingView.variants", "Available Variants")}
               </Typography>
               <VariantBreakdown
-                variants={[]}
+                variants={variants}
                 onSelectVariant={(variantId) => {
                   console.log("Selected variant:", variantId)
                 }}

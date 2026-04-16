@@ -1,328 +1,486 @@
-import React, { useState, useMemo } from "react"
+import React, { useCallback, useRef, useState, useMemo, useEffect } from "react"
 import {
   Box,
-  TextField,
-  MenuItem,
-  Select,
-  FormControl,
-  InputLabel,
+  Card,
+  CardActionArea,
+  CardContent,
+  CardMedia,
+  Chip,
+  Container,
+  Divider,
+  Fade,
   Grid,
   Paper,
-  Typography,
-  CircularProgress,
-  Alert,
-  Pagination,
-  Card,
-  CardContent,
-  CardActionArea,
-  Chip,
   Stack,
-  SelectChangeEvent,
+  Typography,
+  useMediaQuery,
 } from "@mui/material"
+import { useTheme } from "@mui/material/styles"
+import { Link, useNavigate, useLocation } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import { useNavigate } from "react-router-dom"
-import { useSearchListingsV2Query } from "./api/marketV2Api"
-import type { SearchListingsRequest } from "./types/v2-api-types"
+import { isAfter, subDays } from "date-fns"
+import {
+  useSearchListingsQuery,
+  type SearchListingsApiArg,
+  type ListingSearchResult,
+} from "../../../store/api/v2/market"
+import { ExtendedTheme, cardFadeGradient } from "../../../hooks/styles/Theme"
+import { FALLBACK_IMAGE_URL } from "../../../util/constants"
+import { UnderlineLink } from "../../typography/UnderlineLink"
+import {
+  MarketListingRating,
+  BadgeDisplay,
+} from "../../rating/ListingRating"
+import { calculateBadgesFromRating, prioritizeBadges } from "../../../util/badges"
+import { ListingWrapper } from "../../../features/market/components/listings/ListingCard"
+import { ListingPagination } from "../../../features/market/components/listings/ListingPagination"
+import { EmptyListings } from "../../empty-states"
+import { ListingSkeleton } from "../../skeletons"
+import { MarketSidebar } from "../../../features/market/components/MarketSidebar"
+import { HideOnScroll, MarketNavArea } from "../../../features/market/components/MarketNavArea"
+import { useMarketSidebarExp } from "../../../features/market"
 
-/**
- * ListingSearchV2 - V2 market listing search component
- * 
- * Provides search interface with:
- * - Text query search
- * - Game item filtering
- * - Quality tier range filters (min/max)
- * - Price range filters (min/max)
- * - Paginated results display
- * 
- * Requirements: 14.1, 14.2, 14.3, 14.4, 14.5, 14.6
- */
-export function ListingSearchV2() {
-  const { t } = useTranslation()
+// ---------------------------------------------------------------------------
+// V2 Listing Card – mirrors V1 ItemListingBase visual style
+// ---------------------------------------------------------------------------
+const V2ListingCard = React.memo(function V2ListingCard({
+  listing,
+  index,
+}: {
+  listing: ListingSearchResult
+  index: number
+}) {
+  const { t, i18n } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
   const navigate = useNavigate()
 
-  // Search filters state
-  const [textQuery, setTextQuery] = useState("")
-  const [gameItemId, setGameItemId] = useState("")
-  const [qualityTierMin, setQualityTierMin] = useState<number | "">("")
-  const [qualityTierMax, setQualityTierMax] = useState<number | "">("")
-  const [priceMin, setPriceMin] = useState<number | "">("")
-  const [priceMax, setPriceMax] = useState<number | "">("")
-  const [page, setPage] = useState(1)
-  const [pageSize] = useState(20)
+  const { user_seller, contractor_seller } = listing
+  const sellerName = user_seller || contractor_seller
 
-  // Build search params
-  const searchParams = useMemo<SearchListingsRequest>(() => {
-    const params: SearchListingsRequest = {
-      page,
-      page_size: pageSize,
-    }
-
-    // Add optional filters
-    if (textQuery.trim()) {
-      params.text = textQuery.trim()
-    }
-    if (gameItemId) {
-      params.game_item_id = gameItemId
-    }
-    if (qualityTierMin !== "") {
-      params.quality_tier_min = qualityTierMin
-    }
-    if (qualityTierMax !== "") {
-      params.quality_tier_max = qualityTierMax
-    }
-    if (priceMin !== "") {
-      params.price_min = priceMin
-    }
-    if (priceMax !== "") {
-      params.price_max = priceMax
-    }
-
-    return params
-  }, [textQuery, gameItemId, qualityTierMin, qualityTierMax, priceMin, priceMax, page, pageSize])
-
-  // Use Redux Toolkit Query hook
-  const { data: searchResults, isLoading, error } = useSearchListingsV2Query(searchParams)
-
-  // Handle page change
-  const handlePageChange = (_event: React.ChangeEvent<unknown>, value: number) => {
-    setPage(value)
+  const rating = {
+    avg_rating: listing.avg_rating,
+    rating_count: listing.rating_count || 0,
+    total_rating: listing.total_rating,
+    streak: listing.rating_streak || 0,
+    total_orders: listing.total_orders || 0,
+    total_assignments: listing.total_assignments || 0,
+    response_rate: listing.response_rate || 0,
   }
-
-  // Handle listing click
-  const handleListingClick = (listingId: string) => {
-    navigate(`/market/v2/listings/${listingId}`)
-  }
-
-  // Calculate total pages
-  const totalPages = searchResults ? Math.ceil(searchResults.total / pageSize) : 0
+  const allBadges =
+    listing.badges?.badge_ids || calculateBadgesFromRating(rating)
+  const badges = prioritizeBadges(allBadges, 3)
 
   return (
-    <Box sx={{ p: 3 }}>
-      {/* Search Filters */}
-      <Paper sx={{ p: 3, mb: 3 }}>
-        <Typography variant="h5" gutterBottom>
-          {t("market.v2.search.title", "Search Listings")}
-        </Typography>
+    <ListingWrapper>
+      <Fade
+        in
+        style={{
+          transitionDelay: `${50 + 50 * index}ms`,
+          transitionDuration: "500ms",
+        }}
+      >
+        <Box
+          sx={{
+            position: "relative",
+            borderRadius: theme.spacing(theme.borderRadius.topLevel),
+          }}
+        >
+          <Link
+            to={`/market/${listing.listing_id}`}
+            style={{ textDecoration: "none", color: "inherit" }}
+          >
+            <CardActionArea
+              sx={{ borderRadius: theme.spacing(theme.borderRadius.topLevel) }}
+            >
+              <Card sx={{ height: 300, position: "relative" }}>
+                {/* NEW chip */}
+                {isAfter(new Date(listing.timestamp), subDays(new Date(), 3)) && (
+                  <Chip
+                    label={t("market.new")}
+                    color="secondary"
+                    size="small"
+                    sx={{
+                      position: "absolute",
+                      top: 4,
+                      left: 4,
+                      zIndex: 5,
+                      textTransform: "uppercase",
+                      fontWeight: "bold",
+                      fontSize: "0.65rem",
+                      height: 18,
+                    }}
+                  />
+                )}
 
-        <Grid container spacing={2} sx={{ mt: 1 }}>
-          {/* Text Search */}
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              label={t("market.v2.search.textQuery", "Search")}
-              placeholder={t("market.v2.search.textQueryPlaceholder", "Search by title, description, or item name")}
-              value={textQuery}
-              onChange={(e) => setTextQuery(e.target.value)}
-              variant="outlined"
-            />
-          </Grid>
+                {/* OUT OF STOCK chip */}
+                {listing.quantity_available === 0 && (
+                  <Chip
+                    label={t("market.outOfStock")}
+                    color="error"
+                    size="small"
+                    sx={{
+                      position: "absolute",
+                      top: listing.internal ? 28 : 4,
+                      right: 4,
+                      zIndex: 5,
+                      textTransform: "uppercase",
+                      fontWeight: "bold",
+                      fontSize: "0.65rem",
+                      height: 18,
+                    }}
+                  />
+                )}
 
-          {/* Game Item Filter */}
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              label={t("market.v2.search.gameItem", "Game Item")}
-              placeholder={t("market.v2.search.gameItemPlaceholder", "Filter by item")}
-              value={gameItemId}
-              onChange={(e) => setGameItemId(e.target.value)}
-              variant="outlined"
-            />
-          </Grid>
+                {/* INTERNAL chip */}
+                {listing.internal && (
+                  <Chip
+                    label={t("market.internalListing")}
+                    color="warning"
+                    size="small"
+                    sx={{
+                      position: "absolute",
+                      top: 4,
+                      right: 4,
+                      zIndex: 5,
+                      textTransform: "uppercase",
+                      fontWeight: "bold",
+                      fontSize: "0.65rem",
+                      height: 18,
+                    }}
+                  />
+                )}
 
-          {/* Quality Tier Min */}
-          <Grid item xs={6} md={3}>
-            <FormControl fullWidth>
-              <InputLabel>{t("market.v2.search.qualityMin", "Min Quality Tier")}</InputLabel>
-              <Select
-                value={qualityTierMin}
-                label={t("market.v2.search.qualityMin", "Min Quality Tier")}
-                onChange={(e: SelectChangeEvent<number | "">) => {
-                  const value = e.target.value
-                  setQualityTierMin(value === "" ? "" : Number(value))
-                }}
-              >
-                <MenuItem value="">
-                  <em>{t("market.v2.search.any", "Any")}</em>
-                </MenuItem>
-                <MenuItem value={1}>{t("market.v2.quality.tier1", "Tier 1")}</MenuItem>
-                <MenuItem value={2}>{t("market.v2.quality.tier2", "Tier 2")}</MenuItem>
-                <MenuItem value={3}>{t("market.v2.quality.tier3", "Tier 3")}</MenuItem>
-                <MenuItem value={4}>{t("market.v2.quality.tier4", "Tier 4")}</MenuItem>
-                <MenuItem value={5}>{t("market.v2.quality.tier5", "Tier 5")}</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
+                {/* Image */}
+                <CardMedia
+                  component="img"
+                  loading="lazy"
+                  image={listing.photo || FALLBACK_IMAGE_URL}
+                  onError={({ currentTarget }) => {
+                    currentTarget.onerror = null
+                    currentTarget.src = FALLBACK_IMAGE_URL
+                  }}
+                  sx={{
+                    width: "100%",
+                    objectFit: "cover",
+                    ...(theme.palette.mode === "dark"
+                      ? { height: "100%", aspectRatio: "16/9" }
+                      : { height: 150, aspectRatio: "16/9" }),
+                    overflow: "hidden",
+                  }}
+                  alt={`Image of ${listing.title}`}
+                />
 
-          {/* Quality Tier Max */}
-          <Grid item xs={6} md={3}>
-            <FormControl fullWidth>
-              <InputLabel>{t("market.v2.search.qualityMax", "Max Quality Tier")}</InputLabel>
-              <Select
-                value={qualityTierMax}
-                label={t("market.v2.search.qualityMax", "Max Quality Tier")}
-                onChange={(e: SelectChangeEvent<number | "">) => {
-                  const value = e.target.value
-                  setQualityTierMax(value === "" ? "" : Number(value))
-                }}
-              >
-                <MenuItem value="">
-                  <em>{t("market.v2.search.any", "Any")}</em>
-                </MenuItem>
-                <MenuItem value={1}>{t("market.v2.quality.tier1", "Tier 1")}</MenuItem>
-                <MenuItem value={2}>{t("market.v2.quality.tier2", "Tier 2")}</MenuItem>
-                <MenuItem value={3}>{t("market.v2.quality.tier3", "Tier 3")}</MenuItem>
-                <MenuItem value={4}>{t("market.v2.quality.tier4", "Tier 4")}</MenuItem>
-                <MenuItem value={5}>{t("market.v2.quality.tier5", "Tier 5")}</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
+                {/* Dark mode gradient overlay */}
+                {theme.palette.mode === "dark" && (
+                  <Box
+                    sx={{
+                      position: "absolute",
+                      zIndex: 3,
+                      top: 0,
+                      left: 0,
+                      height: "100%",
+                      width: "100%",
+                      borderRadius: theme.spacing(theme.borderRadius.topLevel),
+                      background: cardFadeGradient(theme, 50, 60),
+                    }}
+                  />
+                )}
 
-          {/* Price Min */}
-          <Grid item xs={6} md={3}>
-            <TextField
-              fullWidth
-              type="number"
-              label={t("market.v2.search.priceMin", "Min Price")}
-              placeholder="0"
-              value={priceMin}
-              onChange={(e) => {
-                const value = e.target.value
-                setPriceMin(value === "" ? "" : Number(value))
-              }}
-              variant="outlined"
-              inputProps={{ min: 0 }}
-            />
-          </Grid>
+                {/* Card content */}
+                <CardContent
+                  sx={{
+                    ...(theme.palette.mode === "dark"
+                      ? { position: "absolute", bottom: 0, zIndex: 4 }
+                      : {}),
+                    maxWidth: "100%",
+                    padding: "8px 12px !important",
+                  }}
+                >
+                  {/* Price */}
+                  <Typography
+                    variant="h6"
+                    color="primary"
+                    fontWeight="bold"
+                    sx={{ fontSize: "0.95rem", mb: 0.5 }}
+                  >
+                    {listing.price.toLocaleString(i18n.language)} aUEC
+                  </Typography>
 
-          {/* Price Max */}
-          <Grid item xs={6} md={3}>
-            <TextField
-              fullWidth
-              type="number"
-              label={t("market.v2.search.priceMax", "Max Price")}
-              placeholder="∞"
-              value={priceMax}
-              onChange={(e) => {
-                const value = e.target.value
-                setPriceMax(value === "" ? "" : Number(value))
-              }}
-              variant="outlined"
-              inputProps={{ min: 0 }}
-            />
-          </Grid>
-        </Grid>
-      </Paper>
+                  {/* Title + item type */}
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{
+                      fontSize: "0.75rem",
+                      lineHeight: 1.3,
+                      maxHeight: 36,
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      display: "-webkit-box",
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: "vertical",
+                      mb: 0.5,
+                    }}
+                  >
+                    {listing.title}
+                    {listing.item_type ? ` (${listing.item_type})` : ""}
+                  </Typography>
 
-      {/* Error Display */}
-      {error && (
-        <Alert severity="error" sx={{ mb: 3 }}>
-          {error instanceof Error ? error.message : "Failed to search listings"}
-        </Alert>
-      )}
+                  {/* Seller + badges */}
+                  <Box sx={{ mb: 0 }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 0.5,
+                        mb: 0.25,
+                        flexWrap: "wrap",
+                      }}
+                    >
+                      {sellerName && (
+                        <UnderlineLink
+                          component="span"
+                          display="inline"
+                          noWrap
+                          variant="caption"
+                          onClick={(e) => {
+                            e.preventDefault()
+                            e.stopPropagation()
+                            navigate(
+                              user_seller
+                                ? `/user/${user_seller}`
+                                : `/contractor/${contractor_seller}`,
+                            )
+                          }}
+                          sx={{
+                            overflowX: "hidden",
+                            textOverflow: "ellipsis",
+                            whiteSpace: "nowrap",
+                            cursor: "pointer",
+                            fontSize: "0.7rem",
+                            lineHeight: 1.2,
+                          }}
+                        >
+                          {sellerName}
+                        </UnderlineLink>
+                      )}
+                      {badges.length > 0 && (
+                        <BadgeDisplay badges={badges} iconSize="1rem" />
+                      )}
+                    </Box>
+                    <Box
+                      sx={{
+                        fontSize: "0.7rem",
+                        lineHeight: 1,
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      <MarketListingRating
+                        avg_rating={listing.avg_rating}
+                        rating_count={listing.rating_count}
+                        total_rating={listing.total_rating}
+                        rating_streak={listing.rating_streak}
+                        total_orders={listing.total_orders}
+                        total_assignments={listing.total_assignments}
+                        response_rate={listing.response_rate}
+                        badge_ids={[]}
+                        display_limit={0}
+                        showBadges={false}
+                      />
+                    </Box>
+                  </Box>
 
-      {/* Loading State */}
-      {isLoading && (
-        <Box display="flex" justifyContent="center" py={4}>
-          <CircularProgress />
+                  {/* Quantity available */}
+                  <Typography
+                    display="block"
+                    color="text.primary"
+                    variant="caption"
+                    sx={{ fontSize: "0.7rem", lineHeight: 1.2 }}
+                  >
+                    {t("market.available", {
+                      count: listing.quantity_available,
+                    })}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </CardActionArea>
+          </Link>
         </Box>
+      </Fade>
+    </ListingWrapper>
+  )
+})
+
+// ---------------------------------------------------------------------------
+// ListingSearchV2 – V1 sidebar+content layout with V2 API
+// ---------------------------------------------------------------------------
+export function ListingSearchV2() {
+  const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
+  const showMobileSidebar = useMediaQuery(theme.breakpoints.down("lg"))
+  const sidebarOpen = useMarketSidebarExp()
+  const ref = useRef<HTMLDivElement>(null)
+  const location = useLocation()
+
+  // Pagination state
+  const [page, setPage] = useState(0)
+  const [perPage, setPerPage] = useState(
+    showMobileSidebar ? 12 : 48,
+  )
+
+  // Build search params from URL (V1 pattern: MarketSidebar → useMarketFilters → useMarketSearch → URL params)
+  const searchParams = useMemo<SearchListingsApiArg>(() => {
+    const sp = new URLSearchParams(location.search)
+    const params: SearchListingsApiArg = {
+      page: page + 1,
+      pageSize: perPage,
+    }
+    if (sp.get("query")) params.query = sp.get("query")!
+    if (sp.get("type")) params.itemType = sp.get("type")!
+    if (sp.get("kind") && sp.get("kind") !== "any") params.saleType = sp.get("kind")!
+    if (sp.get("minCost")) params.minPrice = Number(sp.get("minCost"))
+    if (sp.get("maxCost")) params.maxPrice = Number(sp.get("maxCost"))
+    if (sp.get("quantityAvailable")) params.quantityAvailable = Number(sp.get("quantityAvailable"))
+    if (sp.get("sort")) params.sort = sp.get("sort")!
+    if (sp.get("statuses")) params.statuses = sp.get("statuses")!
+    if (sp.get("listing_type")) params.listingType = sp.get("listing_type")!
+    return params
+  }, [location.search, page, perPage])
+
+  const { data, isLoading, isFetching, isError, refetch } =
+    useSearchListingsQuery(searchParams)
+
+  // Reset page when filters change
+  useEffect(() => {
+    setPage(0)
+  }, [location.search])
+
+  const handleChangePage = useCallback(
+    (_event: unknown, newPage: number) => {
+      setPage(newPage)
+      ref.current?.scrollIntoView({ block: "end", behavior: "smooth" })
+    },
+    [],
+  )
+
+  const handleChangeRowsPerPage = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setPerPage(parseInt(event.target.value, 10))
+      setPage(0)
+    },
+    [],
+  )
+
+  const showViewModeSelector = useMemo(() => {
+    if (location.pathname.startsWith("/market/services")) return false
+    if (location.pathname.startsWith("/market")) return true
+    if (location.pathname.startsWith("/bulk")) return true
+    if (location.pathname.startsWith("/buyorders")) return true
+    return false
+  }, [location.pathname])
+
+  // Grid breakpoints matching V1
+  const gridBreakpoints = { xs: 6, sm: 4, md: 4, lg: 3, xl: 2.4 }
+
+  const resultsContent = (
+    <>
+      <div ref={ref} style={{ position: "absolute", top: 0 }} />
+
+      <Grid container spacing={1} sx={{ width: "100%" }}>
+        {isLoading || isFetching ? (
+          Array.from({ length: perPage }).map((_, i) => (
+            <Grid item {...gridBreakpoints} key={i}>
+              <ListingSkeleton index={i} sidebarOpen={sidebarOpen} />
+            </Grid>
+          ))
+        ) : data && data.listings.length > 0 ? (
+          data.listings.map((listing, i) => (
+            <Grid item {...gridBreakpoints} key={listing.listing_id}>
+              <V2ListingCard listing={listing} index={i} />
+            </Grid>
+          ))
+        ) : (
+          <Grid item xs={12}>
+            <EmptyListings
+              isSearchResult={true}
+              isError={isError}
+              showCreateAction={true}
+              onRetry={refetch}
+            />
+          </Grid>
+        )}
+
+        <Grid item xs={12} sx={{ mt: 2 }}>
+          <Divider light />
+        </Grid>
+
+        <Grid item xs={12}>
+          <ListingPagination
+            count={data?.total ?? 0}
+            page={page}
+            rowsPerPage={perPage}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Grid>
+      </Grid>
+    </>
+  )
+
+  return (
+    <>
+      {/* Mobile: BottomSheet sidebar (controlled by MarketSidebarContext via FAB) */}
+      {showMobileSidebar && (
+        <MarketSidebar showViewModeSelector={showViewModeSelector} />
       )}
 
-      {/* Search Results */}
-      {!isLoading && searchResults && (
-        <>
-          {/* Results Header */}
-          <Box sx={{ mb: 2, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <Typography variant="h6">
-              {t("market.v2.search.resultsCount", {
-                count: searchResults.total,
-                defaultValue: "{{count}} listings found",
-              })}
-            </Typography>
-          </Box>
-
-          {/* Listings Grid */}
-          {searchResults.listings.length > 0 ? (
-            <Grid container spacing={2}>
-              {searchResults.listings.map((listing) => (
-                <Grid item xs={12} sm={6} md={4} lg={3} key={listing.listing_id}>
-                  <Card>
-                    <CardActionArea onClick={() => handleListingClick(listing.listing_id)}>
-                      <CardContent>
-                        <Typography variant="h6" noWrap gutterBottom>
-                          {listing.title}
-                        </Typography>
-
-                        <Typography variant="body2" color="text.secondary" gutterBottom>
-                          {t("market.v2.search.seller", "Seller")}: {listing.seller_name}
-                        </Typography>
-
-                        <Stack direction="row" spacing={1} sx={{ mb: 1 }}>
-                          <Chip
-                            label={`⭐ ${listing.seller_rating.toFixed(1)}`}
-                            size="small"
-                            color="primary"
-                            variant="outlined"
-                          />
-                          <Chip
-                            label={`${listing.quantity_available} ${t("market.v2.search.available", "available")}`}
-                            size="small"
-                          />
-                        </Stack>
-
-                        <Typography variant="body2" color="text.secondary" gutterBottom>
-                          {t("market.v2.search.price", "Price")}: {listing.price_min === listing.price_max
-                            ? `${listing.price_min} aUEC`
-                            : `${listing.price_min} - ${listing.price_max} aUEC`}
-                        </Typography>
-
-                        <Typography variant="body2" color="text.secondary" gutterBottom>
-                          {t("market.v2.search.quality", "Quality")}: Tier {listing.quality_tier_min}
-                          {listing.quality_tier_min !== listing.quality_tier_max && ` - ${listing.quality_tier_max}`}
-                        </Typography>
-
-                        {listing.variant_count > 1 && (
-                          <Chip
-                            label={`${listing.variant_count} ${t("market.v2.search.variants", "variants")}`}
-                            size="small"
-                            color="secondary"
-                            sx={{ mt: 1 }}
-                          />
-                        )}
-
-                        <Typography variant="caption" color="text.secondary" display="block" sx={{ mt: 1 }}>
-                          {new Date(listing.created_at).toLocaleDateString()}
-                        </Typography>
-                      </CardContent>
-                    </CardActionArea>
-                  </Card>
-                </Grid>
-              ))}
+      <Container maxWidth="xxxl" sx={{ padding: 0 }}>
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
+          {showMobileSidebar ? (
+            /* Mobile layout */
+            <Grid container spacing={theme.layoutSpacing.layout}>
+              <Grid item xs={12}>
+                <HideOnScroll>
+                  <MarketNavArea />
+                </HideOnScroll>
+              </Grid>
+              <Grid item xs={12}>
+                <Divider light />
+              </Grid>
+              <Grid item xs={12}>
+                {resultsContent}
+              </Grid>
             </Grid>
           ) : (
-            <Paper sx={{ p: 4, textAlign: "center" }}>
-              <Typography variant="h6" color="text.secondary">
-                {t("market.v2.search.noResults", "No listings found")}
-              </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-                {t("market.v2.search.noResultsHint", "Try adjusting your search filters")}
-              </Typography>
-            </Paper>
-          )}
+            /* Desktop: sticky sidebar + content */
+            <Stack
+              direction="row"
+              justifyContent="center"
+              spacing={theme.layoutSpacing.layout}
+              sx={{ width: "100%", maxWidth: "xxxl" }}
+            >
+              <Paper
+                sx={{
+                  position: "sticky",
+                  top: "calc(64px + 16px)",
+                  maxHeight: "calc(100vh - 64px - 32px)",
+                  height: "fit-content",
+                  width: 300,
+                  flexShrink: 0,
+                  overflowY: "auto",
+                }}
+              >
+                <MarketSidebar showViewModeSelector={showViewModeSelector} />
+              </Paper>
 
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <Box display="flex" justifyContent="center" sx={{ mt: 4 }}>
-              <Pagination
-                count={totalPages}
-                page={page}
-                onChange={handlePageChange}
-                color="primary"
-                size="large"
-              />
-            </Box>
+              <Box sx={{ flex: 1, minWidth: 0 }}>
+                {resultsContent}
+              </Box>
+            </Stack>
           )}
-        </>
-      )}
-    </Box>
+        </Box>
+      </Container>
+    </>
   )
 }
