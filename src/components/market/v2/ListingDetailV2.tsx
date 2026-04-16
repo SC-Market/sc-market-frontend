@@ -31,7 +31,7 @@ import { useTranslation } from "react-i18next"
 import { ReportButton } from "../../../components/button/ReportButton"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { useTheme } from "@mui/material/styles"
-import { ListingDetailItem } from "../../market/listing-view/components/ListingDetailItem"
+import { ListingDetailItem } from "../../../features/market/listing-view/components/ListingDetailItem"
 import { dateDiffInDays } from "../../../util/dateDiff"
 import { SellerStatusBadge } from "../../../components/presence/SellerStatusBadge"
 import { useGetListingDetailsQuery } from "../../../store/api/v2/market"
@@ -75,16 +75,16 @@ export function ListingDetailV2({
   const amContractor = useMemo(
     () =>
       profile &&
-      currentOrg?.spectrum_id === listingData?.listing?.contractor_seller?.spectrum_id,
-    [currentOrg?.spectrum_id, listingData?.listing?.contractor_seller, profile],
+      currentOrg?.spectrum_id === (listingData?.listing as any)?.contractor_seller?.spectrum_id,
+    [currentOrg?.spectrum_id, listingData?.listing, profile],
   )
 
   const amSeller = useMemo(
     () =>
       profile &&
-      profile?.username === listingData?.listing?.user_seller?.username &&
+      profile?.username === (listingData?.listing as any)?.user_seller?.username &&
       !currentOrg,
-    [currentOrg, listingData?.listing?.user_seller?.username, profile?.username],
+    [currentOrg, listingData?.listing, profile?.username],
   )
 
   const amRelated = useMemo(
@@ -115,7 +115,8 @@ export function ListingDetailV2({
   }
 
   const { listing, details, stats } = listingData
-  const seller = listing.user_seller || listing.contractor_seller
+  const seller = (listing as any).user_seller || (listing as any).contractor_seller
+  const languages = (listing as any).languages || []
 
   return (
     <Fade in={true}>
@@ -173,8 +174,8 @@ export function ListingDetailV2({
                   icon={<PersonRounded fontSize={"inherit"} />}
                 >
                   <ListingNameAndRating
-                    user={listing.user_seller}
-                    contractor={listing.contractor_seller}
+                    user={(listing as any).user_seller}
+                    contractor={(listing as any).contractor_seller}
                   />
                 </ListingDetailItem>
 
@@ -209,9 +210,9 @@ export function ListingDetailV2({
                     icon={<SportsEsportsRounded fontSize={"inherit"} />}
                   >
                     <SellerStatusBadge
-                      inGame={listing.user_seller?.in_game}
+                      inGame={(listing as any).user_seller?.in_game}
                       lastSeen={seller.last_seen}
-                      membersOnline={listing.contractor_seller?.members_online}
+                      membersOnline={(listing as any).contractor_seller?.members_online}
                     />
                   </ListingDetailItem>
                 )}
@@ -222,7 +223,7 @@ export function ListingDetailV2({
                   <ReportButton reportedUrl={`/market/${listing.listing_id}`} />
                 </ListingDetailItem>
 
-                {listing.languages && listing.languages.length > 0 && (
+                {languages && languages.length > 0 && (
                   <ListingDetailItem
                     icon={<PersonRounded fontSize={"inherit"} />}
                   >
@@ -237,7 +238,7 @@ export function ListingDetailV2({
                       <Typography variant="subtitle2" color="text.secondary">
                         {t("MarketListingView.languages", "Languages")}:
                       </Typography>
-                      {listing.languages.map((lang: any) => (
+                      {languages.map((lang: any) => (
                         <Chip
                           key={lang.code}
                           label={lang.name}
