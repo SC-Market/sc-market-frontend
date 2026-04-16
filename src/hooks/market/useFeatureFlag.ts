@@ -1,3 +1,16 @@
+/**
+ * useFeatureFlag – Market version feature flag hook
+ *
+ * NOTE: This hook intentionally uses raw `fetch()` instead of RTK Query because:
+ *   1. The /api/v2/debug/feature-flag endpoint is NOT in the OpenAPI spec, so the
+ *      generated API client (src/store/api/v2/market.ts) does not include it.
+ *   2. This hook is consumed by MarketRouter to decide which UI tree to render,
+ *      so it must resolve *before* RTK Query and the Redux store are fully initialized.
+ *
+ * If the feature-flag endpoint is added to the OpenAPI spec in the future, migrate
+ * this to a generated RTK Query hook.
+ */
+
 import { useState, useEffect, useCallback, useMemo } from "react"
 import { useGetUserProfileQuery } from "../../store/profile"
 import { BACKEND_URL } from "../../util/constants"
@@ -121,14 +134,12 @@ export function useFeatureFlag(): UseFeatureFlagReturn {
         if (res.ok) {
           localStorage.setItem("market_version", version)
           setMarketVersionState(version)
-          window.location.reload()
           return
         }
 
         if (isFrontendDev) {
           localStorage.setItem("market_version", version)
           setMarketVersionState(version)
-          window.location.reload()
           return
         }
 
