@@ -11,6 +11,7 @@ import {
   Collapse,
   Divider,
   Chip,
+  useMediaQuery,
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import SettingsIcon from "@mui/icons-material/Settings"
@@ -31,6 +32,7 @@ import { useFeatureFlag, MarketVersion } from "../../../hooks/market/useFeatureF
  */
 export function DebugPanel() {
   const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const { marketVersion, setMarketVersion, isDeveloper, isLoading } = useFeatureFlag()
   const [isOpen, setIsOpen] = useState(false)
   const [isSwitching, setIsSwitching] = useState(false)
@@ -73,35 +75,32 @@ export function DebugPanel() {
     return null
   }
 
+  // Stack above the preferences FAB: same horizontal inset as PreferencesButton,
+  // bottom = FAB inset + default Fab height (56px) + gap.
+  const fabInset = isMobile ? theme.spacing(10) : theme.spacing(2)
+  const debugBottom = `calc(${fabInset} + 56px + ${theme.spacing(1)})`
+
   return (
     <Box
       sx={{
-        position: "fixed",
-        bottom: 16,
-        right: 16,
-        zIndex: theme.zIndex.modal - 1,
+        position: "absolute",
+        right: theme.spacing(2),
+        bottom: debugBottom,
+        zIndex: theme.zIndex.drawer + 3,
+        display: "flex",
+        flexDirection: "column-reverse",
+        alignItems: "flex-end",
+        gap: theme.spacing(1),
+        pointerEvents: "none",
       }}
     >
-      {/* Toggle button */}
-      {!isOpen && (
-        <IconButton
-          onClick={handleTogglePanel}
-          sx={{
-            backgroundColor: theme.palette.primary.main,
-            color: theme.palette.primary.contrastText,
-            "&:hover": {
-              backgroundColor: theme.palette.primary.dark,
-            },
-            boxShadow: theme.shadows[4],
-          }}
-          aria-label="Open debug panel"
-        >
-          <SettingsIcon />
-        </IconButton>
-      )}
-
-      {/* Debug panel */}
-      <Collapse in={isOpen}>
+      {/* Debug panel (first in DOM: sits above the toggle when using column-reverse) */}
+      <Collapse
+        in={isOpen}
+        sx={{
+          pointerEvents: isOpen ? "auto" : "none",
+        }}
+      >
         <Paper
           elevation={8}
           sx={{
@@ -109,6 +108,7 @@ export function DebugPanel() {
             p: 2,
             backgroundColor: theme.palette.background.paper,
             border: `2px solid ${theme.palette.primary.main}`,
+            pointerEvents: "auto",
           }}
         >
           {/* Header */}
@@ -207,6 +207,25 @@ export function DebugPanel() {
           </Box>
         </Paper>
       </Collapse>
+
+      {/* Toggle button — anchored just above the preferences FAB; only this captures clicks when closed */}
+      {!isOpen && (
+        <IconButton
+          onClick={handleTogglePanel}
+          sx={{
+            pointerEvents: "auto",
+            backgroundColor: theme.palette.primary.main,
+            color: theme.palette.primary.contrastText,
+            "&:hover": {
+              backgroundColor: theme.palette.primary.dark,
+            },
+            boxShadow: theme.shadows[4],
+          }}
+          aria-label="Open debug panel"
+        >
+          <SettingsIcon />
+        </IconButton>
+      )}
     </Box>
   )
 }
