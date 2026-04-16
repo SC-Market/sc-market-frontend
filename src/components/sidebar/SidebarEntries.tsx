@@ -20,6 +20,7 @@ import {
   WarehouseRounded,
   SecurityRounded,
   StarRounded,
+  ToggleOnRounded,
 } from "@mui/icons-material"
 import PaidIcon from "@mui/icons-material/PaidRounded"
 import CreateIcon from "@mui/icons-material/CreateRounded"
@@ -399,6 +400,12 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
         icon: <StarRounded />,
         site_admin: true,
         to: "/admin/premium",
+      },
+      {
+        text: "sidebar.feature_flags.text",
+        icon: <ToggleOnRounded />,
+        site_admin: true,
+        to: "/admin/feature-flags",
       },
     ],
   },
