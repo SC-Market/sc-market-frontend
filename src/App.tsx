@@ -710,6 +710,14 @@ const router = createBrowserRouter([
                   ).AdminPremiumManagement,
                 }),
               },
+              {
+                path: "/admin/feature-flags",
+                lazy: async () => ({
+                  Component: (
+                    await import("./pages/admin/AdminFeatureFlags")
+                  ).AdminFeatureFlags,
+                }),
+              },
             ],
           },
           {
