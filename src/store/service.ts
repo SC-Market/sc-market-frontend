@@ -47,6 +47,7 @@ export const serviceApi = createApi({
     "OrderSettings",
     "MarketStats",
     "MarketListings",
+    "MarketListingsV2",
     "MarketBids",
     "StockLocations",
     "StockLots",
