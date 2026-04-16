@@ -39,7 +39,8 @@ function readLocalMarketVersion(): MarketVersion | null {
 /**
  * Custom hook to manage market version feature flag
  *
- * - Loads version from GET /api/v2/debug/feature-flag when authenticated; otherwise localStorage.
+ * - Loads version from GET when authenticated; in **dev**, a `localStorage` choice wins over
+ *   the server so V2/local overrides are not reset on reload. In production, the server wins.
  * - `isDeveloper` is true when running under Vite dev or the logged-in user is an admin.
  * - POST updates the server when allowed; in dev, falls back to localStorage if POST fails (e.g. non-admin).
  */
@@ -69,10 +70,24 @@ export function useFeatureFlag(): UseFeatureFlagReturn {
           const data = (await res.json()) as {
             market_version?: string
           }
-          const mv = data.market_version
-          if (mv === "V1" || mv === "V2") {
-            setMarketVersionState(mv)
-            localStorage.setItem("market_version", mv)
+          const serverMv =
+            data.market_version === "V1" || data.market_version === "V2"
+              ? data.market_version
+              : null
+          const localMv = readLocalMarketVersion()
+
+          let resolved: MarketVersion | null = null
+          if (isFrontendDev && localMv) {
+            resolved = localMv
+          } else if (serverMv) {
+            resolved = serverMv
+            localStorage.setItem("market_version", serverMv)
+          } else if (localMv) {
+            resolved = localMv
+          }
+
+          if (resolved) {
+            setMarketVersionState(resolved)
             return
           }
         }
@@ -104,7 +119,7 @@ export function useFeatureFlag(): UseFeatureFlagReturn {
     return () => {
       cancelled = true
     }
-  }, [profile?.username])
+  }, [profile?.username, isFrontendDev])
 
   const setMarketVersion = useCallback(
     async (version: MarketVersion) => {
