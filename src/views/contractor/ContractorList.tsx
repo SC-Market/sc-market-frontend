@@ -15,7 +15,7 @@ import {
   Typography,
 } from "@mui/material"
 import { Contractor } from "../../datatypes/Contractor"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { ExtendedTheme, bannerFadeGradient } from "../../hooks/styles/Theme"
 import { useTheme } from "@mui/material/styles"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import LocalShippingRoundedIcon from "@mui/icons-material/LocalShippingRounded"
@@ -105,7 +105,7 @@ export const ContractorListItem = React.memo(
                   sx={{
                     ...(theme.palette.mode === "dark"
                       ? {
-                          background: `linear-gradient(to bottom, ${theme.palette.background.default}AA, ${theme.palette.background.default} 100%)`,
+                          background: bannerFadeGradient(theme),
                         }
                       : {}),
                     height: "100%",

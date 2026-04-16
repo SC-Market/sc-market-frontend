@@ -19,6 +19,12 @@ declare module "@mui/material/styles" {
     overlayDark: string
     imageOverlay: string
     imageOverlayHover: string
+    subtleDivider: string
+    subtleHover: string
+  }
+
+  interface TypeText {
+    subtle: string
   }
 
   interface TypeAction {

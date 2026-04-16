@@ -702,6 +702,14 @@ const router = createBrowserRouter([
                   ).AdminImportMonitoring,
                 }),
               },
+              {
+                path: "/admin/premium",
+                lazy: async () => ({
+                  Component: (
+                    await import("./pages/admin/AdminPremiumManagement")
+                  ).AdminPremiumManagement,
+                }),
+              },
             ],
           },
           {

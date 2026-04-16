@@ -38,7 +38,7 @@ const FacadeContainer = styled(Box)(({ theme }) => ({
   position: "relative",
   width: "100%",
   paddingBottom: "56.25%", // 16:9 aspect ratio
-  backgroundColor: "#000",
+  backgroundColor: theme.palette.common.black,
   cursor: "pointer",
   overflow: "hidden",
   "&:hover .play-button": {
@@ -75,7 +75,7 @@ const PlayButton = styled(IconButton)(({ theme }) => ({
   },
   "& .MuiSvgIcon-root": {
     fontSize: 48,
-    color: "#fff",
+    color: theme.palette.common.white,
   },
 }))
 

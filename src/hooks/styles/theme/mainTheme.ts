@@ -18,6 +18,7 @@ export const mainThemeOptions: ExtendedThemeOptions = {
       primary: "#b7b7b7",
       secondary: "#e8e8e8",
       disabled: "#EEEEEEC0",
+      subtle: "rgba(255, 255, 255, 0.5)",
     },
     DataGrid: {
       bg: "transparent",
@@ -34,6 +35,8 @@ export const mainThemeOptions: ExtendedThemeOptions = {
       overlayDark: "rgba(0, 0, 0, 0.7)",
       imageOverlay: "rgba(0, 0, 0, 0.8)",
       imageOverlayHover: "rgba(0, 0, 0, 0.9)",
+      subtleDivider: "rgba(255, 255, 255, 0.11)",
+      subtleHover: "#1a1a1a",
     },
     outline: {
       main: mainOutline,
@@ -136,7 +139,7 @@ export const mainThemeOptions: ExtendedThemeOptions = {
     MuiCssBaseline: {
       styleOverrides: {
         html: {
-          backgroundColor: "#0b0f1a",
+          backgroundColor: "var(--mui-palette-background-default, #0b0f1a)",
         },
         "*:focus": {
           outlineColor: "var(--mui-palette-common-focus, #1976d2)",

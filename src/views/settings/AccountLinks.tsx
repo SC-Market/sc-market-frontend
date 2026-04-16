@@ -316,7 +316,7 @@ export function AccountLinks() {
                     </strong>{" "}
                     <code
                       style={{
-                        backgroundColor: "rgba(0,0,0,0.05)",
+                        backgroundColor: theme.palette.action.hover,
                         padding: "2px 4px",
                         borderRadius: `${theme.spacing(theme.borderRadius.input)}px`,
                       }}
@@ -334,7 +334,7 @@ export function AccountLinks() {
                     </strong>{" "}
                     <code
                       style={{
-                        backgroundColor: "rgba(0,0,0,0.05)",
+                        backgroundColor: theme.palette.action.hover,
                         padding: "2px 4px",
                         borderRadius: `${theme.spacing(theme.borderRadius.input)}px`,
                       }}
