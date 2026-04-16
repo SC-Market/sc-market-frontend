@@ -71,6 +71,22 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["Market"],
       }),
+      getMyListings: build.query<
+        GetMyListingsApiResponse,
+        GetMyListingsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/v2/listings/mine`,
+          params: {
+            status: queryArg.status,
+            page: queryArg.page,
+            page_size: queryArg.pageSize,
+            sort_by: queryArg.sortBy,
+            sort_order: queryArg.sortOrder,
+          },
+        }),
+        providesTags: ["Market"],
+      }),
     }),
     overrideExisting: false,
   })
@@ -111,6 +127,32 @@ export type UpdateListingApiArg = {
 export type DeleteListingApiResponse = unknown
 export type DeleteListingApiArg = {
   listingId: string
+}
+export type GetMyListingsApiResponse =
+  /** status 200 Successfully retrieved my listings */ MyListingsResponse
+export type GetMyListingsApiArg = {
+  status?: string
+  page?: number
+  pageSize?: number
+  sortBy?: string
+  sortOrder?: string
+}
+export type MyListingItem = {
+  listing_id: string
+  title: string
+  status: "active" | "sold" | "expired" | "cancelled"
+  created_at: string
+  updated_at: string
+  variant_count: number
+  total_quantity: number
+  price_min: number
+  price_max: number
+  quality_tier_min: number
+  quality_tier_max: number
+}
+export type MyListingsResponse = {
+  listings: MyListingItem[]
+  total: number
 }
 export type ListingSearchResult = {
   listing_id: string
@@ -222,4 +264,5 @@ export const {
   useGetListingDetailsQuery,
   useUpdateListingMutation,
   useDeleteListingMutation,
+  useGetMyListingsQuery,
 } = injectedRtkApi
