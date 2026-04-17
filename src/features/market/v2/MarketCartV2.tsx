@@ -76,7 +76,10 @@ export function CartItemEntryV2(props: {
           severity: "success",
         })
       } catch (error) {
-        issueAlert(error)
+        issueAlert({
+          message: error instanceof Error ? error.message : "Failed to update quantity",
+          severity: "error",
+        })
       }
     },
     [item.cart_item_id, updateCartItem, issueAlert, t]
@@ -96,7 +99,10 @@ export function CartItemEntryV2(props: {
           severity: "success",
         })
       } catch (error) {
-        issueAlert(error)
+        issueAlert({
+          message: error instanceof Error ? error.message : "Failed to update variant",
+          severity: "error",
+        })
       }
     },
     [item.cart_item_id, updateCartItem, issueAlert, t]
@@ -226,7 +232,7 @@ export function CartItemEntryV2(props: {
                 endAdornment: (
                   <InputAdornment position="start">
                     {t("cart.ofAvailable", {
-                      available: item.variant.quantity?.toLocaleString() || "0",
+                      available: "∞",
                     })}
                   </InputAdornment>
                 ),
@@ -335,7 +341,10 @@ export function MarketCartV2() {
           severity: "success",
         })
       } catch (error) {
-        issueAlert(error)
+        issueAlert({
+          message: error instanceof Error ? error.message : "Failed to remove item",
+          severity: "error",
+        })
       }
     },
     [removeCartItem, issueAlert, t]
@@ -364,7 +373,10 @@ export function MarketCartV2() {
         // Navigate to order page
         navigate(`/offer/${result.order_id}`)
       } catch (error) {
-        issueAlert(error)
+        issueAlert({
+          message: error instanceof Error ? error.message : "Failed to checkout",
+          severity: "error",
+        })
       }
     },
     [cartData, checkoutCart, issueAlert, navigate, t]

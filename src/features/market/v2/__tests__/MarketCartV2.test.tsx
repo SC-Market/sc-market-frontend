@@ -6,10 +6,11 @@ import { Provider } from "react-redux"
 import { configureStore } from "@reduxjs/toolkit"
 import { BrowserRouter } from "react-router-dom"
 import { ThemeProvider, createTheme } from "@mui/material/styles"
-import { marketV2Api as api } from "../../../../store/api/v2/market"
+import { marketV2Api as api, GetCartResponse } from "../../../../store/api/v2/market"
 import { describe, it, expect, beforeEach, vi } from "vitest"
 import { CurrentOrgContext } from "../../../../hooks/login/CurrentOrg"
 import { DrawerOpenContext } from "../../../../hooks/layout/Drawer"
+import { Contractor } from "../../../../datatypes/Contractor"
 
 // Mock navigation
 const mockNavigate = vi.fn()
@@ -87,12 +88,12 @@ const renderWithProviders = (
     },
   } as any)
 
-  const mockOrgState: [string | null, (org: string | null) => void] = [
+  const mockOrgState: [Contractor | null, React.Dispatch<React.SetStateAction<Contractor | null>>] = [
     null,
     vi.fn(),
   ]
 
-  const mockDrawerState: [boolean, (open: boolean) => void] = [false, vi.fn()]
+  const mockDrawerState: [boolean, React.Dispatch<React.SetStateAction<boolean>>] = [false, vi.fn()]
 
   function Wrapper({ children }: { children: React.ReactNode }) {
     return (
@@ -114,7 +115,7 @@ const renderWithProviders = (
 }
 
 // Mock cart data
-const mockCartData = {
+const mockCartData: GetCartResponse = {
   items: [
     {
       cart_item_id: "cart-1",
@@ -130,11 +131,10 @@ const mockCartData = {
         attributes: {
           quality_tier: 5,
           quality_value: 95.5,
-          crafted_source: "crafted",
+          crafted_source: "crafted" as const,
         },
         display_name: "Tier 5 (95.5%) - Crafted",
         short_name: "T5 Crafted",
-        quantity: 10,
       },
       quantity: 2,
       price_per_unit: 1000,
@@ -156,11 +156,10 @@ const mockCartData = {
         attributes: {
           quality_tier: 3,
           quality_value: 60.0,
-          crafted_source: "store",
+          crafted_source: "store" as const,
         },
         display_name: "Tier 3 (60.0%) - Store",
         short_name: "T3 Store",
-        quantity: 5,
       },
       quantity: 1,
       price_per_unit: 500,
@@ -173,7 +172,7 @@ const mockCartData = {
   item_count: 2,
 }
 
-const mockEmptyCart = {
+const mockEmptyCart: GetCartResponse = {
   items: [],
   total_price: 0,
   item_count: 0,
@@ -243,7 +242,7 @@ describe("MarketCartV2", () => {
     it("should display price change alert", async () => {
       const store = createTestStore()
 
-      const cartWithPriceChange = {
+      const cartWithPriceChange: GetCartResponse = {
         ...mockCartData,
         items: [
           {
@@ -272,7 +271,7 @@ describe("MarketCartV2", () => {
     it("should display unavailable warning", async () => {
       const store = createTestStore()
 
-      const cartWithUnavailable = {
+      const cartWithUnavailable: GetCartResponse = {
         ...mockCartData,
         items: [
           {
@@ -297,7 +296,7 @@ describe("MarketCartV2", () => {
     it("should disable checkout when items unavailable", async () => {
       const store = createTestStore()
 
-      const cartWithUnavailable = {
+      const cartWithUnavailable: GetCartResponse = {
         ...mockCartData,
         items: [
           {

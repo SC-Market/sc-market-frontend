@@ -3,7 +3,7 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { ThemeProvider } from "@mui/material/styles";
 import { vi } from "vitest";
 import { VariantBreakdown } from "../VariantBreakdown";
-import { mainTheme } from "../../../../hooks/styles/theme";
+import { mainTheme } from "../../../../hooks/styles/Theme";
 
 const mockVariants = [
   {

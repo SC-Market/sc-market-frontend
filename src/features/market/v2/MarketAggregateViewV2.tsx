@@ -536,8 +536,10 @@ export function MarketAggregateViewV2() {
       {/* Quality Tier Filter */}
       <Grid item xs={12}>
         <QualityFilter
-          selectedTier={selectedQualityTier}
-          onTierChange={setSelectedQualityTier}
+          minTier={selectedQualityTier}
+          maxTier={selectedQualityTier}
+          onMinTierChange={setSelectedQualityTier}
+          onMaxTierChange={setSelectedQualityTier}
         />
       </Grid>
 
@@ -828,7 +830,15 @@ export function AggregateRowV2(props: {
               listing.seller_type === "user"
                 ? {
                     username: listing.seller_name,
-                    rating: { avg_rating: listing.seller_rating },
+                    display_name: listing.seller_name,
+                    avatar: "",
+                    rating: { 
+                      avg_rating: listing.seller_rating,
+                      rating_count: 0,
+                      total_rating: 0,
+                      streak: 0,
+                      total_orders: 0,
+                    },
                   }
                 : undefined
             }
@@ -836,7 +846,15 @@ export function AggregateRowV2(props: {
               listing.seller_type === "contractor"
                 ? {
                     name: listing.seller_name,
-                    rating: { avg_rating: listing.seller_rating },
+                    avatar: "",
+                    spectrum_id: listing.seller_id,
+                    rating: { 
+                      avg_rating: listing.seller_rating,
+                      rating_count: 0,
+                      total_rating: 0,
+                      streak: 0,
+                      total_orders: 0,
+                    },
                   }
                 : undefined
             }
@@ -890,16 +908,6 @@ export function AggregateRowV2(props: {
         }}
       >
         <Stack direction="column" spacing={1} alignItems="flex-end">
-          {/* Variant Selector (if multiple variants) */}
-          {listing.variant_count > 1 && (
-            <VariantSelector
-              listingId={listing.listing_id}
-              selectedVariantId={selectedVariantId}
-              onVariantChange={setSelectedVariantId}
-              size="small"
-            />
-          )}
-
           {/* Quantity Input */}
           <NumericFormat
             decimalScale={0}
@@ -1107,7 +1115,15 @@ export function BuyOrderRowV2(props: {
           <ListingNameAndRating
             user={{
               username: buy_order.buyer_name,
-              rating: { avg_rating: buy_order.buyer_rating },
+              display_name: buy_order.buyer_name,
+              avatar: "",
+              rating: { 
+                avg_rating: buy_order.buyer_rating,
+                rating_count: 0,
+                total_rating: 0,
+                streak: 0,
+                total_orders: 0,
+              },
             }}
           />
         </Box>
@@ -1186,7 +1202,7 @@ export function BuyOrderRowV2(props: {
         >
           {t("MarketAggregateView.fulfill")}
         </Button>
-        {buy_order.buyer_id === profile?.user_id && (
+        {buy_order.buyer_id === profile?.username && (
           <Button
             variant={"contained"}
             color={"error"}

@@ -157,7 +157,10 @@ export function CreateBuyOrderV2({ gameItemId }: CreateBuyOrderV2Props) {
       setQualityTierMin(null);
       setQualityTierMax(null);
     } catch (error) {
-      issueAlert(error);
+      issueAlert({
+        message: error instanceof Error ? error.message : "Failed to create buy order",
+        severity: "error",
+      });
     } finally {
       setIsSubmitting(false);
     }

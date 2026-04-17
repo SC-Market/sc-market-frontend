@@ -320,7 +320,9 @@ export function EditListingV2() {
         isLoading={true}
         sidebarOpen={true}
         maxWidth="lg"
-      />
+      >
+        <Box />
+      </StandardPageLayout>
     );
   }
 
@@ -332,7 +334,9 @@ export function EditListingV2() {
         error="not_found"
         sidebarOpen={true}
         maxWidth="lg"
-      />
+      >
+        <Box />
+      </StandardPageLayout>
     );
   }
 
@@ -401,7 +405,6 @@ export function EditListingV2() {
               <MarkdownEditor
                 onChange={(value: string) => setDescription(value)}
                 value={description}
-                disabled={!canEdit}
                 TextFieldProps={{
                   label: t("EditListingV2.description", "Description"),
                   helperText:
@@ -412,6 +415,7 @@ export function EditListingV2() {
                           "Provide a detailed description (markdown supported)"
                         ),
                   inputProps: { maxLength: 2000 },
+                  disabled: !canEdit,
                 }}
                 variant="vertical"
               />

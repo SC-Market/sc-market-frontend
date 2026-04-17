@@ -40,10 +40,12 @@ vi.mock("react-router-dom", async () => {
 
 // Create mock store
 const createMockStore = (mockData?: any) => {
+  const reducer = {
+    [marketV2Api.reducerPath]: marketV2Api.reducer,
+  } as any
+  
   return configureStore({
-    reducer: {
-      [marketV2Api.reducerPath]: marketV2Api.reducer,
-    },
+    reducer,
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware().concat(marketV2Api.middleware),
     preloadedState: mockData,

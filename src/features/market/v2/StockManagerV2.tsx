@@ -360,11 +360,11 @@ export function StockManagerV2({
                   )}
                   <Typography variant="body2" color="text.secondary">
                     (
-                    {Array.from(variantGroups.values()).reduce(
+                    {Array.from<{ variant: StockLotDetail["variant"]; lots: StockLotDetail[] }>(variantGroups.values()).reduce<number>(
                       (sum, vg) => sum + vg.lots.length,
                       0,
                     )}{" "}
-                    {Array.from(variantGroups.values()).reduce(
+                    {Array.from<{ variant: StockLotDetail["variant"]; lots: StockLotDetail[] }>(variantGroups.values()).reduce<number>(
                       (sum, vg) => sum + vg.lots.length,
                       0,
                     ) === 1
@@ -378,7 +378,7 @@ export function StockManagerV2({
 
                 {/* Variant groups within location */}
                 <Stack spacing={1.5}>
-                  {Array.from(variantGroups.entries()).map(
+                  {Array.from<[string, { variant: StockLotDetail["variant"]; lots: StockLotDetail[] }]>(variantGroups.entries()).map<React.ReactElement>(
                     ([variantId, { variant, lots: variantLots }]) => (
                       <Box key={variantId}>
                         {/* Variant header with quality badge */}
@@ -425,7 +425,7 @@ export function StockManagerV2({
 
                         {/* Lots for this variant */}
                         <Stack spacing={1}>
-                          {variantLots.map((lot) => (
+                          {variantLots.map((lot: StockLotDetail) => (
                             <LotListItemV2
                               key={lot.lot_id}
                               lot={lot}

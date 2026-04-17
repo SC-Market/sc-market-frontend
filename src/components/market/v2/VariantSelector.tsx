@@ -7,7 +7,7 @@ import {
   useTheme,
 } from "@mui/material";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
-import type { ExtendedTheme } from "../../../hooks/styles/theme";
+import type { ExtendedTheme } from "../../../hooks/styles/Theme";
 import { QualityBadge } from "./QualityBadge";
 
 interface Variant {

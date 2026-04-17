@@ -1,6 +1,6 @@
 import React from "react";
 import { Chip, useTheme, useMediaQuery } from "@mui/material";
-import type { ExtendedTheme } from "../../../hooks/styles/theme";
+import type { ExtendedTheme } from "../../../hooks/styles/Theme";
 
 interface QualityBadgeProps {
   tier: number | null | undefined;

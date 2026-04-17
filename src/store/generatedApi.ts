@@ -3,24 +3,57 @@
  * Codegen injects endpoints here; hand-written feature APIs use serviceApi.
  */
 import { BACKEND_URL } from "../util/constants"
-import { createApi, fetchBaseQuery, retry } from "@reduxjs/toolkit/query/react"
+import {
+  createApi,
+  fetchBaseQuery,
+  retry,
+  BaseQueryFn,
+  FetchArgs,
+  FetchBaseQueryError,
+} from "@reduxjs/toolkit/query/react"
 
-// Create base query with retry logic and exponential backoff
-const baseQueryWithRetry = retry(
-  fetchBaseQuery({
-    baseUrl: `${BACKEND_URL}`,
-    credentials: "include",
-  }),
-  {
-    maxRetries: 3,
-    // Exponential backoff: 1s, 2s, 4s
-    backoff: (attempt) => {
-      return new Promise((resolve) => {
-        setTimeout(resolve, Math.min(1000 * 2 ** attempt, 30000))
-      })
-    },
+const rawBaseQuery = fetchBaseQuery({
+  baseUrl: `${BACKEND_URL}`,
+  credentials: "include",
+})
+
+/**
+ * Wraps the base query with 401 → refresh → retry logic.
+ * If the access token expires, POST /auth/refresh exchanges the refresh
+ * cookie for a new access token, then retries the original request.
+ * If refresh also fails, the user is redirected to /login.
+ */
+const baseQueryWithReauth: BaseQueryFn<
+  string | FetchArgs,
+  unknown,
+  FetchBaseQueryError
+> = async (args, api, extraOptions) => {
+  let result = await rawBaseQuery(args, api, extraOptions)
+
+  if (result.error?.status === 401) {
+    // Try refreshing the access token
+    const refreshResult = await rawBaseQuery(
+      { url: "/auth/refresh", method: "POST" },
+      api,
+      extraOptions,
+    )
+
+    if (refreshResult.data) {
+      // Refresh succeeded — retry the original request
+      result = await rawBaseQuery(args, api, extraOptions)
+    }
+    // If refresh failed, the 401 propagates and LoggedInRoute redirects to /login
   }
-)
+
+  return result
+}
+
+// Wrap with retry for non-401 errors (network issues, 500s, etc.)
+const baseQueryWithRetry = retry(baseQueryWithReauth, {
+  maxRetries: 3,
+  backoff: (attempt) =>
+    new Promise((resolve) => setTimeout(resolve, Math.min(1000 * 2 ** attempt, 30000))),
+})
 
 export const generatedApi = createApi({
   baseQuery: baseQueryWithRetry,

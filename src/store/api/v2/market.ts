@@ -1,21 +1,17 @@
 import { generatedApi as api } from "../../generatedApi"
-
-// Define cache tags for V2 market API
-// These tags enable automatic cache invalidation when mutations occur
 export const addTagTypes = [
-  "Listing",        // Individual listing cache
-  "StockLot",       // Stock lot inventory cache
-  "Cart",           // Shopping cart cache
-  "Order",          // Order cache
-  "BuyOrder",       // Buy order cache
   "Variant Types V2",
-  "Game Items V2",
-  "Analytics V2",
-  "Debug V2",
+  "Stock Lots V2",
+  "Orders V2",
+  "Listings V2",
   "Health",
+  "Game Items V2",
+  "Debug V2",
+  "Cart V2",
+  "Buy Orders V2",
+  "Analytics V2",
   "Admin Feature Flags",
 ] as const
-
 const injectedRtkApi = api
   .enhanceEndpoints({
     addTagTypes,
@@ -44,14 +40,7 @@ const injectedRtkApi = api
             page_size: queryArg.pageSize,
           },
         }),
-        // Provide StockLot tag for cache invalidation
-        providesTags: (result) =>
-          result
-            ? [
-                ...result.lots.map(({ lot_id }) => ({ type: 'StockLot' as const, id: lot_id })),
-                { type: 'StockLot' as const, id: 'LIST' },
-              ]
-            : [{ type: 'StockLot' as const, id: 'LIST' }],
+        providesTags: ["Stock Lots V2"],
       }),
       updateStockLot: build.mutation<
         UpdateStockLotApiResponse,
@@ -62,12 +51,7 @@ const injectedRtkApi = api
           method: "PUT",
           body: queryArg.updateStockLotRequest,
         }),
-        // Invalidate specific stock lot and related listings
-        invalidatesTags: (result, error, arg) => [
-          { type: 'StockLot', id: arg.id },
-          { type: 'StockLot', id: 'LIST' },
-          { type: 'Listing', id: 'LIST' },
-        ],
+        invalidatesTags: ["Stock Lots V2"],
       }),
       bulkUpdateStockLots: build.mutation<
         BulkUpdateStockLotsApiResponse,
@@ -78,12 +62,7 @@ const injectedRtkApi = api
           method: "POST",
           body: queryArg.bulkUpdateStockLotsRequest,
         }),
-        // Invalidate all affected stock lots and listings
-        invalidatesTags: (result, error, arg) => [
-          ...arg.bulkUpdateStockLotsRequest.updates.map(({ lot_id }) => ({ type: 'StockLot' as const, id: lot_id })),
-          { type: 'StockLot', id: 'LIST' },
-          { type: 'Listing', id: 'LIST' },
-        ],
+        invalidatesTags: ["Stock Lots V2"],
       }),
       createOrder: build.mutation<CreateOrderApiResponse, CreateOrderApiArg>({
         query: (queryArg) => ({
@@ -91,24 +70,30 @@ const injectedRtkApi = api
           method: "POST",
           body: queryArg.createOrderRequest,
         }),
-        // Invalidate orders, cart, stock lots, and listings when order is created
-        invalidatesTags: (result, error, arg) => [
-          { type: 'Order', id: 'LIST' },
-          { type: 'Cart', id: 'LIST' },
-          { type: 'StockLot', id: 'LIST' },
-          { type: 'Listing', id: 'LIST' },
-          ...arg.createOrderRequest.items.map(({ listing_id }) => ({ type: 'Listing' as const, id: listing_id })),
-        ],
+        invalidatesTags: ["Orders V2"],
+      }),
+      getOrders: build.query<GetOrdersApiResponse, GetOrdersApiArg>({
+        query: (queryArg) => ({
+          url: `/api/v2/orders`,
+          params: {
+            status: queryArg.status,
+            role: queryArg.role,
+            quality_tier_min: queryArg.qualityTierMin,
+            quality_tier_max: queryArg.qualityTierMax,
+            page: queryArg.page,
+            page_size: queryArg.pageSize,
+            sort_by: queryArg.sortBy,
+            sort_order: queryArg.sortOrder,
+          },
+        }),
+        providesTags: ["Orders V2"],
       }),
       getOrderDetail: build.query<
         GetOrderDetailApiResponse,
         GetOrderDetailApiArg
       >({
         query: (queryArg) => ({ url: `/api/v2/orders/${queryArg.orderId}` }),
-        providesTags: (result, error, arg) => [
-          { type: 'Order', id: arg.orderId },
-          { type: 'Order', id: 'LIST' },
-        ],
+        providesTags: ["Orders V2"],
       }),
       createListing: build.mutation<
         CreateListingApiResponse,
@@ -119,22 +104,14 @@ const injectedRtkApi = api
           method: "POST",
           body: queryArg.createListingRequest,
         }),
-        // Invalidate listing list and stock lots when new listing is created
-        invalidatesTags: [
-          { type: 'Listing', id: 'LIST' },
-          { type: 'StockLot', id: 'LIST' },
-        ],
+        invalidatesTags: ["Listings V2"],
       }),
       getListingDetail: build.query<
         GetListingDetailApiResponse,
         GetListingDetailApiArg
       >({
         query: (queryArg) => ({ url: `/api/v2/listings/${queryArg.id}` }),
-        // Provide specific listing tag for granular cache invalidation
-        providesTags: (result, error, arg) => [
-          { type: 'Listing', id: arg.id },
-          { type: 'Listing', id: 'LIST' },
-        ],
+        providesTags: ["Listings V2"],
       }),
       updateListing: build.mutation<
         UpdateListingApiResponse,
@@ -145,12 +122,7 @@ const injectedRtkApi = api
           method: "PUT",
           body: queryArg.updateListingRequest,
         }),
-        // Invalidate specific listing and list when updated
-        invalidatesTags: (result, error, arg) => [
-          { type: 'Listing', id: arg.id },
-          { type: 'Listing', id: 'LIST' },
-          { type: 'StockLot', id: 'LIST' },
-        ],
+        invalidatesTags: ["Listings V2"],
       }),
       searchListings: build.query<
         SearchListingsApiResponse,
@@ -171,14 +143,7 @@ const injectedRtkApi = api
             sort_order: queryArg.sortOrder,
           },
         }),
-        // Provide listing tags for search results
-        providesTags: (result) =>
-          result
-            ? [
-                ...result.listings.map(({ listing_id }) => ({ type: 'Listing' as const, id: listing_id })),
-                { type: 'Listing' as const, id: 'LIST' },
-              ]
-            : [{ type: 'Listing' as const, id: 'LIST' }],
+        providesTags: ["Listings V2"],
       }),
       getMyListings: build.query<GetMyListingsApiResponse, GetMyListingsApiArg>(
         {
@@ -192,16 +157,19 @@ const injectedRtkApi = api
               sort_order: queryArg.sortOrder,
             },
           }),
-          // Provide listing tags for user's listings
-          providesTags: (result) =>
-            result
-              ? [
-                  ...result.listings.map(({ listing_id }) => ({ type: 'Listing' as const, id: listing_id })),
-                  { type: 'Listing' as const, id: 'LIST' },
-                ]
-              : [{ type: 'Listing' as const, id: 'LIST' }],
+          providesTags: ["Listings V2"],
         },
       ),
+      refreshListing: build.mutation<
+        RefreshListingApiResponse,
+        RefreshListingApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v2/listings/${queryArg.id}/refresh`,
+          method: "POST",
+        }),
+        invalidatesTags: ["Listings V2"],
+      }),
       getHealth: build.query<GetHealthApiResponse, GetHealthApiArg>({
         query: () => ({ url: `/api/v2/health` }),
         providesTags: ["Health"],
@@ -217,10 +185,7 @@ const injectedRtkApi = api
             page_size: queryArg.pageSize,
           },
         }),
-        providesTags: (result, error, arg) => [
-          { type: 'Game Items V2', id: arg.id },
-          { type: 'Listing', id: 'LIST' },
-        ],
+        providesTags: ["Game Items V2"],
       }),
       getFeatureFlag: build.query<
         GetFeatureFlagApiResponse,
@@ -238,18 +203,11 @@ const injectedRtkApi = api
           method: "POST",
           body: queryArg.setFeatureFlagRequest,
         }),
-        // Invalidate all caches when feature flag switches versions
-        invalidatesTags: [
-          "Debug V2",
-          { type: 'Listing', id: 'LIST' },
-          { type: 'Cart', id: 'LIST' },
-          { type: 'Order', id: 'LIST' },
-          { type: 'StockLot', id: 'LIST' },
-        ],
+        invalidatesTags: ["Debug V2"],
       }),
       getCart: build.query<GetCartApiResponse, GetCartApiArg>({
         query: () => ({ url: `/api/v2/cart` }),
-        providesTags: [{ type: 'Cart', id: 'LIST' }],
+        providesTags: ["Cart V2"],
       }),
       addToCart: build.mutation<AddToCartApiResponse, AddToCartApiArg>({
         query: (queryArg) => ({
@@ -257,11 +215,7 @@ const injectedRtkApi = api
           method: "POST",
           body: queryArg.addToCartRequest,
         }),
-        // Invalidate cart and related listing when item is added
-        invalidatesTags: (result, error, arg) => [
-          { type: 'Cart', id: 'LIST' },
-          { type: 'Listing', id: arg.addToCartRequest.listing_id },
-        ],
+        invalidatesTags: ["Cart V2"],
       }),
       updateCartItem: build.mutation<
         UpdateCartItemApiResponse,
@@ -272,8 +226,7 @@ const injectedRtkApi = api
           method: "PUT",
           body: queryArg.updateCartItemRequest,
         }),
-        // Invalidate cart when item is updated
-        invalidatesTags: [{ type: 'Cart', id: 'LIST' }],
+        invalidatesTags: ["Cart V2"],
       }),
       removeCartItem: build.mutation<
         RemoveCartItemApiResponse,
@@ -283,8 +236,7 @@ const injectedRtkApi = api
           url: `/api/v2/cart/${queryArg.id}`,
           method: "DELETE",
         }),
-        // Invalidate cart when item is removed
-        invalidatesTags: [{ type: 'Cart', id: 'LIST' }],
+        invalidatesTags: ["Cart V2"],
       }),
       checkoutCart: build.mutation<CheckoutCartApiResponse, CheckoutCartApiArg>(
         {
@@ -293,13 +245,7 @@ const injectedRtkApi = api
             method: "POST",
             body: queryArg.checkoutCartRequest,
           }),
-          // Invalidate cart, orders, stock lots, and listings when checkout completes
-          invalidatesTags: [
-            { type: 'Cart', id: 'LIST' },
-            { type: 'Order', id: 'LIST' },
-            { type: 'StockLot', id: 'LIST' },
-            { type: 'Listing', id: 'LIST' },
-          ],
+          invalidatesTags: ["Cart V2"],
         },
       ),
       createBuyOrder: build.mutation<
@@ -311,13 +257,7 @@ const injectedRtkApi = api
           method: "POST",
           body: queryArg.createBuyOrderRequest,
         }),
-        // Invalidate buy orders, orders, and related listing
-        invalidatesTags: (result, error, arg) => [
-          { type: 'BuyOrder', id: 'LIST' },
-          { type: 'Order', id: 'LIST' },
-          { type: 'Listing', id: arg.createBuyOrderRequest.listing_id },
-          { type: 'StockLot', id: 'LIST' },
-        ],
+        invalidatesTags: ["Buy Orders V2"],
       }),
       getPriceHistory: build.query<
         GetPriceHistoryApiResponse,
@@ -333,9 +273,7 @@ const injectedRtkApi = api
             interval: queryArg.interval,
           },
         }),
-        providesTags: (result, error, arg) => [
-          { type: 'Analytics V2', id: `price-${arg.gameItemId}` },
-        ],
+        providesTags: ["Analytics V2"],
       }),
       getQualityDistribution: build.query<
         GetQualityDistributionApiResponse,
@@ -349,9 +287,7 @@ const injectedRtkApi = api
             end_date: queryArg.endDate,
           },
         }),
-        providesTags: (result, error, arg) => [
-          { type: 'Analytics V2', id: `quality-${arg.gameItemId}` },
-        ],
+        providesTags: ["Analytics V2"],
       }),
       getSellerStats: build.query<
         GetSellerStatsApiResponse,
@@ -363,9 +299,7 @@ const injectedRtkApi = api
             seller_id: queryArg.sellerId,
           },
         }),
-        providesTags: (result, error, arg) => [
-          { type: 'Analytics V2', id: `seller-${arg.sellerId || 'me'}` },
-        ],
+        providesTags: ["Analytics V2"],
       }),
       getConfig: build.query<GetConfigApiResponse, GetConfigApiArg>({
         query: () => ({ url: `/api/v2/admin/feature-flags/config` }),
@@ -468,6 +402,18 @@ export type CreateOrderApiArg = {
   /** Order creation request with items array */
   createOrderRequest: CreateOrderRequest
 }
+export type GetOrdersApiResponse =
+  /** status 200 Orders list with pagination metadata */ GetOrdersResponse
+export type GetOrdersApiArg = {
+  status?: "pending" | "completed" | "cancelled"
+  role?: "buyer" | "seller"
+  qualityTierMin?: number
+  qualityTierMax?: number
+  page?: number
+  pageSize?: number
+  sortBy?: "created_at" | "updated_at" | "total_price"
+  sortOrder?: "asc" | "desc"
+}
 export type GetOrderDetailApiResponse =
   /** status 200 Order details with buyer/seller info and variant details */ GetOrderDetailResponse
 export type GetOrderDetailApiArg = {
@@ -531,6 +477,15 @@ export type GetMyListingsApiArg = {
   sortBy?: "created_at" | "updated_at" | "price" | "quantity"
   /** Sort order (default: desc) */
   sortOrder?: "asc" | "desc"
+}
+export type RefreshListingApiResponse =
+  /** status 200 Success message with next refresh time */ {
+    next_refresh_at: string
+    message: string
+  }
+export type RefreshListingApiArg = {
+  /** Listing UUID */
+  id: string
 }
 export type GetHealthApiResponse = /** status 200 Ok */ HealthResponse
 export type GetHealthApiArg = void
@@ -865,6 +820,44 @@ export type OrderItemInput = {
 export type CreateOrderRequest = {
   /** Array of items to purchase */
   items: OrderItemInput[]
+}
+export type OrderPreview = {
+  /** UUID of the order */
+  order_id: string
+  /** Order title (from first listing) */
+  title: string
+  /** Total price in aUEC */
+  total_price: number
+  /** Order status */
+  status: string
+  /** ISO 8601 timestamp of order creation */
+  created_at: string
+  /** ISO 8601 timestamp of last update */
+  updated_at: string
+  /** Buyer username */
+  buyer_username: string
+  /** Seller username */
+  seller_username: string
+  /** Number of items in order */
+  item_count: number
+  /** Minimum quality tier across all items */
+  quality_tier_min?: number
+  /** Maximum quality tier across all items */
+  quality_tier_max?: number
+  /** Buyer avatar URL */
+  buyer_avatar?: string | null
+  /** Seller avatar URL */
+  seller_avatar?: string | null
+}
+export type GetOrdersResponse = {
+  /** Array of order previews */
+  orders: OrderPreview[]
+  /** Total number of orders matching filters */
+  total: number
+  /** Current page number */
+  page: number
+  /** Number of results per page */
+  page_size: number
 }
 export type GetOrderDetailResponse = {
   /** UUID of the order */
@@ -1479,12 +1472,14 @@ export const {
   useUpdateStockLotMutation,
   useBulkUpdateStockLotsMutation,
   useCreateOrderMutation,
+  useGetOrdersQuery,
   useGetOrderDetailQuery,
   useCreateListingMutation,
   useGetListingDetailQuery,
   useUpdateListingMutation,
   useSearchListingsQuery,
   useGetMyListingsQuery,
+  useRefreshListingMutation,
   useGetHealthQuery,
   useGetListingsQuery,
   useGetFeatureFlagQuery,
