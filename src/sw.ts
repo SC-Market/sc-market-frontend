@@ -83,20 +83,22 @@ registerRoute(
 )
 
 // Cache navigation requests with NetworkFirst
-// HTML must be fresh because it references hashed JS/CSS assets.
-// Serving stale HTML after a deploy causes asset hash mismatches.
+// HTML must stay in sync with hashed /assets/* — stale HTML after a deploy still
+// requests old chunk URLs (404 on server) and looks like "SW broke the site".
+// Short cache + longer network wait reduces false fallback to an old document when
+// the connection is merely slow; keep TTL low so a bad cached shell expires quickly.
 registerRoute(
   ({ request }: { request: Request }) => request.mode === "navigate",
   new NetworkFirst({
     cacheName: "pages-v1",
-    networkTimeoutSeconds: 3,
+    networkTimeoutSeconds: 10,
     plugins: [
       new CacheableResponsePlugin({
         statuses: [0, 200],
       }),
       new ExpirationPlugin({
         maxEntries: 50,
-        maxAgeSeconds: 60 * 60 * 24, // 1 day
+        maxAgeSeconds: 60 * 10, // 10 minutes — hashed bundles change every deploy
         purgeOnQuotaError: true,
       }),
     ],
