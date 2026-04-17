@@ -43,7 +43,8 @@ export function LightBannerContainer(props: {
           height: 500,
           top: 0,
           left: 0,
-          background: bannerFadeGradient(theme),
+          background:
+            "linear-gradient(to bottom, transparent, rgba(0,0,0,0.5) 60%, rgba(0,0,0,0.85) 100%)",
         }}
       />
       {props.children}
