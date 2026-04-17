@@ -42,6 +42,9 @@ interface ColorField {
   labelKey: string
   fallback: string
   path: string[]
+  /** Short note under the control — where this token is used in the app */
+  usageNoteKey?: string
+  usageNoteFallback?: string
 }
 
 const COLOR_FIELDS: ColorField[] = [
@@ -50,13 +53,29 @@ const COLOR_FIELDS: ColorField[] = [
   { key: "secondary", labelKey: "theme.secondary", fallback: "Secondary", path: ["palette", "secondary", "main"] },
   { key: "bgDefault", labelKey: "theme.bgDefault", fallback: "Background", path: ["palette", "background", "default"] },
   { key: "bgPaper", labelKey: "theme.bgPaper", fallback: "Paper", path: ["palette", "background", "paper"] },
-  { key: "bgSidebar", labelKey: "theme.bgSidebar", fallback: "Sidebar", path: ["palette", "background", "sidebar"] },
+  {
+    key: "bgSidebar",
+    labelKey: "theme.bgSidebar",
+    fallback: "Sidebar",
+    path: ["palette", "background", "sidebar"],
+    usageNoteKey: "theme.usageSidebar",
+    usageNoteFallback:
+      "Market listing image fades blend into this color (dark mode only).",
+  },
   { key: "bgNavbar", labelKey: "theme.bgNavbar", fallback: "Navbar", path: ["palette", "background", "navbar"] },
   { key: "textPrimary", labelKey: "theme.textPrimary", fallback: "Text", path: ["palette", "text", "primary"] },
   { key: "textSecondary", labelKey: "theme.textSecondary", fallback: "Text Secondary", path: ["palette", "text", "secondary"] },
   { key: "outline", labelKey: "theme.outline", fallback: "Border Color", path: ["palette", "outline", "main"] },
   { key: "actionHover", labelKey: "theme.actionHover", fallback: "Button Hover", path: ["palette", "action", "hover"] },
-  { key: "overlay", labelKey: "theme.overlay", fallback: "Overlay", path: ["palette", "background", "overlay"] },
+  {
+    key: "overlay",
+    labelKey: "theme.overlay",
+    fallback: "Overlay",
+    path: ["palette", "background", "overlay"],
+    usageNoteKey: "theme.usageOverlay",
+    usageNoteFallback:
+      "Modal/sheet dimming and elevated navbar shadow — not listing card fades.",
+  },
 ]
 
 const BORDER_RADIUS_FIELDS = [
@@ -224,6 +243,15 @@ export function ThemeEditor({
                       onChange={(e) => updateValue(field.path, e.target.value)}
                       sx={{ "& input": { fontSize: 11, py: 0.5, px: 0.75 } }}
                     />
+                    {field.usageNoteKey && (
+                      <Typography
+                        variant="caption"
+                        color="text.secondary"
+                        sx={{ display: "block", mt: 0.5, lineHeight: 1.35 }}
+                      >
+                        {t(field.usageNoteKey, field.usageNoteFallback ?? "")}
+                      </Typography>
+                    )}
                   </Box>
                 </Box>
               </Grid>

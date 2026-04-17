@@ -19,8 +19,14 @@ import {
   mainThemeOptions,
   lightThemeOptions,
   navbarShadow,
+  cardFadeGradient,
 } from "../../hooks/styles/Theme"
 import type { ExtendedTheme } from "../../hooks/styles/Theme"
+import { FALLBACK_IMAGE_URL } from "../../util/constants"
+
+/** Sample listing strings — mirrors `ListingCard` layout, not real data. */
+const PREVIEW_LISTING_PRICE = "12,500 aUEC"
+const PREVIEW_LISTING_TITLE = "Aurora MR (vehicle)"
 
 // Validate that a string is a usable CSS color (MUI's getContrastText will not throw)
 function isValidColor(value: unknown): boolean {
@@ -66,9 +72,6 @@ interface ThemePreviewProps {
   mode: "light" | "dark"
   faviconUrl?: string | null
 }
-
-const PLACEHOLDER_IMG =
-  "https://media.starcitizen.tools/thumb/9/93/Placeholderv2.png/399px-Placeholderv2.png.webp"
 
 function ThemePreviewInner({ faviconUrl }: { faviconUrl?: string | null }) {
   const theme = useTheme<ExtendedTheme>()
@@ -245,41 +248,140 @@ function ThemePreviewInner({ faviconUrl }: { faviconUrl?: string | null }) {
             </Typography>
           </Box>
 
-          {/* Overlay on media — matches Overlay token */}
-          <Box
-            sx={{
-              position: "relative",
-              borderRadius: theme.spacing(br.image),
-              overflow: "hidden",
-              height: 72,
-              border: 1,
-              borderColor: outline,
-            }}
-          >
-            <Box
-              component="img"
-              src={PLACEHOLDER_IMG}
-              alt=""
+          {/* Market listing sample — matches `ListingCard`: RSI fallback art + cardFadeGradient (dark only) */}
+          <Box>
+            <Typography
+              variant="caption"
+              color="text.secondary"
+              display="block"
+              sx={{ mb: 0.5 }}
+            >
+              {t("theme.previewListingLabel", "Market listing (sample)")}
+            </Typography>
+            <Card
               sx={{
-                width: "100%",
-                height: "100%",
-                objectFit: "cover",
-                display: "block",
+                position: "relative",
+                overflow: "hidden",
+                border: 1,
+                borderColor: outline,
+                borderRadius: theme.spacing(br.topLevel),
               }}
-            />
+            >
+              <Box
+                component="img"
+                src={FALLBACK_IMAGE_URL}
+                alt=""
+                sx={{
+                  width: "100%",
+                  aspectRatio: "16/9",
+                  objectFit: "cover",
+                  display: "block",
+                  maxHeight: 140,
+                }}
+                onError={(e) => {
+                  ;(e.target as HTMLImageElement).style.opacity = "0.5"
+                }}
+              />
+              {theme.palette.mode === "dark" && (
+                <Box
+                  sx={{
+                    position: "absolute",
+                    zIndex: 3,
+                    top: 0,
+                    left: 0,
+                    height: "100%",
+                    width: "100%",
+                    borderRadius: theme.spacing(br.topLevel),
+                    background: cardFadeGradient(theme, 50, 60),
+                  }}
+                />
+              )}
+              <CardContent
+                sx={{
+                  ...(theme.palette.mode === "dark"
+                    ? {
+                        position: "absolute",
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        zIndex: 4,
+                      }
+                    : {
+                        py: 1,
+                        px: 1.25,
+                      }),
+                  maxWidth: "100%",
+                  padding: "8px 12px !important",
+                  "&:last-child": { pb: "8px !important" },
+                }}
+              >
+                <Typography
+                  variant="caption"
+                  color="primary"
+                  fontWeight="bold"
+                  display="block"
+                >
+                  {PREVIEW_LISTING_PRICE}
+                </Typography>
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  sx={{
+                    display: "-webkit-box",
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: "vertical",
+                    overflow: "hidden",
+                    lineHeight: 1.3,
+                  }}
+                >
+                  {PREVIEW_LISTING_TITLE}
+                </Typography>
+              </CardContent>
+            </Card>
+            <Typography
+              variant="caption"
+              color="text.disabled"
+              sx={{ mt: 0.5, display: "block", lineHeight: 1.35 }}
+            >
+              {theme.palette.mode === "light"
+                ? t(
+                    "theme.previewListingLightNote",
+                    "Light mode: no image fade on listing cards (same as the live market). The Overlay color still applies to modals and nav shadow.",
+                  )
+                : t(
+                    "theme.previewListingDarkNote",
+                    "This fade uses your Sidebar color (cardFadeGradient), not the Overlay field.",
+                  )}
+            </Typography>
+          </Box>
+
+          {/* background.overlay — ImagePreviewModal, BottomSheet, ProfileAvatar, etc.; navbar shadow when Nav Style is Elevation */}
+          <Box>
+            <Typography
+              variant="caption"
+              color="text.secondary"
+              display="block"
+              sx={{ mb: 0.5 }}
+            >
+              {t("theme.previewOverlayTokenLabel", "Overlay color (UI scrim)")}
+            </Typography>
             <Box
               sx={{
-                position: "absolute",
-                inset: 0,
+                minHeight: 44,
+                borderRadius: 1,
                 bgcolor: "background.overlay",
+                border: 1,
+                borderColor: outline,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
+                px: 1,
               }}
             >
               <Typography
                 variant="caption"
                 sx={{
+                  textAlign: "center",
                   color: (th) => {
                     try {
                       return th.palette.getContrastText(
@@ -290,12 +392,36 @@ function ThemePreviewInner({ faviconUrl }: { faviconUrl?: string | null }) {
                     }
                   },
                   fontWeight: 600,
-                  textShadow: "0 1px 2px rgba(0,0,0,0.45)",
+                  textShadow: "0 1px 2px rgba(0,0,0,0.35)",
                 }}
               >
-                {t("theme.previewOverlay", "Overlay")}
+                {t(
+                  "theme.previewOverlayScrimSample",
+                  "Dimming behind modals & sheets",
+                )}
               </Typography>
             </Box>
+          </Box>
+
+          {/* imageOverlay — SelectPhotosArea and similar; not wired in theme editor yet */}
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <Box
+              sx={{
+                width: 32,
+                height: 32,
+                flexShrink: 0,
+                borderRadius: 0.75,
+                bgcolor: "background.imageOverlay",
+                border: 1,
+                borderColor: outline,
+              }}
+            />
+            <Typography variant="caption" color="text.secondary">
+              {t(
+                "theme.previewImageOverlayHint",
+                "Image overlay — used on photo pickers (not listing cards).",
+              )}
+            </Typography>
           </Box>
         </Box>
       </Box>
