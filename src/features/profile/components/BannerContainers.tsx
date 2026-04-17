@@ -24,7 +24,7 @@ export function LightBannerContainer(props: {
   return (
     <Paper
       sx={{
-        height: 250,
+        height: 500,
         background: imageLoaded
           ? `url(${profile.banner})`
           : theme.palette.background.paper,
@@ -40,11 +40,10 @@ export function LightBannerContainer(props: {
         sx={{
           width: "100%",
           position: "absolute",
-          height: 250,
+          height: 500,
           top: 0,
           left: 0,
-          background:
-            "linear-gradient(to bottom, transparent 20%, rgba(0,0,0,0.6) 100%)",
+          background: bannerFadeGradient(theme),
         }}
       />
       {props.children}

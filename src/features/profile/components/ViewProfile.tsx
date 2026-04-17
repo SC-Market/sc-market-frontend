@@ -37,9 +37,8 @@ export function ViewProfile(props: { profile: User }) {
       <ProfileBannerArea profile={props.profile} submitUpdate={submitUpdate} />
       <Box
         sx={{
-          ...(theme.palette.mode === "dark"
-            ? { position: "relative", top: -500 }
-            : { position: "relative", top: -250 }),
+          position: "relative",
+          top: -500,
         }}
       >
         <ProfileMetaTags profile={props.profile} />

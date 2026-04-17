@@ -29,7 +29,7 @@ export function ProfileSkeleton() {
         <Skeleton
           variant="rectangular"
           sx={{
-            height: theme.palette.mode === "dark" ? 500 : 250,
+            height: 500,
             width: "100%",
             borderRadius: 0,
           }}
@@ -37,9 +37,8 @@ export function ProfileSkeleton() {
         <Container
           maxWidth={"xl"}
           sx={{
-            ...(theme.palette.mode === "dark"
-              ? { position: "relative", top: -500 }
-              : { position: "relative", top: -250 }),
+            position: "relative",
+            top: -500,
           }}
         >
           <Grid container spacing={theme.layoutSpacing.layout}>
