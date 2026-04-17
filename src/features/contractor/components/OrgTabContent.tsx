@@ -24,13 +24,13 @@ export function OrgTabContent({ currentTab, contractor }: OrgTabContentProps) {
 
   return (
     <Container maxWidth="xl" sx={{ pt: 3 }}>
-      <TabPanel value={currentTab} index={0}>
+      <TabPanel value={currentTab} index={0} preload>
         <OrgStoreView org={contractor.spectrum_id} />
       </TabPanel>
-      <TabPanel value={currentTab} index={1}>
+      <TabPanel value={currentTab} index={1} preload>
         <OrgServicesView org={contractor.spectrum_id} />
       </TabPanel>
-      <TabPanel value={currentTab} index={2}>
+      <TabPanel value={currentTab} index={2} preload>
         <Grid
           container
           spacing={theme.layoutSpacing.layout}
@@ -69,22 +69,22 @@ export function OrgTabContent({ currentTab, contractor }: OrgTabContentProps) {
           </Grid>
         </Grid>
       </TabPanel>
-      <TabPanel value={currentTab} index={3}>
+      <TabPanel value={currentTab} index={3} preload>
         <Grid container spacing={theme.layoutSpacing.layout}>
           <CreateOrderForm contractor_id={contractor.spectrum_id} />
         </Grid>
       </TabPanel>
-      <TabPanel value={currentTab} index={4}>
+      <TabPanel value={currentTab} index={4} preload>
         <Grid container spacing={theme.layoutSpacing.layout}>
           <MemberList contractor={contractor} />
         </Grid>
       </TabPanel>
-      <TabPanel value={currentTab} index={5}>
+      <TabPanel value={currentTab} index={5} preload>
         <Grid container spacing={theme.layoutSpacing.layout}>
           <RecruitingPostArea spectrum_id={contractor.spectrum_id} />
         </Grid>
       </TabPanel>
-      <TabPanel value={currentTab} index={6}>
+      <TabPanel value={currentTab} index={6} preload>
         <Grid container spacing={theme.layoutSpacing.layout}>
           <Section xs={12} lg={8} disablePadding>
             <OrgReviews contractor={contractor} />

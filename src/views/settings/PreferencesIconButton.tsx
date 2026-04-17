@@ -6,7 +6,7 @@ import { SettingsRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { PreferencesControls } from "../../components/settings/PreferencesControls"
 
-export function PreferencesIconButton() {
+export function PreferencesIconButton({ color }: { color?: string }) {
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null)
@@ -28,6 +28,7 @@ export function PreferencesIconButton() {
           aria-label={t("preferences.page_settings")}
           color="inherit"
           onClick={handleClick}
+          sx={color ? { color } : undefined}
         >
           <SettingsRounded />
         </IconButton>

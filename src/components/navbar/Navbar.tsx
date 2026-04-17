@@ -44,7 +44,7 @@ export function Navbar(props: { children?: React.ReactNode }) {
   const messagingSidebarWidth =
     isMessagingPage && !isMobile ? messagingDrawerWidth : 0
 
-  const cartIconColor = getNavbarContrastText(theme)
+  const navbarIconColor = getNavbarContrastText(theme)
 
   return (
     <AppBar
@@ -110,9 +110,9 @@ export function Navbar(props: { children?: React.ReactNode }) {
         {!drawerOpen && (
           <Tooltip title={t("navbar.toggle_drawer")}>
             <HapticIconButton
-              color={"secondary"}
+              color={"inherit"}
               onClick={() => setDrawerOpen(true)}
-              sx={{ marginLeft: 0 }}
+              sx={{ marginLeft: 0, color: navbarIconColor }}
               aria-label={t(
                 "accessibility.toggleSidebar",
                 "Toggle sidebar menu",
@@ -136,7 +136,7 @@ export function Navbar(props: { children?: React.ReactNode }) {
                 onClick={() => navigate("/market/cart")}
                 color="inherit"
                 aria-label={t("navbar.cart", "Cart")}
-                sx={{ color: cartIconColor }}
+                sx={{ color: navbarIconColor }}
               >
                 <Badge badgeContent={cartItemCount} color="primary">
                   <ShoppingCartRounded />
@@ -170,7 +170,7 @@ export function Navbar(props: { children?: React.ReactNode }) {
             >
               {t("auth.signUp", "Sign up")}
             </Button>
-            <PreferencesIconButton />
+            <PreferencesIconButton color={navbarIconColor} />
           </Stack>
         ) : (
           <Stack direction="row" spacing={theme.layoutSpacing.compact}>
