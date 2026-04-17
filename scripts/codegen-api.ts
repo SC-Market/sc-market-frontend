@@ -4,13 +4,18 @@
  */
 import { execSync } from "node:child_process"
 import { generateEndpoints, parseConfig } from "@rtk-query/codegen-openapi"
-import config from "../openapi-codegen.config.ts"
+import configExport from "../openapi-codegen.config.ts"
 
-const configs = parseConfig(config as Parameters<typeof parseConfig>[0])
-for (const c of configs) {
-  console.log(`Generating ${c.outputFile}`)
-  await generateEndpoints(c)
-  console.log("Done")
+// Handle both single config and array of configs
+const configArray = Array.isArray(configExport) ? configExport : [configExport]
+
+for (const config of configArray) {
+  const configs = parseConfig(config as Parameters<typeof parseConfig>[0])
+  for (const c of configs) {
+    console.log(`Generating ${c.outputFile}`)
+    await generateEndpoints(c)
+    console.log("Done")
+  }
 }
 
 console.log("Formatting generated code with Prettier...")
