@@ -50,6 +50,15 @@ interface ColorField {
 const COLOR_FIELDS: ColorField[] = [
   { key: "primary", labelKey: "theme.primary", fallback: "Primary", path: ["palette", "primary", "main"] },
   { key: "primaryContrast", labelKey: "theme.primaryContrast", fallback: "Button Text", path: ["palette", "primary", "contrastText"] },
+  {
+    key: "primaryDark",
+    labelKey: "theme.primaryDark",
+    fallback: "Primary hover (filled buttons)",
+    path: ["palette", "primary", "dark"],
+    usageNoteKey: "theme.usagePrimaryDark",
+    usageNoteFallback:
+      "MUI uses this for contained primary buttons on hover — not the “Menu & list hover” color.",
+  },
   { key: "secondary", labelKey: "theme.secondary", fallback: "Secondary", path: ["palette", "secondary", "main"] },
   { key: "bgDefault", labelKey: "theme.bgDefault", fallback: "Background", path: ["palette", "background", "default"] },
   { key: "bgPaper", labelKey: "theme.bgPaper", fallback: "Paper", path: ["palette", "background", "paper"] },
@@ -66,7 +75,15 @@ const COLOR_FIELDS: ColorField[] = [
   { key: "textPrimary", labelKey: "theme.textPrimary", fallback: "Text", path: ["palette", "text", "primary"] },
   { key: "textSecondary", labelKey: "theme.textSecondary", fallback: "Text Secondary", path: ["palette", "text", "secondary"] },
   { key: "outline", labelKey: "theme.outline", fallback: "Border Color", path: ["palette", "outline", "main"] },
-  { key: "actionHover", labelKey: "theme.actionHover", fallback: "Button Hover", path: ["palette", "action", "hover"] },
+  {
+    key: "actionHover",
+    labelKey: "theme.actionHover",
+    fallback: "Menu & list hover",
+    path: ["palette", "action", "hover"],
+    usageNoteKey: "theme.usageActionHover",
+    usageNoteFallback:
+      "Sidebar rows, menus, autocomplete — and Skeleton “wave”. Not filled primary buttons.",
+  },
   {
     key: "overlay",
     labelKey: "theme.overlay",

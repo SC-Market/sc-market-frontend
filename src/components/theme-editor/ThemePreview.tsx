@@ -4,7 +4,9 @@ import {
   Button,
   Card,
   CardContent,
+  ListItemButton,
   Paper,
+  Skeleton,
   TextField,
   ThemeProvider,
   Typography,
@@ -13,6 +15,7 @@ import {
   useTheme,
   type ThemeOptions,
 } from "@mui/material"
+import { alpha } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
 import {
   themeBase,
@@ -167,9 +170,9 @@ function ThemePreviewInner({ faviconUrl }: { faviconUrl?: string | null }) {
               key={i}
               sx={{
                 height: 6,
-                bgcolor: "action.hover",
                 borderRadius: 0.5,
                 mt: 0.5,
+                bgcolor: (th) => alpha(th.palette.text.primary, 0.12),
               }}
             />
           ))}
@@ -231,20 +234,41 @@ function ThemePreviewInner({ faviconUrl }: { faviconUrl?: string | null }) {
             }}
           />
 
-          {/* Action hover swatch */}
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <Box
+          {/* action.hover — ListItemButton, MenuItem, Skeleton wave (not contained Button) */}
+          <Box>
+            <Typography
+              variant="caption"
+              color="text.secondary"
+              display="block"
+              sx={{ mb: 0.5 }}
+            >
+              {t("theme.previewActionHoverLabel", "Menu & list hover (palette.action.hover)")}
+            </Typography>
+            <ListItemButton
+              dense
               sx={{
-                width: 36,
-                height: 22,
-                borderRadius: 0.5,
-                bgcolor: "action.hover",
+                py: 0.25,
+                px: 0.75,
+                borderRadius: 1,
                 border: 1,
                 borderColor: outline,
               }}
+            >
+              <Typography variant="caption" color="text.primary">
+                {t("theme.previewNavRowHover", "Sidebar row — hover me")}
+              </Typography>
+            </ListItemButton>
+            <Skeleton
+              variant="rounded"
+              animation="wave"
+              height={28}
+              sx={{ mt: 0.75, borderRadius: 1 }}
             />
-            <Typography variant="caption" color="text.secondary">
-              {t("theme.previewActionHover", "Button hover")}
+            <Typography variant="caption" color="text.disabled" display="block" sx={{ mt: 0.25 }}>
+              {t(
+                "theme.previewSkeletonWaveHint",
+                "Skeleton “wave” shimmer uses this color — not filled button hover.",
+              )}
             </Typography>
           </Box>
 
