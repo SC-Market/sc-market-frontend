@@ -7,3 +7,10 @@
 
 export { MarketPageV2 } from "./MarketPageV2"
 export { DebugPanel } from "./DebugPanel"
+
+// V2-specific utility components
+export { QualityBadge } from "./QualityBadge"
+export { QualityFilter } from "./QualityFilter"
+export { VariantSelector } from "./VariantSelector"
+export { VariantBreakdown } from "./VariantBreakdown"
+export { QualityHistogram } from "./QualityHistogram"
