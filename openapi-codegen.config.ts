@@ -56,7 +56,8 @@ outputFiles[`${OUTPUT_DIR}/core.ts`] = {
   tag: true,
 }
 
-const config: ConfigFile = {
+// Main V1 API config
+const configV1: ConfigFile = {
   schemaFile: "./spec/sc-market.openapi.json",
   apiFile: "./src/store/generatedApi.ts",
   apiImport: "generatedApi",
@@ -65,4 +66,21 @@ const config: ConfigFile = {
   outputFiles,
 }
 
-export default config
+// V2 API config - separate spec file
+const configV2: ConfigFile = {
+  schemaFile: "./spec/sc-market-v2.openapi.json",
+  apiFile: "./src/store/generatedApi.ts",
+  apiImport: "generatedApi",
+  hooks: true,
+  tag: true,
+  outputFiles: {
+    "./src/store/api/v2/market.ts": {
+      filterEndpoints: (_name, def) => def.path.startsWith("/api/v2"),
+      exportName: "marketV2Api",
+      tag: true,
+    },
+  },
+}
+
+// Export both configs as an array
+export default [configV1, configV2]

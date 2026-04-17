@@ -432,36 +432,6 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["Contractor", "Contractors"],
       }),
-      getOrgTheme: build.query<GetOrgThemeApiResponse, GetOrgThemeApiArg>({
-        query: (queryArg) => ({
-          url: `/api/contractors/${queryArg}/theme`,
-        }),
-        providesTags: ["Contractor", "Contractors"],
-      }),
-      updateOrgTheme: build.mutation<
-        UpdateOrgThemeApiResponse,
-        UpdateOrgThemeApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/api/contractors/${queryArg.spectrum_id}/theme`,
-          method: "PUT",
-          body: {
-            theme_data: queryArg.theme_data,
-            favicon_url: queryArg.favicon_url,
-          },
-        }),
-        invalidatesTags: ["Contractor", "Contractors"],
-      }),
-      deleteOrgTheme: build.mutation<
-        DeleteOrgThemeApiResponse,
-        DeleteOrgThemeApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/api/contractors/${queryArg}/theme`,
-          method: "DELETE",
-        }),
-        invalidatesTags: ["Contractor", "Contractors"],
-      }),
     }),
     overrideExisting: false,
   })
@@ -917,44 +887,6 @@ export type UnblockUserForOrgApiArg = {
   /** Username of the user to unblock */
   username: string
 }
-export type GetOrgThemeApiResponse =
-  /** status 200 OK - Org theme retrieved successfully */ {
-    data: {
-      theme_data: {
-        light: Record<string, any>
-        dark: Record<string, any>
-      }
-      favicon_url: string | null
-      updated_at: string
-    }
-  }
-export type GetOrgThemeApiArg = string
-export type UpdateOrgThemeApiResponse =
-  /** status 200 OK - Theme updated successfully */ {
-    data: {
-      theme_data: {
-        light: Record<string, any>
-        dark: Record<string, any>
-      }
-      favicon_url: string | null
-      updated_at: string
-    }
-  }
-export type UpdateOrgThemeApiArg = {
-  spectrum_id: string
-  theme_data: {
-    light: Record<string, any>
-    dark: Record<string, any>
-  }
-  favicon_url?: string | null
-}
-export type DeleteOrgThemeApiResponse =
-  /** status 200 OK - Theme deleted successfully */ {
-    data: {
-      message: string
-    }
-  }
-export type DeleteOrgThemeApiArg = string
 export type BadRequest = {
   errors?: {
     message: string
@@ -1210,7 +1142,4 @@ export const {
   useGetOrgBlocklistQuery,
   useBlockUserForOrgMutation,
   useUnblockUserForOrgMutation,
-  useGetOrgThemeQuery,
-  useUpdateOrgThemeMutation,
-  useDeleteOrgThemeMutation,
 } = injectedRtkApi
