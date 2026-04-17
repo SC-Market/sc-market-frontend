@@ -25,6 +25,10 @@ import { PullToRefresh } from "../../../components/gestures"
 import { EmptyState } from "../../../components/empty-states"
 import { BaseSkeleton } from "../../../components/skeletons/BaseSkeleton"
 import { QualityBadge } from "../../../components/market/v2/QualityBadge"
+import {
+  useGetOrdersQuery,
+  OrderPreview,
+} from "../../../store/api/v2/market"
 
 /**
  * BuyOrdersViewV2 Component
@@ -459,24 +463,40 @@ export function BuyOrdersViewV2() {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const { data: profile } = useGetUserProfileQuery()
 
-  // TODO: Replace with V2 API hooks when ready
-  // const { data: buyOrders, isLoading, isFetching, refetch } = useSearchBuyOrdersV2Query({
-  //   buyer_id: profile?.user_id,
-  //   status: 'active',
-  // })
-  const isLoading = false
-  const isFetching = false
-  const buyOrders: BuyOrderV2Row[] = []
+  // Fetch purchase history via V2 orders API
+  const {
+    data: ordersData,
+    isLoading,
+    isFetching,
+    refetch,
+  } = useGetOrdersQuery({
+    role: "buyer",
+    sortBy: "created_at",
+    sortOrder: "desc",
+  })
 
   const [page, setPage] = useState(0)
   const [pageSize, setPageSize] = useState(5)
   const [order, setOrder] = useState<"asc" | "desc">("desc")
   const [orderBy, setOrderBy] = useState<keyof BuyOrderV2Row>("created_at")
 
-  const rows = useMemo(() => {
-    // TODO: Transform API response to BuyOrderV2Row[]
-    return buyOrders
-  }, [buyOrders])
+  const rows: BuyOrderV2Row[] = useMemo(() => {
+    if (!ordersData?.orders) return []
+    return ordersData.orders.map((o: OrderPreview) => ({
+      buy_order_id: o.order_id,
+      game_item_id: o.order_id,
+      game_item_name: o.title,
+      quantity_desired: o.item_count,
+      price_min: null,
+      price_max: o.total_price,
+      quality_tier_min: o.quality_tier_min ?? null,
+      quality_tier_max: o.quality_tier_max ?? null,
+      status: o.status as BuyOrderV2Row["status"],
+      created_at: o.created_at,
+      expires_at: null,
+      timestamp: new Date(o.created_at).getTime(),
+    }))
+  }, [ordersData])
 
   const sortedRows = useMemo(() => {
     const key = orderBy
@@ -495,10 +515,6 @@ export function BuyOrdersViewV2() {
     () => sortedRows.slice(page * pageSize, page * pageSize + pageSize),
     [sortedRows, page, pageSize],
   )
-
-  const refetch = async () => {
-    // TODO: Implement refetch when API is ready
-  }
 
   if (!profile?.username) {
     return null
@@ -600,18 +616,15 @@ export function BuyOrdersViewV2() {
 export function DashBuyOrdersAreaV2() {
   const { data: profile } = useGetUserProfileQuery()
   
-  // TODO: Replace with V2 API when ready
-  // const { data: buyOrders, isLoading } = useSearchBuyOrdersV2Query({
-  //   buyer_id: profile?.user_id,
-  //   status: 'active',
-  //   page_size: 5,
-  // })
-  const isLoading = false
-  const buyOrders: BuyOrderV2Row[] = []
+  // Fetch purchase history via V2 orders API
+  const { data: ordersData, isLoading } = useGetOrdersQuery({
+    role: "buyer",
+    pageSize: 5,
+  })
 
   const hasMyBuyOrders = useMemo(() => {
-    return buyOrders && buyOrders.length > 0
-  }, [buyOrders])
+    return ordersData?.orders && ordersData.orders.length > 0
+  }, [ordersData])
 
   if (isLoading || !profile?.username) {
     return null

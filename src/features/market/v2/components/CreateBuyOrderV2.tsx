@@ -18,6 +18,7 @@ import { ExtendedTheme } from "../../../../hooks/styles/Theme";
 import { useAlertHook } from "../../../../hooks/alert/AlertHook";
 import { Section } from "../../../../components/paper/Section";
 import { QualityBadge } from "../../../../components/market/v2/QualityBadge";
+import { useCreateBuyOrderMutation } from "../../../../store/api/v2/market";
 
 /**
  * CreateBuyOrderV2 Component
@@ -50,12 +51,15 @@ import { QualityBadge } from "../../../../components/market/v2/QualityBadge";
 
 interface CreateBuyOrderV2Props {
   gameItemId: string;
+  listingId: string;
+  variantId: string;
 }
 
-export function CreateBuyOrderV2({ gameItemId }: CreateBuyOrderV2Props) {
+export function CreateBuyOrderV2({ gameItemId, listingId, variantId }: CreateBuyOrderV2Props) {
   const { t } = useTranslation();
   const theme = useTheme<ExtendedTheme>();
   const issueAlert = useAlertHook();
+  const [createBuyOrder, { isLoading: isSubmitting }] = useCreateBuyOrderMutation();
 
   // Form state
   const [negotiable, setNegotiable] = useState(false);
@@ -64,7 +68,6 @@ export function CreateBuyOrderV2({ gameItemId }: CreateBuyOrderV2Props) {
   const [quantity, setQuantity] = useState<number>(1);
   const [qualityTierMin, setQualityTierMin] = useState<number | null>(null);
   const [qualityTierMax, setQualityTierMax] = useState<number | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Calculate total price range
   const totalMin = priceMin * quantity;
@@ -130,19 +133,14 @@ export function CreateBuyOrderV2({ gameItemId }: CreateBuyOrderV2Props) {
   const handleSubmit = useCallback(async () => {
     if (!isValid()) return;
 
-    setIsSubmitting(true);
-
     try {
-      // TODO: Replace with actual V2 API call when ready
-      // await createBuyOrderV2({
-      //   game_item_id: gameItemId,
-      //   quality_tier_min: qualityTierMin,
-      //   quality_tier_max: qualityTierMax,
-      //   price_min: negotiable ? null : priceMin,
-      //   price_max: negotiable ? null : priceMax,
-      //   quantity_desired: quantity,
-      //   negotiable,
-      // }).unwrap();
+      await createBuyOrder({
+        createBuyOrderRequest: {
+          listing_id: listingId,
+          variant_id: variantId,
+          quantity,
+        },
+      }).unwrap();
 
       issueAlert({
         message: t("buyorder.created", "Buy order created successfully"),
@@ -161,18 +159,13 @@ export function CreateBuyOrderV2({ gameItemId }: CreateBuyOrderV2Props) {
         message: error instanceof Error ? error.message : "Failed to create buy order",
         severity: "error",
       });
-    } finally {
-      setIsSubmitting(false);
     }
   }, [
     isValid,
-    gameItemId,
-    qualityTierMin,
-    qualityTierMax,
-    priceMin,
-    priceMax,
+    listingId,
+    variantId,
     quantity,
-    negotiable,
+    createBuyOrder,
     issueAlert,
     t,
   ]);

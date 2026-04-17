@@ -68,6 +68,8 @@ import { QualityHistogram } from "../../../components/market/v2/QualityHistogram
 import { QualityFilter } from "../../../components/market/v2/QualityFilter";
 import { VariantSelector } from "../../../components/market/v2/VariantSelector";
 import { CreateBuyOrderV2 } from "./components/CreateBuyOrderV2";
+import { useGetListingsQuery, useGetQualityDistributionQuery, useGetPriceHistoryQuery } from "../../../store/api/v2/market";
+import type { GameItemListingResult, GameItemQualityDistribution, PriceDataPoint } from "../../../store/api/v2/market";
 
 /**
  * MarketAggregateViewV2 Component
@@ -247,34 +249,50 @@ export function MarketAggregateViewV2() {
   const [updateImageModalOpen, setUpdateImageModalOpen] = useState(false);
   const [selectedQualityTier, setSelectedQualityTier] = useState<number | null>(null);
 
-  // TODO: Replace with actual V2 API call when ready
-  // const { data: aggregateData, isLoading, error } = useGetGameItemAggregateV2Query(gameItemId!);
-  const aggregateData: GameItemAggregateV2 | null = null;
-  const isLoading = false;
-  const error = null;
+  const { data: listingsData, isLoading: listingsLoading, error: listingsError } = useGetListingsQuery({ id: gameItemId! }, { skip: !gameItemId });
+  const { data: qualityData } = useGetQualityDistributionQuery({ gameItemId: gameItemId! }, { skip: !gameItemId });
+  const { data: priceData } = useGetPriceHistoryQuery({ gameItemId: gameItemId! }, { skip: !gameItemId });
 
-  // Mock data for development
-  const mockData: GameItemAggregateV2 = useMemo(() => ({
-    game_item: {
-      id: gameItemId || "",
-      name: "Sample Item",
-      type: "Weapon",
-      description: "A high-quality weapon with various quality tiers available.",
-      image_url: "https://cdn.robertsspaceindustries.com/static/images/Temp/default-image.png",
-    },
-    quality_distribution: [
-      { quality_tier: 1, listing_count: 5, total_quantity: 50, min_price: 1000, avg_price: 1200, max_price: 1500, seller_count: 3 },
-      { quality_tier: 2, listing_count: 8, total_quantity: 80, min_price: 1500, avg_price: 1800, max_price: 2200, seller_count: 5 },
-      { quality_tier: 3, listing_count: 12, total_quantity: 120, min_price: 2200, avg_price: 2600, max_price: 3000, seller_count: 7 },
-      { quality_tier: 4, listing_count: 6, total_quantity: 60, min_price: 3000, avg_price: 3500, max_price: 4000, seller_count: 4 },
-      { quality_tier: 5, listing_count: 3, total_quantity: 30, min_price: 4000, avg_price: 4800, max_price: 5500, seller_count: 2 },
-    ],
-    listings: [],
+  const isLoading = listingsLoading;
+  const error = listingsError;
+
+  // Compose aggregate data from multiple API responses
+  const complete: GameItemAggregateV2 = useMemo(() => ({
+    game_item: listingsData?.game_item
+      ? { ...listingsData.game_item, description: "", image_url: listingsData.game_item.image_url || "" }
+      : { id: gameItemId || "", name: "", type: "", description: "", image_url: "" },
+    quality_distribution: (qualityData?.distribution || []).map((d) => ({
+      quality_tier: d.quality_tier,
+      listing_count: d.listing_count,
+      total_quantity: d.quantity_available,
+      min_price: d.min_price,
+      avg_price: d.avg_price,
+      max_price: d.max_price,
+      seller_count: d.seller_count,
+    })),
+    listings: (listingsData?.listings || []).map((l): AggregateListingV2Row => ({
+      listing_id: l.listing_id,
+      seller_id: l.seller_id,
+      seller_name: l.seller_name,
+      seller_type: l.seller_type,
+      seller_rating: l.seller_rating,
+      price_min: l.price_min,
+      price_max: l.price_max,
+      quantity_available: l.quantity_available,
+      quality_tier_min: l.quality_tier_min ?? null,
+      quality_tier_max: l.quality_tier_max ?? null,
+      variant_count: l.variant_count,
+    })),
     buy_orders: [],
-    price_history: [],
-  }), [gameItemId]);
-
-  const complete = aggregateData || mockData;
+    price_history: (priceData?.data || []).map((p) => ({
+      timestamp: p.timestamp,
+      quality_tier: p.quality_tier ?? null,
+      avg_price: p.avg_price,
+      min_price: p.min_price,
+      max_price: p.max_price,
+      volume: p.volume,
+    })),
+  }), [listingsData, qualityData, priceData, gameItemId]);
   const { game_item, quality_distribution, listings, buy_orders, price_history } = complete;
 
   // Filter listings by selected quality tier

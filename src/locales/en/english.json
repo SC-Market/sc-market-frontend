@@ -2084,7 +2084,8 @@
       "manage_webhooks": "Manage Webhooks",
       "manage_blocklist": "Manage Blocklist",
       "kick_members": "Kick Members",
-      "claim_orders": "Claim Orders"
+      "claim_orders": "Claim Orders",
+      "manage_theme": "Manage Theme"
     },
     "permissionDescriptions": {
       "manage_org_details": "Edit organization name, description, avatar, banner, language settings, and white-label theme",
@@ -2097,7 +2098,8 @@
       "manage_webhooks": "Create, edit, and delete Discord and notification webhooks",
       "manage_blocklist": "Block and unblock users from interacting with the organization",
       "kick_members": "Remove members from the organization",
-      "claim_orders": "Claim open orders via Discord integration"
+      "claim_orders": "Claim open orders via Discord integration",
+      "manage_theme": "Customize the organization's white-label theme, colors, and branding"
     },
     "headCells": {
       "name": "Name",
