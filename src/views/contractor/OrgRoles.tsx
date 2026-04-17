@@ -213,6 +213,8 @@ function RoleDetailsRow(props: { role: ContractorRole; open: boolean }) {
   const { role, open } = props
   const [newRole, setNewRole] = useState(role)
   const { t } = useTranslation()
+  const [contractor] = useCurrentOrg()
+  const isWhiteLabel = contractor?.premium_tier === "white_label"
 
   useEffect(() => {
     setNewRole(role)
@@ -379,6 +381,14 @@ function RoleDetailsRow(props: { role: ContractorRole; open: boolean }) {
                     label={"Kick Members"}
                     permission_name={"kick_members"}
                   />
+                  {isWhiteLabel && (
+                    <RolePermissionCheck
+                      role={newRole}
+                      setRole={setNewRole}
+                      label={"Manage Theme"}
+                      permission_name={"manage_theme"}
+                    />
+                  )}
                   <Box display={"flex"} justifyContent={"center"}>
                     <Button
                       color={"primary"}
@@ -540,6 +550,7 @@ const defaultRole = {
   manage_webhooks: false,
   manage_blocklist: false,
   claim_orders: false,
+  manage_theme: false,
   role_id: "",
   contractor_id: "",
 }
@@ -653,6 +664,14 @@ export function AddRole() {
           label={"Kick Members"}
           permission_name={"kick_members"}
         />
+        {currentOrg?.premium_tier === "white_label" && (
+          <RolePermissionCheck
+            role={newRole}
+            setRole={setNewRole}
+            label={"Manage Theme"}
+            permission_name={"manage_theme"}
+          />
+        )}
 
         <Grid item display={"flex"} justifyContent={"center"} xs={12}>
           <Button

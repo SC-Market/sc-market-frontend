@@ -28,6 +28,7 @@ import {
 } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import type { LocationInfo } from "../../../../store/api/v2/market"
+import { useGetVariantTypesQuery } from "../../../../store/api/v2/market"
 import { useAlertHook } from "../../../../hooks/alert/AlertHook"
 import { LocationSelector } from "../../components/stock/LocationSelector"
 
@@ -44,6 +45,11 @@ export interface CreateLotDialogV2Props {
  *
  * Form for creating new stock lots with variant attribute inputs.
  * Includes quality tier, quality value, crafted source, and blueprint tier fields.
+ *
+ * NOTE: There is NO create stock lot endpoint in the V2 API yet.
+ * The only available stock lot mutations are useUpdateStockLotMutation and
+ * useBulkUpdateStockLotsMutation. The submit handler is a no-op until the
+ * backend endpoint is implemented.
  */
 export function CreateLotDialogV2({
   open,
@@ -54,6 +60,9 @@ export function CreateLotDialogV2({
 }: CreateLotDialogV2Props) {
   const { t } = useTranslation()
   const issueAlert = useAlertHook()
+
+  // Fetch variant type definitions from V2 API
+  const { data: variantTypesData } = useGetVariantTypesQuery()
 
   // Form state
   const [quantity, setQuantity] = useState(0)
@@ -146,20 +155,10 @@ export function CreateLotDialogV2({
     setIsLoading(true)
 
     try {
-      // TODO: Implement createStockLot mutation when backend endpoint is ready
-      // await createStockLot({
-      //   item_id: itemId,
-      //   quantity_total: quantity,
-      //   location_id: locationId,
-      //   variant_attributes: {
-      //     quality_tier: qualityTier,
-      //     quality_value: qualityValue,
-      //     crafted_source: craftedSource,
-      //     blueprint_tier: blueprintTier,
-      //   },
-      //   listed,
-      //   notes: notes || null,
-      // }).unwrap()
+      // TODO: No create stock lot endpoint exists in the V2 API yet.
+      // The only available mutations are useUpdateStockLotMutation and
+      // useBulkUpdateStockLotsMutation. Implement this when the backend
+      // adds a POST /v2/stock-lots endpoint.
 
       issueAlert({
         message: t(
@@ -244,11 +243,18 @@ export function CreateLotDialogV2({
               onChange={(e) => setQualityTier(Number(e.target.value))}
               label={t("CreateLotDialogV2.qualityTier", "Quality Tier")}
             >
-              {[1, 2, 3, 4, 5].map((tier) => (
-                <MenuItem key={tier} value={tier}>
-                  {t("CreateLotDialogV2.tier", "Tier")} {tier}
-                </MenuItem>
-              ))}
+              {(() => {
+                const qualityTierType = variantTypesData?.variant_types.find(
+                  (vt) => vt.name === "quality_tier",
+                )
+                const min = qualityTierType?.min_value ?? 1
+                const max = qualityTierType?.max_value ?? 5
+                return Array.from({ length: max - min + 1 }, (_, i) => min + i).map((tier) => (
+                  <MenuItem key={tier} value={tier}>
+                    {t("CreateLotDialogV2.tier", "Tier")} {tier}
+                  </MenuItem>
+                ))
+              })()}
             </Select>
           </FormControl>
 
@@ -285,18 +291,17 @@ export function CreateLotDialogV2({
               <MenuItem value="">
                 {t("CreateLotDialogV2.none", "None")}
               </MenuItem>
-              <MenuItem value="crafted">
-                {t("CreateLotDialogV2.crafted", "Crafted")}
-              </MenuItem>
-              <MenuItem value="store">
-                {t("CreateLotDialogV2.store", "Store")}
-              </MenuItem>
-              <MenuItem value="looted">
-                {t("CreateLotDialogV2.looted", "Looted")}
-              </MenuItem>
-              <MenuItem value="unknown">
-                {t("CreateLotDialogV2.unknown", "Unknown")}
-              </MenuItem>
+              {(() => {
+                const sourceType = variantTypesData?.variant_types.find(
+                  (vt) => vt.name === "crafted_source",
+                )
+                const values = sourceType?.allowed_values ?? ["crafted", "store", "looted", "unknown"]
+                return values.map((val) => (
+                  <MenuItem key={val} value={val}>
+                    {val.charAt(0).toUpperCase() + val.slice(1)}
+                  </MenuItem>
+                ))
+              })()}
             </Select>
           </FormControl>
 

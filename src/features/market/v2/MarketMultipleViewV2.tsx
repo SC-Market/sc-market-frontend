@@ -48,6 +48,7 @@ import { VariantSelector } from "../../../components/market/v2/VariantSelector";
 import { QualityBadge } from "../../../components/market/v2/QualityBadge";
 import { Order } from "../../../datatypes/Order";
 import { MinimalUser } from "../../../datatypes/User";
+import { useGetListingDetailQuery } from "../../../store/api/v2/market";
 
 /**
  * MarketMultipleViewV2 Component
@@ -136,101 +137,71 @@ export function MarketMultipleViewV2() {
   const [selectedItemIndex, setSelectedItemIndex] = useState(0);
   const [selectedVariants, setSelectedVariants] = useState<Record<string, string>>({});
 
-  // TODO: Replace with actual V2 API call when ready
-  // const { data: bundleData, isLoading, error } = useGetBundleListingV2Query(id!);
-  const bundleData: BundleListingV2 | null = null;
-  const isLoading = false;
+  const { data: listingDetail, isLoading } = useGetListingDetailQuery({ id: id! }, { skip: !id });
 
-  // Mock data for development
-  const mockData: BundleListingV2 = useMemo(
-    () => ({
-      listing_id: id || "",
-      seller_id: "seller-123",
-      seller_type: "user",
-      title: "Complete Weapon Bundle",
-      description: "A complete set of weapons with various quality tiers.",
-      status: "active",
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-      expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-      items: [
-        {
-          item_id: "item-1",
-          game_item: {
-            id: "game-item-1",
-            name: "Energy Rifle",
-            type: "Weapon",
-          },
-          pricing_mode: "per_variant",
-          variants: [
-            {
-              variant_id: "var-1",
-              attributes: { quality_tier: 3, quality_value: 75.5, crafted_source: "crafted" },
-              display_name: "Tier 3 (75.5%) - Crafted",
-              short_name: "T3 Crafted",
-              quantity: 5,
-              price: 2500,
-            },
-            {
-              variant_id: "var-2",
-              attributes: { quality_tier: 5, quality_value: 95.0, crafted_source: "crafted" },
-              display_name: "Tier 5 (95.0%) - Crafted",
-              short_name: "T5 Crafted",
-              quantity: 2,
-              price: 5000,
-            },
-          ],
+  const complete: BundleListingV2 | null = useMemo(() => {
+    if (!listingDetail) return null;
+    const { listing, seller, items } = listingDetail;
+    return {
+      listing_id: listing.listing_id,
+      seller_id: listing.seller_id,
+      seller_type: listing.seller_type,
+      title: listing.title,
+      description: listing.description,
+      status: listing.status,
+      created_at: listing.created_at,
+      updated_at: listing.updated_at,
+      expires_at: listing.expires_at || listing.updated_at,
+      items: items.map((item) => ({
+        item_id: item.item_id,
+        game_item: {
+          id: item.game_item.id,
+          name: item.game_item.name,
+          type: item.game_item.type,
         },
-        {
-          item_id: "item-2",
-          game_item: {
-            id: "game-item-2",
-            name: "Ballistic Pistol",
-            type: "Weapon",
+        pricing_mode: item.pricing_mode,
+        base_price: item.base_price,
+        variants: item.variants.map((v) => ({
+          variant_id: v.variant_id,
+          attributes: {
+            quality_tier: v.attributes.quality_tier,
+            quality_value: v.attributes.quality_value,
+            crafted_source: v.attributes.crafted_source,
           },
-          pricing_mode: "unified",
-          base_price: 1500,
-          variants: [
-            {
-              variant_id: "var-3",
-              attributes: { quality_tier: 2, quality_value: 55.0, crafted_source: "store" },
-              display_name: "Tier 2 (55.0%) - Store",
-              short_name: "T2 Store",
-              quantity: 10,
-              price: 1500,
-            },
-          ],
-        },
-      ],
-      photos: ["https://cdn.robertsspaceindustries.com/static/images/Temp/default-image.png"],
+          display_name: v.display_name,
+          short_name: v.short_name,
+          quantity: v.quantity,
+          price: v.price,
+        })),
+      })),
+      photos: items[0]?.game_item.image_url
+        ? [items[0].game_item.image_url]
+        : ["https://cdn.robertsspaceindustries.com/static/images/Temp/default-image.png"],
       seller: {
-        id: "seller-123",
-        name: "TestSeller",
-        username: "testseller",
-        rating: { avg_rating: 4.5 },
+        id: seller.id,
+        name: seller.name,
+        avatar: seller.avatar_url,
+        rating: { avg_rating: seller.rating },
       },
       orders: [],
-    }),
-    [id]
-  );
-
-  const complete = bundleData || mockData;
-  const currentItem = complete.items[selectedItemIndex];
+    };
+  }, [listingDetail]);
+  const currentItem = complete?.items[selectedItemIndex];
 
   // Permission checks
   const amContractor = useMemo(
     () =>
-      currentOrg?.spectrum_id === complete.seller.id &&
-      complete.seller_type === "contractor",
-    [currentOrg?.spectrum_id, complete.seller.id, complete.seller_type]
+      currentOrg?.spectrum_id === complete?.seller.id &&
+      complete?.seller_type === "contractor",
+    [currentOrg?.spectrum_id, complete?.seller.id, complete?.seller_type]
   );
 
   const amSeller = useMemo(
     () =>
-      profile?.username === complete.seller.username &&
-      complete.seller_type === "user" &&
+      profile?.username === complete?.seller.username &&
+      complete?.seller_type === "user" &&
       !currentOrg,
-    [currentOrg, complete.seller.username, complete.seller_type, profile?.username]
+    [currentOrg, complete?.seller.username, complete?.seller_type, profile?.username]
   );
 
   const amContractorManager = useMemo(
@@ -247,6 +218,7 @@ export function MarketMultipleViewV2() {
 
   // Calculate bundle total based on selected variants
   const bundleTotal = useMemo(() => {
+    if (!complete) return 0;
     let total = 0;
     for (const item of complete.items) {
       const selectedVariantId = selectedVariants[item.item_id];
@@ -261,14 +233,15 @@ export function MarketMultipleViewV2() {
       }
     }
     return total;
-  }, [complete.items, selectedVariants]);
+  }, [complete?.items, selectedVariants]);
 
   // Check if all items have variants selected
   const allVariantsSelected = useMemo(() => {
+    if (!complete) return false;
     return complete.items.every((item) => {
       return selectedVariants[item.item_id] || item.variants.length === 1;
     });
-  }, [complete.items, selectedVariants]);
+  }, [complete?.items, selectedVariants]);
 
   // Handle variant selection
   const handleVariantChange = (itemId: string, variantId: string | null) => {
@@ -283,6 +256,16 @@ export function MarketMultipleViewV2() {
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Typography>Loading...</Typography>
+        </Grid>
+      </Grid>
+    );
+  }
+
+  if (!complete || !currentItem) {
+    return (
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <Typography>Listing not found.</Typography>
         </Grid>
       </Grid>
     );
