@@ -82,20 +82,22 @@ registerRoute(
   },
 )
 
-// Cache navigation requests with StaleWhileRevalidate for instant loads
-// Serves cached page immediately while updating in background
+// Cache navigation requests with NetworkFirst
+// HTML must be fresh because it references hashed JS/CSS assets.
+// Serving stale HTML after a deploy causes asset hash mismatches.
 registerRoute(
   ({ request }: { request: Request }) => request.mode === "navigate",
-  new StaleWhileRevalidate({
+  new NetworkFirst({
     cacheName: "pages-v1",
+    networkTimeoutSeconds: 3,
     plugins: [
       new CacheableResponsePlugin({
-        statuses: [0, 200], // Cache successful responses and opaque responses
+        statuses: [0, 200],
       }),
       new ExpirationPlugin({
-        maxEntries: 100, // Increased from 50 to cache more pages
-        maxAgeSeconds: 60 * 60 * 24 * 7, // 7 days (increased from 1 day)
-        purgeOnQuotaError: true, // Automatically purge if quota exceeded
+        maxEntries: 50,
+        maxAgeSeconds: 60 * 60 * 24, // 1 day
+        purgeOnQuotaError: true,
       }),
     ],
   }),
