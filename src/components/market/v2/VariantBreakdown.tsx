@@ -15,7 +15,7 @@ import {
   Chip,
 } from "@mui/material";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import type { ExtendedTheme } from "../../../hooks/styles/theme";
+import type { ExtendedTheme } from "../../../hooks/styles/Theme";
 import { QualityBadge } from "./QualityBadge";
 
 interface Variant {

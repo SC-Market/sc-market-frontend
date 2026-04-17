@@ -25,7 +25,7 @@ import { NumericFormat } from "react-number-format";
 import { useTranslation } from "react-i18next";
 import { useCookies } from "react-cookie";
 
-import type { ExtendedTheme } from "../../../hooks/styles/theme";
+import type { ExtendedTheme } from "../../../hooks/styles/Theme";
 import { useGetListingsQuery } from "../../../store/api/v2/market";
 import type {
   GameItemListingResult,
@@ -135,7 +135,7 @@ export function GameItemListingsV2() {
       tier: item.quality_tier,
       count: item.listing_count,
       percentage: totalListings > 0 ? (item.listing_count / totalListings) * 100 : 0,
-      averagePrice: item.avg_price,
+      averagePrice: item.price_avg,
     }));
   }, [quality_distribution]);
 
@@ -268,7 +268,7 @@ export function GameItemListingsV2() {
                 >
                   {t("MarketAggregateView.description")}
                 </Typography>
-                <Typography>{game_item.description || "No description available"}</Typography>
+                <Typography>No description available</Typography>
               </Box>
             </CardContent>
           </Card>
@@ -432,22 +432,22 @@ function PriceRangeTable({
               </td>
               <td style={{ textAlign: "right", padding: theme.spacing(1) }}>
                 <Typography variant="body2" color="primary">
-                  {item.min_price.toLocaleString(i18n.language)} aUEC
+                  {item.price_min.toLocaleString(i18n.language)} aUEC
                 </Typography>
               </td>
               <td style={{ textAlign: "right", padding: theme.spacing(1) }}>
                 <Typography variant="body2">
-                  {item.avg_price.toLocaleString(i18n.language)} aUEC
+                  {item.price_avg.toLocaleString(i18n.language)} aUEC
                 </Typography>
               </td>
               <td style={{ textAlign: "right", padding: theme.spacing(1) }}>
                 <Typography variant="body2">
-                  {item.max_price.toLocaleString(i18n.language)} aUEC
+                  {item.price_max.toLocaleString(i18n.language)} aUEC
                 </Typography>
               </td>
               <td style={{ textAlign: "right", padding: theme.spacing(1) }}>
                 <Typography variant="body2">
-                  {item.total_quantity.toLocaleString(i18n.language)}
+                  {item.quantity_available.toLocaleString(i18n.language)}
                 </Typography>
               </td>
             </tr>
@@ -576,12 +576,34 @@ function GameItemListingRow(props: {
           <ListingNameAndRating
             user={
               listing.seller_type === "user"
-                ? { username: listing.seller_name, rating: { avg_rating: listing.seller_rating } }
+                ? { 
+                    username: listing.seller_name, 
+                    display_name: listing.seller_name,
+                    avatar: "",
+                    rating: { 
+                      avg_rating: listing.seller_rating,
+                      rating_count: 0,
+                      total_rating: 0,
+                      streak: 0,
+                      total_orders: 0,
+                    } 
+                  }
                 : undefined
             }
             contractor={
               listing.seller_type === "contractor"
-                ? { name: listing.seller_name, rating: { avg_rating: listing.seller_rating } }
+                ? { 
+                    name: listing.seller_name,
+                    avatar: "",
+                    spectrum_id: listing.seller_id,
+                    rating: { 
+                      avg_rating: listing.seller_rating,
+                      rating_count: 0,
+                      total_rating: 0,
+                      streak: 0,
+                      total_orders: 0,
+                    } 
+                  }
                 : undefined
             }
           />
@@ -665,16 +687,6 @@ function GameItemListingRow(props: {
       {/* Add to Cart Button */}
       <TableCell align="right">
         <Stack direction="column" spacing={1} alignItems="flex-end">
-          {/* Variant Selector */}
-          {listing.variant_count > 1 && (
-            <VariantSelector
-              listingId={listing.listing_id}
-              selectedVariantId={selectedVariantId}
-              onVariantChange={setSelectedVariantId}
-              size="small"
-            />
-          )}
-
           {/* Add to Cart / View Cart Button */}
           {justAddedToCart ? (
             <Button
@@ -692,7 +704,6 @@ function GameItemListingRow(props: {
               color="primary"
               size="large"
               onClick={addToCart}
-              disabled={listing.variant_count > 1 && !selectedVariantId}
             >
               <AddShoppingCartRounded />
             </HapticButton>

@@ -232,7 +232,10 @@ export function BuyOrderV2Row(props: {
         severity: "success",
       })
     } catch (error) {
-      issueAlert(error)
+      issueAlert({
+        message: error instanceof Error ? error.message : "Failed to cancel buy order",
+        severity: "error",
+      })
     } finally {
       setIsCancelling(false)
     }
@@ -497,7 +500,7 @@ export function BuyOrdersViewV2() {
     // TODO: Implement refetch when API is ready
   }
 
-  if (!profile?.user_id) {
+  if (!profile?.username) {
     return null
   }
 
@@ -610,7 +613,7 @@ export function DashBuyOrdersAreaV2() {
     return buyOrders && buyOrders.length > 0
   }, [buyOrders])
 
-  if (isLoading || !profile?.user_id) {
+  if (isLoading || !profile?.username) {
     return null
   }
 

@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
 import { configureStore } from "@reduxjs/toolkit";
 import { EditListingV2 } from "../EditListingV2";
-import { marketV2Api } from "../../../../store/api/v2/market";
+import { marketV2Api, useGetListingDetailQuery, useUpdateListingMutation } from "../../../../store/api/v2/market";
 
 // Mock all dependencies
 vi.mock("../../../../store/api/v2/market", async () => {
@@ -153,16 +153,14 @@ describe("EditListingV2", () => {
     const store = createMockStore();
     
     // Mock the hooks
-    const { useGetListingDetailQuery, useUpdateListingMutation } = require("../../../../store/api/v2/market");
-    
-    useGetListingDetailQuery.mockReturnValue({
+    (useGetListingDetailQuery as any).mockReturnValue({
       data: mockListingData,
       isLoading: false,
       error: undefined,
       refetch: vi.fn(),
     });
     
-    useUpdateListingMutation.mockReturnValue([vi.fn(), { isLoading: false }]);
+    (useUpdateListingMutation as any).mockReturnValue([vi.fn(), { isLoading: false }]);
 
     return render(
       <Provider store={store}>
@@ -311,9 +309,7 @@ describe("EditListingV2", () => {
   });
 
   it("prevents editing sold listings", () => {
-    const { useGetListingDetailQuery, useUpdateListingMutation } = require("../../../../store/api/v2/market");
-    
-    useGetListingDetailQuery.mockReturnValue({
+    (useGetListingDetailQuery as any).mockReturnValue({
       data: {
         ...mockListingData,
         listing: {
@@ -326,7 +322,7 @@ describe("EditListingV2", () => {
       refetch: vi.fn(),
     });
     
-    useUpdateListingMutation.mockReturnValue([vi.fn(), { isLoading: false }]);
+    (useUpdateListingMutation as any).mockReturnValue([vi.fn(), { isLoading: false }]);
 
     const store = createMockStore();
     render(
@@ -348,16 +344,14 @@ describe("EditListingV2", () => {
   });
 
   it("displays loading state", () => {
-    const { useGetListingDetailQuery, useUpdateListingMutation } = require("../../../../store/api/v2/market");
-    
-    useGetListingDetailQuery.mockReturnValue({
+    (useGetListingDetailQuery as any).mockReturnValue({
       data: undefined,
       isLoading: true,
       error: undefined,
       refetch: vi.fn(),
     });
     
-    useUpdateListingMutation.mockReturnValue([vi.fn(), { isLoading: false }]);
+    (useUpdateListingMutation as any).mockReturnValue([vi.fn(), { isLoading: false }]);
 
     const store = createMockStore();
     render(
@@ -374,16 +368,14 @@ describe("EditListingV2", () => {
   });
 
   it("displays error state when listing not found", () => {
-    const { useGetListingDetailQuery, useUpdateListingMutation } = require("../../../../store/api/v2/market");
-    
-    useGetListingDetailQuery.mockReturnValue({
+    (useGetListingDetailQuery as any).mockReturnValue({
       data: undefined,
       isLoading: false,
       error: { status: 404, data: { message: "Not found" } },
       refetch: vi.fn(),
     });
     
-    useUpdateListingMutation.mockReturnValue([vi.fn(), { isLoading: false }]);
+    (useUpdateListingMutation as any).mockReturnValue([vi.fn(), { isLoading: false }]);
 
     const store = createMockStore();
     render(

@@ -29,23 +29,40 @@ vi.mock("react-i18next", async () => {
 
 // Mock data
 const mockOffer: OfferSession = {
-  session_id: "test-session-id",
+  id: "test-session-id",
   assigned_to: {
     username: "test-seller",
-    user_id: "seller-id",
     display_name: "Test Seller",
-    avatar: null,
+    avatar: "",
+    rating: {
+      avg_rating: 4.5,
+      rating_count: 10,
+      total_rating: 45,
+      streak: 5,
+    },
   },
   contractor: null,
-  title: "Test Offer",
-  kind: "service",
-  cost: "1000",
-  description: "Test description",
-  service_id: null,
-  payment_type: "aUEC",
-  status: "pending",
-  created_at: "2024-01-01T00:00:00Z",
-  updated_at: "2024-01-01T00:00:00Z",
+  customer: {
+    username: "test-customer",
+    display_name: "Test Customer",
+    avatar: "",
+    rating: {
+      avg_rating: 4.0,
+      rating_count: 5,
+      total_rating: 20,
+      streak: 2,
+    },
+  },
+  status: "active",
+  timestamp: new Date().toISOString(),
+  offers: [],
+  discord_thread_id: null,
+  discord_server_id: null,
+  discord_invite: null,
+  availability: {
+    customer: [],
+    assigned: null,
+  },
 }
 
 const mockCounterOfferBody: CounterOfferBody = {
@@ -56,7 +73,7 @@ const mockCounterOfferBody: CounterOfferBody = {
   description: "Test description",
   service_id: null,
   market_listings: [],
-  payment_type: "aUEC",
+  payment_type: "one-time",
   status: "counteroffered",
 }
 

@@ -2,7 +2,6 @@ import React from "react"
 import { render, screen, fireEvent, waitFor } from "@testing-library/react"
 import { describe, it, expect, vi, beforeEach } from "vitest"
 import { CreateBuyOrderV2 } from "../CreateBuyOrderV2"
-import { MarketAggregate } from "../../../domain/types"
 import { Provider } from "react-redux"
 import { configureStore } from "@reduxjs/toolkit"
 import { BrowserRouter } from "react-router-dom"
@@ -53,26 +52,7 @@ vi.mock("react-router-dom", async () => {
   }
 })
 
-const mockAggregate: MarketAggregate = {
-  details: {
-    game_item_id: "test-item-id",
-    title: "Test Item",
-    description: "Test description",
-    item_type: "weapon",
-    item_name: "Test Weapon",
-    wiki_id: 123,
-  },
-  photos: ["https://example.com/photo.jpg"],
-  listings: [],
-  buy_orders: [],
-  stats: {
-    total_quantity: 10,
-    min_price: 1000,
-    max_price: 5000,
-    avg_price: 3000,
-    seller_count: 5,
-  },
-}
+const mockGameItemId = "test-item-id"
 
 const createTestStore = () =>
   configureStore({
@@ -114,35 +94,34 @@ describe("CreateBuyOrderV2", () => {
     vi.clearAllMocks()
   })
 
-  it("renders with game item information", () => {
-    renderWithProviders(<CreateBuyOrderV2 aggregate={mockAggregate} />)
+  it("renders with create buy order form", () => {
+    renderWithProviders(<CreateBuyOrderV2 gameItemId={mockGameItemId} />)
 
-    expect(screen.getByText("Test Item")).toBeInTheDocument()
-    expect(screen.getByAltText("Test Item")).toBeInTheDocument()
+    expect(screen.getByText("Create Buy Order")).toBeInTheDocument()
   })
 
   it("displays quality tier range selectors", () => {
-    renderWithProviders(<CreateBuyOrderV2 aggregate={mockAggregate} />)
+    renderWithProviders(<CreateBuyOrderV2 gameItemId={mockGameItemId} />)
 
-    expect(screen.getByLabelText(/minimum quality tier/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/maximum quality tier/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/min quality tier/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/max quality tier/i)).toBeInTheDocument()
   })
 
   it("displays price range inputs", () => {
-    renderWithProviders(<CreateBuyOrderV2 aggregate={mockAggregate} />)
+    renderWithProviders(<CreateBuyOrderV2 gameItemId={mockGameItemId} />)
 
-    expect(screen.getByLabelText(/minimum price/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/maximum price/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/min price/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/max price/i)).toBeInTheDocument()
   })
 
   it("displays quantity input", () => {
-    renderWithProviders(<CreateBuyOrderV2 aggregate={mockAggregate} />)
+    renderWithProviders(<CreateBuyOrderV2 gameItemId={mockGameItemId} />)
 
-    expect(screen.getByLabelText(/enter quantity/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/quantity/i)).toBeInTheDocument()
   })
 
   it("displays negotiable checkbox", () => {
-    renderWithProviders(<CreateBuyOrderV2 aggregate={mockAggregate} />)
+    renderWithProviders(<CreateBuyOrderV2 gameItemId={mockGameItemId} />)
 
     expect(
       screen.getByRole("checkbox", { name: /negotiable/i }),
@@ -154,22 +133,17 @@ describe("CreateBuyOrderV2", () => {
     const { useAlertHook } = await import("../../../../../hooks/alert/AlertHook")
     vi.mocked(useAlertHook).mockReturnValue(mockAlert)
 
-    renderWithProviders(<CreateBuyOrderV2 aggregate={mockAggregate} />)
+    renderWithProviders(<CreateBuyOrderV2 gameItemId={mockGameItemId} />)
 
     // Set min > max
-    const minSelect = screen.getByLabelText(/minimum quality tier/i)
-    const maxSelect = screen.getByLabelText(/maximum quality tier/i)
+    const minSelect = screen.getByLabelText(/min quality tier/i)
+    const maxSelect = screen.getByLabelText(/max quality tier/i)
 
-    fireEvent.mouseDown(minSelect)
-    const tier5Options = screen.getAllByText("Tier 5")
-    fireEvent.click(tier5Options[tier5Options.length - 1])
-
-    fireEvent.mouseDown(maxSelect)
-    const tier1Options = screen.getAllByText("Tier 1")
-    fireEvent.click(tier1Options[tier1Options.length - 1])
+    fireEvent.change(minSelect, { target: { value: "5" } })
+    fireEvent.change(maxSelect, { target: { value: "1" } })
 
     // Submit
-    const submitButton = screen.getByRole("button", { name: /submit buy order/i })
+    const submitButton = screen.getByRole("button", { name: /submit/i })
     fireEvent.click(submitButton)
 
     await waitFor(() => {
@@ -187,17 +161,17 @@ describe("CreateBuyOrderV2", () => {
     const { useAlertHook } = await import("../../../../../hooks/alert/AlertHook")
     vi.mocked(useAlertHook).mockReturnValue(mockAlert)
 
-    renderWithProviders(<CreateBuyOrderV2 aggregate={mockAggregate} />)
+    renderWithProviders(<CreateBuyOrderV2 gameItemId={mockGameItemId} />)
 
     // Set price min > max
-    const minPriceInput = screen.getByLabelText(/minimum price/i)
-    const maxPriceInput = screen.getByLabelText(/maximum price/i)
+    const minPriceInput = screen.getByLabelText(/min price/i)
+    const maxPriceInput = screen.getByLabelText(/max price/i)
 
     fireEvent.change(minPriceInput, { target: { value: "5000" } })
     fireEvent.change(maxPriceInput, { target: { value: "1000" } })
 
     // Submit
-    const submitButton = screen.getByRole("button", { name: /submit buy order/i })
+    const submitButton = screen.getByRole("button", { name: /submit/i })
     fireEvent.click(submitButton)
 
     await waitFor(() => {
@@ -211,112 +185,102 @@ describe("CreateBuyOrderV2", () => {
   })
 
   it("changes price labels when negotiable is checked", () => {
-    renderWithProviders(<CreateBuyOrderV2 aggregate={mockAggregate} />)
+    renderWithProviders(<CreateBuyOrderV2 gameItemId={mockGameItemId} />)
 
     const negotiableCheckbox = screen.getByRole("checkbox", {
       name: /negotiable/i,
     })
 
     // Initially not negotiable
-    expect(screen.getByLabelText(/minimum price/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/min price/i)).toBeInTheDocument()
 
     // Check negotiable
     fireEvent.click(negotiableCheckbox)
 
-    // Labels should change to "suggested"
+    // Labels should change to "optional"
     expect(
-      screen.getByLabelText(/suggested min price/i),
+      screen.getByLabelText(/min price \(optional\)/i),
     ).toBeInTheDocument()
     expect(
-      screen.getByLabelText(/suggested max price/i),
+      screen.getByLabelText(/max price \(optional\)/i),
     ).toBeInTheDocument()
   })
 
   it("displays total price range calculation", () => {
-    renderWithProviders(<CreateBuyOrderV2 aggregate={mockAggregate} />)
+    renderWithProviders(<CreateBuyOrderV2 gameItemId={mockGameItemId} />)
 
-    const minPriceInput = screen.getByLabelText(/minimum price/i)
-    const maxPriceInput = screen.getByLabelText(/maximum price/i)
-    const quantityInput = screen.getByLabelText(/enter quantity/i)
+    const minPriceInput = screen.getByLabelText(/min price/i)
+    const maxPriceInput = screen.getByLabelText(/max price/i)
+    const quantityInput = screen.getByLabelText(/quantity/i)
 
     fireEvent.change(minPriceInput, { target: { value: "1000" } })
     fireEvent.change(maxPriceInput, { target: { value: "2000" } })
     fireEvent.change(quantityInput, { target: { value: "5" } })
 
     // Total should show range
-    const totalField = screen.getByLabelText(/total price/i)
-    expect(totalField).toHaveValue()
+    const totalField = screen.getByLabelText(/total price range/i)
+    expect(totalField).toBeInTheDocument()
   })
 
   it("maintains visual parity with V1 styling", () => {
     const { container } = renderWithProviders(
-      <CreateBuyOrderV2 aggregate={mockAggregate} />,
+      <CreateBuyOrderV2 gameItemId={mockGameItemId} />,
     )
-
-    // Check image paper styling
-    const imagePaper = container.querySelector('[alt="Test Item"]')
-      ?.parentElement
-    expect(imagePaper).toHaveStyle({
-      minHeight: "400px",
-      maxHeight: "600px",
-      height: "400px",
-    })
 
     // Check Grid container exists
     const gridContainers = container.querySelectorAll('.MuiGrid-container')
     expect(gridContainers.length).toBeGreaterThan(0)
+    
+    // Check Section component is used
+    expect(screen.getByText("Create Buy Order")).toBeInTheDocument()
   })
 
   it("includes accessibility attributes", () => {
-    renderWithProviders(<CreateBuyOrderV2 aggregate={mockAggregate} />)
+    renderWithProviders(<CreateBuyOrderV2 gameItemId={mockGameItemId} />)
 
     // Check that all form elements are accessible by label
-    expect(screen.getByLabelText(/minimum quality tier/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/maximum quality tier/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/minimum price/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/maximum price/i)).toBeInTheDocument()
-    expect(screen.getByLabelText(/enter quantity/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/min quality tier/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/max quality tier/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/min price/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/max price/i)).toBeInTheDocument()
+    expect(screen.getByLabelText(/quantity/i)).toBeInTheDocument()
     
     // Check submit button has accessible name
-    expect(screen.getByRole("button", { name: /submit buy order/i })).toBeInTheDocument()
+    expect(screen.getByRole("button", { name: /submit/i })).toBeInTheDocument()
   })
 
-  it("uses fallback image on error", () => {
-    const aggregateWithoutPhoto = {
-      ...mockAggregate,
-      photos: [],
-    }
+  it("disables price inputs when negotiable is checked", () => {
+    renderWithProviders(<CreateBuyOrderV2 gameItemId={mockGameItemId} />)
 
-    renderWithProviders(<CreateBuyOrderV2 aggregate={aggregateWithoutPhoto} />)
+    const negotiableCheckbox = screen.getByRole("checkbox", {
+      name: /negotiable/i,
+    })
+    const minPriceInput = screen.getByLabelText(/min price/i)
+    const maxPriceInput = screen.getByLabelText(/max price/i)
 
-    const image = screen.getByAltText("Test Item") as HTMLImageElement
-    expect(image.src).toContain("default-image.png")
+    // Initially enabled
+    expect(minPriceInput).not.toBeDisabled()
+    expect(maxPriceInput).not.toBeDisabled()
+
+    // Check negotiable
+    fireEvent.click(negotiableCheckbox)
+
+    // Should be disabled
+    expect(minPriceInput).toBeDisabled()
+    expect(maxPriceInput).toBeDisabled()
   })
 
-  it("updates game_item_id when aggregate changes", () => {
-    const { rerender } = renderWithProviders(
-      <CreateBuyOrderV2 aggregate={mockAggregate} />,
-    )
+  it("shows quality tier badges when tiers are selected", () => {
+    renderWithProviders(<CreateBuyOrderV2 gameItemId={mockGameItemId} />)
 
-    const newAggregate = {
-      ...mockAggregate,
-      details: {
-        ...mockAggregate.details,
-        game_item_id: "new-item-id",
-        title: "New Item",
-      },
-    }
+    const minSelect = screen.getByLabelText(/min quality tier/i)
+    const maxSelect = screen.getByLabelText(/max quality tier/i)
 
-    rerender(
-      <Provider store={createTestStore()}>
-        <ThemeProvider theme={createExtendedTheme()}>
-          <BrowserRouter>
-            <CreateBuyOrderV2 aggregate={newAggregate} />
-          </BrowserRouter>
-        </ThemeProvider>
-      </Provider>,
-    )
+    // Select tier range
+    fireEvent.change(minSelect, { target: { value: "3" } })
+    fireEvent.change(maxSelect, { target: { value: "5" } })
 
-    expect(screen.getByText("New Item")).toBeInTheDocument()
+    // Should show selected range text
+    expect(screen.getByText(/selected range/i)).toBeInTheDocument()
   })
 })

@@ -46,6 +46,8 @@ import { subDays } from "date-fns";
 import { useTranslation } from "react-i18next";
 import { VariantSelector } from "../../../components/market/v2/VariantSelector";
 import { QualityBadge } from "../../../components/market/v2/QualityBadge";
+import { Order } from "../../../datatypes/Order";
+import { MinimalUser } from "../../../datatypes/User";
 
 /**
  * MarketMultipleViewV2 Component
@@ -117,12 +119,11 @@ export interface BundleListingV2 {
     name: string;
     display_name?: string;
     username?: string;
+    avatar?: string;
+    spectrum_id?: string;
     rating: { avg_rating: number };
   };
-  orders?: Array<{
-    order_id: string;
-    status: string;
-  }>;
+  orders?: Order[];
 }
 
 export function MarketMultipleViewV2() {
@@ -379,7 +380,18 @@ export function MarketMultipleViewV2() {
                         }}
                       >
                         <UserList
-                          users={[complete.seller]}
+                          users={[{
+                            name: complete.seller.name,
+                            display_name: complete.seller.display_name || complete.seller.name,
+                            username: complete.seller.username || complete.seller.name,
+                            avatar: complete.seller.avatar || "",
+                            rating: {
+                              avg_rating: complete.seller.rating.avg_rating,
+                              rating_count: 0,
+                              total_rating: 0,
+                              streak: 0,
+                            }
+                          } as MinimalUser]}
                           title={t("MarketMultipleView.seller")}
                         />
                       </Grid>
@@ -487,8 +499,15 @@ export function MarketMultipleViewV2() {
                               user={
                                 complete.seller_type === "user"
                                   ? {
-                                      username: complete.seller.username,
-                                      rating: complete.seller.rating,
+                                      username: complete.seller.username || complete.seller.name,
+                                      display_name: complete.seller.display_name || complete.seller.name,
+                                      avatar: complete.seller.avatar || "",
+                                      rating: {
+                                        avg_rating: complete.seller.rating.avg_rating,
+                                        rating_count: 0,
+                                        total_rating: 0,
+                                        streak: 0,
+                                      },
                                     }
                                   : undefined
                               }
@@ -496,7 +515,14 @@ export function MarketMultipleViewV2() {
                                 complete.seller_type === "contractor"
                                   ? {
                                       name: complete.seller.name,
-                                      rating: complete.seller.rating,
+                                      avatar: complete.seller.avatar || "",
+                                      spectrum_id: complete.seller.spectrum_id || complete.seller.id || "",
+                                      rating: {
+                                        avg_rating: complete.seller.rating.avg_rating,
+                                        rating_count: 0,
+                                        total_rating: 0,
+                                        streak: 0,
+                                      },
                                     }
                                   : undefined
                               }
@@ -598,8 +624,6 @@ export function MarketMultipleViewV2() {
                                 {t("market.selectVariant", "Select Variant")}
                               </Typography>
                               <VariantSelector
-                                listingId={complete.listing_id}
-                                itemId={currentItem.item_id}
                                 variants={currentItem.variants}
                                 selectedVariantId={selectedVariants[currentItem.item_id]}
                                 onVariantChange={(variantId) =>

@@ -4,7 +4,7 @@ import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import { configureStore } from "@reduxjs/toolkit";
 import { CreateListingV2 } from "../CreateListingV2";
-import { api } from "../../../../store/generatedApi";
+import { generatedApi } from "../../../../store/generatedApi";
 import "@testing-library/jest-dom";
 import { vi, describe, it, expect, beforeEach } from "vitest";
 
@@ -58,10 +58,10 @@ vi.mock("../components/stock/LocationSelector", () => ({
 const createMockStore = (initialState = {}) => {
   return configureStore({
     reducer: {
-      [api.reducerPath]: api.reducer,
+      [generatedApi.reducerPath]: generatedApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(api.middleware),
+      getDefaultMiddleware().concat(generatedApi.middleware),
     preloadedState: initialState,
   });
 };

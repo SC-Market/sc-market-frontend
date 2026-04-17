@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { ThemeProvider } from "@mui/material/styles";
 import { QualityBadge } from "../QualityBadge";
-import { mainTheme } from "../../../../hooks/styles/theme";
+import { mainTheme } from "../../../../hooks/styles/Theme";
 
 describe("QualityBadge", () => {
   const renderWithTheme = (component: React.ReactElement) => {

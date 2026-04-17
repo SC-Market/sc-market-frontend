@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react"
-import { describe, it, expect } from "vitest"
+import { describe, it, expect, vi } from "vitest"
 import { OrderSummarySectionV2 } from "../OrderSummarySectionV2"
 import { OrderItemDetail } from "../../../store/api/v2/market"
 import { OfferChanges } from "../../../util/offerChanges"

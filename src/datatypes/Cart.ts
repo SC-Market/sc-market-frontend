@@ -4,6 +4,7 @@ export interface CartItem {
   price?: number
   aggregate_id?: number | string
   type: string
+  variant_id?: string // V2: variant selection for quality tiers
 }
 
 export interface CartSeller {

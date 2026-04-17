@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen } from "@testing-library/react";
 import { ThemeProvider } from "@mui/material/styles";
 import { QualityHistogram } from "../QualityHistogram";
-import { mainTheme } from "../../../../hooks/styles/theme";
+import { mainTheme } from "../../../../hooks/styles/Theme";
 
 const mockDistribution = [
   {

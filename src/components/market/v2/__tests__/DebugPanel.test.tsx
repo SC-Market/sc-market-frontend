@@ -460,4 +460,207 @@ describe("DebugPanel", () => {
       ).toBeInTheDocument()
     })
   })
+
+  describe("Feature Flag Toggle (Requirement 59.6)", () => {
+    beforeEach(() => {
+      mockSetMarketVersion.mockResolvedValue(undefined)
+      localStorage.setItem("debug_panel_open", "true")
+    })
+
+    it("toggles from V1 to V2 successfully", async () => {
+      mockUseFeatureFlag.mockReturnValue({
+        marketVersion: "V1",
+        isLoading: false,
+        error: null,
+        setMarketVersion: mockSetMarketVersion,
+        isDeveloper: true,
+      })
+
+      renderWithTheme(<DebugPanel />)
+
+      const v2Radio = screen.getByRole("radio", { name: /V2 \(Beta\)/i })
+      fireEvent.click(v2Radio)
+
+      await waitFor(() => {
+        expect(mockSetMarketVersion).toHaveBeenCalledWith("V2")
+        expect(mockSetMarketVersion).toHaveBeenCalledTimes(1)
+      })
+    })
+
+    it("toggles from V2 to V1 successfully", async () => {
+      mockUseFeatureFlag.mockReturnValue({
+        marketVersion: "V2",
+        isLoading: false,
+        error: null,
+        setMarketVersion: mockSetMarketVersion,
+        isDeveloper: true,
+      })
+
+      renderWithTheme(<DebugPanel />)
+
+      const v1Radio = screen.getByRole("radio", { name: /V1 \(Production\)/i })
+      fireEvent.click(v1Radio)
+
+      await waitFor(() => {
+        expect(mockSetMarketVersion).toHaveBeenCalledWith("V1")
+        expect(mockSetMarketVersion).toHaveBeenCalledTimes(1)
+      })
+    })
+
+    it("persists feature flag selection across page reloads", async () => {
+      mockUseFeatureFlag.mockReturnValue({
+        marketVersion: "V1",
+        isLoading: false,
+        error: null,
+        setMarketVersion: mockSetMarketVersion,
+        isDeveloper: true,
+      })
+
+      renderWithTheme(<DebugPanel />)
+
+      const v2Radio = screen.getByRole("radio", { name: /V2 \(Beta\)/i })
+      fireEvent.click(v2Radio)
+
+      await waitFor(() => {
+        expect(mockSetMarketVersion).toHaveBeenCalledWith("V2")
+      })
+
+      // Simulate page reload by re-rendering with V2 active
+      vi.clearAllMocks()
+      mockUseFeatureFlag.mockReturnValue({
+        marketVersion: "V2",
+        isLoading: false,
+        error: null,
+        setMarketVersion: mockSetMarketVersion,
+        isDeveloper: true,
+      })
+
+      renderWithTheme(<DebugPanel />)
+
+      await waitFor(() => {
+        const v2RadioAfterReload = screen.getByRole("radio", { name: /V2 \(Beta\)/i })
+        expect(v2RadioAfterReload).toBeChecked()
+      })
+    })
+
+    it("shows visual feedback during version switch", async () => {
+      let resolveSwitch: () => void
+      const switchPromise = new Promise<void>((resolve) => {
+        resolveSwitch = resolve
+      })
+
+      mockSetMarketVersion.mockReturnValue(switchPromise)
+
+      mockUseFeatureFlag.mockReturnValue({
+        marketVersion: "V1",
+        isLoading: false,
+        error: null,
+        setMarketVersion: mockSetMarketVersion,
+        isDeveloper: true,
+      })
+
+      renderWithTheme(<DebugPanel />)
+
+      const v2Radio = screen.getByRole("radio", { name: /V2 \(Beta\)/i })
+      fireEvent.click(v2Radio)
+
+      // Should show switching indicator
+      await waitFor(() => {
+        expect(screen.getByText(/Switching version/i)).toBeInTheDocument()
+      })
+
+      // Complete the switch
+      resolveSwitch!()
+
+      await waitFor(() => {
+        expect(screen.queryByText(/Switching version/i)).not.toBeInTheDocument()
+      })
+    })
+
+    it("prevents multiple simultaneous version switches", async () => {
+      let resolveSwitch: () => void
+      const switchPromise = new Promise<void>((resolve) => {
+        resolveSwitch = resolve
+      })
+
+      mockSetMarketVersion.mockReturnValue(switchPromise)
+
+      mockUseFeatureFlag.mockReturnValue({
+        marketVersion: "V1",
+        isLoading: false,
+        error: null,
+        setMarketVersion: mockSetMarketVersion,
+        isDeveloper: true,
+      })
+
+      renderWithTheme(<DebugPanel />)
+
+      const v2Radio = screen.getByRole("radio", { name: /V2 \(Beta\)/i })
+      
+      // Click multiple times
+      fireEvent.click(v2Radio)
+      fireEvent.click(v2Radio)
+      fireEvent.click(v2Radio)
+
+      await waitFor(() => {
+        // Should only call once
+        expect(mockSetMarketVersion).toHaveBeenCalledTimes(1)
+      })
+
+      resolveSwitch!()
+    })
+
+    it("displays current version badge correctly", () => {
+      mockUseFeatureFlag.mockReturnValue({
+        marketVersion: "V2",
+        isLoading: false,
+        error: null,
+        setMarketVersion: mockSetMarketVersion,
+        isDeveloper: true,
+      })
+
+      const { container } = renderWithTheme(<DebugPanel />)
+
+      // Check for version badge/chip
+      const versionBadge = screen.getByText("V2")
+      expect(versionBadge).toBeInTheDocument()
+
+      // Should be styled as a chip or badge
+      const chip = versionBadge.closest('[class*="MuiChip-root"]')
+      expect(chip).toBeInTheDocument()
+    })
+
+    it("handles rapid version toggling", async () => {
+      mockSetMarketVersion.mockResolvedValue(undefined)
+
+      mockUseFeatureFlag.mockReturnValue({
+        marketVersion: "V1",
+        isLoading: false,
+        error: null,
+        setMarketVersion: mockSetMarketVersion,
+        isDeveloper: true,
+      })
+
+      renderWithTheme(<DebugPanel />)
+
+      const v2Radio = screen.getByRole("radio", { name: /V2 \(Beta\)/i })
+      const v1Radio = screen.getByRole("radio", { name: /V1 \(Production\)/i })
+
+      // Rapid toggling
+      fireEvent.click(v2Radio)
+      await waitFor(() => expect(mockSetMarketVersion).toHaveBeenCalledWith("V2"))
+
+      vi.clearAllMocks()
+      mockUseFeatureFlag.mockReturnValue({
+        marketVersion: "V2",
+        isLoading: false,
+        error: null,
+        setMarketVersion: mockSetMarketVersion,
+        isDeveloper: true,
+      })
+
+      fireEvent.click(v1Radio)
+      await waitFor(() => expect(mockSetMarketVersion).toHaveBeenCalledWith("V1"))
+    })
+  })
 })

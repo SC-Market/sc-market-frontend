@@ -3,7 +3,7 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { ThemeProvider } from "@mui/material/styles";
 import { vi } from "vitest";
 import { QualityFilter } from "../QualityFilter";
-import { mainTheme } from "../../../../hooks/styles/theme";
+import { mainTheme } from "../../../../hooks/styles/Theme";
 
 describe("QualityFilter", () => {
   const renderWithTheme = (component: React.ReactElement) => {

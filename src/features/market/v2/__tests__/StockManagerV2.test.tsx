@@ -10,7 +10,7 @@ import { Provider } from "react-redux"
 import { configureStore } from "@reduxjs/toolkit"
 import { describe, it, expect, beforeEach, vi } from "vitest"
 import { StockManagerV2 } from "../StockManagerV2"
-import { marketV2Api } from "../../../../store/api/v2/market"
+import { marketV2Api, GetStockLotsResponse } from "../../../../store/api/v2/market"
 
 // Mock the alert hook
 vi.mock("../../../../hooks/alert/AlertHook", () => ({
@@ -37,7 +37,7 @@ const createMockStore = (initialState = {}) => {
 }
 
 // Mock data
-const mockStockLots = {
+const mockStockLots: GetStockLotsResponse = {
   lots: [
     {
       lot_id: "lot-1",
@@ -47,7 +47,7 @@ const mockStockLots = {
         attributes: {
           quality_tier: 5,
           quality_value: 95.5,
-          crafted_source: "crafted",
+          crafted_source: "crafted" as const,
         },
         display_name: "Tier 5 (95.5%) - Crafted",
         short_name: "T5 Crafted",
@@ -72,7 +72,7 @@ const mockStockLots = {
         attributes: {
           quality_tier: 3,
           quality_value: 65.0,
-          crafted_source: "store",
+          crafted_source: "store" as const,
         },
         display_name: "Tier 3 (65.0%) - Store",
         short_name: "T3 Store",

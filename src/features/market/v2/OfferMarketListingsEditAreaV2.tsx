@@ -18,7 +18,7 @@ import {
 import { PaginatedTable } from "../../../components/table/PaginatedTable"
 import { MarketListingDetails } from "../../../components/list/UserDetails"
 import { useCounterOffer } from "../../../hooks/offer/CounterOfferDetails"
-import { marketListingHeadCells } from "../../../views/offers/OfferMarketListings"
+import { marketListingHeadCellsV2 } from "./OfferMarketListingsV2"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import { NumericFormat } from "react-number-format"
 import { TrashCan } from "mdi-material-ui"
@@ -45,7 +45,7 @@ export type ListingRowItemV2 = ListingSearchResult & {
   unit_price: number
   variant_id: string
   variant_display_name: string
-  quality_tier?: number
+  quality_tier: number | undefined
   quantity_available: number
 }
 
@@ -100,7 +100,7 @@ export function OfferListingRowItemEditableV2(props: {
       >
         <TableCell component="th" scope="row">
           <Box>
-            <MarketListingDetails listing={row} />
+            <MarketListingDetails listing={row as any} />
             {/* Variant Selector */}
             <Box sx={{ mt: 1, maxWidth: 400 }}>
               {variants.length > 0 && (
@@ -358,17 +358,17 @@ export function OfferMarketListingsEditAreaV2(props: { offer: OfferSession }) {
                 rows={extendedListings}
                 initialSort={"title"}
                 keyAttr={"listing_id"}
-                headCells={marketListingHeadCells.map((cell) => ({
+                headCells={marketListingHeadCellsV2.map((cell) => ({
                   ...cell,
                   label: t(
                     `OfferMarketListingsEditArea.${cell.label.toLowerCase()}`,
                     cell.label
                   ),
-                }))}
-                generateRow={(row, index) => (
+                })) as any}
+                generateRow={(props) => (
                   <OfferListingRowItemEditableV2
-                    row={row}
-                    index={index}
+                    row={props.row}
+                    index={props.index}
                     onVariantChange={handleVariantChange}
                     onQuantityChange={handleQuantityChange}
                     onRemove={handleRemove}

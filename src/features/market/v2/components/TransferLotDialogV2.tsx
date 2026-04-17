@@ -86,6 +86,9 @@ export function TransferLotDialogV2({
     location_id: loc.location_id,
     name: loc.name,
     is_preset: loc.is_preset,
+    display_order: null,
+    created_by: null,
+    created_at: new Date().toISOString(),
   }))
 
   return (
