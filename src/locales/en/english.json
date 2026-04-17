@@ -2083,7 +2083,21 @@
       "manage_recruiting": "Manage Recruiting",
       "manage_webhooks": "Manage Webhooks",
       "manage_blocklist": "Manage Blocklist",
-      "kick_members": "Kick Members"
+      "kick_members": "Kick Members",
+      "claim_orders": "Claim Orders"
+    },
+    "permissionDescriptions": {
+      "manage_org_details": "Edit organization name, description, avatar, banner, language settings, and white-label theme",
+      "manage_roles": "Create, edit, and delete roles and assign them to members",
+      "manage_orders": "View, accept, reject, and manage all orders for the organization",
+      "manage_invites": "Create and manage invite codes and links for the organization",
+      "manage_stock": "Add, edit, and remove stock lots and manage inventory",
+      "manage_market": "Create, edit, and remove market listings on behalf of the organization",
+      "manage_recruiting": "Create and manage recruiting posts for the organization",
+      "manage_webhooks": "Create, edit, and delete Discord and notification webhooks",
+      "manage_blocklist": "Block and unblock users from interacting with the organization",
+      "kick_members": "Remove members from the organization",
+      "claim_orders": "Claim open orders via Discord integration"
     },
     "headCells": {
       "name": "Name",
