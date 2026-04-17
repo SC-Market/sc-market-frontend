@@ -370,7 +370,11 @@ export function ThemeEditor({
         <Typography variant="subtitle2" gutterBottom>
           {t("theme.preview", "Preview")}
         </Typography>
-        <ThemePreview themeData={previewThemeOptions} mode={editMode} />
+        <ThemePreview
+          themeData={previewThemeOptions}
+          mode={editMode}
+          faviconUrl={faviconUrl || null}
+        />
       </Grid>
 
       {/* Actions */}
