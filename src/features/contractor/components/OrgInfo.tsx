@@ -40,8 +40,9 @@ export function OrgInfo(props: { contractor: Contractor }) {
       <OrgBannerArea org={contractor} />
       <Box
         sx={{
-          position: "relative",
-          top: -450,
+          ...(theme.palette.mode === "dark"
+            ? { position: "relative", top: -450 }
+            : { position: "relative", top: -200 }),
         }}
       >
         <Container maxWidth="xl">
@@ -86,7 +87,7 @@ export function OrgInfoSkeleton() {
         <Skeleton
           variant="rectangular"
           sx={{
-            height: 450,
+            height: theme.palette.mode === "dark" ? 450 : 200,
             width: "100%",
             borderRadius: 0,
           }}
@@ -94,8 +95,9 @@ export function OrgInfoSkeleton() {
         <Container
           maxWidth={"xl"}
           sx={{
-            position: "relative",
-            top: -450,
+            ...(theme.palette.mode === "dark"
+              ? { position: "relative", top: -450 }
+              : { position: "relative", top: -200 }),
           }}
         >
           <Grid container spacing={theme.layoutSpacing.layout}>

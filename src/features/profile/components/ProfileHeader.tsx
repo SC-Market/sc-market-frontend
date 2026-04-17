@@ -5,7 +5,6 @@ import {
   IconButton,
   Link as MaterialLink,
   Typography,
-  useTheme,
 } from "@mui/material"
 import { User } from "../../../datatypes/User"
 import { UserActionsDropdown } from "../../../components/profile/UserActionsDropdown"
@@ -30,8 +29,6 @@ export function ProfileHeader({
   setAvatarFileInputRef,
 }: ProfileHeaderProps) {
   const { t } = useTranslation()
-  const theme = useTheme()
-  const isLight = theme.palette.mode === "light"
 
   return (
     <Grid container spacing={2} alignItems="end" justifyContent="flex-start">
@@ -46,7 +43,7 @@ export function ProfileHeader({
       </Grid>
       <Grid item>
         <Typography
-          color={isLight ? "white" : "text.secondary"}
+          color="text.secondary"
           variant="h6"
           fontWeight={600}
           sx={{ display: "flex", alignItems: "center" }}
@@ -62,7 +59,7 @@ export function ProfileHeader({
             style={{ textDecoration: "none", color: "inherit" }}
           >
             <UnderlineLink
-              color={isLight ? "white" : "text.primary"}
+              color="text.primary"
               variant="subtitle2"
               fontWeight={600}
             >
@@ -71,7 +68,7 @@ export function ProfileHeader({
                 ? `#${profile.discord_profile.discriminator}`
                 : ""}
             </UnderlineLink>
-            <IconButton color={isLight ? "inherit" : "primary"}>
+            <IconButton color="primary">
               <Discord />
             </IconButton>
           </MaterialLink>
