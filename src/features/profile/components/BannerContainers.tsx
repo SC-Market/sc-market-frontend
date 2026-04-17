@@ -36,6 +36,17 @@ export function LightBannerContainer(props: {
         transition: "background 0.3s ease-in-out",
       }}
     >
+      <Box
+        sx={{
+          width: "100%",
+          position: "absolute",
+          height: 250,
+          top: 0,
+          left: 0,
+          background:
+            "linear-gradient(to bottom, transparent 20%, rgba(0,0,0,0.6) 100%)",
+        }}
+      />
       {props.children}
     </Paper>
   )
