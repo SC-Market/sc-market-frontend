@@ -126,6 +126,18 @@
       // Uses sessionStorage to avoid an infinite reload loop; cleared when app loads (see index.tsx)
       ;(function () {
         var RELOAD_KEY = "scmarket_asset_404_reload"
+
+        // Listen for SW messages (covers SW-intercepted asset failures)
+        if ("serviceWorker" in navigator && navigator.serviceWorker.controller) {
+          navigator.serviceWorker.addEventListener("message", function (event) {
+            if (event.data && event.data.type === "ASSET_NOT_FOUND" && !sessionStorage.getItem(RELOAD_KEY)) {
+              sessionStorage.setItem(RELOAD_KEY, "1")
+              window.location.reload()
+            }
+          })
+        }
+
+        // Listen for script load errors (covers non-SW failures)
         window.addEventListener(
           "error",
           function (event) {

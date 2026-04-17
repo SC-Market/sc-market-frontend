@@ -27,7 +27,7 @@ interface SyncEvent extends ExtendableEvent {
 // These imports will be replaced by vite-plugin-pwa during build
 // In the final build, they'll be workbox CDN imports or bundled code
 import { clientsClaim, skipWaiting } from "workbox-core"
-import { precacheAndRoute } from "workbox-precaching"
+import { cleanupOutdatedCaches, precacheAndRoute } from "workbox-precaching"
 import { registerRoute } from "workbox-routing"
 import {
   NetworkFirst,
@@ -42,8 +42,45 @@ import { BackgroundSyncPlugin } from "workbox-background-sync"
 skipWaiting()
 clientsClaim()
 
+// Clean up old precache entries from previous SW versions
+cleanupOutdatedCaches()
+
 // Precache assets (injected by vite-plugin-pwa during build)
-precacheAndRoute(self.__WB_MANIFEST || [])
+const manifest = self.__WB_MANIFEST || []
+precacheAndRoute(manifest)
+
+// Build a set of precached URLs for quick lookup
+const precachedUrls = new Set(
+  manifest.map((entry: any) => {
+    const url = typeof entry === "string" ? entry : entry.url
+    return new URL(url, self.location.href).pathname
+  }),
+)
+
+// Handle stale asset requests after deploy.
+// When a new SW activates, old HTML may reference hashed assets not in the new precache.
+// precacheAndRoute ignores requests not in its manifest, so they fall through here.
+// We try network, and if that 404s, tell clients to reload for the new HTML.
+registerRoute(
+  ({ url }) =>
+    url.origin === self.location.origin &&
+    url.pathname.startsWith("/assets/") &&
+    !precachedUrls.has(url.pathname),
+  async ({ request }) => {
+    try {
+      const response = await fetch(request)
+      if (response.ok) return response
+    } catch {
+      // network error
+    }
+    // Asset gone — tell clients to reload
+    const clients = await self.clients.matchAll({ type: "window" })
+    for (const client of clients) {
+      client.postMessage({ type: "ASSET_NOT_FOUND" })
+    }
+    return new Response("Asset not found — reload required", { status: 404 })
+  },
+)
 
 // Cache navigation requests with StaleWhileRevalidate for instant loads
 // Serves cached page immediately while updating in background

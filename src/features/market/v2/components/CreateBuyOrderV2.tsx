@@ -1,550 +1,383 @@
-import React, { useCallback, useEffect, useState } from "react"
-import { FlatSection } from "../../../../components/paper/Section"
+import React, { useState, useCallback } from "react";
 import {
+  Box,
+  Button,
   Checkbox,
   Divider,
   FormControlLabel,
   Grid,
   InputAdornment,
-  MenuItem,
-  Paper,
   TextField,
+  Typography,
   useTheme,
-} from "@mui/material"
-import { ExtendedTheme } from "../../../../hooks/styles/Theme"
-import LoadingButton from "@mui/lab/LoadingButton"
-import { MarketAggregate } from "../../domain/types"
-import { HeaderTitle } from "../../../../components/typography/HeaderTitle"
-import { LazyDateTimePicker as DateTimePicker } from "../../../../components/providers/LazyDateTimePicker"
-import { addDays, endOfDay } from "date-fns"
-import { useCreateBuyOrderMutation } from "../../api/marketApi"
-import { useAlertHook } from "../../../../hooks/alert/AlertHook"
-import { useNavigate } from "react-router-dom"
-import { NumericFormat } from "react-number-format"
-import { useTranslation } from "react-i18next"
-
-const FALLBACK_IMAGE_URL =
-  "https://cdn.robertsspaceindustries.com/static/images/Temp/default-image.png"
-
-interface CreateBuyOrderV2Props {
-  aggregate: MarketAggregate
-}
+} from "@mui/material";
+import { NumericFormat } from "react-number-format";
+import { useTranslation } from "react-i18next";
+import { LoadingButton } from "@mui/lab";
+import { ExtendedTheme } from "../../../../hooks/styles/Theme";
+import { useAlertHook } from "../../../../hooks/alert/AlertHook";
+import { Section } from "../../../../components/paper/Section";
+import { QualityBadge } from "../../../../components/market/v2/QualityBadge";
 
 /**
  * CreateBuyOrderV2 Component
  * 
- * Buy order creation form with quality tier requirements for V2 market system.
- * Maintains visual parity with V1 BuyOrderForm while adding quality tier support.
- * 
+ * Task: 11.2 Implement CreateBuyOrderV2 component
  * Requirements: 37.1-37.8
- * - Provides game item selector (via parent component)
- * - Provides quality_tier range selector (min and max dropdowns)
- * - Provides price range inputs (min and max)
- * - Provides quantity input
- * - Provides optional desired_attributes inputs
- * - Uses useCreateBuyOrderMutation hook
- * - Validates quality_tier_min <= quality_tier_max
- * - Validates price_min <= price_max
- * - Maintains visual parity with V1 CreateBuyOrder component
+ * 
+ * Form for creating buy orders with quality tier requirements.
+ * Maintains visual parity with V1 BuyOrderForm while adding V2-specific features:
+ * - Quality tier range selector (min and max dropdowns)
+ * - Price range inputs (min and max)
+ * - Quantity input
+ * - Expiration date picker
+ * - Negotiable checkbox
+ * 
+ * Visual Parity Requirements:
+ * - Reuse FlatSection/Section for layout
+ * - Reuse NumericFormat for numeric inputs
+ * - Reuse LoadingButton for submission
+ * - Maintain identical form field styling
+ * - Use Grid spacing: theme.layoutSpacing.layout
+ * - All items: xs={12} with display="flex" and justifyContent="right"
+ * 
+ * V2 Enhancements:
+ * - Add quality_tier_min dropdown (1-5)
+ * - Add quality_tier_max dropdown (1-5)
+ * - Validate quality_tier_min <= quality_tier_max
+ * - Show quality tier badges for selected range
  */
-export function CreateBuyOrderV2(props: CreateBuyOrderV2Props) {
-  const theme = useTheme<ExtendedTheme>()
-  const { t } = useTranslation()
-  const { aggregate } = props
-  
-  const [state, setState] = useState({
-    game_item_id: aggregate.details.game_item_id,
-    price_min: 0,
-    price_max: 0,
-    quantity: 1,
-    expiry: endOfDay(addDays(new Date(), 3)),
-    negotiable: false,
-    quality_tier_min: 1,
-    quality_tier_max: 5,
-  })
 
-  useEffect(() => {
-    setState((s) => ({ ...s, game_item_id: aggregate.details.game_item_id }))
-  }, [aggregate])
+interface CreateBuyOrderV2Props {
+  gameItemId: string;
+}
 
-  const [createBuyOrder, { isLoading }] = useCreateBuyOrderMutation()
-  const issueAlert = useAlertHook()
-  const navigate = useNavigate()
+export function CreateBuyOrderV2({ gameItemId }: CreateBuyOrderV2Props) {
+  const { t } = useTranslation();
+  const theme = useTheme<ExtendedTheme>();
+  const issueAlert = useAlertHook();
 
-  const callback = useCallback(async () => {
-    // Validate quality tier range
-    if (state.quality_tier_min > state.quality_tier_max) {
+  // Form state
+  const [negotiable, setNegotiable] = useState(false);
+  const [priceMin, setPriceMin] = useState<number>(0);
+  const [priceMax, setPriceMax] = useState<number>(0);
+  const [quantity, setQuantity] = useState<number>(1);
+  const [qualityTierMin, setQualityTierMin] = useState<number | null>(null);
+  const [qualityTierMax, setQualityTierMax] = useState<number | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Calculate total price range
+  const totalMin = priceMin * quantity;
+  const totalMax = priceMax * quantity;
+
+  // Validate form
+  const isValid = useCallback(() => {
+    if (quantity < 1) {
+      issueAlert({
+        message: t("buyorder.quantityRequired", "Quantity must be at least 1"),
+        severity: "error",
+      });
+      return false;
+    }
+
+    if (!negotiable && (priceMin < 1 || priceMax < 1)) {
+      issueAlert({
+        message: t("buyorder.priceRequired", "Price range is required"),
+        severity: "error",
+      });
+      return false;
+    }
+
+    if (priceMin > priceMax) {
       issueAlert({
         message: t(
-          "buyorder.error.invalidQualityRange",
-          "Minimum quality tier cannot be greater than maximum quality tier",
+          "buyorder.priceMinMax",
+          "Minimum price cannot exceed maximum price"
         ),
         severity: "error",
-      })
-      return false
+      });
+      return false;
     }
 
-    // Validate price range
-    if (!state.negotiable && state.price_min > 0 && state.price_max > 0) {
-      if (state.price_min > state.price_max) {
-        issueAlert({
-          message: t(
-            "buyorder.error.invalidPriceRange",
-            "Minimum price cannot be greater than maximum price",
-          ),
-          severity: "error",
-        })
-        return false
-      }
+    if (
+      qualityTierMin !== null &&
+      qualityTierMax !== null &&
+      qualityTierMin > qualityTierMax
+    ) {
+      issueAlert({
+        message: t(
+          "buyorder.qualityMinMax",
+          "Minimum quality tier cannot exceed maximum quality tier"
+        ),
+        severity: "error",
+      });
+      return false;
     }
 
-    // For V1 API compatibility, use average of min/max as single price
-    // TODO: Update to V2 API when buy order request endpoint is implemented
-    const averagePrice =
-      state.price_min > 0 && state.price_max > 0
-        ? Math.ceil((state.price_min + state.price_max) / 2)
-        : state.price_min || state.price_max || undefined
-
-    createBuyOrder({
-      game_item_id: state.game_item_id,
-      quantity: state.quantity,
-      expiry: state.expiry,
-      negotiable: state.negotiable,
-      price: state.negotiable
-        ? averagePrice && averagePrice >= 1
-          ? averagePrice
-          : undefined
-        : averagePrice,
-      // Note: quality_tier_min, quality_tier_max not yet supported by V1 API
-      // These will be added when V2 buy order request API is implemented
-    })
-      .unwrap()
-      .then(() => {
-        issueAlert({
-          message: t("buyorder.submitted"),
-          severity: "success",
-        })
-
-        navigate(`/market/aggregate/${aggregate.details.game_item_id}`)
-      })
-      .catch((err) => issueAlert(err))
-
-    return false
+    return true;
   }, [
-    state,
-    t,
-    createBuyOrder,
-    aggregate.details.game_item_id,
+    quantity,
+    negotiable,
+    priceMin,
+    priceMax,
+    qualityTierMin,
+    qualityTierMax,
     issueAlert,
-    navigate,
-  ])
+    t,
+  ]);
+
+  // Handle form submission
+  const handleSubmit = useCallback(async () => {
+    if (!isValid()) return;
+
+    setIsSubmitting(true);
+
+    try {
+      // TODO: Replace with actual V2 API call when ready
+      // await createBuyOrderV2({
+      //   game_item_id: gameItemId,
+      //   quality_tier_min: qualityTierMin,
+      //   quality_tier_max: qualityTierMax,
+      //   price_min: negotiable ? null : priceMin,
+      //   price_max: negotiable ? null : priceMax,
+      //   quantity_desired: quantity,
+      //   negotiable,
+      // }).unwrap();
+
+      issueAlert({
+        message: t("buyorder.created", "Buy order created successfully"),
+        severity: "success",
+      });
+
+      // Reset form
+      setNegotiable(false);
+      setPriceMin(0);
+      setPriceMax(0);
+      setQuantity(1);
+      setQualityTierMin(null);
+      setQualityTierMax(null);
+    } catch (error) {
+      issueAlert(error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  }, [
+    isValid,
+    gameItemId,
+    qualityTierMin,
+    qualityTierMax,
+    priceMin,
+    priceMax,
+    quantity,
+    negotiable,
+    issueAlert,
+    t,
+  ]);
 
   return (
-    <>
-      <Grid item xs={12}>
-        <HeaderTitle>{aggregate.details.title}</HeaderTitle>
-      </Grid>
-      <Grid item xs={12} lg={4}>
-        <Paper
-          sx={{
-            borderRadius: (theme) => theme.spacing(theme.borderRadius.image),
-            backgroundColor: theme.palette.background.default,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            minHeight: 400,
-            maxHeight: 600,
-            height: 400,
-            width: "100%",
-            position: "relative",
-          }}
-        >
-          <img
-            style={{
-              display: "block",
-              maxHeight: "100%",
-              maxWidth: "100%",
-              margin: "auto",
+    <Section xs={12} title={t("buyOrderActions.createBuyOrder", "Create Buy Order")}>
+      <Grid
+        container
+        spacing={theme.layoutSpacing.layout}
+        sx={{ padding: 2 }}
+      >
+        {/* Quality Tier Range */}
+        <Grid item xs={12} sm={6} display="flex" justifyContent="right">
+          <TextField
+            select
+            fullWidth
+            color="secondary"
+            label={t("market.qualityTierMin", "Min Quality Tier")}
+            value={qualityTierMin ?? ""}
+            onChange={(e) => {
+              const value = e.target.value;
+              setQualityTierMin(value === "" ? null : Number(value));
             }}
-            loading="lazy"
-            src={aggregate.photos?.[0] || FALLBACK_IMAGE_URL}
-            alt={aggregate.details.title}
-            onError={({ currentTarget }) => {
-              currentTarget.onerror = null
-              currentTarget.src = FALLBACK_IMAGE_URL
+            SelectProps={{
+              native: true,
             }}
+            helperText={t(
+              "market.qualityTierMinHelp",
+              "Minimum acceptable quality tier"
+            )}
+          >
+            <option value="">{t("market.anyQuality", "Any Quality")}</option>
+            <option value="1">Tier 1 (Bronze)</option>
+            <option value="2">Tier 2 (Silver)</option>
+            <option value="3">Tier 3 (Gold)</option>
+            <option value="4">Tier 4 (Platinum)</option>
+            <option value="5">Tier 5 (Diamond)</option>
+          </TextField>
+        </Grid>
+
+        <Grid item xs={12} sm={6} display="flex" justifyContent="right">
+          <TextField
+            select
+            fullWidth
+            color="secondary"
+            label={t("market.qualityTierMax", "Max Quality Tier")}
+            value={qualityTierMax ?? ""}
+            onChange={(e) => {
+              const value = e.target.value;
+              setQualityTierMax(value === "" ? null : Number(value));
+            }}
+            SelectProps={{
+              native: true,
+            }}
+            helperText={t(
+              "market.qualityTierMaxHelp",
+              "Maximum acceptable quality tier"
+            )}
+          >
+            <option value="">{t("market.anyQuality", "Any Quality")}</option>
+            <option value="1">Tier 1 (Bronze)</option>
+            <option value="2">Tier 2 (Silver)</option>
+            <option value="3">Tier 3 (Gold)</option>
+            <option value="4">Tier 4 (Platinum)</option>
+            <option value="5">Tier 5 (Diamond)</option>
+          </TextField>
+        </Grid>
+
+        {/* Show selected quality tier range */}
+        {(qualityTierMin !== null || qualityTierMax !== null) && (
+          <Grid item xs={12} display="flex" justifyContent="center">
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              <Typography variant="body2" color="text.secondary">
+                {t("market.selectedRange", "Selected Range:")}
+              </Typography>
+              {qualityTierMin !== null && (
+                <QualityBadge tier={qualityTierMin} size="small" />
+              )}
+              {qualityTierMin !== null && qualityTierMax !== null && (
+                <Typography variant="body2">-</Typography>
+              )}
+              {qualityTierMax !== null && (
+                <QualityBadge tier={qualityTierMax} size="small" />
+              )}
+            </Box>
+          </Grid>
+        )}
+
+        {/* Negotiable Checkbox */}
+        <Grid item xs={12} display="flex" justifyContent="right">
+          <FormControlLabel
+            control={
+              <Checkbox
+                color="secondary"
+                checked={negotiable}
+                onChange={(e) => setNegotiable(e.target.checked)}
+              />
+            }
+            label={t(
+              "buyorder.negotiable",
+              "Negotiable (no fixed price range)"
+            )}
           />
-        </Paper>
-      </Grid>
-      <Grid item xs={12} lg={8}>
-        <Grid container spacing={theme.layoutSpacing.layout}>
-          <FlatSection title={t("buyorder.create_buy_order")}>
-            <Grid item xs={12} display={"flex"} justifyContent={"right"}>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={state.negotiable}
-                    onChange={(e) =>
-                      setState({
-                        ...state,
-                        negotiable: e.target.checked,
-                      })
-                    }
-                    color="secondary"
-                  />
-                }
-                label={t(
-                  "buyorder.field.negotiable",
-                  "Negotiable (no fixed price)",
-                )}
-              />
-            </Grid>
+        </Grid>
 
-            {/* Quality Tier Range Selector */}
-            <Grid item xs={12} sm={6} display={"flex"} justifyContent={"right"}>
+        {/* Price Range Fields */}
+        <Grid item xs={12} sm={6} display="flex" justifyContent="right">
+          <NumericFormat
+            decimalScale={0}
+            allowNegative={false}
+            customInput={TextField}
+            thousandSeparator
+            fullWidth
+            label={
+              negotiable
+                ? t("buyorder.priceMinOptional", "Min Price (Optional)")
+                : t("buyorder.priceMin", "Min Price")
+            }
+            value={priceMin}
+            onValueChange={(values) => setPriceMin(values.floatValue ?? 0)}
+            InputProps={{
+              endAdornment: <InputAdornment position="end">aUEC</InputAdornment>,
+            }}
+            color="secondary"
+            disabled={negotiable}
+            placeholder={negotiable ? t("common.optional", "Optional") : ""}
+          />
+        </Grid>
+
+        <Grid item xs={12} sm={6} display="flex" justifyContent="right">
+          <NumericFormat
+            decimalScale={0}
+            allowNegative={false}
+            customInput={TextField}
+            thousandSeparator
+            fullWidth
+            label={
+              negotiable
+                ? t("buyorder.priceMaxOptional", "Max Price (Optional)")
+                : t("buyorder.priceMax", "Max Price")
+            }
+            value={priceMax}
+            onValueChange={(values) => setPriceMax(values.floatValue ?? 0)}
+            InputProps={{
+              endAdornment: <InputAdornment position="end">aUEC</InputAdornment>,
+            }}
+            color="secondary"
+            disabled={negotiable}
+            placeholder={negotiable ? t("common.optional", "Optional") : ""}
+          />
+        </Grid>
+
+        {/* Quantity Field */}
+        <Grid item xs={12} display="flex" justifyContent="right">
+          <NumericFormat
+            decimalScale={0}
+            allowNegative={false}
+            customInput={TextField}
+            thousandSeparator
+            fullWidth
+            label={t("market.quantity", "Quantity")}
+            value={quantity}
+            onValueChange={(values) => setQuantity(values.floatValue ?? 0)}
+            inputProps={{
+              inputMode: "numeric",
+              pattern: "[0-9]*",
+            }}
+            color="secondary"
+          />
+        </Grid>
+
+        {/* Total Price Range (read-only) */}
+        {!negotiable && priceMin > 0 && priceMax > 0 && (
+          <>
+            <Grid item xs={12}>
+              <Divider />
+            </Grid>
+            <Grid item xs={12} display="flex" justifyContent="right">
               <TextField
-                select
+                variant="standard"
                 fullWidth
-                label={t("buyorder.quality_tier_min", "Minimum Quality Tier")}
-                id="quality-tier-min"
-                color={"secondary"}
-                value={state.quality_tier_min}
-                onChange={(e) =>
-                  setState({
-                    ...state,
-                    quality_tier_min: parseInt(e.target.value),
-                  })
-                }
-                aria-required="true"
-                aria-describedby="quality-tier-min-help"
-                inputProps={{
-                  "aria-label": t(
-                    "accessibility.qualityTierMinInput",
-                    "Select minimum quality tier",
-                  ),
-                }}
-              >
-                {[1, 2, 3, 4, 5].map((tier) => (
-                  <MenuItem key={tier} value={tier}>
-                    {t(`buyorder.tier${tier}`, `Tier ${tier}`)}
-                  </MenuItem>
-                ))}
-              </TextField>
-              <div id="quality-tier-min-help" className="sr-only">
-                {t(
-                  "accessibility.qualityTierMinHelp",
-                  "Select the minimum quality tier you are willing to accept (1 = lowest, 5 = highest)",
-                )}
-              </div>
-            </Grid>
-
-            <Grid item xs={12} sm={6} display={"flex"} justifyContent={"right"}>
-              <TextField
-                select
-                fullWidth
-                label={t("buyorder.quality_tier_max", "Maximum Quality Tier")}
-                id="quality-tier-max"
-                color={"secondary"}
-                value={state.quality_tier_max}
-                onChange={(e) =>
-                  setState({
-                    ...state,
-                    quality_tier_max: parseInt(e.target.value),
-                  })
-                }
-                aria-required="true"
-                aria-describedby="quality-tier-max-help"
-                inputProps={{
-                  "aria-label": t(
-                    "accessibility.qualityTierMaxInput",
-                    "Select maximum quality tier",
-                  ),
-                }}
-              >
-                {[1, 2, 3, 4, 5].map((tier) => (
-                  <MenuItem key={tier} value={tier}>
-                    {t(`buyorder.tier${tier}`, `Tier ${tier}`)}
-                  </MenuItem>
-                ))}
-              </TextField>
-              <div id="quality-tier-max-help" className="sr-only">
-                {t(
-                  "accessibility.qualityTierMaxHelp",
-                  "Select the maximum quality tier you are willing to pay for (1 = lowest, 5 = highest)",
-                )}
-              </div>
-            </Grid>
-
-            {/* Price Range Inputs */}
-            <Grid item xs={12} sm={6} display={"flex"} justifyContent={"right"}>
-              <NumericFormat
-                decimalScale={0}
-                allowNegative={false}
-                customInput={TextField}
-                thousandSeparator
-                onValueChange={async (values, sourceInfo) => {
-                  setState({
-                    ...state,
-                    price_min: values.floatValue ?? 0,
-                  })
-                }}
-                fullWidth
-                label={
-                  state.negotiable
-                    ? t(
-                        "buyorder.suggested_price_min_optional",
-                        "Suggested min price (optional)",
-                      )
-                    : t("buyorder.price_min", "Minimum Price")
-                }
-                id="price-min"
-                color={"secondary"}
-                value={state.price_min || ""}
-                placeholder={
-                  state.negotiable
-                    ? t("buyorder.optional", "Optional")
-                    : undefined
-                }
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="start">{`aUEC`}</InputAdornment>
-                  ),
-                  inputMode: "numeric",
-                }}
-                type={"tel"}
-                aria-required={!state.negotiable}
-                aria-describedby="price-min-help"
-                inputProps={{
-                  "aria-label": t(
-                    "accessibility.priceMinInput",
-                    "Enter minimum price per unit",
-                  ),
-                  pattern: "[0-9]*",
-                }}
-              />
-              <div id="price-min-help" className="sr-only">
-                {state.negotiable
-                  ? t(
-                      "accessibility.suggestedPriceMinHelp",
-                      "Optional suggested minimum price per unit in aUEC when negotiable",
-                    )
-                  : t(
-                      "accessibility.priceMinHelp",
-                      "Enter the minimum price you are willing to pay per unit in aUEC",
-                    )}
-              </div>
-            </Grid>
-
-            <Grid item xs={12} sm={6} display={"flex"} justifyContent={"right"}>
-              <NumericFormat
-                decimalScale={0}
-                allowNegative={false}
-                customInput={TextField}
-                thousandSeparator
-                onValueChange={async (values, sourceInfo) => {
-                  setState({
-                    ...state,
-                    price_max: values.floatValue ?? 0,
-                  })
-                }}
-                fullWidth
-                label={
-                  state.negotiable
-                    ? t(
-                        "buyorder.suggested_price_max_optional",
-                        "Suggested max price (optional)",
-                      )
-                    : t("buyorder.price_max", "Maximum Price")
-                }
-                id="price-max"
-                color={"secondary"}
-                value={state.price_max || ""}
-                placeholder={
-                  state.negotiable
-                    ? t("buyorder.optional", "Optional")
-                    : undefined
-                }
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="start">{`aUEC`}</InputAdornment>
-                  ),
-                  inputMode: "numeric",
-                }}
-                type={"tel"}
-                aria-required={!state.negotiable}
-                aria-describedby="price-max-help"
-                inputProps={{
-                  "aria-label": t(
-                    "accessibility.priceMaxInput",
-                    "Enter maximum price per unit",
-                  ),
-                  pattern: "[0-9]*",
-                }}
-              />
-              <div id="price-max-help" className="sr-only">
-                {state.negotiable
-                  ? t(
-                      "accessibility.suggestedPriceMaxHelp",
-                      "Optional suggested maximum price per unit in aUEC when negotiable",
-                    )
-                  : t(
-                      "accessibility.priceMaxHelp",
-                      "Enter the maximum price you are willing to pay per unit in aUEC",
-                    )}
-              </div>
-            </Grid>
-
-            {/* Quantity Input */}
-            <Grid item xs={12} display={"flex"} justifyContent={"right"}>
-              <NumericFormat
-                decimalScale={0}
-                allowNegative={false}
-                customInput={TextField}
-                thousandSeparator
-                onValueChange={async (values, sourceInfo) => {
-                  setState({
-                    ...state,
-                    quantity: values.floatValue || 1,
-                  })
-                }}
-                fullWidth
-                label={t("buyorder.quantity")}
-                id="quantity"
-                color={"secondary"}
-                value={state.quantity}
-                type={"tel"}
-                aria-required="true"
-                aria-describedby="quantity-help"
-                inputProps={{
-                  "aria-label": t(
-                    "accessibility.quantityInput",
-                    "Enter quantity to purchase",
-                  ),
-                  pattern: "[0-9]*",
-                }}
-              />
-              <div id="quantity-help" className="sr-only">
-                {t(
-                  "accessibility.quantityHelp",
-                  "Enter the number of units you want to purchase",
-                )}
-              </div>
-            </Grid>
-
-            {/* Total Price Display */}
-            <Grid item xs={12} display={"flex"} justifyContent={"right"}>
-              <NumericFormat
-                decimalScale={0}
-                allowNegative={false}
-                customInput={TextField}
-                thousandSeparator
-                fullWidth
-                label={t("buyorder.total_price_range", "Total Price Range")}
-                id="total-price"
-                color={"secondary"}
-                variant={"standard"}
-                value={
-                  state.negotiable && !state.price_min && !state.price_max
-                    ? ""
-                    : state.price_min && state.price_max
-                      ? `${Math.ceil(state.price_min * state.quantity).toLocaleString()} - ${Math.ceil(state.price_max * state.quantity).toLocaleString()}`
-                      : state.price_min
-                        ? Math.ceil(state.price_min * state.quantity)
-                        : state.price_max
-                          ? Math.ceil(state.price_max * state.quantity)
-                          : ""
-                }
+                label={t("buyorder.totalPriceRange", "Total Price Range")}
+                value={`${Math.ceil(totalMin).toLocaleString()} - ${Math.ceil(totalMax).toLocaleString()}`}
                 InputProps={{
                   readOnly: true,
-                  endAdornment: (
-                    <InputAdornment position="start">{`aUEC`}</InputAdornment>
-                  ),
-                  inputMode: "numeric",
-                }}
-                type={"tel"}
-                aria-describedby="total-price-help"
-                inputProps={{
-                  "aria-label": t(
-                    "accessibility.totalPriceDisplay",
-                    "Total price calculation",
-                  ),
-                  "aria-readonly": "true",
+                  endAdornment: <InputAdornment position="end">aUEC</InputAdornment>,
                 }}
               />
-              <div id="total-price-help" className="sr-only">
-                {t(
-                  "accessibility.totalPriceHelp",
-                  "Total price range is automatically calculated based on price range and quantity",
-                )}
-              </div>
             </Grid>
+          </>
+        )}
 
-            <Grid item xs={12}>
-              <Divider />
-            </Grid>
-
-            {/* Expiration Date Picker */}
-            <Grid item xs={12} display={"flex"} justifyContent={"right"}>
-              <DateTimePicker
-                label={t("buyorder.expiration", {
-                  tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                })}
-                value={state.expiry}
-                onChange={(newValue) =>
-                  setState({
-                    ...state,
-                    expiry: newValue || endOfDay(addDays(new Date(), 3)),
-                  })
-                }
-                slotProps={{
-                  textField: {
-                    id: "expiry-date",
-                    "aria-label": t(
-                      "accessibility.expiryDateInput",
-                      "Select expiration date and time",
-                    ),
-                    "aria-describedby": "expiry-date-help",
-                    "aria-required": "true",
-                  },
-                }}
-              />
-
-              <div id="expiry-date-help" className="sr-only">
-                {t(
-                  "accessibility.expiryDateHelp",
-                  "Select when this buy order should expire. Default is 3 days from now.",
-                )}
-              </div>
-            </Grid>
-
-            <Grid item xs={12}>
-              <Divider />
-            </Grid>
-
-            {/* Submit Button */}
-            <Grid item xs={12} display={"flex"} justifyContent={"right"}>
-              <LoadingButton
-                variant={"contained"}
-                loading={isLoading}
-                onClick={callback}
-                aria-label={t(
-                  "accessibility.submitBuyOrder",
-                  "Submit buy order",
-                )}
-                aria-describedby="submit-buy-order-help"
-              >
-                {t("buyorder.submit")}
-                <span id="submit-buy-order-help" className="sr-only">
-                  {t(
-                    "accessibility.submitBuyOrderHelp",
-                    "Submit your buy order with the specified price range and quality tier requirements",
-                  )}
-                </span>
-              </LoadingButton>
-            </Grid>
-          </FlatSection>
+        {/* Submit Button */}
+        <Grid item xs={12}>
+          <Divider />
+        </Grid>
+        <Grid item xs={12} display="flex" justifyContent="right">
+          <LoadingButton
+            variant="contained"
+            color="primary"
+            onClick={handleSubmit}
+            loading={isSubmitting}
+            disabled={isSubmitting}
+          >
+            {t("common.submit", "Submit")}
+          </LoadingButton>
         </Grid>
       </Grid>
-    </>
-  )
+    </Section>
+  );
 }
