@@ -137,6 +137,7 @@ registerRoute(
 
 // Cache CSS and JS files with StaleWhileRevalidate
 // This ensures users get cached assets immediately while updates happen in background
+// If a hashed asset 404s (deploy changed the hash), force reload to get new index.html
 registerRoute(
   /\.(?:css|js)$/,
   new StaleWhileRevalidate({
@@ -150,6 +151,25 @@ registerRoute(
         maxAgeSeconds: 60 * 60 * 24 * 7, // 7 days
         purgeOnQuotaError: true,
       }),
+      {
+        // If a JS/CSS fetch returns 404 (stale hash after deploy), notify clients to reload
+        fetchDidSucceed: async ({ response }: { response: Response }) => {
+          if (response.status === 404) {
+            const clients = await self.clients.matchAll({ type: "window" })
+            for (const client of clients) {
+              client.postMessage({ type: "ASSET_NOT_FOUND" })
+            }
+          }
+          return response
+        },
+        handlerDidError: async () => {
+          const clients = await self.clients.matchAll({ type: "window" })
+          for (const client of clients) {
+            client.postMessage({ type: "ASSET_NOT_FOUND" })
+          }
+          return undefined as any
+        },
+      },
     ],
   }),
 )
