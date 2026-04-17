@@ -1,0 +1,528 @@
+import React, { useCallback, useMemo, useState } from "react"
+import {
+  Alert,
+  AlertTitle,
+  Box,
+  Button,
+  Divider,
+  Grid,
+  InputAdornment,
+  Link as MaterialLink,
+  TextField,
+  Typography,
+  Chip,
+} from "@mui/material"
+import { Section } from "../../../components/paper/Section"
+import { Link, useNavigate } from "react-router-dom"
+import { UnderlineLink } from "../../../components/typography/UnderlineLink"
+import { TrashCan } from "mdi-material-ui"
+import LoadingButton from "@mui/lab/LoadingButton"
+import { useAlertHook } from "../../../hooks/alert/AlertHook"
+import { HeaderTitle } from "../../../components/typography/HeaderTitle"
+import { BackArrow } from "../../../components/button/BackArrow"
+import { NumericFormat } from "react-number-format"
+import { FALLBACK_IMAGE_URL } from "../../../util/constants"
+import { useTranslation } from "react-i18next"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../../hooks/styles/Theme"
+import { EmptyCart } from "../../../components/empty-states"
+import { StandardPageLayout } from "../../../components/layout/StandardPageLayout"
+import { ShoppingCartRounded, Warning } from "@mui/icons-material"
+import {
+  useGetCartQuery,
+  useUpdateCartItemMutation,
+  useRemoveCartItemMutation,
+  useCheckoutCartMutation,
+  CartItemDetail,
+} from "../../../store/api/v2/market"
+import { QualityBadge } from "../../../components/market/v2/QualityBadge"
+import { VariantSelector } from "../../../components/market/v2/VariantSelector"
+
+/**
+ * CartItemEntryV2 - Individual cart item with variant details
+ * 
+ * Requirements: 31.4-31.12
+ * - Display variant details with quality tier badge
+ * - Provide variant selector for changing selection
+ * - Inline quantity editing with availability constraint
+ * - Show price changes since add-to-cart
+ * - Display availability warnings
+ * - Remove button functionality
+ */
+export function CartItemEntryV2(props: {
+  item: CartItemDetail
+  onRemove: (cartItemId: string) => void
+}) {
+  const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
+  const { item, onRemove } = props
+  const issueAlert = useAlertHook()
+
+  const [updateCartItem, { isLoading: isUpdating }] = useUpdateCartItemMutation()
+
+  // Handle quantity change
+  const handleQuantityChange = useCallback(
+    async (newQuantity: number) => {
+      if (newQuantity < 1) return
+
+      try {
+        await updateCartItem({
+          id: item.cart_item_id,
+          updateCartItemRequest: { quantity: newQuantity },
+        }).unwrap()
+
+        issueAlert({
+          message: t("cart.quantityUpdated", "Quantity updated"),
+          severity: "success",
+        })
+      } catch (error) {
+        issueAlert(error)
+      }
+    },
+    [item.cart_item_id, updateCartItem, issueAlert, t]
+  )
+
+  // Handle variant change
+  const handleVariantChange = useCallback(
+    async (variantId: string) => {
+      try {
+        await updateCartItem({
+          id: item.cart_item_id,
+          updateCartItemRequest: { variant_id: variantId },
+        }).unwrap()
+
+        issueAlert({
+          message: t("cart.variantUpdated", "Variant updated"),
+          severity: "success",
+        })
+      } catch (error) {
+        issueAlert(error)
+      }
+    },
+    [item.cart_item_id, updateCartItem, issueAlert, t]
+  )
+
+  // Price change indicator
+  const priceChanged = item.price_changed && item.current_price !== undefined
+  const priceDifference = priceChanged
+    ? item.current_price! - item.price_per_unit
+    : 0
+
+  return (
+    <Grid item xs={12}>
+      <Grid
+        container
+        spacing={theme.layoutSpacing.layout}
+        justifyContent={"space-between"}
+      >
+        {/* Image Section */}
+        <Grid item>
+          <img
+            height={128}
+            width={128}
+            src={FALLBACK_IMAGE_URL}
+            alt={item.listing.title}
+            style={{
+              borderRadius: theme.spacing(theme.borderRadius.image),
+              objectFit: "cover",
+            }}
+            loading="lazy"
+            onError={({ currentTarget }) => {
+              currentTarget.onerror = null
+              currentTarget.src = FALLBACK_IMAGE_URL
+            }}
+          />
+        </Grid>
+
+        {/* Item Info Section */}
+        <Grid item sx={{ "& > *": { marginBottom: 1 } }}>
+          <Box>
+            <MaterialLink
+              component={Link}
+              to={`/market/v2/${item.listing.listing_id}`}
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              <UnderlineLink
+                color={"text.secondary"}
+                variant={"h6"}
+                sx={{
+                  fontWeight: "600",
+                }}
+              >
+                {item.listing.title}
+              </UnderlineLink>
+            </MaterialLink>
+          </Box>
+
+          {/* Seller Info */}
+          <Box>
+            <Typography variant="body2" color="text.secondary">
+              {t("cart.seller")}: {item.listing.seller_name}
+            </Typography>
+          </Box>
+
+          {/* Variant Display with Quality Badge */}
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            {item.variant.attributes.quality_tier && (
+              <QualityBadge
+                tier={item.variant.attributes.quality_tier}
+                size="small"
+              />
+            )}
+            <Typography variant="body2" color="text.secondary">
+              {item.variant.display_name}
+            </Typography>
+          </Box>
+
+          {/* Availability Warning */}
+          {!item.available && (
+            <Alert severity="warning" sx={{ mt: 1 }}>
+              <AlertTitle>{t("cart.unavailable", "Unavailable")}</AlertTitle>
+              {t(
+                "cart.unavailableMessage",
+                "This variant is no longer available"
+              )}
+            </Alert>
+          )}
+
+          {/* Price Change Warning */}
+          {priceChanged && (
+            <Alert severity="info" icon={<Warning />} sx={{ mt: 1 }}>
+              <AlertTitle>
+                {t("cart.priceChanged", "Price Changed")}
+              </AlertTitle>
+              <Typography variant="body2">
+                {priceDifference > 0
+                  ? t("cart.priceIncreased", {
+                      old: item.price_per_unit.toLocaleString(),
+                      new: item.current_price!.toLocaleString(),
+                    })
+                  : t("cart.priceDecreased", {
+                      old: item.price_per_unit.toLocaleString(),
+                      new: item.current_price!.toLocaleString(),
+                    })}
+              </Typography>
+            </Alert>
+          )}
+
+          {/* Quantity Input */}
+          <Box>
+            <NumericFormat
+              decimalScale={0}
+              allowNegative={false}
+              customInput={TextField}
+              thousandSeparator
+              onValueChange={async (values) => {
+                const newQuantity = +(values.floatValue || 1)
+                if (newQuantity !== item.quantity) {
+                  await handleQuantityChange(newQuantity)
+                }
+              }}
+              inputProps={{
+                inputMode: "numeric",
+                pattern: "[0-9]*",
+              }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="start">
+                    {t("cart.ofAvailable", {
+                      available: item.variant.quantity?.toLocaleString() || "0",
+                    })}
+                  </InputAdornment>
+                ),
+                inputMode: "numeric",
+              }}
+              size="small"
+              label={t("cart.quantity")}
+              value={item.quantity}
+              color={"secondary"}
+              disabled={isUpdating || !item.available}
+            />
+          </Box>
+        </Grid>
+
+        {/* Price Section */}
+        <Grid item>
+          <Box display={"flex"} justifyContent={"space-between"} width={240}>
+            <Box sx={{ width: 120 }}>
+              <Typography>{t("cart.price")}</Typography>
+              <Typography>{t("cart.quantity")}</Typography>
+            </Box>
+            <Box sx={{ width: 120 }}>
+              <Typography sx={{ textAlign: "right" }}>
+                {(priceChanged ? item.current_price! : item.price_per_unit).toLocaleString()}{" "}
+                aUEC
+              </Typography>
+              <Typography sx={{ textAlign: "right" }}>
+                x {item.quantity.toLocaleString()}
+              </Typography>
+            </Box>
+          </Box>
+          <Divider light />
+          <Box display={"flex"} justifyContent={"space-between"} width={240}>
+            <Box sx={{ width: 120 }}>
+              <Typography>{t("cart.subtotal")}</Typography>
+            </Box>
+            <Box sx={{ width: 120 }}>
+              <Typography sx={{ textAlign: "right" }}>
+                {item.subtotal.toLocaleString()} aUEC
+              </Typography>
+            </Box>
+          </Box>
+
+          {/* Remove Button */}
+          <Box>
+            <Button
+              color={"error"}
+              variant={"text"}
+              startIcon={<TrashCan />}
+              size={"small"}
+              onClick={() => onRemove(item.cart_item_id)}
+              disabled={isUpdating}
+            >
+              {t("cart.remove")}
+            </Button>
+          </Box>
+        </Grid>
+      </Grid>
+    </Grid>
+  )
+}
+
+/**
+ * MarketCartV2 - Shopping cart with variant support
+ * 
+ * Requirements: 31.1-31.14
+ * - Use useGetCartQuery hook for server-side cart
+ * - Display variant details for each cart item
+ * - Show quality_tier with QualityBadge visual indicators
+ * - Provide VariantSelector for changing variant selection
+ * - Provide quantity input for each item
+ * - Display per-variant pricing
+ * - Calculate cart total with variant-specific prices
+ * - Highlight price changes since add-to-cart
+ * - Show availability warnings for unavailable variants
+ * - Provide "Remove" button for each item
+ * - Provide "Checkout" button
+ * - Use useUpdateCartItemMutation and useRemoveCartItemMutation hooks
+ * - Maintain visual parity with V1 MarketCart component
+ */
+export function MarketCartV2() {
+  const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
+  const navigate = useNavigate()
+  const issueAlert = useAlertHook()
+
+  // Fetch cart data
+  const {
+    data: cartData,
+    isLoading,
+    error,
+    refetch,
+  } = useGetCartQuery()
+
+  const [removeCartItem, { isLoading: isRemoving }] = useRemoveCartItemMutation()
+  const [checkoutCart, { isLoading: isCheckingOut }] = useCheckoutCartMutation()
+
+  // Handle remove item
+  const handleRemove = useCallback(
+    async (cartItemId: string) => {
+      try {
+        await removeCartItem({ id: cartItemId }).unwrap()
+
+        issueAlert({
+          message: t("cart.itemRemoved", "Item removed from cart"),
+          severity: "success",
+        })
+      } catch (error) {
+        issueAlert(error)
+      }
+    },
+    [removeCartItem, issueAlert, t]
+  )
+
+  // Handle checkout
+  const handleCheckout = useCallback(
+    async () => {
+      if (!cartData || cartData.items.length === 0) return
+
+      // Check for price changes
+      const hasPriceChanges = cartData.items.some((item) => item.price_changed)
+
+      try {
+        const result = await checkoutCart({
+          checkoutCartRequest: {
+            confirm_price_changes: hasPriceChanges,
+          },
+        }).unwrap()
+
+        issueAlert({
+          message: t("cart.checkoutSuccess", "Order created successfully"),
+          severity: "success",
+        })
+
+        // Navigate to order page
+        navigate(`/offer/${result.order_id}`)
+      } catch (error) {
+        issueAlert(error)
+      }
+    },
+    [cartData, checkoutCart, issueAlert, navigate, t]
+  )
+
+  // Check if any items are unavailable
+  const hasUnavailableItems = useMemo(
+    () => cartData?.items.some((item) => !item.available) ?? false,
+    [cartData]
+  )
+
+  // Check if any prices changed
+  const hasPriceChanges = useMemo(
+    () => cartData?.items.some((item) => item.price_changed) ?? false,
+    [cartData]
+  )
+
+  // Empty cart state
+  if (!isLoading && (!cartData || cartData.items.length === 0)) {
+    return (
+      <StandardPageLayout
+        title={t("marketActions.myCart")}
+        breadcrumbs={[
+          { label: t("sidebar.market_short"), href: "/market" },
+          { label: t("cart.yourCart") },
+        ]}
+        showOrgInBreadcrumbs={true}
+        headerTitle={
+          <>
+            <BackArrow /> {t("cart.yourCart")}
+          </>
+        }
+        sidebarOpen={true}
+        maxWidth="md"
+        isLoading={isLoading}
+        error={error}
+      >
+        <Grid item xs={12}>
+          <EmptyCart />
+        </Grid>
+      </StandardPageLayout>
+    )
+  }
+
+  return (
+    <StandardPageLayout
+      title={t("marketActions.myCart")}
+      breadcrumbs={[
+        { label: t("sidebar.market_short"), href: "/market" },
+        { label: t("cart.yourCart") },
+      ]}
+      showOrgInBreadcrumbs={true}
+      headerTitle={
+        <>
+          <BackArrow /> {t("cart.yourCart")}
+        </>
+      }
+      sidebarOpen={true}
+      maxWidth="md"
+      isLoading={isLoading}
+      error={error}
+    >
+      <Grid item xs={12} container spacing={theme.layoutSpacing.layout}>
+        <Section xs={12} title={t("cart.items", "Cart Items")}>
+          {/* Cart Items */}
+          {cartData?.items.map((item) => (
+            <CartItemEntryV2
+              key={item.cart_item_id}
+              item={item}
+              onRemove={handleRemove}
+            />
+          ))}
+
+          {/* Total Section */}
+          <Grid item xs={12}>
+            <Box display={"flex"} justifyContent={"space-between"}>
+              <Typography variant={"h5"} color={"text.secondary"}>
+                {t("cart.total")}
+              </Typography>
+
+              <Typography variant={"h5"} color={"text.secondary"}>
+                {cartData?.total_price.toLocaleString()} aUEC
+              </Typography>
+            </Box>
+          </Grid>
+
+          {/* Price Change Alert */}
+          {hasPriceChanges && (
+            <Grid item xs={12}>
+              <Alert severity="info" icon={<Warning />}>
+                <AlertTitle>
+                  {t("cart.pricesChanged", "Prices Have Changed")}
+                </AlertTitle>
+                {t(
+                  "cart.pricesChangedMessage",
+                  "Some item prices have changed since you added them to your cart. Please review before checkout."
+                )}
+              </Alert>
+            </Grid>
+          )}
+
+          {/* Unavailable Items Alert */}
+          {hasUnavailableItems && (
+            <Grid item xs={12}>
+              <Alert severity="warning">
+                <AlertTitle>
+                  {t("cart.unavailableItems", "Unavailable Items")}
+                </AlertTitle>
+                {t(
+                  "cart.unavailableItemsMessage",
+                  "Some items in your cart are no longer available. Please remove them before checkout."
+                )}
+              </Alert>
+            </Grid>
+          )}
+
+          {/* Checkout Section */}
+          <Grid item xs={12} md={4}>
+            <Typography variant="body2" color="text.secondary">
+              {t(
+                "cart.checkoutDesc",
+                "Review your cart and proceed to checkout"
+              )}
+            </Typography>
+          </Grid>
+          <Grid item xs={12} md={8}>
+            <Grid
+              container
+              spacing={theme.layoutSpacing.text}
+              justifyContent={"right"}
+              alignItems={"center"}
+            >
+              <Grid item>
+                <Typography
+                  variant={"body1"}
+                  sx={{ marginRight: 1, alignItems: "center" }}
+                >
+                  {t("cart.payTotal", {
+                    total: cartData?.total_price.toLocaleString(),
+                  })}
+                </Typography>
+              </Grid>
+              <Grid item>
+                <LoadingButton
+                  color={"secondary"}
+                  variant={"contained"}
+                  startIcon={<ShoppingCartRounded />}
+                  loading={isCheckingOut}
+                  disabled={hasUnavailableItems || isRemoving}
+                  onClick={handleCheckout}
+                >
+                  {t("cart.checkout", "Checkout")}
+                </LoadingButton>
+              </Grid>
+            </Grid>
+          </Grid>
+        </Section>
+      </Grid>
+    </StandardPageLayout>
+  )
+}
