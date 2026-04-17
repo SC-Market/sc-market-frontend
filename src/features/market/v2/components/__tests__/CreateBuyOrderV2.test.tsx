@@ -1,3 +1,4 @@
+import "./setup";
 import React from "react"
 import { render, screen, fireEvent, waitFor } from "@testing-library/react"
 import { describe, it, expect, vi, beforeEach } from "vitest"
@@ -53,6 +54,8 @@ vi.mock("react-router-dom", async () => {
 })
 
 const mockGameItemId = "test-item-id"
+const mockListingId = "test-listing-id"
+const mockVariantId = "test-variant-id"
 
 const createTestStore = () =>
   configureStore({
@@ -95,33 +98,33 @@ describe("CreateBuyOrderV2", () => {
   })
 
   it("renders with create buy order form", () => {
-    renderWithProviders(<CreateBuyOrderV2 gameItemId={mockGameItemId} />)
+    renderWithProviders(<CreateBuyOrderV2 gameItemId={mockGameItemId} listingId={mockListingId} variantId={mockVariantId} />)
 
     expect(screen.getByText("Create Buy Order")).toBeInTheDocument()
   })
 
   it("displays quality tier range selectors", () => {
-    renderWithProviders(<CreateBuyOrderV2 gameItemId={mockGameItemId} />)
+    renderWithProviders(<CreateBuyOrderV2 gameItemId={mockGameItemId} listingId={mockListingId} variantId={mockVariantId} />)
 
     expect(screen.getByLabelText(/min quality tier/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/max quality tier/i)).toBeInTheDocument()
   })
 
   it("displays price range inputs", () => {
-    renderWithProviders(<CreateBuyOrderV2 gameItemId={mockGameItemId} />)
+    renderWithProviders(<CreateBuyOrderV2 gameItemId={mockGameItemId} listingId={mockListingId} variantId={mockVariantId} />)
 
     expect(screen.getByLabelText(/min price/i)).toBeInTheDocument()
     expect(screen.getByLabelText(/max price/i)).toBeInTheDocument()
   })
 
   it("displays quantity input", () => {
-    renderWithProviders(<CreateBuyOrderV2 gameItemId={mockGameItemId} />)
+    renderWithProviders(<CreateBuyOrderV2 gameItemId={mockGameItemId} listingId={mockListingId} variantId={mockVariantId} />)
 
     expect(screen.getByLabelText(/quantity/i)).toBeInTheDocument()
   })
 
   it("displays negotiable checkbox", () => {
-    renderWithProviders(<CreateBuyOrderV2 gameItemId={mockGameItemId} />)
+    renderWithProviders(<CreateBuyOrderV2 gameItemId={mockGameItemId} listingId={mockListingId} variantId={mockVariantId} />)
 
     expect(
       screen.getByRole("checkbox", { name: /negotiable/i }),
@@ -133,7 +136,7 @@ describe("CreateBuyOrderV2", () => {
     const { useAlertHook } = await import("../../../../../hooks/alert/AlertHook")
     vi.mocked(useAlertHook).mockReturnValue(mockAlert)
 
-    renderWithProviders(<CreateBuyOrderV2 gameItemId={mockGameItemId} />)
+    renderWithProviders(<CreateBuyOrderV2 gameItemId={mockGameItemId} listingId={mockListingId} variantId={mockVariantId} />)
 
     // Set min > max
     const minSelect = screen.getByLabelText(/min quality tier/i)
@@ -161,7 +164,7 @@ describe("CreateBuyOrderV2", () => {
     const { useAlertHook } = await import("../../../../../hooks/alert/AlertHook")
     vi.mocked(useAlertHook).mockReturnValue(mockAlert)
 
-    renderWithProviders(<CreateBuyOrderV2 gameItemId={mockGameItemId} />)
+    renderWithProviders(<CreateBuyOrderV2 gameItemId={mockGameItemId} listingId={mockListingId} variantId={mockVariantId} />)
 
     // Set price min > max
     const minPriceInput = screen.getByLabelText(/min price/i)
@@ -185,7 +188,7 @@ describe("CreateBuyOrderV2", () => {
   })
 
   it("changes price labels when negotiable is checked", () => {
-    renderWithProviders(<CreateBuyOrderV2 gameItemId={mockGameItemId} />)
+    renderWithProviders(<CreateBuyOrderV2 gameItemId={mockGameItemId} listingId={mockListingId} variantId={mockVariantId} />)
 
     const negotiableCheckbox = screen.getByRole("checkbox", {
       name: /negotiable/i,
@@ -207,7 +210,7 @@ describe("CreateBuyOrderV2", () => {
   })
 
   it("displays total price range calculation", () => {
-    renderWithProviders(<CreateBuyOrderV2 gameItemId={mockGameItemId} />)
+    renderWithProviders(<CreateBuyOrderV2 gameItemId={mockGameItemId} listingId={mockListingId} variantId={mockVariantId} />)
 
     const minPriceInput = screen.getByLabelText(/min price/i)
     const maxPriceInput = screen.getByLabelText(/max price/i)
@@ -224,7 +227,7 @@ describe("CreateBuyOrderV2", () => {
 
   it("maintains visual parity with V1 styling", () => {
     const { container } = renderWithProviders(
-      <CreateBuyOrderV2 gameItemId={mockGameItemId} />,
+      <CreateBuyOrderV2 gameItemId={mockGameItemId} listingId={mockListingId} variantId={mockVariantId} />,
     )
 
     // Check Grid container exists
@@ -236,7 +239,7 @@ describe("CreateBuyOrderV2", () => {
   })
 
   it("includes accessibility attributes", () => {
-    renderWithProviders(<CreateBuyOrderV2 gameItemId={mockGameItemId} />)
+    renderWithProviders(<CreateBuyOrderV2 gameItemId={mockGameItemId} listingId={mockListingId} variantId={mockVariantId} />)
 
     // Check that all form elements are accessible by label
     expect(screen.getByLabelText(/min quality tier/i)).toBeInTheDocument()
@@ -250,7 +253,7 @@ describe("CreateBuyOrderV2", () => {
   })
 
   it("disables price inputs when negotiable is checked", () => {
-    renderWithProviders(<CreateBuyOrderV2 gameItemId={mockGameItemId} />)
+    renderWithProviders(<CreateBuyOrderV2 gameItemId={mockGameItemId} listingId={mockListingId} variantId={mockVariantId} />)
 
     const negotiableCheckbox = screen.getByRole("checkbox", {
       name: /negotiable/i,
@@ -271,7 +274,7 @@ describe("CreateBuyOrderV2", () => {
   })
 
   it("shows quality tier badges when tiers are selected", () => {
-    renderWithProviders(<CreateBuyOrderV2 gameItemId={mockGameItemId} />)
+    renderWithProviders(<CreateBuyOrderV2 gameItemId={mockGameItemId} listingId={mockListingId} variantId={mockVariantId} />)
 
     const minSelect = screen.getByLabelText(/min quality tier/i)
     const maxSelect = screen.getByLabelText(/max quality tier/i)

@@ -1,3 +1,4 @@
+import "./setup";
 /**
  * Tests for ListingRefreshButtonV2 Component
  *

@@ -118,6 +118,7 @@ export interface BundleListingV2 {
   seller: {
     id: string;
     name: string;
+    slug: string;
     display_name?: string;
     username?: string;
     avatar?: string;
@@ -180,6 +181,7 @@ export function MarketMultipleViewV2() {
       seller: {
         id: seller.id,
         name: seller.name,
+        slug: seller.slug,
         avatar: seller.avatar_url,
         rating: { avg_rating: seller.rating },
       },
@@ -191,9 +193,9 @@ export function MarketMultipleViewV2() {
   // Permission checks
   const amContractor = useMemo(
     () =>
-      currentOrg?.spectrum_id === complete?.seller.id &&
+      currentOrg?.spectrum_id === complete?.seller.slug &&
       complete?.seller_type === "contractor",
-    [currentOrg?.spectrum_id, complete?.seller.id, complete?.seller_type]
+    [currentOrg?.spectrum_id, complete?.seller.slug, complete?.seller_type]
   );
 
   const amSeller = useMemo(
@@ -499,7 +501,7 @@ export function MarketMultipleViewV2() {
                                   ? {
                                       name: complete.seller.name,
                                       avatar: complete.seller.avatar || "",
-                                      spectrum_id: complete.seller.spectrum_id || complete.seller.id || "",
+                                      spectrum_id: complete.seller.slug,
                                       rating: {
                                         avg_rating: complete.seller.rating.avg_rating,
                                         rating_count: 0,

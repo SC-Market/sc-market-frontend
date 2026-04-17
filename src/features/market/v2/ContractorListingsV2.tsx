@@ -96,11 +96,9 @@ export function ContractorListingsV2() {
   // This is a temporary solution until the backend adds contractor filtering
   const contractorListings = useMemo(() => {
     if (!results?.listings) return [];
-    return results.listings.filter(
-      (listing) =>
-        listing.seller_type === "contractor" &&
-        listing.seller_id === contractor_id
-    );
+    // TODO: Backend needs contractor_id filter param on search endpoint.
+    // ListingSearchResult doesn't expose seller_type/seller_id for client-side filtering.
+    return results.listings;
   }, [results?.listings, contractor_id]);
 
   const total = contractorListings.length;

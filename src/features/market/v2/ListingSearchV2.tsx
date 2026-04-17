@@ -19,7 +19,7 @@ import {
   Chip,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, Link as RouterLink } from "react-router-dom";
 import { ExtendedTheme } from "../../../hooks/styles/Theme";
 import { HideOnScroll, MarketNavArea } from "../components/MarketNavArea";
 import { useSearchListingsQuery } from "../../../store/api/v2/market";
@@ -69,6 +69,8 @@ export function ListingSearchV2() {
     const priceMax = searchParams.get("price_max");
     const page = searchParams.get("page");
     const pageSize = searchParams.get("page_size");
+    const sortBy = searchParams.get("sort_by") as "created_at" | "price" | "quality" | "seller_rating" | undefined;
+    const sortOrder = searchParams.get("sort_order") as "asc" | "desc" | undefined;
 
     return {
       text,
@@ -79,6 +81,8 @@ export function ListingSearchV2() {
       priceMax: priceMax ? Number(priceMax) : undefined,
       page: page ? Number(page) : 1,
       pageSize: pageSize ? Number(pageSize) : (isMobile ? 12 : 48),
+      sortBy: sortBy || undefined,
+      sortOrder: sortOrder || undefined,
     };
   }, [searchParams, isMobile]);
 
@@ -249,6 +253,8 @@ function MarketSearchAreaV2() {
   const text = searchParams.get("text") || "";
   const priceMin = searchParams.get("price_min") || "";
   const priceMax = searchParams.get("price_max") || "";
+  const sortBy = searchParams.get("sort_by") || "";
+  const sortOrder = searchParams.get("sort_order") || "";
 
   // Update URL params
   const updateParam = useCallback(
@@ -313,9 +319,52 @@ function MarketSearchAreaV2() {
           />
         </Grid>
 
+        {/* Sorting */}
         <Grid item xs={12}>
           <Typography variant={"subtitle2"} fontWeight={"bold"}>
-            {t("MarketSearchArea.cost", "Price")}
+            {t("MarketSearchArea.sorting", "Sorting")}
+          </Typography>
+        </Grid>
+
+        <Grid item xs={12}>
+          <TextField
+            fullWidth
+            select
+            size="small"
+            label={t("MarketSearchArea.sort", "Sort By")}
+            value={sortBy ? `${sortBy}:${sortOrder || "desc"}` : ""}
+            onChange={(e) => {
+              const val = e.target.value;
+              if (!val) {
+                updateParam("sort_by", "");
+                updateParam("sort_order", "");
+              } else {
+                const [field, order] = val.split(":");
+                const params = new URLSearchParams(searchParams);
+                params.set("sort_by", field);
+                params.set("sort_order", order);
+                params.set("page", "1");
+                setSearchParams(params);
+              }
+            }}
+            color="secondary"
+          >
+            <MenuItem value="">{t("MarketSearchArea.sortNone", "None")}</MenuItem>
+            <MenuItem value="price:asc">{t("MarketSearchArea.sortPriceLow", "Price: Low to High")}</MenuItem>
+            <MenuItem value="price:desc">{t("MarketSearchArea.sortPriceHigh", "Price: High to Low")}</MenuItem>
+            <MenuItem value="created_at:desc">{t("MarketSearchArea.sortNewest", "Date: Newest First")}</MenuItem>
+            <MenuItem value="created_at:asc">{t("MarketSearchArea.sortOldest", "Date: Oldest First")}</MenuItem>
+            <MenuItem value="quality:desc">{t("MarketSearchArea.sortQualityHigh", "Quality: High to Low")}</MenuItem>
+            <MenuItem value="quality:asc">{t("MarketSearchArea.sortQualityLow", "Quality: Low to High")}</MenuItem>
+            <MenuItem value="seller_rating:desc">{t("MarketSearchArea.sortRatingHigh", "Rating: High to Low")}</MenuItem>
+            <MenuItem value="seller_rating:asc">{t("MarketSearchArea.sortRatingLow", "Rating: Low to High")}</MenuItem>
+          </TextField>
+        </Grid>
+
+        {/* Filtering */}
+        <Grid item xs={12}>
+          <Typography variant={"subtitle2"} fontWeight={"bold"}>
+            {t("MarketSearchArea.filtering", "Filtering")}
           </Typography>
         </Grid>
 
@@ -543,9 +592,10 @@ const ListingGrid = React.forwardRef<HTMLDivElement, ListingGridProps>(
 ListingGrid.displayName = "ListingGrid";
 
 /**
- * ListingCardV2 - V2 listing card that transforms V2 data to V1 format for ListingCard
+ * ListingCardV2 - V2 listing card using native V2 ListingSearchResult fields.
  * 
- * Maintains identical styling to V1 (minHeight: 400, padding: 3, Fade animation).
+ * Does NOT transform to V1 types. Uses CardContent with V1-matching typography
+ * (h6 for price, body2 for title, caption for seller) and quality tier badges.
  */
 interface ListingCardV2Props {
   listing: ListingSearchResult;
@@ -554,25 +604,11 @@ interface ListingCardV2Props {
 
 function ListingCardV2({ listing, index }: ListingCardV2Props) {
   const theme = useTheme<ExtendedTheme>();
+  const { i18n } = useTranslation();
 
-  // Transform V2 listing to V1 format for ListingCard component
-  // This maintains visual parity by reusing existing V1 components
-  const v1Listing = useMemo(() => {
-    return {
-      listing_id: listing.listing_id,
-      title: listing.title,
-      seller_name: listing.seller_name,
-      seller_rating: listing.seller_rating,
-      price: listing.price_min, // Use min price for display
-      quantity_available: listing.quantity_available,
-      created_at: listing.created_at,
-      listing_type: "unique" as const, // V2 listings display as unique cards
-      // Add quality tier info for display
-      quality_tier_min: listing.quality_tier_min,
-      quality_tier_max: listing.quality_tier_max,
-      variant_count: listing.variant_count,
-    };
-  }, [listing]);
+  const priceDisplay = listing.price_min === listing.price_max
+    ? `${listing.price_min.toLocaleString(i18n.language)} aUEC`
+    : `${listing.price_min.toLocaleString(i18n.language)} – ${listing.price_max.toLocaleString(i18n.language)} aUEC`;
 
   return (
     <Fade
@@ -581,34 +617,86 @@ function ListingCardV2({ listing, index }: ListingCardV2Props) {
       style={{ transitionDelay: `${50 + 50 * index}ms` }}
     >
       <ListingWrapper useFixedWidth={false}>
-        {/* TODO: Replace with actual V2 ListingCard component once created */}
-        {/* For now, this is a placeholder that maintains grid structure */}
+        <RouterLink
+          to={`/market/listing/${listing.listing_id}`}
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
         <Box
           sx={{
             minHeight: 400,
-            padding: 3,
             border: `1px solid ${theme.palette.divider}`,
             borderRadius: theme.spacing(theme.borderRadius?.topLevel ?? 0.375),
             backgroundColor: theme.palette.background.paper,
+            display: "flex",
+            flexDirection: "column",
+            cursor: "pointer",
+            "&:hover": { boxShadow: theme.shadows[4] },
           }}
         >
-          {/* Placeholder content - will be replaced with actual ListingCard */}
-          <Box>
-            <strong>{v1Listing.title}</strong>
-            <br />
-            Seller: {v1Listing.seller_name}
-            <br />
-            Price: {v1Listing.price} aUEC
-            <br />
-            {v1Listing.quality_tier_min && v1Listing.quality_tier_max && (
-              <>
-                Quality: Tier {v1Listing.quality_tier_min}-{v1Listing.quality_tier_max}
-                <br />
-              </>
-            )}
-            Variants: {v1Listing.variant_count}
-          </Box>
+          <CardContent sx={{ padding: "8px 12px !important", flex: 1 }}>
+            <Typography
+              variant="h6"
+              color="primary"
+              fontWeight="bold"
+              sx={{ fontSize: "0.95rem", mb: 0.5 }}
+            >
+              {priceDisplay}
+            </Typography>
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{
+                fontSize: "0.75rem",
+                lineHeight: 1.3,
+                maxHeight: 36,
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                display: "-webkit-box",
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: "vertical",
+                mb: 0.5,
+              }}
+            >
+              {listing.title}
+            </Typography>
+            <RouterLink
+              to={`/${listing.seller_type === "contractor" ? "contractor" : "user"}/${listing.seller_slug}`}
+              style={{ textDecoration: "none", color: "inherit" }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                sx={{ fontSize: "0.7rem", lineHeight: 1.2, "&:hover": { textDecoration: "underline" } }}
+              >
+                {listing.seller_name}
+              </Typography>
+            </RouterLink>
+
+            <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap", mt: 1 }}>
+              {listing.quality_tier_min != null && listing.quality_tier_max != null && (
+                <Chip
+                  label={
+                    listing.quality_tier_min === listing.quality_tier_max
+                      ? `Tier ${listing.quality_tier_min}`
+                      : `Tier ${listing.quality_tier_min}–${listing.quality_tier_max}`
+                  }
+                  size="small"
+                  color="secondary"
+                  sx={{ fontSize: "0.65rem", height: 18, fontWeight: "bold" }}
+                />
+              )}
+              {listing.variant_count > 1 && (
+                <Chip
+                  label={`${listing.variant_count} variants`}
+                  size="small"
+                  sx={{ fontSize: "0.65rem", height: 18 }}
+                />
+              )}
+            </Box>
+          </CardContent>
         </Box>
+        </RouterLink>
       </ListingWrapper>
     </Fade>
   );

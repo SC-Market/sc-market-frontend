@@ -1,3 +1,4 @@
+import "./setup";
 /**
  * Tests for BulkStockManagementV2 Component
  *

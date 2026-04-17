@@ -1,3 +1,4 @@
+import "./setup";
 /**
  * StockManagerV2 Component Tests
  *

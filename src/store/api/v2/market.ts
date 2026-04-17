@@ -954,6 +954,8 @@ export type SellerInfo = {
   name: string
   /** Seller type */
   type: "user" | "contractor"
+  /** Username (for users) or spectrum_id (for contractors) - use for profile links */
+  slug: string
   /** Seller rating (0-5) */
   rating: number
   /** Optional seller avatar URL */
@@ -1054,6 +1056,10 @@ export type ListingSearchResult = {
   quality_tier_max?: number
   /** Number of unique variants in this listing */
   variant_count: number
+  /** Seller type (user or contractor) */
+  seller_type: "user" | "contractor"
+  /** Username (for user sellers) or spectrum_id (for contractor sellers) - use for profile links */
+  seller_slug: string
   /** ISO 8601 timestamp when listing was created */
   created_at: string
 }
@@ -1145,6 +1151,8 @@ export type GameItemListingResult = {
   seller_rating: number
   /** Seller type */
   seller_type: "user" | "contractor"
+  /** Username (for user sellers) or spectrum_id (for contractor sellers) */
+  seller_slug: string
   /** Minimum price across all variants in this listing */
   price_min: number
   /** Maximum price across all variants in this listing */
