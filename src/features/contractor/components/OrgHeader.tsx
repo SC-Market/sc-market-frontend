@@ -24,7 +24,6 @@ interface OrgHeaderProps {
 export function OrgHeader({ contractor }: OrgHeaderProps) {
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
-  const isLight = theme.palette.mode === "light"
 
   return (
     <Stack direction="row" spacing={2} alignItems="flex-start" flexWrap="wrap">
@@ -48,7 +47,7 @@ export function OrgHeader({ contractor }: OrgHeaderProps) {
             flexWrap: "wrap",
           }}
         >
-          <Typography color={isLight ? "white" : "text.secondary"} variant="h6" fontWeight={600}>
+          <Typography color="text.secondary" variant="h6" fontWeight={600}>
             {contractor.name}
           </Typography>
           {!contractor.spectrum_id.startsWith("~") && (
@@ -75,8 +74,8 @@ export function OrgHeader({ contractor }: OrgHeaderProps) {
             gap: 0.5,
           }}
         >
-          <PeopleAltRoundedIcon style={{ color: isLight ? "white" : theme.palette.text.primary }} />
-          <Typography color={isLight ? "white" : "text.primary"} fontWeight="bold">
+          <PeopleAltRoundedIcon style={{ color: theme.palette.text.primary }} />
+          <Typography color="text.primary" fontWeight="bold">
             {contractor.size}
           </Typography>
         </Box>
