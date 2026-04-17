@@ -29,6 +29,7 @@ import { useRoutePrefetch } from "./hooks/router/useRoutePrefetch"
 import { prefetchHighPriorityRoutes } from "./router/routePrefetch"
 import { usePageTitle } from "./hooks/router/usePageTitle"
 import { LandingPage } from "./pages/home/LandingPage"
+import { tryEmergencyReload } from "./util/assetReloadGuard"
 
 import "./util/i18n.ts"
 
@@ -97,8 +98,7 @@ function App() {
             ] as const),
           )
         } else if (event.data?.type === "ASSET_NOT_FOUND") {
-          // A hashed JS/CSS asset 404'd (deploy changed the hash) — reload to get new index.html
-          window.location.reload()
+          tryEmergencyReload()
         }
       }
 

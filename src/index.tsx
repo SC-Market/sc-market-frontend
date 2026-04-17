@@ -9,11 +9,7 @@ import {
   initializeBugsnagAsync,
   getBugsnagErrorBoundary,
 } from "./util/monitoring/bugsnagLoader"
-
-// Allow future 404-on-deploy reloads: clear the guard set by index.html when we reload after asset 404
-try {
-  sessionStorage.removeItem("scmarket_asset_404_reload")
-} catch (_) {}
+import { clearEmergencyReloadBudget } from "./util/assetReloadGuard"
 
 const container = document.getElementById("root")
 const root = createRoot(container!)
@@ -39,6 +35,14 @@ root.render(
     </ErrorBoundary>
   </React.StrictMode>,
 )
+
+// Reset reload budget only after the shell has been stable long enough for lazy chunks
+// to load — clearing on every boot caused infinite reload loops with stale index.html.
+if (typeof window !== "undefined") {
+  window.addEventListener("load", () => {
+    window.setTimeout(() => clearEmergencyReloadBudget(), 20_000)
+  })
+}
 
 // Initialize PWA features (service worker registration, online detection)
 // Delay initialization significantly to ensure app is fully loaded and Redux is set up

@@ -319,13 +319,11 @@ export function initPWA(): void {
     // Initialize online detection
     initOnlineDetection()
 
-    // Listen for service worker controller changes (only in production)
-    if (!import.meta.env.DEV) {
-      navigator.serviceWorker.addEventListener("controllerchange", () => {
-        console.log("Service Worker controller changed - reloading page")
-        window.location.reload()
-      })
-    }
+    // Do not reload on every controllerchange. skipWaiting + clientsClaim in sw.ts
+    // can fire controllerchange on install/update; an unconditional reload caused
+    // refresh loops and failed dynamic imports (stale chunk + reload repeatedly).
+    // Users still get updates via UpdateNotification → reloadForUpdate(), and
+    // index.html / App handle one-shot reload on asset load failure.
   } catch (error) {
     console.warn("PWA initialization error (non-critical):", error)
     // Still try to initialize online detection even if SW fails
