@@ -73,6 +73,11 @@ export function has_permission(
     return false
   }
 
+  // Org owner has all permissions
+  if (contractor.owner_role && userContractor.roles.includes(contractor.owner_role)) {
+    return true
+  }
+
   // Check if user has any role that grants this permission
   const userRoles = (contractor.roles || []).filter((r) =>
     userContractor.roles!.includes(r.role_id),
