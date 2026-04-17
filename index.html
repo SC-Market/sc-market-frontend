@@ -119,25 +119,42 @@
     <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
 
     <script language="javascript">
-      window.addEventListener("vite:preloadError", () => {
-        window.location.reload() // Reload the page on a vite preload error
-      })
-      // Reload once when a critical app script fails to load (e.g. 404 after deploy)
-      // Uses sessionStorage to avoid an infinite reload loop; cleared when app loads (see index.tsx)
+      // Keep in sync with src/util/assetReloadGuard.ts (same keys / limits).
       ;(function () {
-        var RELOAD_KEY = "scmarket_asset_404_reload"
+        var ATTEMPTS_KEY = "scmarket_asset_reload_attempts"
+        var WINDOW_START_KEY = "scmarket_asset_reload_window_start"
+        var MAX_ATTEMPTS = 2
+        var WINDOW_MS = 120000
 
-        // Listen for SW messages (covers SW-intercepted asset failures)
+        function tryEmergencyReload() {
+          try {
+            var now = Date.now()
+            var windowStart = parseInt(sessionStorage.getItem(WINDOW_START_KEY) || "0", 10)
+            var n = parseInt(sessionStorage.getItem(ATTEMPTS_KEY) || "0", 10)
+            if (!windowStart || now - windowStart > WINDOW_MS) {
+              windowStart = now
+              n = 0
+              sessionStorage.setItem(WINDOW_START_KEY, String(windowStart))
+              sessionStorage.setItem(ATTEMPTS_KEY, "0")
+            }
+            if (n >= MAX_ATTEMPTS) return
+            sessionStorage.setItem(ATTEMPTS_KEY, String(n + 1))
+            window.location.reload()
+          } catch (e) {}
+        }
+
+        window.addEventListener("vite:preloadError", function () {
+          tryEmergencyReload()
+        })
+
         if ("serviceWorker" in navigator && navigator.serviceWorker.controller) {
           navigator.serviceWorker.addEventListener("message", function (event) {
-            if (event.data && event.data.type === "ASSET_NOT_FOUND" && !sessionStorage.getItem(RELOAD_KEY)) {
-              sessionStorage.setItem(RELOAD_KEY, "1")
-              window.location.reload()
+            if (event.data && event.data.type === "ASSET_NOT_FOUND") {
+              tryEmergencyReload()
             }
           })
         }
 
-        // Listen for script load errors (covers non-SW failures)
         window.addEventListener(
           "error",
           function (event) {
@@ -146,10 +163,7 @@
               var isOurAsset =
                 src.indexOf("/assets/") !== -1 ||
                 (src.indexOf(window.location.origin) === 0 && /\.(js|mjs)$/.test(src))
-              if (isOurAsset && !sessionStorage.getItem(RELOAD_KEY)) {
-                sessionStorage.setItem(RELOAD_KEY, "1")
-                window.location.reload()
-              }
+              if (isOurAsset) tryEmergencyReload()
             }
           },
           true

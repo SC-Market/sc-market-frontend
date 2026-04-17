@@ -31,6 +31,7 @@ import { cleanupOutdatedCaches, precacheAndRoute } from "workbox-precaching"
 import { registerRoute } from "workbox-routing"
 import {
   NetworkFirst,
+  NetworkOnly,
   CacheFirst,
   StaleWhileRevalidate,
 } from "workbox-strategies"
@@ -91,26 +92,13 @@ registerRoute(
   },
 )
 
-// Cache navigation requests with NetworkFirst
-// HTML must stay in sync with hashed /assets/* — stale HTML after a deploy still
-// requests old chunk URLs (404 on server) and looks like "SW broke the site".
-// Short cache + longer network wait reduces false fallback to an old document when
-// the connection is merely slow; keep TTL low so a bad cached shell expires quickly.
+// HTML must always match current /assets/* hashes. NetworkFirst + pages-v1 cache
+// could serve an old index after deploy; NetworkOnly + no-store avoids SW/HTTP cache
+// for navigations so clients pick up the latest shell (offline: navigation may fail).
 registerRoute(
   ({ request }: { request: Request }) => request.mode === "navigate",
-  new NetworkFirst({
-    cacheName: NAVIGATION_CACHE_NAME,
-    networkTimeoutSeconds: 10,
-    plugins: [
-      new CacheableResponsePlugin({
-        statuses: [0, 200],
-      }),
-      new ExpirationPlugin({
-        maxEntries: 50,
-        maxAgeSeconds: 60 * 10, // 10 minutes — hashed bundles change every deploy
-        purgeOnQuotaError: true,
-      }),
-    ],
+  new NetworkOnly({
+    fetchOptions: { cache: "no-store" },
   }),
 )
 
