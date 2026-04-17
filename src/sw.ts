@@ -45,6 +45,15 @@ clientsClaim()
 // Clean up old precache entries from previous SW versions
 cleanupOutdatedCaches()
 
+/** HTML shell cache — must not survive across SW generations or unregister (Cache Storage persists). */
+const NAVIGATION_CACHE_NAME = "pages-v1"
+
+// Drop any cached document from a previous registration so the first load after
+// activate/controllerchange cannot replay an old index.html (wrong hashed /assets).
+self.addEventListener("activate", (event: ExtendableEvent) => {
+  event.waitUntil(caches.delete(NAVIGATION_CACHE_NAME))
+})
+
 // Precache assets (injected by vite-plugin-pwa during build)
 const manifest = self.__WB_MANIFEST || []
 precacheAndRoute(manifest)
@@ -90,7 +99,7 @@ registerRoute(
 registerRoute(
   ({ request }: { request: Request }) => request.mode === "navigate",
   new NetworkFirst({
-    cacheName: "pages-v1",
+    cacheName: NAVIGATION_CACHE_NAME,
     networkTimeoutSeconds: 10,
     plugins: [
       new CacheableResponsePlugin({
