@@ -174,11 +174,15 @@ registerRoute(
   }),
 )
 
-// Cache CSS and JS files with StaleWhileRevalidate
-// This ensures users get cached assets immediately while updates happen in background
-// If a hashed asset 404s (deploy changed the hash), force reload to get new index.html
+// Cache non-bundled CSS/JS only. Vite emits hashed chunks under /assets/ — those are
+// precached (or handled by the /assets/ fallback above). Applying StaleWhileRevalidate
+// to /assets/*.js caused the SW to throw when cache+network both failed (handlerDidError
+// returned undefined), which browsers surface as "unexpected error".
 registerRoute(
-  /\.(?:css|js)$/,
+  ({ url }: { url: URL }) =>
+    url.origin === self.location.origin &&
+    !url.pathname.startsWith("/assets/") &&
+    /\.(?:css|js)$/.test(url.pathname),
   new StaleWhileRevalidate({
     cacheName: "static-assets-v1",
     plugins: [
@@ -191,7 +195,6 @@ registerRoute(
         purgeOnQuotaError: true,
       }),
       {
-        // If a JS/CSS fetch returns 404 (stale hash after deploy), notify clients to reload
         fetchDidSucceed: async ({ response }: { response: Response }) => {
           if (response.status === 404) {
             const clients = await self.clients.matchAll({ type: "window" })
@@ -201,12 +204,16 @@ registerRoute(
           }
           return response
         },
-        handlerDidError: async () => {
+        handlerDidError: async ({ request }: { request: Request }) => {
           const clients = await self.clients.matchAll({ type: "window" })
           for (const client of clients) {
             client.postMessage({ type: "ASSET_NOT_FOUND" })
           }
-          return undefined as any
+          try {
+            return await fetch(request)
+          } catch {
+            return new Response("Offline", { status: 503 })
+          }
         },
       },
     ],
