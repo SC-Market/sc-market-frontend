@@ -96,6 +96,9 @@ function App() {
               "MarketListings",
             ] as const),
           )
+        } else if (event.data?.type === "ASSET_NOT_FOUND") {
+          // A hashed JS/CSS asset 404'd (deploy changed the hash) — reload to get new index.html
+          window.location.reload()
         }
       }
 
