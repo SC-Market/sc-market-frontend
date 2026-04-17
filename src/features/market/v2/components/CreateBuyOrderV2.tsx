@@ -51,11 +51,11 @@ import { useCreateBuyOrderMutation } from "../../../../store/api/v2/market";
 
 interface CreateBuyOrderV2Props {
   gameItemId: string;
-  listingId: string;
-  variantId: string;
+  listingId?: string;
+  variantId?: string;
 }
 
-export function CreateBuyOrderV2({ gameItemId, listingId, variantId }: CreateBuyOrderV2Props) {
+export function CreateBuyOrderV2({ gameItemId, listingId = "", variantId = "" }: CreateBuyOrderV2Props) {
   const { t } = useTranslation();
   const theme = useTheme<ExtendedTheme>();
   const issueAlert = useAlertHook();

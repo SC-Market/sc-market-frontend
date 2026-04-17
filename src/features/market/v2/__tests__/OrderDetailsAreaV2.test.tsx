@@ -1,3 +1,4 @@
+import "./setup";
 /**
  * OrderDetailsAreaV2 Component Tests
  *
@@ -42,8 +43,6 @@ vi.mock("../../../../store/api/v2/market", async () => {
 })
 
 const { useGetOrderDetailQuery } = await import("../../../../store/api/v2/market")
-
-import { vi } from "vitest"
 
 // Mock the time format utility
 vi.mock("../../../../util/time", () => ({

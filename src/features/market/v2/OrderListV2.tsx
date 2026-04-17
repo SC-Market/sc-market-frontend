@@ -154,10 +154,10 @@ export function OrderListV2(props: OrderListV2Props) {
   const { data, isLoading, error } = useGetOrdersQuery({
     status,
     role,
-    quality_tier_min: qualityTierMin,
-    quality_tier_max: qualityTierMax,
+    qualityTierMin,
+    qualityTierMax,
     page,
-    page_size: pageSize,
+    pageSize,
   })
 
   // Filter out null/undefined orders

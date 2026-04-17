@@ -557,7 +557,7 @@ export function BuyOrdersViewV2() {
           </Button>
         </Stack>
 
-        <PullToRefresh onRefresh={refetch} enabled={isMobile}>
+        <PullToRefresh onRefresh={() => { refetch() }} enabled={isMobile}>
           <Box
             sx={{
               "& .MuiTableHead .MuiTableCell-root:first-of-type": {

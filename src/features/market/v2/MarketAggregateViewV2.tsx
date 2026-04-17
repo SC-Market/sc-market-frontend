@@ -182,6 +182,7 @@ const buyOrderHeadCells: readonly HeadCell<BuyOrderV2Row>[] = [
 export interface AggregateListingV2Row {
   listing_id: string;
   seller_id: string;
+  seller_slug: string;
   seller_name: string;
   seller_type: "user" | "contractor";
   seller_rating: number;
@@ -273,6 +274,7 @@ export function MarketAggregateViewV2() {
     listings: (listingsData?.listings || []).map((l): AggregateListingV2Row => ({
       listing_id: l.listing_id,
       seller_id: l.seller_id,
+      seller_slug: l.seller_slug,
       seller_name: l.seller_name,
       seller_type: l.seller_type,
       seller_rating: l.seller_rating,
@@ -865,7 +867,7 @@ export function AggregateRowV2(props: {
                 ? {
                     name: listing.seller_name,
                     avatar: "",
-                    spectrum_id: listing.seller_id,
+                    spectrum_id: listing.seller_slug,
                     rating: { 
                       avg_rating: listing.seller_rating,
                       rating_count: 0,

@@ -1,3 +1,4 @@
+import "./setup";
 import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { Provider } from "react-redux";
@@ -133,6 +134,8 @@ const mockListings: ListingSearchResult[] = [
     title: "High Quality Mining Tool",
     seller_name: "John Doe",
     seller_rating: 4.5,
+    seller_type: "user",
+    seller_slug: "johndoe",
     price_min: 1000,
     price_max: 5000,
     quantity_available: 50,
@@ -146,6 +149,8 @@ const mockListings: ListingSearchResult[] = [
     title: "Standard Ship Components",
     seller_name: "Jane Smith",
     seller_rating: 4.8,
+    seller_type: "contractor",
+    seller_slug: "smithcorp",
     price_min: 500,
     price_max: 500,
     quantity_available: 100,

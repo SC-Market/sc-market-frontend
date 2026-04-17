@@ -595,7 +595,7 @@ function GameItemListingRow(props: {
                 ? { 
                     name: listing.seller_name,
                     avatar: "",
-                    spectrum_id: listing.seller_id,
+                    spectrum_id: listing.seller_slug,
                     rating: { 
                       avg_rating: listing.seller_rating,
                       rating_count: 0,

@@ -187,7 +187,7 @@ export function ListingDetailV2() {
                 </Typography>
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                   <RouterLink
-                    to={`/profile/${listingData.seller.id}`}
+                    to={`/${listingData.seller.type === "contractor" ? "contractor" : "user"}/${listingData.seller.slug}`}
                     style={{ textDecoration: "none", color: "inherit" }}
                   >
                     <UnderlineLink variant="subtitle1" color="text.primary">

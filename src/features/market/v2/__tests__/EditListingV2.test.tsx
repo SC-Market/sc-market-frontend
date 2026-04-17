@@ -1,3 +1,4 @@
+import "./setup";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { Provider } from "react-redux";

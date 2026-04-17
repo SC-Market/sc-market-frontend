@@ -1,3 +1,4 @@
+import "./setup";
 /**
  * OrderListV2 Component Tests
  *
