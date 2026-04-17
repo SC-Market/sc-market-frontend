@@ -20,6 +20,7 @@ import {
   TableCell,
   TableRow,
   TextField,
+  Tooltip,
 } from "@mui/material"
 import { HeadCell, PaginatedTable } from "../../components/table/PaginatedTable"
 import { useGetUserProfileQuery } from "../../store/profile"
@@ -186,21 +187,24 @@ function RolePermissionCheck(props: {
 }) {
   const { permission_name, setRole, label, role } = props
   const { t } = useTranslation()
+  const tooltip = t(`manageRoles.permissionDescriptions.${permission_name}`, "")
   return (
     <Grid item xs={6}>
-      <FormControlLabel
-        control={
-          <Checkbox
-            checked={role[permission_name] as boolean}
-            onChange={(event: React.ChangeEvent<{ checked: boolean }>) => {
-              setRole({ ...role, [permission_name]: event.target.checked })
-            }}
-            color={"secondary"}
-            name={label}
-          />
-        }
-        label={t(`manageRoles.permissions.${permission_name}`)}
-      />
+      <Tooltip title={tooltip} placement="top" arrow disableHoverListener={!tooltip}>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={role[permission_name] as boolean}
+              onChange={(event: React.ChangeEvent<{ checked: boolean }>) => {
+                setRole({ ...role, [permission_name]: event.target.checked })
+              }}
+              color={"secondary"}
+              name={label}
+            />
+          }
+          label={t(`manageRoles.permissions.${permission_name}`)}
+        />
+      </Tooltip>
     </Grid>
   )
 }
