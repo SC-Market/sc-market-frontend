@@ -17,6 +17,9 @@ const rawBaseQuery = fetchBaseQuery({
   credentials: "include",
 })
 
+// Mutex to prevent parallel refresh calls
+let refreshPromise: Promise<boolean> | null = null
+
 /**
  * Wraps the base query with 401 → refresh → retry logic.
  * If the access token expires, POST /api/auth/refresh exchanges the refresh
@@ -31,15 +34,20 @@ const baseQueryWithReauth: BaseQueryFn<
   let result = await rawBaseQuery(args, api, extraOptions)
 
   if (result.error?.status === 401) {
-    // Try refreshing the access token
-    const refreshResult = await rawBaseQuery(
-      { url: "/api/auth/refresh", method: "POST" },
-      api,
-      extraOptions,
-    )
-
-    if (refreshResult.data) {
-      // Refresh succeeded — retry the original request
+    // If a refresh is already in flight, wait for it
+    if (!refreshPromise) {
+      refreshPromise = (async () => {
+        const r = await rawBaseQuery(
+          { url: "/api/auth/refresh", method: "POST" },
+          api,
+          extraOptions,
+        )
+        return !!r.data
+      })()
+      refreshPromise.finally(() => { refreshPromise = null })
+    }
+    const refreshed = await refreshPromise
+    if (refreshed) {
       result = await rawBaseQuery(args, api, extraOptions)
     }
     // If refresh failed, the 401 propagates and LoggedInRoute redirects to /login
