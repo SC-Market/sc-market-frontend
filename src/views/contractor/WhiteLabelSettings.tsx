@@ -222,16 +222,12 @@ export function WhiteLabelSettings() {
   const [focusMode, setFocusMode] = useState<"public" | "internal">("public")
   const [homepagePath, setHomepagePath] = useState("")
   const [requireMembership, setRequireMembership] = useState(false)
-  const [drawerStyle, setDrawerStyle] = useState<"elevation" | "outlined">(
-    "elevation",
-  )
 
   useEffect(() => {
     if (config) {
       setFocusMode(config.focus_mode ?? "public")
       setHomepagePath(config.homepage_path ?? "")
       setRequireMembership(config.require_membership ?? false)
-      setDrawerStyle(config.drawer_style ?? "elevation")
     }
   }, [config])
 
@@ -271,7 +267,6 @@ export function WhiteLabelSettings() {
         focus_mode: focusMode,
         homepage_path: homepagePath || null,
         require_membership: requireMembership,
-        drawer_style: drawerStyle,
       }).unwrap()
       setSnack("Settings saved")
     } catch {
@@ -282,7 +277,6 @@ export function WhiteLabelSettings() {
     focusMode,
     homepagePath,
     requireMembership,
-    drawerStyle,
     updateConfig,
   ])
 
@@ -404,22 +398,6 @@ export function WhiteLabelSettings() {
             onChange={(e) => setHomepagePath(e.target.value)}
             helperText="Custom landing page path. Leave blank for default."
           />
-        </Grid>
-        <Grid item xs={12}>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-            Drawer style for the navigation sidebar and panels.
-          </Typography>
-          <Select
-            size="small"
-            value={drawerStyle}
-            onChange={(e) =>
-              setDrawerStyle(e.target.value as "elevation" | "outlined")
-            }
-            fullWidth
-          >
-            <MenuItem value="elevation">Elevation — shadow depth</MenuItem>
-            <MenuItem value="outlined">Outlined — border</MenuItem>
-          </Select>
         </Grid>
         <Grid item xs={12}>
           <Button

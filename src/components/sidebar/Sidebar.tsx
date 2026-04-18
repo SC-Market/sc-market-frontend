@@ -131,8 +131,16 @@ export function Sidebar() {
           boxSizing: "border-box",
           backgroundColor: theme.palette.background.sidebar,
           overflow: "hidden",
-          borderRight: drawerOpen ? 1 : 0,
-          borderColor: drawerOpen ? theme.palette.outline.main : "transparent",
+          ...(theme.navKind === "outlined"
+            ? {
+                borderRight: drawerOpen ? 1 : 0,
+                borderColor: drawerOpen ? theme.palette.outline.main : "transparent",
+                boxShadow: "none",
+              }
+            : {
+                borderRight: 0,
+                boxShadow: drawerOpen ? theme.shadows[4] : "none",
+              }),
           borderRadius: 0,
           scrollPadding: 0,
           display: "flex",
