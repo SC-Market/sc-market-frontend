@@ -12,6 +12,9 @@ const rawBaseQuery = fetchBaseQuery({
   credentials: "include",
 })
 
+// Mutex to prevent parallel refresh calls
+let refreshPromise: Promise<boolean> | null = null
+
 // 401 → refresh → retry (same pattern as generatedApi)
 const baseQueryWithReauth: BaseQueryFn<
   string | FetchArgs,
@@ -20,12 +23,20 @@ const baseQueryWithReauth: BaseQueryFn<
 > = async (args, api, extraOptions) => {
   let result = await rawBaseQuery(args, api, extraOptions)
   if (result.error?.status === 401) {
-    const refreshResult = await rawBaseQuery(
-      { url: "/api/auth/refresh", method: "POST" },
-      api,
-      extraOptions,
-    )
-    if (refreshResult.data) {
+    // If a refresh is already in flight, wait for it
+    if (!refreshPromise) {
+      refreshPromise = (async () => {
+        const r = await rawBaseQuery(
+          { url: "/api/auth/refresh", method: "POST" },
+          api,
+          extraOptions,
+        )
+        return !!r.data
+      })()
+      refreshPromise.finally(() => { refreshPromise = null })
+    }
+    const refreshed = await refreshPromise
+    if (refreshed) {
       result = await rawBaseQuery(args, api, extraOptions)
     }
   }
