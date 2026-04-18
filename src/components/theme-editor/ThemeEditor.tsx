@@ -84,15 +84,6 @@ const COLOR_FIELDS: ColorField[] = [
     usageNoteFallback:
       "Sidebar rows, menus, autocomplete — and Skeleton “wave”. Not filled primary buttons.",
   },
-  {
-    key: "overlay",
-    labelKey: "theme.overlay",
-    fallback: "Overlay",
-    path: ["palette", "background", "overlay"],
-    usageNoteKey: "theme.usageOverlay",
-    usageNoteFallback:
-      "Modal and bottom-sheet scrim; with an elevated nav it also tints the bar shadow. Listing thumbnails use Sidebar + card fade, not this token.",
-  },
 ]
 
 const BORDER_RADIUS_FIELDS = [
@@ -119,6 +110,26 @@ function setNestedValue(obj: Record<string, any>, path: string[], value: any): R
   }
   current[path[path.length - 1]] = value
   return result
+}
+
+/** Scrim overlays use app defaults; strip so saved theme_data does not keep old custom overlay keys. */
+function stripBackgroundOverlayKeys(themeData: {
+  light: Record<string, unknown>
+  dark: Record<string, unknown>
+}) {
+  const clone = {
+    light: structuredClone(themeData.light) as Record<string, unknown>,
+    dark: structuredClone(themeData.dark) as Record<string, unknown>,
+  }
+  for (const mode of ["light", "dark"] as const) {
+    const palette = clone[mode].palette as Record<string, unknown> | undefined
+    if (!palette || typeof palette !== "object") continue
+    const bg = palette.background as Record<string, unknown> | undefined
+    if (!bg || typeof bg !== "object") continue
+    delete bg.overlay
+    delete bg.overlayDark
+  }
+  return clone
 }
 
 export function ThemeEditor({
@@ -198,7 +209,10 @@ export function ThemeEditor({
 
   const handleSave = async () => {
     try {
-      await onSave({ theme_data: themeData, favicon_url: faviconUrl || null })
+      await onSave({
+        theme_data: stripBackgroundOverlayKeys(themeData),
+        favicon_url: faviconUrl || null,
+      })
       issueAlert({ severity: "success", message: t("theme.saveSuccess", "Theme saved successfully") })
     } catch {
       issueAlert({ severity: "error", message: t("theme.saveError", "Failed to save theme") })
