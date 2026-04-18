@@ -170,6 +170,27 @@ export function CreateTokenDialog({ open, onClose }: CreateTokenDialogProps) {
             Copy Token
           </Button>
 
+          <Alert severity="info" sx={{ mb: 2 }}>
+            <Typography variant="body2" gutterBottom>
+              <strong>How to authenticate:</strong> Include the token in the{" "}
+              <code>Authorization</code> header of your API requests:
+            </Typography>
+            <Box
+              component="pre"
+              sx={{
+                fontFamily: "monospace",
+                fontSize: "0.8rem",
+                bgcolor: "action.hover",
+                p: 1,
+                borderRadius: 1,
+                overflow: "auto",
+                mt: 0.5,
+              }}
+            >
+              Authorization: Bearer {createdToken?.slice(0, 12)}...
+            </Box>
+          </Alert>
+
           <Alert severity="warning">
             <Typography variant="body2">
               <strong>Important:</strong> Store this token securely. It provides
