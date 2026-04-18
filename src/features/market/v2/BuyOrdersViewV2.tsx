@@ -27,6 +27,7 @@ import { BaseSkeleton } from "../../../components/skeletons/BaseSkeleton"
 import { QualityBadge } from "../../../components/market/v2/QualityBadge"
 import {
   useGetOrdersQuery,
+  useFulfillBuyOrderMutation,
   OrderPreview,
 } from "../../../store/api/v2/market"
 
@@ -218,6 +219,7 @@ export function BuyOrderV2Row(props: {
   
   // TODO: Replace with useCancelBuyOrderV2Mutation when API is ready
   const [isCancelling, setIsCancelling] = useState(false)
+  const [fulfillBuyOrder, { isLoading: isFulfilling }] = useFulfillBuyOrderMutation()
   
   const expiryDate = useMemo(
     () => (row.expires_at ? new Date(row.expires_at) : new Date(row.created_at)),
@@ -242,6 +244,25 @@ export function BuyOrderV2Row(props: {
       })
     } finally {
       setIsCancelling(false)
+    }
+  }
+
+  const handleFulfill = async (e: React.MouseEvent) => {
+    e.stopPropagation()
+    try {
+      const result = await fulfillBuyOrder({ id: row.buy_order_id }).unwrap()
+      issueAlert({
+        message: t("buyorder.fulfilled", "Buy order fulfilled"),
+        severity: "success",
+      })
+      if (result.order_id) {
+        navigate(`/offer/${result.order_id}`)
+      }
+    } catch (error) {
+      issueAlert({
+        message: error instanceof Error ? error.message : "Failed to fulfill buy order",
+        severity: "error",
+      })
     }
   }
 
@@ -424,15 +445,26 @@ export function BuyOrderV2Row(props: {
         onClick={(e) => e.stopPropagation()}
         sx={{ width: { xs: "auto", sm: "auto" }, minWidth: 100 }}
       >
-        <Button
-          variant="outlined"
-          color="error"
-          size="small"
-          onClick={handleCancel}
-          disabled={isCancelling || row.status !== "active"}
-        >
-          {t("MarketAggregateView.cancel", "Cancel")}
-        </Button>
+        <Box sx={{ display: "flex", gap: 0.5, justifyContent: "flex-end" }}>
+          <Button
+            variant="outlined"
+            color="secondary"
+            size="small"
+            onClick={handleFulfill}
+            disabled={isFulfilling || row.status !== "active"}
+          >
+            {t("buyorder.fulfill", "Fulfill")}
+          </Button>
+          <Button
+            variant="outlined"
+            color="error"
+            size="small"
+            onClick={handleCancel}
+            disabled={isCancelling || row.status !== "active"}
+          >
+            {t("MarketAggregateView.cancel", "Cancel")}
+          </Button>
+        </Box>
       </TableCell>
     </TableRow>
   )

@@ -193,22 +193,19 @@ const router = createBrowserRouter([
         path: "/market/:id",
         errorElement: <RouteErrorFallback />,
         lazy: async () => ({
-          Component: (await import("./pages/market/ViewMarketListing"))
-            .ViewMarketListing,
+          Component: (await import("./components/market/MarketRouter")).MarketRouter,
         }),
       },
       {
         path: "/market/aggregate/:id",
         lazy: async () => ({
-          Component: (await import("./pages/market/ViewMarketAggregate"))
-            .ViewMarketAggregate,
+          Component: (await import("./components/market/MarketRouter")).MarketRouter,
         }),
       },
       {
         path: "/market/multiple/:id",
         lazy: async () => ({
-          Component: (await import("./pages/market/ViewMarketMultiple"))
-            .ViewMarketMultiple,
+          Component: (await import("./components/market/MarketRouter")).MarketRouter,
         }),
       },
       {
@@ -230,8 +227,7 @@ const router = createBrowserRouter([
       {
         path: "/buyorder/create",
         lazy: async () => ({
-          Component: (await import("./pages/market/CreateBuyOrder"))
-            .CreateBuyOrder,
+          Component: (await import("./components/market/MarketRouter")).MarketRouter,
         }),
       },
       {
@@ -389,63 +385,55 @@ const router = createBrowserRouter([
           {
             path: "/market/create/:tab",
             lazy: async () => ({
-              Component: (await import("./pages/market/MarketCreate"))
-                .MarketCreate,
+              Component: (await import("./components/market/MarketRouter")).MarketRouter,
             }),
           },
           {
             path: "/market/create",
             lazy: async () => ({
-              Component: (await import("./pages/market/MarketCreate"))
-                .MarketCreate,
+              Component: (await import("./components/market/MarketRouter")).MarketRouter,
             }),
           },
           {
             path: "/market/me",
             lazy: async () => ({
-              Component: (await import("./pages/market/MyMarketListings"))
-                .MyMarketListings,
+              Component: (await import("./components/market/MarketRouter")).MarketRouter,
             }),
           },
           {
             path: "/market/manage",
             lazy: async () => ({
-              Component: (await import("./pages/market/ManageStock"))
-                .ManageStock,
+              Component: (await import("./components/market/MarketRouter")).MarketRouter,
             }),
           },
           {
             path: "/market/manage-stock",
             lazy: async () => ({
-              Component: (await import("./pages/market/ManageStockLots"))
-                .ManageStockLots,
+              Component: (await import("./components/market/MarketRouter")).MarketRouter,
             }),
           },
           {
             path: "/market/stock/:listingId",
             lazy: async () => ({
-              Component: (await import("./pages/market/ManageListingStock"))
-                .ManageListingStock,
+              Component: (await import("./components/market/MarketRouter")).MarketRouter,
             }),
           },
           {
             path: "/market/cart",
             lazy: async () => ({
-              Component: (await import("./pages/market/MarketCart")).MarketCart,
+              Component: (await import("./components/market/MarketRouter")).MarketRouter,
             }),
           },
           {
             path: "/market_edit/:id",
             lazy: async () => ({
-              Component: (await import("./pages/market/ViewMarketListing"))
-                .EditMarketListing,
+              Component: (await import("./components/market/MarketRouter")).MarketRouter,
             }),
           },
           {
             path: "/market/multiple/:id/edit",
             lazy: async () => ({
-              Component: (await import("./pages/market/ViewMarketListing"))
-                .EditMultipleListing,
+              Component: (await import("./components/market/MarketRouter")).MarketRouter,
             }),
           },
           {
