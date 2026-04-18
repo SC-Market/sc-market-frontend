@@ -40,6 +40,7 @@ export const sunsetThemeOptions: ThemeOptions = {
     outline: {
       main: "rgba(255, 111, 0, 0.3)", // Orange outline
     },
+    divider: "rgba(255, 111, 0, 0.3)",
     action: {
       hover: "rgba(255, 111, 0, 0.1)", // Light orange hover
     },

@@ -40,6 +40,7 @@ export const oceanThemeOptions: ThemeOptions = {
     outline: {
       main: "rgba(0, 172, 193, 0.3)", // Cyan outline
     },
+    divider: "rgba(0, 172, 193, 0.3)",
     action: {
       hover: "rgba(0, 172, 193, 0.1)", // Light cyan hover
     },

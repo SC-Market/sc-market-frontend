@@ -35,6 +35,7 @@ export const industrialThemeOptions: ThemeOptions = {
     outline: {
       main: "rgba(255, 193, 7, 0.3)", // Yellow outline with transparency
     },
+    divider: "rgba(255, 193, 7, 0.3)",
     action: {
       hover: "rgba(255, 193, 7, 0.15)", // Yellow hover with low opacity
     },

@@ -35,6 +35,7 @@ export const cyberpunkThemeOptions: ThemeOptions = {
     outline: {
       main: "rgba(0, 255, 65, 0.5)", // Neon green outline
     },
+    divider: "rgba(0, 255, 65, 0.5)",
     action: {
       hover: "rgba(0, 255, 65, 0.2)", // Neon green hover
     },

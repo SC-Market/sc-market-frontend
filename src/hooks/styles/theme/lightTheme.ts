@@ -19,6 +19,7 @@ export const lightThemeOptions: ExtendedThemeOptions = {
     outline: {
       main: "rgba(0, 0, 0, 0.12)",
     },
+    divider: "rgba(0, 0, 0, 0.12)",
     text: {
       primary: "#000000AA",
       secondary: "#000000",

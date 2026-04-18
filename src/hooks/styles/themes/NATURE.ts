@@ -40,6 +40,7 @@ export const natureThemeOptions: ThemeOptions = {
     outline: {
       main: "rgba(107, 142, 35, 0.3)", // Olive green outline
     },
+    divider: "rgba(107, 142, 35, 0.3)",
     action: {
       hover: "rgba(107, 142, 35, 0.1)", // Light olive hover
     },
