@@ -5,7 +5,6 @@ import {
   ContainerProps,
   Grid,
   GridProps,
-  Theme,
   useMediaQuery,
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
@@ -83,11 +82,7 @@ export function ContainerGrid(
             [theme.breakpoints.down("sm")]: {
               width: drawerOpen ? "100%" : 1,
             },
-            display: props.noTopSpacer
-              ? "none"
-              : theme.navKind === "outlined"
-                ? "block"
-                : "none",
+            display: props.noTopSpacer ? "none" : "block",
           }}
         />
         <Container
@@ -186,7 +181,7 @@ export function OpenGrid(
           sx={{
             ...theme.mixins.toolbar,
             position: "relative",
-            display: theme.navKind === "outlined" ? "block" : "none",
+            display: "block",
           }}
         />
         <Grid
@@ -215,7 +210,7 @@ export function OpenLayout(
     noMobilePadding?: boolean // If true, removes padding on mobile (for market listings)
   } & React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>,
 ) {
-  const theme: Theme = useTheme()
+  const theme = useTheme<ExtendedTheme>()
   const bottomNavHeight = useBottomNavHeight()
 
   const [drawerOpen, setDrawerOpen] = useDrawerOpen()
@@ -260,7 +255,7 @@ export function OpenLayout(
             [theme.breakpoints.down("sm")]: {
               width: drawerOpen ? "100%" : 1,
             },
-            display: theme.navKind === "outlined" ? "block" : "none",
+            display: "block",
             height: 64,
           }}
         />

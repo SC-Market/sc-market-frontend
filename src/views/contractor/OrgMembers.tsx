@@ -31,7 +31,12 @@ import {
   useGetContractorMembersQuery,
 } from "../../store/contractor"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
-import { has_permission, min_position, getMemberPosition } from "./OrgRoles"
+import {
+  has_permission,
+  min_position,
+  getMemberPosition,
+  self_member_role_removal_forbidden,
+} from "./OrgRoles"
 import { Contractor, ContractorRole } from "../../datatypes/Contractor"
 import SearchIcon from "@mui/icons-material/Search"
 import { Stack } from "@mui/system"
@@ -97,6 +102,32 @@ function PeopleRow(props: {
 
   const removeRoleCallback = useCallback(
     (role_id: string) => {
+      if (role_id === contractor.owner_role) {
+        issueAlert({
+          message: t(
+            "manageMemberList.cannotRemoveOwnerRole",
+            "The owner role cannot be removed from a member.",
+          ),
+          severity: "error",
+        })
+        return
+      }
+      if (
+        profile?.username === row.username &&
+        self_member_role_removal_forbidden(
+          (contractor.roles || []).filter((r) => row.roles.includes(r.role_id)),
+          role_id,
+        )
+      ) {
+        issueAlert({
+          message: t(
+            "manageMemberList.cannotRemoveProtectedSelfRole",
+            "You cannot remove this role from yourself (keep your top role, and keep a role with “manage roles” when your top role does not include it).",
+          ),
+          severity: "error",
+        })
+        return
+      }
       removeRole({
         contractor: contractor.spectrum_id,
         username: row.username,
@@ -113,7 +144,16 @@ function PeopleRow(props: {
           issueAlert(error)
         })
     },
-    [contractor, row.username, issueAlert, removeRole, t],
+    [
+      contractor,
+      contractor.owner_role,
+      row.username,
+      row.roles,
+      profile?.username,
+      issueAlert,
+      removeRole,
+      t,
+    ],
   )
 
   const kickMemberCallback = useCallback(() => {

@@ -2118,7 +2118,9 @@
     "updated": "Updated!",
     "update_failed": "Failed to update! {{reason}}",
     "member_kicked": "Member kicked!",
-    "kick_failed": "Failed to kick! {{reason}}"
+    "kick_failed": "Failed to kick! {{reason}}",
+    "cannotRemoveProtectedSelfRole": "You cannot remove this role from yourself (keep your top role, and keep a role with “manage roles” when your top role does not include it).",
+    "cannotRemoveOwnerRole": "The owner role cannot be removed from a member."
   },
   "orgDetailEdit": {
     "submitted": "Submitted!",

@@ -69,7 +69,7 @@ const COLOR_FIELDS: ColorField[] = [
     path: ["palette", "background", "sidebar"],
     usageNoteKey: "theme.usageSidebar",
     usageNoteFallback:
-      "Market listing image fades blend into this color (dark mode only).",
+      "Dark-mode listing thumbnails and photo-picker surfaces (e.g. SelectPhotosArea) fade toward this color.",
   },
   { key: "bgNavbar", labelKey: "theme.bgNavbar", fallback: "Navbar", path: ["palette", "background", "navbar"] },
   { key: "textPrimary", labelKey: "theme.textPrimary", fallback: "Text", path: ["palette", "text", "primary"] },
@@ -91,7 +91,7 @@ const COLOR_FIELDS: ColorField[] = [
     path: ["palette", "background", "overlay"],
     usageNoteKey: "theme.usageOverlay",
     usageNoteFallback:
-      "Modal/sheet dimming and elevated navbar shadow — not listing card fades.",
+      "Modal and bottom-sheet scrim; with an elevated nav it also tints the bar shadow. Listing thumbnails use Sidebar + card fade, not this token.",
   },
 ]
 

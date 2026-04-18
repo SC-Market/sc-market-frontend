@@ -46,6 +46,7 @@ export function createItemFilter(
             "manage_roles",
             "manage_webhooks",
             "manage_orders",
+            "manage_theme",
           ] as const
         ).some((perm) =>
           has_permission(currentOrgObj, profile, perm, profile?.contractors),

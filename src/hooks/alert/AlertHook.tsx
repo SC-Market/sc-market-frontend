@@ -1,7 +1,6 @@
 import React from "react"
 import { AlertInterface } from "../../datatypes/Alert"
 import type { StandardErrorResponse } from "../../store/api-types"
-import { extractErrorMessage } from "../../store/api-utils"
 
 export const AlertHookContext = React.createContext<
   | [

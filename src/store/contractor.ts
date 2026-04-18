@@ -535,6 +535,9 @@ export const contractorsApi = serviceApi.injectEndpoints({
           manage_market: boolean
           manage_webhooks: boolean
           manage_recruiting: boolean
+          manage_blocklist: boolean
+          claim_orders: boolean
+          manage_theme: boolean
           name: string
         }
       }
@@ -567,6 +570,9 @@ export const contractorsApi = serviceApi.injectEndpoints({
           manage_market: boolean
           manage_webhooks: boolean
           manage_recruiting: boolean
+          manage_blocklist: boolean
+          claim_orders: boolean
+          manage_theme: boolean
           name: string
           position: number
         }
