@@ -325,16 +325,19 @@ const headCells: readonly HeadCell<OrgMember>[] = [
 
 export function MemberList(props: { contractor: Contractor }) {
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
   const [page, setPage] = useState(0)
   const [pageSize, setPageSize] = useState(50)
+  const [searchQuery, setSearchQuery] = useState("")
+  const [roleFilter, setRoleFilter] = useState("any")
 
   // Use server-side pagination
   const { data: membersData, isLoading } = useGetContractorMembersQuery({
     spectrum_id: props.contractor?.spectrum_id || "",
     page,
     page_size: pageSize,
-    search: "",
-    role_filter: "",
+    search: searchQuery,
+    role_filter: roleFilter === "any" ? "" : roleFilter,
     sort: "username",
   })
 
@@ -352,7 +355,49 @@ export function MemberList(props: { contractor: Contractor }) {
   }
 
   return (
-    <Section xs={12} title={t("manageMemberList.members")} disablePadding>
+    <Section
+      xs={12}
+      title={t("manageMemberList.members")}
+      disablePadding
+      subtitle={
+        <Stack spacing={theme.layoutSpacing.compact} direction="row">
+          <TextField
+            label={t("manageMemberList.search")}
+            size="small"
+            InputProps={{
+              endAdornment: (
+                <IconButton>
+                  <SearchIcon />
+                </IconButton>
+              ),
+            }}
+            value={searchQuery}
+            onChange={(event: any) => {
+              setSearchQuery(event.target.value)
+              setPage(0)
+            }}
+          />
+          <TextField
+            select
+            label={t("manageMemberList.role")}
+            value={roleFilter}
+            onChange={(event: any) => {
+              setRoleFilter(event.target.value)
+              setPage(0)
+            }}
+            size="small"
+            defaultValue="any"
+          >
+            <MenuItem value="any">{t("manageMemberList.any")}</MenuItem>
+            {(props.contractor?.roles || []).map((r) => (
+              <MenuItem key={r.role_id} value={r.role_id}>
+                {r.name}
+              </MenuItem>
+            ))}
+          </TextField>
+        </Stack>
+      }
+    >
       <Grid item xs={12}>
         <Table>
           <TableHead>
