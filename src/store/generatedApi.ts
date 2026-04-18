@@ -19,7 +19,7 @@ const rawBaseQuery = fetchBaseQuery({
 
 /**
  * Wraps the base query with 401 → refresh → retry logic.
- * If the access token expires, POST /auth/refresh exchanges the refresh
+ * If the access token expires, POST /api/auth/refresh exchanges the refresh
  * cookie for a new access token, then retries the original request.
  * If refresh also fails, the user is redirected to /login.
  */
@@ -33,7 +33,7 @@ const baseQueryWithReauth: BaseQueryFn<
   if (result.error?.status === 401) {
     // Try refreshing the access token
     const refreshResult = await rawBaseQuery(
-      { url: "/auth/refresh", method: "POST" },
+      { url: "/api/auth/refresh", method: "POST" },
       api,
       extraOptions,
     )

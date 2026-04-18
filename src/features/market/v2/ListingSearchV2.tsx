@@ -1,4 +1,4 @@
-import React, { useMemo, useCallback, useRef } from "react";
+import React, { useMemo, useCallback, useRef, useState, useEffect } from "react";
 import {
   Box,
   Container,
@@ -15,12 +15,19 @@ import {
   Autocomplete,
   InputAdornment,
   IconButton,
+  Card,
+  CardActionArea,
   CardContent,
+  CardMedia,
   Chip,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { useSearchParams, Link as RouterLink } from "react-router-dom";
-import { ExtendedTheme } from "../../../hooks/styles/Theme";
+import { isAfter, subDays } from "date-fns";
+import { useNavigate, useSearchParams, Link as RouterLink } from "react-router-dom";
+import { ExtendedTheme, cardFadeGradient } from "../../../hooks/styles/Theme";
+import { FALLBACK_IMAGE_URL } from "../../../util/constants";
+import { UnderlineLink } from "../../../components/typography/UnderlineLink";
+import { MarketListingRating } from "../../../components/rating/ListingRating";
 import { HideOnScroll, MarketNavArea } from "../components/MarketNavArea";
 import { useSearchListingsQuery } from "../../../store/api/v2/market";
 import type { ListingSearchResult } from "../../../store/api/v2/market";
@@ -69,8 +76,11 @@ export function ListingSearchV2() {
     const priceMax = searchParams.get("price_max");
     const page = searchParams.get("page");
     const pageSize = searchParams.get("page_size");
-    const sortBy = searchParams.get("sort_by") as "created_at" | "price" | "quality" | "seller_rating" | undefined;
+    const sortBy = searchParams.get("sort_by") as "created_at" | "price" | "quality" | "seller_rating" | "updated_at" | "quantity" | undefined;
     const sortOrder = searchParams.get("sort_order") as "asc" | "desc" | undefined;
+    const itemType = searchParams.get("item_type") || undefined;
+    const quantityMin = searchParams.get("quantity_min");
+    const status = (searchParams.get("status") || undefined) as "active" | "sold" | "expired" | "cancelled" | undefined;
 
     return {
       text,
@@ -83,6 +93,9 @@ export function ListingSearchV2() {
       pageSize: pageSize ? Number(pageSize) : (isMobile ? 12 : 48),
       sortBy: sortBy || undefined,
       sortOrder: sortOrder || undefined,
+      itemType,
+      quantityMin: quantityMin ? Number(quantityMin) : undefined,
+      status,
     };
   }, [searchParams, isMobile]);
 
@@ -253,8 +266,25 @@ function MarketSearchAreaV2() {
   const text = searchParams.get("text") || "";
   const priceMin = searchParams.get("price_min") || "";
   const priceMax = searchParams.get("price_max") || "";
+  const itemType = searchParams.get("item_type") || "";
+  const quantityMin = searchParams.get("quantity_min") || "";
   const sortBy = searchParams.get("sort_by") || "";
   const sortOrder = searchParams.get("sort_order") || "";
+
+  // Debounced text for autocomplete suggestions
+  const [debouncedText, setDebouncedText] = useState('');
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedText(text), 300);
+    return () => clearTimeout(timer);
+  }, [text]);
+  const { data: suggestions } = useSearchListingsQuery(
+    { text: debouncedText, pageSize: 5 },
+    { skip: debouncedText.length < 2 }
+  );
+  const autocompleteOptions = useMemo(
+    () => suggestions?.listings?.map(l => l.title) ?? [],
+    [suggestions],
+  );
 
   // Update URL params
   const updateParam = useCallback(
@@ -300,22 +330,30 @@ function MarketSearchAreaV2() {
         </Grid>
 
         <Grid item xs={12}>
-          <TextField
-            fullWidth
-            size="small"
-            label={t("MarketSearchArea.search", "Search")}
-            value={text}
-            onChange={(e) => updateParam("text", e.target.value)}
-            color="secondary"
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <IconButton size="small">
-                    <SearchIcon />
-                  </IconButton>
-                </InputAdornment>
-              ),
-            }}
+          <Autocomplete
+            freeSolo
+            options={autocompleteOptions}
+            inputValue={text}
+            onInputChange={(_, value) => updateParam("text", value)}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                fullWidth
+                size="small"
+                label={t("MarketSearchArea.search", "Search")}
+                color="secondary"
+                InputProps={{
+                  ...params.InputProps,
+                  startAdornment: (
+                    <InputAdornment position="start">
+                      <IconButton size="small">
+                        <SearchIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            )}
           />
         </Grid>
 
@@ -358,6 +396,9 @@ function MarketSearchAreaV2() {
             <MenuItem value="quality:asc">{t("MarketSearchArea.sortQualityLow", "Quality: Low to High")}</MenuItem>
             <MenuItem value="seller_rating:desc">{t("MarketSearchArea.sortRatingHigh", "Rating: High to Low")}</MenuItem>
             <MenuItem value="seller_rating:asc">{t("MarketSearchArea.sortRatingLow", "Rating: Low to High")}</MenuItem>
+            <MenuItem value="updated_at:desc">{t("MarketSearchArea.sortUpdated", "Recently Updated")}</MenuItem>
+            <MenuItem value="quantity:desc">{t("MarketSearchArea.sortQuantityHigh", "Quantity: High to Low")}</MenuItem>
+            <MenuItem value="quantity:asc">{t("MarketSearchArea.sortQuantityLow", "Quantity: Low to High")}</MenuItem>
           </TextField>
         </Grid>
 
@@ -366,6 +407,32 @@ function MarketSearchAreaV2() {
           <Typography variant={"subtitle2"} fontWeight={"bold"}>
             {t("MarketSearchArea.filtering", "Filtering")}
           </Typography>
+        </Grid>
+
+        <Grid item xs={12}>
+          <TextField
+            fullWidth
+            size="small"
+            label={t("MarketSearchArea.itemType", "Item Type")}
+            value={itemType}
+            onChange={(e) => updateParam("item_type", e.target.value)}
+            color="secondary"
+          />
+        </Grid>
+
+        <Grid item xs={12}>
+          <TextField
+            fullWidth
+            size="small"
+            label={t("MarketSearchArea.quantityMin", "Min Quantity")}
+            value={quantityMin}
+            onChange={(e) => updateParam("quantity_min", e.target.value)}
+            color="secondary"
+            inputProps={{
+              inputMode: "numeric",
+              pattern: "[0-9]*",
+            }}
+          />
         </Grid>
 
         <Grid item xs={12}>
@@ -577,6 +644,11 @@ const ListingGrid = React.forwardRef<HTMLDivElement, ListingGridProps>(
     return (
       <>
         <div ref={ref} style={{ position: "absolute", top: 0 }} />
+        {/* TODO: Inject ads into listings using injectAds() from ../../components/ads/adUtils.
+           Currently blocked because injectAds expects MarketListingSearchResult (V1 type),
+           not ListingSearchResult (V2 type). Once V2 types are supported by injectAds or an
+           adapter is created, use: const listingsWithAds = injectAds(listings, MARKET_ADS);
+           Then render AdCard for ad items and ListingCardV2 for listing items. */}
         <Grid container spacing={1} sx={{ width: "100%" }}>
           {listings.map((listing, index) => (
             <Grid item {...gridBreakpoints} key={listing.listing_id}>
@@ -605,10 +677,13 @@ interface ListingCardV2Props {
 function ListingCardV2({ listing, index }: ListingCardV2Props) {
   const theme = useTheme<ExtendedTheme>();
   const { i18n } = useTranslation();
+  const navigate = useNavigate();
 
   const priceDisplay = listing.price_min === listing.price_max
     ? `${listing.price_min.toLocaleString(i18n.language)} aUEC`
     : `${listing.price_min.toLocaleString(i18n.language)} – ${listing.price_max.toLocaleString(i18n.language)} aUEC`;
+
+  const isNew = isAfter(new Date(listing.created_at), subDays(new Date(), 3));
 
   return (
     <Fade
@@ -621,81 +696,168 @@ function ListingCardV2({ listing, index }: ListingCardV2Props) {
           to={`/market/listing/${listing.listing_id}`}
           style={{ textDecoration: "none", color: "inherit" }}
         >
-        <Box
-          sx={{
-            minHeight: 400,
-            border: `1px solid ${theme.palette.divider}`,
-            borderRadius: theme.spacing(theme.borderRadius?.topLevel ?? 0.375),
-            backgroundColor: theme.palette.background.paper,
-            display: "flex",
-            flexDirection: "column",
-            cursor: "pointer",
-            "&:hover": { boxShadow: theme.shadows[4] },
-          }}
-        >
-          <CardContent sx={{ padding: "8px 12px !important", flex: 1 }}>
-            <Typography
-              variant="h6"
-              color="primary"
-              fontWeight="bold"
-              sx={{ fontSize: "0.95rem", mb: 0.5 }}
-            >
-              {priceDisplay}
-            </Typography>
-            <Typography
-              variant="body2"
-              color="text.secondary"
-              sx={{
-                fontSize: "0.75rem",
-                lineHeight: 1.3,
-                maxHeight: 36,
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                display: "-webkit-box",
-                WebkitLineClamp: 2,
-                WebkitBoxOrient: "vertical",
-                mb: 0.5,
-              }}
-            >
-              {listing.title}
-            </Typography>
-            <RouterLink
-              to={`/${listing.seller_type === "contractor" ? "contractor" : "user"}/${listing.seller_slug}`}
-              style={{ textDecoration: "none", color: "inherit" }}
-              onClick={(e) => e.stopPropagation()}
-            >
-              <Typography
-                variant="caption"
-                color="text.secondary"
-                sx={{ fontSize: "0.7rem", lineHeight: 1.2, "&:hover": { textDecoration: "underline" } }}
-              >
-                {listing.seller_name}
-              </Typography>
-            </RouterLink>
-
-            <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap", mt: 1 }}>
-              {listing.quality_tier_min != null && listing.quality_tier_max != null && (
+          <CardActionArea
+            sx={{ borderRadius: theme.spacing(theme.borderRadius.topLevel) }}
+          >
+            <Card sx={{ height: 300, position: "relative" }}>
+              {isNew && (
                 <Chip
-                  label={
-                    listing.quality_tier_min === listing.quality_tier_max
-                      ? `Tier ${listing.quality_tier_min}`
-                      : `Tier ${listing.quality_tier_min}–${listing.quality_tier_max}`
-                  }
-                  size="small"
+                  label="NEW"
                   color="secondary"
-                  sx={{ fontSize: "0.65rem", height: 18, fontWeight: "bold" }}
-                />
-              )}
-              {listing.variant_count > 1 && (
-                <Chip
-                  label={`${listing.variant_count} variants`}
                   size="small"
-                  sx={{ fontSize: "0.65rem", height: 18 }}
+                  sx={{
+                    position: "absolute",
+                    top: 4,
+                    left: 4,
+                    zIndex: 2,
+                    textTransform: "uppercase",
+                    fontWeight: "bold",
+                    fontSize: "0.65rem",
+                    height: 18,
+                  }}
                 />
               )}
-            </Box>
-          </CardContent>
-        </Box>
+              {listing.quantity_available === 0 && (
+                <Chip
+                  label="OUT OF STOCK"
+                  color="error"
+                  size="small"
+                  sx={{
+                    position: "absolute",
+                    top: isNew ? 28 : 4,
+                    right: 4,
+                    zIndex: 2,
+                    textTransform: "uppercase",
+                    fontWeight: "bold",
+                    fontSize: "0.65rem",
+                    height: 18,
+                  }}
+                />
+              )}
+              <CardMedia
+                component="img"
+                loading="lazy"
+                image={FALLBACK_IMAGE_URL}
+                sx={{
+                  width: "100%",
+                  objectFit: "cover",
+                  ...(theme.palette.mode === "dark"
+                    ? { height: "100%", aspectRatio: "16/9" }
+                    : { height: 150, aspectRatio: "16/9" }),
+                  overflow: "hidden",
+                }}
+                alt={`Image of ${listing.title}`}
+              />
+              <Box
+                sx={{
+                  ...(theme.palette.mode === "light" ? { display: "none" } : {}),
+                  position: "absolute",
+                  zIndex: 3,
+                  top: 0,
+                  left: 0,
+                  height: "100%",
+                  width: "100%",
+                  borderRadius: theme.spacing(theme.borderRadius.topLevel),
+                  background: cardFadeGradient(theme, 50, 60),
+                }}
+              />
+              <CardContent
+                sx={{
+                  ...(theme.palette.mode === "dark"
+                    ? { position: "absolute", bottom: 0, zIndex: 4 }
+                    : {}),
+                  maxWidth: "100%",
+                  padding: "8px 12px !important",
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  color="primary"
+                  fontWeight="bold"
+                  sx={{ fontSize: "0.95rem", mb: 0.5 }}
+                >
+                  {priceDisplay}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{
+                    fontSize: "0.75rem",
+                    lineHeight: 1.3,
+                    maxHeight: 36,
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    display: "-webkit-box",
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: "vertical",
+                    mb: 0.5,
+                  }}
+                >
+                  {listing.title}
+                </Typography>
+                <Box sx={{ mb: 0 }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 0.5,
+                      mb: 0.25,
+                      flexWrap: "wrap",
+                    }}
+                  >
+                    <UnderlineLink
+                      component="span"
+                      display="inline"
+                      noWrap
+                      variant="caption"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        navigate(
+                          listing.seller_type === "contractor"
+                            ? `/contractor/${listing.seller_slug}`
+                            : `/user/${listing.seller_slug}`,
+                        );
+                      }}
+                      sx={{
+                        overflowX: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                        cursor: "pointer",
+                        fontSize: "0.7rem",
+                        lineHeight: 1.2,
+                      }}
+                    >
+                      {listing.seller_name}
+                    </UnderlineLink>
+                  </Box>
+                  <Box
+                    sx={{
+                      fontSize: "0.7rem",
+                      lineHeight: 1,
+                      display: "flex",
+                      alignItems: "center",
+                      mt: 0,
+                      mb: 0,
+                    }}
+                  >
+                    <MarketListingRating
+                      avg_rating={listing.seller_rating}
+                      rating_count={listing.seller_rating_count ?? null}
+                      total_rating={0}
+                      rating_streak={null}
+                      total_orders={null}
+                      total_assignments={null}
+                      response_rate={null}
+                      badge_ids={[]}
+                      display_limit={0}
+                      showBadges={false}
+                    />
+                  </Box>
+                </Box>
+              </CardContent>
+            </Card>
+          </CardActionArea>
         </RouterLink>
       </ListingWrapper>
     </Fade>

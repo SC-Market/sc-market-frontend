@@ -21,7 +21,7 @@ const baseQueryWithReauth: BaseQueryFn<
   let result = await rawBaseQuery(args, api, extraOptions)
   if (result.error?.status === 401) {
     const refreshResult = await rawBaseQuery(
-      { url: "/auth/refresh", method: "POST" },
+      { url: "/api/auth/refresh", method: "POST" },
       api,
       extraOptions,
     )
