@@ -21,13 +21,13 @@ import { useTranslation } from "react-i18next"
 import {
   useUpdateTokenMutation,
   ApiToken,
-  useGetContractorsForTokensQuery,
 } from "../api/tokensApi"
 import { SCOPE_CATEGORIES } from "../domain/scopes"
 import { useGetUserProfileQuery } from "../../../store/profile.ts"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { BottomSheet } from "../../../components/mobile/BottomSheet"
+import { useAlertHook } from "../../../hooks/alert/AlertHook"
 
 interface EditTokenDialogProps {
   open: boolean
@@ -45,6 +45,7 @@ export function EditTokenDialog({
   const { data: profile } = useGetUserProfileQuery()
   const contractors = profile?.contractors || []
   const isAdmin = profile?.role === "admin"
+  const issueAlert = useAlertHook()
 
   // Filter scopes based on user role - admins can see all, non-admins can't see admin/moderation scopes
   const allScopes = Object.values(SCOPE_CATEGORIES).flatMap((cat) =>
@@ -150,6 +151,7 @@ export function EditTokenDialog({
         },
       }).unwrap()
 
+      issueAlert({ message: "Token updated successfully", severity: "success" })
       onClose()
     } catch (err: any) {
       setError(err.data?.error || "Failed to update token")
