@@ -804,6 +804,7 @@
   },
   "OffersViewPaginated": {
     "offers": "Пропозиції",
+    "myOffers": "Мої пропозиції",
     "all": "Усі",
     "offer": "Пропозиція",
     "user": "Користувач",

@@ -762,6 +762,7 @@
   },
   "OffersViewPaginated": {
     "offers": "",
+    "myOffers": "我的報價",
     "all": "",
     "offer": "",
     "user": "",

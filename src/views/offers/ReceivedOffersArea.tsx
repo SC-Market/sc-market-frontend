@@ -547,7 +547,9 @@ export function OffersViewPaginated(props: {
               flexShrink: 0,
             }}
           >
-            {t("OffersViewPaginated.offers")}
+            {mine
+              ? t("OffersViewPaginated.myOffers", "My Offers")
+              : t("OffersViewPaginated.offers")}
           </Typography>
           <Button
             startIcon={<Search />}

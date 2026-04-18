@@ -768,6 +768,7 @@
   },
   "OffersViewPaginated": {
     "offers": "Offers",
+    "myOffers": "マイオファー",
     "all": "All",
     "offer": "Offer",
     "user": "User",
