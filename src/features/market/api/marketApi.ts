@@ -280,6 +280,12 @@ export const marketApi = serviceApi.injectEndpoints({
         items: { listing_id: string; quantity: number }[]
         note?: string
         offer?: number | string | null
+        v2_variant_items?: {
+          listing_id: string
+          variant_id: string
+          quantity: number
+          price_per_unit: number
+        }[]
       }
     >({
       query: (purchaseData) => ({

@@ -326,6 +326,17 @@ const injectedRtkApi = api
         }),
         providesTags: ["Buy Orders V2"],
       }),
+      updateBuyOrder: build.mutation<
+        UpdateBuyOrderApiResponse,
+        UpdateBuyOrderApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v2/buy-orders/${queryArg.id}`,
+          method: "PUT",
+          body: queryArg.updateStandingBuyOrderRequest,
+        }),
+        invalidatesTags: ["Buy Orders V2"],
+      }),
       cancelBuyOrder: build.mutation<
         CancelBuyOrderApiResponse,
         CancelBuyOrderApiArg
@@ -672,6 +683,19 @@ export type GetMyBuyOrdersApiArg = {
   status?: "active" | "fulfilled" | "cancelled" | "expired"
   page?: number
   pageSize?: number
+}
+export type UpdateBuyOrderApiResponse = /** status 200 Ok */ StandingBuyOrder
+export type UpdateBuyOrderApiArg = {
+  id: string
+  updateStandingBuyOrderRequest: UpdateStandingBuyOrderRequest
+}
+export type UpdateStandingBuyOrderRequest = {
+  quantity?: number
+  price_per_unit?: number
+  quality_tier_min?: number
+  quality_tier_max?: number
+  negotiable?: boolean
+  expires_in_days?: number
 }
 export type CancelBuyOrderApiResponse = /** status 200 Ok */ {
   message: string
@@ -1691,6 +1715,7 @@ export const {
   useCreateStandingBuyOrderMutation,
   useSearchBuyOrdersQuery,
   useGetMyBuyOrdersQuery,
+  useUpdateBuyOrderMutation,
   useCancelBuyOrderMutation,
   useGetPriceHistoryQuery,
   useGetQualityDistributionQuery,
