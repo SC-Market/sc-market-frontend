@@ -14,6 +14,7 @@ import {
   HistoryRounded,
   PaletteRounded,
   PeopleAltRounded,
+  TuneRounded,
 } from "@mui/icons-material"
 import { TabPanel } from "../../components/tabs/Tabs"
 import { CreateOrgInviteCode } from "../../views/contractor/CreateOrgInviteCode"
@@ -45,6 +46,7 @@ import {
   useDeleteOrgThemeMutation,
 } from "../../store/api/contractors"
 import { clearCachedOrgTheme } from "../../hooks/styles/themeCache"
+import { WhiteLabelSettings } from "../../views/contractor/WhiteLabelSettings"
 
 export function OrgManage() {
   const { t } = useTranslation()
@@ -179,6 +181,9 @@ export function OrgManage() {
             {hasWhiteLabel && canManageTheme && (
               <Tab label={t("org.themeTab", "Theme")} icon={<PaletteRounded />} value="theme" iconPosition="start" sx={{ minHeight: 48 }} />
             )}
+            {hasWhiteLabel && canManageTheme && (
+              <Tab label={t("org.whiteLabelTab", "White Label")} icon={<TuneRounded />} value="whitelabel" iconPosition="start" sx={{ minHeight: 48 }} />
+            )}
           </Tabs>
         </Box>
       </Grid>
@@ -254,6 +259,11 @@ export function OrgManage() {
               }}
               isSaving={isThemeSaving}
             />
+          </TabPanel>
+        )}
+        {hasWhiteLabel && canManageTheme && (
+          <TabPanel value={page} index={"whitelabel"}>
+            <WhiteLabelSettings />
           </TabPanel>
         )}
       </Grid>
