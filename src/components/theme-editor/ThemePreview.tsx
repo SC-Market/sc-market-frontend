@@ -370,11 +370,11 @@ function ThemePreviewInner({ faviconUrl }: { faviconUrl?: string | null }) {
               {theme.palette.mode === "light"
                 ? t(
                     "theme.previewListingLightNote",
-                    "Light mode: no image fade on listing cards (same as the live market). The Overlay color still applies to modals and nav shadow.",
+                    "Light mode: no image fade on listing cards (same as the live market). Overlay is still used for modal scrims and (with an elevated nav) the bar shadow tint.",
                   )
                 : t(
                     "theme.previewListingDarkNote",
-                    "This fade uses your Sidebar color (cardFadeGradient), not the Overlay field.",
+                    "Listing thumbnails fade using your Sidebar color (cardFadeGradient), not the Overlay field.",
                   )}
             </Typography>
           </Box>
@@ -427,7 +427,7 @@ function ThemePreviewInner({ faviconUrl }: { faviconUrl?: string | null }) {
             </Box>
           </Box>
 
-          {/* imageOverlay — SelectPhotosArea and similar; not wired in theme editor yet */}
+          {/* background.imageOverlay — SelectPhotosArea-style photo grids; separate from listing card fades */}
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             <Box
               sx={{
@@ -443,7 +443,7 @@ function ThemePreviewInner({ faviconUrl }: { faviconUrl?: string | null }) {
             <Typography variant="caption" color="text.secondary">
               {t(
                 "theme.previewImageOverlayHint",
-                "Image overlay — used on photo pickers (not listing cards).",
+                "Photo grids like SelectPhotosArea; listing cards use Sidebar + card fade instead.",
               )}
             </Typography>
           </Box>

@@ -12,6 +12,21 @@ import type {
   StandardSuccessResponse,
 } from "./api-types"
 
+function joinMessagesFromErrorList(items: unknown): string | undefined {
+  if (!Array.isArray(items) || items.length === 0) return undefined
+  const parts = items
+    .map((item) => {
+      if (item != null && typeof item === "object" && "message" in item) {
+        const m = (item as { message: unknown }).message
+        return typeof m === "string" ? m : undefined
+      }
+      if (typeof item === "string" && item.length > 0) return item
+      return undefined
+    })
+    .filter((x): x is string => !!x && x.length > 0)
+  return parts.length > 0 ? parts.join(" ") : undefined
+}
+
 /**
  * Unwrap API response, extracting data from success responses
  *
@@ -58,33 +73,46 @@ export function unwrapResponse<T, E = StandardErrorResponse>(
  * }
  * ```
  */
-export function extractErrorMessage(
-  response: APIResponse<unknown>,
-): string | undefined {
-  // New standardized format: { error: { code, message, details? } }
+export function extractErrorMessage(response: unknown): string | undefined {
+  if (response == null || typeof response !== "object") {
+    return undefined
+  }
+  const r = response as Record<string, unknown>
+
+  // New standardized format: { error: { code, message, details?, validationErrors? } }
   if (
-    "error" in response &&
-    response.error &&
-    typeof response.error === "object" &&
-    "message" in response.error
+    "error" in r &&
+    r.error &&
+    typeof r.error === "object" &&
+    r.error !== null &&
+    "message" in r.error
   ) {
-    return response.error.message
+    const errObj = r.error as {
+      message?: unknown
+      validationErrors?: unknown
+    }
+    if (typeof errObj.message === "string" && errObj.message.length > 0) {
+      const fromValidation = joinMessagesFromErrorList(errObj.validationErrors)
+      if (fromValidation) {
+        return `${errObj.message} ${fromValidation}`.trim()
+      }
+      return errObj.message
+    }
   }
 
   // Legacy formats
-  if (
-    "error" in response &&
-    response.error &&
-    typeof response.error === "string"
-  ) {
-    return response.error
+  if (typeof r.error === "string" && r.error.length > 0) {
+    return r.error
   }
-  if (
-    "message" in response &&
-    response.message &&
-    typeof response.message === "string"
-  ) {
-    return response.message
+
+  const fromErrors = joinMessagesFromErrorList(r.errors)
+  if (fromErrors) return fromErrors
+
+  const fromValidation = joinMessagesFromErrorList(r.validationErrors)
+  if (fromValidation) return fromValidation
+
+  if (typeof r.message === "string" && r.message.length > 0) {
+    return r.message
   }
 
   return undefined

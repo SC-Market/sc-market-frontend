@@ -21090,6 +21090,14 @@
           "manage_blocklist": {
             "title": "ContractorRoleUpdateBody.manage_blocklist",
             "type": "boolean"
+          },
+          "claim_orders": {
+            "title": "ContractorRoleUpdateBody.claim_orders",
+            "type": "boolean"
+          },
+          "manage_theme": {
+            "title": "ContractorRoleUpdateBody.manage_theme",
+            "type": "boolean"
           }
         },
         "required": [
@@ -21104,7 +21112,9 @@
           "manage_market",
           "manage_recruiting",
           "manage_webhooks",
-          "manage_blocklist"
+          "manage_blocklist",
+          "claim_orders",
+          "manage_theme"
         ],
         "additionalProperties": false,
         "title": "ContractorRoleUpdateBody",
@@ -21296,6 +21306,46 @@
             "type": "string",
             "minLength": 3,
             "maxLength": 30
+          },
+          "language_codes": {
+            "title": "ContractorBody.language_codes",
+            "type": "array",
+            "description": "Optional ISO 639-1 language codes for org communication preferences",
+            "items": {
+              "type": "string",
+              "enum": [
+                "en",
+                "es",
+                "fr",
+                "de",
+                "it",
+                "pt",
+                "ru",
+                "zh",
+                "ja",
+                "ko",
+                "ar",
+                "hi",
+                "nl",
+                "pl",
+                "tr",
+                "sv",
+                "da",
+                "no",
+                "fi",
+                "cs",
+                "hu",
+                "ro",
+                "el",
+                "he",
+                "th",
+                "vi",
+                "id",
+                "ms",
+                "uk",
+                "sk"
+              ]
+            }
           }
         },
         "required": [

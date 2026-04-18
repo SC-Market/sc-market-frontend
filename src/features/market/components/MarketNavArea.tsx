@@ -10,7 +10,7 @@ import {
   Typography,
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
-import { ExtendedTheme } from "../../../hooks/styles/Theme"
+import { ExtendedTheme, navbarShadow } from "../../../hooks/styles/Theme"
 import React, { useEffect, useRef, useState } from "react"
 import { useOnScreen } from "../../../hooks/useOnScreen"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../../hooks/layout/Drawer"
@@ -57,7 +57,8 @@ export function HideOnScroll(props: { children: React.ReactNode }) {
 
   const theme = useTheme<ExtendedTheme>()
   const drawerOpen = useDrawerOpen()
-  const { t } = useTranslation()
+  const outline =
+    theme.palette.outline?.main ?? theme.palette.divider ?? "currentColor"
 
   useEffect(() => {
     setLoaded(true)
@@ -66,7 +67,7 @@ export function HideOnScroll(props: { children: React.ReactNode }) {
   return (
     <>
       <AppBar
-        variant={"outlined"}
+        elevation={0}
         sx={{
           zIndex: theme.zIndex.drawer - 1,
           transition: "opacity .25s linear, top .5s ease-in-out",
@@ -97,33 +98,27 @@ export function HideOnScroll(props: { children: React.ReactNode }) {
           //         duration: '0.3s',
           //     }
           // ),
-          background: theme.palette.background.default,
-          // background: 'transparent',
-          overflow: "hidden",
-          // borderColor: theme.palette.outline.main,
-          // borderBottom: 1,
-          "& .MuiAppBar-root": {
-            backgroundColor: "rgba(0,0,0,0)",
-            // backgroundColor: theme.palette.background.default
-            overflow: "hidden",
-          },
+          background: theme.palette.background.navbar,
+          overflow: "visible",
+          boxSizing: "border-box",
+          ...(theme.navKind === "outlined"
+            ? {
+                borderBottom: 1,
+                borderColor: outline,
+                boxShadow: "none",
+              }
+            : {
+                border: "none",
+                boxShadow: navbarShadow(theme),
+              }),
         }}
-        color={"secondary"}
       >
         <Toolbar
           sx={{
             paddingRight: 2, // keep right padding when drawer closed
-            // boxShadow: `0 3px 5px 3px ${theme.palette.primary.main}`,
             overflow: "visible",
             background: "transparent",
             paddingLeft: 0,
-            ...(theme.navKind === "outlined"
-              ? {}
-              : {
-                  border: "none",
-                  boxShadow:
-                    "rgba(145, 158, 171, 0.2) 0px 0px 2px 0px, rgba(145, 158, 171, 0.12) 0px 12px 24px -4px",
-                }),
           }}
         >
           <Box sx={{ display: "flex" }}>

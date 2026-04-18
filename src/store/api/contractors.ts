@@ -1045,6 +1045,9 @@ export type ContractorRole = {
   manage_market: boolean
   manage_recruiting: boolean
   manage_webhooks: boolean
+  manage_blocklist: boolean
+  claim_orders: boolean
+  manage_theme: boolean
 }
 export type Contractor = {
   kind: "independent" | "organization"
@@ -1111,6 +1114,8 @@ export type ContractorRoleBody = {
   manage_recruiting: boolean
   manage_webhooks: boolean
   manage_blocklist: boolean
+  claim_orders: boolean
+  manage_theme: boolean
 }
 export type ContractorRoleUpdateBody = {
   name: string
@@ -1125,6 +1130,8 @@ export type ContractorRoleUpdateBody = {
   manage_recruiting: boolean
   manage_webhooks: boolean
   manage_blocklist: boolean
+  claim_orders: boolean
+  manage_theme: boolean
 }
 export type ContractorRoleBody2 = {
   name: string

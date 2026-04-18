@@ -794,6 +794,7 @@ const router = createBrowserRouter([
                       "manage_invites",
                       "manage_roles",
                       "manage_webhooks",
+                      "manage_theme",
                     ]}
                   />
                 ),
@@ -871,6 +872,7 @@ const router = createBrowserRouter([
                       "manage_invites",
                       "manage_roles",
                       "manage_webhooks",
+                      "manage_theme",
                     ]}
                   />
                 ),

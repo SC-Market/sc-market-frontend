@@ -45,6 +45,8 @@ export function Navbar(props: { children?: React.ReactNode }) {
     isMessagingPage && !isMobile ? messagingDrawerWidth : 0
 
   const navbarIconColor = getNavbarContrastText(theme)
+  const outline =
+    theme.palette.outline?.main ?? theme.palette.divider ?? "currentColor"
 
   return (
     <AppBar
@@ -70,41 +72,30 @@ export function Navbar(props: { children?: React.ReactNode }) {
           duration: "0.3s",
         }),
         background: theme.palette.background.navbar,
-        // background: 'transparent',
-        overflow: "hidden",
+        overflow: "visible",
         borderRadius: 0,
-        // borderColor: theme.palette.outline.main,
-        // borderBottom: 1,
+        boxSizing: "border-box",
+        ...(theme.navKind === "outlined"
+          ? {
+              borderBottom: 1,
+              borderColor: outline,
+              boxShadow: "none",
+            }
+          : {
+              border: "none",
+              boxShadow: navbarShadow(theme),
+            }),
         // iOS safe area inset for notch/camera gap
         paddingTop: "env(safe-area-inset-top)",
-        "& .MuiAppBar-root": {
-          backgroundColor: "transparent",
-          // backgroundColor: theme.palette.background.default
-          overflow: "hidden",
-        },
       }}
-      // variant={theme.navKind}
     >
       <Toolbar
         sx={{
           paddingRight: 2, // keep right padding when drawer closed
           height: theme.spacing(8),
-          // boxShadow: `0 3px 5px 3px ${theme.palette.primary.main}`,
           overflow: "visible",
           background: "transparent",
           paddingLeft: 2,
-          ...(theme.navKind === "outlined"
-            ? {
-                // borderBottom: 1,
-                // borderLeft: 1,
-                borderColor: theme.palette.outline.main,
-                boxShadow: "none",
-                boxSizing: "border-box",
-              }
-            : {
-                border: "none",
-                boxShadow: navbarShadow(theme),
-              }),
         }}
       >
         {!drawerOpen && (

@@ -47,8 +47,8 @@ export function CreateNewContractor() {
         setError(true)
         return
       }
-      // event.preventDefault();
-      const res: { data?: any; error?: any } = await registerNewContractor({
+
+      registerNewContractor({
         description,
         name: contractorName,
         identifier: contractorIdentifier,
@@ -56,24 +56,20 @@ export function CreateNewContractor() {
         banner,
         language_codes: selectedLanguages,
       })
+        .unwrap()
+        .then(() => {
+          issueAlert({
+            message: t("contractorCreate.success", {
+              defaultValue: "Contractor created successfully",
+            }),
+            severity: "success",
+          })
+          navigate(`/contractor/~${contractorIdentifier}`)
+        })
+        .catch((error) => {
+          issueAlert(error)
+        })
 
-      if (res?.data && !res?.error) {
-        issueAlert({
-          message: t("contractorCreate.success", {
-            defaultValue: "Contractor created successfully",
-          }),
-          severity: "success",
-        })
-        navigate(`/contractor/~${contractorIdentifier}`)
-      } else {
-        issueAlert({
-          message: t("contractorCreate.failed_auth", {
-            reason:
-              res.error?.error || res.error?.data?.error || res.error || "",
-          }),
-          severity: "error",
-        })
-      }
       return false
     },
     [

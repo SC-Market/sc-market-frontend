@@ -73,6 +73,17 @@ export function OrgManage() {
       ),
     [pageData.data],
   )
+  const canManageTheme = useMemo(
+    () =>
+      pageData.data &&
+      has_permission(
+        pageData.data.contractor,
+        pageData.data.profile,
+        "manage_theme",
+        pageData.data.profile?.contractors,
+      ),
+    [pageData.data],
+  )
   const canManageInvites = useMemo(
     () =>
       pageData.data &&
@@ -165,7 +176,7 @@ export function OrgManage() {
             )}
             <Tab label={t("org.auditLogsTab")} icon={<HistoryRounded />} value="audit" iconPosition="start" sx={{ minHeight: 48 }} />
             <Tab label={t("org.customersTab", "Customers")} icon={<PeopleAltRounded />} value="customers" iconPosition="start" sx={{ minHeight: 48 }} />
-            {hasWhiteLabel && canManageOrgDetails && (
+            {hasWhiteLabel && canManageTheme && (
               <Tab label={t("org.themeTab", "Theme")} icon={<PaletteRounded />} value="theme" iconPosition="start" sx={{ minHeight: 48 }} />
             )}
           </Tabs>
@@ -218,7 +229,7 @@ export function OrgManage() {
             <CustomerList />
           </Grid>
         </TabPanel>
-        {hasWhiteLabel && canManageOrgDetails && spectrumId && (
+        {hasWhiteLabel && canManageTheme && spectrumId && (
           <TabPanel value={page} index={"theme"}>
             <ThemeEditor
               initialThemeData={

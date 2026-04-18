@@ -151,6 +151,24 @@ export function getMemberPosition(
   return Math.min(...userRoles.map((role) => role.position))
 }
 
+/** Same rules as the API when removing a role from yourself. */
+export function self_member_role_removal_forbidden(
+  memberRoles: ContractorRole[],
+  roleIdToRemove: string,
+): boolean {
+  if (memberRoles.length === 0) return true
+  const removing = memberRoles.find((r) => r.role_id === roleIdToRemove)
+  if (!removing) return false
+  const sorted = [...memberRoles].sort((a, b) => a.position - b.position)
+  const top = sorted[0]!
+  if (removing.role_id === top.role_id) return true
+  if (!top.manage_roles) {
+    const manageCarrier = sorted.find((r) => r.manage_roles)
+    if (manageCarrier?.role_id === roleIdToRemove) return true
+  }
+  return false
+}
+
 export function min_role(
   contractor: Contractor,
   user: { username: string },
@@ -403,13 +421,15 @@ function RoleDetailsRow(props: { role: ContractorRole; open: boolean }) {
                     >
                       {t("manageRoles.save")}
                     </Button>
-                    <Button
-                      color={"error"}
-                      variant={"contained"}
-                      onClick={deleteRoleCallback}
-                    >
-                      {t("manageRoles.delete")}
-                    </Button>
+                    {role.role_id !== currentOrg?.owner_role && (
+                      <Button
+                        color={"error"}
+                        variant={"contained"}
+                        onClick={deleteRoleCallback}
+                      >
+                        {t("manageRoles.delete")}
+                      </Button>
+                    )}
                   </Box>
                 </Grid>
               </CardContent>
