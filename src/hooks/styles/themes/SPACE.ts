@@ -35,6 +35,7 @@ export const spaceThemeOptions: ThemeOptions = {
     outline: {
       main: "rgba(123, 31, 162, 0.4)", // Purple outline
     },
+    divider: "rgba(123, 31, 162, 0.4)",
     action: {
       hover: "rgba(123, 31, 162, 0.2)", // Purple hover
     },

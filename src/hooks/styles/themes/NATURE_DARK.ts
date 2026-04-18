@@ -35,6 +35,7 @@ export const natureDarkThemeOptions: ThemeOptions = {
     outline: {
       main: "rgba(129, 199, 132, 0.3)", // Light green outline
     },
+    divider: "rgba(129, 199, 132, 0.3)",
     action: {
       hover: "rgba(129, 199, 132, 0.15)", // Light green hover
     },

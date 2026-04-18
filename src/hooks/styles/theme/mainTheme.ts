@@ -41,6 +41,7 @@ export const mainThemeOptions: ExtendedThemeOptions = {
     outline: {
       main: mainOutline,
     },
+    divider: mainOutline,
     action: {
       hover: "rgba(36, 41, 58, 0.43)",
     },

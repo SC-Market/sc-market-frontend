@@ -80,9 +80,15 @@ export function buildOrgTheme(
   themeData: OrgThemeData,
   mode: "light" | "dark",
 ): Theme {
+  const orgOptions = mode === "light" ? themeData.light : themeData.dark
+  // Sync divider with outline.main so all border colors are consistent
+  const outlineMain = (orgOptions?.palette as any)?.outline?.main
+  if (outlineMain && !(orgOptions?.palette as any)?.divider) {
+    ;(orgOptions as any).palette = { ...orgOptions?.palette, divider: outlineMain }
+  }
   const base =
     mode === "light"
-      ? [themeBase, mainThemeOptions, lightThemeOptions, themeData.light]
-      : [themeBase, mainThemeOptions, themeData.dark]
+      ? [themeBase, mainThemeOptions, lightThemeOptions, orgOptions]
+      : [themeBase, mainThemeOptions, orgOptions]
   return responsiveFontSizes(createTheme(...base))
 }
