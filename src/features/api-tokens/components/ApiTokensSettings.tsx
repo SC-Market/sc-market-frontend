@@ -13,14 +13,6 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  TextField,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  FormControlLabel,
-  Checkbox,
-  FormGroup,
   Divider,
   Tooltip,
 } from "@mui/material"
@@ -28,9 +20,7 @@ import {
   Add as AddIcon,
   Edit as EditIcon,
   Delete as DeleteIcon,
-  ContentCopy as CopyIcon,
   Visibility as VisibilityIcon,
-  VisibilityOff as VisibilityOffIcon,
   Security as SecurityIcon,
   Schedule as ScheduleIcon,
 } from "@mui/icons-material"
@@ -52,16 +42,6 @@ export function ApiTokensSettings() {
   const theme = useTheme<ExtendedTheme>()
   const { data: tokens, isLoading, error } = useGetTokensQuery()
   const [deleteToken] = useDeleteTokenMutation()
-
-  // Debug logging for cache invalidation
-  React.useEffect(() => {
-    console.log("ApiTokensSettings - Query state changed:", {
-      tokens: tokens?.length,
-      isLoading,
-      error: !!error,
-      timestamp: new Date().toISOString(),
-    })
-  }, [tokens, isLoading, error])
 
   const [createDialogOpen, setCreateDialogOpen] = useState(false)
   const [editDialogOpen, setEditDialogOpen] = useState(false)
@@ -92,13 +72,11 @@ export function ApiTokensSettings() {
   const confirmDeleteToken = async () => {
     if (tokenToDelete) {
       try {
-        console.log("ApiTokensSettings - Deleting token:", tokenToDelete.id)
         await deleteToken(tokenToDelete.id).unwrap()
-        console.log("ApiTokensSettings - Token deleted successfully")
         setDeleteDialogOpen(false)
         setTokenToDelete(null)
       } catch (error) {
-        console.error("Failed to delete token:", error)
+        // Error handled by RTK Query
       }
     }
   }
@@ -303,8 +281,8 @@ export function ApiTokensSettings() {
                     </Typography>
                     <Typography variant="body2">
                       {(token.contractor_spectrum_ids || []).length === 0
-                        ? "All contractors"
-                        : `${(token.contractor_spectrum_ids || []).length} contractor(s)`}
+                        ? "Unrestricted"
+                        : `${(token.contractor_spectrum_ids || []).length} organization(s)`}
                     </Typography>
                   </Box>
 

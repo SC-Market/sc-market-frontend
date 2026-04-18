@@ -27,13 +27,16 @@ export const SCOPE_CATEGORIES = {
     ],
   },
   contractors: {
-    label: "Contractors",
+    label: "Organizations",
     scopes: [
-      { value: "contractors:read", label: "Read Contractors" },
-      { value: "contractors:write", label: "Write Contractors" },
+      { value: "contractors:read", label: "Read Organizations" },
+      { value: "contractors:write", label: "Write Organizations" },
       { value: "contractors:members", label: "Manage Members" },
       { value: "contractors:webhooks", label: "Manage Webhooks" },
       { value: "contractors:blocklist", label: "Manage Blocklist" },
+      { value: "orgs:read", label: "Read Org Settings" },
+      { value: "orgs:write", label: "Write Org Settings" },
+      { value: "orgs:manage", label: "Manage Org" },
     ],
   },
   services: {
@@ -63,6 +66,20 @@ export const SCOPE_CATEGORIES = {
     scopes: [
       { value: "notifications:read", label: "Read Notifications" },
       { value: "notifications:write", label: "Write Notifications" },
+    ],
+  },
+  recruiting: {
+    label: "Recruiting",
+    scopes: [
+      { value: "recruiting:read", label: "Read Recruiting Posts" },
+      { value: "recruiting:write", label: "Write Recruiting Posts" },
+    ],
+  },
+  comments: {
+    label: "Comments",
+    scopes: [
+      { value: "comments:read", label: "Read Comments" },
+      { value: "comments:write", label: "Write Comments" },
     ],
   },
   moderation: {

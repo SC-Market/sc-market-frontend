@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import {
   Dialog,
   DialogTitle,
@@ -17,8 +17,6 @@ import {
 } from "@mui/material"
 import {
   ContentCopy as CopyIcon,
-  Visibility as VisibilityIcon,
-  VisibilityOff as VisibilityOffIcon,
   Schedule as ScheduleIcon,
   Security as SecurityIcon,
   Business as BusinessIcon,
@@ -27,7 +25,6 @@ import { useTranslation } from "react-i18next"
 import {
   useGetTokenStatsQuery,
   ApiToken,
-  useGetContractorsForTokensQuery,
 } from "../api/tokensApi"
 import { useGetUserProfileQuery } from "../../../store/profile.ts"
 import { useTheme } from "@mui/material/styles"
@@ -53,8 +50,6 @@ export function TokenDetailsDialog({
   })
   const { data: profile } = useGetUserProfileQuery()
   const contractors = profile?.contractors || []
-
-  const [showToken, setShowToken] = useState(false)
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString()
@@ -231,8 +226,8 @@ export function TokenDetailsDialog({
         </Typography>
         <Typography variant="body2">
           {(token.contractor_spectrum_ids || []).length === 0
-            ? "Access to all contractors"
-            : `Access to ${(token.contractor_spectrum_ids || []).length} contractor(s)`}
+            ? "Unrestricted — access to all your organizations"
+            : `Restricted to ${(token.contractor_spectrum_ids || []).length} organization(s)`}
         </Typography>
         {(token.contractor_spectrum_ids || []).length > 0 && (
           <Box sx={{ mt: 1 }}>
@@ -276,18 +271,12 @@ export function TokenDetailsDialog({
             <Grid container spacing={theme.layoutSpacing.layout}>
               <Grid item xs={6}>
                 <Typography variant="body2" color="text.secondary">
-                  Usage Count:
+                  Last Used:
                 </Typography>
                 <Typography variant="body2">
-                  {stats.usage_count || 0}
-                </Typography>
-              </Grid>
-              <Grid item xs={6}>
-                <Typography variant="body2" color="text.secondary">
-                  Days Until Expiry:
-                </Typography>
-                <Typography variant="body2">
-                  {stats.days_until_expiry || "N/A"}
+                  {stats.last_used_at
+                    ? formatDateTime(stats.last_used_at)
+                    : "Never"}
                 </Typography>
               </Grid>
             </Grid>

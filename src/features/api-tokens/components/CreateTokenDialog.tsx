@@ -6,10 +6,6 @@ import {
   DialogActions,
   Button,
   TextField,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   FormGroup,
   FormControlLabel,
   Checkbox,
@@ -24,7 +20,6 @@ import {
 import { useTranslation } from "react-i18next"
 import {
   useCreateTokenMutation,
-  useGetContractorsForTokensQuery,
 } from "../api/tokensApi"
 import { SCOPE_CATEGORIES } from "../domain/scopes"
 import { useGetUserProfileQuery } from "../../../store/profile.ts"
@@ -69,6 +64,7 @@ export function CreateTokenDialog({ open, onClose }: CreateTokenDialogProps) {
   const [showToken, setShowToken] = useState(false)
   const [createdToken, setCreatedToken] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [copied, setCopied] = useState(false)
 
   const handleScopeChange = (scope: string, checked: boolean) => {
     setFormData((prev) => ({
@@ -91,7 +87,6 @@ export function CreateTokenDialog({ open, onClose }: CreateTokenDialogProps) {
   const handleSubmit = async () => {
     try {
       setError(null)
-      console.log("CreateTokenDialog - Creating token:", formData)
       // Convert spectrum IDs to contractor IDs
       const contractorIds =
         formData.contractor_spectrum_ids.length > 0
@@ -110,12 +105,10 @@ export function CreateTokenDialog({ open, onClose }: CreateTokenDialogProps) {
         expires_at: formData.expires_at || undefined,
       }).unwrap()
 
-      console.log("CreateTokenDialog - Token created successfully:", result)
       setCreatedToken(result.token)
       setShowToken(true)
     } catch (err: any) {
-      console.error("CreateTokenDialog - Failed to create token:", err)
-      setError(err.data?.error || "Failed to create token")
+      setError(err.data?.error?.message || err.data?.error || "Failed to create token")
     }
   }
 
@@ -130,12 +123,15 @@ export function CreateTokenDialog({ open, onClose }: CreateTokenDialogProps) {
     setShowToken(false)
     setCreatedToken(null)
     setError(null)
+    setCopied(false)
     onClose()
   }
 
   const copyToken = () => {
     if (createdToken) {
       navigator.clipboard.writeText(createdToken)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
     }
   }
 
@@ -166,8 +162,8 @@ export function CreateTokenDialog({ open, onClose }: CreateTokenDialogProps) {
             sx={{ mb: 2 }}
           />
 
-          <Button variant="outlined" onClick={copyToken} sx={{ mb: 2 }}>
-            Copy Token
+          <Button variant="outlined" onClick={copyToken} sx={{ mb: 2 }} color={copied ? "success" : "primary"}>
+            {copied ? "Copied!" : "Copy Token"}
           </Button>
 
           <Alert severity="info" sx={{ mb: 2 }}>
