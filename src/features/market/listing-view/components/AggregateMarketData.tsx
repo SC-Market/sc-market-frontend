@@ -47,7 +47,7 @@ export function AggregateMarketData({
         )
       : 0
     const high = Math.max(sellHigh, buyHigh) * 1.1
-    const interval = high / bucketCount
+    const interval = high / bucketCount || 1
 
     const sortedSell = [...aggregate.listings]
       .filter((s: MarketAggregateListing) => s.quantity_available)
