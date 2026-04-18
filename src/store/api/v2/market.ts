@@ -167,6 +167,8 @@ const injectedRtkApi = api
             sort_order: queryArg.sortOrder,
             language_codes: queryArg.languageCodes,
             listing_type: queryArg.listingType,
+            seller_id: queryArg.sellerId,
+            contractor_id: queryArg.contractorId,
           },
         }),
         providesTags: ["Listings V2"],
@@ -441,6 +443,52 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["Admin Feature Flags"],
       }),
+      searchGameItems: build.query<
+        SearchGameItemsApiResponse,
+        SearchGameItemsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v2/game-items/search`,
+          params: { query: queryArg.query },
+        }),
+        providesTags: ["Game Items V2"],
+      }),
+      getCategories: build.query<
+        GetCategoriesApiResponse,
+        GetCategoriesApiArg
+      >({
+        query: () => ({ url: `/api/v2/game-items/categories` }),
+        providesTags: ["Game Items V2"],
+      }),
+      fulfillBuyOrder: build.mutation<
+        FulfillBuyOrderApiResponse,
+        FulfillBuyOrderApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v2/buy-orders/${queryArg.id}/fulfill`,
+          method: "POST",
+        }),
+        invalidatesTags: ["Buy Orders V2"],
+      }),
+      deleteStockLot: build.mutation<
+        DeleteStockLotApiResponse,
+        DeleteStockLotApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v2/stock-lots/${queryArg.id}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["Stock Lots V2"],
+      }),
+      trackListingView: build.mutation<
+        TrackListingViewApiResponse,
+        TrackListingViewApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v2/listings/${queryArg.id}/views`,
+          method: "POST",
+        }),
+      }),
     }),
     overrideExisting: false,
   })
@@ -575,6 +623,10 @@ export type SearchListingsApiArg = {
   sortOrder?: "asc" | "desc"
   languageCodes?: string
   listingType?: "single" | "bundle" | "bulk"
+  /** Filter by seller user UUID */
+  sellerId?: string
+  /** Filter by contractor UUID */
+  contractorId?: string
 }
 export type GetMyListingsApiResponse =
   /** status 200 User's listings with pagination metadata */ GetMyListingsResponse
@@ -1686,6 +1738,46 @@ export type SetUserOverrideRequest = {
   user_id: string
   market_version: MarketVersion
 }
+export type SearchGameItemsApiResponse =
+  /** status 200 Game items matching search query */ GameItemSearchResult[]
+export type SearchGameItemsApiArg = {
+  /** Search query string */
+  query: string
+}
+export type GameItemSearchResult = {
+  name: string
+  type: string
+  id: string
+}
+export type GetCategoriesApiResponse =
+  /** status 200 Game item categories */ GameItemCategory[]
+export type GetCategoriesApiArg = void
+export type GameItemCategory = {
+  name: string
+  count: number
+}
+export type FulfillBuyOrderApiResponse = /** status 200 Ok */ {
+  message: string
+  order_id?: string
+}
+export type FulfillBuyOrderApiArg = {
+  /** Buy order UUID */
+  id: string
+}
+export type DeleteStockLotApiResponse = /** status 200 Ok */ {
+  message: string
+}
+export type DeleteStockLotApiArg = {
+  /** Stock lot UUID */
+  id: string
+}
+export type TrackListingViewApiResponse = /** status 200 Ok */ {
+  message: string
+}
+export type TrackListingViewApiArg = {
+  /** Listing UUID */
+  id: string
+}
 export const {
   useGetVariantTypesQuery,
   useCreateStockLotMutation,
@@ -1726,4 +1818,10 @@ export const {
   useGetUserOverridesQuery,
   useSetUserOverrideMutation,
   useRemoveUserOverrideMutation,
+  useSearchGameItemsQuery,
+  useLazySearchGameItemsQuery,
+  useGetCategoriesQuery,
+  useFulfillBuyOrderMutation,
+  useDeleteStockLotMutation,
+  useTrackListingViewMutation,
 } = injectedRtkApi

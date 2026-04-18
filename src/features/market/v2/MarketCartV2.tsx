@@ -4,6 +4,10 @@ import {
   AlertTitle,
   Box,
   Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
   Divider,
   Grid,
   InputAdornment,
@@ -329,6 +333,7 @@ export function MarketCartV2() {
 
   const [removeCartItem, { isLoading: isRemoving }] = useRemoveCartItemMutation()
   const [checkoutCart, { isLoading: isCheckingOut }] = useCheckoutCartMutation()
+  const [checkoutDialogOpen, setCheckoutDialogOpen] = useState(false)
 
   // Handle remove item
   const handleRemove = useCallback(
@@ -350,12 +355,17 @@ export function MarketCartV2() {
     [removeCartItem, issueAlert, t]
   )
 
-  // Handle checkout
-  const handleCheckout = useCallback(
-    async () => {
-      if (!cartData || cartData.items.length === 0) return
+  // Open checkout confirmation dialog
+  const handleCheckout = useCallback(() => {
+    if (!cartData || cartData.items.length === 0) return
+    setCheckoutDialogOpen(true)
+  }, [cartData])
 
-      // Check for price changes
+  // Confirm checkout
+  const handleConfirmCheckout = useCallback(
+    async () => {
+      if (!cartData) return
+
       const hasPriceChanges = cartData.items.some((item) => item.price_changed)
 
       try {
@@ -365,12 +375,12 @@ export function MarketCartV2() {
           },
         }).unwrap()
 
+        setCheckoutDialogOpen(false)
         issueAlert({
           message: t("cart.checkoutSuccess", "Order created successfully"),
           severity: "success",
         })
 
-        // Navigate to order page
         navigate(`/offer/${result.order_id}`)
       } catch (error) {
         issueAlert({
@@ -535,6 +545,76 @@ export function MarketCartV2() {
           </Grid>
         </Section>
       </Grid>
+
+      {/* Checkout Confirmation Dialog */}
+      <Dialog
+        open={checkoutDialogOpen}
+        onClose={() => setCheckoutDialogOpen(false)}
+        maxWidth="sm"
+        fullWidth
+        aria-labelledby="checkout-dialog-title"
+      >
+        <DialogTitle id="checkout-dialog-title">
+          {t("cart.confirmCheckout", "Confirm Checkout")}
+        </DialogTitle>
+        <DialogContent dividers>
+          {cartData?.items.map((item) => (
+            <Box key={item.cart_item_id} sx={{ mb: 1 }}>
+              <Box display="flex" justifyContent="space-between" alignItems="center">
+                <Box>
+                  <Typography variant="body2" fontWeight="bold">
+                    {item.listing.title}
+                  </Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    {item.variant.display_name} × {item.quantity}
+                  </Typography>
+                </Box>
+                <Typography variant="body2">
+                  {((item.price_changed ? item.current_price! : item.price_per_unit) * item.quantity).toLocaleString()} aUEC
+                </Typography>
+              </Box>
+              {item.price_changed && (
+                <Alert severity="warning" sx={{ mt: 0.5, py: 0 }} icon={<Warning fontSize="small" />}>
+                  <Typography variant="caption">
+                    {t("cart.priceChangedFrom", "Price changed from {{old}} to {{new}} aUEC", {
+                      old: item.price_per_unit.toLocaleString(),
+                      new: item.current_price!.toLocaleString(),
+                    })}
+                  </Typography>
+                </Alert>
+              )}
+            </Box>
+          ))}
+          <Divider sx={{ my: 1 }} />
+          <Box display="flex" justifyContent="space-between">
+            <Typography variant="h6">{t("cart.total")}</Typography>
+            <Typography variant="h6">
+              {cartData?.total_price.toLocaleString()} aUEC
+            </Typography>
+          </Box>
+          {hasPriceChanges && (
+            <Alert severity="info" sx={{ mt: 1 }} icon={<Warning />}>
+              {t(
+                "cart.confirmPriceChanges",
+                "Some prices have changed. By confirming, you accept the updated prices."
+              )}
+            </Alert>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setCheckoutDialogOpen(false)}>
+            {t("accessibility.cancel", "Cancel")}
+          </Button>
+          <LoadingButton
+            variant="contained"
+            color="secondary"
+            loading={isCheckingOut}
+            onClick={handleConfirmCheckout}
+          >
+            {t("cart.confirmOrder", "Confirm Order")}
+          </LoadingButton>
+        </DialogActions>
+      </Dialog>
     </StandardPageLayout>
   )
 }
