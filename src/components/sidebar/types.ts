@@ -16,6 +16,7 @@ export interface SidebarItemProps {
   external?: boolean
   toOrgPublic?: boolean
   orgRouteRest?: string
+  tab_key?: string // Used for org sidebar config filtering
 }
 
 export interface SidebarSectionProps {

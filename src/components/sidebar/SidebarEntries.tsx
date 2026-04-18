@@ -43,6 +43,7 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
       {
         text: "sidebar.player_market",
         icon: <StoreRounded />,
+        tab_key: "market",
         children: [
           {
             to: "/market",
@@ -82,18 +83,18 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
 
       {
         to: "/market/services",
-        text: "sidebar.contractor_services",
+        text: "sidebar.contractor_services", tab_key: "services",
         icon: <DesignServicesRounded />,
       },
       {
         to: "/contracts",
-        text: "sidebar.open_contracts",
+        text: "sidebar.open_contracts", tab_key: "contracts",
         icon: <AssignmentIcon />,
         custom: false,
       },
       {
         to: "/contracts",
-        text: "sidebar.open_contracts",
+        text: "sidebar.open_contracts", tab_key: "contracts",
         icon: <AssignmentIcon />,
         custom: true,
         org: true,
@@ -118,7 +119,7 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
       },
       {
         to: "/dashboard",
-        text: "sidebar.orders_assigned_to_me",
+        text: "sidebar.orders_assigned_to_me", tab_key: "orders_assigned",
         icon: <AssignmentTurnedInRounded />,
         logged_in: true,
         custom: false,
@@ -126,7 +127,7 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
       },
       {
         to: "/dashboard",
-        text: "sidebar.orders_assigned_to_me",
+        text: "sidebar.orders_assigned_to_me", tab_key: "orders_assigned",
         icon: <AssignmentTurnedInRounded />,
         logged_in: true,
         custom: true,
@@ -142,7 +143,7 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
       },
       {
         to: "/messages",
-        text: "sidebar.messaging",
+        text: "sidebar.messaging", tab_key: "messaging",
         icon: <ForumRoundedIcon />,
         logged_in: true,
       },
@@ -153,28 +154,28 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
     items: [
       {
         to: "/market/manage?quantityAvailable=0",
-        text: "sidebar.manage_market_listings",
+        text: "sidebar.manage_market_listings", tab_key: "manage_listings",
         icon: <ListAltRounded />,
         logged_in: true,
         org: false,
       },
       {
         to: "/market/manage-stock",
-        text: "sidebar.manage_stock",
+        text: "sidebar.manage_stock", tab_key: "manage_stock",
         icon: <WarehouseRounded />,
         logged_in: true,
         org: false,
       },
       {
         to: "/order/services",
-        text: "sidebar.manage_services",
+        text: "sidebar.manage_services", tab_key: "manage_services",
         icon: <DashboardCustomizeRounded />,
         org: false,
         logged_in: true,
       },
       {
         to: "/availability",
-        text: "sidebar.availability",
+        text: "sidebar.availability", tab_key: "availability",
         icon: <CalendarMonthRounded />,
         org: false,
         logged_in: true,
@@ -199,7 +200,7 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
       },
       {
         to: "/availability",
-        text: "sidebar.availability",
+        text: "sidebar.availability", tab_key: "availability",
         icon: <CalendarMonthRounded />,
         org: true,
       },
@@ -234,7 +235,7 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
           },
           {
             to: "/market/manage-stock",
-            text: "sidebar.manage_stock",
+            text: "sidebar.manage_stock", tab_key: "manage_stock",
             icon: <WarehouseRounded />,
             logged_in: true,
             org: true,
@@ -243,7 +244,7 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
           },
           {
             to: "/order/services",
-            text: "sidebar.manage_services",
+            text: "sidebar.manage_services", tab_key: "manage_services",
             icon: <DesignServicesRounded />,
             org_admin: true,
             orgRouteRest: "services",
@@ -307,7 +308,7 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
       },
       {
         to: "/recruiting",
-        text: "sidebar.recruiting",
+        text: "sidebar.recruiting", tab_key: "recruiting",
         icon: <PersonAddRounded />,
         custom: false,
       },
@@ -413,7 +414,7 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
     title: "sidebar.sc_market.title",
     items: [
       {
-        text: "sidebar.sc_market_home",
+        text: "sidebar.sc_market_home", tab_key: "sc_market_home",
         icon: <HomeRounded />,
         custom: true,
         to: "https://sc-market.space",

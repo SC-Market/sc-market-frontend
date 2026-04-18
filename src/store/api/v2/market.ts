@@ -25,6 +25,17 @@ const injectedRtkApi = api
         query: () => ({ url: `/api/v2/variant-types` }),
         providesTags: ["Variant Types V2"],
       }),
+      createStockLot: build.mutation<
+        CreateStockLotApiResponse,
+        CreateStockLotApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v2/stock-lots`,
+          method: "POST",
+          body: queryArg.createStockLotRequest,
+        }),
+        invalidatesTags: ["Stock Lots V2"],
+      }),
       getStockLots: build.query<GetStockLotsApiResponse, GetStockLotsApiArg>({
         query: (queryArg) => ({
           url: `/api/v2/stock-lots`,
@@ -124,6 +135,16 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["Listings V2"],
       }),
+      deleteListing: build.mutation<
+        DeleteListingApiResponse,
+        DeleteListingApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v2/listings/${queryArg.id}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["Listings V2"],
+      }),
       searchListings: build.query<
         SearchListingsApiResponse,
         SearchListingsApiArg
@@ -144,6 +165,8 @@ const injectedRtkApi = api
             status: queryArg.status,
             sort_by: queryArg.sortBy,
             sort_order: queryArg.sortOrder,
+            language_codes: queryArg.languageCodes,
+            listing_type: queryArg.listingType,
           },
         }),
         providesTags: ["Listings V2"],
@@ -262,6 +285,57 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["Buy Orders V2"],
       }),
+      createStandingBuyOrder: build.mutation<
+        CreateStandingBuyOrderApiResponse,
+        CreateStandingBuyOrderApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v2/buy-orders/standing`,
+          method: "POST",
+          body: queryArg.createStandingBuyOrderRequest,
+        }),
+        invalidatesTags: ["Buy Orders V2"],
+      }),
+      searchBuyOrders: build.query<
+        SearchBuyOrdersApiResponse,
+        SearchBuyOrdersApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v2/buy-orders/search`,
+          params: {
+            game_item_id: queryArg.gameItemId,
+            quality_tier_min: queryArg.qualityTierMin,
+            quality_tier_max: queryArg.qualityTierMax,
+            page: queryArg.page,
+            page_size: queryArg.pageSize,
+          },
+        }),
+        providesTags: ["Buy Orders V2"],
+      }),
+      getMyBuyOrders: build.query<
+        GetMyBuyOrdersApiResponse,
+        GetMyBuyOrdersApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v2/buy-orders/mine`,
+          params: {
+            status: queryArg.status,
+            page: queryArg.page,
+            page_size: queryArg.pageSize,
+          },
+        }),
+        providesTags: ["Buy Orders V2"],
+      }),
+      cancelBuyOrder: build.mutation<
+        CancelBuyOrderApiResponse,
+        CancelBuyOrderApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v2/buy-orders/${queryArg.id}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["Buy Orders V2"],
+      }),
       getPriceHistory: build.query<
         GetPriceHistoryApiResponse,
         GetPriceHistoryApiArg
@@ -363,6 +437,12 @@ export { injectedRtkApi as marketV2Api }
 export type GetVariantTypesApiResponse =
   /** status 200 All variant type definitions with validation rules */ GetVariantTypesResponse
 export type GetVariantTypesApiArg = void
+export type CreateStockLotApiResponse =
+  /** status 200 Created stock lot */ UpdateStockLotResponse
+export type CreateStockLotApiArg = {
+  /** Create request with item_id, quantity, variant_attributes */
+  createStockLotRequest: CreateStockLotRequest
+}
 export type GetStockLotsApiResponse =
   /** status 200 Stock lots with pagination metadata */ GetStockLotsResponse
 export type GetStockLotsApiArg = {
@@ -443,6 +523,13 @@ export type UpdateListingApiArg = {
   /** Update request with optional fields */
   updateListingRequest: UpdateListingRequest
 }
+export type DeleteListingApiResponse = /** status 200 Success message */ {
+  message: string
+}
+export type DeleteListingApiArg = {
+  /** Listing UUID */
+  id: string
+}
 export type SearchListingsApiResponse =
   /** status 200 Search results with pagination metadata */ SearchListingsResponse
 export type SearchListingsApiArg = {
@@ -475,6 +562,8 @@ export type SearchListingsApiArg = {
     | "quantity"
   /** Sort order (default: desc) */
   sortOrder?: "asc" | "desc"
+  languageCodes?: string
+  listingType?: "single" | "bundle" | "bulk"
 }
 export type GetMyListingsApiResponse =
   /** status 200 User's listings with pagination metadata */ GetMyListingsResponse
@@ -562,6 +651,33 @@ export type CreateBuyOrderApiResponse =
 export type CreateBuyOrderApiArg = {
   /** Buy order request with listing, variant, and quantity */
   createBuyOrderRequest: CreateBuyOrderRequest
+}
+export type CreateStandingBuyOrderApiResponse =
+  /** status 200 Ok */ StandingBuyOrder
+export type CreateStandingBuyOrderApiArg = {
+  createStandingBuyOrderRequest: CreateStandingBuyOrderRequest
+}
+export type SearchBuyOrdersApiResponse =
+  /** status 200 Ok */ SearchBuyOrdersResponse
+export type SearchBuyOrdersApiArg = {
+  gameItemId?: string
+  qualityTierMin?: number
+  qualityTierMax?: number
+  page?: number
+  pageSize?: number
+}
+export type GetMyBuyOrdersApiResponse =
+  /** status 200 Ok */ SearchBuyOrdersResponse
+export type GetMyBuyOrdersApiArg = {
+  status?: "active" | "fulfilled" | "cancelled" | "expired"
+  page?: number
+  pageSize?: number
+}
+export type CancelBuyOrderApiResponse = /** status 200 Ok */ {
+  message: string
+}
+export type CancelBuyOrderApiArg = {
+  id: string
 }
 export type GetPriceHistoryApiResponse =
   /** status 200 Price history time-series data */ GetPriceHistoryResponse
@@ -719,6 +835,24 @@ export type StockLotDetail = {
   /** ISO 8601 timestamp when lot was last updated */
   updated_at: string
 }
+export type UpdateStockLotResponse = {
+  /** Updated stock lot */
+  lot: StockLotDetail
+}
+export type CreateStockLotRequest = {
+  /** Listing item UUID */
+  item_id: string
+  /** Quantity (must be > 0) */
+  quantity: number
+  /** Variant attributes for this lot */
+  variant_attributes: VariantAttributes
+  /** Optional location UUID */
+  location_id?: string
+  /** Whether to list for sale (default: true) */
+  listed?: boolean
+  /** Optional notes */
+  notes?: string
+}
 export type GetStockLotsResponse = {
   /** Array of stock lots */
   lots: StockLotDetail[]
@@ -728,10 +862,6 @@ export type GetStockLotsResponse = {
   page: number
   /** Number of results per page */
   page_size: number
-}
-export type UpdateStockLotResponse = {
-  /** Updated stock lot */
-  lot: StockLotDetail
 }
 export type UpdateStockLotRequest = {
   /** New total quantity (optional) */
@@ -932,6 +1062,8 @@ export type CreateListingRequest = {
   base_price?: number
   /** Array of stock lots with variant attributes */
   lots: StockLotInput[]
+  /** Optional array of image resource UUIDs to attach as photos */
+  photo_resource_ids?: string[]
 }
 export type ListingDetail = {
   /** Listing UUID */
@@ -958,6 +1090,8 @@ export type ListingDetail = {
   updated_at: string
   /** Optional ISO 8601 timestamp when listing expires */
   expires_at?: string
+  /** Array of photo URLs */
+  photos?: string[]
 }
 export type SellerInfo = {
   /** Seller UUID */
@@ -1082,6 +1216,10 @@ export type ListingSearchResult = {
   game_item_type: string
   /** Seller rating count */
   seller_rating_count: number
+  /** Seller's supported languages (ISO 639-1 codes) */
+  seller_languages?: string[]
+  /** First photo URL (null if no photos) */
+  photo?: string
 }
 export type SearchListingsResponse = {
   /** Array of listing results */
@@ -1373,6 +1511,36 @@ export type CreateBuyOrderRequest = {
   /** Quantity to purchase (must be > 0) */
   quantity: number
 }
+export type StandingBuyOrder = {
+  buy_order_id: string
+  game_item_id: string
+  game_item_name: string
+  buyer_id: string
+  buyer_name: string
+  quantity: number
+  price_per_unit: number
+  quality_tier_min?: number
+  quality_tier_max?: number
+  negotiable: boolean
+  status: "active" | "fulfilled" | "cancelled" | "expired"
+  created_at: string
+  expires_at?: string
+}
+export type CreateStandingBuyOrderRequest = {
+  game_item_id: string
+  quantity: number
+  price_per_unit: number
+  quality_tier_min?: number
+  quality_tier_max?: number
+  negotiable?: boolean
+  expires_in_days?: number
+}
+export type SearchBuyOrdersResponse = {
+  buy_orders: StandingBuyOrder[]
+  total: number
+  page: number
+  page_size: number
+}
 export type PriceDataPoint = {
   /** ISO 8601 timestamp for this data point */
   timestamp: string
@@ -1458,7 +1626,7 @@ export type GetSellerStatsResponse = {
   price_premiums: QualityTierPremium[]
 }
 export type FeatureFlagConfig = {
-  key: string
+  flag_name: string
   default_version: MarketVersion
   rollout_percentage: number
   enabled: boolean
@@ -1496,6 +1664,7 @@ export type SetUserOverrideRequest = {
 }
 export const {
   useGetVariantTypesQuery,
+  useCreateStockLotMutation,
   useGetStockLotsQuery,
   useUpdateStockLotMutation,
   useBulkUpdateStockLotsMutation,
@@ -1505,6 +1674,7 @@ export const {
   useCreateListingMutation,
   useGetListingDetailQuery,
   useUpdateListingMutation,
+  useDeleteListingMutation,
   useSearchListingsQuery,
   useGetMyListingsQuery,
   useRefreshListingMutation,
@@ -1518,6 +1688,10 @@ export const {
   useRemoveCartItemMutation,
   useCheckoutCartMutation,
   useCreateBuyOrderMutation,
+  useCreateStandingBuyOrderMutation,
+  useSearchBuyOrdersQuery,
+  useGetMyBuyOrdersQuery,
+  useCancelBuyOrderMutation,
   useGetPriceHistoryQuery,
   useGetQualityDistributionQuery,
   useGetSellerStatsQuery,

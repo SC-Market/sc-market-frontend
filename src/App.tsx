@@ -2,6 +2,7 @@ import React, { createElement, useEffect } from "react"
 
 import { HookProvider } from "./hooks/HookProvider"
 import { Root } from "./components/layout/Root"
+import { WhiteLabelAuthGate } from "./components/authentication/WhiteLabelAuthGate"
 import {
   createBrowserRouter,
   Navigate,
@@ -145,12 +146,14 @@ const router = createBrowserRouter([
     errorElement: <FrontendErrorElement />,
     element: (
       <HookProvider>
+        <WhiteLabelAuthGate>
         <Root>
           <RouterEffects />
           <RouteSuspense>
             <Outlet />
           </RouteSuspense>
         </Root>
+        </WhiteLabelAuthGate>
       </HookProvider>
     ),
     children: [

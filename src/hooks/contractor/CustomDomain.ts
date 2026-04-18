@@ -4,19 +4,22 @@
 const CACHE_KEY = "sc-market-domain-org"
 const hostname = window.location.hostname
 
-interface CachedDomainOrg {
+export interface WhiteLabelDomainConfig {
   spectrum_id: string
   contractor_id: string
   name: string
   hostname: string
   fetched_at: number
+  focus_mode: "public" | "internal"
+  homepage_path: string | null
+  require_membership: boolean
 }
 
-function getCachedDomainOrg(): CachedDomainOrg | null {
+function getCachedDomainOrg(): WhiteLabelDomainConfig | null {
   try {
     const raw = localStorage.getItem(CACHE_KEY)
     if (!raw) return null
-    const cached: CachedDomainOrg = JSON.parse(raw)
+    const cached: WhiteLabelDomainConfig = JSON.parse(raw)
     if (cached.hostname !== hostname) return null
     return cached
   } catch {
@@ -28,15 +31,29 @@ export function cacheDomainOrg(data: {
   spectrum_id: string
   contractor_id: string
   name: string
+  focus_mode?: string
+  homepage_path?: string | null
+  require_membership?: boolean
 }): void {
   try {
     localStorage.setItem(
       CACHE_KEY,
-      JSON.stringify({ ...data, hostname, fetched_at: Date.now() }),
+      JSON.stringify({
+        ...data,
+        hostname,
+        fetched_at: Date.now(),
+        focus_mode: data.focus_mode || "public",
+        homepage_path: data.homepage_path || null,
+        require_membership: data.require_membership || false,
+      }),
     )
   } catch {
     // silently fail
   }
+}
+
+export function getWhiteLabelConfig(): WhiteLabelDomainConfig | null {
+  return getCachedDomainOrg()
 }
 
 // Determine if we're on a custom domain (not the main site)

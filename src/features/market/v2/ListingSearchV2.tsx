@@ -20,10 +20,12 @@ import {
   CardContent,
   CardMedia,
   Chip,
+  ToggleButtonGroup,
+  ToggleButton,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { isAfter, subDays } from "date-fns";
-import { useNavigate, useSearchParams, Link as RouterLink } from "react-router-dom";
+import { useNavigate, useSearchParams, Link as RouterLink, useLocation } from "react-router-dom";
 import { ExtendedTheme, cardFadeGradient } from "../../../hooks/styles/Theme";
 import { FALLBACK_IMAGE_URL } from "../../../util/constants";
 import { UnderlineLink } from "../../../components/typography/UnderlineLink";
@@ -32,6 +34,7 @@ import { HideOnScroll, MarketNavArea } from "../components/MarketNavArea";
 import { useSearchListingsQuery } from "../../../store/api/v2/market";
 import type { ListingSearchResult } from "../../../store/api/v2/market";
 import { QualityFilter } from "../../../components/market/v2/QualityFilter";
+import { LanguageFilter } from "../../../components/search/LanguageFilter";
 import { ListingWrapper } from "../components/listings/ListingCard";
 import { ListingSkeleton } from "../../../components/skeletons";
 import { ListingPagination } from "../components/listings/ListingPagination";
@@ -46,6 +49,9 @@ import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownR
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { useBottomNavHeight } from "../../../hooks/layout/useBottomNavHeight";
 import { useTranslation } from "react-i18next";
+import { AdCard } from "../../../components/ads/AdCard";
+import type { AdConfig } from "../../../components/ads/types";
+import { MARKET_ADS } from "../../../components/ads/adConfig";
 
 /**
  * ListingSearchV2 - Main search/browse page for V2 listings
@@ -96,6 +102,7 @@ export function ListingSearchV2() {
       itemType,
       quantityMin: quantityMin ? Number(quantityMin) : undefined,
       status,
+      languageCodes: searchParams.get('language_codes') || undefined,
     };
   }, [searchParams, isMobile]);
 
@@ -261,6 +268,14 @@ function MarketSearchAreaV2() {
   const theme = useTheme<ExtendedTheme>();
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const viewMode = useMemo(() => {
+    if (location.pathname.startsWith('/bulk')) return 'bulk';
+    if (location.pathname.startsWith('/buyorders')) return 'buyorders';
+    return 'market';
+  }, [location.pathname]);
 
   // Read current filter values from URL
   const text = searchParams.get("text") || "";
@@ -270,6 +285,7 @@ function MarketSearchAreaV2() {
   const quantityMin = searchParams.get("quantity_min") || "";
   const sortBy = searchParams.get("sort_by") || "";
   const sortOrder = searchParams.get("sort_order") || "";
+  const languageCodes = searchParams.get('language_codes')?.split(',').filter(Boolean) || [];
 
   // Debounced text for autocomplete suggestions
   const [debouncedText, setDebouncedText] = useState('');
@@ -318,6 +334,25 @@ function MarketSearchAreaV2() {
       }}
     >
       <Grid container spacing={theme.layoutSpacing.layout}>
+        <Grid item xs={12}>
+          <ToggleButtonGroup
+            value={viewMode}
+            exclusive
+            onChange={(_, newValue) => {
+              if (newValue === 'market') navigate('/market');
+              else if (newValue === 'bulk') navigate('/bulk');
+              else if (newValue === 'buyorders') navigate('/buyorders');
+            }}
+            fullWidth
+            size="small"
+            color="secondary"
+          >
+            <ToggleButton value="market">{t('market.listings', 'Listings')}</ToggleButton>
+            <ToggleButton value="bulk">{t('market.bulk', 'Bulk')}</ToggleButton>
+            <ToggleButton value="buyorders">{t('market.buyOrders', 'Buy Orders')}</ToggleButton>
+          </ToggleButtonGroup>
+        </Grid>
+
         <Grid item xs={12}>
           <Button
             onClick={applyFilters}
@@ -481,6 +516,13 @@ function MarketSearchAreaV2() {
         <Grid item xs={12}>
           <QualityFilterWrapper />
         </Grid>
+
+        <Grid item xs={12}>
+          <LanguageFilter
+            selectedLanguages={languageCodes}
+            onChange={(codes) => updateParam('language_codes', codes.length ? codes.join(',') : '')}
+          />
+        </Grid>
       </Grid>
     </Box>
   );
@@ -614,8 +656,24 @@ interface ListingGridProps {
   marketSidebarOpen: boolean;
 }
 
+type ListingOrAd = ListingSearchResult | { _isAd: true; ad: AdConfig };
+
 const ListingGrid = React.forwardRef<HTMLDivElement, ListingGridProps>(
   ({ listings, loading, error, onRetry, gridBreakpoints, marketSidebarOpen }, ref) => {
+    const listingsWithAds = useMemo((): ListingOrAd[] => {
+      if (!listings.length || listings.length < 10) return listings;
+      const ads = MARKET_ADS || [];
+      if (ads.length === 0) return listings;
+      const result: ListingOrAd[] = [...listings];
+      const adFrequency = 24;
+      let adIndex = 0;
+      for (let i = 12; i < result.length; i += adFrequency + 1) {
+        result.splice(i, 0, { _isAd: true, ad: ads[adIndex % ads.length] });
+        adIndex++;
+      }
+      return result;
+    }, [listings]);
+
     if (loading) {
       return (
         <Grid container spacing={1} sx={{ width: "100%" }}>
@@ -644,15 +702,13 @@ const ListingGrid = React.forwardRef<HTMLDivElement, ListingGridProps>(
     return (
       <>
         <div ref={ref} style={{ position: "absolute", top: 0 }} />
-        {/* TODO: Inject ads into listings using injectAds() from ../../components/ads/adUtils.
-           Currently blocked because injectAds expects MarketListingSearchResult (V1 type),
-           not ListingSearchResult (V2 type). Once V2 types are supported by injectAds or an
-           adapter is created, use: const listingsWithAds = injectAds(listings, MARKET_ADS);
-           Then render AdCard for ad items and ListingCardV2 for listing items. */}
         <Grid container spacing={1} sx={{ width: "100%" }}>
-          {listings.map((listing, index) => (
-            <Grid item {...gridBreakpoints} key={listing.listing_id}>
-              <ListingCardV2 listing={listing} index={index} />
+          {listingsWithAds.map((item, index) => (
+            <Grid item {...gridBreakpoints} key={'_isAd' in item ? `ad-${index}` : item.listing_id}>
+              {'_isAd' in item
+                ? <AdCard ad={item.ad} index={index} />
+                : <ListingCardV2 listing={item} index={index} />
+              }
             </Grid>
           ))}
         </Grid>
@@ -737,7 +793,7 @@ function ListingCardV2({ listing, index }: ListingCardV2Props) {
               <CardMedia
                 component="img"
                 loading="lazy"
-                image={FALLBACK_IMAGE_URL}
+                image={listing.photo || FALLBACK_IMAGE_URL}
                 sx={{
                   width: "100%",
                   objectFit: "cover",
