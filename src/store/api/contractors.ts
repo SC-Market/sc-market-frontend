@@ -462,6 +462,46 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["Contractor", "Contractors"],
       }),
+      getWhitelabelConfig: build.query<
+        GetWhitelabelConfigApiResponse,
+        GetWhitelabelConfigApiArg
+      >({
+        query: (spectrumId) => ({
+          url: `/api/contractors/${spectrumId}/whitelabel`,
+        }),
+        providesTags: ["Contractor"],
+      }),
+      updateWhitelabelConfig: build.mutation<
+        UpdateWhitelabelConfigApiResponse,
+        UpdateWhitelabelConfigApiArg
+      >({
+        query: ({ spectrum_id, ...body }) => ({
+          url: `/api/contractors/${spectrum_id}/whitelabel`,
+          method: "PUT",
+          body,
+        }),
+        invalidatesTags: ["Contractor"],
+      }),
+      getWhitelabelSidebar: build.query<
+        GetWhitelabelSidebarApiResponse,
+        GetWhitelabelSidebarApiArg
+      >({
+        query: (spectrumId) => ({
+          url: `/api/contractors/${spectrumId}/whitelabel/sidebar`,
+        }),
+        providesTags: ["Contractor"],
+      }),
+      updateWhitelabelSidebar: build.mutation<
+        UpdateWhitelabelSidebarApiResponse,
+        UpdateWhitelabelSidebarApiArg
+      >({
+        query: ({ spectrum_id, items }) => ({
+          url: `/api/contractors/${spectrum_id}/whitelabel/sidebar`,
+          method: "PUT",
+          body: { items },
+        }),
+        invalidatesTags: ["Contractor"],
+      }),
     }),
     overrideExisting: false,
   })
@@ -1176,6 +1216,36 @@ export type DeleteOrgThemeApiResponse =
     }
   }
 export type DeleteOrgThemeApiArg = string
+export interface WhitelabelConfig {
+  focus_mode: "public" | "internal"
+  homepage_path: string | null
+  require_membership: boolean
+}
+export type GetWhitelabelConfigApiResponse = { data: WhitelabelConfig }
+export type GetWhitelabelConfigApiArg = string
+export type UpdateWhitelabelConfigApiResponse = { data: WhitelabelConfig }
+export type UpdateWhitelabelConfigApiArg = {
+  spectrum_id: string
+  focus_mode?: "public" | "internal"
+  homepage_path?: string | null
+  require_membership?: boolean
+}
+export interface SidebarConfigItem {
+  standard_tab_key: string | null
+  custom_label: string | null
+  custom_path: string | null
+  custom_icon: string | null
+  is_external: boolean
+  enabled: boolean
+  sort_order: number
+}
+export type GetWhitelabelSidebarApiResponse = { data: SidebarConfigItem[] }
+export type GetWhitelabelSidebarApiArg = string
+export type UpdateWhitelabelSidebarApiResponse = { data: SidebarConfigItem[] }
+export type UpdateWhitelabelSidebarApiArg = {
+  spectrum_id: string
+  items: SidebarConfigItem[]
+}
 export const {
   useAuthLinkMutation,
   useCreateContractorMutation,
@@ -1220,4 +1290,8 @@ export const {
   useGetOrgThemeQuery,
   useUpdateOrgThemeMutation,
   useDeleteOrgThemeMutation,
+  useGetWhitelabelConfigQuery,
+  useUpdateWhitelabelConfigMutation,
+  useGetWhitelabelSidebarQuery,
+  useUpdateWhitelabelSidebarMutation,
 } = injectedRtkApi
