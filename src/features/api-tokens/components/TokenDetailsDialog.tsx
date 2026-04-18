@@ -297,6 +297,29 @@ export function TokenDetailsDialog({
 
       <Grid item xs={12}>
         <Alert severity="info">
+          <Typography variant="body2" gutterBottom>
+            <strong>How to authenticate:</strong> Include the token in the{" "}
+            <code>Authorization</code> header:
+          </Typography>
+          <Box
+            component="pre"
+            sx={{
+              fontFamily: "monospace",
+              fontSize: "0.8rem",
+              bgcolor: "action.hover",
+              p: 1,
+              borderRadius: 1,
+              overflow: "auto",
+              mt: 0.5,
+            }}
+          >
+            Authorization: Bearer {"<your_token>"}
+          </Box>
+        </Alert>
+      </Grid>
+
+      <Grid item xs={12}>
+        <Alert severity="info">
           <Typography variant="body2">
             <strong>Security Note:</strong> This token provides access to your
             account with the permissions shown above. Keep it secure and only
