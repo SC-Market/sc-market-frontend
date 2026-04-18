@@ -9,19 +9,59 @@ import {
   IconButton,
   List,
   ListItem,
+  ListItemIcon,
   ListItemText,
   MenuItem,
+  Popover,
   Select,
   Snackbar,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material"
 import {
   Add,
+  AssignmentRounded,
+  AttachMoneyRounded,
+  BusinessRounded,
+  CalendarMonthRounded,
+  CreateRounded,
+  DashboardCustomizeRounded,
+  DashboardRounded,
   Delete,
+  DesignServicesRounded,
+  FolderOpenRounded,
+  ForumRounded,
+  GavelRounded,
+  HomeRounded,
+  InfoRounded,
+  InventoryRounded,
+  LinkRounded,
+  ListAltRounded,
+  LocalShipping,
+  ManageAccountsRounded,
   OpenInNew,
+  PaidRounded,
+  PersonAddRounded,
+  RequestQuoteRounded,
+  SecurityRounded,
+  SettingsRounded,
+  ShieldRounded,
+  StarRounded,
+  StoreRounded,
+  ToggleOnRounded,
   Visibility,
   VisibilityOff,
+  WarehouseRounded,
+  PublicRounded,
+  BookRounded,
+  HelpRounded,
+  MapRounded,
+  NotificationsRounded,
+  PhotoCameraRounded,
+  RocketLaunchRounded,
+  ScienceRounded,
+  WorkRounded,
 } from "@mui/icons-material"
 import { Section } from "../../components/paper/Section"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
@@ -33,7 +73,104 @@ import {
   SidebarConfigItem,
 } from "../../store/api/contractors"
 
-// Tabs that can be toggled off — public/browsable features only
+// ── Icon registry ──────────────────────────────────────────────────────
+const ICON_MAP: Record<string, React.ReactElement> = {
+  home: <HomeRounded />,
+  store: <StoreRounded />,
+  dashboard: <DashboardRounded />,
+  customize: <DashboardCustomizeRounded />,
+  forum: <ForumRounded />,
+  gavel: <GavelRounded />,
+  assignment: <AssignmentRounded />,
+  paid: <PaidRounded />,
+  create: <CreateRounded />,
+  business: <BusinessRounded />,
+  settings: <SettingsRounded />,
+  money: <AttachMoneyRounded />,
+  folder: <FolderOpenRounded />,
+  shipping: <LocalShipping />,
+  calendar: <CalendarMonthRounded />,
+  design: <DesignServicesRounded />,
+  inventory: <InventoryRounded />,
+  list: <ListAltRounded />,
+  accounts: <ManageAccountsRounded />,
+  recruit: <PersonAddRounded />,
+  quote: <RequestQuoteRounded />,
+  shield: <ShieldRounded />,
+  warehouse: <WarehouseRounded />,
+  security: <SecurityRounded />,
+  star: <StarRounded />,
+  toggle: <ToggleOnRounded />,
+  link: <LinkRounded />,
+  info: <InfoRounded />,
+  public: <PublicRounded />,
+  book: <BookRounded />,
+  help: <HelpRounded />,
+  map: <MapRounded />,
+  notifications: <NotificationsRounded />,
+  camera: <PhotoCameraRounded />,
+  rocket: <RocketLaunchRounded />,
+  science: <ScienceRounded />,
+  work: <WorkRounded />,
+}
+
+const DEFAULT_ICON = "link"
+
+function IconPicker({
+  value,
+  onChange,
+}: {
+  value: string
+  onChange: (icon: string) => void
+}) {
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
+
+  return (
+    <>
+      <Tooltip title="Choose icon">
+        <IconButton onClick={(e) => setAnchorEl(e.currentTarget)} size="small">
+          {ICON_MAP[value] || ICON_MAP[DEFAULT_ICON]}
+        </IconButton>
+      </Tooltip>
+      <Popover
+        open={!!anchorEl}
+        anchorEl={anchorEl}
+        onClose={() => setAnchorEl(null)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+      >
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: "repeat(6, 1fr)",
+            gap: 0.5,
+            p: 1,
+            maxWidth: 280,
+          }}
+        >
+          {Object.entries(ICON_MAP).map(([key, icon]) => (
+            <IconButton
+              key={key}
+              size="small"
+              onClick={() => {
+                onChange(key)
+                setAnchorEl(null)
+              }}
+              color={key === value ? "primary" : "default"}
+              sx={{
+                border: key === value ? 1 : 0,
+                borderColor: "primary.main",
+              }}
+            >
+              {icon}
+            </IconButton>
+          ))}
+        </Box>
+      </Popover>
+    </>
+  )
+}
+
+// ── Tab definitions ────────────────────────────────────────────────────
 const TOGGLEABLE_TABS = [
   { key: "market", label: "Player Market" },
   { key: "services", label: "Services" },
@@ -42,7 +179,6 @@ const TOGGLEABLE_TABS = [
   { key: "contractors", label: "Organizations" },
 ] as const
 
-// Always-on tabs — not shown in the UI at all
 const ALWAYS_ON_KEYS = [
   "sc_market_home",
   "orders_assigned",
@@ -60,8 +196,10 @@ function isExternal(path: string) {
 interface CustomTab {
   label: string
   path: string
+  icon: string
 }
 
+// ── Component ──────────────────────────────────────────────────────────
 export function WhiteLabelSettings() {
   const [contractor] = useCurrentOrg()
   const spectrumId = contractor?.spectrum_id
@@ -102,6 +240,7 @@ export function WhiteLabelSettings() {
   const [customTabs, setCustomTabs] = useState<CustomTab[]>([])
   const [newLabel, setNewLabel] = useState("")
   const [newPath, setNewPath] = useState("")
+  const [newIcon, setNewIcon] = useState(DEFAULT_ICON)
 
   useEffect(() => {
     const disabled = new Set<string>()
@@ -114,6 +253,7 @@ export function WhiteLabelSettings() {
         custom.push({
           label: item.custom_label ?? "",
           path: item.custom_path,
+          icon: item.custom_icon || DEFAULT_ICON,
         })
       }
     }
@@ -152,7 +292,6 @@ export function WhiteLabelSettings() {
       const items: SidebarConfigItem[] = []
       let order = 0
 
-      // Always-on tabs (silent)
       for (const key of ALWAYS_ON_KEYS) {
         items.push({
           standard_tab_key: key,
@@ -165,7 +304,6 @@ export function WhiteLabelSettings() {
         })
       }
 
-      // Toggleable tabs
       for (const t of TOGGLEABLE_TABS) {
         items.push({
           standard_tab_key: t.key,
@@ -178,13 +316,12 @@ export function WhiteLabelSettings() {
         })
       }
 
-      // Custom tabs
       for (const ct of customTabs) {
         items.push({
           standard_tab_key: null,
           custom_label: ct.label,
           custom_path: ct.path,
-          custom_icon: null,
+          custom_icon: ct.icon,
           is_external: isExternal(ct.path),
           enabled: true,
           sort_order: order++,
@@ -211,13 +348,20 @@ export function WhiteLabelSettings() {
     const label = newLabel.trim()
     const path = newPath.trim()
     if (!label || !path) return
-    setCustomTabs((prev) => [...prev, { label, path }])
+    setCustomTabs((prev) => [...prev, { label, path, icon: newIcon }])
     setNewLabel("")
     setNewPath("")
+    setNewIcon(DEFAULT_ICON)
   }
 
   const removeCustomTab = (index: number) => {
     setCustomTabs((prev) => prev.filter((_, i) => i !== index))
+  }
+
+  const updateCustomTabIcon = (index: number, icon: string) => {
+    setCustomTabs((prev) =>
+      prev.map((t, i) => (i === index ? { ...t, icon } : t)),
+    )
   }
 
   return (
@@ -335,6 +479,12 @@ export function WhiteLabelSettings() {
                     </IconButton>
                   }
                 >
+                  <ListItemIcon sx={{ minWidth: 36 }}>
+                    <IconPicker
+                      value={ct.icon}
+                      onChange={(icon) => updateCustomTabIcon(i, icon)}
+                    />
+                  </ListItemIcon>
                   <ListItemText
                     primary={
                       <Box
@@ -369,6 +519,7 @@ export function WhiteLabelSettings() {
               alignItems: "flex-start",
             }}
           >
+            <IconPicker value={newIcon} onChange={setNewIcon} />
             <TextField
               label="Label"
               size="small"
