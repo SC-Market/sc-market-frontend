@@ -697,6 +697,13 @@ export type PurchaseRequest = {
   note?: string
   /** Optional custom offer amount in aUEC */
   offer?: number
+  /** Optional V2 variant items for variant-specific offers */
+  v2_variant_items?: {
+    listing_id: string
+    variant_id: string
+    quantity: number
+    price_per_unit: number
+  }[]
 }
 export type MarketBidRequest = {
   listing_id: string
