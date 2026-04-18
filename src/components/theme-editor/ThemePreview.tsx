@@ -370,61 +370,13 @@ function ThemePreviewInner({ faviconUrl }: { faviconUrl?: string | null }) {
               {theme.palette.mode === "light"
                 ? t(
                     "theme.previewListingLightNote",
-                    "Light mode: no image fade on listing cards (same as the live market). Overlay is still used for modal scrims and (with an elevated nav) the bar shadow tint.",
+                    "Light mode: no image fade on listing cards (same as the live market).",
                   )
                 : t(
                     "theme.previewListingDarkNote",
-                    "Listing thumbnails fade using your Sidebar color (cardFadeGradient), not the Overlay field.",
+                    "Listing thumbnails fade using your Sidebar color (cardFadeGradient).",
                   )}
             </Typography>
-          </Box>
-
-          {/* background.overlay — ImagePreviewModal, BottomSheet, ProfileAvatar, etc.; navbar shadow when Nav Style is Elevation */}
-          <Box>
-            <Typography
-              variant="caption"
-              color="text.secondary"
-              display="block"
-              sx={{ mb: 0.5 }}
-            >
-              {t("theme.previewOverlayTokenLabel", "Overlay color (UI scrim)")}
-            </Typography>
-            <Box
-              sx={{
-                minHeight: 44,
-                borderRadius: 1,
-                bgcolor: "background.overlay",
-                border: 1,
-                borderColor: outline,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                px: 1,
-              }}
-            >
-              <Typography
-                variant="caption"
-                sx={{
-                  textAlign: "center",
-                  color: (th) => {
-                    try {
-                      return th.palette.getContrastText(
-                        th.palette.background.overlay,
-                      )
-                    } catch {
-                      return th.palette.text.primary
-                    }
-                  },
-                  fontWeight: 600,
-                  textShadow: "0 1px 2px rgba(0,0,0,0.35)",
-                }}
-              >
-                {t(
-                  "theme.previewOverlayScrimSample",
-                  "Dimming behind modals & sheets",
-                )}
-              </Typography>
-            </Box>
           </Box>
 
           {/* background.imageOverlay — SelectPhotosArea-style photo grids; separate from listing card fades */}

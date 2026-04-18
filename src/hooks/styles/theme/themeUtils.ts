@@ -22,7 +22,8 @@ export const radialGlowGradient = (theme: Theme) =>
   `radial-gradient(at 100% 0%, ${theme.palette.primary.main}80 0px, transparent 60%),radial-gradient(at 0% 0%, ${theme.palette.secondary.main}80 0px, transparent 60%)`
 
 /**
- * Navbar box-shadow derived from the theme overlay token.
+ * Navbar elevation shadow — uses the theme’s standard MUI shadow scale (same
+ * idea as Paper elevation), not palette.background.overlay (overlay is for
+ * modal/sheet scrims).
  */
-export const navbarShadow = (theme: Theme) =>
-  `0px 5px 5px 0px ${theme.palette.background.overlay}`
+export const navbarShadow = (theme: Theme) => theme.shadows[4]
