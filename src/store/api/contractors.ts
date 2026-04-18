@@ -1220,6 +1220,7 @@ export interface WhitelabelConfig {
   focus_mode: "public" | "internal"
   homepage_path: string | null
   require_membership: boolean
+  drawer_style: "elevation" | "outlined"
 }
 export type GetWhitelabelConfigApiResponse = { data: WhitelabelConfig }
 export type GetWhitelabelConfigApiArg = string
@@ -1229,6 +1230,7 @@ export type UpdateWhitelabelConfigApiArg = {
   focus_mode?: "public" | "internal"
   homepage_path?: string | null
   require_membership?: boolean
+  drawer_style?: "elevation" | "outlined"
 }
 export interface SidebarConfigItem {
   standard_tab_key: string | null

@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react"
 import {
-  Alert,
   Box,
   Button,
   Checkbox,
@@ -34,7 +33,7 @@ import {
   SidebarConfigItem,
 } from "../../store/api/contractors"
 
-// Tabs that can be toggled off — public/browsable features
+// Tabs that can be toggled off — public/browsable features only
 const TOGGLEABLE_TABS = [
   { key: "market", label: "Player Market" },
   { key: "services", label: "Services" },
@@ -43,26 +42,24 @@ const TOGGLEABLE_TABS = [
   { key: "contractors", label: "Organizations" },
 ] as const
 
-// Tabs that are always on — org management, orders, messaging, etc.
-const ALWAYS_ON_TABS = [
-  { key: "orders_assigned", label: "Orders Assigned" },
-  { key: "messaging", label: "Messaging" },
-  { key: "manage_listings", label: "Manage Listings" },
-  { key: "manage_stock", label: "Manage Stock" },
-  { key: "manage_services", label: "Manage Services" },
-  { key: "availability", label: "Availability" },
-] as const
-
-const ALL_STANDARD_KEYS = new Set([
+// Always-on tabs — not shown in the UI at all
+const ALWAYS_ON_KEYS = [
   "sc_market_home",
-  ...TOGGLEABLE_TABS.map((t) => t.key),
-  ...ALWAYS_ON_TABS.map((t) => t.key),
-])
+  "orders_assigned",
+  "messaging",
+  "manage_listings",
+  "manage_stock",
+  "manage_services",
+  "availability",
+]
+
+function isExternal(path: string) {
+  return path.startsWith("http://") || path.startsWith("https://")
+}
 
 interface CustomTab {
   label: string
   path: string
-  is_external: boolean
 }
 
 export function WhiteLabelSettings() {
@@ -83,27 +80,28 @@ export function WhiteLabelSettings() {
   const config = (configRes as any)?.data
   const sidebarItems: SidebarConfigItem[] = (sidebarRes as any)?.data ?? []
 
-  // ── Config form state ──
+  // ── Config state ──
   const [focusMode, setFocusMode] = useState<"public" | "internal">("public")
   const [homepagePath, setHomepagePath] = useState("")
   const [requireMembership, setRequireMembership] = useState(false)
+  const [drawerStyle, setDrawerStyle] = useState<"elevation" | "outlined">(
+    "elevation",
+  )
 
   useEffect(() => {
     if (config) {
       setFocusMode(config.focus_mode ?? "public")
       setHomepagePath(config.homepage_path ?? "")
       setRequireMembership(config.require_membership ?? false)
+      setDrawerStyle(config.drawer_style ?? "elevation")
     }
   }, [config])
 
-  // ── Sidebar: toggleable tabs ──
+  // ── Sidebar state ──
   const [disabledTabs, setDisabledTabs] = useState<Set<string>>(new Set())
-
-  // ── Sidebar: custom tabs ──
   const [customTabs, setCustomTabs] = useState<CustomTab[]>([])
   const [newLabel, setNewLabel] = useState("")
   const [newPath, setNewPath] = useState("")
-  const [newExternal, setNewExternal] = useState(false)
 
   useEffect(() => {
     const disabled = new Set<string>()
@@ -116,7 +114,6 @@ export function WhiteLabelSettings() {
         custom.push({
           label: item.custom_label ?? "",
           path: item.custom_path,
-          is_external: item.is_external,
         })
       }
     }
@@ -134,31 +131,41 @@ export function WhiteLabelSettings() {
         focus_mode: focusMode,
         homepage_path: homepagePath || null,
         require_membership: requireMembership,
+        drawer_style: drawerStyle,
       }).unwrap()
       setSnack("Settings saved")
     } catch {
       setSnack("Failed to save settings")
     }
-  }, [spectrumId, focusMode, homepagePath, requireMembership, updateConfig])
+  }, [
+    spectrumId,
+    focusMode,
+    homepagePath,
+    requireMembership,
+    drawerStyle,
+    updateConfig,
+  ])
 
   const handleSaveSidebar = useCallback(async () => {
     if (!spectrumId) return
     try {
-      // Build items: all standard tabs + custom tabs
       const items: SidebarConfigItem[] = []
       let order = 0
 
-      // sc_market_home — always enabled, not sent as toggleable
-      items.push({
-        standard_tab_key: "sc_market_home",
-        custom_label: null,
-        custom_path: null,
-        custom_icon: null,
-        is_external: false,
-        enabled: true,
-        sort_order: order++,
-      })
+      // Always-on tabs (silent)
+      for (const key of ALWAYS_ON_KEYS) {
+        items.push({
+          standard_tab_key: key,
+          custom_label: null,
+          custom_path: null,
+          custom_icon: null,
+          is_external: false,
+          enabled: true,
+          sort_order: order++,
+        })
+      }
 
+      // Toggleable tabs
       for (const t of TOGGLEABLE_TABS) {
         items.push({
           standard_tab_key: t.key,
@@ -171,25 +178,14 @@ export function WhiteLabelSettings() {
         })
       }
 
-      for (const t of ALWAYS_ON_TABS) {
-        items.push({
-          standard_tab_key: t.key,
-          custom_label: null,
-          custom_path: null,
-          custom_icon: null,
-          is_external: false,
-          enabled: true,
-          sort_order: order++,
-        })
-      }
-
+      // Custom tabs
       for (const ct of customTabs) {
         items.push({
           standard_tab_key: null,
           custom_label: ct.label,
           custom_path: ct.path,
           custom_icon: null,
-          is_external: ct.is_external,
+          is_external: isExternal(ct.path),
           enabled: true,
           sort_order: order++,
         })
@@ -215,10 +211,9 @@ export function WhiteLabelSettings() {
     const label = newLabel.trim()
     const path = newPath.trim()
     if (!label || !path) return
-    setCustomTabs((prev) => [...prev, { label, path, is_external: newExternal }])
+    setCustomTabs((prev) => [...prev, { label, path }])
     setNewLabel("")
     setNewPath("")
-    setNewExternal(false)
   }
 
   const removeCustomTab = (index: number) => {
@@ -227,7 +222,7 @@ export function WhiteLabelSettings() {
 
   return (
     <Grid container spacing={2}>
-      <Section title="Focus Mode" xs={12}>
+      <Section title="Site Settings" xs={12}>
         <Grid item xs={12}>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
             Controls who can access your white-label site.
@@ -267,6 +262,22 @@ export function WhiteLabelSettings() {
           />
         </Grid>
         <Grid item xs={12}>
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+            Drawer style for the navigation sidebar and panels.
+          </Typography>
+          <Select
+            size="small"
+            value={drawerStyle}
+            onChange={(e) =>
+              setDrawerStyle(e.target.value as "elevation" | "outlined")
+            }
+            fullWidth
+          >
+            <MenuItem value="elevation">Elevation — shadow depth</MenuItem>
+            <MenuItem value="outlined">Outlined — border</MenuItem>
+          </Select>
+        </Grid>
+        <Grid item xs={12}>
           <Button
             variant="contained"
             onClick={handleSaveConfig}
@@ -279,13 +290,6 @@ export function WhiteLabelSettings() {
 
       <Section title="Sidebar Tabs" xs={12}>
         <Grid item xs={12}>
-          <Typography
-            variant="subtitle2"
-            color="text.secondary"
-            sx={{ mb: 0.5 }}
-          >
-            Public Tabs
-          </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
             Toggle which public-facing tabs appear in the sidebar.
           </Typography>
@@ -333,12 +337,18 @@ export function WhiteLabelSettings() {
                 >
                   <ListItemText
                     primary={
-                      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 1,
+                        }}
+                      >
                         {ct.label}
-                        {ct.is_external && (
+                        {isExternal(ct.path) && (
                           <Chip
                             icon={<OpenInNew sx={{ fontSize: 14 }} />}
-                            label="External"
+                            label="Opens in new tab"
                             size="small"
                             variant="outlined"
                           />
@@ -351,7 +361,14 @@ export function WhiteLabelSettings() {
               ))}
             </List>
           )}
-          <Box sx={{ display: "flex", gap: 1, mt: 1, alignItems: "flex-start" }}>
+          <Box
+            sx={{
+              display: "flex",
+              gap: 1,
+              mt: 1,
+              alignItems: "flex-start",
+            }}
+          >
             <TextField
               label="Label"
               size="small"
@@ -360,37 +377,24 @@ export function WhiteLabelSettings() {
               sx={{ flex: 1 }}
             />
             <TextField
-              label="Path"
+              label="Path or URL"
               size="small"
               placeholder="/custom-page or https://..."
               value={newPath}
-              onChange={(e) => {
-                const v = e.target.value
-                setNewPath(v)
-                // Auto-detect external URLs
-                if (v.startsWith("http://") || v.startsWith("https://")) {
-                  setNewExternal(true)
-                }
-              }}
-              sx={{ flex: 2 }}
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={newExternal}
-                  onChange={(e) => setNewExternal(e.target.checked)}
-                  size="small"
-                />
+              onChange={(e) => setNewPath(e.target.value)}
+              helperText={
+                newPath && isExternal(newPath)
+                  ? "Will open in a new tab"
+                  : undefined
               }
-              label="External"
-              sx={{ whiteSpace: "nowrap" }}
+              sx={{ flex: 2 }}
             />
             <Button
               variant="outlined"
               onClick={addCustomTab}
               disabled={!newLabel.trim() || !newPath.trim()}
               startIcon={<Add />}
-              sx={{ whiteSpace: "nowrap" }}
+              sx={{ whiteSpace: "nowrap", mt: "4px" }}
             >
               Add
             </Button>
