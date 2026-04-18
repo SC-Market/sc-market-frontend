@@ -139,6 +139,9 @@ const injectedRtkApi = api
             price_max: queryArg.priceMax,
             page: queryArg.page,
             page_size: queryArg.pageSize,
+            item_type: queryArg.itemType,
+            quantity_min: queryArg.quantityMin,
+            status: queryArg.status,
             sort_by: queryArg.sortBy,
             sort_order: queryArg.sortOrder,
           },
@@ -459,8 +462,17 @@ export type SearchListingsApiArg = {
   page?: number
   /** Number of results per page (default: 20, max: 100) */
   pageSize?: number
+  itemType?: string
+  quantityMin?: number
+  status?: "active" | "sold" | "expired" | "cancelled"
   /** Sort field (default: created_at) */
-  sortBy?: "created_at" | "price" | "quality" | "seller_rating"
+  sortBy?:
+    | "created_at"
+    | "updated_at"
+    | "price"
+    | "quality"
+    | "seller_rating"
+    | "quantity"
   /** Sort order (default: desc) */
   sortOrder?: "asc" | "desc"
 }
@@ -1062,6 +1074,14 @@ export type ListingSearchResult = {
   seller_slug: string
   /** ISO 8601 timestamp when listing was created */
   created_at: string
+  /** ISO 8601 timestamp when listing was last updated */
+  updated_at: string
+  /** Game item name */
+  game_item_name: string
+  /** Game item type/category */
+  game_item_type: string
+  /** Seller rating count */
+  seller_rating_count: number
 }
 export type SearchListingsResponse = {
   /** Array of listing results */

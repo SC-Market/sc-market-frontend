@@ -143,6 +143,10 @@ const mockListings: ListingSearchResult[] = [
     quality_tier_min: 3,
     quality_tier_max: 5,
     variant_count: 3,
+    updated_at: "2026-04-15T10:00:00Z",
+    game_item_name: "Quantum Drive",
+    game_item_type: "Component",
+    seller_rating_count: 42,
   },
   {
     listing_id: "listing-2",
@@ -158,6 +162,10 @@ const mockListings: ListingSearchResult[] = [
     quality_tier_min: 2,
     quality_tier_max: 2,
     variant_count: 1,
+    updated_at: "2026-04-14T08:00:00Z",
+    game_item_name: "Laser Cannon",
+    game_item_type: "Weapon",
+    seller_rating_count: 15,
   },
 ];
 
