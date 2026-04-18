@@ -777,6 +777,7 @@
   },
   "OffersViewPaginated": {
     "offers": "Offers",
+    "myOffers": "Mis ofertas",
     "all": "All",
     "offer": "Offer",
     "user": "User",

@@ -809,6 +809,7 @@
   },
   "OffersViewPaginated": {
     "offers": "报价",
+    "myOffers": "我的报价",
     "all": "全部",
     "offer": "报价",
     "user": "用户",
