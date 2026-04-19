@@ -96,11 +96,15 @@ export const MarketCartGate = () => {
 }
 export const ManageStockGate = () => {
   const V1 = React.lazy(() => import("../../pages/market/ManageStock").then(m => ({ default: m.ManageStock })))
-  return <V2Gate v1={V1} v2={StockManagerV2} />
+  const { marketVersion } = useFeatureFlag()
+  if (marketVersion === "V2") return <React.Suspense fallback={<MarketLoadingFallback />}><StockManagerV2 listingId="" itemId="" /></React.Suspense>
+  return <React.Suspense fallback={<MarketLoadingFallback />}><V1 /></React.Suspense>
 }
 export const ManageStockLotsGate = () => {
   const V1 = React.lazy(() => import("../../pages/market/ManageStockLots").then(m => ({ default: m.ManageStockLots })))
-  return <V2Gate v1={V1} v2={BulkStockManagementV2} />
+  const { marketVersion } = useFeatureFlag()
+  if (marketVersion === "V2") return <React.Suspense fallback={<MarketLoadingFallback />}><BulkStockManagementV2 listingId="" itemId="" /></React.Suspense>
+  return <React.Suspense fallback={<MarketLoadingFallback />}><V1 /></React.Suspense>
 }
 export const EditListingGate = () => {
   const V1 = React.lazy(() => import("../../pages/market/ViewMarketListing").then(m => ({ default: m.EditMarketListing })))
