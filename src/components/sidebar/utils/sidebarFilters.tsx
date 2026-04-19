@@ -74,6 +74,20 @@ export function setSidebarConfig(config: typeof sidebarConfigCache) {
 }
 
 /**
+ * Get the set of standard tab keys that are disabled in the sidebar config.
+ * Used by MobileBottomNav to hide disabled tabs.
+ */
+export function getDisabledTabs(): Set<string> {
+  const disabled = new Set<string>()
+  for (const item of sidebarConfigCache) {
+    if (item.standard_tab_key && !item.enabled) {
+      disabled.add(item.standard_tab_key)
+    }
+  }
+  return disabled
+}
+
+/**
  * Get custom tabs from the sidebar config (non-standard entries with a custom_path).
  */
 export function getCustomTabs(): SidebarItemProps[] {
