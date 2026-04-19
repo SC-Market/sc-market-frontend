@@ -193,7 +193,7 @@ export function CreateListingV2() {
       ) {
         return t(
           "CreateListingV2.validation.qualityValueRange",
-          "Quality value must be between 0 and 100 for lot {{index}}",
+          "Quality value must be between 0 and 1000 for lot {{index}}",
           { index: i + 1 }
         );
       }
@@ -590,11 +590,12 @@ export function CreateListingV2() {
                     {/* Quality Value */}
                     <Grid item xs={12} sm={6} md={4}>
                       <NumericFormat
-                        decimalScale={2}
+                        decimalScale={0}
                         allowNegative={false}
                         customInput={TextField}
                         size="small"
                         fullWidth
+                        isAllowed={({ floatValue }) => !floatValue || floatValue <= 1000}
                         onValueChange={(values) => {
                           handleUpdateStockLot(
                             lot.id,
