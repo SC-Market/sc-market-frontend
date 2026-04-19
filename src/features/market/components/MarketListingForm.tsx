@@ -638,9 +638,11 @@ export function MarketListingForm(props: { sale_type: "sale" | "auction" }) {
           </>
         ) : null}
       </FormPaper>
-      <Grid item xs={12}>
-        <BulkDiscountTierEditor tiers={bulkDiscountTiers} onChange={setBulkDiscountTiers} />
-      </Grid>
+      <FormPaper title={t("market.bulkDiscountTiers", "Bulk Discounts")}>
+        <Grid item xs={12}>
+          <BulkDiscountTierEditor tiers={bulkDiscountTiers} onChange={setBulkDiscountTiers} />
+        </Grid>
+      </FormPaper>
       <Grid item xs={12} container justifyContent={"right"}>
         <LoadingButton
           size={"large"}

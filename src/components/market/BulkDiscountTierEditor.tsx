@@ -44,9 +44,6 @@ export function BulkDiscountTierEditor({
 
   return (
     <Box>
-      <Typography variant="subtitle2" gutterBottom>
-        {t("market.bulkDiscountTiers", "Bulk Discount Tiers")}
-      </Typography>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
         {t(
           "market.bulkDiscountDescription",
