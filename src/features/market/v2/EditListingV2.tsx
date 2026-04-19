@@ -27,6 +27,7 @@ import { StandardPageLayout } from "../../../components/layout/StandardPageLayou
 import { FormPaper } from "../../../components/paper/FormPaper";
 import { MarkdownEditor } from "../../../components/markdown/Markdown.lazy";
 import { LocationSelector } from "../components/stock/LocationSelector";
+import { BulkDiscountTierEditor } from "../../../components/market/BulkDiscountTierEditor";
 import {
   useGetListingDetailQuery,
   useUpdateListingMutation,
@@ -88,6 +89,7 @@ export function EditListingV2() {
   const [pricingMode, setPricingMode] = useState<"unified" | "per_variant">("unified");
   const [basePrice, setBasePrice] = useState<number>(0);
   const [pickupMethod, setPickupMethod] = useState<"delivery" | "pickup" | "any" | "">(""); 
+  const [bulkDiscountTiers, setBulkDiscountTiers] = useState<Array<{ min_quantity: number; discount_percent: number }>>([]);
 
   // Stock lots state - flattened from variants
   const [stockLots, setStockLots] = useState<StockLotFormData[]>([]);
@@ -115,6 +117,7 @@ export function EditListingV2() {
     if (firstItem) {
       setPricingMode(firstItem.pricing_mode);
       setBasePrice(firstItem.base_price || 0);
+      setBulkDiscountTiers((firstItem as any).bulk_discount_tiers || []);
 
       // Flatten variants into stock lots
       // Note: In a real implementation, we'd need to fetch actual stock lots
@@ -231,6 +234,12 @@ export function EditListingV2() {
       const currentPickup = listingData?.listing.pickup_method || "";
       if (pickupMethod !== currentPickup) {
         request.pickup_method = pickupMethod || null;
+      }
+
+      // Include bulk discount tiers
+      const currentTiers = (listingData?.items[0] as any)?.bulk_discount_tiers || [];
+      if (JSON.stringify(bulkDiscountTiers) !== JSON.stringify(currentTiers)) {
+        (request as any).bulk_discount_tiers = bulkDiscountTiers;
       }
 
       // Handle pricing updates
@@ -446,6 +455,11 @@ export function EditListingV2() {
               <MenuItem value="pickup">{t("EditListingV2.pickup", "Pickup (buyer picks up)")}</MenuItem>
               <MenuItem value="any">{t("EditListingV2.either", "Either (delivery or pickup)")}</MenuItem>
             </TextField>
+          </Grid>
+
+          {/* Bulk Discount Tiers */}
+          <Grid item xs={12}>
+            <BulkDiscountTierEditor tiers={bulkDiscountTiers} onChange={setBulkDiscountTiers} />
           </Grid>
 
           {/* Pricing Section */}

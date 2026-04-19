@@ -279,6 +279,23 @@ export const ItemListingBase = React.memo(
                     }}
                   />
                 )}
+                {listing.bulk_discount_tiers?.length ? (
+                  <Chip
+                    label={t("market.bulkDiscount", "Bulk Discount")}
+                    color={"info"}
+                    size="small"
+                    sx={{
+                      position: "absolute",
+                      bottom: 4,
+                      left: 4,
+                      zIndex: 2,
+                      textTransform: "uppercase",
+                      fontWeight: "bold",
+                      fontSize: "0.65rem",
+                      height: 18,
+                    }}
+                  />
+                ) : null}
                 <CardMedia
                   component="img"
                   loading="lazy"
@@ -562,6 +579,23 @@ export const ItemListingBase = React.memo(
                     }}
                   />
                 )}
+                {listing.bulk_discount_tiers?.length ? (
+                  <Chip
+                    label={t("market.bulkDiscount", "Bulk Discount")}
+                    color={"info"}
+                    size="small"
+                    sx={{
+                      position: "absolute",
+                      bottom: 4,
+                      left: 4,
+                      zIndex: 2,
+                      textTransform: "uppercase",
+                      fontWeight: "bold",
+                      fontSize: "0.65rem",
+                      height: 18,
+                    }}
+                  />
+                ) : null}
                 <CardMedia
                   component="img"
                   loading="lazy"

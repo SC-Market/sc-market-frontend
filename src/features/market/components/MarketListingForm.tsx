@@ -32,6 +32,7 @@ import {
   UniqueListing,
 } from "../domain/types"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
+import { BulkDiscountTierEditor } from "../../../components/market/BulkDiscountTierEditor"
 import {
   AddCircleOutlineRounded,
   KeyboardArrowUpRounded,
@@ -96,6 +97,7 @@ export function MarketListingForm(props: { sale_type: "sale" | "auction" }) {
     )
 
   const [imageOpen, setImageOpen] = useState(false)
+  const [bulkDiscountTiers, setBulkDiscountTiers] = useState<Array<{ min_quantity: number; discount_percent: number }>>([]);
 
   const [
     createListing, // This is the mutation trigger
@@ -118,6 +120,7 @@ export function MarketListingForm(props: { sale_type: "sale" | "auction" }) {
       createListing({
         ...state,
         spectrum_id: currentOrg?.spectrum_id,
+        bulk_discount_tiers: bulkDiscountTiers.length ? bulkDiscountTiers : undefined,
       })
         .unwrap()
         .then(async (res) => {
@@ -635,6 +638,9 @@ export function MarketListingForm(props: { sale_type: "sale" | "auction" }) {
           </>
         ) : null}
       </FormPaper>
+      <Grid item xs={12}>
+        <BulkDiscountTierEditor tiers={bulkDiscountTiers} onChange={setBulkDiscountTiers} />
+      </Grid>
       <Grid item xs={12} container justifyContent={"right"}>
         <LoadingButton
           size={"large"}
