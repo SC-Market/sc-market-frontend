@@ -182,7 +182,7 @@ export function CreateListingV2() {
       }
       if (
         lot.quality_value !== undefined &&
-        (lot.quality_value < 0 || lot.quality_value > 100)
+        (lot.quality_value < 0 || lot.quality_value > 1000)
       ) {
         return t(
           "CreateListingV2.validation.qualityValueRange",
