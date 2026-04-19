@@ -1,4 +1,4 @@
-import { generatedApi as api } from "../../generatedApi"
+import { generatedApiV2 as api } from "../../generatedApiV2"
 export const addTagTypes = [
   "Variant Types V2",
   "Stock Lots V2",
