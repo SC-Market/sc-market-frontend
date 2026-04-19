@@ -5,6 +5,7 @@ import { Page } from "../../../components/metadata/Page"
 import { useTranslation } from "react-i18next"
 import { MarketV2Routes } from "../../../features/market/v2/MarketV2Routes"
 import { MarketSidebarContext } from "../../../features/market/hooks/MarketSidebar"
+import { OpenLayout } from "../../layout/ContainerGrid"
 
 function MarketV2LoadingFallback() {
   return (
@@ -28,9 +29,11 @@ export function MarketPageV2() {
   return (
     <Page title={t("market.market")} dontUseDefaultCanonUrl={true}>
       <MarketSidebarContext.Provider value={[sidebarOpen, setSidebarOpen]}>
-        <Suspense fallback={<MarketV2LoadingFallback />}>
-          <MarketV2Routes />
-        </Suspense>
+        <OpenLayout sidebarOpen={true} noMobilePadding={true}>
+          <Suspense fallback={<MarketV2LoadingFallback />}>
+            <MarketV2Routes />
+          </Suspense>
+        </OpenLayout>
       </MarketSidebarContext.Provider>
     </Page>
   )
