@@ -193,22 +193,19 @@ const router = createBrowserRouter([
         path: "/market/:id",
         errorElement: <RouteErrorFallback />,
         lazy: async () => ({
-          Component: (await import("./pages/market/ViewMarketListing"))
-            .ViewMarketListing,
+          Component: (await import("./components/market/MarketRouter")).ListingDetailGate,
         }),
       },
       {
         path: "/market/aggregate/:id",
         lazy: async () => ({
-          Component: (await import("./pages/market/ViewMarketAggregate"))
-            .ViewMarketAggregate,
+          Component: (await import("./components/market/MarketRouter")).AggregateDetailGate,
         }),
       },
       {
         path: "/market/multiple/:id",
         lazy: async () => ({
-          Component: (await import("./pages/market/ViewMarketMultiple"))
-            .ViewMarketMultiple,
+          Component: (await import("./components/market/MarketRouter")).MultipleDetailGate,
         }),
       },
       {

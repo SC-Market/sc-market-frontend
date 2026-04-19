@@ -271,7 +271,7 @@ export function CreateLotDialogV2({
             label={t("CreateLotDialogV2.qualityValue", "Quality Value (%)")}
             helperText={t(
               "CreateLotDialogV2.qualityValueHelper",
-              "Optional: Precise quality percentage (0-100)",
+              "Optional: Precise quality value (0-1000)",
             )}
             inputProps={{ min: 0, max: 100, step: 0.1 }}
           />
