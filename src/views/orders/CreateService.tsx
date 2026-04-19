@@ -14,9 +14,11 @@ import {
 import React, { useCallback, useEffect, useState } from "react"
 import { Section } from "../../components/paper/Section"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
-import { BACKEND_URL, PAYMENT_TYPES } from "../../util/constants"
+import { PAYMENT_TYPES } from "../../util/constants"
 import throttle from "lodash/throttle"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
+import { store } from "../../store/store"
+import { starmapApi } from "../../store/api/starmap"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { orderIcons, Service, PaymentType } from "../../datatypes/Order"
 import { MarkdownEditor } from "../../components/markdown/Markdown.lazy"
@@ -185,19 +187,16 @@ export function CreateServiceForm(props: GridProps & { service?: Service }) {
       return []
     }
 
-    const resp = await fetch(
-      `${BACKEND_URL}/api/starmap/search/${encodeURIComponent(query)}`,
-      {
-        method: "GET",
-        credentials: "include",
-      },
+    const result = await store.dispatch(
+      starmapApi.endpoints.searchStarmap.initiate({ query }),
     )
-    const data = await resp.json()
+    if (!result.data) return []
+    const data = result.data as any
 
     const extended: StarmapObject[] = []
 
     await Promise.all(
-      data.objects.resultset.map(async (obj: StarmapObject) => {
+      (data.objects?.resultset || data.results || []).map(async (obj: StarmapObject) => {
         if (obj.type === "SATELLITE") {
           const planetNum = obj.designation.replace(/\D/g, "")
           const planetDes = `${obj.star_system.name} ${romanize(
@@ -208,7 +207,7 @@ export function CreateServiceForm(props: GridProps & { service?: Service }) {
         }
       }),
     )
-    extended.push(...data.objects.resultset)
+    extended.push(...(data.objects?.resultset || data.results || []))
 
     return extended
   }, [])

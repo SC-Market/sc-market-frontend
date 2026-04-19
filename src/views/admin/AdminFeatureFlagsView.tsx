@@ -34,7 +34,14 @@ import PersonAddRounded from "@mui/icons-material/PersonAddRounded"
 import SaveRounded from "@mui/icons-material/SaveRounded"
 import { useTranslation } from "react-i18next"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
-import { BACKEND_URL } from "../../util/constants"
+import {
+  useGetConfigQuery,
+  useUpdateConfigMutation,
+  useGetStatsQuery,
+  useGetUserOverridesQuery,
+  useSetUserOverrideMutation,
+  useRemoveUserOverrideMutation,
+} from "../../store/api/v2/market"
 
 // ── Types ────────────────────────────────────────────────────────
 
@@ -45,55 +52,10 @@ interface FeatureFlagConfig {
   enabled: boolean
 }
 
-interface FeatureFlagStats {
-  total_overrides: number
-  v1_overrides: number
-  v2_overrides: number
-  rollout_percentage: number
-  default_version: "V1" | "V2"
-  enabled: boolean
-}
-
 interface UserOverride {
   user_id: string
   market_version: "V1" | "V2"
   updated_at: string
-}
-
-// ── API helpers (admin endpoints not in OpenAPI spec yet) ─────────
-
-const API = `${BACKEND_URL}/api/v2/admin/feature-flags`
-
-async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(`${API}${path}`, {
-    credentials: "include",
-    headers: { "Content-Type": "application/json" },
-    ...init,
-  })
-  if (!res.ok) throw new Error(await res.text())
-  return res.json()
-}
-
-function useAdminApi<T>(path: string) {
-  const [data, setData] = React.useState<T | null>(null)
-  const [loading, setLoading] = React.useState(true)
-  const [error, setError] = React.useState<string | null>(null)
-
-  const refetch = React.useCallback(async () => {
-    setLoading(true)
-    setError(null)
-    try {
-      setData(await apiFetch<T>(path))
-    } catch (e: any) {
-      setError(e.message)
-    } finally {
-      setLoading(false)
-    }
-  }, [path])
-
-  React.useEffect(() => { refetch() }, [refetch])
-
-  return { data, loading, error, refetch }
 }
 
 // ── Component ────────────────────────────────────────────────────
@@ -102,9 +64,17 @@ export function AdminFeatureFlagsView() {
   const { t } = useTranslation()
   const issueAlert = useAlertHook()
 
-  const { data: config, loading: configLoading, refetch: refetchConfig } = useAdminApi<FeatureFlagConfig>("/config")
-  const { data: stats, refetch: refetchStats } = useAdminApi<FeatureFlagStats>("/stats")
-  const { data: overridesData, refetch: refetchOverrides } = useAdminApi<{ overrides: UserOverride[]; total: number }>("/overrides")
+  const { data: configData, isLoading: configLoading } = useGetConfigQuery()
+  const { data: statsData } = useGetStatsQuery()
+  const { data: overridesResult } = useGetUserOverridesQuery({ page: 1, pageSize: 100 })
+
+  const config = (configData as any)?.data || configData
+  const stats = (statsData as any)?.data || statsData
+  const overridesData = (overridesResult as any)?.data || overridesResult
+
+  const [updateConfigMutation] = useUpdateConfigMutation()
+  const [setUserOverride] = useSetUserOverrideMutation()
+  const [removeUserOverride] = useRemoveUserOverrideMutation()
 
   const [localConfig, setLocalConfig] = useState<Partial<FeatureFlagConfig>>({})
   const [saving, setSaving] = useState(false)
@@ -120,19 +90,16 @@ export function AdminFeatureFlagsView() {
   const handleSaveConfig = async () => {
     setSaving(true)
     try {
-      await apiFetch("/config", {
-        method: "PUT",
-        body: JSON.stringify({
+      await updateConfigMutation({
+        updateConfigRequest: {
           default_version: localConfig.default_version,
           rollout_percentage: localConfig.rollout_percentage,
           enabled: localConfig.enabled,
-        }),
-      })
+        },
+      }).unwrap()
       issueAlert({ message: "Config saved", severity: "success" })
-      refetchConfig()
-      refetchStats()
     } catch (e: any) {
-      issueAlert({ message: e.message, severity: "error" })
+      issueAlert({ message: e.message || "Failed to save", severity: "error" })
     } finally {
       setSaving(false)
     }
@@ -141,32 +108,25 @@ export function AdminFeatureFlagsView() {
   const handleAddOverride = async () => {
     if (!newUserId.trim()) return
     try {
-      await apiFetch("/overrides", {
-        method: "POST",
-        body: JSON.stringify({ user_id: newUserId.trim(), market_version: newVersion }),
-      })
+      await setUserOverride({
+        setUserOverrideRequest: { user_id: newUserId.trim(), market_version: newVersion },
+      }).unwrap()
       issueAlert({ message: `Override set for ${newUserId}`, severity: "success" })
       setAddDialogOpen(false)
       setNewUserId("")
-      refetchOverrides()
-      refetchStats()
     } catch (e: any) {
-      issueAlert({ message: e.message, severity: "error" })
+      issueAlert({ message: e.message || "Failed", severity: "error" })
     }
   }
 
   const handleRemoveOverride = async (userId: string) => {
     try {
-      await apiFetch(`/overrides/${userId}`, { method: "DELETE" })
+      await removeUserOverride({ userId }).unwrap()
       issueAlert({ message: `Override removed for ${userId}`, severity: "success" })
-      refetchOverrides()
-      refetchStats()
     } catch (e: any) {
-      issueAlert({ message: e.message, severity: "error" })
+      issueAlert({ message: e.message || "Failed", severity: "error" })
     }
   }
-
-  const refetchAll = () => { refetchConfig(); refetchStats(); refetchOverrides() }
 
   return (
     <Box>
@@ -336,7 +296,7 @@ export function AdminFeatureFlagsView() {
                 </TableCell>
               </TableRow>
             )}
-            {overridesData?.overrides.map((o) => (
+            {overridesData?.overrides.map((o: UserOverride) => (
               <TableRow key={o.user_id}>
                 <TableCell>
                   <Typography variant="body2" fontFamily="monospace">{o.user_id}</Typography>

@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { User } from "../../../datatypes/User"
 import { Contractor } from "../../../datatypes/Contractor"
-import { BACKEND_URL } from "../../../util/constants"
 import throttle from "lodash/throttle"
 import { useCreateTransaction } from "../../../store/transactions"
 import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
+import { store } from "../../../store/store"
+import { userApi } from "../../../store/profile"
+import { contractorsApi } from "../../../store/api/contractors"
 
 export type RecipientType = "user" | "contractor"
 
@@ -35,18 +37,16 @@ export function usePageSendMoney(isOrgTransaction: boolean = false) {
         return
       }
 
-      fetch(
-        `${BACKEND_URL}/api/${
-          recipientType === "user" ? "profile" : "contractor"
-        }/search/${encodeURIComponent(query)}`,
-        {
-          method: "GET",
-          credentials: "include",
-        },
-      )
-        .then(async (resp) => {
-          const data = await resp.json()
-          if (data.error) {
+      const endpoint =
+        recipientType === "user"
+          ? userApi.endpoints.profileSearchUsers.initiate(query)
+          : contractorsApi.endpoints.searchContractors.initiate({ query })
+
+      store
+        .dispatch(endpoint as any)
+        .then((result: any) => {
+          const data = result.data
+          if (!data) {
             setOptions([])
           } else {
             setOptions(data as (User | Contractor)[])

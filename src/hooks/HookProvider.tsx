@@ -28,6 +28,8 @@ import { ServiceSearchContext } from "./contract/ServiceSearch"
 import { LightThemeContext, ThemeChoice } from "./styles/LightTheme"
 import { useCookies, CookiesProvider } from "react-cookie"
 import { CURRENT_CUSTOM_ORG, IS_CUSTOM_DOMAIN, cacheDomainOrg } from "./contractor/CustomDomain"
+import { setSidebarConfig } from "../components/sidebar/utils/sidebarFilters"
+import { contractorsApi } from "../store/api/contractors"
 import { CUSTOM_THEMES } from "./styles/custom_themes"
 import {
   getCachedOrgTheme,
@@ -106,18 +108,21 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
     async function resolveAndFetchTheme() {
       try {
         // Step 1: Resolve domain → spectrum_id
-        const domainRes = await fetch(`${BACKEND_URL}/api/domain/${hostname}`, { credentials: "include" })
-        if (!domainRes.ok) return
-        const domainData = await domainRes.json()
-        const { spectrum_id } = domainData.data
+        const domainResult = await store.dispatch(
+          contractorsApi.endpoints.resolveDomain.initiate(hostname),
+        )
+        if (!domainResult.data?.data) return
+        const { spectrum_id } = domainResult.data.data
         if (!spectrum_id) return
-        cacheDomainOrg(domainData.data)
+        cacheDomainOrg(domainResult.data.data)
 
         // Step 2: Fetch org theme
-        const themeRes = await fetch(`${BACKEND_URL}/api/contractors/${spectrum_id}/theme`, { credentials: "include" })
-        if (!themeRes.ok) return
-        const themeJson = await themeRes.json()
-        const { theme_data, favicon_url, updated_at } = themeJson.data
+        const themeResult = await store.dispatch(
+          contractorsApi.endpoints.getOrgTheme.initiate(spectrum_id),
+        )
+        if (!themeResult.data) return
+        const themeData = (themeResult.data as any).data || themeResult.data
+        const { theme_data, favicon_url, updated_at } = themeData
 
         // Step 3: Check if newer than cache
         const cachedUpdatedAt = getCachedUpdatedAt(spectrum_id)
@@ -128,6 +133,17 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
         // Step 4: Build and apply theme
         const built = buildOrgTheme(theme_data, resolvedMode)
         setDynamicOrgTheme(built)
+
+        // Step 5: Fetch sidebar config for tab filtering + custom tabs
+        try {
+          const sidebarResult = await store.dispatch(
+            contractorsApi.endpoints.getWhitelabelSidebar.initiate(spectrum_id),
+          )
+          if (sidebarResult.data) {
+            const items = (sidebarResult.data as any).data || sidebarResult.data || []
+            setSidebarConfig(items)
+          }
+        } catch { /* sidebar config is optional */ }
       } catch {
         // API unavailable — cached/hardcoded theme continues to work
       }

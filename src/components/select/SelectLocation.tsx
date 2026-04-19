@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { BACKEND_URL } from "../../util/constants"
 import throttle from "lodash/throttle"
 import { Autocomplete, Grid, TextField, Typography } from "@mui/material"
 import { Section } from "../paper/Section"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { store } from "../../store/store"
+import { starmapApi } from "../../store/api/starmap"
 
 export function romanize(num: number) {
   if (isNaN(num)) return NaN
@@ -83,19 +84,16 @@ export function SelectLocation() {
       return []
     }
 
-    const resp = await fetch(
-      `${BACKEND_URL}/api/starmap/search/${encodeURIComponent(query)}`,
-      {
-        method: "GET",
-        credentials: "include",
-      },
+    const result = await store.dispatch(
+      starmapApi.endpoints.searchStarmap.initiate({ query }),
     )
-    const data = await resp.json()
+    if (!result.data) return []
+    const data = result.data as any
 
     const extended: StarmapObject[] = []
 
     await Promise.all(
-      data.objects.resultset.map(async (obj: StarmapObject) => {
+      (data.objects?.resultset || data.results || []).map(async (obj: StarmapObject) => {
         if (obj.type === "SATELLITE") {
           const planetNum = obj.designation.replace(/\D/g, "")
           const planetDes = `${obj.star_system.name} ${romanize(
@@ -106,7 +104,7 @@ export function SelectLocation() {
         }
       }),
     )
-    extended.push(...data.objects.resultset)
+    extended.push(...(data.objects?.resultset || data.results || []))
 
     return extended
   }, [])
