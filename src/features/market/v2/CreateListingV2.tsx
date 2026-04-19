@@ -9,6 +9,7 @@ import {
   Box,
   Divider,
   FormControlLabel,
+  Checkbox,
   Radio,
   RadioGroup,
   FormControl,
@@ -48,6 +49,8 @@ interface StockLotFormData {
   crafted_source?: "crafted" | "store" | "looted" | "unknown";
   location_id?: string;
   price?: number; // For per_variant pricing mode
+  notes?: string;
+  listed?: boolean;
 }
 
 /**
@@ -96,6 +99,8 @@ export function CreateListingV2() {
       crafted_source: undefined,
       location_id: undefined,
       price: undefined,
+      notes: undefined,
+      listed: true,
     },
   ]);
 
@@ -114,6 +119,8 @@ export function CreateListingV2() {
         crafted_source: undefined,
         location_id: undefined,
         price: undefined,
+        notes: undefined,
+        listed: true,
       },
     ]);
   }, []);
@@ -600,7 +607,7 @@ export function CreateListingV2() {
                         color="secondary"
                         helperText={t(
                           "CreateListingV2.qualityValueHelp",
-                          "Optional: 0-100"
+                          "Optional: 0-1000"
                         )}
                         inputProps={{
                           inputMode: "decimal",
@@ -694,6 +701,37 @@ export function CreateListingV2() {
                         />
                       </Grid>
                     )}
+
+                    {/* Notes */}
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        size="small"
+                        fullWidth
+                        label={t("CreateListingV2.notes", "Notes")}
+                        value={lot.notes ?? ""}
+                        onChange={(e) =>
+                          handleUpdateStockLot(lot.id, "notes", e.target.value || undefined)
+                        }
+                        color="secondary"
+                        helperText={t("CreateListingV2.notesHelp", "Optional: Internal notes for this lot")}
+                      />
+                    </Grid>
+
+                    {/* Listed */}
+                    <Grid item xs={12} sm={6} md={4} sx={{ display: "flex", alignItems: "center" }}>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            checked={lot.listed !== false}
+                            onChange={(e) =>
+                              handleUpdateStockLot(lot.id, "listed", e.target.checked)
+                            }
+                            color="secondary"
+                          />
+                        }
+                        label={t("CreateListingV2.listed", "Listed for sale")}
+                      />
+                    </Grid>
                   </Grid>
                 </Box>
               </Grid>

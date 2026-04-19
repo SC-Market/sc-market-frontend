@@ -36,8 +36,11 @@ import { BulkDiscountTierEditor } from "../../../components/market/BulkDiscountT
 import {
   AddCircleOutlineRounded,
   KeyboardArrowUpRounded,
+  DeleteOutline,
 } from "@mui/icons-material"
 import { MarkdownEditor } from "../../../components/markdown/Markdown.lazy"
+import { LocationSelector } from "./stock/LocationSelector"
+import { useCreateLotMutation } from "../../../store/api/stock-lots"
 import { LazyDateTimePicker as DateTimePicker } from "../../../components/providers/LazyDateTimePicker"
 import { useNavigate } from "react-router-dom"
 import { Suspense, lazy } from "react"
@@ -98,6 +101,12 @@ export function MarketListingForm(props: { sale_type: "sale" | "auction" }) {
 
   const [imageOpen, setImageOpen] = useState(false)
   const [bulkDiscountTiers, setBulkDiscountTiers] = useState<Array<{ min_quantity: number; discount_percent: number }>>([]);
+
+  // Stock lots for granular inventory at creation time
+  const [stockLots, setStockLots] = useState<Array<{
+    id: string; quantity: number; location_id?: string; notes?: string; listed: boolean
+  }>>([])
+  const [createLot] = useCreateLotMutation()
 
   const [
     createListing, // This is the mutation trigger
@@ -178,6 +187,23 @@ export function MarketListingForm(props: { sale_type: "sale" | "auction" }) {
             item_name: null,
           })
 
+          // Create stock lots if any were defined
+          if (stockLots.length > 0) {
+            for (const lot of stockLots) {
+              try {
+                await createLot({
+                  listing_id: res.listing.listing_id,
+                  quantity: lot.quantity,
+                  location_id: lot.location_id || null,
+                  notes: lot.notes || null,
+                  listed: lot.listed,
+                }).unwrap()
+              } catch {
+                // Non-fatal — listing was created, lot creation failed
+              }
+            }
+          }
+
           issueAlert({
             message: t("MarketListingForm.submitted"),
             severity: "success",
@@ -193,11 +219,13 @@ export function MarketListingForm(props: { sale_type: "sale" | "auction" }) {
     },
     [
       createListing,
+      createLot,
       currentOrg?.spectrum_id,
       navigate,
       props.sale_type,
       issueAlert,
       state,
+      stockLots,
       t,
       uploadPhotos,
       uploadedFiles,
@@ -346,6 +374,74 @@ export function MarketListingForm(props: { sale_type: "sale" | "auction" }) {
               "Enter the number of items available for sale",
             )}
           </div>
+        </Grid>
+
+        {/* Stock Lots Section */}
+        <Grid item xs={12}>
+          <Collapse in={stockLots.length > 0} unmountOnExit>
+            <Typography variant="subtitle2" fontWeight="bold" sx={{ mb: 1 }}>
+              {t("MarketListingForm.stockLots", "Stock Lots")}
+            </Typography>
+            {stockLots.map((lot) => (
+              <Grid container spacing={1} key={lot.id} sx={{ mb: 1, p: 1, border: 1, borderColor: "divider", borderRadius: 1 }}>
+                <Grid item xs={6} sm={3}>
+                  <TextField
+                    size="small"
+                    fullWidth
+                    type="number"
+                    label={t("MarketListingForm.lotQuantity", "Quantity")}
+                    value={lot.quantity}
+                    onChange={(e) => {
+                      const val = parseInt(e.target.value) || 0
+                      setStockLots(prev => prev.map(l => l.id === lot.id ? { ...l, quantity: val } : l))
+                    }}
+                    inputProps={{ min: 0 }}
+                  />
+                </Grid>
+                <Grid item xs={6} sm={3}>
+                  <LocationSelector
+                    value={lot.location_id ?? null}
+                    onChange={(id) => setStockLots(prev => prev.map(l => l.id === lot.id ? { ...l, location_id: id ?? undefined } : l))}
+                    size="small"
+                    fullWidth
+                    label={t("MarketListingForm.location", "Location")}
+                  />
+                </Grid>
+                <Grid item xs={8} sm={4}>
+                  <TextField
+                    size="small"
+                    fullWidth
+                    label={t("MarketListingForm.notes", "Notes")}
+                    value={lot.notes ?? ""}
+                    onChange={(e) => setStockLots(prev => prev.map(l => l.id === lot.id ? { ...l, notes: e.target.value || undefined } : l))}
+                  />
+                </Grid>
+                <Grid item xs={4} sm={2} sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        size="small"
+                        checked={lot.listed}
+                        onChange={(e) => setStockLots(prev => prev.map(l => l.id === lot.id ? { ...l, listed: e.target.checked } : l))}
+                      />
+                    }
+                    label={t("MarketListingForm.listed", "Listed")}
+                  />
+                  <IconButton size="small" onClick={() => setStockLots(prev => prev.filter(l => l.id !== lot.id))}>
+                    <DeleteOutline fontSize="small" />
+                  </IconButton>
+                </Grid>
+              </Grid>
+            ))}
+          </Collapse>
+          <Button
+            size="small"
+            variant="text"
+            startIcon={<AddCircleOutlineRounded />}
+            onClick={() => setStockLots(prev => [...prev, { id: crypto.randomUUID(), quantity: 1, listed: true }])}
+          >
+            {t("MarketListingForm.addStockLot", "Add Stock Lot")}
+          </Button>
         </Grid>
 
         <Grid item xs={12}>
