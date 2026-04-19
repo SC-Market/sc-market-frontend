@@ -147,34 +147,6 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["Listings V2"],
       }),
-      getListingDetail: build.query<
-        GetListingDetailApiResponse,
-        GetListingDetailApiArg
-      >({
-        query: (queryArg) => ({ url: `/listings/${queryArg.id}` }),
-        providesTags: ["Listings V2"],
-      }),
-      updateListing: build.mutation<
-        UpdateListingApiResponse,
-        UpdateListingApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/listings/${queryArg.id}`,
-          method: "PUT",
-          body: queryArg.updateListingRequest,
-        }),
-        invalidatesTags: ["Listings V2"],
-      }),
-      deleteListing: build.mutation<
-        DeleteListingApiResponse,
-        DeleteListingApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/listings/${queryArg.id}`,
-          method: "DELETE",
-        }),
-        invalidatesTags: ["Listings V2"],
-      }),
       searchListings: build.query<
         SearchListingsApiResponse,
         SearchListingsApiArg
@@ -218,6 +190,34 @@ const injectedRtkApi = api
           providesTags: ["Listings V2"],
         },
       ),
+      getListingDetail: build.query<
+        GetListingDetailApiResponse,
+        GetListingDetailApiArg
+      >({
+        query: (queryArg) => ({ url: `/listings/${queryArg.id}` }),
+        providesTags: ["Listings V2"],
+      }),
+      updateListing: build.mutation<
+        UpdateListingApiResponse,
+        UpdateListingApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/listings/${queryArg.id}`,
+          method: "PUT",
+          body: queryArg.updateListingRequest,
+        }),
+        invalidatesTags: ["Listings V2"],
+      }),
+      deleteListing: build.mutation<
+        DeleteListingApiResponse,
+        DeleteListingApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/listings/${queryArg.id}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["Listings V2"],
+      }),
       refreshListing: build.mutation<
         RefreshListingApiResponse,
         RefreshListingApiArg
@@ -617,27 +617,6 @@ export type CreateListingApiArg = {
   /** Listing creation request with title, description, pricing, and lots */
   createListingRequest: CreateListingRequest
 }
-export type GetListingDetailApiResponse =
-  /** status 200 Complete listing detail with variant breakdown */ GetListingDetailResponse
-export type GetListingDetailApiArg = {
-  /** Listing UUID */
-  id: string
-}
-export type UpdateListingApiResponse =
-  /** status 200 Updated listing with variant breakdown */ GetListingDetailResponse
-export type UpdateListingApiArg = {
-  /** Listing UUID */
-  id: string
-  /** Update request with optional fields */
-  updateListingRequest: UpdateListingRequest
-}
-export type DeleteListingApiResponse = /** status 200 Success message */ {
-  message: string
-}
-export type DeleteListingApiArg = {
-  /** Listing UUID */
-  id: string
-}
 export type SearchListingsApiResponse =
   /** status 200 Search results with pagination metadata */ SearchListingsResponse
 export type SearchListingsApiArg = {
@@ -676,7 +655,7 @@ export type SearchListingsApiArg = {
   contractorId?: string
 }
 export type GetMyListingsApiResponse =
-  /** status 200 User's listings with pagination metadata */ GetMyListingsResponse
+  /** status 200 Updated listing with variant breakdown */ GetMyListingsResponse
 export type GetMyListingsApiArg = {
   /** Filter by listing status */
   status?: "active" | "sold" | "expired" | "cancelled"
@@ -688,6 +667,25 @@ export type GetMyListingsApiArg = {
   sortBy?: "created_at" | "updated_at" | "price" | "quantity"
   /** Sort order (default: desc) */
   sortOrder?: "asc" | "desc"
+}
+export type GetListingDetailApiResponse =
+  /** status 200 Complete listing detail with variant breakdown */ GetListingDetailResponse
+export type GetListingDetailApiArg = {
+  /** Listing UUID */
+  id: string
+}
+export type UpdateListingApiResponse =
+  /** status 200 Search results with pagination metadata */ GetListingDetailResponse
+export type UpdateListingApiArg = {
+  id: string
+  updateListingRequest: UpdateListingRequest
+}
+export type DeleteListingApiResponse = /** status 200 Success message */ {
+  message: string
+}
+export type DeleteListingApiArg = {
+  /** Listing UUID */
+  id: string
 }
 export type RefreshListingApiResponse =
   /** status 200 Success message with next refresh time */ {
@@ -1324,6 +1322,94 @@ export type CreateListingRequest = {
   /** Optional bulk discount tiers sorted by min_quantity ascending */
   bulk_discount_tiers?: BulkDiscountTier[]
 }
+export type ListingSearchResult = {
+  /** Listing UUID */
+  listing_id: string
+  /** Listing title */
+  title: string
+  /** Seller username or contractor name */
+  seller_name: string
+  /** Seller rating (0-5) */
+  seller_rating: number
+  /** Minimum price across all variants */
+  price_min: number
+  /** Maximum price across all variants */
+  price_max: number
+  /** Total quantity available across all variants */
+  quantity_available: number
+  /** Minimum quality tier available (1-5) */
+  quality_tier_min?: number
+  /** Maximum quality tier available (1-5) */
+  quality_tier_max?: number
+  /** Number of unique variants in this listing */
+  variant_count: number
+  /** Seller type (user or contractor) */
+  seller_type: "user" | "contractor"
+  /** Username (for user sellers) or spectrum_id (for contractor sellers) - use for profile links */
+  seller_slug: string
+  /** ISO 8601 timestamp when listing was created */
+  created_at: string
+  /** ISO 8601 timestamp when listing was last updated */
+  updated_at: string
+  /** Game item name */
+  game_item_name: string
+  /** Game item type/category */
+  game_item_type: string
+  /** Seller rating count */
+  seller_rating_count: number
+  /** Seller's supported languages (ISO 639-1 codes) */
+  seller_languages?: string[]
+  /** First photo URL (null if no photos) */
+  photo?: string
+  /** Pickup method: delivery, pickup, any, or null (not specified) */
+  pickup_method?: ("delivery" | "pickup" | "any" | null) | null
+  /** Whether this listing has bulk discount tiers defined */
+  has_bulk_discount?: boolean
+}
+export type SearchListingsResponse = {
+  /** Array of listing results */
+  listings: ListingSearchResult[]
+  /** Total number of listings matching filters */
+  total: number
+  /** Current page number */
+  page: number
+  /** Number of results per page */
+  page_size: number
+}
+export type MyListingItem = {
+  /** Listing UUID */
+  listing_id: string
+  /** Listing title */
+  title: string
+  /** Current status */
+  status: string
+  /** ISO 8601 timestamp when listing was created */
+  created_at: string
+  /** ISO 8601 timestamp when listing was last updated */
+  updated_at: string
+  /** Number of unique variants */
+  variant_count: number
+  /** Total quantity available across all variants */
+  quantity_available: number
+  /** Minimum price across all variants */
+  price_min: number
+  /** Maximum price across all variants */
+  price_max: number
+  /** Minimum quality tier available (1-5) */
+  quality_tier_min?: number
+  /** Maximum quality tier available (1-5) */
+  quality_tier_max?: number
+}
+export type GetMyListingsResponse = {
+  /** Array of user's listings */
+  listings: MyListingItem[]
+  /** Total number of listings matching filters */
+  total: number
+  /** Current page number */
+  page: number
+  /** Number of results per page */
+  page_size: number
+}
 export type ListingDetail = {
   /** Listing UUID */
   listing_id: string
@@ -1447,94 +1533,6 @@ export type UpdateListingRequest = {
   pickup_method?: ("delivery" | "pickup" | "any" | null) | null
   /** Updated bulk discount tiers (pass [] to remove, omit to keep unchanged) */
   bulk_discount_tiers?: BulkDiscountTier[]
-}
-export type ListingSearchResult = {
-  /** Listing UUID */
-  listing_id: string
-  /** Listing title */
-  title: string
-  /** Seller username or contractor name */
-  seller_name: string
-  /** Seller rating (0-5) */
-  seller_rating: number
-  /** Minimum price across all variants */
-  price_min: number
-  /** Maximum price across all variants */
-  price_max: number
-  /** Total quantity available across all variants */
-  quantity_available: number
-  /** Minimum quality tier available (1-5) */
-  quality_tier_min?: number
-  /** Maximum quality tier available (1-5) */
-  quality_tier_max?: number
-  /** Number of unique variants in this listing */
-  variant_count: number
-  /** Seller type (user or contractor) */
-  seller_type: "user" | "contractor"
-  /** Username (for user sellers) or spectrum_id (for contractor sellers) - use for profile links */
-  seller_slug: string
-  /** ISO 8601 timestamp when listing was created */
-  created_at: string
-  /** ISO 8601 timestamp when listing was last updated */
-  updated_at: string
-  /** Game item name */
-  game_item_name: string
-  /** Game item type/category */
-  game_item_type: string
-  /** Seller rating count */
-  seller_rating_count: number
-  /** Seller's supported languages (ISO 639-1 codes) */
-  seller_languages?: string[]
-  /** First photo URL (null if no photos) */
-  photo?: string
-  /** Pickup method: delivery, pickup, any, or null (not specified) */
-  pickup_method?: ("delivery" | "pickup" | "any" | null) | null
-  /** Whether this listing has bulk discount tiers defined */
-  has_bulk_discount?: boolean
-}
-export type SearchListingsResponse = {
-  /** Array of listing results */
-  listings: ListingSearchResult[]
-  /** Total number of listings matching filters */
-  total: number
-  /** Current page number */
-  page: number
-  /** Number of results per page */
-  page_size: number
-}
-export type MyListingItem = {
-  /** Listing UUID */
-  listing_id: string
-  /** Listing title */
-  title: string
-  /** Current status */
-  status: string
-  /** ISO 8601 timestamp when listing was created */
-  created_at: string
-  /** ISO 8601 timestamp when listing was last updated */
-  updated_at: string
-  /** Number of unique variants */
-  variant_count: number
-  /** Total quantity available across all variants */
-  quantity_available: number
-  /** Minimum price across all variants */
-  price_min: number
-  /** Maximum price across all variants */
-  price_max: number
-  /** Minimum quality tier available (1-5) */
-  quality_tier_min?: number
-  /** Maximum quality tier available (1-5) */
-  quality_tier_max?: number
-}
-export type GetMyListingsResponse = {
-  /** Array of user's listings */
-  listings: MyListingItem[]
-  /** Total number of listings matching filters */
-  total: number
-  /** Current page number */
-  page: number
-  /** Number of results per page */
-  page_size: number
 }
 export type HealthResponse = {
   status: string
@@ -1964,11 +1962,11 @@ export const {
   useGetOfferSessionQuery,
   useSearchOffersQuery,
   useCreateListingMutation,
+  useSearchListingsQuery,
+  useGetMyListingsQuery,
   useGetListingDetailQuery,
   useUpdateListingMutation,
   useDeleteListingMutation,
-  useSearchListingsQuery,
-  useGetMyListingsQuery,
   useRefreshListingMutation,
   useTrackViewMutation,
   useUploadPhotosMutation,
