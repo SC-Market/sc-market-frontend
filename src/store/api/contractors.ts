@@ -462,6 +462,14 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["Contractor", "Contractors"],
       }),
+      resolveDomain: build.query<
+        ResolveDomainApiResponse,
+        ResolveDomainApiArg
+      >({
+        query: (hostname) => ({
+          url: `/api/domain/${hostname}`,
+        }),
+      }),
       getWhitelabelConfig: build.query<
         GetWhitelabelConfigApiResponse,
         GetWhitelabelConfigApiArg
@@ -1216,6 +1224,17 @@ export type DeleteOrgThemeApiResponse =
     }
   }
 export type DeleteOrgThemeApiArg = string
+export type ResolveDomainApiResponse = {
+  data: {
+    spectrum_id: string
+    contractor_id: string
+    name: string
+    focus_mode?: string
+    homepage_path?: string | null
+    require_membership?: boolean
+  }
+}
+export type ResolveDomainApiArg = string
 export interface WhitelabelConfig {
   focus_mode: "public" | "internal"
   homepage_path: string | null
@@ -1294,4 +1313,5 @@ export const {
   useUpdateWhitelabelConfigMutation,
   useGetWhitelabelSidebarQuery,
   useUpdateWhitelabelSidebarMutation,
+  useResolveDomainQuery,
 } = injectedRtkApi

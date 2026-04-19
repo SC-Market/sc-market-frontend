@@ -1098,12 +1098,40 @@ export type GetOrderDetailResponse = {
   total_price: number
   /** Order status */
   status: string
+  /** Order kind */
+  kind: string
+  /** Order title */
+  title: string
+  /** Order description */
+  description: string
+  /** Payment type */
+  payment_type: string
+  /** Offer session ID */
+  offer_session_id?: string | null
   /** ISO 8601 timestamp of order creation */
   created_at: string
   /** ISO 8601 timestamp of last update */
   updated_at: string
-  /** Array of order items with variant details */
+  /** V1 market listings enriched with V2 variant data */
+  market_listings: OrderMarketListingV2[]
+  /** V2-only order items with variant details */
   items: OrderItemDetail[]
+}
+export type OrderMarketListingV2 = {
+  listing_id: string
+  quantity: number
+  title: string
+  price: number
+  v2_variants: OrderVariantItemV2[]
+}
+export type OrderVariantItemV2 = {
+  order_item_id: string
+  variant_id: string
+  quantity: number
+  price_per_unit: number
+  attributes: Record<string, any>
+  display_name: string
+  short_name: string
 }
 export type CreateListingResponse = {
   listing_id: string

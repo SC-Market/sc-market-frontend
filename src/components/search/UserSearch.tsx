@@ -8,8 +8,8 @@ import {
   CircularProgress,
 } from "@mui/material"
 import { useTranslation } from "react-i18next"
-import { BACKEND_URL } from "../../util/constants"
 import { User } from "../../datatypes/User"
+import { useSearchUsersQuery } from "../../store/profile"
 
 interface UserSearchProps {
   onUserSelect: (user: User) => void
@@ -31,55 +31,25 @@ export function UserSearch({
 }: UserSearchProps) {
   const { t } = useTranslation()
   const [query, setQuery] = useState("")
-  const [options, setOptions] = useState<SearchResult[]>([])
-  const [loading, setLoading] = useState(false)
+  const [debouncedQuery, setDebouncedQuery] = useState("")
   const [open, setOpen] = useState(false)
 
-  const searchUsers = async (searchQuery: string) => {
-    if (searchQuery.length < 2) {
-      setOptions([])
-      return
-    }
-
-    setLoading(true)
-    try {
-      const response = await fetch(
-        `${BACKEND_URL}/api/profile/search/${encodeURIComponent(searchQuery)}`,
-        {
-          method: "GET",
-          credentials: "include",
-        },
-      )
-      const data = await response.json()
-      setOptions(data || [])
-    } catch (error) {
-      console.error("Error searching users:", error)
-      setOptions([])
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  // Debounce search
+  // Debounce
   useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      if (query) {
-        searchUsers(query)
-      } else {
-        setOptions([])
-      }
-    }, 300)
-
-    return () => clearTimeout(timeoutId)
+    const id = setTimeout(() => setDebouncedQuery(query), 300)
+    return () => clearTimeout(id)
   }, [query])
+
+  const { data: options = [], isFetching: loading } = useSearchUsersQuery(
+    debouncedQuery,
+    { skip: debouncedQuery.length < 2 },
+  )
 
   const handleUserSelect = (user: SearchResult | null) => {
     if (user) {
-      // Convert SearchResult to User format
-      // Explicitly preserve user_id even though it's not in User type
       const userObj: User & { user_id?: string } = {
         ...user,
-        user_id: user.user_id, // Explicitly preserve user_id
+        user_id: user.user_id,
         orders: 0,
         spent: 0,
         banner: "",
@@ -100,7 +70,6 @@ export function UserSearch({
       }
       onUserSelect(userObj as User)
       setQuery("")
-      setOptions([])
       setOpen(false)
     }
   }
@@ -110,7 +79,7 @@ export function UserSearch({
       open={open}
       onOpen={() => setOpen(true)}
       onClose={() => setOpen(false)}
-      options={options}
+      options={options as unknown as SearchResult[]}
       loading={loading}
       disabled={disabled}
       getOptionLabel={(option) => option.display_name || option.username}

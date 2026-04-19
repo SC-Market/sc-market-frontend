@@ -1,62 +1,30 @@
 /**
  * useFeatureFlag – Market version feature flag hook
  *
- * NOTE: This hook intentionally uses raw `fetch()` instead of RTK Query because:
- *   1. The /api/v2/debug/feature-flag endpoint is NOT in the OpenAPI spec, so the
- *      generated API client (src/store/api/v2/market.ts) does not include it.
- *   2. This hook is consumed by MarketRouter to decide which UI tree to render,
- *      so it must resolve *before* RTK Query and the Redux store are fully initialized.
- *
- * If the feature-flag endpoint is added to the OpenAPI spec in the future, migrate
- * this to a generated RTK Query hook.
+ * Uses RTK Query via store.dispatch(initiate()) for network calls.
  */
 
 import { useState, useEffect, useCallback, useMemo } from "react"
 import { useGetUserProfileQuery } from "../../store/profile"
-import { BACKEND_URL } from "../../util/constants"
+import { store } from "../../store/store"
+import { marketV2Api } from "../../store/api/v2/market"
 
-/**
- * Market version type
- */
 export type MarketVersion = "V1" | "V2"
 
-/**
- * Feature flag hook return type
- */
 export interface UseFeatureFlagReturn {
-  /** Current market version */
   marketVersion: MarketVersion
-  /** Whether the feature flag is loading */
   isLoading: boolean
-  /** Error if feature flag fetch failed */
   error: Error | null
-  /** Function to set the market version */
   setMarketVersion: (version: MarketVersion) => Promise<void>
-  /**
-   * Whether to show debug overrides (floating panel, etc.):
-   * Vite dev server, or site admin (matches PreferencesControls / backend intent).
-   */
   isDeveloper: boolean
 }
 
-const FEATURE_FLAG_URL = `${BACKEND_URL}/api/v2/debug/feature-flag`
-
 function readLocalMarketVersion(): MarketVersion | null {
   const stored = localStorage.getItem("market_version")
-  if (stored === "V1" || stored === "V2") {
-    return stored
-  }
+  if (stored === "V1" || stored === "V2") return stored
   return null
 }
 
-/**
- * Custom hook to manage market version feature flag
- *
- * - Loads version from GET when authenticated; in **dev**, a `localStorage` choice wins over
- *   the server so V2/local overrides are not reset on reload. In production, the server wins.
- * - `isDeveloper` is true when running under Vite dev or the logged-in user is an admin.
- * - POST updates the server when allowed; in dev, falls back to localStorage if POST fails (e.g. non-admin).
- */
 export function useFeatureFlag(): UseFeatureFlagReturn {
   const { data: profile } = useGetUserProfileQuery()
   const [marketVersion, setMarketVersionState] = useState<MarketVersion>("V1")
@@ -78,11 +46,12 @@ export function useFeatureFlag(): UseFeatureFlagReturn {
         setIsLoading(true)
         setError(null)
 
-        const res = await fetch(FEATURE_FLAG_URL, { credentials: "include" })
-        if (!cancelled && res.ok) {
-          const data = (await res.json()) as {
-            market_version?: string
-          }
+        const result = await store.dispatch(
+          marketV2Api.endpoints.getFeatureFlag.initiate(),
+        )
+
+        if (!cancelled && result.data) {
+          const data = (result.data as any).data || result.data
           const serverMv =
             data.market_version === "V1" || data.market_version === "V2"
               ? data.market_version
@@ -107,9 +76,7 @@ export function useFeatureFlag(): UseFeatureFlagReturn {
 
         if (!cancelled) {
           const local = readLocalMarketVersion()
-          if (local) {
-            setMarketVersionState(local)
-          }
+          if (local) setMarketVersionState(local)
         }
       } catch (err) {
         if (!cancelled) {
@@ -117,21 +84,15 @@ export function useFeatureFlag(): UseFeatureFlagReturn {
             err instanceof Error ? err : new Error("Failed to fetch feature flag"),
           )
           const local = readLocalMarketVersion()
-          if (local) {
-            setMarketVersionState(local)
-          }
+          if (local) setMarketVersionState(local)
         }
       } finally {
-        if (!cancelled) {
-          setIsLoading(false)
-        }
+        if (!cancelled) setIsLoading(false)
       }
     }
 
     void load()
-    return () => {
-      cancelled = true
-    }
+    return () => { cancelled = true }
   }, [profile?.username, isFrontendDev])
 
   const setMarketVersion = useCallback(
@@ -139,14 +100,13 @@ export function useFeatureFlag(): UseFeatureFlagReturn {
       try {
         setError(null)
 
-        const res = await fetch(FEATURE_FLAG_URL, {
-          method: "POST",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ market_version: version }),
-        })
+        const result = await store.dispatch(
+          marketV2Api.endpoints.setFeatureFlag.initiate({
+            setFeatureFlagRequest: { market_version: version },
+          }),
+        )
 
-        if (res.ok) {
+        if ("data" in result) {
           localStorage.setItem("market_version", version)
           setMarketVersionState(version)
           return
@@ -158,8 +118,7 @@ export function useFeatureFlag(): UseFeatureFlagReturn {
           return
         }
 
-        const message = await res.text().catch(() => res.statusText)
-        throw new Error(message || `Failed to set market version (${res.status})`)
+        throw new Error("Failed to set market version")
       } catch (err) {
         setError(
           err instanceof Error ? err : new Error("Failed to set feature flag"),
@@ -170,11 +129,5 @@ export function useFeatureFlag(): UseFeatureFlagReturn {
     [isFrontendDev],
   )
 
-  return {
-    marketVersion,
-    isLoading,
-    error,
-    setMarketVersion,
-    isDeveloper,
-  }
+  return { marketVersion, isLoading, error, setMarketVersion, isDeveloper }
 }
