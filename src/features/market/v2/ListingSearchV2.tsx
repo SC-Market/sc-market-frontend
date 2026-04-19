@@ -747,7 +747,7 @@ interface ListingCardV2Props {
   index: number;
 }
 
-function ListingCardV2({ listing, index }: ListingCardV2Props) {
+export function ListingCardV2({ listing, index }: ListingCardV2Props) {
   const theme = useTheme<ExtendedTheme>();
   const { i18n } = useTranslation();
   const navigate = useNavigate();
