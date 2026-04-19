@@ -28,6 +28,7 @@ import { MarkdownEditor } from "../../../components/markdown/Markdown.lazy";
 import { GameItemSearchAutocomplete } from "../components/GameItemSearchAutocomplete";
 import { SelectPhotosArea } from "../../../components/modal/SelectPhotosArea";
 import { LocationSelector } from "../components/stock/LocationSelector";
+import { BulkDiscountTierEditor } from "../../../components/market/BulkDiscountTierEditor";
 import { useCreateListingMutation } from "../../../store/api/v2/market";
 import { useAlertHook } from "../../../hooks/alert/AlertHook";
 import type {
@@ -83,6 +84,7 @@ export function CreateListingV2() {
   const [photos, setPhotos] = useState<string[]>([]);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [pickupMethod, setPickupMethod] = useState<"delivery" | "pickup" | "any" | "">(""); 
+  const [bulkDiscountTiers, setBulkDiscountTiers] = useState<Array<{ min_quantity: number; discount_percent: number }>>([]);
 
   // Stock lots state
   const [stockLots, setStockLots] = useState<StockLotFormData[]>([
@@ -245,6 +247,7 @@ export function CreateListingV2() {
         base_price: pricingMode === "unified" ? basePrice : undefined,
         lots,
         pickup_method: pickupMethod || undefined,
+        bulk_discount_tiers: bulkDiscountTiers.length ? bulkDiscountTiers : undefined,
       };
 
       try {
@@ -391,6 +394,11 @@ export function CreateListingV2() {
               <MenuItem value="pickup">{t("CreateListingV2.pickup", "Pickup (buyer picks up)")}</MenuItem>
               <MenuItem value="any">{t("CreateListingV2.either", "Either (delivery or pickup)")}</MenuItem>
             </TextField>
+          </Grid>
+
+          {/* Bulk Discount Tiers */}
+          <Grid item xs={12}>
+            <BulkDiscountTierEditor tiers={bulkDiscountTiers} onChange={setBulkDiscountTiers} />
           </Grid>
 
           {/* Pricing Section */}

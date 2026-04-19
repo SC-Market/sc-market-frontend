@@ -1317,6 +1317,7 @@ export type CreateListingRequest = {
   photo_resource_ids?: string[]
   /** Pickup method: how the buyer receives the item */
   pickup_method?: "delivery" | "pickup" | "any"
+  bulk_discount_tiers?: { min_quantity: number; discount_percent: number }[]
 }
 export type ListingDetail = {
   /** Listing UUID */
@@ -1479,6 +1480,7 @@ export type ListingSearchResult = {
   photo?: string
   /** Pickup method: delivery, pickup, any, or null (not specified) */
   pickup_method?: ("delivery" | "pickup" | "any" | null) | null
+  has_bulk_discount?: boolean
 }
 export type SearchListingsResponse = {
   /** Array of listing results */

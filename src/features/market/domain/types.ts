@@ -81,6 +81,7 @@ export interface BaseMarketListingSearchResult {
     metadata: unknown
   } | null
   languages?: Array<{ code: string; name: string }>
+  bulk_discount_tiers?: Array<{ min_quantity: number; discount_percent: number }> | null
 }
 
 export type ExtendedUniqueSearchResult = BaseMarketListingSearchResult & {

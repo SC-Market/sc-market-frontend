@@ -807,6 +807,23 @@ function ListingCardV2({ listing, index }: ListingCardV2Props) {
                   }}
                 />
               )}
+              {listing.has_bulk_discount && (
+                <Chip
+                  label="BULK DISCOUNT"
+                  color="info"
+                  size="small"
+                  sx={{
+                    position: "absolute",
+                    bottom: 4,
+                    left: 4,
+                    zIndex: 2,
+                    textTransform: "uppercase",
+                    fontWeight: "bold",
+                    fontSize: "0.65rem",
+                    height: 18,
+                  }}
+                />
+              )}
               <CardMedia
                 component="img"
                 loading="lazy"
