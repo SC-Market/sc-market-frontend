@@ -218,7 +218,6 @@ export function BuyOrderV2Row(props: {
   const navigate = useNavigate()
   const issueAlert = useAlertHook()
   
-  // TODO: Replace with useCancelBuyOrderV2Mutation when API is ready
   const [cancelBuyOrder, { isLoading: isCancelling }] = useCancelBuyOrderMutation()
   const [fulfillBuyOrder, { isLoading: isFulfilling }] = useFulfillBuyOrderMutation()
   
@@ -479,11 +478,6 @@ export function BuyOrderV2Row(props: {
  * - Supports pagination and sorting
  * - Pull-to-refresh on mobile
  * - Empty state when no buy orders
- * 
- * TODO: Connect to V2 API when endpoints are ready:
- * - useSearchBuyOrdersV2Query for fetching buy orders
- * - useCancelBuyOrderV2Mutation for cancellation
- * - Add filters for game_item_id, quality tier, price range
  */
 export function BuyOrdersViewV2() {
   const theme = useTheme<ExtendedTheme>()
