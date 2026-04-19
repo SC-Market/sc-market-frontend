@@ -462,14 +462,13 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["Contractor", "Contractors"],
       }),
-      resolveDomain: build.query<
-        ResolveDomainApiResponse,
-        ResolveDomainApiArg
-      >({
-        query: (hostname) => ({
-          url: `/api/domain/${hostname}`,
-        }),
-      }),
+      resolveDomain: build.query<ResolveDomainApiResponse, ResolveDomainApiArg>(
+        {
+          query: (hostname) => ({
+            url: `/api/domain/${hostname}`,
+          }),
+        },
+      ),
       getWhitelabelConfig: build.query<
         GetWhitelabelConfigApiResponse,
         GetWhitelabelConfigApiArg

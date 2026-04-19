@@ -15,7 +15,7 @@ import { useTheme } from "@mui/material/styles";
 import { useParams, Link as RouterLink } from "react-router-dom";
 import { ExtendedTheme } from "../../../hooks/styles/Theme";
 import { StandardPageLayout } from "../../../components/layout/StandardPageLayout";
-import { useGetListingDetailQuery, useAddToCartMutation, useTrackListingViewMutation } from "../../../store/api/v2/market";
+import { useGetListingDetailQuery, useAddToCartMutation, useTrackViewMutation } from "../../../store/api/v2/market";
 import { VariantBreakdown } from "../../../components/market/v2/VariantBreakdown";
 import { QualityBadge } from "../../../components/market/v2/QualityBadge";
 import { UnderlineLink } from "../../../components/typography/UnderlineLink";
@@ -57,7 +57,7 @@ export function ListingDetailV2() {
   } = useGetListingDetailQuery({ id: id! });
 
   const [addToCart] = useAddToCartMutation();
-  const [trackView] = useTrackListingViewMutation();
+  const [trackView] = useTrackViewMutation();
   const issueAlert = useAlertHook();
 
   // Track view on page load

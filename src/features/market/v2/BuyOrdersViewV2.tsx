@@ -246,7 +246,7 @@ export function BuyOrderV2Row(props: {
   const handleFulfill = async (e: React.MouseEvent) => {
     e.stopPropagation()
     try {
-      const result = await fulfillBuyOrder({ id: row.buy_order_id }).unwrap()
+      const result = await fulfillBuyOrder({ id: row.buy_order_id, body: { variant_id: "", listing_id: "" } }).unwrap()
       issueAlert({
         message: t("buyorder.fulfilled", "Buy order fulfilled"),
         severity: "success",

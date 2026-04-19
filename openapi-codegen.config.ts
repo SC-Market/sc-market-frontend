@@ -9,7 +9,6 @@ const config: ConfigFile = {
   tag: true,
   outputFiles: {
     "./src/store/api/v2/market.ts": {
-      filterEndpoints: (_name, def) => def.path.startsWith("/api/v2"),
       exportName: "marketV2Api",
       tag: true,
     },
