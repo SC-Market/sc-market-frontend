@@ -109,10 +109,6 @@ export function MarketV2Routes() {
   }
 
   // Services (filtered search)
-  if (pathname === "/market/services") {
-    return <ListingSearchV2 />
-  }
-
   // Category (filtered search)
   if (pathname.startsWith("/market/category/")) {
     return <ListingSearchV2 />
