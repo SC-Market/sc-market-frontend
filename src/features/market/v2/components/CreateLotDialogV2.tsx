@@ -140,12 +140,12 @@ export function CreateLotDialogV2({
     // Validate quality value if provided
     if (
       qualityValue !== undefined &&
-      (qualityValue < 0 || qualityValue > 100)
+      (qualityValue < 0 || qualityValue > 1000)
     ) {
       issueAlert({
         message: t(
           "CreateLotDialogV2.invalidQualityValue",
-          "Quality value must be between 0 and 100",
+          "Quality value must be between 0 and 1000",
         ),
         severity: "error",
       })
@@ -273,7 +273,7 @@ export function CreateLotDialogV2({
               "CreateLotDialogV2.qualityValueHelper",
               "Optional: Precise quality value (0-1000)",
             )}
-            inputProps={{ min: 0, max: 100, step: 0.1 }}
+            inputProps={{ min: 0, max: 1000, step: 1 }}
           />
 
           {/* Crafted Source */}

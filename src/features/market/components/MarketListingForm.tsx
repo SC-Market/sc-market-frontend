@@ -382,9 +382,22 @@ export function MarketListingForm(props: { sale_type: "sale" | "auction" }) {
             <Typography variant="subtitle2" fontWeight="bold" sx={{ mb: 1 }}>
               {t("MarketListingForm.stockLots", "Stock Lots")}
             </Typography>
-            {stockLots.map((lot) => (
-              <Grid container spacing={1} key={lot.id} sx={{ mb: 1, p: 1, border: 1, borderColor: "divider", borderRadius: 1 }}>
-                <Grid item xs={6} sm={3}>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+              {t("MarketListingForm.stockLotsHelp", "Define granular inventory with locations and notes")}
+            </Typography>
+            {stockLots.map((lot, index) => (
+              <Grid container spacing={1} key={lot.id} sx={{
+                mb: 1.5, p: 2, border: 1, borderColor: "divider", borderRadius: 1, position: "relative",
+              }}>
+                <Grid item xs={12} sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 0.5 }}>
+                  <Typography variant="subtitle2" fontWeight="bold">
+                    {t("MarketListingForm.lot", "Lot")} {index + 1}
+                  </Typography>
+                  <IconButton size="small" onClick={() => setStockLots(prev => prev.filter(l => l.id !== lot.id))}>
+                    <DeleteOutline fontSize="small" />
+                  </IconButton>
+                </Grid>
+                <Grid item xs={12} sm={6} md={3}>
                   <TextField
                     size="small"
                     fullWidth
@@ -396,9 +409,10 @@ export function MarketListingForm(props: { sale_type: "sale" | "auction" }) {
                       setStockLots(prev => prev.map(l => l.id === lot.id ? { ...l, quantity: val } : l))
                     }}
                     inputProps={{ min: 0 }}
+                    required
                   />
                 </Grid>
-                <Grid item xs={6} sm={3}>
+                <Grid item xs={12} sm={6} md={3}>
                   <LocationSelector
                     value={lot.location_id ?? null}
                     onChange={(id) => setStockLots(prev => prev.map(l => l.id === lot.id ? { ...l, location_id: id ?? undefined } : l))}
@@ -407,16 +421,17 @@ export function MarketListingForm(props: { sale_type: "sale" | "auction" }) {
                     label={t("MarketListingForm.location", "Location")}
                   />
                 </Grid>
-                <Grid item xs={8} sm={4}>
+                <Grid item xs={12} sm={6} md={4}>
                   <TextField
                     size="small"
                     fullWidth
                     label={t("MarketListingForm.notes", "Notes")}
                     value={lot.notes ?? ""}
                     onChange={(e) => setStockLots(prev => prev.map(l => l.id === lot.id ? { ...l, notes: e.target.value || undefined } : l))}
+                    helperText={t("MarketListingForm.notesHelp", "Optional: Internal notes")}
                   />
                 </Grid>
-                <Grid item xs={4} sm={2} sx={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
+                <Grid item xs={12} sm={6} md={2} sx={{ display: "flex", alignItems: "center" }}>
                   <FormControlLabel
                     control={
                       <Switch
@@ -427,9 +442,6 @@ export function MarketListingForm(props: { sale_type: "sale" | "auction" }) {
                     }
                     label={t("MarketListingForm.listed", "Listed")}
                   />
-                  <IconButton size="small" onClick={() => setStockLots(prev => prev.filter(l => l.id !== lot.id))}>
-                    <DeleteOutline fontSize="small" />
-                  </IconButton>
                 </Grid>
               </Grid>
             ))}
