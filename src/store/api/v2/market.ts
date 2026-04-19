@@ -1345,8 +1345,8 @@ export type ListingDetail = {
   expires_at?: string
   /** Array of photo URLs */
   photos?: string[]
-  /** Pickup method */
-  pickup_method?: "delivery" | "pickup" | "any" | null
+  /** Pickup method: delivery, pickup, any, or null (not specified) */
+  pickup_method?: ("delivery" | "pickup" | "any" | null) | null
 }
 export type SellerInfo = {
   /** Seller UUID */
@@ -1435,8 +1435,8 @@ export type UpdateListingRequest = {
   variant_prices?: VariantPriceUpdate[]
   /** Array of stock lot updates (optional) */
   lot_updates?: LotUpdate[]
-  /** Pickup method */
-  pickup_method?: "delivery" | "pickup" | "any" | null
+  /** Pickup method: how the buyer receives the item */
+  pickup_method?: ("delivery" | "pickup" | "any" | null) | null
 }
 export type ListingSearchResult = {
   /** Listing UUID */
@@ -1477,8 +1477,8 @@ export type ListingSearchResult = {
   seller_languages?: string[]
   /** First photo URL (null if no photos) */
   photo?: string
-  /** Pickup method */
-  pickup_method?: "delivery" | "pickup" | "any" | null
+  /** Pickup method: delivery, pickup, any, or null (not specified) */
+  pickup_method?: ("delivery" | "pickup" | "any" | null) | null
 }
 export type SearchListingsResponse = {
   /** Array of listing results */

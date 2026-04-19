@@ -149,6 +149,7 @@ export interface ListingDetails {
   description: string
   item_name: string | null
   game_item_id: string | null
+  delivery_preference?: string | null
 }
 
 export interface MarketAggregateListingComposite {
