@@ -82,6 +82,7 @@ export function CreateListingV2() {
   const [basePrice, setBasePrice] = useState<number>(0);
   const [photos, setPhotos] = useState<string[]>([]);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [pickupMethod, setPickupMethod] = useState<"delivery" | "pickup" | "any" | "">(""); 
 
   // Stock lots state
   const [stockLots, setStockLots] = useState<StockLotFormData[]>([
@@ -243,6 +244,7 @@ export function CreateListingV2() {
         pricing_mode: pricingMode,
         base_price: pricingMode === "unified" ? basePrice : undefined,
         lots,
+        pickup_method: pickupMethod || undefined,
       };
 
       try {
@@ -372,6 +374,24 @@ export function CreateListingV2() {
               />
             </Grid>
           </FormPaper>
+
+          {/* Pickup Method */}
+          <Grid item xs={12}>
+            <TextField
+              select
+              fullWidth
+              size="small"
+              label={t("CreateListingV2.pickupMethod", "Pickup Method")}
+              value={pickupMethod}
+              onChange={(e) => setPickupMethod(e.target.value as any)}
+              helperText={t("CreateListingV2.pickupMethodHelper", "How will the buyer receive the item?")}
+            >
+              <MenuItem value="">{t("CreateListingV2.notSpecified", "Not specified")}</MenuItem>
+              <MenuItem value="delivery">{t("CreateListingV2.delivery", "Delivery (seller delivers)")}</MenuItem>
+              <MenuItem value="pickup">{t("CreateListingV2.pickup", "Pickup (buyer picks up)")}</MenuItem>
+              <MenuItem value="any">{t("CreateListingV2.either", "Either (delivery or pickup)")}</MenuItem>
+            </TextField>
+          </Grid>
 
           {/* Pricing Section */}
           <FormPaper title={t("CreateListingV2.pricing", "Pricing")}>

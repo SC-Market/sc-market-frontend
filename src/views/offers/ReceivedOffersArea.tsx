@@ -65,6 +65,8 @@ import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { useNavigate } from "react-router-dom"
 import { useDebounce } from "../../hooks/useDebounce"
 import { OfferRowSkeleton } from "../../components/skeletons"
+import { useAssignOfferMutation } from "../../store/offer"
+import { has_permission } from "../contractor/OrgRoles"
 
 // Map for all statuses
 const statusTextToKey: Record<string, string> = {
@@ -119,6 +121,16 @@ export function OfferRow(props: {
   const date = useMemo(() => new Date(row.timestamp), [row.timestamp])
   const theme = useTheme<ExtendedTheme>()
   const navigate = useNavigate()
+  const { data: profile } = useGetUserProfileQuery()
+  const [currentOrg] = useCurrentOrg()
+  const [assignOffer] = useAssignOfferMutation()
+  const issueAlert = useAlertHook()
+
+  const canClaim = useMemo(() => {
+    if (row.assigned_to || !currentOrg || !profile) return false
+    if (row.status !== "Waiting for Seller" && row.status !== "Waiting for Customer") return false
+    return has_permission(currentOrg, profile, "claim_orders", profile.contractors)
+  }, [row.assigned_to, row.status, currentOrg, profile])
 
   // Key for translation and colour
   const statusKey = statusTextToKey[row.status] || row.status
@@ -330,12 +342,31 @@ export function OfferRow(props: {
           minWidth: { xs: 70, sm: "auto" },
         }}
       >
-        <Chip
-          label={t(`OffersViewPaginated.${statusKey}`, row.status)}
-          color={statusColor}
-          icon={icon}
-          size={isMobile ? "small" : "medium"}
-        />
+        <Stack alignItems="flex-end" spacing={0.5}>
+          <Chip
+            label={t(`OffersViewPaginated.${statusKey}`, row.status)}
+            color={statusColor}
+            icon={icon}
+            size={isMobile ? "small" : "medium"}
+          />
+          {canClaim && (
+            <Button
+              size="small"
+              variant="outlined"
+              sx={{ fontSize: "0.7rem", py: 0, px: 1, minHeight: 24 }}
+              onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                assignOffer({ session_id: row.id, user_id: profile!.username })
+                  .unwrap()
+                  .then(() => issueAlert({ message: t("orders.claimed", "Offer claimed"), severity: "success" }))
+                  .catch(issueAlert)
+              }}
+            >
+              {t("orders.claimOrder", "Claim")}
+            </Button>
+          )}
+        </Stack>
       </TableCell>
       {/*<TableCell align="right">*/}
       {/*  <Typography variant={"subtitle1"} color={"text.primary"}>*/}

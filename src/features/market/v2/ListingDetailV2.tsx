@@ -258,6 +258,22 @@ export function ListingDetailV2() {
                     </Typography>
                   </>
                 )}
+                {listingData.listing.pickup_method && (
+                  <>
+                    {" • "}
+                    <Chip
+                      size="small"
+                      variant="outlined"
+                      label={
+                        listingData.listing.pickup_method === "delivery"
+                          ? t("listing.delivery", "Delivery")
+                          : listingData.listing.pickup_method === "pickup"
+                            ? t("listing.pickup", "Pickup")
+                            : t("listing.deliveryOrPickup", "Delivery or Pickup")
+                      }
+                    />
+                  </>
+                )}
               </Box>
             </Stack>
           </Grid>
