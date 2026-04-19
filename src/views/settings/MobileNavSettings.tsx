@@ -25,6 +25,8 @@ import {
 } from "@mui/icons-material"
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd"
 import { useTranslation } from "react-i18next"
+import { CURRENT_CUSTOM_ORG } from "../../hooks/contractor/CustomDomain"
+import { getDisabledTabs } from "../../components/sidebar/utils/sidebarFilters"
 
 interface NavTab {
   id: string
@@ -132,6 +134,15 @@ const STORAGE_KEY = "mobile_nav_tabs"
 export function MobileNavSettings() {
   const { t } = useTranslation()
 
+  // On white-label, hide tabs disabled in sidebar config
+  const disabledKeys = CURRENT_CUSTOM_ORG ? getDisabledTabs() : new Set<string>()
+  const hiddenOnWhiteLabel = new Set(["contractors", "recruiting"])
+  const availableTabs = ALL_NAV_TABS.filter((tab) => {
+    if (CURRENT_CUSTOM_ORG && hiddenOnWhiteLabel.has(tab.id)) return false
+    if (disabledKeys.has(tab.id)) return false
+    return true
+  })
+
   const [selectedTabs, setSelectedTabs] = useState<string[]>(() => {
     const saved = localStorage.getItem(STORAGE_KEY)
     return saved ? JSON.parse(saved) : DEFAULT_TABS
@@ -171,7 +182,7 @@ export function MobileNavSettings() {
   }
 
   const getTabInfo = (tabId: string) =>
-    ALL_NAV_TABS.find((tab) => tab.id === tabId)
+    availableTabs.find((tab) => tab.id === tabId)
 
   return (
     <Box>
@@ -244,7 +255,7 @@ export function MobileNavSettings() {
           {t("settings.mobileNav.available")}
         </Typography>
         <Stack spacing={1}>
-          {ALL_NAV_TABS.filter((tab) => !selectedTabs.includes(tab.id)).map(
+          {availableTabs.filter((tab) => !selectedTabs.includes(tab.id)).map(
             (tab) => (
               <FormControlLabel
                 key={tab.id}

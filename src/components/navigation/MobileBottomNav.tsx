@@ -32,6 +32,8 @@ import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
 import { usePendingOrderCount } from "../../hooks/orders/usePendingOrderCount"
 import { haptic } from "../../util/haptics"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
+import { CURRENT_CUSTOM_ORG, getWhiteLabelConfig } from "../../hooks/contractor/CustomDomain"
+import { getDisabledTabs } from "../sidebar/utils/sidebarFilters"
 
 interface NavTabConfig {
   id: string
@@ -204,11 +206,18 @@ export function MobileBottomNav() {
     const userTabs = saved ? JSON.parse(saved) : null
     const tabIds = userTabs || defaultTabs
 
+    // On white-label, filter out tabs disabled in sidebar config
+    const disabledKeys = CURRENT_CUSTOM_ORG ? getDisabledTabs() : new Set<string>()
+
     return tabIds
       .map((id: string) => getTabConfig(id))
       .filter((tab: NavTabConfig | null): tab is NavTabConfig => {
         if (!tab) return false
         if (tab.requiresAuth && !isLoggedIn) return false
+        // Hide tabs disabled by white-label sidebar config
+        if (disabledKeys.has(tab.id)) return false
+        // Hide contractors/recruiting on white-label (same as sidebar)
+        if (CURRENT_CUSTOM_ORG && (tab.id === "contractors" || tab.id === "recruiting")) return false
         return true
       })
       .slice(0, 5)
