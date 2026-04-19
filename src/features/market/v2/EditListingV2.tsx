@@ -439,23 +439,25 @@ export function EditListingV2() {
           </FormPaper>
 
           {/* Pickup Method */}
-          <Grid item xs={12}>
-            <TextField
-              select
-              fullWidth
-              size="small"
-              label={t("EditListingV2.pickupMethod", "Pickup Method")}
-              value={pickupMethod}
-              onChange={(e) => setPickupMethod(e.target.value as any)}
-              disabled={!canEdit}
-              helperText={t("EditListingV2.pickupMethodHelper", "How will the buyer receive the item?")}
-            >
-              <MenuItem value="">{t("EditListingV2.notSpecified", "Not specified")}</MenuItem>
-              <MenuItem value="delivery">{t("EditListingV2.delivery", "Delivery (seller delivers)")}</MenuItem>
-              <MenuItem value="pickup">{t("EditListingV2.pickup", "Pickup (buyer picks up)")}</MenuItem>
-              <MenuItem value="any">{t("EditListingV2.either", "Either (delivery or pickup)")}</MenuItem>
-            </TextField>
-          </Grid>
+          <FormPaper title={t("EditListingV2.pickupMethod", "Pickup Method")}>
+            <Grid item xs={12}>
+              <TextField
+                select
+                fullWidth
+                size="small"
+                label={t("EditListingV2.pickupMethod", "Pickup Method")}
+                value={pickupMethod}
+                onChange={(e) => setPickupMethod(e.target.value as any)}
+                disabled={!canEdit}
+                helperText={t("EditListingV2.pickupMethodHelper", "How will the buyer receive the item?")}
+              >
+                <MenuItem value="">{t("EditListingV2.notSpecified", "Not specified")}</MenuItem>
+                <MenuItem value="delivery">{t("EditListingV2.delivery", "Delivery (seller delivers)")}</MenuItem>
+                <MenuItem value="pickup">{t("EditListingV2.pickup", "Pickup (buyer picks up)")}</MenuItem>
+                <MenuItem value="any">{t("EditListingV2.either", "Either (delivery or pickup)")}</MenuItem>
+              </TextField>
+            </Grid>
+          </FormPaper>
 
           {/* Bulk Discount Tiers */}
           <FormPaper title={t("market.bulkDiscountTiers", "Bulk Discounts")}>
