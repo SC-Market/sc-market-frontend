@@ -20,6 +20,7 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { Stack } from "@mui/system"
 import { useTranslation } from "react-i18next"
 import { ORG_ROUTE_REST_TO_CANONICAL } from "./components/SidebarLinkBody"
+import { CURRENT_CUSTOM_ORG } from "../../hooks/contractor/CustomDomain"
 
 const localTheme = createTheme({
   palette: {
@@ -34,9 +35,19 @@ export function SidebarActorSelect() {
   const { data: profile } = useGetUserProfileQuery()
 
   const [cookies, setCookie, deleteCookie] = useCookies(["current_contractor"])
+
+  // On white-label domains, force the org to the white-label org
+  const isWhiteLabel = !!CURRENT_CUSTOM_ORG
   const [contractorSpectrumID, setContractorSpectrumID] = useState(
-    cookies.current_contractor || "_",
+    isWhiteLabel ? CURRENT_CUSTOM_ORG! : (cookies.current_contractor || "_"),
   )
+
+  // Keep it locked on white-label
+  useEffect(() => {
+    if (isWhiteLabel && contractorSpectrumID !== CURRENT_CUSTOM_ORG) {
+      setContractorSpectrumID(CURRENT_CUSTOM_ORG!)
+    }
+  }, [isWhiteLabel, contractorSpectrumID])
 
   const contractor = useGetContractorBySpectrumIDQuery(contractorSpectrumID!, {
     skip: !contractorSpectrumID || contractorSpectrumID === "_",
@@ -97,6 +108,9 @@ export function SidebarActorSelect() {
   ])
 
   const theme = useTheme<ExtendedTheme>()
+
+  // On white-label, don't render the selector at all — org is auto-set
+  if (isWhiteLabel) return null
 
   return (
     <Paper
