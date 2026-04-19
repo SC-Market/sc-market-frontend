@@ -69,52 +69,36 @@ export function V2Gate({ v1, v2 }: { v1: React.ComponentType; v2: React.LazyExot
   )
 }
 
+// V1 page components (lazy, module-scope to prevent remounts)
+const ViewMarketListingV1 = React.lazy(() => import("../../pages/market/ViewMarketListing").then(m => ({ default: m.ViewMarketListing })))
+const ViewMarketAggregateV1 = React.lazy(() => import("../../pages/market/ViewMarketAggregate").then(m => ({ default: m.ViewMarketAggregate })))
+const ViewMarketMultipleV1 = React.lazy(() => import("../../pages/market/ViewMarketMultiple").then(m => ({ default: m.ViewMarketMultiple })))
+const MarketCreateV1 = React.lazy(() => import("../../pages/market/MarketCreate").then(m => ({ default: m.MarketCreate })))
+const MyMarketListingsV1 = React.lazy(() => import("../../pages/market/MyMarketListings").then(m => ({ default: m.MyMarketListings })))
+const MarketCartV1 = React.lazy(() => import("../../pages/market/MarketCart").then(m => ({ default: m.MarketCart })))
+const ManageStockV1 = React.lazy(() => import("../../pages/market/ManageStock").then(m => ({ default: m.ManageStock })))
+const ManageStockLotsV1 = React.lazy(() => import("../../pages/market/ManageStockLots").then(m => ({ default: m.ManageStockLots })))
+const EditMarketListingV1 = React.lazy(() => import("../../pages/market/ViewMarketListing").then(m => ({ default: m.EditMarketListing })))
+const EditMultipleListingV1 = React.lazy(() => import("../../pages/market/ViewMarketListing").then(m => ({ default: m.EditMultipleListing })))
+const CreateBuyOrderV1 = React.lazy(() => import("../../pages/market/CreateBuyOrder").then(m => ({ default: m.CreateBuyOrder })))
+
 // Pre-built gates for App.tsx route definitions
-export const ListingDetailGate = () => {
-  const V1 = React.lazy(() => import("../../pages/market/ViewMarketListing").then(m => ({ default: m.ViewMarketListing })))
-  return <V2Gate v1={V1} v2={ListingDetailV2} />
-}
-export const AggregateDetailGate = () => {
-  const V1 = React.lazy(() => import("../../pages/market/ViewMarketAggregate").then(m => ({ default: m.ViewMarketAggregate })))
-  return <V2Gate v1={V1} v2={MarketAggregateViewV2} />
-}
-export const MultipleDetailGate = () => {
-  const V1 = React.lazy(() => import("../../pages/market/ViewMarketMultiple").then(m => ({ default: m.ViewMarketMultiple })))
-  return <V2Gate v1={V1} v2={MarketMultipleViewV2} />
-}
-export const CreateListingGate = () => {
-  const V1 = React.lazy(() => import("../../pages/market/MarketCreate").then(m => ({ default: m.MarketCreate })))
-  return <V2Gate v1={V1} v2={CreateListingV2} />
-}
-export const MyListingsGate = () => {
-  const V1 = React.lazy(() => import("../../pages/market/MyMarketListings").then(m => ({ default: m.MyMarketListings })))
-  return <V2Gate v1={V1} v2={MyListingsV2} />
-}
-export const MarketCartGate = () => {
-  const V1 = React.lazy(() => import("../../pages/market/MarketCart").then(m => ({ default: m.MarketCart })))
-  return <V2Gate v1={V1} v2={MarketCartV2} />
-}
+export const ListingDetailGate = () => <V2Gate v1={ViewMarketListingV1} v2={ListingDetailV2} />
+export const AggregateDetailGate = () => <V2Gate v1={ViewMarketAggregateV1} v2={MarketAggregateViewV2} />
+export const MultipleDetailGate = () => <V2Gate v1={ViewMarketMultipleV1} v2={MarketMultipleViewV2} />
+export const CreateListingGate = () => <V2Gate v1={MarketCreateV1} v2={CreateListingV2} />
+export const MyListingsGate = () => <V2Gate v1={MyMarketListingsV1} v2={MyListingsV2} />
+export const MarketCartGate = () => <V2Gate v1={MarketCartV1} v2={MarketCartV2} />
+export const EditListingGate = () => <V2Gate v1={EditMarketListingV1} v2={EditListingV2} />
+export const EditMultipleGate = () => <V2Gate v1={EditMultipleListingV1} v2={EditListingV2} />
+export const CreateBuyOrderGate = () => <V2Gate v1={CreateBuyOrderV1} v2={BuyOrdersViewV2} />
 export const ManageStockGate = () => {
-  const V1 = React.lazy(() => import("../../pages/market/ManageStock").then(m => ({ default: m.ManageStock })))
   const { marketVersion } = useFeatureFlag()
   if (marketVersion === "V2") return <React.Suspense fallback={<MarketLoadingFallback />}><StockManagerV2 listingId="" itemId="" /></React.Suspense>
-  return <React.Suspense fallback={<MarketLoadingFallback />}><V1 /></React.Suspense>
+  return <React.Suspense fallback={<MarketLoadingFallback />}><ManageStockV1 /></React.Suspense>
 }
 export const ManageStockLotsGate = () => {
-  const V1 = React.lazy(() => import("../../pages/market/ManageStockLots").then(m => ({ default: m.ManageStockLots })))
   const { marketVersion } = useFeatureFlag()
   if (marketVersion === "V2") return <React.Suspense fallback={<MarketLoadingFallback />}><BulkStockManagementV2 listingId="" itemId="" /></React.Suspense>
-  return <React.Suspense fallback={<MarketLoadingFallback />}><V1 /></React.Suspense>
-}
-export const EditListingGate = () => {
-  const V1 = React.lazy(() => import("../../pages/market/ViewMarketListing").then(m => ({ default: m.EditMarketListing })))
-  return <V2Gate v1={V1} v2={EditListingV2} />
-}
-export const EditMultipleGate = () => {
-  const V1 = React.lazy(() => import("../../pages/market/ViewMarketListing").then(m => ({ default: m.EditMultipleListing })))
-  return <V2Gate v1={V1} v2={EditListingV2} />
-}
-export const CreateBuyOrderGate = () => {
-  const V1 = React.lazy(() => import("../../pages/market/CreateBuyOrder").then(m => ({ default: m.CreateBuyOrder })))
-  return <V2Gate v1={V1} v2={BuyOrdersViewV2} />
+  return <React.Suspense fallback={<MarketLoadingFallback />}><ManageStockLotsV1 /></React.Suspense>
 }
