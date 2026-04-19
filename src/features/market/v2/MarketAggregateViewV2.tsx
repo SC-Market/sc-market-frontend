@@ -1021,7 +1021,7 @@ export function BuyOrderRowV2(props: {
 
   const doFulfill = useCallback(
     (agreedPricePerUnit?: number) => {
-      fulfillBuyOrderMut({ id: buy_order.buy_order_id })
+      fulfillBuyOrderMut({ id: buy_order.buy_order_id, body: { variant_id: "", listing_id: "" } })
         .unwrap()
         .then((result) => {
           issueAlert({

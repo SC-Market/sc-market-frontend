@@ -3,6 +3,7 @@ export const addTagTypes = [
   "Variant Types V2",
   "Stock Lots V2",
   "Orders V2",
+  "Offers V2",
   "Listings V2",
   "Health",
   "Game Items V2",
@@ -22,7 +23,7 @@ const injectedRtkApi = api
         GetVariantTypesApiResponse,
         GetVariantTypesApiArg
       >({
-        query: () => ({ url: `/api/v2/variant-types` }),
+        query: () => ({ url: `/variant-types` }),
         providesTags: ["Variant Types V2"],
       }),
       createStockLot: build.mutation<
@@ -30,7 +31,7 @@ const injectedRtkApi = api
         CreateStockLotApiArg
       >({
         query: (queryArg) => ({
-          url: `/api/v2/stock-lots`,
+          url: `/stock-lots`,
           method: "POST",
           body: queryArg.createStockLotRequest,
         }),
@@ -38,7 +39,7 @@ const injectedRtkApi = api
       }),
       getStockLots: build.query<GetStockLotsApiResponse, GetStockLotsApiArg>({
         query: (queryArg) => ({
-          url: `/api/v2/stock-lots`,
+          url: `/stock-lots`,
           params: {
             listing_id: queryArg.listingId,
             game_item_id: queryArg.gameItemId,
@@ -58,9 +59,19 @@ const injectedRtkApi = api
         UpdateStockLotApiArg
       >({
         query: (queryArg) => ({
-          url: `/api/v2/stock-lots/${queryArg.id}`,
+          url: `/stock-lots/${queryArg.id}`,
           method: "PUT",
           body: queryArg.updateStockLotRequest,
+        }),
+        invalidatesTags: ["Stock Lots V2"],
+      }),
+      deleteStockLot: build.mutation<
+        DeleteStockLotApiResponse,
+        DeleteStockLotApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/stock-lots/${queryArg.id}`,
+          method: "DELETE",
         }),
         invalidatesTags: ["Stock Lots V2"],
       }),
@@ -69,7 +80,7 @@ const injectedRtkApi = api
         BulkUpdateStockLotsApiArg
       >({
         query: (queryArg) => ({
-          url: `/api/v2/stock-lots/bulk-update`,
+          url: `/stock-lots/bulk-update`,
           method: "POST",
           body: queryArg.bulkUpdateStockLotsRequest,
         }),
@@ -77,7 +88,7 @@ const injectedRtkApi = api
       }),
       createOrder: build.mutation<CreateOrderApiResponse, CreateOrderApiArg>({
         query: (queryArg) => ({
-          url: `/api/v2/orders`,
+          url: `/orders`,
           method: "POST",
           body: queryArg.createOrderRequest,
         }),
@@ -85,7 +96,7 @@ const injectedRtkApi = api
       }),
       getOrders: build.query<GetOrdersApiResponse, GetOrdersApiArg>({
         query: (queryArg) => ({
-          url: `/api/v2/orders`,
+          url: `/orders`,
           params: {
             status: queryArg.status,
             role: queryArg.role,
@@ -103,15 +114,34 @@ const injectedRtkApi = api
         GetOrderDetailApiResponse,
         GetOrderDetailApiArg
       >({
-        query: (queryArg) => ({ url: `/api/v2/orders/${queryArg.orderId}` }),
+        query: (queryArg) => ({ url: `/orders/${queryArg.orderId}` }),
         providesTags: ["Orders V2"],
+      }),
+      getOfferSession: build.query<
+        GetOfferSessionApiResponse,
+        GetOfferSessionApiArg
+      >({
+        query: (queryArg) => ({ url: `/offers/${queryArg.sessionId}` }),
+        providesTags: ["Offers V2"],
+      }),
+      searchOffers: build.query<SearchOffersApiResponse, SearchOffersApiArg>({
+        query: (queryArg) => ({
+          url: `/offers/search`,
+          params: {
+            role: queryArg.role,
+            status: queryArg.status,
+            page: queryArg.page,
+            page_size: queryArg.pageSize,
+          },
+        }),
+        providesTags: ["Offers V2"],
       }),
       createListing: build.mutation<
         CreateListingApiResponse,
         CreateListingApiArg
       >({
         query: (queryArg) => ({
-          url: `/api/v2/listings`,
+          url: `/listings`,
           method: "POST",
           body: queryArg.createListingRequest,
         }),
@@ -121,7 +151,7 @@ const injectedRtkApi = api
         GetListingDetailApiResponse,
         GetListingDetailApiArg
       >({
-        query: (queryArg) => ({ url: `/api/v2/listings/${queryArg.id}` }),
+        query: (queryArg) => ({ url: `/listings/${queryArg.id}` }),
         providesTags: ["Listings V2"],
       }),
       updateListing: build.mutation<
@@ -129,7 +159,7 @@ const injectedRtkApi = api
         UpdateListingApiArg
       >({
         query: (queryArg) => ({
-          url: `/api/v2/listings/${queryArg.id}`,
+          url: `/listings/${queryArg.id}`,
           method: "PUT",
           body: queryArg.updateListingRequest,
         }),
@@ -140,7 +170,7 @@ const injectedRtkApi = api
         DeleteListingApiArg
       >({
         query: (queryArg) => ({
-          url: `/api/v2/listings/${queryArg.id}`,
+          url: `/listings/${queryArg.id}`,
           method: "DELETE",
         }),
         invalidatesTags: ["Listings V2"],
@@ -150,7 +180,7 @@ const injectedRtkApi = api
         SearchListingsApiArg
       >({
         query: (queryArg) => ({
-          url: `/api/v2/listings/search`,
+          url: `/listings/search`,
           params: {
             text: queryArg.text,
             game_item_id: queryArg.gameItemId,
@@ -176,7 +206,7 @@ const injectedRtkApi = api
       getMyListings: build.query<GetMyListingsApiResponse, GetMyListingsApiArg>(
         {
           query: (queryArg) => ({
-            url: `/api/v2/listings/mine`,
+            url: `/listings/mine`,
             params: {
               status: queryArg.status,
               page: queryArg.page,
@@ -193,18 +223,52 @@ const injectedRtkApi = api
         RefreshListingApiArg
       >({
         query: (queryArg) => ({
-          url: `/api/v2/listings/${queryArg.id}/refresh`,
+          url: `/listings/${queryArg.id}/refresh`,
           method: "POST",
         }),
         invalidatesTags: ["Listings V2"],
       }),
+      trackView: build.mutation<TrackViewApiResponse, TrackViewApiArg>({
+        query: (queryArg) => ({
+          url: `/listings/${queryArg.id}/views`,
+          method: "POST",
+        }),
+        invalidatesTags: ["Listings V2"],
+      }),
+      uploadPhotos: build.mutation<UploadPhotosApiResponse, UploadPhotosApiArg>(
+        {
+          query: (queryArg) => ({
+            url: `/listings/${queryArg.id}/photos`,
+            method: "POST",
+          }),
+          invalidatesTags: ["Listings V2"],
+        },
+      ),
       getHealth: build.query<GetHealthApiResponse, GetHealthApiArg>({
-        query: () => ({ url: `/api/v2/health` }),
+        query: () => ({ url: `/health` }),
         providesTags: ["Health"],
       }),
+      searchGameItems: build.query<
+        SearchGameItemsApiResponse,
+        SearchGameItemsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/game-items/search`,
+          params: {
+            query: queryArg.query,
+          },
+        }),
+        providesTags: ["Game Items V2"],
+      }),
+      getCategories: build.query<GetCategoriesApiResponse, GetCategoriesApiArg>(
+        {
+          query: () => ({ url: `/game-items/categories` }),
+          providesTags: ["Game Items V2"],
+        },
+      ),
       getListings: build.query<GetListingsApiResponse, GetListingsApiArg>({
         query: (queryArg) => ({
-          url: `/api/v2/game-items/${queryArg.id}/listings`,
+          url: `/game-items/${queryArg.id}/listings`,
           params: {
             quality_tier: queryArg.qualityTier,
             sort_by: queryArg.sortBy,
@@ -219,7 +283,7 @@ const injectedRtkApi = api
         GetFeatureFlagApiResponse,
         GetFeatureFlagApiArg
       >({
-        query: () => ({ url: `/api/v2/debug/feature-flag` }),
+        query: () => ({ url: `/debug/feature-flag` }),
         providesTags: ["Debug V2"],
       }),
       setFeatureFlag: build.mutation<
@@ -227,19 +291,19 @@ const injectedRtkApi = api
         SetFeatureFlagApiArg
       >({
         query: (queryArg) => ({
-          url: `/api/v2/debug/feature-flag`,
+          url: `/debug/feature-flag`,
           method: "POST",
           body: queryArg.setFeatureFlagRequest,
         }),
         invalidatesTags: ["Debug V2"],
       }),
       getCart: build.query<GetCartApiResponse, GetCartApiArg>({
-        query: () => ({ url: `/api/v2/cart` }),
+        query: () => ({ url: `/cart` }),
         providesTags: ["Cart V2"],
       }),
       addToCart: build.mutation<AddToCartApiResponse, AddToCartApiArg>({
         query: (queryArg) => ({
-          url: `/api/v2/cart/add`,
+          url: `/cart/add`,
           method: "POST",
           body: queryArg.addToCartRequest,
         }),
@@ -250,7 +314,7 @@ const injectedRtkApi = api
         UpdateCartItemApiArg
       >({
         query: (queryArg) => ({
-          url: `/api/v2/cart/${queryArg.id}`,
+          url: `/cart/${queryArg.id}`,
           method: "PUT",
           body: queryArg.updateCartItemRequest,
         }),
@@ -261,7 +325,7 @@ const injectedRtkApi = api
         RemoveCartItemApiArg
       >({
         query: (queryArg) => ({
-          url: `/api/v2/cart/${queryArg.id}`,
+          url: `/cart/${queryArg.id}`,
           method: "DELETE",
         }),
         invalidatesTags: ["Cart V2"],
@@ -269,19 +333,19 @@ const injectedRtkApi = api
       checkoutCart: build.mutation<CheckoutCartApiResponse, CheckoutCartApiArg>(
         {
           query: (queryArg) => ({
-            url: `/api/v2/cart/checkout`,
+            url: `/cart/checkout`,
             method: "POST",
             body: queryArg.checkoutCartRequest,
           }),
           invalidatesTags: ["Cart V2"],
         },
       ),
-      createBuyOrder: build.mutation<
-        CreateBuyOrderApiResponse,
-        CreateBuyOrderApiArg
+      createPurchase: build.mutation<
+        CreatePurchaseApiResponse,
+        CreatePurchaseApiArg
       >({
         query: (queryArg) => ({
-          url: `/api/v2/buy-orders`,
+          url: `/buy-orders`,
           method: "POST",
           body: queryArg.createBuyOrderRequest,
         }),
@@ -292,7 +356,7 @@ const injectedRtkApi = api
         CreateStandingBuyOrderApiArg
       >({
         query: (queryArg) => ({
-          url: `/api/v2/buy-orders/standing`,
+          url: `/buy-orders/standing`,
           method: "POST",
           body: queryArg.createStandingBuyOrderRequest,
         }),
@@ -303,7 +367,7 @@ const injectedRtkApi = api
         SearchBuyOrdersApiArg
       >({
         query: (queryArg) => ({
-          url: `/api/v2/buy-orders/search`,
+          url: `/buy-orders/search`,
           params: {
             game_item_id: queryArg.gameItemId,
             quality_tier_min: queryArg.qualityTierMin,
@@ -319,7 +383,7 @@ const injectedRtkApi = api
         GetMyBuyOrdersApiArg
       >({
         query: (queryArg) => ({
-          url: `/api/v2/buy-orders/mine`,
+          url: `/buy-orders/mine`,
           params: {
             status: queryArg.status,
             page: queryArg.page,
@@ -333,7 +397,7 @@ const injectedRtkApi = api
         UpdateBuyOrderApiArg
       >({
         query: (queryArg) => ({
-          url: `/api/v2/buy-orders/${queryArg.id}`,
+          url: `/buy-orders/${queryArg.id}`,
           method: "PUT",
           body: queryArg.updateStandingBuyOrderRequest,
         }),
@@ -344,8 +408,19 @@ const injectedRtkApi = api
         CancelBuyOrderApiArg
       >({
         query: (queryArg) => ({
-          url: `/api/v2/buy-orders/${queryArg.id}`,
+          url: `/buy-orders/${queryArg.id}`,
           method: "DELETE",
+        }),
+        invalidatesTags: ["Buy Orders V2"],
+      }),
+      fulfillBuyOrder: build.mutation<
+        FulfillBuyOrderApiResponse,
+        FulfillBuyOrderApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/buy-orders/${queryArg.id}/fulfill`,
+          method: "POST",
+          body: queryArg.body,
         }),
         invalidatesTags: ["Buy Orders V2"],
       }),
@@ -354,7 +429,7 @@ const injectedRtkApi = api
         GetPriceHistoryApiArg
       >({
         query: (queryArg) => ({
-          url: `/api/v2/analytics/price-history`,
+          url: `/analytics/price-history`,
           params: {
             game_item_id: queryArg.gameItemId,
             quality_tier: queryArg.qualityTier,
@@ -370,7 +445,7 @@ const injectedRtkApi = api
         GetQualityDistributionApiArg
       >({
         query: (queryArg) => ({
-          url: `/api/v2/analytics/quality-distribution`,
+          url: `/analytics/quality-distribution`,
           params: {
             game_item_id: queryArg.gameItemId,
             start_date: queryArg.startDate,
@@ -384,7 +459,7 @@ const injectedRtkApi = api
         GetSellerStatsApiArg
       >({
         query: (queryArg) => ({
-          url: `/api/v2/analytics/seller-stats`,
+          url: `/analytics/seller-stats`,
           params: {
             seller_id: queryArg.sellerId,
           },
@@ -392,13 +467,13 @@ const injectedRtkApi = api
         providesTags: ["Analytics V2"],
       }),
       getConfig: build.query<GetConfigApiResponse, GetConfigApiArg>({
-        query: () => ({ url: `/api/v2/admin/feature-flags/config` }),
+        query: () => ({ url: `/admin/feature-flags/config` }),
         providesTags: ["Admin Feature Flags"],
       }),
       updateConfig: build.mutation<UpdateConfigApiResponse, UpdateConfigApiArg>(
         {
           query: (queryArg) => ({
-            url: `/api/v2/admin/feature-flags/config`,
+            url: `/admin/feature-flags/config`,
             method: "PUT",
             body: queryArg.updateConfigRequest,
           }),
@@ -406,7 +481,7 @@ const injectedRtkApi = api
         },
       ),
       getStats: build.query<GetStatsApiResponse, GetStatsApiArg>({
-        query: () => ({ url: `/api/v2/admin/feature-flags/stats` }),
+        query: () => ({ url: `/admin/feature-flags/stats` }),
         providesTags: ["Admin Feature Flags"],
       }),
       getUserOverrides: build.query<
@@ -414,7 +489,7 @@ const injectedRtkApi = api
         GetUserOverridesApiArg
       >({
         query: (queryArg) => ({
-          url: `/api/v2/admin/feature-flags/overrides`,
+          url: `/admin/feature-flags/overrides`,
           params: {
             page: queryArg.page,
             pageSize: queryArg.pageSize,
@@ -427,7 +502,7 @@ const injectedRtkApi = api
         SetUserOverrideApiArg
       >({
         query: (queryArg) => ({
-          url: `/api/v2/admin/feature-flags/overrides`,
+          url: `/admin/feature-flags/overrides`,
           method: "POST",
           body: queryArg.setUserOverrideRequest,
         }),
@@ -438,56 +513,10 @@ const injectedRtkApi = api
         RemoveUserOverrideApiArg
       >({
         query: (queryArg) => ({
-          url: `/api/v2/admin/feature-flags/overrides/${queryArg.userId}`,
+          url: `/admin/feature-flags/overrides/${queryArg.userId}`,
           method: "DELETE",
         }),
         invalidatesTags: ["Admin Feature Flags"],
-      }),
-      searchGameItems: build.query<
-        SearchGameItemsApiResponse,
-        SearchGameItemsApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/api/v2/game-items/search`,
-          params: { query: queryArg.query },
-        }),
-        providesTags: ["Game Items V2"],
-      }),
-      getCategories: build.query<
-        GetCategoriesApiResponse,
-        GetCategoriesApiArg
-      >({
-        query: () => ({ url: `/api/v2/game-items/categories` }),
-        providesTags: ["Game Items V2"],
-      }),
-      fulfillBuyOrder: build.mutation<
-        FulfillBuyOrderApiResponse,
-        FulfillBuyOrderApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/api/v2/buy-orders/${queryArg.id}/fulfill`,
-          method: "POST",
-        }),
-        invalidatesTags: ["Buy Orders V2"],
-      }),
-      deleteStockLot: build.mutation<
-        DeleteStockLotApiResponse,
-        DeleteStockLotApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/api/v2/stock-lots/${queryArg.id}`,
-          method: "DELETE",
-        }),
-        invalidatesTags: ["Stock Lots V2"],
-      }),
-      trackListingView: build.mutation<
-        TrackListingViewApiResponse,
-        TrackListingViewApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/api/v2/listings/${queryArg.id}/views`,
-          method: "POST",
-        }),
       }),
     }),
     overrideExisting: false,
@@ -532,6 +561,13 @@ export type UpdateStockLotApiArg = {
   /** Update request with optional fields */
   updateStockLotRequest: UpdateStockLotRequest
 }
+export type DeleteStockLotApiResponse = /** status 200 Ok */ {
+  message: string
+}
+export type DeleteStockLotApiArg = {
+  /** Stock lot UUID */
+  id: string
+}
 export type BulkUpdateStockLotsApiResponse =
   /** status 200 Bulk update results with success/failure counts */ BulkUpdateStockLotsResponse
 export type BulkUpdateStockLotsApiArg = {
@@ -561,6 +597,19 @@ export type GetOrderDetailApiResponse =
 export type GetOrderDetailApiArg = {
   /** UUID of the order to retrieve */
   orderId: string
+}
+export type GetOfferSessionApiResponse =
+  /** status 200 Ok */ GetOfferSessionV2Response
+export type GetOfferSessionApiArg = {
+  sessionId: string
+}
+export type SearchOffersApiResponse =
+  /** status 200 Ok */ SearchOffersV2Response
+export type SearchOffersApiArg = {
+  role?: "customer" | "seller"
+  status?: "active" | "closed"
+  page?: number
+  pageSize?: number
 }
 export type CreateListingApiResponse =
   /** status 200 Created listing with listing_id */ CreateListingResponse
@@ -623,9 +672,7 @@ export type SearchListingsApiArg = {
   sortOrder?: "asc" | "desc"
   languageCodes?: string
   listingType?: "single" | "bundle" | "bulk"
-  /** Filter by seller user UUID */
   sellerId?: string
-  /** Filter by contractor UUID */
   contractorId?: string
 }
 export type GetMyListingsApiResponse =
@@ -651,8 +698,33 @@ export type RefreshListingApiArg = {
   /** Listing UUID */
   id: string
 }
+export type TrackViewApiResponse = /** status 200 Ok */ {
+  views: number
+}
+export type TrackViewApiArg = {
+  /** Listing UUID */
+  id: string
+}
+export type UploadPhotosApiResponse = /** status 200 Ok */ {
+  photos: {
+    url: string
+    resource_id: string
+  }[]
+}
+export type UploadPhotosApiArg = {
+  /** Listing UUID */
+  id: string
+}
 export type GetHealthApiResponse = /** status 200 Ok */ HealthResponse
 export type GetHealthApiArg = void
+export type SearchGameItemsApiResponse =
+  /** status 200 Ok */ GameItemSearchResult[]
+export type SearchGameItemsApiArg = {
+  /** Search text */
+  query?: string
+}
+export type GetCategoriesApiResponse = /** status 200 Ok */ GameItemCategory[]
+export type GetCategoriesApiArg = void
 export type GetListingsApiResponse =
   /** status 200 Game item listings with quality distribution */ GetGameItemListingsResponse
 export type GetListingsApiArg = {
@@ -709,10 +781,10 @@ export type CheckoutCartApiArg = {
   /** Checkout request with optional price change confirmation */
   checkoutCartRequest: CheckoutCartRequest
 }
-export type CreateBuyOrderApiResponse =
+export type CreatePurchaseApiResponse =
   /** status 200 Created order with order_id and purchase details */ CreateBuyOrderResponse
-export type CreateBuyOrderApiArg = {
-  /** Buy order request with listing, variant, and quantity */
+export type CreatePurchaseApiArg = {
+  /** Purchase request with listing, variant, and quantity */
   createBuyOrderRequest: CreateBuyOrderRequest
 }
 export type CreateStandingBuyOrderApiResponse =
@@ -741,19 +813,20 @@ export type UpdateBuyOrderApiArg = {
   id: string
   updateStandingBuyOrderRequest: UpdateStandingBuyOrderRequest
 }
-export type UpdateStandingBuyOrderRequest = {
-  quantity?: number
-  price_per_unit?: number
-  quality_tier_min?: number
-  quality_tier_max?: number
-  negotiable?: boolean
-  expires_in_days?: number
-}
 export type CancelBuyOrderApiResponse = /** status 200 Ok */ {
   message: string
 }
 export type CancelBuyOrderApiArg = {
   id: string
+}
+export type FulfillBuyOrderApiResponse =
+  /** status 200 Ok */ CreateBuyOrderResponse
+export type FulfillBuyOrderApiArg = {
+  id: string
+  body: {
+    variant_id: string
+    listing_id: string
+  }
 }
 export type GetPriceHistoryApiResponse =
   /** status 200 Price history time-series data */ GetPriceHistoryResponse
@@ -1077,6 +1150,23 @@ export type GetOrdersResponse = {
   /** Number of results per page */
   page_size: number
 }
+export type OrderVariantItem = {
+  order_item_id: string
+  variant_id: string
+  quantity: number
+  price_per_unit: number
+  attributes: VariantAttributes
+  display_name: string
+  short_name: string
+}
+export type OrderMarketListingV2 = {
+  listing_id: string
+  quantity: number
+  title: string
+  price: number
+  /** V2 variant items for this listing (empty if no V2 data) */
+  v2_variants: OrderVariantItem[]
+}
 export type GetOrderDetailResponse = {
   /** UUID of the order */
   order_id: string
@@ -1098,7 +1188,7 @@ export type GetOrderDetailResponse = {
   total_price: number
   /** Order status */
   status: string
-  /** Order kind */
+  /** Order kind (Delivery, Escort, etc.) */
   kind: string
   /** Order title */
   title: string
@@ -1106,32 +1196,87 @@ export type GetOrderDetailResponse = {
   description: string
   /** Payment type */
   payment_type: string
-  /** Offer session ID */
+  /** Offer session ID (if created from offer) */
   offer_session_id?: string | null
   /** ISO 8601 timestamp of order creation */
   created_at: string
   /** ISO 8601 timestamp of last update */
   updated_at: string
-  /** V1 market listings enriched with V2 variant data */
+  /** V1 market listings with V2 variant enrichment */
   market_listings: OrderMarketListingV2[]
-  /** V2-only order items with variant details */
+  /** V2-only order items (from order_market_items_v2) */
   items: OrderItemDetail[]
 }
-export type OrderMarketListingV2 = {
+export type UserSummary = {
+  user_id: string
+  username: string
+  display_name?: string
+  avatar?: string | null
+}
+export type OrgSummary = {
+  contractor_id: string
+  spectrum_id: string
+  name: string
+  avatar?: string | null
+}
+export type OfferVariantItem = {
+  variant_id: string
+  quantity: number
+  price_per_unit: number
+  attributes: VariantAttributes
+  display_name: string
+  short_name: string
+}
+export type OfferMarketListingV2 = {
   listing_id: string
   quantity: number
   title: string
   price: number
-  v2_variants: OrderVariantItemV2[]
+  /** V2 variant items for this listing (empty if no V2 data) */
+  v2_variants: OfferVariantItem[]
 }
-export type OrderVariantItemV2 = {
-  order_item_id: string
-  variant_id: string
-  quantity: number
-  price_per_unit: number
-  attributes: Record<string, any>
-  display_name: string
-  short_name: string
+export type OfferV2 = {
+  offer_id: string
+  kind: string
+  cost: number
+  title: string
+  description: string
+  payment_type: string
+  status: string
+  created_at: string
+  actor_id: string
+  /** V1 market listings (always present) */
+  market_listings: OfferMarketListingV2[]
+  service?: {
+    title: string
+    service_id: string
+  } | null
+}
+export type GetOfferSessionV2Response = {
+  session_id: string
+  status: string
+  created_at: string
+  order_id?: string
+  discord_invite?: string | null
+  customer: UserSummary
+  seller: (UserSummary | OrgSummary) | null
+  offers: OfferV2[]
+}
+export type OfferSessionV2 = {
+  session_id: string
+  status: string
+  created_at: string
+  order_id?: string
+  discord_invite?: string | null
+  customer: UserSummary
+  seller: (UserSummary | OrgSummary) | null
+  offers: OfferV2[]
+}
+export type SearchOffersV2Response = {
+  offers: OfferSessionV2[]
+  total: number
+  page: number
+  page_size: number
 }
 export type CreateListingResponse = {
   listing_id: string
@@ -1373,6 +1518,16 @@ export type HealthResponse = {
   status: string
   version: string
   timestamp: string
+}
+export type GameItemSearchResult = {
+  id: string
+  name: string
+  type: string
+}
+export type GameItemCategory = {
+  category: string
+  game_item_categories: string
+  subcategory?: string
 }
 export type GameItemMetadata = {
   /** Game item UUID */
@@ -1645,6 +1800,14 @@ export type SearchBuyOrdersResponse = {
   page: number
   page_size: number
 }
+export type UpdateStandingBuyOrderRequest = {
+  quantity?: number
+  price_per_unit?: number
+  quality_tier_min?: number
+  quality_tier_max?: number
+  negotiable?: boolean
+  expires_in_days?: number
+}
 export type PriceDataPoint = {
   /** ISO 8601 timestamp for this data point */
   timestamp: string
@@ -1766,55 +1929,18 @@ export type SetUserOverrideRequest = {
   user_id: string
   market_version: MarketVersion
 }
-export type SearchGameItemsApiResponse =
-  /** status 200 Game items matching search query */ GameItemSearchResult[]
-export type SearchGameItemsApiArg = {
-  /** Search query string */
-  query: string
-}
-export type GameItemSearchResult = {
-  name: string
-  type: string
-  id: string
-}
-export type GetCategoriesApiResponse =
-  /** status 200 Game item categories */ GameItemCategory[]
-export type GetCategoriesApiArg = void
-export type GameItemCategory = {
-  name: string
-  count: number
-}
-export type FulfillBuyOrderApiResponse = /** status 200 Ok */ {
-  message: string
-  order_id?: string
-}
-export type FulfillBuyOrderApiArg = {
-  /** Buy order UUID */
-  id: string
-}
-export type DeleteStockLotApiResponse = /** status 200 Ok */ {
-  message: string
-}
-export type DeleteStockLotApiArg = {
-  /** Stock lot UUID */
-  id: string
-}
-export type TrackListingViewApiResponse = /** status 200 Ok */ {
-  message: string
-}
-export type TrackListingViewApiArg = {
-  /** Listing UUID */
-  id: string
-}
 export const {
   useGetVariantTypesQuery,
   useCreateStockLotMutation,
   useGetStockLotsQuery,
   useUpdateStockLotMutation,
+  useDeleteStockLotMutation,
   useBulkUpdateStockLotsMutation,
   useCreateOrderMutation,
   useGetOrdersQuery,
   useGetOrderDetailQuery,
+  useGetOfferSessionQuery,
+  useSearchOffersQuery,
   useCreateListingMutation,
   useGetListingDetailQuery,
   useUpdateListingMutation,
@@ -1822,7 +1948,11 @@ export const {
   useSearchListingsQuery,
   useGetMyListingsQuery,
   useRefreshListingMutation,
+  useTrackViewMutation,
+  useUploadPhotosMutation,
   useGetHealthQuery,
+  useSearchGameItemsQuery,
+  useGetCategoriesQuery,
   useGetListingsQuery,
   useGetFeatureFlagQuery,
   useSetFeatureFlagMutation,
@@ -1831,12 +1961,13 @@ export const {
   useUpdateCartItemMutation,
   useRemoveCartItemMutation,
   useCheckoutCartMutation,
-  useCreateBuyOrderMutation,
+  useCreatePurchaseMutation,
   useCreateStandingBuyOrderMutation,
   useSearchBuyOrdersQuery,
   useGetMyBuyOrdersQuery,
   useUpdateBuyOrderMutation,
   useCancelBuyOrderMutation,
+  useFulfillBuyOrderMutation,
   useGetPriceHistoryQuery,
   useGetQualityDistributionQuery,
   useGetSellerStatsQuery,
@@ -1846,10 +1977,4 @@ export const {
   useGetUserOverridesQuery,
   useSetUserOverrideMutation,
   useRemoveUserOverrideMutation,
-  useSearchGameItemsQuery,
-  useLazySearchGameItemsQuery,
-  useGetCategoriesQuery,
-  useFulfillBuyOrderMutation,
-  useDeleteStockLotMutation,
-  useTrackListingViewMutation,
 } = injectedRtkApi
