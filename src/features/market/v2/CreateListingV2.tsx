@@ -397,9 +397,11 @@ export function CreateListingV2() {
           </Grid>
 
           {/* Bulk Discount Tiers */}
-          <Grid item xs={12}>
-            <BulkDiscountTierEditor tiers={bulkDiscountTiers} onChange={setBulkDiscountTiers} />
-          </Grid>
+          <FormPaper title={t("market.bulkDiscountTiers", "Bulk Discounts")}>
+            <Grid item xs={12}>
+              <BulkDiscountTierEditor tiers={bulkDiscountTiers} onChange={setBulkDiscountTiers} />
+            </Grid>
+          </FormPaper>
 
           {/* Pricing Section */}
           <FormPaper title={t("CreateListingV2.pricing", "Pricing")}>
