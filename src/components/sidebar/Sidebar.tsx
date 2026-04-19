@@ -12,6 +12,7 @@ import { useSidebarSearch } from "./hooks/useSidebarSearch"
 import { useSidebarItems } from "./hooks/useSidebarItems"
 import { SidebarItemProps } from "./types"
 import { useSearchOffersQuery } from "../../store/api/offers"
+import { getCustomTabs } from "./utils/sidebarFilters"
 
 /**
  * Main sidebar navigation component
@@ -215,6 +216,21 @@ export function Sidebar() {
               />
             )
           })}
+
+        {/* Custom tabs from white-label sidebar config */}
+        {(() => {
+          const customItems = getCustomTabs()
+          if (!customItems.length) return null
+          return (
+            <SidebarSection
+              key="__custom_tabs"
+              title="sidebar.custom"
+              items={customItems}
+              starredItems={starredItems}
+              onToggleStar={toggleStar}
+            />
+          )
+        })()}
       </Stack>
     </Drawer>
   )

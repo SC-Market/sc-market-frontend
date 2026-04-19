@@ -57,6 +57,8 @@ export function SidebarLink(props: SidebarLinkProps) {
   return props.external ? (
     <a
       href={props.to}
+      target="_blank"
+      rel="noopener noreferrer"
       style={{
         textDecoration: "none",
         color: "inherit",

@@ -83,25 +83,18 @@ export function ContractorListingsV2() {
     error,
     refetch,
   } = useSearchListingsQuery({
-    // Note: The current search endpoint doesn't have contractor_id filter
-    // We'll need to filter client-side or add the endpoint
-    // For now, we'll use the search endpoint and filter by seller info
+    contractorId: contractor_id,
     page: page + 1, // Convert 0-based to 1-based
     pageSize: perPage,
     sortBy: "created_at",
     sortOrder: "desc",
   });
 
-  // Filter listings to only show contractor listings
-  // This is a temporary solution until the backend adds contractor filtering
   const contractorListings = useMemo(() => {
-    if (!results?.listings) return [];
-    // TODO: Backend needs contractor_id filter param on search endpoint.
-    // ListingSearchResult doesn't expose seller_type/seller_id for client-side filtering.
-    return results.listings;
-  }, [results?.listings, contractor_id]);
+    return results?.listings || [];
+  }, [results?.listings]);
 
-  const total = contractorListings.length;
+  const total = results?.total || 0;
 
   // Grid breakpoints - match V1 exactly
   const gridBreakpoints = useMemo(() => {

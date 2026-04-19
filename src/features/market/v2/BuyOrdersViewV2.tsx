@@ -28,6 +28,7 @@ import { QualityBadge } from "../../../components/market/v2/QualityBadge"
 import {
   useGetOrdersQuery,
   useFulfillBuyOrderMutation,
+  useCancelBuyOrderMutation,
   OrderPreview,
 } from "../../../store/api/v2/market"
 
@@ -218,7 +219,7 @@ export function BuyOrderV2Row(props: {
   const issueAlert = useAlertHook()
   
   // TODO: Replace with useCancelBuyOrderV2Mutation when API is ready
-  const [isCancelling, setIsCancelling] = useState(false)
+  const [cancelBuyOrder, { isLoading: isCancelling }] = useCancelBuyOrderMutation()
   const [fulfillBuyOrder, { isLoading: isFulfilling }] = useFulfillBuyOrderMutation()
   
   const expiryDate = useMemo(
@@ -228,11 +229,8 @@ export function BuyOrderV2Row(props: {
 
   const handleCancel = async (e: React.MouseEvent) => {
     e.stopPropagation()
-    setIsCancelling(true)
-    
     try {
-      // TODO: Implement cancel mutation when API is ready
-      // await cancelBuyOrderV2(row.buy_order_id).unwrap()
+      await cancelBuyOrder({ id: row.buy_order_id }).unwrap()
       issueAlert({
         message: t("MarketAggregateView.cancelled", "Buy order cancelled"),
         severity: "success",
@@ -242,8 +240,6 @@ export function BuyOrderV2Row(props: {
         message: error instanceof Error ? error.message : "Failed to cancel buy order",
         severity: "error",
       })
-    } finally {
-      setIsCancelling(false)
     }
   }
 

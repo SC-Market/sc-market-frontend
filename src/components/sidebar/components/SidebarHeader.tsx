@@ -16,6 +16,7 @@ import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { useDrawerOpen } from "../../../hooks/layout/Drawer"
 import { SidebarActorSelect } from "../SidebarActorSelect"
 import { HapticIconButton } from "../../haptic"
+import { CURRENT_CUSTOM_ORG, getWhiteLabelConfig } from "../../../hooks/contractor/CustomDomain"
 
 interface SidebarHeaderProps {
   avatar: string
@@ -79,7 +80,9 @@ export function SidebarHeader({
                 )}
                 fontWeight={600}
               >
-                {t("sidebar.sc_market.title")}
+                {CURRENT_CUSTOM_ORG
+                  ? getWhiteLabelConfig()?.name || t("sidebar.sc_market.title")
+                  : t("sidebar.sc_market.title")}
               </Typography>
             </Stack>
           </NavLink>

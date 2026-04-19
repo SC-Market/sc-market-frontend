@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect } from "react";
 import {
   Box,
   Typography,
@@ -15,13 +15,14 @@ import { useTheme } from "@mui/material/styles";
 import { useParams, Link as RouterLink } from "react-router-dom";
 import { ExtendedTheme } from "../../../hooks/styles/Theme";
 import { StandardPageLayout } from "../../../components/layout/StandardPageLayout";
-import { useGetListingDetailQuery } from "../../../store/api/v2/market";
+import { useGetListingDetailQuery, useAddToCartMutation, useTrackListingViewMutation } from "../../../store/api/v2/market";
 import { VariantBreakdown } from "../../../components/market/v2/VariantBreakdown";
 import { QualityBadge } from "../../../components/market/v2/QualityBadge";
 import { UnderlineLink } from "../../../components/typography/UnderlineLink";
 import { FALLBACK_IMAGE_URL } from "../../../util/constants";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
 import { useTranslation } from "react-i18next";
+import { useAlertHook } from "../../../hooks/alert/AlertHook";
 
 /**
  * ListingDetailV2 - Detailed view of V2 listing with variant breakdown
@@ -54,6 +55,15 @@ export function ListingDetailV2() {
     isLoading,
     error,
   } = useGetListingDetailQuery({ id: id! });
+
+  const [addToCart] = useAddToCartMutation();
+  const [trackView] = useTrackListingViewMutation();
+  const issueAlert = useAlertHook();
+
+  // Track view on page load
+  useEffect(() => {
+    if (id) { trackView({ id }).catch(() => {}) }
+  }, [id, trackView]);
 
   // Compute quality tier range from variants
   const qualityTierRange = useMemo(() => {
@@ -292,9 +302,19 @@ export function ListingDetailV2() {
                   <VariantBreakdown
                     variants={item.variants}
                     showActions={listingData.listing.status === "active"}
-                    onSelectVariant={(variantId) => {
-                      // TODO: Implement add to cart functionality
-                      console.log("Add to cart:", variantId);
+                    onSelectVariant={async (variantId) => {
+                      try {
+                        await addToCart({
+                          addToCartRequest: {
+                            listing_id: id!,
+                            variant_id: variantId,
+                            quantity: 1,
+                          },
+                        }).unwrap();
+                        issueAlert({ message: t("cart.added", "Added to cart"), severity: "success" });
+                      } catch (err) {
+                        issueAlert({ message: err instanceof Error ? err.message : "Failed to add to cart", severity: "error" });
+                      }
                     }}
                   />
                 ) : (

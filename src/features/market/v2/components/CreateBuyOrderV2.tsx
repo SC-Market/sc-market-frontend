@@ -18,7 +18,7 @@ import { ExtendedTheme } from "../../../../hooks/styles/Theme";
 import { useAlertHook } from "../../../../hooks/alert/AlertHook";
 import { Section } from "../../../../components/paper/Section";
 import { QualityBadge } from "../../../../components/market/v2/QualityBadge";
-import { useCreateBuyOrderMutation } from "../../../../store/api/v2/market";
+import { useCreateStandingBuyOrderMutation } from "../../../../store/api/v2/market";
 
 /**
  * CreateBuyOrderV2 Component
@@ -51,15 +51,13 @@ import { useCreateBuyOrderMutation } from "../../../../store/api/v2/market";
 
 interface CreateBuyOrderV2Props {
   gameItemId: string;
-  listingId?: string;
-  variantId?: string;
 }
 
-export function CreateBuyOrderV2({ gameItemId, listingId = "", variantId = "" }: CreateBuyOrderV2Props) {
+export function CreateBuyOrderV2({ gameItemId }: CreateBuyOrderV2Props) {
   const { t } = useTranslation();
   const theme = useTheme<ExtendedTheme>();
   const issueAlert = useAlertHook();
-  const [createBuyOrder, { isLoading: isSubmitting }] = useCreateBuyOrderMutation();
+  const [createStandingBuyOrder, { isLoading: isSubmitting }] = useCreateStandingBuyOrderMutation();
 
   // Form state
   const [negotiable, setNegotiable] = useState(false);
@@ -134,11 +132,14 @@ export function CreateBuyOrderV2({ gameItemId, listingId = "", variantId = "" }:
     if (!isValid()) return;
 
     try {
-      await createBuyOrder({
-        createBuyOrderRequest: {
-          listing_id: listingId,
-          variant_id: variantId,
+      await createStandingBuyOrder({
+        createStandingBuyOrderRequest: {
+          game_item_id: gameItemId,
           quantity,
+          price_per_unit: priceMax || priceMin || 0,
+          quality_tier_min: qualityTierMin ?? undefined,
+          quality_tier_max: qualityTierMax ?? undefined,
+          negotiable,
         },
       }).unwrap();
 
@@ -162,10 +163,14 @@ export function CreateBuyOrderV2({ gameItemId, listingId = "", variantId = "" }:
     }
   }, [
     isValid,
-    listingId,
-    variantId,
+    gameItemId,
     quantity,
-    createBuyOrder,
+    priceMin,
+    priceMax,
+    qualityTierMin,
+    qualityTierMax,
+    negotiable,
+    createStandingBuyOrder,
     issueAlert,
     t,
   ]);

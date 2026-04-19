@@ -68,7 +68,7 @@ import { QualityHistogram } from "../../../components/market/v2/QualityHistogram
 import { QualityFilter } from "../../../components/market/v2/QualityFilter";
 import { VariantSelector } from "../../../components/market/v2/VariantSelector";
 import { CreateBuyOrderV2 } from "./components/CreateBuyOrderV2";
-import { useGetListingsQuery, useGetQualityDistributionQuery, useGetPriceHistoryQuery } from "../../../store/api/v2/market";
+import { useGetListingsQuery, useGetQualityDistributionQuery, useGetPriceHistoryQuery, useFulfillBuyOrderMutation, useCancelBuyOrderMutation } from "../../../store/api/v2/market";
 import type { GameItemListingResult, GameItemQualityDistribution, PriceDataPoint } from "../../../store/api/v2/market";
 
 /**
@@ -1015,41 +1015,29 @@ export function BuyOrderRowV2(props: {
   const { data: profile } = useGetUserProfileQuery();
 
   // TODO: Replace with V2 mutations when API is ready
-  const [isLoading, setIsLoading] = useState(false);
-  const [cancelIsLoading, setCancelIsLoading] = useState(false);
+  const [fulfillBuyOrderMut, { isLoading: fulfillIsLoading }] = useFulfillBuyOrderMutation();
+  const [cancelBuyOrderMut, { isLoading: cancelIsLoading }] = useCancelBuyOrderMutation();
+  const isLoading = fulfillIsLoading;
 
   const doFulfill = useCallback(
     (agreedPricePerUnit?: number) => {
-      setIsLoading(true);
-      // TODO: Implement fulfillBuyOrderV2 mutation
-      // fulfillBuyOrderV2({
-      //   buy_order_id: buy_order.buy_order_id,
-      //   contractor_spectrum_id: currentOrg?.spectrum_id,
-      //   ...(buy_order.negotiable && agreedPricePerUnit != null && agreedPricePerUnit >= 1
-      //     ? { agreed_price: agreedPricePerUnit }
-      //     : {}),
-      // })
-      //   .unwrap()
-      //   .then((result) => {
-      //     issueAlert({
-      //       message: t("MarketAggregateView.submitted"),
-      //       severity: "success",
-      //     });
-      //     const sessionId = result.session?.id ?? result.offer?.session_id;
-      //     if (sessionId) {
-      //       navigate(`/offer/${sessionId}`);
-      //     }
-      //   })
-      //   .catch((err) => issueAlert(err))
-      //   .finally(() => setIsLoading(false));
-      
-      issueAlert({
-        message: t("MarketAggregateView.submitted"),
-        severity: "success",
-      });
-      setIsLoading(false);
+      fulfillBuyOrderMut({ id: buy_order.buy_order_id })
+        .unwrap()
+        .then((result) => {
+          issueAlert({
+            message: t("MarketAggregateView.submitted"),
+            severity: "success",
+          });
+          if (result.order_id) {
+            navigate(`/order/${result.order_id}`);
+          }
+        })
+        .catch((err) => issueAlert({
+          message: err?.data?.message || "Failed to fulfill buy order",
+          severity: "error",
+        }));
     },
-    [buy_order, currentOrg, issueAlert, navigate, t]
+    [buy_order, fulfillBuyOrderMut, issueAlert, navigate, t]
   );
 
   const callback = useCallback(() => {
@@ -1078,23 +1066,18 @@ export function BuyOrderRowV2(props: {
   }, [agreedPrice, doFulfill, issueAlert, t]);
 
   const cancelCallback = useCallback(async () => {
-    setCancelIsLoading(true);
-    // TODO: Implement cancelBuyOrderV2 mutation
-    // cancelBuyOrderV2(buy_order.buy_order_id)
-    //   .then(() => {
-    //     issueAlert({
-    //       message: t("MarketAggregateView.cancelled"),
-    //       severity: "success",
-    //     });
-    //   })
-    //   .catch(issueAlert)
-    //   .finally(() => setCancelIsLoading(false));
-    
-    issueAlert({
-      message: t("MarketAggregateView.cancelled"),
-      severity: "success",
-    });
-    setCancelIsLoading(false);
+    cancelBuyOrderMut({ id: buy_order.buy_order_id })
+      .unwrap()
+      .then(() => {
+        issueAlert({
+          message: t("MarketAggregateView.cancelled"),
+          severity: "success",
+        });
+      })
+      .catch((err) => issueAlert({
+        message: err?.data?.message || "Failed to cancel",
+        severity: "error",
+      }));
     return false;
   }, [buy_order, t, issueAlert]);
 
