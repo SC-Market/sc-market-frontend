@@ -199,7 +199,6 @@ const injectedRtkApi = api
             listing_type: queryArg.listingType,
             seller_id: queryArg.sellerId,
             contractor_id: queryArg.contractorId,
-            pickup_method: queryArg.pickupMethod,
           },
         }),
         providesTags: ["Listings V2"],
@@ -675,7 +674,6 @@ export type SearchListingsApiArg = {
   listingType?: "single" | "bundle" | "bulk"
   sellerId?: string
   contractorId?: string
-  pickupMethod?: "delivery" | "pickup" | "any"
 }
 export type GetMyListingsApiResponse =
   /** status 200 User's listings with pagination metadata */ GetMyListingsResponse
@@ -1300,6 +1298,12 @@ export type StockLotInput = {
   /** Price for this variant (required if pricing_mode is 'per_variant') */
   price?: number
 }
+export type BulkDiscountTier = {
+  /** Minimum quantity to qualify for this discount */
+  min_quantity: number
+  /** Discount percentage (0-100) */
+  discount_percent: number
+}
 export type CreateListingRequest = {
   /** Listing title (max 500 chars) */
   title: string
@@ -1317,7 +1321,8 @@ export type CreateListingRequest = {
   photo_resource_ids?: string[]
   /** Pickup method: how the buyer receives the item */
   pickup_method?: "delivery" | "pickup" | "any"
-  bulk_discount_tiers?: { min_quantity: number; discount_percent: number }[]
+  /** Optional bulk discount tiers sorted by min_quantity ascending */
+  bulk_discount_tiers?: BulkDiscountTier[]
 }
 export type ListingDetail = {
   /** Listing UUID */
@@ -1400,6 +1405,8 @@ export type ListingItemDetail = {
   base_price?: number
   /** Array of variants with quantities and prices */
   variants: VariantDetail[]
+  /** Bulk discount tiers (null if none defined) */
+  bulk_discount_tiers?: BulkDiscountTier[] | null
 }
 export type GetListingDetailResponse = {
   /** Core listing metadata */
@@ -1438,6 +1445,8 @@ export type UpdateListingRequest = {
   lot_updates?: LotUpdate[]
   /** Pickup method: how the buyer receives the item */
   pickup_method?: ("delivery" | "pickup" | "any" | null) | null
+  /** Updated bulk discount tiers (pass [] to remove, omit to keep unchanged) */
+  bulk_discount_tiers?: BulkDiscountTier[]
 }
 export type ListingSearchResult = {
   /** Listing UUID */
@@ -1480,6 +1489,7 @@ export type ListingSearchResult = {
   photo?: string
   /** Pickup method: delivery, pickup, any, or null (not specified) */
   pickup_method?: ("delivery" | "pickup" | "any" | null) | null
+  /** Whether this listing has bulk discount tiers defined */
   has_bulk_discount?: boolean
 }
 export type SearchListingsResponse = {
