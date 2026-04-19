@@ -1014,7 +1014,6 @@ export function BuyOrderRowV2(props: {
   const [currentOrg] = useCurrentOrg();
   const { data: profile } = useGetUserProfileQuery();
 
-  // TODO: Replace with V2 mutations when API is ready
   const [fulfillBuyOrderMut, { isLoading: fulfillIsLoading }] = useFulfillBuyOrderMutation();
   const [cancelBuyOrderMut, { isLoading: cancelIsLoading }] = useCancelBuyOrderMutation();
   const isLoading = fulfillIsLoading;
