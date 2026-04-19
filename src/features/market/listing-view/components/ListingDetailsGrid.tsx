@@ -9,6 +9,7 @@ import {
   SportsEsportsRounded,
   AccessTimeRounded,
   LocationOnRounded,
+  LocalShippingRounded,
 } from "@mui/icons-material"
 import { ClockAlert } from "mdi-material-ui"
 import { useTranslation } from "react-i18next"
@@ -86,6 +87,23 @@ export function ListingDetailsGrid({ listing, viewCount }: ListingDetailsGridPro
         icon={<LocationOnRounded fontSize={"inherit"} />}
       >
         {t("MarketListingView.stockLocations", "Available from")}: {listing.listing.stock_locations.join(", ")}
+      </ListingDetailItem>
+    )
+  }
+
+  // Delivery preference
+  if (listing.details?.delivery_preference) {
+    const labels: Record<string, string> = {
+      delivery: t("MarketListingView.deliveryAvailable", "Delivery available"),
+      pickup: t("MarketListingView.pickupOnly", "Pickup only"),
+      any: t("MarketListingView.deliveryOrPickup", "Delivery or pickup"),
+    }
+    items.push(
+      <ListingDetailItem
+        key="delivery"
+        icon={<LocalShippingRounded fontSize={"inherit"} />}
+      >
+        {labels[listing.details.delivery_preference] || listing.details.delivery_preference}
       </ListingDetailItem>
     )
   }
