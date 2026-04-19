@@ -87,6 +87,7 @@ export function EditListingV2() {
   const [description, setDescription] = useState("");
   const [pricingMode, setPricingMode] = useState<"unified" | "per_variant">("unified");
   const [basePrice, setBasePrice] = useState<number>(0);
+  const [pickupMethod, setPickupMethod] = useState<"delivery" | "pickup" | "any" | "">(""); 
 
   // Stock lots state - flattened from variants
   const [stockLots, setStockLots] = useState<StockLotFormData[]>([]);
@@ -107,6 +108,7 @@ export function EditListingV2() {
 
     setTitle(listingData.listing.title);
     setDescription(listingData.listing.description || "");
+    setPickupMethod(listingData.listing.pickup_method || "");
 
     // Get first item (assuming single item listings for now)
     const firstItem = listingData.items[0];
@@ -224,6 +226,11 @@ export function EditListingV2() {
       }
       if (description !== (listingData?.listing.description || "")) {
         request.description = description.trim();
+      }
+
+      const currentPickup = listingData?.listing.pickup_method || "";
+      if (pickupMethod !== currentPickup) {
+        request.pickup_method = pickupMethod || null;
       }
 
       // Handle pricing updates
@@ -421,6 +428,25 @@ export function EditListingV2() {
               />
             </Grid>
           </FormPaper>
+
+          {/* Pickup Method */}
+          <Grid item xs={12}>
+            <TextField
+              select
+              fullWidth
+              size="small"
+              label={t("EditListingV2.pickupMethod", "Pickup Method")}
+              value={pickupMethod}
+              onChange={(e) => setPickupMethod(e.target.value as any)}
+              disabled={!canEdit}
+              helperText={t("EditListingV2.pickupMethodHelper", "How will the buyer receive the item?")}
+            >
+              <MenuItem value="">{t("EditListingV2.notSpecified", "Not specified")}</MenuItem>
+              <MenuItem value="delivery">{t("EditListingV2.delivery", "Delivery (seller delivers)")}</MenuItem>
+              <MenuItem value="pickup">{t("EditListingV2.pickup", "Pickup (buyer picks up)")}</MenuItem>
+              <MenuItem value="any">{t("EditListingV2.either", "Either (delivery or pickup)")}</MenuItem>
+            </TextField>
+          </Grid>
 
           {/* Pricing Section */}
           <FormPaper title={t("EditListingV2.pricing", "Pricing")}>

@@ -199,6 +199,7 @@ const injectedRtkApi = api
             listing_type: queryArg.listingType,
             seller_id: queryArg.sellerId,
             contractor_id: queryArg.contractorId,
+            pickup_method: queryArg.pickupMethod,
           },
         }),
         providesTags: ["Listings V2"],
@@ -674,6 +675,7 @@ export type SearchListingsApiArg = {
   listingType?: "single" | "bundle" | "bulk"
   sellerId?: string
   contractorId?: string
+  pickupMethod?: "delivery" | "pickup" | "any"
 }
 export type GetMyListingsApiResponse =
   /** status 200 User's listings with pagination metadata */ GetMyListingsResponse
@@ -1313,6 +1315,8 @@ export type CreateListingRequest = {
   lots: StockLotInput[]
   /** Optional array of image resource UUIDs to attach as photos */
   photo_resource_ids?: string[]
+  /** Pickup method: how the buyer receives the item */
+  pickup_method?: "delivery" | "pickup" | "any"
 }
 export type ListingDetail = {
   /** Listing UUID */
@@ -1341,6 +1345,8 @@ export type ListingDetail = {
   expires_at?: string
   /** Array of photo URLs */
   photos?: string[]
+  /** Pickup method */
+  pickup_method?: "delivery" | "pickup" | "any" | null
 }
 export type SellerInfo = {
   /** Seller UUID */
@@ -1429,6 +1435,8 @@ export type UpdateListingRequest = {
   variant_prices?: VariantPriceUpdate[]
   /** Array of stock lot updates (optional) */
   lot_updates?: LotUpdate[]
+  /** Pickup method */
+  pickup_method?: "delivery" | "pickup" | "any" | null
 }
 export type ListingSearchResult = {
   /** Listing UUID */
@@ -1469,6 +1477,8 @@ export type ListingSearchResult = {
   seller_languages?: string[]
   /** First photo URL (null if no photos) */
   photo?: string
+  /** Pickup method */
+  pickup_method?: "delivery" | "pickup" | "any" | null
 }
 export type SearchListingsResponse = {
   /** Array of listing results */

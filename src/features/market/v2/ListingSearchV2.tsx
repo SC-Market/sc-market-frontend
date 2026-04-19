@@ -103,6 +103,7 @@ export function ListingSearchV2() {
       quantityMin: quantityMin ? Number(quantityMin) : undefined,
       status,
       languageCodes: searchParams.get('language_codes') || undefined,
+      pickupMethod: (searchParams.get('pickup_method') || undefined) as "delivery" | "pickup" | "any" | undefined,
     };
   }, [searchParams, isMobile]);
 
@@ -522,6 +523,22 @@ function MarketSearchAreaV2() {
             selectedLanguages={languageCodes}
             onChange={(codes) => updateParam('language_codes', codes.length ? codes.join(',') : '')}
           />
+        </Grid>
+
+        {/* Pickup Method Filter */}
+        <Grid item xs={12}>
+          <TextField
+            select
+            fullWidth
+            size="small"
+            label={t("market.pickupMethod", "Pickup Method")}
+            value={searchParams.get("pickup_method") || ""}
+            onChange={(e) => updateParam("pickup_method", e.target.value)}
+          >
+            <MenuItem value="">{t("market.anyPickup", "Any")}</MenuItem>
+            <MenuItem value="delivery">{t("market.delivery", "Delivery")}</MenuItem>
+            <MenuItem value="pickup">{t("market.pickup", "Pickup")}</MenuItem>
+          </TextField>
         </Grid>
       </Grid>
     </Box>

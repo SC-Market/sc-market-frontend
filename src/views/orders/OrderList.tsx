@@ -57,6 +57,10 @@ import {
 import { OrderRowSkeleton } from "../../components/skeletons"
 import { EmptyOrders } from "../../components/empty-states"
 import { LongPressMenu, useLongPress } from "../../components/gestures"
+import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
+import { has_permission } from "../contractor/OrgRoles"
+import { useAssignOrderMutation } from "../../store/orders"
+import { useAlertHook } from "../../hooks/alert/AlertHook"
 
 export const statusColors = new Map<
   | "active"
@@ -151,6 +155,16 @@ export function OrderRow(props: {
   const { t } = useTranslation()
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
   const navigate = useNavigate()
+  const { data: profile } = useGetUserProfileQuery()
+  const [currentOrg] = useCurrentOrg()
+  const [assignOrder] = useAssignOrderMutation()
+  const issueAlert = useAlertHook()
+
+  const canClaim = useMemo(() => {
+    if (row.assigned_to || !currentOrg || !profile) return false
+    if (row.status === "fulfilled" || row.status === "cancelled") return false
+    return has_permission(currentOrg, profile, "claim_orders", profile.contractors)
+  }, [row.assigned_to, row.status, currentOrg, profile])
 
   // When in selection mode (hasSelectedItems) on mobile, single tap should select
   const isInSelectionMode = isMobile && hasSelectedItems
@@ -383,11 +397,30 @@ export function OrderRow(props: {
           padding: { xs: theme.spacing(0.75), sm: theme.spacing(2) },
         }}
       >
-        <Chip
-          label={status}
-          color={statusColor}
-          size={isMobile ? "small" : "medium"}
-        />
+        <Stack alignItems="flex-end" spacing={0.5}>
+          <Chip
+            label={status}
+            color={statusColor}
+            size={isMobile ? "small" : "medium"}
+          />
+          {canClaim && (
+            <Button
+              size="small"
+              variant="outlined"
+              sx={{ fontSize: "0.7rem", py: 0, px: 1, minHeight: 24 }}
+              onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                assignOrder({ order_id: row.order_id, user_id: profile!.username })
+                  .unwrap()
+                  .then(() => issueAlert({ message: t("orders.claimed", "Order claimed"), severity: "success" }))
+                  .catch(issueAlert)
+              }}
+            >
+              {t("orders.claimOrder", "Claim")}
+            </Button>
+          )}
+        </Stack>
       </TableCell>
       {/*<TableCell align="right">*/}
       {/*  <Typography variant={"subtitle1"} color={"text.primary"}>*/}
