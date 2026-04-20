@@ -8,6 +8,7 @@ import { craftingApi } from "./craftingApi"
 import { versionsApi } from "./versionsApi"
 import { missionsApi } from "./missionsApi"
 import { blueprintsApi } from "./blueprintsApi"
+import { resourcesApi } from "./resourcesApi"
 // import {wikiActionApi, wikiRestApi} from "./wiki";
 
 export const store = configureStore({
@@ -20,6 +21,7 @@ export const store = configureStore({
     [versionsApi.reducerPath]: versionsApi.reducer,
     [missionsApi.reducerPath]: missionsApi.reducer,
     [blueprintsApi.reducerPath]: blueprintsApi.reducer,
+    [resourcesApi.reducerPath]: resourcesApi.reducer,
     // [wikiRestApi.reducerPath]: wikiRestApi.reducer,
     // [wikiActionApi.reducerPath]: wikiActionApi.reducer,
   },
@@ -34,6 +36,7 @@ export const store = configureStore({
       versionsApi.middleware,
       missionsApi.middleware,
       blueprintsApi.middleware,
+      resourcesApi.middleware,
       // wikiRestApi.middleware,
       // wikiActionApi.middleware,
     ),
