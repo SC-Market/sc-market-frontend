@@ -7,11 +7,20 @@ export const addTagTypes = [
   "Listings V2",
   "Health",
   "Game Items V2",
+  "Game Data - Wishlists",
+  "Game Data - Wiki",
+  "Game Data - Versions",
+  "Game Data - Resources",
+  "Game Data - Missions",
+  "Game Data - Crafting",
+  "Game Data - Blueprints",
   "Debug V2",
   "Cart V2",
   "Buy Orders V2",
+  "Availability",
   "Analytics V2",
   "Admin Feature Flags",
+  "Admin",
 ] as const
 const injectedRtkApi = api
   .enhanceEndpoints({
@@ -279,6 +288,489 @@ const injectedRtkApi = api
         }),
         providesTags: ["Game Items V2"],
       }),
+      getWishlists: build.query<GetWishlistsApiResponse, GetWishlistsApiArg>({
+        query: () => ({ url: `/api/v2/game-data/wishlists` }),
+        providesTags: ["Game Data - Wishlists"],
+      }),
+      createWishlist: build.mutation<
+        CreateWishlistApiResponse,
+        CreateWishlistApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v2/game-data/wishlists`,
+          method: "POST",
+          body: queryArg.createWishlistRequest,
+        }),
+        invalidatesTags: ["Game Data - Wishlists"],
+      }),
+      getWishlist: build.query<GetWishlistApiResponse, GetWishlistApiArg>({
+        query: (queryArg) => ({
+          url: `/api/v2/game-data/wishlists/${queryArg.wishlistId}`,
+          params: {
+            share_token: queryArg.shareToken,
+          },
+        }),
+        providesTags: ["Game Data - Wishlists"],
+      }),
+      updateWishlist: build.mutation<
+        UpdateWishlistApiResponse,
+        UpdateWishlistApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v2/game-data/wishlists/${queryArg.wishlistId}`,
+          method: "PUT",
+          body: queryArg.updateWishlistRequest,
+        }),
+        invalidatesTags: ["Game Data - Wishlists"],
+      }),
+      deleteWishlist: build.mutation<
+        DeleteWishlistApiResponse,
+        DeleteWishlistApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v2/game-data/wishlists/${queryArg.wishlistId}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["Game Data - Wishlists"],
+      }),
+      addWishlistItem: build.mutation<
+        AddWishlistItemApiResponse,
+        AddWishlistItemApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v2/game-data/wishlists/${queryArg.wishlistId}/items`,
+          method: "POST",
+          body: queryArg.addWishlistItemRequest,
+        }),
+        invalidatesTags: ["Game Data - Wishlists"],
+      }),
+      removeWishlistItem: build.mutation<
+        RemoveWishlistItemApiResponse,
+        RemoveWishlistItemApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v2/game-data/wishlists/${queryArg.wishlistId}/items/${queryArg.itemId}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["Game Data - Wishlists"],
+      }),
+      updateWishlistItem: build.mutation<
+        UpdateWishlistItemApiResponse,
+        UpdateWishlistItemApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v2/game-data/wishlists/${queryArg.wishlistId}/items/${queryArg.itemId}`,
+          method: "PUT",
+          body: queryArg.updateWishlistItemRequest,
+        }),
+        invalidatesTags: ["Game Data - Wishlists"],
+      }),
+      generateShoppingList: build.query<
+        GenerateShoppingListApiResponse,
+        GenerateShoppingListApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v2/game-data/wishlists/${queryArg.wishlistId}/shopping-list`,
+        }),
+        providesTags: ["Game Data - Wishlists"],
+      }),
+      searchItems: build.query<SearchItemsApiResponse, SearchItemsApiArg>({
+        query: (queryArg) => ({
+          url: `/api/v2/game-data/wiki/items`,
+          params: {
+            text: queryArg.text,
+            type: queryArg["type"],
+            sub_type: queryArg.subType,
+            size: queryArg.size,
+            grade: queryArg.grade,
+            manufacturer: queryArg.manufacturer,
+            category: queryArg.category,
+            version_id: queryArg.versionId,
+            page: queryArg.page,
+            page_size: queryArg.pageSize,
+          },
+        }),
+        providesTags: ["Game Data - Wiki"],
+      }),
+      getItemDetail: build.query<GetItemDetailApiResponse, GetItemDetailApiArg>(
+        {
+          query: (queryArg) => ({
+            url: `/api/v2/game-data/wiki/items/${queryArg.id}`,
+          }),
+          providesTags: ["Game Data - Wiki"],
+        },
+      ),
+      getShips: build.query<GetShipsApiResponse, GetShipsApiArg>({
+        query: (queryArg) => ({
+          url: `/api/v2/game-data/wiki/ships`,
+          params: {
+            manufacturer: queryArg.manufacturer,
+            focus: queryArg.focus,
+            size: queryArg.size,
+            page: queryArg.page,
+            page_size: queryArg.pageSize,
+          },
+        }),
+        providesTags: ["Game Data - Wiki"],
+      }),
+      getShipDetail: build.query<GetShipDetailApiResponse, GetShipDetailApiArg>(
+        {
+          query: (queryArg) => ({
+            url: `/api/v2/game-data/wiki/ships/${queryArg.id}`,
+          }),
+          providesTags: ["Game Data - Wiki"],
+        },
+      ),
+      getCommodities: build.query<
+        GetCommoditiesApiResponse,
+        GetCommoditiesApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v2/game-data/wiki/commodities`,
+          params: {
+            category: queryArg.category,
+            can_be_mined: queryArg.canBeMined,
+            page: queryArg.page,
+            page_size: queryArg.pageSize,
+          },
+        }),
+        providesTags: ["Game Data - Wiki"],
+      }),
+      getLocations: build.query<GetLocationsApiResponse, GetLocationsApiArg>({
+        query: (queryArg) => ({
+          url: `/api/v2/game-data/wiki/locations`,
+          params: {
+            parent_id: queryArg.parentId,
+          },
+        }),
+        providesTags: ["Game Data - Wiki"],
+      }),
+      getManufacturers: build.query<
+        GetManufacturersApiResponse,
+        GetManufacturersApiArg
+      >({
+        query: () => ({ url: `/api/v2/game-data/wiki/manufacturers` }),
+        providesTags: ["Game Data - Wiki"],
+      }),
+      getManufacturerDetail: build.query<
+        GetManufacturerDetailApiResponse,
+        GetManufacturerDetailApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v2/game-data/wiki/manufacturers/${queryArg.id}`,
+        }),
+        providesTags: ["Game Data - Wiki"],
+      }),
+      listVersions: build.query<ListVersionsApiResponse, ListVersionsApiArg>({
+        query: () => ({ url: `/api/v2/game-data/versions` }),
+        providesTags: ["Game Data - Versions"],
+      }),
+      getActiveVersions: build.query<
+        GetActiveVersionsApiResponse,
+        GetActiveVersionsApiArg
+      >({
+        query: () => ({ url: `/api/v2/game-data/versions/active` }),
+        providesTags: ["Game Data - Versions"],
+      }),
+      selectVersion: build.mutation<
+        SelectVersionApiResponse,
+        SelectVersionApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v2/game-data/versions/select`,
+          method: "POST",
+          body: queryArg.selectVersionRequest,
+        }),
+        invalidatesTags: ["Game Data - Versions"],
+      }),
+      searchResources: build.query<
+        SearchResourcesApiResponse,
+        SearchResourcesApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v2/game-data/resources/search`,
+          params: {
+            text: queryArg.text,
+            resource_category: queryArg.resourceCategory,
+            resource_subcategory: queryArg.resourceSubcategory,
+            acquisition_method: queryArg.acquisitionMethod,
+            version_id: queryArg.versionId,
+            page: queryArg.page,
+            page_size: queryArg.pageSize,
+          },
+        }),
+        providesTags: ["Game Data - Resources"],
+      }),
+      getResource: build.query<GetResourceApiResponse, GetResourceApiArg>({
+        query: (queryArg) => ({
+          url: `/api/v2/game-data/resources/${queryArg.resourceId}`,
+        }),
+        providesTags: ["Game Data - Resources"],
+      }),
+      getResourceCategories: build.query<
+        GetResourceCategoriesApiResponse,
+        GetResourceCategoriesApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v2/game-data/resources/categories`,
+          params: {
+            version_id: queryArg.versionId,
+          },
+        }),
+        providesTags: ["Game Data - Resources"],
+      }),
+      searchMissions: build.query<
+        SearchMissionsApiResponse,
+        SearchMissionsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v2/game-data/missions/search`,
+          params: {
+            text: queryArg.text,
+            category: queryArg.category,
+            career_type: queryArg.careerType,
+            star_system: queryArg.starSystem,
+            planet_moon: queryArg.planetMoon,
+            faction: queryArg.faction,
+            legal_status: queryArg.legalStatus,
+            difficulty_min: queryArg.difficultyMin,
+            difficulty_max: queryArg.difficultyMax,
+            is_shareable: queryArg.isShareable,
+            availability_type: queryArg.availabilityType,
+            associated_event: queryArg.associatedEvent,
+            is_chain_starter: queryArg.isChainStarter,
+            has_blueprint_rewards: queryArg.hasBlueprintRewards,
+            credit_reward_min: queryArg.creditRewardMin,
+            community_difficulty_min: queryArg.communityDifficultyMin,
+            community_satisfaction_min: queryArg.communitySatisfactionMin,
+            version_id: queryArg.versionId,
+            page: queryArg.page,
+            page_size: queryArg.pageSize,
+          },
+        }),
+        providesTags: ["Game Data - Missions"],
+      }),
+      getMissionDetail: build.query<
+        GetMissionDetailApiResponse,
+        GetMissionDetailApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v2/game-data/missions/${queryArg.missionId}`,
+          params: {
+            user_id: queryArg.userId,
+          },
+        }),
+        providesTags: ["Game Data - Missions"],
+      }),
+      getMissionBlueprints: build.query<
+        GetMissionBlueprintsApiResponse,
+        GetMissionBlueprintsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v2/game-data/missions/${queryArg.missionId}/blueprints`,
+        }),
+        providesTags: ["Game Data - Missions"],
+      }),
+      completeMission: build.mutation<
+        CompleteMissionApiResponse,
+        CompleteMissionApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v2/game-data/missions/${queryArg.missionId}/complete`,
+          method: "POST",
+          body: queryArg.body,
+        }),
+        invalidatesTags: ["Game Data - Missions"],
+      }),
+      rateMission: build.mutation<RateMissionApiResponse, RateMissionApiArg>({
+        query: (queryArg) => ({
+          url: `/api/v2/game-data/missions/${queryArg.missionId}/rate`,
+          method: "POST",
+          body: queryArg.body,
+        }),
+        invalidatesTags: ["Game Data - Missions"],
+      }),
+      getMissionChains: build.query<
+        GetMissionChainsApiResponse,
+        GetMissionChainsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v2/game-data/missions/chains`,
+          params: {
+            version_id: queryArg.versionId,
+          },
+        }),
+        providesTags: ["Game Data - Missions"],
+      }),
+      calculateQuality: build.mutation<
+        CalculateQualityApiResponse,
+        CalculateQualityApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v2/game-data/crafting/calculate-quality`,
+          method: "POST",
+          body: queryArg.calculateQualityRequest,
+        }),
+        invalidatesTags: ["Game Data - Crafting"],
+      }),
+      simulateCrafting: build.mutation<
+        SimulateCraftingApiResponse,
+        SimulateCraftingApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v2/game-data/crafting/simulate`,
+          method: "POST",
+          body: queryArg.simulateCraftingRequest,
+        }),
+        invalidatesTags: ["Game Data - Crafting"],
+      }),
+      recordCrafting: build.mutation<
+        RecordCraftingApiResponse,
+        RecordCraftingApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v2/game-data/crafting/craft`,
+          method: "POST",
+          body: queryArg.recordCraftingRequest,
+        }),
+        invalidatesTags: ["Game Data - Crafting"],
+      }),
+      getCraftingHistory: build.query<
+        GetCraftingHistoryApiResponse,
+        GetCraftingHistoryApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v2/game-data/crafting/history`,
+          params: {
+            blueprint_id: queryArg.blueprintId,
+            page: queryArg.page,
+            page_size: queryArg.pageSize,
+          },
+        }),
+        providesTags: ["Game Data - Crafting"],
+      }),
+      getCraftableItems: build.query<
+        GetCraftableItemsApiResponse,
+        GetCraftableItemsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v2/game-data/crafting/craftable-items`,
+          params: {
+            item_category: queryArg.itemCategory,
+            rarity: queryArg.rarity,
+            tier: queryArg.tier,
+            craftable_only: queryArg.craftableOnly,
+            version_id: queryArg.versionId,
+            page: queryArg.page,
+            page_size: queryArg.pageSize,
+          },
+        }),
+        providesTags: ["Game Data - Crafting"],
+      }),
+      getCraftingStatistics: build.query<
+        GetCraftingStatisticsApiResponse,
+        GetCraftingStatisticsApiArg
+      >({
+        query: () => ({ url: `/api/v2/game-data/crafting/statistics` }),
+        providesTags: ["Game Data - Crafting"],
+      }),
+      searchBlueprints: build.query<
+        SearchBlueprintsApiResponse,
+        SearchBlueprintsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v2/game-data/blueprints/search`,
+          params: {
+            text: queryArg.text,
+            item_category: queryArg.itemCategory,
+            item_subcategory: queryArg.itemSubcategory,
+            rarity: queryArg.rarity,
+            tier: queryArg.tier,
+            crafting_station_type: queryArg.craftingStationType,
+            output_game_item_id: queryArg.outputGameItemId,
+            user_owned_only: queryArg.userOwnedOnly,
+            version_id: queryArg.versionId,
+            page: queryArg.page,
+            page_size: queryArg.pageSize,
+          },
+        }),
+        providesTags: ["Game Data - Blueprints"],
+      }),
+      getBlueprintDetail: build.query<
+        GetBlueprintDetailApiResponse,
+        GetBlueprintDetailApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v2/game-data/blueprints/${queryArg.blueprintId}`,
+          params: {
+            user_id: queryArg.userId,
+          },
+        }),
+        providesTags: ["Game Data - Blueprints"],
+      }),
+      getBlueprintMissions: build.query<
+        GetBlueprintMissionsApiResponse,
+        GetBlueprintMissionsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v2/game-data/blueprints/${queryArg.blueprintId}/missions`,
+          params: {
+            version_id: queryArg.versionId,
+          },
+        }),
+        providesTags: ["Game Data - Blueprints"],
+      }),
+      getBlueprintCategories: build.query<
+        GetBlueprintCategoriesApiResponse,
+        GetBlueprintCategoriesApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v2/game-data/blueprints/categories`,
+          params: {
+            version_id: queryArg.versionId,
+          },
+        }),
+        providesTags: ["Game Data - Blueprints"],
+      }),
+      addBlueprintToInventory: build.mutation<
+        AddBlueprintToInventoryApiResponse,
+        AddBlueprintToInventoryApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v2/game-data/blueprints/${queryArg.blueprintId}/inventory`,
+          method: "POST",
+          body: queryArg.body,
+        }),
+        invalidatesTags: ["Game Data - Blueprints"],
+      }),
+      removeBlueprintFromInventory: build.mutation<
+        RemoveBlueprintFromInventoryApiResponse,
+        RemoveBlueprintFromInventoryApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v2/game-data/blueprints/${queryArg.blueprintId}/inventory`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["Game Data - Blueprints"],
+      }),
+      getUserBlueprintInventory: build.query<
+        GetUserBlueprintInventoryApiResponse,
+        GetUserBlueprintInventoryApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v2/game-data/blueprints/inventory`,
+          params: {
+            item_category: queryArg.itemCategory,
+            rarity: queryArg.rarity,
+            version_id: queryArg.versionId,
+            sort_by: queryArg.sortBy,
+            sort_order: queryArg.sortOrder,
+            page: queryArg.page,
+            page_size: queryArg.pageSize,
+          },
+        }),
+        providesTags: ["Game Data - Blueprints"],
+      }),
       getFeatureFlag: build.query<
         GetFeatureFlagApiResponse,
         GetFeatureFlagApiArg
@@ -424,6 +916,19 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["Buy Orders V2"],
       }),
+      getNextAvailable: build.query<
+        GetNextAvailableApiResponse,
+        GetNextAvailableApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/availability/next`,
+          params: {
+            username: queryArg.username,
+            spectrum_id: queryArg.spectrumId,
+          },
+        }),
+        providesTags: ["Availability"],
+      }),
       getPriceHistory: build.query<
         GetPriceHistoryApiResponse,
         GetPriceHistoryApiArg
@@ -518,17 +1023,15 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["Admin Feature Flags"],
       }),
-      getSellerNextAvailable: build.query<
-        SellerNextAvailableResponse,
-        { username?: string; spectrumId?: string }
+      importGameData: build.mutation<
+        ImportGameDataApiResponse,
+        ImportGameDataApiArg
       >({
-        query: (queryArg) => ({
-          url: `/availability/next`,
-          params: {
-            username: queryArg.username,
-            spectrum_id: queryArg.spectrumId,
-          },
+        query: () => ({
+          url: `/api/v2/admin/import-game-data`,
+          method: "POST",
         }),
+        invalidatesTags: ["Admin"],
       }),
     }),
     overrideExisting: false,
@@ -751,6 +1254,458 @@ export type GetListingsApiArg = {
   /** Number of results per page (default: 20, max: 100) */
   pageSize?: number
 }
+export type GetWishlistsApiResponse =
+  /** status 200 List of user wishlists with statistics */ ListWishlistsResponse
+export type GetWishlistsApiArg = void
+export type CreateWishlistApiResponse =
+  /** status 200 Created wishlist */ Wishlist
+export type CreateWishlistApiArg = {
+  /** Wishlist creation data */
+  createWishlistRequest: CreateWishlistRequest
+}
+export type GetWishlistApiResponse =
+  /** status 200 Wishlist with items and statistics */ GetWishlistResponse
+export type GetWishlistApiArg = {
+  /** Wishlist UUID */
+  wishlistId: string
+  /** Optional share token for public wishlists */
+  shareToken?: string
+}
+export type UpdateWishlistApiResponse =
+  /** status 200 Updated wishlist */ Wishlist
+export type UpdateWishlistApiArg = {
+  /** Wishlist UUID */
+  wishlistId: string
+  /** Update data */
+  updateWishlistRequest: UpdateWishlistRequest
+}
+export type DeleteWishlistApiResponse = /** status 200 Success response */ {
+  success: boolean
+}
+export type DeleteWishlistApiArg = {
+  /** Wishlist UUID */
+  wishlistId: string
+}
+export type AddWishlistItemApiResponse =
+  /** status 200 Created wishlist item */ WishlistItemWithDetails
+export type AddWishlistItemApiArg = {
+  /** Wishlist UUID */
+  wishlistId: string
+  /** Item data */
+  addWishlistItemRequest: AddWishlistItemRequest
+}
+export type RemoveWishlistItemApiResponse = /** status 200 Success response */ {
+  success: boolean
+}
+export type RemoveWishlistItemApiArg = {
+  /** Wishlist UUID */
+  wishlistId: string
+  /** Item UUID */
+  itemId: string
+}
+export type UpdateWishlistItemApiResponse =
+  /** status 200 Updated wishlist item */ WishlistItemWithDetails
+export type UpdateWishlistItemApiArg = {
+  /** Wishlist UUID */
+  wishlistId: string
+  /** Item UUID */
+  itemId: string
+  /** Update data */
+  updateWishlistItemRequest: UpdateWishlistItemRequest
+}
+export type GenerateShoppingListApiResponse =
+  /** status 200 Shopping list with material requirements */ ShoppingListResponse
+export type GenerateShoppingListApiArg = {
+  /** Wishlist UUID */
+  wishlistId: string
+}
+export type SearchItemsApiResponse =
+  /** status 200 Wiki item search results with pagination */ SearchWikiItemsResponse
+export type SearchItemsApiArg = {
+  /** Full-text search on item name */
+  text?: string
+  /** Filter by item type (e.g., WeaponGun, Shield, PowerPlant) */
+  type?: string
+  /** Filter by item sub-type */
+  subType?: string
+  /** Filter by item size (1-5, S1-S5) */
+  size?: string
+  /** Filter by item grade (A, B, C, D, F) */
+  grade?: string
+  /** Filter by manufacturer name */
+  manufacturer?: string
+  /** Filter by game item category */
+  category?: string
+  /** Game version ID (defaults to active LIVE version) */
+  versionId?: string
+  /** Page number (default: 1) */
+  page?: number
+  /** Results per page (default: 20, max: 100) */
+  pageSize?: number
+}
+export type GetItemDetailApiResponse =
+  /** status 200 Complete item details with attributes, recipes, and missions */ WikiItemDetail
+export type GetItemDetailApiArg = {
+  /** Game item UUID */
+  id: string
+}
+export type GetShipsApiResponse =
+  /** status 200 Ship search results with pagination */ {
+    page_size: number
+    page: number
+    total: number
+    ships: WikiShipSearchResult[]
+  }
+export type GetShipsApiArg = {
+  /** Filter by manufacturer */
+  manufacturer?: string
+  /** Filter by ship focus (e.g., Combat, Exploration, Mining) */
+  focus?: string
+  /** Filter by ship size */
+  size?: string
+  /** Page number (default: 1) */
+  page?: number
+  /** Results per page (default: 20, max: 100) */
+  pageSize?: number
+}
+export type GetShipDetailApiResponse =
+  /** status 200 Complete ship details with loadout */ WikiShipDetail
+export type GetShipDetailApiArg = {
+  /** Ship game item UUID */
+  id: string
+}
+export type GetCommoditiesApiResponse =
+  /** status 200 Commodity search results with pagination */ {
+    page_size: number
+    page: number
+    total: number
+    commodities: WikiCommoditySearchResult[]
+  }
+export type GetCommoditiesApiArg = {
+  /** Filter by resource category */
+  category?: string
+  /** Filter to mineable resources only */
+  canBeMined?: boolean
+  /** Page number (default: 1) */
+  page?: number
+  /** Results per page (default: 20, max: 100) */
+  pageSize?: number
+}
+export type GetLocationsApiResponse =
+  /** status 200 Location hierarchy nodes */ WikiLocationNode[]
+export type GetLocationsApiArg = {
+  /** Optional parent location ID to get children */
+  parentId?: string
+}
+export type GetManufacturersApiResponse =
+  /** status 200 Manufacturer list */ WikiManufacturerSearchResult[]
+export type GetManufacturersApiArg = void
+export type GetManufacturerDetailApiResponse =
+  /** status 200 Complete manufacturer details with items */ WikiManufacturerDetail
+export type GetManufacturerDetailApiArg = {
+  /** Manufacturer name */
+  id: string
+}
+export type ListVersionsApiResponse =
+  /** status 200 Array of all game versions */ GameVersion[]
+export type ListVersionsApiArg = void
+export type GetActiveVersionsApiResponse =
+  /** status 200 Active versions by type */ ActiveVersionsResponse
+export type GetActiveVersionsApiArg = void
+export type SelectVersionApiResponse =
+  /** status 200 Success response with selected version */ SelectVersionResponse
+export type SelectVersionApiArg = {
+  /** Version selection request */
+  selectVersionRequest: SelectVersionRequest
+}
+export type SearchResourcesApiResponse =
+  /** status 200 Resource search results with pagination */ SearchResourcesResponse
+export type SearchResourcesApiArg = {
+  /** Full-text search on resource name */
+  text?: string
+  /** Filter by resource category */
+  resourceCategory?: string
+  /** Filter by resource subcategory */
+  resourceSubcategory?: string
+  /** Filter by acquisition method */
+  acquisitionMethod?: "mined" | "purchased" | "salvaged" | "looted"
+  /** Game version ID (defaults to active LIVE version) */
+  versionId?: string
+  /** Page number (default: 1) */
+  page?: number
+  /** Results per page (default: 20, max: 100) */
+  pageSize?: number
+}
+export type GetResourceApiResponse =
+  /** status 200 Complete resource details with blueprints and locations */ ResourceDetailResponse
+export type GetResourceApiArg = {
+  /** Resource UUID */
+  resourceId: string
+}
+export type GetResourceCategoriesApiResponse =
+  /** status 200 Array of categories with counts */ ResourceCategory[]
+export type GetResourceCategoriesApiArg = {
+  /** Optional game version ID (defaults to active LIVE version) */
+  versionId?: string
+}
+export type SearchMissionsApiResponse =
+  /** status 200 Mission search results with pagination */ SearchMissionsResponse
+export type SearchMissionsApiArg = {
+  /** Full-text search on mission name */
+  text?: string
+  /** Filter by mission category */
+  category?: string
+  /** Filter by career type */
+  careerType?: string
+  /** Filter by star system */
+  starSystem?: string
+  /** Filter by planet or moon */
+  planetMoon?: string
+  /** Filter by faction */
+  faction?: string
+  /** Filter by legal status */
+  legalStatus?: "LEGAL" | "ILLEGAL"
+  /** Minimum difficulty level (1-5) */
+  difficultyMin?: number
+  /** Maximum difficulty level (1-5) */
+  difficultyMax?: number
+  /** Filter by shareable status */
+  isShareable?: boolean
+  /** Filter by availability type */
+  availabilityType?: string
+  /** Filter by associated event */
+  associatedEvent?: string
+  /** Filter for chain starter missions */
+  isChainStarter?: boolean
+  /** Filter for missions with blueprint rewards */
+  hasBlueprintRewards?: boolean
+  /** Minimum credit reward */
+  creditRewardMin?: number
+  /** Minimum community difficulty rating */
+  communityDifficultyMin?: number
+  /** Minimum community satisfaction rating */
+  communitySatisfactionMin?: number
+  /** Game version ID (defaults to active LIVE version) */
+  versionId?: string
+  /** Page number (default: 1) */
+  page?: number
+  /** Results per page (default: 20, max: 100) */
+  pageSize?: number
+}
+export type GetMissionDetailApiResponse =
+  /** status 200 Complete mission details with reward pools */ MissionDetailResponse
+export type GetMissionDetailApiArg = {
+  /** Mission UUID */
+  missionId: string
+  /** Optional user ID for user-specific data */
+  userId?: string
+}
+export type GetMissionBlueprintsApiResponse =
+  /** status 200 Array of blueprint details with reward information */ BlueprintDetail[]
+export type GetMissionBlueprintsApiArg = {
+  /** Mission UUID */
+  missionId: string
+}
+export type CompleteMissionApiResponse = /** status 200 Success response */ {
+  completion_id: string
+  success: boolean
+}
+export type CompleteMissionApiArg = {
+  /** Mission UUID */
+  missionId: string
+  /** Completion details */
+  body: {
+    completion_notes?: string
+    blueprints_rewarded?: string[]
+  }
+}
+export type RateMissionApiResponse = /** status 200 Success response */ {
+  rating_id: string
+  success: boolean
+}
+export type RateMissionApiArg = {
+  /** Mission UUID */
+  missionId: string
+  /** Rating details */
+  body: {
+    rating_comment?: string
+    satisfaction_rating: number
+    difficulty_rating: number
+  }
+}
+export type GetMissionChainsApiResponse =
+  /** status 200 Array of mission chains */ {
+    total_missions: number
+    chain_missions: Mission[]
+    starter_mission: Mission
+    chain_name: string
+    chain_id: string
+  }[]
+export type GetMissionChainsApiArg = {
+  /** Game version ID (defaults to active LIVE version) */
+  versionId?: string
+}
+export type CalculateQualityApiResponse =
+  /** status 200 Quality calculation result with breakdown and predicted stats */ CalculateQualityResponse
+export type CalculateQualityApiArg = {
+  /** Crafting calculation request with blueprint and materials */
+  calculateQualityRequest: CalculateQualityRequest
+}
+export type SimulateCraftingApiResponse =
+  /** status 200 Simulation results with best/worst/cost-effective options */ SimulateCraftingResponse
+export type SimulateCraftingApiArg = {
+  /** Simulation request with material variations */
+  simulateCraftingRequest: SimulateCraftingRequest
+}
+export type RecordCraftingApiResponse =
+  /** status 200 Success response with session ID */ RecordCraftingResponse
+export type RecordCraftingApiArg = {
+  /** Crafting session data */
+  recordCraftingRequest: RecordCraftingRequest
+}
+export type GetCraftingHistoryApiResponse =
+  /** status 200 Paginated crafting history */ GetCraftingHistoryResponse
+export type GetCraftingHistoryApiArg = {
+  /** Optional blueprint filter */
+  blueprintId?: string
+  /** Page number (default: 1) */
+  page?: number
+  /** Results per page (default: 20, max: 100) */
+  pageSize?: number
+}
+export type GetCraftableItemsApiResponse =
+  /** status 200 Craftable items with material availability */ GetCraftableItemsResponse
+export type GetCraftableItemsApiArg = {
+  /** Filter by item category */
+  itemCategory?: string
+  /** Filter by rarity */
+  rarity?: string
+  /** Filter by tier (1-5) */
+  tier?: number
+  /** Show only items that can be crafted with current stock */
+  craftableOnly?: boolean
+  /** Game version ID (defaults to active LIVE version) */
+  versionId?: string
+  /** Page number (default: 1) */
+  page?: number
+  /** Results per page (default: 20, max: 100) */
+  pageSize?: number
+}
+export type GetCraftingStatisticsApiResponse =
+  /** status 200 Crafting statistics */ GetCraftingStatisticsResponse
+export type GetCraftingStatisticsApiArg = void
+export type SearchBlueprintsApiResponse =
+  /** status 200 Blueprint search results with pagination */ SearchBlueprintsResponse
+export type SearchBlueprintsApiArg = {
+  /** Full-text search on blueprint name */
+  text?: string
+  /** Filter by item category */
+  itemCategory?: string
+  /** Filter by item subcategory */
+  itemSubcategory?: string
+  /** Filter by rarity */
+  rarity?: string
+  /** Filter by tier (1-5) */
+  tier?: number
+  /** Filter by crafting station type */
+  craftingStationType?: string
+  /** Filter by output game item ID */
+  outputGameItemId?: string
+  /** Filter to show only user-owned blueprints */
+  userOwnedOnly?: boolean
+  /** Game version ID (defaults to active LIVE version) */
+  versionId?: string
+  /** Page number (default: 1) */
+  page?: number
+  /** Results per page (default: 20, max: 100) */
+  pageSize?: number
+}
+export type GetBlueprintDetailApiResponse =
+  /** status 200 Complete blueprint details with ingredients and missions */ BlueprintDetailResponse
+export type GetBlueprintDetailApiArg = {
+  /** Blueprint UUID */
+  blueprintId: string
+  /** Optional user ID for user-specific data */
+  userId?: string
+}
+export type GetBlueprintMissionsApiResponse =
+  /** status 200 Array of missions that reward this blueprint */ MissionRewardingBlueprint[]
+export type GetBlueprintMissionsApiArg = {
+  /** Blueprint UUID */
+  blueprintId: string
+  /** Optional game version ID */
+  versionId?: string
+}
+export type GetBlueprintCategoriesApiResponse =
+  /** status 200 Array of categories with counts */ BlueprintCategory[]
+export type GetBlueprintCategoriesApiArg = {
+  /** Optional game version ID (defaults to active LIVE version) */
+  versionId?: string
+}
+export type AddBlueprintToInventoryApiResponse =
+  /** status 200 Success response with inventory ID */ {
+    inventory_id: string
+    success: boolean
+  }
+export type AddBlueprintToInventoryApiArg = {
+  /** Blueprint UUID */
+  blueprintId: string
+  /** Acquisition details */
+  body: {
+    acquisition_notes?: string
+    acquisition_location?: string
+    acquisition_method?: string
+  }
+}
+export type RemoveBlueprintFromInventoryApiResponse =
+  /** status 200 Success response */ {
+    success: boolean
+  }
+export type RemoveBlueprintFromInventoryApiArg = {
+  /** Blueprint UUID */
+  blueprintId: string
+}
+export type GetUserBlueprintInventoryApiResponse =
+  /** status 200 User's blueprint inventory with statistics */ {
+    page_size: number
+    page: number
+    total: number
+    statistics: {
+      recently_acquired_count: number
+      completion_percentage: number
+      total_available: number
+      total_owned: number
+    }
+    blueprints: {
+      acquisition_notes?: string
+      acquisition_location?: string
+      acquisition_method?: string
+      acquisition_date: string
+      tier?: number
+      rarity?: string
+      item_category?: string
+      output_item_icon?: string
+      output_item_name: string
+      blueprint_name: string
+      blueprint_id: string
+    }[]
+  }
+export type GetUserBlueprintInventoryApiArg = {
+  /** Filter by item category */
+  itemCategory?: string
+  /** Filter by rarity */
+  rarity?: string
+  /** Game version ID (defaults to active LIVE version) */
+  versionId?: string
+  /** Sort field (acquisition_date, blueprint_name) */
+  sortBy?: "acquisition_date" | "blueprint_name"
+  /** Sort order (asc, desc) */
+  sortOrder?: "asc" | "desc"
+  /** Page number (default: 1) */
+  page?: number
+  /** Results per page (default: 50, max: 100) */
+  pageSize?: number
+}
 export type GetFeatureFlagApiResponse =
   /** status 200 Current feature flag setting */ GetFeatureFlagResponse
 export type GetFeatureFlagApiArg = void
@@ -838,6 +1793,14 @@ export type FulfillBuyOrderApiArg = {
     listing_id: string
   }
 }
+export type GetNextAvailableApiResponse =
+  /** status 200 Ok */ SellerNextAvailableResponse
+export type GetNextAvailableApiArg = {
+  /** Username (for user sellers) */
+  username?: string
+  /** Spectrum ID (for contractor sellers) */
+  spectrumId?: string
+}
 export type GetPriceHistoryApiResponse =
   /** status 200 Price history time-series data */ GetPriceHistoryResponse
 export type GetPriceHistoryApiArg = {
@@ -894,6 +1857,10 @@ export type RemoveUserOverrideApiResponse = /** status 200 Ok */ {
 export type RemoveUserOverrideApiArg = {
   userId: string
 }
+export type ImportGameDataApiResponse =
+  /** status 200 Import summary with statistics */
+  ImportGameDataResponse | ImportErrorResponse
+export type ImportGameDataApiArg = void
 export type VariantType = {
   /** Unique identifier for the variant type */
   variant_type_id: string
@@ -1548,10 +2515,10 @@ export type LotUpdate = {
   location_id?: string
 }
 export type UpdateListingRequest = {
-  /** New status (optional) */
-  status?: "active" | "sold" | "expired" | "cancelled"
   /** New title (optional) */
   title?: string
+  /** New status (optional) — active, sold, expired, cancelled */
+  status?: "active" | "sold" | "expired" | "cancelled"
   /** New description (optional) */
   description?: string
   /** New base price for unified pricing mode (optional) */
@@ -1657,6 +2624,978 @@ export type GetGameItemListingsResponse = {
   /** Page size */
   page_size: number
 }
+export type Wishlist = {
+  wishlist_id: string
+  user_id: string
+  wishlist_name: string
+  wishlist_description?: string
+  is_public: boolean
+  share_token?: string
+  organization_id?: string
+  is_collaborative: boolean
+  created_at: string
+  updated_at: string
+}
+export type ListWishlistsResponse = {
+  wishlists: (Wishlist & {
+    progress_percentage: number
+    completed_items: number
+    item_count: number
+  })[]
+}
+export type CreateWishlistRequest = {
+  /** Wishlist name */
+  wishlist_name: string
+  /** Optional description */
+  wishlist_description?: string
+  /** Is wishlist public */
+  is_public: boolean
+  /** Optional organization ID for org wishlists */
+  organization_id?: string
+  /** Is collaborative (multiple users can edit) */
+  is_collaborative: boolean
+}
+export type WishlistItemWithDetails = {
+  item_id: string
+  wishlist_id: string
+  game_item_id: string
+  desired_quantity: number
+  desired_quality_tier?: number
+  blueprint_id?: string
+  priority: number
+  notes?: string
+  is_acquired: boolean
+  acquired_quantity: number
+  created_at: string
+  updated_at: string
+  game_item_name: string
+  game_item_icon?: string
+  game_item_type: string
+  blueprint_name?: string
+  estimated_cost?: number
+  crafting_available: boolean
+}
+export type GetWishlistResponse = {
+  wishlist: Wishlist
+  items: WishlistItemWithDetails[]
+  statistics: {
+    total_estimated_cost: number
+    progress_percentage: number
+    completed_items: number
+    total_items: number
+  }
+}
+export type UpdateWishlistRequest = {
+  /** Updated wishlist name */
+  wishlist_name?: string
+  /** Updated description */
+  wishlist_description?: string
+  /** Updated public status */
+  is_public?: boolean
+  /** Updated collaborative status */
+  is_collaborative?: boolean
+}
+export type AddWishlistItemRequest = {
+  /** Game item ID */
+  game_item_id: string
+  /** Desired quantity */
+  desired_quantity: number
+  /** Desired quality tier (1-5) */
+  desired_quality_tier?: number
+  /** Optional blueprint ID if item is craftable */
+  blueprint_id?: string
+  /** Priority level (1-5, higher is more important) */
+  priority: number
+  /** Optional notes */
+  notes?: string
+}
+export type UpdateWishlistItemRequest = {
+  /** Updated desired quantity */
+  desired_quantity?: number
+  /** Updated desired quality tier */
+  desired_quality_tier?: number
+  /** Updated priority */
+  priority?: number
+  /** Updated notes */
+  notes?: string
+  /** Updated acquired status */
+  is_acquired?: boolean
+  /** Updated acquired quantity */
+  acquired_quantity?: number
+}
+export type ShoppingListMaterial = {
+  /** Game item ID */
+  game_item_id: string
+  /** Game item name */
+  game_item_name: string
+  /** Game item icon */
+  game_item_icon?: string
+  /** Total quantity needed across all wishlist items */
+  total_quantity_needed: number
+  /** Desired quality tier */
+  desired_quality_tier?: number
+  /** User inventory quantity */
+  user_inventory_quantity: number
+  /** Quantity still needed */
+  quantity_to_acquire: number
+  /** Estimated unit price */
+  estimated_unit_price?: number
+  /** Estimated total cost */
+  estimated_total_cost?: number
+  /** Acquisition methods (mining, purchase, salvage, etc.) */
+  acquisition_methods: string[]
+  /** Which wishlist items use this material */
+  used_by_items: {
+    quantity_for_this_item: number
+    item_name: string
+    wishlist_item_id: string
+  }[]
+}
+export type ShoppingListResponse = {
+  wishlist_id: string
+  wishlist_name: string
+  materials_needed: ShoppingListMaterial[]
+  total_estimated_cost: number
+  materials_fully_stocked: number
+  materials_partially_stocked: number
+  materials_not_stocked: number
+}
+export type WikiItemSearchResult = {
+  id: string
+  name: string
+  type?: string
+  sub_type?: string
+  size?: string
+  grade?: string
+  manufacturer?: string
+  image_url?: string
+  thumbnail_path?: string
+  display_type?: string
+}
+export type SearchWikiItemsResponse = {
+  items: WikiItemSearchResult[]
+  total: number
+  page: number
+  page_size: number
+}
+export type RecordStringAny = {
+  [key: string]: any
+}
+export type BlueprintReference = {
+  blueprint_id: string
+  blueprint_name: string
+  rarity?: string
+  tier?: number
+  crafting_time_seconds?: number
+}
+export type MissionRewardReference = {
+  mission_id: string
+  mission_name: string
+  star_system?: string
+  drop_probability: number
+  blueprint_id: string
+  blueprint_name: string
+}
+export type MarketStats = {
+  listing_count: number
+  min_price?: number
+  max_price?: number
+  total_quantity: number
+}
+export type WikiItemDetail = {
+  id: string
+  name: string
+  type?: string
+  sub_type?: string
+  size?: string
+  grade?: string
+  manufacturer?: string
+  image_url?: string
+  thumbnail_path?: string
+  display_type?: string
+  p4k_id?: string
+  p4k_file?: string
+  name_key?: string
+  attributes: RecordStringAny
+  craftable_from: BlueprintReference[]
+  rewarded_by: MissionRewardReference[]
+  market_stats: MarketStats
+}
+export type WikiShipSearchResult = {
+  id: string
+  name: string
+  manufacturer?: string
+  focus?: string
+  size?: string
+  image_url?: string
+}
+export type WikiShipDetail = {
+  id: string
+  name: string
+  manufacturer?: string
+  focus?: string
+  size?: string
+  description?: string
+  movement_class?: string
+  image_url?: string
+  default_loadout?: any
+  attributes: RecordStringAny
+}
+export type WikiCommoditySearchResult = {
+  resource_id: string
+  game_item_id: string
+  name: string
+  resource_category: string
+  resource_subcategory?: string
+  can_be_mined: boolean
+  can_be_purchased: boolean
+  can_be_salvaged: boolean
+  can_be_looted: boolean
+  image_url?: string
+}
+export type WikiLocationNode = {
+  id: string
+  name: string
+  type: string
+  parent_id?: string
+  children: WikiLocationNode[]
+}
+export type WikiManufacturerSearchResult = {
+  manufacturer: string
+  item_count: number
+}
+export type ManufacturerItem = {
+  id: string
+  name: string
+  type?: string
+  size?: string
+  grade?: string
+  image_url?: string
+}
+export type WikiManufacturerDetail = {
+  manufacturer: string
+  description?: string
+  item_count: number
+  items: ManufacturerItem[]
+}
+export type GameVersion = {
+  /** Version UUID */
+  version_id: string
+  /** Version type (LIVE, PTU, EPTU) */
+  version_type: "LIVE" | "PTU" | "EPTU"
+  /** Version number (e.g., "4.7.0") */
+  version_number: string
+  /** Build number (e.g., "11592622") */
+  build_number?: string
+  /** Release date */
+  release_date?: string
+  /** Is this version currently active */
+  is_active: boolean
+  /** Last data update timestamp */
+  last_data_update?: string
+  /** Created timestamp */
+  created_at: string
+  /** Updated timestamp */
+  updated_at: string
+}
+export type ActiveVersionsResponse = {
+  /** Active LIVE version */
+  LIVE?: GameVersion
+  /** Active PTU version */
+  PTU?: GameVersion
+  /** Active EPTU version */
+  EPTU?: GameVersion
+}
+export type SelectVersionResponse = {
+  /** Success status */
+  success: boolean
+  /** Selected version */
+  version?: GameVersion
+}
+export type SelectVersionRequest = {
+  /** Version ID to select */
+  version_id: string
+}
+export type ResourceSearchResult = {
+  /** Resource UUID */
+  resource_id: string
+  /** Game item ID */
+  game_item_id: string
+  /** Resource name */
+  resource_name: string
+  /** Resource icon URL */
+  resource_icon?: string
+  /** Resource category */
+  resource_category: string
+  /** Resource subcategory */
+  resource_subcategory?: string
+  /** Maximum stack size */
+  max_stack_size?: number
+  /** Base value in UEC */
+  base_value?: number
+  /** Can be mined */
+  can_be_mined: boolean
+  /** Can be purchased */
+  can_be_purchased: boolean
+  /** Can be salvaged */
+  can_be_salvaged: boolean
+  /** Can be looted */
+  can_be_looted: boolean
+  /** Number of blueprints that require this resource */
+  blueprint_count: number
+}
+export type SearchResourcesResponse = {
+  /** Resource search results */
+  resources: ResourceSearchResult[]
+  /** Total number of resources matching filters */
+  total: number
+  /** Current page number */
+  page: number
+  /** Page size */
+  page_size: number
+}
+export type MiningLocation = {
+  /** Star system */
+  star_system?: string
+  /** Planet or moon */
+  planet_moon?: string
+  /** Location detail */
+  location_detail?: string
+  /** Abundance level */
+  abundance?: string
+}
+export type PurchaseLocation = {
+  /** Star system */
+  star_system?: string
+  /** Planet or moon */
+  planet_moon?: string
+  /** Station or outpost */
+  station?: string
+  /** Average price */
+  average_price?: number
+}
+export type Resource = {
+  resource_id: string
+  version_id: string
+  game_item_id: string
+  resource_name: string
+  resource_icon?: string
+  resource_category: string
+  resource_subcategory?: string
+  max_stack_size?: number
+  base_value?: number
+  can_be_mined: boolean
+  can_be_purchased: boolean
+  can_be_salvaged: boolean
+  can_be_looted: boolean
+  mining_locations?: MiningLocation[]
+  purchase_locations?: PurchaseLocation[]
+  created_at: string
+  updated_at: string
+}
+export type BlueprintRequiringResource = {
+  /** Blueprint UUID */
+  blueprint_id: string
+  /** Blueprint name */
+  blueprint_name: string
+  /** Output item name */
+  output_item_name: string
+  /** Output item icon */
+  output_item_icon?: string
+  /** Quantity required */
+  quantity_required: number
+  /** Minimum quality tier */
+  min_quality_tier?: number
+  /** Recommended quality tier */
+  recommended_quality_tier?: number
+}
+export type ResourceDetailResponse = {
+  /** Complete resource data */
+  resource: Resource
+  /** Blueprints that require this resource */
+  blueprints_requiring: BlueprintRequiringResource[]
+  /** Market price data (if available) */
+  market_price?: {
+    last_updated?: string
+    average_price?: number
+    max_price?: number
+    min_price?: number
+  }
+}
+export type ResourceCategory = {
+  /** Category name */
+  category: string
+  /** Subcategory name */
+  subcategory?: string
+  /** Number of resources in this category */
+  count: number
+}
+export type MissionSearchResult = {
+  /** Mission UUID */
+  mission_id: string
+  /** Mission name */
+  mission_name: string
+  /** Mission category */
+  category: string
+  /** Career type */
+  career_type?: string
+  /** Legal status */
+  legal_status?: string
+  /** Difficulty level (1-5) */
+  difficulty_level?: number
+  /** Star system */
+  star_system?: string
+  /** Planet or moon */
+  planet_moon?: string
+  /** Faction */
+  faction?: string
+  /** Minimum credit reward */
+  credit_reward_min?: number
+  /** Maximum credit reward */
+  credit_reward_max?: number
+  /** Number of blueprint rewards */
+  blueprint_reward_count: number
+  /** Average community difficulty rating */
+  community_difficulty_avg?: number
+  /** Average community satisfaction rating */
+  community_satisfaction_avg?: number
+  /** Is chain starter mission */
+  is_chain_starter: boolean
+  /** Is shareable mission */
+  is_shareable: boolean
+}
+export type SearchMissionsResponse = {
+  /** Mission search results */
+  missions: MissionSearchResult[]
+  /** Total number of missions matching filters */
+  total: number
+  /** Current page number */
+  page: number
+  /** Page size */
+  page_size: number
+}
+export type Mission = {
+  mission_id: string
+  version_id: string
+  mission_code: string
+  mission_name: string
+  mission_description?: string
+  category: string
+  mission_type?: string
+  career_type?: string
+  legal_status?: "LEGAL" | "ILLEGAL" | "UNKNOWN"
+  difficulty_level?: number
+  star_system?: string
+  planet_moon?: string
+  location_detail?: string
+  mission_giver_org?: string
+  faction?: string
+  credit_reward_min?: number
+  credit_reward_max?: number
+  reputation_reward?: number
+  is_shareable: boolean
+  availability_type?: string
+  associated_event?: string
+  required_rank?: number
+  required_reputation?: number
+  is_chain_starter: boolean
+  is_chain_mission: boolean
+  is_unique_mission: boolean
+  prerequisite_missions?: any
+  estimated_uec_per_hour?: number
+  estimated_rep_per_hour?: number
+  rank_index?: number
+  reward_scope?: string
+  community_difficulty_avg?: number
+  community_difficulty_count: number
+  community_satisfaction_avg?: number
+  community_satisfaction_count: number
+  data_source: string
+  is_verified: boolean
+  created_at: string
+  updated_at: string
+}
+export type MissionBlueprintReward = {
+  /** Blueprint UUID */
+  blueprint_id: string
+  /** Blueprint name */
+  blueprint_name: string
+  /** Output item name */
+  output_item_name: string
+  /** Output item icon URL */
+  output_item_icon?: string
+  /** Drop probability percentage (0-100) */
+  drop_probability: number
+  /** Is guaranteed reward */
+  is_guaranteed: boolean
+  /** Blueprint rarity */
+  rarity?: string
+  /** Blueprint tier (1-5) */
+  tier?: number
+  /** Does user own this blueprint */
+  user_owns?: boolean
+}
+export type MissionRewardPool = {
+  /** Reward pool ID */
+  reward_pool_id: number
+  /** Total number of blueprints in pool */
+  reward_pool_size: number
+  /** Number of blueprints selected from pool */
+  selection_count: number
+  /** Blueprints in this reward pool */
+  blueprints: MissionBlueprintReward[]
+}
+export type UserMissionRating = {
+  /** Difficulty rating (1-5) */
+  difficulty_rating: number
+  /** Satisfaction rating (1-5) */
+  satisfaction_rating: number
+  /** Optional comment */
+  rating_comment?: string
+}
+export type MissionDetailResponse = {
+  /** Complete mission data */
+  mission: Mission
+  /** Blueprint reward pools */
+  blueprint_rewards: MissionRewardPool[]
+  /** Prerequisite missions (if any) */
+  prerequisite_missions?: Mission[]
+  /** Has user completed this mission */
+  user_completed?: boolean
+  /** User's rating for this mission */
+  user_rating?: UserMissionRating
+}
+export type BlueprintDetail = {
+  /** Blueprint UUID */
+  blueprint_id: string
+  /** Blueprint code */
+  blueprint_code: string
+  /** Blueprint name */
+  blueprint_name: string
+  /** Blueprint description */
+  blueprint_description?: string
+  /** Output game item ID */
+  output_game_item_id: string
+  /** Output item name */
+  output_item_name: string
+  /** Output item type */
+  output_item_type: string
+  /** Output item icon URL */
+  output_item_icon?: string
+  /** Output quantity */
+  output_quantity: number
+  /** Item category */
+  item_category?: string
+  /** Item subcategory */
+  item_subcategory?: string
+  /** Rarity */
+  rarity?: string
+  /** Tier (1-5) */
+  tier?: number
+  /** Crafting station type */
+  crafting_station_type?: string
+  /** Crafting time in seconds */
+  crafting_time_seconds?: number
+  /** Required skill level */
+  required_skill_level?: number
+  /** Icon URL */
+  icon_url?: string
+  /** Number of ingredients */
+  ingredient_count: number
+  /** Drop probability for this mission */
+  drop_probability: number
+  /** Is guaranteed reward */
+  is_guaranteed: boolean
+}
+export type QualityContribution = {
+  /** Material name */
+  material_name: string
+  /** Quality tier (1-5) */
+  quality_tier: number
+  /** Quality value (0-100) */
+  quality_value: number
+  /** Weight in calculation */
+  weight: number
+  /** Contribution to final quality */
+  contribution: number
+}
+export type RecordStringNumber = {
+  [key: string]: number
+}
+export type CalculateQualityResponse = {
+  /** Output quality tier (1-5) */
+  output_quality_tier: number
+  /** Output quality value (0-100) */
+  output_quality_value: number
+  /** Output quantity */
+  output_quantity: number
+  /** Calculation breakdown */
+  calculation_breakdown: {
+    /** Quality contributions per material */
+    quality_contributions: QualityContribution[]
+    /** Input weights per material */
+    input_weights: RecordStringNumber
+    /** Formula type used (weighted_average, minimum, maximum) */
+    formula_used: string
+  }
+  /** Estimated costs */
+  estimated_cost: {
+    /** Total cost */
+    total_cost: number
+    /** Crafting station fee */
+    crafting_station_fee?: number
+    /** Total material cost */
+    material_cost: number
+  }
+  /** Success probability percentage (0-100) */
+  success_probability: number
+  /** Critical success chance percentage (0-100) */
+  critical_success_chance: number
+}
+export type CraftingInputMaterial = {
+  /** Game item UUID */
+  game_item_id: string
+  /** Quantity of material */
+  quantity: number
+  /** Quality tier (1-5) */
+  quality_tier: number
+  /** Precise quality value (0-100) */
+  quality_value: number
+}
+export type CalculateQualityRequest = {
+  /** Blueprint UUID */
+  blueprint_id: string
+  /** Input materials with quality values */
+  input_materials: CraftingInputMaterial[]
+}
+export type SimulationResult = {
+  /** Material configuration used */
+  material_configuration: CraftingInputMaterial[]
+  /** Output quality tier */
+  output_quality_tier: number
+  /** Output quality value */
+  output_quality_value: number
+  /** Estimated total cost */
+  estimated_cost: number
+}
+export type SimulateCraftingResponse = {
+  /** Blueprint UUID */
+  blueprint_id: string
+  /** Blueprint name */
+  blueprint_name: string
+  /** All simulation results */
+  simulation_results: SimulationResult[]
+  /** Best result (highest quality) */
+  best_result: SimulationResult
+  /** Worst result (lowest quality) */
+  worst_result: SimulationResult
+  /** Most cost-effective result */
+  most_cost_effective: SimulationResult
+}
+export type MaterialVariation = {
+  /** Game item UUID */
+  game_item_id: string
+  /** Quantity of material */
+  quantity: number
+  /** Quality tier options to test */
+  quality_tiers: number[]
+}
+export type SimulateCraftingRequest = {
+  /** Blueprint UUID */
+  blueprint_id: string
+  /** Material variations to test */
+  material_variations: MaterialVariation[]
+}
+export type RecordCraftingResponse = {
+  /** Success status */
+  success: boolean
+  /** Crafting session UUID */
+  session_id: string
+}
+export type RecordCraftingRequest = {
+  /** Blueprint UUID */
+  blueprint_id: string
+  /** Input materials used */
+  input_materials: CraftingInputMaterial[]
+  /** Output quality tier achieved */
+  output_quality_tier: number
+  /** Output quality value achieved */
+  output_quality_value: number
+  /** Output quantity produced */
+  output_quantity: number
+  /** Was critical success */
+  was_critical_success: boolean
+  /** Total material cost */
+  total_material_cost?: number
+  /** Crafting station fee */
+  crafting_station_fee?: number
+}
+export type CraftingSessionHistory = {
+  /** Session UUID */
+  session_id: string
+  /** Blueprint UUID */
+  blueprint_id: string
+  /** Blueprint name */
+  blueprint_name: string
+  /** Output item name */
+  output_item_name: string
+  /** Crafting date */
+  crafting_date: string
+  /** Input materials used */
+  input_materials: CraftingInputMaterial[]
+  /** Output quality tier */
+  output_quality_tier: number
+  /** Output quality value */
+  output_quality_value: number
+  /** Output quantity */
+  output_quantity: number
+  /** Was critical success */
+  was_critical_success: boolean
+  /** Total material cost */
+  total_material_cost?: number
+  /** Crafting station fee */
+  crafting_station_fee?: number
+}
+export type GetCraftingHistoryResponse = {
+  /** Crafting sessions */
+  history: CraftingSessionHistory[]
+  /** Total number of sessions */
+  total: number
+  /** Current page */
+  page: number
+  /** Page size */
+  page_size: number
+}
+export type MaterialAvailability = {
+  /** Game item UUID */
+  game_item_id: string
+  /** Material name */
+  material_name: string
+  /** Required quantity */
+  quantity_required: number
+  /** Available quantity in stock */
+  quantity_available: number
+  /** Is sufficient */
+  is_sufficient: boolean
+  /** Quality tier range available */
+  quality_tier_min?: number
+  quality_tier_max?: number
+  /** Stock lot IDs containing this material */
+  stock_lot_ids: string[]
+}
+export type CraftableItem = {
+  /** Blueprint UUID */
+  blueprint_id: string
+  /** Blueprint name */
+  blueprint_name: string
+  /** Output item name */
+  output_item_name: string
+  /** Output item icon */
+  output_item_icon?: string
+  /** Item category */
+  item_category?: string
+  /** Rarity */
+  rarity?: string
+  /** Tier */
+  tier?: number
+  /** Crafting time in seconds */
+  crafting_time_seconds?: number
+  /** Can craft with current stock */
+  can_craft: boolean
+  /** Maximum craftable quantity */
+  max_craftable_quantity: number
+  /** Material availability details */
+  materials: MaterialAvailability[]
+  /** Missing materials count */
+  missing_materials_count: number
+  /** Estimated cost per craft */
+  estimated_cost_per_craft?: number
+}
+export type GetCraftableItemsResponse = {
+  /** Craftable items */
+  craftable_items: CraftableItem[]
+  /** Total count */
+  total: number
+  /** Current page */
+  page: number
+  /** Page size */
+  page_size: number
+  /** Summary statistics */
+  summary: {
+    /** Items missing materials */
+    items_missing_materials: number
+    /** Items that can be crafted now */
+    items_craftable_now: number
+    /** Total blueprints owned */
+    total_blueprints_owned: number
+  }
+}
+export type BlueprintStatistics = {
+  /** Blueprint UUID */
+  blueprint_id: string
+  /** Blueprint name */
+  blueprint_name: string
+  /** Total crafts */
+  total_crafts: number
+  /** Average output quality */
+  average_quality: number
+  /** Success rate percentage */
+  success_rate: number
+  /** Critical success count */
+  critical_successes: number
+  /** Total materials spent */
+  total_materials_cost: number
+}
+export type GetCraftingStatisticsResponse = {
+  /** Total crafting sessions */
+  total_sessions: number
+  /** Total unique blueprints crafted */
+  unique_blueprints_crafted: number
+  /** Average output quality across all crafts */
+  average_output_quality: number
+  /** Total critical successes */
+  total_critical_successes: number
+  /** Critical success rate percentage */
+  critical_success_rate: number
+  /** Total materials cost */
+  total_materials_cost: number
+  /** Statistics per blueprint */
+  blueprint_statistics: BlueprintStatistics[]
+}
+export type BlueprintSearchResult = {
+  /** Blueprint UUID */
+  blueprint_id: string
+  /** Blueprint name */
+  blueprint_name: string
+  /** Output item name */
+  output_item_name: string
+  /** Output item icon URL */
+  output_item_icon?: string
+  /** Item category */
+  item_category?: string
+  /** Rarity */
+  rarity?: string
+  /** Tier (1-5) */
+  tier?: number
+  /** Number of ingredients */
+  ingredient_count: number
+  /** Number of missions that reward this blueprint */
+  mission_count: number
+  /** Crafting time in seconds */
+  crafting_time_seconds?: number
+  /** Does user own this blueprint */
+  user_owns?: boolean
+}
+export type SearchBlueprintsResponse = {
+  /** Blueprint search results */
+  blueprints: BlueprintSearchResult[]
+  /** Total number of blueprints matching filters */
+  total: number
+  /** Current page number */
+  page: number
+  /** Page size */
+  page_size: number
+}
+export type Blueprint = {
+  blueprint_id: string
+  version_id: string
+  blueprint_code: string
+  blueprint_name: string
+  blueprint_description?: string
+  output_game_item_id: string
+  output_quantity: number
+  item_category?: string
+  item_subcategory?: string
+  rarity?: string
+  tier?: number
+  crafting_station_type?: string
+  crafting_time_seconds?: number
+  required_skill_level?: number
+  icon_url?: string
+  is_active: boolean
+  created_at: string
+  updated_at: string
+}
+export type GameItem = {
+  /** Game item UUID */
+  game_item_id: string
+  /** Item name */
+  name: string
+  /** Item type */
+  type: string
+  /** Icon URL */
+  icon_url?: string
+}
+export type BlueprintIngredient = {
+  /** Ingredient UUID */
+  ingredient_id: string
+  /** Game item reference */
+  game_item: GameItem
+  /** Required quantity */
+  quantity_required: number
+  /** Minimum quality tier (1-5) */
+  min_quality_tier?: number
+  /** Recommended quality tier (1-5) */
+  recommended_quality_tier?: number
+  /** Is alternative ingredient */
+  is_alternative: boolean
+  /** Alternative group ID */
+  alternative_group?: number
+  /** Minimum market price */
+  market_price_min?: number
+  /** Maximum market price */
+  market_price_max?: number
+  /** User inventory quantity */
+  user_inventory_quantity?: number
+}
+export type MissionRewardingBlueprint = {
+  /** Mission UUID */
+  mission_id: string
+  /** Mission name */
+  mission_name: string
+  /** Drop probability percentage (0-100) */
+  drop_probability: number
+  /** Star system */
+  star_system?: string
+}
+export type UserBlueprintAcquisition = {
+  /** Acquisition date */
+  acquisition_date: string
+  /** Acquisition method */
+  acquisition_method?: string
+  /** Acquisition location */
+  acquisition_location?: string
+  /** Acquisition notes */
+  acquisition_notes?: string
+}
+export type BlueprintDetailResponse = {
+  /** Complete blueprint data */
+  blueprint: Blueprint
+  /** Output item reference */
+  output_item: GameItem
+  /** Ingredients required */
+  ingredients: BlueprintIngredient[]
+  /** Missions that reward this blueprint */
+  missions_rewarding: MissionRewardingBlueprint[]
+  /** Crafting recipe (if available) */
+  crafting_recipe?: {
+    max_output_quality_tier: number
+    min_output_quality_tier: number
+    quality_calculation_type: string
+  }
+  /** Does user own this blueprint */
+  user_owns?: boolean
+  /** User acquisition data */
+  user_acquisition?: UserBlueprintAcquisition
+}
+export type BlueprintCategory = {
+  /** Category name */
+  category: string
+  /** Subcategory name */
+  subcategory?: string
+  /** Number of blueprints in this category */
+  count: number
+}
 export type MarketVersion = "V1" | "V2"
 export type GetFeatureFlagResponse = {
   /** User ID */
@@ -1693,7 +3632,7 @@ export type CartListingInfo = {
   seller_rating: number
   /** Current listing status */
   status: string
-  /** ISO 8601 timestamp of seller's next available slot, or null */
+  /** ISO 8601 timestamp of seller's next available slot, or null if not set / currently available */
   seller_next_available?: string | null
 }
 export type CartVariantDetail = {
@@ -1872,6 +3811,12 @@ export type UpdateStandingBuyOrderRequest = {
   negotiable?: boolean
   expires_in_days?: number
 }
+export type SellerNextAvailableResponse = {
+  /** ISO 8601 timestamp of next available slot, or null if currently available / no schedule */
+  next_available: string | null
+  /** Whether the seller has an availability schedule set */
+  has_schedule: boolean
+}
 export type PriceDataPoint = {
   /** ISO 8601 timestamp for this data point */
   timestamp: string
@@ -1993,6 +3938,30 @@ export type SetUserOverrideRequest = {
   user_id: string
   market_version: MarketVersion
 }
+export type ImportGameDataResponse = {
+  success: boolean
+  summary: {
+    fullSetsCreated: number
+    nameChanges: number
+    updated: number
+    inserted: number
+    matchedFuzzy: number
+    matchedCStoneUUID: number
+    matchedExact: number
+    matched: number
+    existingDBItems: number
+    validP4KItems: number
+    totalP4KItems: number
+  }
+  errors: string[]
+  timestamp: string
+}
+export type ImportErrorResponse = {
+  success: false
+  error: string
+  details?: string
+  timestamp: string
+}
 export const {
   useGetVariantTypesQuery,
   useCreateStockLotMutation,
@@ -2018,6 +3987,48 @@ export const {
   useSearchGameItemsQuery,
   useGetCategoriesQuery,
   useGetListingsQuery,
+  useGetWishlistsQuery,
+  useCreateWishlistMutation,
+  useGetWishlistQuery,
+  useUpdateWishlistMutation,
+  useDeleteWishlistMutation,
+  useAddWishlistItemMutation,
+  useRemoveWishlistItemMutation,
+  useUpdateWishlistItemMutation,
+  useGenerateShoppingListQuery,
+  useSearchItemsQuery,
+  useGetItemDetailQuery,
+  useGetShipsQuery,
+  useGetShipDetailQuery,
+  useGetCommoditiesQuery,
+  useGetLocationsQuery,
+  useGetManufacturersQuery,
+  useGetManufacturerDetailQuery,
+  useListVersionsQuery,
+  useGetActiveVersionsQuery,
+  useSelectVersionMutation,
+  useSearchResourcesQuery,
+  useGetResourceQuery,
+  useGetResourceCategoriesQuery,
+  useSearchMissionsQuery,
+  useGetMissionDetailQuery,
+  useGetMissionBlueprintsQuery,
+  useCompleteMissionMutation,
+  useRateMissionMutation,
+  useGetMissionChainsQuery,
+  useCalculateQualityMutation,
+  useSimulateCraftingMutation,
+  useRecordCraftingMutation,
+  useGetCraftingHistoryQuery,
+  useGetCraftableItemsQuery,
+  useGetCraftingStatisticsQuery,
+  useSearchBlueprintsQuery,
+  useGetBlueprintDetailQuery,
+  useGetBlueprintMissionsQuery,
+  useGetBlueprintCategoriesQuery,
+  useAddBlueprintToInventoryMutation,
+  useRemoveBlueprintFromInventoryMutation,
+  useGetUserBlueprintInventoryQuery,
   useGetFeatureFlagQuery,
   useSetFeatureFlagMutation,
   useGetCartQuery,
@@ -2032,6 +4043,7 @@ export const {
   useUpdateBuyOrderMutation,
   useCancelBuyOrderMutation,
   useFulfillBuyOrderMutation,
+  useGetNextAvailableQuery,
   useGetPriceHistoryQuery,
   useGetQualityDistributionQuery,
   useGetSellerStatsQuery,
@@ -2041,10 +4053,5 @@ export const {
   useGetUserOverridesQuery,
   useSetUserOverrideMutation,
   useRemoveUserOverrideMutation,
-  useGetSellerNextAvailableQuery,
+  useImportGameDataMutation,
 } = injectedRtkApi
-
-export type SellerNextAvailableResponse = {
-  next_available: string | null
-  has_schedule: boolean
-}

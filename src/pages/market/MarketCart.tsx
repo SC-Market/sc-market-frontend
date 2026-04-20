@@ -54,7 +54,7 @@ import {
 import { CheckCircle, Warning } from "@mui/icons-material"
 import { AvailabilitySelector } from "../../components/time/AvailabilitySelector"
 import { SellerNextAvailable } from "../../components/market/SellerNextAvailable"
-import { useGetSellerNextAvailableQuery } from "../../store/api/v2/market"
+import { useGetNextAvailableQuery } from "../../store/api/v2/market"
 import { convertAvailability } from "../../pages/availability/Availability.lazy"
 import { OrderLimitsDisplay } from "../../components/orders/OrderLimitsDisplay"
 import { BottomSheet } from "../../components/mobile/BottomSheet"
@@ -344,7 +344,7 @@ export function CartSellerEntry(props: {
   const [updateAvailability] = useProfileUpdateAvailabilityMutation()
 
   // Seller's next available time
-  const { data: sellerAvailability } = useGetSellerNextAvailableQuery(
+  const { data: sellerAvailability } = useGetNextAvailableQuery(
     {
       username: seller.user_seller_id || undefined,
       spectrumId: seller.contractor_seller_id || undefined,
