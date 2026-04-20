@@ -1321,6 +1321,14 @@ export type CreateListingRequest = {
   pickup_method?: "delivery" | "pickup" | "any"
   /** Quantity unit: 'unit' for discrete items, 'scu' for cargo measured in cSCU */
   quantity_unit?: "unit" | "scu"
+  /** Minimum quantity per order for this listing */
+  min_order_quantity?: number
+  /** Maximum quantity per order for this listing */
+  max_order_quantity?: number
+  /** Minimum order value (aUEC) for this listing */
+  min_order_value?: number
+  /** Maximum order value (aUEC) for this listing */
+  max_order_value?: number
   /** Optional bulk discount tiers sorted by min_quantity ascending */
   bulk_discount_tiers?: BulkDiscountTier[]
 }
@@ -1445,6 +1453,11 @@ export type ListingDetail = {
   pickup_method?: ("delivery" | "pickup" | "any" | null) | null
   /** Quantity unit: 'unit' or 'scu' */
   quantity_unit: "unit" | "scu"
+  /** Per-listing order limits (null = no limit) */
+  min_order_quantity?: number | null
+  max_order_quantity?: number | null
+  min_order_value?: number | null
+  max_order_value?: number | null
 }
 export type SellerInfo = {
   /** Seller UUID */
@@ -1539,6 +1552,11 @@ export type UpdateListingRequest = {
   pickup_method?: ("delivery" | "pickup" | "any" | null) | null
   /** Quantity unit */
   quantity_unit?: "unit" | "scu"
+  /** Per-listing order limits (null to remove) */
+  min_order_quantity?: number | null
+  max_order_quantity?: number | null
+  min_order_value?: number | null
+  max_order_value?: number | null
   /** Updated bulk discount tiers (pass [] to remove, omit to keep unchanged) */
   bulk_discount_tiers?: BulkDiscountTier[]
 }

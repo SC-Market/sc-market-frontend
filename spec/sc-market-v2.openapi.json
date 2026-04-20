@@ -1491,6 +1491,26 @@
 						],
 						"description": "Quantity unit: 'unit' for discrete items, 'scu' for cargo measured in cSCU"
 					},
+					"min_order_quantity": {
+						"type": "number",
+						"format": "double",
+						"description": "Minimum quantity per order for this listing"
+					},
+					"max_order_quantity": {
+						"type": "number",
+						"format": "double",
+						"description": "Maximum quantity per order for this listing"
+					},
+					"min_order_value": {
+						"type": "number",
+						"format": "double",
+						"description": "Minimum order value (aUEC) for this listing"
+					},
+					"max_order_value": {
+						"type": "number",
+						"format": "double",
+						"description": "Maximum order value (aUEC) for this listing"
+					},
 					"bulk_discount_tiers": {
 						"items": {
 							"$ref": "#/components/schemas/BulkDiscountTier"
@@ -1887,6 +1907,27 @@
 							"scu"
 						],
 						"description": "Quantity unit: 'unit' or 'scu'"
+					},
+					"min_order_quantity": {
+						"type": "number",
+						"format": "double",
+						"nullable": true,
+						"description": "Per-listing order limits (null = no limit)"
+					},
+					"max_order_quantity": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					},
+					"min_order_value": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					},
+					"max_order_value": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
 					}
 				},
 				"required": [
@@ -2198,6 +2239,27 @@
 						],
 						"description": "Quantity unit"
 					},
+					"min_order_quantity": {
+						"type": "number",
+						"format": "double",
+						"nullable": true,
+						"description": "Per-listing order limits (null to remove)"
+					},
+					"max_order_quantity": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					},
+					"min_order_value": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					},
+					"max_order_value": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					},
 					"bulk_discount_tiers": {
 						"items": {
 							"$ref": "#/components/schemas/BulkDiscountTier"
@@ -2206,6 +2268,71 @@
 						"description": "Updated bulk discount tiers (pass [] to remove, omit to keep unchanged)"
 					}
 				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ImportSource": {
+				"type": "string",
+				"enum": [
+					"cstone-items",
+					"uex-items",
+					"uex-attributes"
+				]
+			},
+			"JobStatus": {
+				"type": "string",
+				"enum": [
+					"running",
+					"completed",
+					"failed"
+				]
+			},
+			"Record_string.any_": {
+				"properties": {},
+				"additionalProperties": {},
+				"type": "object",
+				"description": "Construct a type with a set of properties K of type T"
+			},
+			"ImportJob": {
+				"properties": {
+					"id": {
+						"type": "string"
+					},
+					"source": {
+						"$ref": "#/components/schemas/ImportSource"
+					},
+					"status": {
+						"$ref": "#/components/schemas/JobStatus"
+					},
+					"startedAt": {
+						"type": "string"
+					},
+					"completedAt": {
+						"type": "string",
+						"nullable": true
+					},
+					"result": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/Record_string.any_"
+							}
+						],
+						"nullable": true
+					},
+					"error": {
+						"type": "string",
+						"nullable": true
+					}
+				},
+				"required": [
+					"id",
+					"source",
+					"status",
+					"startedAt",
+					"completedAt",
+					"result",
+					"error"
+				],
 				"type": "object",
 				"additionalProperties": false
 			},
