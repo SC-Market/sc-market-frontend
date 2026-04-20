@@ -48,6 +48,8 @@ import { useCookies } from "react-cookie";
 import { FRONTEND_URL } from "../../../util/constants";
 import { Cart } from "../../../datatypes/Cart";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { StandardPageLayout } from "../../../components/layout/StandardPageLayout";
+import ShoppingCartRoundedIcon from "@mui/icons-material/ShoppingCartRounded";
 import { ListingNameAndRating } from "../../../components/rating/ListingRating";
 import {
   HeadCell,
@@ -329,28 +331,43 @@ export function MarketAggregateViewV2() {
     // await updateAggregateV2Mutation({ game_item_id: game_item.id, data });
   };
 
-  if (isLoading) {
-    return (
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <Typography>Loading...</Typography>
-        </Grid>
-      </Grid>
-    );
-  }
-
-  if (error) {
-    return (
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <Typography color="error">Failed to load aggregate view</Typography>
-        </Grid>
-      </Grid>
-    );
-  }
-
   return (
+    <StandardPageLayout
+      title={game_item.name || "Market Item"}
+      headerTitle={game_item.name}
+      breadcrumbs={[
+        { label: t("sidebar.market_short", "Market"), href: "/market" },
+        ...(game_item.type ? [{ label: game_item.type, href: `/market?type=${encodeURIComponent(game_item.type)}` }] : []),
+        { label: game_item.name || "Item" },
+      ]}
+      isLoading={isLoading}
+      error={error ? "not_found" : undefined}
+      sidebarOpen={true}
+      maxWidth="xl"
+    >
     <Grid container spacing={2}>
+      {/* SEO */}
+      <Helmet>
+        <title>{game_item.name} — SC Market</title>
+        <meta property="og:title" content={game_item.name} />
+        <meta property="og:url" content={`${FRONTEND_URL}/market/aggregate/${game_item.id}`} />
+        {game_item.image_url && <meta property="og:image" content={game_item.image_url} />}
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Product",
+          name: game_item.name,
+          image: game_item.image_url || undefined,
+          url: `${FRONTEND_URL}/market/aggregate/${game_item.id}`,
+          offers: {
+            "@type": "AggregateOffer",
+            offerCount: listings.length,
+            lowPrice: listings.length ? Math.min(...listings.map(l => l.price_min)) : undefined,
+            highPrice: listings.length ? Math.max(...listings.map(l => l.price_max)) : undefined,
+            priceCurrency: "aUEC",
+          },
+        })}</script>
+      </Helmet>
+
       {/* Image Section */}
       <Grid item xs={12} lg={4}>
         <ImagePreviewModal
@@ -624,6 +641,7 @@ export function MarketAggregateViewV2() {
         <AggregateChartV2 aggregate={complete} />
       </Grid>
     </Grid>
+    </StandardPageLayout>
   );
 }
 
