@@ -1,0 +1,529 @@
+/**
+ * WishlistDetail Component
+ * 
+ * Display wishlist items with quantities, quality tiers, acquisition status,
+ * and support item priority sorting.
+ * 
+ * Task 14.2 - Create WishlistDetail component
+ * Requirements: 8.1, 8.2, 8.3, 53.1-53.10
+ */
+
+import React, { useState, useMemo } from "react"
+import { useParams, useNavigate } from "react-router-dom"
+import {
+  Box,
+  Typography,
+  Button,
+  Card,
+  CardContent,
+  CircularProgress,
+  Alert,
+  Chip,
+  IconButton,
+  Menu,
+  MenuItem,
+  ListItemIcon,
+  ListItemText,
+  Stack,
+  Avatar,
+  LinearProgress,
+  Tooltip,
+  Select,
+  FormControl,
+  InputLabel,
+  SelectChangeEvent,
+} from "@mui/material"
+import {
+  Add,
+  MoreVert,
+  Edit,
+  Delete,
+  CheckCircle,
+  RadioButtonUnchecked,
+  Star,
+  StarBorder,
+  ArrowBack,
+  Sort,
+  Build,
+  ShoppingCart,
+} from "@mui/icons-material"
+import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
+import {
+  useGetWishlistQuery,
+  useRemoveWishlistItemMutation,
+  useUpdateWishlistItemMutation,
+  WishlistItemWithDetails,
+} from "../../store/wishlistsApi"
+
+type SortOption = "priority" | "name" | "status" | "quality"
+
+/**
+ * WishlistDetail Component
+ * 
+ * Features:
+ * - Display wishlist items with details (53.1, 53.2)
+ * - Show item name, icon, quantity, quality tier (53.2)
+ * - Show crafting availability (53.3)
+ * - Display progress statistics (53.4)
+ * - Support priority sorting (53.5, 53.9)
+ * - Show quality tier specification (53.6)
+ * - Display notes (53.7)
+ * - Update acquisition status (53.8)
+ * - Actions: add, edit, remove, mark acquired
+ */
+export function WishlistDetail() {
+  const { wishlist_id } = useParams<{ wishlist_id: string }>()
+  const navigate = useNavigate()
+
+  // State
+  const [sortBy, setSortBy] = useState<SortOption>("priority")
+  const [itemMenuAnchor, setItemMenuAnchor] = useState<{
+    element: HTMLElement
+    item: WishlistItemWithDetails
+  } | null>(null)
+
+  // Query wishlist detail (Requirements 53.1, 53.2, 53.3, 53.4)
+  const { data, isLoading, error } = useGetWishlistQuery(
+    { wishlist_id: wishlist_id! },
+    { skip: !wishlist_id }
+  )
+
+  // Mutations
+  const [removeItem] = useRemoveWishlistItemMutation()
+  const [updateItem] = useUpdateWishlistItemMutation()
+
+  // Handlers
+  const handleBack = () => {
+    navigate("/wishlists")
+  }
+
+  const handleAddItem = () => {
+    // TODO: Open AddItemDialog (Task 14.3)
+    console.log("Add item dialog - to be implemented in Task 14.3")
+  }
+
+  const handleSortChange = (event: SelectChangeEvent<SortOption>) => {
+    setSortBy(event.target.value as SortOption)
+  }
+
+  const handleItemMenuOpen = (event: React.MouseEvent<HTMLElement>, item: WishlistItemWithDetails) => {
+    setItemMenuAnchor({ element: event.currentTarget, item })
+  }
+
+  const handleItemMenuClose = () => {
+    setItemMenuAnchor(null)
+  }
+
+  const handleToggleAcquired = async (item: WishlistItemWithDetails) => {
+    if (!wishlist_id) return
+
+    try {
+      await updateItem({
+        wishlist_id,
+        item_id: item.item_id,
+        body: {
+          is_acquired: !item.is_acquired,
+          acquired_quantity: !item.is_acquired ? item.desired_quantity : 0,
+        },
+      }).unwrap()
+    } catch (err) {
+      console.error("Failed to update item status:", err)
+    }
+  }
+
+  const handleEditItem = (item: WishlistItemWithDetails) => {
+    handleItemMenuClose()
+    // TODO: Open edit dialog (Task 14.3)
+    console.log("Edit item:", item)
+  }
+
+  const handleRemoveItem = async (item: WishlistItemWithDetails) => {
+    if (!wishlist_id) return
+
+    handleItemMenuClose()
+
+    try {
+      await removeItem({
+        wishlist_id,
+        item_id: item.item_id,
+      }).unwrap()
+    } catch (err) {
+      console.error("Failed to remove item:", err)
+    }
+  }
+
+  const handleViewShoppingList = () => {
+    navigate(`/wishlists/${wishlist_id}/shopping-list`)
+  }
+
+  // Sort items (Requirement 53.9)
+  const sortedItems = useMemo(() => {
+    if (!data?.items) return []
+
+    const items = [...data.items]
+
+    switch (sortBy) {
+      case "priority":
+        return items.sort((a, b) => b.priority - a.priority)
+      case "name":
+        return items.sort((a, b) => a.game_item_name.localeCompare(b.game_item_name))
+      case "status":
+        return items.sort((a, b) => {
+          if (a.is_acquired === b.is_acquired) return 0
+          return a.is_acquired ? 1 : -1
+        })
+      case "quality":
+        return items.sort((a, b) => {
+          const aQuality = a.desired_quality_tier || 0
+          const bQuality = b.desired_quality_tier || 0
+          return bQuality - aQuality
+        })
+      default:
+        return items
+    }
+  }, [data?.items, sortBy])
+
+  // Loading state
+  if (isLoading) {
+    return (
+      <StandardPageLayout title="Loading..." headerTitle="Loading Wishlist...">
+        <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
+          <CircularProgress />
+        </Box>
+      </StandardPageLayout>
+    )
+  }
+
+  // Error state
+  if (error || !data) {
+    return (
+      <StandardPageLayout title="Error" headerTitle="Wishlist Not Found">
+        <Alert severity="error" sx={{ m: 3 }}>
+          Failed to load wishlist. It may not exist or you don't have permission to view it.
+        </Alert>
+        <Button startIcon={<ArrowBack />} onClick={handleBack} sx={{ ml: 3 }}>
+          Back to Wishlists
+        </Button>
+      </StandardPageLayout>
+    )
+  }
+
+  const { wishlist, items, statistics } = data
+
+  return (
+    <StandardPageLayout
+      title={wishlist.wishlist_name}
+      headerTitle={wishlist.wishlist_name}
+      breadcrumbs={[
+        { label: "Home", href: "/" },
+        { label: "Wishlists", href: "/wishlists" },
+        { label: wishlist.wishlist_name },
+      ]}
+      headerActions={
+        <Stack direction="row" spacing={1}>
+          <Button
+            variant="outlined"
+            startIcon={<ShoppingCart />}
+            onClick={handleViewShoppingList}
+            disabled={items.length === 0}
+          >
+            Shopping List
+          </Button>
+          <Button variant="contained" startIcon={<Add />} onClick={handleAddItem}>
+            Add Item
+          </Button>
+        </Stack>
+      }
+    >
+      {/* Wishlist Description */}
+      {wishlist.wishlist_description && (
+        <Box sx={{ mb: 3 }}>
+          <Typography variant="body1" color="text.secondary">
+            {wishlist.wishlist_description}
+          </Typography>
+        </Box>
+      )}
+
+      {/* Statistics Card (Requirement 53.4) */}
+      <Card sx={{ mb: 3 }}>
+        <CardContent>
+          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
+            <Typography variant="h6">Progress</Typography>
+            <Typography variant="h4" color="primary">
+              {statistics.progress_percentage}%
+            </Typography>
+          </Box>
+
+          <LinearProgress
+            variant="determinate"
+            value={statistics.progress_percentage}
+            sx={{ height: 8, borderRadius: 4, mb: 2 }}
+          />
+
+          <Box sx={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 2 }}>
+            <Box>
+              <Typography variant="caption" color="text.secondary">
+                Total Items
+              </Typography>
+              <Typography variant="h6">{statistics.total_items}</Typography>
+            </Box>
+            <Box>
+              <Typography variant="caption" color="text.secondary">
+                Completed
+              </Typography>
+              <Typography variant="h6" color="success.main">
+                {statistics.completed_items}
+              </Typography>
+            </Box>
+            <Box>
+              <Typography variant="caption" color="text.secondary">
+                Remaining
+              </Typography>
+              <Typography variant="h6" color="warning.main">
+                {statistics.total_items - statistics.completed_items}
+              </Typography>
+            </Box>
+            {statistics.total_estimated_cost > 0 && (
+              <Box>
+                <Typography variant="caption" color="text.secondary">
+                  Estimated Cost
+                </Typography>
+                <Typography variant="h6">{statistics.total_estimated_cost.toLocaleString()} aUEC</Typography>
+              </Box>
+            )}
+          </Box>
+        </CardContent>
+      </Card>
+
+      {/* Sort Controls (Requirement 53.9) */}
+      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
+        <Typography variant="h6">
+          Items ({items.length})
+        </Typography>
+
+        <FormControl size="small" sx={{ minWidth: 150 }}>
+          <InputLabel>Sort By</InputLabel>
+          <Select
+            value={sortBy}
+            label="Sort By"
+            onChange={handleSortChange}
+            startAdornment={<Sort fontSize="small" sx={{ mr: 1, ml: 1 }} />}
+          >
+            <MenuItem value="priority">Priority</MenuItem>
+            <MenuItem value="name">Name</MenuItem>
+            <MenuItem value="status">Status</MenuItem>
+            <MenuItem value="quality">Quality</MenuItem>
+          </Select>
+        </FormControl>
+      </Box>
+
+      {/* Items List (Requirements 53.1, 53.2, 53.3, 53.5, 53.6, 53.7, 53.8) */}
+      {sortedItems.length === 0 ? (
+        <Card sx={{ textAlign: "center", py: 8 }}>
+          <CardContent>
+            <Typography variant="h6" color="text.secondary" gutterBottom>
+              No items in this wishlist
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+              Add items to start tracking what you want to acquire or craft
+            </Typography>
+            <Button variant="contained" startIcon={<Add />} onClick={handleAddItem}>
+              Add Your First Item
+            </Button>
+          </CardContent>
+        </Card>
+      ) : (
+        <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+          {sortedItems.map((item) => (
+            <Card
+              key={item.item_id}
+              sx={{
+                opacity: item.is_acquired ? 0.6 : 1,
+                transition: "all 0.2s",
+                "&:hover": {
+                  boxShadow: 3,
+                },
+              }}
+            >
+              <CardContent>
+                <Box sx={{ display: "flex", gap: 2 }}>
+                  {/* Item Icon */}
+                  <Avatar
+                    src={item.game_item_icon}
+                    alt={item.game_item_name}
+                    sx={{ width: 64, height: 64 }}
+                    variant="rounded"
+                  >
+                    {item.game_item_name.charAt(0)}
+                  </Avatar>
+
+                  {/* Item Details */}
+                  <Box sx={{ flex: 1 }}>
+                    {/* Item Name and Status */}
+                    <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", mb: 1 }}>
+                      <Box sx={{ flex: 1 }}>
+                        <Typography variant="h6" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                          {item.game_item_name}
+                          {item.is_acquired && (
+                            <Chip
+                              icon={<CheckCircle />}
+                              label="Acquired"
+                              size="small"
+                              color="success"
+                              variant="outlined"
+                            />
+                          )}
+                        </Typography>
+                        <Typography variant="caption" color="text.secondary">
+                          {item.game_item_type}
+                        </Typography>
+                      </Box>
+
+                      {/* Actions Menu */}
+                      <IconButton
+                        size="small"
+                        onClick={(e) => handleItemMenuOpen(e, item)}
+                      >
+                        <MoreVert />
+                      </IconButton>
+                    </Box>
+
+                    {/* Item Properties */}
+                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 2, mb: 1 }}>
+                      {/* Quantity (Requirement 53.2) */}
+                      <Box>
+                        <Typography variant="caption" color="text.secondary" display="block">
+                          Quantity
+                        </Typography>
+                        <Typography variant="body2">
+                          {item.acquired_quantity} / {item.desired_quantity}
+                        </Typography>
+                      </Box>
+
+                      {/* Quality Tier (Requirement 53.6) */}
+                      {item.desired_quality_tier && (
+                        <Box>
+                          <Typography variant="caption" color="text.secondary" display="block">
+                            Quality Tier
+                          </Typography>
+                          <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+                            {[1, 2, 3, 4, 5].map((tier) => (
+                              <Box key={tier}>
+                                {tier <= item.desired_quality_tier! ? (
+                                  <Star fontSize="small" color="primary" />
+                                ) : (
+                                  <StarBorder fontSize="small" color="disabled" />
+                                )}
+                              </Box>
+                            ))}
+                          </Box>
+                        </Box>
+                      )}
+
+                      {/* Priority (Requirement 53.5) */}
+                      <Box>
+                        <Typography variant="caption" color="text.secondary" display="block">
+                          Priority
+                        </Typography>
+                        <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+                          {[1, 2, 3, 4, 5].map((level) => (
+                            <Box
+                              key={level}
+                              sx={{
+                                width: 8,
+                                height: 16,
+                                bgcolor: level <= item.priority ? "primary.main" : "action.disabled",
+                                borderRadius: 0.5,
+                              }}
+                            />
+                          ))}
+                        </Box>
+                      </Box>
+
+                      {/* Crafting Available (Requirement 53.3) */}
+                      {item.crafting_available && (
+                        <Tooltip title={`Craftable from: ${item.blueprint_name}`}>
+                          <Chip
+                            icon={<Build />}
+                            label="Craftable"
+                            size="small"
+                            color="info"
+                            variant="outlined"
+                          />
+                        </Tooltip>
+                      )}
+
+                      {/* Estimated Cost */}
+                      {item.estimated_cost && (
+                        <Box>
+                          <Typography variant="caption" color="text.secondary" display="block">
+                            Est. Cost
+                          </Typography>
+                          <Typography variant="body2">
+                            {item.estimated_cost.toLocaleString()} aUEC
+                          </Typography>
+                        </Box>
+                      )}
+                    </Box>
+
+                    {/* Notes (Requirement 53.7) */}
+                    {item.notes && (
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        sx={{
+                          fontStyle: "italic",
+                          mt: 1,
+                          p: 1,
+                          bgcolor: "action.hover",
+                          borderRadius: 1,
+                        }}
+                      >
+                        {item.notes}
+                      </Typography>
+                    )}
+
+                    {/* Quick Actions */}
+                    <Box sx={{ display: "flex", gap: 1, mt: 2 }}>
+                      <Button
+                        size="small"
+                        variant={item.is_acquired ? "outlined" : "contained"}
+                        startIcon={item.is_acquired ? <RadioButtonUnchecked /> : <CheckCircle />}
+                        onClick={() => handleToggleAcquired(item)}
+                      >
+                        {item.is_acquired ? "Mark as Needed" : "Mark as Acquired"}
+                      </Button>
+                    </Box>
+                  </Box>
+                </Box>
+              </CardContent>
+            </Card>
+          ))}
+        </Box>
+      )}
+
+      {/* Item Actions Menu */}
+      <Menu
+        anchorEl={itemMenuAnchor?.element}
+        open={Boolean(itemMenuAnchor)}
+        onClose={handleItemMenuClose}
+      >
+        <MenuItem onClick={() => itemMenuAnchor && handleEditItem(itemMenuAnchor.item)}>
+          <ListItemIcon>
+            <Edit fontSize="small" />
+          </ListItemIcon>
+          <ListItemText>Edit Item</ListItemText>
+        </MenuItem>
+        <MenuItem
+          onClick={() => itemMenuAnchor && handleRemoveItem(itemMenuAnchor.item)}
+          sx={{ color: "error.main" }}
+        >
+          <ListItemIcon>
+            <Delete fontSize="small" color="error" />
+          </ListItemIcon>
+          <ListItemText>Remove Item</ListItemText>
+        </MenuItem>
+      </Menu>
+    </StandardPageLayout>
+  )
+}

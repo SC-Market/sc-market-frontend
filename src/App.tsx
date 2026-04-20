@@ -957,6 +957,18 @@ const router = createBrowserRouter([
         }),
       },
       {
+        path: "/blueprints/inventory",
+        lazy: async () => ({
+          Component: (await import("./pages/blueprints/BlueprintInventory")).BlueprintInventory,
+        }),
+      },
+      {
+        path: "/wishlists",
+        lazy: async () => ({
+          Component: (await import("./pages/wishlists/WishlistManager")).WishlistManager,
+        }),
+      },
+      {
         path: "/resources",
         lazy: async () => ({
           Component: (await import("./pages/resources/ResourceBrowser")).ResourceBrowser,
