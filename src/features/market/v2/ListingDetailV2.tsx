@@ -367,23 +367,7 @@ export function ListingDetailV2() {
                         <VariantBreakdown
                           variants={item.variants}
                           showActions={listing.status === "active"}
-                          onSelectVariant={async (variantId) => {
-                            try {
-                              await addToCart({
-                                addToCartRequest: {
-                                  listing_id: id!,
-                                  variant_id: variantId,
-                                  quantity: 1,
-                                },
-                              }).unwrap()
-                              issueAlert({ message: "Added to cart", severity: "success" })
-                            } catch (err) {
-                              issueAlert({
-                                message: err instanceof Error ? err.message : "Failed to add to cart",
-                                severity: "error",
-                              })
-                            }
-                          }}
+                          onSelectVariant={() => setCartDrawerOpen(true)}
                         />
                       ) : (
                         <Typography variant="body2" color="text.secondary">
@@ -425,6 +409,13 @@ export function ListingDetailV2() {
             />
           )}
         </Grid>
+      )}
+      {id && (
+        <AddToCartDrawer
+          open={cartDrawerOpen}
+          onClose={() => setCartDrawerOpen(false)}
+          listingId={id}
+        />
       )}
     </StandardPageLayout>
   )
