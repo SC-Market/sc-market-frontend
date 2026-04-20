@@ -329,7 +329,7 @@ export function MarketMultipleViewV2() {
                   <meta property="og:type" content="website" />
                   <meta
                     property="og:url"
-                    content={`${FRONTEND_URL}/market/v2/multiple/${complete.listing_id}`}
+                    content={`${FRONTEND_URL}/market/multiple/${complete.listing_id}`}
                   />
                   <meta property="og:title" content={complete.title} />
                   <meta property="og:description" content={complete.description} />
@@ -337,7 +337,7 @@ export function MarketMultipleViewV2() {
                   <meta name="twitter:card" content="summary_large_image" />
                   <meta
                     name="twitter:url"
-                    content={`${FRONTEND_URL}/market/v2/multiple/${complete.listing_id}`}
+                    content={`${FRONTEND_URL}/market/multiple/${complete.listing_id}`}
                   />
                   <meta name="twitter:title" content={complete.title} />
                   <meta name="twitter:description" content={complete.description} />
@@ -419,7 +419,7 @@ export function MarketMultipleViewV2() {
                               component={Link}
                               underline="hover"
                               color="inherit"
-                              to="/market/v2"
+                              to="/market"
                             >
                               {t("MarketMultipleView.market")}
                             </MaterialLink>
@@ -427,7 +427,7 @@ export function MarketMultipleViewV2() {
                               component={Link}
                               underline="hover"
                               color="inherit"
-                              to={`/market/v2?type=${encodeURIComponent(
+                              to={`/market?type=${encodeURIComponent(
                                 currentItem.game_item.type
                               )}`}
                             >
@@ -438,7 +438,7 @@ export function MarketMultipleViewV2() {
                                 component={Link}
                                 underline="hover"
                                 color="text.secondary"
-                                to={`/market/v2?query=${encodeURIComponent(
+                                to={`/market?query=${encodeURIComponent(
                                   currentItem.game_item.name
                                 )}`}
                               >
@@ -529,7 +529,7 @@ export function MarketMultipleViewV2() {
                       }
                       action={
                         amRelated ? (
-                          <Link to={`/market/v2/multiple/${complete.listing_id}/edit`}>
+                          <Link to={`/market/multiple/${complete.listing_id}/edit`}>
                             <IconButton>
                               <CreateRounded
                                 style={{ color: theme.palette.text.secondary }}

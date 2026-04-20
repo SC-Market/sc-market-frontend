@@ -301,7 +301,7 @@ export function EditListingV2() {
         });
 
         // Navigate back to listing detail page
-        navigate(`/market/v2/${id}`);
+        navigate(`/market/${id}`);
       } catch (error: any) {
         issueAlert({
           message:
@@ -705,7 +705,7 @@ export function EditListingV2() {
               size="large"
               variant="outlined"
               color="secondary"
-              onClick={() => navigate(`/market/v2/${id}`)}
+              onClick={() => navigate(`/market/${id}`)}
             >
               {t("EditListingV2.cancel", "Cancel")}
             </Button>

@@ -291,13 +291,13 @@ function MyListingCard({ listing, index }: MyListingCardProps) {
   };
 
   const handleCardClick = useCallback(() => {
-    navigate(`/market/v2/${listing.listing_id}`);
+    navigate(`/market/${listing.listing_id}`);
   }, [navigate, listing.listing_id]);
 
   const handleEditClick = useCallback(
     (e: React.MouseEvent) => {
       e.stopPropagation(); // Prevent card click
-      navigate(`/market/v2/${listing.listing_id}/edit`);
+      navigate(`/market_edit/${listing.listing_id}`);
     },
     [navigate, listing.listing_id],
   );

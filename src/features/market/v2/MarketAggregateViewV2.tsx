@@ -427,7 +427,7 @@ export function MarketAggregateViewV2() {
           <meta property="og:type" content="website" />
           <meta
             property="og:url"
-            content={`${FRONTEND_URL}/market/v2/aggregate/${game_item.id}`}
+            content={`${FRONTEND_URL}/market/aggregate/${game_item.id}`}
           />
           <meta property="og:title" content={game_item.name} />
           <meta property="og:description" content={game_item.description} />
@@ -435,7 +435,7 @@ export function MarketAggregateViewV2() {
           <meta name="twitter:card" content="summary_large_image" />
           <meta
             name="twitter:url"
-            content={`${FRONTEND_URL}/market/v2/aggregate/${game_item.id}`}
+            content={`${FRONTEND_URL}/market/aggregate/${game_item.id}`}
           />
           <meta name="twitter:title" content={game_item.name} />
           <meta name="twitter:description" content={game_item.description} />
@@ -473,7 +473,7 @@ export function MarketAggregateViewV2() {
                       component={Link}
                       underline="hover"
                       color="inherit"
-                      to="/market/v2"
+                      to="/market"
                     >
                       {t("MarketAggregateView.market")}
                     </MaterialLink>
@@ -481,7 +481,7 @@ export function MarketAggregateViewV2() {
                       component={Link}
                       underline="hover"
                       color="inherit"
-                      to={`/market/v2?type=${encodeURIComponent(game_item.type)}`}
+                      to={`/market?type=${encodeURIComponent(game_item.type)}`}
                     >
                       {game_item.type}
                     </MaterialLink>
@@ -489,7 +489,7 @@ export function MarketAggregateViewV2() {
                       component={Link}
                       underline="hover"
                       color="text.secondary"
-                      to={`/market/v2?query=${encodeURIComponent(game_item.name)}`}
+                      to={`/market?query=${encodeURIComponent(game_item.name)}`}
                     >
                       {game_item.name}
                     </MaterialLink>
@@ -970,7 +970,7 @@ export function AggregateRowV2(props: {
         {justAddedToCart ? (
           <Button
             component={Link}
-            to="/market/v2/cart"
+            to="/market/cart"
             variant={"contained"}
             color={"secondary"}
             size={"large"}
