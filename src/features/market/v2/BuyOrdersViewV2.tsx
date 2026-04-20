@@ -11,7 +11,7 @@ import {
   useMediaQuery,
   Chip,
 } from "@mui/material"
-import { Link, useNavigate } from "react-router-dom"
+import { Link, useNavigate, useLocation } from "react-router-dom"
 import { useGetUserProfileQuery } from "../../../store/profile"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { useTheme } from "@mui/material/styles"
@@ -23,6 +23,9 @@ import {
 } from "../../../components/table/PaginatedTable"
 import { PullToRefresh } from "../../../components/gestures"
 import { EmptyState } from "../../../components/empty-states"
+import { StandardPageLayout } from "../../../components/layout/StandardPageLayout"
+import { GameItemSearchAutocomplete } from "../components/GameItemSearchAutocomplete"
+import { CreateBuyOrderV2 } from "./components/CreateBuyOrderV2"
 import { BaseSkeleton } from "../../../components/skeletons/BaseSkeleton"
 import { QualityBadge } from "../../../components/market/v2/QualityBadge"
 import {
@@ -484,6 +487,44 @@ export function BuyOrdersViewV2() {
   const { t } = useTranslation()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const { data: profile } = useGetUserProfileQuery()
+  const location = useLocation()
+  const isCreateMode = location.pathname.includes("/buyorder/create")
+  const [selectedGameItemId, setSelectedGameItemId] = useState<string | null>(null)
+
+  // If in create mode, show the create form
+  if (isCreateMode) {
+    return (
+      <StandardPageLayout
+        title={t("buyOrderActions.createBuyOrder", "Create Buy Order")}
+        headerTitle={t("buyOrderActions.createBuyOrder", "Create Buy Order")}
+        breadcrumbs={[
+          { label: t("sidebar.market_short", "Market"), href: "/market" },
+          { label: t("sidebar.buy_orders", "Buy Orders"), href: "/buyorders" },
+          { label: t("buyOrderActions.createBuyOrder", "Create Buy Order") },
+        ]}
+        sidebarOpen={true}
+        maxWidth="lg"
+      >
+        <Grid item xs={12}>
+          <Paper sx={{ p: 3 }}>
+            <Typography variant="h6" fontWeight="bold" sx={{ mb: 2 }}>
+              {t("buyOrderActions.selectItem", "Select Game Item")}
+            </Typography>
+            <GameItemSearchAutocomplete
+              value={null}
+              onChange={(_name, _type, itemId) => setSelectedGameItemId(itemId)}
+              label={t("buyOrderActions.searchItem", "Search for a game item")}
+            />
+          </Paper>
+        </Grid>
+        {selectedGameItemId && (
+          <Grid item xs={12}>
+            <CreateBuyOrderV2 gameItemId={selectedGameItemId} />
+          </Grid>
+        )}
+      </StandardPageLayout>
+    )
+  }
 
   // Fetch purchase history via V2 orders API
   const {
