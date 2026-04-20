@@ -44,23 +44,23 @@ function LoadingRow() {
 }
 
 export function SellerOtherListingsV2(props: {
-  sellerId?: string | null
-  contractorId?: string | null
+  sellerUsername?: string | null
+  contractorSpectrumId?: string | null
   currentListingId: string
 }) {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
-  const { sellerId, contractorId, currentListingId } = props
+  const { sellerUsername, contractorSpectrumId, currentListingId } = props
 
   const { data, isLoading } = useSearchListingsQuery(
     {
-      sellerId: sellerId || undefined,
-      contractorId: contractorId || undefined,
+      sellerUsername: sellerUsername || undefined,
+      contractorSpectrumId: contractorSpectrumId || undefined,
       pageSize: 8,
       sortBy: "created_at",
       sortOrder: "desc",
     },
-    { skip: !sellerId && !contractorId },
+    { skip: !sellerUsername && !contractorSpectrumId },
   )
 
   const listings = useMemo(

@@ -99,8 +99,8 @@ export function OrgStoreView(props: { org: string }) {
 /** Lightweight V2 listing grid for profile/org pages */
 function ProfileListingsV2(props: { sellerId?: string; contractorId?: string }) {
   const { data, isLoading } = useSearchListingsQuery({
-    sellerId: props.sellerId,
-    contractorId: props.contractorId,
+    sellerUsername: props.sellerId,
+    contractorSpectrumId: props.contractorId,
     page: 1,
     pageSize: 20,
     status: "active",

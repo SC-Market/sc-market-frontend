@@ -106,7 +106,6 @@ export interface BundleItemV2 {
 /** Bundle listing data structure */
 export interface BundleListingV2 {
   listing_id: string;
-  seller_id: string;
   seller_type: "user" | "contractor";
   title: string;
   description: string;
@@ -117,7 +116,6 @@ export interface BundleListingV2 {
   items: BundleItemV2[];
   photos: string[];
   seller: {
-    id: string;
     name: string;
     slug: string;
     display_name?: string;
@@ -146,7 +144,6 @@ export function MarketMultipleViewV2() {
     const { listing, seller, items } = listingDetail;
     return {
       listing_id: listing.listing_id,
-      seller_id: listing.seller_id,
       seller_type: listing.seller_type,
       title: listing.title,
       description: listing.description,
@@ -180,7 +177,6 @@ export function MarketMultipleViewV2() {
         ? [items[0].game_item.image_url]
         : ["https://cdn.robertsspaceindustries.com/static/images/Temp/default-image.png"],
       seller: {
-        id: seller.id,
         name: seller.name,
         slug: seller.slug,
         avatar: seller.avatar_url,
