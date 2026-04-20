@@ -24,8 +24,10 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
+  Tabs,
+  Tab,
 } from "@mui/material"
-import { Add as AddIcon } from "@mui/icons-material"
+import { Add as AddIcon, Inventory as InventoryIcon, Build as BuildIcon } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import {
   useGetStockLotsQuery,
@@ -36,6 +38,7 @@ import { StockBreakdown } from "../components/stock/StockBreakdown"
 import { LotListItemV2 } from "./components/LotListItemV2"
 import { CreateLotDialogV2 } from "./components/CreateLotDialogV2"
 import { TransferLotDialogV2 } from "./components/TransferLotDialogV2"
+import { CraftableItemsView } from "./components/CraftableItemsView"
 
 export interface StockManagerV2Props {
   listingId: string
@@ -60,6 +63,9 @@ export function StockManagerV2({
   const { t } = useTranslation()
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
+
+  // State for tabs
+  const [activeTab, setActiveTab] = useState<"stock" | "craftable">("stock")
 
   // State for dialogs
   const [createDialogOpen, setCreateDialogOpen] = useState(false)
@@ -211,7 +217,7 @@ export function StockManagerV2({
 
   return (
     <Box>
-      {/* Header with aggregates and filters */}
+      {/* Header with tabs */}
       <Paper sx={{ p: { xs: 1.5, sm: 2 }, mb: 2 }}>
         <Stack
           direction={{ xs: "column", sm: "row" }}
@@ -223,31 +229,61 @@ export function StockManagerV2({
           <Typography variant={isMobile ? "subtitle1" : "h6"}>
             {t("StockManagerV2.title", "Stock Management")}
           </Typography>
-          <Button
-            variant="contained"
-            startIcon={<AddIcon />}
-            onClick={() => setCreateDialogOpen(true)}
-            size="small"
-            fullWidth={isMobile}
-          >
-            {t("StockManagerV2.createLot", "Create Lot")}
-          </Button>
+          {activeTab === "stock" && (
+            <Button
+              variant="contained"
+              startIcon={<AddIcon />}
+              onClick={() => setCreateDialogOpen(true)}
+              size="small"
+              fullWidth={isMobile}
+            >
+              {t("StockManagerV2.createLot", "Create Lot")}
+            </Button>
+          )}
         </Stack>
 
-        {/* Stock breakdown summary */}
-        <StockBreakdown
-          total={aggregates.total}
-          available={aggregates.available}
-          reserved={aggregates.reserved}
-        />
-
-        {/* Filters and sorting */}
-        <Stack
-          direction={{ xs: "column", sm: "row" }}
-          spacing={2}
-          mt={2}
-          alignItems={{ xs: "stretch", sm: "center" }}
+        {/* Tabs */}
+        <Tabs
+          value={activeTab}
+          onChange={(_, newValue) => setActiveTab(newValue)}
+          sx={{ borderBottom: 1, borderColor: "divider" }}
         >
+          <Tab
+            label={t("StockManagerV2.stockTab", "Stock Lots")}
+            value="stock"
+            icon={<InventoryIcon />}
+            iconPosition="start"
+          />
+          <Tab
+            label={t("StockManagerV2.craftableTab", "Craftable Items")}
+            value="craftable"
+            icon={<BuildIcon />}
+            iconPosition="start"
+          />
+        </Tabs>
+      </Paper>
+
+      {/* Tab content */}
+      {activeTab === "craftable" ? (
+        <CraftableItemsView />
+      ) : (
+        <>
+          {/* Stock lots view */}
+          <Paper sx={{ p: { xs: 1.5, sm: 2 }, mb: 2 }}>
+            {/* Stock breakdown summary */}
+            <StockBreakdown
+              total={aggregates.total}
+              available={aggregates.available}
+              reserved={aggregates.reserved}
+            />
+
+            {/* Filters and sorting */}
+            <Stack
+              direction={{ xs: "column", sm: "row" }}
+              spacing={2}
+              mt={2}
+              alignItems={{ xs: "stretch", sm: "center" }}
+            >
           {/* Quality tier filter */}
           <FormControl size="small" sx={{ minWidth: 150 }}>
             <InputLabel>
@@ -317,9 +353,9 @@ export function StockManagerV2({
             </Select>
           </FormControl>
         </Stack>
-      </Paper>
+          </Paper>
 
-      {/* Lots grouped by location and variant */}
+          {/* Lots grouped by location and variant */}
       {lots.length === 0 ? (
         <Paper sx={{ p: 3, textAlign: "center" }}>
           <Typography variant="body2" color="text.secondary" mb={2}>
@@ -442,6 +478,8 @@ export function StockManagerV2({
             ),
           )}
         </Stack>
+          )}
+        </>
       )}
 
       {/* Create Lot Dialog */}
