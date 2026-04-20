@@ -15,6 +15,7 @@ import { wishlistsApi } from "../../../store/wishlistsApi"
 import { BrowserRouter } from "react-router-dom"
 import { vi, describe, it, expect, beforeEach } from "vitest"
 import { CurrentOrgContext } from "../../../hooks/login/CurrentOrg"
+import { DrawerOpenContext } from "../../../hooks/layout/Drawer"
 
 // Mock the Page component to avoid serviceApi dependency
 vi.mock("../../../components/metadata/Page", async () => {
@@ -59,13 +60,16 @@ function renderWithProviders(
   { store = createTestStore() } = {}
 ) {
   const currentOrgState: [any, any] = [null, vi.fn()]
+  const drawerState: [boolean, any] = [false, vi.fn()]
 
   return render(
     <Provider store={store}>
       <BrowserRouter>
-        <CurrentOrgContext.Provider value={currentOrgState}>
-          {ui}
-        </CurrentOrgContext.Provider>
+        <DrawerOpenContext.Provider value={drawerState}>
+          <CurrentOrgContext.Provider value={currentOrgState}>
+            {ui}
+          </CurrentOrgContext.Provider>
+        </DrawerOpenContext.Provider>
       </BrowserRouter>
     </Provider>
   )

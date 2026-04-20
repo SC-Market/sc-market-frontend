@@ -116,6 +116,12 @@ export function createItemFilter(
       return false
     }
 
+    // V2-only items: check localStorage market_version
+    if (item.v2_only) {
+      const mv = localStorage.getItem("market_version")
+      if (mv !== "V2") return false
+    }
+
     // Check login requirements
     if (
       (item.logged_in || item.org || item.org_admin || item.site_admin) &&

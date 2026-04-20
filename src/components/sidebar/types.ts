@@ -17,6 +17,7 @@ export interface SidebarItemProps {
   toOrgPublic?: boolean
   orgRouteRest?: string
   tab_key?: string // Used for org sidebar config filtering
+  v2_only?: boolean // Only show for V2 market users
 }
 
 export interface SidebarSectionProps {
