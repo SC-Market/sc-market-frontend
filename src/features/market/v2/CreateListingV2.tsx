@@ -414,24 +414,27 @@ export function CreateListingV2() {
                 <MenuItem value="any">{t("CreateListingV2.either", "Either (delivery or pickup)")}</MenuItem>
               </TextField>
             </Grid>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                select
-                fullWidth
-                size="small"
-                label={t("CreateListingV2.quantityUnit", "Quantity Unit")}
-                value={quantityUnit}
-                onChange={(e) => setQuantityUnit(e.target.value as "unit" | "scu")}
-                helperText={
-                  quantityUnit === "scu"
-                    ? t("CreateListingV2.scuHelp", "Quantities measured in cSCU (100 cSCU = 1 SCU)")
-                    : t("CreateListingV2.unitHelp", "Discrete items (weapons, armor, components)")
-                }
-              >
-                <MenuItem value="unit">{t("CreateListingV2.unitDiscrete", "Units (discrete items)")}</MenuItem>
-                <MenuItem value="scu">{t("CreateListingV2.unitSCU", "SCU (cargo / commodities)")}</MenuItem>
-              </TextField>
-            </Grid>
+            {/* Quantity Unit — only shown for custom items; auto-inferred for known items */}
+            {!gameItemId && (
+              <Grid item xs={12} sm={6}>
+                <TextField
+                  select
+                  fullWidth
+                  size="small"
+                  label={t("CreateListingV2.quantityUnit", "Quantity Unit")}
+                  value={quantityUnit}
+                  onChange={(e) => setQuantityUnit(e.target.value as "unit" | "scu")}
+                  helperText={
+                    quantityUnit === "scu"
+                      ? t("CreateListingV2.scuHelp", "Quantities measured in cSCU (100 cSCU = 1 SCU)")
+                      : t("CreateListingV2.unitHelp", "Discrete items (weapons, armor, components)")
+                  }
+                >
+                  <MenuItem value="unit">{t("CreateListingV2.unitDiscrete", "Units (discrete items)")}</MenuItem>
+                  <MenuItem value="scu">{t("CreateListingV2.unitSCU", "SCU (cargo / commodities)")}</MenuItem>
+                </TextField>
+              </Grid>
+            )}
           </FormPaper>
 
           {/* Per-Listing Order Limits */}
