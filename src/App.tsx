@@ -697,6 +697,14 @@ const router = createBrowserRouter([
                 }),
               },
               {
+                path: "/admin/game-data-import",
+                lazy: async () => ({
+                  Component: (
+                    await import("./pages/admin/AdminGameDataImport")
+                  ).AdminGameDataImport,
+                }),
+              },
+              {
                 path: "/admin/premium",
                 lazy: async () => ({
                   Component: (

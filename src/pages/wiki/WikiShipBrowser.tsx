@@ -44,7 +44,7 @@ export function WikiShipBrowser() {
     focus: focus || undefined,
     size: size || undefined,
     page,
-    page_size: 20,
+    pageSize: 20,
   })
 
   const handleShipClick = (shipId: string) => {

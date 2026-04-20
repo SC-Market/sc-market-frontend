@@ -85,12 +85,12 @@ export function BlueprintBrowser() {
   // Query blueprints with filters
   const { data, isLoading, isFetching, error } = useSearchBlueprintsQuery({
     text: debouncedSearch || undefined,
-    item_category: category || undefined,
-    item_subcategory: subcategory || undefined,
+    itemCategory: category || undefined,
+    itemSubcategory: subcategory || undefined,
     rarity: rarity || undefined,
     tier: tier || undefined,
     page,
-    page_size: 20,
+    pageSize: 20,
   })
 
   // Accumulate results

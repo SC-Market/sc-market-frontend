@@ -42,10 +42,10 @@ export function ResourceBrowser() {
 
   const { data, isLoading, error } = useSearchResourcesQuery({
     text: debouncedSearch || undefined,
-    resource_category: category || undefined,
-    acquisition_method: acquisition || undefined,
+    resourceCategory: category || undefined,
+    acquisitionMethod: acquisition || undefined,
     page,
-    page_size: 24,
+    pageSize: 24,
   })
 
   const { data: categories } = useGetResourceCategoriesQuery({})

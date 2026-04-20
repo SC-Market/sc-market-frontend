@@ -36,8 +36,7 @@ import {
   MenuItem,
 } from "@mui/material"
 import { Star, StarBorder } from "@mui/icons-material"
-import { useSearchGameItemsQuery } from "../../store/api/v2/market"
-import { useAddWishlistItemMutation } from "../../store/wishlistsApi"
+import { useSearchGameItemsQuery, useAddWishlistItemMutation } from "../../store/api/v2/market"
 import { debounce } from "lodash"
 
 export interface AddItemDialogProps {
@@ -147,8 +146,8 @@ export function AddItemDialog({ open, onClose, wishlistId }: AddItemDialogProps)
     try {
       // Submit item (Requirements 8.1, 8.2, 8.3)
       await addItem({
-        wishlist_id: wishlistId,
-        body: {
+        wishlistId: wishlistId,
+        addWishlistItemRequest: {
           game_item_id: selectedItem.id,
           desired_quantity: quantity,
           desired_quality_tier: qualityTier || undefined,

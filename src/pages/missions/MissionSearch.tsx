@@ -66,17 +66,17 @@ export function MissionSearch() {
   const { data, isLoading, isFetching, error } = useSearchMissionsQuery({
     text: debouncedSearch || undefined,
     category: category || undefined,
-    career_type: careerType || undefined,
-    star_system: starSystem || undefined,
+    careerType: careerType || undefined,
+    starSystem: starSystem || undefined,
     faction: faction || undefined,
-    legal_status: legalStatus || undefined,
-    difficulty_min: difficultyRange[0],
-    difficulty_max: difficultyRange[1],
-    is_shareable: isShareable,
-    has_blueprint_rewards: hasBlueprints,
-    is_chain_starter: isChainStarter,
+    legalStatus: legalStatus || undefined,
+    difficultyMin: difficultyRange[0],
+    difficultyMax: difficultyRange[1],
+    isShareable: isShareable,
+    hasBlueprintRewards: hasBlueprints,
+    isChainStarter: isChainStarter,
     page,
-    page_size: 20,
+    pageSize: 20,
   })
 
   const handleMissionClick = (missionId: string) => {

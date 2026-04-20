@@ -37,11 +37,9 @@ import { useTranslation } from "react-i18next"
 import {
   useGetBlueprintDetailQuery,
   useGetBlueprintMissionsQuery,
-} from "../../store/api/v2/market"
-import {
   useCalculateQualityMutation,
-  CraftingInputMaterial,
-} from "../../store/craftingApi"
+  type CraftingInputMaterial,
+} from "../../store/api/v2/market"
 import { RarityBadge } from "../game-data/RarityBadge"
 
 interface BlueprintDetailModalProps {
@@ -232,7 +230,7 @@ function CalculatorTab({ data }: { data: any }) {
       quality_tier: m.quality_tier,
       quality_value: m.quality_value,
     }))
-    calculateQuality({ blueprint_id: data.blueprint.blueprint_id, input_materials })
+    calculateQuality({ calculateQualityRequest: { blueprint_id: data.blueprint.blueprint_id, input_materials } })
   }
 
   return (

@@ -717,6 +717,9 @@
     "import_monitoring": {
       "text": "Attribute Import Monitoring"
     },
+    "game_data_import": {
+      "text": "Game Data Import"
+    },
     "game_item_attributes": {
       "text": "Game Item Attributes"
     },
