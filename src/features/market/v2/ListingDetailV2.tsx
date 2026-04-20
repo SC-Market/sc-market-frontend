@@ -1,365 +1,440 @@
-import React, { useMemo, useEffect } from "react";
+import React, { useMemo, useEffect } from "react"
 import {
   Box,
-  Typography,
-  Paper,
-  Divider,
-  Button,
-  Stack,
+  Breadcrumbs,
+  Card,
+  CardContent,
+  CardHeader,
   Chip,
+  Divider,
+  Fade,
   Grid,
+  Link,
+  Stack,
+  Typography,
   useMediaQuery,
-  CardMedia,
-} from "@mui/material";
-import { useTheme } from "@mui/material/styles";
-import { useParams, Link as RouterLink } from "react-router-dom";
-import { ExtendedTheme } from "../../../hooks/styles/Theme";
-import { StandardPageLayout } from "../../../components/layout/StandardPageLayout";
-import { useGetListingDetailQuery, useAddToCartMutation, useTrackViewMutation } from "../../../store/api/v2/market";
-import { VariantBreakdown } from "../../../components/market/v2/VariantBreakdown";
-import { QualityBadge } from "../../../components/market/v2/QualityBadge";
-import { UnderlineLink } from "../../../components/typography/UnderlineLink";
-import { FALLBACK_IMAGE_URL } from "../../../util/constants";
-import StarRoundedIcon from "@mui/icons-material/StarRounded";
+} from "@mui/material"
+import { useTheme } from "@mui/material/styles"
+import { useParams, Link as RouterLink } from "react-router-dom"
+import { Helmet } from "react-helmet"
+import { ExtendedTheme } from "../../../hooks/styles/Theme"
+import { StandardPageLayout } from "../../../components/layout/StandardPageLayout"
+import {
+  useGetListingDetailQuery,
+  useAddToCartMutation,
+  useTrackViewMutation,
+} from "../../../store/api/v2/market"
+import { VariantBreakdown } from "../../../components/market/v2/VariantBreakdown"
+import { QualityBadge } from "../../../components/market/v2/QualityBadge"
+import { ImagePreviewPaper } from "../../../components/paper/ImagePreviewPaper"
+import { MarkdownRender } from "../../../components/markdown/Markdown.lazy"
+import { SellerReviews } from "../listing-view/components/SellerReviews"
+import { SellerOtherListings } from "../listing-view/components/SellerOtherListings"
+import { RelatedListings } from "../listing-view/components/RelatedListings"
+import { AggregateMarketData } from "../listing-view/components/AggregateMarketData"
+import { FRONTEND_URL, FALLBACK_IMAGE_URL } from "../../../util/constants"
+import { getRelativeTime } from "../../../util/time"
+import { dateDiffInDays } from "../../../util/dateDiff"
+import { formatQuantity } from "../../../util/formatQuantity"
+import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { useTranslation } from "react-i18next"
-import { formatQuantity } from "../../../util/formatQuantity";
-import { useAlertHook } from "../../../hooks/alert/AlertHook";
+import {
+  CreateRounded,
+  RefreshRounded,
+  LocationOnRounded,
+  LocalShippingRounded,
+  PersonRounded,
+  StarRounded,
+} from "@mui/icons-material"
+import { ClockAlert } from "mdi-material-ui"
+import { ListingDetailItem } from "../listing-view/components/ListingDetailItem"
 
-/**
- * ListingDetailV2 - Detailed view of V2 listing with variant breakdown
- * 
- * Displays:
- * - Listing metadata with seller information
- * - Image gallery with CardMedia and FALLBACK_IMAGE_URL
- * - VariantBreakdown component showing all variants with attributes, quantities, prices
- * - Quality tier with QualityBadge visual indicators
- * - Location information for stock lots
- * - Crafted_by information if applicable
- * 
- * Reuses:
- * - StandardPageLayout for page structure
- * - UnderlineLink for seller name
- * - QualityBadge for quality tier display
- * - VariantBreakdown for variant table
- * 
- * Maintains identical typography and button variants to V1.
- */
 export function ListingDetailV2() {
-  const { id } = useParams<{ id: string }>();
-  const theme = useTheme<ExtendedTheme>();
-  const { t } = useTranslation();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const { id } = useParams<{ id: string }>()
+  const theme = useTheme<ExtendedTheme>()
+  const { t } = useTranslation()
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
 
-  // Fetch listing details using RTK Query
   const {
     data: listingData,
     isLoading,
     error,
-  } = useGetListingDetailQuery({ id: id! });
+  } = useGetListingDetailQuery({ id: id! })
 
-  const [addToCart] = useAddToCartMutation();
-  const [trackView] = useTrackViewMutation();
-  const issueAlert = useAlertHook();
+  const [addToCart] = useAddToCartMutation()
+  const [trackView] = useTrackViewMutation()
+  const issueAlert = useAlertHook()
 
-  // Track view on page load
   useEffect(() => {
-    if (id) { trackView({ id }).catch(() => {}) }
-  }, [id, trackView]);
+    if (id) trackView({ id }).catch(() => {})
+  }, [id, trackView])
 
-  // Compute quality tier range from variants
+  // Derived data
+  const listing = listingData?.listing
+  const seller = listingData?.seller
+  const items = listingData?.items ?? []
+  const photos = listing?.photos?.length ? listing.photos : [FALLBACK_IMAGE_URL]
+  const firstItem = items[0]
+  const gameItemId = firstItem?.game_item?.id
+  const gameItemName = firstItem?.game_item?.name
+  const gameItemType = firstItem?.game_item?.type
+
   const qualityTierRange = useMemo(() => {
-    if (!listingData?.items) return null;
-
-    const allVariants = listingData.items.flatMap((item) => item.variants);
-    const qualityTiers = allVariants
+    const tiers = items
+      .flatMap((i) => i.variants)
       .map((v) => v.attributes.quality_tier)
-      .filter((tier): tier is number => tier !== undefined && tier !== null);
+      .filter((t): t is number => t != null)
+    if (!tiers.length) return null
+    return { min: Math.min(...tiers), max: Math.max(...tiers) }
+  }, [items])
 
-    if (qualityTiers.length === 0) return null;
-
-    const min = Math.min(...qualityTiers);
-    const max = Math.max(...qualityTiers);
-
-    return { min, max };
-  }, [listingData]);
-
-  // Compute price range from variants
   const priceRange = useMemo(() => {
-    if (!listingData?.items) return null;
+    const prices = items.flatMap((i) => i.variants).map((v) => v.price)
+    if (!prices.length) return null
+    return { min: Math.min(...prices), max: Math.max(...prices) }
+  }, [items])
 
-    const allVariants = listingData.items.flatMap((item) => item.variants);
-    const prices = allVariants.map((v) => v.price);
+  const totalQuantity = useMemo(
+    () => items.flatMap((i) => i.variants).reduce((s, v) => s + v.quantity, 0),
+    [items],
+  )
 
-    if (prices.length === 0) return null;
+  const allLocations = useMemo(() => {
+    const locs = new Set(items.flatMap((i) => i.variants).flatMap((v) => v.locations))
+    return [...locs]
+  }, [items])
 
-    const min = Math.min(...prices);
-    const max = Math.max(...prices);
+  const isNew = listing ? dateDiffInDays(new Date(listing.created_at), new Date()) <= 1 : false
 
-    return { min, max };
-  }, [listingData]);
+  // Breadcrumbs
+  const breadcrumbs = useMemo(() => {
+    const crumbs: { label: string; href?: string }[] = [
+      { label: t("sidebar.market_short", "Market"), href: "/market" },
+    ]
+    if (gameItemType) {
+      crumbs.push({ label: gameItemType, href: `/market?type=${encodeURIComponent(gameItemType)}` })
+    }
+    if (gameItemId && gameItemName) {
+      crumbs.push({ label: gameItemName, href: `/market/aggregate/${gameItemId}` })
+    }
+    if (listing) crumbs.push({ label: listing.title })
+    return crumbs
+  }, [listing, gameItemType, gameItemId, gameItemName, t])
 
-  // Compute total quantity available
-  const totalQuantity = useMemo(() => {
-    if (!listingData?.items) return 0;
+  // Seller props for V1 components
+  const userSeller = seller?.type === "user" ? { username: seller.slug } : null
+  const contractorSeller = seller?.type === "contractor" ? { spectrum_id: seller.slug } : null
 
-    return listingData.items
-      .flatMap((item) => item.variants)
-      .reduce((sum, variant) => sum + variant.quantity, 0);
-  }, [listingData]);
+  const canonicalUrl = listing ? `${FRONTEND_URL}/market/${listing.listing_id}` : undefined
 
   return (
     <StandardPageLayout
-      title={listingData?.listing.title || "Listing Details"}
+      title={listing?.title || "Listing Details"}
+      headerTitle={listing?.title}
+      breadcrumbs={breadcrumbs}
       isLoading={isLoading}
       error={error ? "not_found" : undefined}
       sidebarOpen={true}
-      maxWidth="lg"
+      maxWidth="xl"
     >
-      {listingData && (
+      {listingData && listing && seller && (
         <Grid container spacing={theme.layoutSpacing.layout}>
-          {/* Image Gallery Section */}
-          <Grid item xs={12} md={6}>
-            <Paper
-              sx={{
-                borderRadius: theme.spacing(theme.borderRadius?.topLevel ?? 0.375),
-                overflow: "hidden",
-              }}
-            >
-              <CardMedia
-                component="img"
-                image={FALLBACK_IMAGE_URL}
-                alt={listingData.listing.title}
-                sx={{
-                  width: "100%",
-                  height: { xs: 250, sm: 400 },
-                  objectFit: "cover",
-                }}
-                onError={({ currentTarget }) => {
-                  currentTarget.onerror = null;
-                  currentTarget.src = FALLBACK_IMAGE_URL;
-                }}
-              />
-            </Paper>
+          {/* LEFT COLUMN — Image + SEO */}
+          <Grid item xs={12} lg={4}>
+            <Grid container spacing={theme.layoutSpacing.layout}>
+              <Grid item xs={12}>
+                <ImagePreviewPaper photos={photos} />
+
+                {/* SEO Metadata */}
+                <Helmet>
+                  <title>{listing.title} — SC Market</title>
+                  <meta name="description" content={listing.description?.slice(0, 160) || listing.title} />
+                  <link rel="canonical" href={canonicalUrl} />
+                  <meta property="og:title" content={listing.title} />
+                  <meta property="og:description" content={listing.description?.slice(0, 160) || listing.title} />
+                  <meta property="og:url" content={canonicalUrl} />
+                  <meta property="og:image" content={photos[0]} />
+                  <meta property="og:type" content="product" />
+                  <meta name="twitter:card" content="summary_large_image" />
+                  <meta name="twitter:title" content={listing.title} />
+                  <meta name="twitter:image" content={photos[0]} />
+                </Helmet>
+              </Grid>
+            </Grid>
           </Grid>
 
-          {/* Listing Info Section */}
-          <Grid item xs={12} md={6}>
-            <Stack spacing={2}>
-              {/* Title */}
-              <Typography variant="h4" fontWeight="bold" color="text.primary">
-                {listingData.listing.title}
-              </Typography>
+          {/* RIGHT COLUMN — Main card */}
+          <Grid item xs={12} lg={8}>
+            <Grid container spacing={theme.layoutSpacing.component}>
+              <Grid item xs={12}>
+                <Fade in>
+                  <Card sx={{ minHeight: 400 }}>
+                    <CardHeader
+                      disableTypography
+                      title={
+                        <Stack direction="column" spacing={theme.layoutSpacing.text}>
+                          {/* Breadcrumbs inside card */}
+                          <Breadcrumbs separator="›" sx={{ fontSize: "0.85rem" }}>
+                            {breadcrumbs.map((crumb, i) =>
+                              crumb.href && i < breadcrumbs.length - 1 ? (
+                                <Link
+                                  key={i}
+                                  component={RouterLink}
+                                  to={crumb.href}
+                                  underline="hover"
+                                  color="text.secondary"
+                                  variant="body2"
+                                >
+                                  {crumb.label}
+                                </Link>
+                              ) : (
+                                <Typography key={i} variant="body2" color="text.secondary">
+                                  {crumb.label}
+                                </Typography>
+                              ),
+                            )}
+                          </Breadcrumbs>
 
-              {/* Quality Tier Range */}
-              {qualityTierRange && (
-                <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
-                  <Typography variant="subtitle2" color="text.secondary">
-                    Quality:
-                  </Typography>
-                  {qualityTierRange.min === qualityTierRange.max ? (
-                    <QualityBadge tier={qualityTierRange.min} />
-                  ) : (
-                    <Box sx={{ display: "flex", gap: 0.5, alignItems: "center" }}>
-                      <QualityBadge tier={qualityTierRange.min} />
-                      <Typography variant="body2" color="text.secondary">
-                        -
-                      </Typography>
-                      <QualityBadge tier={qualityTierRange.max} />
-                    </Box>
-                  )}
-                </Box>
-              )}
+                          {/* Title + New chip */}
+                          <Stack direction="row" alignItems="center" spacing={1}>
+                            <Typography variant="h5" fontWeight="bold">
+                              {listing.title}
+                            </Typography>
+                            {isNew && (
+                              <Chip label="NEW" color="primary" size="small" />
+                            )}
+                          </Stack>
+                        </Stack>
+                      }
+                      subheader={
+                        <Stack spacing={theme.layoutSpacing.compact} sx={{ mt: 1 }}>
+                          {/* Seller */}
+                          <ListingDetailItem icon={<PersonRounded fontSize="small" />}>
+                            <Box component="span" sx={{ display: "inline-flex", alignItems: "center", gap: 0.5 }}>
+                              <Link
+                                component={RouterLink}
+                                to={`/${seller.type === "contractor" ? "contractor" : "user"}/${seller.slug}`}
+                                underline="hover"
+                                color="text.primary"
+                                variant="subtitle2"
+                              >
+                                {seller.name}
+                              </Link>
+                              <StarRounded sx={{ fontSize: "1rem", color: "warning.main" }} />
+                              <Typography variant="subtitle2" color="text.secondary" component="span">
+                                {seller.rating.toFixed(1)}
+                              </Typography>
+                            </Box>
+                          </ListingDetailItem>
 
-              {/* Price Range */}
-              {priceRange && (
-                <Box>
-                  <Typography variant="h5" color="primary" fontWeight="bold">
-                    {priceRange.min === priceRange.max
-                      ? `${priceRange.min.toLocaleString()} aUEC`
-                      : `${priceRange.min.toLocaleString()} - ${priceRange.max.toLocaleString()} aUEC`}
-                  </Typography>
-                </Box>
-              )}
+                          {/* Locations */}
+                          {allLocations.length > 0 && (
+                            <ListingDetailItem icon={<LocationOnRounded fontSize="small" />}>
+                              {allLocations.join(", ")}
+                            </ListingDetailItem>
+                          )}
 
-              {/* Quantity Available */}
-              <Typography variant="subtitle2" color="text.primary">
-                {formatQuantity(totalQuantity, listingData.listing.quantity_unit)} {t("listing.available", "available")}
-              </Typography>
+                          {/* Delivery preference */}
+                          {listing.pickup_method && (
+                            <ListingDetailItem icon={<LocalShippingRounded fontSize="small" />}>
+                              {listing.pickup_method === "delivery"
+                                ? "Delivery"
+                                : listing.pickup_method === "pickup"
+                                  ? "Pickup"
+                                  : "Delivery or Pickup"}
+                            </ListingDetailItem>
+                          )}
 
-              {/* Per-Listing Order Limits */}
-              {(listingData.listing.min_order_quantity || listingData.listing.max_order_quantity ||
-                listingData.listing.min_order_value || listingData.listing.max_order_value) && (
-                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                  {listingData.listing.min_order_quantity && (
-                    <Chip size="small" variant="outlined" label={`Min ${formatQuantity(listingData.listing.min_order_quantity, listingData.listing.quantity_unit)}`} />
-                  )}
-                  {listingData.listing.max_order_quantity && (
-                    <Chip size="small" variant="outlined" label={`Max ${formatQuantity(listingData.listing.max_order_quantity, listingData.listing.quantity_unit)}`} />
-                  )}
-                  {listingData.listing.min_order_value && (
-                    <Chip size="small" variant="outlined" label={`Min ${listingData.listing.min_order_value.toLocaleString()} aUEC`} />
-                  )}
-                  {listingData.listing.max_order_value && (
-                    <Chip size="small" variant="outlined" label={`Max ${listingData.listing.max_order_value.toLocaleString()} aUEC`} />
-                  )}
-                </Box>
-              )}
+                          {/* Listed date */}
+                          <ListingDetailItem icon={<CreateRounded fontSize="small" />}>
+                            {getRelativeTime(new Date(listing.created_at))}
+                          </ListingDetailItem>
 
-              <Divider />
+                          {/* Updated date */}
+                          {listing.updated_at !== listing.created_at && (
+                            <ListingDetailItem icon={<RefreshRounded fontSize="small" />}>
+                              Updated {getRelativeTime(new Date(listing.updated_at))}
+                            </ListingDetailItem>
+                          )}
 
-              {/* Seller Information */}
-              <Box>
-                <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 0.5 }}>
-                  {t("listing.seller", "Seller")}
-                </Typography>
-                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                  <RouterLink
-                    to={`/${listingData.seller.type === "contractor" ? "contractor" : "user"}/${listingData.seller.slug}`}
-                    style={{ textDecoration: "none", color: "inherit" }}
-                  >
-                    <UnderlineLink variant="subtitle1" color="text.primary">
-                      {listingData.seller.name}
-                    </UnderlineLink>
-                  </RouterLink>
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 0.25 }}>
-                    <StarRoundedIcon
-                      sx={{ fontSize: "1rem", color: theme.palette.warning.main }}
-                    />
-                    <Typography variant="subtitle2" color="text.secondary">
-                      {listingData.seller.rating.toFixed(1)}
-                    </Typography>
-                  </Box>
-                </Box>
-              </Box>
-
-              {/* Status Badges */}
-              <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
-                {listingData.listing.status !== "active" && (
-                  <Chip
-                    label={listingData.listing.status.toUpperCase()}
-                    color="default"
-                    size="small"
-                    sx={{ textTransform: "uppercase", fontWeight: "bold" }}
-                  />
-                )}
-                {listingData.listing.visibility === "private" && (
-                  <Chip
-                    label="PRIVATE LISTING"
-                    color="warning"
-                    size="small"
-                    sx={{ textTransform: "uppercase", fontWeight: "bold" }}
-                  />
-                )}
-                {totalQuantity === 0 && (
-                  <Chip
-                    label="OUT OF STOCK"
-                    color="error"
-                    size="small"
-                    sx={{ textTransform: "uppercase", fontWeight: "bold" }}
-                  />
-                )}
-              </Box>
-
-              {/* Listing Metadata */}
-              <Box>
-                <Typography variant="caption" color="text.secondary">
-                  {t("listing.created", "Created")}{" "}
-                  {new Date(listingData.listing.created_at).toLocaleDateString()}
-                </Typography>
-                {listingData.listing.updated_at !== listingData.listing.created_at && (
-                  <>
-                    {" • "}
-                    <Typography variant="caption" color="text.secondary">
-                      {t("listing.updated", "Updated")}{" "}
-                      {new Date(listingData.listing.updated_at).toLocaleDateString()}
-                    </Typography>
-                  </>
-                )}
-                {listingData.listing.pickup_method && (
-                  <>
-                    {" • "}
-                    <Chip
-                      size="small"
-                      variant="outlined"
-                      label={
-                        listingData.listing.pickup_method === "delivery"
-                          ? t("listing.delivery", "Delivery")
-                          : listingData.listing.pickup_method === "pickup"
-                            ? t("listing.pickup", "Pickup")
-                            : t("listing.deliveryOrPickup", "Delivery or Pickup")
+                          {/* Expires */}
+                          {listing.expires_at && (
+                            <ListingDetailItem icon={<ClockAlert style={{ fontSize: "1.25rem" }} />}>
+                              Expires {getRelativeTime(new Date(listing.expires_at))}
+                            </ListingDetailItem>
+                          )}
+                        </Stack>
                       }
                     />
-                  </>
-                )}
-              </Box>
-            </Stack>
+
+                    <CardContent sx={{ p: 3 }}>
+                      {listing.status === "active" && (
+                        <>
+                          <Divider light />
+                          {/* Price + Quality + Quantity summary */}
+                          <Stack
+                            direction={isMobile ? "column" : "row"}
+                            justifyContent="space-between"
+                            alignItems={isMobile ? "stretch" : "center"}
+                            sx={{ py: 2 }}
+                            spacing={2}
+                          >
+                            <Box>
+                              {priceRange && (
+                                <Typography variant="h5" fontWeight="bold">
+                                  {priceRange.min === priceRange.max
+                                    ? `${priceRange.min.toLocaleString()} aUEC`
+                                    : `${priceRange.min.toLocaleString()} – ${priceRange.max.toLocaleString()} aUEC`}
+                                </Typography>
+                              )}
+                              {qualityTierRange && (
+                                <Box sx={{ display: "flex", gap: 0.5, alignItems: "center", mt: 0.5 }}>
+                                  <QualityBadge tier={qualityTierRange.min} />
+                                  {qualityTierRange.min !== qualityTierRange.max && (
+                                    <>
+                                      <Typography variant="body2" color="text.secondary">–</Typography>
+                                      <QualityBadge tier={qualityTierRange.max} />
+                                    </>
+                                  )}
+                                </Box>
+                              )}
+                              <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+                                {formatQuantity(totalQuantity, listing.quantity_unit)} available
+                              </Typography>
+                            </Box>
+
+                            {/* Order limits */}
+                            {(listing.min_order_quantity || listing.max_order_quantity ||
+                              listing.min_order_value || listing.max_order_value) && (
+                              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                                {listing.min_order_quantity && (
+                                  <Chip size="small" variant="outlined" label={`Min ${formatQuantity(listing.min_order_quantity, listing.quantity_unit)}`} />
+                                )}
+                                {listing.max_order_quantity && (
+                                  <Chip size="small" variant="outlined" label={`Max ${formatQuantity(listing.max_order_quantity, listing.quantity_unit)}`} />
+                                )}
+                                {listing.min_order_value && (
+                                  <Chip size="small" variant="outlined" label={`Min ${listing.min_order_value.toLocaleString()} aUEC`} />
+                                )}
+                                {listing.max_order_value && (
+                                  <Chip size="small" variant="outlined" label={`Max ${listing.max_order_value.toLocaleString()} aUEC`} />
+                                )}
+                              </Box>
+                            )}
+                          </Stack>
+                          <Divider light />
+                        </>
+                      )}
+
+                      {/* Status badges */}
+                      {(listing.status !== "active" || listing.visibility === "private" || totalQuantity === 0) && (
+                        <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap", my: 1 }}>
+                          {listing.status !== "active" && (
+                            <Chip label={listing.status.toUpperCase()} color="default" size="small" sx={{ fontWeight: "bold" }} />
+                          )}
+                          {listing.visibility === "private" && (
+                            <Chip label="PRIVATE" color="warning" size="small" sx={{ fontWeight: "bold" }} />
+                          )}
+                          {totalQuantity === 0 && (
+                            <Chip label="OUT OF STOCK" color="error" size="small" sx={{ fontWeight: "bold" }} />
+                          )}
+                        </Box>
+                      )}
+
+                      {/* Description */}
+                      {listing.description && (
+                        <Box sx={{ mt: 2 }}>
+                          <Typography variant="subtitle1" fontWeight="bold" color="text.secondary" gutterBottom>
+                            Description
+                          </Typography>
+                          <MarkdownRender text={listing.description} />
+                        </Box>
+                      )}
+                    </CardContent>
+                  </Card>
+                </Fade>
+              </Grid>
+
+              {/* Variant Breakdown per item */}
+              {items.map((item) => (
+                <Grid item xs={12} key={item.item_id}>
+                  <Card>
+                    <CardContent sx={{ p: 3 }}>
+                      <Typography variant="h6" fontWeight="bold" sx={{ mb: 2 }}>
+                        {item.game_item.name}
+                      </Typography>
+                      {item.variants.length > 0 ? (
+                        <VariantBreakdown
+                          variants={item.variants}
+                          showActions={listing.status === "active"}
+                          onSelectVariant={async (variantId) => {
+                            try {
+                              await addToCart({
+                                addToCartRequest: {
+                                  listing_id: id!,
+                                  variant_id: variantId,
+                                  quantity: 1,
+                                },
+                              }).unwrap()
+                              issueAlert({ message: "Added to cart", severity: "success" })
+                            } catch (err) {
+                              issueAlert({
+                                message: err instanceof Error ? err.message : "Failed to add to cart",
+                                severity: "error",
+                              })
+                            }
+                          }}
+                        />
+                      ) : (
+                        <Typography variant="body2" color="text.secondary">
+                          No variants available
+                        </Typography>
+                      )}
+                    </CardContent>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
           </Grid>
 
-          {/* Description Section */}
-          {listingData.listing.description && (
-            <Grid item xs={12}>
-              <Paper
-                sx={{
-                  p: 3,
-                  borderRadius: theme.spacing(theme.borderRadius?.topLevel ?? 0.375),
-                }}
-              >
-                <Typography variant="h6" fontWeight="bold" sx={{ mb: 2 }}>
-                  {t("listing.description", "Description")}
+          {/* FULL-WIDTH SECTIONS */}
+
+          {/* Seller Reviews */}
+          <SellerReviews userSeller={userSeller} contractorSeller={contractorSeller} />
+
+          {/* Market Analysis */}
+          {gameItemId && priceRange && (
+            <>
+              <Grid item xs={12}>
+                <Typography variant="h6" fontWeight="bold">
+                  Market Analysis
                 </Typography>
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  sx={{ whiteSpace: "pre-wrap" }}
-                >
-                  {listingData.listing.description}
-                </Typography>
-              </Paper>
-            </Grid>
+              </Grid>
+              <Grid item xs={12}>
+                <AggregateMarketData
+                  gameItemId={gameItemId}
+                  currentPrice={priceRange.min}
+                />
+              </Grid>
+            </>
           )}
 
-          {/* Variant Breakdown Section */}
-          {listingData.items.map((item) => (
-            <Grid item xs={12} key={item.item_id}>
-              <Paper
-                sx={{
-                  p: 3,
-                  borderRadius: theme.spacing(theme.borderRadius?.topLevel ?? 0.375),
-                }}
-              >
-                <Typography variant="h6" fontWeight="bold" sx={{ mb: 2 }}>
-                  {item.game_item.name}
-                </Typography>
+          {/* Seller's Other Listings */}
+          <SellerOtherListings
+            userSeller={userSeller}
+            contractorSeller={contractorSeller}
+            currentListingId={listing.listing_id}
+          />
 
-                {item.variants.length > 0 ? (
-                  <VariantBreakdown
-                    variants={item.variants}
-                    showActions={listingData.listing.status === "active"}
-                    onSelectVariant={async (variantId) => {
-                      try {
-                        await addToCart({
-                          addToCartRequest: {
-                            listing_id: id!,
-                            variant_id: variantId,
-                            quantity: 1,
-                          },
-                        }).unwrap();
-                        issueAlert({ message: t("cart.added", "Added to cart"), severity: "success" });
-                      } catch (err) {
-                        issueAlert({ message: err instanceof Error ? err.message : "Failed to add to cart", severity: "error" });
-                      }
-                    }}
-                  />
-                ) : (
-                  <Typography variant="body2" color="text.secondary">
-                    {t("listing.noVariants", "No variants available")}
-                  </Typography>
-                )}
-              </Paper>
-            </Grid>
-          ))}
+          {/* Related Listings */}
+          {gameItemType && (
+            <RelatedListings
+              itemType={gameItemType}
+              currentListingId={listing.listing_id}
+            />
+          )}
         </Grid>
       )}
     </StandardPageLayout>
-  );
+  )
 }
