@@ -927,6 +927,36 @@ const router = createBrowserRouter([
         ],
       },
       {
+        path: "/crafting/calculator",
+        lazy: async () => ({
+          Component: (await import("./pages/crafting/CraftingCalculator")).CraftingCalculator,
+        }),
+      },
+      {
+        path: "/crafting/history",
+        lazy: async () => ({
+          Component: (await import("./pages/crafting/CraftingHistory")).CraftingHistory,
+        }),
+      },
+      {
+        path: "/missions",
+        lazy: async () => ({
+          Component: (await import("./pages/missions/MissionSearch")).MissionSearch,
+        }),
+      },
+      {
+        path: "/missions/:mission_id",
+        lazy: async () => ({
+          Component: (await import("./pages/missions/MissionDetail")).MissionDetail,
+        }),
+      },
+      {
+        path: "/blueprints",
+        lazy: async () => ({
+          Component: (await import("./pages/blueprints/BlueprintBrowser")).BlueprintBrowser,
+        }),
+      },
+      {
         path: "/wiki/items/:id",
         lazy: async () => ({
           Component: (await import("./pages/wiki/WikiItemDetail"))

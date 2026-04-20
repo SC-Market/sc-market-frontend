@@ -86,6 +86,27 @@ export interface CalculateQualityResponse {
   critical_success_chance: number
 }
 
+export interface CraftingSessionHistory {
+  session_id: string
+  blueprint_id: string
+  blueprint_name: string
+  output_item_name: string
+  crafting_date: string
+  input_materials: CraftingInputMaterial[]
+  output_quality_tier: number
+  output_quality_value: number
+  output_quantity: number
+  was_critical_success: boolean
+  total_material_cost?: number
+}
+
+export interface GetCraftingHistoryResponse {
+  history: CraftingSessionHistory[]
+  total: number
+  page: number
+  page_size: number
+}
+
 // ============================================================================
 // API Definition
 // ============================================================================
@@ -136,6 +157,15 @@ export const craftingApi = createApi({
         body,
       }),
     }),
+
+    // Get crafting history
+    getCraftingHistory: builder.query<
+      GetCraftingHistoryResponse,
+      { page?: number; page_size?: number }
+    >({
+      query: (params) => ({ url: "/history", params }),
+      providesTags: ["CraftingHistory"],
+    }),
   }),
 })
 
@@ -143,4 +173,5 @@ export const craftingApi = createApi({
 export const {
   useGetCraftableItemsQuery,
   useCalculateQualityMutation,
+  useGetCraftingHistoryQuery,
 } = craftingApi
