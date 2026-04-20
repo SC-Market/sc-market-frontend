@@ -410,8 +410,8 @@ export function ListingDetailV2() {
 
           {/* Seller's Other Listings */}
           <SellerOtherListingsV2
-            sellerId={seller.type === "user" ? seller.id : undefined}
-            contractorId={seller.type === "contractor" ? seller.id : undefined}
+            sellerUsername={seller.type === "user" ? seller.slug : undefined}
+            contractorSpectrumId={seller.type === "contractor" ? seller.slug : undefined}
             currentListingId={listing.listing_id}
           />
 

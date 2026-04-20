@@ -169,8 +169,8 @@ const injectedRtkApi = api
             sort_order: queryArg.sortOrder,
             language_codes: queryArg.languageCodes,
             listing_type: queryArg.listingType,
-            seller_id: queryArg.sellerId,
-            contractor_id: queryArg.contractorId,
+            seller_username: queryArg.sellerUsername,
+            contractor_spectrum_id: queryArg.contractorSpectrumId,
           },
         }),
         providesTags: ["Listings V2"],
@@ -651,8 +651,8 @@ export type SearchListingsApiArg = {
   sortOrder?: "asc" | "desc"
   languageCodes?: string
   listingType?: "single" | "bundle" | "bulk"
-  sellerId?: string
-  contractorId?: string
+  sellerUsername?: string
+  contractorSpectrumId?: string
 }
 export type GetMyListingsApiResponse =
   /** status 200 Updated listing with variant breakdown */ GetMyListingsResponse
@@ -1460,8 +1460,6 @@ export type ListingDetail = {
   max_order_value?: number | null
 }
 export type SellerInfo = {
-  /** Seller UUID */
-  id: string
   /** Seller username or contractor name */
   name: string
   /** Seller type */

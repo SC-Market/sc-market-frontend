@@ -83,7 +83,7 @@ export function ContractorListingsV2() {
     error,
     refetch,
   } = useSearchListingsQuery({
-    contractorId: contractor_id,
+    contractorSpectrumId: contractor_id,
     page: page + 1, // Convert 0-based to 1-based
     pageSize: perPage,
     sortBy: "created_at",
