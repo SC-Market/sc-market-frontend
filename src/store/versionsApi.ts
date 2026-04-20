@@ -6,6 +6,7 @@
  */
 
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
+import { BACKEND_URL } from "../util/constants"
 
 // ============================================================================
 // Types
@@ -45,7 +46,7 @@ export interface SelectVersionResponse {
 export const versionsApi = createApi({
   reducerPath: "versionsApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "/api/v2/game-data/versions",
+    baseUrl: `${BACKEND_URL}/api/v2/game-data/versions`,
     credentials: "include",
   }),
   tagTypes: ["Versions"],

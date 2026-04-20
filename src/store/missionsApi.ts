@@ -6,6 +6,7 @@
  */
 
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
+import { BACKEND_URL } from "../util/constants"
 
 // ============================================================================
 // Types
@@ -179,7 +180,7 @@ export interface RateMissionResponse {
 export const missionsApi = createApi({
   reducerPath: "missionsApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "/api/v2/game-data/missions",
+    baseUrl: `${BACKEND_URL}/api/v2/game-data/missions`,
     credentials: "include",
   }),
   tagTypes: ["Missions", "MissionDetail", "MissionBlueprints"],

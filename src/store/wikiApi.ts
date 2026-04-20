@@ -10,6 +10,7 @@
  */
 
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
+import { BACKEND_URL } from "../util/constants"
 
 // ============================================================================
 // Types
@@ -143,7 +144,7 @@ export interface ManufacturerItem {
 export const wikiApi = createApi({
   reducerPath: "wikiApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "/api/v2/game-data/wiki",
+    baseUrl: `${BACKEND_URL}/api/v2/game-data/wiki`,
     credentials: "include",
   }),
   tagTypes: ["WikiItems", "WikiShips", "WikiCommodities", "WikiLocations", "WikiManufacturers"],

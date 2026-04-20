@@ -5,6 +5,7 @@
  */
 
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
+import { BACKEND_URL } from "../../util/constants"
 
 export interface StockLot {
   lot_id: string
@@ -145,7 +146,7 @@ export interface ManualAllocateOrderResponse {
 export const stockLotsApi = createApi({
   reducerPath: "stockLotsApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "/api",
+    baseUrl: `${BACKEND_URL}/api`,
     credentials: "include",
   }),
   tagTypes: ["StockLots", "Locations", "MarketListings", "Allocations"],

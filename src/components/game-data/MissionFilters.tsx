@@ -143,7 +143,7 @@ export const MissionFilters: React.FC<MissionFiltersProps> = ({
         <Grid container spacing={2}>
           {/* Search Text (Requirement 1.1, 1.5) */}
           <Grid item xs={12} md={6}>
-            <TextField
+            <TextField size="small"
               fullWidth
               label="Search missions"
               value={searchText}
@@ -155,7 +155,7 @@ export const MissionFilters: React.FC<MissionFiltersProps> = ({
 
           {/* Category Filter (Requirement 41.1) */}
           <Grid item xs={12} sm={6} md={3}>
-            <FormControl fullWidth>
+            <FormControl fullWidth size="small">
               <InputLabel>Category</InputLabel>
               <Select
                 value={category}
@@ -179,7 +179,7 @@ export const MissionFilters: React.FC<MissionFiltersProps> = ({
 
           {/* Career Type Filter (Requirement 17.1) */}
           <Grid item xs={12} sm={6} md={3}>
-            <FormControl fullWidth>
+            <FormControl fullWidth size="small">
               <InputLabel>Career Type</InputLabel>
               <Select
                 value={careerType}
@@ -201,7 +201,7 @@ export const MissionFilters: React.FC<MissionFiltersProps> = ({
 
           {/* Star System Filter (Requirement 16.1, 41.2) */}
           <Grid item xs={12} sm={6} md={3}>
-            <FormControl fullWidth>
+            <FormControl fullWidth size="small">
               <InputLabel>Star System</InputLabel>
               <Select
                 value={starSystem}
@@ -221,7 +221,7 @@ export const MissionFilters: React.FC<MissionFiltersProps> = ({
           {/* Planet/Moon Filter (Requirement 16.2) - Optional */}
           {onPlanetMoonChange && (
             <Grid item xs={12} sm={6} md={3}>
-              <FormControl fullWidth>
+              <FormControl fullWidth size="small">
                 <InputLabel>Planet/Moon</InputLabel>
                 <Select
                   value={planetMoon || ""}
@@ -251,7 +251,7 @@ export const MissionFilters: React.FC<MissionFiltersProps> = ({
 
           {/* Faction Filter (Requirement 41.4) */}
           <Grid item xs={12} sm={6} md={3}>
-            <FormControl fullWidth>
+            <FormControl fullWidth size="small">
               <InputLabel>Faction</InputLabel>
               <Select
                 value={faction}
@@ -272,7 +272,7 @@ export const MissionFilters: React.FC<MissionFiltersProps> = ({
 
           {/* Legal Status Filter (Requirement 17.2) */}
           <Grid item xs={12} sm={6} md={3}>
-            <FormControl fullWidth>
+            <FormControl fullWidth size="small">
               <InputLabel>Legal Status</InputLabel>
               <Select
                 value={legalStatus}

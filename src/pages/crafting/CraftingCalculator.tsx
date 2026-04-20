@@ -129,7 +129,7 @@ export function CraftingCalculator() {
             <Typography variant="h6" gutterBottom>
               {t("crafting.select_blueprint", "Select Blueprint")}
             </Typography>
-            <Autocomplete
+            <Autocomplete size="small"
               options={blueprintOptions}
               getOptionLabel={(o) => o.blueprint_name}
               loading={blueprintsLoading}

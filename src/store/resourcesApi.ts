@@ -3,6 +3,7 @@
  */
 
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
+import { BACKEND_URL } from "../util/constants"
 
 export interface ResourceSearchResult {
   resource_id: string
@@ -78,7 +79,7 @@ export interface ResourceDetailResponse {
 export const resourcesApi = createApi({
   reducerPath: "resourcesApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "/api/v2/game-data/resources",
+    baseUrl: `${BACKEND_URL}/api/v2/game-data/resources`,
     credentials: "include",
   }),
   tagTypes: ["Resources", "ResourceDetail", "ResourceCategories"],

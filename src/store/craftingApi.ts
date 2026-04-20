@@ -9,6 +9,7 @@
  */
 
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
+import { BACKEND_URL } from "../util/constants"
 
 // ============================================================================
 // Types
@@ -114,7 +115,7 @@ export interface GetCraftingHistoryResponse {
 export const craftingApi = createApi({
   reducerPath: "craftingApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "/api/v2/game-data/crafting",
+    baseUrl: `${BACKEND_URL}/api/v2/game-data/crafting`,
     credentials: "include",
   }),
   tagTypes: ["CraftableItems", "CraftingHistory"],
