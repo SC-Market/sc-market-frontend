@@ -54,6 +54,7 @@ import {
   useUpdateWishlistItemMutation,
   WishlistItemWithDetails,
 } from "../../store/wishlistsApi"
+import { AddItemDialog } from "../../components/wishlists"
 
 type SortOption = "priority" | "name" | "status" | "quality"
 
@@ -81,6 +82,7 @@ export function WishlistDetail() {
     element: HTMLElement
     item: WishlistItemWithDetails
   } | null>(null)
+  const [addItemDialogOpen, setAddItemDialogOpen] = useState(false)
 
   // Query wishlist detail (Requirements 53.1, 53.2, 53.3, 53.4)
   const { data, isLoading, error } = useGetWishlistQuery(
@@ -98,8 +100,7 @@ export function WishlistDetail() {
   }
 
   const handleAddItem = () => {
-    // TODO: Open AddItemDialog (Task 14.3)
-    console.log("Add item dialog - to be implemented in Task 14.3")
+    setAddItemDialogOpen(true)
   }
 
   const handleSortChange = (event: SelectChangeEvent<SortOption>) => {
@@ -133,7 +134,7 @@ export function WishlistDetail() {
 
   const handleEditItem = (item: WishlistItemWithDetails) => {
     handleItemMenuClose()
-    // TODO: Open edit dialog (Task 14.3)
+    // TODO: Open edit dialog with pre-filled data (future enhancement)
     console.log("Edit item:", item)
   }
 
@@ -524,6 +525,13 @@ export function WishlistDetail() {
           <ListItemText>Remove Item</ListItemText>
         </MenuItem>
       </Menu>
+
+      {/* Add Item Dialog (Task 14.3) */}
+      <AddItemDialog
+        open={addItemDialogOpen}
+        onClose={() => setAddItemDialogOpen(false)}
+        wishlistId={wishlist_id!}
+      />
     </StandardPageLayout>
   )
 }
