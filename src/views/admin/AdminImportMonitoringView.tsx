@@ -1,281 +1,158 @@
 import React, { useState } from "react"
-import { useTranslation } from "react-i18next"
 import {
   Typography,
   Grid,
   Button,
-  TextField,
   Box,
   Paper,
   Alert,
   CircularProgress,
   Chip,
+  LinearProgress,
 } from "@mui/material"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
-import { useImportGameItemAttributesMutation } from "../../store/api/attributes"
+import {
+  useStartImportMutation,
+  useListImportJobsQuery,
+  ImportJob,
+  ImportSource,
+} from "../../store/api/admin"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { AdminIcons } from "../../components/icons"
 
-interface ImportJobResult {
-  gameItemId: string
-  timestamp: Date
-  success: boolean
-  attributesImported: number
-  errors: string[]
-  message: string
+const SOURCES: { key: ImportSource; label: string; description: string }[] = [
+  { key: "cstone-items", label: "CStone Items", description: "Import game items from finder.cstone.space" },
+  { key: "uex-items", label: "UEX Items", description: "Import game items from UEXCorp API" },
+  { key: "uex-attributes", label: "UEX Attributes", description: "Import item attributes from UEXCorp API" },
+]
+
+function statusColor(status: ImportJob["status"]): "info" | "success" | "error" {
+  if (status === "running") return "info"
+  if (status === "completed") return "success"
+  return "error"
+}
+
+function JobCard({ job }: { job: ImportJob }) {
+  return (
+    <Paper sx={{ p: 2, mb: 2 }}>
+      <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
+        {job.status === "running" ? (
+          <CircularProgress size={18} />
+        ) : job.status === "completed" ? (
+          <AdminIcons.CheckCircle color="success" />
+        ) : (
+          <AdminIcons.Error color="error" />
+        )}
+        <Typography variant="subtitle1" sx={{ fontWeight: 600 }}>
+          {SOURCES.find((s) => s.key === job.source)?.label ?? job.source}
+        </Typography>
+        <Chip label={job.status} color={statusColor(job.status)} size="small" />
+        <Typography variant="caption" color="text.secondary" sx={{ ml: "auto" }}>
+          {new Date(job.startedAt).toLocaleString()}
+        </Typography>
+      </Box>
+      {job.status === "running" && <LinearProgress sx={{ mb: 1 }} />}
+      {job.result && (
+        <Typography variant="body2" color="text.secondary">
+          {Object.entries(job.result)
+            .map(([k, v]) => `${k}: ${v}`)
+            .join(" · ")}
+        </Typography>
+      )}
+      {job.error && (
+        <Alert severity="error" sx={{ mt: 1 }}>
+          {job.error}
+        </Alert>
+      )}
+    </Paper>
+  )
 }
 
 export function AdminImportMonitoringView() {
-  const { t } = useTranslation()
-  const [gameItemId, setGameItemId] = useState<string>("")
-  const [importHistory, setImportHistory] = useState<ImportJobResult[]>([])
-
-  const [importAttributes, { isLoading: isImporting }] =
-    useImportGameItemAttributesMutation()
-
   const issueAlert = useAlertHook()
+  const [startImport, { isLoading: starting }] = useStartImportMutation()
 
-  const handleImport = () => {
-    if (!gameItemId.trim()) {
+  const [fastPoll, setFastPoll] = useState(false)
+
+  const { data, isLoading } = useListImportJobsQuery(undefined, {
+    pollingInterval: fastPoll ? 3000 : 30000,
+  })
+
+  const jobs = data?.jobs ?? []
+  const hasRunning = jobs.some((j: ImportJob) => j.status === "running")
+  const runningSource = jobs.find((j: ImportJob) => j.status === "running")?.source
+
+  // Sync polling speed with job state
+  React.useEffect(() => {
+    setFastPoll(hasRunning)
+  }, [hasRunning])
+
+  // Adjust polling: slow down when idle
+  const { data: polledData } = useListImportJobsQuery(undefined, {
+    pollingInterval: hasRunning ? 3000 : 30000,
+    skip: true, // The first query handles fetching; this just adjusts interval
+  })
+
+  const handleStart = async (source: ImportSource) => {
+    try {
+      await startImport(source).unwrap()
+      issueAlert({ message: `Started ${source} import`, severity: "info" })
+    } catch (err: any) {
       issueAlert({
-        message: t(
-          "admin.importMonitoring.emptyId",
-          "Please enter a game item ID",
-        ),
+        message: err?.data?.job?.error || err?.data?.message || "Failed to start import",
         severity: "error",
       })
-      return
     }
-
-    const itemId = gameItemId.trim()
-
-    importAttributes(itemId)
-      .unwrap()
-      .then((result) => {
-        // Add to history
-        const jobResult: ImportJobResult = {
-          gameItemId: itemId,
-          timestamp: new Date(),
-          success: result.success,
-          attributesImported: result.attributesImported,
-          errors: result.errors,
-          message: result.message,
-        }
-
-        setImportHistory((prev) => [jobResult, ...prev])
-
-        if (result.success) {
-          issueAlert({
-            message: result.message,
-            severity: "success",
-          })
-        } else {
-          issueAlert({
-            message: result.message,
-            severity: "warning",
-          })
-        }
-
-        // Clear input on success
-        setGameItemId("")
-      })
-      .catch((error) => {
-        // Add failed job to history
-        const jobResult: ImportJobResult = {
-          gameItemId: itemId,
-          timestamp: new Date(),
-          success: false,
-          attributesImported: 0,
-          errors: [error?.data?.message || "Import failed"],
-          message: "Import failed",
-        }
-
-        setImportHistory((prev) => [jobResult, ...prev])
-        issueAlert(error)
-      })
-  }
-
-  const handleRetry = (gameItemId: string) => {
-    setGameItemId(gameItemId)
-    // Trigger import after setting the ID
-    setTimeout(() => {
-      handleImport()
-    }, 100)
   }
 
   return (
     <>
-      <Grid
-        item
-        container
-        xs={12}
-        justifyContent="space-between"
-        alignItems="center"
-        sx={{ mb: 2 }}
-      >
-        <HeaderTitle xs={12}>
-          {t("admin.importMonitoring.title", "Import Job Monitoring")}
-        </HeaderTitle>
+      <Grid item xs={12} sx={{ mb: 2 }}>
+        <HeaderTitle xs={12}>Import Job Monitoring</HeaderTitle>
       </Grid>
 
       <Grid item xs={12}>
         <Paper sx={{ p: 3, mb: 3 }}>
           <Typography variant="h6" sx={{ mb: 2 }}>
-            {t("admin.importMonitoring.triggerImport", "Trigger Import")}
+            Start Import
           </Typography>
-          <Box sx={{ display: "flex", gap: 2, alignItems: "flex-start" }}>
-            <TextField
-              fullWidth
-              label={t("admin.importMonitoring.gameItemId", "Game Item ID")}
-              value={gameItemId}
-              onChange={(e) => setGameItemId(e.target.value)}
-              onKeyPress={(e) => {
-                if (e.key === "Enter" && !isImporting) {
-                  handleImport()
+          <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap" }}>
+            {SOURCES.map((s) => (
+              <Button
+                key={s.key}
+                variant="contained"
+                startIcon={
+                  runningSource === s.key ? (
+                    <CircularProgress size={16} color="inherit" />
+                  ) : (
+                    <AdminIcons.CloudDownload />
+                  )
                 }
-              }}
-              placeholder="Enter game item UUID"
-              disabled={isImporting}
-            />
-            <Button
-              variant="contained"
-              startIcon={
-                isImporting ? (
-                  <CircularProgress size={16} color="inherit" />
-                ) : (
-                  <AdminIcons.CloudDownload />
-                )
-              }
-              onClick={handleImport}
-              disabled={isImporting}
-              sx={{ minWidth: 140 }}
-            >
-              {isImporting
-                ? t("admin.importMonitoring.importing", "Importing...")
-                : t("admin.importMonitoring.import", "Import")}
-            </Button>
+                onClick={() => handleStart(s.key)}
+                disabled={starting || !!runningSource}
+              >
+                {runningSource === s.key ? "Running…" : s.label}
+              </Button>
+            ))}
           </Box>
-          <Typography
-            variant="caption"
-            color="text.secondary"
-            sx={{ mt: 1, display: "block" }}
-          >
-            {t(
-              "admin.importMonitoring.importHelp",
-              "Import attributes from external sources (finder.cstone.space, UEXCorp.space)",
-            )}
+          <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: "block" }}>
+            Only one import can run at a time per source. Status updates automatically.
           </Typography>
         </Paper>
       </Grid>
 
       <Grid item xs={12}>
         <Typography variant="h6" sx={{ mb: 2 }}>
-          {t("admin.importMonitoring.history", "Import History")}
+          Job History
         </Typography>
-
-        {importHistory.length === 0 && (
+        {isLoading && <LinearProgress sx={{ mb: 2 }} />}
+        {jobs.length === 0 && !isLoading && (
           <Alert severity="info">
-            {t(
-              "admin.importMonitoring.noHistory",
-              "No import jobs have been run in this session. Trigger an import to see results here.",
-            )}
+            No import jobs have been run yet. Start an import above.
           </Alert>
         )}
-
-        {importHistory.map((job, index) => (
-          <Paper
-            key={`${job.gameItemId}-${job.timestamp.getTime()}`}
-            sx={{ p: 2, mb: 2 }}
-          >
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "flex-start",
-                mb: 1,
-              }}
-            >
-              <Box sx={{ flex: 1 }}>
-                <Box
-                  sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}
-                >
-                  {job.success ? (
-                    <AdminIcons.CheckCircle color="success" />
-                  ) : job.attributesImported > 0 ? (
-                    <AdminIcons.Warning color="warning" />
-                  ) : (
-                    <AdminIcons.Error color="error" />
-                  )}
-                  <Typography variant="h6">
-                    {t("admin.importMonitoring.gameItem", "Game Item")}:{" "}
-                    {job.gameItemId}
-                  </Typography>
-                  <Chip
-                    label={
-                      job.success
-                        ? t("admin.importMonitoring.success", "Success")
-                        : job.attributesImported > 0
-                          ? t("admin.importMonitoring.partial", "Partial")
-                          : t("admin.importMonitoring.failed", "Failed")
-                    }
-                    color={
-                      job.success
-                        ? "success"
-                        : job.attributesImported > 0
-                          ? "warning"
-                          : "error"
-                    }
-                    size="small"
-                  />
-                </Box>
-
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  sx={{ mb: 1 }}
-                >
-                  {t("admin.importMonitoring.timestamp", "Time")}:{" "}
-                  {job.timestamp.toLocaleString()}
-                </Typography>
-
-                <Typography variant="body2" sx={{ mb: 1 }}>
-                  {t(
-                    "admin.importMonitoring.attributesImported",
-                    "Attributes Imported",
-                  )}
-                  : {job.attributesImported}
-                </Typography>
-
-                {job.errors.length > 0 && (
-                  <Box sx={{ mt: 2 }}>
-                    <Typography
-                      variant="body2"
-                      color="error"
-                      sx={{ fontWeight: "bold", mb: 1 }}
-                    >
-                      {t("admin.importMonitoring.errors", "Errors")}:
-                    </Typography>
-                    {job.errors.map((error, errorIndex) => (
-                      <Alert key={errorIndex} severity="error" sx={{ mb: 1 }}>
-                        {error}
-                      </Alert>
-                    ))}
-                  </Box>
-                )}
-              </Box>
-
-              {!job.success && (
-                <Button
-                  variant="outlined"
-                  size="small"
-                  onClick={() => handleRetry(job.gameItemId)}
-                  disabled={isImporting}
-                >
-                  {t("admin.importMonitoring.retry", "Retry")}
-                </Button>
-              )}
-            </Box>
-          </Paper>
+        {jobs.map((job: ImportJob) => (
+          <JobCard key={job.id} job={job} />
         ))}
       </Grid>
     </>
