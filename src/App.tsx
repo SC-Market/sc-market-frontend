@@ -969,6 +969,18 @@ const router = createBrowserRouter([
         }),
       },
       {
+        path: "/wishlists/:wishlist_id",
+        lazy: async () => ({
+          Component: (await import("./pages/wishlists/WishlistDetail")).WishlistDetail,
+        }),
+      },
+      {
+        path: "/wishlists/:wishlist_id/shopping-list",
+        lazy: async () => ({
+          Component: (await import("./pages/wishlists/ShoppingList")).ShoppingList,
+        }),
+      },
+      {
         path: "/resources",
         lazy: async () => ({
           Component: (await import("./pages/resources/ResourceBrowser")).ResourceBrowser,
