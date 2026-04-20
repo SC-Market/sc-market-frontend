@@ -276,7 +276,7 @@ export function CreateListingV2() {
         });
 
         // Navigate to listing detail page
-        navigate(`/market/v2/${result.listing_id}`);
+        navigate(`/market/${result.listing_id}`);
       } catch (error: any) {
         issueAlert({
           message:

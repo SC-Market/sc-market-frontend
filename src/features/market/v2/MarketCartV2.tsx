@@ -149,7 +149,7 @@ export function CartItemEntryV2(props: {
           <Box>
             <MaterialLink
               component={Link}
-              to={`/market/v2/${item.listing.listing_id}`}
+              to={`/market/${item.listing.listing_id}`}
               style={{ textDecoration: "none", color: "inherit" }}
             >
               <UnderlineLink

@@ -304,7 +304,7 @@ export function BuyOrderV2Row(props: {
   return (
     <TableRow
       hover
-      onClick={() => navigate(`/market/v2/game-items/${row.game_item_id}`)}
+      onClick={() => navigate(`/market/aggregate/${row.game_item_id}`)}
       tabIndex={-1}
       sx={{
         cursor: "pointer",
@@ -570,7 +570,7 @@ export function BuyOrdersViewV2() {
           <Box sx={{ flex: 1, minWidth: 0 }} />
           <Button
             component={Link}
-            to="/market/v2/buy-orders/create"
+            to="/buyorder/create"
             variant="outlined"
             size="small"
             sx={{ flexShrink: 0 }}

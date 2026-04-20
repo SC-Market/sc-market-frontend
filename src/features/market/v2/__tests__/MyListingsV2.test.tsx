@@ -311,7 +311,7 @@ describe("MyListingsV2", () => {
 
     // Check navigation was called
     await waitFor(() => {
-      expect(mockNavigate).toHaveBeenCalledWith("/market/v2/listing-1");
+      expect(mockNavigate).toHaveBeenCalledWith("/market/listing-1");
     });
   });
 
@@ -348,7 +348,7 @@ describe("MyListingsV2", () => {
 
     // Check navigation was called with edit route
     await waitFor(() => {
-      expect(mockNavigate).toHaveBeenCalledWith("/market/v2/listing-1/edit");
+      expect(mockNavigate).toHaveBeenCalledWith("/market_edit/listing-1");
     });
   });
 

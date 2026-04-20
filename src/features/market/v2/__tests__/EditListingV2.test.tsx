@@ -305,7 +305,7 @@ describe("EditListingV2", () => {
     fireEvent.click(cancelButton);
     
     await waitFor(() => {
-      expect(mockNavigate).toHaveBeenCalledWith("/market/v2/listing-123");
+      expect(mockNavigate).toHaveBeenCalledWith("/market/listing-123");
     });
   });
 
