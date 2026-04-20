@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect } from "react"
+import React, { useMemo, useEffect, useState } from "react"
 import {
   Box,
   Breadcrumbs,
@@ -36,6 +36,7 @@ import { dateDiffInDays } from "../../../util/dateDiff"
 import { formatQuantity } from "../../../util/formatQuantity"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { useTranslation } from "react-i18next"
+import { AddToCartDrawer } from "./components/AddToCartDrawer"
 import {
   CreateRounded,
   RefreshRounded,
@@ -60,6 +61,7 @@ export function ListingDetailV2() {
   } = useGetListingDetailQuery({ id: id! })
 
   const [addToCart] = useAddToCartMutation()
+  const [cartDrawerOpen, setCartDrawerOpen] = useState(false)
   const [trackView] = useTrackViewMutation()
   const issueAlert = useAlertHook()
 
