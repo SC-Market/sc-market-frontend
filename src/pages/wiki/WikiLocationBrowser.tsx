@@ -10,6 +10,7 @@ import {
   Box,
   Card,
   CardContent,
+  Grid,
   Typography,
   CircularProgress,
   Alert,
@@ -20,8 +21,12 @@ import {
   Collapse,
   Chip,
 } from "@mui/material"
+import { useTheme } from "@mui/material/styles"
+import { useTranslation } from "react-i18next"
 import { useGetWikiLocationsQuery, WikiLocationNode } from "../../store/wikiApi"
 import { ExpandLess, ExpandMore, Public, Language, Terrain } from "@mui/icons-material"
+import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 interface LocationTreeItemProps {
   node: WikiLocationNode
@@ -98,48 +103,70 @@ function LocationTreeItem({ node, level }: LocationTreeItemProps) {
 }
 
 export function WikiLocationBrowser() {
+  const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
   const { data: locations, isLoading, error } = useGetWikiLocationsQuery({})
 
   if (isLoading) {
     return (
-      <Box sx={{ display: "flex", justifyContent: "center", py: 8 }}>
-        <CircularProgress />
-      </Box>
+      <StandardPageLayout
+        title={t("wiki.locations.title", "Star Map & Locations")}
+        headerTitle={t("wiki.locations.title", "Star Map & Locations")}
+        sidebarOpen={true}
+        maxWidth="xl"
+      >
+        <Grid item xs={12}>
+          <Box sx={{ display: "flex", justifyContent: "center", py: 8 }}>
+            <CircularProgress />
+          </Box>
+        </Grid>
+      </StandardPageLayout>
     )
   }
 
   if (error) {
     return (
-      <Box sx={{ p: 3 }}>
-        <Alert severity="error">Failed to load locations. Please try again.</Alert>
-      </Box>
+      <StandardPageLayout
+        title={t("wiki.locations.title", "Star Map & Locations")}
+        headerTitle={t("wiki.locations.title", "Star Map & Locations")}
+        sidebarOpen={true}
+        maxWidth="xl"
+      >
+        <Grid item xs={12}>
+          <Alert severity="error">Failed to load locations. Please try again.</Alert>
+        </Grid>
+      </StandardPageLayout>
     )
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        Star Map & Locations
-      </Typography>
-      <Typography variant="body1" color="text.secondary" paragraph>
-        Explore the Star Citizen universe hierarchy
-      </Typography>
+    <StandardPageLayout
+      title={t("wiki.locations.title", "Star Map & Locations")}
+      headerTitle={t("wiki.locations.title", "Star Map & Locations")}
+      sidebarOpen={true}
+      maxWidth="xl"
+    >
+      <Grid item xs={12}>
+        <Typography variant="body1" color="text.secondary" paragraph>
+          Explore the Star Citizen universe hierarchy
+        </Typography>
 
-      <Card>
-        <CardContent>
-          {locations && locations.length > 0 ? (
-            <List>
-              {locations.map((location) => (
-                <LocationTreeItem key={location.id} node={location} level={0} />
-              ))}
-            </List>
-          ) : (
-            <Typography variant="body2" color="text.secondary" align="center" sx={{ py: 4 }}>
-              No locations found
-            </Typography>
-          )}
-        </CardContent>
-      </Card>
-    </Box>
+        <Card>
+          <CardContent>
+            {locations && locations.length > 0 ? (
+              <List>
+                {locations.map((location) => (
+                  <LocationTreeItem key={location.id} node={location} level={0} />
+                ))}
+              </List>
+            ) : (
+              <Typography variant="body2" color="text.secondary" align="center" sx={{ py: 4 }}>
+                No locations found
+              </Typography>
+            )}
+          </CardContent>
+        </Card>
+      </Grid>
+    </StandardPageLayout>
   )
 }
