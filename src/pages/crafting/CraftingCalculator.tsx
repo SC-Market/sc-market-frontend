@@ -35,6 +35,7 @@ import {
   CalculateQualityResponse,
 } from "../../store/craftingApi"
 import { useDebounce } from "../../hooks/useDebounce"
+import { useSearchParams } from "react-router-dom"
 
 const TIER_COLORS: Record<number, string> = {
   1: "default",
@@ -55,12 +56,14 @@ interface MaterialInput {
 export function CraftingCalculator() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
+  const [searchParams] = useSearchParams()
+  const prefillBlueprintId = searchParams.get("blueprint_id")
 
   const [searchText, setSearchText] = useState("")
   const [selectedBlueprint, setSelectedBlueprint] = useState<{
     blueprint_id: string
     blueprint_name: string
-  } | null>(null)
+  } | null>(prefillBlueprintId ? { blueprint_id: prefillBlueprintId, blueprint_name: "" } : null)
   const [materials, setMaterials] = useState<MaterialInput[]>([
     { id: 1, game_item_id: "", quality_tier: 1, quality_value: 50, quantity: 1 },
   ])

@@ -37,6 +37,7 @@ import { useDebounce } from "../../hooks/useDebounce"
 import { BlueprintCard } from "../../components/game-data/BlueprintCard"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
+import { BlueprintDetailModal } from "../../components/game-data/BlueprintDetailModal"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 
@@ -89,9 +90,15 @@ export function BlueprintBrowser() {
 
   // Query categories for filter options
   const { data: categories } = useGetBlueprintCategoriesQuery({})
+  const isMobile = theme.breakpoints.values.md > window.innerWidth
+  const [selectedBlueprintId, setSelectedBlueprintId] = useState<string | null>(null)
 
   const handleBlueprintClick = (blueprintId: string) => {
-    navigate(`/blueprints/${blueprintId}`)
+    if (isMobile) {
+      navigate(`/blueprints/${blueprintId}`)
+    } else {
+      setSelectedBlueprintId(blueprintId)
+    }
   }
 
   const handlePageChange = (_event: React.ChangeEvent<unknown>, value: number) => {
@@ -331,6 +338,11 @@ export function BlueprintBrowser() {
         </>
       )}
       </Grid>
+      <BlueprintDetailModal
+        blueprintId={selectedBlueprintId}
+        open={!!selectedBlueprintId}
+        onClose={() => setSelectedBlueprintId(null)}
+      />
     </StandardPageLayout>
   )
 }

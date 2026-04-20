@@ -28,6 +28,8 @@ import { useDebounce } from "../../hooks/useDebounce"
 import { MissionCard, MissionFilters } from "../../components/game-data"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
+import { MissionDetailModal } from "../../components/game-data/MissionDetailModal"
+import { BlueprintDetailModal } from "../../components/game-data/BlueprintDetailModal"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 
@@ -70,8 +72,14 @@ export function MissionSearch() {
   })
 
   const handleMissionClick = (missionId: string) => {
-    navigate(`/missions/${missionId}`)
+    if (theme.breakpoints.values.md > window.innerWidth) {
+      navigate(`/missions/${missionId}`)
+    } else {
+      setSelectedMissionId(missionId)
+    }
   }
+  const [selectedMissionId, setSelectedMissionId] = useState<string | null>(null)
+  const [selectedBlueprintId, setSelectedBlueprintId] = useState<string | null>(null)
 
   const handlePageChange = (_event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value)
@@ -184,6 +192,16 @@ export function MissionSearch() {
         </>
       )}
       </Grid>
-    </StandardPageLayout>
-  )
+      <MissionDetailModal
+        missionId={selectedMissionId}
+        open={!!selectedMissionId}
+        onClose={() => setSelectedMissionId(null)}
+        onBlueprintClick={(id) => { setSelectedMissionId(null); setSelectedBlueprintId(id) }}
+      />
+      <BlueprintDetailModal
+        blueprintId={selectedBlueprintId}
+        open={!!selectedBlueprintId}
+        onClose={() => setSelectedBlueprintId(null)}
+      />
+    </StandardPageLayout>  )
 }
