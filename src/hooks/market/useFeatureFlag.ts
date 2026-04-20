@@ -1,7 +1,8 @@
 /**
  * useFeatureFlag – Market version feature flag hook
  *
- * Uses RTK Query via store.dispatch(initiate()) for network calls.
+ * Reads localStorage immediately (never blocks render).
+ * Fetches from server in background and updates localStorage for next session.
  */
 
 import { useState, useEffect, useCallback, useMemo } from "react"
@@ -19,16 +20,16 @@ export interface UseFeatureFlagReturn {
   isDeveloper: boolean
 }
 
-function readLocalMarketVersion(): MarketVersion | null {
+function readLocalMarketVersion(): MarketVersion {
   const stored = localStorage.getItem("market_version")
-  if (stored === "V1" || stored === "V2") return stored
-  return null
+  if (stored === "V2") return "V2"
+  return "V1"
 }
 
 export function useFeatureFlag(): UseFeatureFlagReturn {
   const { data: profile } = useGetUserProfileQuery()
-  const [marketVersion, setMarketVersionState] = useState<MarketVersion>("V1")
-  const [isLoading, setIsLoading] = useState(true)
+  // Read localStorage synchronously — never blocks render
+  const [marketVersion, setMarketVersionState] = useState<MarketVersion>(readLocalMarketVersion)
   const [error, setError] = useState<Error | null>(null)
 
   const isFrontendDev = useMemo(
@@ -38,62 +39,35 @@ export function useFeatureFlag(): UseFeatureFlagReturn {
 
   const isDeveloper = isFrontendDev || profile?.role === "admin"
 
+  // Background fetch: update localStorage for next session
   useEffect(() => {
     let cancelled = false
 
-    const load = async () => {
+    const sync = async () => {
       try {
-        setIsLoading(true)
-        setError(null)
-
         const result = await store.dispatch(
           marketV2Api.endpoints.getFeatureFlag.initiate(),
         )
 
-        if (!cancelled && result.data) {
-          const data = (result.data as any).data || result.data
-          const serverMv =
-            data.market_version === "V1" || data.market_version === "V2"
-              ? data.market_version
-              : null
-          const localMv = readLocalMarketVersion()
+        if (cancelled) return
 
-          let resolved: MarketVersion | null = null
-          if (isFrontendDev && localMv) {
-            resolved = localMv
-          } else if (serverMv) {
-            resolved = serverMv
-            localStorage.setItem("market_version", serverMv)
-          } else if (localMv) {
-            resolved = localMv
-          }
-
-          if (resolved) {
-            setMarketVersionState(resolved)
-            return
-          }
-        }
-
-        if (!cancelled) {
-          const local = readLocalMarketVersion()
-          if (local) setMarketVersionState(local)
+        const data = (result.data as any)?.data || result.data
+        const serverMv = data?.market_version
+        if (serverMv === "V1" || serverMv === "V2") {
+          localStorage.setItem("market_version", serverMv)
+          // Only update state if it changed (avoids unnecessary re-renders)
+          setMarketVersionState((prev) => prev !== serverMv ? serverMv : prev)
         }
       } catch (err) {
         if (!cancelled) {
-          setError(
-            err instanceof Error ? err : new Error("Failed to fetch feature flag"),
-          )
-          const local = readLocalMarketVersion()
-          if (local) setMarketVersionState(local)
+          setError(err instanceof Error ? err : new Error("Failed to fetch feature flag"))
         }
-      } finally {
-        if (!cancelled) setIsLoading(false)
       }
     }
 
-    void load()
+    void sync()
     return () => { cancelled = true }
-  }, [profile?.username, isFrontendDev])
+  }, [profile?.username])
 
   const setMarketVersion = useCallback(
     async (version: MarketVersion) => {
@@ -106,13 +80,7 @@ export function useFeatureFlag(): UseFeatureFlagReturn {
           }),
         )
 
-        if ("data" in result) {
-          localStorage.setItem("market_version", version)
-          setMarketVersionState(version)
-          return
-        }
-
-        if (isFrontendDev) {
+        if ("data" in result || isFrontendDev) {
           localStorage.setItem("market_version", version)
           setMarketVersionState(version)
           return
@@ -120,14 +88,12 @@ export function useFeatureFlag(): UseFeatureFlagReturn {
 
         throw new Error("Failed to set market version")
       } catch (err) {
-        setError(
-          err instanceof Error ? err : new Error("Failed to set feature flag"),
-        )
+        setError(err instanceof Error ? err : new Error("Failed to set feature flag"))
         throw err
       }
     },
     [isFrontendDev],
   )
 
-  return { marketVersion, isLoading, error, setMarketVersion, isDeveloper }
+  return { marketVersion, isLoading: false, error, setMarketVersion, isDeveloper }
 }
