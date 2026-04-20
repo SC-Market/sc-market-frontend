@@ -957,6 +957,18 @@ const router = createBrowserRouter([
         }),
       },
       {
+        path: "/resources",
+        lazy: async () => ({
+          Component: (await import("./pages/resources/ResourceBrowser")).ResourceBrowser,
+        }),
+      },
+      {
+        path: "/resources/:resource_id",
+        lazy: async () => ({
+          Component: (await import("./pages/resources/ResourceDetail")).ResourceDetail,
+        }),
+      },
+      {
         path: "/wiki/items/:id",
         lazy: async () => ({
           Component: (await import("./pages/wiki/WikiItemDetail"))
