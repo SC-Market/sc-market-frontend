@@ -29,6 +29,12 @@ interface ImportResult {
     updated: number
     nameChanges: number
     fullSetsCreated: number
+    missionsProcessed: number
+    missionsInserted: number
+    missionsUpdated: number
+    blueprintsProcessed: number
+    blueprintsInserted: number
+    blueprintsUpdated: number
   }
   errors?: string[]
   error?: string
@@ -40,6 +46,8 @@ export function AdminGameDataImportView() {
   const [file, setFile] = useState<File | null>(null)
   const [uploading, setUploading] = useState(false)
   const [result, setResult] = useState<ImportResult | null>(null)
+  const [gameVersion, setGameVersion] = useState("")
+  const [gameChannel, setGameChannel] = useState<"LIVE" | "PTU" | "EPTU">("LIVE")
 
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault()
