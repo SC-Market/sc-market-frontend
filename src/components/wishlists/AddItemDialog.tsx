@@ -182,6 +182,7 @@ export function AddItemDialog({ open, onClose, wishlistId }: AddItemDialogProps)
 
           {/* Item Search/Autocomplete (Requirement 8.1) */}
           <Autocomplete
+            size="small"
             value={selectedItem}
             onChange={(_, newValue) => setSelectedItem(newValue)}
             onInputChange={(_, newInputValue) => {
@@ -228,6 +229,7 @@ export function AddItemDialog({ open, onClose, wishlistId }: AddItemDialogProps)
 
           {/* Quantity Input (Requirement 8.2) */}
           <TextField
+            size="small"
             value={quantity}
             onChange={(e) => {
               const value = parseInt(e.target.value, 10)
@@ -321,6 +323,7 @@ export function AddItemDialog({ open, onClose, wishlistId }: AddItemDialogProps)
 
           {/* Notes Field (Requirement 8.1) */}
           <TextField
+            size="small"
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             multiline
