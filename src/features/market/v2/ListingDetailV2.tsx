@@ -186,6 +186,25 @@ export function ListingDetailV2() {
                 {formatQuantity(totalQuantity, listingData.listing.quantity_unit)} {t("listing.available", "available")}
               </Typography>
 
+              {/* Per-Listing Order Limits */}
+              {(listingData.listing.min_order_quantity || listingData.listing.max_order_quantity ||
+                listingData.listing.min_order_value || listingData.listing.max_order_value) && (
+                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                  {listingData.listing.min_order_quantity && (
+                    <Chip size="small" variant="outlined" label={`Min ${formatQuantity(listingData.listing.min_order_quantity, listingData.listing.quantity_unit)}`} />
+                  )}
+                  {listingData.listing.max_order_quantity && (
+                    <Chip size="small" variant="outlined" label={`Max ${formatQuantity(listingData.listing.max_order_quantity, listingData.listing.quantity_unit)}`} />
+                  )}
+                  {listingData.listing.min_order_value && (
+                    <Chip size="small" variant="outlined" label={`Min ${listingData.listing.min_order_value.toLocaleString()} aUEC`} />
+                  )}
+                  {listingData.listing.max_order_value && (
+                    <Chip size="small" variant="outlined" label={`Max ${listingData.listing.max_order_value.toLocaleString()} aUEC`} />
+                  )}
+                </Box>
+              )}
+
               <Divider />
 
               {/* Seller Information */}

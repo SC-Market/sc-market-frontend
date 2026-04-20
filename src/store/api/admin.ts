@@ -15,28 +15,26 @@ export interface ImportJob {
   error: string | null
 }
 
-const injectedRtkApi = api
-  .enhanceEndpoints({ addTagTypes })
-  .injectEndpoints({
-    endpoints: (build) => ({
-      startImport: build.mutation<{ job: ImportJob }, ImportSource>({
-        query: (source) => ({
-          url: `/api/v2/admin/imports/${source}`,
-          method: "POST",
-        }),
-        invalidatesTags: ["ImportJobs"],
+const injectedRtkApi = api.enhanceEndpoints({ addTagTypes }).injectEndpoints({
+  endpoints: (build) => ({
+    startImport: build.mutation<{ job: ImportJob }, ImportSource>({
+      query: (source) => ({
+        url: `/api/v2/admin/imports/${source}`,
+        method: "POST",
       }),
-      getImportJob: build.query<{ job: ImportJob | null }, string>({
-        query: (jobId) => `/api/v2/admin/imports/${jobId}`,
-        providesTags: ["ImportJobs"],
-      }),
-      listImportJobs: build.query<{ jobs: ImportJob[] }, void>({
-        query: () => `/api/v2/admin/imports`,
-        providesTags: ["ImportJobs"],
-      }),
+      invalidatesTags: ["ImportJobs"],
     }),
-    overrideExisting: true,
-  })
+    getImportJob: build.query<{ job: ImportJob | null }, string>({
+      query: (jobId) => `/api/v2/admin/imports/${jobId}`,
+      providesTags: ["ImportJobs"],
+    }),
+    listImportJobs: build.query<{ jobs: ImportJob[] }, void>({
+      query: () => `/api/v2/admin/imports`,
+      providesTags: ["ImportJobs"],
+    }),
+  }),
+  overrideExisting: true,
+})
 
 export { injectedRtkApi as adminApi }
 export const {

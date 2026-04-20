@@ -88,6 +88,10 @@ export function CreateListingV2() {
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [pickupMethod, setPickupMethod] = useState<"delivery" | "pickup" | "any" | "">(""); 
   const [quantityUnit, setQuantityUnit] = useState<"unit" | "scu">("unit");
+  const [minOrderQuantity, setMinOrderQuantity] = useState<number | null>(null);
+  const [maxOrderQuantity, setMaxOrderQuantity] = useState<number | null>(null);
+  const [minOrderValue, setMinOrderValue] = useState<number | null>(null);
+  const [maxOrderValue, setMaxOrderValue] = useState<number | null>(null);
   const [bulkDiscountTiers, setBulkDiscountTiers] = useState<Array<{ min_quantity: number; discount_percent: number }>>([]);
 
   // Stock lots state
@@ -256,6 +260,10 @@ export function CreateListingV2() {
         lots,
         pickup_method: pickupMethod || undefined,
         quantity_unit: quantityUnit,
+        min_order_quantity: minOrderQuantity ?? undefined,
+        max_order_quantity: maxOrderQuantity ?? undefined,
+        min_order_value: minOrderValue ?? undefined,
+        max_order_value: maxOrderValue ?? undefined,
         bulk_discount_tiers: bulkDiscountTiers.length ? bulkDiscountTiers : undefined,
       };
 
@@ -423,6 +431,52 @@ export function CreateListingV2() {
                 <MenuItem value="unit">{t("CreateListingV2.unitDiscrete", "Units (discrete items)")}</MenuItem>
                 <MenuItem value="scu">{t("CreateListingV2.unitSCU", "SCU (cargo / commodities)")}</MenuItem>
               </TextField>
+            </Grid>
+          </FormPaper>
+
+          {/* Per-Listing Order Limits */}
+          <FormPaper title={t("CreateListingV2.orderLimits", "Order Limits")}>
+            <Grid item xs={12} sm={6} md={3}>
+              <NumericFormat
+                decimalScale={0} allowNegative={false} customInput={TextField}
+                thousandSeparator size="small" fullWidth color="secondary"
+                label={t("CreateListingV2.minQuantity", "Min Quantity")}
+                value={minOrderQuantity ?? ""}
+                onValueChange={(v) => setMinOrderQuantity(v.floatValue ?? null)}
+                helperText={t("CreateListingV2.minQuantityHelp", "Optional")}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <NumericFormat
+                decimalScale={0} allowNegative={false} customInput={TextField}
+                thousandSeparator size="small" fullWidth color="secondary"
+                label={t("CreateListingV2.maxQuantity", "Max Quantity")}
+                value={maxOrderQuantity ?? ""}
+                onValueChange={(v) => setMaxOrderQuantity(v.floatValue ?? null)}
+                helperText={t("CreateListingV2.maxQuantityHelp", "Optional")}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <NumericFormat
+                decimalScale={0} allowNegative={false} customInput={TextField}
+                thousandSeparator size="small" fullWidth color="secondary"
+                label={t("CreateListingV2.minValue", "Min Value (aUEC)")}
+                value={minOrderValue ?? ""}
+                onValueChange={(v) => setMinOrderValue(v.floatValue ?? null)}
+                InputProps={{ endAdornment: <Typography variant="caption">aUEC</Typography> }}
+                helperText={t("CreateListingV2.minValueHelp", "Optional")}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <NumericFormat
+                decimalScale={0} allowNegative={false} customInput={TextField}
+                thousandSeparator size="small" fullWidth color="secondary"
+                label={t("CreateListingV2.maxValue", "Max Value (aUEC)")}
+                value={maxOrderValue ?? ""}
+                onValueChange={(v) => setMaxOrderValue(v.floatValue ?? null)}
+                InputProps={{ endAdornment: <Typography variant="caption">aUEC</Typography> }}
+                helperText={t("CreateListingV2.maxValueHelp", "Optional")}
+              />
             </Grid>
           </FormPaper>
 
