@@ -30,7 +30,7 @@ import {
   CircularProgress,
   Alert,
 } from "@mui/material"
-import { useRateMissionMutation } from "../../store/missionsApi"
+import { useRateMissionMutation } from "../../store/api/v2/market"
 
 export interface MissionRatingDialogProps {
   open: boolean
@@ -121,7 +121,7 @@ export function MissionRatingDialog({
     try {
       // Submit rating (Requirement 49.8, 49.9)
       await rateMission({
-        mission_id: missionId,
+        missionId: missionId,
         body: {
           difficulty_rating: difficultyRating,
           satisfaction_rating: satisfactionRating,

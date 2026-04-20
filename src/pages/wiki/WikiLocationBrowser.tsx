@@ -23,7 +23,7 @@ import {
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
-import { useGetWikiLocationsQuery, WikiLocationNode } from "../../store/wikiApi"
+import { useGetLocationsQuery, type WikiLocationNode } from "../../store/api/v2/market"
 import { ExpandLess, ExpandMore, Public, Language, Terrain } from "@mui/icons-material"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -105,7 +105,7 @@ function LocationTreeItem({ node, level }: LocationTreeItemProps) {
 export function WikiLocationBrowser() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
-  const { data: locations, isLoading, error } = useGetWikiLocationsQuery({})
+  const { data: locations, isLoading, error } = useGetLocationsQuery({})
 
   if (isLoading) {
     return (

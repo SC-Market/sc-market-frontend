@@ -28,7 +28,7 @@ import {
 } from "@mui/material"
 import { Close } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
-import { useGetMissionDetailQuery } from "../../store/missionsApi"
+import { useGetMissionDetailQuery } from "../../store/api/v2/market"
 
 interface MissionDetailModalProps {
   missionId: string | null
@@ -42,7 +42,7 @@ export function MissionDetailModal({ missionId, open, onClose, onBlueprintClick 
   const [tab, setTab] = useState(0)
 
   const { data, isLoading, error } = useGetMissionDetailQuery(
-    { mission_id: missionId! },
+    { missionId: missionId! },
     { skip: !missionId },
   )
 

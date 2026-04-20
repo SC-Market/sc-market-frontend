@@ -25,7 +25,7 @@ import {
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
-import { useSearchWikiShipsQuery } from "../../store/wikiApi"
+import { useGetShipsQuery } from "../../store/api/v2/market"
 import { useNavigate } from "react-router-dom"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -39,7 +39,7 @@ export function WikiShipBrowser() {
   const [size, setSize] = useState("")
   const [page, setPage] = useState(1)
 
-  const { data, isLoading, error } = useSearchWikiShipsQuery({
+  const { data, isLoading, error } = useGetShipsQuery({
     manufacturer: manufacturer || undefined,
     focus: focus || undefined,
     size: size || undefined,

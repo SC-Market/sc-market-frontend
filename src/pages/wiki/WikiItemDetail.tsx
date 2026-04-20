@@ -29,7 +29,7 @@ import {
 import { useTheme } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
 import { useParams, useNavigate } from "react-router-dom"
-import { useGetWikiItemDetailQuery } from "../../store/wikiApi"
+import { useGetItemDetailQuery } from "../../store/api/v2/market"
 import { ShoppingCart, Gavel } from "@mui/icons-material"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -39,7 +39,7 @@ export function WikiItemDetail() {
   const theme = useTheme<ExtendedTheme>()
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
-  const { data: item, isLoading, error } = useGetWikiItemDetailQuery(id!)
+  const { data: item, isLoading, error } = useGetItemDetailQuery({ id: id! })
 
   if (isLoading) {
     return (

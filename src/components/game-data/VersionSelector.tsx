@@ -19,7 +19,7 @@ import {
 } from "@mui/material"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import UpdateIcon from "@mui/icons-material/Update"
-import { useGetActiveVersionsQuery, useSelectVersionMutation } from "../../store/versionsApi"
+import { useGetActiveVersionsQuery, useSelectVersionMutation } from "../../store/api/v2/market"
 import type { ExtendedTheme } from "../../hooks/styles/Theme"
 
 interface VersionSelectorProps {
@@ -94,7 +94,7 @@ export const VersionSelector: React.FC<VersionSelectorProps> = ({
 
     // Call API to persist selection (if authenticated)
     try {
-      await selectVersion({ version_id: versionId }).unwrap()
+      await selectVersion({ selectVersionRequest: { version_id: versionId } }).unwrap()
     } catch (error) {
       // Ignore auth errors for guest users
       console.debug("Version selection not persisted (guest user)")

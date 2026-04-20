@@ -24,7 +24,7 @@ import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import {
   useSearchResourcesQuery,
   useGetResourceCategoriesQuery,
-} from "../../store/resourcesApi"
+} from "../../store/api/v2/market"
 import { ResourceCard } from "../../components/game-data/ResourceCard"
 import { useDebounce } from "../../hooks/useDebounce"
 
@@ -48,7 +48,7 @@ export function ResourceBrowser() {
     page_size: 24,
   })
 
-  const { data: categories } = useGetResourceCategoriesQuery()
+  const { data: categories } = useGetResourceCategoriesQuery({})
 
   const uniqueCategories = categories
     ? [...new Set(categories.map((c) => c.category))]

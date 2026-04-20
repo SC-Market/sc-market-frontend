@@ -26,14 +26,14 @@ import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
-import { useGetResourceDetailQuery } from "../../store/resourcesApi"
+import { useGetResourceQuery } from "../../store/api/v2/market"
 
 export function ResourceDetail() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const { resource_id } = useParams<{ resource_id: string }>()
   const navigate = useNavigate()
-  const { data, isLoading, error } = useGetResourceDetailQuery(resource_id!)
+  const { data, isLoading, error } = useGetResourceQuery({ resourceId: resource_id! })
 
   if (isLoading) {
     return (

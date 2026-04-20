@@ -44,7 +44,7 @@ import {
   useGetWishlistsQuery,
   useCreateWishlistMutation,
   useDeleteWishlistMutation,
-} from "../../store/wishlistsApi"
+} from "../../store/api/v2/market"
 import { useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
@@ -111,10 +111,12 @@ export function WishlistManager() {
 
     try {
       const result = await createWishlist({
-        wishlist_name: newWishlistName.trim(),
-        wishlist_description: newWishlistDescription.trim() || undefined,
-        is_public: newWishlistIsPublic,
-        is_collaborative: newWishlistIsCollaborative,
+        createWishlistRequest: {
+          wishlist_name: newWishlistName.trim(),
+          wishlist_description: newWishlistDescription.trim() || undefined,
+          is_public: newWishlistIsPublic,
+          is_collaborative: newWishlistIsCollaborative,
+        },
       }).unwrap()
 
       // Navigate to the new wishlist
@@ -138,7 +140,7 @@ export function WishlistManager() {
     if (!wishlistToDelete) return
 
     try {
-      await deleteWishlist(wishlistToDelete.id).unwrap()
+      await deleteWishlist({ wishlistId: wishlistToDelete.id }).unwrap()
       setDeleteDialogOpen(false)
       setWishlistToDelete(null)
     } catch (err) {
