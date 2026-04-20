@@ -15,6 +15,8 @@ import { useLocation, useNavigate } from "react-router-dom"
 import { messagingDrawerWidth } from "../../features/chats"
 import { NotificationsButton } from "./NotificationsButton"
 import { MenuRounded, ShoppingCartRounded } from "@mui/icons-material"
+import { useFeatureFlag } from "../../hooks/market/useFeatureFlag"
+import { CartDrawer } from "./CartDrawer"
 import { ProfileNavAvatar } from "../../views/people/ProfileNavAvatar"
 import { useGetUserProfileQuery } from "../../store/profile"
 import { useTranslation } from "react-i18next"
@@ -35,6 +37,8 @@ export function Navbar(props: { children?: React.ReactNode }) {
 
   const [drawerOpen, setDrawerOpen] = useDrawerOpen()
   const { t } = useTranslation()
+  const { marketVersion } = useFeatureFlag()
+  const [cartDrawerOpen, setCartDrawerOpen] = React.useState(false)
 
   const cartItemCount = cookies.cart?.items?.length || 0
 
@@ -124,7 +128,7 @@ export function Navbar(props: { children?: React.ReactNode }) {
           <React.Fragment>
             <Tooltip title={t("navbar.cart", "Cart")}>
               <HapticIconButton
-                onClick={() => navigate("/market/cart")}
+                onClick={() => marketVersion === "V2" ? setCartDrawerOpen(true) : navigate("/market/cart")}
                 color="inherit"
                 aria-label={t("navbar.cart", "Cart")}
                 sx={{ color: navbarIconColor }}
@@ -184,6 +188,9 @@ export function Navbar(props: { children?: React.ReactNode }) {
           </Stack>
         )}
       </Toolbar>
+      {marketVersion === "V2" && (
+        <CartDrawer open={cartDrawerOpen} onClose={() => setCartDrawerOpen(false)} />
+      )}
     </AppBar>
   )
 }
