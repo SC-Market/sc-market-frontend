@@ -37,6 +37,7 @@ import { formatQuantity } from "../../../util/formatQuantity"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { useTranslation } from "react-i18next"
 import { AddToCartDrawer } from "./components/AddToCartDrawer"
+import { useCartDrawer } from "../../../hooks/market/AddToCartContext"
 import {
   CreateRounded,
   RefreshRounded,
@@ -61,7 +62,7 @@ export function ListingDetailV2() {
   } = useGetListingDetailQuery({ id: id! })
 
   const [addToCart] = useAddToCartMutation()
-  const [cartDrawerOpen, setCartDrawerOpen] = useState(false)
+  const { openAddToCart } = useCartDrawer()
   const [trackView] = useTrackViewMutation()
   const issueAlert = useAlertHook()
 
@@ -367,7 +368,7 @@ export function ListingDetailV2() {
                         <VariantBreakdown
                           variants={item.variants}
                           showActions={listing.status === "active"}
-                          onSelectVariant={() => setCartDrawerOpen(true)}
+                          onSelectVariant={() => openAddToCart(id!)}
                         />
                       ) : (
                         <Typography variant="body2" color="text.secondary">
@@ -409,13 +410,6 @@ export function ListingDetailV2() {
             />
           )}
         </Grid>
-      )}
-      {id && (
-        <AddToCartDrawer
-          open={cartDrawerOpen}
-          onClose={() => setCartDrawerOpen(false)}
-          listingId={id}
-        />
       )}
     </StandardPageLayout>
   )
