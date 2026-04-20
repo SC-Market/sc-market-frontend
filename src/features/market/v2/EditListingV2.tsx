@@ -20,7 +20,7 @@ import { useTheme } from "@mui/material/styles";
 import { useNavigate, useParams } from "react-router-dom";
 import { NumericFormat } from "react-number-format";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { AddCircleOutlineRounded, DeleteOutline } from "@mui/icons-material";
+import { AddCircleOutlineRounded, DeleteOutline, CheckCircleRounded, PauseCircleRounded, ArchiveRounded } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 import { ExtendedTheme } from "../../../hooks/styles/Theme";
 import { StandardPageLayout } from "../../../components/layout/StandardPageLayout";
@@ -33,6 +33,7 @@ import {
   useUpdateListingMutation,
 } from "../../../store/api/v2/market";
 import { useAlertHook } from "../../../hooks/alert/AlertHook";
+import { PriceComparisonAlert } from "../components/PriceComparisonAlert";
 import type {
   UpdateListingRequest,
   VariantPriceUpdate,
@@ -48,7 +49,7 @@ interface StockLotFormData {
   quantity: number;
   quality_tier?: number;
   quality_value?: number;
-  crafted_source?: "crafted" | "store" | "looted" | "unknown";
+  crafted_source?: "crafted" | "store" | "looted" | "unknown" | "duped";
   location_id?: string;
   price?: number; // For per_variant pricing mode
   display_name: string; // For display purposes
@@ -379,6 +380,56 @@ export function EditListingV2() {
 
       <form onSubmit={handleSubmit}>
         <Grid container spacing={theme.layoutSpacing.layout}>
+          {/* Status Actions */}
+          {listingData.listing.status !== "sold" && listingData.listing.status !== "cancelled" && (
+            <Grid item xs={12}>
+              <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+                {listingData.listing.status !== "active" ? (
+                  <Button
+                    variant="contained"
+                    color="success"
+                    startIcon={<CheckCircleRounded />}
+                    onClick={async () => {
+                      try {
+                        await updateListing({ id: id!, updateListingRequest: { status: "active" } }).unwrap()
+                        issueAlert({ message: "Listing activated", severity: "success" })
+                      } catch { issueAlert({ message: "Failed to activate", severity: "error" }) }
+                    }}
+                  >
+                    Activate
+                  </Button>
+                ) : (
+                  <Button
+                    variant="outlined"
+                    startIcon={<PauseCircleRounded />}
+                    onClick={async () => {
+                      try {
+                        await updateListing({ id: id!, updateListingRequest: { status: "expired" } }).unwrap()
+                        issueAlert({ message: "Listing deactivated", severity: "success" })
+                      } catch { issueAlert({ message: "Failed to deactivate", severity: "error" }) }
+                    }}
+                  >
+                    Deactivate
+                  </Button>
+                )}
+                <Button
+                  variant="outlined"
+                  color="warning"
+                  startIcon={<ArchiveRounded />}
+                  onClick={async () => {
+                    try {
+                      await updateListing({ id: id!, updateListingRequest: { status: "cancelled" } }).unwrap()
+                      issueAlert({ message: "Listing archived", severity: "success" })
+                      navigate("/market/manage")
+                    } catch { issueAlert({ message: "Failed to archive", severity: "error" }) }
+                  }}
+                >
+                  Archive
+                </Button>
+              </Box>
+            </Grid>
+          )}
+
           {/* About Section */}
           <FormPaper title={t("EditListingV2.about", "About")}>
             {/* Game Item (Read-only) */}
@@ -526,6 +577,9 @@ export function EditListingV2() {
                     ),
                   }}
                 />
+                {listingData.items[0]?.game_item?.id && basePrice > 0 && (
+                  <PriceComparisonAlert gameItemId={listingData.items[0].game_item.id} currentPrice={basePrice} />
+                )}
               </Grid>
             )}
           </FormPaper>

@@ -1538,6 +1538,8 @@ export type LotUpdate = {
   location_id?: string
 }
 export type UpdateListingRequest = {
+  /** New status (optional) */
+  status?: "active" | "sold" | "expired" | "cancelled"
   /** New title (optional) */
   title?: string
   /** New description (optional) */
