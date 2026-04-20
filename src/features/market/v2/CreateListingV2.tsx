@@ -32,6 +32,9 @@ import { LocationSelector } from "../components/stock/LocationSelector";
 import { BulkDiscountTierEditor } from "../../../components/market/BulkDiscountTierEditor";
 import { useCreateListingMutation } from "../../../store/api/v2/market";
 import { useAlertHook } from "../../../hooks/alert/AlertHook";
+import { useGetUserProfileQuery } from "../../../store/profile";
+import { Alert } from "@mui/material";
+import { PriceComparisonAlert } from "../components/PriceComparisonAlert";
 import type {
   CreateListingRequest,
   StockLotInput,
@@ -76,6 +79,8 @@ export function CreateListingV2() {
   const theme = useTheme<ExtendedTheme>();
   const navigate = useNavigate();
   const issueAlert = useAlertHook();
+  const { data: profile } = useGetUserProfileQuery();
+  const isVerified = profile?.rsi_confirmed;
 
   // Form state
   const [title, setTitle] = useState("");
@@ -319,6 +324,18 @@ export function CreateListingV2() {
     >
       <form onSubmit={handleSubmit}>
         <Grid container spacing={theme.layoutSpacing.layout}>
+          {/* Verification Warning */}
+          {profile && !isVerified && (
+            <Grid item xs={12}>
+              <Alert severity="warning">
+                {t(
+                  "market.verificationRequired",
+                  "Your account must be verified to create market listings. Please verify your account with RSI/Citizen iD to continue.",
+                )}
+              </Alert>
+            </Grid>
+          )}
+
           {/* About Section */}
           <FormPaper title={t("CreateListingV2.about", "About")}>
             {/* Game Item Selection */}
@@ -560,6 +577,9 @@ export function CreateListingV2() {
                     ),
                   }}
                 />
+                {gameItemId && basePrice > 0 && (
+                  <PriceComparisonAlert gameItemId={gameItemId} currentPrice={basePrice} />
+                )}
               </Grid>
             )}
           </FormPaper>
