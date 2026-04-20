@@ -28,7 +28,7 @@ import {
   Grid2 as Grid,
 } from "@mui/material"
 import { useParams, useNavigate } from "react-router-dom"
-import { useGetMissionDetailQuery } from "../../store/missionsApi"
+import { useGetMissionDetailQuery } from "../../store/api/v2/market"
 import { RarityBadge } from "../../components/game-data"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
@@ -60,7 +60,7 @@ export function MissionDetail() {
 
   // Fetch mission detail
   const { data, isLoading, error } = useGetMissionDetailQuery({
-    mission_id: missionId!,
+    missionId: missionId!,
   })
 
   if (isLoading) {

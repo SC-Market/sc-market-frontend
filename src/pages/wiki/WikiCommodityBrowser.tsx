@@ -29,7 +29,7 @@ import {
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
-import { useSearchWikiCommoditiesQuery } from "../../store/wikiApi"
+import { useGetCommoditiesQuery } from "../../store/api/v2/market"
 import { CheckCircle, Cancel } from "@mui/icons-material"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -41,7 +41,7 @@ export function WikiCommodityBrowser() {
   const [canBeMined, setCanBeMined] = useState<boolean | undefined>(undefined)
   const [page, setPage] = useState(1)
 
-  const { data, isLoading, error } = useSearchWikiCommoditiesQuery({
+  const { data, isLoading, error } = useGetCommoditiesQuery({
     category: category || undefined,
     can_be_mined: canBeMined,
     page,

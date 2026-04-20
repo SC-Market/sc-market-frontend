@@ -27,7 +27,7 @@ import {
 import { useTheme } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
 import { useParams } from "react-router-dom"
-import { useGetWikiShipDetailQuery } from "../../store/wikiApi"
+import { useGetShipDetailQuery } from "../../store/api/v2/market"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 
@@ -35,7 +35,7 @@ export function WikiShipDetail() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const { id } = useParams<{ id: string }>()
-  const { data: ship, isLoading, error } = useGetWikiShipDetailQuery(id!)
+  const { data: ship, isLoading, error } = useGetShipDetailQuery({ id: id! })
 
   if (isLoading) {
     return (

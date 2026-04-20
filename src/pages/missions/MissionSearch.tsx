@@ -13,18 +13,18 @@
  * Requirements: 1.1-1.6, 16.1-16.6, 17.1-17.6, 41.1-41.10
  */
 
-import React, { useState } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import {
   Box,
   Grid,
   Typography,
-  Pagination,
   CircularProgress,
   Alert,
 } from "@mui/material"
-import { useSearchMissionsQuery } from "../../store/missionsApi"
+import { useSearchMissionsQuery } from "../../store/api/v2/market"
 import { useNavigate } from "react-router-dom"
 import { useDebounce } from "../../hooks/useDebounce"
+import { useInfiniteScroll } from "../../hooks/useInfiniteScroll"
 import { MissionCard, MissionFilters } from "../../components/game-data"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
@@ -50,12 +50,20 @@ export function MissionSearch() {
   const [hasBlueprints, setHasBlueprints] = useState<boolean | undefined>(undefined)
   const [isChainStarter, setIsChainStarter] = useState<boolean | undefined>(undefined)
   const [page, setPage] = useState(1)
+  const [allMissions, setAllMissions] = useState<any[]>([])
 
   // Debounce search text for performance (Requirement 1.6: <200ms response)
   const debouncedSearch = useDebounce(searchText, 300)
 
+  // Reset accumulated results when filters change
+  const filterKey = JSON.stringify({
+    debouncedSearch, category, careerType, starSystem, faction,
+    legalStatus, difficultyRange, isShareable, hasBlueprints, isChainStarter,
+  })
+  useEffect(() => { setPage(1); setAllMissions([]) }, [filterKey])
+
   // Query missions with filters
-  const { data, isLoading, error } = useSearchMissionsQuery({
+  const { data, isLoading, isFetching, error } = useSearchMissionsQuery({
     text: debouncedSearch || undefined,
     category: category || undefined,
     career_type: careerType || undefined,
@@ -81,10 +89,16 @@ export function MissionSearch() {
   const [selectedMissionId, setSelectedMissionId] = useState<string | null>(null)
   const [selectedBlueprintId, setSelectedBlueprintId] = useState<string | null>(null)
 
-  const handlePageChange = (_event: React.ChangeEvent<unknown>, value: number) => {
-    setPage(value)
-    window.scrollTo({ top: 0, behavior: "smooth" })
-  }
+  // Accumulate results for infinite scroll
+  useEffect(() => {
+    if (data?.missions) {
+      setAllMissions(prev => page === 1 ? data.missions : [...prev, ...data.missions])
+    }
+  }, [data, page])
+
+  const hasMore = data ? page * data.page_size < data.total : false
+  const loadMore = useCallback(() => setPage(p => p + 1), [])
+  const sentinelRef = useInfiniteScroll({ hasMore, isLoading: isFetching, onLoadMore: loadMore })
 
   const handleResetFilters = () => {
     setSearchText("")
@@ -99,8 +113,6 @@ export function MissionSearch() {
     setIsChainStarter(undefined)
     setPage(1)
   }
-
-  const totalPages = data ? Math.ceil(data.total / data.page_size) : 0
 
   return (
     <StandardPageLayout
@@ -161,32 +173,26 @@ export function MissionSearch() {
           </Typography>
 
           <Grid container spacing={2}>
-            {data.missions.map((mission) => (
+            {allMissions.map((mission) => (
               <Grid item xs={12} key={mission.mission_id}>
                 <MissionCard mission={mission} onClick={handleMissionClick} />
               </Grid>
             ))}
           </Grid>
 
-          {data.missions.length === 0 && (
-            <Grid item xs={12}>
-              <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", py: 6 }}>
-                <Typography color="text.secondary">
-                  {t("missions.noResults", "No results found. Try adjusting your filters.")}
-                </Typography>
-              </Box>
-            </Grid>
+          {allMissions.length === 0 && !isFetching && (
+            <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", py: 6 }}>
+              <Typography color="text.secondary">
+                {t("missions.noResults", "No results found. Try adjusting your filters.")}
+              </Typography>
+            </Box>
           )}
 
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
-              <Pagination
-                count={totalPages}
-                page={page}
-                onChange={handlePageChange}
-                color="primary"
-              />
+          {/* Infinite scroll sentinel */}
+          <div ref={sentinelRef} />
+          {isFetching && page > 1 && (
+            <Box sx={{ display: "flex", justifyContent: "center", py: 2 }}>
+              <CircularProgress size={24} />
             </Box>
           )}
         </>

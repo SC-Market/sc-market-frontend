@@ -55,8 +55,8 @@ import {
   useGetWishlistQuery,
   useRemoveWishlistItemMutation,
   useUpdateWishlistItemMutation,
-  WishlistItemWithDetails,
-} from "../../store/wishlistsApi"
+  type WishlistItemWithDetails,
+} from "../../store/api/v2/market"
 import { AddItemDialog } from "../../components/wishlists"
 
 type SortOption = "priority" | "name" | "status" | "quality"
@@ -91,7 +91,7 @@ export function WishlistDetail() {
 
   // Query wishlist detail (Requirements 53.1, 53.2, 53.3, 53.4)
   const { data, isLoading, error } = useGetWishlistQuery(
-    { wishlist_id: wishlist_id! },
+    { wishlistId: wishlist_id! },
     { skip: !wishlist_id }
   )
 
@@ -125,9 +125,9 @@ export function WishlistDetail() {
 
     try {
       await updateItem({
-        wishlist_id,
-        item_id: item.item_id,
-        body: {
+        wishlistId: wishlist_id,
+        itemId: item.item_id,
+        updateWishlistItemRequest: {
           is_acquired: !item.is_acquired,
           acquired_quantity: !item.is_acquired ? item.desired_quantity : 0,
         },
@@ -150,8 +150,8 @@ export function WishlistDetail() {
 
     try {
       await removeItem({
-        wishlist_id,
-        item_id: item.item_id,
+        wishlistId: wishlist_id,
+        itemId: item.item_id,
       }).unwrap()
     } catch (err) {
       console.error("Failed to remove item:", err)

@@ -47,8 +47,8 @@ import {
   Group,
   Info,
 } from "@mui/icons-material"
-import { useUpdateWishlistMutation } from "../../store/wishlistsApi"
-import type { Wishlist } from "../../store/wishlistsApi"
+import { useUpdateWishlistMutation } from "../../store/api/v2/market"
+import type { Wishlist } from "../../store/api/v2/market"
 
 export interface WishlistShareProps {
   open: boolean
@@ -117,8 +117,8 @@ export function WishlistShare({ open, onClose, wishlist }: WishlistShareProps) {
 
     try {
       await updateWishlist({
-        wishlist_id: wishlist.wishlist_id,
-        body: {
+        wishlistId: wishlist.wishlist_id,
+        updateWishlistRequest: {
           is_public: checked,
         },
       }).unwrap()
@@ -145,8 +145,8 @@ export function WishlistShare({ open, onClose, wishlist }: WishlistShareProps) {
 
     try {
       await updateWishlist({
-        wishlist_id: wishlist.wishlist_id,
-        body: {
+        wishlistId: wishlist.wishlist_id,
+        updateWishlistRequest: {
           is_collaborative: checked,
         },
       }).unwrap()

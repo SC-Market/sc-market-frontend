@@ -19,7 +19,7 @@ import {
 import { useTheme } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
-import { useGetWikiManufacturersQuery } from "../../store/wikiApi"
+import { useGetManufacturersQuery } from "../../store/api/v2/market"
 import { BusinessCenter } from "@mui/icons-material"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -28,7 +28,7 @@ export function WikiManufacturerList() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const navigate = useNavigate()
-  const { data: manufacturers, isLoading, error } = useGetWikiManufacturersQuery()
+  const { data: manufacturers, isLoading, error } = useGetManufacturersQuery()
 
   const handleManufacturerClick = (manufacturer: string) => {
     navigate(`/wiki/manufacturers/${encodeURIComponent(manufacturer)}`)

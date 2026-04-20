@@ -43,7 +43,7 @@ import {
   Cancel,
   Info,
 } from "@mui/icons-material"
-import { useGetShoppingListQuery } from "../../store/wishlistsApi"
+import { useGenerateShoppingListQuery } from "../../store/api/v2/market"
 import { useNavigate, useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
@@ -79,7 +79,7 @@ export function ShoppingList() {
   const [sortOrder, setSortOrder] = useState<SortOrder>("asc")
 
   // Query shopping list data (Requirements 9.1, 9.2, 9.3, 9.4)
-  const { data, isLoading, error } = useGetShoppingListQuery(wishlist_id || "")
+  const { data, isLoading, error } = useGenerateShoppingListQuery({ wishlistId: wishlist_id || "" })
 
   // Handle sort
   const handleSort = (field: SortField) => {

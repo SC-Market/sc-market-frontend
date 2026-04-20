@@ -12,12 +12,11 @@
  * Requirements: 19.1, 19.2, 19.3, 19.4, 19.5, 19.6, 43.10
  */
 
-import React, { useState } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import {
   Box,
   Grid,
   Typography,
-  Pagination,
   CircularProgress,
   Alert,
   ToggleButtonGroup,
@@ -31,9 +30,10 @@ import {
   InputLabel,
 } from "@mui/material"
 import { ViewModule, ViewList } from "@mui/icons-material"
-import { useSearchBlueprintsQuery, useGetBlueprintCategoriesQuery } from "../../store/blueprintsApi"
+import { useSearchBlueprintsQuery, useGetBlueprintCategoriesQuery } from "../../store/api/v2/market"
 import { useNavigate } from "react-router-dom"
 import { useDebounce } from "../../hooks/useDebounce"
+import { useInfiniteScroll } from "../../hooks/useInfiniteScroll"
 import { BlueprintCard } from "../../components/game-data/BlueprintCard"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
@@ -73,12 +73,17 @@ export function BlueprintBrowser() {
   const [rarity, setRarity] = useState("")
   const [tier, setTier] = useState<number | "">("")
   const [page, setPage] = useState(1)
+  const [allBlueprints, setAllBlueprints] = useState<any[]>([])
 
   // Debounce search text for performance (Requirement 19.6: <200ms response)
   const debouncedSearch = useDebounce(searchText, 300)
 
+  // Reset on filter change
+  const filterKey = JSON.stringify({ debouncedSearch, category, subcategory, rarity, tier })
+  useEffect(() => { setPage(1); setAllBlueprints([]) }, [filterKey])
+
   // Query blueprints with filters
-  const { data, isLoading, error } = useSearchBlueprintsQuery({
+  const { data, isLoading, isFetching, error } = useSearchBlueprintsQuery({
     text: debouncedSearch || undefined,
     item_category: category || undefined,
     item_subcategory: subcategory || undefined,
@@ -87,6 +92,17 @@ export function BlueprintBrowser() {
     page,
     page_size: 20,
   })
+
+  // Accumulate results
+  useEffect(() => {
+    if (data?.blueprints) {
+      setAllBlueprints(prev => page === 1 ? data.blueprints : [...prev, ...data.blueprints])
+    }
+  }, [data, page])
+
+  const hasMore = data ? page * data.page_size < data.total : false
+  const loadMore = useCallback(() => setPage(p => p + 1), [])
+  const sentinelRef = useInfiniteScroll({ hasMore, isLoading: isFetching, onLoadMore: loadMore })
 
   // Query categories for filter options
   const { data: categories } = useGetBlueprintCategoriesQuery({})
@@ -99,11 +115,6 @@ export function BlueprintBrowser() {
     } else {
       setSelectedBlueprintId(blueprintId)
     }
-  }
-
-  const handlePageChange = (_event: React.ChangeEvent<unknown>, value: number) => {
-    setPage(value)
-    window.scrollTo({ top: 0, behavior: "smooth" })
   }
 
   const handleResetFilters = () => {
@@ -130,8 +141,6 @@ export function BlueprintBrowser() {
     ?.filter((c) => c.category === category && c.subcategory)
     .map((c) => c.subcategory!)
     .sort() || []
-
-  const totalPages = data ? Math.ceil(data.total / data.page_size) : 0
 
   return (
     <StandardPageLayout
@@ -298,7 +307,7 @@ export function BlueprintBrowser() {
           {/* Grid View (Requirement 43.10) */}
           {viewMode === "grid" && (
             <Grid container spacing={2}>
-              {data.blueprints.map((blueprint) => (
+              {allBlueprints.map((blueprint) => (
                 <Grid item xs={12} sm={6} md={4} lg={3} key={blueprint.blueprint_id}>
                   <BlueprintCard
                     blueprint={blueprint}
@@ -313,7 +322,7 @@ export function BlueprintBrowser() {
           {/* List View (Requirement 43.10) */}
           {viewMode === "list" && (
             <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-              {data.blueprints.map((blueprint) => (
+              {allBlueprints.map((blueprint) => (
                 <BlueprintCard
                   key={blueprint.blueprint_id}
                   blueprint={blueprint}
@@ -324,15 +333,19 @@ export function BlueprintBrowser() {
             </Box>
           )}
 
-          {/* Pagination (Requirement 19.6) */}
-          {totalPages > 1 && (
-            <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
-              <Pagination
-                count={totalPages}
-                page={page}
-                onChange={handlePageChange}
-                color="primary"
-              />
+          {allBlueprints.length === 0 && !isFetching && (
+            <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", py: 6 }}>
+              <Typography color="text.secondary">
+                No blueprints found. Try adjusting your filters.
+              </Typography>
+            </Box>
+          )}
+
+          {/* Infinite scroll sentinel */}
+          <div ref={sentinelRef} />
+          {isFetching && page > 1 && (
+            <Box sx={{ display: "flex", justifyContent: "center", py: 2 }}>
+              <CircularProgress size={24} />
             </Box>
           )}
         </>

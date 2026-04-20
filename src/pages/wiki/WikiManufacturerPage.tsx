@@ -22,7 +22,7 @@ import {
 import { useTheme } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
 import { useParams, useNavigate } from "react-router-dom"
-import { useGetWikiManufacturerDetailQuery } from "../../store/wikiApi"
+import { useGetManufacturerDetailQuery } from "../../store/api/v2/market"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 
@@ -31,7 +31,7 @@ export function WikiManufacturerPage() {
   const theme = useTheme<ExtendedTheme>()
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
-  const { data: manufacturer, isLoading, error } = useGetWikiManufacturerDetailQuery(id!)
+  const { data: manufacturer, isLoading, error } = useGetManufacturerDetailQuery({ id: id! })
 
   const handleItemClick = (itemId: string) => {
     navigate(`/wiki/items/${itemId}`)

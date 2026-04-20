@@ -26,7 +26,7 @@ import {
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
-import { useSearchWikiItemsQuery } from "../../store/wikiApi"
+import { useSearchItemsQuery } from "../../store/api/v2/market"
 import { useNavigate } from "react-router-dom"
 import { useDebounce } from "../../hooks/useDebounce"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
@@ -45,7 +45,7 @@ export function WikiItemBrowser() {
 
   const debouncedSearch = useDebounce(searchText, 300)
 
-  const { data, isLoading, error } = useSearchWikiItemsQuery({
+  const { data, isLoading, error } = useSearchItemsQuery({
     text: debouncedSearch || undefined,
     type: type || undefined,
     size: size || undefined,

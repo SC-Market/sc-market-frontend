@@ -5,7 +5,7 @@
 
 import React from "react"
 import { Card, CardActionArea, CardContent, Chip, Stack, Typography } from "@mui/material"
-import { ResourceSearchResult } from "../../store/resourcesApi"
+import { type ResourceSearchResult } from "../../store/api/v2/market"
 
 interface ResourceCardProps {
   resource: ResourceSearchResult
