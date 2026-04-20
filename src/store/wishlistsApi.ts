@@ -7,6 +7,7 @@
  */
 
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
+import { BACKEND_URL } from "../util/constants"
 
 // ============================================================================
 // Types
@@ -138,7 +139,7 @@ export interface ShoppingListResponse {
 export const wishlistsApi = createApi({
   reducerPath: "wishlistsApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "/api/v2/game-data/wishlists",
+    baseUrl: `${BACKEND_URL}/api/v2/game-data/wishlists`,
     credentials: "include",
   }),
   tagTypes: ["Wishlists", "WishlistDetail", "WishlistItems"],

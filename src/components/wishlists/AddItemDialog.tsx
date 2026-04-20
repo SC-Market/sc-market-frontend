@@ -284,7 +284,7 @@ export function AddItemDialog({ open, onClose, wishlistId }: AddItemDialogProps)
           </Box>
 
           {/* Priority Selection (Requirement 8.1) */}
-          <FormControl fullWidth>
+          <FormControl fullWidth size="small">
             <InputLabel>Priority *</InputLabel>
             <Select
               value={priority}

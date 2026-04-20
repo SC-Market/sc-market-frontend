@@ -356,7 +356,7 @@ export function WishlistManager() {
         <DialogContent>
           <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}>
             {/* Wishlist Name */}
-            <TextField
+            <TextField size="small"
               label="Wishlist Name"
               value={newWishlistName}
               onChange={(e) => setNewWishlistName(e.target.value)}
@@ -367,7 +367,7 @@ export function WishlistManager() {
             />
 
             {/* Description */}
-            <TextField
+            <TextField size="small"
               label="Description (Optional)"
               value={newWishlistDescription}
               onChange={(e) => setNewWishlistDescription(e.target.value)}

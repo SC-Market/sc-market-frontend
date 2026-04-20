@@ -6,6 +6,7 @@
  */
 
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
+import { BACKEND_URL } from "../util/constants"
 
 // ============================================================================
 // Types
@@ -60,7 +61,7 @@ export interface BlueprintCategory {
 export const blueprintsApi = createApi({
   reducerPath: "blueprintsApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "/api/v2/game-data/blueprints",
+    baseUrl: `${BACKEND_URL}/api/v2/game-data/blueprints`,
     credentials: "include",
   }),
   tagTypes: ["Blueprints", "BlueprintDetail", "BlueprintCategories"],
