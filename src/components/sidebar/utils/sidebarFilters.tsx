@@ -116,8 +116,9 @@ export function createItemFilter(
       return false
     }
 
-    // V2-only items: check localStorage market_version
+    // V2-only items: require login AND V2 feature flag
     if (item.v2_only) {
+      if (profileError || !profile) return false
       const mv = localStorage.getItem("market_version")
       if (mv !== "V2") return false
     }
