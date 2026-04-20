@@ -44,11 +44,7 @@ export function CraftingHistory() {
   return (
     <StandardPageLayout
       title={t("crafting.history_title", "Crafting History")}
-      headerTitle={
-        <Typography variant="h4">
-          {t("crafting.history_title", "Crafting History")}
-        </Typography>
-      }
+      headerTitle={t("crafting.history_title", "Crafting History")}
       sidebarOpen={true}
       maxWidth="xl"
       isLoading={isLoading}

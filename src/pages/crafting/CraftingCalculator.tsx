@@ -115,11 +115,7 @@ export function CraftingCalculator() {
   return (
     <StandardPageLayout
       title={t("crafting.calculator_title", "Crafting Calculator")}
-      headerTitle={
-        <Typography variant="h4">
-          {t("crafting.calculator_title", "Crafting Calculator")}
-        </Typography>
-      }
+      headerTitle={t("crafting.calculator_title", "Crafting Calculator")}
       sidebarOpen={true}
       maxWidth="lg"
     >
@@ -296,10 +292,10 @@ function ResultsPanel({ result }: { result: CalculateQualityResponse }) {
             {t("crafting.probabilities", "Probabilities")}
           </Typography>
           <Typography>
-            {t("crafting.success_probability", "Success")}: {(result.success_probability * 100).toFixed(1)}%
+            {t("crafting.success_probability", "Success")}: {result.success_probability.toFixed(1)}%
           </Typography>
           <Typography>
-            {t("crafting.critical_success", "Critical Success")}: {(result.critical_success_chance * 100).toFixed(1)}%
+            {t("crafting.critical_success", "Critical Success")}: {result.critical_success_chance.toFixed(1)}%
           </Typography>
         </Paper>
       </Grid>
