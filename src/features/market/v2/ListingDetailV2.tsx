@@ -29,9 +29,7 @@ import { QualityBadge } from "../../../components/market/v2/QualityBadge"
 import { ImagePreviewPaper } from "../../../components/paper/ImagePreviewPaper"
 import { MarkdownRender } from "../../../components/markdown/Markdown.lazy"
 import { SellerReviews } from "../listing-view/components/SellerReviews"
-import { SellerOtherListings } from "../listing-view/components/SellerOtherListings"
-import { RelatedListings } from "../listing-view/components/RelatedListings"
-import { AggregateMarketData } from "../listing-view/components/AggregateMarketData"
+import { SellerOtherListingsV2, RelatedListingsV2, AggregateMarketDataV2 } from "./components/ListingViewComponentsV2"
 import { FRONTEND_URL, FALLBACK_IMAGE_URL } from "../../../util/constants"
 import { getRelativeTime } from "../../../util/time"
 import { dateDiffInDays } from "../../../util/dateDiff"
@@ -404,31 +402,22 @@ export function ListingDetailV2() {
 
           {/* Market Analysis */}
           {gameItemId && priceRange && (
-            <>
-              <Grid item xs={12}>
-                <Typography variant="h6" fontWeight="bold">
-                  Market Analysis
-                </Typography>
-              </Grid>
-              <Grid item xs={12}>
-                <AggregateMarketData
-                  gameItemId={gameItemId}
-                  currentPrice={priceRange.min}
-                />
-              </Grid>
-            </>
+            <AggregateMarketDataV2
+              gameItemId={gameItemId}
+              currentPrice={priceRange.min}
+            />
           )}
 
           {/* Seller's Other Listings */}
-          <SellerOtherListings
-            userSeller={userSeller}
-            contractorSeller={contractorSeller}
+          <SellerOtherListingsV2
+            sellerId={seller.type === "user" ? seller.id : undefined}
+            contractorId={seller.type === "contractor" ? seller.id : undefined}
             currentListingId={listing.listing_id}
           />
 
           {/* Related Listings */}
           {gameItemType && (
-            <RelatedListings
+            <RelatedListingsV2
               itemType={gameItemType}
               currentListingId={listing.listing_id}
             />
