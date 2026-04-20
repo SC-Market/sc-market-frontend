@@ -30,6 +30,10 @@ import {
 import { useParams, useNavigate } from "react-router-dom"
 import { useGetMissionDetailQuery } from "../../store/missionsApi"
 import { RarityBadge } from "../../components/game-data"
+import { useTranslation } from "react-i18next"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 
 /**
  * MissionDetail Component
@@ -51,6 +55,8 @@ import { RarityBadge } from "../../components/game-data"
 export function MissionDetail() {
   const { missionId } = useParams<{ missionId: string }>()
   const navigate = useNavigate()
+  const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
 
   // Fetch mission detail
   const { data, isLoading, error } = useGetMissionDetailQuery({
@@ -59,26 +65,48 @@ export function MissionDetail() {
 
   if (isLoading) {
     return (
-      <Box sx={{ display: "flex", justifyContent: "center", py: 8 }}>
-        <CircularProgress />
-      </Box>
+      <StandardPageLayout
+        title={t("missions.detail.title", "Mission Detail")}
+        headerTitle={t("missions.detail.header", "Mission Detail")}
+        sidebarOpen={true}
+        maxWidth="xl"
+      >
+        <Grid size={{ xs: 12 }}>
+          <Box sx={{ display: "flex", justifyContent: "center", py: 8 }}>
+            <CircularProgress />
+          </Box>
+        </Grid>
+      </StandardPageLayout>
     )
   }
 
   if (error || !data) {
     return (
-      <Box sx={{ p: 3 }}>
-        <Alert severity="error">
-          Failed to load mission details. Please try again.
-        </Alert>
-      </Box>
+      <StandardPageLayout
+        title={t("missions.detail.title", "Mission Detail")}
+        headerTitle={t("missions.detail.header", "Mission Detail")}
+        sidebarOpen={true}
+        maxWidth="xl"
+      >
+        <Grid size={{ xs: 12 }}>
+          <Alert severity="error">
+            {t("missions.detail.error", "Failed to load mission details. Please try again.")}
+          </Alert>
+        </Grid>
+      </StandardPageLayout>
     )
   }
 
   const { mission, blueprint_rewards, prerequisite_missions, user_completed, user_rating } = data
 
   return (
-    <Box sx={{ p: 3, maxWidth: 1200, mx: "auto" }}>
+    <StandardPageLayout
+      title={t("missions.detail.titleWithName", "{{name}} - Mission Detail", { name: mission.mission_name })}
+      headerTitle={mission.mission_name}
+      sidebarOpen={true}
+      maxWidth="xl"
+    >
+      <Grid size={{ xs: 12 }}>
       {/* Mission Header */}
       <Card sx={{ mb: 3 }}>
         <CardContent>
@@ -575,6 +603,7 @@ export function MissionDetail() {
           </Grid>
         </CardContent>
       </Card>
-    </Box>
+      </Grid>
+    </StandardPageLayout>
   )
 }

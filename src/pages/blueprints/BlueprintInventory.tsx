@@ -39,6 +39,10 @@ import {
 } from "../../store/api/v2/market"
 import { useNavigate } from "react-router-dom"
 import { BlueprintCard } from "../../components/game-data/BlueprintCard"
+import { useTranslation } from "react-i18next"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 
 /**
  * BlueprintInventory Component
@@ -55,6 +59,8 @@ import { BlueprintCard } from "../../components/game-data/BlueprintCard"
  * - Authentication required (46.1, 46.2)
  */
 export function BlueprintInventory() {
+  const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
   const navigate = useNavigate()
 
   // Filter and sort state
@@ -189,36 +195,55 @@ export function BlueprintInventory() {
   // Loading state
   if (isLoading) {
     return (
-      <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
-        <CircularProgress />
-      </Box>
+      <StandardPageLayout
+        title={t("blueprints.inventory.title", "My Blueprint Inventory")}
+        headerTitle={t("blueprints.inventory.header", "My Blueprint Inventory")}
+        sidebarOpen={true}
+        maxWidth="xl"
+      >
+        <Grid item xs={12}>
+          <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
+            <CircularProgress />
+          </Box>
+        </Grid>
+      </StandardPageLayout>
     )
   }
 
   // Error state
   if (error) {
     return (
-      <Alert severity="error" sx={{ m: 3 }}>
-        Failed to load blueprint inventory. Please ensure you are logged in.
-      </Alert>
+      <StandardPageLayout
+        title={t("blueprints.inventory.title", "My Blueprint Inventory")}
+        headerTitle={t("blueprints.inventory.header", "My Blueprint Inventory")}
+        sidebarOpen={true}
+        maxWidth="xl"
+      >
+        <Grid item xs={12}>
+          <Alert severity="error">
+            {t("blueprints.inventory.error", "Failed to load blueprint inventory. Please ensure you are logged in.")}
+          </Alert>
+        </Grid>
+      </StandardPageLayout>
     )
   }
 
   return (
-    <Box sx={{ p: 3 }}>
-      {/* Header */}
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
-        <Box>
-          <Typography variant="h4" gutterBottom>
-            My Blueprint Inventory
-          </Typography>
+    <StandardPageLayout
+      title={t("blueprints.inventory.title", "My Blueprint Inventory")}
+      headerTitle={t("blueprints.inventory.header", "My Blueprint Inventory")}
+      sidebarOpen={true}
+      maxWidth="xl"
+    >
+      <Grid item xs={12}>
+        {/* Header */}
+        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
           <Typography variant="body1" color="text.secondary">
-            Track your owned blueprints and crafting capabilities
+            {t("blueprints.inventory.description", "Track your owned blueprints and crafting capabilities")}
           </Typography>
-        </Box>
 
-        {/* Bulk Import Button (Requirement 10.6, 46.8) */}
-        <Button
+          {/* Bulk Import Button (Requirement 10.6, 46.8) */}
+          <Button
           variant="contained"
           startIcon={<Upload />}
           onClick={handleBulkImportOpen}
@@ -474,6 +499,7 @@ export function BlueprintInventory() {
           </Button>
         </DialogActions>
       </Dialog>
-    </Box>
+      </Grid>
+    </StandardPageLayout>
   )
 }

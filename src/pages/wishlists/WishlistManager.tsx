@@ -10,6 +10,7 @@
 import React, { useState } from "react"
 import {
   Box,
+  Grid,
   Typography,
   Button,
   Card,
@@ -45,6 +46,10 @@ import {
   useDeleteWishlistMutation,
 } from "../../store/wishlistsApi"
 import { useNavigate } from "react-router-dom"
+import { useTranslation } from "react-i18next"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 
 /**
  * WishlistManager Component
@@ -61,6 +66,8 @@ import { useNavigate } from "react-router-dom"
  * - Authentication required
  */
 export function WishlistManager() {
+  const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
   const navigate = useNavigate()
 
   // State for create dialog
@@ -147,38 +154,57 @@ export function WishlistManager() {
   // Loading state
   if (isLoading) {
     return (
-      <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
-        <CircularProgress />
-      </Box>
+      <StandardPageLayout
+        title={t("wishlists.manager.title", "My Wishlists")}
+        headerTitle={t("wishlists.manager.header", "My Wishlists")}
+        sidebarOpen={true}
+        maxWidth="xl"
+      >
+        <Grid item xs={12}>
+          <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
+            <CircularProgress />
+          </Box>
+        </Grid>
+      </StandardPageLayout>
     )
   }
 
   // Error state
   if (error) {
     return (
-      <Alert severity="error" sx={{ m: 3 }}>
-        Failed to load wishlists. Please ensure you are logged in.
-      </Alert>
+      <StandardPageLayout
+        title={t("wishlists.manager.title", "My Wishlists")}
+        headerTitle={t("wishlists.manager.header", "My Wishlists")}
+        sidebarOpen={true}
+        maxWidth="xl"
+      >
+        <Grid item xs={12}>
+          <Alert severity="error">
+            {t("wishlists.manager.error", "Failed to load wishlists. Please ensure you are logged in.")}
+          </Alert>
+        </Grid>
+      </StandardPageLayout>
     )
   }
 
   const wishlists = data?.wishlists || []
 
   return (
-    <Box sx={{ p: 3 }}>
-      {/* Header */}
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
-        <Box>
-          <Typography variant="h4" gutterBottom>
-            My Wishlists
-          </Typography>
+    <StandardPageLayout
+      title={t("wishlists.manager.title", "My Wishlists")}
+      headerTitle={t("wishlists.manager.header", "My Wishlists")}
+      sidebarOpen={true}
+      maxWidth="xl"
+    >
+      <Grid item xs={12}>
+        {/* Header */}
+        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
           <Typography variant="body1" color="text.secondary">
-            Create and manage wishlists of desired items and blueprints
+            {t("wishlists.manager.description", "Create and manage wishlists of desired items and blueprints")}
           </Typography>
-        </Box>
 
-        {/* Create Wishlist Button (Requirement 8.4) */}
-        <Button
+          {/* Create Wishlist Button (Requirement 8.4) */}
+          <Button
           variant="contained"
           startIcon={<Add />}
           onClick={handleCreateDialogOpen}
@@ -429,6 +455,7 @@ export function WishlistManager() {
           </Button>
         </DialogActions>
       </Dialog>
-    </Box>
+      </Grid>
+    </StandardPageLayout>
   )
 }

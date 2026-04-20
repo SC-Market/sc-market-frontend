@@ -26,6 +26,11 @@ import {
   CategoryRounded,
   PublicRounded,
   BusinessCenterRounded,
+  ScienceRounded,
+  ExploreRounded,
+  ConstructionRounded,
+  ChecklistRounded,
+  TerrainRounded,
 } from "@mui/icons-material"
 import PaidIcon from "@mui/icons-material/PaidRounded"
 import CreateIcon from "@mui/icons-material/CreateRounded"
@@ -328,6 +333,49 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
         text: "sidebar.register",
         icon: <CreateIcon />,
         org: false,
+        logged_in: true,
+      },
+    ],
+  },
+  {
+    title: "sidebar.gameData.title",
+    items: [
+      {
+        text: "sidebar.gameData.missions",
+        icon: <ExploreRounded />,
+        tab_key: "missions",
+        to: "/missions",
+      },
+      {
+        text: "sidebar.gameData.blueprints",
+        icon: <ConstructionRounded />,
+        tab_key: "blueprints",
+        to: "/blueprints",
+      },
+      {
+        text: "sidebar.gameData.craftingCalculator",
+        icon: <ScienceRounded />,
+        tab_key: "crafting_calculator",
+        to: "/crafting/calculator",
+      },
+      {
+        text: "sidebar.gameData.resources",
+        icon: <TerrainRounded />,
+        tab_key: "resources",
+        to: "/resources",
+      },
+      {
+        text: "sidebar.gameData.wishlists",
+        icon: <ChecklistRounded />,
+        tab_key: "wishlists",
+        to: "/wishlists",
+        logged_in: true,
+      },
+      {
+        text: "sidebar.gameData.blueprintInventory",
+        icon: <InventoryRounded />,
+        tab_key: "blueprint_inventory",
+        to: "/blueprints/inventory",
         logged_in: true,
       },
     ],

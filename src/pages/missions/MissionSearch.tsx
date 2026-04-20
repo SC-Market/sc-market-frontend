@@ -26,8 +26,14 @@ import { useSearchMissionsQuery } from "../../store/missionsApi"
 import { useNavigate } from "react-router-dom"
 import { useDebounce } from "../../hooks/useDebounce"
 import { MissionCard, MissionFilters } from "../../components/game-data"
+import { useTranslation } from "react-i18next"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 
 export function MissionSearch() {
+  const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
   const navigate = useNavigate()
   
   // Search and filter state
@@ -89,16 +95,19 @@ export function MissionSearch() {
   const totalPages = data ? Math.ceil(data.total / data.page_size) : 0
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        Mission Database
-      </Typography>
-      <Typography variant="body1" color="text.secondary" paragraph>
-        Search and filter missions to find blueprint rewards and plan your progression
-      </Typography>
+    <StandardPageLayout
+      title={t("missions.search.title", "Mission Database")}
+      headerTitle={t("missions.search.header", "Mission Database")}
+      sidebarOpen={true}
+      maxWidth="xl"
+    >
+      <Grid item xs={12}>
+        <Typography variant="body1" color="text.secondary" paragraph>
+          {t("missions.search.description", "Search and filter missions to find blueprint rewards and plan your progression")}
+        </Typography>
 
-      {/* Filters - Now using MissionFilters component */}
-      <MissionFilters
+        {/* Filters - Now using MissionFilters component */}
+        <MissionFilters
         searchText={searchText}
         onSearchTextChange={setSearchText}
         category={category}
@@ -164,6 +173,7 @@ export function MissionSearch() {
           )}
         </>
       )}
-    </Box>
+      </Grid>
+    </StandardPageLayout>
   )
 }

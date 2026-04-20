@@ -35,6 +35,10 @@ import { useSearchBlueprintsQuery, useGetBlueprintCategoriesQuery } from "../../
 import { useNavigate } from "react-router-dom"
 import { useDebounce } from "../../hooks/useDebounce"
 import { BlueprintCard } from "../../components/game-data/BlueprintCard"
+import { useTranslation } from "react-i18next"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 
 type ViewMode = "grid" | "list"
 
@@ -54,6 +58,8 @@ type ViewMode = "grid" | "list"
  * - Material-UI components for consistency
  */
 export function BlueprintBrowser() {
+  const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
   const navigate = useNavigate()
   
   // View mode state
@@ -121,20 +127,21 @@ export function BlueprintBrowser() {
   const totalPages = data ? Math.ceil(data.total / data.page_size) : 0
 
   return (
-    <Box sx={{ p: 3 }}>
-      {/* Header */}
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
-        <Box>
-          <Typography variant="h4" gutterBottom>
-            Blueprint Browser
-          </Typography>
+    <StandardPageLayout
+      title={t("blueprints.browser.title", "Blueprint Browser")}
+      headerTitle={t("blueprints.browser.header", "Blueprint Browser")}
+      sidebarOpen={true}
+      maxWidth="xl"
+    >
+      <Grid item xs={12}>
+        {/* Header Actions */}
+        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
           <Typography variant="body1" color="text.secondary">
-            Search and filter blueprints to find crafting recipes
+            {t("blueprints.browser.description", "Search and filter blueprints to find crafting recipes")}
           </Typography>
-        </Box>
 
-        {/* View Mode Toggle (Requirement 43.10) */}
-        <ToggleButtonGroup
+          {/* View Mode Toggle (Requirement 43.10) */}
+          <ToggleButtonGroup
           value={viewMode}
           exclusive
           onChange={handleViewModeChange}
@@ -146,8 +153,8 @@ export function BlueprintBrowser() {
           <ToggleButton value="list" aria-label="list view">
             <ViewList />
           </ToggleButton>
-        </ToggleButtonGroup>
-      </Box>
+          </ToggleButtonGroup>
+        </Box>
 
       {/* Filters (Requirements 19.1-19.5) */}
       <Card sx={{ mb: 3 }}>
@@ -322,6 +329,7 @@ export function BlueprintBrowser() {
           )}
         </>
       )}
-    </Box>
+      </Grid>
+    </StandardPageLayout>
   )
 }
