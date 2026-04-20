@@ -496,6 +496,12 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
         to: "/admin/import-monitoring",
       },
       {
+        text: "sidebar.game_data_import.text",
+        icon: <RocketLaunchRounded />,
+        site_admin: true,
+        to: "/admin/game-data-import",
+      },
+      {
         text: "sidebar.premium.text",
         icon: <StarRounded />,
         site_admin: true,

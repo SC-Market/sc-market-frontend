@@ -28,12 +28,12 @@ import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
-import { useSearchBlueprintsQuery } from "../../store/blueprintsApi"
 import {
+  useSearchBlueprintsQuery,
   useCalculateQualityMutation,
-  CraftingInputMaterial,
-  CalculateQualityResponse,
-} from "../../store/craftingApi"
+  type CraftingInputMaterial,
+  type CalculateQualityResponse,
+} from "../../store/api/v2/market"
 import { useDebounce } from "../../hooks/useDebounce"
 import { useSearchParams } from "react-router-dom"
 
@@ -72,7 +72,7 @@ export function CraftingCalculator() {
   const debouncedSearch = useDebounce(searchText, 300)
   const { data: blueprintData, isLoading: blueprintsLoading } =
     useSearchBlueprintsQuery(
-      { text: debouncedSearch || undefined, page_size: 20 },
+      { text: debouncedSearch || undefined, pageSize: 20 },
       { skip: !debouncedSearch },
     )
   const [calculateQuality, { data: result, isLoading: calculating, error }] =
@@ -110,8 +110,10 @@ export function CraftingCalculator() {
       quality_value: m.quality_value,
     }))
     calculateQuality({
-      blueprint_id: selectedBlueprint.blueprint_id,
-      input_materials,
+      calculateQualityRequest: {
+        blueprint_id: selectedBlueprint.blueprint_id,
+        input_materials,
+      },
     })
   }
 

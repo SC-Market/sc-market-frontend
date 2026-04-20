@@ -52,7 +52,7 @@ export function WikiItemBrowser() {
     grade: grade || undefined,
     manufacturer: manufacturer || undefined,
     page,
-    page_size: 20,
+    pageSize: 20,
   })
 
   const handleItemClick = (itemId: string) => {

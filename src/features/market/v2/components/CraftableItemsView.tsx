@@ -37,7 +37,7 @@ import {
   Warning as WarningIcon,
 } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
-import { useGetCraftableItemsQuery, type CraftableItem } from "../../../../store/craftingApi"
+import { useGetCraftableItemsQuery, type CraftableItem } from "../../../../store/api/v2/market"
 
 export interface CraftableItemsViewProps {
   /** Optional filter to show only specific item category */
@@ -70,12 +70,12 @@ export function CraftableItemsView({ itemCategory }: CraftableItemsViewProps) {
     isLoading,
     error,
   } = useGetCraftableItemsQuery({
-    item_category: categoryFilter || undefined,
+    itemCategory: categoryFilter || undefined,
     rarity: rarityFilter || undefined,
     tier: tierFilter || undefined,
-    craftable_only: craftableOnly,
+    craftableOnly: craftableOnly,
     page,
-    page_size: 20,
+    pageSize: 20,
   })
 
   const toggleExpanded = (blueprintId: string) => {

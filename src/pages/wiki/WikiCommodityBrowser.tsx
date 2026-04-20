@@ -43,9 +43,9 @@ export function WikiCommodityBrowser() {
 
   const { data, isLoading, error } = useGetCommoditiesQuery({
     category: category || undefined,
-    can_be_mined: canBeMined,
+    canBeMined: canBeMined,
     page,
-    page_size: 20,
+    pageSize: 20,
   })
 
   const handlePageChange = (_event: React.ChangeEvent<unknown>, value: number) => {

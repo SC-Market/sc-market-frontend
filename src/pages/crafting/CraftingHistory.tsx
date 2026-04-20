@@ -18,7 +18,7 @@ import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
-import { useGetCraftingHistoryQuery } from "../../store/craftingApi"
+import { useGetCraftingHistoryQuery } from "../../store/api/v2/market"
 
 const TIER_COLORS: Record<number, string> = {
   1: "default",
@@ -36,7 +36,7 @@ export function CraftingHistory() {
 
   const { data, isLoading, error } = useGetCraftingHistoryQuery({
     page: page + 1,
-    page_size: pageSize,
+    pageSize: pageSize,
   })
 
   return (
