@@ -23,6 +23,7 @@ import { ExtendedTheme } from "../../../hooks/styles/Theme";
 import { useGetMyListingsQuery } from "../../../store/api/v2/market";
 import type { MyListingItem } from "../../../store/api/v2/market";
 import { ListingSkeleton } from "../../../components/skeletons";
+import { StandardPageLayout } from "../../../components/layout/StandardPageLayout";
 import { ListingPagination } from "../components/listings/ListingPagination";
 import { EmptyListings } from "../../../components/empty-states";
 import { useDrawerOpen } from "../../../hooks/layout/Drawer";
@@ -111,8 +112,18 @@ export function MyListingsV2() {
   );
 
   return (
-    <Box sx={{ p: 3 }}>
-      <Grid container spacing={1}>
+    <StandardPageLayout
+      title={t("sidebar.my_market_listings", "My Listings")}
+      headerTitle={t("sidebar.my_market_listings", "My Listings")}
+      breadcrumbs={[
+        { label: t("sidebar.market_short", "Market"), href: "/market" },
+        { label: t("sidebar.my_market_listings", "My Listings") },
+      ]}
+      sidebarOpen={true}
+      maxWidth="lg"
+      isLoading={isLoading && !listings.length}
+    >
+    <Grid container spacing={1}>
         <div ref={ref} style={{ position: "absolute", top: 0 }} />
 
         {/* Status Filter */}
@@ -171,7 +182,7 @@ export function MyListingsV2() {
           />
         </Grid>
       </Grid>
-    </Box>
+    </StandardPageLayout>
   );
 }
 
