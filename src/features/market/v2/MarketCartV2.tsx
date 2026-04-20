@@ -41,6 +41,7 @@ import {
   CartItemDetail,
 } from "../../../store/api/v2/market"
 import { QualityBadge } from "../../../components/market/v2/QualityBadge"
+import { SellerNextAvailable } from "../../../components/market/SellerNextAvailable"
 import { VariantSelector } from "../../../components/market/v2/VariantSelector"
 
 /**
@@ -408,10 +409,10 @@ export function MarketCartV2() {
   // Group items by seller
   const sellerGroups = useMemo(() => {
     if (!cartData?.items.length) return []
-    const groups = new Map<string, { sellerName: string; items: CartItemDetail[]; total: number }>()
+    const groups = new Map<string, { sellerName: string; items: CartItemDetail[]; total: number; nextAvailable?: string | null }>()
     for (const item of cartData.items) {
       const key = item.listing.seller_name
-      if (!groups.has(key)) groups.set(key, { sellerName: key, items: [], total: 0 })
+      if (!groups.has(key)) groups.set(key, { sellerName: key, items: [], total: 0, nextAvailable: item.listing.seller_next_available })
       const g = groups.get(key)!
       g.items.push(item)
       g.total += item.subtotal
@@ -483,6 +484,13 @@ export function MarketCartV2() {
                 onRemove={handleRemove}
               />
             ))}
+
+            {/* Seller availability */}
+            {group.nextAvailable !== undefined && (
+              <Grid item xs={12}>
+                <SellerNextAvailable nextAvailable={group.nextAvailable} />
+              </Grid>
+            )}
 
             {/* Seller Total */}
             <Grid item xs={12}>

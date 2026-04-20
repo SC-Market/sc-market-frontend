@@ -518,6 +518,18 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["Admin Feature Flags"],
       }),
+      getSellerNextAvailable: build.query<
+        SellerNextAvailableResponse,
+        { username?: string; spectrumId?: string }
+      >({
+        query: (queryArg) => ({
+          url: `/availability/next`,
+          params: {
+            username: queryArg.username,
+            spectrum_id: queryArg.spectrumId,
+          },
+        }),
+      }),
     }),
     overrideExisting: false,
   })
@@ -1673,10 +1685,16 @@ export type CartListingInfo = {
   title: string
   /** Seller username or contractor name */
   seller_name: string
+  /** Seller type */
+  seller_type: "user" | "contractor"
+  /** Seller slug (username or spectrum_id) */
+  seller_slug: string
   /** Seller rating (0-5) */
   seller_rating: number
   /** Current listing status */
   status: string
+  /** ISO 8601 timestamp of seller's next available slot, or null */
+  seller_next_available?: string | null
 }
 export type CartVariantDetail = {
   /** UUID of the variant */
@@ -2023,4 +2041,10 @@ export const {
   useGetUserOverridesQuery,
   useSetUserOverrideMutation,
   useRemoveUserOverrideMutation,
+  useGetSellerNextAvailableQuery,
 } = injectedRtkApi
+
+export type SellerNextAvailableResponse = {
+  next_available: string | null
+  has_schedule: boolean
+}
