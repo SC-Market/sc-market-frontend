@@ -111,6 +111,14 @@ export function WikiManufacturerList() {
             </Grid>
           ))}
         </Grid>
+
+        {manufacturers && manufacturers.length === 0 && (
+          <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", py: 6 }}>
+            <Typography color="text.secondary">
+              {t("wiki.manufacturers.noResults", "No results found. Try adjusting your filters.")}
+            </Typography>
+          </Box>
+        )}
       </Grid>
     </StandardPageLayout>
   )

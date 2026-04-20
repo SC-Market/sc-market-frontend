@@ -143,6 +143,14 @@ export function WikiManufacturerPage() {
             </Grid>
           ))}
         </Grid>
+
+        {manufacturer.items.length === 0 && (
+          <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", py: 6 }}>
+            <Typography color="text.secondary">
+              {t("wiki.manufacturerDetail.noItems", "No results found. Try adjusting your filters.")}
+            </Typography>
+          </Box>
+        )}
       </Grid>
     </StandardPageLayout>
   )

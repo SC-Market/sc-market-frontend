@@ -344,7 +344,8 @@ describe("WishlistShare Component", () => {
       )
 
       expect(screen.getByText(/Visibility:/)).toBeInTheDocument()
-      expect(screen.getByText("Private")).toBeInTheDocument()
+      const privateElements = screen.getAllByText("Private")
+      expect(privateElements.length).toBeGreaterThan(0)
       expect(screen.getByText(/Collaboration:/)).toBeInTheDocument()
       expect(screen.getByText("Disabled")).toBeInTheDocument()
       expect(screen.getByText(/Share Link:/)).toBeInTheDocument()
@@ -356,7 +357,8 @@ describe("WishlistShare Component", () => {
         <WishlistShare open={true} onClose={vi.fn()} wishlist={mockPublicWishlist} />
       )
 
-      expect(screen.getByText("Public")).toBeInTheDocument()
+      const publicElements = screen.getAllByText("Public")
+      expect(publicElements.length).toBeGreaterThan(0)
       expect(screen.getByText("Generated")).toBeInTheDocument()
     })
 
@@ -399,22 +401,22 @@ describe("WishlistShare Component", () => {
 
   describe("State Management", () => {
     it("should reset state when wishlist changes", () => {
-      const { rerender } = renderWithRedux(
+      const { rerender, store } = renderWithRedux(
         <WishlistShare open={true} onClose={vi.fn()} wishlist={mockWishlist} />
       )
 
       // Initial state: private
-      expect(screen.getByText("Private")).toBeInTheDocument()
+      expect(screen.getAllByText("Private").length).toBeGreaterThan(0)
 
       // Change to public wishlist
       rerender(
-        <Provider store={createMockStore()}>
+        <Provider store={store}>
           <WishlistShare open={true} onClose={vi.fn()} wishlist={mockPublicWishlist} />
         </Provider>
       )
 
       // Should update to public
-      expect(screen.getByText("Public")).toBeInTheDocument()
+      expect(screen.getAllByText("Public").length).toBeGreaterThan(0)
     })
 
     it("should clear success message when dialog closes", () => {

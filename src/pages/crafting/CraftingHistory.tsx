@@ -11,8 +11,6 @@ import {
   TableRow,
   TablePagination,
   Chip,
-  CircularProgress,
-  Alert,
   Box,
 } from "@mui/material"
 import { Check } from "@mui/icons-material"
@@ -51,18 +49,6 @@ export function CraftingHistory() {
       error={error}
     >
       <Grid item xs={12}>
-        {isLoading && (
-          <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
-            <CircularProgress />
-          </Box>
-        )}
-
-        {error && (
-          <Alert severity="error">
-            {t("crafting.history_error", "Failed to load crafting history.")}
-          </Alert>
-        )}
-
         {data && (
           <Paper>
             <TableContainer>

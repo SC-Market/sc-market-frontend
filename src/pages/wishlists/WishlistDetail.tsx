@@ -10,6 +10,9 @@
 
 import React, { useState, useMemo } from "react"
 import { useParams, useNavigate } from "react-router-dom"
+import { useTranslation } from "react-i18next"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 import {
   Box,
   Typography,
@@ -73,6 +76,8 @@ type SortOption = "priority" | "name" | "status" | "quality"
  * - Actions: add, edit, remove, mark acquired
  */
 export function WishlistDetail() {
+  const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
   const { wishlist_id } = useParams<{ wishlist_id: string }>()
   const navigate = useNavigate()
 
@@ -187,7 +192,7 @@ export function WishlistDetail() {
   // Loading state
   if (isLoading) {
     return (
-      <StandardPageLayout title="Loading..." headerTitle="Loading Wishlist...">
+      <StandardPageLayout title={t("wishlists.detail", "Wishlist Detail")} headerTitle={t("wishlists.detail", "Wishlist Detail")}>
         <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
           <CircularProgress />
         </Box>
@@ -198,12 +203,12 @@ export function WishlistDetail() {
   // Error state
   if (error || !data) {
     return (
-      <StandardPageLayout title="Error" headerTitle="Wishlist Not Found">
+      <StandardPageLayout title={t("wishlists.detail", "Wishlist Detail")} headerTitle={t("wishlists.notFound", "Wishlist Not Found")}>
         <Alert severity="error" sx={{ m: 3 }}>
-          Failed to load wishlist. It may not exist or you don't have permission to view it.
+          {t("wishlists.loadError", "Failed to load wishlist. It may not exist or you don't have permission to view it.")}
         </Alert>
         <Button startIcon={<ArrowBack />} onClick={handleBack} sx={{ ml: 3 }}>
-          Back to Wishlists
+          {t("wishlists.backToList", "Back to Wishlists")}
         </Button>
       </StandardPageLayout>
     )
@@ -228,10 +233,10 @@ export function WishlistDetail() {
             onClick={handleViewShoppingList}
             disabled={items.length === 0}
           >
-            Shopping List
+            {t("wishlists.shoppingList", "Shopping List")}
           </Button>
           <Button variant="contained" startIcon={<Add />} onClick={handleAddItem}>
-            Add Item
+            {t("wishlists.addItem", "Add Item")}
           </Button>
         </Stack>
       }
@@ -249,7 +254,7 @@ export function WishlistDetail() {
       <Card sx={{ mb: 3 }}>
         <CardContent>
           <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
-            <Typography variant="h6">Progress</Typography>
+            <Typography variant="h6">{t("wishlists.progress", "Progress")}</Typography>
             <Typography variant="h4" color="primary">
               {statistics.progress_percentage}%
             </Typography>
@@ -264,13 +269,13 @@ export function WishlistDetail() {
           <Box sx={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", gap: 2 }}>
             <Box>
               <Typography variant="caption" color="text.secondary">
-                Total Items
+                {t("wishlists.totalItems", "Total Items")}
               </Typography>
               <Typography variant="h6">{statistics.total_items}</Typography>
             </Box>
             <Box>
               <Typography variant="caption" color="text.secondary">
-                Completed
+                {t("wishlists.completed", "Completed")}
               </Typography>
               <Typography variant="h6" color="success.main">
                 {statistics.completed_items}
@@ -278,7 +283,7 @@ export function WishlistDetail() {
             </Box>
             <Box>
               <Typography variant="caption" color="text.secondary">
-                Remaining
+                {t("wishlists.remaining", "Remaining")}
               </Typography>
               <Typography variant="h6" color="warning.main">
                 {statistics.total_items - statistics.completed_items}
@@ -287,7 +292,7 @@ export function WishlistDetail() {
             {statistics.total_estimated_cost > 0 && (
               <Box>
                 <Typography variant="caption" color="text.secondary">
-                  Estimated Cost
+                  {t("wishlists.estimatedCost", "Estimated Cost")}
                 </Typography>
                 <Typography variant="h6">{statistics.total_estimated_cost.toLocaleString()} aUEC</Typography>
               </Box>
@@ -299,21 +304,21 @@ export function WishlistDetail() {
       {/* Sort Controls (Requirement 53.9) */}
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
         <Typography variant="h6">
-          Items ({items.length})
+          {t("wishlists.items", "Items")} ({items.length})
         </Typography>
 
         <FormControl size="small" sx={{ minWidth: 150 }}>
-          <InputLabel>Sort By</InputLabel>
+          <InputLabel>{t("wishlists.sortBy", "Sort By")}</InputLabel>
           <Select
             value={sortBy}
             label="Sort By"
             onChange={handleSortChange}
             startAdornment={<Sort fontSize="small" sx={{ mr: 1, ml: 1 }} />}
           >
-            <MenuItem value="priority">Priority</MenuItem>
-            <MenuItem value="name">Name</MenuItem>
-            <MenuItem value="status">Status</MenuItem>
-            <MenuItem value="quality">Quality</MenuItem>
+            <MenuItem value="priority">{t("wishlists.sortPriority", "Priority")}</MenuItem>
+            <MenuItem value="name">{t("wishlists.sortName", "Name")}</MenuItem>
+            <MenuItem value="status">{t("wishlists.sortStatus", "Status")}</MenuItem>
+            <MenuItem value="quality">{t("wishlists.sortQuality", "Quality")}</MenuItem>
           </Select>
         </FormControl>
       </Box>
@@ -323,13 +328,13 @@ export function WishlistDetail() {
         <Card sx={{ textAlign: "center", py: 8 }}>
           <CardContent>
             <Typography variant="h6" color="text.secondary" gutterBottom>
-              No items in this wishlist
+              {t("wishlists.noItems", "No items in this wishlist")}
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-              Add items to start tracking what you want to acquire or craft
+              {t("wishlists.noItemsHint", "Add items to start tracking what you want to acquire or craft")}
             </Typography>
             <Button variant="contained" startIcon={<Add />} onClick={handleAddItem}>
-              Add Your First Item
+              {t("wishlists.addFirstItem", "Add Your First Item")}
             </Button>
           </CardContent>
         </Card>
@@ -394,7 +399,7 @@ export function WishlistDetail() {
                       {/* Quantity (Requirement 53.2) */}
                       <Box>
                         <Typography variant="caption" color="text.secondary" display="block">
-                          Quantity
+                          {t("wishlists.quantity", "Quantity")}
                         </Typography>
                         <Typography variant="body2">
                           {item.acquired_quantity} / {item.desired_quantity}
@@ -405,7 +410,7 @@ export function WishlistDetail() {
                       {item.desired_quality_tier && (
                         <Box>
                           <Typography variant="caption" color="text.secondary" display="block">
-                            Quality Tier
+                            {t("wishlists.qualityTier", "Quality Tier")}
                           </Typography>
                           <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
                             {[1, 2, 3, 4, 5].map((tier) => (
@@ -424,7 +429,7 @@ export function WishlistDetail() {
                       {/* Priority (Requirement 53.5) */}
                       <Box>
                         <Typography variant="caption" color="text.secondary" display="block">
-                          Priority
+                          {t("wishlists.priority", "Priority")}
                         </Typography>
                         <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
                           {[1, 2, 3, 4, 5].map((level) => (
@@ -458,7 +463,7 @@ export function WishlistDetail() {
                       {item.estimated_cost && (
                         <Box>
                           <Typography variant="caption" color="text.secondary" display="block">
-                            Est. Cost
+                            {t("wishlists.estCost", "Est. Cost")}
                           </Typography>
                           <Typography variant="body2">
                             {item.estimated_cost.toLocaleString()} aUEC
@@ -492,7 +497,7 @@ export function WishlistDetail() {
                         startIcon={item.is_acquired ? <RadioButtonUnchecked /> : <CheckCircle />}
                         onClick={() => handleToggleAcquired(item)}
                       >
-                        {item.is_acquired ? "Mark as Needed" : "Mark as Acquired"}
+                        {item.is_acquired ? t("wishlists.markNeeded", "Mark as Needed") : t("wishlists.markAcquired", "Mark as Acquired")}
                       </Button>
                     </Box>
                   </Box>
@@ -513,7 +518,7 @@ export function WishlistDetail() {
           <ListItemIcon>
             <Edit fontSize="small" />
           </ListItemIcon>
-          <ListItemText>Edit Item</ListItemText>
+          <ListItemText>{t("wishlists.editItem", "Edit Item")}</ListItemText>
         </MenuItem>
         <MenuItem
           onClick={() => itemMenuAnchor && handleRemoveItem(itemMenuAnchor.item)}
@@ -522,7 +527,7 @@ export function WishlistDetail() {
           <ListItemIcon>
             <Delete fontSize="small" color="error" />
           </ListItemIcon>
-          <ListItemText>Remove Item</ListItemText>
+          <ListItemText>{t("wishlists.removeItem", "Remove Item")}</ListItemText>
         </MenuItem>
       </Menu>
 

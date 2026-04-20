@@ -160,6 +160,16 @@ export function MissionSearch() {
             ))}
           </Grid>
 
+          {data.missions.length === 0 && (
+            <Grid item xs={12}>
+              <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", py: 6 }}>
+                <Typography color="text.secondary">
+                  {t("missions.noResults", "No results found. Try adjusting your filters.")}
+                </Typography>
+              </Box>
+            </Grid>
+          )}
+
           {/* Pagination */}
           {totalPages > 1 && (
             <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>

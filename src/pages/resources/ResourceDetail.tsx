@@ -23,18 +23,21 @@ import {
 } from "@mui/material"
 import { useParams, useNavigate, Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { useGetResourceDetailQuery } from "../../store/resourcesApi"
 
 export function ResourceDetail() {
   const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
   const { resource_id } = useParams<{ resource_id: string }>()
   const navigate = useNavigate()
   const { data, isLoading, error } = useGetResourceDetailQuery(resource_id!)
 
   if (isLoading) {
     return (
-      <StandardPageLayout title={t("resources.loading", "Loading...")} sidebarOpen={true}>
+      <StandardPageLayout title={t("resources.detail", "Resource Details")} sidebarOpen={true}>
         <Grid item xs={12}>
           <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
             <CircularProgress />
@@ -46,7 +49,7 @@ export function ResourceDetail() {
 
   if (error || !data) {
     return (
-      <StandardPageLayout title={t("resources.error", "Error")} sidebarOpen={true}>
+      <StandardPageLayout title={t("resources.detail", "Resource Details")} sidebarOpen={true}>
         <Grid item xs={12}>
           <Alert severity="error">{t("resources.notFound", "Resource not found.")}</Alert>
         </Grid>
