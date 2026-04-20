@@ -116,11 +116,9 @@ export function createItemFilter(
       return false
     }
 
-    // V2-only items: require login AND V2 feature flag
+    // V2-only items: only show when market_version is explicitly "V2" in localStorage
     if (item.v2_only) {
-      if (profileError || !profile) return false
-      const mv = localStorage.getItem("market_version")
-      if (mv !== "V2") return false
+      if (localStorage.getItem("market_version") !== "V2") return false
     }
 
     // Check login requirements
