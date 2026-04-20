@@ -13,6 +13,7 @@ import {
   Alert,
   Box,
   InputAdornment,
+  Typography,
 } from "@mui/material"
 import { Search } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
@@ -144,6 +145,16 @@ export function ResourceBrowser() {
               ))}
             </Grid>
           </Grid>
+
+          {data.resources.length === 0 && (
+            <Grid item xs={12}>
+              <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", py: 6 }}>
+                <Typography color="text.secondary">
+                  {t("resources.noResults", "No results found. Try adjusting your filters.")}
+                </Typography>
+              </Box>
+            </Grid>
+          )}
 
           {data.total > 24 && (
             <Grid item xs={12} sx={{ display: "flex", justifyContent: "center" }}>

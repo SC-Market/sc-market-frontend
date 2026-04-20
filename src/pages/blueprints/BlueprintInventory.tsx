@@ -296,7 +296,7 @@ export function BlueprintInventory() {
           <Grid container spacing={2}>
             {/* Category Filter */}
             <Grid item xs={12} sm={6} md={3}>
-              <FormControl fullWidth>
+              <FormControl fullWidth size="small">
                 <InputLabel>Category</InputLabel>
                 <Select
                   value={itemCategory}
@@ -315,7 +315,7 @@ export function BlueprintInventory() {
 
             {/* Rarity Filter */}
             <Grid item xs={12} sm={6} md={3}>
-              <FormControl fullWidth>
+              <FormControl fullWidth size="small">
                 <InputLabel>Rarity</InputLabel>
                 <Select
                   value={rarity}
@@ -334,7 +334,7 @@ export function BlueprintInventory() {
 
             {/* Sort By */}
             <Grid item xs={12} sm={6} md={3}>
-              <FormControl fullWidth>
+              <FormControl fullWidth size="small">
                 <InputLabel>Sort By</InputLabel>
                 <Select
                   value={sortBy}
@@ -349,7 +349,7 @@ export function BlueprintInventory() {
 
             {/* Sort Order */}
             <Grid item xs={12} sm={6} md={3}>
-              <FormControl fullWidth>
+              <FormControl fullWidth size="small">
                 <InputLabel>Sort Order</InputLabel>
                 <Select
                   value={sortOrder}

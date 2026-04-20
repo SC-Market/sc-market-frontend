@@ -164,6 +164,7 @@ export function BlueprintBrowser() {
             <Grid item xs={12} md={6}>
               <TextField
                 fullWidth
+                size="small"
                 label="Search blueprints"
                 value={searchText}
                 onChange={(e) => setSearchText(e.target.value)}
@@ -174,7 +175,7 @@ export function BlueprintBrowser() {
 
             {/* Category Filter (Requirement 19.2, 19.3) */}
             <Grid item xs={12} sm={6} md={3}>
-              <FormControl fullWidth>
+              <FormControl fullWidth size="small">
                 <InputLabel>Category</InputLabel>
                 <Select
                   value={category}
@@ -196,7 +197,7 @@ export function BlueprintBrowser() {
 
             {/* Subcategory Filter (Requirement 19.2, 19.3) */}
             <Grid item xs={12} sm={6} md={3}>
-              <FormControl fullWidth disabled={!category || subcategoriesForCategory.length === 0}>
+              <FormControl fullWidth size="small" disabled={!category || subcategoriesForCategory.length === 0}>
                 <InputLabel>Subcategory</InputLabel>
                 <Select
                   value={subcategory}
@@ -215,7 +216,7 @@ export function BlueprintBrowser() {
 
             {/* Rarity Filter (Requirement 19.1) */}
             <Grid item xs={12} sm={6} md={3}>
-              <FormControl fullWidth>
+              <FormControl fullWidth size="small">
                 <InputLabel>Rarity</InputLabel>
                 <Select
                   value={rarity}
@@ -234,7 +235,7 @@ export function BlueprintBrowser() {
 
             {/* Tier Filter (Requirement 19.1) */}
             <Grid item xs={12} sm={6} md={3}>
-              <FormControl fullWidth>
+              <FormControl fullWidth size="small">
                 <InputLabel>Tier</InputLabel>
                 <Select
                   value={tier}

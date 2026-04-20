@@ -202,6 +202,14 @@ export function WikiShipBrowser() {
               ))}
             </Grid>
 
+            {data.ships.length === 0 && (
+              <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", py: 6 }}>
+                <Typography color="text.secondary">
+                  {t("wiki.ships.noResults", "No results found. Try adjusting your filters.")}
+                </Typography>
+              </Box>
+            )}
+
             {totalPages > 1 && (
               <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
                 <Pagination
