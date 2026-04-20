@@ -49,7 +49,7 @@ import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownR
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { useBottomNavHeight } from "../../../hooks/layout/useBottomNavHeight";
 import { useTranslation } from "react-i18next";
-import { AddToCartDrawer } from "./components/AddToCartDrawer";
+import { useCartDrawer } from "../../../hooks/market/AddToCartContext";
 import { AdCard } from "../../../components/ads/AdCard";
 import type { AdConfig } from "../../../components/ads/types";
 import { MARKET_ADS } from "../../../components/ads/adConfig";
@@ -752,7 +752,7 @@ export function ListingCardV2({ listing, index }: ListingCardV2Props) {
   const theme = useTheme<ExtendedTheme>();
   const { i18n } = useTranslation();
   const navigate = useNavigate();
-  const [cartOpen, setCartOpen] = useState(false);
+  const { openAddToCart } = useCartDrawer();
 
   const priceDisplay = listing.price_min === listing.price_max
     ? `${listing.price_min.toLocaleString(i18n.language)} aUEC`
@@ -955,7 +955,7 @@ export function ListingCardV2({ listing, index }: ListingCardV2Props) {
           <IconButton
             size="small"
             color="primary"
-            onClick={(e) => { e.stopPropagation(); setCartOpen(true); }}
+            onClick={(e) => { e.stopPropagation(); openAddToCart(listing.listing_id); }}
             sx={{
               position: "absolute",
               bottom: 8,
@@ -969,13 +969,6 @@ export function ListingCardV2({ listing, index }: ListingCardV2Props) {
           >
             <AddShoppingCartRounded fontSize="small" />
           </IconButton>
-        )}
-        {cartOpen && (
-          <AddToCartDrawer
-            open={cartOpen}
-            onClose={() => setCartOpen(false)}
-            listingId={listing.listing_id}
-          />
         )}
       </ListingWrapper>
     </Fade>

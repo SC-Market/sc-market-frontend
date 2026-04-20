@@ -16,6 +16,7 @@ import { useLocation } from "react-router-dom"
 import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { DebugPanel } from "../market/v2/DebugPanel"
+import { CartDrawerProvider } from "../../hooks/market/AddToCartContext"
 
 export function Root(props: { children: React.ReactNode }) {
   const theme: Theme = useTheme<ExtendedTheme>()
@@ -77,7 +78,9 @@ export function Root(props: { children: React.ReactNode }) {
             overflow: "auto", // Main content can scroll internally
           }}
         >
-          {props.children}
+          <CartDrawerProvider>
+            {props.children}
+          </CartDrawerProvider>
         </Box>
         {!isMessagingPage && !isMobile && <PreferencesButton />}
         <DebugPanel />
