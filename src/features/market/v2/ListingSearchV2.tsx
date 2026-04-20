@@ -970,11 +970,13 @@ export function ListingCardV2({ listing, index }: ListingCardV2Props) {
             <AddShoppingCartRounded fontSize="small" />
           </IconButton>
         )}
-        <AddToCartDrawer
-          open={cartOpen}
-          onClose={() => setCartOpen(false)}
-          listingId={listing.listing_id}
-        />
+        {cartOpen && (
+          <AddToCartDrawer
+            open={cartOpen}
+            onClose={() => setCartOpen(false)}
+            listingId={listing.listing_id}
+          />
+        )}
       </ListingWrapper>
     </Fade>
   );
