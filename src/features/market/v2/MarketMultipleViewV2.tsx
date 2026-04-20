@@ -20,6 +20,7 @@ import {
 import { Link } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 import { useParams } from "react-router-dom";
+import { StandardPageLayout } from "../../../components/layout/StandardPageLayout";
 import { ExtendedTheme } from "../../../hooks/styles/Theme";
 import { useGetUserProfileQuery } from "../../../store/profile";
 import { useCurrentOrg } from "../../../hooks/login/CurrentOrg";
@@ -253,27 +254,20 @@ export function MarketMultipleViewV2() {
     }));
   };
 
-  if (isLoading) {
-    return (
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <Typography>Loading...</Typography>
-        </Grid>
-      </Grid>
-    );
-  }
-
-  if (!complete || !currentItem) {
-    return (
-      <Grid container spacing={2}>
-        <Grid item xs={12}>
-          <Typography>Listing not found.</Typography>
-        </Grid>
-      </Grid>
-    );
-  }
-
   return (
+    <StandardPageLayout
+      title={complete?.title || "Bundle Listing"}
+      headerTitle={complete?.title}
+      breadcrumbs={[
+        { label: t("sidebar.market_short", "Market"), href: "/market" },
+        { label: complete?.title || "Listing" },
+      ]}
+      isLoading={isLoading}
+      error={!complete && !isLoading ? "not_found" : undefined}
+      sidebarOpen={true}
+      maxWidth="xl"
+    >
+    {complete && currentItem && (
     <>
       <Grid item xs={12} lg={12}>
         <Grid container spacing={theme.layoutSpacing.layout}>
@@ -342,6 +336,14 @@ export function MarketMultipleViewV2() {
                   <meta name="twitter:title" content={complete.title} />
                   <meta name="twitter:description" content={complete.description} />
                   <meta name="twitter:image" content={complete.photos[0]} />
+                  <script type="application/ld+json">{JSON.stringify({
+                    "@context": "https://schema.org",
+                    "@type": "Product",
+                    name: complete.title,
+                    description: complete.description,
+                    image: complete.photos[0],
+                    url: `${FRONTEND_URL}/market/multiple/${complete.listing_id}`,
+                  })}</script>
                 </Helmet>
               </Grid>
 
@@ -706,6 +708,8 @@ export function MarketMultipleViewV2() {
         </Grid>
       </Grid>
     </>
+    )}
+    </StandardPageLayout>
   );
 }
 
