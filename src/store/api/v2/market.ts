@@ -924,7 +924,7 @@ export type VariantAttributes = {
   /** Precise quality value from 0 to 1000 */
   quality_value?: number
   /** How the item was obtained */
-  crafted_source?: "crafted" | "store" | "looted" | "unknown"
+  crafted_source?: "crafted" | "store" | "looted" | "unknown" | "duped"
   /** Blueprint quality tier for craftable items (1-5) */
   blueprint_tier?: number
 }
