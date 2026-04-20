@@ -43,12 +43,13 @@ import { useMarketSidebarExp } from "../hooks/MarketSidebar";
 import { useDrawerOpen } from "../../../hooks/layout/Drawer";
 import { BottomSheet } from "../../../components/mobile/BottomSheet";
 import { useMarketSidebar } from "../hooks/MarketSidebar";
-import { SearchRounded } from "@mui/icons-material";
+import { SearchRounded, AddShoppingCartRounded } from "@mui/icons-material";
 import SearchIcon from "@mui/icons-material/Search";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { useBottomNavHeight } from "../../../hooks/layout/useBottomNavHeight";
 import { useTranslation } from "react-i18next";
+import { AddToCartDrawer } from "./components/AddToCartDrawer";
 import { AdCard } from "../../../components/ads/AdCard";
 import type { AdConfig } from "../../../components/ads/types";
 import { MARKET_ADS } from "../../../components/ads/adConfig";
@@ -751,6 +752,7 @@ export function ListingCardV2({ listing, index }: ListingCardV2Props) {
   const theme = useTheme<ExtendedTheme>();
   const { i18n } = useTranslation();
   const navigate = useNavigate();
+  const [cartOpen, setCartOpen] = useState(false);
 
   const priceDisplay = listing.price_min === listing.price_max
     ? `${listing.price_min.toLocaleString(i18n.language)} aUEC`
@@ -949,6 +951,30 @@ export function ListingCardV2({ listing, index }: ListingCardV2Props) {
             </Card>
           </CardActionArea>
         </RouterLink>
+        {listing.quantity_available > 0 && (
+          <IconButton
+            size="small"
+            color="primary"
+            onClick={(e) => { e.stopPropagation(); setCartOpen(true); }}
+            sx={{
+              position: "absolute",
+              bottom: 8,
+              right: 8,
+              zIndex: 5,
+              bgcolor: "background.paper",
+              boxShadow: 2,
+              "&:hover": { bgcolor: "primary.main", color: "primary.contrastText" },
+            }}
+            aria-label="Add to cart"
+          >
+            <AddShoppingCartRounded fontSize="small" />
+          </IconButton>
+        )}
+        <AddToCartDrawer
+          open={cartOpen}
+          onClose={() => setCartOpen(false)}
+          listingId={listing.listing_id}
+        />
       </ListingWrapper>
     </Fade>
   );
