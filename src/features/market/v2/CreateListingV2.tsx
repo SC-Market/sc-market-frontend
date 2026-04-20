@@ -731,6 +731,9 @@ export function CreateListingV2() {
                         <MenuItem value="unknown">
                           {t("CreateListingV2.unknown", "Unknown")}
                         </MenuItem>
+                        <MenuItem value="duped">
+                          {t("CreateListingV2.duped", "Duped")}
+                        </MenuItem>
                       </TextField>
                     </Grid>
 
