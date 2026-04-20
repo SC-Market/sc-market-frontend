@@ -87,6 +87,7 @@ export function CreateListingV2() {
   const [photos, setPhotos] = useState<string[]>([]);
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [pickupMethod, setPickupMethod] = useState<"delivery" | "pickup" | "any" | "">(""); 
+  const [quantityUnit, setQuantityUnit] = useState<"unit" | "scu">("unit");
   const [bulkDiscountTiers, setBulkDiscountTiers] = useState<Array<{ min_quantity: number; discount_percent: number }>>([]);
 
   // Stock lots state
@@ -254,6 +255,7 @@ export function CreateListingV2() {
         base_price: pricingMode === "unified" ? basePrice : undefined,
         lots,
         pickup_method: pickupMethod || undefined,
+        quantity_unit: quantityUnit,
         bulk_discount_tiers: bulkDiscountTiers.length ? bulkDiscountTiers : undefined,
       };
 
@@ -318,6 +320,7 @@ export function CreateListingV2() {
                 onChange={(itemName, itemType, itemId) => {
                   setGameItemName(itemName);
                   setGameItemId(itemId);
+                  setQuantityUnit(itemType === "Commodity" ? "scu" : "unit");
                   if (!title && itemName) {
                     setTitle(itemName);
                   }
@@ -385,9 +388,9 @@ export function CreateListingV2() {
             </Grid>
           </FormPaper>
 
-          {/* Pickup Method */}
-          <FormPaper title={t("CreateListingV2.pickupMethod", "Pickup Method")}>
-            <Grid item xs={12}>
+          {/* Pickup Method & Quantity Unit */}
+          <FormPaper title={t("CreateListingV2.listingOptions", "Listing Options")}>
+            <Grid item xs={12} sm={6}>
               <TextField
                 select
                 fullWidth
@@ -401,6 +404,24 @@ export function CreateListingV2() {
                 <MenuItem value="delivery">{t("CreateListingV2.delivery", "Delivery (seller delivers)")}</MenuItem>
                 <MenuItem value="pickup">{t("CreateListingV2.pickup", "Pickup (buyer picks up)")}</MenuItem>
                 <MenuItem value="any">{t("CreateListingV2.either", "Either (delivery or pickup)")}</MenuItem>
+              </TextField>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                select
+                fullWidth
+                size="small"
+                label={t("CreateListingV2.quantityUnit", "Quantity Unit")}
+                value={quantityUnit}
+                onChange={(e) => setQuantityUnit(e.target.value as "unit" | "scu")}
+                helperText={
+                  quantityUnit === "scu"
+                    ? t("CreateListingV2.scuHelp", "Quantities measured in cSCU (100 cSCU = 1 SCU)")
+                    : t("CreateListingV2.unitHelp", "Discrete items (weapons, armor, components)")
+                }
+              >
+                <MenuItem value="unit">{t("CreateListingV2.unitDiscrete", "Units (discrete items)")}</MenuItem>
+                <MenuItem value="scu">{t("CreateListingV2.unitSCU", "SCU (cargo / commodities)")}</MenuItem>
               </TextField>
             </Grid>
           </FormPaper>

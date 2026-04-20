@@ -1319,6 +1319,8 @@ export type CreateListingRequest = {
   photo_resource_ids?: string[]
   /** Pickup method: how the buyer receives the item */
   pickup_method?: "delivery" | "pickup" | "any"
+  /** Quantity unit: 'unit' for discrete items, 'scu' for cargo measured in cSCU */
+  quantity_unit?: "unit" | "scu"
   /** Optional bulk discount tiers sorted by min_quantity ascending */
   bulk_discount_tiers?: BulkDiscountTier[]
 }
@@ -1363,6 +1365,8 @@ export type ListingSearchResult = {
   photo?: string
   /** Pickup method: delivery, pickup, any, or null (not specified) */
   pickup_method?: ("delivery" | "pickup" | "any" | null) | null
+  /** Quantity unit: 'unit' or 'scu' */
+  quantity_unit: "unit" | "scu"
   /** Whether this listing has bulk discount tiers defined */
   has_bulk_discount?: boolean
 }
@@ -1439,6 +1443,8 @@ export type ListingDetail = {
   photos?: string[]
   /** Pickup method: delivery, pickup, any, or null (not specified) */
   pickup_method?: ("delivery" | "pickup" | "any" | null) | null
+  /** Quantity unit: 'unit' or 'scu' */
+  quantity_unit: "unit" | "scu"
 }
 export type SellerInfo = {
   /** Seller UUID */
@@ -1531,6 +1537,8 @@ export type UpdateListingRequest = {
   lot_updates?: LotUpdate[]
   /** Pickup method: how the buyer receives the item */
   pickup_method?: ("delivery" | "pickup" | "any" | null) | null
+  /** Quantity unit */
+  quantity_unit?: "unit" | "scu"
   /** Updated bulk discount tiers (pass [] to remove, omit to keep unchanged) */
   bulk_discount_tiers?: BulkDiscountTier[]
 }

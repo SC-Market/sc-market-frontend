@@ -21,7 +21,8 @@ import { QualityBadge } from "../../../components/market/v2/QualityBadge";
 import { UnderlineLink } from "../../../components/typography/UnderlineLink";
 import { FALLBACK_IMAGE_URL } from "../../../util/constants";
 import StarRoundedIcon from "@mui/icons-material/StarRounded";
-import { useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next"
+import { formatQuantity } from "../../../util/formatQuantity";
 import { useAlertHook } from "../../../hooks/alert/AlertHook";
 
 /**
@@ -182,10 +183,7 @@ export function ListingDetailV2() {
 
               {/* Quantity Available */}
               <Typography variant="subtitle2" color="text.primary">
-                {t("listing.quantityAvailable", {
-                  defaultValue: "{{count}} available",
-                  count: totalQuantity,
-                })}
+                {formatQuantity(totalQuantity, listingData.listing.quantity_unit)} {t("listing.available", "available")}
               </Typography>
 
               <Divider />
