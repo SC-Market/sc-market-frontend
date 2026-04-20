@@ -430,88 +430,115 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
     title: "sidebar.admin.title",
     items: [
       {
-        text: "sidebar.users",
+        text: "sidebar.admin.users_market",
         icon: <PeopleAltIcon />,
-        hidden: false,
         site_admin: true,
-        to: "/admin/users",
+        children: [
+          {
+            text: "sidebar.users",
+            icon: <PeopleAltIcon />,
+            site_admin: true,
+            to: "/admin/users",
+          },
+          {
+            text: "sidebar.market.text",
+            icon: <GavelIcon />,
+            site_admin: true,
+            to: "/admin/market",
+          },
+          {
+            text: "sidebar.orders.text",
+            icon: <CreateIcon />,
+            site_admin: true,
+            to: "/admin/orders",
+          },
+          {
+            text: "sidebar.premium.text",
+            icon: <StarRounded />,
+            site_admin: true,
+            to: "/admin/premium",
+          },
+        ],
       },
       {
-        text: "sidebar.market.text",
-        icon: <GavelIcon />,
-        site_admin: true,
-        to: "/admin/market",
-      },
-      {
-        text: "sidebar.orders.text",
-        icon: <CreateIcon />,
-        site_admin: true,
-        to: "/admin/orders",
-      },
-      {
-        text: "sidebar.moderation.text",
-        icon: (
-          <ModerationSidebarEntry
-            text="sidebar.moderation.text"
-            to="/admin/moderation"
-          />
-        ),
-        site_admin: true,
-        to: "/admin/moderation",
-      },
-      {
-        text: "sidebar.alerts.text",
-        icon: <NotificationsIcon />,
-        site_admin: true,
-        to: "/admin/alerts",
-      },
-      {
-        text: "sidebar.audit_logs.text",
+        text: "sidebar.admin.moderation_logs",
         icon: <SecurityRounded />,
         site_admin: true,
-        to: "/admin/audit-logs",
+        children: [
+          {
+            text: "sidebar.moderation.text",
+            icon: (
+              <ModerationSidebarEntry
+                text="sidebar.moderation.text"
+                to="/admin/moderation"
+              />
+            ),
+            site_admin: true,
+            to: "/admin/moderation",
+          },
+          {
+            text: "sidebar.audit_logs.text",
+            icon: <SecurityRounded />,
+            site_admin: true,
+            to: "/admin/audit-logs",
+          },
+          {
+            text: "sidebar.alerts.text",
+            icon: <NotificationsIcon />,
+            site_admin: true,
+            to: "/admin/alerts",
+          },
+        ],
       },
       {
-        text: "sidebar.notification_test.text",
-        icon: <NotificationsIcon />,
-        site_admin: true,
-        to: "/admin/notification-test",
-      },
-      {
-        text: "sidebar.attribute_definitions.text",
-        icon: <CreateIcon />,
-        site_admin: true,
-        to: "/admin/attribute-definitions",
-      },
-      {
-        text: "sidebar.game_item_attributes.text",
-        icon: <CreateIcon />,
-        site_admin: true,
-        to: "/admin/game-item-attributes",
-      },
-      {
-        text: "sidebar.import_monitoring.text",
+        text: "sidebar.admin.game_data",
         icon: <CloudDownloadRounded />,
         site_admin: true,
-        to: "/admin/import-monitoring",
+        children: [
+          {
+            text: "sidebar.attribute_definitions.text",
+            icon: <CreateIcon />,
+            site_admin: true,
+            to: "/admin/attribute-definitions",
+          },
+          {
+            text: "sidebar.game_item_attributes.text",
+            icon: <CreateIcon />,
+            site_admin: true,
+            to: "/admin/game-item-attributes",
+          },
+          {
+            text: "sidebar.import_monitoring.text",
+            icon: <CloudDownloadRounded />,
+            site_admin: true,
+            to: "/admin/import-monitoring",
+          },
+          {
+            text: "sidebar.game_data_import.text",
+            icon: <RocketLaunchRounded />,
+            site_admin: true,
+            to: "/admin/game-data-import",
+          },
+        ],
       },
       {
-        text: "sidebar.game_data_import.text",
-        icon: <RocketLaunchRounded />,
-        site_admin: true,
-        to: "/admin/game-data-import",
-      },
-      {
-        text: "sidebar.premium.text",
-        icon: <StarRounded />,
-        site_admin: true,
-        to: "/admin/premium",
-      },
-      {
-        text: "sidebar.feature_flags.text",
+        text: "sidebar.admin.system",
         icon: <ToggleOnRounded />,
         site_admin: true,
-        to: "/admin/feature-flags",
+        children: [
+          {
+            text: "sidebar.feature_flags.text",
+            icon: <ToggleOnRounded />,
+            site_admin: true,
+            to: "/admin/feature-flags",
+          },
+          {
+            text: "sidebar.notification_test.text",
+            icon: <NotificationsIcon />,
+            site_admin: true,
+            to: "/admin/notification-test",
+          },
+        ],
       },
     ],
   },
