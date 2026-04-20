@@ -30,6 +30,7 @@ import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { EmptyCart } from "../../../components/empty-states"
+import { MarkdownEditor } from "../../../components/markdown/Markdown.lazy"
 import { StandardPageLayout } from "../../../components/layout/StandardPageLayout"
 import { ShoppingCartRounded, Warning } from "@mui/icons-material"
 import {
@@ -404,6 +405,20 @@ export function MarketCartV2() {
     [cartData]
   )
 
+  // Group items by seller
+  const sellerGroups = useMemo(() => {
+    if (!cartData?.items.length) return []
+    const groups = new Map<string, { sellerName: string; items: CartItemDetail[]; total: number }>()
+    for (const item of cartData.items) {
+      const key = item.listing.seller_name
+      if (!groups.has(key)) groups.set(key, { sellerName: key, items: [], total: 0 })
+      const g = groups.get(key)!
+      g.items.push(item)
+      g.total += item.subtotal
+    }
+    return [...groups.values()]
+  }, [cartData])
+
   // Empty cart state
   if (!isLoading && (!cartData || cartData.items.length === 0)) {
     return (
@@ -450,43 +465,102 @@ export function MarketCartV2() {
       error={error}
     >
       <Grid item xs={12} container spacing={theme.layoutSpacing.layout}>
-        <Section xs={12} title={t("cart.items", "Cart Items")}>
-          {/* Cart Items */}
-          {cartData?.items.map((item) => (
-            <CartItemEntryV2
-              key={item.cart_item_id}
-              item={item}
-              onRemove={handleRemove}
-            />
-          ))}
+        {sellerGroups.map((group) => (
+          <Section
+            key={group.sellerName}
+            xs={12}
+            title={t("cart.seller", "Seller")}
+            element_title={
+              <UnderlineLink color="text.primary" variant="h6" sx={{ fontWeight: "600" }}>
+                {group.sellerName}
+              </UnderlineLink>
+            }
+          >
+            {group.items.map((item) => (
+              <CartItemEntryV2
+                key={item.cart_item_id}
+                item={item}
+                onRemove={handleRemove}
+              />
+            ))}
 
-          {/* Total Section */}
-          <Grid item xs={12}>
-            <Box display={"flex"} justifyContent={"space-between"}>
-              <Typography variant={"h5"} color={"text.secondary"}>
-                {t("cart.total")}
-              </Typography>
-
-              <Typography variant={"h5"} color={"text.secondary"}>
-                {cartData?.total_price.toLocaleString()} aUEC
-              </Typography>
-            </Box>
-          </Grid>
-
-          {/* Price Change Alert */}
-          {hasPriceChanges && (
+            {/* Seller Total */}
             <Grid item xs={12}>
-              <Alert severity="info" icon={<Warning />}>
-                <AlertTitle>
-                  {t("cart.pricesChanged", "Prices Have Changed")}
-                </AlertTitle>
-                {t(
-                  "cart.pricesChangedMessage",
-                  "Some item prices have changed since you added them to your cart. Please review before checkout."
-                )}
-              </Alert>
+              <Box display="flex" justifyContent="space-between">
+                <Typography variant="h5" color="text.secondary">
+                  {t("cart.total")}
+                </Typography>
+                <Typography variant="h5" color="text.secondary">
+                  {group.total.toLocaleString()} aUEC
+                </Typography>
+              </Box>
             </Grid>
-          )}
+
+            {/* Note field */}
+            <Grid item xs={12}>
+              <MarkdownEditor
+                sx={{ marginRight: 2, marginBottom: 1 }}
+                TextFieldProps={{ label: t("cart.note", "Note to seller") }}
+                value=""
+                onChange={() => {}}
+              />
+            </Grid>
+
+            {/* Offer + Submit */}
+            <Grid item xs={12} md={4}>
+              <Typography variant="body2" color="text.secondary">
+                {t("cart.submitOfferDesc", "Submit an offer for this seller's items")}
+              </Typography>
+            </Grid>
+            <Grid item xs={12} md={8}>
+              <Grid container spacing={theme.layoutSpacing.text} justifyContent="right" alignItems="center">
+                <Grid item>
+                  <NumericFormat
+                    decimalScale={0}
+                    allowNegative={false}
+                    customInput={TextField}
+                    thousandSeparator
+                    size="small"
+                    label={t("cart.offerOptional", "Offer (optional)")}
+                    value={group.total}
+                    color="secondary"
+                    InputProps={{
+                      endAdornment: <InputAdornment position="end">aUEC</InputAdornment>,
+                    }}
+                    inputProps={{ inputMode: "numeric" }}
+                  />
+                </Grid>
+                <Grid item>
+                  <LoadingButton
+                    color="secondary"
+                    variant="outlined"
+                    startIcon={<ShoppingCartRounded />}
+                    loading={isCheckingOut}
+                    disabled={hasUnavailableItems || isRemoving}
+                    onClick={handleCheckout}
+                  >
+                    {t("cart.submitOffer", "Submit Offer")}
+                  </LoadingButton>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Section>
+        ))}
+
+        {/* Price Change Alert */}
+        {hasPriceChanges && (
+          <Grid item xs={12}>
+            <Alert severity="info" icon={<Warning />}>
+              <AlertTitle>
+                {t("cart.pricesChanged", "Prices Have Changed")}
+              </AlertTitle>
+              {t(
+                "cart.pricesChangedMessage",
+                "Some item prices have changed since you added them to your cart. Please review before checkout."
+              )}
+            </Alert>
+          </Grid>
+        )}
 
           {/* Unavailable Items Alert */}
           {hasUnavailableItems && (
@@ -502,48 +576,6 @@ export function MarketCartV2() {
               </Alert>
             </Grid>
           )}
-
-          {/* Checkout Section */}
-          <Grid item xs={12} md={4}>
-            <Typography variant="body2" color="text.secondary">
-              {t(
-                "cart.checkoutDesc",
-                "Review your cart and proceed to checkout"
-              )}
-            </Typography>
-          </Grid>
-          <Grid item xs={12} md={8}>
-            <Grid
-              container
-              spacing={theme.layoutSpacing.text}
-              justifyContent={"right"}
-              alignItems={"center"}
-            >
-              <Grid item>
-                <Typography
-                  variant={"body1"}
-                  sx={{ marginRight: 1, alignItems: "center" }}
-                >
-                  {t("cart.payTotal", {
-                    total: cartData?.total_price.toLocaleString(),
-                  })}
-                </Typography>
-              </Grid>
-              <Grid item>
-                <LoadingButton
-                  color={"secondary"}
-                  variant={"contained"}
-                  startIcon={<ShoppingCartRounded />}
-                  loading={isCheckingOut}
-                  disabled={hasUnavailableItems || isRemoving}
-                  onClick={handleCheckout}
-                >
-                  {t("cart.checkout", "Checkout")}
-                </LoadingButton>
-              </Grid>
-            </Grid>
-          </Grid>
-        </Section>
       </Grid>
 
       {/* Checkout Confirmation Dialog */}
