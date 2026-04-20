@@ -696,7 +696,11 @@
       "manufacturers": "Manufacturers"
     },
     "admin": {
-      "title": "Admin"
+      "title": "Admin",
+      "users_market": "Users & Market",
+      "moderation_logs": "Moderation & Logs",
+      "game_data": "Game Data",
+      "system": "System"
     },
     "users": "Users",
     "moderation": {

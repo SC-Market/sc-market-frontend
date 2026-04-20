@@ -11,6 +11,12 @@ import {
   TableBody,
   TableCell,
   TableRow,
+  TextField,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Stack,
 } from "@mui/material"
 import { CloudUploadRounded, CheckCircleRounded, ErrorRounded } from "@mui/icons-material"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
@@ -68,6 +74,8 @@ export function AdminGameDataImportView() {
     try {
       const formData = new FormData()
       formData.append("file", file)
+      formData.append("gameChannel", gameChannel)
+      if (gameVersion) formData.append("gameVersion", gameVersion)
 
       const res = await fetch("/api/v2/admin/import-game-data", {
         method: "POST",
@@ -130,16 +138,36 @@ export function AdminGameDataImportView() {
         )}
       </Paper>
 
-      <Button
-        variant="contained"
-        size="large"
-        disabled={!file || uploading}
-        onClick={handleUpload}
-        startIcon={uploading ? <CircularProgress size={20} /> : <CloudUploadRounded />}
-        sx={{ mb: 3 }}
-      >
-        {uploading ? "Importing..." : "Import Game Data"}
-      </Button>
+      <Stack direction="row" spacing={2} sx={{ mb: 3 }}>
+        <FormControl size="small" sx={{ minWidth: 120 }}>
+          <InputLabel>Channel</InputLabel>
+          <Select
+            value={gameChannel}
+            label="Channel"
+            onChange={(e) => setGameChannel(e.target.value as "LIVE" | "PTU" | "EPTU")}
+          >
+            <MenuItem value="LIVE">LIVE</MenuItem>
+            <MenuItem value="PTU">PTU</MenuItem>
+            <MenuItem value="EPTU">EPTU</MenuItem>
+          </Select>
+        </FormControl>
+        <TextField
+          size="small"
+          label="Game Version"
+          placeholder="e.g. 4.7.1"
+          value={gameVersion}
+          onChange={(e) => setGameVersion(e.target.value)}
+        />
+        <Button
+          variant="contained"
+          size="large"
+          disabled={!file || uploading}
+          onClick={handleUpload}
+          startIcon={uploading ? <CircularProgress size={20} /> : <CloudUploadRounded />}
+        >
+          {uploading ? "Importing..." : "Import Game Data"}
+        </Button>
+      </Stack>
 
       {/* Results */}
       {result && !result.success && (
@@ -192,21 +220,21 @@ export function AdminGameDataImportView() {
                 <TableCell sx={{ fontWeight: 600 }}>Full Sets Created</TableCell>
                 <TableCell>{result.summary.fullSetsCreated}</TableCell>
               </TableRow>
-              {(result.summary as any).missionsProcessed > 0 && (
+              {result.summary.missionsProcessed > 0 && (
                 <TableRow>
                   <TableCell sx={{ fontWeight: 600 }}>Missions</TableCell>
                   <TableCell>
-                    {(result.summary as any).missionsProcessed} processed
-                    {" "}({(result.summary as any).missionsInserted} new, {(result.summary as any).missionsUpdated} updated)
+                    {result.summary.missionsProcessed} processed
+                    {" "}({result.summary.missionsInserted} new, {result.summary.missionsUpdated} updated)
                   </TableCell>
                 </TableRow>
               )}
-              {(result.summary as any).blueprintsProcessed > 0 && (
+              {result.summary.blueprintsProcessed > 0 && (
                 <TableRow>
                   <TableCell sx={{ fontWeight: 600 }}>Blueprints</TableCell>
                   <TableCell>
-                    {(result.summary as any).blueprintsProcessed} processed
-                    {" "}({(result.summary as any).blueprintsInserted} new, {(result.summary as any).blueprintsUpdated} updated)
+                    {result.summary.blueprintsProcessed} processed
+                    {" "}({result.summary.blueprintsInserted} new, {result.summary.blueprintsUpdated} updated)
                   </TableCell>
                 </TableRow>
               )}
