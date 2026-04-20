@@ -927,6 +927,62 @@ const router = createBrowserRouter([
         ],
       },
       {
+        path: "/wiki/items/:id",
+        lazy: async () => ({
+          Component: (await import("./pages/wiki/WikiItemDetail"))
+            .WikiItemDetail,
+        }),
+      },
+      {
+        path: "/wiki/items",
+        lazy: async () => ({
+          Component: (await import("./pages/wiki/WikiItemBrowser"))
+            .WikiItemBrowser,
+        }),
+      },
+      {
+        path: "/wiki/ships/:id",
+        lazy: async () => ({
+          Component: (await import("./pages/wiki/WikiShipDetail"))
+            .WikiShipDetail,
+        }),
+      },
+      {
+        path: "/wiki/ships",
+        lazy: async () => ({
+          Component: (await import("./pages/wiki/WikiShipBrowser"))
+            .WikiShipBrowser,
+        }),
+      },
+      {
+        path: "/wiki/commodities",
+        lazy: async () => ({
+          Component: (await import("./pages/wiki/WikiCommodityBrowser"))
+            .WikiCommodityBrowser,
+        }),
+      },
+      {
+        path: "/wiki/locations",
+        lazy: async () => ({
+          Component: (await import("./pages/wiki/WikiLocationBrowser"))
+            .WikiLocationBrowser,
+        }),
+      },
+      {
+        path: "/wiki/manufacturers/:id",
+        lazy: async () => ({
+          Component: (await import("./pages/wiki/WikiManufacturerPage"))
+            .WikiManufacturerPage,
+        }),
+      },
+      {
+        path: "/wiki/manufacturers",
+        lazy: async () => ({
+          Component: (await import("./pages/wiki/WikiManufacturerList"))
+            .WikiManufacturerList,
+        }),
+      },
+      {
         path: "/error",
         lazy: async () => ({
           Component: (await import("./pages/errors/FrontendError"))

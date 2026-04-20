@@ -4,6 +4,8 @@ import { serviceApi } from "./service"
 import { generatedApi } from "./generatedApi"
 import { generatedApiV2 } from "./generatedApiV2"
 import { wikiApi } from "./wikiApi"
+import { craftingApi } from "./craftingApi"
+import { versionsApi } from "./versionsApi"
 // import {wikiActionApi, wikiRestApi} from "./wiki";
 
 export const store = configureStore({
@@ -12,6 +14,8 @@ export const store = configureStore({
     [generatedApi.reducerPath]: generatedApi.reducer,
     [generatedApiV2.reducerPath]: generatedApiV2.reducer,
     [wikiApi.reducerPath]: wikiApi.reducer,
+    [craftingApi.reducerPath]: craftingApi.reducer,
+    [versionsApi.reducerPath]: versionsApi.reducer,
     // [wikiRestApi.reducerPath]: wikiRestApi.reducer,
     // [wikiActionApi.reducerPath]: wikiActionApi.reducer,
   },
@@ -22,6 +26,8 @@ export const store = configureStore({
       generatedApi.middleware,
       generatedApiV2.middleware,
       wikiApi.middleware,
+      craftingApi.middleware,
+      versionsApi.middleware,
       // wikiRestApi.middleware,
       // wikiActionApi.middleware,
     ),

@@ -678,6 +678,14 @@
     "stock_short": "Stock",
     "fleet_short": "Fleet",
     "register": "Register",
+    "wiki": {
+      "title": "Wiki",
+      "items": "Items",
+      "ships": "Ships",
+      "commodities": "Commodities",
+      "locations": "Locations",
+      "manufacturers": "Manufacturers"
+    },
     "admin": {
       "title": "Admin"
     },
@@ -705,6 +713,9 @@
     },
     "premium": {
       "text": "Premium"
+    },
+    "feature_flags": {
+      "text": "Feature Flags"
     },
     "sc_market": {
       "title": "SC Market"
