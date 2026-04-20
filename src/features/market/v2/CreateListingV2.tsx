@@ -322,6 +322,7 @@ export function CreateListingV2() {
       sidebarOpen={true}
       maxWidth="lg"
     >
+      <Grid item xs={12}>
       <form onSubmit={handleSubmit}>
         <Grid container spacing={theme.layoutSpacing.layout}>
           {/* Verification Warning */}
@@ -867,6 +868,7 @@ export function CreateListingV2() {
           </Grid>
         </Grid>
       </form>
+      </Grid>
     </StandardPageLayout>
   );
 }

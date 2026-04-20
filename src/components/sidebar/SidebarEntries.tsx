@@ -21,6 +21,11 @@ import {
   SecurityRounded,
   StarRounded,
   ToggleOnRounded,
+  MenuBookRounded,
+  RocketLaunchRounded,
+  CategoryRounded,
+  PublicRounded,
+  BusinessCenterRounded,
 } from "@mui/icons-material"
 import PaidIcon from "@mui/icons-material/PaidRounded"
 import CreateIcon from "@mui/icons-material/CreateRounded"
@@ -324,6 +329,41 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
         icon: <CreateIcon />,
         org: false,
         logged_in: true,
+      },
+    ],
+  },
+  {
+    title: "sidebar.wiki.title",
+    items: [
+      {
+        text: "sidebar.wiki.items",
+        icon: <MenuBookRounded />,
+        tab_key: "wiki_items",
+        to: "/wiki/items",
+      },
+      {
+        text: "sidebar.wiki.ships",
+        icon: <RocketLaunchRounded />,
+        tab_key: "wiki_ships",
+        to: "/wiki/ships",
+      },
+      {
+        text: "sidebar.wiki.commodities",
+        icon: <CategoryRounded />,
+        tab_key: "wiki_commodities",
+        to: "/wiki/commodities",
+      },
+      {
+        text: "sidebar.wiki.locations",
+        icon: <PublicRounded />,
+        tab_key: "wiki_locations",
+        to: "/wiki/locations",
+      },
+      {
+        text: "sidebar.wiki.manufacturers",
+        icon: <BusinessCenterRounded />,
+        tab_key: "wiki_manufacturers",
+        to: "/wiki/manufacturers",
       },
     ],
   },

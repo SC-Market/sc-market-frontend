@@ -378,6 +378,7 @@ export function EditListingV2() {
         </Alert>
       )}
 
+      <Grid item xs={12}>
       <form onSubmit={handleSubmit}>
         <Grid container spacing={theme.layoutSpacing.layout}>
           {/* Status Actions */}
@@ -778,6 +779,7 @@ export function EditListingV2() {
           </Grid>
         </Grid>
       </form>
+      </Grid>
     </StandardPageLayout>
   );
 }
