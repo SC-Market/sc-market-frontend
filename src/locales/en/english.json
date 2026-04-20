@@ -678,6 +678,15 @@
     "stock_short": "Stock",
     "fleet_short": "Fleet",
     "register": "Register",
+    "gameData": {
+      "title": "Game Data",
+      "missions": "Missions",
+      "blueprints": "Blueprints",
+      "craftingCalculator": "Crafting Calculator",
+      "resources": "Resources",
+      "wishlists": "Wishlists",
+      "blueprintInventory": "My Blueprints"
+    },
     "wiki": {
       "title": "Wiki",
       "items": "Items",
