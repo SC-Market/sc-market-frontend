@@ -17,8 +17,10 @@ const rawBaseQuery = fetchBaseQuery({
   credentials: "include",
 })
 
-// Mutex to prevent parallel refresh calls
+// Mutex to prevent parallel refresh calls + circuit breaker
 let refreshPromise: Promise<boolean> | null = null
+let refreshFailedAt: number = 0
+const REFRESH_BACKOFF_MS = 30_000 // Don't retry refresh for 30s after failure
 
 /**
  * Wraps the base query with 401 → refresh → retry logic.
@@ -34,6 +36,11 @@ const baseQueryWithReauth: BaseQueryFn<
   let result = await rawBaseQuery(args, api, extraOptions)
 
   if (result.error?.status === 401) {
+    // Skip refresh if it recently failed (user is logged out)
+    if (Date.now() - refreshFailedAt < REFRESH_BACKOFF_MS) {
+      return result
+    }
+
     // If a refresh is already in flight, wait for it
     if (!refreshPromise) {
       refreshPromise = (async () => {
@@ -42,12 +49,16 @@ const baseQueryWithReauth: BaseQueryFn<
           api,
           extraOptions,
         )
+        if (!r.data) {
+          refreshFailedAt = Date.now()
+        }
         return !!r.data
       })()
       refreshPromise.finally(() => { refreshPromise = null })
     }
     const refreshed = await refreshPromise
     if (refreshed) {
+      refreshFailedAt = 0
       result = await rawBaseQuery(args, api, extraOptions)
     }
     // If refresh failed, the 401 propagates and LoggedInRoute redirects to /login
@@ -56,12 +67,23 @@ const baseQueryWithReauth: BaseQueryFn<
   return result
 }
 
-// Wrap with retry for non-401 errors (network issues, 500s, etc.)
-const baseQueryWithRetry = retry(baseQueryWithReauth, {
-  maxRetries: 3,
-  backoff: (attempt) =>
-    new Promise((resolve) => setTimeout(resolve, Math.min(1000 * 2 ** attempt, 30000))),
-})
+// Wrap with retry for non-auth errors (network issues, 500s, etc.)
+// 401s should NOT be retried — they mean the user is logged out
+const baseQueryWithRetry = retry(
+  async (args, api, extraOptions) => {
+    const result = await baseQueryWithReauth(args, api, extraOptions)
+    // Bail out of retry loop on 401 (auth failure, not transient)
+    if (result.error?.status === 401) {
+      retry.fail(result.error)
+    }
+    return result
+  },
+  {
+    maxRetries: 3,
+    backoff: (attempt) =>
+      new Promise((resolve) => setTimeout(resolve, Math.min(1000 * 2 ** attempt, 30000))),
+  },
+)
 
 export const generatedApi = createApi({
   baseQuery: baseQueryWithRetry,

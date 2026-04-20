@@ -12,10 +12,12 @@ const rawBaseQuery = fetchBaseQuery({
   credentials: "include",
 })
 
-// Mutex to prevent parallel refresh calls
+// Mutex to prevent parallel refresh calls + circuit breaker
 let refreshPromise: Promise<boolean> | null = null
+let refreshFailedAt: number = 0
+const REFRESH_BACKOFF_MS = 30_000 // Don't retry refresh for 30s after failure
 
-// 401 → refresh → retry (same pattern as generatedApi)
+// 401 → refresh → retry
 const baseQueryWithReauth: BaseQueryFn<
   string | FetchArgs,
   unknown,
@@ -23,6 +25,11 @@ const baseQueryWithReauth: BaseQueryFn<
 > = async (args, api, extraOptions) => {
   let result = await rawBaseQuery(args, api, extraOptions)
   if (result.error?.status === 401) {
+    // Skip refresh if it recently failed (user is logged out)
+    if (Date.now() - refreshFailedAt < REFRESH_BACKOFF_MS) {
+      return result
+    }
+
     // If a refresh is already in flight, wait for it
     if (!refreshPromise) {
       refreshPromise = (async () => {
@@ -31,12 +38,16 @@ const baseQueryWithReauth: BaseQueryFn<
           api,
           extraOptions,
         )
+        if (!r.data) {
+          refreshFailedAt = Date.now()
+        }
         return !!r.data
       })()
       refreshPromise.finally(() => { refreshPromise = null })
     }
     const refreshed = await refreshPromise
     if (refreshed) {
+      refreshFailedAt = 0 // Reset on success
       result = await rawBaseQuery(args, api, extraOptions)
     }
   }
