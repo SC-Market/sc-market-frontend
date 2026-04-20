@@ -16,6 +16,15 @@ import { BrowserRouter } from "react-router-dom"
 import { vi, describe, it, expect, beforeEach } from "vitest"
 import { CurrentOrgContext } from "../../../hooks/login/CurrentOrg"
 import { DrawerOpenContext } from "../../../hooks/layout/Drawer"
+import { ThemeProvider, createTheme } from "@mui/material/styles"
+
+// Create a theme with custom properties
+const mockTheme = createTheme({
+  layoutSpacing: {
+    component: 2,
+    layout: 3,
+  },
+} as any)
 
 // Mock the Page component to avoid serviceApi dependency
 vi.mock("../../../components/metadata/Page", async () => {
@@ -64,13 +73,15 @@ function renderWithProviders(
 
   return render(
     <Provider store={store}>
-      <BrowserRouter>
-        <DrawerOpenContext.Provider value={drawerState}>
-          <CurrentOrgContext.Provider value={currentOrgState}>
-            {ui}
-          </CurrentOrgContext.Provider>
-        </DrawerOpenContext.Provider>
-      </BrowserRouter>
+      <ThemeProvider theme={mockTheme}>
+        <BrowserRouter>
+          <DrawerOpenContext.Provider value={drawerState}>
+            <CurrentOrgContext.Provider value={currentOrgState}>
+              {ui}
+            </CurrentOrgContext.Provider>
+          </DrawerOpenContext.Provider>
+        </BrowserRouter>
+      </ThemeProvider>
     </Provider>
   )
 }
