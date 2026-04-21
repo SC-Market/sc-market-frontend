@@ -1,5 +1,5 @@
 /**
- * BlueprintCard — compact card showing crafted item name, avatar icon, owned toggle
+ * BlueprintCard — compact card with ingredients, mission source dots, commodity colors
  */
 
 import React from "react"
@@ -15,8 +15,17 @@ import {
   Stack,
   Typography,
 } from "@mui/material"
-import { Bookmark, BookmarkBorder } from "@mui/icons-material"
+import { Bookmark, BookmarkBorder, Circle } from "@mui/icons-material"
 import { formatCategoryName } from "../../util/categoryDisplay"
+import { getResourceCategoryIcon, getCommodityColor } from "../../util/gameIcons"
+
+export interface BlueprintIngredientSummary {
+  name: string
+  short_name?: string
+  quantity_required: number
+  sub_type?: string
+  icon_url?: string
+}
 
 export interface BlueprintCardProps {
   blueprint: {
@@ -31,6 +40,7 @@ export interface BlueprintCardProps {
     mission_count: number
     crafting_time_seconds?: number
     user_owns?: boolean
+    ingredients?: BlueprintIngredientSummary[]
   }
   viewMode?: "grid" | "list"
   onClick?: (blueprintId: string) => void
@@ -49,16 +59,30 @@ function formatTime(seconds?: number): string {
   return m > 0 ? (s > 0 ? `${m}m ${s}s` : `${m}m`) : `${seconds}s`
 }
 
+function shortName(name: string): string {
+  // "Lindinium" → "LIND", "Iron" → "IRON", "Hephaestanite" → "HEPH"
+  return name.replace(/[aeiou]/gi, "").slice(0, 4).toUpperCase() || name.slice(0, 4).toUpperCase()
+}
+
+function ingIcon(ing: BlueprintIngredientSummary): string | undefined {
+  return ing.icon_url || getResourceCategoryIcon(ing.sub_type) || undefined
+}
+
+function ingColor(ing: BlueprintIngredientSummary): string {
+  return getCommodityColor(ing.sub_type) || "#616161"
+}
+
 export const BlueprintCard: React.FC<BlueprintCardProps> = ({
   blueprint: bp,
   viewMode = "grid",
   onClick,
   onBookmarkToggle,
 }) => {
+  const ings = bp.ingredients || []
+
   if (viewMode === "grid") {
     return (
       <Card sx={{ height: "100%", position: "relative" }}>
-        {/* Owned toggle — top right */}
         {onBookmarkToggle && (
           <IconButton
             size="small"
@@ -72,13 +96,12 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
 
         <CardActionArea onClick={() => onClick?.(bp.blueprint_id)} sx={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "stretch", justifyContent: "flex-start" }}>
           <CardContent sx={{ p: 1.5, pb: 0, flex: 1 }}>
-            {/* Header: small avatar + item name */}
             <Box sx={{ display: "flex", gap: 1, mb: 1, pr: 3 }}>
               <Avatar
                 src={bp.output_item_icon}
                 variant="rounded"
-                sx={{ width: 32, height: 32, fontSize: "0.7rem", bgcolor: "primary.main", flexShrink: 0 }}
-                imgProps={{ style: { objectFit: "cover" } }}
+                sx={{ width: 32, height: 32, fontSize: "0.7rem", bgcolor: "primary.main", flexShrink: 0, p: 0.5 }}
+                imgProps={{ style: { objectFit: "contain" } }}
               >
                 {initials(bp.output_item_name)}
               </Avatar>
@@ -87,20 +110,40 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
                   {bp.output_item_name}
                 </Typography>
                 <Typography variant="caption" color="text.secondary" noWrap display="block">
-                  {formatCategoryName(bp.item_category) || "Blueprint"}
+                  {formatCategoryName(bp.item_category)}
                 </Typography>
               </Box>
             </Box>
+
+            {/* Ingredients list */}
+            {ings.length > 0 && (
+              <Stack spacing={0.25} sx={{ mb: 0.5 }}>
+                {ings.slice(0, 4).map((ing, i) => (
+                  <Box key={i} sx={{ display: "flex", gap: 0.5, alignItems: "center" }}>
+                    <Avatar
+                      src={ingIcon(ing)}
+                      variant="rounded"
+                      sx={{ width: 16, height: 16, fontSize: "0.45rem", bgcolor: ingColor(ing), p: 0.25 }}
+                      imgProps={{ style: { objectFit: "contain" } }}
+                    >
+                      {ing.name[0]}
+                    </Avatar>
+                    <Typography variant="caption" noWrap sx={{ flex: 1 }}>{ing.name}</Typography>
+                    <Typography variant="caption" color="text.secondary">{(ing.quantity_required / 100).toFixed(2)}</Typography>
+                  </Box>
+                ))}
+                {ings.length > 4 && (
+                  <Typography variant="caption" color="text.disabled">+{ings.length - 4} more</Typography>
+                )}
+              </Stack>
+            )}
           </CardContent>
 
-          {/* Tags */}
           <CardActions sx={{ px: 1.5, pt: 0, pb: 0.5, flexWrap: "wrap", gap: 0.5 }}>
             {bp.rarity && <Chip label={bp.rarity} size="small" color="primary" sx={{ height: 18, fontSize: "0.65rem" }} />}
             {bp.tier && <Chip label={`T${bp.tier}`} size="small" color="secondary" sx={{ height: 18, fontSize: "0.65rem" }} />}
-            {bp.mission_count > 0 && <Chip label={`${bp.mission_count} mission${bp.mission_count !== 1 ? "s" : ""}`} size="small" color="info" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} />}
           </CardActions>
 
-          {/* Bottom stats */}
           <Box sx={{ px: 1.5, pb: 1.5, pt: 0.5, mt: "auto" }}>
             {bp.crafting_time_seconds ? (
               <Box sx={{ display: "flex", justifyContent: "space-between" }}>
@@ -108,20 +151,19 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
                 <Typography variant="caption">{formatTime(bp.crafting_time_seconds)}</Typography>
               </Box>
             ) : null}
-            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <Typography variant="caption" color="text.secondary">Ingredients</Typography>
-              <Typography variant="caption">{bp.ingredient_count}</Typography>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+              <Circle sx={{ fontSize: 8, color: bp.mission_count > 0 ? "success.main" : "error.main" }} />
+              <Typography variant="caption" color={bp.mission_count > 0 ? "text.secondary" : "text.disabled"}>
+                {bp.mission_count > 0 ? `${bp.mission_count} mission source${bp.mission_count !== 1 ? "s" : ""}` : "No mission sources"}
+              </Typography>
             </Box>
-            {bp.mission_count === 0 && (
-              <Typography variant="caption" color="text.disabled" display="block">No mission sources</Typography>
-            )}
           </Box>
         </CardActionArea>
       </Card>
     )
   }
 
-  // List mode — same as grid but horizontal
+  // List mode
   return (
     <Card sx={{ cursor: "pointer", "&:hover": { boxShadow: 3 } }} onClick={() => onClick?.(bp.blueprint_id)}>
       <CardContent sx={{ p: 1.5, "&:last-child": { pb: 1.5 } }}>
@@ -129,22 +171,30 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
           <Avatar
             src={bp.output_item_icon}
             variant="rounded"
-            sx={{ width: 40, height: 40, fontSize: "0.8rem", bgcolor: "primary.main", flexShrink: 0 }}
-            imgProps={{ style: { objectFit: "cover" } }}
+            sx={{ width: 36, height: 36, fontSize: "0.75rem", bgcolor: "primary.main", flexShrink: 0, p: 0.5 }}
+            imgProps={{ style: { objectFit: "contain" } }}
           >
             {initials(bp.output_item_name)}
           </Avatar>
           <Box sx={{ flex: 1, minWidth: 0 }}>
             <Typography variant="body2" fontWeight={600} noWrap>{bp.output_item_name}</Typography>
-            <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap>
+            <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap sx={{ mt: 0.25 }}>
               {bp.rarity && <Chip label={bp.rarity} size="small" color="primary" sx={{ height: 18, fontSize: "0.65rem" }} />}
               {bp.tier && <Chip label={`T${bp.tier}`} size="small" color="secondary" sx={{ height: 18, fontSize: "0.65rem" }} />}
-              {bp.item_category && <Chip label={formatCategoryName(bp.item_category)} size="small" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} />}
+              {ings.map((ing, i) => (
+                <Chip
+                  key={i}
+                  label={`${shortName(ing.name)}×${(ing.quantity_required / 100).toFixed(2)}`}
+                  size="small"
+                  sx={{ height: 18, fontSize: "0.6rem", bgcolor: ingColor(ing), color: "#fff" }}
+                />
+              ))}
             </Stack>
           </Box>
-          <Box sx={{ textAlign: "right", flexShrink: 0 }}>
-            <Typography variant="caption" color="text.secondary" display="block">{bp.ingredient_count} ing · {bp.mission_count} msn</Typography>
-            {bp.crafting_time_seconds && <Typography variant="caption" color="text.secondary">{formatTime(bp.crafting_time_seconds)}</Typography>}
+          <Box sx={{ textAlign: "right", flexShrink: 0, display: "flex", alignItems: "center", gap: 0.5 }}>
+            <Circle sx={{ fontSize: 8, color: bp.mission_count > 0 ? "success.main" : "error.main" }} />
+            <Typography variant="caption" color="text.secondary">{bp.mission_count} msn</Typography>
+            {bp.crafting_time_seconds && <Typography variant="caption" color="text.secondary" sx={{ ml: 1 }}>{formatTime(bp.crafting_time_seconds)}</Typography>}
           </Box>
           {onBookmarkToggle && (
             <IconButton

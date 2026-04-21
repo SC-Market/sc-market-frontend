@@ -115,3 +115,35 @@ export function getResourceCategoryIcon(category: string | null | undefined): st
   const file = map[category.toLowerCase()]
   return file ? `${BASE}/items/${file}` : null
 }
+
+/** Commodity sub_type → color for chips and avatar backgrounds */
+const COMMODITY_COLORS: Record<string, string> = {
+  mineral: "#8B6914",
+  minerals: "#8B6914",
+  ore: "#8B6914",
+  metal: "#607D8B",
+  metals: "#607D8B",
+  refined: "#78909C",
+  alloy: "#78909C",
+  gas: "#4DB6AC",
+  organic: "#66BB6A",
+  organics: "#66BB6A",
+  agricultural: "#81C784",
+  food: "#A5D6A7",
+  synthetic: "#AB47BC",
+  synthetics: "#AB47BC",
+  polymer: "#BA68C8",
+  composite: "#CE93D8",
+  liquid: "#42A5F5",
+  liquids: "#42A5F5",
+  chemical: "#29B6F6",
+  nonmetal: "#BDBDBD",
+  nonmetals: "#BDBDBD",
+  scrap: "#8D6E63",
+  waste: "#A1887F",
+}
+
+export function getCommodityColor(subType: string | null | undefined): string | null {
+  if (!subType) return null
+  return COMMODITY_COLORS[subType.toLowerCase()] || null
+}

@@ -20,7 +20,7 @@ import {
 import { useGetBlueprintDetailQuery } from "../../store/api/v2/market"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { formatCategoryName } from "../../util/categoryDisplay"
-import { getResourceCategoryIcon } from "../../util/gameIcons"
+import { getResourceCategoryIcon, getCommodityColor } from "../../util/gameIcons"
 
 function initials(name: string | undefined): string {
   if (!name) return "?"
@@ -146,8 +146,8 @@ function OverviewTab({ data, itemName }: { data: any; itemName: string }) {
                 <Avatar
                   src={ingredientIcon(ing)}
                   variant="rounded"
-                  sx={{ width: 28, height: 28, fontSize: "0.6rem", bgcolor: "secondary.main" }}
-                  imgProps={{ style: { objectFit: "cover" } }}
+                  sx={{ width: 28, height: 28, fontSize: "0.6rem", bgcolor: getCommodityColor(ing.game_item?.sub_type) || "secondary.main", p: 0.4 }}
+                  imgProps={{ style: { objectFit: "contain" } }}
                 >
                   {initials(ing.game_item?.name)}
                 </Avatar>
@@ -229,8 +229,8 @@ function CalculatorTab({ data }: { data: any }) {
               <Avatar
                 src={ingredientIcon(ing)}
                 variant="rounded"
-                sx={{ width: 24, height: 24, fontSize: "0.55rem", bgcolor: "secondary.main" }}
-                imgProps={{ style: { objectFit: "cover" } }}
+                sx={{ width: 24, height: 24, fontSize: "0.55rem", bgcolor: getCommodityColor(ing.game_item?.sub_type) || "secondary.main", p: 0.3 }}
+                imgProps={{ style: { objectFit: "contain" } }}
               >
                 {initials(ing.game_item?.name)}
               </Avatar>
