@@ -31,6 +31,7 @@ import {
   Chip,
   Stack,
   Button,
+  Avatar,
   useMediaQuery,
 } from "@mui/material"
 import { ViewList, ViewModule, FilterList } from "@mui/icons-material"
@@ -48,6 +49,7 @@ import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { BottomSheet } from "../../components/mobile/BottomSheet"
 import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
 import { formatCredits, getMissionTypeLabel } from "../../util/missionDisplay"
+import { getMissionIcon } from "../../util/gameIcons"
 import { MissionName } from "../../components/game-data/MissionName"
 
 export function MissionSearch() {
@@ -278,6 +280,7 @@ export function MissionSearch() {
                   <Table size="small" sx={{ "& td, & th": { py: 0.5, px: 1 } }}>
                     <TableHead>
                       <TableRow>
+                        <TableCell sx={{ width: 40 }} />
                         <TableCell>System</TableCell>
                         <TableCell>Title</TableCell>
                         <TableCell>Faction</TableCell>
@@ -295,6 +298,15 @@ export function MissionSearch() {
                           sx={{ cursor: "pointer" }}
                           onClick={() => handleMissionClick(m.mission_id)}
                         >
+                          <TableCell sx={{ width: 40, py: 0.5 }}>
+                            <Avatar
+                              src={getMissionIcon(m.category) || undefined}
+                              sx={{ width: 24, height: 24, bgcolor: "primary.main" }}
+                              imgProps={{ style: { objectFit: "contain", padding: 2 } }}
+                            >
+                              {(m.category || "?")[0].toUpperCase()}
+                            </Avatar>
+                          </TableCell>
                           <TableCell>
                             <Typography variant="caption" noWrap sx={{ maxWidth: 80, display: "block" }}>
                               {m.star_system || "—"}

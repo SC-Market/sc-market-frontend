@@ -30,6 +30,7 @@ import { Close } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { useGetMissionDetailQuery } from "../../store/api/v2/market"
 import { getMissionTypeLabel, formatMissionDescription } from "../../util/missionDisplay"
+import { getMissionIcon } from "../../util/gameIcons"
 import { MissionName } from "./MissionName"
 import { MissionRankCalculator } from "./MissionRankCalculator"
 
@@ -91,7 +92,11 @@ function OverviewTab({ data }: { data: any }) {
   return (
     <Stack spacing={2}>
       <Stack direction="row" spacing={1} flexWrap="wrap" gap={0.5}>
-        {m.category && <Chip label={getMissionTypeLabel(m.category)} size="small" />}
+        {m.category && <Chip
+          label={getMissionTypeLabel(m.category)}
+          size="small"
+          icon={getMissionIcon(m.category) ? <img src={getMissionIcon(m.category)!} alt="" style={{ width: 16, height: 16 }} /> : undefined}
+        />}
         {m.career_type && <Chip label={m.career_type} size="small" variant="outlined" />}
         {m.legal_status && (
           <Chip label={m.legal_status} size="small"
