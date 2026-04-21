@@ -22,6 +22,7 @@ import { CloudUploadRounded, CheckCircleRounded, ErrorRounded } from "@mui/icons
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
 
 import { useImportGameDataMutation, GameDataImportResult } from "../../store/api/admin"
+import { useAlertHook } from "../../hooks/alert/AlertHook"
 
 export function AdminGameDataImportView() {
   const [file, setFile] = useState<File | null>(null)
@@ -31,6 +32,7 @@ export function AdminGameDataImportView() {
   const [gameChannel, setGameChannel] = useState<"LIVE" | "PTU" | "EPTU">("LIVE")
 
   const [importGameData, { isLoading: uploading }] = useImportGameDataMutation()
+  const issueAlert = useAlertHook()
 
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault()
@@ -54,9 +56,20 @@ export function AdminGameDataImportView() {
         gameChannel,
         gameVersion: gameVersion || undefined,
       }).unwrap()
+
       setResult(data)
+
+      if (data.success) {
+        issueAlert({ message: "Game data imported successfully", severity: "success" })
+      } else {
+        const msg = data.error || "Import failed"
+        setError(data.details ? `${msg}: ${data.details}` : msg)
+        issueAlert({ message: msg, severity: "error" })
+      }
     } catch (err: any) {
-      setError(err?.data?.error || err?.message || "Upload failed")
+      const msg = err?.data?.error || err?.message || "Upload failed"
+      setError(msg)
+      issueAlert({ message: msg, severity: "error" })
     }
   }
 
