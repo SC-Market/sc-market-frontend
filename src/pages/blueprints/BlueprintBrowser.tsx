@@ -39,8 +39,10 @@ import {
   Chip,
   Avatar,
   Stack,
+  Button,
+  useMediaQuery,
 } from "@mui/material"
-import { ViewModule, ViewList } from "@mui/icons-material"
+import { ViewModule, ViewList, FilterList, RestartAltRounded } from "@mui/icons-material"
 import { useSearchBlueprintsQuery, useGetBlueprintCategoriesQuery } from "../../store/api/v2/market"
 import { useNavigate } from "react-router-dom"
 import { useDebounce } from "../../hooks/useDebounce"
@@ -52,6 +54,8 @@ import { useTheme } from "@mui/material/styles"
 import { BlueprintDetailModal } from "../../components/game-data/BlueprintDetailModal"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
+import { BottomSheet } from "../../components/mobile/BottomSheet"
+import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
 
 type ViewMode = "grid" | "list"
 
@@ -88,7 +92,9 @@ export function BlueprintBrowser() {
   const [ownedOnly, setOwnedOnly] = useState(false)
   const [page, setPage] = useState(1)
   const [allBlueprints, setAllBlueprints] = useState<any[]>([])
-
+  const isMobile = useMediaQuery(theme.breakpoints.down("lg"))
+  const [filterOpen, setFilterOpen] = useState(false)
+  const bottomNavHeight = useBottomNavHeight()
   // Debounce search text for performance (Requirement 19.6: <200ms response)
   const debouncedSearch = useDebounce(searchText, 300)
 
@@ -156,6 +162,55 @@ export function BlueprintBrowser() {
     .map((c) => c.subcategory!)
     .sort() || []
 
+  const filterContent = (
+    <Stack spacing={1.5}>
+      <TextField fullWidth size="small" label="Search" value={searchText}
+        onChange={(e) => setSearchText(e.target.value)} placeholder="Item or blueprint name..." />
+      <FormControl fullWidth size="small">
+        <InputLabel>Category</InputLabel>
+        <Select value={category} label="Category" onChange={(e) => { setCategory(e.target.value); setSubcategory("") }}>
+          <MenuItem value="">All</MenuItem>
+          {uniqueCategories.map(c => <MenuItem key={c} value={c}>{c}</MenuItem>)}
+        </Select>
+      </FormControl>
+      {subcategoriesForCategory.length > 0 && (
+        <FormControl fullWidth size="small">
+          <InputLabel>Subcategory</InputLabel>
+          <Select value={subcategory} label="Subcategory" onChange={(e) => setSubcategory(e.target.value)}>
+            <MenuItem value="">All</MenuItem>
+            {subcategoriesForCategory.map(s => <MenuItem key={s} value={s}>{s}</MenuItem>)}
+          </Select>
+        </FormControl>
+      )}
+      <FormControl fullWidth size="small">
+        <InputLabel>Rarity</InputLabel>
+        <Select value={rarity} label="Rarity" onChange={(e) => setRarity(e.target.value)}>
+          <MenuItem value="">All</MenuItem>
+          {["Common","Uncommon","Rare","Epic","Legendary"].map(r => <MenuItem key={r} value={r}>{r}</MenuItem>)}
+        </Select>
+      </FormControl>
+      <FormControl fullWidth size="small">
+        <InputLabel>Tier</InputLabel>
+        <Select value={tier} label="Tier" onChange={(e) => setTier(e.target.value === "" ? "" : Number(e.target.value))}>
+          <MenuItem value="">All</MenuItem>
+          {[1,2,3,4,5].map(t => <MenuItem key={t} value={t}>Tier {t}</MenuItem>)}
+        </Select>
+      </FormControl>
+      <FormControl fullWidth size="small">
+        <InputLabel>Station</InputLabel>
+        <Select value={craftingStation} label="Station" onChange={(e) => setCraftingStation(e.target.value)}>
+          <MenuItem value="">All</MenuItem>
+          {["Weapons Bench","Armor Bench","Component Bench","Vehicle Bench","Electronics Bench"].map(s => <MenuItem key={s} value={s}>{s}</MenuItem>)}
+        </Select>
+      </FormControl>
+      <FormControlLabel control={<Checkbox checked={ownedOnly} onChange={(e) => setOwnedOnly(e.target.checked)} size="small" />}
+        label={<Typography variant="body2">Owned Only</Typography>} sx={{ ml: 0 }} />
+      <Button size="small" startIcon={<RestartAltRounded />} onClick={handleResetFilters} sx={{ textTransform: "none" }}>
+        Reset Filters
+      </Button>
+    </Stack>
+  )
+
   return (
     <StandardPageLayout
       title={t("blueprints.browser.title", "Blueprint Browser")}
@@ -164,170 +219,50 @@ export function BlueprintBrowser() {
       maxWidth="xl"
     >
       <Grid item xs={12}>
-        {/* Header Actions */}
-        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
-          <Typography variant="body1" color="text.secondary">
-            {t("blueprints.browser.description", "Search and filter blueprints to find crafting recipes")}
-          </Typography>
+        {/* Mobile: Bottom sheet for filters */}
+        {isMobile && (
+          <>
+            <BottomSheet open={filterOpen} onClose={() => setFilterOpen(false)} title="Filters">
+              {filterContent}
+            </BottomSheet>
+            <Button
+              variant="outlined" color="secondary" startIcon={<FilterList />}
+              onClick={() => setFilterOpen(true)}
+              sx={{
+                position: "fixed", bottom: bottomNavHeight + 16, right: 24,
+                zIndex: (t) => t.zIndex.speedDial, borderRadius: 2, textTransform: "none",
+                boxShadow: theme.shadows[4], backgroundColor: theme.palette.background.paper,
+                "&:hover": { backgroundColor: theme.palette.background.paper, boxShadow: theme.shadows[8] },
+              }}
+            >
+              Filters
+            </Button>
+          </>
+        )}
 
-          {/* View Mode Toggle (Requirement 43.10) */}
-          <ToggleButtonGroup
-          value={viewMode}
-          exclusive
-          onChange={handleViewModeChange}
-          aria-label="view mode"
-        >
-          <ToggleButton value="grid" aria-label="grid view">
-            <ViewModule />
-          </ToggleButton>
-          <ToggleButton value="list" aria-label="list view">
-            <ViewList />
-          </ToggleButton>
-          </ToggleButtonGroup>
-        </Box>
+        <Stack direction="row" spacing={2} sx={{ width: "100%" }}>
+          {/* Desktop: Sticky sidebar */}
+          {!isMobile && (
+            <Paper sx={{
+              position: "sticky", top: "calc(64px + 16px)",
+              maxHeight: "calc(100vh - 64px - 32px)", height: "fit-content",
+              width: 260, flexShrink: 0, overflowY: "auto", p: 1.5,
+            }}>
+              {filterContent}
+            </Paper>
+          )}
 
-      {/* Filters (Requirements 19.1-19.5) */}
-      <Card sx={{ mb: 3 }}>
-        <CardContent>
-          <Grid container spacing={2}>
-            {/* Search Text (Requirement 19.1) */}
-            <Grid item xs={12} md={6}>
-              <TextField
-                fullWidth
-                size="small"
-                label="Search blueprints"
-                value={searchText}
-                onChange={(e) => setSearchText(e.target.value)}
-                placeholder="Search by blueprint or item name..."
-                helperText="Partial name matching supported"
-              />
-            </Grid>
-
-            {/* Category Filter (Requirement 19.2, 19.3) */}
-            <Grid item xs={12} sm={6} md={3}>
-              <FormControl fullWidth size="small">
-                <InputLabel>Category</InputLabel>
-                <Select
-                  value={category}
-                  label="Category"
-                  onChange={(e) => {
-                    setCategory(e.target.value)
-                    setSubcategory("") // Reset subcategory when category changes
-                  }}
-                >
-                  <MenuItem value="">All Categories</MenuItem>
-                  {uniqueCategories.map((cat) => (
-                    <MenuItem key={cat} value={cat}>
-                      {cat}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-
-            {/* Subcategory Filter (Requirement 19.2, 19.3) */}
-            <Grid item xs={12} sm={6} md={3}>
-              <FormControl fullWidth size="small" disabled={!category || subcategoriesForCategory.length === 0}>
-                <InputLabel>Subcategory</InputLabel>
-                <Select
-                  value={subcategory}
-                  label="Subcategory"
-                  onChange={(e) => setSubcategory(e.target.value)}
-                >
-                  <MenuItem value="">All Subcategories</MenuItem>
-                  {subcategoriesForCategory.map((subcat) => (
-                    <MenuItem key={subcat} value={subcat}>
-                      {subcat}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-
-            {/* Rarity Filter (Requirement 19.1) */}
-            <Grid item xs={12} sm={6} md={3}>
-              <FormControl fullWidth size="small">
-                <InputLabel>Rarity</InputLabel>
-                <Select
-                  value={rarity}
-                  label="Rarity"
-                  onChange={(e) => setRarity(e.target.value)}
-                >
-                  <MenuItem value="">All Rarities</MenuItem>
-                  <MenuItem value="Common">Common</MenuItem>
-                  <MenuItem value="Uncommon">Uncommon</MenuItem>
-                  <MenuItem value="Rare">Rare</MenuItem>
-                  <MenuItem value="Epic">Epic</MenuItem>
-                  <MenuItem value="Legendary">Legendary</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-
-            {/* Tier Filter (Requirement 19.1) */}
-            <Grid item xs={12} sm={6} md={3}>
-              <FormControl fullWidth size="small">
-                <InputLabel>Tier</InputLabel>
-                <Select
-                  value={tier}
-                  label="Tier"
-                  onChange={(e) => setTier(e.target.value === "" ? "" : Number(e.target.value))}
-                >
-                  <MenuItem value="">All Tiers</MenuItem>
-                  <MenuItem value={1}>Tier 1</MenuItem>
-                  <MenuItem value={2}>Tier 2</MenuItem>
-                  <MenuItem value={3}>Tier 3</MenuItem>
-                  <MenuItem value={4}>Tier 4</MenuItem>
-                  <MenuItem value={5}>Tier 5</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-
-            <Grid item xs={12} sm={6} md={3}>
-              <FormControl fullWidth size="small">
-                <InputLabel>Crafting Station</InputLabel>
-                <Select
-                  value={craftingStation}
-                  label="Crafting Station"
-                  onChange={(e) => setCraftingStation(e.target.value)}
-                >
-                  <MenuItem value="">All Stations</MenuItem>
-                  <MenuItem value="Weapons Bench">Weapons Bench</MenuItem>
-                  <MenuItem value="Armor Bench">Armor Bench</MenuItem>
-                  <MenuItem value="Component Bench">Component Bench</MenuItem>
-                  <MenuItem value="Vehicle Bench">Vehicle Bench</MenuItem>
-                  <MenuItem value="Electronics Bench">Electronics Bench</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-
-            <Grid item xs={12} sm={6} md={3}>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={ownedOnly}
-                    onChange={(e) => setOwnedOnly(e.target.checked)}
-                    size="small"
-                  />
-                }
-                label="Owned Only"
-              />
-            </Grid>
-
-            {/* Reset Button */}
-            <Grid item xs={12}>
-              <Typography
-                variant="body2"
-                color="primary"
-                sx={{ cursor: "pointer", textDecoration: "underline" }}
-                onClick={handleResetFilters}
-              >
-                Reset all filters
+          {/* Main content */}
+          <Box sx={{ flex: 1, minWidth: 0 }}>
+            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
+              <Typography variant="body2" color="text.secondary">
+                {data ? `${data.total} blueprints` : ""}
               </Typography>
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
-
+              <ToggleButtonGroup value={viewMode} exclusive onChange={handleViewModeChange} size="small">
+                <ToggleButton value="grid"><ViewModule /></ToggleButton>
+                <ToggleButton value="list"><ViewList /></ToggleButton>
+              </ToggleButtonGroup>
+            </Box>
       {/* Loading State */}
       {isLoading && (
         <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
@@ -454,6 +389,8 @@ export function BlueprintBrowser() {
           )}
         </>
       )}
+          </Box>
+        </Stack>
       </Grid>
       <BlueprintDetailModal
         blueprintId={selectedBlueprintId}
