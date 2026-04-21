@@ -15,6 +15,7 @@ import {
 } from "@mui/material"
 import { useGetBlueprintDetailQuery } from "../../store/api/v2/market"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
+import { formatCategoryName } from "../../util/categoryDisplay"
 
 function initials(name: string | undefined): string {
   if (!name) return "?"
@@ -61,7 +62,7 @@ export function BlueprintDetail() {
               <Stack direction="row" spacing={0.5}>
                 {bp.rarity && <Chip label={bp.rarity} size="small" color="primary" />}
                 {bp.tier && <Chip label={`Tier ${bp.tier}`} size="small" color="secondary" />}
-                {bp.item_category && <Chip label={bp.item_category} size="small" variant="outlined" />}
+                {bp.item_category && <Chip label={formatCategoryName(bp.item_category)} size="small" variant="outlined" />}
               </Stack>
             </Box>
           </Box>
