@@ -53,6 +53,7 @@ export function Root(props: { children: React.ReactNode }) {
           <InstallPrompt />
         </>
       )}
+      <CartDrawerProvider>
       <Navbar />
       <Sidebar />
       <Box
@@ -78,14 +79,13 @@ export function Root(props: { children: React.ReactNode }) {
             overflow: "auto", // Main content can scroll internally
           }}
         >
-          <CartDrawerProvider>
-            {props.children}
-          </CartDrawerProvider>
+          {props.children}
         </Box>
         {!isMessagingPage && !isMobile && <PreferencesButton />}
         <DebugPanel />
         <MobileBottomNav />
         <ContextAwareFAB />
+      </CartDrawerProvider>
       </Box>
     </Box>
   )
