@@ -273,9 +273,6 @@ export function WikiItemDetail() {
                       {blueprint.crafting_time_seconds && (
                         <Typography variant="caption" color="text.secondary" display="block">
                           Crafting time: {formatCraftingTime(blueprint.crafting_time_seconds)}
-                          {blueprint.output_quantity > 1 && (
-                            <> ({formatCraftingTime(blueprint.crafting_time_seconds * blueprint.output_quantity)} for {blueprint.output_quantity}×)</>
-                          )}
                         </Typography>
                       )}
                     </Box>
@@ -318,4 +315,14 @@ export function WikiItemDetail() {
       </Grid>
     </StandardPageLayout>
   )
+}
+
+function formatCraftingTime(seconds: number): string {
+  if (seconds < 60) return `${seconds}s`
+  const minutes = Math.floor(seconds / 60)
+  const secs = seconds % 60
+  if (minutes < 60) return secs > 0 ? `${minutes}m ${secs}s` : `${minutes}m`
+  const hours = Math.floor(minutes / 60)
+  const mins = minutes % 60
+  return mins > 0 ? `${hours}h ${mins}m` : `${hours}h`
 }
