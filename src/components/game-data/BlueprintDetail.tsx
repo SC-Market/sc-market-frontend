@@ -16,6 +16,7 @@
 import React from "react"
 import {
   Box,
+  Button,
   Card,
   CardContent,
   Typography,
@@ -452,31 +453,84 @@ export function BlueprintDetail() {
         <Card sx={{ mb: 3 }}>
           <CardContent>
             <Typography variant="h5" gutterBottom>
-              Crafting Recipe
+              Estimated Output
             </Typography>
 
-            <Grid container spacing={2}>
+            <Grid container spacing={2} sx={{ mb: 2 }}>
               <Grid size={{ xs: 12, sm: 6, md: 4 }}>
                 <Typography variant="subtitle2" color="text.secondary">
                   Quality Calculation
                 </Typography>
                 <Typography variant="body2">{crafting_recipe.quality_calculation_type}</Typography>
               </Grid>
-
               <Grid size={{ xs: 12, sm: 6, md: 4 }}>
                 <Typography variant="subtitle2" color="text.secondary">
-                  Min Output Quality
+                  Output Quality Range
                 </Typography>
-                <Typography variant="body2">Tier {crafting_recipe.min_output_quality_tier}</Typography>
+                <Typography variant="body2">
+                  Tier {crafting_recipe.min_output_quality_tier} – Tier {crafting_recipe.max_output_quality_tier}
+                </Typography>
               </Grid>
-
               <Grid size={{ xs: 12, sm: 6, md: 4 }}>
                 <Typography variant="subtitle2" color="text.secondary">
-                  Max Output Quality
+                  Output
                 </Typography>
-                <Typography variant="body2">Tier {crafting_recipe.max_output_quality_tier}</Typography>
+                <Typography variant="body2">
+                  {blueprint.output_quantity > 1 ? `${blueprint.output_quantity}× ` : ""}{output_item.name}
+                </Typography>
               </Grid>
             </Grid>
+
+            <Divider sx={{ mb: 2 }} />
+
+            {/* Quality impact per ingredient */}
+            <Typography variant="subtitle2" gutterBottom>
+              Quality Impact by Ingredient
+            </Typography>
+            <Typography variant="caption" color="text.secondary" sx={{ mb: 1, display: "block" }}>
+              Higher quality ingredients produce higher quality output. Using the recommended tier or above has a positive impact.
+            </Typography>
+
+            <Stack spacing={0.5}>
+              {ingredients.map((ingredient) => {
+                const recTier = ingredient.recommended_quality_tier || 3
+                const minTier = ingredient.min_quality_tier || 1
+                const isAboveRec = minTier >= recTier
+                return (
+                  <Stack key={ingredient.ingredient_id} direction="row" spacing={1} alignItems="center">
+                    <Typography variant="body2" sx={{ flex: 1, minWidth: 120 }} noWrap>
+                      {ingredient.game_item.name}
+                    </Typography>
+                    {ingredient.recommended_quality_tier && (
+                      <Chip
+                        size="small"
+                        label={`Rec: T${ingredient.recommended_quality_tier}`}
+                        color="info"
+                        variant="outlined"
+                      />
+                    )}
+                    <Typography
+                      variant="body2"
+                      fontWeight="bold"
+                      color={isAboveRec ? "success.main" : "warning.main"}
+                    >
+                      {isAboveRec ? "✓ Positive impact" : "↓ Below recommended"}
+                    </Typography>
+                  </Stack>
+                )
+              })}
+            </Stack>
+
+            {/* Link to full calculator */}
+            <Box sx={{ mt: 2 }}>
+              <Button
+                variant="outlined"
+                size="small"
+                onClick={() => navigate(`/crafting/calculator?blueprint_id=${blueprint.blueprint_id}`)}
+              >
+                Open Full Calculator
+              </Button>
+            </Box>
           </CardContent>
         </Card>
       )}

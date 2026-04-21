@@ -227,15 +227,69 @@ export function CraftingCalculator() {
         {result && (
           <Grid item xs={12}>
             <Paper sx={{ p: 2 }}>
-              <Typography variant="subtitle2" gutterBottom>Predicted Output</Typography>
-              <Stack direction="row" spacing={2} alignItems="center">
+              <Typography variant="subtitle2" gutterBottom>Estimated Output</Typography>
+              <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 2 }}>
                 <Chip
                   label={`Tier ${result.output_quality_tier}`}
                   color={TIER_COLORS[result.output_quality_tier] || "default"}
                 />
-                <Typography>Quality: <strong>{result.output_quality_value.toFixed(1)}</strong> / 1000</Typography>
+                <Typography>Quality: <strong>{result.output_quality_value.toFixed(0)}</strong> / 1000</Typography>
                 <Typography>Success: <strong>{result.success_probability.toFixed(1)}%</strong></Typography>
+                {result.critical_success_chance > 0 && (
+                  <Typography color="warning.main">Crit: <strong>{result.critical_success_chance.toFixed(1)}%</strong></Typography>
+                )}
               </Stack>
+
+              {/* Per-material quality impact */}
+              {result.calculation_breakdown?.quality_contributions?.length > 0 && (
+                <>
+                  <Divider sx={{ my: 1 }} />
+                  <Typography variant="subtitle2" gutterBottom>Quality Impact by Material</Typography>
+                  <Stack spacing={0.5}>
+                    {result.calculation_breakdown.quality_contributions.map((c, i) => {
+                      const avgQuality = result.output_quality_value
+                      const isPositive = c.quality_value >= avgQuality
+                      return (
+                        <Stack key={i} direction="row" spacing={1} alignItems="center">
+                          <Typography variant="body2" sx={{ flex: 1, minWidth: 100 }} noWrap>
+                            {c.material_name}
+                          </Typography>
+                          <Typography variant="caption" color="text.secondary">
+                            Q{c.quality_value.toFixed(0)} × {(c.weight * 100).toFixed(0)}%
+                          </Typography>
+                          <Typography
+                            variant="body2"
+                            fontWeight="bold"
+                            color={isPositive ? "success.main" : "error.main"}
+                          >
+                            {isPositive ? "+" : ""}{(c.contribution - (avgQuality * c.weight)).toFixed(1)}
+                          </Typography>
+                        </Stack>
+                      )
+                    })}
+                  </Stack>
+                </>
+              )}
+
+              {/* Cost breakdown */}
+              {result.estimated_cost && result.estimated_cost.total_cost > 0 && (
+                <>
+                  <Divider sx={{ my: 1 }} />
+                  <Stack direction="row" spacing={2}>
+                    <Typography variant="body2">
+                      Materials: <strong>{result.estimated_cost.material_cost.toLocaleString()} aUEC</strong>
+                    </Typography>
+                    {result.estimated_cost.crafting_station_fee ? (
+                      <Typography variant="body2">
+                        Station fee: <strong>{result.estimated_cost.crafting_station_fee.toLocaleString()} aUEC</strong>
+                      </Typography>
+                    ) : null}
+                    <Typography variant="body2" fontWeight="bold">
+                      Total: {result.estimated_cost.total_cost.toLocaleString()} aUEC
+                    </Typography>
+                  </Stack>
+                </>
+              )}
             </Paper>
           </Grid>
         )}
