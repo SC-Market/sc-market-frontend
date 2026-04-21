@@ -3631,6 +3631,8 @@ export type GameItem = {
   name: string
   /** Item type */
   type: string
+  /** Item sub-type (e.g., mineral, metal, gas for commodities) */
+  sub_type?: string
   /** Icon URL */
   icon_url?: string
 }

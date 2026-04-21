@@ -81,7 +81,8 @@ export function getFactionIcon(code: string | null | undefined): string | null {
 }
 
 /** Get resource category icon URL */
-export function getResourceCategoryIcon(category: string): string | null {
+export function getResourceCategoryIcon(category: string | null | undefined): string | null {
+  if (!category) return null
   const map: Record<string, string> = {
     gas: "inv_filter_icons_gas.svg",
     metal: "inv_filter_icon_metals.svg",
@@ -89,9 +90,27 @@ export function getResourceCategoryIcon(category: string): string | null {
     mineral: "inv_filter_icon_minerals.svg",
     minerals: "inv_filter_icon_minerals.svg",
     nonmetal: "inv_filter_icon_nonmetals.svg",
+    nonmetals: "inv_filter_icon_nonmetals.svg",
     organic: "inv_filter_icon_organics.svg",
+    organics: "inv_filter_icon_organics.svg",
     synthetic: "inv_filter_icon_synthetics.svg",
+    synthetics: "inv_filter_icon_synthetics.svg",
     liquid: "inv_filter_icon_liquids.svg",
+    liquids: "inv_filter_icon_liquids.svg",
+    // Common commodity sub_types from p4k
+    ore: "inv_filter_icon_minerals.svg",
+    raw: "inv_filter_icon_minerals.svg",
+    refined: "inv_filter_icon_metals.svg",
+    alloy: "inv_filter_icon_metals.svg",
+    polymer: "inv_filter_icon_synthetics.svg",
+    composite: "inv_filter_icon_synthetics.svg",
+    chemical: "inv_filter_icon_liquids.svg",
+    agricultural: "inv_filter_icon_organics.svg",
+    food: "inv_filter_icon_organics.svg",
+    drug: "inv_filter_icon_liquids.svg",
+    scrap: "inv_filter_icon_metals.svg",
+    waste: "inv_filter_icon_nonmetals.svg",
+    commodity: "inv_filter_icon_minerals.svg",
   }
   const file = map[category.toLowerCase()]
   return file ? `${BASE}/items/${file}` : null
