@@ -14,7 +14,8 @@
 
 import React from "react"
 import { Box, Card, CardContent, Chip, Stack, Typography } from "@mui/material"
-import { getMissionTypeLabel, formatMissionDescription, formatMissionName, formatCredits } from "../../util/missionDisplay"
+import { getMissionTypeLabel, formatMissionDescription, formatCredits } from "../../util/missionDisplay"
+import { MissionName } from "./MissionName"
 
 export interface MissionCardProps {
   /** Mission data */
@@ -86,8 +87,7 @@ export const MissionCard: React.FC<MissionCardProps> = ({ mission, onClick }) =>
         >
           {/* Left side - Mission info */}
           <Box sx={{ flex: 1, minWidth: 0 }}>
-            <Typography variant="h6" gutterBottom sx={{ wordBreak: "break-word" }}>
-              {formatMissionName(mission.mission_name)}
+            <MissionName name={mission.mission_name} variant="h6" gutterBottom sx={{ wordBreak: "break-word" }} />
             </Typography>
 
             {/* Mission Metadata Badges */}
