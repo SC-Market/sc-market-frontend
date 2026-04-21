@@ -85,8 +85,8 @@ export function Root(props: { children: React.ReactNode }) {
         <DebugPanel />
         <MobileBottomNav />
         <ContextAwareFAB />
-      </CartDrawerProvider>
       </Box>
+      </CartDrawerProvider>
     </Box>
   )
 }
