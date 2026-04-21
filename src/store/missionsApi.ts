@@ -45,6 +45,7 @@ export interface SearchMissionsParams {
   star_system?: string
   planet_moon?: string
   faction?: string
+  mission_giver_org?: string
   legal_status?: "LEGAL" | "ILLEGAL"
   difficulty_min?: number
   difficulty_max?: number

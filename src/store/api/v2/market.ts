@@ -1463,6 +1463,8 @@ export type SearchMissionsApiArg = {
   planetMoon?: string
   /** Filter by faction */
   faction?: string
+  /** Filter by mission giver */
+  missionGiverOrg?: string
   /** Filter by legal status */
   legalStatus?: "LEGAL" | "ILLEGAL"
   /** Minimum difficulty level (1-5) */

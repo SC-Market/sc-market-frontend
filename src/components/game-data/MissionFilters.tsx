@@ -64,6 +64,11 @@ export interface MissionFiltersProps {
   /** Faction change handler */
   onFactionChange: (value: string) => void
   
+  /** Mission giver filter value */
+  missionGiver: string
+  /** Mission giver change handler */
+  onMissionGiverChange: (value: string) => void
+
   /** Legal status filter value */
   legalStatus: "" | "LEGAL" | "ILLEGAL"
   /** Legal status change handler */
@@ -125,6 +130,8 @@ export const MissionFilters: React.FC<MissionFiltersProps> = ({
   onPlanetMoonChange,
   faction,
   onFactionChange,
+  missionGiver,
+  onMissionGiverChange,
   legalStatus,
   onLegalStatusChange,
   difficultyRange,
@@ -268,6 +275,17 @@ export const MissionFilters: React.FC<MissionFiltersProps> = ({
                 <MenuItem value="Bounty Hunters Guild">Bounty Hunters Guild</MenuItem>
               </Select>
             </FormControl>
+          </Grid>
+
+          {/* Mission Giver Filter */}
+          <Grid item xs={12} sm={6} md={3}>
+            <TextField size="small"
+              fullWidth
+              label="Mission Giver"
+              value={missionGiver}
+              onChange={(e) => onMissionGiverChange(e.target.value)}
+              placeholder="Search by giver..."
+            />
           </Grid>
 
           {/* Legal Status Filter (Requirement 17.2) */}
