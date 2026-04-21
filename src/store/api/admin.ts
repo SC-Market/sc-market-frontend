@@ -50,10 +50,7 @@ const injectedRtkApi = api.injectEndpoints({
     >({
       query: (jobId) => `/api/v2/admin/import-game-data/${jobId}`,
     }),
-    listGameDataImportJobs: build.query<
-      { jobs: GameDataImportJob[] },
-      void
-    >({
+    listGameDataImportJobs: build.query<{ jobs: GameDataImportJob[] }, void>({
       query: () => `/api/v2/admin/import-game-data`,
     }),
   }),

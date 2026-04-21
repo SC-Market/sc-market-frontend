@@ -4061,6 +4061,19 @@
 					"is_shareable": {
 						"type": "boolean",
 						"description": "Is shareable mission"
+					},
+					"reputation_reward": {
+						"type": "number",
+						"format": "double",
+						"description": "Reputation XP reward"
+					},
+					"reward_scope": {
+						"type": "string",
+						"description": "Reputation scope (e.g., headhunter, salvage)"
+					},
+					"mission_giver_org": {
+						"type": "string",
+						"description": "Mission giver organization"
 					}
 				},
 				"required": [
@@ -4516,6 +4529,46 @@
 					"ingredient_count",
 					"drop_probability",
 					"is_guaranteed"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ReputationRank": {
+				"description": "Reputation rank threshold for a career scope",
+				"properties": {
+					"scope_code": {
+						"type": "string"
+					},
+					"scope_display_name": {
+						"type": "string"
+					},
+					"standing_code": {
+						"type": "string"
+					},
+					"standing_display_name": {
+						"type": "string"
+					},
+					"threshold": {
+						"type": "number",
+						"format": "double"
+					},
+					"ceiling": {
+						"type": "number",
+						"format": "double"
+					},
+					"rank_index": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"scope_code",
+					"scope_display_name",
+					"standing_code",
+					"standing_display_name",
+					"threshold",
+					"ceiling",
+					"rank_index"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -6860,6 +6913,34 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"ImportErrorResponse": {
+				"description": "Error response for import failures",
+				"properties": {
+					"success": {
+						"type": "boolean",
+						"enum": [
+							false
+						],
+						"nullable": false
+					},
+					"error": {
+						"type": "string"
+					},
+					"details": {
+						"type": "string"
+					},
+					"timestamp": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"success",
+					"error",
+					"timestamp"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"ImportGameDataResponse": {
 				"description": "Import summary returned by game data import endpoint",
 				"properties": {
@@ -6977,30 +7058,58 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"ImportErrorResponse": {
-				"description": "Error response for import failures",
+			"GameDataImportJob": {
 				"properties": {
-					"success": {
-						"type": "boolean",
+					"id": {
+						"type": "string"
+					},
+					"status": {
+						"type": "string",
 						"enum": [
-							false
+							"validating",
+							"extracting",
+							"importing",
+							"completed",
+							"failed"
+						]
+					},
+					"startedAt": {
+						"type": "string"
+					},
+					"completedAt": {
+						"type": "string",
+						"nullable": true
+					},
+					"progress": {
+						"type": "string",
+						"nullable": true
+					},
+					"result": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/ImportGameDataResponse"
+							}
 						],
-						"nullable": false
+						"nullable": true
 					},
 					"error": {
-						"type": "string"
+						"type": "string",
+						"nullable": true
 					},
 					"details": {
-						"type": "string"
-					},
-					"timestamp": {
-						"type": "string"
+						"type": "string",
+						"nullable": true
 					}
 				},
 				"required": [
-					"success",
+					"id",
+					"status",
+					"startedAt",
+					"completedAt",
+					"progress",
+					"result",
 					"error",
-					"timestamp"
+					"details"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -7062,7 +7171,11 @@
 				"tags": [
 					"Stock Lots V2"
 				],
-				"security": [],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
 				"parameters": [],
 				"requestBody": {
 					"description": "Create request with item_id, quantity, variant_attributes",
@@ -7206,7 +7319,11 @@
 				"tags": [
 					"Stock Lots V2"
 				],
-				"security": [],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
 				"parameters": [
 					{
 						"description": "Stock lot UUID",
@@ -7296,7 +7413,11 @@
 				"tags": [
 					"Stock Lots V2"
 				],
-				"security": [],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
 				"parameters": [],
 				"requestBody": {
 					"description": "Bulk update request with array of lot updates",
@@ -7332,7 +7453,11 @@
 				"tags": [
 					"Orders V2"
 				],
-				"security": [],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
 				"parameters": [],
 				"requestBody": {
 					"description": "Order creation request with items array",
@@ -7366,7 +7491,11 @@
 				"tags": [
 					"Orders V2"
 				],
-				"security": [],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
 				"parameters": [
 					{
 						"in": "query",
@@ -7477,7 +7606,11 @@
 				"tags": [
 					"Orders V2"
 				],
-				"security": [],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
 				"parameters": [
 					{
 						"description": "UUID of the order to retrieve",
@@ -7617,7 +7750,11 @@
 				"tags": [
 					"Listings V2"
 				],
-				"security": [],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
 				"parameters": [],
 				"requestBody": {
 					"description": "Listing creation request with title, description, pricing, and lots",
@@ -7854,7 +7991,11 @@
 				"tags": [
 					"Listings V2"
 				],
-				"security": [],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
 				"parameters": [
 					{
 						"description": "Filter by listing status",
@@ -7974,7 +8115,11 @@
 				"tags": [
 					"Listings V2"
 				],
-				"security": [],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
 				"parameters": [
 					{
 						"in": "path",
@@ -8023,7 +8168,11 @@
 				"tags": [
 					"Listings V2"
 				],
-				"security": [],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
 				"parameters": [
 					{
 						"description": "Listing UUID",
@@ -8069,7 +8218,11 @@
 				"tags": [
 					"Listings V2"
 				],
-				"security": [],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
 				"parameters": [
 					{
 						"description": "Listing UUID",
@@ -10160,6 +10313,58 @@
 				]
 			}
 		},
+		"/game-data/missions/reputation-ranks": {
+			"get": {
+				"operationId": "GetReputationRanks",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"scopes": {
+											"items": {
+												"type": "string"
+											},
+											"type": "array"
+										},
+										"ranks": {
+											"items": {
+												"$ref": "#/components/schemas/ReputationRank"
+											},
+											"type": "array"
+										}
+									},
+									"required": [
+										"scopes",
+										"ranks"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get reputation rank thresholds for a scope (e.g., headhunter, salvage)",
+				"summary": "Get reputation ranks",
+				"tags": [
+					"Game Data - Missions"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"description": "The reputation scope code",
+						"in": "query",
+						"name": "scope_code",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
 		"/game-data/crafting/calculate-quality": {
 			"post": {
 				"operationId": "CalculateQuality",
@@ -10675,43 +10880,6 @@
 				]
 			}
 		},
-		"/game-data/blueprints/categories": {
-			"get": {
-				"operationId": "GetBlueprintCategories",
-				"responses": {
-					"200": {
-						"description": "Array of categories with counts",
-						"content": {
-							"application/json": {
-								"schema": {
-									"items": {
-										"$ref": "#/components/schemas/BlueprintCategory"
-									},
-									"type": "array"
-								}
-							}
-						}
-					}
-				},
-				"description": "Get blueprint categories\n\nReturns all blueprint categories with item counts, supporting\nhierarchical category navigation in the blueprint browser.\n\nRequirements:\n- 19.1: Categorize blueprints by item type\n- 19.2: Support hierarchical categories with subcategories\n- 19.5: Display item count per category",
-				"summary": "Get categories",
-				"tags": [
-					"Game Data - Blueprints"
-				],
-				"security": [],
-				"parameters": [
-					{
-						"description": "Optional game version ID (defaults to active LIVE version)",
-						"in": "query",
-						"name": "version_id",
-						"required": false,
-						"schema": {
-							"type": "string"
-						}
-					}
-				]
-			}
-		},
 		"/game-data/blueprints/{blueprint_id}/inventory": {
 			"post": {
 				"operationId": "AddBlueprintToInventory",
@@ -10822,6 +10990,43 @@
 						"in": "path",
 						"name": "blueprint_id",
 						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/game-data/blueprints/categories": {
+			"get": {
+				"operationId": "GetBlueprintCategories",
+				"responses": {
+					"200": {
+						"description": "Array of categories with counts",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/BlueprintCategory"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get blueprint categories\n\nReturns all blueprint categories with item counts, supporting\nhierarchical category navigation in the blueprint browser.\n\nRequirements:\n- 19.1: Categorize blueprints by item type\n- 19.2: Support hierarchical categories with subcategories\n- 19.5: Display item count per category",
+				"summary": "Get categories",
+				"tags": [
+					"Game Data - Blueprints"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"description": "Optional game version ID (defaults to active LIVE version)",
+						"in": "query",
+						"name": "version_id",
+						"required": false,
 						"schema": {
 							"type": "string"
 						}
@@ -11076,6 +11281,9 @@
 				"security": [
 					{
 						"jwt": []
+					},
+					{
+						"jwt": []
 					}
 				],
 				"parameters": [],
@@ -11113,7 +11321,11 @@
 				"tags": [
 					"Cart V2"
 				],
-				"security": [],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
 				"parameters": []
 			}
 		},
@@ -11137,7 +11349,11 @@
 				"tags": [
 					"Cart V2"
 				],
-				"security": [],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
 				"parameters": [],
 				"requestBody": {
 					"description": "Add to cart request with listing, variant, and quantity",
@@ -11181,7 +11397,11 @@
 				"tags": [
 					"Cart V2"
 				],
-				"security": [],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
 				"parameters": [
 					{
 						"description": "Cart item UUID",
@@ -11233,7 +11453,11 @@
 				"tags": [
 					"Cart V2"
 				],
-				"security": [],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
 				"parameters": [
 					{
 						"description": "Cart item UUID",
@@ -11267,7 +11491,11 @@
 				"tags": [
 					"Cart V2"
 				],
-				"security": [],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
 				"parameters": [],
 				"requestBody": {
 					"description": "Checkout request with optional price change confirmation",
@@ -11303,7 +11531,11 @@
 				"tags": [
 					"Buy Orders V2"
 				],
-				"security": [],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
 				"parameters": [],
 				"requestBody": {
 					"description": "Purchase request with listing, variant, and quantity",
@@ -11339,6 +11571,9 @@
 					"Buy Orders V2"
 				],
 				"security": [
+					{
+						"jwt": []
+					},
 					{
 						"session": []
 					}
@@ -11445,6 +11680,9 @@
 				],
 				"security": [
 					{
+						"jwt": []
+					},
+					{
 						"session": []
 					}
 				],
@@ -11505,6 +11743,9 @@
 				],
 				"security": [
 					{
+						"jwt": []
+					},
+					{
 						"session": []
 					}
 				],
@@ -11557,6 +11798,9 @@
 				],
 				"security": [
 					{
+						"jwt": []
+					},
+					{
 						"session": []
 					}
 				],
@@ -11593,6 +11837,9 @@
 					"Buy Orders V2"
 				],
 				"security": [
+					{
+						"jwt": []
+					},
 					{
 						"session": []
 					}
@@ -11860,7 +12107,11 @@
 				"tags": [
 					"Admin Feature Flags"
 				],
-				"security": [],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
 				"parameters": []
 			},
 			"put": {
@@ -11882,7 +12133,11 @@
 				"tags": [
 					"Admin Feature Flags"
 				],
-				"security": [],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
 				"parameters": [],
 				"requestBody": {
 					"required": true,
@@ -11916,7 +12171,11 @@
 				"tags": [
 					"Admin Feature Flags"
 				],
-				"security": [],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
 				"parameters": []
 			}
 		},
@@ -11940,7 +12199,11 @@
 				"tags": [
 					"Admin Feature Flags"
 				],
-				"security": [],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
 				"parameters": [
 					{
 						"in": "query",
@@ -11989,7 +12252,11 @@
 				"tags": [
 					"Admin Feature Flags"
 				],
-				"security": [],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
 				"parameters": [],
 				"requestBody": {
 					"required": true,
@@ -12031,7 +12298,11 @@
 				"tags": [
 					"Admin Feature Flags"
 				],
-				"security": [],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
 				"parameters": [
 					{
 						"in": "path",
@@ -12049,13 +12320,21 @@
 				"operationId": "ImportGameData",
 				"responses": {
 					"200": {
-						"description": "Import summary with statistics",
+						"description": "Ok",
 						"content": {
 							"application/json": {
 								"schema": {
 									"anyOf": [
 										{
-											"$ref": "#/components/schemas/ImportGameDataResponse"
+											"properties": {
+												"job_id": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"job_id"
+											],
+											"type": "object"
 										},
 										{
 											"$ref": "#/components/schemas/ImportErrorResponse"
@@ -12066,13 +12345,104 @@
 						}
 					}
 				},
-				"description": "Import game data from uploaded ZIP file\n\nAccepts a game-data.zip file upload, extracts the game-data.json,\nand runs the same import logic as the command-line script.\n\nThe import process:\n1. Validates ZIP file format\n2. Extracts game-data.json\n3. Matches P4K items to existing database items using:\n   - Exact name match (case-insensitive)\n   - CStone UUID match\n   - Fuzzy name match (Levenshtein distance ≤ 2)\n4. Updates matched items with P4K metadata\n5. Inserts new items not found in database\n6. Regenerates \"Full Set\" synthetic items from \"Core\" items\n7. Rebuilds full-text search indexes\n\nRequirements:\n- 4.1: Parse game data files to extract mission information\n- 4.2: Identify mission names, locations, and rewards\n- 4.3: Extract blueprint reward pools and probabilities\n- 4.4: Validate extracted data for completeness\n- 4.5: Log extraction errors with descriptive messages\n- 4.6: Support multiple game versions simultaneously",
-				"summary": "Import game data",
+				"description": "Upload game data ZIP and start async import job",
+				"summary": "Start game data import",
 				"tags": [
 					"Admin"
 				],
-				"security": [],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
 				"parameters": []
+			},
+			"get": {
+				"operationId": "ListGameDataImportJobs",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"jobs": {
+											"items": {
+												"$ref": "#/components/schemas/GameDataImportJob"
+											},
+											"type": "array"
+										}
+									},
+									"required": [
+										"jobs"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "List all game data import jobs (most recent first)",
+				"summary": "List import jobs",
+				"tags": [
+					"Admin"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/admin/import-game-data/{jobId}": {
+			"get": {
+				"operationId": "GetImportJobStatus",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"job": {
+											"allOf": [
+												{
+													"$ref": "#/components/schemas/GameDataImportJob"
+												}
+											],
+											"nullable": true
+										}
+									},
+									"required": [
+										"job"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get game data import job status",
+				"summary": "Poll import job",
+				"tags": [
+					"Admin"
+				],
+				"security": [
+					{
+						"jwt": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "jobId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
 			}
 		}
 	},
