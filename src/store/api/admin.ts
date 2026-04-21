@@ -32,13 +32,40 @@ const injectedRtkApi = api.enhanceEndpoints({ addTagTypes }).injectEndpoints({
       query: () => `/api/v2/admin/imports`,
       providesTags: ["ImportJobs"],
     }),
+    importGameData: build.mutation<
+      GameDataImportResult,
+      { file: File; gameChannel: string; gameVersion?: string }
+    >({
+      query: ({ file, gameChannel, gameVersion }) => {
+        const formData = new FormData()
+        formData.append("file", file)
+        formData.append("gameChannel", gameChannel)
+        if (gameVersion) formData.append("gameVersion", gameVersion)
+        return {
+          url: `/api/v2/admin/import-game-data`,
+          method: "POST",
+          body: formData,
+        }
+      },
+    }),
   }),
   overrideExisting: true,
 })
 
 export { injectedRtkApi as adminApi }
+
+export interface GameDataImportResult {
+  success: boolean
+  summary?: Record<string, number>
+  errors?: string[]
+  error?: string
+  details?: string
+  timestamp?: string
+}
+
 export const {
   useStartImportMutation,
   useGetImportJobQuery,
   useListImportJobsQuery,
+  useImportGameDataMutation,
 } = injectedRtkApi
