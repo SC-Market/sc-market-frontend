@@ -59,5 +59,7 @@ export function formatMissionDescription(text: string | null | undefined): strin
 /** Format credit amount with locale-aware commas */
 export function formatCredits(amount: number | null | undefined): string {
   if (amount === null || amount === undefined || amount === 0) return "—"
+  if (amount >= 1_000_000) return `${(amount / 1_000_000).toFixed(1).replace(/\.0$/, "")}M aUEC`
+  if (amount >= 1_000) return `${(amount / 1_000).toFixed(1).replace(/\.0$/, "")}K aUEC`
   return `${amount.toLocaleString()} aUEC`
 }
