@@ -397,7 +397,7 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
         v2_only: true,
       },
       {
-        text: "sidebar.wiki.ships",
+        text: "sidebar.wiki.vehicles",
         icon: <RocketLaunchRounded />,
         tab_key: "wiki_ships",
         to: "/wiki/ships",
