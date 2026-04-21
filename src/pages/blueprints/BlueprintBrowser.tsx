@@ -116,11 +116,7 @@ export function BlueprintBrowser() {
   const [selectedBlueprintId, setSelectedBlueprintId] = useState<string | null>(null)
 
   const handleBlueprintClick = (blueprintId: string) => {
-    if (isMobile) {
-      navigate(`/blueprints/${blueprintId}`)
-    } else {
-      setSelectedBlueprintId(blueprintId)
-    }
+    navigate(`/blueprints/${blueprintId}`)
   }
 
   const handleResetFilters = () => {
