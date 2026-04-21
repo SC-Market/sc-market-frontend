@@ -39,6 +39,7 @@ import { useDebounce } from "../../hooks/useDebounce"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { FALLBACK_IMAGE_URL } from "../../util/constants"
+import { getFactionIcon } from "../../util/gameIcons"
 
 const CARD_HEIGHT = 220
 
@@ -58,7 +59,7 @@ function ItemGridCard({ item, onClick }: { item: WikiItemSearchResult; onClick: 
       <CardMedia
         component="img"
         height="100"
-        image={item.image_url || item.thumbnail_path || FALLBACK_IMAGE_URL}
+        image={item.image_url || item.thumbnail_path || getFactionIcon(item.manufacturer) || FALLBACK_IMAGE_URL}
         alt={item.name}
         sx={{ objectFit: "contain", bgcolor: "background.default", p: 0.5 }}
         onError={({ currentTarget }) => { currentTarget.onerror = null; currentTarget.src = FALLBACK_IMAGE_URL }}
@@ -87,7 +88,7 @@ function ItemListRow({ item, onClick }: { item: WikiItemSearchResult; onClick: (
     <TableRow hover sx={{ cursor: "pointer" }} onClick={onClick}>
       <TableCell sx={{ py: 0.75, width: 40 }}>
         <Avatar
-          src={item.image_url || item.thumbnail_path || FALLBACK_IMAGE_URL}
+          src={item.image_url || item.thumbnail_path || getFactionIcon(item.manufacturer) || FALLBACK_IMAGE_URL}
           variant="rounded"
           sx={{ width: 32, height: 32, bgcolor: "background.default" }}
           imgProps={{ style: { objectFit: "contain" } }}

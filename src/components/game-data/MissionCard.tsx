@@ -15,6 +15,7 @@ import {
   Box,
 } from "@mui/material"
 import { getMissionTypeLabel, formatCredits } from "../../util/missionDisplay"
+import { getMissionIcon, getFactionIcon } from "../../util/gameIcons"
 import { MissionName } from "./MissionName"
 
 export interface MissionCardProps {
@@ -47,6 +48,7 @@ function initials(name: string | undefined | null): string {
 
 export const MissionCard: React.FC<MissionCardProps> = ({ mission, onClick }) => {
   const giver = mission.mission_giver_org || mission.faction
+  const missionIcon = getMissionIcon(mission.category) || getFactionIcon(mission.faction)
   const reward = mission.credit_reward_min === mission.credit_reward_max || !mission.credit_reward_max
     ? formatCredits(mission.credit_reward_min)
     : `${formatCredits(mission.credit_reward_min)} – ${formatCredits(mission.credit_reward_max)}`
@@ -57,7 +59,10 @@ export const MissionCard: React.FC<MissionCardProps> = ({ mission, onClick }) =>
         <CardContent sx={{ p: 1.5, pb: 0, flex: 1 }}>
           {/* Header: Avatar + Title + Subtitle */}
           <Box sx={{ display: "flex", gap: 1, mb: 1 }}>
-            <Avatar sx={{ width: 32, height: 32, fontSize: "0.75rem", bgcolor: "primary.main", flexShrink: 0 }}>
+            <Avatar sx={{ width: 32, height: 32, fontSize: "0.75rem", bgcolor: "primary.main", flexShrink: 0 }}
+              src={missionIcon || undefined}
+              imgProps={{ style: { objectFit: "contain", padding: 2 } }}
+            >
               {initials(giver)}
             </Avatar>
             <Box sx={{ minWidth: 0 }}>
