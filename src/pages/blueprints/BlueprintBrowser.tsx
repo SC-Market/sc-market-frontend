@@ -30,6 +30,15 @@ import {
   Select,
   FormControl,
   InputLabel,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Paper,
+  Chip,
+  Avatar,
+  Stack,
 } from "@mui/material"
 import { ViewModule, ViewList } from "@mui/icons-material"
 import { useSearchBlueprintsQuery, useGetBlueprintCategoriesQuery } from "../../store/api/v2/market"
@@ -37,6 +46,7 @@ import { useNavigate } from "react-router-dom"
 import { useDebounce } from "../../hooks/useDebounce"
 import { useInfiniteScroll } from "../../hooks/useInfiniteScroll"
 import { BlueprintCard } from "../../components/game-data/BlueprintCard"
+import { formatCategoryName } from "../../util/categoryDisplay"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { BlueprintDetailModal } from "../../components/game-data/BlueprintDetailModal"
@@ -356,16 +366,75 @@ export function BlueprintBrowser() {
 
           {/* List View (Requirement 43.10) */}
           {viewMode === "list" && (
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-              {allBlueprints.map((blueprint) => (
-                <BlueprintCard
-                  key={blueprint.blueprint_id}
-                  blueprint={blueprint}
-                  viewMode="list"
-                  onClick={handleBlueprintClick}
-                />
-              ))}
-            </Box>
+            <Paper>
+              <Table size="small" sx={{ "& td, & th": { py: 0.5, px: 1 } }}>
+                <TableHead>
+                  <TableRow>
+                    <TableCell />
+                    <TableCell>Item</TableCell>
+                    <TableCell>Category</TableCell>
+                    <TableCell>Tags</TableCell>
+                    <TableCell align="center">Ingredients</TableCell>
+                    <TableCell align="center">Missions</TableCell>
+                    <TableCell align="right">Craft Time</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {allBlueprints.map((bp) => (
+                    <TableRow
+                      key={bp.blueprint_id}
+                      hover
+                      sx={{ cursor: "pointer" }}
+                      onClick={() => handleBlueprintClick(bp.blueprint_id)}
+                    >
+                      <TableCell sx={{ width: 40 }}>
+                        <Avatar
+                          src={bp.output_item_icon}
+                          variant="rounded"
+                          sx={{ width: 28, height: 28, fontSize: "0.6rem", bgcolor: "primary.main" }}
+                          imgProps={{ style: { objectFit: "contain" } }}
+                        >
+                          {(bp.output_item_name || "?").slice(0, 2).toUpperCase()}
+                        </Avatar>
+                      </TableCell>
+                      <TableCell>
+                        <Typography variant="body2" fontWeight={600} noWrap sx={{ maxWidth: 240 }}>
+                          {bp.output_item_name}
+                        </Typography>
+                      </TableCell>
+                      <TableCell>
+                        <Typography variant="caption" color="text.secondary" noWrap>
+                          {formatCategoryName(bp.item_category)}
+                        </Typography>
+                      </TableCell>
+                      <TableCell>
+                        <Stack direction="row" spacing={0.5} flexWrap="nowrap">
+                          {bp.rarity && <Chip label={bp.rarity} size="small" color="primary" sx={{ height: 18, fontSize: "0.65rem" }} />}
+                          {bp.tier && <Chip label={`T${bp.tier}`} size="small" color="secondary" sx={{ height: 18, fontSize: "0.65rem" }} />}
+                        </Stack>
+                      </TableCell>
+                      <TableCell align="center">
+                        <Typography variant="caption">{bp.ingredient_count}</Typography>
+                      </TableCell>
+                      <TableCell align="center">
+                        {bp.mission_count > 0
+                          ? <Chip label={bp.mission_count} size="small" color="info" sx={{ height: 18, fontSize: "0.65rem", minWidth: 24 }} />
+                          : <Typography variant="caption" color="text.disabled">—</Typography>}
+                      </TableCell>
+                      <TableCell align="right">
+                        <Typography variant="caption">
+                          {bp.crafting_time_seconds
+                            ? bp.crafting_time_seconds >= 60
+                              ? `${Math.floor(bp.crafting_time_seconds / 60)}m${bp.crafting_time_seconds % 60 ? ` ${bp.crafting_time_seconds % 60}s` : ""}`
+                              : `${bp.crafting_time_seconds}s`
+                            : "—"}
+                        </Typography>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </Paper>
           )}
 
           {allBlueprints.length === 0 && !isFetching && (
