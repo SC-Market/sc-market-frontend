@@ -40,13 +40,14 @@ export function AdminGameDataImportView() {
 
   // Poll job status when we have a jobId
   const isRunning = jobId != null
+  const isDoneRef = React.useRef(false)
+
   const { data: jobData } = useGetGameDataImportJobQuery(jobId!, {
     skip: !jobId,
     pollingInterval: jobId && !isDoneRef.current ? 2000 : 0,
   })
   const job = jobData?.job ?? null
   const isDone = job?.status === "completed" || job?.status === "failed"
-  const isDoneRef = React.useRef(false)
   React.useEffect(() => { isDoneRef.current = isDone }, [isDone])
 
   // Job history
