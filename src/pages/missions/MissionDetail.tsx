@@ -110,9 +110,6 @@ export function MissionDetail() {
       {/* Mission Header */}
       <Card sx={{ mb: 3 }}>
         <CardContent>
-          <Typography variant="h4" gutterBottom>
-            {mission.mission_name}
-          </Typography>
 
           {/* Mission Badges */}
           <Stack direction="row" spacing={1} flexWrap="wrap" sx={{ mb: 2, gap: 0.5 }}>

@@ -79,9 +79,6 @@ export function WikiManufacturerPage() {
       <Grid item xs={12}>
         <Card sx={{ mb: 3 }}>
           <CardContent>
-            <Typography variant="h4" gutterBottom>
-              {manufacturer.manufacturer}
-            </Typography>
             {manufacturer.description && (
               <Typography variant="body1" color="text.secondary" paragraph>
                 {manufacturer.description}
