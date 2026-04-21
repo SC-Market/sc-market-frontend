@@ -123,6 +123,11 @@ export function BlueprintBrowser() {
     }
   }, [data, page])
 
+  const filteredBlueprints = useMemo(() => {
+    if (!hasMissionSource) return allBlueprints
+    return allBlueprints.filter((bp: any) => bp.mission_count > 0)
+  }, [allBlueprints, hasMissionSource])
+
   const hasMore = data ? page * data.page_size < data.total : false
   const loadMore = useCallback(() => setPage(p => p + 1), [])
   const sentinelRef = useInfiniteScroll({ hasMore, isLoading: isFetching, onLoadMore: loadMore })
@@ -143,6 +148,7 @@ export function BlueprintBrowser() {
     setTier("")
     setCraftingStation("")
     setOwnedOnly(false)
+    setHasMissionSource(false)
     setPage(1)
   }
 
@@ -205,6 +211,8 @@ export function BlueprintBrowser() {
       </FormControl>
       <FormControlLabel control={<Checkbox checked={ownedOnly} onChange={(e) => setOwnedOnly(e.target.checked)} size="small" />}
         label={<Typography variant="body2">Owned Only</Typography>} sx={{ ml: 0 }} />
+      <FormControlLabel control={<Checkbox checked={hasMissionSource} onChange={(e) => setHasMissionSource(e.target.checked)} size="small" />}
+        label={<Typography variant="body2">Has Mission Source</Typography>} sx={{ ml: 0 }} />
       <Button size="small" startIcon={<RestartAltRounded />} onClick={handleResetFilters} sx={{ textTransform: "none" }}>
         Reset Filters
       </Button>
