@@ -14,12 +14,14 @@
 
 import React from "react"
 import { Box, Card, CardContent, Chip, Stack, Typography } from "@mui/material"
+import { getMissionTypeLabel, formatMissionDescription, formatCredits } from "../../util/missionDisplay"
 
 export interface MissionCardProps {
   /** Mission data */
   mission: {
     mission_id: string
     mission_name: string
+    mission_description?: string
     category?: string
     career_type?: string
     legal_status?: string
@@ -91,7 +93,7 @@ export const MissionCard: React.FC<MissionCardProps> = ({ mission, onClick }) =>
             {/* Mission Metadata Badges */}
             <Stack direction="row" spacing={1} flexWrap="wrap" sx={{ mb: 1, gap: 0.5 }}>
               {mission.category && (
-                <Chip label={mission.category} size="small" color="primary" />
+                <Chip label={getMissionTypeLabel(mission.category)} size="small" color="primary" />
               )}
               {mission.career_type && <Chip label={mission.career_type} size="small" />}
               {mission.legal_status && (
@@ -122,6 +124,27 @@ export const MissionCard: React.FC<MissionCardProps> = ({ mission, onClick }) =>
                 .filter(Boolean)
                 .join(" • ")}
             </Typography>
+
+            {/* Description (ellipsed to 3 lines) */}
+            {mission.mission_description && (
+              <Typography
+                variant="body2"
+                color="text.secondary"
+                sx={{
+                  mt: 1,
+                  display: "-webkit-box",
+                  WebkitLineClamp: 3,
+                  WebkitBoxOrient: "vertical",
+                  overflow: "hidden",
+                  "& .placeholder": { color: "info.main", fontStyle: "italic" },
+                }}
+                dangerouslySetInnerHTML={{
+                  __html: formatMissionDescription(mission.mission_description)
+                    .replace(/\[([^\]]+)\]/g, '<span class="placeholder">[$1]</span>')
+                    .replace(/\n/g, "<br/>"),
+                }}
+              />
+            )}
           </Box>
 
           {/* Right side - Rewards */}
@@ -133,8 +156,9 @@ export const MissionCard: React.FC<MissionCardProps> = ({ mission, onClick }) =>
           >
             {(mission.credit_reward_min || mission.credit_reward_max) && (
               <Typography variant="body1" color="success.main" fontWeight="bold">
-                {mission.credit_reward_min?.toLocaleString()} -{" "}
-                {mission.credit_reward_max?.toLocaleString()} aUEC
+                {mission.credit_reward_min === mission.credit_reward_max || !mission.credit_reward_max
+                  ? formatCredits(mission.credit_reward_min)
+                  : `${formatCredits(mission.credit_reward_min)} - ${formatCredits(mission.credit_reward_max)}`}
               </Typography>
             )}
             {mission.blueprint_reward_count > 0 && (
