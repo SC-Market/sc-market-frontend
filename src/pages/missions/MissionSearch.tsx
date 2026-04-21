@@ -156,6 +156,8 @@ export function MissionSearch() {
         onHasBlueprintsChange={setHasBlueprints}
         isChainStarter={isChainStarter}
         onIsChainStarterChange={setIsChainStarter}
+        creditRewardMin={creditRewardMin}
+        onCreditRewardMinChange={setCreditRewardMin}
         onResetFilters={handleResetFilters}
       />
 
