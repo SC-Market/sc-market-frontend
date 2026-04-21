@@ -88,7 +88,6 @@ export const MissionCard: React.FC<MissionCardProps> = ({ mission, onClick }) =>
           {/* Left side - Mission info */}
           <Box sx={{ flex: 1, minWidth: 0 }}>
             <MissionName name={mission.mission_name} variant="h6" gutterBottom sx={{ wordBreak: "break-word" }} />
-            </Typography>
 
             {/* Mission Metadata Badges */}
             <Stack direction="row" spacing={1} flexWrap="wrap" sx={{ mb: 1, gap: 0.5 }}>
