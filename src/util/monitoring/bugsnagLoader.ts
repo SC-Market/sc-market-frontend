@@ -79,22 +79,21 @@ export function getBugsnagErrorBoundary(
   // Fallback error boundary if Bugsnag fails to load
   return class FallbackErrorBoundary extends ReactInstance.Component<
     { children: React.ReactNode },
-    { hasError: boolean }
+    { hasError: boolean; error: Error | null }
   > {
     constructor(props: { children: React.ReactNode }) {
       super(props)
-      this.state = { hasError: false }
+      this.state = { hasError: false, error: null }
     }
 
-    static getDerivedStateFromError() {
-      return { hasError: true }
+    static getDerivedStateFromError(error: Error) {
+      return { hasError: true, error }
     }
 
     componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-      // Log to console in development
-      if (import.meta.env.DEV) {
-        console.error("Error caught by fallback boundary:", error, errorInfo)
-      }
+      console.error("[ErrorBoundary] Uncaught error:", error, errorInfo)
+      // Also try to notify Bugsnag if it loaded
+      notifyBugsnag(error, { componentStack: errorInfo.componentStack })
     }
 
     render() {
@@ -113,6 +112,11 @@ export function getBugsnagErrorBoundary(
             "p",
             null,
             "Please refresh the page to continue.",
+          ),
+          this.state.error && ReactInstance.createElement(
+            "pre",
+            { style: { fontSize: "12px", color: "#888", textAlign: "left", maxWidth: "600px", margin: "10px auto", overflow: "auto" } },
+            this.state.error.message,
           ),
           ReactInstance.createElement(
             "button",
