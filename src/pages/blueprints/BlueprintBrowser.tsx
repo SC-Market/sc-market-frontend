@@ -375,7 +375,7 @@ export function BlueprintBrowser() {
                     <TableCell>Category</TableCell>
                     <TableCell>Tags</TableCell>
                     <TableCell align="center">Ingredients</TableCell>
-                    <TableCell align="center">Missions</TableCell>
+                    <TableCell align="center">Mission Sources</TableCell>
                     <TableCell align="right">Craft Time</TableCell>
                   </TableRow>
                 </TableHead>

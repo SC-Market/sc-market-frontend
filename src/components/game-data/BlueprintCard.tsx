@@ -97,8 +97,7 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
           <CardActions sx={{ px: 1.5, pt: 0, pb: 0.5, flexWrap: "wrap", gap: 0.5 }}>
             {bp.rarity && <Chip label={bp.rarity} size="small" color="primary" sx={{ height: 18, fontSize: "0.65rem" }} />}
             {bp.tier && <Chip label={`T${bp.tier}`} size="small" color="secondary" sx={{ height: 18, fontSize: "0.65rem" }} />}
-            {bp.ingredient_count > 0 && <Chip label={`${bp.ingredient_count} ing`} size="small" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} />}
-            {bp.mission_count > 0 && <Chip label={`${bp.mission_count} msn`} size="small" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} />}
+            {bp.mission_count > 0 && <Chip label={`${bp.mission_count} mission${bp.mission_count !== 1 ? "s" : ""}`} size="small" color="info" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} />}
           </CardActions>
 
           {/* Bottom stats */}
@@ -113,6 +112,9 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
               <Typography variant="caption" color="text.secondary">Ingredients</Typography>
               <Typography variant="caption">{bp.ingredient_count}</Typography>
             </Box>
+            {bp.mission_count === 0 && (
+              <Typography variant="caption" color="text.disabled" display="block">No mission sources</Typography>
+            )}
           </Box>
         </CardActionArea>
       </Card>
