@@ -109,6 +109,10 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
                 <Typography variant="caption">{formatTime(bp.crafting_time_seconds)}</Typography>
               </Box>
             ) : null}
+            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+              <Typography variant="caption" color="text.secondary">Ingredients</Typography>
+              <Typography variant="caption">{bp.ingredient_count}</Typography>
+            </Box>
           </Box>
         </CardActionArea>
       </Card>

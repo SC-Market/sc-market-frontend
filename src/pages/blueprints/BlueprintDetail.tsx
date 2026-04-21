@@ -61,7 +61,7 @@ export function BlueprintDetail() {
       isLoading={isLoading}
       error={error ? "not_found" : undefined}
       sidebarOpen={true}
-      maxWidth="md"
+      maxWidth="xl"
     >
       {data && bp && (
         <>
@@ -110,7 +110,7 @@ function OverviewTab({ data, itemName }: { data: any; itemName: string }) {
 
       <Box>
         <Typography variant="body2"><strong>Crafting time:</strong> {bp.crafting_time_seconds ? `${Math.floor(bp.crafting_time_seconds / 60)}m ${bp.crafting_time_seconds % 60}s` : "Unknown"}</Typography>
-        <Typography variant="body2"><strong>Output:</strong> {itemName} ×{bp.output_quantity || 1}</Typography>
+        <Typography variant="body2"><strong>Output:</strong> {itemName} ×{bp.output_quantity || 1}{(bp.output_quantity || 1) >= 100 ? ` (${((bp.output_quantity || 1) / 100).toFixed(2)} SCU)` : " units"}</Typography>
         {bp.crafting_station_type && (
           <Typography variant="body2"><strong>Station:</strong> {bp.crafting_station_type}</Typography>
         )}
@@ -136,7 +136,7 @@ function OverviewTab({ data, itemName }: { data: any; itemName: string }) {
                 {ing.min_quality_tier && (
                   <Chip label={`T${ing.min_quality_tier}+`} size="small" sx={{ height: 18, fontSize: "0.65rem" }} />
                 )}
-                <Typography variant="body2" color="text.secondary">×{ing.quantity_required}</Typography>
+                <Typography variant="body2" color="text.secondary">×{ing.quantity_required}{ing.quantity_required >= 100 ? ` (${(ing.quantity_required / 100).toFixed(2)} SCU)` : " cSCU"}</Typography>
               </Box>
             ))}
           </Stack>
