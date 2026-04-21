@@ -268,6 +268,118 @@ export function WikiItemDetail() {
                 </CardContent>
               </Card>
             )}
+              </>
+            )}
+
+            {/* Tab: Crafting */}
+            {tab === TAB_CRAFTING && (
+              <Card>
+                <CardContent>
+                  <Typography variant="h6" gutterBottom>Crafting Recipes</Typography>
+                  {item.craftable_from.map((bp) => (
+                    <Paper key={bp.blueprint_id} variant="outlined" sx={{ p: 2, mb: 2 }}>
+                      <Stack direction="row" justifyContent="space-between" alignItems="center">
+                        <Box>
+                          <Typography variant="subtitle1" fontWeight="bold">{bp.blueprint_name}</Typography>
+                          <Stack direction="row" spacing={0.5} sx={{ mt: 0.5 }}>
+                            {bp.rarity && <Chip label={bp.rarity} size="small" />}
+                            {bp.tier && <Chip label={`Tier ${bp.tier}`} size="small" />}
+                          </Stack>
+                        </Box>
+                        {bp.crafting_time_seconds && (
+                          <Typography variant="body2" color="text.secondary">
+                            {formatCraftingTime(bp.crafting_time_seconds)} per craft
+                          </Typography>
+                        )}
+                      </Stack>
+                      <Box sx={{ mt: 2 }}>
+                        <Button
+                          size="small"
+                          variant="outlined"
+                          onClick={() => navigate(`/crafting/calculator?blueprint_id=${bp.blueprint_id}`)}
+                        >
+                          Open in Calculator
+                        </Button>
+                        <Button
+                          size="small"
+                          sx={{ ml: 1 }}
+                          onClick={() => navigate(`/blueprints/${bp.blueprint_id}`)}
+                        >
+                          View Blueprint
+                        </Button>
+                      </Box>
+                    </Paper>
+                  ))}
+                  {item.craftable_from.length === 0 && (
+                    <Typography color="text.secondary">This item cannot be crafted.</Typography>
+                  )}
+                </CardContent>
+              </Card>
+            )}
+
+            {/* Tab: Disassembly */}
+            {tab === TAB_DISASSEMBLY && (
+              <Card>
+                <CardContent>
+                  <Typography variant="h6" gutterBottom>Disassembly Calculator</Typography>
+                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                    Estimate materials recovered from disassembling this item.
+                  </Typography>
+
+                  <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 3 }}>
+                    <TextField
+                      size="small"
+                      type="number"
+                      label="Quantity to disassemble"
+                      value={disassemblyQty}
+                      onChange={(e) => setDisassemblyQty(Math.max(1, +e.target.value || 1))}
+                      inputProps={{ min: 1 }}
+                      sx={{ width: 200 }}
+                    />
+                  </Stack>
+
+                  {/* Disassembly output estimate */}
+                  {item.craftable_from.length > 0 ? (
+                    <Alert severity="info" sx={{ mb: 2 }}>
+                      Disassembly typically returns 50-80% of crafting materials depending on item quality and skill level.
+                    </Alert>
+                  ) : null}
+
+                  <TableContainer component={Paper} variant="outlined">
+                    <Table size="small">
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>Material</TableCell>
+                          <TableCell align="right">Est. per Item</TableCell>
+                          <TableCell align="right">Total ({disassemblyQty}×)</TableCell>
+                          <TableCell align="center">Efficiency</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {item.craftable_from.length > 0 ? (
+                          <TableRow>
+                            <TableCell colSpan={4}>
+                              <Typography variant="body2" color="text.secondary" sx={{ py: 2, textAlign: "center" }}>
+                                Disassembly data will be available once the game provides material recovery rates.
+                                Check back after crafting system updates.
+                              </Typography>
+                            </TableCell>
+                          </TableRow>
+                        ) : (
+                          <TableRow>
+                            <TableCell colSpan={4}>
+                              <Typography variant="body2" color="text.secondary" sx={{ py: 2, textAlign: "center" }}>
+                                No crafting recipe found — disassembly data unavailable.
+                              </Typography>
+                            </TableCell>
+                          </TableRow>
+                        )}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                </CardContent>
+              </Card>
+            )}
           </Grid>
 
           {/* Sidebar */}
