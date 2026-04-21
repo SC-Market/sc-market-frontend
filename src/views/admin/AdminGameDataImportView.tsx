@@ -21,41 +21,16 @@ import {
 import { CloudUploadRounded, CheckCircleRounded, ErrorRounded } from "@mui/icons-material"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
 
-import { BACKEND_URL } from "../../util/constants"
-
-interface ImportResult {
-  success: boolean
-  summary?: {
-    totalP4KItems: number
-    validP4KItems: number
-    existingDBItems: number
-    matched: number
-    matchedExact: number
-    matchedCStoneUUID: number
-    matchedFuzzy: number
-    inserted: number
-    updated: number
-    nameChanges: number
-    fullSetsCreated: number
-    missionsProcessed: number
-    missionsInserted: number
-    missionsUpdated: number
-    blueprintsProcessed: number
-    blueprintsInserted: number
-    blueprintsUpdated: number
-  }
-  errors?: string[]
-  error?: string
-  details?: string
-  timestamp?: string
-}
+import { useImportGameDataMutation, GameDataImportResult } from "../../store/api/admin"
 
 export function AdminGameDataImportView() {
   const [file, setFile] = useState<File | null>(null)
-  const [uploading, setUploading] = useState(false)
-  const [result, setResult] = useState<ImportResult | null>(null)
+  const [result, setResult] = useState<GameDataImportResult | null>(null)
+  const [error, setError] = useState<string | null>(null)
   const [gameVersion, setGameVersion] = useState("")
   const [gameChannel, setGameChannel] = useState<"LIVE" | "PTU" | "EPTU">("LIVE")
+
+  const [importGameData, { isLoading: uploading }] = useImportGameDataMutation()
 
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault()
@@ -70,31 +45,18 @@ export function AdminGameDataImportView() {
 
   const handleUpload = async () => {
     if (!file) return
-    setUploading(true)
     setResult(null)
+    setError(null)
 
     try {
-      const formData = new FormData()
-      formData.append("file", file)
-      formData.append("gameChannel", gameChannel)
-      if (gameVersion) formData.append("gameVersion", gameVersion)
-
-      const res = await fetch(`${BACKEND_URL}/api/v2/admin/import-game-data`, {
-        method: "POST",
-        body: formData,
-        credentials: "include",
-      })
-
-      const data: ImportResult = await res.json()
+      const data = await importGameData({
+        file,
+        gameChannel,
+        gameVersion: gameVersion || undefined,
+      }).unwrap()
       setResult(data)
-    } catch (err) {
-      setResult({
-        success: false,
-        error: "Upload failed",
-        details: err instanceof Error ? err.message : "Network error",
-      })
-    } finally {
-      setUploading(false)
+    } catch (err: any) {
+      setError(err?.data?.error || err?.message || "Upload failed")
     }
   }
 
@@ -172,12 +134,9 @@ export function AdminGameDataImportView() {
       </Stack>
 
       {/* Results */}
-      {result && !result.success && (
+      {error && (
         <Alert severity="error" sx={{ mb: 2 }} icon={<ErrorRounded />}>
-          <Typography variant="subtitle2">{result.error}</Typography>
-          {result.details && (
-            <Typography variant="body2">{result.details}</Typography>
-          )}
+          <Typography variant="subtitle2">{error}</Typography>
         </Alert>
       )}
 
@@ -186,60 +145,17 @@ export function AdminGameDataImportView() {
           <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
             <CheckCircleRounded color="success" />
             <Typography variant="h6">Import Complete</Typography>
-            <Chip label={result.timestamp} size="small" variant="outlined" />
+            {result.timestamp && <Chip label={result.timestamp} size="small" variant="outlined" />}
           </Box>
 
           <Table size="small">
             <TableBody>
-              <TableRow>
-                <TableCell sx={{ fontWeight: 600 }}>P4K Items</TableCell>
-                <TableCell>{result.summary.totalP4KItems.toLocaleString()} total, {result.summary.validP4KItems.toLocaleString()} valid</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell sx={{ fontWeight: 600 }}>Existing DB Items</TableCell>
-                <TableCell>{result.summary.existingDBItems.toLocaleString()}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell sx={{ fontWeight: 600 }}>Matched</TableCell>
-                <TableCell>
-                  {result.summary.matched.toLocaleString()} total
-                  {" "}({result.summary.matchedExact} exact, {result.summary.matchedFuzzy} fuzzy)
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell sx={{ fontWeight: 600 }}>Updated</TableCell>
-                <TableCell>{result.summary.updated.toLocaleString()}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell sx={{ fontWeight: 600 }}>Inserted</TableCell>
-                <TableCell>{result.summary.inserted.toLocaleString()}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell sx={{ fontWeight: 600 }}>Name Changes</TableCell>
-                <TableCell>{result.summary.nameChanges}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell sx={{ fontWeight: 600 }}>Full Sets Created</TableCell>
-                <TableCell>{result.summary.fullSetsCreated}</TableCell>
-              </TableRow>
-              {result.summary.missionsProcessed > 0 && (
-                <TableRow>
-                  <TableCell sx={{ fontWeight: 600 }}>Missions</TableCell>
-                  <TableCell>
-                    {result.summary.missionsProcessed} processed
-                    {" "}({result.summary.missionsInserted} new, {result.summary.missionsUpdated} updated)
-                  </TableCell>
+              {Object.entries(result.summary).map(([key, value]) => (
+                <TableRow key={key}>
+                  <TableCell sx={{ fontWeight: 600 }}>{key.replace(/([A-Z])/g, " $1").replace(/^./, s => s.toUpperCase())}</TableCell>
+                  <TableCell>{typeof value === "number" ? value.toLocaleString() : String(value)}</TableCell>
                 </TableRow>
-              )}
-              {result.summary.blueprintsProcessed > 0 && (
-                <TableRow>
-                  <TableCell sx={{ fontWeight: 600 }}>Blueprints</TableCell>
-                  <TableCell>
-                    {result.summary.blueprintsProcessed} processed
-                    {" "}({result.summary.blueprintsInserted} new, {result.summary.blueprintsUpdated} updated)
-                  </TableCell>
-                </TableRow>
-              )}
+              ))}
             </TableBody>
           </Table>
 
