@@ -139,17 +139,21 @@ function OverviewTab({ data, itemName }: { data: any; itemName: string }) {
         </>
       )}
 
-      {/* Missions that reward this */}
-      {data.missions_rewarding?.length > 0 && (
+      {/* Mission sources */}
+      <Divider />
+      {data.missions_rewarding?.length > 0 ? (
         <>
-          <Divider />
-          <Typography variant="subtitle2">Rewarded by missions ({data.missions_rewarding.length})</Typography>
+          <Typography variant="subtitle2">Mission Sources ({data.missions_rewarding.length})</Typography>
           <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
             {data.missions_rewarding.map((m: any) => (
               <Chip key={m.mission_id} label={m.mission_name} size="small" sx={{ height: 22 }} />
             ))}
           </Box>
         </>
+      ) : (
+        <Typography variant="body2" color="text.secondary">
+          No known mission sources — this blueprint may be found through loot, purchase, or other means.
+        </Typography>
       )}
     </Stack>
   )
