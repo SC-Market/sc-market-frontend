@@ -102,9 +102,6 @@ export function WikiItemDetail() {
                     />
                   )}
                   <Box sx={{ flex: 1 }}>
-                    <Typography variant="h4" gutterBottom>
-                      {item.name}
-                    </Typography>
                     <Stack direction="row" spacing={1} sx={{ mb: 2 }} flexWrap="wrap">
                       {item.type && <Chip label={item.type} color="primary" />}
                       {item.size && <Chip label={`Size ${item.size}`} />}

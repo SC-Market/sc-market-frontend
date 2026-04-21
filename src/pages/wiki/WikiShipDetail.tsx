@@ -98,9 +98,6 @@ export function WikiShipDetail() {
                     />
                   )}
                   <Box sx={{ flex: 1 }}>
-                    <Typography variant="h4" gutterBottom>
-                      {ship.name}
-                    </Typography>
                     <Stack direction="row" spacing={1} sx={{ mb: 2 }} flexWrap="wrap">
                       {ship.manufacturer && <Chip label={ship.manufacturer} color="primary" />}
                       {ship.focus && <Chip label={ship.focus} />}
