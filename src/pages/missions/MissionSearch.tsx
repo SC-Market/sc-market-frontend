@@ -44,6 +44,7 @@ export function MissionSearch() {
   const [careerType, setCareerType] = useState("")
   const [starSystem, setStarSystem] = useState("")
   const [faction, setFaction] = useState("")
+  const [missionGiver, setMissionGiver] = useState("")
   const [legalStatus, setLegalStatus] = useState<"" | "LEGAL" | "ILLEGAL">("")
   const [difficultyRange, setDifficultyRange] = useState<number[]>([1, 5])
   const [isShareable, setIsShareable] = useState<boolean | undefined>(undefined)
@@ -57,7 +58,7 @@ export function MissionSearch() {
 
   // Reset accumulated results when filters change
   const filterKey = JSON.stringify({
-    debouncedSearch, category, careerType, starSystem, faction,
+    debouncedSearch, category, careerType, starSystem, faction, missionGiver,
     legalStatus, difficultyRange, isShareable, hasBlueprints, isChainStarter,
   })
   useEffect(() => { setPage(1); setAllMissions([]) }, [filterKey])
@@ -69,6 +70,7 @@ export function MissionSearch() {
     careerType: careerType || undefined,
     starSystem: starSystem || undefined,
     faction: faction || undefined,
+    missionGiverOrg: missionGiver || undefined,
     legalStatus: legalStatus || undefined,
     difficultyMin: difficultyRange[0],
     difficultyMax: difficultyRange[1],
@@ -106,6 +108,7 @@ export function MissionSearch() {
     setCareerType("")
     setStarSystem("")
     setFaction("")
+    setMissionGiver("")
     setLegalStatus("")
     setDifficultyRange([1, 5])
     setIsShareable(undefined)
@@ -138,6 +141,8 @@ export function MissionSearch() {
         onStarSystemChange={setStarSystem}
         faction={faction}
         onFactionChange={setFaction}
+        missionGiver={missionGiver}
+        onMissionGiverChange={setMissionGiver}
         legalStatus={legalStatus}
         onLegalStatusChange={setLegalStatus}
         difficultyRange={difficultyRange}
