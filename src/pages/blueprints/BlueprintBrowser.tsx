@@ -128,7 +128,6 @@ export function BlueprintBrowser() {
 
   // Query categories for filter options
   const { data: categories } = useGetBlueprintCategoriesQuery({})
-  const isMobile = theme.breakpoints.values.md > window.innerWidth
   const [selectedBlueprintId, setSelectedBlueprintId] = useState<string | null>(null)
 
   const handleBlueprintClick = (blueprintId: string) => {
