@@ -761,11 +761,6 @@ export function ListingCardV2({ listing, index }: ListingCardV2Props) {
   const isNew = isAfter(new Date(listing.created_at), subDays(new Date(), 3));
 
   return (
-    <Fade
-      in={true}
-      timeout={500}
-      style={{ transitionDelay: `${50 + 50 * index}ms` }}
-    >
       <ListingWrapper useFixedWidth={false}>
         <RouterLink
           to={`/market/listing/${listing.listing_id}`}
@@ -971,6 +966,5 @@ export function ListingCardV2({ listing, index }: ListingCardV2Props) {
           </IconButton>
         )}
       </ListingWrapper>
-    </Fade>
   );
 }
