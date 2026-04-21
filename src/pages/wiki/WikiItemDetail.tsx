@@ -29,10 +29,12 @@ import {
 import { useTheme } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
 import { useParams, useNavigate } from "react-router-dom"
-import { useGetItemDetailQuery } from "../../store/api/v2/market"
+import { useGetItemDetailQuery, useSearchListingsQuery } from "../../store/api/v2/market"
 import { ShoppingCart, Gavel } from "@mui/icons-material"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { useCartDrawer } from "../../hooks/market/AddToCartContext"
+import { formatQuantity } from "../../util/formatQuantity"
 
 export function WikiItemDetail() {
   const { t } = useTranslation()
@@ -40,6 +42,13 @@ export function WikiItemDetail() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
   const { data: item, isLoading, error } = useGetItemDetailQuery({ id: id! })
+  const { openAddToCart } = useCartDrawer()
+
+  // Fetch related market listings for this item
+  const { data: listingsData } = useSearchListingsQuery(
+    { gameItemId: id!, pageSize: 6, sortBy: "price", sortOrder: "asc" },
+    { skip: !id },
+  )
 
   if (isLoading) {
     return (
@@ -169,6 +178,73 @@ export function WikiItemDetail() {
                 </CardContent>
               </Card>
             )}
+
+            {/* Related Market Listings */}
+            {listingsData && listingsData.listings.length > 0 && (
+              <Card sx={{ mt: 3 }}>
+                <CardContent>
+                  <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
+                    <Typography variant="h6">
+                      Market Listings ({listingsData.total})
+                    </Typography>
+                    <Button
+                      size="small"
+                      onClick={() => navigate(`/market?game_item_id=${id}`)}
+                    >
+                      View All
+                    </Button>
+                  </Stack>
+                  <TableContainer component={Paper} variant="outlined">
+                    <Table size="small">
+                      <TableBody>
+                        {listingsData.listings.map((listing) => (
+                          <TableRow
+                            key={listing.listing_id}
+                            hover
+                            sx={{ cursor: "pointer" }}
+                            onClick={() => navigate(`/market/listing/${listing.listing_id}`)}
+                          >
+                            <TableCell>
+                              <Typography variant="body2" noWrap sx={{ maxWidth: 200 }}>
+                                {listing.title}
+                              </Typography>
+                              <Typography variant="caption" color="text.secondary">
+                                {listing.seller_name}
+                              </Typography>
+                            </TableCell>
+                            <TableCell align="right">
+                              <Typography variant="body2" fontWeight="bold" color="primary">
+                                {listing.price_min === listing.price_max
+                                  ? `${listing.price_min.toLocaleString()} aUEC`
+                                  : `${listing.price_min.toLocaleString()} – ${listing.price_max.toLocaleString()} aUEC`}
+                              </Typography>
+                            </TableCell>
+                            <TableCell align="right">
+                              <Typography variant="caption" color="text.secondary">
+                                {listing.quantity_available} avail.
+                              </Typography>
+                            </TableCell>
+                            <TableCell align="right">
+                              <Button
+                                size="small"
+                                variant="outlined"
+                                onClick={(e) => {
+                                  e.stopPropagation()
+                                  openAddToCart(listing.listing_id)
+                                }}
+                                disabled={listing.quantity_available === 0}
+                              >
+                                <ShoppingCart fontSize="small" />
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                </CardContent>
+              </Card>
+            )}
           </Grid>
 
           {/* Sidebar */}
@@ -195,8 +271,11 @@ export function WikiItemDetail() {
                         )}
                       </Stack>
                       {blueprint.crafting_time_seconds && (
-                        <Typography variant="caption" color="text.secondary">
-                          Crafting time: {Math.floor(blueprint.crafting_time_seconds / 60)}m
+                        <Typography variant="caption" color="text.secondary" display="block">
+                          Crafting time: {formatCraftingTime(blueprint.crafting_time_seconds)}
+                          {blueprint.output_quantity > 1 && (
+                            <> ({formatCraftingTime(blueprint.crafting_time_seconds * blueprint.output_quantity)} for {blueprint.output_quantity}×)</>
+                          )}
                         </Typography>
                       )}
                     </Box>
