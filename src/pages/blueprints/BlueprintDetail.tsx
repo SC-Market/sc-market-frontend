@@ -15,10 +15,6 @@ import {
   Divider,
   TextField,
   Button,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
   Alert,
   CircularProgress,
 } from "@mui/material"
@@ -167,7 +163,6 @@ function CalculatorTab({ data }: { data: any }) {
       game_item_id: ing.game_item?.game_item_id || ing.ingredient_id,
       name: ing.game_item?.name || "Unknown",
       quantity: ing.quantity_required,
-      quality_tier: ing.recommended_quality_tier || ing.min_quality_tier || 1,
       quality_value: 500,
     }))
   )
@@ -180,7 +175,6 @@ function CalculatorTab({ data }: { data: any }) {
     const input_materials: CraftingInputMaterial[] = materials.map((m: any) => ({
       game_item_id: m.game_item_id,
       quantity: m.quantity,
-      quality_tier: m.quality_tier,
       quality_value: m.quality_value,
     }))
     calculateQuality({ calculateQualityRequest: { blueprint_id: data.blueprint.blueprint_id, input_materials } })
@@ -200,21 +194,12 @@ function CalculatorTab({ data }: { data: any }) {
             value={mat.quantity} sx={{ width: 65 }}
             onChange={e => updateMaterial(idx, "quantity", Math.max(1, +e.target.value || 1))}
           />
-          <FormControl size="small" sx={{ width: 80 }}>
-            <InputLabel>Tier</InputLabel>
-            <Select value={mat.quality_tier} label="Tier"
-              onChange={e => updateMaterial(idx, "quality_tier", e.target.value)}>
-              {[1,2,3,4,5].map(n => <MenuItem key={n} value={n}>T{n}</MenuItem>)}
-            </Select>
-          </FormControl>
-          <Box sx={{ width: 90 }}>
-            <TextField
-              size="small" type="number" label="Quality"
-              value={mat.quality_value} fullWidth
-              onChange={(e) => updateMaterial(idx, "quality_value", Math.max(0, Math.min(1000, +e.target.value || 0)))}
-              inputProps={{ min: 0, max: 1000 }}
-            />
-          </Box>
+          <TextField
+            size="small" type="number" label="Quality (0-1000)"
+            value={mat.quality_value} sx={{ width: 130 }}
+            onChange={e => updateMaterial(idx, "quality_value", Math.max(0, Math.min(1000, +e.target.value || 0)))}
+            inputProps={{ min: 0, max: 1000 }}
+          />
         </Stack>
       ))}
 
