@@ -1,24 +1,23 @@
 /**
- * MissionCard - Display mission information in card format
- * 
- * Reusable card component for displaying mission metadata including:
- * - Mission name, category, career type
- * - Location, legal status, difficulty
- * - Credit rewards and blueprint count
- * - Community ratings
- * - Hover effects for interactivity
- * 
- * Task 11.2 - Create MissionCard component
- * Requirements: 42.1-42.10, 49.3, 49.4, 49.5
+ * MissionCard - Compact card for grid display
  */
 
 import React from "react"
-import { Box, Card, CardContent, Chip, Stack, Typography } from "@mui/material"
-import { getMissionTypeLabel, formatMissionDescription, formatCredits } from "../../util/missionDisplay"
+import {
+  Avatar,
+  Card,
+  CardActionArea,
+  CardContent,
+  CardActions,
+  Chip,
+  Stack,
+  Typography,
+  Box,
+} from "@mui/material"
+import { getMissionTypeLabel, formatCredits } from "../../util/missionDisplay"
 import { MissionName } from "./MissionName"
 
 export interface MissionCardProps {
-  /** Mission data */
   mission: {
     mission_id: string
     mission_name: string
@@ -30,6 +29,7 @@ export interface MissionCardProps {
     star_system?: string
     planet_moon?: string
     faction?: string
+    mission_giver_org?: string
     credit_reward_min?: number
     credit_reward_max?: number
     blueprint_reward_count: number
@@ -37,143 +37,60 @@ export interface MissionCardProps {
     is_shareable: boolean
     is_chain_starter: boolean
   }
-  /** Click handler */
   onClick?: (missionId: string) => void
 }
 
-/**
- * MissionCard Component
- * 
- * Features:
- * - Displays mission name and metadata (42.1, 42.2, 42.3)
- * - Shows location and legal status (42.4, 17.2)
- * - Displays difficulty level (42.6, 17.3)
- * - Shows credit rewards (42.4)
- * - Shows blueprint count (42.9)
- * - Displays community ratings (49.3, 49.4, 49.5)
- * - Hover effects for interactivity
- * - Responsive layout
- */
+function initials(name: string | undefined | null): string {
+  if (!name) return "?"
+  return name.split(/[\s_-]+/).map(w => w[0]).filter(Boolean).slice(0, 2).join("").toUpperCase()
+}
+
 export const MissionCard: React.FC<MissionCardProps> = ({ mission, onClick }) => {
-  const handleClick = () => {
-    if (onClick) {
-      onClick(mission.mission_id)
-    }
-  }
+  const giver = mission.mission_giver_org || mission.faction
+  const reward = mission.credit_reward_min === mission.credit_reward_max || !mission.credit_reward_max
+    ? formatCredits(mission.credit_reward_min)
+    : `${formatCredits(mission.credit_reward_min)} – ${formatCredits(mission.credit_reward_max)}`
 
   return (
-    <Card
-      sx={{
-        cursor: onClick ? "pointer" : "default",
-        transition: "transform 0.2s, box-shadow 0.2s",
-        "&:hover": onClick
-          ? {
-              transform: "translateY(-2px)",
-              boxShadow: 3,
-            }
-          : {},
-      }}
-      onClick={handleClick}
-    >
-      <CardContent>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "flex-start",
-            flexDirection: { xs: "column", sm: "row" },
-            gap: 2,
-          }}
-        >
-          {/* Left side - Mission info */}
-          <Box sx={{ flex: 1, minWidth: 0 }}>
-            <MissionName name={mission.mission_name} variant="h6" gutterBottom sx={{ wordBreak: "break-word" }} />
-
-            {/* Mission Metadata Badges */}
-            <Stack direction="row" spacing={1} flexWrap="wrap" sx={{ mb: 1, gap: 0.5 }}>
-              {mission.category && (
-                <Chip label={getMissionTypeLabel(mission.category)} size="small" color="primary" />
-              )}
-              {mission.career_type && <Chip label={mission.career_type} size="small" />}
-              {mission.legal_status && (
-                <Chip
-                  label={mission.legal_status}
-                  size="small"
-                  color={mission.legal_status === "LEGAL" ? "success" : "error"}
-                />
-              )}
-              {mission.difficulty_level && (
-                <Chip
-                  label={`Difficulty ${mission.difficulty_level}`}
-                  size="small"
-                  variant="outlined"
-                />
-              )}
-              {mission.is_shareable && (
-                <Chip label="Shareable" size="small" variant="outlined" />
-              )}
-              {mission.is_chain_starter && (
-                <Chip label="Chain Starter" size="small" color="secondary" />
-              )}
-            </Stack>
-
-            {/* Location and Faction */}
-            <Typography variant="body2" color="text.secondary">
-              {[mission.star_system, mission.planet_moon, mission.faction]
-                .filter(Boolean)
-                .join(" • ")}
-            </Typography>
-
-            {/* Description (ellipsed to 3 lines) */}
-            {mission.mission_description && (
-              <Typography
-                variant="body2"
-                color="text.secondary"
-                sx={{
-                  mt: 1,
-                  display: "-webkit-box",
-                  WebkitLineClamp: 3,
-                  WebkitBoxOrient: "vertical",
-                  overflow: "hidden",
-                  "& .placeholder": { color: "info.main", fontStyle: "italic" },
-                }}
-                dangerouslySetInnerHTML={{
-                  __html: formatMissionDescription(mission.mission_description)
-                    .replace(/\[([^\]]+)\]/g, '<span class="placeholder">[$1]</span>')
-                    .replace(/\n/g, "<br/>"),
-                }}
-              />
-            )}
+    <Card sx={{ height: "100%" }}>
+      <CardActionArea onClick={() => onClick?.(mission.mission_id)} sx={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "stretch" }}>
+        <CardContent sx={{ p: 1.5, pb: 0, flex: 1 }}>
+          {/* Header: Avatar + Title + Subtitle */}
+          <Box sx={{ display: "flex", gap: 1, mb: 1 }}>
+            <Avatar sx={{ width: 32, height: 32, fontSize: "0.75rem", bgcolor: "primary.main", flexShrink: 0 }}>
+              {initials(giver)}
+            </Avatar>
+            <Box sx={{ minWidth: 0 }}>
+              <MissionName name={mission.mission_name} variant="body2" fontWeight={600} noWrap />
+              <Typography variant="caption" color="text.secondary" noWrap display="block">
+                {giver || mission.star_system || "Unknown"}
+              </Typography>
+            </Box>
           </Box>
+        </CardContent>
 
-          {/* Right side - Rewards */}
-          <Box
-            sx={{
-              textAlign: { xs: "left", sm: "right" },
-              minWidth: { xs: "100%", sm: "auto" },
-            }}
-          >
-            {(mission.credit_reward_min || mission.credit_reward_max) && (
-              <Typography variant="body1" color="success.main" fontWeight="bold">
-                {mission.credit_reward_min === mission.credit_reward_max || !mission.credit_reward_max
-                  ? formatCredits(mission.credit_reward_min)
-                  : `${formatCredits(mission.credit_reward_min)} - ${formatCredits(mission.credit_reward_max)}`}
-              </Typography>
-            )}
-            {mission.blueprint_reward_count > 0 && (
-              <Typography variant="body2" color="primary">
-                {mission.blueprint_reward_count} Blueprint
-                {mission.blueprint_reward_count !== 1 ? "s" : ""}
-              </Typography>
-            )}
-            {mission.community_satisfaction_avg && (
-              <Typography variant="caption" color="text.secondary">
-                ⭐ {mission.community_satisfaction_avg.toFixed(1)} satisfaction
-              </Typography>
-            )}
+        {/* Tags */}
+        <CardActions sx={{ px: 1.5, pt: 0, pb: 0.5, flexWrap: "wrap", gap: 0.5 }}>
+          {mission.category && <Chip label={getMissionTypeLabel(mission.category)} size="small" color="primary" sx={{ height: 18, fontSize: "0.65rem" }} />}
+          {mission.difficulty_level && <Chip label={`D${mission.difficulty_level}`} size="small" color="warning" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} />}
+          {mission.legal_status === "ILLEGAL" && <Chip label="ILL" size="small" color="error" sx={{ height: 18, fontSize: "0.65rem" }} />}
+          {mission.is_shareable && <Chip label="SH" size="small" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} />}
+          {mission.is_chain_starter && <Chip label="CH" size="small" color="secondary" sx={{ height: 18, fontSize: "0.65rem" }} />}
+          {mission.blueprint_reward_count > 0 && <Chip label={`${mission.blueprint_reward_count} BP`} size="small" color="secondary" sx={{ height: 18, fontSize: "0.65rem" }} />}
+        </CardActions>
+
+        {/* Reward lines */}
+        <Box sx={{ px: 1.5, pb: 1.5, pt: 0.5 }}>
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            <Typography variant="caption" color="text.secondary">Reward</Typography>
+            <Typography variant="caption" color="success.main" fontWeight={600}>{reward}</Typography>
+          </Box>
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            <Typography variant="caption" color="text.secondary">Base XP</Typography>
+            <Typography variant="caption" color="text.disabled">—</Typography>
           </Box>
         </Box>
-      </CardContent>
+      </CardActionArea>
     </Card>
   )
 }
