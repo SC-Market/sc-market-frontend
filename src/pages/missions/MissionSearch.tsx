@@ -217,14 +217,16 @@ export function MissionSearch() {
             ) : (
               <Grid item xs={12}>
                 <Paper>
-                  <Table size="small">
+                  <Table size="small" sx={{ "& td, & th": { py: 0.5, px: 1 } }}>
                     <TableHead>
                       <TableRow>
-                        <TableCell>Mission</TableCell>
+                        <TableCell>System</TableCell>
+                        <TableCell>Title</TableCell>
+                        <TableCell>Faction</TableCell>
                         <TableCell>Tags</TableCell>
+                        <TableCell align="center">BPs</TableCell>
+                        <TableCell align="right">Base XP</TableCell>
                         <TableCell align="right">Reward</TableCell>
-                        <TableCell align="right">Blueprints</TableCell>
-                        <TableCell align="right">Rating</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -236,33 +238,40 @@ export function MissionSearch() {
                           onClick={() => handleMissionClick(m.mission_id)}
                         >
                           <TableCell>
-                            <MissionName name={m.mission_name} variant="body2" fontWeight={600} noWrap sx={{ maxWidth: 300 }} />
+                            <Typography variant="caption" noWrap sx={{ maxWidth: 80, display: "block" }}>
+                              {m.star_system || "—"}
+                            </Typography>
                           </TableCell>
                           <TableCell>
-                            <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap>
-                              {m.category && <Chip label={getMissionTypeLabel(m.category)} size="small" color="primary" sx={{ height: 20, fontSize: "0.7rem" }} />}
-                              {m.star_system && <Chip label={m.star_system} size="small" color="info" sx={{ height: 20, fontSize: "0.7rem" }} />}
-                              {m.difficulty_level && <Chip label={`Diff ${m.difficulty_level}`} size="small" color="warning" variant="outlined" sx={{ height: 20, fontSize: "0.7rem" }} />}
-                              {m.legal_status === "ILLEGAL" && <Chip label="Illegal" size="small" color="error" sx={{ height: 20, fontSize: "0.7rem" }} />}
-                              {m.is_shareable && <Chip label="Share" size="small" variant="outlined" sx={{ height: 20, fontSize: "0.7rem" }} />}
-                              {m.is_chain_starter && <Chip label="Chain" size="small" color="secondary" sx={{ height: 20, fontSize: "0.7rem" }} />}
+                            <MissionName name={m.mission_name} variant="body2" fontWeight={600} noWrap sx={{ maxWidth: 260 }} />
+                          </TableCell>
+                          <TableCell>
+                            <Typography variant="caption" color="text.secondary" noWrap sx={{ maxWidth: 100, display: "block" }}>
+                              {m.faction || "—"}
+                            </Typography>
+                          </TableCell>
+                          <TableCell>
+                            <Stack direction="row" spacing={0.5} flexWrap="nowrap">
+                              {m.category && <Chip label={getMissionTypeLabel(m.category)} size="small" color="primary" sx={{ height: 18, fontSize: "0.65rem" }} />}
+                              {m.difficulty_level && <Chip label={`D${m.difficulty_level}`} size="small" color="warning" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} />}
+                              {m.legal_status === "ILLEGAL" && <Chip label="ILL" size="small" color="error" sx={{ height: 18, fontSize: "0.65rem" }} />}
+                              {m.is_shareable && <Chip label="SH" size="small" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} />}
+                              {m.is_chain_starter && <Chip label="CH" size="small" color="secondary" sx={{ height: 18, fontSize: "0.65rem" }} />}
                             </Stack>
+                          </TableCell>
+                          <TableCell align="center">
+                            {m.blueprint_reward_count > 0
+                              ? <Chip label={m.blueprint_reward_count} size="small" color="secondary" sx={{ height: 18, fontSize: "0.65rem", minWidth: 24 }} />
+                              : <Typography variant="caption" color="text.disabled">—</Typography>}
+                          </TableCell>
+                          <TableCell align="right">
+                            <Typography variant="caption" color="text.disabled">—</Typography>
                           </TableCell>
                           <TableCell align="right">
                             <Typography variant="body2" color="success.main" fontWeight={600} noWrap>
                               {m.credit_reward_min === m.credit_reward_max || !m.credit_reward_max
                                 ? formatCredits(m.credit_reward_min)
-                                : `${formatCredits(m.credit_reward_min)} \u2013 ${formatCredits(m.credit_reward_max)}`}
-                            </Typography>
-                          </TableCell>
-                          <TableCell align="right">
-                            {m.blueprint_reward_count > 0 ? (
-                              <Chip label={`${m.blueprint_reward_count} BP`} size="small" color="secondary" sx={{ height: 20, fontSize: "0.7rem" }} />
-                            ) : "\u2014"}
-                          </TableCell>
-                          <TableCell align="right">
-                            <Typography variant="caption" color="text.secondary">
-                              {m.community_satisfaction_avg ? `\u2B50 ${m.community_satisfaction_avg.toFixed(1)}` : "\u2014"}
+                                : `${formatCredits(m.credit_reward_min)} – ${formatCredits(m.credit_reward_max)}`}
                             </Typography>
                           </TableCell>
                         </TableRow>
