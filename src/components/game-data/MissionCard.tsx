@@ -53,7 +53,7 @@ export const MissionCard: React.FC<MissionCardProps> = ({ mission, onClick }) =>
 
   return (
     <Card sx={{ height: "100%" }}>
-      <CardActionArea onClick={() => onClick?.(mission.mission_id)} sx={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "stretch" }}>
+      <CardActionArea onClick={() => onClick?.(mission.mission_id)} sx={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "stretch", justifyContent: "flex-start" }}>
         <CardContent sx={{ p: 1.5, pb: 0, flex: 1 }}>
           {/* Header: Avatar + Title + Subtitle */}
           <Box sx={{ display: "flex", gap: 1, mb: 1 }}>
@@ -79,8 +79,8 @@ export const MissionCard: React.FC<MissionCardProps> = ({ mission, onClick }) =>
           {mission.blueprint_reward_count > 0 && <Chip label={`${mission.blueprint_reward_count} BP`} size="small" color="secondary" sx={{ height: 18, fontSize: "0.65rem" }} />}
         </CardActions>
 
-        {/* Reward lines */}
-        <Box sx={{ px: 1.5, pb: 1.5, pt: 0.5 }}>
+        {/* Reward lines — pinned to bottom */}
+        <Box sx={{ px: 1.5, pb: 1.5, pt: 0.5, mt: "auto" }}>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <Typography variant="caption" color="text.secondary">Reward</Typography>
             <Typography variant="caption" color="success.main" fontWeight={600}>{reward}</Typography>
