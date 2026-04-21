@@ -40,6 +40,24 @@ export function getMissionTypeLabel(type: string | null | undefined): string {
 }
 
 /**
+ * Format mission name:
+ * - Replace ~mission(...) placeholders with readable [PLACEHOLDER]
+ */
+export function formatMissionName(name: string | null | undefined): string {
+  if (!name) return "Unknown Mission"
+  return name.replace(/~mission\(([^)]+)\)/g, (_, inner) => {
+    // inner may be "TargetName", "location", "Contractor|AssassinationTitle", etc.
+    const key = inner.split("|").pop() || inner
+    const label = key
+      .replace(/([a-z])([A-Z])/g, "$1 $2")
+      .replace(/[_]/g, " ")
+      .trim()
+      .toUpperCase()
+    return `[${label}]`
+  })
+}
+
+/**
  * Format mission description text:
  * - Replace ~mission(TargetName) style placeholders with readable [Target Name]
  * - Clean up escaped newlines
