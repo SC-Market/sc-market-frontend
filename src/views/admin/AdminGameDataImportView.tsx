@@ -24,6 +24,7 @@ import { HeaderTitle } from "../../components/typography/HeaderTitle"
 import {
   useImportGameDataMutation,
   useGetGameDataImportJobQuery,
+  useListGameDataImportJobsQuery,
   GameDataImportJob,
 } from "../../store/api/admin"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
@@ -41,12 +42,21 @@ export function AdminGameDataImportView() {
   const isRunning = jobId != null
   const { data: jobData } = useGetGameDataImportJobQuery(jobId!, {
     skip: !jobId,
-    pollingInterval: jobId ? 2000 : 0,
+    pollingInterval: jobId && !isDoneRef.current ? 2000 : 0,
   })
   const job = jobData?.job ?? null
-
-  // Stop polling when job is done
   const isDone = job?.status === "completed" || job?.status === "failed"
+  const isDoneRef = React.useRef(false)
+  React.useEffect(() => { isDoneRef.current = isDone }, [isDone])
+
+  // Job history
+  const { data: historyData, refetch: refetchHistory } = useListGameDataImportJobsQuery(undefined, {
+    pollingInterval: 30000,
+  })
+  const history = historyData?.jobs ?? []
+
+  // Refetch history when current job completes
+  React.useEffect(() => { if (isDone) refetchHistory() }, [isDone])
 
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault()
@@ -199,6 +209,59 @@ export function AdminGameDataImportView() {
             </Alert>
           )}
         </Paper>
+      )}
+
+      {/* Job History */}
+      {history.length > 0 && (
+        <Box sx={{ mt: 4 }}>
+          <Typography variant="h6" fontWeight="bold" sx={{ mb: 2 }}>
+            Import History
+          </Typography>
+          {history.map((h) => (
+            <Paper key={h.id} sx={{ p: 2, mb: 1 }}>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                {h.status === "completed" ? (
+                  <CheckCircleRounded color="success" fontSize="small" />
+                ) : h.status === "failed" ? (
+                  <ErrorRounded color="error" fontSize="small" />
+                ) : (
+                  <CircularProgress size={16} />
+                )}
+                <Chip
+                  label={h.status}
+                  size="small"
+                  color={h.status === "completed" ? "success" : h.status === "failed" ? "error" : "info"}
+                />
+                <Typography variant="body2" color="text.secondary">
+                  {new Date(h.startedAt).toLocaleString()}
+                </Typography>
+                {h.completedAt && (
+                  <Typography variant="caption" color="text.secondary">
+                    ({Math.round((new Date(h.completedAt).getTime() - new Date(h.startedAt).getTime()) / 1000)}s)
+                  </Typography>
+                )}
+              </Box>
+              {h.status === "completed" && h.result?.summary && (
+                <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5, display: "block" }}>
+                  {Object.entries(h.result.summary)
+                    .filter(([, v]) => typeof v === "number" && v > 0)
+                    .map(([k, v]) => `${k.replace(/([A-Z])/g, " $1").trim()}: ${v}`)
+                    .join(" · ")}
+                </Typography>
+              )}
+              {h.status === "failed" && h.error && (
+                <Typography variant="caption" color="error" sx={{ mt: 0.5, display: "block" }}>
+                  {h.error}
+                </Typography>
+              )}
+              {h.progress && (
+                <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5, display: "block" }}>
+                  {h.progress}
+                </Typography>
+              )}
+            </Paper>
+          ))}
+        </Box>
       )}
     </Box>
   )
