@@ -21,6 +21,8 @@ import {
 import { CloudUploadRounded, CheckCircleRounded, ErrorRounded } from "@mui/icons-material"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
 
+import { BACKEND_URL } from "../../util/constants"
+
 interface ImportResult {
   success: boolean
   summary?: {
@@ -77,7 +79,7 @@ export function AdminGameDataImportView() {
       formData.append("gameChannel", gameChannel)
       if (gameVersion) formData.append("gameVersion", gameVersion)
 
-      const res = await fetch("/api/v2/admin/import-game-data", {
+      const res = await fetch(`${BACKEND_URL}/api/v2/admin/import-game-data`, {
         method: "POST",
         body: formData,
         credentials: "include",
