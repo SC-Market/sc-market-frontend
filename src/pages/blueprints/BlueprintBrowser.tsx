@@ -12,7 +12,7 @@
  * Requirements: 19.1, 19.2, 19.3, 19.4, 19.5, 19.6, 43.10
  */
 
-import React, { useState, useEffect, useCallback } from "react"
+import React, { useState, useEffect, useCallback, useMemo } from "react"
 import {
   Box,
   Grid,
@@ -295,7 +295,7 @@ export function BlueprintBrowser() {
           {/* Grid View (Requirement 43.10) */}
           {viewMode === "grid" && (
             <Grid container spacing={2}>
-              {allBlueprints.map((blueprint) => (
+              {filteredBlueprints.map((blueprint) => (
                 <Grid item xs={12} sm={6} md={4} lg={3} key={blueprint.blueprint_id}>
                   <BlueprintCard
                     blueprint={blueprint}
@@ -323,7 +323,7 @@ export function BlueprintBrowser() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {allBlueprints.map((bp) => (
+                  {filteredBlueprints.map((bp) => (
                     <TableRow
                       key={bp.blueprint_id}
                       hover
@@ -380,7 +380,7 @@ export function BlueprintBrowser() {
             </Paper>
           )}
 
-          {allBlueprints.length === 0 && !isFetching && (
+          {filteredBlueprints.length === 0 && !isFetching && (
             <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", py: 6 }}>
               <Typography color="text.secondary">
                 No blueprints found. Try adjusting your filters.
