@@ -5,6 +5,7 @@ export const addTagTypes = [
   "Orders V2",
   "Offers V2",
   "Listings V2",
+  "Admin Imports",
   "Health",
   "Game Items V2",
   "Game Data - Wishlists",
@@ -253,6 +254,21 @@ const injectedRtkApi = api
           invalidatesTags: ["Listings V2"],
         },
       ),
+      startImport: build.mutation<StartImportApiResponse, StartImportApiArg>({
+        query: (queryArg) => ({
+          url: `/admin/imports/${queryArg.source}`,
+          method: "POST",
+        }),
+        invalidatesTags: ["Admin Imports"],
+      }),
+      getJobStatus: build.query<GetJobStatusApiResponse, GetJobStatusApiArg>({
+        query: (queryArg) => ({ url: `/admin/imports/${queryArg.jobId}` }),
+        providesTags: ["Admin Imports"],
+      }),
+      listJobs: build.query<ListJobsApiResponse, ListJobsApiArg>({
+        query: () => ({ url: `/admin/imports` }),
+        providesTags: ["Admin Imports"],
+      }),
       getHealth: build.query<GetHealthApiResponse, GetHealthApiArg>({
         query: () => ({ url: `/health` }),
         providesTags: ["Health"],
@@ -1226,6 +1242,24 @@ export type UploadPhotosApiArg = {
   /** Listing UUID */
   id: string
 }
+export type StartImportApiResponse = /** status 200 Ok */ {
+  job: ImportJob
+}
+export type StartImportApiArg = {
+  /** Import source: cstone-items, uex-items, or uex-attributes */
+  source: ImportSource
+}
+export type GetJobStatusApiResponse = /** status 200 Ok */ {
+  job: ImportJob | null
+}
+export type GetJobStatusApiArg = {
+  /** The job ID returned from startImport */
+  jobId: string
+}
+export type ListJobsApiResponse = /** status 200 Ok */ {
+  jobs: ImportJob[]
+}
+export type ListJobsApiArg = void
 export type GetHealthApiResponse = /** status 200 Ok */ HealthResponse
 export type GetHealthApiArg = void
 export type SearchGameItemsApiResponse =
@@ -2538,6 +2572,20 @@ export type UpdateListingRequest = {
   /** Updated bulk discount tiers (pass [] to remove, omit to keep unchanged) */
   bulk_discount_tiers?: BulkDiscountTier[]
 }
+export type ImportSource = "cstone-items" | "uex-items" | "uex-attributes"
+export type JobStatus = "running" | "completed" | "failed"
+export type RecordStringAny = {
+  [key: string]: any
+}
+export type ImportJob = {
+  id: string
+  source: ImportSource
+  status: JobStatus
+  startedAt: string
+  completedAt: string | null
+  result: RecordStringAny | null
+  error: string | null
+}
 export type HealthResponse = {
   status: string
   version: string
@@ -2776,9 +2824,6 @@ export type SearchWikiItemsResponse = {
   total: number
   page: number
   page_size: number
-}
-export type RecordStringAny = {
-  [key: string]: any
 }
 export type BlueprintReference = {
   blueprint_id: string
@@ -3988,6 +4033,9 @@ export const {
   useRefreshListingMutation,
   useTrackViewMutation,
   useUploadPhotosMutation,
+  useStartImportMutation,
+  useGetJobStatusQuery,
+  useListJobsQuery,
   useGetHealthQuery,
   useSearchGameItemsQuery,
   useGetCategoriesQuery,

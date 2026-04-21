@@ -13,10 +13,10 @@ import {
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
 import {
   useStartImportMutation,
-  useListImportJobsQuery,
-  ImportJob,
-  ImportSource,
-} from "../../store/api/admin"
+  useListJobsQuery,
+  type ImportJob,
+  type ImportSource,
+} from "../../store/api/v2/market"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { AdminIcons } from "../../components/icons"
 
@@ -74,7 +74,7 @@ export function AdminImportMonitoringView() {
 
   const [fastPoll, setFastPoll] = useState(false)
 
-  const { data, isLoading } = useListImportJobsQuery(undefined, {
+  const { data, isLoading } = useListJobsQuery(undefined, {
     pollingInterval: fastPoll ? 3000 : 30000,
   })
 
@@ -88,14 +88,14 @@ export function AdminImportMonitoringView() {
   }, [hasRunning])
 
   // Adjust polling: slow down when idle
-  const { data: polledData } = useListImportJobsQuery(undefined, {
+  const { data: polledData } = useListJobsQuery(undefined, {
     pollingInterval: hasRunning ? 3000 : 30000,
     skip: true, // The first query handles fetching; this just adjusts interval
   })
 
   const handleStart = async (source: ImportSource) => {
     try {
-      await startImport(source).unwrap()
+      await startImport({ source }).unwrap()
       issueAlert({ message: `Started ${source} import`, severity: "info" })
     } catch (err: any) {
       issueAlert({
