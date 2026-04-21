@@ -768,7 +768,7 @@ export function ListingCardV2({ listing, index }: ListingCardV2Props) {
     >
       <ListingWrapper useFixedWidth={false}>
         <RouterLink
-          to={`/market/listing/${listing.listing_id}`}
+          to={`/market/${listing.listing_id}`}
           style={{ textDecoration: "none", color: "inherit" }}
         >
           <CardActionArea
