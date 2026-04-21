@@ -23,6 +23,8 @@ import {
   ToggleButton,
   Card,
   CardContent,
+  Checkbox,
+  FormControlLabel,
   TextField,
   MenuItem,
   Select,
@@ -72,6 +74,8 @@ export function BlueprintBrowser() {
   const [subcategory, setSubcategory] = useState("")
   const [rarity, setRarity] = useState("")
   const [tier, setTier] = useState<number | "">("")
+  const [craftingStation, setCraftingStation] = useState("")
+  const [ownedOnly, setOwnedOnly] = useState(false)
   const [page, setPage] = useState(1)
   const [allBlueprints, setAllBlueprints] = useState<any[]>([])
 
@@ -79,7 +83,7 @@ export function BlueprintBrowser() {
   const debouncedSearch = useDebounce(searchText, 300)
 
   // Reset on filter change
-  const filterKey = JSON.stringify({ debouncedSearch, category, subcategory, rarity, tier })
+  const filterKey = JSON.stringify({ debouncedSearch, category, subcategory, rarity, tier, craftingStation, ownedOnly })
   useEffect(() => { setPage(1); setAllBlueprints([]) }, [filterKey])
 
   // Query blueprints with filters
@@ -89,6 +93,8 @@ export function BlueprintBrowser() {
     itemSubcategory: subcategory || undefined,
     rarity: rarity || undefined,
     tier: tier || undefined,
+    craftingStationType: craftingStation || undefined,
+    userOwnedOnly: ownedOnly || undefined,
     page,
     pageSize: 20,
   })
@@ -123,6 +129,8 @@ export function BlueprintBrowser() {
     setSubcategory("")
     setRarity("")
     setTier("")
+    setCraftingStation("")
+    setOwnedOnly(false)
     setPage(1)
   }
 
@@ -266,6 +274,37 @@ export function BlueprintBrowser() {
                   <MenuItem value={5}>Tier 5</MenuItem>
                 </Select>
               </FormControl>
+            </Grid>
+
+            <Grid item xs={12} sm={6} md={3}>
+              <FormControl fullWidth size="small">
+                <InputLabel>Crafting Station</InputLabel>
+                <Select
+                  value={craftingStation}
+                  label="Crafting Station"
+                  onChange={(e) => setCraftingStation(e.target.value)}
+                >
+                  <MenuItem value="">All Stations</MenuItem>
+                  <MenuItem value="Weapons Bench">Weapons Bench</MenuItem>
+                  <MenuItem value="Armor Bench">Armor Bench</MenuItem>
+                  <MenuItem value="Component Bench">Component Bench</MenuItem>
+                  <MenuItem value="Vehicle Bench">Vehicle Bench</MenuItem>
+                  <MenuItem value="Electronics Bench">Electronics Bench</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+
+            <Grid item xs={12} sm={6} md={3}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={ownedOnly}
+                    onChange={(e) => setOwnedOnly(e.target.checked)}
+                    size="small"
+                  />
+                }
+                label="Owned Only"
+              />
             </Grid>
 
             {/* Reset Button */}
