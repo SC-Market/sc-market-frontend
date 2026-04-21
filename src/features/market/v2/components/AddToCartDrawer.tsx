@@ -62,9 +62,49 @@ export function AddToCartDrawer({ open, onClose, listingId }: AddToCartDrawerPro
 
   const selectedVariant = variants.find((v: any) => v.variant_id === selectedVariantId)
 
+  // Client-side validation
+  const listing = listingData?.listing
+  const subtotal = (selectedVariant?.price ?? 0) * quantity
+  const validationError = useMemo(() => {
+    if (!selectedVariant) return null
+    if (quantity < 1) return t("cart.invalidQty", "Quantity must be at least 1")
+    if (quantity > selectedVariant.quantity) return t("cart.exceedsStock", "Only {{available}} available", { available: selectedVariant.quantity })
+    if (listing?.min_order_quantity && quantity < listing.min_order_quantity) return t("cart.belowMinQty", "Minimum quantity: {{min}}", { min: listing.min_order_quantity })
+    if (listing?.max_order_quantity && quantity > listing.max_order_quantity) return t("cart.aboveMaxQty", "Maximum quantity: {{max}}", { max: listing.max_order_quantity })
+    if (listing?.min_order_value && subtotal < listing.min_order_value) return t("cart.belowMinValue", "Minimum order value: {{min}} aUEC", { min: listing.min_order_value.toLocaleString() })
+    if (listing?.max_order_value && subtotal > listing.max_order_value) return t("cart.aboveMaxValue", "Maximum order value: {{max}} aUEC", { max: listing.max_order_value.toLocaleString() })
+    return null
+  }, [selectedVariant, quantity, listing, subtotal, t])
+
   const handleAdd = async () => {
     if (!selectedVariantId) {
       issueAlert({ message: t("cart.selectVariant", "Please select a variant"), severity: "warning" })
+      return
+    }
+    if (quantity < 1) {
+      issueAlert({ message: t("cart.invalidQty", "Quantity must be at least 1"), severity: "warning" })
+      return
+    }
+    if (selectedVariant && quantity > selectedVariant.quantity) {
+      issueAlert({ message: t("cart.exceedsStock", "Only {{available}} available", { available: selectedVariant.quantity }), severity: "warning" })
+      return
+    }
+    const listing = listingData?.listing
+    if (listing?.min_order_quantity && quantity < listing.min_order_quantity) {
+      issueAlert({ message: t("cart.belowMinQty", "Minimum quantity: {{min}}", { min: listing.min_order_quantity }), severity: "warning" })
+      return
+    }
+    if (listing?.max_order_quantity && quantity > listing.max_order_quantity) {
+      issueAlert({ message: t("cart.aboveMaxQty", "Maximum quantity: {{max}}", { max: listing.max_order_quantity }), severity: "warning" })
+      return
+    }
+    const subtotal = (selectedVariant?.price ?? 0) * quantity
+    if (listing?.min_order_value && subtotal < listing.min_order_value) {
+      issueAlert({ message: t("cart.belowMinValue", "Minimum order value: {{min}} aUEC", { min: listing.min_order_value.toLocaleString() }), severity: "warning" })
+      return
+    }
+    if (listing?.max_order_value && subtotal > listing.max_order_value) {
+      issueAlert({ message: t("cart.aboveMaxValue", "Maximum order value: {{max}} aUEC", { max: listing.max_order_value.toLocaleString() }), severity: "warning" })
       return
     }
     try {
@@ -79,8 +119,8 @@ export function AddToCartDrawer({ open, onClose, listingId }: AddToCartDrawerPro
       onClose()
       setQuantity(1)
       setSelectedVariantId("")
-    } catch {
-      issueAlert({ message: t("cart.addFailed", "Failed to add to cart"), severity: "error" })
+    } catch (err: any) {
+      issueAlert(err)
     }
   }
 
@@ -157,15 +197,10 @@ export function AddToCartDrawer({ open, onClose, listingId }: AddToCartDrawerPro
             </Typography>
           )}
 
-          {/* Limits warning */}
-          {listingData.listing.min_order_quantity && quantity < listingData.listing.min_order_quantity && (
+          {/* Validation error */}
+          {validationError && (
             <Typography variant="caption" color="error">
-              {t("cart.belowMinQty", "Minimum quantity: {{min}}", { min: listingData.listing.min_order_quantity })}
-            </Typography>
-          )}
-          {listingData.listing.max_order_quantity && quantity > listingData.listing.max_order_quantity && (
-            <Typography variant="caption" color="error">
-              {t("cart.aboveMaxQty", "Maximum quantity: {{max}}", { max: listingData.listing.max_order_quantity })}
+              {validationError}
             </Typography>
           )}
 
@@ -174,7 +209,7 @@ export function AddToCartDrawer({ open, onClose, listingId }: AddToCartDrawerPro
             fullWidth
             startIcon={<ShoppingCartRounded />}
             onClick={handleAdd}
-            disabled={isAdding || !selectedVariantId || quantity < 1}
+            disabled={isAdding || !selectedVariantId || quantity < 1 || !!validationError}
           >
             {isAdding ? t("cart.adding", "Adding...") : t("cart.addToCart", "Add to Cart")}
           </Button>
