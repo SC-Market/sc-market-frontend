@@ -271,7 +271,6 @@ export function MissionSearch() {
                   </Table>
                 </Paper>
               </Grid>
-              </Grid>
             )}
           </Grid>
 
