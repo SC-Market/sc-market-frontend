@@ -6,10 +6,6 @@ import {
   Autocomplete,
   TextField,
   Button,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
   IconButton,
   Chip,
   CircularProgress,
@@ -40,7 +36,6 @@ interface MaterialInput {
   id: number
   game_item_id: string
   game_item_name: string
-  quality_tier: number
   quality_value: number
   quantity: number
 }
@@ -83,7 +78,6 @@ export function CraftingCalculator() {
       id: nextId,
       game_item_id: itemId,
       game_item_name: itemName,
-      quality_tier: 1,
       quality_value: 500,
       quantity: 1,
     }])
@@ -107,7 +101,6 @@ export function CraftingCalculator() {
     const input_materials: CraftingInputMaterial[] = materials.map(m => ({
       game_item_id: m.game_item_id,
       quantity: m.quantity,
-      quality_tier: m.quality_tier,
       quality_value: m.quality_value,
     }))
     calculateQuality({
@@ -198,16 +191,9 @@ export function CraftingCalculator() {
                     onChange={e => updateMaterial(mat.id, "quantity", Math.max(1, +e.target.value || 1))}
                     inputProps={{ min: 1 }}
                   />
-                  <FormControl size="small" sx={{ width: 80 }}>
-                    <InputLabel>Tier</InputLabel>
-                    <Select value={mat.quality_tier} label="Tier"
-                      onChange={e => updateMaterial(mat.id, "quality_tier", e.target.value)}>
-                      {[1,2,3,4,5].map(n => <MenuItem key={n} value={n}>T{n}</MenuItem>)}
-                    </Select>
-                  </FormControl>
                   <TextField
-                    size="small" type="number" label="Quality"
-                    value={mat.quality_value} sx={{ width: 90 }}
+                    size="small" type="number" label="Quality (0-1000)"
+                    value={mat.quality_value} sx={{ width: 130 }}
                     onChange={e => updateMaterial(mat.id, "quality_value", Math.max(0, Math.min(1000, +e.target.value || 0)))}
                     inputProps={{ min: 0, max: 1000 }}
                   />
