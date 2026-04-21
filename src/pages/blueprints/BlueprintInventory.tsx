@@ -26,12 +26,13 @@ import {
   Button,
   LinearProgress,
   Chip,
+  Stack,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
 } from "@mui/material"
-import { Upload, FilterList } from "@mui/icons-material"
+import { Upload } from "@mui/icons-material"
 import {
   useGetUserBlueprintInventoryQuery,
   useAddBlueprintToInventoryMutation,
@@ -43,21 +44,8 @@ import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
+import { FilterSidebarLayout } from "../../components/layout/FilterSidebarLayout"
 
-/**
- * BlueprintInventory Component
- * 
- * Features:
- * - Display owned blueprints in grid view (10.1, 10.2)
- * - Filter by owned status (10.4)
- * - Show acquisition progress (10.3, 46.6)
- * - Support bulk import (10.6, 46.8)
- * - Display acquisition date (10.3)
- * - Filter by category and rarity (10.4)
- * - Sort by acquisition date or name (46.9)
- * - Pagination support
- * - Authentication required (46.1, 46.2)
- */
 export function BlueprintInventory() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
@@ -85,7 +73,7 @@ export function BlueprintInventory() {
     errors: [],
   })
 
-  // Query user's blueprint inventory (Requirement 10.1, 10.2, 46.2)
+  // Query user's blueprint inventory
   const { data, isLoading, error } = useGetUserBlueprintInventoryQuery({
     itemCategory: itemCategory || undefined,
     rarity: rarity || undefined,
@@ -95,7 +83,7 @@ export function BlueprintInventory() {
     pageSize: 20,
   })
 
-  // Mutations for adding/removing blueprints (Requirement 10.2, 10.6)
+  // Mutations for adding/removing blueprints
   const [addBlueprint] = useAddBlueprintToInventoryMutation()
   const [removeBlueprint] = useRemoveBlueprintFromInventoryMutation()
 
@@ -108,9 +96,7 @@ export function BlueprintInventory() {
       if (isOwned) {
         await addBlueprint({
           blueprintId,
-          body: {
-            acquisition_method: "manual",
-          },
+          body: { acquisition_method: "manual" },
         }).unwrap()
       } else {
         await removeBlueprint({ blueprintId }).unwrap()
@@ -136,28 +122,16 @@ export function BlueprintInventory() {
   const handleBulkImportOpen = () => {
     setBulkImportOpen(true)
     setBulkImportText("")
-    setBulkImportStatus({
-      processing: false,
-      success: 0,
-      failed: 0,
-      errors: [],
-    })
+    setBulkImportStatus({ processing: false, success: 0, failed: 0, errors: [] })
   }
 
   const handleBulkImportClose = () => {
     setBulkImportOpen(false)
   }
 
-  // Bulk import handler (Requirement 10.6, 46.8)
   const handleBulkImport = async () => {
-    setBulkImportStatus({
-      processing: true,
-      success: 0,
-      failed: 0,
-      errors: [],
-    })
+    setBulkImportStatus({ processing: true, success: 0, failed: 0, errors: [] })
 
-    // Parse blueprint IDs from text (one per line)
     const blueprintIds = bulkImportText
       .split("\n")
       .map((line) => line.trim())
@@ -171,9 +145,7 @@ export function BlueprintInventory() {
       try {
         await addBlueprint({
           blueprintId,
-          body: {
-            acquisition_method: "bulk_import",
-          },
+          body: { acquisition_method: "bulk_import" },
         }).unwrap()
         successCount++
       } catch (err) {
@@ -182,12 +154,7 @@ export function BlueprintInventory() {
       }
     }
 
-    setBulkImportStatus({
-      processing: false,
-      success: successCount,
-      failed: failedCount,
-      errors,
-    })
+    setBulkImportStatus({ processing: false, success: successCount, failed: failedCount, errors })
   }
 
   const totalPages = data ? Math.ceil(data.total / data.page_size) : 0
@@ -228,6 +195,71 @@ export function BlueprintInventory() {
     )
   }
 
+  const filtersContent = (
+    <Stack spacing={1.5}>
+      <FormControl fullWidth size="small">
+        <InputLabel>Category</InputLabel>
+        <Select
+          value={itemCategory}
+          label="Category"
+          onChange={(e) => setItemCategory(e.target.value)}
+        >
+          <MenuItem value="">All Categories</MenuItem>
+          <MenuItem value="Weapons">Weapons</MenuItem>
+          <MenuItem value="Armor">Armor</MenuItem>
+          <MenuItem value="Components">Components</MenuItem>
+          <MenuItem value="Consumables">Consumables</MenuItem>
+          <MenuItem value="Tools">Tools</MenuItem>
+        </Select>
+      </FormControl>
+      <FormControl fullWidth size="small">
+        <InputLabel>Rarity</InputLabel>
+        <Select
+          value={rarity}
+          label="Rarity"
+          onChange={(e) => setRarity(e.target.value)}
+        >
+          <MenuItem value="">All Rarities</MenuItem>
+          <MenuItem value="Common">Common</MenuItem>
+          <MenuItem value="Uncommon">Uncommon</MenuItem>
+          <MenuItem value="Rare">Rare</MenuItem>
+          <MenuItem value="Epic">Epic</MenuItem>
+          <MenuItem value="Legendary">Legendary</MenuItem>
+        </Select>
+      </FormControl>
+      <FormControl fullWidth size="small">
+        <InputLabel>Sort By</InputLabel>
+        <Select
+          value={sortBy}
+          label="Sort By"
+          onChange={(e) => setSortBy(e.target.value as "acquisition_date" | "blueprint_name")}
+        >
+          <MenuItem value="acquisition_date">Acquisition Date</MenuItem>
+          <MenuItem value="blueprint_name">Blueprint Name</MenuItem>
+        </Select>
+      </FormControl>
+      <FormControl fullWidth size="small">
+        <InputLabel>Sort Order</InputLabel>
+        <Select
+          value={sortOrder}
+          label="Sort Order"
+          onChange={(e) => setSortOrder(e.target.value as "asc" | "desc")}
+        >
+          <MenuItem value="desc">Newest First</MenuItem>
+          <MenuItem value="asc">Oldest First</MenuItem>
+        </Select>
+      </FormControl>
+      <Typography
+        variant="body2"
+        color="primary"
+        sx={{ cursor: "pointer", textDecoration: "underline" }}
+        onClick={handleResetFilters}
+      >
+        Reset all filters
+      </Typography>
+    </Stack>
+  )
+
   return (
     <StandardPageLayout
       title={t("blueprints.inventory.title", "My Blueprint Inventory")}
@@ -241,209 +273,109 @@ export function BlueprintInventory() {
           <Typography variant="body1" color="text.secondary">
             {t("blueprints.inventory.description", "Track your owned blueprints and crafting capabilities")}
           </Typography>
+          <Button variant="contained" startIcon={<Upload />} onClick={handleBulkImportOpen}>
+            Bulk Import
+          </Button>
+        </Box>
 
-          {/* Bulk Import Button (Requirement 10.6, 46.8) */}
-          <Button
-          variant="contained"
-          startIcon={<Upload />}
-          onClick={handleBulkImportOpen}
-        >
-          Bulk Import
-        </Button>
-      </Box>
-
-      {/* Acquisition Progress (Requirement 10.3, 46.6) */}
-      {data?.statistics && (
-        <Card sx={{ mb: 3 }}>
-          <CardContent>
-            <Typography variant="h6" gutterBottom>
-              Collection Progress
-            </Typography>
-            <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 1 }}>
-              <Box sx={{ flex: 1 }}>
-                <LinearProgress
-                  variant="determinate"
-                  value={data.statistics.completion_percentage}
-                  sx={{ height: 10, borderRadius: 5 }}
-                />
+        {/* Acquisition Progress */}
+        {data?.statistics && (
+          <Card sx={{ mb: 3 }}>
+            <CardContent>
+              <Typography variant="h6" gutterBottom>
+                Collection Progress
+              </Typography>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 1 }}>
+                <Box sx={{ flex: 1 }}>
+                  <LinearProgress
+                    variant="determinate"
+                    value={data.statistics.completion_percentage}
+                    sx={{ height: 10, borderRadius: 5 }}
+                  />
+                </Box>
+                <Typography variant="body2" color="text.secondary" sx={{ minWidth: 80 }}>
+                  {data.statistics.completion_percentage.toFixed(1)}%
+                </Typography>
               </Box>
-              <Typography variant="body2" color="text.secondary" sx={{ minWidth: 80 }}>
-                {data.statistics.completion_percentage.toFixed(1)}%
-              </Typography>
-            </Box>
-            <Typography variant="body2" color="text.secondary">
-              {data.statistics.total_owned} of {data.statistics.total_available} blueprints owned
-            </Typography>
-            {data.statistics.recently_acquired_count > 0 && (
-              <Chip
-                label={`${data.statistics.recently_acquired_count} recently acquired`}
-                size="small"
-                color="primary"
-                sx={{ mt: 1 }}
-              />
-            )}
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Filters (Requirement 10.4) */}
-      <Card sx={{ mb: 3 }}>
-        <CardContent>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
-            <FilterList />
-            <Typography variant="h6">Filters</Typography>
-          </Box>
-          <Grid container spacing={2}>
-            {/* Category Filter */}
-            <Grid item xs={12} sm={6} md={3}>
-              <FormControl fullWidth size="small">
-                <InputLabel>Category</InputLabel>
-                <Select
-                  value={itemCategory}
-                  label="Category"
-                  onChange={(e) => setItemCategory(e.target.value)}
-                >
-                  <MenuItem value="">All Categories</MenuItem>
-                  <MenuItem value="Weapons">Weapons</MenuItem>
-                  <MenuItem value="Armor">Armor</MenuItem>
-                  <MenuItem value="Components">Components</MenuItem>
-                  <MenuItem value="Consumables">Consumables</MenuItem>
-                  <MenuItem value="Tools">Tools</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-
-            {/* Rarity Filter */}
-            <Grid item xs={12} sm={6} md={3}>
-              <FormControl fullWidth size="small">
-                <InputLabel>Rarity</InputLabel>
-                <Select
-                  value={rarity}
-                  label="Rarity"
-                  onChange={(e) => setRarity(e.target.value)}
-                >
-                  <MenuItem value="">All Rarities</MenuItem>
-                  <MenuItem value="Common">Common</MenuItem>
-                  <MenuItem value="Uncommon">Uncommon</MenuItem>
-                  <MenuItem value="Rare">Rare</MenuItem>
-                  <MenuItem value="Epic">Epic</MenuItem>
-                  <MenuItem value="Legendary">Legendary</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-
-            {/* Sort By */}
-            <Grid item xs={12} sm={6} md={3}>
-              <FormControl fullWidth size="small">
-                <InputLabel>Sort By</InputLabel>
-                <Select
-                  value={sortBy}
-                  label="Sort By"
-                  onChange={(e) => setSortBy(e.target.value as "acquisition_date" | "blueprint_name")}
-                >
-                  <MenuItem value="acquisition_date">Acquisition Date</MenuItem>
-                  <MenuItem value="blueprint_name">Blueprint Name</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-
-            {/* Sort Order */}
-            <Grid item xs={12} sm={6} md={3}>
-              <FormControl fullWidth size="small">
-                <InputLabel>Sort Order</InputLabel>
-                <Select
-                  value={sortOrder}
-                  label="Sort Order"
-                  onChange={(e) => setSortOrder(e.target.value as "asc" | "desc")}
-                >
-                  <MenuItem value="desc">Newest First</MenuItem>
-                  <MenuItem value="asc">Oldest First</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-
-            {/* Reset Button */}
-            <Grid item xs={12}>
-              <Typography
-                variant="body2"
-                color="primary"
-                sx={{ cursor: "pointer", textDecoration: "underline" }}
-                onClick={handleResetFilters}
-              >
-                Reset all filters
-              </Typography>
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
-
-      {/* Results */}
-      {data && (
-        <>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            Showing {data.blueprints.length} of {data.total} owned blueprints
-          </Typography>
-
-          {/* Grid View */}
-          <Grid container spacing={2}>
-            {data.blueprints.map((blueprint) => (
-              <Grid item xs={12} sm={6} md={4} lg={3} key={blueprint.blueprint_id}>
-                <BlueprintCard
-                  blueprint={{
-                    blueprint_id: blueprint.blueprint_id,
-                    blueprint_name: blueprint.blueprint_name,
-                    output_item_name: blueprint.output_item_name,
-                    output_item_icon: blueprint.output_item_icon,
-                    item_category: blueprint.item_category,
-                    rarity: blueprint.rarity,
-                    tier: blueprint.tier,
-                    ingredient_count: 0, // Not provided in inventory response
-                    mission_count: 0, // Not provided in inventory response
-                    user_owns: true, // Always true in inventory view
-                  }}
-                  viewMode="grid"
-                  onClick={handleBlueprintClick}
-                  onBookmarkToggle={handleBookmarkToggle}
-                />
-              </Grid>
-            ))}
-          </Grid>
-
-          {/* Empty State */}
-          {data.blueprints.length === 0 && (
-            <Box sx={{ textAlign: "center", py: 8 }}>
-              <Typography variant="h6" color="text.secondary" gutterBottom>
-                No blueprints found
-              </Typography>
               <Typography variant="body2" color="text.secondary">
-                {itemCategory || rarity
-                  ? "Try adjusting your filters"
-                  : "Start adding blueprints to your inventory"}
+                {data.statistics.total_owned} of {data.statistics.total_available} blueprints owned
               </Typography>
-            </Box>
-          )}
+              {data.statistics.recently_acquired_count > 0 && (
+                <Chip
+                  label={`${data.statistics.recently_acquired_count} recently acquired`}
+                  size="small"
+                  color="primary"
+                  sx={{ mt: 1 }}
+                />
+              )}
+            </CardContent>
+          </Card>
+        )}
 
-          {/* Pagination */}
-          {totalPages > 1 && (
-            <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
-              <Pagination
-                count={totalPages}
-                page={page}
-                onChange={handlePageChange}
-                color="primary"
-              />
-            </Box>
-          )}
-        </>
-      )}
+        <FilterSidebarLayout filters={filtersContent} filterTitle="Filters">
+          {/* Results */}
+          {data && (
+            <>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                Showing {data.blueprints.length} of {data.total} owned blueprints
+              </Typography>
 
-      {/* Bulk Import Dialog (Requirement 10.6, 46.8) */}
-      <Dialog
-        open={bulkImportOpen}
-        onClose={handleBulkImportClose}
-        maxWidth="md"
-        fullWidth
-      >
+              <Grid container spacing={2}>
+                {data.blueprints.map((blueprint) => (
+                  <Grid item xs={12} sm={6} md={4} lg={3} key={blueprint.blueprint_id}>
+                    <BlueprintCard
+                      blueprint={{
+                        blueprint_id: blueprint.blueprint_id,
+                        blueprint_name: blueprint.blueprint_name,
+                        output_item_name: blueprint.output_item_name,
+                        output_item_icon: blueprint.output_item_icon,
+                        item_category: blueprint.item_category,
+                        rarity: blueprint.rarity,
+                        tier: blueprint.tier,
+                        ingredient_count: 0,
+                        mission_count: 0,
+                        user_owns: true,
+                      }}
+                      viewMode="grid"
+                      onClick={handleBlueprintClick}
+                      onBookmarkToggle={handleBookmarkToggle}
+                    />
+                  </Grid>
+                ))}
+              </Grid>
+
+              {/* Empty State */}
+              {data.blueprints.length === 0 && (
+                <Box sx={{ textAlign: "center", py: 8 }}>
+                  <Typography variant="h6" color="text.secondary" gutterBottom>
+                    No blueprints found
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {itemCategory || rarity
+                      ? "Try adjusting your filters"
+                      : "Start adding blueprints to your inventory"}
+                  </Typography>
+                </Box>
+              )}
+
+              {/* Pagination */}
+              {totalPages > 1 && (
+                <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+                  <Pagination
+                    count={totalPages}
+                    page={page}
+                    onChange={handlePageChange}
+                    color="primary"
+                  />
+                </Box>
+              )}
+            </>
+          )}
+        </FilterSidebarLayout>
+      </Grid>
+
+      {/* Bulk Import Dialog */}
+      <Dialog open={bulkImportOpen} onClose={handleBulkImportClose} maxWidth="md" fullWidth>
         <DialogTitle>Bulk Import Blueprints</DialogTitle>
         <DialogContent>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
@@ -499,7 +431,6 @@ export function BlueprintInventory() {
           </Button>
         </DialogActions>
       </Dialog>
-      </Grid>
     </StandardPageLayout>
   )
 }

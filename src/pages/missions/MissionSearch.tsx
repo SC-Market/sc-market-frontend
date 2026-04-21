@@ -34,7 +34,7 @@ import {
   Avatar,
   useMediaQuery,
 } from "@mui/material"
-import { ViewList, ViewModule, FilterList } from "@mui/icons-material"
+import { ViewList, ViewModule } from "@mui/icons-material"
 import { useSearchMissionsQuery } from "../../store/api/v2/market"
 import { useNavigate } from "react-router-dom"
 import { useDebounce } from "../../hooks/useDebounce"
@@ -46,8 +46,7 @@ import { MissionDetailModal } from "../../components/game-data/MissionDetailModa
 import { BlueprintDetailModal } from "../../components/game-data/BlueprintDetailModal"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
-import { BottomSheet } from "../../components/mobile/BottomSheet"
-import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
+import { FilterSidebarLayout } from "../../components/layout/FilterSidebarLayout"
 import { formatCredits, getMissionTypeLabel } from "../../util/missionDisplay"
 import { getMissionIcon } from "../../util/gameIcons"
 import { MissionName } from "../../components/game-data/MissionName"
@@ -73,9 +72,6 @@ export function MissionSearch() {
   const [page, setPage] = useState(1)
   const [allMissions, setAllMissions] = useState<any[]>([])
   const [viewMode, setViewMode] = useState<"list" | "grid">("list")
-  const isMobile = useMediaQuery(theme.breakpoints.down("lg"))
-  const [filterOpen, setFilterOpen] = useState(false)
-  const bottomNavHeight = useBottomNavHeight()
 
   // Debounce search text for performance (Requirement 1.6: <200ms response)
   const debouncedSearch = useDebounce(searchText, 300)
@@ -180,60 +176,8 @@ export function MissionSearch() {
       sidebarOpen={true}
       maxWidth="xl"
     >
-      {/* Mobile: Bottom sheet for filters */}
-      {isMobile && (
-        <>
-          <BottomSheet
-            open={filterOpen}
-            onClose={() => setFilterOpen(false)}
-            title={t("missions.filters", "Filters")}
-          >
-            {filterContent}
-          </BottomSheet>
-          <Button
-            variant="outlined"
-            color="secondary"
-            startIcon={<FilterList />}
-            onClick={() => setFilterOpen(true)}
-            sx={{
-              position: "fixed",
-              bottom: bottomNavHeight + 16,
-              right: 24,
-              zIndex: (theme) => theme.zIndex.speedDial,
-              borderRadius: 2,
-              textTransform: "none",
-              boxShadow: theme.shadows[4],
-              backgroundColor: theme.palette.background.paper,
-              "&:hover": { backgroundColor: theme.palette.background.paper, boxShadow: theme.shadows[8] },
-            }}
-          >
-            Filters
-          </Button>
-        </>
-      )}
-
       <Grid item xs={12}>
-        <Stack direction="row" spacing={2} sx={{ width: "100%" }}>
-          {/* Desktop: Sticky sidebar */}
-          {!isMobile && (
-            <Paper
-              sx={{
-                position: "sticky",
-                top: "calc(64px + 16px)",
-                maxHeight: "calc(100vh - 64px - 32px)",
-                height: "fit-content",
-                width: 280,
-                flexShrink: 0,
-                overflowY: "auto",
-                p: 1.5,
-              }}
-            >
-              {filterContent}
-            </Paper>
-          )}
-
-          {/* Main content */}
-          <Box sx={{ flex: 1, minWidth: 0 }}>
+        <FilterSidebarLayout filters={filterContent} filterTitle={t("missions.filters", "Filters")}>
 
       {/* Loading State */}
       {isLoading && (
@@ -372,8 +316,7 @@ export function MissionSearch() {
           )}
         </>
       )}
-          </Box>
-        </Stack>
+        </FilterSidebarLayout>
       </Grid>
       <MissionDetailModal
         missionId={selectedMissionId}

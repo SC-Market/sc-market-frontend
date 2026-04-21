@@ -37,6 +37,7 @@ import { useSearchItemsQuery, WikiItemSearchResult } from "../../store/api/v2/ma
 import { useNavigate } from "react-router-dom"
 import { useDebounce } from "../../hooks/useDebounce"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
+import { FilterSidebarLayout } from "../../components/layout/FilterSidebarLayout"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { FALLBACK_IMAGE_URL } from "../../util/constants"
 import { getFactionIcon } from "../../util/gameIcons"
@@ -145,6 +146,42 @@ export function WikiItemBrowser() {
 
   const totalPages = data ? Math.ceil(data.total / data.page_size) : 0
 
+  const filtersContent = (
+    <Stack spacing={1.5}>
+      <TextField fullWidth size="small" label="Search items" value={searchText}
+        onChange={(e) => { setSearchText(e.target.value); setPage(1) }} placeholder="Search by name..." />
+      <FormControl fullWidth size="small">
+        <InputLabel>Type</InputLabel>
+        <Select value={type} label="Type" onChange={(e) => { setType(e.target.value); setPage(1) }}>
+          <MenuItem value="">All</MenuItem>
+          <MenuItem value="WeaponGun">Weapon</MenuItem>
+          <MenuItem value="Shield">Shield</MenuItem>
+          <MenuItem value="PowerPlant">Power Plant</MenuItem>
+          <MenuItem value="Cooler">Cooler</MenuItem>
+          <MenuItem value="QuantumDrive">QD</MenuItem>
+          <MenuItem value="Armor">Armor</MenuItem>
+          <MenuItem value="Commodity">Commodity</MenuItem>
+        </Select>
+      </FormControl>
+      <FormControl fullWidth size="small">
+        <InputLabel>Size</InputLabel>
+        <Select value={size} label="Size" onChange={(e) => { setSize(e.target.value); setPage(1) }}>
+          <MenuItem value="">All</MenuItem>
+          {[1,2,3,4,5].map(s => <MenuItem key={s} value={String(s)}>S{s}</MenuItem>)}
+        </Select>
+      </FormControl>
+      <FormControl fullWidth size="small">
+        <InputLabel>Grade</InputLabel>
+        <Select value={grade} label="Grade" onChange={(e) => { setGrade(e.target.value); setPage(1) }}>
+          <MenuItem value="">All</MenuItem>
+          {["A","B","C","D"].map(g => <MenuItem key={g} value={g}>{g}</MenuItem>)}
+        </Select>
+      </FormControl>
+      <TextField fullWidth size="small" label="Manufacturer" value={manufacturer}
+        onChange={(e) => { setManufacturer(e.target.value); setPage(1) }} placeholder="e.g. Aegis" />
+    </Stack>
+  )
+
   return (
     <StandardPageLayout
       title={t("wiki.items.title", "Game Items Database")}
@@ -153,113 +190,66 @@ export function WikiItemBrowser() {
       maxWidth="xl"
     >
       <Grid item xs={12}>
-        {/* Filters */}
-        <Card sx={{ mb: 2 }}>
-          <CardContent sx={{ pb: "12px !important" }}>
-            <Grid container spacing={1.5} alignItems="center">
-              <Grid item xs={12} md={4}>
-                <TextField fullWidth size="small" label="Search items" value={searchText}
-                  onChange={(e) => { setSearchText(e.target.value); setPage(1) }} placeholder="Search by name..." />
-              </Grid>
-              <Grid item xs={6} sm={3} md={2}>
-                <FormControl fullWidth size="small">
-                  <InputLabel>Type</InputLabel>
-                  <Select value={type} label="Type" onChange={(e) => { setType(e.target.value); setPage(1) }}>
-                    <MenuItem value="">All</MenuItem>
-                    <MenuItem value="WeaponGun">Weapon</MenuItem>
-                    <MenuItem value="Shield">Shield</MenuItem>
-                    <MenuItem value="PowerPlant">Power Plant</MenuItem>
-                    <MenuItem value="Cooler">Cooler</MenuItem>
-                    <MenuItem value="QuantumDrive">QD</MenuItem>
-                    <MenuItem value="Armor">Armor</MenuItem>
-                    <MenuItem value="Commodity">Commodity</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={6} sm={3} md={1.5}>
-                <FormControl fullWidth size="small">
-                  <InputLabel>Size</InputLabel>
-                  <Select value={size} label="Size" onChange={(e) => { setSize(e.target.value); setPage(1) }}>
-                    <MenuItem value="">All</MenuItem>
-                    {[1,2,3,4,5].map(s => <MenuItem key={s} value={String(s)}>S{s}</MenuItem>)}
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={6} sm={3} md={1.5}>
-                <FormControl fullWidth size="small">
-                  <InputLabel>Grade</InputLabel>
-                  <Select value={grade} label="Grade" onChange={(e) => { setGrade(e.target.value); setPage(1) }}>
-                    <MenuItem value="">All</MenuItem>
-                    {["A","B","C","D"].map(g => <MenuItem key={g} value={g}>{g}</MenuItem>)}
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={6} sm={3} md={2}>
-                <TextField fullWidth size="small" label="Manufacturer" value={manufacturer}
-                  onChange={(e) => { setManufacturer(e.target.value); setPage(1) }} placeholder="e.g. Aegis" />
-              </Grid>
-              <Grid item xs="auto">
-                <ToggleButtonGroup size="small" value={viewMode} exclusive onChange={(_, v) => v && setViewMode(v)}>
-                  <ToggleButton value="grid"><GridViewRounded fontSize="small" /></ToggleButton>
-                  <ToggleButton value="list"><ViewListRounded fontSize="small" /></ToggleButton>
-                </ToggleButtonGroup>
-              </Grid>
-            </Grid>
-          </CardContent>
-        </Card>
-
-        {isLoading && <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}><CircularProgress /></Box>}
-        {error && <Alert severity="error" sx={{ mb: 2 }}>Failed to load items.</Alert>}
-
-        {data && (
-          <>
-            <Typography variant="caption" color="text.secondary" sx={{ mb: 1, display: "block" }}>
-              {data.total.toLocaleString()} items
+        <FilterSidebarLayout filters={filtersContent} filterTitle="Filters">
+          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 1 }}>
+            <Typography variant="caption" color="text.secondary">
+              {data ? `${data.total.toLocaleString()} items` : ""}
             </Typography>
+            <ToggleButtonGroup size="small" value={viewMode} exclusive onChange={(_, v) => v && setViewMode(v)}>
+              <ToggleButton value="grid"><GridViewRounded fontSize="small" /></ToggleButton>
+              <ToggleButton value="list"><ViewListRounded fontSize="small" /></ToggleButton>
+            </ToggleButtonGroup>
+          </Box>
 
-            {viewMode === "grid" ? (
-              <Grid container spacing={1.5}>
-                {data.items.map((item) => (
-                  <Grid item xs={6} sm={4} md={3} lg={2} key={item.id}>
-                    <ItemGridCard item={item} onClick={() => handleItemClick(item.id)} />
-                  </Grid>
-                ))}
-              </Grid>
-            ) : (
-              <Paper>
-                <Table size="small">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell sx={{ width: 40 }} />
-                      <TableCell>Name</TableCell>
-                      <TableCell>Type</TableCell>
-                      <TableCell>Size</TableCell>
-                      <TableCell>Grade</TableCell>
-                      <TableCell>Manufacturer</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {data.items.map((item) => (
-                      <ItemListRow key={item.id} item={item} onClick={() => handleItemClick(item.id)} />
-                    ))}
-                  </TableBody>
-                </Table>
-              </Paper>
-            )}
+          {isLoading && <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}><CircularProgress /></Box>}
+          {error && <Alert severity="error" sx={{ mb: 2 }}>Failed to load items.</Alert>}
 
-            {data.items.length === 0 && (
-              <Box sx={{ textAlign: "center", py: 6 }}>
-                <Typography color="text.secondary">No results found. Try adjusting your filters.</Typography>
-              </Box>
-            )}
+          {data && (
+            <>
+              {viewMode === "grid" ? (
+                <Grid container spacing={1.5}>
+                  {data.items.map((item) => (
+                    <Grid item xs={6} sm={4} md={3} lg={2} key={item.id}>
+                      <ItemGridCard item={item} onClick={() => handleItemClick(item.id)} />
+                    </Grid>
+                  ))}
+                </Grid>
+              ) : (
+                <Paper>
+                  <Table size="small">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell sx={{ width: 40 }} />
+                        <TableCell>Name</TableCell>
+                        <TableCell>Type</TableCell>
+                        <TableCell>Size</TableCell>
+                        <TableCell>Grade</TableCell>
+                        <TableCell>Manufacturer</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {data.items.map((item) => (
+                        <ItemListRow key={item.id} item={item} onClick={() => handleItemClick(item.id)} />
+                      ))}
+                    </TableBody>
+                  </Table>
+                </Paper>
+              )}
 
-            {totalPages > 1 && (
-              <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
-                <Pagination count={totalPages} page={page} onChange={handlePageChange} color="primary" />
-              </Box>
-            )}
-          </>
-        )}
+              {data.items.length === 0 && (
+                <Box sx={{ textAlign: "center", py: 6 }}>
+                  <Typography color="text.secondary">No results found. Try adjusting your filters.</Typography>
+                </Box>
+              )}
+
+              {totalPages > 1 && (
+                <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
+                  <Pagination count={totalPages} page={page} onChange={handlePageChange} color="primary" />
+                </Box>
+              )}
+            </>
+          )}
+        </FilterSidebarLayout>
       </Grid>
     </StandardPageLayout>
   )

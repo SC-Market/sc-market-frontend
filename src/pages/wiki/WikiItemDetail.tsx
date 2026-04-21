@@ -6,7 +6,7 @@
  * Task 8.10.3
  */
 
-import React from "react"
+import React, { useState } from "react"
 import {
   Box,
   Card,
@@ -22,9 +22,13 @@ import {
   TableBody,
   TableCell,
   TableContainer,
+  TableHead,
   TableRow,
   Paper,
   Stack,
+  Tabs,
+  Tab,
+  TextField,
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
@@ -35,6 +39,10 @@ import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useCartDrawer } from "../../hooks/market/AddToCartContext"
 import { formatQuantity } from "../../util/formatQuantity"
+
+const TAB_OVERVIEW = 0
+const TAB_CRAFTING = 1
+const TAB_DISASSEMBLY = 2
 
 export function WikiItemDetail() {
   const { t } = useTranslation()
@@ -49,6 +57,9 @@ export function WikiItemDetail() {
     { gameItemId: id!, pageSize: 6, sortBy: "price", sortOrder: "asc" },
     { skip: !id },
   )
+
+  const [tab, setTab] = useState(TAB_OVERVIEW)
+  const [disassemblyQty, setDisassemblyQty] = useState(1)
 
   if (isLoading) {
     return (
@@ -150,8 +161,20 @@ export function WikiItemDetail() {
               </CardContent>
             </Card>
 
-            {/* Attributes */}
-            {Object.keys(item.attributes).length > 0 && (
+            {/* Tabs */}
+            <Box sx={{ borderBottom: 1, borderColor: "divider", mt: 2, mb: 2 }}>
+              <Tabs value={tab} onChange={(_, v) => setTab(v)}>
+                <Tab label="Overview" />
+                <Tab label="Crafting" disabled={item.craftable_from.length === 0} />
+                <Tab label="Disassembly" />
+              </Tabs>
+            </Box>
+
+            {/* Tab: Overview */}
+            {tab === TAB_OVERVIEW && (
+              <>
+                {/* Attributes */}
+                {Object.keys(item.attributes).length > 0 && (
               <Card sx={{ mt: 3 }}>
                 <CardContent>
                   <Typography variant="h6" gutterBottom>
