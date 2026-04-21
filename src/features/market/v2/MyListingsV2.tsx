@@ -123,6 +123,7 @@ export function MyListingsV2() {
       maxWidth="lg"
       isLoading={isLoading && !listings.length}
     >
+    <Grid item xs={12}>
     <Grid container spacing={1}>
         <div ref={ref} style={{ position: "absolute", top: 0 }} />
 
@@ -182,6 +183,7 @@ export function MyListingsV2() {
           />
         </Grid>
       </Grid>
+    </Grid>
     </StandardPageLayout>
   );
 }

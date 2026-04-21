@@ -345,6 +345,7 @@ export function MarketAggregateViewV2() {
       sidebarOpen={true}
       maxWidth="xl"
     >
+    <Grid item xs={12}>
     <Grid container spacing={2}>
       {/* SEO */}
       <Helmet>
@@ -640,6 +641,7 @@ export function MarketAggregateViewV2() {
       <Grid item xs={12}>
         <AggregateChartV2 aggregate={complete} />
       </Grid>
+    </Grid>
     </Grid>
     </StandardPageLayout>
   );

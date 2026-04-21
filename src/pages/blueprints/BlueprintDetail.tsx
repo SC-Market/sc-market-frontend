@@ -28,7 +28,10 @@ function initials(name: string | undefined): string {
 }
 
 function ingredientIcon(ing: any): string | undefined {
-  return ing.game_item?.icon_url || getResourceCategoryIcon(ing.game_item?.type || "") || undefined
+  return ing.game_item?.icon_url
+    || getResourceCategoryIcon(ing.game_item?.sub_type)
+    || getResourceCategoryIcon(ing.game_item?.type)
+    || undefined
 }
 
 function formatQty(qty: number): string {
