@@ -50,6 +50,7 @@ export function MissionSearch() {
   const [isShareable, setIsShareable] = useState<boolean | undefined>(undefined)
   const [hasBlueprints, setHasBlueprints] = useState<boolean | undefined>(undefined)
   const [isChainStarter, setIsChainStarter] = useState<boolean | undefined>(undefined)
+  const [creditRewardMin, setCreditRewardMin] = useState<number | "">("")
   const [page, setPage] = useState(1)
   const [allMissions, setAllMissions] = useState<any[]>([])
 
@@ -59,7 +60,7 @@ export function MissionSearch() {
   // Reset accumulated results when filters change
   const filterKey = JSON.stringify({
     debouncedSearch, category, careerType, starSystem, faction, missionGiver,
-    legalStatus, difficultyRange, isShareable, hasBlueprints, isChainStarter,
+    legalStatus, difficultyRange, isShareable, hasBlueprints, isChainStarter, creditRewardMin,
   })
   useEffect(() => { setPage(1); setAllMissions([]) }, [filterKey])
 
@@ -77,6 +78,7 @@ export function MissionSearch() {
     isShareable: isShareable,
     hasBlueprintRewards: hasBlueprints,
     isChainStarter: isChainStarter,
+    creditRewardMin: creditRewardMin || undefined,
     page,
     pageSize: 20,
   })
@@ -114,6 +116,7 @@ export function MissionSearch() {
     setIsShareable(undefined)
     setHasBlueprints(undefined)
     setIsChainStarter(undefined)
+    setCreditRewardMin("")
     setPage(1)
   }
 

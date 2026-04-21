@@ -94,6 +94,10 @@ export interface MissionFiltersProps {
   /** Chain starter change handler */
   onIsChainStarterChange: (value: boolean | undefined) => void
   
+  /** Minimum credit reward */
+  creditRewardMin: number | ""
+  onCreditRewardMinChange: (value: number | "") => void
+
   /** Reset filters handler */
   onResetFilters: () => void
 }
@@ -142,6 +146,8 @@ export const MissionFilters: React.FC<MissionFiltersProps> = ({
   onHasBlueprintsChange,
   isChainStarter,
   onIsChainStarterChange,
+  creditRewardMin,
+  onCreditRewardMinChange,
   onResetFilters,
 }) => {
   return (
@@ -380,6 +386,19 @@ export const MissionFilters: React.FC<MissionFiltersProps> = ({
                 label="Chain Starter"
               />
             </Stack>
+          </Grid>
+
+          {/* Min Credit Reward */}
+          <Grid item xs={12} sm={6} md={3}>
+            <TextField size="small"
+              fullWidth
+              type="number"
+              label="Min Credit Reward"
+              value={creditRewardMin}
+              onChange={(e) => onCreditRewardMinChange(e.target.value === "" ? "" : Number(e.target.value))}
+              placeholder="e.g. 10000"
+              inputProps={{ min: 0 }}
+            />
           </Grid>
 
           {/* Reset Button */}
