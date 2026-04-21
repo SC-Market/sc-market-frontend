@@ -11,6 +11,7 @@ import {
   CircularProgress,
   Alert,
   Box,
+  Slider,
   Stack,
   Divider,
 } from "@mui/material"
@@ -179,29 +180,71 @@ export function CraftingCalculator() {
               </Typography>
             )}
 
-            <Stack spacing={1}>
-              {materials.map((mat) => (
-                <Stack key={mat.id} direction="row" spacing={1} alignItems="center">
-                  <Typography variant="body2" sx={{ flex: 1, minWidth: 100 }} noWrap>
-                    {mat.game_item_name}
-                  </Typography>
-                  <TextField
-                    size="small" type="number" label="Qty"
-                    value={mat.quantity} sx={{ width: 65 }}
-                    onChange={e => updateMaterial(mat.id, "quantity", Math.max(1, +e.target.value || 1))}
-                    inputProps={{ min: 1 }}
-                  />
-                  <TextField
-                    size="small" type="number" label="Quality (0-1000)"
-                    value={mat.quality_value} sx={{ width: 130 }}
-                    onChange={e => updateMaterial(mat.id, "quality_value", Math.max(0, Math.min(1000, +e.target.value || 0)))}
-                    inputProps={{ min: 0, max: 1000 }}
-                  />
-                  <IconButton size="small" onClick={() => removeMaterial(mat.id)}>
-                    <Delete fontSize="small" />
-                  </IconButton>
-                </Stack>
-              ))}
+            <Stack spacing={2}>
+              {materials.map((mat) => {
+                // Find this material's contribution from the result (if calculated)
+                const contrib = result?.calculation_breakdown?.quality_contributions?.find(
+                  (c) => c.material_name === mat.game_item_name
+                )
+                return (
+                  <Paper key={mat.id} variant="outlined" sx={{ p: 2 }}>
+                    <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
+                      <Typography variant="subtitle2" fontWeight="bold">
+                        {mat.game_item_name}
+                      </Typography>
+                      <Stack direction="row" spacing={1} alignItems="center">
+                        <TextField
+                          size="small" type="number" label="Qty"
+                          value={mat.quantity} sx={{ width: 65 }}
+                          onChange={e => updateMaterial(mat.id, "quantity", Math.max(1, +e.target.value || 1))}
+                          inputProps={{ min: 1 }}
+                        />
+                        <IconButton size="small" onClick={() => removeMaterial(mat.id)}>
+                          <Delete fontSize="small" />
+                        </IconButton>
+                      </Stack>
+                    </Stack>
+
+                    {/* Quality slider + input */}
+                    <Stack direction="row" spacing={2} alignItems="center">
+                      <Typography variant="caption" color="text.secondary" sx={{ minWidth: 50 }}>
+                        Quality
+                      </Typography>
+                      <Slider
+                        value={mat.quality_value}
+                        onChange={(_, val) => updateMaterial(mat.id, "quality_value", val as number)}
+                        min={0} max={1000} step={1}
+                        size="small"
+                        sx={{ flex: 1 }}
+                        color={mat.quality_value >= 600 ? "success" : mat.quality_value >= 300 ? "primary" : "warning"}
+                      />
+                      <TextField
+                        size="small" type="number"
+                        value={mat.quality_value} sx={{ width: 80 }}
+                        onChange={e => updateMaterial(mat.id, "quality_value", Math.max(0, Math.min(1000, +e.target.value || 0)))}
+                        inputProps={{ min: 0, max: 1000 }}
+                      />
+                    </Stack>
+
+                    {/* Per-material contribution (shown after calculation) */}
+                    {contrib && (
+                      <Stack direction="row" spacing={2} alignItems="center" sx={{ mt: 1 }}>
+                        <Typography variant="caption" color="text.secondary">
+                          Weight: {(contrib.weight * 100).toFixed(0)}%
+                        </Typography>
+                        <Typography
+                          variant="caption"
+                          fontWeight="bold"
+                          color={contrib.quality_value >= result!.output_quality_value ? "success.main" : "error.main"}
+                        >
+                          Contribution: {contrib.contribution.toFixed(1)}
+                          {contrib.quality_value >= result!.output_quality_value ? " ↑" : " ↓"}
+                        </Typography>
+                      </Stack>
+                    )}
+                  </Paper>
+                )
+              })}
             </Stack>
           </Paper>
         </Grid>
@@ -228,7 +271,7 @@ export function CraftingCalculator() {
           <Grid item xs={12}>
             <Paper sx={{ p: 2 }}>
               <Typography variant="subtitle2" gutterBottom>Estimated Output</Typography>
-              <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 2 }}>
+              <Stack direction="row" spacing={2} alignItems="center" flexWrap="wrap" sx={{ mb: 2 }}>
                 <Chip
                   label={`Tier ${result.output_quality_tier}`}
                   color={TIER_COLORS[result.output_quality_tier] || "default"}
@@ -243,6 +286,14 @@ export function CraftingCalculator() {
                 )}
               </Stack>
 
+              {/* Stats impact table — shows when backend provides stat data */}
+              {/* TODO: Backend needs to return base_stats and predicted_stats per output item */}
+              {/* Example structure:
+                  Stat          Base    Crafted   Diff
+                  Fire Rate     650 RPM 689 RPM   +6.00%
+                  Damage        28      29.4      +5.00%
+              */}
+
               {/* Per-material quality impact */}
               {result.calculation_breakdown?.quality_contributions?.length > 0 && (
                 <>
@@ -251,7 +302,8 @@ export function CraftingCalculator() {
                   <Stack spacing={0.5}>
                     {result.calculation_breakdown.quality_contributions.map((c, i) => {
                       const avgQuality = result.output_quality_value
-                      const isPositive = c.quality_value >= avgQuality
+                      const delta = c.contribution - (avgQuality * c.weight)
+                      const isPositive = delta >= 0
                       return (
                         <Stack key={i} direction="row" spacing={1} alignItems="center">
                           <Typography variant="body2" sx={{ flex: 1, minWidth: 100 }} noWrap>
@@ -265,7 +317,7 @@ export function CraftingCalculator() {
                             fontWeight="bold"
                             color={isPositive ? "success.main" : "error.main"}
                           >
-                            {isPositive ? "+" : ""}{(c.contribution - (avgQuality * c.weight)).toFixed(1)}
+                            {isPositive ? "+" : ""}{delta.toFixed(1)}
                           </Typography>
                         </Stack>
                       )
@@ -278,7 +330,7 @@ export function CraftingCalculator() {
               {result.estimated_cost && result.estimated_cost.total_cost > 0 && (
                 <>
                   <Divider sx={{ my: 1 }} />
-                  <Stack direction="row" spacing={2}>
+                  <Stack direction="row" spacing={2} flexWrap="wrap">
                     <Typography variant="body2">
                       Materials: <strong>{result.estimated_cost.material_cost.toLocaleString()} aUEC</strong>
                     </Typography>
