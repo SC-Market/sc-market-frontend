@@ -29,7 +29,8 @@ import {
 import { Close } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { useGetMissionDetailQuery } from "../../store/api/v2/market"
-import { getMissionTypeLabel, formatMissionDescription, formatMissionName } from "../../util/missionDisplay"
+import { getMissionTypeLabel, formatMissionDescription } from "../../util/missionDisplay"
+import { MissionName } from "./MissionName"
 
 interface MissionDetailModalProps {
   missionId: string | null
@@ -53,7 +54,7 @@ export function MissionDetailModal({ missionId, open, onClose, onBlueprintClick 
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
       <DialogTitle sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <Typography variant="h6" noWrap sx={{ flex: 1 }}>
-          {formatMissionName(data?.mission.mission_name) || t("missions.detail.title", "Mission Detail")}
+          <MissionName name={data?.mission.mission_name} variant="inherit" />
         </Typography>
         <IconButton onClick={onClose} size="small"><Close /></IconButton>
       </DialogTitle>
@@ -240,7 +241,7 @@ function ChainTab({ data }: { data: any }) {
           <Stack spacing={0.5}>
             {data.prerequisite_missions.map((pm: any) => (
               <Stack key={pm.mission_id} direction="row" spacing={1} alignItems="center">
-                <Typography variant="body2">{formatMissionName(pm.mission_name)}</Typography>
+                <MissionName name={pm.mission_name} variant="body2" />
                 {pm.category && <Chip label={getMissionTypeLabel(pm.category)} size="small" variant="outlined" />}
               </Stack>
             ))}

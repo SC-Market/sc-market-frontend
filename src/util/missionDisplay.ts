@@ -41,12 +41,12 @@ export function getMissionTypeLabel(type: string | null | undefined): string {
 
 /**
  * Format mission name:
- * - Replace ~mission(...) placeholders with readable [PLACEHOLDER]
+ * - Replace ~mission(...) placeholders with styled [PLACEHOLDER] spans
+ * Returns plain text (for non-React contexts like table sorting)
  */
-export function formatMissionName(name: string | null | undefined): string {
+export function formatMissionNameText(name: string | null | undefined): string {
   if (!name) return "Unknown Mission"
   return name.replace(/~mission\(([^)]+)\)/g, (_, inner) => {
-    // inner may be "TargetName", "location", "Contractor|AssassinationTitle", etc.
     const key = inner.split("|").pop() || inner
     const label = key
       .replace(/([a-z])([A-Z])/g, "$1 $2")
@@ -66,8 +66,7 @@ export function formatMissionDescription(text: string | null | undefined): strin
   if (!text) return ""
   return text
     .replace(/~mission\(([^|)]+)\|?[^)]*\)/g, (_, key) => {
-      // Convert camelCase/PascalCase to spaced words
-      const label = key.replace(/([a-z])([A-Z])/g, "$1 $2").replace(/[_|]/g, " ").trim()
+      const label = key.replace(/([a-z])([A-Z])/g, "$1 $2").replace(/[_|]/g, " ").trim().toUpperCase()
       return `[${label}]`
     })
     .replace(/\\n/g, "\n")

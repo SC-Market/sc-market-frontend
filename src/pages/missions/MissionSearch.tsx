@@ -29,6 +29,7 @@ import {
   TableRow,
   Paper,
   Chip,
+  Stack,
 } from "@mui/material"
 import { ViewList, ViewModule } from "@mui/icons-material"
 import { useSearchMissionsQuery } from "../../store/api/v2/market"
@@ -42,7 +43,8 @@ import { MissionDetailModal } from "../../components/game-data/MissionDetailModa
 import { BlueprintDetailModal } from "../../components/game-data/BlueprintDetailModal"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
-import { formatCredits, getMissionTypeLabel, formatMissionName } from "../../util/missionDisplay"
+import { formatCredits, getMissionTypeLabel } from "../../util/missionDisplay"
+import { MissionName } from "../../components/game-data/MissionName"
 
 export function MissionSearch() {
   const { t } = useTranslation()
@@ -219,9 +221,7 @@ export function MissionSearch() {
                     <TableHead>
                       <TableRow>
                         <TableCell>Mission</TableCell>
-                        <TableCell>Category</TableCell>
-                        <TableCell>Location</TableCell>
-                        <TableCell>Difficulty</TableCell>
+                        <TableCell>Tags</TableCell>
                         <TableCell align="right">Reward</TableCell>
                         <TableCell align="right">Blueprints</TableCell>
                         <TableCell align="right">Rating</TableCell>
@@ -236,49 +236,33 @@ export function MissionSearch() {
                           onClick={() => handleMissionClick(m.mission_id)}
                         >
                           <TableCell>
-                            <Typography variant="body2" fontWeight={600} noWrap sx={{ maxWidth: 280 }}>
-                              {formatMissionName(m.mission_name)}
-                            </Typography>
-                            {m.legal_status && (
-                              <Chip
-                                label={m.legal_status}
-                                size="small"
-                                color={m.legal_status === "LEGAL" ? "success" : "error"}
-                                sx={{ height: 18, fontSize: "0.65rem", mt: 0.25 }}
-                              />
-                            )}
+                            <MissionName name={m.mission_name} variant="body2" fontWeight={600} noWrap sx={{ maxWidth: 300 }} />
                           </TableCell>
                           <TableCell>
-                            <Chip
-                              label={getMissionTypeLabel(m.category) || "—"}
-                              size="small"
-                              color="primary"
-                              sx={{ height: 20, fontSize: "0.7rem" }}
-                            />
-                          </TableCell>
-                          <TableCell>
-                            <Typography variant="caption" color="text.secondary" noWrap sx={{ maxWidth: 160, display: "block" }}>
-                              {[m.star_system, m.planet_moon].filter(Boolean).join(" · ") || "—"}
-                            </Typography>
-                          </TableCell>
-                          <TableCell>
-                            {m.difficulty_level ? `★${"★".repeat(m.difficulty_level - 1)}${"☆".repeat(5 - m.difficulty_level)}` : "—"}
+                            <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap>
+                              {m.category && <Chip label={getMissionTypeLabel(m.category)} size="small" color="primary" sx={{ height: 20, fontSize: "0.7rem" }} />}
+                              {m.star_system && <Chip label={m.star_system} size="small" color="info" sx={{ height: 20, fontSize: "0.7rem" }} />}
+                              {m.difficulty_level && <Chip label={`Diff ${m.difficulty_level}`} size="small" color="warning" variant="outlined" sx={{ height: 20, fontSize: "0.7rem" }} />}
+                              {m.legal_status === "ILLEGAL" && <Chip label="Illegal" size="small" color="error" sx={{ height: 20, fontSize: "0.7rem" }} />}
+                              {m.is_shareable && <Chip label="Share" size="small" variant="outlined" sx={{ height: 20, fontSize: "0.7rem" }} />}
+                              {m.is_chain_starter && <Chip label="Chain" size="small" color="secondary" sx={{ height: 20, fontSize: "0.7rem" }} />}
+                            </Stack>
                           </TableCell>
                           <TableCell align="right">
                             <Typography variant="body2" color="success.main" fontWeight={600} noWrap>
                               {m.credit_reward_min === m.credit_reward_max || !m.credit_reward_max
                                 ? formatCredits(m.credit_reward_min)
-                                : `${formatCredits(m.credit_reward_min)} – ${formatCredits(m.credit_reward_max)}`}
+                                : `${formatCredits(m.credit_reward_min)} \u2013 ${formatCredits(m.credit_reward_max)}`}
                             </Typography>
                           </TableCell>
                           <TableCell align="right">
                             {m.blueprint_reward_count > 0 ? (
                               <Chip label={`${m.blueprint_reward_count} BP`} size="small" color="secondary" sx={{ height: 20, fontSize: "0.7rem" }} />
-                            ) : "—"}
+                            ) : "\u2014"}
                           </TableCell>
                           <TableCell align="right">
                             <Typography variant="caption" color="text.secondary">
-                              {m.community_satisfaction_avg ? `⭐ ${m.community_satisfaction_avg.toFixed(1)}` : "—"}
+                              {m.community_satisfaction_avg ? `\u2B50 ${m.community_satisfaction_avg.toFixed(1)}` : "\u2014"}
                             </Typography>
                           </TableCell>
                         </TableRow>
@@ -286,6 +270,7 @@ export function MissionSearch() {
                     </TableBody>
                   </Table>
                 </Paper>
+              </Grid>
               </Grid>
             )}
           </Grid>
