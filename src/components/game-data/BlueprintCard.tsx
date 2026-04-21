@@ -16,6 +16,7 @@ import {
   Typography,
 } from "@mui/material"
 import { Bookmark, BookmarkBorder } from "@mui/icons-material"
+import { formatCategoryName } from "../../util/categoryDisplay"
 
 export interface BlueprintCardProps {
   blueprint: {
@@ -86,7 +87,7 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
                   {bp.output_item_name}
                 </Typography>
                 <Typography variant="caption" color="text.secondary" noWrap display="block">
-                  {bp.item_category || "Blueprint"}
+                  {formatCategoryName(bp.item_category) || "Blueprint"}
                 </Typography>
               </Box>
             </Box>
@@ -132,7 +133,7 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
             <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap>
               {bp.rarity && <Chip label={bp.rarity} size="small" color="primary" sx={{ height: 18, fontSize: "0.65rem" }} />}
               {bp.tier && <Chip label={`T${bp.tier}`} size="small" color="secondary" sx={{ height: 18, fontSize: "0.65rem" }} />}
-              {bp.item_category && <Chip label={bp.item_category} size="small" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} />}
+              {bp.item_category && <Chip label={formatCategoryName(bp.item_category)} size="small" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} />}
             </Stack>
           </Box>
           <Box sx={{ textAlign: "right", flexShrink: 0 }}>
