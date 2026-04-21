@@ -69,7 +69,13 @@ function JobDetailRow({ job }: { job: GameDataImportJob }) {
         </TableCell>
         <TableCell>
           {job.result?.summary
-            ? `${job.result.summary.inserted ?? 0} inserted, ${job.result.summary.updated ?? 0} updated`
+            ? [
+                job.result.summary.matched && `${job.result.summary.matched} items matched`,
+                job.result.summary.inserted && `${job.result.summary.inserted} items added`,
+                job.result.summary.missionsInserted && `${job.result.summary.missionsInserted} missions`,
+                job.result.summary.missionsUpdated && `${job.result.summary.missionsUpdated} missions updated`,
+                job.result.summary.blueprintsInserted && `${job.result.summary.blueprintsInserted} blueprints`,
+              ].filter(Boolean).join(", ") || "No changes"
             : job.error
               ? job.error.slice(0, 60)
               : "—"}
