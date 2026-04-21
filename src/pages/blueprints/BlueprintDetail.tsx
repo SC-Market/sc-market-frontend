@@ -20,10 +20,20 @@ import {
 import { useGetBlueprintDetailQuery } from "../../store/api/v2/market"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { formatCategoryName } from "../../util/categoryDisplay"
+import { getResourceCategoryIcon } from "../../util/gameIcons"
 
 function initials(name: string | undefined): string {
   if (!name) return "?"
   return name.split(/[\s_-]+/).map(w => w[0]).filter(Boolean).slice(0, 2).join("").toUpperCase()
+}
+
+function ingredientIcon(ing: any): string | undefined {
+  return ing.game_item?.icon_url || getResourceCategoryIcon(ing.game_item?.type || "") || undefined
+}
+
+function formatQty(qty: number): string {
+  if (qty >= 100) return `${(qty / 100).toFixed(2)} SCU`
+  return `${qty} cSCU`
 }
 
 const TIER_COLORS: Record<number, "default" | "warning" | "info" | "primary" | "secondary"> = {
@@ -131,7 +141,7 @@ function OverviewTab({ data, itemName }: { data: any; itemName: string }) {
             {data.ingredients.map((ing: any, i: number) => (
               <Box key={i} sx={{ display: "flex", gap: 1, alignItems: "center" }}>
                 <Avatar
-                  src={ing.game_item?.icon_url}
+                  src={ingredientIcon(ing)}
                   variant="rounded"
                   sx={{ width: 28, height: 28, fontSize: "0.6rem", bgcolor: "secondary.main" }}
                   imgProps={{ style: { objectFit: "cover" } }}
@@ -139,7 +149,7 @@ function OverviewTab({ data, itemName }: { data: any; itemName: string }) {
                   {initials(ing.game_item?.name)}
                 </Avatar>
                 <Typography variant="body2" sx={{ flex: 1 }}>{ing.game_item?.name || "Unknown"}</Typography>
-                <Typography variant="body2" color="text.secondary">×{ing.quantity_required}</Typography>
+                <Typography variant="body2" color="text.secondary">{formatQty(ing.quantity_required)}</Typography>
               </Box>
             ))}
           </Stack>
@@ -214,7 +224,7 @@ function CalculatorTab({ data }: { data: any }) {
           return (
             <Stack key={idx} direction="row" spacing={1} alignItems="center">
               <Avatar
-                src={ing.game_item?.icon_url}
+                src={ingredientIcon(ing)}
                 variant="rounded"
                 sx={{ width: 24, height: 24, fontSize: "0.55rem", bgcolor: "secondary.main" }}
                 imgProps={{ style: { objectFit: "cover" } }}
@@ -224,8 +234,8 @@ function CalculatorTab({ data }: { data: any }) {
               <Typography variant="body2" sx={{ flex: 1, minWidth: 80 }} noWrap>
                 {ing.game_item?.name || "Unknown"}
               </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ minWidth: 60, textAlign: "right" }}>
-                ×{totalQty}
+              <Typography variant="body2" color="text.secondary" sx={{ minWidth: 80, textAlign: "right" }}>
+                {formatQty(totalQty)}
               </Typography>
               <TextField
                 size="small" type="number" label="Quality"
