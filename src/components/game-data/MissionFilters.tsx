@@ -128,11 +128,11 @@ export const MissionFilters: React.FC<MissionFiltersProps> = (props) => {
         inputProps={{ min: 0 }} />
 
       <FormControlLabel sx={{ ml: 0 }} control={<Checkbox size="small" {...triState(props.hasBlueprints, props.onHasBlueprintsChange)} />}
-        label={<Typography variant="body2">Has Blueprints</Typography>} />
+        label={<Typography variant="body2">Blueprints {props.hasBlueprints === undefined ? "(any)" : props.hasBlueprints ? "(yes)" : "(no)"}</Typography>} />
       <FormControlLabel sx={{ ml: 0 }} control={<Checkbox size="small" {...triState(props.isShareable, props.onIsShareableChange)} />}
-        label={<Typography variant="body2">Shareable</Typography>} />
+        label={<Typography variant="body2">Shareable {props.isShareable === undefined ? "(any)" : props.isShareable ? "(yes)" : "(no)"}</Typography>} />
       <FormControlLabel sx={{ ml: 0 }} control={<Checkbox size="small" {...triState(props.isChainStarter, props.onIsChainStarterChange)} />}
-        label={<Typography variant="body2">Chain Starter</Typography>} />
+        label={<Typography variant="body2">Chain Starter {props.isChainStarter === undefined ? "(any)" : props.isChainStarter ? "(yes)" : "(no)"}</Typography>} />
 
       <Button size="small" startIcon={<RestartAltRounded />} onClick={props.onResetFilters} sx={{ textTransform: "none" }}>
         Reset Filters
