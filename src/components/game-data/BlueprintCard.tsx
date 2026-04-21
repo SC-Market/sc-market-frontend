@@ -78,7 +78,7 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
                 src={bp.output_item_icon}
                 variant="rounded"
                 sx={{ width: 32, height: 32, fontSize: "0.7rem", bgcolor: "primary.main", flexShrink: 0 }}
-                imgProps={{ style: { objectFit: "contain" } }}
+                imgProps={{ style: { objectFit: "cover" } }}
               >
                 {initials(bp.output_item_name)}
               </Avatar>
@@ -130,7 +130,7 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
             src={bp.output_item_icon}
             variant="rounded"
             sx={{ width: 40, height: 40, fontSize: "0.8rem", bgcolor: "primary.main", flexShrink: 0 }}
-            imgProps={{ style: { objectFit: "contain" } }}
+            imgProps={{ style: { objectFit: "cover" } }}
           >
             {initials(bp.output_item_name)}
           </Avatar>

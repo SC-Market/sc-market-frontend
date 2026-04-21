@@ -90,6 +90,7 @@ export function BlueprintBrowser() {
   const [tier, setTier] = useState<number | "">("")
   const [craftingStation, setCraftingStation] = useState("")
   const [ownedOnly, setOwnedOnly] = useState(false)
+  const [hasMissionSource, setHasMissionSource] = useState(false)
   const [page, setPage] = useState(1)
   const [allBlueprints, setAllBlueprints] = useState<any[]>([])
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"))
@@ -326,7 +327,7 @@ export function BlueprintBrowser() {
                           src={bp.output_item_icon}
                           variant="rounded"
                           sx={{ width: 28, height: 28, fontSize: "0.6rem", bgcolor: "primary.main" }}
-                          imgProps={{ style: { objectFit: "contain" } }}
+                          imgProps={{ style: { objectFit: "cover" } }}
                         >
                           {(bp.output_item_name || "?").slice(0, 2).toUpperCase()}
                         </Avatar>
