@@ -139,6 +139,7 @@ export function ListingDetailV2() {
       maxWidth="xl"
     >
       {listingData && listing && seller && (
+        <Grid item xs={12}>
         <Grid container spacing={theme.layoutSpacing.layout}>
           {/* LEFT COLUMN — Image + SEO */}
           <Grid item xs={12} lg={4}>
@@ -409,6 +410,7 @@ export function ListingDetailV2() {
               currentListingId={listing.listing_id}
             />
           )}
+        </Grid>
         </Grid>
       )}
     </StandardPageLayout>
