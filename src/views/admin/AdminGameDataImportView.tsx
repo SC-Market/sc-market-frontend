@@ -17,22 +17,36 @@ import {
   FormControl,
   InputLabel,
   Stack,
+  LinearProgress,
 } from "@mui/material"
 import { CloudUploadRounded, CheckCircleRounded, ErrorRounded } from "@mui/icons-material"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
-
-import { useImportGameDataMutation, GameDataImportResult } from "../../store/api/admin"
+import {
+  useImportGameDataMutation,
+  useGetGameDataImportJobQuery,
+  GameDataImportJob,
+} from "../../store/api/admin"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 
 export function AdminGameDataImportView() {
   const [file, setFile] = useState<File | null>(null)
-  const [result, setResult] = useState<GameDataImportResult | null>(null)
-  const [error, setError] = useState<string | null>(null)
+  const [jobId, setJobId] = useState<string | null>(null)
   const [gameVersion, setGameVersion] = useState("")
   const [gameChannel, setGameChannel] = useState<"LIVE" | "PTU" | "EPTU">("LIVE")
 
   const [importGameData, { isLoading: uploading }] = useImportGameDataMutation()
   const issueAlert = useAlertHook()
+
+  // Poll job status when we have a jobId
+  const isRunning = jobId != null
+  const { data: jobData } = useGetGameDataImportJobQuery(jobId!, {
+    skip: !jobId,
+    pollingInterval: jobId ? 2000 : 0,
+  })
+  const job = jobData?.job ?? null
+
+  // Stop polling when job is done
+  const isDone = job?.status === "completed" || job?.status === "failed"
 
   const handleDrop = useCallback((e: React.DragEvent) => {
     e.preventDefault()
@@ -47,8 +61,7 @@ export function AdminGameDataImportView() {
 
   const handleUpload = async () => {
     if (!file) return
-    setResult(null)
-    setError(null)
+    setJobId(null)
 
     try {
       const data = await importGameData({
@@ -57,36 +70,34 @@ export function AdminGameDataImportView() {
         gameVersion: gameVersion || undefined,
       }).unwrap()
 
-      setResult(data)
-
-      if (data.success) {
-        issueAlert({ message: "Game data imported successfully", severity: "success" })
-      } else {
-        const msg = data.error || "Import failed"
-        setError(data.details ? `${msg}: ${data.details}` : msg)
-        issueAlert({ message: msg, severity: "error" })
-      }
+      setJobId(data.job_id)
+      issueAlert({ message: "Import started", severity: "info" })
     } catch (err: any) {
       const msg = err?.data?.error || err?.message || "Upload failed"
-      setError(msg)
       issueAlert({ message: msg, severity: "error" })
     }
   }
+
+  // Alert when job completes
+  React.useEffect(() => {
+    if (job?.status === "completed") {
+      issueAlert({ message: "Game data imported successfully", severity: "success" })
+    } else if (job?.status === "failed") {
+      issueAlert({ message: job.error || "Import failed", severity: "error" })
+    }
+  }, [job?.status])
 
   return (
     <Box>
       <HeaderTitle>Game Data Import</HeaderTitle>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-        Upload a <code>game-data.zip</code> extracted from Star Citizen's Data.p4k
-        using StarBreaker. This updates items, blueprints, missions, resources,
-        ships, manufacturers, and starmap locations.
+        Upload a <code>game-data.zip</code> extracted from Star Citizen's Data.p4k.
       </Typography>
 
       {/* Upload area */}
       <Paper
         sx={{
-          p: 4,
-          mb: 3,
+          p: 4, mb: 3,
           border: "2px dashed",
           borderColor: file ? "primary.main" : "divider",
           textAlign: "center",
@@ -97,13 +108,7 @@ export function AdminGameDataImportView() {
         onDragOver={(e) => e.preventDefault()}
         onClick={() => document.getElementById("game-data-file-input")?.click()}
       >
-        <input
-          id="game-data-file-input"
-          type="file"
-          accept=".zip"
-          hidden
-          onChange={handleFileSelect}
-        />
+        <input id="game-data-file-input" type="file" accept=".zip" hidden onChange={handleFileSelect} />
         <CloudUploadRounded sx={{ fontSize: 48, color: "text.secondary", mb: 1 }} />
         <Typography variant="h6">
           {file ? file.name : "Drop game-data.zip here or click to browse"}
@@ -118,65 +123,76 @@ export function AdminGameDataImportView() {
       <Stack direction="row" spacing={2} sx={{ mb: 3 }}>
         <FormControl size="small" sx={{ minWidth: 120 }}>
           <InputLabel>Channel</InputLabel>
-          <Select
-            value={gameChannel}
-            label="Channel"
-            onChange={(e) => setGameChannel(e.target.value as "LIVE" | "PTU" | "EPTU")}
-          >
+          <Select value={gameChannel} label="Channel" onChange={(e) => setGameChannel(e.target.value as any)}>
             <MenuItem value="LIVE">LIVE</MenuItem>
             <MenuItem value="PTU">PTU</MenuItem>
             <MenuItem value="EPTU">EPTU</MenuItem>
           </Select>
         </FormControl>
         <TextField
-          size="small"
-          label="Game Version"
-          placeholder="e.g. 4.7.1"
-          value={gameVersion}
-          onChange={(e) => setGameVersion(e.target.value)}
+          size="small" label="Game Version" placeholder="e.g. 4.7.1"
+          value={gameVersion} onChange={(e) => setGameVersion(e.target.value)}
         />
         <Button
-          variant="contained"
-          size="large"
-          disabled={!file || uploading}
+          variant="contained" size="large"
+          disabled={!file || uploading || (isRunning && !isDone)}
           onClick={handleUpload}
           startIcon={uploading ? <CircularProgress size={20} /> : <CloudUploadRounded />}
         >
-          {uploading ? "Importing..." : "Import Game Data"}
+          {uploading ? "Uploading..." : "Import Game Data"}
         </Button>
       </Stack>
 
-      {/* Results */}
-      {error && (
+      {/* Job progress */}
+      {job && !isDone && (
+        <Paper sx={{ p: 2, mb: 2 }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 1 }}>
+            <CircularProgress size={18} />
+            <Typography variant="subtitle1" fontWeight={600}>
+              {job.status.charAt(0).toUpperCase() + job.status.slice(1)}
+            </Typography>
+            <Chip label={job.status} color="info" size="small" />
+          </Box>
+          <LinearProgress sx={{ mb: 1 }} />
+          {job.progress && (
+            <Typography variant="body2" color="text.secondary">{job.progress}</Typography>
+          )}
+        </Paper>
+      )}
+
+      {/* Job failed */}
+      {job?.status === "failed" && (
         <Alert severity="error" sx={{ mb: 2 }} icon={<ErrorRounded />}>
-          <Typography variant="subtitle2">{error}</Typography>
+          <Typography variant="subtitle2">{job.error}</Typography>
+          {job.details && <Typography variant="body2">{job.details}</Typography>}
         </Alert>
       )}
 
-      {result?.success && result.summary && (
+      {/* Job completed */}
+      {job?.status === "completed" && job.result?.summary && (
         <Paper sx={{ p: 2 }}>
           <Box sx={{ display: "flex", alignItems: "center", gap: 1, mb: 2 }}>
             <CheckCircleRounded color="success" />
             <Typography variant="h6">Import Complete</Typography>
-            {result.timestamp && <Chip label={result.timestamp} size="small" variant="outlined" />}
+            {job.result.timestamp && <Chip label={job.result.timestamp} size="small" variant="outlined" />}
           </Box>
-
           <Table size="small">
             <TableBody>
-              {Object.entries(result.summary).map(([key, value]) => (
+              {Object.entries(job.result.summary).map(([key, value]) => (
                 <TableRow key={key}>
-                  <TableCell sx={{ fontWeight: 600 }}>{key.replace(/([A-Z])/g, " $1").replace(/^./, s => s.toUpperCase())}</TableCell>
+                  <TableCell sx={{ fontWeight: 600 }}>
+                    {key.replace(/([A-Z])/g, " $1").replace(/^./, (s) => s.toUpperCase())}
+                  </TableCell>
                   <TableCell>{typeof value === "number" ? value.toLocaleString() : String(value)}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
-
-          {result.errors && result.errors.length > 0 && (
+          {job.result.errors?.length > 0 && (
             <Alert severity="warning" sx={{ mt: 2 }}>
-              <Typography variant="subtitle2">{result.errors.length} warnings</Typography>
+              <Typography variant="subtitle2">{job.result.errors.length} warnings</Typography>
               <Box component="ul" sx={{ m: 0, pl: 2, maxHeight: 200, overflow: "auto" }}>
-                {result.errors.slice(0, 20).map((e, i) => (
+                {job.result.errors.slice(0, 20).map((e, i) => (
                   <li key={i}><Typography variant="caption">{e}</Typography></li>
                 ))}
               </Box>

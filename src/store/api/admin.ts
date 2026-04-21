@@ -1,18 +1,35 @@
 /**
  * Admin API store — manual endpoints that can't be codegen'd.
  *
- * Import job endpoints (startImport, getJobStatus, listJobs) are now
- * generated in store/api/v2/market.ts. Import them from there.
+ * Import job endpoints (startImport, getJobStatus, listJobs) are generated
+ * in store/api/v2/market.ts. Import them from there.
  *
- * This file only contains the game data import mutation which requires
- * FormData (file upload) that the codegen can't express.
+ * This file contains:
+ * - importGameData: file upload (FormData) that codegen can't express
+ * - getGameDataImportJob: poll job status
  */
 import { generatedApi as api } from "../generatedApi"
+
+export interface GameDataImportJob {
+  id: string
+  status: "validating" | "extracting" | "importing" | "completed" | "failed"
+  startedAt: string
+  completedAt: string | null
+  progress: string | null
+  result: {
+    success: boolean
+    summary: Record<string, number>
+    errors: string[]
+    timestamp: string
+  } | null
+  error: string | null
+  details: string | null
+}
 
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
     importGameData: build.mutation<
-      GameDataImportResult,
+      { job_id: string },
       { file: File; gameChannel: string; gameVersion?: string }
     >({
       query: ({ file, gameChannel, gameVersion }) => {
@@ -27,19 +44,18 @@ const injectedRtkApi = api.injectEndpoints({
         }
       },
     }),
+    getGameDataImportJob: build.query<
+      { job: GameDataImportJob | null },
+      string
+    >({
+      query: (jobId) => `/api/v2/admin/import-game-data/${jobId}`,
+    }),
   }),
   overrideExisting: true,
 })
 
 export { injectedRtkApi as adminApi }
-
-export interface GameDataImportResult {
-  success: boolean
-  summary?: Record<string, number>
-  errors?: string[]
-  error?: string
-  details?: string
-  timestamp?: string
-}
-
-export const { useImportGameDataMutation } = injectedRtkApi
+export const {
+  useImportGameDataMutation,
+  useGetGameDataImportJobQuery,
+} = injectedRtkApi
