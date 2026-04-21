@@ -21,8 +21,6 @@ import {
   Alert,
   ToggleButtonGroup,
   ToggleButton,
-  Card,
-  CardContent,
   Checkbox,
   FormControlLabel,
   TextField,
@@ -40,9 +38,8 @@ import {
   Avatar,
   Stack,
   Button,
-  useMediaQuery,
 } from "@mui/material"
-import { ViewModule, ViewList, FilterList, RestartAltRounded } from "@mui/icons-material"
+import { ViewModule, ViewList, RestartAltRounded } from "@mui/icons-material"
 import { useSearchBlueprintsQuery, useGetBlueprintCategoriesQuery } from "../../store/api/v2/market"
 import { useNavigate } from "react-router-dom"
 import { useDebounce } from "../../hooks/useDebounce"
@@ -54,26 +51,10 @@ import { useTheme } from "@mui/material/styles"
 import { BlueprintDetailModal } from "../../components/game-data/BlueprintDetailModal"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
-import { BottomSheet } from "../../components/mobile/BottomSheet"
-import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
+import { FilterSidebarLayout } from "../../components/layout/FilterSidebarLayout"
 
 type ViewMode = "grid" | "list"
 
-/**
- * BlueprintBrowser Component
- * 
- * Features:
- * - Text search with partial matching (19.1, 43.10)
- * - Category filter with hierarchical support (19.2, 19.3)
- * - Rarity filter (19.1)
- * - Tier filter (19.1)
- * - Grid/list view toggle (43.10)
- * - Pagination (19.6)
- * - RTK Query integration (Task requirement)
- * - Debounced search for performance
- * - Responsive grid layout
- * - Material-UI components for consistency
- */
 export function BlueprintBrowser() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
@@ -93,9 +74,7 @@ export function BlueprintBrowser() {
   const [hasMissionSource, setHasMissionSource] = useState(false)
   const [page, setPage] = useState(1)
   const [allBlueprints, setAllBlueprints] = useState<any[]>([])
-  const isMobile = useMediaQuery(theme.breakpoints.down("lg"))
-  const [filterOpen, setFilterOpen] = useState(false)
-  const bottomNavHeight = useBottomNavHeight()
+
   // Debounce search text for performance (Requirement 19.6: <200ms response)
   const debouncedSearch = useDebounce(searchText, 300)
 
@@ -168,7 +147,7 @@ export function BlueprintBrowser() {
     .map((c) => c.subcategory!)
     .sort() || []
 
-  const filterContent = (
+  const filtersContent = (
     <Stack spacing={1.5}>
       <TextField fullWidth size="small" label="Search" value={searchText}
         onChange={(e) => setSearchText(e.target.value)} placeholder="Item or blueprint name..." />
@@ -227,178 +206,144 @@ export function BlueprintBrowser() {
       maxWidth="xl"
     >
       <Grid item xs={12}>
-        {/* Mobile: Bottom sheet for filters */}
-        {isMobile && (
-          <>
-            <BottomSheet open={filterOpen} onClose={() => setFilterOpen(false)} title="Filters">
-              {filterContent}
-            </BottomSheet>
-            <Button
-              variant="outlined" color="secondary" startIcon={<FilterList />}
-              onClick={() => setFilterOpen(true)}
-              sx={{
-                position: "fixed", bottom: bottomNavHeight + 16, right: 24,
-                zIndex: (t) => t.zIndex.speedDial, borderRadius: 2, textTransform: "none",
-                boxShadow: theme.shadows[4], backgroundColor: theme.palette.background.paper,
-                "&:hover": { backgroundColor: theme.palette.background.paper, boxShadow: theme.shadows[8] },
-              }}
-            >
-              Filters
-            </Button>
-          </>
-        )}
-
-        <Stack direction="row" spacing={2} sx={{ width: "100%" }}>
-          {/* Desktop: Sticky sidebar */}
-          {!isMobile && (
-            <Paper sx={{
-              position: "sticky", top: "calc(64px + 16px)",
-              maxHeight: "calc(100vh - 64px - 32px)", height: "fit-content",
-              width: 260, flexShrink: 0, overflowY: "auto", p: 1.5,
-            }}>
-              {filterContent}
-            </Paper>
-          )}
-
-          {/* Main content */}
-          <Box sx={{ flex: 1, minWidth: 0 }}>
-            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
-              <Typography variant="body2" color="text.secondary">
-                {data ? `${data.total} blueprints` : ""}
-              </Typography>
-              <ToggleButtonGroup value={viewMode} exclusive onChange={handleViewModeChange} size="small">
-                <ToggleButton value="grid"><ViewModule /></ToggleButton>
-                <ToggleButton value="list"><ViewList /></ToggleButton>
-              </ToggleButtonGroup>
-            </Box>
-      {/* Loading State */}
-      {isLoading && (
-        <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
-          <CircularProgress />
-        </Box>
-      )}
-
-      {/* Error State */}
-      {error && (
-        <Alert severity="error" sx={{ mb: 2 }}>
-          Failed to load blueprints. Please try again.
-        </Alert>
-      )}
-
-      {/* Results */}
-      {data && (
-        <>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            Found {data.total} blueprints
-          </Typography>
-
-          {/* Grid View (Requirement 43.10) */}
-          {viewMode === "grid" && (
-            <Grid container spacing={2}>
-              {filteredBlueprints.map((blueprint) => (
-                <Grid item xs={12} sm={6} md={4} lg={3} key={blueprint.blueprint_id}>
-                  <BlueprintCard
-                    blueprint={blueprint}
-                    viewMode="grid"
-                    onClick={handleBlueprintClick}
-                  />
-                </Grid>
-              ))}
-            </Grid>
-          )}
-
-          {/* List View (Requirement 43.10) */}
-          {viewMode === "list" && (
-            <Paper>
-              <Table size="small" sx={{ "& td, & th": { py: 0.5, px: 1 } }}>
-                <TableHead>
-                  <TableRow>
-                    <TableCell />
-                    <TableCell>Item</TableCell>
-                    <TableCell>Category</TableCell>
-                    <TableCell>Tags</TableCell>
-                    <TableCell align="center">Ingredients</TableCell>
-                    <TableCell align="center">Mission Sources</TableCell>
-                    <TableCell align="right">Craft Time</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {filteredBlueprints.map((bp) => (
-                    <TableRow
-                      key={bp.blueprint_id}
-                      hover
-                      sx={{ cursor: "pointer" }}
-                      onClick={() => handleBlueprintClick(bp.blueprint_id)}
-                    >
-                      <TableCell sx={{ width: 40 }}>
-                        <Avatar
-                          src={bp.output_item_icon}
-                          variant="rounded"
-                          sx={{ width: 28, height: 28, fontSize: "0.6rem", bgcolor: "primary.main" }}
-                          imgProps={{ style: { objectFit: "cover" } }}
-                        >
-                          {(bp.output_item_name || "?").slice(0, 2).toUpperCase()}
-                        </Avatar>
-                      </TableCell>
-                      <TableCell>
-                        <Typography variant="body2" fontWeight={600} noWrap sx={{ maxWidth: 240 }}>
-                          {bp.output_item_name}
-                        </Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Typography variant="caption" color="text.secondary" noWrap>
-                          {formatCategoryName(bp.item_category)}
-                        </Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Stack direction="row" spacing={0.5} flexWrap="nowrap">
-                          {bp.rarity && <Chip label={bp.rarity} size="small" color="primary" sx={{ height: 18, fontSize: "0.65rem" }} />}
-                          {bp.tier && <Chip label={`T${bp.tier}`} size="small" color="secondary" sx={{ height: 18, fontSize: "0.65rem" }} />}
-                        </Stack>
-                      </TableCell>
-                      <TableCell align="center">
-                        <Typography variant="caption">{bp.ingredient_count}</Typography>
-                      </TableCell>
-                      <TableCell align="center">
-                        {bp.mission_count > 0
-                          ? <Chip label={bp.mission_count} size="small" color="info" sx={{ height: 18, fontSize: "0.65rem", minWidth: 24 }} />
-                          : <Typography variant="caption" color="text.disabled">—</Typography>}
-                      </TableCell>
-                      <TableCell align="right">
-                        <Typography variant="caption">
-                          {bp.crafting_time_seconds
-                            ? bp.crafting_time_seconds >= 60
-                              ? `${Math.floor(bp.crafting_time_seconds / 60)}m${bp.crafting_time_seconds % 60 ? ` ${bp.crafting_time_seconds % 60}s` : ""}`
-                              : `${bp.crafting_time_seconds}s`
-                            : "—"}
-                        </Typography>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </Paper>
-          )}
-
-          {filteredBlueprints.length === 0 && !isFetching && (
-            <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", py: 6 }}>
-              <Typography color="text.secondary">
-                No blueprints found. Try adjusting your filters.
-              </Typography>
-            </Box>
-          )}
-
-          {/* Infinite scroll sentinel */}
-          <div ref={sentinelRef} />
-          {isFetching && page > 1 && (
-            <Box sx={{ display: "flex", justifyContent: "center", py: 2 }}>
-              <CircularProgress size={24} />
-            </Box>
-          )}
-        </>
-      )}
+        <FilterSidebarLayout filters={filtersContent} filterTitle="Filters">
+          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
+            <Typography variant="body2" color="text.secondary">
+              {data ? `${data.total} blueprints` : ""}
+            </Typography>
+            <ToggleButtonGroup value={viewMode} exclusive onChange={handleViewModeChange} size="small">
+              <ToggleButton value="grid"><ViewModule /></ToggleButton>
+              <ToggleButton value="list"><ViewList /></ToggleButton>
+            </ToggleButtonGroup>
           </Box>
-        </Stack>
+
+          {/* Loading State */}
+          {isLoading && (
+            <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
+              <CircularProgress />
+            </Box>
+          )}
+
+          {/* Error State */}
+          {error && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              Failed to load blueprints. Please try again.
+            </Alert>
+          )}
+
+          {/* Results */}
+          {data && (
+            <>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                Found {data.total} blueprints
+              </Typography>
+
+              {/* Grid View */}
+              {viewMode === "grid" && (
+                <Grid container spacing={2}>
+                  {filteredBlueprints.map((blueprint) => (
+                    <Grid item xs={12} sm={6} md={4} lg={3} key={blueprint.blueprint_id}>
+                      <BlueprintCard
+                        blueprint={blueprint}
+                        viewMode="grid"
+                        onClick={handleBlueprintClick}
+                      />
+                    </Grid>
+                  ))}
+                </Grid>
+              )}
+
+              {/* List View */}
+              {viewMode === "list" && (
+                <Paper>
+                  <Table size="small" sx={{ "& td, & th": { py: 0.5, px: 1 } }}>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell />
+                        <TableCell>Item</TableCell>
+                        <TableCell>Category</TableCell>
+                        <TableCell>Tags</TableCell>
+                        <TableCell align="center">Ingredients</TableCell>
+                        <TableCell align="center">Mission Sources</TableCell>
+                        <TableCell align="right">Craft Time</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {filteredBlueprints.map((bp) => (
+                        <TableRow
+                          key={bp.blueprint_id}
+                          hover
+                          sx={{ cursor: "pointer" }}
+                          onClick={() => handleBlueprintClick(bp.blueprint_id)}
+                        >
+                          <TableCell sx={{ width: 40 }}>
+                            <Avatar
+                              src={bp.output_item_icon}
+                              variant="rounded"
+                              sx={{ width: 28, height: 28, fontSize: "0.6rem", bgcolor: "primary.main" }}
+                              imgProps={{ style: { objectFit: "cover" } }}
+                            >
+                              {(bp.output_item_name || "?").slice(0, 2).toUpperCase()}
+                            </Avatar>
+                          </TableCell>
+                          <TableCell>
+                            <Typography variant="body2" fontWeight={600} noWrap sx={{ maxWidth: 240 }}>
+                              {bp.output_item_name}
+                            </Typography>
+                          </TableCell>
+                          <TableCell>
+                            <Typography variant="caption" color="text.secondary" noWrap>
+                              {formatCategoryName(bp.item_category)}
+                            </Typography>
+                          </TableCell>
+                          <TableCell>
+                            <Stack direction="row" spacing={0.5} flexWrap="nowrap">
+                              {bp.rarity && <Chip label={bp.rarity} size="small" color="primary" sx={{ height: 18, fontSize: "0.65rem" }} />}
+                              {bp.tier && <Chip label={`T${bp.tier}`} size="small" color="secondary" sx={{ height: 18, fontSize: "0.65rem" }} />}
+                            </Stack>
+                          </TableCell>
+                          <TableCell align="center">
+                            <Typography variant="caption">{bp.ingredient_count}</Typography>
+                          </TableCell>
+                          <TableCell align="center">
+                            {bp.mission_count > 0
+                              ? <Chip label={bp.mission_count} size="small" color="info" sx={{ height: 18, fontSize: "0.65rem", minWidth: 24 }} />
+                              : <Typography variant="caption" color="text.disabled">—</Typography>}
+                          </TableCell>
+                          <TableCell align="right">
+                            <Typography variant="caption">
+                              {bp.crafting_time_seconds
+                                ? bp.crafting_time_seconds >= 60
+                                  ? `${Math.floor(bp.crafting_time_seconds / 60)}m${bp.crafting_time_seconds % 60 ? ` ${bp.crafting_time_seconds % 60}s` : ""}`
+                                  : `${bp.crafting_time_seconds}s`
+                                : "—"}
+                            </Typography>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </Paper>
+              )}
+
+              {filteredBlueprints.length === 0 && !isFetching && (
+                <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", py: 6 }}>
+                  <Typography color="text.secondary">
+                    No blueprints found. Try adjusting your filters.
+                  </Typography>
+                </Box>
+              )}
+
+              {/* Infinite scroll sentinel */}
+              <div ref={sentinelRef} />
+              {isFetching && page > 1 && (
+                <Box sx={{ display: "flex", justifyContent: "center", py: 2 }}>
+                  <CircularProgress size={24} />
+                </Box>
+              )}
+            </>
+          )}
+        </FilterSidebarLayout>
       </Grid>
       <BlueprintDetailModal
         blueprintId={selectedBlueprintId}

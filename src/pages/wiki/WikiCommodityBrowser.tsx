@@ -32,6 +32,7 @@ import { useTranslation } from "react-i18next"
 import { useGetCommoditiesQuery } from "../../store/api/v2/market"
 import { CheckCircle, Cancel } from "@mui/icons-material"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
+import { FilterSidebarLayout } from "../../components/layout/FilterSidebarLayout"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function WikiCommodityBrowser() {
@@ -55,6 +56,37 @@ export function WikiCommodityBrowser() {
 
   const totalPages = data ? Math.ceil(data.total / data.page_size) : 0
 
+  const filtersContent = (
+    <Stack spacing={1.5}>
+      <FormControl fullWidth size="small">
+        <InputLabel>Category</InputLabel>
+        <Select
+          value={category}
+          label="Category"
+          size="small"
+          onChange={(e) => setCategory(e.target.value)}
+        >
+          <MenuItem value="">All Categories</MenuItem>
+          <MenuItem value="Metals">Metals</MenuItem>
+          <MenuItem value="Gases">Gases</MenuItem>
+          <MenuItem value="Minerals">Minerals</MenuItem>
+          <MenuItem value="Agricultural">Agricultural</MenuItem>
+          <MenuItem value="Medical">Medical</MenuItem>
+          <MenuItem value="Processed">Processed</MenuItem>
+        </Select>
+      </FormControl>
+      <FormControlLabel
+        control={
+          <Checkbox
+            checked={canBeMined === true}
+            onChange={(e) => setCanBeMined(e.target.checked ? true : undefined)}
+          />
+        }
+        label="Mineable only"
+      />
+    </Stack>
+  )
+
   return (
     <StandardPageLayout
       title={t("wiki.commodities.title", "Commodities & Resources")}
@@ -67,150 +99,114 @@ export function WikiCommodityBrowser() {
           Browse all resources with acquisition methods and mining statistics
         </Typography>
 
-        {/* Filters */}
-        <Card sx={{ mb: 3 }}>
-          <CardContent>
-            <Grid container spacing={2} alignItems="center">
-              <Grid item xs={12} sm={6}>
-                <FormControl fullWidth size="small">
-                  <InputLabel>Category</InputLabel>
-                  <Select
-                    value={category}
-                    label="Category"
-                    size="small"
-                    onChange={(e) => setCategory(e.target.value)}
-                  >
-                    <MenuItem value="">All Categories</MenuItem>
-                    <MenuItem value="Metals">Metals</MenuItem>
-                    <MenuItem value="Gases">Gases</MenuItem>
-                    <MenuItem value="Minerals">Minerals</MenuItem>
-                    <MenuItem value="Agricultural">Agricultural</MenuItem>
-                    <MenuItem value="Medical">Medical</MenuItem>
-                    <MenuItem value="Processed">Processed</MenuItem>
-                  </Select>
-                </FormControl>
+        <FilterSidebarLayout filters={filtersContent} filterTitle="Filters">
+          {/* Results */}
+          {isLoading && (
+            <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
+              <CircularProgress />
+            </Box>
+          )}
+
+          {error && (
+            <Alert severity="error" sx={{ mb: 2 }}>
+              Failed to load commodities. Please try again.
+            </Alert>
+          )}
+
+          {data && (
+            <>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                Found {data.total} resources
+              </Typography>
+
+              <Grid container spacing={2}>
+                {data.commodities.map((commodity) => (
+                  <Grid item xs={12} sm={6} md={4} key={commodity.resource_id}>
+                    <Card>
+                      <CardContent>
+                        <Stack direction="row" spacing={2} alignItems="flex-start">
+                          {commodity.image_url && (
+                            <Box
+                              component="img"
+                              src={commodity.image_url}
+                              alt={commodity.name}
+                              sx={{
+                                width: 60,
+                                height: 60,
+                                objectFit: "contain",
+                                bgcolor: "background.default",
+                                borderRadius: 1,
+                              }}
+                            />
+                          )}
+                          <Box sx={{ flex: 1 }}>
+                            <Typography variant="h6" gutterBottom>
+                              {commodity.name}
+                            </Typography>
+                            <Stack direction="row" spacing={0.5} sx={{ mb: 1 }} flexWrap="wrap">
+                              <Chip label={commodity.resource_category} size="small" color="primary" />
+                              {commodity.resource_subcategory && (
+                                <Chip label={commodity.resource_subcategory} size="small" />
+                              )}
+                            </Stack>
+                            <Typography variant="body2" color="text.secondary" gutterBottom>
+                              Acquisition Methods:
+                            </Typography>
+                            <List dense disablePadding>
+                              {commodity.can_be_mined && (
+                                <ListItem disablePadding>
+                                  <CheckCircle fontSize="small" color="success" sx={{ mr: 0.5 }} />
+                                  <ListItemText primary="Mining" primaryTypographyProps={{ variant: "caption" }} />
+                                </ListItem>
+                              )}
+                              {commodity.can_be_purchased && (
+                                <ListItem disablePadding>
+                                  <CheckCircle fontSize="small" color="success" sx={{ mr: 0.5 }} />
+                                  <ListItemText primary="Purchase" primaryTypographyProps={{ variant: "caption" }} />
+                                </ListItem>
+                              )}
+                              {commodity.can_be_salvaged && (
+                                <ListItem disablePadding>
+                                  <CheckCircle fontSize="small" color="success" sx={{ mr: 0.5 }} />
+                                  <ListItemText primary="Salvage" primaryTypographyProps={{ variant: "caption" }} />
+                                </ListItem>
+                              )}
+                              {commodity.can_be_looted && (
+                                <ListItem disablePadding>
+                                  <CheckCircle fontSize="small" color="success" sx={{ mr: 0.5 }} />
+                                  <ListItemText primary="Loot" primaryTypographyProps={{ variant: "caption" }} />
+                                </ListItem>
+                              )}
+                            </List>
+                          </Box>
+                        </Stack>
+                      </CardContent>
+                    </Card>
+                  </Grid>
+                ))}
               </Grid>
-              <Grid item xs={12} sm={6}>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={canBeMined === true}
-                      onChange={(e) => setCanBeMined(e.target.checked ? true : undefined)}
-                    />
-                  }
-                  label="Mineable only"
-                />
-              </Grid>
-            </Grid>
-          </CardContent>
-        </Card>
 
-        {/* Results */}
-        {isLoading && (
-          <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
-            <CircularProgress />
-          </Box>
-        )}
+              {data.commodities.length === 0 && (
+                <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", py: 6 }}>
+                  <Typography color="text.secondary">
+                    {t("wiki.commodities.noResults", "No results found. Try adjusting your filters.")}
+                  </Typography>
+                </Box>
+              )}
 
-        {error && (
-          <Alert severity="error" sx={{ mb: 2 }}>
-            Failed to load commodities. Please try again.
-          </Alert>
-        )}
-
-        {data && (
-          <>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-              Found {data.total} resources
-            </Typography>
-
-            <Grid container spacing={2}>
-              {data.commodities.map((commodity) => (
-                <Grid item xs={12} sm={6} md={4} key={commodity.resource_id}>
-                  <Card>
-                    <CardContent>
-                      <Stack direction="row" spacing={2} alignItems="flex-start">
-                        {commodity.image_url && (
-                          <Box
-                            component="img"
-                            src={commodity.image_url}
-                            alt={commodity.name}
-                            sx={{
-                              width: 60,
-                              height: 60,
-                              objectFit: "contain",
-                              bgcolor: "background.default",
-                              borderRadius: 1,
-                            }}
-                          />
-                        )}
-                        <Box sx={{ flex: 1 }}>
-                          <Typography variant="h6" gutterBottom>
-                            {commodity.name}
-                          </Typography>
-                          <Stack direction="row" spacing={0.5} sx={{ mb: 1 }} flexWrap="wrap">
-                            <Chip label={commodity.resource_category} size="small" color="primary" />
-                            {commodity.resource_subcategory && (
-                              <Chip label={commodity.resource_subcategory} size="small" />
-                            )}
-                          </Stack>
-                          <Typography variant="body2" color="text.secondary" gutterBottom>
-                            Acquisition Methods:
-                          </Typography>
-                          <List dense disablePadding>
-                            {commodity.can_be_mined && (
-                              <ListItem disablePadding>
-                                <CheckCircle fontSize="small" color="success" sx={{ mr: 0.5 }} />
-                                <ListItemText primary="Mining" primaryTypographyProps={{ variant: "caption" }} />
-                              </ListItem>
-                            )}
-                            {commodity.can_be_purchased && (
-                              <ListItem disablePadding>
-                                <CheckCircle fontSize="small" color="success" sx={{ mr: 0.5 }} />
-                                <ListItemText primary="Purchase" primaryTypographyProps={{ variant: "caption" }} />
-                              </ListItem>
-                            )}
-                            {commodity.can_be_salvaged && (
-                              <ListItem disablePadding>
-                                <CheckCircle fontSize="small" color="success" sx={{ mr: 0.5 }} />
-                                <ListItemText primary="Salvage" primaryTypographyProps={{ variant: "caption" }} />
-                              </ListItem>
-                            )}
-                            {commodity.can_be_looted && (
-                              <ListItem disablePadding>
-                                <CheckCircle fontSize="small" color="success" sx={{ mr: 0.5 }} />
-                                <ListItemText primary="Loot" primaryTypographyProps={{ variant: "caption" }} />
-                              </ListItem>
-                            )}
-                          </List>
-                        </Box>
-                      </Stack>
-                    </CardContent>
-                  </Card>
-                </Grid>
-              ))}
-            </Grid>
-
-            {data.commodities.length === 0 && (
-              <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", py: 6 }}>
-                <Typography color="text.secondary">
-                  {t("wiki.commodities.noResults", "No results found. Try adjusting your filters.")}
-                </Typography>
-              </Box>
-            )}
-
-            {totalPages > 1 && (
-              <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
-                <Pagination
-                  count={totalPages}
-                  page={page}
-                  onChange={handlePageChange}
-                  color="primary"
-                />
-              </Box>
-            )}
-          </>
-        )}
+              {totalPages > 1 && (
+                <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+                  <Pagination
+                    count={totalPages}
+                    page={page}
+                    onChange={handlePageChange}
+                    color="primary"
+                  />
+                </Box>
+              )}
+            </>
+          )}
+        </FilterSidebarLayout>
       </Grid>
     </StandardPageLayout>
   )
