@@ -110,14 +110,10 @@ export const MissionFilters: React.FC<MissionFiltersProps> = (props) => {
             props.onDifficultyRangeChange([min, max])
           }}
         >
-          <MenuItem value="">All</MenuItem>
-          <MenuItem value="1-1">1 (Easy)</MenuItem>
-          <MenuItem value="2-2">2</MenuItem>
-          <MenuItem value="3-3">3</MenuItem>
-          <MenuItem value="4-4">4</MenuItem>
-          <MenuItem value="5-5">5 (Hard)</MenuItem>
-          <MenuItem value="1-2">1–2</MenuItem>
-          <MenuItem value="3-5">3–5</MenuItem>
+          <MenuItem value="">All Difficulties</MenuItem>
+          <MenuItem value="1-2">Easy (1–2)</MenuItem>
+          <MenuItem value="3-3">Medium (3)</MenuItem>
+          <MenuItem value="4-5">Hard (4–5)</MenuItem>
         </Select>
       </FormControl>
 
