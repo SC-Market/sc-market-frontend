@@ -265,10 +265,10 @@ export function MissionSearch() {
             </ToggleButtonGroup>
           </Box>
 
-          <Grid container spacing={2}>
+          <Grid container spacing={1.5} alignItems="stretch">
             {viewMode === "grid" ? (
               allMissions.map((mission) => (
-                <Grid item xs={12} sm={6} md={4} key={mission.mission_id}>
+                <Grid item xs={12} sm={6} md={4} lg={3} key={mission.mission_id} sx={{ display: "flex" }}>
                   <MissionCard mission={mission} onClick={handleMissionClick} />
                 </Grid>
               ))
