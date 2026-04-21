@@ -234,6 +234,9 @@ export function CraftingCalculator() {
                   color={TIER_COLORS[result.output_quality_tier] || "default"}
                 />
                 <Typography>Quality: <strong>{result.output_quality_value.toFixed(0)}</strong> / 1000</Typography>
+                {result.output_quantity > 1 && (
+                  <Typography>Output: <strong>{result.output_quantity}×</strong></Typography>
+                )}
                 <Typography>Success: <strong>{result.success_probability.toFixed(1)}%</strong></Typography>
                 {result.critical_success_chance > 0 && (
                   <Typography color="warning.main">Crit: <strong>{result.critical_success_chance.toFixed(1)}%</strong></Typography>
