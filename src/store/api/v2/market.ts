@@ -619,6 +619,18 @@ const injectedRtkApi = api
         }),
         providesTags: ["Game Data - Missions"],
       }),
+      getReputationRanks: build.query<
+        GetReputationRanksApiResponse,
+        GetReputationRanksApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/game-data/missions/reputation-ranks`,
+          params: {
+            scope_code: queryArg.scopeCode,
+          },
+        }),
+        providesTags: ["Game Data - Missions"],
+      }),
       calculateQuality: build.mutation<
         CalculateQualityApiResponse,
         CalculateQualityApiArg
@@ -737,18 +749,6 @@ const injectedRtkApi = api
         }),
         providesTags: ["Game Data - Blueprints"],
       }),
-      getBlueprintCategories: build.query<
-        GetBlueprintCategoriesApiResponse,
-        GetBlueprintCategoriesApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/game-data/blueprints/categories`,
-          params: {
-            version_id: queryArg.versionId,
-          },
-        }),
-        providesTags: ["Game Data - Blueprints"],
-      }),
       addBlueprintToInventory: build.mutation<
         AddBlueprintToInventoryApiResponse,
         AddBlueprintToInventoryApiArg
@@ -769,6 +769,18 @@ const injectedRtkApi = api
           method: "DELETE",
         }),
         invalidatesTags: ["Game Data - Blueprints"],
+      }),
+      getBlueprintCategories: build.query<
+        GetBlueprintCategoriesApiResponse,
+        GetBlueprintCategoriesApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/game-data/blueprints/categories`,
+          params: {
+            version_id: queryArg.versionId,
+          },
+        }),
+        providesTags: ["Game Data - Blueprints"],
       }),
       getUserBlueprintInventory: build.query<
         GetUserBlueprintInventoryApiResponse,
@@ -1046,6 +1058,22 @@ const injectedRtkApi = api
       >({
         query: () => ({ url: `/admin/import-game-data`, method: "POST" }),
         invalidatesTags: ["Admin"],
+      }),
+      listGameDataImportJobs: build.query<
+        ListGameDataImportJobsApiResponse,
+        ListGameDataImportJobsApiArg
+      >({
+        query: () => ({ url: `/admin/import-game-data` }),
+        providesTags: ["Admin"],
+      }),
+      getImportJobStatus: build.query<
+        GetImportJobStatusApiResponse,
+        GetImportJobStatusApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/admin/import-game-data/${queryArg.jobId}`,
+        }),
+        providesTags: ["Admin"],
       }),
     }),
     overrideExisting: false,
@@ -1578,6 +1606,14 @@ export type GetMissionChainsApiArg = {
   /** Game version ID (defaults to active LIVE version) */
   versionId?: string
 }
+export type GetReputationRanksApiResponse = /** status 200 Ok */ {
+  scopes: string[]
+  ranks: ReputationRank[]
+}
+export type GetReputationRanksApiArg = {
+  /** The reputation scope code */
+  scopeCode?: string
+}
 export type CalculateQualityApiResponse =
   /** status 200 Quality calculation result with breakdown and predicted stats */ CalculateQualityResponse
 export type CalculateQualityApiArg = {
@@ -1669,12 +1705,6 @@ export type GetBlueprintMissionsApiArg = {
   /** Optional game version ID */
   versionId?: string
 }
-export type GetBlueprintCategoriesApiResponse =
-  /** status 200 Array of categories with counts */ BlueprintCategory[]
-export type GetBlueprintCategoriesApiArg = {
-  /** Optional game version ID (defaults to active LIVE version) */
-  versionId?: string
-}
 export type AddBlueprintToInventoryApiResponse =
   /** status 200 Success response with inventory ID */ {
     inventory_id: string
@@ -1697,6 +1727,12 @@ export type RemoveBlueprintFromInventoryApiResponse =
 export type RemoveBlueprintFromInventoryApiArg = {
   /** Blueprint UUID */
   blueprintId: string
+}
+export type GetBlueprintCategoriesApiResponse =
+  /** status 200 Array of categories with counts */ BlueprintCategory[]
+export type GetBlueprintCategoriesApiArg = {
+  /** Optional game version ID (defaults to active LIVE version) */
+  versionId?: string
 }
 export type GetUserBlueprintInventoryApiResponse =
   /** status 200 User's blueprint inventory with statistics */ {
@@ -1891,9 +1927,22 @@ export type RemoveUserOverrideApiArg = {
   userId: string
 }
 export type ImportGameDataApiResponse =
-  /** status 200 Import summary with statistics */
-  ImportGameDataResponse | ImportErrorResponse
+  /** status 200 Ok */
+  | {
+      job_id: string
+    }
+  | ImportErrorResponse
 export type ImportGameDataApiArg = void
+export type ListGameDataImportJobsApiResponse = /** status 200 Ok */ {
+  jobs: GameDataImportJob[]
+}
+export type ListGameDataImportJobsApiArg = void
+export type GetImportJobStatusApiResponse = /** status 200 Ok */ {
+  job: GameDataImportJob | null
+}
+export type GetImportJobStatusApiArg = {
+  jobId: string
+}
 export type VariantType = {
   /** Unique identifier for the variant type */
   variant_type_id: string
@@ -3107,6 +3156,12 @@ export type MissionSearchResult = {
   is_chain_starter: boolean
   /** Is shareable mission */
   is_shareable: boolean
+  /** Reputation XP reward */
+  reputation_reward?: number
+  /** Reputation scope (e.g., headhunter, salvage) */
+  reward_scope?: string
+  /** Mission giver organization */
+  mission_giver_org?: string
 }
 export type SearchMissionsResponse = {
   /** Mission search results */
@@ -3250,6 +3305,15 @@ export type BlueprintDetail = {
   drop_probability: number
   /** Is guaranteed reward */
   is_guaranteed: boolean
+}
+export type ReputationRank = {
+  scope_code: string
+  scope_display_name: string
+  standing_code: string
+  standing_display_name: string
+  threshold: number
+  ceiling: number
+  rank_index: number
 }
 export type QualityContribution = {
   /** Material name */
@@ -3982,6 +4046,12 @@ export type SetUserOverrideRequest = {
   user_id: string
   market_version: MarketVersion
 }
+export type ImportErrorResponse = {
+  success: false
+  error: string
+  details?: string
+  timestamp: string
+}
 export type ImportGameDataResponse = {
   success: boolean
   summary: {
@@ -4006,11 +4076,15 @@ export type ImportGameDataResponse = {
   errors: string[]
   timestamp: string
 }
-export type ImportErrorResponse = {
-  success: false
-  error: string
-  details?: string
-  timestamp: string
+export type GameDataImportJob = {
+  id: string
+  status: "validating" | "extracting" | "importing" | "completed" | "failed"
+  startedAt: string
+  completedAt: string | null
+  progress: string | null
+  result: ImportGameDataResponse | null
+  error: string | null
+  details: string | null
 }
 export const {
   useGetVariantTypesQuery,
@@ -4069,6 +4143,7 @@ export const {
   useCompleteMissionMutation,
   useRateMissionMutation,
   useGetMissionChainsQuery,
+  useGetReputationRanksQuery,
   useCalculateQualityMutation,
   useSimulateCraftingMutation,
   useRecordCraftingMutation,
@@ -4078,9 +4153,9 @@ export const {
   useSearchBlueprintsQuery,
   useGetBlueprintDetailQuery,
   useGetBlueprintMissionsQuery,
-  useGetBlueprintCategoriesQuery,
   useAddBlueprintToInventoryMutation,
   useRemoveBlueprintFromInventoryMutation,
+  useGetBlueprintCategoriesQuery,
   useGetUserBlueprintInventoryQuery,
   useGetFeatureFlagQuery,
   useSetFeatureFlagMutation,
@@ -4107,4 +4182,6 @@ export const {
   useSetUserOverrideMutation,
   useRemoveUserOverrideMutation,
   useImportGameDataMutation,
+  useListGameDataImportJobsQuery,
+  useGetImportJobStatusQuery,
 } = injectedRtkApi

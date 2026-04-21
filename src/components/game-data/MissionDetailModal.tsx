@@ -31,6 +31,7 @@ import { useTranslation } from "react-i18next"
 import { useGetMissionDetailQuery } from "../../store/api/v2/market"
 import { getMissionTypeLabel, formatMissionDescription } from "../../util/missionDisplay"
 import { MissionName } from "./MissionName"
+import { MissionRankCalculator } from "./MissionRankCalculator"
 
 interface MissionDetailModalProps {
   missionId: string | null
@@ -58,9 +59,10 @@ export function MissionDetailModal({ missionId, open, onClose, onBlueprintClick 
         </Typography>
         <IconButton onClick={onClose} size="small"><Close /></IconButton>
       </DialogTitle>
-      <Tabs value={tab} onChange={(_, v) => setTab(v)} sx={{ px: 2 }}>
+      <Tabs value={tab} onChange={(_, v) => setTab(v)} sx={{ px: 2 }} variant="scrollable">
         <Tab label={t("missions.overview", "Overview")} />
         <Tab label={t("missions.rewards", "Rewards")} />
+        <Tab label={t("missions.rankCalc", "Rank Calculator")} disabled={!data?.mission.reward_scope || !data?.mission.reputation_reward} />
         <Tab label={t("missions.chainInfo", "Chain Info")} />
       </Tabs>
       <DialogContent sx={{ minHeight: 400 }}>
@@ -68,7 +70,15 @@ export function MissionDetailModal({ missionId, open, onClose, onBlueprintClick 
         {error && <Alert severity="error">{t("missions.loadError", "Failed to load mission.")}</Alert>}
         {data && tab === 0 && <OverviewTab data={data} />}
         {data && tab === 1 && <RewardsTab data={data} onBlueprintClick={onBlueprintClick} />}
-        {data && tab === 2 && <ChainTab data={data} />}
+        {data && tab === 2 && data.mission.reward_scope && data.mission.reputation_reward && (
+          <MissionRankCalculator
+            reputationReward={data.mission.reputation_reward}
+            rewardScope={data.mission.reward_scope}
+            requiredRank={data.mission.required_rank}
+            isShareable={data.mission.is_shareable}
+          />
+        )}
+        {data && tab === 3 && <ChainTab data={data} />}
       </DialogContent>
     </Dialog>
   )
