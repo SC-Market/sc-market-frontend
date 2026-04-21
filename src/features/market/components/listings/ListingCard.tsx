@@ -834,15 +834,13 @@ export const LISTING_CARD_WIDTH = 200
 
 // Reusable wrapper for consistent listing sizing
 // useFixedWidth: true for horizontal scrolling (landing page), false for Grid layout
-export function ListingWrapper({ 
-  children, 
-  useFixedWidth = false 
-}: { 
-  children: React.ReactNode
-  useFixedWidth?: boolean
-}) {
+export const ListingWrapper = React.forwardRef<
+  HTMLDivElement,
+  { children: React.ReactNode; useFixedWidth?: boolean }
+>(function ListingWrapper({ children, useFixedWidth = false }, ref) {
   return (
     <Box
+      ref={ref}
       sx={{
         width: useFixedWidth ? { xs: "min(50vw, 200px)", sm: LISTING_CARD_WIDTH } : "100%",
         height: "100%",
@@ -852,7 +850,7 @@ export function ListingWrapper({
       {children}
     </Box>
   )
-}
+})
 
 export function ItemListing(props: {
   listing: ExtendedUniqueSearchResult
