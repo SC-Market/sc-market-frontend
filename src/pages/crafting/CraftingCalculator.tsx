@@ -6,22 +6,17 @@ import {
   Autocomplete,
   TextField,
   Button,
-  Slider,
   Select,
   MenuItem,
   FormControl,
   InputLabel,
   IconButton,
   Chip,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   CircularProgress,
   Alert,
   Box,
+  Stack,
+  Divider,
 } from "@mui/material"
 import { Add, Delete } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
@@ -30,24 +25,21 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import {
   useSearchBlueprintsQuery,
+  useSearchItemsQuery,
   useCalculateQualityMutation,
   type CraftingInputMaterial,
-  type CalculateQualityResponse,
 } from "../../store/api/v2/market"
 import { useDebounce } from "../../hooks/useDebounce"
 import { useSearchParams } from "react-router-dom"
 
-const TIER_COLORS: Record<number, string> = {
-  1: "default",
-  2: "success",
-  3: "info",
-  4: "secondary",
-  5: "warning",
+const TIER_COLORS: Record<number, "default" | "success" | "info" | "secondary" | "warning"> = {
+  1: "default", 2: "success", 3: "info", 4: "secondary", 5: "warning",
 }
 
 interface MaterialInput {
   id: number
   game_item_id: string
+  game_item_name: string
   quality_tier: number
   quality_value: number
   quantity: number
@@ -59,52 +51,61 @@ export function CraftingCalculator() {
   const [searchParams] = useSearchParams()
   const prefillBlueprintId = searchParams.get("blueprint_id")
 
-  const [searchText, setSearchText] = useState("")
+  // Blueprint search — by product name
+  const [bpSearch, setBpSearch] = useState("")
+  const debouncedBpSearch = useDebounce(bpSearch, 300)
+  const { data: bpData, isLoading: bpLoading } = useSearchBlueprintsQuery(
+    { text: debouncedBpSearch || undefined, pageSize: 20 },
+    { skip: !debouncedBpSearch },
+  )
+  const bpOptions = useMemo(() => bpData?.blueprints ?? [], [bpData])
+
   const [selectedBlueprint, setSelectedBlueprint] = useState<{
     blueprint_id: string
-    blueprint_name: string
-  } | null>(prefillBlueprintId ? { blueprint_id: prefillBlueprintId, blueprint_name: "" } : null)
-  const [materials, setMaterials] = useState<MaterialInput[]>([
-    { id: 1, game_item_id: "", quality_tier: 1, quality_value: 50, quantity: 1 },
-  ])
-  const [nextId, setNextId] = useState(2)
+    output_item_name: string
+  } | null>(prefillBlueprintId ? { blueprint_id: prefillBlueprintId, output_item_name: "" } : null)
 
-  const debouncedSearch = useDebounce(searchText, 300)
-  const { data: blueprintData, isLoading: blueprintsLoading } =
-    useSearchBlueprintsQuery(
-      { text: debouncedSearch || undefined, pageSize: 20 },
-      { skip: !debouncedSearch },
-    )
-  const [calculateQuality, { data: result, isLoading: calculating, error }] =
-    useCalculateQualityMutation()
-
-  const blueprintOptions = useMemo(
-    () => blueprintData?.blueprints ?? [],
-    [blueprintData],
+  // Material search
+  const [matSearch, setMatSearch] = useState("")
+  const debouncedMatSearch = useDebounce(matSearch, 300)
+  const { data: itemData } = useSearchItemsQuery(
+    { text: debouncedMatSearch, pageSize: 10 },
+    { skip: debouncedMatSearch.length < 2 },
   )
+  const itemOptions = useMemo(() => itemData?.items ?? [], [itemData])
 
-  const addMaterial = () => {
-    setMaterials((prev) => [
-      ...prev,
-      { id: nextId, game_item_id: "", quality_tier: 1, quality_value: 50, quantity: 1 },
-    ])
-    setNextId((n) => n + 1)
+  // Materials list
+  const [materials, setMaterials] = useState<MaterialInput[]>([])
+  const [nextId, setNextId] = useState(1)
+
+  const addMaterial = (itemId: string, itemName: string) => {
+    setMaterials(prev => [...prev, {
+      id: nextId,
+      game_item_id: itemId,
+      game_item_name: itemName,
+      quality_tier: 1,
+      quality_value: 500,
+      quantity: 1,
+    }])
+    setNextId(n => n + 1)
+    setMatSearch("")
   }
 
   const removeMaterial = (id: number) => {
-    setMaterials((prev) => prev.filter((m) => m.id !== id))
+    setMaterials(prev => prev.filter(m => m.id !== id))
   }
 
   const updateMaterial = (id: number, field: keyof MaterialInput, value: any) => {
-    setMaterials((prev) =>
-      prev.map((m) => (m.id === id ? { ...m, [field]: value } : m)),
-    )
+    setMaterials(prev => prev.map(m => m.id === id ? { ...m, [field]: value } : m))
   }
 
+  // Calculate
+  const [calculateQuality, { data: result, isLoading: calculating, error }] = useCalculateQualityMutation()
+
   const handleCalculate = () => {
-    if (!selectedBlueprint) return
-    const input_materials: CraftingInputMaterial[] = materials.map((m) => ({
-      game_item_id: m.game_item_id || `material-${m.id}`,
+    if (!selectedBlueprint || !materials.length) return
+    const input_materials: CraftingInputMaterial[] = materials.map(m => ({
+      game_item_id: m.game_item_id,
       quantity: m.quantity,
       quality_tier: m.quality_tier,
       quality_value: m.quality_value,
@@ -124,226 +125,135 @@ export function CraftingCalculator() {
       sidebarOpen={true}
       maxWidth="lg"
     >
-      <Grid item xs={12} container spacing={theme.layoutSpacing?.layout ?? 2}>
-        {/* Blueprint Selector */}
+      <Grid item xs={12} container spacing={2}>
+        {/* Blueprint Selector — search by product name */}
         <Grid item xs={12}>
           <Paper sx={{ p: 2 }}>
-            <Typography variant="h6" gutterBottom>
-              {t("crafting.select_blueprint", "Select Blueprint")}
-            </Typography>
-            <Autocomplete size="small"
-              options={blueprintOptions}
-              getOptionLabel={(o) => o.blueprint_name}
-              loading={blueprintsLoading}
-              value={
-                blueprintOptions.find(
-                  (o) => o.blueprint_id === selectedBlueprint?.blueprint_id,
-                ) ?? null
-              }
-              onInputChange={(_, val) => setSearchText(val)}
+            <Typography variant="subtitle2" gutterBottom>What do you want to craft?</Typography>
+            <Autocomplete
+              size="small"
+              options={bpOptions}
+              getOptionLabel={(o) => o.output_item_name || o.blueprint_name}
+              loading={bpLoading}
+              onInputChange={(_, val) => setBpSearch(val)}
               onChange={(_, val) =>
-                setSelectedBlueprint(
-                  val
-                    ? { blueprint_id: val.blueprint_id, blueprint_name: val.blueprint_name }
-                    : null,
-                )
+                setSelectedBlueprint(val ? { blueprint_id: val.blueprint_id, output_item_name: val.output_item_name } : null)
               }
+              renderOption={(props, option) => (
+                <li {...props} key={option.blueprint_id}>
+                  <Box>
+                    <Typography variant="body2">{option.output_item_name}</Typography>
+                    <Typography variant="caption" color="text.secondary">
+                      {option.rarity && `${option.rarity} · `}{option.item_category || ""}
+                    </Typography>
+                  </Box>
+                </li>
+              )}
               renderInput={(params) => (
-                <TextField
-                  {...params}
-                  label={t("crafting.blueprint", "Blueprint")}
-                  placeholder={t("crafting.search_blueprints", "Search blueprints...")}
-                />
+                <TextField {...params} label="Search by item name" placeholder="e.g. Behringer LMG" />
               )}
             />
           </Paper>
         </Grid>
 
-        {/* Material Inputs */}
+        {/* Materials */}
         <Grid item xs={12}>
           <Paper sx={{ p: 2 }}>
-            <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
-              <Typography variant="h6">
-                {t("crafting.materials", "Materials")}
+            <Typography variant="subtitle2" gutterBottom>Materials</Typography>
+
+            {/* Add material autocomplete */}
+            <Autocomplete
+              size="small"
+              options={itemOptions}
+              getOptionLabel={(o) => o.name}
+              inputValue={matSearch}
+              onInputChange={(_, val) => setMatSearch(val)}
+              onChange={(_, val) => {
+                if (val) addMaterial(val.id, val.name)
+              }}
+              value={null}
+              blurOnSelect
+              renderInput={(params) => (
+                <TextField {...params} label="Add material" placeholder="Search resources..." />
+              )}
+              sx={{ mb: 2 }}
+            />
+
+            {/* Material rows */}
+            {materials.length === 0 && (
+              <Typography variant="body2" color="text.secondary">
+                Search and add materials above
               </Typography>
-              <Button startIcon={<Add />} onClick={addMaterial} size="small">
-                {t("crafting.add_material", "Add Material")}
-              </Button>
-            </Box>
-            {materials.map((mat, idx) => (
-              <Grid container spacing={2} key={mat.id} sx={{ mb: 1 }} alignItems="center">
-                <Grid item xs={12} sm={3}>
-                  <TextField
-                    fullWidth
-                    size="small"
-                    label={t("crafting.material_id", "Material ID")}
-                    value={mat.game_item_id}
-                    onChange={(e) => updateMaterial(mat.id, "game_item_id", e.target.value)}
-                  />
-                </Grid>
-                <Grid item xs={6} sm={2}>
-                  <FormControl fullWidth size="small">
-                    <InputLabel>{t("crafting.quality_tier", "Tier")}</InputLabel>
-                    <Select
-                      value={mat.quality_tier}
-                      label={t("crafting.quality_tier", "Tier")}
-                      onChange={(e) => updateMaterial(mat.id, "quality_tier", e.target.value)}
-                    >
-                      {[1, 2, 3, 4, 5].map((tier) => (
-                        <MenuItem key={tier} value={tier}>
-                          {t("crafting.tier_n", `Tier ${tier}`, { n: tier })}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Grid>
-                <Grid item xs={6} sm={3}>
-                  <Typography variant="caption" color="text.secondary">
-                    {t("crafting.quality_value", "Quality")}: {mat.quality_value}
+            )}
+
+            <Stack spacing={1}>
+              {materials.map((mat) => (
+                <Stack key={mat.id} direction="row" spacing={1} alignItems="center">
+                  <Typography variant="body2" sx={{ flex: 1, minWidth: 100 }} noWrap>
+                    {mat.game_item_name}
                   </Typography>
-                  <Slider
-                    value={mat.quality_value}
-                    min={0}
-                    max={100}
-                    onChange={(_, val) => updateMaterial(mat.id, "quality_value", val)}
-                    size="small"
-                  />
-                </Grid>
-                <Grid item xs={6} sm={2}>
                   <TextField
-                    fullWidth
-                    size="small"
-                    type="number"
-                    label={t("crafting.quantity", "Qty")}
-                    value={mat.quantity}
-                    onChange={(e) =>
-                      updateMaterial(mat.id, "quantity", Math.max(1, parseInt(e.target.value) || 1))
-                    }
+                    size="small" type="number" label="Qty"
+                    value={mat.quantity} sx={{ width: 65 }}
+                    onChange={e => updateMaterial(mat.id, "quantity", Math.max(1, +e.target.value || 1))}
                     inputProps={{ min: 1 }}
                   />
-                </Grid>
-                <Grid item xs={6} sm={2}>
-                  <IconButton
-                    onClick={() => removeMaterial(mat.id)}
-                    disabled={materials.length <= 1}
-                    size="small"
-                  >
-                    <Delete />
+                  <FormControl size="small" sx={{ width: 80 }}>
+                    <InputLabel>Tier</InputLabel>
+                    <Select value={mat.quality_tier} label="Tier"
+                      onChange={e => updateMaterial(mat.id, "quality_tier", e.target.value)}>
+                      {[1,2,3,4,5].map(n => <MenuItem key={n} value={n}>T{n}</MenuItem>)}
+                    </Select>
+                  </FormControl>
+                  <TextField
+                    size="small" type="number" label="Quality"
+                    value={mat.quality_value} sx={{ width: 90 }}
+                    onChange={e => updateMaterial(mat.id, "quality_value", Math.max(0, Math.min(1000, +e.target.value || 0)))}
+                    inputProps={{ min: 0, max: 1000 }}
+                  />
+                  <IconButton size="small" onClick={() => removeMaterial(mat.id)}>
+                    <Delete fontSize="small" />
                   </IconButton>
-                </Grid>
-              </Grid>
-            ))}
+                </Stack>
+              ))}
+            </Stack>
           </Paper>
         </Grid>
 
-        {/* Calculate Button */}
+        {/* Calculate */}
         <Grid item xs={12}>
           <Button
             variant="contained"
             onClick={handleCalculate}
-            disabled={!selectedBlueprint || calculating}
-            fullWidth
+            disabled={calculating || !selectedBlueprint || !materials.length}
+            startIcon={calculating ? <CircularProgress size={20} /> : undefined}
           >
-            {calculating ? (
-              <CircularProgress size={24} />
-            ) : (
-              t("crafting.calculate", "Calculate Quality")
-            )}
+            Calculate Output Quality
           </Button>
         </Grid>
 
-        {/* Error */}
         {error && (
           <Grid item xs={12}>
-            <Alert severity="error">
-              {t("crafting.calc_error", "Calculation failed. Please try again.")}
-            </Alert>
+            <Alert severity="error">Calculation failed. Check your inputs.</Alert>
           </Grid>
         )}
 
-        {/* Results */}
-        {result && <ResultsPanel result={result} />}
+        {result && (
+          <Grid item xs={12}>
+            <Paper sx={{ p: 2 }}>
+              <Typography variant="subtitle2" gutterBottom>Predicted Output</Typography>
+              <Stack direction="row" spacing={2} alignItems="center">
+                <Chip
+                  label={`Tier ${result.output_quality_tier}`}
+                  color={TIER_COLORS[result.output_quality_tier] || "default"}
+                />
+                <Typography>Quality: <strong>{result.output_quality_value.toFixed(1)}</strong> / 1000</Typography>
+                <Typography>Success: <strong>{result.success_probability.toFixed(1)}%</strong></Typography>
+              </Stack>
+            </Paper>
+          </Grid>
+        )}
       </Grid>
     </StandardPageLayout>
-  )
-}
-
-function ResultsPanel({ result }: { result: CalculateQualityResponse }) {
-  const { t } = useTranslation()
-
-  return (
-    <>
-      <Grid item xs={12} md={6}>
-        <Paper sx={{ p: 2 }}>
-          <Typography variant="h6" gutterBottom>
-            {t("crafting.output_quality", "Output Quality")}
-          </Typography>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2 }}>
-            <Chip
-              label={`Tier ${result.output_quality_tier}`}
-              color={TIER_COLORS[result.output_quality_tier] as any}
-            />
-            <Typography variant="h5">{result.output_quality_value}</Typography>
-          </Box>
-          <Typography variant="body2" color="text.secondary">
-            {t("crafting.output_quantity", "Output Quantity")}: {result.output_quantity}
-          </Typography>
-        </Paper>
-      </Grid>
-
-      <Grid item xs={12} md={6}>
-        <Paper sx={{ p: 2 }}>
-          <Typography variant="h6" gutterBottom>
-            {t("crafting.probabilities", "Probabilities")}
-          </Typography>
-          <Typography>
-            {t("crafting.success_probability", "Success")}: {result.success_probability.toFixed(1)}%
-          </Typography>
-          <Typography>
-            {t("crafting.critical_success", "Critical Success")}: {result.critical_success_chance.toFixed(1)}%
-          </Typography>
-        </Paper>
-      </Grid>
-
-      {result.calculation_breakdown?.quality_contributions?.length > 0 && (
-        <Grid item xs={12}>
-          <Paper sx={{ p: 2 }}>
-            <Typography variant="h6" gutterBottom>
-              {t("crafting.breakdown", "Calculation Breakdown")}
-            </Typography>
-            <TableContainer>
-              <Table size="small">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>{t("crafting.material", "Material")}</TableCell>
-                    <TableCell align="right">{t("crafting.quality_tier", "Tier")}</TableCell>
-                    <TableCell align="right">{t("crafting.quality_value", "Quality")}</TableCell>
-                    <TableCell align="right">{t("crafting.weight", "Weight")}</TableCell>
-                    <TableCell align="right">{t("crafting.contribution", "Contribution")}</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {result.calculation_breakdown.quality_contributions.map((c, i) => (
-                    <TableRow key={i}>
-                      <TableCell>{c.material_name}</TableCell>
-                      <TableCell align="right">
-                        <Chip
-                          label={c.quality_tier}
-                          size="small"
-                          color={TIER_COLORS[c.quality_tier] as any}
-                        />
-                      </TableCell>
-                      <TableCell align="right">{c.quality_value}</TableCell>
-                      <TableCell align="right">{c.weight.toFixed(2)}</TableCell>
-                      <TableCell align="right">{c.contribution.toFixed(2)}</TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Paper>
-        </Grid>
-      )}
-    </>
   )
 }

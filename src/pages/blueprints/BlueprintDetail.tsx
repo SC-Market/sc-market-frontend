@@ -15,7 +15,6 @@ import {
   Divider,
   TextField,
   Button,
-  Slider,
   Select,
   MenuItem,
   FormControl,
@@ -169,7 +168,7 @@ function CalculatorTab({ data }: { data: any }) {
       name: ing.game_item?.name || "Unknown",
       quantity: ing.quantity_required,
       quality_tier: ing.recommended_quality_tier || ing.min_quality_tier || 1,
-      quality_value: 50,
+      quality_value: 500,
     }))
   )
 
@@ -209,9 +208,12 @@ function CalculatorTab({ data }: { data: any }) {
             </Select>
           </FormControl>
           <Box sx={{ width: 90 }}>
-            <Typography variant="caption" color="text.secondary">Q: {mat.quality_value}</Typography>
-            <Slider size="small" min={0} max={100} value={mat.quality_value}
-              onChange={(_, v) => updateMaterial(idx, "quality_value", v)} />
+            <TextField
+              size="small" type="number" label="Quality"
+              value={mat.quality_value} fullWidth
+              onChange={(e) => updateMaterial(idx, "quality_value", Math.max(0, Math.min(1000, +e.target.value || 0)))}
+              inputProps={{ min: 0, max: 1000 }}
+            />
           </Box>
         </Stack>
       ))}
