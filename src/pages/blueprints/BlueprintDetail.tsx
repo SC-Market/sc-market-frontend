@@ -1,5 +1,5 @@
 /**
- * BlueprintDetail — standalone page for mobile
+ * BlueprintDetail — standalone page with Overview (includes recipe) + Calculator tabs
  */
 
 import React, { useState } from "react"
@@ -12,14 +12,32 @@ import {
   Avatar,
   Chip,
   Stack,
+  Divider,
+  TextField,
+  Button,
+  Slider,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Alert,
+  CircularProgress,
 } from "@mui/material"
-import { useGetBlueprintDetailQuery } from "../../store/api/v2/market"
+import {
+  useGetBlueprintDetailQuery,
+  useCalculateQualityMutation,
+} from "../../store/api/v2/market"
+import type { CraftingInputMaterial } from "../../store/api/v2/market"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { formatCategoryName } from "../../util/categoryDisplay"
 
 function initials(name: string | undefined): string {
   if (!name) return "?"
   return name.split(/[\s_-]+/).map(w => w[0]).filter(Boolean).slice(0, 2).join("").toUpperCase()
+}
+
+const TIER_COLORS: Record<number, "default" | "warning" | "info" | "primary" | "secondary"> = {
+  1: "default", 2: "warning", 3: "info", 4: "primary", 5: "secondary",
 }
 
 export function BlueprintDetail() {
@@ -69,56 +87,154 @@ export function BlueprintDetail() {
 
           <Tabs value={tab} onChange={(_, v) => setTab(v)} sx={{ px: 2, mb: 2 }}>
             <Tab label="Overview" />
-            <Tab label="Ingredients" />
+            <Tab label="Calculator" disabled={!data.ingredients?.length} />
           </Tabs>
 
           <Box sx={{ px: 2 }}>
-            {tab === 0 && (
-              <Box>
-                {bp.blueprint_description && (
-                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                    {bp.blueprint_description}
-                  </Typography>
-                )}
-                <Typography variant="body2">
-                  <strong>Crafting time:</strong> {bp.crafting_time_seconds ? `${Math.floor(bp.crafting_time_seconds / 60)}m ${bp.crafting_time_seconds % 60}s` : "Unknown"}
-                </Typography>
-                <Typography variant="body2">
-                  <strong>Ingredients:</strong> {data.ingredients?.length || 0}
-                </Typography>
-                {data.missions_rewarding && data.missions_rewarding.length > 0 && (
-                  <Box sx={{ mt: 2 }}>
-                    <Typography variant="subtitle2" gutterBottom>Rewarded by missions:</Typography>
-                    {data.missions_rewarding.map((m) => (
-                      <Chip key={m.mission_id} label={m.mission_name} size="small" sx={{ mr: 0.5, mb: 0.5 }} />
-                    ))}
-                  </Box>
-                )}
-              </Box>
-            )}
-            {tab === 1 && data.ingredients && (
-              <Stack spacing={1}>
-                {data.ingredients.map((ing, i) => (
-                  <Box key={i} sx={{ display: "flex", gap: 1, alignItems: "center" }}>
-                    <Avatar
-                      src={ing.game_item.icon_url}
-                      variant="rounded"
-                      sx={{ width: 28, height: 28, fontSize: "0.6rem", bgcolor: "secondary.main" }}
-                      imgProps={{ style: { objectFit: "contain" } }}
-                    >
-                      {initials(ing.game_item.name)}
-                    </Avatar>
-                    <Typography variant="body2">{ing.game_item.name}</Typography>
-                    <Typography variant="body2" color="text.secondary" sx={{ ml: "auto" }}>
-                      ×{ing.quantity_required}
-                    </Typography>
-                  </Box>
-                ))}
-              </Stack>
-            )}
+            {tab === 0 && <OverviewTab data={data} itemName={itemName} />}
+            {tab === 1 && <CalculatorTab data={data} />}
           </Box>
         </>
       )}
     </StandardPageLayout>
+  )
+}
+
+function OverviewTab({ data, itemName }: { data: any; itemName: string }) {
+  const bp = data.blueprint
+
+  return (
+    <Stack spacing={2}>
+      {bp.blueprint_description && (
+        <Typography variant="body2" color="text.secondary">{bp.blueprint_description}</Typography>
+      )}
+
+      <Box>
+        <Typography variant="body2"><strong>Crafting time:</strong> {bp.crafting_time_seconds ? `${Math.floor(bp.crafting_time_seconds / 60)}m ${bp.crafting_time_seconds % 60}s` : "Unknown"}</Typography>
+        <Typography variant="body2"><strong>Output:</strong> {itemName} ×{bp.output_quantity || 1}</Typography>
+        {bp.crafting_station_type && (
+          <Typography variant="body2"><strong>Station:</strong> {bp.crafting_station_type}</Typography>
+        )}
+      </Box>
+
+      {/* Ingredients */}
+      {data.ingredients?.length > 0 && (
+        <>
+          <Divider />
+          <Typography variant="subtitle2">Ingredients ({data.ingredients.length})</Typography>
+          <Stack spacing={0.75}>
+            {data.ingredients.map((ing: any, i: number) => (
+              <Box key={i} sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+                <Avatar
+                  src={ing.game_item?.icon_url}
+                  variant="rounded"
+                  sx={{ width: 28, height: 28, fontSize: "0.6rem", bgcolor: "secondary.main" }}
+                  imgProps={{ style: { objectFit: "contain" } }}
+                >
+                  {initials(ing.game_item?.name)}
+                </Avatar>
+                <Typography variant="body2" sx={{ flex: 1 }}>{ing.game_item?.name || "Unknown"}</Typography>
+                {ing.min_quality_tier && (
+                  <Chip label={`T${ing.min_quality_tier}+`} size="small" sx={{ height: 18, fontSize: "0.65rem" }} />
+                )}
+                <Typography variant="body2" color="text.secondary">×{ing.quantity_required}</Typography>
+              </Box>
+            ))}
+          </Stack>
+        </>
+      )}
+
+      {/* Missions that reward this */}
+      {data.missions_rewarding?.length > 0 && (
+        <>
+          <Divider />
+          <Typography variant="subtitle2">Rewarded by missions ({data.missions_rewarding.length})</Typography>
+          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+            {data.missions_rewarding.map((m: any) => (
+              <Chip key={m.mission_id} label={m.mission_name} size="small" sx={{ height: 22 }} />
+            ))}
+          </Box>
+        </>
+      )}
+    </Stack>
+  )
+}
+
+function CalculatorTab({ data }: { data: any }) {
+  const [calculateQuality, { data: result, isLoading, error }] = useCalculateQualityMutation()
+
+  const [materials, setMaterials] = useState(() =>
+    (data.ingredients || []).map((ing: any) => ({
+      game_item_id: ing.game_item?.game_item_id || ing.ingredient_id,
+      name: ing.game_item?.name || "Unknown",
+      quantity: ing.quantity_required,
+      quality_tier: ing.recommended_quality_tier || ing.min_quality_tier || 1,
+      quality_value: 50,
+    }))
+  )
+
+  const updateMaterial = (idx: number, field: string, value: any) => {
+    setMaterials((prev: any[]) => prev.map((m, i) => i === idx ? { ...m, [field]: value } : m))
+  }
+
+  const handleCalculate = () => {
+    const input_materials: CraftingInputMaterial[] = materials.map((m: any) => ({
+      game_item_id: m.game_item_id,
+      quantity: m.quantity,
+      quality_tier: m.quality_tier,
+      quality_value: m.quality_value,
+    }))
+    calculateQuality({ calculateQualityRequest: { blueprint_id: data.blueprint.blueprint_id, input_materials } })
+  }
+
+  return (
+    <Stack spacing={2}>
+      <Typography variant="body2" color="text.secondary">
+        Adjust material quality to predict output quality
+      </Typography>
+
+      {materials.map((mat: any, idx: number) => (
+        <Stack key={mat.game_item_id} direction="row" spacing={1} alignItems="center">
+          <Typography variant="body2" sx={{ minWidth: 100, flex: 1 }} noWrap>{mat.name}</Typography>
+          <TextField
+            size="small" type="number" label="Qty"
+            value={mat.quantity} sx={{ width: 65 }}
+            onChange={e => updateMaterial(idx, "quantity", Math.max(1, +e.target.value || 1))}
+          />
+          <FormControl size="small" sx={{ width: 80 }}>
+            <InputLabel>Tier</InputLabel>
+            <Select value={mat.quality_tier} label="Tier"
+              onChange={e => updateMaterial(idx, "quality_tier", e.target.value)}>
+              {[1,2,3,4,5].map(n => <MenuItem key={n} value={n}>T{n}</MenuItem>)}
+            </Select>
+          </FormControl>
+          <Box sx={{ width: 90 }}>
+            <Typography variant="caption" color="text.secondary">Q: {mat.quality_value}</Typography>
+            <Slider size="small" min={0} max={100} value={mat.quality_value}
+              onChange={(_, v) => updateMaterial(idx, "quality_value", v)} />
+          </Box>
+        </Stack>
+      ))}
+
+      <Button variant="contained" size="small" onClick={handleCalculate} disabled={isLoading || !materials.length}>
+        {isLoading ? <CircularProgress size={20} /> : "Calculate"}
+      </Button>
+
+      {error && <Alert severity="error">Calculation failed.</Alert>}
+
+      {result && (
+        <>
+          <Divider />
+          <Stack direction="row" spacing={2} alignItems="center">
+            <Typography variant="subtitle2">Predicted Output:</Typography>
+            <Chip label={`Tier ${result.output_quality_tier}`} color={TIER_COLORS[result.output_quality_tier] || "default"} />
+            <Typography>Quality: {result.output_quality_value.toFixed(1)}</Typography>
+          </Stack>
+          <Typography variant="body2">
+            Success: {result.success_probability.toFixed(1)}%
+          </Typography>
+        </>
+      )}
+    </Stack>
   )
 }
