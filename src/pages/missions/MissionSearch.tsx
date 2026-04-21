@@ -20,7 +20,10 @@ import {
   Typography,
   CircularProgress,
   Alert,
+  ToggleButtonGroup,
+  ToggleButton,
 } from "@mui/material"
+import { ViewList, ViewModule } from "@mui/icons-material"
 import { useSearchMissionsQuery } from "../../store/api/v2/market"
 import { useNavigate } from "react-router-dom"
 import { useDebounce } from "../../hooks/useDebounce"
@@ -53,6 +56,7 @@ export function MissionSearch() {
   const [creditRewardMin, setCreditRewardMin] = useState<number | "">("")
   const [page, setPage] = useState(1)
   const [allMissions, setAllMissions] = useState<any[]>([])
+  const [viewMode, setViewMode] = useState<"list" | "grid">("list")
 
   // Debounce search text for performance (Requirement 1.6: <200ms response)
   const debouncedSearch = useDebounce(searchText, 300)
@@ -178,13 +182,24 @@ export function MissionSearch() {
       {/* Results */}
       {data && (
         <>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            Found {data.total} missions
-          </Typography>
+          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
+            <Typography variant="body2" color="text.secondary">
+              Found {data.total} missions
+            </Typography>
+            <ToggleButtonGroup
+              value={viewMode}
+              exclusive
+              onChange={(_, v) => v && setViewMode(v)}
+              size="small"
+            >
+              <ToggleButton value="list"><ViewList /></ToggleButton>
+              <ToggleButton value="grid"><ViewModule /></ToggleButton>
+            </ToggleButtonGroup>
+          </Box>
 
           <Grid container spacing={2}>
             {allMissions.map((mission) => (
-              <Grid item xs={12} key={mission.mission_id}>
+              <Grid item xs={12} sm={viewMode === "grid" ? 6 : 12} md={viewMode === "grid" ? 4 : 12} key={mission.mission_id}>
                 <MissionCard mission={mission} onClick={handleMissionClick} />
               </Grid>
             ))}
