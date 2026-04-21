@@ -41,6 +41,7 @@ import {
 import { useLocation, useSearchParams } from "react-router-dom"
 import { isCitizenIdEnabled, BACKEND_URL } from "../util/constants"
 import { useGetUserProfileQuery } from "../store/profile"
+import { startProactiveRefresh } from "../store/proactiveRefresh"
 
 import { getMuiLocales } from "../util/i18n"
 import { useTranslation } from "react-i18next"
@@ -99,6 +100,9 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
     }
     return actualTheme === "light" ? lightTheme : mainTheme
   }, [actualTheme, location.pathname, isDev, isAdmin, useLightTheme, dynamicOrgTheme, resolvedMode])
+
+  // Start proactive JWT refresh (every 13 min + on tab visibility change)
+  useEffect(() => { startProactiveRefresh() }, [])
 
   // Background: resolve domain + fetch theme for white-label sites
   useEffect(() => {
