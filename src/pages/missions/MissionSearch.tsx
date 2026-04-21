@@ -42,7 +42,7 @@ import { MissionDetailModal } from "../../components/game-data/MissionDetailModa
 import { BlueprintDetailModal } from "../../components/game-data/BlueprintDetailModal"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
-import { formatCredits, getMissionTypeLabel } from "../../util/missionDisplay"
+import { formatCredits, getMissionTypeLabel, formatMissionName } from "../../util/missionDisplay"
 
 export function MissionSearch() {
   const { t } = useTranslation()
@@ -237,7 +237,7 @@ export function MissionSearch() {
                         >
                           <TableCell>
                             <Typography variant="body2" fontWeight={600} noWrap sx={{ maxWidth: 280 }}>
-                              {m.mission_name}
+                              {formatMissionName(m.mission_name)}
                             </Typography>
                             {m.legal_status && (
                               <Chip

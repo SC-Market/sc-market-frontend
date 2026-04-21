@@ -29,6 +29,7 @@ import {
 import { Close } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { useGetMissionDetailQuery } from "../../store/api/v2/market"
+import { getMissionTypeLabel, formatMissionDescription, formatMissionName } from "../../util/missionDisplay"
 
 interface MissionDetailModalProps {
   missionId: string | null
@@ -52,7 +53,7 @@ export function MissionDetailModal({ missionId, open, onClose, onBlueprintClick 
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
       <DialogTitle sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <Typography variant="h6" noWrap sx={{ flex: 1 }}>
-          {data?.mission.mission_name || t("missions.detail.title", "Mission Detail")}
+          {formatMissionName(data?.mission.mission_name) || t("missions.detail.title", "Mission Detail")}
         </Typography>
         <IconButton onClick={onClose} size="small"><Close /></IconButton>
       </DialogTitle>
@@ -79,7 +80,7 @@ function OverviewTab({ data }: { data: any }) {
   return (
     <Stack spacing={2}>
       <Stack direction="row" spacing={1} flexWrap="wrap" gap={0.5}>
-        {m.category && <Chip label={m.category} size="small" />}
+        {m.category && <Chip label={getMissionTypeLabel(m.category)} size="small" />}
         {m.career_type && <Chip label={m.career_type} size="small" variant="outlined" />}
         {m.legal_status && (
           <Chip label={m.legal_status} size="small"
@@ -239,8 +240,8 @@ function ChainTab({ data }: { data: any }) {
           <Stack spacing={0.5}>
             {data.prerequisite_missions.map((pm: any) => (
               <Stack key={pm.mission_id} direction="row" spacing={1} alignItems="center">
-                <Typography variant="body2">{pm.mission_name}</Typography>
-                {pm.category && <Chip label={pm.category} size="small" variant="outlined" />}
+                <Typography variant="body2">{formatMissionName(pm.mission_name)}</Typography>
+                {pm.category && <Chip label={getMissionTypeLabel(pm.category)} size="small" variant="outlined" />}
               </Stack>
             ))}
           </Stack>
