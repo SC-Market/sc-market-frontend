@@ -44,8 +44,11 @@ function interpolateModifier(qv: number, startQ: number, endQ: number, modStart:
 
 const PROPERTY_LABELS: Record<string, string> = {
   damagemitigation: "Damage Mitigation",
+  gpp_armor_damagemitigation: "Damage Mitigation",
   mintemp: "Min Temp",
+  gpp_armor_mintemp: "Min Temp",
   maxtemp: "Max Temp",
+  gpp_armor_maxtemp: "Max Temp",
   emreduction: "EM Reduction",
   irreduction: "IR Reduction",
   durability: "Durability",
@@ -53,7 +56,12 @@ const PROPERTY_LABELS: Record<string, string> = {
 }
 
 function propertyLabel(prop: string): string {
-  return PROPERTY_LABELS[prop.toLowerCase()] || prop.replace(/([a-z])([A-Z])/g, "$1 $2").replace(/^./, s => s.toUpperCase())
+  const lower = prop.toLowerCase()
+  if (PROPERTY_LABELS[lower]) return PROPERTY_LABELS[lower]
+  // Strip common prefixes
+  const stripped = lower.replace(/^gpp_armor_/, "").replace(/^gpp_/, "")
+  if (PROPERTY_LABELS[stripped]) return PROPERTY_LABELS[stripped]
+  return stripped.replace(/([a-z])([A-Z])/g, "$1 $2").replace(/^./, s => s.toUpperCase())
 }
 
 export function BlueprintDetail() {
@@ -276,6 +284,9 @@ export function BlueprintDetail() {
               ⏱ Craft Time: {formatTime(bp.crafting_time_seconds)}
             </Typography>
           )}
+          <Typography variant="body2" color="text.secondary">
+            🔧 Disassemble: 15s · Returns 50% of materials
+          </Typography>
 
           </>)}
 
@@ -292,16 +303,17 @@ export function BlueprintDetail() {
                       sx={{ cursor: "pointer" }}
                       onClick={() => navigate(`/user/${m.username}`)}
                     >
-                      <Avatar src={m.avatar} sx={{ width: 28, height: 28, fontSize: "0.6rem" }}>
+                      <Avatar src={m.avatar} sx={{ width: 32, height: 32, fontSize: "0.65rem" }}>
                         {m.display_name.slice(0, 2).toUpperCase()}
                       </Avatar>
                       <Box>
-                        <Typography variant="body2" fontWeight={600}>{m.display_name}</Typography>
-                        {m.acquisition_date && (
-                          <Typography variant="caption" color="text.secondary">
-                            Acquired {new Date(m.acquisition_date).toLocaleDateString()}
-                          </Typography>
-                        )}
+                        <Typography variant="body2" fontWeight={600} color="primary">
+                          {m.display_name}
+                        </Typography>
+                        <Typography variant="caption" color="text.secondary">
+                          @{m.username}
+                          {m.acquisition_date && ` · Acquired ${new Date(m.acquisition_date).toLocaleDateString()}`}
+                        </Typography>
                       </Box>
                     </Stack>
                   ))}
