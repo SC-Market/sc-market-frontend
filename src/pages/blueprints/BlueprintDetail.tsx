@@ -25,6 +25,7 @@ import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { formatCategoryName } from "../../util/categoryDisplay"
 import { getCommodityColor } from "../../util/gameIcons"
 import { GameItemAvatar } from "../../components/game-data/GameItemAvatar"
+import { TrackChangesRounded, BuildRounded, TimerRounded, RecyclingRounded } from "@mui/icons-material"
 
 function formatQty(qty: number): string {
   const r = Math.round(qty * 100) / 100
@@ -153,7 +154,7 @@ export function BlueprintDetail() {
           {data.missions_rewarding?.length > 0 && (
             <Box sx={{ mb: 2 }}>
               <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
-                🎯 Missions ({data.missions_rewarding.length})
+                <TrackChangesRounded sx={{ fontSize: 16, mr: 0.5 }} />Missions ({data.missions_rewarding.length})
               </Typography>
               <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
                 {data.missions_rewarding.slice(0, 8).map((m: any) => (
@@ -204,7 +205,7 @@ export function BlueprintDetail() {
           </Stack>
 
           {/* Ingredients with inline sliders */}
-          <Typography variant="subtitle2" sx={{ mb: 1 }}>⚒ Craft</Typography>
+          <Typography variant="subtitle2" sx={{ mb: 1 }}><BuildRounded sx={{ fontSize: 16, mr: 0.5 }} />Craft</Typography>
           <Stack spacing={2} sx={{ mb: 2 }}>
             {ingredients.map((ing: any, idx: number) => {
               const qv = qualities[idx] ?? 500
@@ -281,11 +282,11 @@ export function BlueprintDetail() {
           {/* Craft time */}
           {bp.crafting_time_seconds && (
             <Typography variant="body2" color="text.secondary">
-              ⏱ Craft Time: {formatTime(bp.crafting_time_seconds)}
+              <TimerRounded sx={{ fontSize: 16, mr: 0.5, verticalAlign: "text-bottom" }} />Craft Time: {formatTime(bp.crafting_time_seconds)}
             </Typography>
           )}
           <Typography variant="body2" color="text.secondary">
-            🔧 Disassemble: 15s · Returns 50% of materials
+            <RecyclingRounded sx={{ fontSize: 16, mr: 0.5, verticalAlign: "text-bottom" }} />Disassemble: 15s · Returns 50% of materials
           </Typography>
 
           </>)}
