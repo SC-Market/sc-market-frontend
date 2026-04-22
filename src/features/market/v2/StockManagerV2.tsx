@@ -35,7 +35,7 @@ import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
-import { LazyDataGrid as DataGrid } from "../../../components/grid/LazyDataGrid"
+import { ThemedDataGrid } from "../../../components/grid/ThemedDataGrid"
 import { StandardPageLayout } from "../../../components/layout/StandardPageLayout"
 import { ManageListingsTabBar } from "../components/ManageListingsTabBar"
 import { MarketSearchAreaV2, MarketSidebarV2 } from "./ListingSearchV2"
@@ -44,6 +44,7 @@ import { UnderlineLink } from "../../../components/typography/UnderlineLink"
 import FilterListIcon from "@mui/icons-material/FilterList"
 import {
   useGetMyListingsQuery,
+  useUpdateListingMutation,
   useRefreshListingMutation,
   useDeleteListingMutation,
   type MyListingItem,
@@ -69,8 +70,24 @@ export function StockManagerV2() {
   })
   const [refreshListing] = useRefreshListingMutation()
   const [deleteListing] = useDeleteListingMutation()
+  const [updateListing] = useUpdateListingMutation()
 
   const listings = data?.listings ?? []
+
+  const processRowUpdate = useCallback(async (newRow: any, oldRow: any) => {
+    const changes: any = {}
+    if (newRow.title !== oldRow.title) changes.title = newRow.title
+    if (newRow.status !== oldRow.status) changes.status = newRow.status
+    if (Object.keys(changes).length === 0) return oldRow
+    try {
+      await updateListing({ id: newRow.listing_id, updateListingRequest: changes }).unwrap()
+      issueAlert({ message: t("ItemStock.updated", "Listing updated"), severity: "success" })
+      return newRow
+    } catch {
+      issueAlert({ message: "Failed to update", severity: "error" })
+      return oldRow
+    }
+  }, [updateListing, issueAlert, t])
 
   const handleRefresh = useCallback(async (id: string) => {
     try {
@@ -93,6 +110,7 @@ export function StockManagerV2() {
       headerName: t("ItemStock.item", "Item"),
       flex: 2,
       minWidth: 200,
+      editable: true,
       display: "flex" as const,
       renderCell: (params: GridRenderCellParams) => (
         <Stack direction="row" spacing={1} alignItems="center">
@@ -144,7 +162,10 @@ export function StockManagerV2() {
     {
       field: "status",
       headerName: t("ItemStock.status", "Status"),
-      width: 90,
+      width: 100,
+      editable: true,
+      type: "singleSelect" as const,
+      valueOptions: ["active", "inactive"],
       display: "flex" as const,
       renderCell: (params: GridRenderCellParams) => (
         <Chip
@@ -281,11 +302,12 @@ export function StockManagerV2() {
           {/* Content */}
           <Grid item xs={12} md={isMobile ? 12 : 9}>
             {isMobile ? mobileCards : (
-              <DataGrid
+              <ThemedDataGrid
                 rows={rows}
                 columns={columns}
                 getRowId={(row) => row.id}
                 disableRowSelectionOnClick
+                processRowUpdate={processRowUpdate}
                 paginationMode="server"
                 rowCount={data?.total ?? 0}
                 paginationModel={{ page, pageSize }}
@@ -293,7 +315,6 @@ export function StockManagerV2() {
                 pageSizeOptions={[24, 48, 96]}
                 loading={isLoading}
                 initialState={{ sorting: { sortModel: [{ field: "title", sort: "asc" }] } }}
-                sx={{ "& .MuiDataGrid-cell": { py: 1 } }}
               />
             )}
           </Grid>
