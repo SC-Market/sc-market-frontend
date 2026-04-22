@@ -27,11 +27,10 @@ import { getCommodityColor, getItemCategoryColor } from "../../util/gameIcons"
 import { GameItemAvatar } from "../../components/game-data/GameItemAvatar"
 import { TrackChangesRounded, BuildRounded, TimerRounded, RecyclingRounded } from "@mui/icons-material"
 
-/** Format quantity — values are stored as cSCU (hundredths of SCU) */
-function formatQty(cScu: number): string {
-  const r = Math.round(cScu * 100) / 100
-  if (r >= 100) return `${(r / 100).toFixed(2)} SCU`
-  return `${r} cSCU`
+/** Format quantity — values are in SCU */
+function formatQty(scu: number): string {
+  if (scu >= 1) return `${scu.toFixed(2)} SCU`
+  return `${scu.toFixed(2)} SCU`
 }
 
 function formatTime(s: number): string {
@@ -186,6 +185,7 @@ export function BlueprintDetail() {
           {/* Tabs */}
           <Tabs value={tab} onChange={(_, v) => setTab(v)} sx={{ mb: 2 }}>
             <Tab label="Craft" />
+            <Tab label="Disassemble" />
             {spectrumId && <Tab label="Org Owners" />}
           </Tabs>
 
@@ -286,15 +286,42 @@ export function BlueprintDetail() {
             <Typography variant="body2" color="text.secondary">
               <TimerRounded sx={{ fontSize: 16, mr: 0.5, verticalAlign: "text-bottom" }} />Craft Time: {formatTime(bp.crafting_time_seconds)}
             </Typography>
-          )}
-          <Typography variant="body2" color="text.secondary">
-            <RecyclingRounded sx={{ fontSize: 16, mr: 0.5, verticalAlign: "text-bottom" }} />Disassemble: 15s · Returns 50% of materials
           </Typography>
 
           </>)}
 
+          {/* Disassemble tab */}
+          {tab === 1 && (
+            <Stack spacing={2}>
+              <Stack direction="row" spacing={2}>
+                <Box>
+                  <Typography variant="caption" color="text.secondary">Efficiency</Typography>
+                  <Typography variant="body1" fontWeight={600}>50%</Typography>
+                </Box>
+                <Box>
+                  <Typography variant="caption" color="text.secondary">Time</Typography>
+                  <Typography variant="body1" fontWeight={600}><TimerRounded sx={{ fontSize: 16, mr: 0.5, verticalAlign: "text-bottom" }} />15s</Typography>
+                </Box>
+              </Stack>
+              <Divider />
+              <Typography variant="subtitle2">Recovered Materials</Typography>
+              <Stack spacing={0.75}>
+                {ingredients.map((ing: any, i: number) => {
+                  const recovered = Math.round(ing.quantity_required * 50) / 100
+                  return (
+                    <Stack key={i} direction="row" spacing={1} alignItems="center">
+                      <GameItemAvatar name={ing.game_item?.name} iconUrl={ing.game_item?.icon_url} subType={ing.game_item?.sub_type} itemType={ing.game_item?.type} size={28} />
+                      <Typography variant="body2" sx={{ flex: 1 }}>{ing.game_item?.name || "Unknown"}</Typography>
+                      <Typography variant="body2" fontWeight={600}>{recovered.toFixed(2)} SCU</Typography>
+                    </Stack>
+                  )
+                })}
+              </Stack>
+            </Stack>
+          )}
+
           {/* Org Owners tab */}
-          {tab === 1 && spectrumId && (
+          {tab === 2 && spectrumId && (
             <Box>
               <Typography variant="subtitle2" sx={{ mb: 1 }}>
                 Org members who own this blueprint

@@ -322,9 +322,9 @@ export function BlueprintBrowser() {
                             <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap sx={{ maxWidth: 200 }}>
                               {(bp.ingredients || []).slice(0, 4).map((ing: any, i: number) => {
                                 const short = ing.name.replace(/[aeiou]/gi, "").slice(0, 4).toUpperCase() || ing.name.slice(0, 4).toUpperCase()
-                                const qty = ing.quantity_required
+                                const qty = ing.quantity_required.toFixed(2)
                                 return (
-                                  <Tooltip key={i} title={`${ing.name} — ${qty} cSCU (${(qty / 100).toFixed(2)} SCU)`} arrow>
+                                  <Tooltip key={i} title={`${ing.name} — ${qty} SCU`} arrow>
                                   <Chip
                                     label={`${short}×${qty}`}
                                     size="small"

@@ -32,10 +32,8 @@ import { formatCategoryName } from "../../util/categoryDisplay"
 import { getCommodityColor, getItemCategoryColor } from "../../util/gameIcons"
 import { GameItemAvatar } from "./GameItemAvatar"
 
-function formatQty(cScu: number): string {
-  const r = Math.round(cScu * 100) / 100
-  if (r >= 100) return `${(r / 100).toFixed(2)} SCU`
-  return `${r} cSCU`
+function formatQty(scu: number): string {
+  return `${scu.toFixed(2)} SCU`
 }
 
 function formatTime(s: number): string {
@@ -130,6 +128,7 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
 
       <Tabs value={tab} onChange={(_, v) => setTab(v)} sx={{ px: 2 }}>
         <Tab label="Craft" />
+        <Tab label="Disassemble" />
         {spectrumId && <Tab label="Org Owners" />}
       </Tabs>
 
@@ -206,12 +205,41 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
             {bp?.crafting_time_seconds && (
               <Typography variant="body2" color="text.secondary"><TimerRounded sx={{ fontSize: 16, mr: 0.5, verticalAlign: "text-bottom" }} />Craft Time: {formatTime(bp.crafting_time_seconds)}</Typography>
             )}
-            <Typography variant="body2" color="text.secondary"><RecyclingRounded sx={{ fontSize: 16, mr: 0.5, verticalAlign: "text-bottom" }} />Disassemble: 15s · Returns 50% of materials</Typography>
+          </Stack>
+        )}
+
+        {/* Disassemble tab */}
+        {data && tab === 1 && (
+          <Stack spacing={2}>
+            <Stack direction="row" spacing={2}>
+              <Box>
+                <Typography variant="caption" color="text.secondary">Efficiency</Typography>
+                <Typography variant="body1" fontWeight={600}>50%</Typography>
+              </Box>
+              <Box>
+                <Typography variant="caption" color="text.secondary">Time</Typography>
+                <Typography variant="body1" fontWeight={600}><TimerRounded sx={{ fontSize: 16, mr: 0.5, verticalAlign: "text-bottom" }} />15s</Typography>
+              </Box>
+            </Stack>
+            <Divider />
+            <Typography variant="subtitle2">Recovered Materials</Typography>
+            <Stack spacing={0.75}>
+              {ingredients.map((ing: any, i: number) => {
+                const recovered = ing.quantity_required * 0.5
+                return (
+                  <Stack key={i} direction="row" spacing={1} alignItems="center">
+                    <GameItemAvatar name={ing.game_item?.name} iconUrl={ing.game_item?.icon_url} subType={ing.game_item?.sub_type} itemType={ing.game_item?.type} size={28} />
+                    <Typography variant="body2" sx={{ flex: 1 }}>{ing.game_item?.name || "Unknown"}</Typography>
+                    <Typography variant="body2" fontWeight={600}>{recovered.toFixed(2)} SCU</Typography>
+                  </Stack>
+                )
+              })}
+            </Stack>
           </Stack>
         )}
 
         {/* Org Owners tab */}
-        {tab === 1 && spectrumId && (
+        {tab === 2 && spectrumId && (
           <Box>
             <Typography variant="subtitle2" sx={{ mb: 1 }}>Org members who own this blueprint</Typography>
             {orgOwners?.members.length ? (
