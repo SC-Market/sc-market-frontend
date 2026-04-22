@@ -3677,6 +3677,13 @@ export type BlueprintSearchResult = {
   tier?: number
   /** Number of ingredients */
   ingredient_count: number
+  /** Ingredient summaries */
+  ingredients: {
+    quantity_required: number
+    icon_url?: string
+    sub_type?: string
+    name: string
+  }[]
   /** Number of missions that reward this blueprint */
   mission_count: number
   /** Crafting time in seconds */

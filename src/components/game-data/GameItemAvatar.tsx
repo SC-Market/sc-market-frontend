@@ -51,8 +51,8 @@ export function GameItemAvatar({
   const isSvg = isSvgIcon(resolvedIcon)
   const bgColor = useCommodityColor ? (getCommodityColor(subType) || getCommodityColor(itemType) || undefined) : undefined
 
-  // Scale font size relative to avatar size
-  const fontSize = size <= 16 ? "0.45rem" : size <= 24 ? "0.55rem" : size <= 32 ? "0.65rem" : "0.8rem"
+  // Scale font size relative to avatar size — smaller for text fallback
+  const fontSize = size <= 16 ? "0.4rem" : size <= 24 ? "0.5rem" : size <= 32 ? "0.6rem" : "0.7rem"
 
   return (
     <Avatar
@@ -62,10 +62,10 @@ export function GameItemAvatar({
         width: size,
         height: size,
         fontSize,
-        fontWeight: 600,
-        color: "#fff",
+        fontWeight: 700,
+        color: "#fff !important", // Force white text on colored bg
         bgcolor: bgColor || "secondary.main",
-        ...(resolvedIcon && isSvg ? { p: Math.max(0.25, size / 16 * 0.5) + "px" } : {}),
+        ...(resolvedIcon && isSvg ? { p: Math.max(2, size * 0.12) + "px" } : {}),
         flexShrink: 0,
         ...sx,
       }}

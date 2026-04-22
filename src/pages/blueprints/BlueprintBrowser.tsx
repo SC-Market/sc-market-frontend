@@ -47,6 +47,7 @@ import { useDebounce } from "../../hooks/useDebounce"
 import { useInfiniteScroll } from "../../hooks/useInfiniteScroll"
 import { BlueprintCard } from "../../components/game-data/BlueprintCard"
 import { formatCategoryName } from "../../util/categoryDisplay"
+import { getCommodityColor } from "../../util/gameIcons"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { BottomSheet } from "../../components/mobile/BottomSheet"
@@ -277,7 +278,7 @@ export function BlueprintBrowser() {
                         <TableCell>Item</TableCell>
                         <TableCell>Category</TableCell>
                         <TableCell>Tags</TableCell>
-                        <TableCell align="center">Ingredients</TableCell>
+                        <TableCell>Ingredients</TableCell>
                         <TableCell align="center">Mission Sources</TableCell>
                         <TableCell align="right">Craft Time</TableCell>
                       </TableRow>
@@ -316,8 +317,24 @@ export function BlueprintBrowser() {
                               {bp.tier && <Chip label={`T${bp.tier}`} size="small" color="secondary" sx={{ height: 18, fontSize: "0.65rem" }} />}
                             </Stack>
                           </TableCell>
-                          <TableCell align="center">
-                            <Typography variant="caption">{bp.ingredient_count}</Typography>
+                          <TableCell>
+                            <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap sx={{ maxWidth: 200 }}>
+                              {(bp.ingredients || []).slice(0, 4).map((ing: any, i: number) => {
+                                const short = ing.name.replace(/[aeiou]/gi, "").slice(0, 4).toUpperCase() || ing.name.slice(0, 4).toUpperCase()
+                                const qty = (Math.round(ing.quantity_required * 100) / 10000).toFixed(2)
+                                return (
+                                  <Chip
+                                    key={i}
+                                    label={`${short}×${qty}`}
+                                    size="small"
+                                    sx={{ height: 18, fontSize: "0.6rem", bgcolor: getCommodityColor(ing.sub_type) || "grey.600", color: "#fff" }}
+                                  />
+                                )
+                              })}
+                              {(bp.ingredients || []).length > 4 && (
+                                <Chip label={`+${bp.ingredients.length - 4}`} size="small" variant="outlined" sx={{ height: 18, fontSize: "0.6rem" }} />
+                              )}
+                            </Stack>
                           </TableCell>
                           <TableCell align="center">
                             {bp.mission_count > 0

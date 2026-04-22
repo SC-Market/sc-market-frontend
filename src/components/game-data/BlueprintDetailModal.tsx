@@ -68,7 +68,7 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: BlueprintDe
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
       <DialogTitle sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <Typography variant="h6" noWrap sx={{ flex: 1 }}>
-          {data?.blueprint.blueprint_name || t("blueprints.detail", "Blueprint Detail")}
+          {data?.output_item?.name || data?.blueprint.blueprint_name || t("blueprints.detail", "Blueprint Detail")}
         </Typography>
         <IconButton onClick={onClose} size="small"><Close /></IconButton>
       </DialogTitle>
