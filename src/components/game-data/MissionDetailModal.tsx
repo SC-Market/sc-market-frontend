@@ -395,13 +395,13 @@ function RequirementsTab({ data }: { data: any }) {
             {m.min_standing && (
               <Stack direction="row" justifyContent="space-between">
                 <Typography variant="body2" color="text.secondary">Min</Typography>
-                <Typography variant="body2">{m.min_standing}</Typography>
+                <Typography variant="body2">{m.min_standing_display || m.min_standing}</Typography>
               </Stack>
             )}
             {m.max_standing && (
               <Stack direction="row" justifyContent="space-between">
                 <Typography variant="body2" color="text.secondary">Max</Typography>
-                <Typography variant="body2">{m.max_standing}</Typography>
+                <Typography variant="body2">{m.max_standing_display || m.max_standing}</Typography>
               </Stack>
             )}
           </Stack>
