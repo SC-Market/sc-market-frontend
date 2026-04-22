@@ -32,6 +32,7 @@ import {
   Stack,
   Button,
   Avatar,
+  Tooltip,
   useMediaQuery,
 } from "@mui/material"
 import { ViewList, ViewModule } from "@mui/icons-material"
@@ -214,7 +215,7 @@ export function MissionSearch() {
           <Grid container spacing={1.5} alignItems="stretch">
             {viewMode === "grid" ? (
               allMissions.map((mission) => (
-                <Grid item xs={12} sm={6} md={4} lg={3} key={mission.mission_id} sx={{ display: "flex" }}>
+                <Grid item xs={6} sm={6} md={4} lg={3} key={mission.mission_id} sx={{ display: "flex" }}>
                   <MissionCard mission={mission} onClick={handleMissionClick} />
                 </Grid>
               ))
@@ -245,6 +246,7 @@ export function MissionSearch() {
                           <TableCell sx={{ width: 40, py: 0.5 }}>
                             <Avatar
                               src={getMissionIcon(m.category) || undefined}
+                              variant="rounded"
                               sx={{ width: 24, height: 24, bgcolor: "primary.main" }}
                               imgProps={{ style: { objectFit: "contain", padding: 4 } }}
                             >
@@ -266,11 +268,11 @@ export function MissionSearch() {
                           </TableCell>
                           <TableCell>
                             <Stack direction="row" spacing={0.5} flexWrap="nowrap">
-                              {m.category && <Chip label={getMissionTypeLabel(m.category)} size="small" color="primary" sx={{ height: 18, fontSize: "0.65rem" }} />}
-                              {m.difficulty_level && <Chip label={`D${m.difficulty_level}`} size="small" color="warning" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} />}
-                              {m.legal_status === "ILLEGAL" && <Chip label="ILL" size="small" color="error" sx={{ height: 18, fontSize: "0.65rem" }} />}
-                              {m.is_shareable && <Chip label="SH" size="small" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} />}
-                              {m.is_chain_starter && <Chip label="CH" size="small" color="secondary" sx={{ height: 18, fontSize: "0.65rem" }} />}
+                              {m.category && <Tooltip title={getMissionTypeLabel(m.category)}><Chip label={getMissionTypeLabel(m.category)} size="small" color="primary" sx={{ height: 18, fontSize: "0.65rem" }} /></Tooltip>}
+                              {m.difficulty_level && <Tooltip title={`Difficulty ${m.difficulty_level}`}><Chip label={`D${m.difficulty_level}`} size="small" color="warning" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} /></Tooltip>}
+                              {m.legal_status === "ILLEGAL" && <Tooltip title="Illegal Mission"><Chip label="ILL" size="small" color="error" sx={{ height: 18, fontSize: "0.65rem" }} /></Tooltip>}
+                              {m.is_shareable && <Tooltip title="Shareable"><Chip label="SH" size="small" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} /></Tooltip>}
+                              {m.is_chain_starter && <Tooltip title="Chain Starter"><Chip label="CH" size="small" color="secondary" sx={{ height: 18, fontSize: "0.65rem" }} /></Tooltip>}
                             </Stack>
                           </TableCell>
                           <TableCell align="center">

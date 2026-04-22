@@ -63,7 +63,7 @@ export function MissionDetailModal({ missionId, open, onClose, onBlueprintClick 
       <Tabs value={tab} onChange={(_, v) => setTab(v)} sx={{ px: 2 }} variant="scrollable">
         <Tab label={t("missions.overview", "Overview")} />
         <Tab label={t("missions.rewards", "Rewards")} />
-        <Tab label={t("missions.rankCalc", "Rank Calculator")} disabled={!data?.mission.reward_scope || !data?.mission.reputation_reward} />
+        <Tab label={t("missions.rankCalc", "Rank Calculator")} disabled={!data?.mission.reward_scope} />
         <Tab label={t("missions.chainInfo", "Chain Info")} />
       </Tabs>
       <DialogContent sx={{ minHeight: 400 }}>
@@ -71,7 +71,7 @@ export function MissionDetailModal({ missionId, open, onClose, onBlueprintClick 
         {error && <Alert severity="error">{t("missions.loadError", "Failed to load mission.")}</Alert>}
         {data && tab === 0 && <OverviewTab data={data} />}
         {data && tab === 1 && <RewardsTab data={data} onBlueprintClick={onBlueprintClick} />}
-        {data && tab === 2 && data.mission.reward_scope && data.mission.reputation_reward && (
+        {data && tab === 2 && data.mission.reward_scope && (
           <MissionRankCalculator
             reputationReward={data.mission.reputation_reward}
             rewardScope={data.mission.reward_scope}

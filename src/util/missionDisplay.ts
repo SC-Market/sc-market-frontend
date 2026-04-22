@@ -47,6 +47,7 @@ export function getMissionTypeLabel(type: string | null | undefined): string {
 export function formatMissionNameText(name: string | null | undefined): string {
   if (!name) return "Unknown Mission"
   return name.replace(/~mission\(([^)]+)\)/g, (_, inner) => {
+    if (inner === "Contractor" || inner.startsWith("Contractor|")) return "Various"
     const key = inner.split("|").pop() || inner
     const label = key
       .replace(/([a-z])([A-Z])/g, "$1 $2")

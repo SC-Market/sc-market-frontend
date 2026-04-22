@@ -48,6 +48,7 @@ function initials(name: string | undefined | null): string {
 
 export const MissionCard: React.FC<MissionCardProps> = ({ mission, onClick }) => {
   const giver = mission.mission_giver_org || mission.faction
+  const displayGiver = giver?.includes("~mission") ? "Various" : giver
   const missionIcon = getMissionIcon(mission.category) || getFactionIcon(mission.faction)
   const reward = mission.credit_reward_min === mission.credit_reward_max || !mission.credit_reward_max
     ? formatCredits(mission.credit_reward_min)
@@ -61,14 +62,15 @@ export const MissionCard: React.FC<MissionCardProps> = ({ mission, onClick }) =>
           <Box sx={{ display: "flex", gap: 1, mb: 1 }}>
             <Avatar sx={{ width: 32, height: 32, fontSize: "0.75rem", bgcolor: "primary.main", flexShrink: 0 }}
               src={missionIcon || undefined}
+              variant="rounded"
               imgProps={{ style: { objectFit: "contain", padding: 4 } }}
             >
-              {initials(giver)}
+              {initials(displayGiver)}
             </Avatar>
             <Box sx={{ minWidth: 0 }}>
               <MissionName name={mission.mission_name} variant="body2" fontWeight={600} noWrap />
               <Typography variant="caption" color="text.secondary" noWrap display="block">
-                {giver || mission.star_system || "Unknown"}
+                {displayGiver || mission.star_system || "Unknown"}
               </Typography>
             </Box>
           </Box>
