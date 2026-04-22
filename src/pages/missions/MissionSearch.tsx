@@ -243,7 +243,7 @@ export function MissionSearch() {
             </ToggleButtonGroup>
           </Box>
 
-          <Grid container spacing={1.5} alignItems="stretch">
+          <Grid container spacing={0.75} alignItems="stretch">
             {viewMode === "grid" ? (
               allMissions.map((mission) => (
                 <Grid item xs={6} sm={6} md={4} lg={3} key={mission.mission_id} sx={{ display: "flex" }}>
@@ -260,7 +260,7 @@ export function MissionSearch() {
                         <TableCell>System</TableCell>
                         <TableCell>Title</TableCell>
                         <TableCell>Faction</TableCell>
-                        <TableCell sx={{ maxWidth: 220 }}>Tags</TableCell>
+                        <TableCell sx={{ maxWidth: 280 }}>Tags</TableCell>
                         <TableCell align="center">BPs</TableCell>
                         <TableCell align="right">Base XP</TableCell>
                         <TableCell align="right">Reward</TableCell>
@@ -300,17 +300,19 @@ export function MissionSearch() {
                             </Typography>
                           </TableCell>
                           <TableCell>
-                            <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap sx={{ maxWidth: 220 }}>
+                            <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap sx={{ maxWidth: 280 }}>
                               {m.category && <Tooltip title={getMissionTypeLabel(m.category)}><Chip label={getMissionTypeLabel(m.category)} size="small" color="primary" sx={{ height: 18, fontSize: "0.65rem" }} /></Tooltip>}
-                              {m.difficulty_level && <Tooltip title={`Difficulty ${m.difficulty_level}`}><Chip label={`D${m.difficulty_level}`} size="small" color="warning" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} /></Tooltip>}
-                              {m.legal_status === "ILLEGAL" && <Tooltip title="Illegal Mission"><Chip label="ILL" size="small" color="error" sx={{ height: 18, fontSize: "0.65rem" }} /></Tooltip>}
-                              {m.is_shareable && <Tooltip title="Shareable"><Chip label="SH" size="small" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} /></Tooltip>}
-                              {m.is_chain_starter && <Tooltip title="Chain Starter"><Chip label="CH" size="small" color="secondary" sx={{ height: 18, fontSize: "0.65rem" }} /></Tooltip>}
+                              {(m.is_illegal || m.legal_status === "ILLEGAL") && <Tooltip title="Illegal Mission"><Chip label="ILLEGAL" size="small" color="error" sx={{ height: 18, fontSize: "0.65rem" }} /></Tooltip>}
+                              {m.is_unique_mission && <Tooltip title="Unique (one-time)"><Chip label="UNIQUE" size="small" color="warning" sx={{ height: 18, fontSize: "0.65rem" }} /></Tooltip>}
+                              {m.is_chain_starter && <Tooltip title="Chain Starter"><Chip label="STARTER" size="small" color="secondary" sx={{ height: 18, fontSize: "0.65rem" }} /></Tooltip>}
+                              {m.is_chain_mission && !m.is_chain_starter && <Tooltip title="Part of Chain"><Chip label="CHAIN" size="small" color="secondary" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} /></Tooltip>}
+                              {m.associated_event && <Tooltip title={m.associated_event}><Chip label={m.associated_event} size="small" variant="outlined" sx={{ height: 18, fontSize: "0.65rem", maxWidth: 100 }} /></Tooltip>}
+                              {m.ship_encounter_count > 0 && <Tooltip title={`${m.ship_encounter_count} ships`}><Chip label={`🛡 ${m.ship_encounter_count}`} size="small" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} /></Tooltip>}
                             </Stack>
                           </TableCell>
                           <TableCell align="center">
                             {m.blueprint_reward_count > 0
-                              ? <Chip label={m.blueprint_reward_count} size="small" color="secondary" sx={{ height: 18, fontSize: "0.65rem", minWidth: 24 }} />
+                              ? <Chip label={`🔧 ${m.blueprint_reward_count}`} size="small" color="secondary" sx={{ height: 18, fontSize: "0.65rem", minWidth: 24 }} />
                               : <Typography variant="caption" color="text.disabled">—</Typography>}
                           </TableCell>
                           <TableCell align="right">
