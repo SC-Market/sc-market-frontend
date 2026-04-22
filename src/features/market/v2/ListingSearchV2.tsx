@@ -266,7 +266,7 @@ export function ListingSearchV2() {
  * Simplified version of V1 MarketSearchArea with V2-specific filters.
  * Maintains visual parity with V1 styling.
  */
-function MarketSearchAreaV2() {
+export function MarketSearchAreaV2() {
   const theme = useTheme<ExtendedTheme>();
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -549,7 +549,7 @@ function MarketSearchAreaV2() {
 /**
  * MarketSidebarV2 - V2 mobile sidebar with bottom sheet
  */
-function MarketSidebarV2() {
+export function MarketSidebarV2() {
   const [open, setOpen] = useMarketSidebar();
   const theme = useTheme<ExtendedTheme>();
   const { t } = useTranslation();
