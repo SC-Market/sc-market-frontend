@@ -1,427 +1,363 @@
 /**
- * StockManagerV2 — V2 equivalent of V1 AllStockLotsGrid.
+ * StockManagerV2 — V2 equivalent of V1 ManageStock.tsx
  *
- * Uses LazyDataGrid with inline editing, matching V1's column layout:
- * listing (variant display_name), quantity, location, listed, notes, actions.
- * Adds V2-specific quality tier column.
+ * Matches V1 layout: StandardPageLayout → ManageListingsTabBar → sidebar + card grid.
  * Uses V2 RTK Query hooks exclusively.
  */
 
 import React, { useState, useCallback, useMemo } from "react"
 import {
-  GridColDef,
-  GridRenderCellParams,
-  GridRenderEditCellParams,
-  useGridApiContext,
-} from "@mui/x-data-grid"
-import { LazyDataGrid as DataGrid } from "../../../components/grid/LazyDataGrid"
-import {
-  Paper,
-  Typography,
-  Chip,
-  IconButton,
+  Avatar,
   Box,
   Button,
-  Autocomplete,
-  TextField,
+  Chip,
+  Grid,
+  IconButton,
+  Paper,
+  Stack,
+  TablePagination,
+  Typography,
+  useMediaQuery,
 } from "@mui/material"
 import {
-  Delete as DeleteIcon,
-  Save as SaveIcon,
-  Add as AddIcon,
+  AddRounded,
+  RemoveRounded,
+  VisibilityRounded,
+  InventoryRounded,
+  ShareRounded,
+  RefreshOutlined,
+  CreateRounded,
+  DeleteRounded,
 } from "@mui/icons-material"
+import FilterListIcon from "@mui/icons-material/FilterList"
+import { useTheme } from "@mui/material/styles"
+import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import {
-  useGetStockLotsQuery,
-  useGetListingDetailQuery,
-  useCreateStockLotMutation,
-  useUpdateStockLotMutation,
-  useDeleteStockLotMutation,
-  type StockLotDetail,
-  type LocationInfo,
-} from "../../../store/api/v2/market"
+import { ExtendedTheme } from "../../../hooks/styles/Theme"
+import { StandardPageLayout } from "../../../components/layout/StandardPageLayout"
+import { ManageListingsTabBar } from "../components/ManageListingsTabBar"
+import { MarketSearchAreaV2, MarketSidebarV2 } from "./ListingSearchV2"
+import { BottomSheet } from "../../../components/mobile/BottomSheet"
+import { UnderlineLink } from "../../../components/typography/UnderlineLink"
+import { EmptyListings } from "../../../components/empty-states"
+import { LongPressMenu } from "../../../components/gestures"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
-import { getQualityMode, formatQuality, type QualityMode } from "../../../util/qualityMode"
+import {
+  useGetMyListingsQuery,
+  useUpdateListingMutation,
+  useRefreshListingMutation,
+  useDeleteListingMutation,
+  type MyListingItem,
+} from "../../../store/api/v2/market"
+import { formatQuality, getQualityMode } from "../../../util/qualityMode"
 
-export interface StockManagerV2Props {
-  listingId: string
-  itemId: string
-  onClose?: () => void
+export function StockManagerV2() {
+  const { t } = useTranslation()
+  const theme = useTheme<ExtendedTheme>()
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const issueAlert = useAlertHook()
+  const [sidebarOpen, setSidebarOpen] = useState(!isMobile)
+  const [page, setPage] = useState(0)
+  const [perPage, setPerPage] = useState(48)
+
+  const { data, isLoading, error } = useGetMyListingsQuery({
+    status: "active",
+    page: page + 1,
+    pageSize: perPage,
+    sortBy: "updated_at",
+    sortOrder: "desc",
+  })
+
+  const [updateListing] = useUpdateListingMutation()
+  const [refreshListing] = useRefreshListingMutation()
+  const [deleteListing] = useDeleteListingMutation()
+
+  const listings = data?.listings ?? []
+  const total = data?.total ?? 0
+
+  const handleUpdateQuantity = useCallback(
+    async (listingId: string, currentQty: number, delta: number) => {
+      const newQty = Math.max(0, currentQty + delta)
+      try {
+        await updateListing({
+          id: listingId,
+          updateListingRequest: {
+            lot_updates: [{ lot_id: listingId, quantity_total: newQty }],
+          },
+        }).unwrap()
+        issueAlert({ message: t("ItemStock.updated", "Updated"), severity: "success" })
+      } catch (err) {
+        issueAlert(err as any)
+      }
+    },
+    [updateListing, issueAlert, t],
+  )
+
+  const handleRefresh = useCallback(
+    async (listingId: string) => {
+      try {
+        await refreshListing({ id: listingId }).unwrap()
+        issueAlert({ message: t("ItemStock.refreshed", "Listing refreshed"), severity: "success" })
+      } catch (err) {
+        issueAlert(err as any)
+      }
+    },
+    [refreshListing, issueAlert, t],
+  )
+
+  return (
+    <StandardPageLayout
+      title={t("sidebar.manage_listings", "Manage Listings")}
+      breadcrumbs={[
+        { label: t("sidebar.market_short", "Market"), href: "/market" },
+        { label: t("sidebar.manage_listings", "Manage Listings") },
+      ]}
+      sidebarOpen={true}
+      maxWidth="xl"
+      isLoading={isLoading}
+      error={error}
+    >
+      <Grid item xs={12}>
+        <Grid container spacing={theme.layoutSpacing.layout}>
+          {/* Mobile bottom sheet */}
+          {isMobile && (
+            <BottomSheet
+              open={sidebarOpen}
+              onClose={() => setSidebarOpen(false)}
+              title={t("market.filters", "Filters")}
+              maxHeight="90vh"
+            >
+              <Box sx={{ overflowY: "auto", overflowX: "hidden", pb: 2 }}>
+                <MarketSearchAreaV2 />
+              </Box>
+            </BottomSheet>
+          )}
+
+          {/* Tab bar + actions */}
+          <Grid item xs={12}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1, flexWrap: "wrap" }}>
+              {isMobile && (
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  startIcon={<FilterListIcon />}
+                  onClick={() => setSidebarOpen((p) => !p)}
+                  sx={{ borderRadius: 2, textTransform: "none" }}
+                >
+                  {t("market.filters", "Filters")}
+                </Button>
+              )}
+              <ManageListingsTabBar
+                title={t("sidebar.manage_listings", "Manage Listings")}
+                rightAction={
+                  <Link to="/market/create" style={{ textDecoration: "none" }}>
+                    <Button variant="contained" color="secondary" startIcon={<AddRounded />} size="large">
+                      {t("market.createListing", "Create Listing")}
+                    </Button>
+                  </Link>
+                }
+              />
+            </Box>
+          </Grid>
+
+          {/* Desktop sidebar */}
+          {!isMobile && (
+            <Grid item xs={12} md={3}>
+              <Paper>
+                <MarketSearchAreaV2 />
+              </Paper>
+            </Grid>
+          )}
+
+          {/* Card grid */}
+          <Grid item xs={12} md={isMobile ? 12 : 9}>
+            <Grid container spacing={theme.layoutSpacing.layout}>
+              <Grid item xs={12}>
+                {listings.length === 0 && !isLoading ? (
+                  <EmptyListings showCreateAction={false} />
+                ) : (
+                  <Grid container spacing={theme.layoutSpacing.layout}>
+                    {listings.map((listing) => (
+                      <Grid item xs={12} key={listing.listing_id}>
+                        <StockCardV2
+                          listing={listing}
+                          onQuantityChange={handleUpdateQuantity}
+                          onRefresh={handleRefresh}
+                        />
+                      </Grid>
+                    ))}
+                  </Grid>
+                )}
+              </Grid>
+            </Grid>
+          </Grid>
+
+          {/* Pagination */}
+          <Grid item xs={12}>
+            <TablePagination
+              component="div"
+              count={total}
+              page={page}
+              onPageChange={(_, p) => setPage(p)}
+              rowsPerPage={perPage}
+              onRowsPerPageChange={(e) => {
+                setPerPage(parseInt(e.target.value, 10))
+                setPage(0)
+              }}
+              rowsPerPageOptions={[24, 48, 96]}
+            />
+          </Grid>
+
+          {/* Archived link */}
+          <Grid item xs={12} sx={{ display: "flex", justifyContent: "flex-end" }}>
+            <Link to="/market/me" style={{ color: "inherit" }}>
+              <UnderlineLink>{t("sidebar.archived_listings", "Archived Listings")}</UnderlineLink>
+            </Link>
+          </Grid>
+        </Grid>
+      </Grid>
+    </StandardPageLayout>
+  )
 }
 
-export function StockManagerV2({ listingId, itemId, onClose }: StockManagerV2Props) {
+/** Card matching V1 StockCard layout */
+function StockCardV2({
+  listing,
+  onQuantityChange,
+  onRefresh,
+}: {
+  listing: MyListingItem
+  onQuantityChange: (id: string, currentQty: number, delta: number) => Promise<void>
+  onRefresh: (id: string) => Promise<void>
+}) {
   const { t } = useTranslation()
-  const issueAlert = useAlertHook()
+  const theme = useTheme<ExtendedTheme>()
 
-  const { data: lotsData } = useGetStockLotsQuery({ listingId })
-  const { data: listingDetail } = useGetListingDetailQuery({ id: listingId }, { skip: !listingId })
-  const [createLot] = useCreateStockLotMutation()
-  const [updateLot] = useUpdateStockLotMutation()
-  const [deleteLot] = useDeleteStockLotMutation()
+  const qualityMode = getQualityMode(null) // listing-level doesn't have item type
+  const qualityLabel =
+    listing.quality_tier_min != null
+      ? listing.quality_tier_min === listing.quality_tier_max
+        ? `Tier ${listing.quality_tier_min}`
+        : `Tier ${listing.quality_tier_min}–${listing.quality_tier_max}`
+      : null
 
-  const qualityMode: QualityMode = useMemo(
-    () => getQualityMode(listingDetail?.items?.[0]?.game_item?.type),
-    [listingDetail],
-  )
+  const priceLabel =
+    listing.price_min === listing.price_max
+      ? `${listing.price_min.toLocaleString()} aUEC`
+      : `${listing.price_min.toLocaleString()} – ${listing.price_max.toLocaleString()} aUEC`
 
-  const [newRows, setNewRows] = useState<any[]>([])
-
-  const lots = lotsData?.lots ?? []
-
-  // Extract unique locations from lot data
-  const locations = useMemo(() => {
-    const map = new Map<string, LocationInfo>()
-    lots.forEach((lot) => {
-      if (lot.location) map.set(lot.location.location_id, lot.location)
-    })
-    return Array.from(map.values())
-  }, [lots])
-
-  // Location edit cell — matches V1 LocationEditCell pattern
-  function LocationEditCell(props: GridRenderEditCellParams) {
-    const { id, value, field } = props
-    const apiRef = useGridApiContext()
-    const [inputValue, setInputValue] = useState("")
-
-    const filtered = locations.filter((loc) =>
-      loc.name.toLowerCase().includes(inputValue.toLowerCase()),
-    )
-    const selected = locations.find((l) => l.location_id === value) ?? null
-
-    return (
-      <Autocomplete
-        value={selected}
-        onChange={(_, v) =>
-          apiRef.current.setEditCellValue({ id, field, value: v?.location_id ?? null })
-        }
-        inputValue={inputValue}
-        onInputChange={(_, v) => setInputValue(v)}
-        options={filtered}
-        getOptionLabel={(o) => o.name}
-        renderInput={(params) => (
-          <TextField {...params} size="medium" placeholder={t("AllStockLots.selectLocation", "Select location...")} />
-        )}
-        fullWidth
-        size="medium"
-        disablePortal={false}
-        sx={{ height: "100%" }}
-      />
-    )
-  }
-
-  const renderLocationEditCell = useCallback(
-    (props: GridRenderEditCellParams) => <LocationEditCell {...props} />,
-    [locations, t],
-  )
-
-  // Map lots to rows
-  const allLots = lots.map((lot) => ({
-    id: lot.lot_id,
-    lot_id: lot.lot_id,
-    variant_display_name: lot.variant.display_name,
-    variant_short_name: lot.variant.short_name,
-    quality_tier: lot.variant.attributes.quality_tier ?? null,
-    quality_value: lot.variant.attributes.quality_value ?? null,
-    crafted_source: lot.variant.attributes.crafted_source ?? null,
-    quantity: lot.quantity_total,
-    location_id: lot.location?.location_id ?? null,
-    location_name: lot.location?.name ?? null,
-    listed: lot.listed,
-    notes: lot.notes ?? "",
-  }))
-
-  const rows = [...newRows, ...allLots]
-
-  const columns: GridColDef[] = [
+  const longPressActions = [
     {
-      field: "variant_display_name",
-      headerName: t("AllStockLots.listing", "Variant"),
-      flex: 2,
-      renderCell: (params: GridRenderCellParams) => (
-        <Typography variant="body2">{params.value}</Typography>
-      ),
+      label: t("common.viewDetails", "View Details"),
+      icon: <VisibilityRounded />,
+      onClick: () => { window.location.href = `/market/${listing.listing_id}` },
     },
     {
-      field: "quality_tier",
-      headerName: t("StockManagerV2.qualityTier", "Quality"),
-      flex: 1,
-      editable: qualityMode !== "none",
-      type: qualityMode === "numeric" ? "number" as const : undefined,
-      renderCell: (params: GridRenderCellParams) => {
-        if (qualityMode === "none") return <Typography variant="body2" color="text.disabled">—</Typography>
-        if (qualityMode === "numeric") {
-          const qv = params.row.quality_value as number | null
-          return qv != null
-            ? <Chip label={`Q${qv}`} size="small" variant="outlined" />
-            : <Typography variant="body2" color="text.disabled">—</Typography>
-        }
-        // tiered
-        const tier = params.value as number | null
-        if (!tier) return <Typography variant="body2" color="text.disabled">—</Typography>
-        return (
-          <Chip
-            label={`Tier ${tier}`}
-            size="small"
-            color={tier >= 4 ? "success" : tier >= 3 ? "primary" : "default"}
-            variant="outlined"
-          />
-        )
-      },
-      renderEditCell: qualityMode === "tiered"
-        ? (params: GridRenderEditCellParams) => {
-            const api = useGridApiContext()
-            return (
-              <TextField
-                select
-                fullWidth
-                size="small"
-                value={params.value ?? ""}
-                onChange={(e) => {
-                  const val = e.target.value === "" ? null : Number(e.target.value)
-                  api.current.setEditCellValue({ id: params.id, field: "quality_tier", value: val })
-                }}
-                SelectProps={{ native: true }}
-              >
-                <option value="">—</option>
-                <option value="1">Tier 1</option>
-                <option value="2">Tier 2</option>
-                <option value="3">Tier 3</option>
-                <option value="4">Tier 4</option>
-                <option value="5">Tier 5</option>
-              </TextField>
-            )
-          }
-        : undefined,
-      valueGetter: qualityMode === "numeric"
-        ? (_value: any, row: any) => row.quality_value
-        : undefined,
-      valueSetter: qualityMode === "numeric"
-        ? (value: any, row: any) => ({ ...row, quality_value: value })
-        : undefined,
+      label: t("ItemStock.edit", "Edit"),
+      icon: <CreateRounded />,
+      onClick: () => { window.location.href = `/market_edit/${listing.listing_id}` },
     },
     {
-      field: "quantity",
-      headerName: t("AllStockLots.quantity", "Quantity"),
-      flex: 1,
-      editable: true,
-      type: "number" as const,
-      valueParser: (value: string) => {
-        const parsed = Number(value)
-        return isNaN(parsed) ? 0 : Math.max(0, parsed)
+      label: t("ItemStock.manageStock", "Manage Stock"),
+      icon: <InventoryRounded />,
+      onClick: () => { window.location.href = `/market/stock/${listing.listing_id}` },
+    },
+    {
+      label: t("ItemStock.share", "Share"),
+      icon: <ShareRounded />,
+      onClick: () => {
+        navigator.clipboard.writeText(`${window.location.origin}/market/${listing.listing_id}`)
       },
     },
     {
-      field: "location_id",
-      headerName: t("AllStockLots.location", "Location"),
-      flex: 1.5,
-      minWidth: 200,
-      editable: true,
-      renderEditCell: renderLocationEditCell,
-      valueFormatter: (value: string) => {
-        const loc = locations.find((l) => l.location_id === value)
-        return loc?.name ?? "Unspecified"
-      },
-    },
-    {
-      field: "listed",
-      headerName: t("AllStockLots.listed", "Listed"),
-      flex: 1,
-      editable: true,
-      renderCell: (params: GridRenderCellParams) => (
-        <Chip
-          label={params.value ? t("ui.yes", "Yes") : t("ui.no", "No")}
-          color={params.value ? "success" : "default"}
-          size="small"
-        />
-      ),
-    },
-    {
-      field: "notes",
-      headerName: t("AllStockLots.notes", "Notes"),
-      flex: 2,
-      editable: true,
-    },
-    {
-      field: "actions",
-      headerName: t("AllStockLots.actions", "Actions"),
-      flex: 1,
-      renderCell: (params: GridRenderCellParams) => {
-        const isNew = String(params.row.id).startsWith("new-")
-        return (
-          <Box sx={{ display: "flex", gap: 0.5 }}>
-            {isNew && (
-              <IconButton
-                size="small"
-                color="primary"
-                onClick={() => handleSaveNew(params.row)}
-              >
-                <SaveIcon />
-              </IconButton>
-            )}
-            <IconButton
-              size="small"
-              onClick={() =>
-                isNew
-                  ? handleCancelNew(params.row.id)
-                  : handleDelete(params.row.lot_id)
-              }
-            >
-              <DeleteIcon />
-            </IconButton>
-          </Box>
-        )
-      },
+      label: t("ItemStock.refresh", "Refresh"),
+      icon: <RefreshOutlined />,
+      onClick: () => onRefresh(listing.listing_id),
     },
   ]
 
-  const handleDelete = async (lotId: string) => {
-    try {
-      await deleteLot({ id: lotId }).unwrap()
-      issueAlert({ message: t("AllStockLots.deleted", "Lot deleted"), severity: "success" })
-    } catch (error) {
-      issueAlert(error as any)
-    }
-  }
-
-  const handleRowUpdate = async (newRow: any, oldRow: any) => {
-    if (String(newRow.id).startsWith("new-")) return newRow
-
-    // Build variant_attributes if quality changed
-    const qualityChanged =
-      newRow.quality_tier !== oldRow.quality_tier ||
-      newRow.quality_value !== oldRow.quality_value
-    const variantAttrs = qualityChanged
-      ? {
-          quality_tier: newRow.quality_tier ?? undefined,
-          quality_value: newRow.quality_value ?? undefined,
-          crafted_source: newRow.crafted_source ?? undefined,
-        }
-      : undefined
-
-    try {
-      const result = await updateLot({
-        id: newRow.lot_id,
-        updateStockLotRequest: {
-          quantity_total: Number(newRow.quantity),
-          location_id: newRow.location_id ?? undefined,
-          listed: newRow.listed,
-          notes: newRow.notes || null,
-          variant_attributes: variantAttrs,
-        },
-      }).unwrap()
-
-      issueAlert({ message: t("AllStockLots.updated", "Lot updated"), severity: "success" })
-
-      const lot = result.lot
-      return {
-        id: lot.lot_id,
-        lot_id: lot.lot_id,
-        variant_display_name: lot.variant.display_name,
-        variant_short_name: lot.variant.short_name,
-        quality_tier: lot.variant.attributes.quality_tier ?? null,
-        quality_value: lot.variant.attributes.quality_value ?? null,
-        crafted_source: lot.variant.attributes.crafted_source ?? null,
-        quantity: lot.quantity_total,
-        location_id: lot.location?.location_id ?? null,
-        location_name: lot.location?.name ?? null,
-        listed: lot.listed,
-        notes: lot.notes ?? "",
-      }
-    } catch (error) {
-      issueAlert(error as any)
-      return oldRow
-    }
-  }
-
-  const handleSaveNew = async (row: any) => {
-    try {
-      await createLot({
-        createStockLotRequest: {
-          item_id: itemId,
-          quantity: Number(row.quantity) || 0,
-          variant_attributes: {},
-          location_id: row.location_id ?? undefined,
-          listed: row.listed ?? true,
-          notes: row.notes || undefined,
-        },
-      }).unwrap()
-
-      issueAlert({ message: t("AllStockLots.created", "Lot created"), severity: "success" })
-      setNewRows((prev) => prev.filter((r) => r.id !== row.id))
-    } catch (error) {
-      issueAlert(error as any)
-    }
-  }
-
-  const handleCancelNew = (rowId: string) => {
-    setNewRows((prev) => prev.filter((r) => r.id !== rowId))
-  }
-
-  const handleAddRow = () => {
-    const newId = `new-${Date.now()}`
-    setNewRows((prev) => [
-      ...prev,
-      {
-        id: newId,
-        lot_id: null,
-        variant_display_name: "New Lot",
-        variant_short_name: "",
-        quality_tier: null,
-        quality_value: null,
-        crafted_source: null,
-        quantity: 0,
-        location_id: null,
-        location_name: null,
-        listed: true,
-        notes: "",
-      },
-    ])
-  }
-
   return (
-    <Paper>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        processRowUpdate={handleRowUpdate}
-        onProcessRowUpdateError={(error) => console.error(error)}
-        pageSizeOptions={[24, 48, 96]}
-        initialState={{
-          pagination: { paginationModel: { pageSize: 24 } },
-        }}
-        disableRowSelectionOnClick
-        slots={{
-          toolbar: () => (
-            <Box
-              sx={{
-                p: 2,
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
+    <LongPressMenu actions={longPressActions}>
+      <Paper sx={{ p: 0 }}>
+        <Stack direction="row" spacing={2} sx={{ p: 2 }} alignItems="center">
+          <Avatar variant="rounded" sx={{ width: 56, height: 56 }}>
+            {listing.title.charAt(0)}
+          </Avatar>
+          <Box sx={{ flex: 1, minWidth: 0 }}>
+            <Link to={`/market/${listing.listing_id}`} style={{ textDecoration: "none", color: "inherit" }}>
+              <Typography variant="subtitle1" fontWeight="bold" noWrap>
+                {listing.title}
+              </Typography>
+            </Link>
+            <Typography variant="body2" color="text.secondary">
+              {priceLabel}
+            </Typography>
+            <Stack direction="row" spacing={1} sx={{ mt: 1 }} flexWrap="wrap">
+              <Chip
+                label={`${t("ItemStock.quantity", "Qty")}: ${listing.quantity_available.toLocaleString()}`}
+                size="small"
+                variant="outlined"
+              />
+              <Chip
+                label={
+                  listing.status === "active"
+                    ? t("ItemStock.active", "Active")
+                    : t("ItemStock.inactive", "Inactive")
+                }
+                color={listing.status === "active" ? "success" : "error"}
+                size="small"
+              />
+              {qualityLabel && (
+                <Chip label={qualityLabel} size="small" variant="outlined" />
+              )}
+              {listing.variant_count > 1 && (
+                <Chip
+                  label={`${listing.variant_count} variants`}
+                  size="small"
+                  variant="outlined"
+                />
+              )}
+            </Stack>
+          </Box>
+
+          {/* Quick quantity +/- */}
+          <Stack direction="column" spacing={0.5}>
+            <IconButton
+              size="small"
+              color="success"
+              onClick={(e) => {
+                e.stopPropagation()
+                onQuantityChange(listing.listing_id, listing.quantity_available, 1)
               }}
             >
-              <Typography variant="h6">
-                {t("AllStockLots.title", "All Stock Lots")}
-              </Typography>
-              <Button
-                size="small"
-                variant="contained"
-                startIcon={<AddIcon />}
-                onClick={handleAddRow}
-              >
-                {t("AllStockLots.addLot", "Add Lot")}
-              </Button>
-            </Box>
-          ),
-        }}
-        showToolbar
-        sx={{
-          "& .MuiDataGrid-cell": {
-            display: "flex",
-            alignItems: "center",
-          },
-        }}
-      />
-    </Paper>
+              <AddRounded fontSize="small" />
+            </IconButton>
+            <IconButton
+              size="small"
+              color="warning"
+              onClick={(e) => {
+                e.stopPropagation()
+                onQuantityChange(listing.listing_id, listing.quantity_available, -1)
+              }}
+            >
+              <RemoveRounded fontSize="small" />
+            </IconButton>
+          </Stack>
+
+          {/* Desktop actions */}
+          <Stack direction="row" spacing={0.5} sx={{ display: { xs: "none", md: "flex" } }}>
+            <IconButton size="small" component={Link} to={`/market/${listing.listing_id}`}>
+              <VisibilityRounded fontSize="small" />
+            </IconButton>
+            <IconButton size="small" component={Link} to={`/market_edit/${listing.listing_id}`}>
+              <CreateRounded fontSize="small" />
+            </IconButton>
+            <IconButton size="small" onClick={() => onRefresh(listing.listing_id)}>
+              <RefreshOutlined fontSize="small" />
+            </IconButton>
+          </Stack>
+        </Stack>
+      </Paper>
+    </LongPressMenu>
   )
 }

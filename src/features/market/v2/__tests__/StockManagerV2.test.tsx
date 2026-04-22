@@ -106,7 +106,7 @@ describe("StockManagerV2", () => {
   it("renders loading state initially", () => {
     render(
       <Provider store={store}>
-        <StockManagerV2 listingId="listing-1" itemId="item-1" />
+        <StockManagerV2 />
       </Provider>,
     )
 
@@ -125,7 +125,7 @@ describe("StockManagerV2", () => {
 
     render(
       <Provider store={store}>
-        <StockManagerV2 listingId="listing-1" itemId="item-1" />
+        <StockManagerV2 />
       </Provider>,
     )
 
@@ -147,7 +147,7 @@ describe("StockManagerV2", () => {
 
     render(
       <Provider store={store}>
-        <StockManagerV2 listingId="listing-1" itemId="item-1" />
+        <StockManagerV2 />
       </Provider>,
     )
 
@@ -171,7 +171,7 @@ describe("StockManagerV2", () => {
 
     render(
       <Provider store={store}>
-        <StockManagerV2 listingId="listing-1" itemId="item-1" />
+        <StockManagerV2 />
       </Provider>,
     )
 
@@ -194,7 +194,7 @@ describe("StockManagerV2", () => {
 
     render(
       <Provider store={store}>
-        <StockManagerV2 listingId="listing-1" itemId="item-1" />
+        <StockManagerV2 />
       </Provider>,
     )
 
@@ -216,7 +216,7 @@ describe("StockManagerV2", () => {
 
     render(
       <Provider store={store}>
-        <StockManagerV2 listingId="listing-1" itemId="item-1" />
+        <StockManagerV2 />
       </Provider>,
     )
 
@@ -240,7 +240,7 @@ describe("StockManagerV2", () => {
 
     render(
       <Provider store={store}>
-        <StockManagerV2 listingId="listing-1" itemId="item-1" />
+        <StockManagerV2 />
       </Provider>,
     )
 
@@ -261,7 +261,7 @@ describe("StockManagerV2", () => {
 
     render(
       <Provider store={store}>
-        <StockManagerV2 listingId="listing-1" itemId="item-1" />
+        <StockManagerV2 />
       </Provider>,
     )
 
@@ -287,7 +287,7 @@ describe("StockManagerV2", () => {
 
     render(
       <Provider store={store}>
-        <StockManagerV2 listingId="listing-1" itemId="item-1" />
+        <StockManagerV2 />
       </Provider>,
     )
 
@@ -307,7 +307,7 @@ describe("StockManagerV2", () => {
 
     render(
       <Provider store={store}>
-        <StockManagerV2 listingId="listing-1" itemId="item-1" />
+        <StockManagerV2 />
       </Provider>,
     )
 
@@ -331,7 +331,7 @@ describe("StockManagerV2", () => {
 
     render(
       <Provider store={store}>
-        <StockManagerV2 listingId="listing-1" itemId="item-1" />
+        <StockManagerV2 />
       </Provider>,
     )
 
