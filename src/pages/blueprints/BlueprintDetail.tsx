@@ -262,6 +262,12 @@ export function BlueprintDetail() {
               const color = getCommodityColor(ing.game_item?.sub_type) || "#616161"
               return (
                 <Box key={idx} sx={{ border: 1, borderColor: "divider", borderRadius: 1, p: 1.5 }}>
+                  {/* Slot name header */}
+                  {ing.slot_display_name && (
+                    <Typography variant="caption" color="text.secondary" fontWeight={600} sx={{ mb: 0.5, display: "block" }}>
+                      {ing.slot_display_name}
+                    </Typography>
+                  )}
                   {/* Ingredient header */}
                   <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1 }}>
                     <GameItemAvatar

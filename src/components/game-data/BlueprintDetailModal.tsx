@@ -222,6 +222,11 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
               const color = getCommodityColor(ing.game_item?.sub_type) || "#616161"
               return (
                 <Box key={idx} sx={{ border: 1, borderColor: "divider", borderRadius: 1, p: 1.5 }}>
+                  {ing.slot_display_name && (
+                    <Typography variant="caption" color="text.secondary" fontWeight={600} sx={{ mb: 0.5, display: "block" }}>
+                      {ing.slot_display_name}
+                    </Typography>
+                  )}
                   <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1 }}>
                     <GameItemAvatar name={ing.game_item?.name} iconUrl={ing.game_item?.icon_url} subType={ing.game_item?.sub_type} itemType={ing.game_item?.type} size={28} />
                     <Box sx={{ flex: 1 }}>
