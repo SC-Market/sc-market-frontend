@@ -203,54 +203,52 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
 
             <Divider />
 
-            {/* Craft quantity */}
-            <Stack direction="row" spacing={1} alignItems="center">
-              <Typography variant="subtitle2">Quantity to craft:</Typography>
-              <TextField size="small" type="number" value={craftQty} sx={{ width: 70 }}
-                onChange={e => setCraftQty(Math.max(1, +e.target.value || 1))} inputProps={{ min: 1 }} />
-            </Stack>
-
-            {/* Quality Presets */}
-            <Stack direction="row" spacing={1} alignItems="center">
-              <Typography variant="subtitle2">Quality Presets</Typography>
-              <ButtonGroup size="small" variant="outlined">
-                <Button onClick={() => setAllQualities(0)}>Min</Button>
-                <Button onClick={() => setAllQualities(500)}>Base</Button>
-                <Button onClick={() => setAllQualities(1000)}>Max</Button>
-              </ButtonGroup>
+            {/* Craft quantity + Quality Presets on same row */}
+            <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 1 }}>
+              <Box>
+                <Typography variant="caption" color="text.secondary">Quantity</Typography>
+                <TextField size="small" type="number" value={craftQty} sx={{ width: 60, display: "block", "& input": { py: 0.5, fontSize: "0.8rem" } }}
+                  onChange={e => setCraftQty(Math.max(1, +e.target.value || 1))} inputProps={{ min: 1 }} />
+              </Box>
+              <Box>
+                <Typography variant="caption" color="text.secondary">Quality Presets</Typography>
+                <ButtonGroup size="small" variant="outlined" sx={{ display: "block" }}>
+                  <Button onClick={() => setAllQualities(0)}>Min</Button>
+                  <Button onClick={() => setAllQualities(500)}>Base</Button>
+                  <Button onClick={() => setAllQualities(1000)}>Max</Button>
+                </ButtonGroup>
+              </Box>
               <Box sx={{ flex: 1 }} />
               <Chip label={`Output: ${outputQuality}`} color={outputQuality >= 800 ? "success" : outputQuality >= 400 ? "primary" : "default"} size="small" />
             </Stack>
 
             {/* Ingredients */}
             <Typography variant="subtitle2"><BuildRounded sx={{ fontSize: 16, mr: 0.5 }} />Craft</Typography>
+            <Stack spacing={1}>
             {ingredients.map((ing: any, idx: number) => {
               const qv = qualities[idx] ?? 500
               const color = getCommodityColor(ing.game_item?.sub_type) || "#616161"
               return (
-                <Box key={idx} sx={{ border: 1, borderColor: "divider", borderRadius: 1, p: 1.5 }}>
+                <Box key={idx} sx={{ border: 1, borderColor: "divider", borderRadius: 1, p: 1 }}>
                   {ing.slot_display_name && (
-                    <Typography variant="caption" color="text.secondary" fontWeight={600} sx={{ mb: 0.5, display: "block" }}>
+                    <Typography variant="caption" color="text.secondary" fontWeight={600} sx={{ mb: 0.25, display: "block" }}>
                       {ing.slot_display_name}
                     </Typography>
                   )}
-                  <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1 }}>
-                    <GameItemAvatar name={ing.game_item?.name} iconUrl={ing.game_item?.icon_url} subType={ing.game_item?.sub_type} itemType={ing.game_item?.type} size={28} />
-                    <Box sx={{ flex: 1 }}>
-                      <Typography variant="body2" fontWeight={600}>{ing.game_item?.name || "Unknown"}</Typography>
-                      <Typography variant="caption" color="text.secondary">{formatQty(parseFloat(String(ing.quantity_required)) * craftQty)}{craftQty > 1 && ` (${formatQty(ing.quantity_required)} each)`}{ing.min_quality_tier ? ` · min T${ing.min_quality_tier}` : ""}</Typography>
+                  <Stack direction="row" spacing={1} alignItems="center">
+                    <GameItemAvatar name={ing.game_item?.name} iconUrl={ing.game_item?.icon_url} subType={ing.game_item?.sub_type} itemType={ing.game_item?.type} size={24} />
+                    <Box sx={{ minWidth: 100 }}>
+                      <Typography variant="body2" fontWeight={600} lineHeight={1.2}>{ing.game_item?.name || "Unknown"}</Typography>
+                      <Typography variant="caption" color="text.secondary" lineHeight={1}>{formatQty(parseFloat(String(ing.quantity_required)) * craftQty)}{craftQty > 1 && ` (${formatQty(ing.quantity_required)} ea)`}{ing.min_quality_tier ? ` · min T${ing.min_quality_tier}` : ""}</Typography>
                     </Box>
-                  </Stack>
-                  <Stack direction="row" spacing={1.5} alignItems="center">
-                    <Typography variant="caption" color="text.secondary" sx={{ minWidth: 50 }}>Quality</Typography>
-                    <Slider size="small" min={0} max={1000} value={qv} onChange={(_, v) => setQuality(idx, v as number)} sx={{ flex: 1, color, "& .MuiSlider-thumb": { width: 14, height: 14 } }} />
-                    <TextField size="small" type="number" value={qv} onChange={e => setQuality(idx, +e.target.value || 0)} inputProps={{ min: 0, max: 1000 }} sx={{ width: 75 }} />
+                    <Slider size="small" min={0} max={1000} value={qv} onChange={(_, v) => setQuality(idx, v as number)} sx={{ flex: 1, color, "& .MuiSlider-thumb": { width: 12, height: 12 } }} />
+                    <TextField size="small" type="number" value={qv} onChange={e => setQuality(idx, +e.target.value || 0)} inputProps={{ min: 0, max: 1000 }} sx={{ width: 70, "& input": { py: 0.5, fontSize: "0.8rem" } }} />
                   </Stack>
                   {(modsBySlot.get(ing.slot_name || ing.game_item?.name) || []).map((mod: any, mi: number) => {
                     const factor = interpolateModifier(qv, mod.start_quality, mod.end_quality, mod.modifier_at_start, mod.modifier_at_end)
                     const pct = (factor - 1) * 100
                     return (
-                      <Stack key={mi} direction="row" spacing={1} alignItems="center" sx={{ mt: 0.5 }}>
+                      <Stack key={mi} direction="row" spacing={1} alignItems="center" sx={{ mt: 0.25 }}>
                         <Typography variant="caption" color="text.secondary" sx={{ minWidth: 120 }}>{propertyLabel(mod.property)}</Typography>
                         <Typography variant="caption" fontWeight={600} color={pct >= 0 ? "success.main" : "error.main"}>×{factor.toFixed(3)} {pct >= 0 ? "+" : ""}{pct.toFixed(2)}%</Typography>
                         <Typography variant="caption" color="text.disabled">Factor: ×{mod.modifier_at_start}–{mod.modifier_at_end}</Typography>
@@ -260,6 +258,7 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
                 </Box>
               )
             })}
+            </Stack>
 
             {bp?.crafting_time_seconds && (
               <Typography variant="body2" color="text.secondary"><TimerRounded sx={{ fontSize: 16, mr: 0.5, verticalAlign: "text-bottom" }} />Craft Time: {formatTime(bp.crafting_time_seconds)}</Typography>
@@ -281,7 +280,7 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
               </Box>
               <Box>
                 <Typography variant="caption" color="text.secondary">Quantity</Typography>
-                <TextField size="small" type="number" value={craftQty} sx={{ width: 70 }}
+                <TextField size="small" type="number" value={craftQty} sx={{ width: 60, "& input": { py: 0.5, fontSize: "0.8rem" } }}
                   onChange={(e: any) => setCraftQty(Math.max(1, +e.target.value || 1))} inputProps={{ min: 1 }} />
               </Box>
               {craftQty > 1 && (
