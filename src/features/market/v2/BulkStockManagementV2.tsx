@@ -43,7 +43,7 @@ import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../../components/layout/StandardPageLayout"
 import { ManageListingsTabBar } from "../components/ManageListingsTabBar"
 import { BottomSheet } from "../../../components/mobile/BottomSheet"
-import { LazyDataGrid as DataGrid } from "../../../components/grid/LazyDataGrid"
+import { ThemedDataGrid as DataGrid } from "../../../components/grid/ThemedDataGrid"
 import { UnderlineLink } from "../../../components/typography/UnderlineLink"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import {
