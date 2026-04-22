@@ -33,6 +33,7 @@ import {
 import { useTranslation } from "react-i18next"
 import {
   useGetStockLotsQuery,
+  useGetListingDetailQuery,
   useCreateStockLotMutation,
   useUpdateStockLotMutation,
   useDeleteStockLotMutation,
@@ -40,6 +41,7 @@ import {
   type LocationInfo,
 } from "../../../store/api/v2/market"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
+import { getQualityMode, formatQuality, type QualityMode } from "../../../util/qualityMode"
 
 export interface StockManagerV2Props {
   listingId: string
@@ -52,9 +54,15 @@ export function StockManagerV2({ listingId, itemId, onClose }: StockManagerV2Pro
   const issueAlert = useAlertHook()
 
   const { data: lotsData } = useGetStockLotsQuery({ listingId })
+  const { data: listingDetail } = useGetListingDetailQuery({ id: listingId }, { skip: !listingId })
   const [createLot] = useCreateStockLotMutation()
   const [updateLot] = useUpdateStockLotMutation()
   const [deleteLot] = useDeleteStockLotMutation()
+
+  const qualityMode: QualityMode = useMemo(
+    () => getQualityMode(listingDetail?.items?.[0]?.game_item?.type),
+    [listingDetail],
+  )
 
   const [newRows, setNewRows] = useState<any[]>([])
 
@@ -137,9 +145,19 @@ export function StockManagerV2({ listingId, itemId, onClose }: StockManagerV2Pro
       field: "quality_tier",
       headerName: t("StockManagerV2.qualityTier", "Quality"),
       flex: 1,
+      editable: qualityMode !== "none",
+      type: qualityMode === "numeric" ? "number" as const : undefined,
       renderCell: (params: GridRenderCellParams) => {
-        if (!params.value) return null
-        const tier = params.value as number
+        if (qualityMode === "none") return <Typography variant="body2" color="text.disabled">—</Typography>
+        if (qualityMode === "numeric") {
+          const qv = params.row.quality_value as number | null
+          return qv != null
+            ? <Chip label={`Q${qv}`} size="small" variant="outlined" />
+            : <Typography variant="body2" color="text.disabled">—</Typography>
+        }
+        // tiered
+        const tier = params.value as number | null
+        if (!tier) return <Typography variant="body2" color="text.disabled">—</Typography>
         return (
           <Chip
             label={`Tier ${tier}`}
@@ -149,6 +167,37 @@ export function StockManagerV2({ listingId, itemId, onClose }: StockManagerV2Pro
           />
         )
       },
+      renderEditCell: qualityMode === "tiered"
+        ? (params: GridRenderEditCellParams) => {
+            const api = useGridApiContext()
+            return (
+              <TextField
+                select
+                fullWidth
+                size="small"
+                value={params.value ?? ""}
+                onChange={(e) => {
+                  const val = e.target.value === "" ? null : Number(e.target.value)
+                  api.current.setEditCellValue({ id: params.id, field: "quality_tier", value: val })
+                }}
+                SelectProps={{ native: true }}
+              >
+                <option value="">—</option>
+                <option value="1">Tier 1</option>
+                <option value="2">Tier 2</option>
+                <option value="3">Tier 3</option>
+                <option value="4">Tier 4</option>
+                <option value="5">Tier 5</option>
+              </TextField>
+            )
+          }
+        : undefined,
+      valueGetter: qualityMode === "numeric"
+        ? (_value: any, row: any) => row.quality_value
+        : undefined,
+      valueSetter: qualityMode === "numeric"
+        ? (value: any, row: any) => ({ ...row, quality_value: value })
+        : undefined,
     },
     {
       field: "quantity",
@@ -237,6 +286,18 @@ export function StockManagerV2({ listingId, itemId, onClose }: StockManagerV2Pro
   const handleRowUpdate = async (newRow: any, oldRow: any) => {
     if (String(newRow.id).startsWith("new-")) return newRow
 
+    // Build variant_attributes if quality changed
+    const qualityChanged =
+      newRow.quality_tier !== oldRow.quality_tier ||
+      newRow.quality_value !== oldRow.quality_value
+    const variantAttrs = qualityChanged
+      ? {
+          quality_tier: newRow.quality_tier ?? undefined,
+          quality_value: newRow.quality_value ?? undefined,
+          crafted_source: newRow.crafted_source ?? undefined,
+        }
+      : undefined
+
     try {
       const result = await updateLot({
         id: newRow.lot_id,
@@ -245,6 +306,7 @@ export function StockManagerV2({ listingId, itemId, onClose }: StockManagerV2Pro
           location_id: newRow.location_id ?? undefined,
           listed: newRow.listed,
           notes: newRow.notes || null,
+          variant_attributes: variantAttrs,
         },
       }).unwrap()
 
