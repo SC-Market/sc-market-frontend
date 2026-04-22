@@ -214,7 +214,8 @@ export function ListingDetailV2() {
                         </Stack>
                       }
                       subheader={
-                        <Stack spacing={theme.layoutSpacing.compact} sx={{ mt: 1 }}>
+                        <Stack direction={{ xs: "column", sm: "row" }} spacing={2} sx={{ mt: 1 }}>
+                          <Stack direction="column" spacing={0.5} flex={1}>
                           {/* Seller */}
                           <ListingDetailItem icon={<PersonRounded fontSize="small" />}>
                             <Box component="span" sx={{ display: "inline-flex", alignItems: "center", gap: 0.5 }}>
@@ -241,35 +242,51 @@ export function ListingDetailV2() {
                             </ListingDetailItem>
                           )}
 
-                          {/* Delivery preference */}
-                          {listing.pickup_method && (
-                            <ListingDetailItem icon={<LocalShippingRounded fontSize="small" />}>
-                              {listing.pickup_method === "delivery"
-                                ? "Delivery"
-                                : listing.pickup_method === "pickup"
-                                  ? "Pickup"
-                                  : "Delivery or Pickup"}
-                            </ListingDetailItem>
-                          )}
-
                           {/* Listed date */}
                           <ListingDetailItem icon={<CreateRounded fontSize="small" />}>
-                            {getRelativeTime(new Date(listing.created_at))}
+                            {t("MarketListingView.listed", "Listed")} {getRelativeTime(new Date(listing.created_at))}
                           </ListingDetailItem>
 
                           {/* Updated date */}
                           {listing.updated_at !== listing.created_at && (
                             <ListingDetailItem icon={<RefreshRounded fontSize="small" />}>
-                              Updated {getRelativeTime(new Date(listing.updated_at))}
+                              {t("MarketListingView.updated", "Updated")} {getRelativeTime(new Date(listing.updated_at))}
                             </ListingDetailItem>
                           )}
+                          </Stack>
 
+                          <Stack direction="column" spacing={0.5} flex={1}>
                           {/* Expires */}
                           {listing.expires_at && (
                             <ListingDetailItem icon={<ClockAlert style={{ fontSize: "1.25rem" }} />}>
-                              Expires {getRelativeTime(new Date(listing.expires_at))}
+                              {t("MarketListingView.expires", "Expires")} {getRelativeTime(new Date(listing.expires_at))}
                             </ListingDetailItem>
                           )}
+
+                          {/* Views */}
+                          <ListingDetailItem icon={<VisibilityRounded fontSize="small" />}>
+                            {t("MarketListingView.views", "Views")} {listing.view_count ?? 0}
+                          </ListingDetailItem>
+
+                          {/* Languages */}
+                          {seller.languages && seller.languages.length > 0 && (
+                            <ListingDetailItem icon={<PersonRounded fontSize="small" />}>
+                              <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap", alignItems: "center" }}>
+                                <Typography variant="subtitle2" color="text.secondary">
+                                  {t("MarketListingView.languages", "Languages")}:
+                                </Typography>
+                                {seller.languages.map((lang: string) => (
+                                  <Chip key={lang} label={lang} size="small" variant="outlined" sx={{ height: 22, fontSize: "0.7rem" }} />
+                                ))}
+                              </Box>
+                            </ListingDetailItem>
+                          )}
+
+                          {/* Report */}
+                          <ListingDetailItem icon={<WarningRounded fontSize="small" />}>
+                            <ReportButton reportedUrl={`/market/${listing.listing_id}`} />
+                          </ListingDetailItem>
+                          </Stack>
                         </Stack>
                       }
                     />
