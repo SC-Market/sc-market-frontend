@@ -260,7 +260,7 @@ export function MissionSearch() {
                         <TableCell>System</TableCell>
                         <TableCell>Title</TableCell>
                         <TableCell>Faction</TableCell>
-                        <TableCell>Tags</TableCell>
+                        <TableCell sx={{ maxWidth: 220 }}>Tags</TableCell>
                         <TableCell align="center">BPs</TableCell>
                         <TableCell align="right">Base XP</TableCell>
                         <TableCell align="right">Reward</TableCell>
@@ -298,7 +298,7 @@ export function MissionSearch() {
                             </Typography>
                           </TableCell>
                           <TableCell>
-                            <Stack direction="row" spacing={0.5} flexWrap="nowrap">
+                            <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap sx={{ maxWidth: 220 }}>
                               {m.category && <Tooltip title={getMissionTypeLabel(m.category)}><Chip label={getMissionTypeLabel(m.category)} size="small" color="primary" sx={{ height: 18, fontSize: "0.65rem" }} /></Tooltip>}
                               {m.difficulty_level && <Tooltip title={`Difficulty ${m.difficulty_level}`}><Chip label={`D${m.difficulty_level}`} size="small" color="warning" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} /></Tooltip>}
                               {m.legal_status === "ILLEGAL" && <Tooltip title="Illegal Mission"><Chip label="ILL" size="small" color="error" sx={{ height: 18, fontSize: "0.65rem" }} /></Tooltip>}
