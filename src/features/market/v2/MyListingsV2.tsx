@@ -114,7 +114,18 @@ export function MyListingsV2() {
   return (
     <StandardPageLayout
       title={t("sidebar.my_market_listings", "My Listings")}
-      headerTitle={t("sidebar.my_market_listings", "My Listings")}
+      headerTitle={
+        <ManageListingsTabBar
+          title={t("sidebar.my_market_listings", "My Listings")}
+          rightAction={
+            <Link to="/market/create" style={{ textDecoration: "none" }}>
+              <Button variant="contained" color="secondary" size="small" startIcon={<AddCircleOutlineRounded />}>
+                {t("market.createListing", "Create Listing")}
+              </Button>
+            </Link>
+          }
+        />
+      }
       breadcrumbs={[
         { label: t("sidebar.market_short", "Market"), href: "/market" },
         { label: t("sidebar.my_market_listings", "My Listings") },

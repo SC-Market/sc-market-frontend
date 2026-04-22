@@ -37,7 +37,7 @@ import {
 } from "@mui/material"
 import { ViewList, ViewModule } from "@mui/icons-material"
 import { useSearchMissionsQuery } from "../../store/api/v2/market"
-import { useNavigate, useParams } from "react-router-dom"
+import { useNavigate, useParams, useSearchParams } from "react-router-dom"
 import { useDebounce } from "../../hooks/useDebounce"
 import { useInfiniteScroll } from "../../hooks/useInfiniteScroll"
 import { MissionCard, MissionFilters } from "../../components/game-data"
@@ -59,19 +59,45 @@ export function MissionSearch() {
   const theme = useTheme<ExtendedTheme>()
   const navigate = useNavigate()
   
-  // Search and filter state
-  const [searchText, setSearchText] = useState("")
-  const [category, setCategory] = useState("")
-  const [careerType, setCareerType] = useState("")
-  const [starSystem, setStarSystem] = useState("")
-  const [faction, setFaction] = useState("")
-  const [missionGiver, setMissionGiver] = useState("")
-  const [legalStatus, setLegalStatus] = useState<"" | "LEGAL" | "ILLEGAL">("")
-  const [difficultyRange, setDifficultyRange] = useState<number[]>([1, 5])
-  const [isShareable, setIsShareable] = useState<boolean | undefined>(undefined)
-  const [hasBlueprints, setHasBlueprints] = useState<boolean | undefined>(true)
-  const [isChainStarter, setIsChainStarter] = useState<boolean | undefined>(undefined)
-  const [creditRewardMin, setCreditRewardMin] = useState<number | "">("")
+  // Search and filter state — synced with URL search params
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  const searchText = searchParams.get("q") || ""
+  const category = searchParams.get("category") || ""
+  const careerType = searchParams.get("career") || ""
+  const starSystem = searchParams.get("system") || ""
+  const faction = searchParams.get("faction") || ""
+  const missionGiver = searchParams.get("giver") || ""
+  const legalStatus = (searchParams.get("legal") || "") as "" | "LEGAL" | "ILLEGAL"
+  const diffMin = parseInt(searchParams.get("diff_min") || "1") || 1
+  const diffMax = parseInt(searchParams.get("diff_max") || "5") || 5
+  const difficultyRange = [diffMin, diffMax]
+  const isShareable = searchParams.get("shareable") === "true" ? true : searchParams.get("shareable") === "false" ? false : undefined
+  const hasBlueprints = searchParams.has("blueprints") ? searchParams.get("blueprints") === "true" : true // default true
+  const isChainStarter = searchParams.get("chain") === "true" ? true : searchParams.get("chain") === "false" ? false : undefined
+  const creditRewardMin: number | "" = searchParams.get("min_reward") ? Number(searchParams.get("min_reward")) : ""
+
+  const updateParam = (key: string, value: string) => {
+    const params = new URLSearchParams(searchParams)
+    if (value) params.set(key, value)
+    else params.delete(key)
+    params.delete("page")
+    setSearchParams(params, { replace: true })
+  }
+
+  const setSearchText = (v: string) => updateParam("q", v)
+  const setCategory = (v: string) => updateParam("category", v)
+  const setCareerType = (v: string) => updateParam("career", v)
+  const setStarSystem = (v: string) => updateParam("system", v)
+  const setFaction = (v: string) => updateParam("faction", v)
+  const setMissionGiver = (v: string) => updateParam("giver", v)
+  const setLegalStatus = (v: "" | "LEGAL" | "ILLEGAL") => updateParam("legal", v)
+  const setDifficultyRange = (v: number[]) => { updateParam("diff_min", v[0] === 1 ? "" : String(v[0])); updateParam("diff_max", v[1] === 5 ? "" : String(v[1])) }
+  const setIsShareable = (v: boolean | undefined) => updateParam("shareable", v === undefined ? "" : String(v))
+  const setHasBlueprints = (v: boolean | undefined) => updateParam("blueprints", v === undefined ? "" : String(v))
+  const setIsChainStarter = (v: boolean | undefined) => updateParam("chain", v === undefined ? "" : String(v))
+  const setCreditRewardMin = (v: number | "") => updateParam("min_reward", v === "" ? "" : String(v))
+
   const [page, setPage] = useState(1)
   const [allMissions, setAllMissions] = useState<any[]>([])
   const [viewMode, setViewMode] = useState<"list" | "grid">("list")
@@ -139,19 +165,9 @@ export function MissionSearch() {
   const sentinelRef = useInfiniteScroll({ hasMore, isLoading: isFetching, onLoadMore: loadMore })
 
   const handleResetFilters = () => {
-    setSearchText("")
-    setCategory("")
-    setCareerType("")
-    setStarSystem("")
-    setFaction("")
-    setMissionGiver("")
-    setLegalStatus("")
-    setDifficultyRange([1, 5])
-    setIsShareable(undefined)
-    setHasBlueprints(true)
-    setIsChainStarter(undefined)
-    setCreditRewardMin("")
+    setSearchParams({}, { replace: true })
     setPage(1)
+    setAllMissions([])
   }
 
   const filterContent = (
