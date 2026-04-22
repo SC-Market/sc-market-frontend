@@ -32,7 +32,13 @@ function ManageStockV2Wrapper() {
     <React.Suspense fallback={<MarketLoadingFallback />}>
       <StandardPageLayout
         title={t("sidebar.manage_listings", "Manage Listings")}
-        headerTitle={<ManageListingsTabBar title={t("sidebar.manage_listings", "Manage Listings")} />}
+        headerTitle={
+          <ManageListingsTabBar title={t("sidebar.manage_listings", "Manage Listings")} />
+        }
+        breadcrumbs={[
+          { label: t("sidebar.market_short", "Market"), href: "/market" },
+          { label: t("sidebar.manage_listings", "Manage Listings") },
+        ]}
         sidebarOpen={true}
         maxWidth="xl"
       >
@@ -50,7 +56,13 @@ function ManageStockLotsV2Wrapper() {
     <React.Suspense fallback={<MarketLoadingFallback />}>
       <StandardPageLayout
         title={t("sidebar.manage_stock", "Manage Stock")}
-        headerTitle={<ManageListingsTabBar title={t("sidebar.manage_stock", "Manage Stock")} />}
+        headerTitle={
+          <ManageListingsTabBar title={t("sidebar.manage_stock", "Manage Stock")} />
+        }
+        breadcrumbs={[
+          { label: t("sidebar.market_short", "Market"), href: "/market" },
+          { label: t("sidebar.manage_stock", "Manage Stock") },
+        ]}
         sidebarOpen={true}
         maxWidth="xl"
       >

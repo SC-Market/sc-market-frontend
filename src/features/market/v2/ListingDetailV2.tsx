@@ -360,24 +360,17 @@ export function ListingDetailV2() {
               {/* Variant Breakdown per item */}
               {items.map((item) => (
                 <Grid item xs={12} key={item.item_id}>
-                  <Card>
-                    <CardContent sx={{ p: 3 }}>
-                      <Typography variant="h6" fontWeight="bold" sx={{ mb: 2 }}>
-                        {item.game_item.name}
-                      </Typography>
-                      {item.variants.length > 0 ? (
-                        <VariantBreakdown
-                          variants={item.variants}
-                          showActions={listing.status === "active"}
-                          onSelectVariant={() => openAddToCart(id!)}
-                        />
-                      ) : (
-                        <Typography variant="body2" color="text.secondary">
-                          No variants available
-                        </Typography>
-                      )}
-                    </CardContent>
-                  </Card>
+                  {item.variants.length > 0 ? (
+                    <VariantBreakdown
+                      variants={item.variants}
+                      showActions={listing.status === "active"}
+                      onSelectVariant={() => openAddToCart(id!)}
+                    />
+                  ) : (
+                    <Typography variant="body2" color="text.secondary">
+                      No variants available
+                    </Typography>
+                  )}
                 </Grid>
               ))}
             </Grid>
