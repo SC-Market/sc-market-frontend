@@ -147,3 +147,44 @@ export function getCommodityColor(subType: string | null | undefined): string | 
   if (!subType) return null
   return COMMODITY_COLORS[subType.toLowerCase()] || null
 }
+
+/** Mission category → background color for avatars */
+const MISSION_CATEGORY_COLORS: Record<string, string> = {
+  mercenary: "#C62828",
+  bountyhunter: "#AD1457",
+  "missiontype.delivery": "#1565C0",
+  hauling: "#1565C0",
+  hauling_planetary: "#1565C0",
+  hauling_solar: "#0D47A1",
+  hauling_local: "#1976D2",
+  hauling_interstellar: "#0D47A1",
+  courier: "#1E88E5",
+  investigation: "#6A1B9A",
+  priority: "#E65100",
+  race: "#F57F17",
+  salvage: "#4E342E",
+  maintenance: "#546E7A",
+  ecn: "#B71C1C",
+  mining: "#E65100",
+  fpsmining: "#BF360C",
+  groundmining: "#D84315",
+  shipmining: "#E65100",
+  "missiontype.search": "#00695C",
+  "missiontype.job": "#37474F",
+  "missiontype.research": "#283593",
+  appointment: "#4527A0",
+  servicebeacon: "#00838F",
+  pvpmission: "#880E4F",
+  collection: "#2E7D32",
+  combat: "#C62828",
+  delivery: "#1565C0",
+  "bounty hunting": "#AD1457",
+  exploration: "#00695C",
+  medical: "#1B5E20",
+  trading: "#F9A825",
+}
+
+export function getMissionCategoryColor(category: string | null | undefined): string {
+  if (!category) return "#616161"
+  return MISSION_CATEGORY_COLORS[category.toLowerCase()] || "#616161"
+}
