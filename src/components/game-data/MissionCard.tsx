@@ -61,7 +61,7 @@ export const MissionCard: React.FC<MissionCardProps> = ({ mission, onClick }) =>
           <Box sx={{ display: "flex", gap: 1, mb: 1 }}>
             <Avatar sx={{ width: 32, height: 32, fontSize: "0.75rem", bgcolor: "primary.main", flexShrink: 0 }}
               src={missionIcon || undefined}
-              imgProps={{ style: { objectFit: "contain", padding: 2 } }}
+              imgProps={{ style: { objectFit: "contain", padding: 4 } }}
             >
               {initials(giver)}
             </Avatar>

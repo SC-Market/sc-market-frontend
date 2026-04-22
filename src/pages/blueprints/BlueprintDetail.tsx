@@ -146,7 +146,7 @@ function OverviewTab({ data, itemName }: { data: any; itemName: string }) {
                 <Avatar
                   src={ingredientIcon(ing)}
                   variant="rounded"
-                  sx={{ width: 28, height: 28, fontSize: "0.6rem", bgcolor: getCommodityColor(ing.game_item?.sub_type) || "secondary.main", p: 0.4 }}
+                  sx={{ width: 28, height: 28, fontSize: "0.6rem", bgcolor: getCommodityColor(ing.game_item?.sub_type) || "secondary.main", p: 0.6 }}
                   imgProps={{ style: { objectFit: "contain" } }}
                 >
                   {initials(ing.game_item?.name)}
@@ -229,7 +229,7 @@ function CalculatorTab({ data }: { data: any }) {
               <Avatar
                 src={ingredientIcon(ing)}
                 variant="rounded"
-                sx={{ width: 24, height: 24, fontSize: "0.55rem", bgcolor: getCommodityColor(ing.game_item?.sub_type) || "secondary.main", p: 0.3 }}
+                sx={{ width: 24, height: 24, fontSize: "0.55rem", bgcolor: getCommodityColor(ing.game_item?.sub_type) || "secondary.main", p: 0.5 }}
                 imgProps={{ style: { objectFit: "contain" } }}
               >
                 {initials(ing.game_item?.name)}

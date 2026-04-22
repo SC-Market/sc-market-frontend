@@ -100,7 +100,7 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
               <Avatar
                 src={bp.output_item_icon}
                 variant="rounded"
-                sx={{ width: 32, height: 32, fontSize: "0.7rem", bgcolor: "primary.main", flexShrink: 0, p: 0.5 }}
+                sx={{ width: 32, height: 32, fontSize: "0.7rem", bgcolor: "primary.main", flexShrink: 0, p: 0.75 }}
                 imgProps={{ style: { objectFit: "contain" } }}
               >
                 {initials(bp.output_item_name)}
@@ -123,7 +123,7 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
                     <Avatar
                       src={ingIcon(ing)}
                       variant="rounded"
-                      sx={{ width: 16, height: 16, fontSize: "0.45rem", bgcolor: ingColor(ing), p: 0.25 }}
+                      sx={{ width: 16, height: 16, fontSize: "0.45rem", bgcolor: ingColor(ing), p: 0.75 }}
                       imgProps={{ style: { objectFit: "contain" } }}
                     >
                       {ing.name[0]}
@@ -139,7 +139,7 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
             )}
           </CardContent>
 
-          <CardActions sx={{ px: 1.5, pt: 0, pb: 0.5, flexWrap: "wrap", gap: 0.5 }}>
+          <CardActions sx={{ px: 1.5, pt: 0, pb: 0.5, flexWrap: "wrap", gap: 0.75 }}>
             {bp.rarity && <Chip label={bp.rarity} size="small" color="primary" sx={{ height: 18, fontSize: "0.65rem" }} />}
             {bp.tier && <Chip label={`T${bp.tier}`} size="small" color="secondary" sx={{ height: 18, fontSize: "0.65rem" }} />}
           </CardActions>
@@ -151,7 +151,7 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
                 <Typography variant="caption">{formatTime(bp.crafting_time_seconds)}</Typography>
               </Box>
             ) : null}
-            <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 0.75 }}>
               <Circle sx={{ fontSize: 8, color: bp.mission_count > 0 ? "success.main" : "error.main" }} />
               <Typography variant="caption" color={bp.mission_count > 0 ? "text.secondary" : "text.disabled"}>
                 {bp.mission_count > 0 ? `${bp.mission_count} mission source${bp.mission_count !== 1 ? "s" : ""}` : "No mission sources"}
@@ -171,7 +171,7 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
           <Avatar
             src={bp.output_item_icon}
             variant="rounded"
-            sx={{ width: 36, height: 36, fontSize: "0.75rem", bgcolor: "primary.main", flexShrink: 0, p: 0.5 }}
+            sx={{ width: 36, height: 36, fontSize: "0.75rem", bgcolor: "primary.main", flexShrink: 0, p: 0.75 }}
             imgProps={{ style: { objectFit: "contain" } }}
           >
             {initials(bp.output_item_name)}
@@ -191,7 +191,7 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
               ))}
             </Stack>
           </Box>
-          <Box sx={{ textAlign: "right", flexShrink: 0, display: "flex", alignItems: "center", gap: 0.5 }}>
+          <Box sx={{ textAlign: "right", flexShrink: 0, display: "flex", alignItems: "center", gap: 0.75 }}>
             <Circle sx={{ fontSize: 8, color: bp.mission_count > 0 ? "success.main" : "error.main" }} />
             <Typography variant="caption" color="text.secondary">{bp.mission_count} msn</Typography>
             {bp.crafting_time_seconds && <Typography variant="caption" color="text.secondary" sx={{ ml: 1 }}>{formatTime(bp.crafting_time_seconds)}</Typography>}
