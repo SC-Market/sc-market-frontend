@@ -83,6 +83,7 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
   const [currentOrg] = useCurrentOrg()
   const spectrumId = currentOrg?.spectrum_id
   const [tab, setTab] = useState(0)
+  const [missionsExpanded, setMissionsExpanded] = useState(false)
 
   const { data: orgOwners } = useGetOrgBlueprintOwnersQuery(
     { blueprintId: blueprintId!, spectrumId: spectrumId! },
@@ -185,11 +186,17 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
                   <TrackChangesRounded sx={{ fontSize: 16, mr: 0.5 }} />Missions ({data.missions_rewarding.length})
                 </Typography>
                 <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                  {data.missions_rewarding.slice(0, 8).map((m: any) => (
+                  {(missionsExpanded ? data.missions_rewarding : data.missions_rewarding.slice(0, 8)).map((m: any) => (
                     <Chip key={m.mission_id} label={m.mission_name} size="small" sx={{ height: 22, cursor: "pointer" }}
                       onClick={() => { onClose(); navigate(`/missions/${m.mission_id}`) }} />
                   ))}
-                  {data.missions_rewarding.length > 8 && <Chip label={`+${data.missions_rewarding.length - 8}`} size="small" variant="outlined" sx={{ height: 22 }} />}
+                  {data.missions_rewarding.length > 8 && (
+                    <Chip
+                      label={missionsExpanded ? "Show less" : `+${data.missions_rewarding.length - 8}`}
+                      size="small" variant="outlined" sx={{ height: 22, cursor: "pointer" }}
+                      onClick={() => setMissionsExpanded(!missionsExpanded)}
+                    />
+                  )}
                 </Box>
               </Box>
             )}
