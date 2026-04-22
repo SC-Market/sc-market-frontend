@@ -78,6 +78,19 @@ export function BlueprintDetail() {
   const itemName = outputItem?.name || bp?.blueprint_name || "Blueprint"
   const ingredients = data?.ingredients || []
   const slotModifiers = data?.slot_modifiers || []
+  const itemAttrs = data?.item_attributes || {}
+
+  // Compute combined modifier per property from all slots at current qualities
+  const combinedModifiers = useMemo(() => {
+    const result = new Map<string, number>()
+    for (const mod of slotModifiers) {
+      const slotIdx = ingredients.findIndex((ing: any) => (ing.slot_name || ing.game_item?.name) === mod.slot_name)
+      const qv = qualities[slotIdx] ?? 500
+      const factor = interpolateModifier(qv, mod.start_quality, mod.end_quality, mod.modifier_at_start, mod.modifier_at_end)
+      result.set(mod.property, (result.get(mod.property) || 1) * factor)
+    }
+    return result
+  }, [slotModifiers, qualities, ingredients])
   const [currentOrg] = useCurrentOrg()
   const spectrumId = currentOrg?.spectrum_id
   const [tab, setTab] = useState(0)
@@ -182,6 +195,30 @@ export function BlueprintDetail() {
           )}
 
           <Divider sx={{ mb: 1 }} />
+
+          {/* Product Stats — base vs crafted */}
+          {Object.keys(itemAttrs).length > 0 && combinedModifiers.size > 0 && (
+            <Box sx={{ mb: 2 }}>
+              <Typography variant="subtitle2" sx={{ mb: 1 }}>Product Stats</Typography>
+              {Array.from(combinedModifiers.entries()).map(([prop, modifier]) => {
+                const baseKey = Object.keys(itemAttrs).find(k => k.toLowerCase().includes(prop.replace(/^gpp_armor_/, "").toLowerCase()))
+                const baseVal = baseKey ? parseFloat(itemAttrs[baseKey]) : null
+                if (baseVal === null || isNaN(baseVal)) return null
+                const modified = baseVal * modifier
+                const pctChange = (modifier - 1) * 100
+                return (
+                  <Stack key={prop} direction="row" spacing={1} alignItems="center" sx={{ py: 0.25 }}>
+                    <Typography variant="caption" color="text.secondary" sx={{ minWidth: 140 }}>{propertyLabel(prop)}</Typography>
+                    <Typography variant="caption">×{baseVal.toFixed(2)}</Typography>
+                    <Typography variant="caption" color="text.disabled">→</Typography>
+                    <Typography variant="caption" fontWeight={600} color={pctChange >= 0 ? "success.main" : "error.main"}>
+                      ×{modified.toFixed(2)} ({pctChange >= 0 ? "+" : ""}{pctChange.toFixed(1)}%)
+                    </Typography>
+                  </Stack>
+                )
+              })}
+            </Box>
+          )}
 
           {/* Tabs */}
           <Tabs value={tab} onChange={(_, v) => setTab(v)} sx={{ mb: 2 }}>
