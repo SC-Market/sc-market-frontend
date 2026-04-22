@@ -44,7 +44,8 @@ export function ManageStockPage() {
         </BottomSheet>
       )}
 
-      <Grid item xs={12} container spacing={theme.layoutSpacing.layout}>
+      <Grid item xs={12}>
+      <Grid container spacing={theme.layoutSpacing.layout}>
         <Grid item xs={12}>
           <Box
             sx={{
@@ -88,6 +89,6 @@ export function ManageStockPage() {
           </Grid>
         </Grid>
       </Grid>
-    </StockSearchProvider>
+      </Grid>    </StockSearchProvider>
   )
 }

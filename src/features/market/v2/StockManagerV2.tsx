@@ -1,45 +1,45 @@
 /**
- * Stock Manager V2 Component
+ * StockManagerV2 — V2 equivalent of V1 AllStockLotsGrid.
  *
- * Advanced stock management interface with variant support, lot breakdown,
- * inline editing, and progressive disclosure of complex features.
- *
- * **Validates: Requirements 21.1-21.12**
+ * Uses LazyDataGrid with inline editing, matching V1's column layout:
+ * listing (variant display_name), quantity, location, listed, notes, actions.
+ * Adds V2-specific quality tier column.
+ * Uses V2 RTK Query hooks exclusively.
  */
 
-import React, { useState, useMemo } from "react"
+import React, { useState, useCallback, useMemo } from "react"
 import {
-  Box,
+  GridColDef,
+  GridRenderCellParams,
+  GridRenderEditCellParams,
+  useGridApiContext,
+} from "@mui/x-data-grid"
+import { LazyDataGrid as DataGrid } from "../../../components/grid/LazyDataGrid"
+import {
   Paper,
   Typography,
-  Button,
-  Stack,
   Chip,
-  Divider,
-  Alert,
-  CircularProgress,
-  Skeleton,
-  useMediaQuery,
-  useTheme,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
-  Tabs,
-  Tab,
+  IconButton,
+  Box,
+  Button,
+  Autocomplete,
+  TextField,
 } from "@mui/material"
-import { Add as AddIcon, Inventory as InventoryIcon, Build as BuildIcon } from "@mui/icons-material"
+import {
+  Delete as DeleteIcon,
+  Save as SaveIcon,
+  Add as AddIcon,
+} from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import {
   useGetStockLotsQuery,
+  useCreateStockLotMutation,
+  useUpdateStockLotMutation,
+  useDeleteStockLotMutation,
   type StockLotDetail,
   type LocationInfo,
 } from "../../../store/api/v2/market"
-import { StockBreakdown } from "../components/stock/StockBreakdown"
-import { LotListItemV2 } from "./components/LotListItemV2"
-import { CreateLotDialogV2 } from "./components/CreateLotDialogV2"
-import { TransferLotDialogV2 } from "./components/TransferLotDialogV2"
-import { CraftableItemsView } from "./components/CraftableItemsView"
+import { useAlertHook } from "../../../hooks/alert/AlertHook"
 
 export interface StockManagerV2Props {
   listingId: string
@@ -47,460 +47,319 @@ export interface StockManagerV2Props {
   onClose?: () => void
 }
 
-type SortOption = "quality" | "quantity" | "location"
-
-/**
- * StockManagerV2 Component
- *
- * Displays a comprehensive view of all stock lots for a V2 listing.
- * Groups lots by location and variant, shows aggregates, and provides inline editing.
- * Supports quality tier filtering and sorting by quality, quantity, or location.
- */
-export function StockManagerV2({
-  listingId,
-  itemId,
-  onClose,
-}: StockManagerV2Props) {
+export function StockManagerV2({ listingId, itemId, onClose }: StockManagerV2Props) {
   const { t } = useTranslation()
-  const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const issueAlert = useAlertHook()
 
-  // State for tabs
-  const [activeTab, setActiveTab] = useState<"stock" | "craftable">("stock")
+  const { data: lotsData } = useGetStockLotsQuery({ listingId })
+  const [createLot] = useCreateStockLotMutation()
+  const [updateLot] = useUpdateStockLotMutation()
+  const [deleteLot] = useDeleteStockLotMutation()
 
-  // State for dialogs
-  const [createDialogOpen, setCreateDialogOpen] = useState(false)
-  const [transferDialogOpen, setTransferDialogOpen] = useState(false)
-  const [selectedLot, setSelectedLot] = useState<StockLotDetail | null>(null)
+  const [newRows, setNewRows] = useState<any[]>([])
 
-  // State for filters and sorting
-  const [qualityTierMin, setQualityTierMin] = useState<number | undefined>(
-    undefined,
-  )
-  const [qualityTierMax, setQualityTierMax] = useState<number | undefined>(
-    undefined,
-  )
-  const [sortBy, setSortBy] = useState<SortOption>("location")
+  const lots = lotsData?.lots ?? []
 
-  // Fetch lots
-  const {
-    data: lotsData,
-    isLoading: isLoadingLots,
-    error: lotsError,
-  } = useGetStockLotsQuery({
-    listingId,
-    qualityTierMin,
-    qualityTierMax,
-  })
-
-  // Extract unique locations for filtering
+  // Extract unique locations from lot data
   const locations = useMemo(() => {
-    if (!lotsData?.lots) return []
-    const locationMap = new Map<string, LocationInfo>()
-    lotsData.lots.forEach((lot) => {
-      if (lot.location) {
-        locationMap.set(lot.location.location_id, lot.location)
-      }
+    const map = new Map<string, LocationInfo>()
+    lots.forEach((lot) => {
+      if (lot.location) map.set(lot.location.location_id, lot.location)
     })
-    return Array.from(locationMap.values())
-  }, [lotsData])
+    return Array.from(map.values())
+  }, [lots])
 
-  // Group lots by location and variant
-  const groupedLots = useMemo(() => {
-    if (!lotsData?.lots) return new Map()
+  // Location edit cell — matches V1 LocationEditCell pattern
+  function LocationEditCell(props: GridRenderEditCellParams) {
+    const { id, value, field } = props
+    const apiRef = useGridApiContext()
+    const [inputValue, setInputValue] = useState("")
 
-    const grouped = new Map<
-      string,
-      {
-        location: LocationInfo | null
-        variantGroups: Map<
-          string,
-          {
-            variant: StockLotDetail["variant"]
-            lots: StockLotDetail[]
-          }
-        >
-      }
-    >()
+    const filtered = locations.filter((loc) =>
+      loc.name.toLowerCase().includes(inputValue.toLowerCase()),
+    )
+    const selected = locations.find((l) => l.location_id === value) ?? null
 
-    // Sort lots based on selected sort option
-    const sortedLots = [...lotsData.lots].sort((a, b) => {
-      switch (sortBy) {
-        case "quality": {
-          const qualityA = a.variant.attributes.quality_tier || 0
-          const qualityB = b.variant.attributes.quality_tier || 0
-          return qualityB - qualityA // Descending (highest quality first)
+    return (
+      <Autocomplete
+        value={selected}
+        onChange={(_, v) =>
+          apiRef.current.setEditCellValue({ id, field, value: v?.location_id ?? null })
         }
-        case "quantity":
-          return b.quantity_total - a.quantity_total // Descending
-        case "location":
-        default:
-          return (a.location?.name || "").localeCompare(
-            b.location?.name || "",
-          )
-      }
-    })
+        inputValue={inputValue}
+        onInputChange={(_, v) => setInputValue(v)}
+        options={filtered}
+        getOptionLabel={(o) => o.name}
+        renderInput={(params) => (
+          <TextField {...params} size="medium" placeholder={t("AllStockLots.selectLocation", "Select location...")} />
+        )}
+        fullWidth
+        size="medium"
+        disablePortal={false}
+        sx={{ height: "100%" }}
+      />
+    )
+  }
 
-    sortedLots.forEach((lot) => {
-      const locationId = lot.location?.location_id || "unspecified"
+  const renderLocationEditCell = useCallback(
+    (props: GridRenderEditCellParams) => <LocationEditCell {...props} />,
+    [locations, t],
+  )
 
-      if (!grouped.has(locationId)) {
-        grouped.set(locationId, {
-          location: lot.location,
-          variantGroups: new Map(),
-        })
-      }
+  // Map lots to rows
+  const allLots = lots.map((lot) => ({
+    id: lot.lot_id,
+    lot_id: lot.lot_id,
+    variant_display_name: lot.variant.display_name,
+    variant_short_name: lot.variant.short_name,
+    quality_tier: lot.variant.attributes.quality_tier ?? null,
+    quality_value: lot.variant.attributes.quality_value ?? null,
+    crafted_source: lot.variant.attributes.crafted_source ?? null,
+    quantity: lot.quantity_total,
+    location_id: lot.location?.location_id ?? null,
+    location_name: lot.location?.name ?? null,
+    listed: lot.listed,
+    notes: lot.notes ?? "",
+  }))
 
-      const locationGroup = grouped.get(locationId)!
-      const variantId = lot.variant.variant_id
+  const rows = [...newRows, ...allLots]
 
-      if (!locationGroup.variantGroups.has(variantId)) {
-        locationGroup.variantGroups.set(variantId, {
-          variant: lot.variant,
-          lots: [],
-        })
-      }
+  const columns: GridColDef[] = [
+    {
+      field: "variant_display_name",
+      headerName: t("AllStockLots.listing", "Variant"),
+      flex: 2,
+      renderCell: (params: GridRenderCellParams) => (
+        <Typography variant="body2">{params.value}</Typography>
+      ),
+    },
+    {
+      field: "quality_tier",
+      headerName: t("StockManagerV2.qualityTier", "Quality"),
+      flex: 1,
+      renderCell: (params: GridRenderCellParams) => {
+        if (!params.value) return null
+        const tier = params.value as number
+        return (
+          <Chip
+            label={`Tier ${tier}`}
+            size="small"
+            color={tier >= 4 ? "success" : tier >= 3 ? "primary" : "default"}
+            variant="outlined"
+          />
+        )
+      },
+    },
+    {
+      field: "quantity",
+      headerName: t("AllStockLots.quantity", "Quantity"),
+      flex: 1,
+      editable: true,
+      type: "number" as const,
+      valueParser: (value: string) => {
+        const parsed = Number(value)
+        return isNaN(parsed) ? 0 : Math.max(0, parsed)
+      },
+    },
+    {
+      field: "location_id",
+      headerName: t("AllStockLots.location", "Location"),
+      flex: 1.5,
+      minWidth: 200,
+      editable: true,
+      renderEditCell: renderLocationEditCell,
+      valueFormatter: (value: string) => {
+        const loc = locations.find((l) => l.location_id === value)
+        return loc?.name ?? "Unspecified"
+      },
+    },
+    {
+      field: "listed",
+      headerName: t("AllStockLots.listed", "Listed"),
+      flex: 1,
+      editable: true,
+      renderCell: (params: GridRenderCellParams) => (
+        <Chip
+          label={params.value ? t("ui.yes", "Yes") : t("ui.no", "No")}
+          color={params.value ? "success" : "default"}
+          size="small"
+        />
+      ),
+    },
+    {
+      field: "notes",
+      headerName: t("AllStockLots.notes", "Notes"),
+      flex: 2,
+      editable: true,
+    },
+    {
+      field: "actions",
+      headerName: t("AllStockLots.actions", "Actions"),
+      flex: 1,
+      renderCell: (params: GridRenderCellParams) => {
+        const isNew = String(params.row.id).startsWith("new-")
+        return (
+          <Box sx={{ display: "flex", gap: 0.5 }}>
+            {isNew && (
+              <IconButton
+                size="small"
+                color="primary"
+                onClick={() => handleSaveNew(params.row)}
+              >
+                <SaveIcon />
+              </IconButton>
+            )}
+            <IconButton
+              size="small"
+              onClick={() =>
+                isNew
+                  ? handleCancelNew(params.row.id)
+                  : handleDelete(params.row.lot_id)
+              }
+            >
+              <DeleteIcon />
+            </IconButton>
+          </Box>
+        )
+      },
+    },
+  ]
 
-      locationGroup.variantGroups.get(variantId)!.lots.push(lot)
-    })
-
-    return grouped
-  }, [lotsData, sortBy])
-
-  // Calculate aggregates
-  const aggregates = useMemo(() => {
-    if (!lotsData?.lots) {
-      return { total: 0, available: 0, reserved: 0 }
+  const handleDelete = async (lotId: string) => {
+    try {
+      await deleteLot({ id: lotId }).unwrap()
+      issueAlert({ message: t("AllStockLots.deleted", "Lot deleted"), severity: "success" })
+    } catch (error) {
+      issueAlert(error as any)
     }
-
-    const total = lotsData.lots.reduce(
-      (sum, lot) => sum + lot.quantity_total,
-      0,
-    )
-    const available = lotsData.lots
-      .filter((lot) => lot.listed)
-      .reduce((sum, lot) => sum + lot.quantity_total, 0)
-    const reserved = total - available
-
-    return { total, available, reserved }
-  }, [lotsData])
-
-  // Handle transfer dialog
-  const handleTransferClick = (lot: StockLotDetail) => {
-    setSelectedLot(lot)
-    setTransferDialogOpen(true)
   }
 
-  const handleTransferClose = () => {
-    setTransferDialogOpen(false)
-    setSelectedLot(null)
+  const handleRowUpdate = async (newRow: any, oldRow: any) => {
+    if (String(newRow.id).startsWith("new-")) return newRow
+
+    try {
+      const result = await updateLot({
+        id: newRow.lot_id,
+        updateStockLotRequest: {
+          quantity_total: Number(newRow.quantity),
+          location_id: newRow.location_id ?? undefined,
+          listed: newRow.listed,
+          notes: newRow.notes || null,
+        },
+      }).unwrap()
+
+      issueAlert({ message: t("AllStockLots.updated", "Lot updated"), severity: "success" })
+
+      const lot = result.lot
+      return {
+        id: lot.lot_id,
+        lot_id: lot.lot_id,
+        variant_display_name: lot.variant.display_name,
+        variant_short_name: lot.variant.short_name,
+        quality_tier: lot.variant.attributes.quality_tier ?? null,
+        quality_value: lot.variant.attributes.quality_value ?? null,
+        crafted_source: lot.variant.attributes.crafted_source ?? null,
+        quantity: lot.quantity_total,
+        location_id: lot.location?.location_id ?? null,
+        location_name: lot.location?.name ?? null,
+        listed: lot.listed,
+        notes: lot.notes ?? "",
+      }
+    } catch (error) {
+      issueAlert(error as any)
+      return oldRow
+    }
   }
 
-  // Loading state
-  if (isLoadingLots) {
-    return (
-      <Stack spacing={1}>
-        {[1,2,3].map(i => <Skeleton key={i} variant="rectangular" height={60} sx={{ borderRadius: 1 }} />)}
-      </Stack>
-    )
+  const handleSaveNew = async (row: any) => {
+    try {
+      await createLot({
+        createStockLotRequest: {
+          item_id: itemId,
+          quantity: Number(row.quantity) || 0,
+          variant_attributes: {},
+          location_id: row.location_id ?? undefined,
+          listed: row.listed ?? true,
+          notes: row.notes || undefined,
+        },
+      }).unwrap()
+
+      issueAlert({ message: t("AllStockLots.created", "Lot created"), severity: "success" })
+      setNewRows((prev) => prev.filter((r) => r.id !== row.id))
+    } catch (error) {
+      issueAlert(error as any)
+    }
   }
 
-  // Error state
-  if (lotsError) {
-    return (
-      <Alert severity="error">
-        {t("StockManagerV2.errorLoading", "Failed to load stock information")}
-      </Alert>
-    )
+  const handleCancelNew = (rowId: string) => {
+    setNewRows((prev) => prev.filter((r) => r.id !== rowId))
   }
 
-  const lots = lotsData?.lots || []
+  const handleAddRow = () => {
+    const newId = `new-${Date.now()}`
+    setNewRows((prev) => [
+      ...prev,
+      {
+        id: newId,
+        lot_id: null,
+        variant_display_name: "New Lot",
+        variant_short_name: "",
+        quality_tier: null,
+        quality_value: null,
+        crafted_source: null,
+        quantity: 0,
+        location_id: null,
+        location_name: null,
+        listed: true,
+        notes: "",
+      },
+    ])
+  }
 
   return (
-    <Box>
-      {/* Header with tabs */}
-      <Paper sx={{ p: { xs: 1.5, sm: 2 }, mb: 2 }}>
-        <Stack
-          direction={{ xs: "column", sm: "row" }}
-          justifyContent="space-between"
-          alignItems={{ xs: "stretch", sm: "center" }}
-          spacing={theme.layoutSpacing.layout}
-          mb={2}
-        >
-          <Typography variant={isMobile ? "subtitle1" : "h6"}>
-            {t("StockManagerV2.title", "Stock Management")}
-          </Typography>
-          {activeTab === "stock" && (
-            <Button
-              variant="contained"
-              startIcon={<AddIcon />}
-              onClick={() => setCreateDialogOpen(true)}
-              size="small"
-              fullWidth={isMobile}
+    <Paper>
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        processRowUpdate={handleRowUpdate}
+        onProcessRowUpdateError={(error) => console.error(error)}
+        pageSizeOptions={[24, 48, 96]}
+        initialState={{
+          pagination: { paginationModel: { pageSize: 24 } },
+        }}
+        disableRowSelectionOnClick
+        slots={{
+          toolbar: () => (
+            <Box
+              sx={{
+                p: 2,
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
             >
-              {t("StockManagerV2.createLot", "Create Lot")}
-            </Button>
-          )}
-        </Stack>
-
-        {/* Tabs */}
-        <Tabs
-          value={activeTab}
-          onChange={(_, newValue) => setActiveTab(newValue)}
-          sx={{ borderBottom: 1, borderColor: "divider" }}
-        >
-          <Tab
-            label={t("StockManagerV2.stockTab", "Stock Lots")}
-            value="stock"
-            icon={<InventoryIcon />}
-            iconPosition="start"
-          />
-          <Tab
-            label={t("StockManagerV2.craftableTab", "Craftable Items")}
-            value="craftable"
-            icon={<BuildIcon />}
-            iconPosition="start"
-          />
-        </Tabs>
-      </Paper>
-
-      {/* Tab content */}
-      {activeTab === "craftable" ? (
-        <CraftableItemsView />
-      ) : (
-        <>
-          {/* Stock lots view */}
-          <Paper sx={{ p: { xs: 1.5, sm: 2 }, mb: 2 }}>
-            {/* Stock breakdown summary */}
-            <StockBreakdown
-              total={aggregates.total}
-              available={aggregates.available}
-              reserved={aggregates.reserved}
-            />
-
-            {/* Filters and sorting */}
-            <Stack
-              direction={{ xs: "column", sm: "row" }}
-              spacing={theme.layoutSpacing.layout}
-              mt={2}
-              alignItems={{ xs: "stretch", sm: "center" }}
-            >
-          {/* Quality tier filter */}
-          <FormControl size="small" sx={{ minWidth: 150 }}>
-            <InputLabel>
-              {t("StockManagerV2.minQuality", "Min Quality")}
-            </InputLabel>
-            <Select
-              value={qualityTierMin || ""}
-              onChange={(e) =>
-                setQualityTierMin(
-                  e.target.value ? Number(e.target.value) : undefined,
-                )
-              }
-              label={t("StockManagerV2.minQuality", "Min Quality")}
-            >
-              <MenuItem value="">
-                {t("StockManagerV2.any", "Any")}
-              </MenuItem>
-              {[1, 2, 3, 4, 5].map((tier) => (
-                <MenuItem key={tier} value={tier}>
-                  {t("StockManagerV2.tier", "Tier")} {tier}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          <FormControl size="small" sx={{ minWidth: 150 }}>
-            <InputLabel>
-              {t("StockManagerV2.maxQuality", "Max Quality")}
-            </InputLabel>
-            <Select
-              value={qualityTierMax || ""}
-              onChange={(e) =>
-                setQualityTierMax(
-                  e.target.value ? Number(e.target.value) : undefined,
-                )
-              }
-              label={t("StockManagerV2.maxQuality", "Max Quality")}
-            >
-              <MenuItem value="">
-                {t("StockManagerV2.any", "Any")}
-              </MenuItem>
-              {[1, 2, 3, 4, 5].map((tier) => (
-                <MenuItem key={tier} value={tier}>
-                  {t("StockManagerV2.tier", "Tier")} {tier}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-
-          {/* Sort by */}
-          <FormControl size="small" sx={{ minWidth: 150 }}>
-            <InputLabel>{t("StockManagerV2.sortBy", "Sort By")}</InputLabel>
-            <Select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as SortOption)}
-              label={t("StockManagerV2.sortBy", "Sort By")}
-            >
-              <MenuItem value="location">
-                {t("StockManagerV2.sortLocation", "Location")}
-              </MenuItem>
-              <MenuItem value="quality">
-                {t("StockManagerV2.sortQuality", "Quality")}
-              </MenuItem>
-              <MenuItem value="quantity">
-                {t("StockManagerV2.sortQuantity", "Quantity")}
-              </MenuItem>
-            </Select>
-          </FormControl>
-        </Stack>
-          </Paper>
-
-          {/* Lots grouped by location and variant */}
-      {lots.length === 0 ? (
-        <Paper sx={{ p: 3, textAlign: "center" }}>
-          <Typography variant="body2" color="text.secondary" mb={2}>
-            {t(
-              "StockManagerV2.noLots",
-              "No stock lots found. Create your first lot to get started.",
-            )}
-          </Typography>
-          <Button
-            variant="outlined"
-            startIcon={<AddIcon />}
-            onClick={() => setCreateDialogOpen(true)}
-          >
-            {t("StockManagerV2.createFirstLot", "Create First Lot")}
-          </Button>
-        </Paper>
-      ) : (
-        <Stack spacing={theme.layoutSpacing.layout}>
-          {Array.from(groupedLots.entries()).map(
-            ([locationId, { location, variantGroups }]) => (
-              <Paper key={locationId} sx={{ p: 2 }}>
-                {/* Location header */}
-                <Stack direction="row" alignItems="center" spacing={1} mb={2}>
-                  <Typography variant="subtitle1" fontWeight="medium">
-                    {location?.name ||
-                      t(
-                        "StockManagerV2.unspecifiedLocation",
-                        "Unspecified Location",
-                      )}
-                  </Typography>
-                  {location?.is_preset && (
-                    <Chip
-                      label={t("StockManagerV2.preset", "Preset")}
-                      size="small"
-                      color="primary"
-                      variant="outlined"
-                    />
-                  )}
-                  <Typography variant="body2" color="text.secondary">
-                    (
-                    {Array.from<{ variant: StockLotDetail["variant"]; lots: StockLotDetail[] }>(variantGroups.values()).reduce<number>(
-                      (sum, vg) => sum + vg.lots.length,
-                      0,
-                    )}{" "}
-                    {Array.from<{ variant: StockLotDetail["variant"]; lots: StockLotDetail[] }>(variantGroups.values()).reduce<number>(
-                      (sum, vg) => sum + vg.lots.length,
-                      0,
-                    ) === 1
-                      ? t("StockManagerV2.lot", "lot")
-                      : t("StockManagerV2.lots", "lots")}
-                    )
-                  </Typography>
-                </Stack>
-
-                <Divider sx={{ mb: 2 }} />
-
-                {/* Variant groups within location */}
-                <Stack spacing={theme.layoutSpacing.component}>
-                  {Array.from<[string, { variant: StockLotDetail["variant"]; lots: StockLotDetail[] }]>(variantGroups.entries()).map<React.ReactElement>(
-                    ([variantId, { variant, lots: variantLots }]) => (
-                      <Box key={variantId}>
-                        {/* Variant header with quality badge */}
-                        <Stack
-                          direction="row"
-                          alignItems="center"
-                          spacing={1}
-                          mb={1}
-                        >
-                          <Typography
-                            variant="body2"
-                            fontWeight="medium"
-                            color="text.secondary"
-                          >
-                            {variant.display_name}
-                          </Typography>
-                          {variant.attributes.quality_tier && (
-                            <Chip
-                              label={`${t("StockManagerV2.tier", "Tier")} ${variant.attributes.quality_tier}`}
-                              size="small"
-                              color={
-                                variant.attributes.quality_tier >= 4
-                                  ? "success"
-                                  : variant.attributes.quality_tier >= 3
-                                    ? "primary"
-                                    : "default"
-                              }
-                              variant="outlined"
-                            />
-                          )}
-                          {variant.attributes.quality_value !== undefined && (
-                            <Typography variant="caption" color="text.secondary">
-                              ({variant.attributes.quality_value.toFixed(1)}%)
-                            </Typography>
-                          )}
-                          {variant.attributes.crafted_source && (
-                            <Chip
-                              label={variant.attributes.crafted_source}
-                              size="small"
-                              variant="outlined"
-                            />
-                          )}
-                        </Stack>
-
-                        {/* Lots for this variant */}
-                        <Stack spacing={1}>
-                          {variantLots.map((lot: StockLotDetail) => (
-                            <LotListItemV2
-                              key={lot.lot_id}
-                              lot={lot}
-                              locations={locations}
-                              onTransfer={handleTransferClick}
-                            />
-                          ))}
-                        </Stack>
-                      </Box>
-                    ),
-                  )}
-                </Stack>
-              </Paper>
-            ),
-          )}
-        </Stack>
-          )}
-        </>
-      )}
-
-      {/* Create Lot Dialog */}
-      <CreateLotDialogV2
-        open={createDialogOpen}
-        onClose={() => setCreateDialogOpen(false)}
-        listingId={listingId}
-        itemId={itemId}
-        locations={locations}
+              <Typography variant="h6">
+                {t("AllStockLots.title", "All Stock Lots")}
+              </Typography>
+              <Button
+                size="small"
+                variant="contained"
+                startIcon={<AddIcon />}
+                onClick={handleAddRow}
+              >
+                {t("AllStockLots.addLot", "Add Lot")}
+              </Button>
+            </Box>
+          ),
+        }}
+        showToolbar
+        sx={{
+          "& .MuiDataGrid-cell": {
+            display: "flex",
+            alignItems: "center",
+          },
+        }}
       />
-
-      {/* Transfer Lot Dialog */}
-      {selectedLot && (
-        <TransferLotDialogV2
-          open={transferDialogOpen}
-          onClose={handleTransferClose}
-          lot={selectedLot}
-          locations={locations}
-        />
-      )}
-    </Box>
+    </Paper>
   )
 }

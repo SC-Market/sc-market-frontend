@@ -803,7 +803,8 @@ export function MarketCart() {
       isLoading={pageData.isLoading}
       error={pageData.error}
     >
-      <Grid item xs={12} container spacing={theme.layoutSpacing.layout}>
+      <Grid item xs={12}>
+      <Grid container spacing={theme.layoutSpacing.layout}>
         {(cart || []).map((seller: CartSeller) => (
           <CartSellerEntry
             key={seller.contractor_seller_id || seller.user_seller_id}
@@ -818,6 +819,6 @@ export function MarketCart() {
           </Grid>
         )}
       </Grid>
-    </StandardPageLayout>
+      </Grid>    </StandardPageLayout>
   )
 }

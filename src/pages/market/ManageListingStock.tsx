@@ -33,7 +33,8 @@ export function ManageListingStock() {
       error={pageData.error}
     >
       {pageData.data && (
-        <Grid item xs={12} container spacing={theme.layoutSpacing.layout}>
+        <Grid item xs={12}>
+        <Grid container spacing={theme.layoutSpacing.layout}>
           <Grid item xs={12}>
             <Button
               startIcon={<ArrowBack />}
@@ -52,7 +53,7 @@ export function ManageListingStock() {
             </Paper>
           </Grid>
         </Grid>
-      )}
+        </Grid>      )}
     </StandardPageLayout>
   )
 }
