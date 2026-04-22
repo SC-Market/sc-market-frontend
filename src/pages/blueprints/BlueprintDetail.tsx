@@ -18,9 +18,6 @@ import {
   Tabs,
   Tab,
   Avatar,
-  Tabs,
-  Tab,
-  Avatar,
 } from "@mui/material"
 import { useGetBlueprintDetailQuery, useGetOrgBlueprintOwnersQuery } from "../../store/api/v2/market"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
