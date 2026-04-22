@@ -322,11 +322,8 @@ export function WikiItemDetail() {
               <Card>
                 <CardContent>
                   <Typography variant="h6" gutterBottom>Disassembly Calculator</Typography>
-                  <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                    Estimate materials recovered from disassembling this item.
-                  </Typography>
 
-                  <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 3 }}>
+                  <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 2 }}>
                     <TextField
                       size="small"
                       type="number"
@@ -336,47 +333,55 @@ export function WikiItemDetail() {
                       inputProps={{ min: 1 }}
                       sx={{ width: 200 }}
                     />
+                    <Chip label={`${formatCraftingTime(15 * disassemblyQty)} total`} color="primary" variant="outlined" />
+                    <Chip label="50% recovery" variant="outlined" />
+                    <Chip label="15s per item" variant="outlined" />
                   </Stack>
 
-                  {/* Disassembly output estimate */}
                   {item.craftable_from.length > 0 ? (
-                    <Alert severity="info" sx={{ mb: 2 }}>
-                      Disassembly typically returns 50-80% of crafting materials depending on item quality and skill level.
-                    </Alert>
-                  ) : null}
+                    <>
+                      <Alert severity="info" sx={{ mb: 2 }}>
+                        Disassembly returns 50% of crafting components at 15 seconds per item.
+                      </Alert>
 
-                  <TableContainer component={Paper} variant="outlined">
-                    <Table size="small">
-                      <TableHead>
-                        <TableRow>
-                          <TableCell>Material</TableCell>
-                          <TableCell align="right">Est. per Item</TableCell>
-                          <TableCell align="right">Total ({disassemblyQty}×)</TableCell>
-                          <TableCell align="center">Efficiency</TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {item.craftable_from.length > 0 ? (
-                          <TableRow>
-                            <TableCell colSpan={4}>
-                              <Typography variant="body2" color="text.secondary" sx={{ py: 2, textAlign: "center" }}>
-                                Disassembly data will be available once the game provides material recovery rates.
-                                Check back after crafting system updates.
-                              </Typography>
-                            </TableCell>
-                          </TableRow>
-                        ) : (
-                          <TableRow>
-                            <TableCell colSpan={4}>
-                              <Typography variant="body2" color="text.secondary" sx={{ py: 2, textAlign: "center" }}>
-                                No crafting recipe found — disassembly data unavailable.
-                              </Typography>
-                            </TableCell>
-                          </TableRow>
-                        )}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
+                      {item.craftable_from.map((bp) => (
+                        <Box key={bp.blueprint_id} sx={{ mb: 3 }}>
+                          <Typography variant="subtitle2" gutterBottom>
+                            From: {bp.blueprint_name}
+                          </Typography>
+                          <TableContainer component={Paper} variant="outlined">
+                            <Table size="small">
+                              <TableHead>
+                                <TableRow>
+                                  <TableCell>Component</TableCell>
+                                  <TableCell align="right">Recipe Qty</TableCell>
+                                  <TableCell align="right">Recovered per Item (50%)</TableCell>
+                                  <TableCell align="right">Total ({disassemblyQty}×)</TableCell>
+                                </TableRow>
+                              </TableHead>
+                              <TableBody>
+                                {/* Blueprint ingredients would go here — need detail query */}
+                                <TableRow>
+                                  <TableCell colSpan={4}>
+                                    <Button
+                                      size="small"
+                                      onClick={() => navigate(`/blueprints/${bp.blueprint_id}`)}
+                                    >
+                                      View blueprint for full ingredient list
+                                    </Button>
+                                  </TableCell>
+                                </TableRow>
+                              </TableBody>
+                            </Table>
+                          </TableContainer>
+                        </Box>
+                      ))}
+                    </>
+                  ) : (
+                    <Alert severity="warning">
+                      No crafting recipe found for this item — disassembly components unknown.
+                    </Alert>
+                  )}
                 </CardContent>
               </Card>
             )}
