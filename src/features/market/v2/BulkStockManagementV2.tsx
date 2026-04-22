@@ -195,7 +195,7 @@ export function BulkStockManagementV2({
   // Handle delete lot
   const handleDeleteLot = async (lot: StockLotDetail) => {
     try {
-      await deleteLot({ lotId: lot.lot_id }).unwrap()
+      await deleteLot({ id: lot.lot_id }).unwrap()
       issueAlert({
         message: t("BulkStockManagementV2.deleted", "Lot deleted successfully"),
         severity: "success",
