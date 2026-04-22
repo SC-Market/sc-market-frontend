@@ -38,6 +38,7 @@ import {
   Avatar,
   Stack,
   Button,
+  Tooltip,
   useMediaQuery,
 } from "@mui/material"
 import { ViewModule, ViewList, RestartAltRounded, FilterList } from "@mui/icons-material"
@@ -323,12 +324,13 @@ export function BlueprintBrowser() {
                                 const short = ing.name.replace(/[aeiou]/gi, "").slice(0, 4).toUpperCase() || ing.name.slice(0, 4).toUpperCase()
                                 const qty = (Math.round(ing.quantity_required * 100) / 10000).toFixed(2)
                                 return (
+                                  <Tooltip key={i} title={`${ing.name} — ${qty} SCU`} arrow>
                                   <Chip
-                                    key={i}
                                     label={`${short}×${qty}`}
                                     size="small"
                                     sx={{ height: 18, fontSize: "0.6rem", bgcolor: getCommodityColor(ing.sub_type) || "grey.600", color: "#fff" }}
                                   />
+                                  </Tooltip>
                                 )
                               })}
                               {(bp.ingredients || []).length > 4 && (

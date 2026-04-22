@@ -188,3 +188,38 @@ export function getMissionCategoryColor(category: string | null | undefined): st
   if (!category) return "#616161"
   return MISSION_CATEGORY_COLORS[category.toLowerCase()] || "#616161"
 }
+
+/** Item category → color for blueprint chips/avatars */
+const ITEM_CATEGORY_COLORS: Record<string, string> = {
+  weapongun: "#C62828",
+  weapon: "#C62828",
+  weaponmissile: "#B71C1C",
+  shield: "#1565C0",
+  powerplant: "#E65100",
+  cooler: "#00838F",
+  quantumdrive: "#6A1B9A",
+  armor: "#37474F",
+  armor_helmet: "#455A64",
+  armor_torso: "#37474F",
+  armor_arms: "#546E7A",
+  armor_legs: "#546E7A",
+  armor_backpack: "#4E342E",
+  armor_undersuit: "#263238",
+  fpsweapon: "#AD1457",
+  fpsarmor: "#37474F",
+  shipweapon: "#C62828",
+  shipcomponent: "#1565C0",
+  mininghead: "#E65100",
+  salvagehead: "#4E342E",
+  commodity: "#2E7D32",
+  component: "#546E7A",
+  consumable: "#00695C",
+  medical: "#1B5E20",
+  food: "#33691E",
+  drink: "#1B5E20",
+}
+
+export function getItemCategoryColor(category: string | null | undefined): string {
+  if (!category) return "#616161"
+  return ITEM_CATEGORY_COLORS[category.toLowerCase().replace(/[\s_-]/g, "")] || "#616161"
+}
