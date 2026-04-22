@@ -62,7 +62,7 @@ export function StockManagerV2({
 }: StockManagerV2Props) {
   const { t } = useTranslation()
   const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
 
   // State for tabs
   const [activeTab, setActiveTab] = useState<"stock" | "craftable">("stock")
