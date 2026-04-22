@@ -32,6 +32,11 @@ const BulkStockManagementV2 = React.lazy(() =>
     default: m.BulkStockManagementV2,
   })),
 )
+const BulkItemsPageV2 = React.lazy(() =>
+  import("./BulkItemsPageV2").then((m) => ({
+    default: m.BulkItemsPageV2,
+  })),
+)
 const MarketCartV2 = React.lazy(() =>
   import("./MarketCartV2").then((m) => ({ default: m.MarketCartV2 })),
 )
@@ -119,9 +124,9 @@ export function MarketV2Routes() {
     return <BuyOrdersViewV2 />
   }
 
-  // Bulk listings
+  // Bulk listings — game-item-level aggregates
   if (pathname === "/bulk") {
-    return <ListingSearchV2 />
+    return <BulkItemsPageV2 />
   }
 
   // Listing detail (/market/:id) — must be after all /market/xxx paths
