@@ -124,7 +124,7 @@ const mockCartData: GetCartResponse = {
         listing_id: "listing-1",
         title: "Test Item 1",
         seller_name: "TestSeller",
-        seller_rating: 4.5,
+        seller_rating: 4.5, seller_type: "user" as const, seller_slug: "testuser",
         status: "active",
       },
       variant: {
@@ -149,7 +149,7 @@ const mockCartData: GetCartResponse = {
         listing_id: "listing-2",
         title: "Test Item 2",
         seller_name: "TestSeller2",
-        seller_rating: 4.0,
+        seller_rating: 4.0, seller_type: "user" as const, seller_slug: "testuser2",
         status: "active",
       },
       variant: {

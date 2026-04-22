@@ -78,7 +78,7 @@ function renderWithProviders(component: React.ReactElement) {
   // Wrapper component to provide necessary context
   function TestWrapper({ children }: { children: React.ReactNode }) {
     const drawerState = React.useState(false)
-    const currentOrgState = React.useState(null)
+    const currentOrgState = React.useState(null) as any
 
     return (
       <Provider store={store}>
