@@ -19,13 +19,14 @@ import {
   Tab,
   Avatar,
 } from "@mui/material"
-import { useGetBlueprintDetailQuery, useGetOrgBlueprintOwnersQuery } from "../../store/api/v2/market"
+import { useGetBlueprintDetailQuery, useGetOrgBlueprintOwnersQuery, useAddBlueprintToInventoryMutation, useRemoveBlueprintFromInventoryMutation } from "../../store/api/v2/market"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { formatCategoryName } from "../../util/categoryDisplay"
 import { getCommodityColor, getItemCategoryColor } from "../../util/gameIcons"
 import { GameItemAvatar } from "../../components/game-data/GameItemAvatar"
-import { TrackChangesRounded, BuildRounded, TimerRounded, RecyclingRounded } from "@mui/icons-material"
+import { TrackChangesRounded, BuildRounded, TimerRounded, RecyclingRounded, Bookmark, BookmarkBorder } from "@mui/icons-material"
+import { IconButton } from "@mui/material"
 
 /** Format quantity — values are in SCU, may be string from API */
 function formatQty(scu: number | string): string {
@@ -85,6 +86,16 @@ export function BlueprintDetail() {
   const spectrumId = currentOrg?.spectrum_id
   const [tab, setTab] = useState(0)
   const [missionsExpanded, setMissionsExpanded] = useState(false)
+
+  const [addToInventory] = useAddBlueprintToInventoryMutation()
+  const [removeFromInventory] = useRemoveBlueprintFromInventoryMutation()
+  const handleBookmarkToggle = async () => {
+    if (!id) return
+    try {
+      if (data?.user_owns) await removeFromInventory({ blueprintId: id }).unwrap()
+      else await addToInventory({ blueprintId: id, body: {} }).unwrap()
+    } catch { /* not logged in */ }
+  }
 
   const { data: orgOwners } = useGetOrgBlueprintOwnersQuery(
     { blueprintId: id!, spectrumId: spectrumId! },
@@ -159,14 +170,22 @@ export function BlueprintDetail() {
               useCommodityColor={false}
               sx={{ bgcolor: getItemCategoryColor(bp.item_category) }}
             />
-            <Box>
+            <Box sx={{ flex: 1 }}>
               <Typography variant="h5" fontWeight={700}>{itemName}</Typography>
               <Stack direction="row" spacing={0.5} alignItems="center">
-                {bp.rarity && <Chip label={bp.rarity} size="small" color="primary" />}
-                {bp.tier && <Chip label={`Tier ${bp.tier}`} size="small" color="secondary" />}
+                {data.user_owns && <Chip label="OWNED" size="small" color="success" />}
+                {bp.rarity && <Chip label={bp.rarity} size="small" sx={{ bgcolor: "info.main", color: "#fff" }} />}
+                {bp.tier && <Chip label={`Tier ${bp.tier}`} size="small" sx={{ bgcolor: "warning.main", color: "#fff" }} />}
                 {bp.item_category && <Chip label={formatCategoryName(bp.item_category)} size="small" variant="outlined" />}
               </Stack>
             </Box>
+            <IconButton
+              color={data.user_owns ? "primary" : "default"}
+              onClick={handleBookmarkToggle}
+              title={data.user_owns ? "Remove from owned" : "Mark as owned"}
+            >
+              {data.user_owns ? <Bookmark /> : <BookmarkBorder />}
+            </IconButton>
           </Stack>
 
           {/* Missions section */}

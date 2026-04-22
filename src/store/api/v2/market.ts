@@ -3387,6 +3387,10 @@ export type MissionBlueprintReward = {
 export type MissionRewardPool = {
   /** Reward pool ID */
   reward_pool_id: number
+  /** Pool name from game data (e.g. "BP_MISSIONREWARD_CFP_Outpost_RegionC") */
+  pool_name?: string
+  /** Pool-level chance (0-1, e.g. 1.0 = 100%) */
+  pool_chance?: number
   /** Total number of blueprints in pool */
   reward_pool_size: number
   /** Number of blueprints selected from pool */

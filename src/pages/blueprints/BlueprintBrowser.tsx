@@ -42,7 +42,7 @@ import {
   useMediaQuery,
 } from "@mui/material"
 import { ViewModule, ViewList, RestartAltRounded, FilterList } from "@mui/icons-material"
-import { useSearchBlueprintsQuery, useGetBlueprintCategoriesQuery } from "../../store/api/v2/market"
+import { useSearchBlueprintsQuery, useGetBlueprintCategoriesQuery, useAddBlueprintToInventoryMutation, useRemoveBlueprintFromInventoryMutation } from "../../store/api/v2/market"
 import { useNavigate, useParams } from "react-router-dom"
 import { useDebounce } from "../../hooks/useDebounce"
 import { useInfiniteScroll } from "../../hooks/useInfiniteScroll"
@@ -132,6 +132,18 @@ export function BlueprintBrowser() {
   const handleBlueprintClick = (blueprintId: string) => {
     navigate(`/blueprints/${blueprintId}`)
     if (!isMobile) setSelectedBlueprintId(blueprintId)
+  }
+
+  const [addToInventory] = useAddBlueprintToInventoryMutation()
+  const [removeFromInventory] = useRemoveBlueprintFromInventoryMutation()
+  const handleBookmarkToggle = async (blueprintId: string, shouldOwn: boolean) => {
+    try {
+      if (shouldOwn) await addToInventory({ blueprintId, body: {} }).unwrap()
+      else await removeFromInventory({ blueprintId }).unwrap()
+      setAllBlueprints(prev => prev.map(bp =>
+        bp.blueprint_id === blueprintId ? { ...bp, user_owns: shouldOwn } : bp
+      ))
+    } catch { /* user not logged in or error */ }
   }
 
   const handleResetFilters = () => {
@@ -263,6 +275,7 @@ export function BlueprintBrowser() {
                         blueprint={blueprint}
                         viewMode="grid"
                         onClick={handleBlueprintClick}
+                        onBookmarkToggle={handleBookmarkToggle}
                       />
                     </Grid>
                   ))}
@@ -314,8 +327,9 @@ export function BlueprintBrowser() {
                           </TableCell>
                           <TableCell>
                             <Stack direction="row" spacing={0.5} flexWrap="nowrap">
-                              {bp.rarity && <Chip label={bp.rarity} size="small" color="primary" sx={{ height: 18, fontSize: "0.65rem" }} />}
-                              {bp.tier && <Chip label={`T${bp.tier}`} size="small" color="secondary" sx={{ height: 18, fontSize: "0.65rem" }} />}
+                              {bp.user_owns && <Chip label="OWNED" size="small" color="success" sx={{ height: 18, fontSize: "0.65rem" }} />}
+                              {bp.rarity && <Chip label={bp.rarity} size="small" sx={{ height: 18, fontSize: "0.65rem", bgcolor: "info.main", color: "#fff" }} />}
+                              {bp.tier && <Chip label={`T${bp.tier}`} size="small" sx={{ height: 18, fontSize: "0.65rem", bgcolor: "warning.main", color: "#fff" }} />}
                             </Stack>
                           </TableCell>
                           <TableCell>

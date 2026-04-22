@@ -19,13 +19,6 @@ import {
   CircularProgress,
   Alert,
   Divider,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  LinearProgress,
 } from "@mui/material"
 import {
   Close,
@@ -33,6 +26,7 @@ import {
   CancelOutlined,
   TimerRounded,
   ShieldRounded,
+  BuildRounded,
 } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { useGetMissionDetailQuery } from "../../store/api/v2/market"
@@ -205,49 +199,46 @@ function OverviewTab({ data, onBlueprintClick }: { data: any; onBlueprintClick?:
         <>
           <Divider />
           <Typography variant="subtitle2">Blueprint Rewards</Typography>
-          {data.blueprint_rewards.map((pool: any, poolIdx: number) => (
-            <Box key={poolIdx}>
-              {data.blueprint_rewards.length > 1 && (
-                <Typography variant="caption" color="text.secondary" gutterBottom>
-                  Pool {poolIdx + 1}{pool.selection_count ? ` (pick ${pool.selection_count})` : ""}
-                </Typography>
-              )}
-              <TableContainer>
-                <Table size="small">
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Blueprint</TableCell>
-                      <TableCell align="right">Drop Chance</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {(pool.blueprints || []).map((bp: any) => {
-                      const pct = bp.drop_probability >= 1 ? bp.drop_probability : bp.drop_probability * 100
-                      return (
-                        <TableRow
-                          key={bp.blueprint_id} hover
-                          sx={{ cursor: onBlueprintClick ? "pointer" : undefined }}
-                          onClick={() => onBlueprintClick?.(bp.blueprint_id)}
-                        >
-                          <TableCell>
-                            <Typography variant="body2" fontWeight={600}>
-                              {bp.output_item_name || bp.blueprint_name}
-                            </Typography>
-                          </TableCell>
-                          <TableCell align="right">
-                            <Stack direction="row" spacing={1} alignItems="center" justifyContent="flex-end">
-                              <LinearProgress variant="determinate" value={Math.min(pct, 100)} sx={{ width: 60, height: 6, borderRadius: 3 }} />
-                              <Typography variant="caption">{pct >= 100 ? "Guaranteed" : `${pct.toFixed(0)}%`}</Typography>
-                            </Stack>
-                          </TableCell>
-                        </TableRow>
-                      )
-                    })}
-                  </TableBody>
-                </Table>
-              </TableContainer>
+          {data.blueprint_rewards.map((pool: any, poolIdx: number) => {
+            const poolChance = pool.pool_chance != null ? pool.pool_chance * 100 : null
+            const bpCount = pool.blueprints?.length || pool.reward_pool_size || 0
+            return (
+            <Box key={poolIdx} sx={{ border: 1, borderColor: "divider", borderRadius: 1, p: 1.5, mb: 1 }}>
+              {/* Pool header */}
+              <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1 }}>
+                {pool.pool_name && (
+                  <Typography variant="caption" color="text.secondary" sx={{ fontFamily: "monospace", fontSize: "0.7rem" }}>
+                    {pool.pool_name}
+                  </Typography>
+                )}
+                <Box sx={{ flex: 1 }} />
+                {poolChance != null && (
+                  <Chip label={`${poolChance}% chance`} size="small" color={poolChance >= 100 ? "success" : "default"} sx={{ height: 20, fontSize: "0.7rem" }} />
+                )}
+                {pool.selection_count > 0 && bpCount > 0 && (
+                  <Chip label={`${pool.selection_count} of ${bpCount}`} size="small" variant="outlined" sx={{ height: 20, fontSize: "0.7rem" }} />
+                )}
+              </Stack>
+              {/* Blueprint list */}
+              <Stack spacing={0.5}>
+                {(pool.blueprints || []).map((bp: any) => (
+                  <Stack
+                    key={bp.blueprint_id}
+                    direction="row" spacing={1} alignItems="center"
+                    sx={{ cursor: onBlueprintClick ? "pointer" : undefined, py: 0.25, "&:hover": { bgcolor: "action.hover" }, borderRadius: 0.5, px: 0.5 }}
+                    onClick={() => onBlueprintClick?.(bp.blueprint_id)}
+                  >
+                    <BuildRounded sx={{ fontSize: 16, color: "success.main" }} />
+                    <Typography variant="body2" fontWeight={600} sx={{ flex: 1 }}>
+                      {bp.output_item_name || bp.blueprint_name}
+                    </Typography>
+                    {bp.user_owns && <CheckCircleOutline sx={{ fontSize: 16, color: "success.main" }} />}
+                  </Stack>
+                ))}
+              </Stack>
             </Box>
-          ))}
+            )
+          })}
         </>
       )}
 
