@@ -25,7 +25,8 @@ export function ManageStockLots() {
       isLoading={pageData.isLoading}
       error={pageData.error}
     >
-      <Grid item xs={12} container spacing={theme.layoutSpacing?.layout ?? 1}>
+      <Grid item xs={12}>
+      <Grid container spacing={theme.layoutSpacing?.layout ?? 1}>
         <Grid item xs={12}>
           <ManageListingsTabBar
             title={t("sidebar.manage_stock", "Manage Stock")}
@@ -34,6 +35,7 @@ export function ManageStockLots() {
         <Grid item xs={12}>
           <ManageStockPage />
         </Grid>
+      </Grid>
       </Grid>
     </StandardPageLayout>
   )
