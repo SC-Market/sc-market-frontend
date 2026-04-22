@@ -17,7 +17,7 @@ import {
   InputLabel,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ExtendedTheme } from "../../../hooks/styles/Theme";
 import { useGetMyListingsQuery } from "../../../store/api/v2/market";
@@ -27,7 +27,8 @@ import { StandardPageLayout } from "../../../components/layout/StandardPageLayou
 import { ListingPagination } from "../components/listings/ListingPagination";
 import { EmptyListings } from "../../../components/empty-states";
 import { useDrawerOpen } from "../../../hooks/layout/Drawer";
-import { EditRounded } from "@mui/icons-material";
+import { EditRounded, AddCircleOutlineRounded } from "@mui/icons-material";
+import { ManageListingsTabBar } from "../components/ManageListingsTabBar";
 import { getRelativeTime } from "../../../util/time";
 
 /**
