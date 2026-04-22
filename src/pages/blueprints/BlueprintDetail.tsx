@@ -27,9 +27,11 @@ import { getCommodityColor, getItemCategoryColor } from "../../util/gameIcons"
 import { GameItemAvatar } from "../../components/game-data/GameItemAvatar"
 import { TrackChangesRounded, BuildRounded, TimerRounded, RecyclingRounded } from "@mui/icons-material"
 
-function formatQty(qty: number): string {
-  const r = Math.round(qty * 100) / 100
-  return `${(r / 100).toFixed(2)} SCU`
+/** Format quantity — values are stored as cSCU (hundredths of SCU) */
+function formatQty(cScu: number): string {
+  const r = Math.round(cScu * 100) / 100
+  if (r >= 100) return `${(r / 100).toFixed(2)} SCU`
+  return `${r} cSCU`
 }
 
 function formatTime(s: number): string {
