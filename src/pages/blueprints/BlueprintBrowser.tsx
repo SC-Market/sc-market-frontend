@@ -72,6 +72,9 @@ export function BlueprintBrowser() {
   const [craftingStation, setCraftingStation] = useState("")
   const [ownedOnly, setOwnedOnly] = useState(false)
   const [hasMissionSource, setHasMissionSource] = useState(false)
+  const isMobile = useMediaQuery(theme.breakpoints.down("lg"))
+  const [filterOpen, setFilterOpen] = useState(false)
+  const bottomNavHeight = useBottomNavHeight()
   const [page, setPage] = useState(1)
   const [allBlueprints, setAllBlueprints] = useState<any[]>([])
 

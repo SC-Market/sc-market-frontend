@@ -18,6 +18,7 @@ import {
   Divider,
   Alert,
   CircularProgress,
+  Skeleton,
   useMediaQuery,
   useTheme,
   Select,
@@ -198,9 +199,9 @@ export function StockManagerV2({
   // Loading state
   if (isLoadingLots) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" p={4}>
-        <CircularProgress />
-      </Box>
+      <Stack spacing={1}>
+        {[1,2,3].map(i => <Skeleton key={i} variant="rectangular" height={60} sx={{ borderRadius: 1 }} />)}
+      </Stack>
     )
   }
 
@@ -223,7 +224,7 @@ export function StockManagerV2({
           direction={{ xs: "column", sm: "row" }}
           justifyContent="space-between"
           alignItems={{ xs: "stretch", sm: "center" }}
-          spacing={2}
+          spacing={theme.layoutSpacing.layout}
           mb={2}
         >
           <Typography variant={isMobile ? "subtitle1" : "h6"}>
@@ -280,7 +281,7 @@ export function StockManagerV2({
             {/* Filters and sorting */}
             <Stack
               direction={{ xs: "column", sm: "row" }}
-              spacing={2}
+              spacing={theme.layoutSpacing.layout}
               mt={2}
               alignItems={{ xs: "stretch", sm: "center" }}
             >
@@ -373,7 +374,7 @@ export function StockManagerV2({
           </Button>
         </Paper>
       ) : (
-        <Stack spacing={2}>
+        <Stack spacing={theme.layoutSpacing.layout}>
           {Array.from(groupedLots.entries()).map(
             ([locationId, { location, variantGroups }]) => (
               <Paper key={locationId} sx={{ p: 2 }}>
@@ -413,7 +414,7 @@ export function StockManagerV2({
                 <Divider sx={{ mb: 2 }} />
 
                 {/* Variant groups within location */}
-                <Stack spacing={1.5}>
+                <Stack spacing={theme.layoutSpacing.component}>
                   {Array.from<[string, { variant: StockLotDetail["variant"]; lots: StockLotDetail[] }]>(variantGroups.entries()).map<React.ReactElement>(
                     ([variantId, { variant, lots: variantLots }]) => (
                       <Box key={variantId}>
