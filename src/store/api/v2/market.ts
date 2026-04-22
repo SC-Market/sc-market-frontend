@@ -3270,14 +3270,24 @@ export type MissionSearchResult = {
   community_satisfaction_avg?: number
   /** Is chain starter mission */
   is_chain_starter: boolean
+  /** Is part of a chain */
+  is_chain_mission: boolean
   /** Is shareable mission */
   is_shareable: boolean
+  /** Is unique (one-time) mission */
+  is_unique_mission: boolean
+  /** Is illegal */
+  is_illegal?: boolean
   /** Reputation XP reward */
   reputation_reward?: number
   /** Reputation scope (e.g., headhunter, salvage) */
   reward_scope?: string
   /** Mission giver organization */
   mission_giver_org?: string
+  /** Associated event name (e.g., "Nyx Mission Pack") */
+  associated_event?: string
+  /** Total ship encounter count */
+  ship_encounter_count: number
 }
 export type SearchMissionsResponse = {
   /** Mission search results */

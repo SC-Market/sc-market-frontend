@@ -38,6 +38,12 @@ export interface MissionCardProps {
     community_satisfaction_avg?: number
     is_shareable: boolean
     is_chain_starter: boolean
+    is_chain_mission: boolean
+    is_unique_mission: boolean
+    is_illegal?: boolean
+    reputation_reward?: number
+    associated_event?: string
+    ship_encounter_count: number
   }
   onClick?: (missionId: string) => void
 }
