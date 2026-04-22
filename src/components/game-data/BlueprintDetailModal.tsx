@@ -258,21 +258,32 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
         {/* Disassemble tab */}
         {data && tab === 1 && (
           <Stack spacing={2}>
-            <Stack direction="row" spacing={2}>
+            <Stack direction="row" spacing={2} alignItems="center">
               <Box>
                 <Typography variant="caption" color="text.secondary">Efficiency</Typography>
                 <Typography variant="body1" fontWeight={600}>50%</Typography>
               </Box>
               <Box>
-                <Typography variant="caption" color="text.secondary">Time</Typography>
+                <Typography variant="caption" color="text.secondary">Time per item</Typography>
                 <Typography variant="body1" fontWeight={600}><TimerRounded sx={{ fontSize: 16, mr: 0.5, verticalAlign: "text-bottom" }} />15s</Typography>
               </Box>
+              <Box>
+                <Typography variant="caption" color="text.secondary">Quantity</Typography>
+                <TextField size="small" type="number" value={craftQty} sx={{ width: 70 }}
+                  onChange={(e: any) => setCraftQty(Math.max(1, +e.target.value || 1))} inputProps={{ min: 1 }} />
+              </Box>
+              {craftQty > 1 && (
+                <Box>
+                  <Typography variant="caption" color="text.secondary">Total time</Typography>
+                  <Typography variant="body1" fontWeight={600}>{formatTime(15 * craftQty)}</Typography>
+                </Box>
+              )}
             </Stack>
             <Divider />
-            <Typography variant="subtitle2">Recovered Materials</Typography>
+            <Typography variant="subtitle2">Recovered Materials{craftQty > 1 && ` (×${craftQty})`}</Typography>
             <Stack spacing={0.75}>
               {ingredients.map((ing: any, i: number) => {
-                const recovered = parseFloat(String(ing.quantity_required)) * 0.5
+                const recovered = parseFloat(String(ing.quantity_required)) * 0.5 * craftQty
                 return (
                   <Stack key={i} direction="row" spacing={1} alignItems="center">
                     <GameItemAvatar name={ing.game_item?.name} iconUrl={ing.game_item?.icon_url} subType={ing.game_item?.sub_type} itemType={ing.game_item?.type} size={28} />
