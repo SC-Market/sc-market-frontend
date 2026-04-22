@@ -159,15 +159,22 @@ const mockMissionDetail = {
 const createMockStore = (mockData: any, isLoading = false, error: any = null) => {
   return configureStore({
     reducer: {
-      [missionsApi.reducerPath]: () => ({
+      [missionsApi.reducerPath]: missionsApi.reducer,
+    },
+    preloadedState: {
+      [missionsApi.reducerPath]: {
         queries: {
           'getMissionDetail({"mission_id":"mission-1"})': {
             status: isLoading ? "pending" : error ? "rejected" : "fulfilled",
             data: mockData,
             error,
-          },
+          } as any,
         },
-      }),
+        mutations: {},
+        provided: {},
+        subscriptions: {},
+        config: { online: true, focused: true, middlewareRegistered: true, refetchOnFocus: false, refetchOnReconnect: false, refetchOnMountOrArgChange: false, keepUnusedDataFor: 60, reducerPath: missionsApi.reducerPath, invalidationBehavior: "delayed" },
+      } as any,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware().concat(missionsApi.middleware),

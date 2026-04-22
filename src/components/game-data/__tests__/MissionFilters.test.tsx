@@ -44,6 +44,10 @@ describe("MissionFilters", () => {
     isShareable: undefined,
     hasBlueprints: undefined,
     isChainStarter: undefined,
+    missionGiver: "",
+    onMissionGiverChange: vi.fn(),
+    creditRewardMin: "" as number | "",
+    onCreditRewardMinChange: vi.fn(),
     ...mockHandlers,
   }
 

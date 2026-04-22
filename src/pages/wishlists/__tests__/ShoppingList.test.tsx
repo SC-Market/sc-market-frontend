@@ -385,7 +385,7 @@ describe("ShoppingList", () => {
 
       // Mock URL.createObjectURL
       const mockCreateObjectURL = vi.fn(() => "blob:mock-url")
-      global.URL.createObjectURL = mockCreateObjectURL
+      globalThis.URL.createObjectURL = mockCreateObjectURL
 
       // Mock link element
       const mockClick = vi.fn()

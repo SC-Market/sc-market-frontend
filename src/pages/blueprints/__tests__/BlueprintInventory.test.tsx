@@ -18,7 +18,7 @@ import { BrowserRouter } from "react-router-dom"
 import { configureStore } from "@reduxjs/toolkit"
 import { describe, it, expect, vi, beforeEach } from "vitest"
 import { BlueprintInventory } from "../BlueprintInventory"
-import { enhancedApi as api } from "../../../store/api/v2/market"
+import { marketV2Api as api } from "../../../store/api/v2/market"
 
 // Mock data
 const mockInventoryData = {

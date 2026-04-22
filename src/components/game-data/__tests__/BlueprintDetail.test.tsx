@@ -137,15 +137,22 @@ const mockBlueprintDetail = {
 const createMockStore = (mockData: any, isLoading = false, error: any = null) => {
   return configureStore({
     reducer: {
-      [marketV2Api.reducerPath]: () => ({
+      [marketV2Api.reducerPath]: marketV2Api.reducer,
+    },
+    preloadedState: {
+      [marketV2Api.reducerPath]: {
         queries: {
           'getBlueprintDetail({"blueprintId":"test-blueprint-id"})': {
             status: isLoading ? "pending" : error ? "rejected" : "fulfilled",
             data: mockData,
             error,
-          },
+          } as any,
         },
-      }),
+        mutations: {},
+        provided: {},
+        subscriptions: {},
+        config: { online: true, focused: true, middlewareRegistered: true, refetchOnFocus: false, refetchOnReconnect: false, refetchOnMountOrArgChange: false, keepUnusedDataFor: 60, reducerPath: marketV2Api.reducerPath, invalidationBehavior: "delayed" },
+      } as any,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware().concat(marketV2Api.middleware),
