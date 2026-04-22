@@ -21,6 +21,16 @@ export function MissionName({
 
         const inner = match[1]
         const key = inner.split("|").pop() || inner
+        
+        // ~mission(Contractor) or ~mission(Contractor|...) → "Various"
+        if (inner === "Contractor" || inner.startsWith("Contractor|")) {
+          return (
+            <Typography key={i} component="span" sx={{ fontFamily: "monospace", color: "text.secondary" }}>
+              Various
+            </Typography>
+          )
+        }
+
         const label = key
           .replace(/([a-z])([A-Z])/g, "$1 $2")
           .replace(/[_]/g, " ")
