@@ -71,7 +71,8 @@ export function ManageStock() {
     >
       <ItemStockContext.Provider value={[selectionModel, setSelectionModel]}>
         <MarketSidebarContext.Provider value={[open, setOpen]}>
-          <Grid item xs={12} container spacing={theme.layoutSpacing.layout}>
+          <Grid item xs={12}>
+          <Grid container spacing={theme.layoutSpacing.layout}>
             {isMobile && (
               <BottomSheet
                 open={open}
@@ -144,6 +145,7 @@ export function ManageStock() {
                 <UnderlineLink>{t("sidebar.archived_listings")}</UnderlineLink>
               </Link>
             </Grid>
+          </Grid>
           </Grid>
         </MarketSidebarContext.Provider>
       </ItemStockContext.Provider>
