@@ -64,7 +64,9 @@ export function MissionDetailModal({ missionId, open, onClose, onBlueprintClick 
         <Tab label={t("missions.overview", "Overview")} />
         <Tab label={t("missions.rewards", "Rewards")} />
         <Tab label={t("missions.rankCalc", "Rank Calculator")} disabled={!data?.mission.reward_scope} />
-        <Tab label={t("missions.chainInfo", "Chain Info")} />
+        {(data?.mission.is_chain_starter || data?.mission.is_chain_mission || data?.mission.prerequisite_missions?.length > 0) && (
+          <Tab label={t("missions.chainInfo", "Chain Info")} />
+        )}
       </Tabs>
       <DialogContent sx={{ minHeight: 400 }}>
         {isLoading && <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}><CircularProgress /></Box>}
@@ -79,7 +81,7 @@ export function MissionDetailModal({ missionId, open, onClose, onBlueprintClick 
             isShareable={data.mission.is_shareable}
           />
         )}
-        {data && tab === 3 && <ChainTab data={data} />}
+        {data && tab === (data.mission.reward_scope ? 3 : 2) && (data.mission.is_chain_starter || data.mission.is_chain_mission || data.mission.prerequisite_missions?.length > 0) && <ChainTab data={data} />}
       </DialogContent>
     </Dialog>
   )
@@ -192,35 +194,38 @@ function RewardsTab({ data, onBlueprintClick }: { data: any; onBlueprintClick?: 
               <TableHead>
                 <TableRow>
                   <TableCell>{t("missions.blueprint", "Blueprint")}</TableCell>
-                  <TableCell>{t("missions.outputItem", "Output")}</TableCell>
                   <TableCell align="right">{t("missions.dropChance", "Drop Chance")}</TableCell>
-                  <TableCell align="center">{t("missions.guaranteed", "Guaranteed")}</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {(pool.blueprints || []).map((bp: any) => (
-                  <TableRow
-                    key={bp.blueprint_id} hover
-                    sx={{ cursor: onBlueprintClick ? "pointer" : undefined }}
-                    onClick={() => onBlueprintClick?.(bp.blueprint_id)}
-                  >
-                    <TableCell>{bp.blueprint_name}</TableCell>
-                    <TableCell>{bp.output_item_name}</TableCell>
-                    <TableCell align="right">
-                      <Stack direction="row" spacing={1} alignItems="center" justifyContent="flex-end">
-                        <LinearProgress
-                          variant="determinate"
-                          value={(bp.drop_probability || 0) * 100}
-                          sx={{ width: 60, height: 6, borderRadius: 3 }}
-                        />
-                        <Typography variant="caption">{((bp.drop_probability || 0) * 100).toFixed(0)}%</Typography>
-                      </Stack>
-                    </TableCell>
-                    <TableCell align="center">
-                      {bp.is_guaranteed ? <Chip label="✓" size="small" color="success" /> : "—"}
-                    </TableCell>
-                  </TableRow>
-                ))}
+                {(pool.blueprints || []).map((bp: any) => {
+                  const pct = bp.drop_probability >= 1 ? bp.drop_probability : bp.drop_probability * 100
+                  return (
+                    <TableRow
+                      key={bp.blueprint_id} hover
+                      sx={{ cursor: onBlueprintClick ? "pointer" : undefined }}
+                      onClick={() => onBlueprintClick?.(bp.blueprint_id)}
+                    >
+                      <TableCell>
+                        <Typography variant="body2" fontWeight={600}>
+                          {bp.output_item_name || bp.blueprint_name}
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="right">
+                        <Stack direction="row" spacing={1} alignItems="center" justifyContent="flex-end">
+                          <LinearProgress
+                            variant="determinate"
+                            value={Math.min(pct, 100)}
+                            sx={{ width: 60, height: 6, borderRadius: 3 }}
+                          />
+                          <Typography variant="caption">
+                            {pct >= 100 ? "Guaranteed" : `${pct.toFixed(0)}%`}
+                          </Typography>
+                        </Stack>
+                      </TableCell>
+                    </TableRow>
+                  )
+                })}
               </TableBody>
             </Table>
           </TableContainer>

@@ -3,7 +3,7 @@
  */
 
 import React, { useState, useMemo } from "react"
-import { useParams } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 import {
   Box,
   Typography,
@@ -122,6 +122,7 @@ export function BlueprintDetail() {
 
 function OverviewTab({ data, itemName }: { data: any; itemName: string }) {
   const bp = data.blueprint
+  const navigate = useNavigate()
 
   return (
     <Stack spacing={2}>
@@ -164,8 +165,18 @@ function OverviewTab({ data, itemName }: { data: any; itemName: string }) {
         <>
           <Typography variant="subtitle2">Mission Sources ({data.missions_rewarding.length})</Typography>
           <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-            {data.missions_rewarding.map((m: any) => (
-              <Chip key={m.mission_id} label={m.mission_name} size="small" sx={{ height: 22 }} />
+            {data.missions_rewarding.map((m: any) => {
+              const pct = m.drop_probability >= 1 ? m.drop_probability : (m.drop_probability || 0) * 100
+              return (
+                <Chip
+                  key={m.mission_id}
+                  label={`${m.mission_name}${pct >= 100 ? "" : ` (${pct.toFixed(0)}%)`}`}
+                  size="small"
+                  sx={{ height: 22, cursor: "pointer" }}
+                  onClick={() => navigate(`/missions/${m.mission_id}`)}
+                />
+              )
+            })}
             ))}
           </Box>
         </>
