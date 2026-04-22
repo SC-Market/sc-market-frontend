@@ -285,7 +285,6 @@ export function BlueprintDetail() {
           {bp.crafting_time_seconds && (
             <Typography variant="body2" color="text.secondary">
               <TimerRounded sx={{ fontSize: 16, mr: 0.5, verticalAlign: "text-bottom" }} />Craft Time: {formatTime(bp.crafting_time_seconds)}
-            </Typography>
           </Typography>
 
           </>)}
