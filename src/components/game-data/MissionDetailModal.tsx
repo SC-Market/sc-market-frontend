@@ -29,7 +29,7 @@ import {
 import { Close } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { useGetMissionDetailQuery } from "../../store/api/v2/market"
-import { getMissionTypeLabel, formatMissionDescription } from "../../util/missionDisplay"
+import { getMissionTypeLabel, formatMissionDescription, formatCredits } from "../../util/missionDisplay"
 import { getMissionIcon } from "../../util/gameIcons"
 import { MissionName } from "./MissionName"
 import { MissionRankCalculator } from "./MissionRankCalculator"
@@ -138,10 +138,10 @@ function OverviewTab({ data }: { data: any }) {
       {(m.credit_reward_min || m.credit_reward_max) && (
         <Stack direction="row" spacing={1} alignItems="center">
           <Typography variant="subtitle2">{t("missions.creditReward", "Credit Reward")}:</Typography>
-          <Typography variant="body2">
+          <Typography variant="body2" color="success.main" fontWeight={600}>
             {m.credit_reward_min === m.credit_reward_max
-              ? `${m.credit_reward_min?.toLocaleString()} aUEC`
-              : `${m.credit_reward_min?.toLocaleString()} – ${m.credit_reward_max?.toLocaleString()} aUEC`}
+              ? formatCredits(m.credit_reward_min)
+              : `${formatCredits(m.credit_reward_min)} – ${formatCredits(m.credit_reward_max)}`}
           </Typography>
         </Stack>
       )}
