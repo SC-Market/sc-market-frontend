@@ -155,7 +155,7 @@ function OverviewTab({ data }: { data: any }) {
                   label={`${m.mission_name}${pct >= 100 ? "" : ` (${pct.toFixed(0)}%)`}`}
                   size="small"
                   sx={{ height: 22, cursor: "pointer" }}
-                  onClick={() => { onClose(); window.location.href = `/missions/${m.mission_id}` }}
+                  onClick={() => { window.location.href = `/missions/${m.mission_id}` }}
                 />
               )
             })}

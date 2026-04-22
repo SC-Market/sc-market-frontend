@@ -76,14 +76,14 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
           <CircularProgress />
         </Box>
       ) : itemCount === 0 ? (
-        <Box display="flex" flexDirection="column" alignItems="center" py={4} gap={1}>
-          <Typography color="text.secondary">
-            {t("cart.empty", "Your cart is empty")}
-          </Typography>
-          <Button variant="outlined" size="small" onClick={() => { onClose(); navigate("/market"); }}>
-            {t("cart.browsMarket", "Browse Market")}
-          </Button>
-        </Box>
+        <EmptyCart
+          sx={{ minHeight: 200, py: 3, px: 2 }}
+          action={{
+            label: t("cart.browseMarket", "Browse Market"),
+            onClick: () => { onClose(); navigate("/market"); },
+            variant: "contained",
+          }}
+        />
       ) : (
         <>
           <Stack spacing={1} sx={{ flex: 1, overflow: "auto", mb: 2 }}>
