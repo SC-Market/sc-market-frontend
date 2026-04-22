@@ -73,6 +73,9 @@ export function MissionSearch() {
   const [page, setPage] = useState(1)
   const [allMissions, setAllMissions] = useState<any[]>([])
   const [viewMode, setViewMode] = useState<"list" | "grid">("list")
+  const isMobile = useMediaQuery(theme.breakpoints.down("lg"))
+  const [filterOpen, setFilterOpen] = useState(false)
+  const bottomNavHeight = useBottomNavHeight()
 
   // Debounce search text for performance (Requirement 1.6: <200ms response)
   const debouncedSearch = useDebounce(searchText, 300)
