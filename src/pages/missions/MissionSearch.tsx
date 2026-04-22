@@ -246,7 +246,7 @@ export function MissionSearch() {
                             <Avatar
                               src={getMissionIcon(m.category) || undefined}
                               sx={{ width: 24, height: 24, bgcolor: "primary.main" }}
-                              imgProps={{ style: { objectFit: "contain", padding: 2 } }}
+                              imgProps={{ style: { objectFit: "contain", padding: 4 } }}
                             >
                               {(m.category || "?")[0].toUpperCase()}
                             </Avatar>
