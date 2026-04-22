@@ -265,17 +265,17 @@ export function ListingDetailV2() {
 
                           {/* Views */}
                           <ListingDetailItem icon={<VisibilityRounded fontSize="small" />}>
-                            {t("MarketListingView.views", "Views")} {listing.view_count ?? 0}
+                            {t("MarketListingView.views", "Views")} {(listing as any).view_count ?? 0}
                           </ListingDetailItem>
 
                           {/* Languages */}
-                          {seller.languages && seller.languages.length > 0 && (
+                          {(seller as any).languages && (seller as any).languages.length > 0 && (
                             <ListingDetailItem icon={<PersonRounded fontSize="small" />}>
                               <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap", alignItems: "center" }}>
                                 <Typography variant="subtitle2" color="text.secondary">
                                   {t("MarketListingView.languages", "Languages")}:
                                 </Typography>
-                                {seller.languages.map((lang: string) => (
+                                {((seller as any).languages as string[]).map((lang: string) => (
                                   <Chip key={lang} label={lang} size="small" variant="outlined" sx={{ height: 22, fontSize: "0.7rem" }} />
                                 ))}
                               </Box>
@@ -317,7 +317,11 @@ export function ListingDetailV2() {
                                   onSelectVariant={() => openAddToCart(id!)}
                                 />
                               </Box>
-                            ) : null,
+                            ) : (
+                              <Typography variant="body2" color="text.secondary" sx={{ py: 2, textAlign: "center" }}>
+                                No variants available
+                              </Typography>
+                            ),
                           )}
                           <Divider light />
                         </>
@@ -350,7 +354,8 @@ export function ListingDetailV2() {
                     </CardContent>
                   </Card>
                 </Fade>
-              </Grid>
+                </Grid>
+            </Grid>
           </Grid>
 
           {/* FULL-WIDTH SECTIONS */}
