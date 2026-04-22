@@ -300,7 +300,7 @@ export function MissionSearch() {
                             </Typography>
                           </TableCell>
                           <TableCell>
-                            <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap sx={{ maxWidth: 280 }}>
+                            <Stack direction="row" spacing={0.25} flexWrap="wrap" useFlexGap>
                               {m.category && <Tooltip title={getMissionTypeLabel(m.category)}><Chip label={getMissionTypeLabel(m.category)} size="small" color="primary" sx={{ height: 18, fontSize: "0.65rem" }} /></Tooltip>}
                               {(m.is_illegal || m.legal_status === "ILLEGAL") && <Tooltip title="Illegal Mission"><Chip label="ILLEGAL" size="small" color="error" sx={{ height: 18, fontSize: "0.65rem" }} /></Tooltip>}
                               {m.is_unique_mission && <Tooltip title="Unique (one-time)"><Chip label="UNIQUE" size="small" color="warning" sx={{ height: 18, fontSize: "0.65rem" }} /></Tooltip>}

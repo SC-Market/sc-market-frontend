@@ -87,7 +87,7 @@ export const MissionCard: React.FC<MissionCardProps> = ({ mission, onClick }) =>
         </CardContent>
 
         {/* Tags */}
-        <CardActions sx={{ px: 1.5, pt: 0, pb: 0.5, flexWrap: "wrap", gap: 0.5 }}>
+        <CardActions sx={{ px: 1.5, pt: 0, pb: 0.5, flexWrap: "wrap", gap: 0.25 }}>
           {mission.star_system && <Chip label={mission.star_system} size="small" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} />}
           {mission.category && <Chip label={getMissionTypeLabel(mission.category)} size="small" color="primary" sx={{ height: 18, fontSize: "0.65rem" }} />}
           {(mission.is_illegal || mission.legal_status === "ILLEGAL") && <Chip label="ILLEGAL" size="small" color="error" sx={{ height: 18, fontSize: "0.65rem" }} />}
