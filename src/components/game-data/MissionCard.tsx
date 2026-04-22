@@ -56,7 +56,7 @@ export const MissionCard: React.FC<MissionCardProps> = ({ mission, onClick }) =>
     : `${formatCredits(mission.credit_reward_min)} – ${formatCredits(mission.credit_reward_max)}`
 
   return (
-    <Card sx={{ height: "100%" }}>
+    <Card sx={{ height: "100%", width: "100%", display: "flex", flexDirection: "column" }}>
       <CardActionArea onClick={() => onClick?.(mission.mission_id)} sx={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "stretch", justifyContent: "flex-start" }}>
         <CardContent sx={{ p: 1.5, pb: 0, flex: 1 }}>
           {/* Header: Avatar + Title + Subtitle */}
@@ -81,12 +81,15 @@ export const MissionCard: React.FC<MissionCardProps> = ({ mission, onClick }) =>
 
         {/* Tags */}
         <CardActions sx={{ px: 1.5, pt: 0, pb: 0.5, flexWrap: "wrap", gap: 0.5 }}>
+          {mission.star_system && <Chip label={mission.star_system} size="small" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} />}
           {mission.category && <Chip label={getMissionTypeLabel(mission.category)} size="small" color="primary" sx={{ height: 18, fontSize: "0.65rem" }} />}
-          {mission.difficulty_level && <Chip label={`D${mission.difficulty_level}`} size="small" color="warning" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} />}
-          {mission.legal_status === "ILLEGAL" && <Chip label="ILL" size="small" color="error" sx={{ height: 18, fontSize: "0.65rem" }} />}
-          {mission.is_shareable && <Chip label="SH" size="small" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} />}
-          {mission.is_chain_starter && <Chip label="CH" size="small" color="secondary" sx={{ height: 18, fontSize: "0.65rem" }} />}
-          {mission.blueprint_reward_count > 0 && <Chip label={`${mission.blueprint_reward_count} BP`} size="small" color="secondary" sx={{ height: 18, fontSize: "0.65rem" }} />}
+          {(mission.is_illegal || mission.legal_status === "ILLEGAL") && <Chip label="ILLEGAL" size="small" color="error" sx={{ height: 18, fontSize: "0.65rem" }} />}
+          {mission.is_unique_mission && <Chip label="UNIQUE" size="small" color="warning" sx={{ height: 18, fontSize: "0.65rem" }} />}
+          {mission.is_chain_starter && <Chip label="STARTER" size="small" color="secondary" sx={{ height: 18, fontSize: "0.65rem" }} />}
+          {mission.is_chain_mission && !mission.is_chain_starter && <Chip label="CHAIN" size="small" color="secondary" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} />}
+          {mission.associated_event && <Chip label={mission.associated_event} size="small" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} />}
+          {mission.ship_encounter_count > 0 && <Chip label={`🛡 ${mission.ship_encounter_count}`} size="small" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} />}
+          {mission.blueprint_reward_count > 0 && <Chip label={`🔧 ${mission.blueprint_reward_count} BP`} size="small" color="secondary" sx={{ height: 18, fontSize: "0.65rem" }} />}
         </CardActions>
 
         {/* Reward lines — pinned to bottom */}
@@ -97,7 +100,9 @@ export const MissionCard: React.FC<MissionCardProps> = ({ mission, onClick }) =>
           </Box>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <Typography variant="caption" color="text.secondary">Base XP</Typography>
-            <Typography variant="caption" color="text.disabled">—</Typography>
+            <Typography variant="caption" color={mission.reputation_reward ? "text.primary" : "text.disabled"}>
+              {mission.reputation_reward ? `${mission.reputation_reward.toLocaleString()}` : "—"}
+            </Typography>
           </Box>
         </Box>
       </CardActionArea>
