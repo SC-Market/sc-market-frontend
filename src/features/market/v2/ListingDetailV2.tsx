@@ -45,9 +45,14 @@ import {
   LocalShippingRounded,
   PersonRounded,
   StarRounded,
+  VisibilityRounded,
+  WarningRounded,
+  SportsEsportsRounded,
+  AccessTimeRounded,
 } from "@mui/icons-material"
 import { ClockAlert } from "mdi-material-ui"
 import { ListingDetailItem } from "../listing-view/components/ListingDetailItem"
+import { ReportButton } from "../../../components/button/ReportButton"
 
 export function ListingDetailV2() {
   const { id } = useParams<{ id: string }>()
@@ -273,57 +278,30 @@ export function ListingDetailV2() {
                       {listing.status === "active" && (
                         <>
                           <Divider light />
-                          {/* Price + Quality + Quantity summary */}
-                          <Stack
-                            direction={isMobile ? "column" : "row"}
-                            justifyContent="space-between"
-                            alignItems={isMobile ? "stretch" : "center"}
-                            sx={{ py: 2 }}
-                            spacing={2}
-                          >
-                            <Box>
-                              {priceRange && (
-                                <Typography variant="h5" fontWeight="bold">
-                                  {priceRange.min === priceRange.max
-                                    ? `${priceRange.min.toLocaleString()} aUEC`
-                                    : `${priceRange.min.toLocaleString()} – ${priceRange.max.toLocaleString()} aUEC`}
-                                </Typography>
-                              )}
-                              {qualityTierRange && (
-                                <Box sx={{ display: "flex", gap: 0.5, alignItems: "center", mt: 0.5 }}>
-                                  <QualityBadge tier={qualityTierRange.min} />
-                                  {qualityTierRange.min !== qualityTierRange.max && (
-                                    <>
-                                      <Typography variant="body2" color="text.secondary">–</Typography>
-                                      <QualityBadge tier={qualityTierRange.max} />
-                                    </>
-                                  )}
-                                </Box>
-                              )}
-                              <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-                                {formatQuantity(totalQuantity, listing.quantity_unit)} available
+                          {/* Fixed price: show big price. Per-variant: show variant table */}
+                          {priceRange && priceRange.min === priceRange.max ? (
+                            <Stack sx={{ py: 2 }} spacing={1}>
+                              <Typography variant="h4" fontWeight="bold">
+                                {priceRange.min.toLocaleString()} aUEC
                               </Typography>
-                            </Box>
+                              <Typography variant="body2" color="text.secondary">
+                                {totalQuantity.toLocaleString()} available
+                              </Typography>
+                            </Stack>
+                          ) : null}
 
-                            {/* Order limits */}
-                            {(listing.min_order_quantity || listing.max_order_quantity ||
-                              listing.min_order_value || listing.max_order_value) && (
-                              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                                {listing.min_order_quantity && (
-                                  <Chip size="small" variant="outlined" label={`Min ${formatQuantity(listing.min_order_quantity, listing.quantity_unit)}`} />
-                                )}
-                                {listing.max_order_quantity && (
-                                  <Chip size="small" variant="outlined" label={`Max ${formatQuantity(listing.max_order_quantity, listing.quantity_unit)}`} />
-                                )}
-                                {listing.min_order_value && (
-                                  <Chip size="small" variant="outlined" label={`Min ${listing.min_order_value.toLocaleString()} aUEC`} />
-                                )}
-                                {listing.max_order_value && (
-                                  <Chip size="small" variant="outlined" label={`Max ${listing.max_order_value.toLocaleString()} aUEC`} />
-                                )}
+                          {/* Variant breakdown table (always shown for multi-variant, replaces price summary) */}
+                          {items.map((item) =>
+                            item.variants.length > 0 ? (
+                              <Box key={item.item_id} sx={{ py: 1 }}>
+                                <VariantBreakdown
+                                  variants={item.variants}
+                                  showActions={listing.status === "active"}
+                                  onSelectVariant={() => openAddToCart(id!)}
+                                />
                               </Box>
-                            )}
-                          </Stack>
+                            ) : null,
+                          )}
                           <Divider light />
                         </>
                       )}
@@ -356,24 +334,6 @@ export function ListingDetailV2() {
                   </Card>
                 </Fade>
               </Grid>
-
-              {/* Variant Breakdown per item */}
-              {items.map((item) => (
-                <Grid item xs={12} key={item.item_id}>
-                  {item.variants.length > 0 ? (
-                    <VariantBreakdown
-                      variants={item.variants}
-                      showActions={listing.status === "active"}
-                      onSelectVariant={() => openAddToCart(id!)}
-                    />
-                  ) : (
-                    <Typography variant="body2" color="text.secondary">
-                      No variants available
-                    </Typography>
-                  )}
-                </Grid>
-              ))}
-            </Grid>
           </Grid>
 
           {/* FULL-WIDTH SECTIONS */}

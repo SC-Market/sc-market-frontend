@@ -177,7 +177,6 @@ function OverviewTab({ data, itemName }: { data: any; itemName: string }) {
                 />
               )
             })}
-            ))}
           </Box>
         </>
       ) : (
