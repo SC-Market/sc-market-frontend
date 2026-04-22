@@ -32,10 +32,24 @@ function formatTime(s: number): string {
   return `${s}s`
 }
 
-function qualityToFactor(qv: number, min: number, max: number, base: number): number {
-  // Linear interpolation: quality 0 → min factor, base → 1.0, 1000 → max factor
-  if (qv <= base) return min + (1.0 - min) * (qv / base)
-  return 1.0 + (max - 1.0) * ((qv - base) / (1000 - base))
+/** Linear interpolation of modifier value at a given quality */
+function interpolateModifier(qv: number, startQ: number, endQ: number, modStart: number, modEnd: number): number {
+  const t = Math.max(0, Math.min(1, (qv - startQ) / (endQ - startQ)))
+  return modStart + t * (modEnd - modStart)
+}
+
+const PROPERTY_LABELS: Record<string, string> = {
+  damagemitigation: "Damage Mitigation",
+  mintemp: "Min Temp",
+  maxtemp: "Max Temp",
+  emreduction: "EM Reduction",
+  irreduction: "IR Reduction",
+  durability: "Durability",
+  weight: "Weight",
+}
+
+function propertyLabel(prop: string): string {
+  return PROPERTY_LABELS[prop.toLowerCase()] || prop.replace(/([a-z])([A-Z])/g, "$1 $2").replace(/^./, s => s.toUpperCase())
 }
 
 export function BlueprintDetail() {
@@ -49,6 +63,17 @@ export function BlueprintDetail() {
   const outputItem = data?.output_item
   const itemName = outputItem?.name || bp?.blueprint_name || "Blueprint"
   const ingredients = data?.ingredients || []
+  const slotModifiers = (data as any)?.slot_modifiers || []
+
+  // Group slot modifiers by slot_name
+  const modsBySlot = useMemo(() => {
+    const map = new Map<string, any[]>()
+    for (const m of slotModifiers) {
+      if (!map.has(m.slot_name)) map.set(m.slot_name, [])
+      map.get(m.slot_name)!.push(m)
+    }
+    return map
+  }, [slotModifiers])
 
   // Quality state per ingredient
   const [qualities, setQualities] = useState<number[]>([])
@@ -201,6 +226,25 @@ export function BlueprintDetail() {
                   <Typography variant="caption" color="text.disabled" sx={{ mt: 0.5, display: "block" }}>
                     Quality: 0–1000 · Base: 500
                   </Typography>
+
+                  {/* Stat effects from slot modifiers */}
+                  {(modsBySlot.get(ing.slot_name || ing.game_item?.name) || []).map((mod: any, mi: number) => {
+                    const factor = interpolateModifier(qv, mod.start_quality, mod.end_quality, mod.modifier_at_start, mod.modifier_at_end)
+                    const pctChange = (factor - 1) * 100
+                    return (
+                      <Stack key={mi} direction="row" spacing={1} alignItems="center" sx={{ mt: 0.5 }}>
+                        <Typography variant="caption" color="text.secondary" sx={{ minWidth: 120 }}>
+                          {propertyLabel(mod.property)}
+                        </Typography>
+                        <Typography variant="caption" fontWeight={600} color={pctChange >= 0 ? "success.main" : "error.main"}>
+                          ×{factor.toFixed(3)} {pctChange >= 0 ? "+" : ""}{pctChange.toFixed(2)}%
+                        </Typography>
+                        <Typography variant="caption" color="text.disabled">
+                          Factor: ×{mod.modifier_at_start}–{mod.modifier_at_end}
+                        </Typography>
+                      </Stack>
+                    )
+                  })}
                 </Box>
               )
             })}

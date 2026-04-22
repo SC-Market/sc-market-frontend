@@ -3765,6 +3765,18 @@ export type MissionRewardingBlueprint = {
   /** Star system */
   star_system?: string
 }
+export type SlotModifier = {
+  slot_name: string
+  slot_display_name: string
+  /** Property affected (e.g., "damagemitigation", "mintemp", "maxtemp") */
+  property: string
+  start_quality: number
+  end_quality: number
+  /** Modifier value at start_quality (e.g., 0.9 = ×0.9) */
+  modifier_at_start: number
+  /** Modifier value at end_quality (e.g., 1.1 = ×1.1) */
+  modifier_at_end: number
+}
 export type UserBlueprintAcquisition = {
   /** Acquisition date */
   acquisition_date: string
@@ -3790,6 +3802,8 @@ export type BlueprintDetailResponse = {
     min_output_quality_tier: number
     quality_calculation_type: string
   }
+  /** Per-slot quality modifiers (how ingredient quality affects output stats) */
+  slot_modifiers: SlotModifier[]
   /** Does user own this blueprint */
   user_owns?: boolean
   /** User acquisition data */
