@@ -39,6 +39,7 @@ import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useCartDrawer } from "../../hooks/market/AddToCartContext"
 import { formatQuantity } from "../../util/formatQuantity"
+import { DISASSEMBLY_EFFICIENCY, DISASSEMBLY_TIME_SECONDS } from "../../constants/crafting"
 
 const TAB_OVERVIEW = 0
 const TAB_CRAFTING = 1
@@ -333,15 +334,15 @@ export function WikiItemDetail() {
                       inputProps={{ min: 1 }}
                       sx={{ width: 200 }}
                     />
-                    <Chip label={`${formatCraftingTime(15 * disassemblyQty)} total`} color="primary" variant="outlined" />
-                    <Chip label="50% recovery" variant="outlined" />
-                    <Chip label="15s per item" variant="outlined" />
+                    <Chip label={`${formatCraftingTime(DISASSEMBLY_TIME_SECONDS * disassemblyQty)} total`} color="primary" variant="outlined" />
+                    <Chip label={`${Math.round(DISASSEMBLY_EFFICIENCY * 100)}% recovery`} variant="outlined" />
+                    <Chip label={`${DISASSEMBLY_TIME_SECONDS}s per item`} variant="outlined" />
                   </Stack>
 
                   {item.craftable_from.length > 0 ? (
                     <>
                       <Alert severity="info" sx={{ mb: 2 }}>
-                        Disassembly returns 50% of crafting components at 15 seconds per item.
+                        Disassembly returns {Math.round(DISASSEMBLY_EFFICIENCY * 100)}% of crafting components at {DISASSEMBLY_TIME_SECONDS} seconds per item.
                       </Alert>
 
                       {item.craftable_from.map((bp) => (
@@ -355,7 +356,7 @@ export function WikiItemDetail() {
                                 <TableRow>
                                   <TableCell>Component</TableCell>
                                   <TableCell align="right">Recipe Qty</TableCell>
-                                  <TableCell align="right">Recovered per Item (50%)</TableCell>
+                                  <TableCell align="right">Recovered per Item ({Math.round(DISASSEMBLY_EFFICIENCY * 100)}%)</TableCell>
                                   <TableCell align="right">Total ({disassemblyQty}×)</TableCell>
                                 </TableRow>
                               </TableHead>
