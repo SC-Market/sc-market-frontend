@@ -27,6 +27,7 @@ import {
   useRemoveCartItemMutation,
 } from "../../store/api/v2/market"
 import { formatQuantity } from "../../util/formatQuantity"
+import { EmptyCart } from "../empty-states"
 
 interface CartDrawerProps {
   open: boolean
