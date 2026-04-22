@@ -145,17 +145,21 @@ function OverviewTab({ data }: { data: any }) {
       {data.missions_rewarding?.length > 0 && (
         <>
           <Divider />
-          <Typography variant="subtitle2">{t("blueprints.rewardedBy", "Rewarded by Missions")} ({data.missions_rewarding.length})</Typography>
-          <Stack spacing={0.5}>
-            {data.missions_rewarding.map((m: any) => (
-              <Stack key={m.mission_id} direction="row" spacing={1} alignItems="center">
-                <Typography variant="body2">{m.mission_name}</Typography>
-                {m.drop_probability != null && (
-                  <Chip label={`${(m.drop_probability * 100).toFixed(0)}%`} size="small" variant="outlined" />
-                )}
-              </Stack>
-            ))}
-          </Stack>
+          <Typography variant="subtitle2">{t("blueprints.rewardedBy", "Mission Sources")} ({data.missions_rewarding.length})</Typography>
+          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+            {data.missions_rewarding.map((m: any) => {
+              const pct = m.drop_probability >= 1 ? m.drop_probability : (m.drop_probability || 0) * 100
+              return (
+                <Chip
+                  key={m.mission_id}
+                  label={`${m.mission_name}${pct >= 100 ? "" : ` (${pct.toFixed(0)}%)`}`}
+                  size="small"
+                  sx={{ height: 22, cursor: "pointer" }}
+                  onClick={() => { onClose(); window.location.href = `/missions/${m.mission_id}` }}
+                />
+              )
+            })}
+          </Box>
         </>
       )}
     </Stack>
