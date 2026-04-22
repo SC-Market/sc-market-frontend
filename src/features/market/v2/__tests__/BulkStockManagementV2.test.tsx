@@ -114,7 +114,7 @@ describe("BulkStockManagementV2", () => {
     render(
       <Provider store={store}>
         <BrowserRouter>
-          <BulkStockManagementV2 listingId="listing-1" itemId="item-1" />
+          <BulkStockManagementV2 />
         </BrowserRouter>
       </Provider>,
     )
@@ -137,7 +137,7 @@ describe("BulkStockManagementV2", () => {
     render(
       <Provider store={store}>
         <BrowserRouter>
-          <BulkStockManagementV2 listingId="listing-1" itemId="item-1" />
+          <BulkStockManagementV2 />
         </BrowserRouter>
       </Provider>,
     )
@@ -162,7 +162,7 @@ describe("BulkStockManagementV2", () => {
     render(
       <Provider store={store}>
         <BrowserRouter>
-          <BulkStockManagementV2 listingId="listing-1" itemId="item-1" />
+          <BulkStockManagementV2 />
         </BrowserRouter>
       </Provider>,
     )
@@ -188,7 +188,7 @@ describe("BulkStockManagementV2", () => {
     render(
       <Provider store={store}>
         <BrowserRouter>
-          <BulkStockManagementV2 listingId="listing-1" itemId="item-1" />
+          <BulkStockManagementV2 />
         </BrowserRouter>
       </Provider>,
     )
@@ -220,7 +220,7 @@ describe("BulkStockManagementV2", () => {
     render(
       <Provider store={store}>
         <BrowserRouter>
-          <BulkStockManagementV2 listingId="listing-1" itemId="item-1" />
+          <BulkStockManagementV2 />
         </BrowserRouter>
       </Provider>,
     )
@@ -258,7 +258,7 @@ describe("BulkStockManagementV2", () => {
     render(
       <Provider store={store}>
         <BrowserRouter>
-          <BulkStockManagementV2 listingId="listing-1" itemId="item-1" />
+          <BulkStockManagementV2 />
         </BrowserRouter>
       </Provider>,
     )
@@ -290,7 +290,7 @@ describe("BulkStockManagementV2", () => {
     render(
       <Provider store={store}>
         <BrowserRouter>
-          <BulkStockManagementV2 listingId="listing-1" itemId="item-1" />
+          <BulkStockManagementV2 />
         </BrowserRouter>
       </Provider>,
     )
@@ -321,7 +321,7 @@ describe("BulkStockManagementV2", () => {
     render(
       <Provider store={store}>
         <BrowserRouter>
-          <BulkStockManagementV2 listingId="listing-1" itemId="item-1" />
+          <BulkStockManagementV2 />
         </BrowserRouter>
       </Provider>,
     )
@@ -347,7 +347,7 @@ describe("BulkStockManagementV2", () => {
     render(
       <Provider store={store}>
         <BrowserRouter>
-          <BulkStockManagementV2 listingId="listing-1" itemId="item-1" />
+          <BulkStockManagementV2 />
         </BrowserRouter>
       </Provider>,
     )
@@ -380,7 +380,7 @@ describe("BulkStockManagementV2", () => {
     render(
       <Provider store={store}>
         <BrowserRouter>
-          <BulkStockManagementV2 listingId="listing-1" itemId="item-1" />
+          <BulkStockManagementV2 />
         </BrowserRouter>
       </Provider>,
     )
@@ -407,7 +407,7 @@ describe("BulkStockManagementV2", () => {
     render(
       <Provider store={store}>
         <BrowserRouter>
-          <BulkStockManagementV2 listingId="listing-1" itemId="item-1" />
+          <BulkStockManagementV2 />
         </BrowserRouter>
       </Provider>,
     )
@@ -434,7 +434,7 @@ describe("BulkStockManagementV2", () => {
     render(
       <Provider store={store}>
         <BrowserRouter>
-          <BulkStockManagementV2 listingId="listing-1" itemId="item-1" />
+          <BulkStockManagementV2 />
         </BrowserRouter>
       </Provider>,
     )
@@ -455,7 +455,7 @@ describe("BulkStockManagementV2", () => {
     render(
       <Provider store={store}>
         <BrowserRouter>
-          <BulkStockManagementV2 listingId="listing-1" itemId="item-1" />
+          <BulkStockManagementV2 />
         </BrowserRouter>
       </Provider>,
     )
@@ -478,7 +478,7 @@ describe("BulkStockManagementV2", () => {
     render(
       <Provider store={store}>
         <BrowserRouter>
-          <BulkStockManagementV2 listingId="listing-1" itemId="item-1" />
+          <BulkStockManagementV2 />
         </BrowserRouter>
       </Provider>,
     )
@@ -500,7 +500,7 @@ describe("BulkStockManagementV2", () => {
     render(
       <Provider store={store}>
         <BrowserRouter>
-          <BulkStockManagementV2 listingId="listing-1" itemId="item-1" />
+          <BulkStockManagementV2 />
         </BrowserRouter>
       </Provider>,
     )
@@ -526,7 +526,7 @@ describe("BulkStockManagementV2", () => {
     render(
       <Provider store={store}>
         <BrowserRouter>
-          <BulkStockManagementV2 listingId="listing-1" itemId="item-1" />
+          <BulkStockManagementV2 />
         </BrowserRouter>
       </Provider>,
     )

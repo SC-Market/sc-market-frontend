@@ -91,21 +91,18 @@ export function MarketV2Routes() {
   // Stock management for specific listing
   if (pathname.startsWith("/market/stock/")) {
     return (
-      <StockManagerV2
-        listingId={params.listingId || ""}
-        itemId=""
-      />
+      <StockManagerV2 />
     )
   }
 
   // Manage stock (overview)
   if (pathname === "/market/manage") {
-    return <StockManagerV2 listingId="" itemId="" />
+    return <StockManagerV2 />
   }
 
   // Bulk stock management
   if (pathname === "/market/manage-stock") {
-    return <BulkStockManagementV2 listingId="" itemId="" />
+    return <BulkStockManagementV2 />
   }
 
   // Cart

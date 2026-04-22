@@ -1,7 +1,6 @@
 import React from "react"
-import { CircularProgress, Box, Grid } from "@mui/material"
+import { CircularProgress, Box } from "@mui/material"
 import { useFeatureFlag } from "../../hooks/market/useFeatureFlag"
-import { useTranslation } from "react-i18next"
 
 const MarketPageV1 = React.lazy(() =>
   import("../../features/market/components/MarketPage").then((module) => ({
@@ -23,56 +22,8 @@ const MyListingsV2 = React.lazy(() => import("../../features/market/v2/MyListing
 const MarketCartV2 = React.lazy(() => import("../../features/market/v2/MarketCartV2").then(m => ({ default: m.MarketCartV2 })))
 const StockManagerV2 = React.lazy(() => import("../../features/market/v2/StockManagerV2").then(m => ({ default: m.StockManagerV2 })))
 const BulkStockManagementV2 = React.lazy(() => import("../../features/market/v2/BulkStockManagementV2").then(m => ({ default: m.BulkStockManagementV2 })))
-const ManageListingsTabBar = React.lazy(() => import("../../features/market/components/ManageListingsTabBar").then(m => ({ default: m.ManageListingsTabBar })))
-const StandardPageLayout = React.lazy(() => import("../layout/StandardPageLayout").then(m => ({ default: m.StandardPageLayout })))
 
-function ManageStockV2Wrapper() {
-  const { t } = useTranslation()
-  return (
-    <React.Suspense fallback={<MarketLoadingFallback />}>
-      <StandardPageLayout
-        title={t("sidebar.manage_listings", "Manage Listings")}
-        headerTitle={
-          <ManageListingsTabBar title={t("sidebar.manage_listings", "Manage Listings")} />
-        }
-        breadcrumbs={[
-          { label: t("sidebar.market_short", "Market"), href: "/market" },
-          { label: t("sidebar.manage_listings", "Manage Listings") },
-        ]}
-        sidebarOpen={true}
-        maxWidth="xl"
-      >
-        <Grid item xs={12}>
-          <StockManagerV2 listingId="" itemId="" />
-        </Grid>
-      </StandardPageLayout>
-    </React.Suspense>
-  )
-}
-
-function ManageStockLotsV2Wrapper() {
-  const { t } = useTranslation()
-  return (
-    <React.Suspense fallback={<MarketLoadingFallback />}>
-      <StandardPageLayout
-        title={t("sidebar.manage_stock", "Manage Stock")}
-        headerTitle={
-          <ManageListingsTabBar title={t("sidebar.manage_stock", "Manage Stock")} />
-        }
-        breadcrumbs={[
-          { label: t("sidebar.market_short", "Market"), href: "/market" },
-          { label: t("sidebar.manage_stock", "Manage Stock") },
-        ]}
-        sidebarOpen={true}
-        maxWidth="xl"
-      >
-        <Grid item xs={12}>
-          <BulkStockManagementV2 listingId="" itemId="" />
-        </Grid>
-      </StandardPageLayout>
-    </React.Suspense>
-  )
-}
+// V2 wrappers removed — StockManagerV2 and BulkStockManagementV2 now include their own StandardPageLayout
 const MarketAggregateViewV2 = React.lazy(() => import("../../features/market/v2/MarketAggregateViewV2").then(m => ({ default: m.MarketAggregateViewV2 })))
 const MarketMultipleViewV2 = React.lazy(() => import("../../features/market/v2/MarketMultipleViewV2").then(m => ({ default: m.MarketMultipleViewV2 })))
 const CreateBuyOrderPageV2 = React.lazy(() => import("../../features/market/v2/CreateBuyOrderPageV2").then(m => ({ default: m.CreateBuyOrderPageV2 })))
@@ -147,7 +98,7 @@ export const ManageStockGate = () => {
   const { marketVersion } = useFeatureFlag()
   if (marketVersion === "V2") return (
     <React.Suspense fallback={<MarketLoadingFallback />}>
-      <ManageStockV2Wrapper />
+      <StockManagerV2 />
     </React.Suspense>
   )
   return <React.Suspense fallback={<MarketLoadingFallback />}><ManageStockV1 /></React.Suspense>
@@ -156,7 +107,7 @@ export const ManageStockLotsGate = () => {
   const { marketVersion } = useFeatureFlag()
   if (marketVersion === "V2") return (
     <React.Suspense fallback={<MarketLoadingFallback />}>
-      <ManageStockLotsV2Wrapper />
+      <BulkStockManagementV2 />
     </React.Suspense>
   )
   return <React.Suspense fallback={<MarketLoadingFallback />}><ManageStockLotsV1 /></React.Suspense>
