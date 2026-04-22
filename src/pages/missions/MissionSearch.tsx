@@ -47,6 +47,8 @@ import { MissionDetailModal } from "../../components/game-data/MissionDetailModa
 import { BlueprintDetailModal } from "../../components/game-data/BlueprintDetailModal"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
+import { BottomSheet } from "../../components/mobile/BottomSheet"
+import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
 import { FilterSidebarLayout } from "../../components/layout/FilterSidebarLayout"
 import { formatCredits, getMissionTypeLabel } from "../../util/missionDisplay"
 import { getMissionIcon } from "../../util/gameIcons"
