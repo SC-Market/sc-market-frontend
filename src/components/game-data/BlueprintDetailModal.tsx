@@ -89,6 +89,7 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
 
   // Quality state
   const [qualities, setQualities] = useState<number[]>([])
+  const [craftQty, setCraftQty] = useState(1)
   React.useEffect(() => {
     if (ingredients.length && qualities.length !== ingredients.length)
       setQualities(ingredients.map(() => 500))
@@ -156,6 +157,13 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
 
             <Divider />
 
+            {/* Craft quantity */}
+            <Stack direction="row" spacing={1} alignItems="center">
+              <Typography variant="subtitle2">Quantity to craft:</Typography>
+              <TextField size="small" type="number" value={craftQty} sx={{ width: 70 }}
+                onChange={e => setCraftQty(Math.max(1, +e.target.value || 1))} inputProps={{ min: 1 }} />
+            </Stack>
+
             {/* Quality Presets */}
             <Stack direction="row" spacing={1} alignItems="center">
               <Typography variant="subtitle2">Quality Presets</Typography>
@@ -179,7 +187,7 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
                     <GameItemAvatar name={ing.game_item?.name} iconUrl={ing.game_item?.icon_url} subType={ing.game_item?.sub_type} itemType={ing.game_item?.type} size={28} />
                     <Box sx={{ flex: 1 }}>
                       <Typography variant="body2" fontWeight={600}>{ing.game_item?.name || "Unknown"}</Typography>
-                      <Typography variant="caption" color="text.secondary">{formatQty(ing.quantity_required)}{ing.min_quality_tier ? ` (min T${ing.min_quality_tier})` : " (min 0)"}</Typography>
+                      <Typography variant="caption" color="text.secondary">{formatQty(ing.quantity_required * craftQty)}{craftQty > 1 && ` (${formatQty(ing.quantity_required)} each)`}{ing.min_quality_tier ? ` · min T${ing.min_quality_tier}` : ""}</Typography>
                     </Box>
                   </Stack>
                   <Stack direction="row" spacing={1.5} alignItems="center">
