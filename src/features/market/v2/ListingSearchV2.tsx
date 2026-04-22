@@ -73,21 +73,23 @@ export function ListingSearchV2() {
   // Read filter state from URL params
   const [searchParams, setSearchParams] = useSearchParams();
   
-  // Parse URL params to API format
+  // Parse URL params to API format (supports both V2 and V1 param names)
   const searchQuery = useMemo(() => {
-    const text = searchParams.get("text") || undefined;
+    const text = searchParams.get("text") || searchParams.get("query") || undefined;
     const gameItemId = searchParams.get("game_item_id") || undefined;
     const qualityTierMin = searchParams.get("quality_tier_min");
     const qualityTierMax = searchParams.get("quality_tier_max");
-    const priceMin = searchParams.get("price_min");
-    const priceMax = searchParams.get("price_max");
-    const page = searchParams.get("page");
+    const priceMin = searchParams.get("price_min") || searchParams.get("minCost");
+    const priceMax = searchParams.get("price_max") || searchParams.get("maxCost");
+    const page = searchParams.get("page") || searchParams.get("index");
     const pageSize = searchParams.get("page_size");
-    const sortBy = searchParams.get("sort_by") as "created_at" | "price" | "quality" | "seller_rating" | "updated_at" | "quantity" | undefined;
+    const sortBy = searchParams.get("sort_by") || searchParams.get("sort") as any;
     const sortOrder = searchParams.get("sort_order") as "asc" | "desc" | undefined;
-    const itemType = searchParams.get("item_type") || undefined;
-    const quantityMin = searchParams.get("quantity_min");
-    const status = (searchParams.get("status") || undefined) as "active" | "sold" | "expired" | "cancelled" | undefined;
+    const itemType = searchParams.get("item_type") || searchParams.get("type") || undefined;
+    const quantityMin = searchParams.get("quantity_min") || searchParams.get("quantityAvailable");
+    const status = (searchParams.get("status") || searchParams.get("statuses") || undefined) as "active" | "sold" | "expired" | "cancelled" | undefined;
+    const sellerId = searchParams.get("seller_id") || undefined;
+    const contractorId = searchParams.get("contractor_id") || searchParams.get("contractor_seller") || undefined;
 
     return {
       text,
@@ -105,6 +107,8 @@ export function ListingSearchV2() {
       status,
       languageCodes: searchParams.get('language_codes') || undefined,
       pickupMethod: (searchParams.get('pickup_method') || undefined) as "delivery" | "pickup" | "any" | undefined,
+      sellerId,
+      contractorId,
     };
   }, [searchParams, isMobile]);
 
@@ -279,13 +283,13 @@ export function MarketSearchAreaV2() {
     return 'market';
   }, [location.pathname]);
 
-  // Read current filter values from URL
-  const text = searchParams.get("text") || "";
-  const priceMin = searchParams.get("price_min") || "";
-  const priceMax = searchParams.get("price_max") || "";
-  const itemType = searchParams.get("item_type") || "";
-  const quantityMin = searchParams.get("quantity_min") || "";
-  const sortBy = searchParams.get("sort_by") || "";
+  // Read current filter values from URL (V2 params with V1 fallbacks)
+  const text = searchParams.get("text") || searchParams.get("query") || "";
+  const priceMin = searchParams.get("price_min") || searchParams.get("minCost") || "";
+  const priceMax = searchParams.get("price_max") || searchParams.get("maxCost") || "";
+  const itemType = searchParams.get("item_type") || searchParams.get("type") || "";
+  const quantityMin = searchParams.get("quantity_min") || searchParams.get("quantityAvailable") || "";
+  const sortBy = searchParams.get("sort_by") || searchParams.get("sort") || "";
   const sortOrder = searchParams.get("sort_order") || "";
   const languageCodes = searchParams.get('language_codes')?.split(',').filter(Boolean) || [];
 
