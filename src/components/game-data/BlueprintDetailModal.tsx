@@ -75,6 +75,18 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
   const itemName = outputItem?.name || bp?.blueprint_name || "Blueprint"
   const ingredients = data?.ingredients || []
   const slotModifiers = data?.slot_modifiers || []
+  const itemAttrs = data?.item_attributes || {}
+
+  const combinedModifiers = useMemo(() => {
+    const result = new Map<string, number>()
+    for (const mod of slotModifiers) {
+      const slotIdx = ingredients.findIndex((ing: any) => (ing.slot_name || ing.game_item?.name) === mod.slot_name)
+      const qv = qualities[slotIdx] ?? 500
+      const factor = interpolateModifier(qv, mod.start_quality, mod.end_quality, mod.modifier_at_start, mod.modifier_at_end)
+      result.set(mod.property, (result.get(mod.property) || 1) * factor)
+    }
+    return result
+  }, [slotModifiers, qualities, ingredients])
 
   const [currentOrg] = useCurrentOrg()
   const spectrumId = currentOrg?.spectrum_id
@@ -139,6 +151,29 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
 
         {data && tab === 0 && (
           <Stack spacing={2}>
+            {/* Product Stats */}
+            {Object.keys(itemAttrs).length > 0 && combinedModifiers.size > 0 && (
+              <Box>
+                <Typography variant="subtitle2" sx={{ mb: 0.5 }}>Product Stats</Typography>
+                {Array.from(combinedModifiers.entries()).map(([prop, modifier]) => {
+                  const baseKey = Object.keys(itemAttrs).find(k => k.toLowerCase().includes(prop.replace(/^gpp_armor_/, "").toLowerCase()))
+                  const baseVal = baseKey ? parseFloat(itemAttrs[baseKey]) : null
+                  if (baseVal === null || isNaN(baseVal)) return null
+                  const modified = baseVal * modifier
+                  const pctChange = (modifier - 1) * 100
+                  return (
+                    <Stack key={prop} direction="row" spacing={1} alignItems="center" sx={{ py: 0.25 }}>
+                      <Typography variant="caption" color="text.secondary" sx={{ minWidth: 140 }}>{propertyLabel(prop)}</Typography>
+                      <Typography variant="caption">×{baseVal.toFixed(2)}</Typography>
+                      <Typography variant="caption" color="text.disabled">→</Typography>
+                      <Typography variant="caption" fontWeight={600} color={pctChange >= 0 ? "success.main" : "error.main"}>×{modified.toFixed(2)} ({pctChange >= 0 ? "+" : ""}{pctChange.toFixed(1)}%)</Typography>
+                    </Stack>
+                  )
+                })}
+                <Divider sx={{ mt: 1 }} />
+              </Box>
+            )}
+
             {/* Missions */}
             {data.missions_rewarding?.length > 0 && (
               <Box>

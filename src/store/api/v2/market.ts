@@ -3801,6 +3801,9 @@ export type SlotModifier = {
   /** Modifier value at end_quality (e.g., 1.1 = ×1.1) */
   modifier_at_end: number
 }
+export type RecordStringString = {
+  [key: string]: string
+}
 export type UserBlueprintAcquisition = {
   /** Acquisition date */
   acquisition_date: string
@@ -3828,6 +3831,8 @@ export type BlueprintDetailResponse = {
   }
   /** Per-slot quality modifiers (how ingredient quality affects output stats) */
   slot_modifiers: SlotModifier[]
+  /** Output item base attributes (damage resistance, temperature, etc.) */
+  item_attributes: RecordStringString
   /** Does user own this blueprint */
   user_owns?: boolean
   /** User acquisition data */
