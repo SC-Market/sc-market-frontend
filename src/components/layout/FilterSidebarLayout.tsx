@@ -52,7 +52,7 @@ export function FilterSidebarLayout({
   }
 
   return (
-    <Grid container spacing={theme.layoutSpacing?.layout ?? 2}>
+    <Grid container spacing={theme.layoutSpacing?.layout ?? 2} sx={{ flexWrap: "nowrap" }}>
       <Grid item sx={{ width: sidebarWidth, flexShrink: 0 }}>
         <Paper
           sx={{
@@ -69,8 +69,10 @@ export function FilterSidebarLayout({
           {filters}
         </Paper>
       </Grid>
-      <Grid item xs>
-        {children}
+      <Grid item xs sx={{ minWidth: 0 }}>
+        <Box sx={{ overflow: "hidden" }}>
+          {children}
+        </Box>
       </Grid>
     </Grid>
   )

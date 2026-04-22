@@ -11,7 +11,10 @@ import { getResourceCategoryIcon, getCommodityColor } from "../../util/gameIcons
 
 function initials(name: string | undefined): string {
   if (!name) return "?"
-  return name.split(/[\s_-]+/).map(w => w[0]).filter(Boolean).slice(0, 2).join("").toUpperCase()
+  const words = name.split(/[\s_-]+/).filter(Boolean)
+  if (words.length >= 2) return (words[0][0] + words[1][0]).toUpperCase()
+  // Single word: first two chars
+  return name.slice(0, 2).toUpperCase()
 }
 
 function isSvgIcon(url: string | undefined): boolean {
@@ -44,10 +47,12 @@ export function GameItemAvatar({
   sx,
   ...rest
 }: GameItemAvatarProps) {
-  // Resolve icon: direct URL → sub_type category icon → type category icon → null
   const resolvedIcon = iconUrl || getResourceCategoryIcon(subType) || getResourceCategoryIcon(itemType) || undefined
   const isSvg = isSvgIcon(resolvedIcon)
   const bgColor = useCommodityColor ? (getCommodityColor(subType) || getCommodityColor(itemType) || undefined) : undefined
+
+  // Scale font size relative to avatar size
+  const fontSize = size <= 16 ? "0.45rem" : size <= 24 ? "0.55rem" : size <= 32 ? "0.65rem" : "0.8rem"
 
   return (
     <Avatar
@@ -56,9 +61,12 @@ export function GameItemAvatar({
       sx={{
         width: size,
         height: size,
+        fontSize,
+        fontWeight: 600,
+        color: "#fff",
         bgcolor: bgColor || "secondary.main",
-        // SVG icons get padding, photos fill the avatar
-        ...(resolvedIcon && isSvg ? { p: size * 0.15 / 8 } : {}),
+        ...(resolvedIcon && isSvg ? { p: Math.max(0.25, size / 16 * 0.5) + "px" } : {}),
+        flexShrink: 0,
         ...sx,
       }}
       imgProps={{
