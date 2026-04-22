@@ -579,6 +579,18 @@ const injectedRtkApi = api
         }),
         providesTags: ["Game Data - Missions"],
       }),
+      getMissionDetailByCode: build.query<
+        GetMissionDetailByCodeApiResponse,
+        GetMissionDetailByCodeApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/game-data/missions/by-code/${queryArg.missionCode}`,
+          params: {
+            user_id: queryArg.userId,
+          },
+        }),
+        providesTags: ["Game Data - Missions"],
+      }),
       getMissionBlueprints: build.query<
         GetMissionBlueprintsApiResponse,
         GetMissionBlueprintsApiArg
@@ -1559,6 +1571,13 @@ export type GetMissionDetailApiArg = {
   /** Mission UUID */
   missionId: string
   /** Optional user ID for user-specific data */
+  userId?: string
+}
+export type GetMissionDetailByCodeApiResponse =
+  /** status 200 Ok */ MissionDetailResponse
+export type GetMissionDetailByCodeApiArg = {
+  /** The mission code string (e.g., pu_eliminatespecific_lawful_stanton4_intro) */
+  missionCode: string
   userId?: string
 }
 export type GetMissionBlueprintsApiResponse =
@@ -4141,6 +4160,7 @@ export const {
   useGetResourceCategoriesQuery,
   useSearchMissionsQuery,
   useGetMissionDetailQuery,
+  useGetMissionDetailByCodeQuery,
   useGetMissionBlueprintsQuery,
   useCompleteMissionMutation,
   useRateMissionMutation,
