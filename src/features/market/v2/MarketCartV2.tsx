@@ -465,7 +465,8 @@ export function MarketCartV2() {
       isLoading={isLoading}
       error={error}
     >
-      <Grid item xs={12} container spacing={theme.layoutSpacing.layout}>
+      <Grid item xs={12}>
+      <Grid container spacing={theme.layoutSpacing.layout}>
         {sellerGroups.map((group) => (
           <Section
             key={group.sellerName}
@@ -585,7 +586,7 @@ export function MarketCartV2() {
             </Grid>
           )}
       </Grid>
-
+      </Grid>
       {/* Checkout Confirmation Dialog */}
       <Dialog
         open={checkoutDialogOpen}

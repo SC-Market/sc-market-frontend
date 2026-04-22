@@ -119,7 +119,8 @@ export function CraftingCalculator() {
       sidebarOpen={true}
       maxWidth="lg"
     >
-      <Grid item xs={12} container spacing={2}>
+      <Grid item xs={12}>
+      <Grid container spacing={2}>
         {/* Blueprint Selector — search by product name */}
         <Grid item xs={12}>
           <Paper sx={{ p: 2 }}>
@@ -349,6 +350,6 @@ export function CraftingCalculator() {
           </Grid>
         )}
       </Grid>
-    </StandardPageLayout>
+      </Grid>    </StandardPageLayout>
   )
 }

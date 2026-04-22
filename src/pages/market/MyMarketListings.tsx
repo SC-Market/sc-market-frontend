@@ -82,7 +82,8 @@ export function MyMarketListings() {
         {open ? <CloseIcon /> : <MenuIcon />}
       </IconButton>
       <MarketSidebarContext.Provider value={[open, setOpen]}>
-        <Grid item xs={12} container spacing={theme.layoutSpacing.layout}>
+        <Grid item xs={12}>
+        <Grid container spacing={theme.layoutSpacing.layout}>
           <Grid item xs={12}>
             <HideOnScroll>
               <MarketNavArea />
@@ -164,7 +165,7 @@ export function MyMarketListings() {
             }}
           />
         </Grid>
-      </MarketSidebarContext.Provider>
+        </Grid>      </MarketSidebarContext.Provider>
     </StandardPageLayout>
   )
 }
