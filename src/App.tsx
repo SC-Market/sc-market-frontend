@@ -955,7 +955,7 @@ const router = createBrowserRouter([
       {
         path: "/missions/:mission_id",
         lazy: async () => ({
-          Component: (await import("./pages/missions/MissionDetail")).MissionDetail,
+          Component: (await import("./pages/missions/MissionDetailGate")).MissionDetailGate,
         }),
       },
       {

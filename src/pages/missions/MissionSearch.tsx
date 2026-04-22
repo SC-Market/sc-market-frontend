@@ -37,7 +37,7 @@ import {
 } from "@mui/material"
 import { ViewList, ViewModule } from "@mui/icons-material"
 import { useSearchMissionsQuery } from "../../store/api/v2/market"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { useDebounce } from "../../hooks/useDebounce"
 import { useInfiniteScroll } from "../../hooks/useInfiniteScroll"
 import { MissionCard, MissionFilters } from "../../components/game-data"
@@ -104,14 +104,23 @@ export function MissionSearch() {
   })
 
   const handleMissionClick = (missionId: string) => {
-    if (theme.breakpoints.values.md > window.innerWidth) {
+    if (isMobile) {
       navigate(`/missions/${missionId}`)
     } else {
+      navigate(`/missions/${missionId}`, { replace: false })
       setSelectedMissionId(missionId)
     }
   }
   const [selectedMissionId, setSelectedMissionId] = useState<string | null>(null)
   const [selectedBlueprintId, setSelectedBlueprintId] = useState<string | null>(null)
+
+  // Auto-open modal if URL has a mission_id (e.g., /missions/:mission_id on desktop)
+  const urlParams = useParams<{ mission_id?: string }>()
+  React.useEffect(() => {
+    if (urlParams.mission_id && !isMobile) {
+      setSelectedMissionId(urlParams.mission_id)
+    }
+  }, [urlParams.mission_id, isMobile])
 
   // Accumulate results for infinite scroll
   useEffect(() => {
@@ -323,7 +332,7 @@ export function MissionSearch() {
       <MissionDetailModal
         missionId={selectedMissionId}
         open={!!selectedMissionId}
-        onClose={() => setSelectedMissionId(null)}
+        onClose={() => { setSelectedMissionId(null); navigate("/missions", { replace: true }) }}
         onBlueprintClick={(id) => { setSelectedMissionId(null); setSelectedBlueprintId(id) }}
       />
       <BlueprintDetailModal
