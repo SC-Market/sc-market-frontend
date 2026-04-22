@@ -144,7 +144,8 @@ export function MyListingsV2() {
       sidebarOpen={true}
       maxWidth="lg"
     >
-      <Grid item xs={12} container spacing={theme.layoutSpacing.layout}>
+      <Grid item xs={12}>
+        <Grid container spacing={theme.layoutSpacing.layout}>
         {/* Active Listings */}
         <LazySection
           component={ActiveListingsV2}
@@ -216,6 +217,7 @@ export function MyListingsV2() {
             sx: { transition: "0.3s" },
           }}
         />
+      </Grid>
       </Grid>
     </StandardPageLayout>
   )
