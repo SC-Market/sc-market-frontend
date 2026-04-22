@@ -75,7 +75,7 @@ function ManageStockLotsV2Wrapper() {
 }
 const MarketAggregateViewV2 = React.lazy(() => import("../../features/market/v2/MarketAggregateViewV2").then(m => ({ default: m.MarketAggregateViewV2 })))
 const MarketMultipleViewV2 = React.lazy(() => import("../../features/market/v2/MarketMultipleViewV2").then(m => ({ default: m.MarketMultipleViewV2 })))
-const BuyOrdersViewV2 = React.lazy(() => import("../../features/market/v2/BuyOrdersViewV2").then(m => ({ default: m.BuyOrdersViewV2 })))
+const CreateBuyOrderPageV2 = React.lazy(() => import("../../features/market/v2/CreateBuyOrderPageV2").then(m => ({ default: m.CreateBuyOrderPageV2 })))
 
 function MarketLoadingFallback() {
   return (
@@ -142,7 +142,7 @@ export const MyListingsGate = () => <V2Gate v1={MyMarketListingsV1} v2={MyListin
 export const MarketCartGate = () => <V2Gate v1={MarketCartV1} v2={MarketCartV2} />
 export const EditListingGate = () => <V2Gate v1={EditMarketListingV1} v2={EditListingV2} />
 export const EditMultipleGate = () => <V2Gate v1={EditMultipleListingV1} v2={EditListingV2} />
-export const CreateBuyOrderGate = () => <V2Gate v1={CreateBuyOrderV1} v2={BuyOrdersViewV2} />
+export const CreateBuyOrderGate = () => <V2Gate v1={CreateBuyOrderV1} v2={CreateBuyOrderPageV2} />
 export const ManageStockGate = () => {
   const { marketVersion } = useFeatureFlag()
   if (marketVersion === "V2") return (

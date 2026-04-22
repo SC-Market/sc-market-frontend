@@ -304,6 +304,25 @@ const injectedRtkApi = api
         }),
         providesTags: ["Game Items V2"],
       }),
+      searchGameItemAggregates: build.query<
+        SearchGameItemAggregatesApiResponse,
+        SearchGameItemAggregatesApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/game-items/aggregates`,
+          params: {
+            text: queryArg.text,
+            item_type: queryArg.itemType,
+            price_min: queryArg.priceMin,
+            price_max: queryArg.priceMax,
+            sort_by: queryArg.sortBy,
+            sort_order: queryArg.sortOrder,
+            page: queryArg.page,
+            page_size: queryArg.pageSize,
+          },
+        }),
+        providesTags: ["Game Items V2"],
+      }),
       getWishlists: build.query<GetWishlistsApiResponse, GetWishlistsApiArg>({
         query: () => ({ url: `/game-data/wishlists` }),
         providesTags: ["Game Data - Wishlists"],
@@ -1324,6 +1343,18 @@ export type GetListingsApiArg = {
   /** Page number for pagination (default: 1) */
   page?: number
   /** Number of results per page (default: 20, max: 100) */
+  pageSize?: number
+}
+export type SearchGameItemAggregatesApiResponse =
+  /** status 200 Ok */ SearchGameItemAggregatesResponse
+export type SearchGameItemAggregatesApiArg = {
+  text?: string
+  itemType?: string
+  priceMin?: number
+  priceMax?: number
+  sortBy?: "price" | "quantity" | "name" | "seller_count"
+  sortOrder?: "asc" | "desc"
+  page?: number
   pageSize?: number
 }
 export type GetWishlistsApiResponse =
@@ -2739,6 +2770,40 @@ export type GetGameItemListingsResponse = {
   /** Page size */
   page_size: number
 }
+export type GameItemAggregate = {
+  /** Game item UUID */
+  game_item_id: string
+  /** Game item name */
+  name: string
+  /** Game item type/category */
+  type: string
+  /** Game item image URL */
+  image_url?: string
+  /** Minimum price across all listings for this item */
+  min_price: number
+  /** Maximum price across all listings for this item */
+  max_price: number
+  /** Total quantity available across all sellers */
+  total_quantity: number
+  /** Number of active listings */
+  listing_count: number
+  /** Number of unique sellers */
+  seller_count: number
+  /** Minimum quality tier available */
+  quality_tier_min?: number
+  /** Maximum quality tier available */
+  quality_tier_max?: number
+}
+export type SearchGameItemAggregatesResponse = {
+  /** Array of game item aggregates */
+  items: GameItemAggregate[]
+  /** Total number of game items with active listings */
+  total: number
+  /** Current page */
+  page: number
+  /** Page size */
+  page_size: number
+}
 export type Wishlist = {
   wishlist_id: string
   user_id: string
@@ -4135,6 +4200,7 @@ export const {
   useSearchGameItemsQuery,
   useGetCategoriesQuery,
   useGetListingsQuery,
+  useSearchGameItemAggregatesQuery,
   useGetWishlistsQuery,
   useCreateWishlistMutation,
   useGetWishlistQuery,
