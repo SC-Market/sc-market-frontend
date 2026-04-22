@@ -29,6 +29,7 @@ import { HideOnScroll, MarketNavArea } from "../components/MarketNavArea"
 import { BottomSheet } from "../../../components/mobile/BottomSheet"
 import { useMarketSidebar } from "../hooks/MarketSidebar"
 import { LanguageFilter } from "../../../components/search/LanguageFilter"
+import { EmptyListings } from "../../../components/empty-states"
 
 // ── Sidebar Filter ─────────────────────────────────────────────────────
 
@@ -207,9 +208,20 @@ export function BulkItemsPageV2() {
       {isLoading ? (
         <Box display="flex" justifyContent="center" py={8}><CircularProgress /></Box>
       ) : items.length === 0 ? (
-        <Typography color="text.secondary" textAlign="center" py={8}>
-          {t("bulk.noItems", "No bulk items found")}
-        </Typography>
+        <EmptyListings
+          isSearchResult={!!searchParams.get("text") || !!searchParams.get("item_type") || !!searchParams.get("price_min")}
+          title={
+            searchParams.get("text") || searchParams.get("item_type")
+              ? t("bulk.noResults", "No items match your filters")
+              : t("bulk.noItems", "No bulk items available")
+          }
+          description={
+            searchParams.get("text") || searchParams.get("item_type")
+              ? t("bulk.noResultsDesc", "Try adjusting your search or clearing filters")
+              : t("bulk.noItemsDesc", "There are no items with active listings right now. Check back later or create a listing.")
+          }
+          showCreateAction={!searchParams.get("text")}
+        />
       ) : (
         <Grid container spacing={2}>
           {items.map((item) => (
