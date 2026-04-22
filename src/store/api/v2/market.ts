@@ -2571,6 +2571,8 @@ export type ListingDetail = {
   max_order_quantity?: number | null
   min_order_value?: number | null
   max_order_value?: number | null
+  /** Number of views this listing has received */
+  view_count?: number
 }
 export type SellerInfo = {
   /** Seller username or contractor name */
@@ -2583,6 +2585,8 @@ export type SellerInfo = {
   rating: number
   /** Optional seller avatar URL */
   avatar_url?: string
+  /** Seller's supported languages (ISO 639-1 codes) */
+  languages?: string[]
 }
 export type GameItemInfo = {
   /** Game item UUID */
