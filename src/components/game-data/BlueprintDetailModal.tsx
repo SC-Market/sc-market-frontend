@@ -77,16 +77,6 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
   const slotModifiers = data?.slot_modifiers || []
   const itemAttrs = data?.item_attributes || {}
 
-  const combinedModifiers = useMemo(() => {
-    const result = new Map<string, number>()
-    for (const mod of slotModifiers) {
-      const slotIdx = ingredients.findIndex((ing: any) => (ing.slot_name || ing.game_item?.name) === mod.slot_name)
-      const qv = qualities[slotIdx] ?? 500
-      const factor = interpolateModifier(qv, mod.start_quality, mod.end_quality, mod.modifier_at_start, mod.modifier_at_end)
-      result.set(mod.property, (result.get(mod.property) || 1) * factor)
-    }
-    return result
-  }, [slotModifiers, qualities, ingredients])
 
   const [currentOrg] = useCurrentOrg()
   const spectrumId = currentOrg?.spectrum_id
@@ -110,6 +100,18 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
   const setQuality = (idx: number, v: number) =>
     setQualities(prev => prev.map((q, i) => i === idx ? Math.max(0, Math.min(1000, v)) : q))
   const setAllQualities = (v: number) => setQualities(prev => prev.map(() => v))
+
+  const combinedModifiers = useMemo(() => {
+    const result = new Map<string, number>()
+    for (const mod of slotModifiers) {
+      const slotIdx = ingredients.findIndex((ing: any) => (ing.slot_name || ing.game_item?.name) === mod.slot_name)
+      const qv = qualities[slotIdx] ?? 500
+      const factor = interpolateModifier(qv, mod.start_quality, mod.end_quality, mod.modifier_at_start, mod.modifier_at_end)
+      result.set(mod.property, (result.get(mod.property) || 1) * factor)
+    }
+    return result
+  }, [slotModifiers, qualities, ingredients])
+
 
   const modsBySlot = useMemo(() => {
     const map = new Map<string, any[]>()
