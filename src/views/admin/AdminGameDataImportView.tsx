@@ -220,7 +220,7 @@ export function AdminGameDataImportView() {
             <MenuItem value="EPTU">EPTU</MenuItem>
           </Select>
         </FormControl>
-        <TextField size="small" label="Game Version" placeholder="e.g. 4.7.1" value={gameVersion} onChange={(e) => setGameVersion(e.target.value)} />
+        <TextField size="small" label="Game Version" placeholder="e.g. 4.7.1" value={gameVersion} onChange={(e) => setGameVersion(e.target.value.slice(0, 50))} inputProps={{ maxLength: 50 }} />
         <Button
           variant="contained" size="large"
           disabled={!file || uploading || hasRunning}
