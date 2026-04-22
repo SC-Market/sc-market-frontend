@@ -120,7 +120,8 @@ export function ListingDetailV2() {
     if (gameItemType) {
       crumbs.push({ label: gameItemType, href: `/market?type=${encodeURIComponent(gameItemType)}` })
     }
-    if (gameItemId && gameItemName) {
+    // Only show game item name in breadcrumbs if it differs from the listing title
+    if (gameItemId && gameItemName && listing && gameItemName !== listing.title) {
       crumbs.push({ label: gameItemName, href: `/market/aggregate/${gameItemId}` })
     }
     if (listing) crumbs.push({ label: listing.title })
@@ -295,19 +296,7 @@ export function ListingDetailV2() {
                       {listing.status === "active" && (
                         <>
                           <Divider light />
-                          {/* Fixed price: show big price. Per-variant: show variant table */}
-                          {priceRange && priceRange.min === priceRange.max ? (
-                            <Stack sx={{ py: 2 }} spacing={1}>
-                              <Typography variant="h4" fontWeight="bold">
-                                {priceRange.min.toLocaleString()} aUEC
-                              </Typography>
-                              <Typography variant="body2" color="text.secondary">
-                                {totalQuantity.toLocaleString()} available
-                              </Typography>
-                            </Stack>
-                          ) : null}
-
-                          {/* Variant breakdown table (always shown for multi-variant, replaces price summary) */}
+                          {/* Variant breakdown table */}
                           {items.map((item) =>
                             item.variants.length > 0 ? (
                               <Box key={item.item_id} sx={{ py: 1 }}>
