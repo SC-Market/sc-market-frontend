@@ -73,7 +73,7 @@ export function MissionDetailModal({ missionId, open, onClose, onBlueprintClick 
         {data && tab === 1 && <RewardsTab data={data} onBlueprintClick={onBlueprintClick} />}
         {data && tab === 2 && data.mission.reward_scope && (
           <MissionRankCalculator
-            reputationReward={data.mission.reputation_reward}
+            reputationReward={data.mission.reputation_reward || 0}
             rewardScope={data.mission.reward_scope}
             requiredRank={data.mission.required_rank}
             isShareable={data.mission.is_shareable}
