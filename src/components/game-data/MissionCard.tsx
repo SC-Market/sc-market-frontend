@@ -15,8 +15,9 @@ import {
   Box,
 } from "@mui/material"
 import { getMissionTypeLabel, formatCredits } from "../../util/missionDisplay"
-import { getMissionIcon, getFactionIcon } from "../../util/gameIcons"
+import { getMissionIcon, getFactionIcon, getMissionCategoryColor } from "../../util/gameIcons"
 import { MissionName } from "./MissionName"
+import { Tooltip } from "@mui/material"
 
 export interface MissionCardProps {
   mission: {
@@ -60,13 +61,15 @@ export const MissionCard: React.FC<MissionCardProps> = ({ mission, onClick }) =>
         <CardContent sx={{ p: 1.5, pb: 0, flex: 1 }}>
           {/* Header: Avatar + Title + Subtitle */}
           <Box sx={{ display: "flex", gap: 1, mb: 1 }}>
-            <Avatar sx={{ width: 32, height: 32, fontSize: "0.75rem", bgcolor: "primary.main", flexShrink: 0 }}
+            <Tooltip title={getMissionTypeLabel(mission.category)} arrow>
+            <Avatar sx={{ width: 32, height: 32, fontSize: "0.75rem", bgcolor: getMissionCategoryColor(mission.category), flexShrink: 0 }}
               src={missionIcon || undefined}
               variant="rounded"
               imgProps={{ style: { objectFit: "contain", padding: 4 } }}
             >
               {initials(displayGiver)}
             </Avatar>
+            </Tooltip>
             <Box sx={{ minWidth: 0 }}>
               <MissionName name={mission.mission_name} variant="body2" fontWeight={600} noWrap />
               <Typography variant="caption" color="text.secondary" noWrap display="block">

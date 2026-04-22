@@ -51,7 +51,7 @@ import { BottomSheet } from "../../components/mobile/BottomSheet"
 import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
 import { FilterSidebarLayout } from "../../components/layout/FilterSidebarLayout"
 import { formatCredits, getMissionTypeLabel } from "../../util/missionDisplay"
-import { getMissionIcon } from "../../util/gameIcons"
+import { getMissionIcon, getMissionCategoryColor } from "../../util/gameIcons"
 import { MissionName } from "../../components/game-data/MissionName"
 
 export function MissionSearch() {
@@ -275,14 +275,16 @@ export function MissionSearch() {
                           onClick={() => handleMissionClick(m.mission_id)}
                         >
                           <TableCell sx={{ width: 40, py: 0.5 }}>
+                            <Tooltip title={getMissionTypeLabel(m.category)} arrow>
                             <Avatar
                               src={getMissionIcon(m.category) || undefined}
                               variant="rounded"
-                              sx={{ width: 24, height: 24, bgcolor: "primary.main" }}
+                              sx={{ width: 24, height: 24, bgcolor: getMissionCategoryColor(m.category) }}
                               imgProps={{ style: { objectFit: "contain", padding: 4 } }}
                             >
                               {(m.category || "?")[0].toUpperCase()}
                             </Avatar>
+                            </Tooltip>
                           </TableCell>
                           <TableCell>
                             <Typography variant="caption" noWrap sx={{ maxWidth: 80, display: "block" }}>
