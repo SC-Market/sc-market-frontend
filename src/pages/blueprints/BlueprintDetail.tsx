@@ -16,6 +16,7 @@ import {
   TextField,
   Alert,
   Grid,
+  Slider,
 } from "@mui/material"
 import { useGetBlueprintDetailQuery } from "../../store/api/v2/market"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
@@ -35,8 +36,9 @@ function ingredientIcon(ing: any): string | undefined {
 }
 
 function formatQty(qty: number): string {
-  if (qty >= 100) return `${(qty / 100).toFixed(2)} SCU`
-  return `${qty} cSCU`
+  const rounded = Math.round(qty * 100) / 100 // avoid FP issues
+  if (rounded >= 100) return `${(rounded / 100).toFixed(2)} SCU`
+  return `${rounded} cSCU`
 }
 
 const TIER_COLORS: Record<number, "default" | "warning" | "info" | "primary" | "secondary"> = {
@@ -191,7 +193,7 @@ function CalculatorTab({ data }: { data: any }) {
   const result = useMemo(() => {
     const mats = ingredients.map((ing: any, i: number) => ({
       quality_value: qualities[i] ?? 500,
-      quantity: ing.quantity_required * craftQty,
+      quantity: Math.round(ing.quantity_required * craftQty * 100) / 100,
     }))
     const avgQuality = estimateOutputQuality(mats)
     const tier = qualityToTier(avgQuality)
@@ -221,35 +223,38 @@ function CalculatorTab({ data }: { data: any }) {
 
       {/* Ingredients with total quantities and quality inputs */}
       <Typography variant="subtitle2">Ingredients (×{craftQty})</Typography>
-      <Stack spacing={1}>
+      <Stack spacing={1.5}>
         {ingredients.map((ing: any, idx: number) => {
-          const totalQty = ing.quantity_required * craftQty
+          const totalQty = Math.round(ing.quantity_required * craftQty * 100) / 100
+          const qv = qualities[idx] ?? 500
+          const setQv = (v: number) => setQualities(prev => prev.map((q, i) => i === idx ? Math.max(0, Math.min(1000, v)) : q))
           return (
-            <Stack key={idx} direction="row" spacing={1} alignItems="center">
-              <Avatar
-                src={ingredientIcon(ing)}
-                variant="rounded"
-                sx={{ width: 24, height: 24, fontSize: "0.55rem", bgcolor: getCommodityColor(ing.game_item?.sub_type) || "secondary.main", p: 0.5 }}
-                imgProps={{ style: { objectFit: "contain" } }}
-              >
-                {initials(ing.game_item?.name)}
-              </Avatar>
-              <Typography variant="body2" sx={{ flex: 1, minWidth: 80 }} noWrap>
-                {ing.game_item?.name || "Unknown"}
-              </Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ minWidth: 80, textAlign: "right" }}>
-                {formatQty(totalQty)}
-              </Typography>
-              <TextField
-                size="small" type="number" label="Quality"
-                value={qualities[idx] ?? 500} sx={{ width: 100 }}
-                onChange={e => {
-                  const v = Math.max(0, Math.min(1000, +e.target.value || 0))
-                  setQualities(prev => prev.map((q, i) => i === idx ? v : q))
-                }}
-                inputProps={{ min: 0, max: 1000 }}
-              />
-            </Stack>
+            <Box key={idx}>
+              <Box sx={{ display: "flex", gap: 1, alignItems: "center", mb: 0.5 }}>
+                <Avatar
+                  src={ingredientIcon(ing)}
+                  variant="rounded"
+                  sx={{ width: 24, height: 24, fontSize: "0.55rem", bgcolor: getCommodityColor(ing.game_item?.sub_type) || "secondary.main", p: 0.5 }}
+                  imgProps={{ style: { objectFit: "contain" } }}
+                >
+                  {initials(ing.game_item?.name)}
+                </Avatar>
+                <Typography variant="body2" sx={{ flex: 1 }} noWrap>{ing.game_item?.name || "Unknown"}</Typography>
+                <Typography variant="body2" color="text.secondary">{formatQty(totalQty)}</Typography>
+              </Box>
+              <Box sx={{ display: "flex", gap: 1, alignItems: "center", pl: 4 }}>
+                <Slider
+                  size="small" min={0} max={1000} value={qv}
+                  onChange={(_, v) => setQv(v as number)}
+                  sx={{ flex: 1 }}
+                />
+                <TextField
+                  size="small" type="number" value={qv} sx={{ width: 80 }}
+                  onChange={e => setQv(+e.target.value || 0)}
+                  inputProps={{ min: 0, max: 1000 }}
+                />
+              </Box>
+            </Box>
           )
         })}
       </Stack>

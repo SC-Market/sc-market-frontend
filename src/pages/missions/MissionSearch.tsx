@@ -100,7 +100,8 @@ export function MissionSearch() {
 
   const [page, setPage] = useState(1)
   const [allMissions, setAllMissions] = useState<any[]>([])
-  const [viewMode, setViewMode] = useState<"list" | "grid">("list")
+  const [viewMode, setViewMode] = useState<"list" | "grid">(() => (localStorage.getItem("missions-view") as "list" | "grid") || "list")
+  const handleViewModeChange = (_: any, v: "list" | "grid" | null) => { if (v) { setViewMode(v); localStorage.setItem("missions-view", v) } }
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"))
   const [filterOpen, setFilterOpen] = useState(false)
   const bottomNavHeight = useBottomNavHeight()
@@ -234,7 +235,7 @@ export function MissionSearch() {
             <ToggleButtonGroup
               value={viewMode}
               exclusive
-              onChange={(_, v) => v && setViewMode(v)}
+              onChange={handleViewModeChange}
               size="small"
             >
               <ToggleButton value="list"><ViewList /></ToggleButton>

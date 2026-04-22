@@ -41,7 +41,7 @@ import {
 } from "@mui/material"
 import { ViewModule, ViewList, RestartAltRounded } from "@mui/icons-material"
 import { useSearchBlueprintsQuery, useGetBlueprintCategoriesQuery } from "../../store/api/v2/market"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
 import { useDebounce } from "../../hooks/useDebounce"
 import { useInfiniteScroll } from "../../hooks/useInfiniteScroll"
 import { BlueprintCard } from "../../components/game-data/BlueprintCard"
@@ -61,7 +61,7 @@ export function BlueprintBrowser() {
   const navigate = useNavigate()
   
   // View mode state
-  const [viewMode, setViewMode] = useState<ViewMode>("grid")
+  const [viewMode, setViewMode] = useState<ViewMode>(() => (localStorage.getItem("bp-view") as ViewMode) || "grid")
   
   // Search and filter state
   const [searchText, setSearchText] = useState("")
@@ -115,8 +115,15 @@ export function BlueprintBrowser() {
   const { data: categories } = useGetBlueprintCategoriesQuery({})
   const [selectedBlueprintId, setSelectedBlueprintId] = useState<string | null>(null)
 
+  // Auto-open modal if URL has a blueprint ID (e.g., /blueprints/:id on desktop)
+  const urlParams = useParams<{ id?: string }>()
+  React.useEffect(() => {
+    if (urlParams.id && !isMobile) setSelectedBlueprintId(urlParams.id)
+  }, [urlParams.id, isMobile])
+
   const handleBlueprintClick = (blueprintId: string) => {
     navigate(`/blueprints/${blueprintId}`)
+    if (!isMobile) setSelectedBlueprintId(blueprintId)
   }
 
   const handleResetFilters = () => {
@@ -134,6 +141,7 @@ export function BlueprintBrowser() {
   const handleViewModeChange = (_event: React.MouseEvent<HTMLElement>, newMode: ViewMode | null) => {
     if (newMode !== null) {
       setViewMode(newMode)
+      localStorage.setItem("bp-view", newMode)
     }
   }
 
@@ -348,7 +356,7 @@ export function BlueprintBrowser() {
       <BlueprintDetailModal
         blueprintId={selectedBlueprintId}
         open={!!selectedBlueprintId}
-        onClose={() => setSelectedBlueprintId(null)}
+        onClose={() => { setSelectedBlueprintId(null); navigate("/blueprints", { replace: true }) }}
       />
     </StandardPageLayout>
   )

@@ -973,7 +973,7 @@ const router = createBrowserRouter([
       {
         path: "/blueprints/:id",
         lazy: async () => ({
-          Component: (await import("./pages/blueprints/BlueprintDetail")).BlueprintDetail,
+          Component: (await import("./pages/blueprints/BlueprintDetailGate")).BlueprintDetailGate,
         }),
       },
       {

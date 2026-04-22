@@ -31,22 +31,25 @@ import {
   DialogContent,
   DialogActions,
   Alert,
-  CircularProgress,
+  Skeleton,
 } from "@mui/material"
 import {
   AddRounded,
   RemoveRounded,
   SaveRounded,
   InventoryRounded,
+  DeleteOutline,
 } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import {
   useGetStockLotsQuery,
   useBulkUpdateStockLotsMutation,
+  useDeleteStockLotMutation,
   type StockLotDetail,
   type LocationInfo,
 } from "../../../store/api/v2/market"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
+import { FilterSidebarLayout } from "../../../components/layout/FilterSidebarLayout"
 import { Link } from "react-router-dom"
 
 export interface BulkStockManagementV2Props {
@@ -96,6 +99,12 @@ export function BulkStockManagementV2({
   })
 
   const [bulkUpdate] = useBulkUpdateStockLotsMutation()
+  const [deleteLot] = useDeleteStockLotMutation()
+
+  // Filter state
+  const [searchText, setSearchText] = useState("")
+  const [locationFilter, setLocationFilter] = useState("")
+  const [listedFilter, setListedFilter] = useState<"" | "listed" | "unlisted">("")
 
   // State for individual lot quantity changes
   const [quantities, setQuantities] = useState<Record<string, number>>({})
@@ -137,6 +146,65 @@ export function BulkStockManagementV2({
     })
     return Array.from(tiers).sort((a, b) => b - a) // Descending
   }, [lots])
+
+  // Unique locations for filter dropdown
+  const uniqueLocations = useMemo(() => {
+    return locations.map((l) => l.name).filter(Boolean)
+  }, [locations])
+
+  // Filter lots
+  const filteredLots = useMemo(() => {
+    return lots.filter((lot) => {
+      if (searchText && !lot.variant.display_name.toLowerCase().includes(searchText.toLowerCase())) return false
+      if (locationFilter && lot.location?.name !== locationFilter) return false
+      if (listedFilter === "listed" && !lot.listed) return false
+      if (listedFilter === "unlisted" && lot.listed) return false
+      return true
+    })
+  }, [lots, searchText, locationFilter, listedFilter])
+
+  const filtersContent = (
+    <Stack spacing={1.5}>
+      <TextField
+        size="small"
+        label="Search"
+        placeholder="Search lots..."
+        value={searchText}
+        onChange={(e) => setSearchText(e.target.value)}
+      />
+      <FormControl size="small">
+        <InputLabel>Location</InputLabel>
+        <Select value={locationFilter} onChange={(e) => setLocationFilter(e.target.value)} label="Location">
+          <MenuItem value="">All</MenuItem>
+          {uniqueLocations.map((loc) => (
+            <MenuItem key={loc} value={loc}>{loc}</MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+      <FormControl size="small">
+        <InputLabel>Listed Status</InputLabel>
+        <Select value={listedFilter} onChange={(e) => setListedFilter(e.target.value as any)} label="Listed Status">
+          <MenuItem value="">All</MenuItem>
+          <MenuItem value="listed">Listed</MenuItem>
+          <MenuItem value="unlisted">Unlisted</MenuItem>
+        </Select>
+      </FormControl>
+    </Stack>
+  )
+
+  // Handle delete lot
+  const handleDeleteLot = async (lot: StockLotDetail) => {
+    try {
+      await deleteLot({ lotId: lot.lot_id }).unwrap()
+      issueAlert({
+        message: t("BulkStockManagementV2.deleted", "Lot deleted successfully"),
+        severity: "success",
+      })
+      onRefresh?.()
+    } catch (error) {
+      issueAlert(error as any)
+    }
+  }
 
   // Handle individual quantity change
   const handleQuantityChange = (lotId: string, newQuantity: number) => {
@@ -322,9 +390,9 @@ export function BulkStockManagementV2({
   // Loading state
   if (isLoading) {
     return (
-      <Box display="flex" justifyContent="center" alignItems="center" p={4}>
-        <CircularProgress />
-      </Box>
+      <Stack spacing={1}>
+        {[1,2,3].map(i => <Skeleton key={i} variant="rectangular" height={60} sx={{ borderRadius: 1 }} />)}
+      </Stack>
     )
   }
 
@@ -359,6 +427,7 @@ export function BulkStockManagementV2({
         {t("BulkStockManagementV2.title", "Quick Stock Updates")}
       </Typography>
 
+      <FilterSidebarLayout filters={filtersContent} filterTitle="Filters">
       {/* Bulk controls */}
       {selectedLots.size > 0 && (
         <Paper variant="outlined" sx={{ p: 2, mb: 2, bgcolor: "action.hover" }}>
@@ -444,7 +513,7 @@ export function BulkStockManagementV2({
 
       {/* Lot items */}
       <Stack spacing={2} sx={{ mt: 2 }}>
-        {lots.map((lot) => {
+        {filteredLots.map((lot) => {
           const lotId = lot.lot_id
           const currentQty = lot.quantity_total
           const pendingQty = quantities[lotId]
@@ -522,6 +591,11 @@ export function BulkStockManagementV2({
                         color={lot.listed ? "success" : "default"}
                       />
                     </Stack>
+                    {lot.notes && (
+                      <Typography variant="caption" color="text.secondary">
+                        {lot.notes}
+                      </Typography>
+                    )}
                   </Box>
                 </Stack>
 
@@ -594,12 +668,23 @@ export function BulkStockManagementV2({
                   >
                     <InventoryRounded />
                   </IconButton>
+
+                  {/* Delete lot */}
+                  <IconButton
+                    size="small"
+                    color="error"
+                    onClick={() => handleDeleteLot(lot)}
+                    disabled={isSaving}
+                  >
+                    <DeleteOutline />
+                  </IconButton>
                 </Stack>
               </Stack>
             </Paper>
           )
         })}
       </Stack>
+      </FilterSidebarLayout>
 
       {/* Bulk Action Confirmation Dialog */}
       <Dialog
