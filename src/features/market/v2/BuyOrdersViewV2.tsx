@@ -1,701 +1,258 @@
-import React, { useMemo, useState } from "react"
+import React, { useMemo, useState, useCallback, useRef, useEffect } from "react"
 import {
   Box,
-  Button,
+  Card,
+  CardActionArea,
+  CardContent,
+  CardMedia,
+  Divider,
+  Fade,
   Grid,
-  Paper,
-  Stack,
-  TableCell,
-  TableRow,
   Typography,
   useMediaQuery,
-  Chip,
 } from "@mui/material"
 import { Link, useNavigate, useLocation } from "react-router-dom"
-import { useGetUserProfileQuery } from "../../../store/profile"
-import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { useTheme } from "@mui/material/styles"
-import { ExtendedTheme } from "../../../hooks/styles/Theme"
+import { ExtendedTheme, cardFadeGradient } from "../../../hooks/styles/Theme"
 import { useTranslation } from "react-i18next"
-import {
-  ControlledTable,
-  HeadCell,
-} from "../../../components/table/PaginatedTable"
-import { PullToRefresh } from "../../../components/gestures"
-import { EmptyState } from "../../../components/empty-states"
-import { StandardPageLayout } from "../../../components/layout/StandardPageLayout"
-import { GameItemSearchAutocomplete } from "../components/GameItemSearchAutocomplete"
-import { CreateBuyOrderV2 } from "./components/CreateBuyOrderV2"
-import { BaseSkeleton } from "../../../components/skeletons/BaseSkeleton"
-import { QualityBadge } from "../../../components/market/v2/QualityBadge"
-import {
-  useGetOrdersQuery,
-  useFulfillBuyOrderMutation,
-  useCancelBuyOrderMutation,
-  OrderPreview,
-} from "../../../store/api/v2/market"
+import { useSearchBuyOrdersQuery, StandingBuyOrder } from "../../../store/api/v2/market"
+import { useMarketSidebarExp } from "../hooks/MarketSidebar"
+import { ListingWrapper } from "../components/listings/ListingCard"
+import { ListingPagination } from "../components/listings/ListingPagination"
+import { ListingSkeleton } from "../../../components/skeletons"
+import { EmptyListings } from "../../../components/empty-states/EmptyListings"
+import { FALLBACK_IMAGE_URL } from "../../../util/constants"
 
 /**
- * BuyOrdersViewV2 Component
- * 
- * Task: 11.3 Implement BuyOrdersViewV2 component
- * Requirements: 37.9-37.13
- * 
- * Displays buy orders with quality tier requirements and match indicators for sellers.
- * Maintains visual parity with V1 buy orders view while adding V2-specific features:
- * - Quality tier requirements (min/max)
- * - Match indicators showing compatibility percentage
- * - Filters for game_item_id, quality tier, price range
- * 
- * Visual Parity Requirements:
- * - Reuse Paper + Stack header layout from V1
- * - Reuse ControlledTable with pagination
- * - Maintain date badge styling
- * - Keep cancel button styling (error, outlined, small)
- * - Preserve responsive cell padding
- * - Use EmptyState for no results
- * 
- * V2 Enhancements:
- * - Display quality_tier_min and quality_tier_max with QualityBadge
- * - Show match indicators for sellers (compatibility percentage)
- * - Add quality tier filter
- * - Show variant attributes in subtitle
- */
-
-/** Row shape for V2 buy orders table */
-export interface BuyOrderV2Row {
-  buy_order_id: string
-  game_item_id: string
-  game_item_name: string
-  quantity_desired: number
-  price_min: number | null
-  price_max: number | null
-  quality_tier_min: number | null
-  quality_tier_max: number | null
-  status: "active" | "fulfilled" | "cancelled" | "expired"
-  created_at: string
-  expires_at: string | null
-  timestamp: number
-  match_count?: number // Number of compatible listings
-  _actions?: undefined
-}
-
-export const BuyOrderV2HeadCells: readonly HeadCell<BuyOrderV2Row>[] = [
-  {
-    id: "game_item_name",
-    numeric: false,
-    disablePadding: false,
-    label: "market.buyOrder",
-  },
-  {
-    id: "quantity_desired",
-    numeric: true,
-    disablePadding: false,
-    label: "market.quantity",
-  },
-  {
-    id: "price_max",
-    numeric: true,
-    disablePadding: false,
-    label: "market.price",
-  },
-  {
-    id: "_actions",
-    numeric: true,
-    disablePadding: false,
-    label: "orders.actions",
-    noSort: true,
-  },
-]
-
-/** Skeleton for buy order table rows */
-function BuyOrderV2RowSkeleton({ index = 0 }: { index?: number }) {
-  const theme = useTheme<ExtendedTheme>()
-  return (
-    <TableRow>
-      <TableCell
-        sx={{
-          width: { xs: "45%", sm: "auto" },
-          minWidth: 0,
-          padding: { xs: theme.spacing(0.75), sm: theme.spacing(2) },
-        }}
-      >
-        <Stack
-          spacing={theme.layoutSpacing.compact}
-          direction="row"
-          alignItems="center"
-        >
-          <Paper
-            sx={{
-              padding: { xs: 0.25, sm: 0.5 },
-              bgcolor: theme.palette.background.default,
-              minWidth: { xs: 40, sm: 50 },
-              flexShrink: 0,
-            }}
-          >
-            <Stack direction="column" alignItems="center">
-              <BaseSkeleton
-                variant="text"
-                width={30}
-                height={12}
-                sx={{ mb: 0.5 }}
-              />
-              <BaseSkeleton variant="text" width={24} height={20} />
-            </Stack>
-          </Paper>
-          <Stack direction="column" sx={{ flex: 1, minWidth: 0 }}>
-            <BaseSkeleton
-              variant="text"
-              width="80%"
-              height={18}
-              sx={{ mb: 0.5 }}
-            />
-            <BaseSkeleton variant="text" width="60%" height={14} />
-          </Stack>
-        </Stack>
-      </TableCell>
-      <TableCell
-        align="right"
-        sx={{ padding: { xs: theme.spacing(0.75), sm: theme.spacing(2) } }}
-      >
-        <BaseSkeleton
-          variant="text"
-          width={40}
-          height={18}
-          sx={{ ml: "auto" }}
-        />
-      </TableCell>
-      <TableCell
-        align="right"
-        sx={{ padding: { xs: theme.spacing(0.75), sm: theme.spacing(2) } }}
-      >
-        <BaseSkeleton
-          variant="text"
-          width={60}
-          height={18}
-          sx={{ ml: "auto" }}
-        />
-      </TableCell>
-      <TableCell
-        align="right"
-        sx={{
-          padding: { xs: theme.spacing(0.75), sm: theme.spacing(2) },
-          minWidth: 100,
-        }}
-      >
-        <BaseSkeleton
-          variant="rectangular"
-          width={70}
-          height={32}
-          sx={{ borderRadius: 1, ml: "auto" }}
-        />
-      </TableCell>
-    </TableRow>
-  )
-}
-
-/**
- * Buy Order Row Component
- * 
- * Displays a single buy order with:
- * - Date badge (month/day)
- * - Game item name
- * - Quality tier requirements (min-max range with badges)
- * - Quantity desired
- * - Price range (min-max)
- * - Match indicator (number of compatible listings)
- * - Cancel button
- * 
- * Maintains V1 visual styling while adding V2 quality tier display.
- */
-export function BuyOrderV2Row(props: {
-  row: BuyOrderV2Row
-  index: number
-  onClick?: React.MouseEventHandler
-  isItemSelected: boolean
-  labelId: string
-}) {
-  const { row } = props
-  const theme = useTheme<ExtendedTheme>()
-  const { t } = useTranslation()
-  const navigate = useNavigate()
-  const issueAlert = useAlertHook()
-  
-  const [cancelBuyOrder, { isLoading: isCancelling }] = useCancelBuyOrderMutation()
-  const [fulfillBuyOrder, { isLoading: isFulfilling }] = useFulfillBuyOrderMutation()
-  
-  const expiryDate = useMemo(
-    () => (row.expires_at ? new Date(row.expires_at) : new Date(row.created_at)),
-    [row.expires_at, row.created_at],
-  )
-
-  const handleCancel = async (e: React.MouseEvent) => {
-    e.stopPropagation()
-    try {
-      await cancelBuyOrder({ id: row.buy_order_id }).unwrap()
-      issueAlert({
-        message: t("MarketAggregateView.cancelled", "Buy order cancelled"),
-        severity: "success",
-      })
-    } catch (error) {
-      issueAlert({
-        message: error instanceof Error ? error.message : "Failed to cancel buy order",
-        severity: "error",
-      })
-    }
-  }
-
-  const handleFulfill = async (e: React.MouseEvent) => {
-    e.stopPropagation()
-    try {
-      const result = await fulfillBuyOrder({ id: row.buy_order_id, body: { variant_id: "", listing_id: "" } }).unwrap()
-      issueAlert({
-        message: t("buyorder.fulfilled", "Buy order fulfilled"),
-        severity: "success",
-      })
-      if (result.order_id) {
-        navigate(`/offer/${result.order_id}`)
-      }
-    } catch (error) {
-      issueAlert({
-        message: error instanceof Error ? error.message : "Failed to fulfill buy order",
-        severity: "error",
-      })
-    }
-  }
-
-  // Format price range display
-  const priceDisplay = useMemo(() => {
-    if (row.price_min == null && row.price_max == null) {
-      return t("buyorder.status.negotiable", "Negotiable")
-    }
-    if (row.price_min != null && row.price_max != null) {
-      if (row.price_min === row.price_max) {
-        return `${row.price_min.toLocaleString()} aUEC`
-      }
-      return `${row.price_min.toLocaleString()}-${row.price_max.toLocaleString()} aUEC`
-    }
-    if (row.price_max != null) {
-      return `≤ ${row.price_max.toLocaleString()} aUEC`
-    }
-    if (row.price_min != null) {
-      return `≥ ${row.price_min.toLocaleString()} aUEC`
-    }
-    return t("buyorder.status.negotiable", "Negotiable")
-  }, [row.price_min, row.price_max, t])
-
-  // Format quality tier display
-  const qualityDisplay = useMemo(() => {
-    if (row.quality_tier_min == null && row.quality_tier_max == null) {
-      return t("market.anyQuality", "Any Quality")
-    }
-    if (row.quality_tier_min != null && row.quality_tier_max != null) {
-      if (row.quality_tier_min === row.quality_tier_max) {
-        return `Tier ${row.quality_tier_min}`
-      }
-      return `Tier ${row.quality_tier_min}-${row.quality_tier_max}`
-    }
-    if (row.quality_tier_max != null) {
-      return `≤ Tier ${row.quality_tier_max}`
-    }
-    if (row.quality_tier_min != null) {
-      return `≥ Tier ${row.quality_tier_min}`
-    }
-    return t("market.anyQuality", "Any Quality")
-  }, [row.quality_tier_min, row.quality_tier_max, t])
-
-  return (
-    <TableRow
-      hover
-      onClick={() => navigate(`/market/aggregate/${row.game_item_id}`)}
-      tabIndex={-1}
-      sx={{
-        cursor: "pointer",
-        "& .MuiTableCell-root": {
-          padding: { xs: theme.spacing(0.75), sm: theme.spacing(2) },
-        },
-      }}
-    >
-      <TableCell
-        sx={{
-          width: { xs: "45%", sm: "auto" },
-          minWidth: { xs: 0, sm: "auto" },
-        }}
-      >
-        <Stack
-          spacing={theme.layoutSpacing.compact}
-          direction="row"
-          alignItems="center"
-          justifyContent="left"
-        >
-          {/* Date Badge - Maintains V1 styling */}
-          <Paper
-            sx={{
-              padding: { xs: 0.25, sm: 0.5 },
-              bgcolor: theme.palette.background.default,
-              minWidth: { xs: 40, sm: 50 },
-              flexShrink: 0,
-            }}
-          >
-            <Stack
-              direction="column"
-              alignItems="center"
-              justifyContent="space-between"
-            >
-              <Typography
-                variant="subtitle2"
-                color="text.secondary"
-                sx={{ fontSize: { xs: "0.625rem", sm: "0.875rem" } }}
-              >
-                {expiryDate.toLocaleString("default", { month: "short" })}
-              </Typography>
-              <Typography
-                variant="h5"
-                fontWeight="bold"
-                color="text.secondary"
-                sx={{ fontSize: { xs: "1rem", sm: "1.5rem" } }}
-              >
-                {expiryDate.getDate()}
-              </Typography>
-            </Stack>
-          </Paper>
-
-          {/* Item Info with Quality Tier */}
-          <Stack direction="column" sx={{ flex: 1, minWidth: 0 }}>
-            <Typography
-              color="text.secondary"
-              fontWeight="bold"
-              sx={{
-                fontSize: { xs: "0.875rem", sm: "1rem" },
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
-              }}
-            >
-              {row.game_item_name || t("market.buyOrder", "Buy order")}
-            </Typography>
-            <Stack
-              direction="row"
-              spacing={0.5}
-              alignItems="center"
-              sx={{
-                fontSize: { xs: "0.75rem", sm: "0.875rem" },
-                overflow: "hidden",
-              }}
-            >
-              <Typography
-                variant="body2"
-                sx={{
-                  fontSize: { xs: "0.75rem", sm: "0.875rem" },
-                  whiteSpace: "nowrap",
-                }}
-              >
-                {row.quantity_desired.toLocaleString()} {t("market.unit", "ea")}
-              </Typography>
-              <Typography variant="body2" sx={{ fontSize: { xs: "0.75rem", sm: "0.875rem" } }}>
-                •
-              </Typography>
-              <Typography
-                variant="body2"
-                sx={{
-                  fontSize: { xs: "0.75rem", sm: "0.875rem" },
-                  whiteSpace: "nowrap",
-                }}
-              >
-                {qualityDisplay}
-              </Typography>
-              {row.match_count != null && row.match_count > 0 && (
-                <>
-                  <Typography variant="body2" sx={{ fontSize: { xs: "0.75rem", sm: "0.875rem" } }}>
-                    •
-                  </Typography>
-                  <Chip
-                    label={`${row.match_count} ${t("market.matches", "matches")}`}
-                    size="small"
-                    color="success"
-                    sx={{
-                      height: { xs: 16, sm: 20 },
-                      fontSize: { xs: "0.625rem", sm: "0.75rem" },
-                    }}
-                  />
-                </>
-              )}
-            </Stack>
-          </Stack>
-        </Stack>
-      </TableCell>
-
-      {/* Quantity Column */}
-      <TableCell align="right" sx={{ width: { xs: "25%", sm: "auto" } }}>
-        <Typography variant="body2">
-          {row.quantity_desired.toLocaleString()}
-        </Typography>
-      </TableCell>
-
-      {/* Price Column */}
-      <TableCell align="right" sx={{ width: { xs: "30%", sm: "auto" } }}>
-        <Typography variant="body2">{priceDisplay}</Typography>
-      </TableCell>
-
-      {/* Actions Column */}
-      <TableCell
-        align="right"
-        onClick={(e) => e.stopPropagation()}
-        sx={{ width: { xs: "auto", sm: "auto" }, minWidth: 100 }}
-      >
-        <Box sx={{ display: "flex", gap: 0.5, justifyContent: "flex-end" }}>
-          <Button
-            variant="outlined"
-            color="secondary"
-            size="small"
-            onClick={handleFulfill}
-            disabled={isFulfilling || row.status !== "active"}
-          >
-            {t("buyorder.fulfill", "Fulfill")}
-          </Button>
-          <Button
-            variant="outlined"
-            color="error"
-            size="small"
-            onClick={handleCancel}
-            disabled={isCancelling || row.status !== "active"}
-          >
-            {t("MarketAggregateView.cancel", "Cancel")}
-          </Button>
-        </Box>
-      </TableCell>
-    </TableRow>
-  )
-}
-
-/**
- * BuyOrdersViewV2 Component
- * 
- * Paginated table view of the current user's V2 buy orders.
- * Maintains visual parity with V1 while adding quality tier support.
- * 
- * Features:
- * - Displays buy orders with quality tier requirements
- * - Shows match indicators (number of compatible listings)
- * - Provides filters for game_item_id, quality tier, price range
- * - Supports pagination and sorting
- * - Pull-to-refresh on mobile
- * - Empty state when no buy orders
+ * BuyOrdersViewV2 — V2 buy orders browse page.
+ *
+ * Matches V1 layout: a card grid of game items that have active buy orders.
+ * Each card shows the game item image, name, total quantity requested,
+ * price range across all buy orders, and the number of active buy orders.
+ *
+ * Clicking a card navigates to the aggregate view for that game item.
  */
 export function BuyOrdersViewV2() {
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"))
-  const { data: profile } = useGetUserProfileQuery()
-  const location = useLocation()
-  const isCreateMode = location.pathname.includes("/buyorder/create")
-  const [selectedGameItemId, setSelectedGameItemId] = useState<string | null>(null)
-
-  // If in create mode, show the create form
-  if (isCreateMode) {
-    return (
-      <StandardPageLayout
-        title={t("buyOrderActions.createBuyOrder", "Create Buy Order")}
-        headerTitle={t("buyOrderActions.createBuyOrder", "Create Buy Order")}
-        breadcrumbs={[
-          { label: t("sidebar.market_short", "Market"), href: "/market" },
-          { label: t("sidebar.buy_orders", "Buy Orders"), href: "/buyorders" },
-          { label: t("buyOrderActions.createBuyOrder", "Create Buy Order") },
-        ]}
-        sidebarOpen={true}
-        maxWidth="lg"
-      >
-        <Grid item xs={12}>
-          <Paper sx={{ p: 3 }}>
-            <Typography variant="h6" fontWeight="bold" sx={{ mb: 2 }}>
-              {t("buyOrderActions.selectItem", "Select Game Item")}
-            </Typography>
-            <GameItemSearchAutocomplete
-              value={null}
-              onChange={(_name, _type, itemId) => setSelectedGameItemId(itemId)}
-              label={t("buyOrderActions.searchItem", "Search for a game item")}
-            />
-          </Paper>
-        </Grid>
-        {selectedGameItemId && (
-          <Grid item xs={12}>
-            <CreateBuyOrderV2 gameItemId={selectedGameItemId} />
-          </Grid>
-        )}
-      </StandardPageLayout>
-    )
-  }
-
-  // Fetch purchase history via V2 orders API
-  const {
-    data: ordersData,
-    isLoading,
-    isFetching,
-    refetch,
-  } = useGetOrdersQuery({
-    role: "buyer",
-    sortBy: "created_at",
-    sortOrder: "desc",
-  })
+  const navigate = useNavigate()
+  const marketSidebarOpen = useMarketSidebarExp()
 
   const [page, setPage] = useState(0)
-  const [pageSize, setPageSize] = useState(5)
-  const [order, setOrder] = useState<"asc" | "desc">("desc")
-  const [orderBy, setOrderBy] = useState<keyof BuyOrderV2Row>("created_at")
+  const [perPage, setPerPage] = useState(48)
+  const ref = useRef<HTMLDivElement>(null)
 
-  const rows: BuyOrderV2Row[] = useMemo(() => {
-    if (!ordersData?.orders) return []
-    return ordersData.orders.map((o: OrderPreview) => ({
-      buy_order_id: o.order_id,
-      game_item_id: o.order_id,
-      game_item_name: o.title,
-      quantity_desired: o.item_count,
-      price_min: null,
-      price_max: o.total_price,
-      quality_tier_min: o.quality_tier_min ?? null,
-      quality_tier_max: o.quality_tier_max ?? null,
-      status: o.status as BuyOrderV2Row["status"],
-      created_at: o.created_at,
-      expires_at: null,
-      timestamp: new Date(o.created_at).getTime(),
-    }))
-  }, [ordersData])
+  const { data, isLoading, isFetching } = useSearchBuyOrdersQuery({
+    page: page + 1,
+    pageSize: perPage,
+  })
 
-  const sortedRows = useMemo(() => {
-    const key = orderBy
-    return [...rows].sort((a, b) => {
-      const aVal = a[key]
-      const bVal = b[key]
-      if (typeof aVal === "number" && typeof bVal === "number")
-        return order === "asc" ? aVal - bVal : bVal - aVal
-      const sa = String(aVal ?? "")
-      const sb = String(bVal ?? "")
-      return order === "asc" ? sa.localeCompare(sb) : sb.localeCompare(sa)
-    })
-  }, [rows, order, orderBy])
+  // Group buy orders by game_item_id to create aggregate cards
+  const aggregates = useMemo(() => {
+    if (!data?.buy_orders) return []
+    const grouped = new Map<string, { item_id: string; item_name: string; orders: StandingBuyOrder[] }>()
+    for (const bo of data.buy_orders) {
+      const existing = grouped.get(bo.game_item_id)
+      if (existing) {
+        existing.orders.push(bo)
+      } else {
+        grouped.set(bo.game_item_id, {
+          item_id: bo.game_item_id,
+          item_name: bo.game_item_name,
+          orders: [bo],
+        })
+      }
+    }
+    return Array.from(grouped.values())
+  }, [data])
 
-  const paginatedRows = useMemo(
-    () => sortedRows.slice(page * pageSize, page * pageSize + pageSize),
-    [sortedRows, page, pageSize],
+  const handleChangePage = useCallback(
+    (_: unknown, newPage: number) => {
+      setPage(newPage)
+      ref.current?.scrollIntoView({ block: "end", behavior: "smooth" })
+    },
+    [],
   )
 
-  if (!profile?.username) {
-    return null
-  }
+  const handleChangeRowsPerPage = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setPerPage(parseInt(event.target.value, 10))
+      setPage(0)
+    },
+    [],
+  )
+
+  // Grid breakpoints matching V1
+  const gridBreakpoints = useMemo(() => {
+    if (marketSidebarOpen) {
+      return { xs: 6, sm: 6, md: 4, lg: 3, xl: 2 }
+    }
+    return { xs: 6, sm: 4, md: 3, lg: 2, xl: 2 }
+  }, [marketSidebarOpen])
+
+  const loading = isLoading || isFetching
 
   return (
-    <Grid item xs={12}>
-      <Paper>
-        <Stack
-          direction={{ xs: "column", sm: "row" }}
-          spacing={{
-            xs: theme.layoutSpacing.component,
-            sm: theme.layoutSpacing.layout,
-          }}
-          sx={{ paddingTop: 2, paddingLeft: 2, paddingRight: 2 }}
-          alignItems={{ xs: "stretch", sm: "center" }}
-        >
-          <Typography
-            variant="h5"
-            fontWeight="bold"
-            color="text.secondary"
-            sx={{
-              whiteSpace: "nowrap",
-              textOverflow: "display",
-              fontSize: { xs: "1.25rem", sm: "1.5rem" },
-              flexShrink: 0,
-            }}
-          >
-            {t("market.buyOrders", "Buy Orders")}
-          </Typography>
-          <Box sx={{ flex: 1, minWidth: 0 }} />
-          <Button
-            component={Link}
-            to="/buyorder/create"
-            variant="outlined"
-            size="small"
-            sx={{ flexShrink: 0 }}
-          >
-            {t("buyOrderActions.createBuyOrder", "Create Buy Order")}
-          </Button>
-        </Stack>
+    <Grid container spacing={1} sx={{ width: "100%" }}>
+      <div ref={ref} style={{ position: "absolute", top: 0 }} />
 
-        <PullToRefresh onRefresh={() => { refetch() }} enabled={isMobile}>
-          <Box
-            sx={{
-              "& .MuiTableHead .MuiTableCell-root:first-of-type": {
-                display: { xs: "none", sm: "table-cell" },
-              },
-            }}
-          >
-            <ControlledTable
-              rows={paginatedRows}
-              initialSort="created_at"
-              onPageChange={setPage}
-              page={page}
-              onPageSizeChange={(size) => {
-                setPageSize(size)
-                setPage(0)
-              }}
-              pageSize={pageSize}
-              rowCount={rows.length}
-              onOrderChange={setOrder}
-              order={order}
-              onOrderByChange={(key) => setOrderBy(key as keyof BuyOrderV2Row)}
-              orderBy={orderBy}
-              generateRow={BuyOrderV2Row}
-              keyAttr="buy_order_id"
-              headCells={BuyOrderV2HeadCells.map((cell) => ({
-                ...cell,
-                label: t(cell.label),
-              }))}
-              disableSelect={true}
-              loading={isLoading || isFetching}
-              loadingRowComponent={BuyOrderV2RowSkeleton}
-              emptyStateComponent={
-                !(isLoading || isFetching) && rows.length === 0 ? (
-                  <EmptyState
-                    title={t("dashboard.noBuyOrders", "No buy orders")}
-                    description={t(
-                      "dashboard.noBuyOrdersDescription",
-                      "Your active buy orders will appear here. Create a buy order to specify what you want to purchase.",
-                    )}
-                    sx={{ py: 4 }}
+      <Grid item xs={12} sx={{ width: "100%", minWidth: 0 }}>
+        <Grid container spacing={1} sx={{ width: "100%" }}>
+          {loading
+            ? new Array(perPage > 12 ? 12 : perPage)
+                .fill(undefined)
+                .map((_, i) => (
+                  <Grid item {...gridBreakpoints} key={i}>
+                    <ListingSkeleton index={i} />
+                  </Grid>
+                ))
+            : aggregates.length === 0
+              ? (
+                <Grid item xs={12}>
+                  <EmptyListings
+                    isSearchResult={false}
+                    showCreateAction={false}
+                    action={{
+                      label: t("buyOrderActions.createBuyOrder", "Create Buy Order"),
+                      onClick: () => navigate("/buyorder/create"),
+                      variant: "contained" as const,
+                    }}
                   />
-                ) : undefined
-              }
-            />
-          </Box>
-        </PullToRefresh>
-      </Paper>
+                </Grid>
+              )
+              : aggregates.map((agg, index) => (
+                <Grid item {...gridBreakpoints} key={agg.item_id}>
+                  <BuyOrderAggregateCard aggregate={agg} index={index} />
+                </Grid>
+              ))}
+        </Grid>
+      </Grid>
+
+      <Grid item xs={12}>
+        <Divider light />
+      </Grid>
+
+      <Grid item xs={12}>
+        <ListingPagination
+          count={data?.total || aggregates.length}
+          page={page}
+          rowsPerPage={perPage}
+          onPageChange={handleChangePage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </Grid>
     </Grid>
   )
 }
 
-/**
- * Dashboard section showing the current user's V2 buy orders.
- * Conditionally renders based on whether user has buy orders.
- */
-export function DashBuyOrdersAreaV2() {
-  const { data: profile } = useGetUserProfileQuery()
-  
-  // Fetch purchase history via V2 orders API
-  const { data: ordersData, isLoading } = useGetOrdersQuery({
-    role: "buyer",
-    pageSize: 5,
-  })
+/** Card for a game item with active buy orders — matches V1 AggregateBuyOrderListingBase */
+function BuyOrderAggregateCard({ aggregate, index }: {
+  aggregate: { item_id: string; item_name: string; orders: StandingBuyOrder[] }
+  index: number
+}) {
+  const theme = useTheme<ExtendedTheme>()
+  const { t, i18n } = useTranslation()
 
-  const hasMyBuyOrders = useMemo(() => {
-    return ordersData?.orders && ordersData.orders.length > 0
-  }, [ordersData])
+  const maxPrice = useMemo(
+    () => aggregate.orders.reduce((max, o) => Math.max(max, o.price_per_unit || 0), 0),
+    [aggregate.orders],
+  )
+  const minPrice = useMemo(
+    () => aggregate.orders.reduce((min, o) => Math.min(min, o.price_per_unit || Infinity), Infinity),
+    [aggregate.orders],
+  )
+  const totalQty = useMemo(
+    () => aggregate.orders.reduce((sum, o) => sum + o.quantity, 0),
+    [aggregate.orders],
+  )
 
-  if (isLoading || !profile?.username) {
-    return null
-  }
+  const priceDisplay = minPrice === maxPrice
+    ? `${maxPrice.toLocaleString(i18n.language)} aUEC`
+    : `${minPrice.toLocaleString(i18n.language)} - ${maxPrice.toLocaleString(i18n.language)} aUEC`
 
-  if (!hasMyBuyOrders) {
-    return null
-  }
+  const cardHeight = 300
+  const isDark = theme.palette.mode === "dark"
+  const contentSx = isDark
+    ? { position: "absolute" as const, bottom: 0, zIndex: 4, width: "100%" }
+    : {}
 
-  return <BuyOrdersViewV2 />
+  return (
+    <ListingWrapper>
+      <Fade
+        in
+        style={{ transitionDelay: `${50 + 50 * index}ms`, transitionDuration: "500ms" }}
+      >
+        <Link
+          to={`/market/aggregate/${aggregate.item_id}`}
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
+          <CardActionArea
+            sx={{ borderRadius: (t) => t.spacing((t as ExtendedTheme).borderRadius.topLevel) }}
+          >
+            <Card
+              sx={{
+                borderRadius: (t) => t.spacing((t as ExtendedTheme).borderRadius.topLevel),
+                height: cardHeight,
+                position: "relative",
+              }}
+            >
+              <CardMedia
+                component="img"
+                loading="lazy"
+                image={FALLBACK_IMAGE_URL}
+                sx={{
+                  width: "100%",
+                  objectFit: "cover",
+                  height: isDark ? "100%" : 150,
+                }}
+                onError={({ currentTarget }) => {
+                  currentTarget.onerror = null
+                  currentTarget.src = FALLBACK_IMAGE_URL
+                }}
+              />
+              {isDark && (
+                <Box
+                  sx={{
+                    position: "absolute",
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    height: "100%",
+                    background: cardFadeGradient(theme),
+                    zIndex: 3,
+                  }}
+                />
+              )}
+              <CardContent sx={contentSx}>
+                <Typography
+                  variant="subtitle1"
+                  fontWeight="bold"
+                  color="text.secondary"
+                  sx={{
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {aggregate.item_name}
+                </Typography>
+                <Typography variant="body2" color="primary">
+                  {priceDisplay}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {totalQty.toLocaleString(i18n.language)} {t("market.requested", "requested")}
+                  {" · "}
+                  {aggregate.orders.length} {t("market.buyOrders", "buy orders")}
+                </Typography>
+              </CardContent>
+            </Card>
+          </CardActionArea>
+        </Link>
+      </Fade>
+    </ListingWrapper>
+  )
 }
+
+// Keep the old exports for backward compatibility with tests/other imports
+export type BuyOrderV2Row = StandingBuyOrder & { timestamp: number }
+export const BuyOrderV2HeadCells = [] as const

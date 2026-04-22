@@ -9,7 +9,6 @@ import {
   Typography,
   Tab,
   Tabs,
-  Avatar,
   Chip,
   Stack,
   Divider,
@@ -22,6 +21,7 @@ import { useGetBlueprintDetailQuery } from "../../store/api/v2/market"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { formatCategoryName } from "../../util/categoryDisplay"
 import { getResourceCategoryIcon, getCommodityColor } from "../../util/gameIcons"
+import { GameItemAvatar } from "../../components/game-data/GameItemAvatar"
 
 function initials(name: string | undefined): string {
   if (!name) return "?"
@@ -90,14 +90,13 @@ export function BlueprintDetail() {
         <Grid item xs={12}>
           {/* Header */}
           <Box sx={{ display: "flex", gap: 2, alignItems: "center", mb: 2 }}>
-            <Avatar
-              src={outputItem?.icon_url || bp.icon_url}
-              variant="rounded"
-              sx={{ width: 56, height: 56, fontSize: "1.2rem", bgcolor: "primary.main" }}
-              imgProps={{ style: { objectFit: "cover" } }}
-            >
-              {initials(itemName)}
-            </Avatar>
+            <GameItemAvatar
+              name={itemName}
+              iconUrl={outputItem?.icon_url || bp.icon_url}
+              size={56}
+              useCommodityColor={false}
+              sx={{ bgcolor: "primary.main" }}
+            />
             <Box>
               <Typography variant="h5" fontWeight={600}>{itemName}</Typography>
               <Stack direction="row" spacing={0.5}>
@@ -145,14 +144,13 @@ function OverviewTab({ data, itemName }: { data: any; itemName: string }) {
           <Stack spacing={0.75}>
             {data.ingredients.map((ing: any, i: number) => (
               <Box key={i} sx={{ display: "flex", gap: 1, alignItems: "center" }}>
-                <Avatar
-                  src={ingredientIcon(ing)}
-                  variant="rounded"
-                  sx={{ width: 28, height: 28, fontSize: "0.6rem", bgcolor: getCommodityColor(ing.game_item?.sub_type) || "secondary.main", p: 0.6 }}
-                  imgProps={{ style: { objectFit: "contain" } }}
-                >
-                  {initials(ing.game_item?.name)}
-                </Avatar>
+                <GameItemAvatar
+                  name={ing.game_item?.name}
+                  iconUrl={ing.game_item?.icon_url}
+                  subType={ing.game_item?.sub_type}
+                  itemType={ing.game_item?.type}
+                  size={28}
+                />
                 <Typography variant="body2" sx={{ flex: 1 }}>{ing.game_item?.name || "Unknown"}</Typography>
                 <Typography variant="body2" color="text.secondary">{formatQty(ing.quantity_required)}</Typography>
               </Box>
@@ -231,14 +229,13 @@ function CalculatorTab({ data }: { data: any }) {
           return (
             <Box key={idx}>
               <Box sx={{ display: "flex", gap: 1, alignItems: "center", mb: 0.5 }}>
-                <Avatar
-                  src={ingredientIcon(ing)}
-                  variant="rounded"
-                  sx={{ width: 24, height: 24, fontSize: "0.55rem", bgcolor: getCommodityColor(ing.game_item?.sub_type) || "secondary.main", p: 0.5 }}
-                  imgProps={{ style: { objectFit: "contain" } }}
-                >
-                  {initials(ing.game_item?.name)}
-                </Avatar>
+                <GameItemAvatar
+                  name={ing.game_item?.name}
+                  iconUrl={ing.game_item?.icon_url}
+                  subType={ing.game_item?.sub_type}
+                  itemType={ing.game_item?.type}
+                  size={24}
+                />
                 <Typography variant="body2" sx={{ flex: 1 }} noWrap>{ing.game_item?.name || "Unknown"}</Typography>
                 <Typography variant="body2" color="text.secondary">{formatQty(totalQty)}</Typography>
               </Box>

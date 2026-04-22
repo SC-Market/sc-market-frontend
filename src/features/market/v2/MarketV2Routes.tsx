@@ -114,11 +114,6 @@ export function MarketV2Routes() {
     return <ListingSearchV2 />
   }
 
-  // Buy order create
-  if (pathname === "/buyorder/create") {
-    return <CreateListingV2 />
-  }
-
   // Buy orders list
   if (pathname === "/buyorders") {
     return <BuyOrdersViewV2 />
