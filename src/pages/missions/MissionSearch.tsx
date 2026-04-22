@@ -35,7 +35,7 @@ import {
   Tooltip,
   useMediaQuery,
 } from "@mui/material"
-import { ViewList, ViewModule } from "@mui/icons-material"
+import { ViewList, ViewModule, ShieldRounded, BuildRounded } from "@mui/icons-material"
 import { useSearchMissionsQuery } from "../../store/api/v2/market"
 import { useNavigate, useParams, useSearchParams } from "react-router-dom"
 import { useDebounce } from "../../hooks/useDebounce"
@@ -307,12 +307,12 @@ export function MissionSearch() {
                               {m.is_chain_starter && <Tooltip title="Chain Starter"><Chip label="STARTER" size="small" color="secondary" sx={{ height: 18, fontSize: "0.65rem" }} /></Tooltip>}
                               {m.is_chain_mission && !m.is_chain_starter && <Tooltip title="Part of Chain"><Chip label="CHAIN" size="small" color="secondary" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} /></Tooltip>}
                               {m.associated_event && <Tooltip title={m.associated_event}><Chip label={m.associated_event} size="small" variant="outlined" sx={{ height: 18, fontSize: "0.65rem", maxWidth: 100 }} /></Tooltip>}
-                              {m.ship_encounter_count > 0 && <Tooltip title={`${m.ship_encounter_count} ships`}><Chip label={`🛡 ${m.ship_encounter_count}`} size="small" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} /></Tooltip>}
+                              {m.ship_encounter_count > 0 && <Tooltip title={`${m.ship_encounter_count} ships`}><Chip icon={<ShieldRounded sx={{ fontSize: 14 }} />} label={m.ship_encounter_count} size="small" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} /></Tooltip>}
                             </Stack>
                           </TableCell>
                           <TableCell align="center">
                             {m.blueprint_reward_count > 0
-                              ? <Chip label={`🔧 ${m.blueprint_reward_count}`} size="small" color="secondary" sx={{ height: 18, fontSize: "0.65rem", minWidth: 24 }} />
+                              ? <Chip icon={<BuildRounded sx={{ fontSize: 14 }} />} label={m.blueprint_reward_count} size="small" color="secondary" sx={{ height: 18, fontSize: "0.65rem", minWidth: 24 }} />
                               : <Typography variant="caption" color="text.disabled">—</Typography>}
                           </TableCell>
                           <TableCell align="right">
