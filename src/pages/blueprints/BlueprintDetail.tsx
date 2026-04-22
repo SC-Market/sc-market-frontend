@@ -23,7 +23,7 @@ import { useGetBlueprintDetailQuery, useGetOrgBlueprintOwnersQuery } from "../..
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { formatCategoryName } from "../../util/categoryDisplay"
-import { getCommodityColor } from "../../util/gameIcons"
+import { getCommodityColor, getItemCategoryColor } from "../../util/gameIcons"
 import { GameItemAvatar } from "../../components/game-data/GameItemAvatar"
 import { TrackChangesRounded, BuildRounded, TimerRounded, RecyclingRounded } from "@mui/icons-material"
 
@@ -138,7 +138,7 @@ export function BlueprintDetail() {
               iconUrl={outputItem?.icon_url || bp.icon_url}
               size={48}
               useCommodityColor={false}
-              sx={{ bgcolor: "primary.main" }}
+              sx={{ bgcolor: getItemCategoryColor(bp.item_category) }}
             />
             <Box>
               <Typography variant="h5" fontWeight={700}>{itemName}</Typography>

@@ -16,8 +16,9 @@ import {
 } from "@mui/material"
 import { Bookmark, BookmarkBorder, Circle } from "@mui/icons-material"
 import { formatCategoryName } from "../../util/categoryDisplay"
-import { getResourceCategoryIcon, getCommodityColor } from "../../util/gameIcons"
+import { getResourceCategoryIcon, getCommodityColor, getItemCategoryColor } from "../../util/gameIcons"
 import { GameItemAvatar } from "./GameItemAvatar"
+import { Tooltip } from "@mui/material"
 
 export interface BlueprintIngredientSummary {
   name: string
@@ -97,7 +98,7 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
         <CardActionArea onClick={() => onClick?.(bp.blueprint_id)} sx={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "stretch", justifyContent: "flex-start" }}>
           <CardContent sx={{ p: 1.5, pb: 0, flex: 1 }}>
             <Box sx={{ display: "flex", gap: 1, mb: 1, pr: 3 }}>
-              <GameItemAvatar name={bp.output_item_name} iconUrl={bp.output_item_icon} size={32} useCommodityColor={false} sx={{ bgcolor: "primary.main" }} />
+              <GameItemAvatar name={bp.output_item_name} iconUrl={bp.output_item_icon} size={32} useCommodityColor={false} sx={{ bgcolor: getItemCategoryColor(bp.item_category) }} />
               <Box sx={{ minWidth: 0 }}>
                 <Typography variant="body2" fontWeight={600} noWrap title={bp.output_item_name}>
                   {bp.output_item_name}
@@ -154,19 +155,20 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
     <Card sx={{ cursor: "pointer", "&:hover": { boxShadow: 3 } }} onClick={() => onClick?.(bp.blueprint_id)}>
       <CardContent sx={{ p: 1.5, "&:last-child": { pb: 1.5 } }}>
         <Box sx={{ display: "flex", gap: 1.5, alignItems: "center" }}>
-          <GameItemAvatar name={bp.output_item_name} iconUrl={bp.output_item_icon} size={36} useCommodityColor={false} sx={{ bgcolor: "primary.main" }} />
+          <GameItemAvatar name={bp.output_item_name} iconUrl={bp.output_item_icon} size={36} useCommodityColor={false} sx={{ bgcolor: getItemCategoryColor(bp.item_category) }} />
           <Box sx={{ flex: 1, minWidth: 0 }}>
             <Typography variant="body2" fontWeight={600} noWrap>{bp.output_item_name}</Typography>
             <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap sx={{ mt: 0.25 }}>
               {bp.rarity && <Chip label={bp.rarity} size="small" color="primary" sx={{ height: 18, fontSize: "0.65rem" }} />}
               {bp.tier && <Chip label={`T${bp.tier}`} size="small" color="secondary" sx={{ height: 18, fontSize: "0.65rem" }} />}
               {ings.map((ing, i) => (
+                <Tooltip key={i} title={`${ing.name} — ${(Math.round(ing.quantity_required * 100) / 10000).toFixed(2)} SCU`} arrow>
                 <Chip
-                  key={i}
-                  label={`${shortName(ing.name)}×${(ing.quantity_required / 100).toFixed(2)}`}
+                  label={`${shortName(ing.name)}×${(Math.round(ing.quantity_required * 100) / 10000).toFixed(2)}`}
                   size="small"
                   sx={{ height: 18, fontSize: "0.6rem", bgcolor: ingColor(ing), color: "#fff" }}
                 />
+                </Tooltip>
               ))}
             </Stack>
           </Box>
