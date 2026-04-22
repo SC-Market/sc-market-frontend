@@ -116,7 +116,7 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
                   <Box key={i} sx={{ display: "flex", gap: 0.5, alignItems: "center" }}>
                     <GameItemAvatar name={ing.name} iconUrl={ing.icon_url} subType={ing.sub_type} size={16} />
                     <Typography variant="caption" noWrap sx={{ flex: 1 }}>{ing.name}</Typography>
-                    <Typography variant="caption" color="text.secondary">{(ing.quantity_required / 100).toFixed(2)}</Typography>
+                    <Typography variant="caption" color="text.secondary">{ing.quantity_required} cSCU</Typography>
                   </Box>
                 ))}
                 {ings.length > 4 && (
@@ -162,9 +162,9 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
               {bp.rarity && <Chip label={bp.rarity} size="small" color="primary" sx={{ height: 18, fontSize: "0.65rem" }} />}
               {bp.tier && <Chip label={`T${bp.tier}`} size="small" color="secondary" sx={{ height: 18, fontSize: "0.65rem" }} />}
               {ings.map((ing, i) => (
-                <Tooltip key={i} title={`${ing.name} — ${(Math.round(ing.quantity_required * 100) / 10000).toFixed(2)} SCU`} arrow>
+                <Tooltip key={i} title={`${ing.name} — ${ing.quantity_required} cSCU (${(ing.quantity_required / 100).toFixed(2)} SCU)`} arrow>
                 <Chip
-                  label={`${shortName(ing.name)}×${(Math.round(ing.quantity_required * 100) / 10000).toFixed(2)}`}
+                  label={`${shortName(ing.name)}×${ing.quantity_required}`}
                   size="small"
                   sx={{ height: 18, fontSize: "0.6rem", bgcolor: ingColor(ing), color: "#fff" }}
                 />
