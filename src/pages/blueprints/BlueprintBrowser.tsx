@@ -38,8 +38,9 @@ import {
   Avatar,
   Stack,
   Button,
+  useMediaQuery,
 } from "@mui/material"
-import { ViewModule, ViewList, RestartAltRounded } from "@mui/icons-material"
+import { ViewModule, ViewList, RestartAltRounded, FilterList } from "@mui/icons-material"
 import { useSearchBlueprintsQuery, useGetBlueprintCategoriesQuery } from "../../store/api/v2/market"
 import { useNavigate, useParams } from "react-router-dom"
 import { useDebounce } from "../../hooks/useDebounce"
@@ -48,6 +49,8 @@ import { BlueprintCard } from "../../components/game-data/BlueprintCard"
 import { formatCategoryName } from "../../util/categoryDisplay"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
+import { BottomSheet } from "../../components/mobile/BottomSheet"
+import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
 import { BlueprintDetailModal } from "../../components/game-data/BlueprintDetailModal"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
