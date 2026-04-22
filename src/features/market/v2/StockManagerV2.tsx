@@ -720,7 +720,7 @@ function DisplayStockV2({
         },
       },
       {
-        field: "updated_at",
+        field: "expires_at",
         headerName: t("ItemStock.expiration"),
         renderHeader: () => <RefreshCircle />,
         width: 50,
