@@ -44,6 +44,7 @@ import { StandardPageLayout } from "../../../components/layout/StandardPageLayou
 import { ManageListingsTabBar } from "../components/ManageListingsTabBar"
 import { BottomSheet } from "../../../components/mobile/BottomSheet"
 import { ThemedDataGrid as DataGrid } from "../../../components/grid/ThemedDataGrid"
+import { EmptyState } from "../../../components/empty-states/EmptyState"
 import { UnderlineLink } from "../../../components/typography/UnderlineLink"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import {
@@ -523,6 +524,13 @@ function AllStockLotsGridV2() {
         initialState={{ pagination: { paginationModel: { pageSize: 24 } } }}
         disableRowSelectionOnClick
         slots={{
+          noRowsOverlay: () => (
+            <EmptyState
+              title={t("stock.noLots", "No stock lots")}
+              description={t("stock.noLotsDesc", "Add stock lots to manage your inventory.")}
+              sx={{ minHeight: 200 }}
+            />
+          ),
           toolbar: () => (
             <Box sx={{ p: 2, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
