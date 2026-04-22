@@ -27,10 +27,11 @@ import { getCommodityColor, getItemCategoryColor } from "../../util/gameIcons"
 import { GameItemAvatar } from "../../components/game-data/GameItemAvatar"
 import { TrackChangesRounded, BuildRounded, TimerRounded, RecyclingRounded } from "@mui/icons-material"
 
-/** Format quantity — values are in SCU */
-function formatQty(scu: number): string {
-  if (scu >= 1) return `${scu.toFixed(2)} SCU`
-  return `${scu.toFixed(2)} SCU`
+/** Format quantity — values are in SCU, may be string from API */
+function formatQty(scu: number | string): string {
+  const n = typeof scu === "string" ? parseFloat(scu) : scu
+  if (isNaN(n)) return "0.00 SCU"
+  return `${n.toFixed(2)} SCU`
 }
 
 function formatTime(s: number): string {
@@ -273,7 +274,7 @@ export function BlueprintDetail() {
                     <Box sx={{ flex: 1 }}>
                       <Typography variant="body2" fontWeight={600}>{ing.game_item?.name || "Unknown"}</Typography>
                       <Typography variant="caption" color="text.secondary">
-                        {formatQty(ing.quantity_required * craftQty)}
+                        {formatQty(parseFloat(String(ing.quantity_required)) * craftQty)}
                         {craftQty > 1 && ` (${formatQty(ing.quantity_required)} each)`}
                         {ing.min_quality_tier ? ` · min T${ing.min_quality_tier}` : ""}
                       </Typography>
@@ -355,7 +356,7 @@ export function BlueprintDetail() {
               <Typography variant="subtitle2">Recovered Materials</Typography>
               <Stack spacing={0.75}>
                 {ingredients.map((ing: any, i: number) => {
-                  const recovered = Math.round(ing.quantity_required * 50) / 100
+                  const recovered = parseFloat(String(ing.quantity_required)) * 0.5
                   return (
                     <Stack key={i} direction="row" spacing={1} alignItems="center">
                       <GameItemAvatar name={ing.game_item?.name} iconUrl={ing.game_item?.icon_url} subType={ing.game_item?.sub_type} itemType={ing.game_item?.type} size={28} />
