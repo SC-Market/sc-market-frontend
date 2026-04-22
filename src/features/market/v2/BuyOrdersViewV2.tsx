@@ -1,21 +1,26 @@
-import React, { useMemo, useState, useCallback, useRef, useEffect } from "react"
+import React, { useMemo, useState, useCallback, useRef } from "react"
 import {
   Box,
   Card,
   CardActionArea,
   CardContent,
   CardMedia,
+  Container,
   Divider,
   Fade,
   Grid,
   Typography,
   useMediaQuery,
 } from "@mui/material"
-import { Link, useNavigate, useLocation } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme, cardFadeGradient } from "../../../hooks/styles/Theme"
 import { useTranslation } from "react-i18next"
-import { useSearchBuyOrdersQuery, StandingBuyOrder } from "../../../store/api/v2/market"
+import {
+  useSearchBuyOrdersQuery,
+  type StandingBuyOrder,
+  type SearchBuyOrdersResponse,
+} from "../../../store/api/v2/market"
 import { useMarketSidebarExp } from "../hooks/MarketSidebar"
 import { ListingWrapper } from "../components/listings/ListingCard"
 import { ListingPagination } from "../components/listings/ListingPagination"
@@ -26,17 +31,15 @@ import { FALLBACK_IMAGE_URL } from "../../../util/constants"
 /**
  * BuyOrdersViewV2 — V2 buy orders browse page.
  *
- * Matches V1 layout: a card grid of game items that have active buy orders.
- * Each card shows the game item image, name, total quantity requested,
- * price range across all buy orders, and the number of active buy orders.
- *
- * Clicking a card navigates to the aggregate view for that game item.
+ * Matches V1 layout: Container-wrapped card grid of game items with active
+ * buy orders. Renders inside the Items tab of MarketPageV2.
  */
 export function BuyOrdersViewV2() {
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
   const navigate = useNavigate()
   const marketSidebarOpen = useMarketSidebarExp()
+  const isMobile = useMediaQuery(theme.breakpoints.down("lg"))
 
   const [page, setPage] = useState(0)
   const [perPage, setPerPage] = useState(48)
@@ -50,7 +53,10 @@ export function BuyOrdersViewV2() {
   // Group buy orders by game_item_id to create aggregate cards
   const aggregates = useMemo(() => {
     if (!data?.buy_orders) return []
-    const grouped = new Map<string, { item_id: string; item_name: string; orders: StandingBuyOrder[] }>()
+    const grouped = new Map<
+      string,
+      { item_id: string; item_name: string; orders: StandingBuyOrder[] }
+    >()
     for (const bo of data.buy_orders) {
       const existing = grouped.get(bo.game_item_id)
       if (existing) {
@@ -93,72 +99,88 @@ export function BuyOrdersViewV2() {
   const loading = isLoading || isFetching
 
   return (
-    <Grid container spacing={1} sx={{ width: "100%" }}>
-      <div ref={ref} style={{ position: "absolute", top: 0 }} />
+    <Container maxWidth={"xxxl" as any} sx={{ padding: 0 }}>
+      <Box sx={{ display: "flex", justifyContent: "center" }}>
+        <Box sx={{ flex: 1, minWidth: 0, width: "100%" }}>
+          <div ref={ref} style={{ position: "absolute", top: 0 }} />
 
-      <Grid item xs={12} sx={{ width: "100%", minWidth: 0 }}>
-        <Grid container spacing={1} sx={{ width: "100%" }}>
-          {loading
-            ? new Array(perPage > 12 ? 12 : perPage)
-                .fill(undefined)
-                .map((_, i) => (
-                  <Grid item {...gridBreakpoints} key={i}>
-                    <ListingSkeleton index={i} />
+          <Grid container spacing={1} sx={{ width: "100%" }}>
+            {loading
+              ? new Array(perPage > 12 ? 12 : perPage)
+                  .fill(undefined)
+                  .map((_, i) => (
+                    <Grid item {...gridBreakpoints} key={i}>
+                      <ListingSkeleton index={i} />
+                    </Grid>
+                  ))
+              : aggregates.length === 0
+                ? (
+                  <Grid item xs={12}>
+                    <EmptyListings
+                      isSearchResult={false}
+                      showCreateAction={false}
+                      action={{
+                        label: t(
+                          "buyOrderActions.createBuyOrder",
+                          "Create Buy Order",
+                        ),
+                        onClick: () => navigate("/buyorder/create"),
+                        variant: "contained" as const,
+                      }}
+                    />
                   </Grid>
-                ))
-            : aggregates.length === 0
-              ? (
-                <Grid item xs={12}>
-                  <EmptyListings
-                    isSearchResult={false}
-                    showCreateAction={false}
-                    action={{
-                      label: t("buyOrderActions.createBuyOrder", "Create Buy Order"),
-                      onClick: () => navigate("/buyorder/create"),
-                      variant: "contained" as const,
-                    }}
-                  />
-                </Grid>
-              )
-              : aggregates.map((agg, index) => (
-                <Grid item {...gridBreakpoints} key={agg.item_id}>
-                  <BuyOrderAggregateCard aggregate={agg} index={index} />
-                </Grid>
-              ))}
-        </Grid>
-      </Grid>
+                )
+                : aggregates.map((agg, index) => (
+                  <Grid item {...gridBreakpoints} key={agg.item_id}>
+                    <BuyOrderAggregateCard aggregate={agg} index={index} />
+                  </Grid>
+                ))}
+          </Grid>
 
-      <Grid item xs={12}>
-        <Divider light />
-      </Grid>
+          <Divider light sx={{ my: 1 }} />
 
-      <Grid item xs={12}>
-        <ListingPagination
-          count={data?.total || aggregates.length}
-          page={page}
-          rowsPerPage={perPage}
-          onPageChange={handleChangePage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Grid>
-    </Grid>
+          <ListingPagination
+            count={data?.total || aggregates.length}
+            page={page}
+            rowsPerPage={perPage}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Box>
+      </Box>
+    </Container>
   )
 }
 
 /** Card for a game item with active buy orders — matches V1 AggregateBuyOrderListingBase */
-function BuyOrderAggregateCard({ aggregate, index }: {
-  aggregate: { item_id: string; item_name: string; orders: StandingBuyOrder[] }
+function BuyOrderAggregateCard({
+  aggregate,
+  index,
+}: {
+  aggregate: {
+    item_id: string
+    item_name: string
+    orders: StandingBuyOrder[]
+  }
   index: number
 }) {
   const theme = useTheme<ExtendedTheme>()
   const { t, i18n } = useTranslation()
 
   const maxPrice = useMemo(
-    () => aggregate.orders.reduce((max, o) => Math.max(max, o.price_per_unit || 0), 0),
+    () =>
+      aggregate.orders.reduce(
+        (max, o) => Math.max(max, o.price_per_unit || 0),
+        0,
+      ),
     [aggregate.orders],
   )
   const minPrice = useMemo(
-    () => aggregate.orders.reduce((min, o) => Math.min(min, o.price_per_unit || Infinity), Infinity),
+    () =>
+      aggregate.orders.reduce(
+        (min, o) => Math.min(min, o.price_per_unit || Infinity),
+        Infinity,
+      ),
     [aggregate.orders],
   )
   const totalQty = useMemo(
@@ -166,32 +188,45 @@ function BuyOrderAggregateCard({ aggregate, index }: {
     [aggregate.orders],
   )
 
-  const priceDisplay = minPrice === maxPrice
-    ? `${maxPrice.toLocaleString(i18n.language)} aUEC`
-    : `${minPrice.toLocaleString(i18n.language)} - ${maxPrice.toLocaleString(i18n.language)} aUEC`
+  const priceDisplay =
+    minPrice === maxPrice
+      ? `${maxPrice.toLocaleString(i18n.language)} aUEC`
+      : `${minPrice.toLocaleString(i18n.language)} - ${maxPrice.toLocaleString(i18n.language)} aUEC`
 
   const cardHeight = 300
   const isDark = theme.palette.mode === "dark"
   const contentSx = isDark
-    ? { position: "absolute" as const, bottom: 0, zIndex: 4, width: "100%" }
+    ? {
+        position: "absolute" as const,
+        bottom: 0,
+        zIndex: 4,
+        width: "100%",
+      }
     : {}
 
   return (
     <ListingWrapper>
       <Fade
         in
-        style={{ transitionDelay: `${50 + 50 * index}ms`, transitionDuration: "500ms" }}
+        style={{
+          transitionDelay: `${50 + 50 * index}ms`,
+          transitionDuration: "500ms",
+        }}
       >
         <Link
           to={`/market/aggregate/${aggregate.item_id}`}
           style={{ textDecoration: "none", color: "inherit" }}
         >
           <CardActionArea
-            sx={{ borderRadius: (t) => t.spacing((t as ExtendedTheme).borderRadius.topLevel) }}
+            sx={{
+              borderRadius: (t) =>
+                t.spacing((t as ExtendedTheme).borderRadius.topLevel),
+            }}
           >
             <Card
               sx={{
-                borderRadius: (t) => t.spacing((t as ExtendedTheme).borderRadius.topLevel),
+                borderRadius: (t) =>
+                  t.spacing((t as ExtendedTheme).borderRadius.topLevel),
                 height: cardHeight,
                 position: "relative",
               }}
@@ -240,9 +275,11 @@ function BuyOrderAggregateCard({ aggregate, index }: {
                   {priceDisplay}
                 </Typography>
                 <Typography variant="body2" color="text.secondary">
-                  {totalQty.toLocaleString(i18n.language)} {t("market.requested", "requested")}
+                  {totalQty.toLocaleString(i18n.language)}{" "}
+                  {t("market.requested", "requested")}
                   {" · "}
-                  {aggregate.orders.length} {t("market.buyOrders", "buy orders")}
+                  {aggregate.orders.length}{" "}
+                  {t("market.buyOrders", "buy orders")}
                 </Typography>
               </CardContent>
             </Card>
@@ -252,7 +289,3 @@ function BuyOrderAggregateCard({ aggregate, index }: {
     </ListingWrapper>
   )
 }
-
-// Keep the old exports for backward compatibility with tests/other imports
-export type BuyOrderV2Row = StandingBuyOrder & { timestamp: number }
-export const BuyOrderV2HeadCells = [] as const
