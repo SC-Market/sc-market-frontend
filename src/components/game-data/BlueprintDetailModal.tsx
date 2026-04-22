@@ -1,6 +1,5 @@
 /**
- * BlueprintDetailModal - Tabbed modal for blueprint details on desktop
- * Tabs: Overview, Ingredients, Calculator
+ * BlueprintDetailModal — renders the same content as BlueprintDetail page inside a dialog.
  */
 
 import React, { useState, useMemo } from "react"
@@ -9,285 +8,229 @@ import {
   DialogContent,
   DialogTitle,
   IconButton,
-  Tab,
-  Tabs,
   Box,
   Typography,
   Chip,
   Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   CircularProgress,
   Alert,
-  Button,
-  Slider,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
-  TextField,
   Divider,
+  Slider,
+  TextField,
+  ButtonGroup,
+  Button,
+  Tabs,
+  Tab,
+  Avatar,
 } from "@mui/material"
-import { Close } from "@mui/icons-material"
+import { Close, BuildRounded, TimerRounded, RecyclingRounded, TrackChangesRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
-import {
-  useGetBlueprintDetailQuery,
-  useGetBlueprintMissionsQuery,
-  useCalculateQualityMutation,
-  type CraftingInputMaterial,
-} from "../../store/api/v2/market"
-import { RarityBadge } from "../game-data/RarityBadge"
+import { useNavigate } from "react-router-dom"
+import { useGetBlueprintDetailQuery, useGetOrgBlueprintOwnersQuery } from "../../store/api/v2/market"
+import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
+import { formatCategoryName } from "../../util/categoryDisplay"
+import { getCommodityColor, getItemCategoryColor } from "../../util/gameIcons"
+import { GameItemAvatar } from "./GameItemAvatar"
 
-interface BlueprintDetailModalProps {
+function formatQty(qty: number): string {
+  const r = Math.round(qty * 100) / 100
+  return `${(r / 100).toFixed(2)} SCU`
+}
+
+function formatTime(s: number): string {
+  if (s >= 60) return `${Math.floor(s / 60)}m ${s % 60}s`
+  return `${s}s`
+}
+
+function interpolateModifier(qv: number, startQ: number, endQ: number, modStart: number, modEnd: number): number {
+  const t = Math.max(0, Math.min(1, (qv - startQ) / (endQ - startQ)))
+  return modStart + t * (modEnd - modStart)
+}
+
+const PROPERTY_LABELS: Record<string, string> = {
+  damagemitigation: "Damage Mitigation", gpp_armor_damagemitigation: "Damage Mitigation",
+  mintemp: "Min Temp", gpp_armor_mintemp: "Min Temp",
+  maxtemp: "Max Temp", gpp_armor_maxtemp: "Max Temp",
+}
+
+function propertyLabel(prop: string): string {
+  const lower = prop.toLowerCase()
+  return PROPERTY_LABELS[lower] || PROPERTY_LABELS[lower.replace(/^gpp_armor_/, "")] || lower.replace(/^gpp_armor_/, "").replace(/([a-z])([A-Z])/g, "$1 $2").replace(/^./, s => s.toUpperCase())
+}
+
+interface Props {
   blueprintId: string | null
   open: boolean
   onClose: () => void
 }
 
-const TIER_COLORS: Record<number, "default" | "success" | "info" | "primary" | "secondary" | "warning"> = {
-  1: "warning", 2: "default", 3: "info", 4: "primary", 5: "secondary",
-}
-
-export function BlueprintDetailModal({ blueprintId, open, onClose }: BlueprintDetailModalProps) {
+export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
   const { t } = useTranslation()
-  const [tab, setTab] = useState(0)
-
+  const navigate = useNavigate()
   const { data, isLoading, error } = useGetBlueprintDetailQuery(
     { blueprintId: blueprintId! },
     { skip: !blueprintId },
   )
+  const bp = data?.blueprint
+  const outputItem = data?.output_item
+  const itemName = outputItem?.name || bp?.blueprint_name || "Blueprint"
+  const ingredients = data?.ingredients || []
+  const slotModifiers = data?.slot_modifiers || []
 
-  // Reset tab when modal opens with new blueprint
+  const [currentOrg] = useCurrentOrg()
+  const spectrumId = currentOrg?.spectrum_id
+  const [tab, setTab] = useState(0)
+
+  const { data: orgOwners } = useGetOrgBlueprintOwnersQuery(
+    { blueprintId: blueprintId!, spectrumId: spectrumId! },
+    { skip: !blueprintId || !spectrumId },
+  )
+
   React.useEffect(() => { setTab(0) }, [blueprintId])
+
+  // Quality state
+  const [qualities, setQualities] = useState<number[]>([])
+  React.useEffect(() => {
+    if (ingredients.length && qualities.length !== ingredients.length)
+      setQualities(ingredients.map(() => 500))
+  }, [ingredients.length])
+
+  const setQuality = (idx: number, v: number) =>
+    setQualities(prev => prev.map((q, i) => i === idx ? Math.max(0, Math.min(1000, v)) : q))
+  const setAllQualities = (v: number) => setQualities(prev => prev.map(() => v))
+
+  const modsBySlot = useMemo(() => {
+    const map = new Map<string, any[]>()
+    for (const m of slotModifiers) { if (!map.has(m.slot_name)) map.set(m.slot_name, []); map.get(m.slot_name)!.push(m) }
+    return map
+  }, [slotModifiers])
+
+  const outputQuality = useMemo(() => {
+    if (!ingredients.length || !qualities.length) return 500
+    return Math.round(ingredients.reduce((s: number, _: any, i: number) => s + (qualities[i] ?? 500), 0) / ingredients.length)
+  }, [qualities, ingredients])
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
       <DialogTitle sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <Typography variant="h6" noWrap sx={{ flex: 1 }}>
-          {data?.output_item?.name || data?.blueprint.blueprint_name || t("blueprints.detail", "Blueprint Detail")}
-        </Typography>
-        <IconButton onClick={onClose} size="small"><Close /></IconButton>
-      </DialogTitle>
-      <Tabs value={tab} onChange={(_, v) => setTab(v)} sx={{ px: 2 }}>
-        <Tab label={t("blueprints.overview", "Overview")} />
-        <Tab label={t("blueprints.ingredients", "Ingredients")} />
-        <Tab label={t("crafting.calculator", "Calculator")} />
-      </Tabs>
-      <DialogContent sx={{ minHeight: 400 }}>
-        {isLoading && <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}><CircularProgress /></Box>}
-        {error && <Alert severity="error">{t("blueprints.loadError", "Failed to load blueprint.")}</Alert>}
-        {data && tab === 0 && <OverviewTab data={data} />}
-        {data && tab === 1 && <IngredientsTab data={data} />}
-        {data && tab === 2 && <CalculatorTab data={data} />}
-      </DialogContent>
-    </Dialog>
-  )
-}
-
-function OverviewTab({ data }: { data: any }) {
-  const { t } = useTranslation()
-  const bp = data.blueprint
-
-  return (
-    <Stack spacing={2}>
-      <Stack direction="row" spacing={1} flexWrap="wrap" gap={0.5}>
-        {bp.rarity && <RarityBadge rarity={bp.rarity} />}
-        {bp.tier && <Chip label={`Tier ${bp.tier}`} size="small" color={TIER_COLORS[bp.tier] || "default"} />}
-        {bp.item_category && <Chip label={bp.item_category} size="small" variant="outlined" />}
-        {bp.item_subcategory && <Chip label={bp.item_subcategory} size="small" variant="outlined" />}
-      </Stack>
-
-      {bp.blueprint_description && (
-        <Typography variant="body2" color="text.secondary">{bp.blueprint_description}</Typography>
-      )}
-
-      <Divider />
-
-      <Typography variant="subtitle2">{t("blueprints.outputItem", "Output Item")}</Typography>
-      <Stack direction="row" spacing={1} alignItems="center">
-        <Typography>{data.output_item?.name || bp.output_item_name}</Typography>
-        <Chip label={`×${bp.output_quantity || 1}`} size="small" />
-      </Stack>
-
-      {bp.crafting_station_type && (
-        <>
-          <Typography variant="subtitle2">{t("blueprints.craftingStation", "Crafting Station")}</Typography>
-          <Typography variant="body2">{bp.crafting_station_type}</Typography>
-        </>
-      )}
-
-      {bp.crafting_time_seconds && (
-        <>
-          <Typography variant="subtitle2">{t("blueprints.craftingTime", "Crafting Time")}</Typography>
-          <Typography variant="body2">
-            {bp.crafting_time_seconds >= 60
-              ? `${Math.floor(bp.crafting_time_seconds / 60)}m ${bp.crafting_time_seconds % 60}s`
-              : `${bp.crafting_time_seconds}s`}
-          </Typography>
-        </>
-      )}
-
-      {data.crafting_recipe && (
-        <>
-          <Typography variant="subtitle2">{t("blueprints.qualityRange", "Output Quality Range")}</Typography>
-          <Stack direction="row" spacing={1}>
-            <Chip label={`Tier ${data.crafting_recipe.min_output_quality_tier}`} size="small" color={TIER_COLORS[data.crafting_recipe.min_output_quality_tier]} />
-            <Typography variant="body2">—</Typography>
-            <Chip label={`Tier ${data.crafting_recipe.max_output_quality_tier}`} size="small" color={TIER_COLORS[data.crafting_recipe.max_output_quality_tier]} />
-          </Stack>
-        </>
-      )}
-
-      {data.missions_rewarding?.length > 0 && (
-        <>
-          <Divider />
-          <Typography variant="subtitle2">{t("blueprints.rewardedBy", "Mission Sources")} ({data.missions_rewarding.length})</Typography>
-          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-            {data.missions_rewarding.map((m: any) => {
-              const pct = m.drop_probability >= 1 ? m.drop_probability : (m.drop_probability || 0) * 100
-              return (
-                <Chip
-                  key={m.mission_id}
-                  label={`${m.mission_name}${pct >= 100 ? "" : ` (${pct.toFixed(0)}%)`}`}
-                  size="small"
-                  sx={{ height: 22, cursor: "pointer" }}
-                  onClick={() => { window.location.href = `/missions/${m.mission_id}` }}
-                />
-              )
-            })}
-          </Box>
-        </>
-      )}
-    </Stack>
-  )
-}
-
-function IngredientsTab({ data }: { data: any }) {
-  const { t } = useTranslation()
-
-  if (!data.ingredients?.length) {
-    return <Typography color="text.secondary">{t("blueprints.noIngredients", "No ingredients listed.")}</Typography>
-  }
-
-  return (
-    <TableContainer>
-      <Table size="small">
-        <TableHead>
-          <TableRow>
-            <TableCell>{t("blueprints.material", "Material")}</TableCell>
-            <TableCell align="right">{t("blueprints.qtyRequired", "Qty Required")}</TableCell>
-            <TableCell align="right">{t("blueprints.minTier", "Min Tier")}</TableCell>
-            <TableCell align="right">{t("blueprints.recTier", "Rec. Tier")}</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {data.ingredients.map((ing: any) => (
-            <TableRow key={ing.ingredient_id || ing.ingredient_game_item_id}>
-              <TableCell>{ing.ingredient_name || ing.ingredient_game_item_id}</TableCell>
-              <TableCell align="right">{ing.quantity_required}</TableCell>
-              <TableCell align="right">
-                {ing.min_quality_tier ? <Chip label={`T${ing.min_quality_tier}`} size="small" color={TIER_COLORS[ing.min_quality_tier]} /> : "—"}
-              </TableCell>
-              <TableCell align="right">
-                {ing.recommended_quality_tier ? <Chip label={`T${ing.recommended_quality_tier}`} size="small" color={TIER_COLORS[ing.recommended_quality_tier]} /> : "—"}
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  )
-}
-
-function CalculatorTab({ data }: { data: any }) {
-  const { t } = useTranslation()
-  const [calculateQuality, { data: result, isLoading, error }] = useCalculateQualityMutation()
-
-  const [materials, setMaterials] = useState<Array<{
-    game_item_id: string
-    name: string
-    quantity: number
-    quality_tier: number
-    quality_value: number
-  }>>(() =>
-    (data.ingredients || []).map((ing: any) => ({
-      game_item_id: ing.ingredient_game_item_id,
-      name: ing.ingredient_name || ing.ingredient_game_item_id,
-      quantity: ing.quantity_required,
-      quality_tier: ing.recommended_quality_tier || ing.min_quality_tier || 1,
-      quality_value: 50,
-    }))
-  )
-
-  const updateMaterial = (idx: number, field: string, value: any) => {
-    setMaterials(prev => prev.map((m, i) => i === idx ? { ...m, [field]: value } : m))
-  }
-
-  const handleCalculate = () => {
-    const input_materials: CraftingInputMaterial[] = materials.map(m => ({
-      game_item_id: m.game_item_id,
-      quantity: m.quantity,
-      quality_tier: m.quality_tier,
-      quality_value: m.quality_value,
-    }))
-    calculateQuality({ calculateQualityRequest: { blueprint_id: data.blueprint.blueprint_id, input_materials } })
-  }
-
-  return (
-    <Stack spacing={2}>
-      <Typography variant="subtitle2">{t("crafting.adjustMaterials", "Adjust material quality to see predicted output")}</Typography>
-
-      {materials.map((mat, idx) => (
-        <Stack key={mat.game_item_id} direction="row" spacing={1} alignItems="center">
-          <Typography variant="body2" sx={{ minWidth: 120, flex: 1 }} noWrap>{mat.name}</Typography>
-          <TextField
-            size="small" type="number" label={t("crafting.qty", "Qty")}
-            value={mat.quantity} sx={{ width: 70 }}
-            onChange={e => updateMaterial(idx, "quantity", Math.max(1, +e.target.value || 1))}
-          />
-          <FormControl size="small" sx={{ width: 90 }}>
-            <InputLabel>{t("crafting.tier", "Tier")}</InputLabel>
-            <Select value={mat.quality_tier} label={t("crafting.tier", "Tier")}
-              onChange={e => updateMaterial(idx, "quality_tier", e.target.value)}>
-              {[1,2,3,4,5].map(n => <MenuItem key={n} value={n}>T{n}</MenuItem>)}
-            </Select>
-          </FormControl>
-          <Box sx={{ width: 100 }}>
-            <Typography variant="caption" color="text.secondary">Q: {mat.quality_value}</Typography>
-            <Slider size="small" min={0} max={100} value={mat.quality_value}
-              onChange={(_, v) => updateMaterial(idx, "quality_value", v)} />
+        <Stack direction="row" spacing={1} alignItems="center" sx={{ flex: 1, minWidth: 0 }}>
+          <GameItemAvatar name={itemName} iconUrl={outputItem?.icon_url || bp?.icon_url} size={36} useCommodityColor={false} sx={{ bgcolor: getItemCategoryColor(bp?.item_category) }} />
+          <Box sx={{ minWidth: 0 }}>
+            <Typography variant="h6" noWrap>{itemName}</Typography>
+            <Stack direction="row" spacing={0.5}>
+              {bp?.rarity && <Chip label={bp.rarity} size="small" color="primary" />}
+              {bp?.tier && <Chip label={`Tier ${bp.tier}`} size="small" color="secondary" />}
+              {bp?.item_category && <Chip label={formatCategoryName(bp.item_category)} size="small" variant="outlined" />}
+            </Stack>
           </Box>
         </Stack>
-      ))}
+        <IconButton onClick={onClose} size="small"><Close /></IconButton>
+      </DialogTitle>
 
-      <Button variant="contained" size="small" onClick={handleCalculate} disabled={isLoading || !materials.length}>
-        {isLoading ? <CircularProgress size={20} /> : t("crafting.calculate", "Calculate")}
-      </Button>
+      <Tabs value={tab} onChange={(_, v) => setTab(v)} sx={{ px: 2 }}>
+        <Tab label="Craft" />
+        {spectrumId && <Tab label="Org Owners" />}
+      </Tabs>
 
-      {error && <Alert severity="error">{t("crafting.calcError", "Calculation failed.")}</Alert>}
+      <DialogContent sx={{ minHeight: 300 }}>
+        {isLoading && <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}><CircularProgress /></Box>}
+        {error && <Alert severity="error">Failed to load blueprint.</Alert>}
 
-      {result && (
-        <>
-          <Divider />
-          <Stack direction="row" spacing={2} alignItems="center">
-            <Typography variant="subtitle2">{t("crafting.predictedOutput", "Predicted Output")}:</Typography>
-            <Chip label={`Tier ${result.output_quality_tier}`} color={TIER_COLORS[result.output_quality_tier]} />
-            <Typography>Quality: {result.output_quality_value.toFixed(1)}</Typography>
+        {data && tab === 0 && (
+          <Stack spacing={2}>
+            {/* Missions */}
+            {data.missions_rewarding?.length > 0 && (
+              <Box>
+                <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
+                  <TrackChangesRounded sx={{ fontSize: 16, mr: 0.5 }} />Missions ({data.missions_rewarding.length})
+                </Typography>
+                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                  {data.missions_rewarding.slice(0, 8).map((m: any) => (
+                    <Chip key={m.mission_id} label={m.mission_name} size="small" sx={{ height: 22, cursor: "pointer" }}
+                      onClick={() => { onClose(); navigate(`/missions/${m.mission_id}`) }} />
+                  ))}
+                  {data.missions_rewarding.length > 8 && <Chip label={`+${data.missions_rewarding.length - 8}`} size="small" variant="outlined" sx={{ height: 22 }} />}
+                </Box>
+              </Box>
+            )}
+
+            <Divider />
+
+            {/* Quality Presets */}
+            <Stack direction="row" spacing={1} alignItems="center">
+              <Typography variant="subtitle2">Quality Presets</Typography>
+              <ButtonGroup size="small" variant="outlined">
+                <Button onClick={() => setAllQualities(0)}>Min</Button>
+                <Button onClick={() => setAllQualities(500)}>Base</Button>
+                <Button onClick={() => setAllQualities(1000)}>Max</Button>
+              </ButtonGroup>
+              <Box sx={{ flex: 1 }} />
+              <Chip label={`Output: ${outputQuality}`} color={outputQuality >= 800 ? "success" : outputQuality >= 400 ? "primary" : "default"} size="small" />
+            </Stack>
+
+            {/* Ingredients */}
+            <Typography variant="subtitle2"><BuildRounded sx={{ fontSize: 16, mr: 0.5 }} />Craft</Typography>
+            {ingredients.map((ing: any, idx: number) => {
+              const qv = qualities[idx] ?? 500
+              const color = getCommodityColor(ing.game_item?.sub_type) || "#616161"
+              return (
+                <Box key={idx} sx={{ border: 1, borderColor: "divider", borderRadius: 1, p: 1.5 }}>
+                  <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1 }}>
+                    <GameItemAvatar name={ing.game_item?.name} iconUrl={ing.game_item?.icon_url} subType={ing.game_item?.sub_type} itemType={ing.game_item?.type} size={28} />
+                    <Box sx={{ flex: 1 }}>
+                      <Typography variant="body2" fontWeight={600}>{ing.game_item?.name || "Unknown"}</Typography>
+                      <Typography variant="caption" color="text.secondary">{formatQty(ing.quantity_required)}{ing.min_quality_tier ? ` (min T${ing.min_quality_tier})` : " (min 0)"}</Typography>
+                    </Box>
+                  </Stack>
+                  <Stack direction="row" spacing={1.5} alignItems="center">
+                    <Typography variant="caption" color="text.secondary" sx={{ minWidth: 50 }}>Quality</Typography>
+                    <Slider size="small" min={0} max={1000} value={qv} onChange={(_, v) => setQuality(idx, v as number)} sx={{ flex: 1, color, "& .MuiSlider-thumb": { width: 14, height: 14 } }} />
+                    <TextField size="small" type="number" value={qv} onChange={e => setQuality(idx, +e.target.value || 0)} inputProps={{ min: 0, max: 1000 }} sx={{ width: 75 }} />
+                  </Stack>
+                  {(modsBySlot.get(ing.slot_name || ing.game_item?.name) || []).map((mod: any, mi: number) => {
+                    const factor = interpolateModifier(qv, mod.start_quality, mod.end_quality, mod.modifier_at_start, mod.modifier_at_end)
+                    const pct = (factor - 1) * 100
+                    return (
+                      <Stack key={mi} direction="row" spacing={1} alignItems="center" sx={{ mt: 0.5 }}>
+                        <Typography variant="caption" color="text.secondary" sx={{ minWidth: 120 }}>{propertyLabel(mod.property)}</Typography>
+                        <Typography variant="caption" fontWeight={600} color={pct >= 0 ? "success.main" : "error.main"}>×{factor.toFixed(3)} {pct >= 0 ? "+" : ""}{pct.toFixed(2)}%</Typography>
+                        <Typography variant="caption" color="text.disabled">Factor: ×{mod.modifier_at_start}–{mod.modifier_at_end}</Typography>
+                      </Stack>
+                    )
+                  })}
+                </Box>
+              )
+            })}
+
+            {bp?.crafting_time_seconds && (
+              <Typography variant="body2" color="text.secondary"><TimerRounded sx={{ fontSize: 16, mr: 0.5, verticalAlign: "text-bottom" }} />Craft Time: {formatTime(bp.crafting_time_seconds)}</Typography>
+            )}
+            <Typography variant="body2" color="text.secondary"><RecyclingRounded sx={{ fontSize: 16, mr: 0.5, verticalAlign: "text-bottom" }} />Disassemble: 15s · Returns 50% of materials</Typography>
           </Stack>
-          <Stack direction="row" spacing={2}>
-            <Typography variant="body2">
-              {t("crafting.successRate", "Success")}: {result.success_probability.toFixed(1)}%
-            </Typography>
-            <Typography variant="body2">
-              {t("crafting.criticalRate", "Critical")}: {result.critical_success_chance.toFixed(1)}%
-            </Typography>
-          </Stack>
-        </>
-      )}
-    </Stack>
+        )}
+
+        {/* Org Owners tab */}
+        {tab === 1 && spectrumId && (
+          <Box>
+            <Typography variant="subtitle2" sx={{ mb: 1 }}>Org members who own this blueprint</Typography>
+            {orgOwners?.members.length ? (
+              <Stack spacing={0.75}>
+                {orgOwners.members.map((m) => (
+                  <Stack key={m.user_id} direction="row" spacing={1} alignItems="center" sx={{ cursor: "pointer" }} onClick={() => { onClose(); navigate(`/user/${m.username}`) }}>
+                    <Avatar src={m.avatar} sx={{ width: 32, height: 32, fontSize: "0.65rem" }}>{m.display_name.slice(0, 2).toUpperCase()}</Avatar>
+                    <Box>
+                      <Typography variant="body2" fontWeight={600} color="primary">{m.display_name}</Typography>
+                      <Typography variant="caption" color="text.secondary">@{m.username}{m.acquisition_date && ` · ${new Date(m.acquisition_date).toLocaleDateString()}`}</Typography>
+                    </Box>
+                  </Stack>
+                ))}
+              </Stack>
+            ) : (
+              <Typography variant="body2" color="text.secondary">No org members have marked this blueprint as owned yet.</Typography>
+            )}
+          </Box>
+        )}
+      </DialogContent>
+    </Dialog>
   )
 }
