@@ -831,6 +831,15 @@ const injectedRtkApi = api
         }),
         providesTags: ["Game Data - Blueprints"],
       }),
+      getOrgBlueprintOwners: build.query<
+        GetOrgBlueprintOwnersApiResponse,
+        GetOrgBlueprintOwnersApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/game-data/blueprints/${queryArg.blueprintId}/org-owners/${queryArg.spectrumId}`,
+        }),
+        providesTags: ["Game Data - Blueprints"],
+      }),
       getFeatureFlag: build.query<
         GetFeatureFlagApiResponse,
         GetFeatureFlagApiArg
@@ -1824,6 +1833,21 @@ export type GetUserBlueprintInventoryApiArg = {
   page?: number
   /** Results per page (default: 50, max: 100) */
   pageSize?: number
+}
+export type GetOrgBlueprintOwnersApiResponse = /** status 200 Ok */ {
+  members: {
+    acquisition_date?: string
+    avatar?: string
+    display_name: string
+    username: string
+    user_id: string
+  }[]
+}
+export type GetOrgBlueprintOwnersApiArg = {
+  /** Blueprint UUID */
+  blueprintId: string
+  /** Org spectrum ID */
+  spectrumId: string
 }
 export type GetFeatureFlagApiResponse =
   /** status 200 Current feature flag setting */ GetFeatureFlagResponse
@@ -4272,6 +4296,7 @@ export const {
   useRemoveBlueprintFromInventoryMutation,
   useGetBlueprintCategoriesQuery,
   useGetUserBlueprintInventoryQuery,
+  useGetOrgBlueprintOwnersQuery,
   useGetFeatureFlagQuery,
   useSetFeatureFlagMutation,
   useGetCartQuery,

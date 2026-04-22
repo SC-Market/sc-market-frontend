@@ -15,8 +15,15 @@ import {
   Slider,
   Button,
   ButtonGroup,
+  Tabs,
+  Tab,
+  Avatar,
+  Tabs,
+  Tab,
+  Avatar,
 } from "@mui/material"
-import { useGetBlueprintDetailQuery } from "../../store/api/v2/market"
+import { useGetBlueprintDetailQuery, useGetOrgBlueprintOwnersQuery } from "../../store/api/v2/market"
+import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { formatCategoryName } from "../../util/categoryDisplay"
 import { getCommodityColor } from "../../util/gameIcons"
@@ -63,7 +70,15 @@ export function BlueprintDetail() {
   const outputItem = data?.output_item
   const itemName = outputItem?.name || bp?.blueprint_name || "Blueprint"
   const ingredients = data?.ingredients || []
-  const slotModifiers = (data as any)?.slot_modifiers || []
+  const slotModifiers = data?.slot_modifiers || []
+  const [currentOrg] = useCurrentOrg()
+  const spectrumId = currentOrg?.spectrum_id
+  const [tab, setTab] = useState(0)
+
+  const { data: orgOwners } = useGetOrgBlueprintOwnersQuery(
+    { blueprintId: id!, spectrumId: spectrumId! },
+    { skip: !id || !spectrumId },
+  )
 
   // Group slot modifiers by slot_name
   const modsBySlot = useMemo(() => {
@@ -158,7 +173,15 @@ export function BlueprintDetail() {
             </Typography>
           )}
 
-          <Divider sx={{ mb: 2 }} />
+          <Divider sx={{ mb: 1 }} />
+
+          {/* Tabs */}
+          <Tabs value={tab} onChange={(_, v) => setTab(v)} sx={{ mb: 2 }}>
+            <Tab label="Craft" />
+            {spectrumId && <Tab label="Org Owners" />}
+          </Tabs>
+
+          {tab === 0 && (<>
 
           {/* Quality Presets */}
           <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 2 }}>
@@ -255,6 +278,43 @@ export function BlueprintDetail() {
             <Typography variant="body2" color="text.secondary">
               ⏱ Craft Time: {formatTime(bp.crafting_time_seconds)}
             </Typography>
+          )}
+
+          </>)}
+
+          {/* Org Owners tab */}
+          {tab === 1 && spectrumId && (
+            <Box>
+              <Typography variant="subtitle2" sx={{ mb: 1 }}>
+                Org members who own this blueprint
+              </Typography>
+              {orgOwners?.members.length ? (
+                <Stack spacing={0.75}>
+                  {orgOwners.members.map((m) => (
+                    <Stack key={m.user_id} direction="row" spacing={1} alignItems="center"
+                      sx={{ cursor: "pointer" }}
+                      onClick={() => navigate(`/user/${m.username}`)}
+                    >
+                      <Avatar src={m.avatar} sx={{ width: 28, height: 28, fontSize: "0.6rem" }}>
+                        {m.display_name.slice(0, 2).toUpperCase()}
+                      </Avatar>
+                      <Box>
+                        <Typography variant="body2" fontWeight={600}>{m.display_name}</Typography>
+                        {m.acquisition_date && (
+                          <Typography variant="caption" color="text.secondary">
+                            Acquired {new Date(m.acquisition_date).toLocaleDateString()}
+                          </Typography>
+                        )}
+                      </Box>
+                    </Stack>
+                  ))}
+                </Stack>
+              ) : (
+                <Typography variant="body2" color="text.secondary">
+                  No org members have marked this blueprint as owned yet.
+                </Typography>
+              )}
+            </Box>
           )}
         </Grid>
       )}
