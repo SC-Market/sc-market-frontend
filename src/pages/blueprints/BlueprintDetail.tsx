@@ -84,6 +84,7 @@ export function BlueprintDetail() {
   const [currentOrg] = useCurrentOrg()
   const spectrumId = currentOrg?.spectrum_id
   const [tab, setTab] = useState(0)
+  const [missionsExpanded, setMissionsExpanded] = useState(false)
 
   const { data: orgOwners } = useGetOrgBlueprintOwnersQuery(
     { blueprintId: id!, spectrumId: spectrumId! },
@@ -169,13 +170,16 @@ export function BlueprintDetail() {
           </Stack>
 
           {/* Missions section */}
-          {data.missions_rewarding?.length > 0 && (
+          {data.missions_rewarding?.length > 0 && (() => {
+            const [expanded, setExpanded] = [missionsExpanded, setMissionsExpanded]
+            const missions = expanded ? data.missions_rewarding : data.missions_rewarding.slice(0, 8)
+            return (
             <Box sx={{ mb: 2 }}>
               <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
                 <TrackChangesRounded sx={{ fontSize: 16, mr: 0.5 }} />Missions ({data.missions_rewarding.length})
               </Typography>
               <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                {data.missions_rewarding.slice(0, 8).map((m: any) => (
+                {missions.map((m: any) => (
                   <Chip
                     key={m.mission_id}
                     label={m.mission_name}
@@ -185,11 +189,18 @@ export function BlueprintDetail() {
                   />
                 ))}
                 {data.missions_rewarding.length > 8 && (
-                  <Chip label={`+${data.missions_rewarding.length - 8} more`} size="small" variant="outlined" sx={{ height: 22 }} />
+                  <Chip
+                    label={expanded ? "Show less" : `+${data.missions_rewarding.length - 8} more`}
+                    size="small"
+                    variant="outlined"
+                    sx={{ height: 22, cursor: "pointer" }}
+                    onClick={() => setMissionsExpanded(!expanded)}
+                  />
                 )}
               </Box>
             </Box>
-          )}
+            )
+          })()}
 
           {!data.missions_rewarding?.length && (
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
