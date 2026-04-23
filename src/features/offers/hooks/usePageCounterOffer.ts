@@ -39,6 +39,7 @@ export function usePageCounterOffer(offerId: string | undefined) {
         title: session.offers[0].title,
         market_listings: session.offers[0].market_listings,
         status: "counteroffered",
+        v2_variant_items: session.offers[0].v2_variant_items,
       })
     }
   }, [offerQuery.data])

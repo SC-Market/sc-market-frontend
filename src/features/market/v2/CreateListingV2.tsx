@@ -27,6 +27,7 @@ import { StandardPageLayout } from "../../../components/layout/StandardPageLayou
 import { FormPaper } from "../../../components/paper/FormPaper";
 import { MarkdownEditor } from "../../../components/markdown/Markdown.lazy";
 import { GameItemSearchAutocomplete } from "../components/GameItemSearchAutocomplete";
+import { getQualityMode } from "../../../util/qualityMode";
 import { SelectPhotosArea } from "../../../components/modal/SelectPhotosArea";
 import { LocationSelector } from "../components/stock/LocationSelector";
 import { BulkDiscountTierEditor } from "../../../components/market/BulkDiscountTierEditor";
@@ -658,11 +659,9 @@ export function CreateListingV2() {
 
                     {/* Quality — conditional based on item type */}
                     {(() => {
-                      const t_ = (gameItemType || "").toLowerCase()
-                      const hasNumericQuality = t_.includes("resource") || t_.includes("commodity") || t_.includes("ore") || t_.includes("mineral")
-                      const hasTierQuality = t_.includes("armor") || t_.includes("weapon") || t_.includes("clothing") || t_.includes("undersuit") || t_.includes("helmet") || t_.includes("backpack")
-                      if (!hasNumericQuality && !hasTierQuality) return null
-                      return hasNumericQuality ? (
+                      const qm = getQualityMode(gameItemType)
+                      if (qm === "none") return null
+                      return qm === "value" ? (
                         <Grid item xs={12} sm={6} md={4}>
                           <NumericFormat
                         decimalScale={0}

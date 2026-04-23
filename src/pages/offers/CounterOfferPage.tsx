@@ -8,6 +8,7 @@ import { CounterOfferSubmitArea } from "../../views/offers/CounterOfferSubmitAre
 import { CounterOfferDetailsContext } from "../../hooks/offer/CounterOfferDetails"
 import { OfferServiceEditArea } from "../../views/offers/OfferServiceEditArea"
 import { OfferMarketListingsEditArea } from "../../views/offers/OfferMarketListingsEditArea"
+import { OfferMarketListingsEditAreaV2 } from "../../features/market/v2/OfferMarketListingsEditAreaV2"
 import { useTranslation } from "react-i18next"
 import { usePageCounterOffer } from "../../features/offers/hooks/usePageCounterOffer"
 
@@ -61,7 +62,11 @@ export function CounterOfferPage() {
         >
           <OfferDetailsEditArea session={pageData.data.session} />
           <OfferServiceEditArea offer={pageData.data.session} />
-          <OfferMarketListingsEditArea offer={pageData.data.session} />
+          {pageData.data.session.offers[0]?.v2_variant_items?.length ? (
+            <OfferMarketListingsEditAreaV2 offer={pageData.data.session} />
+          ) : (
+            <OfferMarketListingsEditArea offer={pageData.data.session} />
+          )}
           <CounterOfferSubmitArea session={pageData.data.session} />
         </CounterOfferDetailsContext.Provider>
       )}
