@@ -32,7 +32,7 @@ export function AdminFeatureFlagDetail() {
         { label },
       ]}
       sidebarOpen={true}
-      maxWidth="xl"
+      maxWidth="lg"
     >
       <AdminFeatureFlagDetailView flagName={flagName!} />
     </StandardPageLayout>
