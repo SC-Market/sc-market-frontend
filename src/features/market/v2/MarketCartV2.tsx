@@ -32,7 +32,7 @@ import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { EmptyCart } from "../../../components/empty-states"
 import { MarkdownEditor } from "../../../components/markdown/Markdown.lazy"
 import { StandardPageLayout } from "../../../components/layout/StandardPageLayout"
-import { ShoppingCartRounded, Warning } from "@mui/icons-material"
+import { ShoppingCartRounded, Warning, PlaylistAddRounded } from "@mui/icons-material"
 import {
   useGetCartQuery,
   useUpdateCartItemMutation,
@@ -42,6 +42,7 @@ import {
 } from "../../../store/api/v2/market"
 import { QualityBadge } from "../../../components/market/v2/QualityBadge"
 import { SellerNextAvailable } from "../../../components/market/SellerNextAvailable"
+import { ShoppingListPanel } from "../../../components/game-data/ShoppingListPanel"
 import { VariantSelector } from "../../../components/market/v2/VariantSelector"
 
 /**
@@ -587,6 +588,17 @@ export function MarketCartV2() {
           )}
       </Grid>
       </Grid>
+
+      {/* Shopping List */}
+      <Box sx={{ mt: 3 }}>
+        <Divider sx={{ mb: 2 }} />
+        <Typography variant="h6" sx={{ mb: 1.5 }}>
+          <PlaylistAddRounded sx={{ fontSize: 20, mr: 0.5, verticalAlign: "text-bottom" }} />
+          Crafting Shopping List
+        </Typography>
+        <ShoppingListPanel />
+      </Box>
+
       {/* Checkout Confirmation Dialog */}
       <Dialog
         open={checkoutDialogOpen}
