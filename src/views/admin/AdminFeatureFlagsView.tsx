@@ -43,17 +43,20 @@ import {
   useRemoveUserOverrideMutation,
 } from "../../store/api/v2/market"
 
+import { UserSearch } from "../../components/search/UserSearch"
+
 // ── Types ────────────────────────────────────────────────────────
 
 interface FeatureFlagConfig {
-  key: string
+  flag_name: string
   default_version: "V1" | "V2"
   rollout_percentage: number
   enabled: boolean
 }
 
-interface UserOverride {
+interface UserOverrideWithName {
   user_id: string
+  username: string
   market_version: "V1" | "V2"
   updated_at: string
 }
@@ -79,7 +82,7 @@ export function AdminFeatureFlagsView() {
   const [localConfig, setLocalConfig] = useState<Partial<FeatureFlagConfig>>({})
   const [saving, setSaving] = useState(false)
   const [addDialogOpen, setAddDialogOpen] = useState(false)
-  const [newUserId, setNewUserId] = useState("")
+  const [newUsername, setNewUsername] = useState("")
   const [newVersion, setNewVersion] = useState<"V1" | "V2">("V2")
 
   // Sync local state when config loads
@@ -106,25 +109,25 @@ export function AdminFeatureFlagsView() {
   }
 
   const handleAddOverride = async () => {
-    if (!newUserId.trim()) return
+    if (!newUsername.trim()) return
     try {
       await setUserOverride({
-        setUserOverrideRequest: { username: newUserId.trim(), market_version: newVersion },
+        setUserOverrideRequest: { username: newUsername.trim(), market_version: newVersion },
       }).unwrap()
-      issueAlert({ message: `Override set for ${newUserId}`, severity: "success" })
+      issueAlert({ message: `Override set for ${newUsername}`, severity: "success" })
       setAddDialogOpen(false)
-      setNewUserId("")
+      setNewUsername("")
     } catch (e: any) {
-      issueAlert({ message: e.message || "Failed", severity: "error" })
+      issueAlert({ message: e?.data?.message || e.message || "User not found", severity: "error" })
     }
   }
 
-  const handleRemoveOverride = async (userId: string) => {
+  const handleRemoveOverride = async (username: string) => {
     try {
-      await removeUserOverride({ username: userId }).unwrap()
-      issueAlert({ message: `Override removed for ${userId}`, severity: "success" })
+      await removeUserOverride({ username }).unwrap()
+      issueAlert({ message: `Override removed for ${username}`, severity: "success" })
     } catch (e: any) {
-      issueAlert({ message: e.message || "Failed", severity: "error" })
+      issueAlert({ message: e?.data?.message || e.message || "Failed", severity: "error" })
     }
   }
 
@@ -196,7 +199,7 @@ export function AdminFeatureFlagsView() {
                   <Typography>Enabled</Typography>
                   <Switch
                     checked={localConfig.enabled ?? true}
-                    onChange={(e) => setLocalConfig((c) => ({ ...c, enabled: e.target.checked }))}
+                    onChange={(e) => setLocalConfig((c: any) => ({ ...c, enabled: e.target.checked }))}
                   />
                 </Stack>
                 <Typography variant="caption" color="text.secondary">
@@ -210,7 +213,7 @@ export function AdminFeatureFlagsView() {
                   <Select
                     value={localConfig.default_version ?? "V1"}
                     label="Default Version"
-                    onChange={(e) => setLocalConfig((c) => ({ ...c, default_version: e.target.value as "V1" | "V2" }))}
+                    onChange={(e) => setLocalConfig((c: any) => ({ ...c, default_version: e.target.value as "V1" | "V2" }))}
                   >
                     <MenuItem value="V1">V1 (Production)</MenuItem>
                     <MenuItem value="V2">V2 (New)</MenuItem>
@@ -224,7 +227,7 @@ export function AdminFeatureFlagsView() {
                 </Typography>
                 <Slider
                   value={localConfig.rollout_percentage ?? 0}
-                  onChange={(_, v) => setLocalConfig((c) => ({ ...c, rollout_percentage: v as number }))}
+                  onChange={(_, v) => setLocalConfig((c: any) => ({ ...c, rollout_percentage: v as number }))}
                   min={0}
                   max={100}
                   step={5}
@@ -280,7 +283,7 @@ export function AdminFeatureFlagsView() {
         <Table size="small">
           <TableHead>
             <TableRow>
-              <TableCell>User ID</TableCell>
+              <TableCell>Username</TableCell>
               <TableCell>Version</TableCell>
               <TableCell>Updated</TableCell>
               <TableCell align="right">Actions</TableCell>
@@ -296,10 +299,10 @@ export function AdminFeatureFlagsView() {
                 </TableCell>
               </TableRow>
             )}
-            {overridesData?.overrides.map((o: UserOverride) => (
+            {overridesData?.overrides.map((o: UserOverrideWithName) => (
               <TableRow key={o.user_id}>
                 <TableCell>
-                  <Typography variant="body2" fontFamily="monospace">{o.user_id}</Typography>
+                  <Typography variant="body2" fontWeight="bold">{o.username}</Typography>
                 </TableCell>
                 <TableCell>
                   <Chip
@@ -310,7 +313,7 @@ export function AdminFeatureFlagsView() {
                 </TableCell>
                 <TableCell>{new Date(o.updated_at).toLocaleString()}</TableCell>
                 <TableCell align="right">
-                  <IconButton size="small" onClick={() => handleRemoveOverride(o.user_id)} color="error">
+                  <IconButton size="small" onClick={() => handleRemoveOverride(o.username)} color="error">
                     <DeleteRounded fontSize="small" />
                   </IconButton>
                 </TableCell>
@@ -325,14 +328,13 @@ export function AdminFeatureFlagsView() {
         <DialogTitle>Add User Override</DialogTitle>
         <DialogContent>
           <Stack spacing={2} sx={{ mt: 1 }}>
-            <TextField
-              label="User ID"
-              value={newUserId}
-              onChange={(e) => setNewUserId(e.target.value)}
-              fullWidth
-              size="small"
-              placeholder="UUID of the user"
+            <UserSearch
+              onUserSelect={(user) => setNewUsername(user.username)}
+              placeholder="Search by username"
             />
+            {newUsername && (
+              <Chip label={newUsername} onDelete={() => setNewUsername("")} />
+            )}
             <FormControl fullWidth size="small">
               <InputLabel>Version</InputLabel>
               <Select
@@ -347,8 +349,8 @@ export function AdminFeatureFlagsView() {
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setAddDialogOpen(false)}>Cancel</Button>
-          <Button variant="contained" onClick={handleAddOverride} disabled={!newUserId.trim()}>
+          <Button onClick={() => { setAddDialogOpen(false); setNewUsername("") }}>Cancel</Button>
+          <Button variant="contained" onClick={handleAddOverride} disabled={!newUsername.trim()}>
             Add Override
           </Button>
         </DialogActions>
