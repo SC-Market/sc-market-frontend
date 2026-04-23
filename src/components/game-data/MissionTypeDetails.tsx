@@ -201,14 +201,55 @@ function fmtRange(min: number, max: number): string {
   return min === max ? `${min}` : `${min}–${max}`
 }
 
+/** Compact summary chips for quick-glance mission info */
+function SummaryChips({ chips }: { chips: { label: string; color?: "default" | "primary" | "secondary" | "error" | "info" | "success" | "warning"; icon?: React.ReactElement }[] }) {
+  if (!chips.length) return null
+  return (
+    <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap sx={{ mb: 0.5 }}>
+      {chips.map((c, i) => (
+        <Chip key={i} label={c.label} icon={c.icon} size="small" color={c.color || "default"} variant="outlined" sx={{ height: 22, fontSize: "0.7rem" }} />
+      ))}
+    </Stack>
+  )
+}
+
+function shipChips(data: MissionDetailResponse): { label: string; color: "error" | "info"; icon: React.ReactElement }[] {
+  const enc = data.ship_encounters || []
+  const chips: { label: string; color: "error" | "info"; icon: React.ReactElement }[] = []
+  const hostile = enc.filter(e => e.alignment === "hostile")
+  const friendly = enc.filter(e => e.alignment === "friendly")
+  if (hostile.length) {
+    const min = hostile.reduce((s, e) => s + e.waves.reduce((ws, w) => ws + w.min_ships, 0), 0)
+    const max = hostile.reduce((s, e) => s + e.waves.reduce((ws, w) => ws + w.max_ships, 0), 0)
+    chips.push({ label: `${fmtRange(min, max)} hostile`, color: "error", icon: <RocketLaunchRounded sx={{ fontSize: 14 }} /> })
+  }
+  if (friendly.length) {
+    const min = friendly.reduce((s, e) => s + e.waves.reduce((ws, w) => ws + w.min_ships, 0), 0)
+    const max = friendly.reduce((s, e) => s + e.waves.reduce((ws, w) => ws + w.max_ships, 0), 0)
+    chips.push({ label: `${fmtRange(min, max)} friendly`, color: "info", icon: <ShieldRounded sx={{ fontSize: 14 }} /> })
+  }
+  return chips
+}
+
 // ============================================================================
 // Per-type renderers
 // ============================================================================
 
 /** Mercenary — ship encounters, NPC squads, BP rewards */
 function MercenaryDetails({ data }: { data: MissionDetailResponse }) {
+  const npcCount = (data.npc_encounters || []).reduce((s, n) => s + n.count, 0)
+  const entityCount = (data.entity_spawns || []).reduce((s, e) => s + e.count, 0)
+  const poolCount = (data.ship_encounters || []).flatMap(e => e.ship_pool || []).length
+  const chips = [
+    ...shipChips(data),
+    ...(npcCount > 0 ? [{ label: `${npcCount} NPCs`, color: "warning" as const }] : []),
+    ...(entityCount > 0 ? [{ label: `${entityCount} targets`, color: "secondary" as const }] : []),
+    ...(poolCount > 0 ? [{ label: `${new Set((data.ship_encounters || []).flatMap(e => e.ship_pool || [])).size} ship types`, color: "info" as const }] : []),
+    ...(data.blueprint_rewards?.length ? [{ label: `${data.blueprint_rewards.reduce((s, p) => s + p.blueprints.length, 0)} BPs`, color: "success" as const, icon: <BuildRounded sx={{ fontSize: 14 }} /> }] : []),
+  ]
   return (
     <Stack spacing={1.5}>
+      <SummaryChips chips={chips} />
       <ShipEncountersSection encounters={data.ship_encounters || []} />
       <NpcEncountersSection encounters={data.npc_encounters || []} />
       <EntitySpawnsSection spawns={data.entity_spawns || []} />
@@ -221,8 +262,15 @@ function MercenaryDetails({ data }: { data: MissionDetailResponse }) {
 
 /** Bounty Hunter — ship encounters with pools, NPC squads */
 function BountyHunterDetails({ data }: { data: MissionDetailResponse }) {
+  const poolSize = new Set((data.ship_encounters || []).flatMap(e => e.ship_pool || [])).size
+  const chips = [
+    ...shipChips(data),
+    ...(poolSize > 0 ? [{ label: `${poolSize} ship types`, color: "info" as const }] : []),
+    ...(data.blueprint_rewards?.length ? [{ label: `${data.blueprint_rewards.reduce((s, p) => s + p.blueprints.length, 0)} BPs`, color: "success" as const, icon: <BuildRounded sx={{ fontSize: 14 }} /> }] : []),
+  ]
   return (
     <Stack spacing={1.5}>
+      <SummaryChips chips={chips} />
       <ShipEncountersSection encounters={data.ship_encounters || []} />
       <NpcEncountersSection encounters={data.npc_encounters || []} />
       {!data.ship_encounters?.length && !data.npc_encounters?.length && (
@@ -236,8 +284,18 @@ function BountyHunterDetails({ data }: { data: MissionDetailResponse }) {
 function SalvageDetails({ data }: { data: MissionDetailResponse }) {
   const m = data.mission
   const isFee = (m.credit_reward_min ?? 0) < 0
+  const hauling = data.hauling_orders || []
+  const totalScu = hauling.reduce((s, h) => s + h.max_scu, 0)
+  const entityCount = (data.entity_spawns || []).reduce((s, e) => s + e.count, 0)
+  const chips = [
+    ...(isFee ? [{ label: `Fee: ${Math.abs(m.credit_reward_min!).toLocaleString()} aUEC`, color: "warning" as const }] : []),
+    ...(totalScu > 0 ? [{ label: `${totalScu} SCU`, color: "info" as const, icon: <LocalShippingRounded sx={{ fontSize: 14 }} /> }] : []),
+    ...(entityCount > 0 ? [{ label: `${entityCount} wrecks`, color: "secondary" as const, icon: <RecyclingRounded sx={{ fontSize: 14 }} /> }] : []),
+    ...shipChips(data),
+  ]
   return (
     <Stack spacing={1.5}>
+      <SummaryChips chips={chips} />
       {isFee && (
         <Paper variant="outlined" sx={{ p: 1.5, borderColor: "warning.main" }}>
           <Typography variant="subtitle2" color="warning.main">Buy-in Required</Typography>
@@ -253,8 +311,15 @@ function SalvageDetails({ data }: { data: MissionDetailResponse }) {
 
 /** Delivery — hauling orders, pickup/delivery info */
 function DeliveryDetails({ data }: { data: MissionDetailResponse }) {
+  const hauling = data.hauling_orders || []
+  const totalScu = hauling.reduce((s, h) => s + h.max_scu, 0)
+  const chips = [
+    ...(totalScu > 0 ? [{ label: `${totalScu} SCU`, color: "info" as const, icon: <LocalShippingRounded sx={{ fontSize: 14 }} /> }] : []),
+    ...shipChips(data),
+  ]
   return (
     <Stack spacing={1.5}>
+      <SummaryChips chips={chips} />
       <HaulingOrdersSection orders={data.hauling_orders || []} />
       <ShipEncountersSection encounters={data.ship_encounters || []} />
       {!data.hauling_orders?.length && !data.ship_encounters?.length && (
@@ -268,8 +333,15 @@ function DeliveryDetails({ data }: { data: MissionDetailResponse }) {
 
 /** Hauling — cargo details, hauling orders */
 function HaulingDetails({ data }: { data: MissionDetailResponse }) {
+  const hauling = data.hauling_orders || []
+  const totalScu = hauling.reduce((s, h) => s + h.max_scu, 0)
+  const chips = [
+    ...(totalScu > 0 ? [{ label: `${totalScu} SCU cargo`, color: "info" as const, icon: <LocalShippingRounded sx={{ fontSize: 14 }} /> }] : []),
+    ...(hauling.length > 0 ? [{ label: `${hauling.length} resources`, color: "secondary" as const }] : []),
+  ]
   return (
     <Stack spacing={1.5}>
+      <SummaryChips chips={chips} />
       <HaulingOrdersSection orders={data.hauling_orders || []} />
       {!data.hauling_orders?.length && (
         <Typography variant="body2" color="text.secondary">
@@ -282,8 +354,15 @@ function HaulingDetails({ data }: { data: MissionDetailResponse }) {
 
 /** Mining — hauling orders (ore output), BP rewards */
 function MiningDetails({ data }: { data: MissionDetailResponse }) {
+  const hauling = data.hauling_orders || []
+  const totalScu = hauling.reduce((s, h) => s + h.max_scu, 0)
+  const chips = [
+    ...(totalScu > 0 ? [{ label: `${totalScu} SCU ore`, color: "info" as const, icon: <LocalShippingRounded sx={{ fontSize: 14 }} /> }] : []),
+    ...(data.blueprint_rewards?.length ? [{ label: `${data.blueprint_rewards.reduce((s, p) => s + p.blueprints.length, 0)} BPs`, color: "success" as const, icon: <BuildRounded sx={{ fontSize: 14 }} /> }] : []),
+  ]
   return (
     <Stack spacing={1.5}>
+      <SummaryChips chips={chips} />
       <HaulingOrdersSection orders={data.hauling_orders || []} />
       <EntitySpawnsSection spawns={data.entity_spawns || []} />
       {!data.hauling_orders?.length && (
@@ -295,8 +374,13 @@ function MiningDetails({ data }: { data: MissionDetailResponse }) {
 
 /** Maintenance — entity spawns (relay/pipe repair targets) */
 function MaintenanceDetails({ data }: { data: MissionDetailResponse }) {
+  const entityCount = (data.entity_spawns || []).reduce((s, e) => s + e.count, 0)
+  const chips = [
+    ...(entityCount > 0 ? [{ label: `${entityCount} repair targets`, color: "warning" as const, icon: <HandymanRounded sx={{ fontSize: 14 }} /> }] : []),
+  ]
   return (
     <Stack spacing={1.5}>
+      <SummaryChips chips={chips} />
       <EntitySpawnsSection spawns={data.entity_spawns || []} />
       {!data.entity_spawns?.length && (
         <Typography variant="body2" color="text.secondary">No repair target data available.</Typography>
@@ -307,8 +391,13 @@ function MaintenanceDetails({ data }: { data: MissionDetailResponse }) {
 
 /** Investigation — accept locations, ship encounters */
 function InvestigationDetails({ data }: { data: MissionDetailResponse }) {
+  const chips = [
+    ...shipChips(data),
+    ...((data.entity_spawns?.length ?? 0) > 0 ? [{ label: `${data.entity_spawns!.reduce((s, e) => s + e.count, 0)} clues`, color: "info" as const, icon: <SearchRounded sx={{ fontSize: 14 }} /> }] : []),
+  ]
   return (
     <Stack spacing={1.5}>
+      <SummaryChips chips={chips} />
       <ShipEncountersSection encounters={data.ship_encounters || []} />
       <EntitySpawnsSection spawns={data.entity_spawns || []} />
       {!data.ship_encounters?.length && !data.entity_spawns?.length && (
@@ -324,8 +413,12 @@ function InvestigationDetails({ data }: { data: MissionDetailResponse }) {
 function RaceDetails({ data }: { data: MissionDetailResponse }) {
   const m = data.mission
   const isFee = (m.credit_reward_min ?? 0) < 0
+  const chips = [
+    ...(isFee ? [{ label: `Entry: ${Math.abs(m.credit_reward_min!).toLocaleString()} aUEC`, color: "warning" as const, icon: <SportsScoreRounded sx={{ fontSize: 14 }} /> }] : []),
+  ]
   return (
     <Stack spacing={1.5}>
+      <SummaryChips chips={chips} />
       {isFee && (
         <Paper variant="outlined" sx={{ p: 1.5, borderColor: "warning.main" }}>
           <Stack direction="row" spacing={1} alignItems="center">
