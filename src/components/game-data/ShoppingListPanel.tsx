@@ -35,12 +35,12 @@ import { useNavigate } from "react-router-dom"
 import {
   useGetWishlistsQuery,
   useGetWishlistQuery,
-  useGetShoppingListQuery,
+  useGenerateShoppingListQuery,
   useUpdateWishlistItemMutation,
   useRemoveWishlistItemMutation,
   type ShoppingListMaterial,
   type WishlistItemWithDetails,
-} from "../../store/wishlistsApi"
+} from "../../store/api/v2/market"
 import { GameItemAvatar } from "../game-data/GameItemAvatar"
 
 /** Format SCU quantity */
@@ -88,8 +88,8 @@ export function ShoppingListPanel() {
 // ============================================================================
 
 function ShoppingListDetail({ wishlistId }: { wishlistId: string }) {
-  const { data: detail } = useGetWishlistQuery({ wishlist_id: wishlistId })
-  const { data: shoppingList, isLoading } = useGetShoppingListQuery(wishlistId)
+  const { data: detail } = useGetWishlistQuery({ wishlistId })
+  const { data: shoppingList, isLoading } = useGenerateShoppingListQuery({ wishlistId })
   const [expanded, setExpanded] = useState(true)
 
   if (isLoading) return <CircularProgress size={24} />
@@ -172,12 +172,12 @@ function BlueprintItemRow({ item, wishlistId }: { item: WishlistItemWithDetails;
         value={item.desired_quantity}
         onChange={(e) => {
           const qty = Math.max(1, parseInt(e.target.value) || 1)
-          updateItem({ wishlist_id: wishlistId, item_id: item.item_id, body: { desired_quantity: qty } })
+          updateItem({ wishlistId, itemId: item.item_id, updateWishlistItemRequest: { desired_quantity: qty } })
         }}
         inputProps={{ min: 1, style: { textAlign: "center" } }}
         sx={{ width: 50, "& input": { py: 0.25, fontSize: "0.8rem" } }}
       />
-      <IconButton size="small" onClick={() => removeItem({ wishlist_id: wishlistId, item_id: item.item_id })}>
+      <IconButton size="small" onClick={() => removeItem({ wishlistId, itemId: item.item_id })}>
         <DeleteRounded sx={{ fontSize: 16 }} />
       </IconButton>
     </Stack>
