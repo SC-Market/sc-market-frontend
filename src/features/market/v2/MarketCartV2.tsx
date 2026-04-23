@@ -378,26 +378,35 @@ export function MarketCartV2() {
 
       const hasPriceChanges = cartData.items.some((item) => item.price_changed)
 
+      // Get note from the first seller group (cart is single-seller)
+      const sellerName = cartData.items[0]?.listing.seller_name
+      const note = sellerName ? notes[sellerName] : undefined
+
       try {
         const result = await checkoutCart({
           checkoutCartRequest: {
             confirm_price_changes: hasPriceChanges,
+            note: note || undefined,
           },
         }).unwrap()
 
         setCheckoutDialogOpen(false)
         issueAlert({
-          message: t("cart.checkoutSuccess", "Order created successfully"),
+          message: t("cart.checkoutSuccess", "Offer submitted successfully"),
           severity: "success",
         })
 
-        navigate(`/offer/${result.order_id}`)
+        if (result.discord_invite) {
+          window.open(`https://discord.gg/${result.discord_invite}`, "_blank")
+        }
+
+        navigate(`/offer/${result.session_id}`)
       } catch (err: any) {
         setCheckoutDialogOpen(false)
         issueAlert(err)
       }
     },
-    [cartData, checkoutCart, issueAlert, navigate, t]
+    [cartData, checkoutCart, issueAlert, navigate, t, notes]
   )
 
   // Check if any items are unavailable
