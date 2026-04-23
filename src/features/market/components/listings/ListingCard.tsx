@@ -13,6 +13,7 @@ import {
 } from "@mui/material"
 import React, { useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
+import { formatPrice } from "../../../../util/formatPrice"
 import { Link, useNavigate } from "react-router-dom"
 import { RefreshRounded, EditRounded, ShareRounded } from "@mui/icons-material"
 import {
@@ -357,11 +358,11 @@ export const ItemListingBase = React.memo(
                     fontWeight={"bold"}
                     noWrap
                     sx={{
-                      fontSize: `${listing.price.toLocaleString().length > 10 ? 0.75 : 0.95}rem`,
+                      fontSize: "0.95rem",
                       mb: 0.5,
                     }}
                   >
-                    {listing.price.toLocaleString(i18n.language)} aUEC
+                    {formatPrice(listing.price)}
                   </Typography>
                   <Typography
                     variant={"body2"}
@@ -653,9 +654,9 @@ export const ItemListingBase = React.memo(
                     color={"primary"}
                     fontWeight={"bold"}
                     noWrap
-                    sx={{ fontSize: `${listing.price.toLocaleString().length > 10 ? 0.9 : 1.15}rem` }}
+                    sx={{ fontSize: "1.15rem" }}
                   >
-                    {listing.price.toLocaleString(i18n.language)} aUEC
+                    {formatPrice(listing.price)}
                   </Typography>
                   <Typography
                     variant={"subtitle2"}

@@ -33,6 +33,7 @@ import { MarketListingRating } from "../../../components/rating/ListingRating";
 import { HideOnScroll, MarketNavArea } from "../components/MarketNavArea";
 import { useSearchListingsQuery } from "../../../store/api/v2/market";
 import type { ListingSearchResult } from "../../../store/api/v2/market";
+import { formatPriceRange } from "../../../util/formatPrice";
 import { QualityFilter } from "../../../components/market/v2/QualityFilter";
 import { LanguageFilter } from "../../../components/search/LanguageFilter";
 import { ListingWrapper } from "../components/listings/ListingCard";
@@ -796,9 +797,7 @@ export function ListingCardV2({ listing, index }: ListingCardV2Props) {
   const navigate = useNavigate();
   const { openAddToCart } = useCartDrawer();
 
-  const priceDisplay = listing.price_min === listing.price_max
-    ? `${listing.price_min.toLocaleString(i18n.language)} aUEC`
-    : `${listing.price_min.toLocaleString(i18n.language)} – ${listing.price_max.toLocaleString(i18n.language)} aUEC`;
+  const priceDisplay = formatPriceRange(listing.price_min, listing.price_max);
 
   const isNew = isAfter(new Date(listing.created_at), subDays(new Date(), 3));
 
@@ -930,7 +929,7 @@ export function ListingCardV2({ listing, index }: ListingCardV2Props) {
                   color="primary"
                   fontWeight="bold"
                   noWrap
-                  sx={{ fontSize: priceDisplay.length > 20 ? "0.7rem" : priceDisplay.length > 14 ? "0.8rem" : "0.95rem", mb: 0.5 }}
+                  sx={{ fontSize: "0.95rem", mb: 0.5 }}
                 >
                   {priceDisplay}
                 </Typography>
