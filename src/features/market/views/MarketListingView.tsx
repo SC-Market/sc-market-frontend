@@ -17,6 +17,7 @@ import {
   Typography,
   Skeleton,
   TablePagination,
+  Paper,
   Tabs,
   Tab,
   useMediaQuery,
@@ -1056,7 +1057,7 @@ export function MarketListingView() {
                           <Divider light />
                         </>
                       )}
-                      <Box sx={{ paddingTop: 2 }}>
+                      <Paper variant="outlined" sx={{ p: 2, mt: 2 }}>
                         <Typography
                           variant={"subtitle1"}
                           fontWeight={"bold"}
@@ -1067,7 +1068,7 @@ export function MarketListingView() {
                         <Typography variant={"body2"}>
                           <MarkdownRender text={details.description} />
                         </Typography>
-                      </Box>
+                      </Paper>
                       {details.game_item_id && (
                         <ItemAttributesSection
                           gameItemId={details.game_item_id}
