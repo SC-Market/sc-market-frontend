@@ -764,6 +764,32 @@ function qualityColor(tier: number): string {
   }
 }
 
+/** Quality value (0-1000) to color */
+function qualityValueColor(value: number): string {
+  if (value >= 800) return "#ff9800"  // gold
+  if (value >= 600) return "#9c27b0"  // purple
+  if (value >= 400) return "#2196f3"  // blue
+  if (value >= 200) return "#4caf50"  // green
+  return "#757575"                     // grey
+}
+
+/** Format quality display — prefers value (0-1000) over tier (1-5) */
+function qualityChipProps(listing: ListingSearchResult): { label: string; color: string } | null {
+  if (listing.quality_value_min != null) {
+    const min = listing.quality_value_min
+    const max = listing.quality_value_max ?? min
+    const label = min === max ? `${min}` : `${min}–${max}`
+    return { label, color: qualityValueColor(max) }
+  }
+  if (listing.quality_tier_min != null) {
+    const min = listing.quality_tier_min
+    const max = listing.quality_tier_max ?? min
+    const label = min === max ? `Q${min}` : `Q${min}–${max}`
+    return { label, color: qualityColor(max) }
+  }
+  return null
+}
+
 export function ListingCardV2({ listing, index }: ListingCardV2Props) {
   const theme = useTheme<ExtendedTheme>();
   const { i18n } = useTranslation();
@@ -842,27 +868,27 @@ export function ListingCardV2({ listing, index }: ListingCardV2Props) {
                   }}
                 />
               )}
-              {listing.quality_tier_min != null && (
-                <Chip
-                  label={listing.quality_tier_min === listing.quality_tier_max || !listing.quality_tier_max
-                    ? `Q${listing.quality_tier_min}`
-                    : `Q${listing.quality_tier_min}–${listing.quality_tier_max}`}
-                  size="small"
-                  sx={{
-                    position: "absolute",
-                    top: 4,
-                    right: listing.quantity_available === 0 ? undefined : 4,
-                    left: listing.quantity_available === 0 ? 4 : undefined,
-                    bottom: listing.quantity_available === 0 ? undefined : undefined,
-                    zIndex: 2,
-                    fontWeight: "bold",
-                    fontSize: "0.65rem",
-                    height: 18,
-                    bgcolor: qualityColor(listing.quality_tier_max || listing.quality_tier_min),
-                    color: "#fff",
-                  }}
-                />
-              )}
+              {(() => {
+                const qc = qualityChipProps(listing)
+                return qc && (
+                  <Chip
+                    label={qc.label}
+                    size="small"
+                    sx={{
+                      position: "absolute",
+                      top: 4,
+                      right: listing.quantity_available === 0 ? undefined : 4,
+                      left: listing.quantity_available === 0 ? 4 : undefined,
+                      zIndex: 2,
+                      fontWeight: "bold",
+                      fontSize: "0.65rem",
+                      height: 18,
+                      bgcolor: qc.color,
+                      color: "#fff",
+                    }}
+                  />
+                )
+              })()}
               <CardMedia
                 component="img"
                 loading="lazy"

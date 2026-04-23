@@ -2515,6 +2515,10 @@ export type ListingSearchResult = {
   quality_tier_min?: number
   /** Maximum quality tier available (1-5) */
   quality_tier_max?: number
+  /** Minimum quality value available (0-1000) */
+  quality_value_min?: number
+  /** Maximum quality value available (0-1000) */
+  quality_value_max?: number
   /** Number of unique variants in this listing */
   variant_count: number
   /** Seller type (user or contractor) */
