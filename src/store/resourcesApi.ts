@@ -2,8 +2,8 @@
  * Resources API - RTK Query hooks for Game Data Resources
  */
 
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
-import { BACKEND_URL } from "../util/constants"
+import { createApi } from "@reduxjs/toolkit/query/react"
+import { createV2BaseQuery } from "./generatedApiV2"
 
 export interface ResourceSearchResult {
   resource_id: string
@@ -78,10 +78,7 @@ export interface ResourceDetailResponse {
 
 export const resourcesApi = createApi({
   reducerPath: "resourcesApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: `${BACKEND_URL}/api/v2/game-data/resources`,
-    credentials: "include",
-  }),
+  baseQuery: createV2BaseQuery("/game-data/resources"),
   tagTypes: ["Resources", "ResourceDetail", "ResourceCategories"],
   endpoints: (builder) => ({
     searchResources: builder.query<SearchResourcesResponse, SearchResourcesParams>({

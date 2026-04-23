@@ -8,8 +8,8 @@
  * - Crafting history
  */
 
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
-import { BACKEND_URL } from "../util/constants"
+import { createApi } from "@reduxjs/toolkit/query/react"
+import { createV2BaseQuery } from "./generatedApiV2"
 
 // ============================================================================
 // Types
@@ -114,10 +114,7 @@ export interface GetCraftingHistoryResponse {
 
 export const craftingApi = createApi({
   reducerPath: "craftingApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: `${BACKEND_URL}/api/v2/game-data/crafting`,
-    credentials: "include",
-  }),
+  baseQuery: createV2BaseQuery("/game-data/crafting"),
   tagTypes: ["CraftableItems", "CraftingHistory"],
   endpoints: (builder) => ({
     // Get craftable items from stock

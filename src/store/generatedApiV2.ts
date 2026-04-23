@@ -28,7 +28,6 @@ const baseQueryWithReauth: BaseQueryFn<
 
   if (result.error?.status === 401) {
     if (!refreshPromise) {
-      // Use the root URL for auth refresh, not /api/v2
       const authQuery = fetchBaseQuery({
         baseUrl: `${BACKEND_URL}`,
         credentials: "include",
@@ -50,6 +49,33 @@ const baseQueryWithReauth: BaseQueryFn<
   }
 
   return result
+}
+
+/**
+ * Create a base query with reauth for a V2 sub-path.
+ * Use this for standalone createApi instances that need the same auth handling.
+ */
+export function createV2BaseQuery(subPath: string): BaseQueryFn<string | FetchArgs, unknown, FetchBaseQueryError> {
+  const query = fetchBaseQuery({
+    baseUrl: `${BACKEND_URL}/api/v2${subPath}`,
+    credentials: "include",
+  })
+  return async (args, api, extraOptions) => {
+    let result = await query(args, api, extraOptions)
+    if (result.error?.status === 401) {
+      if (!refreshPromise) {
+        const authQuery = fetchBaseQuery({ baseUrl: `${BACKEND_URL}`, credentials: "include" })
+        refreshPromise = (async () => {
+          const r = await authQuery({ url: "/api/auth/refresh", method: "POST" }, api, extraOptions)
+          return !!r.data
+        })()
+        refreshPromise.finally(() => { refreshPromise = null })
+      }
+      const refreshed = await refreshPromise
+      if (refreshed) result = await query(args, api, extraOptions)
+    }
+    return result
+  }
 }
 
 const baseQueryWithRetry = retry(baseQueryWithReauth, {

@@ -595,9 +595,6 @@ const injectedRtkApi = api
       >({
         query: (queryArg) => ({
           url: `/game-data/missions/${queryArg.missionId}`,
-          params: {
-            user_id: queryArg.userId,
-          },
         }),
         providesTags: ["Game Data - Missions"],
       }),
@@ -607,9 +604,6 @@ const injectedRtkApi = api
       >({
         query: (queryArg) => ({
           url: `/game-data/missions/by-code/${queryArg.missionCode}`,
-          params: {
-            user_id: queryArg.userId,
-          },
         }),
         providesTags: ["Game Data - Missions"],
       }),
@@ -774,9 +768,6 @@ const injectedRtkApi = api
       >({
         query: (queryArg) => ({
           url: `/game-data/blueprints/${queryArg.blueprintId}`,
-          params: {
-            user_id: queryArg.userId,
-          },
         }),
         providesTags: ["Game Data - Blueprints"],
       }),
@@ -1627,15 +1618,12 @@ export type GetMissionDetailApiResponse =
 export type GetMissionDetailApiArg = {
   /** Mission UUID */
   missionId: string
-  /** Optional user ID for user-specific data */
-  userId?: string
 }
 export type GetMissionDetailByCodeApiResponse =
   /** status 200 Ok */ MissionDetailResponse
 export type GetMissionDetailByCodeApiArg = {
   /** The mission code string (e.g., pu_eliminatespecific_lawful_stanton4_intro) */
   missionCode: string
-  userId?: string
 }
 export type GetMissionBlueprintsApiResponse =
   /** status 200 Array of blueprint details with reward information */ BlueprintDetail[]
@@ -1780,8 +1768,6 @@ export type GetBlueprintDetailApiResponse =
 export type GetBlueprintDetailApiArg = {
   /** Blueprint UUID */
   blueprintId: string
-  /** Optional user ID for user-specific data */
-  userId?: string
 }
 export type GetBlueprintMissionsApiResponse =
   /** status 200 Array of missions that reward this blueprint */ MissionRewardingBlueprint[]
@@ -2370,13 +2356,11 @@ export type GetOrderDetailResponse = {
   items: OrderItemDetail[]
 }
 export type UserSummary = {
-  user_id: string
   username: string
   display_name?: string
   avatar?: string | null
 }
 export type OrgSummary = {
-  contractor_id: string
   spectrum_id: string
   name: string
   avatar?: string | null
@@ -2406,7 +2390,8 @@ export type OfferV2 = {
   payment_type: string
   status: string
   created_at: string
-  actor_id: string
+  /** Username of the user who created this offer */
+  actor_username: string
   /** V1 market listings (always present) */
   market_listings: OfferMarketListingV2[]
   service?: {
@@ -2421,7 +2406,8 @@ export type GetOfferSessionV2Response = {
   order_id?: string
   discord_invite?: string | null
   customer: UserSummary
-  seller: (UserSummary | OrgSummary) | null
+  assigned_to: UserSummary | null
+  contractor: OrgSummary | null
   offers: OfferV2[]
 }
 export type OfferSessionV2 = {
@@ -2431,7 +2417,8 @@ export type OfferSessionV2 = {
   order_id?: string
   discord_invite?: string | null
   customer: UserSummary
-  seller: (UserSummary | OrgSummary) | null
+  assigned_to: UserSummary | null
+  contractor: OrgSummary | null
   offers: OfferV2[]
 }
 export type SearchOffersV2Response = {
