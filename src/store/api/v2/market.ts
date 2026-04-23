@@ -2022,7 +2022,7 @@ export type UpdateConfigApiResponse = /** status 200 Ok */ FeatureFlagConfig
 export type UpdateConfigApiArg = {
   updateConfigRequest: UpdateConfigRequest
 }
-export type GetStatsApiResponse = /** status 200 Ok */ FeatureFlagStats
+export type GetStatsApiResponse = /** status 200 Ok */ FeatureFlagStats[]
 export type GetStatsApiArg = void
 export type GetUserOverridesApiResponse =
   /** status 200 Ok */ UserOverridesResponse
@@ -4011,15 +4011,22 @@ export type BlueprintCategory = {
   count: number
 }
 export type MarketVersion = "V1" | "V2"
+export type RecordStringBoolean = {
+  [key: string]: boolean
+}
 export type GetFeatureFlagResponse = {
   /** User ID */
   user_id: string
-  /** Current market version (V1 or V2) */
+  /** Current market version (V1 or V2) — backward compat */
   market_version: MarketVersion
   /** Whether user has developer privileges (admin or dev environment) */
   is_developer: boolean
   /** Whether this user has a manual override (show treatment picker if true) */
   has_override: boolean
+  /** All resolved flags for this user */
+  flags: RecordStringBoolean
+  /** Which flags this user has overrides for */
+  overridden_flags: string[]
 }
 export type SetFeatureFlagResponse = {
   /** User ID */
@@ -4338,10 +4345,10 @@ export type FeatureFlagConfig = {
   default_version: MarketVersion
   rollout_percentage: number
   enabled: boolean
-  created_at: string
-  updated_at: string
 }
 export type UpdateConfigRequest = {
+  /** Which flag to update (defaults to market_v2) */
+  flag_name?: string
   /** Global default version for users without overrides */
   default_version?: MarketVersion
   /** Percentage of users (0-100) to receive V2 via rollout */
@@ -4350,12 +4357,13 @@ export type UpdateConfigRequest = {
   enabled?: boolean
 }
 export type FeatureFlagStats = {
-  total_overrides: number
-  v1_overrides: number
-  v2_overrides: number
-  rollout_percentage: number
-  default_version: MarketVersion
+  flag_name: string
   enabled: boolean
+  default_version: MarketVersion
+  rollout_percentage: number
+  override_count: number
+  enabled_overrides: number
+  disabled_overrides: number
 }
 export type UserOverrideWithName = {
   user_id: string

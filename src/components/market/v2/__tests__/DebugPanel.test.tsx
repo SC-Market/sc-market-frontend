@@ -35,7 +35,7 @@ describe("DebugPanel", () => {
         isLoading: false,
         error: null,
         setMarketVersion: mockSetMarketVersion,
-        isDeveloper: false, hasOverride: false,
+        isDeveloper: false, hasOverride: false, flags: { market_v2: false, crafting: false, wiki: false }, overriddenFlags: [] as string[], setFlag: vi.fn(),
       })
 
       const { container } = renderWithTheme(<DebugPanel />)
@@ -48,7 +48,7 @@ describe("DebugPanel", () => {
         isLoading: false,
         error: null,
         setMarketVersion: mockSetMarketVersion,
-        isDeveloper: true, hasOverride: false,
+        isDeveloper: true, hasOverride: false, flags: { market_v2: false, crafting: false, wiki: false }, overriddenFlags: [] as string[], setFlag: vi.fn(),
       })
 
       renderWithTheme(<DebugPanel />)
@@ -61,7 +61,7 @@ describe("DebugPanel", () => {
         isLoading: false,
         error: null,
         setMarketVersion: mockSetMarketVersion,
-        isDeveloper: true, hasOverride: false,
+        isDeveloper: true, hasOverride: false, flags: { market_v2: false, crafting: false, wiki: false }, overriddenFlags: [] as string[], setFlag: vi.fn(),
       })
 
       renderWithTheme(<DebugPanel />)
@@ -77,7 +77,7 @@ describe("DebugPanel", () => {
         isLoading: false,
         error: null,
         setMarketVersion: mockSetMarketVersion,
-        isDeveloper: true, hasOverride: false,
+        isDeveloper: true, hasOverride: false, flags: { market_v2: false, crafting: false, wiki: false }, overriddenFlags: [] as string[], setFlag: vi.fn(),
       })
     })
 
@@ -161,7 +161,7 @@ describe("DebugPanel", () => {
         isLoading: false,
         error: null,
         setMarketVersion: mockSetMarketVersion,
-        isDeveloper: true, hasOverride: false,
+        isDeveloper: true, hasOverride: false, flags: { market_v2: false, crafting: false, wiki: false }, overriddenFlags: [] as string[], setFlag: vi.fn(),
       })
 
       localStorage.setItem("debug_panel_open", "true")
@@ -176,7 +176,7 @@ describe("DebugPanel", () => {
         isLoading: false,
         error: null,
         setMarketVersion: mockSetMarketVersion,
-        isDeveloper: true, hasOverride: false,
+        isDeveloper: true, hasOverride: false, flags: { market_v2: false, crafting: false, wiki: false }, overriddenFlags: [] as string[], setFlag: vi.fn(),
       })
 
       localStorage.setItem("debug_panel_open", "true")
@@ -191,7 +191,7 @@ describe("DebugPanel", () => {
         isLoading: false,
         error: null,
         setMarketVersion: mockSetMarketVersion,
-        isDeveloper: true, hasOverride: false,
+        isDeveloper: true, hasOverride: false, flags: { market_v2: false, crafting: false, wiki: false }, overriddenFlags: [] as string[], setFlag: vi.fn(),
       })
 
       localStorage.setItem("debug_panel_open", "true")
@@ -207,7 +207,7 @@ describe("DebugPanel", () => {
         isLoading: false,
         error: null,
         setMarketVersion: mockSetMarketVersion,
-        isDeveloper: true, hasOverride: false,
+        isDeveloper: true, hasOverride: false, flags: { market_v2: false, crafting: false, wiki: false }, overriddenFlags: [] as string[], setFlag: vi.fn(),
       })
 
       localStorage.setItem("debug_panel_open", "true")
@@ -229,7 +229,7 @@ describe("DebugPanel", () => {
         isLoading: false,
         error: null,
         setMarketVersion: mockSetMarketVersion,
-        isDeveloper: true, hasOverride: false,
+        isDeveloper: true, hasOverride: false, flags: { market_v2: false, crafting: false, wiki: false }, overriddenFlags: [] as string[], setFlag: vi.fn(),
       })
 
       localStorage.setItem("debug_panel_open", "true")
@@ -249,7 +249,7 @@ describe("DebugPanel", () => {
         isLoading: false,
         error: null,
         setMarketVersion: mockSetMarketVersion,
-        isDeveloper: true, hasOverride: false,
+        isDeveloper: true, hasOverride: false, flags: { market_v2: false, crafting: false, wiki: false }, overriddenFlags: [] as string[], setFlag: vi.fn(),
       })
 
       localStorage.setItem("debug_panel_open", "true")
@@ -269,7 +269,7 @@ describe("DebugPanel", () => {
         isLoading: false,
         error: null,
         setMarketVersion: mockSetMarketVersion,
-        isDeveloper: true, hasOverride: false,
+        isDeveloper: true, hasOverride: false, flags: { market_v2: false, crafting: false, wiki: false }, overriddenFlags: [] as string[], setFlag: vi.fn(),
       })
 
       localStorage.setItem("debug_panel_open", "true")
@@ -293,7 +293,7 @@ describe("DebugPanel", () => {
         isLoading: false,
         error: null,
         setMarketVersion: mockSetMarketVersion,
-        isDeveloper: true, hasOverride: false,
+        isDeveloper: true, hasOverride: false, flags: { market_v2: false, crafting: false, wiki: false }, overriddenFlags: [] as string[], setFlag: vi.fn(),
       })
 
       localStorage.setItem("debug_panel_open", "true")
@@ -317,7 +317,7 @@ describe("DebugPanel", () => {
         isLoading: false,
         error: null,
         setMarketVersion: mockSetMarketVersion,
-        isDeveloper: true, hasOverride: false,
+        isDeveloper: true, hasOverride: false, flags: { market_v2: false, crafting: false, wiki: false }, overriddenFlags: [] as string[], setFlag: vi.fn(),
       })
 
       localStorage.setItem("debug_panel_open", "true")
@@ -342,7 +342,7 @@ describe("DebugPanel", () => {
         isLoading: false,
         error: null,
         setMarketVersion: mockSetMarketVersion,
-        isDeveloper: true, hasOverride: false,
+        isDeveloper: true, hasOverride: false, flags: { market_v2: false, crafting: false, wiki: false }, overriddenFlags: [] as string[], setFlag: vi.fn(),
       })
 
       localStorage.setItem("debug_panel_open", "true")
@@ -369,7 +369,7 @@ describe("DebugPanel", () => {
         isLoading: true,
         error: null,
         setMarketVersion: mockSetMarketVersion,
-        isDeveloper: true, hasOverride: false,
+        isDeveloper: true, hasOverride: false, flags: { market_v2: false, crafting: false, wiki: false }, overriddenFlags: [] as string[], setFlag: vi.fn(),
       })
 
       localStorage.setItem("debug_panel_open", "true")
@@ -390,7 +390,7 @@ describe("DebugPanel", () => {
         isLoading: false,
         error: null,
         setMarketVersion: mockSetMarketVersion,
-        isDeveloper: true, hasOverride: false,
+        isDeveloper: true, hasOverride: false, flags: { market_v2: false, crafting: false, wiki: false }, overriddenFlags: [] as string[], setFlag: vi.fn(),
       })
     })
 
@@ -421,7 +421,7 @@ describe("DebugPanel", () => {
         isLoading: false,
         error: null,
         setMarketVersion: mockSetMarketVersion,
-        isDeveloper: true, hasOverride: false,
+        isDeveloper: true, hasOverride: false, flags: { market_v2: false, crafting: false, wiki: false }, overriddenFlags: [] as string[], setFlag: vi.fn(),
       })
       localStorage.setItem("debug_panel_open", "true")
     })
@@ -473,7 +473,7 @@ describe("DebugPanel", () => {
         isLoading: false,
         error: null,
         setMarketVersion: mockSetMarketVersion,
-        isDeveloper: true, hasOverride: false,
+        isDeveloper: true, hasOverride: false, flags: { market_v2: false, crafting: false, wiki: false }, overriddenFlags: [] as string[], setFlag: vi.fn(),
       })
 
       renderWithTheme(<DebugPanel />)
@@ -493,7 +493,7 @@ describe("DebugPanel", () => {
         isLoading: false,
         error: null,
         setMarketVersion: mockSetMarketVersion,
-        isDeveloper: true, hasOverride: false,
+        isDeveloper: true, hasOverride: false, flags: { market_v2: false, crafting: false, wiki: false }, overriddenFlags: [] as string[], setFlag: vi.fn(),
       })
 
       renderWithTheme(<DebugPanel />)
@@ -513,7 +513,7 @@ describe("DebugPanel", () => {
         isLoading: false,
         error: null,
         setMarketVersion: mockSetMarketVersion,
-        isDeveloper: true, hasOverride: false,
+        isDeveloper: true, hasOverride: false, flags: { market_v2: false, crafting: false, wiki: false }, overriddenFlags: [] as string[], setFlag: vi.fn(),
       })
 
       renderWithTheme(<DebugPanel />)
@@ -532,7 +532,7 @@ describe("DebugPanel", () => {
         isLoading: false,
         error: null,
         setMarketVersion: mockSetMarketVersion,
-        isDeveloper: true, hasOverride: false,
+        isDeveloper: true, hasOverride: false, flags: { market_v2: false, crafting: false, wiki: false }, overriddenFlags: [] as string[], setFlag: vi.fn(),
       })
 
       renderWithTheme(<DebugPanel />)
@@ -556,7 +556,7 @@ describe("DebugPanel", () => {
         isLoading: false,
         error: null,
         setMarketVersion: mockSetMarketVersion,
-        isDeveloper: true, hasOverride: false,
+        isDeveloper: true, hasOverride: false, flags: { market_v2: false, crafting: false, wiki: false }, overriddenFlags: [] as string[], setFlag: vi.fn(),
       })
 
       renderWithTheme(<DebugPanel />)
@@ -590,7 +590,7 @@ describe("DebugPanel", () => {
         isLoading: false,
         error: null,
         setMarketVersion: mockSetMarketVersion,
-        isDeveloper: true, hasOverride: false,
+        isDeveloper: true, hasOverride: false, flags: { market_v2: false, crafting: false, wiki: false }, overriddenFlags: [] as string[], setFlag: vi.fn(),
       })
 
       renderWithTheme(<DebugPanel />)
@@ -616,7 +616,7 @@ describe("DebugPanel", () => {
         isLoading: false,
         error: null,
         setMarketVersion: mockSetMarketVersion,
-        isDeveloper: true, hasOverride: false,
+        isDeveloper: true, hasOverride: false, flags: { market_v2: false, crafting: false, wiki: false }, overriddenFlags: [] as string[], setFlag: vi.fn(),
       })
 
       const { container } = renderWithTheme(<DebugPanel />)
@@ -638,7 +638,7 @@ describe("DebugPanel", () => {
         isLoading: false,
         error: null,
         setMarketVersion: mockSetMarketVersion,
-        isDeveloper: true, hasOverride: false,
+        isDeveloper: true, hasOverride: false, flags: { market_v2: false, crafting: false, wiki: false }, overriddenFlags: [] as string[], setFlag: vi.fn(),
       })
 
       renderWithTheme(<DebugPanel />)
@@ -656,7 +656,7 @@ describe("DebugPanel", () => {
         isLoading: false,
         error: null,
         setMarketVersion: mockSetMarketVersion,
-        isDeveloper: true, hasOverride: false,
+        isDeveloper: true, hasOverride: false, flags: { market_v2: false, crafting: false, wiki: false }, overriddenFlags: [] as string[], setFlag: vi.fn(),
       })
 
       fireEvent.click(v1Radio)
