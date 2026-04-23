@@ -87,6 +87,7 @@ export function CreateListingV2() {
   const [description, setDescription] = useState("");
   const [gameItemId, setGameItemId] = useState<string | null>(null);
   const [gameItemName, setGameItemName] = useState<string | null>(null);
+  const [gameItemType, setGameItemType] = useState<string | null>(null);
   const [pricingMode, setPricingMode] = useState<"unified" | "per_variant">("unified");
   const [basePrice, setBasePrice] = useState<number>(0);
   const [photos, setPhotos] = useState<string[]>([]);
@@ -346,6 +347,7 @@ export function CreateListingV2() {
                 onChange={(itemName, itemType, itemId) => {
                   setGameItemName(itemName);
                   setGameItemId(itemId);
+                  setGameItemType(itemType);
                   setQuantityUnit(itemType === "Commodity" ? "scu" : "unit");
                   if (!title && itemName) {
                     setTitle(itemName);
@@ -654,41 +656,15 @@ export function CreateListingV2() {
                       />
                     </Grid>
 
-                    {/* Quality Tier */}
-                    <Grid item xs={12} sm={6} md={4}>
-                      <TextField
-                        select
-                        fullWidth
-                        size="small"
-                        label={t("CreateListingV2.qualityTier", "Quality Tier")}
-                        value={lot.quality_tier ?? ""}
-                        onChange={(e) =>
-                          handleUpdateStockLot(
-                            lot.id,
-                            "quality_tier",
-                            e.target.value ? Number(e.target.value) : undefined
-                          )
-                        }
-                        color="secondary"
-                        helperText={t(
-                          "CreateListingV2.qualityTierHelp",
-                          "Optional: 1-5"
-                        )}
-                      >
-                        <MenuItem value="">
-                          {t("CreateListingV2.notSpecified", "Not specified")}
-                        </MenuItem>
-                        {[1, 2, 3, 4, 5].map((tier) => (
-                          <MenuItem key={tier} value={tier}>
-                            {t("CreateListingV2.tier", "Tier")} {tier}
-                          </MenuItem>
-                        ))}
-                      </TextField>
-                    </Grid>
-
-                    {/* Quality Value */}
-                    <Grid item xs={12} sm={6} md={4}>
-                      <NumericFormat
+                    {/* Quality — conditional based on item type */}
+                    {(() => {
+                      const t_ = (gameItemType || "").toLowerCase()
+                      const hasNumericQuality = t_.includes("resource") || t_.includes("commodity") || t_.includes("ore") || t_.includes("mineral")
+                      const hasTierQuality = t_.includes("armor") || t_.includes("weapon") || t_.includes("clothing") || t_.includes("undersuit") || t_.includes("helmet") || t_.includes("backpack")
+                      if (!hasNumericQuality && !hasTierQuality) return null
+                      return hasNumericQuality ? (
+                        <Grid item xs={12} sm={6} md={4}>
+                          <NumericFormat
                         decimalScale={0}
                         allowNegative={false}
                         customInput={TextField}
@@ -718,6 +694,24 @@ export function CreateListingV2() {
                         }}
                       />
                     </Grid>
+                      ) : (
+                        <Grid item xs={12} sm={6} md={4}>
+                          <TextField
+                            select fullWidth size="small"
+                            label={t("CreateListingV2.qualityTier", "Quality Tier")}
+                            value={lot.quality_tier ?? ""}
+                            onChange={(e) => handleUpdateStockLot(lot.id, "quality_tier", e.target.value ? Number(e.target.value) : undefined)}
+                            color="secondary"
+                            helperText={t("CreateListingV2.qualityTierHelp", "Optional: 1-5")}
+                          >
+                            <MenuItem value="">{t("CreateListingV2.notSpecified", "Not specified")}</MenuItem>
+                            {[1, 2, 3, 4, 5].map((tier) => (
+                              <MenuItem key={tier} value={tier}>{t("CreateListingV2.tier", "Tier")} {tier}</MenuItem>
+                            ))}
+                          </TextField>
+                        </Grid>
+                      )
+                    })()}
 
                     {/* Crafted Source */}
                     <Grid item xs={12} sm={6} md={4}>
