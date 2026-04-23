@@ -337,7 +337,7 @@ export function MissionSearch() {
                               : <Typography variant="caption" color="text.disabled">—</Typography>}
                           </TableCell>
                           <TableCell align="right">
-                            <Typography variant="caption" color={m.reputation_reward ? "text.primary" : "text.disabled"}>
+                            <Typography variant="caption" color={m.reputation_reward ? "text.primary" : "text.secondary"}>
                               {m.reputation_reward ? `${m.reputation_reward.toLocaleString()} XP` : "—"}
                             </Typography>
                           </TableCell>
