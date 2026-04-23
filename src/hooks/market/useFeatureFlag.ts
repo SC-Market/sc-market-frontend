@@ -136,21 +136,23 @@ export function useFeatureFlag(): UseFeatureFlagReturn {
     async (flagName: string, enabled: boolean) => {
       try {
         setError(null)
-        // For market_v2, use the existing setFeatureFlag endpoint
-        if (flagName === "market_v2") {
-          await setMarketVersion(enabled ? "V2" : "V1")
-          return
-        }
-        // For other flags, we'd need a generic set-flag endpoint
-        // For now, update locally (server sync on next load)
+        await store.dispatch(
+          marketV2Api.endpoints.setFeatureFlag.initiate({
+            setFeatureFlagRequest: { flag_name: flagName, enabled },
+          }),
+        )
         const newFlags = { ...flags, [flagName]: enabled }
         localStorage.setItem(STORAGE_KEY, JSON.stringify(newFlags))
+        // Also update backward compat key
+        if (flagName === "market_v2") {
+          localStorage.setItem("market_version", enabled ? "V2" : "V1")
+        }
         setFlags(newFlags)
       } catch (err) {
         setError(err instanceof Error ? err : new Error("Failed to set flag"))
       }
     },
-    [flags, setMarketVersion],
+    [flags],
   )
 
   return {
