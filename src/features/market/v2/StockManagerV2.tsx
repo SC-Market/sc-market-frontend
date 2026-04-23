@@ -903,6 +903,7 @@ export function StockManagerV2() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const [currentOrg] = useCurrentOrg()
   const [sidebarOpen, setSidebarOpen] = useState(!isMobile)
   const [page, setPage] = useState(0)
   const [pageSize, setPageSize] = useState(48)

@@ -5,8 +5,8 @@
  * Task 11.1 - Mission Search Frontend
  */
 
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
-import { BACKEND_URL } from "../util/constants"
+import { createApi } from "@reduxjs/toolkit/query/react"
+import { createV2BaseQuery } from "./generatedApiV2"
 
 // ============================================================================
 // Types
@@ -180,10 +180,7 @@ export interface RateMissionResponse {
 
 export const missionsApi = createApi({
   reducerPath: "missionsApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: `${BACKEND_URL}/api/v2/game-data/missions`,
-    credentials: "include",
-  }),
+  baseQuery: createV2BaseQuery("/game-data/missions"),
   tagTypes: ["Missions", "MissionDetail", "MissionBlueprints"],
   endpoints: (builder) => ({
     // Search missions with comprehensive filters

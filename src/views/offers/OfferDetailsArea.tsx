@@ -53,6 +53,7 @@ import LoadingButton from "@mui/lab/LoadingButton"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { Link, useNavigate } from "react-router-dom"
 import { OrderSummarySection } from "../../components/orders/OrderSummarySection"
+import { OrderSummarySectionV2 } from "../../components/orders/OrderSummarySectionV2"
 import { detectOfferChanges } from "../../util/offerChanges"
 import { useGetPublicContractQuery } from "../../store/public_contracts"
 import { ListingSellerRating } from "../../components/rating/ListingRating"
@@ -621,6 +622,26 @@ export function OfferDetailsArea(props: { session: OfferSession }) {
                     total_cost={+currentOffer.cost}
                     offerChanges={offerChanges}
                   />
+                  {currentOffer.v2_variant_items && currentOffer.v2_variant_items.length > 0 && (
+                    <OrderSummarySectionV2
+                      items={currentOffer.v2_variant_items.map((vi) => ({
+                        order_item_id: vi.variant_id,
+                        listing_id: vi.listing_id,
+                        item_id: "",
+                        variant: {
+                          variant_id: vi.variant_id,
+                          attributes: vi.attributes as any,
+                          display_name: vi.display_name,
+                          short_name: vi.short_name,
+                        },
+                        quantity: vi.quantity,
+                        price_per_unit: vi.price_per_unit,
+                        subtotal: vi.quantity * vi.price_per_unit,
+                      }))}
+                      total_cost={+currentOffer.cost}
+                      offerChanges={offerChanges}
+                    />
+                  )}
                 </Stack>
               </TableCell>
             </TableRow>

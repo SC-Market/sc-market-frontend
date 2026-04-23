@@ -41,6 +41,16 @@ export interface OfferSession {
   order_id?: string | null
 }
 
+export interface OfferVariantItemV2 {
+  listing_id: string
+  variant_id: string
+  quantity: number
+  price_per_unit: number
+  attributes: Record<string, any>
+  display_name: string
+  short_name: string
+}
+
 export interface Offer {
   id: string
   session_id: string
@@ -55,6 +65,7 @@ export interface Offer {
   service: Service | null
   market_listings: OfferMarketListing[]
   payment_type: "one-time" | "hourly" | "daily"
+  v2_variant_items?: OfferVariantItemV2[]
 }
 
 export interface CounterOfferBody {

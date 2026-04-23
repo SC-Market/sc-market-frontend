@@ -6,8 +6,8 @@
  * Requirements: 8.1, 8.2, 8.3, 8.4, 8.5, 8.6, 32.1-32.6, 46.1-46.10, 53.1-53.10
  */
 
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
-import { BACKEND_URL } from "../util/constants"
+import { createApi } from "@reduxjs/toolkit/query/react"
+import { createV2BaseQuery } from "./generatedApiV2"
 
 // ============================================================================
 // Types
@@ -138,11 +138,8 @@ export interface ShoppingListResponse {
 
 export const wishlistsApi = createApi({
   reducerPath: "wishlistsApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: `${BACKEND_URL}/api/v2/game-data/wishlists`,
-    credentials: "include",
-  }),
-  tagTypes: ["Wishlists", "WishlistDetail", "WishlistItems"],
+  baseQuery: createV2BaseQuery("/game-data/wishlists"),
+    tagTypes: ["Wishlists", "WishlistDetail", "WishlistItems"],
   endpoints: (builder) => ({
     // Get user's wishlists
     getWishlists: builder.query<ListWishlistsResponse, void>({

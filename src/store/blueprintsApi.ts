@@ -5,8 +5,8 @@
  * Task 12.1 - Blueprint Browser Frontend
  */
 
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
-import { BACKEND_URL } from "../util/constants"
+import { createApi } from "@reduxjs/toolkit/query/react"
+import { createV2BaseQuery } from "./generatedApiV2"
 
 // ============================================================================
 // Types
@@ -60,10 +60,7 @@ export interface BlueprintCategory {
 
 export const blueprintsApi = createApi({
   reducerPath: "blueprintsApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: `${BACKEND_URL}/api/v2/game-data/blueprints`,
-    credentials: "include",
-  }),
+  baseQuery: createV2BaseQuery("/game-data/blueprints"),
   tagTypes: ["Blueprints", "BlueprintDetail", "BlueprintCategories"],
   endpoints: (builder) => ({
     // Search blueprints with comprehensive filters
