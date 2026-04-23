@@ -189,7 +189,12 @@ export function MissionDetail() {
                 <Typography variant="subtitle2" color="text.secondary">
                   Mission Type
                 </Typography>
-                <Typography variant="body2">{mission.mission_type}</Typography>
+                <Typography variant="body2">
+                  {mission.mission_type
+                    .replace(/^missiontype[._]/i, "")
+                    .replace(/[._]/g, " ")
+                    .replace(/\b\w/g, (c) => c.toUpperCase())}
+                </Typography>
               </Grid>
             )}
 
@@ -213,15 +218,6 @@ export function MissionDetail() {
               </Grid>
             )}
 
-            {/* Reward Scope */}
-            {mission.reward_scope && (
-              <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                <Typography variant="subtitle2" color="text.secondary">
-                  Reward Scope
-                </Typography>
-                <Typography variant="body2">{mission.reward_scope}</Typography>
-              </Grid>
-            )}
           </Grid>
         </CardContent>
       </Card>
@@ -242,8 +238,9 @@ export function MissionDetail() {
                     Credits
                   </Typography>
                   <Typography variant="h6" color="success.contrastText">
-                    {mission.credit_reward_min?.toLocaleString()} -{" "}
-                    {mission.credit_reward_max?.toLocaleString()} aUEC
+                    {mission.credit_reward_min === mission.credit_reward_max
+                      ? `${mission.credit_reward_min?.toLocaleString()} aUEC`
+                      : `${mission.credit_reward_min?.toLocaleString()} - ${mission.credit_reward_max?.toLocaleString()} aUEC`}
                   </Typography>
                 </Paper>
               </Grid>
@@ -562,44 +559,6 @@ export function MissionDetail() {
         </Card>
       )}
 
-      {/* Mission Metadata */}
-      <Card>
-        <CardContent>
-          <Typography variant="h5" gutterBottom>
-            Additional Information
-          </Typography>
-
-          <Grid container spacing={2}>
-            <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-              <Typography variant="subtitle2" color="text.secondary">
-                Mission Code
-              </Typography>
-              <Typography variant="body2" sx={{ fontFamily: "monospace" }}>
-                {mission.mission_code}
-              </Typography>
-            </Grid>
-
-            {mission.rank_index && (
-              <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-                <Typography variant="subtitle2" color="text.secondary">
-                  Rank Index
-                </Typography>
-                <Typography variant="body2">{mission.rank_index}</Typography>
-              </Grid>
-            )}
-
-            <Grid size={{ xs: 12, sm: 6, md: 4 }}>
-              <Typography variant="subtitle2" color="text.secondary">
-                Data Source
-              </Typography>
-              <Typography variant="body2">
-                {mission.data_source}
-                {mission.is_verified && " ✓"}
-              </Typography>
-            </Grid>
-          </Grid>
-        </CardContent>
-      </Card>
       </Grid>
     </StandardPageLayout>
   )
