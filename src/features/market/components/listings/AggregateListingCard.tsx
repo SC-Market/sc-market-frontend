@@ -22,6 +22,7 @@ import { useMarketSidebarExp } from "../../hooks/MarketSidebar"
 import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
 
 import { ListingWrapper } from "./ListingCard"
+import { formatPrice, formatPriceRange } from "../../../../util/formatPrice"
 
 export function AggregateListing(props: {
   aggregate: ExtendedAggregateSearchResult
@@ -130,9 +131,9 @@ export function AggregateListingBase(props: {
                   color="primary"
                   fontWeight="bold"
                   noWrap
-                  sx={isMobile ? { fontSize: "0.95rem", mb: 0.5 } : { fontSize: `${minimum_price.toLocaleString().length > 10 ? 0.9 : 1.15}rem` }}
+                  sx={isMobile ? { fontSize: "0.95rem", mb: 0.5 } : { fontSize: "1.15rem" }}
                 >
-                  {minimum_price.toLocaleString(undefined)} aUEC
+                  {formatPrice(minimum_price)}
                 </Typography>
                 <Typography
                   variant="subtitle2"
@@ -301,8 +302,7 @@ export function AggregateBuyOrderListingBase(props: {
                   fontWeight="bold"
                   sx={{ fontSize: "0.95rem", mb: 0.5 }}
                 >
-                  {minimum_price.toLocaleString(undefined)} -{" "}
-                  {maximum_price.toLocaleString(undefined)} aUEC/
+                  {formatPriceRange(minimum_price, maximum_price)}/
                   {t("market.unit")}
                 </Typography>
                 <Typography
