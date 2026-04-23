@@ -14,8 +14,10 @@ import {
   Typography,
   Button,
   Stack,
+  Divider,
 } from "@mui/material"
 import { RestartAltRounded } from "@mui/icons-material"
+import { useGetGameEventsQuery } from "../../store/api/v2/market"
 
 export interface MissionFiltersProps {
   searchText: string
@@ -42,6 +44,10 @@ export interface MissionFiltersProps {
   onIsChainStarterChange: (value: boolean | undefined) => void
   creditRewardMin: number | ""
   onCreditRewardMinChange: (value: number | "") => void
+  eventCode: string
+  onEventCodeChange: (value: string) => void
+  showEventMissions: boolean
+  onShowEventMissionsChange: (value: boolean) => void
   onResetFilters: () => void
 }
 
@@ -134,9 +140,34 @@ export const MissionFilters: React.FC<MissionFiltersProps> = (props) => {
       <FormControlLabel sx={{ ml: 0 }} control={<Checkbox size="small" {...triState(props.isChainStarter, props.onIsChainStarterChange)} />}
         label={<Typography variant="body2">Chain Starter {props.isChainStarter === undefined ? "(any)" : props.isChainStarter ? "(yes)" : "(no)"}</Typography>} />
 
+      <Divider />
+      <Typography variant="caption" color="text.secondary" fontWeight={600}>Events</Typography>
+      <FormControlLabel sx={{ ml: 0 }} control={<Checkbox size="small" checked={props.showEventMissions}
+        onChange={(e) => { props.onShowEventMissionsChange(e.target.checked); if (!e.target.checked) props.onEventCodeChange("") }} />}
+        label={<Typography variant="body2">Show event missions</Typography>} />
+      {props.showEventMissions && <EventSelect value={props.eventCode} onChange={props.onEventCodeChange} />}
+
       <Button size="small" startIcon={<RestartAltRounded />} onClick={props.onResetFilters} sx={{ textTransform: "none" }}>
         Reset Filters
       </Button>
     </Stack>
+  )
+}
+
+function EventSelect({ value, onChange }: { value: string; onChange: (v: string) => void }) {
+  const { data } = useGetGameEventsQuery()
+  const events = data?.events || []
+  return (
+    <FormControl fullWidth size="small">
+      <InputLabel>Event</InputLabel>
+      <Select value={value} onChange={(e) => onChange(e.target.value as string)} label="Event">
+        <MenuItem value="">All Events</MenuItem>
+        {events.map((e) => (
+          <MenuItem key={e.event_code} value={e.event_code}>
+            {e.event_name} ({e.mission_count})
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
   )
 }
