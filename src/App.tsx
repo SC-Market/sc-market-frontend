@@ -1,6 +1,7 @@
 import React, { createElement, useEffect } from "react"
 
 import { HookProvider } from "./hooks/HookProvider"
+import { WishlistProvider } from "./hooks/wishlist/WishlistContext"
 import { Root } from "./components/layout/Root"
 import { WhiteLabelAuthGate } from "./components/authentication/WhiteLabelAuthGate"
 import {
@@ -146,6 +147,7 @@ const router = createBrowserRouter([
     errorElement: <FrontendErrorElement />,
     element: (
       <HookProvider>
+        <WishlistProvider>
         <WhiteLabelAuthGate>
         <Root>
           <RouterEffects />
@@ -154,6 +156,7 @@ const router = createBrowserRouter([
           </RouteSuspense>
         </Root>
         </WhiteLabelAuthGate>
+        </WishlistProvider>
       </HookProvider>
     ),
     children: [
