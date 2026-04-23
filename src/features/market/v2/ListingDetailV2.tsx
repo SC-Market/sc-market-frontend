@@ -377,6 +377,7 @@ export function ListingDetailV2() {
           {/* Market Analysis */}
           {gameItemId && priceRange && (
             <AggregateMarketDataV2
+              key={gameItemId}
               gameItemId={gameItemId}
               currentPrice={priceRange.min}
             />
