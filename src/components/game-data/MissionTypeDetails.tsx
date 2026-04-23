@@ -313,20 +313,25 @@ function SalvageDetails({ data }: { data: MissionDetailResponse }) {
 function DeliveryDetails({ data }: { data: MissionDetailResponse }) {
   const hauling = data.hauling_orders || []
   const totalScu = hauling.reduce((s, h) => s + h.max_scu, 0)
+  const dests = data.mission.destinations || []
   const chips = [
     ...(totalScu > 0 ? [{ label: `${totalScu} SCU`, color: "info" as const, icon: <LocalShippingRounded sx={{ fontSize: 14 }} /> }] : []),
+    ...(dests.length > 0 ? [{ label: `${dests.length} destinations`, color: "secondary" as const }] : []),
     ...shipChips(data),
   ]
   return (
     <Stack spacing={1.5}>
       <SummaryChips chips={chips} />
-      <HaulingOrdersSection orders={data.hauling_orders || []} />
-      <ShipEncountersSection encounters={data.ship_encounters || []} />
-      {!data.hauling_orders?.length && !data.ship_encounters?.length && (
-        <Typography variant="body2" color="text.secondary">
-          Delivery details not yet available. Pickup/delivery counts and destinations coming soon.
-        </Typography>
+      <HaulingOrdersSection orders={hauling} />
+      {dests.length > 0 && (
+        <Paper variant="outlined" sx={{ p: 1.5 }}>
+          <Typography variant="subtitle2" sx={{ mb: 0.5 }}>Destinations</Typography>
+          <Stack spacing={0.25}>
+            {dests.map((d, i) => <Typography key={i} variant="body2">{d}</Typography>)}
+          </Stack>
+        </Paper>
       )}
+      <ShipEncountersSection encounters={data.ship_encounters || []} />
     </Stack>
   )
 }
