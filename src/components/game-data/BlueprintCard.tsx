@@ -142,7 +142,7 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
             )}
           </CardContent>
 
-          <CardActions sx={{ px: 1.5, pt: 0, pb: 0.5, flexWrap: "wrap", gap: 0.25 }}>
+          <CardActions disableSpacing sx={{ px: 1.5, pt: 0, pb: 0.5, flexWrap: "wrap", gap: 0.25 }}>
             {bp.user_owns && <Chip label="Owned" size="small" color="success" sx={{ height: 18, fontSize: "0.65rem" }} />}
             {bp.source === "default" && <Chip label="Default" size="small" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} />}
             {bp.rarity && <Chip label={bp.rarity} size="small" sx={{ height: 18, fontSize: "0.65rem", bgcolor: "info.main", color: "#fff" }} />}
