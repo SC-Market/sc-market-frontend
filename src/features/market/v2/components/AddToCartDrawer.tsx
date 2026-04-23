@@ -71,8 +71,6 @@ export function AddToCartDrawer({ open, onClose, listingId }: AddToCartDrawerPro
     if (quantity > selectedVariant.quantity) return t("cart.exceedsStock", "Only {{available}} available", { available: selectedVariant.quantity })
     if (listing?.min_order_quantity && quantity < listing.min_order_quantity) return t("cart.belowMinQty", "Minimum quantity: {{min}}", { min: listing.min_order_quantity })
     if (listing?.max_order_quantity && quantity > listing.max_order_quantity) return t("cart.aboveMaxQty", "Maximum quantity: {{max}}", { max: listing.max_order_quantity })
-    if (listing?.min_order_value && subtotal < listing.min_order_value) return t("cart.belowMinValue", "Minimum order value: {{min}} aUEC", { min: listing.min_order_value.toLocaleString() })
-    if (listing?.max_order_value && subtotal > listing.max_order_value) return t("cart.aboveMaxValue", "Maximum order value: {{max}} aUEC", { max: listing.max_order_value.toLocaleString() })
     return null
   }, [selectedVariant, quantity, listing, subtotal, t])
 
@@ -98,14 +96,8 @@ export function AddToCartDrawer({ open, onClose, listingId }: AddToCartDrawerPro
       issueAlert({ message: t("cart.aboveMaxQty", "Maximum quantity: {{max}}", { max: listing.max_order_quantity }), severity: "warning" })
       return
     }
-    const subtotal = (selectedVariant?.price ?? 0) * quantity
-    if (listing?.min_order_value && subtotal < listing.min_order_value) {
-      issueAlert({ message: t("cart.belowMinValue", "Minimum order value: {{min}} aUEC", { min: listing.min_order_value.toLocaleString() }), severity: "warning" })
-      return
-    }
-    if (listing?.max_order_value && subtotal > listing.max_order_value) {
-      issueAlert({ message: t("cart.aboveMaxValue", "Maximum order value: {{max}} aUEC", { max: listing.max_order_value.toLocaleString() }), severity: "warning" })
-      return
+    // Order value limits are checked at checkout, not when adding to cart
+    // (users can make offers at different amounts)
     }
     try {
       await addToCart({
