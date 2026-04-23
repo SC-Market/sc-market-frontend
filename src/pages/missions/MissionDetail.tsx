@@ -53,7 +53,7 @@ import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
  * - Responsive layout
  */
 export function MissionDetail() {
-  const { missionId } = useParams<{ missionId: string }>()
+  const { mission_id: missionId } = useParams<{ mission_id: string }>()
   const navigate = useNavigate()
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
