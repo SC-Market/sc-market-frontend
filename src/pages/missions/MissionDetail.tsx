@@ -39,7 +39,7 @@ export function MissionDetail() {
     >
       {isLoading && (
         <Grid size={{ xs: 12 }}>
-          <Box sx={{ display: "flex", justifyContent: "center", py: 8 }}><CircularProgress /></Box>
+          <DetailPageSkeleton />
         </Grid>
       )}
       {error && (

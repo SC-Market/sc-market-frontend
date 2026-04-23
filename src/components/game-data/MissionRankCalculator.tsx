@@ -44,14 +44,13 @@ export function MissionRankCalculator({ reputationReward, rewardScope, requiredR
   }, [reputationReward, crewSize])
 
   // Detect inverse scopes (Affinity: Exalted=0 → Hated=max, higher XP = worse)
-  // For these, reverse the display so progression makes sense
-  const isInverse = useMemo(() => {
+  const isNegativeRep = xpPerRun < 0 || useMemo(() => {
     if (ranks.length < 2) return false
     const firstName = ranks[0]?.standing_display_name?.toLowerCase() || ""
     return /exalted|ally|best|loved/.test(firstName)
   }, [ranks])
 
-  const displayRanks = useMemo(() => isInverse ? [...ranks].reverse() : ranks, [ranks, isInverse])
+  const displayRanks = useMemo(() => ranks, [ranks])
 
   // Find the min rank index based on the required standing threshold
   const minRankIndex = useMemo(() => {
@@ -101,9 +100,7 @@ export function MissionRankCalculator({ reputationReward, rewardScope, requiredR
           {displayRanks.map((rank, i) => {
             const isBelowMin = i < minRankIndex
             const minThreshold = displayRanks[minRankIndex]?.threshold ?? 0
-            const xpFromMin = isInverse
-              ? minThreshold - rank.threshold  // inverse: going down in XP
-              : rank.threshold - minThreshold
+            const xpFromMin = rank.threshold - minThreshold
             const absXpPerRun = Math.abs(xpPerRun) || 1
             const runsNeeded = xpFromMin > 0 ? Math.ceil(xpFromMin / absXpPerRun) : 0
 
