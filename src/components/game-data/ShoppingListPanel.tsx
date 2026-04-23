@@ -54,14 +54,14 @@ function fmtQty(scu: number): string {
 // ============================================================================
 
 export function ShoppingListPanel() {
-  const { data: listsData, isLoading: listsLoading } = useGetWishlistsQuery()
+  const { data: listsData, isLoading: listsLoading, error } = useGetWishlistsQuery()
   const [selectedListId, setSelectedListId] = useState<string>("")
 
-  // Auto-select first list
   const lists = listsData?.wishlists || []
   const activeId = selectedListId || lists[0]?.wishlist_id || ""
 
   if (listsLoading) return <CircularProgress size={24} />
+  if (error) return <Alert severity="info">Sign in to use shopping lists.</Alert>
   if (!lists.length) return <Alert severity="info">No shopping lists. Add blueprints from the Fabricator.</Alert>
 
   return (
@@ -88,12 +88,12 @@ export function ShoppingListPanel() {
 // ============================================================================
 
 function ShoppingListDetail({ wishlistId }: { wishlistId: string }) {
-  const { data: detail } = useGetWishlistQuery({ wishlistId })
-  const { data: shoppingList, isLoading } = useGenerateShoppingListQuery({ wishlistId })
+  const { data: detail } = useGetWishlistQuery({ wishlistId }, { skip: !wishlistId })
+  const { data: shoppingList, isLoading, error } = useGenerateShoppingListQuery({ wishlistId }, { skip: !wishlistId })
   const [expanded, setExpanded] = useState(true)
 
   if (isLoading) return <CircularProgress size={24} />
-  if (!shoppingList) return null
+  if (error || !shoppingList) return <Alert severity="info">Could not load shopping list.</Alert>
 
   const materials = shoppingList.materials_needed || []
   const items = detail?.items || []
