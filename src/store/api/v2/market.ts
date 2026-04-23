@@ -3406,11 +3406,14 @@ export type MissionRewardPool = {
 }
 export type ShipWave = {
   name: string
-  ship_count: number
+  min_ships: number
+  max_ships: number
 }
 export type ShipEncounter = {
   role: string
+  alignment: "hostile" | "friendly" | "neutral"
   waves: ShipWave[]
+  ship_pool?: string[]
 }
 export type NpcEncounter = {
   name: string
