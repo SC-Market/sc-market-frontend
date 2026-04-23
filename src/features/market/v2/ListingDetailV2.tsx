@@ -295,7 +295,6 @@ export function ListingDetailV2() {
                     <CardContent sx={{ p: 3 }}>
                       {listing.status === "active" && (
                         <>
-                          <Divider light />
                           {/* Variant breakdown table */}
                           {items.map((item) =>
                             item.variants.length > 0 ? (
