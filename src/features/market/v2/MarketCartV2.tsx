@@ -487,7 +487,6 @@ export function MarketCartV2() {
           <Section
             key={group.sellerName}
             xs={12}
-            title={t("cart.seller", "Seller")}
             element_title={
               <UnderlineLink color="text.primary" variant="h6" sx={{ fontWeight: "600" }}>
                 {group.sellerName}
