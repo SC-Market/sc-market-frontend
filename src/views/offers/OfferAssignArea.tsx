@@ -81,7 +81,7 @@ export function OfferAssignArea(props: { offer: OfferSession }) {
 
     const res: { data?: any; error?: any } = await assignUser({
       session_id: offer.id,
-      user_id: targetObject.username!,
+      username: targetObject.username!,
     })
 
     if (res?.data && !res?.error) {

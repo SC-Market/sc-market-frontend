@@ -355,13 +355,13 @@ export const offersApi = serviceApi.injectEndpoints({
       void,
       {
         session_id: string
-        user_id: string
+        username: string
       }
     >({
       query: (arg) => ({
         url: `/api/offer/${arg.session_id}`,
         method: "PUT",
-        body: { assigned_to: arg.user_id },
+        body: { assigned_to: arg.username },
       }),
       invalidatesTags: (result, error, { session_id }) => [
         { type: "Offer" as const, id: session_id },

@@ -357,7 +357,7 @@ export function OfferRow(props: {
               onClick={(e) => {
                 e.preventDefault()
                 e.stopPropagation()
-                assignOffer({ session_id: row.id, user_id: profile!.username })
+                assignOffer({ session_id: row.id, username: profile!.username })
                   .unwrap()
                   .then(() => issueAlert({ message: t("orders.claimed", "Offer claimed"), severity: "success" }))
                   .catch(issueAlert)
