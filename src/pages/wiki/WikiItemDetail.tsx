@@ -213,7 +213,7 @@ export function WikiItemDetail() {
                     </Typography>
                     <Button
                       size="small"
-                      onClick={() => navigate(`/market?game_item_id=${id}`)}
+                      onClick={() => navigate(`/market/aggregate/${id}`)}
                     >
                       View All
                     </Button>
@@ -226,7 +226,7 @@ export function WikiItemDetail() {
                             key={listing.listing_id}
                             hover
                             sx={{ cursor: "pointer" }}
-                            onClick={() => navigate(`/market/listing/${listing.listing_id}`)}
+                            onClick={() => navigate(`/market/${listing.listing_id}`)}
                           >
                             <TableCell>
                               <Typography variant="body2" noWrap sx={{ maxWidth: 200 }}>
