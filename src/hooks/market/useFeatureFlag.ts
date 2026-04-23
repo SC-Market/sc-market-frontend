@@ -18,6 +18,8 @@ export interface UseFeatureFlagReturn {
   error: Error | null
   setMarketVersion: (version: MarketVersion) => Promise<void>
   isDeveloper: boolean
+  /** True if this user has a manual admin override (show treatment picker) */
+  hasOverride: boolean
 }
 
 function readLocalMarketVersion(): MarketVersion {
@@ -31,6 +33,7 @@ export function useFeatureFlag(): UseFeatureFlagReturn {
   // Read localStorage synchronously — never blocks render
   const [marketVersion, setMarketVersionState] = useState<MarketVersion>(readLocalMarketVersion)
   const [error, setError] = useState<Error | null>(null)
+  const [hasOverride, setHasOverride] = useState(false)
 
   const isFrontendDev = useMemo(
     () => import.meta.env.DEV || import.meta.env.MODE === "development",
@@ -55,8 +58,10 @@ export function useFeatureFlag(): UseFeatureFlagReturn {
         const serverMv = data?.market_version
         if (serverMv === "V1" || serverMv === "V2") {
           localStorage.setItem("market_version", serverMv)
-          // Only update state if it changed (avoids unnecessary re-renders)
           setMarketVersionState((prev) => prev !== serverMv ? serverMv : prev)
+        }
+        if (data?.has_override !== undefined) {
+          setHasOverride(!!data.has_override)
         }
       } catch (err) {
         if (!cancelled) {
@@ -95,5 +100,5 @@ export function useFeatureFlag(): UseFeatureFlagReturn {
     [isFrontendDev],
   )
 
-  return { marketVersion, isLoading: false, error, setMarketVersion, isDeveloper }
+  return { marketVersion, isLoading: false, error, setMarketVersion, isDeveloper, hasOverride }
 }

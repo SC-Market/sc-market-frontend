@@ -316,6 +316,8 @@ const injectedRtkApi = api
             item_type: queryArg.itemType,
             price_min: queryArg.priceMin,
             price_max: queryArg.priceMax,
+            quantity_min: queryArg.quantityMin,
+            quantity_max: queryArg.quantityMax,
             sort_by: queryArg.sortBy,
             sort_order: queryArg.sortOrder,
             page: queryArg.page,
@@ -771,6 +773,15 @@ const injectedRtkApi = api
         }),
         providesTags: ["Game Data - Blueprints"],
       }),
+      getBlueprintDetailByCode: build.query<
+        GetBlueprintDetailByCodeApiResponse,
+        GetBlueprintDetailByCodeApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/game-data/blueprints/by-code/${queryArg.blueprintCode}`,
+        }),
+        providesTags: ["Game Data - Blueprints"],
+      }),
       getBlueprintMissions: build.query<
         GetBlueprintMissionsApiResponse,
         GetBlueprintMissionsApiArg
@@ -1074,6 +1085,7 @@ const injectedRtkApi = api
           params: {
             page: queryArg.page,
             pageSize: queryArg.pageSize,
+            search: queryArg.search,
           },
         }),
         providesTags: ["Admin Feature Flags"],
@@ -1094,7 +1106,7 @@ const injectedRtkApi = api
         RemoveUserOverrideApiArg
       >({
         query: (queryArg) => ({
-          url: `/admin/feature-flags/overrides/${queryArg.userId}`,
+          url: `/admin/feature-flags/overrides/${queryArg.username}`,
           method: "DELETE",
         }),
         invalidatesTags: ["Admin Feature Flags"],
@@ -1369,6 +1381,8 @@ export type SearchGameItemAggregatesApiArg = {
   itemType?: string
   priceMin?: number
   priceMax?: number
+  quantityMin?: number
+  quantityMax?: number
   sortBy?: "price" | "quantity" | "name" | "seller_count"
   sortOrder?: "asc" | "desc"
   page?: number
@@ -1773,6 +1787,12 @@ export type GetBlueprintDetailApiArg = {
   /** Blueprint UUID */
   blueprintId: string
 }
+export type GetBlueprintDetailByCodeApiResponse =
+  /** status 200 Ok */ BlueprintDetailResponse
+export type GetBlueprintDetailByCodeApiArg = {
+  /** The blueprint code string */
+  blueprintCode: string
+}
 export type GetBlueprintMissionsApiResponse =
   /** status 200 Array of missions that reward this blueprint */ MissionRewardingBlueprint[]
 export type GetBlueprintMissionsApiArg = {
@@ -2009,6 +2029,7 @@ export type GetUserOverridesApiResponse =
 export type GetUserOverridesApiArg = {
   page?: number
   pageSize?: number
+  search?: string
 }
 export type SetUserOverrideApiResponse = /** status 200 Ok */ {
   message: string
@@ -2020,7 +2041,7 @@ export type RemoveUserOverrideApiResponse = /** status 200 Ok */ {
   message: string
 }
 export type RemoveUserOverrideApiArg = {
-  userId: string
+  username: string
 }
 export type ImportGameDataApiResponse =
   /** status 200 Ok */
@@ -3276,6 +3297,8 @@ export type HaulingOrder = {
 export type MissionSearchResult = {
   /** Mission UUID */
   mission_id: string
+  /** Mission code (internal name for URL-friendly links) */
+  mission_code: string
   /** Mission name */
   mission_name: string
   /** Mission category */
@@ -3817,6 +3840,8 @@ export type GetCraftingStatisticsResponse = {
 export type BlueprintSearchResult = {
   /** Blueprint UUID */
   blueprint_id: string
+  /** Blueprint code (internal name for URL-friendly links) */
+  blueprint_code: string
   /** Blueprint name */
   blueprint_name: string
   /** Output item name */
@@ -3993,6 +4018,8 @@ export type GetFeatureFlagResponse = {
   market_version: MarketVersion
   /** Whether user has developer privileges (admin or dev environment) */
   is_developer: boolean
+  /** Whether this user has a manual override (show treatment picker if true) */
+  has_override: boolean
 }
 export type SetFeatureFlagResponse = {
   /** User ID */
@@ -4330,17 +4357,18 @@ export type FeatureFlagStats = {
   default_version: MarketVersion
   enabled: boolean
 }
-export type UserOverride = {
+export type UserOverrideWithName = {
   user_id: string
+  username: string
   market_version: MarketVersion
   updated_at: string
 }
 export type UserOverridesResponse = {
-  overrides: UserOverride[]
+  overrides: UserOverrideWithName[]
   total: number
 }
 export type SetUserOverrideRequest = {
-  user_id: string
+  username: string
   market_version: MarketVersion
 }
 export type ImportErrorResponse = {
@@ -4452,6 +4480,7 @@ export const {
   useGetCraftingStatisticsQuery,
   useSearchBlueprintsQuery,
   useGetBlueprintDetailQuery,
+  useGetBlueprintDetailByCodeQuery,
   useGetBlueprintMissionsQuery,
   useAddBlueprintToInventoryMutation,
   useRemoveBlueprintFromInventoryMutation,
