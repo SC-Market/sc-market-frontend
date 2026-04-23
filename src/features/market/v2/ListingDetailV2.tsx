@@ -9,6 +9,7 @@ import {
   Divider,
   Fade,
   Grid,
+  IconButton,
   Link,
   Stack,
   Typography,
@@ -35,6 +36,8 @@ import { getRelativeTime } from "../../../util/time"
 import { dateDiffInDays } from "../../../util/dateDiff"
 import { formatQuantity } from "../../../util/formatQuantity"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
+import { useGetUserProfileQuery } from "../../../store/profile"
+import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
 import { useTranslation } from "react-i18next"
 import { AddToCartDrawer } from "./components/AddToCartDrawer"
 import { useCartDrawer } from "../../../hooks/market/AddToCartContext"
@@ -70,6 +73,8 @@ export function ListingDetailV2() {
   const { openAddToCart } = useCartDrawer()
   const [trackView] = useTrackViewMutation()
   const issueAlert = useAlertHook()
+  const { data: profile } = useGetUserProfileQuery()
+  const [currentOrg] = useCurrentOrg()
 
   useEffect(() => {
     if (id) trackView({ id }).catch(() => {})
@@ -132,6 +137,14 @@ export function ListingDetailV2() {
   const userSeller = seller?.type === "user" ? { username: seller.slug } : null
   const contractorSeller = seller?.type === "contractor" ? { spectrum_id: seller.slug } : null
 
+  const canEdit = useMemo(() => {
+    if (!profile || !seller || !listing) return false
+    if (profile.role === "admin") return true
+    if (seller.type === "user" && seller.slug === profile.username) return true
+    if (seller.type === "contractor" && currentOrg?.spectrum_id === seller.slug) return true
+    return false
+  }, [profile, seller, listing, currentOrg])
+
   const canonicalUrl = listing ? `${FRONTEND_URL}/market/${listing.listing_id}` : undefined
 
   return (
@@ -179,6 +192,13 @@ export function ListingDetailV2() {
                   <Card sx={{ minHeight: 400 }}>
                     <CardHeader
                       disableTypography
+                      action={
+                        canEdit && listing.status !== "cancelled" ? (
+                          <IconButton component={RouterLink} to={`/market_edit/${listing.listing_id}`} sx={{ color: "inherit" }}>
+                            <CreateRounded />
+                          </IconButton>
+                        ) : undefined
+                      }
                       title={
                         <Stack direction="column" spacing={theme.layoutSpacing.text}>
                           {/* Breadcrumbs inside card */}
