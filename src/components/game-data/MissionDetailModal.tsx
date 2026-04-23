@@ -10,13 +10,13 @@ import {
   IconButton,
   Typography,
   Box,
-  CircularProgress,
   Alert,
 } from "@mui/material"
 import { Close } from "@mui/icons-material"
 import { useGetMissionDetailQuery } from "../../store/api/v2/market"
 import { MissionName } from "./MissionName"
 import { MissionHeaderChips, MissionDetailTabs } from "./MissionDetailContent"
+import { DetailSkeleton } from "./GameDataSkeletons"
 
 interface MissionDetailModalProps {
   missionId: string | null
@@ -49,7 +49,7 @@ export function MissionDetailModal({ missionId, open, onClose, onBlueprintClick 
       )}
 
       <DialogContent sx={{ minHeight: 400 }}>
-        {isLoading && <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}><CircularProgress /></Box>}
+        {isLoading && <DetailSkeleton />}
         {error && <Alert severity="error">Failed to load mission.</Alert>}
         {data && <MissionDetailTabs data={data} onBlueprintClick={onBlueprintClick} />}
       </DialogContent>
