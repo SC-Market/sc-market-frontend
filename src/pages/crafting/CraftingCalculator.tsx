@@ -24,10 +24,13 @@ import {
   useSearchBlueprintsQuery,
   useSearchItemsQuery,
   useCalculateQualityMutation,
+  useGetInventorySummaryQuery,
+  useFindCraftableBlueprintsMutation,
   type CraftingInputMaterial,
 } from "../../store/api/v2/market"
 import { useDebounce } from "../../hooks/useDebounce"
-import { useSearchParams } from "react-router-dom"
+import { useSearchParams, useNavigate } from "react-router-dom"
+import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 
 const TIER_COLORS: Record<number, "default" | "success" | "info" | "secondary" | "warning"> = {
   1: "default", 2: "success", 3: "info", 4: "secondary", 5: "warning",
@@ -45,7 +48,11 @@ export function CraftingCalculator() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const [searchParams] = useSearchParams()
+  const navigate = useNavigate()
   const prefillBlueprintId = searchParams.get("blueprint_id")
+  const [mode, setMode] = useState<"craft" | "discover">(prefillBlueprintId ? "craft" : "craft")
+  const [currentOrg] = useCurrentOrg()
+  const spectrumId = currentOrg?.spectrum_id
 
   // Blueprint search — by product name
   const [bpSearch, setBpSearch] = useState("")
@@ -90,6 +97,28 @@ export function CraftingCalculator() {
     setMaterials(prev => prev.filter(m => m.id !== id))
   }
 
+  // Inventory import
+  const { data: inventoryData } = useGetInventorySummaryQuery(
+    { spectrumId: spectrumId || undefined },
+    { skip: false },
+  )
+
+  const importFromInventory = () => {
+    if (!inventoryData?.materials?.length) return
+    const imported: MaterialInput[] = inventoryData.materials.map((m, i) => ({
+      id: nextId + i,
+      game_item_id: m.game_item_id,
+      game_item_name: m.game_item_name,
+      quality_value: m.avg_quality_value ?? 500,
+      quantity: m.total_quantity,
+    }))
+    setMaterials(imported)
+    setNextId(n => n + imported.length)
+  }
+
+  // "What Can I Craft?" discovery
+  const [findCraftable, { data: craftableResults, isLoading: discovering }] = useFindCraftableBlueprintsMutation()
+
   const updateMaterial = (id: number, field: keyof MaterialInput, value: any) => {
     setMaterials(prev => prev.map(m => m.id === id ? { ...m, [field]: value } : m))
   }
@@ -112,6 +141,19 @@ export function CraftingCalculator() {
     })
   }
 
+  const handleDiscover = () => {
+    if (!materials.length) return
+    findCraftable({
+      body: {
+        materials: materials.map(m => ({
+          game_item_id: m.game_item_id,
+          quantity_scu: m.quantity,
+          quality_value: m.quality_value,
+        })),
+      },
+    })
+  }
+
   return (
     <StandardPageLayout
       title={t("crafting.calculator_title", "Crafting Calculator")}
@@ -121,7 +163,20 @@ export function CraftingCalculator() {
     >
       <Grid item xs={12}>
       <Grid container spacing={2}>
-        {/* Blueprint Selector — search by product name */}
+        {/* Mode tabs */}
+        <Grid item xs={12}>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <Button variant={mode === "craft" ? "contained" : "outlined"} size="small" onClick={() => setMode("craft")}>
+              Craft Calculator
+            </Button>
+            <Button variant={mode === "discover" ? "contained" : "outlined"} size="small" onClick={() => setMode("discover")}>
+              What Can I Craft?
+            </Button>
+          </Stack>
+        </Grid>
+
+        {/* Blueprint Selector — only in craft mode */}
+        {mode === "craft" && (
         <Grid item xs={12}>
           <Paper sx={{ p: 2 }}>
             <Typography variant="subtitle2" gutterBottom>What do you want to craft?</Typography>
@@ -150,11 +205,18 @@ export function CraftingCalculator() {
             />
           </Paper>
         </Grid>
+        )}
 
         {/* Materials */}
         <Grid item xs={12}>
           <Paper sx={{ p: 2 }}>
-            <Typography variant="subtitle2" gutterBottom>Materials</Typography>
+            <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
+              <Typography variant="subtitle2">Materials</Typography>
+              <Button size="small" variant="outlined" onClick={importFromInventory}
+                disabled={!inventoryData?.materials?.length}>
+                Import from Inventory{spectrumId ? " (+ Org)" : ""}
+              </Button>
+            </Stack>
 
             {/* Add material autocomplete */}
             <Autocomplete
@@ -252,14 +314,25 @@ export function CraftingCalculator() {
 
         {/* Calculate */}
         <Grid item xs={12}>
-          <Button
-            variant="contained"
-            onClick={handleCalculate}
-            disabled={calculating || !selectedBlueprint || !materials.length}
-            startIcon={calculating ? <CircularProgress size={20} /> : undefined}
-          >
-            Calculate Output Quality
-          </Button>
+          {mode === "craft" ? (
+            <Button
+              variant="contained"
+              onClick={handleCalculate}
+              disabled={calculating || !selectedBlueprint || !materials.length}
+              startIcon={calculating ? <CircularProgress size={20} /> : undefined}
+            >
+              Calculate Output Quality
+            </Button>
+          ) : (
+            <Button
+              variant="contained"
+              onClick={handleDiscover}
+              disabled={discovering || !materials.length}
+              startIcon={discovering ? <CircularProgress size={20} /> : undefined}
+            >
+              Find Craftable Items
+            </Button>
+          )}
         </Grid>
 
         {error && (
@@ -349,6 +422,48 @@ export function CraftingCalculator() {
             </Paper>
           </Grid>
         )}
+        {/* Craftable Results — discover mode */}
+        {mode === "discover" && craftableResults && craftableResults.length > 0 && (
+          <Grid item xs={12}>
+            <Paper sx={{ p: 2 }}>
+              <Typography variant="subtitle2" gutterBottom>
+                Craftable Items ({craftableResults.length})
+              </Typography>
+              <Stack spacing={1}>
+                {craftableResults.map((bp) => (
+                  <Paper key={bp.blueprint_id} variant="outlined" sx={{ p: 1.5, cursor: "pointer", "&:hover": { bgcolor: "action.hover" } }}
+                    onClick={() => navigate(`/blueprints/${bp.blueprint_code}`)}>
+                    <Stack direction="row" spacing={1.5} alignItems="center">
+                      {bp.output_item_icon && <Box component="img" src={bp.output_item_icon} sx={{ width: 32, height: 32, objectFit: "contain" }} />}
+                      <Box sx={{ flex: 1 }}>
+                        <Typography variant="body2" fontWeight={600}>{bp.output_item_name}</Typography>
+                        <Typography variant="caption" color="text.secondary">
+                          {bp.item_category}{bp.crafting_time_seconds ? ` · ${Math.round(bp.crafting_time_seconds / 60)}m` : ""}
+                        </Typography>
+                      </Box>
+                      <Chip label={`×${bp.max_craftable}`} size="small" color="success" sx={{ fontWeight: 700 }} />
+                    </Stack>
+                    <Stack direction="row" spacing={0.5} sx={{ mt: 0.5 }} flexWrap="wrap" useFlexGap>
+                      {bp.ingredients.map((ing, i) => (
+                        <Chip key={i} size="small" variant="outlined"
+                          label={`${ing.name}: ${ing.quantity_required.toFixed(2)} / ${ing.available_quantity.toFixed(2)}`}
+                          color={ing.available_quantity >= ing.quantity_required ? "success" : "error"}
+                          sx={{ height: 20, fontSize: "0.65rem" }} />
+                      ))}
+                    </Stack>
+                  </Paper>
+                ))}
+              </Stack>
+            </Paper>
+          </Grid>
+        )}
+
+        {mode === "discover" && craftableResults && craftableResults.length === 0 && !discovering && (
+          <Grid item xs={12}>
+            <Alert severity="info">No blueprints can be crafted with these materials.</Alert>
+          </Grid>
+        )}
+
       </Grid>
       </Grid>    </StandardPageLayout>
   )
