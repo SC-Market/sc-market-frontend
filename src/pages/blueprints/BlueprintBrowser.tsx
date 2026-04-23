@@ -58,7 +58,7 @@ import { BlueprintDetailModal } from "../../components/game-data/BlueprintDetail
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { FilterSidebarLayout } from "../../components/layout/FilterSidebarLayout"
-import { useWishlist } from "../../hooks/wishlist/WishlistContext"
+import { useShoppingList } from "../../hooks/wishlist/WishlistContext"
 
 type ViewMode = "grid" | "list"
 
@@ -165,7 +165,7 @@ export function BlueprintBrowser() {
 
   const [addToInventory] = useAddBlueprintToInventoryMutation()
   const [removeFromInventory] = useRemoveBlueprintFromInventoryMutation()
-  const { addToWishlist } = useWishlist()
+  const { addToShoppingList } = useShoppingList()
   const handleBookmarkToggle = async (blueprintId: string, shouldOwn: boolean) => {
     try {
       if (shouldOwn) await addToInventory({ blueprintId, body: {} }).unwrap()
@@ -311,7 +311,7 @@ export function BlueprintBrowser() {
                         viewMode="grid"
                         onClick={handleBlueprintClick}
                         onBookmarkToggle={handleBookmarkToggle}
-                        onWishlistAdd={(id) => addToWishlist(id)}
+                        onWishlistAdd={(id) => addToShoppingList(id)}
                       />
                     </Grid>
                   ))}
