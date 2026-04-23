@@ -98,7 +98,6 @@ export function AddToCartDrawer({ open, onClose, listingId }: AddToCartDrawerPro
     }
     // Order value limits are checked at checkout, not when adding to cart
     // (users can make offers at different amounts)
-    }
     try {
       await addToCart({
         addToCartRequest: {
@@ -235,3 +234,4 @@ export function AddToCartDrawer({ open, onClose, listingId }: AddToCartDrawerPro
     </Drawer>
   )
 }
+
