@@ -936,6 +936,10 @@ const injectedRtkApi = api
             game_item_id: queryArg.gameItemId,
             quality_tier_min: queryArg.qualityTierMin,
             quality_tier_max: queryArg.qualityTierMax,
+            quality_value_min: queryArg.qualityValueMin,
+            quality_value_max: queryArg.qualityValueMax,
+            sort_by: queryArg.sortBy,
+            sort_order: queryArg.sortOrder,
             page: queryArg.page,
             page_size: queryArg.pageSize,
           },
@@ -1919,6 +1923,11 @@ export type SearchBuyOrdersApiArg = {
   gameItemId?: string
   qualityTierMin?: number
   qualityTierMax?: number
+  qualityValueMin?: number
+  qualityValueMax?: number
+  /** Sort by: created_at, price_per_unit, quality_tier_min, quality_value_min */
+  sortBy?: string
+  sortOrder?: "asc" | "desc"
   page?: number
   pageSize?: number
 }
@@ -4159,12 +4168,18 @@ export type StandingBuyOrder = {
   buy_order_id: string
   game_item_id: string
   game_item_name: string
+  /** Game item type for quality mode determination */
+  game_item_type?: string
   buyer_id: string
   buyer_name: string
   quantity: number
   price_per_unit: number
   quality_tier_min?: number
   quality_tier_max?: number
+  /** Minimum quality value (0-1000) */
+  quality_value_min?: number
+  /** Maximum quality value (0-1000) */
+  quality_value_max?: number
   negotiable: boolean
   status: "active" | "fulfilled" | "cancelled" | "expired"
   created_at: string
@@ -4176,6 +4191,10 @@ export type CreateStandingBuyOrderRequest = {
   price_per_unit: number
   quality_tier_min?: number
   quality_tier_max?: number
+  /** Minimum quality value (0-1000) for resource buy orders */
+  quality_value_min?: number
+  /** Maximum quality value (0-1000) for resource buy orders */
+  quality_value_max?: number
   negotiable?: boolean
   expires_in_days?: number
 }
@@ -4190,6 +4209,8 @@ export type UpdateStandingBuyOrderRequest = {
   price_per_unit?: number
   quality_tier_min?: number
   quality_tier_max?: number
+  quality_value_min?: number
+  quality_value_max?: number
   negotiable?: boolean
   expires_in_days?: number
 }

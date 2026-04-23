@@ -17,43 +17,21 @@ import { LoadingButton } from "@mui/lab";
 import { ExtendedTheme } from "../../../../hooks/styles/Theme";
 import { useAlertHook } from "../../../../hooks/alert/AlertHook";
 import { Section } from "../../../../components/paper/Section";
-import { QualityBadge } from "../../../../components/market/v2/QualityBadge";
 import { useCreateStandingBuyOrderMutation } from "../../../../store/api/v2/market";
+
+import { getQualityMode, type QualityMode } from "../../../../util/qualityMode";
 
 /**
  * CreateBuyOrderV2 Component
- * 
- * Task: 11.2 Implement CreateBuyOrderV2 component
- * Requirements: 37.1-37.8
- * 
- * Form for creating buy orders with quality tier requirements.
- * Maintains visual parity with V1 BuyOrderForm while adding V2-specific features:
- * - Quality tier range selector (min and max dropdowns)
- * - Price range inputs (min and max)
- * - Quantity input
- * - Expiration date picker
- * - Negotiable checkbox
- * 
- * Visual Parity Requirements:
- * - Reuse FlatSection/Section for layout
- * - Reuse NumericFormat for numeric inputs
- * - Reuse LoadingButton for submission
- * - Maintain identical form field styling
- * - Use Grid spacing: theme.layoutSpacing.layout
- * - All items: xs={12} with display="flex" and justifyContent="right"
- * 
- * V2 Enhancements:
- * - Add quality_tier_min dropdown (1-5)
- * - Add quality_tier_max dropdown (1-5)
- * - Validate quality_tier_min <= quality_tier_max
- * - Show quality tier badges for selected range
+ * Form for creating buy orders with conditional quality inputs based on item type.
  */
 
 interface CreateBuyOrderV2Props {
   gameItemId: string;
+  gameItemType?: string;
 }
 
-export function CreateBuyOrderV2({ gameItemId }: CreateBuyOrderV2Props) {
+export function CreateBuyOrderV2({ gameItemId, gameItemType }: CreateBuyOrderV2Props) {
   const { t } = useTranslation();
   const theme = useTheme<ExtendedTheme>();
   const issueAlert = useAlertHook();
@@ -66,6 +44,9 @@ export function CreateBuyOrderV2({ gameItemId }: CreateBuyOrderV2Props) {
   const [quantity, setQuantity] = useState<number>(1);
   const [qualityTierMin, setQualityTierMin] = useState<number | null>(null);
   const [qualityTierMax, setQualityTierMax] = useState<number | null>(null);
+  const [qualityValueMin, setQualityValueMin] = useState<number | null>(null);
+  const [qualityValueMax, setQualityValueMax] = useState<number | null>(null);
+  const qualityMode = getQualityMode(gameItemType);
 
   // Calculate total price range
   const totalMin = priceMin * quantity;
@@ -137,8 +118,10 @@ export function CreateBuyOrderV2({ gameItemId }: CreateBuyOrderV2Props) {
           game_item_id: gameItemId,
           quantity,
           price_per_unit: priceMax || priceMin || 0,
-          quality_tier_min: qualityTierMin ?? undefined,
-          quality_tier_max: qualityTierMax ?? undefined,
+          quality_tier_min: qualityMode === "tier" ? (qualityTierMin ?? undefined) : undefined,
+          quality_tier_max: qualityMode === "tier" ? (qualityTierMax ?? undefined) : undefined,
+          quality_value_min: qualityMode === "value" ? (qualityValueMin ?? undefined) : undefined,
+          quality_value_max: qualityMode === "value" ? (qualityValueMax ?? undefined) : undefined,
           negotiable,
         },
       }).unwrap();
@@ -182,82 +165,48 @@ export function CreateBuyOrderV2({ gameItemId }: CreateBuyOrderV2Props) {
         spacing={theme.layoutSpacing.layout}
         sx={{ padding: 2 }}
       >
-        {/* Quality Tier Range */}
-        <Grid item xs={12} sm={6} display="flex" justifyContent="right">
-          <TextField
-            select
-            fullWidth
-            color="secondary"
-            label={t("market.qualityTierMin", "Min Quality Tier")}
-            value={qualityTierMin ?? ""}
-            onChange={(e) => {
-              const value = e.target.value;
-              setQualityTierMin(value === "" ? null : Number(value));
-            }}
-            SelectProps={{
-              native: true,
-            }}
-            helperText={t(
-              "market.qualityTierMinHelp",
-              "Minimum acceptable quality tier"
-            )}
-          >
-            <option value="">{t("market.anyQuality", "Any Quality")}</option>
-            <option value="1">Tier 1 (Bronze)</option>
-            <option value="2">Tier 2 (Silver)</option>
-            <option value="3">Tier 3 (Gold)</option>
-            <option value="4">Tier 4 (Platinum)</option>
-            <option value="5">Tier 5 (Diamond)</option>
-          </TextField>
-        </Grid>
-
-        <Grid item xs={12} sm={6} display="flex" justifyContent="right">
-          <TextField
-            select
-            fullWidth
-            color="secondary"
-            label={t("market.qualityTierMax", "Max Quality Tier")}
-            value={qualityTierMax ?? ""}
-            onChange={(e) => {
-              const value = e.target.value;
-              setQualityTierMax(value === "" ? null : Number(value));
-            }}
-            SelectProps={{
-              native: true,
-            }}
-            helperText={t(
-              "market.qualityTierMaxHelp",
-              "Maximum acceptable quality tier"
-            )}
-          >
-            <option value="">{t("market.anyQuality", "Any Quality")}</option>
-            <option value="1">Tier 1 (Bronze)</option>
-            <option value="2">Tier 2 (Silver)</option>
-            <option value="3">Tier 3 (Gold)</option>
-            <option value="4">Tier 4 (Platinum)</option>
-            <option value="5">Tier 5 (Diamond)</option>
-          </TextField>
-        </Grid>
-
-        {/* Show selected quality tier range */}
-        {(qualityTierMin !== null || qualityTierMax !== null) && (
-          <Grid item xs={12} display="flex" justifyContent="center">
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              <Typography variant="body2" color="text.secondary">
-                {t("market.selectedRange", "Selected Range:")}
-              </Typography>
-              {qualityTierMin !== null && (
-                <QualityBadge tier={qualityTierMin} size="small" />
-              )}
-              {qualityTierMin !== null && qualityTierMax !== null && (
-                <Typography variant="body2">-</Typography>
-              )}
-              {qualityTierMax !== null && (
-                <QualityBadge tier={qualityTierMax} size="small" />
-              )}
-            </Box>
+        {/* Quality — conditional based on item type */}
+        {qualityMode === "tier" && (<>
+          <Grid item xs={12} sm={6}>
+            <TextField select fullWidth color="secondary" size="small"
+              label={t("market.qualityTierMin", "Min Quality Tier")}
+              value={qualityTierMin ?? ""}
+              onChange={(e) => setQualityTierMin(e.target.value === "" ? null : Number(e.target.value))}
+              SelectProps={{ native: true }}>
+              <option value="">Any</option>
+              {[1,2,3,4,5].map(t => <option key={t} value={t}>Tier {t}</option>)}
+            </TextField>
           </Grid>
-        )}
+          <Grid item xs={12} sm={6}>
+            <TextField select fullWidth color="secondary" size="small"
+              label={t("market.qualityTierMax", "Max Quality Tier")}
+              value={qualityTierMax ?? ""}
+              onChange={(e) => setQualityTierMax(e.target.value === "" ? null : Number(e.target.value))}
+              SelectProps={{ native: true }}>
+              <option value="">Any</option>
+              {[1,2,3,4,5].map(t => <option key={t} value={t}>Tier {t}</option>)}
+            </TextField>
+          </Grid>
+        </>)}
+
+        {qualityMode === "value" && (<>
+          <Grid item xs={12} sm={6}>
+            <NumericFormat decimalScale={0} allowNegative={false} customInput={TextField}
+              size="small" fullWidth color="secondary"
+              isAllowed={({ floatValue }) => !floatValue || floatValue <= 1000}
+              label="Min Quality (0-1000)"
+              value={qualityValueMin ?? ""}
+              onValueChange={(v) => setQualityValueMin(v.floatValue ?? null)} />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <NumericFormat decimalScale={0} allowNegative={false} customInput={TextField}
+              size="small" fullWidth color="secondary"
+              isAllowed={({ floatValue }) => !floatValue || floatValue <= 1000}
+              label="Max Quality (0-1000)"
+              value={qualityValueMax ?? ""}
+              onValueChange={(v) => setQualityValueMax(v.floatValue ?? null)} />
+          </Grid>
+        </>)}
 
         {/* Negotiable Checkbox */}
         <Grid item xs={12} display="flex" justifyContent="right">

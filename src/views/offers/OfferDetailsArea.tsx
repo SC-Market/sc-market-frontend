@@ -617,11 +617,13 @@ export function OfferDetailsArea(props: { session: OfferSession }) {
                   >
                     <MarkdownRender text={currentOffer.description} />
                   </Typography>
-                  <OrderSummarySection
-                    market_listings={currentOffer.market_listings}
-                    total_cost={+currentOffer.cost}
-                    offerChanges={offerChanges}
-                  />
+                  {!(currentOffer.v2_variant_items && currentOffer.v2_variant_items.length > 0) && (
+                    <OrderSummarySection
+                      market_listings={currentOffer.market_listings}
+                      total_cost={+currentOffer.cost}
+                      offerChanges={offerChanges}
+                    />
+                  )}
                   {currentOffer.v2_variant_items && currentOffer.v2_variant_items.length > 0 && (
                     <OrderSummarySectionV2
                       items={currentOffer.v2_variant_items.map((vi) => ({

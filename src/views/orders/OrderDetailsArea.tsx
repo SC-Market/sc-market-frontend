@@ -48,6 +48,8 @@ import {
   contractorsApi,
 } from "../../store/contractor"
 import { OrderSummarySection } from "../../components/orders/OrderSummarySection"
+import { OrderSummarySectionV2 } from "../../components/orders/OrderSummarySectionV2"
+import { useGetOrderDetailQuery } from "../../store/api/v2/market"
 import {
   CancelRounded,
   DoneRounded,
@@ -135,6 +137,8 @@ export function OrderDetailsArea(props: { order: Order }) {
   const [options, setOptions] = useState<MinimalUser[]>([])
 
   const issueAlert = useAlertHook()
+  const { data: orderDetailV2 } = useGetOrderDetailQuery({ orderId: order.order_id })
+  const hasV2Items = (orderDetailV2?.items?.length ?? 0) > 0
   const [currentOrg] = useCurrentOrg()
 
   const { data: membersData } = useGetContractorMembersQuery({
@@ -571,10 +575,18 @@ export function OrderDetailsArea(props: { order: Order }) {
                   >
                     <MarkdownRender text={order.description} />
                   </Typography>
-                  <OrderSummarySection
-                    market_listings={order.market_listings}
-                    total_cost={+order.cost}
-                  />
+                  {!hasV2Items && (
+                    <OrderSummarySection
+                      market_listings={order.market_listings}
+                      total_cost={+order.cost}
+                    />
+                  )}
+                  {hasV2Items && (
+                    <OrderSummarySectionV2
+                      items={orderDetailV2!.items}
+                      total_cost={orderDetailV2!.total_price}
+                    />
+                  )}
                 </Stack>
               </TableCell>
             </TableRow>

@@ -1,44 +1,37 @@
 /**
- * Quality display mode for game items based on Star Citizen crafting system.
- *
- * - "numeric": Raw materials/commodities — quality is a continuous value (0–1000)
- * - "tiered": Craftable equipment — quality is a tier (1–5) based on blueprint + materials
- * - "none": Cosmetics, flairs, ships — no quality attribute
- *
- * Reference: https://robertsspaceindustries.com/en/comm-link/transmission/19652-Crafting-Gameplay-Guide
+ * Quality mode determination for game items.
+ * Shared between listing creation, buy orders, and stock management.
  */
-export type QualityMode = "numeric" | "tiered" | "none"
 
-const NUMERIC_TYPES = new Set(["Commodity"])
+export type QualityMode = "none" | "tier" | "value"
 
-const TIERED_TYPES = new Set([
-  "Ranged Weapon", "Melee Weapon", "Thrown Weapon", "Ship Weapon",
-  "Helmet", "Torso", "Arms", "Legs", "Gloves", "Footwear", "Undersuit",
-  "Backpack", "Backpack (Clothing)",
-  "Shield", "Power Plant", "Cooler", "Quantum Drive", "Jump Drive",
-  "Mining Head", "Mining Modifier", "Handheld Mining Modifier",
-  "Salvage Head", "Salvage Modifier",
-  "Ship Module", "Ship Turret or Gimbal", "Ship Component",
-  "Missile", "Missile Rack", "Flight Blade",
-  "Weapon Attachment", "Weapon Magazine", "Tool Attachment",
-  "Tractor Beam", "Towing Beam", "Fuel Nozzle", "Fuel Pod",
-  "Bomb", "Bomb Launcher", "FPS Tool", "Medical Pen", "Hacking Chip",
-])
+/** Item types that use numeric quality value (0-1000) — crafting ingredients */
+const VALUE_TYPES = /resource|commodity|ore|mineral|raw material/i
 
+/** Item types that use quality tier (1-5) — crafted outputs */
+const TIER_TYPES = /armor|weapon|clothing|undersuit|helmet|backpack|arms|legs|core|magazine|battery/i
+
+/**
+ * Determine which quality input to show for a given item type.
+ * - "value": numeric 0-1000 (resources, commodities, ores)
+ * - "tier": dropdown 1-5 (armor, weapons, clothing)
+ * - "none": no quality input (ships, components, misc)
+ */
 export function getQualityMode(itemType: string | null | undefined): QualityMode {
   if (!itemType) return "none"
-  if (NUMERIC_TYPES.has(itemType)) return "numeric"
-  if (TIERED_TYPES.has(itemType)) return "tiered"
+  if (VALUE_TYPES.test(itemType)) return "value"
+  if (TIER_TYPES.test(itemType)) return "tier"
   return "none"
 }
 
 /** Format quality for display */
-export function formatQuality(
-  mode: QualityMode,
-  attrs: { quality_tier?: number; quality_value?: number } | undefined,
-): string {
-  if (!attrs) return "—"
-  if (mode === "tiered" && attrs.quality_tier != null) return `Tier ${attrs.quality_tier}`
-  if (mode === "numeric" && attrs.quality_value != null) return `Q${attrs.quality_value}`
-  return "—"
+export function formatQuality(mode: QualityMode, min?: number, max?: number): string | null {
+  if (mode === "none" || (min == null && max == null)) return null
+  if (mode === "tier") {
+    if (min != null && max != null && min !== max) return `Tier ${min}–${max}`
+    return `Tier ${min ?? max}`
+  }
+  // value mode
+  if (min != null && max != null && min !== max) return `${min}–${max}`
+  return `${min ?? max}`
 }

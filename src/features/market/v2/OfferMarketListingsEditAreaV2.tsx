@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useCallback } from "react"
+import React, { useMemo, useState, useCallback, useEffect } from "react"
 import {
   Autocomplete,
   Button,
@@ -218,6 +218,17 @@ export function OfferMarketListingsEditAreaV2(props: { offer: OfferSession }) {
     Record<string, string>
   >({})
 
+  // Initialize variant selections from existing v2_variant_items
+  useEffect(() => {
+    if (body.v2_variant_items?.length) {
+      const initial: Record<string, string> = {}
+      for (const item of body.v2_variant_items) {
+        initial[item.listing_id] = item.variant_id
+      }
+      setVariantSelections(initial)
+    }
+  }, []) // Only on mount
+
   // Build extended listings with variant information
   const extendedListings: ListingRowItemV2[] = useMemo(() => {
     return body.market_listings
@@ -251,15 +262,27 @@ export function OfferMarketListingsEditAreaV2(props: { offer: OfferSession }) {
   // Handle variant change
   const handleVariantChange = useCallback(
     (listingId: string, variantId: string) => {
-      setVariantSelections((prev) => ({
-        ...prev,
-        [listingId]: variantId,
-      }))
+      const newSelections = { ...variantSelections, [listingId]: variantId }
+      setVariantSelections(newSelections)
 
-      // Fetch listing detail to get variant price
-      // Price will be updated when listing detail is fetched
+      // Sync to body.v2_variant_items
+      const listing = body.market_listings.find((l) => l.listing_id === listingId)
+      if (!listing) return
+      const existing = (body.v2_variant_items || []).filter((i) => i.listing_id !== listingId)
+      setBody({
+        ...body,
+        v2_variant_items: [
+          ...existing,
+          {
+            listing_id: listingId,
+            variant_id: variantId,
+            quantity: listing.quantity,
+            price_per_unit: 0, // Will be resolved by backend from variant pricing
+          },
+        ],
+      })
     },
-    []
+    [body, setBody, variantSelections]
   )
 
   // Handle quantity change
@@ -267,15 +290,12 @@ export function OfferMarketListingsEditAreaV2(props: { offer: OfferSession }) {
     (listingId: string, quantity: number) => {
       setBody({
         ...body,
-        market_listings: body.market_listings.map((l) => {
-          if (l.listing_id === listingId) {
-            return {
-              ...l,
-              quantity,
-            }
-          }
-          return l
-        }),
+        market_listings: body.market_listings.map((l) =>
+          l.listing_id === listingId ? { ...l, quantity } : l
+        ),
+        v2_variant_items: (body.v2_variant_items || []).map((i) =>
+          i.listing_id === listingId ? { ...i, quantity } : i
+        ),
       })
     },
     [body, setBody]
@@ -286,11 +306,9 @@ export function OfferMarketListingsEditAreaV2(props: { offer: OfferSession }) {
     (listingId: string) => {
       setBody({
         ...body,
-        market_listings: body.market_listings.filter(
-          (l) => l.listing_id !== listingId
-        ),
+        market_listings: body.market_listings.filter((l) => l.listing_id !== listingId),
+        v2_variant_items: (body.v2_variant_items || []).filter((i) => i.listing_id !== listingId),
       })
-      // Clean up variant selection
       setVariantSelections((prev) => {
         const { [listingId]: _, ...rest } = prev
         return rest
@@ -317,9 +335,7 @@ export function OfferMarketListingsEditAreaV2(props: { offer: OfferSession }) {
 
   // Handle add listing
   const handleAddListing = useCallback(() => {
-    if (!selected || !selectedVariantId) {
-      return
-    }
+    if (!selected || !selectedVariantId) return
 
     setBody({
       ...body,
@@ -327,15 +343,22 @@ export function OfferMarketListingsEditAreaV2(props: { offer: OfferSession }) {
         ...body.market_listings,
         { listing_id: selected.listing_id, quantity },
       ],
+      v2_variant_items: [
+        ...(body.v2_variant_items || []),
+        {
+          listing_id: selected.listing_id,
+          variant_id: selectedVariantId,
+          quantity,
+          price_per_unit: 0,
+        },
+      ],
     })
 
-    // Store variant selection
     setVariantSelections((prev) => ({
       ...prev,
       [selected.listing_id]: selectedVariantId,
     }))
 
-    // Reset form
     setQuantity(1)
     setSelected(null)
     setSelectedVariantId(null)
