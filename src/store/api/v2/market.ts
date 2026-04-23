@@ -1265,7 +1265,6 @@ export type GetMyListingsApiArg = {
   sortBy?: "created_at" | "updated_at" | "price" | "quantity"
   /** Sort order (default: desc) */
   sortOrder?: "asc" | "desc"
-  /** Org spectrum ID — returns org listings instead of user listings */
   spectrumId?: string
 }
 export type GetListingDetailApiResponse =
