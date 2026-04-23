@@ -92,11 +92,13 @@ export function MissionDetailTabs({ data, onBlueprintClick }: { data: MissionDet
   const m = data.mission
   const hasChain = !!(m.is_chain_starter || m.is_chain_mission || data.prerequisite_missions?.length)
 
+  const hasDetails = !!(data.ship_encounters?.length || data.npc_encounters?.length || data.entity_spawns?.length || data.hauling_orders?.length)
+
   const tabs: { label: string; id: string }[] = [
     { label: "Overview", id: "overview" },
-    { label: "Details", id: "details" },
-    { label: "Requirements", id: "requirements" },
   ]
+  if (hasDetails) tabs.push({ label: "Details", id: "details" })
+  tabs.push({ label: "Requirements", id: "requirements" })
   if (m.reward_scope) tabs.push({ label: "Rank Calculator", id: "calculator" })
   if (hasChain) tabs.push({ label: "Chain Info", id: "chain" })
 
