@@ -9,6 +9,7 @@ import { CYBERPUNK_theme } from "./themes/CYBERPUNK"
 import { OCEAN_theme } from "./themes/OCEAN"
 import { SUNSET_theme } from "./themes/SUNSET"
 import { SPACE_theme } from "./themes/SPACE"
+import { NEON_BLUE_theme } from "./themes/NEON_BLUE"
 
 export const CUSTOM_THEMES = new Map<string, Theme>()
 CUSTOM_THEMES.set("BWINCORP", BWINCORP_theme)
@@ -21,3 +22,4 @@ CUSTOM_THEMES.set("CYBERPUNK", CYBERPUNK_theme)
 CUSTOM_THEMES.set("OCEAN", OCEAN_theme)
 CUSTOM_THEMES.set("SUNSET", SUNSET_theme)
 CUSTOM_THEMES.set("SPACE", SPACE_theme)
+CUSTOM_THEMES.set("NEON_BLUE", NEON_BLUE_theme)

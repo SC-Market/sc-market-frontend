@@ -255,6 +255,18 @@ const injectedRtkApi = api
           invalidatesTags: ["Listings V2"],
         },
       ),
+      getInventorySummary: build.query<
+        GetInventorySummaryApiResponse,
+        GetInventorySummaryApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/listings/inventory-summary`,
+          params: {
+            spectrum_id: queryArg.spectrumId,
+          },
+        }),
+        providesTags: ["Listings V2"],
+      }),
       startImport: build.mutation<StartImportApiResponse, StartImportApiArg>({
         query: (queryArg) => ({
           url: `/admin/imports/${queryArg.source}`,
@@ -854,6 +866,17 @@ const injectedRtkApi = api
         }),
         providesTags: ["Game Data - Blueprints"],
       }),
+      findCraftableBlueprints: build.mutation<
+        FindCraftableBlueprintsApiResponse,
+        FindCraftableBlueprintsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/game-data/blueprints/craftable`,
+          method: "POST",
+          body: queryArg.body,
+        }),
+        invalidatesTags: ["Game Data - Blueprints"],
+      }),
       getFeatureFlag: build.query<
         GetFeatureFlagApiResponse,
         GetFeatureFlagApiArg
@@ -1333,6 +1356,12 @@ export type UploadPhotosApiResponse = /** status 200 Ok */ {
 export type UploadPhotosApiArg = {
   /** Listing UUID */
   id: string
+}
+export type GetInventorySummaryApiResponse =
+  /** status 200 Ok */ InventorySummaryResponse
+export type GetInventorySummaryApiArg = {
+  /** Optional org spectrum_id to include org inventory */
+  spectrumId?: string
 }
 export type StartImportApiResponse = /** status 200 Ok */ {
   job: ImportJob
@@ -1890,6 +1919,17 @@ export type GetOrgBlueprintOwnersApiArg = {
   blueprintId: string
   /** Org spectrum ID */
   spectrumId: string
+}
+export type FindCraftableBlueprintsApiResponse =
+  /** status 200 Ok */ CraftableBlueprintResult[]
+export type FindCraftableBlueprintsApiArg = {
+  body: {
+    materials: {
+      quality_value?: number
+      quantity_scu: number
+      game_item_id: string
+    }[]
+  }
 }
 export type GetFeatureFlagApiResponse =
   /** status 200 Current feature flag setting */ GetFeatureFlagResponse
@@ -2759,6 +2799,18 @@ export type UpdateListingRequest = {
   max_order_value?: number | null
   /** Updated bulk discount tiers (pass [] to remove, omit to keep unchanged) */
   bulk_discount_tiers?: BulkDiscountTier[]
+}
+export type InventoryMaterial = {
+  game_item_id: string
+  game_item_name: string
+  game_item_type?: string
+  game_item_icon?: string
+  total_quantity: number
+  avg_quality_value?: number
+  max_quality_value?: number
+}
+export type InventorySummaryResponse = {
+  materials: InventoryMaterial[]
 }
 export type ImportSource = "cstone-items" | "uex-items" | "uex-attributes"
 export type JobStatus = "running" | "completed" | "failed"
@@ -4017,6 +4069,23 @@ export type BlueprintCategory = {
   /** Number of blueprints in this category */
   count: number
 }
+export type CraftableBlueprintResult = {
+  blueprint_id: string
+  blueprint_code: string
+  blueprint_name: string
+  output_item_name: string
+  output_item_icon?: string
+  item_category?: string
+  crafting_time_seconds?: number
+  max_craftable: number
+  ingredients: {
+    quality_value?: number
+    available_quantity: number
+    quantity_required: number
+    name: string
+    game_item_id: string
+  }[]
+}
 export type MarketVersion = "V1" | "V2"
 export type RecordStringBoolean = {
   [key: string]: boolean
@@ -4453,6 +4522,7 @@ export const {
   useRefreshListingMutation,
   useTrackViewMutation,
   useUploadPhotosMutation,
+  useGetInventorySummaryQuery,
   useStartImportMutation,
   useGetJobStatusQuery,
   useListJobsQuery,
@@ -4508,6 +4578,7 @@ export const {
   useGetBlueprintCategoriesQuery,
   useGetUserBlueprintInventoryQuery,
   useGetOrgBlueprintOwnersQuery,
+  useFindCraftableBlueprintsMutation,
   useGetFeatureFlagQuery,
   useSetFeatureFlagMutation,
   useGetCartQuery,
