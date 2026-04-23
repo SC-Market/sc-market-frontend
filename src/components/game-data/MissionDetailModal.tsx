@@ -108,7 +108,7 @@ export function MissionDetailModal({ missionId, open, onClose, onBlueprintClick 
               icon={getMissionIcon(m.category) ? <img src={getMissionIcon(m.category)!} alt="" style={{ width: 16, height: 16 }} /> : undefined}
             />
           )}
-          {m.career_type && m.career_type !== getMissionTypeLabel(m.category) && (
+          {m.career_type && m.career_type !== getMissionTypeLabel(m.category) && !m.career_type.includes("~mission") && (
             <Chip label={m.career_type} size="small" variant="outlined" />
           )}
           {(m.is_illegal || m.legal_status === "ILLEGAL") && <Chip label="ILLEGAL" size="small" color="error" />}
@@ -181,7 +181,7 @@ function OverviewTab({ data, onBlueprintClick }: { data: MissionDetailResponse; 
             <Typography variant="body2">{m.reputation_reward.toLocaleString()} XP</Typography>
           </Stack>
         )}
-        {m.faction && (
+        {m.faction && !m.faction.includes("~mission") && (
           <Stack direction="row" justifyContent="space-between">
             <Typography variant="body2" color="text.secondary">Faction</Typography>
             <Typography variant="body2">{m.faction}</Typography>

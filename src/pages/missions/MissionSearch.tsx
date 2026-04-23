@@ -307,7 +307,7 @@ export function MissionSearch() {
                           </TableCell>
                           <TableCell>
                             <Typography variant="caption" color="text.secondary" noWrap sx={{ maxWidth: 100, display: "block" }}>
-                              {m.faction || "—"}
+                              {m.faction?.includes("~mission") ? "Various" : m.faction || "—"}
                             </Typography>
                           </TableCell>
                           <TableCell>
