@@ -90,7 +90,9 @@ export function MissionRankCalculator({ reputationReward, rewardScope, rewardFac
       )}
 
       <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-        <strong>{xpPerRun}</strong> XP per run towards <Chip label={scopeDisplayName} size="small" color="primary" sx={{ height: 20, fontSize: "0.7rem" }} />
+        <strong>{xpPerRun}</strong> XP per run towards{" "}
+        {rewardFaction && <Chip label={rewardFaction} size="small" color="secondary" sx={{ height: 20, fontSize: "0.7rem", mr: 0.5 }} />}
+        <Chip label={scopeDisplayName} size="small" color="primary" sx={{ height: 20, fontSize: "0.7rem" }} />
       </Typography>
 
       <Table size="small" sx={{ "& td, & th": { py: 0.5, px: 1 } }}>
