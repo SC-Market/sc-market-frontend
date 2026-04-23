@@ -61,7 +61,10 @@ export function AdminFeatureFlagsView() {
   // Add override dialog
   const [addOpen, setAddOpen] = useState(false)
   const [newUsername, setNewUsername] = useState("")
-  const [newVersion, setNewVersion] = useState<"V1" | "V2">("V2")
+  const [newFlagName, setNewFlagName] = useState("market_v2")
+  const [newEnabled, setNewEnabled] = useState(true)
+
+  const flagNames = (stats || []).map((s: any) => s.flag_name)
 
   const handleSaveFlag = async (flagName: string) => {
     const e = edits[flagName]
@@ -84,9 +87,9 @@ export function AdminFeatureFlagsView() {
     if (!newUsername.trim()) return
     try {
       await setUserOverride({
-        setUserOverrideRequest: { username: newUsername.trim(), market_version: newVersion },
+        setUserOverrideRequest: { username: newUsername.trim(), flag_name: newFlagName, enabled: newEnabled },
       }).unwrap()
-      issueAlert({ message: `Override set for ${newUsername}`, severity: "success" })
+      issueAlert({ message: `Override set for ${newUsername} (${newFlagName}=${newEnabled})`, severity: "success" })
       setAddOpen(false)
       setNewUsername("")
     } catch (err: any) {
@@ -94,9 +97,9 @@ export function AdminFeatureFlagsView() {
     }
   }
 
-  const handleRemoveOverride = async (username: string) => {
+  const handleRemoveOverride = async (username: string, flagName?: string) => {
     try {
-      await removeUserOverride({ username }).unwrap()
+      await removeUserOverride({ username, flagName }).unwrap()
       issueAlert({ message: `Override removed for ${username}`, severity: "success" })
     } catch (err: any) {
       issueAlert({ message: err?.data?.message || "Failed", severity: "error" })
@@ -187,7 +190,8 @@ export function AdminFeatureFlagsView() {
           <TableHead>
             <TableRow>
               <TableCell>Username</TableCell>
-              <TableCell>Version</TableCell>
+              <TableCell>Flag</TableCell>
+              <TableCell>Enabled</TableCell>
               <TableCell>Updated</TableCell>
               <TableCell align="right">Actions</TableCell>
             </TableRow>
@@ -195,20 +199,21 @@ export function AdminFeatureFlagsView() {
           <TableBody>
             {(!overridesData?.overrides || overridesData.overrides.length === 0) && (
               <TableRow>
-                <TableCell colSpan={4} align="center">
+                <TableCell colSpan={5} align="center">
                   <Typography color="text.secondary" sx={{ py: 2 }}>No overrides</Typography>
                 </TableCell>
               </TableRow>
             )}
-            {overridesData?.overrides?.map((o: any) => (
-              <TableRow key={o.user_id}>
+            {overridesData?.overrides?.map((o: any, i: number) => (
+              <TableRow key={`${o.user_id}-${o.flag_name}-${i}`}>
                 <TableCell><Typography variant="body2" fontWeight="bold">{o.username}</Typography></TableCell>
+                <TableCell><Chip label={o.flag_name} size="small" variant="outlined" /></TableCell>
                 <TableCell>
-                  <Chip label={o.market_version} color={o.market_version === "V2" ? "secondary" : "default"} size="small" />
+                  <Chip label={o.enabled ? "ON" : "OFF"} color={o.enabled ? "success" : "default"} size="small" />
                 </TableCell>
                 <TableCell>{new Date(o.updated_at).toLocaleString()}</TableCell>
                 <TableCell align="right">
-                  <IconButton size="small" onClick={() => handleRemoveOverride(o.username)} color="error">
+                  <IconButton size="small" onClick={() => handleRemoveOverride(o.username, o.flag_name)} color="error">
                     <DeleteRounded fontSize="small" />
                   </IconButton>
                 </TableCell>

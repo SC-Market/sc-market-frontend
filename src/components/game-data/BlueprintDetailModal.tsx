@@ -12,7 +12,6 @@ import {
   Typography,
   Chip,
   Stack,
-  CircularProgress,
   Alert,
   Divider,
   Slider,
@@ -40,6 +39,7 @@ function formatQty(scu: number | string): string {
 
 import { formatCraftingTime } from "../../constants/crafting"
 import { propertyLabel, isModifierPositive, interpolateModifier } from "../../util/statDisplay"
+import { DetailPageSkeleton } from "./GameDataSkeletons"
 
 interface Props {
   blueprintId: string | null
@@ -173,7 +173,7 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
       </Tabs>
 
       <DialogContent sx={{ minHeight: 300 }}>
-        {isLoading && <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}><CircularProgress /></Box>}
+        {isLoading && <DetailPageSkeleton />}
         {error && <Alert severity="error">Failed to load blueprint.</Alert>}
 
         {data && tab === 0 && (

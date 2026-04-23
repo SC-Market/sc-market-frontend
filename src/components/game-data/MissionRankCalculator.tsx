@@ -43,13 +43,22 @@ export function MissionRankCalculator({ reputationReward, rewardScope, requiredR
     return Math.floor(reputationReward / crewSize)
   }, [reputationReward, crewSize])
 
+  // Detect inverse scopes (Affinity: Exalted=0 → Hated=max, higher XP = worse)
+  // For these, reverse the display so progression makes sense
+  const isInverse = useMemo(() => {
+    if (ranks.length < 2) return false
+    const firstName = ranks[0]?.standing_display_name?.toLowerCase() || ""
+    return /exalted|ally|best|loved/.test(firstName)
+  }, [ranks])
+
+  const displayRanks = useMemo(() => isInverse ? [...ranks].reverse() : ranks, [ranks, isInverse])
+
   // Find the min rank index based on the required standing threshold
   const minRankIndex = useMemo(() => {
     if (requiredRank == null) return 0
-    // requiredRank is the XP threshold of the min standing
-    const idx = ranks.findIndex((r) => r.threshold >= requiredRank)
+    const idx = displayRanks.findIndex((r) => r.threshold >= requiredRank)
     return idx >= 0 ? idx : 0
-  }, [requiredRank, ranks])
+  }, [requiredRank, displayRanks])
 
   if (isLoading) return <Typography variant="body2" color="text.secondary">Loading ranks...</Typography>
   if (!ranks.length) return <Alert severity="info">No rank data available for {rewardScope}</Alert>
@@ -89,12 +98,14 @@ export function MissionRankCalculator({ reputationReward, rewardScope, requiredR
           </TableRow>
         </TableHead>
         <TableBody>
-          {ranks.map((rank, i) => {
+          {displayRanks.map((rank, i) => {
             const isBelowMin = i < minRankIndex
-            // XP needed from the min standing to reach this rank
-            const minThreshold = ranks[minRankIndex]?.threshold ?? 0
-            const xpFromMin = rank.threshold - minThreshold
-            const runsNeeded = xpPerRun > 0 && xpFromMin > 0 ? Math.ceil(xpFromMin / xpPerRun) : 0
+            const minThreshold = displayRanks[minRankIndex]?.threshold ?? 0
+            const xpFromMin = isInverse
+              ? minThreshold - rank.threshold  // inverse: going down in XP
+              : rank.threshold - minThreshold
+            const absXpPerRun = Math.abs(xpPerRun) || 1
+            const runsNeeded = xpFromMin > 0 ? Math.ceil(xpFromMin / absXpPerRun) : 0
 
             return (
               <TableRow

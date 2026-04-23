@@ -1086,6 +1086,7 @@ const injectedRtkApi = api
             page: queryArg.page,
             pageSize: queryArg.pageSize,
             search: queryArg.search,
+            flag_name: queryArg.flagName,
           },
         }),
         providesTags: ["Admin Feature Flags"],
@@ -1108,6 +1109,9 @@ const injectedRtkApi = api
         query: (queryArg) => ({
           url: `/admin/feature-flags/overrides/${queryArg.username}`,
           method: "DELETE",
+          params: {
+            flag_name: queryArg.flagName,
+          },
         }),
         invalidatesTags: ["Admin Feature Flags"],
       }),
@@ -2030,6 +2034,7 @@ export type GetUserOverridesApiArg = {
   page?: number
   pageSize?: number
   search?: string
+  flagName?: string
 }
 export type SetUserOverrideApiResponse = /** status 200 Ok */ {
   message: string
@@ -2042,6 +2047,7 @@ export type RemoveUserOverrideApiResponse = /** status 200 Ok */ {
 }
 export type RemoveUserOverrideApiArg = {
   username: string
+  flagName?: string
 }
 export type ImportGameDataApiResponse =
   /** status 200 Ok */
@@ -4368,7 +4374,8 @@ export type FeatureFlagStats = {
 export type UserOverrideWithName = {
   user_id: string
   username: string
-  market_version: MarketVersion
+  flag_name: string
+  enabled: boolean
   updated_at: string
 }
 export type UserOverridesResponse = {
@@ -4377,7 +4384,8 @@ export type UserOverridesResponse = {
 }
 export type SetUserOverrideRequest = {
   username: string
-  market_version: MarketVersion
+  flag_name: string
+  enabled: boolean
 }
 export type ImportErrorResponse = {
   success: false

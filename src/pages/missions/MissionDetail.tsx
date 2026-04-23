@@ -3,13 +3,14 @@
  */
 
 import React from "react"
-import { Box, CircularProgress, Alert, Grid2 as Grid } from "@mui/material"
+import { Box, Alert, Grid2 as Grid } from "@mui/material"
 import { useParams, useNavigate } from "react-router-dom"
 import { useGetMissionDetailQuery } from "../../store/api/v2/market"
 import { useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { MissionName } from "../../components/game-data/MissionName"
 import { MissionHeaderChips, MissionDetailTabs } from "../../components/game-data/MissionDetailContent"
+import { DetailPageSkeleton } from "../../components/game-data/GameDataSkeletons"
 
 export function MissionDetail() {
   const { slug } = useParams<{ slug: string }>()
