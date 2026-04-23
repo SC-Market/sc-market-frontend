@@ -28,6 +28,7 @@ import {
   TimerRounded,
   ShieldRounded,
   BuildRounded,
+  RocketLaunchRounded,
 } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { useGetMissionDetailQuery } from "../../store/api/v2/market"
@@ -289,46 +290,89 @@ function OverviewTab({ data, onBlueprintClick }: { data: any; onBlueprintClick?:
 // ============================================================================
 // Combat Tab
 // ============================================================================
+function formatShipRange(min: number, max: number): string {
+  return min === max ? `${min}` : `${min}–${max}`
+}
+
 function CombatTab({ data }: { data: any }) {
   const shipEnc = data.ship_encounters || []
   const npcEnc = data.npc_encounters || []
   const entities = data.entity_spawns || []
   const hauling = data.hauling_orders || []
 
-  const totalShips = shipEnc.reduce((sum: number, e: any) =>
-    sum + (e.waves || []).reduce((ws: number, w: any) => ws + (w.ship_count || 0), 0), 0)
+  // Compute totals per alignment
+  const totals = shipEnc.reduce((acc: any, e: any) => {
+    const a = e.alignment || "neutral"
+    const waves = e.waves || []
+    const min = waves.reduce((s: number, w: any) => s + (w.min_ships || 0), 0)
+    const max = waves.reduce((s: number, w: any) => s + (w.max_ships || 0), 0)
+    acc[a] = { min: (acc[a]?.min || 0) + min, max: (acc[a]?.max || 0) + max }
+    return acc
+  }, {} as Record<string, { min: number; max: number }>)
+
+  // Collect all ship pool entries
+  const allShipPool = shipEnc.flatMap((e: any) => e.ship_pool || [])
+  const uniquePool: string[] = [...new Set(allShipPool as string[])].sort()
 
   return (
     <Stack spacing={1.5}>
       {/* Ship Encounters */}
       {shipEnc.length > 0 && (
         <Paper variant="outlined" sx={{ p: 1.5 }}>
-          <Typography variant="subtitle2" sx={{ mb: 0.75 }}>
-            Ship Encounters
-            {totalShips > 0 && (
-              <Typography component="span" variant="caption" color="text.secondary" sx={{ ml: 1 }}>
-                {totalShips} ship{totalShips !== 1 ? "s" : ""} total
-              </Typography>
+          {/* Header with totals */}
+          <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap sx={{ mb: 1 }}>
+            <Typography variant="subtitle2">Ship Encounters</Typography>
+            {totals.hostile && (
+              <Chip icon={<RocketLaunchRounded sx={{ fontSize: 14 }} />} label={`${formatShipRange(totals.hostile.min, totals.hostile.max)} hostile`} size="small" color="error" variant="outlined" sx={{ height: 22, fontSize: "0.7rem" }} />
             )}
-          </Typography>
-          <Stack spacing={0.75}>
-          {shipEnc.map((enc: any, i: number) => (
-            <Box key={i} sx={{ border: 1, borderColor: "divider", borderRadius: 1, p: 1 }}>
-              <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 0.25 }}>
-                <ShieldRounded sx={{ fontSize: 16, color: enc.role?.toLowerCase().includes("friendly") ? "info.main" : "error.main" }} />
-                <Typography variant="body2" fontWeight={600}>{enc.role}</Typography>
-                <Typography variant="caption" color="text.secondary">
-                  {(enc.waves || []).reduce((s: number, w: any) => s + (w.ship_count || 0), 0)} ships
-                </Typography>
-              </Stack>
-              {(enc.waves || []).map((wave: any, wi: number) => (
-                <Stack key={wi} direction="row" spacing={1} alignItems="center" sx={{ pl: 3 }}>
-                  <Typography variant="caption" color="text.secondary">{wave.name}:</Typography>
-                  <Typography variant="caption">{wave.ship_count} ship{wave.ship_count !== 1 ? "s" : ""}</Typography>
+            {totals.friendly && (
+              <Chip icon={<ShieldRounded sx={{ fontSize: 14 }} />} label={`${formatShipRange(totals.friendly.min, totals.friendly.max)} friendly`} size="small" color="info" variant="outlined" sx={{ height: 22, fontSize: "0.7rem" }} />
+            )}
+          </Stack>
+
+          {/* Encounter groups */}
+          <Stack spacing={0.5}>
+          {shipEnc.map((enc: any, i: number) => {
+            const isHostile = enc.alignment === "hostile"
+            const icon = isHostile ? "🚀" : "🛡"
+            const waveMin = (enc.waves || []).reduce((s: number, w: any) => s + (w.min_ships || 0), 0)
+            const waveMax = (enc.waves || []).reduce((s: number, w: any) => s + (w.max_ships || 0), 0)
+            return (
+              <Box key={i}>
+                <Stack direction="row" spacing={0.75} alignItems="center">
+                  {isHostile
+                    ? <RocketLaunchRounded sx={{ fontSize: 16, color: "error.main" }} />
+                    : <ShieldRounded sx={{ fontSize: 16, color: "info.main" }} />}
+                  <Typography variant="body2" fontWeight={600}>{enc.role}</Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    {formatShipRange(waveMin, waveMax)} ships
+                  </Typography>
                 </Stack>
-              ))}
-            </Box>
-          ))}
+                {(enc.waves || []).map((wave: any, wi: number) => (
+                  <Typography key={wi} variant="caption" color="text.secondary" sx={{ pl: 3.5, display: "block" }}>
+                    {wave.name}: {formatShipRange(wave.min_ships, wave.max_ships)} ships
+                  </Typography>
+                ))}
+              </Box>
+            )
+          })}
+          </Stack>
+        </Paper>
+      )}
+
+      {/* Ship Pool */}
+      {uniquePool.length > 0 && (
+        <Paper variant="outlined" sx={{ p: 1.5 }}>
+          <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
+            Ship Pool
+            <Typography component="span" variant="caption" color="text.secondary" sx={{ ml: 1 }}>
+              {uniquePool.length} types
+            </Typography>
+          </Typography>
+          <Stack spacing={0}>
+            {uniquePool.map((ship: string, i: number) => (
+              <Typography key={i} variant="caption" color="text.secondary">{ship}</Typography>
+            ))}
           </Stack>
         </Paper>
       )}
