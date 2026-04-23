@@ -26,7 +26,7 @@ describe("MarketRouter", () => {
       isLoading: true,
       error: null,
       setMarketVersion: vi.fn(),
-      isDeveloper: false,
+      isDeveloper: false, hasOverride: false,
     })
 
     render(<MarketRouter />)
@@ -41,7 +41,7 @@ describe("MarketRouter", () => {
       isLoading: false,
       error: null,
       setMarketVersion: vi.fn(),
-      isDeveloper: false,
+      isDeveloper: false, hasOverride: false,
     })
 
     render(<MarketRouter />)
@@ -60,7 +60,7 @@ describe("MarketRouter", () => {
       isLoading: false,
       error: null,
       setMarketVersion: vi.fn(),
-      isDeveloper: false,
+      isDeveloper: false, hasOverride: false,
     })
 
     render(<MarketRouter />)
@@ -81,7 +81,7 @@ describe("MarketRouter", () => {
       isLoading: false,
       error: new Error("Failed to fetch feature flag"),
       setMarketVersion: vi.fn(),
-      isDeveloper: false,
+      isDeveloper: false, hasOverride: false,
     })
 
     render(<MarketRouter />)
@@ -106,7 +106,7 @@ describe("MarketRouter", () => {
       isLoading: false,
       error: null,
       setMarketVersion: vi.fn(),
-      isDeveloper: false,
+      isDeveloper: false, hasOverride: false,
     })
 
     render(<MarketRouter />)
@@ -127,7 +127,7 @@ describe("MarketRouter", () => {
       isLoading: false,
       error: null,
       setMarketVersion: vi.fn(),
-      isDeveloper: false,
+      isDeveloper: false, hasOverride: false,
     })
 
     rerender(<MarketRouter />)
@@ -142,7 +142,7 @@ describe("MarketRouter", () => {
       isLoading: false,
       error: null,
       setMarketVersion: vi.fn(),
-      isDeveloper: false,
+      isDeveloper: false, hasOverride: false,
     })
 
     rerender(<MarketRouter />)
