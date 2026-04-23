@@ -321,10 +321,12 @@ export function MissionSearch() {
                             </Typography>
                           </TableCell>
                           <TableCell align="right">
-                            <Typography variant="body2" color="success.main" fontWeight={600} noWrap>
-                              {m.credit_reward_min === m.credit_reward_max || !m.credit_reward_max
-                                ? formatCredits(m.credit_reward_min)
-                                : `${formatCredits(m.credit_reward_min)} – ${formatCredits(m.credit_reward_max)}`}
+                            <Typography variant="body2" color={(m.credit_reward_min ?? 0) < 0 ? "error.main" : "success.main"} fontWeight={600} noWrap>
+                              {(m.credit_reward_min ?? 0) < 0
+                                ? `Fee: ${formatCredits(Math.abs(m.credit_reward_min!))}`
+                                : m.credit_reward_min === m.credit_reward_max || !m.credit_reward_max
+                                  ? formatCredits(m.credit_reward_min)
+                                  : `${formatCredits(m.credit_reward_min)} – ${formatCredits(m.credit_reward_max)}`}
                             </Typography>
                           </TableCell>
                         </TableRow>

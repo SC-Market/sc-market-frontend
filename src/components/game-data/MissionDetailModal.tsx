@@ -31,7 +31,7 @@ import {
   RocketLaunchRounded,
 } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
-import { useGetMissionDetailQuery } from "../../store/api/v2/market"
+import { useGetMissionDetailQuery, type MissionDetailResponse, type Mission, type MissionRewardPool, type MissionBlueprintReward, type ShipEncounter, type ShipWave, type NpcEncounter, type HaulingOrder, type EntitySpawn } from "../../store/api/v2/market"
 import { getMissionTypeLabel, formatMissionDescription, formatCredits } from "../../util/missionDisplay"
 import { getMissionIcon } from "../../util/gameIcons"
 import { MissionName } from "./MissionName"
@@ -148,7 +148,7 @@ export function MissionDetailModal({ missionId, open, onClose, onBlueprintClick 
 // ============================================================================
 // Overview Tab
 // ============================================================================
-function OverviewTab({ data, onBlueprintClick }: { data: any; onBlueprintClick?: (id: string) => void }) {
+function OverviewTab({ data, onBlueprintClick }: { data: MissionDetailResponse; onBlueprintClick?: (id: string) => void }) {
   const m = data.mission
 
   return (
@@ -165,16 +165,21 @@ function OverviewTab({ data, onBlueprintClick }: { data: any; onBlueprintClick?:
       {/* Reward section */}
       <Typography variant="subtitle2">Reward</Typography>
       <Stack spacing={0.5}>
-        {(m.credit_reward_min || m.credit_reward_max) && (
+        {(m.credit_reward_min || m.credit_reward_max) && (() => {
+          const isFee = (m.credit_reward_min ?? 0) < 0
+          return (
           <Stack direction="row" justifyContent="space-between">
-            <Typography variant="body2" color="text.secondary">UEC</Typography>
-            <Typography variant="body2" color="success.main" fontWeight={600}>
-              {m.credit_reward_min === m.credit_reward_max || !m.credit_reward_max
-                ? formatCredits(m.credit_reward_min)
-                : `${formatCredits(m.credit_reward_min)} – ${formatCredits(m.credit_reward_max)}`}
+            <Typography variant="body2" color="text.secondary">{isFee ? "Fee" : "UEC"}</Typography>
+            <Typography variant="body2" color={isFee ? "error.main" : "success.main"} fontWeight={600}>
+              {isFee
+                ? formatCredits(Math.abs(m.credit_reward_min!))
+                : m.credit_reward_min === m.credit_reward_max || !m.credit_reward_max
+                  ? formatCredits(m.credit_reward_min)
+                  : `${formatCredits(m.credit_reward_min)} – ${formatCredits(m.credit_reward_max)}`}
             </Typography>
           </Stack>
-        )}
+          )
+        })()}
         {m.reputation_reward && (
           <Stack direction="row" justifyContent="space-between">
             <Typography variant="body2" color="text.secondary">Rep/mission</Typography>
@@ -200,7 +205,7 @@ function OverviewTab({ data, onBlueprintClick }: { data: any; onBlueprintClick?:
         <>
           <Divider />
           <Typography variant="subtitle2">Blueprint Rewards</Typography>
-          {data.blueprint_rewards.map((pool: any, poolIdx: number) => {
+          {data.blueprint_rewards.map((pool: MissionRewardPool, poolIdx: number) => {
             const poolChance = pool.pool_chance != null ? pool.pool_chance * 100 : null
             const bpCount = pool.blueprints?.length || pool.reward_pool_size || 0
             return (
@@ -222,7 +227,7 @@ function OverviewTab({ data, onBlueprintClick }: { data: any; onBlueprintClick?:
               </Stack>
               {/* Blueprint list */}
               <Stack spacing={0.5}>
-                {(pool.blueprints || []).map((bp: any) => (
+                {(pool.blueprints || []).map((bp: MissionBlueprintReward) => (
                   <Stack
                     key={bp.blueprint_id}
                     direction="row" spacing={1} alignItems="center"
@@ -240,6 +245,24 @@ function OverviewTab({ data, onBlueprintClick }: { data: any; onBlueprintClick?:
             </Box>
             )
           })}
+        </>
+      )}
+
+      {/* Hauling Orders */}
+      {(data.hauling_orders?.length ?? 0) > 0 && (
+        <>
+          <Divider />
+          <Typography variant="subtitle2">Hauling Orders</Typography>
+          <Stack spacing={0.25}>
+            {data.hauling_orders!.map((h, i) => (
+              <Stack key={i} direction="row" justifyContent="space-between">
+                <Typography variant="body2">{h.resource_name}</Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {h.min_scu === h.max_scu ? `${h.min_scu} SCU` : `${h.min_scu}–${h.max_scu} SCU`}
+                </Typography>
+              </Stack>
+            ))}
+          </Stack>
         </>
       )}
 
@@ -294,24 +317,24 @@ function formatShipRange(min: number, max: number): string {
   return min === max ? `${min}` : `${min}–${max}`
 }
 
-function CombatTab({ data }: { data: any }) {
+function CombatTab({ data }: { data: MissionDetailResponse }) {
   const shipEnc = data.ship_encounters || []
   const npcEnc = data.npc_encounters || []
   const entities = data.entity_spawns || []
   const hauling = data.hauling_orders || []
 
   // Compute totals per alignment
-  const totals = shipEnc.reduce((acc: any, e: any) => {
+  const totals = shipEnc.reduce((acc, e) => {
     const a = e.alignment || "neutral"
     const waves = e.waves || []
-    const min = waves.reduce((s: number, w: any) => s + (w.min_ships || 0), 0)
-    const max = waves.reduce((s: number, w: any) => s + (w.max_ships || 0), 0)
+    const min = waves.reduce((s, w) => s + (w.min_ships || 0), 0)
+    const max = waves.reduce((s, w) => s + (w.max_ships || 0), 0)
     acc[a] = { min: (acc[a]?.min || 0) + min, max: (acc[a]?.max || 0) + max }
     return acc
   }, {} as Record<string, { min: number; max: number }>)
 
   // Collect all ship pool entries
-  const allShipPool = shipEnc.flatMap((e: any) => e.ship_pool || [])
+  const allShipPool = shipEnc.flatMap((e) => e.ship_pool || [])
   const uniquePool: string[] = [...new Set(allShipPool as string[])].sort()
 
   return (
@@ -332,11 +355,10 @@ function CombatTab({ data }: { data: any }) {
 
           {/* Encounter groups */}
           <Stack spacing={0.5}>
-          {shipEnc.map((enc: any, i: number) => {
+          {shipEnc.map((enc, i) => {
             const isHostile = enc.alignment === "hostile"
-            const icon = isHostile ? "🚀" : "🛡"
-            const waveMin = (enc.waves || []).reduce((s: number, w: any) => s + (w.min_ships || 0), 0)
-            const waveMax = (enc.waves || []).reduce((s: number, w: any) => s + (w.max_ships || 0), 0)
+            const waveMin = (enc.waves || []).reduce((s, w) => s + (w.min_ships || 0), 0)
+            const waveMax = (enc.waves || []).reduce((s, w) => s + (w.max_ships || 0), 0)
             return (
               <Box key={i}>
                 <Stack direction="row" spacing={0.75} alignItems="center">
@@ -348,7 +370,7 @@ function CombatTab({ data }: { data: any }) {
                     {formatShipRange(waveMin, waveMax)} ships
                   </Typography>
                 </Stack>
-                {(enc.waves || []).map((wave: any, wi: number) => (
+                {(enc.waves || []).map((wave, wi) => (
                   <Typography key={wi} variant="caption" color="text.secondary" sx={{ pl: 3.5, display: "block" }}>
                     {wave.name}: {formatShipRange(wave.min_ships, wave.max_ships)} ships
                   </Typography>
@@ -382,7 +404,7 @@ function CombatTab({ data }: { data: any }) {
         <Paper variant="outlined" sx={{ p: 1.5 }}>
           <Typography variant="subtitle2" sx={{ mb: 0.5 }}>NPC Encounters</Typography>
           <Stack spacing={0.25}>
-          {npcEnc.map((npc: any, i: number) => (
+          {npcEnc.map((npc, i) => (
             <Stack key={i} direction="row" justifyContent="space-between">
               <Typography variant="body2">{npc.name}</Typography>
               <Typography variant="body2" color="text.secondary">×{npc.count}</Typography>
@@ -397,7 +419,7 @@ function CombatTab({ data }: { data: any }) {
         <Paper variant="outlined" sx={{ p: 1.5 }}>
           <Typography variant="subtitle2" sx={{ mb: 0.5 }}>Entity Spawns</Typography>
           <Stack spacing={0.25}>
-          {entities.map((e: any, i: number) => (
+          {entities.map((e, i) => (
             <Stack key={i} direction="row" justifyContent="space-between">
               <Typography variant="body2">{e.name}</Typography>
               <Typography variant="body2" color="text.secondary">×{e.count}</Typography>
@@ -412,7 +434,7 @@ function CombatTab({ data }: { data: any }) {
         <Paper variant="outlined" sx={{ p: 1.5 }}>
           <Typography variant="subtitle2" sx={{ mb: 0.5 }}>Hauling Orders</Typography>
           <Stack spacing={0.25}>
-          {hauling.map((h: any, i: number) => (
+          {hauling.map((h, i) => (
             <Stack key={i} direction="row" justifyContent="space-between">
               <Typography variant="body2">{h.resource_name}</Typography>
               <Typography variant="body2" color="text.secondary">
@@ -434,7 +456,7 @@ function CombatTab({ data }: { data: any }) {
 // ============================================================================
 // Requirements Tab
 // ============================================================================
-function RequirementsTab({ data }: { data: any }) {
+function RequirementsTab({ data }: { data: MissionDetailResponse }) {
   const m = data.mission
 
   return (
@@ -517,7 +539,7 @@ function RequirementsTab({ data }: { data: any }) {
 // ============================================================================
 // Chain Tab
 // ============================================================================
-function ChainTab({ data }: { data: any }) {
+function ChainTab({ data }: { data: MissionDetailResponse }) {
   const m = data.mission
 
   return (
@@ -533,12 +555,12 @@ function ChainTab({ data }: { data: any }) {
 
       {m.is_unique_mission && <Chip label="Unique (one-time)" size="small" color="warning" sx={{ alignSelf: "flex-start" }} />}
 
-      {data.prerequisite_missions?.length > 0 && (
+      {(data.prerequisite_missions?.length ?? 0) > 0 && (
         <>
           <Divider />
-          <Typography variant="subtitle2">Prerequisites ({data.prerequisite_missions.length})</Typography>
+          <Typography variant="subtitle2">Prerequisites ({data.prerequisite_missions!.length})</Typography>
           <Stack spacing={0.5}>
-            {data.prerequisite_missions.map((pm: any) => (
+            {data.prerequisite_missions!.map((pm) => (
               <Stack key={pm.mission_id} direction="row" spacing={1} alignItems="center">
                 <MissionName name={pm.mission_name} variant="body2" />
                 {pm.category && <Chip label={getMissionTypeLabel(pm.category)} size="small" variant="outlined" />}
