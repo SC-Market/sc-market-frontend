@@ -34,6 +34,7 @@ import { BulkDiscountTierEditor } from "../../../components/market/BulkDiscountT
 import { useCreateListingMutation } from "../../../store/api/v2/market";
 import { useAlertHook } from "../../../hooks/alert/AlertHook";
 import { useGetUserProfileQuery } from "../../../store/profile";
+import { useCurrentOrg } from "../../../hooks/login/CurrentOrg";
 import { Alert } from "@mui/material";
 import { PriceComparisonAlert } from "../components/PriceComparisonAlert";
 import type {
@@ -81,6 +82,7 @@ export function CreateListingV2() {
   const navigate = useNavigate();
   const issueAlert = useAlertHook();
   const { data: profile } = useGetUserProfileQuery();
+  const [currentOrg] = useCurrentOrg();
   const isVerified = profile?.rsi_confirmed;
 
   // Form state
@@ -272,6 +274,7 @@ export function CreateListingV2() {
         min_order_value: minOrderValue ?? undefined,
         max_order_value: maxOrderValue ?? undefined,
         bulk_discount_tiers: bulkDiscountTiers.length ? bulkDiscountTiers : undefined,
+        contractor_id: currentOrg?.contractor_id || undefined,
       };
 
       try {
