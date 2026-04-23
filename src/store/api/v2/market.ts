@@ -1693,6 +1693,7 @@ export type GetMissionChainsApiArg = {
   versionId?: string
 }
 export type GetReputationRanksApiResponse = /** status 200 Ok */ {
+  display_name: string
   scopes: string[]
   ranks: ReputationRank[]
 }
@@ -4043,8 +4044,12 @@ export type SetFeatureFlagResponse = {
   message: string
 }
 export type SetFeatureFlagRequest = {
-  /** Market version to set (V1 or V2) */
-  market_version: MarketVersion
+  /** Market version to set (V1 or V2) — backward compat for market_v2 */
+  market_version?: MarketVersion
+  /** Flag name to set (e.g. "market_v2", "crafting", "wiki") */
+  flag_name?: string
+  /** Whether to enable or disable the flag */
+  enabled?: boolean
 }
 export type CartListingInfo = {
   /** Listing UUID */
