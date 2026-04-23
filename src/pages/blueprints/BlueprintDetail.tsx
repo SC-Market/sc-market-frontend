@@ -112,19 +112,36 @@ export function BlueprintDetail() {
     return map
   }, [slotModifiers])
 
+  // Quality range per ingredient from slot modifiers
+  const qualityRanges = useMemo(() => {
+    return ingredients.map((ing: any) => {
+      const mods = modsBySlot.get(ing.slot_name || ing.game_item?.name) || []
+      if (!mods.length) return { min: 0, max: 1000 }
+      const min = Math.min(...mods.map((m: any) => m.start_quality))
+      const max = Math.max(...mods.map((m: any) => m.end_quality))
+      return { min, max }
+    })
+  }, [ingredients, modsBySlot])
+
   // Quality state per ingredient
   const [qualities, setQualities] = useState<number[]>([])
   const [craftQty, setCraftQty] = useState(1)
   React.useEffect(() => {
     if (ingredients.length && qualities.length !== ingredients.length) {
-      setQualities(ingredients.map(() => 500))
+      setQualities(qualityRanges.map(r => Math.round((r.min + r.max) / 2)))
     }
   }, [ingredients.length])
 
   const setQuality = (idx: number, v: number) =>
-    setQualities(prev => prev.map((q, i) => i === idx ? Math.max(0, Math.min(1000, v)) : q))
+    setQualities(prev => prev.map((q, i) => {
+      if (i !== idx) return q
+      const r = qualityRanges[i] || { min: 0, max: 1000 }
+      return Math.max(r.min, Math.min(r.max, v))
+    }))
 
-  const setAllQualities = (v: number) => setQualities(prev => prev.map(() => v))
+  const setAllQualities = (mode: "min" | "mid" | "max") => setQualities(
+    qualityRanges.map(r => mode === "min" ? r.min : mode === "max" ? r.max : Math.round((r.min + r.max) / 2))
+  )
 
   // Compute combined modifier per property from all slots at current qualities
   const combinedModifiers = useMemo(() => {
@@ -272,9 +289,9 @@ export function BlueprintDetail() {
             <Box>
               <Typography variant="caption" color="text.secondary">Quality Presets</Typography>
               <ButtonGroup size="small" variant="outlined" sx={{ display: "block" }}>
-                <Button onClick={() => setAllQualities(0)}>Min</Button>
-                <Button onClick={() => setAllQualities(500)}>Base</Button>
-                <Button onClick={() => setAllQualities(1000)}>Max</Button>
+                <Button onClick={() => setAllQualities("min")}>Min</Button>
+                <Button onClick={() => setAllQualities("mid")}>Base</Button>
+                <Button onClick={() => setAllQualities("max")}>Max</Button>
               </ButtonGroup>
             </Box>
             <Box sx={{ flex: 1 }} />
@@ -285,7 +302,8 @@ export function BlueprintDetail() {
           <Typography variant="subtitle2" sx={{ mb: 1 }}><BuildRounded sx={{ fontSize: 16, mr: 0.5 }} />Craft</Typography>
           <Stack spacing={1} sx={{ mb: 1 }}>
             {ingredients.map((ing: any, idx: number) => {
-              const qv = qualities[idx] ?? 500
+              const qv = qualities[idx] ?? Math.round((qualityRanges[idx]?.min + qualityRanges[idx]?.max) / 2)
+              const qr = qualityRanges[idx] || { min: 0, max: 1000 }
               const color = getCommodityColor(ing.game_item?.sub_type) || "#616161"
               return (
                 <Box key={idx} sx={{ border: 1, borderColor: "divider", borderRadius: 1, p: 1 }}>
@@ -314,7 +332,7 @@ export function BlueprintDetail() {
                     </Box>
                     <Slider
                       size="small"
-                      min={0} max={1000} value={qv}
+                      min={qr.min} max={qr.max} value={qv}
                       onChange={(_, v) => setQuality(idx, v as number)}
                       sx={{
                         flex: 1,
@@ -325,7 +343,7 @@ export function BlueprintDetail() {
                     <TextField
                       size="small" type="number" value={qv}
                       onChange={e => setQuality(idx, +e.target.value || 0)}
-                      inputProps={{ min: 0, max: 1000 }}
+                      inputProps={{ min: qr.min, max: qr.max }}
                       sx={{ width: 70, "& input": { py: 0.5, fontSize: "0.8rem" } }}
                     />
                   </Stack>

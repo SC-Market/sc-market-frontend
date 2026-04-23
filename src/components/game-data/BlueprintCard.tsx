@@ -52,13 +52,7 @@ function initials(name: string | undefined): string {
   if (!name) return "?"
   return name.split(/[\s_-]+/).map(w => w[0]).filter(Boolean).slice(0, 2).join("").toUpperCase()
 }
-
-function formatTime(seconds?: number): string {
-  if (!seconds) return ""
-  const m = Math.floor(seconds / 60)
-  const s = seconds % 60
-  return m > 0 ? (s > 0 ? `${m}m ${s}s` : `${m}m`) : `${seconds}s`
-}
+import { formatCraftingTime } from "../../constants/crafting"
 
 function shortName(name: string): string {
   // "Lindinium" → "LIND", "Iron" → "IRON", "Hephaestanite" → "HEPH"

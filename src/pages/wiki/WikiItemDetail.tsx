@@ -39,7 +39,7 @@ import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useCartDrawer } from "../../hooks/market/AddToCartContext"
 import { formatQuantity } from "../../util/formatQuantity"
-import { DISASSEMBLY_EFFICIENCY, DISASSEMBLY_TIME_SECONDS } from "../../constants/crafting"
+import { DISASSEMBLY_EFFICIENCY, DISASSEMBLY_TIME_SECONDS, formatCraftingTime } from "../../constants/crafting"
 
 const TAB_OVERVIEW = 0
 const TAB_CRAFTING = 1
@@ -458,12 +458,3 @@ export function WikiItemDetail() {
   )
 }
 
-function formatCraftingTime(seconds: number): string {
-  if (seconds < 60) return `${seconds}s`
-  const minutes = Math.floor(seconds / 60)
-  const secs = seconds % 60
-  if (minutes < 60) return secs > 0 ? `${minutes}m ${secs}s` : `${minutes}m`
-  const hours = Math.floor(minutes / 60)
-  const mins = minutes % 60
-  return mins > 0 ? `${hours}h ${mins}m` : `${hours}h`
-}
