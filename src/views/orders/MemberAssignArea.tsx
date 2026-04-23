@@ -83,7 +83,7 @@ export function MemberAssignArea(props: { order: Order }) {
 
     const res: { data?: any; error?: any } = await assignUser({
       order_id: order.order_id,
-      user_id: targetObject.username!,
+      username: targetObject.username!,
     })
 
     if (res?.data && !res?.error) {

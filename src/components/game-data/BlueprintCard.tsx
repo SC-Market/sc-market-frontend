@@ -31,6 +31,7 @@ export interface BlueprintIngredientSummary {
 export interface BlueprintCardProps {
   blueprint: {
     blueprint_id: string
+    blueprint_code?: string
     blueprint_name: string
     output_item_name: string
     output_item_icon?: string
@@ -48,7 +49,7 @@ export interface BlueprintCardProps {
     ingredients?: BlueprintIngredientSummary[]
   }
   viewMode?: "grid" | "list"
-  onClick?: (blueprintId: string) => void
+  onClick?: (blueprintId: string, blueprintCode?: string) => void
   onBookmarkToggle?: (blueprintId: string, isOwned: boolean) => void
   onWishlistAdd?: (blueprintId: string) => void
 }
@@ -108,7 +109,7 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
           </IconButton>
         )}
 
-        <CardActionArea onClick={() => onClick?.(bp.blueprint_id)} sx={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "stretch", justifyContent: "flex-start" }}>
+        <CardActionArea onClick={() => onClick?.(bp.blueprint_id, bp.blueprint_code)} sx={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "stretch", justifyContent: "flex-start" }}>
           <CardContent sx={{ p: 1.5, pb: 0, flex: 1 }}>
             <Box sx={{ display: "flex", gap: 1, mb: 1, pr: 3 }}>
               <GameItemAvatar name={bp.output_item_name} iconUrl={bp.output_item_icon} size={32} useCommodityColor={false} sx={{ bgcolor: getItemCategoryColor(bp.item_category) }} />
@@ -176,7 +177,7 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
 
   // List mode
   return (
-    <Card sx={{ cursor: "pointer", "&:hover": { boxShadow: 3 } }} onClick={() => onClick?.(bp.blueprint_id)}>
+    <Card sx={{ cursor: "pointer", "&:hover": { boxShadow: 3 } }} onClick={() => onClick?.(bp.blueprint_id, bp.blueprint_code)}>
       <CardContent sx={{ p: 1.5, "&:last-child": { pb: 1.5 } }}>
         <Box sx={{ display: "flex", gap: 1.5, alignItems: "center" }}>
           <GameItemAvatar name={bp.output_item_name} iconUrl={bp.output_item_icon} size={36} useCommodityColor={false} sx={{ bgcolor: getItemCategoryColor(bp.item_category) }} />

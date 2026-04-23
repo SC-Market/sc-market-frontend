@@ -94,6 +94,22 @@ function BulkSearchArea() {
             inputProps={{ min: 0 }}
           />
         </Grid>
+        <Grid item xs={6}>
+          <TextField size="small" fullWidth type="number"
+            label={t("bulk.minQty", "Min Quantity")}
+            value={searchParams.get("quantity_min") || ""}
+            onChange={(e) => updateParam("quantity_min", e.target.value)}
+            inputProps={{ min: 0 }}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <TextField size="small" fullWidth type="number"
+            label={t("bulk.maxQty", "Max Quantity")}
+            value={searchParams.get("quantity_max") || ""}
+            onChange={(e) => updateParam("quantity_max", e.target.value)}
+            inputProps={{ min: 0 }}
+          />
+        </Grid>
         <Grid item xs={12}>
           <TextField size="small" fullWidth
             label={t("bulk.itemType", "Item Type")}
@@ -184,6 +200,8 @@ export function BulkItemsPageV2() {
     itemType: searchParams.get("item_type") || undefined,
     priceMin: searchParams.get("price_min") ? Number(searchParams.get("price_min")) : undefined,
     priceMax: searchParams.get("price_max") ? Number(searchParams.get("price_max")) : undefined,
+    quantityMin: searchParams.get("quantity_min") ? Number(searchParams.get("quantity_min")) : undefined,
+    quantityMax: searchParams.get("quantity_max") ? Number(searchParams.get("quantity_max")) : undefined,
     sortBy: (searchParams.get("sort_by") as any) || "quantity",
     sortOrder: (searchParams.get("sort_order") as any) || "desc",
     page: Number(searchParams.get("page")) || 1,
@@ -217,7 +235,7 @@ export function BulkItemsPageV2() {
         </Grid>
       ) : items.length === 0 ? (
         <EmptyListings
-          isSearchResult={!!searchParams.get("text") || !!searchParams.get("item_type") || !!searchParams.get("price_min")}
+          isSearchResult={!!searchParams.get("text") || !!searchParams.get("item_type") || !!searchParams.get("price_min") || !!searchParams.get("quantity_min")}
           title={
             searchParams.get("text") || searchParams.get("item_type")
               ? t("bulk.noResults", "No items match your filters")

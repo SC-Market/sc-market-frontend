@@ -12,13 +12,13 @@ import { MissionName } from "../../components/game-data/MissionName"
 import { MissionHeaderChips, MissionDetailTabs } from "../../components/game-data/MissionDetailContent"
 
 export function MissionDetail() {
-  const { mission_id: missionId } = useParams<{ mission_id: string }>()
+  const { slug } = useParams<{ slug: string }>()
   const navigate = useNavigate()
   const { t } = useTranslation()
 
   const { data, isLoading, error } = useGetMissionDetailQuery(
-    { missionId: missionId! },
-    { skip: !missionId },
+    { missionId: slug! },
+    { skip: !slug },
   )
 
   const m = data?.mission
