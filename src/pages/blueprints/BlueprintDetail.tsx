@@ -35,10 +35,7 @@ function formatQty(scu: number | string): string {
   return `${n.toFixed(2)} SCU`
 }
 
-function formatTime(s: number): string {
-  if (s >= 60) return `${Math.floor(s / 60)}m ${s % 60}s`
-  return `${s}s`
-}
+import { formatCraftingTime } from "../../constants/crafting"
 
 /** Linear interpolation of modifier value at a given quality */
 function interpolateModifier(qv: number, startQ: number, endQ: number, modStart: number, modEnd: number): number {
@@ -374,7 +371,7 @@ export function BlueprintDetail() {
           {/* Craft time */}
           {bp.crafting_time_seconds && (
             <Typography variant="body2" color="text.secondary">
-              <TimerRounded sx={{ fontSize: 16, mr: 0.5, verticalAlign: "text-bottom" }} />Craft Time: {formatTime(bp.crafting_time_seconds)}
+              <TimerRounded sx={{ fontSize: 16, mr: 0.5, verticalAlign: "text-bottom" }} />Craft Time: {formatCraftingTime(bp.crafting_time_seconds)}
             </Typography>
           )}
 
