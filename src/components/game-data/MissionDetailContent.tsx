@@ -129,6 +129,7 @@ export function MissionDetailTabs({ data, onBlueprintClick }: { data: MissionDet
           <MissionRankCalculator
             reputationReward={m.reputation_reward || 0}
             rewardScope={m.reward_scope}
+            rewardFaction={m.faction || m.mission_giver_org}
             requiredRank={m.required_rank}
             isShareable={m.is_shareable}
           />
