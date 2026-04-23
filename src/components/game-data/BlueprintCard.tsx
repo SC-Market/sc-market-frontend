@@ -99,6 +99,7 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
     return (
       <Card sx={{ height: "100%", position: "relative" }}>
         {onBookmarkToggle && (
+          <Tooltip title={bp.user_owns ? "Remove from inventory" : "Add to inventory"} arrow>
           <IconButton
             size="small"
             sx={{ position: "absolute", top: 4, right: 4, zIndex: 1 }}
@@ -107,6 +108,7 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
           >
             {bp.user_owns ? <Bookmark fontSize="small" /> : <BookmarkBorder fontSize="small" />}
           </IconButton>
+          </Tooltip>
         )}
 
         <CardActionArea onClick={() => onClick?.(bp.blueprint_id, bp.blueprint_code)} sx={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "stretch", justifyContent: "flex-start" }}>
@@ -164,9 +166,11 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
                 {bp.mission_count > 0 ? `${bp.mission_count} mission source${bp.mission_count !== 1 ? "s" : ""}` : "No mission sources"}
               </Typography>
               {onWishlistAdd && (
-                <IconButton size="small" title="Add to Shopping List" onClick={(e) => { e.stopPropagation(); onWishlistAdd(bp.blueprint_id) }}>
+                <Tooltip title="Add to Shopping List" arrow>
+                <IconButton size="small" onClick={(e) => { e.stopPropagation(); onWishlistAdd(bp.blueprint_id) }}>
                   <PlaylistAddRounded sx={{ fontSize: 16 }} />
                 </IconButton>
+                </Tooltip>
               )}
             </Box>
           </Box>
@@ -209,6 +213,7 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
             {bp.crafting_time_seconds && <Typography variant="caption" color="text.secondary" sx={{ ml: 1 }}>{formatCraftingTime(bp.crafting_time_seconds)}</Typography>}
           </Box>
           {onBookmarkToggle && (
+            <Tooltip title={bp.user_owns ? "Remove from inventory" : "Add to inventory"} arrow>
             <IconButton
               size="small"
               color={bp.user_owns ? "primary" : "default"}
@@ -216,6 +221,7 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
             >
               {bp.user_owns ? <Bookmark fontSize="small" /> : <BookmarkBorder fontSize="small" />}
             </IconButton>
+            </Tooltip>
           )}
         </Box>
       </CardContent>
