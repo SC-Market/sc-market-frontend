@@ -271,6 +271,7 @@ export function MissionSearch() {
                         <TableCell>Title</TableCell>
                         <TableCell>Faction</TableCell>
                         <TableCell sx={{ maxWidth: 280 }}>Tags</TableCell>
+                        <TableCell>Materials</TableCell>
                         <TableCell align="center">BPs</TableCell>
                         <TableCell align="right">Base XP</TableCell>
                         <TableCell align="right">Reward</TableCell>
@@ -319,6 +320,18 @@ export function MissionSearch() {
                               {m.associated_event && <Tooltip title={m.associated_event}><Chip label={m.associated_event} size="small" sx={{ height: 18, fontSize: "0.65rem", maxWidth: 100, bgcolor: "info.main", color: "#fff" }} /></Tooltip>}
                               {m.ship_encounter_count > 0 && <Tooltip title={`${m.ship_encounter_count} ships`}><Chip icon={<ShieldRounded sx={{ fontSize: 14 }} />} label={m.ship_encounter_count} size="small" color="info" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} /></Tooltip>}
                             </Stack>
+                          </TableCell>
+                          <TableCell>
+                            {(m.hauling_orders?.length ?? 0) > 0 ? (
+                              <Stack direction="row" spacing={0.25} flexWrap="wrap" useFlexGap>
+                                {m.hauling_orders!.map((h: any, i: number) => (
+                                  <Tooltip key={i} title={h.resource_name} arrow>
+                                    <Chip label={h.resource_name.split(/[\s,]+/).filter(Boolean).map((w: string) => w[0]).join("").slice(0, 4).toUpperCase()}
+                                      size="small" sx={{ height: 18, fontSize: "0.6rem", fontFamily: "monospace", bgcolor: "action.selected" }} />
+                                  </Tooltip>
+                                ))}
+                              </Stack>
+                            ) : <Typography variant="caption" color="text.disabled">—</Typography>}
                           </TableCell>
                           <TableCell align="center">
                             {m.blueprint_reward_count > 0

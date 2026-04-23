@@ -68,9 +68,10 @@ export const MissionFilters: React.FC<MissionFiltersProps> = (props) => {
 
       <FormControl fullWidth size="small">
         <InputLabel>Category</InputLabel>
-        <Select value={props.category} label="Category" onChange={(e) => props.onCategoryChange(e.target.value)}>
-          <MenuItem value="">All</MenuItem>
-          {["Combat","Delivery","Investigation","Bounty Hunting","Mercenary","Mining","Salvage","Trading","Exploration","Medical"].map(c =>
+        <Select multiple value={props.category ? props.category.split(",") : []} label="Category"
+          onChange={(e) => props.onCategoryChange((e.target.value as string[]).join(","))}
+          renderValue={(sel) => (sel as string[]).join(", ") || "All"}>
+          {["Mercenary","Bounty Hunter","Delivery","Hauling","Investigation","Mining","Salvage","Maintenance","Race","Courier"].map(c =>
             <MenuItem key={c} value={c}>{c}</MenuItem>
           )}
         </Select>
@@ -88,8 +89,9 @@ export const MissionFilters: React.FC<MissionFiltersProps> = (props) => {
 
       <FormControl fullWidth size="small">
         <InputLabel>System</InputLabel>
-        <Select value={props.starSystem} label="System" onChange={(e) => props.onStarSystemChange(e.target.value)}>
-          <MenuItem value="">All</MenuItem>
+        <Select multiple value={props.starSystem ? props.starSystem.split(",") : []} label="System"
+          onChange={(e) => props.onStarSystemChange((e.target.value as string[]).join(","))}
+          renderValue={(sel) => (sel as string[]).join(", ") || "All"}>
           {["Stanton","Pyro","Nyx","Terra","Magnus"].map(s =>
             <MenuItem key={s} value={s}>{s}</MenuItem>
           )}

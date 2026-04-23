@@ -45,6 +45,7 @@ export interface MissionCardProps {
     reputation_reward?: number
     associated_event?: string
     ship_encounter_count: number
+    hauling_orders?: Array<{ resource_name: string; min_scu: number; max_scu: number }>
   }
   onClick?: (missionId: string) => void
 }
@@ -52,6 +53,13 @@ export interface MissionCardProps {
 function initials(name: string | undefined | null): string {
   if (!name) return "?"
   return name.split(/[\s_-]+/).map(w => w[0]).filter(Boolean).slice(0, 2).join("").toUpperCase()
+}
+
+/** Abbreviate resource name like SCMDB: "Recycled Material Composite" → "RECY" */
+function abbrResource(name: string): string {
+  const words = name.split(/[\s,]+/).filter(Boolean)
+  if (words.length === 1) return words[0].slice(0, 4).toUpperCase()
+  return words.map(w => w[0]).join("").slice(0, 4).toUpperCase()
 }
 
 export const MissionCard: React.FC<MissionCardProps> = ({ mission, onClick }) => {
@@ -101,6 +109,18 @@ export const MissionCard: React.FC<MissionCardProps> = ({ mission, onClick }) =>
           {mission.ship_encounter_count > 0 && <Chip icon={<ShieldRounded sx={{ fontSize: 14 }} />} label={mission.ship_encounter_count} size="small" color="info" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} />}
           {mission.blueprint_reward_count > 0 && <Chip icon={<BuildRounded sx={{ fontSize: 14 }} />} label={`${mission.blueprint_reward_count} BP`} size="small" color="success" sx={{ height: 18, fontSize: "0.65rem" }} />}
         </CardActions>
+
+        {/* Material badges */}
+        {(mission.hauling_orders?.length ?? 0) > 0 && (
+          <Box sx={{ px: 1.5, pt: 0, pb: 0.5, display: "flex", flexWrap: "wrap", gap: 0.25 }}>
+            {mission.hauling_orders!.map((h, i) => (
+              <Tooltip key={i} title={h.resource_name} arrow>
+                <Chip label={abbrResource(h.resource_name)} size="small"
+                  sx={{ height: 18, fontSize: "0.6rem", fontFamily: "monospace", bgcolor: "action.selected" }} />
+              </Tooltip>
+            ))}
+          </Box>
+        )}
 
         {/* Reward lines — pinned to bottom */}
         <Box sx={{ px: 1.5, pb: 1.5, pt: 0.5, mt: "auto" }}>

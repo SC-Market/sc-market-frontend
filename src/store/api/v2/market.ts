@@ -3257,6 +3257,11 @@ export type ResourceCategory = {
   /** Number of resources in this category */
   count: number
 }
+export type HaulingOrder = {
+  resource_name: string
+  min_scu: number
+  max_scu: number
+}
 export type MissionSearchResult = {
   /** Mission UUID */
   mission_id: string
@@ -3306,6 +3311,8 @@ export type MissionSearchResult = {
   associated_event?: string
   /** Total ship encounter count */
   ship_encounter_count: number
+  /** Hauling order summaries for material badges */
+  hauling_orders?: HaulingOrder[]
 }
 export type SearchMissionsResponse = {
   /** Mission search results */
@@ -3451,11 +3458,6 @@ export type ShipEncounter = {
 export type NpcEncounter = {
   name: string
   count: number
-}
-export type HaulingOrder = {
-  resource_name: string
-  min_scu: number
-  max_scu: number
 }
 export type EntitySpawn = {
   name: string
