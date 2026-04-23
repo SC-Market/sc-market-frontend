@@ -115,7 +115,6 @@ export function MissionDetailModal({ missionId, open, onClose, onBlueprintClick 
           {(m.is_illegal || m.legal_status === "ILLEGAL") && <Chip label="ILLEGAL" size="small" color="error" />}
           {m.is_chain_starter && <Chip label="CHAIN" size="small" color="secondary" />}
           {m.is_chain_mission && !m.is_chain_starter && <Chip label="CHAIN" size="small" variant="outlined" />}
-          {m.mission_type && <Chip label={m.mission_type} size="small" variant="outlined" sx={{ fontSize: "0.7rem" }} />}
         </Stack>
       )}
 
