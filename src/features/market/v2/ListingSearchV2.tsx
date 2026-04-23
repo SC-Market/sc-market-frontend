@@ -752,6 +752,18 @@ interface ListingCardV2Props {
   index: number;
 }
 
+/** Quality tier color: 1=grey, 2=green, 3=blue, 4=purple, 5=gold */
+function qualityColor(tier: number): string {
+  switch (tier) {
+    case 1: return "#757575"
+    case 2: return "#4caf50"
+    case 3: return "#2196f3"
+    case 4: return "#9c27b0"
+    case 5: return "#ff9800"
+    default: return "#757575"
+  }
+}
+
 export function ListingCardV2({ listing, index }: ListingCardV2Props) {
   const theme = useTheme<ExtendedTheme>();
   const { i18n } = useTranslation();
@@ -827,6 +839,27 @@ export function ListingCardV2({ listing, index }: ListingCardV2Props) {
                     fontWeight: "bold",
                     fontSize: "0.65rem",
                     height: 18,
+                  }}
+                />
+              )}
+              {listing.quality_tier_min != null && (
+                <Chip
+                  label={listing.quality_tier_min === listing.quality_tier_max || !listing.quality_tier_max
+                    ? `Q${listing.quality_tier_min}`
+                    : `Q${listing.quality_tier_min}–${listing.quality_tier_max}`}
+                  size="small"
+                  sx={{
+                    position: "absolute",
+                    top: 4,
+                    right: listing.quantity_available === 0 ? undefined : 4,
+                    left: listing.quantity_available === 0 ? 4 : undefined,
+                    bottom: listing.quantity_available === 0 ? undefined : undefined,
+                    zIndex: 2,
+                    fontWeight: "bold",
+                    fontSize: "0.65rem",
+                    height: 18,
+                    bgcolor: qualityColor(listing.quality_tier_max || listing.quality_tier_min),
+                    color: "#fff",
                   }}
                 />
               )}
