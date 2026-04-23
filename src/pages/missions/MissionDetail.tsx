@@ -33,7 +33,7 @@ export function MissionDetail() {
         { label: m?.mission_name || "Detail" },
       ]}
       isLoading={isLoading}
-      error={error ? "not_found" : undefined}
+      error={error || undefined}
       sidebarOpen={true}
       maxWidth="lg"
     >

@@ -306,7 +306,7 @@ export function WikiItemDetail() {
                         <Button
                           size="small"
                           sx={{ ml: 1 }}
-                          onClick={() => navigate(`/blueprints/${bp.blueprint_id}`)}
+                          onClick={() => navigate(`/blueprints/${bp.blueprint_code || bp.blueprint_id}`)}
                         >
                           View Blueprint
                         </Button>
@@ -382,7 +382,7 @@ export function WikiItemDetail() {
                                   <TableCell colSpan={4}>
                                     <Button
                                       size="small"
-                                      onClick={() => navigate(`/blueprints/${bp.blueprint_id}`)}
+                                      onClick={() => navigate(`/blueprints/${bp.blueprint_code || bp.blueprint_id}`)}
                                     >
                                       View blueprint for full ingredient list
                                     </Button>

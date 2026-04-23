@@ -176,7 +176,7 @@ export function ResourceDetail() {
                       key={bp.blueprint_id}
                       hover
                       sx={{ cursor: "pointer" }}
-                      onClick={() => navigate(`/blueprints/${bp.blueprint_id}`)}
+                      onClick={() => navigate(`/blueprints/${bp.blueprint_code || bp.blueprint_id}`)}
                     >
                       <TableCell>{bp.blueprint_name}</TableCell>
                       <TableCell>{bp.output_item_name}</TableCell>
