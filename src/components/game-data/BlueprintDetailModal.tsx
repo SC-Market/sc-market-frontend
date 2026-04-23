@@ -238,6 +238,25 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
 
             {/* Ingredients */}
             <Typography variant="subtitle2"><BuildRounded sx={{ fontSize: 16, mr: 0.5 }} />Craft</Typography>
+
+            {/* Scaling attributes summary */}
+            {combinedModifiers.size > 0 && (
+              <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap sx={{ mb: 0.5 }}>
+                {Array.from(combinedModifiers.entries()).map(([prop, modifier]) => {
+                  const pct = (modifier - 1) * 100
+                  return (
+                    <Chip
+                      key={prop}
+                      size="small"
+                      label={`${propertyLabel(prop)}: ×${modifier.toFixed(3)} (${pct >= 0 ? "+" : ""}${pct.toFixed(1)}%)`}
+                      color={pct >= 0 ? "success" : "error"}
+                      variant="outlined"
+                      sx={{ height: 22, fontSize: "0.7rem" }}
+                    />
+                  )
+                })}
+              </Stack>
+            )}
             <Stack spacing={1}>
             {ingredients.map((ing: any, idx: number) => {
               const qv = qualities[idx] ?? Math.round((qualityRanges[idx]?.min + qualityRanges[idx]?.max) / 2)
