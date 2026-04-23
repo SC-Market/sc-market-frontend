@@ -96,6 +96,12 @@ export function BlueprintBrowser() {
   const setCraftingStation = (v: string) => updateParam("station", v)
   const setOwnedOnly = (v: boolean) => updateParam("owned", v ? "true" : "")
   const setHasMissionSource = (v: boolean) => updateParam("missions", v ? "true" : "")
+  const source = searchParams.get("source") || ""
+  const setSource = (v: string) => updateParam("source", v)
+  const manufacturer = searchParams.get("mfr") || ""
+  const setManufacturer = (v: string) => updateParam("mfr", v)
+  const ingredientName = searchParams.get("ingredient") || ""
+  const setIngredientName = (v: string) => updateParam("ingredient", v)
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"))
   const [filterOpen, setFilterOpen] = useState(false)
   const bottomNavHeight = useBottomNavHeight()
@@ -118,6 +124,9 @@ export function BlueprintBrowser() {
     tier: tier || undefined,
     craftingStationType: craftingStation || undefined,
     userOwnedOnly: ownedOnly || undefined,
+    source: source || undefined,
+    manufacturer: manufacturer || undefined,
+    ingredientName: ingredientName || undefined,
     page,
     pageSize: 20,
   })
@@ -232,6 +241,18 @@ export function BlueprintBrowser() {
         label={<Typography variant="body2">Owned Only</Typography>} sx={{ ml: 0 }} />
       <FormControlLabel control={<Checkbox checked={hasMissionSource} onChange={(e) => setHasMissionSource(e.target.checked)} size="small" />}
         label={<Typography variant="body2">Has Mission Source</Typography>} sx={{ ml: 0 }} />
+      <FormControl fullWidth size="small">
+        <InputLabel>Source</InputLabel>
+        <Select value={source} label="Source" onChange={(e) => setSource(e.target.value)}>
+          <MenuItem value="">All</MenuItem>
+          <MenuItem value="default">Default (all players)</MenuItem>
+          <MenuItem value="mission_reward">Mission Reward</MenuItem>
+        </Select>
+      </FormControl>
+      <TextField fullWidth size="small" label="Manufacturer" value={manufacturer}
+        onChange={(e) => setManufacturer(e.target.value)} placeholder="e.g. Behring" />
+      <TextField fullWidth size="small" label="Ingredient" value={ingredientName}
+        onChange={(e) => setIngredientName(e.target.value)} placeholder="e.g. Hephaestanite" />
       <Button size="small" startIcon={<RestartAltRounded />} onClick={handleResetFilters} sx={{ textTransform: "none" }}>
         Reset Filters
       </Button>
@@ -340,6 +361,7 @@ export function BlueprintBrowser() {
                           <TableCell>
                             <Stack direction="row" spacing={0.5} flexWrap="nowrap">
                               {bp.user_owns && <Chip label="OWNED" size="small" color="success" sx={{ height: 18, fontSize: "0.65rem" }} />}
+                              {bp.source === "default" && <Chip label="DEFAULT" size="small" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} />}
                               {bp.rarity && <Chip label={bp.rarity} size="small" sx={{ height: 18, fontSize: "0.65rem", bgcolor: "info.main", color: "#fff" }} />}
                               {bp.tier && <Chip label={`T${bp.tier}`} size="small" sx={{ height: 18, fontSize: "0.65rem", bgcolor: "warning.main", color: "#fff" }} />}
                             </Stack>
