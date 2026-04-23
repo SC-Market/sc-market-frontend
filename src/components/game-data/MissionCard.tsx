@@ -58,9 +58,12 @@ export const MissionCard: React.FC<MissionCardProps> = ({ mission, onClick }) =>
   const giver = mission.mission_giver_org || mission.faction
   const displayGiver = giver?.includes("~mission") ? "Various" : giver
   const missionIcon = getMissionIcon(mission.category) || getFactionIcon(mission.faction)
-  const reward = mission.credit_reward_min === mission.credit_reward_max || !mission.credit_reward_max
-    ? formatCredits(mission.credit_reward_min)
-    : `${formatCredits(mission.credit_reward_min)} – ${formatCredits(mission.credit_reward_max)}`
+  const isFee = (mission.credit_reward_min ?? 0) < 0
+  const reward = isFee
+    ? `Fee: ${formatCredits(Math.abs(mission.credit_reward_min!))}`
+    : mission.credit_reward_min === mission.credit_reward_max || !mission.credit_reward_max
+      ? formatCredits(mission.credit_reward_min)
+      : `${formatCredits(mission.credit_reward_min)} – ${formatCredits(mission.credit_reward_max)}`
 
   return (
     <Card sx={{ height: "100%", width: "100%", display: "flex", flexDirection: "column" }}>
@@ -103,7 +106,7 @@ export const MissionCard: React.FC<MissionCardProps> = ({ mission, onClick }) =>
         <Box sx={{ px: 1.5, pb: 1.5, pt: 0.5, mt: "auto" }}>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <Typography variant="caption" color="text.secondary">Reward</Typography>
-            <Typography variant="caption" color="success.main" fontWeight={600}>{reward}</Typography>
+            <Typography variant="caption" color={isFee ? "error.main" : "success.main"} fontWeight={600}>{reward}</Typography>
           </Box>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <Typography variant="caption" color="text.secondary">Base XP</Typography>
