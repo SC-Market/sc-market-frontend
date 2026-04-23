@@ -25,6 +25,7 @@ import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { formatCategoryName } from "../../util/categoryDisplay"
 import { getCommodityColor, getItemCategoryColor } from "../../util/gameIcons"
 import { GameItemAvatar } from "../../components/game-data/GameItemAvatar"
+import { DetailPageSkeleton } from "../../components/game-data/GameDataSkeletons"
 import { TrackChangesRounded, BuildRounded, TimerRounded, RecyclingRounded, Bookmark, BookmarkBorder } from "@mui/icons-material"
 import { IconButton } from "@mui/material"
 import { propertyLabel, isModifierPositive, interpolateModifier } from "../../util/statDisplay"
@@ -142,6 +143,7 @@ export function BlueprintDetail() {
         { label: itemName },
       ]}
       isLoading={isLoading}
+      skeleton={<DetailPageSkeleton />}
       error={error ? "not_found" : undefined}
       sidebarOpen={true}
       maxWidth="lg"

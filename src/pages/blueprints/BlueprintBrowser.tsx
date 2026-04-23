@@ -47,6 +47,7 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom"
 import { useDebounce } from "../../hooks/useDebounce"
 import { useInfiniteScroll } from "../../hooks/useInfiniteScroll"
 import { BlueprintCard } from "../../components/game-data/BlueprintCard"
+import { CardGridSkeleton } from "../../components/game-data/GameDataSkeletons"
 import { formatCategoryName } from "../../util/categoryDisplay"
 import { getCommodityColor } from "../../util/gameIcons"
 import { useTranslation } from "react-i18next"
@@ -282,11 +283,7 @@ export function BlueprintBrowser() {
           </Box>
 
           {/* Loading State */}
-          {isLoading && (
-            <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
-              <CircularProgress />
-            </Box>
-          )}
+          {isLoading && <CardGridSkeleton />}
 
           {/* Error State */}
           {error && (

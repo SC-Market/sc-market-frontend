@@ -19,6 +19,7 @@ import {
   Grid,
   Typography,
   CircularProgress,
+  Skeleton,
   Alert,
   ToggleButtonGroup,
   ToggleButton,
@@ -41,6 +42,7 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom"
 import { useDebounce } from "../../hooks/useDebounce"
 import { useInfiniteScroll } from "../../hooks/useInfiniteScroll"
 import { MissionCard, MissionFilters } from "../../components/game-data"
+import { CardGridSkeleton } from "../../components/game-data/GameDataSkeletons"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { MissionDetailModal } from "../../components/game-data/MissionDetailModal"
@@ -222,11 +224,7 @@ export function MissionSearch() {
         <FilterSidebarLayout filters={filterContent} filterTitle={t("missions.filters", "Filters")}>
 
       {/* Loading State */}
-      {isLoading && (
-        <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
-          <CircularProgress />
-        </Box>
-      )}
+      {isLoading && <CardGridSkeleton />}
 
       {/* Error State */}
       {error && (
