@@ -361,8 +361,8 @@ export function BlueprintBrowser() {
                           </TableCell>
                           <TableCell>
                             <Stack direction="row" spacing={0.5} flexWrap="nowrap">
-                              {bp.user_owns && <Chip label="OWNED" size="small" color="success" sx={{ height: 18, fontSize: "0.65rem" }} />}
-                              {bp.source === "default" && <Chip label="DEFAULT" size="small" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} />}
+                              {bp.user_owns && <Chip label="Owned" size="small" color="success" sx={{ height: 18, fontSize: "0.65rem" }} />}
+                              {bp.source === "default" && <Chip label="Default" size="small" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} />}
                               {bp.rarity && <Chip label={bp.rarity} size="small" sx={{ height: 18, fontSize: "0.65rem", bgcolor: "info.main", color: "#fff" }} />}
                               {bp.tier && <Chip label={`T${bp.tier}`} size="small" sx={{ height: 18, fontSize: "0.65rem", bgcolor: "warning.main", color: "#fff" }} />}
                             </Stack>

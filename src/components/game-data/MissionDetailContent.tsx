@@ -84,10 +84,10 @@ export function MissionHeaderChips({ mission: m }: { mission: Mission }) {
         />
       )}
       {showGiver && <Chip label={giver} size="small" variant="outlined" clickable onClick={() => go({ giver: giver! })} />}
-      {(m.is_illegal || m.legal_status === "ILLEGAL") && <Chip label="ILLEGAL" size="small" color="error" clickable onClick={() => go({ legal: "ILLEGAL" })} />}
-      {m.is_unique_mission && <Chip label="UNIQUE" size="small" color="warning" />}
-      {m.is_chain_starter && <Chip label="STARTER" size="small" color="secondary" clickable onClick={() => go({ chain: "true" })} />}
-      {m.is_chain_mission && !m.is_chain_starter && <Chip label="CHAIN" size="small" color="secondary" variant="outlined" />}
+      {(m.is_illegal || m.legal_status === "ILLEGAL") && <Chip label="Illegal" size="small" color="error" clickable onClick={() => go({ legal: "ILLEGAL" })} />}
+      {m.is_unique_mission && <Chip label="Unique" size="small" color="warning" />}
+      {m.is_chain_starter && <Chip label="Starter" size="small" color="secondary" clickable onClick={() => go({ chain: "true" })} />}
+      {m.is_chain_mission && !m.is_chain_starter && <Chip label="Chain" size="small" color="secondary" variant="outlined" />}
       {m.is_shareable && <Chip label="Shareable" size="small" variant="outlined" clickable onClick={() => go({ shareable: "true" })} />}
       {m.associated_event && <Chip label={m.associated_event} size="small" clickable onClick={() => go({ show_events: "true", event: m.associated_event! })} sx={{ bgcolor: "info.main", color: "#fff" }} />}
       {m.difficulty_level && <Chip label={`D${m.difficulty_level}`} size="small" color="warning" variant="outlined" />}
