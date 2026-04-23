@@ -231,12 +231,17 @@ export function AdminFeatureFlagsView() {
             <UserSearch onUserSelect={(user) => setNewUsername(user.username)} placeholder="Search by username" />
             {newUsername && <Chip label={newUsername} onDelete={() => setNewUsername("")} />}
             <FormControl fullWidth size="small">
-              <InputLabel>Version</InputLabel>
-              <Select value={newVersion} label="Version" onChange={(ev) => setNewVersion(ev.target.value as "V1" | "V2")}>
-                <MenuItem value="V1">V1</MenuItem>
-                <MenuItem value="V2">V2</MenuItem>
+              <InputLabel>Flag</InputLabel>
+              <Select value={newFlagName} label="Flag" onChange={(ev) => setNewFlagName(ev.target.value)}>
+                {flagNames.map((f: string) => (
+                  <MenuItem key={f} value={f}>{f.replace(/_/g, " ")}</MenuItem>
+                ))}
               </Select>
             </FormControl>
+            <Stack direction="row" alignItems="center" spacing={1}>
+              <Typography variant="body2">Enabled</Typography>
+              <Switch checked={newEnabled} onChange={(ev) => setNewEnabled(ev.target.checked)} />
+            </Stack>
           </Stack>
         </DialogContent>
         <DialogActions>
