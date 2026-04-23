@@ -97,6 +97,10 @@ export function MissionSearch() {
   const setHasBlueprints = (v: boolean | undefined) => updateParam("blueprints", v === undefined ? "" : String(v))
   const setIsChainStarter = (v: boolean | undefined) => updateParam("chain", v === undefined ? "" : String(v))
   const setCreditRewardMin = (v: number | "") => updateParam("min_reward", v === "" ? "" : String(v))
+  const eventCode = searchParams.get("event") || ""
+  const setEventCode = (v: string) => updateParam("event", v)
+  const showEventMissions = searchParams.get("show_events") === "true"
+  const setShowEventMissions = (v: boolean) => updateParam("show_events", v ? "true" : "")
 
   const [page, setPage] = useState(1)
   const [allMissions, setAllMissions] = useState<any[]>([])
@@ -112,7 +116,7 @@ export function MissionSearch() {
   // Reset accumulated results when filters change
   const filterKey = JSON.stringify({
     debouncedSearch, category, careerType, starSystem, faction, missionGiver,
-    legalStatus, difficultyRange, isShareable, hasBlueprints, isChainStarter, creditRewardMin,
+    legalStatus, difficultyRange, isShareable, hasBlueprints, isChainStarter, creditRewardMin, eventCode, showEventMissions,
   })
   useEffect(() => { setPage(1); setAllMissions([]) }, [filterKey])
 
@@ -131,6 +135,8 @@ export function MissionSearch() {
     hasBlueprintRewards: hasBlueprints,
     isChainStarter: isChainStarter,
     creditRewardMin: creditRewardMin || undefined,
+    eventCode: eventCode || undefined,
+    excludeEvents: eventCode ? false : !showEventMissions,
     page,
     pageSize: 20,
   })
@@ -197,6 +203,10 @@ export function MissionSearch() {
       onIsChainStarterChange={setIsChainStarter}
       creditRewardMin={creditRewardMin}
       onCreditRewardMinChange={setCreditRewardMin}
+      eventCode={eventCode}
+      onEventCodeChange={setEventCode}
+      showEventMissions={showEventMissions}
+      onShowEventMissionsChange={setShowEventMissions}
       onResetFilters={handleResetFilters}
     />
   )

@@ -580,6 +580,8 @@ const injectedRtkApi = api
             credit_reward_min: queryArg.creditRewardMin,
             community_difficulty_min: queryArg.communityDifficultyMin,
             community_satisfaction_min: queryArg.communitySatisfactionMin,
+            event_code: queryArg.eventCode,
+            exclude_events: queryArg.excludeEvents,
             version_id: queryArg.versionId,
             page: queryArg.page,
             page_size: queryArg.pageSize,
@@ -663,6 +665,12 @@ const injectedRtkApi = api
         }),
         providesTags: ["Game Data - Missions"],
       }),
+      getGameEvents: build.query<GetGameEventsApiResponse, GetGameEventsApiArg>(
+        {
+          query: () => ({ url: `/game-data/missions/events` }),
+          providesTags: ["Game Data - Missions"],
+        },
+      ),
       calculateQuality: build.mutation<
         CalculateQualityApiResponse,
         CalculateQualityApiArg
@@ -1600,6 +1608,10 @@ export type SearchMissionsApiArg = {
   communityDifficultyMin?: number
   /** Minimum community satisfaction rating */
   communitySatisfactionMin?: number
+  /** Filter by event code (show only missions for this event) */
+  eventCode?: string
+  /** Exclude event-only missions (default: true — hides seasonal missions) */
+  excludeEvents?: boolean
   /** Game version ID (defaults to active LIVE version) */
   versionId?: string
   /** Page number (default: 1) */
@@ -1675,6 +1687,10 @@ export type GetReputationRanksApiArg = {
   /** The reputation scope code */
   scopeCode?: string
 }
+export type GetGameEventsApiResponse = /** status 200 Ok */ {
+  events: GameEvent[]
+}
+export type GetGameEventsApiArg = void
 export type CalculateQualityApiResponse =
   /** status 200 Quality calculation result with breakdown and predicted stats */ CalculateQualityResponse
 export type CalculateQualityApiArg = {
@@ -3524,6 +3540,12 @@ export type ReputationRank = {
   ceiling: number
   rank_index: number
 }
+export type GameEvent = {
+  event_id: string
+  event_code: string
+  event_name: string
+  mission_count: number
+}
 export type QualityContribution = {
   /** Material name */
   material_name: string
@@ -4384,6 +4406,7 @@ export const {
   useRateMissionMutation,
   useGetMissionChainsQuery,
   useGetReputationRanksQuery,
+  useGetGameEventsQuery,
   useCalculateQualityMutation,
   useSimulateCraftingMutation,
   useRecordCraftingMutation,
