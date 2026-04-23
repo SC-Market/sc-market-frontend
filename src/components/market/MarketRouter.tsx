@@ -1,5 +1,6 @@
 import React from "react"
 import { CircularProgress, Box } from "@mui/material"
+import { useParams } from "react-router-dom"
 import { useFeatureFlag } from "../../hooks/market/useFeatureFlag"
 
 const MarketPageV1 = React.lazy(() =>
