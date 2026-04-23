@@ -33,7 +33,7 @@ import { useFeatureFlag, MarketVersion } from "../../../hooks/market/useFeatureF
 export function DebugPanel() {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
-  const { marketVersion, setMarketVersion, isDeveloper, isLoading } = useFeatureFlag()
+  const { marketVersion, setMarketVersion, isDeveloper, hasOverride, isLoading } = useFeatureFlag()
   const [isOpen, setIsOpen] = useState(false)
   const [isSwitching, setIsSwitching] = useState(false)
 
@@ -71,7 +71,7 @@ export function DebugPanel() {
   }
 
   // Don't render if user is not a developer
-  if (!isDeveloper) {
+  if (!isDeveloper && !hasOverride) {
     return null
   }
 

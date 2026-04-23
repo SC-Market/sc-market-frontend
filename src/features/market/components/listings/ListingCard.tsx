@@ -355,8 +355,9 @@ export const ItemListingBase = React.memo(
                     variant={"h6"}
                     color={"primary"}
                     fontWeight={"bold"}
+                    noWrap
                     sx={{
-                      fontSize: "0.95rem",
+                      fontSize: `${listing.price.toLocaleString().length > 10 ? 0.75 : 0.95}rem`,
                       mb: 0.5,
                     }}
                   >
@@ -651,6 +652,8 @@ export const ItemListingBase = React.memo(
                     variant={"h5"}
                     color={"primary"}
                     fontWeight={"bold"}
+                    noWrap
+                    sx={{ fontSize: `${listing.price.toLocaleString().length > 10 ? 0.9 : 1.15}rem` }}
                   >
                     {listing.price.toLocaleString(i18n.language)} aUEC
                   </Typography>

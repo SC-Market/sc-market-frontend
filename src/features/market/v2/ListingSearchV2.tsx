@@ -929,7 +929,8 @@ export function ListingCardV2({ listing, index }: ListingCardV2Props) {
                   variant="h6"
                   color="primary"
                   fontWeight="bold"
-                  sx={{ fontSize: "0.95rem", mb: 0.5 }}
+                  noWrap
+                  sx={{ fontSize: priceDisplay.length > 20 ? "0.7rem" : priceDisplay.length > 14 ? "0.8rem" : "0.95rem", mb: 0.5 }}
                 >
                   {priceDisplay}
                 </Typography>
