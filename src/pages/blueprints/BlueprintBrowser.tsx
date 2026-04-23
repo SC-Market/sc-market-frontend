@@ -43,7 +43,7 @@ import {
 } from "@mui/material"
 import { ViewModule, ViewList, RestartAltRounded, FilterList } from "@mui/icons-material"
 import { useSearchBlueprintsQuery, useGetBlueprintCategoriesQuery, useAddBlueprintToInventoryMutation, useRemoveBlueprintFromInventoryMutation } from "../../store/api/v2/market"
-import { useNavigate, useParams } from "react-router-dom"
+import { useNavigate, useParams, useSearchParams } from "react-router-dom"
 import { useDebounce } from "../../hooks/useDebounce"
 import { useInfiniteScroll } from "../../hooks/useInfiniteScroll"
 import { BlueprintCard } from "../../components/game-data/BlueprintCard"
@@ -68,15 +68,33 @@ export function BlueprintBrowser() {
   // View mode state
   const [viewMode, setViewMode] = useState<ViewMode>(() => (localStorage.getItem("bp-view") as ViewMode) || "grid")
   
-  // Search and filter state
-  const [searchText, setSearchText] = useState("")
-  const [category, setCategory] = useState("")
-  const [subcategory, setSubcategory] = useState("")
-  const [rarity, setRarity] = useState("")
-  const [tier, setTier] = useState<number | "">("")
-  const [craftingStation, setCraftingStation] = useState("")
-  const [ownedOnly, setOwnedOnly] = useState(false)
-  const [hasMissionSource, setHasMissionSource] = useState(false)
+  // Search and filter state — persisted to URL params
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  const searchText = searchParams.get("q") || ""
+  const category = searchParams.get("category") || ""
+  const subcategory = searchParams.get("subcategory") || ""
+  const rarity = searchParams.get("rarity") || ""
+  const tier: number | "" = searchParams.get("tier") ? Number(searchParams.get("tier")) : ""
+  const craftingStation = searchParams.get("station") || ""
+  const ownedOnly = searchParams.get("owned") === "true"
+  const hasMissionSource = searchParams.get("missions") === "true"
+
+  const updateParam = (key: string, value: string) => {
+    const params = new URLSearchParams(searchParams)
+    if (value) params.set(key, value)
+    else params.delete(key)
+    setSearchParams(params, { replace: true })
+  }
+
+  const setSearchText = (v: string) => updateParam("q", v)
+  const setCategory = (v: string) => { updateParam("category", v); updateParam("subcategory", "") }
+  const setSubcategory = (v: string) => updateParam("subcategory", v)
+  const setRarity = (v: string) => updateParam("rarity", v)
+  const setTier = (v: number | "") => updateParam("tier", v === "" ? "" : String(v))
+  const setCraftingStation = (v: string) => updateParam("station", v)
+  const setOwnedOnly = (v: boolean) => updateParam("owned", v ? "true" : "")
+  const setHasMissionSource = (v: boolean) => updateParam("missions", v ? "true" : "")
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"))
   const [filterOpen, setFilterOpen] = useState(false)
   const bottomNavHeight = useBottomNavHeight()
@@ -147,14 +165,7 @@ export function BlueprintBrowser() {
   }
 
   const handleResetFilters = () => {
-    setSearchText("")
-    setCategory("")
-    setSubcategory("")
-    setRarity("")
-    setTier("")
-    setCraftingStation("")
-    setOwnedOnly(false)
-    setHasMissionSource(false)
+    setSearchParams({}, { replace: true })
     setPage(1)
   }
 

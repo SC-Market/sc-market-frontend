@@ -38,10 +38,7 @@ function formatQty(scu: number | string): string {
   return `${n.toFixed(2)} SCU`
 }
 
-function formatTime(s: number): string {
-  if (s >= 60) return `${Math.floor(s / 60)}m ${s % 60}s`
-  return `${s}s`
-}
+import { formatCraftingTime } from "../../constants/crafting"
 
 function interpolateModifier(qv: number, startQ: number, endQ: number, modStart: number, modEnd: number): number {
   const t = Math.max(0, Math.min(1, (qv - startQ) / (endQ - startQ)))
@@ -93,16 +90,38 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
   React.useEffect(() => { setTab(0) }, [blueprintId])
 
   // Quality state
+  const modsBySlot = useMemo(() => {
+    const map = new Map<string, any[]>()
+    for (const m of slotModifiers) { if (!map.has(m.slot_name)) map.set(m.slot_name, []); map.get(m.slot_name)!.push(m) }
+    return map
+  }, [slotModifiers])
+
   const [qualities, setQualities] = useState<number[]>([])
   const [craftQty, setCraftQty] = useState(1)
+
+  // Quality range per ingredient from slot modifiers
+  const qualityRanges = useMemo(() => {
+    return ingredients.map((ing: any) => {
+      const mods = modsBySlot.get(ing.slot_name || ing.game_item?.name) || []
+      if (!mods.length) return { min: 0, max: 1000 }
+      const min = Math.min(...mods.map((m: any) => m.start_quality))
+      const max = Math.max(...mods.map((m: any) => m.end_quality))
+      return { min, max }
+    })
+  }, [ingredients, modsBySlot])
+
   React.useEffect(() => {
     if (ingredients.length && qualities.length !== ingredients.length)
-      setQualities(ingredients.map(() => 500))
+      setQualities(qualityRanges.map(r => Math.round((r.min + r.max) / 2)))
   }, [ingredients.length])
 
-  const setQuality = (idx: number, v: number) =>
-    setQualities(prev => prev.map((q, i) => i === idx ? Math.max(0, Math.min(1000, v)) : q))
-  const setAllQualities = (v: number) => setQualities(prev => prev.map(() => v))
+  const setQuality = (idx: number, v: number) => {
+    const r = qualityRanges[idx] || { min: 0, max: 1000 }
+    setQualities(prev => prev.map((q, i) => i === idx ? Math.max(r.min, Math.min(r.max, v)) : q))
+  }
+  const setAllQualities = (mode: "min" | "mid" | "max") => setQualities(
+    qualityRanges.map(r => mode === "min" ? r.min : mode === "max" ? r.max : Math.round((r.min + r.max) / 2))
+  )
 
   const combinedModifiers = useMemo(() => {
     const result = new Map<string, number>()
@@ -116,11 +135,6 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
   }, [slotModifiers, qualities, ingredients])
 
 
-  const modsBySlot = useMemo(() => {
-    const map = new Map<string, any[]>()
-    for (const m of slotModifiers) { if (!map.has(m.slot_name)) map.set(m.slot_name, []); map.get(m.slot_name)!.push(m) }
-    return map
-  }, [slotModifiers])
 
   const outputQuality = useMemo(() => {
     if (!ingredients.length || !qualities.length) return 500
@@ -213,9 +227,9 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
               <Box>
                 <Typography variant="caption" color="text.secondary">Quality Presets</Typography>
                 <ButtonGroup size="small" variant="outlined" sx={{ display: "block" }}>
-                  <Button onClick={() => setAllQualities(0)}>Min</Button>
-                  <Button onClick={() => setAllQualities(500)}>Base</Button>
-                  <Button onClick={() => setAllQualities(1000)}>Max</Button>
+                  <Button onClick={() => setAllQualities("min")}>Min</Button>
+                  <Button onClick={() => setAllQualities("mid")}>Base</Button>
+                  <Button onClick={() => setAllQualities("max")}>Max</Button>
                 </ButtonGroup>
               </Box>
               <Box sx={{ flex: 1 }} />
@@ -226,7 +240,8 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
             <Typography variant="subtitle2"><BuildRounded sx={{ fontSize: 16, mr: 0.5 }} />Craft</Typography>
             <Stack spacing={1}>
             {ingredients.map((ing: any, idx: number) => {
-              const qv = qualities[idx] ?? 500
+              const qv = qualities[idx] ?? Math.round((qualityRanges[idx]?.min + qualityRanges[idx]?.max) / 2)
+              const qr = qualityRanges[idx] || { min: 0, max: 1000 }
               const color = getCommodityColor(ing.game_item?.sub_type) || "#616161"
               return (
                 <Box key={idx} sx={{ border: 1, borderColor: "divider", borderRadius: 1, p: 1 }}>
@@ -241,8 +256,8 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
                       <Typography variant="body2" fontWeight={600} lineHeight={1.2}>{ing.game_item?.name || "Unknown"}</Typography>
                       <Typography variant="caption" color="text.secondary" lineHeight={1}>{formatQty(parseFloat(String(ing.quantity_required)) * craftQty)}{craftQty > 1 && ` (${formatQty(ing.quantity_required)} ea)`}{ing.min_quality_tier ? ` · min T${ing.min_quality_tier}` : ""}</Typography>
                     </Box>
-                    <Slider size="small" min={0} max={1000} value={qv} onChange={(_, v) => setQuality(idx, v as number)} sx={{ flex: 1, color, "& .MuiSlider-thumb": { width: 12, height: 12 } }} />
-                    <TextField size="small" type="number" value={qv} onChange={e => setQuality(idx, +e.target.value || 0)} inputProps={{ min: 0, max: 1000 }} sx={{ width: 70, "& input": { py: 0.5, fontSize: "0.8rem" } }} />
+                    <Slider size="small" min={qr.min} max={qr.max} value={qv} onChange={(_, v) => setQuality(idx, v as number)} sx={{ flex: 1, color, "& .MuiSlider-thumb": { width: 12, height: 12 } }} />
+                    <TextField size="small" type="number" value={qv} onChange={e => setQuality(idx, +e.target.value || 0)} inputProps={{ min: qr.min, max: qr.max }} sx={{ width: 70, "& input": { py: 0.5, fontSize: "0.8rem" } }} />
                   </Stack>
                   {(modsBySlot.get(ing.slot_name || ing.game_item?.name) || []).map((mod: any, mi: number) => {
                     const factor = interpolateModifier(qv, mod.start_quality, mod.end_quality, mod.modifier_at_start, mod.modifier_at_end)
@@ -261,7 +276,7 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
             </Stack>
 
             {bp?.crafting_time_seconds && (
-              <Typography variant="body2" color="text.secondary"><TimerRounded sx={{ fontSize: 16, mr: 0.5, verticalAlign: "text-bottom" }} />Craft Time: {formatTime(bp.crafting_time_seconds)}</Typography>
+              <Typography variant="body2" color="text.secondary"><TimerRounded sx={{ fontSize: 16, mr: 0.5, verticalAlign: "text-bottom" }} />Craft Time: {formatCraftingTime(bp.crafting_time_seconds)}</Typography>
             )}
           </Stack>
         )}
