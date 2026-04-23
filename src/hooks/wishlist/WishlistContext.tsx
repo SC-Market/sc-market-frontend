@@ -1,7 +1,7 @@
 /**
- * WishlistContext — provides addToWishlist(blueprintId, gameItemId?) from anywhere.
- * Renders a shared picker dialog to select which wishlist to add to.
- * Wrap the app (or game-data routes) with <WishlistProvider>.
+ * ShoppingListContext — provides addToShoppingList(blueprintId, gameItemId?) from anywhere.
+ * Renders a shared picker dialog to select which shopping list to add to.
+ * Wrap the app with <ShoppingListProvider>.
  */
 
 import React, { createContext, useContext, useState, useCallback } from "react"
@@ -27,33 +27,33 @@ import {
 } from "../../store/wishlistsApi"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 
-interface WishlistRequest {
+interface ShoppingListRequest {
   blueprintId?: string
   gameItemId?: string
 }
 
-interface WishlistContextValue {
-  addToWishlist: (blueprintId?: string, gameItemId?: string) => void
+interface ShoppingListContextValue {
+  addToShoppingList: (blueprintId?: string, gameItemId?: string) => void
 }
 
-const WishlistCtx = createContext<WishlistContextValue>({
-  addToWishlist: () => {},
+const ShoppingListCtx = createContext<ShoppingListContextValue>({
+  addToShoppingList: () => {},
 })
 
-export const useWishlist = () => useContext(WishlistCtx)
+export const useShoppingList = () => useContext(ShoppingListCtx)
 
-export function WishlistProvider({ children }: { children: React.ReactNode }) {
+export function ShoppingListProvider({ children }: { children: React.ReactNode }) {
   const [open, setOpen] = useState(false)
-  const [request, setRequest] = useState<WishlistRequest | null>(null)
+  const [request, setRequest] = useState<ShoppingListRequest | null>(null)
   const [creating, setCreating] = useState(false)
   const [newName, setNewName] = useState("")
 
   const { data, isLoading } = useGetWishlistsQuery(undefined, { skip: !open })
   const [addItem] = useAddWishlistItemMutation()
-  const [createWishlist] = useCreateWishlistMutation()
+  const [createList] = useCreateWishlistMutation()
   const issueAlert = useAlertHook()
 
-  const addToWishlist = useCallback((blueprintId?: string, gameItemId?: string) => {
+  const addToShoppingList = useCallback((blueprintId?: string, gameItemId?: string) => {
     setRequest({ blueprintId, gameItemId })
     setOpen(true)
     setCreating(false)
@@ -72,9 +72,9 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
           priority: 0,
         },
       }).unwrap()
-      issueAlert({ severity: "success", message: "Added to wishlist" })
+      issueAlert({ severity: "success", message: "Added to shopping list" })
     } catch {
-      issueAlert({ severity: "error", message: "Failed to add to wishlist" })
+      issueAlert({ severity: "error", message: "Failed to add to shopping list" })
     }
     setOpen(false)
     setRequest(null)
@@ -83,26 +83,26 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
   const handleCreate = async () => {
     if (!newName.trim()) return
     try {
-      const wl = await createWishlist({
+      const wl = await createList({
         wishlist_name: newName.trim(),
         is_public: false,
         is_collaborative: false,
       }).unwrap()
       await handleSelect(wl.wishlist_id)
     } catch {
-      issueAlert({ severity: "error", message: "Failed to create wishlist" })
+      issueAlert({ severity: "error", message: "Failed to create shopping list" })
     }
   }
 
   return (
-    <WishlistCtx.Provider value={{ addToWishlist }}>
+    <ShoppingListCtx.Provider value={{ addToShoppingList }}>
       {children}
       <Dialog open={open} onClose={() => setOpen(false)} maxWidth="xs" fullWidth>
-        <DialogTitle>Add to Wishlist</DialogTitle>
+        <DialogTitle>Add to Shopping List</DialogTitle>
         <DialogContent>
           {isLoading && <CircularProgress size={24} />}
           {!isLoading && !data?.wishlists?.length && !creating && (
-            <Alert severity="info" sx={{ mb: 1 }}>No wishlists yet.</Alert>
+            <Alert severity="info" sx={{ mb: 1 }}>No shopping lists yet.</Alert>
           )}
           {!creating && (
             <>
@@ -122,7 +122,7 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
                 onClick={() => setCreating(true)}
                 sx={{ mt: 1, textTransform: "none" }}
               >
-                New Wishlist
+                New Shopping List
               </Button>
             </>
           )}
@@ -131,7 +131,7 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
               <TextField
                 size="small"
                 fullWidth
-                label="Wishlist Name"
+                label="List Name"
                 value={newName}
                 onChange={(e) => setNewName(e.target.value)}
                 autoFocus
@@ -147,6 +147,6 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
           )}
         </DialogContent>
       </Dialog>
-    </WishlistCtx.Provider>
+    </ShoppingListCtx.Provider>
   )
 }

@@ -163,7 +163,7 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
                 {bp.mission_count > 0 ? `${bp.mission_count} mission source${bp.mission_count !== 1 ? "s" : ""}` : "No mission sources"}
               </Typography>
               {onWishlistAdd && (
-                <IconButton size="small" title="Add to Wishlist" onClick={(e) => { e.stopPropagation(); onWishlistAdd(bp.blueprint_id) }}>
+                <IconButton size="small" title="Add to Shopping List" onClick={(e) => { e.stopPropagation(); onWishlistAdd(bp.blueprint_id) }}>
                   <PlaylistAddRounded sx={{ fontSize: 16 }} />
                 </IconButton>
               )}
