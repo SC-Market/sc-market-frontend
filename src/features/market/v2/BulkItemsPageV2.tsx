@@ -15,7 +15,6 @@ import {
   Stack,
   TextField,
   Typography,
-  CircularProgress,
   useMediaQuery,
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
@@ -30,6 +29,7 @@ import { BottomSheet } from "../../../components/mobile/BottomSheet"
 import { useMarketSidebar } from "../hooks/MarketSidebar"
 import { LanguageFilter } from "../../../components/search/LanguageFilter"
 import { EmptyListings } from "../../../components/empty-states"
+import { ListingSkeleton } from "../../../components/skeletons"
 
 // ── Sidebar Filter ─────────────────────────────────────────────────────
 
@@ -203,10 +203,18 @@ export function BulkItemsPageV2() {
     setSearchParams(params)
   }, [searchParams, setSearchParams])
 
+  const gridBreakpoints = { xs: 6, sm: 4, md: 3, lg: 2 }
+
   const itemGrid = (
     <>
       {isLoading ? (
-        <Box display="flex" justifyContent="center" py={8}><CircularProgress /></Box>
+        <Grid container spacing={1}>
+          {new Array(12).fill(undefined).map((_, i) => (
+            <Grid item {...gridBreakpoints} key={i}>
+              <ListingSkeleton index={i} />
+            </Grid>
+          ))}
+        </Grid>
       ) : items.length === 0 ? (
         <EmptyListings
           isSearchResult={!!searchParams.get("text") || !!searchParams.get("item_type") || !!searchParams.get("price_min")}
@@ -223,9 +231,9 @@ export function BulkItemsPageV2() {
           showCreateAction={!searchParams.get("text")}
         />
       ) : (
-        <Grid container spacing={2}>
+        <Grid container spacing={1}>
           {items.map((item) => (
-            <Grid item xs={6} sm={4} md={3} lg={2} key={item.game_item_id}>
+            <Grid item {...gridBreakpoints} key={item.game_item_id}>
               <AggregateCard item={item} />
             </Grid>
           ))}
