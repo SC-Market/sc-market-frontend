@@ -14,7 +14,9 @@ export function MissionName({
 }: { name: string | null | undefined } & Omit<TypographyProps, "children">) {
   if (!name) return <Typography {...props}>Unknown Mission</Typography>
 
-  const parts = name.split(/(~mission\([^)]+\))/)
+  const cleaned = name.replace(/<\/?em\d*>/gi, "")
+
+  const parts = cleaned.split(/(~mission\([^)]+\))/)
 
   return (
     <Typography {...props}>
@@ -60,8 +62,9 @@ export function MissionDescription({
 }: { text: string | null | undefined } & Omit<TypographyProps, "children">) {
   if (!text) return null
 
-  // First convert ~mission() to [LABEL], then style all [BRACKETS]
+  // First strip em tags, convert ~mission() to [LABEL], then style all [BRACKETS]
   const processed = text
+    .replace(/<\/?em\d*>/gi, "")
     .replace(/~mission\(([^|)]+)\|?[^)]*\)/g, (_, key) => {
       if (key === "Contractor") return "[Various]"
       return `[${key.replace(/([a-z])([A-Z])/g, "$1 $2").replace(/[_]/g, " ").trim().toUpperCase()}]`
