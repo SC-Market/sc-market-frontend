@@ -92,8 +92,8 @@ export function AddToCartDrawer({ open, onClose, listingId }: AddToCartDrawerPro
     if (totalAfterAdd > available) {
       return t("cart.exceedsStockWithCart", "Only {{available}} available, cart would have {{total}}", { available, total: totalAfterAdd })
     }
-    if (listing?.min_order_quantity && quantity < listing.min_order_quantity) return t("cart.belowMinQty", "Minimum quantity: {{min}}", { min: listing.min_order_quantity })
-    if (listing?.max_order_quantity && totalAfterAdd > listing.max_order_quantity) return t("cart.aboveMaxQty", "Maximum quantity: {{max}}", { max: listing.max_order_quantity })
+    if (listing?.min_order_quantity && totalAfterAdd < listing.min_order_quantity) return t("cart.belowMinQty", "Minimum quantity: {{min}} (cart has {{total}})", { min: listing.min_order_quantity, total: totalAfterAdd })
+    if (listing?.max_order_quantity && totalAfterAdd > listing.max_order_quantity) return t("cart.aboveMaxQty", "Maximum quantity: {{max}} (cart would have {{total}})", { max: listing.max_order_quantity, total: totalAfterAdd })
     return null
   }, [selectedVariant, quantity, listing, totalAfterAdd, available, t])
 
