@@ -61,6 +61,22 @@ export function MarketActions() {
 
       <Grid item xs={6} sm="auto">
         <Link
+          to={"/buyorder/create"}
+          style={{ color: "inherit", textDecoration: "none", display: "block" }}
+        >
+          <Button
+            color={"secondary"}
+            variant={"outlined"}
+            size={isMobile ? "medium" : "large"}
+            fullWidth={isMobile}
+          >
+            {t("buyOrderActions.createBuyOrder", "Create Buy Order")}
+          </Button>
+        </Link>
+      </Grid>
+
+      <Grid item xs={6} sm="auto">
+        <Link
           to={"/market/cart"}
           style={{ color: "inherit", textDecoration: "none", display: "block" }}
         >

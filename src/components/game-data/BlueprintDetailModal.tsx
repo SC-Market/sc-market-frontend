@@ -39,22 +39,7 @@ function formatQty(scu: number | string): string {
 }
 
 import { formatCraftingTime } from "../../constants/crafting"
-
-function interpolateModifier(qv: number, startQ: number, endQ: number, modStart: number, modEnd: number): number {
-  const t = Math.max(0, Math.min(1, (qv - startQ) / (endQ - startQ)))
-  return modStart + t * (modEnd - modStart)
-}
-
-const PROPERTY_LABELS: Record<string, string> = {
-  damagemitigation: "Damage Mitigation", gpp_armor_damagemitigation: "Damage Mitigation",
-  mintemp: "Min Temp", gpp_armor_mintemp: "Min Temp",
-  maxtemp: "Max Temp", gpp_armor_maxtemp: "Max Temp",
-}
-
-function propertyLabel(prop: string): string {
-  const lower = prop.toLowerCase()
-  return PROPERTY_LABELS[lower] || PROPERTY_LABELS[lower.replace(/^gpp_armor_/, "")] || lower.replace(/^gpp_armor_/, "").replace(/([a-z])([A-Z])/g, "$1 $2").replace(/^./, s => s.toUpperCase())
-}
+import { propertyLabel, isModifierPositive, interpolateModifier } from "../../util/statDisplay"
 
 interface Props {
   blueprintId: string | null
@@ -185,7 +170,7 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
                       <Typography variant="caption" color="text.secondary" sx={{ minWidth: 140 }}>{propertyLabel(prop)}</Typography>
                       <Typography variant="caption">×{baseVal.toFixed(2)}</Typography>
                       <Typography variant="caption" color="text.disabled">→</Typography>
-                      <Typography variant="caption" fontWeight={600} color={pctChange >= 0 ? "success.main" : "error.main"}>×{modified.toFixed(2)} ({pctChange >= 0 ? "+" : ""}{pctChange.toFixed(1)}%)</Typography>
+                      <Typography variant="caption" fontWeight={600} color={isModifierPositive(prop, modifier) ? "success.main" : modifier === 1 ? "text.secondary" : "error.main"}>×{modified.toFixed(2)} ({pctChange >= 0 ? "+" : ""}{pctChange.toFixed(1)}%)</Typography>
                     </Stack>
                   )
                 })}
@@ -249,7 +234,7 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
                       key={prop}
                       size="small"
                       label={`${propertyLabel(prop)}: ×${modifier.toFixed(3)} (${pct >= 0 ? "+" : ""}${pct.toFixed(1)}%)`}
-                      color={pct >= 0 ? "success" : "error"}
+                      color={isModifierPositive(prop, modifier) ? "success" : modifier === 1 ? "default" : "error"}
                       variant="outlined"
                       sx={{ height: 22, fontSize: "0.7rem" }}
                     />
@@ -284,7 +269,7 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
                     return (
                       <Stack key={mi} direction="row" spacing={1} alignItems="center" sx={{ mt: 0.25 }}>
                         <Typography variant="caption" color="text.secondary" sx={{ minWidth: 120 }}>{propertyLabel(mod.property)}</Typography>
-                        <Typography variant="caption" fontWeight={600} color={pct >= 0 ? "success.main" : "error.main"}>×{factor.toFixed(3)} {pct >= 0 ? "+" : ""}{pct.toFixed(2)}%</Typography>
+                        <Typography variant="caption" fontWeight={600} color={isModifierPositive(mod.property, factor) ? "success.main" : factor === 1 ? "text.secondary" : "error.main"}>×{factor.toFixed(3)} {pct >= 0 ? "+" : ""}{pct.toFixed(2)}%</Typography>
                         <Typography variant="caption" color="text.disabled">Factor: ×{mod.modifier_at_start}–{mod.modifier_at_end}</Typography>
                       </Stack>
                     )

@@ -27,6 +27,7 @@ import { getCommodityColor, getItemCategoryColor } from "../../util/gameIcons"
 import { GameItemAvatar } from "../../components/game-data/GameItemAvatar"
 import { TrackChangesRounded, BuildRounded, TimerRounded, RecyclingRounded, Bookmark, BookmarkBorder } from "@mui/icons-material"
 import { IconButton } from "@mui/material"
+import { propertyLabel, isModifierPositive, interpolateModifier } from "../../util/statDisplay"
 
 /** Format quantity — values are in SCU, may be string from API */
 function formatQty(scu: number | string): string {
@@ -36,34 +37,6 @@ function formatQty(scu: number | string): string {
 }
 
 import { formatCraftingTime } from "../../constants/crafting"
-
-/** Linear interpolation of modifier value at a given quality */
-function interpolateModifier(qv: number, startQ: number, endQ: number, modStart: number, modEnd: number): number {
-  const t = Math.max(0, Math.min(1, (qv - startQ) / (endQ - startQ)))
-  return modStart + t * (modEnd - modStart)
-}
-
-const PROPERTY_LABELS: Record<string, string> = {
-  damagemitigation: "Damage Mitigation",
-  gpp_armor_damagemitigation: "Damage Mitigation",
-  mintemp: "Min Temp",
-  gpp_armor_mintemp: "Min Temp",
-  maxtemp: "Max Temp",
-  gpp_armor_maxtemp: "Max Temp",
-  emreduction: "EM Reduction",
-  irreduction: "IR Reduction",
-  durability: "Durability",
-  weight: "Weight",
-}
-
-function propertyLabel(prop: string): string {
-  const lower = prop.toLowerCase()
-  if (PROPERTY_LABELS[lower]) return PROPERTY_LABELS[lower]
-  // Strip common prefixes
-  const stripped = lower.replace(/^gpp_armor_/, "").replace(/^gpp_/, "")
-  if (PROPERTY_LABELS[stripped]) return PROPERTY_LABELS[stripped]
-  return stripped.replace(/([a-z])([A-Z])/g, "$1 $2").replace(/^./, s => s.toUpperCase())
-}
 
 export function BlueprintDetail() {
   const { id } = useParams<{ id: string }>()
@@ -258,7 +231,7 @@ export function BlueprintDetail() {
                     <Typography variant="caption" color="text.secondary" sx={{ minWidth: 140 }}>{propertyLabel(prop)}</Typography>
                     <Typography variant="caption">×{baseVal.toFixed(2)}</Typography>
                     <Typography variant="caption" color="text.disabled">→</Typography>
-                    <Typography variant="caption" fontWeight={600} color={pctChange >= 0 ? "success.main" : "error.main"}>
+                    <Typography variant="caption" fontWeight={600} color={isModifierPositive(prop, modifier) ? "success.main" : modifier === 1 ? "text.secondary" : "error.main"}>
                       ×{modified.toFixed(2)} ({pctChange >= 0 ? "+" : ""}{pctChange.toFixed(1)}%)
                     </Typography>
                   </Stack>
@@ -308,7 +281,7 @@ export function BlueprintDetail() {
                     key={prop}
                     size="small"
                     label={`${propertyLabel(prop)}: ×${modifier.toFixed(3)} (${pct >= 0 ? "+" : ""}${pct.toFixed(1)}%)`}
-                    color={pct >= 0 ? "success" : "error"}
+                    color={isModifierPositive(prop, modifier) ? "success" : modifier === 1 ? "default" : "error"}
                     variant="outlined"
                     sx={{ height: 22, fontSize: "0.7rem" }}
                   />
@@ -373,7 +346,7 @@ export function BlueprintDetail() {
                         <Typography variant="caption" color="text.secondary" sx={{ minWidth: 120 }}>
                           {propertyLabel(mod.property)}
                         </Typography>
-                        <Typography variant="caption" fontWeight={600} color={pctChange >= 0 ? "success.main" : "error.main"}>
+                        <Typography variant="caption" fontWeight={600} color={isModifierPositive(mod.property, factor) ? "success.main" : factor === 1 ? "text.secondary" : "error.main"}>
                           ×{factor.toFixed(3)} {pctChange >= 0 ? "+" : ""}{pctChange.toFixed(2)}%
                         </Typography>
                         <Typography variant="caption" color="text.disabled">
