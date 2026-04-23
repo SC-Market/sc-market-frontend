@@ -639,7 +639,7 @@ export function MarketAggregateViewV2() {
         <HeaderTitle>{t("MarketAggregateView.priceHistory")}</HeaderTitle>
       </Grid>
       <Grid item xs={12}>
-        <AggregateChartV2 aggregate={complete} />
+        <AggregateChartV2 key={gameItemId} aggregate={complete} />
       </Grid>
     </Grid>
     </Grid>
