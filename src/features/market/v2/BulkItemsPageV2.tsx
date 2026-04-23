@@ -47,7 +47,7 @@ function BulkSearchArea() {
 
   return (
     <Box sx={{ p: 2 }}>
-      <Grid container spacing={2}>
+      <Grid container spacing={1.5}>
         <Grid item xs={12}>
           <TextField
             size="small" fullWidth

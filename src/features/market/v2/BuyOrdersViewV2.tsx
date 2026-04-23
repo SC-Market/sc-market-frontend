@@ -142,7 +142,7 @@ export function BuyOrdersViewV2() {
     <>
       {showMobileSidebar && <MarketSidebarV2 />}
 
-      <Container maxWidth={"xxxl" as any} sx={{ padding: 0 }}>
+      <Container maxWidth={"xxxl"} sx={{ padding: 0 }}>
         <Box sx={{ display: "flex", justifyContent: "center" }}>
           {showMobileSidebar ? (
             <Grid container spacing={theme.layoutSpacing.layout}>
