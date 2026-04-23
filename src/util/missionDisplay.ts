@@ -46,7 +46,7 @@ export function getMissionTypeLabel(type: string | null | undefined): string {
  */
 export function formatMissionNameText(name: string | null | undefined): string {
   if (!name) return "Unknown Mission"
-  return name.replace(/~mission\(([^)]+)\)/g, (_, inner) => {
+  return name.replace(/<\/?em\d*>/gi, "").replace(/~mission\(([^)]+)\)/g, (_, inner) => {
     if (inner === "Contractor" || inner.startsWith("Contractor|")) return "Various"
     const key = inner.split("|").pop() || inner
     const label = key
@@ -71,7 +71,7 @@ export function formatMissionDescription(text: string | null | undefined): strin
       return `[${label}]`
     })
     .replace(/\\n/g, "\n")
-    .replace(/<EM\d*>/g, "")
+    .replace(/<\/?em\d*>/gi, "")
 }
 
 /** Format credit amount with locale-aware commas */
