@@ -301,7 +301,7 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
               {craftQty > 1 && (
                 <Box>
                   <Typography variant="caption" color="text.secondary">Total time</Typography>
-                  <Typography variant="body1" fontWeight={600}>{formatTime(15 * craftQty)}</Typography>
+                  <Typography variant="body1" fontWeight={600}>{formatCraftingTime(15 * craftQty)}</Typography>
                 </Box>
               )}
             </Stack>

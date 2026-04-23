@@ -73,7 +73,7 @@ export function MissionSearch() {
   const diffMax = parseInt(searchParams.get("diff_max") || "5") || 5
   const difficultyRange = [diffMin, diffMax]
   const isShareable = searchParams.get("shareable") === "true" ? true : searchParams.get("shareable") === "false" ? false : undefined
-  const hasBlueprints = searchParams.has("blueprints") ? searchParams.get("blueprints") === "true" : true // default true
+  const hasBlueprints = searchParams.get("blueprints") === "true" ? true : searchParams.get("blueprints") === "false" ? false : undefined
   const isChainStarter = searchParams.get("chain") === "true" ? true : searchParams.get("chain") === "false" ? false : undefined
   const creditRewardMin: number | "" = searchParams.get("min_reward") ? Number(searchParams.get("min_reward")) : ""
 
