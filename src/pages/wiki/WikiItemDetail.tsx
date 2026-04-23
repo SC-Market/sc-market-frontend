@@ -33,7 +33,7 @@ import {
 import { useTheme } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
 import { useParams, useNavigate } from "react-router-dom"
-import { useGetItemDetailQuery, useSearchListingsQuery } from "../../store/api/v2/market"
+import { useGetItemDetailQuery, useSearchListingsQuery, useAddBlueprintToInventoryMutation, useRemoveBlueprintFromInventoryMutation } from "../../store/api/v2/market"
 import { ShoppingCart, Gavel } from "@mui/icons-material"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -61,6 +61,8 @@ export function WikiItemDetail() {
 
   const [tab, setTab] = useState(TAB_OVERVIEW)
   const [disassemblyQty, setDisassemblyQty] = useState(1)
+  const [addToInventory] = useAddBlueprintToInventoryMutation()
+  const [removeFromInventory] = useRemoveBlueprintFromInventoryMutation()
 
   if (isLoading) {
     return (
@@ -307,6 +309,20 @@ export function WikiItemDetail() {
                           onClick={() => navigate(`/blueprints/${bp.blueprint_id}`)}
                         >
                           View Blueprint
+                        </Button>
+                        <Button
+                          size="small"
+                          variant={bp.user_owns ? "contained" : "outlined"}
+                          sx={{ ml: 1 }}
+                          onClick={() => {
+                            if (bp.user_owns) {
+                              removeFromInventory({ blueprintId: bp.blueprint_id }).catch(() => {})
+                            } else {
+                              addToInventory({ blueprintId: bp.blueprint_id, body: {} }).catch(() => {})
+                            }
+                          }}
+                        >
+                          {bp.user_owns ? "Owned ✓" : "Mark Owned"}
                         </Button>
                       </Box>
                     </Paper>

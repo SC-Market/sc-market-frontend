@@ -23,10 +23,10 @@ import {
   Tab,
   Avatar,
 } from "@mui/material"
-import { Close, BuildRounded, TimerRounded, RecyclingRounded, TrackChangesRounded } from "@mui/icons-material"
+import { Close, BuildRounded, TimerRounded, RecyclingRounded, TrackChangesRounded, Bookmark, BookmarkBorder } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
-import { useGetBlueprintDetailQuery, useGetOrgBlueprintOwnersQuery } from "../../store/api/v2/market"
+import { useGetBlueprintDetailQuery, useGetOrgBlueprintOwnersQuery, useAddBlueprintToInventoryMutation, useRemoveBlueprintFromInventoryMutation } from "../../store/api/v2/market"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { formatCategoryName } from "../../util/categoryDisplay"
 import { getCommodityColor, getItemCategoryColor } from "../../util/gameIcons"
@@ -66,6 +66,19 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
   const spectrumId = currentOrg?.spectrum_id
   const [tab, setTab] = useState(0)
   const [missionsExpanded, setMissionsExpanded] = useState(false)
+
+  const [addToInventory] = useAddBlueprintToInventoryMutation()
+  const [removeFromInventory] = useRemoveBlueprintFromInventoryMutation()
+  const userOwns = data?.user_owns ?? false
+
+  const handleToggleOwned = async () => {
+    if (!blueprintId) return
+    if (userOwns) {
+      await removeFromInventory({ blueprintId }).unwrap().catch(() => {})
+    } else {
+      await addToInventory({ blueprintId, body: {} }).unwrap().catch(() => {})
+    }
+  }
 
   const { data: orgOwners } = useGetOrgBlueprintOwnersQuery(
     { blueprintId: blueprintId!, spectrumId: spectrumId! },
@@ -140,7 +153,17 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
             </Stack>
           </Box>
         </Stack>
-        <IconButton onClick={onClose} size="small"><Close /></IconButton>
+        <Stack direction="row" spacing={0.5} alignItems="center">
+          <IconButton
+            size="small"
+            onClick={handleToggleOwned}
+            color={userOwns ? "primary" : "default"}
+            title={userOwns ? "Remove from inventory" : "Mark as owned"}
+          >
+            {userOwns ? <Bookmark fontSize="small" /> : <BookmarkBorder fontSize="small" />}
+          </IconButton>
+          <IconButton onClick={onClose} size="small"><Close /></IconButton>
+        </Stack>
       </DialogTitle>
 
       <Tabs value={tab} onChange={(_, v) => setTab(v)} sx={{ px: 2 }}>
