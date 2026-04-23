@@ -193,7 +193,24 @@ function OverviewTab({ data, onBlueprintClick }: { data: MissionDetailResponse; 
             <Typography variant="body2">{m.reward_scope}</Typography>
           </Stack>
         )}
+        {m.estimated_uec_per_hour && (
+          <Stack direction="row" justifyContent="space-between">
+            <Typography variant="body2" color="text.secondary">Est. UEC/hr</Typography>
+            <Typography variant="body2">{m.estimated_uec_per_hour.toLocaleString()}</Typography>
+          </Stack>
+        )}
+        {m.estimated_rep_per_hour && (
+          <Stack direction="row" justifyContent="space-between">
+            <Typography variant="body2" color="text.secondary">Est. XP/hr</Typography>
+            <Typography variant="body2">{m.estimated_rep_per_hour.toLocaleString()}</Typography>
+          </Stack>
+        )}
       </Stack>
+
+      {/* Associated event */}
+      {m.associated_event && (
+        <Chip label={m.associated_event} size="small" color="info" sx={{ alignSelf: "flex-start" }} />
+      )}
 
       {/* Blueprint rewards */}
       {data.blueprint_rewards?.length > 0 && (
@@ -368,11 +385,22 @@ function RequirementsTab({ data }: { data: MissionDetailResponse }) {
       <Stack spacing={0.75}>
         <BoolChip value={m.is_shareable} label="Shareable" />
         <BoolChip value={m.is_illegal} label="Illegal" />
+        <BoolChip value={m.is_lawful} label="Lawful" />
         <BoolChip value={m.is_unique_mission} label="Once Only" />
         <BoolChip value={m.can_reaccept_after_abandoning} label="Re-accept after abandon" />
         <BoolChip value={m.can_reaccept_after_failing} label="Re-accept after fail" />
         <BoolChip value={m.available_in_prison} label="Available in prison" />
       </Stack>
+
+      {m.required_reputation != null && (
+        <>
+          <Divider />
+          <Stack direction="row" justifyContent="space-between">
+            <Typography variant="body2" color="text.secondary">Required Reputation</Typography>
+            <Typography variant="body2">{m.required_reputation.toLocaleString()} XP</Typography>
+          </Stack>
+        </>
+      )}
 
       <Divider />
 
