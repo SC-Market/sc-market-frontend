@@ -50,6 +50,7 @@ import { BlueprintCard } from "../../components/game-data/BlueprintCard"
 import { formatCategoryName } from "../../util/categoryDisplay"
 import { getCommodityColor } from "../../util/gameIcons"
 import { useTranslation } from "react-i18next"
+import { formatCraftingTime } from "../../constants/crafting"
 import { useTheme } from "@mui/material/styles"
 import { BottomSheet } from "../../components/mobile/BottomSheet"
 import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
@@ -105,7 +106,7 @@ export function BlueprintBrowser() {
   const debouncedSearch = useDebounce(searchText, 300)
 
   // Reset on filter change
-  const filterKey = JSON.stringify({ debouncedSearch, category, subcategory, rarity, tier, craftingStation, ownedOnly })
+  const filterKey = searchParams.toString()
   useEffect(() => { setPage(1); setAllBlueprints([]) }, [filterKey])
 
   // Query blueprints with filters
@@ -370,11 +371,7 @@ export function BlueprintBrowser() {
                           </TableCell>
                           <TableCell align="right">
                             <Typography variant="caption">
-                              {bp.crafting_time_seconds
-                                ? bp.crafting_time_seconds >= 60
-                                  ? `${Math.floor(bp.crafting_time_seconds / 60)}m${bp.crafting_time_seconds % 60 ? ` ${bp.crafting_time_seconds % 60}s` : ""}`
-                                  : `${bp.crafting_time_seconds}s`
-                                : "—"}
+                              {formatCraftingTime(bp.crafting_time_seconds)}
                             </Typography>
                           </TableCell>
                         </TableRow>

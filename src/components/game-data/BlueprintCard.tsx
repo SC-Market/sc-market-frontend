@@ -130,7 +130,7 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
             {bp.crafting_time_seconds ? (
               <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                 <Typography variant="caption" color="text.secondary">Craft time</Typography>
-                <Typography variant="caption">{formatTime(bp.crafting_time_seconds)}</Typography>
+                <Typography variant="caption">{formatCraftingTime(bp.crafting_time_seconds)}</Typography>
               </Box>
             ) : null}
             <Box sx={{ display: "flex", alignItems: "center", gap: 0.75 }}>
@@ -171,7 +171,7 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
           <Box sx={{ textAlign: "right", flexShrink: 0, display: "flex", alignItems: "center", gap: 0.75 }}>
             <Circle sx={{ fontSize: 8, color: bp.mission_count > 0 ? "success.main" : "error.main" }} />
             <Typography variant="caption" color="text.secondary">{bp.mission_count} msn</Typography>
-            {bp.crafting_time_seconds && <Typography variant="caption" color="text.secondary" sx={{ ml: 1 }}>{formatTime(bp.crafting_time_seconds)}</Typography>}
+            {bp.crafting_time_seconds && <Typography variant="caption" color="text.secondary" sx={{ ml: 1 }}>{formatCraftingTime(bp.crafting_time_seconds)}</Typography>}
           </Box>
           {onBookmarkToggle && (
             <IconButton
