@@ -13,6 +13,7 @@ import {
   useTheme,
   useMediaQuery,
   Chip,
+  Stack,
 } from "@mui/material";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import type { ExtendedTheme } from "../../../hooks/styles/Theme";
@@ -26,6 +27,7 @@ interface Variant {
     quality_tier?: number;
     quality_value?: number;
     crafted_source?: string;
+    blueprint_tier?: number;
     [key: string]: any;
   };
   quantity: number;
@@ -39,18 +41,36 @@ interface VariantBreakdownProps {
   showActions?: boolean;
 }
 
+const SOURCE_COLORS: Record<string, "default" | "success" | "warning" | "error" | "info" | "primary"> = {
+  crafted: "success",
+  store: "info",
+  looted: "warning",
+  duped: "error",
+  unknown: "default",
+};
+
+function VariantInfo({ variant }: { variant: Variant }) {
+  const { quality_tier, quality_value, crafted_source } = variant.attributes;
+  return (
+    <Stack direction="row" spacing={0.5} alignItems="center" flexWrap="wrap" useFlexGap>
+      {quality_tier && <QualityBadge tier={quality_tier} size="small" />}
+      {quality_value != null && (
+        <Chip label={`${quality_value}/1000`} size="small" variant="outlined" />
+      )}
+      {crafted_source && (
+        <Chip
+          label={crafted_source.charAt(0).toUpperCase() + crafted_source.slice(1)}
+          size="small"
+          color={SOURCE_COLORS[crafted_source] || "default"}
+          variant="outlined"
+        />
+      )}
+    </Stack>
+  );
+}
+
 /**
- * VariantBreakdown - Quality tier table display for listing variants
- * 
- * Displays all variants in a table with columns:
- * - Quality tier badge
- * - Display name
- * - Quantity available
- * - Price
- * - Action button (optional)
- * 
- * Responsive: switches to card layout on mobile.
- * Maintains visual consistency with V1 table styling.
+ * VariantBreakdown - Rich variant table with quality badges and source chips
  */
 export const VariantBreakdown: React.FC<VariantBreakdownProps> = ({
   variants,
@@ -77,53 +97,25 @@ export const VariantBreakdown: React.FC<VariantBreakdownProps> = ({
         {variants.map((variant) => (
           <Paper
             key={variant.variant_id}
-            sx={{
-              p: 2,
-              borderRadius: theme.borderRadius?.topLevel ?? 0.375,
-            }}
+            sx={{ p: 2, borderRadius: theme.borderRadius?.topLevel ?? 0.375 }}
           >
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                {variant.attributes.quality_tier && (
-                  <QualityBadge
-                    tier={variant.attributes.quality_tier}
-                    size="small"
-                  />
-                )}
-                <Typography variant="subtitle2" sx={{ flex: 1 }}>
-                  {variant.display_name}
-                </Typography>
-              </Box>
+            <Stack spacing={1}>
+              <VariantInfo variant={variant} />
 
-              {variant.attributes.crafted_source && (
-                <Chip
-                  label={variant.attributes.crafted_source}
-                  size="small"
-                  variant="outlined"
-                  sx={{ alignSelf: "flex-start" }}
-                />
+              {variant.locations && variant.locations.length > 0 && (
+                <Typography variant="caption" color="text.secondary">
+                  📍 {variant.locations.join(", ")}
+                </Typography>
               )}
 
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
+              <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <Typography variant="body2" color="text.secondary">
-                  Qty: {variant.quantity}
+                  Qty: {variant.quantity.toLocaleString()}
                 </Typography>
                 <Typography variant="h6" color="primary" fontWeight="bold">
                   {variant.price.toLocaleString()} aUEC
                 </Typography>
               </Box>
-
-              {variant.locations && variant.locations.length > 0 && (
-                <Typography variant="caption" color="text.secondary">
-                  Locations: {variant.locations.join(", ")}
-                </Typography>
-              )}
 
               {showActions && onSelectVariant && (
                 <Button
@@ -138,7 +130,7 @@ export const VariantBreakdown: React.FC<VariantBreakdownProps> = ({
                   Add to Cart
                 </Button>
               )}
-            </Box>
+            </Stack>
           </Paper>
         ))}
       </Box>
@@ -154,10 +146,10 @@ export const VariantBreakdown: React.FC<VariantBreakdownProps> = ({
       <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell>Quality</TableCell>
             <TableCell>Variant</TableCell>
             <TableCell align="right">Quantity</TableCell>
             <TableCell align="right">Price</TableCell>
+            <TableCell>Location</TableCell>
             {showActions && <TableCell align="center">Action</TableCell>}
           </TableRow>
         </TableHead>
@@ -165,45 +157,29 @@ export const VariantBreakdown: React.FC<VariantBreakdownProps> = ({
           {variants.map((variant) => (
             <TableRow
               key={variant.variant_id}
-              sx={{
-                "&:last-child td, &:last-child th": { border: 0 },
-              }}
+              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
               <TableCell>
-                {variant.attributes.quality_tier && (
-                  <QualityBadge
-                    tier={variant.attributes.quality_tier}
-                    size="small"
-                  />
-                )}
-              </TableCell>
-              <TableCell>
-                <Box>
-                  <Typography variant="body2">
-                    {variant.display_name}
-                  </Typography>
-                  {variant.attributes.crafted_source && (
-                    <Chip
-                      label={variant.attributes.crafted_source}
-                      size="small"
-                      variant="outlined"
-                      sx={{ mt: 0.5 }}
-                    />
-                  )}
-                  {variant.locations && variant.locations.length > 0 && (
-                    <Typography variant="caption" color="text.secondary">
-                      {variant.locations.join(", ")}
-                    </Typography>
-                  )}
-                </Box>
+                <VariantInfo variant={variant} />
               </TableCell>
               <TableCell align="right">
-                <Typography variant="body2">{variant.quantity}</Typography>
+                <Typography variant="body2">
+                  {variant.quantity.toLocaleString()}
+                </Typography>
               </TableCell>
               <TableCell align="right">
                 <Typography variant="body2" color="primary" fontWeight="bold">
                   {variant.price.toLocaleString()} aUEC
                 </Typography>
+              </TableCell>
+              <TableCell>
+                {variant.locations && variant.locations.length > 0 ? (
+                  <Typography variant="caption" color="text.secondary">
+                    {variant.locations.join(", ")}
+                  </Typography>
+                ) : (
+                  <Typography variant="caption" color="text.secondary">—</Typography>
+                )}
               </TableCell>
               {showActions && (
                 <TableCell align="center">
