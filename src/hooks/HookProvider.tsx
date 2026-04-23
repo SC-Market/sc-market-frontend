@@ -228,13 +228,13 @@ export function HookProvider(props: { children: React.ReactElement }) {
     if (error === "account_not_found") {
       errorMessage =
         searchParams.get("error_description") ||
-        t("auth.accountNotFound", "No account found. Please sign up first.")
+        t("auth.accountNotFound", "No account found with this login method. Please sign up or try a different login method.")
     } else if (error === "account_already_exists") {
       errorMessage =
         searchParams.get("error_description") ||
         t(
           "auth.accountAlreadyExists",
-          "An account already exists. Please sign in instead.",
+          "An account already exists with this identity. Please sign in with your original login method.",
         )
     } else if (
       isCitizenIdEnabled &&
@@ -249,11 +249,11 @@ export function HookProvider(props: { children: React.ReactElement }) {
     } else if (isCitizenIdEnabled && error === "citizenid_auth_failed") {
       errorMessage =
         searchParams.get("error_description") ||
-        t("auth.authFailed", "Authentication failed. Please try again.")
+        t("auth.authFailed", "Citizen iD authentication failed. Please try again or use a different login method.")
     } else if (isCitizenIdEnabled && error === "citizenid_login_failed") {
       errorMessage =
         searchParams.get("error_description") ||
-        t("auth.loginFailed", "Failed to sign in. Please try again.")
+        t("auth.loginFailed", "Failed to sign in with Citizen iD. Please try again or use a different login method.")
     } else if (isCitizenIdEnabled && error === "citizenid_oauth_error") {
       errorMessage =
         searchParams.get("error_description") ||
