@@ -129,7 +129,8 @@ export function AggregateListingBase(props: {
                   variant={isMobile ? "body1" : "h5"}
                   color="primary"
                   fontWeight="bold"
-                  sx={isMobile ? { fontSize: "0.95rem", mb: 0.5 } : undefined}
+                  noWrap
+                  sx={isMobile ? { fontSize: "0.95rem", mb: 0.5 } : { fontSize: `${minimum_price.toLocaleString().length > 10 ? 0.9 : 1.15}rem` }}
                 >
                   {minimum_price.toLocaleString(undefined)} aUEC
                 </Typography>
