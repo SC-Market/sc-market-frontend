@@ -3,20 +3,17 @@ import {
   Box,
   Paper,
   Typography,
-  Radio,
-  RadioGroup,
-  FormControlLabel,
-  FormControl,
   IconButton,
   Collapse,
   Divider,
-  Chip,
+  Stack,
+  Switch,
   useMediaQuery,
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import SettingsIcon from "@mui/icons-material/Settings"
 import CloseIcon from "@mui/icons-material/Close"
-import { useFeatureFlag, MarketVersion } from "../../../hooks/market/useFeatureFlag"
+import { useFeatureFlag } from "../../../hooks/market/useFeatureFlag"
 
 /**
  * DebugPanel component for switching between V1 and V2 market experiences
@@ -33,7 +30,7 @@ import { useFeatureFlag, MarketVersion } from "../../../hooks/market/useFeatureF
 export function DebugPanel() {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
-  const { marketVersion, setMarketVersion, isDeveloper, hasOverride, isLoading } = useFeatureFlag()
+  const { marketVersion, setMarketVersion, isDeveloper, hasOverride, flags, overriddenFlags, setFlag } = useFeatureFlag()
   const [isOpen, setIsOpen] = useState(false)
   const [isSwitching, setIsSwitching] = useState(false)
 
@@ -53,24 +50,7 @@ export function DebugPanel() {
   }
 
   // Handle market version change
-  const handleVersionChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newVersion = event.target.value as MarketVersion
-    
-    if (newVersion === marketVersion) {
-      return // No change needed
-    }
-
-    try {
-      setIsSwitching(true)
-      await setMarketVersion(newVersion)
-      // Page will reload automatically after setMarketVersion completes
-    } catch (error) {
-      console.error("Failed to switch market version:", error)
-      setIsSwitching(false)
-    }
-  }
-
-  // Don't render if user is not a developer
+  // Don't render if user is not a developer or override user
   if (!isDeveloper && !hasOverride) {
     return null
   }
@@ -138,57 +118,43 @@ export function DebugPanel() {
           {/* Current version display */}
           <Box mb={2}>
             <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-              Current Market Version
+              Feature Flags
             </Typography>
-            <Chip
-              label={marketVersion}
-              color={marketVersion === "V2" ? "primary" : "default"}
-              sx={{ fontWeight: "bold" }}
-            />
           </Box>
 
           <Divider sx={{ mb: 2 }} />
 
-          {/* Version selector */}
-          <FormControl component="fieldset" fullWidth disabled={isLoading || isSwitching}>
-            <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-              Switch Version
-            </Typography>
-            <RadioGroup
-              value={marketVersion}
-              onChange={handleVersionChange}
-              aria-label="Market version selector"
-            >
-              <FormControlLabel
-                value="V1"
-                control={<Radio />}
-                label={
+          {/* Flag toggles */}
+          <Stack spacing={1.5}>
+            {Object.entries(flags).map(([flagName, enabled]) => {
+              const isOverridden = overriddenFlags.includes(flagName)
+              const label = flagName.replace(/_/g, " ").replace(/\bv2\b/i, "V2")
+              return (
+                <Box key={flagName} sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <Box>
-                    <Typography variant="body2" fontWeight="bold">
-                      V1 (Production)
+                    <Typography variant="body2" fontWeight="bold" sx={{ textTransform: "capitalize" }}>
+                      {label}
                     </Typography>
-                    <Typography variant="caption" color="text.secondary">
-                      Current stable market system
-                    </Typography>
+                    {isOverridden && (
+                      <Typography variant="caption" color="primary">Override</Typography>
+                    )}
                   </Box>
-                }
-              />
-              <FormControlLabel
-                value="V2"
-                control={<Radio />}
-                label={
-                  <Box>
-                    <Typography variant="body2" fontWeight="bold">
-                      V2 (Beta)
-                    </Typography>
-                    <Typography variant="caption" color="text.secondary">
-                      New market with variants & quality tiers
-                    </Typography>
-                  </Box>
-                }
-              />
-            </RadioGroup>
-          </FormControl>
+                  <Switch
+                    checked={enabled}
+                    onChange={async () => {
+                      setIsSwitching(true)
+                      await setFlag(flagName, !enabled)
+                      setIsSwitching(false)
+                      window.location.reload()
+                    }}
+                    disabled={isSwitching}
+                    size="small"
+                    color="primary"
+                  />
+                </Box>
+              )
+            })}
+          </Stack>
 
           {/* Switching indicator */}
           {isSwitching && (
