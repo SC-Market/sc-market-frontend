@@ -39,11 +39,11 @@ function formatQty(scu: number | string): string {
 import { formatCraftingTime } from "../../constants/crafting"
 
 export function BlueprintDetail() {
-  const { id } = useParams<{ id: string }>()
+  const { slug } = useParams<{ slug: string }>()
   const navigate = useNavigate()
   const { data, isLoading, error } = useGetBlueprintDetailQuery(
-    { blueprintId: id! },
-    { skip: !id },
+    { blueprintId: slug! },
+    { skip: !slug },
   )
   const bp = data?.blueprint
   const outputItem = data?.output_item
@@ -60,16 +60,16 @@ export function BlueprintDetail() {
   const [addToInventory] = useAddBlueprintToInventoryMutation()
   const [removeFromInventory] = useRemoveBlueprintFromInventoryMutation()
   const handleBookmarkToggle = async () => {
-    if (!id) return
+    if (!slug) return
     try {
-      if (data?.user_owns) await removeFromInventory({ blueprintId: id }).unwrap()
-      else await addToInventory({ blueprintId: id, body: {} }).unwrap()
+      if (data?.user_owns) await removeFromInventory({ blueprintId: slug }).unwrap()
+      else await addToInventory({ blueprintId: slug, body: {} }).unwrap()
     } catch { /* not logged in */ }
   }
 
   const { data: orgOwners } = useGetOrgBlueprintOwnersQuery(
-    { blueprintId: id!, spectrumId: spectrumId! },
-    { skip: !id || !spectrumId },
+    { blueprintId: slug!, spectrumId: spectrumId! },
+    { skip: !slug || !spectrumId },
   )
 
   // Group slot modifiers by slot_name

@@ -956,7 +956,7 @@ const router = createBrowserRouter([
         }),
       },
       {
-        path: "/missions/:mission_id",
+        path: "/missions/:slug",
         lazy: async () => ({
           Component: (await import("./pages/missions/MissionDetailGate")).MissionDetailGate,
         }),
@@ -974,7 +974,7 @@ const router = createBrowserRouter([
         }),
       },
       {
-        path: "/blueprints/:id",
+        path: "/blueprints/:slug",
         lazy: async () => ({
           Component: (await import("./pages/blueprints/BlueprintDetailGate")).BlueprintDetailGate,
         }),

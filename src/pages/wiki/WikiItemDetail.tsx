@@ -312,17 +312,17 @@ export function WikiItemDetail() {
                         </Button>
                         <Button
                           size="small"
-                          variant={bp.user_owns ? "contained" : "outlined"}
+                          variant={((bp as any).user_owns) ? "contained" : "outlined"}
                           sx={{ ml: 1 }}
                           onClick={() => {
-                            if (bp.user_owns) {
+                            if ((bp as any).user_owns) {
                               removeFromInventory({ blueprintId: bp.blueprint_id }).catch(() => {})
                             } else {
                               addToInventory({ blueprintId: bp.blueprint_id, body: {} }).catch(() => {})
                             }
                           }}
                         >
-                          {bp.user_owns ? "Owned ✓" : "Mark Owned"}
+                          {(bp as any).user_owns ? "Owned ✓" : "Mark Owned"}
                         </Button>
                       </Box>
                     </Paper>

@@ -141,24 +141,24 @@ export function MissionSearch() {
     pageSize: 20,
   })
 
-  const handleMissionClick = (missionId: string) => {
+  const handleMissionClick = (missionCode: string, missionId: string) => {
     if (isMobile) {
-      navigate(`/missions/${missionId}`)
+      navigate(`/missions/${missionCode}`)
     } else {
-      navigate(`/missions/${missionId}`, { replace: false })
-      setSelectedMissionId(missionId)
+      navigate(`/missions/${missionCode}`, { replace: false })
+      setSelectedMissionId(missionId) // modal still uses ID for API
     }
   }
   const [selectedMissionId, setSelectedMissionId] = useState<string | null>(null)
   const [selectedBlueprintId, setSelectedBlueprintId] = useState<string | null>(null)
 
   // Auto-open modal if URL has a mission_id (e.g., /missions/:mission_id on desktop)
-  const urlParams = useParams<{ mission_id?: string }>()
+  const urlParams = useParams<{ slug?: string }>()
   React.useEffect(() => {
-    if (urlParams.mission_id && !isMobile) {
-      setSelectedMissionId(urlParams.mission_id)
+    if (urlParams.slug && !isMobile) {
+      setSelectedMissionId(urlParams.slug)
     }
-  }, [urlParams.mission_id, isMobile])
+  }, [urlParams.slug, isMobile])
 
   // Accumulate results for infinite scroll
   useEffect(() => {
@@ -257,7 +257,7 @@ export function MissionSearch() {
             {viewMode === "grid" ? (
               allMissions.map((mission) => (
                 <Grid item xs={6} sm={6} md={4} lg={3} key={mission.mission_id} sx={{ display: "flex" }}>
-                  <MissionCard mission={mission} onClick={handleMissionClick} />
+                  <MissionCard mission={mission} onClick={() => handleMissionClick(mission.mission_code, mission.mission_id)} />
                 </Grid>
               ))
             ) : (
@@ -283,7 +283,7 @@ export function MissionSearch() {
                           key={m.mission_id}
                           hover
                           sx={{ cursor: "pointer" }}
-                          onClick={() => handleMissionClick(m.mission_id)}
+                          onClick={() => handleMissionClick(m.mission_code, m.mission_id)}
                         >
                           <TableCell sx={{ width: 40, py: 0.5 }}>
                             <Tooltip title={getMissionTypeLabel(m.category)} arrow>

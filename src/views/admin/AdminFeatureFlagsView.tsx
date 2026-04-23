@@ -109,7 +109,7 @@ export function AdminFeatureFlagsView() {
     if (!newUserId.trim()) return
     try {
       await setUserOverride({
-        setUserOverrideRequest: { user_id: newUserId.trim(), market_version: newVersion },
+        setUserOverrideRequest: { username: newUserId.trim(), market_version: newVersion },
       }).unwrap()
       issueAlert({ message: `Override set for ${newUserId}`, severity: "success" })
       setAddDialogOpen(false)
@@ -121,7 +121,7 @@ export function AdminFeatureFlagsView() {
 
   const handleRemoveOverride = async (userId: string) => {
     try {
-      await removeUserOverride({ userId }).unwrap()
+      await removeUserOverride({ username: userId }).unwrap()
       issueAlert({ message: `Override removed for ${userId}`, severity: "success" })
     } catch (e: any) {
       issueAlert({ message: e.message || "Failed", severity: "error" })

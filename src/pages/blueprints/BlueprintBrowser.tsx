@@ -153,14 +153,15 @@ export function BlueprintBrowser() {
   const [selectedBlueprintId, setSelectedBlueprintId] = useState<string | null>(null)
 
   // Auto-open modal if URL has a blueprint ID (e.g., /blueprints/:id on desktop)
-  const urlParams = useParams<{ id?: string }>()
+  const urlParams = useParams<{ slug?: string }>()
   React.useEffect(() => {
-    if (urlParams.id && !isMobile) setSelectedBlueprintId(urlParams.id)
-  }, [urlParams.id, isMobile])
+    if (urlParams.slug && !isMobile) setSelectedBlueprintId(urlParams.slug)
+  }, [urlParams.slug, isMobile])
 
-  const handleBlueprintClick = (blueprintId: string) => {
-    navigate(`/blueprints/${blueprintId}`)
-    if (!isMobile) setSelectedBlueprintId(blueprintId)
+  const handleBlueprintClick = (blueprintId: string, blueprintCode?: string) => {
+    const urlSlug = blueprintCode || blueprintId
+    navigate(`/blueprints/${urlSlug}`)
+    if (!isMobile) setSelectedBlueprintId(urlSlug)
   }
 
   const [addToInventory] = useAddBlueprintToInventoryMutation()
