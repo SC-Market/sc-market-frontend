@@ -144,7 +144,7 @@ export function BlueprintDetail() {
       ]}
       isLoading={isLoading}
       skeleton={<DetailPageSkeleton />}
-      error={error ? "not_found" : undefined}
+      error={error || undefined}
       sidebarOpen={true}
       maxWidth="lg"
     >
