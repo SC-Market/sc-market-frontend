@@ -164,7 +164,7 @@ export function ListingSearchV2() {
       {/* Mobile/Tablet: Use bottom sheet for filters */}
       {showMobileSidebar && <MarketSidebarV2 />}
 
-      <Container maxWidth={"xxxl"} sx={{ padding: 0 }}>
+      <Container maxWidth={"xxxl"} sx={{ padding: 0, px: { xs: 1, sm: 0 } }}>
         <Box sx={{ display: "flex", justifyContent: "center" }}>
           {showMobileSidebar ? (
             <Grid container spacing={theme.layoutSpacing.layout}>
