@@ -26,6 +26,7 @@ import {
   BuildRounded,
 } from "@mui/icons-material"
 import type { MissionDetailResponse, Mission, MissionRewardPool, MissionBlueprintReward, HaulingOrder } from "../../store/api/v2/market"
+import { useNavigate } from "react-router-dom"
 import { getMissionTypeLabel, formatCredits } from "../../util/missionDisplay"
 import { getMissionIcon } from "../../util/gameIcons"
 import { MissionName, MissionDescription } from "./MissionName"
@@ -62,22 +63,33 @@ function BoolChip({ value, label }: { value: boolean | undefined; label: string 
 // ============================================================================
 
 export function MissionHeaderChips({ mission: m }: { mission: Mission }) {
+  const navigate = useNavigate()
+  const go = (params: Record<string, string>) => {
+    const sp = new URLSearchParams(params)
+    navigate(`/missions?${sp.toString()}`)
+  }
+  const giver = m.mission_giver_org || m.faction
+  const showGiver = giver && !giver.includes("~mission")
+
   return (
     <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap>
-      {m.star_system && <Chip label={m.star_system} size="small" variant="outlined" />}
+      {m.star_system && <Chip label={m.star_system} size="small" variant="outlined" clickable onClick={() => go({ system: m.star_system! })} />}
       {m.category && (
         <Chip
           label={getMissionTypeLabel(m.category)}
           size="small"
+          clickable
+          onClick={() => go({ category: m.category })}
           icon={getMissionIcon(m.category) ? <img src={getMissionIcon(m.category)!} alt="" style={{ width: 16, height: 16 }} /> : undefined}
         />
       )}
-      {(m.is_illegal || m.legal_status === "ILLEGAL") && <Chip label="ILLEGAL" size="small" color="error" />}
+      {showGiver && <Chip label={giver} size="small" variant="outlined" clickable onClick={() => go({ giver: giver! })} />}
+      {(m.is_illegal || m.legal_status === "ILLEGAL") && <Chip label="ILLEGAL" size="small" color="error" clickable onClick={() => go({ legal: "ILLEGAL" })} />}
       {m.is_unique_mission && <Chip label="UNIQUE" size="small" color="warning" />}
-      {m.is_chain_starter && <Chip label="STARTER" size="small" color="secondary" />}
+      {m.is_chain_starter && <Chip label="STARTER" size="small" color="secondary" clickable onClick={() => go({ chain: "true" })} />}
       {m.is_chain_mission && !m.is_chain_starter && <Chip label="CHAIN" size="small" color="secondary" variant="outlined" />}
-      {m.is_shareable && <Chip label="Shareable" size="small" variant="outlined" />}
-      {m.associated_event && <Chip label={m.associated_event} size="small" sx={{ bgcolor: "info.main", color: "#fff" }} />}
+      {m.is_shareable && <Chip label="Shareable" size="small" variant="outlined" clickable onClick={() => go({ shareable: "true" })} />}
+      {m.associated_event && <Chip label={m.associated_event} size="small" clickable onClick={() => go({ show_events: "true", event: m.associated_event! })} sx={{ bgcolor: "info.main", color: "#fff" }} />}
       {m.difficulty_level && <Chip label={`D${m.difficulty_level}`} size="small" color="warning" variant="outlined" />}
     </Stack>
   )

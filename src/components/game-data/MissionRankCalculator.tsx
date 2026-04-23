@@ -64,6 +64,11 @@ export function MissionRankCalculator({ reputationReward, rewardScope, requiredR
 
   return (
     <Box>
+      {isNegativeRep && (
+        <Alert severity="warning" sx={{ mb: 2 }}>
+          This mission <strong>decreases</strong> your standing with this faction. Completing it will push you toward lower ranks.
+        </Alert>
+      )}
       {/* Crew size slider */}
       {isShareable && (
         <Box sx={{ mb: 2 }}>
