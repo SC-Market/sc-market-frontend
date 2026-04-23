@@ -1,0 +1,361 @@
+/**
+ * MissionTypeDetails — bespoke per-type rendering for mission detail modal.
+ *
+ * Each mission type gets a focused component showing the most relevant data.
+ * Add new types by adding a case to TYPE_RENDERERS and a component below.
+ *
+ * Architecture:
+ *   MissionTypeDetails (dispatcher)
+ *     ├── MercenaryDetails     — ship encounters, NPC squads, BP rewards
+ *     ├── BountyHunterDetails  — ship encounters, ship pools, BP rewards
+ *     ├── SalvageDetails       — entity spawns, ship encounters, hauling, buy-in
+ *     ├── DeliveryDetails      — hauling orders, pickup/delivery counts, destinations
+ *     ├── HaulingDetails       — hauling orders, cargo details
+ *     ├── MiningDetails        — hauling orders (ore), BP rewards
+ *     ├── MaintenanceDetails   — entity spawns (relay/pipe targets)
+ *     ├── InvestigationDetails — accept locations, ship encounters
+ *     ├── RaceDetails          — buy-in fee, route info
+ *     └── GenericDetails       — fallback for unknown types
+ */
+
+import React from "react"
+import {
+  Box,
+  Chip,
+  Paper,
+  Stack,
+  Typography,
+} from "@mui/material"
+import {
+  RocketLaunchRounded,
+  ShieldRounded,
+  LocalShippingRounded,
+  RecyclingRounded,
+  BuildRounded,
+  ScienceRounded,
+  SportsScoreRounded,
+  HandymanRounded,
+  SearchRounded,
+} from "@mui/icons-material"
+import type {
+  MissionDetailResponse,
+  ShipEncounter,
+  NpcEncounter,
+  HaulingOrder,
+  EntitySpawn,
+} from "../../store/api/v2/market"
+
+// ============================================================================
+// Dispatcher
+// ============================================================================
+
+/** Normalize category string to a renderer key */
+function normalizeCategory(category?: string): string {
+  if (!category) return "generic"
+  const c = category.toLowerCase().replace(/^missiontype\./, "")
+  if (c.includes("bounty")) return "bountyhunter"
+  if (c.includes("mercenary")) return "mercenary"
+  if (c.includes("salvage")) return "salvage"
+  if (c.includes("delivery") || c.includes("courier")) return "delivery"
+  if (c.includes("hauling")) return "hauling"
+  if (c.includes("mining")) return "mining"
+  if (c.includes("maintenance")) return "maintenance"
+  if (c.includes("investigation") || c.includes("search")) return "investigation"
+  if (c.includes("race")) return "race"
+  return "generic"
+}
+
+const TYPE_RENDERERS: Record<string, React.FC<{ data: MissionDetailResponse }>> = {
+  mercenary: MercenaryDetails,
+  bountyhunter: BountyHunterDetails,
+  salvage: SalvageDetails,
+  delivery: DeliveryDetails,
+  hauling: HaulingDetails,
+  mining: MiningDetails,
+  maintenance: MaintenanceDetails,
+  investigation: InvestigationDetails,
+  race: RaceDetails,
+  generic: GenericDetails,
+}
+
+export function MissionTypeDetails({ data }: { data: MissionDetailResponse }) {
+  const key = normalizeCategory(data.mission.category)
+  const Renderer = TYPE_RENDERERS[key] || GenericDetails
+  return <Renderer data={data} />
+}
+
+// ============================================================================
+// Shared building blocks
+// ============================================================================
+
+function ShipEncountersSection({ encounters }: { encounters: ShipEncounter[] }) {
+  if (!encounters.length) return null
+  const hostileMin = encounters.filter(e => e.alignment === "hostile").reduce((s, e) => s + e.waves.reduce((ws, w) => ws + w.min_ships, 0), 0)
+  const hostileMax = encounters.filter(e => e.alignment === "hostile").reduce((s, e) => s + e.waves.reduce((ws, w) => ws + w.max_ships, 0), 0)
+  const friendlyMin = encounters.filter(e => e.alignment === "friendly").reduce((s, e) => s + e.waves.reduce((ws, w) => ws + w.min_ships, 0), 0)
+  const friendlyMax = encounters.filter(e => e.alignment === "friendly").reduce((s, e) => s + e.waves.reduce((ws, w) => ws + w.max_ships, 0), 0)
+  const allPool = encounters.flatMap(e => e.ship_pool || [])
+  const uniquePool: string[] = [...new Set(allPool)].sort()
+
+  return (
+    <Paper variant="outlined" sx={{ p: 1.5 }}>
+      <Stack direction="row" spacing={1} alignItems="center" flexWrap="wrap" useFlexGap sx={{ mb: 1 }}>
+        <Typography variant="subtitle2">Ship Encounters</Typography>
+        {hostileMax > 0 && <Chip icon={<RocketLaunchRounded sx={{ fontSize: 14 }} />} label={`${fmtRange(hostileMin, hostileMax)} hostile`} size="small" color="error" variant="outlined" sx={{ height: 22, fontSize: "0.7rem" }} />}
+        {friendlyMax > 0 && <Chip icon={<ShieldRounded sx={{ fontSize: 14 }} />} label={`${fmtRange(friendlyMin, friendlyMax)} friendly`} size="small" color="info" variant="outlined" sx={{ height: 22, fontSize: "0.7rem" }} />}
+      </Stack>
+      <Stack spacing={0.5}>
+        {encounters.map((enc, i) => (
+          <Box key={i}>
+            <Stack direction="row" spacing={0.75} alignItems="center">
+              {enc.alignment === "hostile"
+                ? <RocketLaunchRounded sx={{ fontSize: 16, color: "error.main" }} />
+                : <ShieldRounded sx={{ fontSize: 16, color: "info.main" }} />}
+              <Typography variant="body2" fontWeight={600}>{enc.role}</Typography>
+              <Typography variant="caption" color="text.secondary">
+                {fmtRange(enc.waves.reduce((s, w) => s + w.min_ships, 0), enc.waves.reduce((s, w) => s + w.max_ships, 0))} ships
+              </Typography>
+            </Stack>
+            {enc.waves.map((wave, wi) => (
+              <Typography key={wi} variant="caption" color="text.secondary" sx={{ pl: 3.5, display: "block" }}>
+                {wave.name}: {fmtRange(wave.min_ships, wave.max_ships)} ships
+              </Typography>
+            ))}
+          </Box>
+        ))}
+      </Stack>
+      {uniquePool.length > 0 && (
+        <Box sx={{ mt: 1, pt: 1, borderTop: 1, borderColor: "divider" }}>
+          <Typography variant="caption" fontWeight={600}>Ship Pool — {uniquePool.length} types</Typography>
+          <Stack spacing={0}>
+            {uniquePool.map((ship, i) => (
+              <Typography key={i} variant="caption" color="text.secondary">{ship}</Typography>
+            ))}
+          </Stack>
+        </Box>
+      )}
+    </Paper>
+  )
+}
+
+function NpcEncountersSection({ encounters }: { encounters: NpcEncounter[] }) {
+  if (!encounters.length) return null
+  return (
+    <Paper variant="outlined" sx={{ p: 1.5 }}>
+      <Typography variant="subtitle2" sx={{ mb: 0.5 }}>NPC Encounters</Typography>
+      <Stack spacing={0.25}>
+        {encounters.map((npc, i) => (
+          <Stack key={i} direction="row" justifyContent="space-between">
+            <Typography variant="body2">{npc.name}</Typography>
+            <Typography variant="body2" color="text.secondary">×{npc.count}</Typography>
+          </Stack>
+        ))}
+      </Stack>
+    </Paper>
+  )
+}
+
+function HaulingOrdersSection({ orders }: { orders: HaulingOrder[] }) {
+  if (!orders.length) return null
+  const totalMin = orders.reduce((s, h) => s + h.min_scu, 0)
+  const totalMax = orders.reduce((s, h) => s + h.max_scu, 0)
+  return (
+    <Paper variant="outlined" sx={{ p: 1.5 }}>
+      <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 0.5 }}>
+        <LocalShippingRounded sx={{ fontSize: 16 }} />
+        <Typography variant="subtitle2">Hauling Orders</Typography>
+        <Chip label={`${fmtRange(totalMin, totalMax)} SCU`} size="small" variant="outlined" sx={{ height: 20, fontSize: "0.7rem" }} />
+      </Stack>
+      <Stack spacing={0.25}>
+        {orders.map((h, i) => (
+          <Stack key={i} direction="row" justifyContent="space-between">
+            <Typography variant="body2">{h.resource_name}</Typography>
+            <Typography variant="body2" color="text.secondary">
+              {h.min_scu === h.max_scu ? `${h.min_scu} SCU` : `${h.min_scu}–${h.max_scu} SCU`}
+            </Typography>
+          </Stack>
+        ))}
+      </Stack>
+    </Paper>
+  )
+}
+
+function EntitySpawnsSection({ spawns }: { spawns: EntitySpawn[] }) {
+  if (!spawns.length) return null
+  return (
+    <Paper variant="outlined" sx={{ p: 1.5 }}>
+      <Typography variant="subtitle2" sx={{ mb: 0.5 }}>Targets</Typography>
+      <Stack spacing={0.25}>
+        {spawns.map((e, i) => (
+          <Stack key={i} direction="row" justifyContent="space-between">
+            <Typography variant="body2">{e.name}</Typography>
+            <Typography variant="body2" color="text.secondary">×{e.count}</Typography>
+          </Stack>
+        ))}
+      </Stack>
+    </Paper>
+  )
+}
+
+function fmtRange(min: number, max: number): string {
+  return min === max ? `${min}` : `${min}–${max}`
+}
+
+// ============================================================================
+// Per-type renderers
+// ============================================================================
+
+/** Mercenary — ship encounters, NPC squads, BP rewards */
+function MercenaryDetails({ data }: { data: MissionDetailResponse }) {
+  return (
+    <Stack spacing={1.5}>
+      <ShipEncountersSection encounters={data.ship_encounters || []} />
+      <NpcEncountersSection encounters={data.npc_encounters || []} />
+      <EntitySpawnsSection spawns={data.entity_spawns || []} />
+      {!(data.ship_encounters?.length || data.npc_encounters?.length || data.entity_spawns?.length) && (
+        <Typography variant="body2" color="text.secondary">No combat data available.</Typography>
+      )}
+    </Stack>
+  )
+}
+
+/** Bounty Hunter — ship encounters with pools, NPC squads */
+function BountyHunterDetails({ data }: { data: MissionDetailResponse }) {
+  return (
+    <Stack spacing={1.5}>
+      <ShipEncountersSection encounters={data.ship_encounters || []} />
+      <NpcEncountersSection encounters={data.npc_encounters || []} />
+      {!data.ship_encounters?.length && !data.npc_encounters?.length && (
+        <Typography variant="body2" color="text.secondary">No encounter data available.</Typography>
+      )}
+    </Stack>
+  )
+}
+
+/** Salvage — entity spawns (wrecks), ship encounters, hauling orders */
+function SalvageDetails({ data }: { data: MissionDetailResponse }) {
+  const m = data.mission
+  const isFee = (m.credit_reward_min ?? 0) < 0
+  return (
+    <Stack spacing={1.5}>
+      {isFee && (
+        <Paper variant="outlined" sx={{ p: 1.5, borderColor: "warning.main" }}>
+          <Typography variant="subtitle2" color="warning.main">Buy-in Required</Typography>
+          <Typography variant="body2">Fee: {Math.abs(m.credit_reward_min!).toLocaleString()} aUEC</Typography>
+        </Paper>
+      )}
+      <HaulingOrdersSection orders={data.hauling_orders || []} />
+      <EntitySpawnsSection spawns={data.entity_spawns || []} />
+      <ShipEncountersSection encounters={data.ship_encounters || []} />
+    </Stack>
+  )
+}
+
+/** Delivery — hauling orders, pickup/delivery info */
+function DeliveryDetails({ data }: { data: MissionDetailResponse }) {
+  return (
+    <Stack spacing={1.5}>
+      <HaulingOrdersSection orders={data.hauling_orders || []} />
+      <ShipEncountersSection encounters={data.ship_encounters || []} />
+      {!data.hauling_orders?.length && !data.ship_encounters?.length && (
+        <Typography variant="body2" color="text.secondary">
+          Delivery details not yet available. Pickup/delivery counts and destinations coming soon.
+        </Typography>
+      )}
+    </Stack>
+  )
+}
+
+/** Hauling — cargo details, hauling orders */
+function HaulingDetails({ data }: { data: MissionDetailResponse }) {
+  return (
+    <Stack spacing={1.5}>
+      <HaulingOrdersSection orders={data.hauling_orders || []} />
+      {!data.hauling_orders?.length && (
+        <Typography variant="body2" color="text.secondary">
+          Hauling cargo details not yet available for template-embedded contracts.
+        </Typography>
+      )}
+    </Stack>
+  )
+}
+
+/** Mining — hauling orders (ore output), BP rewards */
+function MiningDetails({ data }: { data: MissionDetailResponse }) {
+  return (
+    <Stack spacing={1.5}>
+      <HaulingOrdersSection orders={data.hauling_orders || []} />
+      <EntitySpawnsSection spawns={data.entity_spawns || []} />
+      {!data.hauling_orders?.length && (
+        <Typography variant="body2" color="text.secondary">No mining order data available.</Typography>
+      )}
+    </Stack>
+  )
+}
+
+/** Maintenance — entity spawns (relay/pipe repair targets) */
+function MaintenanceDetails({ data }: { data: MissionDetailResponse }) {
+  return (
+    <Stack spacing={1.5}>
+      <EntitySpawnsSection spawns={data.entity_spawns || []} />
+      {!data.entity_spawns?.length && (
+        <Typography variant="body2" color="text.secondary">No repair target data available.</Typography>
+      )}
+    </Stack>
+  )
+}
+
+/** Investigation — accept locations, ship encounters */
+function InvestigationDetails({ data }: { data: MissionDetailResponse }) {
+  return (
+    <Stack spacing={1.5}>
+      <ShipEncountersSection encounters={data.ship_encounters || []} />
+      <EntitySpawnsSection spawns={data.entity_spawns || []} />
+      {!data.ship_encounters?.length && !data.entity_spawns?.length && (
+        <Typography variant="body2" color="text.secondary">
+          Investigation details not yet available. Accept locations coming soon.
+        </Typography>
+      )}
+    </Stack>
+  )
+}
+
+/** Race — buy-in fee, route info */
+function RaceDetails({ data }: { data: MissionDetailResponse }) {
+  const m = data.mission
+  const isFee = (m.credit_reward_min ?? 0) < 0
+  return (
+    <Stack spacing={1.5}>
+      {isFee && (
+        <Paper variant="outlined" sx={{ p: 1.5, borderColor: "warning.main" }}>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <SportsScoreRounded sx={{ fontSize: 20, color: "warning.main" }} />
+            <Box>
+              <Typography variant="subtitle2" color="warning.main">Entry Fee</Typography>
+              <Typography variant="body2">{Math.abs(m.credit_reward_min!).toLocaleString()} aUEC</Typography>
+            </Box>
+          </Stack>
+        </Paper>
+      )}
+      <Typography variant="body2" color="text.secondary">
+        Race route data not yet available.
+      </Typography>
+    </Stack>
+  )
+}
+
+/** Generic fallback — shows whatever data exists */
+function GenericDetails({ data }: { data: MissionDetailResponse }) {
+  const hasAnything = (data.ship_encounters?.length || data.npc_encounters?.length || data.hauling_orders?.length || data.entity_spawns?.length)
+  return (
+    <Stack spacing={1.5}>
+      <ShipEncountersSection encounters={data.ship_encounters || []} />
+      <NpcEncountersSection encounters={data.npc_encounters || []} />
+      <HaulingOrdersSection orders={data.hauling_orders || []} />
+      <EntitySpawnsSection spawns={data.entity_spawns || []} />
+      {!hasAnything && (
+        <Typography variant="body2" color="text.secondary">No type-specific data available for this mission.</Typography>
+      )}
+    </Stack>
+  )
+}
