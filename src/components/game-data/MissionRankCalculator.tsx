@@ -23,11 +23,12 @@ import { useGetReputationRanksQuery } from "../../store/api/v2/market"
 interface Props {
   reputationReward: number
   rewardScope: string
+  rewardFaction?: string
   requiredRank?: number
   isShareable: boolean
 }
 
-export function MissionRankCalculator({ reputationReward, rewardScope, requiredRank, isShareable }: Props) {
+export function MissionRankCalculator({ reputationReward, rewardScope, rewardFaction, requiredRank, isShareable }: Props) {
   const [crewSize, setCrewSize] = useState(1)
 
   const { data, isLoading } = useGetReputationRanksQuery(
