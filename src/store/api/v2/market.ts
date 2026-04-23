@@ -3301,6 +3301,13 @@ export type SearchMissionsResponse = {
   /** Page size */
   page_size: number
 }
+export type ItemReward = {
+  name: string
+  ref: string
+}
+export type RecordStringString = {
+  [key: string]: string
+}
 export type Mission = {
   mission_id: string
   version_id: string
@@ -3361,6 +3368,16 @@ export type Mission = {
   max_crimestat?: number
   /** Difficulty from broker (raw) */
   difficulty_from_broker?: number
+  /** Time to complete the mission (seconds) */
+  time_to_complete?: number
+  /** Accept locations (where the mission can be picked up) */
+  accept_locations?: string[]
+  /** Destinations (pickup/dropoff location names) */
+  destinations?: string[]
+  /** Non-blueprint item rewards */
+  item_rewards?: ItemReward[]
+  /** Token substitutions for description placeholders */
+  token_substitutions?: RecordStringString
   community_difficulty_avg?: number
   community_difficulty_count: number
   community_satisfaction_avg?: number
@@ -3882,9 +3899,6 @@ export type SlotModifier = {
   modifier_at_start: number
   /** Modifier value at end_quality (e.g., 1.1 = ×1.1) */
   modifier_at_end: number
-}
-export type RecordStringString = {
-  [key: string]: string
 }
 export type UserBlueprintAcquisition = {
   /** Acquisition date */

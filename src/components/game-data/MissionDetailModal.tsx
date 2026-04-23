@@ -263,6 +263,32 @@ function OverviewTab({ data, onBlueprintClick }: { data: MissionDetailResponse; 
         </>
       )}
 
+      {/* Item Rewards */}
+      {(m.item_rewards?.length ?? 0) > 0 && (
+        <>
+          <Divider />
+          <Typography variant="subtitle2">Item Rewards</Typography>
+          <Stack spacing={0.25}>
+            {m.item_rewards!.map((item, i) => (
+              <Typography key={i} variant="body2">{item.name}</Typography>
+            ))}
+          </Stack>
+        </>
+      )}
+
+      {/* Destinations */}
+      {(m.destinations?.length ?? 0) > 0 && (
+        <>
+          <Divider />
+          <Typography variant="subtitle2">Destinations</Typography>
+          <Stack spacing={0.25}>
+            {m.destinations!.map((dest, i) => (
+              <Chip key={i} label={dest} size="small" variant="outlined" sx={{ alignSelf: "flex-start" }} />
+            ))}
+          </Stack>
+        </>
+      )}
+
       {/* Location */}
       {(m.star_system || m.planet_moon) && (
         <>
@@ -355,6 +381,15 @@ function RequirementsTab({ data }: { data: MissionDetailResponse }) {
       {/* Timing */}
       <Typography variant="subtitle2">Timing</Typography>
       <Stack spacing={0.5}>
+        {m.time_to_complete != null && (
+          <Stack direction="row" justifyContent="space-between">
+            <Typography variant="body2" color="text.secondary">
+              <TimerRounded sx={{ fontSize: 14, mr: 0.5, verticalAlign: "text-bottom" }} />
+              Time to Complete
+            </Typography>
+            <Typography variant="body2">{formatDuration(m.time_to_complete)}</Typography>
+          </Stack>
+        )}
         {m.personal_cooldown_time != null && (
           <Stack direction="row" justifyContent="space-between">
             <Typography variant="body2" color="text.secondary">
@@ -377,6 +412,19 @@ function RequirementsTab({ data }: { data: MissionDetailResponse }) {
           </Stack>
         )}
       </Stack>
+
+      {/* Accept Locations */}
+      {(m.accept_locations?.length ?? 0) > 0 && (
+        <>
+          <Divider />
+          <Typography variant="subtitle2">Available At</Typography>
+          <Stack spacing={0.25}>
+            {m.accept_locations!.map((loc, i) => (
+              <Typography key={i} variant="body2">{loc}</Typography>
+            ))}
+          </Stack>
+        </>
+      )}
 
       {/* Crimestat */}
       {m.max_crimestat != null && (
