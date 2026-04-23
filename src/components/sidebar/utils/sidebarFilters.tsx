@@ -116,9 +116,26 @@ export function createItemFilter(
       return false
     }
 
-    // V2-only items: only show when market_version is explicitly "V2" in localStorage
-    if (item.v2_only) {
-      if (localStorage.getItem("market_version") !== "V2") return false
+    // Feature-flagged items: check the specific flag in localStorage
+    if (item.feature_flag) {
+      try {
+        const stored = localStorage.getItem("feature_flags")
+        const flags = stored ? JSON.parse(stored) : {}
+        if (!flags[item.feature_flag]) return false
+      } catch {
+        return false
+      }
+    }
+
+    // Backward compat: v2_only checks market_v2 flag
+    if (item.v2_only && !item.feature_flag) {
+      try {
+        const stored = localStorage.getItem("feature_flags")
+        const flags = stored ? JSON.parse(stored) : {}
+        if (!flags.market_v2) return false
+      } catch {
+        if (localStorage.getItem("market_version") !== "V2") return false
+      }
     }
 
     // Check login requirements
