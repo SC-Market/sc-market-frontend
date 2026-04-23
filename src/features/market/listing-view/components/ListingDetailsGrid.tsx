@@ -1,5 +1,5 @@
 import React from "react"
-import { Box, Chip, Stack, Typography } from "@mui/material"
+import { Box, Chip, Paper, Stack, Typography } from "@mui/material"
 import {
   PersonRounded,
   CreateRounded,
@@ -205,6 +205,7 @@ export function ListingDetailsGrid({ listing, viewCount }: ListingDetailsGridPro
   const rightItems = items.slice(midpoint)
 
   return (
+    <Paper sx={{ p: 2 }}>
     <Stack direction="row" spacing={2}>
       <Stack direction="column" spacing={0.5} flex={1}>
         {leftItems}
@@ -213,5 +214,6 @@ export function ListingDetailsGrid({ listing, viewCount }: ListingDetailsGridPro
         {rightItems}
       </Stack>
     </Stack>
+    </Paper>
   )
 }

@@ -11,6 +11,7 @@ import {
   Grid,
   IconButton,
   Link,
+  Paper,
   Stack,
   Typography,
   useMediaQuery,
@@ -235,7 +236,8 @@ export function ListingDetailV2() {
                         </Stack>
                       }
                       subheader={
-                        <Stack direction={{ xs: "column", sm: "row" }} spacing={2} sx={{ mt: 1 }}>
+                        <Paper variant="outlined" sx={{ p: 1.5, mt: 1 }}>
+                        <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
                           <Stack direction="column" spacing={0.5} flex={1}>
                           {/* Seller */}
                           <ListingDetailItem icon={<PersonRounded fontSize="small" />}>
@@ -309,6 +311,7 @@ export function ListingDetailV2() {
                           </ListingDetailItem>
                           </Stack>
                         </Stack>
+                        </Paper>
                       }
                     />
 
