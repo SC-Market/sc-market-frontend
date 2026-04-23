@@ -1528,9 +1528,9 @@
 						"type": "array",
 						"description": "Optional bulk discount tiers sorted by min_quantity ascending"
 					},
-					"contractor_id": {
+					"contractor_spectrum_id": {
 						"type": "string",
-						"description": "Optional contractor ID — if provided, listing is created on behalf of the org"
+						"description": "Optional contractor spectrum_id — if provided, listing is created on behalf of the org"
 					}
 				},
 				"required": [
