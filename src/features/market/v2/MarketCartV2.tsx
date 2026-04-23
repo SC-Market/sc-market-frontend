@@ -174,17 +174,21 @@ export function CartItemEntryV2(props: {
             </Typography>
           </Box>
 
-          {/* Variant Display with Quality Badge */}
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          {/* Variant Display — rich chips, no duplicates */}
+          <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, flexWrap: "wrap" }}>
             {item.variant.attributes.quality_tier && (
-              <QualityBadge
-                tier={item.variant.attributes.quality_tier}
+              <QualityBadge tier={item.variant.attributes.quality_tier} size="small" />
+            )}
+            {item.variant.attributes.quality_value != null && (
+              <Chip label={`${item.variant.attributes.quality_value}/1000`} size="small" variant="outlined" />
+            )}
+            {item.variant.attributes.crafted_source && (
+              <Chip
+                label={item.variant.attributes.crafted_source.charAt(0).toUpperCase() + item.variant.attributes.crafted_source.slice(1)}
                 size="small"
+                variant="outlined"
               />
             )}
-            <Typography variant="body2" color="text.secondary">
-              {item.variant.display_name}
-            </Typography>
           </Box>
 
           {/* Availability Warning */}
@@ -337,6 +341,7 @@ export function MarketCartV2() {
   const [removeCartItem, { isLoading: isRemoving }] = useRemoveCartItemMutation()
   const [checkoutCart, { isLoading: isCheckingOut }] = useCheckoutCartMutation()
   const [checkoutDialogOpen, setCheckoutDialogOpen] = useState(false)
+  const [notes, setNotes] = useState<Record<string, string>>({})
 
   // Handle remove item
   const handleRemove = useCallback(
@@ -385,11 +390,9 @@ export function MarketCartV2() {
         })
 
         navigate(`/offer/${result.order_id}`)
-      } catch (error) {
-        issueAlert({
-          message: error instanceof Error ? error.message : "Failed to checkout",
-          severity: "error",
-        })
+      } catch (err: any) {
+        setCheckoutDialogOpen(false)
+        issueAlert(err)
       }
     },
     [cartData, checkoutCart, issueAlert, navigate, t]
@@ -511,8 +514,8 @@ export function MarketCartV2() {
               <MarkdownEditor
                 sx={{ marginRight: 2, marginBottom: 1 }}
                 TextFieldProps={{ label: t("cart.note", "Note to seller") }}
-                value=""
-                onChange={() => {}}
+                value={notes[group.sellerName] || ""}
+                onChange={(val: string) => setNotes(prev => ({ ...prev, [group.sellerName]: val }))}
               />
             </Grid>
 
