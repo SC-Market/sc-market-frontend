@@ -15,6 +15,8 @@ import {
   TextField,
   Typography,
   Chip,
+  Skeleton,
+  Stack,
 } from "@mui/material"
 import { Section } from "../../../components/paper/Section"
 import { Link, useNavigate } from "react-router-dom"
@@ -468,6 +470,16 @@ export function MarketCartV2() {
       maxWidth="md"
       isLoading={isLoading}
       error={error}
+      skeleton={
+        <Grid item xs={12}>
+          <Stack spacing={2}>
+            {[1, 2, 3].map((i) => (
+              <Skeleton key={i} variant="rectangular" height={120} sx={{ borderRadius: 1 }} />
+            ))}
+            <Skeleton variant="rectangular" height={60} sx={{ borderRadius: 1 }} />
+          </Stack>
+        </Grid>
+      }
     >
       <Grid item xs={12}>
       <Grid container spacing={theme.layoutSpacing.layout}>
@@ -592,6 +604,7 @@ export function MarketCartV2() {
       </Grid>
       </Grid>
 
+      <Grid item xs={12}>
       {/* Shopping List */}
       <Box sx={{ mt: 3 }}>
         <Divider sx={{ mb: 2 }} />
@@ -601,6 +614,7 @@ export function MarketCartV2() {
         </Typography>
         <ShoppingListPanel />
       </Box>
+      </Grid>
 
       {/* Checkout Confirmation Dialog */}
       <Dialog
