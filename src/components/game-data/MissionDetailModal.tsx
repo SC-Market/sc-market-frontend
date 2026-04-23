@@ -31,7 +31,7 @@ import { useTranslation } from "react-i18next"
 import { useGetMissionDetailQuery, type MissionDetailResponse, type Mission, type MissionRewardPool, type MissionBlueprintReward, type HaulingOrder } from "../../store/api/v2/market"
 import { getMissionTypeLabel, formatMissionDescription, formatCredits } from "../../util/missionDisplay"
 import { getMissionIcon } from "../../util/gameIcons"
-import { MissionName } from "./MissionName"
+import { MissionName, MissionDescription } from "./MissionName"
 import { MissionRankCalculator } from "./MissionRankCalculator"
 import { MissionTypeDetails } from "./MissionTypeDetails"
 
@@ -152,9 +152,7 @@ function OverviewTab({ data, onBlueprintClick }: { data: MissionDetailResponse; 
     <Stack spacing={2}>
       {/* Description */}
       {m.mission_description && (
-        <Typography variant="body2" color="text.secondary" sx={{ whiteSpace: "pre-line" }}>
-          {m.mission_description}
-        </Typography>
+        <MissionDescription text={m.mission_description} variant="body2" color="text.secondary" sx={{ whiteSpace: "pre-line" }} />
       )}
 
       <Divider />
