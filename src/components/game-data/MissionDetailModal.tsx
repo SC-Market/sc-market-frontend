@@ -19,6 +19,7 @@ import {
   CircularProgress,
   Alert,
   Divider,
+  Paper,
 } from "@mui/material"
 import {
   Close,
@@ -298,11 +299,11 @@ function CombatTab({ data }: { data: any }) {
     sum + (e.waves || []).reduce((ws: number, w: any) => ws + (w.ship_count || 0), 0), 0)
 
   return (
-    <Stack spacing={2}>
+    <Stack spacing={1.5}>
       {/* Ship Encounters */}
       {shipEnc.length > 0 && (
-        <>
-          <Typography variant="subtitle2">
+        <Paper variant="outlined" sx={{ p: 1.5 }}>
+          <Typography variant="subtitle2" sx={{ mb: 0.75 }}>
             Ship Encounters
             {totalShips > 0 && (
               <Typography component="span" variant="caption" color="text.secondary" sx={{ ml: 1 }}>
@@ -310,9 +311,10 @@ function CombatTab({ data }: { data: any }) {
               </Typography>
             )}
           </Typography>
+          <Stack spacing={0.75}>
           {shipEnc.map((enc: any, i: number) => (
-            <Box key={i} sx={{ border: 1, borderColor: "divider", borderRadius: 1, p: 1.5 }}>
-              <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 0.5 }}>
+            <Box key={i} sx={{ border: 1, borderColor: "divider", borderRadius: 1, p: 1 }}>
+              <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 0.25 }}>
                 <ShieldRounded sx={{ fontSize: 16, color: enc.role?.toLowerCase().includes("friendly") ? "info.main" : "error.main" }} />
                 <Typography variant="body2" fontWeight={600}>{enc.role}</Typography>
                 <Typography variant="caption" color="text.secondary">
@@ -327,39 +329,45 @@ function CombatTab({ data }: { data: any }) {
               ))}
             </Box>
           ))}
-        </>
+          </Stack>
+        </Paper>
       )}
 
       {/* NPC Encounters */}
       {npcEnc.length > 0 && (
-        <>
-          <Typography variant="subtitle2">NPC Encounters</Typography>
+        <Paper variant="outlined" sx={{ p: 1.5 }}>
+          <Typography variant="subtitle2" sx={{ mb: 0.5 }}>NPC Encounters</Typography>
+          <Stack spacing={0.25}>
           {npcEnc.map((npc: any, i: number) => (
             <Stack key={i} direction="row" justifyContent="space-between">
               <Typography variant="body2">{npc.name}</Typography>
               <Typography variant="body2" color="text.secondary">×{npc.count}</Typography>
             </Stack>
           ))}
-        </>
+          </Stack>
+        </Paper>
       )}
 
       {/* Entity Spawns */}
       {entities.length > 0 && (
-        <>
-          <Typography variant="subtitle2">Entity Spawns</Typography>
+        <Paper variant="outlined" sx={{ p: 1.5 }}>
+          <Typography variant="subtitle2" sx={{ mb: 0.5 }}>Entity Spawns</Typography>
+          <Stack spacing={0.25}>
           {entities.map((e: any, i: number) => (
             <Stack key={i} direction="row" justifyContent="space-between">
               <Typography variant="body2">{e.name}</Typography>
               <Typography variant="body2" color="text.secondary">×{e.count}</Typography>
             </Stack>
           ))}
-        </>
+          </Stack>
+        </Paper>
       )}
 
       {/* Hauling Orders */}
       {hauling.length > 0 && (
-        <>
-          <Typography variant="subtitle2">Hauling Orders</Typography>
+        <Paper variant="outlined" sx={{ p: 1.5 }}>
+          <Typography variant="subtitle2" sx={{ mb: 0.5 }}>Hauling Orders</Typography>
+          <Stack spacing={0.25}>
           {hauling.map((h: any, i: number) => (
             <Stack key={i} direction="row" justifyContent="space-between">
               <Typography variant="body2">{h.resource_name}</Typography>
@@ -368,7 +376,8 @@ function CombatTab({ data }: { data: any }) {
               </Typography>
             </Stack>
           ))}
-        </>
+          </Stack>
+        </Paper>
       )}
 
       {!shipEnc.length && !npcEnc.length && !entities.length && !hauling.length && (
