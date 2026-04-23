@@ -236,8 +236,7 @@ export function ListingDetailV2() {
                         </Stack>
                       }
                       subheader={
-                        <Paper variant="outlined" sx={{ p: 1.5, mt: 1 }}>
-                        <Stack direction={{ xs: "column", sm: "row" }} spacing={2}>
+                        <Stack direction={{ xs: "column", sm: "row" }} spacing={2} sx={{ mt: 1 }}>
                           <Stack direction="column" spacing={0.5} flex={1}>
                           {/* Seller */}
                           <ListingDetailItem icon={<PersonRounded fontSize="small" />}>
@@ -311,7 +310,6 @@ export function ListingDetailV2() {
                           </ListingDetailItem>
                           </Stack>
                         </Stack>
-                        </Paper>
                       }
                     />
 
@@ -355,12 +353,12 @@ export function ListingDetailV2() {
 
                       {/* Description */}
                       {listing.description && (
-                        <Box sx={{ mt: 2 }}>
+                        <Paper variant="outlined" sx={{ mt: 2, p: 2 }}>
                           <Typography variant="subtitle1" fontWeight="bold" color="text.secondary" gutterBottom>
                             Description
                           </Typography>
                           <MarkdownRender text={listing.description} />
-                        </Box>
+                        </Paper>
                       )}
                     </CardContent>
                   </Card>

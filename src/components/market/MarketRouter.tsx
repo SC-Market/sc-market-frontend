@@ -85,7 +85,10 @@ const EditMultipleListingV1 = React.lazy(() => import("../../pages/market/ViewMa
 const CreateBuyOrderV1 = React.lazy(() => import("../../pages/market/CreateBuyOrder").then(m => ({ default: m.CreateBuyOrder })))
 
 // Pre-built gates for App.tsx route definitions
-export const ListingDetailGate = () => <V2Gate v1={ViewMarketListingV1} v2={ListingDetailV2} />
+export const ListingDetailGate = () => {
+  const { id } = useParams<{ id: string }>()
+  return <V2Gate key={id} v1={ViewMarketListingV1} v2={ListingDetailV2} />
+}
 export const AggregateDetailGate = () => <V2Gate v1={ViewMarketAggregateV1} v2={MarketAggregateViewV2} />
 export const MultipleDetailGate = () => <V2Gate v1={ViewMarketMultipleV1} v2={MarketMultipleViewV2} />
 export const CreateListingGate = () => <V2Gate v1={MarketCreateV1} v2={CreateListingV2} />
