@@ -53,7 +53,7 @@ function BoolChip({ value, label }: { value: boolean | undefined; label: string 
       {value
         ? <CheckCircleOutline sx={{ fontSize: 16, color: "success.main" }} />
         : <CancelOutlined sx={{ fontSize: 16, color: "text.disabled" }} />}
-      <Typography variant="body2" color={value ? "text.primary" : "text.disabled"}>{label}</Typography>
+      <Typography variant="body2" color={value ? "text.primary" : "text.secondary"}>{label}</Typography>
     </Stack>
   )
 }
@@ -231,7 +231,7 @@ function OverviewTab({ data, onBlueprintClick }: { data: MissionDetailResponse; 
                         <TableRow
                           key={bp.blueprint_id} hover
                           sx={{ cursor: onBlueprintClick ? "pointer" : undefined }}
-                          onClick={() => onBlueprintClick?.(bp.blueprint_id)}
+                          onClick={() => onBlueprintClick?.(bp.blueprint_code || bp.blueprint_id)}
                         >
                           <TableCell>
                             <Stack direction="row" spacing={0.75} alignItems="center">

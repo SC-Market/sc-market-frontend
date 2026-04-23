@@ -131,7 +131,7 @@ export const MissionCard: React.FC<MissionCardProps> = ({ mission, onClick }) =>
           </Box>
           <Box sx={{ display: "flex", justifyContent: "space-between" }}>
             <Typography variant="caption" color="text.secondary">Base XP</Typography>
-            <Typography variant="caption" color={mission.reputation_reward ? "text.primary" : "text.disabled"}>
+            <Typography variant="caption" color={mission.reputation_reward ? "text.primary" : "text.secondary"}>
               {mission.reputation_reward ? `${mission.reputation_reward.toLocaleString()}` : "—"}
             </Typography>
           </Box>

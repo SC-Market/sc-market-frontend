@@ -134,12 +134,12 @@ export function MissionRankCalculator({ reputationReward, rewardScope, rewardFac
                   </Stack>
                 </TableCell>
                 <TableCell align="right">
-                  <Typography variant="body2" color={isBelowMin ? "text.disabled" : "text.primary"}>
+                  <Typography variant="body2" color={isBelowMin ? "text.secondary" : "text.primary"}>
                     {isBelowMin ? "—" : xpFromMin.toLocaleString()}
                   </Typography>
                 </TableCell>
                 <TableCell align="right">
-                  <Typography variant="body2" color={isBelowMin ? "text.disabled" : "success.main"} fontWeight={600}>
+                  <Typography variant="body2" color={isBelowMin ? "text.secondary" : "success.main"} fontWeight={600}>
                     {isBelowMin ? "—" : runsNeeded}
                   </Typography>
                 </TableCell>

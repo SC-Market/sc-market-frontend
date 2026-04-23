@@ -136,7 +136,7 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
                   </Box>
                 ))}
                 {ings.length > 4 && (
-                  <Typography variant="caption" color="text.disabled">+{ings.length - 4} more</Typography>
+                  <Typography variant="caption" color="text.secondary">+{ings.length - 4} more</Typography>
                 )}
               </Stack>
             )}
