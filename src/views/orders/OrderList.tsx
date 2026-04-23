@@ -411,7 +411,7 @@ export function OrderRow(props: {
               onClick={(e) => {
                 e.preventDefault()
                 e.stopPropagation()
-                assignOrder({ order_id: row.order_id, user_id: profile!.username })
+                assignOrder({ order_id: row.order_id, username: profile!.username })
                   .unwrap()
                   .then(() => issueAlert({ message: t("orders.claimed", "Order claimed"), severity: "success" }))
                   .catch(issueAlert)

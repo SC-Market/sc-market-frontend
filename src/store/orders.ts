@@ -126,13 +126,13 @@ const ordersApi = serviceApi.injectEndpoints({
       void,
       {
         order_id: string
-        user_id: string
+        username: string
       }
     >({
       query: (arg) => ({
         url: `/api/orders/${arg.order_id}`,
         method: "PUT",
-        body: { assigned_to: arg.user_id },
+        body: { assigned_to: arg.username },
       }),
       invalidatesTags: [
         {
