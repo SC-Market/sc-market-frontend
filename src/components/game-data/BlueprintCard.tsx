@@ -162,7 +162,7 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
             ) : null}
             <Box sx={{ display: "flex", alignItems: "center", gap: 0.75 }}>
               <Circle sx={{ fontSize: 8, color: bp.mission_count > 0 ? "success.main" : "error.main" }} />
-              <Typography variant="caption" color={bp.mission_count > 0 ? "text.secondary" : "text.disabled"} sx={{ flex: 1 }}>
+              <Typography variant="caption" color="text.secondary" sx={{ flex: 1, opacity: bp.mission_count > 0 ? 1 : 0.7 }}>
                 {bp.mission_count > 0 ? `${bp.mission_count} mission source${bp.mission_count !== 1 ? "s" : ""}` : "No mission sources"}
               </Typography>
               {onWishlistAdd && (
