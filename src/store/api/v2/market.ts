@@ -758,6 +758,9 @@ const injectedRtkApi = api
             crafting_station_type: queryArg.craftingStationType,
             output_game_item_id: queryArg.outputGameItemId,
             user_owned_only: queryArg.userOwnedOnly,
+            source: queryArg.source,
+            manufacturer: queryArg.manufacturer,
+            ingredient_name: queryArg.ingredientName,
             version_id: queryArg.versionId,
             page: queryArg.page,
             page_size: queryArg.pageSize,
@@ -1759,6 +1762,12 @@ export type SearchBlueprintsApiArg = {
   outputGameItemId?: string
   /** Filter to show only user-owned blueprints */
   userOwnedOnly?: boolean
+  /** Filter by blueprint source (default, mission_reward) */
+  source?: string
+  /** Filter by manufacturer name */
+  manufacturer?: string
+  /** Filter by ingredient material name */
+  ingredientName?: string
   /** Game version ID (defaults to active LIVE version) */
   versionId?: string
   /** Page number (default: 1) */
@@ -3814,6 +3823,12 @@ export type BlueprintSearchResult = {
   output_item_icon?: string
   /** Item category */
   item_category?: string
+  /** Item subcategory */
+  item_subcategory?: string
+  /** Manufacturer name */
+  manufacturer?: string
+  /** Blueprint source (default, mission_reward) */
+  source?: string
   /** Rarity */
   rarity?: string
   /** Tier (1-5) */
@@ -3831,6 +3846,8 @@ export type BlueprintSearchResult = {
   mission_count: number
   /** Crafting time in seconds */
   crafting_time_seconds?: number
+  /** Distinct modifier property names (e.g. ["damagemitigation", "mintemp"]) */
+  modifier_properties?: string[]
   /** Does user own this blueprint */
   user_owns?: boolean
 }

@@ -14,7 +14,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material"
-import { Bookmark, BookmarkBorder, Circle } from "@mui/icons-material"
+import { Bookmark, BookmarkBorder, Circle, PlaylistAddRounded } from "@mui/icons-material"
 import { formatCategoryName } from "../../util/categoryDisplay"
 import { getResourceCategoryIcon, getCommodityColor, getItemCategoryColor } from "../../util/gameIcons"
 import { GameItemAvatar } from "./GameItemAvatar"
@@ -35,17 +35,22 @@ export interface BlueprintCardProps {
     output_item_name: string
     output_item_icon?: string
     item_category?: string
+    item_subcategory?: string
+    manufacturer?: string
+    source?: string
     rarity?: string
     tier?: number
     ingredient_count: number
     mission_count: number
     crafting_time_seconds?: number
+    modifier_properties?: string[]
     user_owns?: boolean
     ingredients?: BlueprintIngredientSummary[]
   }
   viewMode?: "grid" | "list"
   onClick?: (blueprintId: string) => void
   onBookmarkToggle?: (blueprintId: string, isOwned: boolean) => void
+  onWishlistAdd?: (blueprintId: string) => void
 }
 
 function initials(name: string | undefined): string {
@@ -67,11 +72,25 @@ function ingColor(ing: BlueprintIngredientSummary): string {
   return getCommodityColor(ing.sub_type) || "#616161"
 }
 
+/** Abbreviate modifier property names like SCMDB: damagemitigation → DR, mintemp → Temp */
+const MOD_ABBR: Record<string, string> = {
+  damagemitigation: "DR",
+  mintemp: "Temp",
+  maxtemp: "Temp",
+  gpp_armor_damagemitigation: "DR",
+  gpp_armor_mintemp: "Temp",
+  gpp_armor_maxtemp: "Temp",
+}
+function modAbbr(prop: string): string {
+  return MOD_ABBR[prop.toLowerCase()] || prop.replace(/^gpp_armor_/, "").slice(0, 4).toUpperCase()
+}
+
 export const BlueprintCard: React.FC<BlueprintCardProps> = ({
   blueprint: bp,
   viewMode = "grid",
   onClick,
   onBookmarkToggle,
+  onWishlistAdd,
 }) => {
   const ings = bp.ingredients || []
 
@@ -120,10 +139,15 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
             )}
           </CardContent>
 
-          <CardActions sx={{ px: 1.5, pt: 0, pb: 0.5, flexWrap: "wrap", gap: 0.75 }}>
+          <CardActions sx={{ px: 1.5, pt: 0, pb: 0.5, flexWrap: "wrap", gap: 0.25 }}>
             {bp.user_owns && <Chip label="OWNED" size="small" color="success" sx={{ height: 18, fontSize: "0.65rem" }} />}
+            {bp.source === "default" && <Chip label="DEFAULT" size="small" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} />}
             {bp.rarity && <Chip label={bp.rarity} size="small" sx={{ height: 18, fontSize: "0.65rem", bgcolor: "info.main", color: "#fff" }} />}
             {bp.tier && <Chip label={`T${bp.tier}`} size="small" sx={{ height: 18, fontSize: "0.65rem", bgcolor: "warning.main", color: "#fff" }} />}
+            {bp.manufacturer && <Chip label={bp.manufacturer.slice(0, 4).toUpperCase()} size="small" variant="outlined" sx={{ height: 18, fontSize: "0.65rem", fontFamily: "monospace" }} />}
+            {[...new Set((bp.modifier_properties || []).map(modAbbr))].map(tag => (
+              <Chip key={tag} label={tag} size="small" color="secondary" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} />
+            ))}
           </CardActions>
 
           <Box sx={{ px: 1.5, pb: 1.5, pt: 0.5, mt: "auto" }}>
@@ -135,9 +159,14 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
             ) : null}
             <Box sx={{ display: "flex", alignItems: "center", gap: 0.75 }}>
               <Circle sx={{ fontSize: 8, color: bp.mission_count > 0 ? "success.main" : "error.main" }} />
-              <Typography variant="caption" color={bp.mission_count > 0 ? "text.secondary" : "text.disabled"}>
+              <Typography variant="caption" color={bp.mission_count > 0 ? "text.secondary" : "text.disabled"} sx={{ flex: 1 }}>
                 {bp.mission_count > 0 ? `${bp.mission_count} mission source${bp.mission_count !== 1 ? "s" : ""}` : "No mission sources"}
               </Typography>
+              {onWishlistAdd && (
+                <IconButton size="small" title="Add to Wishlist" onClick={(e) => { e.stopPropagation(); onWishlistAdd(bp.blueprint_id) }}>
+                  <PlaylistAddRounded sx={{ fontSize: 16 }} />
+                </IconButton>
+              )}
             </Box>
           </Box>
         </CardActionArea>
@@ -155,8 +184,13 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
             <Typography variant="body2" fontWeight={600} noWrap>{bp.output_item_name}</Typography>
             <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap sx={{ mt: 0.25 }}>
               {bp.user_owns && <Chip label="OWNED" size="small" color="success" sx={{ height: 18, fontSize: "0.65rem" }} />}
+              {bp.source === "default" && <Chip label="DEFAULT" size="small" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} />}
               {bp.rarity && <Chip label={bp.rarity} size="small" sx={{ height: 18, fontSize: "0.65rem", bgcolor: "info.main", color: "#fff" }} />}
               {bp.tier && <Chip label={`T${bp.tier}`} size="small" sx={{ height: 18, fontSize: "0.65rem", bgcolor: "warning.main", color: "#fff" }} />}
+              {bp.manufacturer && <Chip label={bp.manufacturer.slice(0, 4).toUpperCase()} size="small" variant="outlined" sx={{ height: 18, fontSize: "0.65rem", fontFamily: "monospace" }} />}
+              {[...new Set((bp.modifier_properties || []).map(modAbbr))].map(tag => (
+                <Chip key={tag} label={tag} size="small" color="secondary" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} />
+              ))}
               {ings.map((ing, i) => (
                 <Tooltip key={i} title={`${ing.name} — ${ing.quantity_required.toFixed(2)} SCU`} arrow>
                 <Chip
