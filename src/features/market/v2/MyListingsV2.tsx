@@ -22,6 +22,7 @@ import { ManageListingsTabBar } from "../components/ManageListingsTabBar"
 import { ListingSkeleton } from "../../../components/skeletons"
 import { EmptyListings } from "../../../components/empty-states"
 import { useDrawerOpen } from "../../../hooks/layout/Drawer"
+import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
 import { HeaderTitle } from "../../../components/typography/HeaderTitle"
 import { LazySection } from "../../../components/layout/LazySection"
 import { MyListingCardV2 } from "./components/MyListingCardV2"
@@ -34,6 +35,7 @@ function MyListingSectionV2({ status }: { status: "active" | "expired" | "cancel
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
   const [drawerOpen] = useDrawerOpen()
+  const [currentOrg] = useCurrentOrg()
   const [page, setPage] = useState(0)
   const perPage = 48
 
@@ -47,6 +49,7 @@ function MyListingSectionV2({ status }: { status: "active" | "expired" | "cancel
     pageSize: perPage,
     sortBy: "created_at",
     sortOrder: "desc",
+    spectrumId: currentOrg?.spectrum_id,
   })
 
   const listings = data?.listings ?? []

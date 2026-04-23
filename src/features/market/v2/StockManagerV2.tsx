@@ -62,6 +62,7 @@ import { useTheme } from "@mui/material/styles"
 import { NumericFormat } from "react-number-format"
 import { RefreshCircle } from "mdi-material-ui"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
+import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
 import { ThemedDataGrid } from "../../../components/grid/ThemedDataGrid"
 import { StandardPageLayout } from "../../../components/layout/StandardPageLayout"
 import { ManageListingsTabBar } from "../components/ManageListingsTabBar"
@@ -442,6 +443,7 @@ function DisplayStockV2({
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
+  const [currentOrg] = useCurrentOrg()
   const issueAlert = useAlertHook()
 
   const [updateListing] = useUpdateListingMutation()
@@ -916,7 +918,7 @@ export function StockManagerV2() {
     pageSize,
     sortBy: "updated_at",
     sortOrder: "desc",
-  })
+    spectrumId: currentOrg?.spectrum_id,  })
 
   const listings = data?.listings ?? []
 

@@ -44,6 +44,7 @@ import { StandardPageLayout } from "../../../components/layout/StandardPageLayou
 import { ManageListingsTabBar } from "../components/ManageListingsTabBar"
 import { BottomSheet } from "../../../components/mobile/BottomSheet"
 import { ThemedDataGrid as DataGrid } from "../../../components/grid/ThemedDataGrid"
+import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
 import { EmptyState } from "../../../components/empty-states/EmptyState"
 import { UnderlineLink } from "../../../components/typography/UnderlineLink"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
@@ -186,7 +187,8 @@ export function BulkStockManagementV2() {
 function StockSearchAreaV2() {
   const { t } = useTranslation()
   const { filters, setSearch, setListingId, setLocationId } = useStockFilter()
-  const { data: listingsData } = useGetMyListingsQuery({ pageSize: 100, sortBy: "updated_at", sortOrder: "desc" })
+  const [currentOrg] = useCurrentOrg()
+  const { data: listingsData } = useGetMyListingsQuery({ pageSize: 100, sortBy: "updated_at", sortOrder: "desc", spectrumId: currentOrg?.spectrum_id })
   const listings = listingsData?.listings ?? []
 
   return (
@@ -239,7 +241,8 @@ function AllStockLotsGridV2() {
     pageSize: 100,
   })
 
-  const { data: listingsData } = useGetMyListingsQuery({ pageSize: 100, sortBy: "updated_at", sortOrder: "desc" })
+  const [currentOrg] = useCurrentOrg()
+  const { data: listingsData } = useGetMyListingsQuery({ pageSize: 100, sortBy: "updated_at", sortOrder: "desc", spectrumId: currentOrg?.spectrum_id })
   const listings = listingsData?.listings ?? []
 
   const [createLot] = useCreateStockLotMutation()
