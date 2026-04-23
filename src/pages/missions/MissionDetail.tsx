@@ -30,6 +30,7 @@ import {
 import { useParams, useNavigate } from "react-router-dom"
 import { useGetMissionDetailQuery } from "../../store/api/v2/market"
 import { RarityBadge } from "../../components/game-data"
+import { MissionDescription } from "../../components/game-data/MissionName"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -116,7 +117,7 @@ export function MissionDetail() {
             {mission.category && (
               <Chip label={mission.category} size="small" color="primary" />
             )}
-            {mission.career_type && <Chip label={mission.career_type} size="small" />}
+            {mission.career_type && !mission.career_type.includes("~mission") && <Chip label={mission.career_type} size="small" />}
             {mission.legal_status && (
               <Chip
                 label={mission.legal_status}
@@ -150,9 +151,7 @@ export function MissionDetail() {
 
           {/* Mission Description */}
           {mission.mission_description && (
-            <Typography variant="body1" paragraph>
-              {mission.mission_description}
-            </Typography>
+            <MissionDescription text={mission.mission_description} variant="body1" paragraph />
           )}
 
           {/* Mission Metadata Grid */}
@@ -172,7 +171,7 @@ export function MissionDetail() {
             )}
 
             {/* Mission Giver */}
-            {(mission.mission_giver_org || mission.faction) && (
+            {(mission.mission_giver_org || mission.faction) && !(mission.mission_giver_org || mission.faction || "").includes("~mission") && (
               <Grid size={{ xs: 12, sm: 6, md: 4 }}>
                 <Typography variant="subtitle2" color="text.secondary">
                   Mission Giver
