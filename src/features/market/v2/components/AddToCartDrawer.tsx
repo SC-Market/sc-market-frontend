@@ -143,14 +143,14 @@ export function AddToCartDrawer({ open, onClose, listingId }: AddToCartDrawerPro
             >
               {variants.map((v: any) => (
                 <MenuItem key={v.variant_id} value={v.variant_id}>
-                  {v.display_name} — {v.price.toLocaleString()} aUEC ({formatQuantity(v.quantity, listingData.listing.quantity_unit)} avail.)
+                  {v.display_name || "Standard"} — {Number(v.price).toLocaleString()} aUEC ({formatQuantity(v.quantity, listingData.listing.quantity_unit)} avail.)
                 </MenuItem>
               ))}
             </TextField>
           ) : variants.length === 1 ? (
             <Box sx={{ p: 1.5, bgcolor: "action.hover", borderRadius: 1 }}>
               <Typography variant="body2">
-                {variants[0].display_name} — {variants[0].price.toLocaleString()} aUEC
+                {variants[0].display_name || "Standard"} — {Number(variants[0].price).toLocaleString()} aUEC
               </Typography>
               <Typography variant="caption" color="text.secondary">
                 {formatQuantity(variants[0].quantity, listingData.listing.quantity_unit)} {t("cart.available", "available")}
@@ -184,7 +184,7 @@ export function AddToCartDrawer({ open, onClose, listingId }: AddToCartDrawerPro
           {/* Subtotal */}
           {selectedVariant && (
             <Typography variant="body1" fontWeight="bold" color="primary">
-              {t("cart.subtotal", "Subtotal")}: {subtotal.toLocaleString()} aUEC
+              {t("cart.subtotal", "Subtotal")}: {Number(subtotal).toLocaleString()} aUEC
             </Typography>
           )}
 
@@ -217,7 +217,7 @@ export function AddToCartDrawer({ open, onClose, listingId }: AddToCartDrawerPro
                     <Box sx={{ minWidth: 0 }}>
                       <Typography variant="body2" noWrap>{ci.variant?.display_name || "Standard"}</Typography>
                       <Typography variant="caption" color="text.secondary">
-                        {ci.quantity} × {ci.price_per_unit.toLocaleString()} aUEC = {(ci.quantity * ci.price_per_unit).toLocaleString()} aUEC
+                        {ci.quantity} × {Number(ci.price_per_unit).toLocaleString()} aUEC = {Number(ci.quantity * ci.price_per_unit).toLocaleString()} aUEC
                       </Typography>
                     </Box>
                     <IconButton size="small" onClick={() => handleRemoveCartItem(ci.cart_item_id)} color="error">

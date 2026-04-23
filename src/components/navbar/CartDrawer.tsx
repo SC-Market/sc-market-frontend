@@ -108,7 +108,7 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
                     </Typography>
                     <Box display="flex" gap={1} alignItems="center" mt={0.5}>
                       <Typography variant="body2">
-                        {item.quantity} × {item.price_per_unit?.toLocaleString()} aUEC
+                        {item.quantity} × {Number(item.price_per_unit || 0).toLocaleString()} aUEC
                       </Typography>
                     </Box>
                     {item.price_changed && (
@@ -124,7 +124,7 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
                   </Box>
                   <Box display="flex" flexDirection="column" alignItems="flex-end">
                     <Typography variant="body2" fontWeight="bold" color="primary">
-                      {item.subtotal?.toLocaleString()} aUEC
+                      {Number(item.subtotal || 0).toLocaleString()} aUEC
                     </Typography>
                     <IconButton size="small" onClick={() => handleRemove(item.cart_item_id)}>
                       <DeleteOutlineRounded fontSize="small" />
@@ -142,7 +142,7 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
               {t("cart.total", "Total")}
             </Typography>
             <Typography variant="h6" fontWeight="bold" color="primary">
-              {totalPrice.toLocaleString()} aUEC
+              {Number(totalPrice).toLocaleString()} aUEC
             </Typography>
           </Box>
 
