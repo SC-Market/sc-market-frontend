@@ -274,7 +274,7 @@ export function CreateListingV2() {
         min_order_value: minOrderValue ?? undefined,
         max_order_value: maxOrderValue ?? undefined,
         bulk_discount_tiers: bulkDiscountTiers.length ? bulkDiscountTiers : undefined,
-        contractor_id: currentOrg?.contractor_id || undefined,
+        contractor_spectrum_id: currentOrg?.spectrum_id || undefined,
       };
 
       try {

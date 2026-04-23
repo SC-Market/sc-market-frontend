@@ -2491,8 +2491,8 @@ export type CreateListingRequest = {
   max_order_value?: number
   /** Optional bulk discount tiers sorted by min_quantity ascending */
   bulk_discount_tiers?: BulkDiscountTier[]
-  /** Optional contractor ID — if provided, listing is created on behalf of the org */
-  contractor_id?: string
+  /** Optional contractor spectrum_id — if provided, listing is created on behalf of the org */
+  contractor_spectrum_id?: string
 }
 export type ListingSearchResult = {
   /** Listing UUID */

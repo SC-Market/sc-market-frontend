@@ -126,12 +126,12 @@ function ShipEncountersSection({ encounters }: { encounters: ShipEncounter[] }) 
       </Stack>
       {uniquePool.length > 0 && (
         <Box sx={{ mt: 1, pt: 1, borderTop: 1, borderColor: "divider" }}>
-          <Typography variant="caption" fontWeight={600}>Ship Pool — {uniquePool.length} types</Typography>
-          <Stack spacing={0}>
+          <Typography variant="caption" fontWeight={600} sx={{ mb: 0.5, display: "block" }}>Ship Pool — {uniquePool.length} types</Typography>
+          <Box sx={{ display: "flex", flexWrap: "wrap", gap: "4px" }}>
             {uniquePool.map((ship, i) => (
-              <Typography key={i} variant="caption" color="text.secondary">{ship}</Typography>
+              <Chip key={i} label={ship} size="small" variant="outlined" sx={{ height: 20, fontSize: "0.65rem" }} />
             ))}
-          </Stack>
+          </Box>
         </Box>
       )}
     </Paper>
