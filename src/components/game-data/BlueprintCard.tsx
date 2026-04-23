@@ -113,7 +113,7 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
 
         <CardActionArea onClick={() => onClick?.(bp.blueprint_id, bp.blueprint_code)} sx={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "stretch", justifyContent: "flex-start" }}>
           <CardContent sx={{ p: 1.5, pb: 0, flex: 1 }}>
-            <Box sx={{ display: "flex", gap: 1, mb: 1, pr: 3 }}>
+            <Box sx={{ display: "flex", gap: 0.75, mb: 1, pr: 3 }}>
               <GameItemAvatar name={bp.output_item_name} iconUrl={bp.output_item_icon} size={32} useCommodityColor={false} sx={{ bgcolor: getItemCategoryColor(bp.item_category) }} />
               <Box sx={{ minWidth: 0 }}>
                 <Typography variant="body2" fontWeight={600} noWrap title={bp.output_item_name}>
@@ -129,7 +129,7 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
             {ings.length > 0 && (
               <Stack spacing={0.25} sx={{ mb: 0.5 }}>
                 {ings.slice(0, 4).map((ing, i) => (
-                  <Box key={i} sx={{ display: "flex", gap: 0.5, alignItems: "center" }}>
+                  <Box key={i} sx={{ display: "flex", gap: 0.25, alignItems: "center" }}>
                     <GameItemAvatar name={ing.name} iconUrl={ing.icon_url} subType={ing.sub_type} size={16} />
                     <Typography variant="caption" noWrap sx={{ flex: 1 }}>{ing.name}</Typography>
                     <Typography variant="caption" color="text.secondary">{ing.quantity_required.toFixed(2)} SCU</Typography>
