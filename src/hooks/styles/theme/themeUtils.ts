@@ -19,7 +19,9 @@ export const bannerFadeGradient = (theme: Theme) =>
  * Used on landing page and its skeleton.
  */
 export const radialGlowGradient = (theme: Theme) =>
-  `radial-gradient(at 100% 0%, ${theme.palette.primary.main}80 0px, transparent 60%),radial-gradient(at 0% 0%, ${theme.palette.secondary.main}80 0px, transparent 60%)`
+  theme.palette.mode === "light"
+    ? "none"
+    : `radial-gradient(at 100% 0%, ${theme.palette.primary.main}80 0px, transparent 60%),radial-gradient(at 0% 0%, ${theme.palette.secondary.main}80 0px, transparent 60%)`
 
 /**
  * Navbar elevation shadow — uses the theme’s standard MUI shadow scale (same
