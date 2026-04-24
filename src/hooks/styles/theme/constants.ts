@@ -19,6 +19,7 @@ const defaultBorderRadius: NonNullable<ExtendedThemeOptions["borderRadius"]> = {
   image: 0.375,
   button: 1,
   input: 0.5,
+  chip: 0.5,
   minimal: 0,
 }
 

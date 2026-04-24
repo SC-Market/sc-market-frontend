@@ -73,6 +73,16 @@ export function getBaseComponentOverrides(): Components<
         root: {},
       },
     },
+    MuiChip: {
+      styleOverrides: {
+        root: ({ theme }) => {
+          const extTheme = theme as ExtendedTheme
+          return {
+            borderRadius: theme.spacing(extTheme.borderRadius.chip),
+          }
+        },
+      },
+    },
     MuiDivider: {
       styleOverrides: {
         light: {

@@ -91,6 +91,7 @@ const COLOR_FIELDS: ColorField[] = [
 const BORDER_RADIUS_FIELDS = [
   { key: "topLevel", labelKey: "theme.borderRadiusTopLevel", fallback: "Cards", path: ["borderRadius", "topLevel"] },
   { key: "button", labelKey: "theme.borderRadiusButton", fallback: "Buttons", path: ["borderRadius", "button"] },
+  { key: "chip", labelKey: "theme.borderRadiusChip", fallback: "Chips", path: ["borderRadius", "chip"] },
   { key: "image", labelKey: "theme.borderRadiusImage", fallback: "Images", path: ["borderRadius", "image"] },
 ]
 
