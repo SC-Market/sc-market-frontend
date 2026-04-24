@@ -1,5 +1,5 @@
 import { useEffect } from "react"
-import { useGetOfferSessionByIDQuery } from "../../../store/offer"
+import { useGetOfferSessionByIDQuery } from "../api/offerApi"
 import {
   useGetNotificationsQuery,
   useNotificationDeleteMutation,

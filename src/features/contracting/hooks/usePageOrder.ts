@@ -1,6 +1,6 @@
 import { useGetOrderByIdQuery } from "../../orders/api/ordersApi"
 import { useGetChatByOrderIDQuery } from "../../chats"
-import { useGetOfferSessionByIDQuery } from "../../../store/offer"
+import { useGetOfferSessionByIDQuery } from "../../offers/api/offerApi"
 import {
   useGetNotificationsQuery,
   useNotificationDeleteMutation,

@@ -420,13 +420,13 @@ export function MarkdownEditor(props: {
           <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}>
             <ButtonGroup
               size="small"
-              sx={{ color: "inherit" }}
+              sx={{ color: "text.primary" }}
               color={"primary"}
             >
               {buttons.slice(0, 5).map((rep) => (
                 <Button
                   key={rep[0]}
-                  sx={{ color: "inherit", minWidth: 32 }}
+                  sx={{ color: "text.primary", minWidth: 32 }}
                   onClick={() => wrapText(rep[0])}
                   title={`Format as ${rep[0]}`}
                 >
@@ -436,13 +436,13 @@ export function MarkdownEditor(props: {
             </ButtonGroup>
             <ButtonGroup
               size="small"
-              sx={{ color: "inherit" }}
+              sx={{ color: "text.primary" }}
               color={"primary"}
             >
               {buttons.slice(5, 8).map((rep) => (
                 <Button
                   key={rep[0]}
-                  sx={{ color: "inherit", minWidth: 32 }}
+                  sx={{ color: "text.primary", minWidth: 32 }}
                   onClick={() => wrapText(rep[0])}
                   title={`Format as ${rep[0]}`}
                 >
@@ -452,13 +452,13 @@ export function MarkdownEditor(props: {
             </ButtonGroup>
             <ButtonGroup
               size="small"
-              sx={{ color: "inherit" }}
+              sx={{ color: "text.primary" }}
               color={"primary"}
             >
               {buttons.slice(8).map((rep) => (
                 <Button
                   key={rep[0]}
-                  sx={{ color: "inherit", minWidth: 32 }}
+                  sx={{ color: "text.primary", minWidth: 32 }}
                   onClick={() => wrapText(rep[0])}
                   title={`Format as ${rep[0]}`}
                 >

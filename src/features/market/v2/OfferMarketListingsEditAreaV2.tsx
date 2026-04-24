@@ -25,7 +25,7 @@ import { TrashCan } from "mdi-material-ui"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
-import { OfferSession } from "../../../store/offer"
+import { OfferSession } from "../../offers/api/offerApi"
 import {
   useSearchListingsQuery,
   ListingSearchResult,
