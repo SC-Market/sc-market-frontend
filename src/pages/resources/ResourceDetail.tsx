@@ -164,8 +164,7 @@ export function ResourceDetail() {
               <Table size="small">
                 <TableHead>
                   <TableRow>
-                    <TableCell>{t("resources.blueprint", "Blueprint")}</TableCell>
-                    <TableCell>{t("resources.outputItem", "Output")}</TableCell>
+                    <TableCell>{t("resources.craftedItem", "Crafted Item")}</TableCell>
                     <TableCell align="right">{t("resources.qtyRequired", "Qty Required")}</TableCell>
                     <TableCell align="right">{t("resources.minTier", "Min Tier")}</TableCell>
                   </TableRow>
@@ -178,8 +177,7 @@ export function ResourceDetail() {
                       sx={{ cursor: "pointer" }}
                       onClick={() => navigate(`/blueprints/${bp.blueprint_name || bp.blueprint_id}`)}
                     >
-                      <TableCell>{bp.blueprint_name}</TableCell>
-                      <TableCell>{bp.output_item_name}</TableCell>
+                      <TableCell>{bp.output_item_name || bp.blueprint_name}</TableCell>
                       <TableCell align="right">{bp.quantity_required}</TableCell>
                       <TableCell align="right">
                         {bp.min_quality_tier ? `Tier ${bp.min_quality_tier}` : "—"}

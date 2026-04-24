@@ -369,7 +369,7 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
         feature_flag: "crafting",
       },
       {
-        text: "sidebar.gameData.wishlists",
+        text: "Shopping Lists",
         icon: <ChecklistRounded />,
         tab_key: "wishlists",
         to: "/wishlists",
