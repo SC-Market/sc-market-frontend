@@ -1,4 +1,4 @@
-import { useGetNotificationsQuery } from "../../../store/notification"
+import { useGetNotificationsQuery } from "../../notifications/api/notificationApi"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 
 /**

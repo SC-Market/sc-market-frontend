@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next"
 import {
   useGetServicesContractorQuery,
   useGetServicesQuery,
-} from "../../../store/services"
+} from "../api/servicesApi"
 import { EmptyListings } from "../../../components/empty-states"
 import { HorizontalServiceListings } from "./HorizontalServiceListings"
 import { RecentServicesSkeleton } from "./RecentServicesSkeleton"

@@ -11,7 +11,7 @@ import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import {
   useGetPublicServicesQuery,
   ServicesQueryParams,
-} from "../../../store/services"
+} from "../api/servicesApi"
 import { ServiceListing } from "./ServiceListing"
 
 export function ServiceListings(props: { user?: string; contractor?: string }) {

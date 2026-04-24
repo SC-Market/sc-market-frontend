@@ -4,9 +4,9 @@ import { useTranslation } from "react-i18next"
 import {
   RecruitingPost,
   useRecruitingCommentOnPostMutation,
-} from "../../../store/recruiting"
+} from "../api/recruitingApi"
 import { CommentTree } from "../../../views/comments/CommentTree"
-import { Comment } from "../../../store/recruiting"
+import { Comment } from "../api/recruitingApi"
 
 interface PostCommentAreaProps {
   post: RecruitingPost

@@ -1,7 +1,7 @@
 import {
   useRecruitingGetAllPostsQuery,
   useRecruitingGetPostByOrgQuery,
-} from "../../../store/recruiting"
+} from "../api/recruitingApi"
 import { RecruitingSearchState } from "../../../hooks/recruiting/RecruitingSearch"
 
 interface UsePageRecruitingParams {

@@ -1,4 +1,4 @@
-import { useGetPublicServicesQuery } from "../../../store/services"
+import { useGetPublicServicesQuery } from "../../services/api/servicesApi"
 
 interface UsePageServicesResult {
   data: ReturnType<typeof useGetPublicServicesQuery>["data"]

@@ -4,7 +4,7 @@ import { useGetOfferSessionByIDQuery } from "../../offers/api/offerApi"
 import {
   useGetNotificationsQuery,
   useNotificationDeleteMutation,
-} from "../../../store/notification"
+} from "../../notifications/api/notificationApi"
 import { useEffect } from "react"
 
 export interface UsePageOrderResult {

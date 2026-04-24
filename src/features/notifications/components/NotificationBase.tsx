@@ -22,7 +22,7 @@ import { getRelativeTime } from "../../../util/time"
 import {
   useNotificationDeleteMutation,
   useNotificationUpdateMutation,
-} from "../../../store/notification"
+} from "../api/notificationApi"
 import { useTranslation } from "react-i18next"
 import { useCallback, useMemo } from "react"
 import { LongPressMenu } from "../../../components/gestures"

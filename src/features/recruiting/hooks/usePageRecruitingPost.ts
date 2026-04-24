@@ -1,7 +1,7 @@
 import {
   useRecruitingGetPostByIDQuery,
   useRecruitingGetPostCommentsByIDQuery,
-} from "../../../store/recruiting"
+} from "../api/recruitingApi"
 
 interface UsePageRecruitingPostResult {
   data:
