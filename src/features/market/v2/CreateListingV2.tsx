@@ -342,6 +342,15 @@ export function CreateListingV2() {
             </Grid>
           )}
 
+          {/* Org context banner */}
+          <Grid item xs={12}>
+            <Alert severity="info" icon={false}>
+              {currentOrg
+                ? t("CreateListingV2.creatingForOrg", "Creating listing on behalf of {{orgName}}", { orgName: currentOrg.name })
+                : t("CreateListingV2.creatingAsUser", "Creating listing as {{username}}", { username: profile?.display_name || profile?.username || "" })}
+            </Alert>
+          </Grid>
+
           {/* About Section */}
           <FormPaper title={t("CreateListingV2.about", "About")}>
             {/* Game Item Selection */}
