@@ -1,12 +1,12 @@
 /**
  * OfferMarketListingsV2Items — displays V2 market listing items in an offer.
- * Shows listing title, quantity, variant details (quality, source), and price.
+ * Shows listing photo, title, variant details, quantity, and price.
  */
 
 import React from "react"
 import {
+  Avatar,
   Grid,
-  Paper,
   Stack,
   Typography,
   Chip,
@@ -16,29 +16,19 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material"
+import { InventoryRounded } from "@mui/icons-material"
 import { Link } from "react-router-dom"
 import { formatPrice } from "../../util/formatPrice"
 import { Section } from "../../components/paper/Section"
+import type { OfferMarketListingV2 } from "../../store/api/v2/market"
 
-interface V2MarketListing {
-  listing_id: string
-  title: string
-  price: number
-  quantity: number
-  variants: Array<{
-    variant_id: string
-    quantity: number
-    price_per_unit: number
-    attributes: Record<string, unknown>
-    display_name: string
-    short_name: string
-  }>
-}
-
-export function OfferMarketListingsV2Items({ items }: { items: V2MarketListing[] }) {
+export function OfferMarketListingsV2Items({ items }: { items: OfferMarketListingV2[] }) {
   if (!items.length) return null
 
-  const total = items.reduce((s, i) => s + i.variants.reduce((vs, v) => vs + v.price_per_unit * v.quantity, 0), 0)
+  const total = items.reduce(
+    (s, i) => s + i.v2_variants.reduce((vs, v) => vs + v.price_per_unit * v.quantity, 0),
+    0,
+  )
 
   return (
     <Section xs={12} title="Order Items">
@@ -55,14 +45,35 @@ export function OfferMarketListingsV2Items({ items }: { items: V2MarketListing[]
           </TableHead>
           <TableBody>
             {items.flatMap((item) =>
-              item.variants.map((v) => (
-                <TableRow key={v.variant_id} hover sx={{ cursor: "pointer" }}
-                  component={Link} to={`/market/${item.listing_id}`} style={{ textDecoration: "none", color: "inherit" }}>
+              item.v2_variants.map((v) => (
+                <TableRow
+                  key={v.variant_id}
+                  hover
+                  sx={{ cursor: "pointer", textDecoration: "none", color: "inherit" }}
+                  component={Link}
+                  to={`/market/${item.listing_id}`}
+                >
                   <TableCell>
-                    <Typography variant="body2" fontWeight={600}>{item.title}</Typography>
+                    <Stack direction="row" spacing={1} alignItems="center">
+                      <Avatar
+                        src={item.photo || undefined}
+                        variant="rounded"
+                        sx={{ width: 32, height: 32, borderRadius: 1 }}
+                      >
+                        <InventoryRounded fontSize="small" />
+                      </Avatar>
+                      <Typography variant="body2" fontWeight={600}>
+                        {item.title}
+                      </Typography>
+                    </Stack>
                   </TableCell>
                   <TableCell>
-                    <Chip label={v.display_name || v.short_name} size="small" variant="outlined" sx={{ height: 20, fontSize: "0.7rem" }} />
+                    <Chip
+                      label={v.display_name || v.short_name}
+                      size="small"
+                      variant="outlined"
+                      sx={{ height: 20, fontSize: "0.7rem" }}
+                    />
                   </TableCell>
                   <TableCell align="right">{v.quantity}</TableCell>
                   <TableCell align="right">{formatPrice(v.price_per_unit)}</TableCell>
@@ -72,7 +83,7 @@ export function OfferMarketListingsV2Items({ items }: { items: V2MarketListing[]
                     </Typography>
                   </TableCell>
                 </TableRow>
-              ))
+              )),
             )}
             <TableRow>
               <TableCell colSpan={4} align="right">

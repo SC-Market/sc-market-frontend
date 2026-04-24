@@ -2301,6 +2301,8 @@ export type OrderItemDetail = {
   listing_id: string
   /** UUID of the listing item */
   item_id: string
+  /** Listing title */
+  listing_title: string
   /** Variant details with quality attributes */
   variant: OrderVariantDetail
   /** Quantity purchased */
@@ -2520,6 +2522,8 @@ export type OfferMarketListingV2 = {
   quantity: number
   title: string
   price: number
+  /** First photo URL */
+  photo?: string
   /** V2 variant items for this listing (empty if no V2 data) */
   v2_variants: OfferVariantItem[]
 }
@@ -2556,6 +2560,7 @@ export type GetOfferSessionV2Response = {
   status: string
   created_at: string
   order_id?: string
+  contract_id?: string | null
   discord_thread_id?: string | null
   discord_server_id?: string | null
   discord_invite?: string | null
@@ -2570,6 +2575,7 @@ export type OfferSessionV2 = {
   status: string
   created_at: string
   order_id?: string
+  contract_id?: string | null
   discord_thread_id?: string | null
   discord_server_id?: string | null
   discord_invite?: string | null
