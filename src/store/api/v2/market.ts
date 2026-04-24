@@ -2459,15 +2459,53 @@ export type OrdersByListingResponse = {
   orders: ListingOrderSummary[]
   offers: ListingOfferSummary[]
 }
-export type UserSummary = {
-  username: string
-  display_name?: string
-  avatar?: string | null
+export type Rating = {
+  avg_rating: number
+  rating_count: number
+  streak: number
+  total_rating: number
+  total_orders?: number
+  response_rate?: number
+  total_assignments?: number
 }
-export type OrgSummary = {
+export type BadgeMetadata = {
+  avg_rating: number
+  rating_count: number
+  rating_streak: number
+  total_orders: number
+  fulfilled_orders: number
+  total_assignments: number
+  response_rate: number
+  total_rating: number
+  orders_last_30_days: number
+  orders_last_90_days: number
+  avg_completion_time_hours: number | null
+  account_age_months: number
+  account_created_at: string | null
+  donor_duration_months: number | null
+  calculated_at: string
+}
+export type BadgeData = {
+  badge_ids: string[]
+  metadata?: BadgeMetadata
+}
+export type MinimalUser = {
+  username: string
+  avatar: string
+  display_name: string
+  rating: Rating
+  badges?: BadgeData | null
+  last_seen?: string
+  in_game?: boolean
+}
+export type MinimalContractor = {
   spectrum_id: string
   name: string
-  avatar?: string | null
+  avatar: string
+  rating: Rating
+  badges?: BadgeData | null
+  last_seen?: string
+  members_online?: number
 }
 export type OfferVariantItem = {
   variant_id: string
@@ -2494,36 +2532,52 @@ export type OfferV2 = {
   payment_type: string
   status: string
   created_at: string
+  collateral?: number
   /** Username of the user who created this offer */
   actor_username: string
-  /** V1 market listings (always present) */
   market_listings: OfferMarketListingV2[]
   service?: {
     title: string
     service_id: string
   } | null
 }
+export type DbAvailabilityEntry = {
+  contractor_id: string | null
+  user_id: string
+  start: number
+  finish: number
+}
+export type OfferAvailability = {
+  customer: DbAvailabilityEntry[] | null
+  assigned: DbAvailabilityEntry[] | null
+}
 export type GetOfferSessionV2Response = {
   session_id: string
   status: string
   created_at: string
   order_id?: string
+  discord_thread_id?: string | null
+  discord_server_id?: string | null
   discord_invite?: string | null
-  customer: UserSummary
-  assigned_to: UserSummary | null
-  contractor: OrgSummary | null
+  customer: MinimalUser
+  assigned_to: MinimalUser | null
+  contractor: MinimalContractor | null
   offers: OfferV2[]
+  availability?: OfferAvailability | null
 }
 export type OfferSessionV2 = {
   session_id: string
   status: string
   created_at: string
   order_id?: string
+  discord_thread_id?: string | null
+  discord_server_id?: string | null
   discord_invite?: string | null
-  customer: UserSummary
-  assigned_to: UserSummary | null
-  contractor: OrgSummary | null
+  customer: MinimalUser
+  assigned_to: MinimalUser | null
+  contractor: MinimalContractor | null
   offers: OfferV2[]
+  availability?: OfferAvailability | null
 }
 export type SearchOffersV2Response = {
   offers: OfferSessionV2[]
