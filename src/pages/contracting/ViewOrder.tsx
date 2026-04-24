@@ -84,8 +84,8 @@ export function ViewOrder() {
     [order, profile],
   )
   const amContractor = useMemo(
-    () => !amCustomer && currentOrg?.spectrum_id === order?.contractor,
-    [currentOrg?.spectrum_id, order?.contractor, amCustomer],
+    () => currentOrg?.spectrum_id === order?.contractor,
+    [currentOrg?.spectrum_id, order?.contractor],
   )
   const amRelated = useMemo(
     () => amCustomer || amAssigned || amContractor,

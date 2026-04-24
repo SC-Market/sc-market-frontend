@@ -20,6 +20,11 @@ import { store } from "../../../store/store"
 import type { MinimalUser } from "../../../datatypes/User"
 
 const statusTextToKey: Record<string, string> = {
+  "Waiting for Seller": "waitingSeller",
+  "Waiting for Customer": "waitingCustomer",
+  Accepted: "accepted",
+  Rejected: "rejected",
+  // Also map API-style values for robustness
   "to-seller": "waitingSeller",
   "to-customer": "waitingCustomer",
   accepted: "accepted",
@@ -86,11 +91,15 @@ export function useOfferDetails(session: OfferSession) {
 
   const showAccept = useMemo(() => {
     if (["rejected", "accepted"].includes(statusKey)) return false
-    if (session.contractor && org?.spectrum_id === session.contractor.spectrum_id) return statusKey === "waitingSeller"
-    if (session.assigned_to && profile?.username === session.assigned_to.username) return statusKey === "waitingSeller"
+    if (statusKey === "waitingSeller") {
+      if (session.contractor && org?.spectrum_id === session.contractor.spectrum_id) return true
+      if (session.assigned_to && profile?.username === session.assigned_to.username) return true
+      // Fallback: if user is a manager of the contractor org
+      if (amContractorManager) return true
+    }
     if (profile?.username === session.customer.username) return statusKey === "waitingCustomer"
     return false
-  }, [profile, org, session, statusKey])
+  }, [profile, org, session, statusKey, amContractorManager])
 
   const showCancel = !showAccept && statusKey !== "rejected" && statusKey !== "accepted"
 
