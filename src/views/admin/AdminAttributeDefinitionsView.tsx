@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import { useTranslation } from "react-i18next"
 import {
   Typography,
@@ -18,307 +18,53 @@ import {
   MenuItem,
   Autocomplete,
 } from "@mui/material"
-import {
-  useGetAttributeDefinitionsQuery,
-  useCreateAttributeDefinitionMutation,
-  useUpdateAttributeDefinitionMutation,
-  useDeleteAttributeDefinitionMutation,
-  AttributeDefinition,
-  CreateAttributeDefinitionPayload,
-  UpdateAttributeDefinitionPayload,
-} from "../../store/api/attributes"
+import type { AttributeDefinition } from "../../store/api/attributes"
 import { ThemedDataGrid } from "../../components/grid/ThemedDataGrid"
 import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { AdminIcons } from "../../components/icons"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { useAdminAttributeDefinitions } from "../../features/admin/hooks/useAdminAttributeDefinitions"
 
 export function AdminAttributeDefinitionsView() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
-  const [selectedDefinition, setSelectedDefinition] =
-    useState<AttributeDefinition | null>(null)
 
   const {
-    data: definitionsData,
-    isLoading,
-    error,
-  } = useGetAttributeDefinitionsQuery({ include_hidden: true })
-
-  const [createDefinition, { isLoading: isCreating }] =
-    useCreateAttributeDefinitionMutation()
-  const [updateDefinition, { isLoading: isUpdating }] =
-    useUpdateAttributeDefinitionMutation()
-  const [deleteDefinition, { isLoading: isDeleting }] =
-    useDeleteAttributeDefinitionMutation()
-
-  const issueAlert = useAlertHook()
-
-  // Form state
-  const [formData, setFormData] = useState<CreateAttributeDefinitionPayload>({
-    attribute_name: "",
-    display_name: "",
-    attribute_type: "select",
-    allowed_values: null,
-    applicable_item_types: null,
-    display_order: 0,
-    show_in_filters: false,
-  })
-
-  const [allowedValuesInput, setAllowedValuesInput] = useState<string>("")
-  const [cascadeDelete, setCascadeDelete] = useState(false)
-
-  const handleOpenCreateModal = () => {
-    setFormData({
-      attribute_name: "",
-      display_name: "",
-      attribute_type: "select",
-      allowed_values: null,
-      applicable_item_types: null,
-      display_order: 0,
-    })
-    setAllowedValuesInput("")
-    setIsCreateModalOpen(true)
-  }
-
-  const handleOpenEditModal = (definition: AttributeDefinition) => {
-    setSelectedDefinition(definition)
-    setFormData({
-      attribute_name: definition.attribute_name,
-      display_name: definition.display_name,
-      attribute_type: definition.attribute_type,
-      allowed_values: definition.allowed_values,
-      applicable_item_types: definition.applicable_item_types,
-      display_order: definition.display_order,
-      show_in_filters: definition.show_in_filters,
-    })
-    setAllowedValuesInput(
-      definition.allowed_values ? definition.allowed_values.join(", ") : "",
-    )
-    setIsEditModalOpen(true)
-  }
-
-  const handleOpenDeleteModal = (definition: AttributeDefinition) => {
-    setSelectedDefinition(definition)
-    setCascadeDelete(false)
-    setIsDeleteModalOpen(true)
-  }
-
-  const handleCloseModals = () => {
-    setIsCreateModalOpen(false)
-    setIsEditModalOpen(false)
-    setIsDeleteModalOpen(false)
-    setSelectedDefinition(null)
-    setFormData({
-      attribute_name: "",
-      display_name: "",
-      attribute_type: "select",
-      allowed_values: null,
-      applicable_item_types: null,
-      display_order: 0,
-    })
-    setAllowedValuesInput("")
-    setCascadeDelete(false)
-  }
-
-  const parseAllowedValues = (input: string): string[] | null => {
-    if (!input.trim()) return null
-    return input
-      .split(",")
-      .map((v) => v.trim())
-      .filter((v) => v.length > 0)
-  }
-
-  const handleCreateDefinition = () => {
-    const payload: CreateAttributeDefinitionPayload = {
-      ...formData,
-      allowed_values: parseAllowedValues(allowedValuesInput),
-    }
-
-    createDefinition(payload)
-      .unwrap()
-      .then(() => {
-        issueAlert({
-          message: t(
-            "admin.attributes.created",
-            "Attribute definition created successfully",
-          ),
-          severity: "success",
-        })
-        handleCloseModals()
-      })
-      .catch((error) => {
-        issueAlert(error)
-      })
-  }
-
-  const handleUpdateDefinition = () => {
-    if (!selectedDefinition) return
-
-    const payload: UpdateAttributeDefinitionPayload = {
-      display_name: formData.display_name,
-      attribute_type: formData.attribute_type,
-      allowed_values: parseAllowedValues(allowedValuesInput),
-      applicable_item_types: formData.applicable_item_types,
-      display_order: formData.display_order,
-    }
-
-    updateDefinition({
-      name: selectedDefinition.attribute_name,
-      data: payload,
-    })
-      .unwrap()
-      .then(() => {
-        issueAlert({
-          message: t(
-            "admin.attributes.updated",
-            "Attribute definition updated successfully",
-          ),
-          severity: "success",
-        })
-        handleCloseModals()
-      })
-      .catch((error) => {
-        issueAlert(error)
-      })
-  }
-
-  const handleDeleteDefinition = () => {
-    if (!selectedDefinition) return
-
-    deleteDefinition({
-      name: selectedDefinition.attribute_name,
-      cascade: cascadeDelete,
-    })
-      .unwrap()
-      .then(() => {
-        issueAlert({
-          message: t(
-            "admin.attributes.deleted",
-            "Attribute definition deleted successfully",
-          ),
-          severity: "success",
-        })
-        handleCloseModals()
-      })
-      .catch((error) => {
-        issueAlert(error)
-      })
-  }
+    definitionsData, isLoading, error, rows,
+    selectedDefinition,
+    isCreateModalOpen, isEditModalOpen, isDeleteModalOpen,
+    handleOpenCreateModal, handleOpenEditModal, handleOpenDeleteModal, handleCloseModals,
+    formData, setFormData,
+    allowedValuesInput, setAllowedValuesInput,
+    cascadeDelete, setCascadeDelete,
+    isCreating, isUpdating, isDeleting,
+    handleCreateDefinition, handleUpdateDefinition, handleDeleteDefinition,
+  } = useAdminAttributeDefinitions()
 
   const columns: GridColDef[] = [
-    {
-      field: "attribute_name",
-      headerName: t("admin.attributes.attributeName", "Attribute Name"),
-      width: 150,
-      display: "flex",
-      flex: 1,
-    },
-    {
-      field: "display_name",
-      headerName: t("admin.attributes.displayName", "Display Name"),
-      width: 150,
-      display: "flex",
-      flex: 1,
-    },
-    {
-      field: "attribute_type",
-      headerName: t("admin.attributes.field.type", "Type"),
-      width: 120,
-      display: "flex",
-      flex: 1,
-      renderCell: (params: GridRenderCellParams) => (
-        <Chip
-          label={params.value}
-          color="primary"
-          variant="outlined"
-          size="small"
-        />
-      ),
-    },
-    {
-      field: "allowed_values",
-      headerName: t("admin.attributes.allowedValues", "Allowed Values"),
-      width: 200,
-      display: "flex",
-      flex: 1,
-      renderCell: (params: GridRenderCellParams) =>
-        params.value ? (
-          <Typography variant="body2" noWrap>
-            {params.value.join(", ")}
-          </Typography>
-        ) : (
-          <Typography variant="body2" color="text.secondary">
-            {t("admin.attributes.anyValue", "Any value")}
-          </Typography>
-        ),
-    },
-    {
-      field: "applicable_item_types",
-      headerName: t(
-        "admin.attributes.field.applicableTypes",
-        "Applicable Types",
-      ),
-      width: 200,
-      display: "flex",
-      flex: 1,
-      renderCell: (params: GridRenderCellParams) =>
-        params.value ? (
-          <Typography variant="body2" noWrap>
-            {params.value.join(", ")}
-          </Typography>
-        ) : (
-          <Typography variant="body2" color="text.secondary">
-            {t("admin.attributes.allTypes", "All types")}
-          </Typography>
-        ),
-    },
-    {
-      field: "display_order",
-      headerName: t("admin.attributes.field.order", "Order"),
-      width: 80,
-      display: "flex",
-      flex: 1,
-    },
-    {
-      field: "actions",
-      headerName: t("admin.attributes.actions", "Actions"),
-      width: 150,
-      display: "flex",
-      flex: 1,
+    { field: "attribute_name", headerName: t("admin.attributes.attributeName", "Attribute Name"), width: 150, display: "flex" as const, flex: 1 },
+    { field: "display_name", headerName: t("admin.attributes.displayName", "Display Name"), width: 150, display: "flex" as const, flex: 1 },
+    { field: "attribute_type", headerName: t("admin.attributes.field.type", "Type"), width: 120, display: "flex" as const, flex: 1,
+      renderCell: (params: GridRenderCellParams) => <Chip label={params.value} color="primary" variant="outlined" size="small" /> },
+    { field: "allowed_values", headerName: t("admin.attributes.allowedValues", "Allowed Values"), width: 200, display: "flex" as const, flex: 1,
+      renderCell: (params: GridRenderCellParams) => params.value
+        ? <Typography variant="body2" noWrap>{params.value.join(", ")}</Typography>
+        : <Typography variant="body2" color="text.secondary">{t("admin.attributes.anyValue", "Any value")}</Typography> },
+    { field: "applicable_item_types", headerName: t("admin.attributes.field.applicableTypes", "Applicable Types"), width: 200, display: "flex" as const, flex: 1,
+      renderCell: (params: GridRenderCellParams) => params.value
+        ? <Typography variant="body2" noWrap>{params.value.join(", ")}</Typography>
+        : <Typography variant="body2" color="text.secondary">{t("admin.attributes.allTypes", "All types")}</Typography> },
+    { field: "display_order", headerName: t("admin.attributes.field.order", "Order"), width: 80, display: "flex" as const, flex: 1 },
+    { field: "actions", headerName: t("admin.attributes.actions", "Actions"), width: 150, display: "flex" as const, flex: 1,
       renderCell: (params: GridRenderCellParams) => (
         <Box>
-          <IconButton
-            size="small"
-            onClick={() => handleOpenEditModal(params.row)}
-            color="primary"
-          >
-            <AdminIcons.Edit />
-          </IconButton>
-          <IconButton
-            size="small"
-            onClick={() => handleOpenDeleteModal(params.row)}
-            color="error"
-          >
-            <AdminIcons.Delete />
-          </IconButton>
+          <IconButton size="small" onClick={() => handleOpenEditModal(params.row)} color="primary"><AdminIcons.Edit /></IconButton>
+          <IconButton size="small" onClick={() => handleOpenDeleteModal(params.row)} color="error"><AdminIcons.Delete /></IconButton>
         </Box>
-      ),
-    },
+      ) },
   ]
-
-  const rows = React.useMemo(() => {
-    if (!definitionsData?.definitions) return []
-    return definitionsData.definitions.map((def) => ({
-      ...def,
-      id: def.attribute_name,
-    }))
-  }, [definitionsData?.definitions])
 
   return (
     <>

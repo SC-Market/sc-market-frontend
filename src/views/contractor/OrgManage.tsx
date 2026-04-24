@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import {
   Autocomplete,
   AutocompleteRenderInputParams,
@@ -26,10 +26,10 @@ import CreateIcon from "@mui/icons-material/CreateRounded"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import {
-  ContractorKindIconKey,
   contractorKindIcons,
   contractorKindIconsKeys,
 } from "./ContractorList"
+import type { ContractorKindIconKey } from "../../features/contractor/domain/types"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import { Contractor } from "../../features/contractor/domain/types"
@@ -40,18 +40,13 @@ import {
   StarRounded,
 } from "@mui/icons-material"
 import {
-  useContractorUploadAvatarMutation,
-  useContractorUploadBannerMutation,
-  useUpdateContractorMutation,
-} from "../../features/contractor/api/contractorApi"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
-import {
   MarkdownEditor,
   MarkdownRender,
 } from "../../components/markdown/Markdown.lazy"
 import { external_resource_regex } from "../../features/profile"
 import { ListingSellerRating } from "../../components/rating/ListingRating"
 import { useTranslation } from "react-i18next"
+import { useOrgDetailEdit } from "../../features/contractor/hooks/useOrgDetailEdit"
 
 export function OrgDetailEdit() {
   const [contractor] = useCurrentOrg()
@@ -79,133 +74,16 @@ export function OrgDetailEditForm(props: { contractor: Contractor }) {
   const theme = useTheme<ExtendedTheme>()
   const { contractor } = props
   const { t } = useTranslation()
-  const issueAlert = useAlertHook()
 
-  const [editingName, setEditingName] = useState(false)
-  const [editingDesc, setEditingDesc] = useState(false)
-  const [editingTags, setEditingTags] = useState(false)
-
-  const [newName, setNewName] = useState(contractor?.name || "")
-  const [newDesc, setNewDesc] = useState(contractor?.description || "")
-  const [newTags, setNewTags] = useState(contractor?.fields || [])
-
-  const [showAvatarButton, setShowAvatarButton] = useState(false)
-  const [avatarFileInputRef, setAvatarFileInputRef] =
-    useState<HTMLInputElement | null>(null)
-  const [bannerFileInputRef, setBannerFileInputRef] =
-    useState<HTMLInputElement | null>(null)
-
-  const [
-    updateContractor, // This is the mutation trigger
-    { isSuccess }, // This is the destructured mutation result
-  ] = useUpdateContractorMutation()
-
-  const [uploadAvatar, { isLoading: isUploadingAvatar }] =
-    useContractorUploadAvatarMutation()
-
-  const [uploadBanner, { isLoading: isUploadingBanner }] =
-    useContractorUploadBannerMutation()
-
-  async function submitUpdate(data: {
-    description?: string
-    tags?: string[]
-    site_url?: string
-    name?: string
-  }) {
-    const res: { data?: any; error?: any } = await updateContractor({
-      contractor: contractor.spectrum_id,
-      body: data,
-    })
-
-    if (res?.data && !res?.error) {
-      issueAlert({
-        message: t("orgDetailEdit.submitted"),
-        severity: "success",
-      })
-    } else {
-      issueAlert({
-        message: t("orgDetailEdit.failed_submit", {
-          reason: res.error?.error || res.error?.data?.error || res.error || "",
-        }),
-        severity: "error",
-      })
-    }
-    return false
-  }
-
-  function handleAvatarUpload(event: React.ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.[0]
-    if (!file) return
-
-    // Validate file size (1MB limit for avatars)
-    if (file.size > 1 * 1000 * 1000) {
-      issueAlert({
-        message: t("orgDetailEdit.avatar_too_large", {
-          defaultValue: "Avatar must be less than 1MB",
-        }),
-        severity: "error",
-      })
-      return
-    }
-
-    uploadAvatar({
-      contractor: contractor.spectrum_id,
-      file,
-    })
-      .unwrap()
-      .then(() => {
-        issueAlert({
-          message: t("orgDetailEdit.avatar_uploaded", {
-            defaultValue: "Avatar uploaded successfully",
-          }),
-          severity: "success",
-        })
-      })
-      .catch(issueAlert)
-      .finally(() => {
-        // Reset file input
-        if (avatarFileInputRef) {
-          avatarFileInputRef.value = ""
-        }
-      })
-  }
-
-  function handleBannerUpload(event: React.ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.[0]
-    if (!file) return
-
-    // Validate file size (2.5MB limit for banners)
-    if (file.size > 2.5 * 1000 * 1000) {
-      issueAlert({
-        message: t("orgDetailEdit.banner_too_large", {
-          defaultValue: "Banner must be less than 2.5MB",
-        }),
-        severity: "error",
-      })
-      return
-    }
-
-    uploadBanner({
-      contractor: contractor.spectrum_id,
-      file,
-    })
-      .unwrap()
-      .then(() => {
-        issueAlert({
-          message: t("orgDetailEdit.banner_uploaded", {
-            defaultValue: "Banner uploaded successfully",
-          }),
-          severity: "success",
-        })
-      })
-      .catch(issueAlert)
-      .finally(() => {
-        // Reset file input
-        if (bannerFileInputRef) {
-          bannerFileInputRef.value = ""
-        }
-      })
-  }
+  const {
+    editingName, setEditingName, editingDesc, setEditingDesc, editingTags, setEditingTags,
+    newName, setNewName, newDesc, setNewDesc, newTags, setNewTags,
+    showAvatarButton, setShowAvatarButton,
+    avatarFileInputRef, setAvatarFileInputRef,
+    bannerFileInputRef, setBannerFileInputRef,
+    isUploadingAvatar, isUploadingBanner,
+    submitUpdate, handleAvatarUpload, handleBannerUpload,
+  } = useOrgDetailEdit(contractor)
 
   return (
     <React.Fragment>
