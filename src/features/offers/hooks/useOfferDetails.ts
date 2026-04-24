@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
 import throttle from "lodash/throttle"
-import type { OfferSession } from "../domain/types"
+import type { GetOfferSessionV2Response } from "../../../store/api/v2/market"
 import { normalizeOfferStatus, type OfferStatusKey } from "../domain/types"
 import {
   useUpdateOfferStatusMutation,
@@ -20,7 +20,7 @@ import { detectOfferChanges } from "../../../util/offerChanges"
 import { store } from "../../../store/store"
 import type { MinimalUser } from "../../../datatypes/User"
 
-export function useOfferDetails(session: OfferSession) {
+export function useOfferDetails(session: GetOfferSessionV2Response) {
   const { t } = useTranslation()
   const [org] = useCurrentOrg()
   const { data: profile } = useGetUserProfileQuery()
@@ -57,7 +57,7 @@ export function useOfferDetails(session: OfferSession) {
   const retrieve = useMemo(() => throttle((query: string) => fetchOptions(query), 400), [fetchOptions])
   useEffect(() => { retrieve(target) }, [target, retrieve])
 
-  // Mutations
+  // Mutations — use session_id (V2 field name)
   const [assignUser] = useAssignOfferMutation()
   const [unassignUser] = useUnassignOfferMutation()
   const [updateStatus, { isLoading: isUpdatingStatus }] = useUpdateOfferStatusMutation()
@@ -107,36 +107,36 @@ export function useOfferDetails(session: OfferSession) {
 
   const updateStatusCallback = useCallback(
     (status: "accepted" | "rejected" | "cancelled") => {
-      updateStatus({ session_id: session.id, status })
+      updateStatus({ session_id: session.session_id, status })
         .unwrap()
-        .then((result) => { if ((result as any).order_id) navigate(`/contract/${(result as any).order_id}`) })
+        .then((result) => { if ((result as { order_id?: string }).order_id) navigate(`/contract/${(result as { order_id?: string }).order_id}`) })
         .catch((err) => issueAlert(err))
     },
-    [session.id, updateStatus, navigate, issueAlert],
+    [session.session_id, updateStatus, navigate, issueAlert],
   )
 
   const handleAssignSave = useCallback(async () => {
     if (!targetObject) return
-    const res: { data?: any; error?: any } = await assignUser({ session_id: session.id, username: targetObject.username })
+    const res: { data?: unknown; error?: { error?: string; data?: { error?: string } } } = await assignUser({ session_id: session.session_id, username: targetObject.username })
     if (res?.data && !res?.error) {
       issueAlert({ message: t("memberAssignArea.assigned"), severity: "success" })
       setIsEditingAssigned(false); setTarget(""); setTargetObject(null)
     } else {
       issueAlert({ message: `${t("memberAssignArea.failed_assign")} ${res.error?.error || res.error?.data?.error || res.error}`, severity: "error" })
     }
-  }, [assignUser, session.id, issueAlert, targetObject, t])
+  }, [assignUser, session.session_id, issueAlert, targetObject, t])
 
   const handleAssignCancel = useCallback(() => { setIsEditingAssigned(false); setTarget(""); setTargetObject(null) }, [])
 
   const handleUnassign = useCallback(async () => {
-    const res: { data?: any; error?: any } = await unassignUser({ session_id: session.id })
+    const res: { data?: unknown; error?: { error?: string; data?: { error?: string } } } = await unassignUser({ session_id: session.session_id })
     if (res?.data && !res?.error) {
       issueAlert({ message: t("memberAssignArea.unassigned"), severity: "success" })
       setIsEditingAssigned(false)
     } else {
       issueAlert({ message: `${t("memberAssignArea.failed_unassign")} ${res.error?.error || res.error?.data?.error || res.error}`, severity: "error" })
     }
-  }, [unassignUser, session.id, issueAlert, t])
+  }, [unassignUser, session.session_id, issueAlert, t])
 
   return {
     profile, org, issueAlert, publicContract,

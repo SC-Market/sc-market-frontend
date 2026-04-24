@@ -1,4 +1,5 @@
-import { Offer } from "../features/offers/api/offerApi"
+import type { Offer } from "../features/offers/api/offerApi"
+import type { OfferV2 } from "../store/api/v2/market"
 
 export interface OfferChanges {
   costChanged: boolean
@@ -9,9 +10,17 @@ export interface OfferChanges {
   quantityChanges: Map<string, { old: number; new: number }> // listing_id -> quantities
 }
 
+/** Minimal shape needed for change detection — works with both V1 Offer and V2 OfferV2 */
+interface OfferLike {
+  cost: string | number
+  description: string
+  service?: { service_id: string } | null
+  market_listings: Array<{ listing_id: string; quantity: number }>
+}
+
 export function detectOfferChanges(
-  currentOffer: Offer,
-  previousOffer: Offer | undefined,
+  currentOffer: OfferLike,
+  previousOffer: OfferLike | undefined,
 ): OfferChanges | null {
   if (!previousOffer) {
     return null // No previous offer to compare
