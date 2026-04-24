@@ -1,4 +1,4 @@
-import { useGetMyShips } from "../../../store/ships"
+import { useGetMyShips } from "../api/shipsApi"
 
 export interface FleetPageData {
   ships: ReturnType<typeof useGetMyShips>["data"]

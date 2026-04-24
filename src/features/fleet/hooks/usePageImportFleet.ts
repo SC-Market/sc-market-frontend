@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { useImportShipFile } from "../../../store/ships"
+import { useImportShipFile } from "../api/shipsApi"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { useTranslation } from "react-i18next"
 

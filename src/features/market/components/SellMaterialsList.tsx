@@ -51,7 +51,7 @@ import DirectionsCarIcon from "@mui/icons-material/DirectionsCar"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import SearchIcon from "@mui/icons-material/Search"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
-import { useGetCommoditiesQuery } from "../../../store/commodities"
+import { useGetCommoditiesQuery } from "../api/commoditiesApi"
 import LocalOfferIcon from "@mui/icons-material/LocalOffer"
 
 export const kindIcons: { [key: string]: [ReactElement, string] } = {

@@ -43,6 +43,10 @@ const LOWER_IS_BETTER = new Set([
   "weapon_recoil_smoothness",
   "weapon_spread",
   "weight",
+  "gpp_weapon_recoil_kick",
+  "gpp_weapon_recoil_handling",
+  "gpp_weapon_recoil_smoothness",
+  "gpp_weapon_spread",
 ])
 
 export function propertyLabel(prop: string): string {
@@ -61,7 +65,9 @@ export function propertyLabel(prop: string): string {
 
 /** Is this modifier "good"? Accounts for lower-is-better stats. */
 export function isModifierPositive(prop: string, factor: number): boolean {
-  const isLowerBetter = LOWER_IS_BETTER.has(prop.toLowerCase())
+  const lower = prop.toLowerCase()
+  const stripped = lower.replace(/^gpp_armor_/, "").replace(/^gpp_/, "")
+  const isLowerBetter = LOWER_IS_BETTER.has(lower) || LOWER_IS_BETTER.has(stripped)
   return isLowerBetter ? factor < 1 : factor > 1
 }
 
