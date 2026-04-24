@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
 import throttle from "lodash/throttle"
 import type { OfferSession } from "../domain/types"
+import { normalizeOfferStatus, type OfferStatusKey } from "../domain/types"
 import {
   useUpdateOfferStatusMutation,
   useAssignOfferMutation,
@@ -18,25 +19,6 @@ import { has_permission } from "../../contractor/domain/permissions"
 import { detectOfferChanges } from "../../../util/offerChanges"
 import { store } from "../../../store/store"
 import type { MinimalUser } from "../../../datatypes/User"
-
-const statusTextToKey: Record<string, string> = {
-  // Display strings (V1 API)
-  "Waiting for Seller": "waitingSeller",
-  "Waiting for Customer": "waitingCustomer",
-  Accepted: "accepted",
-  Rejected: "rejected",
-  // API-style values (V2 API)
-  "to-seller": "waitingSeller",
-  "to-customer": "waitingCustomer",
-  "to_seller": "waitingSeller",
-  "to_customer": "waitingCustomer",
-  accepted: "accepted",
-  rejected: "rejected",
-  // Additional possible V2 values
-  pending_seller: "waitingSeller",
-  pending_customer: "waitingCustomer",
-  counteroffered: "waitingSeller",
-}
 
 export function useOfferDetails(session: OfferSession) {
   const { t } = useTranslation()
@@ -87,10 +69,10 @@ export function useOfferDetails(session: OfferSession) {
     [org, profile, session],
   )
 
-  const statusKey = statusTextToKey[session.status] || session.status
-  if (!statusTextToKey[session.status]) {
-    console.warn(`[useOfferDetails] Unknown session status: "${session.status}" — showAccept may not work correctly`)
-  }
+  const statusKey: OfferStatusKey = useMemo(
+    () => normalizeOfferStatus(session.status),
+    [session.status],
+  )
 
   const statusColor = useMemo(() => {
     if (statusKey === "waitingSeller") return "warning" as const
@@ -172,4 +154,4 @@ export function useOfferDetails(session: OfferSession) {
   }
 }
 
-export { statusTextToKey }
+export { normalizeOfferStatus }

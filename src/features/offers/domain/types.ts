@@ -3,6 +3,56 @@ import type { MinimalContractor } from "../../contractor/domain/types"
 import type { OrderAvailability, Service } from "../../orders/domain/types"
 import type { UniqueListing } from "../../market"
 
+// ── Offer Status ──
+
+/** Status values as returned by the API (both V1 and V2) */
+export type OfferSessionStatus =
+  | "to-seller"
+  | "to-customer"
+  | "accepted"
+  | "rejected"
+  | "counteroffered"
+
+/** Legacy display strings from V1 API — mapped to OfferSessionStatus for backward compat */
+export type OfferSessionDisplayStatus =
+  | "Waiting for Seller"
+  | "Waiting for Customer"
+  | "Accepted"
+  | "Rejected"
+
+/** Normalized UI keys used for rendering logic (colors, icons, showAccept) */
+export type OfferStatusKey =
+  | "waitingSeller"
+  | "waitingCustomer"
+  | "accepted"
+  | "rejected"
+
+/** Map any status string (API, display, or already-normalized) to a UI key */
+export function normalizeOfferStatus(status: string): OfferStatusKey {
+  switch (status) {
+    case "to-seller":
+    case "Waiting for Seller":
+    case "counteroffered":
+    case "waitingSeller":
+      return "waitingSeller"
+    case "to-customer":
+    case "Waiting for Customer":
+    case "waitingCustomer":
+      return "waitingCustomer"
+    case "accepted":
+    case "Accepted":
+      return "accepted"
+    case "rejected":
+    case "Rejected":
+      return "rejected"
+    default:
+      console.warn(`[normalizeOfferStatus] Unknown offer status: "${status}"`)
+      return "waitingSeller" // Safe default — shows accept button for seller
+  }
+}
+
+// ── Core Entities ──
+
 export interface OfferSessionStub {
   id: string
   contractor: MinimalContractor | null
