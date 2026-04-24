@@ -179,13 +179,19 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
         {data && tab === 0 && (
           <Stack spacing={2}>
             {/* Product Stats */}
-            {Object.keys(itemAttrs).length > 0 && combinedModifiers.size > 0 && (
+            {(() => {
+              if (!Object.keys(itemAttrs).length || !combinedModifiers.size) return null
+              const stats = Array.from(combinedModifiers.entries()).filter(([prop]) => {
+                const baseKey = Object.keys(itemAttrs).find(k => k.toLowerCase().includes(prop.replace(/^gpp_armor_/, "").toLowerCase()))
+                return baseKey && !isNaN(parseFloat(itemAttrs[baseKey]))
+              })
+              if (!stats.length) return null
+              return (
               <Box>
                 <Typography variant="subtitle2" sx={{ mb: 0.5 }}>Product Stats</Typography>
-                {Array.from(combinedModifiers.entries()).map(([prop, modifier]) => {
-                  const baseKey = Object.keys(itemAttrs).find(k => k.toLowerCase().includes(prop.replace(/^gpp_armor_/, "").toLowerCase()))
-                  const baseVal = baseKey ? parseFloat(itemAttrs[baseKey]) : null
-                  if (baseVal === null || isNaN(baseVal)) return null
+                {stats.map(([prop, modifier]) => {
+                  const baseKey = Object.keys(itemAttrs).find(k => k.toLowerCase().includes(prop.replace(/^gpp_armor_/, "").toLowerCase()))!
+                  const baseVal = parseFloat(itemAttrs[baseKey])
                   const modified = baseVal * modifier
                   const pctChange = (modifier - 1) * 100
                   return (
@@ -199,6 +205,8 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
                 })}
                 <Divider sx={{ mt: 1 }} />
               </Box>
+              )
+            })()}
             )}
 
             {/* Missions */}
