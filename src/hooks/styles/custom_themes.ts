@@ -18,6 +18,7 @@ import { REDLINE_theme } from "./themes/REDLINE"
 import { ORIGIN_theme } from "./themes/ORIGIN"
 import { PRINCESS_theme } from "./themes/PRINCESS"
 import { HIGHCON_theme } from "./themes/HIGHCON"
+import { INK_theme } from "./themes/INK"
 
 export const CUSTOM_THEMES = new Map<string, Theme>()
 CUSTOM_THEMES.set("BWINCORP", BWINCORP_theme)
@@ -39,3 +40,4 @@ CUSTOM_THEMES.set("REDLINE", REDLINE_theme)
 CUSTOM_THEMES.set("ORIGIN", ORIGIN_theme)
 CUSTOM_THEMES.set("PRINCESS", PRINCESS_theme)
 CUSTOM_THEMES.set("HIGHCON", HIGHCON_theme)
+CUSTOM_THEMES.set("INK", INK_theme)

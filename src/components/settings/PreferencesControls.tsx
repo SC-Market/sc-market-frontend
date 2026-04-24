@@ -71,8 +71,8 @@ function ThemePresetSwatch({ name, onClick, isActive }: { name: string; onClick:
       <Box
         onClick={onClick}
         sx={{
-          width: 28,
-          height: 28,
+          width: 22,
+          height: 22,
           borderRadius: 0.5,
           cursor: "pointer",
           border: isActive ? "2px solid" : "1px solid",
@@ -161,7 +161,7 @@ export function PreferencesControls() {
               </ToggleButtonGroup>
 
               {/* Cyberbunk-style preset swatches */}
-              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.75 }}>
+              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5, maxWidth: 240 }}>
                 {themeNames.map((name) => (
                   <ThemePresetSwatch
                     key={name}
@@ -289,7 +289,6 @@ export function PreferencesControls() {
                 options={FONT_OPTIONS}
                 getOptionLabel={(o) => o.label}
                 isOptionEqualToValue={(a, b) => a.value === b.value}
-                slotProps={{ popper: { disablePortal: true } }}
                 renderInput={(params) => (
                   <TextField {...params} size="small" placeholder="Select font" />
                 )}
