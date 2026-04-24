@@ -25,10 +25,11 @@ interface Props {
   rewardScope: string
   rewardFaction?: string
   requiredRank?: number
+  minStanding?: string
   isShareable: boolean
 }
 
-export function MissionRankCalculator({ reputationReward, rewardScope, rewardFaction, requiredRank, isShareable }: Props) {
+export function MissionRankCalculator({ reputationReward, rewardScope, rewardFaction, requiredRank, minStanding, isShareable }: Props) {
   const [crewSize, setCrewSize] = useState(1)
 
   const { data, isLoading } = useGetReputationRanksQuery(
@@ -53,14 +54,18 @@ export function MissionRankCalculator({ reputationReward, rewardScope, rewardFac
 
   const displayRanks = useMemo(() => isNegativeRep ? [...ranks].reverse() : ranks, [ranks, isNegativeRep])
 
-  // Find the min rank index based on the required standing threshold
+  // Find the min rank index — match by standing code first, then threshold
   const minRankIndex = useMemo(() => {
+    if (minStanding) {
+      const idx = displayRanks.findIndex((r) => r.standing_code === minStanding)
+      if (idx >= 0) return idx
+    }
     if (requiredRank == null) return 0
     const idx = displayRanks.findIndex((r) => {
       return isNegativeRep ? r.threshold <= requiredRank : r.threshold >= requiredRank
     })
     return idx >= 0 ? idx : 0
-  }, [requiredRank, displayRanks, isNegativeRep])
+  }, [minStanding, requiredRank, displayRanks, isNegativeRep])
 
   if (isLoading) return <Typography variant="body2" color="text.secondary">Loading ranks...</Typography>
   if (!ranks.length) return <Alert severity="info">No rank data available for {scopeDisplayName}</Alert>

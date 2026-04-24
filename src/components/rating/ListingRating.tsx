@@ -175,7 +175,7 @@ export function SellerRatingStars(props: {
   const { user, contractor } = props
   const rating = useMemo(() => {
     const avgRating =
-      user?.rating.avg_rating || contractor?.rating.avg_rating || 0
+      user?.rating?.avg_rating || contractor?.rating?.avg_rating || 0
     // Ratings are stored in 0-5 scale, use directly (no division needed)
     return avgRating
   }, [user, contractor])
