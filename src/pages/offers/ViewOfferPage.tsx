@@ -8,6 +8,7 @@ import { Grid, Skeleton, Tabs, useMediaQuery, useTheme } from "@mui/material"
 import { HapticTab } from "../../components/haptic"
 import { OfferDetailSkeleton } from "../../components/skeletons"
 import { OfferMarketListings } from "../../views/offers/OfferMarketListings"
+import { OfferMarketListingsV2Items } from "../../views/offers/OfferMarketListingsV2Items"
 import { OfferServiceArea } from "../../views/offers/OfferServiceArea"
 import { OrderAvailabilityArea } from "../../views/orders/OrderAvailabilityArea"
 import { useTranslation } from "react-i18next"
@@ -112,11 +113,8 @@ export function ViewOfferPage() {
         const detailsTab = tabIndex++
         const messagesTab = isMobile ? tabIndex++ : -1
         const serviceTab = session.offers[0]?.service ? tabIndex++ : -1
-        const marketListingsTab =
-          session.offers[0]?.market_listings &&
-          session.offers[0].market_listings.length > 0
-            ? tabIndex++
-            : -1
+        const hasItems = (session.offers[0]?.market_listings?.length > 0) || (session.offers[0]?.market_listings_v2?.length > 0)
+        const marketListingsTab = hasItems ? tabIndex++ : -1
         const availabilityTab = session.availability ? tabIndex++ : -1
 
         return (
@@ -148,19 +146,15 @@ export function ViewOfferPage() {
             )}
 
             {/* Market Listings Tab */}
-            {session.offers[0]?.market_listings &&
-              session.offers[0].market_listings.length > 0 &&
-              activeTab === marketListingsTab && (
-                <>
-                  {session ? (
-                    <OfferMarketListings offer={session} />
-                  ) : (
-                    <Grid item xs={12} lg={4}>
-                      <Skeleton width={"100%"} height={400} />
-                    </Grid>
-                  )}
-                </>
-              )}
+            {hasItems && activeTab === marketListingsTab && (
+              <>
+                {session.offers[0]?.market_listings_v2?.length > 0 ? (
+                  <OfferMarketListingsV2Items items={session.offers[0].market_listings_v2} />
+                ) : (
+                  <OfferMarketListings offer={session} />
+                )}
+              </>
+            )}
 
             {/* Availability Tab */}
             {session.availability && activeTab === availabilityTab && (

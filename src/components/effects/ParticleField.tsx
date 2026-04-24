@@ -55,10 +55,15 @@ export function ParticleField() {
       if (paused) { animId = requestAnimationFrame(animate); return }
       const c = hexToRgb(primaryRef.current)
       const bg = hexToRgb(bgRef.current)
-      const dim = isDarkRef.current ? 1 : 0.35
+      const dark = isDarkRef.current
+      const dim = dark ? 1 : 0.35
       const scrollY = window.scrollY * 0.3 // parallax factor
-      ctx.fillStyle = `rgba(${bg.r},${bg.g},${bg.b},0.12)`
-      ctx.fillRect(0, 0, canvas.width, canvas.height)
+      if (dark) {
+        ctx.fillStyle = `rgba(${bg.r},${bg.g},${bg.b},0.12)`
+        ctx.fillRect(0, 0, canvas.width, canvas.height)
+      } else {
+        ctx.clearRect(0, 0, canvas.width, canvas.height)
+      }
 
       for (let i = 0; i < particles.length; i++) {
         const p = particles[i]
