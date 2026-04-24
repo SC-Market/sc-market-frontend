@@ -56,6 +56,8 @@ import { formatCredits, getMissionTypeLabel } from "../../util/missionDisplay"
 import { getMissionIcon, getMissionCategoryColor } from "../../util/gameIcons"
 import { MissionName } from "../../components/game-data/MissionName"
 
+const microChip = { height: 18, fontSize: "0.65rem", fontWeight: "bold", textTransform: "uppercase" as const }
+
 export function MissionSearch() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
@@ -310,13 +312,13 @@ export function MissionSearch() {
                           </TableCell>
                           <TableCell>
                             <Stack direction="row" spacing={0.25} flexWrap="wrap" useFlexGap>
-                              {m.category && <Tooltip title={getMissionTypeLabel(m.category)}><Chip label={getMissionTypeLabel(m.category)} size="small" color="primary" sx={{ height: 18, fontSize: "0.65rem" }} /></Tooltip>}
-                              {(m.is_illegal || m.legal_status === "ILLEGAL") && <Tooltip title="Illegal Mission"><Chip label="Illegal" size="small" color="error" sx={{ height: 18, fontSize: "0.65rem" }} /></Tooltip>}
-                              {m.is_unique_mission && <Tooltip title="Unique (one-time)"><Chip label="Unique" size="small" color="warning" sx={{ height: 18, fontSize: "0.65rem" }} /></Tooltip>}
-                              {m.is_chain_starter && <Tooltip title="Chain Starter"><Chip label="Starter" size="small" color="secondary" sx={{ height: 18, fontSize: "0.65rem" }} /></Tooltip>}
-                              {m.is_chain_mission && !m.is_chain_starter && <Tooltip title="Part of Chain"><Chip label="Chain" size="small" color="secondary" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} /></Tooltip>}
-                              {m.associated_event && <Tooltip title={m.associated_event}><Chip label={m.associated_event} size="small" sx={{ height: 18, fontSize: "0.65rem", maxWidth: 100, bgcolor: "info.main", color: "#fff" }} /></Tooltip>}
-                              {m.ship_encounter_count > 0 && <Tooltip title={`${m.ship_encounter_count} ships`}><Chip icon={<ShieldRounded sx={{ fontSize: 14 }} />} label={m.ship_encounter_count} size="small" color="info" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} /></Tooltip>}
+                              {m.category && <Tooltip title={getMissionTypeLabel(m.category)}><Chip label={getMissionTypeLabel(m.category)} size="small" color="primary" sx={microChip} /></Tooltip>}
+                              {(m.is_illegal || m.legal_status === "ILLEGAL") && <Tooltip title="Illegal Mission"><Chip label="Illegal" size="small" color="error" sx={microChip} /></Tooltip>}
+                              {m.is_unique_mission && <Tooltip title="Unique (one-time)"><Chip label="Unique" size="small" color="warning" sx={microChip} /></Tooltip>}
+                              {m.is_chain_starter && <Tooltip title="Chain Starter"><Chip label="Starter" size="small" color="secondary" sx={microChip} /></Tooltip>}
+                              {m.is_chain_mission && !m.is_chain_starter && <Tooltip title="Part of Chain"><Chip label="Chain" size="small" color="secondary" variant="outlined" sx={microChip} /></Tooltip>}
+                              {m.associated_event && <Tooltip title={m.associated_event}><Chip label={m.associated_event} size="small" sx={{ ...microChip, maxWidth: 100, bgcolor: "info.main", color: "#fff" }} /></Tooltip>}
+                              {m.ship_encounter_count > 0 && <Tooltip title={`${m.ship_encounter_count} ships`}><Chip icon={<ShieldRounded sx={{ fontSize: 14 }} />} label={m.ship_encounter_count} size="small" color="info" variant="outlined" sx={microChip} /></Tooltip>}
                             </Stack>
                           </TableCell>
                           <TableCell>
@@ -333,7 +335,7 @@ export function MissionSearch() {
                           </TableCell>
                           <TableCell align="center">
                             {m.blueprint_reward_count > 0
-                              ? <Chip icon={<BuildRounded sx={{ fontSize: 14 }} />} label={m.blueprint_reward_count} size="small" color="success" sx={{ height: 18, fontSize: "0.65rem", minWidth: 24 }} />
+                              ? <Chip icon={<BuildRounded sx={{ fontSize: 14 }} />} label={m.blueprint_reward_count} size="small" color="success" sx={{ ...microChip, minWidth: 24 }} />
                               : <Typography variant="caption" color="text.disabled">—</Typography>}
                           </TableCell>
                           <TableCell align="right">

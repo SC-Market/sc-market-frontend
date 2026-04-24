@@ -15,6 +15,9 @@ import {
 } from "@mui/material"
 import { getMissionTypeLabel, formatCredits } from "../../util/missionDisplay"
 import { useNavigate } from "react-router-dom"
+
+/** Shared micro chip style matching V2 listing cards */
+const microChip = { height: 18, fontSize: "0.65rem", fontWeight: "bold", textTransform: "uppercase" as const }
 import { getMissionIcon, getFactionIcon, getMissionCategoryColor } from "../../util/gameIcons"
 import { MissionName } from "./MissionName"
 import { Tooltip } from "@mui/material"
@@ -99,15 +102,15 @@ export const MissionCard: React.FC<MissionCardProps> = ({ mission, onClick }) =>
 
           {/* Tags — right after header, full width */}
           <Box sx={{ display: "flex", flexWrap: "wrap", gap: "4px", mb: 0.5 }}>
-            {mission.star_system && <Chip label={mission.star_system} size="small" variant="outlined" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav(`/missions?system=${mission.star_system}`) }} sx={{ height: 18, fontSize: "0.65rem" }} />}
-            {mission.category && <Chip label={getMissionTypeLabel(mission.category)} size="small" color="primary" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav(`/missions?category=${mission.category}`) }} sx={{ height: 18, fontSize: "0.65rem" }} />}
-            {(mission.is_illegal || mission.legal_status === "ILLEGAL") && <Chip label="Illegal" size="small" color="error" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav("/missions?legal=ILLEGAL") }} sx={{ height: 18, fontSize: "0.65rem" }} />}
-            {mission.is_unique_mission && <Chip label="Unique" size="small" color="warning" sx={{ height: 18, fontSize: "0.65rem" }} />}
-            {mission.is_chain_starter && <Chip label="Starter" size="small" color="secondary" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav("/missions?chain=true") }} sx={{ height: 18, fontSize: "0.65rem" }} />}
-            {mission.is_chain_mission && !mission.is_chain_starter && <Chip label="Chain" size="small" color="secondary" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} />}
-            {mission.associated_event && <Chip label={mission.associated_event} size="small" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav(`/missions?show_events=true&event=${mission.associated_event}`) }} sx={{ height: 18, fontSize: "0.65rem", bgcolor: "info.main", color: "#fff" }} />}
-            {mission.ship_encounter_count > 0 && <Chip icon={<ShieldRounded sx={{ fontSize: 14 }} />} label={mission.ship_encounter_count} size="small" color="info" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} />}
-            {mission.blueprint_reward_count > 0 && <Chip icon={<BuildRounded sx={{ fontSize: 14 }} />} label={`${mission.blueprint_reward_count} BP`} size="small" color="success" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav("/missions?blueprints=true") }} sx={{ height: 18, fontSize: "0.65rem" }} />}
+            {mission.star_system && <Chip label={mission.star_system} size="small" variant="outlined" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav(`/missions?system=${mission.star_system}`) }} sx={microChip} />}
+            {mission.category && <Chip label={getMissionTypeLabel(mission.category)} size="small" color="primary" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav(`/missions?category=${mission.category}`) }} sx={microChip} />}
+            {(mission.is_illegal || mission.legal_status === "ILLEGAL") && <Chip label="Illegal" size="small" color="error" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav("/missions?legal=ILLEGAL") }} sx={microChip} />}
+            {mission.is_unique_mission && <Chip label="Unique" size="small" color="warning" sx={microChip} />}
+            {mission.is_chain_starter && <Chip label="Starter" size="small" color="secondary" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav("/missions?chain=true") }} sx={microChip} />}
+            {mission.is_chain_mission && !mission.is_chain_starter && <Chip label="Chain" size="small" color="secondary" variant="outlined" sx={microChip} />}
+            {mission.associated_event && <Chip label={mission.associated_event} size="small" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav(`/missions?show_events=true&event=${mission.associated_event}`) }} sx={{ ...microChip, bgcolor: "info.main", color: "#fff" }} />}
+            {mission.ship_encounter_count > 0 && <Chip icon={<ShieldRounded sx={{ fontSize: 14 }} />} label={mission.ship_encounter_count} size="small" color="info" variant="outlined" sx={microChip} />}
+            {mission.blueprint_reward_count > 0 && <Chip icon={<BuildRounded sx={{ fontSize: 14 }} />} label={`${mission.blueprint_reward_count} BP`} size="small" color="success" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav("/missions?blueprints=true") }} sx={microChip} />}
           </Box>
 
           {/* Material badges */}
@@ -116,7 +119,7 @@ export const MissionCard: React.FC<MissionCardProps> = ({ mission, onClick }) =>
               {mission.hauling_orders!.map((h, i) => (
                 <Tooltip key={i} title={h.resource_name} arrow>
                   <Chip label={abbrResource(h.resource_name)} size="small"
-                    sx={{ height: 18, fontSize: "0.6rem", fontFamily: "monospace", bgcolor: "action.selected" }} />
+                    sx={{ ...microChip, fontFamily: "monospace", bgcolor: "action.selected" }} />
                 </Tooltip>
               ))}
             </Box>

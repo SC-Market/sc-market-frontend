@@ -17,6 +17,8 @@ import {
 import { Bookmark, BookmarkBorder, Circle, PlaylistAddRounded } from "@mui/icons-material"
 import { formatCategoryName } from "../../util/categoryDisplay"
 import { getResourceCategoryIcon, getCommodityColor, getItemCategoryColor } from "../../util/gameIcons"
+
+const microChip = { height: 18, fontSize: "0.65rem", fontWeight: "bold", textTransform: "uppercase" as const }
 import { GameItemAvatar } from "./GameItemAvatar"
 import { Tooltip } from "@mui/material"
 
@@ -143,13 +145,13 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
           </CardContent>
 
           <CardActions disableSpacing sx={{ px: 1.5, pt: 0, pb: 0.5, flexWrap: "wrap", gap: 0.25 }}>
-            {bp.user_owns && <Chip label="Owned" size="small" color="success" sx={{ height: 18, fontSize: "0.65rem" }} />}
-            {bp.source === "default" && <Chip label="Default" size="small" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} />}
-            {bp.rarity && <Chip label={bp.rarity} size="small" sx={{ height: 18, fontSize: "0.65rem", bgcolor: "info.main", color: "#fff" }} />}
-            {bp.tier && <Chip label={`T${bp.tier}`} size="small" sx={{ height: 18, fontSize: "0.65rem", bgcolor: "warning.main", color: "#fff" }} />}
-            {bp.manufacturer && <Chip label={bp.manufacturer.slice(0, 4).toUpperCase()} size="small" variant="outlined" sx={{ height: 18, fontSize: "0.65rem", fontFamily: "monospace" }} />}
+            {bp.user_owns && <Chip label="Owned" size="small" color="success" sx={microChip} />}
+            {bp.source === "default" && <Chip label="Default" size="small" variant="outlined" sx={microChip} />}
+            {bp.rarity && <Chip label={bp.rarity} size="small" sx={{ ...microChip, bgcolor: "info.main", color: "#fff" }} />}
+            {bp.tier && <Chip label={`T${bp.tier}`} size="small" sx={{ ...microChip, bgcolor: "warning.main", color: "#fff" }} />}
+            {bp.manufacturer && <Chip label={bp.manufacturer.slice(0, 4).toUpperCase()} size="small" variant="outlined" sx={{ ...microChip, fontFamily: "monospace" }} />}
             {[...new Set((bp.modifier_properties || []).map(modAbbr))].map(tag => (
-              <Chip key={tag} label={tag} size="small" color="secondary" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} />
+              <Chip key={tag} label={tag} size="small" color="secondary" variant="outlined" sx={microChip} />
             ))}
           </CardActions>
 
@@ -188,13 +190,13 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
           <Box sx={{ flex: 1, minWidth: 0 }}>
             <Typography variant="body2" fontWeight={600} noWrap>{bp.output_item_name}</Typography>
             <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap sx={{ mt: 0.25 }}>
-              {bp.user_owns && <Chip label="Owned" size="small" color="success" sx={{ height: 18, fontSize: "0.65rem" }} />}
-              {bp.source === "default" && <Chip label="Default" size="small" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} />}
-              {bp.rarity && <Chip label={bp.rarity} size="small" sx={{ height: 18, fontSize: "0.65rem", bgcolor: "info.main", color: "#fff" }} />}
-              {bp.tier && <Chip label={`T${bp.tier}`} size="small" sx={{ height: 18, fontSize: "0.65rem", bgcolor: "warning.main", color: "#fff" }} />}
-              {bp.manufacturer && <Chip label={bp.manufacturer.slice(0, 4).toUpperCase()} size="small" variant="outlined" sx={{ height: 18, fontSize: "0.65rem", fontFamily: "monospace" }} />}
+              {bp.user_owns && <Chip label="Owned" size="small" color="success" sx={microChip} />}
+              {bp.source === "default" && <Chip label="Default" size="small" variant="outlined" sx={microChip} />}
+              {bp.rarity && <Chip label={bp.rarity} size="small" sx={{ ...microChip, bgcolor: "info.main", color: "#fff" }} />}
+              {bp.tier && <Chip label={`T${bp.tier}`} size="small" sx={{ ...microChip, bgcolor: "warning.main", color: "#fff" }} />}
+              {bp.manufacturer && <Chip label={bp.manufacturer.slice(0, 4).toUpperCase()} size="small" variant="outlined" sx={{ ...microChip, fontFamily: "monospace" }} />}
               {[...new Set((bp.modifier_properties || []).map(modAbbr))].map(tag => (
-                <Chip key={tag} label={tag} size="small" color="secondary" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} />
+                <Chip key={tag} label={tag} size="small" color="secondary" variant="outlined" sx={microChip} />
               ))}
               {ings.map((ing, i) => (
                 <Tooltip key={i} title={`${ing.name} — ${ing.quantity_required.toFixed(2)} SCU`} arrow>
