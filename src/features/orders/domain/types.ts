@@ -1,7 +1,7 @@
 import type { MinimalUser, User } from "../../../datatypes/User"
 import type { MinimalContractor, Contractor } from "../../contractor/domain/types"
 import type { AvailabilitySelection } from "../../../hooks/login/UserProfile"
-import type { OfferMarketListing } from "../../../store/offer"
+import type { OfferMarketListing } from "../../offers/api/offerApi"
 
 // ── Order Status & Kind ──
 
