@@ -73,7 +73,7 @@ import { formatMostSignificantDiff } from "../../../util/time"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { ThemedDataGrid } from "../../../components/grid/ThemedDataGrid"
 import { SelectGameItemStack } from "../../../components/select/SelectGameItem"
-import { useGetUserProfileQuery } from "../../../store/profile"
+import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { useTranslation } from "react-i18next"
 import {
   PullToRefresh,

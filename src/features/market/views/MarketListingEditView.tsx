@@ -16,7 +16,7 @@ import {
   TextField,
 } from "@mui/material"
 import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
-import { useGetUserProfileQuery } from "../../../store/profile"
+import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import {
   AddAPhotoRounded,
   ArchiveRounded,

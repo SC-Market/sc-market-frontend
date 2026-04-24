@@ -5,7 +5,7 @@ import throttle from "lodash/throttle"
 import { useCreateTransaction } from "../../../store/transactions"
 import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
 import { store } from "../../../store/store"
-import { userApi } from "../../../store/profile"
+import { userApi } from "../../profile/api/profileApi"
 import { contractorsApi } from "../../../store/api/contractors"
 
 export type RecipientType = "user" | "contractor"

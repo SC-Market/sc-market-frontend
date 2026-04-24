@@ -34,7 +34,7 @@ import {
 import { HapticButton } from "../../../components/haptic"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
-import { useGetUserProfileQuery } from "../../../store/profile"
+import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import {
   AddShoppingCartRounded,
   EditRounded,

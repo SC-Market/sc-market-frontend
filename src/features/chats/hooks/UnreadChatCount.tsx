@@ -1,6 +1,6 @@
 import { useMemo } from "react"
 import { useGetMyChatsQuery } from "../api/chatsApi"
-import { useGetUserProfileQuery } from "../../../store/profile"
+import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 
 /**
  * Hook to get the count of chats with unread messages

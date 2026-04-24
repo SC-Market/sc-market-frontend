@@ -1,6 +1,6 @@
 import { Switch, FormControlLabel } from "@mui/material"
-import { useProfileUpdateInGameStatusMutation } from "../../../store/profile"
-import { useGetUserProfileQuery } from "../../../store/profile"
+import { useProfileUpdateInGameStatusMutation } from "../api/profileApi"
+import { useGetUserProfileQuery } from "../api/profileApi"
 import { useTranslation } from "react-i18next"
 
 export function InGameToggle() {

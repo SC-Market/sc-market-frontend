@@ -1,7 +1,7 @@
 import {
   useGetUserByUsernameQuery,
   useGetUserProfileQuery,
-} from "../../../store/profile"
+} from "../api/profileApi"
 
 /**
  * Page data for my profile page

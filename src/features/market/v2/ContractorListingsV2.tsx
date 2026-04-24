@@ -31,7 +31,7 @@ import { useDrawerOpen } from "../../../hooks/layout/Drawer";
 import { EditRounded, BusinessRounded } from "@mui/icons-material";
 import { getRelativeTime } from "../../../util/time";
 import { useCurrentOrg } from "../../../hooks/login/CurrentOrg";
-import { useGetUserProfileQuery } from "../../../store/profile";
+import { useGetUserProfileQuery } from "../../profile/api/profileApi";
 import { has_permission } from "../../../views/contractor/OrgRoles";
 
 /**

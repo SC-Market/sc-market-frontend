@@ -13,7 +13,7 @@ import {
 } from "@mui/material"
 import { Link } from "react-router-dom"
 import { getRelativeTime } from "../../../util/time"
-import { useGetUserProfileQuery } from "../../../store/profile"
+import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import {
   CreateRounded,
   PersonRounded,

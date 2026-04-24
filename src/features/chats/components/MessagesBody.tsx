@@ -25,7 +25,7 @@ import {
   MessageSendArea,
 } from "../messages"
 import type { Message } from "../domain/types"
-import { useGetUserProfileQuery } from "../../../store/profile"
+import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 
 export const socket = io(WS_URL, {
   withCredentials: true,

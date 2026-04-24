@@ -1,4 +1,4 @@
-import { useGetUserByUsernameQuery } from "../../../store/profile"
+import { useGetUserByUsernameQuery } from "../api/profileApi"
 
 /**
  * Page data for user profile page

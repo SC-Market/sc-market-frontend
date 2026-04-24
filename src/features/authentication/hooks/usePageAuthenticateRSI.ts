@@ -1,7 +1,7 @@
 import {
   useGetUserProfileQuery,
   useGetAuthenticatorIdentifier,
-} from "../../../store/profile"
+} from "../../profile/api/profileApi"
 
 export interface UsePageAuthenticateRSIResult {
   profile: ReturnType<typeof useGetUserProfileQuery>

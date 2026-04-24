@@ -5,7 +5,7 @@ import { Link } from "react-router-dom"
 import {
   useGetUserByUsernameQuery,
   useGetUserProfileQuery,
-} from "../../../../store/profile"
+} from "../../../profile/api/profileApi"
 import { getRelativeTime } from "../../../../util/time"
 import SCMarketLogo from "../../../../assets/scmarket-logo.webp"
 import { useMemo } from "react"

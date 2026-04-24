@@ -22,7 +22,7 @@ import {
   useCreateTokenMutation,
 } from "../api/tokensApi"
 import { SCOPE_CATEGORIES } from "../domain/scopes"
-import { useGetUserProfileQuery } from "../../../store/profile.ts"
+import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { BottomSheet } from "../../../components/mobile/BottomSheet"

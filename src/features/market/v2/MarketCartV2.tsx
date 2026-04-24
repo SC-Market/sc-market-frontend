@@ -632,7 +632,7 @@ export function MarketCartV2() {
           {t("cart.confirmCheckout", "Confirm Checkout")}
         </DialogTitle>
         <DialogContent dividers>
-          {cartData?.items.map((item) => (
+          {cartData?.items.filter(i => i.listing.seller_id === checkoutSellerId).map((item) => (
             <Box key={item.cart_item_id} sx={{ mb: 1 }}>
               <Box display="flex" justifyContent="space-between" alignItems="center">
                 <Box>
@@ -663,7 +663,7 @@ export function MarketCartV2() {
           <Box display="flex" justifyContent="space-between">
             <Typography variant="h6">{t("cart.total")}</Typography>
             <Typography variant="h6">
-              {cartData?.total_price.toLocaleString()} aUEC
+              {(cartData?.items.filter(i => i.listing.seller_id === checkoutSellerId).reduce((s, i) => s + i.subtotal, 0) ?? 0).toLocaleString()} aUEC
             </Typography>
           </Box>
           {hasPriceChanges && (

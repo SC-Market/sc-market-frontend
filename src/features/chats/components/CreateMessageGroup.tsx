@@ -24,7 +24,7 @@ import { User } from "../../../datatypes/User"
 import {
   useGetUserProfileQuery,
   useSearchUsersQuery,
-} from "../../../store/profile"
+} from "../../profile/api/profileApi"
 import { useMessagingSidebar } from "../hooks/MessagingSidebar"
 import MenuIcon from "@mui/icons-material/MenuRounded"
 import {

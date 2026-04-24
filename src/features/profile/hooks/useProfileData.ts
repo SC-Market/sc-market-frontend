@@ -1,5 +1,5 @@
 import { useMemo } from "react"
-import { useGetUserProfileQuery } from "../../../store/profile"
+import { useGetUserProfileQuery } from "../api/profileApi"
 import { User } from "../../../datatypes/User"
 
 export function useProfileData(profile: User) {

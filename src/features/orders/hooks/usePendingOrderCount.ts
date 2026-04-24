@@ -1,5 +1,5 @@
 import { useGetNotificationsQuery } from "../../../store/notification"
-import { useGetUserProfileQuery } from "../../../store/profile"
+import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 
 /**
  * Hook to get count of pending orders requiring attention.

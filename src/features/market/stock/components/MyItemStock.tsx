@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useCallback } from "react"
 import { useCurrentOrg } from "../../../../hooks/login/CurrentOrg"
-import { useGetUserProfileQuery } from "../../../../store/profile"
+import { useGetUserProfileQuery } from "../../../profile/api/profileApi"
 import { useGetMyListingsQuery } from "../../api/marketApi"
 import { useMarketSearch } from "../../index"
 import { DisplayStock } from "../../components/ItemStock"

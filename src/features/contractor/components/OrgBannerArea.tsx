@@ -4,7 +4,7 @@ import { RefreshRounded } from "@mui/icons-material"
 import { useTheme } from "@mui/material/styles"
 import { Contractor } from "../domain/types"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
-import { useGetUserProfileQuery } from "../../../store/profile"
+import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { useRefetchContractorDetailsMutation } from "../api/contractorApi"
 import {
   DarkBannerContainer,
