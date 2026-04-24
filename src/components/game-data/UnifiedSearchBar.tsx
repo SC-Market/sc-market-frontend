@@ -183,7 +183,7 @@ export function missionTokensToParams(tokens: SearchToken[]): Record<string, str
 export function missionParamsToTokens(sp: URLSearchParams): SearchToken[] {
   const tokens: SearchToken[] = []
   const q = sp.get("q"); if (q) tokens.push({ type: "query", label: q, value: q })
-  sp.get("category")?.split(",").forEach(c => c && tokens.push({ type: "category", label: c, value: c }))
+  sp.get("category")?.split(",").forEach(c => c && tokens.push({ type: "category", label: getMissionTypeLabel(c), value: c }))
   sp.get("system")?.split(",").forEach(s => s && tokens.push({ type: "system", label: s, value: s }))
   const giver = sp.get("giver"); if (giver) tokens.push({ type: "giver", label: giver, value: giver })
   const faction = sp.get("faction"); if (faction) tokens.push({ type: "faction", label: faction, value: faction })
