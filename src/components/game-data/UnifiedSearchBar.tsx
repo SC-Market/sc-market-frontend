@@ -80,14 +80,28 @@ interface UnifiedSearchBarProps {
   onChange: (tokens: SearchToken[]) => void
   extraOptions?: SearchToken[]
   placeholder?: string
-  mode?: "missions" | "blueprints"
+  mode?: "missions" | "blueprints" | "market"
 }
+
+const MARKET_CATEGORIES: SearchToken[] = [
+  "Helmet", "Torso", "Arms", "Legs", "Backpack", "Undersuit",
+  "Ranged Weapon", "Weapon Attachment", "Ship Weapon",
+  "Commodity", "Food/Drink", "Medical Pen",
+  "Power Plant", "Cooler", "Shield", "Quantum Drive",
+].map(c => ({ type: "category" as const, label: c, value: c }))
+
+const MARKET_TAGS: SearchToken[] = [
+  { type: "tag", label: "Has Photos", value: "has_photos" },
+  { type: "tag", label: "In Stock", value: "in_stock" },
+  { type: "tag", label: "Bulk Discount", value: "bulk_discount" },
+]
 
 export function UnifiedSearchBar({ tokens, onChange, extraOptions = [], placeholder, mode = "missions" }: UnifiedSearchBarProps) {
   const [inputValue, setInputValue] = useState("")
 
   const baseOptions = useMemo(() => {
     if (mode === "blueprints") return [...BP_CATEGORIES, ...BP_MATERIALS, ...BP_RARITIES, ...BP_TAGS]
+    if (mode === "market") return [...MARKET_CATEGORIES, ...MARKET_TAGS]
     return [...SYSTEMS, ...MISSION_CATEGORIES, ...MISSION_TAGS, ...MISSION_GIVERS, ...MISSION_FACTIONS]
   }, [mode])
 
@@ -230,5 +244,34 @@ export function blueprintParamsToTokens(sp: URLSearchParams): SearchToken[] {
   if (src === "mission_reward") tokens.push({ type: "tag", label: "Mission Reward", value: "mission_reward" })
   if (sp.get("missions") === "true") tokens.push({ type: "tag", label: "Has Mission Source", value: "has_missions" })
   if (sp.get("owned") === "true") tokens.push({ type: "tag", label: "Owned", value: "owned" })
+  return tokens
+}
+
+// === Market param conversion ===
+export function marketTokensToParams(tokens: SearchToken[]): Record<string, string> {
+  const params: Record<string, string> = {}
+  const queries: string[] = []
+  for (const t of tokens) {
+    switch (t.type) {
+      case "query": queries.push(t.value); break
+      case "category": params.type = t.value; break
+      case "tag":
+        if (t.value === "has_photos") params.has_photos = "true"
+        else if (t.value === "in_stock") params.in_stock = "true"
+        else if (t.value === "bulk_discount") params.bulk_discount = "true"
+        break
+    }
+  }
+  if (queries.length) params.query = queries.join(" ")
+  return params
+}
+
+export function marketParamsToTokens(sp: URLSearchParams): SearchToken[] {
+  const tokens: SearchToken[] = []
+  const q = sp.get("query") || sp.get("q"); if (q) tokens.push({ type: "query", label: q, value: q })
+  const type = sp.get("type"); if (type) tokens.push({ type: "category", label: type, value: type })
+  if (sp.get("has_photos") === "true") tokens.push({ type: "tag", label: "Has Photos", value: "has_photos" })
+  if (sp.get("in_stock") === "true") tokens.push({ type: "tag", label: "In Stock", value: "in_stock" })
+  if (sp.get("bulk_discount") === "true") tokens.push({ type: "tag", label: "Bulk Discount", value: "bulk_discount" })
   return tokens
 }
