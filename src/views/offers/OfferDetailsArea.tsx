@@ -1,4 +1,4 @@
-import type { OfferSession } from "../../features/offers/domain/types"
+import type { GetOfferSessionV2Response } from "../../store/api/v2/market"
 import {
   Chip,
   Grid,
@@ -42,7 +42,6 @@ import {
 import { MessagesBody } from "../../features/chats"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { Link } from "react-router-dom"
-import { OrderSummarySection } from "../../components/orders/OrderSummarySection"
 import { OrderSummarySectionV2 } from "../../components/orders/OrderSummarySectionV2"
 import { ListingSellerRating } from "../../components/rating/ListingRating"
 import { useTranslation } from "react-i18next"
@@ -53,18 +52,18 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import { useOfferDetails } from "../../features/offers/hooks/useOfferDetails"
 
-export function OfferMessagesArea(props: { offer: OfferSession }) {
-  const { offer } = props
+export function OfferMessagesArea(props: { session: GetOfferSessionV2Response }) {
+  const { session } = props
   const [currentChat, setCurrentChat] = useCurrentChat()
-  const { data: chatObj } = useGetChatByOfferIDQuery(offer.id!, {
-    skip: !offer,
+  const { data: chatObj } = useGetChatByOfferIDQuery(session.session_id, {
+    skip: !session,
   })
 
   const { data: notificationsData } = useGetNotificationsQuery({
     page: 0,
     pageSize: 100,
     action: "offer_message",
-    entityId: offer.id,
+    entityId: session.session_id,
   })
 
   const notifications = notificationsData?.notifications || []
@@ -105,7 +104,7 @@ export function OfferMessagesArea(props: { offer: OfferSession }) {
   )
 }
 
-export function OfferDetailsArea(props: { session: OfferSession }) {
+export function OfferDetailsArea(props: { session: GetOfferSessionV2Response }) {
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
   const { t, i18n } = useTranslation()
@@ -311,7 +310,7 @@ export function OfferDetailsArea(props: { session: OfferSession }) {
               <TableCell align="right">
                 <Stack direction="row" justifyContent={"right"}>
                   {format(
-                    new Date(currentOffer.timestamp),
+                    new Date(currentOffer.created_at),
                     "MMMM do yyyy, h:mm:ss a",
                   )}
                 </Stack>
@@ -410,33 +409,51 @@ export function OfferDetailsArea(props: { session: OfferSession }) {
                   >
                     <MarkdownRender text={currentOffer.description} />
                   </Typography>
-                  {!(currentOffer.v2_variant_items && currentOffer.v2_variant_items.length > 0) && (
-                    <OrderSummarySection
-                      market_listings={currentOffer.market_listings}
-                      total_cost={+currentOffer.cost}
-                      offerChanges={offerChanges}
-                    />
-                  )}
-                  {currentOffer.v2_variant_items && currentOffer.v2_variant_items.length > 0 && (
-                    <OrderSummarySectionV2
-                      items={currentOffer.v2_variant_items.map((vi) => ({
-                        order_item_id: vi.variant_id,
-                        listing_id: vi.listing_id,
+                  {(() => {
+                    const items = currentOffer.market_listings.flatMap((ml) => {
+                      if (ml.v2_variants.length > 0) {
+                        return ml.v2_variants.map((v) => ({
+                          order_item_id: v.variant_id,
+                          listing_id: ml.listing_id,
+                          item_id: "",
+                          listing_title: ml.title,
+                          variant: {
+                            variant_id: v.variant_id,
+                            attributes: v.attributes,
+                            display_name: v.display_name,
+                            short_name: v.short_name,
+                          },
+                          quantity: v.quantity,
+                          price_per_unit: v.price_per_unit,
+                          subtotal: v.quantity * v.price_per_unit,
+                        }))
+                      }
+                      // No variants — use listing-level data
+                      return [{
+                        order_item_id: ml.listing_id,
+                        listing_id: ml.listing_id,
                         item_id: "",
+                        listing_title: ml.title,
                         variant: {
-                          variant_id: vi.variant_id,
-                          attributes: vi.attributes as any,
-                          display_name: vi.display_name,
-                          short_name: vi.short_name,
+                          variant_id: "",
+                          attributes: {},
+                          display_name: "Standard",
+                          short_name: "STD",
                         },
-                        quantity: vi.quantity,
-                        price_per_unit: vi.price_per_unit,
-                        subtotal: vi.quantity * vi.price_per_unit,
-                      }))}
-                      total_cost={+currentOffer.cost}
-                      offerChanges={offerChanges}
-                    />
-                  )}
+                        quantity: ml.quantity,
+                        price_per_unit: ml.price,
+                        subtotal: ml.quantity * ml.price,
+                      }]
+                    })
+                    if (items.length === 0) return null
+                    return (
+                      <OrderSummarySectionV2
+                        items={items}
+                        total_cost={currentOffer.cost}
+                        offerChanges={offerChanges}
+                      />
+                    )
+                  })()}
                 </Stack>
               </TableCell>
             </TableRow>
@@ -506,7 +523,7 @@ export function OfferDetailsArea(props: { session: OfferSession }) {
                         <LoadingButton
                           loading={createThreadLoading}
                           onClick={() => {
-                            createThread(session.id)
+                            createThread(session.session_id)
                               .unwrap()
                               .then((result) => {
                                 issueAlert({
@@ -581,7 +598,7 @@ export function OfferDetailsArea(props: { session: OfferSession }) {
                       {t("OfferDetailsArea.accept")}
                     </LoadingButton>
                     <Link
-                      to={`/offer/${session.id}/counteroffer`}
+                      to={`/offer/${session.session_id}/counteroffer`}
                       style={{ width: isMobile ? "100%" : "auto" }}
                     >
                       <LoadingButton

@@ -97,8 +97,7 @@ export function OrderSummarySectionV2({
                     href={`/market/${item.listing_id}`}
                     sx={{ textDecoration: "none" }}
                   >
-                    {/* Display listing title - placeholder for now */}
-                    Listing {item.listing_id.substring(0, 8)}
+                    {item.listing_title}
                   </Link>
                   
                   {/* Variant details with quality badge */}
