@@ -17,6 +17,7 @@ import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { DebugPanel } from "../market/v2/DebugPanel"
 import { CartDrawerProvider } from "../../hooks/market/AddToCartContext"
+import { ParticleField } from "../effects/ParticleField"
 
 export function Root(props: { children: React.ReactNode }) {
   const theme: Theme = useTheme<ExtendedTheme>()
@@ -43,6 +44,7 @@ export function Root(props: { children: React.ReactNode }) {
       }}
     >
       <SkipNavigation />
+      {theme.palette.mode === "dark" && <ParticleField />}
       <CookieConsent />
       {/* PWA Components */}
       {typeof window !== "undefined" && (

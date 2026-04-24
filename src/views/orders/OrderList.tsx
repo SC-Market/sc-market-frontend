@@ -62,38 +62,12 @@ import { has_permission } from "../contractor/OrgRoles"
 import { useAssignOrderMutation } from "../../store/orders"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 
-export const statusColors = new Map<
-  | "active"
-  | "inactive"
-  | "fulfilled"
-  | "in-progress"
-  | "not-started"
-  | "cancelled",
-  "default" | "primary" | "secondary" | "error" | "info" | "success" | "warning"
->()
-statusColors.set("fulfilled", "success")
-statusColors.set("in-progress", "info")
-statusColors.set("cancelled", "warning")
-statusColors.set("not-started", "error")
-statusColors.set("active", "success")
-statusColors.set("inactive", "warning")
+import {
+  statusColors,
+  statusNames,
+} from "../../features/orders/domain/constants"
 
-export const statusNames = new Map<
-  | "active"
-  | "inactive"
-  | "fulfilled"
-  | "in-progress"
-  | "not-started"
-  | "cancelled",
-  string
->()
-
-statusNames.set("fulfilled", "orders.status.fulfilled")
-statusNames.set("in-progress", "orders.status.inProgress")
-statusNames.set("cancelled", "orders.status.cancelled")
-statusNames.set("not-started", "orders.status.notStarted")
-statusNames.set("active", "orders.status.active")
-statusNames.set("inactive", "orders.status.inactive")
+export { statusColors, statusNames }
 
 export const OrderHeadCells: readonly HeadCell<
   OrderStub & { other_name: string | null }

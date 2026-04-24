@@ -7,7 +7,7 @@ export const inkThemeOptions: ThemeOptions = {
     primary: refTheme.palette.augmentColor({ color: { main: "#1A1A1A", contrastText: "#FFFFFF" } }),
     secondary: refTheme.palette.augmentColor({ color: { main: "#555555", contrastText: "#FFFFFF" } }),
     text: { primary: "#1A1A1A", secondary: "#666666", disabled: "#AAAAAA" },
-    background: { default: "#FFFFFF", paper: "#F0F0F0", sidebar: "#E8E8E8", navbar: "#E8E8E8", light: "#FFFFFF", overlay: "rgba(26,26,26,0.1)", overlayDark: "rgba(26,26,26,0.2)", imageOverlay: "rgba(26,26,26,0.4)", imageOverlayHover: "rgba(26,26,26,0.6)" },
+    background: { default: "#FFFFFF", paper: "#F0F0F0", sidebar: "#FFFFFF", navbar: "#FFFFFF", light: "#FFFFFF", overlay: "rgba(26,26,26,0.1)", overlayDark: "rgba(26,26,26,0.2)", imageOverlay: "rgba(26,26,26,0.4)", imageOverlayHover: "rgba(26,26,26,0.6)" },
     outline: { main: "rgba(0,0,0,0.2)" },
     divider: "rgba(0,0,0,0.2)",
     action: { hover: "rgba(0,0,0,0.06)" },

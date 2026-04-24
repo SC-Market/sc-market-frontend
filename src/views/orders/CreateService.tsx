@@ -34,50 +34,7 @@ import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 
-function romanize(num: number) {
-  if (isNaN(num)) return NaN
-  const digits = String(+num).split(""),
-    key = [
-      "",
-      "C",
-      "CC",
-      "CCC",
-      "CD",
-      "D",
-      "DC",
-      "DCC",
-      "DCCC",
-      "CM",
-      "",
-      "X",
-      "XX",
-      "XXX",
-      "XL",
-      "L",
-      "LX",
-      "LXX",
-      "LXXX",
-      "XC",
-      "",
-      "I",
-      "II",
-      "III",
-      "IV",
-      "V",
-      "VI",
-      "VII",
-      "VIII",
-      "IX",
-    ]
-  let roman = "",
-    i = 3
-  while (i--) {
-    const digit = digits.pop()
-    if (digit == null) break
-    roman = (key[+digit + i * 10] || "") + roman
-  }
-  return Array(+digits.join("") + 1).join("M") + roman
-}
+import { romanize } from "../../features/orders/domain/formatters"
 
 interface StarmapObject {
   id: string

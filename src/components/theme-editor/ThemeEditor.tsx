@@ -252,6 +252,48 @@ export function ThemeEditor({
 
       <Grid item xs={12} md={7}>
         <Paper sx={{ p: 2 }}>
+          {/* Presets from custom themes */}
+          <Typography variant="subtitle2" gutterBottom>
+            {t("theme.presets", "Load Preset")}
+          </Typography>
+          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5, mb: 2 }}>
+            {Array.from(CUSTOM_THEMES.entries()).map(([name, themeObj]) => {
+              const primary = themeObj.palette?.primary?.main || "#888"
+              const bg = themeObj.palette?.background?.default || "#1A1A2E"
+              return (
+                <Tooltip key={name} title={name.replace(/_/g, " ")} placement="top">
+                  <Box
+                    onClick={() => {
+                      const p = themeObj.palette
+                      const mode = p?.mode || "dark"
+                      const preset: Record<string, any> = {
+                        palette: {
+                          mode,
+                          primary: { main: p?.primary?.main, contrastText: p?.primary?.contrastText },
+                          secondary: { main: p?.secondary?.main, contrastText: p?.secondary?.contrastText },
+                          background: { default: (p?.background as any)?.default, paper: (p?.background as any)?.paper, sidebar: (p?.background as any)?.sidebar, navbar: (p?.background as any)?.navbar },
+                          text: { primary: p?.text?.primary, secondary: p?.text?.secondary },
+                          outline: { main: (p as any)?.outline?.main },
+                          action: { hover: p?.action?.hover },
+                        },
+                        navKind: (themeObj as any).navKind,
+                      }
+                      setThemeData((prev) => ({ ...prev, [editMode]: preset }))
+                    }}
+                    sx={{
+                      width: 22, height: 22, borderRadius: 0.5, cursor: "pointer",
+                      border: "1px solid", borderColor: "divider",
+                      background: `linear-gradient(to right, ${primary} 50%, ${bg} 50%)`,
+                      transition: "transform 0.15s, box-shadow 0.15s",
+                      "&:hover": { transform: "scale(1.2)", boxShadow: `0 0 8px ${primary}` },
+                      flexShrink: 0,
+                    }}
+                  />
+                </Tooltip>
+              )
+            })}
+          </Box>
+
           {/* Colors */}
           <Typography variant="subtitle2" gutterBottom>
             {t("theme.colors", "Colors")}
