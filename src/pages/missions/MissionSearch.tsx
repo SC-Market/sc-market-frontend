@@ -337,7 +337,7 @@ export function MissionSearch() {
                           </TableCell>
                           <TableCell align="center">
                             {m.blueprint_reward_count > 0
-                              ? <Chip icon={<BuildRounded sx={{ fontSize: 14 }} />} label={m.blueprint_reward_count} size="small" color="success" sx={{ ...microChip, minWidth: 24 }} />
+                              ? <Tooltip title={m.blueprint_reward_names?.join(", ") || `${m.blueprint_reward_count} blueprints`} arrow><Chip icon={<BuildRounded sx={{ fontSize: 14 }} />} label={m.blueprint_reward_count} size="small" color="success" sx={{ ...microChip, minWidth: 24 }} /></Tooltip>
                               : <Typography variant="caption" color="text.disabled">—</Typography>}
                           </TableCell>
                           <TableCell align="right">
