@@ -7,7 +7,7 @@ export const originThemeOptions: ThemeOptions = {
     primary: refTheme.palette.augmentColor({ color: { main: "#C8A84E", contrastText: "#FFFFFF" } }),
     secondary: refTheme.palette.augmentColor({ color: { main: "#8A7030", contrastText: "#FFFFFF" } }),
     text: { primary: "#2A2418", secondary: "#6A5E40", disabled: "#B0A880" },
-    background: { default: "#F0ECE2", paper: "#FFFDF6", sidebar: "#E8E2D4", navbar: "#FFFDF6", light: "#FFFFFF", overlay: "rgba(200,168,78,0.15)", overlayDark: "rgba(200,168,78,0.3)", imageOverlay: "rgba(200,168,78,0.4)", imageOverlayHover: "rgba(200,168,78,0.6)" },
+    background: { default: "#FFFDF6", paper: "#F0ECE2", sidebar: "#E8E2D4", navbar: "#E8E2D4", light: "#FFFFFF", overlay: "rgba(200,168,78,0.15)", overlayDark: "rgba(200,168,78,0.3)", imageOverlay: "rgba(200,168,78,0.4)", imageOverlayHover: "rgba(200,168,78,0.6)" },
     outline: { main: "rgba(200,168,78,0.3)" },
     divider: "rgba(200,168,78,0.3)",
     action: { hover: "rgba(200,168,78,0.1)" },

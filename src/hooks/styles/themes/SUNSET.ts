@@ -27,10 +27,10 @@ export const sunsetThemeOptions: ThemeOptions = {
       disabled: "#BCAAA4",
     },
     background: {
-      default: "#FFF3E0", // Warm cream
-      paper: "#FFFFFF",
+      default: "#FFFFFF",
+      paper: "#FFF3E0", // Warm cream
       sidebar: "#FFE0B2", // Light orange
-      navbar: "#FFFFFF",
+      navbar: "#FFE0B2",
       light: "#FFFFFF",
       overlay: "rgba(255, 111, 0, 0.4)",
       overlayDark: "rgba(255, 111, 0, 0.6)",

@@ -1,7 +1,7 @@
 import type { Components, Theme } from "@mui/material"
 import type { ExtendedTheme } from "./utils"
 
-const fontStack = `var(--sc-custom-font, Inter), -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"`
+const fontStack = `var(--sc-custom-font, "Electrolize"), "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji"`
 
 export function getBaseComponentOverrides(): Components<
   Omit<Theme, "components">

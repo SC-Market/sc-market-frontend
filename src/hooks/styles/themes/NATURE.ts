@@ -27,10 +27,10 @@ export const natureThemeOptions: ThemeOptions = {
       disabled: "#A0A0A0",
     },
     background: {
-      default: "#F5F7F0", // Very light green-tinted white
-      paper: "#FFFFFF",
+      default: "#FFFFFF",
+      paper: "#F5F7F0", // Very light green-tinted white
       sidebar: "#F0F4E8", // Light sage green
-      navbar: "#FFFFFF",
+      navbar: "#F0F4E8",
       light: "#FFFFFF",
       overlay: "rgba(45, 80, 22, 0.4)", // Forest green overlay
       overlayDark: "rgba(45, 80, 22, 0.6)",

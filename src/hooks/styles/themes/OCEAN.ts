@@ -27,10 +27,10 @@ export const oceanThemeOptions: ThemeOptions = {
       disabled: "#90CAF9",
     },
     background: {
-      default: "#E0F2F1", // Very light teal
-      paper: "#FFFFFF",
+      default: "#FFFFFF",
+      paper: "#E0F2F1", // Very light teal
       sidebar: "#B2DFDB", // Light teal
-      navbar: "#FFFFFF",
+      navbar: "#B2DFDB",
       light: "#FFFFFF",
       overlay: "rgba(2, 119, 189, 0.4)",
       overlayDark: "rgba(2, 119, 189, 0.6)",
