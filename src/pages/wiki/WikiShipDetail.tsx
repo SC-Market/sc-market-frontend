@@ -26,15 +26,74 @@ import {
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
-import { useParams } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 import { useGetShipDetailQuery } from "../../store/api/v2/market"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { DetailPageSkeleton } from "../../components/game-data/GameDataSkeletons"
+
+import { DetailPageSkeleton } from "../../components/game-data/GameDataSkeletons"
+
+/** Recursively render a loadout object as a nested list */
+function LoadoutTree({ data, navigate, depth = 0 }: { data: any; navigate: (path: string) => void; depth?: number }) {
+  if (!data || typeof data !== "object") return <Typography variant="caption">{String(data)}</Typography>
+
+  const entries = Array.isArray(data) ? data.map((v, i) => [String(i), v] as const) : Object.entries(data)
+
+  return (
+    <Stack spacing={0} sx={{ pl: depth > 0 ? 2 : 0, borderLeft: depth > 0 ? "1px solid" : "none", borderColor: "divider" }}>
+      {entries.map(([key, value]) => {
+        if (value && typeof value === "object" && !Array.isArray(value)) {
+          const name = value.name || value.item_name || value.display_name
+          const itemId = value.game_item_id || value.item_id || value.id
+          const type = value.type || value.item_type
+          return (
+            <Box key={key} sx={{ py: 0.25 }}>
+              <Stack direction="row" spacing={0.5} alignItems="center">
+                <Typography variant="caption" color="text.secondary" sx={{ minWidth: 80 }}>{key.replace(/_/g, " ")}</Typography>
+                {name ? (
+                  <Chip
+                    label={name}
+                    size="small"
+                    sx={{ height: 20, fontSize: "0.7rem", cursor: itemId ? "pointer" : "default" }}
+                    onClick={itemId ? () => navigate(`/wiki/items/${itemId}`) : undefined}
+                    color={itemId ? "primary" : "default"}
+                    variant="outlined"
+                  />
+                ) : null}
+                {type && <Typography variant="caption" color="text.disabled">{type}</Typography>}
+              </Stack>
+              {Object.keys(value).length > 3 && <LoadoutTree data={value} navigate={navigate} depth={depth + 1} />}
+            </Box>
+          )
+        }
+        if (Array.isArray(value) && value.length > 0) {
+          return (
+            <Box key={key} sx={{ py: 0.25 }}>
+              <Typography variant="caption" color="text.secondary" fontWeight={600}>{key.replace(/_/g, " ")} ({value.length})</Typography>
+              <LoadoutTree data={value} navigate={navigate} depth={depth + 1} />
+            </Box>
+          )
+        }
+        if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+          return (
+            <Stack key={key} direction="row" spacing={1} sx={{ py: 0.125 }}>
+              <Typography variant="caption" color="text.secondary" sx={{ minWidth: 80 }}>{key.replace(/_/g, " ")}</Typography>
+              <Typography variant="caption">{String(value)}</Typography>
+            </Stack>
+          )
+        }
+        return null
+      })}
+    </Stack>
+  )
+}
 
 export function WikiShipDetail() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const { id } = useParams<{ id: string }>()
+  const navigate = useNavigate()
   const { data: ship, isLoading, error } = useGetShipDetailQuery({ id: id! })
 
   if (isLoading) {
@@ -45,11 +104,7 @@ export function WikiShipDetail() {
         sidebarOpen={true}
         maxWidth="xl"
       >
-        <Grid item xs={12}>
-          <Box sx={{ display: "flex", justifyContent: "center", py: 8 }}>
-            <CircularProgress />
-          </Box>
-        </Grid>
+        <Grid item xs={12}><DetailPageSkeleton /></Grid>
       </StandardPageLayout>
     )
   }
@@ -158,18 +213,8 @@ export function WikiShipDetail() {
                     Default Loadout
                   </Typography>
                   <Divider sx={{ mb: 2 }} />
-                  <Box
-                    sx={{
-                      maxHeight: 400,
-                      overflow: "auto",
-                      bgcolor: "background.default",
-                      p: 2,
-                      borderRadius: 1,
-                    }}
-                  >
-                    <pre style={{ margin: 0, fontSize: "0.875rem" }}>
-                      {JSON.stringify(ship.default_loadout, null, 2)}
-                    </pre>
+                  <Box sx={{ maxHeight: 500, overflow: "auto" }}>
+                    <LoadoutTree data={ship.default_loadout} navigate={navigate} />
                   </Box>
                 </CardContent>
               </Card>

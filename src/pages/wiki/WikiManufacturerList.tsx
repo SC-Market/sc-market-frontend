@@ -23,6 +23,7 @@ import { useGetManufacturersQuery } from "../../store/api/v2/market"
 import { BusinessCenter } from "@mui/icons-material"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { CardGridSkeleton } from "../../components/game-data/GameDataSkeletons"
 
 export function WikiManufacturerList() {
   const { t } = useTranslation()
@@ -42,11 +43,7 @@ export function WikiManufacturerList() {
         sidebarOpen={true}
         maxWidth="xl"
       >
-        <Grid item xs={12}>
-          <Box sx={{ display: "flex", justifyContent: "center", py: 8 }}>
-            <CircularProgress />
-          </Box>
-        </Grid>
+        <Grid item xs={12}><CardGridSkeleton /></Grid>
       </StandardPageLayout>
     )
   }

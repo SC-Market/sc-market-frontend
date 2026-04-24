@@ -1053,6 +1053,13 @@ const router = createBrowserRouter([
         }),
       },
       {
+        path: "/wiki/commodities/:id",
+        lazy: async () => ({
+          Component: (await import("./pages/wiki/WikiCommodityDetail"))
+            .WikiCommodityDetail,
+        }),
+      },
+      {
         path: "/wiki/locations",
         lazy: async () => ({
           Component: (await import("./pages/wiki/WikiLocationBrowser"))
