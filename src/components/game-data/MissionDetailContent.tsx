@@ -231,7 +231,7 @@ function OverviewTab({ data, onBlueprintClick }: { data: MissionDetailResponse; 
                         <TableRow
                           key={bp.blueprint_id} hover
                           sx={{ cursor: onBlueprintClick ? "pointer" : undefined }}
-                          onClick={() => onBlueprintClick?.(bp.blueprint_code || bp.blueprint_id)}
+                          onClick={() => onBlueprintClick?.(bp.blueprint_name || bp.blueprint_code || bp.blueprint_id)}
                         >
                           <TableCell>
                             <Stack direction="row" spacing={0.75} alignItems="center">

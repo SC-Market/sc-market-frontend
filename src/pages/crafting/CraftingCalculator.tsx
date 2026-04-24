@@ -432,7 +432,7 @@ export function CraftingCalculator() {
               <Stack spacing={1}>
                 {craftableResults.map((bp) => (
                   <Paper key={bp.blueprint_id} variant="outlined" sx={{ p: 1.5, cursor: "pointer", "&:hover": { bgcolor: "action.hover" } }}
-                    onClick={() => navigate(`/blueprints/${bp.blueprint_code}`)}>
+                    onClick={() => navigate(`/blueprints/${bp.blueprint_name}`)}>
                     <Stack direction="row" spacing={1.5} alignItems="center">
                       {bp.output_item_icon && <Box component="img" src={bp.output_item_icon} sx={{ width: 32, height: 32, objectFit: "contain" }} />}
                       <Box sx={{ flex: 1 }}>

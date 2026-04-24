@@ -111,7 +111,7 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
           </Tooltip>
         )}
 
-        <CardActionArea onClick={() => onClick?.(bp.blueprint_id, bp.blueprint_code)} sx={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "stretch", justifyContent: "flex-start" }}>
+        <CardActionArea onClick={() => onClick?.(bp.blueprint_id, bp.blueprint_name)} sx={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "stretch", justifyContent: "flex-start" }}>
           <CardContent sx={{ p: 1.5, pb: 0, flex: 1 }}>
             <Box sx={{ display: "flex", gap: 0.75, mb: 1, pr: 3 }}>
               <GameItemAvatar name={bp.output_item_name} iconUrl={bp.output_item_icon} size={32} useCommodityColor={false} sx={{ bgcolor: getItemCategoryColor(bp.item_category) }} />
@@ -181,7 +181,7 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
 
   // List mode
   return (
-    <Card sx={{ cursor: "pointer", "&:hover": { boxShadow: 3 } }} onClick={() => onClick?.(bp.blueprint_id, bp.blueprint_code)}>
+    <Card sx={{ cursor: "pointer", "&:hover": { boxShadow: 3 } }} onClick={() => onClick?.(bp.blueprint_id, bp.blueprint_name)}>
       <CardContent sx={{ p: 1.5, "&:last-child": { pb: 1.5 } }}>
         <Box sx={{ display: "flex", gap: 1.5, alignItems: "center" }}>
           <GameItemAvatar name={bp.output_item_name} iconUrl={bp.output_item_icon} size={36} useCommodityColor={false} sx={{ bgcolor: getItemCategoryColor(bp.item_category) }} />

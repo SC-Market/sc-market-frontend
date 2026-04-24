@@ -337,7 +337,7 @@ export function BlueprintBrowser() {
                           key={bp.blueprint_id}
                           hover
                           sx={{ cursor: "pointer" }}
-                          onClick={() => handleBlueprintClick(bp.blueprint_id, bp.blueprint_code)}
+                          onClick={() => handleBlueprintClick(bp.blueprint_id, bp.blueprint_name)}
                         >
                           <TableCell sx={{ width: 40 }}>
                             <Avatar
