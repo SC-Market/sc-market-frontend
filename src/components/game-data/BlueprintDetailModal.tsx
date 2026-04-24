@@ -207,7 +207,6 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
               </Box>
               )
             })()}
-            )}
 
             {/* Missions */}
             {data.missions_rewarding?.length > 0 && (
