@@ -2,6 +2,7 @@ import React, { useCallback, useMemo, useState } from "react"
 import {
   Alert,
   AlertTitle,
+  Avatar,
   Box,
   Button,
   Dialog,
@@ -130,21 +131,19 @@ export function CartItemEntryV2(props: {
         spacing={theme.layoutSpacing.layout}
         justifyContent={"space-between"}
       >
-        {/* Image Section */}
+        {/* Avatar */}
         <Grid item>
-          <img
-            height={128}
-            width={128}
+          <Avatar
             src={FALLBACK_IMAGE_URL}
             alt={item.listing.title}
-            style={{
-              borderRadius: theme.spacing(theme.borderRadius.image),
-              objectFit: "cover",
-            }}
-            loading="lazy"
-            onError={({ currentTarget }) => {
-              currentTarget.onerror = null
-              currentTarget.src = FALLBACK_IMAGE_URL
+            variant="rounded"
+            sx={{ width: 48, height: 48 }}
+            imgProps={{
+              loading: "lazy",
+              onError: ({ currentTarget }: any) => {
+                currentTarget.onerror = null
+                currentTarget.src = FALLBACK_IMAGE_URL
+              },
             }}
           />
         </Grid>
