@@ -68,12 +68,9 @@ import { has_permission } from "../contractor/OrgRoles"
 import { useOfferSearch } from "../../features/offers/hooks/useOfferSearch"
 
 // Map for all statuses
-const statusTextToKey: Record<string, string> = {
-  "Waiting for Seller": "waitingSeller",
-  "Waiting for Customer": "waitingCustomer",
-  Accepted: "accepted",
-  Rejected: "rejected",
-}
+import { normalizeOfferStatus } from "../../features/offers/domain/types"
+
+// Status icon mapping for offer rows
 
 export const OffersHeadCells: readonly HeadCell<
   OfferSessionStub & { customer_name: string }
@@ -127,12 +124,13 @@ export function OfferRow(props: {
 
   const canClaim = useMemo(() => {
     if (row.assigned_to || !currentOrg || !profile) return false
-    if (row.status !== "Waiting for Seller" && row.status !== "Waiting for Customer") return false
+    const normalized = normalizeOfferStatus(row.status)
+    if (normalized !== "waitingSeller" && normalized !== "waitingCustomer") return false
     return has_permission(currentOrg, profile, "claim_orders", profile.contractors)
   }, [row.assigned_to, row.status, currentOrg, profile])
 
   // Key for translation and colour
-  const statusKey = statusTextToKey[row.status] || row.status
+  const statusKey = normalizeOfferStatus(row.status)
 
   const [statusColor, icon] = useMemo(() => {
     if (statusKey === "waitingSeller") {

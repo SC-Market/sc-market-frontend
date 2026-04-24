@@ -32,8 +32,6 @@ import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { DetailPageSkeleton } from "../../components/game-data/GameDataSkeletons"
 
-import { DetailPageSkeleton } from "../../components/game-data/GameDataSkeletons"
-
 /** Recursively render a loadout object as a nested list */
 function LoadoutTree({ data, navigate, depth = 0 }: { data: any; navigate: (path: string) => void; depth?: number }) {
   if (!data || typeof data !== "object") return <Typography variant="caption">{String(data)}</Typography>

@@ -51,7 +51,7 @@ import { useTheme } from "@mui/material/styles"
 import { useMediaQuery } from "@mui/material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
-import { useOfferDetails, statusTextToKey } from "../../features/offers/hooks/useOfferDetails"
+import { useOfferDetails } from "../../features/offers/hooks/useOfferDetails"
 
 export function OfferMessagesArea(props: { offer: OfferSession }) {
   const { offer } = props
