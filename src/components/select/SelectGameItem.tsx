@@ -178,6 +178,7 @@ export function SelectGameItemOnly(props: {
 
 export function SelectGameItem(props: SelectGameItemProps) {
   const { t } = useTranslation()
+  const { categories, items, itemsLoading } = useGameItemData(props.item_type)
 
   const category_value = useMemo(
     () =>
@@ -303,6 +304,7 @@ export function SelectGameCategory(props: {
 
   const itemType = props.value || props.item_type || "Other"
   const handleChange = props.onChange || props.onTypeChange
+  const { categories } = useGameItemData()
 
   const category_value = useMemo(
     () =>
@@ -358,6 +360,7 @@ export function SelectGameCategoryOption(props: {
             category: t("market.other_category", "Other"),
             subcategory: t("market.other_category", "Other"),
           }
+  const { categories } = useGameItemData()
         : {
             category: t("market.other_category", "Other"),
             subcategory: t("market.other_category", "Other"),
