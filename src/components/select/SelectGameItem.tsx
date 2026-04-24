@@ -1,8 +1,7 @@
 import { Autocomplete, Grid, TextField, TextFieldProps } from "@mui/material"
+import { useGameItemData } from "../../features/market/hooks/useGameItemData"
 import React, { useMemo } from "react"
 import {
-  useGetMarketCategoriesQuery,
-  useGetMarketItemsByCategoryQuery,
 } from "../../features/market"
 import { useTranslation } from "react-i18next"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -18,11 +17,7 @@ export interface SelectGameItemProps {
 
 export function SelectGameItemStack(props: SelectGameItemProps) {
   const { t } = useTranslation()
-  const { data: categories } = useGetMarketCategoriesQuery()
-  const { data: items, isLoading: itemsLoading } =
-    useGetMarketItemsByCategoryQuery(props.item_type!, {
-      skip: !props.item_type,
-    })
+  const { categories, items, itemsLoading } = useGameItemData(props.item_type)
 
   const category_value = useMemo(
     () =>
@@ -146,10 +141,7 @@ export function SelectGameItemOnly(props: {
   size?: "small" | "medium"
 }) {
   const { t } = useTranslation()
-  const { data: items, isLoading: itemsLoading } =
-    useGetMarketItemsByCategoryQuery(props.item_type!, {
-      skip: !props.item_type,
-    })
+  const { items, itemsLoading } = useGameItemData(props.item_type)
 
   const item_name_value = useMemo(
     () =>
@@ -186,11 +178,6 @@ export function SelectGameItemOnly(props: {
 
 export function SelectGameItem(props: SelectGameItemProps) {
   const { t } = useTranslation()
-  const { data: categories } = useGetMarketCategoriesQuery()
-  const { data: items, isLoading: itemsLoading } =
-    useGetMarketItemsByCategoryQuery(props.item_type!, {
-      skip: !props.item_type,
-    })
 
   const category_value = useMemo(
     () =>
@@ -313,7 +300,6 @@ export function SelectGameCategory(props: {
   size?: "small" | "medium"
 }) {
   const { t } = useTranslation()
-  const { data: categories } = useGetMarketCategoriesQuery()
 
   const itemType = props.value || props.item_type || "Other"
   const handleChange = props.onChange || props.onTypeChange
@@ -364,7 +350,6 @@ export function SelectGameCategoryOption(props: {
   TextfieldProps?: TextFieldProps
 }) {
   const { t } = useTranslation()
-  const { data: categories } = useGetMarketCategoriesQuery()
 
   const category_value = useMemo(
     () =>
