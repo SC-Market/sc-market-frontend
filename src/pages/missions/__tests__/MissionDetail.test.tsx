@@ -17,7 +17,7 @@ import { Provider } from "react-redux"
 import { BrowserRouter, MemoryRouter, Route, Routes } from "react-router-dom"
 import { configureStore } from "@reduxjs/toolkit"
 import { MissionDetail } from "../MissionDetail"
-import { missionsApi } from "../../../store/missionsApi"
+import { marketV2Api } from "../../../store/api/v2/market"
 
 // Mock mission detail data
 const mockMissionDetail = {
@@ -159,10 +159,10 @@ const mockMissionDetail = {
 const createMockStore = (mockData: any, isLoading = false, error: any = null) => {
   return configureStore({
     reducer: {
-      [missionsApi.reducerPath]: missionsApi.reducer,
+      [marketV2Api.reducerPath]: marketV2Api.reducer,
     },
     preloadedState: {
-      [missionsApi.reducerPath]: {
+      [marketV2Api.reducerPath]: {
         queries: {
           'getMissionDetail({"mission_id":"mission-1"})': {
             status: isLoading ? "pending" : error ? "rejected" : "fulfilled",
@@ -173,11 +173,11 @@ const createMockStore = (mockData: any, isLoading = false, error: any = null) =>
         mutations: {},
         provided: {},
         subscriptions: {},
-        config: { online: true, focused: true, middlewareRegistered: true, refetchOnFocus: false, refetchOnReconnect: false, refetchOnMountOrArgChange: false, keepUnusedDataFor: 60, reducerPath: missionsApi.reducerPath, invalidationBehavior: "delayed" },
+        config: { online: true, focused: true, middlewareRegistered: true, refetchOnFocus: false, refetchOnReconnect: false, refetchOnMountOrArgChange: false, keepUnusedDataFor: 60, reducerPath: marketV2Api.reducerPath, invalidationBehavior: "delayed" },
       } as any,
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(missionsApi.middleware),
+      getDefaultMiddleware().concat(marketV2Api.middleware),
   })
 }
 

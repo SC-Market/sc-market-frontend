@@ -17,29 +17,29 @@ import { Provider } from "react-redux"
 import { configureStore } from "@reduxjs/toolkit"
 import { describe, it, expect, beforeEach, vi } from "vitest"
 import { MissionRatingDialog } from "../MissionRatingDialog"
-import { missionsApi } from "../../../store/missionsApi"
+import { marketV2Api } from "../../../store/api/v2/market"
 
 // Mock store setup
 const createMockStore = () => {
   return configureStore({
     reducer: {
-      [missionsApi.reducerPath]: missionsApi.reducer,
+      [marketV2Api.reducerPath]: marketV2Api.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(missionsApi.middleware),
+      getDefaultMiddleware().concat(marketV2Api.middleware),
   })
 }
 
 // Mock the mutation hook
-vi.mock("../../../store/missionsApi", async () => {
-  const actual = await vi.importActual("../../../store/missionsApi")
+vi.mock("../../../store/api/v2/market", async () => {
+  const actual = await vi.importActual("../../../store/api/v2/market")
   return {
     ...actual,
     useRateMissionMutation: vi.fn(),
   }
 })
 
-const { useRateMissionMutation } = await import("../../../store/missionsApi")
+const { useRateMissionMutation } = await import("../../../store/api/v2/market")
 
 describe("MissionRatingDialog", () => {
   const mockOnClose = vi.fn()

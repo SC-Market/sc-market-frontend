@@ -12,12 +12,12 @@ import { BrowserRouter } from "react-router-dom"
 import { configureStore } from "@reduxjs/toolkit"
 import { describe, it, expect, vi } from "vitest"
 import { BlueprintBrowser } from "../BlueprintBrowser"
-import { blueprintsApi } from "../../../store/blueprintsApi"
+import { marketV2Api } from "../../../store/api/v2/market"
 
 // Mock the API hooks
-vi.mock("../../../store/blueprintsApi", () => ({
-  blueprintsApi: {
-    reducerPath: "blueprintsApi",
+vi.mock("../../../store/api/v2/market", () => ({
+  marketV2Api: {
+    reducerPath: "marketV2Api",
     reducer: () => ({}),
     middleware: { concat: () => [] },
   },
@@ -53,7 +53,7 @@ vi.mock("../../../store/blueprintsApi", () => ({
 const createMockStore = () => {
   return configureStore({
     reducer: {
-      [blueprintsApi.reducerPath]: blueprintsApi.reducer,
+      [marketV2Api.reducerPath]: marketV2Api.reducer,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
   })

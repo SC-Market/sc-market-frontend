@@ -19,8 +19,8 @@ import { describe, it, expect, beforeEach, vi } from "vitest"
 import { Provider } from "react-redux"
 import { configureStore } from "@reduxjs/toolkit"
 import { WishlistShare } from "../WishlistShare"
-import { wishlistsApi } from "../../../store/wishlistsApi"
-import type { Wishlist } from "../../../store/wishlistsApi"
+import { marketV2Api } from "../../../store/api/v2/market"
+import type { Wishlist } from "../../../store/api/v2/market"
 
 // Mock window.location
 delete (window as any).location
@@ -30,10 +30,10 @@ window.location = { origin: "https://example.com" } as any
 const createMockStore = (initialState = {}) => {
   return configureStore({
     reducer: {
-      [wishlistsApi.reducerPath]: wishlistsApi.reducer,
+      [marketV2Api.reducerPath]: marketV2Api.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(wishlistsApi.middleware),
+      getDefaultMiddleware().concat(marketV2Api.middleware),
     preloadedState: initialState,
   })
 }
