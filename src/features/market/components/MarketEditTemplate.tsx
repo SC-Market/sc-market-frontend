@@ -8,7 +8,7 @@ import {
 } from "../../../store/profile"
 import { Grid, Typography } from "@mui/material"
 import LoadingButton from "@mui/lab/LoadingButton"
-import { useUpdateContractorMutation } from "../../../store/contractor"
+import { useUpdateContractorMutation } from "../../contractor/api/contractorApi"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { useTranslation } from "react-i18next" // Localization
 import { OrderSettings } from "../../../components/settings/OrderSettings"

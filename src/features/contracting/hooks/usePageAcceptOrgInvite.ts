@@ -4,7 +4,7 @@ import {
   useAcceptContractorInviteCodeMutation,
   useGetContractorBySpectrumIDQuery,
   useGetContractorInviteCodeQuery,
-} from "../../../store/contractor"
+} from "../../contractor/api/contractorApi"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { useTranslation } from "react-i18next"
 

@@ -1,4 +1,4 @@
-import { Contractor, ContractorInvite } from "../../../datatypes/Contractor"
+import type { Contractor, ContractorInvite } from "../../contractor/domain/types"
 import type { Order, OrderComment, OrderReview } from "../../orders/domain/types"
 import { MarketBid, MarketListing } from "../../../features/market"
 import { MinimalUser } from "../../../datatypes/User"

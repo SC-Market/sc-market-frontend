@@ -5,14 +5,14 @@ import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded"
 import { Box, Button, Collapse, ListItem } from "@mui/material"
 import { Notification } from "../../../hooks/login/UserProfile"
-import { ContractorInvite } from "../../../datatypes/Contractor"
+import type { ContractorInvite } from "../../contractor/domain/types"
 import { UnderlineLink } from "../../../components/typography/UnderlineLink"
 import { Trans, useTranslation } from "react-i18next"
 import { NotificationBase } from "../components/NotificationBase"
 import {
   useAcceptContractorInviteMutation,
   useDeclineContractorInviteMutation,
-} from "../../../store/contractor"
+} from "../../contractor/api/contractorApi"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 
 export function NotificationContractorInvite(props: { notif: Notification }) {

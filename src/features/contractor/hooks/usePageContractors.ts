@@ -1,4 +1,4 @@
-import { useGetContractorsQuery } from "../../../store/contractor"
+import { useGetContractorsQuery } from "../api/contractorApi"
 import type { ContractorSearchState } from "../../../hooks/contractor/ContractorSearch"
 
 /**

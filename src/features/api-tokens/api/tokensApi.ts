@@ -1,7 +1,7 @@
 import { BACKEND_URL } from "../../../util/constants"
 import { serviceApi } from "../../../store/service"
 import { unwrapResponse } from "../../../store/api-utils"
-import { Contractor } from "../../../datatypes/Contractor"
+import type { Contractor } from "../../contractor/domain/types"
 import type {
   ApiToken,
   CreateTokenRequest,

@@ -24,7 +24,7 @@ import {
   RadioButtonCheckedRounded,
   RadioButtonUncheckedRounded,
 } from "@mui/icons-material"
-import { useGetContractorBySpectrumIDQuery } from "../../../store/contractor"
+import { useGetContractorBySpectrumIDQuery } from "../../contractor/api/contractorApi"
 import { useCurrentMarketListing } from ".."
 import {
   useMarketUpdateListingMutation,

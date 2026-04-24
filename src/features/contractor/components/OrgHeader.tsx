@@ -13,7 +13,7 @@ import { useTheme } from "@mui/material/styles"
 import PeopleAltRoundedIcon from "@mui/icons-material/PeopleAltRounded"
 import { GroupAdd, LinkRounded } from "@mui/icons-material"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
-import { Contractor, ContractorInvite } from "../../../datatypes/Contractor"
+import { Contractor, ContractorInvite } from "../domain/types"
 import { contractorKindIcons } from "../../../views/contractor/ContractorList"
 import { useTranslation } from "react-i18next"
 import { ShareButton } from "../../../components/buttons/ShareButton"
@@ -21,7 +21,7 @@ import { useGetUserProfileQuery } from "../../../store/profile"
 import { useGetNotificationsQuery } from "../../../store/notification"
 import {
   useAcceptContractorInviteMutation,
-} from "../../../store/contractor"
+} from "../api/contractorApi"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 
 interface OrgHeaderProps {

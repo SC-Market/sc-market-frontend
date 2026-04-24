@@ -1,6 +1,6 @@
 import React from "react"
 import { Helmet } from "react-helmet"
-import { Contractor } from "../../../datatypes/Contractor"
+import { Contractor } from "../domain/types"
 import { FRONTEND_URL } from "../../../util/constants"
 
 interface OrgMetaTagsProps {

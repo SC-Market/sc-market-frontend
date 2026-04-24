@@ -2,10 +2,10 @@ import React from "react"
 import { Fab } from "@mui/material"
 import { RefreshRounded } from "@mui/icons-material"
 import { useTheme } from "@mui/material/styles"
-import { Contractor } from "../../../datatypes/Contractor"
+import { Contractor } from "../domain/types"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { useGetUserProfileQuery } from "../../../store/profile"
-import { useRefetchContractorDetailsMutation } from "../../../store/contractor"
+import { useRefetchContractorDetailsMutation } from "../api/contractorApi"
 import {
   DarkBannerContainer,
   LightBannerContainer,
