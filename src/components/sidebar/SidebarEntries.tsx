@@ -338,7 +338,7 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
     ],
   },
   {
-    title: "sidebar.gameData.title",
+    title: "Crafting",
     items: [
       {
         text: "sidebar.gameData.missions",
@@ -348,41 +348,39 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
         feature_flag: "crafting",
       },
       {
-        text: "sidebar.gameData.blueprints",
-        icon: <ConstructionRounded />,
-        tab_key: "blueprints",
-        to: "/blueprints",
-        feature_flag: "crafting",
-      },
-      {
-        text: "sidebar.gameData.craftingCalculator",
+        text: "Crafting",
         icon: <ScienceRounded />,
-        tab_key: "crafting_calculator",
-        to: "/crafting/calculator",
+        tab_key: "crafting",
         feature_flag: "crafting",
-      },
-      {
-        text: "sidebar.gameData.resources",
-        icon: <TerrainRounded />,
-        tab_key: "resources",
-        to: "/resources",
-        feature_flag: "crafting",
-      },
-      {
-        text: "Shopping Lists",
-        icon: <ChecklistRounded />,
-        tab_key: "wishlists",
-        to: "/wishlists",
-        logged_in: true,
-        feature_flag: "crafting",
-      },
-      {
-        text: "sidebar.gameData.blueprintInventory",
-        icon: <InventoryRounded />,
-        tab_key: "blueprint_inventory",
-        to: "/blueprints/inventory",
-        logged_in: true,
-        feature_flag: "crafting",
+        children: [
+          {
+            text: "sidebar.gameData.blueprints",
+            icon: <ConstructionRounded />,
+            to: "/blueprints",
+          },
+          {
+            text: "sidebar.gameData.craftingCalculator",
+            icon: <ScienceRounded />,
+            to: "/crafting/calculator",
+          },
+          {
+            text: "sidebar.gameData.resources",
+            icon: <TerrainRounded />,
+            to: "/resources",
+          },
+          {
+            text: "Shopping Lists",
+            icon: <ChecklistRounded />,
+            to: "/wishlists",
+            logged_in: true,
+          },
+          {
+            text: "sidebar.gameData.blueprintInventory",
+            icon: <InventoryRounded />,
+            to: "/blueprints/inventory",
+            logged_in: true,
+          },
+        ],
       },
     ],
   },
