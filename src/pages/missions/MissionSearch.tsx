@@ -163,7 +163,7 @@ export function MissionSearch() {
     eventCode: eventCode || undefined,
     excludeEvents: eventCode ? false : !showEventMissions,
     page,
-    pageSize: 20,
+    pageSize: 40,
   })
 
   const handleMissionClick = (missionCode: string, missionId: string) => {

@@ -149,7 +149,7 @@ export function BlueprintBrowser() {
     manufacturer: manufacturer || undefined,
     ingredientName: ingredientName || undefined,
     page,
-    pageSize: 20,
+    pageSize: 40,
   }, { refetchOnMountOrArgChange: true })
 
   // Accumulate results

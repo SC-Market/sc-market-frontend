@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useState } from "react"
 import {
   Box,
   Button,
@@ -64,14 +64,8 @@ import {
   WorkRounded,
 } from "@mui/icons-material"
 import { Section } from "../../components/paper/Section"
-import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
-import {
-  useGetWhitelabelConfigQuery,
-  useUpdateWhitelabelConfigMutation,
-  useGetWhitelabelSidebarQuery,
-  useUpdateWhitelabelSidebarMutation,
-  SidebarConfigItem,
-} from "../../store/api/contractors"
+import type { SidebarConfigItem } from "../../store/api/contractors"
+import { useWhiteLabelSettings, TOGGLEABLE_TABS, DEFAULT_ICON, type CustomTab } from "../../features/contractor/hooks/useWhiteLabelSettings"
 
 // ── Icon registry ──────────────────────────────────────────────────────
 const ICON_MAP: Record<string, React.ReactElement> = {
@@ -171,193 +165,19 @@ function IconPicker({
 }
 
 // ── Tab definitions ────────────────────────────────────────────────────
-const TOGGLEABLE_TABS = [
-  { key: "market", label: "Player Market" },
-  { key: "services", label: "Services" },
-  { key: "contracts", label: "Contracts" },
-  { key: "recruiting", label: "Recruiting" },
-  { key: "contractors", label: "Organizations" },
-] as const
-
-const ALWAYS_ON_KEYS = [
-  "sc_market_home",
-  "orders_assigned",
-  "messaging",
-  "manage_listings",
-  "manage_stock",
-  "manage_services",
-  "availability",
-]
-
-function isExternal(path: string) {
-  return path.startsWith("http://") || path.startsWith("https://")
-}
-
-interface CustomTab {
-  label: string
-  path: string
-  icon: string
-}
-
-// ── Component ──────────────────────────────────────────────────────────
 export function WhiteLabelSettings() {
-  const [contractor] = useCurrentOrg()
-  const spectrumId = contractor?.spectrum_id
+  const {
+    spectrumId, config,
+    focusMode, setFocusMode, homepagePath, setHomepagePath, requireMembership, setRequireMembership,
+    configSaving, handleSaveConfig,
+    disabledTabs, toggleTab,
+    customTabs, addCustomTab, removeCustomTab, updateCustomTabIcon,
+    newLabel, setNewLabel, newPath, setNewPath, newIcon, setNewIcon,
+    sidebarSaving, handleSaveSidebar,
+    snack, setSnack,
+  } = useWhiteLabelSettings()
 
-  const { data: configRes } = useGetWhitelabelConfigQuery(spectrumId!, {
-    skip: !spectrumId,
-  })
-  const { data: sidebarRes } = useGetWhitelabelSidebarQuery(spectrumId!, {
-    skip: !spectrumId,
-  })
-  const [updateConfig, { isLoading: configSaving }] =
-    useUpdateWhitelabelConfigMutation()
-  const [updateSidebar, { isLoading: sidebarSaving }] =
-    useUpdateWhitelabelSidebarMutation()
-
-  const config = (configRes as any)?.data
-  const sidebarItems: SidebarConfigItem[] = (sidebarRes as any)?.data ?? []
-
-  // ── Config state ──
-  const [focusMode, setFocusMode] = useState<"public" | "internal">("public")
-  const [homepagePath, setHomepagePath] = useState("")
-  const [requireMembership, setRequireMembership] = useState(false)
-
-  useEffect(() => {
-    if (config) {
-      setFocusMode(config.focus_mode ?? "public")
-      setHomepagePath(config.homepage_path ?? "")
-      setRequireMembership(config.require_membership ?? false)
-    }
-  }, [config])
-
-  // ── Sidebar state ──
-  const [disabledTabs, setDisabledTabs] = useState<Set<string>>(new Set())
-  const [customTabs, setCustomTabs] = useState<CustomTab[]>([])
-  const [newLabel, setNewLabel] = useState("")
-  const [newPath, setNewPath] = useState("")
-  const [newIcon, setNewIcon] = useState(DEFAULT_ICON)
-
-  useEffect(() => {
-    const disabled = new Set<string>()
-    const custom: CustomTab[] = []
-    for (const item of sidebarItems) {
-      if (item.standard_tab_key && !item.enabled) {
-        disabled.add(item.standard_tab_key)
-      }
-      if (!item.standard_tab_key && item.custom_path) {
-        custom.push({
-          label: item.custom_label ?? "",
-          path: item.custom_path,
-          icon: item.custom_icon || DEFAULT_ICON,
-        })
-      }
-    }
-    setDisabledTabs(disabled)
-    setCustomTabs(custom)
-  }, [sidebarItems])
-
-  const [snack, setSnack] = useState<string | null>(null)
-
-  const handleSaveConfig = useCallback(async () => {
-    if (!spectrumId) return
-    try {
-      await updateConfig({
-        spectrum_id: spectrumId,
-        focus_mode: focusMode,
-        homepage_path: homepagePath || null,
-        require_membership: requireMembership,
-      }).unwrap()
-      setSnack("Settings saved")
-    } catch {
-      setSnack("Failed to save settings")
-    }
-  }, [
-    spectrumId,
-    focusMode,
-    homepagePath,
-    requireMembership,
-    updateConfig,
-  ])
-
-  const handleSaveSidebar = useCallback(async () => {
-    if (!spectrumId) return
-    try {
-      const items: SidebarConfigItem[] = []
-      let order = 0
-
-      for (const key of ALWAYS_ON_KEYS) {
-        items.push({
-          standard_tab_key: key,
-          custom_label: null,
-          custom_path: null,
-          custom_icon: null,
-          is_external: false,
-          enabled: true,
-          sort_order: order++,
-        })
-      }
-
-      for (const t of TOGGLEABLE_TABS) {
-        items.push({
-          standard_tab_key: t.key,
-          custom_label: null,
-          custom_path: null,
-          custom_icon: null,
-          is_external: false,
-          enabled: !disabledTabs.has(t.key),
-          sort_order: order++,
-        })
-      }
-
-      for (const ct of customTabs) {
-        items.push({
-          standard_tab_key: null,
-          custom_label: ct.label,
-          custom_path: ct.path,
-          custom_icon: ct.icon,
-          is_external: isExternal(ct.path),
-          enabled: true,
-          sort_order: order++,
-        })
-      }
-
-      await updateSidebar({ spectrum_id: spectrumId, items }).unwrap()
-      setSnack("Sidebar saved")
-    } catch {
-      setSnack("Failed to save sidebar")
-    }
-  }, [spectrumId, disabledTabs, customTabs, updateSidebar])
-
-  const toggleTab = (key: string) => {
-    setDisabledTabs((prev) => {
-      const next = new Set(prev)
-      if (next.has(key)) next.delete(key)
-      else next.add(key)
-      return next
-    })
-  }
-
-  const addCustomTab = () => {
-    const label = newLabel.trim()
-    const path = newPath.trim()
-    if (!label || !path) return
-    setCustomTabs((prev) => [...prev, { label, path, icon: newIcon }])
-    setNewLabel("")
-    setNewPath("")
-    setNewIcon(DEFAULT_ICON)
-  }
-
-  const removeCustomTab = (index: number) => {
-    setCustomTabs((prev) => prev.filter((_, i) => i !== index))
-  }
-
-  const updateCustomTabIcon = (index: number, icon: string) => {
-    setCustomTabs((prev) =>
-      prev.map((t, i) => (i === index ? { ...t, icon } : t)),
-    )
-  }
-
+  return (
   return (
     <Grid container spacing={2}>
       <Section title="Site Settings" xs={12}>
