@@ -102,6 +102,8 @@ export function BlueprintBrowser() {
   const setHasMissionSource = (v: boolean) => updateParam("missions", v ? "true" : "")
   const source = searchParams.get("source") || ""
   const setSource = (v: string) => updateParam("source", v)
+  const hideUnsourceable = searchParams.get("hide_unsourceable") !== "false" // default true
+  const setHideUnsourceable = (v: boolean) => updateParam("hide_unsourceable", v ? "" : "false")
   const manufacturer = searchParams.get("mfr") || ""
   const setManufacturer = (v: string) => updateParam("mfr", v)
   const ingredientName = searchParams.get("ingredient") || ""
@@ -143,9 +145,15 @@ export function BlueprintBrowser() {
   }, [data, page])
 
   const filteredBlueprints = useMemo(() => {
-    if (!hasMissionSource) return allBlueprints
-    return allBlueprints.filter((bp) => bp.mission_count > 0)
-  }, [allBlueprints, hasMissionSource])
+    let result = allBlueprints
+    if (hideUnsourceable) {
+      result = result.filter((bp) => bp.source === "default" || bp.mission_count > 0)
+    }
+    if (hasMissionSource) {
+      result = result.filter((bp) => bp.mission_count > 0)
+    }
+    return result
+  }, [allBlueprints, hasMissionSource, hideUnsourceable])
 
   const hasMore = data ? page * data.page_size < data.total : false
   const loadMore = useCallback(() => setPage(p => p + 1), [])
@@ -249,6 +257,8 @@ export function BlueprintBrowser() {
         label={<Typography variant="body2">Owned Only</Typography>} sx={{ ml: 0 }} />
       <FormControlLabel control={<Checkbox checked={hasMissionSource} onChange={(e) => setHasMissionSource(e.target.checked)} size="small" />}
         label={<Typography variant="body2">Has Mission Source</Typography>} sx={{ ml: 0 }} />
+      <FormControlLabel control={<Checkbox checked={hideUnsourceable} onChange={(e) => setHideUnsourceable(e.target.checked)} size="small" />}
+        label={<Typography variant="body2">Hide Unsourceable</Typography>} sx={{ ml: 0 }} />
       <FormControl fullWidth size="small">
         <InputLabel>Source</InputLabel>
         <Select value={source} label="Source" onChange={(e) => setSource(e.target.value)}>
