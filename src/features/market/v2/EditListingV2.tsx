@@ -30,6 +30,7 @@ import { LocationSelector } from "../components/stock/LocationSelector";
 import { BulkDiscountTierEditor } from "../../../components/market/BulkDiscountTierEditor";
 import {
   useGetListingDetailQuery,
+  useGetStockLotsQuery,
   useUpdateListingMutation,
 } from "../../../store/api/v2/market";
 import { useAlertHook } from "../../../hooks/alert/AlertHook";
@@ -83,6 +84,7 @@ export function EditListingV2() {
     isLoading: isLoadingListing,
     error: loadError,
   } = useGetListingDetailQuery({ id: id! });
+  const { data: stockLotsData } = useGetStockLotsQuery({ listingId: id! });
 
   // Form state
   const [title, setTitle] = useState("");
@@ -120,25 +122,24 @@ export function EditListingV2() {
       setBasePrice(firstItem.base_price || 0);
       setBulkDiscountTiers((firstItem as any).bulk_discount_tiers || []);
 
-      // Flatten variants into stock lots
-      // Note: In a real implementation, we'd need to fetch actual stock lots
-      // For now, we'll create one "lot" per variant for editing purposes
-      const lots: StockLotFormData[] = firstItem.variants.map((variant) => ({
-        lot_id: variant.variant_id, // Using variant_id as placeholder
-        variant_id: variant.variant_id,
-        quantity: variant.quantity,
-        quality_tier: variant.attributes.quality_tier,
-        quality_value: variant.attributes.quality_value,
-        crafted_source: variant.attributes.crafted_source,
-        location_id: variant.locations?.[0], // First location if available
-        price: variant.price,
-        display_name: variant.display_name,
+      // Build stock lots from actual lot data (not variant aggregates)
+      const actualLots = stockLotsData?.lots || [];
+      const lots: StockLotFormData[] = actualLots.map((lot) => ({
+        lot_id: lot.lot_id,
+        variant_id: lot.variant.variant_id,
+        quantity: lot.quantity_total,
+        quality_tier: lot.variant.attributes.quality_tier,
+        quality_value: lot.variant.attributes.quality_value,
+        crafted_source: lot.variant.attributes.crafted_source,
+        location_id: lot.location?.location_id,
+        price: firstItem.variants.find((v) => v.variant_id === lot.variant.variant_id)?.price ?? 0,
+        display_name: lot.variant.display_name,
         isModified: false,
       }));
 
       setStockLots(lots);
     }
-  }, [listingData]);
+  }, [listingData, stockLotsData]);
 
   // Update stock lot field
   const handleUpdateStockLot = useCallback(
