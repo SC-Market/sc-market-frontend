@@ -248,24 +248,10 @@ export function BlueprintBrowser() {
         </FormControl>
       )}
       <FormControl fullWidth size="small">
-        <InputLabel>Rarity</InputLabel>
-        <Select value={rarity} label="Rarity" onChange={(e) => setRarity(e.target.value)}>
-          <MenuItem value="">All</MenuItem>
-          {["Common","Uncommon","Rare","Epic","Legendary"].map(r => <MenuItem key={r} value={r}>{r}</MenuItem>)}
-        </Select>
-      </FormControl>
-      <FormControl fullWidth size="small">
         <InputLabel>Tier</InputLabel>
         <Select value={tier} label="Tier" onChange={(e) => setTier(e.target.value === "" ? "" : Number(e.target.value))}>
           <MenuItem value="">All</MenuItem>
           {[1,2,3,4,5].map(t => <MenuItem key={t} value={t}>Tier {t}</MenuItem>)}
-        </Select>
-      </FormControl>
-      <FormControl fullWidth size="small">
-        <InputLabel>Station</InputLabel>
-        <Select value={craftingStation} label="Station" onChange={(e) => setCraftingStation(e.target.value)}>
-          <MenuItem value="">All</MenuItem>
-          {["Weapons Bench","Armor Bench","Component Bench","Vehicle Bench","Electronics Bench"].map(s => <MenuItem key={s} value={s}>{s}</MenuItem>)}
         </Select>
       </FormControl>
       <FormControlLabel control={<Checkbox checked={ownedOnly} onChange={(e) => setOwnedOnly(e.target.checked)} size="small" />}

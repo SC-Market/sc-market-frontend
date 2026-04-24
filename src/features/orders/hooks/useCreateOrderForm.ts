@@ -180,7 +180,8 @@ export function useCreateOrderForm(params: UseCreateOrderFormParams) {
         })
         issueAlert({ message: t("CreateOrderForm.alert.submitted"), severity: "success" })
         if (data.discord_invite) {
-          window.open(`https://discord.gg/${data.discord_invite}`, "_blank")
+          const newWindow = window.open(`https://discord.gg/${data.discord_invite}`, "_blank")
+          if (newWindow) newWindow.focus()
         }
         navigate(`/offer/${data.session_id}`)
       })
