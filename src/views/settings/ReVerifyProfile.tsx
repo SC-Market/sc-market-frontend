@@ -1,6 +1,6 @@
 import { Grid, Typography, Alert } from "@mui/material"
 import React from "react"
-import { useProfileSyncHandleMutation } from "../../store/profile"
+import { useProfileSyncHandleMutation } from "../../features/profile/api/profileApi"
 import { useTranslation } from "react-i18next"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { FlatSection } from "../../components/paper/Section"

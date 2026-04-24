@@ -42,7 +42,7 @@ import {
 import { Stack } from "@mui/system"
 import { a11yProps } from "../../components/tabs/Tabs"
 import SCMarketLogo from "../../assets/scmarket-logo.webp"
-import { useGetUserProfileQuery } from "../../store/profile"
+import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { useTranslation } from "react-i18next"
 import { useOrderSearch } from "../../features/orders/hooks/useOrderSearch"
 import {

@@ -6,7 +6,7 @@ import {
 import { Order, OrderComment, OrderReview } from "../../datatypes/Order"
 import { MarketBid, MarketListing } from "../../features/market"
 import { MinimalUser } from "../../datatypes/User"
-import { OfferSession } from "../../store/offer"
+import { OfferSession } from "../../features/offers/api/offerApi"
 
 export interface Notification {
   read: boolean

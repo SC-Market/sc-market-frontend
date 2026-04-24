@@ -1,4 +1,4 @@
-import { Offer } from "../store/offer"
+import { Offer } from "../features/offers/api/offerApi"
 
 export interface OfferChanges {
   costChanged: boolean

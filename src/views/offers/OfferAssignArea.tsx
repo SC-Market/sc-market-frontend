@@ -2,18 +2,18 @@ import { Section } from "../../components/paper/Section"
 import React, { useCallback, useEffect, useState } from "react"
 import { MinimalUser } from "../../datatypes/User"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
-import { useGetContractorMembersQuery } from "../../store/contractor"
+import { useGetContractorMembersQuery } from "../../features/contractor/api/contractorApi"
 import throttle from "lodash/throttle"
 import { Autocomplete, Box, Button, Grid, TextField } from "@mui/material"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
-import { contractorsApi } from "../../store/contractor"
+import { contractorsApi } from "../../features/contractor/api/contractorApi"
 import { store } from "../../store/store"
 import { PersonRemoveRounded, PersonRounded } from "@mui/icons-material"
 import {
   useAssignOfferMutation,
   useUnassignOfferMutation,
   OfferSession,
-} from "../../store/offer"
+} from "../../features/offers/api/offerApi"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { useTranslation } from "react-i18next"
 

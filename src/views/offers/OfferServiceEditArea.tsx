@@ -1,4 +1,4 @@
-import { OfferSession } from "../../store/offer"
+import { OfferSession } from "../../features/offers/api/offerApi"
 import React, { useMemo } from "react"
 import { Grid, MenuItem, Paper, TextField, Typography } from "@mui/material"
 import { ServiceListingBase } from "../contracts/ServiceListings.lazy"
@@ -8,7 +8,7 @@ import { useCounterOffer } from "../../hooks/offer/CounterOfferDetails"
 import {
   useGetServicesContractorQuery,
   useGetServicesQuery,
-} from "../../store/services"
+} from "../../features/services/api/servicesApi"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"

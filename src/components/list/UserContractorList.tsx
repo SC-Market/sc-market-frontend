@@ -1,5 +1,5 @@
 import { Contractor } from "../../datatypes/Contractor"
-import { useGetContractorBySpectrumIDQuery } from "../../store/contractor"
+import { useGetContractorBySpectrumIDQuery } from "../../features/contractor/api/contractorApi"
 import {
   Avatar,
   List,

@@ -1,7 +1,7 @@
 import LoadingButton from "@mui/lab/LoadingButton"
 import { Stack } from "@mui/system"
 import React, { useCallback } from "react"
-import { OfferSession, useCounterOfferMutation } from "../../store/offer"
+import { OfferSession, useCounterOfferMutation } from "../../features/offers/api/offerApi"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { useNavigate } from "react-router-dom"
 import { useCounterOffer } from "../../hooks/offer/CounterOfferDetails"

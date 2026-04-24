@@ -6,7 +6,7 @@ import { ContainerGrid } from "../../components/layout/ContainerGrid"
 import {
   useGetUserProfileQuery,
   useGetAuthenticatorIdentifier,
-} from "../../store/profile"
+} from "../../features/profile/api/profileApi"
 import { Navigate } from "react-router-dom"
 import { LoginInfoPanel } from "./LoginInfoPanel"
 import { Grid } from "@mui/material"

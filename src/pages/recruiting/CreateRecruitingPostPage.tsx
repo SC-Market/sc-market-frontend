@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { FormPageLayout } from "../../components/layout/FormPageLayout"
 import { CreateRecruitingPost } from "../../views/recruiting/CreateRecruitingPost"
-import { useRecruitingGetPostByIDQuery } from "../../store/recruiting"
+import { useRecruitingGetPostByIDQuery } from "../../features/recruiting/api/recruitingApi"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { RecruitingPostViewSkeleton } from "../../components/skeletons"
 

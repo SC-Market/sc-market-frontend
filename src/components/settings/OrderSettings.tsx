@@ -31,7 +31,7 @@ import {
   useCreateContractorOrderSettingMutation,
   useUpdateContractorOrderSettingMutation,
   useDeleteContractorOrderSettingMutation,
-} from "../../store/orderSettings"
+} from "../../features/orders/api/orderSettingsApi"
 
 interface OrderSettingsProps {
   entityType: "user" | "contractor"

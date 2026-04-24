@@ -10,8 +10,8 @@ import { PersonAdd } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { User } from "../../datatypes/User"
-import { useProfileUnblockUserMutation } from "../../store/profile"
-import { useUnblockUserForOrgMutation } from "../../store/contractor"
+import { useProfileUnblockUserMutation } from "../../features/profile/api/profileApi"
+import { useUnblockUserForOrgMutation } from "../../features/contractor/api/contractorApi"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 
 interface UnblockUserButtonProps {

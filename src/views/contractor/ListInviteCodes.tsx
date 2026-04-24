@@ -10,7 +10,7 @@ import { HeadCell, PaginatedTable } from "../../components/table/PaginatedTable"
 import {
   useDeleteContractorInviteMutation,
   useGetContractorInvitesQuery,
-} from "../../store/contractor"
+} from "../../features/contractor/api/contractorApi"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import {
   ContentCopyRounded,

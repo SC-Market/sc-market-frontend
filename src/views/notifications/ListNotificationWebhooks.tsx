@@ -5,11 +5,11 @@ import { HeadCell, PaginatedTable } from "../../components/table/PaginatedTable"
 import {
   useDeleteContractorWebhookMutation,
   useGetContractorWebhooksQuery,
-} from "../../store/contractor"
+} from "../../features/contractor/api/contractorApi"
 import {
   useGetUserWebhooks,
   useProfileDeleteWebhook,
-} from "../../store/profile"
+} from "../../features/profile/api/profileApi"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { OrderWebhook } from "../../datatypes/Contractor"
 import { DeleteRounded } from "@mui/icons-material"

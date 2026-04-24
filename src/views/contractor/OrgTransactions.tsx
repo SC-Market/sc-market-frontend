@@ -1,6 +1,6 @@
 import React from "react"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
-import { useGetTransactionsByContractor } from "../../store/transactions"
+import { useGetTransactionsByContractor } from "../../features/money/api/transactionsApi"
 import { TransactionTableView } from "../transactions/TransactionTableView"
 
 export function OrgTransactions() {

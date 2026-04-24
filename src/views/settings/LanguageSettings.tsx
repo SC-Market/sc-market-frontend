@@ -12,7 +12,7 @@ import { LanguageSelector } from "../../components/settings/LanguageSelector"
 import {
   useProfileGetLanguagesQuery,
   useProfileSetLanguagesMutation,
-} from "../../store/profile"
+} from "../../features/profile/api/profileApi"
 import { useTranslation } from "react-i18next"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import LoadingButton from "@mui/lab/LoadingButton"

@@ -35,7 +35,7 @@ import {
   useGetAdminUsersQuery,
   useGetActivityAdminQuery,
   useGetMembershipAnalyticsQuery,
-} from "../../store/admin"
+} from "../../features/admin/api/adminApi"
 import { MuiAreaChart } from "../../components/charts/MuiCharts"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"

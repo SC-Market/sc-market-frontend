@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { Section } from "../../components/paper/Section"
 import { Alert, Button, Grid, Snackbar, Typography } from "@mui/material"
-import { useImportShipFile } from "../../store/ships"
+import { useImportShipFile } from "../../features/fleet/api/shipsApi"
 import { AlertInterface } from "../../datatypes/Alert"
 import { Navigate } from "react-router-dom"
 import { useAlertHook } from "../../hooks/alert/AlertHook"

@@ -1,6 +1,6 @@
 import { Grid, TextField } from "@mui/material"
 import React, { useCallback, useState } from "react"
-import { useAdminExpressVerifyContractorMutation } from "../../store/contractor"
+import { useAdminExpressVerifyContractorMutation } from "../../features/contractor/api/contractorApi"
 import { FlatSection } from "../../components/paper/Section"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { useAlertHook } from "../../hooks/alert/AlertHook"

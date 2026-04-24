@@ -19,9 +19,9 @@ import {
   useGetOrgBlocklistQuery,
   useUnblockUserForOrgMutation,
   useBlockUserForOrgMutation,
-} from "../../store/contractor"
+} from "../../features/contractor/api/contractorApi"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
-import { BlocklistEntry } from "../../store/profile"
+import { BlocklistEntry } from "../../features/profile/api/profileApi"
 import { FlatSection } from "../../components/paper/Section"
 import { UserSearch } from "../../components/search/UserSearch"
 import { User } from "../../datatypes/User"

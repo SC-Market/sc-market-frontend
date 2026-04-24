@@ -12,7 +12,7 @@ import {
 } from "@mui/material"
 import { SaveRounded, EditRounded, CancelRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
-import { useUpdateOrderReviewMutation } from "../../store/orders"
+import { useUpdateOrderReviewMutation } from "../../features/orders/api/ordersApi"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { OrderReview } from "../../datatypes/Order"
 

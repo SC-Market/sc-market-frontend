@@ -18,7 +18,7 @@ import {
 import { GridColDef } from "@mui/x-data-grid"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import throttle from "lodash/throttle"
-import { useGetUserProfileQuery } from "../../store/profile"
+import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import {
   useGetContractorBySpectrumIDQuery,
   useArchiveContractorMutation,
@@ -26,7 +26,7 @@ import {
   useTransferOwnershipMutation,
   useGetContractorMembersQuery,
   contractorsApi,
-} from "../../store/contractor"
+} from "../../features/contractor/api/contractorApi"
 import { ThemedDataGrid } from "../../components/grid/ThemedDataGrid"
 import { useTranslation } from "react-i18next"
 import { useAlertHook } from "../../hooks/alert/AlertHook"

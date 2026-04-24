@@ -3,7 +3,7 @@ import {
   OfferSessionStub,
   useSearchOfferSessionsQuery,
   useMergeOfferSessionsMutation,
-} from "../../store/offer"
+} from "../../features/offers/api/offerApi"
 import {
   ControlledTable,
   HeadCell,
@@ -57,7 +57,7 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { EmptyOrders } from "../../components/empty-states"
 import { useLongPress } from "../../components/gestures"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
-import { useGetUserProfileQuery } from "../../store/profile"
+import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { OrderSearchSortMethod } from "../../datatypes/Order"
 import { UserAvatar } from "../../components/avatar/UserAvatar"
 import { useTranslation } from "react-i18next"
@@ -65,7 +65,7 @@ import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { useNavigate } from "react-router-dom"
 import { useDebounce } from "../../hooks/useDebounce"
 import { OfferRowSkeleton } from "../../components/skeletons"
-import { useAssignOfferMutation } from "../../store/offer"
+import { useAssignOfferMutation } from "../../features/offers/api/offerApi"
 import { has_permission } from "../contractor/OrgRoles"
 
 // Map for all statuses

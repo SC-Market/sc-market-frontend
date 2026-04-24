@@ -1,4 +1,4 @@
-import { OfferSession } from "../../store/offer"
+import { OfferSession } from "../../features/offers/api/offerApi"
 import React from "react"
 import { Grid, Paper, Typography } from "@mui/material"
 import { ServiceListingBase } from "../../views/contracts/ServiceListings.lazy"

@@ -3,12 +3,12 @@ import { Helmet } from "react-helmet"
 import { FRONTEND_URL } from "../../util/constants"
 import { Grid } from "@mui/material"
 import React, { lazy } from "react"
-import { useGetUserProfileQuery } from "../../store/profile"
+import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { useTranslation } from "react-i18next"
 import { ContractDetailsTableSkeleton } from "../../components/skeletons"
 import { DetailPageLayout } from "../../components/layout/DetailPageLayout"
 import { usePagePublicContract } from "../../features/contracting"
-import { PublicContract } from "../../store/public_contracts"
+import { PublicContract } from "../../features/contracting/api/publicContractsApi"
 
 // Lazy load content sections
 const ContractDetailsArea = lazy(() =>

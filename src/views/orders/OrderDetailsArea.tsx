@@ -31,14 +31,14 @@ import { useCurrentChat, useGetChatByOrderIDQuery } from "../../features/chats"
 import {
   useGetNotificationsQuery,
   useNotificationDeleteMutation,
-} from "../../store/notification"
+} from "../../features/notifications/api/notificationApi"
 import { Order } from "../../datatypes/Order"
 import { MessagesBody } from "../../features/chats"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import {
   useGetUserByUsernameQuery,
   useGetUserProfileQuery,
-} from "../../store/profile"
+} from "../../features/profile/api/profileApi"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { statusColors, statusNames } from "./OrderList"
@@ -46,7 +46,7 @@ import {
   useGetContractorBySpectrumIDQuery,
   useGetContractorMembersQuery,
   contractorsApi,
-} from "../../store/contractor"
+} from "../../features/contractor/api/contractorApi"
 import { OrderSummarySection } from "../../components/orders/OrderSummarySection"
 import { OrderSummarySectionV2 } from "../../components/orders/OrderSummarySectionV2"
 import { useGetOrderDetailQuery } from "../../store/api/v2/market"

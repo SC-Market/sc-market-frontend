@@ -17,7 +17,7 @@ import {
   useProfileGetLinksQuery,
   useProfileUnlinkProviderMutation,
   useProfileSetPrimaryProviderMutation,
-} from "../../store/profile"
+} from "../../features/profile/api/profileApi"
 import { useTranslation } from "react-i18next"
 import { useSearchParams, useNavigate } from "react-router-dom"
 import LoadingButton from "@mui/lab/LoadingButton"

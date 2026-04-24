@@ -31,19 +31,19 @@ import { NumericFormat } from "react-number-format"
 import {
   useGetServicesContractorQuery,
   useGetServicesQuery,
-} from "../../store/services"
-import { PublicContract } from "../../store/public_contracts"
+} from "../../features/services/api/servicesApi"
+import { PublicContract } from "../../features/contracting/api/publicContractsApi"
 import { useTranslation } from "react-i18next"
 import {
   useCheckContractorAvailabilityRequirementQuery,
   useCheckUserAvailabilityRequirementQuery,
   useCheckContractorOrderLimitsQuery,
   useCheckUserOrderLimitsQuery,
-} from "../../store/orderSettings"
+} from "../../features/orders/api/orderSettingsApi"
 import {
   useProfileGetAvailabilityQuery,
   useProfileUpdateAvailabilityMutation,
-} from "../../store/profile"
+} from "../../features/profile/api/profileApi"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { CheckCircle, Warning } from "@mui/icons-material"
 import { AvailabilitySelector } from "../../components/time/AvailabilitySelector"

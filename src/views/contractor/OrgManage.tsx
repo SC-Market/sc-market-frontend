@@ -43,7 +43,7 @@ import {
   useContractorUploadAvatarMutation,
   useContractorUploadBannerMutation,
   useUpdateContractorMutation,
-} from "../../store/contractor"
+} from "../../features/contractor/api/contractorApi"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import {
   MarkdownEditor,

@@ -1,6 +1,6 @@
 import React from "react"
 import { Box, Typography, Button, CircularProgress } from "@mui/material"
-import { useGetUserProfileQuery } from "../../store/profile"
+import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { IS_CUSTOM_DOMAIN, getWhiteLabelConfig } from "../../hooks/contractor/CustomDomain"
 import { BACKEND_URL } from "../../util/constants"
 import { useTranslation } from "react-i18next"

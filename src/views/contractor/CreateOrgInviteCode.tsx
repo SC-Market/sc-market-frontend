@@ -1,7 +1,7 @@
 import { Button, Divider, Grid, TextField, Typography } from "@mui/material"
 import { Section } from "../../components/paper/Section"
 import React, { useCallback, useState } from "react"
-import { useCreateContractorInviteMutation } from "../../store/contractor"
+import { useCreateContractorInviteMutation } from "../../features/contractor/api/contractorApi"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useTranslation } from "react-i18next"

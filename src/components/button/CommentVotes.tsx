@@ -2,14 +2,14 @@ import {
   RecruitingPost,
   useRecruitingDownvotePostMutation,
   useRecruitingUpvotePostMutation,
-} from "../../store/recruiting"
+} from "../../features/recruiting/api/recruitingApi"
 import { Button, ButtonGroup } from "@mui/material"
 import {
   KeyboardArrowDownRounded,
   KeyboardArrowUpRounded,
 } from "@mui/icons-material"
 import React from "react"
-import { Comment as RecruitingComment } from "../../store/recruiting"
+import { Comment as RecruitingComment } from "../../features/recruiting/api/recruitingApi"
 import {
   Comment,
   useCommentsDownvoteMutation,

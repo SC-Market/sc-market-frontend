@@ -9,9 +9,9 @@ import {
 } from "@mui/material"
 import React, { useCallback, useState } from "react"
 import OpenInNewIcon from "@mui/icons-material/OpenInNew"
-import { useGetAuthenticatorIdentifier } from "../../store/profile"
+import { useGetAuthenticatorIdentifier } from "../../features/profile/api/profileApi"
 import { useNavigate } from "react-router-dom"
-import { useContractorLinkMutation } from "../../store/contractor"
+import { useContractorLinkMutation } from "../../features/contractor/api/contractorApi"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { Trans, useTranslation } from "react-i18next"
 import {

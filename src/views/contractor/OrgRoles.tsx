@@ -23,7 +23,7 @@ import {
   Tooltip,
 } from "@mui/material"
 import { HeadCell, PaginatedTable } from "../../components/table/PaginatedTable"
-import { useGetUserProfileQuery } from "../../store/profile"
+import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { Contractor, ContractorRole } from "../../datatypes/Contractor"
@@ -38,7 +38,7 @@ import {
   useCreateContractorRoleMutation,
   useDeleteContractorRoleMutation,
   useUpdateContractorRoleMutation,
-} from "../../store/contractor"
+} from "../../features/contractor/api/contractorApi"
 import { useTranslation } from "react-i18next"
 
 export {

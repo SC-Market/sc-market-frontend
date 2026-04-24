@@ -2,7 +2,7 @@ import {
   Comment,
   RecruitingPost,
   useRecruitingCommentOnPostMutation,
-} from "../../store/recruiting"
+} from "../../features/recruiting/api/recruitingApi"
 import {
   Avatar,
   Box,
@@ -24,7 +24,7 @@ import {
   useCommentsReplyMutation,
 } from "../../store/comments"
 import { MarkdownRender } from "../../components/markdown/Markdown.lazy"
-import { useGetUserProfileQuery } from "../../store/profile"
+import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { TrashCan } from "mdi-material-ui"
 import { CommentVotes } from "../../components/button/CommentVotes"
 import { useTranslation } from "react-i18next"

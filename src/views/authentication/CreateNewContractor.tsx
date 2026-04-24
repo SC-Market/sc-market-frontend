@@ -10,7 +10,7 @@ import {
 } from "@mui/material"
 import React, { useCallback, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { useRegisterContractorMutation } from "../../store/contractor"
+import { useRegisterContractorMutation } from "../../features/contractor/api/contractorApi"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { isAlphaNumeric } from "./AuthenticateRSI"
 import { MarkdownEditor } from "../../components/markdown/Markdown.lazy"

@@ -10,7 +10,7 @@ import {
 } from "@mui/material"
 import { HapticTab } from "../../components/haptic"
 import { OrderDetailSkeleton } from "../../components/skeletons"
-import { useGetUserProfileQuery } from "../../store/profile"
+import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { has_permission } from "../../views/contractor/OrgRoles"
 import { useTranslation } from "react-i18next"

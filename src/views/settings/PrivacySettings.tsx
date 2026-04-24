@@ -3,7 +3,7 @@ import React, { useCallback } from "react"
 import {
   useGetUserProfileQuery,
   useProfileUpdateSettingsMutation,
-} from "../../store/profile"
+} from "../../features/profile/api/profileApi"
 import {
   Button,
   FormControlLabel,

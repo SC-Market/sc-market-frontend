@@ -1,4 +1,4 @@
-import { useGetMyTransactions } from "../../store/transactions"
+import { useGetMyTransactions } from "../../features/money/api/transactionsApi"
 import { TransactionTableView } from "../transactions/TransactionTableView"
 import React from "react"
 

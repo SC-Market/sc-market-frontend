@@ -13,7 +13,7 @@ import {
 import React, { useState } from "react"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { useGetUserProfileQuery } from "../../store/profile"
+import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import {
   LogoutRounded,
   PeopleRounded,
@@ -21,7 +21,7 @@ import {
 } from "@mui/icons-material"
 import { Link, useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import { useLogoutMutation } from "../../store/profile"
+import { useLogoutMutation } from "../../features/profile/api/profileApi"
 import { useDispatch } from "react-redux"
 import { serviceApi } from "../../store/service"
 import { tokensApi } from "../../features/api-tokens"

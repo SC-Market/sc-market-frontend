@@ -5,11 +5,11 @@ import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import {
   useProfileGetDiscordSettingsQuery,
   useProfileUseOfficialDiscordSettingsMutation,
-} from "../../store/profile"
+} from "../../features/profile/api/profileApi"
 import {
   useGetDiscordSettingsQuery,
   useUseOfficialDiscordSettingsMutation,
-} from "../../store/contractor"
+} from "../../features/contractor/api/contractorApi"
 import { Stack } from "@mui/system"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { DISCORD_INVITE } from "../../util/constants"

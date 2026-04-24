@@ -4,7 +4,7 @@ import {
   useUpdateOfferStatusMutation,
   useAssignOfferMutation,
   useUnassignOfferMutation,
-} from "../../store/offer"
+} from "../../features/offers/api/offerApi"
 import {
   Chip,
   Grid,
@@ -44,18 +44,18 @@ import { useCurrentChat, useGetChatByOfferIDQuery } from "../../features/chats"
 import {
   useGetNotificationsQuery,
   useNotificationDeleteMutation,
-} from "../../store/notification"
+} from "../../features/notifications/api/notificationApi"
 import { Order } from "../../datatypes/Order"
 import { MessagesBody } from "../../features/chats"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
-import { useGetUserProfileQuery } from "../../store/profile"
+import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { Link, useNavigate } from "react-router-dom"
 import { OrderSummarySection } from "../../components/orders/OrderSummarySection"
 import { OrderSummarySectionV2 } from "../../components/orders/OrderSummarySectionV2"
 import { detectOfferChanges } from "../../util/offerChanges"
-import { useGetPublicContractQuery } from "../../store/public_contracts"
+import { useGetPublicContractQuery } from "../../features/contracting/api/publicContractsApi"
 import { ListingSellerRating } from "../../components/rating/ListingRating"
 import { useTranslation } from "react-i18next"
 import { PAYMENT_TYPE_MAP } from "../../util/constants"
@@ -65,7 +65,7 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import {
   useGetContractorMembersQuery,
   contractorsApi,
-} from "../../store/contractor"
+} from "../../features/contractor/api/contractorApi"
 import { store } from "../../store/store"
 import { MinimalUser } from "../../datatypes/User"
 import throttle from "lodash/throttle"
