@@ -54,6 +54,7 @@ declare module "@mui/material/styles" {
     image: number
     button: number
     input: number
+    chip: number
     minimal: number
   }
 
