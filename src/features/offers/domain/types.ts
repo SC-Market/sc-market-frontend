@@ -58,6 +58,13 @@ export interface Offer {
   collateral?: string | number | null
   service: Service | null
   market_listings: OfferMarketListing[]
+  market_listings_v2?: Array<{
+    listing_id: string
+    title: string
+    price: number
+    quantity: number
+    variants: OfferVariantItemV2[]
+  }>
   payment_type: "one-time" | "hourly" | "daily"
   v2_variant_items?: OfferVariantItemV2[]
 }
