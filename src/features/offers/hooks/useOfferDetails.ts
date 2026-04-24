@@ -20,15 +20,22 @@ import { store } from "../../../store/store"
 import type { MinimalUser } from "../../../datatypes/User"
 
 const statusTextToKey: Record<string, string> = {
+  // Display strings (V1 API)
   "Waiting for Seller": "waitingSeller",
   "Waiting for Customer": "waitingCustomer",
   Accepted: "accepted",
   Rejected: "rejected",
-  // Also map API-style values for robustness
+  // API-style values (V2 API)
   "to-seller": "waitingSeller",
   "to-customer": "waitingCustomer",
+  "to_seller": "waitingSeller",
+  "to_customer": "waitingCustomer",
   accepted: "accepted",
   rejected: "rejected",
+  // Additional possible V2 values
+  pending_seller: "waitingSeller",
+  pending_customer: "waitingCustomer",
+  counteroffered: "waitingSeller",
 }
 
 export function useOfferDetails(session: OfferSession) {
@@ -81,6 +88,9 @@ export function useOfferDetails(session: OfferSession) {
   )
 
   const statusKey = statusTextToKey[session.status] || session.status
+  if (!statusTextToKey[session.status]) {
+    console.warn(`[useOfferDetails] Unknown session status: "${session.status}" — showAccept may not work correctly`)
+  }
 
   const statusColor = useMemo(() => {
     if (statusKey === "waitingSeller") return "warning" as const

@@ -39,6 +39,8 @@ import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useCartDrawer } from "../../features/market/hooks/AddToCartContext"
 import { formatQuantity } from "../../util/formatQuantity"
+import { PriceHistoryChartV2 } from "../../features/market/v2/components/PriceHistoryChartV2"
+import { QualityDistributionChart } from "../../features/market/v2/components/QualityDistributionChart"
 import { DISASSEMBLY_EFFICIENCY, DISASSEMBLY_TIME_SECONDS, formatCraftingTime } from "../../constants/crafting"
 
 const TAB_OVERVIEW = 0
@@ -129,7 +131,7 @@ export function WikiItemDetail() {
                       {item.type && <Chip label={item.type} color="primary" />}
                       {item.size && <Chip label={`Size ${item.size}`} />}
                       {item.grade && <Chip label={`Grade ${item.grade}`} />}
-                      {item.manufacturer && <Chip label={item.manufacturer} />}
+                      {item.manufacturer && <Chip label={item.manufacturer} clickable onClick={() => navigate(`/wiki/manufacturers/${encodeURIComponent(item.manufacturer!)}`)} />}
                     </Stack>
 
                     {/* Market Stats */}
@@ -192,8 +194,10 @@ export function WikiItemDetail() {
                               {key.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())}
                             </TableCell>
                             <TableCell>
-                              {typeof value === "object"
-                                ? JSON.stringify(value, null, 2)
+                              {typeof value === "object" && value !== null
+                                ? Object.entries(value as Record<string, any>).map(([k, v]) => (
+                                    <Chip key={k} label={`${k}: ${v}`} size="small" variant="outlined" sx={{ mr: 0.5, mb: 0.5, height: 20, fontSize: "0.65rem" }} />
+                                  ))
                                 : String(value)}
                             </TableCell>
                           </TableRow>
@@ -204,6 +208,22 @@ export function WikiItemDetail() {
                 </CardContent>
               </Card>
             )}
+
+            {/* Price History */}
+            <Card sx={{ mt: 3 }}>
+              <CardContent>
+                <Typography variant="h6" gutterBottom>Price History</Typography>
+                <PriceHistoryChartV2 gameItemId={id!} />
+              </CardContent>
+            </Card>
+
+            {/* Quality Distribution */}
+            <Card sx={{ mt: 3 }}>
+              <CardContent>
+                <Typography variant="h6" gutterBottom>Quality Distribution</Typography>
+                <QualityDistributionChart gameItemId={id!} />
+              </CardContent>
+            </Card>
 
             {/* Related Market Listings */}
             {listingsData && listingsData.listings.length > 0 && (

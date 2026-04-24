@@ -27,6 +27,7 @@ import { useGetLocationsQuery, type WikiLocationNode } from "../../store/api/v2/
 import { ExpandLess, ExpandMore, Public, Language, Terrain } from "@mui/icons-material"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { TableSkeleton } from "../../components/game-data/GameDataSkeletons"
 
 interface LocationTreeItemProps {
   node: WikiLocationNode
@@ -115,11 +116,7 @@ export function WikiLocationBrowser() {
         sidebarOpen={true}
         maxWidth="xl"
       >
-        <Grid item xs={12}>
-          <Box sx={{ display: "flex", justifyContent: "center", py: 8 }}>
-            <CircularProgress />
-          </Box>
-        </Grid>
+        <Grid item xs={12}><TableSkeleton rows={12} /></Grid>
       </StandardPageLayout>
     )
   }

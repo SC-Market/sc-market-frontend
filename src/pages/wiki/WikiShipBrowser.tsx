@@ -1,216 +1,124 @@
 /**
- * Wiki Ship Browser
- * 
- * Ship grid with focus/manufacturer filters
- * Task 8.10.4
+ * Wiki Ship Browser — with text search, URL param sync, dynamic filters
  */
 
-import React, { useState } from "react"
+import React, { useMemo, useCallback } from "react"
 import {
-  Box,
-  Card,
-  CardContent,
-  CardMedia,
-  Grid,
-  Typography,
-  MenuItem,
-  Select,
-  FormControl,
-  InputLabel,
-  Pagination,
-  CircularProgress,
-  Alert,
-  Chip,
-  Stack,
+  Box, Card, CardContent, CardMedia, Grid, Typography, TextField,
+  MenuItem, Select, FormControl, InputLabel, Pagination, Alert, Chip, Stack,
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
 import { useGetShipsQuery } from "../../store/api/v2/market"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useSearchParams } from "react-router-dom"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { FilterSidebarLayout } from "../../components/layout/FilterSidebarLayout"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { CardGridSkeleton } from "../../components/game-data/GameDataSkeletons"
+import { FALLBACK_IMAGE_URL } from "../../util/constants"
 
 export function WikiShipBrowser() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const navigate = useNavigate()
-  const [manufacturer, setManufacturer] = useState("")
-  const [focus, setFocus] = useState("")
-  const [size, setSize] = useState("")
-  const [page, setPage] = useState(1)
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  const text = searchParams.get("q") || ""
+  const manufacturer = searchParams.get("manufacturer") || ""
+  const focus = searchParams.get("focus") || ""
+  const size = searchParams.get("size") || ""
+  const page = Number(searchParams.get("page")) || 1
+
+  const updateParam = useCallback((key: string, value: string) => {
+    const p = new URLSearchParams(searchParams)
+    if (value) p.set(key, value); else p.delete(key)
+    if (key !== "page") p.delete("page")
+    setSearchParams(p, { replace: true })
+  }, [searchParams, setSearchParams])
 
   const { data, isLoading, error } = useGetShipsQuery({
     manufacturer: manufacturer || undefined,
     focus: focus || undefined,
     size: size || undefined,
     page,
-    pageSize: 20,
+    pageSize: 24,
   })
 
-  const handleShipClick = (shipId: string) => {
-    navigate(`/wiki/ships/${shipId}`)
-  }
+  // Derive unique filter values from results (dynamic)
+  const allShips = data?.ships || []
+  const manufacturers = useMemo(() => [...new Set(allShips.map(s => s.manufacturer).filter(Boolean))].sort(), [allShips])
+  const focuses = useMemo(() => [...new Set(allShips.map(s => s.focus).filter(Boolean))].sort(), [allShips])
+  const sizes = useMemo(() => [...new Set(allShips.map(s => s.size).filter(Boolean))].sort(), [allShips])
 
-  const handlePageChange = (_event: React.ChangeEvent<unknown>, value: number) => {
-    setPage(value)
-    window.scrollTo({ top: 0, behavior: "smooth" })
-  }
+  // Client-side text filter (API doesn't support text search for ships)
+  const filtered = useMemo(() => {
+    if (!text) return allShips
+    const q = text.toLowerCase()
+    return allShips.filter(s => s.name.toLowerCase().includes(q) || s.manufacturer?.toLowerCase().includes(q))
+  }, [allShips, text])
 
   const totalPages = data ? Math.ceil(data.total / data.page_size) : 0
 
   const filtersContent = (
     <Stack spacing={1.5}>
+      <TextField fullWidth size="small" label="Search ships" value={text}
+        onChange={(e) => updateParam("q", e.target.value)} placeholder="Name or manufacturer..." />
       <FormControl fullWidth size="small">
         <InputLabel>Manufacturer</InputLabel>
-        <Select
-          value={manufacturer}
-          label="Manufacturer"
-          size="small"
-          onChange={(e) => setManufacturer(e.target.value)}
-        >
-          <MenuItem value="">All Manufacturers</MenuItem>
-          <MenuItem value="Aegis Dynamics">Aegis Dynamics</MenuItem>
-          <MenuItem value="Anvil Aerospace">Anvil Aerospace</MenuItem>
-          <MenuItem value="Crusader Industries">Crusader Industries</MenuItem>
-          <MenuItem value="Drake Interplanetary">Drake Interplanetary</MenuItem>
-          <MenuItem value="Origin Jumpworks">Origin Jumpworks</MenuItem>
-          <MenuItem value="RSI">Roberts Space Industries</MenuItem>
-          <MenuItem value="Misc">MISC</MenuItem>
+        <Select value={manufacturer} label="Manufacturer" onChange={(e) => updateParam("manufacturer", e.target.value)}>
+          <MenuItem value="">All</MenuItem>
+          {manufacturers.map(m => <MenuItem key={m} value={m}>{m}</MenuItem>)}
         </Select>
       </FormControl>
       <FormControl fullWidth size="small">
         <InputLabel>Focus</InputLabel>
-        <Select
-          value={focus}
-          label="Focus"
-          size="small"
-          onChange={(e) => setFocus(e.target.value)}
-        >
-          <MenuItem value="">All Focus Types</MenuItem>
-          <MenuItem value="Combat">Combat</MenuItem>
-          <MenuItem value="Exploration">Exploration</MenuItem>
-          <MenuItem value="Mining">Mining</MenuItem>
-          <MenuItem value="Cargo">Cargo</MenuItem>
-          <MenuItem value="Racing">Racing</MenuItem>
-          <MenuItem value="Multi-Role">Multi-Role</MenuItem>
+        <Select value={focus} label="Focus" onChange={(e) => updateParam("focus", e.target.value)}>
+          <MenuItem value="">All</MenuItem>
+          {focuses.map(f => <MenuItem key={f} value={f}>{f}</MenuItem>)}
         </Select>
       </FormControl>
       <FormControl fullWidth size="small">
         <InputLabel>Size</InputLabel>
-        <Select
-          value={size}
-          label="Size"
-          size="small"
-          onChange={(e) => setSize(e.target.value)}
-        >
-          <MenuItem value="">All Sizes</MenuItem>
-          <MenuItem value="Small">Small</MenuItem>
-          <MenuItem value="Medium">Medium</MenuItem>
-          <MenuItem value="Large">Large</MenuItem>
-          <MenuItem value="Capital">Capital</MenuItem>
+        <Select value={size} label="Size" onChange={(e) => updateParam("size", e.target.value)}>
+          <MenuItem value="">All</MenuItem>
+          {sizes.map(s => <MenuItem key={s} value={s}>{s}</MenuItem>)}
         </Select>
       </FormControl>
     </Stack>
   )
 
   return (
-    <StandardPageLayout
-      title={t("wiki.ships.title", "Ships Database")}
-      headerTitle={t("wiki.ships.title", "Ships Database")}
-      sidebarOpen={true}
-      maxWidth="xl"
-    >
+    <StandardPageLayout title="Ships Database" headerTitle="Ships Database" sidebarOpen={true} maxWidth="xl">
       <Grid item xs={12}>
-        <Typography variant="body1" color="text.secondary" paragraph>
-          Browse all ships with detailed specifications and loadouts
-        </Typography>
-
         <FilterSidebarLayout filters={filtersContent} filterTitle="Filters">
-          {/* Results */}
-          {isLoading && (
-            <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
-              <CircularProgress />
-            </Box>
-          )}
-
-          {error && (
-            <Alert severity="error" sx={{ mb: 2 }}>
-              Failed to load ships. Please try again.
-            </Alert>
-          )}
-
+          {isLoading && <CardGridSkeleton />}
+          {error && <Alert severity="error" sx={{ mb: 2 }}>Failed to load ships.</Alert>}
           {data && (
             <>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                Found {data.total} ships
-              </Typography>
-
-              <Grid container spacing={3}>
-                {data.ships.map((ship) => (
-                  <Grid item xs={12} sm={6} md={4} key={ship.id}>
-                    <Card
-                      sx={{
-                        cursor: "pointer",
-                        transition: "transform 0.2s, box-shadow 0.2s",
-                        "&:hover": {
-                          transform: "translateY(-4px)",
-                          boxShadow: 4,
-                        },
-                        height: "100%",
-                        display: "flex",
-                        flexDirection: "column",
-                      }}
-                      onClick={() => handleShipClick(ship.id)}
-                    >
-                      {ship.image_url && (
-                        <CardMedia
-                          component="img"
-                          height="200"
-                          image={ship.image_url}
-                          alt={ship.name}
-                          sx={{ objectFit: "cover", bgcolor: "background.default" }}
-                        />
-                      )}
-                      <CardContent sx={{ flex: 1 }}>
-                        <Typography variant="h6" gutterBottom>
-                          {ship.name}
-                        </Typography>
-                        <Stack direction="row" spacing={0.5} sx={{ mt: 1 }} flexWrap="wrap">
-                          {ship.focus && (
-                            <Chip label={ship.focus} size="small" color="primary" />
-                          )}
-                          {ship.size && (
-                            <Chip label={ship.size} size="small" />
-                          )}
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>{filtered.length} ships</Typography>
+              <Grid container spacing={1.5}>
+                {filtered.map((ship) => (
+                  <Grid item xs={6} sm={4} md={3} key={ship.id}>
+                    <Card sx={{ cursor: "pointer", transition: "transform 0.15s", "&:hover": { transform: "translateY(-3px)" }, height: "100%", display: "flex", flexDirection: "column" }}
+                      onClick={() => navigate(`/wiki/ships/${ship.id}`)}>
+                      <CardMedia component="img" height="140" image={ship.image_url || FALLBACK_IMAGE_URL} alt={ship.name}
+                        sx={{ objectFit: "cover", bgcolor: "background.default" }} />
+                      <CardContent sx={{ flex: 1, p: 1.5, "&:last-child": { pb: 1.5 } }}>
+                        <Typography variant="body2" fontWeight={700} noWrap>{ship.name}</Typography>
+                        <Stack direction="row" spacing={0.5} sx={{ mt: 0.5 }} flexWrap="wrap" useFlexGap>
+                          {ship.focus && <Chip label={ship.focus} size="small" color="primary" sx={{ height: 20, fontSize: "0.65rem" }} />}
+                          {ship.size && <Chip label={ship.size} size="small" sx={{ height: 20, fontSize: "0.65rem" }} />}
                         </Stack>
-                        {ship.manufacturer && (
-                          <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: "block" }}>
-                            {ship.manufacturer}
-                          </Typography>
-                        )}
+                        {ship.manufacturer && <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5, display: "block" }}>{ship.manufacturer}</Typography>}
                       </CardContent>
                     </Card>
                   </Grid>
                 ))}
               </Grid>
-
-              {data.ships.length === 0 && (
-                <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", py: 6 }}>
-                  <Typography color="text.secondary">
-                    {t("wiki.ships.noResults", "No results found. Try adjusting your filters.")}
-                  </Typography>
-                </Box>
-              )}
-
+              {filtered.length === 0 && <Box sx={{ textAlign: "center", py: 6 }}><Typography color="text.secondary">No ships found.</Typography></Box>}
               {totalPages > 1 && (
-                <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
-                  <Pagination
-                    count={totalPages}
-                    page={page}
-                    onChange={handlePageChange}
-                    color="primary"
-                  />
+                <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
+                  <Pagination count={totalPages} page={page} onChange={(_, p) => updateParam("page", String(p))} color="primary" />
                 </Box>
               )}
             </>

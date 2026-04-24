@@ -34,12 +34,13 @@ import { GridViewRounded, ViewListRounded } from "@mui/icons-material"
 import { useTheme } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
 import { useSearchItemsQuery, WikiItemSearchResult } from "../../store/api/v2/market"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useSearchParams } from "react-router-dom"
 import { useDebounce } from "../../hooks/useDebounce"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { FilterSidebarLayout } from "../../components/layout/FilterSidebarLayout"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { FALLBACK_IMAGE_URL } from "../../util/constants"
+import { CardGridSkeleton } from "../../components/game-data/GameDataSkeletons"
 import { getFactionIcon } from "../../util/gameIcons"
 
 const CARD_HEIGHT = 220
@@ -118,13 +119,24 @@ export function WikiItemBrowser() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const navigate = useNavigate()
-  const [searchText, setSearchText] = useState("")
-  const [type, setType] = useState("")
-  const [size, setSize] = useState("")
-  const [grade, setGrade] = useState("")
-  const [manufacturer, setManufacturer] = useState("")
-  const [page, setPage] = useState(1)
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid")
+  const [searchParams, setSearchParams] = useSearchParams()
+
+  const searchText = searchParams.get("q") || ""
+  const type = searchParams.get("type") || ""
+  const size = searchParams.get("size") || ""
+  const grade = searchParams.get("grade") || ""
+  const manufacturer = searchParams.get("manufacturer") || ""
+  const page = Number(searchParams.get("page")) || 1
+  const [viewMode, setViewMode] = useState<"grid" | "list">(
+    () => (localStorage.getItem("wiki-items-view") as "grid" | "list") || "grid"
+  )
+
+  const updateParam = (key: string, value: string) => {
+    const p = new URLSearchParams(searchParams)
+    if (value) p.set(key, value); else p.delete(key)
+    if (key !== "page") p.delete("page")
+    setSearchParams(p, { replace: true })
+  }
 
   const debouncedSearch = useDebounce(searchText, 300)
 
@@ -140,7 +152,7 @@ export function WikiItemBrowser() {
 
   const handleItemClick = (itemId: string) => navigate(`/wiki/items/${itemId}`)
   const handlePageChange = (_: React.ChangeEvent<unknown>, value: number) => {
-    setPage(value)
+    updateParam("page", String(value))
     window.scrollTo({ top: 0, behavior: "smooth" })
   }
 
@@ -149,10 +161,10 @@ export function WikiItemBrowser() {
   const filtersContent = (
     <Stack spacing={1.5}>
       <TextField fullWidth size="small" label="Search items" value={searchText}
-        onChange={(e) => { setSearchText(e.target.value); setPage(1) }} placeholder="Search by name..." />
+        onChange={(e) => updateParam("q", e.target.value)} placeholder="Search by name..." />
       <FormControl fullWidth size="small">
         <InputLabel>Type</InputLabel>
-        <Select value={type} label="Type" onChange={(e) => { setType(e.target.value); setPage(1) }}>
+        <Select value={type} label="Type" onChange={(e) => updateParam("type", e.target.value)}>
           <MenuItem value="">All</MenuItem>
           <MenuItem value="WeaponGun">Weapon</MenuItem>
           <MenuItem value="Shield">Shield</MenuItem>
@@ -165,20 +177,20 @@ export function WikiItemBrowser() {
       </FormControl>
       <FormControl fullWidth size="small">
         <InputLabel>Size</InputLabel>
-        <Select value={size} label="Size" onChange={(e) => { setSize(e.target.value); setPage(1) }}>
+        <Select value={size} label="Size" onChange={(e) => updateParam("size", e.target.value)}>
           <MenuItem value="">All</MenuItem>
           {[1,2,3,4,5].map(s => <MenuItem key={s} value={String(s)}>S{s}</MenuItem>)}
         </Select>
       </FormControl>
       <FormControl fullWidth size="small">
         <InputLabel>Grade</InputLabel>
-        <Select value={grade} label="Grade" onChange={(e) => { setGrade(e.target.value); setPage(1) }}>
+        <Select value={grade} label="Grade" onChange={(e) => updateParam("grade", e.target.value)}>
           <MenuItem value="">All</MenuItem>
           {["A","B","C","D"].map(g => <MenuItem key={g} value={g}>{g}</MenuItem>)}
         </Select>
       </FormControl>
       <TextField fullWidth size="small" label="Manufacturer" value={manufacturer}
-        onChange={(e) => { setManufacturer(e.target.value); setPage(1) }} placeholder="e.g. Aegis" />
+        onChange={(e) => updateParam("manufacturer", e.target.value)} placeholder="e.g. Aegis" />
     </Stack>
   )
 
@@ -195,13 +207,13 @@ export function WikiItemBrowser() {
             <Typography variant="caption" color="text.secondary">
               {data ? `${data.total.toLocaleString()} items` : ""}
             </Typography>
-            <ToggleButtonGroup size="small" value={viewMode} exclusive onChange={(_, v) => v && setViewMode(v)}>
+            <ToggleButtonGroup size="small" value={viewMode} exclusive onChange={(_, v) => { if (v) { setViewMode(v); localStorage.setItem("wiki-items-view", v) } }}>
               <ToggleButton value="grid"><GridViewRounded fontSize="small" /></ToggleButton>
               <ToggleButton value="list"><ViewListRounded fontSize="small" /></ToggleButton>
             </ToggleButtonGroup>
           </Box>
 
-          {isLoading && <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}><CircularProgress /></Box>}
+          {isLoading && <CardGridSkeleton />}
           {error && <Alert severity="error" sx={{ mb: 2 }}>Failed to load items.</Alert>}
 
           {data && (
