@@ -19,7 +19,7 @@ export const cleanThemeOptions: ThemeOptions = {
     MuiCard: { defaultProps: { variant: "outlined" }, styleOverrides: { root: { border: "1px solid rgba(0,0,0,0.15)" } } },
     MuiDivider: { styleOverrides: { light: { backgroundColor: "rgba(0,0,0,0.12)" } } },
     MuiTableCell: { styleOverrides: { root: { borderBottomColor: "rgba(0,0,0,0.12)" } } },
-    MuiCssBaseline: { styleOverrides: { body: { backgroundImage: "radial-gradient(circle, rgba(0,0,0,0.04) 1px, transparent 1px)", backgroundSize: "24px 24px" } } },
+    MuiCssBaseline: { styleOverrides: { body: { backgroundImage: "radial-gradient(circle, rgba(0,0,0,0.07) 1px, transparent 1px)", backgroundSize: "24px 24px" } } },
   },
 }
 
