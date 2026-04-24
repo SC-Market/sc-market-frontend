@@ -1,4 +1,10 @@
 import React, { MouseEventHandler, useCallback, useMemo, useState } from "react"
+import { useTranslation } from "react-i18next"
+import { useTheme } from "@mui/material/styles"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
+import SearchIcon from "@mui/icons-material/Search"
+import { Stack } from "@mui/system"
+import { BACKEND_URL } from "../../util/constants"
 import { Section } from "../../components/paper/Section"
 import {
   Autocomplete,
@@ -28,22 +34,16 @@ import {
   useApplyContractorRoleMutation,
   useKickContractorMemberMutation,
   useRemoveContractorRoleMutation,
-  useGetContractorMembersQuery,
 } from "../../features/contractor/api/contractorApi"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
 import {
-  has_permission,
   min_position,
   getMemberPosition,
   self_member_role_removal_forbidden,
 } from "./OrgRoles"
 import { Contractor, ContractorRole } from "../../features/contractor/domain/types"
-import SearchIcon from "@mui/icons-material/Search"
-import { Stack } from "@mui/system"
-import { BACKEND_URL } from "../../util/constants"
-import { useTranslation } from "react-i18next"
-import { useTheme } from "@mui/material/styles"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { useMemberActions } from "../../features/contractor/hooks/useMemberActions"
+import { has_permission } from "../../features/contractor/domain/permissions"
+import { useGetContractorMembersQuery } from "../../features/contractor/api/contractorApi"
 
 function PeopleRow(props: {
   row: OrgMember
@@ -58,121 +58,10 @@ function PeopleRow(props: {
   const { t } = useTranslation()
 
   const [roles, setRoles] = useState(row.roles)
-
-  const [applyRole] = useApplyContractorRoleMutation()
-  const [removeRole] = useRemoveContractorRoleMutation()
-  const [kickMember] = useKickContractorMemberMutation()
-  const issueAlert = useAlertHook()
-
-  const { data: profile } = useGetUserProfileQuery()
-  const myPosition = useMemo(
-    () => min_position(contractor, profile!, profile?.contractors),
-    [contractor, profile],
-  )
-  const theirPosition = useMemo(
-    () => getMemberPosition(contractor, row.roles),
-    [contractor, row.roles],
-  )
-  const canKick = useMemo(
-    () =>
-      has_permission(contractor, profile, "kick_members", profile?.contractors),
-    [contractor, profile],
-  )
-
-  const addRoleCallback = useCallback(
-    (role_id: string) => {
-      applyRole({
-        contractor: contractor!.spectrum_id,
-        username: row.username,
-        role_id,
-      })
-        .unwrap()
-        .then(() => {
-          issueAlert({
-            message: t("manageMemberList.updated"),
-            severity: "success",
-          })
-        })
-        .catch((error) => {
-          issueAlert(error)
-        })
-    },
-    [contractor, row.username, issueAlert, applyRole, t],
-  )
-
-  const removeRoleCallback = useCallback(
-    (role_id: string) => {
-      if (role_id === contractor.owner_role) {
-        issueAlert({
-          message: t(
-            "manageMemberList.cannotRemoveOwnerRole",
-            "The owner role cannot be removed from a member.",
-          ),
-          severity: "error",
-        })
-        return
-      }
-      if (
-        profile?.username === row.username &&
-        self_member_role_removal_forbidden(
-          (contractor.roles || []).filter((r) => row.roles.includes(r.role_id)),
-          role_id,
-        )
-      ) {
-        issueAlert({
-          message: t(
-            "manageMemberList.cannotRemoveProtectedSelfRole",
-            "You cannot remove this role from yourself (keep your top role, and keep a role with “manage roles” when your top role does not include it).",
-          ),
-          severity: "error",
-        })
-        return
-      }
-      removeRole({
-        contractor: contractor.spectrum_id,
-        username: row.username,
-        role_id,
-      })
-        .unwrap()
-        .then(() => {
-          issueAlert({
-            message: t("manageMemberList.updated"),
-            severity: "success",
-          })
-        })
-        .catch((error) => {
-          issueAlert(error)
-        })
-    },
-    [
-      contractor,
-      contractor.owner_role,
-      row.username,
-      row.roles,
-      profile?.username,
-      issueAlert,
-      removeRole,
-      t,
-    ],
-  )
-
-  const kickMemberCallback = useCallback(() => {
-    kickMember({
-      contractor: contractor.spectrum_id,
-      username: row.username,
-    })
-      .unwrap()
-      .then(() => {
-        issueAlert({
-          message: t("manageMemberList.member_kicked"),
-          severity: "success",
-        })
-      })
-      .catch((error) => {
-        issueAlert(error)
-      })
-  }, [contractor, row.username, issueAlert, kickMember, t])
-
+  const {
+    profile, myPosition, theirPosition, canKick,
+    addRoleCallback, removeRoleCallback, kickCallback, canRemoveRole,
+  } = useMemberActions(contractor, row.username, row.roles)
   return (
     <TableRow
       hover
@@ -223,7 +112,7 @@ function PeopleRow(props: {
               <Button
                 color={"error"}
                 sx={{ marginRight: 2 }}
-                onClick={kickMemberCallback}
+                onClick={kickCallback}
               >
                 {t("manageMemberList.kick")}
               </Button>
