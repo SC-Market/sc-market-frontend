@@ -6,7 +6,7 @@ import {
   CheckCircle,
   Error as ErrorIcon,
 } from "@mui/icons-material"
-import { OrderLimits } from "../../store/orderSettings"
+import type { OrderLimits } from "../../features/orders/domain/types"
 
 interface OrderLimitsDisplayProps {
   limits: OrderLimits
@@ -17,10 +17,7 @@ interface OrderLimitsDisplayProps {
 
 type ValidationState = "info" | "warning" | "error" | "success"
 
-function formatCurrency(value: number | string): string {
-  const num = typeof value === "string" ? parseInt(value, 10) : value
-  return num.toLocaleString("en-US")
-}
+import { formatCurrency } from "../../features/orders/domain/formatters"
 
 function getSizeValidationState(
   limits: OrderLimits,
