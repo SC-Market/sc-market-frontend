@@ -3,7 +3,7 @@
  */
 
 import React from "react"
-import { Box, Alert, Grid2 as Grid } from "@mui/material"
+import { Box, Alert, Grid } from "@mui/material"
 import { useParams, useNavigate } from "react-router-dom"
 import { useGetMissionDetailQuery } from "../../store/api/v2/market"
 import { useTranslation } from "react-i18next"
@@ -38,17 +38,17 @@ export function MissionDetail() {
       maxWidth="lg"
     >
       {isLoading && (
-        <Grid size={{ xs: 12 }}>
+        <Grid item xs={12}>
           <DetailPageSkeleton />
         </Grid>
       )}
       {error && (
-        <Grid size={{ xs: 12 }}>
+        <Grid item xs={12}>
           <Alert severity="error">Failed to load mission details.</Alert>
         </Grid>
       )}
       {data && m && (
-        <Grid size={{ xs: 12 }}>
+        <Grid item xs={12}>
           <Box sx={{ mb: 2 }}>
             <MissionHeaderChips mission={m} />
           </Box>

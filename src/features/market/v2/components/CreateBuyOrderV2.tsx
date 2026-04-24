@@ -232,6 +232,7 @@ export function CreateBuyOrderV2({ gameItemId, gameItemType }: CreateBuyOrderV2P
             allowNegative={false}
             customInput={TextField}
             thousandSeparator
+            autoFocus
             fullWidth
             label={
               negotiable
