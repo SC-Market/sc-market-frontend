@@ -19,6 +19,8 @@ import {
   Stack,
   Switch,
   TextField,
+  ToggleButton,
+  ToggleButtonGroup,
   Typography,
   InputAdornment,
   useMediaQuery,
@@ -31,7 +33,7 @@ import {
 import FilterListIcon from "@mui/icons-material/FilterList"
 import SearchIcon from "@mui/icons-material/Search"
 import { useTheme } from "@mui/material/styles"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import {
   GridColDef,
@@ -186,6 +188,7 @@ export function BulkStockManagementV2() {
 
 function StockSearchAreaV2() {
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const { filters, setSearch, setListingId, setLocationId } = useStockFilter()
   const [currentOrg] = useCurrentOrg()
   const { data: listingsData } = useGetMyListingsQuery({ pageSize: 100, sortBy: "updated_at", sortOrder: "desc", spectrumId: currentOrg?.spectrum_id })
@@ -193,6 +196,22 @@ function StockSearchAreaV2() {
 
   return (
     <Stack spacing={1} sx={{ p: 2 }}>
+      <ToggleButtonGroup
+        value="bulk"
+        exclusive
+        onChange={(_, v) => {
+          if (v === "market") navigate("/market")
+          else if (v === "buyorders") navigate("/buyorders")
+        }}
+        fullWidth
+        size="small"
+        color="secondary"
+      >
+        <ToggleButton value="market">{t("market.listings", "Listings")}</ToggleButton>
+        <ToggleButton value="bulk">{t("market.bulk", "Bulk")}</ToggleButton>
+        <ToggleButton value="buyorders">{t("market.buyOrders", "Buy Orders")}</ToggleButton>
+      </ToggleButtonGroup>
+
       <Typography variant="h6">{t("stock.filters", "Filters")}</Typography>
 
       <TextField
