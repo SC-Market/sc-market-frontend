@@ -117,24 +117,24 @@ export function useOfferDetails(session: GetOfferSessionV2Response) {
 
   const handleAssignSave = useCallback(async () => {
     if (!targetObject) return
-    const res: { data?: unknown; error?: { error?: string; data?: { error?: string } } } = await assignUser({ session_id: session.session_id, username: targetObject.username })
-    if (res?.data && !res?.error) {
+    try {
+      await assignUser({ session_id: session.session_id, username: targetObject.username }).unwrap()
       issueAlert({ message: t("memberAssignArea.assigned"), severity: "success" })
       setIsEditingAssigned(false); setTarget(""); setTargetObject(null)
-    } else {
-      issueAlert({ message: `${t("memberAssignArea.failed_assign")} ${res.error?.error || res.error?.data?.error || res.error}`, severity: "error" })
+    } catch (err) {
+      issueAlert({ message: t("memberAssignArea.failed_assign"), severity: "error" })
     }
   }, [assignUser, session.session_id, issueAlert, targetObject, t])
 
   const handleAssignCancel = useCallback(() => { setIsEditingAssigned(false); setTarget(""); setTargetObject(null) }, [])
 
   const handleUnassign = useCallback(async () => {
-    const res: { data?: unknown; error?: { error?: string; data?: { error?: string } } } = await unassignUser({ session_id: session.session_id })
-    if (res?.data && !res?.error) {
+    try {
+      await unassignUser({ session_id: session.session_id }).unwrap()
       issueAlert({ message: t("memberAssignArea.unassigned"), severity: "success" })
       setIsEditingAssigned(false)
-    } else {
-      issueAlert({ message: `${t("memberAssignArea.failed_unassign")} ${res.error?.error || res.error?.data?.error || res.error}`, severity: "error" })
+    } catch (err) {
+      issueAlert({ message: t("memberAssignArea.failed_unassign"), severity: "error" })
     }
   }, [unassignUser, session.session_id, issueAlert, t])
 

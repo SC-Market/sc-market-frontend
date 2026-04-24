@@ -1,4 +1,5 @@
 import type { MinimalUser } from "../../../datatypes/User"
+import type { BadgeMetadata } from "../../../store/api/v2/market"
 
 // ── Contractor Kind ──
 
@@ -37,7 +38,7 @@ export interface Contractor {
   banner: string
   site_url?: string
   rating: Rating
-  badges?: { badge_ids: string[]; metadata: any } | null
+  badges?: { badge_ids: string[]; metadata?: BadgeMetadata } | null
   size: number
   name: string
   description: string
@@ -61,7 +62,7 @@ export interface MinimalContractor {
   name: string
   spectrum_id: string
   rating: Rating
-  badges?: { badge_ids: string[]; metadata: any } | null
+  badges?: { badge_ids: string[]; metadata?: BadgeMetadata } | null
   role?: string
   role_id?: string
   last_seen?: string
