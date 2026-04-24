@@ -2,7 +2,7 @@ import {
   useGetServicesQuery,
   useGetServicesContractorQuery,
 } from "../../../store/services"
-import { useGetUserProfileQuery } from "../../../store/profile"
+import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
 
 interface UsePageMyServicesResult {

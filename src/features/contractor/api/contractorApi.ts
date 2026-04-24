@@ -12,7 +12,7 @@ import type { OrderReview } from "../../orders/domain/types"
 import { serviceApi } from "../../../store/service"
 import { ContractorSearchState } from "../../../hooks/contractor/ContractorSearch"
 import { unwrapResponse } from "../../../store/api-utils"
-import { BlocklistEntry } from "../../../store/profile"
+import { BlocklistEntry } from "../../profile/domain/types"
 import { Language } from "../../../constants/languages"
 
 export const contractorsApi = serviceApi.injectEndpoints({

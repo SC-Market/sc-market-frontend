@@ -33,7 +33,7 @@ import { LocationSelector } from "../components/stock/LocationSelector";
 import { BulkDiscountTierEditor } from "../../../components/market/BulkDiscountTierEditor";
 import { useCreateListingMutation } from "../../../store/api/v2/market";
 import { useAlertHook } from "../../../hooks/alert/AlertHook";
-import { useGetUserProfileQuery } from "../../../store/profile";
+import { useGetUserProfileQuery } from "../../profile/api/profileApi";
 import { useCurrentOrg } from "../../../hooks/login/CurrentOrg";
 import { Alert } from "@mui/material";
 import { PriceComparisonAlert } from "../components/PriceComparisonAlert";

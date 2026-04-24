@@ -5,7 +5,7 @@ import React, { useCallback, useEffect, useState } from "react"
 import {
   useGetUserProfileQuery,
   useUpdateProfile,
-} from "../../../store/profile"
+} from "../../profile/api/profileApi"
 import { Grid, Typography } from "@mui/material"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { useUpdateContractorMutation } from "../../contractor/api/contractorApi"

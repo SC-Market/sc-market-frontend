@@ -41,7 +41,7 @@ import {
   SaveRounded,
   ShoppingCartRounded,
 } from "@mui/icons-material"
-import { useGetUserProfileQuery } from "../../../store/profile"
+import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { UserProfileState } from "../../../hooks/login/UserProfile"
 import { UserAvatar } from "../../../components/avatar/UserAvatar"
 import { ThemedDataGrid } from "../../../components/grid/ThemedDataGrid"

@@ -28,7 +28,7 @@ import { Link, Navigate, useLocation, useNavigate } from "react-router-dom"
 import { getRelativeTime } from "../../../util/time"
 import { Section } from "../../../components/paper/Section"
 import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
-import { useGetUserProfileQuery } from "../../../store/profile"
+import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import {
   AddShoppingCartRounded,
   CreateRounded,

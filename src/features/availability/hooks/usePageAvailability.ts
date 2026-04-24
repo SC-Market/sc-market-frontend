@@ -1,4 +1,4 @@
-import { useProfileGetAvailabilityQuery } from "../../../store/profile"
+import { useProfileGetAvailabilityQuery } from "../../profile/api/profileApi"
 
 interface UsePageAvailabilityResult {
   data:

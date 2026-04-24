@@ -90,7 +90,7 @@ import {
   calculateBadgesFromRating,
   prioritizeBadges,
 } from "../../../../util/badges"
-import { useGetUserProfileQuery } from "../../../../store/profile"
+import { useGetUserProfileQuery } from "../../../profile/api/profileApi"
 import { RefreshRounded, EditRounded, ShareRounded } from "@mui/icons-material"
 import {
   isAfter,

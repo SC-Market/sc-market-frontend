@@ -3,7 +3,7 @@ import {
   useGetNotificationsQuery,
   useNotificationUpdateMutation,
 } from "../../../store/notification"
-import { useGetUserProfileQuery } from "../../../store/profile"
+import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { useEffect } from "react"
 import type { Chat } from "../domain/types"
 

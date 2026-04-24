@@ -16,7 +16,7 @@ import {
   useCancelBuyOrderMutation,
   type MarketAggregate,
 } from ".."
-import { useGetUserProfileQuery } from "../../../store/profile"
+import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"

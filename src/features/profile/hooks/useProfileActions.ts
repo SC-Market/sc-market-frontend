@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next"
 import {
   useUpdateProfile,
   useProfileUploadAvatarMutation,
-} from "../../../store/profile"
+} from "../api/profileApi"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 
 export function useProfileActions() {

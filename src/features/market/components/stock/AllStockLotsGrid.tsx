@@ -48,7 +48,7 @@ import { LocationSelector } from "./LocationSelector"
 import { useStockSearch } from "./StockSearchContext"
 import { OrgMemberSearch } from "../../../../components/search/OrgMemberSearch"
 import { Link } from "react-router-dom"
-import { useGetUserProfileQuery } from "../../../../store/profile"
+import { useGetUserProfileQuery } from "../../../profile/api/profileApi"
 
 export function AllStockLotsGrid() {
   const { t } = useTranslation()

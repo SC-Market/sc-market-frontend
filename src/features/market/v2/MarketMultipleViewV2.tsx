@@ -22,7 +22,7 @@ import { useTheme } from "@mui/material/styles";
 import { useParams } from "react-router-dom";
 import { StandardPageLayout } from "../../../components/layout/StandardPageLayout";
 import { ExtendedTheme } from "../../../hooks/styles/Theme";
-import { useGetUserProfileQuery } from "../../../store/profile";
+import { useGetUserProfileQuery } from "../../profile/api/profileApi";
 import { useCurrentOrg } from "../../../hooks/login/CurrentOrg";
 import {
   CreateRounded,

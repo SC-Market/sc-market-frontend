@@ -8,7 +8,7 @@ import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import {
   useGetUserProfileQuery,
   useProfileUploadBannerMutation,
-} from "../../../store/profile"
+} from "../api/profileApi"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { DarkBannerContainer, LightBannerContainer } from "./BannerContainers"
 

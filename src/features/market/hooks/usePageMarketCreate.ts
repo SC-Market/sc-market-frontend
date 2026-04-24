@@ -1,4 +1,4 @@
-import { useGetUserProfileQuery } from "../../../store/profile"
+import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 
 /**
  * Page hook interface for consistent data fetching patterns.

@@ -37,7 +37,7 @@ import type { Message } from "../domain/types"
 import {
   useGetUserByUsernameQuery,
   useGetUserProfileQuery,
-} from "../../../store/profile"
+} from "../../profile/api/profileApi"
 import { getRelativeTime } from "../../../util/time"
 import { useMessagingSidebar } from "../hooks/MessagingSidebar"
 import { useCurrentChat } from "../hooks/CurrentChat"
