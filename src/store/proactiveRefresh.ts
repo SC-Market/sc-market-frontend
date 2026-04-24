@@ -6,39 +6,25 @@
  * Also refreshes when the tab becomes visible after being hidden.
  */
 
-import { BACKEND_URL } from "../util/constants"
+import { refreshAuth } from "./refreshAuth"
 
 const REFRESH_INTERVAL_MS = 13 * 60 * 1000 // 13 minutes
 let intervalId: ReturnType<typeof setInterval> | null = null
 let lastRefreshAt = 0
 
-async function doRefresh(): Promise<void> {
-  try {
-    const res = await fetch(`${BACKEND_URL}/api/auth/refresh`, {
-      method: "POST",
-      credentials: "include",
-    })
-    if (res.ok) {
-      lastRefreshAt = Date.now()
-    }
-  } catch {
-    // Silent — reactive refresh (401 handler) is the fallback
-  }
-}
-
 function onVisibilityChange(): void {
   if (document.visibilityState !== "visible") return
-  // If the tab was hidden long enough for the token to expire, refresh now
-  const elapsed = Date.now() - lastRefreshAt
-  if (elapsed > REFRESH_INTERVAL_MS) {
-    doRefresh()
+  if (Date.now() - lastRefreshAt > REFRESH_INTERVAL_MS) {
+    refreshAuth().then((ok) => { if (ok) lastRefreshAt = Date.now() })
   }
 }
 
 export function startProactiveRefresh(): void {
   if (intervalId) return
-  lastRefreshAt = Date.now() // Assume token is fresh on login/page load
-  intervalId = setInterval(doRefresh, REFRESH_INTERVAL_MS)
+  lastRefreshAt = Date.now()
+  intervalId = setInterval(() => {
+    refreshAuth().then((ok) => { if (ok) lastRefreshAt = Date.now() })
+  }, REFRESH_INTERVAL_MS)
   document.addEventListener("visibilitychange", onVisibilityChange)
 }
 
