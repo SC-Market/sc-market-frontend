@@ -20,8 +20,8 @@ import { configureStore } from "@reduxjs/toolkit"
 import { describe, it, expect, vi, beforeEach } from "vitest"
 import { ThemeProvider, createTheme } from "@mui/material/styles"
 import { CraftingCalculator } from "../CraftingCalculator"
-import { blueprintsApi } from "../../../store/blueprintsApi"
-import { craftingApi } from "../../../store/craftingApi"
+import { marketV2Api } from "../../../store/api/v2/market"
+import { marketV2Api } from "../../../store/api/v2/market"
 import { DrawerOpenContext } from "../../../hooks/layout/Drawer"
 import { CurrentOrgContext } from "../../../hooks/login/CurrentOrg"
 
@@ -63,11 +63,11 @@ vi.mock("react-router-dom", async () => {
 function createTestStore() {
   return configureStore({
     reducer: {
-      [blueprintsApi.reducerPath]: blueprintsApi.reducer,
-      [craftingApi.reducerPath]: craftingApi.reducer,
+      [marketV2Api.reducerPath]: marketV2Api.reducer,
+      [marketV2Api.reducerPath]: marketV2Api.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(blueprintsApi.middleware, craftingApi.middleware),
+      getDefaultMiddleware().concat(marketV2Api.middleware, marketV2Api.middleware),
   })
 }
 

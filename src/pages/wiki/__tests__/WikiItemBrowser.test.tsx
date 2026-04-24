@@ -8,16 +8,16 @@ import { Provider } from "react-redux"
 import { BrowserRouter } from "react-router-dom"
 import { configureStore } from "@reduxjs/toolkit"
 import { WikiItemBrowser } from "../WikiItemBrowser"
-import { wikiApi } from "../../../store/wikiApi"
+import { marketV2Api } from "../../../store/api/v2/market"
 
 // Mock store setup
 const createMockStore = () => {
   return configureStore({
     reducer: {
-      [wikiApi.reducerPath]: wikiApi.reducer,
+      [marketV2Api.reducerPath]: marketV2Api.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(wikiApi.middleware),
+      getDefaultMiddleware().concat(marketV2Api.middleware),
   })
 }
 
