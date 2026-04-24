@@ -43,8 +43,8 @@ export function Root(props: { children: React.ReactNode }) {
         // backgroundSize: 'cover',
       }}
     >
+      <ParticleField />
       <SkipNavigation />
-      {theme.palette.mode === "dark" && <ParticleField />}
       <CookieConsent />
       {/* PWA Components */}
       {typeof window !== "undefined" && (

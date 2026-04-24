@@ -1,70 +1,24 @@
-import React, { useCallback, useState } from "react"
+import React from "react"
 import { Button, Grid, Rating, TextField, Typography } from "@mui/material"
 import { Section } from "../../components/paper/Section"
 import { AddRounded, StarRounded } from "@mui/icons-material"
-import { useCurrentOrder } from "../../hooks/order/CurrentOrder"
-import { useLeaveOrderReviewMutation } from "../../store/orders"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTheme } from "@mui/material/styles"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { Order } from "../../datatypes/Order"
 import { useTranslation } from "react-i18next"
+import { useOrderReview } from "../../features/orders/hooks/useOrderReview"
 
 export function OrderReviewArea(props: {
   asCustomer?: boolean
   asContractor?: boolean
   order: Order
 }) {
-  const [content, setContent] = useState("")
-  const [rating, setRating] = useState(0)
   const { order } = props
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
-
-  const issueAlert = useAlertHook()
-
-  const [
-    addReview, // This is the mutation trigger
-    // {isLoading}, // This is the destructured mutation result
-  ] = useLeaveOrderReviewMutation()
-
-  const submitReview = useCallback(
-    async (event: any) => {
-      // event.preventDefault();
-      const res: { data?: any; error?: any } = await addReview({
-        content: content,
-        rating: rating,
-        order_id: order.order_id,
-        role: props.asCustomer ? "customer" : "contractor",
-      })
-
-      if (res?.data && !res?.error) {
-        issueAlert({
-          message: t("orderReviewArea.alert.success"),
-          severity: "success",
-        })
-
-        setContent("")
-      } else {
-        issueAlert({
-          message: `${t("orderReviewArea.alert.error")} ${
-            res.error?.error || res.error?.data?.error || res.error
-          }`,
-          severity: "error",
-        })
-      }
-      return false
-    },
-    [
-      addReview,
-      content,
-      order.order_id,
-      props.asCustomer,
-      rating,
-      issueAlert,
-      t,
-    ],
-  )
+  const role = props.asCustomer ? "customer" : "contractor"
+  const { content, setContent, rating, setRating, submitReview } =
+    useOrderReview(order.order_id, role)
 
   return (
     <>

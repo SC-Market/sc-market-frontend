@@ -35,14 +35,5 @@ export const statusNames = new Map<
 ])
 
 // ── Payment type constants ──
-
-export const PAYMENT_TYPES = [
-  "one-time",
-  "hourly",
-  "daily",
-  "unit",
-  "box",
-  "scu",
-  "cscu",
-  "mscu",
-] as const
+// Note: The full PAYMENT_TYPES with translation keys lives in util/constants.ts
+// This is the raw type union — see domain/types.ts PaymentType

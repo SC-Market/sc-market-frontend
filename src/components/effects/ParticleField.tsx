@@ -11,12 +11,14 @@ export function ParticleField() {
   const theme = useTheme()
   const primaryRef = useRef(theme.palette.primary.main)
   const bgRef = useRef(theme.palette.background.default)
+  const isDarkRef = useRef(theme.palette.mode === "dark")
 
   // Keep colors in sync with theme changes
   useEffect(() => {
     primaryRef.current = theme.palette.primary.main
     bgRef.current = theme.palette.background.default
-  }, [theme.palette.primary.main, theme.palette.background.default])
+    isDarkRef.current = theme.palette.mode === "dark"
+  }, [theme.palette.primary.main, theme.palette.background.default, theme.palette.mode])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -53,6 +55,7 @@ export function ParticleField() {
       if (paused) { animId = requestAnimationFrame(animate); return }
       const c = hexToRgb(primaryRef.current)
       const bg = hexToRgb(bgRef.current)
+      const dim = isDarkRef.current ? 1 : 0.35
       ctx.fillStyle = `rgba(${bg.r},${bg.g},${bg.b},0.12)`
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
@@ -62,7 +65,7 @@ export function ParticleField() {
         if (p.x < 0 || p.x > canvas.width) p.vx *= -1
         if (p.y < 0 || p.y > canvas.height) p.vy *= -1
 
-        ctx.fillStyle = `rgba(${c.r},${c.g},${c.b},0.5)`
+        ctx.fillStyle = `rgba(${c.r},${c.g},${c.b},${0.5 * dim})`
         ctx.beginPath()
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
         ctx.fill()
@@ -72,7 +75,7 @@ export function ParticleField() {
           const dx = p.x - p2.x, dy = p.y - p2.y
           const dist = Math.sqrt(dx * dx + dy * dy)
           if (dist < 120) {
-            ctx.strokeStyle = `rgba(${c.r},${c.g},${c.b},${0.15 * (1 - dist / 120)})`
+            ctx.strokeStyle = `rgba(${c.r},${c.g},${c.b},${0.15 * dim * (1 - dist / 120)})`
             ctx.lineWidth = 0.5
             ctx.beginPath()
             ctx.moveTo(p.x, p.y)

@@ -14,18 +14,16 @@ import {
   TextField,
   Typography,
 } from "@mui/material"
-import React, { useCallback, useState } from "react"
+import React, { useState } from "react"
 import {
-  useAcceptOrderApplicantMutation,
-  useApplyToOrderMutation,
-} from "../../store/orders"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
+  useAcceptApplicant,
+  useApplyToOrder,
+} from "../../features/orders/hooks/useOrderApplications"
 import {
   KeyboardArrowDownRounded,
   KeyboardArrowUpRounded,
   PublishRounded,
 } from "@mui/icons-material"
-import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -57,41 +55,10 @@ export function ApplicantListItem(props: {
 
   const [open, setOpen] = useState(false)
 
-  const [acceptApplicant] = useAcceptOrderApplicantMutation()
-
-  const issueAlert = useAlertHook()
-
-  const acceptApp = useCallback(async () => {
-    const res: {
-      data?: any
-      error?: any
-    } = await acceptApplicant({
-      order_id: order.order_id,
-      contractor_id: applicant.org_applicant?.spectrum_id,
-      user_id: applicant.user_applicant?.username,
-    })
-
-    if (res?.data && !res?.error) {
-      issueAlert({
-        message: t("orderApplicantsArea.accepted"),
-        severity: "success",
-      })
-    } else {
-      issueAlert({
-        message: `${t("orderApplicantsArea.failed_accept")} ${
-          res.error?.error || res.error?.data?.error || res.error
-        }`,
-        severity: "error",
-      })
-    }
-  }, [
-    acceptApplicant,
-    order.order_id,
-    applicant.org_applicant?.spectrum_id,
-    applicant.user_applicant?.username,
-    issueAlert,
-    t,
-  ])
+  const acceptApp = useAcceptApplicant(order.order_id, {
+    orgSpectrumId: applicant.org_applicant?.spectrum_id,
+    userUsername: applicant.user_applicant?.username,
+  })
 
   return (
     <>
@@ -140,40 +107,8 @@ export function ApplicantListItem(props: {
 export function OrderApplyArea(props: { order: Order }) {
   const { order } = props
   const { t } = useTranslation()
-  const [currentOrg] = useCurrentOrg()
 
-  const [
-    applyToOrder, // This is the mutation trigger
-    // {isLoading}, // This is the destructured mutation result
-  ] = useApplyToOrderMutation()
-
-  const [appMessage, setAppMessage] = useState("")
-  const issueAlert = useAlertHook()
-
-  const processApp = async () => {
-    const res: {
-      data?: any
-      error?: any
-    } = await applyToOrder({
-      order_id: order.order_id,
-      contractor_id: currentOrg?.spectrum_id,
-      message: appMessage,
-    })
-
-    if (res?.data && !res?.error) {
-      issueAlert({
-        message: t("orderApplicantsArea.applied"),
-        severity: "success",
-      })
-    } else {
-      issueAlert({
-        message: `${t("orderApplicantsArea.failed_apply")} ${
-          res.error?.error || res.error?.data?.error || res.error
-        }`,
-        severity: "error",
-      })
-    }
-  }
+  const { appMessage, setAppMessage, processApp } = useApplyToOrder(order.order_id)
 
   return (
     <Section xs={12} title={t("orderApplicantsArea.apply")}>

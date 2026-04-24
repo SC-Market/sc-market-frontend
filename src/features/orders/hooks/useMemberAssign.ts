@@ -1,0 +1,98 @@
+import { useCallback, useEffect, useMemo, useState } from "react"
+import React from "react"
+import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
+import { useGetContractorMembersQuery, contractorsApi } from "../../../store/contractor"
+import { useAssignOrderMutation, useUnassignOrderMutation } from "../api/ordersApi"
+import { useAlertHook } from "../../../hooks/alert/AlertHook"
+import { useTranslation } from "react-i18next"
+import { store } from "../../../store/store"
+import type { MinimalUser } from "../../../datatypes/User"
+import throttle from "lodash/throttle"
+
+export function useMemberAssign(orderId: string) {
+  const [target, setTarget] = useState("")
+  const [targetObject, setTargetObject] = useState<{
+    username: string
+    display_name: string
+  } | null>(null)
+  const [currentOrg] = useCurrentOrg()
+  const [options, setOptions] = useState<MinimalUser[]>([])
+  const { t } = useTranslation()
+  const issueAlert = useAlertHook()
+
+  const { data: membersData } = useGetContractorMembersQuery({
+    spectrum_id: currentOrg?.spectrum_id || "",
+    page: 0,
+    page_size: 100,
+    search: "",
+    role_filter: "",
+    sort: "username",
+  })
+
+  const members = membersData?.members || []
+
+  const fetchOptions = useCallback(
+    async (query: string) => {
+      if (query.length < 3) return
+      const { data } = await store.dispatch(
+        contractorsApi.endpoints.searchContractorMembers.initiate({
+          spectrum_id: currentOrg?.spectrum_id!,
+          query,
+        }),
+      )
+      setOptions(data || [])
+    },
+    [currentOrg?.spectrum_id],
+  )
+
+  const retrieve = useMemo(
+    () => throttle((query: string) => fetchOptions(query), 400),
+    [fetchOptions],
+  )
+
+  useEffect(() => {
+    retrieve(target)
+  }, [target, retrieve])
+
+  const [assignUser] = useAssignOrderMutation()
+  const [unassignUser] = useUnassignOrderMutation()
+
+  const updateAssignment = useCallback(async () => {
+    if (!targetObject) return
+    const res: { data?: any; error?: any } = await assignUser({
+      order_id: orderId,
+      username: targetObject.username,
+    })
+    if (res?.data && !res?.error) {
+      issueAlert({ message: t("memberAssignArea.assigned"), severity: "success" })
+    } else {
+      issueAlert({
+        message: `${t("memberAssignArea.failed_assign")} ${res.error?.error || res.error?.data?.error || res.error}`,
+        severity: "error",
+      })
+    }
+  }, [assignUser, orderId, issueAlert, targetObject, t])
+
+  const removeAssignment = useCallback(async () => {
+    const res: { data?: any; error?: any } = await unassignUser({ order_id: orderId })
+    if (res?.data && !res?.error) {
+      issueAlert({ message: t("memberAssignArea.unassigned"), severity: "success" })
+    } else {
+      issueAlert({
+        message: `${t("memberAssignArea.failed_unassign")} ${res.error?.error || res.error?.data?.error || res.error}`,
+        severity: "error",
+      })
+    }
+  }, [unassignUser, orderId, issueAlert, t])
+
+  return {
+    target,
+    setTarget,
+    targetObject,
+    setTargetObject,
+    options,
+    members,
+    updateAssignment,
+    removeAssignment,
+  }
+}
