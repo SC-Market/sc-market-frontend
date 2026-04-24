@@ -127,6 +127,15 @@ const injectedRtkApi = api
         query: (queryArg) => ({ url: `/orders/${queryArg.orderId}` }),
         providesTags: ["Orders V2"],
       }),
+      getOrdersByListing: build.query<
+        GetOrdersByListingApiResponse,
+        GetOrdersByListingApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/orders/by-listing/${queryArg.listingId}`,
+        }),
+        providesTags: ["Orders V2"],
+      }),
       getOfferSession: build.query<
         GetOfferSessionApiResponse,
         GetOfferSessionApiArg
@@ -1240,6 +1249,14 @@ export type GetOrderDetailApiResponse =
 export type GetOrderDetailApiArg = {
   /** UUID of the order to retrieve */
   orderId: string
+}
+export type GetOrdersByListingApiResponse = /** status 200 Ok */ {
+  offers: any[]
+  orders: any[]
+}
+export type GetOrdersByListingApiArg = {
+  /** Listing UUID */
+  listingId: string
 }
 export type GetOfferSessionApiResponse =
   /** status 200 Ok */ GetOfferSessionV2Response
@@ -4516,6 +4533,7 @@ export const {
   useCreateOrderMutation,
   useGetOrdersQuery,
   useGetOrderDetailQuery,
+  useGetOrdersByListingQuery,
   useGetOfferSessionQuery,
   useSearchOffersQuery,
   useCreateListingMutation,

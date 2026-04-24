@@ -42,7 +42,7 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom"
 import { useDebounce } from "../../hooks/useDebounce"
 import { useInfiniteScroll } from "../../hooks/useInfiniteScroll"
 import { MissionCard, MissionFilters } from "../../components/game-data"
-import { CardGridSkeleton } from "../../components/game-data/GameDataSkeletons"
+import { CardGridSkeleton, TableSkeleton } from "../../components/game-data/GameDataSkeletons"
 import { UnifiedSearchBar, missionParamsToTokens, missionTokensToParams, type SearchToken } from "../../components/game-data/UnifiedSearchBar"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
@@ -249,7 +249,7 @@ export function MissionSearch() {
         <FilterSidebarLayout filters={filterContent} filterTitle={t("missions.filters", "Filters")}>
 
       {/* Loading State */}
-      {isLoading && <CardGridSkeleton />}
+      {isLoading && (viewMode === "grid" ? <CardGridSkeleton /> : <TableSkeleton />)}
 
       {/* Error State */}
       {error && (
