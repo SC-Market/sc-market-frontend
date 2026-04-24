@@ -61,7 +61,19 @@ export function MissionRankCalculator({ reputationReward, rewardScope, rewardFac
   }, [requiredRank, displayRanks])
 
   if (isLoading) return <Typography variant="body2" color="text.secondary">Loading ranks...</Typography>
-  if (!ranks.length) return <Alert severity="info">No rank data available for {rewardScope}</Alert>
+  if (!ranks.length) return <Alert severity="info">No rank data available for {scopeDisplayName}</Alert>
+
+  // Affinity scopes have negative thresholds and sliding scale — not suitable for a grind calculator
+  if (isNegativeRep || ranks.some((r) => r.threshold < 0)) {
+    return (
+      <Alert severity="info">
+        This mission affects your <strong>{scopeDisplayName}</strong> standing
+        {rewardFaction ? ` with ${rewardFaction}` : ""}.
+        {" "}Completing it will {reputationReward > 0 ? "increase" : "decrease"} your reputation by{" "}
+        <strong>{Math.abs(reputationReward).toLocaleString()} XP</strong> per run.
+      </Alert>
+    )
+  }
 
   return (
     <Box>
