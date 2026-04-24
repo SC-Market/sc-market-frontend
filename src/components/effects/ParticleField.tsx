@@ -56,6 +56,7 @@ export function ParticleField() {
       const c = hexToRgb(primaryRef.current)
       const bg = hexToRgb(bgRef.current)
       const dim = isDarkRef.current ? 1 : 0.35
+      const scrollY = window.scrollY * 0.3 // parallax factor
       ctx.fillStyle = `rgba(${bg.r},${bg.g},${bg.b},0.12)`
       ctx.fillRect(0, 0, canvas.width, canvas.height)
 
@@ -65,21 +66,24 @@ export function ParticleField() {
         if (p.x < 0 || p.x > canvas.width) p.vx *= -1
         if (p.y < 0 || p.y > canvas.height) p.vy *= -1
 
+        const drawY = ((p.y - scrollY) % canvas.height + canvas.height) % canvas.height
+
         ctx.fillStyle = `rgba(${c.r},${c.g},${c.b},${0.5 * dim})`
         ctx.beginPath()
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
+        ctx.arc(p.x, drawY, p.size, 0, Math.PI * 2)
         ctx.fill()
 
         for (let j = i + 1; j < particles.length; j++) {
           const p2 = particles[j]
-          const dx = p.x - p2.x, dy = p.y - p2.y
+          const drawY2 = ((p2.y - scrollY) % canvas.height + canvas.height) % canvas.height
+          const dx = p.x - p2.x, dy = drawY - drawY2
           const dist = Math.sqrt(dx * dx + dy * dy)
           if (dist < 120) {
             ctx.strokeStyle = `rgba(${c.r},${c.g},${c.b},${0.15 * dim * (1 - dist / 120)})`
             ctx.lineWidth = 0.5
             ctx.beginPath()
-            ctx.moveTo(p.x, p.y)
-            ctx.lineTo(p2.x, p2.y)
+            ctx.moveTo(p.x, drawY)
+            ctx.lineTo(p2.x, drawY2)
             ctx.stroke()
           }
         }
