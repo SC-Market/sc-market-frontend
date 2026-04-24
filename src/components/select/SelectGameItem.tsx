@@ -352,15 +352,15 @@ export function SelectGameCategoryOption(props: {
   TextfieldProps?: TextFieldProps
 }) {
   const { t } = useTranslation()
+  const { categories } = useGameItemData()
 
   const category_value = useMemo(
     () =>
       categories
-        ? (categories || []).find((o) => o.subcategory === props.item_type) || {
+        ? (categories || []).find((o: any) => o.subcategory === props.item_type) || {
             category: t("market.other_category", "Other"),
             subcategory: t("market.other_category", "Other"),
           }
-  const { categories } = useGameItemData()
         : {
             category: t("market.other_category", "Other"),
             subcategory: t("market.other_category", "Other"),
