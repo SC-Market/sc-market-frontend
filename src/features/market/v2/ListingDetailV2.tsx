@@ -32,6 +32,7 @@ import { ImagePreviewPaper } from "../../../components/paper/ImagePreviewPaper"
 import { MarkdownRender } from "../../../components/markdown/Markdown.lazy"
 import { SellerReviews } from "../listing-view/components/SellerReviews"
 import { SellerOtherListingsV2, RelatedListingsV2, AggregateMarketDataV2 } from "./components/ListingViewComponentsV2"
+import { ListingOrdersSection } from "./components/ListingOrdersSection"
 import { FRONTEND_URL, FALLBACK_IMAGE_URL } from "../../../util/constants"
 import { getRelativeTime } from "../../../util/time"
 import { dateDiffInDays } from "../../../util/dateDiff"
@@ -380,6 +381,9 @@ export function ListingDetailV2() {
               currentPrice={priceRange.min}
             />
           )}
+
+          {/* Related Orders/Offers (seller only) */}
+          <ListingOrdersSection listingId={listing.listing_id} />
 
           {/* Seller's Other Listings */}
           <SellerOtherListingsV2

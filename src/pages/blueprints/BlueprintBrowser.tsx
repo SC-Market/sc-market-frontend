@@ -47,7 +47,7 @@ import { useNavigate, useParams, useSearchParams } from "react-router-dom"
 import { useDebounce } from "../../hooks/useDebounce"
 import { useInfiniteScroll } from "../../hooks/useInfiniteScroll"
 import { BlueprintCard } from "../../components/game-data/BlueprintCard"
-import { CardGridSkeleton } from "../../components/game-data/GameDataSkeletons"
+import { CardGridSkeleton, TableSkeleton } from "../../components/game-data/GameDataSkeletons"
 import { UnifiedSearchBar, blueprintParamsToTokens, blueprintTokensToParams, type SearchToken } from "../../components/game-data/UnifiedSearchBar"
 import { formatCategoryName } from "../../util/categoryDisplay"
 import { getCommodityColor } from "../../util/gameIcons"
@@ -304,7 +304,7 @@ export function BlueprintBrowser() {
           </Box>
 
           {/* Loading State */}
-          {isLoading && <CardGridSkeleton />}
+          {isLoading && (viewMode === "grid" ? <CardGridSkeleton /> : <TableSkeleton />)}
 
           {/* Error State */}
           {error && (
