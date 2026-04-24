@@ -39,6 +39,7 @@ export interface MissionCardProps {
     credit_reward_min?: number
     credit_reward_max?: number
     blueprint_reward_count: number
+    blueprint_reward_names?: string[]
     community_satisfaction_avg?: number
     is_shareable: boolean
     is_chain_starter: boolean
@@ -110,7 +111,7 @@ export const MissionCard: React.FC<MissionCardProps> = ({ mission, onClick }) =>
             {mission.is_chain_mission && !mission.is_chain_starter && <Chip label="Chain" size="small" color="secondary" variant="outlined" sx={microChip} />}
             {mission.associated_event && <Chip label={mission.associated_event} size="small" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav(`/missions?show_events=true&event=${mission.associated_event}`) }} sx={{ ...microChip, bgcolor: "info.main", color: "#fff" }} />}
             {mission.ship_encounter_count > 0 && <Chip icon={<ShieldRounded sx={{ fontSize: 14 }} />} label={mission.ship_encounter_count} size="small" color="info" variant="outlined" sx={microChip} />}
-            {mission.blueprint_reward_count > 0 && <Chip icon={<BuildRounded sx={{ fontSize: 14 }} />} label={`${mission.blueprint_reward_count} BP`} size="small" color="success" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav("/missions?blueprints=true") }} sx={microChip} />}
+            {mission.blueprint_reward_count > 0 && <Tooltip title={mission.blueprint_reward_names?.join(", ") || `${mission.blueprint_reward_count} blueprints`} arrow><Chip icon={<BuildRounded sx={{ fontSize: 14 }} />} label={`${mission.blueprint_reward_count} BP`} size="small" color="success" clickable onClick={(e) => { e.stopPropagation(); e.preventDefault(); nav("/missions?blueprints=true") }} sx={microChip} /></Tooltip>}
           </Box>
 
           {/* Material badges */}

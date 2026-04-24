@@ -7,7 +7,7 @@ import { unwrapResponse } from "../../../store/api-utils"
 // Re-export domain types for backward compatibility
 export type { Comment, RecruitingPost } from "../domain/types"
 
-import type { RecruitingPost } from "../domain/types"
+import type { Comment, RecruitingPost } from "../domain/types"
 
 // Define a service using a base URL and expected endpoints
 export const recruitingApi = serviceApi.injectEndpoints({
