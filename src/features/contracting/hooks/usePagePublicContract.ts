@@ -1,4 +1,4 @@
-import { useGetPublicContractQuery } from "../../../store/public_contracts"
+import { useGetPublicContractQuery } from "../api/publicContractsApi"
 
 export interface UsePagePublicContractResult {
   data:

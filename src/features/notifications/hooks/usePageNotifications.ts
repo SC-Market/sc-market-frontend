@@ -1,6 +1,6 @@
 import { useCallback } from "react"
 import { useNotifications } from "./useNotifications"
-import { useGetUserOrganizationsQuery } from "../../../store/organizations"
+import { useGetUserOrganizationsQuery } from "../../contractor/api/organizationsApi"
 import type { NotificationScope } from "../domain/types"
 
 export interface UsePageNotificationsParams {

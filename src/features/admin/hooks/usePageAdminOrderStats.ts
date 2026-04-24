@@ -1,4 +1,4 @@
-import { useGetOrderAnalyticsQuery } from "../../../store/admin"
+import { useGetOrderAnalyticsQuery } from "../api/adminApi"
 
 export interface UsePageAdminOrderStatsResult {
   data: ReturnType<typeof useGetOrderAnalyticsQuery>["data"]
