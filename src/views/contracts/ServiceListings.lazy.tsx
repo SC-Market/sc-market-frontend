@@ -1,8 +1,8 @@
 import { lazy } from "react"
-import type { orderIcons } from "../../datatypes/Order"
+import type { OrderKind } from "../../features/orders/domain/types"
 
-// Re-export type
-export type ContractKindIconKey = keyof typeof orderIcons
+/** @deprecated Use OrderKind from features/orders/domain/types instead */
+export type ContractKindIconKey = OrderKind
 
 // Lazy load components from features
 export const ServiceListings = lazy(() =>

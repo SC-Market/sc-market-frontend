@@ -7,7 +7,7 @@ export const princessThemeOptions: ThemeOptions = {
     primary: refTheme.palette.augmentColor({ color: { main: "#F48FB1", contrastText: "#FFFFFF" } }),
     secondary: refTheme.palette.augmentColor({ color: { main: "#80CBC4", contrastText: "#2A1A28" } }),
     text: { primary: "#2A1A28", secondary: "#6E4A6E", disabled: "#C0A0C0" },
-    background: { default: "#F6F2FB", paper: "#FFF5F9", sidebar: "#DDE8F4", navbar: "#FFF5F9", light: "#FFFFFF", overlay: "rgba(244,143,177,0.15)", overlayDark: "rgba(244,143,177,0.3)", imageOverlay: "rgba(244,143,177,0.4)", imageOverlayHover: "rgba(244,143,177,0.6)" },
+    background: { default: "#FFF5F9", paper: "#F6F2FB", sidebar: "#DDE8F4", navbar: "#DDE8F4", light: "#FFFFFF", overlay: "rgba(244,143,177,0.15)", overlayDark: "rgba(244,143,177,0.3)", imageOverlay: "rgba(244,143,177,0.4)", imageOverlayHover: "rgba(244,143,177,0.6)" },
     outline: { main: "rgba(184,212,232,0.5)" },
     divider: "rgba(184,212,232,0.5)",
     action: { hover: "rgba(244,143,177,0.1)" },

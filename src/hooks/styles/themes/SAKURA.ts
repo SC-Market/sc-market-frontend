@@ -7,7 +7,7 @@ export const sakuraThemeOptions: ThemeOptions = {
     primary: refTheme.palette.augmentColor({ color: { main: "#D4618C", contrastText: "#FFFFFF" } }),
     secondary: refTheme.palette.augmentColor({ color: { main: "#A0466A", contrastText: "#FFFFFF" } }),
     text: { primary: "#2A1A20", secondary: "#6E4A56", disabled: "#C0A0B0" },
-    background: { default: "#F0E4E8", paper: "#FFFFFF", sidebar: "#ECDCE2", navbar: "#FFFFFF", light: "#FFFFFF", overlay: "rgba(212,97,140,0.15)", overlayDark: "rgba(212,97,140,0.3)", imageOverlay: "rgba(212,97,140,0.4)", imageOverlayHover: "rgba(212,97,140,0.6)" },
+    background: { default: "#FFF8FA", paper: "#F0E4E8", sidebar: "#ECDCE2", navbar: "#ECDCE2", light: "#FFFFFF", overlay: "rgba(212,97,140,0.15)", overlayDark: "rgba(212,97,140,0.3)", imageOverlay: "rgba(212,97,140,0.4)", imageOverlayHover: "rgba(212,97,140,0.6)" },
     outline: { main: "rgba(212,97,140,0.3)" },
     divider: "rgba(212,97,140,0.3)",
     action: { hover: "rgba(212,97,140,0.1)" },
