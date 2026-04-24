@@ -1,10 +1,4 @@
-import {
-  OfferSession,
-  useCreateOfferThreadMutation,
-  useUpdateOfferStatusMutation,
-  useAssignOfferMutation,
-  useUnassignOfferMutation,
-} from "../../features/offers/api/offerApi"
+import type { OfferSession } from "../../features/offers/domain/types"
 import {
   Chip,
   Grid,
@@ -26,7 +20,7 @@ import {
   FormControl,
   InputLabel,
 } from "@mui/material"
-import React, { useCallback, useEffect, useMemo, useState } from "react"
+import React, { useEffect } from "react"
 import { OrgDetails, UserDetails } from "../../components/list/UserDetails"
 import { Stack } from "@mui/system"
 import { format } from "../../util/time"
@@ -45,40 +39,19 @@ import {
   useGetNotificationsQuery,
   useNotificationDeleteMutation,
 } from "../../features/notifications/api/notificationApi"
-import { Order } from "../../features/orders/domain/types"
 import { MessagesBody } from "../../features/chats"
-import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
-import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import LoadingButton from "@mui/lab/LoadingButton"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
-import { Link, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { OrderSummarySection } from "../../components/orders/OrderSummarySection"
 import { OrderSummarySectionV2 } from "../../components/orders/OrderSummarySectionV2"
-import { detectOfferChanges } from "../../util/offerChanges"
-import { useGetPublicContractQuery } from "../../features/contracting/api/publicContractsApi"
 import { ListingSellerRating } from "../../components/rating/ListingRating"
 import { useTranslation } from "react-i18next"
 import { PAYMENT_TYPE_MAP } from "../../util/constants"
 import { useTheme } from "@mui/material/styles"
 import { useMediaQuery } from "@mui/material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import {
-  useGetContractorMembersQuery,
-  contractorsApi,
-} from "../../features/contractor/api/contractorApi"
-import { store } from "../../store/store"
-import { MinimalUser } from "../../datatypes/User"
-import throttle from "lodash/throttle"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
-import { has_permission } from "../contractor/OrgRoles"
-
-// Status map for unified translation and colour coding
-const statusTextToKey: Record<string, string> = {
-  "Waiting for Seller": "waitingSeller",
-  "Waiting for Customer": "waitingCustomer",
-  Accepted: "accepted",
-  Rejected: "rejected",
-}
+import { useOfferDetails, statusTextToKey } from "../../features/offers/hooks/useOfferDetails"
 
 export function OfferMessagesArea(props: { offer: OfferSession }) {
   const { offer } = props
@@ -137,207 +110,23 @@ export function OfferDetailsArea(props: { session: OfferSession }) {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
   const { t, i18n } = useTranslation()
   const { session } = props
-  const [org] = useCurrentOrg()
-  const { data: profile } = useGetUserProfileQuery()
-  const { data: publicContract } = useGetPublicContractQuery(
-    session?.contract_id!,
-    { skip: !session?.contract_id },
-  )
 
-  const [selectedOfferIndex, setSelectedOfferIndex] = useState(0)
-  const [isEditingAssigned, setIsEditingAssigned] = useState(false)
-  const [target, setTarget] = useState("")
-  const [targetObject, setTargetObject] = useState<{
-    username: string
-    display_name: string
-  } | null>(null)
-  const [options, setOptions] = useState<MinimalUser[]>([])
+  const {
+    profile, org, issueAlert, publicContract,
+    selectedOfferIndex, setSelectedOfferIndex,
+    currentOffer, previousOffer, offerChanges,
+    isEditingAssigned, setIsEditingAssigned,
+    target, setTarget, targetObject, setTargetObject,
+    options, members,
+    handleAssignSave, handleAssignCancel, handleUnassign,
+    amContractorManager,
+    statusKey, statusColor,
+    showAccept, showCancel,
+    isUpdatingStatus, updateStatusCallback,
+    createThread, createThreadLoading,
+  } = useOfferDetails(session)
 
-  const issueAlert = useAlertHook()
-
-  const { data: membersData } = useGetContractorMembersQuery({
-    spectrum_id: org?.spectrum_id || "",
-    page: 0,
-    page_size: 100,
-    search: "",
-    role_filter: "",
-    sort: "username",
-  })
-
-  const members = membersData?.members || []
-
-  const fetchOptions = useCallback(
-    async (query: string) => {
-      if (query.length < 3) {
-        return
-      }
-
-      const { data } = await store.dispatch(
-        contractorsApi.endpoints.searchContractorMembers.initiate({
-          spectrum_id: org?.spectrum_id!,
-          query: query,
-        }),
-      )
-
-      setOptions(data || [])
-    },
-    [org?.spectrum_id],
-  )
-
-  const retrieve = useMemo(
-    () =>
-      throttle((query: string) => {
-        fetchOptions(query)
-      }, 400),
-    [fetchOptions],
-  )
-
-  useEffect(() => {
-    retrieve(target)
-  }, [target, retrieve])
-
-  // Get current offer and detect changes
-  const currentOffer = session.offers[selectedOfferIndex]
-  const previousOffer =
-    selectedOfferIndex < session.offers.length - 1
-      ? session.offers[selectedOfferIndex + 1]
-      : undefined
-  const offerChanges = detectOfferChanges(currentOffer, previousOffer)
-
-  const [assignUser] = useAssignOfferMutation()
-  const [unassignUser] = useUnassignOfferMutation()
-
-  const amContractorManager = useMemo(
-    () =>
-      session.contractor &&
-      org?.spectrum_id === session.contractor.spectrum_id &&
-      has_permission(org, profile, "manage_orders", profile?.contractors),
-    [org, profile, session],
-  )
-
-  // Generate a status key for translation and icons/colours
-  const statusKey = statusTextToKey[session.status] || session.status
-
-  const [statusColor, icon] = useMemo(() => {
-    if (statusKey === "waitingSeller") {
-      return ["warning" as const, <Announcement key={"warning"} />] as const
-    } else if (statusKey === "waitingCustomer") {
-      return ["info" as const, <HourglassTop key={"info"} />] as const
-    } else if (statusKey === "rejected") {
-      return ["error" as const, <Cancel key={"error"} />] as const
-    } else {
-      return ["success" as const, <CheckCircle key={"success"} />] as const
-    }
-  }, [statusKey])
-
-  const showAccept = useMemo(() => {
-    if (
-      [
-        t("OffersViewPaginated.rejected"),
-        t("OffersViewPaginated.accepted"),
-      ].includes(statusKey)
-    ) {
-      return false
-    }
-
-    if (session.contractor) {
-      if (org?.spectrum_id === session.contractor.spectrum_id) {
-        return statusKey === "waitingSeller"
-      }
-    }
-
-    if (session.assigned_to) {
-      if (profile?.username === session.assigned_to.username) {
-        return statusKey === "waitingSeller"
-      }
-    }
-
-    if (profile?.username === session.customer.username) {
-      return statusKey === "waitingCustomer"
-    }
-
-    return false
-  }, [profile, org, session, statusKey, t])
-
-  const showCancel =
-    !showAccept && statusKey !== "rejected" && statusKey !== "accepted"
-
-  const [updateStatus, { isLoading: isUpdatingStatus }] =
-    useUpdateOfferStatusMutation()
-  const navigate = useNavigate()
-
-  const updateStatusCallback = useCallback(
-    (status: "accepted" | "rejected" | "cancelled") => {
-      updateStatus({ session_id: session.id, status: status })
-        .unwrap()
-        .then((result) => {
-          if (result.order_id) navigate(`/contract/${result.order_id}`)
-        })
-        .catch((err) => {
-          issueAlert(err)
-        })
-    },
-    [session.id, updateStatus, navigate, issueAlert],
-  )
-
-  const handleAssignSave = useCallback(async () => {
-    if (!targetObject) {
-      return
-    }
-
-    const res: { data?: any; error?: any } = await assignUser({
-      session_id: session.id,
-      username: targetObject.username!,
-    })
-
-    if (res?.data && !res?.error) {
-      issueAlert({
-        message: t("memberAssignArea.assigned"),
-        severity: "success",
-      })
-      setIsEditingAssigned(false)
-      setTarget("")
-      setTargetObject(null)
-    } else {
-      issueAlert({
-        message: `${t("memberAssignArea.failed_assign")} ${
-          res.error?.error || res.error?.data?.error || res.error
-        }`,
-        severity: "error",
-      })
-    }
-  }, [assignUser, session.id, issueAlert, targetObject, t])
-
-  const handleAssignCancel = useCallback(() => {
-    setIsEditingAssigned(false)
-    setTarget("")
-    setTargetObject(null)
-  }, [])
-
-  const handleUnassign = useCallback(async () => {
-    const res: { data?: any; error?: any } = await unassignUser({
-      session_id: session.id,
-    })
-
-    if (res?.data && !res?.error) {
-      issueAlert({
-        message: t("memberAssignArea.unassigned"),
-        severity: "success",
-      })
-      setIsEditingAssigned(false)
-    } else {
-      issueAlert({
-        message: `${t("memberAssignArea.failed_unassign")} ${
-          res.error?.error || res.error?.data?.error || res.error
-        }`,
-        severity: "error",
-      })
-    }
-  }, [unassignUser, session.id, issueAlert, t])
-
-  const [createThread, { isLoading: createThreadLoading }] =
-    useCreateOfferThreadMutation()
-
+  return (
   return (
     <Grid item xs={12} lg={8} md={6} sx={{ minWidth: 0 }}>
       {session.offers.length > 1 && (

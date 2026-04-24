@@ -377,9 +377,11 @@ export function BlueprintBrowser() {
                             </Avatar>
                           </TableCell>
                           <TableCell>
+                            <Tooltip title={bp.output_item_name} arrow enterDelay={500}>
                             <Typography variant="body2" fontWeight={600} noWrap sx={{ maxWidth: 240 }}>
                               {bp.output_item_name}
                             </Typography>
+                            </Tooltip>
                           </TableCell>
                           <TableCell>
                             <Typography variant="caption" color="text.secondary" noWrap>

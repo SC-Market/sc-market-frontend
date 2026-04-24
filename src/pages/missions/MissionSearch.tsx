@@ -37,7 +37,7 @@ import {
   useMediaQuery,
 } from "@mui/material"
 import { ViewList, ViewModule, ShieldRounded, BuildRounded } from "@mui/icons-material"
-import { useSearchMissionsQuery, type MissionSearchResult } from "../../store/api/v2/market"
+import { useSearchMissionsQuery, useGetGameEventsQuery, type MissionSearchResult } from "../../store/api/v2/market"
 import { useNavigate, useParams, useSearchParams } from "react-router-dom"
 import { useDebounce } from "../../hooks/useDebounce"
 import { useInfiniteScroll } from "../../hooks/useInfiniteScroll"
@@ -116,6 +116,10 @@ export function MissionSearch() {
     const params = new URLSearchParams(missionTokensToParams(tokens))
     setSearchParams(params, { replace: true })
   }
+  const { data: eventsData } = useGetGameEventsQuery()
+  const eventOptions: SearchToken[] = useMemo(() =>
+    (eventsData?.events || []).map(e => ({ type: "event" as const, label: e.event_name, value: e.event_code })), [eventsData])
+
   const [viewMode, setViewMode] = useState<"list" | "grid">(() => (localStorage.getItem("missions-view") as "list" | "grid") || "list")
   const handleViewModeChange = (_: React.MouseEvent<HTMLElement>, v: "list" | "grid" | null) => { if (v) { setViewMode(v); localStorage.setItem("missions-view", v) } }
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"))
@@ -252,6 +256,7 @@ export function MissionSearch() {
             <UnifiedSearchBar
               tokens={searchTokens}
               onChange={handleTokensChange}
+              extraOptions={eventOptions}
               placeholder="Search missions, systems, categories..."
             />
             <Typography variant="body2" color="text.secondary" sx={{ whiteSpace: "nowrap" }}>
@@ -318,7 +323,7 @@ export function MissionSearch() {
                             </Typography>
                           </TableCell>
                           <TableCell>
-                            <MissionName name={m.mission_name} variant="body2" fontWeight={600} noWrap sx={{ maxWidth: 260 }} />
+                            <Tooltip title={m.mission_name} arrow enterDelay={500}><span><MissionName name={m.mission_name} variant="body2" fontWeight={600} noWrap sx={{ maxWidth: 260, display: "block" }} /></span></Tooltip>
                           </TableCell>
                           <TableCell>
                             <Typography variant="caption" color="text.secondary" noWrap sx={{ maxWidth: 100, display: "block" }}>
