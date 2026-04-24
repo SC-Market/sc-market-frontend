@@ -18,135 +18,38 @@ import {
   useMediaQuery,
 } from "@mui/material"
 import NotificationsActiveRoundedIcon from "@mui/icons-material/NotificationsActiveRounded"
-import React, { useCallback, useEffect, useMemo, useState } from "react"
+import React from "react"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme, getNavbarContrastText } from "../../hooks/styles/Theme"
-import { Notification } from "../../hooks/login/UserProfile"
 import { ClearAllRounded, MarkEmailReadRounded } from "@mui/icons-material"
-import {
-  useGetNotificationsQuery,
-  useNotificationBulkUpdateMutation,
-  useNotificationBulkDeleteMutation,
-} from "../../features/notifications/api/notificationApi"
-import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
-import { useGetUserOrganizationsQuery } from "../../features/contractor/api/organizationsApi"
-import { useNotificationPollingInterval } from "../../hooks/notifications/useNotificationPolling"
 import { useTranslation } from "react-i18next"
-import { useBadgeAPI } from "../../hooks/pwa/useBadgeAPI"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { Link } from "react-router-dom"
 import { NotificationEntry } from "../../features/notifications"
 import { haptic } from "../../util/haptics"
 import { HapticIconButton, HapticTablePagination } from "../haptic"
+import { useNotifications } from "../../features/notifications/hooks/useNotifications"
 
 export function NotificationsButton() {
   const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null)
   const notifOpen = Boolean(anchorEl)
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
-  const [page, setPage] = useState(0)
-  const [pageSize, setPageSize] = useState(5)
-  const [scopeFilter, setScopeFilter] = useState<
-    "individual" | "organization" | "all"
-  >("all")
-  const [contractorIdFilter, setContractorIdFilter] = useState<string>("")
-
   const iconColor = getNavbarContrastText(theme)
 
-  const { data: currentUser } = useGetUserProfileQuery()
-  const isLoggedIn = !!currentUser
-
-  const { data: organizationsData } = useGetUserOrganizationsQuery()
-
-  // Calculate optimal polling interval based on push subscription and app visibility
-  const pollingInterval = useNotificationPollingInterval()
-
-  const { data: notificationsData, refetch } = useGetNotificationsQuery(
-    {
-      page,
-      pageSize,
-      scope: scopeFilter !== "all" ? scopeFilter : undefined,
-      contractorId: contractorIdFilter || undefined,
-    },
-    {
-      skip: !isLoggedIn,
-      pollingInterval: pollingInterval > 0 ? pollingInterval : undefined, // Disable polling if interval is 0
-      refetchOnMountOrArgChange: true, // Refetch when component mounts or arguments change
-    },
-  )
-
-  // Explicitly refetch when pagination changes
-  useEffect(() => {
-    refetch()
-  }, [page, pageSize, refetch])
-
-  const notifications = notificationsData?.notifications || []
-  const total = notificationsData?.pagination?.total || 0
-  const unreadCount = notificationsData?.unread_count || 0
-
-  // Update app icon badge with unread count
-  useBadgeAPI(unreadCount)
+  const {
+    isLoggedIn, organizationsData,
+    notifications, total, unreadCount,
+    page, pageSize, handleChangePage, handleChangeRowsPerPage, resetPage,
+    scopeFilter, setScopeFilter,
+    contractorIdFilter, setContractorIdFilter,
+    markAllReadCallback, deleteAllCallback,
+  } = useNotifications()
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    if (notifOpen) {
-      haptic.light()
-    }
+    if (notifOpen) haptic.light()
     setAnchorEl(notifOpen ? null : event.currentTarget)
   }
-
-  const handleClose = () => {
-    setAnchorEl(null)
-  }
-
-  const [bulkUpdate] = useNotificationBulkUpdateMutation()
-  const [bulkDelete] = useNotificationBulkDeleteMutation()
-  const issueAlert = useAlertHook()
-
-  const markAllReadCallback = useCallback(async () => {
-    try {
-      const result = await bulkUpdate({ read: true }).unwrap()
-      issueAlert({
-        severity: "success",
-        message: t("notifications.marked_all_read", {
-          count: result.affected_count,
-        }),
-      })
-    } catch (error) {
-      issueAlert({
-        severity: "error",
-        message: t("notifications.mark_all_read_failed"),
-      })
-    }
-  }, [bulkUpdate, issueAlert, t])
-
-  const deleteAllCallback = useCallback(async () => {
-    try {
-      const result = await bulkDelete({}).unwrap()
-      issueAlert({
-        severity: "success",
-        message: t("notifications.cleared_all", {
-          count: result.affected_count,
-        }),
-      })
-    } catch (error) {
-      issueAlert({
-        severity: "error",
-        message: t("notifications.clear_all_failed"),
-      })
-    }
-  }, [bulkDelete, issueAlert, t])
-
-  const handleChangePage = useCallback((event: unknown, newPage: number) => {
-    setPage(newPage)
-  }, [])
-
-  const handleChangeRowsPerPage = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setPageSize(parseInt(event.target.value, 10))
-      setPage(0)
-    },
-    [],
-  )
+  const handleClose = () => setAnchorEl(null)
 
   return (
     <>
@@ -245,7 +148,7 @@ export function NotificationsButton() {
             onChange={(_, newValue) => {
               setScopeFilter(newValue)
               setContractorIdFilter("") // Reset contractor filter when changing scope
-              setPage(0) // Reset to first page
+              resetPage() // Reset to first page
             }}
             variant="scrollable"
             scrollButtons="auto"
@@ -280,7 +183,7 @@ export function NotificationsButton() {
                   label="Filter by Organization"
                   onChange={(e) => {
                     setContractorIdFilter(e.target.value)
-                    setPage(0) // Reset to first page
+                    resetPage() // Reset to first page
                   }}
                 >
                   <MenuItem value="">
@@ -307,7 +210,7 @@ export function NotificationsButton() {
                   onDelete={() => {
                     setScopeFilter("all")
                     setContractorIdFilter("")
-                    setPage(0)
+                    resetPage()
                   }}
                 />
               )}
@@ -321,7 +224,7 @@ export function NotificationsButton() {
                   size="small"
                   onDelete={() => {
                     setContractorIdFilter("")
-                    setPage(0)
+                    resetPage()
                   }}
                 />
               )}

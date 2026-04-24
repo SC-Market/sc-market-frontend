@@ -1,60 +1,84 @@
-import { useCallback } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import {
   useGetNotificationsQuery,
   useNotificationBulkUpdateMutation,
   useNotificationBulkDeleteMutation,
-} from "../api/notificationApi"
-import type { NotificationScope } from "../domain/types"
+} from "../../notifications/api/notificationApi"
+import { useGetUserProfileQuery } from "../../profile/api/profileApi"
+import { useGetUserOrganizationsQuery } from "../../contractor/api/organizationsApi"
 import { useNotificationPollingInterval } from "../../../hooks/notifications/useNotificationPolling"
+import { useAlertHook } from "../../../hooks/alert/AlertHook"
+import { useTranslation } from "react-i18next"
+import { useBadgeAPI } from "../../../hooks/pwa/useBadgeAPI"
 
-/**
- * Hook for managing notifications with filtering and pagination
- */
-export function useNotifications(
-  page: number = 0,
-  pageSize: number = 20,
-  scope: NotificationScope = "all",
-  contractorId?: string,
-) {
-  // Calculate optimal polling interval based on push subscription and app visibility
+export function useNotifications() {
+  const { t } = useTranslation()
+  const issueAlert = useAlertHook()
+  const [page, setPage] = useState(0)
+  const [pageSize, setPageSize] = useState(5)
+  const [scopeFilter, setScopeFilter] = useState<"individual" | "organization" | "all">("all")
+  const [contractorIdFilter, setContractorIdFilter] = useState("")
+
+  const { data: currentUser } = useGetUserProfileQuery()
+  const isLoggedIn = !!currentUser
+  const { data: organizationsData } = useGetUserOrganizationsQuery()
   const pollingInterval = useNotificationPollingInterval()
 
-  const { data, refetch, isLoading, error } = useGetNotificationsQuery(
+  const { data: notificationsData, refetch } = useGetNotificationsQuery(
     {
-      page,
-      pageSize,
-      scope: scope !== "all" ? scope : undefined,
-      contractorId: contractorId || undefined,
+      page, pageSize,
+      scope: scopeFilter !== "all" ? scopeFilter : undefined,
+      contractorId: contractorIdFilter || undefined,
     },
     {
+      skip: !isLoggedIn,
       pollingInterval: pollingInterval > 0 ? pollingInterval : undefined,
       refetchOnMountOrArgChange: true,
     },
   )
 
-  const notifications = data?.notifications || []
-  const pagination = data?.pagination
-  const unreadCount = data?.unread_count || 0
+  useEffect(() => { refetch() }, [page, pageSize, refetch])
+
+  const notifications = notificationsData?.notifications || []
+  const total = notificationsData?.pagination?.total || 0
+  const unreadCount = notificationsData?.unread_count || 0
+
+  useBadgeAPI(unreadCount)
 
   const [bulkUpdate] = useNotificationBulkUpdateMutation()
   const [bulkDelete] = useNotificationBulkDeleteMutation()
 
-  const markAllAsRead = useCallback(async () => {
-    return await bulkUpdate({ read: true }).unwrap()
-  }, [bulkUpdate])
+  const markAllReadCallback = useCallback(async () => {
+    try {
+      const result = await bulkUpdate({ read: true }).unwrap()
+      issueAlert({ severity: "success", message: t("notifications.marked_all_read", { count: result.affected_count }) })
+    } catch {
+      issueAlert({ severity: "error", message: t("notifications.mark_all_read_failed") })
+    }
+  }, [bulkUpdate, issueAlert, t])
 
-  const deleteAll = useCallback(async () => {
-    return await bulkDelete({}).unwrap()
-  }, [bulkDelete])
+  const deleteAllCallback = useCallback(async () => {
+    try {
+      const result = await bulkDelete({}).unwrap()
+      issueAlert({ severity: "success", message: t("notifications.cleared_all", { count: result.affected_count }) })
+    } catch {
+      issueAlert({ severity: "error", message: t("notifications.clear_all_failed") })
+    }
+  }, [bulkDelete, issueAlert, t])
+
+  const handleChangePage = useCallback((_: unknown, newPage: number) => setPage(newPage), [])
+  const handleChangeRowsPerPage = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    setPageSize(parseInt(event.target.value, 10)); setPage(0)
+  }, [])
+
+  const resetPage = useCallback(() => setPage(0), [])
 
   return {
-    notifications,
-    pagination,
-    unreadCount,
-    isLoading,
-    error,
-    refetch,
-    markAllAsRead,
-    deleteAll,
+    isLoggedIn, organizationsData,
+    notifications, total, unreadCount,
+    page, pageSize, handleChangePage, handleChangeRowsPerPage, resetPage,
+    scopeFilter, setScopeFilter,
+    contractorIdFilter, setContractorIdFilter,
+    markAllReadCallback, deleteAllCallback,
   }
 }
