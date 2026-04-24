@@ -113,7 +113,16 @@ export function MissionSearch() {
   // Unified search bar tokens — derived from URL params
   const searchTokens = useMemo(() => missionParamsToTokens(searchParams), [searchParams])
   const handleTokensChange = (tokens: SearchToken[]) => {
-    const params = new URLSearchParams(missionTokensToParams(tokens))
+    const tokenParams = missionTokensToParams(tokens)
+    // Merge: start with current params, remove token-managed keys, add new token values
+    const params = new URLSearchParams(searchParams)
+    for (const key of ["q", "category", "system", "giver", "faction", "legal", "shareable", "unique", "chain", "blueprints", "event", "show_events"]) {
+      params.delete(key)
+    }
+    for (const [k, v] of Object.entries(tokenParams)) {
+      params.set(k, v)
+    }
+    params.delete("page")
     setSearchParams(params, { replace: true })
   }
   const { data: eventsData } = useGetGameEventsQuery()

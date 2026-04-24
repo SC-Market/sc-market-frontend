@@ -118,9 +118,14 @@ export function BlueprintBrowser() {
   // Unified search bar tokens
   const searchTokens = useMemo(() => blueprintParamsToTokens(searchParams), [searchParams])
   const handleTokensChange = (tokens: SearchToken[]) => {
-    const params = new URLSearchParams(blueprintTokensToParams(tokens))
-    // Preserve non-token params
-    if (searchParams.get("hide_unsourceable") === "false") params.set("hide_unsourceable", "false")
+    const tokenParams = blueprintTokensToParams(tokens)
+    const params = new URLSearchParams(searchParams)
+    for (const key of ["q", "category", "subcategory", "rarity", "ingredient", "mfr", "source", "missions", "owned"]) {
+      params.delete(key)
+    }
+    for (const [k, v] of Object.entries(tokenParams)) {
+      params.set(k, v)
+    }
     setSearchParams(params, { replace: true })
   }
 
