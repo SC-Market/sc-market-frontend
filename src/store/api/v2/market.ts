@@ -2645,6 +2645,8 @@ export type MyListingItem = {
   quality_tier_min?: number
   /** Maximum quality tier available (1-5) */
   quality_tier_max?: number
+  /** Primary photo URL */
+  photo?: string
   /** ISO 8601 timestamp when listing expires (null if no expiry) */
   expires_at?: string
 }

@@ -8,6 +8,7 @@
 
 import React, { useCallback, useMemo } from "react"
 import {
+  Avatar,
   Box,
   Button,
   Card,
@@ -25,6 +26,7 @@ import { EditRounded } from "@mui/icons-material"
 import { ExtendedTheme } from "../../../../hooks/styles/Theme"
 import type { MyListingItem } from "../../../../store/api/v2/market"
 import { getRelativeTime } from "../../../../util/time"
+import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
 
 interface MyListingCardV2Props {
   listing: MyListingItem
@@ -107,19 +109,27 @@ export function MyListingCardV2({ listing, index }: MyListingCardV2Props) {
               </Button>
             </Box>
 
-            <Typography
-              variant="h6"
-              fontWeight="bold"
-              sx={{
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-                display: "-webkit-box",
-                WebkitLineClamp: 2,
-                WebkitBoxOrient: "vertical",
-              }}
-            >
-              {listing.title}
-            </Typography>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+              <Avatar
+                src={listing.photo || FALLBACK_IMAGE_URL}
+                variant="rounded"
+                sx={{ width: 48, height: 48, flexShrink: 0 }}
+                imgProps={{ loading: "lazy" }}
+              />
+              <Typography
+                variant="h6"
+                fontWeight="bold"
+                sx={{
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  display: "-webkit-box",
+                  WebkitLineClamp: 2,
+                  WebkitBoxOrient: "vertical",
+                }}
+              >
+                {listing.title}
+              </Typography>
+            </Box>
 
             <Divider />
 

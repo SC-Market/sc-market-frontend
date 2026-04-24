@@ -15,6 +15,8 @@ import {
   FormLabel,
   Chip,
   Alert,
+  Skeleton,
+  Stack,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { useNavigate, useParams } from "react-router-dom";
@@ -338,6 +340,19 @@ export function EditListingV2() {
         isLoading={true}
         sidebarOpen={true}
         maxWidth="lg"
+        skeleton={
+          <Grid item xs={12}>
+            <Stack spacing={2}>
+              <Skeleton variant="rectangular" height={40} sx={{ borderRadius: 1 }} />
+              <Skeleton variant="rectangular" height={40} sx={{ borderRadius: 1 }} />
+              <Skeleton variant="rectangular" height={120} sx={{ borderRadius: 1 }} />
+              <Skeleton variant="rectangular" height={40} sx={{ borderRadius: 1, width: "50%" }} />
+              <Skeleton variant="rectangular" height={40} sx={{ borderRadius: 1, width: "50%" }} />
+              <Skeleton variant="rectangular" height={200} sx={{ borderRadius: 1 }} />
+              <Skeleton variant="rectangular" height={44} sx={{ borderRadius: 1, width: 120, ml: "auto" }} />
+            </Stack>
+          </Grid>
+        }
       >
         <Box />
       </StandardPageLayout>

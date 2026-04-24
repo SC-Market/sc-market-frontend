@@ -18,6 +18,7 @@ import {
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import type { ExtendedTheme } from "../../../hooks/styles/Theme";
 import { QualityBadge } from "./QualityBadge";
+import { formatPrice } from "../../../util/formatPrice";
 
 interface Variant {
   variant_id: string;
@@ -113,7 +114,7 @@ export const VariantBreakdown: React.FC<VariantBreakdownProps> = ({
                   Qty: {variant.quantity.toLocaleString()}
                 </Typography>
                 <Typography variant="h6" color="primary" fontWeight="bold">
-                  {variant.price.toLocaleString()} aUEC
+                  {formatPrice(variant.price)}
                 </Typography>
               </Box>
 
@@ -169,7 +170,7 @@ export const VariantBreakdown: React.FC<VariantBreakdownProps> = ({
               </TableCell>
               <TableCell align="right">
                 <Typography variant="body2" color="primary" fontWeight="bold">
-                  {variant.price.toLocaleString()} aUEC
+                  {formatPrice(variant.price)}
                 </Typography>
               </TableCell>
               <TableCell>
