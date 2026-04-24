@@ -91,6 +91,35 @@ Shared type definitions. New types go in `features/<name>/domain/types.ts`. Type
 | No new slices in `store/` (top-level) | Code review |
 | Pages are thin shells | Code review |
 | Feature components receive data via props, not queries | Code review |
+| No `any`, `unknown`, or `Record<string, unknown>` as a substitute for real types | Code review + `@typescript-eslint/no-explicit-any` |
+
+---
+
+## Type Safety
+
+**Do not use `any`, `unknown`, or `Record<string, unknown>` as a workaround for missing types.** These mask real problems and spread untyped data through the codebase.
+
+When you encounter untyped data:
+
+1. **API responses** — Update the OpenAPI spec on the backend, then regenerate the frontend client with `npm run codegen:api`. The generated types in `store/api/v2/` are the source of truth.
+2. **Hand-written API slices** — Add proper request/response types to `features/*/domain/types.ts` and use them in the endpoint definitions in `features/*/api/`.
+3. **Third-party data** — Create an interface in the relevant `domain/types.ts` that describes the shape you actually use.
+4. **Temporary escape hatches** — If you genuinely need `any` during a migration, add a `// TODO: type this` comment with a ticket reference. These should not persist.
+
+```typescript
+// ❌ Bad
+const data = response as any
+const items = (result as Record<string, unknown>)["items"]
+
+// ✅ Good — update the OpenAPI spec and regenerate
+interface OrderDetail { items: OrderItemDetail[]; total_price: number }
+const { data } = useGetOrderDetailQuery({ orderId })
+
+// ✅ Good — define the type in domain/
+import type { OrderDetail } from "../domain/types"
+```
+
+The `@typescript-eslint/no-explicit-any` rule is set to `warn`. Treat warnings as errors in new code.
 
 ---
 
