@@ -13,7 +13,7 @@
  * Requirements: 1.1-1.6, 16.1-16.6, 17.1-17.6, 41.1-41.10
  */
 
-import React, { useState, useEffect, useCallback } from "react"
+import React, { useState, useEffect, useCallback, useMemo } from "react"
 import {
   Box,
   Grid,
@@ -43,6 +43,7 @@ import { useDebounce } from "../../hooks/useDebounce"
 import { useInfiniteScroll } from "../../hooks/useInfiniteScroll"
 import { MissionCard, MissionFilters } from "../../components/game-data"
 import { CardGridSkeleton } from "../../components/game-data/GameDataSkeletons"
+import { UnifiedSearchBar, paramsToTokens, tokensToParams, type SearchToken } from "../../components/game-data/UnifiedSearchBar"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { MissionDetailModal } from "../../components/game-data/MissionDetailModal"
@@ -108,6 +109,13 @@ export function MissionSearch() {
 
   const [page, setPage] = useState(1)
   const [allMissions, setAllMissions] = useState<MissionSearchResult[]>([])
+
+  // Unified search bar tokens — derived from URL params
+  const searchTokens = useMemo(() => paramsToTokens(searchParams), [searchParams])
+  const handleTokensChange = (tokens: SearchToken[]) => {
+    const params = new URLSearchParams(tokensToParams(tokens))
+    setSearchParams(params, { replace: true })
+  }
   const [viewMode, setViewMode] = useState<"list" | "grid">(() => (localStorage.getItem("missions-view") as "list" | "grid") || "list")
   const handleViewModeChange = (_: React.MouseEvent<HTMLElement>, v: "list" | "grid" | null) => { if (v) { setViewMode(v); localStorage.setItem("missions-view", v) } }
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"))
@@ -240,9 +248,14 @@ export function MissionSearch() {
       {/* Results */}
       {data && (
         <>
-          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
-            <Typography variant="body2" color="text.secondary">
-              Found {data.total} missions
+          <Box sx={{ display: "flex", gap: 1, alignItems: "center", mb: 2 }}>
+            <UnifiedSearchBar
+              tokens={searchTokens}
+              onChange={handleTokensChange}
+              placeholder="Search missions, systems, categories..."
+            />
+            <Typography variant="body2" color="text.secondary" sx={{ whiteSpace: "nowrap" }}>
+              {data.total}
             </Typography>
             <ToggleButtonGroup
               value={viewMode}
