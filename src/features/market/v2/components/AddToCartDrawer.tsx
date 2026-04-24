@@ -226,17 +226,21 @@ export function AddToCartDrawer({ open, onClose, listingId }: AddToCartDrawerPro
                   </Box>
                 ))}
               </Stack>
-              <Button
-                component={Link}
-                to="/market/cart"
-                variant="outlined"
-                fullWidth
-                size="small"
-                onClick={onClose}
-              >
-                {t("cart.viewCart", "View Cart")} ({cartData?.item_count ?? 0})
-              </Button>
             </>
+          )}
+
+          {/* View Cart — always visible when cart has items */}
+          {(cartData?.item_count ?? 0) > 0 && (
+            <Button
+              component={Link}
+              to="/market/cart"
+              variant="outlined"
+              fullWidth
+              size="small"
+              onClick={onClose}
+            >
+              {t("cart.viewCart", "View Cart")} ({cartData?.item_count ?? 0})
+            </Button>
           )}
         </>
       ) : null}

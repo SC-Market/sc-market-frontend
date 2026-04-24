@@ -7,7 +7,6 @@ import {
 import { Grid, Skeleton, Tabs, useMediaQuery, useTheme } from "@mui/material"
 import { HapticTab } from "../../components/haptic"
 import { OfferDetailSkeleton } from "../../components/skeletons"
-import { OfferMarketListings } from "../../views/offers/OfferMarketListings"
 import { OfferMarketListingsV2Items } from "../../views/offers/OfferMarketListingsV2Items"
 import { OfferServiceArea } from "../../views/offers/OfferServiceArea"
 import { OrderAvailabilityArea } from "../../views/orders/OrderAvailabilityArea"
@@ -31,6 +30,9 @@ export function ViewOfferPage() {
       navigate(`/contract/${session.order_id}`, { replace: true })
     }
   }, [session?.order_id, navigate])
+
+  const firstOffer = session?.offers[0]
+  const hasMarketListings = (firstOffer?.market_listings?.length ?? 0) > 0
 
   return (
     <DetailPageLayout
@@ -60,15 +62,12 @@ export function ViewOfferPage() {
           >
             <HapticTab label={t("offers.details", "Details")} />
             {isMobile && <HapticTab label={t("offers.messages", "Messages")} />}
-            {session.offers[0]?.service && (
+            {firstOffer?.service && (
               <HapticTab label={t("offers.service", "Service")} />
             )}
-            {((session.offers[0]?.market_listings?.length ?? 0) > 0 ||
-              (session.offers[0]?.market_listings_v2?.length ?? 0) > 0) && (
-                <HapticTab
-                  label={t("offers.marketListings", "Items")}
-                />
-              )}
+            {hasMarketListings && (
+              <HapticTab label={t("offers.marketListings", "Items")} />
+            )}
             {session.availability && (
               <HapticTab label={t("offers.availability", "Availability")} />
             )}
@@ -90,11 +89,10 @@ export function ViewOfferPage() {
               />
             </Grid>
           )}
-          {/* Messages on desktop in details tab */}
           {!isMobile && (
             <>
               {session ? (
-                <OfferMessagesArea offer={session} />
+                <OfferMessagesArea session={session} />
               ) : (
                 <Grid item xs={12} lg={4} md={6}>
                   <Skeleton width={"100%"} height={400} />
@@ -105,60 +103,33 @@ export function ViewOfferPage() {
         </>
       )}
 
-      {/* Calculate tab indices dynamically */}
+      {/* Dynamic tabs */}
       {(() => {
         if (isLoading || isFetching || !session) return null
 
         let tabIndex = 0
-        const detailsTab = tabIndex++
+        tabIndex++ // details
         const messagesTab = isMobile ? tabIndex++ : -1
-        const serviceTab = session.offers[0]?.service ? tabIndex++ : -1
-        const hasItems = (session.offers[0]?.market_listings?.length ?? 0) > 0 || (session.offers[0]?.market_listings_v2?.length ?? 0) > 0
-        const marketListingsTab = hasItems ? tabIndex++ : -1
+        const serviceTab = firstOffer?.service ? tabIndex++ : -1
+        const marketListingsTab = hasMarketListings ? tabIndex++ : -1
         const availabilityTab = session.availability ? tabIndex++ : -1
 
         return (
           <>
-            {/* Messages Tab - mobile only */}
             {isMobile && activeTab === messagesTab && (
-              <>
-                {session ? (
-                  <OfferMessagesArea offer={session} />
-                ) : (
-                  <Grid item xs={12} lg={4} md={6}>
-                    <Skeleton width={"100%"} height={400} />
-                  </Grid>
-                )}
-              </>
+              <OfferMessagesArea session={session} />
             )}
 
-            {/* Service Tab */}
-            {session.offers[0]?.service && activeTab === serviceTab && (
-              <>
-                {session ? (
-                  <OfferServiceArea offer={session} />
-                ) : (
-                  <Grid item xs={12} lg={4}>
-                    <Skeleton width={"100%"} height={400} />
-                  </Grid>
-                )}
-              </>
+            {firstOffer?.service && activeTab === serviceTab && (
+              <OfferServiceArea session={session} />
             )}
 
-            {/* Market Listings Tab */}
-            {hasItems && activeTab === marketListingsTab && (
-              <>
-                {(session.offers[0]?.market_listings_v2?.length ?? 0) > 0 ? (
-                  <OfferMarketListingsV2Items items={session.offers[0]?.market_listings_v2 || []} />
-                ) : (
-                  <OfferMarketListings offer={session} />
-                )}
-              </>
+            {hasMarketListings && activeTab === marketListingsTab && (
+              <OfferMarketListingsV2Items items={firstOffer!.market_listings} />
             )}
 
-            {/* Availability Tab */}
             {session.availability && activeTab === availabilityTab && (
-              <OrderAvailabilityArea order={session} />
+              <OrderAvailabilityArea session={session} />
             )}
           </>
         )
