@@ -105,7 +105,8 @@ export function useAccountLinks() {
   return {
     isLoading, isUnlinking, isSettingPrimary,
     errorMessage, setErrorMessage,
-    accountUsername, citizenIDUsername,
+    accountUsername, setAccountUsername,
+    citizenIDUsername, setCitizenIDUsername,
     authProviders, hasDiscord, hasCitizenID, primaryProvider,
     unlinkDialog, handleUnlinkClick, handleConfirmUnlink, handleCancelUnlink,
     handleSetPrimary, getProviderName,

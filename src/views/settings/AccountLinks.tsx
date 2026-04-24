@@ -17,11 +17,20 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material"
-import { Section } from "../../components/paper/Section"
+import { FlatSection } from "../../components/paper/Section"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { BACKEND_URL, isCitizenIdEnabled } from "../../util/constants"
+import { CheckCircle as CheckCircleIcon } from "@mui/icons-material"
+import AccountCircleIcon from "@mui/icons-material/AccountCircle"
+import { Discord } from "../../components/icon/DiscordIcon"
+import { CitizenIDLogo } from "../../components/icon/CitizenIDLogo"
+import { CitizenIDLoginButton } from "../../components/button/CitizenIDLoginButton"
+import { LinkCitizenIDButton } from "../../components/button/LinkCitizenIDButton"
+import { DiscordLoginButton } from "../../components/button/DiscordLoginButton"
+import { BottomSheet } from "../../components/mobile/BottomSheet"
+import LoadingButton from "@mui/lab/LoadingButton"
 import { useAccountLinks } from "../../features/profile/hooks/useAccountLinks"
 
 export function AccountLinks() {
@@ -32,11 +41,20 @@ export function AccountLinks() {
   const {
     isLoading, isUnlinking, isSettingPrimary,
     errorMessage, setErrorMessage,
-    accountUsername, citizenIDUsername,
+    accountUsername, setAccountUsername,
+    citizenIDUsername, setCitizenIDUsername,
     authProviders, hasDiscord, hasCitizenID, primaryProvider,
     unlinkDialog, handleUnlinkClick, handleConfirmUnlink, handleCancelUnlink,
     handleSetPrimary, getProviderName,
   } = useAccountLinks()
+
+  const getProviderIcon = (providerType: string) => {
+    switch (providerType) {
+      case "discord": return <Discord />
+      case "citizenid": return isCitizenIdEnabled ? <CitizenIDLogo height={24} /> : <AccountCircleIcon />
+      default: return <AccountCircleIcon />
+    }
+  }
   return (
     <>
       <FlatSection
