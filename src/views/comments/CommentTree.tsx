@@ -22,7 +22,7 @@ import { ReplyRounded } from "@mui/icons-material"
 import {
   useCommentsDeleteMutation,
   useCommentsReplyMutation,
-} from "../../store/comments"
+} from "../../features/recruiting/api/commentsApi"
 import { MarkdownRender } from "../../components/markdown/Markdown.lazy"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { TrashCan } from "mdi-material-ui"

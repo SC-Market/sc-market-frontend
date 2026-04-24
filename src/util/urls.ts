@@ -11,8 +11,8 @@ export {
 } from "../features/market/domain/urls"
 export type { FormattableListingType } from "../features/market/domain/urls"
 
-import { Service } from "../datatypes/Order"
-import { Contractor } from "../datatypes/Contractor"
+import { Service } from "../features/orders/domain/types"
+import { Contractor } from "../features/contractor/domain/types"
 import { formatListingSlug } from "../features/market/domain/urls"
 
 export function formatServiceUrl(service: Service) {

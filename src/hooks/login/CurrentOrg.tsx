@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react"
-import { Contractor } from "../../datatypes/Contractor"
+import { Contractor } from "../../features/contractor/domain/types"
 
 export const CurrentOrgContext = React.createContext<
   | [Contractor | null, React.Dispatch<React.SetStateAction<Contractor | null>>]

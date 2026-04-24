@@ -1,4 +1,4 @@
-import { Order } from "../../datatypes/Order"
+import { Order } from "../../features/orders/domain/types"
 import { AvailabilityDisplay } from "../../components/time/AvailabilitySelector"
 import { convertAvailability } from "../../pages/availability/Availability.lazy"
 import React from "react"

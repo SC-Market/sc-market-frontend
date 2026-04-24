@@ -1,7 +1,7 @@
 import React from "react"
 import { Badge, IconButton } from "@mui/material"
 import { SecurityRounded } from "@mui/icons-material"
-import { useGetAdminReportsQuery } from "../../store/moderation"
+import { useGetAdminReportsQuery } from "../../features/admin/api/moderationApi"
 
 interface ModerationSidebarEntryProps {
   text: string

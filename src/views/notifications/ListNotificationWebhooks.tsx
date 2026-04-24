@@ -11,7 +11,7 @@ import {
   useProfileDeleteWebhook,
 } from "../../features/profile/api/profileApi"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
-import { OrderWebhook } from "../../datatypes/Contractor"
+import { OrderWebhook } from "../../features/contractor/domain/types"
 import { DeleteRounded } from "@mui/icons-material"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { useTheme } from "@mui/material/styles"

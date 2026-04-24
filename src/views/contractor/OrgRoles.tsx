@@ -26,7 +26,7 @@ import { HeadCell, PaginatedTable } from "../../components/table/PaginatedTable"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
-import { Contractor, ContractorRole } from "../../datatypes/Contractor"
+import { Contractor, ContractorRole } from "../../features/contractor/domain/types"
 import {
   KeyboardArrowDownRounded,
   KeyboardArrowRightRounded,

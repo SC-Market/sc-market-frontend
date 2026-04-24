@@ -19,8 +19,8 @@ import {
 import {
   useGetAdminReportsQuery,
   useUpdateReportMutation,
-} from "../../store/moderation"
-import { ContentReport } from "../../store/moderation"
+} from "../../features/admin/api/moderationApi"
+import { ContentReport } from "../../features/admin/api/moderationApi"
 import { UserDetails } from "../../components/list/UserDetails"
 import { ThemedDataGrid } from "../../components/grid/ThemedDataGrid"
 import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid"

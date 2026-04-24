@@ -1,5 +1,5 @@
 import { MinimalUser } from "../../datatypes/User"
-import { MinimalContractor } from "../../datatypes/Contractor"
+import { MinimalContractor } from "../../features/contractor/domain/types"
 import {
   AccessTimeRounded,
   AutoAwesomeRounded,
@@ -19,7 +19,7 @@ import {
   Rating as MuiRating,
   Tooltip,
 } from "@mui/material"
-import { Rating } from "../../datatypes/Contractor"
+import { Rating } from "../../features/contractor/domain/types"
 import React, { useEffect, useMemo } from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { UnderlineLink } from "../typography/UnderlineLink"

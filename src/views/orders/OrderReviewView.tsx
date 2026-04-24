@@ -15,7 +15,7 @@ import { Link } from "react-router-dom"
 import { getRelativeTime } from "../../util/time"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTheme } from "@mui/material/styles"
-import { Order, OrderReview } from "../../datatypes/Order"
+import { Order, OrderReview } from "../../features/orders/domain/types"
 import { useTranslation } from "react-i18next"
 import { ReviewRevisionButton } from "../../components/reviews/ReviewRevisionButton"
 import { EditableReview } from "../../components/reviews/EditableReview"
@@ -23,7 +23,7 @@ import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { UserProfileState } from "../../hooks/login/UserProfile"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { has_permission } from "../contractor/OrgRoles"
-import { Contractor } from "../../datatypes/Contractor.ts"
+import { Contractor } from "../../features/contractor/domain/types"
 
 // Helper function to determine if current user can request revision
 function canRequestRevision(

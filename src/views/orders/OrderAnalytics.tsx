@@ -5,7 +5,7 @@ import { MuiAreaChart, MuiLineChart } from "../../components/charts/MuiCharts"
 import { useTranslation } from "react-i18next"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { Link } from "react-router-dom"
-import { OrderAnalytics } from "../../datatypes/Order"
+import { OrderAnalytics } from "../../features/orders/domain/types"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 

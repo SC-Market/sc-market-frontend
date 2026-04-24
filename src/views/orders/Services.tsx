@@ -2,7 +2,7 @@ import {
   KeyboardArrowDownRounded,
   KeyboardArrowRightRounded,
 } from "@mui/icons-material"
-import { PaymentType, Service } from "../../datatypes/Order"
+import { PaymentType, Service } from "../../features/orders/domain/types"
 import React, { MouseEventHandler, useEffect, useMemo, useState } from "react"
 import {
   Box,

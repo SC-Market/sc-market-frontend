@@ -3,7 +3,7 @@ import React from "react"
 import { Autocomplete, Box, Button, Grid, TextField } from "@mui/material"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import { PersonRemoveRounded, PersonRounded } from "@mui/icons-material"
-import { Order } from "../../datatypes/Order"
+import { Order } from "../../features/orders/domain/types"
 import { useTranslation } from "react-i18next"
 import { useMemberAssign } from "../../features/orders/hooks/useMemberAssign"
 

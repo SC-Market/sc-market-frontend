@@ -1,4 +1,4 @@
-import { Rating } from "../datatypes/Contractor"
+import { Rating } from "../features/contractor/domain/types"
 
 // Badge ID constants
 export const BADGE_RATING_99_9 = "rating_99_9"

@@ -11,7 +11,7 @@ import { EditRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { useRequestReviewRevisionMutation } from "../../features/orders/api/ordersApi"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
-import { OrderReview } from "../../datatypes/Order.tsx"
+import { OrderReview } from "../../features/orders/domain/types"
 
 interface ReviewRevisionButtonProps {
   review: OrderReview

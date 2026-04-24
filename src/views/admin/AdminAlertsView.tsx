@@ -36,7 +36,7 @@ import {
   MarkdownRender,
   MarkdownEditor,
 } from "../../components/markdown/Markdown.lazy"
-import { MinimalContractor } from "../../datatypes/Contractor"
+import { MinimalContractor } from "../../features/contractor/domain/types"
 import { useSearchContractorsQuery } from "../../features/contractor/api/contractorApi"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
