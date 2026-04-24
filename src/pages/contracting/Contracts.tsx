@@ -1,11 +1,11 @@
 import React, { useState, useMemo, lazy } from "react"
 import { ContractListings } from "../../views/contracts/ContractListings"
 import { ContractSidebar } from "../../views/contracts/ContractSidebar"
-import { ContractSidebarContext } from "../../hooks/contract/ContractSidebar"
+import { ContractSidebarContext } from "../../features/contracting/hooks/ContractSidebar"
 import {
   ContractSearchContext,
   ContractSearchState,
-} from "../../hooks/contract/ContractSearch"
+} from "../../features/contracting/hooks/ContractSearch"
 import { FiltersFAB } from "../../components/mobile/FiltersFAB"
 import {
   Divider,
@@ -21,7 +21,7 @@ import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { MarketSidebarContext } from "../../features/market/hooks/MarketSidebar"
-import { ServiceSidebarContext } from "../../hooks/contract/ServiceSidebar"
+import { ServiceSidebarContext } from "../../features/contracting/hooks/ServiceSidebar"
 import { TabPanel } from "../../components/tabs/Tabs"
 import { MarketTabsLayout } from "../../components/layout/MarketTabsLayout"
 import { Page } from "../../components/metadata/Page"

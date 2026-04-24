@@ -1,5 +1,5 @@
 import { useGetContractorsQuery } from "../api/contractorApi"
-import type { ContractorSearchState } from "../../../hooks/contractor/ContractorSearch"
+import type { ContractorSearchState } from "../hooks/ContractorSearch"
 
 /**
  * Page hook interface for consistent data fetching patterns.

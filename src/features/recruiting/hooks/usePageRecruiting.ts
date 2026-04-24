@@ -2,7 +2,7 @@ import {
   useRecruitingGetAllPostsQuery,
   useRecruitingGetPostByOrgQuery,
 } from "../api/recruitingApi"
-import { RecruitingSearchState } from "../../../hooks/recruiting/RecruitingSearch"
+import { RecruitingSearchState } from "../hooks/RecruitingSearch"
 
 interface UsePageRecruitingParams {
   page: number

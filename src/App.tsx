@@ -1,7 +1,7 @@
 import React, { createElement, useEffect } from "react"
 
 import { HookProvider } from "./hooks/HookProvider"
-import { ShoppingListProvider } from "./hooks/wishlist/WishlistContext"
+import { ShoppingListProvider } from "./features/wishlists/hooks/WishlistContext"
 import { Root } from "./components/layout/Root"
 import { WhiteLabelAuthGate } from "./components/authentication/WhiteLabelAuthGate"
 import {

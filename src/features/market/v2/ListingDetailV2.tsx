@@ -41,7 +41,7 @@ import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
 import { useTranslation } from "react-i18next"
 import { AddToCartDrawer } from "./components/AddToCartDrawer"
-import { useCartDrawer } from "../../../hooks/market/AddToCartContext"
+import { useCartDrawer } from "../hooks/AddToCartContext"
 import {
   CreateRounded,
   RefreshRounded,

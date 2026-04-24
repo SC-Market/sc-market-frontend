@@ -6,7 +6,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material"
-import { orderIcons } from "../../datatypes/Order"
+import { orderIcons } from "../../features/orders/components/orderIcons"
 import type { OrderKind, PaymentType } from "../../features/orders/domain/types"
 import { PAYMENT_TYPES } from "../../util/constants"
 import React, { useCallback, useState } from "react"

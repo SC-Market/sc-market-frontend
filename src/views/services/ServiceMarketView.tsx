@@ -9,7 +9,7 @@ import {
 } from "@mui/material"
 import { ServiceSidebar } from "../contracts/ServiceSidebar"
 import { ServiceListings } from "../contracts/ServiceListings.lazy"
-import { useServiceSidebar } from "../../hooks/contract/ServiceSidebar"
+import { useServiceSidebar } from "../../features/contracting/hooks/ServiceSidebar"
 import React from "react"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"

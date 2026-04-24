@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react"
 import {
   AvailabilityHookContext,
   useAvailability,
-} from "../../hooks/time/AvailabilityHook"
+} from "../../features/availability/hooks/AvailabilityHook"
 import { Button, Grid, GridProps, IconButton, useTheme } from "@mui/material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { Section } from "../paper/Section"

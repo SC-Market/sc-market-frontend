@@ -3,11 +3,11 @@ import { Button, Divider, Grid, useMediaQuery } from "@mui/material"
 import { HapticTablePagination } from "../../components/haptic"
 import FilterListIcon from "@mui/icons-material/FilterList"
 import { RecruitingSidebar } from "../../views/recruiting/RecruitingSidebar"
-import { RecruitingSidebarContext } from "../../hooks/recruiting/RecruitingSidebar"
+import { RecruitingSidebarContext } from "../../features/recruiting/hooks/RecruitingSidebar"
 import {
   RecruitingSearchContext,
   RecruitingSearchState,
-} from "../../hooks/recruiting/RecruitingSearch"
+} from "../../features/recruiting/hooks/RecruitingSearch"
 import { RecruitingPostItem } from "../../views/recruiting/RecruitingList"
 import { RecruitingPostSkeleton } from "../../components/skeletons"
 import { NoteAddRounded } from "@mui/icons-material"

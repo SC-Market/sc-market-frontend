@@ -1,7 +1,7 @@
 import { serviceApi } from "../../../store/service"
 import { MinimalUser } from "../../../datatypes/User"
 import type { Contractor } from "../../contractor/domain/types"
-import { RecruitingSearchState } from "../../../hooks/recruiting/RecruitingSearch"
+import { RecruitingSearchState } from "../hooks/RecruitingSearch"
 import { unwrapResponse } from "../../../store/api-utils"
 
 // Re-export domain types for backward compatibility
