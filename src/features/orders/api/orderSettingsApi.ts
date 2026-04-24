@@ -4,6 +4,9 @@ import type {
   UpdateOrderSettingRequest,
   OrderLimits,
 } from "../domain/types"
+
+// Re-export domain types for backward compatibility
+export type { OrderSetting, CreateOrderSettingRequest, UpdateOrderSettingRequest, OrderLimits } from "../domain/types"
 import { serviceApi } from "../../../store/service"
 
 export const orderSettingsApi = serviceApi.injectEndpoints({

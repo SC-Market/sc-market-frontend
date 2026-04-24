@@ -6,7 +6,7 @@ import {
   RecruitingPost,
   useRecruitingCreatePostMutation,
   useRecruitingUpdatePostMutation,
-} from "../../store/recruiting"
+} from "../../features/recruiting/api/recruitingApi"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import throttle from "lodash/throttle"
 import { RecruitingPostView } from "./RecruitingPostView"

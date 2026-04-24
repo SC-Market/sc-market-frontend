@@ -5,7 +5,7 @@ import { Chip, Fade, TableCell, TableRow, Typography } from "@mui/material"
 import { HeadCell } from "../../components/table/PaginatedTable"
 import { Section } from "../../components/paper/Section"
 import { ScrollableTable } from "../../components/table/ScrollableTable"
-import { useGetUserProfileQuery } from "../../store/profile"
+import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { useTranslation } from "react-i18next"
 
 const statusColors = new Map<

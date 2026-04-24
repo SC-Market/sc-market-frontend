@@ -4,7 +4,7 @@ import {
   useGetUserProfileQuery,
   useProfileGetLinksQuery,
   useGetAuthenticatorIdentifier,
-} from "../../store/profile"
+} from "../../features/profile/api/profileApi"
 import { AuthenticateRSI } from "../authentication/AuthenticateRSI"
 import { AuthenticateRSISkeleton } from "../authentication/AuthenticateRSI.skeleton"
 import { ReVerifyProfile } from "./ReVerifyProfile"

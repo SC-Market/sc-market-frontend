@@ -25,7 +25,7 @@ import {
   useCreateAdminAlertMutation,
   useUpdateAdminAlertMutation,
   useDeleteAdminAlertMutation,
-} from "../../store/admin"
+} from "../../features/admin/api/adminApi"
 import { AdminAlert, AdminAlertCreate } from "../../datatypes/AdminAlert"
 import { ThemedDataGrid } from "../../components/grid/ThemedDataGrid"
 import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid"
@@ -37,7 +37,7 @@ import {
   MarkdownEditor,
 } from "../../components/markdown/Markdown.lazy"
 import { MinimalContractor } from "../../datatypes/Contractor"
-import { useSearchContractorsQuery } from "../../store/contractor"
+import { useSearchContractorsQuery } from "../../features/contractor/api/contractorApi"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 

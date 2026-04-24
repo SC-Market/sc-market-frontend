@@ -17,11 +17,11 @@ import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import {
   useProfileGetBlocklistQuery,
   useGetUserProfileQuery,
-} from "../../store/profile"
-import { useGetOrgBlocklistQuery } from "../../store/contractor"
+} from "../../features/profile/api/profileApi"
+import { useGetOrgBlocklistQuery } from "../../features/contractor/api/contractorApi"
 import { BlockUserButton, BlockUserForOrgButton } from "./BlockUserButton"
 import { UnblockUserButton, UnblockUserForOrgButton } from "./UnblockUserButton"
-import { useAdminUnlinkUserAccountMutation } from "../../store/admin"
+import { useAdminUnlinkUserAccountMutation } from "../../features/admin/api/adminApi"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { LinkOff as LinkOffIcon } from "@mui/icons-material"
 import {

@@ -9,7 +9,7 @@ import {
 } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { User } from "../../datatypes/User"
-import { useSearchUsersQuery } from "../../store/profile"
+import { useSearchUsersQuery } from "../../features/profile/api/profileApi"
 
 interface UserSearchProps {
   onUserSelect: (user: User) => void

@@ -6,7 +6,7 @@ import {
 import { Button, Grid, GridProps, IconButton, useTheme } from "@mui/material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { Section } from "../paper/Section"
-import { useGetUserProfileQuery } from "../../store/profile"
+import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import CreateRoundedIcon from "@mui/icons-material/CreateRounded"
 import { addHours, startOfDay } from "date-fns"
 import { format } from "../../util/time"

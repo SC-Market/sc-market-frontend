@@ -1,4 +1,4 @@
-import { OfferSession } from "../../store/offer"
+import { OfferSession } from "../../features/offers/api/offerApi"
 import {
   Grid,
   InputAdornment,

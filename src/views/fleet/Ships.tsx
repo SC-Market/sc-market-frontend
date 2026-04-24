@@ -5,7 +5,7 @@ import { Ship } from "../../datatypes/Ship"
 import { ScrollableTable } from "../../components/table/ScrollableTable"
 import { HeadCell } from "../../components/table/PaginatedTable"
 import { getRelativeTime } from "../../util/time"
-import { useGetMyShips } from "../../store/ships"
+import { useGetMyShips } from "../../features/fleet/api/shipsApi"
 import { useTranslation } from "react-i18next" // Import translation hook
 
 const statusColors = new Map<

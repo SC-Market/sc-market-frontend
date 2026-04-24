@@ -5,7 +5,7 @@ import React from "react"
 import { Grid } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { OfferSession } from "../../store/offer"
+import { OfferSession } from "../../features/offers/api/offerApi"
 import { MinimalUser } from "../../datatypes/User"
 import { useTranslation } from "react-i18next"
 

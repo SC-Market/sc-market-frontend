@@ -10,8 +10,8 @@ import { Person, Business } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { User } from "../../datatypes/User"
-import { useProfileBlockUserMutation } from "../../store/profile"
-import { useBlockUserForOrgMutation } from "../../store/contractor"
+import { useProfileBlockUserMutation } from "../../features/profile/api/profileApi"
+import { useBlockUserForOrgMutation } from "../../features/contractor/api/contractorApi"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 
 interface BlockUserButtonProps {

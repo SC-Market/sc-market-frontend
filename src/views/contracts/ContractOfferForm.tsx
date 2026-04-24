@@ -18,20 +18,20 @@ import {
   PublicContract,
   useCreateContractOfferMutation,
   useCreatePublicContractMutation,
-} from "../../store/public_contracts"
+} from "../../features/contracting/api/publicContractsApi"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { OrgDetails, UserDetails } from "../../components/list/UserDetails"
 import {
   useGetUserByUsernameQuery,
   useGetUserProfileQuery,
-} from "../../store/profile"
+} from "../../features/profile/api/profileApi"
 import { MinimalUser } from "../../datatypes/User"
 import { PAYMENT_TYPES } from "../../util/constants"
 import { useTranslation } from "react-i18next"
 import {
   useCheckContractorOrderLimitsQuery,
   useCheckUserOrderLimitsQuery,
-} from "../../store/orderSettings"
+} from "../../features/orders/api/orderSettingsApi"
 import { OrderLimitsDisplay } from "../../components/orders/OrderLimitsDisplay"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"

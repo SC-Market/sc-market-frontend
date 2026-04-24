@@ -9,7 +9,7 @@ import {
 } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
-import { contractorsApi } from "../../store/contractor"
+import { contractorsApi } from "../../features/contractor/api/contractorApi"
 import { store } from "../../store/store"
 import throttle from "lodash/throttle"
 

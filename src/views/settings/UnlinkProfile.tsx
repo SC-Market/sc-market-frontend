@@ -12,7 +12,7 @@ import {
   Box,
 } from "@mui/material"
 import React from "react"
-import { useProfileUnlinkAccountMutation } from "../../store/profile"
+import { useProfileUnlinkAccountMutation } from "../../features/profile/api/profileApi"
 import { useTranslation } from "react-i18next"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { FlatSection } from "../../components/paper/Section"

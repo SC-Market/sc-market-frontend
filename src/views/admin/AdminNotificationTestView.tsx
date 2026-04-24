@@ -14,14 +14,14 @@ import {
   CircularProgress,
   MenuProps,
 } from "@mui/material"
-import { useTestNotificationMutation } from "../../store/admin"
+import { useTestNotificationMutation } from "../../features/admin/api/adminApi"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { UserSearch } from "../../components/search/UserSearch"
 import { User } from "../../datatypes/User"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { useGetUserOrganizationsQuery } from "../../store/organizations"
+import { useGetUserOrganizationsQuery } from "../../features/contractor/api/organizationsApi"
 
 const NOTIFICATION_TYPES = [
   "order_create",

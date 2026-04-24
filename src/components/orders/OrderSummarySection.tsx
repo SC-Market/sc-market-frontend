@@ -1,5 +1,5 @@
 import { Box, Typography, Divider, Stack, Link, Chip } from "@mui/material"
-import { OfferMarketListing } from "../../store/offer"
+import { OfferMarketListing } from "../../features/offers/api/offerApi"
 import { useTranslation } from "react-i18next"
 import { OfferChanges } from "../../util/offerChanges"
 

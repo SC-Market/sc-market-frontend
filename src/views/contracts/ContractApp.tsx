@@ -2,7 +2,7 @@ import { Section } from "../../components/paper/Section"
 import React from "react"
 import { Button, Grid, TextField, Typography } from "@mui/material"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
-import { useGetUserProfileQuery } from "../../store/profile"
+import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { useTranslation } from "react-i18next"
 
 export function ContractApp(props: {}) {

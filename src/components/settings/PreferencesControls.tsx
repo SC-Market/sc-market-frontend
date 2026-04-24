@@ -18,7 +18,7 @@ import { CUSTOM_THEMES } from "../../hooks/styles/custom_themes"
 import {
   useProfileUpdateLocale,
   useGetUserProfileQuery,
-} from "../../store/profile"
+} from "../../features/profile/api/profileApi"
 import { useEffect, useMemo, useCallback, useState } from "react"
 
 const FONT_OPTIONS = [

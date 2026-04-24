@@ -20,8 +20,8 @@ import { Section } from "../../components/paper/Section"
 import { CartItem, CartSeller } from "../../datatypes/Cart"
 import { Link, useNavigate } from "react-router-dom"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
-import { useGetUserByUsernameQuery } from "../../store/profile"
-import { useGetContractorBySpectrumIDQuery } from "../../store/contractor"
+import { useGetUserByUsernameQuery } from "../../features/profile/api/profileApi"
+import { useGetContractorBySpectrumIDQuery } from "../../features/contractor/api/contractorApi"
 import {
   useGetMarketListingQuery,
   usePurchaseMarketListingMutation,
@@ -46,11 +46,11 @@ import {
   useCheckUserAvailabilityRequirementQuery,
   useCheckContractorOrderLimitsQuery,
   useCheckUserOrderLimitsQuery,
-} from "../../store/orderSettings"
+} from "../../features/orders/api/orderSettingsApi"
 import {
   useProfileGetAvailabilityQuery,
   useProfileUpdateAvailabilityMutation,
-} from "../../store/profile"
+} from "../../features/profile/api/profileApi"
 import { CheckCircle, Warning } from "@mui/icons-material"
 import { AvailabilitySelector } from "../../components/time/AvailabilitySelector"
 import { SellerNextAvailable } from "../../components/market/SellerNextAvailable"

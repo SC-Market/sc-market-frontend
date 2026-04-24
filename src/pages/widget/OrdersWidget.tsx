@@ -1,6 +1,6 @@
 import React, { useEffect } from "react"
 import { Box, Typography, ThemeProvider } from "@mui/material"
-import { useGetUserOrderDataQuery } from "../../store/orders"
+import { useGetUserOrderDataQuery } from "../../features/orders/api/ordersApi"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { Link } from "react-router-dom"

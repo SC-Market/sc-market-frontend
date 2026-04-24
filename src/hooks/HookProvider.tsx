@@ -42,7 +42,7 @@ import {
 } from "./styles/themeCache"
 import { useLocation, useSearchParams } from "react-router-dom"
 import { isCitizenIdEnabled, BACKEND_URL } from "../util/constants"
-import { useGetUserProfileQuery } from "../store/profile"
+import { useGetUserProfileQuery } from "../features/profile/api/profileApi"
 import { startProactiveRefresh } from "../store/proactiveRefresh"
 
 import { getMuiLocales } from "../util/i18n"

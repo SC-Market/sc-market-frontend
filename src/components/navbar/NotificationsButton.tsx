@@ -27,9 +27,9 @@ import {
   useGetNotificationsQuery,
   useNotificationBulkUpdateMutation,
   useNotificationBulkDeleteMutation,
-} from "../../store/notification"
-import { useGetUserProfileQuery } from "../../store/profile"
-import { useGetUserOrganizationsQuery } from "../../store/organizations"
+} from "../../features/notifications/api/notificationApi"
+import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
+import { useGetUserOrganizationsQuery } from "../../features/contractor/api/organizationsApi"
 import { useNotificationPollingInterval } from "../../hooks/notifications/useNotificationPolling"
 import { useTranslation } from "react-i18next"
 import { useBadgeAPI } from "../../hooks/pwa/useBadgeAPI"

@@ -7,7 +7,7 @@
  */
 
 import { useState, useEffect, useCallback, useMemo } from "react"
-import { useGetUserProfileQuery } from "../../store/profile"
+import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { store } from "../../store/store"
 import { marketV2Api } from "../../store/api/v2/market"
 

@@ -28,7 +28,7 @@ import {
   useCreateServiceMutation,
   useUpdateServiceMutation,
   useUploadServicePhotosMutation,
-} from "../../store/services"
+} from "../../features/services/api/servicesApi"
 import { useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"

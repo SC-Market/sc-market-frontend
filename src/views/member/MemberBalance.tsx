@@ -2,7 +2,7 @@ import { Section } from "../../components/paper/Section"
 import { Button, Divider, Grid, Typography } from "@mui/material"
 import React from "react"
 import { Link } from "react-router-dom"
-import { useGetUserProfileQuery } from "../../store/profile"
+import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { useTranslation } from "react-i18next"
 
 export function MemberBalance() {

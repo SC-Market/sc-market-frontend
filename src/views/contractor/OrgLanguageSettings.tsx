@@ -5,11 +5,11 @@ import { LanguageSelector } from "../../components/settings/LanguageSelector"
 import {
   useGetContractorLanguagesQuery,
   useSetContractorLanguagesMutation,
-} from "../../store/contractor"
+} from "../../features/contractor/api/contractorApi"
 import { useTranslation } from "react-i18next"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
-import { useGetUserProfileQuery } from "../../store/profile"
+import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { has_permission } from "./OrgRoles"
 import LoadingButton from "@mui/lab/LoadingButton"
 

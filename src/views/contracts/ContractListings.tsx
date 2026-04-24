@@ -23,7 +23,7 @@ import { getRelativeTime } from "../../util/time"
 import {
   PublicContract,
   useGetPublicContractsQuery,
-} from "../../store/public_contracts"
+} from "../../features/contracting/api/publicContractsApi"
 import { MarkdownRender } from "../../components/markdown/Markdown.lazy"
 import { useContractSearch } from "../../hooks/contract/ContractSearch"
 import { dateDiffInDays } from "../../util/dateDiff"

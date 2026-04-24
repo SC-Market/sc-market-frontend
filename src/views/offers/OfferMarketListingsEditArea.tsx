@@ -1,4 +1,4 @@
-import { OfferMarketListing, OfferSession } from "../../store/offer"
+import { OfferMarketListing, OfferSession } from "../../features/offers/api/offerApi"
 import {
   Autocomplete,
   Button,

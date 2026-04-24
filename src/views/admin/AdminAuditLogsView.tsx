@@ -14,7 +14,7 @@ import {
   Autocomplete,
 } from "@mui/material"
 import { ExpandMore, ExpandLess } from "@mui/icons-material"
-import { useGetAdminAuditLogsQuery } from "../../store/contractor"
+import { useGetAdminAuditLogsQuery } from "../../features/contractor/api/contractorApi"
 import { useTranslation } from "react-i18next"
 import { AuditLogEntry } from "../../datatypes/Contractor"
 import {

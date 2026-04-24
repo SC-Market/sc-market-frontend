@@ -20,14 +20,14 @@ import { styled, useTheme } from "@mui/material/styles"
 import { HeadCell, PaginatedTable } from "../../components/table/PaginatedTable"
 import { Section } from "../../components/paper/Section"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
-import { useGetUserProfileQuery } from "../../store/profile"
+import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { Link } from "react-router-dom"
 import { MarkdownRender } from "../../components/markdown/Markdown.lazy"
 import {
   useGetServicesContractorQuery,
   useGetServicesQuery,
-} from "../../store/services"
+} from "../../features/services/api/servicesApi"
 import { useTranslation } from "react-i18next"
 import { PAYMENT_TYPE_MAP } from "../../util/constants"
 

@@ -1,5 +1,5 @@
 import React from "react"
-import { CounterOfferBody } from "../../store/offer"
+import { CounterOfferBody } from "../../features/offers/api/offerApi"
 
 export const CounterOfferDetailsContext = React.createContext<
   | [CounterOfferBody, React.Dispatch<React.SetStateAction<CounterOfferBody>>]

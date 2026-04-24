@@ -1,11 +1,11 @@
 import {
   RecruitingPost,
   useRecruitingUpvotePostMutation,
-} from "../../store/recruiting"
+} from "../../features/recruiting/api/recruitingApi"
 import { Button } from "@mui/material"
 import { KeyboardArrowUpRounded } from "@mui/icons-material"
 import React, { useState } from "react"
-import { useGetUserProfileQuery } from "../../store/profile"
+import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { BACKEND_URL } from "../../util/constants"
 import { useTranslation } from "react-i18next"
 

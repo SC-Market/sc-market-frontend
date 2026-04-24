@@ -20,7 +20,7 @@ import {
 } from "@mui/material"
 import { Link } from "react-router-dom"
 import { HeadCell } from "../../components/table/PaginatedTable"
-import { useGetUserProfileQuery } from "../../store/profile"
+import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { MinimalUser } from "../../datatypes/User"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
@@ -29,7 +29,7 @@ import {
   useKickContractorMemberMutation,
   useRemoveContractorRoleMutation,
   useGetContractorMembersQuery,
-} from "../../store/contractor"
+} from "../../features/contractor/api/contractorApi"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import {
   has_permission,

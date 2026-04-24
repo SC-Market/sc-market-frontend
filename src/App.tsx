@@ -24,7 +24,7 @@ import {
 } from "./components/router/LoggedInRoute"
 import { OrgContextFromRoute } from "./components/router/OrgContextFromRoute"
 import { store } from "./store/store"
-import { notificationApi } from "./store/notification"
+import { notificationApi } from "./features/notifications/api/notificationApi"
 import { usePeriodicBackgroundSync } from "./hooks/pwa/usePeriodicBackgroundSync"
 import { useWebVitals } from "./hooks/performance/useWebVitals"
 import { useRoutePrefetch } from "./hooks/router/useRoutePrefetch"

@@ -25,7 +25,7 @@ import { Link } from "react-router-dom"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { getRelativeTime } from "../../util/time"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
-import { useGetUserProfileQuery } from "../../store/profile"
+import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import {
   CreateRounded,
   StarRounded,
@@ -39,13 +39,13 @@ import { ImagePreviewPaper } from "../../components/paper/ImagePreviewPaper"
 import { PAYMENT_TYPE_MAP } from "../../util/constants"
 import { useTranslation } from "react-i18next"
 import { ReportButton } from "../../components/button/ReportButton"
-import { useGetUserOrderReviews } from "../../store/profile"
-import { useGetContractorReviewsQuery } from "../../store/contractor"
+import { useGetUserOrderReviews } from "../../features/profile/api/profileApi"
+import { useGetContractorReviewsQuery } from "../../features/contractor/api/contractorApi"
 import {
   useGetServicesContractorQuery,
   useGetServicesQuery,
   useGetPublicServicesQuery,
-} from "../../store/services"
+} from "../../features/services/api/servicesApi"
 import { OrderReview } from "../../datatypes/Order"
 
 export function ServiceSellerReviews(props: {

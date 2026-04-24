@@ -1,7 +1,7 @@
 import React, { PropsWithChildren, useEffect } from "react"
 import { CURRENT_CUSTOM_ORG } from "../../hooks/contractor/CustomDomain"
 import { Helmet } from "react-helmet"
-import { useGetContractorBySpectrumIDQuery } from "../../store/contractor"
+import { useGetContractorBySpectrumIDQuery } from "../../features/contractor/api/contractorApi"
 import { FRONTEND_URL } from "../../util/constants"
 import { CircularProgress } from "@mui/material"
 import { Stack } from "@mui/system"
