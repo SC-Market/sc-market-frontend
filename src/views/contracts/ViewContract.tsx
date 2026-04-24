@@ -1,4 +1,5 @@
-import { Order, orderIcons } from "../../datatypes/Order"
+import { orderIcons } from "../../datatypes/Order"
+import type { Order } from "../../features/orders/domain/types"
 import {
   Box,
   Button,

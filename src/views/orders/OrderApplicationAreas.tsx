@@ -1,4 +1,4 @@
-import { Order, OrderApplicant } from "../../datatypes/Order"
+import { Order, OrderApplicant } from "../../features/orders/domain/types"
 import { Section } from "../../components/paper/Section"
 import {
   Avatar,

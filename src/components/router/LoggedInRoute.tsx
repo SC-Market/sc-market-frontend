@@ -7,7 +7,7 @@ import { useTheme } from "@mui/material/styles"
 import { useGetContractorBySpectrumIDQuery } from "../../features/contractor/api/contractorApi"
 import { useCookies } from "react-cookie"
 import { has_permission } from "../../views/contractor/OrgRoles"
-import { ContractorRole } from "../../datatypes/Contractor"
+import { ContractorRole } from "../../features/contractor/domain/types"
 import { getBugsnagInstance } from "../../util/monitoring/bugsnagLoader"
 
 export function LoggedInRoute() {

@@ -2,7 +2,7 @@ import {
   OrderSearchSortMethod,
   OrderSearchStatus,
   OrderStub,
-} from "../../datatypes/Order"
+} from "../../features/orders/domain/types"
 import React, {
   MouseEventHandler,
   useMemo,

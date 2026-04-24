@@ -14,7 +14,7 @@ import { SaveRounded, EditRounded, CancelRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { useUpdateOrderReviewMutation } from "../../features/orders/api/ordersApi"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
-import { OrderReview } from "../../datatypes/Order"
+import { OrderReview } from "../../features/orders/domain/types"
 
 interface EditableReviewProps {
   review: OrderReview

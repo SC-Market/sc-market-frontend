@@ -37,7 +37,7 @@ import {
   getMemberPosition,
   self_member_role_removal_forbidden,
 } from "./OrgRoles"
-import { Contractor, ContractorRole } from "../../datatypes/Contractor"
+import { Contractor, ContractorRole } from "../../features/contractor/domain/types"
 import SearchIcon from "@mui/icons-material/Search"
 import { Stack } from "@mui/system"
 import { BACKEND_URL } from "../../util/constants"

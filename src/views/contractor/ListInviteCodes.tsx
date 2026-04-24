@@ -18,7 +18,7 @@ import {
   DeleteRounded,
 } from "@mui/icons-material"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
-import { ContractorInviteCode } from "../../datatypes/Contractor"
+import { ContractorInviteCode } from "../../features/contractor/domain/types"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useTranslation } from "react-i18next"

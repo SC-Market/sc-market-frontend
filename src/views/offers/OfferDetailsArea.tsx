@@ -45,7 +45,7 @@ import {
   useGetNotificationsQuery,
   useNotificationDeleteMutation,
 } from "../../features/notifications/api/notificationApi"
-import { Order } from "../../datatypes/Order"
+import { Order } from "../../features/orders/domain/types"
 import { MessagesBody } from "../../features/chats"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"

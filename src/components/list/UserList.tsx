@@ -1,4 +1,4 @@
-import { Contractor, MinimalContractor } from "../../datatypes/Contractor"
+import { Contractor, MinimalContractor } from "../../features/contractor/domain/types"
 import {
   Avatar,
   List,

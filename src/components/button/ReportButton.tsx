@@ -15,7 +15,7 @@ import {
   useMediaQuery,
 } from "@mui/material"
 import { Report as ReportIcon } from "@mui/icons-material"
-import { useReportContentMutation } from "../../store/moderation"
+import { useReportContentMutation } from "../../features/admin/api/moderationApi"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { useTranslation } from "react-i18next"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"

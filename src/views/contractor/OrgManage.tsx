@@ -32,7 +32,7 @@ import {
 } from "./ContractorList"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
-import { Contractor } from "../../datatypes/Contractor"
+import { Contractor } from "../../features/contractor/domain/types"
 import {
   AddAPhotoRounded,
   EditRounded,

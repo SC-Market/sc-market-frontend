@@ -1,4 +1,4 @@
-import { Contractor } from "../../datatypes/Contractor"
+import { Contractor } from "../../features/contractor/domain/types"
 import { useGetContractorBySpectrumIDQuery } from "../../features/contractor/api/contractorApi"
 import {
   Avatar,

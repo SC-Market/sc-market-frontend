@@ -8,7 +8,7 @@ import {
 } from "@mui/material"
 import React, { useMemo } from "react"
 import { Link } from "react-router-dom"
-import { Order } from "../../datatypes/Order"
+import { Order } from "../../features/orders/domain/types"
 
 export function OrderListItem(props: { order: Order }) {
   const { order } = props

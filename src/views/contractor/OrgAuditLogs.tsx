@@ -16,7 +16,7 @@ import {
 import { ExpandMore, ExpandLess } from "@mui/icons-material"
 import { useGetContractorAuditLogsQuery } from "../../features/contractor/api/contractorApi"
 import { useTranslation } from "react-i18next"
-import { AuditLogEntry } from "../../datatypes/Contractor"
+import { AuditLogEntry } from "../../features/contractor/domain/types"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import {
   ControlledTable,

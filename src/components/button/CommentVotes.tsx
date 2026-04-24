@@ -14,7 +14,7 @@ import {
   Comment,
   useCommentsDownvoteMutation,
   useCommentsUpvoteMutation,
-} from "../../store/comments"
+} from "../../features/recruiting/api/commentsApi"
 import { useTranslation } from "react-i18next"
 
 export function CommentVotes(props: {

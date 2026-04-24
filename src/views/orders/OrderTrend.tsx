@@ -1,5 +1,5 @@
 import { Section } from "../../components/paper/Section"
-import { OrderStub } from "../../datatypes/Order"
+import { OrderStub } from "../../features/orders/domain/types"
 import React, { useMemo } from "react"
 import { Grid, List, ListItem, Typography } from "@mui/material"
 import { MuiLineChart, MuiAreaChart } from "../../components/charts/MuiCharts"

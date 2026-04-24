@@ -14,7 +14,7 @@ import {
   Skeleton,
   Typography,
 } from "@mui/material"
-import { Contractor } from "../../datatypes/Contractor"
+import { Contractor } from "../../features/contractor/domain/types"
 import type { ContractorKindIconKey } from "../../features/contractor/domain/types"
 import { ExtendedTheme, bannerFadeGradient } from "../../hooks/styles/Theme"
 import { useTheme } from "@mui/material/styles"

@@ -4,7 +4,7 @@ import { Section } from "../../components/paper/Section"
 import { AddRounded, StarRounded } from "@mui/icons-material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { Order } from "../../datatypes/Order"
+import { Order } from "../../features/orders/domain/types"
 import { useTranslation } from "react-i18next"
 import { useOrderReview } from "../../features/orders/hooks/useOrderReview"
 
