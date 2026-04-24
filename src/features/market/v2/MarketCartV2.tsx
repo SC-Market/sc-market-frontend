@@ -169,13 +169,6 @@ export function CartItemEntryV2(props: {
             </MaterialLink>
           </Box>
 
-          {/* Seller Info */}
-          <Box>
-            <Typography variant="body2" color="text.secondary">
-              {t("cart.seller")}: {item.listing.seller_name}
-            </Typography>
-          </Box>
-
           {/* Variant Display — rich chips, no duplicates */}
           <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, flexWrap: "wrap" }}>
             {item.variant.attributes.quality_tier && (
@@ -242,13 +235,6 @@ export function CartItemEntryV2(props: {
                 pattern: "[0-9]*",
               }}
               InputProps={{
-                endAdornment: (
-                  <InputAdornment position="start">
-                    {t("cart.ofAvailable", {
-                      available: "∞",
-                    })}
-                  </InputAdornment>
-                ),
                 inputMode: "numeric",
               }}
               size="small"
