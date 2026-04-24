@@ -1,7 +1,7 @@
 import {
   useGetServicesQuery,
   useGetServicesContractorQuery,
-} from "../../../store/services"
+} from "../../services/api/servicesApi"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
 

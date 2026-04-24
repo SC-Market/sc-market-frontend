@@ -3,7 +3,7 @@ import NotificationsActiveRoundedIcon from "@mui/icons-material/NotificationsAct
 import { Notification } from "../../../hooks/login/UserProfile"
 import { useTranslation } from "react-i18next"
 import { NotificationBase } from "../components/NotificationBase"
-import { useNotificationUpdateMutation } from "../../../store/notification"
+import { useNotificationUpdateMutation } from "../api/notificationApi"
 import { MarkdownRender } from "../../../components/markdown/Markdown.lazy"
 
 export function NotificationAdminAlert(props: { notif: Notification }) {

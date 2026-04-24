@@ -2,7 +2,7 @@ import React from "react"
 import {
   useRecruitingGetPostByOrgQuery,
   useRecruitingGetPostCommentsByIDQuery,
-} from "../../../store/recruiting"
+} from "../api/recruitingApi"
 import { RecruitingPostViewSkeleton } from "../../../components/skeletons"
 import { RecruitingPostView } from "../../../views/recruiting/RecruitingPostView"
 import { PostCommentArea } from "./PostCommentArea"

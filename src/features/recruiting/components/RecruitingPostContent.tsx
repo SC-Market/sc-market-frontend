@@ -1,9 +1,9 @@
 import React from "react"
 import { Grid } from "@mui/material"
-import { RecruitingPost } from "../../../store/recruiting"
+import { RecruitingPost } from "../api/recruitingApi"
 import { RecruitingPostView } from "../../../views/recruiting/RecruitingPostView"
 import { PostCommentArea } from "./PostCommentArea"
-import { Comment } from "../../../store/recruiting"
+import { Comment } from "../api/recruitingApi"
 
 interface RecruitingPostContentProps {
   post: RecruitingPost

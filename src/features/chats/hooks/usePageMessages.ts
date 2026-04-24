@@ -2,7 +2,7 @@ import { useGetChatByIDQuery } from "../api/chatsApi"
 import {
   useGetNotificationsQuery,
   useNotificationUpdateMutation,
-} from "../../../store/notification"
+} from "../../notifications/api/notificationApi"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { useEffect } from "react"
 import type { Chat } from "../domain/types"

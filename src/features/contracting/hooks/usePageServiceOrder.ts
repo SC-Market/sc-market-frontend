@@ -1,4 +1,4 @@
-import { useGetServiceByIdQuery } from "../../../store/services"
+import { useGetServiceByIdQuery } from "../../services/api/servicesApi"
 
 export interface UsePageServiceOrderResult {
   service: ReturnType<typeof useGetServiceByIdQuery>["data"]

@@ -23,7 +23,7 @@ import { OrgHeader } from "./OrgHeader"
 import { OrgTabs } from "./OrgTabs"
 import { OrgTabContent } from "./OrgTabContent"
 import { useOrgTab } from "../hooks/useOrgTab"
-import { useRecruitingGetPostByOrgQuery } from "../../../store/recruiting"
+import { useRecruitingGetPostByOrgQuery } from "../../recruiting/api/recruitingApi"
 
 export function OrgInfo(props: { contractor: Contractor }) {
   const { contractor } = props

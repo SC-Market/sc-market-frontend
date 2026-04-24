@@ -3,7 +3,7 @@ import { useGetOfferSessionByIDQuery } from "../api/offerApi"
 import {
   useGetNotificationsQuery,
   useNotificationDeleteMutation,
-} from "../../../store/notification"
+} from "../../notifications/api/notificationApi"
 
 /**
  * Page hook for offer detail pages

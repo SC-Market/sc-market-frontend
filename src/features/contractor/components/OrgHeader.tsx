@@ -18,7 +18,7 @@ import { contractorKindIcons } from "../../../views/contractor/ContractorList"
 import { useTranslation } from "react-i18next"
 import { ShareButton } from "../../../components/buttons/ShareButton"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
-import { useGetNotificationsQuery } from "../../../store/notification"
+import { useGetNotificationsQuery } from "../../notifications/api/notificationApi"
 import {
   useAcceptContractorInviteMutation,
 } from "../api/contractorApi"
