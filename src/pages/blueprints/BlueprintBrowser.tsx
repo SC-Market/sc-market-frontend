@@ -163,7 +163,9 @@ export function BlueprintBrowser() {
 
   const handleBlueprintClick = (blueprintId: string, blueprintCode?: string) => {
     const urlSlug = blueprintCode || blueprintId
-    navigate(`/blueprints/${urlSlug}`)
+    const params = searchParams.toString()
+    const qs = params ? `?${params}` : ""
+    navigate(`/blueprints/${urlSlug}${qs}`)
     if (!isMobile) setSelectedBlueprintId(urlSlug)
   }
 

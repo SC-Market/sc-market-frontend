@@ -146,10 +146,12 @@ export function MissionSearch() {
   })
 
   const handleMissionClick = (missionCode: string, missionId: string) => {
+    const params = searchParams.toString()
+    const qs = params ? `?${params}` : ""
     if (isMobile) {
-      navigate(`/missions/${missionCode}`)
+      navigate(`/missions/${missionCode}${qs}`)
     } else {
-      navigate(`/missions/${missionCode}`, { replace: false })
+      navigate(`/missions/${missionCode}${qs}`, { replace: false })
       setSelectedMissionId(missionId) // modal still uses ID for API
     }
   }
@@ -383,7 +385,7 @@ export function MissionSearch() {
       <MissionDetailModal
         missionId={selectedMissionId}
         open={!!selectedMissionId}
-        onClose={() => { setSelectedMissionId(null); navigate("/missions", { replace: true }) }}
+        onClose={() => { setSelectedMissionId(null); navigate(`/missions?${searchParams.toString()}`, { replace: true }) }}
         onBlueprintClick={(id) => { setSelectedMissionId(null); setSelectedBlueprintId(id) }}
       />
       <BlueprintDetailModal
