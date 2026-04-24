@@ -8,13 +8,13 @@
 
 | Phase | Status | Summary |
 |---|---|---|
-| Phase 0: Conventions | ✅ | ARCHITECTURE.md, ESLint rules |
+| Phase 0: Conventions | ✅ | ARCHITECTURE.md, ESLint rules, type safety guidance |
 | Phase 1: Store migration | ✅ | All 16 store slices → features/*/api/, shims deleted |
-| Phase 2: Feature shells | ✅ | 21 feature modules with api/, domain/, hooks/ |
-| Phase 3: Extract from views/ | ✅ | 9 largest view files decomposed (~2,100 lines extracted) |
-| Phase 4: Clean components/ | 🔄 | OrderSettings done (1,438→672). SelectPhotosArea + ListingRating remaining |
-| Phase 5: Context providers | ✅ | 12 contexts moved, shims deleted |
-| Phase 6: Fill feature gaps | ✅ | Domain types for orders, contractor, profile, offers, recruiting, contracting |
+| Phase 2: Feature shells | ✅ | 21 feature modules, all with index.ts barrel files |
+| Phase 3: Extract from views/ | ✅ | 11 view files decomposed (~2,500 lines extracted into hooks) |
+| Phase 4: Clean components/ | ✅ | OrderSettings, NotificationsButton, UserActionsDropdown, SelectGameItem extracted |
+| Phase 5: Context providers | ✅ | 12 contexts moved to owning features, shims deleted |
+| Phase 6: Fill feature gaps | ✅ | Domain types for 12 features, 21 API files, 72 hooks |
 
 ---
 
