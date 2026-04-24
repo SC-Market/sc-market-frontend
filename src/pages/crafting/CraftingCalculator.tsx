@@ -8,6 +8,8 @@ import {
   Button,
   IconButton,
   Chip,
+  Checkbox,
+  FormControlLabel,
   CircularProgress,
   Alert,
   Box,
@@ -151,6 +153,7 @@ export function CraftingCalculator() {
           quantity_scu: m.quantity,
           quality_value: m.quality_value,
         })),
+        owned_only: ownedOnly || undefined,
       },
     })
   }
