@@ -63,8 +63,8 @@ export function ViewOfferPage() {
             {session.offers[0]?.service && (
               <HapticTab label={t("offers.service", "Service")} />
             )}
-            {((session.offers[0]?.market_listings?.length > 0) ||
-              (session.offers[0]?.market_listings_v2?.length > 0)) && (
+            {((session.offers[0]?.market_listings?.length ?? 0) > 0 ||
+              (session.offers[0]?.market_listings_v2?.length ?? 0) > 0) && (
                 <HapticTab
                   label={t("offers.marketListings", "Items")}
                 />
@@ -113,7 +113,7 @@ export function ViewOfferPage() {
         const detailsTab = tabIndex++
         const messagesTab = isMobile ? tabIndex++ : -1
         const serviceTab = session.offers[0]?.service ? tabIndex++ : -1
-        const hasItems = (session.offers[0]?.market_listings?.length > 0) || (session.offers[0]?.market_listings_v2?.length > 0)
+        const hasItems = (session.offers[0]?.market_listings?.length ?? 0) > 0 || (session.offers[0]?.market_listings_v2?.length ?? 0) > 0
         const marketListingsTab = hasItems ? tabIndex++ : -1
         const availabilityTab = session.availability ? tabIndex++ : -1
 
@@ -148,8 +148,8 @@ export function ViewOfferPage() {
             {/* Market Listings Tab */}
             {hasItems && activeTab === marketListingsTab && (
               <>
-                {session.offers[0]?.market_listings_v2?.length > 0 ? (
-                  <OfferMarketListingsV2Items items={session.offers[0].market_listings_v2} />
+                {(session.offers[0]?.market_listings_v2?.length ?? 0) > 0 ? (
+                  <OfferMarketListingsV2Items items={session.offers[0]?.market_listings_v2 || []} />
                 ) : (
                   <OfferMarketListings offer={session} />
                 )}
