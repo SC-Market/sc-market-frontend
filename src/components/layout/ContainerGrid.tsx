@@ -241,8 +241,6 @@ export function OpenLayout(
           overflow: "auto",
           height: "100vh",
           position: "relative",
-          marginLeft: drawerOpen ? sidebarDrawerWidth : 0,
-          transition: `margin-left ${theme.transitions.duration.enteringScreen}ms ${theme.transitions.easing.sharp}`,
           ...mainProps?.style,
         }}
         ref={ref}
@@ -251,6 +249,12 @@ export function OpenLayout(
           sx={{
             ...theme.mixins.toolbar,
             position: "relative",
+            [theme.breakpoints.up("sm")]: {
+              width: drawerOpen ? sidebarDrawerWidth : 1,
+            },
+            [theme.breakpoints.down("sm")]: {
+              width: drawerOpen ? "100%" : 1,
+            },
             display: "block",
             height: 64,
           }}
