@@ -62,10 +62,10 @@ export function ViewOfferPage() {
             {session.offers[0]?.service && (
               <HapticTab label={t("offers.service", "Service")} />
             )}
-            {session.offers[0]?.market_listings &&
-              session.offers[0].market_listings.length > 0 && (
+            {((session.offers[0]?.market_listings?.length > 0) ||
+              (session.offers[0]?.market_listings_v2?.length > 0)) && (
                 <HapticTab
-                  label={t("offers.marketListings", "Market Listings")}
+                  label={t("offers.marketListings", "Items")}
                 />
               )}
             {session.availability && (
