@@ -46,6 +46,28 @@ function formatDuration(seconds: number | undefined): string {
   return m ? `${h}h ${m}m` : `${h}h`
 }
 
+/** Format raw scope codes to readable names */
+const SCOPE_LABELS: Record<string, string> = {
+  factionreputationscope: "Faction Reputation",
+  factionreputation: "Faction Reputation",
+  headhunter: "Headhunter",
+  salvage: "Salvage",
+  mercenary: "Mercenary",
+  bounty: "Bounty",
+  mining: "Mining",
+  hauling: "Hauling",
+  delivery: "Delivery",
+  investigation: "Investigation",
+}
+function formatScope(scope: string): string {
+  const lower = scope.toLowerCase()
+  if (SCOPE_LABELS[lower]) return SCOPE_LABELS[lower]
+  return scope
+    .replace(/([a-z])([A-Z])/g, "$1 $2")
+    .replace(/_/g, " ")
+    .replace(/^./, s => s.toUpperCase())
+}
+
 function BoolChip({ value, label }: { value: boolean | undefined; label: string }) {
   if (value === undefined || value === null) return null
   return (
@@ -188,7 +210,7 @@ function OverviewTab({ data, onBlueprintClick }: { data: MissionDetailResponse; 
         {m.reward_scope && (
           <Stack direction="row" justifyContent="space-between">
             <Typography variant="body2" color="text.secondary">Scope</Typography>
-            <Typography variant="body2">{m.reward_scope}</Typography>
+            <Typography variant="body2">{formatScope(m.reward_scope)}</Typography>
           </Stack>
         )}
       </Stack>

@@ -16,7 +16,7 @@ import { useLocation } from "react-router-dom"
 import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { DebugPanel } from "../market/v2/DebugPanel"
-import { CartDrawerProvider } from "../../hooks/market/AddToCartContext"
+import { CartDrawerProvider } from "../../features/market/hooks/AddToCartContext"
 import { ParticleField } from "../effects/ParticleField"
 
 export function Root(props: { children: React.ReactNode }) {

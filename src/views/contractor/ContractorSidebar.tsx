@@ -19,14 +19,14 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
 import { marketDrawerWidth } from "../../features/market"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
-import { useContractorSearch } from "../../hooks/contractor/ContractorSearch"
+import { useContractorSearch } from "../../features/contractor/hooks/ContractorSearch"
 import {
   ContractorKindIconKey,
   contractorKindIcons,
   contractorKindIconsKeys,
 } from "./ContractorList"
 import { StarRounded } from "@mui/icons-material"
-import { useContractorSidebar } from "../../hooks/contractor/ContractorSidebar"
+import { useContractorSidebar } from "../../features/contractor/hooks/ContractorSidebar"
 import { useTranslation } from "react-i18next"
 import { LanguageFilter } from "../../components/search/LanguageFilter"
 import { BottomSheet } from "../../components/mobile/BottomSheet"

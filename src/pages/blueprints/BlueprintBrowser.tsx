@@ -61,7 +61,7 @@ import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { FilterSidebarLayout } from "../../components/layout/FilterSidebarLayout"
 
 const microChip = { height: 18, fontSize: "0.65rem", fontWeight: "bold", textTransform: "uppercase" as const }
-import { useShoppingList } from "../../hooks/wishlist/WishlistContext"
+import { useShoppingList } from "../../features/wishlists/hooks/WishlistContext"
 
 type ViewMode = "grid" | "list"
 

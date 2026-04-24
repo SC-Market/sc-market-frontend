@@ -82,7 +82,7 @@ vi.mock("../../../features/contractor/components/OrgInfo", () => ({
 }))
 
 // Import the mocked function
-import { useGetContractorBySpectrumIDQuery } from "../../../store/contractor"
+import { useGetContractorBySpectrumIDQuery } from "../../../features/contractor/api/contractorApi"
 
 // Create a real MUI theme
 const mockTheme = createTheme({

@@ -1,6 +1,6 @@
 import React, { useState, lazy } from "react"
 import { useParams } from "react-router-dom"
-import { ContractAppOpenContext } from "../../hooks/contract/ContractApp"
+import { ContractAppOpenContext } from "../../features/contracting/hooks/ContractApp"
 import { useTranslation } from "react-i18next"
 import { ContractDetailSkeleton } from "../../components/skeletons"
 import { Grid } from "@mui/material"

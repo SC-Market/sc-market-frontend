@@ -6,8 +6,8 @@ import { HapticTablePagination } from "../../components/haptic"
 import {
   ContractorSearchContext,
   ContractorSearchState,
-} from "../../hooks/contractor/ContractorSearch"
-import { ContractorSidebarContext } from "../../hooks/contractor/ContractorSidebar"
+} from "../../features/contractor/hooks/ContractorSearch"
+import { ContractorSidebarContext } from "../../features/contractor/hooks/ContractorSidebar"
 import { ContractorSidebar } from "../../views/contractor/ContractorSidebar"
 import FilterListIcon from "@mui/icons-material/FilterList"
 import { useTranslation } from "react-i18next"

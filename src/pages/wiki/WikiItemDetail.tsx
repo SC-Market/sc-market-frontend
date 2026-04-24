@@ -37,7 +37,7 @@ import { useGetItemDetailQuery, useSearchListingsQuery, useAddBlueprintToInvento
 import { ShoppingCart, Gavel } from "@mui/icons-material"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { useCartDrawer } from "../../hooks/market/AddToCartContext"
+import { useCartDrawer } from "../../features/market/hooks/AddToCartContext"
 import { formatQuantity } from "../../util/formatQuantity"
 import { DISASSEMBLY_EFFICIENCY, DISASSEMBLY_TIME_SECONDS, formatCraftingTime } from "../../constants/crafting"
 

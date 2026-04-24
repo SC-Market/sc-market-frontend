@@ -10,7 +10,7 @@ import type {
 import { MinimalUser, User } from "../../../datatypes/User"
 import type { OrderReview } from "../../orders/domain/types"
 import { serviceApi } from "../../../store/service"
-import { ContractorSearchState } from "../../../hooks/contractor/ContractorSearch"
+import { ContractorSearchState } from "../hooks/ContractorSearch"
 import { unwrapResponse } from "../../../store/api-utils"
 import { BlocklistEntry } from "../../profile/domain/types"
 import { Language } from "../../../constants/languages"

@@ -50,7 +50,7 @@ import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownR
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { useBottomNavHeight } from "../../../hooks/layout/useBottomNavHeight";
 import { useTranslation } from "react-i18next";
-import { useCartDrawer } from "../../../hooks/market/AddToCartContext";
+import { useCartDrawer } from "../hooks/AddToCartContext";
 import { AdCard } from "../../../components/ads/AdCard";
 import type { AdConfig } from "../../../components/ads/types";
 import { MARKET_ADS } from "../../../components/ads/adConfig";

@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
-import { orderIcons } from "../../datatypes/Order"
+import { orderIcons } from "../../features/orders/components/orderIcons"
 import {
   Box,
   Button,
@@ -25,7 +25,7 @@ import {
   useGetPublicContractsQuery,
 } from "../../features/contracting/api/publicContractsApi"
 import { MarkdownRender } from "../../components/markdown/Markdown.lazy"
-import { useContractSearch } from "../../hooks/contract/ContractSearch"
+import { useContractSearch } from "../../features/contracting/hooks/ContractSearch"
 import { dateDiffInDays } from "../../util/dateDiff"
 import { PAYMENT_TYPE_MAP } from "../../util/constants"
 import { useTheme } from "@mui/material/styles"

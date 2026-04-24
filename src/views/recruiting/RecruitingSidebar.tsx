@@ -26,11 +26,11 @@ import {
   contractorKindIcons,
   contractorKindIconsKeys,
 } from "../contractor/ContractorList"
-import { useRecruitingSidebar } from "../../hooks/recruiting/RecruitingSidebar"
+import { useRecruitingSidebar } from "../../features/recruiting/hooks/RecruitingSidebar"
 import {
   RecruitingSearchState,
   useRecruitingSearch,
-} from "../../hooks/recruiting/RecruitingSearch"
+} from "../../features/recruiting/hooks/RecruitingSearch"
 import { useTranslation } from "react-i18next"
 import { LanguageFilter } from "../../components/search/LanguageFilter"
 import { BottomSheet } from "../../components/mobile/BottomSheet"

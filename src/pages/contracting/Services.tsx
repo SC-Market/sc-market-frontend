@@ -11,7 +11,7 @@ import {
   useMediaQuery,
 } from "@mui/material"
 import { ServiceSidebar } from "../../views/contracts/ServiceSidebar"
-import { ServiceSidebarContext } from "../../hooks/contract/ServiceSidebar"
+import { ServiceSidebarContext } from "../../features/contracting/hooks/ServiceSidebar"
 import { ServiceListings } from "../../views/contracts/ServiceListings.lazy"
 import { Link } from "react-router-dom"
 import { CreateRounded } from "@mui/icons-material"

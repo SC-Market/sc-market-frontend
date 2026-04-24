@@ -4,9 +4,9 @@ import { useTheme } from "@mui/material/styles"
 import { useNavigate } from "react-router-dom"
 import { ElectricBoltRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
-import { orderIcons } from "../../../datatypes/Order"
+import { orderIcons } from "../../orders/components/orderIcons"
 import type { Service } from "../../orders/domain/types"
-import { useServiceSearch } from "../../../hooks/contract/ServiceSearch"
+import { useServiceSearch } from "../../contracting/hooks/ServiceSearch"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 
 export function ServiceChips(props: { service: Service }) {

@@ -31,7 +31,7 @@ import {
   StarRounded,
   ShoppingCartRounded,
 } from "@mui/icons-material"
-import { orderIcons } from "../../datatypes/Order"
+import { orderIcons } from "../../features/orders/components/orderIcons"
 import type { Service } from "../../features/orders/domain/types"
 import { MarkdownRender } from "../../components/markdown/Markdown.lazy"
 import { dateDiffInDays } from "../../util/dateDiff"

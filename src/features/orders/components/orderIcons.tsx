@@ -1,7 +1,3 @@
-/**
- * @deprecated Import from "features/orders/domain/types" instead.
- * This file re-exports for backward compatibility during migration.
- */
 import HandymanRoundedIcon from "@mui/icons-material/HandymanRounded"
 import GppGoodRoundedIcon from "@mui/icons-material/GppGoodRounded"
 import FlightRoundedIcon from "@mui/icons-material/FlightRounded"
@@ -15,33 +11,9 @@ import {
 import MiscellaneousServicesRoundedIcon from "@mui/icons-material/MiscellaneousServicesRounded"
 import LocalShippingRoundedIcon from "@mui/icons-material/LocalShippingRounded"
 import React from "react"
+import type { OrderKind } from "../domain/types"
 
-// Re-export all pure types from the new canonical location
-export type {
-  OrderStatus,
-  OrderKind,
-  PaymentType,
-  Order,
-  OrderAvailability,
-  OrderApplicant,
-  OrderComment,
-  OrderReview,
-  OrderBody,
-  ServiceBody,
-  Service,
-  OrderStub,
-  OrderSearchSortMethod,
-  OrderSearchStatus,
-  OrderSearchQuery,
-  OrderTrendDatapoint,
-  OrderAnalytics,
-} from "../features/orders/domain/types"
-
-export { makeOrderTrend } from "../features/orders/domain/formatters"
-
-// Icon map stays here because it contains JSX (rendering concern)
-// but is widely imported — will be moved to features/orders/components/ later
-export const orderIcons = {
+export const orderIcons: Record<OrderKind, React.ReactElement> = {
   Support: <HandymanRoundedIcon />,
   Escort: <GppGoodRoundedIcon />,
   Transport: <FlightRoundedIcon />,
