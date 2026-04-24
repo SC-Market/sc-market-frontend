@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import { useUserActions } from "../../features/profile/hooks/useUserActions"
 import {
   IconButton,
   Popover,
@@ -48,6 +49,9 @@ export function UserActionsDropdown({ user }: UserActionsDropdownProps) {
     isPersonallyBlocked, isSelf, isOrgBlocked, isAdmin,
     isUnlinking, unlinkDialogOpen, setUnlinkDialogOpen, handleConfirmUnlink,
   } = useUserActions(user.username)
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget)
+  const handleClose = () => setAnchorEl(null)
+  const handleViewRSIPage = () => { window.open(`https://robertsspaceindustries.com/citizens/${user.username}`, "_blank"); handleClose() }
   const handleSuccess = () => handleClose()
   const handleUnlinkClick = () => { setUnlinkDialogOpen(true); handleClose() }
   const handleCancelUnlink = () => setUnlinkDialogOpen(false)
