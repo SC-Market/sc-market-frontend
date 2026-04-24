@@ -338,7 +338,7 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
     ],
   },
   {
-    title: "Crafting",
+    title: "sidebar.gameData.title",
     items: [
       {
         text: "sidebar.gameData.missions",
@@ -348,7 +348,7 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
         feature_flag: "crafting",
       },
       {
-        text: "Crafting",
+        text: "sidebar.gameData.crafting",
         icon: <ScienceRounded />,
         tab_key: "crafting",
         feature_flag: "crafting",
@@ -382,45 +382,38 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
           },
         ],
       },
-    ],
-  },
-  {
-    title: "sidebar.wiki.title",
-    items: [
       {
-        text: "sidebar.wiki.items",
+        text: "sidebar.wiki.title",
         icon: <MenuBookRounded />,
-        tab_key: "wiki_items",
-        to: "/wiki/items",
+        tab_key: "wiki",
         feature_flag: "wiki",
-      },
-      {
-        text: "sidebar.wiki.vehicles",
-        icon: <RocketLaunchRounded />,
-        tab_key: "wiki_ships",
-        to: "/wiki/ships",
-        feature_flag: "wiki",
-      },
-      {
-        text: "sidebar.wiki.commodities",
-        icon: <CategoryRounded />,
-        tab_key: "wiki_commodities",
-        to: "/wiki/commodities",
-        feature_flag: "wiki",
-      },
-      {
-        text: "sidebar.wiki.locations",
-        icon: <PublicRounded />,
-        tab_key: "wiki_locations",
-        to: "/wiki/locations",
-        feature_flag: "wiki",
-      },
-      {
-        text: "sidebar.wiki.manufacturers",
-        icon: <BusinessCenterRounded />,
-        tab_key: "wiki_manufacturers",
-        to: "/wiki/manufacturers",
-        feature_flag: "wiki",
+        children: [
+          {
+            text: "sidebar.wiki.items",
+            icon: <MenuBookRounded />,
+            to: "/wiki/items",
+          },
+          {
+            text: "sidebar.wiki.vehicles",
+            icon: <RocketLaunchRounded />,
+            to: "/wiki/ships",
+          },
+          {
+            text: "sidebar.wiki.commodities",
+            icon: <CategoryRounded />,
+            to: "/wiki/commodities",
+          },
+          {
+            text: "sidebar.wiki.locations",
+            icon: <PublicRounded />,
+            to: "/wiki/locations",
+          },
+          {
+            text: "sidebar.wiki.manufacturers",
+            icon: <BusinessCenterRounded />,
+            to: "/wiki/manufacturers",
+          },
+        ],
       },
     ],
   },

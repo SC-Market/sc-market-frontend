@@ -118,6 +118,7 @@ export function CraftingCalculator() {
 
   // "What Can I Craft?" discovery
   const [findCraftable, { data: craftableResults, isLoading: discovering }] = useFindCraftableBlueprintsMutation()
+  const [ownedOnly, setOwnedOnly] = useState(false)
 
   const updateMaterial = (id: number, field: keyof MaterialInput, value: string | number) => {
     setMaterials(prev => prev.map(m => m.id === id ? { ...m, [field]: value } : m))
@@ -324,14 +325,21 @@ export function CraftingCalculator() {
               Calculate Output Quality
             </Button>
           ) : (
-            <Button
-              variant="contained"
-              onClick={handleDiscover}
-              disabled={discovering || !materials.length}
-              startIcon={discovering ? <CircularProgress size={20} /> : undefined}
-            >
-              Find Craftable Items
-            </Button>
+            <Stack direction="row" spacing={2} alignItems="center">
+              <Button
+                variant="contained"
+                onClick={handleDiscover}
+                disabled={discovering || !materials.length}
+                startIcon={discovering ? <CircularProgress size={20} /> : undefined}
+              >
+                Find Craftable Items
+              </Button>
+              <FormControlLabel
+                control={<Checkbox size="small" checked={ownedOnly} onChange={(e) => setOwnedOnly(e.target.checked)} />}
+                label={<Typography variant="body2">Owned BPs only</Typography>}
+                sx={{ ml: 0 }}
+              />
+            </Stack>
           )}
         </Grid>
 
