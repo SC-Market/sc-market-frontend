@@ -79,9 +79,15 @@ export function createV2BaseQuery(subPath: string): BaseQueryFn<string | FetchAr
 }
 
 const baseQueryWithRetry = retry(baseQueryWithReauth, {
-  maxRetries: 3,
+  maxRetries: 2,
   backoff: (attempt) =>
-    new Promise((resolve) => setTimeout(resolve, Math.min(1000 * 2 ** attempt, 30000))),
+    new Promise((resolve) => setTimeout(resolve, Math.min(1000 * 2 ** attempt, 10000))),
+  retryCondition: (_error, _args, { attempt, baseQueryApi, extraOptions }) => {
+    // Only retry on network errors or 5xx server errors
+    const status = (_error as any)?.status
+    if (typeof status === "number" && status >= 400 && status < 500) return false
+    return attempt < 2
+  },
 })
 
 export const generatedApiV2 = createApi({
