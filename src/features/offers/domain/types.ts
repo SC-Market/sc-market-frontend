@@ -28,7 +28,7 @@ export type OfferStatusKey =
   | "rejected"
 
 /** Map any status string (API, display, or already-normalized) to a UI key */
-export function normalizeOfferStatus(status: string, offers?: Offer[]): OfferStatusKey {
+export function normalizeOfferStatus(status: string, offers?: Array<{ status: string }>): OfferStatusKey {
   switch (status) {
     case "to-seller":
     case "Waiting for Seller":

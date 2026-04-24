@@ -20,7 +20,7 @@ import {
   FormControl,
   InputLabel,
 } from "@mui/material"
-import React, { useEffect } from "react"
+import React, { useEffect, useMemo } from "react"
 import { OrgDetails, UserDetails } from "../../components/list/UserDetails"
 import { Stack } from "@mui/system"
 import { format } from "../../util/time"
@@ -124,6 +124,44 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response }) 
     isUpdatingStatus, updateStatusCallback,
     createThread, createThreadLoading,
   } = useOfferDetails(session)
+
+  const v2SummaryItems = useMemo(() => {
+    if (!currentOffer?.market_listings?.length) return []
+    return currentOffer.market_listings.flatMap((ml) => {
+      if (ml.v2_variants.length > 0) {
+        return ml.v2_variants.map((v) => ({
+          order_item_id: v.variant_id,
+          listing_id: ml.listing_id,
+          item_id: "",
+          listing_title: ml.title,
+          variant: {
+            variant_id: v.variant_id,
+            attributes: v.attributes,
+            display_name: v.display_name,
+            short_name: v.short_name,
+          },
+          quantity: v.quantity,
+          price_per_unit: v.price_per_unit,
+          subtotal: v.quantity * v.price_per_unit,
+        }))
+      }
+      return [{
+        order_item_id: ml.listing_id,
+        listing_id: ml.listing_id,
+        item_id: "",
+        listing_title: ml.title,
+        variant: {
+          variant_id: "",
+          attributes: {},
+          display_name: "Standard",
+          short_name: "STD",
+        },
+        quantity: ml.quantity,
+        price_per_unit: ml.price,
+        subtotal: ml.quantity * ml.price,
+      }]
+    })
+  }, [currentOffer])
 
   return (
     <Grid item xs={12} lg={8} md={6} sx={{ minWidth: 0 }}>
@@ -409,51 +447,13 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response }) 
                   >
                     <MarkdownRender text={currentOffer.description} />
                   </Typography>
-                  {(() => {
-                    const items = currentOffer.market_listings.flatMap((ml) => {
-                      if (ml.v2_variants.length > 0) {
-                        return ml.v2_variants.map((v) => ({
-                          order_item_id: v.variant_id,
-                          listing_id: ml.listing_id,
-                          item_id: "",
-                          listing_title: ml.title,
-                          variant: {
-                            variant_id: v.variant_id,
-                            attributes: v.attributes,
-                            display_name: v.display_name,
-                            short_name: v.short_name,
-                          },
-                          quantity: v.quantity,
-                          price_per_unit: v.price_per_unit,
-                          subtotal: v.quantity * v.price_per_unit,
-                        }))
-                      }
-                      // No variants — use listing-level data
-                      return [{
-                        order_item_id: ml.listing_id,
-                        listing_id: ml.listing_id,
-                        item_id: "",
-                        listing_title: ml.title,
-                        variant: {
-                          variant_id: "",
-                          attributes: {},
-                          display_name: "Standard",
-                          short_name: "STD",
-                        },
-                        quantity: ml.quantity,
-                        price_per_unit: ml.price,
-                        subtotal: ml.quantity * ml.price,
-                      }]
-                    })
-                    if (items.length === 0) return null
-                    return (
-                      <OrderSummarySectionV2
-                        items={items}
-                        total_cost={currentOffer.cost}
-                        offerChanges={offerChanges}
-                      />
-                    )
-                  })()}
+                  {v2SummaryItems.length > 0 && (
+                    <OrderSummarySectionV2
+                      items={v2SummaryItems}
+                      total_cost={currentOffer.cost}
+                      offerChanges={offerChanges}
+                    />
+                  )}
                 </Stack>
               </TableCell>
             </TableRow>

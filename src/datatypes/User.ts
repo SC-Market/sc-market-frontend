@@ -1,4 +1,5 @@
 import { Rating } from "../features/contractor/domain/types"
+import type { BadgeMetadata } from "../store/api/v2/market"
 
 export interface User {
   username: string
@@ -18,7 +19,7 @@ export interface User {
   rating: Rating
   badges?: {
     badge_ids: string[]
-    metadata: any
+    metadata?: BadgeMetadata
   } | null
   discord_profile?: {
     id: string
@@ -40,7 +41,7 @@ export interface MinimalUser {
   rating: Rating
   badges?: {
     badge_ids: string[]
-    metadata: any
+    metadata?: BadgeMetadata
   } | null
   discord_profile?: {
     id: string

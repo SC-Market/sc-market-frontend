@@ -32,6 +32,6 @@ export const PAYMENT_TYPES = [
 ] as const
 
 // Map for faster payment type lookups
-export const PAYMENT_TYPE_MAP = new Map(
+export const PAYMENT_TYPE_MAP: Map<string, string> = new Map(
   PAYMENT_TYPES.map((pt) => [pt.value, pt.translationKey]),
 )
