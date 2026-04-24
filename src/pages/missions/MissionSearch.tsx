@@ -43,7 +43,7 @@ import { useDebounce } from "../../hooks/useDebounce"
 import { useInfiniteScroll } from "../../hooks/useInfiniteScroll"
 import { MissionCard, MissionFilters } from "../../components/game-data"
 import { CardGridSkeleton } from "../../components/game-data/GameDataSkeletons"
-import { UnifiedSearchBar, paramsToTokens, tokensToParams, type SearchToken } from "../../components/game-data/UnifiedSearchBar"
+import { UnifiedSearchBar, missionParamsToTokens, missionTokensToParams, type SearchToken } from "../../components/game-data/UnifiedSearchBar"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { MissionDetailModal } from "../../components/game-data/MissionDetailModal"
@@ -111,9 +111,9 @@ export function MissionSearch() {
   const [allMissions, setAllMissions] = useState<MissionSearchResult[]>([])
 
   // Unified search bar tokens — derived from URL params
-  const searchTokens = useMemo(() => paramsToTokens(searchParams), [searchParams])
+  const searchTokens = useMemo(() => missionParamsToTokens(searchParams), [searchParams])
   const handleTokensChange = (tokens: SearchToken[]) => {
-    const params = new URLSearchParams(tokensToParams(tokens))
+    const params = new URLSearchParams(missionTokensToParams(tokens))
     setSearchParams(params, { replace: true })
   }
   const [viewMode, setViewMode] = useState<"list" | "grid">(() => (localStorage.getItem("missions-view") as "list" | "grid") || "list")

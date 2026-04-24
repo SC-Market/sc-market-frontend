@@ -48,6 +48,7 @@ import { useDebounce } from "../../hooks/useDebounce"
 import { useInfiniteScroll } from "../../hooks/useInfiniteScroll"
 import { BlueprintCard } from "../../components/game-data/BlueprintCard"
 import { CardGridSkeleton } from "../../components/game-data/GameDataSkeletons"
+import { UnifiedSearchBar, blueprintParamsToTokens, blueprintTokensToParams, type SearchToken } from "../../components/game-data/UnifiedSearchBar"
 import { formatCategoryName } from "../../util/categoryDisplay"
 import { getCommodityColor } from "../../util/gameIcons"
 import { useTranslation } from "react-i18next"
@@ -113,6 +114,15 @@ export function BlueprintBrowser() {
   const bottomNavHeight = useBottomNavHeight()
   const [page, setPage] = useState(1)
   const [allBlueprints, setAllBlueprints] = useState<BlueprintSearchResult[]>([])
+
+  // Unified search bar tokens
+  const searchTokens = useMemo(() => blueprintParamsToTokens(searchParams), [searchParams])
+  const handleTokensChange = (tokens: SearchToken[]) => {
+    const params = new URLSearchParams(blueprintTokensToParams(tokens))
+    // Preserve non-token params
+    if (searchParams.get("hide_unsourceable") === "false") params.set("hide_unsourceable", "false")
+    setSearchParams(params, { replace: true })
+  }
 
   // Debounce search text for performance (Requirement 19.6: <200ms response)
   const debouncedSearch = useDebounce(searchText, 300)
@@ -286,9 +296,15 @@ export function BlueprintBrowser() {
     >
       <Grid item xs={12}>
         <FilterSidebarLayout filters={filtersContent} filterTitle="Filters">
-          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
-            <Typography variant="body2" color="text.secondary">
-              {data ? `${data.total} blueprints` : ""}
+          <Box sx={{ display: "flex", gap: 1, alignItems: "center", mb: 2 }}>
+            <UnifiedSearchBar
+              tokens={searchTokens}
+              onChange={handleTokensChange}
+              mode="blueprints"
+              placeholder="Search blueprints, materials, categories..."
+            />
+            <Typography variant="body2" color="text.secondary" sx={{ whiteSpace: "nowrap" }}>
+              {data ? data.total : ""}
             </Typography>
             <ToggleButtonGroup value={viewMode} exclusive onChange={handleViewModeChange} size="small">
               <ToggleButton value="grid"><ViewModule /></ToggleButton>
