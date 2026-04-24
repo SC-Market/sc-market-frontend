@@ -4,7 +4,7 @@ import { lightThemeOptions, mainThemeOptions, refTheme, themeBase } from "../The
 export const cleanThemeOptions: ThemeOptions = {
   palette: {
     mode: "light",
-    primary: refTheme.palette.augmentColor({ color: { main: "#0d9c6c", contrastText: "#FFFFFF" } }),
+    primary: refTheme.palette.augmentColor({ color: { main: "#1A1A1A", contrastText: "#FFFFFF" } }),
     secondary: refTheme.palette.augmentColor({ color: { main: "#432dd2", contrastText: "#FFFFFF" } }),
     text: { primary: "#1A1A1A", secondary: "#555555", disabled: "#AAAAAA" },
     background: { default: "#FFFFFF", paper: "#F4F4F5", sidebar: "#FFFFFF", navbar: "#FFFFFF", light: "#FFFFFF", overlay: "rgba(16,184,129,0.1)", overlayDark: "rgba(16,184,129,0.2)", imageOverlay: "rgba(0,0,0,0.4)", imageOverlayHover: "rgba(0,0,0,0.6)" },

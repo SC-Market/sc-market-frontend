@@ -4,8 +4,8 @@ import { mainThemeOptions, refTheme, themeBase } from "../Theme"
 export const cleanDarkThemeOptions: ThemeOptions = {
   palette: {
     mode: "dark",
-    primary: refTheme.palette.augmentColor({ color: { main: "#0d9c6c", contrastText: "#FFFFFF" } }),
-    secondary: refTheme.palette.augmentColor({ color: { main: "#432dd2", contrastText: "#FFFFFF" } }),
+    primary: refTheme.palette.augmentColor({ color: { main: "#FFFFFF", contrastText: "#050505" } }),
+    secondary: refTheme.palette.augmentColor({ color: { main: "#0d9c6c", contrastText: "#FFFFFF" } }),
     text: { primary: "#E0E0E0", secondary: "#808080", disabled: "#404040" },
     background: { default: "#050505", paper: "#0E0E0E", sidebar: "#050505", navbar: "#050505", light: "#FFFFFF", overlay: "rgba(13,156,108,0.1)", overlayDark: "rgba(13,156,108,0.2)", imageOverlay: "rgba(5,5,5,0.85)", imageOverlayHover: "rgba(5,5,5,0.95)" },
     outline: { main: "rgba(255,255,255,0.15)" },
