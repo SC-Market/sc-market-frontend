@@ -65,7 +65,7 @@ import {
 } from "@mui/icons-material"
 import { Section } from "../../components/paper/Section"
 import type { SidebarConfigItem } from "../../store/api/contractors"
-import { useWhiteLabelSettings, TOGGLEABLE_TABS, DEFAULT_ICON, type CustomTab } from "../../features/contractor/hooks/useWhiteLabelSettings"
+import { useWhiteLabelSettings, TOGGLEABLE_TABS, isExternal, type CustomTab } from "../../features/contractor/hooks/useWhiteLabelSettings"
 
 // ── Icon registry ──────────────────────────────────────────────────────
 const ICON_MAP: Record<string, React.ReactElement> = {
@@ -177,7 +177,6 @@ export function WhiteLabelSettings() {
     snack, setSnack,
   } = useWhiteLabelSettings()
 
-  return (
   return (
     <Grid container spacing={2}>
       <Section title="Site Settings" xs={12}>

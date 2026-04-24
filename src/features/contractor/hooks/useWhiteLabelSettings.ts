@@ -28,11 +28,11 @@ const DEFAULT_ICON = "DashboardRounded"
 const ALWAYS_ON_KEYS = ["overview", "store", "services"]
 
 const TOGGLEABLE_TABS = [
-  { key: "orders" }, { key: "offers" }, { key: "contracts" },
-  { key: "recruiting" }, { key: "fleet" }, { key: "members" },
-  { key: "roles" }, { key: "settings" }, { key: "money" },
-  { key: "invites" }, { key: "webhooks" }, { key: "audit_logs" },
-  { key: "blocklist" }, { key: "white_label" },
+  { key: "orders", label: "Orders" }, { key: "offers", label: "Offers" }, { key: "contracts", label: "Contracts" },
+  { key: "recruiting", label: "Recruiting" }, { key: "fleet", label: "Fleet" }, { key: "members", label: "Members" },
+  { key: "roles", label: "Roles" }, { key: "settings", label: "Settings" }, { key: "money", label: "Money" },
+  { key: "invites", label: "Invites" }, { key: "webhooks", label: "Webhooks" }, { key: "audit_logs", label: "Audit Logs" },
+  { key: "blocklist", label: "Blocklist" }, { key: "white_label", label: "White Label" },
 ]
 
 function isExternal(path: string): boolean {
@@ -144,4 +144,4 @@ export function useWhiteLabelSettings() {
   }
 }
 
-export { TOGGLEABLE_TABS, DEFAULT_ICON, type CustomTab, type SidebarConfigItem }
+export { TOGGLEABLE_TABS, DEFAULT_ICON, isExternal, type CustomTab, type SidebarConfigItem }

@@ -173,14 +173,17 @@ export function OrderDetailsArea(props: { order: Order }) {
                     {t("orderDetailsArea.assigned")}
                     {amContractorManager &&
                       !["cancelled", "fulfilled"].includes(order.status) && (
-                        <IconButton
+                        <Button
                           size="small"
+                          variant="text"
+                          startIcon={isEditingAssigned ? <Close /> : undefined}
                           onClick={() =>
                             setIsEditingAssigned(!isEditingAssigned)
                           }
+                          sx={{ textTransform: "none", fontSize: "0.75rem" }}
                         >
-                          {isEditingAssigned ? <Close /> : <Edit />}
-                        </IconButton>
+                          {isEditingAssigned ? "Cancel" : "Reassign"}
+                        </Button>
                       )}
                   </Stack>
                 </TableCell>
