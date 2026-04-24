@@ -4,12 +4,11 @@ import React, { useMemo } from "react"
 import { Grid, List, ListItem, Typography } from "@mui/material"
 import { MuiLineChart, MuiAreaChart } from "../../components/charts/MuiCharts"
 import { useTranslation } from "react-i18next"
+import type { ContractorOrderData } from "../../features/orders/domain/types"
 import {
-  useGetContractorOrderDataQuery,
-  useGetUserOrderDataQuery,
-  ContractorOrderData,
-} from "../../store/orders"
-import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
+  useOrgOrderTrend,
+  useUserOrderTrend,
+} from "../../features/orders/hooks/useOrderTrend"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { Link } from "react-router-dom"
 
@@ -272,61 +271,20 @@ export function OrderTrendFromOrders(props: { orders: TrendOrder[] }) {
 }
 
 export function OrgOrderTrend() {
-  const [contractor] = useCurrentOrg()
-  const { data: orderData } = useGetContractorOrderDataQuery(
-    {
-      spectrum_id: contractor?.spectrum_id!,
-      include_trends: true,
-      assigned_only: false,
-    },
-    {
-      skip: !contractor?.spectrum_id,
-    },
-  )
+  const { orderData } = useOrgOrderTrend()
 
-  // Use metrics trend data if available, otherwise fall back to recent orders
   if (orderData?.metrics?.trend_data) {
     return <OrderTrendFromMetrics data={orderData} />
   }
-
-  // Fallback to original implementation with recent orders
   return <OrderTrendFromOrders orders={orderData?.recent_orders || []} />
 }
 
 export function UserOrderTrend() {
-  const [contractor] = useCurrentOrg()
+  const { orderData } = useUserOrderTrend()
 
-  // Use contractor data if user is in an organization
-  const { data: contractorOrderData } = useGetContractorOrderDataQuery(
-    {
-      spectrum_id: contractor?.spectrum_id!,
-      include_trends: true,
-      assigned_only: true,
-    },
-    {
-      skip: !contractor?.spectrum_id,
-    },
-  )
-
-  // Use user data if user is not in an organization
-  const { data: userOrderData } = useGetUserOrderDataQuery(
-    {
-      include_trends: true,
-    },
-    {
-      skip: !!contractor?.spectrum_id,
-    },
-  )
-
-  // Use the appropriate data source
-  const orderData = contractorOrderData || userOrderData
-
-  // Use metrics trend data if available, otherwise fall back to recent orders
   if (orderData?.metrics?.trend_data) {
     return <OrderTrendFromMetrics data={orderData} />
   }
-
-  // Fallback to original implementation with recent orders
   return <OrderTrendFromOrders orders={orderData?.recent_orders || []} />
 }
 

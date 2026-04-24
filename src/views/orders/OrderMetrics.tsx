@@ -1,11 +1,8 @@
 import React from "react"
 import { Grid, Typography, Box, Divider } from "@mui/material"
 import { Section } from "../../components/paper/Section"
-import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
-import {
-  useGetContractorOrderMetricsQuery,
-  ContractorOrderMetrics,
-} from "../../store/orders"
+import { useOrderMetrics } from "../../features/orders/hooks/useOrderMetrics"
+import type { ContractorOrderMetrics } from "../../features/orders/domain/types"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -281,16 +278,7 @@ export function ContractorOrderMetricsDisplay(props: {
 }
 
 export function OrderMetrics(props: {}) {
-  const theme = useTheme<ExtendedTheme>()
-  const [contractor] = useCurrentOrg()
-  const {
-    data: metrics,
-    isLoading,
-    error,
-  } = useGetContractorOrderMetricsQuery(contractor?.spectrum_id!, {
-    skip: !contractor?.spectrum_id,
-  })
-
+  const { metrics, isLoading, error } = useOrderMetrics()
   const { t } = useTranslation()
 
   if (isLoading) {
