@@ -36,7 +36,7 @@ export function Root(props: { children: React.ReactNode }) {
       sx={{
         display: "flex",
         flexDirection: "row", // Horizontal layout for sidebar and main content
-        background: theme.palette.background.default,
+        background: "transparent",
         backgroundSize: "400px",
         height: "100vh",
         overflow: "hidden", // Prevent root from scrolling
