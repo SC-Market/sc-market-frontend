@@ -17,42 +17,22 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material"
-import React, { useCallback, useEffect, useMemo, useState } from "react"
+import React from "react"
 import { Section } from "../../components/paper/Section"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import { BACKEND_URL, PAYMENT_TYPES } from "../../util/constants"
-import throttle from "lodash/throttle"
-import { useCreateOrderMutation } from "../../features/orders/api/ordersApi"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { orderIcons } from "../../features/orders/components/orderIcons"
-import type { Service, PaymentType } from "../../features/orders/domain/types"
-import { useNavigate } from "react-router-dom"
+import type { Service } from "../../features/orders/domain/types"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { NumericFormat } from "react-number-format"
-import {
-  useGetServicesContractorQuery,
-  useGetServicesQuery,
-} from "../../features/services/api/servicesApi"
-import { PublicContract } from "../../features/contracting/api/publicContractsApi"
 import { useTranslation } from "react-i18next"
-import {
-  useCheckContractorAvailabilityRequirementQuery,
-  useCheckUserAvailabilityRequirementQuery,
-  useCheckContractorOrderLimitsQuery,
-  useCheckUserOrderLimitsQuery,
-} from "../../features/orders/api/orderSettingsApi"
-import {
-  useProfileGetAvailabilityQuery,
-  useProfileUpdateAvailabilityMutation,
-} from "../../features/profile/api/profileApi"
-import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { CheckCircle, Warning } from "@mui/icons-material"
 import { AvailabilitySelector } from "../../components/time/AvailabilitySelector"
-import { convertAvailability } from "../../pages/availability/Availability.lazy"
 import { OrderLimitsDisplay } from "../../components/orders/OrderLimitsDisplay"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { BottomSheet } from "../../components/mobile/BottomSheet"
+import { useCreateOrderForm } from "../../features/orders/hooks/useCreateOrderForm"
 
 // Helper component for Availability Modal that uses BottomSheet on mobile
 function AvailabilityModalWrapper(props: {
@@ -115,18 +95,6 @@ function AvailabilityModalWrapper(props: {
   )
 }
 
-interface WorkRequestState {
-  title: string
-  rush: boolean
-  description: string
-  type: string
-  collateral: number
-  estimate: number
-  offer: number
-  service_id?: string | null
-  payment_type: PaymentType
-}
-
 const CreateOrderFormComponent = React.forwardRef<
   HTMLDivElement,
   GridProps & {
@@ -137,311 +105,20 @@ const CreateOrderFormComponent = React.forwardRef<
 >((props, ref) => {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
-  const [state, setState] = React.useState<WorkRequestState>({
-    title: "",
-    rush: false,
-    description: "",
-    type: "Escort",
-    collateral: 0,
-    estimate: 0,
-    offer: 0,
-    service_id: null,
-    payment_type: "one-time",
+  const {
+    state, setState,
+    isLoading,
+    services, service, setService,
+    availabilityRequirement, hasAvailabilitySet, formDisabled,
+    isAvailabilityModalOpen, setIsAvailabilityModalOpen,
+    availabilitySelections, handleSaveAvailability,
+    orderLimits, sellerName,
+    submitOrder, issueAlert,
+  } = useCreateOrderForm({
+    contractor_id: props.contractor_id,
+    assigned_to: props.assigned_to,
+    service: props.service,
   })
-
-  const issueAlert = useAlertHook()
-
-  const [
-    createOrder, // This is the mutation trigger
-    { isLoading },
-  ] = useCreateOrderMutation()
-
-  const { data: userServices } = useGetServicesQuery(props.assigned_to!, {
-    skip: !props.assigned_to,
-  })
-  const { data: contractorServices } = useGetServicesContractorQuery(
-    props.contractor_id!,
-    { skip: !props.contractor_id },
-  )
-  const services = useMemo(
-    () => userServices || contractorServices,
-    [contractorServices, userServices],
-  )
-
-  const [service, setService] = useState<Service | null>(props.service || null)
-
-  // Check availability requirement - check both contractor and assigned user
-  const { data: contractorRequirement, refetch: refetchContractorRequirement } =
-    useCheckContractorAvailabilityRequirementQuery(props.contractor_id!, {
-      skip: !props.contractor_id,
-    })
-
-  const { data: userRequirement, refetch: refetchUserRequirement } =
-    useCheckUserAvailabilityRequirementQuery(props.assigned_to!, {
-      skip: !props.assigned_to,
-    })
-
-  // If either requires availability, enforce it
-  const availabilityRequirement = useMemo(() => {
-    if (contractorRequirement?.required) {
-      return contractorRequirement
-    }
-    if (userRequirement?.required) {
-      return userRequirement
-    }
-    // If neither requires, return undefined
-    return undefined
-  }, [contractorRequirement, userRequirement])
-
-  // Get user's current availability - check contractor-specific if contractor, global if user seller
-  const [currentOrg] = useCurrentOrg()
-  const { data: userAvailability } = useProfileGetAvailabilityQuery(
-    props.contractor_id ? currentOrg?.spectrum_id || null : null,
-  )
-
-  // Check order limits
-  const { data: contractorLimits } = useCheckContractorOrderLimitsQuery(
-    props.contractor_id!,
-    { skip: !props.contractor_id },
-  )
-  const { data: userLimits } = useCheckUserOrderLimitsQuery(
-    props.assigned_to!,
-    {
-      skip: !props.assigned_to,
-    },
-  )
-
-  // Use contractor limits if available, otherwise user limits
-  const orderLimits = contractorLimits || userLimits
-
-  // Check if availability is set
-  const hasAvailabilitySet = useMemo(() => {
-    if (!availabilityRequirement?.required) return true
-    // The backend already checked this, so we can use the hasAvailability from the requirement check
-    return availabilityRequirement.hasAvailability
-  }, [availabilityRequirement])
-
-  const formDisabled = availabilityRequirement?.required && !hasAvailabilitySet
-
-  // Availability modal state
-  const [isAvailabilityModalOpen, setIsAvailabilityModalOpen] = useState(false)
-  const [availabilitySelections, setAvailabilitySelections] = useState<
-    boolean[]
-  >(convertAvailability(userAvailability?.selections || []))
-  const [updateAvailability] = useProfileUpdateAvailabilityMutation()
-
-  // Update availability selections when userAvailability changes
-  useEffect(() => {
-    if (userAvailability) {
-      setAvailabilitySelections(
-        convertAvailability(userAvailability.selections || []),
-      )
-    }
-  }, [userAvailability])
-
-  const handleSaveAvailability = useCallback(
-    async (selections: boolean[]) => {
-      // Convert to spans format (same as Availability page)
-      const spans: Array<{ start: number; finish: number }> = []
-      let current: { start: number; finish: number } | null = null
-
-      for (let i = 0; i < selections.length; i++) {
-        if (selections[i]) {
-          if (current) {
-            current.finish = i
-          } else {
-            current = { start: i, finish: i }
-          }
-        } else {
-          if (current) {
-            spans.push(current)
-            current = null
-          }
-        }
-      }
-
-      if (current) {
-        spans.push(current)
-      }
-
-      try {
-        await updateAvailability({
-          contractor: props.contractor_id || null,
-          selections: spans,
-        }).unwrap()
-
-        // Refetch availability requirement checks to update form state
-        if (props.contractor_id) {
-          refetchContractorRequirement()
-        }
-        if (props.assigned_to) {
-          refetchUserRequirement()
-        }
-
-        setIsAvailabilityModalOpen(false)
-        issueAlert({
-          message: t("availability.updated"),
-          severity: "success",
-        })
-      } catch (error) {
-        const errorMessage =
-          (error as any)?.error ||
-          (error as any)?.data?.error ||
-          (error instanceof Error ? error.message : String(error))
-        issueAlert({
-          message: `${t("availability.failed")} ${errorMessage}`,
-          severity: "error",
-        })
-      }
-    },
-    [
-      props.contractor_id,
-      props.assigned_to,
-      updateAvailability,
-      refetchContractorRequirement,
-      refetchUserRequirement,
-      issueAlert,
-      t,
-    ],
-  )
-
-  // Get seller name for display
-  const sellerName = useMemo(() => {
-    if (props.contractor_id) {
-      return props.contractor_id // Could enhance to get contractor name
-    }
-    if (props.assigned_to) {
-      return props.assigned_to
-    }
-    return "this seller"
-  }, [props.contractor_id, props.assigned_to])
-
-  // Sync props.service to local service state when it changes
-  useEffect(() => {
-    setService(props.service || null)
-  }, [props.service])
-
-  useEffect(() => {
-    if (service) {
-      setState((state) => ({
-        ...state,
-        title: service.title,
-        rush: service.rush,
-        description: service.description,
-        collateral: service.collateral,
-        offer: service.cost,
-        type: service.kind,
-        service_id: service.service_id,
-        // collateral: service.collateral,
-        payment_type: service.payment_type,
-      }))
-    } else {
-      setState((state) => ({
-        title: "",
-        rush: false,
-        description: "",
-        type: "Escort",
-        collateral: 0,
-        estimate: 0,
-        offer: 0,
-        departure: null,
-        departureInput: "",
-        departChangeTimer: Date.now(),
-        destination: null,
-        destinationInput: "",
-        destChangeTimer: Date.now(),
-        service_id: null,
-        payment_type: "one-time",
-      }))
-    }
-  }, [service])
-
-  const navigate = useNavigate()
-  const submitOrder = useCallback(
-    async (event: any) => {
-      // event.preventDefault();
-      createOrder({
-        title: state.title,
-        rush: state.rush,
-        description: state.description,
-        kind: state.type,
-        collateral: state.collateral,
-        cost: state.offer,
-        contractor: props.contractor_id,
-        assigned_to: props.assigned_to,
-        payment_type: state.payment_type,
-        service_id: service?.service_id,
-        departure: null,
-        destination: null,
-      })
-        .unwrap()
-        .then((data) => {
-          setState({
-            title: "",
-            rush: false,
-            description: "",
-            type: "Escort",
-            collateral: 0,
-            estimate: 0,
-            offer: 0,
-            payment_type: "one-time",
-          })
-
-          issueAlert({
-            message: t("CreateOrderForm.alert.submitted"),
-            severity: "success",
-          })
-
-          if (data.discord_invite) {
-            const newWindow = window.open(
-              `https://discord.gg/${data.discord_invite}`,
-              "_blank",
-            )
-            if (newWindow) {
-              newWindow.focus()
-            }
-          }
-
-          navigate(`/offer/${data.session_id}`)
-        })
-        .catch((error) => {
-          if (error?.data?.error?.code === "AVAILABILITY_REQUIRED") {
-            issueAlert({
-              message:
-                error.data.error.message ||
-                t("AvailabilityRequirement.apiError"),
-              severity: "error",
-            })
-          } else if (error?.data?.error?.code === "ORDER_LIMIT_VIOLATION") {
-            issueAlert({
-              message:
-                error.data.error.message ||
-                "Order does not meet size or value requirements",
-              severity: "error",
-            })
-          } else {
-            issueAlert(error)
-          }
-        })
-      return false
-    },
-    [
-      service?.service_id,
-      createOrder,
-      state.title,
-      state.rush,
-      state.description,
-      state.type,
-      state.collateral,
-      state.offer,
-      state.payment_type,
-      props.contractor_id,
-      props.assigned_to,
-      issueAlert,
-      navigate,
-      t, // add t
-    ],
-  )
 
   return (
     // <FormControl component={Grid} item xs={12} container spacing={2}>

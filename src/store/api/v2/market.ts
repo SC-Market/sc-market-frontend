@@ -3460,7 +3460,8 @@ export type Mission = {
   estimated_rep_per_hour?: number
   rank_index?: number
   reward_scope?: string
-  /** Standing requirement — min (e.g. "Neutral") */
+  /** Faction name for reputation reward */
+  reputation_reward_faction?: string
   min_standing?: string
   /** Standing requirement — max (e.g. "Elite Contractor") */
   max_standing?: string
