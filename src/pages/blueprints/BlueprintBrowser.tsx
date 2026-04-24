@@ -427,7 +427,7 @@ export function BlueprintBrowser() {
       <BlueprintDetailModal
         blueprintId={selectedBlueprintId}
         open={!!selectedBlueprintId}
-        onClose={() => { setSelectedBlueprintId(null); navigate("/blueprints", { replace: true }) }}
+        onClose={() => { setSelectedBlueprintId(null); navigate(`/blueprints?${searchParams.toString()}`, { replace: true }) }}
       />
     </StandardPageLayout>
   )
