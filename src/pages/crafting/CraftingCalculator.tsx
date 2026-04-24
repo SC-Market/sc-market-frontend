@@ -119,7 +119,7 @@ export function CraftingCalculator() {
   // "What Can I Craft?" discovery
   const [findCraftable, { data: craftableResults, isLoading: discovering }] = useFindCraftableBlueprintsMutation()
 
-  const updateMaterial = (id: number, field: keyof MaterialInput, value: any) => {
+  const updateMaterial = (id: number, field: keyof MaterialInput, value: string | number) => {
     setMaterials(prev => prev.map(m => m.id === id ? { ...m, [field]: value } : m))
   }
 
