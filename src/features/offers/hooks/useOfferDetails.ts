@@ -91,15 +91,25 @@ export function useOfferDetails(session: OfferSession) {
 
   const showAccept = useMemo(() => {
     if (["rejected", "accepted"].includes(statusKey)) return false
-    if (statusKey === "waitingSeller") {
-      if (session.contractor && org?.spectrum_id === session.contractor.spectrum_id) return true
-      if (session.assigned_to && profile?.username === session.assigned_to.username) return true
-      // Fallback: if user is a manager of the contractor org
-      if (amContractorManager) return true
+
+    if (session.contractor) {
+      if (org?.spectrum_id === session.contractor.spectrum_id) {
+        return statusKey === "waitingSeller"
+      }
     }
-    if (profile?.username === session.customer.username) return statusKey === "waitingCustomer"
+
+    if (session.assigned_to) {
+      if (profile?.username === session.assigned_to.username) {
+        return statusKey === "waitingSeller"
+      }
+    }
+
+    if (profile?.username === session.customer.username) {
+      return statusKey === "waitingCustomer"
+    }
+
     return false
-  }, [profile, org, session, statusKey, amContractorManager])
+  }, [profile, org, session, statusKey])
 
   const showCancel = !showAccept && statusKey !== "rejected" && statusKey !== "accepted"
 
