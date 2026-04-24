@@ -6,18 +6,13 @@ import {
   FetchArgs,
   FetchBaseQueryError,
 } from "@reduxjs/toolkit/query/react"
+import { refreshAuth } from "./refreshAuth"
 
 const rawBaseQuery = fetchBaseQuery({
   baseUrl: `${BACKEND_URL}`,
   credentials: "include",
 })
 
-// Mutex to prevent parallel refresh calls + circuit breaker
-let refreshPromise: Promise<boolean> | null = null
-let refreshFailedAt: number = 0
-const REFRESH_BACKOFF_MS = 30_000 // Don't retry refresh for 30s after failure
-
-// 401 → refresh → retry
 const baseQueryWithReauth: BaseQueryFn<
   string | FetchArgs,
   unknown,
@@ -25,29 +20,8 @@ const baseQueryWithReauth: BaseQueryFn<
 > = async (args, api, extraOptions) => {
   let result = await rawBaseQuery(args, api, extraOptions)
   if (result.error?.status === 401) {
-    // Skip refresh if it recently failed (user is logged out)
-    if (Date.now() - refreshFailedAt < REFRESH_BACKOFF_MS) {
-      return result
-    }
-
-    // If a refresh is already in flight, wait for it
-    if (!refreshPromise) {
-      refreshPromise = (async () => {
-        const r = await rawBaseQuery(
-          { url: "/api/auth/refresh", method: "POST" },
-          api,
-          extraOptions,
-        )
-        if (!r.data) {
-          refreshFailedAt = Date.now()
-        }
-        return !!r.data
-      })()
-      refreshPromise.finally(() => { refreshPromise = null })
-    }
-    const refreshed = await refreshPromise
+    const refreshed = await refreshAuth()
     if (refreshed) {
-      refreshFailedAt = 0 // Reset on success
       result = await rawBaseQuery(args, api, extraOptions)
     }
   }
@@ -59,12 +33,8 @@ export const serviceApi = createApi({
   endpoints: (builder) => ({}),
   reducerPath: "serviceApi",
   refetchOnReconnect: true,
-  refetchOnFocus: false, // Don't refetch on window focus - service worker handles this
-  // Enhanced caching configuration for better offline PWA experience
-  keepUnusedDataFor: 600, // Increased from 5 minutes to 10 minutes for better offline support
-  // This reduces API requests by keeping data in cache longer
-  // Users navigating back/forth won't trigger unnecessary refetches
-  // Works in coordination with service worker cache for optimal offline experience
+  refetchOnFocus: false,
+  keepUnusedDataFor: 600,
   tagTypes: [
     "RecruitingPostComments",
     "RecruitingPosts",

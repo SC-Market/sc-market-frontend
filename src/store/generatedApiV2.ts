@@ -11,13 +11,12 @@ import {
   FetchArgs,
   FetchBaseQueryError,
 } from "@reduxjs/toolkit/query/react"
+import { refreshAuth } from "./refreshAuth"
 
 const rawBaseQuery = fetchBaseQuery({
   baseUrl: `${BACKEND_URL}/api/v2`,
   credentials: "include",
 })
-
-let refreshPromise: Promise<boolean> | null = null
 
 const baseQueryWithReauth: BaseQueryFn<
   string | FetchArgs,
@@ -27,22 +26,7 @@ const baseQueryWithReauth: BaseQueryFn<
   let result = await rawBaseQuery(args, api, extraOptions)
 
   if (result.error?.status === 401) {
-    if (!refreshPromise) {
-      const authQuery = fetchBaseQuery({
-        baseUrl: `${BACKEND_URL}`,
-        credentials: "include",
-      })
-      refreshPromise = (async () => {
-        const r = await authQuery(
-          { url: "/api/auth/refresh", method: "POST" },
-          api,
-          extraOptions,
-        )
-        return !!r.data
-      })()
-      refreshPromise.finally(() => { refreshPromise = null })
-    }
-    const refreshed = await refreshPromise
+    const refreshed = await refreshAuth()
     if (refreshed) {
       result = await rawBaseQuery(args, api, extraOptions)
     }
@@ -63,15 +47,7 @@ export function createV2BaseQuery(subPath: string): BaseQueryFn<string | FetchAr
   return async (args, api, extraOptions) => {
     let result = await query(args, api, extraOptions)
     if (result.error?.status === 401) {
-      if (!refreshPromise) {
-        const authQuery = fetchBaseQuery({ baseUrl: `${BACKEND_URL}`, credentials: "include" })
-        refreshPromise = (async () => {
-          const r = await authQuery({ url: "/api/auth/refresh", method: "POST" }, api, extraOptions)
-          return !!r.data
-        })()
-        refreshPromise.finally(() => { refreshPromise = null })
-      }
-      const refreshed = await refreshPromise
+      const refreshed = await refreshAuth()
       if (refreshed) result = await query(args, api, extraOptions)
     }
     return result
@@ -82,11 +58,10 @@ const baseQueryWithRetry = retry(baseQueryWithReauth, {
   maxRetries: 2,
   backoff: (attempt) =>
     new Promise((resolve) => setTimeout(resolve, Math.min(1000 * 2 ** attempt, 10000))),
-  retryCondition: (_error, _args, { attempt, baseQueryApi, extraOptions }) => {
-    // Only retry on network errors or 5xx server errors
+  retryCondition: (_error) => {
     const status = (_error as any)?.status
     if (typeof status === "number" && status >= 400 && status < 500) return false
-    return attempt < 2
+    return true
   },
 })
 
