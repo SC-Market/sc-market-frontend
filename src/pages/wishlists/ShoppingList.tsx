@@ -167,7 +167,7 @@ export function ShoppingList() {
 
   // Navigate back to wishlist detail (Requirement 9.6)
   const handleBackToWishlist = () => {
-    navigate(`/wishlists/${wishlist_id}`)
+    navigate(`/shopping-lists/${wishlist_id}`)
   }
 
   // Get stock status icon and color

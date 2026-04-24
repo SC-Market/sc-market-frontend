@@ -120,14 +120,14 @@ export function WishlistManager() {
       }).unwrap()
 
       // Navigate to the new wishlist
-      navigate(`/wishlists/${result.wishlist_id}`)
+      navigate(`/shopping-lists/${result.wishlist_id}`)
     } catch (err) {
       console.error("Failed to create wishlist:", err)
     }
   }
 
   const handleWishlistClick = (wishlistId: string) => {
-    navigate(`/wishlists/${wishlistId}`)
+    navigate(`/shopping-lists/${wishlistId}`)
   }
 
   const handleDeleteClick = (wishlistId: string, wishlistName: string, event: React.MouseEvent) => {
@@ -157,8 +157,8 @@ export function WishlistManager() {
   if (isLoading) {
     return (
       <StandardPageLayout
-        title={t("wishlists.manager.title", "My Wishlists")}
-        headerTitle={t("wishlists.manager.header", "My Wishlists")}
+        title={t("wishlists.manager.title", "My Shopping Lists")}
+        headerTitle={t("wishlists.manager.header", "My Shopping Lists")}
         sidebarOpen={true}
         maxWidth="xl"
       >
@@ -175,14 +175,14 @@ export function WishlistManager() {
   if (error) {
     return (
       <StandardPageLayout
-        title={t("wishlists.manager.title", "My Wishlists")}
-        headerTitle={t("wishlists.manager.header", "My Wishlists")}
+        title={t("wishlists.manager.title", "My Shopping Lists")}
+        headerTitle={t("wishlists.manager.header", "My Shopping Lists")}
         sidebarOpen={true}
         maxWidth="xl"
       >
         <Grid item xs={12}>
           <Alert severity="error">
-            {t("wishlists.manager.error", "Failed to load wishlists. Please ensure you are logged in.")}
+            {t("wishlists.manager.error", "Failed to load shopping lists. Please ensure you are logged in.")}
           </Alert>
         </Grid>
       </StandardPageLayout>
@@ -193,8 +193,8 @@ export function WishlistManager() {
 
   return (
     <StandardPageLayout
-      title={t("wishlists.manager.title", "My Wishlists")}
-      headerTitle={t("wishlists.manager.header", "My Wishlists")}
+      title={t("wishlists.manager.title", "My Shopping Lists")}
+      headerTitle={t("wishlists.manager.header", "My Shopping Lists")}
       sidebarOpen={true}
       maxWidth="xl"
     >
@@ -359,7 +359,7 @@ export function WishlistManager() {
           <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}>
             {/* Wishlist Name */}
             <TextField size="small"
-              label="Wishlist Name"
+              label="Shopping List Name"
               value={newWishlistName}
               onChange={(e) => setNewWishlistName(e.target.value)}
               fullWidth
@@ -425,7 +425,7 @@ export function WishlistManager() {
             variant="contained"
             disabled={isCreating || !newWishlistName.trim()}
           >
-            {isCreating ? "Creating..." : "Create Wishlist"}
+            {isCreating ? "Creating..." : "Create Shopping List"}
           </Button>
         </DialogActions>
       </Dialog>

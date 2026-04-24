@@ -48,6 +48,7 @@ export function UserActionsDropdown({ user }: UserActionsDropdownProps) {
     myProfile, contractor,
     isPersonallyBlocked, isSelf, isOrgBlocked, isAdmin,
     isUnlinking, unlinkDialogOpen, setUnlinkDialogOpen, handleConfirmUnlink,
+    personalBlocklistLoading, orgBlocklistLoading,
   } = useUserActions(user.username)
   const handleClick = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget)
   const handleClose = () => setAnchorEl(null)
