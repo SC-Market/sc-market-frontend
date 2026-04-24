@@ -1250,10 +1250,8 @@ export type GetOrderDetailApiArg = {
   /** UUID of the order to retrieve */
   orderId: string
 }
-export type GetOrdersByListingApiResponse = /** status 200 Ok */ {
-  offers: any[]
-  orders: any[]
-}
+export type GetOrdersByListingApiResponse =
+  /** status 200 Ok */ OrdersByListingResponse
 export type GetOrdersByListingApiArg = {
   /** Listing UUID */
   listingId: string
@@ -2440,6 +2438,26 @@ export type GetOrderDetailResponse = {
   market_listings: OrderMarketListingV2[]
   /** V2-only order items (from order_market_items_v2) */
   items: OrderItemDetail[]
+}
+export type ListingOrderSummary = {
+  order_id: string
+  status: string
+  created_at: string
+  buyer_name: string
+  quantity: number
+  price_per_unit: number
+}
+export type ListingOfferSummary = {
+  session_id: string
+  status: string
+  created_at: string
+  buyer_name: string
+  quantity: number
+  price_per_unit: number
+}
+export type OrdersByListingResponse = {
+  orders: ListingOrderSummary[]
+  offers: ListingOfferSummary[]
 }
 export type UserSummary = {
   username: string

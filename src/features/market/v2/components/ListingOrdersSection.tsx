@@ -4,16 +4,15 @@
  */
 
 import React from "react"
-import { Grid, Typography, Chip, Stack, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material"
+import { Grid, Typography, Chip, Table, TableBody, TableCell, TableHead, TableRow } from "@mui/material"
 import { Link } from "react-router-dom"
-import { useGetOrdersByListingQuery } from "../../../../store/api/v2/market"
+import { useGetOrdersByListingQuery, type ListingOrderSummary, type ListingOfferSummary } from "../../../../store/api/v2/market"
 import { Section } from "../../../../components/paper/Section"
 import { formatPrice } from "../../../../util/formatPrice"
 
 export function ListingOrdersSection({ listingId }: { listingId: string }) {
   const { data, error } = useGetOrdersByListingQuery({ listingId }, { skip: !listingId })
 
-  // Silently hide if not authorized or no data
   if (error || !data) return null
   if (!data.orders.length && !data.offers.length) return null
 
@@ -32,7 +31,7 @@ export function ListingOrdersSection({ listingId }: { listingId: string }) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {data.offers.map((o: any) => (
+              {data.offers.map((o: ListingOfferSummary) => (
                 <TableRow key={o.session_id} hover component={Link} to={`/offer/${o.session_id}`}
                   sx={{ textDecoration: "none", color: "inherit" }}>
                   <TableCell>{o.buyer_name}</TableCell>
@@ -59,7 +58,7 @@ export function ListingOrdersSection({ listingId }: { listingId: string }) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {data.orders.map((o: any) => (
+              {data.orders.map((o: ListingOrderSummary) => (
                 <TableRow key={o.order_id} hover component={Link} to={`/contract/${o.order_id}`}
                   sx={{ textDecoration: "none", color: "inherit" }}>
                   <TableCell>{o.buyer_name}</TableCell>
