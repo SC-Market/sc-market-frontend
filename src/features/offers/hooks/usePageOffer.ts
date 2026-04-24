@@ -1,6 +1,5 @@
 import { useEffect } from "react"
-import { useGetOfferSessionQuery } from "../../../store/api/v2/market"
-import type { GetOfferSessionV2Response } from "../../../store/api/v2/market"
+import { useGetOfferSessionByIDQuery } from "../api/offerApi"
 import {
   useGetNotificationsQuery,
   useNotificationDeleteMutation,
@@ -8,13 +7,13 @@ import {
 
 /**
  * Page hook for offer detail pages.
- * Returns V2 types directly — no mapping to V1 shapes.
+ * Uses V1 API which returns correct per-turn status values
+ * (to-seller, to-customer, accepted, rejected).
  */
 export function usePageOffer(offerId: string | undefined) {
-  const offerQuery = useGetOfferSessionQuery(
-    { sessionId: offerId! },
-    { skip: !offerId },
-  )
+  const offerQuery = useGetOfferSessionByIDQuery(offerId!, {
+    skip: !offerId,
+  })
 
   const notificationsQuery = useGetNotificationsQuery(
     {

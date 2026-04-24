@@ -65,11 +65,13 @@ interface StockLotWithAvailable extends StockLot {
   } | null
 }
 
-function getListingTitle(listingData: any): string {
+import type { AllocationListingData } from "../../../../store/api/stockLotsApi"
+
+function getListingTitle(listingData: AllocationListingData | undefined | null): string {
   return listingData?.details?.title || listingData?.title || "Item"
 }
 
-function getListingImage(listingData: any): string | undefined {
+function getListingImage(listingData: AllocationListingData | undefined | null): string | undefined {
   return listingData?.photos?.[0]
 }
 
@@ -268,7 +270,7 @@ function AvailableLots({
   setAllocateQtys,
 }: {
   listingId: string
-  listingData?: any
+  listingData?: AllocationListingData | null
   allocations: Allocation[]
   onAllocate: (lotId: string, listingId: string, quantity: number) => void
   orderQuantity: number
@@ -442,7 +444,7 @@ function AllocationTarget({
   onDeallocate,
 }: {
   listingId: string
-  listingData?: any
+  listingData?: AllocationListingData | null
   required: number
   allocated: number
   allocations: Allocation[]

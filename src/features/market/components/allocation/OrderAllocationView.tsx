@@ -88,8 +88,7 @@ export function OrderAllocationView({
   const totalAllocated = allocationsData?.total_allocated || 0
   const aggregates = lotsData?.aggregates
   const listingTitle =
-    (listingData?.listing as any)?.details?.title ||
-    (listingData?.listing as any)?.title ||
+    (listingData && "details" in listingData ? listingData.details.title : undefined) ||
     "Item"
 
   // Calculate available quantity per lot (total - allocated)

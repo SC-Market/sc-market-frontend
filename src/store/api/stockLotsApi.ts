@@ -60,9 +60,18 @@ export interface Allocation {
   }
 }
 
+/** Listing data returned by the allocations endpoint — V2 shape or V1 shape */
+export interface AllocationListingData {
+  title?: string
+  listing_id?: string
+  photos?: string[]
+  /** V1 shape has details.title */
+  details?: { title?: string }
+}
+
 export interface AllocationGroup {
   listing_id: string
-  listing: any // MarketListing type
+  listing: AllocationListingData | null
   allocations: Allocation[]
   total_allocated: number
 }
