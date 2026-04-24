@@ -349,13 +349,19 @@ export function ViewOrder() {
                       <SplitAllocationView
                         orderId={order.order_id}
                         listings={
-                          order.market_listings?.map((listing: any) => ({
-                            listing_id:
-                              typeof listing.listing_id === "string"
-                                ? listing.listing_id
-                                : listing.listing_id?.listing_id,
-                            quantity: listing.quantity,
-                          })) || []
+                          // Use V2 order items if available, fall back to V1
+                          (orderDetailV2?.items?.length
+                            ? orderDetailV2.items.map((item: any) => ({
+                                listing_id: item.listing_id,
+                                quantity: item.quantity,
+                              }))
+                            : order.market_listings?.map((listing: any) => ({
+                                listing_id:
+                                  typeof listing.listing_id === "string"
+                                    ? listing.listing_id
+                                    : listing.listing_id?.listing_id,
+                                quantity: listing.quantity,
+                              }))) || []
                         }
                       />
                     </Grid>
