@@ -117,6 +117,9 @@ describe("MissionCard", () => {
       blueprint_reward_count: 0,
       is_shareable: false,
       is_chain_starter: false,
+      is_chain_mission: false,
+      is_unique_mission: false,
+      ship_encounter_count: 0,
     }
     
     render(<MissionCard mission={minimalMission} />)
@@ -132,6 +135,9 @@ describe("MissionCard", () => {
       blueprint_reward_count: 0,
       is_shareable: false,
       is_chain_starter: false,
+      is_chain_mission: false,
+      is_unique_mission: false,
+      ship_encounter_count: 0,
     }
     
     render(<MissionCard mission={noRewardsMission} />)
