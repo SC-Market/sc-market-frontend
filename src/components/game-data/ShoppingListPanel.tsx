@@ -61,7 +61,11 @@ export function ShoppingListPanel() {
   const activeId = selectedListId || lists[0]?.wishlist_id || ""
 
   if (listsLoading) return <CircularProgress size={24} />
-  if (error) return <Alert severity="info">Sign in to use shopping lists.</Alert>
+  if (error) {
+    const status = (error as { status?: number })?.status
+    if (status === 401 || status === 403) return <Alert severity="info">Sign in to use shopping lists.</Alert>
+    return <Alert severity="warning">Could not load shopping lists.</Alert>
+  }
   if (!lists.length) return <Alert severity="info">No shopping lists. Add blueprints from the Fabricator.</Alert>
 
   return (
