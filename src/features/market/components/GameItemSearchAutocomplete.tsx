@@ -17,6 +17,7 @@ interface GameItemSearchAutocompleteProps {
   onChange: (itemName: string | null, itemType: string | null, itemId: string | null) => void
   label?: string
   size?: "small" | "medium"
+  autoFocus?: boolean
   sx?: SxProps<Theme>
 }
 
@@ -25,6 +26,7 @@ export function GameItemSearchAutocomplete({
   onChange,
   label,
   size = "medium",
+  autoFocus,
   sx,
 }: GameItemSearchAutocompleteProps) {
   const { t } = useTranslation()
@@ -82,6 +84,7 @@ export function GameItemSearchAutocomplete({
       renderInput={(params) => (
         <TextField
           {...params}
+          autoFocus={autoFocus}
           label={label || t("market.search_query")}
           InputProps={{
             ...params.InputProps,

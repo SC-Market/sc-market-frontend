@@ -470,6 +470,7 @@ export function EditListingV2() {
               <TextField
                 fullWidth
                 size="small"
+                autoFocus
                 label={t("EditListingV2.title", "Title")}
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}

@@ -356,6 +356,7 @@ export function CreateListingV2() {
             {/* Game Item Selection */}
             <Grid item xs={12}>
               <GameItemSearchAutocomplete
+                autoFocus
                 value={gameItemName}
                 onChange={(itemName, itemType, itemId) => {
                   setGameItemName(itemName);
