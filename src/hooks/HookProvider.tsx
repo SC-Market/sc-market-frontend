@@ -19,6 +19,8 @@ import {
   type Message,
 } from "../features/chats"
 import { lightTheme, mainTheme } from "./styles/Theme"
+import { CLEAN_theme } from "./styles/themes/CLEAN"
+import { CLEAN_DARK_theme } from "./styles/themes/CLEAN_DARK"
 import { CurrentOrgProvider } from "./login/CurrentOrg"
 import { Provider } from "react-redux"
 import { store } from "../store/store"
@@ -72,7 +74,7 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
       return prefersLight ? "light" : "dark"
     }
     // If it's a custom theme name, return it as-is (for dev mode or admins)
-    if ((isDev || isAdmin) && CUSTOM_THEMES.has(useLightTheme)) {
+    if ((isDev || isAdmin || useLightTheme === "CLEAN_DARK") && CUSTOM_THEMES.has(useLightTheme)) {
       return useLightTheme
     }
     return useLightTheme
@@ -85,7 +87,7 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
 
   const baseTheme = useMemo(() => {
     // In dev mode or for admins, check if a custom theme is selected
-    if ((isDev || isAdmin) && CUSTOM_THEMES.has(useLightTheme)) {
+    if ((isDev || isAdmin || useLightTheme === "CLEAN_DARK") && CUSTOM_THEMES.has(useLightTheme)) {
       const customTheme = CUSTOM_THEMES.get(useLightTheme)
       if (customTheme) return customTheme
     }
@@ -98,7 +100,7 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
       const cached = getCachedOrgTheme(CURRENT_CUSTOM_ORG, resolvedMode)
       if (cached) return cached
     }
-    return actualTheme === "light" ? lightTheme : mainTheme
+    return actualTheme === "light" ? CLEAN_theme : mainTheme
   }, [actualTheme, location.pathname, isDev, isAdmin, useLightTheme, dynamicOrgTheme, resolvedMode])
 
   // Start proactive JWT refresh (every 13 min + on tab visibility change)

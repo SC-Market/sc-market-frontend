@@ -1,5 +1,5 @@
 import { Grid } from "@mui/material"
-import { Service } from "../../../datatypes/Order"
+import type { Service } from "../../orders/domain/types"
 import { ServiceListingBase } from "./ServiceListingCard"
 
 export function ServiceListing(props: { service: Service; index: number }) {

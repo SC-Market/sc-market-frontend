@@ -1,4 +1,4 @@
-import { useGetOrderByIdQuery } from "../../../store/orders"
+import { useGetOrderByIdQuery } from "../../orders/api/ordersApi"
 import { useGetChatByOrderIDQuery } from "../../chats"
 import { useGetOfferSessionByIDQuery } from "../../../store/offer"
 import {
