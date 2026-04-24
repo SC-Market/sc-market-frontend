@@ -150,7 +150,7 @@ export function BlueprintBrowser() {
     ingredientName: ingredientName || undefined,
     page,
     pageSize: 20,
-  })
+  }, { refetchOnMountOrArgChange: true })
 
   // Accumulate results
   useEffect(() => {
