@@ -371,7 +371,7 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
           {
             text: "Shopping Lists",
             icon: <ChecklistRounded />,
-            to: "/wishlists",
+            to: "/shopping-lists",
             logged_in: true,
           },
           {

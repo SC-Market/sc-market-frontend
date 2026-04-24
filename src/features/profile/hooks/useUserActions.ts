@@ -14,8 +14,8 @@ export function useUserActions(username: string) {
   const [unlinkAccount, { isLoading: isUnlinking }] = useAdminUnlinkUserAccountMutation()
   const [unlinkDialogOpen, setUnlinkDialogOpen] = useState(false)
 
-  const { data: personalBlocklist = [] } = useProfileGetBlocklistQuery()
-  const { data: orgBlocklist = [] } = useGetOrgBlocklistQuery(contractor?.spectrum_id || "", { skip: !contractor?.spectrum_id })
+  const { data: personalBlocklist = [], isLoading: personalBlocklistLoading } = useProfileGetBlocklistQuery()
+  const { data: orgBlocklist = [], isLoading: orgBlocklistLoading } = useGetOrgBlocklistQuery(contractor?.spectrum_id || "", { skip: !contractor?.spectrum_id })
 
   const isPersonallyBlocked = personalBlocklist.some((e) => e.blocked_user?.username === username)
   const isSelf = myProfile?.username === username
@@ -34,5 +34,6 @@ export function useUserActions(username: string) {
     myProfile, contractor,
     isPersonallyBlocked, isSelf, isOrgBlocked, isAdmin,
     isUnlinking, unlinkDialogOpen, setUnlinkDialogOpen, handleConfirmUnlink,
+    personalBlocklistLoading, orgBlocklistLoading,
   }
 }

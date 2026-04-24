@@ -88,7 +88,7 @@ export function WishlistShare({ open, onClose, wishlist }: WishlistShareProps) {
 
   // Generate share URL (Requirement 28.1)
   const shareUrl = wishlist.share_token
-    ? `${window.location.origin}/game-data/wishlists/${wishlist.wishlist_id}?share_token=${wishlist.share_token}`
+    ? `${window.location.origin}/game-data/shopping-lists/${wishlist.wishlist_id}?share_token=${wishlist.share_token}`
     : null
 
   // Handle copy to clipboard (Requirement 28.1)

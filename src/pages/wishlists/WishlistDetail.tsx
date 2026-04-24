@@ -101,7 +101,7 @@ export function WishlistDetail() {
 
   // Handlers
   const handleBack = () => {
-    navigate("/wishlists")
+    navigate("/shopping-lists")
   }
 
   const handleAddItem = () => {
@@ -159,7 +159,7 @@ export function WishlistDetail() {
   }
 
   const handleViewShoppingList = () => {
-    navigate(`/wishlists/${wishlist_id}/shopping-list`)
+    navigate(`/shopping-lists/${wishlist_id}/shopping-list`)
   }
 
   // Sort items (Requirement 53.9)
@@ -192,7 +192,7 @@ export function WishlistDetail() {
   // Loading state
   if (isLoading) {
     return (
-      <StandardPageLayout title={t("wishlists.detail", "Wishlist Detail")} headerTitle={t("wishlists.detail", "Wishlist Detail")}>
+      <StandardPageLayout title={t("wishlists.detail", "Shopping List Detail")} headerTitle={t("wishlists.detail", "Shopping List Detail")}>
         <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
           <CircularProgress />
         </Box>
@@ -203,12 +203,12 @@ export function WishlistDetail() {
   // Error state
   if (error || !data) {
     return (
-      <StandardPageLayout title={t("wishlists.detail", "Wishlist Detail")} headerTitle={t("wishlists.notFound", "Wishlist Not Found")}>
+      <StandardPageLayout title={t("wishlists.detail", "Shopping List Detail")} headerTitle={t("wishlists.notFound", "Shopping List Not Found")}>
         <Alert severity="error" sx={{ m: 3 }}>
-          {t("wishlists.loadError", "Failed to load wishlist. It may not exist or you don't have permission to view it.")}
+          {t("wishlists.loadError", "Failed to load shopping list. It may not exist or you don't have permission to view it.")}
         </Alert>
         <Button startIcon={<ArrowBack />} onClick={handleBack} sx={{ ml: 3 }}>
-          {t("wishlists.backToList", "Back to Wishlists")}
+          {t("wishlists.backToList", "Back to Shopping Lists")}
         </Button>
       </StandardPageLayout>
     )
@@ -222,7 +222,7 @@ export function WishlistDetail() {
       headerTitle={wishlist.wishlist_name}
       breadcrumbs={[
         { label: "Home", href: "/" },
-        { label: "Wishlists", href: "/wishlists" },
+        { label: "Shopping Lists", href: "/shopping-lists" },
         { label: wishlist.wishlist_name },
       ]}
       headerActions={
