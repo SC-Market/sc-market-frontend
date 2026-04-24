@@ -201,6 +201,18 @@ const injectedRtkApi = api
           providesTags: ["Listings V2"],
         },
       ),
+      getInventorySummary: build.query<
+        GetInventorySummaryApiResponse,
+        GetInventorySummaryApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/listings/inventory-summary`,
+          params: {
+            spectrum_id: queryArg.spectrumId,
+          },
+        }),
+        providesTags: ["Listings V2"],
+      }),
       getListingDetail: build.query<
         GetListingDetailApiResponse,
         GetListingDetailApiArg
@@ -255,18 +267,6 @@ const injectedRtkApi = api
           invalidatesTags: ["Listings V2"],
         },
       ),
-      getInventorySummary: build.query<
-        GetInventorySummaryApiResponse,
-        GetInventorySummaryApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/listings/inventory-summary`,
-          params: {
-            spectrum_id: queryArg.spectrumId,
-          },
-        }),
-        providesTags: ["Listings V2"],
-      }),
       startImport: build.mutation<StartImportApiResponse, StartImportApiArg>({
         query: (queryArg) => ({
           url: `/admin/imports/${queryArg.source}`,
@@ -1312,10 +1312,14 @@ export type GetMyListingsApiArg = {
   sortOrder?: "asc" | "desc"
   spectrumId?: string
 }
+export type GetInventorySummaryApiResponse =
+  /** status 200 Complete listing detail with variant breakdown */ InventorySummaryResponse
+export type GetInventorySummaryApiArg = {
+  spectrumId?: string
+}
 export type GetListingDetailApiResponse =
-  /** status 200 Complete listing detail with variant breakdown */ GetListingDetailResponse
+  /** status 200 Ok */ GetListingDetailResponse
 export type GetListingDetailApiArg = {
-  /** Listing UUID */
   id: string
 }
 export type UpdateListingApiResponse =
@@ -1356,12 +1360,6 @@ export type UploadPhotosApiResponse = /** status 200 Ok */ {
 export type UploadPhotosApiArg = {
   /** Listing UUID */
   id: string
-}
-export type GetInventorySummaryApiResponse =
-  /** status 200 Ok */ InventorySummaryResponse
-export type GetInventorySummaryApiArg = {
-  /** Optional org spectrum_id to include org inventory */
-  spectrumId?: string
 }
 export type StartImportApiResponse = /** status 200 Ok */ {
   job: ImportJob
@@ -1427,7 +1425,6 @@ export type GetWishlistsApiArg = void
 export type CreateWishlistApiResponse =
   /** status 200 Created wishlist */ Wishlist
 export type CreateWishlistApiArg = {
-  /** Wishlist creation data */
   createWishlistRequest: CreateWishlistRequest
 }
 export type GetWishlistApiResponse =
@@ -1443,7 +1440,6 @@ export type UpdateWishlistApiResponse =
 export type UpdateWishlistApiArg = {
   /** Wishlist UUID */
   wishlistId: string
-  /** Update data */
   updateWishlistRequest: UpdateWishlistRequest
 }
 export type DeleteWishlistApiResponse = /** status 200 Success response */ {
@@ -1458,7 +1454,6 @@ export type AddWishlistItemApiResponse =
 export type AddWishlistItemApiArg = {
   /** Wishlist UUID */
   wishlistId: string
-  /** Item data */
   addWishlistItemRequest: AddWishlistItemRequest
 }
 export type RemoveWishlistItemApiResponse = /** status 200 Success response */ {
@@ -1477,7 +1472,6 @@ export type UpdateWishlistItemApiArg = {
   wishlistId: string
   /** Item UUID */
   itemId: string
-  /** Update data */
   updateWishlistItemRequest: UpdateWishlistItemRequest
 }
 export type GenerateShoppingListApiResponse =
@@ -1737,19 +1731,16 @@ export type GetGameEventsApiArg = void
 export type CalculateQualityApiResponse =
   /** status 200 Quality calculation result with breakdown and predicted stats */ CalculateQualityResponse
 export type CalculateQualityApiArg = {
-  /** Crafting calculation request with blueprint and materials */
   calculateQualityRequest: CalculateQualityRequest
 }
 export type SimulateCraftingApiResponse =
   /** status 200 Simulation results with best/worst/cost-effective options */ SimulateCraftingResponse
 export type SimulateCraftingApiArg = {
-  /** Simulation request with material variations */
   simulateCraftingRequest: SimulateCraftingRequest
 }
 export type RecordCraftingApiResponse =
   /** status 200 Success response with session ID */ RecordCraftingResponse
 export type RecordCraftingApiArg = {
-  /** Crafting session data */
   recordCraftingRequest: RecordCraftingRequest
 }
 export type GetCraftingHistoryApiResponse =
@@ -1924,6 +1915,7 @@ export type FindCraftableBlueprintsApiResponse =
   /** status 200 Ok */ CraftableBlueprintResult[]
 export type FindCraftableBlueprintsApiArg = {
   body: {
+    owned_only?: boolean
     materials: {
       quality_value?: number
       quantity_scu: number
@@ -2660,6 +2652,18 @@ export type GetMyListingsResponse = {
   /** Number of results per page */
   page_size: number
 }
+export type InventoryMaterial = {
+  game_item_id: string
+  game_item_name: string
+  game_item_type?: string
+  game_item_icon?: string
+  total_quantity: number
+  avg_quality_value?: number
+  max_quality_value?: number
+}
+export type InventorySummaryResponse = {
+  materials: InventoryMaterial[]
+}
 export type ListingDetail = {
   /** Listing UUID */
   listing_id: string
@@ -2801,18 +2805,6 @@ export type UpdateListingRequest = {
   max_order_value?: number | null
   /** Updated bulk discount tiers (pass [] to remove, omit to keep unchanged) */
   bulk_discount_tiers?: BulkDiscountTier[]
-}
-export type InventoryMaterial = {
-  game_item_id: string
-  game_item_name: string
-  game_item_type?: string
-  game_item_icon?: string
-  total_quantity: number
-  avg_quality_value?: number
-  max_quality_value?: number
-}
-export type InventorySummaryResponse = {
-  materials: InventoryMaterial[]
 }
 export type ImportSource = "cstone-items" | "uex-items" | "uex-attributes"
 export type JobStatus = "running" | "completed" | "failed"
@@ -4529,13 +4521,13 @@ export const {
   useCreateListingMutation,
   useSearchListingsQuery,
   useGetMyListingsQuery,
+  useGetInventorySummaryQuery,
   useGetListingDetailQuery,
   useUpdateListingMutation,
   useDeleteListingMutation,
   useRefreshListingMutation,
   useTrackViewMutation,
   useUploadPhotosMutation,
-  useGetInventorySummaryQuery,
   useStartImportMutation,
   useGetJobStatusQuery,
   useListJobsQuery,
