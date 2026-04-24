@@ -1,7 +1,7 @@
 import {
   useGetMarketCategoriesQuery,
   useGetMarketItemsByCategoryQuery,
-} from "../../../store/api/v2/market"
+} from "../api/marketApi"
 
 export function useGameItemData(itemType?: string) {
   const { data: categories } = useGetMarketCategoriesQuery()
