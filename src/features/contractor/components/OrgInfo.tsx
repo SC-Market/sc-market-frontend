@@ -1,4 +1,4 @@
-import { Contractor } from "../../../datatypes/Contractor"
+import { Contractor } from "../domain/types"
 import React from "react"
 import { Box, Container, Grid, Skeleton, Stack, Tabs } from "@mui/material"
 import { HapticTab } from "../../../components/haptic"

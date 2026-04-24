@@ -15,6 +15,7 @@ import {
   Typography,
 } from "@mui/material"
 import { Contractor } from "../../datatypes/Contractor"
+import type { ContractorKindIconKey } from "../../features/contractor/domain/types"
 import { ExtendedTheme, bannerFadeGradient } from "../../hooks/styles/Theme"
 import { useTheme } from "@mui/material/styles"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
@@ -56,7 +57,7 @@ export const contractorKindIcons = {
   intelligence: <InfoRounded />,
 }
 
-export type ContractorKindIconKey = keyof typeof contractorKindIcons
+export type { ContractorKindIconKey } from "../../features/contractor/domain/types"
 export const contractorKindIconsKeys: ContractorKindIconKey[] = Object.keys(
   contractorKindIcons,
 ) as ContractorKindIconKey[]

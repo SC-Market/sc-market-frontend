@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
 import { User } from "../../../datatypes/User"
-import { Contractor } from "../../../datatypes/Contractor"
+import type { Contractor } from "../../contractor/domain/types"
 import throttle from "lodash/throttle"
 import { useCreateTransaction } from "../../../store/transactions"
 import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"

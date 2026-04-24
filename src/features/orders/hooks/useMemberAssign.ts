@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
 import React from "react"
 import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
-import { useGetContractorMembersQuery, contractorsApi } from "../../../store/contractor"
+import { useGetContractorMembersQuery, contractorsApi } from "../../contractor/api/contractorApi"
 import { useAssignOrderMutation, useUnassignOrderMutation } from "../api/ordersApi"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { useTranslation } from "react-i18next"

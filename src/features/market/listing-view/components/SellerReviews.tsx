@@ -13,7 +13,7 @@ import { useTheme } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
 import { ExtendedTheme } from "../../../../hooks/styles/Theme"
 import { useGetUserOrderReviews } from "../../../../store/profile"
-import { useGetContractorReviewsQuery } from "../../../../store/contractor"
+import { useGetContractorReviewsQuery } from "../../../contractor/api/contractorApi"
 import type { OrderReview } from "../../../orders/domain/types"
 import { getRelativeTime } from "../../../../util/time"
 

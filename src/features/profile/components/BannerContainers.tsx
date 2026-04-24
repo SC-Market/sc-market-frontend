@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react"
 import { Box, Paper } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { User } from "../../../datatypes/User"
-import { Contractor } from "../../../datatypes/Contractor"
+import type { Contractor } from "../../contractor/domain/types"
 import { ExtendedTheme, bannerFadeGradient } from "../../../hooks/styles/Theme"
 
 export function LightBannerContainer(props: {

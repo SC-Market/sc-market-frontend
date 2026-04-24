@@ -1,5 +1,5 @@
-import { useGetContractorBySpectrumIDQuery } from "../../../store/contractor"
-import type { Contractor } from "../../../datatypes/Contractor"
+import { useGetContractorBySpectrumIDQuery } from "../api/contractorApi"
+import type { Contractor } from "../domain/types"
 
 /**
  * Page hook interface for consistent data fetching patterns.

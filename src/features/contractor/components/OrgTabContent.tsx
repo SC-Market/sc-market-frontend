@@ -10,7 +10,7 @@ import { RecruitingPostArea } from "../../recruiting/components/RecruitingPostAr
 import { OrgStoreView } from "../../profile/components/ProfileStoreView"
 import { OrgServicesView } from "../../profile/components/ProfileServicesView"
 import { MarkdownRender } from "../../../components/markdown/Markdown.lazy"
-import { Contractor } from "../../../datatypes/Contractor"
+import { Contractor } from "../domain/types"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 
 interface OrgTabContentProps {

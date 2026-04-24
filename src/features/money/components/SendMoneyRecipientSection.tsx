@@ -8,7 +8,7 @@ import {
   TextField,
 } from "@mui/material"
 import { User } from "../../../datatypes/User"
-import { Contractor } from "../../../datatypes/Contractor"
+import type { Contractor } from "../../contractor/domain/types"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import { useTranslation } from "react-i18next"
 import { RecipientType } from "../hooks/usePageSendMoney"

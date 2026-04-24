@@ -336,6 +336,7 @@ export function MarketCartV2() {
   const [removeCartItem, { isLoading: isRemoving }] = useRemoveCartItemMutation()
   const [checkoutCart, { isLoading: isCheckingOut }] = useCheckoutCartMutation()
   const [checkoutDialogOpen, setCheckoutDialogOpen] = useState(false)
+  const [checkoutSellerId, setCheckoutSellerId] = useState<string | undefined>()
   const [notes, setNotes] = useState<Record<string, string>>({})
 
   // Handle remove item
@@ -359,8 +360,9 @@ export function MarketCartV2() {
   )
 
   // Open checkout confirmation dialog
-  const handleCheckout = useCallback(() => {
+  const handleCheckout = useCallback((sellerId: string) => {
     if (!cartData || cartData.items.length === 0) return
+    setCheckoutSellerId(sellerId)
     setCheckoutDialogOpen(true)
   }, [cartData])
 
@@ -417,10 +419,10 @@ export function MarketCartV2() {
   // Group items by seller
   const sellerGroups = useMemo(() => {
     if (!cartData?.items.length) return []
-    const groups = new Map<string, { sellerName: string; items: CartItemDetail[]; total: number; nextAvailable?: string | null }>()
+    const groups = new Map<string, { sellerName: string; sellerId: string; items: CartItemDetail[]; total: number; nextAvailable?: string | null }>()
     for (const item of cartData.items) {
-      const key = item.listing.seller_name
-      if (!groups.has(key)) groups.set(key, { sellerName: key, items: [], total: 0, nextAvailable: item.listing.seller_next_available })
+      const key = item.listing.seller_id
+      if (!groups.has(key)) groups.set(key, { sellerName: item.listing.seller_name, sellerId: key, items: [], total: 0, nextAvailable: item.listing.seller_next_available })
       const g = groups.get(key)!
       g.items.push(item)
       g.total += item.subtotal
