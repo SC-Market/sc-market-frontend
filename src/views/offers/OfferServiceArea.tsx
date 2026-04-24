@@ -1,4 +1,4 @@
-import { OfferSession } from "../../features/offers/api/offerApi"
+import type { GetOfferSessionV2Response } from "../../store/api/v2/market"
 import React from "react"
 import { Grid, Paper, Typography } from "@mui/material"
 import { ServiceListingBase } from "../../views/contracts/ServiceListings.lazy"
@@ -7,10 +7,10 @@ import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 
-export function OfferServiceArea(props: { offer: OfferSession }) {
+export function OfferServiceArea(props: { session: GetOfferSessionV2Response }) {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
-  const { offer: session } = props
+  const { session } = props
 
   if (session.offers[0].service) {
     return (

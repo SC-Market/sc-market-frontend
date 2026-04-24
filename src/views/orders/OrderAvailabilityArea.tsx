@@ -6,39 +6,43 @@ import { Grid } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { OfferSession } from "../../features/offers/api/offerApi"
-import { MinimalUser } from "../../datatypes/User"
+import type { GetOfferSessionV2Response } from "../../store/api/v2/market"
 import { useTranslation } from "react-i18next"
 
-export function OrderAvailabilityArea(props: { order: Order | OfferSession }) {
-  const { order } = props
+type SessionLike = Order | OfferSession | GetOfferSessionV2Response
+
+function getUsername(user: unknown): string {
+  if (!user) return "Unknown"
+  if (typeof user === "string") return user
+  if (typeof user === "object" && user !== null && "username" in user) return (user as { username: string }).username
+  return "Unknown"
+}
+
+export function OrderAvailabilityArea(props: { order?: SessionLike; session?: GetOfferSessionV2Response }) {
+  const source = props.session || props.order
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
 
-  const customerName =
-    typeof order.customer === "string"
-      ? order.customer
-      : (order.customer as MinimalUser).username
+  if (!source || !source.availability) return null
 
-  const assignedName =
-    typeof order.assigned_to === "string"
-      ? order.assigned_to
-      : (order.assigned_to as MinimalUser)?.username
+  const customerName = getUsername(source.customer)
+  const assignedName = getUsername(source.assigned_to)
 
   return (
     <Grid container spacing={theme.layoutSpacing?.layout ?? 2}>
-      <Grid item xs={12} lg={order.assigned_to && order.availability?.assigned ? 6 : 12}>
-        <AvailabilityDisplay
-          name={t("orderAvailabilityArea.customer_name", { name: customerName })}
-          value={convertAvailability(order.availability!.customer)}
-        />
+      <Grid item xs={12} lg={source.assigned_to && source.availability?.assigned ? 6 : 12}>
+        {source.availability.customer && (
+          <AvailabilityDisplay
+            name={t("orderAvailabilityArea.customer_name", { name: customerName })}
+            value={convertAvailability(source.availability.customer)}
+          />
+        )}
       </Grid>
-      {assignedName && order.availability?.assigned && (
+      {assignedName && source.availability?.assigned && (
         <Grid item xs={12} lg={6}>
           <AvailabilityDisplay
-            name={t("orderAvailabilityArea.assigned_name", {
-              name: assignedName,
-            })}
-            value={convertAvailability(order.availability!.assigned!)}
+            name={t("orderAvailabilityArea.assigned_name", { name: assignedName })}
+            value={convertAvailability(source.availability.assigned)}
           />
         </Grid>
       )}

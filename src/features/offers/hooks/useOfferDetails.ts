@@ -70,8 +70,8 @@ export function useOfferDetails(session: GetOfferSessionV2Response) {
   )
 
   const statusKey: OfferStatusKey = useMemo(
-    () => normalizeOfferStatus(session.status),
-    [session.status],
+    () => normalizeOfferStatus(session.status, session.offers),
+    [session.status, session.offers],
   )
 
   const statusColor = useMemo(() => {
