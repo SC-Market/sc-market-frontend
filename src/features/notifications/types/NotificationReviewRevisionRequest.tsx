@@ -1,6 +1,6 @@
 import { EditRounded } from "@mui/icons-material"
 import { Notification } from "../../../hooks/login/UserProfile"
-import { OrderReview } from "../../../datatypes/Order"
+import type { OrderReview } from "../../orders/domain/types"
 import { Trans, useTranslation } from "react-i18next"
 import { NotificationBase } from "../components/NotificationBase"
 

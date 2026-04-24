@@ -217,6 +217,9 @@ export function PreferencesControls() {
               <ToggleButton value={"dark"} color={"primary"}>
                 {t("preferences.dark")}
               </ToggleButton>
+              <ToggleButton value={"CLEAN_DARK"} color={"primary"}>
+                {t("preferences.cleanDark", "Clean")}
+              </ToggleButton>
               <ToggleButton value={"system"} color={"primary"}>
                 {t("preferences.system", "System")}
               </ToggleButton>

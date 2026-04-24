@@ -14,7 +14,7 @@ import { useTranslation } from "react-i18next"
 import { ExtendedTheme } from "../../../../hooks/styles/Theme"
 import { useGetUserOrderReviews } from "../../../../store/profile"
 import { useGetContractorReviewsQuery } from "../../../../store/contractor"
-import { OrderReview } from "../../../../datatypes/Order"
+import type { OrderReview } from "../../../orders/domain/types"
 import { getRelativeTime } from "../../../../util/time"
 
 export function SellerReviews(props: {

@@ -19,7 +19,7 @@ import {
 } from "../domain/types"
 import { unwrapResponse } from "../../../store/api-utils"
 import { createOptimisticUpdate } from "../../../util/optimisticUpdates"
-import type { Order } from "../../../datatypes/Order"
+import type { Order } from "../../orders/domain/types"
 
 /** Response from POST /api/market/buyorder/:id/fulfill */
 export interface FulfillBuyOrderResponse {

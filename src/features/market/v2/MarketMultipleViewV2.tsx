@@ -47,7 +47,7 @@ import { subDays } from "date-fns";
 import { useTranslation } from "react-i18next";
 import { VariantSelector } from "../../../components/market/v2/VariantSelector";
 import { QualityBadge } from "../../../components/market/v2/QualityBadge";
-import { Order } from "../../../datatypes/Order";
+import type { Order } from "../../orders/domain/types"
 import { MinimalUser } from "../../../datatypes/User";
 import { useGetListingDetailQuery } from "../../../store/api/v2/market";
 
