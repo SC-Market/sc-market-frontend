@@ -98,19 +98,21 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
 }) => {
   const nav = useNavigate()
   const ings = bp.ingredients || []
+  // Default blueprints are always owned by everyone
+  const effectiveOwned = bp.source === "default" || bp.user_owns
 
   if (viewMode === "grid") {
     return (
       <Card sx={{ height: "100%", position: "relative" }}>
-        {onBookmarkToggle && (
-          <Tooltip title={bp.user_owns ? "Remove from inventory" : "Add to inventory"} arrow>
+        {onBookmarkToggle && bp.source !== "default" && (
+          <Tooltip title={effectiveOwned ? "Remove from inventory" : "Add to inventory"} arrow>
           <IconButton
             size="small"
             sx={{ position: "absolute", top: 4, right: 4, zIndex: 1 }}
-            color={bp.user_owns ? "primary" : "default"}
+            color={effectiveOwned ? "primary" : "default"}
             onClick={(e) => { e.stopPropagation(); onBookmarkToggle(bp.blueprint_id, !bp.user_owns) }}
           >
-            {bp.user_owns ? <Bookmark fontSize="small" /> : <BookmarkBorder fontSize="small" />}
+            {effectiveOwned ? <Bookmark fontSize="small" /> : <BookmarkBorder fontSize="small" />}
           </IconButton>
           </Tooltip>
         )}
@@ -147,7 +149,7 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
           </CardContent>
 
           <CardActions disableSpacing sx={{ px: 1.5, pt: 0, pb: 0.5, flexWrap: "wrap", gap: 0.25 }}>
-            {bp.user_owns && <Chip label="Owned" size="small" color="success" clickable onClick={(e) => { e.stopPropagation(); nav("/blueprints?owned=true") }} sx={microChip} />}
+            {effectiveOwned && <Chip label="Owned" size="small" color="success" clickable onClick={(e) => { e.stopPropagation(); nav("/blueprints?owned=true") }} sx={microChip} />}
             {bp.source === "default" && <Chip label="Default" size="small" variant="outlined" clickable onClick={(e) => { e.stopPropagation(); nav("/blueprints?source=default") }} sx={microChip} />}
             {bp.rarity && <Chip label={bp.rarity} size="small" clickable onClick={(e) => { e.stopPropagation(); nav(`/blueprints?rarity=${bp.rarity}`) }} sx={{ ...microChip, bgcolor: "secondary.main", color: "#fff" }} />}
             {bp.tier && <Chip label={`T${bp.tier}`} size="small" sx={{ ...microChip, bgcolor: "warning.main", color: "#fff" }} />}
@@ -193,7 +195,7 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
           <Box sx={{ flex: 1, minWidth: 0 }}>
             <Typography variant="body2" fontWeight={600} noWrap>{bp.output_item_name}</Typography>
             <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap sx={{ mt: 0.25 }}>
-              {bp.user_owns && <Chip label="Owned" size="small" color="success" clickable onClick={(e) => { e.stopPropagation(); nav("/blueprints?owned=true") }} sx={microChip} />}
+              {effectiveOwned && <Chip label="Owned" size="small" color="success" clickable onClick={(e) => { e.stopPropagation(); nav("/blueprints?owned=true") }} sx={microChip} />}
               {bp.source === "default" && <Chip label="Default" size="small" variant="outlined" clickable onClick={(e) => { e.stopPropagation(); nav("/blueprints?source=default") }} sx={microChip} />}
               {bp.rarity && <Chip label={bp.rarity} size="small" clickable onClick={(e) => { e.stopPropagation(); nav(`/blueprints?rarity=${bp.rarity}`) }} sx={{ ...microChip, bgcolor: "secondary.main", color: "#fff" }} />}
               {bp.tier && <Chip label={`T${bp.tier}`} size="small" sx={{ ...microChip, bgcolor: "warning.main", color: "#fff" }} />}
@@ -224,14 +226,14 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
             </IconButton>
             </Tooltip>
           )}
-          {onBookmarkToggle && (
-            <Tooltip title={bp.user_owns ? "Remove from inventory" : "Add to inventory"} arrow>
+          {onBookmarkToggle && bp.source !== "default" && (
+            <Tooltip title={effectiveOwned ? "Remove from inventory" : "Add to inventory"} arrow>
             <IconButton
               size="small"
-              color={bp.user_owns ? "primary" : "default"}
+              color={effectiveOwned ? "primary" : "default"}
               onClick={(e) => { e.stopPropagation(); onBookmarkToggle(bp.blueprint_id, !bp.user_owns) }}
             >
-              {bp.user_owns ? <Bookmark fontSize="small" /> : <BookmarkBorder fontSize="small" />}
+              {effectiveOwned ? <Bookmark fontSize="small" /> : <BookmarkBorder fontSize="small" />}
             </IconButton>
             </Tooltip>
           )}
