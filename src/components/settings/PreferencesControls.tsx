@@ -6,6 +6,7 @@ import {
   TextField,
   ToggleButton,
   ToggleButtonGroup,
+  Tooltip,
   Typography,
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
@@ -18,7 +19,73 @@ import {
   useProfileUpdateLocale,
   useGetUserProfileQuery,
 } from "../../store/profile"
-import { useEffect } from "react"
+import { useEffect, useMemo, useCallback, useState } from "react"
+
+const FONT_OPTIONS = [
+  { label: "Default (Roboto)", value: "" },
+  { label: "Electrolize (SC-style)", value: "Electrolize", url: "https://fonts.googleapis.com/css2?family=Electrolize&display=swap" },
+  { label: "Orbitron", value: "Orbitron", url: "https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap" },
+  { label: "Rajdhani", value: "Rajdhani", url: "https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;700&display=swap" },
+  { label: "Exo 2", value: "Exo 2", url: "https://fonts.googleapis.com/css2?family=Exo+2:wght@400;500;700&display=swap" },
+  { label: "Jura", value: "Jura", url: "https://fonts.googleapis.com/css2?family=Jura:wght@400;500;700&display=swap" },
+  { label: "Share Tech Mono", value: "Share Tech Mono", url: "https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" },
+  { label: "JetBrains Mono", value: "JetBrains Mono", url: "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" },
+]
+
+function loadFont(fontValue: string) {
+  const opt = FONT_OPTIONS.find((f) => f.value === fontValue)
+  if (!opt?.url) return
+  const id = `font-${fontValue.replace(/\s/g, "-")}`
+  if (document.getElementById(id)) return
+  const link = document.createElement("link")
+  link.id = id
+  link.rel = "stylesheet"
+  link.href = opt.url
+  document.head.appendChild(link)
+}
+
+function applyFont(fontValue: string) {
+  if (!fontValue) {
+    document.documentElement.style.removeProperty("--sc-custom-font")
+    document.body.style.fontFamily = ""
+    return
+  }
+  loadFont(fontValue)
+  const stack = `"${fontValue}", "Roboto", Arial, sans-serif`
+  document.documentElement.style.setProperty("--sc-custom-font", stack)
+  document.body.style.fontFamily = stack
+}
+
+function getStoredFont(): string {
+  try { return localStorage.getItem("sc-admin-font") || "" } catch { return "" }
+}
+
+/** Cyberbunk-style theme preset swatch */
+function ThemePresetSwatch({ name, onClick, isActive }: { name: string; onClick: () => void; isActive: boolean }) {
+  const themeObj = CUSTOM_THEMES.get(name)
+  const primary = themeObj?.palette?.primary?.main || "#888"
+  const bg = themeObj?.palette?.background?.default || "#1A1A2E"
+
+  return (
+    <Tooltip title={name.replace(/_/g, " ")} placement="top">
+      <Box
+        onClick={onClick}
+        sx={{
+          width: 28,
+          height: 28,
+          borderRadius: 0.5,
+          cursor: "pointer",
+          border: isActive ? "2px solid" : "1px solid",
+          borderColor: isActive ? "primary.main" : "divider",
+          background: `linear-gradient(to right, ${primary} 50%, ${bg} 50%)`,
+          transition: "transform 0.15s, box-shadow 0.15s",
+          "&:hover": { transform: "scale(1.2)", boxShadow: `0 0 8px ${primary}` },
+          flexShrink: 0,
+        }}
+      />
+    </Tooltip>
+  )
+}
 
 export function PreferencesControls() {
   const theme = useTheme<ExtendedTheme>()
@@ -29,16 +96,18 @@ export function PreferencesControls() {
   const isDev = import.meta.env.DEV || import.meta.env.MODE === "development"
   const isAdmin = userProfile?.role === "admin"
 
-  // Get available theme options - show custom themes in dev mode or for site admins
-  const availableThemes: ThemeChoice[] =
-    isDev || isAdmin
-      ? [
-          "light",
-          "dark",
-          "system",
-          ...(Array.from(CUSTOM_THEMES.keys()) as ThemeChoice[]),
-        ]
-      : ["light", "dark", "system"]
+  const [selectedFont, setSelectedFont] = useState(getStoredFont)
+
+  // Apply stored font on mount
+  useEffect(() => { if (selectedFont) applyFont(selectedFont) }, [])
+
+  const handleFontChange = useCallback((value: string) => {
+    setSelectedFont(value)
+    try { localStorage.setItem("sc-admin-font", value) } catch {}
+    applyFont(value)
+  }, [])
+
+  const themeNames = useMemo(() => Array.from(CUSTOM_THEMES.keys()), [])
 
   // Initialize language from user profile if available
   useEffect(() => {
@@ -76,39 +145,33 @@ export function PreferencesControls() {
             {t("preferences.theme")}
           </Typography>
           {isDev || isAdmin ? (
-            <Autocomplete
-              value={lightTheme}
-              onChange={(event, newValue) => {
-                if (newValue) {
-                  setLightTheme(newValue as ThemeChoice)
-                }
-              }}
-              options={availableThemes}
-              getOptionLabel={(option) => {
-                if (option === "system") {
-                  return t("preferences.system", "System")
-                }
-                if (option === "light") {
-                  return t("preferences.light")
-                }
-                if (option === "dark") {
-                  return t("preferences.dark")
-                }
-                return option
-              }}
-              slotProps={{
-                popper: {
-                  disablePortal: true,
-                },
-              }}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  size="small"
-                  placeholder={t("preferences.select_theme", "Select theme")}
-                />
-              )}
-            />
+            <>
+              {/* Base theme toggle */}
+              <ToggleButtonGroup
+                value={["light", "dark", "system"].includes(lightTheme) ? lightTheme : null}
+                exclusive
+                onChange={(e, v) => v && setLightTheme(v)}
+                size="small"
+                fullWidth
+                sx={{ mb: 1 }}
+              >
+                <ToggleButton value="light">{t("preferences.light")}</ToggleButton>
+                <ToggleButton value="dark">{t("preferences.dark")}</ToggleButton>
+                <ToggleButton value="system">{t("preferences.system", "System")}</ToggleButton>
+              </ToggleButtonGroup>
+
+              {/* Cyberbunk-style preset swatches */}
+              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.75 }}>
+                {themeNames.map((name) => (
+                  <ThemePresetSwatch
+                    key={name}
+                    name={name}
+                    isActive={lightTheme === name}
+                    onClick={() => setLightTheme(name as ThemeChoice)}
+                  />
+                ))}
+              </Box>
+            </>
           ) : (
             <ToggleButtonGroup
               value={lightTheme}
@@ -209,6 +272,36 @@ export function PreferencesControls() {
             isOptionEqualToValue={(option, value) => option.code === value.code}
           />
         </Grid>
+
+        {/* Font selector — admin only */}
+        {(isDev || isAdmin) && (
+          <>
+            <Grid item xs={12}>
+              <Divider sx={{ my: 0.5 }} />
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
+                {t("preferences.font", "Font")}
+              </Typography>
+              <Autocomplete
+                value={FONT_OPTIONS.find((f) => f.value === selectedFont) || FONT_OPTIONS[0]}
+                onChange={(_, v) => v && handleFontChange(v.value)}
+                options={FONT_OPTIONS}
+                getOptionLabel={(o) => o.label}
+                isOptionEqualToValue={(a, b) => a.value === b.value}
+                slotProps={{ popper: { disablePortal: true } }}
+                renderInput={(params) => (
+                  <TextField {...params} size="small" placeholder="Select font" />
+                )}
+                renderOption={(props, option) => (
+                  <Box component="li" {...props} sx={{ fontFamily: option.value ? `"${option.value}", sans-serif` : undefined }}>
+                    {option.label}
+                  </Box>
+                )}
+              />
+            </Grid>
+          </>
+        )}
       </Grid>
     </Box>
   )

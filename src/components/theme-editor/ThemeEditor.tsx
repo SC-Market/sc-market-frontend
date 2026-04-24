@@ -18,6 +18,7 @@ import {
   Tab,
   Tabs,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material"
 import { SaveRounded, RestoreRounded } from "@mui/icons-material"
@@ -25,6 +26,7 @@ import { ThemePreview } from "./ThemePreview"
 import { useTranslation } from "react-i18next"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import type { ThemeOptions } from "@mui/material"
+import { CUSTOM_THEMES } from "../../hooks/styles/custom_themes"
 
 interface ThemeEditorProps {
   initialThemeData: { light: Record<string, any>; dark: Record<string, any> }
