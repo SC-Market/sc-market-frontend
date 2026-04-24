@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from "react"
+import React from "react"
 import { useTranslation } from "react-i18next"
 import {
   Typography,
@@ -20,286 +20,40 @@ import {
   FormControlLabel,
   Autocomplete,
 } from "@mui/material"
-import {
-  useGetAdminAlertsQuery,
-  useCreateAdminAlertMutation,
-  useUpdateAdminAlertMutation,
-  useDeleteAdminAlertMutation,
-} from "../../features/admin/api/adminApi"
-import { AdminAlert, AdminAlertCreate } from "../../datatypes/AdminAlert"
+import { AdminAlert } from "../../datatypes/AdminAlert"
 import { ThemedDataGrid } from "../../components/grid/ThemedDataGrid"
 import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid"
 import { HeaderTitle } from "../../components/typography/HeaderTitle"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { AdminIcons } from "../../components/icons"
 import {
   MarkdownRender,
   MarkdownEditor,
 } from "../../components/markdown/Markdown.lazy"
-import { MinimalContractor } from "../../features/contractor/domain/types"
-import { useSearchContractorsQuery } from "../../features/contractor/api/contractorApi"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { useAdminAlerts } from "../../features/admin/hooks/useAdminAlerts"
 
 export function AdminAlertsView() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
-  const [page, setPage] = useState(1)
-  const [pageSize, setPageSize] = useState(20)
-  const [targetTypeFilter, setTargetTypeFilter] = useState<
-    | "all_users"
-    | "org_members"
-    | "org_owners"
-    | "admins_only"
-    | "specific_org"
-    | ""
-  >("")
-  const [activeFilter, setActiveFilter] = useState<boolean | null>(null)
-  const [selectedAlert, setSelectedAlert] = useState<AdminAlert | null>(null)
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false)
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false)
 
   const {
-    data: alertsData,
-    isLoading,
-    error,
-  } = useGetAdminAlertsQuery({
-    page: page - 1,
-    pageSize,
-    target_type: targetTypeFilter || undefined,
-    active: activeFilter !== null ? activeFilter : undefined,
-  })
-
-  const [createAlert, { isLoading: isCreating }] = useCreateAdminAlertMutation()
-  const [updateAlert, { isLoading: isUpdating }] = useUpdateAdminAlertMutation()
-  const [deleteAlert, { isLoading: isDeleting }] = useDeleteAdminAlertMutation()
-
-  const issueAlert = useAlertHook()
-
-  // Form state for create/edit
-  const [formData, setFormData] = useState<AdminAlertCreate>({
-    title: "",
-    content: "",
-    link: null,
-    target_type: "all_users",
-    target_spectrum_id: null,
-  })
-
-  // Validation state
-  const [linkError, setLinkError] = useState<string>("")
-  const [contractorError, setContractorError] = useState<string>("")
-
-  // Contractor search state
-  const [contractorSearchQuery, setContractorSearchQuery] = useState<string>("")
-  const [selectedContractor, setSelectedContractor] =
-    useState<MinimalContractor | null>(null)
-
-  // RTK Query for contractor search with throttling
-  const { data: contractorOptions = [], isLoading: isSearchingContractors } =
-    useSearchContractorsQuery(
-      { query: contractorSearchQuery },
-      {
-        skip: contractorSearchQuery.length < 3, // Only search when query is 3+ characters
-      },
-    )
-
-  // URL validation function
-  const validateUrl = (url: string): boolean => {
-    if (!url || url.trim() === "") return true // Empty is valid (optional field)
-
-    try {
-      const urlObj = new URL(url)
-      // Only allow http and https protocols
-      return urlObj.protocol === "http:" || urlObj.protocol === "https:"
-    } catch {
-      return false
-    }
-  }
-
-  // Handle link change with validation
-  const handleLinkChange = (value: string) => {
-    const trimmedValue = value.trim()
-    const newLink = trimmedValue === "" ? null : trimmedValue
-
-    setFormData({ ...formData, link: newLink })
-
-    // Validate the URL
-    if (newLink && !validateUrl(newLink)) {
-      setLinkError(
-        t(
-          "admin.alerts.validation.invalidUrl",
-          "Please enter a valid URL (http:// or https://)",
-        ),
-      )
-    } else {
-      setLinkError("")
-    }
-  }
-
-  // Handle contractor selection
-  const handleContractorChange = (contractor: MinimalContractor | null) => {
-    setSelectedContractor(contractor)
-    setFormData({
-      ...formData,
-      target_spectrum_id: contractor?.spectrum_id || null,
-    })
-
-    // Clear contractor error when a contractor is selected
-    if (contractor) {
-      setContractorError("")
-    }
-  }
-
-  // Handle target type change
-  const handleTargetTypeChange = (targetType: string) => {
-    setFormData({ ...formData, target_type: targetType as any })
-
-    // Clear contractor selection and error when target type changes away from specific_org
-    if (targetType !== "specific_org") {
-      setSelectedContractor(null)
-      setFormData((prev) => ({ ...prev, target_spectrum_id: null }))
-      setContractorError("")
-    }
-  }
-
-  const handleOpenCreateModal = () => {
-    setFormData({
-      title: "",
-      content: "",
-      link: null,
-      target_type: "all_users",
-      target_spectrum_id: null,
-    })
-    setLinkError("")
-    setContractorError("")
-    setSelectedContractor(null)
-    setContractorSearchQuery("")
-    setIsCreateModalOpen(true)
-  }
-
-  const handleOpenEditModal = (alert: AdminAlert) => {
-    setSelectedAlert(alert)
-    setFormData({
-      title: alert.title,
-      content: alert.content,
-      link: alert.link,
-      target_type: alert.target_type,
-      target_spectrum_id: alert.target_spectrum_id,
-    })
-    setLinkError("")
-    setContractorError("")
-    setSelectedContractor(null) // Will be set if target_spectrum_id exists
-    setContractorSearchQuery("")
-    setIsEditModalOpen(true)
-  }
-
-  const handleOpenDeleteModal = (alert: AdminAlert) => {
-    setSelectedAlert(alert)
-    setIsDeleteModalOpen(true)
-  }
-
-  const handleCloseModals = () => {
-    setIsCreateModalOpen(false)
-    setIsEditModalOpen(false)
-    setIsDeleteModalOpen(false)
-    setSelectedAlert(null)
-    setFormData({
-      title: "",
-      content: "",
-      link: null,
-      target_type: "all_users",
-      target_spectrum_id: null,
-    })
-    setLinkError("")
-    setContractorError("")
-    setSelectedContractor(null)
-    setContractorSearchQuery("")
-  }
-
-  const handleCreateAlert = () => {
-    // Check for validation errors
-    if (linkError) {
-      return
-    }
-
-    // Validate contractor selection for specific_org
-    if (
-      formData.target_type === "specific_org" &&
-      !formData.target_spectrum_id
-    ) {
-      setContractorError(
-        t("admin.alerts.contractorRequired", "Please select a contractor"),
-      )
-      return
-    }
-
-    createAlert(formData)
-      .unwrap()
-      .then(() => {
-        issueAlert({
-          message: t("admin.alerts.created", "Alert created successfully"),
-          severity: "success",
-        })
-        handleCloseModals()
-      })
-      .catch((error) => {
-        issueAlert(error)
-      })
-  }
-
-  const handleUpdateAlert = () => {
-    if (!selectedAlert) return
-
-    // Check for validation errors
-    if (linkError) {
-      return
-    }
-
-    // Validate contractor selection for specific_org
-    if (
-      formData.target_type === "specific_org" &&
-      !formData.target_spectrum_id
-    ) {
-      setContractorError(
-        t("admin.alerts.contractorRequired", "Please select a contractor"),
-      )
-      return
-    }
-
-    updateAlert({
-      alertId: selectedAlert.alert_id,
-      data: formData,
-    })
-      .unwrap()
-      .then(() => {
-        issueAlert({
-          message: t("admin.alerts.updated", "Alert updated successfully"),
-          severity: "success",
-        })
-        handleCloseModals()
-      })
-      .catch((error) => {
-        issueAlert(error)
-      })
-  }
-
-  const handleDeleteAlert = () => {
-    if (!selectedAlert) return
-
-    deleteAlert(selectedAlert.alert_id)
-      .unwrap()
-      .then(() => {
-        issueAlert({
-          message: t("admin.alerts.deleted", "Alert deleted successfully"),
-          severity: "success",
-        })
-        handleCloseModals()
-      })
-      .catch((error) => {
-        issueAlert(error)
-      })
-  }
+    alertsData, isLoading, error, rows,
+    page, setPage, pageSize, setPageSize,
+    targetTypeFilter, setTargetTypeFilter,
+    activeFilter, setActiveFilter,
+    selectedAlert,
+    isCreateModalOpen, isEditModalOpen, isDeleteModalOpen,
+    handleOpenCreateModal, handleOpenEditModal, handleOpenDeleteModal, handleCloseModals,
+    formData, setFormData,
+    linkError, handleLinkChange,
+    contractorError, contractorSearchQuery, setContractorSearchQuery,
+    selectedContractor, contractorOptions, isSearchingContractors,
+    handleContractorChange, handleTargetTypeChange,
+    isCreating, isUpdating, isDeleting,
+    handleCreateAlert, handleUpdateAlert, handleDeleteAlert,
+    updateAlertMut, issueAlert,
+  } = useAdminAlerts()
 
   const columns: GridColDef[] = [
     {
@@ -398,14 +152,6 @@ export function AdminAlertsView() {
       ),
     },
   ]
-
-  const rows = React.useMemo(() => {
-    if (!alertsData?.alerts) return []
-    return alertsData.alerts.map((alert) => ({
-      ...alert,
-      id: alert.alert_id,
-    }))
-  }, [alertsData?.alerts])
 
   return (
     <>
@@ -779,7 +525,7 @@ export function AdminAlertsView() {
                     checked={selectedAlert.active}
                     onChange={(e) => {
                       if (selectedAlert) {
-                        updateAlert({
+                        updateAlertMut({
                           alertId: selectedAlert.alert_id,
                           data: { active: e.target.checked },
                         })

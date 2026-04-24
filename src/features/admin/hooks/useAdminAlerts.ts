@@ -4,7 +4,7 @@ import {
   useCreateAdminAlertMutation,
   useUpdateAdminAlertMutation,
   useDeleteAdminAlertMutation,
-} from "../adminApi"
+} from "../api/adminApi"
 import { useSearchContractorsQuery } from "../../contractor/api/contractorApi"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { useTranslation } from "react-i18next"
@@ -35,7 +35,9 @@ export function useAdminAlerts() {
 
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(20)
-  const [targetTypeFilter, setTargetTypeFilter] = useState<string>("")
+  const [targetTypeFilter, setTargetTypeFilter] = useState<
+    "all_users" | "org_members" | "org_owners" | "admins_only" | "specific_org" | ""
+  >("")
   const [activeFilter, setActiveFilter] = useState<boolean | null>(null)
   const [selectedAlert, setSelectedAlert] = useState<AdminAlert | null>(null)
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
@@ -109,7 +111,7 @@ export function useAdminAlerts() {
     }
     createAlertMut(formData).unwrap()
       .then(() => { issueAlert({ message: t("admin.alerts.created", "Alert created successfully"), severity: "success" }); handleCloseModals() })
-      .catch((err) => issueAlert(err))
+      .catch((err: any) => issueAlert(err))
   }, [formData, linkError, createAlertMut, issueAlert, handleCloseModals, t])
 
   const handleUpdateAlert = useCallback(() => {
@@ -119,19 +121,19 @@ export function useAdminAlerts() {
     }
     updateAlertMut({ alertId: selectedAlert.alert_id, data: formData }).unwrap()
       .then(() => { issueAlert({ message: t("admin.alerts.updated", "Alert updated successfully"), severity: "success" }); handleCloseModals() })
-      .catch((err) => issueAlert(err))
+      .catch((err: any) => issueAlert(err))
   }, [selectedAlert, formData, linkError, updateAlertMut, issueAlert, handleCloseModals, t])
 
   const handleDeleteAlert = useCallback(() => {
     if (!selectedAlert) return
     deleteAlertMut(selectedAlert.alert_id).unwrap()
       .then(() => { issueAlert({ message: t("admin.alerts.deleted", "Alert deleted successfully"), severity: "success" }); handleCloseModals() })
-      .catch((err) => issueAlert(err))
+      .catch((err: any) => issueAlert(err))
   }, [selectedAlert, deleteAlertMut, issueAlert, handleCloseModals, t])
 
   const rows = useMemo(() => {
     if (!alertsData?.alerts) return []
-    return alertsData.alerts.map((alert) => ({ ...alert, id: alert.alert_id }))
+    return alertsData.alerts.map((alert: AdminAlert) => ({ ...alert, id: alert.alert_id }))
   }, [alertsData?.alerts])
 
   return {
@@ -154,5 +156,6 @@ export function useAdminAlerts() {
     // Actions
     isCreating, isUpdating, isDeleting,
     handleCreateAlert, handleUpdateAlert, handleDeleteAlert,
+    updateAlertMut, issueAlert,
   }
 }

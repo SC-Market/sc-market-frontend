@@ -34,6 +34,7 @@ import { HideOnScroll, MarketNavArea } from "../components/MarketNavArea";
 import { useSearchListingsQuery } from "../../../store/api/v2/market";
 import type { ListingSearchResult } from "../../../store/api/v2/market";
 import { formatPriceRange } from "../../../util/formatPrice";
+import { UnifiedSearchBar, marketParamsToTokens, marketTokensToParams, type SearchToken } from "../../../components/game-data/UnifiedSearchBar";
 import { QualityFilter } from "../../../components/market/v2/QualityFilter";
 import { LanguageFilter } from "../../../components/search/LanguageFilter";
 import { ListingWrapper } from "../components/listings/ListingCard";
@@ -73,6 +74,16 @@ export function ListingSearchV2() {
 
   // Read filter state from URL params
   const [searchParams, setSearchParams] = useSearchParams();
+
+  // Unified search bar
+  const marketSearchTokens = React.useMemo(() => marketParamsToTokens(searchParams), [searchParams])
+  const handleMarketTokensChange = (tokens: SearchToken[]) => {
+    const tokenParams = marketTokensToParams(tokens)
+    const params = new URLSearchParams(searchParams)
+    for (const key of ["query", "q", "type", "has_photos", "in_stock", "bulk_discount"]) params.delete(key)
+    for (const [k, v] of Object.entries(tokenParams)) params.set(k, v)
+    setSearchParams(params, { replace: true })
+  }
   
   // Parse URL params to API format (supports both V2 and V1 param names)
   const searchQuery = useMemo(() => {
@@ -180,6 +191,10 @@ export function ListingSearchV2() {
               </Grid>
 
               <Grid item xs={12}>
+                <UnifiedSearchBar tokens={marketSearchTokens} onChange={handleMarketTokensChange}
+                  mode="market" placeholder="Search items, categories..." />
+              </Grid>
+              <Grid item xs={12}>
                 <ListingGrid
                   listings={listings}
                   loading={isLoading || isFetching}
@@ -229,6 +244,14 @@ export function ListingSearchV2() {
 
               {/* Main content area – minWidth: 0 so flex child can shrink and grid gets full width */}
               <Box sx={{ flex: 1, minWidth: 0 }}>
+                <Box sx={{ mb: 1.5 }}>
+                  <UnifiedSearchBar
+                    tokens={marketSearchTokens}
+                    onChange={handleMarketTokensChange}
+                    mode="market"
+                    placeholder="Search items, categories, sellers..."
+                  />
+                </Box>
                 <Grid container spacing={1}>
                   <Grid item xs={12}>
                     <ListingGrid
