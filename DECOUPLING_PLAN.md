@@ -1,7 +1,20 @@
 # Architecture Decoupling Plan
 
 > Audit date: 2026-04-23
+> Last updated: 2026-04-24
 > Goal: Decouple business logic, data fetching, rendering, and layout across the entire codebase using the pattern already established in `features/email/`.
+
+## Status Summary
+
+| Phase | Status | Summary |
+|---|---|---|
+| Phase 0: Conventions | ✅ | ARCHITECTURE.md, ESLint rules |
+| Phase 1: Store migration | ✅ | All 16 store slices → features/*/api/, shims deleted |
+| Phase 2: Feature shells | ✅ | 21 feature modules with api/, domain/, hooks/ |
+| Phase 3: Extract from views/ | ✅ | 9 largest view files decomposed (~2,100 lines extracted) |
+| Phase 4: Clean components/ | 🔄 | OrderSettings done (1,438→672). SelectPhotosArea + ListingRating remaining |
+| Phase 5: Context providers | ✅ | 12 contexts moved, shims deleted |
+| Phase 6: Fill feature gaps | ✅ | Domain types for orders, contractor, profile, offers, recruiting, contracting |
 
 ---
 
