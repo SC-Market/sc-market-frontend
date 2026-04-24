@@ -7,7 +7,6 @@ import React, {
   MouseEventHandler,
   useMemo,
   useState,
-  useEffect,
   useCallback,
 } from "react"
 import {
@@ -43,10 +42,9 @@ import {
 import { Stack } from "@mui/system"
 import { a11yProps } from "../../components/tabs/Tabs"
 import SCMarketLogo from "../../assets/scmarket-logo.webp"
-import { useSearchOrdersQuery } from "../../store/orders"
 import { useGetUserProfileQuery } from "../../store/profile"
 import { useTranslation } from "react-i18next"
-import { useDebounce } from "../../hooks/useDebounce"
+import { useOrderSearch } from "../../features/orders/hooks/useOrderSearch"
 import {
   ExpandLess,
   ExpandMore,
@@ -59,7 +57,7 @@ import { EmptyOrders } from "../../components/empty-states"
 import { LongPressMenu, useLongPress } from "../../components/gestures"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { has_permission } from "../contractor/OrgRoles"
-import { useAssignOrderMutation } from "../../store/orders"
+import { useAssignOrderMutation } from "../../features/orders/api/ordersApi"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 
 import {
@@ -423,59 +421,21 @@ export function OrdersViewPaginated(props: {
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const { data: profile } = useGetUserProfileQuery()
-  const [statusFilter, setStatusFilter] = useState<
-    "all" | "active" | "past" | OrderSearchStatus
-  >("active")
-  const [pageSize, setPageSize] = useState(5)
-  const [page, setPage] = useState(0)
-  const [orderBy, setOrderBy] = useState("timestamp")
-  const [order, setOrder] = useState<"asc" | "desc">("desc")
   const { t } = useTranslation()
 
-  // Filter state
-  const [filtersOpen, setFiltersOpen] = useState(false)
-  const [buyerUsername, setBuyerUsername] = useState("")
-  const [sellerUsername, setSellerUsername] = useState("")
-  const [hasMarketListings, setHasMarketListings] = useState<
-    boolean | undefined
-  >(undefined)
-  const [hasService, setHasService] = useState<boolean | undefined>(undefined)
-
-  // Debounce username inputs
-  const debouncedBuyerUsername = useDebounce(buyerUsername, 500)
-  const debouncedSellerUsername = useDebounce(sellerUsername, 500)
-
-  // Reset page when filters change
-  useEffect(() => {
-    setPage(0)
-  }, [
-    debouncedBuyerUsername,
-    debouncedSellerUsername,
-    hasMarketListings,
-    hasService,
-  ])
-
   const {
-    data: orders,
-    isLoading,
-    isFetching,
-    refetch,
-  } = useSearchOrdersQuery({
-    status: statusFilter === "all" ? undefined : statusFilter,
-    index: page,
-    page_size: pageSize,
-    customer: mine ? profile?.username : undefined,
-    assigned: assigned ? profile?.username : undefined,
-    contractor: contractor,
-    sort_method: orderBy as OrderSearchSortMethod,
-    reverse_sort: order === "desc",
-    buyer_username:
-      !mine && debouncedBuyerUsername ? debouncedBuyerUsername : undefined,
-    seller_username:
-      mine && debouncedSellerUsername ? debouncedSellerUsername : undefined,
-    has_market_listings: hasMarketListings,
-    has_service: hasService,
-  })
+    orders, isLoading, isFetching,
+    page, setPage, pageSize, setPageSize,
+    order, setOrder, orderBy, setOrderBy,
+    statusFilter, setStatusFilter, totalCounts,
+    filtersOpen, setFiltersOpen,
+    buyerUsername, setBuyerUsername,
+    sellerUsername, setSellerUsername,
+    hasMarketListings, setHasMarketListings,
+    hasService, setHasService,
+    debouncedBuyerUsername, debouncedSellerUsername,
+    activeFiltersCount, clearFilters,
+  } = useOrderSearch({ mine, assigned, contractor, username: profile?.username })
 
   const tabs = [
     ["all", t("orders.tabs.all")],
@@ -500,53 +460,6 @@ export function OrdersViewPaginated(props: {
       ].indexOf(statusFilter),
     [statusFilter],
   )
-
-  const totalCounts = useMemo(() => {
-    if (!orders?.item_counts) {
-      return {
-        all: 0,
-        active: 0,
-        past: 0,
-        fulfilled: 0,
-        "in-progress": 0,
-        "not-started": 0,
-        cancelled: 0,
-      }
-    }
-
-    return {
-      all: Object.values(orders?.item_counts || {}).reduce((x, y) => x + y, 0),
-      active:
-        (orders?.item_counts["not-started"] || 0) +
-        (orders?.item_counts["in-progress"] || 0),
-      past:
-        (orders?.item_counts["cancelled"] || 0) +
-        (orders?.item_counts["fulfilled"] || 0),
-      ...orders?.item_counts,
-    }
-  }, [orders])
-
-  // Count active filters
-  const activeFiltersCount = useMemo(() => {
-    let count = 0
-    if (debouncedBuyerUsername) count++
-    if (debouncedSellerUsername) count++
-    if (hasMarketListings !== undefined) count++
-    if (hasService !== undefined) count++
-    return count
-  }, [
-    debouncedBuyerUsername,
-    debouncedSellerUsername,
-    hasMarketListings,
-    hasService,
-  ])
-
-  const clearFilters = () => {
-    setBuyerUsername("")
-    setSellerUsername("")
-    setHasMarketListings(undefined)
-    setHasService(undefined)
-  }
 
   return (
     <Grid item xs={12}>
