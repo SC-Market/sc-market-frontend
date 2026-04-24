@@ -144,7 +144,7 @@ export function BlueprintBrowser() {
 
   const filteredBlueprints = useMemo(() => {
     if (!hasMissionSource) return allBlueprints
-    return allBlueprints.filter((bp: any) => bp.mission_count > 0)
+    return allBlueprints.filter((bp) => bp.mission_count > 0)
   }, [allBlueprints, hasMissionSource])
 
   const hasMore = data ? page * data.page_size < data.total : false
@@ -370,7 +370,7 @@ export function BlueprintBrowser() {
                           </TableCell>
                           <TableCell>
                             <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap sx={{ maxWidth: 200 }}>
-                              {(bp.ingredients || []).slice(0, 4).map((ing: any, i: number) => {
+                              {(bp.ingredients || []).slice(0, 4).map((ing, i: number) => {
                                 const short = ing.name.replace(/[aeiou]/gi, "").slice(0, 4).toUpperCase() || ing.name.slice(0, 4).toUpperCase()
                                 const qty = ing.quantity_required.toFixed(2)
                                 return (

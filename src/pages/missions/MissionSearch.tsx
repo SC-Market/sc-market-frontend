@@ -109,7 +109,7 @@ export function MissionSearch() {
   const [page, setPage] = useState(1)
   const [allMissions, setAllMissions] = useState<any[]>([])
   const [viewMode, setViewMode] = useState<"list" | "grid">(() => (localStorage.getItem("missions-view") as "list" | "grid") || "list")
-  const handleViewModeChange = (_: any, v: "list" | "grid" | null) => { if (v) { setViewMode(v); localStorage.setItem("missions-view", v) } }
+  const handleViewModeChange = (_: React.MouseEvent<HTMLElement>, v: "list" | "grid" | null) => { if (v) { setViewMode(v); localStorage.setItem("missions-view", v) } }
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"))
   const [filterOpen, setFilterOpen] = useState(false)
   const bottomNavHeight = useBottomNavHeight()
@@ -326,7 +326,7 @@ export function MissionSearch() {
                           <TableCell>
                             {(m.hauling_orders?.length ?? 0) > 0 ? (
                               <Stack direction="row" spacing={0.25} flexWrap="wrap" useFlexGap>
-                                {m.hauling_orders!.map((h: any, i: number) => (
+                                {m.hauling_orders!.map((h, i: number) => (
                                   <Tooltip key={i} title={h.resource_name} arrow>
                                     <Chip label={h.resource_name.split(/[\s,]+/).filter(Boolean).map((w: string) => w[0]).join("").slice(0, 4).toUpperCase()}
                                       size="small" sx={{ height: 18, fontSize: "0.6rem", fontFamily: "monospace", bgcolor: "action.selected" }} />
