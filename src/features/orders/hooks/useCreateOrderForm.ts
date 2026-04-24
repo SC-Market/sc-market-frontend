@@ -125,8 +125,7 @@ export function useCreateOrderForm(params: UseCreateOrderFormParams) {
       try {
         await updateAvailability({
           selections: spans,
-          contractor: contractor_id || undefined,
-          seller_username: assigned_to || undefined,
+          contractor: contractor_id || null,
         }).unwrap()
         if (contractor_id) refetchContractorRequirement()
         if (assigned_to) refetchUserRequirement()
