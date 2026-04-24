@@ -51,29 +51,19 @@ export function MissionRankCalculator({ reputationReward, rewardScope, rewardFac
     return /exalted|ally|best|loved/.test(firstName)
   }, [ranks])
 
-  const displayRanks = useMemo(() => ranks, [ranks])
+  const displayRanks = useMemo(() => isNegativeRep ? [...ranks].reverse() : ranks, [ranks, isNegativeRep])
 
   // Find the min rank index based on the required standing threshold
   const minRankIndex = useMemo(() => {
     if (requiredRank == null) return 0
-    const idx = displayRanks.findIndex((r) => r.threshold >= requiredRank)
+    const idx = displayRanks.findIndex((r) => {
+      return isNegativeRep ? r.threshold <= requiredRank : r.threshold >= requiredRank
+    })
     return idx >= 0 ? idx : 0
-  }, [requiredRank, displayRanks])
+  }, [requiredRank, displayRanks, isNegativeRep])
 
   if (isLoading) return <Typography variant="body2" color="text.secondary">Loading ranks...</Typography>
   if (!ranks.length) return <Alert severity="info">No rank data available for {scopeDisplayName}</Alert>
-
-  // Affinity scopes have negative thresholds and sliding scale — not suitable for a grind calculator
-  if (isNegativeRep || ranks.some((r) => r.threshold < 0)) {
-    return (
-      <Alert severity="info">
-        This mission affects your <strong>{scopeDisplayName}</strong> standing
-        {rewardFaction ? ` with ${rewardFaction}` : ""}.
-        {" "}Completing it will {reputationReward > 0 ? "increase" : "decrease"} your reputation by{" "}
-        <strong>{Math.abs(reputationReward).toLocaleString()} XP</strong> per run.
-      </Alert>
-    )
-  }
 
   return (
     <Box>
@@ -120,7 +110,11 @@ export function MissionRankCalculator({ reputationReward, rewardScope, rewardFac
           {displayRanks.map((rank, i) => {
             const isBelowMin = i < minRankIndex
             const minThreshold = displayRanks[minRankIndex]?.threshold ?? 0
-            const xpFromMin = rank.threshold - minThreshold
+            // For negative rep: XP goes down, so distance is minThreshold - rank.threshold
+            // For positive rep: XP goes up, so distance is rank.threshold - minThreshold
+            const xpFromMin = isNegativeRep
+              ? minThreshold - rank.threshold
+              : rank.threshold - minThreshold
             const absXpPerRun = Math.abs(xpPerRun) || 1
             const runsNeeded = xpFromMin > 0 ? Math.ceil(xpFromMin / absXpPerRun) : 0
 
