@@ -238,7 +238,7 @@ export function CartItemEntryV2(props: {
                 endAdornment: (
                   <InputAdornment position="start">
                     {t("cart.ofAvailable", {
-                      available: item.quantity_available.toLocaleString(),
+                      available: (item.quantity_available ?? 0).toLocaleString(),
                     })}
                   </InputAdornment>
                 ),

@@ -11,6 +11,56 @@ export default [
   jsxA11y.flatConfigs.recommended,
   eslintPluginPrettierRecommended,
   ...tseslint.configs.recommended,
+
+  // ── Architecture boundary: features/*/domain/ must be pure ──
+  // No React, MUI, or store imports in domain files
+  {
+    files: ["src/features/*/domain/**/*.ts"],
+    rules: {
+      "no-restricted-imports": [
+        "error",
+        {
+          patterns: [
+            { group: ["react", "react-dom"], message: "domain/ must be pure — no React imports" },
+            { group: ["@mui/*"], message: "domain/ must be pure — no MUI imports" },
+            { group: ["*/store/*"], message: "domain/ must be pure — no store imports" },
+          ],
+        },
+      ],
+    },
+  },
+
+  // ── Architecture boundary: components/ must not access the store ──
+  {
+    files: ["src/components/**/*.tsx", "src/components/**/*.ts"],
+    rules: {
+      "no-restricted-imports": [
+        "warn",
+        {
+          patterns: [
+            { group: ["*/store/*"], message: "Shared components should not import from store/ — receive data via props instead (see ARCHITECTURE.md)" },
+          ],
+        },
+      ],
+    },
+  },
+
+  // ── Architecture boundary: no new code should import old store slices ──
+  // Warn on direct imports from legacy store slices (not store/api/)
+  {
+    files: ["src/features/**/*.ts", "src/features/**/*.tsx"],
+    rules: {
+      "no-restricted-imports": [
+        "warn",
+        {
+          patterns: [
+            { group: ["*/store/profile", "*/store/contractor", "*/store/offer", "*/store/orders", "*/store/services", "*/store/recruiting", "*/store/notification", "*/store/moderation", "*/store/public_contracts", "*/store/admin", "*/store/ships", "*/store/orderSettings", "*/store/comments", "*/store/transactions", "*/store/commodities", "*/store/organizations"], message: "Use feature-owned API slices (features/*/api/) instead of legacy store slices (see DECOUPLING_PLAN.md)" },
+          ],
+        },
+      ],
+    },
+  },
+
   {
     plugins: {
       "react-hooks": reactHooks,
