@@ -36,14 +36,13 @@ const MISSION_CATEGORIES: SearchToken[] = [
 ].map(c => ({ type: "category" as const, label: c, value: c }))
 
 const MISSION_GIVERS: SearchToken[] = [
-  "Vaughn", "Adagio Holdings", "Bounty Hunters Guild", "Headhunters",
-  "Crusader Security", "Hurston Security", "MicroTech Security",
-  "Citizens for Prosperity", "Reclamation & Disposal Ormond",
+  "Vaughn", "Adagio Holdings", "Citizens for Prosperity",
+  "Reclamation & Disposal Ormond", "Miles Eckhart", "Twitch Pacheco",
 ].map(g => ({ type: "giver" as const, label: g, value: g }))
 
 const MISSION_FACTIONS: SearchToken[] = [
-  "Vaughn", "Adagio Holdings", "Bounty Hunters Guild", "Headhunters",
-  "Crusader Security", "Hurston Security",
+  "Bounty Hunters Guild", "Headhunters", "Crusader Security",
+  "Hurston Security", "MicroTech Security", "UEE Navy",
 ].map(f => ({ type: "faction" as const, label: f, value: f }))
 
 // === Blueprint suggestions ===
@@ -70,9 +69,9 @@ const BP_TAGS: SearchToken[] = [
 ]
 
 const TYPE_COLORS: Record<string, "default" | "primary" | "secondary" | "error" | "info" | "success" | "warning"> = {
-  system: "info", category: "primary", giver: "secondary", faction: "secondary",
-  tag: "warning", event: "success", query: "default", material: "info",
-  rarity: "warning", manufacturer: "secondary",
+  system: "info", category: "primary", giver: "secondary", faction: "success",
+  tag: "warning", event: "error", query: "default", material: "info",
+  rarity: "secondary", manufacturer: "default",
 }
 
 interface UnifiedSearchBarProps {

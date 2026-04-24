@@ -16,6 +16,7 @@ import {
 } from "@mui/material"
 import { Bookmark, BookmarkBorder, Circle, PlaylistAddRounded } from "@mui/icons-material"
 import { formatCategoryName } from "../../util/categoryDisplay"
+import { useNavigate } from "react-router-dom"
 import { getResourceCategoryIcon, getCommodityColor, getItemCategoryColor } from "../../util/gameIcons"
 
 const microChip = { height: 18, fontSize: "0.65rem", fontWeight: "bold", textTransform: "uppercase" as const }
@@ -95,6 +96,7 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
   onBookmarkToggle,
   onWishlistAdd,
 }) => {
+  const nav = useNavigate()
   const ings = bp.ingredients || []
 
   if (viewMode === "grid") {
@@ -145,11 +147,12 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
           </CardContent>
 
           <CardActions disableSpacing sx={{ px: 1.5, pt: 0, pb: 0.5, flexWrap: "wrap", gap: 0.25 }}>
-            {bp.user_owns && <Chip label="Owned" size="small" color="success" sx={microChip} />}
-            {bp.source === "default" && <Chip label="Default" size="small" variant="outlined" sx={microChip} />}
-            {bp.rarity && <Chip label={bp.rarity} size="small" sx={{ ...microChip, bgcolor: "info.main", color: "#fff" }} />}
+            {bp.user_owns && <Chip label="Owned" size="small" color="success" clickable onClick={(e) => { e.stopPropagation(); nav("/blueprints?owned=true") }} sx={microChip} />}
+            {bp.source === "default" && <Chip label="Default" size="small" variant="outlined" clickable onClick={(e) => { e.stopPropagation(); nav("/blueprints?source=default") }} sx={microChip} />}
+            {bp.rarity && <Chip label={bp.rarity} size="small" clickable onClick={(e) => { e.stopPropagation(); nav(`/blueprints?rarity=${bp.rarity}`) }} sx={{ ...microChip, bgcolor: "secondary.main", color: "#fff" }} />}
             {bp.tier && <Chip label={`T${bp.tier}`} size="small" sx={{ ...microChip, bgcolor: "warning.main", color: "#fff" }} />}
-            {bp.manufacturer && <Chip label={bp.manufacturer.slice(0, 4).toUpperCase()} size="small" variant="outlined" sx={{ ...microChip, fontFamily: "monospace" }} />}
+            {bp.manufacturer && <Chip label={bp.manufacturer.slice(0, 4).toUpperCase()} size="small" variant="outlined" clickable onClick={(e) => { e.stopPropagation(); nav(`/blueprints?mfr=${bp.manufacturer}`) }} sx={{ ...microChip, fontFamily: "monospace" }} />}
+            {bp.item_category && <Chip label={formatCategoryName(bp.item_category)} size="small" color="primary" clickable onClick={(e) => { e.stopPropagation(); nav(`/blueprints?category=${bp.item_category}`) }} sx={microChip} />}
             {[...new Set((bp.modifier_properties || []).map(modAbbr))].map(tag => (
               <Chip key={tag} label={tag} size="small" color="secondary" variant="outlined" sx={microChip} />
             ))}
@@ -190,11 +193,11 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
           <Box sx={{ flex: 1, minWidth: 0 }}>
             <Typography variant="body2" fontWeight={600} noWrap>{bp.output_item_name}</Typography>
             <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap sx={{ mt: 0.25 }}>
-              {bp.user_owns && <Chip label="Owned" size="small" color="success" sx={microChip} />}
-              {bp.source === "default" && <Chip label="Default" size="small" variant="outlined" sx={microChip} />}
-              {bp.rarity && <Chip label={bp.rarity} size="small" sx={{ ...microChip, bgcolor: "info.main", color: "#fff" }} />}
+              {bp.user_owns && <Chip label="Owned" size="small" color="success" clickable onClick={(e) => { e.stopPropagation(); nav("/blueprints?owned=true") }} sx={microChip} />}
+              {bp.source === "default" && <Chip label="Default" size="small" variant="outlined" clickable onClick={(e) => { e.stopPropagation(); nav("/blueprints?source=default") }} sx={microChip} />}
+              {bp.rarity && <Chip label={bp.rarity} size="small" clickable onClick={(e) => { e.stopPropagation(); nav(`/blueprints?rarity=${bp.rarity}`) }} sx={{ ...microChip, bgcolor: "secondary.main", color: "#fff" }} />}
               {bp.tier && <Chip label={`T${bp.tier}`} size="small" sx={{ ...microChip, bgcolor: "warning.main", color: "#fff" }} />}
-              {bp.manufacturer && <Chip label={bp.manufacturer.slice(0, 4).toUpperCase()} size="small" variant="outlined" sx={{ ...microChip, fontFamily: "monospace" }} />}
+              {bp.manufacturer && <Chip label={bp.manufacturer.slice(0, 4).toUpperCase()} size="small" variant="outlined" clickable onClick={(e) => { e.stopPropagation(); nav(`/blueprints?mfr=${bp.manufacturer}`) }} sx={{ ...microChip, fontFamily: "monospace" }} />}
               {[...new Set((bp.modifier_properties || []).map(modAbbr))].map(tag => (
                 <Chip key={tag} label={tag} size="small" color="secondary" variant="outlined" sx={microChip} />
               ))}
