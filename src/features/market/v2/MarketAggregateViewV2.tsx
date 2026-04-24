@@ -337,7 +337,7 @@ export function MarketAggregateViewV2() {
       headerTitle={game_item.name}
       breadcrumbs={[
         { label: t("sidebar.market_short", "Market"), href: "/market" },
-        ...(game_item.type ? [{ label: game_item.type, href: `/market?type=${encodeURIComponent(game_item.type)}` }] : []),
+        ...(game_item.type && game_item.type !== "Other" ? [{ label: game_item.type, href: `/market?type=${encodeURIComponent(game_item.type)}` }] : []),
         { label: game_item.name || "Item" },
       ]}
       isLoading={isLoading}
