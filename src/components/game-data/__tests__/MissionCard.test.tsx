@@ -32,6 +32,9 @@ describe("MissionCard", () => {
     community_satisfaction_avg: 4.5,
     is_shareable: true,
     is_chain_starter: false,
+    is_chain_mission: false,
+    is_unique_mission: false,
+    ship_encounter_count: 0,
   }
 
   it("renders mission name", () => {
