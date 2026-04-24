@@ -3,39 +3,10 @@ import { MinimalUser } from "../../../datatypes/User"
 import { OrderKind, PaymentType } from "../../orders/domain/types"
 import { unwrapResponse } from "../../../store/api-utils"
 
-export interface PublicContract {
-  id: string
-  title: string
-  customer: MinimalUser
-  description: string
-  kind: OrderKind
-  collateral: number
-  cost: number
-  payment_type: PaymentType
-  timestamp: Date
-  status: string
-  expiration: Date
-}
+// Re-export domain types for backward compatibility
+export type { PublicContract, ContractOfferBody, PublicContractBody } from "../domain/types"
 
-export interface ContractOfferBody {
-  contract_id: string
-  contractor: string | null
-  title: string
-  description: string
-  kind: string
-  collateral: number
-  cost: number
-  payment_type: PaymentType
-}
-
-export interface PublicContractBody {
-  title: string
-  description: string
-  kind: string
-  collateral: number
-  cost: number
-  payment_type: PaymentType
-}
+import type { PublicContract, ContractOfferBody, PublicContractBody } from "../domain/types"
 
 export const publicContractsApi = serviceApi.injectEndpoints({
   endpoints: (builder) => ({

@@ -27,7 +27,7 @@ export {
   OFFER_SEARCH_STATUS,
 } from "../domain/types"
 
-import type { OfferSearchQuery, OfferSession, OfferSessionStub, CounterOfferBody } from "../domain/types"
+import type { OfferSearchQuery, OfferSession, OfferSessionStub, CounterOfferBody, Offer } from "../domain/types"
 
 export const offersApi = serviceApi.injectEndpoints({
   endpoints: (builder) => ({

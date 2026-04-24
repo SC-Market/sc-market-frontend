@@ -3382,6 +3382,8 @@ export type MissionSearchResult = {
   credit_reward_max?: number
   /** Number of blueprint rewards */
   blueprint_reward_count: number
+  /** Names of blueprint reward output items */
+  blueprint_reward_names?: string[]
   /** Average community difficulty rating */
   community_difficulty_avg?: number
   /** Average community satisfaction rating */
