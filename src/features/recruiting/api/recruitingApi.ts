@@ -4,26 +4,10 @@ import type { Contractor } from "../../contractor/domain/types"
 import { RecruitingSearchState } from "../../../hooks/recruiting/RecruitingSearch"
 import { unwrapResponse } from "../../../store/api-utils"
 
-export interface Comment {
-  comment_id: string
-  author: MinimalUser | null
-  content: string
-  replies: Comment[]
-  timestamp: number
-  upvotes: number
-  downvotes: number
-  deleted: boolean
-}
+// Re-export domain types for backward compatibility
+export type { Comment, RecruitingPost } from "../domain/types"
 
-export interface RecruitingPost {
-  post_id: string
-  contractor: Contractor
-  title: string
-  body: string
-  timestamp: number
-  upvotes: number
-  downvotes: number
-}
+import type { RecruitingPost } from "../domain/types"
 
 // Define a service using a base URL and expected endpoints
 export const recruitingApi = serviceApi.injectEndpoints({

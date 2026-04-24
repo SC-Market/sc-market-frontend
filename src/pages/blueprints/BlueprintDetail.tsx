@@ -19,7 +19,7 @@ import {
   Tab,
   Avatar,
 } from "@mui/material"
-import { useGetBlueprintDetailQuery, useGetOrgBlueprintOwnersQuery, useAddBlueprintToInventoryMutation, useRemoveBlueprintFromInventoryMutation } from "../../store/api/v2/market"
+import { useGetBlueprintDetailQuery, useGetOrgBlueprintOwnersQuery, useAddBlueprintToInventoryMutation, useRemoveBlueprintFromInventoryMutation, type BlueprintIngredient, type SlotModifier, type MissionRewardingBlueprint } from "../../store/api/v2/market"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { formatCategoryName } from "../../util/categoryDisplay"
@@ -85,11 +85,11 @@ export function BlueprintDetail() {
 
   // Quality range per ingredient from slot modifiers
   const qualityRanges = useMemo(() => {
-    return ingredients.map((ing: any) => {
+    return ingredients.map((ing: BlueprintIngredient) => {
       const mods = modsBySlot.get(ing.slot_name || ing.game_item?.name) || []
       if (!mods.length) return { min: 0, max: 1000 }
-      const min = Math.min(...mods.map((m: any) => m.start_quality))
-      const max = Math.max(...mods.map((m: any) => m.end_quality))
+      const min = Math.min(...mods.map((m: SlotModifier) => m.start_quality))
+      const max = Math.max(...mods.map((m: SlotModifier) => m.end_quality))
       return { min, max }
     })
   }, [ingredients, modsBySlot])
@@ -118,7 +118,7 @@ export function BlueprintDetail() {
   const combinedModifiers = useMemo(() => {
     const result = new Map<string, number>()
     for (const mod of slotModifiers) {
-      const slotIdx = ingredients.findIndex((ing: any) => (ing.slot_name || ing.game_item?.name) === mod.slot_name)
+      const slotIdx = ingredients.findIndex((ing: BlueprintIngredient) => (ing.slot_name || ing.game_item?.name) === mod.slot_name)
       const qv = qualities[slotIdx] ?? 500
       const factor = interpolateModifier(qv, mod.start_quality, mod.end_quality, mod.modifier_at_start, mod.modifier_at_end)
       result.set(mod.property, (result.get(mod.property) || 1) * factor)
@@ -187,7 +187,7 @@ export function BlueprintDetail() {
                 <TrackChangesRounded sx={{ fontSize: 16, mr: 0.5 }} />Missions ({data.missions_rewarding.length})
               </Typography>
               <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                {missions.map((m: any) => (
+                {missions.map((m: MissionRewardingBlueprint) => (
                   <Chip
                     key={m.mission_id}
                     label={m.mission_name}
@@ -340,7 +340,7 @@ export function BlueprintDetail() {
                   </Stack>
 
                   {/* Stat effects from slot modifiers */}
-                  {(modsBySlot.get(ing.slot_name || ing.game_item?.name) || []).map((mod: any, mi: number) => {
+                  {(modsBySlot.get(ing.slot_name || ing.game_item?.name) || []).map((mod: SlotModifier, mi: number) => {
                     const factor = interpolateModifier(qv, mod.start_quality, mod.end_quality, mod.modifier_at_start, mod.modifier_at_end)
                     const pctChange = (factor - 1) * 100
                     return (

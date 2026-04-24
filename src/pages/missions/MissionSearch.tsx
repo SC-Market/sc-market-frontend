@@ -37,7 +37,7 @@ import {
   useMediaQuery,
 } from "@mui/material"
 import { ViewList, ViewModule, ShieldRounded, BuildRounded } from "@mui/icons-material"
-import { useSearchMissionsQuery } from "../../store/api/v2/market"
+import { useSearchMissionsQuery, type MissionSearchResult } from "../../store/api/v2/market"
 import { useNavigate, useParams, useSearchParams } from "react-router-dom"
 import { useDebounce } from "../../hooks/useDebounce"
 import { useInfiniteScroll } from "../../hooks/useInfiniteScroll"
@@ -107,7 +107,7 @@ export function MissionSearch() {
   const setShowEventMissions = (v: boolean) => updateParam("show_events", v ? "true" : "")
 
   const [page, setPage] = useState(1)
-  const [allMissions, setAllMissions] = useState<any[]>([])
+  const [allMissions, setAllMissions] = useState<MissionSearchResult[]>([])
   const [viewMode, setViewMode] = useState<"list" | "grid">(() => (localStorage.getItem("missions-view") as "list" | "grid") || "list")
   const handleViewModeChange = (_: React.MouseEvent<HTMLElement>, v: "list" | "grid" | null) => { if (v) { setViewMode(v); localStorage.setItem("missions-view", v) } }
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"))

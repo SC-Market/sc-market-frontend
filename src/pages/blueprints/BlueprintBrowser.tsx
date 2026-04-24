@@ -42,7 +42,7 @@ import {
   useMediaQuery,
 } from "@mui/material"
 import { ViewModule, ViewList, RestartAltRounded, FilterList } from "@mui/icons-material"
-import { useSearchBlueprintsQuery, useGetBlueprintCategoriesQuery, useAddBlueprintToInventoryMutation, useRemoveBlueprintFromInventoryMutation } from "../../store/api/v2/market"
+import { useSearchBlueprintsQuery, useGetBlueprintCategoriesQuery, useAddBlueprintToInventoryMutation, useRemoveBlueprintFromInventoryMutation, type BlueprintSearchResult } from "../../store/api/v2/market"
 import { useNavigate, useParams, useSearchParams } from "react-router-dom"
 import { useDebounce } from "../../hooks/useDebounce"
 import { useInfiniteScroll } from "../../hooks/useInfiniteScroll"
@@ -110,7 +110,7 @@ export function BlueprintBrowser() {
   const [filterOpen, setFilterOpen] = useState(false)
   const bottomNavHeight = useBottomNavHeight()
   const [page, setPage] = useState(1)
-  const [allBlueprints, setAllBlueprints] = useState<any[]>([])
+  const [allBlueprints, setAllBlueprints] = useState<BlueprintSearchResult[]>([])
 
   // Debounce search text for performance (Requirement 19.6: <200ms response)
   const debouncedSearch = useDebounce(searchText, 300)
