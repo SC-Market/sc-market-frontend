@@ -11,447 +11,40 @@ import {
   TextField,
   Typography,
 } from "@mui/material"
-import React, { useCallback, useEffect, useState } from "react"
+import React from "react"
 import { Section } from "../../components/paper/Section"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import { PAYMENT_TYPES } from "../../util/constants"
-import throttle from "lodash/throttle"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
-import { store } from "../../store/store"
-import { starmapApi } from "../../store/api/starmap"
-import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { orderIcons } from "../../features/orders/components/orderIcons"
-import type { Service, PaymentType } from "../../features/orders/domain/types"
+import type { Service } from "../../features/orders/domain/types"
 import { MarkdownEditor } from "../../components/markdown/Markdown.lazy"
 import { NumericFormat } from "react-number-format"
 import { SelectPhotosArea } from "../../components/modal/SelectPhotosArea"
-import {
-  useCreateServiceMutation,
-  useUpdateServiceMutation,
-  useUploadServicePhotosMutation,
-} from "../../features/services/api/servicesApi"
-import { useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import {
+  useCreateServiceForm,
+  type ServiceFormState,
+} from "../../features/orders/hooks/useCreateServiceForm"
 
-import { romanize } from "../../features/orders/domain/formatters"
-
-interface StarmapObject {
-  id: string
-  code: string
-  designation: string
-  name: null | string
-  star_system_id: string
-  status: string
-  type: string
-  star_system: {
-    id: string
-    code: string
-    name: null | string
-    type: string
-  }
-}
-
-export interface ServiceState {
-  service_name: string
-  service_description: string
-  title: string
-  rush: boolean
-  description: string
-  type: string
-  collateral: number
-  estimate: number
-  offer: number
-  payment_type: PaymentType
-  departure: StarmapObject | null
-  departureInput: string
-  departChangeTimer: number
-  destination: StarmapObject | null
-  destinationInput: string
-  destChangeTimer: number
-  status: string
-  photos: string[]
-}
+export type { ServiceFormState as ServiceState }
 
 export function CreateServiceForm(props: GridProps & { service?: Service }) {
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
-  const [currentOrg] = useCurrentOrg()
-  const [state, setState] = React.useState<ServiceState>({
-    service_name: "",
-    service_description: "",
-    title: "",
-    rush: false,
-    description: "",
-    type: "",
-    collateral: 0,
-    estimate: 0,
-    offer: 0,
-    payment_type: "one-time",
-    departure: null,
-    departureInput: "",
-    departChangeTimer: Date.now(),
-    destination: null,
-    destinationInput: "",
-    destChangeTimer: Date.now(),
-    status: "active",
-    photos: [],
-  })
-
-  useEffect(() => {
-    if (props.service) {
-      setState({
-        ...props.service,
-        estimate: 0,
-        departure: null,
-        departureInput: "",
-        departChangeTimer: Date.now(),
-        destination: null,
-        destinationInput: "",
-        destChangeTimer: Date.now(),
-        type: props.service.kind,
-        offer: props.service.cost || 0,
-        payment_type: props.service.payment_type || "one-time",
-      })
-    }
-  }, [props.service])
-
-  // Watch for photo updates and sync local state
-  useEffect(() => {
-    if (props.service?.photos) {
-      setState((prev) => ({
-        ...prev,
-        photos: props.service!.photos,
-      }))
-    }
-  }, [props.service?.photos])
-
-  const issueAlert = useAlertHook()
-
-  const [departSuggest, setDepartSuggest] = useState<StarmapObject[]>([])
-  const [destSuggest, setDestSuggest] = useState<StarmapObject[]>([])
-  const [departTarget, setDepartTarget] = useState("")
-  const [destTarget, setDestTarget] = useState("")
-  const [departTargetObject, setDepartTargetObject] =
-    useState<StarmapObject | null>(null)
-  const [destTargetObject, setDestTargetObject] =
-    useState<StarmapObject | null>(null)
-  const [uploadedFiles, setUploadedFiles] = useState<File[]>([])
-  const navigate = useNavigate()
-
-  const getSuggestions = React.useCallback(async (query: string) => {
-    if (query.length < 3) {
-      return []
-    }
-
-    const result = await store.dispatch(
-      starmapApi.endpoints.searchStarmap.initiate({ query }),
-    )
-    if (!result.data) return []
-    const data = result.data as any
-
-    const extended: StarmapObject[] = []
-
-    await Promise.all(
-      (data.objects?.resultset || data.results || []).map(async (obj: StarmapObject) => {
-        if (obj.type === "SATELLITE") {
-          const planetNum = obj.designation.replace(/\D/g, "")
-          const planetDes = `${obj.star_system.name} ${romanize(
-            parseInt(planetNum),
-          )}`
-
-          extended.push(...(await getSuggestions(planetDes)))
-        }
-      }),
-    )
-    extended.push(...(data.objects?.resultset || data.results || []))
-
-    return extended
-  }, [])
-
-  const retrieveDepart = React.useMemo(
-    () =>
-      throttle(async (query: string) => {
-        const suggestions = await getSuggestions(query)
-        setDepartSuggest(suggestions)
-      }, 400),
-    [getSuggestions],
-  )
-  const retrieveDest = React.useMemo(
-    () =>
-      throttle(async (query: string) => {
-        const suggestions = await getSuggestions(query)
-        setDestSuggest(suggestions)
-      }, 400),
-    [getSuggestions],
-  )
-
-  const handleFileUpload = useCallback((files: File[]) => {
-    console.log(`[Service Photo Upload] Files selected:`, {
-      count: files.length,
-      files: files.map((f) => ({ name: f.name, size: f.size, type: f.type })),
-    })
-    setUploadedFiles((prev) => [...prev, ...files])
-  }, [])
-
-  useEffect(() => {
-    retrieveDepart(departTarget)
-  }, [departTarget, retrieveDepart])
-  useEffect(() => {
-    retrieveDest(destTarget)
-  }, [destTarget, retrieveDest])
-
-  const [
-    createService, // This is the mutation trigger
-  ] = useCreateServiceMutation()
-
-  const [
-    updateService, // This is the mutation trigger
-  ] = useUpdateServiceMutation()
-
-  const [uploadServicePhotos, { isLoading: isUploadingPhotos }] =
-    useUploadServicePhotosMutation()
-
-  const submitService = useCallback(
-    async (event: any) => {
-      // event.preventDefault();
-
-      // Combine existing photos with uploaded files
-      const allPhotos = [...state.photos]
-
-      console.log(`[Service Photo Upload] Submitting service:`, {
-        existing_photos: state.photos,
-        uploaded_files: uploadedFiles.map((f) => ({
-          name: f.name,
-          size: f.size,
-          type: f.type,
-        })),
-        photos_to_send: allPhotos, // Only normal photo URLs, not uploaded file names
-        service_name: state.service_name,
-        service_type: props.service ? "update" : "create",
-      })
-
-      if (props.service) {
-        console.log(
-          `[Service Photo Upload] Updating service ${props.service.service_id}`,
-        )
-
-        const serviceId = props.service.service_id // Store service ID for use in async callbacks
-
-        updateService({
-          service_id: serviceId,
-          body: {
-            service_name: state.service_name,
-            service_description: state.service_description,
-            title: state.title,
-            rush: state.rush,
-            description: state.description,
-            kind: state.type, // ? state.type : null,
-            collateral: state.collateral,
-            departure: departTargetObject ? departTargetObject.code : null,
-            destination: destTargetObject ? destTargetObject.code : null,
-            cost: state.offer,
-            payment_type: state.payment_type,
-            contractor: currentOrg?.spectrum_id,
-            status: state.status,
-            photos: allPhotos,
-          },
-        })
-          .unwrap()
-          .then(async () => {
-            console.log(
-              `[Service Photo Upload] Service update successful for ${serviceId}`,
-            )
-
-            // Upload any pending files if they exist
-            if (uploadedFiles.length > 0) {
-              console.log(
-                `[Service Photo Upload] Uploading photos for updated service ${serviceId}`,
-              )
-
-              uploadServicePhotos({
-                service_id: serviceId,
-                photos: uploadedFiles,
-              })
-                .unwrap()
-                .then((uploadResult) => {
-                  console.log(
-                    `[Service Photo Upload] Photos uploaded successfully:`,
-                    {
-                      service_id: serviceId,
-                      result: uploadResult,
-                      photo_urls: uploadResult.photos,
-                    },
-                  )
-                  // Clear uploaded files after successful photo upload
-                  setUploadedFiles([])
-                })
-                .catch((uploadError) => {
-                  console.error(
-                    `[Service Photo Upload] Photo upload failed:`,
-                    uploadError,
-                  )
-                  // Issue alert for failed photo upload
-                  issueAlert(uploadError)
-                  // Continue with redirect even if photo upload fails
-                })
-            }
-
-            setState({
-              service_name: "",
-              service_description: "",
-              title: "",
-              rush: false,
-              description: "",
-              type: "",
-              collateral: 0,
-              estimate: 0,
-              offer: 0,
-              payment_type: "one-time",
-              departure: null,
-              departureInput: "",
-              departChangeTimer: Date.now(),
-              destination: null,
-              destinationInput: "",
-              destChangeTimer: Date.now(),
-              status: "active",
-              photos: [],
-            })
-
-            issueAlert({
-              message: t("CreateServiceForm.alert.submitted"),
-              severity: "success",
-            })
-
-            navigate("/order/services")
-          })
-          .catch((err) => {
-            console.error(
-              `[Service Photo Upload] Service update failed for ${serviceId}:`,
-              {
-                service_id: serviceId,
-                error: err,
-                error_message: (err as any)?.message || "Unknown error",
-                error_status: (err as any)?.status || "No status",
-              },
-            )
-            issueAlert(err)
-          })
-      } else {
-        console.log(`[Service Photo Upload] Creating new service`)
-        createService({
-          service_name: state.service_name,
-          service_description: state.service_description,
-          title: state.title,
-          rush: state.rush,
-          description: state.description,
-          kind: state.type, // ? state.type : null,
-          collateral: state.collateral,
-          departure: departTargetObject ? departTargetObject.code : null,
-          destination: destTargetObject ? destTargetObject.code : null,
-          cost: state.offer,
-          payment_type: state.payment_type,
-          contractor: currentOrg?.spectrum_id,
-          status: state.status,
-          photos: allPhotos,
-        })
-          .unwrap()
-          .then(async (result) => {
-            const serviceId = result.service_id
-            console.log(
-              `[Service Photo Upload] Service creation successful: ${serviceId}`,
-            )
-
-            // Upload any pending files if they exist
-            if (uploadedFiles.length > 0) {
-              console.log(
-                `[Service Photo Upload] Uploading photos for new service ${serviceId}`,
-              )
-
-              uploadServicePhotos({
-                service_id: serviceId,
-                photos: uploadedFiles,
-              })
-                .unwrap()
-                .then((uploadResult) => {
-                  console.log(
-                    `[Service Photo Upload] Photos uploaded successfully:`,
-                    {
-                      service_id: serviceId,
-                      result: uploadResult,
-                      photo_urls: uploadResult.photos,
-                    },
-                  )
-                })
-                .catch((uploadErr) => {
-                  issueAlert(uploadErr)
-                })
-            }
-
-            setState({
-              service_name: "",
-              service_description: "",
-              title: "",
-              rush: false,
-              description: "",
-              type: "",
-              collateral: 0,
-              estimate: 0,
-              offer: 0,
-              payment_type: "one-time",
-              departure: null,
-              departureInput: "",
-              departChangeTimer: Date.now(),
-              destination: null,
-              destinationInput: "",
-              destChangeTimer: Date.now(),
-              status: "active",
-              photos: [],
-            })
-
-            // Clear uploaded files after successful submission
-            setUploadedFiles([])
-
-            issueAlert({
-              message: t("CreateServiceForm.alert.submitted"),
-              severity: "success",
-            })
-
-            // Redirect to the service edit page
-            navigate(`/order/service/${serviceId}/edit`)
-          })
-          .catch((err) => {
-            issueAlert(err)
-          })
-      }
-
-      return false
-    },
-    [
-      createService,
-      currentOrg?.spectrum_id,
-      departTargetObject,
-      destTargetObject,
-      props.service,
-      issueAlert,
-      state.collateral,
-      state.description,
-      state.offer,
-      state.payment_type,
-      state.rush,
-      state.status,
-      state.service_description,
-      state.service_name,
-      state.title,
-      state.type,
-      state.photos,
-      uploadedFiles,
-      updateService,
-      uploadServicePhotos,
-      t, // add t to dependencies
-    ],
-  )
+  const {
+    state, setState,
+    departSuggest, destSuggest,
+    departTarget, setDepartTarget,
+    destTarget, setDestTarget,
+    departTargetObject, setDepartTargetObject,
+    destTargetObject, setDestTargetObject,
+    uploadedFiles, handleFileUpload, removePendingFile,
+    isUploadingPhotos,
+    submitService,
+    issueAlert,
+  } = useCreateServiceForm(props.service)
 
   return (
     // <FormControl component={Grid} item xs={12} container spacing={2}>
@@ -573,7 +166,7 @@ export function CreateServiceForm(props: GridProps & { service?: Service }) {
               showUploadButton={true}
               pendingFiles={uploadedFiles}
               onRemovePendingFile={(file) => {
-                setUploadedFiles((prev) => prev.filter((f) => f !== file))
+                removePendingFile(file)
               }}
               onAlert={(severity, message) => issueAlert({ severity, message })}
             />
