@@ -1,8 +1,5 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react"
+import React from "react"
 import {
-  Autocomplete,
-  Avatar,
-  Box,
   Button,
   Chip,
   Dialog,
@@ -13,165 +10,33 @@ import {
   Grid,
   Paper,
   TextField,
+  Autocomplete,
+  Avatar,
+  Box,
   Typography,
 } from "@mui/material"
-import { GridColDef } from "@mui/x-data-grid"
-import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
-import throttle from "lodash/throttle"
-import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
-import {
-  useGetContractorBySpectrumIDQuery,
-  useArchiveContractorMutation,
-  useLeaveContractorMutation,
-  useTransferOwnershipMutation,
-  useGetContractorMembersQuery,
-  contractorsApi,
-} from "../../features/contractor/api/contractorApi"
 import { ThemedDataGrid } from "../../components/grid/ThemedDataGrid"
+import { GridColDef } from "@mui/x-data-grid"
 import { useTranslation } from "react-i18next"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
-import { MinimalUser } from "../../datatypes/User"
-import { store } from "../../store/store"
+import LoadingButton from "@mui/lab/LoadingButton"
+import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
+import { useGetContractorBySpectrumIDQuery } from "../../features/contractor/api/contractorApi"
+import { useManageContractors } from "../../features/contractor/hooks/useManageContractors"
 
 export function SettingsManageContractors() {
   const { t } = useTranslation()
-  const { data: profile } = useGetUserProfileQuery()
-
-  const [leaveOrg] = useLeaveContractorMutation()
-  const [archiveContractor, { isLoading: isArchiving }] =
-    useArchiveContractorMutation()
-  const [transferOwnership, { isLoading: isTransferring }] =
-    useTransferOwnershipMutation()
-  const issueAlert = useAlertHook()
-
-  const [archiveTarget, setArchiveTarget] = useState<{
-    spectrum_id: string
-    name: string
-  } | null>(null)
-  const [archiveReason, setArchiveReason] = useState("")
-
-  const [transferTarget, setTransferTarget] = useState<{
-    spectrum_id: string
-    name: string
-  } | null>(null)
-  const [transferSearchQuery, setTransferSearchQuery] = useState("")
-  const [transferSelectedUser, setTransferSelectedUser] = useState<{
-    username: string
-    display_name: string
-    avatar?: string
-  } | null>(null)
-  const [transferSearchOptions, setTransferSearchOptions] = useState<
-    MinimalUser[]
-  >([])
-
-  const handleLeaveOrg = (spectrum_id: string) => {
-    leaveOrg(spectrum_id)
-  }
-
-  const handleArchiveOrg = () => {
-    if (!archiveTarget) return
-    archiveContractor({
-      spectrum_id: archiveTarget.spectrum_id,
-      reason: archiveReason.trim() || undefined,
-    })
-      .unwrap()
-      .then(() => {
-        issueAlert({
-          message: t("settingsManageContractors.disband_org_success", {
-            name: archiveTarget.name,
-          }),
-          severity: "success",
-        })
-        setArchiveTarget(null)
-        setArchiveReason("")
-      })
-      .catch(() => {
-        issueAlert({
-          message: t("settingsManageContractors.disband_org_error", {
-            name: archiveTarget.name,
-          }),
-          severity: "error",
-        })
-      })
-  }
-
-  // Get members for the transfer target contractor
-  const { data: transferMembersData } = useGetContractorMembersQuery(
-    {
-      spectrum_id: transferTarget?.spectrum_id || "",
-      page: 0,
-      page_size: 100,
-      search: "",
-      role_filter: "",
-      sort: "username",
-    },
-    { skip: !transferTarget },
-  )
-
-  const transferMembers = transferMembersData?.members || []
-
-  const fetchTransferOptions = useCallback(
-    async (query: string) => {
-      if (!transferTarget || query.length < 3) {
-        setTransferSearchOptions([])
-        return
-      }
-
-      const { status, data, error } = await store.dispatch(
-        contractorsApi.endpoints.searchContractorMembers.initiate({
-          spectrum_id: transferTarget.spectrum_id,
-          query: query,
-        }),
-      )
-
-      setTransferSearchOptions(data || [])
-    },
-    [transferTarget],
-  )
-
-  const retrieveTransfer = useMemo(
-    () =>
-      throttle((query: string) => {
-        fetchTransferOptions(query)
-      }, 400),
-    [fetchTransferOptions],
-  )
-
-  useEffect(() => {
-    retrieveTransfer(transferSearchQuery)
-  }, [transferSearchQuery, retrieveTransfer])
-
-  const handleTransferOwnership = () => {
-    if (!transferTarget || !transferSelectedUser) return
-    transferOwnership({
-      contractor: transferTarget.spectrum_id,
-      username: transferSelectedUser.username,
-    })
-      .unwrap()
-      .then(() => {
-        issueAlert({
-          message: t("settingsManageContractors.transfer_ownership_success", {
-            name: transferTarget.name,
-            username: transferSelectedUser.username,
-          }),
-          severity: "success",
-        })
-        setTransferTarget(null)
-        setTransferSearchQuery("")
-        setTransferSelectedUser(null)
-        setTransferSearchOptions([])
-      })
-      .catch((error: any) => {
-        issueAlert({
-          message:
-            error?.data?.message ||
-            t("settingsManageContractors.transfer_ownership_error", {
-              name: transferTarget.name,
-            }),
-          severity: "error",
-        })
-      })
-  }
+  const {
+    profile,
+    archiveTarget, setArchiveTarget, archiveReason, setArchiveReason,
+    isArchiving, handleArchiveOrg,
+    transferTarget, setTransferTarget,
+    transferSearchQuery, setTransferSearchQuery,
+    transferSelectedUser, setTransferSelectedUser,
+    transferSearchOptions, transferMembers,
+    setTransferSearchOptions,
+    isTransferring, handleTransferOwnership,
+    handleLeaveOrg,
+  } = useManageContractors()
 
   const columns: GridColDef[] = [
     {
@@ -187,69 +52,17 @@ export function SettingsManageContractors() {
       minWidth: 300,
       sortable: false,
       align: "right",
-      renderCell: ({ row }) => {
-        const { data: contractor } = useGetContractorBySpectrumIDQuery(
-          row.spectrum_id,
-        )
-
-        const ownerRole = contractor?.owner_role
-
-        // Check if user is owner using profile contractors
-        const userContractor = profile?.contractors?.find(
-          (c) => c.spectrum_id === contractor?.spectrum_id,
-        )
-        const isOwner =
-          ownerRole && userContractor?.roles.find((r) => r === ownerRole)
-
-        if (contractor?.archived || row.archived) {
-          return <Chip label={t("settingsManageContractors.archived_label")} />
-        }
-
-        if (isOwner) {
-          return (
-            <>
-              <Button
-                variant="outlined"
-                color="primary"
-                onClick={() =>
-                  setTransferTarget({
-                    spectrum_id: row.spectrum_id,
-                    name: row.name,
-                  })
-                }
-                sx={{ mr: 1 }}
-              >
-                {t("settingsManageContractors.transfer_ownership")}
-              </Button>
-              <Button
-                variant="contained"
-                color="error"
-                onClick={() =>
-                  setArchiveTarget({
-                    spectrum_id: row.spectrum_id,
-                    name: row.name,
-                  })
-                }
-              >
-                {t("settingsManageContractors.disband_org")}
-              </Button>
-            </>
-          )
-        }
-
-        return (
-          <Button
-            variant="outlined"
-            color="error"
-            onClick={() => handleLeaveOrg(row.spectrum_id)}
-          >
-            {t("settingsManageContractors.leave_org")}
-          </Button>
-        )
-      },
+      renderCell: ({ row }) => (
+        <ContractorActions
+          row={row}
+          profile={profile}
+          onTransfer={(spectrum_id, name) => setTransferTarget({ spectrum_id, name })}
+          onArchive={(spectrum_id, name) => setArchiveTarget({ spectrum_id, name })}
+          onLeave={handleLeaveOrg}
+        />
+      ),
     },
   ]
-
   return (
     <Grid item xs={12}>
       <Paper>
@@ -440,5 +253,46 @@ export function SettingsManageContractors() {
         </DialogActions>
       </Dialog>
     </Grid>
+  )
+}
+
+function ContractorActions(props: {
+  row: any
+  profile: any
+  onTransfer: (spectrum_id: string, name: string) => void
+  onArchive: (spectrum_id: string, name: string) => void
+  onLeave: (spectrum_id: string) => void
+}) {
+  const { row, profile, onTransfer, onArchive, onLeave } = props
+  const { t } = useTranslation()
+  const { data: contractor } = useGetContractorBySpectrumIDQuery(row.spectrum_id)
+
+  const ownerRole = contractor?.owner_role
+  const userContractor = profile?.contractors?.find(
+    (c: any) => c.spectrum_id === contractor?.spectrum_id,
+  )
+  const isOwner = ownerRole && userContractor?.roles.find((r: string) => r === ownerRole)
+
+  if (contractor?.archived || row.archived) {
+    return <Chip label={t("settingsManageContractors.archived_label")} />
+  }
+
+  if (isOwner) {
+    return (
+      <>
+        <Button variant="outlined" color="primary" onClick={() => onTransfer(row.spectrum_id, row.name)} sx={{ mr: 1 }}>
+          {t("settingsManageContractors.transfer_ownership")}
+        </Button>
+        <Button variant="contained" color="error" onClick={() => onArchive(row.spectrum_id, row.name)}>
+          {t("settingsManageContractors.disband_org")}
+        </Button>
+      </>
+    )
+  }
+
+  return (
+    <Button variant="outlined" color="error" onClick={() => onLeave(row.spectrum_id)}>
+      {t("settingsManageContractors.leave_org")}
+    </Button>
   )
 }
