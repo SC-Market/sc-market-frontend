@@ -23,17 +23,25 @@ interface CustomTab {
   icon: string
 }
 
-const DEFAULT_ICON = "DashboardRounded"
+const DEFAULT_ICON = "link"
 
-const ALWAYS_ON_KEYS = ["overview", "store", "services"]
+const ALWAYS_ON_KEYS = [
+  "sc_market_home",
+  "orders_assigned",
+  "messaging",
+  "manage_listings",
+  "manage_stock",
+  "manage_services",
+  "availability",
+]
 
 const TOGGLEABLE_TABS = [
-  { key: "orders", label: "Orders" }, { key: "offers", label: "Offers" }, { key: "contracts", label: "Contracts" },
-  { key: "recruiting", label: "Recruiting" }, { key: "fleet", label: "Fleet" }, { key: "members", label: "Members" },
-  { key: "roles", label: "Roles" }, { key: "settings", label: "Settings" }, { key: "money", label: "Money" },
-  { key: "invites", label: "Invites" }, { key: "webhooks", label: "Webhooks" }, { key: "audit_logs", label: "Audit Logs" },
-  { key: "blocklist", label: "Blocklist" }, { key: "white_label", label: "White Label" },
-]
+  { key: "market", label: "Player Market" },
+  { key: "services", label: "Services" },
+  { key: "contracts", label: "Contracts" },
+  { key: "recruiting", label: "Recruiting" },
+  { key: "contractors", label: "Organizations" },
+] as const
 
 function isExternal(path: string): boolean {
   return path.startsWith("http://") || path.startsWith("https://")
