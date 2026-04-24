@@ -295,9 +295,6 @@ export function BlueprintBrowser() {
           {/* Results */}
           {data && (
             <>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                Found {data.total} blueprints
-              </Typography>
 
               {/* Grid View */}
               {viewMode === "grid" && (
