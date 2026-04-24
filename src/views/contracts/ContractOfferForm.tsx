@@ -1,134 +1,34 @@
-import {
-  FormControl,
-  Grid,
-  InputAdornment,
-  MenuItem,
-  TextField,
-  Typography,
-} from "@mui/material"
-import { orderIcons } from "../../features/orders/components/orderIcons"
-import type { OrderKind, PaymentType } from "../../features/orders/domain/types"
-import React, { useCallback, useState } from "react"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
-import { useNavigate } from "react-router-dom"
+import React from "react"
+import { Button, Grid, InputAdornment, MenuItem, TextField, Typography } from "@mui/material"
 import { Section } from "../../components/paper/Section"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
+import { PAYMENT_TYPES } from "../../util/constants"
+import { orderIcons } from "../../features/orders/components/orderIcons"
+import type { OrderKind, PaymentType } from "../../features/orders/domain/types"
+import type { PublicContract } from "../../features/contracting/domain/types"
 import { NumericFormat } from "react-number-format"
 import LoadingButton from "@mui/lab/LoadingButton"
-import {
-  PublicContract,
-  useCreateContractOfferMutation,
-  useCreatePublicContractMutation,
-} from "../../features/contracting/api/publicContractsApi"
-import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
-import { OrgDetails, UserDetails } from "../../components/list/UserDetails"
-import {
-  useGetUserByUsernameQuery,
-  useGetUserProfileQuery,
-} from "../../features/profile/api/profileApi"
-import { MinimalUser } from "../../datatypes/User"
-import { PAYMENT_TYPES } from "../../util/constants"
 import { useTranslation } from "react-i18next"
-import {
-  useCheckContractorOrderLimitsQuery,
-  useCheckUserOrderLimitsQuery,
-} from "../../features/orders/api/orderSettingsApi"
-import { OrderLimitsDisplay } from "../../components/orders/OrderLimitsDisplay"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { OrderLimitsDisplay } from "../../components/orders/OrderLimitsDisplay"
+import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
+import { OrgDetails, UserDetails } from "../../components/list/UserDetails"
+import { useContractOfferForm } from "../../features/contracting/hooks/useContractOfferForm"
 
 export function ContractOfferForm(props: { contract: PublicContract }) {
   const { contract } = props
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
+
+  const {
+    title, setTitle, description, setDescription,
+    kind, setKind, cost, setCost, collateral, setCollateral,
+    paymentType, setPaymentType,
+    isLoading, submitContractOffer,
+    profile, myUser, orderLimits,
+  } = useContractOfferForm(contract)
   const [currentOrg] = useCurrentOrg()
-  const [title, setTitle] = useState(contract.title)
-  const [description, setDescription] = useState(contract.description)
-  const [kind, setKind] = useState<OrderKind>(contract.kind)
-  const [cost, setCost] = useState(contract.cost)
-  const [collateral, setCollateral] = useState(contract.collateral)
-  const [paymentType, setPaymentType] = useState<PaymentType>(
-    contract.payment_type,
-  )
-
-  const issueAlert = useAlertHook()
-
-  const [
-    createContractOffer, // This is the mutation trigger
-    { isLoading },
-  ] = useCreateContractOfferMutation()
-
-  const navigate = useNavigate()
-  const submitContractOffer = useCallback(
-    async (event: any) => {
-      // event.preventDefault();
-      createContractOffer({
-        contract_id: contract.id,
-        contractor: currentOrg?.spectrum_id || null,
-        title,
-        description,
-        kind,
-        collateral,
-        cost,
-        payment_type: paymentType,
-      })
-        .unwrap()
-        .then((data) => {
-          issueAlert({
-            message: t("createPublicContract.submitted"),
-            severity: "success",
-          })
-
-          navigate(`/offer/${data.session_id}`)
-        })
-        .catch((error) => {
-          if (error?.data?.error?.code === "ORDER_LIMIT_VIOLATION") {
-            issueAlert({
-              message:
-                error.data.error.message ||
-                "Order does not meet size or value requirements",
-              severity: "error",
-            })
-          } else {
-            issueAlert(error)
-          }
-        })
-      return false
-    },
-    [
-      collateral,
-      cost,
-      createContractOffer,
-      description,
-      issueAlert,
-      kind,
-      navigate,
-      paymentType,
-      title,
-      t,
-      currentOrg,
-      contract.id,
-    ],
-  )
-
-  const { data: profile } = useGetUserProfileQuery()
-  const { data: myUser } = useGetUserByUsernameQuery(profile?.username!, {
-    skip: !profile,
-  })
-
-  // Check order limits for the seller (contractor or user making the offer)
-  const { data: contractorLimits } = useCheckContractorOrderLimitsQuery(
-    currentOrg?.spectrum_id || "",
-    { skip: !currentOrg?.spectrum_id },
-  )
-  const { data: userLimits } = useCheckUserOrderLimitsQuery(
-    profile?.username || "",
-    { skip: !profile?.username || !!currentOrg },
-  )
-
-  // Use contractor limits if available, otherwise user limits
-  const orderLimits = contractorLimits || userLimits
-
   return (
     <>
       <Section xs={12}>
