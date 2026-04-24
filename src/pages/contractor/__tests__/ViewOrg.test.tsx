@@ -17,7 +17,7 @@ import { Provider } from "react-redux"
 import { configureStore } from "@reduxjs/toolkit"
 import { describe, it, expect, vi, beforeEach } from "vitest"
 import { ViewOrg } from "../ViewOrg"
-import type { Contractor } from "../../../datatypes/Contractor"
+import type { Contractor } from "../../../features/contractor/domain/types"
 import { ThemeProvider, createTheme } from "@mui/material/styles"
 import { DrawerOpenContext } from "../../../hooks/layout/Drawer"
 

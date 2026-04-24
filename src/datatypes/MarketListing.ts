@@ -1,6 +1,6 @@
 import { MinimalUser } from "./User"
-import { MinimalContractor } from "./Contractor"
-import { Order } from "./Order"
+import { MinimalContractor } from "../features/contractor/domain/types"
+import { Order } from "../features/orders/domain/types"
 
 export const item_types = [
   "Armor",

@@ -1,4 +1,4 @@
-import { Rating } from "./Contractor"
+import { Rating } from "../features/contractor/domain/types"
 
 export interface User {
   username: string

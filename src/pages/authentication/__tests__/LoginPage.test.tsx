@@ -9,7 +9,7 @@ import { ThemeProvider, createTheme } from "@mui/material/styles"
 import { DrawerOpenContext } from "../../../hooks/layout/Drawer"
 import { AlertHookContext } from "../../../hooks/alert/AlertHook"
 import { CurrentOrgContext } from "../../../hooks/login/CurrentOrg"
-import type { Contractor } from "../../../datatypes/Contractor"
+import type { Contractor } from "../../../features/contractor/domain/types"
 
 // Mock the hooks
 vi.mock("../../../features/authentication/hooks/usePageLogin", () => ({
