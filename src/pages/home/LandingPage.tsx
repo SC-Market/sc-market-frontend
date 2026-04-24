@@ -16,7 +16,6 @@ import {
 } from "../../components/landing"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme, radialGlowGradient } from "../../hooks/styles/Theme"
-import { ParticleField } from "../../components/effects/ParticleField"
 
 export function LandingPage() {
   const { t } = useTranslation()
@@ -50,7 +49,6 @@ export function LandingPage() {
         },
       }}
     >
-      {theme.palette.mode === "light" && <ParticleField />}
       <LandingPageLayout
         hero={<LandingHero />}
         statistics={<OrderStatistics />}
