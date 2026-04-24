@@ -1,10 +1,4 @@
 import {
-  useCreateOrderThreadMutation,
-  useSetOrderStatusMutation,
-  useAssignOrderMutation,
-  useUnassignOrderMutation,
-} from "../../features/orders/api/ordersApi"
-import {
   ButtonGroup,
   Chip,
   Grid,
@@ -22,34 +16,18 @@ import {
   Box,
   Button,
 } from "@mui/material"
-import React, { useCallback, useEffect, useMemo, useState } from "react"
+import React, { useEffect } from "react"
 import { OrgDetails, UserDetails } from "../../components/list/UserDetails"
 import { Stack } from "@mui/system"
 import { format } from "../../util/time"
 import { MarkdownRender } from "../../components/markdown/Markdown.lazy"
 import { useCurrentChat, useGetChatByOrderIDQuery } from "../../features/chats"
-import {
-  useGetNotificationsQuery,
-  useNotificationDeleteMutation,
-} from "../../features/notifications/api/notificationApi"
-import { Order } from "../../features/orders/domain/types"
+import type { Order } from "../../features/orders/domain/types"
 import { MessagesBody } from "../../features/chats"
-import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
-import {
-  useGetUserByUsernameQuery,
-  useGetUserProfileQuery,
-} from "../../features/profile/api/profileApi"
 import LoadingButton from "@mui/lab/LoadingButton"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
-import { statusColors, statusNames } from "./OrderList"
-import {
-  useGetContractorBySpectrumIDQuery,
-  useGetContractorMembersQuery,
-  contractorsApi,
-} from "../../features/contractor/api/contractorApi"
+import { statusColors, statusNames } from "../../features/orders/domain/constants"
 import { OrderSummarySection } from "../../components/orders/OrderSummarySection"
 import { OrderSummarySectionV2 } from "../../components/orders/OrderSummarySectionV2"
-import { useGetOrderDetailQuery } from "../../store/api/v2/market"
 import {
   CancelRounded,
   DoneRounded,
@@ -58,16 +36,17 @@ import {
   Close,
   Check,
 } from "@mui/icons-material"
-import { has_permission } from "../contractor/OrgRoles"
 import { PAYMENT_TYPE_MAP } from "../../util/constants"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { useMediaQuery } from "@mui/material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { store } from "../../store/store"
-import { MinimalUser } from "../../datatypes/User"
-import throttle from "lodash/throttle"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
+import {
+  useGetNotificationsQuery,
+  useNotificationDeleteMutation,
+} from "../../features/notifications/api/notificationApi"
+import { useOrderDetails } from "../../features/orders/hooks/useOrderDetails"
 
 export function OrderMessagesArea(props: { order: Order }) {
   const { order } = props
@@ -126,220 +105,21 @@ export function OrderDetailsArea(props: { order: Order }) {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
   const { order } = props
   const { t } = useTranslation()
-  const { data: profile } = useGetUserProfileQuery()
 
-  const [isEditingAssigned, setIsEditingAssigned] = useState(false)
-  const [target, setTarget] = useState("")
-  const [targetObject, setTargetObject] = useState<{
-    username: string
-    display_name: string
-  } | null>(null)
-  const [options, setOptions] = useState<MinimalUser[]>([])
-
-  const issueAlert = useAlertHook()
-  const { data: orderDetailV2 } = useGetOrderDetailQuery({ orderId: order.order_id })
-  const hasV2Items = (orderDetailV2?.items?.length ?? 0) > 0
-  const [currentOrg] = useCurrentOrg()
-
-  const { data: membersData } = useGetContractorMembersQuery({
-    spectrum_id: currentOrg?.spectrum_id || "",
-    page: 0,
-    page_size: 100,
-    search: "",
-    role_filter: "",
-    sort: "username",
-  })
-
-  const members = membersData?.members || []
-
-  const fetchOptions = useCallback(
-    async (query: string) => {
-      if (query.length < 3) {
-        return
-      }
-
-      const { data } = await store.dispatch(
-        contractorsApi.endpoints.searchContractorMembers.initiate({
-          spectrum_id: currentOrg?.spectrum_id!,
-          query: query,
-        }),
-      )
-
-      setOptions(data || [])
-    },
-    [currentOrg?.spectrum_id],
-  )
-
-  const retrieve = useMemo(
-    () =>
-      throttle((query: string) => {
-        fetchOptions(query)
-      }, 400),
-    [fetchOptions],
-  )
-
-  useEffect(() => {
-    retrieve(target)
-  }, [target, retrieve])
-
-  const [assignUser] = useAssignOrderMutation()
-  const [unassignUser] = useUnassignOrderMutation()
-
-  const statusColor = useMemo(
-    () => statusColors.get(order.status),
-    [order.status],
-  )
-  const status = useMemo(
-    () => statusNames.get(order.status) || statusNames.get("not-started")!,
-    [order.status],
-  )
-
-  const [setOrderStatus] = useSetOrderStatusMutation()
-  const updateOrderStatus = useCallback(
-    async (status: string) => {
-      setOrderStatus({
-        order_id: order.order_id,
-        status: status,
-      })
-        .unwrap()
-        .then(() => {
-          issueAlert({
-            message: t("orderDetailsArea.updated_status"),
-            severity: "success",
-          })
-        })
-        .catch((error) => {
-          issueAlert(error)
-        })
-    },
-    [order.order_id, issueAlert, setOrderStatus, t],
-  )
-
-  const handleAssignSave = useCallback(async () => {
-    if (!targetObject) {
-      return
-    }
-
-    const res: { data?: any; error?: any } = await assignUser({
-      order_id: order.order_id,
-      username: targetObject.username!,
-    })
-
-    if (res?.data && !res?.error) {
-      issueAlert({
-        message: t("memberAssignArea.assigned"),
-        severity: "success",
-      })
-      setIsEditingAssigned(false)
-      setTarget("")
-      setTargetObject(null)
-    } else {
-      issueAlert({
-        message: `${t("memberAssignArea.failed_assign")} ${
-          res.error?.error || res.error?.data?.error || res.error
-        }`,
-        severity: "error",
-      })
-    }
-  }, [assignUser, order.order_id, issueAlert, targetObject, t])
-
-  const handleAssignCancel = useCallback(() => {
-    setIsEditingAssigned(false)
-    setTarget("")
-    setTargetObject(null)
-  }, [])
-
-  const handleUnassign = useCallback(async () => {
-    const res: { data?: any; error?: any } = await unassignUser({
-      order_id: order.order_id,
-    })
-
-    if (res?.data && !res?.error) {
-      issueAlert({
-        message: t("memberAssignArea.unassigned"),
-        severity: "success",
-      })
-      setIsEditingAssigned(false)
-    } else {
-      issueAlert({
-        message: `${t("memberAssignArea.failed_unassign")} ${
-          res.error?.error || res.error?.data?.error || res.error
-        }`,
-        severity: "error",
-      })
-    }
-  }, [unassignUser, order.order_id, issueAlert, t])
-
-  const { data: contractor } = useGetContractorBySpectrumIDQuery(
-    order.contractor!,
-    { skip: !order.contractor },
-  )
-  const { data: assigned } = useGetUserByUsernameQuery(order.assigned_to!, {
-    skip: !order.assigned_to,
-  })
-  const { data: customer } = useGetUserByUsernameQuery(order.customer!, {
-    skip: !order.customer,
-  })
-
-  const amCustomer = useMemo(
-    () => order.customer === profile?.username,
-    [order, profile],
-  )
-  const amAssigned = useMemo(
-    () => order.assigned_to === profile?.username,
-    [order, profile],
-  )
-  const amContractor = useMemo(
-    () => currentOrg?.spectrum_id === order?.contractor,
-    [currentOrg?.spectrum_id, order?.contractor],
-  )
-  const amRelated = useMemo(
-    () => amCustomer || amAssigned || amContractor,
-    [amCustomer, amAssigned, amContractor],
-  )
-  const amContractorManager = useMemo(
-    () =>
-      amContractor &&
-      has_permission(
-        currentOrg,
-        profile,
-        "manage_orders",
-        profile?.contractors,
-      ),
-    [currentOrg, profile, amContractor],
-  )
-
-  const privateContractCustomer = useMemo(
-    () =>
-      amCustomer && // I am the customer
-      !(amContractorManager || amAssigned) && // I am not assigned or an org admin
-      (order.contractor || order.assigned_to), // This is either assigned to someone or has a contractor
-    [
-      order.contractor,
-      order.assigned_to,
-      amAssigned,
-      amContractorManager,
-      amCustomer,
-    ],
-  )
-
-  const publicContractCustomer = useMemo(
-    () => amCustomer && !order.assigned_to && !order.contractor,
-    [amCustomer, order],
-  )
-
-  const isComplete = useMemo(
-    () => ["cancelled", "fulfilled"].includes(order.status),
-    [order.status],
-  )
-
-  const server_id = useMemo(
-    () => order.discord_server_id || contractor?.official_server_id,
-    [contractor?.official_server_id, order.discord_server_id],
-  )
-
-  const [createThread, { isLoading: createThreadLoading }] =
-    useCreateOrderThreadMutation()
+  const {
+    profile, issueAlert, currentOrg,
+    isEditingAssigned, setIsEditingAssigned,
+    target, setTarget, targetObject, setTargetObject,
+    options, members,
+    handleAssignSave, handleAssignCancel, handleUnassign,
+    orderDetailV2, hasV2Items,
+    statusColor, status, updateOrderStatus,
+    contractor, assigned, customer,
+    amCustomer, amAssigned, amContractor, amRelated, amContractorManager,
+    privateContractCustomer, publicContractCustomer, isComplete,
+    server_id,
+    createThread, createThreadLoading,
+  } = useOrderDetails(order)
 
   return (
     <Grid item xs={12} lg={8} md={6} sx={{ minWidth: 0 }}>
