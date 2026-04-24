@@ -897,7 +897,7 @@ export function ListingCardV2({ listing, index }: ListingCardV2Props) {
                   objectFit: "cover",
                   ...(theme.palette.mode === "dark"
                     ? { height: "100%", aspectRatio: "16/9" }
-                    : { height: 150, aspectRatio: "16/9" }),
+                    : { height: 180, aspectRatio: "16/9" }),
                   overflow: "hidden",
                 }}
                 alt={`Image of ${listing.title}`}
