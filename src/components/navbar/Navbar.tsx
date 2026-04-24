@@ -83,6 +83,9 @@ export function Navbar(props: { children?: React.ReactNode }) {
           ? {
               borderBottom: 1,
               borderColor: outline,
+              borderTop: "none",
+              borderLeft: { xs: "none", md: drawerOpen ? "none" : undefined },
+              borderRight: { xs: "none", md: undefined },
               boxShadow: "none",
             }
           : {
