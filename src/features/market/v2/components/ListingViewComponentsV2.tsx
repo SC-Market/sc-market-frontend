@@ -4,33 +4,31 @@
  */
 
 import React, { useMemo } from "react"
-import { Box, Grid, Typography, Skeleton } from "@mui/material"
-import { useTheme } from "@mui/material/styles"
+import { Box, Grid, Typography, Skeleton, Button } from "@mui/material"
+import { ArrowForwardRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
-import { ExtendedTheme } from "../../../../hooks/styles/Theme"
-import { useSearchListingsQuery, useGetPriceHistoryQuery, ListingSearchResult } from "../../../../store/api/v2/market"
+import { Link } from "react-router-dom"
+import { useSearchListingsQuery, useGetPriceHistoryQuery, type ListingSearchResult } from "../../../../store/api/v2/market"
 import { ListingCardV2 } from "../ListingSearchV2"
 import { Section } from "../../../../components/paper/Section"
 import { MuiAreaChart } from "../../../../components/charts/MuiCharts"
 
-function HorizontalListingScroll({ listings }: { listings: ListingSearchResult[] }) {
-  return (
-    <Grid item xs={12}>
-      <Box sx={{ width: "100%", overflowX: "auto" }}>
-        <Box display="flex" gap={1}>
-          {listings.map((listing, i) => (
-            <Box key={listing.listing_id} sx={{ minWidth: 280, maxWidth: 320 }}>
-              <ListingCardV2 listing={listing} index={i} />
-            </Box>
-          ))}
-        </Box>
-      </Box>
-    </Grid>
-  )
-}
+// ============================================================================
+// Shared listing row component
+// ============================================================================
 
-function LoadingRow() {
-  return (
+function ListingRow({
+  title,
+  seeAllHref,
+  listings,
+  isLoading,
+}: {
+  title: string
+  seeAllHref: string
+  listings: ListingSearchResult[]
+  isLoading: boolean
+}) {
+  if (isLoading) return (
     <Grid item xs={12}>
       <Box sx={{ width: "100%", overflowX: "auto" }}>
         <Box display="flex" gap={1}>
@@ -41,7 +39,43 @@ function LoadingRow() {
       </Box>
     </Grid>
   )
+
+  if (!listings.length) return null
+
+  return (
+    <>
+      <Grid item xs={12}>
+        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <Typography variant="h6" fontWeight="bold">{title}</Typography>
+          <Button
+            component={Link}
+            to={seeAllHref}
+            size="small"
+            endIcon={<ArrowForwardRounded />}
+            sx={{ textTransform: "none" }}
+          >
+            See all
+          </Button>
+        </Box>
+      </Grid>
+      <Grid item xs={12}>
+        <Box sx={{ width: "100%", overflowX: "auto" }}>
+          <Box display="flex" gap={1}>
+            {listings.map((listing, i) => (
+              <Box key={listing.listing_id} sx={{ minWidth: 280, maxWidth: 320 }}>
+                <ListingCardV2 listing={listing} index={i} />
+              </Box>
+            ))}
+          </Box>
+        </Box>
+      </Grid>
+    </>
+  )
 }
+
+// ============================================================================
+// Seller's other listings
+// ============================================================================
 
 export function SellerOtherListingsV2(props: {
   sellerUsername?: string | null
@@ -49,7 +83,6 @@ export function SellerOtherListingsV2(props: {
   currentListingId: string
 }) {
   const { t } = useTranslation()
-  const theme = useTheme<ExtendedTheme>()
   const { sellerUsername, contractorSpectrumId, currentListingId } = props
 
   const { data, isLoading } = useSearchListingsQuery(
@@ -68,20 +101,23 @@ export function SellerOtherListingsV2(props: {
     [data, currentListingId],
   )
 
-  if (isLoading) return <LoadingRow />
-  if (!listings.length) return null
+  const seeAllHref = contractorSpectrumId
+    ? `/market?seller=${encodeURIComponent(contractorSpectrumId)}`
+    : `/market?seller=${encodeURIComponent(sellerUsername || "")}`
 
   return (
-    <>
-      <Grid item xs={12}>
-        <Typography variant="h6" fontWeight="bold">
-          {t("listing.otherListings", "Other listings from this seller")}
-        </Typography>
-      </Grid>
-      <HorizontalListingScroll listings={listings} />
-    </>
+    <ListingRow
+      title={t("listing.otherListings", "Other listings from this seller")}
+      seeAllHref={seeAllHref}
+      listings={listings}
+      isLoading={isLoading}
+    />
   )
 }
+
+// ============================================================================
+// Related listings (same item type)
+// ============================================================================
 
 export function RelatedListingsV2(props: {
   itemType: string
@@ -102,20 +138,19 @@ export function RelatedListingsV2(props: {
     [data, currentListingId],
   )
 
-  if (isLoading) return <LoadingRow />
-  if (!listings.length) return null
-
   return (
-    <>
-      <Grid item xs={12}>
-        <Typography variant="h6" fontWeight="bold">
-          {t("listing.relatedListings", "Related Listings")}
-        </Typography>
-      </Grid>
-      <HorizontalListingScroll listings={listings} />
-    </>
+    <ListingRow
+      title={t("listing.relatedListings", "Related Listings")}
+      seeAllHref={`/market?type=${encodeURIComponent(itemType)}`}
+      listings={listings}
+      isLoading={isLoading}
+    />
   )
 }
+
+// ============================================================================
+// Price history chart
+// ============================================================================
 
 export function AggregateMarketDataV2(props: {
   gameItemId: string
