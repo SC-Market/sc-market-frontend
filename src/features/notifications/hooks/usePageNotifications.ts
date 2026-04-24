@@ -1,12 +1,16 @@
 import { useCallback } from "react"
-import { useNotifications } from "./useNotifications"
+import {
+  useGetNotificationsQuery,
+  useNotificationBulkUpdateMutation,
+  useNotificationBulkDeleteMutation,
+} from "../api/notificationApi"
 import { useGetUserOrganizationsQuery } from "../../contractor/api/organizationsApi"
-import type { NotificationScope } from "../domain/types"
+import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 
 export interface UsePageNotificationsParams {
   page: number
   pageSize: number
-  scope: NotificationScope
+  scope: string
   contractorId?: string
 }
 
@@ -27,43 +31,61 @@ export interface UsePageNotificationsResult {
   deleteAll: () => Promise<any>
 }
 
-/**
- * Page hook for NotificationsPage
- * Composes notifications and organizations queries
- */
 export function usePageNotifications(
   params: UsePageNotificationsParams,
 ): UsePageNotificationsResult {
   const { page, pageSize, scope, contractorId } = params
 
-  const notificationsData = useNotifications(
-    page,
-    pageSize,
-    scope,
-    contractorId,
+  const { data: currentUser } = useGetUserProfileQuery()
+  const isLoggedIn = !!currentUser
+
+  const {
+    data: notificationsData,
+    isLoading,
+    isFetching,
+    error,
+    refetch,
+  } = useGetNotificationsQuery(
+    {
+      page,
+      pageSize,
+      scope: scope !== "all" ? (scope as "individual" | "organization") : undefined,
+      contractorId: contractorId || undefined,
+    },
+    { skip: !isLoggedIn },
   )
+
   const { data: organizationsData, isLoading: orgsLoading } =
     useGetUserOrganizationsQuery()
 
-  const refetch = useCallback(() => {
-    notificationsData.refetch()
-  }, [notificationsData])
+  const [bulkUpdate] = useNotificationBulkUpdateMutation()
+  const [bulkDelete] = useNotificationBulkDeleteMutation()
+
+  const markAllAsRead = useCallback(
+    () => bulkUpdate({ read: true }).unwrap(),
+    [bulkUpdate],
+  )
+
+  const deleteAll = useCallback(
+    () => bulkDelete({}).unwrap(),
+    [bulkDelete],
+  )
 
   return {
     data:
-      notificationsData.notifications || organizationsData
+      notificationsData || organizationsData
         ? {
-            notifications: notificationsData.notifications,
-            pagination: notificationsData.pagination,
-            unreadCount: notificationsData.unreadCount,
+            notifications: notificationsData?.notifications || [],
+            pagination: notificationsData?.pagination,
+            unreadCount: notificationsData?.unread_count || 0,
             organizations: organizationsData || [],
           }
         : undefined,
-    isLoading: notificationsData.isLoading || orgsLoading,
-    isFetching: notificationsData.isLoading || orgsLoading,
-    error: notificationsData.error,
+    isLoading: isLoading || orgsLoading,
+    isFetching: isFetching || orgsLoading,
+    error,
     refetch,
-    markAllAsRead: notificationsData.markAllAsRead,
-    deleteAll: notificationsData.deleteAll,
+    markAllAsRead,
+    deleteAll,
   }
 }
