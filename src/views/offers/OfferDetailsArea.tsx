@@ -127,7 +127,6 @@ export function OfferDetailsArea(props: { session: OfferSession }) {
   } = useOfferDetails(session)
 
   return (
-  return (
     <Grid item xs={12} lg={8} md={6} sx={{ minWidth: 0 }}>
       {session.offers.length > 1 && (
         <Box sx={{ mb: 2 }}>
@@ -332,7 +331,12 @@ export function OfferDetailsArea(props: { session: OfferSession }) {
                       session.status,
                     )}
                     color={statusColor}
-                    icon={icon}
+                    icon={
+                      statusKey === "waitingSeller" ? <Announcement /> :
+                      statusKey === "waitingCustomer" ? <HourglassTop /> :
+                      statusKey === "rejected" ? <Cancel /> :
+                      <CheckCircle />
+                    }
                   />
                 </Stack>
               </TableCell>

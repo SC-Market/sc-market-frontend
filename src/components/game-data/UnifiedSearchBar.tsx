@@ -5,6 +5,7 @@
 
 import React, { useState, useMemo } from "react"
 import { Autocomplete, Chip, TextField, Box, Typography } from "@mui/material"
+import { getMissionTypeLabel } from "../../util/missionDisplay"
 
 export interface SearchToken {
   type: "query" | "system" | "category" | "giver" | "faction" | "tag" | "event" | "material" | "rarity" | "manufacturer"
@@ -97,11 +98,21 @@ export function UnifiedSearchBar({ tokens, onChange, extraOptions = [], placehol
   }, [tokens, extraOptions, baseOptions])
 
   const filtered = useMemo(() => {
-    if (!inputValue.trim()) return allOptions.slice(0, 10)
+    if (!inputValue.trim()) {
+      // Show 2 examples of each type when empty
+      const byType = new Map<string, SearchToken[]>()
+      for (const o of allOptions) {
+        if (!byType.has(o.type)) byType.set(o.type, [])
+        if (byType.get(o.type)!.length < 2) byType.get(o.type)!.push(o)
+      }
+      return Array.from(byType.values()).flat()
+    }
     const lower = inputValue.toLowerCase()
     return allOptions.filter(o =>
-      o.label.toLowerCase().includes(lower) || o.type.toLowerCase().includes(lower)
-    ).slice(0, 12)
+      o.label.toLowerCase().includes(lower) ||
+      o.value.toLowerCase().includes(lower) ||
+      o.type.toLowerCase().includes(lower)
+    ).slice(0, 15)
   }, [inputValue, allOptions])
 
   return (
