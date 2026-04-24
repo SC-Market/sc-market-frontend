@@ -1,14 +1,7 @@
-import React from "react"
-import { Order } from "../../datatypes/Order"
-
-export const CurrentOrderContext = React.createContext<
-  [Order, () => void] | null
->(null)
-
-export const useCurrentOrder = () => {
-  const val = React.useContext(CurrentOrderContext)
-  if (val == null) {
-    throw new Error("Cannot use useCurrentOrder outside of CurrentOrderContext")
-  }
-  return val
-}
+/**
+ * @deprecated Import from "features/orders/hooks/CurrentOrderContext" instead.
+ */
+export {
+  CurrentOrderContext,
+  useCurrentOrder,
+} from "../../features/orders/hooks/CurrentOrderContext"
