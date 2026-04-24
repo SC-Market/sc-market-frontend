@@ -235,6 +235,13 @@ export function CartItemEntryV2(props: {
                 pattern: "[0-9]*",
               }}
               InputProps={{
+                endAdornment: (
+                  <InputAdornment position="start">
+                    {t("cart.ofAvailable", {
+                      available: item.quantity_available.toLocaleString(),
+                    })}
+                  </InputAdornment>
+                ),
                 inputMode: "numeric",
               }}
               size="small"
