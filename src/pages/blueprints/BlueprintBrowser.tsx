@@ -316,8 +316,8 @@ export function BlueprintBrowser() {
       maxWidth="xl"
     >
       <Grid item xs={12}>
-        {/* Collection progress — shown when filtering by owned */}
-        {ownedOnly && <CollectionProgressCard />}
+        {/* Collection progress — shown on inventory page */}
+        {searchParams.get("inventory") === "true" && <CollectionProgressCard />}
         <FilterSidebarLayout filters={filtersContent} filterTitle="Filters">
           <Box sx={{ display: "flex", gap: 1, alignItems: "center", mb: 2 }}>
             <UnifiedSearchBar

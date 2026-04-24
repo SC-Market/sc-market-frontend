@@ -1,6 +1,5 @@
 /**
- * BlueprintInventory — redirects to BlueprintBrowser with owned=true.
- * The browser handles all search, filters, list/grid, etc.
+ * BlueprintInventory — redirects to BlueprintBrowser with owned=true and inventory flag.
  */
 
 import { useEffect } from "react"
@@ -13,6 +12,7 @@ export function BlueprintInventory() {
   useEffect(() => {
     const params = new URLSearchParams(searchParams)
     params.set("owned", "true")
+    params.set("inventory", "true")
     navigate(`/blueprints?${params.toString()}`, { replace: true })
   }, [])
 
