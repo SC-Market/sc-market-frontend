@@ -72,6 +72,7 @@ export function ViewOrder() {
   const chatObj = pageData.data?.chat
   const session = pageData.data?.offerSession
 
+  const { data: orderDetailV2 } = useGetOrderDetailQuery({ orderId: id! }, { skip: !id })
   const { data: profile } = useGetUserProfileQuery()
   const [currentOrg] = useCurrentOrg()
 
