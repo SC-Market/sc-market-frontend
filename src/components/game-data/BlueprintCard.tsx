@@ -212,6 +212,13 @@ export const BlueprintCard: React.FC<BlueprintCardProps> = ({
             <Typography variant="caption" color="text.secondary">{bp.mission_count} msn</Typography>
             {bp.crafting_time_seconds && <Typography variant="caption" color="text.secondary" sx={{ ml: 1 }}>{formatCraftingTime(bp.crafting_time_seconds)}</Typography>}
           </Box>
+          {onWishlistAdd && (
+            <Tooltip title="Add to Shopping List" arrow>
+            <IconButton size="small" onClick={(e) => { e.stopPropagation(); onWishlistAdd(bp.blueprint_id) }}>
+              <PlaylistAddRounded fontSize="small" />
+            </IconButton>
+            </Tooltip>
+          )}
           {onBookmarkToggle && (
             <Tooltip title={bp.user_owns ? "Remove from inventory" : "Add to inventory"} arrow>
             <IconButton
