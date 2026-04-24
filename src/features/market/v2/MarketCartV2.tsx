@@ -382,6 +382,7 @@ export function MarketCartV2() {
           checkoutCartRequest: {
             confirm_price_changes: hasPriceChanges,
             note: note || undefined,
+            seller_id: checkoutSellerId,
           },
         }).unwrap()
 
@@ -565,7 +566,7 @@ export function MarketCartV2() {
                     startIcon={<ShoppingCartRounded />}
                     loading={isCheckingOut}
                     disabled={hasUnavailableItems || isRemoving}
-                    onClick={handleCheckout}
+                    onClick={() => handleCheckout(group.sellerId)}
                   >
                     {t("cart.submitOffer", "Submit Offer")}
                   </LoadingButton>
