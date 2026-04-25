@@ -221,6 +221,7 @@ export function WishlistDetail() {
     <StandardPageLayout
       title={wishlist.wishlist_name}
       headerTitle={wishlist.wishlist_name}
+      maxWidth="xl"
       breadcrumbs={[
         { label: "Home", href: "/" },
         { label: "Shopping Lists", href: "/shopping-lists" },
