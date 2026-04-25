@@ -91,30 +91,48 @@ export function OfferMarketListingsEditAreaV2(props: { session: GetOfferSessionV
     [body.v2_variant_items],
   )
 
-  // Build display items by enriching v2_variant_items with listing/variant data
+  // Cache variant details from offer data and newly added items
+  const [variantCache, setVariantCache] = useState<Record<string, VariantDetail>>(() => {
+    const cache: Record<string, VariantDetail> = {}
+    for (const ml of session.offers[0]?.market_listings || []) {
+      for (const v of ml.v2_variants) {
+        cache[v.variant_id] = {
+          variant_id: v.variant_id,
+          attributes: v.attributes,
+          display_name: v.display_name,
+          short_name: v.short_name,
+          quantity: v.quantity,
+          price: v.price_per_unit,
+          locations: [],
+        }
+      }
+    }
+    return cache
+  })
+
+  // Build display items by enriching v2_variant_items with cached variant data
   const displayItems: DisplayItem[] = useMemo(() => {
     return (body.v2_variant_items || []).map((item) => {
       const listing = listings.find((l) => l.listing_id === item.listing_id)
-      // Find variant from the offer's market_listings (which have v2_variants with attributes)
       const offerListing = session.offers[0]?.market_listings.find((ml) => ml.listing_id === item.listing_id)
-      const offerVariant = offerListing?.v2_variants.find((v) => v.variant_id === item.variant_id)
+      const cached = variantCache[item.variant_id]
 
       return {
         ...item,
         listing_title: listing?.title || offerListing?.title || "Unknown",
         listing_photo: listing?.photo,
-        variant: {
+        variant: cached || {
           variant_id: item.variant_id,
-          attributes: offerVariant?.attributes || {},
-          display_name: offerVariant?.display_name || "Standard",
-          short_name: offerVariant?.short_name || "STD",
-          quantity: offerVariant?.quantity || item.quantity,
+          attributes: {},
+          display_name: "Standard",
+          short_name: "STD",
+          quantity: item.quantity,
           price: item.price_per_unit,
           locations: [],
         },
       }
     })
-  }, [body.v2_variant_items, listings, session.offers])
+  }, [body.v2_variant_items, listings, session.offers, variantCache])
 
   const total = displayItems.reduce((s, i) => s + i.price_per_unit * i.quantity, 0)
 
@@ -147,8 +165,32 @@ export function OfferMarketListingsEditAreaV2(props: { session: GetOfferSessionV
     const variant = availableVariants.find((v) => v.variant_id === selectedVariantId)
     if (!variant) return
 
+    // Cache variant details for display
+    setVariantCache((prev) => ({ ...prev, [selectedVariantId]: variant }))
+
     const existingMl = body.market_listings.find((ml) => ml.listing_id === selectedListing.listing_id)
     const newMlQuantity = (existingMl?.quantity || 0) + addQuantity
+
+    // Merge if same variant already exists, otherwise append
+    const existingV2 = (body.v2_variant_items || []).find(
+      (i) => i.listing_id === selectedListing.listing_id && i.variant_id === selectedVariantId,
+    )
+
+    const updatedV2Items = existingV2
+      ? (body.v2_variant_items || []).map((i) =>
+          i.listing_id === selectedListing.listing_id && i.variant_id === selectedVariantId
+            ? { ...i, quantity: i.quantity + addQuantity }
+            : i,
+        )
+      : [
+          ...(body.v2_variant_items || []),
+          {
+            listing_id: selectedListing.listing_id,
+            variant_id: selectedVariantId,
+            quantity: addQuantity,
+            price_per_unit: variant.price,
+          },
+        ]
 
     setBody({
       ...body,
@@ -157,15 +199,7 @@ export function OfferMarketListingsEditAreaV2(props: { session: GetOfferSessionV
             ml.listing_id === selectedListing.listing_id ? { ...ml, quantity: newMlQuantity } : ml,
           )
         : [...body.market_listings, { listing_id: selectedListing.listing_id, quantity: addQuantity }],
-      v2_variant_items: [
-        ...(body.v2_variant_items || []),
-        {
-          listing_id: selectedListing.listing_id,
-          variant_id: selectedVariantId,
-          quantity: addQuantity,
-          price_per_unit: variant.price,
-        },
-      ],
+      v2_variant_items: updatedV2Items,
     })
 
     setSelectedListing(null)
