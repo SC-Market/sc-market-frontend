@@ -71,8 +71,8 @@ export function OfferMarketListingsV2Items({ items }: { items: (OfferMarketListi
                   </TableCell>
                   <TableCell>
                     <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, flexWrap: "wrap" }}>
-                      {v.attributes.quality_tier && (
-                        <QualityBadge tier={v.attributes.quality_tier as number} size="small" />
+                      {v.attributes.quality_tier != null && (
+                        <QualityBadge tier={v.attributes.quality_tier} size="small" />
                       )}
                       {v.attributes.quality_value != null && (
                         <Chip label={`${v.attributes.quality_value}/1000`} size="small" variant="outlined" />
@@ -83,6 +83,9 @@ export function OfferMarketListingsV2Items({ items }: { items: (OfferMarketListi
                           size="small"
                           variant="outlined"
                         />
+                      )}
+                      {v.attributes.quality_tier == null && v.attributes.quality_value == null && !v.attributes.crafted_source && (
+                        <Typography variant="caption" color="text.secondary">{v.display_name || "Standard"}</Typography>
                       )}
                     </Box>
                   </TableCell>
