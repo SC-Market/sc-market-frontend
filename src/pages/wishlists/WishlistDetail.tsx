@@ -242,103 +242,104 @@ export function WishlistDetail() {
         </Stack>
       }
     >
-      {/* Description + Progress Row */}
-      <Grid container spacing={2} sx={{ mb: 3 }}>
-        {/* Description */}
-        {wishlist.wishlist_description && (
-          <Grid item xs={12} md={6}>
+      <Stack spacing={3}>
+        {/* Description + Progress Row */}
+        <Grid container spacing={2}>
+          {/* Description */}
+          {wishlist.wishlist_description && (
+            <Grid item xs={12} md={6}>
+              <Card sx={{ height: "100%" }}>
+                <CardContent>
+                  <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+                    Description
+                  </Typography>
+                  <Typography variant="body1">
+                    {wishlist.wishlist_description}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          )}
+
+          {/* Progress */}
+          <Grid item xs={12} md={wishlist.wishlist_description ? 6 : 12}>
             <Card sx={{ height: "100%" }}>
               <CardContent>
-                <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-                  Description
-                </Typography>
-                <Typography variant="body1">
-                  {wishlist.wishlist_description}
-                </Typography>
+                <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 1 }}>
+                  <Typography variant="subtitle2" color="text.secondary">
+                    {t("wishlists.progress", "Progress")}
+                  </Typography>
+                  <Typography variant="h5" color="primary" fontWeight="bold">
+                    {statistics.progress_percentage}%
+                  </Typography>
+                </Box>
+
+                <LinearProgress
+                  variant="determinate"
+                  value={statistics.progress_percentage}
+                  sx={{ height: 8, borderRadius: 4, mb: 2 }}
+                />
+
+                <Box sx={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(100px, 1fr))", gap: 1 }}>
+                  <Box>
+                    <Typography variant="caption" color="text.secondary">
+                      {t("wishlists.totalItems", "Total Items")}
+                    </Typography>
+                    <Typography variant="h6">{statistics.total_items}</Typography>
+                  </Box>
+                  <Box>
+                    <Typography variant="caption" color="text.secondary">
+                      {t("wishlists.completed", "Completed")}
+                    </Typography>
+                    <Typography variant="h6" color="success.main">
+                      {statistics.completed_items}
+                    </Typography>
+                  </Box>
+                  <Box>
+                    <Typography variant="caption" color="text.secondary">
+                      {t("wishlists.remaining", "Remaining")}
+                    </Typography>
+                    <Typography variant="h6" color="warning.main">
+                      {statistics.total_items - statistics.completed_items}
+                    </Typography>
+                  </Box>
+                  {statistics.total_estimated_cost > 0 && (
+                    <Box>
+                      <Typography variant="caption" color="text.secondary">
+                        {t("wishlists.estimatedCost", "Estimated Cost")}
+                      </Typography>
+                      <Typography variant="h6">{statistics.total_estimated_cost.toLocaleString()} aUEC</Typography>
+                    </Box>
+                  )}
+                </Box>
               </CardContent>
             </Card>
           </Grid>
-        )}
-
-        {/* Progress (Requirement 53.4) */}
-        <Grid item xs={12} md={wishlist.wishlist_description ? 6 : 12}>
-          <Card sx={{ height: "100%" }}>
-            <CardContent>
-              <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 1 }}>
-                <Typography variant="subtitle2" color="text.secondary">
-                  {t("wishlists.progress", "Progress")}
-                </Typography>
-                <Typography variant="h5" color="primary" fontWeight="bold">
-                  {statistics.progress_percentage}%
-                </Typography>
-              </Box>
-
-              <LinearProgress
-                variant="determinate"
-                value={statistics.progress_percentage}
-                sx={{ height: 8, borderRadius: 4, mb: 2 }}
-              />
-
-              <Box sx={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(100px, 1fr))", gap: 1 }}>
-                <Box>
-                  <Typography variant="caption" color="text.secondary">
-                    {t("wishlists.totalItems", "Total Items")}
-                  </Typography>
-                  <Typography variant="h6">{statistics.total_items}</Typography>
-                </Box>
-                <Box>
-                  <Typography variant="caption" color="text.secondary">
-                    {t("wishlists.completed", "Completed")}
-                  </Typography>
-                  <Typography variant="h6" color="success.main">
-                    {statistics.completed_items}
-                  </Typography>
-                </Box>
-                <Box>
-                  <Typography variant="caption" color="text.secondary">
-                    {t("wishlists.remaining", "Remaining")}
-                  </Typography>
-                  <Typography variant="h6" color="warning.main">
-                    {statistics.total_items - statistics.completed_items}
-                  </Typography>
-                </Box>
-                {statistics.total_estimated_cost > 0 && (
-                  <Box>
-                    <Typography variant="caption" color="text.secondary">
-                      {t("wishlists.estimatedCost", "Estimated Cost")}
-                    </Typography>
-                    <Typography variant="h6">{statistics.total_estimated_cost.toLocaleString()} aUEC</Typography>
-                  </Box>
-                )}
-              </Box>
-            </CardContent>
-          </Card>
         </Grid>
-      </Grid>
 
-      {/* Items Header + Sort Controls */}
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
-        <Typography variant="h6">
-          {t("wishlists.items", "Items")} ({items.length})
-        </Typography>
+        {/* Items Header + Sort Controls */}
+        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <Typography variant="h6">
+            {t("wishlists.items", "Items")} ({items.length})
+          </Typography>
 
-        <FormControl size="small" sx={{ minWidth: 150 }}>
-          <InputLabel>{t("wishlists.sortBy", "Sort By")}</InputLabel>
-          <Select
-            value={sortBy}
-            label="Sort By"
-            onChange={handleSortChange}
-            startAdornment={<Sort fontSize="small" sx={{ mr: 1, ml: 1 }} />}
-          >
-            <MenuItem value="priority">{t("wishlists.sortPriority", "Priority")}</MenuItem>
-            <MenuItem value="name">{t("wishlists.sortName", "Name")}</MenuItem>
-            <MenuItem value="status">{t("wishlists.sortStatus", "Status")}</MenuItem>
-            <MenuItem value="quality">{t("wishlists.sortQuality", "Quality")}</MenuItem>
-          </Select>
-        </FormControl>
-      </Box>
+          <FormControl size="small" sx={{ minWidth: 150 }}>
+            <InputLabel>{t("wishlists.sortBy", "Sort By")}</InputLabel>
+            <Select
+              value={sortBy}
+              label="Sort By"
+              onChange={handleSortChange}
+              startAdornment={<Sort fontSize="small" sx={{ mr: 1, ml: 1 }} />}
+            >
+              <MenuItem value="priority">{t("wishlists.sortPriority", "Priority")}</MenuItem>
+              <MenuItem value="name">{t("wishlists.sortName", "Name")}</MenuItem>
+              <MenuItem value="status">{t("wishlists.sortStatus", "Status")}</MenuItem>
+              <MenuItem value="quality">{t("wishlists.sortQuality", "Quality")}</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
 
-      {/* Items List (Requirements 53.1, 53.2, 53.3, 53.5, 53.6, 53.7, 53.8) */}
+        {/* Items List */}
       {sortedItems.length === 0 ? (
         <Card sx={{ textAlign: "center", py: 8 }}>
           <CardContent>
@@ -552,6 +553,7 @@ export function WishlistDetail() {
         onClose={() => setAddItemDialogOpen(false)}
         wishlistId={wishlist_id!}
       />
+      </Stack>
     </StandardPageLayout>
   )
 }
