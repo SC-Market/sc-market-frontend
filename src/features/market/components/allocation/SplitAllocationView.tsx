@@ -302,8 +302,9 @@ function AvailableLots({
       .filter((lot) => lot.quantity_available > 0)
   }, [lotsData?.lots, allocatedByLot])
 
-  const title = getListingTitle(listingData)
-  const image = getListingImage(listingData)
+  const effectiveListing = listingData || lotsData?.listing
+  const title = getListingTitle(effectiveListing)
+  const image = getListingImage(effectiveListing)
 
   if (lots.length === 0) return null
 
@@ -459,8 +460,13 @@ function AllocationTarget({
   const [deallocateQtys, setDeallocateQtys] = React.useState<
     Record<string, number>
   >({})
-  const title = getListingTitle(listingData)
-  const image = getListingImage(listingData)
+  const { data: lotsData } = useGetListingLotsQuery({
+    listing_id: listingId,
+    listed: true,
+  })
+  const effectiveListing = listingData || lotsData?.listing
+  const title = getListingTitle(effectiveListing)
+  const image = getListingImage(effectiveListing)
 
   const isComplete = allocated >= required
 

@@ -86,7 +86,11 @@ export const stockLotsApi = serviceApi.injectEndpoints({
   endpoints: (builder) => ({
     // Get lots for a listing
     getListingLots: builder.query<
-      { lots: StockLot[]; aggregates: StockAggregates },
+      {
+        lots: StockLot[]
+        listing: AllocationListingData | null
+        aggregates: StockAggregates
+      },
       {
         listing_id: string
         location_id?: string | null
@@ -103,7 +107,7 @@ export const stockLotsApi = serviceApi.injectEndpoints({
         return `/api/market/listings/${listing_id}/lots?${params.toString()}`
       },
       transformResponse: (response: {
-        data: { lots: StockLot[]; aggregates: StockAggregates }
+        data: { lots: StockLot[]; listing: AllocationListingData | null; aggregates: StockAggregates }
       }) => response.data,
       providesTags: (result, error, { listing_id }) => [
         { type: "MarketListings", id: listing_id },
