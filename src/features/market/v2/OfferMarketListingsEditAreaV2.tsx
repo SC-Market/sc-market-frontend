@@ -151,8 +151,6 @@ export function OfferMarketListingsEditAreaV2(props: { session: GetOfferSessionV
       ),
     })
   }, [body, setBody])
-    })
-  }, [body, setBody])
 
   const handleAdd = useCallback(() => {
     if (!selectedListing || !selectedVariantId) return
