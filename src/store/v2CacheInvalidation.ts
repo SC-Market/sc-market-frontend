@@ -32,15 +32,14 @@ export const v2CacheInvalidationMiddleware: Middleware = (storeApi) => (next) =>
   if (typeof act?.type === "string" && act.type.endsWith("/fulfilled")) {
     const endpointName = act?.meta?.arg?.endpointName
 
-    if (OFFER_MUTATIONS.includes(endpointName)) {
+    if (endpointName && OFFER_MUTATIONS.includes(endpointName)) {
       storeApi.dispatch(marketV2Api.util.invalidateTags(["Offers V2"]))
     }
 
-    if (ORDER_MUTATIONS.includes(endpointName)) {
+    if (endpointName && ORDER_MUTATIONS.includes(endpointName)) {
       storeApi.dispatch(marketV2Api.util.invalidateTags(["Orders V2"]))
     }
 
-    // Accept creates an order too
     if (endpointName === "updateOfferStatus") {
       storeApi.dispatch(marketV2Api.util.invalidateTags(["Orders V2"]))
     }
