@@ -137,12 +137,9 @@ export function OfferMarketListingsEditAreaV2(props: { session: GetOfferSessionV
   const total = displayItems.reduce((s, i) => s + i.price_per_unit * i.quantity, 0)
 
   const handleRemove = useCallback((variantId: string) => {
-    const items = (body.v2_variant_items || []).filter((i) => i.variant_id !== variantId)
-    const remainingListingIds = new Set(items.map((i) => i.listing_id))
     setBody({
       ...body,
-      v2_variant_items: items,
-      market_listings: body.market_listings.filter((ml) => remainingListingIds.has(ml.listing_id)),
+      v2_variant_items: (body.v2_variant_items || []).filter((i) => i.variant_id !== variantId),
     })
   }, [body, setBody])
 
@@ -152,11 +149,8 @@ export function OfferMarketListingsEditAreaV2(props: { session: GetOfferSessionV
       v2_variant_items: (body.v2_variant_items || []).map((i) =>
         i.variant_id === variantId ? { ...i, quantity } : i,
       ),
-      market_listings: body.market_listings.map((ml) => {
-        const mlItems = (body.v2_variant_items || []).filter((i) => i.listing_id === ml.listing_id)
-        const mlTotal = mlItems.reduce((s, i) => s + (i.variant_id === variantId ? quantity : i.quantity), 0)
-        return { ...ml, quantity: mlTotal }
-      }),
+    })
+  }, [body, setBody])
     })
   }, [body, setBody])
 
@@ -194,11 +188,6 @@ export function OfferMarketListingsEditAreaV2(props: { session: GetOfferSessionV
 
     setBody({
       ...body,
-      market_listings: existingMl
-        ? body.market_listings.map((ml) =>
-            ml.listing_id === selectedListing.listing_id ? { ...ml, quantity: newMlQuantity } : ml,
-          )
-        : [...body.market_listings, { listing_id: selectedListing.listing_id, quantity: addQuantity }],
       v2_variant_items: updatedV2Items,
     })
 
