@@ -63,7 +63,7 @@ export type ListingRowItemV2 = ListingSearchResult & {
 export function OfferListingRowItemEditableV2(props: {
   row: ListingRowItemV2
   index: number
-  onVariantChange: (listingId: string, variantId: string) => void
+  onVariantChange: (listingId: string, variantId: string, pricePerUnit: number) => void
   onQuantityChange: (listingId: string, quantity: number) => void
   onRemove: (listingId: string) => void
 }) {
@@ -107,9 +107,10 @@ export function OfferListingRowItemEditableV2(props: {
                 <VariantSelector
                   variants={variants}
                   selectedVariantId={row.variant_id}
-                  onVariantChange={(variantId) =>
-                    onVariantChange(row.listing_id, variantId)
-                  }
+                  onVariantChange={(variantId) => {
+                    const v = variants.find((vr) => vr.variant_id === variantId)
+                    onVariantChange(row.listing_id, variantId, v?.price ?? 0)
+                  }}
                   label={t("OfferMarketListingsEditArea.selectVariant", "Select Variant")}
                 />
               )}
@@ -200,10 +201,11 @@ export function OfferMarketListingsEditAreaV2(props: { session: GetOfferSessionV
   const { session } = props
   const [body, setBody] = useCounterOffer()
 
-  // Search V2 listings for this seller
+  // Search V2 listings scoped to this seller
   const { data: searchResults } = useSearchListingsQuery({
-    // Filter by seller based on session type
-    // Note: V2 API uses different filter params, adjust as needed
+    sellerUsername: !session.contractor ? session.assigned_to?.username : undefined,
+    contractorSpectrumId: session.contractor?.spectrum_id,
+    quantityMin: 1,
     page: 1,
     pageSize: 50,
   })
@@ -239,12 +241,11 @@ export function OfferMarketListingsEditAreaV2(props: { session: GetOfferSessionV
           return null
         }
 
-        // Get selected variant ID or use first available
         const variantId = variantSelections[l.listing_id] || ""
 
-        // Calculate price based on variant
-        // For now, use price_min as default until variant is selected
-        const unitPrice = fullListing.price_min
+        // Get price from v2_variant_items (actual variant price), fall back to listing price
+        const v2Item = body.v2_variant_items?.find((i) => i.listing_id === l.listing_id)
+        const unitPrice = v2Item?.price_per_unit || fullListing.price_min
 
         return {
           ...fullListing,
@@ -261,11 +262,10 @@ export function OfferMarketListingsEditAreaV2(props: { session: GetOfferSessionV
 
   // Handle variant change
   const handleVariantChange = useCallback(
-    (listingId: string, variantId: string) => {
+    (listingId: string, variantId: string, pricePerUnit: number) => {
       const newSelections = { ...variantSelections, [listingId]: variantId }
       setVariantSelections(newSelections)
 
-      // Sync to body.v2_variant_items
       const listing = body.market_listings.find((l) => l.listing_id === listingId)
       if (!listing) return
       const existing = (body.v2_variant_items || []).filter((i) => i.listing_id !== listingId)
@@ -277,7 +277,7 @@ export function OfferMarketListingsEditAreaV2(props: { session: GetOfferSessionV
             listing_id: listingId,
             variant_id: variantId,
             quantity: listing.quantity,
-            price_per_unit: 0, // Will be resolved by backend from variant pricing
+            price_per_unit: pricePerUnit,
           },
         ],
       })
@@ -337,6 +337,8 @@ export function OfferMarketListingsEditAreaV2(props: { session: GetOfferSessionV
   const handleAddListing = useCallback(() => {
     if (!selected || !selectedVariantId) return
 
+    const selectedVariant = selectedListingVariants.find((v) => v.variant_id === selectedVariantId)
+
     setBody({
       ...body,
       market_listings: [
@@ -349,7 +351,7 @@ export function OfferMarketListingsEditAreaV2(props: { session: GetOfferSessionV
           listing_id: selected.listing_id,
           variant_id: selectedVariantId,
           quantity,
-          price_per_unit: 0,
+          price_per_unit: selectedVariant?.price ?? 0,
         },
       ],
     })
