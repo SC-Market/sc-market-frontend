@@ -523,7 +523,8 @@ export function WishlistDetail() {
             </Card>
           ))}
         </Box>
-      )}
+          )}
+        </Box>
 
       {/* Item Actions Menu */}
       <Menu
