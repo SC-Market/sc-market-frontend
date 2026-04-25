@@ -1,43 +1,26 @@
 /**
  * AddItemDialog Component
- * 
- * Dialog for adding items to a shopping list with search, quantity, quality, priority, and notes.
- * 
- * Features:
- * - Item search/autocomplete (Requirement 8.1)
- * - Quantity input (Requirement 8.2)
- * - Quality tier selection (1-5 stars) (Requirement 8.3)
- * - Priority selection (1-5) (Requirement 8.1)
- * - Notes field (Requirement 8.1)
- * - Form validation (quantity > 0, quality tier 1-5, priority 1-5)
- * 
- * Task 14.3 - Create AddItemDialog component
- * Requirements: 8.1, 8.2, 8.3
+ *
+ * Dialog for adding items to a shopping list with search, quantity, quality,
+ * priority, notes, and buy/craft acquisition mode.
  */
 
 import React, { useState, useCallback } from "react"
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Button,
-  TextField,
-  Stack,
-  Typography,
-  Box,
-  CircularProgress,
-  Alert,
-  Autocomplete,
-  Slider,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
+  Dialog, DialogTitle, DialogContent, DialogActions,
+  Button, TextField, Stack, Typography, Box, CircularProgress,
+  Alert, Autocomplete, Slider, FormControl, InputLabel, Select, MenuItem,
+  ToggleButtonGroup, ToggleButton, Chip,
 } from "@mui/material"
-import { Star, StarBorder } from "@mui/icons-material"
-import { useSearchGameItemsQuery, useAddWishlistItemMutation } from "../../store/api/v2/market"
+import { Star, StarBorder, ShoppingCart, Build } from "@mui/icons-material"
+import {
+  useSearchGameItemsQuery,
+  useAddWishlistItemMutation,
+  useSearchBlueprintsQuery,
+  type AcquisitionMode,
+} from "../../store/api/v2/market"
 import { debounce } from "lodash"
+import { Link } from "react-router-dom"
 
 export interface AddItemDialogProps {
   open: boolean
@@ -51,19 +34,7 @@ interface GameItemOption {
   type: string
 }
 
-/**
- * AddItemDialog Component
- * 
- * Provides a form for adding items to a shopping list with:
- * - Item search/autocomplete
- * - Quantity input (must be > 0)
- * - Quality tier selection (1-5 stars)
- * - Priority selection (1-5)
- * - Optional notes field
- * - Validation and error handling
- */
 export function AddItemDialog({ open, onClose, wishlistId }: AddItemDialogProps) {
-  // Form state
   const [selectedItem, setSelectedItem] = useState<GameItemOption | null>(null)
   const [searchQuery, setSearchQuery] = useState("")
   const [quantity, setQuantity] = useState<number>(1)
@@ -71,23 +42,32 @@ export function AddItemDialog({ open, onClose, wishlistId }: AddItemDialogProps)
   const [priority, setPriority] = useState<number>(3)
   const [notes, setNotes] = useState("")
   const [error, setError] = useState<string | null>(null)
+  const [acquisitionMode, setAcquisitionMode] = useState<AcquisitionMode>("buy")
+  const [selectedBlueprintId, setSelectedBlueprintId] = useState<string | null>(null)
 
-  // RTK Query hooks
   const { data: searchResults = [], isLoading: isSearching } = useSearchGameItemsQuery(
     { query: searchQuery },
-    { skip: searchQuery.length < 2 }
+    { skip: searchQuery.length < 2 },
   )
   const [addItem, { isLoading: isAdding }] = useAddWishlistItemMutation()
 
-  // Debounced search handler
-  const debouncedSetSearchQuery = useCallback(
-    debounce((value: string) => {
-      setSearchQuery(value)
-    }, 300),
-    []
+  // Search for blueprints that produce the selected item
+  const { data: blueprintResults = [] } = useSearchBlueprintsQuery(
+    { text: selectedItem?.name || "" },
+    { skip: !selectedItem },
   )
 
-  // Reset form
+  // Filter to blueprints that actually produce this item
+  const itemBlueprints = blueprintResults.filter(
+    (bp) => bp.output_item_name?.toLowerCase() === selectedItem?.name?.toLowerCase(),
+  )
+  const hasCraftingOption = itemBlueprints.length > 0
+
+  const debouncedSetSearchQuery = useCallback(
+    debounce((value: string) => setSearchQuery(value), 300),
+    [],
+  )
+
   const resetForm = () => {
     setSelectedItem(null)
     setSearchQuery("")
@@ -96,256 +76,195 @@ export function AddItemDialog({ open, onClose, wishlistId }: AddItemDialogProps)
     setPriority(3)
     setNotes("")
     setError(null)
+    setAcquisitionMode("buy")
+    setSelectedBlueprintId(null)
   }
 
-  // Handle close
-  const handleClose = () => {
-    resetForm()
-    onClose()
+  const handleClose = () => { resetForm(); onClose() }
+
+  const handleItemChange = (_: any, newValue: GameItemOption | null) => {
+    setSelectedItem(newValue)
+    setAcquisitionMode("buy")
+    setSelectedBlueprintId(null)
   }
 
-  // Handle submit
+  const handleAcquisitionModeChange = (_: any, newMode: AcquisitionMode | null) => {
+    if (newMode) {
+      setAcquisitionMode(newMode)
+      if (newMode === "craft" && itemBlueprints.length === 1) {
+        setSelectedBlueprintId(itemBlueprints[0].blueprint_id)
+      } else if (newMode === "buy") {
+        setSelectedBlueprintId(null)
+      }
+    }
+  }
+
   const handleSubmit = async () => {
-    // Validate item selection (Requirement 8.1)
-    if (!selectedItem) {
-      setError("Please select an item")
-      return
-    }
-
-    // Validate quantity (Requirement 8.2, must be > 0)
-    if (quantity < 1) {
-      setError("Quantity must be at least 1")
-      return
-    }
-
-    if (!Number.isInteger(quantity)) {
-      setError("Quantity must be a whole number")
-      return
-    }
-
-    // Validate quality tier (Requirement 8.3, 1-5 if provided)
-    if (qualityTier !== null && (qualityTier < 1 || qualityTier > 5)) {
-      setError("Quality tier must be between 1 and 5")
-      return
-    }
-
-    // Validate priority (1-5)
-    if (priority < 1 || priority > 5) {
-      setError("Priority must be between 1 and 5")
-      return
-    }
-
-    // Validate notes length
-    if (notes.length > 500) {
-      setError("Notes must be 500 characters or less")
-      return
-    }
+    if (!selectedItem) { setError("Please select an item"); return }
+    if (quantity < 1) { setError("Quantity must be at least 1"); return }
+    if (acquisitionMode === "craft" && !selectedBlueprintId) { setError("Please select a blueprint for crafting"); return }
 
     setError(null)
-
     try {
-      // Submit item (Requirements 8.1, 8.2, 8.3)
       await addItem({
-        wishlistId: wishlistId,
+        wishlistId,
         addWishlistItemRequest: {
           game_item_id: selectedItem.id,
           desired_quantity: quantity,
           desired_quality_tier: qualityTier || undefined,
+          blueprint_id: acquisitionMode === "craft" ? selectedBlueprintId || undefined : undefined,
+          acquisition_mode: acquisitionMode,
           priority,
           notes: notes || undefined,
         },
       }).unwrap()
-
-      // Close dialog on success
       handleClose()
     } catch (err: any) {
-      // Handle error
-      const errorMessage =
-        err?.data?.message || err?.message || "Failed to add item. Please try again."
-      setError(errorMessage)
+      setError(err?.data?.message || err?.message || "Failed to add item.")
     }
   }
 
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
       <DialogTitle>Add Item to Shopping List</DialogTitle>
-
       <DialogContent>
-        <Stack spacing={3} mt={1}>
-          {/* Error Alert */}
-          {error && (
-            <Alert severity="error" onClose={() => setError(null)}>
-              {error}
-            </Alert>
-          )}
+        <Stack spacing={2.5} mt={1}>
+          {error && <Alert severity="error" onClose={() => setError(null)}>{error}</Alert>}
 
-          {/* Item Search/Autocomplete (Requirement 8.1) */}
+          {/* Item Search */}
           <Autocomplete
             size="small"
             value={selectedItem}
-            onChange={(_, newValue) => setSelectedItem(newValue)}
-            onInputChange={(_, newInputValue) => {
-              debouncedSetSearchQuery(newInputValue)
-            }}
+            onChange={handleItemChange}
+            onInputChange={(_, v) => debouncedSetSearchQuery(v)}
             options={searchResults}
-            getOptionLabel={(option) => option.name}
+            getOptionLabel={(o) => o.name}
             loading={isSearching}
-            filterOptions={(x) => x} // Disable client-side filtering (server-side search)
-            isOptionEqualToValue={(option, value) => option.id === value.id}
+            filterOptions={(x) => x}
+            isOptionEqualToValue={(a, b) => a.id === b.id}
             renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Search Item *"
-                placeholder="Type to search for items..."
-                InputProps={{
-                  ...params.InputProps,
-                  endAdornment: (
-                    <>
-                      {isSearching ? <CircularProgress color="inherit" size={20} /> : null}
-                      {params.InputProps.endAdornment}
-                    </>
-                  ),
-                }}
-                helperText="Start typing to search for game items"
+              <TextField {...params} label="Search Item *" placeholder="Type to search..."
+                InputProps={{ ...params.InputProps, endAdornment: (<>{isSearching ? <CircularProgress size={20} /> : null}{params.InputProps.endAdornment}</>) }}
               />
             )}
             renderOption={(props, option) => (
               <li {...props} key={option.id}>
                 <Box>
                   <Typography variant="body2">{option.name}</Typography>
-                  <Typography variant="caption" color="text.secondary">
-                    {option.type}
-                  </Typography>
+                  <Typography variant="caption" color="text.secondary">{option.type}</Typography>
                 </Box>
               </li>
             )}
-            noOptionsText={
-              searchQuery.length < 2
-                ? "Type at least 2 characters to search"
-                : "No items found"
-            }
+            noOptionsText={searchQuery.length < 2 ? "Type at least 2 characters" : "No items found"}
           />
 
-          {/* Quantity Input (Requirement 8.2) */}
-          <TextField
-            size="small"
-            value={quantity}
-            onChange={(e) => {
-              const value = parseInt(e.target.value, 10)
-              if (!isNaN(value) && value >= 0) {
-                setQuantity(value)
-              }
-            }}
-            type="number"
-            fullWidth
-            label="Quantity *"
-            inputProps={{ min: 1, step: 1 }}
-            helperText="How many of this item do you want?"
-          />
+          {/* Acquisition Mode — only show when item has blueprints */}
+          {selectedItem && hasCraftingOption && (
+            <Box>
+              <Typography variant="subtitle2" gutterBottom>How do you want to get this item?</Typography>
+              <ToggleButtonGroup
+                value={acquisitionMode}
+                exclusive
+                onChange={handleAcquisitionModeChange}
+                fullWidth
+                size="small"
+              >
+                <ToggleButton value="buy">
+                  <ShoppingCart sx={{ mr: 1 }} fontSize="small" />
+                  Buy from Market
+                </ToggleButton>
+                <ToggleButton value="craft">
+                  <Build sx={{ mr: 1 }} fontSize="small" />
+                  Craft (add ingredients)
+                </ToggleButton>
+              </ToggleButtonGroup>
 
-          {/* Quality Tier Selection (Requirement 8.3) */}
-          <Box>
-            <Typography variant="subtitle2" gutterBottom>
-              Desired Quality Tier (Optional)
-            </Typography>
-            <Typography variant="caption" color="text.secondary" display="block" mb={1}>
-              Select the quality tier you want for this item (1-5 stars)
-            </Typography>
-            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-              {[1, 2, 3, 4, 5].map((tier) => (
-                <Box
-                  key={tier}
-                  onClick={() => setQualityTier(qualityTier === tier ? null : tier)}
-                  sx={{
-                    cursor: "pointer",
-                    transition: "transform 0.2s",
-                    "&:hover": {
-                      transform: "scale(1.2)",
-                    },
-                  }}
-                >
-                  {qualityTier && tier <= qualityTier ? (
-                    <Star fontSize="large" color="primary" />
+              {acquisitionMode === "craft" && (
+                <Box sx={{ mt: 1.5 }}>
+                  <Typography variant="caption" color="text.secondary" display="block" mb={1}>
+                    Select a blueprint — its ingredients will be tracked in your shopping list
+                  </Typography>
+                  {itemBlueprints.length === 1 ? (
+                    <Chip
+                      label={itemBlueprints[0].blueprint_name}
+                      color="primary"
+                      variant="outlined"
+                      component={Link}
+                      to={`/blueprints/${itemBlueprints[0].blueprint_code}`}
+                      clickable
+                      size="small"
+                    />
                   ) : (
-                    <StarBorder fontSize="large" color="action" />
+                    <FormControl fullWidth size="small">
+                      <InputLabel>Blueprint *</InputLabel>
+                      <Select
+                        value={selectedBlueprintId || ""}
+                        label="Blueprint *"
+                        onChange={(e) => setSelectedBlueprintId(e.target.value || null)}
+                      >
+                        {itemBlueprints.map((bp) => (
+                          <MenuItem key={bp.blueprint_id} value={bp.blueprint_id}>
+                            {bp.blueprint_name}
+                            {bp.item_subcategory && (
+                              <Typography variant="caption" color="text.secondary" sx={{ ml: 1 }}>
+                                ({bp.item_subcategory})
+                              </Typography>
+                            )}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
                   )}
                 </Box>
-              ))}
-              {qualityTier && (
-                <Button size="small" onClick={() => setQualityTier(null)}>
-                  Clear
-                </Button>
               )}
             </Box>
-            {qualityTier && (
-              <Typography variant="caption" color="text.secondary" display="block" mt={1}>
-                Selected: {qualityTier} / 5 stars
-              </Typography>
-            )}
+          )}
+
+          {/* Quantity */}
+          <TextField
+            size="small" value={quantity} type="number" fullWidth label="Quantity *"
+            onChange={(e) => { const v = parseInt(e.target.value, 10); if (!isNaN(v) && v >= 0) setQuantity(v) }}
+            inputProps={{ min: 1, step: 1 }}
+          />
+
+          {/* Quality Tier */}
+          <Box>
+            <Typography variant="subtitle2" gutterBottom>Quality Tier (Optional)</Typography>
+            <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+              {[1, 2, 3, 4, 5].map((tier) => (
+                <Box key={tier} onClick={() => setQualityTier(qualityTier === tier ? null : tier)}
+                  sx={{ cursor: "pointer", "&:hover": { transform: "scale(1.2)" }, transition: "transform 0.2s" }}>
+                  {qualityTier && tier <= qualityTier ? <Star fontSize="large" color="primary" /> : <StarBorder fontSize="large" color="action" />}
+                </Box>
+              ))}
+              {qualityTier && <Button size="small" onClick={() => setQualityTier(null)}>Clear</Button>}
+            </Box>
           </Box>
 
-          {/* Priority Selection (Requirement 8.1) */}
-          <FormControl fullWidth size="small">
-            <InputLabel>Priority *</InputLabel>
-            <Select
-              value={priority}
-              label="Priority *"
-              onChange={(e) => setPriority(e.target.value as number)}
-            >
-              <MenuItem value={1}>1 - Low</MenuItem>
-              <MenuItem value={2}>2 - Below Average</MenuItem>
-              <MenuItem value={3}>3 - Medium</MenuItem>
-              <MenuItem value={4}>4 - High</MenuItem>
-              <MenuItem value={5}>5 - Critical</MenuItem>
-            </Select>
-          </FormControl>
-
-          {/* Priority Slider (Alternative Visual) */}
+          {/* Priority */}
           <Box>
-            <Typography variant="subtitle2" gutterBottom>
-              Priority Level: {priority}
-            </Typography>
-            <Slider
-              value={priority}
-              onChange={(_, newValue) => setPriority(newValue as number)}
-              min={1}
-              max={5}
-              step={1}
-              marks={[
-                { value: 1, label: "Low" },
-                { value: 3, label: "Medium" },
-                { value: 5, label: "Critical" },
-              ]}
+            <Typography variant="subtitle2" gutterBottom>Priority: {priority}</Typography>
+            <Slider value={priority} onChange={(_, v) => setPriority(v as number)}
+              min={1} max={5} step={1}
+              marks={[{ value: 1, label: "Low" }, { value: 3, label: "Medium" }, { value: 5, label: "Critical" }]}
               valueLabelDisplay="auto"
             />
           </Box>
 
-          {/* Notes Field (Requirement 8.1) */}
+          {/* Notes */}
           <TextField
-            size="small"
-            value={notes}
-            onChange={(e) => setNotes(e.target.value)}
-            multiline
-            rows={3}
-            fullWidth
-            label="Notes (Optional)"
-            placeholder="Add any notes about this item..."
-            inputProps={{ maxLength: 500 }}
-            helperText={`${notes.length}/500 characters`}
+            size="small" value={notes} onChange={(e) => setNotes(e.target.value)}
+            multiline rows={2} fullWidth label="Notes (Optional)"
+            placeholder="Add any notes..." inputProps={{ maxLength: 500 }}
+            helperText={`${notes.length}/500`}
           />
         </Stack>
       </DialogContent>
-
       <DialogActions>
-        <Button onClick={handleClose} disabled={isAdding}>
-          Cancel
-        </Button>
-        <Button
-          onClick={handleSubmit}
-          variant="contained"
-          disabled={isAdding || !selectedItem || quantity < 1}
-        >
-          {isAdding ? <CircularProgress size={20} /> : "Add Item"}
+        <Button onClick={handleClose} disabled={isAdding}>Cancel</Button>
+        <Button onClick={handleSubmit} variant="contained"
+          disabled={isAdding || !selectedItem || quantity < 1 || (acquisitionMode === "craft" && !selectedBlueprintId)}>
+          {isAdding ? <CircularProgress size={20} /> : acquisitionMode === "craft" ? "Add Ingredients" : "Add Item"}
         </Button>
       </DialogActions>
     </Dialog>
