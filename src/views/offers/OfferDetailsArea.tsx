@@ -10,11 +10,14 @@ import {
   TableContainer,
   TableRow,
   Typography,
-  IconButton,
   Autocomplete,
   TextField,
   Box,
   Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
   Select,
   MenuItem,
   FormControl,
@@ -30,7 +33,6 @@ import {
   CheckCircle,
   HourglassTop,
   Close,
-  Check,
 } from "@mui/icons-material"
 import { MarkdownRender } from "../../components/markdown/Markdown.lazy"
 import { useCurrentChat, useGetChatByOfferIDQuery } from "../../features/chats"
@@ -256,12 +258,52 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response }) 
                 </Stack>
               </TableCell>
               <TableCell align="right">
-                {isEditingAssigned ? (
-                  <Stack spacing={1}>
+                <Stack direction="row" justifyContent="right" alignItems="center" spacing={1}>
+                  <Stack direction="column">
+                    {session.assigned_to ? (
+                      <>
+                        <UserDetails user={session.assigned_to} />
+                        <ListingSellerRating
+                          user={session.assigned_to}
+                          contractor={session.contractor}
+                        />
+                      </>
+                    ) : (
+                      <>
+                        {session.contractor && (
+                          <OrgDetails org={session.contractor} />
+                        )}
+                        <Typography variant="body2" color="text.secondary">
+                          {t("orderDetailsArea.none", "None")}
+                        </Typography>
+                      </>
+                    )}
+                  </Stack>
+                  {!session.assigned_to && amContractor && !["accepted", "rejected"].includes(session.status) && (
+                    <Button
+                      size="small"
+                      variant="outlined"
+                      onClick={handleClaimOffer}
+                    >
+                      {t("orderDetailsArea.claim", "Claim")}
+                    </Button>
+                  )}
+                </Stack>
+
+                {/* Assign Member Dialog */}
+                <Dialog
+                  open={isEditingAssigned}
+                  onClose={handleAssignCancel}
+                  maxWidth="xs"
+                  fullWidth
+                >
+                  <DialogTitle>{t("memberAssignArea.assignMember", "Assign Member")}</DialogTitle>
+                  <DialogContent>
                     <Autocomplete
                       filterOptions={(x) => x}
                       fullWidth
                       size="small"
+                      sx={{ mt: 1 }}
                       options={
                         target
                           ? options
@@ -294,68 +336,26 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response }) 
                         setTarget(newInputValue)
                       }}
                     />
-                    <Box display="flex" gap={1} justifyContent="flex-end">
-                      {session.assigned_to && (
-                        <Button
-                          size="small"
-                          variant="outlined"
-                          color="error"
-                          onClick={handleUnassign}
-                        >
-                          {t("memberAssignArea.unassign")}
-                        </Button>
-                      )}
-                      <Button
-                        size="small"
-                        variant="outlined"
-                        onClick={handleAssignCancel}
-                      >
-                        {t("ui.cancel")}
-                      </Button>
-                      <Button
-                        size="small"
-                        variant="contained"
-                        onClick={handleAssignSave}
-                        disabled={!targetObject}
-                        startIcon={<Check />}
-                      >
-                        {t("ui.save")}
-                      </Button>
-                    </Box>
-                  </Stack>
-                ) : (
-                  <Stack direction="row" justifyContent="right" alignItems="center" spacing={1}>
-                    <Stack direction="column">
-                      {session.assigned_to ? (
-                        <>
-                          <UserDetails user={session.assigned_to} />
-                          <ListingSellerRating
-                            user={session.assigned_to}
-                            contractor={session.contractor}
-                          />
-                        </>
-                      ) : (
-                        <>
-                          {session.contractor && (
-                            <OrgDetails org={session.contractor} />
-                          )}
-                          <Typography variant="body2" color="text.secondary">
-                            {t("orderDetailsArea.none", "None")}
-                          </Typography>
-                        </>
-                      )}
-                    </Stack>
-                    {!session.assigned_to && amContractor && !["accepted", "rejected"].includes(session.status) && (
-                      <Button
-                        size="small"
-                        variant="outlined"
-                        onClick={handleClaimOffer}
-                      >
-                        {t("orderDetailsArea.claim", "Claim")}
+                  </DialogContent>
+                  <DialogActions>
+                    {session.assigned_to && (
+                      <Button color="error" onClick={handleUnassign}>
+                        {t("memberAssignArea.unassign", "Unassign")}
                       </Button>
                     )}
-                  </Stack>
-                )}
+                    <Box sx={{ flex: 1 }} />
+                    <Button onClick={handleAssignCancel}>
+                      {t("common.cancel", "Cancel")}
+                    </Button>
+                    <Button
+                      variant="contained"
+                      onClick={handleAssignSave}
+                      disabled={!targetObject}
+                    >
+                      {t("common.save", "Save")}
+                    </Button>
+                  </DialogActions>
+                </Dialog>
               </TableCell>
             </TableRow>
             <TableRow
