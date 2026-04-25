@@ -10,11 +10,14 @@ import {
   TableContainer,
   TableRow,
   Typography,
-  IconButton,
   Autocomplete,
   TextField,
   Box,
   Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
 } from "@mui/material"
 import React, { useEffect } from "react"
 import { OrgDetails, UserDetails } from "../../components/list/UserDetails"
@@ -188,12 +191,41 @@ export function OrderDetailsArea(props: { order: Order }) {
                   </Stack>
                 </TableCell>
                 <TableCell align="right">
-                  {isEditingAssigned ? (
-                    <Stack spacing={1}>
+                  <Stack direction="row" justifyContent="right" alignItems="center" spacing={1}>
+                    {assigned ? (
+                      <UserDetails user={assigned} />
+                    ) : (
+                      <>
+                        <Typography variant="body2" color="text.secondary">
+                          {t("orderDetailsArea.none", "None")}
+                        </Typography>
+                        {amContractor && !["cancelled", "fulfilled"].includes(order.status) && (
+                          <Button
+                            size="small"
+                            variant="outlined"
+                            onClick={handleClaimOrder}
+                          >
+                            {t("orderDetailsArea.claim", "Claim")}
+                          </Button>
+                        )}
+                      </>
+                    )}
+                  </Stack>
+
+                  {/* Assign Member Dialog */}
+                  <Dialog
+                    open={isEditingAssigned}
+                    onClose={handleAssignCancel}
+                    maxWidth="xs"
+                    fullWidth
+                  >
+                    <DialogTitle>{t("memberAssignArea.assignMember", "Assign Member")}</DialogTitle>
+                    <DialogContent>
                       <Autocomplete
                         filterOptions={(x) => x}
                         fullWidth
                         size="small"
+                        sx={{ mt: 1 }}
                         options={
                           target
                             ? options
@@ -218,65 +250,34 @@ export function OrderDetailsArea(props: { order: Order }) {
                           />
                         )}
                         value={targetObject}
-                        onChange={(event: any, newValue) => {
+                        onChange={(_event: React.SyntheticEvent, newValue) => {
                           setTargetObject(newValue)
                         }}
                         inputValue={target}
-                        onInputChange={(event, newInputValue) => {
+                        onInputChange={(_event, newInputValue) => {
                           setTarget(newInputValue)
                         }}
                       />
-                      <Box display="flex" gap={1} justifyContent="flex-end">
-                        {order.assigned_to && (
-                          <Button
-                            size="small"
-                            variant="outlined"
-                            color="error"
-                            onClick={handleUnassign}
-                          >
-                            {t("memberAssignArea.unassign")}
-                          </Button>
-                        )}
-                        <Button
-                          size="small"
-                          variant="outlined"
-                          onClick={handleAssignCancel}
-                        >
-                          {t("ui.cancel")}
+                    </DialogContent>
+                    <DialogActions>
+                      {order.assigned_to && (
+                        <Button color="error" onClick={handleUnassign}>
+                          {t("memberAssignArea.unassign", "Unassign")}
                         </Button>
-                        <Button
-                          size="small"
-                          variant="contained"
-                          onClick={handleAssignSave}
-                          disabled={!targetObject}
-                          startIcon={<Check />}
-                        >
-                          {t("ui.save")}
-                        </Button>
-                      </Box>
-                    </Stack>
-                  ) : (
-                    <Stack direction="row" justifyContent="right" alignItems="center" spacing={1}>
-                      {assigned ? (
-                        <UserDetails user={assigned} />
-                      ) : (
-                        <>
-                          <Typography variant="body2" color="text.secondary">
-                            {t("orderDetailsArea.none", "None")}
-                          </Typography>
-                          {amContractor && !["cancelled", "fulfilled"].includes(order.status) && (
-                            <Button
-                              size="small"
-                              variant="outlined"
-                              onClick={handleClaimOrder}
-                            >
-                              {t("orderDetailsArea.claim", "Claim")}
-                            </Button>
-                          )}
-                        </>
                       )}
-                    </Stack>
-                  )}
+                      <Box sx={{ flex: 1 }} />
+                      <Button onClick={handleAssignCancel}>
+                        {t("common.cancel", "Cancel")}
+                      </Button>
+                      <Button
+                        variant="contained"
+                        onClick={handleAssignSave}
+                        disabled={!targetObject}
+                      >
+                        {t("common.save", "Save")}
+                      </Button>
+                    </DialogActions>
+                  </Dialog>
                 </TableCell>
               </TableRow>
             )}
