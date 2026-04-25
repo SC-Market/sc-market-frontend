@@ -113,7 +113,7 @@ function ProfileListingsV2(props: { sellerId?: string; contractorId?: string }) 
   return (
     <Grid container spacing={1}>
       {(data?.listings || []).map((listing, index) => (
-        <Grid item xs={12} sm={6} md={4} key={listing.listing_id}>
+        <Grid item xs={6} sm={4} md={4} lg={3} key={listing.listing_id}>
           <ListingCardV2 listing={listing} index={index} />
         </Grid>
       ))}
