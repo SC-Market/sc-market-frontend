@@ -49,6 +49,7 @@ import { useTheme } from "@mui/material/styles"
 import { MissionDetailModal } from "../../components/game-data/MissionDetailModal"
 import { BlueprintDetailModal } from "../../components/game-data/BlueprintDetailModal"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { VersionSelector } from "../../components/game-data/VersionSelector"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { BottomSheet } from "../../components/mobile/BottomSheet"
 import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
@@ -244,6 +245,7 @@ export function MissionSearch() {
       headerTitle={t("missions.search.header", "Mission Database")}
       sidebarOpen={true}
       maxWidth="xl"
+      headerActions={<VersionSelector compact width={220} />}
     >
       <Grid item xs={12}>
         <FilterSidebarLayout filters={filterContent} filterTitle={t("missions.filters", "Filters")}>
