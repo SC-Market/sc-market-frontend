@@ -61,6 +61,7 @@ import { BottomSheet } from "../../components/mobile/BottomSheet"
 import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
 import { BlueprintDetailModal } from "../../components/game-data/BlueprintDetailModal"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { VersionSelector } from "../../components/game-data/VersionSelector"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { FilterSidebarLayout } from "../../components/layout/FilterSidebarLayout"
 
@@ -314,6 +315,7 @@ export function BlueprintBrowser() {
       headerTitle={t("blueprints.browser.header", "Blueprint Browser")}
       sidebarOpen={true}
       maxWidth="xl"
+      headerActions={<VersionSelector compact width={220} />}
     >
       <Grid item xs={12}>
         {/* Collection progress — shown on inventory page */}
