@@ -18,10 +18,6 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
 } from "@mui/material"
 import React, { useEffect, useMemo } from "react"
 import { OrgDetails, UserDetails } from "../../components/list/UserDetails"
@@ -105,7 +101,7 @@ export function OfferMessagesArea(props: { session: GetOfferSessionV2Response })
   )
 }
 
-export function OfferDetailsArea(props: { session: GetOfferSessionV2Response }) {
+export function OfferDetailsArea(props: { session: GetOfferSessionV2Response; selectedOfferIndex?: number }) {
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
   const { t, i18n } = useTranslation()
@@ -113,7 +109,6 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response }) 
 
   const {
     profile, org, issueAlert, publicContract,
-    selectedOfferIndex, setSelectedOfferIndex,
     currentOffer, previousOffer, offerChanges,
     isEditingAssigned, setIsEditingAssigned,
     target, setTarget, targetObject, setTargetObject,
@@ -124,7 +119,7 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response }) 
     showAccept, showCancel,
     isUpdatingStatus, updateStatusCallback,
     createThread, createThreadLoading,
-  } = useOfferDetails(session)
+  } = useOfferDetails(session, props.selectedOfferIndex)
 
   const v2SummaryItems = useMemo(() => {
     if (!currentOffer?.market_listings_v2?.length) return []
@@ -149,26 +144,6 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response }) 
 
   return (
     <Grid item xs={12} lg={8} md={6} sx={{ minWidth: 0 }}>
-      {session.offers.length > 1 && (
-        <Box sx={{ mb: 2 }}>
-          <FormControl size="small" sx={{ minWidth: 200 }}>
-            <InputLabel>Offer Version</InputLabel>
-            <Select
-              value={selectedOfferIndex}
-              label="Offer Version"
-              onChange={(e) => setSelectedOfferIndex(Number(e.target.value))}
-            >
-              {session.offers.map((_, index) => (
-                <MenuItem key={index} value={index}>
-                  {index === 0
-                    ? "Most Recent"
-                    : `Offer ${session.offers.length - index}`}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-        </Box>
-      )}
       <TableContainer
         component={Paper}
         sx={{

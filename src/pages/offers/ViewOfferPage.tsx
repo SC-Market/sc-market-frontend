@@ -4,11 +4,10 @@ import {
   OfferDetailsArea,
   OfferMessagesArea,
 } from "../../views/offers/OfferDetailsArea"
-import { Grid, Skeleton, Tabs, useMediaQuery, useTheme } from "@mui/material"
+import { Grid, Skeleton, Tabs, useMediaQuery, useTheme, FormControl, InputLabel, Select, MenuItem, Stack } from "@mui/material"
 import { HapticTab } from "../../components/haptic"
 import { OfferDetailSkeleton } from "../../components/skeletons"
 import { OfferMarketListingsV2Items } from "../../views/offers/OfferMarketListingsV2Items"
-import { OfferMarketListingsV1Items } from "../../views/offers/OfferMarketListingsV1Items"
 import { OfferServiceArea } from "../../views/offers/OfferServiceArea"
 import { OrderAvailabilityArea } from "../../views/orders/OrderAvailabilityArea"
 import { useTranslation } from "react-i18next"
@@ -24,17 +23,17 @@ export function ViewOfferPage() {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const [activeTab, setActiveTab] = useState(0)
+  const [selectedOfferIndex, setSelectedOfferIndex] = useState(0)
 
-  // Redirect to order if offer has an associated order
   useEffect(() => {
     if (session?.order_id) {
       navigate(`/contract/${session.order_id}`, { replace: true })
     }
   }, [session?.order_id, navigate])
 
-  const firstOffer = session?.offers[0]
-  const hasV2Listings = (firstOffer?.market_listings_v2?.length ?? 0) > 0
-  const hasV1Listings = (firstOffer?.market_listings?.length ?? 0) > 0
+  const selectedOffer = session?.offers[selectedOfferIndex]
+  const hasV2Listings = (selectedOffer?.market_listings_v2?.length ?? 0) > 0
+  const hasV1Listings = (selectedOffer?.market_listings?.length ?? 0) > 0
   const hasMarketListings = hasV2Listings || hasV1Listings
 
   return (
@@ -52,27 +51,41 @@ export function ViewOfferPage() {
     >
       {session ? (
         <Grid item xs={12}>
-          <Tabs
-            value={activeTab}
-            onChange={(_, newValue) => setActiveTab(newValue)}
-            variant="scrollable"
-            scrollButtons="auto"
-            sx={{
-              borderBottom: 1,
-              borderColor: "divider",
-              marginBottom: 1,
-            }}
-          >
-            <HapticTab label={t("offers.details", "Details")} />
-            {isMobile && <HapticTab label={t("offers.messages", "Messages")} />}
-            {firstOffer?.service && (
-              <HapticTab label={t("offers.service", "Service")} />
+          <Stack direction="row" alignItems="center" justifyContent="space-between">
+            <Tabs
+              value={activeTab}
+              onChange={(_, newValue) => setActiveTab(newValue)}
+              variant="scrollable"
+              scrollButtons="auto"
+              sx={{ borderBottom: 1, borderColor: "divider", flex: 1 }}
+            >
+              <HapticTab label={t("offers.details", "Details")} />
+              {isMobile && <HapticTab label={t("offers.messages", "Messages")} />}
+              {selectedOffer?.service && (
+                <HapticTab label={t("offers.service", "Service")} />
+              )}
+              {hasMarketListings && (
+                <HapticTab label={t("offers.marketListings", "Items")} />
+              )}
+              <HapticTab label={t("offers.availability", "Availability")} />
+            </Tabs>
+            {session.offers.length > 1 && (
+              <FormControl size="small" sx={{ minWidth: 160, ml: 2 }}>
+                <InputLabel>Version</InputLabel>
+                <Select
+                  value={selectedOfferIndex}
+                  label="Version"
+                  onChange={(e) => setSelectedOfferIndex(Number(e.target.value))}
+                >
+                  {session.offers.map((_, index) => (
+                    <MenuItem key={index} value={index}>
+                      {index === 0 ? "Most Recent" : `Offer ${session.offers.length - index}`}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
             )}
-            {hasMarketListings && (
-              <HapticTab label={t("offers.marketListings", "Items")} />
-            )}
-            <HapticTab label={t("offers.availability", "Availability")} />
-          </Tabs>
+          </Stack>
         </Grid>
       ) : null}
 
@@ -80,7 +93,7 @@ export function ViewOfferPage() {
       {activeTab === 0 && (
         <>
           {!(isLoading || isFetching) && session ? (
-            <OfferDetailsArea session={session} />
+            <OfferDetailsArea session={session} selectedOfferIndex={selectedOfferIndex} />
           ) : (
             <Grid item xs={12} lg={8} md={6}>
               <OfferDetailSkeleton
@@ -111,7 +124,7 @@ export function ViewOfferPage() {
         let tabIndex = 0
         tabIndex++ // details
         const messagesTab = isMobile ? tabIndex++ : -1
-        const serviceTab = firstOffer?.service ? tabIndex++ : -1
+        const serviceTab = selectedOffer?.service ? tabIndex++ : -1
         const marketListingsTab = hasMarketListings ? tabIndex++ : -1
         const availabilityTab = tabIndex++
 
@@ -121,14 +134,14 @@ export function ViewOfferPage() {
               <OfferMessagesArea session={session} />
             )}
 
-            {firstOffer?.service && activeTab === serviceTab && (
+            {selectedOffer?.service && activeTab === serviceTab && (
               <OfferServiceArea session={session} />
             )}
 
             {hasMarketListings && activeTab === marketListingsTab && (
               hasV2Listings
-                ? <OfferMarketListingsV2Items items={firstOffer!.market_listings_v2} />
-                : <OfferMarketListingsV1Items items={firstOffer!.market_listings} />
+                ? <OfferMarketListingsV2Items items={selectedOffer!.market_listings_v2} />
+                : null
             )}
 
             {activeTab === availabilityTab && (

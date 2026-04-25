@@ -318,39 +318,40 @@ export function WishlistDetail() {
         </Grid>
 
         {/* Items Header + Sort Controls */}
-        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <Typography variant="h6">
-            {t("wishlists.items", "Items")} ({items.length})
-          </Typography>
-
-          <FormControl size="small" sx={{ minWidth: 150 }}>
-            <InputLabel>{t("wishlists.sortBy", "Sort By")}</InputLabel>
-            <Select
-              value={sortBy}
-              label="Sort By"
-              onChange={handleSortChange}
-              startAdornment={<Sort fontSize="small" sx={{ mr: 1, ml: 1 }} />}
-            >
-              <MenuItem value="priority">{t("wishlists.sortPriority", "Priority")}</MenuItem>
-              <MenuItem value="name">{t("wishlists.sortName", "Name")}</MenuItem>
-              <MenuItem value="status">{t("wishlists.sortStatus", "Status")}</MenuItem>
-              <MenuItem value="quality">{t("wishlists.sortQuality", "Quality")}</MenuItem>
-            </Select>
-          </FormControl>
-        </Box>
-
-        {/* Items List */}
-      {sortedItems.length === 0 ? (
-        <Card sx={{ textAlign: "center", py: 8 }}>
-          <CardContent>
-            <Typography variant="h6" color="text.secondary" gutterBottom>
-              {t("wishlists.noItems", "No items in this wishlist")}
+        <Box>
+          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
+            <Typography variant="h6">
+              {t("wishlists.items", "Items")} ({items.length})
             </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
-              {t("wishlists.noItemsHint", "Add items to start tracking what you want to acquire or craft")}
-            </Typography>
-            <Button variant="contained" startIcon={<Add />} onClick={handleAddItem}>
-              {t("wishlists.addFirstItem", "Add Your First Item")}
+
+            <FormControl size="small" sx={{ minWidth: 150 }}>
+              <InputLabel>{t("wishlists.sortBy", "Sort By")}</InputLabel>
+              <Select
+                value={sortBy}
+                label="Sort By"
+                onChange={handleSortChange}
+                startAdornment={<Sort fontSize="small" sx={{ mr: 1, ml: 1 }} />}
+              >
+                <MenuItem value="priority">{t("wishlists.sortPriority", "Priority")}</MenuItem>
+                <MenuItem value="name">{t("wishlists.sortName", "Name")}</MenuItem>
+                <MenuItem value="status">{t("wishlists.sortStatus", "Status")}</MenuItem>
+                <MenuItem value="quality">{t("wishlists.sortQuality", "Quality")}</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
+
+          {/* Items List */}
+          {sortedItems.length === 0 ? (
+            <Card sx={{ textAlign: "center", py: 8 }}>
+              <CardContent>
+                <Typography variant="h6" color="text.secondary" gutterBottom>
+                  {t("wishlists.noItems", "No items in this shopping list")}
+                </Typography>
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 3 }}>
+                  {t("wishlists.noItemsHint", "Add items to start tracking what you want to acquire or craft")}
+                </Typography>
+                <Button variant="contained" startIcon={<Add />} onClick={handleAddItem}>
+                  {t("wishlists.addFirstItem", "Add Your First Item")}
             </Button>
           </CardContent>
         </Card>

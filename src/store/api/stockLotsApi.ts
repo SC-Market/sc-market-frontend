@@ -107,7 +107,11 @@ export const stockLotsApi = serviceApi.injectEndpoints({
         return `/api/market/listings/${listing_id}/lots?${params.toString()}`
       },
       transformResponse: (response: {
-        data: { lots: StockLot[]; listing: AllocationListingData | null; aggregates: StockAggregates }
+        data: {
+          lots: StockLot[]
+          listing: AllocationListingData | null
+          aggregates: StockAggregates
+        }
       }) => response.data,
       providesTags: (result, error, { listing_id }) => [
         { type: "MarketListings", id: listing_id },
