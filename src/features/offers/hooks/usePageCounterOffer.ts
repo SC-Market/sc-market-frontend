@@ -32,8 +32,8 @@ export function usePageCounterOffer(offerId: string | undefined) {
     const offer = session.offers[0]
     if (!offer) return
 
-    // Build V2 variant items from market_listings[].v2_variants
-    const v2Items = offer.market_listings.flatMap((ml) =>
+    // Build V2 variant items from market_listings_v2[].v2_variants
+    const v2Items = (offer.market_listings_v2 || []).flatMap((ml) =>
       ml.v2_variants.map((v) => ({
         listing_id: ml.listing_id,
         variant_id: v.variant_id,

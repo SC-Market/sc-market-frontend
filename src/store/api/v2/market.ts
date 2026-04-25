@@ -2393,6 +2393,12 @@ export type OrderVariantItem = {
   display_name: string
   short_name: string
 }
+export type OrderMarketListingV1 = {
+  listing_id: string
+  quantity: number
+  title: string
+  price: number
+}
 export type OrderMarketListingV2 = {
   listing_id: string
   quantity: number
@@ -2400,7 +2406,7 @@ export type OrderMarketListingV2 = {
   price: number
   /** First photo URL */
   photo?: string
-  /** V2 variant items for this listing (empty if no V2 data) */
+  /** V2 variant items for this listing */
   v2_variants: OrderVariantItem[]
 }
 export type GetOrderDetailResponse = {
@@ -2438,8 +2444,10 @@ export type GetOrderDetailResponse = {
   created_at: string
   /** ISO 8601 timestamp of last update */
   updated_at: string
-  /** V1 market listings with V2 variant enrichment */
-  market_listings: OrderMarketListingV2[]
+  /** V1 market listings from market_orders */
+  market_listings: OrderMarketListingV1[]
+  /** V2 market listings with variant data from order_market_items_v2 */
+  market_listings_v2: OrderMarketListingV2[]
   /** V2-only order items (from order_market_items_v2) */
   items: OrderItemDetail[]
 }
@@ -2519,6 +2527,12 @@ export type OfferVariantItem = {
   display_name: string
   short_name: string
 }
+export type OfferMarketListingV1 = {
+  listing_id: string
+  quantity: number
+  title: string
+  price: number
+}
 export type OfferMarketListingV2 = {
   listing_id: string
   quantity: number
@@ -2526,7 +2540,7 @@ export type OfferMarketListingV2 = {
   price: number
   /** First photo URL */
   photo?: string
-  /** V2 variant items for this listing (empty if no V2 data) */
+  /** V2 variant items for this listing */
   v2_variants: OfferVariantItem[]
 }
 export type OfferV2 = {
@@ -2541,7 +2555,10 @@ export type OfferV2 = {
   collateral?: number
   /** Username of the user who created this offer */
   actor_username: string
-  market_listings: OfferMarketListingV2[]
+  /** V1 market listings from offer_market_items */
+  market_listings: OfferMarketListingV1[]
+  /** V2 market listings with variant data from offer_market_items_v2 */
+  market_listings_v2: OfferMarketListingV2[]
   service?: {
     title: string
     service_id: string
