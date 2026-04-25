@@ -317,7 +317,6 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response }) 
                       getOptionLabel={(option) =>
                         `${option.username} (${option.display_name})`
                       }
-                      disablePortal
                       renderInput={(params) => (
                         <TextField
                           {...params}
