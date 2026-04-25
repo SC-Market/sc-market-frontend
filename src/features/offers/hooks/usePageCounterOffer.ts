@@ -42,11 +42,14 @@ export function usePageCounterOffer(offerId: string | undefined) {
       })),
     )
 
-    // Build flat market_listings for V1 compat (listing_id + quantity)
-    const marketListings = offer.market_listings.map((ml) => ({
-      listing_id: ml.listing_id,
-      quantity: ml.quantity,
-    }))
+    // V2 items are fully described by v2_variant_items — don't duplicate in market_listings
+    const v2ListingIds = new Set(v2Items.map((i) => i.listing_id))
+    const v1MarketListings = offer.market_listings
+      .filter((ml) => !v2ListingIds.has(ml.listing_id))
+      .map((ml) => ({
+        listing_id: ml.listing_id,
+        quantity: ml.quantity,
+      }))
 
     setCounterOffer({
       cost: String(offer.cost),
@@ -56,7 +59,7 @@ export function usePageCounterOffer(offerId: string | undefined) {
       session_id: session.session_id,
       service_id: offer.service?.service_id ?? null,
       title: offer.title,
-      market_listings: marketListings,
+      market_listings: v1MarketListings,
       status: "counteroffered",
       v2_variant_items: v2Items.length > 0 ? v2Items : undefined,
     })
