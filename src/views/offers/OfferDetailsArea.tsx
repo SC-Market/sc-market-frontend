@@ -197,12 +197,30 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response; se
                 </TableCell>
               </TableRow>
             )}
-            <TableRow
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
+            {/* Seller (org) row */}
+            {session.contractor && (
+              <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                <TableCell component="th" scope="row">
+                  {t("OfferDetailsArea.seller")}
+                </TableCell>
+                <TableCell align="right">
+                  <Stack direction="row" justifyContent="right">
+                    <Stack direction="column">
+                      <OrgDetails org={session.contractor} />
+                      <ListingSellerRating contractor={session.contractor} />
+                    </Stack>
+                  </Stack>
+                </TableCell>
+              </TableRow>
+            )}
+
+            {/* Assigned row */}
+            <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
               <TableCell component="th" scope="row">
                 <Stack direction="row" alignItems="center" spacing={1}>
-                  {t("OfferDetailsArea.seller")}
+                  {session.contractor
+                    ? t("orderDetailsArea.assigned", "Assigned")
+                    : t("OfferDetailsArea.seller")}
                   {amContractorManager &&
                     !["accepted", "rejected"].includes(session.status) && (
                       <Button
@@ -219,34 +237,26 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response; se
               </TableCell>
               <TableCell align="right">
                 <Stack direction="row" justifyContent="right" alignItems="center" spacing={1}>
-                  <Stack direction="column">
-                    {session.assigned_to ? (
-                      <>
-                        <UserDetails user={session.assigned_to} />
-                        <ListingSellerRating
-                          user={session.assigned_to}
-                          contractor={session.contractor}
-                        />
-                      </>
-                    ) : (
-                      <>
-                        {session.contractor && (
-                          <OrgDetails org={session.contractor} />
-                        )}
-                        <Typography variant="body2" color="text.secondary">
-                          {t("orderDetailsArea.none", "None")}
-                        </Typography>
-                      </>
-                    )}
-                  </Stack>
-                  {!session.assigned_to && amContractor && !["accepted", "rejected"].includes(session.status) && (
-                    <Button
-                      size="small"
-                      variant="outlined"
-                      onClick={handleClaimOffer}
-                    >
-                      {t("orderDetailsArea.claim", "Claim")}
-                    </Button>
+                  {session.assigned_to ? (
+                    <Stack direction="column">
+                      <UserDetails user={session.assigned_to} />
+                      <ListingSellerRating user={session.assigned_to} />
+                    </Stack>
+                  ) : (
+                    <>
+                      <Typography variant="body2" color="text.secondary">
+                        {t("orderDetailsArea.none", "None")}
+                      </Typography>
+                      {amContractor && !["accepted", "rejected"].includes(session.status) && (
+                        <Button
+                          size="small"
+                          variant="outlined"
+                          onClick={handleClaimOffer}
+                        >
+                          {t("orderDetailsArea.claim", "Claim")}
+                        </Button>
+                      )}
+                    </>
                   )}
                 </Stack>
 
