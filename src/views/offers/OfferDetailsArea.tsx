@@ -121,6 +121,8 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response; se
     createThread, createThreadLoading,
   } = useOfferDetails(session, props.selectedOfferIndex)
 
+  const isLatestOffer = (props.selectedOfferIndex ?? 0) === 0
+
   const v2SummaryItems = useMemo(() => {
     if (!currentOffer?.market_listings_v2?.length) return []
     return currentOffer.market_listings_v2.flatMap((ml) => {
@@ -547,7 +549,7 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response; se
                 </TableCell>
               </TableRow>
             )}
-            {showAccept && (
+            {showAccept && isLatestOffer && (
               <TableRow
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
@@ -599,7 +601,7 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response; se
                 </TableCell>
               </TableRow>
             )}
-            {showCancel && (
+            {showCancel && isLatestOffer && (
               <TableRow
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
