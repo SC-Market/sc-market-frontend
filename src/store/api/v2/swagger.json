@@ -512,6 +512,10 @@
             "type": "string",
             "description": "UUID of the listing item"
           },
+          "listing_title": {
+            "type": "string",
+            "description": "Listing title"
+          },
           "variant": {
             "$ref": "#/components/schemas/OrderVariantDetail",
             "description": "Variant details with quality attributes"
@@ -536,6 +540,7 @@
           "order_item_id",
           "listing_id",
           "item_id",
+          "listing_title",
           "variant",
           "quantity",
           "price_per_unit",
@@ -650,6 +655,28 @@
         "type": "object",
         "additionalProperties": false
       },
+      "OrderMarketListingV1": {
+        "description": "V1 market listing in an order",
+        "properties": {
+          "listing_id": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number",
+            "format": "double"
+          },
+          "title": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "required": ["listing_id", "quantity", "title", "price"],
+        "type": "object",
+        "additionalProperties": false
+      },
       "OrderVariantItem": {
         "properties": {
           "order_item_id": {
@@ -689,7 +716,7 @@
         "additionalProperties": false
       },
       "OrderMarketListingV2": {
-        "description": "Market listing in an order, enriched with V2 variant data",
+        "description": "V2 market listing in an order with variant data",
         "properties": {
           "listing_id": {
             "type": "string"
@@ -705,12 +732,16 @@
             "type": "number",
             "format": "double"
           },
+          "photo": {
+            "type": "string",
+            "description": "First photo URL"
+          },
           "v2_variants": {
             "items": {
               "$ref": "#/components/schemas/OrderVariantItem"
             },
             "type": "array",
-            "description": "V2 variant items for this listing (empty if no V2 data)"
+            "description": "V2 variant items for this listing"
           }
         },
         "required": ["listing_id", "quantity", "title", "price", "v2_variants"],
@@ -804,10 +835,17 @@
           },
           "market_listings": {
             "items": {
+              "$ref": "#/components/schemas/OrderMarketListingV1"
+            },
+            "type": "array",
+            "description": "V1 market listings from market_orders"
+          },
+          "market_listings_v2": {
+            "items": {
               "$ref": "#/components/schemas/OrderMarketListingV2"
             },
             "type": "array",
-            "description": "V1 market listings with V2 variant enrichment"
+            "description": "V2 market listings with variant data from order_market_items_v2"
           },
           "items": {
             "items": {
@@ -830,6 +868,7 @@
           "created_at",
           "updated_at",
           "market_listings",
+          "market_listings_v2",
           "items"
         ],
         "type": "object",
@@ -941,31 +980,267 @@
         "type": "object",
         "additionalProperties": false
       },
-      "UserSummary": {
+      "ListingOrderSummary": {
+        "description": "Order summary for a specific listing",
         "properties": {
-          "user_id": {
+          "order_id": {
             "type": "string"
           },
+          "status": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "buyer_name": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number",
+            "format": "double"
+          },
+          "price_per_unit": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "required": [
+          "order_id",
+          "status",
+          "created_at",
+          "buyer_name",
+          "quantity",
+          "price_per_unit"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "ListingOfferSummary": {
+        "description": "Offer summary for a specific listing",
+        "properties": {
+          "session_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "buyer_name": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number",
+            "format": "double"
+          },
+          "price_per_unit": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "required": [
+          "session_id",
+          "status",
+          "created_at",
+          "buyer_name",
+          "quantity",
+          "price_per_unit"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "OrdersByListingResponse": {
+        "description": "Response for orders/offers by listing",
+        "properties": {
+          "orders": {
+            "items": {
+              "$ref": "#/components/schemas/ListingOrderSummary"
+            },
+            "type": "array"
+          },
+          "offers": {
+            "items": {
+              "$ref": "#/components/schemas/ListingOfferSummary"
+            },
+            "type": "array"
+          }
+        },
+        "required": ["orders", "offers"],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "Rating": {
+        "properties": {
+          "avg_rating": {
+            "type": "number",
+            "format": "double"
+          },
+          "rating_count": {
+            "type": "number",
+            "format": "double"
+          },
+          "streak": {
+            "type": "number",
+            "format": "double"
+          },
+          "total_rating": {
+            "type": "number",
+            "format": "double"
+          },
+          "total_orders": {
+            "type": "number",
+            "format": "double"
+          },
+          "response_rate": {
+            "type": "number",
+            "format": "double"
+          },
+          "total_assignments": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "required": ["avg_rating", "rating_count", "streak", "total_rating"],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "BadgeMetadata": {
+        "properties": {
+          "avg_rating": {
+            "type": "number",
+            "format": "double"
+          },
+          "rating_count": {
+            "type": "number",
+            "format": "double"
+          },
+          "rating_streak": {
+            "type": "number",
+            "format": "double"
+          },
+          "total_orders": {
+            "type": "number",
+            "format": "double"
+          },
+          "fulfilled_orders": {
+            "type": "number",
+            "format": "double"
+          },
+          "total_assignments": {
+            "type": "number",
+            "format": "double"
+          },
+          "response_rate": {
+            "type": "number",
+            "format": "double"
+          },
+          "total_rating": {
+            "type": "number",
+            "format": "double"
+          },
+          "orders_last_30_days": {
+            "type": "number",
+            "format": "double"
+          },
+          "orders_last_90_days": {
+            "type": "number",
+            "format": "double"
+          },
+          "avg_completion_time_hours": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "account_age_months": {
+            "type": "number",
+            "format": "double"
+          },
+          "account_created_at": {
+            "type": "string",
+            "nullable": true
+          },
+          "donor_duration_months": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "calculated_at": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "avg_rating",
+          "rating_count",
+          "rating_streak",
+          "total_orders",
+          "fulfilled_orders",
+          "total_assignments",
+          "response_rate",
+          "total_rating",
+          "orders_last_30_days",
+          "orders_last_90_days",
+          "avg_completion_time_hours",
+          "account_age_months",
+          "account_created_at",
+          "donor_duration_months",
+          "calculated_at"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "BadgeData": {
+        "properties": {
+          "badge_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/BadgeMetadata"
+          }
+        },
+        "required": ["badge_ids"],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "MinimalUser": {
+        "properties": {
           "username": {
+            "type": "string"
+          },
+          "avatar": {
             "type": "string"
           },
           "display_name": {
             "type": "string"
           },
-          "avatar": {
-            "type": "string",
+          "rating": {
+            "$ref": "#/components/schemas/Rating"
+          },
+          "badges": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/BadgeData"
+              }
+            ],
             "nullable": true
+          },
+          "last_seen": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "in_game": {
+            "type": "boolean"
           }
         },
-        "required": ["user_id", "username"],
+        "required": ["username", "avatar", "display_name", "rating"],
         "type": "object",
         "additionalProperties": false
       },
-      "OrgSummary": {
+      "MinimalContractor": {
         "properties": {
-          "contractor_id": {
-            "type": "string"
-          },
           "spectrum_id": {
             "type": "string"
           },
@@ -973,11 +1248,50 @@
             "type": "string"
           },
           "avatar": {
-            "type": "string",
+            "type": "string"
+          },
+          "rating": {
+            "$ref": "#/components/schemas/Rating"
+          },
+          "badges": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/BadgeData"
+              }
+            ],
             "nullable": true
+          },
+          "last_seen": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "members_online": {
+            "type": "number",
+            "format": "double"
           }
         },
-        "required": ["contractor_id", "spectrum_id", "name"],
+        "required": ["spectrum_id", "name", "avatar", "rating"],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "OfferMarketListingV1": {
+        "properties": {
+          "listing_id": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number",
+            "format": "double"
+          },
+          "title": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "required": ["listing_id", "quantity", "title", "price"],
         "type": "object",
         "additionalProperties": false
       },
@@ -1031,12 +1345,16 @@
             "type": "number",
             "format": "double"
           },
+          "photo": {
+            "type": "string",
+            "description": "First photo URL"
+          },
           "v2_variants": {
             "items": {
               "$ref": "#/components/schemas/OfferVariantItem"
             },
             "type": "array",
-            "description": "V2 variant items for this listing (empty if no V2 data)"
+            "description": "V2 variant items for this listing"
           }
         },
         "required": ["listing_id", "quantity", "title", "price", "v2_variants"],
@@ -1070,15 +1388,27 @@
           "created_at": {
             "type": "string"
           },
-          "actor_id": {
-            "type": "string"
+          "collateral": {
+            "type": "number",
+            "format": "double"
+          },
+          "actor_username": {
+            "type": "string",
+            "description": "Username of the user who created this offer"
           },
           "market_listings": {
+            "items": {
+              "$ref": "#/components/schemas/OfferMarketListingV1"
+            },
+            "type": "array",
+            "description": "V1 market listings from offer_market_items (empty when V2 data exists)"
+          },
+          "market_listings_v2": {
             "items": {
               "$ref": "#/components/schemas/OfferMarketListingV2"
             },
             "type": "array",
-            "description": "V1 market listings (always present)"
+            "description": "V2 market listings with variant data from offer_market_items_v2"
           },
           "service": {
             "properties": {
@@ -1103,9 +1433,53 @@
           "payment_type",
           "status",
           "created_at",
-          "actor_id",
-          "market_listings"
+          "actor_username",
+          "market_listings",
+          "market_listings_v2"
         ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "DBAvailabilityEntry": {
+        "properties": {
+          "contractor_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "user_id": {
+            "type": "string"
+          },
+          "start": {
+            "type": "number",
+            "format": "double"
+          },
+          "finish": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "required": ["contractor_id", "user_id", "start", "finish"],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "OfferAvailability": {
+        "properties": {
+          "customer": {
+            "items": {
+              "$ref": "#/components/schemas/DBAvailabilityEntry"
+            },
+            "type": "array",
+            "nullable": true
+          },
+          "assigned": {
+            "items": {
+              "$ref": "#/components/schemas/DBAvailabilityEntry"
+            },
+            "type": "array",
+            "nullable": true
+          }
+        },
+        "required": ["customer", "assigned"],
         "type": "object",
         "additionalProperties": false
       },
@@ -1123,20 +1497,37 @@
           "order_id": {
             "type": "string"
           },
+          "contract_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "discord_thread_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "discord_server_id": {
+            "type": "string",
+            "nullable": true
+          },
           "discord_invite": {
             "type": "string",
             "nullable": true
           },
           "customer": {
-            "$ref": "#/components/schemas/UserSummary"
+            "$ref": "#/components/schemas/MinimalUser"
           },
-          "seller": {
-            "anyOf": [
+          "assigned_to": {
+            "allOf": [
               {
-                "$ref": "#/components/schemas/UserSummary"
-              },
+                "$ref": "#/components/schemas/MinimalUser"
+              }
+            ],
+            "nullable": true
+          },
+          "contractor": {
+            "allOf": [
               {
-                "$ref": "#/components/schemas/OrgSummary"
+                "$ref": "#/components/schemas/MinimalContractor"
               }
             ],
             "nullable": true
@@ -1146,6 +1537,14 @@
               "$ref": "#/components/schemas/OfferV2"
             },
             "type": "array"
+          },
+          "availability": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OfferAvailability"
+              }
+            ],
+            "nullable": true
           }
         },
         "required": [
@@ -1153,7 +1552,8 @@
           "status",
           "created_at",
           "customer",
-          "seller",
+          "assigned_to",
+          "contractor",
           "offers"
         ],
         "type": "object",
@@ -1174,20 +1574,37 @@
           "order_id": {
             "type": "string"
           },
+          "contract_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "discord_thread_id": {
+            "type": "string",
+            "nullable": true
+          },
+          "discord_server_id": {
+            "type": "string",
+            "nullable": true
+          },
           "discord_invite": {
             "type": "string",
             "nullable": true
           },
           "customer": {
-            "$ref": "#/components/schemas/UserSummary"
+            "$ref": "#/components/schemas/MinimalUser"
           },
-          "seller": {
-            "anyOf": [
+          "assigned_to": {
+            "allOf": [
               {
-                "$ref": "#/components/schemas/UserSummary"
-              },
+                "$ref": "#/components/schemas/MinimalUser"
+              }
+            ],
+            "nullable": true
+          },
+          "contractor": {
+            "allOf": [
               {
-                "$ref": "#/components/schemas/OrgSummary"
+                "$ref": "#/components/schemas/MinimalContractor"
               }
             ],
             "nullable": true
@@ -1197,6 +1614,14 @@
               "$ref": "#/components/schemas/OfferV2"
             },
             "type": "array"
+          },
+          "availability": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/OfferAvailability"
+              }
+            ],
+            "nullable": true
           }
         },
         "required": [
@@ -1204,7 +1629,8 @@
           "status",
           "created_at",
           "customer",
-          "seller",
+          "assigned_to",
+          "contractor",
           "offers"
         ],
         "type": "object",
@@ -1397,6 +1823,10 @@
             },
             "type": "array",
             "description": "Optional bulk discount tiers sorted by min_quantity ascending"
+          },
+          "contractor_spectrum_id": {
+            "type": "string",
+            "description": "Optional contractor spectrum_id — if provided, listing is created on behalf of the org"
           }
         },
         "required": [
@@ -1453,6 +1883,16 @@
             "type": "number",
             "format": "double",
             "description": "Maximum quality tier available (1-5)"
+          },
+          "quality_value_min": {
+            "type": "number",
+            "format": "double",
+            "description": "Minimum quality value available (0-1000)"
+          },
+          "quality_value_max": {
+            "type": "number",
+            "format": "double",
+            "description": "Maximum quality value available (0-1000)"
           },
           "variant_count": {
             "type": "number",
@@ -1620,6 +2060,10 @@
             "format": "double",
             "description": "Maximum quality tier available (1-5)"
           },
+          "photo": {
+            "type": "string",
+            "description": "Primary photo URL"
+          },
           "expires_at": {
             "type": "string",
             "description": "ISO 8601 timestamp when listing expires (null if no expiry)"
@@ -1666,6 +2110,51 @@
           }
         },
         "required": ["listings", "total", "page", "page_size"],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "InventoryMaterial": {
+        "description": "Aggregated inventory material",
+        "properties": {
+          "game_item_id": {
+            "type": "string"
+          },
+          "game_item_name": {
+            "type": "string"
+          },
+          "game_item_type": {
+            "type": "string"
+          },
+          "game_item_icon": {
+            "type": "string"
+          },
+          "total_quantity": {
+            "type": "number",
+            "format": "double"
+          },
+          "avg_quality_value": {
+            "type": "number",
+            "format": "double"
+          },
+          "max_quality_value": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "required": ["game_item_id", "game_item_name", "total_quantity"],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "InventorySummaryResponse": {
+        "properties": {
+          "materials": {
+            "items": {
+              "$ref": "#/components/schemas/InventoryMaterial"
+            },
+            "type": "array"
+          }
+        },
+        "required": ["materials"],
         "type": "object",
         "additionalProperties": false
       },
@@ -2608,6 +3097,11 @@
         "type": "object",
         "additionalProperties": false
       },
+      "AcquisitionMode": {
+        "type": "string",
+        "enum": ["buy", "craft"],
+        "description": "How the user intends to acquire this item\n- \"buy\": Purchase the finished item from the market\n- \"craft\": Craft the item — ingredients will be added to the shopping list"
+      },
       "WishlistItemWithDetails": {
         "description": "Wishlist item with enriched data",
         "properties": {
@@ -2630,6 +3124,9 @@
           },
           "blueprint_id": {
             "type": "string"
+          },
+          "acquisition_mode": {
+            "$ref": "#/components/schemas/AcquisitionMode"
           },
           "priority": {
             "type": "number",
@@ -2676,6 +3173,7 @@
           "wishlist_id",
           "game_item_id",
           "desired_quantity",
+          "acquisition_mode",
           "priority",
           "is_acquired",
           "acquired_quantity",
@@ -2776,6 +3274,10 @@
             "type": "string",
             "description": "Optional blueprint ID if item is craftable"
           },
+          "acquisition_mode": {
+            "$ref": "#/components/schemas/AcquisitionMode",
+            "description": "How to acquire: \"buy\" from market or \"craft\" from ingredients (default: \"buy\")"
+          },
           "priority": {
             "type": "number",
             "format": "double",
@@ -2811,6 +3313,10 @@
           "notes": {
             "type": "string",
             "description": "Updated notes"
+          },
+          "acquisition_mode": {
+            "$ref": "#/components/schemas/AcquisitionMode",
+            "description": "Updated acquisition mode"
           },
           "is_acquired": {
             "type": "boolean",
@@ -3796,12 +4302,35 @@
         "type": "object",
         "additionalProperties": false
       },
+      "HaulingOrder": {
+        "description": "Hauling order",
+        "properties": {
+          "resource_name": {
+            "type": "string"
+          },
+          "min_scu": {
+            "type": "number",
+            "format": "double"
+          },
+          "max_scu": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "required": ["resource_name", "min_scu", "max_scu"],
+        "type": "object",
+        "additionalProperties": false
+      },
       "MissionSearchResult": {
         "description": "Mission search result item",
         "properties": {
           "mission_id": {
             "type": "string",
             "description": "Mission UUID"
+          },
+          "mission_code": {
+            "type": "string",
+            "description": "Mission code (internal name for URL-friendly links)"
           },
           "mission_name": {
             "type": "string",
@@ -3851,6 +4380,13 @@
             "format": "double",
             "description": "Number of blueprint rewards"
           },
+          "blueprint_reward_names": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "description": "Names of blueprint reward output items"
+          },
           "community_difficulty_avg": {
             "type": "number",
             "format": "double",
@@ -3865,9 +4401,21 @@
             "type": "boolean",
             "description": "Is chain starter mission"
           },
+          "is_chain_mission": {
+            "type": "boolean",
+            "description": "Is part of a chain"
+          },
           "is_shareable": {
             "type": "boolean",
             "description": "Is shareable mission"
+          },
+          "is_unique_mission": {
+            "type": "boolean",
+            "description": "Is unique (one-time) mission"
+          },
+          "is_illegal": {
+            "type": "boolean",
+            "description": "Is illegal"
           },
           "reputation_reward": {
             "type": "number",
@@ -3881,15 +4429,35 @@
           "mission_giver_org": {
             "type": "string",
             "description": "Mission giver organization"
+          },
+          "associated_event": {
+            "type": "string",
+            "description": "Associated event name (e.g., \"Nyx Mission Pack\")"
+          },
+          "ship_encounter_count": {
+            "type": "number",
+            "format": "double",
+            "description": "Total ship encounter count"
+          },
+          "hauling_orders": {
+            "items": {
+              "$ref": "#/components/schemas/HaulingOrder"
+            },
+            "type": "array",
+            "description": "Hauling order summaries for material badges"
           }
         },
         "required": [
           "mission_id",
+          "mission_code",
           "mission_name",
           "category",
           "blueprint_reward_count",
           "is_chain_starter",
-          "is_shareable"
+          "is_chain_mission",
+          "is_shareable",
+          "is_unique_mission",
+          "ship_encounter_count"
         ],
         "type": "object",
         "additionalProperties": false
@@ -3923,6 +4491,28 @@
         "required": ["missions", "total", "page", "page_size"],
         "type": "object",
         "additionalProperties": false
+      },
+      "ItemReward": {
+        "description": "Non-blueprint item reward",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "ref": {
+            "type": "string"
+          }
+        },
+        "required": ["name", "ref"],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "Record_string.string_": {
+        "properties": {},
+        "additionalProperties": {
+          "type": "string"
+        },
+        "type": "object",
+        "description": "Construct a type with a set of properties K of type T"
       },
       "Mission": {
         "description": "Complete mission data",
@@ -4028,13 +4618,24 @@
           "reward_scope": {
             "type": "string"
           },
-          "min_standing": {
+          "reputation_reward_faction": {
             "type": "string",
-            "description": "Standing requirement — min (e.g. \"Neutral\")"
+            "description": "Faction name for reputation reward"
+          },
+          "min_standing": {
+            "type": "string"
           },
           "max_standing": {
             "type": "string",
             "description": "Standing requirement — max (e.g. \"Elite Contractor\")"
+          },
+          "min_standing_display": {
+            "type": "string",
+            "description": "Friendly display name for min standing"
+          },
+          "max_standing_display": {
+            "type": "string",
+            "description": "Friendly display name for max standing"
           },
           "can_reaccept_after_failing": {
             "type": "boolean",
@@ -4080,6 +4681,36 @@
             "type": "number",
             "format": "double",
             "description": "Difficulty from broker (raw)"
+          },
+          "time_to_complete": {
+            "type": "number",
+            "format": "double",
+            "description": "Time to complete the mission (seconds)"
+          },
+          "accept_locations": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "description": "Accept locations (where the mission can be picked up)"
+          },
+          "destinations": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "description": "Destinations (pickup/dropoff location names)"
+          },
+          "item_rewards": {
+            "items": {
+              "$ref": "#/components/schemas/ItemReward"
+            },
+            "type": "array",
+            "description": "Non-blueprint item rewards"
+          },
+          "token_substitutions": {
+            "$ref": "#/components/schemas/Record_string.string_",
+            "description": "Token substitutions for description placeholders"
           },
           "community_difficulty_avg": {
             "type": "number",
@@ -4137,6 +4768,10 @@
             "type": "string",
             "description": "Blueprint UUID"
           },
+          "blueprint_code": {
+            "type": "string",
+            "description": "Blueprint code for URL-friendly links"
+          },
           "blueprint_name": {
             "type": "string",
             "description": "Blueprint name"
@@ -4174,6 +4809,7 @@
         },
         "required": [
           "blueprint_id",
+          "blueprint_code",
           "blueprint_name",
           "output_item_name",
           "drop_probability",
@@ -4189,6 +4825,15 @@
             "type": "number",
             "format": "double",
             "description": "Reward pool ID"
+          },
+          "pool_name": {
+            "type": "string",
+            "description": "Pool name from game data (e.g. \"BP_MISSIONREWARD_CFP_Outpost_RegionC\")"
+          },
+          "pool_chance": {
+            "type": "number",
+            "format": "double",
+            "description": "Pool-level chance (0-1, e.g. 1.0 = 100%)"
           },
           "reward_pool_size": {
             "type": "number",
@@ -4222,12 +4867,16 @@
           "name": {
             "type": "string"
           },
-          "ship_count": {
+          "min_ships": {
+            "type": "number",
+            "format": "double"
+          },
+          "max_ships": {
             "type": "number",
             "format": "double"
           }
         },
-        "required": ["name", "ship_count"],
+        "required": ["name", "min_ships", "max_ships"],
         "type": "object",
         "additionalProperties": false
       },
@@ -4237,14 +4886,24 @@
           "role": {
             "type": "string"
           },
+          "alignment": {
+            "type": "string",
+            "enum": ["hostile", "friendly", "neutral"]
+          },
           "waves": {
             "items": {
               "$ref": "#/components/schemas/ShipWave"
             },
             "type": "array"
+          },
+          "ship_pool": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
           }
         },
-        "required": ["role", "waves"],
+        "required": ["role", "alignment", "waves"],
         "type": "object",
         "additionalProperties": false
       },
@@ -4260,25 +4919,6 @@
           }
         },
         "required": ["name", "count"],
-        "type": "object",
-        "additionalProperties": false
-      },
-      "HaulingOrder": {
-        "description": "Hauling order",
-        "properties": {
-          "resource_name": {
-            "type": "string"
-          },
-          "min_scu": {
-            "type": "number",
-            "format": "double"
-          },
-          "max_scu": {
-            "type": "number",
-            "format": "double"
-          }
-        },
-        "required": ["resource_name", "min_scu", "max_scu"],
         "type": "object",
         "additionalProperties": false
       },
@@ -4523,6 +5163,27 @@
           "ceiling",
           "rank_index"
         ],
+        "type": "object",
+        "additionalProperties": false
+      },
+      "GameEvent": {
+        "description": "Game event/scenario (e.g. Luminalia, Invictus)",
+        "properties": {
+          "event_id": {
+            "type": "string"
+          },
+          "event_code": {
+            "type": "string"
+          },
+          "event_name": {
+            "type": "string"
+          },
+          "mission_count": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "required": ["event_id", "event_code", "event_name", "mission_count"],
         "type": "object",
         "additionalProperties": false
       },
@@ -5305,6 +5966,10 @@
             "type": "string",
             "description": "Blueprint UUID"
           },
+          "blueprint_code": {
+            "type": "string",
+            "description": "Blueprint code (internal name for URL-friendly links)"
+          },
           "blueprint_name": {
             "type": "string",
             "description": "Blueprint name"
@@ -5320,6 +5985,18 @@
           "item_category": {
             "type": "string",
             "description": "Item category"
+          },
+          "item_subcategory": {
+            "type": "string",
+            "description": "Item subcategory"
+          },
+          "manufacturer": {
+            "type": "string",
+            "description": "Manufacturer name"
+          },
+          "source": {
+            "type": "string",
+            "description": "Blueprint source (default, mission_reward)"
           },
           "rarity": {
             "type": "string",
@@ -5368,6 +6045,13 @@
             "format": "double",
             "description": "Crafting time in seconds"
           },
+          "modifier_properties": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "description": "Distinct modifier property names (e.g. [\"damagemitigation\", \"mintemp\"])"
+          },
           "user_owns": {
             "type": "boolean",
             "description": "Does user own this blueprint"
@@ -5375,6 +6059,7 @@
         },
         "required": [
           "blueprint_id",
+          "blueprint_code",
           "blueprint_name",
           "output_item_name",
           "ingredient_count",
@@ -5655,14 +6340,6 @@
         "type": "object",
         "additionalProperties": false
       },
-      "Record_string.string_": {
-        "properties": {},
-        "additionalProperties": {
-          "type": "string"
-        },
-        "type": "object",
-        "description": "Construct a type with a set of properties K of type T"
-      },
       "UserBlueprintAcquisition": {
         "description": "User acquisition data",
         "properties": {
@@ -5786,9 +6463,90 @@
         "type": "object",
         "additionalProperties": false
       },
+      "CraftableBlueprintResult": {
+        "description": "Result from the craftable blueprints endpoint",
+        "properties": {
+          "blueprint_id": {
+            "type": "string"
+          },
+          "blueprint_code": {
+            "type": "string"
+          },
+          "blueprint_name": {
+            "type": "string"
+          },
+          "output_item_name": {
+            "type": "string"
+          },
+          "output_item_icon": {
+            "type": "string"
+          },
+          "item_category": {
+            "type": "string"
+          },
+          "crafting_time_seconds": {
+            "type": "number",
+            "format": "double"
+          },
+          "max_craftable": {
+            "type": "number",
+            "format": "double"
+          },
+          "ingredients": {
+            "items": {
+              "properties": {
+                "quality_value": {
+                  "type": "number",
+                  "format": "double"
+                },
+                "available_quantity": {
+                  "type": "number",
+                  "format": "double"
+                },
+                "quantity_required": {
+                  "type": "number",
+                  "format": "double"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "game_item_id": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "available_quantity",
+                "quantity_required",
+                "name",
+                "game_item_id"
+              ],
+              "type": "object"
+            },
+            "type": "array"
+          }
+        },
+        "required": [
+          "blueprint_id",
+          "blueprint_code",
+          "blueprint_name",
+          "output_item_name",
+          "max_craftable",
+          "ingredients"
+        ],
+        "type": "object",
+        "additionalProperties": false
+      },
       "MarketVersion": {
         "type": "string",
         "enum": ["V1", "V2"]
+      },
+      "Record_string.boolean_": {
+        "properties": {},
+        "additionalProperties": {
+          "type": "boolean"
+        },
+        "type": "object",
+        "description": "Construct a type with a set of properties K of type T"
       },
       "GetFeatureFlagResponse": {
         "description": "Response for getting feature flag\n\nReturns the current market version for the authenticated user,\nalong with developer status to determine if debug UI should be shown.",
@@ -5799,14 +6557,36 @@
           },
           "market_version": {
             "$ref": "#/components/schemas/MarketVersion",
-            "description": "Current market version (V1 or V2)"
+            "description": "Current market version (V1 or V2) — backward compat"
           },
           "is_developer": {
             "type": "boolean",
             "description": "Whether user has developer privileges (admin or dev environment)"
+          },
+          "has_override": {
+            "type": "boolean",
+            "description": "Whether this user has a manual override (show treatment picker if true)"
+          },
+          "flags": {
+            "$ref": "#/components/schemas/Record_string.boolean_",
+            "description": "All resolved flags for this user"
+          },
+          "overridden_flags": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "description": "Which flags this user has overrides for"
           }
         },
-        "required": ["user_id", "market_version", "is_developer"],
+        "required": [
+          "user_id",
+          "market_version",
+          "is_developer",
+          "has_override",
+          "flags",
+          "overridden_flags"
+        ],
         "type": "object",
         "additionalProperties": false
       },
@@ -5835,10 +6615,17 @@
         "properties": {
           "market_version": {
             "$ref": "#/components/schemas/MarketVersion",
-            "description": "Market version to set (V1 or V2)"
+            "description": "Market version to set (V1 or V2) — backward compat for market_v2"
+          },
+          "flag_name": {
+            "type": "string",
+            "description": "Flag name to set (e.g. \"market_v2\", \"crafting\", \"wiki\")"
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "Whether to enable or disable the flag"
           }
         },
-        "required": ["market_version"],
         "type": "object",
         "additionalProperties": false
       },
@@ -5856,6 +6643,10 @@
           "seller_name": {
             "type": "string",
             "description": "Seller username or contractor name"
+          },
+          "seller_id": {
+            "type": "string",
+            "description": "Seller ID (user_id or contractor_id)"
           },
           "seller_type": {
             "type": "string",
@@ -5885,6 +6676,7 @@
           "listing_id",
           "title",
           "seller_name",
+          "seller_id",
           "seller_type",
           "seller_slug",
           "seller_rating",
@@ -5951,6 +6743,11 @@
             "type": "boolean",
             "description": "Whether this variant is currently available"
           },
+          "quantity_available": {
+            "type": "number",
+            "format": "double",
+            "description": "Total quantity available for this variant"
+          },
           "price_changed": {
             "type": "boolean",
             "description": "Whether the price has changed since add-to-cart"
@@ -5969,6 +6766,7 @@
           "price_per_unit",
           "subtotal",
           "available",
+          "quantity_available",
           "price_changed"
         ],
         "type": "object",
@@ -6084,19 +6882,22 @@
       "CheckoutCartResponse": {
         "description": "Response from cart checkout\nRequirement 32.10: Return order_id and purchase summary",
         "properties": {
-          "order_id": {
+          "result": {
             "type": "string",
-            "description": "UUID of the created order"
+            "description": "Result status"
           },
-          "total_price": {
-            "type": "number",
-            "format": "double",
-            "description": "Total price of the order"
+          "offer_id": {
+            "type": "string",
+            "description": "UUID of the created offer"
           },
-          "items_purchased": {
-            "type": "number",
-            "format": "double",
-            "description": "Number of items successfully purchased"
+          "session_id": {
+            "type": "string",
+            "description": "UUID of the offer session"
+          },
+          "discord_invite": {
+            "type": "string",
+            "nullable": true,
+            "description": "Discord invite code (if available)"
           },
           "unavailable_items": {
             "items": {
@@ -6106,7 +6907,7 @@
             "description": "Array of items that could not be purchased (optional)"
           }
         },
-        "required": ["order_id", "total_price", "items_purchased"],
+        "required": ["result", "offer_id", "session_id", "discord_invite"],
         "type": "object",
         "additionalProperties": false
       },
@@ -6116,6 +6917,14 @@
           "confirm_price_changes": {
             "type": "boolean",
             "description": "Required if any prices have changed since add-to-cart"
+          },
+          "note": {
+            "type": "string",
+            "description": "Optional note from buyer to seller"
+          },
+          "seller_id": {
+            "type": "string",
+            "description": "Checkout only items from this seller (user_id or contractor_id). If omitted, all items must be from one seller."
           }
         },
         "type": "object",
@@ -6290,6 +7099,10 @@
           "game_item_name": {
             "type": "string"
           },
+          "game_item_type": {
+            "type": "string",
+            "description": "Game item type for quality mode determination"
+          },
           "buyer_id": {
             "type": "string"
           },
@@ -6311,6 +7124,16 @@
           "quality_tier_max": {
             "type": "number",
             "format": "double"
+          },
+          "quality_value_min": {
+            "type": "number",
+            "format": "double",
+            "description": "Minimum quality value (0-1000)"
+          },
+          "quality_value_max": {
+            "type": "number",
+            "format": "double",
+            "description": "Maximum quality value (0-1000)"
           },
           "negotiable": {
             "type": "boolean"
@@ -6362,6 +7185,16 @@
           "quality_tier_max": {
             "type": "number",
             "format": "double"
+          },
+          "quality_value_min": {
+            "type": "number",
+            "format": "double",
+            "description": "Minimum quality value (0-1000) for resource buy orders"
+          },
+          "quality_value_max": {
+            "type": "number",
+            "format": "double",
+            "description": "Maximum quality value (0-1000) for resource buy orders"
           },
           "negotiable": {
             "type": "boolean"
@@ -6415,6 +7248,14 @@
             "format": "double"
           },
           "quality_tier_max": {
+            "type": "number",
+            "format": "double"
+          },
+          "quality_value_min": {
+            "type": "number",
+            "format": "double"
+          },
+          "quality_value_max": {
             "type": "number",
             "format": "double"
           },
@@ -6725,29 +7566,23 @@
           },
           "enabled": {
             "type": "boolean"
-          },
-          "created_at": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "updated_at": {
-            "type": "string",
-            "format": "date-time"
           }
         },
         "required": [
           "flag_name",
           "default_version",
           "rollout_percentage",
-          "enabled",
-          "created_at",
-          "updated_at"
+          "enabled"
         ],
         "type": "object",
         "additionalProperties": false
       },
       "UpdateConfigRequest": {
         "properties": {
+          "flag_name": {
+            "type": "string",
+            "description": "Which flag to update (defaults to market_v2)"
+          },
           "default_version": {
             "$ref": "#/components/schemas/MarketVersion",
             "description": "Global default version for users without overrides"
@@ -6767,54 +7602,69 @@
       },
       "FeatureFlagStats": {
         "properties": {
-          "total_overrides": {
-            "type": "number",
-            "format": "double"
+          "flag_name": {
+            "type": "string"
           },
-          "v1_overrides": {
-            "type": "number",
-            "format": "double"
+          "enabled": {
+            "type": "boolean"
           },
-          "v2_overrides": {
-            "type": "number",
-            "format": "double"
+          "default_version": {
+            "$ref": "#/components/schemas/MarketVersion"
           },
           "rollout_percentage": {
             "type": "number",
             "format": "double"
           },
-          "default_version": {
-            "$ref": "#/components/schemas/MarketVersion"
+          "override_count": {
+            "type": "number",
+            "format": "double"
           },
-          "enabled": {
-            "type": "boolean"
+          "enabled_overrides": {
+            "type": "number",
+            "format": "double"
+          },
+          "disabled_overrides": {
+            "type": "number",
+            "format": "double"
           }
         },
         "required": [
-          "total_overrides",
-          "v1_overrides",
-          "v2_overrides",
-          "rollout_percentage",
+          "flag_name",
+          "enabled",
           "default_version",
-          "enabled"
+          "rollout_percentage",
+          "override_count",
+          "enabled_overrides",
+          "disabled_overrides"
         ],
         "type": "object",
         "additionalProperties": false
       },
-      "UserOverride": {
+      "UserOverrideWithName": {
         "properties": {
           "user_id": {
             "type": "string"
           },
-          "market_version": {
-            "$ref": "#/components/schemas/MarketVersion"
+          "username": {
+            "type": "string"
+          },
+          "flag_name": {
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
           },
           "updated_at": {
-            "type": "string",
-            "format": "date-time"
+            "type": "string"
           }
         },
-        "required": ["user_id", "market_version", "updated_at"],
+        "required": [
+          "user_id",
+          "username",
+          "flag_name",
+          "enabled",
+          "updated_at"
+        ],
         "type": "object",
         "additionalProperties": false
       },
@@ -6822,7 +7672,7 @@
         "properties": {
           "overrides": {
             "items": {
-              "$ref": "#/components/schemas/UserOverride"
+              "$ref": "#/components/schemas/UserOverrideWithName"
             },
             "type": "array"
           },
@@ -6837,14 +7687,17 @@
       },
       "SetUserOverrideRequest": {
         "properties": {
-          "user_id": {
+          "username": {
             "type": "string"
           },
-          "market_version": {
-            "$ref": "#/components/schemas/MarketVersion"
+          "flag_name": {
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
           }
         },
-        "required": ["user_id", "market_version"],
+        "required": ["username", "flag_name", "enabled"],
         "type": "object",
         "additionalProperties": false
       },
@@ -7093,7 +7946,7 @@
         "tags": ["Stock Lots V2"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": [],
@@ -7237,7 +8090,7 @@
         "tags": ["Stock Lots V2"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": [
@@ -7289,7 +8142,7 @@
         "tags": ["Stock Lots V2"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": [
@@ -7325,7 +8178,7 @@
         "tags": ["Stock Lots V2"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": [],
@@ -7358,12 +8211,12 @@
             }
           }
         },
-        "description": "Create a new order with variant-specific items\n\nCreates an order by:\n1. Validating variant availability for each item\n2. Creating order record in V1 orders table\n3. Creating market_orders entries (V1 compatibility)\n4. Creating order_market_items_v2 entries with variant tracking\n5. Snapshotting variant prices at purchase time\n6. Allocating stock from variant-specific lots\n7. Notifying seller of new order\n\nUses database transaction for atomicity to ensure all-or-nothing behavior.\nStock allocation follows the V1 workflow using OrderLifecycleService.\n\nRequirements:\n- 25.1: POST /api/v2/orders endpoint\n- 25.2: Accept array of items with listing_id, variant_id, quantity\n- 25.3: Validate variant availability before order creation\n- 25.4: Use variant-specific pricing in order calculations\n- 25.5: Allocate stock from correct variant's stock lots\n- 25.6: Use database transaction for atomicity\n- 25.7: Snapshot variant prices at time of order creation\n- 25.8: Prevent ordering unavailable variants with descriptive error\n- 25.9: Create order_market_items_v2 entries for each item\n- 25.10: Return order_id and order details on success\n- 25.11: Notify seller of new order\n- 25.12: Log order creation to Audit_Trail",
+        "description": "Create a new order with variant-specific items\n\nCreates an order by:\n1. Validating variant availability for each item\n2. Creating order record in V1 orders table\n3. Creating market_orders entries (V1 compatibility)\n4. Creating order_market_items_v2 entries with variant tracking\n5. Snapshotting variant prices at purchase time\n6. Allocating stock from variant-specific lots\n7. Notifying seller of new order\n\nUses database transaction for atomicity to ensure all-or-nothing behavior.\nStock allocation uses listing_item_lots directly (V2).\n\nRequirements:\n- 25.1: POST /api/v2/orders endpoint\n- 25.2: Accept array of items with listing_id, variant_id, quantity\n- 25.3: Validate variant availability before order creation\n- 25.4: Use variant-specific pricing in order calculations\n- 25.5: Allocate stock from correct variant's stock lots\n- 25.6: Use database transaction for atomicity\n- 25.7: Snapshot variant prices at time of order creation\n- 25.8: Prevent ordering unavailable variants with descriptive error\n- 25.9: Create order_market_items_v2 entries for each item\n- 25.10: Return order_id and order details on success\n- 25.11: Notify seller of new order\n- 25.12: Log order creation to Audit_Trail",
         "summary": "Create order",
         "tags": ["Orders V2"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": [],
@@ -7399,7 +8252,7 @@
         "tags": ["Orders V2"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": [
@@ -7498,7 +8351,7 @@
         "tags": ["Orders V2"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": [
@@ -7506,6 +8359,42 @@
             "description": "UUID of the order to retrieve",
             "in": "path",
             "name": "orderId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/orders/by-listing/{listingId}": {
+      "get": {
+        "operationId": "GetOrdersByListing",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrdersByListingResponse"
+                }
+              }
+            }
+          }
+        },
+        "description": "Get orders and offers related to a specific listing.\nOnly visible to the listing owner or org members.",
+        "summary": "Get orders by listing",
+        "tags": ["Orders V2"],
+        "security": [
+          {
+            "jwt": []
+          }
+        ],
+        "parameters": [
+          {
+            "description": "Listing UUID",
+            "in": "path",
+            "name": "listingId",
             "required": true,
             "schema": {
               "type": "string"
@@ -7533,7 +8422,7 @@
         "tags": ["Offers V2"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": [
@@ -7567,7 +8456,7 @@
         "tags": ["Offers V2"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": [
@@ -7630,7 +8519,7 @@
         "tags": ["Listings V2"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": [],
@@ -7855,7 +8744,7 @@
         "tags": ["Listings V2"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": [
@@ -7908,6 +8797,49 @@
               "type": "string",
               "enum": ["asc", "desc"]
             }
+          },
+          {
+            "in": "query",
+            "name": "spectrum_id",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/listings/inventory-summary": {
+      "get": {
+        "operationId": "GetInventorySummary",
+        "responses": {
+          "200": {
+            "description": "Complete listing detail with variant breakdown",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventorySummaryResponse"
+                }
+              }
+            }
+          }
+        },
+        "description": "Get listing detail with variant breakdown\n\nRetrieves complete listing information including seller details, game item information,\nand variant breakdown with quantities, prices, and locations. Returns 404 if listing\nnot found.\n\nRequirements:\n- 16.1: GET /api/v2/listings/:id endpoint\n- 16.2: Return listing metadata with seller information\n- 16.3: Return array of items with game_item details\n- 16.4: Return array of variants for each item with attributes\n- 16.5: Return quantity and price for each variant\n- 16.6: Return display_name for each variant\n- 16.7: Include location information for stock lots\n- 16.8: Include crafted_by information if applicable\n- 16.9: Return 404 if listing not found\n- 16.10: Include view count and timestamps\n- 16.11: Include seller rating and status\n- 16.12: Support image gallery with multiple photos",
+        "summary": "Get listing detail",
+        "tags": ["Listings V2"],
+        "security": [
+          {
+            "loggedin": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "spectrum_id",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
           }
         ]
       }
@@ -7917,7 +8849,7 @@
         "operationId": "GetListingDetail",
         "responses": {
           "200": {
-            "description": "Complete listing detail with variant breakdown",
+            "description": "Ok",
             "content": {
               "application/json": {
                 "schema": {
@@ -7927,13 +8859,10 @@
             }
           }
         },
-        "description": "Get listing detail with variant breakdown\n\nRetrieves complete listing information including seller details, game item information,\nand variant breakdown with quantities, prices, and locations. Returns 404 if listing\nnot found.\n\nRequirements:\n- 16.1: GET /api/v2/listings/:id endpoint\n- 16.2: Return listing metadata with seller information\n- 16.3: Return array of items with game_item details\n- 16.4: Return array of variants for each item with attributes\n- 16.5: Return quantity and price for each variant\n- 16.6: Return display_name for each variant\n- 16.7: Include location information for stock lots\n- 16.8: Include crafted_by information if applicable\n- 16.9: Return 404 if listing not found\n- 16.10: Include view count and timestamps\n- 16.11: Include seller rating and status\n- 16.12: Support image gallery with multiple photos",
-        "summary": "Get listing detail",
         "tags": ["Listings V2"],
         "security": [],
         "parameters": [
           {
-            "description": "Listing UUID",
             "in": "path",
             "name": "id",
             "required": true,
@@ -7962,7 +8891,7 @@
         "tags": ["Listings V2"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": [
@@ -8011,7 +8940,7 @@
         "tags": ["Listings V2"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": [
@@ -8056,7 +8985,7 @@
         "tags": ["Listings V2"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": [
@@ -8149,7 +9078,7 @@
         "tags": ["Listings V2"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": [
@@ -8190,7 +9119,7 @@
         "tags": ["Admin Imports"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": [
@@ -8236,7 +9165,7 @@
         "tags": ["Admin Imports"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": [
@@ -8280,7 +9209,7 @@
         "tags": ["Admin Imports"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": []
@@ -8506,6 +9435,24 @@
           },
           {
             "in": "query",
+            "name": "quantity_min",
+            "required": false,
+            "schema": {
+              "format": "double",
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "quantity_max",
+            "required": false,
+            "schema": {
+              "format": "double",
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
             "name": "sort_by",
             "required": false,
             "schema": {
@@ -8563,7 +9510,7 @@
         "tags": ["Game Data - Wishlists"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": []
@@ -8587,18 +9534,16 @@
         "tags": ["Game Data - Wishlists"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": [],
         "requestBody": {
-          "description": "Wishlist creation data",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CreateWishlistRequest",
-                "description": "Wishlist creation data"
+                "$ref": "#/components/schemas/CreateWishlistRequest"
               }
             }
           }
@@ -8664,7 +9609,7 @@
         "tags": ["Game Data - Wishlists"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": [
@@ -8679,13 +9624,11 @@
           }
         ],
         "requestBody": {
-          "description": "Update data",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateWishlistRequest",
-                "description": "Update data"
+                "$ref": "#/components/schemas/UpdateWishlistRequest"
               }
             }
           }
@@ -8716,7 +9659,7 @@
         "tags": ["Game Data - Wishlists"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": [
@@ -8752,7 +9695,7 @@
         "tags": ["Game Data - Wishlists"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": [
@@ -8767,13 +9710,11 @@
           }
         ],
         "requestBody": {
-          "description": "Item data",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/AddWishlistItemRequest",
-                "description": "Item data"
+                "$ref": "#/components/schemas/AddWishlistItemRequest"
               }
             }
           }
@@ -8806,7 +9747,7 @@
         "tags": ["Game Data - Wishlists"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": [
@@ -8849,7 +9790,7 @@
         "tags": ["Game Data - Wishlists"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": [
@@ -8873,13 +9814,11 @@
           }
         ],
         "requestBody": {
-          "description": "Update data",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/UpdateWishlistItemRequest",
-                "description": "Update data"
+                "$ref": "#/components/schemas/UpdateWishlistItemRequest"
               }
             }
           }
@@ -8906,7 +9845,7 @@
         "tags": ["Game Data - Wishlists"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": [
@@ -9439,7 +10378,7 @@
         "tags": ["Game Data - Versions"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": [],
@@ -9803,6 +10742,24 @@
             }
           },
           {
+            "description": "Filter by event code (show only missions for this event)",
+            "in": "query",
+            "name": "event_code",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Exclude event-only missions (default: true — hides seasonal missions)",
+            "in": "query",
+            "name": "exclude_events",
+            "required": false,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
             "description": "Game version ID (defaults to active LIVE version)",
             "in": "query",
             "name": "version_id",
@@ -9864,15 +10821,6 @@
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "description": "Optional user ID for user-specific data",
-            "in": "query",
-            "name": "user_id",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
           }
         ]
       }
@@ -9901,14 +10849,6 @@
             "in": "path",
             "name": "mission_code",
             "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "in": "query",
-            "name": "user_id",
-            "required": false,
             "schema": {
               "type": "string"
             }
@@ -9980,7 +10920,7 @@
         "tags": ["Game Data - Missions"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": [
@@ -10048,7 +10988,7 @@
         "tags": ["Game Data - Missions"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": [
@@ -10163,6 +11103,9 @@
               "application/json": {
                 "schema": {
                   "properties": {
+                    "display_name": {
+                      "type": "string"
+                    },
                     "scopes": {
                       "items": {
                         "type": "string"
@@ -10176,7 +11119,7 @@
                       "type": "array"
                     }
                   },
-                  "required": ["scopes", "ranks"],
+                  "required": ["display_name", "scopes", "ranks"],
                   "type": "object"
                 }
               }
@@ -10200,6 +11143,37 @@
         ]
       }
     },
+    "/game-data/missions/events": {
+      "get": {
+        "operationId": "GetGameEvents",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "events": {
+                      "items": {
+                        "$ref": "#/components/schemas/GameEvent"
+                      },
+                      "type": "array"
+                    }
+                  },
+                  "required": ["events"],
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "description": "List all game events/scenarios that have associated missions",
+        "summary": "Get game events",
+        "tags": ["Game Data - Missions"],
+        "security": [],
+        "parameters": []
+      }
+    },
     "/game-data/crafting/calculate-quality": {
       "post": {
         "operationId": "CalculateQuality",
@@ -10221,13 +11195,11 @@
         "security": [],
         "parameters": [],
         "requestBody": {
-          "description": "Crafting calculation request with blueprint and materials",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CalculateQualityRequest",
-                "description": "Crafting calculation request with blueprint and materials"
+                "$ref": "#/components/schemas/CalculateQualityRequest"
               }
             }
           }
@@ -10255,13 +11227,11 @@
         "security": [],
         "parameters": [],
         "requestBody": {
-          "description": "Simulation request with material variations",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SimulateCraftingRequest",
-                "description": "Simulation request with material variations"
+                "$ref": "#/components/schemas/SimulateCraftingRequest"
               }
             }
           }
@@ -10288,18 +11258,16 @@
         "tags": ["Game Data - Crafting"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": [],
         "requestBody": {
-          "description": "Crafting session data",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/RecordCraftingRequest",
-                "description": "Crafting session data"
+                "$ref": "#/components/schemas/RecordCraftingRequest"
               }
             }
           }
@@ -10326,7 +11294,7 @@
         "tags": ["Game Data - Crafting"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": [
@@ -10384,7 +11352,7 @@
         "tags": ["Game Data - Crafting"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": [
@@ -10479,7 +11447,7 @@
         "tags": ["Game Data - Crafting"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": []
@@ -10579,6 +11547,33 @@
             }
           },
           {
+            "description": "Filter by blueprint source (default, mission_reward)",
+            "in": "query",
+            "name": "source",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter by manufacturer name",
+            "in": "query",
+            "name": "manufacturer",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Filter by ingredient material name",
+            "in": "query",
+            "name": "ingredient_name",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
             "description": "Game version ID (defaults to active LIVE version)",
             "in": "query",
             "name": "version_id",
@@ -10640,12 +11635,35 @@
             "schema": {
               "type": "string"
             }
-          },
+          }
+        ]
+      }
+    },
+    "/game-data/blueprints/by-code/{blueprint_code}": {
+      "get": {
+        "operationId": "GetBlueprintDetailByCode",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BlueprintDetailResponse"
+                }
+              }
+            }
+          }
+        },
+        "description": "Get missions that reward this blueprint\n\nReturns all missions that can reward the specified blueprint,\n/**\nGet blueprint detail by blueprint_code (string identifier)",
+        "summary": "Get blueprint by code",
+        "tags": ["Game Data - Blueprints"],
+        "security": [],
+        "parameters": [
           {
-            "description": "Optional user ID for user-specific data",
-            "in": "query",
-            "name": "user_id",
-            "required": false,
+            "description": "The blueprint code string",
+            "in": "path",
+            "name": "blueprint_code",
+            "required": true,
             "schema": {
               "type": "string"
             }
@@ -10671,7 +11689,7 @@
             }
           }
         },
-        "description": "Get missions that reward this blueprint\n\nReturns all missions that can reward the specified blueprint,\nincluding drop probabilities and mission locations.",
+        "description": "Get missions that reward a specific blueprint\n\nincluding drop probabilities and mission locations.",
         "summary": "Get blueprint missions",
         "tags": ["Game Data - Blueprints"],
         "security": [],
@@ -10726,7 +11744,7 @@
         "tags": ["Game Data - Blueprints"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": [
@@ -10789,7 +11807,7 @@
         "tags": ["Game Data - Blueprints"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": [
@@ -10956,7 +11974,7 @@
         "tags": ["Game Data - Blueprints"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": [
@@ -11080,7 +12098,7 @@
         "tags": ["Game Data - Blueprints"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": [
@@ -11103,6 +12121,67 @@
             }
           }
         ]
+      }
+    },
+    "/game-data/blueprints/craftable": {
+      "post": {
+        "operationId": "FindCraftableBlueprints",
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/CraftableBlueprintResult"
+                  },
+                  "type": "array"
+                }
+              }
+            }
+          }
+        },
+        "description": "Find blueprints craftable with given materials.\nReturns blueprints where all ingredients are satisfied, with max craftable count.",
+        "summary": "Find craftable blueprints",
+        "tags": ["Game Data - Blueprints"],
+        "security": [],
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "owned_only": {
+                    "type": "boolean"
+                  },
+                  "materials": {
+                    "items": {
+                      "properties": {
+                        "quality_value": {
+                          "type": "number",
+                          "format": "double"
+                        },
+                        "quantity_scu": {
+                          "type": "number",
+                          "format": "double"
+                        },
+                        "game_item_id": {
+                          "type": "string"
+                        }
+                      },
+                      "required": ["quantity_scu", "game_item_id"],
+                      "type": "object"
+                    },
+                    "type": "array"
+                  }
+                },
+                "required": ["materials"],
+                "type": "object"
+              }
+            }
+          }
+        }
       }
     },
     "/debug/feature-flag": {
@@ -11145,10 +12224,10 @@
         "tags": ["Debug V2"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           },
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": [],
@@ -11186,7 +12265,7 @@
         "tags": ["Cart V2"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": []
@@ -11212,7 +12291,7 @@
         "tags": ["Cart V2"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": [],
@@ -11256,7 +12335,7 @@
         "tags": ["Cart V2"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": [
@@ -11308,7 +12387,7 @@
         "tags": ["Cart V2"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": [
@@ -11329,7 +12408,7 @@
         "operationId": "CheckoutCart",
         "responses": {
           "200": {
-            "description": "Order ID and purchase summary",
+            "description": "Offer session details (session_id, offer_id, discord_invite)",
             "content": {
               "application/json": {
                 "schema": {
@@ -11339,23 +12418,23 @@
             }
           }
         },
-        "description": "Checkout cart and create order\n\nConverts cart items to an order by:\n1. Validating all cart items are still available\n2. Detecting price changes and requiring confirmation if needed\n3. Creating order with variant-specific line items\n4. Allocating stock for each variant\n5. Clearing cart after successful order\n6. Handling partial failures (some items unavailable)\n\nUses database transaction for atomicity to ensure all-or-nothing behavior.\nIf any cart items are unavailable or prices have changed without confirmation,\nthe checkout will fail with descriptive errors.\n\nRequirements:\n- 32.1: POST /api/v2/cart/checkout endpoint\n- 32.2: Validate all cart items for availability before checkout\n- 32.3: Create order with variant-specific items from cart\n- 32.4: Allocate stock from correct variants\n- 32.5: Use variant-specific pricing in order totals\n- 32.6: Use database transaction for atomicity\n- 32.7: Clear cart after successful checkout\n- 32.8: Handle partial checkout if some items become unavailable\n- 32.9: Return order_id and order details on success\n- 32.10: Notify user of price changes requiring confirmation\n- 32.11: Notify sellers of new orders\n- 32.12: Log checkout to Audit_Trail",
+        "description": "Checkout cart — creates an offer session (mirrors V1 purchase_listings flow)\n\n1. Validates all cart items are still available\n2. Detects price changes and requires confirmation if needed\n3. Checks blocked users, availability requirements, order limits\n4. Creates an offer session via V1 createOffer (chat, Discord, notifications)\n5. Clears cart after successful offer creation",
         "summary": "Checkout cart",
         "tags": ["Cart V2"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": [],
         "requestBody": {
-          "description": "Checkout request with optional price change confirmation",
+          "description": "Checkout request with optional price change confirmation and note",
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/CheckoutCartRequest",
-                "description": "Checkout request with optional price change confirmation"
+                "description": "Checkout request with optional price change confirmation and note"
               }
             }
           }
@@ -11377,12 +12456,12 @@
             }
           }
         },
-        "description": "Create a direct purchase order from listing\n\nCreates an order directly from a listing with variant selection, bypassing the cart.\nThis implements \"Buy Now\" functionality for immediate purchases.\n\nProcess:\n1. Validates listing exists and is active\n2. Validates variant exists and belongs to listing\n3. Checks variant availability (sufficient stock)\n4. Snapshots variant price at purchase time\n5. Creates order record in V1 orders table\n6. Creates market_orders entry (V1 compatibility)\n7. Creates order_market_items_v2 entry with variant tracking\n8. Allocates stock from variant-specific lots\n9. Returns order details with purchase summary\n\nUses database transaction for atomicity to ensure all-or-nothing behavior.\nStock allocation follows the V1 workflow using OrderLifecycleService.\n\nRequirements:\n- Validate listing exists and is active\n- Validate variant exists and belongs to listing\n- Check variant availability before order creation\n- Create order with variant-specific line item\n- Allocate stock for the variant\n- Use database transaction for atomicity\n- Snapshot variant price at time of purchase\n- Return order_id and purchase summary\n- Prevent ordering unavailable variants with descriptive error\n- Follow same patterns as cart checkout",
+        "description": "Create a direct purchase order from listing\n\nCreates an order directly from a listing with variant selection, bypassing the cart.\nThis implements \"Buy Now\" functionality for immediate purchases.\n\nProcess:\n1. Validates listing exists and is active\n2. Validates variant exists and belongs to listing\n3. Checks variant availability (sufficient stock)\n4. Snapshots variant price at purchase time\n5. Creates order record in V1 orders table\n6. Creates market_orders entry (V1 compatibility)\n7. Creates order_market_items_v2 entry with variant tracking\n8. Allocates stock from variant-specific lots\n9. Returns order details with purchase summary\n\nUses database transaction for atomicity to ensure all-or-nothing behavior.\nStock allocation uses listing_item_lots directly (V2).\n\nRequirements:\n- Validate listing exists and is active\n- Validate variant exists and belongs to listing\n- Check variant availability before order creation\n- Create order with variant-specific line item\n- Allocate stock for the variant\n- Use database transaction for atomicity\n- Snapshot variant price at time of purchase\n- Return order_id and purchase summary\n- Prevent ordering unavailable variants with descriptive error\n- Follow same patterns as cart checkout",
         "summary": "Create direct purchase order",
         "tags": ["Buy Orders V2"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": [],
@@ -11419,10 +12498,7 @@
         "tags": ["Buy Orders V2"],
         "security": [
           {
-            "jwt": []
-          },
-          {
-            "session": []
+            "loggedin": []
           }
         ],
         "parameters": [],
@@ -11485,6 +12561,42 @@
           },
           {
             "in": "query",
+            "name": "quality_value_min",
+            "required": false,
+            "schema": {
+              "format": "double",
+              "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "quality_value_max",
+            "required": false,
+            "schema": {
+              "format": "double",
+              "type": "number"
+            }
+          },
+          {
+            "description": "Sort by: created_at, price_per_unit, quality_tier_min, quality_value_min",
+            "in": "query",
+            "name": "sort_by",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sort_order",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["asc", "desc"]
+            }
+          },
+          {
+            "in": "query",
             "name": "page",
             "required": false,
             "schema": {
@@ -11523,10 +12635,7 @@
         "tags": ["Buy Orders V2"],
         "security": [
           {
-            "jwt": []
-          },
-          {
-            "session": []
+            "loggedin": []
           }
         ],
         "parameters": [
@@ -11579,10 +12688,7 @@
         "tags": ["Buy Orders V2"],
         "security": [
           {
-            "jwt": []
-          },
-          {
-            "session": []
+            "loggedin": []
           }
         ],
         "parameters": [
@@ -11630,10 +12736,7 @@
         "tags": ["Buy Orders V2"],
         "security": [
           {
-            "jwt": []
-          },
-          {
-            "session": []
+            "loggedin": []
           }
         ],
         "parameters": [
@@ -11668,10 +12771,7 @@
         "tags": ["Buy Orders V2"],
         "security": [
           {
-            "jwt": []
-          },
-          {
-            "session": []
+            "loggedin": []
           }
         ],
         "parameters": [
@@ -11724,7 +12824,7 @@
         "tags": ["Availability"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": [
@@ -11921,7 +13021,7 @@
         "tags": ["Admin Feature Flags"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": []
@@ -11945,7 +13045,7 @@
         "tags": ["Admin Feature Flags"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": [],
@@ -11970,7 +13070,10 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/FeatureFlagStats"
+                  "items": {
+                    "$ref": "#/components/schemas/FeatureFlagStats"
+                  },
+                  "type": "array"
                 }
               }
             }
@@ -11981,7 +13084,7 @@
         "tags": ["Admin Feature Flags"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": []
@@ -12007,7 +13110,7 @@
         "tags": ["Admin Feature Flags"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": [
@@ -12027,6 +13130,22 @@
             "schema": {
               "format": "double",
               "type": "number"
+            }
+          },
+          {
+            "in": "query",
+            "name": "search",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "flag_name",
+            "required": false,
+            "schema": {
+              "type": "string"
             }
           }
         ]
@@ -12056,7 +13175,7 @@
         "tags": ["Admin Feature Flags"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": [],
@@ -12072,7 +13191,7 @@
         }
       }
     },
-    "/admin/feature-flags/overrides/{userId}": {
+    "/admin/feature-flags/overrides/{username}": {
       "delete": {
         "operationId": "RemoveUserOverride",
         "responses": {
@@ -12098,14 +13217,22 @@
         "tags": ["Admin Feature Flags"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": [
           {
             "in": "path",
-            "name": "userId",
+            "name": "username",
             "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "flag_name",
+            "required": false,
             "schema": {
               "type": "string"
             }
@@ -12146,7 +13273,7 @@
         "tags": ["Admin"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": []
@@ -12179,7 +13306,7 @@
         "tags": ["Admin"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": []
@@ -12216,7 +13343,7 @@
         "tags": ["Admin"],
         "security": [
           {
-            "jwt": []
+            "loggedin": []
           }
         ],
         "parameters": [

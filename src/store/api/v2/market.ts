@@ -3084,6 +3084,7 @@ export type CreateWishlistRequest = {
   /** Is collaborative (multiple users can edit) */
   is_collaborative: boolean
 }
+export type AcquisitionMode = "buy" | "craft"
 export type WishlistItemWithDetails = {
   item_id: string
   wishlist_id: string
@@ -3091,6 +3092,7 @@ export type WishlistItemWithDetails = {
   desired_quantity: number
   desired_quality_tier?: number
   blueprint_id?: string
+  acquisition_mode: AcquisitionMode
   priority: number
   notes?: string
   is_acquired: boolean
@@ -3133,6 +3135,8 @@ export type AddWishlistItemRequest = {
   desired_quality_tier?: number
   /** Optional blueprint ID if item is craftable */
   blueprint_id?: string
+  /** How to acquire: "buy" from market or "craft" from ingredients (default: "buy") */
+  acquisition_mode?: AcquisitionMode
   /** Priority level (1-5, higher is more important) */
   priority: number
   /** Optional notes */
@@ -3147,6 +3151,8 @@ export type UpdateWishlistItemRequest = {
   priority?: number
   /** Updated notes */
   notes?: string
+  /** Updated acquisition mode */
+  acquisition_mode?: AcquisitionMode
   /** Updated acquired status */
   is_acquired?: boolean
   /** Updated acquired quantity */
