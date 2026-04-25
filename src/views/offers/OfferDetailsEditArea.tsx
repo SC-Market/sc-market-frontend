@@ -1,4 +1,4 @@
-import { OfferSession } from "../../features/offers/api/offerApi"
+import type { GetOfferSessionV2Response } from "../../store/api/v2/market"
 import {
   Grid,
   InputAdornment,
@@ -26,7 +26,7 @@ import { useCounterOffer } from "../../hooks/offer/CounterOfferDetails"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 
-export function OfferDetailsEditArea(props: { session: OfferSession }) {
+export function OfferDetailsEditArea(props: { session: GetOfferSessionV2Response }) {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const { session } = props
@@ -79,7 +79,7 @@ export function OfferDetailsEditArea(props: { session: OfferSession }) {
               <TableCell align="right">
                 <Stack direction="row" justifyContent={"right"}>
                   {format(
-                    new Date(session.offers[0].timestamp),
+                    new Date(session.offers[0].created_at),
                     "MMMM do yyyy, h:mm:ss a",
                   )}
                 </Stack>

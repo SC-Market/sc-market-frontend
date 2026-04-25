@@ -1,4 +1,3 @@
-import { OfferSession } from "../../features/offers/api/offerApi"
 import React, { useMemo } from "react"
 import { Grid, MenuItem, Paper, TextField, Typography } from "@mui/material"
 import { ServiceListingBase } from "../contracts/ServiceListings.lazy"
@@ -13,25 +12,28 @@ import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 
-export function OfferServiceEditArea(props: { offer: OfferSession }) {
+export function OfferServiceEditArea(props: {
+  session?: { assigned_to?: { username: string } | null; contractor?: { spectrum_id: string } | null }
+  offer?: { assigned_to?: { username: string } | null; contractor?: { spectrum_id: string } | null }
+}) {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
-  const { offer: session } = props
+  const session = props.session || props.offer
   const [body, setBody] = useCounterOffer()
 
   const { data: userServices } = useGetServicesQuery(
-    session.assigned_to?.username!,
+    session?.assigned_to?.username!,
     {
-      skip: !session.assigned_to?.username,
+      skip: !session?.assigned_to?.username,
     },
   )
   const { data: contractorServices } = useGetServicesContractorQuery(
-    session.contractor?.spectrum_id!,
-    { skip: !session.contractor?.spectrum_id },
+    session?.contractor?.spectrum_id!,
+    { skip: !session?.contractor?.spectrum_id },
   )
   const services = useMemo(
-    () => (session.assigned_to ? userServices : contractorServices) || [],
-    [session.assigned_to, contractorServices, userServices],
+    () => (session?.assigned_to ? userServices : contractorServices) || [],
+    [session?.assigned_to, contractorServices, userServices],
   )
 
   const service = useMemo(() => {

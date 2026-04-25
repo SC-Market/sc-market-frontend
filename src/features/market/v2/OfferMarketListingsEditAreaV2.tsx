@@ -25,7 +25,7 @@ import { TrashCan } from "mdi-material-ui"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
-import { OfferSession } from "../../offers/api/offerApi"
+import type { GetOfferSessionV2Response } from "../../../store/api/v2/market"
 import {
   useSearchListingsQuery,
   ListingSearchResult,
@@ -194,10 +194,10 @@ export function OfferListingRowItemEditableV2(props: {
  * - Same Table maxWidth (350)
  * - Same fade-in animations
  */
-export function OfferMarketListingsEditAreaV2(props: { offer: OfferSession }) {
+export function OfferMarketListingsEditAreaV2(props: { session: GetOfferSessionV2Response }) {
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
-  const { offer: session } = props
+  const { session } = props
   const [body, setBody] = useCounterOffer()
 
   // Search V2 listings for this seller

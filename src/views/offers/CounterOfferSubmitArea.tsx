@@ -1,7 +1,8 @@
 import LoadingButton from "@mui/lab/LoadingButton"
 import { Stack } from "@mui/system"
 import React, { useCallback } from "react"
-import { OfferSession, useCounterOfferMutation } from "../../features/offers/api/offerApi"
+import { useCounterOfferMutation } from "../../features/offers/api/offerApi"
+import type { GetOfferSessionV2Response } from "../../store/api/v2/market"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { useNavigate } from "react-router-dom"
 import { useCounterOffer } from "../../hooks/offer/CounterOfferDetails"
@@ -10,7 +11,7 @@ import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 
-export function CounterOfferSubmitArea(props: { session: OfferSession }) {
+export function CounterOfferSubmitArea(props: { session: GetOfferSessionV2Response }) {
   const { session } = props
   const [counterOffer, { isLoading: counterOfferLoading }] =
     useCounterOfferMutation()
@@ -30,10 +31,10 @@ export function CounterOfferSubmitArea(props: { session: OfferSession }) {
           }),
           severity: "success",
         })
-        navigate(`/offer/${session.id}`)
+        navigate(`/offer/${session.session_id}`)
       })
       .catch(issueAlert)
-  }, [counterOffer, body, navigate, session.id, issueAlert, t])
+  }, [counterOffer, body, navigate, session.session_id, issueAlert, t])
 
   return (
     <Grid item xs={12}>
