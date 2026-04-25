@@ -68,9 +68,7 @@ export function ViewOfferPage() {
             {hasMarketListings && (
               <HapticTab label={t("offers.marketListings", "Items")} />
             )}
-            {session.availability && (
-              <HapticTab label={t("offers.availability", "Availability")} />
-            )}
+            <HapticTab label={t("offers.availability", "Availability")} />
           </Tabs>
         </Grid>
       ) : null}
@@ -112,7 +110,7 @@ export function ViewOfferPage() {
         const messagesTab = isMobile ? tabIndex++ : -1
         const serviceTab = firstOffer?.service ? tabIndex++ : -1
         const marketListingsTab = hasMarketListings ? tabIndex++ : -1
-        const availabilityTab = session.availability ? tabIndex++ : -1
+        const availabilityTab = tabIndex++
 
         return (
           <>
@@ -128,7 +126,7 @@ export function ViewOfferPage() {
               <OfferMarketListingsV2Items items={firstOffer!.market_listings} />
             )}
 
-            {session.availability && activeTab === availabilityTab && (
+            {activeTab === availabilityTab && (
               <OrderAvailabilityArea session={session} />
             )}
           </>
