@@ -2,7 +2,6 @@ import { Box, Typography, Divider, Stack, Link, Chip } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { OfferChanges } from "../../util/offerChanges"
 import { OrderItemDetail } from "../../store/api/v2/market"
-import { QualityBadge } from "../market/v2/QualityBadge"
 
 /**
  * OrderSummarySectionV2 Props
@@ -100,22 +99,7 @@ export function OrderSummarySectionV2({
                     {item.listing_title}
                   </Link>
                   
-                  {/* Variant details with quality badge */}
-                  {/* Requirement 27.10: Display quality_tier in order summary */}
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, mt: 0.5 }}>
-                    {item.variant.attributes.quality_tier && (
-                      <QualityBadge
-                        tier={item.variant.attributes.quality_tier}
-                        size="small"
-                      />
-                    )}
-                    <Typography variant="caption" color="text.secondary">
-                      {item.variant.display_name}
-                    </Typography>
-                  </Box>
-                  
                   {/* Price and quantity details */}
-                  {/* Requirement 27.11: Per-variant pricing */}
                   <Typography variant="body2" color="text.secondary">
                     {item.price_per_unit.toLocaleString()} aUEC × {item.quantity}
                     {quantityChange && (
