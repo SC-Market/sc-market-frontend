@@ -213,7 +213,7 @@ export function ViewOrder() {
               )}
               {((session?.offers[0]?.market_listings &&
                 session.offers[0].market_listings.length > 0) ||
-                (orderDetailV2?.market_listings && orderDetailV2.market_listings.length > 0)) && (
+                (orderDetailV2?.market_listings_v2 && orderDetailV2.market_listings_v2.length > 0)) && (
                   <HapticTab
                     label={t("orders.marketListings", "Items")}
                   />
@@ -236,7 +236,7 @@ export function ViewOrder() {
             const hasItems =
               (session?.offers[0]?.market_listings &&
               session.offers[0].market_listings.length > 0) ||
-              (orderDetailV2?.market_listings && orderDetailV2.market_listings.length > 0)
+              (orderDetailV2?.market_listings_v2 && orderDetailV2.market_listings_v2.length > 0)
             const marketListingsTab = hasItems ? tabIndex++ : -1
             const allocationTab = amContractorManager ? tabIndex++ : -1
             const availabilityTab = amRelated ? tabIndex++ : -1
@@ -340,8 +340,8 @@ export function ViewOrder() {
                   activeTab === marketListingsTab &&
                   (!(pageData.isLoading || pageData.isFetching) ? (
                     <Grid item xs={12}>
-                      {orderDetailV2?.market_listings && orderDetailV2.market_listings.length > 0 ? (
-                        <OfferMarketListingsV2Items items={orderDetailV2.market_listings} />
+                      {orderDetailV2?.market_listings_v2 && orderDetailV2.market_listings_v2.length > 0 ? (
+                        <OfferMarketListingsV2Items items={orderDetailV2.market_listings_v2} />
                       ) : session ? (
                         <OfferMarketListings offer={session} />
                       ) : null}

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useParams, useNavigate } from "react-router-dom"
 import {
   OfferDetailsArea,
@@ -8,6 +9,7 @@ import { Grid, Skeleton, Tabs, useMediaQuery, useTheme } from "@mui/material"
 import { HapticTab } from "../../components/haptic"
 import { OfferDetailSkeleton } from "../../components/skeletons"
 import { OfferMarketListingsV2Items } from "../../views/offers/OfferMarketListingsV2Items"
+import { OfferMarketListingsV1Items } from "../../views/offers/OfferMarketListingsV1Items"
 import { OfferServiceArea } from "../../views/offers/OfferServiceArea"
 import { OrderAvailabilityArea } from "../../views/orders/OrderAvailabilityArea"
 import { useTranslation } from "react-i18next"
@@ -32,7 +34,9 @@ export function ViewOfferPage() {
   }, [session?.order_id, navigate])
 
   const firstOffer = session?.offers[0]
-  const hasMarketListings = (firstOffer?.market_listings?.length ?? 0) > 0
+  const hasV2Listings = (firstOffer?.market_listings_v2?.length ?? 0) > 0
+  const hasV1Listings = (firstOffer?.market_listings?.length ?? 0) > 0
+  const hasMarketListings = hasV2Listings || hasV1Listings
 
   return (
     <DetailPageLayout
@@ -123,7 +127,9 @@ export function ViewOfferPage() {
             )}
 
             {hasMarketListings && activeTab === marketListingsTab && (
-              <OfferMarketListingsV2Items items={firstOffer!.market_listings} />
+              hasV2Listings
+                ? <OfferMarketListingsV2Items items={firstOffer!.market_listings_v2} />
+                : <OfferMarketListingsV1Items items={firstOffer!.market_listings} />
             )}
 
             {activeTab === availabilityTab && (

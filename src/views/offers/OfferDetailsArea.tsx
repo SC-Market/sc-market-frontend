@@ -127,40 +127,23 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response }) 
   } = useOfferDetails(session)
 
   const v2SummaryItems = useMemo(() => {
-    if (!currentOffer?.market_listings?.length) return []
-    return currentOffer.market_listings.flatMap((ml) => {
-      if (ml.v2_variants.length > 0) {
-        return ml.v2_variants.map((v) => ({
-          order_item_id: v.variant_id,
-          listing_id: ml.listing_id,
-          item_id: "",
-          listing_title: ml.title,
-          variant: {
-            variant_id: v.variant_id,
-            attributes: v.attributes,
-            display_name: v.display_name,
-            short_name: v.short_name,
-          },
-          quantity: v.quantity,
-          price_per_unit: v.price_per_unit,
-          subtotal: v.quantity * v.price_per_unit,
-        }))
-      }
-      return [{
-        order_item_id: ml.listing_id,
+    if (!currentOffer?.market_listings_v2?.length) return []
+    return currentOffer.market_listings_v2.flatMap((ml) => {
+      return ml.v2_variants.map((v) => ({
+        order_item_id: v.variant_id,
         listing_id: ml.listing_id,
         item_id: "",
         listing_title: ml.title,
         variant: {
-          variant_id: "",
-          attributes: {},
-          display_name: "Standard",
-          short_name: "STD",
+          variant_id: v.variant_id,
+          attributes: v.attributes,
+          display_name: v.display_name,
+          short_name: v.short_name,
         },
-        quantity: ml.quantity,
-        price_per_unit: ml.price,
-        subtotal: ml.quantity * ml.price,
-      }]
+        quantity: v.quantity,
+        price_per_unit: v.price_per_unit,
+        subtotal: v.quantity * v.price_per_unit,
+      }))
     })
   }, [currentOffer])
 
