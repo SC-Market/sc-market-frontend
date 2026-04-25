@@ -2384,6 +2384,12 @@ export type GetOrdersResponse = {
   /** Number of results per page */
   page_size: number
 }
+export type OrderMarketListingV1 = {
+  listing_id: string
+  quantity: number
+  title: string
+  price: number
+}
 export type OrderVariantItem = {
   order_item_id: string
   variant_id: string
@@ -2392,12 +2398,6 @@ export type OrderVariantItem = {
   attributes: VariantAttributes
   display_name: string
   short_name: string
-}
-export type OrderMarketListingV1 = {
-  listing_id: string
-  quantity: number
-  title: string
-  price: number
 }
 export type OrderMarketListingV2 = {
   listing_id: string
@@ -2519,6 +2519,12 @@ export type MinimalContractor = {
   last_seen?: string
   members_online?: number
 }
+export type OfferMarketListingV1 = {
+  listing_id: string
+  quantity: number
+  title: string
+  price: number
+}
 export type OfferVariantItem = {
   variant_id: string
   quantity: number
@@ -2526,12 +2532,6 @@ export type OfferVariantItem = {
   attributes: VariantAttributes
   display_name: string
   short_name: string
-}
-export type OfferMarketListingV1 = {
-  listing_id: string
-  quantity: number
-  title: string
-  price: number
 }
 export type OfferMarketListingV2 = {
   listing_id: string
@@ -2555,7 +2555,7 @@ export type OfferV2 = {
   collateral?: number
   /** Username of the user who created this offer */
   actor_username: string
-  /** V1 market listings from offer_market_items */
+  /** V1 market listings from offer_market_items (empty when V2 data exists) */
   market_listings: OfferMarketListingV1[]
   /** V2 market listings with variant data from offer_market_items_v2 */
   market_listings_v2: OfferMarketListingV2[]
