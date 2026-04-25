@@ -3,6 +3,7 @@ import { setupListeners } from "@reduxjs/toolkit/query"
 import { serviceApi } from "./service"
 import { generatedApi } from "./generatedApi"
 import { generatedApiV2 } from "./generatedApiV2"
+import { v2CacheInvalidationMiddleware } from "./v2CacheInvalidation"
 // import {wikiActionApi, wikiRestApi} from "./wiki";
 
 export const store = configureStore({
@@ -19,8 +20,7 @@ export const store = configureStore({
       serviceApi.middleware,
       generatedApi.middleware,
       generatedApiV2.middleware,
-      // wikiRestApi.middleware,
-      // wikiActionApi.middleware,
+      v2CacheInvalidationMiddleware,
     ),
 })
 
