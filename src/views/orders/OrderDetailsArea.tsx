@@ -239,7 +239,6 @@ export function OrderDetailsArea(props: { order: Order }) {
                         getOptionLabel={(option) =>
                           `${option.username} (${option.display_name})`
                         }
-                        disablePortal
                         renderInput={(params) => (
                           <TextField
                             {...params}
