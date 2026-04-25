@@ -1,7 +1,7 @@
 /**
  * AddItemDialog Component
  * 
- * Dialog for adding items to a wishlist with search, quantity, quality, priority, and notes.
+ * Dialog for adding items to a shopping list with search, quantity, quality, priority, and notes.
  * 
  * Features:
  * - Item search/autocomplete (Requirement 8.1)
@@ -54,7 +54,7 @@ interface GameItemOption {
 /**
  * AddItemDialog Component
  * 
- * Provides a form for adding items to a wishlist with:
+ * Provides a form for adding items to a shopping list with:
  * - Item search/autocomplete
  * - Quantity input (must be > 0)
  * - Quality tier selection (1-5 stars)
@@ -168,7 +168,7 @@ export function AddItemDialog({ open, onClose, wishlistId }: AddItemDialogProps)
 
   return (
     <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
-      <DialogTitle>Add Item to Wishlist</DialogTitle>
+      <DialogTitle>Add Item to Shopping List</DialogTitle>
 
       <DialogContent>
         <Stack spacing={3} mt={1}>

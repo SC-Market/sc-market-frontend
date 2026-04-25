@@ -126,8 +126,8 @@ export function WishlistShare({ open, onClose, wishlist }: WishlistShareProps) {
       setIsPublic(checked)
       setSuccess(
         checked
-          ? "Wishlist is now public. Anyone with the link can view it."
-          : "Wishlist is now private. Only you can view it."
+          ? "Shopping list is now public. Anyone with the link can view it."
+          : "Shopping list is now private. Only you can view it."
       )
     } catch (err: any) {
       const errorMessage =
@@ -154,8 +154,8 @@ export function WishlistShare({ open, onClose, wishlist }: WishlistShareProps) {
       setIsCollaborative(checked)
       setSuccess(
         checked
-          ? "Collaborative mode enabled. Organization members can edit this wishlist."
-          : "Collaborative mode disabled. Only you can edit this wishlist."
+          ? "Collaborative mode enabled. Organization members can edit this shopping list."
+          : "Collaborative mode disabled. Only you can edit this shopping list."
       )
     } catch (err: any) {
       const errorMessage =
@@ -235,8 +235,8 @@ export function WishlistShare({ open, onClose, wishlist }: WishlistShareProps) {
 
             <Typography variant="caption" color="text.secondary" display="block" ml={4}>
               {isPublic
-                ? "Anyone with the link can view this wishlist"
-                : "Only you can view this wishlist"}
+                ? "Anyone with the link can view this shopping list"
+                : "Only you can view this shopping list"}
             </Typography>
           </Box>
 
@@ -310,8 +310,8 @@ export function WishlistShare({ open, onClose, wishlist }: WishlistShareProps) {
 
               <Typography variant="caption" color="text.secondary" display="block" ml={4}>
                 {isCollaborative
-                  ? "Organization members can add and edit items in this wishlist"
-                  : "Only you can add and edit items in this wishlist"}
+                  ? "Organization members can add and edit items in this shopping list"
+                  : "Only you can add and edit items in this shopping list"}
               </Typography>
 
               <Alert severity="info" icon={<Info />} sx={{ mt: 2 }}>
