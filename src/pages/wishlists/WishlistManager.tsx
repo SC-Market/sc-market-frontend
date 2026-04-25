@@ -122,7 +122,7 @@ export function WishlistManager() {
       // Navigate to the new wishlist
       navigate(`/shopping-lists/${result.wishlist_id}`)
     } catch (err) {
-      console.error("Failed to create wishlist:", err)
+      console.error("Failed to create shopping list:", err)
     }
   }
 
@@ -144,7 +144,7 @@ export function WishlistManager() {
       setDeleteDialogOpen(false)
       setWishlistToDelete(null)
     } catch (err) {
-      console.error("Failed to delete wishlist:", err)
+      console.error("Failed to delete shopping list:", err)
     }
   }
 
@@ -202,7 +202,7 @@ export function WishlistManager() {
         {/* Header */}
         <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
           <Typography variant="body1" color="text.secondary">
-            {t("wishlists.manager.description", "Create and manage wishlists of desired items and blueprints")}
+            {t("wishlists.manager.description", "Create and manage shopping lists of desired items and blueprints")}
           </Typography>
 
           {/* Create Wishlist Button (Requirement 8.4) */}
@@ -376,7 +376,7 @@ export function WishlistManager() {
               fullWidth
               multiline
               rows={3}
-              placeholder="Add notes about this wishlist..."
+              placeholder="Add notes about this shopping list..."
             />
 
             {/* Public/Private Toggle */}
