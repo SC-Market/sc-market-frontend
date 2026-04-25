@@ -44,6 +44,7 @@ import {
   CartItemDetail,
 } from "../../../store/api/v2/market"
 import { QualityBadge } from "../../../components/market/v2/QualityBadge"
+import { formatCraftedSource } from "../../../util/variantDisplay"
 import { SellerNextAvailable } from "../../../components/market/SellerNextAvailable"
 import { ShoppingListPanel } from "../../../components/game-data/ShoppingListPanel"
 import { VariantSelector } from "../../../components/market/v2/VariantSelector"
@@ -178,7 +179,7 @@ export function CartItemEntryV2(props: {
             )}
             {item.variant.attributes.crafted_source && (
               <Chip
-                label={item.variant.attributes.crafted_source.charAt(0).toUpperCase() + item.variant.attributes.crafted_source.slice(1)}
+                label={formatCraftedSource(item.variant.attributes.crafted_source)}
                 size="small"
                 variant="outlined"
               />
