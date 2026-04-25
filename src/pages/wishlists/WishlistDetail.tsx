@@ -243,28 +243,23 @@ export function WishlistDetail() {
         </Stack>
       }
     >
-      <Grid item xs={12}>
-        <Stack spacing={3}>
-        {/* Description + Progress Row */}
-        <Grid container spacing={2}>
-          {/* Description */}
-          {wishlist.wishlist_description && (
-            <Grid item xs={12} md={6}>
-              <Card sx={{ height: "100%" }}>
-                <CardContent>
-                  <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-                    Description
-                  </Typography>
-                  <Typography variant="body1">
-                    {wishlist.wishlist_description}
-                  </Typography>
-                </CardContent>
-              </Card>
-            </Grid>
-          )}
+      {/* Description + Progress */}
+      {wishlist.wishlist_description && (
+        <Grid item xs={12} lg={6}>
+          <Card sx={{ height: "100%" }}>
+            <CardContent>
+              <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+                Description
+              </Typography>
+              <Typography variant="body1">
+                {wishlist.wishlist_description}
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
+      )}
 
-          {/* Progress */}
-          <Grid item xs={12} md={wishlist.wishlist_description ? 6 : 12}>
+      <Grid item xs={12} lg={wishlist.wishlist_description ? 6 : 12}>
             <Card sx={{ height: "100%" }}>
               <CardContent>
                 <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 1 }}>
@@ -317,9 +312,9 @@ export function WishlistDetail() {
               </CardContent>
             </Card>
           </Grid>
-        </Grid>
 
         {/* Items Header + Sort Controls */}
+        <Grid item xs={12}>
         <Box>
           <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
             <Typography variant="h6">
@@ -557,7 +552,6 @@ export function WishlistDetail() {
         onClose={() => setAddItemDialogOpen(false)}
         wishlistId={wishlist_id!}
       />
-      </Stack>
       </Grid>
     </StandardPageLayout>
   )
