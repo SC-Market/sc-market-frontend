@@ -29,7 +29,6 @@ import {
   Cancel,
   CheckCircle,
   HourglassTop,
-  Edit,
   Close,
   Check,
 } from "@mui/icons-material"
@@ -117,8 +116,8 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response }) 
     isEditingAssigned, setIsEditingAssigned,
     target, setTarget, targetObject, setTargetObject,
     options, members,
-    handleAssignSave, handleAssignCancel, handleUnassign,
-    amContractorManager,
+    handleAssignSave, handleAssignCancel, handleUnassign, handleClaimOffer,
+    amContractor, amContractorManager,
     statusKey, statusColor,
     showAccept, showCancel,
     isUpdatingStatus, updateStatusCallback,
@@ -244,12 +243,15 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response }) 
                   {t("OfferDetailsArea.seller")}
                   {amContractorManager &&
                     !["accepted", "rejected"].includes(session.status) && (
-                      <IconButton
+                      <Button
                         size="small"
+                        variant="text"
+                        startIcon={isEditingAssigned ? <Close /> : undefined}
                         onClick={() => setIsEditingAssigned(!isEditingAssigned)}
+                        sx={{ textTransform: "none", fontSize: "0.75rem" }}
                       >
-                        {isEditingAssigned ? <Close /> : <Edit />}
-                      </IconButton>
+                        {isEditingAssigned ? "Cancel" : "Assign"}
+                      </Button>
                     )}
                 </Stack>
               </TableCell>
@@ -284,11 +286,11 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response }) 
                         />
                       )}
                       value={targetObject}
-                      onChange={(event: any, newValue) => {
+                      onChange={(_event: React.SyntheticEvent, newValue) => {
                         setTargetObject(newValue)
                       }}
                       inputValue={target}
-                      onInputChange={(event, newInputValue) => {
+                      onInputChange={(_event, newInputValue) => {
                         setTarget(newInputValue)
                       }}
                     />
@@ -322,19 +324,36 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response }) 
                     </Box>
                   </Stack>
                 ) : (
-                  <Stack direction="row" justifyContent={"right"}>
-                    <Stack direction={"column"}>
-                      {session.assigned_to && (
-                        <UserDetails user={session.assigned_to} />
+                  <Stack direction="row" justifyContent="right" alignItems="center" spacing={1}>
+                    <Stack direction="column">
+                      {session.assigned_to ? (
+                        <>
+                          <UserDetails user={session.assigned_to} />
+                          <ListingSellerRating
+                            user={session.assigned_to}
+                            contractor={session.contractor}
+                          />
+                        </>
+                      ) : (
+                        <>
+                          {session.contractor && (
+                            <OrgDetails org={session.contractor} />
+                          )}
+                          <Typography variant="body2" color="text.secondary">
+                            {t("orderDetailsArea.none", "None")}
+                          </Typography>
+                        </>
                       )}
-                      {session.contractor && (
-                        <OrgDetails org={session.contractor} />
-                      )}
-                      <ListingSellerRating
-                        user={session.assigned_to}
-                        contractor={session.contractor}
-                      />
                     </Stack>
+                    {!session.assigned_to && amContractor && !["accepted", "rejected"].includes(session.status) && (
+                      <Button
+                        size="small"
+                        variant="outlined"
+                        onClick={handleClaimOffer}
+                      >
+                        {t("orderDetailsArea.claim", "Claim")}
+                      </Button>
+                    )}
                   </Stack>
                 )}
               </TableCell>

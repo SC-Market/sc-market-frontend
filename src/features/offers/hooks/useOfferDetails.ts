@@ -138,6 +138,21 @@ export function useOfferDetails(session: GetOfferSessionV2Response) {
     }
   }, [unassignUser, session.session_id, issueAlert, t])
 
+  const amContractor = useMemo(
+    () => !!session.contractor && org?.spectrum_id === session.contractor.spectrum_id,
+    [org?.spectrum_id, session.contractor],
+  )
+
+  const handleClaimOffer = useCallback(async () => {
+    if (!profile?.username) return
+    try {
+      await assignUser({ session_id: session.session_id, username: profile.username }).unwrap()
+      issueAlert({ message: t("orderDetailsArea.claimed", "Offer claimed"), severity: "success" })
+    } catch {
+      issueAlert({ message: t("orderDetailsArea.claimFailed", "Failed to claim offer"), severity: "error" })
+    }
+  }, [assignUser, session.session_id, profile?.username, issueAlert, t])
+
   return {
     profile, org, issueAlert, publicContract,
     selectedOfferIndex, setSelectedOfferIndex,
@@ -145,8 +160,8 @@ export function useOfferDetails(session: GetOfferSessionV2Response) {
     isEditingAssigned, setIsEditingAssigned,
     target, setTarget, targetObject, setTargetObject,
     options, members,
-    handleAssignSave, handleAssignCancel, handleUnassign,
-    amContractorManager,
+    handleAssignSave, handleAssignCancel, handleUnassign, handleClaimOffer,
+    amContractor, amContractorManager,
     statusKey, statusColor,
     showAccept, showCancel,
     isUpdatingStatus, updateStatusCallback,
