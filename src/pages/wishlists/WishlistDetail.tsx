@@ -243,7 +243,8 @@ export function WishlistDetail() {
         </Stack>
       }
     >
-      <Stack spacing={3}>
+      <Grid item xs={12}>
+        <Stack spacing={3}>
         {/* Description + Progress Row */}
         <Grid container spacing={2}>
           {/* Description */}
@@ -557,6 +558,7 @@ export function WishlistDetail() {
         wishlistId={wishlist_id!}
       />
       </Stack>
+      </Grid>
     </StandardPageLayout>
   )
 }
