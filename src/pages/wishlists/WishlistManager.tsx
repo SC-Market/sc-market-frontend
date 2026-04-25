@@ -50,6 +50,7 @@ import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
+import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 
 /**
  * WishlistManager Component
@@ -68,6 +69,7 @@ import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 export function WishlistManager() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
+  const [currentOrg] = useCurrentOrg()
   const navigate = useNavigate()
 
   // State for create dialog
@@ -116,6 +118,7 @@ export function WishlistManager() {
           wishlist_description: newWishlistDescription.trim() || undefined,
           is_public: newWishlistIsPublic,
           is_collaborative: newWishlistIsCollaborative,
+          organization_id: newWishlistIsCollaborative && currentOrg ? currentOrg.spectrum_id : undefined,
         },
       }).unwrap()
 
@@ -354,7 +357,7 @@ export function WishlistManager() {
         maxWidth="sm"
         fullWidth
       >
-        <DialogTitle>Create New Wishlist</DialogTitle>
+        <DialogTitle>Create New Shopping List</DialogTitle>
         <DialogContent>
           <Box sx={{ display: "flex", flexDirection: "column", gap: 2, mt: 1 }}>
             {/* Wishlist Name */}
@@ -391,29 +394,40 @@ export function WishlistManager() {
                 <Box>
                   <Typography variant="body2">Make Public</Typography>
                   <Typography variant="caption" color="text.secondary">
-                    Anyone with the link can view this wishlist
+                    Anyone with the link can view this shopping list
                   </Typography>
                 </Box>
               }
             />
 
-            {/* Collaborative Toggle */}
+            {/* Collaborative Toggle — only available when an org is selected */}
             <FormControlLabel
               control={
                 <Switch
                   checked={newWishlistIsCollaborative}
                   onChange={(e) => setNewWishlistIsCollaborative(e.target.checked)}
+                  disabled={!currentOrg}
                 />
               }
               label={
                 <Box>
-                  <Typography variant="body2">Collaborative</Typography>
+                  <Typography variant="body2" color={!currentOrg ? "text.disabled" : undefined}>
+                    Collaborative
+                  </Typography>
                   <Typography variant="caption" color="text.secondary">
-                    Allow organization members to edit this wishlist
+                    {currentOrg
+                      ? `Members of ${currentOrg.name} can edit this shopping list`
+                      : "Select an organization to enable collaborative mode"}
                   </Typography>
                 </Box>
               }
             />
+
+            {newWishlistIsCollaborative && currentOrg && (
+              <Alert severity="info" sx={{ mt: -1 }}>
+                This shopping list will be owned by <strong>{currentOrg.name}</strong> and visible to its members.
+              </Alert>
+            )}
           </Box>
         </DialogContent>
         <DialogActions>
@@ -436,7 +450,7 @@ export function WishlistManager() {
         onClose={handleDeleteCancel}
         maxWidth="sm"
       >
-        <DialogTitle>Delete Wishlist?</DialogTitle>
+        <DialogTitle>Delete Shopping List?</DialogTitle>
         <DialogContent>
           <Typography>
             Are you sure you want to delete <strong>{wishlistToDelete?.name}</strong>?
