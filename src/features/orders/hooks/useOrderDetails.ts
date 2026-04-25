@@ -131,13 +131,23 @@ export function useOrderDetails(order: Order) {
     [contractor?.official_server_id, order.discord_server_id],
   )
 
+  const handleClaimOrder = useCallback(async () => {
+    if (!profile?.username) return
+    try {
+      await assignUser({ order_id: order.order_id, username: profile.username }).unwrap()
+      issueAlert({ message: t("orderDetailsArea.claimed", "Order claimed"), severity: "success" })
+    } catch {
+      issueAlert({ message: t("orderDetailsArea.claimFailed", "Failed to claim order"), severity: "error" })
+    }
+  }, [assignUser, order.order_id, profile?.username, issueAlert, t])
+
   return {
     profile, issueAlert, currentOrg,
     // Assignment editing
     isEditingAssigned, setIsEditingAssigned,
     target, setTarget, targetObject, setTargetObject,
     options, members,
-    handleAssignSave, handleAssignCancel, handleUnassign,
+    handleAssignSave, handleAssignCancel, handleUnassign, handleClaimOrder,
     // V2
     orderDetailV2, hasV2Items,
     // Status

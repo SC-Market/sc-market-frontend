@@ -111,7 +111,7 @@ export function OrderDetailsArea(props: { order: Order }) {
     isEditingAssigned, setIsEditingAssigned,
     target, setTarget, targetObject, setTargetObject,
     options, members,
-    handleAssignSave, handleAssignCancel, handleUnassign,
+    handleAssignSave, handleAssignCancel, handleUnassign, handleClaimOrder,
     orderDetailV2, hasV2Items,
     statusColor, status, updateOrderStatus,
     contractor, assigned, customer,
@@ -164,7 +164,7 @@ export function OrderDetailsArea(props: { order: Order }) {
                 </TableCell>
               </TableRow>
             )}
-            {(assigned || amContractorManager) && (
+            {(assigned || amContractor) && (
               <TableRow
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
@@ -182,7 +182,7 @@ export function OrderDetailsArea(props: { order: Order }) {
                           }
                           sx={{ textTransform: "none", fontSize: "0.75rem" }}
                         >
-                          {isEditingAssigned ? "Cancel" : "Reassign"}
+                          {isEditingAssigned ? "Cancel" : "Assign"}
                         </Button>
                       )}
                   </Stack>
@@ -256,9 +256,24 @@ export function OrderDetailsArea(props: { order: Order }) {
                       </Box>
                     </Stack>
                   ) : (
-                    <Stack direction="row" justifyContent={"right"}>
-                      {order.assigned_to && assigned && (
+                    <Stack direction="row" justifyContent="right" alignItems="center" spacing={1}>
+                      {assigned ? (
                         <UserDetails user={assigned} />
+                      ) : (
+                        <>
+                          <Typography variant="body2" color="text.secondary">
+                            {t("orderDetailsArea.none", "None")}
+                          </Typography>
+                          {amContractor && !["cancelled", "fulfilled"].includes(order.status) && (
+                            <Button
+                              size="small"
+                              variant="outlined"
+                              onClick={handleClaimOrder}
+                            >
+                              {t("orderDetailsArea.claim", "Claim")}
+                            </Button>
+                          )}
+                        </>
                       )}
                     </Stack>
                   )}
