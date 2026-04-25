@@ -20,7 +20,7 @@ import { detectOfferChanges } from "../../../util/offerChanges"
 import { store } from "../../../store/store"
 import type { MinimalUser } from "../../../datatypes/User"
 
-export function useOfferDetails(session: GetOfferSessionV2Response) {
+export function useOfferDetails(session: GetOfferSessionV2Response, offerIndex?: number) {
   const { t } = useTranslation()
   const [org] = useCurrentOrg()
   const { data: profile } = useGetUserProfileQuery()
@@ -29,8 +29,8 @@ export function useOfferDetails(session: GetOfferSessionV2Response) {
 
   const { data: publicContract } = useGetPublicContractQuery(session?.contract_id!, { skip: !session?.contract_id })
 
-  // Offer selection
-  const [selectedOfferIndex, setSelectedOfferIndex] = useState(0)
+  // Offer selection — use provided index or default to 0
+  const selectedOfferIndex = offerIndex ?? 0
   const currentOffer = session.offers[selectedOfferIndex]
   const previousOffer = selectedOfferIndex < session.offers.length - 1 ? session.offers[selectedOfferIndex + 1] : undefined
   const offerChanges = detectOfferChanges(currentOffer, previousOffer)
@@ -155,7 +155,6 @@ export function useOfferDetails(session: GetOfferSessionV2Response) {
 
   return {
     profile, org, issueAlert, publicContract,
-    selectedOfferIndex, setSelectedOfferIndex,
     currentOffer, previousOffer, offerChanges,
     isEditingAssigned, setIsEditingAssigned,
     target, setTarget, targetObject, setTargetObject,
