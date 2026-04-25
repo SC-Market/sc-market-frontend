@@ -20,9 +20,9 @@ import { InventoryRounded } from "@mui/icons-material"
 import { Link } from "react-router-dom"
 import { formatPrice } from "../../util/formatPrice"
 import { Section } from "../../components/paper/Section"
-import type { OfferMarketListingV2 } from "../../store/api/v2/market"
+import type { OfferMarketListingV2, OrderMarketListingV2 } from "../../store/api/v2/market"
 
-export function OfferMarketListingsV2Items({ items }: { items: OfferMarketListingV2[] }) {
+export function OfferMarketListingsV2Items({ items }: { items: (OfferMarketListingV2 | OrderMarketListingV2)[] }) {
   if (!items.length) return null
 
   const total = items.reduce(
