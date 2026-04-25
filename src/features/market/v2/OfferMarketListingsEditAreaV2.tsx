@@ -94,7 +94,7 @@ export function OfferMarketListingsEditAreaV2(props: { session: GetOfferSessionV
   // Cache variant details from offer data and newly added items
   const [variantCache, setVariantCache] = useState<Record<string, VariantDetail>>(() => {
     const cache: Record<string, VariantDetail> = {}
-    for (const ml of session.offers[0]?.market_listings || []) {
+    for (const ml of session.offers[0]?.market_listings_v2 || []) {
       for (const v of ml.v2_variants) {
         cache[v.variant_id] = {
           variant_id: v.variant_id,
@@ -114,7 +114,7 @@ export function OfferMarketListingsEditAreaV2(props: { session: GetOfferSessionV
   const displayItems: DisplayItem[] = useMemo(() => {
     return (body.v2_variant_items || []).map((item) => {
       const listing = listings.find((l) => l.listing_id === item.listing_id)
-      const offerListing = session.offers[0]?.market_listings.find((ml) => ml.listing_id === item.listing_id)
+      const offerListing = session.offers[0]?.market_listings_v2?.find((ml) => ml.listing_id === item.listing_id)
       const cached = variantCache[item.variant_id]
 
       return {
