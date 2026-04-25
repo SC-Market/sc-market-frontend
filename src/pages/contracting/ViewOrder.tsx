@@ -44,6 +44,11 @@ const OfferMarketListings = lazy(() =>
     default: module.OfferMarketListings,
   })),
 )
+const OfferMarketListingsV2Items = lazy(() =>
+  import("../../views/offers/OfferMarketListingsV2Items").then((module) => ({
+    default: module.OfferMarketListingsV2Items,
+  })),
+)
 const OfferServiceArea = lazy(() =>
   import("../../views/offers/OfferServiceArea").then((module) => ({
     default: module.OfferServiceArea,
@@ -206,10 +211,11 @@ export function ViewOrder() {
               {session?.offers[0]?.service && (
                 <HapticTab label={t("orders.service", "Service")} />
               )}
-              {session?.offers[0]?.market_listings &&
-                session.offers[0].market_listings.length > 0 && (
+              {((session?.offers[0]?.market_listings &&
+                session.offers[0].market_listings.length > 0) ||
+                (orderDetailV2?.market_listings && orderDetailV2.market_listings.length > 0)) && (
                   <HapticTab
-                    label={t("orders.marketListings", "Market Listings")}
+                    label={t("orders.marketListings", "Items")}
                   />
                 )}
               {amContractorManager && (
@@ -227,11 +233,11 @@ export function ViewOrder() {
             const detailsTab = tabIndex++
             const messagesTab = isMobile && isAssigned ? tabIndex++ : -1
             const serviceTab = session?.offers[0]?.service ? tabIndex++ : -1
-            const marketListingsTab =
-              session?.offers[0]?.market_listings &&
-              session.offers[0].market_listings.length > 0
-                ? tabIndex++
-                : -1
+            const hasItems =
+              (session?.offers[0]?.market_listings &&
+              session.offers[0].market_listings.length > 0) ||
+              (orderDetailV2?.market_listings && orderDetailV2.market_listings.length > 0)
+            const marketListingsTab = hasItems ? tabIndex++ : -1
             const allocationTab = amContractorManager ? tabIndex++ : -1
             const availabilityTab = amRelated ? tabIndex++ : -1
 
@@ -329,13 +335,16 @@ export function ViewOrder() {
                     </Grid>
                   ))}
 
-                {/* Market Listings Tab */}
-                {session?.offers[0]?.market_listings &&
-                  session.offers[0].market_listings.length > 0 &&
+                {/* Market Listings / Items Tab */}
+                {hasItems &&
                   activeTab === marketListingsTab &&
-                  (!(pageData.isLoading || pageData.isFetching) && session ? (
+                  (!(pageData.isLoading || pageData.isFetching) ? (
                     <Grid item xs={12}>
-                      <OfferMarketListings offer={session} />
+                      {orderDetailV2?.market_listings && orderDetailV2.market_listings.length > 0 ? (
+                        <OfferMarketListingsV2Items items={orderDetailV2.market_listings} />
+                      ) : session ? (
+                        <OfferMarketListings offer={session} />
+                      ) : null}
                     </Grid>
                   ) : (
                     <Grid item xs={12} lg={4}>

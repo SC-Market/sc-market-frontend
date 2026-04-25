@@ -2398,6 +2398,8 @@ export type OrderMarketListingV2 = {
   quantity: number
   title: string
   price: number
+  /** First photo URL */
+  photo?: string
   /** V2 variant items for this listing (empty if no V2 data) */
   v2_variants: OrderVariantItem[]
 }
