@@ -9,7 +9,7 @@
  */
 
 import React, { useState, useMemo } from "react"
-import { useParams, useNavigate } from "react-router-dom"
+import { useParams, useNavigate, Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -31,7 +31,6 @@ import {
   Stack,
   Avatar,
   LinearProgress,
-  Tooltip,
   Select,
   FormControl,
   InputLabel,
@@ -460,18 +459,27 @@ export function WishlistDetail() {
                         </Box>
                       </Box>
 
-                      {/* Crafting Available (Requirement 53.3) */}
-                      {item.crafting_available && (
-                        <Tooltip title={`Craftable from: ${item.blueprint_name}`}>
-                          <Chip
-                            icon={<Build />}
-                            label="Craftable"
-                            size="small"
-                            color="info"
-                            variant="outlined"
-                          />
-                        </Tooltip>
-                      )}
+                      {/* Acquisition Mode */}
+                      {item.acquisition_mode === "craft" && item.blueprint_name ? (
+                        <Chip
+                          icon={<Build />}
+                          label={`Craft: ${item.blueprint_name}`}
+                          size="small"
+                          color="info"
+                          variant="outlined"
+                          component={Link}
+                          to={`/blueprints/${item.blueprint_id}`}
+                          clickable
+                        />
+                      ) : item.crafting_available ? (
+                        <Chip
+                          icon={<ShoppingCart />}
+                          label="Buy from Market"
+                          size="small"
+                          color="primary"
+                          variant="outlined"
+                        />
+                      ) : null}
 
                       {/* Estimated Cost */}
                       {item.estimated_cost && (
