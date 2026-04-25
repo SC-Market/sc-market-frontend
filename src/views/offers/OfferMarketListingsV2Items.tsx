@@ -6,6 +6,7 @@
 import React from "react"
 import {
   Avatar,
+  Box,
   Grid,
   Stack,
   Typography,
@@ -20,6 +21,7 @@ import { InventoryRounded } from "@mui/icons-material"
 import { Link } from "react-router-dom"
 import { formatPrice } from "../../util/formatPrice"
 import { Section } from "../../components/paper/Section"
+import { QualityBadge } from "../../components/market/v2/QualityBadge"
 import type { OfferMarketListingV2, OrderMarketListingV2 } from "../../store/api/v2/market"
 
 export function OfferMarketListingsV2Items({ items }: { items: (OfferMarketListingV2 | OrderMarketListingV2)[] }) {
@@ -68,12 +70,21 @@ export function OfferMarketListingsV2Items({ items }: { items: (OfferMarketListi
                     </Stack>
                   </TableCell>
                   <TableCell>
-                    <Chip
-                      label={v.display_name || v.short_name}
-                      size="small"
-                      variant="outlined"
-                      sx={{ height: 20, fontSize: "0.7rem" }}
-                    />
+                    <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, flexWrap: "wrap" }}>
+                      {v.attributes.quality_tier && (
+                        <QualityBadge tier={v.attributes.quality_tier as number} size="small" />
+                      )}
+                      {v.attributes.quality_value != null && (
+                        <Chip label={`${v.attributes.quality_value}/1000`} size="small" variant="outlined" />
+                      )}
+                      {v.attributes.crafted_source && (
+                        <Chip
+                          label={String(v.attributes.crafted_source).charAt(0).toUpperCase() + String(v.attributes.crafted_source).slice(1)}
+                          size="small"
+                          variant="outlined"
+                        />
+                      )}
+                    </Box>
                   </TableCell>
                   <TableCell align="right">{v.quantity}</TableCell>
                   <TableCell align="right">{formatPrice(v.price_per_unit)}</TableCell>
