@@ -22,6 +22,7 @@ import { Link } from "react-router-dom"
 import { formatPrice } from "../../util/formatPrice"
 import { Section } from "../../components/paper/Section"
 import { QualityBadge } from "../../components/market/v2/QualityBadge"
+import { formatCraftedSource } from "../../util/variantDisplay"
 import type { OfferMarketListingV2, OrderMarketListingV2 } from "../../store/api/v2/market"
 
 export function OfferMarketListingsV2Items({ items }: { items: (OfferMarketListingV2 | OrderMarketListingV2)[] }) {
@@ -79,7 +80,7 @@ export function OfferMarketListingsV2Items({ items }: { items: (OfferMarketListi
                       )}
                       {v.attributes.crafted_source && (
                         <Chip
-                          label={String(v.attributes.crafted_source).charAt(0).toUpperCase() + String(v.attributes.crafted_source).slice(1)}
+                          label={formatCraftedSource(String(v.attributes.crafted_source))}
                           size="small"
                           variant="outlined"
                         />

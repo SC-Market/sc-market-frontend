@@ -1,4 +1,5 @@
 import React from "react";
+import { formatCraftedSource } from "../../../util/variantDisplay";
 import {
   Table,
   TableBody,
@@ -60,7 +61,7 @@ function VariantInfo({ variant }: { variant: Variant }) {
       )}
       {crafted_source && (
         <Chip
-          label={crafted_source.charAt(0).toUpperCase() + crafted_source.slice(1)}
+          label={formatCraftedSource(crafted_source)}
           size="small"
           color={SOURCE_COLORS[crafted_source] || "default"}
           variant="outlined"
