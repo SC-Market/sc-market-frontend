@@ -24,6 +24,11 @@ export interface StockLot {
   } | null
   listed: boolean
   notes: string | null
+  variant?: {
+    variant_id: string
+    attributes: { quality_tier?: number; quality_value?: number; crafted_source?: string }
+    display_name: string
+  } | null
   created_at: string
   updated_at: string
 }
@@ -157,6 +162,7 @@ export const stockLotsApi = serviceApi.injectEndpoints({
         owner_username?: string | null
         listed?: boolean
         notes?: string | null
+        variant_attributes?: Record<string, unknown>
       }
     >({
       query: ({ lot_id, ...body }) => ({
