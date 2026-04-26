@@ -15,10 +15,10 @@ export function ManageStockLots() {
 
   return (
     <StandardPageLayout
-      title={t("sidebar.manage_stock", "Manage Stock")}
+      title={t("sidebar.manage_stock", "Manage Inventory")}
       breadcrumbs={[
         { label: t("sidebar.market_short"), href: "/market" },
-        { label: t("sidebar.manage_stock", "Manage Stock") },
+        { label: t("sidebar.manage_stock", "Manage Inventory") },
       ]}
       sidebarOpen={true}
       maxWidth="xl"
@@ -29,7 +29,7 @@ export function ManageStockLots() {
       <Grid container spacing={theme.layoutSpacing?.layout ?? 1}>
         <Grid item xs={12}>
           <ManageListingsTabBar
-            title={t("sidebar.manage_stock", "Manage Stock")}
+            title={t("sidebar.manage_stock", "Manage Inventory")}
           />
         </Grid>
         <Grid item xs={12}>

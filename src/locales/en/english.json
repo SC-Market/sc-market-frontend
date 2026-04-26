@@ -632,7 +632,7 @@
     "settings": "Settings",
     "my_market_listings": "My Market Listings",
     "manage_listings": "Manage Listings",
-    "manage_stock": "Manage Stock",
+    "manage_stock": "Manage Inventory",
     "archived_listings": "Archived Listings",
     "money": "Money",
     "invoices": "Invoices",
@@ -1891,7 +1891,7 @@
     "quantityHelp": "Enter the total quantity of items available for sale",
     "available": "Available",
     "reserved": "Reserved",
-    "manageStock": "Manage Stock",
+    "manageStock": "Manage Inventory",
     "viewBreakdown": "View Breakdown",
     "updateError": "Failed to update stock quantity",
     "advancedFeatureComingSoon": "Advanced stock management coming soon"
@@ -2798,7 +2798,7 @@
       "title": "My Listings"
     },
     "manageStock": {
-      "title": "Manage Stock"
+      "title": "Manage Inventory"
     },
     "manageStockLots": {
       "title": "Manage Stock Lots"

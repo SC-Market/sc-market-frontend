@@ -66,7 +66,7 @@ export function ManageListingsTabBar({ title, rightAction }: ManageListingsTabBa
         </Typography>
         <Tabs value={currentTab} onChange={handleTabChange} sx={{ minHeight: 0 }}>
           <Tab label={t("sidebar.manage_listings", "Manage Listings")} />
-          <Tab label={t("sidebar.manage_stock", "Manage Stock")} />
+          <Tab label={t("sidebar.manage_stock", "Manage Inventory")} />
           <Tab label={t("sidebar.manage_services", "Manage Services")} />
         </Tabs>
       </Box>

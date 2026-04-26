@@ -115,10 +115,10 @@ export function BulkStockManagementV2() {
 
   return (
     <StandardPageLayout
-      title={t("sidebar.manage_stock", "Manage Stock")}
+      title={t("sidebar.manage_stock", "Manage Inventory")}
       breadcrumbs={[
         { label: t("sidebar.market_short", "Market"), href: "/market" },
-        { label: t("sidebar.manage_stock", "Manage Stock") },
+        { label: t("sidebar.manage_stock", "Manage Inventory") },
       ]}
       sidebarOpen={true}
       maxWidth="xl"
@@ -139,7 +139,7 @@ export function BulkStockManagementV2() {
                     {t("market.filters", "Filters")}
                   </Button>
                 )}
-                <ManageListingsTabBar title={t("sidebar.manage_stock", "Manage Stock")} />
+                <ManageListingsTabBar title={t("sidebar.manage_stock", "Manage Inventory")} />
               </Box>
             </Grid>
 
