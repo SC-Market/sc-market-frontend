@@ -310,6 +310,7 @@ export function AllStockLotsGrid() {
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             <Avatar
               src={params.row.owner_avatar || undefined}
+              variant="rounded"
               sx={{ width: 24, height: 24 }}
             />
             <Link
