@@ -310,7 +310,7 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
             </Stack>
 
             {bp?.crafting_time_seconds && (
-              <Typography variant="body2" color="text.secondary"><TimerRounded sx={{ fontSize: 16, mr: 0.5, verticalAlign: "text-bottom" }} />Craft Time: {formatCraftingTime(bp.crafting_time_seconds)}</Typography>
+              <Typography variant="body2" color="text.secondary"><TimerRounded sx={{ fontSize: 16, mr: 0.5, verticalAlign: "text-bottom" }} />Craft Time: {formatCraftingTime(bp.crafting_time_seconds * craftQty)}{craftQty > 1 && ` (${formatCraftingTime(bp.crafting_time_seconds)} each)`}</Typography>
             )}
           </Stack>
         )}
@@ -335,7 +335,7 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
               {craftQty > 1 && (
                 <Box>
                   <Typography variant="caption" color="text.secondary">Total time</Typography>
-                  <Typography variant="body1" fontWeight={600}>{formatCraftingTime(15 * craftQty)}</Typography>
+                  <Typography variant="body1" fontWeight={600}>{formatCraftingTime((bp?.crafting_time_seconds || 0) * craftQty)}</Typography>
                 </Box>
               )}
             </Stack>
