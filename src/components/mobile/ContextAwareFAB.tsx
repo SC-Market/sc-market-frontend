@@ -66,7 +66,7 @@ export function ContextAwareFAB() {
     },
     {
       icon: <InventoryRounded />,
-      name: "Manage Stock",
+      name: "Manage Inventory",
       onClick: () => {
         navigate("/market/stock")
       },
