@@ -352,30 +352,33 @@ export function AllStockLotsGrid() {
       headerName: t("AllStockLots.quality", "Quality"),
       flex: 1.5,
       editable: false,
-      renderCell: (params: GridRenderCellParams) => (
-        <Box
-          sx={{ display: "flex", alignItems: "center", gap: 0.5, cursor: "pointer" }}
-          onClick={() => {
-            setQualityTier(params.row.quality_tier ?? "")
-            setCraftedSource(params.row.crafted_source ?? "")
-            setEditingQualityLotId(params.row.lot_id)
-          }}
-        >
-          {params.row.quality_tier != null && (
-            <QualityBadge tier={params.row.quality_tier} size="small" />
-          )}
-          {params.row.crafted_source && (
-            <Chip
-              label={formatCraftedSource(params.row.crafted_source)}
-              size="small"
-              variant="outlined"
-            />
-          )}
-          {params.row.quality_tier == null && !params.row.crafted_source && (
-            <Typography variant="caption" color="text.secondary">—</Typography>
-          )}
-        </Box>
-      ),
+      renderCell: (params: GridRenderCellParams) => {
+        const hasVariant = params.row.quality_tier != null || params.row.crafted_source
+        return (
+          <Box
+            sx={{ display: "flex", alignItems: "center", gap: 0.5, cursor: hasVariant ? "pointer" : "default" }}
+            onClick={hasVariant ? () => {
+              setQualityTier(params.row.quality_tier ?? "")
+              setCraftedSource(params.row.crafted_source ?? "")
+              setEditingQualityLotId(params.row.lot_id)
+            } : undefined}
+          >
+            {params.row.quality_tier != null && (
+              <QualityBadge tier={params.row.quality_tier} size="small" />
+            )}
+            {params.row.crafted_source && (
+              <Chip
+                label={formatCraftedSource(params.row.crafted_source)}
+                size="small"
+                variant="outlined"
+              />
+            )}
+            {!hasVariant && (
+              <Typography variant="caption" color="text.secondary">—</Typography>
+            )}
+          </Box>
+        )
+      },
     },
     {
       field: "listed",
