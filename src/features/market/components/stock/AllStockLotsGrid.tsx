@@ -23,6 +23,7 @@ import {
   Avatar,
   Autocomplete,
   TextField,
+  Switch,
 } from "@mui/material"
 import {
   Delete as DeleteIcon,
@@ -337,12 +338,26 @@ export function AllStockLotsGrid() {
       field: "listed",
       headerName: t("AllStockLots.listed", "Listed"),
       flex: 1,
-      editable: true,
+      editable: false,
       renderCell: (params: GridRenderCellParams) => (
-        <Chip
-          label={params.value ? t("ui.yes", "Yes") : t("ui.no", "No")}
-          color={params.value ? "success" : "default"}
+        <Switch
+          checked={!!params.value}
           size="small"
+          onChange={async () => {
+            try {
+              await updateLot({
+                lot_id: params.row.lot_id,
+                listing_id: params.row.listing_id,
+                quantity: Number(params.row.quantity),
+                location_id: params.row.location_id,
+                owner_username: params.row.owner_username || null,
+                listed: !params.value,
+                notes: params.row.notes,
+              }).unwrap()
+            } catch (error) {
+              issueAlert(error as { message?: string })
+            }
+          }}
         />
       ),
     },
