@@ -24,6 +24,11 @@ import {
   Autocomplete,
   TextField,
   Switch,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  MenuItem,
 } from "@mui/material"
 import {
   Delete as DeleteIcon,
@@ -43,6 +48,8 @@ import {
   useGetLocationsQuery,
 } from "../../../../store/api/stockLotsApi"
 import { useCurrentOrg } from "../../../../hooks/login/CurrentOrg"
+import { QualityBadge } from "../../../../components/market/v2/QualityBadge"
+import { formatCraftedSource } from "../../../../util/variantDisplay"
 import { useAlertHook } from "../../../../hooks/alert/AlertHook"
 import type { StockManageType } from "../../domain/types"
 import { LocationSelector } from "./LocationSelector"
@@ -96,6 +103,9 @@ export function AllStockLotsGrid() {
   const locations = locationsData?.locations || []
 
   const [newRows, setNewRows] = useState<any[]>([])
+  const [editingQualityLotId, setEditingQualityLotId] = useState<string | null>(null)
+  const [qualityTier, setQualityTier] = useState<number | "">("")
+  const [craftedSource, setCraftedSource] = useState<string>("")
 
   // Memoize edit cell renderers to prevent hook issues
   // Custom edit component for listing selection
@@ -255,6 +265,8 @@ export function AllStockLotsGrid() {
       owner_avatar: lot.owner?.avatar || null,
       listed: lot.listed,
       notes: lot.notes,
+      quality_tier: lot.variant?.attributes?.quality_tier ?? null,
+      crafted_source: lot.variant?.attributes?.crafted_source ?? null,
     }))
 
   // Combine all lots into rows
@@ -334,6 +346,36 @@ export function AllStockLotsGrid() {
         const location = locations.find((l) => l.location_id === value)
         return location?.name || "Unspecified"
       },
+    },
+    {
+      field: "quality_tier",
+      headerName: t("AllStockLots.quality", "Quality"),
+      flex: 1.5,
+      editable: false,
+      renderCell: (params: GridRenderCellParams) => (
+        <Box
+          sx={{ display: "flex", alignItems: "center", gap: 0.5, cursor: "pointer" }}
+          onClick={() => {
+            setQualityTier(params.row.quality_tier ?? "")
+            setCraftedSource(params.row.crafted_source ?? "")
+            setEditingQualityLotId(params.row.lot_id)
+          }}
+        >
+          {params.row.quality_tier != null && (
+            <QualityBadge tier={params.row.quality_tier} size="small" />
+          )}
+          {params.row.crafted_source && (
+            <Chip
+              label={formatCraftedSource(params.row.crafted_source)}
+              size="small"
+              variant="outlined"
+            />
+          )}
+          {params.row.quality_tier == null && !params.row.crafted_source && (
+            <Typography variant="caption" color="text.secondary">—</Typography>
+          )}
+        </Box>
+      ),
     },
     {
       field: "listed",
@@ -555,6 +597,80 @@ export function AllStockLotsGrid() {
           },
         }}
       />
+
+      {/* Quality Edit Dialog */}
+      <Dialog
+        open={!!editingQualityLotId}
+        onClose={() => setEditingQualityLotId(null)}
+        maxWidth="xs"
+        fullWidth
+      >
+        <DialogTitle>Edit Quality</DialogTitle>
+        <DialogContent>
+          <TextField
+            select
+            fullWidth
+            size="small"
+            label="Quality Tier"
+            value={qualityTier}
+            onChange={(e) => setQualityTier(e.target.value === "" ? "" : Number(e.target.value))}
+            sx={{ mt: 1, mb: 2 }}
+          >
+            <MenuItem value="">None</MenuItem>
+            <MenuItem value={1}>Tier 1</MenuItem>
+            <MenuItem value={2}>Tier 2</MenuItem>
+            <MenuItem value={3}>Tier 3</MenuItem>
+            <MenuItem value={4}>Tier 4</MenuItem>
+            <MenuItem value={5}>Tier 5</MenuItem>
+          </TextField>
+          <TextField
+            select
+            fullWidth
+            size="small"
+            label="Source"
+            value={craftedSource}
+            onChange={(e) => setCraftedSource(e.target.value)}
+          >
+            <MenuItem value="">None</MenuItem>
+            <MenuItem value="store">Store-Bought</MenuItem>
+            <MenuItem value="crafted">Crafted</MenuItem>
+            <MenuItem value="looted">Looted</MenuItem>
+          </TextField>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setEditingQualityLotId(null)}>Cancel</Button>
+          <Button
+            variant="contained"
+            onClick={async () => {
+              if (!editingQualityLotId) return
+              const row = rows.find((r) => r.id === editingQualityLotId)
+              if (!row) return
+              const variant_attributes: Record<string, unknown> = {}
+              if (qualityTier !== "") variant_attributes.quality_tier = qualityTier
+              if (craftedSource) variant_attributes.crafted_source = craftedSource
+
+              try {
+                await updateLot({
+                  lot_id: editingQualityLotId,
+                  listing_id: row.listing_id,
+                  quantity: Number(row.quantity),
+                  location_id: row.location_id,
+                  owner_username: row.owner_username || null,
+                  listed: row.listed ?? true,
+                  notes: row.notes,
+                  variant_attributes,
+                }).unwrap()
+                issueAlert({ message: "Quality updated", severity: "success" })
+                setEditingQualityLotId(null)
+              } catch (error) {
+                issueAlert(error as { message?: string })
+              }
+            }}
+          >
+            Save
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Paper>
   )
 }
