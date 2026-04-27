@@ -10,3 +10,8 @@ export function formatCraftedSource(source: string): string {
   if (source === "unknown") return ""
   return SOURCE_LABELS[source] ?? source.charAt(0).toUpperCase() + source.slice(1)
 }
+
+/** Whether this source value should be displayed as a chip */
+export function hasDisplayableSource(source: string | undefined | null): boolean {
+  return !!source && source !== "unknown"
+}

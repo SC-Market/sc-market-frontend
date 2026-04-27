@@ -123,7 +123,6 @@ export function ImagePreviewModal(props: {
                     total: images.length,
                   },
                 )}
-                onClose={onClose}
                 sx={{ width: "100%", height: "100%" }}
               />
             ) : (

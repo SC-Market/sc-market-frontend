@@ -35,7 +35,7 @@ import {
   VariantDetail,
 } from "../../../store/api/v2/market"
 import { QualityBadge } from "../../../components/market/v2/QualityBadge"
-import { formatCraftedSource } from "../../../util/variantDisplay"
+import { formatCraftedSource, hasDisplayableSource } from "../../../util/variantDisplay"
 import { formatPrice } from "../../../util/formatPrice"
 
 /** A single variant item in the counteroffer */
@@ -239,7 +239,7 @@ export function OfferMarketListingsEditAreaV2(props: { session: GetOfferSessionV
                         {item.variant.attributes.quality_tier != null && (
                           <QualityBadge tier={item.variant.attributes.quality_tier} size="small" />
                         )}
-                        {item.variant.attributes.crafted_source && (
+                        {hasDisplayableSource(item.variant.attributes.crafted_source) && (
                           <Chip
                             label={formatCraftedSource(String(item.variant.attributes.crafted_source))}
                             size="small"
@@ -333,7 +333,7 @@ export function OfferMarketListingsEditAreaV2(props: { session: GetOfferSessionV
                       {v.attributes.quality_tier != null && (
                         <QualityBadge tier={v.attributes.quality_tier} size="small" />
                       )}
-                      {v.attributes.crafted_source && (
+                      {hasDisplayableSource(v.attributes.crafted_source) && (
                         <Chip
                           label={formatCraftedSource(String(v.attributes.crafted_source))}
                           size="small"

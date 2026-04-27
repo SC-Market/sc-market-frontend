@@ -28,10 +28,7 @@ export function BaseSkeleton({
       width={width}
       height={height}
       animation={animation}
-      sx={{
-        bgcolor: theme.palette.background.subtleDivider,
-        ...sx,
-      }}
+      sx={sx}
       {...props}
     />
   )

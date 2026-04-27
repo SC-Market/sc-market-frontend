@@ -38,7 +38,7 @@ import {
   MyListingItem,
 } from "../../../../store/api/v2/market"
 import { QualityBadge } from "../../../../components/market/v2/QualityBadge"
-import { formatCraftedSource } from "../../../../util/variantDisplay"
+import { formatCraftedSource, hasDisplayableSource } from "../../../../util/variantDisplay"
 import { useAlertHook } from "../../../../hooks/alert/AlertHook"
 
 interface StockLotRow {
@@ -119,7 +119,7 @@ export function AllStockLotsGrid() {
       headerName: t("AllStockLots.quality", "Quality"),
       flex: 1.5,
       renderCell: (params: GridRenderCellParams) => {
-        const hasVariant = params.row.quality_tier != null || params.row.crafted_source
+        const hasVariant = params.row.quality_tier != null || hasDisplayableSource(params.row.crafted_source)
         return (
           <Box
             sx={{ display: "flex", alignItems: "center", gap: 0.5, cursor: hasVariant ? "pointer" : "default" }}
@@ -132,7 +132,7 @@ export function AllStockLotsGrid() {
             {params.row.quality_tier != null && (
               <QualityBadge tier={params.row.quality_tier} size="small" />
             )}
-            {params.row.crafted_source && (
+            {hasDisplayableSource(params.row.crafted_source) && (
               <Chip
                 label={formatCraftedSource(params.row.crafted_source)}
                 size="small"

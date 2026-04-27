@@ -22,7 +22,7 @@ import { Link } from "react-router-dom"
 import { formatPrice } from "../../util/formatPrice"
 import { Section } from "../../components/paper/Section"
 import { QualityBadge } from "../../components/market/v2/QualityBadge"
-import { formatCraftedSource } from "../../util/variantDisplay"
+import { formatCraftedSource, hasDisplayableSource } from "../../util/variantDisplay"
 import type { OfferMarketListingV2, OrderMarketListingV2 } from "../../store/api/v2/market"
 
 export function OfferMarketListingsV2Items({ items }: { items: (OfferMarketListingV2 | OrderMarketListingV2)[] }) {
@@ -78,14 +78,14 @@ export function OfferMarketListingsV2Items({ items }: { items: (OfferMarketListi
                       {v.attributes.quality_value != null && (
                         <Chip label={`${v.attributes.quality_value}/1000`} size="small" variant="outlined" />
                       )}
-                      {v.attributes.crafted_source && (
+                      {hasDisplayableSource(v.attributes.crafted_source) && (
                         <Chip
                           label={formatCraftedSource(String(v.attributes.crafted_source))}
                           size="small"
                           variant="outlined"
                         />
                       )}
-                      {v.attributes.quality_tier == null && v.attributes.quality_value == null && !v.attributes.crafted_source && (
+                      {v.attributes.quality_tier == null && v.attributes.quality_value == null && !hasDisplayableSource(v.attributes.crafted_source) && (
                         <Typography variant="caption" color="text.secondary">{v.display_name || "Standard"}</Typography>
                       )}
                     </Box>
