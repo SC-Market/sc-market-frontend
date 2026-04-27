@@ -8547,6 +8547,12 @@
 					"auctions": {
 						"$ref": "#/components/schemas/MigrationSummary"
 					},
+					"order_items": {
+						"$ref": "#/components/schemas/MigrationSummary"
+					},
+					"offer_items": {
+						"$ref": "#/components/schemas/MigrationSummary"
+					},
 					"duration_seconds": {
 						"type": "number",
 						"format": "double"
@@ -8557,6 +8563,8 @@
 					"listings",
 					"price_history",
 					"auctions",
+					"order_items",
+					"offer_items",
 					"duration_seconds"
 				],
 				"type": "object",

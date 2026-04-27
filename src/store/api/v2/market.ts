@@ -4804,6 +4804,8 @@ export type MigrationRunResponse = {
   listings: MigrationSummary
   price_history: MigrationSummary
   auctions: MigrationSummary
+  order_items: MigrationSummary
+  offer_items: MigrationSummary
   duration_seconds: number
 }
 export type MigrationRunRequest = {
