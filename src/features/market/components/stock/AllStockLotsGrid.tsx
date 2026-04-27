@@ -1,357 +1,130 @@
 /**
- * All Stock Lots Grid
+ * All Stock Lots Grid (V2)
  *
- * Data grid showing all stock lots across all listings with inline editing
+ * Data grid showing all stock lots using V2 endpoints with proper types.
+ * Displays listing name, quality chips, quantity, location, owner, listed toggle.
  */
 
-import React, { useState, useCallback } from "react"
+import React, { useState, useMemo } from "react"
 import {
   GridColDef,
-  GridRowsProp,
-  GridRenderEditCellParams,
   GridRenderCellParams,
-  useGridApiContext,
 } from "@mui/x-data-grid"
 import { LazyDataGrid as DataGrid } from "../../../../components/grid/LazyDataGrid"
 import {
   Paper,
   Typography,
   Chip,
-  IconButton,
   Box,
   Button,
   Avatar,
-  Autocomplete,
-  TextField,
   Switch,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
+  TextField,
   MenuItem,
+  IconButton,
 } from "@mui/material"
-import {
-  Delete as DeleteIcon,
-  Save as SaveIcon,
-  Add as AddIcon,
-} from "@mui/icons-material"
+import { Delete as DeleteIcon } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import {
+  useGetStockLotsQuery,
   useGetMyListingsQuery,
-  useSearchMarketListingsQuery,
-} from "../../api/marketApi"
-import {
-  useSearchLotsQuery,
-  useCreateLotMutation,
-  useUpdateLotMutation,
-  useDeleteLotMutation,
-  useGetLocationsQuery,
-} from "../../../../store/api/stockLotsApi"
-import { useCurrentOrg } from "../../../../hooks/login/CurrentOrg"
+  useUpdateStockLotMutation,
+  useDeleteStockLotMutation,
+  StockLotDetail,
+  MyListingItem,
+} from "../../../../store/api/v2/market"
 import { QualityBadge } from "../../../../components/market/v2/QualityBadge"
 import { formatCraftedSource } from "../../../../util/variantDisplay"
 import { useAlertHook } from "../../../../hooks/alert/AlertHook"
-import type { StockManageType } from "../../domain/types"
-import { LocationSelector } from "./LocationSelector"
-import { useStockSearch } from "./StockSearchContext"
-import { OrgMemberSearch } from "../../../../components/search/OrgMemberSearch"
-import { Link } from "react-router-dom"
-import { useGetUserProfileQuery } from "../../../profile/api/profileApi"
+
+interface StockLotRow {
+  id: string
+  lot_id: string
+  listing_id: string
+  listing_title: string
+  listing_photo?: string
+  quantity: number
+  location_name: string | null
+  owner_username: string | null
+  owner_avatar: string | null
+  listed: boolean
+  notes: string | null
+  quality_tier: number | null
+  crafted_source: string | null
+}
 
 export function AllStockLotsGrid() {
   const { t } = useTranslation()
-  const [currentOrg] = useCurrentOrg()
   const issueAlert = useAlertHook()
-  const { filters } = useStockSearch()
-  const { data: profile } = useGetUserProfileQuery()
 
-  // Fetch all listings using same approach as MyItemStock
-  const hasOrg = currentOrg && currentOrg.spectrum_id
-  const searchQueryParams = {
-    page_size: 96,
-    index: 0,
-    quantityAvailable: 0,
-    query: "",
-    sort: "activity",
-    statuses: "active,inactive",
-  }
+  const { data: lotsData } = useGetStockLotsQuery({ page: 1, pageSize: 200 })
+  const { data: listingsData } = useGetMyListingsQuery({ status: "active", page: 1, pageSize: 200 })
+  const [updateLot] = useUpdateStockLotMutation()
+  const [deleteLot] = useDeleteStockLotMutation()
 
-  const finalParams = hasOrg
-    ? { ...searchQueryParams, contractor_id: currentOrg?.spectrum_id }
-    : searchQueryParams
-
-  const { data: listingsData } = useGetMyListingsQuery(finalParams)
-  const listings = (listingsData?.listings || []) as StockManageType[]
-
-  // Fetch all lots using search endpoint with filters
-  const { data: lotsData } = useSearchLotsQuery({
-    contractor_spectrum_id: hasOrg ? currentOrg?.spectrum_id : undefined,
-    location_id: filters.locationId || undefined,
-    status: filters.status !== "all" ? filters.status : undefined,
-    min_quantity: filters.minQuantity ? filters.minQuantity : undefined,
-    max_quantity: filters.maxQuantity ? filters.maxQuantity : undefined,
-    search: filters.search ? filters.search : undefined,
-    page_size: 100,
-    offset: 0,
-  })
-
-  const [createLot] = useCreateLotMutation()
-  const [updateLot] = useUpdateLotMutation()
-  const [deleteLot] = useDeleteLotMutation()
-
-  const { data: locationsData } = useGetLocationsQuery({ search: "" })
-  const locations = locationsData?.locations || []
-
-  const [newRows, setNewRows] = useState<any[]>([])
   const [editingQualityLotId, setEditingQualityLotId] = useState<string | null>(null)
   const [qualityTier, setQualityTier] = useState<number | "">("")
   const [craftedSource, setCraftedSource] = useState<string>("")
 
-  // Memoize edit cell renderers to prevent hook issues
-  // Custom edit component for listing selection
-  function ListingEditCell(props: GridRenderEditCellParams) {
-    const { id, value, field } = props
-    const apiRef = useGridApiContext()
-    const [inputValue, setInputValue] = React.useState("")
-
-    const { data: searchData } = useSearchMarketListingsQuery({
-      query: inputValue,
-      page_size: 20,
-      user_seller: currentOrg ? undefined : profile?.username,
-      contractor_seller: currentOrg?.spectrum_id,
-      statuses: "active,inactive",
-      listing_type: "unique",
-    })
-
-    const options = searchData?.listings || []
-    const selectedListing = options.find((l) => l.listing_id === value)
-
-    const handleChange = (
-      _: React.SyntheticEvent,
-      newValue: (typeof options)[0] | null,
-    ) => {
-      apiRef.current.setEditCellValue({
-        id,
-        field,
-        value: newValue?.listing_id || "",
-      })
+  // Build a listing lookup map
+  const listingMap = useMemo(() => {
+    const map = new Map<string, MyListingItem>()
+    for (const l of listingsData?.listings || []) {
+      map.set(l.listing_id, l)
     }
+    return map
+  }, [listingsData])
 
-    return (
-      <Autocomplete
-        value={selectedListing || null}
-        onChange={handleChange}
-        inputValue={inputValue}
-        onInputChange={(_, newValue) => setInputValue(newValue)}
-        options={options}
-        getOptionLabel={(option) => option.title}
-        renderOption={(props, option) => (
-          <Box
-            component="li"
-            {...props}
-            sx={{ display: "flex", alignItems: "center", gap: 1 }}
-          >
-            <Avatar
-              src={option.photo}
-              variant="rounded"
-              sx={{ width: 32, height: 32 }}
-            />
-            <Typography variant="body2">{option.title}</Typography>
-          </Box>
-        )}
-        renderInput={(params) => <TextField {...params} size="medium" />}
-        fullWidth
-        size="medium"
-        disablePortal={false}
-        sx={{ height: "100%" }}
-      />
-    )
-  }
-
-  // Custom edit component for location selection
-  function LocationEditCell(props: GridRenderEditCellParams) {
-    const { id, value, field } = props
-    const apiRef = useGridApiContext()
-    const [inputValue, setInputValue] = React.useState("")
-
-    const filteredLocations = locations.filter((loc) =>
-      loc.name.toLowerCase().includes(inputValue.toLowerCase()),
-    )
-
-    const selectedLocation = locations.find((l) => l.location_id === value)
-
-    const handleChange = (
-      _: React.SyntheticEvent,
-      newValue: (typeof locations)[0] | null,
-    ) => {
-      apiRef.current.setEditCellValue({
-        id,
-        field,
-        value: newValue?.location_id || null,
-      })
-    }
-
-    return (
-      <Autocomplete
-        value={selectedLocation || null}
-        onChange={handleChange}
-        inputValue={inputValue}
-        onInputChange={(_, newValue) => setInputValue(newValue)}
-        options={filteredLocations}
-        getOptionLabel={(option) => option.name}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            size="medium"
-            placeholder={t("AllStockLots.selectLocation", "Select location...")}
-          />
-        )}
-        fullWidth
-        size="medium"
-        disablePortal={false}
-        sx={{ height: "100%" }}
-      />
-    )
-  }
-
-  const renderListingEditCell = useCallback(
-    (props: GridRenderEditCellParams) => <ListingEditCell {...props} />,
-    [currentOrg, profile],
-  )
-
-  const renderLocationEditCell = useCallback(
-    (props: GridRenderEditCellParams) => <LocationEditCell {...props} />,
-    [locations, t],
-  )
-
-  // Custom edit component for owner selection
-  const renderOwnerEditCell = useCallback(
-    (props: GridRenderEditCellParams) => {
-      const { id, value, field } = props
-      const apiRef = useGridApiContext()
-
-      const handleMemberSelect = (member: any) => {
-        apiRef.current.setEditCellValue({
-          id,
-          field,
-          value: member?.username || null,
-        })
-      }
-
-      return (
-        <OrgMemberSearch
-          fullWidth
-          size="small"
-          onMemberSelect={handleMemberSelect}
-          placeholder={t("AllStockLots.selectOwner", "Select owner...")}
-          sx={{ height: "100%" }}
-        />
+  // Map lots to grid rows
+  const rows: StockLotRow[] = useMemo(() => {
+    return (lotsData?.lots || []).map((lot: StockLotDetail) => {
+      // Find listing for this lot — need to get listing_id from the lot
+      // StockLotDetail has item_id but not listing_id directly, we need to match via listings
+      const listing = listingsData?.listings.find((l) =>
+        l.listing_id === (lot as unknown as { listing_id?: string }).listing_id
       )
-    },
-    [t],
-  )
+      return {
+        id: lot.lot_id,
+        lot_id: lot.lot_id,
+        listing_id: (lot as unknown as { listing_id?: string }).listing_id || "",
+        listing_title: listing?.title || "Unknown",
+        listing_photo: listing?.photo,
+        quantity: lot.quantity_total,
+        location_name: lot.location?.name || null,
+        owner_username: lot.owner?.username || null,
+        owner_avatar: lot.owner?.avatar || null,
+        listed: lot.listed,
+        notes: lot.notes,
+        quality_tier: lot.variant.attributes.quality_tier ?? null,
+        crafted_source: lot.variant.attributes.crafted_source ?? null,
+      }
+    })
+  }, [lotsData, listingsData])
 
-  // Map lots to rows
-  // Filter out allocated lots (they show in AllAllocatedLotsGrid)
-  const allLots = (lotsData?.lots || [])
-    .filter((lot: any) => !lot.is_allocated)
-    .map((lot) => ({
-      id: lot.lot_id,
-      lot_id: lot.lot_id,
-      listing_id: lot.listing_id,
-      quantity: lot.quantity_total,
-      location_id: lot.location_id,
-      owner_username: lot.owner?.username || null,
-      owner_avatar: lot.owner?.avatar || null,
-      listed: lot.listed,
-      notes: lot.notes,
-      quality_tier: lot.variant?.attributes?.quality_tier ?? null,
-      crafted_source: lot.variant?.attributes?.crafted_source ?? null,
-    }))
-
-  // Combine all lots into rows
-  const rows: GridRowsProp = [...newRows, ...allLots]
-
-  const columns: GridColDef[] = [
+  const columns: GridColDef[] = useMemo(() => [
     {
-      field: "listing_id",
+      field: "listing_title",
       headerName: t("AllStockLots.listing", "Listing"),
       flex: 2,
-      editable: true,
-      renderEditCell: renderListingEditCell,
-      renderCell: (params: GridRenderCellParams) => {
-        const listing = listings.find(
-          (l) => l.listing.listing_id === params.value,
-        )
-        if (!listing) return null
-        return (
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <Avatar
-              src={listing.photos[0]}
-              variant="rounded"
-              sx={{ width: 32, height: 32 }}
-            />
-            <Typography variant="body2">{listing.details.title}</Typography>
-          </Box>
-        )
-      },
-    },
-    {
-      field: "quantity",
-      headerName: t("AllStockLots.quantity", "Quantity"),
-      flex: 1,
-      editable: true,
-      type: "number" as const,
-      valueParser: (value: string) => {
-        const parsed = Number(value)
-        return isNaN(parsed) ? 0 : Math.max(0, parsed)
-      },
-    },
-    {
-      field: "owner_username",
-      headerName: t("AllStockLots.owner", "Owner"),
-      flex: 1.5,
-      minWidth: 180,
-      editable: true,
-      renderEditCell: renderOwnerEditCell,
-      renderCell: (params: GridRenderCellParams) => {
-        if (!params.value)
-          return <Typography variant="body2">Unassigned</Typography>
-
-        return (
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <Avatar
-              src={params.row.owner_avatar || undefined}
-              variant="rounded"
-              sx={{ width: 24, height: 24 }}
-            />
-            <Link
-              to={`/user/${params.value}`}
-              style={{ textDecoration: "none", color: "inherit" }}
-            >
-              <Typography variant="body2">{params.value}</Typography>
-            </Link>
-          </Box>
-        )
-      },
-    },
-    {
-      field: "location_id",
-      headerName: t("AllStockLots.location", "Location"),
-      flex: 1.5,
-      minWidth: 200,
-      editable: true,
-      renderEditCell: renderLocationEditCell,
-      valueFormatter: (value: string) => {
-        const location = locations.find((l) => l.location_id === value)
-        return location?.name || "Unspecified"
-      },
+      renderCell: (params: GridRenderCellParams) => (
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <Avatar
+            src={params.row.listing_photo || undefined}
+            variant="rounded"
+            sx={{ width: 32, height: 32 }}
+          />
+          <Typography variant="body2">{params.value}</Typography>
+        </Box>
+      ),
     },
     {
       field: "quality_tier",
       headerName: t("AllStockLots.quality", "Quality"),
       flex: 1.5,
-      editable: false,
       renderCell: (params: GridRenderCellParams) => {
         const hasVariant = params.row.quality_tier != null || params.row.crafted_source
         return (
@@ -381,10 +154,44 @@ export function AllStockLotsGrid() {
       },
     },
     {
+      field: "quantity",
+      headerName: t("AllStockLots.quantity", "Qty"),
+      width: 80,
+      editable: true,
+      type: "number",
+    },
+    {
+      field: "location_name",
+      headerName: t("AllStockLots.location", "Location"),
+      flex: 1,
+      renderCell: (params: GridRenderCellParams) => (
+        <Typography variant="body2" color={params.value ? "text.primary" : "text.disabled"}>
+          {params.value || "Unspecified"}
+        </Typography>
+      ),
+    },
+    {
+      field: "owner_username",
+      headerName: t("AllStockLots.owner", "Owner"),
+      flex: 1,
+      renderCell: (params: GridRenderCellParams) => {
+        if (!params.value) return <Typography variant="body2" color="text.disabled">—</Typography>
+        return (
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <Avatar
+              src={params.row.owner_avatar || undefined}
+              variant="rounded"
+              sx={{ width: 24, height: 24 }}
+            />
+            <Typography variant="body2">{params.value}</Typography>
+          </Box>
+        )
+      },
+    },
+    {
       field: "listed",
       headerName: t("AllStockLots.listed", "Listed"),
-      flex: 1,
-      editable: false,
+      width: 80,
       renderCell: (params: GridRenderCellParams) => (
         <Switch
           checked={!!params.value}
@@ -392,13 +199,8 @@ export function AllStockLotsGrid() {
           onChange={async () => {
             try {
               await updateLot({
-                lot_id: params.row.lot_id,
-                listing_id: params.row.listing_id,
-                quantity: Number(params.row.quantity),
-                location_id: params.row.location_id,
-                owner_username: params.row.owner_username || null,
-                listed: !params.value,
-                notes: params.row.notes,
+                id: params.row.lot_id,
+                updateStockLotRequest: { listed: !params.value },
               }).unwrap()
             } catch (error) {
               issueAlert(error as { message?: string })
@@ -408,151 +210,41 @@ export function AllStockLotsGrid() {
       ),
     },
     {
-      field: "notes",
-      headerName: t("AllStockLots.notes", "Notes"),
-      flex: 2,
-      editable: true,
-    },
-    {
       field: "actions",
-      headerName: t("AllStockLots.actions", "Actions"),
-      flex: 1,
-      renderCell: (params: GridRenderCellParams) => {
-        const isNew = params.row.id.toString().startsWith("new-")
-        return (
-          <Box sx={{ display: "flex", gap: 0.5 }}>
-            {isNew && (
-              <IconButton
-                size="small"
-                color="primary"
-                onClick={() => handleSaveNew(params.row)}
-                disabled={!params.row.listing_id}
-              >
-                <SaveIcon />
-              </IconButton>
-            )}
-            <IconButton
-              size="small"
-              onClick={() =>
-                isNew
-                  ? handleCancelNew(params.row.id)
-                  : handleDelete(params.row.lot_id)
-              }
-            >
-              <DeleteIcon />
-            </IconButton>
-          </Box>
-        )
-      },
+      headerName: "",
+      width: 50,
+      sortable: false,
+      renderCell: (params: GridRenderCellParams) => (
+        <IconButton
+          size="small"
+          onClick={async () => {
+            try {
+              await deleteLot({ id: params.row.lot_id }).unwrap()
+              issueAlert({ message: "Lot deleted", severity: "success" })
+            } catch (error) {
+              issueAlert(error as { message?: string })
+            }
+          }}
+        >
+          <DeleteIcon fontSize="small" color="error" />
+        </IconButton>
+      ),
     },
-  ].filter((col) => {
-    // Hide owner column when there's no org
-    if (col.field === "owner_username" && !currentOrg) {
-      return false
-    }
-    return true
-  })
+  ], [t, updateLot, deleteLot, issueAlert])
 
-  const handleDelete = async (lotId: string) => {
-    try {
-      await deleteLot({ lot_id: lotId }).unwrap()
-      issueAlert({
-        message: t("AllStockLots.deleted", "Lot deleted"),
-        severity: "success",
-      })
-    } catch (error) {
-      issueAlert(error as any)
-    }
-  }
-
-  const handleRowUpdate = async (newRow: any, oldRow: any) => {
-    // Don't auto-save new rows
-    if (newRow.id.toString().startsWith("new-")) {
-      return newRow
-    }
-
-    // Handle existing row update
-    try {
-      const result = await updateLot({
-        lot_id: newRow.lot_id,
-        listing_id: newRow.listing_id,
-        quantity: Number(newRow.quantity),
-        location_id: newRow.location_id,
-        owner_username: newRow.owner_username || null,
-        listed: newRow.listed,
-        notes: newRow.notes,
-      }).unwrap()
-
-      issueAlert({
-        message: t("AllStockLots.updated", "Lot updated"),
-        severity: "success",
-      })
-
-      // Return the updated lot data from server
-      return {
-        id: result.lot.lot_id,
-        lot_id: result.lot.lot_id,
-        listing_id: result.lot.listing_id,
-        quantity: result.lot.quantity_total,
-        location_id: result.lot.location_id,
-        owner_username: result.lot.owner?.username || null,
-        owner_avatar: result.lot.owner?.avatar || null,
-        listed: result.lot.listed,
-        notes: result.lot.notes,
+  const handleRowUpdate = async (newRow: StockLotRow, oldRow: StockLotRow) => {
+    if (newRow.quantity !== oldRow.quantity) {
+      try {
+        await updateLot({
+          id: newRow.lot_id,
+          updateStockLotRequest: { quantity_total: newRow.quantity },
+        }).unwrap()
+      } catch (error) {
+        issueAlert(error as { message?: string })
+        return oldRow
       }
-    } catch (error) {
-      issueAlert(error as any)
-      return oldRow
     }
-  }
-
-  const handleSaveNew = async (row: any) => {
-    try {
-      // Auto-set owner to current user when no org
-      const ownerUsername = currentOrg
-        ? row.owner_username || null
-        : profile?.username || null
-
-      await createLot({
-        listing_id: row.listing_id,
-        quantity: Number(row.quantity) || 0,
-        location_id: row.location_id || null,
-        owner_username: ownerUsername,
-        listed: row.listed ?? true,
-        notes: row.notes || null,
-      }).unwrap()
-
-      issueAlert({
-        message: t("AllStockLots.created", "Lot created"),
-        severity: "success",
-      })
-
-      setNewRows((prev) => prev.filter((r) => r.id !== row.id))
-    } catch (error) {
-      issueAlert(error as any)
-    }
-  }
-
-  const handleCancelNew = (rowId: string) => {
-    setNewRows((prev) => prev.filter((r) => r.id !== rowId))
-  }
-
-  const handleAddRow = () => {
-    const newId = `new-${Date.now()}`
-    setNewRows((prev) => [
-      ...prev,
-      {
-        id: newId,
-        lot_id: null,
-        listing_id: "",
-        quantity: 0,
-        location_id: null,
-        owner_username: null,
-        owner_avatar: null,
-        listed: true,
-        notes: "",
-      },
-    ])
+    return newRow
   }
 
   return (
@@ -566,33 +258,6 @@ export function AllStockLotsGrid() {
         initialState={{
           pagination: { paginationModel: { pageSize: 24 } },
         }}
-        disableRowSelectionOnClick
-        slots={{
-          toolbar: () => (
-            <Box
-              sx={{
-                p: 2,
-                display: "flex",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <Typography variant="h6">
-                {t("AllStockLots.title", "All Stock Lots")}
-              </Typography>
-              <Button
-                size="small"
-                variant="contained"
-                startIcon={<AddIcon />}
-                onClick={handleAddRow}
-                disabled={listings.length === 0}
-              >
-                {t("AllStockLots.addLot", "Add Lot")}
-              </Button>
-            </Box>
-          ),
-        }}
-        showToolbar
         sx={{
           "& .MuiDataGrid-cell": {
             display: "flex",
@@ -646,22 +311,14 @@ export function AllStockLotsGrid() {
             variant="contained"
             onClick={async () => {
               if (!editingQualityLotId) return
-              const row = rows.find((r) => r.id === editingQualityLotId)
-              if (!row) return
               const variant_attributes: Record<string, unknown> = {}
               if (qualityTier !== "") variant_attributes.quality_tier = qualityTier
               if (craftedSource) variant_attributes.crafted_source = craftedSource
 
               try {
                 await updateLot({
-                  lot_id: editingQualityLotId,
-                  listing_id: row.listing_id,
-                  quantity: Number(row.quantity),
-                  location_id: row.location_id,
-                  owner_username: row.owner_username || null,
-                  listed: row.listed ?? true,
-                  notes: row.notes,
-                  variant_attributes,
+                  id: editingQualityLotId,
+                  updateStockLotRequest: { variant_attributes },
                 }).unwrap()
                 issueAlert({ message: "Quality updated", severity: "success" })
                 setEditingQualityLotId(null)
