@@ -149,6 +149,6 @@ export function ProfileSkeleton() {
           </Grid>
         </Container>
       </Box>
-    </OpenLayout>
+  
   )
 }

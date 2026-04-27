@@ -3,7 +3,6 @@ import {
   PageSkeleton,
   MarketPageSkeleton,
   DashboardSkeleton,
-  ProfileSkeleton,
   ListPageSkeleton,
   DetailPageSkeleton,
   FormPageSkeleton,
@@ -23,6 +22,7 @@ import {
   MyListingsSkeleton,
   ServicesListSkeleton,
 } from "../components/skeletons"
+import { ProfileRouteSkeleton, OrgRouteSkeleton } from "./profileRouteSkeletons"
 
 /**
  * Maps route paths to their appropriate skeleton components
@@ -52,9 +52,9 @@ export const routeSkeletonMap: Record<string, React.ComponentType> = {
 
   // Contractor routes
   "/contractors": ContractorsListSkeleton,
-  "/contractor/:id": ProfileSkeleton,
-  "/contractor/:id/:tab": ProfileSkeleton,
-  "/myorg": ProfileSkeleton,
+  "/contractor/:id": OrgRouteSkeleton,
+  "/contractor/:id/:tab": OrgRouteSkeleton,
+  "/myorg": OrgRouteSkeleton,
   "/org/register": FormPageSkeleton,
   "/contractor_invite/:invite_id": PageSkeleton,
 
@@ -83,10 +83,10 @@ export const routeSkeletonMap: Record<string, React.ComponentType> = {
   "/offer/:id/counteroffer": FormPageSkeleton,
 
   // User routes
-  "/user/:username": ProfileSkeleton,
-  "/user/:username/:tab": ProfileSkeleton,
-  "/profile": ProfileSkeleton,
-  "/profile/:tab": ProfileSkeleton,
+  "/user/:username": ProfileRouteSkeleton,
+  "/user/:username/:tab": ProfileRouteSkeleton,
+  "/profile": ProfileRouteSkeleton,
+  "/profile/:tab": ProfileRouteSkeleton,
   "/settings": FormPageSkeleton,
 
   // Dashboard routes
