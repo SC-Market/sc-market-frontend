@@ -1170,11 +1170,20 @@ const injectedRtkApi = api
         query: () => ({ url: `/admin/migration/status` }),
         providesTags: ["Admin Migration"],
       }),
-      getMigrationLogs: build.query<
-        GetMigrationLogsApiResponse,
-        GetMigrationLogsApiArg
+      listMigrationJobs: build.query<
+        ListMigrationJobsApiResponse,
+        ListMigrationJobsApiArg
       >({
-        query: () => ({ url: `/admin/migration/logs` }),
+        query: () => ({ url: `/admin/migration/jobs` }),
+        providesTags: ["Admin Migration"],
+      }),
+      getMigrationJob: build.query<
+        GetMigrationJobApiResponse,
+        GetMigrationJobApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/admin/migration/jobs/${queryArg.jobId}`,
+        }),
         providesTags: ["Admin Migration"],
       }),
       runMigration: build.mutation<RunMigrationApiResponse, RunMigrationApiArg>(
@@ -2209,10 +2218,19 @@ export type GetSellerStatsApiArg = {
 export type GetMigrationStatusApiResponse =
   /** status 200 Ok */ MigrationStatusResponse
 export type GetMigrationStatusApiArg = void
-export type GetMigrationLogsApiResponse =
-  /** status 200 Ok */ MigrationLogEntry[]
-export type GetMigrationLogsApiArg = void
-export type RunMigrationApiResponse = /** status 200 Ok */ MigrationRunResponse
+export type ListMigrationJobsApiResponse = /** status 200 Ok */ {
+  jobs: MigrationJob[]
+}
+export type ListMigrationJobsApiArg = void
+export type GetMigrationJobApiResponse = /** status 200 Ok */ {
+  job: MigrationJob | null
+}
+export type GetMigrationJobApiArg = {
+  jobId: string
+}
+export type RunMigrationApiResponse = /** status 200 Ok */ {
+  job_id: string
+}
 export type RunMigrationApiArg = {
   migrationRunRequest: MigrationRunRequest
 }
@@ -4802,7 +4820,7 @@ export type MigrationSummary = {
     v1_listing_id: string
   }[]
 }
-export type MigrationRunResponse = {
+export type MigrationResult = {
   dry_run: boolean
   listings: MigrationSummary
   price_history: MigrationSummary
@@ -4812,14 +4830,17 @@ export type MigrationRunResponse = {
   buy_orders: MigrationSummary
   duration_seconds: number
 }
-export type MigrationLogEntry = {
-  timestamp: string
+export type MigrationJob = {
+  id: string
+  status: "running" | "rolling_back" | "completed" | "failed"
   dry_run: boolean
-  duration_seconds: number
-  result: MigrationRunResponse
+  started_at: string
+  completed_at: string | null
+  progress: string | null
+  result: MigrationResult | null
+  error: string | null
 }
 export type MigrationRunRequest = {
-  /** If true, wraps in a transaction and rolls back — no data is persisted */
   dry_run: boolean
 }
 export type FeatureFlagConfig = {
@@ -5008,7 +5029,8 @@ export const {
   useGetQualityDistributionQuery,
   useGetSellerStatsQuery,
   useGetMigrationStatusQuery,
-  useGetMigrationLogsQuery,
+  useListMigrationJobsQuery,
+  useGetMigrationJobQuery,
   useRunMigrationMutation,
   useGetConfigQuery,
   useUpdateConfigMutation,
