@@ -102,6 +102,10 @@ export function CreateListingV2() {
   const [minOrderValue, setMinOrderValue] = useState<number | null>(null);
   const [maxOrderValue, setMaxOrderValue] = useState<number | null>(null);
   const [bulkDiscountTiers, setBulkDiscountTiers] = useState<Array<{ min_quantity: number; discount_percent: number }>>([]);
+  const [saleType, setSaleType] = useState<"fixed" | "auction" | "negotiable">("fixed");
+  const [auctionEndTime, setAuctionEndTime] = useState<string>("");
+  const [minBidIncrement, setMinBidIncrement] = useState<number>(1000);
+  const [reservePrice, setReservePrice] = useState<number | null>(null);
 
   // Stock lots state
   const [stockLots, setStockLots] = useState<StockLotFormData[]>([
@@ -275,6 +279,12 @@ export function CreateListingV2() {
         max_order_value: maxOrderValue ?? undefined,
         bulk_discount_tiers: bulkDiscountTiers.length ? bulkDiscountTiers : undefined,
         contractor_spectrum_id: currentOrg?.spectrum_id || undefined,
+        sale_type: saleType,
+        auction_details: saleType === "auction" ? {
+          end_time: new Date(auctionEndTime).toISOString(),
+          min_bid_increment: minBidIncrement,
+          reserve_price: reservePrice ?? undefined,
+        } : undefined,
       };
 
       try {
@@ -522,6 +532,58 @@ export function CreateListingV2() {
             <Grid item xs={12}>
               <BulkDiscountTierEditor tiers={bulkDiscountTiers} onChange={setBulkDiscountTiers} />
             </Grid>
+          </FormPaper>
+
+          {/* Sale Type */}
+          <FormPaper title={t("CreateListingV2.saleType", "Sale Type")}>
+            <Grid item xs={12}>
+              <FormControl component="fieldset">
+                <RadioGroup
+                  row
+                  value={saleType}
+                  onChange={(e) => setSaleType(e.target.value as "fixed" | "auction" | "negotiable")}
+                >
+                  <FormControlLabel value="fixed" control={<Radio color="secondary" />} label={t("CreateListingV2.fixed", "Fixed Price")} />
+                  <FormControlLabel value="auction" control={<Radio color="secondary" />} label={t("CreateListingV2.auction", "Auction")} />
+                  <FormControlLabel value="negotiable" control={<Radio color="secondary" />} label={t("CreateListingV2.negotiable", "Negotiable")} />
+                </RadioGroup>
+              </FormControl>
+            </Grid>
+            {saleType === "auction" && (
+              <>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    label={t("CreateListingV2.auctionEndTime", "Auction End Time")}
+                    type="datetime-local"
+                    value={auctionEndTime}
+                    onChange={(e) => setAuctionEndTime(e.target.value)}
+                    InputLabelProps={{ shrink: true }}
+                    required
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    label={t("CreateListingV2.minBidIncrement", "Min Bid Increment (aUEC)")}
+                    type="number"
+                    value={minBidIncrement}
+                    onChange={(e) => setMinBidIncrement(parseInt(e.target.value) || 0)}
+                    inputProps={{ min: 1 }}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <TextField
+                    fullWidth
+                    label={t("CreateListingV2.reservePrice", "Reserve Price (optional)")}
+                    type="number"
+                    value={reservePrice ?? ""}
+                    onChange={(e) => setReservePrice(e.target.value ? parseInt(e.target.value) : null)}
+                    helperText={t("CreateListingV2.reservePriceHelp", "Auction won't sell below this price")}
+                  />
+                </Grid>
+              </>
+            )}
           </FormPaper>
 
           {/* Pricing Section */}

@@ -29,6 +29,8 @@ import {
 import { VariantBreakdown } from "../../../components/market/v2/VariantBreakdown"
 import { QualityBadge } from "../../../components/market/v2/QualityBadge"
 import { ImagePreviewPaper } from "../../../components/paper/ImagePreviewPaper"
+import { BidAreaV2 } from "./components/BidAreaV2"
+import { useGetUserProfileQuery } from "../../../features/profile/api/profileApi"
 import { MarkdownRender } from "../../../components/markdown/Markdown.lazy"
 import { SellerReviews } from "../listing-view/components/SellerReviews"
 import { SellerOtherListingsV2, RelatedListingsV2, AggregateMarketDataV2 } from "./components/ListingViewComponentsV2"
@@ -350,6 +352,15 @@ export function ListingDetailV2() {
                             <Chip label="OUT OF STOCK" color="error" size="small" sx={{ fontWeight: "bold" }} />
                           )}
                         </Box>
+                      )}
+
+                      {/* Auction Bid Area */}
+                      {listing.sale_type === "auction" && (
+                        <BidAreaV2
+                          listingId={listing.listing_id}
+                          startingPrice={items[0]?.base_price || 0}
+                          isOwner={listing.seller_id === profile?.user_id}
+                        />
                       )}
 
                       {/* Description */}

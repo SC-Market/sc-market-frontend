@@ -1,9 +1,12 @@
 import React, { useMemo, useState } from "react"
 import {
-  Avatar,
   Box,
   Button,
   Chip,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
   Grid,
   IconButton,
   Paper,
@@ -14,6 +17,7 @@ import {
   TableHead,
   TableRow,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material"
 import {
@@ -26,15 +30,28 @@ import {
 } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
-import { useGetInventoryQuery } from "../../store/api/v2/market"
+import {
+  useGetInventoryQuery,
+  useCreateInventoryLotMutation,
+  useDeleteInventoryLotMutation,
+  useUnlinkFromListingMutation,
+} from "../../store/api/v2/market"
 import { Link } from "react-router-dom"
+import { useAlertHook } from "../../hooks/alert/AlertHook"
 
 export default function InventoryPage() {
   const { t } = useTranslation()
+  const issueAlert = useAlertHook()
   const [page, setPage] = useState(1)
   const [search, setSearch] = useState("")
+  const [createOpen, setCreateOpen] = useState(false)
+  const [newQty, setNewQty] = useState(1)
+  const [newNotes, setNewNotes] = useState("")
 
-  const { data, isLoading } = useGetInventoryQuery({ page, page_size: 50 })
+  const { data, isLoading, refetch } = useGetInventoryQuery({ page, page_size: 50 })
+  const [createLot, { isLoading: creating }] = useCreateInventoryLotMutation()
+  const [deleteLot] = useDeleteInventoryLotMutation()
+  const [unlinkLot] = useUnlinkFromListingMutation()
 
   const lots = data?.lots || []
   const filtered = useMemo(() => {
@@ -47,6 +64,39 @@ export default function InventoryPage() {
         l.notes?.toLowerCase().includes(s),
     )
   }, [lots, search])
+
+  const handleCreate = async () => {
+    try {
+      await createLot({ createInventoryLotRequest: { quantity: newQty, notes: newNotes || undefined } }).unwrap()
+      issueAlert({ message: t("inventory.created", "Lot created"), severity: "success" })
+      setCreateOpen(false)
+      setNewQty(1)
+      setNewNotes("")
+      refetch()
+    } catch (err: any) {
+      issueAlert({ message: err?.data?.message || "Failed to create lot", severity: "error" })
+    }
+  }
+
+  const handleDelete = async (lotId: string) => {
+    try {
+      await deleteLot({ lotId }).unwrap()
+      issueAlert({ message: t("inventory.deleted", "Lot deleted"), severity: "success" })
+      refetch()
+    } catch (err: any) {
+      issueAlert({ message: err?.data?.message || "Failed to delete lot", severity: "error" })
+    }
+  }
+
+  const handleUnlink = async (lotId: string) => {
+    try {
+      await unlinkLot({ lotId }).unwrap()
+      issueAlert({ message: t("inventory.unlinked", "Lot unlinked from listing"), severity: "success" })
+      refetch()
+    } catch (err: any) {
+      issueAlert({ message: err?.data?.message || "Failed to unlink lot", severity: "error" })
+    }
+  }
 
   return (
     <StandardPageLayout
@@ -73,6 +123,9 @@ export default function InventoryPage() {
                 onChange={(e) => setSearch(e.target.value)}
                 InputProps={{ startAdornment: <SearchRounded sx={{ mr: 0.5, color: "text.secondary" }} /> }}
               />
+              <Button variant="contained" startIcon={<AddRounded />} onClick={() => setCreateOpen(true)}>
+                {t("inventory.addLot", "Add Lot")}
+              </Button>
             </Stack>
           </Stack>
 
@@ -93,6 +146,7 @@ export default function InventoryPage() {
                   <TableCell>{t("inventory.location", "Location")}</TableCell>
                   <TableCell>{t("inventory.listing", "Listing")}</TableCell>
                   <TableCell>{t("inventory.status", "Status")}</TableCell>
+                  <TableCell align="right">{t("inventory.actions", "Actions")}</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -140,6 +194,22 @@ export default function InventoryPage() {
                         variant="outlined"
                       />
                     </TableCell>
+                    <TableCell align="right">
+                      <Stack direction="row" spacing={0.5} justifyContent="flex-end">
+                        {lot.listing_id && (
+                          <Tooltip title={t("inventory.unlink", "Unlink from listing")}>
+                            <IconButton size="small" onClick={() => handleUnlink(lot.lot_id)}>
+                              <LinkOffRounded fontSize="small" />
+                            </IconButton>
+                          </Tooltip>
+                        )}
+                        <Tooltip title={t("inventory.delete", "Delete lot")}>
+                          <IconButton size="small" color="error" onClick={() => handleDelete(lot.lot_id)}>
+                            <DeleteRounded fontSize="small" />
+                          </IconButton>
+                        </Tooltip>
+                      </Stack>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -161,6 +231,37 @@ export default function InventoryPage() {
           )}
         </Paper>
       </Grid>
+
+      {/* Create Lot Dialog */}
+      <Dialog open={createOpen} onClose={() => setCreateOpen(false)} maxWidth="xs" fullWidth>
+        <DialogTitle>{t("inventory.createLot", "Create Inventory Lot")}</DialogTitle>
+        <DialogContent>
+          <Stack spacing={2} sx={{ mt: 1 }}>
+            <TextField
+              fullWidth
+              label={t("inventory.quantity", "Quantity")}
+              type="number"
+              value={newQty}
+              onChange={(e) => setNewQty(parseInt(e.target.value) || 0)}
+              inputProps={{ min: 0 }}
+            />
+            <TextField
+              fullWidth
+              label={t("inventory.notes", "Notes")}
+              value={newNotes}
+              onChange={(e) => setNewNotes(e.target.value)}
+              multiline
+              rows={2}
+            />
+          </Stack>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setCreateOpen(false)}>{t("common.cancel", "Cancel")}</Button>
+          <Button variant="contained" onClick={handleCreate} disabled={creating || newQty < 0}>
+            {t("common.create", "Create")}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </StandardPageLayout>
   )
 }
