@@ -15,7 +15,6 @@ import {
   StarRounded,
   StorefrontRounded,
 } from "@mui/icons-material"
-import { OpenLayout } from "../../../components/layout/ContainerGrid"
 import { useTranslation } from "react-i18next"
 import { OrgBannerArea } from "./OrgBannerArea"
 import { OrgMetaTags } from "./OrgMetaTags"
