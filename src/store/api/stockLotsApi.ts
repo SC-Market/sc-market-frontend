@@ -26,7 +26,11 @@ export interface StockLot {
   notes: string | null
   variant?: {
     variant_id: string
-    attributes: { quality_tier?: number; quality_value?: number; crafted_source?: string }
+    attributes: {
+      quality_tier?: number
+      quality_value?: number
+      crafted_source?: string
+    }
     display_name: string
   } | null
   created_at: string

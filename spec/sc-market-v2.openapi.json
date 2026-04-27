@@ -2823,6 +2823,155 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"InventoryLotDetail": {
+				"properties": {
+					"lot_id": {
+						"type": "string"
+					},
+					"owner_id": {
+						"type": "string"
+					},
+					"game_item_id": {
+						"type": "string",
+						"nullable": true
+					},
+					"game_item_name": {
+						"type": "string",
+						"nullable": true
+					},
+					"variant_id": {
+						"type": "string",
+						"nullable": true
+					},
+					"variant_display_name": {
+						"type": "string",
+						"nullable": true
+					},
+					"listing_id": {
+						"type": "string",
+						"nullable": true
+					},
+					"listing_title": {
+						"type": "string",
+						"nullable": true
+					},
+					"quantity_total": {
+						"type": "number",
+						"format": "double"
+					},
+					"location_id": {
+						"type": "string",
+						"nullable": true
+					},
+					"location_name": {
+						"type": "string",
+						"nullable": true
+					},
+					"listed": {
+						"type": "boolean"
+					},
+					"notes": {
+						"type": "string",
+						"nullable": true
+					},
+					"created_at": {
+						"type": "string"
+					},
+					"updated_at": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"lot_id",
+					"owner_id",
+					"game_item_id",
+					"game_item_name",
+					"variant_id",
+					"variant_display_name",
+					"listing_id",
+					"listing_title",
+					"quantity_total",
+					"location_id",
+					"location_name",
+					"listed",
+					"notes",
+					"created_at",
+					"updated_at"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"InventoryResponse": {
+				"properties": {
+					"lots": {
+						"items": {
+							"$ref": "#/components/schemas/InventoryLotDetail"
+						},
+						"type": "array"
+					},
+					"total": {
+						"type": "number",
+						"format": "double"
+					},
+					"page": {
+						"type": "number",
+						"format": "double"
+					},
+					"page_size": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"lots",
+					"total",
+					"page",
+					"page_size"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"CreateInventoryLotRequest": {
+				"properties": {
+					"game_item_id": {
+						"type": "string",
+						"nullable": true
+					},
+					"variant_id": {
+						"type": "string",
+						"nullable": true
+					},
+					"quantity": {
+						"type": "number",
+						"format": "double"
+					},
+					"location_id": {
+						"type": "string",
+						"nullable": true
+					},
+					"notes": {
+						"type": "string",
+						"nullable": true
+					}
+				},
+				"required": [
+					"quantity"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"LinkToListingRequest": {
+				"properties": {
+					"listing_id": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"listing_id"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"ImportSource": {
 				"type": "string",
 				"enum": [
@@ -7790,6 +7939,146 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"BidDetail": {
+				"properties": {
+					"bid_id": {
+						"type": "string"
+					},
+					"bidder": {
+						"properties": {
+							"avatar": {
+								"type": "string",
+								"nullable": true
+							},
+							"display_name": {
+								"type": "string"
+							},
+							"username": {
+								"type": "string"
+							}
+						},
+						"required": [
+							"avatar",
+							"display_name",
+							"username"
+						],
+						"type": "object"
+					},
+					"amount": {
+						"type": "number",
+						"format": "double"
+					},
+					"is_active": {
+						"type": "boolean"
+					},
+					"created_at": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"bid_id",
+					"bidder",
+					"amount",
+					"is_active",
+					"created_at"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"AuctionDetailResponse": {
+				"properties": {
+					"listing_id": {
+						"type": "string"
+					},
+					"end_time": {
+						"type": "string"
+					},
+					"min_bid_increment": {
+						"type": "number",
+						"format": "double"
+					},
+					"buyout_price": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					},
+					"reserve_price": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					},
+					"status": {
+						"type": "string"
+					},
+					"current_highest_bid": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					},
+					"total_bids": {
+						"type": "number",
+						"format": "double"
+					},
+					"bids": {
+						"items": {
+							"$ref": "#/components/schemas/BidDetail"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"listing_id",
+					"end_time",
+					"min_bid_increment",
+					"buyout_price",
+					"reserve_price",
+					"status",
+					"current_highest_bid",
+					"total_bids",
+					"bids"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"PlaceBidResponse": {
+				"properties": {
+					"bid_id": {
+						"type": "string"
+					},
+					"amount": {
+						"type": "number",
+						"format": "double"
+					},
+					"is_highest": {
+						"type": "boolean"
+					},
+					"current_highest": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"bid_id",
+					"amount",
+					"is_highest",
+					"current_highest"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"PlaceBidRequest": {
+				"properties": {
+					"amount": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"amount"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"PriceDataPoint": {
 				"description": "Price data point in time series",
 				"properties": {
@@ -8429,7 +8718,7 @@
 		"contact": {}
 	},
 	"paths": {
-		"/variant-types": {
+		"/api/v2/variant-types": {
 			"get": {
 				"operationId": "GetVariantTypes",
 				"responses": {
@@ -8453,7 +8742,7 @@
 				"parameters": []
 			}
 		},
-		"/stock-lots": {
+		"/api/v2/stock-lots": {
 			"post": {
 				"operationId": "CreateStockLot",
 				"responses": {
@@ -8601,7 +8890,7 @@
 				]
 			}
 		},
-		"/stock-lots/{id}": {
+		"/api/v2/stock-lots/{id}": {
 			"put": {
 				"operationId": "UpdateStockLot",
 				"responses": {
@@ -8695,7 +8984,7 @@
 				]
 			}
 		},
-		"/stock-lots/bulk-update": {
+		"/api/v2/stock-lots/bulk-update": {
 			"post": {
 				"operationId": "BulkUpdateStockLots",
 				"responses": {
@@ -8735,7 +9024,7 @@
 				}
 			}
 		},
-		"/orders": {
+		"/api/v2/orders": {
 			"post": {
 				"operationId": "CreateOrder",
 				"responses": {
@@ -8888,7 +9177,7 @@
 				]
 			}
 		},
-		"/orders/{orderId}": {
+		"/api/v2/orders/{orderId}": {
 			"get": {
 				"operationId": "GetOrderDetail",
 				"responses": {
@@ -8926,7 +9215,7 @@
 				]
 			}
 		},
-		"/orders/by-listing/{listingId}": {
+		"/api/v2/orders/by-listing/{listingId}": {
 			"get": {
 				"operationId": "GetOrdersByListing",
 				"responses": {
@@ -8964,7 +9253,7 @@
 				]
 			}
 		},
-		"/offers/{sessionId}": {
+		"/api/v2/offers/{sessionId}": {
 			"get": {
 				"operationId": "GetOfferSession",
 				"responses": {
@@ -9000,7 +9289,7 @@
 				]
 			}
 		},
-		"/offers/search": {
+		"/api/v2/offers/search": {
 			"get": {
 				"operationId": "SearchOffers",
 				"responses": {
@@ -9070,7 +9359,7 @@
 				]
 			}
 		},
-		"/listings": {
+		"/api/v2/listings": {
 			"post": {
 				"operationId": "CreateListing",
 				"responses": {
@@ -9110,7 +9399,7 @@
 				}
 			}
 		},
-		"/listings/search": {
+		"/api/v2/listings/search": {
 			"get": {
 				"operationId": "SearchListings",
 				"responses": {
@@ -9311,7 +9600,7 @@
 				]
 			}
 		},
-		"/listings/mine": {
+		"/api/v2/listings/mine": {
 			"get": {
 				"operationId": "GetMyListings",
 				"responses": {
@@ -9411,7 +9700,7 @@
 				]
 			}
 		},
-		"/listings/inventory-summary": {
+		"/api/v2/listings/inventory-summary": {
 			"get": {
 				"operationId": "GetInventorySummary",
 				"responses": {
@@ -9448,7 +9737,7 @@
 				]
 			}
 		},
-		"/listings/{id}": {
+		"/api/v2/listings/{id}": {
 			"get": {
 				"operationId": "GetListingDetail",
 				"responses": {
@@ -9568,7 +9857,7 @@
 				]
 			}
 		},
-		"/listings/{id}/refresh": {
+		"/api/v2/listings/{id}/refresh": {
 			"post": {
 				"operationId": "RefreshListing",
 				"responses": {
@@ -9618,7 +9907,7 @@
 				]
 			}
 		},
-		"/listings/{id}/views": {
+		"/api/v2/listings/{id}/views": {
 			"post": {
 				"operationId": "TrackView",
 				"responses": {
@@ -9661,7 +9950,7 @@
 				]
 			}
 		},
-		"/listings/{id}/photos": {
+		"/api/v2/listings/{id}/photos": {
 			"post": {
 				"operationId": "UploadPhotos",
 				"responses": {
@@ -9722,7 +10011,247 @@
 				]
 			}
 		},
-		"/admin/imports/{source}": {
+		"/api/v2/inventory": {
+			"get": {
+				"operationId": "GetInventory",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/InventoryResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "List all inventory lots for the current user",
+				"tags": [
+					"Inventory V2"
+				],
+				"security": [
+					{
+						"loggedin": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "game_item_id",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "listing_id",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "listed",
+						"required": false,
+						"schema": {
+							"type": "boolean"
+						}
+					},
+					{
+						"in": "query",
+						"name": "page",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "page_size",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			},
+			"post": {
+				"operationId": "CreateInventoryLot",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"lot": {
+											"$ref": "#/components/schemas/InventoryLotDetail"
+										}
+									},
+									"required": [
+										"lot"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "Create an unlisted inventory lot (personal inventory)",
+				"tags": [
+					"Inventory V2"
+				],
+				"security": [
+					{
+						"loggedin": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/CreateInventoryLotRequest"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v2/inventory/{lotId}/list": {
+			"post": {
+				"operationId": "LinkToListing",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"lot": {
+											"$ref": "#/components/schemas/InventoryLotDetail"
+										}
+									},
+									"required": [
+										"lot"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "Link a lot to a listing (makes it available for sale)",
+				"tags": [
+					"Inventory V2"
+				],
+				"security": [
+					{
+						"loggedin": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "lotId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/LinkToListingRequest"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v2/inventory/{lotId}/unlist": {
+			"post": {
+				"operationId": "UnlinkFromListing",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"lot": {
+											"$ref": "#/components/schemas/InventoryLotDetail"
+										}
+									},
+									"required": [
+										"lot"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "Unlink a lot from its listing (returns to personal inventory)",
+				"tags": [
+					"Inventory V2"
+				],
+				"security": [
+					{
+						"loggedin": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "lotId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/api/v2/inventory/{lotId}": {
+			"delete": {
+				"operationId": "DeleteInventoryLot",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"description": "Delete an inventory lot",
+				"tags": [
+					"Inventory V2"
+				],
+				"security": [
+					{
+						"loggedin": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "lotId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/api/v2/admin/imports/{source}": {
 			"post": {
 				"operationId": "StartImport",
 				"responses": {
@@ -9767,7 +10296,7 @@
 				]
 			}
 		},
-		"/admin/imports/{jobId}": {
+		"/api/v2/admin/imports/{jobId}": {
 			"get": {
 				"operationId": "GetJobStatus",
 				"responses": {
@@ -9817,7 +10346,7 @@
 				]
 			}
 		},
-		"/admin/imports": {
+		"/api/v2/admin/imports": {
 			"get": {
 				"operationId": "ListJobs",
 				"responses": {
@@ -9855,7 +10384,7 @@
 				"parameters": []
 			}
 		},
-		"/health": {
+		"/api/v2/health": {
 			"get": {
 				"operationId": "GetHealth",
 				"responses": {
@@ -9879,7 +10408,7 @@
 				"parameters": []
 			}
 		},
-		"/game-items/search": {
+		"/api/v2/game-items/search": {
 			"get": {
 				"operationId": "SearchGameItems",
 				"responses": {
@@ -9916,7 +10445,7 @@
 				]
 			}
 		},
-		"/game-items/categories": {
+		"/api/v2/game-items/categories": {
 			"get": {
 				"operationId": "GetCategories",
 				"responses": {
@@ -9943,7 +10472,7 @@
 				"parameters": []
 			}
 		},
-		"/game-items/{id}/listings": {
+		"/api/v2/game-items/{id}/listings": {
 			"get": {
 				"operationId": "GetListings",
 				"responses": {
@@ -10035,7 +10564,7 @@
 				]
 			}
 		},
-		"/game-items/aggregates": {
+		"/api/v2/game-items/aggregates": {
 			"get": {
 				"operationId": "SearchGameItemAggregates",
 				"responses": {
@@ -10156,7 +10685,7 @@
 				]
 			}
 		},
-		"/game-data/wishlists": {
+		"/api/v2/game-data/wishlists": {
 			"get": {
 				"operationId": "GetWishlists",
 				"responses": {
@@ -10220,7 +10749,7 @@
 				}
 			}
 		},
-		"/game-data/wishlists/{wishlist_id}": {
+		"/api/v2/game-data/wishlists/{wishlist_id}": {
 			"get": {
 				"operationId": "GetWishlist",
 				"responses": {
@@ -10353,7 +10882,7 @@
 				]
 			}
 		},
-		"/game-data/wishlists/{wishlist_id}/items": {
+		"/api/v2/game-data/wishlists/{wishlist_id}/items": {
 			"post": {
 				"operationId": "AddWishlistItem",
 				"responses": {
@@ -10401,7 +10930,7 @@
 				}
 			}
 		},
-		"/game-data/wishlists/{wishlist_id}/items/{item_id}": {
+		"/api/v2/game-data/wishlists/{wishlist_id}/items/{item_id}": {
 			"delete": {
 				"operationId": "RemoveWishlistItem",
 				"responses": {
@@ -10511,7 +11040,7 @@
 				}
 			}
 		},
-		"/game-data/wishlists/{wishlist_id}/shopping-list": {
+		"/api/v2/game-data/wishlists/{wishlist_id}/shopping-list": {
 			"get": {
 				"operationId": "GenerateShoppingList",
 				"responses": {
@@ -10549,7 +11078,7 @@
 				]
 			}
 		},
-		"/game-data/wiki/items": {
+		"/api/v2/game-data/wiki/items": {
 			"get": {
 				"operationId": "SearchItems",
 				"responses": {
@@ -10668,7 +11197,7 @@
 				]
 			}
 		},
-		"/game-data/wiki/items/{id}": {
+		"/api/v2/game-data/wiki/items/{id}": {
 			"get": {
 				"operationId": "GetItemDetail",
 				"responses": {
@@ -10702,7 +11231,7 @@
 				]
 			}
 		},
-		"/game-data/wiki/ships": {
+		"/api/v2/game-data/wiki/ships": {
 			"get": {
 				"operationId": "GetShips",
 				"responses": {
@@ -10802,7 +11331,7 @@
 				]
 			}
 		},
-		"/game-data/wiki/ships/{id}": {
+		"/api/v2/game-data/wiki/ships/{id}": {
 			"get": {
 				"operationId": "GetShipDetail",
 				"responses": {
@@ -10836,7 +11365,7 @@
 				]
 			}
 		},
-		"/game-data/wiki/commodities": {
+		"/api/v2/game-data/wiki/commodities": {
 			"get": {
 				"operationId": "GetCommodities",
 				"responses": {
@@ -10927,7 +11456,7 @@
 				]
 			}
 		},
-		"/game-data/wiki/locations": {
+		"/api/v2/game-data/wiki/locations": {
 			"get": {
 				"operationId": "GetLocations",
 				"responses": {
@@ -10964,7 +11493,7 @@
 				]
 			}
 		},
-		"/game-data/wiki/manufacturers": {
+		"/api/v2/game-data/wiki/manufacturers": {
 			"get": {
 				"operationId": "GetManufacturers",
 				"responses": {
@@ -10991,7 +11520,7 @@
 				"parameters": []
 			}
 		},
-		"/game-data/wiki/manufacturers/{id}": {
+		"/api/v2/game-data/wiki/manufacturers/{id}": {
 			"get": {
 				"operationId": "GetManufacturerDetail",
 				"responses": {
@@ -11025,7 +11554,7 @@
 				]
 			}
 		},
-		"/game-data/versions": {
+		"/api/v2/game-data/versions": {
 			"get": {
 				"operationId": "ListVersions",
 				"responses": {
@@ -11052,7 +11581,7 @@
 				"parameters": []
 			}
 		},
-		"/game-data/versions/active": {
+		"/api/v2/game-data/versions/active": {
 			"get": {
 				"operationId": "GetActiveVersions",
 				"responses": {
@@ -11076,7 +11605,7 @@
 				"parameters": []
 			}
 		},
-		"/game-data/versions/select": {
+		"/api/v2/game-data/versions/select": {
 			"post": {
 				"operationId": "SelectVersion",
 				"responses": {
@@ -11116,7 +11645,7 @@
 				}
 			}
 		},
-		"/game-data/resources/search": {
+		"/api/v2/game-data/resources/search": {
 			"get": {
 				"operationId": "SearchResources",
 				"responses": {
@@ -11214,7 +11743,7 @@
 				]
 			}
 		},
-		"/game-data/resources/{resource_id}": {
+		"/api/v2/game-data/resources/{resource_id}": {
 			"get": {
 				"operationId": "GetResource",
 				"responses": {
@@ -11248,7 +11777,7 @@
 				]
 			}
 		},
-		"/game-data/resources/categories": {
+		"/api/v2/game-data/resources/categories": {
 			"get": {
 				"operationId": "GetResourceCategories",
 				"responses": {
@@ -11285,7 +11814,7 @@
 				]
 			}
 		},
-		"/game-data/missions/search": {
+		"/api/v2/game-data/missions/search": {
 			"get": {
 				"operationId": "SearchMissions",
 				"responses": {
@@ -11529,7 +12058,7 @@
 				]
 			}
 		},
-		"/game-data/missions/{mission_id}": {
+		"/api/v2/game-data/missions/{mission_id}": {
 			"get": {
 				"operationId": "GetMissionDetail",
 				"responses": {
@@ -11563,7 +12092,7 @@
 				]
 			}
 		},
-		"/game-data/missions/by-code/{mission_code}": {
+		"/api/v2/game-data/missions/by-code/{mission_code}": {
 			"get": {
 				"operationId": "GetMissionDetailByCode",
 				"responses": {
@@ -11596,7 +12125,7 @@
 				]
 			}
 		},
-		"/game-data/missions/{mission_id}/blueprints": {
+		"/api/v2/game-data/missions/{mission_id}/blueprints": {
 			"get": {
 				"operationId": "GetMissionBlueprints",
 				"responses": {
@@ -11633,7 +12162,7 @@
 				]
 			}
 		},
-		"/game-data/missions/{mission_id}/complete": {
+		"/api/v2/game-data/missions/{mission_id}/complete": {
 			"post": {
 				"operationId": "CompleteMission",
 				"responses": {
@@ -11706,7 +12235,7 @@
 				}
 			}
 		},
-		"/game-data/missions/{mission_id}/rate": {
+		"/api/v2/game-data/missions/{mission_id}/rate": {
 			"post": {
 				"operationId": "RateMission",
 				"responses": {
@@ -11785,7 +12314,7 @@
 				}
 			}
 		},
-		"/game-data/missions/chains": {
+		"/api/v2/game-data/missions/chains": {
 			"get": {
 				"operationId": "GetMissionChains",
 				"responses": {
@@ -11850,7 +12379,7 @@
 				]
 			}
 		},
-		"/game-data/missions/reputation-ranks": {
+		"/api/v2/game-data/missions/reputation-ranks": {
 			"get": {
 				"operationId": "GetReputationRanks",
 				"responses": {
@@ -11906,7 +12435,7 @@
 				]
 			}
 		},
-		"/game-data/missions/events": {
+		"/api/v2/game-data/missions/events": {
 			"get": {
 				"operationId": "GetGameEvents",
 				"responses": {
@@ -11941,7 +12470,7 @@
 				"parameters": []
 			}
 		},
-		"/game-data/crafting/calculate-quality": {
+		"/api/v2/game-data/crafting/calculate-quality": {
 			"post": {
 				"operationId": "CalculateQuality",
 				"responses": {
@@ -11975,7 +12504,7 @@
 				}
 			}
 		},
-		"/game-data/crafting/simulate": {
+		"/api/v2/game-data/crafting/simulate": {
 			"post": {
 				"operationId": "SimulateCrafting",
 				"responses": {
@@ -12009,7 +12538,7 @@
 				}
 			}
 		},
-		"/game-data/crafting/craft": {
+		"/api/v2/game-data/crafting/craft": {
 			"post": {
 				"operationId": "RecordCrafting",
 				"responses": {
@@ -12047,7 +12576,7 @@
 				}
 			}
 		},
-		"/game-data/crafting/history": {
+		"/api/v2/game-data/crafting/history": {
 			"get": {
 				"operationId": "GetCraftingHistory",
 				"responses": {
@@ -12107,7 +12636,7 @@
 				]
 			}
 		},
-		"/game-data/crafting/craftable-items": {
+		"/api/v2/game-data/crafting/craftable-items": {
 			"get": {
 				"operationId": "GetCraftableItems",
 				"responses": {
@@ -12204,7 +12733,7 @@
 				]
 			}
 		},
-		"/game-data/crafting/statistics": {
+		"/api/v2/game-data/crafting/statistics": {
 			"get": {
 				"operationId": "GetCraftingStatistics",
 				"responses": {
@@ -12232,7 +12761,7 @@
 				"parameters": []
 			}
 		},
-		"/game-data/blueprints/search": {
+		"/api/v2/game-data/blueprints/search": {
 			"get": {
 				"operationId": "SearchBlueprints",
 				"responses": {
@@ -12388,7 +12917,7 @@
 				]
 			}
 		},
-		"/game-data/blueprints/{blueprint_id}": {
+		"/api/v2/game-data/blueprints/{blueprint_id}": {
 			"get": {
 				"operationId": "GetBlueprintDetail",
 				"responses": {
@@ -12422,7 +12951,7 @@
 				]
 			}
 		},
-		"/game-data/blueprints/by-code/{blueprint_code}": {
+		"/api/v2/game-data/blueprints/by-code/{blueprint_code}": {
 			"get": {
 				"operationId": "GetBlueprintDetailByCode",
 				"responses": {
@@ -12456,7 +12985,7 @@
 				]
 			}
 		},
-		"/game-data/blueprints/{blueprint_id}/missions": {
+		"/api/v2/game-data/blueprints/{blueprint_id}/missions": {
 			"get": {
 				"operationId": "GetBlueprintMissions",
 				"responses": {
@@ -12502,7 +13031,7 @@
 				]
 			}
 		},
-		"/game-data/blueprints/{blueprint_id}/inventory": {
+		"/api/v2/game-data/blueprints/{blueprint_id}/inventory": {
 			"post": {
 				"operationId": "AddBlueprintToInventory",
 				"responses": {
@@ -12619,7 +13148,7 @@
 				]
 			}
 		},
-		"/game-data/blueprints/categories": {
+		"/api/v2/game-data/blueprints/categories": {
 			"get": {
 				"operationId": "GetBlueprintCategories",
 				"responses": {
@@ -12656,7 +13185,7 @@
 				]
 			}
 		},
-		"/game-data/blueprints/inventory": {
+		"/api/v2/game-data/blueprints/inventory": {
 			"get": {
 				"operationId": "GetUserBlueprintInventory",
 				"responses": {
@@ -12858,7 +13387,7 @@
 				]
 			}
 		},
-		"/game-data/blueprints/{blueprint_id}/org-owners/{spectrum_id}": {
+		"/api/v2/game-data/blueprints/{blueprint_id}/org-owners/{spectrum_id}": {
 			"get": {
 				"operationId": "GetOrgBlueprintOwners",
 				"responses": {
@@ -12937,7 +13466,7 @@
 				]
 			}
 		},
-		"/game-data/blueprints/craftable": {
+		"/api/v2/game-data/blueprints/craftable": {
 			"post": {
 				"operationId": "FindCraftableBlueprints",
 				"responses": {
@@ -13005,7 +13534,7 @@
 				}
 			}
 		},
-		"/debug/feature-flag": {
+		"/api/v2/debug/feature-flag": {
 			"get": {
 				"operationId": "GetFeatureFlag",
 				"responses": {
@@ -13070,7 +13599,7 @@
 				}
 			}
 		},
-		"/cart": {
+		"/api/v2/cart": {
 			"get": {
 				"operationId": "GetCart",
 				"responses": {
@@ -13098,7 +13627,7 @@
 				"parameters": []
 			}
 		},
-		"/cart/add": {
+		"/api/v2/cart/add": {
 			"post": {
 				"operationId": "AddToCart",
 				"responses": {
@@ -13138,7 +13667,7 @@
 				}
 			}
 		},
-		"/cart/{id}": {
+		"/api/v2/cart/{id}": {
 			"put": {
 				"operationId": "UpdateCartItem",
 				"responses": {
@@ -13240,7 +13769,7 @@
 				]
 			}
 		},
-		"/cart/checkout": {
+		"/api/v2/cart/checkout": {
 			"post": {
 				"operationId": "CheckoutCart",
 				"responses": {
@@ -13280,7 +13809,7 @@
 				}
 			}
 		},
-		"/buy-orders": {
+		"/api/v2/buy-orders": {
 			"post": {
 				"operationId": "CreatePurchase",
 				"responses": {
@@ -13320,7 +13849,7 @@
 				}
 			}
 		},
-		"/buy-orders/standing": {
+		"/api/v2/buy-orders/standing": {
 			"post": {
 				"operationId": "CreateStandingBuyOrder",
 				"responses": {
@@ -13357,7 +13886,7 @@
 				}
 			}
 		},
-		"/buy-orders/search": {
+		"/api/v2/buy-orders/search": {
 			"get": {
 				"operationId": "SearchBuyOrders",
 				"responses": {
@@ -13464,7 +13993,7 @@
 				]
 			}
 		},
-		"/buy-orders/mine": {
+		"/api/v2/buy-orders/mine": {
 			"get": {
 				"operationId": "GetMyBuyOrders",
 				"responses": {
@@ -13524,7 +14053,7 @@
 				]
 			}
 		},
-		"/buy-orders/{id}": {
+		"/api/v2/buy-orders/{id}": {
 			"put": {
 				"operationId": "UpdateBuyOrder",
 				"responses": {
@@ -13612,7 +14141,7 @@
 				]
 			}
 		},
-		"/buy-orders/{id}/fulfill": {
+		"/api/v2/buy-orders/{id}/fulfill": {
 			"post": {
 				"operationId": "FulfillBuyOrder",
 				"responses": {
@@ -13671,7 +14200,7 @@
 				}
 			}
 		},
-		"/availability/next": {
+		"/api/v2/availability/next": {
 			"get": {
 				"operationId": "GetNextAvailable",
 				"responses": {
@@ -13717,7 +14246,85 @@
 				]
 			}
 		},
-		"/analytics/price-history": {
+		"/api/v2/auctions/{listingId}": {
+			"get": {
+				"operationId": "GetAuctionDetail",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/AuctionDetailResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get auction details and bids for a listing",
+				"tags": [
+					"Auctions V2"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "listingId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/api/v2/auctions/{listingId}/bids": {
+			"post": {
+				"operationId": "PlaceBid",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/PlaceBidResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Place a bid on an auction listing",
+				"tags": [
+					"Auctions V2"
+				],
+				"security": [
+					{
+						"loggedin": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "listingId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/PlaceBidRequest"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/v2/analytics/price-history": {
 			"get": {
 				"operationId": "GetPriceHistory",
 				"responses": {
@@ -13794,7 +14401,7 @@
 				]
 			}
 		},
-		"/analytics/quality-distribution": {
+		"/api/v2/analytics/quality-distribution": {
 			"get": {
 				"operationId": "GetQualityDistribution",
 				"responses": {
@@ -13846,7 +14453,7 @@
 				]
 			}
 		},
-		"/analytics/seller-stats": {
+		"/api/v2/analytics/seller-stats": {
 			"get": {
 				"operationId": "GetSellerStats",
 				"responses": {
@@ -13880,7 +14487,7 @@
 				]
 			}
 		},
-		"/admin/feature-flags/config": {
+		"/api/v2/admin/feature-flags/config": {
 			"get": {
 				"operationId": "GetConfig",
 				"responses": {
@@ -13944,7 +14551,7 @@
 				}
 			}
 		},
-		"/admin/feature-flags/stats": {
+		"/api/v2/admin/feature-flags/stats": {
 			"get": {
 				"operationId": "GetStats",
 				"responses": {
@@ -13975,7 +14582,7 @@
 				"parameters": []
 			}
 		},
-		"/admin/feature-flags/overrides": {
+		"/api/v2/admin/feature-flags/overrides": {
 			"get": {
 				"operationId": "GetUserOverrides",
 				"responses": {
@@ -14082,7 +14689,7 @@
 				}
 			}
 		},
-		"/admin/feature-flags/overrides/{username}": {
+		"/api/v2/admin/feature-flags/overrides/{username}": {
 			"delete": {
 				"operationId": "RemoveUserOverride",
 				"responses": {
@@ -14135,7 +14742,7 @@
 				]
 			}
 		},
-		"/admin/import-game-data": {
+		"/api/v2/admin/import-game-data": {
 			"post": {
 				"operationId": "ImportGameData",
 				"responses": {
@@ -14215,7 +14822,7 @@
 				"parameters": []
 			}
 		},
-		"/admin/import-game-data/{jobId}": {
+		"/api/v2/admin/import-game-data/{jobId}": {
 			"get": {
 				"operationId": "GetImportJobStatus",
 				"responses": {
@@ -14265,10 +14872,5 @@
 				]
 			}
 		}
-	},
-	"servers": [
-		{
-			"url": "/api/v2"
-		}
-	]
+	}
 }
