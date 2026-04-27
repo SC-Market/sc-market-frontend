@@ -31,7 +31,7 @@ import {
   ErrorRounded,
   SyncRounded,
 } from "@mui/icons-material"
-import { useGetMigrationStatusQuery, useRunMigrationMutation } from "../../store/api/v2/market"
+import { useGetMigrationStatusQuery, useRunMigrationMutation, useGetMigrationLogsQuery } from "../../store/api/v2/market"
 
 function CountCard({ label, count, color }: { label: string; count: number; color?: string }) {
   return (
@@ -49,6 +49,7 @@ function CountCard({ label, count, color }: { label: string; count: number; colo
 export default function AdminMigrationPage() {
   const { data: status, isLoading: statusLoading, refetch } = useGetMigrationStatusQuery()
   const [runMigration, { isLoading: running }] = useRunMigrationMutation()
+  const { data: logs, refetch: refetchLogs } = useGetMigrationLogsQuery()
   const [result, setResult] = useState<any>(null)
   const [error, setError] = useState<string | null>(null)
 
@@ -59,6 +60,7 @@ export default function AdminMigrationPage() {
       const res = await runMigration({ migrationRunRequest: { dry_run: dryRun } }).unwrap()
       setResult(res)
       refetch()
+      refetchLogs()
     } catch (err: any) {
       setError(err?.data?.message || "Migration failed")
     }
@@ -202,6 +204,50 @@ export default function AdminMigrationPage() {
               ))}
             </>
           )}
+        </Paper>
+      )}
+
+      {/* Recent Runs */}
+      {logs && logs.length > 0 && (
+        <Paper sx={{ p: 2, mt: 3 }}>
+          <Typography variant="h6" fontWeight="bold" sx={{ mb: 2 }}>
+            Recent Runs (clears on restart)
+          </Typography>
+          {logs.map((log: any, i: number) => (
+            <Paper key={i} variant="outlined" sx={{ p: 1.5, mb: 1 }}>
+              <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1 }}>
+                <Chip
+                  label={log.dry_run ? "DRY RUN" : "EXECUTED"}
+                  size="small"
+                  color={log.dry_run ? "info" : "success"}
+                />
+                <Typography variant="caption" color="text.secondary">
+                  {new Date(log.timestamp).toLocaleString()} — {log.duration_seconds.toFixed(2)}s
+                </Typography>
+              </Stack>
+              <Stack direction="row" spacing={2} flexWrap="wrap">
+                {["listings", "price_history", "auctions", "order_items", "offer_items", "buy_orders"].map((key) => {
+                  const d = log.result[key]
+                  if (!d) return null
+                  const hasErrors = d.failed > 0
+                  return (
+                    <Typography key={key} variant="caption" color={hasErrors ? "error.main" : "text.secondary"}>
+                      {key}: {d.successful}✓ {d.failed > 0 ? `${d.failed}✗ ` : ""}{d.skipped > 0 ? `${d.skipped}⏭` : ""}
+                    </Typography>
+                  )
+                })}
+              </Stack>
+              {log.result.listings?.errors?.length > 0 && (
+                <Box sx={{ mt: 1, maxHeight: 150, overflow: "auto" }}>
+                  {log.result.listings.errors.slice(0, 50).map((e: any, j: number) => (
+                    <Typography key={j} variant="caption" display="block" color="error" sx={{ fontFamily: "monospace", fontSize: "0.7rem" }}>
+                      {e.v1_listing_id}: {e.error}
+                    </Typography>
+                  ))}
+                </Box>
+              )}
+            </Paper>
+          ))}
         </Paper>
       )}
     </Box>

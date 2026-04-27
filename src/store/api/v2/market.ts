@@ -1170,6 +1170,13 @@ const injectedRtkApi = api
         query: () => ({ url: `/admin/migration/status` }),
         providesTags: ["Admin Migration"],
       }),
+      getMigrationLogs: build.query<
+        GetMigrationLogsApiResponse,
+        GetMigrationLogsApiArg
+      >({
+        query: () => ({ url: `/admin/migration/logs` }),
+        providesTags: ["Admin Migration"],
+      }),
       runMigration: build.mutation<RunMigrationApiResponse, RunMigrationApiArg>(
         {
           query: (queryArg) => ({
@@ -2202,6 +2209,9 @@ export type GetSellerStatsApiArg = {
 export type GetMigrationStatusApiResponse =
   /** status 200 Ok */ MigrationStatusResponse
 export type GetMigrationStatusApiArg = void
+export type GetMigrationLogsApiResponse =
+  /** status 200 Ok */ MigrationLogEntry[]
+export type GetMigrationLogsApiArg = void
 export type RunMigrationApiResponse = /** status 200 Ok */ MigrationRunResponse
 export type RunMigrationApiArg = {
   migrationRunRequest: MigrationRunRequest
@@ -4802,6 +4812,12 @@ export type MigrationRunResponse = {
   buy_orders: MigrationSummary
   duration_seconds: number
 }
+export type MigrationLogEntry = {
+  timestamp: string
+  dry_run: boolean
+  duration_seconds: number
+  result: MigrationRunResponse
+}
 export type MigrationRunRequest = {
   /** If true, wraps in a transaction and rolls back — no data is persisted */
   dry_run: boolean
@@ -4992,6 +5008,7 @@ export const {
   useGetQualityDistributionQuery,
   useGetSellerStatsQuery,
   useGetMigrationStatusQuery,
+  useGetMigrationLogsQuery,
   useRunMigrationMutation,
   useGetConfigQuery,
   useUpdateConfigMutation,
