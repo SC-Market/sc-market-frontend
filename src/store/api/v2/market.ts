@@ -5,6 +5,7 @@ export const addTagTypes = [
   "Orders V2",
   "Offers V2",
   "Listings V2",
+  "Inventory V2",
   "Admin Imports",
   "Health",
   "Game Items V2",
@@ -19,6 +20,7 @@ export const addTagTypes = [
   "Cart V2",
   "Buy Orders V2",
   "Availability",
+  "Auctions V2",
   "Analytics V2",
   "Admin Feature Flags",
   "Admin",
@@ -33,7 +35,7 @@ const injectedRtkApi = api
         GetVariantTypesApiResponse,
         GetVariantTypesApiArg
       >({
-        query: () => ({ url: `/variant-types` }),
+        query: () => ({ url: `/api/v2/variant-types` }),
         providesTags: ["Variant Types V2"],
       }),
       createStockLot: build.mutation<
@@ -41,7 +43,7 @@ const injectedRtkApi = api
         CreateStockLotApiArg
       >({
         query: (queryArg) => ({
-          url: `/stock-lots`,
+          url: `/api/v2/stock-lots`,
           method: "POST",
           body: queryArg.createStockLotRequest,
         }),
@@ -49,7 +51,7 @@ const injectedRtkApi = api
       }),
       getStockLots: build.query<GetStockLotsApiResponse, GetStockLotsApiArg>({
         query: (queryArg) => ({
-          url: `/stock-lots`,
+          url: `/api/v2/stock-lots`,
           params: {
             listing_id: queryArg.listingId,
             game_item_id: queryArg.gameItemId,
@@ -69,7 +71,7 @@ const injectedRtkApi = api
         UpdateStockLotApiArg
       >({
         query: (queryArg) => ({
-          url: `/stock-lots/${queryArg.id}`,
+          url: `/api/v2/stock-lots/${queryArg.id}`,
           method: "PUT",
           body: queryArg.updateStockLotRequest,
         }),
@@ -80,7 +82,7 @@ const injectedRtkApi = api
         DeleteStockLotApiArg
       >({
         query: (queryArg) => ({
-          url: `/stock-lots/${queryArg.id}`,
+          url: `/api/v2/stock-lots/${queryArg.id}`,
           method: "DELETE",
         }),
         invalidatesTags: ["Stock Lots V2"],
@@ -90,7 +92,7 @@ const injectedRtkApi = api
         BulkUpdateStockLotsApiArg
       >({
         query: (queryArg) => ({
-          url: `/stock-lots/bulk-update`,
+          url: `/api/v2/stock-lots/bulk-update`,
           method: "POST",
           body: queryArg.bulkUpdateStockLotsRequest,
         }),
@@ -98,7 +100,7 @@ const injectedRtkApi = api
       }),
       createOrder: build.mutation<CreateOrderApiResponse, CreateOrderApiArg>({
         query: (queryArg) => ({
-          url: `/orders`,
+          url: `/api/v2/orders`,
           method: "POST",
           body: queryArg.createOrderRequest,
         }),
@@ -106,7 +108,7 @@ const injectedRtkApi = api
       }),
       getOrders: build.query<GetOrdersApiResponse, GetOrdersApiArg>({
         query: (queryArg) => ({
-          url: `/orders`,
+          url: `/api/v2/orders`,
           params: {
             status: queryArg.status,
             role: queryArg.role,
@@ -124,7 +126,7 @@ const injectedRtkApi = api
         GetOrderDetailApiResponse,
         GetOrderDetailApiArg
       >({
-        query: (queryArg) => ({ url: `/orders/${queryArg.orderId}` }),
+        query: (queryArg) => ({ url: `/api/v2/orders/${queryArg.orderId}` }),
         providesTags: ["Orders V2"],
       }),
       getOrdersByListing: build.query<
@@ -132,7 +134,7 @@ const injectedRtkApi = api
         GetOrdersByListingApiArg
       >({
         query: (queryArg) => ({
-          url: `/orders/by-listing/${queryArg.listingId}`,
+          url: `/api/v2/orders/by-listing/${queryArg.listingId}`,
         }),
         providesTags: ["Orders V2"],
       }),
@@ -140,12 +142,12 @@ const injectedRtkApi = api
         GetOfferSessionApiResponse,
         GetOfferSessionApiArg
       >({
-        query: (queryArg) => ({ url: `/offers/${queryArg.sessionId}` }),
+        query: (queryArg) => ({ url: `/api/v2/offers/${queryArg.sessionId}` }),
         providesTags: ["Offers V2"],
       }),
       searchOffers: build.query<SearchOffersApiResponse, SearchOffersApiArg>({
         query: (queryArg) => ({
-          url: `/offers/search`,
+          url: `/api/v2/offers/search`,
           params: {
             role: queryArg.role,
             status: queryArg.status,
@@ -160,7 +162,7 @@ const injectedRtkApi = api
         CreateListingApiArg
       >({
         query: (queryArg) => ({
-          url: `/listings`,
+          url: `/api/v2/listings`,
           method: "POST",
           body: queryArg.createListingRequest,
         }),
@@ -171,7 +173,7 @@ const injectedRtkApi = api
         SearchListingsApiArg
       >({
         query: (queryArg) => ({
-          url: `/listings/search`,
+          url: `/api/v2/listings/search`,
           params: {
             text: queryArg.text,
             game_item_id: queryArg.gameItemId,
@@ -197,7 +199,7 @@ const injectedRtkApi = api
       getMyListings: build.query<GetMyListingsApiResponse, GetMyListingsApiArg>(
         {
           query: (queryArg) => ({
-            url: `/listings/mine`,
+            url: `/api/v2/listings/mine`,
             params: {
               status: queryArg.status,
               page: queryArg.page,
@@ -215,7 +217,7 @@ const injectedRtkApi = api
         GetInventorySummaryApiArg
       >({
         query: (queryArg) => ({
-          url: `/listings/inventory-summary`,
+          url: `/api/v2/listings/inventory-summary`,
           params: {
             spectrum_id: queryArg.spectrumId,
           },
@@ -226,7 +228,7 @@ const injectedRtkApi = api
         GetListingDetailApiResponse,
         GetListingDetailApiArg
       >({
-        query: (queryArg) => ({ url: `/listings/${queryArg.id}` }),
+        query: (queryArg) => ({ url: `/api/v2/listings/${queryArg.id}` }),
         providesTags: ["Listings V2"],
       }),
       updateListing: build.mutation<
@@ -234,7 +236,7 @@ const injectedRtkApi = api
         UpdateListingApiArg
       >({
         query: (queryArg) => ({
-          url: `/listings/${queryArg.id}`,
+          url: `/api/v2/listings/${queryArg.id}`,
           method: "PUT",
           body: queryArg.updateListingRequest,
         }),
@@ -245,7 +247,7 @@ const injectedRtkApi = api
         DeleteListingApiArg
       >({
         query: (queryArg) => ({
-          url: `/listings/${queryArg.id}`,
+          url: `/api/v2/listings/${queryArg.id}`,
           method: "DELETE",
         }),
         invalidatesTags: ["Listings V2"],
@@ -255,14 +257,14 @@ const injectedRtkApi = api
         RefreshListingApiArg
       >({
         query: (queryArg) => ({
-          url: `/listings/${queryArg.id}/refresh`,
+          url: `/api/v2/listings/${queryArg.id}/refresh`,
           method: "POST",
         }),
         invalidatesTags: ["Listings V2"],
       }),
       trackView: build.mutation<TrackViewApiResponse, TrackViewApiArg>({
         query: (queryArg) => ({
-          url: `/listings/${queryArg.id}/views`,
+          url: `/api/v2/listings/${queryArg.id}/views`,
           method: "POST",
         }),
         invalidatesTags: ["Listings V2"],
@@ -270,29 +272,86 @@ const injectedRtkApi = api
       uploadPhotos: build.mutation<UploadPhotosApiResponse, UploadPhotosApiArg>(
         {
           query: (queryArg) => ({
-            url: `/listings/${queryArg.id}/photos`,
+            url: `/api/v2/listings/${queryArg.id}/photos`,
             method: "POST",
           }),
           invalidatesTags: ["Listings V2"],
         },
       ),
+      getInventory: build.query<GetInventoryApiResponse, GetInventoryApiArg>({
+        query: (queryArg) => ({
+          url: `/api/v2/inventory`,
+          params: {
+            game_item_id: queryArg.gameItemId,
+            listing_id: queryArg.listingId,
+            listed: queryArg.listed,
+            page: queryArg.page,
+            page_size: queryArg.pageSize,
+          },
+        }),
+        providesTags: ["Inventory V2"],
+      }),
+      createInventoryLot: build.mutation<
+        CreateInventoryLotApiResponse,
+        CreateInventoryLotApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v2/inventory`,
+          method: "POST",
+          body: queryArg.createInventoryLotRequest,
+        }),
+        invalidatesTags: ["Inventory V2"],
+      }),
+      linkToListing: build.mutation<
+        LinkToListingApiResponse,
+        LinkToListingApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v2/inventory/${queryArg.lotId}/list`,
+          method: "POST",
+          body: queryArg.linkToListingRequest,
+        }),
+        invalidatesTags: ["Inventory V2"],
+      }),
+      unlinkFromListing: build.mutation<
+        UnlinkFromListingApiResponse,
+        UnlinkFromListingApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v2/inventory/${queryArg.lotId}/unlist`,
+          method: "POST",
+        }),
+        invalidatesTags: ["Inventory V2"],
+      }),
+      deleteInventoryLot: build.mutation<
+        DeleteInventoryLotApiResponse,
+        DeleteInventoryLotApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v2/inventory/${queryArg.lotId}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["Inventory V2"],
+      }),
       startImport: build.mutation<StartImportApiResponse, StartImportApiArg>({
         query: (queryArg) => ({
-          url: `/admin/imports/${queryArg.source}`,
+          url: `/api/v2/admin/imports/${queryArg.source}`,
           method: "POST",
         }),
         invalidatesTags: ["Admin Imports"],
       }),
       getJobStatus: build.query<GetJobStatusApiResponse, GetJobStatusApiArg>({
-        query: (queryArg) => ({ url: `/admin/imports/${queryArg.jobId}` }),
+        query: (queryArg) => ({
+          url: `/api/v2/admin/imports/${queryArg.jobId}`,
+        }),
         providesTags: ["Admin Imports"],
       }),
       listJobs: build.query<ListJobsApiResponse, ListJobsApiArg>({
-        query: () => ({ url: `/admin/imports` }),
+        query: () => ({ url: `/api/v2/admin/imports` }),
         providesTags: ["Admin Imports"],
       }),
       getHealth: build.query<GetHealthApiResponse, GetHealthApiArg>({
-        query: () => ({ url: `/health` }),
+        query: () => ({ url: `/api/v2/health` }),
         providesTags: ["Health"],
       }),
       searchGameItems: build.query<
@@ -300,7 +359,7 @@ const injectedRtkApi = api
         SearchGameItemsApiArg
       >({
         query: (queryArg) => ({
-          url: `/game-items/search`,
+          url: `/api/v2/game-items/search`,
           params: {
             query: queryArg.query,
           },
@@ -309,13 +368,13 @@ const injectedRtkApi = api
       }),
       getCategories: build.query<GetCategoriesApiResponse, GetCategoriesApiArg>(
         {
-          query: () => ({ url: `/game-items/categories` }),
+          query: () => ({ url: `/api/v2/game-items/categories` }),
           providesTags: ["Game Items V2"],
         },
       ),
       getListings: build.query<GetListingsApiResponse, GetListingsApiArg>({
         query: (queryArg) => ({
-          url: `/game-items/${queryArg.id}/listings`,
+          url: `/api/v2/game-items/${queryArg.id}/listings`,
           params: {
             quality_tier: queryArg.qualityTier,
             sort_by: queryArg.sortBy,
@@ -331,7 +390,7 @@ const injectedRtkApi = api
         SearchGameItemAggregatesApiArg
       >({
         query: (queryArg) => ({
-          url: `/game-items/aggregates`,
+          url: `/api/v2/game-items/aggregates`,
           params: {
             text: queryArg.text,
             item_type: queryArg.itemType,
@@ -348,7 +407,7 @@ const injectedRtkApi = api
         providesTags: ["Game Items V2"],
       }),
       getWishlists: build.query<GetWishlistsApiResponse, GetWishlistsApiArg>({
-        query: () => ({ url: `/game-data/wishlists` }),
+        query: () => ({ url: `/api/v2/game-data/wishlists` }),
         providesTags: ["Game Data - Wishlists"],
       }),
       createWishlist: build.mutation<
@@ -356,7 +415,7 @@ const injectedRtkApi = api
         CreateWishlistApiArg
       >({
         query: (queryArg) => ({
-          url: `/game-data/wishlists`,
+          url: `/api/v2/game-data/wishlists`,
           method: "POST",
           body: queryArg.createWishlistRequest,
         }),
@@ -364,7 +423,7 @@ const injectedRtkApi = api
       }),
       getWishlist: build.query<GetWishlistApiResponse, GetWishlistApiArg>({
         query: (queryArg) => ({
-          url: `/game-data/wishlists/${queryArg.wishlistId}`,
+          url: `/api/v2/game-data/wishlists/${queryArg.wishlistId}`,
           params: {
             share_token: queryArg.shareToken,
           },
@@ -376,7 +435,7 @@ const injectedRtkApi = api
         UpdateWishlistApiArg
       >({
         query: (queryArg) => ({
-          url: `/game-data/wishlists/${queryArg.wishlistId}`,
+          url: `/api/v2/game-data/wishlists/${queryArg.wishlistId}`,
           method: "PUT",
           body: queryArg.updateWishlistRequest,
         }),
@@ -387,7 +446,7 @@ const injectedRtkApi = api
         DeleteWishlistApiArg
       >({
         query: (queryArg) => ({
-          url: `/game-data/wishlists/${queryArg.wishlistId}`,
+          url: `/api/v2/game-data/wishlists/${queryArg.wishlistId}`,
           method: "DELETE",
         }),
         invalidatesTags: ["Game Data - Wishlists"],
@@ -397,7 +456,7 @@ const injectedRtkApi = api
         AddWishlistItemApiArg
       >({
         query: (queryArg) => ({
-          url: `/game-data/wishlists/${queryArg.wishlistId}/items`,
+          url: `/api/v2/game-data/wishlists/${queryArg.wishlistId}/items`,
           method: "POST",
           body: queryArg.addWishlistItemRequest,
         }),
@@ -408,7 +467,7 @@ const injectedRtkApi = api
         RemoveWishlistItemApiArg
       >({
         query: (queryArg) => ({
-          url: `/game-data/wishlists/${queryArg.wishlistId}/items/${queryArg.itemId}`,
+          url: `/api/v2/game-data/wishlists/${queryArg.wishlistId}/items/${queryArg.itemId}`,
           method: "DELETE",
         }),
         invalidatesTags: ["Game Data - Wishlists"],
@@ -418,7 +477,7 @@ const injectedRtkApi = api
         UpdateWishlistItemApiArg
       >({
         query: (queryArg) => ({
-          url: `/game-data/wishlists/${queryArg.wishlistId}/items/${queryArg.itemId}`,
+          url: `/api/v2/game-data/wishlists/${queryArg.wishlistId}/items/${queryArg.itemId}`,
           method: "PUT",
           body: queryArg.updateWishlistItemRequest,
         }),
@@ -429,13 +488,13 @@ const injectedRtkApi = api
         GenerateShoppingListApiArg
       >({
         query: (queryArg) => ({
-          url: `/game-data/wishlists/${queryArg.wishlistId}/shopping-list`,
+          url: `/api/v2/game-data/wishlists/${queryArg.wishlistId}/shopping-list`,
         }),
         providesTags: ["Game Data - Wishlists"],
       }),
       searchItems: build.query<SearchItemsApiResponse, SearchItemsApiArg>({
         query: (queryArg) => ({
-          url: `/game-data/wiki/items`,
+          url: `/api/v2/game-data/wiki/items`,
           params: {
             text: queryArg.text,
             type: queryArg["type"],
@@ -454,14 +513,14 @@ const injectedRtkApi = api
       getItemDetail: build.query<GetItemDetailApiResponse, GetItemDetailApiArg>(
         {
           query: (queryArg) => ({
-            url: `/game-data/wiki/items/${queryArg.id}`,
+            url: `/api/v2/game-data/wiki/items/${queryArg.id}`,
           }),
           providesTags: ["Game Data - Wiki"],
         },
       ),
       getShips: build.query<GetShipsApiResponse, GetShipsApiArg>({
         query: (queryArg) => ({
-          url: `/game-data/wiki/ships`,
+          url: `/api/v2/game-data/wiki/ships`,
           params: {
             manufacturer: queryArg.manufacturer,
             focus: queryArg.focus,
@@ -475,7 +534,7 @@ const injectedRtkApi = api
       getShipDetail: build.query<GetShipDetailApiResponse, GetShipDetailApiArg>(
         {
           query: (queryArg) => ({
-            url: `/game-data/wiki/ships/${queryArg.id}`,
+            url: `/api/v2/game-data/wiki/ships/${queryArg.id}`,
           }),
           providesTags: ["Game Data - Wiki"],
         },
@@ -485,7 +544,7 @@ const injectedRtkApi = api
         GetCommoditiesApiArg
       >({
         query: (queryArg) => ({
-          url: `/game-data/wiki/commodities`,
+          url: `/api/v2/game-data/wiki/commodities`,
           params: {
             category: queryArg.category,
             can_be_mined: queryArg.canBeMined,
@@ -497,7 +556,7 @@ const injectedRtkApi = api
       }),
       getLocations: build.query<GetLocationsApiResponse, GetLocationsApiArg>({
         query: (queryArg) => ({
-          url: `/game-data/wiki/locations`,
+          url: `/api/v2/game-data/wiki/locations`,
           params: {
             parent_id: queryArg.parentId,
           },
@@ -508,7 +567,7 @@ const injectedRtkApi = api
         GetManufacturersApiResponse,
         GetManufacturersApiArg
       >({
-        query: () => ({ url: `/game-data/wiki/manufacturers` }),
+        query: () => ({ url: `/api/v2/game-data/wiki/manufacturers` }),
         providesTags: ["Game Data - Wiki"],
       }),
       getManufacturerDetail: build.query<
@@ -516,19 +575,19 @@ const injectedRtkApi = api
         GetManufacturerDetailApiArg
       >({
         query: (queryArg) => ({
-          url: `/game-data/wiki/manufacturers/${queryArg.id}`,
+          url: `/api/v2/game-data/wiki/manufacturers/${queryArg.id}`,
         }),
         providesTags: ["Game Data - Wiki"],
       }),
       listVersions: build.query<ListVersionsApiResponse, ListVersionsApiArg>({
-        query: () => ({ url: `/game-data/versions` }),
+        query: () => ({ url: `/api/v2/game-data/versions` }),
         providesTags: ["Game Data - Versions"],
       }),
       getActiveVersions: build.query<
         GetActiveVersionsApiResponse,
         GetActiveVersionsApiArg
       >({
-        query: () => ({ url: `/game-data/versions/active` }),
+        query: () => ({ url: `/api/v2/game-data/versions/active` }),
         providesTags: ["Game Data - Versions"],
       }),
       selectVersion: build.mutation<
@@ -536,7 +595,7 @@ const injectedRtkApi = api
         SelectVersionApiArg
       >({
         query: (queryArg) => ({
-          url: `/game-data/versions/select`,
+          url: `/api/v2/game-data/versions/select`,
           method: "POST",
           body: queryArg.selectVersionRequest,
         }),
@@ -547,7 +606,7 @@ const injectedRtkApi = api
         SearchResourcesApiArg
       >({
         query: (queryArg) => ({
-          url: `/game-data/resources/search`,
+          url: `/api/v2/game-data/resources/search`,
           params: {
             text: queryArg.text,
             resource_category: queryArg.resourceCategory,
@@ -562,7 +621,7 @@ const injectedRtkApi = api
       }),
       getResource: build.query<GetResourceApiResponse, GetResourceApiArg>({
         query: (queryArg) => ({
-          url: `/game-data/resources/${queryArg.resourceId}`,
+          url: `/api/v2/game-data/resources/${queryArg.resourceId}`,
         }),
         providesTags: ["Game Data - Resources"],
       }),
@@ -571,7 +630,7 @@ const injectedRtkApi = api
         GetResourceCategoriesApiArg
       >({
         query: (queryArg) => ({
-          url: `/game-data/resources/categories`,
+          url: `/api/v2/game-data/resources/categories`,
           params: {
             version_id: queryArg.versionId,
           },
@@ -583,7 +642,7 @@ const injectedRtkApi = api
         SearchMissionsApiArg
       >({
         query: (queryArg) => ({
-          url: `/game-data/missions/search`,
+          url: `/api/v2/game-data/missions/search`,
           params: {
             text: queryArg.text,
             category: queryArg.category,
@@ -617,7 +676,7 @@ const injectedRtkApi = api
         GetMissionDetailApiArg
       >({
         query: (queryArg) => ({
-          url: `/game-data/missions/${queryArg.missionId}`,
+          url: `/api/v2/game-data/missions/${queryArg.missionId}`,
         }),
         providesTags: ["Game Data - Missions"],
       }),
@@ -626,7 +685,7 @@ const injectedRtkApi = api
         GetMissionDetailByCodeApiArg
       >({
         query: (queryArg) => ({
-          url: `/game-data/missions/by-code/${queryArg.missionCode}`,
+          url: `/api/v2/game-data/missions/by-code/${queryArg.missionCode}`,
         }),
         providesTags: ["Game Data - Missions"],
       }),
@@ -635,7 +694,7 @@ const injectedRtkApi = api
         GetMissionBlueprintsApiArg
       >({
         query: (queryArg) => ({
-          url: `/game-data/missions/${queryArg.missionId}/blueprints`,
+          url: `/api/v2/game-data/missions/${queryArg.missionId}/blueprints`,
         }),
         providesTags: ["Game Data - Missions"],
       }),
@@ -644,7 +703,7 @@ const injectedRtkApi = api
         CompleteMissionApiArg
       >({
         query: (queryArg) => ({
-          url: `/game-data/missions/${queryArg.missionId}/complete`,
+          url: `/api/v2/game-data/missions/${queryArg.missionId}/complete`,
           method: "POST",
           body: queryArg.body,
         }),
@@ -652,7 +711,7 @@ const injectedRtkApi = api
       }),
       rateMission: build.mutation<RateMissionApiResponse, RateMissionApiArg>({
         query: (queryArg) => ({
-          url: `/game-data/missions/${queryArg.missionId}/rate`,
+          url: `/api/v2/game-data/missions/${queryArg.missionId}/rate`,
           method: "POST",
           body: queryArg.body,
         }),
@@ -663,7 +722,7 @@ const injectedRtkApi = api
         GetMissionChainsApiArg
       >({
         query: (queryArg) => ({
-          url: `/game-data/missions/chains`,
+          url: `/api/v2/game-data/missions/chains`,
           params: {
             version_id: queryArg.versionId,
           },
@@ -675,7 +734,7 @@ const injectedRtkApi = api
         GetReputationRanksApiArg
       >({
         query: (queryArg) => ({
-          url: `/game-data/missions/reputation-ranks`,
+          url: `/api/v2/game-data/missions/reputation-ranks`,
           params: {
             scope_code: queryArg.scopeCode,
           },
@@ -684,7 +743,7 @@ const injectedRtkApi = api
       }),
       getGameEvents: build.query<GetGameEventsApiResponse, GetGameEventsApiArg>(
         {
-          query: () => ({ url: `/game-data/missions/events` }),
+          query: () => ({ url: `/api/v2/game-data/missions/events` }),
           providesTags: ["Game Data - Missions"],
         },
       ),
@@ -693,7 +752,7 @@ const injectedRtkApi = api
         CalculateQualityApiArg
       >({
         query: (queryArg) => ({
-          url: `/game-data/crafting/calculate-quality`,
+          url: `/api/v2/game-data/crafting/calculate-quality`,
           method: "POST",
           body: queryArg.calculateQualityRequest,
         }),
@@ -704,7 +763,7 @@ const injectedRtkApi = api
         SimulateCraftingApiArg
       >({
         query: (queryArg) => ({
-          url: `/game-data/crafting/simulate`,
+          url: `/api/v2/game-data/crafting/simulate`,
           method: "POST",
           body: queryArg.simulateCraftingRequest,
         }),
@@ -715,7 +774,7 @@ const injectedRtkApi = api
         RecordCraftingApiArg
       >({
         query: (queryArg) => ({
-          url: `/game-data/crafting/craft`,
+          url: `/api/v2/game-data/crafting/craft`,
           method: "POST",
           body: queryArg.recordCraftingRequest,
         }),
@@ -726,7 +785,7 @@ const injectedRtkApi = api
         GetCraftingHistoryApiArg
       >({
         query: (queryArg) => ({
-          url: `/game-data/crafting/history`,
+          url: `/api/v2/game-data/crafting/history`,
           params: {
             blueprint_id: queryArg.blueprintId,
             page: queryArg.page,
@@ -740,7 +799,7 @@ const injectedRtkApi = api
         GetCraftableItemsApiArg
       >({
         query: (queryArg) => ({
-          url: `/game-data/crafting/craftable-items`,
+          url: `/api/v2/game-data/crafting/craftable-items`,
           params: {
             item_category: queryArg.itemCategory,
             rarity: queryArg.rarity,
@@ -757,7 +816,7 @@ const injectedRtkApi = api
         GetCraftingStatisticsApiResponse,
         GetCraftingStatisticsApiArg
       >({
-        query: () => ({ url: `/game-data/crafting/statistics` }),
+        query: () => ({ url: `/api/v2/game-data/crafting/statistics` }),
         providesTags: ["Game Data - Crafting"],
       }),
       searchBlueprints: build.query<
@@ -765,7 +824,7 @@ const injectedRtkApi = api
         SearchBlueprintsApiArg
       >({
         query: (queryArg) => ({
-          url: `/game-data/blueprints/search`,
+          url: `/api/v2/game-data/blueprints/search`,
           params: {
             text: queryArg.text,
             item_category: queryArg.itemCategory,
@@ -790,7 +849,7 @@ const injectedRtkApi = api
         GetBlueprintDetailApiArg
       >({
         query: (queryArg) => ({
-          url: `/game-data/blueprints/${queryArg.blueprintId}`,
+          url: `/api/v2/game-data/blueprints/${queryArg.blueprintId}`,
         }),
         providesTags: ["Game Data - Blueprints"],
       }),
@@ -799,7 +858,7 @@ const injectedRtkApi = api
         GetBlueprintDetailByCodeApiArg
       >({
         query: (queryArg) => ({
-          url: `/game-data/blueprints/by-code/${queryArg.blueprintCode}`,
+          url: `/api/v2/game-data/blueprints/by-code/${queryArg.blueprintCode}`,
         }),
         providesTags: ["Game Data - Blueprints"],
       }),
@@ -808,7 +867,7 @@ const injectedRtkApi = api
         GetBlueprintMissionsApiArg
       >({
         query: (queryArg) => ({
-          url: `/game-data/blueprints/${queryArg.blueprintId}/missions`,
+          url: `/api/v2/game-data/blueprints/${queryArg.blueprintId}/missions`,
           params: {
             version_id: queryArg.versionId,
           },
@@ -820,7 +879,7 @@ const injectedRtkApi = api
         AddBlueprintToInventoryApiArg
       >({
         query: (queryArg) => ({
-          url: `/game-data/blueprints/${queryArg.blueprintId}/inventory`,
+          url: `/api/v2/game-data/blueprints/${queryArg.blueprintId}/inventory`,
           method: "POST",
           body: queryArg.body,
         }),
@@ -831,7 +890,7 @@ const injectedRtkApi = api
         RemoveBlueprintFromInventoryApiArg
       >({
         query: (queryArg) => ({
-          url: `/game-data/blueprints/${queryArg.blueprintId}/inventory`,
+          url: `/api/v2/game-data/blueprints/${queryArg.blueprintId}/inventory`,
           method: "DELETE",
         }),
         invalidatesTags: ["Game Data - Blueprints"],
@@ -841,7 +900,7 @@ const injectedRtkApi = api
         GetBlueprintCategoriesApiArg
       >({
         query: (queryArg) => ({
-          url: `/game-data/blueprints/categories`,
+          url: `/api/v2/game-data/blueprints/categories`,
           params: {
             version_id: queryArg.versionId,
           },
@@ -853,7 +912,7 @@ const injectedRtkApi = api
         GetUserBlueprintInventoryApiArg
       >({
         query: (queryArg) => ({
-          url: `/game-data/blueprints/inventory`,
+          url: `/api/v2/game-data/blueprints/inventory`,
           params: {
             item_category: queryArg.itemCategory,
             rarity: queryArg.rarity,
@@ -871,7 +930,7 @@ const injectedRtkApi = api
         GetOrgBlueprintOwnersApiArg
       >({
         query: (queryArg) => ({
-          url: `/game-data/blueprints/${queryArg.blueprintId}/org-owners/${queryArg.spectrumId}`,
+          url: `/api/v2/game-data/blueprints/${queryArg.blueprintId}/org-owners/${queryArg.spectrumId}`,
         }),
         providesTags: ["Game Data - Blueprints"],
       }),
@@ -880,7 +939,7 @@ const injectedRtkApi = api
         FindCraftableBlueprintsApiArg
       >({
         query: (queryArg) => ({
-          url: `/game-data/blueprints/craftable`,
+          url: `/api/v2/game-data/blueprints/craftable`,
           method: "POST",
           body: queryArg.body,
         }),
@@ -890,7 +949,7 @@ const injectedRtkApi = api
         GetFeatureFlagApiResponse,
         GetFeatureFlagApiArg
       >({
-        query: () => ({ url: `/debug/feature-flag` }),
+        query: () => ({ url: `/api/v2/debug/feature-flag` }),
         providesTags: ["Debug V2"],
       }),
       setFeatureFlag: build.mutation<
@@ -898,19 +957,19 @@ const injectedRtkApi = api
         SetFeatureFlagApiArg
       >({
         query: (queryArg) => ({
-          url: `/debug/feature-flag`,
+          url: `/api/v2/debug/feature-flag`,
           method: "POST",
           body: queryArg.setFeatureFlagRequest,
         }),
         invalidatesTags: ["Debug V2"],
       }),
       getCart: build.query<GetCartApiResponse, GetCartApiArg>({
-        query: () => ({ url: `/cart` }),
+        query: () => ({ url: `/api/v2/cart` }),
         providesTags: ["Cart V2"],
       }),
       addToCart: build.mutation<AddToCartApiResponse, AddToCartApiArg>({
         query: (queryArg) => ({
-          url: `/cart/add`,
+          url: `/api/v2/cart/add`,
           method: "POST",
           body: queryArg.addToCartRequest,
         }),
@@ -921,7 +980,7 @@ const injectedRtkApi = api
         UpdateCartItemApiArg
       >({
         query: (queryArg) => ({
-          url: `/cart/${queryArg.id}`,
+          url: `/api/v2/cart/${queryArg.id}`,
           method: "PUT",
           body: queryArg.updateCartItemRequest,
         }),
@@ -932,7 +991,7 @@ const injectedRtkApi = api
         RemoveCartItemApiArg
       >({
         query: (queryArg) => ({
-          url: `/cart/${queryArg.id}`,
+          url: `/api/v2/cart/${queryArg.id}`,
           method: "DELETE",
         }),
         invalidatesTags: ["Cart V2"],
@@ -940,7 +999,7 @@ const injectedRtkApi = api
       checkoutCart: build.mutation<CheckoutCartApiResponse, CheckoutCartApiArg>(
         {
           query: (queryArg) => ({
-            url: `/cart/checkout`,
+            url: `/api/v2/cart/checkout`,
             method: "POST",
             body: queryArg.checkoutCartRequest,
           }),
@@ -952,7 +1011,7 @@ const injectedRtkApi = api
         CreatePurchaseApiArg
       >({
         query: (queryArg) => ({
-          url: `/buy-orders`,
+          url: `/api/v2/buy-orders`,
           method: "POST",
           body: queryArg.createBuyOrderRequest,
         }),
@@ -963,7 +1022,7 @@ const injectedRtkApi = api
         CreateStandingBuyOrderApiArg
       >({
         query: (queryArg) => ({
-          url: `/buy-orders/standing`,
+          url: `/api/v2/buy-orders/standing`,
           method: "POST",
           body: queryArg.createStandingBuyOrderRequest,
         }),
@@ -974,7 +1033,7 @@ const injectedRtkApi = api
         SearchBuyOrdersApiArg
       >({
         query: (queryArg) => ({
-          url: `/buy-orders/search`,
+          url: `/api/v2/buy-orders/search`,
           params: {
             game_item_id: queryArg.gameItemId,
             quality_tier_min: queryArg.qualityTierMin,
@@ -994,7 +1053,7 @@ const injectedRtkApi = api
         GetMyBuyOrdersApiArg
       >({
         query: (queryArg) => ({
-          url: `/buy-orders/mine`,
+          url: `/api/v2/buy-orders/mine`,
           params: {
             status: queryArg.status,
             page: queryArg.page,
@@ -1008,7 +1067,7 @@ const injectedRtkApi = api
         UpdateBuyOrderApiArg
       >({
         query: (queryArg) => ({
-          url: `/buy-orders/${queryArg.id}`,
+          url: `/api/v2/buy-orders/${queryArg.id}`,
           method: "PUT",
           body: queryArg.updateStandingBuyOrderRequest,
         }),
@@ -1019,7 +1078,7 @@ const injectedRtkApi = api
         CancelBuyOrderApiArg
       >({
         query: (queryArg) => ({
-          url: `/buy-orders/${queryArg.id}`,
+          url: `/api/v2/buy-orders/${queryArg.id}`,
           method: "DELETE",
         }),
         invalidatesTags: ["Buy Orders V2"],
@@ -1029,7 +1088,7 @@ const injectedRtkApi = api
         FulfillBuyOrderApiArg
       >({
         query: (queryArg) => ({
-          url: `/buy-orders/${queryArg.id}/fulfill`,
+          url: `/api/v2/buy-orders/${queryArg.id}/fulfill`,
           method: "POST",
           body: queryArg.body,
         }),
@@ -1040,7 +1099,7 @@ const injectedRtkApi = api
         GetNextAvailableApiArg
       >({
         query: (queryArg) => ({
-          url: `/availability/next`,
+          url: `/api/v2/availability/next`,
           params: {
             username: queryArg.username,
             spectrum_id: queryArg.spectrumId,
@@ -1048,12 +1107,29 @@ const injectedRtkApi = api
         }),
         providesTags: ["Availability"],
       }),
+      getAuctionDetail: build.query<
+        GetAuctionDetailApiResponse,
+        GetAuctionDetailApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/api/v2/auctions/${queryArg.listingId}`,
+        }),
+        providesTags: ["Auctions V2"],
+      }),
+      placeBid: build.mutation<PlaceBidApiResponse, PlaceBidApiArg>({
+        query: (queryArg) => ({
+          url: `/api/v2/auctions/${queryArg.listingId}/bids`,
+          method: "POST",
+          body: queryArg.placeBidRequest,
+        }),
+        invalidatesTags: ["Auctions V2"],
+      }),
       getPriceHistory: build.query<
         GetPriceHistoryApiResponse,
         GetPriceHistoryApiArg
       >({
         query: (queryArg) => ({
-          url: `/analytics/price-history`,
+          url: `/api/v2/analytics/price-history`,
           params: {
             game_item_id: queryArg.gameItemId,
             quality_tier: queryArg.qualityTier,
@@ -1069,7 +1145,7 @@ const injectedRtkApi = api
         GetQualityDistributionApiArg
       >({
         query: (queryArg) => ({
-          url: `/analytics/quality-distribution`,
+          url: `/api/v2/analytics/quality-distribution`,
           params: {
             game_item_id: queryArg.gameItemId,
             start_date: queryArg.startDate,
@@ -1083,7 +1159,7 @@ const injectedRtkApi = api
         GetSellerStatsApiArg
       >({
         query: (queryArg) => ({
-          url: `/analytics/seller-stats`,
+          url: `/api/v2/analytics/seller-stats`,
           params: {
             seller_id: queryArg.sellerId,
           },
@@ -1091,13 +1167,13 @@ const injectedRtkApi = api
         providesTags: ["Analytics V2"],
       }),
       getConfig: build.query<GetConfigApiResponse, GetConfigApiArg>({
-        query: () => ({ url: `/admin/feature-flags/config` }),
+        query: () => ({ url: `/api/v2/admin/feature-flags/config` }),
         providesTags: ["Admin Feature Flags"],
       }),
       updateConfig: build.mutation<UpdateConfigApiResponse, UpdateConfigApiArg>(
         {
           query: (queryArg) => ({
-            url: `/admin/feature-flags/config`,
+            url: `/api/v2/admin/feature-flags/config`,
             method: "PUT",
             body: queryArg.updateConfigRequest,
           }),
@@ -1105,7 +1181,7 @@ const injectedRtkApi = api
         },
       ),
       getStats: build.query<GetStatsApiResponse, GetStatsApiArg>({
-        query: () => ({ url: `/admin/feature-flags/stats` }),
+        query: () => ({ url: `/api/v2/admin/feature-flags/stats` }),
         providesTags: ["Admin Feature Flags"],
       }),
       getUserOverrides: build.query<
@@ -1113,7 +1189,7 @@ const injectedRtkApi = api
         GetUserOverridesApiArg
       >({
         query: (queryArg) => ({
-          url: `/admin/feature-flags/overrides`,
+          url: `/api/v2/admin/feature-flags/overrides`,
           params: {
             page: queryArg.page,
             pageSize: queryArg.pageSize,
@@ -1128,7 +1204,7 @@ const injectedRtkApi = api
         SetUserOverrideApiArg
       >({
         query: (queryArg) => ({
-          url: `/admin/feature-flags/overrides`,
+          url: `/api/v2/admin/feature-flags/overrides`,
           method: "POST",
           body: queryArg.setUserOverrideRequest,
         }),
@@ -1139,7 +1215,7 @@ const injectedRtkApi = api
         RemoveUserOverrideApiArg
       >({
         query: (queryArg) => ({
-          url: `/admin/feature-flags/overrides/${queryArg.username}`,
+          url: `/api/v2/admin/feature-flags/overrides/${queryArg.username}`,
           method: "DELETE",
           params: {
             flag_name: queryArg.flagName,
@@ -1151,14 +1227,17 @@ const injectedRtkApi = api
         ImportGameDataApiResponse,
         ImportGameDataApiArg
       >({
-        query: () => ({ url: `/admin/import-game-data`, method: "POST" }),
+        query: () => ({
+          url: `/api/v2/admin/import-game-data`,
+          method: "POST",
+        }),
         invalidatesTags: ["Admin"],
       }),
       listGameDataImportJobs: build.query<
         ListGameDataImportJobsApiResponse,
         ListGameDataImportJobsApiArg
       >({
-        query: () => ({ url: `/admin/import-game-data` }),
+        query: () => ({ url: `/api/v2/admin/import-game-data` }),
         providesTags: ["Admin"],
       }),
       getImportJobStatus: build.query<
@@ -1166,7 +1245,7 @@ const injectedRtkApi = api
         GetImportJobStatusApiArg
       >({
         query: (queryArg) => ({
-          url: `/admin/import-game-data/${queryArg.jobId}`,
+          url: `/api/v2/admin/import-game-data/${queryArg.jobId}`,
         }),
         providesTags: ["Admin"],
       }),
@@ -1375,6 +1454,37 @@ export type UploadPhotosApiResponse = /** status 200 Ok */ {
 export type UploadPhotosApiArg = {
   /** Listing UUID */
   id: string
+}
+export type GetInventoryApiResponse = /** status 200 Ok */ InventoryResponse
+export type GetInventoryApiArg = {
+  gameItemId?: string
+  listingId?: string
+  listed?: boolean
+  page?: number
+  pageSize?: number
+}
+export type CreateInventoryLotApiResponse = /** status 200 Ok */ {
+  lot: InventoryLotDetail
+}
+export type CreateInventoryLotApiArg = {
+  createInventoryLotRequest: CreateInventoryLotRequest
+}
+export type LinkToListingApiResponse = /** status 200 Ok */ {
+  lot: InventoryLotDetail
+}
+export type LinkToListingApiArg = {
+  lotId: string
+  linkToListingRequest: LinkToListingRequest
+}
+export type UnlinkFromListingApiResponse = /** status 200 Ok */ {
+  lot: InventoryLotDetail
+}
+export type UnlinkFromListingApiArg = {
+  lotId: string
+}
+export type DeleteInventoryLotApiResponse = unknown
+export type DeleteInventoryLotApiArg = {
+  lotId: string
 }
 export type StartImportApiResponse = /** status 200 Ok */ {
   job: ImportJob
@@ -2037,6 +2147,16 @@ export type GetNextAvailableApiArg = {
   username?: string
   /** Spectrum ID (for contractor sellers) */
   spectrumId?: string
+}
+export type GetAuctionDetailApiResponse =
+  /** status 200 Ok */ AuctionDetailResponse
+export type GetAuctionDetailApiArg = {
+  listingId: string
+}
+export type PlaceBidApiResponse = /** status 200 Ok */ PlaceBidResponse
+export type PlaceBidApiArg = {
+  listingId: string
+  placeBidRequest: PlaceBidRequest
 }
 export type GetPriceHistoryApiResponse =
   /** status 200 Price history time-series data */ GetPriceHistoryResponse
@@ -2919,6 +3039,39 @@ export type UpdateListingRequest = {
   max_order_value?: number | null
   /** Updated bulk discount tiers (pass [] to remove, omit to keep unchanged) */
   bulk_discount_tiers?: BulkDiscountTier[]
+}
+export type InventoryLotDetail = {
+  lot_id: string
+  owner_id: string
+  game_item_id: string | null
+  game_item_name: string | null
+  variant_id: string | null
+  variant_display_name: string | null
+  listing_id: string | null
+  listing_title: string | null
+  quantity_total: number
+  location_id: string | null
+  location_name: string | null
+  listed: boolean
+  notes: string | null
+  created_at: string
+  updated_at: string
+}
+export type InventoryResponse = {
+  lots: InventoryLotDetail[]
+  total: number
+  page: number
+  page_size: number
+}
+export type CreateInventoryLotRequest = {
+  game_item_id?: string | null
+  variant_id?: string | null
+  quantity: number
+  location_id?: string | null
+  notes?: string | null
+}
+export type LinkToListingRequest = {
+  listing_id: string
 }
 export type ImportSource = "cstone-items" | "uex-items" | "uex-attributes"
 export type JobStatus = "running" | "completed" | "failed"
@@ -4461,6 +4614,37 @@ export type SellerNextAvailableResponse = {
   /** Whether the seller has an availability schedule set */
   has_schedule: boolean
 }
+export type BidDetail = {
+  bid_id: string
+  bidder: {
+    avatar: string | null
+    display_name: string
+    username: string
+  }
+  amount: number
+  is_active: boolean
+  created_at: string
+}
+export type AuctionDetailResponse = {
+  listing_id: string
+  end_time: string
+  min_bid_increment: number
+  buyout_price: number | null
+  reserve_price: number | null
+  status: string
+  current_highest_bid: number | null
+  total_bids: number
+  bids: BidDetail[]
+}
+export type PlaceBidResponse = {
+  bid_id: string
+  amount: number
+  is_highest: boolean
+  current_highest: number
+}
+export type PlaceBidRequest = {
+  amount: number
+}
 export type PriceDataPoint = {
   /** ISO 8601 timestamp for this data point */
   timestamp: string
@@ -4649,6 +4833,11 @@ export const {
   useRefreshListingMutation,
   useTrackViewMutation,
   useUploadPhotosMutation,
+  useGetInventoryQuery,
+  useCreateInventoryLotMutation,
+  useLinkToListingMutation,
+  useUnlinkFromListingMutation,
+  useDeleteInventoryLotMutation,
   useStartImportMutation,
   useGetJobStatusQuery,
   useListJobsQuery,
@@ -4720,6 +4909,8 @@ export const {
   useCancelBuyOrderMutation,
   useFulfillBuyOrderMutation,
   useGetNextAvailableQuery,
+  useGetAuctionDetailQuery,
+  usePlaceBidMutation,
   useGetPriceHistoryQuery,
   useGetQualityDistributionQuery,
   useGetSellerStatsQuery,

@@ -422,6 +422,12 @@ const router = createBrowserRouter([
             }),
           },
           {
+            path: "/inventory",
+            lazy: async () => ({
+              Component: (await import("./pages/inventory/InventoryPage")).default,
+            }),
+          },
+          {
             path: "/market/cart",
             lazy: async () => ({
               Component: (await import("./components/market/MarketRouter")).MarketCartGate,

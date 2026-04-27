@@ -177,6 +177,13 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
         org: false,
       },
       {
+        to: "/inventory",
+        text: "sidebar.inventory", tab_key: "inventory",
+        icon: <InventoryRounded />,
+        logged_in: true,
+        org: false,
+      },
+      {
         to: "/order/services",
         text: "sidebar.manage_services", tab_key: "manage_services",
         icon: <DashboardCustomizeRounded />,
