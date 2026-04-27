@@ -170,6 +170,7 @@ export default function AdminMigrationPage() {
                 { name: "Auctions", data: result.auctions },
                 { name: "Order Items", data: result.order_items },
                 { name: "Offer Items", data: result.offer_items },
+                { name: "Buy Orders", data: result.buy_orders },
               ].map((row) => (
                 <TableRow key={row.name}>
                   <TableCell>{row.name}</TableCell>
