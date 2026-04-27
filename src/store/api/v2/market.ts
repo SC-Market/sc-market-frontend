@@ -2359,6 +2359,10 @@ export type StockLotDetail = {
   lot_id: string
   /** Item UUID this lot belongs to */
   item_id: string
+  /** Listing UUID this lot belongs to */
+  listing_id: string
+  /** Listing title */
+  listing_title: string
   /** Variant information */
   variant: StockLotVariant
   /** Total quantity in this lot */

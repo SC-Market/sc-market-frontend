@@ -81,29 +81,22 @@ export function AllStockLotsGrid() {
 
   // Map lots to grid rows
   const rows: StockLotRow[] = useMemo(() => {
-    return (lotsData?.lots || []).map((lot: StockLotDetail) => {
-      // Find listing for this lot — need to get listing_id from the lot
-      // StockLotDetail has item_id but not listing_id directly, we need to match via listings
-      const listing = listingsData?.listings.find((l) =>
-        l.listing_id === (lot as unknown as { listing_id?: string }).listing_id
-      )
-      return {
-        id: lot.lot_id,
-        lot_id: lot.lot_id,
-        listing_id: (lot as unknown as { listing_id?: string }).listing_id || "",
-        listing_title: listing?.title || "Unknown",
-        listing_photo: listing?.photo,
-        quantity: lot.quantity_total,
-        location_name: lot.location?.name || null,
-        owner_username: lot.owner?.username || null,
-        owner_avatar: lot.owner?.avatar || null,
-        listed: lot.listed,
-        notes: lot.notes,
-        quality_tier: lot.variant.attributes.quality_tier ?? null,
-        crafted_source: lot.variant.attributes.crafted_source ?? null,
-      }
-    })
-  }, [lotsData, listingsData])
+    return (lotsData?.lots || []).map((lot: StockLotDetail) => ({
+      id: lot.lot_id,
+      lot_id: lot.lot_id,
+      listing_id: lot.listing_id,
+      listing_title: lot.listing_title,
+      listing_photo: listingMap.get(lot.listing_id)?.photo,
+      quantity: lot.quantity_total,
+      location_name: lot.location?.name || null,
+      owner_username: lot.owner?.username || null,
+      owner_avatar: lot.owner?.avatar_url || null,
+      listed: lot.listed,
+      notes: lot.notes,
+      quality_tier: lot.variant.attributes.quality_tier ?? null,
+      crafted_source: lot.variant.attributes.crafted_source ?? null,
+    }))
+  }, [lotsData, listingMap])
 
   const columns: GridColDef[] = useMemo(() => [
     {
