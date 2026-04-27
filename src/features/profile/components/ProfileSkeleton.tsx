@@ -18,7 +18,6 @@ import {
 } from "@mui/icons-material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
-import { OpenLayout } from "../../../components/layout/ContainerGrid"
 
 export function ProfileSkeleton() {
   const theme = useTheme<ExtendedTheme>()
