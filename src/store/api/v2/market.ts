@@ -22,6 +22,7 @@ export const addTagTypes = [
   "Availability",
   "Auctions V2",
   "Analytics V2",
+  "Admin Migration",
   "Admin Feature Flags",
   "Admin",
 ] as const
@@ -1166,6 +1167,23 @@ const injectedRtkApi = api
         }),
         providesTags: ["Analytics V2"],
       }),
+      getMigrationStatus: build.query<
+        GetMigrationStatusApiResponse,
+        GetMigrationStatusApiArg
+      >({
+        query: () => ({ url: `/api/v2/admin/migration/status` }),
+        providesTags: ["Admin Migration"],
+      }),
+      runMigration: build.mutation<RunMigrationApiResponse, RunMigrationApiArg>(
+        {
+          query: (queryArg) => ({
+            url: `/api/v2/admin/migration/run`,
+            method: "POST",
+            body: queryArg.migrationRunRequest,
+          }),
+          invalidatesTags: ["Admin Migration"],
+        },
+      ),
       getConfig: build.query<GetConfigApiResponse, GetConfigApiArg>({
         query: () => ({ url: `/api/v2/admin/feature-flags/config` }),
         providesTags: ["Admin Feature Flags"],
@@ -2187,6 +2205,13 @@ export type GetSellerStatsApiResponse =
 export type GetSellerStatsApiArg = {
   /** Optional seller ID (defaults to current user) */
   sellerId?: string
+}
+export type GetMigrationStatusApiResponse =
+  /** status 200 Ok */ MigrationStatusResponse
+export type GetMigrationStatusApiArg = void
+export type RunMigrationApiResponse = /** status 200 Ok */ MigrationRunResponse
+export type RunMigrationApiArg = {
+  migrationRunRequest: MigrationRunRequest
 }
 export type GetConfigApiResponse = /** status 200 Ok */ FeatureFlagConfig
 export type GetConfigApiArg = void
@@ -4742,6 +4767,49 @@ export type GetSellerStatsResponse = {
   /** Price premium percentages by quality tier */
   price_premiums: QualityTierPremium[]
 }
+export type MigrationStatusResponse = {
+  v1_counts: {
+    total: number
+    multiple: number
+    aggregate: number
+    unique: number
+  }
+  v2_counts: {
+    photos: number
+    stock_lots_mapped: number
+    mapped: number
+    listings: number
+  }
+  price_history: {
+    v2: number
+    v1: number
+  }
+  auctions: {
+    v2: number
+    v1: number
+  }
+}
+export type MigrationSummary = {
+  total_attempted: number
+  successful: number
+  failed: number
+  skipped: number
+  errors: {
+    error: string
+    v1_listing_id: string
+  }[]
+}
+export type MigrationRunResponse = {
+  dry_run: boolean
+  listings: MigrationSummary
+  price_history: MigrationSummary
+  auctions: MigrationSummary
+  duration_seconds: number
+}
+export type MigrationRunRequest = {
+  /** If true, wraps in a transaction and rolls back — no data is persisted */
+  dry_run: boolean
+}
 export type FeatureFlagConfig = {
   flag_name: string
   default_version: MarketVersion
@@ -4927,6 +4995,8 @@ export const {
   useGetPriceHistoryQuery,
   useGetQualityDistributionQuery,
   useGetSellerStatsQuery,
+  useGetMigrationStatusQuery,
+  useRunMigrationMutation,
   useGetConfigQuery,
   useUpdateConfigMutation,
   useGetStatsQuery,
