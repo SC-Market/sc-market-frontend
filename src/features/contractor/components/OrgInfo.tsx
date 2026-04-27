@@ -82,7 +82,6 @@ export function OrgInfoSkeleton() {
   const { t } = useTranslation()
 
   return (
-    <OpenLayout sidebarOpen={true}>
       <Box sx={{ position: "relative" }}>
         <Skeleton
           variant="rectangular"
@@ -247,6 +246,6 @@ export function OrgInfoSkeleton() {
           </Grid>
         </Container>
       </Box>
-    </OpenLayout>
+  
   )
 }

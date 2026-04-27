@@ -24,7 +24,6 @@ export function ProfileSkeleton() {
   const theme = useTheme<ExtendedTheme>()
 
   return (
-    <OpenLayout sidebarOpen={true}>
       <Box sx={{ position: "relative" }}>
         <Skeleton
           variant="rectangular"
