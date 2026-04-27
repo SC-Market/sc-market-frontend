@@ -3,9 +3,10 @@ const SOURCE_LABELS: Record<string, string> = {
   crafted: "Crafted",
   looted: "Looted",
   duped: "Duped",
-  unknown: "Unknown",
 }
 
+/** Returns a display label for crafted_source, or empty string for "unknown" */
 export function formatCraftedSource(source: string): string {
+  if (source === "unknown") return ""
   return SOURCE_LABELS[source] ?? source.charAt(0).toUpperCase() + source.slice(1)
 }
