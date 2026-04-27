@@ -115,7 +115,7 @@ export function ListingSearchV2() {
       sortBy: sortBy || undefined,
       sortOrder: sortOrder || undefined,
       itemType,
-      quantityMin: quantityMin ? Number(quantityMin) : undefined,
+      quantityMin: quantityMin ? Number(quantityMin) : 1,
       status,
       languageCodes: searchParams.get('language_codes') || undefined,
       pickupMethod: (searchParams.get('pickup_method') || undefined) as "delivery" | "pickup" | "any" | undefined,
