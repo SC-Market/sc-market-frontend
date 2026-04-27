@@ -674,6 +674,12 @@ const router = createBrowserRouter([
                 }),
               },
               {
+                path: "/admin/migration",
+                lazy: async () => ({
+                  Component: (await import("./pages/admin/AdminMigrationPage")).default,
+                }),
+              },
+              {
                 path: "/admin/notification-test",
                 lazy: async () => ({
                   Component: (
