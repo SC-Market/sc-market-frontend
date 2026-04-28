@@ -8,6 +8,7 @@ import { Grid, Skeleton, Tabs, useMediaQuery, useTheme, FormControl, InputLabel,
 import { HapticTab } from "../../components/haptic"
 import { OfferDetailSkeleton } from "../../components/skeletons"
 import { OfferMarketListingsV2Items } from "../../views/offers/OfferMarketListingsV2Items"
+import { OfferMarketListingsV1Items } from "../../views/offers/OfferMarketListingsV1Items"
 import { OfferServiceArea } from "../../views/offers/OfferServiceArea"
 import { OrderAvailabilityArea } from "../../views/orders/OrderAvailabilityArea"
 import { useTranslation } from "react-i18next"
@@ -141,13 +142,7 @@ export function ViewOfferPage() {
             {hasMarketListings && activeTab === marketListingsTab && (
               hasV2Listings
                 ? <OfferMarketListingsV2Items items={selectedOffer!.market_listings_v2} />
-                : <OfferMarketListingsV2Items items={selectedOffer!.market_listings.map((ml) => ({
-                    listing_id: ml.listing_id,
-                    quantity: ml.quantity,
-                    title: ml.title,
-                    price: ml.price,
-                    v2_variants: [],
-                  }))} />
+                : <OfferMarketListingsV1Items items={selectedOffer!.market_listings} />
             )}
 
             {activeTab === availabilityTab && (

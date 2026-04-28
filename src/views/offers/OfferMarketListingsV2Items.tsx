@@ -29,9 +29,7 @@ export function OfferMarketListingsV2Items({ items }: { items: (OfferMarketListi
   if (!items.length) return null
 
   const total = items.reduce(
-    (s, i) => s + (i.v2_variants.length > 0
-      ? i.v2_variants.reduce((vs, v) => vs + v.price_per_unit * v.quantity, 0)
-      : i.price * i.quantity),
+    (s, i) => s + i.v2_variants.reduce((vs, v) => vs + v.price_per_unit * v.quantity, 0),
     0,
   )
 
@@ -50,8 +48,7 @@ export function OfferMarketListingsV2Items({ items }: { items: (OfferMarketListi
           </TableHead>
           <TableBody>
             {items.flatMap((item) =>
-              item.v2_variants.length > 0
-                ? item.v2_variants.map((v) => (
+              item.v2_variants.map((v) => (
                 <TableRow
                   key={v.variant_id}
                   hover
@@ -101,39 +98,7 @@ export function OfferMarketListingsV2Items({ items }: { items: (OfferMarketListi
                     </Typography>
                   </TableCell>
                 </TableRow>
-              ))
-                : [<TableRow
-                    key={item.listing_id}
-                    hover
-                    sx={{ cursor: "pointer", textDecoration: "none", color: "inherit" }}
-                    component={Link}
-                    to={`/market/${item.listing_id}`}
-                  >
-                    <TableCell>
-                      <Stack direction="row" spacing={1} alignItems="center">
-                        <Avatar
-                          src={item.photo || undefined}
-                          variant="rounded"
-                          sx={{ width: 32, height: 32, borderRadius: 1 }}
-                        >
-                          <InventoryRounded fontSize="small" />
-                        </Avatar>
-                        <Typography variant="body2" fontWeight={600}>
-                          {item.title}
-                        </Typography>
-                      </Stack>
-                    </TableCell>
-                    <TableCell>
-                      <Typography variant="caption" color="text.secondary">—</Typography>
-                    </TableCell>
-                    <TableCell align="right">{item.quantity}</TableCell>
-                    <TableCell align="right">{formatPrice(item.price)}</TableCell>
-                    <TableCell align="right">
-                      <Typography variant="body2" fontWeight={600}>
-                        {formatPrice(item.price * item.quantity)}
-                      </Typography>
-                    </TableCell>
-                  </TableRow>],
+              )),
             )}
             <TableRow>
               <TableCell colSpan={4} align="right">
