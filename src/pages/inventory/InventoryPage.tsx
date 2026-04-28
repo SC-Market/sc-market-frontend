@@ -48,7 +48,7 @@ export default function InventoryPage() {
   const [newQty, setNewQty] = useState(1)
   const [newNotes, setNewNotes] = useState("")
 
-  const { data, isLoading, refetch } = useGetInventoryQuery({ page, page_size: 50 })
+  const { data, isLoading, refetch } = useGetInventoryQuery({ page, pageSize: 50 })
   const [createLot, { isLoading: creating }] = useCreateInventoryLotMutation()
   const [deleteLot] = useDeleteInventoryLotMutation()
   const [unlinkLot] = useUnlinkFromListingMutation()

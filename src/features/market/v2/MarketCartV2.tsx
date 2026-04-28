@@ -179,7 +179,7 @@ export function CartItemEntryV2(props: {
             )}
             {hasDisplayableSource(item.variant.attributes.crafted_source) && (
               <Chip
-                label={formatCraftedSource(item.variant.attributes.crafted_source)}
+                label={formatCraftedSource(item.variant.attributes.crafted_source!)}
                 size="small"
                 variant="outlined"
               />
