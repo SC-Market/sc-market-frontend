@@ -77,7 +77,7 @@ export function BidAreaV2({ listingId, startingPrice, isOwner }: BidAreaV2Props)
             <TimerRounded fontSize="small" color={isActive ? "warning" : "disabled"} />
             <Typography variant="body2" color={isActive ? "warning.main" : "text.disabled"}>
               {isActive
-                ? t("BidAreaV2.endsIn", { time: formatMostSignificantDiff(endTime.getTime()) })
+                ? t("BidAreaV2.endsIn", { time: formatMostSignificantDiff(endTime) })
                 : auction.status === "concluded"
                   ? t("BidAreaV2.concluded", "Concluded")
                   : t("BidAreaV2.ended", "Ended")}
@@ -159,7 +159,7 @@ export function BidAreaV2({ listingId, startingPrice, isOwner }: BidAreaV2Props)
                     </TableCell>
                     <TableCell align="right">
                       <Typography variant="caption" color="text.secondary">
-                        {formatMostSignificantDiff(new Date(bid.created_at).getTime())}
+                        {formatMostSignificantDiff(new Date(bid.created_at))}
                       </Typography>
                     </TableCell>
                   </TableRow>

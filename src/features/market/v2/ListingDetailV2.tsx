@@ -40,7 +40,6 @@ import { getRelativeTime } from "../../../util/time"
 import { dateDiffInDays } from "../../../util/dateDiff"
 import { formatQuantity } from "../../../util/formatQuantity"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
-import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
 import { useTranslation } from "react-i18next"
 import { AddToCartDrawer } from "./components/AddToCartDrawer"
@@ -359,7 +358,7 @@ export function ListingDetailV2() {
                         <BidAreaV2
                           listingId={listing.listing_id}
                           startingPrice={items[0]?.base_price || 0}
-                          isOwner={listing.seller_id === profile?.user_id}
+                          isOwner={seller?.type === "user" && seller?.slug === profile?.username}
                         />
                       )}
 
