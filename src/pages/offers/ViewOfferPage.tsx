@@ -141,7 +141,13 @@ export function ViewOfferPage() {
             {hasMarketListings && activeTab === marketListingsTab && (
               hasV2Listings
                 ? <OfferMarketListingsV2Items items={selectedOffer!.market_listings_v2} />
-                : null
+                : <OfferMarketListingsV2Items items={selectedOffer!.market_listings.map((ml) => ({
+                    listing_id: ml.listing_id,
+                    quantity: ml.quantity,
+                    title: ml.title,
+                    price: ml.price,
+                    v2_variants: [],
+                  }))} />
             )}
 
             {activeTab === availabilityTab && (
