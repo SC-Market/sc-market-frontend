@@ -4813,6 +4813,18 @@ export type MigrationStatusResponse = {
     v2: number
     v1: number
   }
+  order_items: {
+    v2: number
+    v1: number
+  }
+  offer_items: {
+    v2: number
+    v1: number
+  }
+  buy_orders: {
+    v2: number
+    v1: number
+  }
 }
 export type MigrationSummary = {
   total_attempted: number

@@ -53,7 +53,14 @@ function CountCard({ label, count, color }: { label: string; count: number; colo
 }
 
 function JobResult({ result }: { result: any }) {
-  const categories = ["listings", "price_history", "auctions", "order_items", "offer_items", "buy_orders"]
+  const categories = [
+    { key: "listings", label: "Listings", skipReason: "Already migrated (re-run)" },
+    { key: "price_history", label: "Price History", skipReason: "Already migrated or NULL game_item_id" },
+    { key: "auctions", label: "Auctions", skipReason: "Already migrated or listing not yet migrated" },
+    { key: "order_items", label: "Order Items", skipReason: "Already migrated (re-run)" },
+    { key: "offer_items", label: "Offer Items", skipReason: "Already migrated (re-run)" },
+    { key: "buy_orders", label: "Buy Orders", skipReason: "Already migrated or NULL game_item_id (required for buy orders)" },
+  ]
   return (
     <>
       <Table size="small">
@@ -63,18 +70,20 @@ function JobResult({ result }: { result: any }) {
             <TableCell align="right">Success</TableCell>
             <TableCell align="right">Failed</TableCell>
             <TableCell align="right">Skipped</TableCell>
+            <TableCell>Skip Reason</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {categories.map((key) => {
+          {categories.map(({ key, label, skipReason }) => {
             const d = result[key]
             if (!d) return null
             return (
               <TableRow key={key}>
-                <TableCell>{key.replace(/_/g, " ")}</TableCell>
+                <TableCell>{label}</TableCell>
                 <TableCell align="right"><Typography color="success.main" fontWeight="bold">{d.successful}</Typography></TableCell>
                 <TableCell align="right">{d.failed > 0 ? <Typography color="error.main" fontWeight="bold">{d.failed}</Typography> : "0"}</TableCell>
                 <TableCell align="right">{d.skipped}</TableCell>
+                <TableCell><Typography variant="caption" color="text.secondary">{d.skipped > 0 ? skipReason : "—"}</Typography></TableCell>
               </TableRow>
             )
           })}
@@ -155,11 +164,18 @@ export default function AdminMigrationPage() {
               <CountCard label="Stock Lots" count={status.v2_counts.stock_lots_mapped} />
               <CountCard label="Photos" count={status.v2_counts.photos} />
             </Stack>
+            <Typography variant="subtitle2" color="text.secondary" sx={{ mt: 2, mb: 1 }}>Parity</Typography>
             <Stack direction="row" spacing={1} sx={{ flexWrap: "wrap", gap: 1 }}>
               <CountCard label="Price Hist V1" count={status.price_history.v1} />
-              <CountCard label="Price Hist V2" count={status.price_history.v2} />
+              <CountCard label="Price Hist V2" count={status.price_history.v2} color={status.price_history.v2 >= status.price_history.v1 ? "success.main" : "warning.main"} />
               <CountCard label="Auctions V1" count={status.auctions.v1} />
-              <CountCard label="Auctions V2" count={status.auctions.v2} />
+              <CountCard label="Auctions V2" count={status.auctions.v2} color={status.auctions.v2 >= status.auctions.v1 ? "success.main" : "warning.main"} />
+              <CountCard label="Order Items V1" count={status.order_items.v1} />
+              <CountCard label="Order Items V2" count={status.order_items.v2} color={status.order_items.v2 >= status.order_items.v1 ? "success.main" : "warning.main"} />
+              <CountCard label="Offer Items V1" count={status.offer_items.v1} />
+              <CountCard label="Offer Items V2" count={status.offer_items.v2} color={status.offer_items.v2 >= status.offer_items.v1 ? "success.main" : "warning.main"} />
+              <CountCard label="Buy Orders V1" count={status.buy_orders.v1} />
+              <CountCard label="Buy Orders V2" count={status.buy_orders.v2} color={status.buy_orders.v2 >= status.buy_orders.v1 ? "success.main" : "warning.main"} />
             </Stack>
           </>
         )}
