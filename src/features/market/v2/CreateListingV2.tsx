@@ -103,6 +103,7 @@ export function CreateListingV2() {
   const [maxOrderValue, setMaxOrderValue] = useState<number | null>(null);
   const [bulkDiscountTiers, setBulkDiscountTiers] = useState<Array<{ min_quantity: number; discount_percent: number }>>([]);
   const [saleType, setSaleType] = useState<"fixed" | "auction" | "negotiable">("fixed");
+  const [listingStatus, setListingStatus] = useState<"active" | "inactive">("active");
   const [auctionEndTime, setAuctionEndTime] = useState<string>("");
   const [minBidIncrement, setMinBidIncrement] = useState<number>(1000);
   const [reservePrice, setReservePrice] = useState<number | null>(null);
@@ -281,6 +282,7 @@ export function CreateListingV2() {
         bulk_discount_tiers: bulkDiscountTiers.length ? bulkDiscountTiers : undefined,
         contractor_spectrum_id: currentOrg?.spectrum_id || undefined,
         sale_type: saleType,
+        status: listingStatus,
         auction_details: saleType === "auction" ? {
           end_time: new Date(auctionEndTime).toISOString(),
           min_bid_increment: minBidIncrement,
@@ -462,13 +464,30 @@ export function CreateListingV2() {
                 size="small"
                 label={t("CreateListingV2.pickupMethod", "Pickup Method")}
                 value={pickupMethod}
-                onChange={(e) => setPickupMethod(e.target.value as any)}
+                onChange={(e) => setPickupMethod(e.target.value as "delivery" | "pickup" | "any" | "")}
                 helperText={t("CreateListingV2.pickupMethodHelper", "How will the buyer receive the item?")}
               >
                 <MenuItem value="">{t("CreateListingV2.notSpecified", "Not specified")}</MenuItem>
                 <MenuItem value="delivery">{t("CreateListingV2.delivery", "Delivery (seller delivers)")}</MenuItem>
                 <MenuItem value="pickup">{t("CreateListingV2.pickup", "Pickup (buyer picks up)")}</MenuItem>
                 <MenuItem value="any">{t("CreateListingV2.either", "Either (delivery or pickup)")}</MenuItem>
+              </TextField>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                select
+                fullWidth
+                size="small"
+                label={t("CreateListingV2.listingStatus", "Listing Status")}
+                value={listingStatus}
+                onChange={(e) => setListingStatus(e.target.value as "active" | "inactive")}
+                helperText={listingStatus === "inactive"
+                  ? t("CreateListingV2.inactiveHelp", "Listing will be saved as a draft and won't be visible to buyers")
+                  : t("CreateListingV2.activeHelp", "Listing will be immediately visible to buyers")
+                }
+              >
+                <MenuItem value="active">{t("CreateListingV2.active", "Active")}</MenuItem>
+                <MenuItem value="inactive">{t("CreateListingV2.inactive", "Inactive (Draft)")}</MenuItem>
               </TextField>
             </Grid>
             {/* Quantity Unit — only shown for custom items; auto-inferred for known items */}

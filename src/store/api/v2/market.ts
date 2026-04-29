@@ -1409,7 +1409,7 @@ export type SearchListingsApiArg = {
   pageSize?: number
   itemType?: string
   quantityMin?: number
-  status?: "active" | "sold" | "expired" | "cancelled"
+  status?: "active" | "inactive" | "sold" | "expired" | "cancelled"
   /** Sort field (default: created_at) */
   sortBy?:
     | "created_at"
@@ -1429,7 +1429,7 @@ export type GetMyListingsApiResponse =
   /** status 200 Updated listing with variant breakdown */ GetMyListingsResponse
 export type GetMyListingsApiArg = {
   /** Filter by listing status */
-  status?: "active" | "sold" | "expired" | "cancelled"
+  status?: "active" | "inactive" | "sold" | "expired" | "cancelled"
   /** Page number for pagination (default: 1) */
   page?: number
   /** Number of results per page (default: 20, max: 100) */
@@ -2795,7 +2795,7 @@ export type CreateListingResponse = {
   seller_type: "user" | "contractor"
   title: string
   description: string
-  status: "active" | "sold" | "expired" | "cancelled"
+  status: "active" | "inactive" | "sold" | "expired" | "cancelled"
   created_at: string
   updated_at: string
 }
@@ -2859,6 +2859,8 @@ export type CreateListingRequest = {
     /** When the auction ends (ISO 8601) */
     end_time: string
   }
+  /** Initial listing status (default: 'active'). Use 'inactive' for draft/prep. */
+  status?: "active" | "inactive"
 }
 export type ListingSearchResult = {
   /** Listing UUID */
@@ -2982,7 +2984,7 @@ export type ListingDetail = {
   /** Listing description (markdown) */
   description: string
   /** Current listing status */
-  status: "active" | "sold" | "expired" | "cancelled"
+  status: "active" | "inactive" | "sold" | "expired" | "cancelled"
   /** Visibility setting */
   visibility: "public" | "private" | "unlisted"
   /** Sale type */
@@ -3091,7 +3093,7 @@ export type UpdateListingRequest = {
   /** New title (optional) */
   title?: string
   /** New status (optional) — active, sold, expired, cancelled */
-  status?: "active" | "sold" | "expired" | "cancelled"
+  status?: "active" | "inactive" | "sold" | "expired" | "cancelled"
   /** New description (optional) */
   description?: string
   /** New base price for unified pricing mode (optional) */
