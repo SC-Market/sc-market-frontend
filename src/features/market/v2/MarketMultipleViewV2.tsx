@@ -137,7 +137,7 @@ export function MarketMultipleViewV2() {
   const [selectedItemIndex, setSelectedItemIndex] = useState(0);
   const [selectedVariants, setSelectedVariants] = useState<Record<string, string>>({});
 
-  const { data: listingDetail, isLoading } = useGetListingDetailQuery({ id: id! }, { skip: !id });
+  const { data: listingDetail, isLoading, error } = useGetListingDetailQuery({ id: id! }, { skip: !id });
 
   const complete: BundleListingV2 | null = useMemo(() => {
     if (!listingDetail) return null;
@@ -259,7 +259,7 @@ export function MarketMultipleViewV2() {
         { label: complete?.title || "Listing" },
       ]}
       isLoading={isLoading}
-      error={!complete && !isLoading ? "not_found" : undefined}
+      error={!complete && !isLoading ? error : undefined}
       sidebarOpen={true}
       maxWidth="xl"
     >

@@ -341,7 +341,7 @@ export function MarketAggregateViewV2() {
         { label: game_item.name || "Item" },
       ]}
       isLoading={isLoading}
-      error={error ? "not_found" : undefined}
+      error={error}
       sidebarOpen={true}
       maxWidth="xl"
     >
