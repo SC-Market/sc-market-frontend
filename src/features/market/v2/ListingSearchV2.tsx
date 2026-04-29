@@ -176,10 +176,10 @@ export function ListingSearchV2() {
       {/* Mobile/Tablet: Use bottom sheet for filters */}
       {showMobileSidebar && <MarketSidebarV2 />}
 
-      <Container maxWidth={"xxxl"} sx={{ padding: 0, px: { xs: 1, sm: 2 } }}>
+      <Container maxWidth={"xxxl"} sx={{ padding: 0, px: { xs: 0, sm: 2 } }}>
         <Box sx={{ display: "flex", justifyContent: "center" }}>
           {showMobileSidebar ? (
-            <Grid container spacing={theme.layoutSpacing.layout}>
+            <Grid container spacing={{ xs: 1, sm: theme.layoutSpacing.layout }}>
               <Grid item xs={12}>
                 <HideOnScroll>
                   <MarketNavArea />
@@ -194,7 +194,7 @@ export function ListingSearchV2() {
                 <UnifiedSearchBar tokens={marketSearchTokens} onChange={handleMarketTokensChange}
                   mode="market" placeholder="Search items, categories..." />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} sx={{ px: { xs: 0 } }}>
                 <ListingGrid
                   listings={listings}
                   loading={isLoading || isFetching}
@@ -253,7 +253,7 @@ export function ListingSearchV2() {
                   />
                 </Box>
                 <Grid container spacing={1}>
-                  <Grid item xs={12}>
+                  <Grid item xs={12} sx={{ px: 0 }}>
                     <ListingGrid
                       listings={listings}
                       loading={isLoading || isFetching}
@@ -741,7 +741,7 @@ const ListingGrid = React.forwardRef<HTMLDivElement, ListingGridProps>(
 
     if (loading) {
       return (
-        <Grid container spacing={1} sx={{ width: "100%" }}>
+        <Grid container spacing={1}>
           {new Array(16).fill(undefined).map((_, i) => (
             <Grid item {...gridBreakpoints} key={i}>
               <ListingSkeleton index={i} sidebarOpen={marketSidebarOpen} />
@@ -767,7 +767,7 @@ const ListingGrid = React.forwardRef<HTMLDivElement, ListingGridProps>(
     return (
       <>
         <div ref={ref} style={{ position: "absolute", top: 0 }} />
-        <Grid container spacing={1} sx={{ width: "100%" }}>
+        <Grid container spacing={1}>
           {listingsWithAds.map((item, index) => (
             <Grid item {...gridBreakpoints} key={'_isAd' in item ? `ad-${index}` : item.listing_id}>
               {'_isAd' in item
