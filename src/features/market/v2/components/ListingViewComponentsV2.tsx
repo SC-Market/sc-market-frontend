@@ -33,7 +33,7 @@ function ListingRow({
       <Box sx={{ width: "100%", overflowX: "auto" }}>
         <Box display="flex" gap={1}>
           {Array.from({ length: 4 }).map((_, i) => (
-            <Skeleton key={i} variant="rounded" width={300} height={200} />
+            <Skeleton key={i} variant="rounded" width={225} height={200} />
           ))}
         </Box>
       </Box>
@@ -62,7 +62,7 @@ function ListingRow({
         <Box sx={{ width: "100%", overflowX: "auto" }}>
           <Box display="flex" gap={1}>
             {listings.map((listing, i) => (
-              <Box key={listing.listing_id} sx={{ minWidth: 280, maxWidth: 320 }}>
+              <Box key={listing.listing_id} sx={{ minWidth: 210, maxWidth: 240 }}>
                 <ListingCardV2 listing={listing} index={i} />
               </Box>
             ))}
