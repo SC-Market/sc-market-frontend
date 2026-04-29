@@ -1395,6 +1395,18 @@ export function AggregateBuySellWallV2(props: { aggregate: GameItemAggregateV2 }
     const high = Math.max(sellHigh, buyHigh) * 1.1;
     const interval = high / bucketCount;
 
+    if (interval === 0) {
+      return {
+        series: [[], []],
+        supplyDemand: [[], []],
+        high,
+        buyMax: 0,
+        sellMax: 0,
+        totalStockAvailable: 0,
+        totalQuantityRequested: 0,
+      };
+    }
+
     const sortedSell = [...aggregate.listings]
       .filter((s) => s.quantity_available)
       .sort((a, b) => a.price_min - b.price_min);

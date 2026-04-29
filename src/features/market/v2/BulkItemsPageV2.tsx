@@ -30,10 +30,12 @@ import { useMarketSidebar } from "../hooks/MarketSidebar"
 import { LanguageFilter } from "../../../components/search/LanguageFilter"
 import { EmptyListings } from "../../../components/empty-states"
 import { ListingSkeleton } from "../../../components/skeletons"
+import { useViewMode, ViewModeToggle } from "../../../hooks/market/useViewMode"
+import { BulkItemsTableV2 } from "./components/BulkItemsTableV2"
 
 // ── Sidebar Filter ─────────────────────────────────────────────────────
 
-function BulkSearchArea() {
+function BulkSearchArea({ viewMode, onViewModeChange }: { viewMode: "grid" | "list"; onViewModeChange: (m: "grid" | "list") => void }) {
   const { t } = useTranslation()
   const [searchParams, setSearchParams] = useSearchParams()
 
@@ -48,6 +50,9 @@ function BulkSearchArea() {
   return (
     <Box sx={{ p: 2 }}>
       <Grid container spacing={1.5}>
+        <Grid item xs={12} sx={{ display: "flex", justifyContent: "flex-end" }}>
+          <ViewModeToggle mode={viewMode} onChange={onViewModeChange} />
+        </Grid>
         <Grid item xs={12}>
           <TextField
             size="small" fullWidth
@@ -123,12 +128,12 @@ function BulkSearchArea() {
   )
 }
 
-function BulkMobileSidebar() {
+function BulkMobileSidebar({ viewMode, onViewModeChange }: { viewMode: "grid" | "list"; onViewModeChange: (m: "grid" | "list") => void }) {
   const [open, setOpen] = useMarketSidebar()
   const { t } = useTranslation()
   return (
     <BottomSheet open={open} onClose={() => setOpen(false)} title={t("market.filters", "Filters")}>
-      <BulkSearchArea />
+      <BulkSearchArea viewMode={viewMode} onViewModeChange={onViewModeChange} />
     </BottomSheet>
   )
 }
@@ -194,6 +199,7 @@ export function BulkItemsPageV2() {
   const { t } = useTranslation()
   const [searchParams, setSearchParams] = useSearchParams()
   const showMobileSidebar = useMediaQuery(theme.breakpoints.down("lg"))
+  const [viewMode, setViewMode] = useViewMode()
 
   const queryArgs = useMemo(() => ({
     text: searchParams.get("text") || undefined,
@@ -248,6 +254,8 @@ export function BulkItemsPageV2() {
           }
           showCreateAction={!searchParams.get("text")}
         />
+      ) : viewMode === "list" ? (
+        <BulkItemsTableV2 items={items} />
       ) : (
         <Grid container spacing={1}>
           {items.map((item) => (
@@ -273,7 +281,7 @@ export function BulkItemsPageV2() {
 
   return (
     <>
-      {showMobileSidebar && <BulkMobileSidebar />}
+      {showMobileSidebar && <BulkMobileSidebar viewMode={viewMode} onViewModeChange={setViewMode} />}
 
       <Container maxWidth={"xxxl"} sx={{ padding: 0 }}>
         <Box sx={{ display: "flex", justifyContent: "center" }}>
@@ -302,7 +310,7 @@ export function BulkItemsPageV2() {
                 flexShrink: 0,
                 overflowY: "auto",
               }}>
-                <BulkSearchArea />
+                <BulkSearchArea viewMode={viewMode} onViewModeChange={setViewMode} />
               </Paper>
 
               <Box sx={{ flex: 1, minWidth: 0 }}>
