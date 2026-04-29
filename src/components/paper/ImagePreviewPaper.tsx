@@ -1,5 +1,5 @@
 import { ImagePreviewModal } from "../modal/ImagePreviewModal"
-import { IconButton, Paper, useTheme } from "@mui/material"
+import { Box, IconButton, Paper, useTheme } from "@mui/material"
 import {
   KeyboardArrowLeft,
   KeyboardArrowRight,
@@ -125,6 +125,48 @@ export function ImagePreviewPaper(props: { photos: string[] }) {
           }}
         />
       </Paper>
+      {photos.length > 1 && (
+        <Box
+          sx={{
+            display: "flex",
+            gap: 1,
+            mt: 1,
+            overflowX: "auto",
+            pb: 0.5,
+          }}
+        >
+          {photos.map((photo, i) => (
+            <Box
+              key={i}
+              onClick={() => setImageIndex(i)}
+              sx={{
+                width: 64,
+                height: 64,
+                flexShrink: 0,
+                borderRadius: 1,
+                overflow: "hidden",
+                cursor: "pointer",
+                border: 2,
+                borderColor: i === imageIndex ? "primary.main" : "transparent",
+                opacity: i === imageIndex ? 1 : 0.6,
+                transition: "opacity 0.2s, border-color 0.2s",
+                "&:hover": { opacity: 1 },
+              }}
+            >
+              <img
+                src={photo}
+                alt={t("accessibility.thumbnail", "Thumbnail {{index}}", { index: i + 1 })}
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                loading="lazy"
+                onError={({ currentTarget }) => {
+                  currentTarget.onerror = null
+                  currentTarget.src = "https://cdn.robertsspaceindustries.com/static/images/Temp/default-image.png"
+                }}
+              />
+            </Box>
+          ))}
+        </Box>
+      )}
     </>
   )
 }
