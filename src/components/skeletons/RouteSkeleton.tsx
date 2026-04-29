@@ -96,7 +96,7 @@ export function MarketPageSkeleton() {
                 <Divider light />
               </Grid>
               <Grid item xs={12}>
-                <Grid container spacing={1} sx={{ width: "100%" }}>
+                <Grid container spacing={1}>
                   {[...Array(12)].map((_, i) => (
                     <Grid item key={i} {...LISTING_GRID_BREAKPOINTS}>
                       <ListingSkeleton index={i} sidebarOpen={false} />
@@ -128,7 +128,7 @@ export function MarketPageSkeleton() {
                 </Box>
               </Paper>
               <Box sx={{ flex: 1 }}>
-                <Grid container spacing={1} sx={{ width: "100%" }}>
+                <Grid container spacing={1}>
                   {[...Array(16)].map((_, i) => (
                     <Grid item key={i} {...LISTING_GRID_BREAKPOINTS}>
                       <ListingSkeleton index={i} sidebarOpen={false} />
