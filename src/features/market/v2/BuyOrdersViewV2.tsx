@@ -98,7 +98,7 @@ export function BuyOrdersViewV2() {
   const cardGrid = (
     <>
       <div ref={ref} style={{ position: "absolute", top: 0 }} />
-      <Grid container spacing={1} sx={{ width: "100%" }}>
+      <Grid container spacing={1}>
         {loading
           ? new Array(Math.min(perPage, 12))
               .fill(undefined)

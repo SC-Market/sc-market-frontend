@@ -57,7 +57,7 @@ function MyListingSectionV2({ status }: { status: "active" | "inactive" | "cance
 
   if (loading) {
     return (
-      <Grid container spacing={1} sx={{ width: "100%" }}>
+      <Grid container spacing={1}>
         {Array.from({ length: 16 }).map((_, i) => (
           <Grid item {...gridBreakpoints} key={i}>
             <ListingSkeleton index={i} sidebarOpen={false} />
@@ -79,7 +79,7 @@ function MyListingSectionV2({ status }: { status: "active" | "inactive" | "cance
   }
 
   return (
-    <Grid container spacing={1} sx={{ width: "100%" }}>
+    <Grid container spacing={1}>
       {listings.map((listing, index) => (
         <Grid item {...gridBreakpoints} key={listing.listing_id}>
           <MyListingCardV2 listing={listing} index={index} />

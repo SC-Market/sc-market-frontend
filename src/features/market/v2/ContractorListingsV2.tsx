@@ -227,7 +227,7 @@ const ListingGrid = React.forwardRef<HTMLDivElement, ListingGridProps>(
 
     if (loading) {
       return (
-        <Grid container spacing={1} sx={{ width: "100%" }}>
+        <Grid container spacing={1}>
           {new Array(16).fill(undefined).map((_, i) => (
             <Grid item {...gridBreakpoints} key={i}>
               <ListingSkeleton index={i} sidebarOpen={false} />
@@ -258,7 +258,7 @@ const ListingGrid = React.forwardRef<HTMLDivElement, ListingGridProps>(
     return (
       <>
         <div ref={ref} style={{ position: "absolute", top: 0 }} />
-        <Grid container spacing={1} sx={{ width: "100%" }}>
+        <Grid container spacing={1}>
           {listings.map((listing, index) => (
             <Grid item {...gridBreakpoints} key={listing.listing_id}>
               <ContractorListingCard
