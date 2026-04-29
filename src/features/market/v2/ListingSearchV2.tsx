@@ -49,7 +49,6 @@ import { SearchRounded, AddShoppingCartRounded } from "@mui/icons-material";
 import SearchIcon from "@mui/icons-material/Search";
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded";
 import FilterListIcon from "@mui/icons-material/FilterList";
-import { useBottomNavHeight } from "../../../hooks/layout/useBottomNavHeight";
 import { useTranslation } from "react-i18next";
 import { useCartDrawer } from "../hooks/AddToCartContext";
 import { AdCard } from "../../../components/ads/AdCard";
@@ -612,46 +611,7 @@ export function MarketSidebarV2() {
       >
         <MarketSearchAreaV2 />
       </BottomSheet>
-
-      {/* Toggle button for mobile */}
-      <MarketSideBarToggleButtonV2 />
     </>
-  );
-}
-
-/**
- * MarketSideBarToggleButtonV2 - Mobile FAB for opening filters
- */
-function MarketSideBarToggleButtonV2() {
-  const [open, setOpen] = useMarketSidebar();
-  const theme = useTheme<ExtendedTheme>();
-  const bottomNavHeight = useBottomNavHeight();
-  const { t } = useTranslation();
-
-  return (
-    <Button
-      variant="outlined"
-      color="secondary"
-      startIcon={<FilterListIcon />}
-      aria-label={t("market.toggleSidebar", "Toggle Filters")}
-      onClick={() => setOpen((value) => !value)}
-      sx={{
-        position: "fixed",
-        bottom: bottomNavHeight + 16,
-        right: 24,
-        zIndex: theme.zIndex.speedDial,
-        borderRadius: 2,
-        textTransform: "none",
-        boxShadow: theme.shadows[4],
-        backgroundColor: theme.palette.background.paper,
-        "&:hover": {
-          backgroundColor: theme.palette.background.paper,
-          boxShadow: theme.shadows[8],
-        },
-      }}
-    >
-      {t("market.filters", "Filters")}
-    </Button>
   );
 }
 
