@@ -147,7 +147,7 @@ function StockToolbarV2(props: StockToolbarProps) {
   const hasSelection = selectedCount > 0
 
   const handleBulkStatus = useCallback(
-    async (status: "active" | "cancelled") => {
+    async (status: "active" | "inactive") => {
       const ids = [...selectionModel.ids].map(String)
       if (ids.length === 0) return
       setBulkLoading(true)
@@ -264,7 +264,7 @@ function StockToolbarV2(props: StockToolbarProps) {
             <LoadingButton color="success" startIcon={<RadioButtonCheckedRounded />} variant="outlined" size="small" loading={bulkLoading} onClick={() => void handleBulkStatus("active")} fullWidth disabled={!hasSelection}>
               {t("ItemStock.activate")}
             </LoadingButton>
-            <LoadingButton color="error" startIcon={<RadioButtonUncheckedRounded />} variant="outlined" size="small" loading={bulkLoading} onClick={() => void handleBulkStatus("cancelled")} fullWidth disabled={!hasSelection}>
+            <LoadingButton color="error" startIcon={<RadioButtonUncheckedRounded />} variant="outlined" size="small" loading={bulkLoading} onClick={() => void handleBulkStatus("inactive")} fullWidth disabled={!hasSelection}>
               {t("ItemStock.deactivate")}
             </LoadingButton>
             <LoadingButton color="warning" startIcon={<ArchiveOutlined />} variant="outlined" size="small" loading={bulkLoading} onClick={() => setArchiveDialogOpen(true)} fullWidth disabled={!hasSelection}>
@@ -286,7 +286,7 @@ function StockToolbarV2(props: StockToolbarProps) {
         <LoadingButton color="success" startIcon={<RadioButtonCheckedRounded />} variant="outlined" size="small" loading={bulkLoading} onClick={() => void handleBulkStatus("active")} disabled={!hasSelection}>
           {t("ItemStock.activate")}
         </LoadingButton>
-        <LoadingButton color="error" startIcon={<RadioButtonUncheckedRounded />} variant="outlined" size="small" loading={bulkLoading} onClick={() => void handleBulkStatus("cancelled")} disabled={!hasSelection}>
+        <LoadingButton color="error" startIcon={<RadioButtonUncheckedRounded />} variant="outlined" size="small" loading={bulkLoading} onClick={() => void handleBulkStatus("inactive")} disabled={!hasSelection}>
           {t("ItemStock.deactivate")}
         </LoadingButton>
         <LoadingButton color="warning" startIcon={<ArchiveOutlined />} variant="outlined" size="small" loading={bulkLoading} onClick={() => setArchiveDialogOpen(true)} disabled={!hasSelection}>
