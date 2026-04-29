@@ -3113,6 +3113,8 @@ export type UpdateListingRequest = {
   max_order_value?: number | null
   /** Updated bulk discount tiers (pass [] to remove, omit to keep unchanged) */
   bulk_discount_tiers?: BulkDiscountTier[]
+  /** Replace listing photos with these URLs (handles removals) */
+  photos?: string[]
 }
 export type InventoryLotDetail = {
   lot_id: string

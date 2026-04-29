@@ -248,6 +248,12 @@ export function EditListingV2() {
         request.pickup_method = pickupMethod || null;
       }
 
+      // Include photos if any were removed
+      const originalPhotos = listingData?.listing.photos || [];
+      if (JSON.stringify(photos) !== JSON.stringify(originalPhotos)) {
+        request.photos = photos;
+      }
+
       // Include bulk discount tiers
       const currentTiers = (listingData?.items[0] as any)?.bulk_discount_tiers || [];
       if (JSON.stringify(bulkDiscountTiers) !== JSON.stringify(currentTiers)) {
@@ -293,6 +299,7 @@ export function EditListingV2() {
         !request.base_price &&
         !request.variant_prices &&
         !request.lot_updates &&
+        !request.photos &&
         uploadedFiles.length === 0
       ) {
         issueAlert({
@@ -303,7 +310,7 @@ export function EditListingV2() {
       }
 
       try {
-        const hasFieldChanges = !!(request.title || request.description || request.base_price || request.variant_prices || request.lot_updates)
+        const hasFieldChanges = !!(request.title || request.description || request.base_price || request.variant_prices || request.lot_updates || request.photos)
 
         if (hasFieldChanges) {
           await updateListing({
