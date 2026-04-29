@@ -3,8 +3,7 @@ import { SerializedError } from "@reduxjs/toolkit"
 
 /**
  * Determines if an error should result in a 404 redirect
- * Only 400 (Bad Request) errors should redirect to 404
- * Other errors should be handled differently (e.g., show error message, retry, etc.)
+ * 400 (Bad Request) and 404 (Not Found) errors should redirect to 404
  */
 export function shouldRedirectTo404(
   error: FetchBaseQueryError | SerializedError | undefined,
@@ -13,7 +12,7 @@ export function shouldRedirectTo404(
 
   // Check if it's a FetchBaseQueryError with status
   if ("status" in error) {
-    return error.status === 400
+    return error.status === 400 || error.status === 404
   }
 
   // If it's not a FetchBaseQueryError, don't redirect to 404
@@ -22,7 +21,7 @@ export function shouldRedirectTo404(
 
 /**
  * Determines if an error should show the error page
- * Any error that's not a 400 should show the error page
+ * Any error that's not a 400/404 should show the error page
  */
 export function shouldShowErrorPage(
   error: FetchBaseQueryError | SerializedError | undefined,
@@ -32,7 +31,7 @@ export function shouldShowErrorPage(
 
   // Check if it's a FetchBaseQueryError with status
   if ("status" in error) {
-    return error.status !== 400
+    return error.status !== 400 && error.status !== 404
   }
 
   // If it's not a FetchBaseQueryError, show error page
