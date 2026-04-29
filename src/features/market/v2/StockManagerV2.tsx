@@ -56,7 +56,7 @@ import {
 } from "@mui/icons-material"
 import FilterListIcon from "@mui/icons-material/FilterList"
 import LoadingButton from "@mui/lab/LoadingButton"
-import { Link } from "react-router-dom"
+import { Link, useSearchParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { NumericFormat } from "react-number-format"
@@ -923,6 +923,8 @@ export function StockManagerV2() {
   const [sidebarOpen, setSidebarOpen] = useState(!isMobile)
   const [page, setPage] = useState(0)
   const [pageSize, setPageSize] = useState(48)
+  const [searchParams] = useSearchParams()
+  const statusFilter = searchParams.get("status") as "active" | "expired" | "cancelled" | null
 
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>({
     type: "include",
@@ -930,7 +932,7 @@ export function StockManagerV2() {
   })
 
   const { data, isLoading, refetch } = useGetMyListingsQuery({
-    status: "active",
+    status: statusFilter || undefined,
     page: page + 1,
     pageSize,
     sortBy: "updated_at",
@@ -962,7 +964,7 @@ export function StockManagerV2() {
                 maxHeight="90vh"
               >
                 <Box sx={{ overflowY: "auto", overflowX: "hidden", pb: 2 }}>
-                  <MarketSearchAreaV2 />
+                  <MarketSearchAreaV2 manageMode />
                 </Box>
               </BottomSheet>
             )}
@@ -996,7 +998,7 @@ export function StockManagerV2() {
             {/* Desktop sidebar */}
             {!isMobile && (
               <Grid item xs={12} md={3}>
-                <Paper><MarketSearchAreaV2 /></Paper>
+                <Paper><MarketSearchAreaV2 manageMode /></Paper>
               </Grid>
             )}
 
