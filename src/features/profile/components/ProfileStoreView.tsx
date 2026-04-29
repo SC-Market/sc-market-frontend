@@ -2,19 +2,15 @@ import React, { useState } from "react"
 import { Box, Grid, Paper, useMediaQuery } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
-import { ItemListings } from "../../market/views/ItemListings"
 import { MarketSidebarContext } from "../../market/hooks/MarketSidebar"
 import { MarketSidebar } from "../../market/components/MarketSidebar"
 import { MarketSideBarToggleButton } from "../../market/components/MarketSidebar"
 import { MarketSearchArea } from "../../market/components/MarketSidebar"
-import { useFeatureFlag } from "../../../hooks/market/useFeatureFlag"
-import { ContractorListingsV2 } from "../../market/v2/ContractorListingsV2"
 import { useSearchListingsQuery } from "../../../store/api/v2/market"
 import { ListingCardV2 } from "../../market/v2/ListingSearchV2"
 
 export function ProfileStoreView(props: { user: string }) {
   const { user } = props
-  const { marketVersion } = useFeatureFlag()
   const theme = useTheme<ExtendedTheme>()
   const xs = useMediaQuery(theme.breakpoints.down("md"))
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -42,11 +38,7 @@ export function ProfileStoreView(props: { user: string }) {
               pb: 3,
             }}
           >
-            {marketVersion === "V2" ? (
-              <ProfileListingsV2 sellerId={user} />
-            ) : (
-              <ItemListings user={user} />
-            )}
+            <ProfileListingsV2 sellerId={user} />
           </Box>
         </Grid>
       </Grid>
@@ -56,7 +48,6 @@ export function ProfileStoreView(props: { user: string }) {
 
 export function OrgStoreView(props: { org: string }) {
   const { org } = props
-  const { marketVersion } = useFeatureFlag()
   const theme = useTheme<ExtendedTheme>()
   const xs = useMediaQuery(theme.breakpoints.down("md"))
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -84,11 +75,7 @@ export function OrgStoreView(props: { org: string }) {
               pb: 3,
             }}
           >
-            {marketVersion === "V2" ? (
-              <ProfileListingsV2 contractorId={org} />
-            ) : (
-              <ItemListings org={org} />
-            )}
+            <ProfileListingsV2 contractorId={org} />
           </Box>
         </Grid>
       </Grid>
