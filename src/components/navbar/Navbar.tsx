@@ -11,11 +11,10 @@ import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme, getNavbarContrastText, navbarShadow } from "../../hooks/styles/Theme"
 import React from "react"
 import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
-import { useLocation, useNavigate } from "react-router-dom"
+import { useLocation } from "react-router-dom"
 import { messagingDrawerWidth } from "../../features/chats"
 import { NotificationsButton } from "./NotificationsButton"
 import { MenuRounded, ShoppingCartRounded } from "@mui/icons-material"
-import { useFeatureFlag } from "../../hooks/market/useFeatureFlag"
 import { useCartDrawer } from "../../features/market/hooks/AddToCartContext"
 import { ProfileNavAvatar } from "../../views/people/ProfileNavAvatar"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
@@ -30,14 +29,12 @@ export function Navbar(props: { children?: React.ReactNode }) {
   const theme: ExtendedTheme = useTheme()
   const profile = useGetUserProfileQuery()
   const [cookies] = useCookies(["cart"])
-  const navigate = useNavigate()
   const location = useLocation()
   const isMessagingPage = location.pathname.startsWith("/messages")
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
 
   const [drawerOpen, setDrawerOpen] = useDrawerOpen()
   const { t } = useTranslation()
-  const { marketVersion } = useFeatureFlag()
   const { openCartPreview } = useCartDrawer()
 
   const cartItemCount = cookies.cart?.items?.length || 0
@@ -131,7 +128,7 @@ export function Navbar(props: { children?: React.ReactNode }) {
           <React.Fragment>
             <Tooltip title={t("navbar.cart", "Cart")}>
               <HapticIconButton
-                onClick={() => marketVersion === "V2" ? openCartPreview() : navigate("/market/cart")}
+                onClick={() => openCartPreview()}
                 color="inherit"
                 aria-label={t("navbar.cart", "Cart")}
                 sx={{ color: navbarIconColor }}

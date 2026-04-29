@@ -17,8 +17,7 @@ export interface SidebarItemProps {
   toOrgPublic?: boolean
   orgRouteRest?: string
   tab_key?: string // Used for org sidebar config filtering
-  v2_only?: boolean // Deprecated — use feature_flag instead
-  feature_flag?: string // Only show when this flag is enabled (e.g. "market_v2", "crafting", "wiki")
+  feature_flag?: string // Only show when this flag is enabled (e.g. "wiki")
 }
 
 export interface SidebarSectionProps {

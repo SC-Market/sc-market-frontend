@@ -353,13 +353,11 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
         icon: <ExploreRounded />,
         tab_key: "missions",
         to: "/missions",
-        feature_flag: "crafting",
       },
       {
         text: "sidebar.gameData.crafting",
         icon: <ScienceRounded />,
         tab_key: "crafting",
-        feature_flag: "crafting",
         children: [
           {
             text: "sidebar.gameData.blueprints",

@@ -127,17 +127,6 @@ export function createItemFilter(
       }
     }
 
-    // Backward compat: v2_only checks market_v2 flag
-    if (item.v2_only && !item.feature_flag) {
-      try {
-        const stored = localStorage.getItem("feature_flags")
-        const flags = stored ? JSON.parse(stored) : {}
-        if (!flags.market_v2) return false
-      } catch {
-        if (localStorage.getItem("market_version") !== "V2") return false
-      }
-    }
-
     // Check login requirements
     if (
       (item.logged_in || item.org || item.org_admin || item.site_admin) &&
