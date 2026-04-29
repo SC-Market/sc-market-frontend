@@ -294,7 +294,7 @@ export function ListingSearchV2() {
  * Simplified version of V1 MarketSearchArea with V2-specific filters.
  * Maintains visual parity with V1 styling.
  */
-export function MarketSearchAreaV2() {
+export function MarketSearchAreaV2({ manageMode }: { manageMode?: boolean } = {}) {
   const theme = useTheme<ExtendedTheme>();
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -364,24 +364,43 @@ export function MarketSearchAreaV2() {
       }}
     >
       <Grid container spacing={theme.layoutSpacing.layout}>
-        <Grid item xs={12}>
-          <ToggleButtonGroup
-            value={viewMode}
-            exclusive
-            onChange={(_, newValue) => {
-              if (newValue === 'market') navigate('/market');
-              else if (newValue === 'bulk') navigate('/bulk');
-              else if (newValue === 'buyorders') navigate('/buyorders');
-            }}
-            fullWidth
-            size="small"
-            color="secondary"
-          >
-            <ToggleButton value="market">{t('market.listings', 'Listings')}</ToggleButton>
-            <ToggleButton value="bulk">{t('market.bulk', 'Bulk')}</ToggleButton>
-            <ToggleButton value="buyorders">{t('market.buyOrders', 'Buy Orders')}</ToggleButton>
-          </ToggleButtonGroup>
-        </Grid>
+        {manageMode ? (
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              select
+              size="small"
+              label={t("MarketSearchArea.status", "Status")}
+              value={searchParams.get("status") || ""}
+              onChange={(e) => updateParam("status", e.target.value)}
+              color="secondary"
+            >
+              <MenuItem value="">{t("MarketSearchArea.allStatuses", "All")}</MenuItem>
+              <MenuItem value="active">{t("MarketSearchArea.active", "Active")}</MenuItem>
+              <MenuItem value="expired">{t("MarketSearchArea.inactive", "Inactive")}</MenuItem>
+              <MenuItem value="cancelled">{t("MarketSearchArea.archived", "Archived")}</MenuItem>
+            </TextField>
+          </Grid>
+        ) : (
+          <Grid item xs={12}>
+            <ToggleButtonGroup
+              value={viewMode}
+              exclusive
+              onChange={(_, newValue) => {
+                if (newValue === 'market') navigate('/market');
+                else if (newValue === 'bulk') navigate('/bulk');
+                else if (newValue === 'buyorders') navigate('/buyorders');
+              }}
+              fullWidth
+              size="small"
+              color="secondary"
+            >
+              <ToggleButton value="market">{t('market.listings', 'Listings')}</ToggleButton>
+              <ToggleButton value="bulk">{t('market.bulk', 'Bulk')}</ToggleButton>
+              <ToggleButton value="buyorders">{t('market.buyOrders', 'Buy Orders')}</ToggleButton>
+            </ToggleButtonGroup>
+          </Grid>
+        )}
 
         <Grid item xs={12}>
           <Button
