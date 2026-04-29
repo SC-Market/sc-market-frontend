@@ -924,7 +924,7 @@ export function StockManagerV2() {
   const [page, setPage] = useState(0)
   const [pageSize, setPageSize] = useState(48)
   const [searchParams] = useSearchParams()
-  const statusFilter = searchParams.get("status") as "active" | "expired" | "cancelled" | null
+  const statusFilter = searchParams.get("status") as "active" | "inactive" | "expired" | "cancelled" | null
 
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>({
     type: "include",

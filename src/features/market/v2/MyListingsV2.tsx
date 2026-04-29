@@ -31,7 +31,7 @@ import { MyListingCardV2 } from "./components/MyListingCardV2"
  * Section that fetches and displays listings for a given status.
  * Mirrors V1 MyItemListings but uses V2 useGetMyListingsQuery.
  */
-function MyListingSectionV2({ status }: { status: "active" | "expired" | "cancelled" }) {
+function MyListingSectionV2({ status }: { status: "active" | "inactive" | "cancelled" }) {
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
   const [drawerOpen] = useDrawerOpen()
@@ -98,7 +98,7 @@ const ActiveListingsV2 = lazy(() =>
 
 const InactiveListingsV2 = lazy(() =>
   Promise.resolve({
-    default: () => <MyListingSectionV2 status="expired" />,
+    default: () => <MyListingSectionV2 status="inactive" />,
   }),
 )
 

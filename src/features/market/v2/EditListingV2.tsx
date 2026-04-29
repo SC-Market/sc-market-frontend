@@ -441,7 +441,7 @@ export function EditListingV2() {
                     startIcon={<PauseCircleRounded />}
                     onClick={async () => {
                       try {
-                        await updateListing({ id: id!, updateListingRequest: { status: "expired" } }).unwrap()
+                        await updateListing({ id: id!, updateListingRequest: { status: "inactive" } }).unwrap()
                         issueAlert({ message: "Listing deactivated", severity: "success" })
                       } catch { issueAlert({ message: "Failed to deactivate", severity: "error" }) }
                     }}

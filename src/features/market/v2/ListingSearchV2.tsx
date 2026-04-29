@@ -377,7 +377,7 @@ export function MarketSearchAreaV2({ manageMode }: { manageMode?: boolean } = {}
             >
               <MenuItem value="">{t("MarketSearchArea.allStatuses", "All")}</MenuItem>
               <MenuItem value="active">{t("MarketSearchArea.active", "Active")}</MenuItem>
-              <MenuItem value="expired">{t("MarketSearchArea.inactive", "Inactive")}</MenuItem>
+              <MenuItem value="inactive">{t("MarketSearchArea.inactive", "Inactive")}</MenuItem>
               <MenuItem value="cancelled">{t("MarketSearchArea.archived", "Archived")}</MenuItem>
             </TextField>
           </Grid>
