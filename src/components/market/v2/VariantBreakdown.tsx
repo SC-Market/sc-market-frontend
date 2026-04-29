@@ -51,7 +51,13 @@ const SOURCE_COLORS: Record<string, "default" | "success" | "warning" | "error" 
   unknown: "default",
 };
 
+function hasDisplayableAttributes(variant: Variant): boolean {
+  const { quality_tier, quality_value, crafted_source } = variant.attributes;
+  return !!(quality_tier || quality_value != null || crafted_source);
+}
+
 function VariantInfo({ variant }: { variant: Variant }) {
+  if (!hasDisplayableAttributes(variant)) return null;
   const { quality_tier, quality_value, crafted_source } = variant.attributes;
   return (
     <Stack direction="row" spacing={0.5} alignItems="center" flexWrap="wrap" useFlexGap>
@@ -92,6 +98,8 @@ export const VariantBreakdown: React.FC<VariantBreakdownProps> = ({
     );
   }
 
+  const showVariantColumn = variants.length > 1 && variants.some(hasDisplayableAttributes);
+
   // Mobile card layout
   if (isMobile) {
     return (
@@ -102,7 +110,7 @@ export const VariantBreakdown: React.FC<VariantBreakdownProps> = ({
             sx={{ p: 2, borderRadius: theme.borderRadius?.topLevel ?? 0.375 }}
           >
             <Stack spacing={1}>
-              <VariantInfo variant={variant} />
+              {showVariantColumn && <VariantInfo variant={variant} />}
 
               {variant.locations && variant.locations.length > 0 && (
                 <Typography variant="caption" color="text.secondary">
@@ -148,7 +156,7 @@ export const VariantBreakdown: React.FC<VariantBreakdownProps> = ({
       <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell>Variant</TableCell>
+            {showVariantColumn && <TableCell>Variant</TableCell>}
             <TableCell align="right">Quantity</TableCell>
             <TableCell align="right">Price</TableCell>
             <TableCell>Location</TableCell>
@@ -161,9 +169,11 @@ export const VariantBreakdown: React.FC<VariantBreakdownProps> = ({
               key={variant.variant_id}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
-              <TableCell>
-                <VariantInfo variant={variant} />
-              </TableCell>
+              {showVariantColumn && (
+                <TableCell>
+                  <VariantInfo variant={variant} />
+                </TableCell>
+              )}
               <TableCell align="right">
                 <Typography variant="body2">
                   {variant.quantity.toLocaleString()}
