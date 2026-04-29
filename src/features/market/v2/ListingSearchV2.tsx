@@ -42,6 +42,9 @@ import { ListingSkeleton } from "../../../components/skeletons";
 import { ListingPagination } from "../components/listings/ListingPagination";
 import { EmptyListings } from "../../../components/empty-states";
 import { useMarketSidebarExp } from "../hooks/MarketSidebar";
+import { ViewModeToggle, type ViewMode } from "../../../hooks/market/useViewMode";
+import { useViewMode } from "../../../hooks/market/useViewMode";
+import { ListingTableV2 } from "./components/ListingTableV2";
 import { useDrawerOpen } from "../../../hooks/layout/Drawer";
 import { BottomSheet } from "../../../components/mobile/BottomSheet";
 import { useMarketSidebar } from "../hooks/MarketSidebar";
@@ -70,6 +73,7 @@ export function ListingSearchV2() {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const marketSidebarOpen = useMarketSidebarExp();
   const [drawerOpen] = useDrawerOpen();
+  const [viewMode, setViewMode] = useViewMode();
 
   // Read filter state from URL params
   const [searchParams, setSearchParams] = useSearchParams();
@@ -173,7 +177,7 @@ export function ListingSearchV2() {
   return (
     <>
       {/* Mobile/Tablet: Use bottom sheet for filters */}
-      {showMobileSidebar && <MarketSidebarV2 />}
+      {showMobileSidebar && <MarketSidebarV2 viewMode={viewMode} onViewModeChange={setViewMode} />}
 
       <Container maxWidth={"xxxl"} sx={{ padding: 0, px: { xs: 0, sm: 2 } }}>
         <Box sx={{ display: "flex", justifyContent: "center" }}>
@@ -194,15 +198,19 @@ export function ListingSearchV2() {
                   mode="market" placeholder="Search items, categories..." />
               </Grid>
               <Grid item xs={12} sx={{ px: { xs: 0 } }}>
-                <ListingGrid
-                  listings={listings}
-                  loading={isLoading || isFetching}
-                  error={!!error}
-                  onRetry={refetch}
-                  gridBreakpoints={gridBreakpoints}
-                  marketSidebarOpen={marketSidebarOpen}
-                  ref={ref}
-                />
+                {viewMode === "list" ? (
+                  <ListingTableV2 listings={listings} />
+                ) : (
+                  <ListingGrid
+                    listings={listings}
+                    loading={isLoading || isFetching}
+                    error={!!error}
+                    onRetry={refetch}
+                    gridBreakpoints={gridBreakpoints}
+                    marketSidebarOpen={marketSidebarOpen}
+                    ref={ref}
+                  />
+                )}
               </Grid>
 
               <Grid item xs={12}>
@@ -238,7 +246,7 @@ export function ListingSearchV2() {
                   overflowY: "auto",
                 }}
               >
-                <MarketSearchAreaV2 />
+                <MarketSearchAreaV2 viewMode={viewMode} onViewModeChange={setViewMode} />
               </Paper>
 
               {/* Main content area – minWidth: 0 so flex child can shrink and grid gets full width */}
@@ -253,15 +261,19 @@ export function ListingSearchV2() {
                 </Box>
                 <Grid container spacing={1}>
                   <Grid item xs={12} sx={{ px: 0 }}>
-                    <ListingGrid
-                      listings={listings}
-                      loading={isLoading || isFetching}
-                      error={!!error}
-                      onRetry={refetch}
-                      gridBreakpoints={gridBreakpoints}
-                      marketSidebarOpen={marketSidebarOpen}
-                      ref={ref}
-                    />
+                    {viewMode === "list" ? (
+                      <ListingTableV2 listings={listings} />
+                    ) : (
+                      <ListingGrid
+                        listings={listings}
+                        loading={isLoading || isFetching}
+                        error={!!error}
+                        onRetry={refetch}
+                        gridBreakpoints={gridBreakpoints}
+                        marketSidebarOpen={marketSidebarOpen}
+                        ref={ref}
+                      />
+                    )}
                   </Grid>
 
                   <Grid item xs={12}>
@@ -293,7 +305,7 @@ export function ListingSearchV2() {
  * Simplified version of V1 MarketSearchArea with V2-specific filters.
  * Maintains visual parity with V1 styling.
  */
-export function MarketSearchAreaV2({ manageMode }: { manageMode?: boolean } = {}) {
+export function MarketSearchAreaV2({ manageMode, viewMode: listViewMode, onViewModeChange }: { manageMode?: boolean; viewMode?: ViewMode; onViewModeChange?: (m: ViewMode) => void } = {}) {
   const theme = useTheme<ExtendedTheme>();
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -398,6 +410,12 @@ export function MarketSearchAreaV2({ manageMode }: { manageMode?: boolean } = {}
               <ToggleButton value="bulk">{t('market.bulk', 'Bulk')}</ToggleButton>
               <ToggleButton value="buyorders">{t('market.buyOrders', 'Buy Orders')}</ToggleButton>
             </ToggleButtonGroup>
+          </Grid>
+        )}
+
+        {listViewMode && onViewModeChange && (
+          <Grid item xs={12} sx={{ display: "flex", justifyContent: "flex-end" }}>
+            <ViewModeToggle mode={listViewMode} onChange={onViewModeChange} />
           </Grid>
         )}
 
@@ -595,7 +613,7 @@ export function MarketSearchAreaV2({ manageMode }: { manageMode?: boolean } = {}
 /**
  * MarketSidebarV2 - V2 mobile sidebar with bottom sheet
  */
-export function MarketSidebarV2() {
+export function MarketSidebarV2({ viewMode, onViewModeChange }: { viewMode?: ViewMode; onViewModeChange?: (m: ViewMode) => void } = {}) {
   const [open, setOpen] = useMarketSidebar();
   const theme = useTheme<ExtendedTheme>();
   const { t } = useTranslation();
@@ -609,7 +627,7 @@ export function MarketSidebarV2() {
         snapPoints={["half", "75", "full"]}
         defaultSnap="75"
       >
-        <MarketSearchAreaV2 />
+        <MarketSearchAreaV2 viewMode={viewMode} onViewModeChange={onViewModeChange} />
       </BottomSheet>
     </>
   );

@@ -30,6 +30,8 @@ import { ListingPagination } from "../components/listings/ListingPagination"
 import { ListingSkeleton } from "../../../components/skeletons"
 import { EmptyListings } from "../../../components/empty-states/EmptyListings"
 import { FALLBACK_IMAGE_URL } from "../../../util/constants"
+import { useViewMode } from "../../../hooks/market/useViewMode"
+import { BuyOrdersTableV2 } from "./components/BuyOrdersTableV2"
 
 /**
  * BuyOrdersViewV2 — V2 buy orders browse page.
@@ -43,6 +45,7 @@ export function BuyOrdersViewV2() {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const marketSidebarOpen = useMarketSidebarExp()
+  const [viewMode, setViewMode] = useViewMode()
   const showMobileSidebar = useMediaQuery(theme.breakpoints.down("lg"))
 
   const [page, setPage] = useState(0)
@@ -121,7 +124,13 @@ export function BuyOrdersViewV2() {
                 />
               </Grid>
             )
-            : aggregates.map((agg, index) => (
+            : viewMode === "list"
+              ? (
+                <Grid item xs={12}>
+                  <BuyOrdersTableV2 aggregates={aggregates} />
+                </Grid>
+              )
+              : aggregates.map((agg, index) => (
               <Grid item {...gridBreakpoints} key={agg.item_id}>
                 <BuyOrderAggregateCard aggregate={agg} index={index} />
               </Grid>
@@ -140,7 +149,7 @@ export function BuyOrdersViewV2() {
 
   return (
     <>
-      {showMobileSidebar && <MarketSidebarV2 />}
+      {showMobileSidebar && <MarketSidebarV2 viewMode={viewMode} onViewModeChange={setViewMode} />}
 
       <Container maxWidth={"xxxl"} sx={{ padding: 0 }}>
         <Box sx={{ display: "flex", justifyContent: "center" }}>
@@ -176,7 +185,7 @@ export function BuyOrdersViewV2() {
                   overflowY: "auto",
                 }}
               >
-                <MarketSearchAreaV2 />
+                <MarketSearchAreaV2 viewMode={viewMode} onViewModeChange={setViewMode} />
               </Paper>
               <Box sx={{ flex: 1, minWidth: 0 }}>
                 {cardGrid}
