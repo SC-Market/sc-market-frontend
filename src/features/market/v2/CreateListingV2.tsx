@@ -31,7 +31,7 @@ import { getQualityMode } from "../../../util/qualityMode";
 import { SelectPhotosArea } from "../../../components/modal/SelectPhotosArea";
 import { LocationSelector } from "../components/stock/LocationSelector";
 import { BulkDiscountTierEditor } from "../../../components/market/BulkDiscountTierEditor";
-import { useCreateListingMutation } from "../../../store/api/v2/market";
+import { useCreateListingMutation, useUploadPhotosMutation } from "../../../store/api/v2/market";
 import { useAlertHook } from "../../../hooks/alert/AlertHook";
 import { useGetUserProfileQuery } from "../../profile/api/profileApi";
 import { useCurrentOrg } from "../../../hooks/login/CurrentOrg";
@@ -124,6 +124,7 @@ export function CreateListingV2() {
 
   // RTK Query mutation
   const [createListing, { isLoading }] = useCreateListingMutation();
+  const [uploadPhotos] = useUploadPhotosMutation();
 
   // Add new stock lot
   const handleAddStockLot = useCallback(() => {
@@ -289,6 +290,18 @@ export function CreateListingV2() {
 
       try {
         const result = await createListing({ createListingRequest: request }).unwrap();
+
+        // Upload photos if any files were selected
+        if (uploadedFiles.length > 0) {
+          try {
+            await uploadPhotos({ id: result.listing_id, photos: uploadedFiles }).unwrap();
+          } catch {
+            issueAlert({
+              message: t("CreateListingV2.photoUploadError", "Listing created but photo upload failed"),
+              severity: "warning",
+            });
+          }
+        }
 
         issueAlert({
           message: t("CreateListingV2.success", "Listing created successfully"),

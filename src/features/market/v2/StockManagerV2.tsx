@@ -101,23 +101,38 @@ const StockSelectionContext = createContext<
   [GridRowSelectionModel, React.Dispatch<React.SetStateAction<GridRowSelectionModel>>] | null
 >(null)
 
-/* ── Toolbar (mirrors V1 ItemStockToolbar) ── */
+/* ── Toolbar props ── */
 
-function StockToolbarV2({
-  listings,
-  setNewRows,
-  setRowModesModel,
-  isMobile,
-  onAddQuickListing,
-}: {
+interface StockToolbarProps {
   listings: MyListingItem[]
   setNewRows: React.Dispatch<React.SetStateAction<NewListingRowV2[]>>
   setRowModesModel: React.Dispatch<React.SetStateAction<GridRowModesModel>>
   isMobile: boolean
   onAddQuickListing?: () => void
-}) {
+}
+
+declare module "@mui/x-data-grid" {
+  interface ToolbarPropsOverrides {
+    listings: MyListingItem[]
+    setNewRows: React.Dispatch<React.SetStateAction<NewListingRowV2[]>>
+    setRowModesModel: React.Dispatch<React.SetStateAction<GridRowModesModel>>
+    isMobile: boolean
+    onAddQuickListing?: () => void
+  }
+}
+
+/* ── Toolbar (mirrors V1 ItemStockToolbar) ── */
+
+function StockToolbarV2(props: StockToolbarProps) {
+  const {
+    listings,
+    setNewRows,
+    setRowModesModel,
+    isMobile,
+    onAddQuickListing,
+  } = props
   const ctx = useContext(StockSelectionContext)
-  if (!ctx) return null
+  if (!ctx) return <></>
   const [selectionModel] = ctx
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
@@ -876,14 +891,15 @@ function DisplayStockV2({
         onRowModesModelChange={setRowModesModel}
         initialState={{ sorting: { sortModel: [{ field: "title", sort: "asc" }] } }}
         slots={{
-          toolbar: () => (
-            <StockToolbarV2
-              listings={listings}
-              setNewRows={setNewRows}
-              setRowModesModel={setRowModesModel}
-              isMobile={false}
-            />
-          ),
+          toolbar: StockToolbarV2,
+        }}
+        slotProps={{
+          toolbar: {
+            listings,
+            setNewRows,
+            setRowModesModel,
+            isMobile: false,
+          },
         }}
         showToolbar
         paginationMode="server"
