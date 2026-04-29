@@ -156,7 +156,7 @@ export function ListingDetailV2() {
       headerTitle={listing?.title}
       breadcrumbs={breadcrumbs}
       isLoading={isLoading}
-      error={error ? "not_found" : undefined}
+      error={error}
       sidebarOpen={true}
       maxWidth="xl"
     >

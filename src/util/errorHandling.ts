@@ -9,7 +9,7 @@ import { SerializedError } from "@reduxjs/toolkit"
 export function shouldRedirectTo404(
   error: FetchBaseQueryError | SerializedError | undefined,
 ): boolean {
-  if (!error) return false
+  if (!error || typeof error !== "object") return false
 
   // Check if it's a FetchBaseQueryError with status
   if ("status" in error) {
@@ -28,6 +28,7 @@ export function shouldShowErrorPage(
   error: FetchBaseQueryError | SerializedError | undefined,
 ): boolean {
   if (!error) return false
+  if (typeof error !== "object") return true
 
   // Check if it's a FetchBaseQueryError with status
   if ("status" in error) {
