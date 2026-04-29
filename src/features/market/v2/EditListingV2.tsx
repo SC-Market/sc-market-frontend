@@ -292,7 +292,8 @@ export function EditListingV2() {
         !request.description &&
         !request.base_price &&
         !request.variant_prices &&
-        !request.lot_updates
+        !request.lot_updates &&
+        uploadedFiles.length === 0
       ) {
         issueAlert({
           message: t("EditListingV2.noChanges", "No changes to save"),
@@ -302,10 +303,14 @@ export function EditListingV2() {
       }
 
       try {
-        await updateListing({
-          id: id!,
-          updateListingRequest: request,
-        }).unwrap();
+        const hasFieldChanges = !!(request.title || request.description || request.base_price || request.variant_prices || request.lot_updates)
+
+        if (hasFieldChanges) {
+          await updateListing({
+            id: id!,
+            updateListingRequest: request,
+          }).unwrap();
+        }
 
         // Upload new photos if any files were selected
         if (uploadedFiles.length > 0) {
