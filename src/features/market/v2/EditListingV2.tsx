@@ -34,9 +34,11 @@ import {
   useGetListingDetailQuery,
   useGetStockLotsQuery,
   useUpdateListingMutation,
+  useUploadPhotosMutation,
 } from "../../../store/api/v2/market";
 import { useAlertHook } from "../../../hooks/alert/AlertHook";
 import { PriceComparisonAlert } from "../components/PriceComparisonAlert";
+import { SelectPhotosArea } from "../../../components/modal/SelectPhotosArea";
 import type {
   UpdateListingRequest,
   VariantPriceUpdate,
@@ -101,6 +103,11 @@ export function EditListingV2() {
 
   // RTK Query mutation
   const [updateListing, { isLoading: isUpdating }] = useUpdateListingMutation();
+  const [uploadPhotos] = useUploadPhotosMutation();
+
+  // Photo state
+  const [photos, setPhotos] = useState<string[]>([]);
+  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
 
   // Check if listing can be edited
   const canEdit = useMemo(() => {
@@ -116,6 +123,7 @@ export function EditListingV2() {
     setTitle(listingData.listing.title);
     setDescription(listingData.listing.description || "");
     setPickupMethod(listingData.listing.pickup_method || "");
+    setPhotos(listingData.listing.photos || []);
 
     // Get first item (assuming single item listings for now)
     const firstItem = listingData.items[0];
@@ -298,6 +306,18 @@ export function EditListingV2() {
           id: id!,
           updateListingRequest: request,
         }).unwrap();
+
+        // Upload new photos if any files were selected
+        if (uploadedFiles.length > 0) {
+          try {
+            await uploadPhotos({ id: id!, photos: uploadedFiles }).unwrap();
+          } catch {
+            issueAlert({
+              message: t("EditListingV2.photoUploadError", "Listing updated but photo upload failed"),
+              severity: "warning",
+            });
+          }
+        }
 
         issueAlert({
           message: t("EditListingV2.success", "Listing updated successfully"),
@@ -503,6 +523,23 @@ export function EditListingV2() {
                   disabled: !canEdit,
                 }}
                 variant="vertical"
+              />
+            </Grid>
+          </FormPaper>
+
+          {/* Photos */}
+          <FormPaper title={t("EditListingV2.photos", "Photos")}>
+            <Grid item xs={12}>
+              <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
+                {t("EditListingV2.imageSizeLimit", "(Max 2.5MB per image)")}
+              </Typography>
+              <SelectPhotosArea
+                setPhotos={setPhotos}
+                photos={photos}
+                onFileUpload={(files: File[]) => setUploadedFiles((prev) => [...prev, ...files])}
+                pendingFiles={uploadedFiles}
+                onRemovePendingFile={(file: File) => setUploadedFiles((prev) => prev.filter((f) => f !== file))}
+                onAlert={(severity: "warning" | "error", message: string) => issueAlert({ severity, message })}
               />
             </Grid>
           </FormPaper>
