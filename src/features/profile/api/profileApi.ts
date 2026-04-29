@@ -13,6 +13,7 @@ import type { DiscordSettings, OrderWebhook } from "../../contractor/domain/type
 import { unwrapResponse } from "../../../store/api-utils"
 import { Language } from "../../../constants/languages"
 import { createOptimisticUpdate } from "../../../util/optimisticUpdates"
+import { saveProfileCache, clearProfileCache } from "../profileCache"
 
 export type { SerializedError, BlocklistEntry } from "../domain/types"
 
@@ -37,6 +38,7 @@ export const userApi = serviceApi.injectEndpoints({
         try {
           await queryFulfilled
           // Clear all RTK Query cache
+          clearProfileCache()
           dispatch(serviceApi.util.resetApiState())
           // Invalidate all authentication-related tags
           dispatch(
@@ -53,6 +55,7 @@ export const userApi = serviceApi.injectEndpoints({
           )
         } catch {
           // Even if logout fails, clear cache (session might be destroyed anyway)
+          clearProfileCache()
           dispatch(serviceApi.util.resetApiState())
         }
       },
@@ -69,6 +72,17 @@ export const userApi = serviceApi.injectEndpoints({
         { type: "MyProfile" as const },
         "MyProfile" as const,
       ],
+      async onQueryStarted(_, { queryFulfilled }) {
+        try {
+          const { data } = await queryFulfilled
+          saveProfileCache(data)
+        } catch (err: unknown) {
+          const status = (err as { error?: { status?: number } })?.error?.status
+          if (status === 401 || status === 403) {
+            clearProfileCache()
+          }
+        }
+      },
     }),
     profileGetDiscordSettings: builder.query<DiscordSettings, void>({
       query: () => `${baseUrl}/settings/discord`,
