@@ -1,16 +1,23 @@
 import React from "react"
-import { Link } from "react-router-dom"
+import { Link as RouterLink } from "react-router-dom"
 import {
   Avatar,
+  Link as MuiLink,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
 } from "@mui/material"
-import { GameItemAggregate } from "../../../../store/api/v2/market"
+import type { GameItemAggregate } from "../../../../store/api/v2/market"
 import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
+
+function formatPrice(min: number, max: number) {
+  if (min === max) return `${min.toLocaleString()} aUEC`
+  return `${min.toLocaleString()} – ${max.toLocaleString()} aUEC`
+}
 
 export function BulkItemsTableV2({ items }: { items: GameItemAggregate[] }) {
   return (
@@ -18,36 +25,42 @@ export function BulkItemsTableV2({ items }: { items: GameItemAggregate[] }) {
       <Table size="small">
         <TableHead>
           <TableRow>
-            <TableCell>Image</TableCell>
+            <TableCell />
             <TableCell>Name</TableCell>
             <TableCell>Type</TableCell>
             <TableCell>Price Range</TableCell>
-            <TableCell>Available</TableCell>
-            <TableCell>Sellers</TableCell>
+            <TableCell align="right">Available</TableCell>
+            <TableCell align="right">Sellers</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {items.map((item) => (
-            <TableRow key={item.game_item_id}>
-              <TableCell padding="none" sx={{ pl: 2 }}>
+            <TableRow key={item.game_item_id} hover>
+              <TableCell padding="none" sx={{ width: 40, pl: 1 }}>
                 <Avatar
                   src={item.image_url || FALLBACK_IMAGE_URL}
-                  alt={item.name}
                   sx={{ width: 40, height: 40 }}
+                  variant="rounded"
+                  imgProps={{ loading: "lazy" }}
                 />
               </TableCell>
               <TableCell>
-                <Link to={`/market/aggregate/${item.game_item_id}`}>
+                <MuiLink component={RouterLink} to={`/market/aggregate/${item.game_item_id}`} underline="hover" color="text.primary" fontWeight="bold" variant="body2">
                   {item.name}
-                </Link>
+                </MuiLink>
               </TableCell>
-              <TableCell>{item.type}</TableCell>
               <TableCell>
-                {item.min_price.toLocaleString()} -{" "}
-                {item.max_price.toLocaleString()} aUEC
+                <Typography variant="caption" color="text.secondary">{item.type}</Typography>
               </TableCell>
-              <TableCell>{item.total_quantity.toLocaleString()}</TableCell>
-              <TableCell>{item.seller_count}</TableCell>
+              <TableCell sx={{ whiteSpace: "nowrap" }}>
+                <Typography variant="body2" color="primary" fontWeight="bold">{formatPrice(item.min_price, item.max_price)}</Typography>
+              </TableCell>
+              <TableCell align="right">
+                <Typography variant="body2">{item.total_quantity.toLocaleString()}</Typography>
+              </TableCell>
+              <TableCell align="right">
+                <Typography variant="body2">{item.seller_count}</Typography>
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

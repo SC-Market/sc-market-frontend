@@ -30,7 +30,7 @@ import { ListingPagination } from "../components/listings/ListingPagination"
 import { ListingSkeleton } from "../../../components/skeletons"
 import { EmptyListings } from "../../../components/empty-states/EmptyListings"
 import { FALLBACK_IMAGE_URL } from "../../../util/constants"
-import { useViewMode } from "../../../hooks/market/useViewMode"
+import { useViewMode, ViewModeToggle } from "../../../hooks/market/useViewMode"
 import { BuyOrdersTableV2 } from "./components/BuyOrdersTableV2"
 
 /**
@@ -149,7 +149,7 @@ export function BuyOrdersViewV2() {
 
   return (
     <>
-      {showMobileSidebar && <MarketSidebarV2 viewMode={viewMode} onViewModeChange={setViewMode} />}
+      {showMobileSidebar && <MarketSidebarV2 />}
 
       <Container maxWidth={"xxxl"} sx={{ padding: 0 }}>
         <Box sx={{ display: "flex", justifyContent: "center" }}>
@@ -162,6 +162,11 @@ export function BuyOrdersViewV2() {
               </Grid>
               <Grid item xs={12}>
                 <Divider light />
+              </Grid>
+              <Grid item xs={12}>
+                <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                  <ViewModeToggle mode={viewMode} onChange={setViewMode} />
+                </Box>
               </Grid>
               <Grid item xs={12}>
                 {cardGrid}
@@ -185,9 +190,12 @@ export function BuyOrdersViewV2() {
                   overflowY: "auto",
                 }}
               >
-                <MarketSearchAreaV2 viewMode={viewMode} onViewModeChange={setViewMode} />
+                <MarketSearchAreaV2 />
               </Paper>
               <Box sx={{ flex: 1, minWidth: 0 }}>
+                <Box sx={{ display: "flex", justifyContent: "flex-end", mb: 1 }}>
+                  <ViewModeToggle mode={viewMode} onChange={setViewMode} />
+                </Box>
                 {cardGrid}
               </Box>
             </Stack>

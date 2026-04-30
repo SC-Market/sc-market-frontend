@@ -318,6 +318,10 @@ export function HookProvider(props: { children: React.ReactElement }) {
                       open={!!alert}
                       autoHideDuration={6000}
                       onClose={() => issueAlert(null)}
+                      sx={{
+                        // Lift above mobile bottom navigation bar (64px)
+                        bottom: { xs: 80, sm: 24 },
+                      }}
                     >
                       <Alert
                         onClose={() => issueAlert(null)}
