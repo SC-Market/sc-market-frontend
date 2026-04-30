@@ -42,8 +42,7 @@ import { ListingSkeleton } from "../../../components/skeletons";
 import { ListingPagination } from "../components/listings/ListingPagination";
 import { EmptyListings } from "../../../components/empty-states";
 import { useMarketSidebarExp } from "../hooks/MarketSidebar";
-import { ViewModeToggle, type ViewMode } from "../../../hooks/market/useViewMode";
-import { useViewMode } from "../../../hooks/market/useViewMode";
+import { ViewModeToggle, useViewMode } from "../../../hooks/market/useViewMode";
 import { ListingTableV2 } from "./components/ListingTableV2";
 import { useDrawerOpen } from "../../../hooks/layout/Drawer";
 import { BottomSheet } from "../../../components/mobile/BottomSheet";
@@ -177,7 +176,7 @@ export function ListingSearchV2() {
   return (
     <>
       {/* Mobile/Tablet: Use bottom sheet for filters */}
-      {showMobileSidebar && <MarketSidebarV2 viewMode={viewMode} onViewModeChange={setViewMode} />}
+      {showMobileSidebar && <MarketSidebarV2 />}
 
       <Container maxWidth={"xxxl"} sx={{ padding: 0, px: { xs: 0, sm: 2 } }}>
         <Box sx={{ display: "flex", justifyContent: "center" }}>
@@ -194,8 +193,13 @@ export function ListingSearchV2() {
               </Grid>
 
               <Grid item xs={12}>
-                <UnifiedSearchBar tokens={marketSearchTokens} onChange={handleMarketTokensChange}
-                  mode="market" placeholder="Search items, categories..." />
+                <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+                  <Box sx={{ flex: 1 }}>
+                    <UnifiedSearchBar tokens={marketSearchTokens} onChange={handleMarketTokensChange}
+                      mode="market" placeholder="Search items, categories..." />
+                  </Box>
+                  <ViewModeToggle mode={viewMode} onChange={setViewMode} />
+                </Box>
               </Grid>
               <Grid item xs={12} sx={{ px: { xs: 0 } }}>
                 {viewMode === "list" ? (
@@ -246,18 +250,21 @@ export function ListingSearchV2() {
                   overflowY: "auto",
                 }}
               >
-                <MarketSearchAreaV2 viewMode={viewMode} onViewModeChange={setViewMode} />
+                <MarketSearchAreaV2 />
               </Paper>
 
               {/* Main content area – minWidth: 0 so flex child can shrink and grid gets full width */}
               <Box sx={{ flex: 1, minWidth: 0 }}>
-                <Box sx={{ mb: 1.5 }}>
-                  <UnifiedSearchBar
-                    tokens={marketSearchTokens}
-                    onChange={handleMarketTokensChange}
-                    mode="market"
-                    placeholder="Search items, categories, sellers..."
-                  />
+                <Box sx={{ mb: 1.5, display: "flex", gap: 1, alignItems: "center" }}>
+                  <Box sx={{ flex: 1 }}>
+                    <UnifiedSearchBar
+                      tokens={marketSearchTokens}
+                      onChange={handleMarketTokensChange}
+                      mode="market"
+                      placeholder="Search items, categories, sellers..."
+                    />
+                  </Box>
+                  <ViewModeToggle mode={viewMode} onChange={setViewMode} />
                 </Box>
                 <Grid container spacing={1}>
                   <Grid item xs={12} sx={{ px: 0 }}>
@@ -305,7 +312,7 @@ export function ListingSearchV2() {
  * Simplified version of V1 MarketSearchArea with V2-specific filters.
  * Maintains visual parity with V1 styling.
  */
-export function MarketSearchAreaV2({ manageMode, viewMode: listViewMode, onViewModeChange }: { manageMode?: boolean; viewMode?: ViewMode; onViewModeChange?: (m: ViewMode) => void } = {}) {
+export function MarketSearchAreaV2({ manageMode }: { manageMode?: boolean } = {}) {
   const theme = useTheme<ExtendedTheme>();
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -410,12 +417,6 @@ export function MarketSearchAreaV2({ manageMode, viewMode: listViewMode, onViewM
               <ToggleButton value="bulk">{t('market.bulk', 'Bulk')}</ToggleButton>
               <ToggleButton value="buyorders">{t('market.buyOrders', 'Buy Orders')}</ToggleButton>
             </ToggleButtonGroup>
-          </Grid>
-        )}
-
-        {listViewMode && onViewModeChange && (
-          <Grid item xs={12} sx={{ display: "flex", justifyContent: "flex-end" }}>
-            <ViewModeToggle mode={listViewMode} onChange={onViewModeChange} />
           </Grid>
         )}
 
@@ -613,7 +614,7 @@ export function MarketSearchAreaV2({ manageMode, viewMode: listViewMode, onViewM
 /**
  * MarketSidebarV2 - V2 mobile sidebar with bottom sheet
  */
-export function MarketSidebarV2({ viewMode, onViewModeChange }: { viewMode?: ViewMode; onViewModeChange?: (m: ViewMode) => void } = {}) {
+export function MarketSidebarV2() {
   const [open, setOpen] = useMarketSidebar();
   const theme = useTheme<ExtendedTheme>();
   const { t } = useTranslation();
@@ -627,7 +628,7 @@ export function MarketSidebarV2({ viewMode, onViewModeChange }: { viewMode?: Vie
         snapPoints={["half", "75", "full"]}
         defaultSnap="75"
       >
-        <MarketSearchAreaV2 viewMode={viewMode} onViewModeChange={onViewModeChange} />
+        <MarketSearchAreaV2 />
       </BottomSheet>
     </>
   );
