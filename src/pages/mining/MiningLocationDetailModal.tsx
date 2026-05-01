@@ -109,7 +109,7 @@ export function MiningLocationDetailModal({ locationName, open, onClose }: Props
 
 function MiningGroupSection({ group }: { group: LocationMiningGroup }) {
   return (
-    <Section title={<Box component="span">{groupIcon(group.groupName)}{groupLabel(group.groupName)} (Weight: {group.groupProbability})</Box>}>
+    <Section element_title={<Box component="span">{groupIcon(group.groupName)}{groupLabel(group.groupName)} (Weight: {group.groupProbability})</Box>}>
       <TableContainer>
         <Table size="small">
           <TableHead>
