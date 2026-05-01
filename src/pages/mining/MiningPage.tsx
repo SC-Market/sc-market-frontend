@@ -3,6 +3,7 @@ import { Grid, Tab, Tabs } from "@mui/material"
 import { useSearchParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
+import { VersionSelector } from "../../components/game-data/VersionSelector"
 import { MiningOreBrowser } from "./MiningOreBrowser"
 import { MiningLocationBrowser } from "./MiningLocationBrowser"
 
@@ -23,6 +24,7 @@ export function MiningPage() {
     <StandardPageLayout
       title={t("mining.title", "Mining Database")}
       headerTitle={t("mining.title", "Mining Database")}
+      headerActions={<VersionSelector compact width={220} />}
       sidebarOpen={true}
       maxWidth="xl"
     >
