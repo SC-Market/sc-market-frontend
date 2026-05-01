@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import {
   Grid,
   TextField,
@@ -14,9 +14,10 @@ import {
   CardActionArea,
   CardContent,
   Chip,
+  useMediaQuery,
 } from "@mui/material"
 import { Search } from "@mui/icons-material"
-import { useSearchParams } from "react-router-dom"
+import { useSearchParams, useNavigate, useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -43,6 +44,9 @@ const microChip = { height: 20, fontSize: "0.7rem", fontWeight: "bold" }
 export function MiningOreBrowser() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
+  const isMobile = useMediaQuery(theme.breakpoints.down("lg"))
+  const navigate = useNavigate()
+  const urlParams = useParams<{ name?: string }>()
   const [searchParams, setSearchParams] = useSearchParams()
 
   const searchText = searchParams.get("q") || ""
@@ -61,6 +65,22 @@ export function MiningOreBrowser() {
 
   const debouncedSearch = useDebounce(searchText, 300)
   const [selectedOre, setSelectedOre] = useState<string | null>(null)
+
+  // Auto-open modal from URL on desktop
+  useEffect(() => {
+    if (urlParams.name && !isMobile) setSelectedOre(urlParams.name)
+  }, [urlParams.name, isMobile])
+
+  const handleOreClick = (oreName: string) => {
+    const qs = searchParams.toString()
+    navigate(`/mining/ores/${oreName}${qs ? `?${qs}` : ""}`)
+    if (!isMobile) setSelectedOre(oreName)
+  }
+
+  const handleModalClose = () => {
+    setSelectedOre(null)
+    navigate(`/mining?${searchParams.toString()}`, { replace: true })
+  }
 
   const { data, isLoading, error } = useSearchOresQuery({
     text: debouncedSearch || undefined,
@@ -128,7 +148,7 @@ export function MiningOreBrowser() {
             <Grid container spacing={theme.layoutSpacing?.layout ?? 2}>
               {data.ores.map((ore) => (
                 <Grid item xs={12} sm={6} md={4} lg={3} key={ore.name}>
-                  <OreCard ore={ore} onClick={() => setSelectedOre(ore.name)} />
+                  <OreCard ore={ore} onClick={() => handleOreClick(ore.name)} />
                 </Grid>
               ))}
             </Grid>
@@ -153,7 +173,7 @@ export function MiningOreBrowser() {
       <MiningOreDetailModal
         oreName={selectedOre}
         open={!!selectedOre}
-        onClose={() => setSelectedOre(null)}
+        onClose={handleModalClose}
       />
     </>
   )
