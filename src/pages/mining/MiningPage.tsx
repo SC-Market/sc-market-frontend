@@ -29,7 +29,7 @@ export function MiningPage() {
       maxWidth="xl"
     >
       <Grid item xs={12}>
-        <Tabs value={tab} onChange={handleTabChange} sx={{ mb: 2 }}>
+        <Tabs value={tab} onChange={handleTabChange} sx={{ mb: 2 }} variant="fullWidth">
           <Tab label={t("mining.ores", "Ores")} value="ores" />
           <Tab label={t("mining.locations", "Locations")} value="locations" />
         </Tabs>
