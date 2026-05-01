@@ -1,13 +1,9 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useMemo } from "react"
 import {
   Grid,
-  TextField,
-  MenuItem,
   Pagination,
-  CircularProgress,
   Alert,
   Box,
-  InputAdornment,
   Typography,
   Stack,
   Card,
@@ -16,15 +12,14 @@ import {
   Chip,
   useMediaQuery,
 } from "@mui/material"
-import { Search } from "@mui/icons-material"
 import { useSearchParams, useNavigate, useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { FilterSidebarLayout } from "../../components/layout/FilterSidebarLayout"
 import { useSearchOresQuery, type OreSearchResult } from "../../store/api/v2/market"
-import { useDebounce } from "../../hooks/useDebounce"
 import { MiningOreDetailModal } from "./MiningOreDetailModal"
+import { UnifiedSearchBar, miningTokensToParams, miningParamsToTokens, type SearchToken } from "../../components/game-data/UnifiedSearchBar"
+import { CardGridSkeleton } from "../../components/game-data/GameDataSkeletons"
 
 const RARITY_COLORS: Record<string, string> = {
   common: "#9e9e9e",
@@ -49,22 +44,23 @@ export function MiningOreBrowser() {
   const urlParams = useParams<{ name?: string }>()
   const [searchParams, setSearchParams] = useSearchParams()
 
-  const searchText = searchParams.get("q") || ""
-  const system = searchParams.get("system") || ""
-  const method = searchParams.get("mining_method") || ""
-  const rarity = searchParams.get("rarity") || ""
   const page = parseInt(searchParams.get("page") || "1") || 1
+  const [selectedOre, setSelectedOre] = useState<string | null>(null)
 
-  const updateParam = (key: string, value: string) => {
-    const params = new URLSearchParams(searchParams)
-    if (value) params.set(key, value)
-    else params.delete(key)
-    if (key !== "page") params.delete("page")
+  const searchTokens = useMemo(() => miningParamsToTokens(searchParams), [searchParams])
+  const queryParams = useMemo(() => miningTokensToParams(searchTokens), [searchTokens])
+
+  const handleTokensChange = (tokens: SearchToken[]) => {
+    const params = new URLSearchParams(miningTokensToParams(tokens))
+    params.set("tab", searchParams.get("tab") || "ores")
     setSearchParams(params, { replace: true })
   }
 
-  const debouncedSearch = useDebounce(searchText, 300)
-  const [selectedOre, setSelectedOre] = useState<string | null>(null)
+  const handlePageChange = (_: unknown, p: number) => {
+    const params = new URLSearchParams(searchParams)
+    params.set("page", String(p))
+    setSearchParams(params, { replace: true })
+  }
 
   // Auto-open modal from URL on desktop
   useEffect(() => {
@@ -83,65 +79,31 @@ export function MiningOreBrowser() {
   }
 
   const { data, isLoading, error } = useSearchOresQuery({
-    text: debouncedSearch || undefined,
-    system: system || undefined,
-    miningMethod: (method as any) || undefined,
-    rarity: (rarity as any) || undefined,
+    text: queryParams.q || undefined,
+    system: queryParams.system || undefined,
+    miningMethod: (queryParams.mining_method as any) || undefined,
+    rarity: (queryParams.rarity as any) || undefined,
     page,
     pageSize: PAGE_SIZE,
   })
 
-  const filtersContent = (
-    <Stack spacing={1.5}>
-      <TextField
-        fullWidth size="small"
-        placeholder={t("mining.searchOres", "Search ores...")}
-        value={searchText}
-        onChange={(e) => updateParam("q", e.target.value)}
-        InputProps={{ startAdornment: <InputAdornment position="start"><Search /></InputAdornment> }}
-      />
-      <TextField
-        select fullWidth size="small"
-        label={t("mining.system", "System")}
-        value={system}
-        onChange={(e) => updateParam("system", e.target.value)}
-      >
-        <MenuItem value="">All</MenuItem>
-        <MenuItem value="stanton">Stanton</MenuItem>
-        <MenuItem value="pyro">Pyro</MenuItem>
-        <MenuItem value="nyx">Nyx</MenuItem>
-      </TextField>
-      <TextField
-        select fullWidth size="small"
-        label={t("mining.method", "Mining Method")}
-        value={method}
-        onChange={(e) => updateParam("mining_method", e.target.value)}
-      >
-        <MenuItem value="">All</MenuItem>
-        <MenuItem value="ship">Ship</MenuItem>
-        <MenuItem value="ground">Ground Vehicle</MenuItem>
-        <MenuItem value="fps">FPS (Hand)</MenuItem>
-      </TextField>
-      <TextField
-        select fullWidth size="small"
-        label={t("mining.rarity", "Rarity")}
-        value={rarity}
-        onChange={(e) => updateParam("rarity", e.target.value)}
-      >
-        <MenuItem value="">All</MenuItem>
-        {["common", "uncommon", "rare", "epic", "legendary"].map((r) => (
-          <MenuItem key={r} value={r}>{r.charAt(0).toUpperCase() + r.slice(1)}</MenuItem>
-        ))}
-      </TextField>
-    </Stack>
-  )
-
   return (
     <>
-      <FilterSidebarLayout filters={filtersContent} filterTitle={t("mining.filters", "Filters")}>
-        {isLoading && (
-          <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}><CircularProgress /></Box>
+      <Box sx={{ display: "flex", gap: 1, alignItems: "center", mb: 2 }}>
+        <UnifiedSearchBar
+          tokens={searchTokens}
+          onChange={handleTokensChange}
+          mode="mining"
+          placeholder="Search ores, systems, rarity..."
+        />
+        {data && (
+          <Typography variant="body2" color="text.secondary" sx={{ whiteSpace: "nowrap" }}>
+            {data.total}
+          </Typography>
         )}
+      </Box>
+
+      {isLoading && <CardGridSkeleton />}
         {error && <Alert severity="error">{t("mining.error", "Failed to load ores.")}</Alert>}
         {data && (
           <>
@@ -162,14 +124,13 @@ export function MiningOreBrowser() {
                 <Pagination
                   count={Math.ceil(data.total / PAGE_SIZE)}
                   page={page}
-                  onChange={(_, p) => updateParam("page", String(p))}
+                  onChange={handlePageChange}
                   color="primary"
                 />
               </Box>
             )}
           </>
         )}
-      </FilterSidebarLayout>
       <MiningOreDetailModal
         oreName={selectedOre}
         open={!!selectedOre}
