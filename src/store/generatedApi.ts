@@ -41,12 +41,20 @@ const baseQueryWithRetry = retry(
     if (result.error?.status === 401) {
       retry.fail(result.error)
     }
+    // Don't retry other 4xx errors (except 429)
+    if (
+      result.error &&
+      typeof result.error.status === "number" &&
+      result.error.status >= 400 &&
+      result.error.status < 500 &&
+      result.error.status !== 429
+    ) {
+      retry.fail(result.error)
+    }
     return result
   },
   {
     maxRetries: 3,
-    backoff: (attempt) =>
-      new Promise((resolve) => setTimeout(resolve, Math.min(1000 * 2 ** attempt, 30000))),
   },
 )
 
