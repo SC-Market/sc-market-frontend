@@ -68,14 +68,17 @@ export function MiningOreBrowser() {
   }, [urlParams.name, isMobile])
 
   const handleOreClick = (oreName: string) => {
-    setSelectedOre(oreName)
-    const qs = searchParams.toString()
-    window.history.replaceState(null, "", `/mining/ores/${oreName}${qs ? `?${qs}` : ""}`)
+    if (isMobile) {
+      navigate(`/mining/ores/${oreName}`)
+    } else {
+      setSelectedOre(oreName)
+      window.history.replaceState(null, "", `/mining/ores/${oreName}`)
+    }
   }
 
   const handleModalClose = () => {
     setSelectedOre(null)
-    window.history.replaceState(null, "", `/mining?${searchParams.toString()}`)
+    navigate("/mining", { replace: true })
   }
 
   const { data, isLoading, error } = useSearchOresQuery({

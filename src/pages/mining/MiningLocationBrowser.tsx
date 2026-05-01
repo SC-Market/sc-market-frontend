@@ -78,15 +78,17 @@ export function MiningLocationBrowser() {
   }, [urlParams.name, isMobile])
 
   const handleLocationClick = (locName: string) => {
-    setSelectedLocation(locName)
-    // Update URL without navigation so the background stays intact
-    const qs = searchParams.toString()
-    window.history.replaceState(null, "", `/mining/locations/${locName}${qs ? `?${qs}` : ""}`)
+    if (isMobile) {
+      navigate(`/mining/locations/${locName}`)
+    } else {
+      setSelectedLocation(locName)
+      window.history.replaceState(null, "", `/mining/locations/${locName}`)
+    }
   }
 
   const handleModalClose = () => {
     setSelectedLocation(null)
-    window.history.replaceState(null, "", `/mining?tab=locations&${searchParams.toString()}`)
+    navigate("/mining?tab=locations", { replace: true })
   }
 
   const { data, isLoading, error } = useSearchLocationsQuery({
