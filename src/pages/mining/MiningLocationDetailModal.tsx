@@ -106,6 +106,7 @@ function MiningGroupSection({ group }: { group: LocationMiningGroup }) {
           <TableHead>
             <TableRow>
               <TableCell>Ore</TableCell>
+              <TableCell align="center">Rarity</TableCell>
               <TableCell align="right">Probability (%)</TableCell>
               <TableCell align="right">Market Price</TableCell>
               <TableCell align="right">Est. Value</TableCell>
@@ -114,20 +115,31 @@ function MiningGroupSection({ group }: { group: LocationMiningGroup }) {
           <TableBody>
             {[...(group.ores || [])]
               .sort((a, b) => b.relativeProbability - a.relativeProbability)
-              .map((ore) => (
-                <TableRow key={ore.presetName} hover>
-                  <TableCell>
-                    {ore.resourceName ? friendlyName(ore.resourceName) : friendlyName(ore.elementName || ore.presetName)}
-                  </TableCell>
-                  <TableCell align="right">{ore.relativeProbability.toFixed(1)}</TableCell>
-                  <TableCell align="right">
-                    {ore.marketPrice != null ? `${ore.marketPrice.toLocaleString()} aUEC` : "—"}
-                  </TableCell>
-                  <TableCell align="right">
-                    {ore.estimatedValue != null ? `${ore.estimatedValue.toLocaleString()} aUEC` : "—"}
-                  </TableCell>
-                </TableRow>
-              ))}
+              .map((ore) => {
+                const name = ore.displayName || (ore.resourceName ? friendlyName(ore.resourceName) : friendlyName(ore.elementName || ore.presetName))
+                const rarity = ore.rarity || "common"
+                return (
+                  <TableRow key={ore.presetName} hover>
+                    <TableCell>
+                      <Typography variant="body2" fontWeight={600}>{name}</Typography>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Chip
+                        label={rarity.charAt(0).toUpperCase() + rarity.slice(1)}
+                        size="small"
+                        sx={{ bgcolor: (RARITY_COLORS[rarity] || "#9e9e9e") + "22", color: RARITY_COLORS[rarity] || "#9e9e9e", fontWeight: 600, height: 20, fontSize: "0.7rem" }}
+                      />
+                    </TableCell>
+                    <TableCell align="right">{ore.relativeProbability.toFixed(1)}</TableCell>
+                    <TableCell align="right">
+                      {ore.marketPrice != null ? `${ore.marketPrice.toLocaleString()} aUEC` : "—"}
+                    </TableCell>
+                    <TableCell align="right">
+                      {ore.estimatedValue != null ? `${ore.estimatedValue.toLocaleString()} aUEC` : "—"}
+                    </TableCell>
+                  </TableRow>
+                )
+              })}
           </TableBody>
         </Table>
       </TableContainer>
