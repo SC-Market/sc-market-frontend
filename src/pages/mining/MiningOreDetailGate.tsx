@@ -1,11 +1,12 @@
 import React from "react"
 import { useMediaQuery, useTheme } from "@mui/material"
-import { MiningOreBrowser } from "./MiningOreBrowser"
+import { MiningPage } from "./MiningPage"
 import { MiningOreDetailPage } from "./MiningOreDetailPage"
 
 export function MiningOreDetailGate() {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down("lg"))
   if (isMobile) return <MiningOreDetailPage />
-  return <MiningOreBrowser />
+  // Desktop: render the full mining page — the ore browser reads :name from URL and auto-opens modal
+  return <MiningPage />
 }
