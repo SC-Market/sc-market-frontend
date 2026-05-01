@@ -14,7 +14,6 @@ export function MiningPage() {
   const handleTabChange = (_: React.SyntheticEvent, value: string) => {
     const params = new URLSearchParams(searchParams)
     params.set("tab", value)
-    // Clear tab-specific filters when switching
     for (const key of ["rarity", "mining_method", "location_type"]) params.delete(key)
     params.delete("page")
     setSearchParams(params, { replace: true })

@@ -21,7 +21,7 @@ import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { FilterSidebarLayout } from "../../components/layout/FilterSidebarLayout"
-import { useSearchMiningOresQuery, type MiningOreSearchResult } from "../../store/api/v2/mining"
+import { useSearchOresQuery, type OreSearchResult } from "../../store/api/v2/market"
 import { useDebounce } from "../../hooks/useDebounce"
 import { MiningOreDetailModal } from "./MiningOreDetailModal"
 
@@ -33,7 +33,12 @@ const RARITY_COLORS: Record<string, string> = {
   legendary: "#ff9800",
 }
 
+function friendlyName(name: string): string {
+  return name.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
+}
+
 const PAGE_SIZE = 24
+const microChip = { height: 20, fontSize: "0.7rem", fontWeight: "bold" }
 
 export function MiningOreBrowser() {
   const { t } = useTranslation()
@@ -57,20 +62,19 @@ export function MiningOreBrowser() {
   const debouncedSearch = useDebounce(searchText, 300)
   const [selectedOre, setSelectedOre] = useState<string | null>(null)
 
-  const { data, isLoading, error } = useSearchMiningOresQuery({
+  const { data, isLoading, error } = useSearchOresQuery({
     text: debouncedSearch || undefined,
     system: system || undefined,
-    mining_method: method || undefined,
-    rarity: rarity || undefined,
+    miningMethod: (method as any) || undefined,
+    rarity: (rarity as any) || undefined,
     page,
-    page_size: PAGE_SIZE,
+    pageSize: PAGE_SIZE,
   })
 
   const filtersContent = (
     <Stack spacing={1.5}>
       <TextField
-        fullWidth
-        size="small"
+        fullWidth size="small"
         placeholder={t("mining.searchOres", "Search ores...")}
         value={searchText}
         onChange={(e) => updateParam("q", e.target.value)}
@@ -123,7 +127,7 @@ export function MiningOreBrowser() {
           <>
             <Grid container spacing={theme.layoutSpacing?.layout ?? 2}>
               {data.ores.map((ore) => (
-                <Grid item xs={12} sm={6} md={4} lg={3} key={ore.element_id}>
+                <Grid item xs={12} sm={6} md={4} lg={3} key={ore.name}>
                   <OreCard ore={ore} onClick={() => setSelectedOre(ore.name)} />
                 </Grid>
               ))}
@@ -155,44 +159,57 @@ export function MiningOreBrowser() {
   )
 }
 
-const microChip = { height: 20, fontSize: "0.7rem", fontWeight: "bold" }
+function OreCard({ ore, onClick }: { ore: OreSearchResult; onClick: () => void }) {
+  const rarityColor = RARITY_COLORS[(ore.rarity || "").toLowerCase()] || "#757575"
+  const displayName = ore.resourceName ? friendlyName(ore.resourceName) : friendlyName(ore.name)
 
-function OreCard({ ore, onClick }: { ore: MiningOreSearchResult; onClick: () => void }) {
   return (
-    <Card sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
+    <Card sx={{ height: "100%", display: "flex", flexDirection: "column", borderLeft: `3px solid ${rarityColor}` }}>
       <CardActionArea onClick={onClick} sx={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "stretch", justifyContent: "flex-start" }}>
-        <CardContent sx={{ p: 1.5 }}>
+        <CardContent sx={{ p: 1.5, pb: 0 }}>
           <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 0.5 }}>
             <Typography variant="body2" fontWeight={600} noWrap sx={{ flex: 1 }}>
-              {ore.resource_name || ore.name}
+              {displayName}
             </Typography>
             {ore.rarity && (
               <Chip
-                label={ore.rarity}
+                label={ore.rarity.charAt(0).toUpperCase() + ore.rarity.slice(1)}
                 size="small"
-                sx={{ ...microChip, bgcolor: RARITY_COLORS[ore.rarity.toLowerCase()] || "#757575", color: "#fff", ml: 0.5 }}
+                sx={{ ...microChip, bgcolor: rarityColor, color: "#fff", ml: 0.5 }}
               />
             )}
           </Box>
-          <Stack direction="row" spacing={0.5} sx={{ mb: 0.5 }}>
+          <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap sx={{ mb: 0.5 }}>
             {ore.instability != null && (
               <Chip label={`Inst: ${ore.instability.toFixed(0)}`} size="small" variant="outlined" sx={microChip} />
             )}
             {ore.resistance != null && (
               <Chip label={`Res: ${ore.resistance.toFixed(2)}`} size="small" variant="outlined" sx={microChip} />
             )}
+            {ore.explosionMultiplier != null && (
+              <Chip label={`Exp: ${ore.explosionMultiplier.toFixed(0)}`} size="small" variant="outlined" sx={microChip} />
+            )}
           </Stack>
-          {ore.market_price != null && (
-            <Typography variant="caption" color="success.main" fontWeight={600}>
-              {ore.market_price.toLocaleString()} aUEC
-            </Typography>
-          )}
-          {ore.top_locations && ore.top_locations.length > 0 && (
-            <Typography variant="caption" color="text.secondary" display="block" noWrap>
-              {ore.top_locations.slice(0, 2).map((l) => l.location_name).join(", ")}
-            </Typography>
-          )}
         </CardContent>
+        <Box sx={{ px: 1.5, pb: 1.5, pt: 0.5, mt: "auto" }}>
+          {ore.marketPrice != null && (
+            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+              <Typography variant="caption" color="text.secondary">Market Price</Typography>
+              <Typography variant="caption" color="success.main" fontWeight={600}>
+                {ore.marketPrice.toLocaleString()} aUEC
+              </Typography>
+            </Box>
+          )}
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            <Typography variant="caption" color="text.secondary">Locations</Typography>
+            <Typography variant="caption">{ore.locationCount}</Typography>
+          </Box>
+          {(ore.topLocations?.length ?? 0) > 0 && (
+            <Typography variant="caption" color="text.secondary" display="block" noWrap sx={{ mt: 0.25 }}>
+              {(ore.topLocations || []).slice(0, 2).map((l) => friendlyName(l.name)).join(", ")}
+            </Typography>
+          )}
+        </Box>
       </CardActionArea>
     </Card>
   )
