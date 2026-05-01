@@ -5983,6 +5983,47 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"OreQualityDistribution": {
+				"properties": {
+					"miningType": {
+						"type": "string"
+					},
+					"rarity": {
+						"type": "string",
+						"nullable": true
+					},
+					"min": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					},
+					"max": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					},
+					"mean": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					},
+					"stddev": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					}
+				},
+				"required": [
+					"miningType",
+					"rarity",
+					"min",
+					"max",
+					"mean",
+					"stddev"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"OreDetailResponse": {
 				"properties": {
 					"name": {
@@ -6047,6 +6088,12 @@
 							"$ref": "#/components/schemas/OreLocation"
 						},
 						"type": "array"
+					},
+					"qualityDistributions": {
+						"items": {
+							"$ref": "#/components/schemas/OreQualityDistribution"
+						},
+						"type": "array"
 					}
 				},
 				"required": [
@@ -6063,7 +6110,8 @@
 					"clusterFactor",
 					"rarity",
 					"marketPrice",
-					"locations"
+					"locations",
+					"qualityDistributions"
 				],
 				"type": "object",
 				"additionalProperties": false

@@ -94,6 +94,64 @@ export function MiningOreDetailModal({ oreName, open, onClose }: Props) {
               </Stack>
             </Section>
 
+            {(ore.qualityDistributions?.length ?? 0) > 0 && (
+              <Section title="Quality Distribution">
+                <Box sx={{ pt: 1 }}>
+                  <Typography variant="caption" color="text.secondary" display="block" sx={{ mb: 1 }}>
+                    Quality values range from 0 (lowest) to 1000 (highest). Higher quality yields better crafting results and sell prices.
+                  </Typography>
+                  {ore.qualityDistributions!.map((qd, i) => (
+                    <Box key={i} sx={{ mb: 1.5 }}>
+                      <Typography variant="caption" fontWeight={600}>{qd.miningType}</Typography>
+                      {qd.min != null && qd.max != null && (
+                        <Box sx={{ mt: 0.5 }}>
+                          <Box sx={{ display: "flex", justifyContent: "space-between", mb: 0.25 }}>
+                            <Typography variant="caption" color="text.secondary">Range</Typography>
+                            <Typography variant="caption">{qd.min} – {qd.max}</Typography>
+                          </Box>
+                          {qd.mean != null && qd.stddev != null && (
+                            <>
+                              <Box sx={{ display: "flex", justifyContent: "space-between", mb: 0.25 }}>
+                                <Typography variant="caption" color="text.secondary">Most likely</Typography>
+                                <Typography variant="caption" fontWeight={600}>
+                                  {Math.max(qd.min, Math.round(qd.mean - qd.stddev))} – {Math.min(qd.max, Math.round(qd.mean + qd.stddev))}
+                                </Typography>
+                              </Box>
+                              {/* Visual bar showing distribution */}
+                              <Box sx={{ position: "relative", height: 12, bgcolor: "action.hover", borderRadius: 1, mt: 0.5, overflow: "hidden" }}>
+                                {/* Full range background */}
+                                <Box sx={{
+                                  position: "absolute",
+                                  left: `${((Math.max(0, qd.mean - qd.stddev) - qd.min) / (qd.max - qd.min)) * 100}%`,
+                                  width: `${((2 * qd.stddev) / (qd.max - qd.min)) * 100}%`,
+                                  height: "100%",
+                                  bgcolor: "primary.main",
+                                  opacity: 0.3,
+                                  borderRadius: 1,
+                                }} />
+                                {/* Mean marker */}
+                                <Box sx={{
+                                  position: "absolute",
+                                  left: `${((qd.mean - qd.min) / (qd.max - qd.min)) * 100}%`,
+                                  width: 2,
+                                  height: "100%",
+                                  bgcolor: "primary.main",
+                                }} />
+                              </Box>
+                              <Box sx={{ display: "flex", justifyContent: "space-between", mt: 0.25 }}>
+                                <Typography variant="caption" color="text.secondary" sx={{ fontSize: "0.6rem" }}>{qd.min}</Typography>
+                                <Typography variant="caption" color="text.secondary" sx={{ fontSize: "0.6rem" }}>{qd.max}</Typography>
+                              </Box>
+                            </>
+                          )}
+                        </Box>
+                      )}
+                    </Box>
+                  ))}
+                </Box>
+              </Section>
+            )}
+
             <Section title={t("mining.locations", "Locations")}>
               <TableContainer>
                 <Table size="small">
