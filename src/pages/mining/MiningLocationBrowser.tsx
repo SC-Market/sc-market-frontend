@@ -118,7 +118,7 @@ export function MiningLocationBrowser() {
         {error && <Alert severity="error">{t("mining.error", "Failed to load locations.")}</Alert>}
         {data && (
           <>
-            <Grid container spacing={theme.layoutSpacing?.layout ?? 2}>
+            <Grid container spacing={1.5}>
               {data.locations.map((loc) => (
                 <Grid item xs={12} sm={6} md={4} lg={3} key={loc.name}>
                   <LocationCard location={loc} onClick={() => handleLocationClick(loc.name)} />
@@ -171,7 +171,7 @@ function LocationCard({ location, onClick }: { location: LocationSearchResult; o
   return (
     <Card sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
       <CardActionArea onClick={onClick} sx={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "stretch", justifyContent: "flex-start" }}>
-        <CardContent sx={{ p: 1.5, flex: 1 }}>
+        <CardContent sx={{ p: 1.5, flex: 1, "&:last-child": { pb: 1.5 } }}>
           <Typography variant="body2" fontWeight={600} noWrap>{displayName}</Typography>
           <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap sx={{ my: 0.5 }}>
             {systemDisplay && (

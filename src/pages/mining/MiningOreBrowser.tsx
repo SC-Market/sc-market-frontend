@@ -109,7 +109,7 @@ export function MiningOreBrowser() {
         {error && <Alert severity="error">{t("mining.error", "Failed to load ores.")}</Alert>}
         {data && (
           <>
-            <Grid container spacing={theme.layoutSpacing?.layout ?? 2}>
+            <Grid container spacing={1.5}>
               {data.ores.map((ore) => (
                 <Grid item xs={12} sm={6} md={4} lg={3} key={ore.name}>
                   <OreCard ore={ore} onClick={() => handleOreClick(ore.name)} />
@@ -149,7 +149,7 @@ function OreCard({ ore, onClick }: { ore: OreSearchResult; onClick: () => void }
   return (
     <Card sx={{ height: "100%", display: "flex", flexDirection: "column", borderLeft: `3px solid ${rarityColor}` }}>
       <CardActionArea onClick={onClick} sx={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "stretch", justifyContent: "flex-start" }}>
-        <CardContent sx={{ p: 1.5, pb: 0 }}>
+        <CardContent sx={{ p: 1.5, flex: 1, display: "flex", flexDirection: "column", "&:last-child": { pb: 1.5 } }}>
           <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 0.5 }}>
             <Typography variant="body2" fontWeight={600} noWrap sx={{ flex: 1 }}>
               {displayName}
@@ -173,8 +173,7 @@ function OreCard({ ore, onClick }: { ore: OreSearchResult; onClick: () => void }
               <Chip label={`Exp: ${ore.explosionMultiplier.toFixed(0)}`} size="small" variant="outlined" sx={microChip} />
             )}
           </Stack>
-        </CardContent>
-        <Box sx={{ px: 1.5, pb: 1.5, pt: 0.5, mt: "auto" }}>
+          <Box sx={{ mt: "auto" }}>
           {ore.marketPrice != null && (
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
               <Typography variant="caption" color="text.secondary">Market Price</Typography>
@@ -191,6 +190,7 @@ function OreCard({ ore, onClick }: { ore: OreSearchResult; onClick: () => void }
             <OreLocationChips locations={ore.topLocations || []} />
           )}
         </Box>
+        </CardContent>
       </CardActionArea>
     </Card>
   )
