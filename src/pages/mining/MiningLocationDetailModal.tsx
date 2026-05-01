@@ -16,7 +16,7 @@ import {
   TableRow,
   CircularProgress,
 } from "@mui/material"
-import { Close } from "@mui/icons-material"
+import { Close, RocketLaunchRounded, DirectionsCarRounded, PanToolRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { useGetLocationDetailQuery, type LocationMiningGroup } from "../../store/api/v2/market"
 import { Section } from "../../components/paper/Section"
@@ -41,10 +41,19 @@ interface Props {
 
 function groupLabel(groupName: string): string {
   const g = (groupName || "").toLowerCase()
-  if (g.includes("spaceship") || g.includes("ship")) return "Ship Mining"
+  if (g.includes("ship")) return "Ship Mining"
   if (g.includes("ground")) return "Ground Vehicle Mining"
-  if (g.includes("fps")) return "FPS Mining"
+  if (g.includes("fps") || g.includes("hand")) return "Hand Mining (FPS)"
   return friendlyName(groupName || "Unknown")
+}
+
+function groupIcon(groupName: string) {
+  const g = (groupName || "").toLowerCase()
+  const sx = { fontSize: 18, mr: 0.5, verticalAlign: "text-bottom" }
+  if (g.includes("ship")) return <RocketLaunchRounded sx={{ ...sx, color: "#2196f3" }} />
+  if (g.includes("ground")) return <DirectionsCarRounded sx={{ ...sx, color: "#ff9800" }} />
+  if (g.includes("fps") || g.includes("hand")) return <PanToolRounded sx={{ ...sx, color: "#4caf50" }} />
+  return null
 }
 
 export function MiningLocationDetailModal({ locationName, open, onClose }: Props) {
@@ -100,7 +109,7 @@ export function MiningLocationDetailModal({ locationName, open, onClose }: Props
 
 function MiningGroupSection({ group }: { group: LocationMiningGroup }) {
   return (
-    <Section title={`${groupLabel(group.groupName)} (Weight: ${group.groupProbability})`}>
+    <Section title={<Box component="span">{groupIcon(group.groupName)}{groupLabel(group.groupName)} (Weight: {group.groupProbability})</Box>}>
       <TableContainer>
         <Table size="small">
           <TableHead>
