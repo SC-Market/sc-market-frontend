@@ -8,6 +8,7 @@ import {
   Chip,
   Stack,
   Box,
+  Button,
   LinearProgress,
   Table,
   TableBody,
@@ -88,9 +89,10 @@ export function MiningOreDetailModal({ oreName, open, onClose }: Props) {
               <Stack spacing={1.5} sx={{ pt: 1 }}>
                 <StatBar label="Instability" value={ore.instability} max={1000} />
                 <StatBar label="Resistance" value={ore.resistance != null ? ore.resistance * 100 : null} max={100} suffix="%" />
-                <StatBar label="Optimal Window" value={ore.optimalWindowThinness} max={10} />
+                <StatBar label="Optimal Window Size" value={ore.optimalWindowThinness} max={10} />
+                <StatBar label="Optimal Window Position" value={ore.optimalWindowMidpoint != null ? ore.optimalWindowMidpoint * 100 : null} max={100} suffix="%" />
                 <StatBar label="Explosion Risk" value={ore.explosionMultiplier} max={500} />
-                <StatBar label="Cluster Factor" value={ore.clusterFactor} max={10} />
+                <StatBar label="Cluster Factor" value={ore.clusterFactor != null ? ore.clusterFactor * 100 : null} max={100} suffix="%" />
               </Stack>
             </Section>
 
@@ -180,6 +182,18 @@ export function MiningOreDetailModal({ oreName, open, onClose }: Props) {
                 </Table>
               </TableContainer>
             </Section>
+
+            {ore.gameItemId && (
+              <Box sx={{ display: "flex", justifyContent: "center" }}>
+                <Button
+                  variant="outlined"
+                  size="small"
+                  onClick={() => { onClose(); window.location.href = `/market/aggregate/${ore.gameItemId}` }}
+                >
+                  View Market Listings
+                </Button>
+              </Box>
+            )}
           </Stack>
         )}
       </DialogContent>
