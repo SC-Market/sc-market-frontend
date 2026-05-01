@@ -225,12 +225,54 @@ function OreCard({ ore, onClick }: { ore: OreSearchResult; onClick: () => void }
             <Typography variant="caption">{ore.locationCount}</Typography>
           </Box>
           {(ore.topLocations?.length ?? 0) > 0 && (
-            <Typography variant="caption" color="text.secondary" display="block" noWrap sx={{ mt: 0.25 }}>
-              {(ore.topLocations || []).slice(0, 2).map((l) => friendlyName(l.name)).join(", ")}
-            </Typography>
+            <OreLocationChips locations={ore.topLocations || []} />
           )}
         </Box>
       </CardActionArea>
     </Card>
+  )
+}
+
+const SYSTEM_COLORS: Record<string, string> = {
+  Stanton: "#00bcd4",
+  Pyro: "#ff9800",
+  Nyx: "#4caf50",
+}
+
+function OreLocationChips({ locations }: { locations: Array<{ name: string; system: string; probability: number }> }) {
+  // Group by system
+  const bySystem = new Map<string, Array<{ name: string; probability: number }>>()
+  for (const loc of locations) {
+    const sys = loc.system || "Unknown"
+    const arr = bySystem.get(sys) || []
+    arr.push({ name: loc.name, probability: loc.probability })
+    bySystem.set(sys, arr)
+  }
+
+  return (
+    <Box sx={{ mt: 0.5 }}>
+      {Array.from(bySystem.entries()).map(([sys, locs]) => {
+        const color = SYSTEM_COLORS[sys] || "#9e9e9e"
+        return (
+          <Box key={sys} sx={{ mb: 0.25 }}>
+            <Chip
+              label={sys}
+              size="small"
+              sx={{ height: 16, fontSize: "0.6rem", fontWeight: 700, bgcolor: color + "22", color, mr: 0.5, mb: 0.25 }}
+            />
+            {locs.slice(0, 3).map((l, i) => (
+              <Typography key={i} variant="caption" color="text.secondary" sx={{ fontSize: "0.65rem" }}>
+                {l.name}{i < Math.min(locs.length, 3) - 1 ? ", " : ""}
+              </Typography>
+            ))}
+            {locs.length > 3 && (
+              <Typography variant="caption" color="text.secondary" sx={{ fontSize: "0.65rem" }}>
+                {" "}+{locs.length - 3}
+              </Typography>
+            )}
+          </Box>
+        )
+      })}
+    </Box>
   )
 }
