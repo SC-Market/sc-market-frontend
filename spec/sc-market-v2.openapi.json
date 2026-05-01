@@ -6270,6 +6270,41 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"RefiningMethod": {
+				"properties": {
+					"name": {
+						"type": "string"
+					},
+					"speed": {
+						"type": "string"
+					},
+					"quality": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"name",
+					"speed",
+					"quality"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"RefiningMethodsResponse": {
+				"properties": {
+					"methods": {
+						"items": {
+							"$ref": "#/components/schemas/RefiningMethod"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"methods"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"Record_string.number_": {
 				"properties": {},
 				"additionalProperties": {
@@ -13566,6 +13601,30 @@
 						}
 					}
 				]
+			}
+		},
+		"/game-data/mining/refining-methods": {
+			"get": {
+				"operationId": "GetRefiningMethods",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RefiningMethodsResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get all refining methods",
+				"summary": "Get refining methods",
+				"tags": [
+					"Game Data - Mining"
+				],
+				"security": [],
+				"parameters": []
 			}
 		},
 		"/game-data/crafting/calculate-quality": {

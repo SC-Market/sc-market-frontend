@@ -12,6 +12,7 @@ import {
   NotificationReviewRevisionRequest,
   NotificationContractorInvite,
 } from "../types"
+import { NotificationBidV2 } from "../types/NotificationBidV2"
 
 export function NotificationEntry(props: { notif: Notification }) {
   const { notif } = props
@@ -39,7 +40,8 @@ export function NotificationEntry(props: { notif: Notification }) {
     case "order_status_cancelled":
       return <NotificationOrderUpdateStatus notif={notif} />
     case "market_item_bid":
-      return <NotificationBid notif={notif} />
+    case "market_item_bid_v2":
+      return <NotificationBidV2 notif={notif} />
     case "admin_alert":
       return <NotificationAdminAlert notif={notif} />
     case "order_review_revision_requested":

@@ -793,6 +793,13 @@ const injectedRtkApi = api
         }),
         providesTags: ["Game Data - Mining"],
       }),
+      getRefiningMethods: build.query<
+        GetRefiningMethodsApiResponse,
+        GetRefiningMethodsApiArg
+      >({
+        query: () => ({ url: `/game-data/mining/refining-methods` }),
+        providesTags: ["Game Data - Mining"],
+      }),
       calculateQuality: build.mutation<
         CalculateQualityApiResponse,
         CalculateQualityApiArg
@@ -1969,6 +1976,9 @@ export type GetLocationDetailApiArg = {
   /** Location name (e.g. 'stanton1b') */
   name: string
 }
+export type GetRefiningMethodsApiResponse =
+  /** status 200 Ok */ RefiningMethodsResponse
+export type GetRefiningMethodsApiArg = void
 export type CalculateQualityApiResponse =
   /** status 200 Quality calculation result with breakdown and predicted stats */ CalculateQualityResponse
 export type CalculateQualityApiArg = {
@@ -4163,6 +4173,14 @@ export type LocationDetailResponse = {
   hasRefinery: boolean
   amenities: string[]
 }
+export type RefiningMethod = {
+  name: string
+  speed: string
+  quality: string
+}
+export type RefiningMethodsResponse = {
+  methods: RefiningMethod[]
+}
 export type QualityContribution = {
   /** Material name */
   material_name: string
@@ -5199,6 +5217,7 @@ export const {
   useGetOreDetailQuery,
   useSearchLocationsQuery,
   useGetLocationDetailQuery,
+  useGetRefiningMethodsQuery,
   useCalculateQualityMutation,
   useSimulateCraftingMutation,
   useRecordCraftingMutation,

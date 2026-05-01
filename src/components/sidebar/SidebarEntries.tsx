@@ -426,6 +426,11 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
             icon: <BusinessCenterRounded />,
             to: "/wiki/manufacturers",
           },
+          {
+            text: "Refining Methods",
+            icon: <ScienceRounded />,
+            to: "/wiki/refinery",
+          },
         ],
       },
     ],
