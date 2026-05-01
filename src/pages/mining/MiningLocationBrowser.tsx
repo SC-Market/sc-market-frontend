@@ -1,13 +1,9 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useMemo } from "react"
 import {
   Grid,
-  TextField,
-  MenuItem,
   Pagination,
-  CircularProgress,
   Alert,
   Box,
-  InputAdornment,
   Typography,
   Stack,
   Card,
@@ -16,15 +12,14 @@ import {
   Chip,
   useMediaQuery,
 } from "@mui/material"
-import { Search } from "@mui/icons-material"
 import { useSearchParams, useNavigate, useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { FilterSidebarLayout } from "../../components/layout/FilterSidebarLayout"
 import { useSearchLocationsQuery, type LocationSearchResult } from "../../store/api/v2/market"
-import { useDebounce } from "../../hooks/useDebounce"
 import { MiningLocationDetailModal } from "./MiningLocationDetailModal"
+import { UnifiedSearchBar, locationTokensToParams, locationParamsToTokens, type SearchToken } from "../../components/game-data/UnifiedSearchBar"
+import { CardGridSkeleton } from "../../components/game-data/GameDataSkeletons"
 
 function friendlyName(name: string): string {
   return name.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
@@ -49,21 +44,23 @@ export function MiningLocationBrowser() {
   const urlParams = useParams<{ name?: string }>()
   const [searchParams, setSearchParams] = useSearchParams()
 
-  const searchText = searchParams.get("q") || ""
-  const system = searchParams.get("system") || ""
-  const locationType = searchParams.get("location_type") || ""
   const page = parseInt(searchParams.get("page") || "1") || 1
+  const [selectedLocation, setSelectedLocation] = useState<string | null>(null)
 
-  const updateParam = (key: string, value: string) => {
-    const params = new URLSearchParams(searchParams)
-    if (value) params.set(key, value)
-    else params.delete(key)
-    if (key !== "page") params.delete("page")
+  const searchTokens = useMemo(() => locationParamsToTokens(searchParams), [searchParams])
+  const queryParams = useMemo(() => locationTokensToParams(searchTokens), [searchTokens])
+
+  const handleTokensChange = (tokens: SearchToken[]) => {
+    const params = new URLSearchParams(locationTokensToParams(tokens))
+    params.set("tab", "locations")
     setSearchParams(params, { replace: true })
   }
 
-  const debouncedSearch = useDebounce(searchText, 300)
-  const [selectedLocation, setSelectedLocation] = useState<string | null>(null)
+  const handlePageChange = (_: unknown, p: number) => {
+    const params = new URLSearchParams(searchParams)
+    params.set("page", String(p))
+    setSearchParams(params, { replace: true })
+  }
 
   useEffect(() => {
     if (urlParams.name && !isMobile) setSelectedLocation(urlParams.name)
@@ -81,52 +78,30 @@ export function MiningLocationBrowser() {
   }
 
   const { data, isLoading, error } = useSearchLocationsQuery({
-    text: debouncedSearch || undefined,
-    system: system || undefined,
-    locationType: (locationType as any) || undefined,
+    text: queryParams.q || undefined,
+    system: queryParams.system || undefined,
+    locationType: (queryParams.location_type as any) || undefined,
     page,
     pageSize: PAGE_SIZE,
   })
 
-  const filtersContent = (
-    <Stack spacing={1.5}>
-      <TextField
-        fullWidth size="small"
-        placeholder={t("mining.searchLocations", "Search locations...")}
-        value={searchText}
-        onChange={(e) => updateParam("q", e.target.value)}
-        InputProps={{ startAdornment: <InputAdornment position="start"><Search /></InputAdornment> }}
-      />
-      <TextField
-        select fullWidth size="small"
-        label={t("mining.system", "System")}
-        value={system}
-        onChange={(e) => updateParam("system", e.target.value)}
-      >
-        <MenuItem value="">All</MenuItem>
-        <MenuItem value="stanton">Stanton</MenuItem>
-        <MenuItem value="pyro">Pyro</MenuItem>
-        <MenuItem value="nyx">Nyx</MenuItem>
-      </TextField>
-      <TextField
-        select fullWidth size="small"
-        label={t("mining.locationType", "Location Type")}
-        value={locationType}
-        onChange={(e) => updateParam("location_type", e.target.value)}
-      >
-        <MenuItem value="">All</MenuItem>
-        <MenuItem value="surface">Surface</MenuItem>
-        <MenuItem value="asteroidfield">Asteroid Field</MenuItem>
-      </TextField>
-    </Stack>
-  )
-
   return (
     <>
-      <FilterSidebarLayout filters={filtersContent} filterTitle={t("mining.filters", "Filters")}>
-        {isLoading && (
-          <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}><CircularProgress /></Box>
+      <Box sx={{ display: "flex", gap: 1, alignItems: "center", mb: 2 }}>
+        <UnifiedSearchBar
+          tokens={searchTokens}
+          onChange={handleTokensChange}
+          mode="locations"
+          placeholder="Search locations, systems, types..."
+        />
+        {data && (
+          <Typography variant="body2" color="text.secondary" sx={{ whiteSpace: "nowrap" }}>
+            {data.total}
+          </Typography>
         )}
+      </Box>
+
+      {isLoading && <CardGridSkeleton />}
         {error && <Alert severity="error">{t("mining.error", "Failed to load locations.")}</Alert>}
         {data && (
           <>
@@ -147,14 +122,13 @@ export function MiningLocationBrowser() {
                 <Pagination
                   count={Math.ceil(data.total / PAGE_SIZE)}
                   page={page}
-                  onChange={(_, p) => updateParam("page", String(p))}
+                  onChange={handlePageChange}
                   color="primary"
                 />
               </Box>
             )}
           </>
         )}
-      </FilterSidebarLayout>
       <MiningLocationDetailModal
         locationName={selectedLocation}
         open={!!selectedLocation}

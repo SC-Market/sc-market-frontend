@@ -79,8 +79,37 @@ interface UnifiedSearchBarProps {
   onChange: (tokens: SearchToken[]) => void
   extraOptions?: SearchToken[]
   placeholder?: string
-  mode?: "missions" | "blueprints" | "market"
+  mode?: "missions" | "blueprints" | "market" | "mining" | "locations" | "wiki-items"
 }
+
+// === Mining suggestions ===
+const MINING_RARITIES: SearchToken[] = [
+  "Common", "Uncommon", "Rare", "Epic", "Legendary",
+].map(r => ({ type: "rarity" as const, label: r, value: r.toLowerCase() }))
+
+const MINING_METHODS: SearchToken[] = [
+  { type: "category" as const, label: "Ship Mining", value: "ship" },
+  { type: "category" as const, label: "Ground Vehicle (ROC)", value: "ground" },
+  { type: "category" as const, label: "Hand Mining (FPS)", value: "fps" },
+]
+
+// === Location suggestions ===
+const LOCATION_TYPES: SearchToken[] = [
+  { type: "category" as const, label: "Surface", value: "surface" },
+  { type: "category" as const, label: "Asteroid Field", value: "asteroidfield" },
+]
+
+const LOCATION_TAGS: SearchToken[] = [
+  { type: "tag" as const, label: "Has Refinery", value: "refinery" },
+]
+
+// === Wiki Items suggestions ===
+const WIKI_ITEM_TYPES: SearchToken[] = [
+  "Helmet", "Torso", "Arms", "Legs", "Backpack", "Undersuit",
+  "Ranged Weapon", "Weapon Attachment", "Ship Weapon",
+  "Commodity", "Power Plant", "Cooler", "Shield", "Quantum Drive",
+  "Mining Head", "Mining Modifier",
+].map(c => ({ type: "category" as const, label: c, value: c }))
 
 const MARKET_CATEGORIES: SearchToken[] = [
   "Helmet", "Torso", "Arms", "Legs", "Backpack", "Undersuit",
@@ -101,6 +130,9 @@ export function UnifiedSearchBar({ tokens, onChange, extraOptions = [], placehol
   const baseOptions = useMemo(() => {
     if (mode === "blueprints") return [...BP_CATEGORIES, ...BP_MATERIALS, ...BP_RARITIES, ...BP_TAGS]
     if (mode === "market") return [...MARKET_CATEGORIES, ...MARKET_TAGS]
+    if (mode === "mining") return [...SYSTEMS, ...MINING_RARITIES, ...MINING_METHODS]
+    if (mode === "locations") return [...SYSTEMS, ...LOCATION_TYPES, ...LOCATION_TAGS]
+    if (mode === "wiki-items") return [...WIKI_ITEM_TYPES, ...SYSTEMS]
     return [...SYSTEMS, ...MISSION_CATEGORIES, ...MISSION_TAGS, ...MISSION_GIVERS, ...MISSION_FACTIONS]
   }, [mode])
 
@@ -272,5 +304,83 @@ export function marketParamsToTokens(sp: URLSearchParams): SearchToken[] {
   if (sp.get("has_photos") === "true") tokens.push({ type: "tag", label: "Has Photos", value: "has_photos" })
   if (sp.get("in_stock") === "true") tokens.push({ type: "tag", label: "In Stock", value: "in_stock" })
   if (sp.get("bulk_discount") === "true") tokens.push({ type: "tag", label: "Bulk Discount", value: "bulk_discount" })
+  return tokens
+}
+
+// === Mining param conversion ===
+export function miningTokensToParams(tokens: SearchToken[]): Record<string, string> {
+  const params: Record<string, string> = {}
+  const queries: string[] = []
+  for (const t of tokens) {
+    switch (t.type) {
+      case "query": queries.push(t.value); break
+      case "system": params.system = t.value; break
+      case "rarity": params.rarity = t.value; break
+      case "category": params.mining_method = t.value; break
+    }
+  }
+  if (queries.length) params.q = queries.join(" ")
+  return params
+}
+
+export function miningParamsToTokens(sp: URLSearchParams): SearchToken[] {
+  const tokens: SearchToken[] = []
+  const q = sp.get("q"); if (q) tokens.push({ type: "query", label: q, value: q })
+  const sys = sp.get("system"); if (sys) tokens.push({ type: "system", label: sys, value: sys })
+  const rar = sp.get("rarity"); if (rar) tokens.push({ type: "rarity", label: rar.charAt(0).toUpperCase() + rar.slice(1), value: rar })
+  const method = sp.get("mining_method"); if (method) {
+    const label = method === "ship" ? "Ship Mining" : method === "ground" ? "Ground Vehicle (ROC)" : "Hand Mining (FPS)"
+    tokens.push({ type: "category", label, value: method })
+  }
+  return tokens
+}
+
+// === Location param conversion ===
+export function locationTokensToParams(tokens: SearchToken[]): Record<string, string> {
+  const params: Record<string, string> = {}
+  const queries: string[] = []
+  for (const t of tokens) {
+    switch (t.type) {
+      case "query": queries.push(t.value); break
+      case "system": params.system = t.value; break
+      case "category": params.location_type = t.value; break
+      case "tag": if (t.value === "refinery") params.refinery = "true"; break
+    }
+  }
+  if (queries.length) params.q = queries.join(" ")
+  return params
+}
+
+export function locationParamsToTokens(sp: URLSearchParams): SearchToken[] {
+  const tokens: SearchToken[] = []
+  const q = sp.get("q"); if (q) tokens.push({ type: "query", label: q, value: q })
+  const sys = sp.get("system"); if (sys) tokens.push({ type: "system", label: sys, value: sys })
+  const lt = sp.get("location_type"); if (lt) {
+    tokens.push({ type: "category", label: lt === "surface" ? "Surface" : "Asteroid Field", value: lt })
+  }
+  if (sp.get("refinery") === "true") tokens.push({ type: "tag", label: "Has Refinery", value: "refinery" })
+  return tokens
+}
+
+// === Wiki Items param conversion ===
+export function wikiItemsTokensToParams(tokens: SearchToken[]): Record<string, string> {
+  const params: Record<string, string> = {}
+  const queries: string[] = []
+  for (const t of tokens) {
+    switch (t.type) {
+      case "query": queries.push(t.value); break
+      case "category": params.type = t.value; break
+      case "system": params.manufacturer = t.value; break
+    }
+  }
+  if (queries.length) params.q = queries.join(" ")
+  return params
+}
+
+export function wikiItemsParamsToTokens(sp: URLSearchParams): SearchToken[] {
+  const tokens: SearchToken[] = []
+  const q = sp.get("q"); if (q) tokens.push({ type: "query", label: q, value: q })
+  const type = sp.get("type"); if (type) tokens.push({ type: "category", label: type, value: type })
+  const mfr = sp.get("manufacturer"); if (mfr) tokens.push({ type: "system", label: mfr, value: mfr })
   return tokens
 }
