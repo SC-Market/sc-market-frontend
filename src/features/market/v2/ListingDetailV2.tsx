@@ -102,6 +102,15 @@ export function ListingDetailV2() {
     return { min: Math.min(...tiers), max: Math.max(...tiers) }
   }, [items])
 
+  const qualityValueRange = useMemo(() => {
+    const vals = items
+      .flatMap((i) => i.variants)
+      .map((v) => v.attributes.quality_value)
+      .filter((v): v is number => v != null)
+    if (!vals.length) return null
+    return { min: Math.min(...vals), max: Math.max(...vals) }
+  }, [items])
+
   const priceRange = useMemo(() => {
     const prices = items.flatMap((i) => i.variants).map((v) => v.price)
     if (!prices.length) return null
