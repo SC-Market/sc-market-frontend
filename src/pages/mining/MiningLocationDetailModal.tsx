@@ -122,6 +122,14 @@ function MiningGroupSection({ group }: { group: LocationMiningGroup }) {
                   <TableRow key={ore.presetName} hover>
                     <TableCell>
                       <Typography variant="body2" fontWeight={600}>{name}</Typography>
+                      {(ore.instability != null || ore.resistance != null) && (
+                        <Typography variant="caption" color="text.secondary" sx={{ fontSize: "0.65rem" }}>
+                          {[
+                            ore.instability != null ? `Inst: ${ore.instability}` : null,
+                            ore.resistance != null ? `Res: ${(ore.resistance * 100).toFixed(0)}%` : null,
+                          ].filter(Boolean).join(" · ")}
+                        </Typography>
+                      )}
                     </TableCell>
                     <TableCell align="center">
                       <Chip

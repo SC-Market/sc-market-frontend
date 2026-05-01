@@ -1,6 +1,6 @@
 import React from "react"
 import { useParams } from "react-router-dom"
-import { Grid, Typography, Chip, Stack, Box, Table, TableBody, TableCell, TableHead, TableRow, Paper, LinearProgress, CircularProgress } from "@mui/material"
+import { Grid, Typography, Chip, Stack, Box, Table, TableBody, TableCell, TableHead, TableRow, Paper, LinearProgress, Button } from "@mui/material"
 import { useGetOreDetailQuery } from "../../store/api/v2/market"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { DetailPageSkeleton } from "../../components/game-data/GameDataSkeletons"
@@ -35,9 +35,11 @@ export function MiningOreDetailPage() {
             <Typography variant="subtitle2" gutterBottom>Mining Stats</Typography>
             {[
               { label: "Instability", value: ore.instability, max: 800 },
-              { label: "Resistance", value: ore.resistance, max: 1 },
-              { label: "Optimal Window", value: ore.optimalWindowThinness, max: 3 },
+              { label: "Resistance", value: ore.resistance != null ? ore.resistance * 100 : null, max: 100 },
+              { label: "Optimal Window Size", value: ore.optimalWindowThinness, max: 3 },
+              { label: "Optimal Window Position", value: ore.optimalWindowMidpoint != null ? ore.optimalWindowMidpoint * 100 : null, max: 100 },
               { label: "Explosion Risk", value: ore.explosionMultiplier, max: 300 },
+              { label: "Cluster Factor", value: ore.clusterFactor != null ? ore.clusterFactor * 100 : null, max: 100 },
             ].map(({ label, value, max }) => value != null ? (
               <Box key={label} sx={{ mb: 1 }}>
                 <Stack direction="row" justifyContent="space-between"><Typography variant="caption">{label}</Typography><Typography variant="caption" fontWeight={600}>{value}</Typography></Stack>
@@ -72,6 +74,14 @@ export function MiningOreDetailPage() {
                 </TableBody>
               </Table>
             </Paper>
+          )}
+
+          {ore.gameItemId && (
+            <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+              <Button variant="outlined" href={`/market/aggregate/${ore.gameItemId}`}>
+                View Market Listings
+              </Button>
+            </Box>
           )}
         </Grid>
       )}
