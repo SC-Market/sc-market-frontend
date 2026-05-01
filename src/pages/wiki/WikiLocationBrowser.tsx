@@ -10,6 +10,7 @@ import {
   Box,
   Card,
   CardContent,
+  Chip,
   Grid,
   Typography,
   CircularProgress,
@@ -19,15 +20,50 @@ import {
   ListItemButton,
   ListItemText,
   Collapse,
-  Chip,
+  Stack,
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
 import { useGetLocationsQuery, type WikiLocationNode } from "../../store/api/v2/market"
-import { ExpandLess, ExpandMore, Public, Language, Terrain } from "@mui/icons-material"
+import { ExpandLess, ExpandMore, Public, Language, Terrain, HardwareRounded } from "@mui/icons-material"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { TableSkeleton } from "../../components/game-data/GameDataSkeletons"
+import { useGetMiningLocationDetailQuery } from "../../store/api/v2/mining"
+
+function MiningLocationSummary({ locationCode, level }: { locationCode: string; level: number }) {
+  const { data, isLoading } = useGetMiningLocationDetailQuery({ name: locationCode })
+
+  if (isLoading) return <Box sx={{ pl: (level + 1) * 2 + 2, py: 0.5 }}><CircularProgress size={16} /></Box>
+  if (!data?.location?.groups?.length) return null
+
+  return (
+    <Box sx={{ pl: (level + 1) * 2 + 2, pr: 2, py: 0.5, bgcolor: "action.hover", borderRadius: 1, mx: 1, mb: 0.5 }}>
+      <Stack direction="row" spacing={0.5} alignItems="center" sx={{ mb: 0.5 }}>
+        <HardwareRounded sx={{ fontSize: 14, color: "text.secondary" }} />
+        <Typography variant="caption" fontWeight={600} color="text.secondary">Mining Resources</Typography>
+      </Stack>
+      {(data.location.groups || []).map((g: any) => (
+        <Box key={g.group_name} sx={{ mb: 0.5 }}>
+          <Typography variant="caption" color="text.secondary" sx={{ fontSize: "0.65rem" }}>
+            {(g.group_name || "").replace("_Mineables", "").replace("SpaceShip", "Ship")} ({g.group_probability}%)
+          </Typography>
+          <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap>
+            {(g.ores || []).slice(0, 6).map((ore: any) => (
+              <Chip
+                key={ore.preset_name}
+                label={`${ore.element_name || ore.preset_name} ${ore.relative_probability?.toFixed(1)}%`}
+                size="small"
+                sx={{ height: 18, fontSize: "0.6rem" }}
+                variant="outlined"
+              />
+            ))}
+          </Stack>
+        </Box>
+      ))}
+    </Box>
+  )
+}
 
 interface LocationTreeItemProps {
   node: WikiLocationNode
@@ -42,6 +78,10 @@ function LocationTreeItem({ node, level }: LocationTreeItemProps) {
       setOpen(!open)
     }
   }
+
+  // Derive mining location code from the node id (e.g. "starmapobject.stanton1b" -> "stanton1b")
+  const miningCode = node.id?.includes(".") ? node.id.split(".").pop() : null
+  const isMineableType = ["planet", "moon"].includes(node.type?.toLowerCase() || "")
 
   const getIcon = () => {
     switch (node.type) {
@@ -92,6 +132,9 @@ function LocationTreeItem({ node, level }: LocationTreeItemProps) {
       </ListItem>
       {node.children.length > 0 && (
         <Collapse in={open} timeout="auto" unmountOnExit>
+          {isMineableType && miningCode && open && (
+            <MiningLocationSummary locationCode={miningCode} level={level} />
+          )}
           <List component="div" disablePadding>
             {node.children.map((child) => (
               <LocationTreeItem key={child.id} node={child} level={level + 1} />
