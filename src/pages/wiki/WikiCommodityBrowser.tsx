@@ -1,23 +1,29 @@
 /**
- * Wiki Commodity Browser — with text search, clickable cards, URL param sync, dynamic categories
+ * Wiki Commodity Browser — table layout with all commodity data
  */
 
 import React, { useMemo, useCallback } from "react"
 import {
-  Box, Card, CardContent, Grid, Typography, TextField,
-  MenuItem, Select, FormControl, InputLabel, Pagination, Alert, Chip, Stack,
+  Box, Grid, Typography, TextField, MenuItem, Select, FormControl, InputLabel,
+  Pagination, Alert, Chip, Stack, Table, TableBody, TableCell, TableHead, TableRow, Paper, Avatar,
 } from "@mui/material"
-import { CheckCircle } from "@mui/icons-material"
-import { useTheme } from "@mui/material/styles"
+import { CheckCircle, Cancel } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { useGetCommoditiesQuery, useGetResourceCategoriesQuery } from "../../store/api/v2/market"
 import { useNavigate, useSearchParams } from "react-router-dom"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
-import { FilterSidebarLayout } from "../../components/layout/FilterSidebarLayout"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { CardGridSkeleton } from "../../components/game-data/GameDataSkeletons"
-import { GameItemAvatar } from "../../components/game-data/GameItemAvatar"
+import { useTheme } from "@mui/material/styles"
+import { TableSkeleton } from "../../components/game-data/GameDataSkeletons"
 import { getCommodityColor } from "../../util/gameIcons"
+import { FALLBACK_IMAGE_URL } from "../../util/constants"
+
+function AcqChip({ value, label }: { value: boolean; label: string }) {
+  return value ? (
+    <Chip icon={<CheckCircle sx={{ fontSize: 12 }} />} label={label} size="small" color="success"
+      sx={{ height: 18, fontSize: "0.6rem", fontWeight: 600 }} />
+  ) : null
+}
 
 export function WikiCommodityBrowser() {
   const { t } = useTranslation()
@@ -39,83 +45,107 @@ export function WikiCommodityBrowser() {
   const { data, isLoading, error } = useGetCommoditiesQuery({
     category: category || undefined,
     page,
-    pageSize: 24,
+    pageSize: 50,
   })
 
-  // Dynamic categories from API
   const { data: categoriesData } = useGetResourceCategoriesQuery({})
   const categories = useMemo(() => {
     if (!categoriesData) return []
     return [...new Set(categoriesData.map(c => c.category))].sort()
   }, [categoriesData])
 
-  // Client-side text filter
   const filtered = useMemo(() => {
     const items = data?.commodities || []
     if (!text) return items
     const q = text.toLowerCase()
-    return items.filter(c => c.name.toLowerCase().includes(q) || c.resource_category?.toLowerCase().includes(q))
+    return items.filter(c => c.name.toLowerCase().includes(q) || c.resource_category?.toLowerCase().includes(q) || c.resource_subcategory?.toLowerCase().includes(q))
   }, [data, text])
 
   const totalPages = data ? Math.ceil(data.total / data.page_size) : 0
 
-  const filtersContent = (
-    <Stack spacing={1.5}>
-      <TextField fullWidth size="small" label="Search commodities" value={text}
-        onChange={(e) => updateParam("q", e.target.value)} placeholder="Name or category..." />
-      <FormControl fullWidth size="small">
-        <InputLabel>Category</InputLabel>
-        <Select value={category} label="Category" onChange={(e) => updateParam("category", e.target.value)}>
-          <MenuItem value="">All</MenuItem>
-          {categories.map(c => <MenuItem key={c} value={c}>{c}</MenuItem>)}
-        </Select>
-      </FormControl>
-    </Stack>
-  )
-
   return (
     <StandardPageLayout title="Commodities" headerTitle="Commodities" sidebarOpen={true} maxWidth="xl">
       <Grid item xs={12}>
-        <FilterSidebarLayout filters={filtersContent} filterTitle="Filters">
-          {isLoading && <CardGridSkeleton />}
-          {error && <Alert severity="error" sx={{ mb: 2 }}>Failed to load commodities.</Alert>}
-          {data && (
-            <>
-              <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>{filtered.length} commodities</Typography>
-              <Grid container spacing={1.5}>
-                {filtered.map((commodity) => (
-                  <Grid item xs={6} sm={4} md={3} lg={2} key={commodity.resource_id}>
-                    <Card sx={{ cursor: "pointer", transition: "transform 0.15s", "&:hover": { transform: "translateY(-3px)" }, height: "100%" }}
-                      onClick={() => navigate(`/wiki/commodities/${commodity.resource_id}`)}>
-                      <CardContent sx={{ p: 1.5, "&:last-child": { pb: 1.5 } }}>
-                        <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1 }}>
-                          <GameItemAvatar name={commodity.name} iconUrl={commodity.image_url} subType={commodity.resource_subcategory} size={32}
-                            sx={{ bgcolor: getCommodityColor(commodity.resource_subcategory) || "primary.main" }} />
-                          <Box sx={{ minWidth: 0 }}>
-                            <Typography variant="body2" fontWeight={700} noWrap>{commodity.name}</Typography>
-                            <Typography variant="caption" color="text.secondary" noWrap>{commodity.resource_category}{commodity.resource_subcategory ? ` · ${commodity.resource_subcategory}` : ""}</Typography>
-                          </Box>
+        {/* Filters inline */}
+        <Stack direction="row" spacing={1.5} sx={{ mb: 2 }} flexWrap="wrap" useFlexGap>
+          <TextField size="small" label="Search" value={text}
+            onChange={(e) => updateParam("q", e.target.value)} placeholder="Name..."
+            sx={{ minWidth: 200, flex: 1 }} />
+          <FormControl size="small" sx={{ minWidth: 150 }}>
+            <InputLabel>Category</InputLabel>
+            <Select value={category} label="Category" onChange={(e) => updateParam("category", e.target.value as string)}>
+              <MenuItem value="">All</MenuItem>
+              {categories.map(c => <MenuItem key={c} value={c}>{c}</MenuItem>)}
+            </Select>
+          </FormControl>
+          <Typography variant="body2" color="text.secondary" sx={{ alignSelf: "center" }}>
+            {filtered.length} results
+          </Typography>
+        </Stack>
+
+        {isLoading && <TableSkeleton rows={15} />}
+        {error && <Alert severity="error" sx={{ mb: 2 }}>Failed to load commodities.</Alert>}
+
+        {data && (
+          <>
+            <Paper>
+              <Table size="small">
+                <TableHead>
+                  <TableRow>
+                    <TableCell sx={{ width: 40 }} />
+                    <TableCell>Name</TableCell>
+                    <TableCell>Category</TableCell>
+                    <TableCell>Subcategory</TableCell>
+                    <TableCell align="center">Acquisition</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {filtered.map((c) => (
+                    <TableRow key={c.resource_id} hover sx={{ cursor: "pointer" }}
+                      onClick={() => navigate(`/wiki/commodities/${c.resource_id}`)}>
+                      <TableCell sx={{ py: 0.5 }}>
+                        <Avatar src={c.image_url || FALLBACK_IMAGE_URL} variant="rounded"
+                          sx={{ width: 28, height: 28, bgcolor: getCommodityColor(c.resource_subcategory) || "grey.300" }}
+                          imgProps={{ style: { objectFit: "contain" } }} />
+                      </TableCell>
+                      <TableCell sx={{ py: 0.5 }}>
+                        <Typography variant="body2" fontWeight={600}>{c.name}</Typography>
+                      </TableCell>
+                      <TableCell sx={{ py: 0.5 }}>
+                        <Chip label={c.resource_category} size="small" variant="outlined" sx={{ height: 20, fontSize: "0.7rem" }} />
+                      </TableCell>
+                      <TableCell sx={{ py: 0.5 }}>
+                        {c.resource_subcategory && (
+                          <Typography variant="caption" color="text.secondary">{c.resource_subcategory}</Typography>
+                        )}
+                      </TableCell>
+                      <TableCell sx={{ py: 0.5 }} align="center">
+                        <Stack direction="row" spacing={0.25} justifyContent="center" flexWrap="wrap" useFlexGap>
+                          <AcqChip value={c.can_be_mined} label="Mine" />
+                          <AcqChip value={c.can_be_purchased} label="Buy" />
+                          <AcqChip value={c.can_be_salvaged} label="Salvage" />
+                          <AcqChip value={c.can_be_looted} label="Loot" />
                         </Stack>
-                        <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap>
-                          {commodity.can_be_mined && <Chip icon={<CheckCircle sx={{ fontSize: 12 }} />} label="Mine" size="small" color="success" sx={{ height: 18, fontSize: "0.6rem" }} />}
-                          {commodity.can_be_purchased && <Chip icon={<CheckCircle sx={{ fontSize: 12 }} />} label="Buy" size="small" color="info" sx={{ height: 18, fontSize: "0.6rem" }} />}
-                          {commodity.can_be_salvaged && <Chip icon={<CheckCircle sx={{ fontSize: 12 }} />} label="Salvage" size="small" sx={{ height: 18, fontSize: "0.6rem" }} />}
-                          {commodity.can_be_looted && <Chip icon={<CheckCircle sx={{ fontSize: 12 }} />} label="Loot" size="small" sx={{ height: 18, fontSize: "0.6rem" }} />}
-                        </Stack>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                ))}
-              </Grid>
-              {filtered.length === 0 && <Box sx={{ textAlign: "center", py: 6 }}><Typography color="text.secondary">No commodities found.</Typography></Box>}
-              {totalPages > 1 && (
-                <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
-                  <Pagination count={totalPages} page={page} onChange={(_, p) => updateParam("page", String(p))} color="primary" />
-                </Box>
-              )}
-            </>
-          )}
-        </FilterSidebarLayout>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </Paper>
+
+            {filtered.length === 0 && (
+              <Box sx={{ textAlign: "center", py: 6 }}>
+                <Typography color="text.secondary">No commodities found.</Typography>
+              </Box>
+            )}
+
+            {totalPages > 1 && (
+              <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
+                <Pagination count={totalPages} page={page} onChange={(_, p) => updateParam("page", String(p))} color="primary" />
+              </Box>
+            )}
+          </>
+        )}
       </Grid>
     </StandardPageLayout>
   )

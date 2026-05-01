@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import {
-  Box, Card, CardContent, Typography, Grid, Alert, Chip, Stack,
+  Box, Card, CardContent, Typography, Grid, Chip, Stack,
   ToggleButtonGroup, ToggleButton, Table, TableBody, TableCell, TableHead, TableRow, Paper,
 } from "@mui/material"
 import { useTranslation } from "react-i18next"
@@ -52,9 +52,6 @@ export function WikiManufacturerList() {
                         <Typography variant="subtitle1" fontWeight={600} noWrap>
                           {m.display_name || m.manufacturer}
                         </Typography>
-                        {m.display_name && m.display_name !== m.manufacturer && (
-                          <Typography variant="caption" color="text.secondary" noWrap>{m.manufacturer}</Typography>
-                        )}
                         <Chip label={`${m.item_count} items`} size="small" color="primary" sx={{ mt: 0.5, height: 20, fontSize: "0.7rem" }} />
                       </Box>
                     </Stack>
@@ -69,7 +66,6 @@ export function WikiManufacturerList() {
               <TableHead>
                 <TableRow>
                   <TableCell>Manufacturer</TableCell>
-                  <TableCell>Code</TableCell>
                   <TableCell align="right">Items</TableCell>
                 </TableRow>
               </TableHead>
@@ -78,9 +74,6 @@ export function WikiManufacturerList() {
                   <TableRow key={m.manufacturer} hover sx={{ cursor: "pointer" }} onClick={() => go(m.manufacturer)}>
                     <TableCell>
                       <Typography variant="body2" fontWeight={600}>{m.display_name || m.manufacturer}</Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Typography variant="caption" color="text.secondary">{m.manufacturer}</Typography>
                     </TableCell>
                     <TableCell align="right">{m.item_count}</TableCell>
                   </TableRow>
