@@ -164,30 +164,65 @@ export function MiningLocationBrowser() {
   )
 }
 
+const SYSTEM_COLORS: Record<string, string> = {
+  Stanton: "#00bcd4",
+  Pyro: "#ff9800",
+  Nyx: "#4caf50",
+}
+
+function systemChipColor(system: string): string {
+  return SYSTEM_COLORS[system] || "#9e9e9e"
+}
+
 function LocationCard({ location, onClick }: { location: LocationSearchResult; onClick: () => void }) {
   const displayName = location.displayName || friendlyName(location.name)
-  const systemDisplay = friendlyName(location.system || "")
-  const groups = location.groups || []
-  const groupSummary = groups
-    .map((g) => `${g.oreCount} ${groupLabel(g.groupName)}`)
-    .join(", ")
+  const systemDisplay = location.system || ""
+
+  // Flatten all ores across groups, sorted by probability
+  const allOres = (location.groups || [])
+    .flatMap((g) => (g as any).ores || [])
+  // If no ores array on groups (search endpoint), show group summary
+  const hasOreDetail = allOres.length > 0
+  const topOres = allOres.sort((a: any, b: any) => (b.relativeProbability || 0) - (a.relativeProbability || 0)).slice(0, 5)
+  const moreCount = allOres.length - 5
 
   return (
     <Card sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
       <CardActionArea onClick={onClick} sx={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "stretch", justifyContent: "flex-start" }}>
-        <CardContent sx={{ p: 1.5, pb: 0 }}>
+        <CardContent sx={{ p: 1.5, flex: 1 }}>
           <Typography variant="body2" fontWeight={600} noWrap>{displayName}</Typography>
           <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap sx={{ my: 0.5 }}>
-            {systemDisplay && <Chip label={systemDisplay} size="small" color="primary" sx={microChip} />}
-            {location.locationType && <Chip label={friendlyName(location.locationType)} size="small" variant="outlined" sx={microChip} />}
+            {systemDisplay && (
+              <Chip label={systemDisplay} size="small"
+                sx={{ ...microChip, bgcolor: systemChipColor(systemDisplay) + "22", color: systemChipColor(systemDisplay), fontWeight: 600 }} />
+            )}
+            {location.locationType && <Chip label={location.locationType} size="small" variant="outlined" sx={microChip} />}
             {location.hasRefinery && <Chip label="Refinery" size="small" color="success" sx={microChip} />}
           </Stack>
-        </CardContent>
-        <Box sx={{ px: 1.5, pb: 1.5, pt: 0.5, mt: "auto" }}>
-          {groupSummary && (
-            <Typography variant="caption" color="text.secondary">{groupSummary}</Typography>
+
+          {hasOreDetail ? (
+            <Box sx={{ mt: 0.5 }}>
+              {topOres.map((ore: any, i: number) => (
+                <Box key={i} sx={{ display: "flex", justifyContent: "space-between", py: 0.1 }}>
+                  <Typography variant="caption" noWrap sx={{ flex: 1 }}>{ore.displayName || ore.elementName || ore.presetName}</Typography>
+                  <Typography variant="caption" color="text.secondary" fontWeight={600} sx={{ ml: 1, flexShrink: 0 }}>{(ore.relativeProbability || 0).toFixed(1)}%</Typography>
+                </Box>
+              ))}
+              {moreCount > 0 && (
+                <Typography variant="caption" color="text.secondary">+{moreCount} more</Typography>
+              )}
+            </Box>
+          ) : (
+            <Box sx={{ mt: 0.5 }}>
+              {(location.groups || []).map((g) => (
+                <Box key={g.groupName} sx={{ display: "flex", justifyContent: "space-between", py: 0.1 }}>
+                  <Typography variant="caption" noWrap>{g.groupName}</Typography>
+                  <Typography variant="caption" color="text.secondary" fontWeight={600} sx={{ ml: 1 }}>{g.oreCount} ores</Typography>
+                </Box>
+              ))}
+            </Box>
           )}
-        </Box>
+        </CardContent>
       </CardActionArea>
     </Card>
   )
