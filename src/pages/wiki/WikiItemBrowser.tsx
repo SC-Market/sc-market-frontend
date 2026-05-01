@@ -43,7 +43,7 @@ import { FALLBACK_IMAGE_URL } from "../../util/constants"
 import { CardGridSkeleton } from "../../components/game-data/GameDataSkeletons"
 import { getFactionIcon } from "../../util/gameIcons"
 
-const CARD_HEIGHT = 220
+const CARD_HEIGHT = 280
 
 function ItemGridCard({ item, onClick }: { item: WikiItemSearchResult; onClick: () => void }) {
   return (
@@ -60,7 +60,7 @@ function ItemGridCard({ item, onClick }: { item: WikiItemSearchResult; onClick: 
     >
       <CardMedia
         component="img"
-        height="100"
+        height="140"
         image={item.image_url || item.thumbnail_path || getFactionIcon(item.manufacturer) || FALLBACK_IMAGE_URL}
         alt={item.name}
         sx={{ objectFit: "contain", bgcolor: "background.default", p: 0.5 }}
