@@ -135,14 +135,15 @@ export function MiningLocationBrowser() {
 const microChip = { height: 20, fontSize: "0.7rem", fontWeight: "bold" }
 
 function groupLabel(groupName: string): string {
-  if (groupName.toLowerCase().includes("spaceship") || groupName.toLowerCase().includes("ship")) return "Ship"
-  if (groupName.toLowerCase().includes("ground")) return "Ground"
-  if (groupName.toLowerCase().includes("fps")) return "FPS"
-  return groupName
+  const g = (groupName || "").toLowerCase()
+  if (g.includes("spaceship") || g.includes("ship")) return "Ship"
+  if (g.includes("ground")) return "Ground"
+  if (g.includes("fps")) return "FPS"
+  return groupName || "Unknown"
 }
 
 function LocationCard({ location, onClick }: { location: MiningLocationSearchResult; onClick: () => void }) {
-  const groupSummary = location.groups
+  const groupSummary = (location.groups || [])
     .map((g) => `${g.ore_count} ${groupLabel(g.group_name)}`)
     .join(", ")
 
