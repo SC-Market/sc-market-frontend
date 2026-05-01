@@ -28,12 +28,23 @@ function friendlyName(name: string): string {
 const PAGE_SIZE = 24
 const microChip = { height: 20, fontSize: "0.7rem", fontWeight: "bold" }
 
+import { RocketLaunchRounded, DirectionsCarRounded, PanToolRounded } from "@mui/icons-material"
+
 function groupLabel(groupName: string): string {
   const g = (groupName || "").toLowerCase()
-  if (g.includes("spaceship") || g.includes("ship")) return "Ship"
-  if (g.includes("ground")) return "Ground"
-  if (g.includes("fps")) return "FPS"
+  if (g.includes("ship")) return "Ship Mining"
+  if (g.includes("ground")) return "Ground Vehicle"
+  if (g.includes("fps") || g.includes("hand")) return "Hand Mining"
   return groupName || "Unknown"
+}
+
+function GroupIcon({ groupName }: { groupName: string }) {
+  const g = (groupName || "").toLowerCase()
+  const sx = { fontSize: 14, mr: 0.5, verticalAlign: "text-bottom" }
+  if (g.includes("ship")) return <RocketLaunchRounded sx={{ ...sx, color: "#2196f3" }} />
+  if (g.includes("ground")) return <DirectionsCarRounded sx={{ ...sx, color: "#ff9800" }} />
+  if (g.includes("fps") || g.includes("hand")) return <PanToolRounded sx={{ ...sx, color: "#4caf50" }} />
+  return null
 }
 
 export function MiningLocationBrowser() {
@@ -67,14 +78,15 @@ export function MiningLocationBrowser() {
   }, [urlParams.name, isMobile])
 
   const handleLocationClick = (locName: string) => {
+    setSelectedLocation(locName)
+    // Update URL without navigation so the background stays intact
     const qs = searchParams.toString()
-    navigate(`/mining/locations/${locName}${qs ? `?${qs}` : ""}`)
-    if (!isMobile) setSelectedLocation(locName)
+    window.history.replaceState(null, "", `/mining/locations/${locName}${qs ? `?${qs}` : ""}`)
   }
 
   const handleModalClose = () => {
     setSelectedLocation(null)
-    navigate(`/mining?tab=locations&${searchParams.toString()}`, { replace: true })
+    window.history.replaceState(null, "", `/mining?tab=locations&${searchParams.toString()}`)
   }
 
   const { data, isLoading, error } = useSearchLocationsQuery({
@@ -190,7 +202,7 @@ function LocationCard({ location, onClick }: { location: LocationSearchResult; o
             <Box sx={{ mt: 0.5 }}>
               {(location.groups || []).map((g) => (
                 <Box key={g.groupName} sx={{ mb: 0.5 }}>
-                  <Typography variant="caption" color="text.secondary" fontWeight={600} sx={{ fontSize: "0.65rem" }}>{g.groupName}</Typography>
+                  <Typography variant="caption" color="text.secondary" fontWeight={600} sx={{ fontSize: "0.65rem" }}><GroupIcon groupName={g.groupName} />{g.groupName}</Typography>
                   {(g.topOres || []).length > 0 ? (
                     <Box>
                       {g.topOres.slice(0, 3).map((name, i) => (
