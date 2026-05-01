@@ -4116,6 +4116,14 @@ export type OreLocation = {
   groupProbability: number
   relativeProbability: number
 }
+export type OreQualityDistribution = {
+  miningType: string
+  rarity: string | null
+  min: number | null
+  max: number | null
+  mean: number | null
+  stddev: number | null
+}
 export type OreDetailResponse = {
   name: string
   displayName: string
@@ -4131,6 +4139,7 @@ export type OreDetailResponse = {
   rarity: string
   marketPrice: number | null
   locations: OreLocation[]
+  qualityDistributions: OreQualityDistribution[]
 }
 export type LocationGroup = {
   groupName: string
