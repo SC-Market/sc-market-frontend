@@ -126,5 +126,3 @@ function MiningGroupSection({ group }: { group: LocationMiningGroup }) {
     </Section>
   )
 }
-  )
-}
