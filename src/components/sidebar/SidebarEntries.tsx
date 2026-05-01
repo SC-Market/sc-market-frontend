@@ -32,6 +32,7 @@ import {
   ConstructionRounded,
   ChecklistRounded,
   TerrainRounded,
+  HardwareRounded,
 } from "@mui/icons-material"
 import PaidIcon from "@mui/icons-material/PaidRounded"
 import CreateIcon from "@mui/icons-material/CreateRounded"
@@ -387,6 +388,12 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
             logged_in: true,
           },
         ],
+      },
+      {
+        text: "Mining",
+        icon: <HardwareRounded />,
+        tab_key: "mining",
+        to: "/mining",
       },
       {
         text: "sidebar.wiki.title",
