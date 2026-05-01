@@ -27,7 +27,6 @@ export function MiningOreDetailPage() {
       {ore && (
         <Grid item xs={12}>
           <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 2 }}>
-            <Typography variant="h5" fontWeight={700}>{displayName}</Typography>
             <Chip label={ore.rarity} size="small" sx={{ bgcolor: (RARITY_COLORS[ore.rarity] || "#9e9e9e") + "22", color: RARITY_COLORS[ore.rarity], fontWeight: 600 }} />
             {ore.marketPrice != null && <Chip label={`${ore.marketPrice.toLocaleString()} aUEC`} size="small" color="success" />}
           </Stack>
@@ -35,14 +34,16 @@ export function MiningOreDetailPage() {
           <Paper sx={{ p: 2, mb: 2 }}>
             <Typography variant="subtitle2" gutterBottom>Mining Stats</Typography>
             {[
-              { label: "Instability", value: ore.instability, max: 800, color: "warning" },
-              { label: "Resistance", value: ore.resistance, max: 1, color: "error" },
-              { label: "Optimal Window", value: ore.optimalWindowThinness, max: 3, color: "info" },
-              { label: "Explosion Risk", value: ore.explosionMultiplier, max: 300, color: "error" },
-            ].map(({ label, value, max, color }) => value != null ? (
+              { label: "Instability", value: ore.instability, max: 800 },
+              { label: "Resistance", value: ore.resistance, max: 1 },
+              { label: "Optimal Window", value: ore.optimalWindowThinness, max: 3 },
+              { label: "Explosion Risk", value: ore.explosionMultiplier, max: 300 },
+            ].map(({ label, value, max }) => value != null ? (
               <Box key={label} sx={{ mb: 1 }}>
                 <Stack direction="row" justifyContent="space-between"><Typography variant="caption">{label}</Typography><Typography variant="caption" fontWeight={600}>{value}</Typography></Stack>
-                <LinearProgress variant="determinate" value={Math.min(100, (Math.abs(value) / max) * 100)} color={color as any} sx={{ height: 6, borderRadius: 3 }} />
+                <LinearProgress variant="determinate" value={Math.min(100, (Math.abs(value) / max) * 100)}
+                  color={value < 0 ? "success" : Math.abs(value) / max < 0.33 ? "success" : Math.abs(value) / max < 0.66 ? "warning" : "error"}
+                  sx={{ height: 6, borderRadius: 3 }} />
               </Box>
             ) : null)}
           </Paper>

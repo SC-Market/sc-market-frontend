@@ -41,7 +41,8 @@ interface Props {
 }
 
 function dangerColor(value: number, max: number): "success" | "warning" | "error" {
-  const ratio = value / max
+  const ratio = Math.abs(value) / max
+  if (value < 0) return "success" // Negative values are safe
   if (ratio < 0.33) return "success"
   if (ratio < 0.66) return "warning"
   return "error"
@@ -130,7 +131,7 @@ export function MiningOreDetailModal({ oreName, open, onClose }: Props) {
 
 function StatBar({ label, value, max, suffix = "" }: { label: string; value: number | null | undefined; max: number; suffix?: string }) {
   if (value == null) return null
-  const pct = Math.min((value / max) * 100, 100)
+  const pct = Math.min((Math.abs(value) / max) * 100, 100)
   return (
     <Box>
       <Box sx={{ display: "flex", justifyContent: "space-between", mb: 0.25 }}>
