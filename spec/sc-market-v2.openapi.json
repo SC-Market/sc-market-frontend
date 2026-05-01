@@ -5830,7 +5830,14 @@
 					"name": {
 						"type": "string"
 					},
+					"displayName": {
+						"type": "string"
+					},
 					"resourceName": {
+						"type": "string",
+						"nullable": true
+					},
+					"gameItemId": {
 						"type": "string",
 						"nullable": true
 					},
@@ -5885,7 +5892,9 @@
 				},
 				"required": [
 					"name",
+					"displayName",
 					"resourceName",
+					"gameItemId",
 					"instability",
 					"resistance",
 					"optimalWindowMidpoint",
@@ -5969,7 +5978,14 @@
 					"name": {
 						"type": "string"
 					},
+					"displayName": {
+						"type": "string"
+					},
 					"resourceName": {
+						"type": "string",
+						"nullable": true
+					},
+					"gameItemId": {
 						"type": "string",
 						"nullable": true
 					},
@@ -6025,7 +6041,9 @@
 				},
 				"required": [
 					"name",
+					"displayName",
 					"resourceName",
+					"gameItemId",
 					"instability",
 					"resistance",
 					"optimalWindowMidpoint",
