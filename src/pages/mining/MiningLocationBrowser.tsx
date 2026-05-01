@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import {
   Grid,
   TextField,
@@ -14,9 +14,10 @@ import {
   CardActionArea,
   CardContent,
   Chip,
+  useMediaQuery,
 } from "@mui/material"
 import { Search } from "@mui/icons-material"
-import { useSearchParams } from "react-router-dom"
+import { useSearchParams, useNavigate, useParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -43,6 +44,9 @@ function groupLabel(groupName: string): string {
 export function MiningLocationBrowser() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
+  const isMobile = useMediaQuery(theme.breakpoints.down("lg"))
+  const navigate = useNavigate()
+  const urlParams = useParams<{ name?: string }>()
   const [searchParams, setSearchParams] = useSearchParams()
 
   const searchText = searchParams.get("q") || ""
@@ -60,6 +64,21 @@ export function MiningLocationBrowser() {
 
   const debouncedSearch = useDebounce(searchText, 300)
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null)
+
+  useEffect(() => {
+    if (urlParams.name && !isMobile) setSelectedLocation(urlParams.name)
+  }, [urlParams.name, isMobile])
+
+  const handleLocationClick = (locName: string) => {
+    const qs = searchParams.toString()
+    navigate(`/mining/locations/${locName}${qs ? `?${qs}` : ""}`)
+    if (!isMobile) setSelectedLocation(locName)
+  }
+
+  const handleModalClose = () => {
+    setSelectedLocation(null)
+    navigate(`/mining?tab=locations&${searchParams.toString()}`, { replace: true })
+  }
 
   const { data, isLoading, error } = useSearchLocationsQuery({
     text: debouncedSearch || undefined,
@@ -114,7 +133,7 @@ export function MiningLocationBrowser() {
             <Grid container spacing={theme.layoutSpacing?.layout ?? 2}>
               {data.locations.map((loc) => (
                 <Grid item xs={12} sm={6} md={4} lg={3} key={loc.name}>
-                  <LocationCard location={loc} onClick={() => setSelectedLocation(loc.name)} />
+                  <LocationCard location={loc} onClick={() => handleLocationClick(loc.name)} />
                 </Grid>
               ))}
             </Grid>
@@ -139,7 +158,7 @@ export function MiningLocationBrowser() {
       <MiningLocationDetailModal
         locationName={selectedLocation}
         open={!!selectedLocation}
-        onClose={() => setSelectedLocation(null)}
+        onClose={handleModalClose}
       />
     </>
   )

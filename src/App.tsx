@@ -1036,6 +1036,18 @@ const router = createBrowserRouter([
         }),
       },
       {
+        path: "/mining/ores/:name",
+        lazy: async () => ({
+          Component: (await import("./pages/mining/MiningOreDetailGate")).MiningOreDetailGate,
+        }),
+      },
+      {
+        path: "/mining/locations/:name",
+        lazy: async () => ({
+          Component: (await import("./pages/mining/MiningLocationDetailGate")).MiningLocationDetailGate,
+        }),
+      },
+      {
         path: "/wiki/items/:id",
         lazy: async () => ({
           Component: (await import("./pages/wiki/WikiItemDetail"))
