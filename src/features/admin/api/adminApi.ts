@@ -2,6 +2,7 @@ import { BACKEND_URL } from "../../../util/constants"
 import { serviceApi } from "../../../store/service"
 import { unwrapResponse } from "../../../store/api-utils"
 import { OrderAnalytics } from "../../orders/domain/types"
+import { OfferAnalytics } from "../../offers/domain/types"
 import { AdminUsersResponse, AdminUsersQuery } from "../../../datatypes/User"
 import {
   AdminAlert,
@@ -100,6 +101,11 @@ export const adminApi = serviceApi.injectEndpoints({
       providesTags: ["Order" as const],
       transformResponse: unwrapResponse,
     }),
+    getOfferAnalytics: builder.query<OfferAnalytics, void>({
+      query: () => `${baseUrl}/offers/analytics`,
+      providesTags: ["Offer" as const],
+      transformResponse: unwrapResponse,
+    }),
     getAdminUsers: builder.query<AdminUsersResponse, AdminUsersQuery>({
       query: (params) => ({
         url: `${baseUrl}/users`,
@@ -176,6 +182,7 @@ export const adminApi = serviceApi.injectEndpoints({
 export const {
   useGetActivityAdminQuery,
   useGetOrderAnalyticsQuery,
+  useGetOfferAnalyticsQuery,
   useGetAdminUsersQuery,
   useGetMembershipAnalyticsQuery,
   useGetAdminAlertsQuery,

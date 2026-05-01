@@ -203,3 +203,47 @@ export const OFFER_SEARCH_STATUS = [
   "accepted",
   "rejected",
 ] as const
+
+// ── Admin Offer Analytics ──
+
+export interface OfferAnalytics {
+  daily_totals: Array<{
+    date: string
+    total: number
+    active: number
+    accepted: number
+    rejected: number
+  }>
+  weekly_totals: Array<{
+    date: string
+    total: number
+    active: number
+    accepted: number
+    rejected: number
+  }>
+  monthly_totals: Array<{
+    date: string
+    total: number
+    active: number
+    accepted: number
+    rejected: number
+    average_accepted_value?: number
+  }>
+  top_contractors: Array<{
+    name: string
+    accepted_offers: number
+    total_offers: number
+  }>
+  top_users: Array<{
+    username: string
+    accepted_offers: number
+    total_offers: number
+  }>
+  summary: {
+    total_offers: number
+    active_offers: number
+    accepted_offers: number
+    rejected_offers: number
+    total_value: number
+  }
+}

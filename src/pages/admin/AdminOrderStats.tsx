@@ -3,7 +3,8 @@ import { useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { usePageAdminOrderStats } from "../../features/admin/hooks/usePageAdminOrderStats"
 import { AdminOrderStatsSkeleton } from "../../features/admin/components/AdminOrderStatsSkeleton"
-import { Grid } from "@mui/material"
+import { useGetOfferAnalyticsQuery } from "../../features/admin/api/adminApi"
+import { Divider, Grid, Typography } from "@mui/material"
 
 const OrderAnalyticsCharts = lazy(() =>
   import("../../views/orders/OrderAnalytics").then((m) => ({
@@ -35,9 +36,36 @@ const AdminRecentOrders = lazy(() =>
   })),
 )
 
+const OfferAnalyticsCharts = lazy(() =>
+  import("../../views/offers/OfferAnalytics").then((m) => ({
+    default: m.OfferAnalyticsCharts,
+  })),
+)
+
+const OfferTopContractorsAnalytics = lazy(() =>
+  import("../../views/offers/OfferAnalytics").then((m) => ({
+    default: m.OfferTopContractorsAnalytics,
+  })),
+)
+
+const OfferTopUsersAnalytics = lazy(() =>
+  import("../../views/offers/OfferAnalytics").then((m) => ({
+    default: m.OfferTopUsersAnalytics,
+  })),
+)
+
+const OfferSummary = lazy(() =>
+  import("../../views/offers/OfferAnalytics").then((m) => ({
+    default: m.OfferSummary,
+  })),
+)
+
 export function AdminOrderStats() {
   const { t } = useTranslation()
-  const { data: analytics, isLoading, error } = usePageAdminOrderStats()
+  const { data: orderAnalytics, isLoading: ordersLoading, error: ordersError } = usePageAdminOrderStats()
+  const { data: offerAnalytics, isLoading: offersLoading } = useGetOfferAnalyticsQuery()
+
+  const isLoading = ordersLoading || offersLoading
 
   return (
     <StandardPageLayout
@@ -46,18 +74,35 @@ export function AdminOrderStats() {
       sidebarOpen={true}
       maxWidth="xl"
       isLoading={isLoading}
-      error={error}
+      error={ordersError}
       skeleton={<AdminOrderStatsSkeleton />}
     >
-      {analytics && (
-        <Suspense fallback={<AdminOrderStatsSkeleton />}>
-          <OrderAnalyticsCharts analytics={analytics} />
-          <TopContractorsAnalytics analytics={analytics} />
-          <TopUsersAnalytics analytics={analytics} />
-          <OrderSummary analytics={analytics} />
-          <AdminRecentOrders />
-        </Suspense>
-      )}
+      <Suspense fallback={<AdminOrderStatsSkeleton />}>
+        {orderAnalytics && (
+          <>
+            <OrderAnalyticsCharts analytics={orderAnalytics} />
+            <TopContractorsAnalytics analytics={orderAnalytics} />
+            <TopUsersAnalytics analytics={orderAnalytics} />
+            <OrderSummary analytics={orderAnalytics} />
+            <AdminRecentOrders />
+          </>
+        )}
+
+        {offerAnalytics && (
+          <>
+            <Grid item xs={12}>
+              <Divider sx={{ my: 4 }} />
+              <Typography variant="h5" sx={{ mb: 2 }}>
+                {t("admin.offerAnalytics", "Offer Analytics")}
+              </Typography>
+            </Grid>
+            <OfferAnalyticsCharts analytics={offerAnalytics} />
+            <OfferTopContractorsAnalytics analytics={offerAnalytics} />
+            <OfferTopUsersAnalytics analytics={offerAnalytics} />
+            <OfferSummary analytics={offerAnalytics} />
+          </>
+        )}
+      </Suspense>
     </StandardPageLayout>
   )
 }
