@@ -18,7 +18,7 @@ import {
 } from "@mui/material"
 import { Close } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
-import { useGetMiningLocationDetailQuery, type MiningLocationGroup } from "../../store/api/v2/mining"
+import { useGetLocationDetailQuery, type LocationMiningGroup } from "../../store/api/v2/market"
 import { Section } from "../../components/paper/Section"
 
 const RARITY_COLORS: Record<string, string> = {
@@ -29,6 +29,10 @@ const RARITY_COLORS: Record<string, string> = {
   legendary: "#ff9800",
 }
 
+function friendlyName(name: string): string {
+  return name.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
+}
+
 interface Props {
   locationName: string | null
   open: boolean
@@ -36,27 +40,30 @@ interface Props {
 }
 
 function groupLabel(groupName: string): string {
-  if (groupName.toLowerCase().includes("spaceship") || groupName.toLowerCase().includes("ship")) return "Ship Mining"
-  if (groupName.toLowerCase().includes("ground")) return "Ground Vehicle Mining"
-  if (groupName.toLowerCase().includes("fps")) return "FPS Mining"
-  return groupName
+  const g = (groupName || "").toLowerCase()
+  if (g.includes("spaceship") || g.includes("ship")) return "Ship Mining"
+  if (g.includes("ground")) return "Ground Vehicle Mining"
+  if (g.includes("fps")) return "FPS Mining"
+  return friendlyName(groupName || "Unknown")
 }
 
 export function MiningLocationDetailModal({ locationName, open, onClose }: Props) {
   const { t } = useTranslation()
-  const { data, isLoading } = useGetMiningLocationDetailQuery(
+  const { data: loc, isLoading } = useGetLocationDetailQuery(
     { name: locationName! },
     { skip: !locationName },
   )
-  const loc = data?.location
+
+  const displayName = loc ? (loc.displayName || friendlyName(loc.name)) : locationName
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
       <DialogTitle sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <Stack direction="row" spacing={1} alignItems="center">
-          <Typography variant="h6">{loc?.location_name || locationName}</Typography>
-          {loc && <Chip label={loc.system} size="small" color="primary" />}
-          {loc && <Chip label={loc.location_type} size="small" variant="outlined" />}
+          <Typography variant="h6">{displayName}</Typography>
+          {loc && <Chip label={friendlyName(loc.system)} size="small" color="primary" />}
+          {loc && <Chip label={friendlyName(loc.locationType)} size="small" variant="outlined" />}
+          {loc?.hasRefinery && <Chip label="Refinery" size="small" color="success" />}
         </Stack>
         <IconButton onClick={onClose} size="small"><Close /></IconButton>
       </DialogTitle>
@@ -66,17 +73,17 @@ export function MiningLocationDetailModal({ locationName, open, onClose }: Props
         )}
         {loc && (
           <Stack spacing={2}>
-            {loc.groups.map((group) => (
-              <MiningGroupSection key={group.group_name} group={group} />
+            {(loc.groups || []).map((group) => (
+              <MiningGroupSection key={group.groupName} group={group} />
             ))}
 
-            {loc.amenities.length > 0 && (
+            {(loc.amenities || []).length > 0 && (
               <Section title={t("mining.amenities", "Amenities")}>
                 <Stack direction="row" spacing={0.5} flexWrap="wrap" gap={0.5} sx={{ pt: 1 }}>
                   {loc.amenities.map((a) => (
                     <Chip
                       key={a}
-                      label={a}
+                      label={friendlyName(a)}
                       size="small"
                       color={a.toLowerCase().includes("refinery") ? "success" : "default"}
                     />
@@ -91,43 +98,33 @@ export function MiningLocationDetailModal({ locationName, open, onClose }: Props
   )
 }
 
-function MiningGroupSection({ group }: { group: MiningLocationGroup }) {
+function MiningGroupSection({ group }: { group: LocationMiningGroup }) {
   return (
-    <Section
-      title={`${groupLabel(group.group_name)} (Weight: ${group.group_probability})`}
-    >
+    <Section title={`${groupLabel(group.groupName)} (Weight: ${group.groupProbability})`}>
       <TableContainer>
         <Table size="small">
           <TableHead>
             <TableRow>
               <TableCell>Ore</TableCell>
-              <TableCell>Rarity</TableCell>
               <TableCell align="right">Probability (%)</TableCell>
               <TableCell align="right">Market Price</TableCell>
               <TableCell align="right">Est. Value</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {[...group.ores]
-              .sort((a, b) => b.probability_pct - a.probability_pct)
+            {[...(group.ores || [])]
+              .sort((a, b) => b.relativeProbability - a.relativeProbability)
               .map((ore) => (
-                <TableRow key={ore.ore_name} hover>
-                  <TableCell>{ore.ore_name}</TableCell>
+                <TableRow key={ore.presetName} hover>
                   <TableCell>
-                    {ore.rarity && (
-                      <Chip
-                        label={ore.rarity}
-                        size="small"
-                        sx={{ height: 20, fontSize: "0.65rem", bgcolor: RARITY_COLORS[ore.rarity.toLowerCase()] || "#757575", color: "#fff" }}
-                      />
-                    )}
+                    {ore.resourceName ? friendlyName(ore.resourceName) : friendlyName(ore.elementName || ore.presetName)}
                   </TableCell>
-                  <TableCell align="right">{ore.probability_pct.toFixed(1)}</TableCell>
+                  <TableCell align="right">{ore.relativeProbability.toFixed(1)}</TableCell>
                   <TableCell align="right">
-                    {ore.market_price != null ? `${ore.market_price.toLocaleString()} aUEC` : "—"}
+                    {ore.marketPrice != null ? `${ore.marketPrice.toLocaleString()} aUEC` : "—"}
                   </TableCell>
                   <TableCell align="right">
-                    {ore.estimated_value != null ? `${ore.estimated_value.toLocaleString()} aUEC` : "—"}
+                    {ore.estimatedValue != null ? `${ore.estimatedValue.toLocaleString()} aUEC` : "—"}
                   </TableCell>
                 </TableRow>
               ))}

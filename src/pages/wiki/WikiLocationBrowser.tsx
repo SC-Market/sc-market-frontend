@@ -29,13 +29,13 @@ import { ExpandLess, ExpandMore, Public, Language, Terrain, HardwareRounded } fr
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { TableSkeleton } from "../../components/game-data/GameDataSkeletons"
-import { useGetMiningLocationDetailQuery } from "../../store/api/v2/mining"
+import { useGetLocationDetailQuery } from "../../store/api/v2/market"
 
 function MiningLocationSummary({ locationCode, level }: { locationCode: string; level: number }) {
-  const { data, isLoading } = useGetMiningLocationDetailQuery({ name: locationCode })
+  const { data, isLoading } = useGetLocationDetailQuery({ name: locationCode })
 
   if (isLoading) return <Box sx={{ pl: (level + 1) * 2 + 2, py: 0.5 }}><CircularProgress size={16} /></Box>
-  if (!data?.location?.groups?.length) return null
+  if (!data?.groups?.length) return null
 
   return (
     <Box sx={{ pl: (level + 1) * 2 + 2, pr: 2, py: 0.5, bgcolor: "action.hover", borderRadius: 1, mx: 1, mb: 0.5 }}>
@@ -43,16 +43,16 @@ function MiningLocationSummary({ locationCode, level }: { locationCode: string; 
         <HardwareRounded sx={{ fontSize: 14, color: "text.secondary" }} />
         <Typography variant="caption" fontWeight={600} color="text.secondary">Mining Resources</Typography>
       </Stack>
-      {(data.location.groups || []).map((g: any) => (
-        <Box key={g.group_name} sx={{ mb: 0.5 }}>
+      {(data.groups || []).map((g: any) => (
+        <Box key={g.groupName} sx={{ mb: 0.5 }}>
           <Typography variant="caption" color="text.secondary" sx={{ fontSize: "0.65rem" }}>
-            {(g.group_name || "").replace("_Mineables", "").replace("SpaceShip", "Ship")} ({g.group_probability}%)
+            {(g.groupName || "").replace("_Mineables", "").replace("SpaceShip", "Ship")} ({g.groupProbability}%)
           </Typography>
           <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap>
             {(g.ores || []).slice(0, 6).map((ore: any) => (
               <Chip
-                key={ore.preset_name}
-                label={`${ore.element_name || ore.preset_name} ${ore.relative_probability?.toFixed(1)}%`}
+                key={ore.presetName}
+                label={`${ore.elementName || ore.presetName} ${ore.relativeProbability?.toFixed(1)}%`}
                 size="small"
                 sx={{ height: 18, fontSize: "0.6rem" }}
                 variant="outlined"

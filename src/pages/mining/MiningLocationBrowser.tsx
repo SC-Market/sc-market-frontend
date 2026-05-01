@@ -21,11 +21,24 @@ import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { FilterSidebarLayout } from "../../components/layout/FilterSidebarLayout"
-import { useSearchMiningLocationsQuery, type MiningLocationSearchResult } from "../../store/api/v2/mining"
+import { useSearchLocationsQuery, type LocationSearchResult } from "../../store/api/v2/market"
 import { useDebounce } from "../../hooks/useDebounce"
 import { MiningLocationDetailModal } from "./MiningLocationDetailModal"
 
+function friendlyName(name: string): string {
+  return name.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
+}
+
 const PAGE_SIZE = 24
+const microChip = { height: 20, fontSize: "0.7rem", fontWeight: "bold" }
+
+function groupLabel(groupName: string): string {
+  const g = (groupName || "").toLowerCase()
+  if (g.includes("spaceship") || g.includes("ship")) return "Ship"
+  if (g.includes("ground")) return "Ground"
+  if (g.includes("fps")) return "FPS"
+  return groupName || "Unknown"
+}
 
 export function MiningLocationBrowser() {
   const { t } = useTranslation()
@@ -48,12 +61,12 @@ export function MiningLocationBrowser() {
   const debouncedSearch = useDebounce(searchText, 300)
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null)
 
-  const { data, isLoading, error } = useSearchMiningLocationsQuery({
+  const { data, isLoading, error } = useSearchLocationsQuery({
     text: debouncedSearch || undefined,
     system: system || undefined,
-    location_type: locationType || undefined,
+    locationType: (locationType as any) || undefined,
     page,
-    page_size: PAGE_SIZE,
+    pageSize: PAGE_SIZE,
   })
 
   const filtersContent = (
@@ -100,8 +113,8 @@ export function MiningLocationBrowser() {
           <>
             <Grid container spacing={theme.layoutSpacing?.layout ?? 2}>
               {data.locations.map((loc) => (
-                <Grid item xs={12} sm={6} md={4} lg={3} key={loc.location_name}>
-                  <LocationCard location={loc} onClick={() => setSelectedLocation(loc.location_name)} />
+                <Grid item xs={12} sm={6} md={4} lg={3} key={loc.name}>
+                  <LocationCard location={loc} onClick={() => setSelectedLocation(loc.name)} />
                 </Grid>
               ))}
             </Grid>
@@ -132,33 +145,30 @@ export function MiningLocationBrowser() {
   )
 }
 
-const microChip = { height: 20, fontSize: "0.7rem", fontWeight: "bold" }
-
-function groupLabel(groupName: string): string {
-  const g = (groupName || "").toLowerCase()
-  if (g.includes("spaceship") || g.includes("ship")) return "Ship"
-  if (g.includes("ground")) return "Ground"
-  if (g.includes("fps")) return "FPS"
-  return groupName || "Unknown"
-}
-
-function LocationCard({ location, onClick }: { location: MiningLocationSearchResult; onClick: () => void }) {
-  const groupSummary = (location.groups || [])
-    .map((g) => `${g.ore_count} ${groupLabel(g.group_name)}`)
+function LocationCard({ location, onClick }: { location: LocationSearchResult; onClick: () => void }) {
+  const displayName = location.displayName || friendlyName(location.name)
+  const systemDisplay = friendlyName(location.system || "")
+  const groups = location.groups || []
+  const groupSummary = groups
+    .map((g) => `${g.oreCount} ${groupLabel(g.groupName)}`)
     .join(", ")
 
   return (
     <Card sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
       <CardActionArea onClick={onClick} sx={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "stretch", justifyContent: "flex-start" }}>
-        <CardContent sx={{ p: 1.5 }}>
-          <Typography variant="body2" fontWeight={600} noWrap>{location.location_name}</Typography>
-          <Stack direction="row" spacing={0.5} sx={{ my: 0.5 }}>
-            <Chip label={location.system} size="small" color="primary" sx={microChip} />
-            <Chip label={location.location_type} size="small" variant="outlined" sx={microChip} />
-            {location.has_refinery && <Chip label="Refinery" size="small" color="success" sx={microChip} />}
+        <CardContent sx={{ p: 1.5, pb: 0 }}>
+          <Typography variant="body2" fontWeight={600} noWrap>{displayName}</Typography>
+          <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap sx={{ my: 0.5 }}>
+            {systemDisplay && <Chip label={systemDisplay} size="small" color="primary" sx={microChip} />}
+            {location.locationType && <Chip label={friendlyName(location.locationType)} size="small" variant="outlined" sx={microChip} />}
+            {location.hasRefinery && <Chip label="Refinery" size="small" color="success" sx={microChip} />}
           </Stack>
-          <Typography variant="caption" color="text.secondary">{groupSummary}</Typography>
         </CardContent>
+        <Box sx={{ px: 1.5, pb: 1.5, pt: 0.5, mt: "auto" }}>
+          {groupSummary && (
+            <Typography variant="caption" color="text.secondary">{groupSummary}</Typography>
+          )}
+        </Box>
       </CardActionArea>
     </Card>
   )

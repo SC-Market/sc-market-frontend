@@ -15,13 +15,11 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Button,
   CircularProgress,
 } from "@mui/material"
 import { Close } from "@mui/icons-material"
-import { useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
-import { useGetMiningOreDetailQuery } from "../../store/api/v2/mining"
+import { useGetOreDetailQuery } from "../../store/api/v2/market"
 import { Section } from "../../components/paper/Section"
 
 const RARITY_COLORS: Record<string, string> = {
@@ -32,13 +30,16 @@ const RARITY_COLORS: Record<string, string> = {
   legendary: "#ff9800",
 }
 
+function friendlyName(name: string): string {
+  return name.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
+}
+
 interface Props {
   oreName: string | null
   open: boolean
   onClose: () => void
 }
 
-/** Map a 0-1 value to green→red */
 function dangerColor(value: number, max: number): "success" | "warning" | "error" {
   const ratio = value / max
   if (ratio < 0.33) return "success"
@@ -48,23 +49,23 @@ function dangerColor(value: number, max: number): "success" | "warning" | "error
 
 export function MiningOreDetailModal({ oreName, open, onClose }: Props) {
   const { t } = useTranslation()
-  const navigate = useNavigate()
-  const { data, isLoading } = useGetMiningOreDetailQuery(
+  const { data: ore, isLoading } = useGetOreDetailQuery(
     { name: oreName! },
     { skip: !oreName },
   )
-  const ore = data?.ore
+
+  const displayName = ore ? (ore.resourceName ? friendlyName(ore.resourceName) : friendlyName(ore.name)) : oreName
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
       <DialogTitle sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
         <Stack direction="row" spacing={1} alignItems="center">
-          <Typography variant="h6">{ore?.resource_name || oreName}</Typography>
+          <Typography variant="h6">{displayName}</Typography>
           {ore?.rarity && (
             <Chip
-              label={ore.rarity}
+              label={ore.rarity.charAt(0).toUpperCase() + ore.rarity.slice(1)}
               size="small"
-              sx={{ bgcolor: RARITY_COLORS[ore.rarity.toLowerCase()] || "#757575", color: "#fff" }}
+              sx={{ bgcolor: RARITY_COLORS[(ore.rarity || "").toLowerCase()] || "#757575", color: "#fff" }}
             />
           )}
         </Stack>
@@ -76,9 +77,9 @@ export function MiningOreDetailModal({ oreName, open, onClose }: Props) {
         )}
         {ore && (
           <Stack spacing={2}>
-            {ore.market_price != null && (
+            {ore.marketPrice != null && (
               <Typography variant="h6" color="success.main">
-                {ore.market_price.toLocaleString()} aUEC
+                {ore.marketPrice.toLocaleString()} aUEC
               </Typography>
             )}
 
@@ -86,8 +87,9 @@ export function MiningOreDetailModal({ oreName, open, onClose }: Props) {
               <Stack spacing={1.5} sx={{ pt: 1 }}>
                 <StatBar label="Instability" value={ore.instability} max={1000} />
                 <StatBar label="Resistance" value={ore.resistance != null ? ore.resistance * 100 : null} max={100} suffix="%" />
-                <StatBar label="Optimal Window" value={ore.optimal_window_thinness} max={10} />
-                <StatBar label="Explosion Risk" value={ore.explosion_multiplier} max={500} />
+                <StatBar label="Optimal Window" value={ore.optimalWindowThinness} max={10} />
+                <StatBar label="Explosion Risk" value={ore.explosionMultiplier} max={500} />
+                <StatBar label="Cluster Factor" value={ore.clusterFactor} max={10} />
               </Stack>
             </Section>
 
@@ -99,35 +101,26 @@ export function MiningOreDetailModal({ oreName, open, onClose }: Props) {
                       <TableCell>Location</TableCell>
                       <TableCell>System</TableCell>
                       <TableCell>Type</TableCell>
-                      <TableCell>Method</TableCell>
+                      <TableCell>Group</TableCell>
                       <TableCell align="right">Probability (%)</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {[...ore.locations]
-                      .sort((a, b) => b.probability_pct - a.probability_pct)
-                      .map((loc) => (
-                        <TableRow key={`${loc.location_name}-${loc.group_name}`} hover>
-                          <TableCell>{loc.location_name}</TableCell>
-                          <TableCell>{loc.system}</TableCell>
-                          <TableCell>{loc.location_type}</TableCell>
-                          <TableCell>{loc.mining_method}</TableCell>
-                          <TableCell align="right">{loc.probability_pct.toFixed(1)}</TableCell>
+                    {[...(ore.locations || [])]
+                      .sort((a, b) => b.relativeProbability - a.relativeProbability)
+                      .map((loc, i) => (
+                        <TableRow key={`${loc.locationName}-${loc.groupName}-${i}`} hover>
+                          <TableCell>{friendlyName(loc.locationName)}</TableCell>
+                          <TableCell>{friendlyName(loc.system)}</TableCell>
+                          <TableCell>{friendlyName(loc.locationType)}</TableCell>
+                          <TableCell>{friendlyName(loc.groupName)}</TableCell>
+                          <TableCell align="right">{loc.relativeProbability.toFixed(1)}</TableCell>
                         </TableRow>
                       ))}
                   </TableBody>
                 </Table>
               </TableContainer>
             </Section>
-
-            {ore.game_item_id && (
-              <Button
-                variant="outlined"
-                onClick={() => { onClose(); navigate(`/market/aggregate/${ore.game_item_id}`) }}
-              >
-                {t("mining.viewOnMarket", "View on Market")}
-              </Button>
-            )}
           </Stack>
         )}
       </DialogContent>
@@ -135,7 +128,7 @@ export function MiningOreDetailModal({ oreName, open, onClose }: Props) {
   )
 }
 
-function StatBar({ label, value, max, suffix = "" }: { label: string; value: number | null; max: number; suffix?: string }) {
+function StatBar({ label, value, max, suffix = "" }: { label: string; value: number | null | undefined; max: number; suffix?: string }) {
   if (value == null) return null
   const pct = Math.min((value / max) * 100, 100)
   return (

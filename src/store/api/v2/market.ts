@@ -14,6 +14,7 @@ export const addTagTypes = [
   "Game Data - Versions",
   "Game Data - Resources",
   "Game Data - Missions",
+  "Game Data - Mining",
   "Game Data - Crafting",
   "Game Data - Blueprints",
   "Debug V2",
@@ -272,17 +273,10 @@ const injectedRtkApi = api
       }),
       uploadPhotos: build.mutation<UploadPhotosApiResponse, UploadPhotosApiArg>(
         {
-          query: (queryArg) => {
-            const formData = new FormData()
-            for (const file of queryArg.photos) {
-              formData.append("photos", file)
-            }
-            return {
-              url: `/listings/${queryArg.id}/photos`,
-              method: "POST",
-              body: formData,
-            }
-          },
+          query: (queryArg) => ({
+            url: `/listings/${queryArg.id}/photos`,
+            method: "POST",
+          }),
           invalidatesTags: ["Listings V2"],
         },
       ),
@@ -753,6 +747,52 @@ const injectedRtkApi = api
           providesTags: ["Game Data - Missions"],
         },
       ),
+      searchOres: build.query<SearchOresApiResponse, SearchOresApiArg>({
+        query: (queryArg) => ({
+          url: `/game-data/mining/ores`,
+          params: {
+            text: queryArg.text,
+            system: queryArg.system,
+            mining_method: queryArg.miningMethod,
+            rarity: queryArg.rarity,
+            page: queryArg.page,
+            page_size: queryArg.pageSize,
+          },
+        }),
+        providesTags: ["Game Data - Mining"],
+      }),
+      getOreDetail: build.query<GetOreDetailApiResponse, GetOreDetailApiArg>({
+        query: (queryArg) => ({
+          url: `/game-data/mining/ores/${queryArg.name}`,
+        }),
+        providesTags: ["Game Data - Mining"],
+      }),
+      searchLocations: build.query<
+        SearchLocationsApiResponse,
+        SearchLocationsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/game-data/mining/locations`,
+          params: {
+            text: queryArg.text,
+            system: queryArg.system,
+            location_type: queryArg.locationType,
+            mining_method: queryArg.miningMethod,
+            page: queryArg.page,
+            page_size: queryArg.pageSize,
+          },
+        }),
+        providesTags: ["Game Data - Mining"],
+      }),
+      getLocationDetail: build.query<
+        GetLocationDetailApiResponse,
+        GetLocationDetailApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/game-data/mining/locations/${queryArg.name}`,
+        }),
+        providesTags: ["Game Data - Mining"],
+      }),
       calculateQuality: build.mutation<
         CalculateQualityApiResponse,
         CalculateQualityApiArg
@@ -1488,8 +1528,6 @@ export type UploadPhotosApiResponse = /** status 200 Ok */ {
 export type UploadPhotosApiArg = {
   /** Listing UUID */
   id: string
-  /** Photo files to upload */
-  photos: File[]
 }
 export type GetInventoryApiResponse = /** status 200 Ok */ InventoryResponse
 export type GetInventoryApiArg = {
@@ -1889,6 +1927,48 @@ export type GetGameEventsApiResponse = /** status 200 Ok */ {
   events: GameEvent[]
 }
 export type GetGameEventsApiArg = void
+export type SearchOresApiResponse = /** status 200 Ok */ SearchOresResponse
+export type SearchOresApiArg = {
+  /** Search ore name */
+  text?: string
+  /** Filter by star system */
+  system?: string
+  /** Filter by mining method */
+  miningMethod?: "ship" | "ground" | "fps"
+  /** Filter by rarity */
+  rarity?: "common" | "uncommon" | "rare" | "epic" | "legendary"
+  /** Page number (default: 1) */
+  page?: number
+  /** Results per page (default: 20, max: 100) */
+  pageSize?: number
+}
+export type GetOreDetailApiResponse = /** status 200 Ok */ OreDetailResponse
+export type GetOreDetailApiArg = {
+  /** Element name (e.g. 'gold_ore') */
+  name: string
+}
+export type SearchLocationsApiResponse =
+  /** status 200 Ok */ SearchLocationsResponse
+export type SearchLocationsApiArg = {
+  /** Search location name */
+  text?: string
+  /** Filter by star system */
+  system?: string
+  /** Filter by location type */
+  locationType?: "surface" | "asteroidfield"
+  /** Filter by mining method */
+  miningMethod?: "ship" | "ground" | "fps"
+  /** Page number (default: 1) */
+  page?: number
+  /** Results per page (default: 20, max: 100) */
+  pageSize?: number
+}
+export type GetLocationDetailApiResponse =
+  /** status 200 Ok */ LocationDetailResponse
+export type GetLocationDetailApiArg = {
+  /** Location name (e.g. 'stanton1b') */
+  name: string
+}
 export type CalculateQualityApiResponse =
   /** status 200 Quality calculation result with breakdown and predicted stats */ CalculateQualityResponse
 export type CalculateQualityApiArg = {
@@ -3092,7 +3172,7 @@ export type LotUpdate = {
 export type UpdateListingRequest = {
   /** New title (optional) */
   title?: string
-  /** New status (optional) — active, sold, expired, cancelled */
+  /** New status (optional) — active, inactive, sold, expired, cancelled */
   status?: "active" | "inactive" | "sold" | "expired" | "cancelled"
   /** New description (optional) */
   description?: string
@@ -3104,6 +3184,8 @@ export type UpdateListingRequest = {
   lot_updates?: LotUpdate[]
   /** Pickup method: how the buyer receives the item */
   pickup_method?: ("delivery" | "pickup" | "any" | null) | null
+  /** Replace listing photos with these URLs (handles removals) */
+  photos?: string[]
   /** Quantity unit */
   quantity_unit?: "unit" | "scu"
   /** Per-listing order limits (null to remove) */
@@ -3113,8 +3195,6 @@ export type UpdateListingRequest = {
   max_order_value?: number | null
   /** Updated bulk discount tiers (pass [] to remove, omit to keep unchanged) */
   bulk_discount_tiers?: BulkDiscountTier[]
-  /** Replace listing photos with these URLs (handles removals) */
-  photos?: string[]
 }
 export type InventoryLotDetail = {
   lot_id: string
@@ -3988,6 +4068,100 @@ export type GameEvent = {
   event_code: string
   event_name: string
   mission_count: number
+}
+export type OreTopLocation = {
+  name: string
+  system: string
+  probability: number
+}
+export type OreSearchResult = {
+  name: string
+  resourceName: string | null
+  instability: number | null
+  resistance: number | null
+  optimalWindowMidpoint: number | null
+  optimalWindowThinness: number | null
+  explosionMultiplier: number | null
+  clusterFactor: number | null
+  rarity: string
+  marketPrice: number | null
+  locationCount: number
+  topLocations: OreTopLocation[]
+}
+export type SearchOresResponse = {
+  ores: OreSearchResult[]
+  total: number
+  page: number
+  page_size: number
+}
+export type OreLocation = {
+  locationName: string
+  system: string
+  locationType: string
+  groupName: string
+  groupProbability: number
+  relativeProbability: number
+}
+export type OreDetailResponse = {
+  name: string
+  resourceName: string | null
+  instability: number | null
+  resistance: number | null
+  optimalWindowMidpoint: number | null
+  optimalWindowMidpointRandomness: number | null
+  optimalWindowThinness: number | null
+  explosionMultiplier: number | null
+  clusterFactor: number | null
+  rarity: string
+  marketPrice: number | null
+  locations: OreLocation[]
+}
+export type LocationGroup = {
+  groupName: string
+  groupProbability: number
+  oreCount: number
+}
+export type LocationSearchResult = {
+  name: string
+  displayName: string | null
+  system: string
+  locationType: string
+  groups: LocationGroup[]
+  hasRefinery: boolean
+}
+export type SearchLocationsResponse = {
+  locations: LocationSearchResult[]
+  total: number
+  page: number
+  page_size: number
+}
+export type LocationOre = {
+  presetName: string
+  elementName: string | null
+  resourceName: string | null
+  relativeProbability: number
+  instability: number | null
+  resistance: number | null
+  optimalWindowMidpoint: number | null
+  optimalWindowThinness: number | null
+  explosionMultiplier: number | null
+  clusterFactor: number | null
+  marketPrice: number | null
+  estimatedValue: number | null
+}
+export type LocationMiningGroup = {
+  groupName: string
+  groupProbability: number
+  ores: LocationOre[]
+}
+export type LocationDetailResponse = {
+  name: string
+  displayName: string | null
+  system: string
+  locationType: string
+  groups: LocationMiningGroup[]
+  hasRefinery: boolean
+  amenities: string[]
 }
 export type QualityContribution = {
   /** Material name */
@@ -5021,6 +5195,10 @@ export const {
   useGetMissionChainsQuery,
   useGetReputationRanksQuery,
   useGetGameEventsQuery,
+  useSearchOresQuery,
+  useGetOreDetailQuery,
+  useSearchLocationsQuery,
+  useGetLocationDetailQuery,
   useCalculateQualityMutation,
   useSimulateCraftingMutation,
   useRecordCraftingMutation,

@@ -17,7 +17,7 @@ import { GameItemAvatar } from "../../components/game-data/GameItemAvatar"
 import { getCommodityColor } from "../../util/gameIcons"
 import { formatPrice } from "../../util/formatPrice"
 import { CheckCircle, Cancel, TerrainRounded, StoreRounded, BuildRounded, HardwareRounded } from "@mui/icons-material"
-import { useSearchMiningOresQuery } from "../../store/api/v2/mining"
+import { useSearchOresQuery } from "../../store/api/v2/market"
 
 function BoolChip({ value, label }: { value: boolean; label: string }) {
   return (
@@ -190,7 +190,7 @@ export function WikiCommodityDetail() {
 
 function MiningDataSection({ resourceName }: { resourceName: string }) {
   // Search for ores matching this resource name
-  const { data } = useSearchMiningOresQuery({ text: resourceName, page_size: 5 })
+  const { data } = useSearchOresQuery({ text: resourceName, pageSize: 5 })
   const ores = data?.ores || []
   if (!ores.length) return null
 
@@ -216,19 +216,19 @@ function MiningDataSection({ resourceName }: { resourceName: string }) {
                 <Typography variant="caption" fontWeight={600}>{ore.resistance}</Typography>
               </Stack>
             )}
-            {ore.explosion_multiplier != null && (
+            {ore.explosionMultiplier != null && (
               <Stack direction="row" justifyContent="space-between">
                 <Typography variant="caption" color="text.secondary">Explosion Risk</Typography>
-                <Typography variant="caption" fontWeight={600}>{ore.explosion_multiplier}</Typography>
+                <Typography variant="caption" fontWeight={600}>{ore.explosionMultiplier}</Typography>
               </Stack>
             )}
-            {ore.top_locations && ore.top_locations.length > 0 && (
+            {(ore.topLocations?.length ?? 0) > 0 && (
               <>
                 <Divider sx={{ my: 0.5 }} />
                 <Typography variant="caption" color="text.secondary" fontWeight={600}>Best Locations</Typography>
-                {ore.top_locations.map((loc: any) => (
-                  <Stack key={loc.location_name} direction="row" justifyContent="space-between">
-                    <Typography variant="caption">{loc.location_name}</Typography>
+                {(ore.topLocations || []).map((loc: any) => (
+                  <Stack key={loc.name} direction="row" justifyContent="space-between">
+                    <Typography variant="caption">{loc.name}</Typography>
                     <Typography variant="caption" color="primary">{loc.probability?.toFixed(1)}%</Typography>
                   </Stack>
                 ))}
