@@ -81,8 +81,8 @@ export function MiningOreBrowser() {
   const { data, isLoading, error } = useSearchOresQuery({
     text: queryParams.q || undefined,
     system: queryParams.system || undefined,
-    miningMethod: (queryParams.mining_method as any) || undefined,
-    rarity: (queryParams.rarity as any) || undefined,
+    miningMethod: (queryParams.mining_method as "ship" | "ground" | "fps" | undefined) || undefined,
+    rarity: (queryParams.rarity as "common" | "uncommon" | "rare" | "epic" | "legendary" | undefined) || undefined,
     page,
     pageSize: PAGE_SIZE,
   })

@@ -92,7 +92,7 @@ export function MiningLocationBrowser() {
   const { data, isLoading, error } = useSearchLocationsQuery({
     text: queryParams.q || undefined,
     system: queryParams.system || undefined,
-    locationType: (queryParams.location_type as any) || undefined,
+    locationType: (queryParams.location_type as "surface" | "asteroidfield" | undefined) || undefined,
     page,
     pageSize: PAGE_SIZE,
   })
@@ -164,13 +164,8 @@ function LocationCard({ location, onClick }: { location: LocationSearchResult; o
   const displayName = location.displayName || friendlyName(location.name)
   const systemDisplay = location.system || ""
 
-  // Flatten all ores across groups, sorted by probability
-  const allOres = (location.groups || [])
-    .flatMap((g) => (g as any).ores || [])
-  // If no ores array on groups (search endpoint), show group summary
-  const hasOreDetail = allOres.length > 0
-  const topOres = allOres.sort((a: any, b: any) => (b.relativeProbability || 0) - (a.relativeProbability || 0)).slice(0, 5)
-  const moreCount = allOres.length - 5
+  // topOres is string[] from the search endpoint
+  const hasTopOres = (location.groups || []).some((g) => (g.topOres || []).length > 0)
 
   return (
     <Card sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
@@ -186,39 +181,23 @@ function LocationCard({ location, onClick }: { location: LocationSearchResult; o
             {location.hasRefinery && <Chip label="Refinery" size="small" color="success" sx={microChip} />}
           </Stack>
 
-          {hasOreDetail ? (
-            <Box sx={{ mt: 0.5 }}>
-              {topOres.map((ore: any, i: number) => (
-                <Box key={i} sx={{ display: "flex", justifyContent: "space-between", py: 0.1 }}>
-                  <Typography variant="caption" noWrap sx={{ flex: 1 }}>{ore.displayName || ore.elementName || ore.presetName}</Typography>
-                  <Typography variant="caption" color="text.secondary" fontWeight={600} sx={{ ml: 1, flexShrink: 0 }}>{(ore.relativeProbability || 0).toFixed(1)}%</Typography>
-                </Box>
-              ))}
-              {moreCount > 0 && (
-                <Typography variant="caption" color="text.secondary">+{moreCount} more</Typography>
-              )}
-            </Box>
-          ) : (
-            <Box sx={{ mt: 0.5 }}>
-              {(location.groups || []).map((g) => (
-                <Box key={g.groupName} sx={{ mb: 0.5 }}>
-                  <Typography variant="caption" color="text.secondary" fontWeight={600} sx={{ fontSize: "0.65rem" }}><GroupIcon groupName={g.groupName} />{g.groupName}</Typography>
-                  {(g.topOres || []).length > 0 ? (
-                    <Box>
-                      {g.topOres.slice(0, 3).map((name, i) => (
-                        <Typography key={i} variant="caption" display="block" sx={{ fontSize: "0.7rem", pl: 0.5 }}>{name}</Typography>
-                      ))}
-                      {g.oreCount > 3 && (
-                        <Typography variant="caption" color="text.secondary" sx={{ fontSize: "0.65rem", pl: 0.5 }}>+{g.oreCount - 3} more</Typography>
-                      )}
-                    </Box>
-                  ) : (
-                    <Typography variant="caption" color="text.secondary" sx={{ pl: 0.5 }}>{g.oreCount} ores</Typography>
+          {(location.groups || []).map((g) => (
+            <Box key={g.groupName} sx={{ mb: 0.5 }}>
+              <Typography variant="caption" color="text.secondary" fontWeight={600} sx={{ fontSize: "0.65rem" }}><GroupIcon groupName={g.groupName} />{g.groupName}</Typography>
+              {(g.topOres || []).length > 0 ? (
+                <Box>
+                  {g.topOres.slice(0, 3).map((name: string, i: number) => (
+                    <Typography key={i} variant="caption" display="block" sx={{ fontSize: "0.7rem", pl: 0.5 }}>{name}</Typography>
+                  ))}
+                  {g.oreCount > 3 && (
+                    <Typography variant="caption" color="text.secondary" sx={{ fontSize: "0.65rem", pl: 0.5 }}>+{g.oreCount - 3} more</Typography>
                   )}
                 </Box>
-              ))}
+              ) : (
+                <Typography variant="caption" color="text.secondary" sx={{ pl: 0.5 }}>{g.oreCount} ores</Typography>
+              )}
             </Box>
-          )}
+          ))}
         </CardContent>
       </CardActionArea>
     </Card>
