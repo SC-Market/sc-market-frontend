@@ -1042,6 +1042,12 @@ const router = createBrowserRouter([
         }),
       },
       {
+        path: "/mining/locations",
+        lazy: async () => ({
+          Component: (await import("./pages/mining/MiningPage")).MiningPage,
+        }),
+      },
+      {
         path: "/mining/locations/:name",
         lazy: async () => ({
           Component: (await import("./pages/mining/MiningLocationDetailGate")).MiningLocationDetailGate,

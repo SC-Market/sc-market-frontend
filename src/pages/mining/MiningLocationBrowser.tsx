@@ -63,7 +63,6 @@ export function MiningLocationBrowser() {
 
   const handleTokensChange = (tokens: SearchToken[]) => {
     const params = new URLSearchParams(locationTokensToParams(tokens))
-    params.set("tab", "locations")
     setSearchParams(params, { replace: true })
   }
 
@@ -88,7 +87,7 @@ export function MiningLocationBrowser() {
 
   const handleModalClose = () => {
     setSelectedLocation(null)
-    navigate("/mining?tab=locations", { replace: true })
+    navigate("/mining/locations", { replace: true })
   }
 
   const { data, isLoading, error } = useSearchLocationsQuery({
