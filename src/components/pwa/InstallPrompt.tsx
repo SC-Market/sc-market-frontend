@@ -8,68 +8,38 @@ import {
   Typography,
   IconButton,
   Stack,
-  Chip,
 } from "@mui/material"
 import {
   GetAppRounded,
   CloseRounded,
-  CheckCircleRounded,
 } from "@mui/icons-material"
 import { usePWAInstallPrompt } from "../../hooks/pwa/usePWAInstallPrompt"
-import { useCookies } from "react-cookie"
+
+const DISMISS_KEY = "pwa_install_dismissed"
 
 export function InstallPrompt() {
   const { canInstall, isInstalled, triggerInstall } = usePWAInstallPrompt()
   const [showPrompt, setShowPrompt] = useState(false)
-  const [cookies, setCookie] = useCookies(["pwa-install-dismissed"])
 
   useEffect(() => {
-    // Check if app is already installed
-    if (isInstalled) {
-      return
-    }
-
-    // Migrate from old sessionStorage to cookie
-    const oldDismissed = sessionStorage.getItem("pwa-install-dismissed")
-    if (oldDismissed === "true" && cookies["pwa-install-dismissed"] !== "true") {
-      setCookie("pwa-install-dismissed", "true", {
-        path: "/",
-        maxAge: 365 * 24 * 60 * 60,
-      })
-      sessionStorage.removeItem("pwa-install-dismissed")
-      return
-    }
-
-    // Check if prompt was dismissed (cookie lasts 1 year)
-    if (cookies["pwa-install-dismissed"] === "true") {
-      return
-    }
-
-    // Show prompt when install becomes available
-    if (canInstall) {
-      setShowPrompt(true)
-    }
-  }, [canInstall, isInstalled, cookies, setCookie])
+    if (isInstalled) return
+    try {
+      if (localStorage.getItem(DISMISS_KEY)) return
+    } catch {}
+    if (canInstall) setShowPrompt(true)
+  }, [canInstall, isInstalled])
 
   const handleInstall = async () => {
     const success = await triggerInstall()
-    if (success) {
-      setShowPrompt(false)
-    }
+    if (success) setShowPrompt(false)
   }
 
   const handleDismiss = () => {
     setShowPrompt(false)
-    // Set cookie to expire in 1 year
-    setCookie("pwa-install-dismissed", "true", {
-      path: "/",
-      maxAge: 365 * 24 * 60 * 60, // 1 year in seconds
-    })
+    try { localStorage.setItem(DISMISS_KEY, "1") } catch {}
   }
 
-  if (isInstalled || !showPrompt || !canInstall) {
-    return null
-  }
+  if (isInstalled || !showPrompt || !canInstall) return null
 
   return (
     <Card
@@ -90,12 +60,7 @@ export function InstallPrompt() {
           spacing={2}
         >
           <Box sx={{ flex: 1 }}>
-            <Stack
-              direction="row"
-              spacing={1}
-              alignItems="center"
-              sx={{ mb: 1 }}
-            >
+            <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1 }}>
               <GetAppRounded color="primary" />
               <Typography variant="h6" component="div">
                 Install SC Market
@@ -105,33 +70,18 @@ export function InstallPrompt() {
               Install our app for a better experience:
             </Typography>
             <Stack spacing={0.5}>
-              <Typography variant="body2" component="div">
-                • Faster loading
-              </Typography>
-              <Typography variant="body2" component="div">
-                • Offline access
-              </Typography>
-              <Typography variant="body2" component="div">
-                • Home screen icon
-              </Typography>
+              <Typography variant="body2" component="div">• Faster loading</Typography>
+              <Typography variant="body2" component="div">• Offline access</Typography>
+              <Typography variant="body2" component="div">• Home screen icon</Typography>
             </Stack>
           </Box>
-          <IconButton
-            size="small"
-            onClick={handleDismiss}
-            sx={{ alignSelf: "flex-start" }}
-          >
+          <IconButton size="small" onClick={handleDismiss} sx={{ alignSelf: "flex-start" }}>
             <CloseRounded />
           </IconButton>
         </Stack>
       </CardContent>
       <CardActions sx={{ px: 2, pb: 2 }}>
-        <Button
-          variant="contained"
-          fullWidth
-          startIcon={<GetAppRounded />}
-          onClick={handleInstall}
-        >
+        <Button variant="contained" fullWidth startIcon={<GetAppRounded />} onClick={handleInstall}>
           Install
         </Button>
       </CardActions>
