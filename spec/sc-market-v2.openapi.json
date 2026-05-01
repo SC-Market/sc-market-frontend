@@ -4330,8 +4330,46 @@
 					"type": {
 						"type": "string"
 					},
-					"parent_id": {
-						"type": "string"
+					"navIcon": {
+						"type": "string",
+						"nullable": true
+					},
+					"description": {
+						"type": "string",
+						"nullable": true
+					},
+					"parentId": {
+						"type": "string",
+						"nullable": true
+					},
+					"jurisdiction": {
+						"type": "string",
+						"nullable": true
+					},
+					"respawnType": {
+						"type": "string",
+						"nullable": true
+					},
+					"size": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					},
+					"qtArrivalRadius": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					},
+					"qtObstructionRadius": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					},
+					"amenities": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
 					},
 					"children": {
 						"items": {
@@ -4344,6 +4382,15 @@
 					"id",
 					"name",
 					"type",
+					"navIcon",
+					"description",
+					"parentId",
+					"jurisdiction",
+					"respawnType",
+					"size",
+					"qtArrivalRadius",
+					"qtObstructionRadius",
+					"amenities",
 					"children"
 				],
 				"type": "object",
