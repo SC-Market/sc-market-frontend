@@ -1,6 +1,6 @@
 import React from "react"
 import { Grid, Tab, Tabs } from "@mui/material"
-import { useSearchParams, useLocation } from "react-router-dom"
+import { useLocation, useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { VersionSelector } from "../../components/game-data/VersionSelector"
@@ -9,19 +9,13 @@ import { MiningLocationBrowser } from "./MiningLocationBrowser"
 
 export function MiningPage() {
   const { t } = useTranslation()
-  const [searchParams, setSearchParams] = useSearchParams()
   const location = useLocation()
+  const navigate = useNavigate()
 
-  // Detect tab from URL path (for /mining/locations/:name routes) or search params
-  const pathTab = location.pathname.startsWith("/mining/locations") ? "locations" : location.pathname.startsWith("/mining/ores") ? "ores" : null
-  const tab = pathTab || searchParams.get("tab") || "ores"
+  const tab = location.pathname.includes("/mining/locations") ? "locations" : "ores"
 
   const handleTabChange = (_: React.SyntheticEvent, value: string) => {
-    const params = new URLSearchParams(searchParams)
-    params.set("tab", value)
-    for (const key of ["rarity", "mining_method", "location_type"]) params.delete(key)
-    params.delete("page")
-    setSearchParams(params, { replace: true })
+    navigate(value === "locations" ? "/mining/locations" : "/mining", { replace: true })
   }
 
   return (

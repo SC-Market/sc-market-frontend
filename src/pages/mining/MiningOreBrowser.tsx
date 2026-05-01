@@ -52,7 +52,6 @@ export function MiningOreBrowser() {
 
   const handleTokensChange = (tokens: SearchToken[]) => {
     const params = new URLSearchParams(miningTokensToParams(tokens))
-    params.set("tab", searchParams.get("tab") || "ores")
     setSearchParams(params, { replace: true })
   }
 
