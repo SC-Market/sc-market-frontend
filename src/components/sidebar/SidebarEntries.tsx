@@ -356,6 +356,12 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
         to: "/missions",
       },
       {
+        text: "Mining",
+        icon: <HardwareRounded />,
+        tab_key: "mining",
+        to: "/mining",
+      },
+      {
         text: "sidebar.gameData.crafting",
         icon: <ScienceRounded />,
         tab_key: "crafting",
@@ -388,12 +394,6 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
             logged_in: true,
           },
         ],
-      },
-      {
-        text: "Mining",
-        icon: <HardwareRounded />,
-        tab_key: "mining",
-        to: "/mining",
       },
       {
         text: "sidebar.wiki.title",
