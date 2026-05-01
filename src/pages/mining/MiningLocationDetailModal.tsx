@@ -1,20 +1,6 @@
 import React from "react"
 import {
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  IconButton,
-  Typography,
-  Chip,
-  Stack,
-  Box,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  CircularProgress,
+  Dialog, DialogTitle, DialogContent, IconButton, Typography, Chip, Stack, Box, CircularProgress,
 } from "@mui/material"
 import { Close, RocketLaunchRounded, DirectionsCarRounded, PanToolRounded } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
@@ -108,58 +94,37 @@ export function MiningLocationDetailModal({ locationName, open, onClose }: Props
 }
 
 function MiningGroupSection({ group }: { group: LocationMiningGroup }) {
+  const sorted = [...(group.ores || [])].sort((a, b) => b.relativeProbability - a.relativeProbability)
   return (
     <Section element_title={<Box component="span">{groupIcon(group.groupName)}{groupLabel(group.groupName)} (Weight: {group.groupProbability})</Box>}>
-      <TableContainer>
-        <Table size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell>Ore</TableCell>
-              <TableCell align="center">Rarity</TableCell>
-              <TableCell align="right">Probability (%)</TableCell>
-              <TableCell align="right">Market Price</TableCell>
-              <TableCell align="right">Est. Value</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {[...(group.ores || [])]
-              .sort((a, b) => b.relativeProbability - a.relativeProbability)
-              .map((ore) => {
-                const name = ore.displayName || (ore.resourceName ? friendlyName(ore.resourceName) : friendlyName(ore.elementName || ore.presetName))
-                const rarity = ore.rarity || "common"
-                return (
-                  <TableRow key={ore.presetName} hover>
-                    <TableCell>
-                      <Typography variant="body2" fontWeight={600}>{name}</Typography>
-                      {(ore.instability != null || ore.resistance != null) && (
-                        <Typography variant="caption" color="text.secondary" sx={{ fontSize: "0.65rem" }}>
-                          {[
-                            ore.instability != null ? `Inst: ${ore.instability}` : null,
-                            ore.resistance != null ? `Res: ${(ore.resistance * 100).toFixed(0)}%` : null,
-                          ].filter(Boolean).join(" · ")}
-                        </Typography>
-                      )}
-                    </TableCell>
-                    <TableCell align="center">
-                      <Chip
-                        label={rarity.charAt(0).toUpperCase() + rarity.slice(1)}
-                        size="small"
-                        sx={{ bgcolor: (RARITY_COLORS[rarity] || "#9e9e9e") + "22", color: RARITY_COLORS[rarity] || "#9e9e9e", fontWeight: 600, height: 20, fontSize: "0.7rem" }}
-                      />
-                    </TableCell>
-                    <TableCell align="right">{ore.relativeProbability.toFixed(1)}</TableCell>
-                    <TableCell align="right">
-                      {ore.marketPrice != null ? `${ore.marketPrice.toLocaleString()} aUEC` : "—"}
-                    </TableCell>
-                    <TableCell align="right">
-                      {ore.estimatedValue != null ? `${ore.estimatedValue.toLocaleString()} aUEC` : "—"}
-                    </TableCell>
-                  </TableRow>
-                )
-              })}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <Stack spacing={0.5} sx={{ pt: 1 }}>
+        {sorted.map((ore) => {
+          const name = ore.displayName || (ore.resourceName ? friendlyName(ore.resourceName) : friendlyName(ore.elementName || ore.presetName))
+          const rarity = ore.rarity || "common"
+          const color = RARITY_COLORS[rarity] || "#9e9e9e"
+          return (
+            <Box key={ore.presetName} sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <Box sx={{ display: "flex", alignItems: "center", gap: 1, minWidth: 0 }}>
+                <Chip
+                  label={name}
+                  size="small"
+                  sx={{ bgcolor: color + "18", color, fontWeight: 600, height: 24, fontSize: "0.75rem", borderLeft: `3px solid ${color}` }}
+                />
+                {ore.marketPrice != null && (
+                  <Typography variant="caption" color="text.secondary" sx={{ whiteSpace: "nowrap" }}>
+                    {ore.marketPrice.toLocaleString()} aUEC
+                  </Typography>
+                )}
+              </Box>
+              <Typography variant="body2" fontWeight={600} sx={{ ml: 1, whiteSpace: "nowrap" }}>
+                {ore.relativeProbability.toFixed(1)}%
+              </Typography>
+            </Box>
+          )
+        })}
+      </Stack>
     </Section>
+  )
+}
   )
 }
