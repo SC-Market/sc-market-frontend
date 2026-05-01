@@ -161,7 +161,7 @@ export function MiningOreBrowser() {
 
 function OreCard({ ore, onClick }: { ore: OreSearchResult; onClick: () => void }) {
   const rarityColor = RARITY_COLORS[(ore.rarity || "").toLowerCase()] || "#757575"
-  const displayName = ore.resourceName ? friendlyName(ore.resourceName) : friendlyName(ore.name)
+  const displayName = ore.displayName || friendlyName(ore.name)
 
   return (
     <Card sx={{ height: "100%", display: "flex", flexDirection: "column", borderLeft: `3px solid ${rarityColor}` }}>

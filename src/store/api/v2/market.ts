@@ -4086,7 +4086,9 @@ export type OreTopLocation = {
 }
 export type OreSearchResult = {
   name: string
+  displayName: string
   resourceName: string | null
+  gameItemId: string | null
   instability: number | null
   resistance: number | null
   optimalWindowMidpoint: number | null
@@ -4114,7 +4116,9 @@ export type OreLocation = {
 }
 export type OreDetailResponse = {
   name: string
+  displayName: string
   resourceName: string | null
+  gameItemId: string | null
   instability: number | null
   resistance: number | null
   optimalWindowMidpoint: number | null

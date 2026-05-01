@@ -54,7 +54,7 @@ export function MiningOreDetailModal({ oreName, open, onClose }: Props) {
     { skip: !oreName },
   )
 
-  const displayName = ore ? (ore.resourceName ? friendlyName(ore.resourceName) : friendlyName(ore.name)) : oreName
+  const displayName = ore ? (ore.displayName || friendlyName(ore.name)) : oreName
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
