@@ -187,7 +187,7 @@ function OreCard({ ore, onClick }: { ore: MiningOreSearchResult; onClick: () => 
               {ore.market_price.toLocaleString()} aUEC
             </Typography>
           )}
-          {ore.top_locations.length > 0 && (
+          {ore.top_locations && ore.top_locations.length > 0 && (
             <Typography variant="caption" color="text.secondary" display="block" noWrap>
               {ore.top_locations.slice(0, 2).map((l) => l.location_name).join(", ")}
             </Typography>
