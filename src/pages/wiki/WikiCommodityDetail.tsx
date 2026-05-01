@@ -16,7 +16,8 @@ import { DetailPageSkeleton } from "../../components/game-data/GameDataSkeletons
 import { GameItemAvatar } from "../../components/game-data/GameItemAvatar"
 import { getCommodityColor } from "../../util/gameIcons"
 import { formatPrice } from "../../util/formatPrice"
-import { CheckCircle, Cancel, TerrainRounded, StoreRounded, BuildRounded } from "@mui/icons-material"
+import { CheckCircle, Cancel, TerrainRounded, StoreRounded, BuildRounded, HardwareRounded } from "@mui/icons-material"
+import { useSearchMiningOresQuery } from "../../store/api/v2/mining"
 
 function BoolChip({ value, label }: { value: boolean; label: string }) {
   return (
@@ -127,6 +128,9 @@ export function WikiCommodityDetail() {
               </Grid>
             )}
 
+            {/* Mining Data from P4K */}
+            <MiningDataSection resourceName={r.resource_name} />
+
             {/* Purchase Locations */}
             {r.purchase_locations && r.purchase_locations.length > 0 && (
               <Grid item xs={12} md={6}>
@@ -181,5 +185,58 @@ export function WikiCommodityDetail() {
         </Grid>
       )}
     </StandardPageLayout>
+  )
+}
+
+function MiningDataSection({ resourceName }: { resourceName: string }) {
+  // Search for ores matching this resource name
+  const { data } = useSearchMiningOresQuery({ text: resourceName, page_size: 5 })
+  const ores = data?.ores || []
+  if (!ores.length) return null
+
+  const ore = ores[0]
+  return (
+    <Grid item xs={12} md={6}>
+      <Card>
+        <CardContent>
+          <Typography variant="subtitle2" gutterBottom>
+            <HardwareRounded sx={{ fontSize: 16, mr: 0.5, verticalAlign: "text-bottom" }} />
+            Mining Stats
+          </Typography>
+          <Stack spacing={0.5}>
+            {ore.instability != null && (
+              <Stack direction="row" justifyContent="space-between">
+                <Typography variant="caption" color="text.secondary">Instability</Typography>
+                <Typography variant="caption" fontWeight={600}>{ore.instability}</Typography>
+              </Stack>
+            )}
+            {ore.resistance != null && (
+              <Stack direction="row" justifyContent="space-between">
+                <Typography variant="caption" color="text.secondary">Resistance</Typography>
+                <Typography variant="caption" fontWeight={600}>{ore.resistance}</Typography>
+              </Stack>
+            )}
+            {ore.explosion_multiplier != null && (
+              <Stack direction="row" justifyContent="space-between">
+                <Typography variant="caption" color="text.secondary">Explosion Risk</Typography>
+                <Typography variant="caption" fontWeight={600}>{ore.explosion_multiplier}</Typography>
+              </Stack>
+            )}
+            {ore.top_locations && ore.top_locations.length > 0 && (
+              <>
+                <Divider sx={{ my: 0.5 }} />
+                <Typography variant="caption" color="text.secondary" fontWeight={600}>Best Locations</Typography>
+                {ore.top_locations.map((loc: any) => (
+                  <Stack key={loc.location_name} direction="row" justifyContent="space-between">
+                    <Typography variant="caption">{loc.location_name}</Typography>
+                    <Typography variant="caption" color="primary">{loc.probability?.toFixed(1)}%</Typography>
+                  </Stack>
+                ))}
+              </>
+            )}
+          </Stack>
+        </CardContent>
+      </Card>
+    </Grid>
   )
 }
