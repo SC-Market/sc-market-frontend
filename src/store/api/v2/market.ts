@@ -4147,8 +4147,10 @@ export type SearchLocationsResponse = {
 }
 export type LocationOre = {
   presetName: string
+  displayName: string
   elementName: string | null
   resourceName: string | null
+  rarity: string
   relativeProbability: number
   instability: number | null
   resistance: number | null
