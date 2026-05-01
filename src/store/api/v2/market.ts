@@ -4136,6 +4136,7 @@ export type LocationGroup = {
   groupName: string
   groupProbability: number
   oreCount: number
+  topOres: string[]
 }
 export type LocationSearchResult = {
   name: string

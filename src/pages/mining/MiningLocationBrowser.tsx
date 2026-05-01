@@ -215,9 +215,20 @@ function LocationCard({ location, onClick }: { location: LocationSearchResult; o
           ) : (
             <Box sx={{ mt: 0.5 }}>
               {(location.groups || []).map((g) => (
-                <Box key={g.groupName} sx={{ display: "flex", justifyContent: "space-between", py: 0.1 }}>
-                  <Typography variant="caption" noWrap>{g.groupName}</Typography>
-                  <Typography variant="caption" color="text.secondary" fontWeight={600} sx={{ ml: 1 }}>{g.oreCount} ores</Typography>
+                <Box key={g.groupName} sx={{ mb: 0.5 }}>
+                  <Typography variant="caption" color="text.secondary" fontWeight={600} sx={{ fontSize: "0.65rem" }}>{g.groupName}</Typography>
+                  {(g.topOres || []).length > 0 ? (
+                    <Box>
+                      {g.topOres.slice(0, 3).map((name, i) => (
+                        <Typography key={i} variant="caption" display="block" sx={{ fontSize: "0.7rem", pl: 0.5 }}>{name}</Typography>
+                      ))}
+                      {g.oreCount > 3 && (
+                        <Typography variant="caption" color="text.secondary" sx={{ fontSize: "0.65rem", pl: 0.5 }}>+{g.oreCount - 3} more</Typography>
+                      )}
+                    </Box>
+                  ) : (
+                    <Typography variant="caption" color="text.secondary" sx={{ pl: 0.5 }}>{g.oreCount} ores</Typography>
+                  )}
                 </Box>
               ))}
             </Box>
