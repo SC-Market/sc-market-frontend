@@ -4354,6 +4354,10 @@
 					"manufacturer": {
 						"type": "string"
 					},
+					"display_name": {
+						"type": "string",
+						"nullable": true
+					},
 					"item_count": {
 						"type": "number",
 						"format": "double"
@@ -4361,6 +4365,7 @@
 				},
 				"required": [
 					"manufacturer",
+					"display_name",
 					"item_count"
 				],
 				"type": "object",
@@ -4399,6 +4404,10 @@
 					"manufacturer": {
 						"type": "string"
 					},
+					"display_name": {
+						"type": "string",
+						"nullable": true
+					},
 					"description": {
 						"type": "string"
 					},
@@ -4415,6 +4424,7 @@
 				},
 				"required": [
 					"manufacturer",
+					"display_name",
 					"item_count",
 					"items"
 				],
