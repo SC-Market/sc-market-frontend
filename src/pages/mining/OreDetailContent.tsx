@@ -3,8 +3,9 @@
  */
 import React from "react"
 import {
-  Typography, Chip, Stack, Box, Button, LinearProgress, Grid,
+  Typography, Chip, Stack, Box, Button, LinearProgress,
   Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
+  useMediaQuery, useTheme,
 } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import type { OreDetailResponse, OreQualityDistribution } from "../../store/api/v2/market"
@@ -13,10 +14,6 @@ import { EmptyState } from "../../components/empty-states/EmptyState"
 
 const RARITY_COLORS: Record<string, string> = {
   common: "#9e9e9e", uncommon: "#4caf50", rare: "#2196f3", epic: "#9c27b0", legendary: "#ff9800",
-}
-
-function friendlyName(name: string): string {
-  return name.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
 }
 
 function dangerColor(value: number, max: number): "success" | "warning" | "error" {
@@ -34,6 +31,9 @@ interface Props {
 
 export function OreDetailContent({ ore, onClose }: Props) {
   const { t } = useTranslation()
+  const theme = useTheme()
+  const isDesktop = useMediaQuery(theme.breakpoints.up("md"))
+  const hasQuality = (ore.qualityDistributions?.length ?? 0) > 0
 
   return (
     <Stack spacing={2}>
@@ -48,9 +48,9 @@ export function OreDetailContent({ ore, onClose }: Props) {
         )}
       </Stack>
 
-      {/* Stats + Quality side by side on desktop */}
-      <Grid container spacing={2}>
-        <Grid item xs={12} md={ore.qualityDistributions?.length ? 6 : 12}>
+      {/* Stats + Quality: side by side on desktop via flex, stacked on mobile */}
+      <Box sx={{ display: "flex", flexDirection: isDesktop && hasQuality ? "row" : "column", gap: 2 }}>
+        <Box sx={{ flex: 1, minWidth: 0 }}>
           <Section title={t("mining.stats", "Mining Stats")}>
             <Stack spacing={1.5} sx={{ pt: 1 }}>
               <StatBar label="Instability" value={ore.instability} max={1000} />
@@ -61,10 +61,10 @@ export function OreDetailContent({ ore, onClose }: Props) {
               <StatBar label="Cluster Factor" value={ore.clusterFactor != null ? ore.clusterFactor * 100 : null} max={100} suffix="%" />
             </Stack>
           </Section>
-        </Grid>
+        </Box>
 
-        {(ore.qualityDistributions?.length ?? 0) > 0 && (
-          <Grid item xs={12} md={6}>
+        {hasQuality && (
+          <Box sx={{ flex: 1, minWidth: 0 }}>
             <Section title="Quality Distribution">
               <Box sx={{ pt: 1 }}>
                 <Typography variant="caption" color="text.secondary" display="block" sx={{ mb: 1 }}>
@@ -75,9 +75,9 @@ export function OreDetailContent({ ore, onClose }: Props) {
                 ))}
               </Box>
             </Section>
-          </Grid>
+          </Box>
         )}
-      </Grid>
+      </Box>
 
       {/* Locations */}
       <Section title={t("mining.locations", "Locations")}>
