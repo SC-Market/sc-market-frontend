@@ -28,7 +28,7 @@ import { ListingSkeleton } from "../../../components/skeletons";
 import { ListingPagination } from "../components/listings/ListingPagination";
 import { EmptyListings } from "../../../components/empty-states";
 import { useDrawerOpen } from "../../../hooks/layout/Drawer";
-import { EditRounded, BusinessRounded } from "@mui/icons-material";
+import { EditRounded, BusinessRounded, StarRounded } from "@mui/icons-material";
 import { getRelativeTime } from "../../../util/time";
 import { useCurrentOrg } from "../../../hooks/login/CurrentOrg";
 import { useGetUserProfileQuery } from "../../profile/api/profileApi";
@@ -447,8 +447,8 @@ function ContractorListingCard({ listing, index, canManage }: ContractorListingC
               <Typography variant="caption" color="text.secondary">
                 {t("contractorListings.rating", "Organization Rating")}
               </Typography>
-              <Typography variant="body1" fontWeight="medium">
-                {listing.seller_rating.toFixed(1)} ⭐
+              <Typography variant="body1" fontWeight="medium" sx={{ display: "flex", alignItems: "center", gap: 0.25 }}>
+                {listing.seller_rating.toFixed(1)} <StarRounded sx={{ fontSize: 18, color: "warning.main" }} />
               </Typography>
             </Box>
 

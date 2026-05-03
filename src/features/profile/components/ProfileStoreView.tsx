@@ -4,8 +4,8 @@ import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { MarketSidebarContext } from "../../market/hooks/MarketSidebar"
 import { MarketSidebar } from "../../market/components/MarketSidebar"
-import { MarketSideBarToggleButton } from "../../market/components/MarketSidebar"
 import { MarketSearchArea } from "../../market/components/MarketSidebar"
+import { FiltersFAB } from "../../../components/mobile/FiltersFAB"
 import { useSearchListingsQuery } from "../../../store/api/v2/market"
 import { ListingCardV2 } from "../../market/v2/ListingSearchV2"
 
@@ -18,7 +18,7 @@ export function ProfileStoreView(props: { user: string }) {
   return (
     <MarketSidebarContext.Provider value={[sidebarOpen, setSidebarOpen]}>
       {xs && <MarketSidebar />}
-      {xs && <MarketSideBarToggleButton />}
+      {xs && <FiltersFAB onClick={() => setSidebarOpen(true)} label="Filters" />}
       <Grid
         container
         spacing={theme.layoutSpacing.layout}
@@ -55,7 +55,7 @@ export function OrgStoreView(props: { org: string }) {
   return (
     <MarketSidebarContext.Provider value={[sidebarOpen, setSidebarOpen]}>
       {xs && <MarketSidebar />}
-      {xs && <MarketSideBarToggleButton />}
+      {xs && <FiltersFAB onClick={() => setSidebarOpen(true)} label="Filters" />}
       <Grid
         container
         spacing={theme.layoutSpacing.layout}
