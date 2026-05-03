@@ -92,4 +92,21 @@ export const ROUTE_PREFETCH_MAP: Record<string, string[]> = {
   "/admin/users": ["/admin/market", "/admin/orders"],
   "/admin/market": ["/admin/orders", "/admin/moderation"],
   "/admin/orders": ["/admin/market", "/admin/users"],
+
+  // Game Data - browse → detail prefetch chains
+  "/missions": ["/missions/:slug", "/blueprints"],
+  "/blueprints": ["/blueprints/:slug", "/blueprints/inventory", "/missions", "/resources"],
+  "/resources": ["/resources/:resource_id"],
+  "/crafting/calculator": ["/blueprints", "/resources"],
+  "/shopping-lists": ["/blueprints", "/resources"],
+
+  // Mining - prefetch detail gates from browse pages
+  "/mining": ["/mining/ores/:name", "/mining/locations", "/wiki/commodities"],
+  "/mining/locations": ["/mining/locations/:name", "/mining"],
+
+  // Wiki - prefetch detail pages from browse pages
+  "/wiki/items": ["/wiki/items/:id"],
+  "/wiki/ships": ["/wiki/ships/:id"],
+  "/wiki/commodities": ["/wiki/commodities/:id"],
+  "/wiki/manufacturers": ["/wiki/manufacturers/:id"],
 }

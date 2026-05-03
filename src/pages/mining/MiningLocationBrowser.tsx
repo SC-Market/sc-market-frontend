@@ -20,6 +20,7 @@ import { useSearchLocationsQuery, type LocationSearchResult } from "../../store/
 import { MiningLocationDetailModal } from "./MiningLocationDetailModal"
 import { UnifiedSearchBar, locationTokensToParams, locationParamsToTokens, type SearchToken } from "../../components/game-data/UnifiedSearchBar"
 import { CardGridSkeleton } from "../../components/game-data/GameDataSkeletons"
+import { useHoverPrefetch } from "../../hooks/prefetch/useHoverPrefetch"
 
 function friendlyName(name: string): string {
   return name.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())
@@ -164,12 +165,14 @@ function systemChipColor(system: string): string {
 function LocationCard({ location, onClick }: { location: LocationSearchResult; onClick: () => void }) {
   const displayName = location.displayName || friendlyName(location.name)
   const systemDisplay = location.system || ""
+  const { onMouseEnter, onMouseLeave } = useHoverPrefetch("/mining/locations/:name")
 
   // topOres is string[] from the search endpoint
   const hasTopOres = (location.groups || []).some((g) => (g.topOres || []).length > 0)
 
   return (
-    <Card sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
+    <Card sx={{ height: "100%", display: "flex", flexDirection: "column" }}
+      onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
       <CardActionArea onClick={onClick} sx={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "stretch", justifyContent: "flex-start" }}>
         <CardContent sx={{ p: 1.5, flex: 1, "&:last-child": { pb: 1.5 } }}>
           <Typography variant="body2" fontWeight={600} noWrap>{displayName}</Typography>
