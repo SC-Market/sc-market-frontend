@@ -17,6 +17,7 @@ import {
   Stack,
 } from "@mui/material";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
+import { LocationOnRounded } from "@mui/icons-material";
 import type { ExtendedTheme } from "../../../hooks/styles/Theme";
 import { QualityBadge } from "./QualityBadge";
 import { formatPrice } from "../../../util/formatPrice";
@@ -113,8 +114,8 @@ export const VariantBreakdown: React.FC<VariantBreakdownProps> = ({
               {showVariantColumn && <VariantInfo variant={variant} />}
 
               {variant.locations && variant.locations.length > 0 && (
-                <Typography variant="caption" color="text.secondary">
-                  📍 {variant.locations.join(", ")}
+                <Typography variant="caption" color="text.secondary" sx={{ display: "flex", alignItems: "center", gap: 0.25 }}>
+                  <LocationOnRounded sx={{ fontSize: 14 }} /> {variant.locations.join(", ")}
                 </Typography>
               )}
 

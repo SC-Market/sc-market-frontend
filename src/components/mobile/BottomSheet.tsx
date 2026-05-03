@@ -163,13 +163,25 @@ export function BottomSheet({
 
   const displayHeight = isDragging ? currentHeight + dragOffset : currentHeight
 
+  const contentRef = useRef<HTMLDivElement>(null)
+
+  // Only allow SwipeableDrawer's built-in close when content is at scroll top
+  const handleSwipeClose = () => {
+    const el = contentRef.current
+    if (el && el.scrollTop > 0) return // Don't close if scrolled down
+    handleClose()
+  }
+
   return (
     <SwipeableDrawer
       anchor="bottom"
       open={open}
-      onClose={handleClose}
+      onClose={handleSwipeClose}
       onOpen={handleOpen}
       disableSwipeToOpen
+      swipeAreaWidth={0}
+      hysteresis={0.7}
+      minFlingVelocity={800}
       PaperProps={{
         sx: {
           height: displayHeight,
@@ -262,6 +274,7 @@ export function BottomSheet({
 
       {/* Content */}
       <Box
+        ref={contentRef}
         sx={{
           flex: 1,
           overflowY: "auto",
