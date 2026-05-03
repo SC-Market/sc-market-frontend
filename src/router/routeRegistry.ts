@@ -143,6 +143,35 @@ export const routeRegistry: Record<string, RouteImportFunction> = {
   // Widget routes
   "/widget/orders": () => import("../pages/widget/OrdersWidget"),
 
+  // Game Data routes
+  "/missions": () => import("../pages/missions/MissionSearch"),
+  "/missions/:slug": () => import("../pages/missions/MissionDetailGate"),
+  "/blueprints": () => import("../pages/blueprints/BlueprintBrowser"),
+  "/blueprints/:slug": () => import("../pages/blueprints/BlueprintDetailGate"),
+  "/blueprints/inventory": () => import("../pages/blueprints/BlueprintInventory"),
+  "/crafting/calculator": () => import("../pages/crafting/CraftingCalculator"),
+  "/resources": () => import("../pages/resources/ResourceBrowser"),
+  "/resources/:resource_id": () => import("../pages/resources/ResourceDetail"),
+  "/shopping-lists": () => import("../pages/wishlists/WishlistManager"),
+
+  // Mining routes
+  "/mining": () => import("../pages/mining/MiningPage"),
+  "/mining/locations": () => import("../pages/mining/MiningPage"),
+  "/mining/ores/:name": () => import("../pages/mining/MiningOreDetailGate"),
+  "/mining/locations/:name": () => import("../pages/mining/MiningLocationDetailGate"),
+
+  // Wiki routes
+  "/wiki/items": () => import("../pages/wiki/WikiItemBrowser"),
+  "/wiki/items/:id": () => import("../pages/wiki/WikiItemDetail"),
+  "/wiki/ships": () => import("../pages/wiki/WikiShipBrowser"),
+  "/wiki/ships/:id": () => import("../pages/wiki/WikiShipDetail"),
+  "/wiki/commodities": () => import("../pages/wiki/WikiCommodityBrowser"),
+  "/wiki/commodities/:id": () => import("../pages/wiki/WikiCommodityDetail"),
+  "/wiki/locations": () => import("../pages/wiki/WikiLocationBrowser"),
+  "/wiki/manufacturers": () => import("../pages/wiki/WikiManufacturerList"),
+  "/wiki/manufacturers/:id": () => import("../pages/wiki/WikiManufacturerPage"),
+  "/wiki/refinery": () => import("../pages/wiki/WikiRefineryPage"),
+
   // Error routes
   "/error": () => import("../pages/errors/FrontendError"),
   "/*": () => import("../pages/errors/Error404"),

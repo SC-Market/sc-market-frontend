@@ -21,6 +21,8 @@ import { MiningOreDetailModal } from "./MiningOreDetailModal"
 import { UnifiedSearchBar, miningTokensToParams, miningParamsToTokens, type SearchToken } from "../../components/game-data/UnifiedSearchBar"
 import { CardGridSkeleton } from "../../components/game-data/GameDataSkeletons"
 
+import { useHoverPrefetch } from "../../hooks/prefetch/useHoverPrefetch"
+
 const RARITY_COLORS: Record<string, string> = {
   common: "#9e9e9e",
   uncommon: "#4caf50",
@@ -145,9 +147,11 @@ export function MiningOreBrowser() {
 function OreCard({ ore, onClick }: { ore: OreSearchResult; onClick: () => void }) {
   const rarityColor = RARITY_COLORS[(ore.rarity || "").toLowerCase()] || "#757575"
   const displayName = ore.displayName || friendlyName(ore.name)
+  const { onMouseEnter, onMouseLeave } = useHoverPrefetch("/mining/ores/:name")
 
   return (
-    <Card sx={{ height: "100%", display: "flex", flexDirection: "column", borderLeft: `3px solid ${rarityColor}` }}>
+    <Card sx={{ height: "100%", display: "flex", flexDirection: "column", borderLeft: `3px solid ${rarityColor}` }}
+      onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave}>
       <CardActionArea onClick={onClick} sx={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "stretch", justifyContent: "flex-start" }}>
         <CardContent sx={{ p: 1.5, flex: 1, display: "flex", flexDirection: "column", "&:last-child": { pb: 1.5 } }}>
           <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 0.5 }}>
