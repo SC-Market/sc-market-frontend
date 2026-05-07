@@ -48,11 +48,11 @@ export function OreDetailContent({ ore, onClose }: Props) {
         )}
       </Stack>
 
-      {/* Stats + Quality: side by side on desktop via flex, stacked on mobile */}
+      {/* Stats + Quality: side by side on desktop (4:8 ratio), stacked on mobile */}
       <Box sx={{ display: "flex", flexDirection: isDesktop && hasQuality ? "row" : "column", gap: 2 }}>
-        <Box sx={{ flex: 1, minWidth: 0 }}>
+        <Box sx={{ flex: isDesktop && hasQuality ? "0 0 33.33%" : 1, minWidth: 0 }}>
           <Section title={t("mining.stats", "Mining Stats")}>
-            <Stack spacing={1.5} sx={{ pt: 1 }}>
+            <Stack spacing={1.5} sx={{ pt: 1, px: 0.5 }}>
               <StatBar label="Instability" value={ore.instability} max={1000} />
               <StatBar label="Resistance" value={ore.resistance != null ? ore.resistance * 100 : null} max={100} suffix="%" />
               <StatBar label="Optimal Window Size" value={ore.optimalWindowThinness} max={10} />
@@ -66,7 +66,7 @@ export function OreDetailContent({ ore, onClose }: Props) {
         {hasQuality && (
           <Box sx={{ flex: 1, minWidth: 0 }}>
             <Section title="Quality Distribution">
-              <Box sx={{ pt: 1 }}>
+              <Box sx={{ pt: 1, px: 0.5 }}>
                 <Typography variant="caption" color="text.secondary" display="block" sx={{ mb: 1 }}>
                   Quality 0–1000. Higher = better crafting &amp; sell price.
                 </Typography>

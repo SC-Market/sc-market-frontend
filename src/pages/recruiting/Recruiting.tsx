@@ -1,7 +1,8 @@
 import React, { useCallback, useRef, useState } from "react"
-import { Button, Divider, Grid, useMediaQuery } from "@mui/material"
+import { Alert, AlertTitle, Button, Divider, Grid, useMediaQuery } from "@mui/material"
 import { HapticTablePagination } from "../../components/haptic"
 import FilterListIcon from "@mui/icons-material/FilterList"
+import { NoteAddRounded, RocketLaunchRounded } from "@mui/icons-material"
 import { RecruitingSidebar } from "../../views/recruiting/RecruitingSidebar"
 import { RecruitingSidebarContext } from "../../features/recruiting/hooks/RecruitingSidebar"
 import {
@@ -10,7 +11,6 @@ import {
 } from "../../features/recruiting/hooks/RecruitingSearch"
 import { RecruitingPostItem } from "../../views/recruiting/RecruitingList"
 import { RecruitingPostSkeleton } from "../../components/skeletons"
-import { NoteAddRounded } from "@mui/icons-material"
 import { Link } from "react-router-dom"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useTranslation } from "react-i18next"
@@ -148,6 +148,28 @@ export function Recruiting() {
             enabled={isMobile}
           >
             <Grid container spacing={theme.layoutSpacing.layout}>
+              {/* SC Orgs promotion banner */}
+              <Grid item xs={12}>
+                <Alert
+                  severity="info"
+                  icon={<RocketLaunchRounded />}
+                  action={
+                    <Button
+                      color="inherit"
+                      size="small"
+                      href="https://sc-orgs.space"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Visit SC Orgs
+                    </Button>
+                  }
+                  sx={{ mb: 1 }}
+                >
+                  <AlertTitle>Looking for recruitment &amp; event management?</AlertTitle>
+                  Check out <strong>SC Orgs</strong> at sc-orgs.space — our new dedicated platform for org recruitment, event scheduling, and community management.
+                </Alert>
+              </Grid>
               {!(pageData.isLoading || pageData.isFetching) ? (
                 (pageData.data?.posts?.items || []).length === 0 ? (
                   <Grid item xs={12}>
