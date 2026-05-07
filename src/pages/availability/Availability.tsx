@@ -4,12 +4,10 @@ import { useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { LazySection } from "../../components/layout/LazySection"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
-import { useProfileUpdateAvailabilityMutation } from "../../features/profile/api/profileApi"
+import { useProfileUpdateAvailabilityMutation, useProfileGetAvailabilityQuery } from "../../features/profile/api/profileApi"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { convertAvailability } from "../../util/availability"
-import { usePageAvailability } from "../../features/availability/hooks/usePageAvailability"
 
-// Lazy load AvailabilitySelector
 const AvailabilitySelector = lazy(() =>
   import("../../components/time/AvailabilitySelector").then((module) => ({
     default: module.AvailabilitySelector,
@@ -24,7 +22,11 @@ interface Span {
 export function Availability() {
   const { t } = useTranslation()
   const [currentOrg] = useCurrentOrg()
-  const pageData = usePageAvailability(currentOrg?.spectrum_id)
+  const spectrumId = currentOrg?.spectrum_id || undefined
+
+  // Fetch availability — pass spectrumId for org, undefined for personal
+  // Don't skip when spectrumId is undefined — that fetches personal availability
+  const { data, isLoading, error } = useProfileGetAvailabilityQuery(spectrumId)
   const [updateAvailability] = useProfileUpdateAvailabilityMutation()
   const issueAlert = useAlertHook()
 
@@ -33,7 +35,6 @@ export function Availability() {
       const spans: Span[] = []
       let current: Span | null = null
 
-      // Convert boolean slots to bounded spans
       for (let i = 0; i < selections.length; i++) {
         if (selections[i]) {
           if (current) {
@@ -51,35 +52,31 @@ export function Availability() {
 
       if (current) {
         spans.push(current)
-        current = null
       }
 
-      updateAvailability({
-        contractor: currentOrg?.spectrum_id || null,
-        selections: spans,
-      })
-        .unwrap()
-        .then((data) => {
-          issueAlert({
-            message: t("availability.updated"),
-            severity: "success",
-          })
+      try {
+        await updateAvailability({
+          contractor: spectrumId || null,
+          selections: spans,
+        }).unwrap()
+        issueAlert({
+          message: t("availability.updated"),
+          severity: "success",
         })
-        .catch((error) =>
-          issueAlert({
-            message: `${t("availability.failed")} ${
-              error?.error || error?.data?.error || error
-            }`,
-            severity: "error",
-          }),
-        )
+      } catch (error: any) {
+        issueAlert({
+          message: `${t("availability.failed")} ${error?.error || error?.data?.error || error}`,
+          severity: "error",
+        })
+      }
     },
-    [currentOrg?.spectrum_id, issueAlert, updateAvailability, t],
+    [spectrumId, issueAlert, updateAvailability, t],
   )
 
+  // Key on spectrumId so the selector resets when org changes
   const initial = useMemo(
-    () => convertAvailability(pageData.data?.selections || []),
-    [pageData.data],
+    () => convertAvailability(data?.selections || []),
+    [data],
   )
 
   const skeleton = (
@@ -97,14 +94,15 @@ export function Availability() {
       ]}
       showOrgInBreadcrumbs={true}
       headerTitle={t("availability.title")}
-      isLoading={pageData.isLoading}
-      error={pageData.error}
+      isLoading={isLoading}
+      error={error}
       skeleton={skeleton}
       sidebarOpen={true}
       maxWidth="lg"
     >
-      {pageData.data && (
+      {data && (
         <LazySection
+          key={spectrumId || "personal"}
           component={AvailabilitySelector}
           componentProps={{
             onSave: saveCallback,
