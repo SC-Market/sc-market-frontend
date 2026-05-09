@@ -34,8 +34,8 @@ import {
   useGetListingDetailQuery,
   useGetStockLotsQuery,
   useUpdateListingMutation,
-  useUploadPhotosMutation,
 } from "../../../store/api/v2/market";
+import { useUploadPhotosMutation } from "../../../store/api/v2/market-overrides";
 import { useAlertHook } from "../../../hooks/alert/AlertHook";
 import { PriceComparisonAlert } from "../components/PriceComparisonAlert";
 import { SelectPhotosArea } from "../../../components/modal/SelectPhotosArea";
