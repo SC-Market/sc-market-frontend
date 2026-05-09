@@ -273,10 +273,19 @@ const injectedRtkApi = api
       }),
       uploadPhotos: build.mutation<UploadPhotosApiResponse, UploadPhotosApiArg>(
         {
-          query: (queryArg) => ({
-            url: `/listings/${queryArg.id}/photos`,
-            method: "POST",
-          }),
+          query: (queryArg) => {
+            const formData = new FormData()
+            if (queryArg.photos) {
+              for (const file of queryArg.photos) {
+                formData.append("photos", file)
+              }
+            }
+            return {
+              url: `/listings/${queryArg.id}/photos`,
+              method: "POST",
+              body: formData,
+            }
+          },
           invalidatesTags: ["Listings V2"],
         },
       ),
@@ -1535,6 +1544,8 @@ export type UploadPhotosApiResponse = /** status 200 Ok */ {
 export type UploadPhotosApiArg = {
   /** Listing UUID */
   id: string
+  /** Photo files to upload */
+  photos?: File[]
 }
 export type GetInventoryApiResponse = /** status 200 Ok */ InventoryResponse
 export type GetInventoryApiArg = {
