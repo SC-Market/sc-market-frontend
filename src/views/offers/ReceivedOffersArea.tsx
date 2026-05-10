@@ -380,12 +380,13 @@ export function OfferRow(props: {
   )
 }
 
-export function ReceivedOffersArea() {
+export function ReceivedOffersArea({ unassigned }: { unassigned?: boolean } = {}) {
   const [currentOrg] = useCurrentOrg()
 
   return (
     <OffersViewPaginated
-      assigned={!currentOrg}
+      assigned={!currentOrg && !unassigned}
+      unassigned={unassigned}
       contractor={currentOrg?.spectrum_id}
     />
   )
