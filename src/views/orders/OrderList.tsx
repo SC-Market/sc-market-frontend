@@ -531,7 +531,7 @@ export function OrdersViewPaginated(props: {
                 <Tab
                   key={id}
                   label={tag}
-                  icon={<Chip label={(totalCounts as Record<string, number>)[id] || 0} size={"small"} />}
+                  icon={<Chip label={totalCounts[id as keyof typeof totalCounts] || 0} size={"small"} />}
                   {...a11yProps(index)}
                   onClick={() => setStatusFilter(id as typeof statusFilter)}
                 />
@@ -685,7 +685,7 @@ export function OrdersViewPaginated(props: {
           page={page}
           onPageSizeChange={setPageSize}
           pageSize={pageSize}
-          rowCount={+((totalCounts as Record<string, number>)[statusFilter] || 0)}
+          rowCount={+(totalCounts[statusFilter as keyof typeof totalCounts] || 0)}
           onOrderChange={setOrder}
           order={order}
           onOrderByChange={setOrderBy}
