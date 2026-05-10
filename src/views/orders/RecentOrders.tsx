@@ -3,7 +3,7 @@ import { OrdersViewPaginated } from "./OrderList"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useTranslation } from "react-i18next"
 
-export function RecentOrders() {
+export function RecentOrders({ unassigned }: { unassigned?: boolean } = {}) {
   const [contractor] = useCurrentOrg()
   const { t } = useTranslation()
 
@@ -11,6 +11,7 @@ export function RecentOrders() {
     <OrdersViewPaginated
       title={t("recentOrders.title")}
       contractor={contractor?.spectrum_id}
+      unassigned={unassigned}
     />
   )
 }
