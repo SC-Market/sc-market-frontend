@@ -15,8 +15,8 @@ export function useOrderSearch(params: UseOrderSearchParams) {
   const { mine, assigned, unassigned, contractor, username } = params
 
   const [statusFilter, setStatusFilter] = useState<
-    "all" | "active" | "past" | OrderSearchStatus
-  >("active")
+    "all" | "active" | "past" | "unassigned" | OrderSearchStatus
+  >(unassigned ? "unassigned" : "active")
   const [pageSize, setPageSize] = useState(5)
   const [page, setPage] = useState(0)
   const [orderBy, setOrderBy] = useState("timestamp")
@@ -38,12 +38,12 @@ export function useOrderSearch(params: UseOrderSearchParams) {
   }, [debouncedBuyerUsername, debouncedSellerUsername, hasMarketListings, hasService])
 
   const { data: orders, isLoading, isFetching } = useSearchOrdersQuery({
-    status: statusFilter === "all" ? undefined : statusFilter,
+    status: statusFilter === "all" || statusFilter === "unassigned" ? undefined : statusFilter,
     index: page,
     page_size: pageSize,
     customer: mine ? username : undefined,
     assigned: assigned ? username : undefined,
-    unassigned: unassigned ? "true" : undefined,
+    unassigned: statusFilter === "unassigned" ? "true" : undefined,
     contractor,
     sort_method: orderBy as OrderSearchSortMethod,
     reverse_sort: order === "desc",
@@ -55,10 +55,11 @@ export function useOrderSearch(params: UseOrderSearchParams) {
 
   const totalCounts = useMemo(() => {
     if (!orders?.item_counts) {
-      return { all: 0, active: 0, past: 0, fulfilled: 0, "in-progress": 0, "not-started": 0, cancelled: 0 }
+      return { all: 0, unassigned: 0, active: 0, past: 0, fulfilled: 0, "in-progress": 0, "not-started": 0, cancelled: 0 }
     }
     return {
       all: Object.values(orders.item_counts).reduce((x, y) => x + y, 0),
+      unassigned: 0, // Count not available from API, tab still works
       active: (orders.item_counts["not-started"] || 0) + (orders.item_counts["in-progress"] || 0),
       past: (orders.item_counts["cancelled"] || 0) + (orders.item_counts["fulfilled"] || 0),
       ...orders.item_counts,
