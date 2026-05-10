@@ -6,12 +6,13 @@ import type { OrderSearchSortMethod, OrderSearchStatus, OrderStub } from "../dom
 export interface UseOrderSearchParams {
   mine?: boolean
   assigned?: boolean
+  unassigned?: boolean
   contractor?: string
   username?: string
 }
 
 export function useOrderSearch(params: UseOrderSearchParams) {
-  const { mine, assigned, contractor, username } = params
+  const { mine, assigned, unassigned, contractor, username } = params
 
   const [statusFilter, setStatusFilter] = useState<
     "all" | "active" | "past" | OrderSearchStatus
@@ -42,6 +43,7 @@ export function useOrderSearch(params: UseOrderSearchParams) {
     page_size: pageSize,
     customer: mine ? username : undefined,
     assigned: assigned ? username : undefined,
+    unassigned: unassigned ? "true" : undefined,
     contractor,
     sort_method: orderBy as OrderSearchSortMethod,
     reverse_sort: order === "desc",
