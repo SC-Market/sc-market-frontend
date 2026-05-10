@@ -25,8 +25,8 @@ export function useOfferSearch(params: UseOfferSearchParams) {
   const issueAlert = useAlertHook()
   const navigate = useNavigate()
 
-  const [statusFilter, setStatusFilter] = useState<null | OfferSearchStatus>(
-    mine ? "to-customer" : "to-seller",
+  const [statusFilter, setStatusFilter] = useState<null | "unclaimed" | OfferSearchStatus>(
+    unassigned ? "unclaimed" : mine ? "to-customer" : "to-seller",
   )
   const [pageSize, setPageSize] = useState(5)
   const [page, setPage] = useState(0)
@@ -52,12 +52,12 @@ export function useOfferSearch(params: UseOfferSearchParams) {
   }
 
   const { data, isLoading, isFetching } = useSearchOfferSessionsQuery({
-    status: statusFilter || undefined,
+    status: statusFilter === "unclaimed" ? undefined : (statusFilter || undefined),
     index: page,
     page_size: pageSize,
     customer: mine ? profile?.username : undefined,
     assigned: assigned ? profile?.username : undefined,
-    unassigned: unassigned ? "true" : undefined,
+    unassigned: statusFilter === "unclaimed" ? "true" : undefined,
     contractor,
     sort_method: orderBy as OrderSearchSortMethod,
     reverse_sort: order === "desc",

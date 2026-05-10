@@ -438,28 +438,20 @@ export function OrdersViewPaginated(props: {
     activeFiltersCount, clearFilters,
   } = useOrderSearch({ mine, assigned, unassigned, contractor, username: profile?.username })
 
-  const tabs = [
+  const tabs: [string, string][] = [
     ["all", t("orders.tabs.all")],
+    ...(unassigned !== undefined ? [["unassigned", t("orders.tabs.unclaimed", "Unclaimed")] as [string, string]] : []),
     ["active", t("orders.tabs.active")],
     ["past", t("orders.tabs.past")],
     ["fulfilled", t("orders.tabs.fulfilled")],
     ["in-progress", t("orders.tabs.inProgress")],
     ["not-started", t("orders.tabs.notStarted")],
     ["cancelled", t("orders.tabs.cancelled")],
-  ] as const
+  ]
 
   const tab = useMemo(
-    () =>
-      [
-        "all",
-        "active",
-        "past",
-        "fulfilled",
-        "in-progress",
-        "not-started",
-        "cancelled",
-      ].indexOf(statusFilter),
-    [statusFilter],
+    () => tabs.findIndex(([id]) => id === statusFilter),
+    [statusFilter, tabs],
   )
 
   return (
@@ -539,9 +531,9 @@ export function OrdersViewPaginated(props: {
                 <Tab
                   key={id}
                   label={tag}
-                  icon={<Chip label={totalCounts[id] || 0} size={"small"} />}
+                  icon={<Chip label={(totalCounts as Record<string, number>)[id] || 0} size={"small"} />}
                   {...a11yProps(index)}
-                  onClick={() => setStatusFilter(id)}
+                  onClick={() => setStatusFilter(id as typeof statusFilter)}
                 />
               ))}
             </Tabs>
@@ -693,7 +685,7 @@ export function OrdersViewPaginated(props: {
           page={page}
           onPageSizeChange={setPageSize}
           pageSize={pageSize}
-          rowCount={+(totalCounts[statusFilter] || 0)}
+          rowCount={+((totalCounts as Record<string, number>)[statusFilter] || 0)}
           onOrderChange={setOrder}
           order={order}
           onOrderByChange={setOrderBy}

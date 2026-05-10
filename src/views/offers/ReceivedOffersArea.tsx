@@ -428,6 +428,7 @@ export function OffersViewPaginated(props: {
 
   const tabs = [
     [null, t("OffersViewPaginated.all", { defaultValue: "All" })],
+    ["unclaimed", t("OffersViewPaginated.unclaimed", { defaultValue: "Unclaimed" })],
     ["to-seller", t("OffersViewPaginated.waitingSeller")],
     ["to-customer", t("OffersViewPaginated.waitingCustomer")],
     ["accepted", t("OffersViewPaginated.accepted")],
@@ -436,7 +437,7 @@ export function OffersViewPaginated(props: {
 
   const tab = useMemo(
     () =>
-      [null, "to-seller", "to-customer", "accepted", "rejected"].indexOf(
+      [null, "unclaimed", "to-seller", "to-customer", "accepted", "rejected"].indexOf(
         statusFilter,
       ),
     [statusFilter],
