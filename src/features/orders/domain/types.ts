@@ -190,6 +190,7 @@ export interface OrderSearchQuery {
   sort_method?: OrderSearchSortMethod
   status?: OrderSearchStatus
   assigned?: string
+  unassigned?: string
   contractor?: string
   customer?: string
   index?: number

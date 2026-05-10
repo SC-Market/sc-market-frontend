@@ -1,18 +1,20 @@
-import React from "react"
+import React, { useState } from "react"
 import { RecentOrders } from "../../views/orders/RecentOrders"
+import { OrdersViewPaginated } from "../../views/orders/OrderList"
 import { OrgOrderTrend } from "../../views/orders/OrderTrend"
 import { OrderMetrics } from "../../views/orders/OrderMetrics"
 import { ReceivedOffersArea } from "../../views/offers/ReceivedOffersArea"
 import { useTranslation } from "react-i18next"
-import { Grid, useMediaQuery, useTheme } from "@mui/material"
+import { Grid, Tab, Tabs, useMediaQuery, useTheme } from "@mui/material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
+import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 
 export function OrgOrders() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
-  const xxl = useMediaQuery(theme.breakpoints.up("xxl"))
-  const lg = useMediaQuery(theme.breakpoints.up("lg"))
+  const [currentOrg] = useCurrentOrg()
+  const [tab, setTab] = useState(0)
 
   return (
     <StandardPageLayout
@@ -21,52 +23,39 @@ export function OrgOrders() {
       sidebarOpen={true}
       maxWidth="xl"
     >
-      {xxl && (
-        <>
-          <Grid item xs={12} lg={2.5}>
-            <Grid container spacing={theme.layoutSpacing.layout}>
-              <OrderMetrics />
-            </Grid>
-          </Grid>
-          <Grid item xs={12} lg={6.5}>
-            <Grid container spacing={theme.layoutSpacing.layout}>
-              <ReceivedOffersArea />
-              <RecentOrders />
-            </Grid>
-          </Grid>
-          <Grid item xs={12} lg={3}>
-            <Grid container spacing={theme.layoutSpacing.layout}>
-              <OrgOrderTrend />
-            </Grid>
-          </Grid>
-        </>
+      <Grid item xs={12}>
+        <Tabs value={tab} onChange={(_, v) => setTab(v)} sx={{ mb: 2 }}>
+          <Tab label={t("orders.unclaimed", "Unclaimed")} />
+          <Tab label={t("orders.allOrders", "All Orders")} />
+          <Tab label={t("orders.offers", "Offers")} />
+          <Tab label={t("orders.metrics", "Metrics")} />
+        </Tabs>
+      </Grid>
+
+      {tab === 0 && (
+        <Grid item xs={12}>
+          <OrdersViewPaginated
+            title={t("orders.unclaimedOrders", "Unclaimed Orders")}
+            unassigned
+            contractor={currentOrg?.spectrum_id}
+          />
+        </Grid>
       )}
 
-      {lg && !xxl && (
-        <>
-          <Grid item xs={12} lg={3}>
-            <Grid container spacing={theme.layoutSpacing.layout}>
-              <OrderMetrics />
-            </Grid>
-          </Grid>
-          <Grid item xs={12} lg={9}>
-            <Grid container spacing={theme.layoutSpacing.layout}>
-              <ReceivedOffersArea />
-              <RecentOrders />
-              <OrgOrderTrend />
-            </Grid>
-          </Grid>
-        </>
+      {tab === 1 && (
+        <Grid item xs={12}>
+          <RecentOrders />
+        </Grid>
       )}
 
-      {!lg && (
+      {tab === 2 && (
+        <Grid item xs={12}>
+          <ReceivedOffersArea />
+        </Grid>
+      )}
+
+      {tab === 3 && (
         <>
-          <Grid item xs={12}>
-            <ReceivedOffersArea />
-          </Grid>
-          <Grid item xs={12}>
-            <RecentOrders />
-          </Grid>
           <OrderMetrics />
           <OrgOrderTrend />
         </>
