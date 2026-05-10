@@ -240,6 +240,7 @@ const ordersApi = serviceApi.injectEndpoints({
           "in-progress": number
           "not-started": number
           cancelled: number
+          unassigned: number
         }
       },
       OrderSearchQuery
