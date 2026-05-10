@@ -3,7 +3,7 @@ import { RecentOrders } from "../../views/orders/RecentOrders"
 import { OrdersViewPaginated } from "../../views/orders/OrderList"
 import { OrgOrderTrend } from "../../views/orders/OrderTrend"
 import { OrderMetrics } from "../../views/orders/OrderMetrics"
-import { ReceivedOffersArea } from "../../views/offers/ReceivedOffersArea"
+import { ReceivedOffersArea, OffersViewPaginated } from "../../views/offers/ReceivedOffersArea"
 import { useTranslation } from "react-i18next"
 import { Grid, Tab, Tabs, useMediaQuery, useTheme } from "@mui/material"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -50,7 +50,10 @@ export function OrgOrders() {
 
       {tab === 2 && (
         <Grid item xs={12}>
-          <ReceivedOffersArea />
+          <OffersViewPaginated
+            unassigned
+            contractor={currentOrg?.spectrum_id}
+          />
         </Grid>
       )}
 

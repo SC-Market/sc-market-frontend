@@ -14,11 +14,12 @@ import { useDebounce } from "../../../hooks/useDebounce"
 export interface UseOfferSearchParams {
   mine?: boolean
   assigned?: boolean
+  unassigned?: boolean
   contractor?: string
 }
 
 export function useOfferSearch(params: UseOfferSearchParams) {
-  const { mine, assigned, contractor } = params
+  const { mine, assigned, unassigned, contractor } = params
   const { t } = useTranslation()
   const { data: profile } = useGetUserProfileQuery()
   const issueAlert = useAlertHook()
@@ -56,6 +57,7 @@ export function useOfferSearch(params: UseOfferSearchParams) {
     page_size: pageSize,
     customer: mine ? profile?.username : undefined,
     assigned: assigned ? profile?.username : undefined,
+    unassigned: unassigned ? "true" : undefined,
     contractor,
     sort_method: orderBy as OrderSearchSortMethod,
     reverse_sort: order === "desc",

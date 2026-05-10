@@ -174,6 +174,7 @@ export interface OfferSearchQuery {
   sort_method?: OfferSearchSortMethod
   status?: OfferSearchStatus
   assigned?: string
+  unassigned?: string
   contractor?: string
   customer?: string
   index?: number
