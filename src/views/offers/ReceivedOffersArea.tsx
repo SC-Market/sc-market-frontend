@@ -398,11 +398,12 @@ export function SentOffersArea() {
 export function OffersViewPaginated(props: {
   mine?: boolean
   assigned?: boolean
+  unassigned?: boolean
   contractor?: string
 }) {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
-  const { mine, assigned, contractor } = props
+  const { mine, assigned, unassigned, contractor } = props
 
   const {
     data, isLoading, isFetching,
@@ -422,7 +423,7 @@ export function OffersViewPaginated(props: {
     debouncedBuyerUsername, debouncedSellerUsername,
     activeFiltersCount, clearFilters,
     profile, issueAlert,
-  } = useOfferSearch({ mine, assigned, contractor })
+  } = useOfferSearch({ mine, assigned, unassigned, contractor })
 
   const tabs = [
     [null, t("OffersViewPaginated.all", { defaultValue: "All" })],
