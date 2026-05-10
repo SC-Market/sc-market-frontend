@@ -186,6 +186,21 @@ export type OrderSearchStatus =
   | "active"
   | "past"
 
+/** Extended filter including virtual tabs */
+export type OrderStatusFilter = "all" | "unassigned" | OrderSearchStatus
+
+/** Counts per status tab */
+export interface OrderTotalCounts {
+  all: number
+  unassigned: number
+  active: number
+  past: number
+  fulfilled: number
+  "in-progress": number
+  "not-started": number
+  cancelled: number
+}
+
 export interface OrderSearchQuery {
   sort_method?: OrderSearchSortMethod
   status?: OrderSearchStatus
