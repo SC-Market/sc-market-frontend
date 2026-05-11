@@ -18,6 +18,7 @@ import { ExtendedTheme } from "../../../../hooks/styles/Theme";
 import { useAlertHook } from "../../../../hooks/alert/AlertHook";
 import { Section } from "../../../../components/paper/Section";
 import { useCreateStandingBuyOrderMutation } from "../../../../store/api/v2/market";
+import { useNavigate } from "react-router-dom";
 
 import { getQualityMode, type QualityMode } from "../../../../util/qualityMode";
 
@@ -36,6 +37,7 @@ export function CreateBuyOrderV2({ gameItemId, gameItemType }: CreateBuyOrderV2P
   const theme = useTheme<ExtendedTheme>();
   const issueAlert = useAlertHook();
   const [createStandingBuyOrder, { isLoading: isSubmitting }] = useCreateStandingBuyOrderMutation();
+  const navigate = useNavigate();
 
   // Form state
   const [negotiable, setNegotiable] = useState(false);
@@ -113,7 +115,7 @@ export function CreateBuyOrderV2({ gameItemId, gameItemType }: CreateBuyOrderV2P
     if (!isValid()) return;
 
     try {
-      await createStandingBuyOrder({
+      const result = await createStandingBuyOrder({
         createStandingBuyOrderRequest: {
           game_item_id: gameItemId,
           quantity,
@@ -130,6 +132,8 @@ export function CreateBuyOrderV2({ gameItemId, gameItemType }: CreateBuyOrderV2P
         message: t("buyorder.created", "Buy order created successfully"),
         severity: "success",
       });
+
+      navigate("/buyorders");
 
       // Reset form
       setNegotiable(false);
