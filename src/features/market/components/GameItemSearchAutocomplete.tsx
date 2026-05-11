@@ -35,6 +35,7 @@ export function GameItemSearchAutocomplete({
     Array<{ name: string; type: string; id: string }>
   >([])
   const [inputValue, setInputValue] = useState("")
+  const [selectedItem, setSelectedItem] = useState<{ name: string; type: string; id: string } | null>(null)
 
   const debouncedSearch = useMemo(
     () =>
@@ -55,19 +56,13 @@ export function GameItemSearchAutocomplete({
     debouncedSearch(inputValue)
   }, [inputValue, debouncedSearch])
 
-  // Initialize inputValue with the current value
-  useEffect(() => {
-    if (value && !inputValue) {
-      setInputValue(value)
-    }
-  }, [value, inputValue])
-
   return (
     <Autocomplete
+      id="game-item-search"
       size={size}
       sx={sx}
       options={itemOptions}
-      value={itemOptions.find((opt) => opt.name === value) || null}
+      value={selectedItem}
       inputValue={inputValue}
       onInputChange={(event, newValue, reason) => {
         if (reason !== 'reset') {
@@ -75,11 +70,13 @@ export function GameItemSearchAutocomplete({
         }
       }}
       onChange={(event, newValue) => {
+        setSelectedItem(newValue)
         onChange(newValue?.name || null, newValue?.type || null, newValue?.id || null)
         if (newValue) {
           setInputValue(newValue.name)
         }
       }}
+      isOptionEqualToValue={(option, val) => option.id === val.id}
       getOptionLabel={(option) => option.name}
       renderInput={(params) => (
         <TextField
