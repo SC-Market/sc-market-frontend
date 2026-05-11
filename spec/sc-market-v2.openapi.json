@@ -10251,7 +10251,7 @@
 				],
 				"security": [
 					{
-						"jwt": []
+						"loggedin": []
 					}
 				],
 				"parameters": [
@@ -16324,6 +16324,80 @@
 						}
 					}
 				]
+			}
+		},
+		"/admin/expire-all-listings": {
+			"post": {
+				"operationId": "ExpireAllListings",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"affected": {
+											"type": "number",
+											"format": "double"
+										}
+									},
+									"required": [
+										"affected"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "Expire all active listings (used after game wipes).\nSets all active listings to 'expired' status, requiring sellers to manually refresh.",
+				"summary": "Expire all active listings",
+				"tags": [
+					"Admin"
+				],
+				"security": [
+					{
+						"loggedin": []
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/admin/active-listing-count": {
+			"get": {
+				"operationId": "GetActiveListingCount",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"count": {
+											"type": "number",
+											"format": "double"
+										}
+									},
+									"required": [
+										"count"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get count of active listings (for confirmation dialog).",
+				"summary": "Get active listing count",
+				"tags": [
+					"Admin"
+				],
+				"security": [
+					{
+						"loggedin": []
+					}
+				],
+				"parameters": []
 			}
 		}
 	},
