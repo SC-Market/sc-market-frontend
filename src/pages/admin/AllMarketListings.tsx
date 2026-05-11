@@ -13,6 +13,8 @@ import { HeaderTitle } from "../../components/typography/HeaderTitle"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 
+import { ExpireAllListingsButton } from "../../views/admin/ExpireAllListingsButton"
+
 const AllItemListings = lazy(() =>
   import("../../features/market/views/ItemListings").then((m) => ({
     default: m.AllItemListings,
@@ -41,7 +43,7 @@ export function AllMarketListings() {
     <StandardPageLayout
       title={t("market.allListingsTitle")}
       headerTitle={t("market.activeListings")}
-      headerActions={<MarketActions />}
+      headerActions={<><ExpireAllListingsButton /><MarketActions /></>}
       sidebarOpen={true}
       maxWidth="lg"
     >

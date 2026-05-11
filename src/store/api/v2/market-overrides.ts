@@ -8,7 +8,10 @@ import { generatedApiV2 } from "../../generatedApiV2"
 export const marketV2Overrides = generatedApiV2.injectEndpoints({
   overrideExisting: true,
   endpoints: (build) => ({
-    uploadPhotos: build.mutation<{ photos: string[] }, { id: string; photos: File[] }>({
+    uploadPhotos: build.mutation<
+      { photos: string[] },
+      { id: string; photos: File[] }
+    >({
       query: ({ id, photos }) => {
         const formData = new FormData()
         for (const file of photos) {

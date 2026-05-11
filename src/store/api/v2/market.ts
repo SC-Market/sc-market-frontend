@@ -1330,6 +1330,20 @@ const injectedRtkApi = api
         }),
         providesTags: ["Admin"],
       }),
+      expireAllListings: build.mutation<
+        ExpireAllListingsApiResponse,
+        ExpireAllListingsApiArg
+      >({
+        query: () => ({ url: `/admin/expire-all-listings`, method: "POST" }),
+        invalidatesTags: ["Admin"],
+      }),
+      getActiveListingCount: build.query<
+        GetActiveListingCountApiResponse,
+        GetActiveListingCountApiArg
+      >({
+        query: () => ({ url: `/admin/active-listing-count` }),
+        providesTags: ["Admin"],
+      }),
     }),
     overrideExisting: false,
   })
@@ -2379,6 +2393,14 @@ export type GetImportJobStatusApiResponse = /** status 200 Ok */ {
 export type GetImportJobStatusApiArg = {
   jobId: string
 }
+export type ExpireAllListingsApiResponse = /** status 200 Ok */ {
+  affected: number
+}
+export type ExpireAllListingsApiArg = void
+export type GetActiveListingCountApiResponse = /** status 200 Ok */ {
+  count: number
+}
+export type GetActiveListingCountApiArg = void
 export type VariantType = {
   /** Unique identifier for the variant type */
   variant_type_id: string
@@ -5293,4 +5315,6 @@ export const {
   useImportGameDataMutation,
   useListGameDataImportJobsQuery,
   useGetImportJobStatusQuery,
+  useExpireAllListingsMutation,
+  useGetActiveListingCountQuery,
 } = injectedRtkApi
