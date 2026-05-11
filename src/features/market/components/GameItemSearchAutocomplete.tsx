@@ -35,16 +35,19 @@ export function GameItemSearchAutocomplete({
     Array<{ name: string; type: string; id: string }>
   >([])
   const [inputValue, setInputValue] = useState("")
+  const [isSearching, setIsSearching] = useState(false)
   const [selectedItem, setSelectedItem] = useState<{ name: string; type: string; id: string } | null>(null)
 
   const debouncedSearch = useMemo(
     () =>
       debounce(async (searchQuery: string) => {
         if (searchQuery.length > 1) {
+          setIsSearching(true)
           const result = await searchTrigger(searchQuery)
           if (result.data) {
             setItemOptions(result.data)
           }
+          setIsSearching(false)
         } else {
           setItemOptions([])
         }
@@ -62,6 +65,7 @@ export function GameItemSearchAutocomplete({
       size={size}
       sx={sx}
       options={itemOptions}
+      loading={isSearching}
       value={selectedItem}
       inputValue={inputValue}
       onInputChange={(event, newValue, reason) => {
@@ -98,8 +102,11 @@ export function GameItemSearchAutocomplete({
       noOptionsText={
         inputValue.length < 2
           ? t("market.typeToSearch", "Type to search...")
+          : isSearching
+          ? t("market.searching", "Searching...")
           : t("market.noResults", "No results")
       }
+      loadingText={t("market.searching", "Searching...")}
     />
   )
 }
