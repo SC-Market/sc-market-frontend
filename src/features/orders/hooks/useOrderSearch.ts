@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import { useSearchOrdersQuery } from "../api/ordersApi"
 import { useDebounce } from "../../../hooks/useDebounce"
 import type { OrderSearchSortMethod, OrderSearchStatus, OrderStatusFilter, OrderTotalCounts, OrderStub } from "../domain/types"
@@ -66,6 +66,15 @@ export function useOrderSearch(params: UseOrderSearchParams) {
       unassigned: counts.unassigned || 0,
     }
   }, [orders])
+
+  // Auto-switch from "unassigned" to "active" on first load if there are 0 unclaimed items
+  const hasAutoSwitched = useRef(false)
+  useEffect(() => {
+    if (unassigned && !hasAutoSwitched.current && !isLoading && totalCounts.unassigned === 0 && statusFilter === "unassigned") {
+      hasAutoSwitched.current = true
+      setStatusFilter("active")
+    }
+  }, [unassigned, isLoading, totalCounts.unassigned, statusFilter])
 
   const activeFiltersCount = useMemo(() => {
     let count = 0

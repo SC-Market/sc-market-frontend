@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import {
   useSearchOfferSessionsQuery,
   useMergeOfferSessionsMutation,
@@ -72,6 +72,18 @@ export function useOfferSearch(params: UseOfferSearchParams) {
     [data],
   )
   const totals = useMemo(() => new Map(Object.entries(data?.item_counts || [])), [data])
+
+  // Auto-switch from "unclaimed" to "to-seller" on first load if there are 0 unclaimed items
+  const hasAutoSwitched = useRef(false)
+  useEffect(() => {
+    if (unassigned && !hasAutoSwitched.current && !isLoading && statusFilter === "unclaimed") {
+      const unclaimedCount = data?.item_counts?.unclaimed || 0
+      if (unclaimedCount === 0) {
+        hasAutoSwitched.current = true
+        setStatusFilter("to-seller")
+      }
+    }
+  }, [unassigned, isLoading, data?.item_counts, statusFilter])
 
   const handleMergeOffers = useCallback(() => {
     if (selectedOfferIds.length < 2) return
