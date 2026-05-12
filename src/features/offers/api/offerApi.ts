@@ -62,6 +62,7 @@ export const offersApi = serviceApi.injectEndpoints({
           "to-customer": number
           accepted: number
           rejected: number
+          unclaimed: number
         }
       },
       OfferSearchQuery
