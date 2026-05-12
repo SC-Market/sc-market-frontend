@@ -38,7 +38,7 @@ export function useOrderSearch(params: UseOrderSearchParams) {
   }, [debouncedBuyerUsername, debouncedSellerUsername, hasMarketListings, hasService])
 
   const { data: orders, isLoading, isFetching } = useSearchOrdersQuery({
-    status: statusFilter === "all" || statusFilter === "unassigned" ? undefined : statusFilter,
+    status: statusFilter === "all" ? undefined : statusFilter === "unassigned" ? "active" : statusFilter,
     index: page,
     page_size: pageSize,
     customer: mine ? username : undefined,
