@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Chip,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -24,9 +25,9 @@ import {
   AddRounded,
   DeleteRounded,
   InventoryRounded,
-  LinkRounded,
   LinkOffRounded,
-  SearchRounded,
+  LinkRounded,
+  WarehouseRounded,
 } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
@@ -38,6 +39,41 @@ import {
 } from "../../store/api/v2/market"
 import { Link } from "react-router-dom"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
+import { GameItemSearchAutocomplete } from "../../features/market/components/GameItemSearchAutocomplete"
+import { LocationSelector } from "../../features/market/components/stock/LocationSelector"
+
+/* ── Stat pill ── */
+function StatPill({ label, value, color }: { label: string; value: string | number; color?: "success" | "primary" }) {
+  return (
+    <Box sx={{ textAlign: "center" }}>
+      <Typography variant="h6" fontWeight={700} color={color === "success" ? "success.main" : color === "primary" ? "primary.main" : "text.primary"}>
+        {value}
+      </Typography>
+      <Typography variant="caption" color="text.secondary">{label}</Typography>
+    </Box>
+  )
+}
+
+/* ── Confirm delete dialog ── */
+function ConfirmDeleteDialog({ open, onClose, onConfirm, loading }: { open: boolean; onClose: () => void; onConfirm: () => void; loading: boolean }) {
+  const { t } = useTranslation()
+  return (
+    <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
+      <DialogTitle>{t("inventory.confirmDeleteTitle", "Delete lot?")}</DialogTitle>
+      <DialogContent>
+        <Typography variant="body2" color="text.secondary">
+          {t("inventory.confirmDeleteBody", "This lot will be permanently deleted and cannot be recovered.")}
+        </Typography>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose} disabled={loading}>{t("common.cancel", "Cancel")}</Button>
+        <Button variant="contained" color="error" onClick={onConfirm} disabled={loading} startIcon={loading ? <CircularProgress size={16} /> : undefined}>
+          {t("inventory.deleteConfirm", "Delete")}
+        </Button>
+      </DialogActions>
+    </Dialog>
+  )
+}
 
 export default function InventoryPage() {
   const { t } = useTranslation()
@@ -45,15 +81,22 @@ export default function InventoryPage() {
   const [page, setPage] = useState(1)
   const [search, setSearch] = useState("")
   const [createOpen, setCreateOpen] = useState(false)
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null)
+
+  // Create form state
+  const [newGameItemId, setNewGameItemId] = useState<string | null>(null)
+  const [newGameItemName, setNewGameItemName] = useState<string | null>(null)
   const [newQty, setNewQty] = useState(1)
+  const [newLocationId, setNewLocationId] = useState<string | null>(null)
   const [newNotes, setNewNotes] = useState("")
 
   const { data, isLoading, refetch } = useGetInventoryQuery({ page, pageSize: 50 })
   const [createLot, { isLoading: creating }] = useCreateInventoryLotMutation()
-  const [deleteLot] = useDeleteInventoryLotMutation()
+  const [deleteLot, { isLoading: deleting }] = useDeleteInventoryLotMutation()
   const [unlinkLot] = useUnlinkFromListingMutation()
 
   const lots = data?.lots || []
+
   const filtered = useMemo(() => {
     if (!search) return lots
     const s = search.toLowerCase()
@@ -61,30 +104,54 @@ export default function InventoryPage() {
       (l) =>
         l.game_item_name?.toLowerCase().includes(s) ||
         l.listing_title?.toLowerCase().includes(s) ||
-        l.notes?.toLowerCase().includes(s),
+        l.notes?.toLowerCase().includes(s) ||
+        l.location_name?.toLowerCase().includes(s),
     )
   }, [lots, search])
 
+  const totalQty = lots.reduce((sum, l) => sum + l.quantity_total, 0)
+  const listedCount = lots.filter((l) => l.listed).length
+
+  const resetCreateForm = () => {
+    setNewGameItemId(null)
+    setNewGameItemName(null)
+    setNewQty(1)
+    setNewLocationId(null)
+    setNewNotes("")
+  }
+
   const handleCreate = async () => {
+    if (newQty <= 0) {
+      issueAlert({ message: t("inventory.qtyRequired", "Quantity must be greater than 0"), severity: "error" })
+      return
+    }
     try {
-      await createLot({ createInventoryLotRequest: { quantity: newQty, notes: newNotes || undefined } }).unwrap()
+      await createLot({
+        createInventoryLotRequest: {
+          game_item_id: newGameItemId ?? undefined,
+          quantity: newQty,
+          location_id: newLocationId ?? undefined,
+          notes: newNotes.trim() || undefined,
+        },
+      }).unwrap()
       issueAlert({ message: t("inventory.created", "Lot created"), severity: "success" })
       setCreateOpen(false)
-      setNewQty(1)
-      setNewNotes("")
+      resetCreateForm()
       refetch()
     } catch (err: any) {
-      issueAlert({ message: err?.data?.message || "Failed to create lot", severity: "error" })
+      issueAlert({ message: err?.data?.message || t("inventory.createError", "Failed to create lot"), severity: "error" })
     }
   }
 
-  const handleDelete = async (lotId: string) => {
+  const handleDeleteConfirm = async () => {
+    if (!confirmDeleteId) return
     try {
-      await deleteLot({ lotId }).unwrap()
+      await deleteLot({ lotId: confirmDeleteId }).unwrap()
       issueAlert({ message: t("inventory.deleted", "Lot deleted"), severity: "success" })
+      setConfirmDeleteId(null)
       refetch()
     } catch (err: any) {
-      issueAlert({ message: err?.data?.message || "Failed to delete lot", severity: "error" })
+      issueAlert({ message: err?.data?.message || t("inventory.deleteError", "Failed to delete lot"), severity: "error" })
     }
   }
 
@@ -94,7 +161,7 @@ export default function InventoryPage() {
       issueAlert({ message: t("inventory.unlinked", "Lot unlinked from listing"), severity: "success" })
       refetch()
     } catch (err: any) {
-      issueAlert({ message: err?.data?.message || "Failed to unlink lot", severity: "error" })
+      issueAlert({ message: err?.data?.message || t("inventory.unlinkError", "Failed to unlink lot"), severity: "error" })
     }
   }
 
@@ -111,6 +178,7 @@ export default function InventoryPage() {
     >
       <Grid item xs={12}>
         <Paper sx={{ p: 2 }}>
+          {/* Header */}
           <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
             <Typography variant="h5" fontWeight="bold" color="text.secondary">
               {t("inventory.title", "Inventory")}
@@ -121,7 +189,7 @@ export default function InventoryPage() {
                 placeholder={t("inventory.search", "Search...")}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                InputProps={{ startAdornment: <SearchRounded sx={{ mr: 0.5, color: "text.secondary" }} /> }}
+                InputProps={{ startAdornment: <InventoryRounded sx={{ mr: 0.5, color: "text.secondary", fontSize: 18 }} /> }}
               />
               <Button variant="contained" startIcon={<AddRounded />} onClick={() => setCreateOpen(true)}>
                 {t("inventory.addLot", "Add Lot")}
@@ -129,11 +197,29 @@ export default function InventoryPage() {
             </Stack>
           </Stack>
 
+          {/* Stats strip */}
+          {lots.length > 0 && (
+            <Stack
+              direction="row"
+              spacing={3}
+              divider={<Box sx={{ borderLeft: 1, borderColor: "divider" }} />}
+              sx={{ mb: 2, px: 2, py: 1.5, bgcolor: "action.hover", borderRadius: 1 }}
+            >
+              <StatPill label={t("inventory.totalLots", "Total lots")} value={data?.total ?? lots.length} color="primary" />
+              <StatPill label={t("inventory.totalQty", "Total units")} value={totalQty.toLocaleString()} />
+              <StatPill label={t("inventory.listedCount", "Listed")} value={listedCount} color="success" />
+              <StatPill label={t("inventory.unlistedCount", "Unlisted")} value={lots.length - listedCount} />
+            </Stack>
+          )}
+
+          {/* Table */}
           {filtered.length === 0 && !isLoading ? (
             <Box sx={{ textAlign: "center", py: 6 }}>
               <InventoryRounded sx={{ fontSize: 64, color: "text.disabled", mb: 2 }} />
               <Typography color="text.secondary">
-                {t("inventory.empty", "No inventory items yet")}
+                {search
+                  ? t("inventory.noResults", "No lots match your search")
+                  : t("inventory.empty", "No inventory items yet")}
               </Typography>
             </Box>
           ) : (
@@ -157,9 +243,7 @@ export default function InventoryPage() {
                         {lot.game_item_name || t("inventory.custom_item", "Custom Item")}
                       </Typography>
                     </TableCell>
-                    <TableCell>
-                      {lot.variant_display_name || "—"}
-                    </TableCell>
+                    <TableCell>{lot.variant_display_name || "—"}</TableCell>
                     <TableCell align="right">
                       <Typography variant="body2" fontWeight={600}>
                         {lot.quantity_total.toLocaleString()}
@@ -204,7 +288,7 @@ export default function InventoryPage() {
                           </Tooltip>
                         )}
                         <Tooltip title={t("inventory.delete", "Delete lot")}>
-                          <IconButton size="small" color="error" onClick={() => handleDelete(lot.lot_id)}>
+                          <IconButton size="small" color="error" onClick={() => setConfirmDeleteId(lot.lot_id)}>
                             <DeleteRounded fontSize="small" />
                           </IconButton>
                         </Tooltip>
@@ -216,6 +300,7 @@ export default function InventoryPage() {
             </Table>
           )}
 
+          {/* Pagination */}
           {data && data.total > data.page_size && (
             <Stack direction="row" justifyContent="center" sx={{ mt: 2 }}>
               <Button disabled={page <= 1} onClick={() => setPage(page - 1)}>
@@ -233,35 +318,81 @@ export default function InventoryPage() {
       </Grid>
 
       {/* Create Lot Dialog */}
-      <Dialog open={createOpen} onClose={() => setCreateOpen(false)} maxWidth="xs" fullWidth>
-        <DialogTitle>{t("inventory.createLot", "Create Inventory Lot")}</DialogTitle>
+      <Dialog
+        open={createOpen}
+        onClose={() => { if (!creating) { setCreateOpen(false); resetCreateForm() } }}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>
+          <Stack direction="row" alignItems="center" spacing={1}>
+            <WarehouseRounded />
+            <span>{t("inventory.createLot", "Add Inventory Lot")}</span>
+          </Stack>
+        </DialogTitle>
         <DialogContent>
           <Stack spacing={2} sx={{ mt: 1 }}>
+            <GameItemSearchAutocomplete
+              value={newGameItemName}
+              onChange={(name, _type, itemId) => {
+                setNewGameItemName(name)
+                setNewGameItemId(itemId)
+              }}
+              label={t("inventory.gameItem", "Item (optional)")}
+              size="small"
+            />
             <TextField
               fullWidth
               label={t("inventory.quantity", "Quantity")}
               type="number"
               value={newQty}
               onChange={(e) => setNewQty(parseInt(e.target.value) || 0)}
-              inputProps={{ min: 0 }}
+              inputProps={{ min: 1 }}
+              size="small"
+              error={newQty <= 0}
+              helperText={newQty <= 0 ? t("inventory.qtyRequired", "Must be greater than 0") : t("inventory.qtyHelp", "Number of units in this lot")}
+            />
+            <LocationSelector
+              value={newLocationId}
+              onChange={setNewLocationId}
+              size="small"
+              fullWidth
+              label={t("inventory.location", "Location (optional)")}
             />
             <TextField
               fullWidth
-              label={t("inventory.notes", "Notes")}
+              label={t("inventory.notes", "Notes (optional)")}
               value={newNotes}
               onChange={(e) => setNewNotes(e.target.value)}
               multiline
               rows={2}
+              size="small"
+              inputProps={{ maxLength: 1000 }}
+              helperText={`${newNotes.length}/1000`}
             />
           </Stack>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setCreateOpen(false)}>{t("common.cancel", "Cancel")}</Button>
-          <Button variant="contained" onClick={handleCreate} disabled={creating || newQty < 0}>
+          <Button onClick={() => { setCreateOpen(false); resetCreateForm() }} disabled={creating}>
+            {t("common.cancel", "Cancel")}
+          </Button>
+          <Button
+            variant="contained"
+            onClick={handleCreate}
+            disabled={creating || newQty <= 0}
+            startIcon={creating ? <CircularProgress size={16} /> : undefined}
+          >
             {t("common.create", "Create")}
           </Button>
         </DialogActions>
       </Dialog>
+
+      <ConfirmDeleteDialog
+        open={!!confirmDeleteId}
+        onClose={() => setConfirmDeleteId(null)}
+        onConfirm={handleDeleteConfirm}
+        loading={deleting}
+      />
     </StandardPageLayout>
   )
 }

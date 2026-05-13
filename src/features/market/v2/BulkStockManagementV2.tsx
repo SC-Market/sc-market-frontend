@@ -62,6 +62,7 @@ import {
   type LocationInfo,
 } from "../../../store/api/v2/market"
 import { getQualityMode, formatQuality, type QualityMode } from "../../../util/qualityMode"
+import { useGetContractorAllocationsQuery, type Allocation } from "../../../store/api/stockLotsApi"
 import { CreateLotDialogV2 } from "./components/CreateLotDialogV2"
 
 /* ── Local filter context (mirrors V1 StockSearchContext) ── */
@@ -259,6 +260,7 @@ function AllStockLotsGridV2() {
 
   const { data: lotsData, isLoading } = useGetStockLotsQuery({
     listingId: filters.listingId ?? undefined,
+    locationId: filters.locationId ?? undefined,
     pageSize: 100,
   })
 
@@ -424,24 +426,13 @@ function AllStockLotsGridV2() {
       field: "actions",
       headerName: t("AllStockLots.actions", "Actions"),
       flex: 1,
-      renderCell: (params: GridRenderCellParams) => {
-        const isNew = String(params.row.id).startsWith("new-")
-        return (
-          <Box sx={{ display: "flex", gap: 0.5 }}>
-            {isNew && (
-              <IconButton size="small" color="primary" onClick={() => handleSaveNew(params.row)}>
-                <SaveIcon />
-              </IconButton>
-            )}
-            <IconButton
-              size="small"
-              onClick={() => isNew ? handleCancelNew(params.row.id) : handleDelete(params.row.lot_id)}
-            >
-              <DeleteIcon />
-            </IconButton>
-          </Box>
-        )
-      },
+      renderCell: (params: GridRenderCellParams) => (
+        <Box sx={{ display: "flex", gap: 0.5 }}>
+          <IconButton size="small" onClick={() => handleDelete(params.row.lot_id)}>
+            <DeleteIcon />
+          </IconButton>
+        </Box>
+      ),
     },
   ]
 
@@ -494,30 +485,6 @@ function AllStockLotsGridV2() {
     }
   }
 
-  const handleSaveNew = async (row: GridRowModel) => {
-    try {
-      await createLot({
-        createStockLotRequest: {
-          item_id: row.listing_id || "",
-          quantity: Number(row.quantity) || 0,
-          variant_attributes: row.quality_tier ? { quality_tier: row.quality_tier } : {},
-          location_id: row.location_id ?? undefined,
-          listed: row.listed ?? true,
-          notes: row.notes || undefined,
-        },
-      }).unwrap()
-      issueAlert({ message: t("AllStockLots.created", "Lot created"), severity: "success" })
-      setNewRows((prev) => prev.filter((r) => r.id !== row.id))
-    } catch (err) {
-      issueAlert({ message: (err as Error)?.message || "Operation failed", severity: "error" })
-    }
-  }
-
-  const handleCancelNew = (rowId: string) => {
-    setNewRows((prev) => prev.filter((r) => r.id !== rowId))
-  }
-
-  const handleAddRow = () => {
   const handleAddRow = () => {
     // Default to first listing or the currently filtered listing
     const defaultListing = filters.listingId || (listings.length > 0 ? listings[0].listing_id : "")
@@ -560,6 +527,8 @@ function AllStockLotsGridV2() {
       {addLotListingId && (
         <CreateLotDialogV2
           listingId={addLotListingId}
+          itemId=""
+          locations={locations}
           open={!!addLotListingId}
           onClose={() => setAddLotListingId(null)}
         />
@@ -572,20 +541,43 @@ function AllStockLotsGridV2() {
 
 function AllocatedStockGridV2() {
   const { t } = useTranslation()
+  const [currentOrg] = useCurrentOrg()
 
-  // Allocated lots = lots with listed=false (approximation for V2)
-  const { data: lotsData, isLoading } = useGetStockLotsQuery({ listed: false, pageSize: 100 })
-  const allocations = lotsData?.lots ?? []
+  const { data, isLoading } = useGetContractorAllocationsQuery(
+    { contractor_spectrum_id: currentOrg?.spectrum_id || "" },
+    { skip: !currentOrg?.spectrum_id },
+  )
+  const allocations: Allocation[] = data?.allocations ?? []
 
   const columns: GridColDef[] = [
     {
-      field: "variant_display_name",
+      field: "listing_id",
       headerName: t("stock.listing", "Listing"),
       flex: 1.5,
-      valueGetter: (_value: any, row: any) => row.variant?.display_name ?? "—",
+      valueGetter: (_value: any, row: Allocation) => row.lot?.listing_id ?? "",
+      renderCell: (params: GridRenderCellParams) => {
+        const photo = params.row.lot?.photos?.[0]
+        const title = params.row.lot?.title || String(params.value).substring(0, 8).toUpperCase()
+        return (
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <Avatar src={photo} variant="rounded" sx={{ width: 32, height: 32 }} />
+            <Typography variant="body2">{title}</Typography>
+          </Box>
+        )
+      },
     },
     {
-      field: "quantity_total",
+      field: "order_id",
+      headerName: t("stock.order", "Order"),
+      flex: 1.5,
+      renderCell: (params: GridRenderCellParams) => (
+        <Typography variant="body2" color="text.secondary">
+          {params.row.order_title || String(params.value).substring(0, 8).toUpperCase()}
+        </Typography>
+      ),
+    },
+    {
+      field: "quantity",
       headerName: t("stock.quantity", "Quantity"),
       width: 120,
     },
@@ -593,18 +585,19 @@ function AllocatedStockGridV2() {
       field: "location_name",
       headerName: t("stock.location", "Location"),
       flex: 1,
-      valueGetter: (_value: any, row: any) => row.location?.name ?? "Unspecified",
+      valueGetter: (_value: any, row: Allocation) => row.lot?.location?.name ?? "Unspecified",
     },
     {
-      field: "owner_name",
+      field: "owner",
       headerName: t("stock.user", "User"),
       flex: 1,
-      valueGetter: (_value: any, row: any) => row.owner?.display_name ?? row.owner?.username ?? "—",
+      valueGetter: (_value: any, row: Allocation) =>
+        row.lot?.owner?.display_name ?? row.lot?.owner?.username ?? "—",
       renderCell: (params: GridRenderCellParams) => {
-        if (!params.row.owner) return <Typography variant="body2" color="text.disabled">—</Typography>
+        if (!params.row.lot?.owner) return <Typography variant="body2" color="text.disabled">—</Typography>
         return (
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <Avatar src={params.row.owner.avatar_url || undefined} sx={{ width: 24, height: 24 }} />
+            <Avatar src={params.row.lot.owner.avatar || undefined} sx={{ width: 24, height: 24 }} />
             <Typography variant="body2" color="text.secondary">{params.value}</Typography>
           </Box>
         )
@@ -624,11 +617,18 @@ function AllocatedStockGridV2() {
         rows={allocations}
         columns={columns}
         loading={isLoading}
-        getRowId={(row) => row.lot_id}
+        getRowId={(row: Allocation) => row.allocation_id}
         autoHeight
         pageSizeOptions={[10, 25, 50]}
         initialState={{ pagination: { paginationModel: { pageSize: 10 } } }}
         slots={{
+          noRowsOverlay: () => (
+            <Box sx={{ textAlign: "center", py: 4 }}>
+              <Typography color="text.secondary">
+                {currentOrg ? t("stock.noAllocations", "No allocated stock") : t("stock.noOrgForAllocations", "Join an org to see allocations")}
+              </Typography>
+            </Box>
+          ),
           toolbar: () => (
             <Box sx={{ p: 2, display: "flex", alignItems: "center", gap: 1 }}>
               <Typography variant="h6">{t("stock.allocatedStock", "Allocated Stock")}</Typography>

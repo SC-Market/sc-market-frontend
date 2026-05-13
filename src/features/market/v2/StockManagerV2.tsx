@@ -229,33 +229,6 @@ function StockToolbarV2(props: StockToolbarProps) {
     </Dialog>
   )
 
-  /* ── Batch quantity update area (mirrors V1 ManageStockArea) ── */
-  const [batchQty, setBatchQty] = useState(1)
-
-  const runBatchQtyUpdate = useCallback(
-    async (delta: number | "zero") => {
-      const ids = [...selectionModel.ids].map(String)
-      if (ids.length === 0) return
-      try {
-        await Promise.all(
-          ids.map((id) => {
-            const listing = listings.find((l) => l.listing_id === id)
-            const newQty =
-              delta === "zero" ? 0 : Math.max(0, (listing?.quantity_available ?? 0) + delta)
-            return updateListing({
-              id,
-              updateListingRequest: { base_price: undefined, lot_updates: undefined },
-            })
-          }),
-        )
-        issueAlert({ message: t("ItemStock.updated"), severity: "success" })
-      } catch (e) {
-        issueAlert(e as Error)
-      }
-    },
-    [selectionModel.ids, listings, updateListing, issueAlert, t],
-  )
-
   if (isMobile) {
     return (
       <>
