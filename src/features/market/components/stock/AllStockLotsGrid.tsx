@@ -82,33 +82,6 @@ interface StockLotRow {
   crafted_source: string | null
 }
 
-/* ── Stats strip ── */
-
-function StockStatsStrip({ total, listedQty, unlistedQty }: { total: number; listedQty: number; unlistedQty: number }) {
-  const { t } = useTranslation()
-  return (
-    <Stack
-      direction="row"
-      spacing={3}
-      divider={<Box sx={{ borderLeft: 1, borderColor: "divider" }} />}
-      sx={{ px: 2, py: 1.5, bgcolor: "action.hover", borderBottom: 1, borderColor: "divider" }}
-    >
-      <Box sx={{ textAlign: "center" }}>
-        <Typography variant="subtitle2" fontWeight={700} color="primary.main">{total}</Typography>
-        <Typography variant="caption" color="text.secondary">{t("AllStockLots.totalLots", "Lots")}</Typography>
-      </Box>
-      <Box sx={{ textAlign: "center" }}>
-        <Typography variant="subtitle2" fontWeight={700} color="success.main">{listedQty}</Typography>
-        <Typography variant="caption" color="text.secondary">{t("AllStockLots.listedQty", "Listed")}</Typography>
-      </Box>
-      <Box sx={{ textAlign: "center" }}>
-        <Typography variant="subtitle2" fontWeight={700}>{unlistedQty}</Typography>
-        <Typography variant="caption" color="text.secondary">{t("AllStockLots.unlistedQty", "Unlisted")}</Typography>
-      </Box>
-    </Stack>
-  )
-}
-
 /* ── Quality edit dialog ── */
 
 function QualityEditDialog({
@@ -476,8 +449,6 @@ export function AllStockLotsGrid() {
   }, [allRows, filters.search, filters.minQuantity, filters.maxQuantity])
 
   // Stats
-  const listedQty = rows.filter((r) => r.listed).length
-  const unlistedQty = rows.length - listedQty
 
   // Bulk list / unlist
   const handleBulkListed = useCallback(async (newListed: boolean) => {
@@ -632,11 +603,6 @@ export function AllStockLotsGrid() {
 
   return (
     <Paper>
-      <StockStatsStrip
-        total={lotsData?.total ?? rows.length}
-        listedQty={listedQty}
-        unlistedQty={unlistedQty}
-      />
       <DataGrid
         rows={rows}
         columns={columns}
