@@ -1420,7 +1420,7 @@ export function AggregateBuySellWallV2(props: { aggregate: GameItemAggregateV2 }
 
     for (const buy of sortedBuy) {
       const index = Math.min(
-        Math.floor((buy.price_max ?? 0) / interval),
+        Math.floor((buy.price_per_unit ?? 0) / interval),
         bucketCount
       );
       buyPoints[index].y += 1;
@@ -1460,7 +1460,7 @@ export function AggregateBuySellWallV2(props: { aggregate: GameItemAggregateV2 }
 
     for (const buy of sortedBuy) {
       const index = Math.min(
-        Math.floor((buy.price_max ?? 0) / interval),
+        Math.floor((buy.price_per_unit ?? 0) / interval),
         bucketCount
       );
       for (let i = 0; i <= index; i++) {
