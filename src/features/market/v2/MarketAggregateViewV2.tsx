@@ -70,7 +70,7 @@ import { QualityHistogram } from "../../../components/market/v2/QualityHistogram
 import { QualityFilter } from "../../../components/market/v2/QualityFilter";
 import { VariantSelector } from "../../../components/market/v2/VariantSelector";
 import { CreateBuyOrderV2 } from "./components/CreateBuyOrderV2";
-import { useGetListingsQuery, useGetQualityDistributionQuery, useGetPriceHistoryQuery, useSearchBuyOrdersQuery, useFulfillBuyOrderMutation, useCancelBuyOrderMutation } from "../../../store/api/v2/market";
+import { useGetListingsQuery, useGetQualityDistributionQuery, useGetPriceHistoryQuery, useSearchBuyOrdersQuery, useFulfillBuyOrderMutation, useCancelBuyOrderMutation, type StandingBuyOrder } from "../../../store/api/v2/market";
 import type { GameItemListingResult, GameItemQualityDistribution, PriceDataPoint } from "../../../store/api/v2/market";
 
 /**
@@ -197,21 +197,8 @@ export interface AggregateListingV2Row {
 }
 
 /** Row shape for buy orders table */
-export interface BuyOrderV2Row {
-  buy_order_id: string;
-  game_item_id: string;
-  game_item_name: string;
-  buyer_id: string;
-  buyer_name: string;
-  quantity: number;
-  price_per_unit: number;
-  quality_tier_min?: number;
-  quality_tier_max?: number;
-  negotiable: boolean;
-  status: string;
-  created_at: string;
-  expires_at?: string;
-}
+/** Buy order row type — uses generated StandingBuyOrder + computed total */
+type BuyOrderV2Row = StandingBuyOrder & { total?: number | null }
 
 /** Game item aggregate data */
 export interface GameItemAggregateV2 {
@@ -1142,7 +1129,7 @@ export function BuyOrderRowV2(props: {
               display_name: buy_order.buyer_name,
               avatar: "",
               rating: { 
-                avg_rating: buy_order.buyer_rating,
+                avg_rating: 0,
                 rating_count: 0,
                 total_rating: 0,
                 streak: 0,
@@ -1391,7 +1378,7 @@ export function AggregateBuySellWallV2(props: { aggregate: GameItemAggregateV2 }
       ? pricedBuyOrders.reduce(
           (high, listing) =>
             listing.price_per_unit > high ? listing.price_per_unit : high,
-          pricedBuyOrders[0].price_max!
+          pricedBuyOrders[0].price_per_unit!
         )
       : 0;
     const high = Math.max(sellHigh, buyHigh) * 1.1;
