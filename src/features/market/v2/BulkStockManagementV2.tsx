@@ -38,6 +38,7 @@ import { useTranslation } from "react-i18next"
 import {
   GridColDef,
   GridRenderCellParams,
+  GridRowModel,
   GridRenderEditCellParams,
   useGridApiContext,
 } from "@mui/x-data-grid"
@@ -61,6 +62,7 @@ import {
   type LocationInfo,
 } from "../../../store/api/v2/market"
 import { getQualityMode, formatQuality, type QualityMode } from "../../../util/qualityMode"
+import { CreateLotDialogV2 } from "./components/CreateLotDialogV2"
 
 /* ── Local filter context (mirrors V1 StockSearchContext) ── */
 
@@ -268,7 +270,7 @@ function AllStockLotsGridV2() {
   const [updateLot] = useUpdateStockLotMutation()
   const [deleteLot] = useDeleteStockLotMutation()
 
-  const [newRows, setNewRows] = useState<any[]>([])
+  const [addLotListingId, setAddLotListingId] = useState<string | null>(null)
 
   const lots = lotsData?.lots ?? []
 
@@ -350,7 +352,7 @@ function AllStockLotsGridV2() {
       notes: lot.notes ?? "",
     }))
 
-  const rows = [...newRows, ...allLots]
+  const rows = allLots
 
   const columns: GridColDef[] = [
     {
@@ -448,11 +450,11 @@ function AllStockLotsGridV2() {
       await deleteLot({ id: lotId }).unwrap()
       issueAlert({ message: t("AllStockLots.deleted", "Lot deleted"), severity: "success" })
     } catch (err) {
-      issueAlert(err as any)
+      issueAlert({ message: (err as Error)?.message || "Operation failed", severity: "error" })
     }
   }
 
-  const handleRowUpdate = async (newRow: any, oldRow: any) => {
+  const handleRowUpdate = async (newRow: GridRowModel, oldRow: GridRowModel) => {
     if (String(newRow.id).startsWith("new-")) return newRow
     const qualityChanged = newRow.quality_tier !== oldRow.quality_tier || newRow.quality_value !== oldRow.quality_value
     const variantAttrs = qualityChanged
@@ -487,12 +489,12 @@ function AllStockLotsGridV2() {
         notes: lot.notes ?? "",
       }
     } catch (err) {
-      issueAlert(err as any)
+      issueAlert({ message: (err as Error)?.message || "Operation failed", severity: "error" })
       return oldRow
     }
   }
 
-  const handleSaveNew = async (row: any) => {
+  const handleSaveNew = async (row: GridRowModel) => {
     try {
       await createLot({
         createStockLotRequest: {
@@ -507,7 +509,7 @@ function AllStockLotsGridV2() {
       issueAlert({ message: t("AllStockLots.created", "Lot created"), severity: "success" })
       setNewRows((prev) => prev.filter((r) => r.id !== row.id))
     } catch (err) {
-      issueAlert(err as any)
+      issueAlert({ message: (err as Error)?.message || "Operation failed", severity: "error" })
     }
   }
 
@@ -516,23 +518,10 @@ function AllStockLotsGridV2() {
   }
 
   const handleAddRow = () => {
-    setNewRows((prev) => [
-      ...prev,
-      {
-        id: `new-${Date.now()}`,
-        lot_id: null,
-        listing_id: "",
-        variant_display_name: "New Lot",
-        quality_tier: null,
-        quality_value: null,
-        crafted_source: null,
-        quantity: 0,
-        location_id: null,
-        location_name: null,
-        listed: true,
-        notes: "",
-      },
-    ])
+  const handleAddRow = () => {
+    // Default to first listing or the currently filtered listing
+    const defaultListing = filters.listingId || (listings.length > 0 ? listings[0].listing_id : "")
+    setAddLotListingId(defaultListing)
   }
 
   return (
@@ -568,6 +557,13 @@ function AllStockLotsGridV2() {
         showToolbar
         sx={{ "& .MuiDataGrid-cell": { display: "flex", alignItems: "center" } }}
       />
+      {addLotListingId && (
+        <CreateLotDialogV2
+          listingId={addLotListingId}
+          open={!!addLotListingId}
+          onClose={() => setAddLotListingId(null)}
+        />
+      )}
     </Paper>
   )
 }
