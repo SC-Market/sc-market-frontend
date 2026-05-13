@@ -42,18 +42,6 @@ import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { GameItemSearchAutocomplete } from "../../features/market/components/GameItemSearchAutocomplete"
 import { LocationSelector } from "../../features/market/components/stock/LocationSelector"
 
-/* ── Stat pill ── */
-function StatPill({ label, value, color }: { label: string; value: string | number; color?: "success" | "primary" }) {
-  return (
-    <Box sx={{ textAlign: "center" }}>
-      <Typography variant="h6" fontWeight={700} color={color === "success" ? "success.main" : color === "primary" ? "primary.main" : "text.primary"}>
-        {value}
-      </Typography>
-      <Typography variant="caption" color="text.secondary">{label}</Typography>
-    </Box>
-  )
-}
-
 /* ── Confirm delete dialog ── */
 function ConfirmDeleteDialog({ open, onClose, onConfirm, loading }: { open: boolean; onClose: () => void; onConfirm: () => void; loading: boolean }) {
   const { t } = useTranslation()
@@ -108,9 +96,6 @@ export default function InventoryPage() {
         l.location_name?.toLowerCase().includes(s),
     )
   }, [lots, search])
-
-  const totalQty = lots.reduce((sum, l) => sum + l.quantity_total, 0)
-  const listedCount = lots.filter((l) => l.listed).length
 
   const resetCreateForm = () => {
     setNewGameItemId(null)
@@ -197,25 +182,9 @@ export default function InventoryPage() {
             </Stack>
           </Stack>
 
-          {/* Stats strip */}
-          {lots.length > 0 && (
-            <Stack
-              direction="row"
-              spacing={3}
-              divider={<Box sx={{ borderLeft: 1, borderColor: "divider" }} />}
-              sx={{ mb: 2, px: 2, py: 1.5, bgcolor: "action.hover", borderRadius: 1 }}
-            >
-              <StatPill label={t("inventory.totalLots", "Total lots")} value={data?.total ?? lots.length} color="primary" />
-              <StatPill label={t("inventory.totalQty", "Total units")} value={totalQty.toLocaleString()} />
-              <StatPill label={t("inventory.listedCount", "Listed")} value={listedCount} color="success" />
-              <StatPill label={t("inventory.unlistedCount", "Unlisted")} value={lots.length - listedCount} />
-            </Stack>
-          )}
-
           {/* Table */}
           {filtered.length === 0 && !isLoading ? (
             <Box sx={{ textAlign: "center", py: 6 }}>
-              <InventoryRounded sx={{ fontSize: 64, color: "text.disabled", mb: 2 }} />
               <Typography color="text.secondary">
                 {search
                   ? t("inventory.noResults", "No lots match your search")
