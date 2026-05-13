@@ -153,7 +153,7 @@ const buyOrderHeadCells: readonly HeadCell<BuyOrderV2Row>[] = [
     label: "Quality Tier",
   },
   {
-    id: "price_max",
+    id: "price_per_unit",
     numeric: true,
     disablePadding: false,
     label: "MarketAggregateView.price",
@@ -199,16 +199,18 @@ export interface AggregateListingV2Row {
 /** Row shape for buy orders table */
 export interface BuyOrderV2Row {
   buy_order_id: string;
+  game_item_id: string;
+  game_item_name: string;
   buyer_id: string;
   buyer_name: string;
-  buyer_rating: number;
-  quality_tier_min: number | null;
-  quality_tier_max: number | null;
-  price_min: number | null;
-  price_max: number | null;
   quantity: number;
-  total: number | null;
+  price_per_unit: number;
+  quality_tier_min?: number;
+  quality_tier_max?: number;
   negotiable: boolean;
+  status: string;
+  created_at: string;
+  expires_at?: string;
 }
 
 /** Game item aggregate data */
@@ -288,20 +290,7 @@ export function MarketAggregateViewV2() {
       quality_tier_max: l.quality_tier_max ?? null,
       variant_count: l.variant_count,
     })),
-    buy_orders: (buyOrdersData?.buy_orders || []).map((bo) => ({
-      buy_order_id: bo.buy_order_id,
-      game_item_id: bo.game_item_id,
-      game_item_name: bo.game_item_name,
-      buyer_id: bo.buyer_id,
-      buyer_name: bo.buyer_name,
-      quantity: bo.quantity,
-      price_per_unit: bo.price_per_unit,
-      quality_tier_min: bo.quality_tier_min ?? null,
-      quality_tier_max: bo.quality_tier_max ?? null,
-      status: bo.status,
-      created_at: bo.created_at,
-      expires_at: bo.expires_at ?? null,
-    })),
+    buy_orders: buyOrdersData?.buy_orders || [],
     price_history: (priceData?.data || []).map((p) => ({
       timestamp: p.timestamp,
       quality_tier: p.quality_tier ?? null,
@@ -627,13 +616,12 @@ export function MarketAggregateViewV2() {
           disableSelect
           rows={buy_orders.map((o) => ({
             ...o,
-            rating: o.buyer_rating,
             total:
-              o.negotiable || o.price_max == null
+              o.negotiable
                 ? null
-                : o.price_max * o.quantity,
+                : o.price_per_unit * o.quantity,
           }))}
-          initialSort={"price_max"}
+          initialSort={"price_per_unit"}
           keyAttr={"buy_order_id"}
           headCells={buyOrderHeadCells}
           generateRow={BuyOrderRowV2}
@@ -1033,7 +1021,7 @@ export function AggregateRowV2(props: {
  * Requirements: 41.6, 41.7, 41.9
  */
 export function BuyOrderRowV2(props: {
-  row: BuyOrderV2Row & { rating: number; total: number | null };
+  row: BuyOrderV2Row & { total: number | null };
   index: number;
   onClick?: MouseEventHandler;
   isItemSelected: boolean;
@@ -1074,14 +1062,14 @@ export function BuyOrderRowV2(props: {
   );
 
   const callback = useCallback(() => {
-    if (buy_order.negotiable || buy_order.price_max == null) {
+    if (buy_order.negotiable) {
       setAgreedPrice(0);
       setFulfillDialogOpen(true);
       return false;
     }
     doFulfill();
     return false;
-  }, [buy_order.negotiable, buy_order.price_max, doFulfill]);
+  }, [buy_order.negotiable, doFulfill]);
 
   const handleFulfillDialogSubmit = useCallback(() => {
     if (agreedPrice >= 1) {
@@ -1116,14 +1104,14 @@ export function BuyOrderRowV2(props: {
 
   // Format price display
   const priceDisplay = useMemo(() => {
-    if (buy_order.negotiable || buy_order.price_max == null) {
-      return buy_order.price_max != null && buy_order.price_max >= 1
+    if (buy_order.negotiable) {
+      return buy_order.price_per_unit >= 1
         ? t("buyorder.negotiableSuggested", "Negotiable (~{{price}} aUEC)", {
-            price: buy_order.price_max.toLocaleString(i18n.language),
+            price: buy_order.price_per_unit.toLocaleString(i18n.language),
           })
         : t("buyorder.status.negotiable", "Negotiable");
     }
-    return `${buy_order.price_max.toLocaleString(i18n.language)} aUEC`;
+    return `${buy_order.price_per_unit.toLocaleString(i18n.language)} aUEC`;
   }, [buy_order, t, i18n.language]);
 
   return (
@@ -1397,12 +1385,12 @@ export function AggregateBuySellWallV2(props: { aggregate: GameItemAggregateV2 }
         )
       : 0;
     const pricedBuyOrders = aggregate.buy_orders.filter(
-      (o) => o.price_max != null
+      (o) => o.price_per_unit != null
     );
     const buyHigh = pricedBuyOrders.length
       ? pricedBuyOrders.reduce(
           (high, listing) =>
-            listing.price_max! > high ? listing.price_max! : high,
+            listing.price_per_unit > high ? listing.price_per_unit : high,
           pricedBuyOrders[0].price_max!
         )
       : 0;
@@ -1425,7 +1413,7 @@ export function AggregateBuySellWallV2(props: { aggregate: GameItemAggregateV2 }
       .filter((s) => s.quantity_available)
       .sort((a, b) => a.price_min - b.price_min);
     const sortedBuy = [...pricedBuyOrders].sort(
-      (a, b) => (a.price_max ?? 0) - (b.price_max ?? 0)
+      (a, b) => (a.price_per_unit ?? 0) - (b.price_per_unit ?? 0)
     );
 
     const sellPoints = new Array(bucketCount + 1)
