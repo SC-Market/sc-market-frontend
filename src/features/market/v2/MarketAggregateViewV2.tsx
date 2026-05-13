@@ -70,7 +70,7 @@ import { QualityHistogram } from "../../../components/market/v2/QualityHistogram
 import { QualityFilter } from "../../../components/market/v2/QualityFilter";
 import { VariantSelector } from "../../../components/market/v2/VariantSelector";
 import { CreateBuyOrderV2 } from "./components/CreateBuyOrderV2";
-import { useGetListingsQuery, useGetQualityDistributionQuery, useGetPriceHistoryQuery, useFulfillBuyOrderMutation, useCancelBuyOrderMutation } from "../../../store/api/v2/market";
+import { useGetListingsQuery, useGetQualityDistributionQuery, useGetPriceHistoryQuery, useSearchBuyOrdersQuery, useFulfillBuyOrderMutation, useCancelBuyOrderMutation } from "../../../store/api/v2/market";
 import type { GameItemListingResult, GameItemQualityDistribution, PriceDataPoint } from "../../../store/api/v2/market";
 
 /**
@@ -255,6 +255,7 @@ export function MarketAggregateViewV2() {
   const { data: listingsData, isLoading: listingsLoading, error: listingsError } = useGetListingsQuery({ id: gameItemId! }, { skip: !gameItemId });
   const { data: qualityData } = useGetQualityDistributionQuery({ gameItemId: gameItemId! }, { skip: !gameItemId });
   const { data: priceData } = useGetPriceHistoryQuery({ gameItemId: gameItemId! }, { skip: !gameItemId });
+  const { data: buyOrdersData } = useSearchBuyOrdersQuery({ gameItemId: gameItemId! }, { skip: !gameItemId });
 
   const isLoading = listingsLoading;
   const error = listingsError;
@@ -287,7 +288,20 @@ export function MarketAggregateViewV2() {
       quality_tier_max: l.quality_tier_max ?? null,
       variant_count: l.variant_count,
     })),
-    buy_orders: [],
+    buy_orders: (buyOrdersData?.buy_orders || []).map((bo) => ({
+      buy_order_id: bo.buy_order_id,
+      game_item_id: bo.game_item_id,
+      game_item_name: bo.game_item_name,
+      buyer_id: bo.buyer_id,
+      buyer_name: bo.buyer_name,
+      quantity: bo.quantity,
+      price_per_unit: bo.price_per_unit,
+      quality_tier_min: bo.quality_tier_min ?? null,
+      quality_tier_max: bo.quality_tier_max ?? null,
+      status: bo.status,
+      created_at: bo.created_at,
+      expires_at: bo.expires_at ?? null,
+    })),
     price_history: (priceData?.data || []).map((p) => ({
       timestamp: p.timestamp,
       quality_tier: p.quality_tier ?? null,
@@ -296,7 +310,7 @@ export function MarketAggregateViewV2() {
       max_price: p.max_price,
       volume: p.volume,
     })),
-  }), [listingsData, qualityData, priceData, gameItemId]);
+  }), [listingsData, qualityData, priceData, buyOrdersData, gameItemId]);
   const { game_item, quality_distribution, listings, buy_orders, price_history } = complete;
 
   // Filter listings by selected quality tier
