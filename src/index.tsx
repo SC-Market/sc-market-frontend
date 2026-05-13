@@ -9,7 +9,12 @@ import {
   initializeBugsnagAsync,
   getBugsnagErrorBoundary,
 } from "./util/monitoring/bugsnagLoader"
-import { clearEmergencyReloadBudget } from "./util/assetReloadGuard"
+import { clearEmergencyReloadBudget, tryEmergencyReload } from "./util/assetReloadGuard"
+
+// Handle stale chunk errors after deployments (dynamic import failures)
+window.addEventListener("vite:preloadError", () => {
+  tryEmergencyReload()
+})
 
 const container = document.getElementById("root")
 const root = createRoot(container!)
