@@ -723,7 +723,7 @@ export function OffersViewPaginated(props: {
           page={page}
           onPageSizeChange={setPageSize}
           pageSize={pageSize}
-          rowCount={statusFilter ? totals.get(statusFilter) || 0 : totalCount}
+          rowCount={statusFilter === "unclaimed" ? totalCount : statusFilter ? totals.get(statusFilter) || 0 : totalCount}
           onOrderChange={setOrder}
           order={order}
           onOrderByChange={setOrderBy}
