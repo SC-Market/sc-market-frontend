@@ -64,6 +64,8 @@ const mockStockLots: GetStockLotsResponse = {
       notes: null,
       created_at: "2024-01-01T00:00:00Z",
       updated_at: "2024-01-01T00:00:00Z",
+      listing_id: "listing-1",
+      listing_title: "Mock Listing",
     },
     {
       lot_id: "lot-2",
@@ -89,6 +91,8 @@ const mockStockLots: GetStockLotsResponse = {
       notes: "Test notes",
       created_at: "2024-01-02T00:00:00Z",
       updated_at: "2024-01-02T00:00:00Z",
+      listing_id: "listing-1",
+      listing_title: "Mock Listing",
     },
   ],
   total: 2,
