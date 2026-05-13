@@ -36,6 +36,7 @@ import { SellerReviews } from "../listing-view/components/SellerReviews"
 import { SellerOtherListingsV2, RelatedListingsV2, AggregateMarketDataV2 } from "./components/ListingViewComponentsV2"
 import { ListingOrdersSection } from "./components/ListingOrdersSection"
 import { FRONTEND_URL, FALLBACK_IMAGE_URL } from "../../../util/constants"
+import { getLanguageName } from "../../../constants/languages"
 import { getRelativeTime } from "../../../util/time"
 import { dateDiffInDays } from "../../../util/dateDiff"
 import { formatQuantity } from "../../../util/formatQuantity"
@@ -309,7 +310,7 @@ export function ListingDetailV2() {
                                   {t("MarketListingView.languages", "Languages")}:
                                 </Typography>
                                 {seller.languages.map((lang) => (
-                                  <Chip key={lang} label={lang} size="small" variant="outlined" sx={{ height: 22, fontSize: "0.7rem" }} />
+                                  <Chip key={lang} label={getLanguageName(lang) || lang} size="small" variant="outlined" sx={{ height: 22, fontSize: "0.7rem" }} />
                                 ))}
                               </Box>
                             </ListingDetailItem>
