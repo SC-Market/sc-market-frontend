@@ -32,8 +32,20 @@ import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { DetailPageSkeleton } from "../../components/game-data/GameDataSkeletons"
 
+interface LoadoutNode {
+  name?: string
+  item_name?: string
+  display_name?: string
+  game_item_id?: string
+  item_id?: string
+  id?: string
+  type?: string
+  item_type?: string
+  [key: string]: LoadoutNode | LoadoutNode[] | string | number | boolean | null | undefined
+}
+
 /** Recursively render a loadout object as a nested list */
-function LoadoutTree({ data, navigate, depth = 0 }: { data: any; navigate: (path: string) => void; depth?: number }) {
+function LoadoutTree({ data, navigate, depth = 0 }: { data: LoadoutNode | LoadoutNode[] | string | number | null | undefined; navigate: (path: string) => void; depth?: number }) {
   if (!data || typeof data !== "object") return <Typography variant="caption">{String(data)}</Typography>
 
   const entries = Array.isArray(data) ? data.map((v, i) => [String(i), v] as const) : Object.entries(data)

@@ -214,7 +214,7 @@ export const emailApi = serviceApi.injectEndpoints({
         url: `${apiBase}/email/unsubscribe/${token}?json=true`,
         method: "POST",
       }),
-      transformResponse: (response: any) => {
+      transformResponse: (response: { data: { success?: boolean; message?: string; userId?: string; email?: string } }) => {
         // Handle both wrapped and unwrapped responses
         const data = unwrapResponse(response) as {
           success?: boolean
@@ -241,7 +241,7 @@ export const emailApi = serviceApi.injectEndpoints({
         }
       },
       // Handle errors that might come through as 200 responses
-      transformErrorResponse: (response: any) => {
+      transformErrorResponse: (response: { status: number; data?: { error?: string }; error?: string }) => {
         // If response has error structure, extract it
         if (response?.data?.error) {
           return response.data.error
