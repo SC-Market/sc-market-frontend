@@ -17,10 +17,11 @@ import { LoadingButton } from "@mui/lab";
 import { ExtendedTheme } from "../../../../hooks/styles/Theme";
 import { useAlertHook } from "../../../../hooks/alert/AlertHook";
 import { Section } from "../../../../components/paper/Section";
-import { useCreateStandingBuyOrderMutation } from "../../../../store/api/v2/market";
+import { useCreateStandingBuyOrderMutation, useSearchResourcesQuery } from "../../../../store/api/v2/market";
 import { useNavigate } from "react-router-dom";
 
 import { getQualityMode, type QualityMode } from "../../../../util/qualityMode";
+import { QualityBandSelect } from "../../../../components/game-data/QualityBandSelect";
 
 /**
  * CreateBuyOrderV2 Component
@@ -29,10 +30,11 @@ import { getQualityMode, type QualityMode } from "../../../../util/qualityMode";
 
 interface CreateBuyOrderV2Props {
   gameItemId: string;
+  gameItemName?: string;
   gameItemType?: string;
 }
 
-export function CreateBuyOrderV2({ gameItemId, gameItemType }: CreateBuyOrderV2Props) {
+export function CreateBuyOrderV2({ gameItemId, gameItemName, gameItemType }: CreateBuyOrderV2Props) {
   const { t } = useTranslation();
   const theme = useTheme<ExtendedTheme>();
   const issueAlert = useAlertHook();
@@ -49,6 +51,11 @@ export function CreateBuyOrderV2({ gameItemId, gameItemType }: CreateBuyOrderV2P
   const [qualityValueMin, setQualityValueMin] = useState<number | null>(null);
   const [qualityValueMax, setQualityValueMax] = useState<number | null>(null);
   const qualityMode = getQualityMode(gameItemType);
+  const { data: resourceData } = useSearchResourcesQuery(
+    { text: gameItemName || undefined, pageSize: 1 },
+    { skip: qualityMode !== "value" || !gameItemName },
+  )
+  const qualityBands = resourceData?.resources?.[0]?.quality_bands
 
   // Calculate total price range
   const totalMin = priceMin * quantity;
@@ -196,20 +203,38 @@ export function CreateBuyOrderV2({ gameItemId, gameItemType }: CreateBuyOrderV2P
 
         {qualityMode === "value" && (<>
           <Grid item xs={12} sm={6}>
-            <NumericFormat decimalScale={0} allowNegative={false} customInput={TextField}
-              size="small" fullWidth color="secondary"
-              isAllowed={({ floatValue }) => !floatValue || floatValue <= 1000}
-              label="Min Quality (0-1000)"
-              value={qualityValueMin ?? ""}
-              onValueChange={(v) => setQualityValueMin(v.floatValue ?? null)} />
+            {qualityBands && qualityBands.length > 0 ? (
+              <QualityBandSelect
+                bands={qualityBands}
+                value={qualityValueMin}
+                onChange={setQualityValueMin}
+                label="Min Quality"
+              />
+            ) : (
+              <NumericFormat decimalScale={0} allowNegative={false} customInput={TextField}
+                size="small" fullWidth color="secondary"
+                isAllowed={({ floatValue }) => !floatValue || floatValue <= 1000}
+                label="Min Quality (0-1000)"
+                value={qualityValueMin ?? ""}
+                onValueChange={(v) => setQualityValueMin(v.floatValue ?? null)} />
+            )}
           </Grid>
           <Grid item xs={12} sm={6}>
-            <NumericFormat decimalScale={0} allowNegative={false} customInput={TextField}
-              size="small" fullWidth color="secondary"
-              isAllowed={({ floatValue }) => !floatValue || floatValue <= 1000}
-              label="Max Quality (0-1000)"
-              value={qualityValueMax ?? ""}
-              onValueChange={(v) => setQualityValueMax(v.floatValue ?? null)} />
+            {qualityBands && qualityBands.length > 0 ? (
+              <QualityBandSelect
+                bands={qualityBands}
+                value={qualityValueMax}
+                onChange={setQualityValueMax}
+                label="Max Quality"
+              />
+            ) : (
+              <NumericFormat decimalScale={0} allowNegative={false} customInput={TextField}
+                size="small" fullWidth color="secondary"
+                isAllowed={({ floatValue }) => !floatValue || floatValue <= 1000}
+                label="Max Quality (0-1000)"
+                value={qualityValueMax ?? ""}
+                onValueChange={(v) => setQualityValueMax(v.floatValue ?? null)} />
+            )}
           </Grid>
         </>)}
 
