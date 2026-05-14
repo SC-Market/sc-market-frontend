@@ -8,6 +8,7 @@ import { CreateBuyOrderV2 } from "./components/CreateBuyOrderV2"
 export function CreateBuyOrderPageV2() {
   const { t } = useTranslation()
   const [selectedGameItemId, setSelectedGameItemId] = useState<string | null>(null)
+  const [selectedGameItemName, setSelectedGameItemName] = useState<string | null>(null)
   const [selectedGameItemType, setSelectedGameItemType] = useState<string | null>(null)
 
   return (
@@ -29,14 +30,14 @@ export function CreateBuyOrderPageV2() {
           </Typography>
           <GameItemSearchAutocomplete
             value={null}
-            onChange={(_name, type, itemId) => { setSelectedGameItemId(itemId); setSelectedGameItemType(type) }}
+            onChange={(name, type, itemId) => { setSelectedGameItemId(itemId); setSelectedGameItemName(name); setSelectedGameItemType(type) }}
             label={t("buyOrderActions.searchItem", "Search for a game item")}
           />
         </Paper>
       </Grid>
       {selectedGameItemId && (
         <Grid item xs={12}>
-          <CreateBuyOrderV2 gameItemId={selectedGameItemId} gameItemType={selectedGameItemType || undefined} />
+          <CreateBuyOrderV2 gameItemId={selectedGameItemId} gameItemName={selectedGameItemName || undefined} gameItemType={selectedGameItemType || undefined} />
         </Grid>
       )}
     </StandardPageLayout>

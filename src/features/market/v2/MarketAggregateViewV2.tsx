@@ -616,7 +616,7 @@ export function MarketAggregateViewV2() {
       </Grid>
 
       {/* Create Buy Order Form */}
-      <CreateBuyOrderV2 gameItemId={game_item.id} gameItemType={game_item.type} />
+      <CreateBuyOrderV2 gameItemId={game_item.id} gameItemName={game_item.name} gameItemType={game_item.type} />
 
       {/* Buy/Sell Wall Charts */}
       <Grid item xs={12}>

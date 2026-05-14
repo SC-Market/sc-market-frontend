@@ -31,7 +31,8 @@ import { getQualityMode } from "../../../util/qualityMode";
 import { SelectPhotosArea } from "../../../components/modal/SelectPhotosArea";
 import { LocationSelector } from "../components/stock/LocationSelector";
 import { BulkDiscountTierEditor } from "../../../components/market/BulkDiscountTierEditor";
-import { useCreateListingMutation } from "../../../store/api/v2/market";
+import { QualityBandSelect } from "../../../components/game-data/QualityBandSelect";
+import { useCreateListingMutation, useSearchResourcesQuery } from "../../../store/api/v2/market";
 import { useUploadPhotosMutation } from "../../../store/api/v2/market-overrides";
 import { useAlertHook } from "../../../hooks/alert/AlertHook";
 import { useGetUserProfileQuery } from "../../profile/api/profileApi";
@@ -123,6 +124,14 @@ export function CreateListingV2() {
       listed: true,
     },
   ]);
+
+  // Fetch quality bands for commodity items
+  const qualityMode = getQualityMode(gameItemType)
+  const { data: resourceData } = useSearchResourcesQuery(
+    { text: gameItemName || undefined, pageSize: 1 },
+    { skip: qualityMode !== "value" || !gameItemName },
+  )
+  const qualityBands = resourceData?.resources?.[0]?.quality_bands
 
   // RTK Query mutation
   const [createListing, { isLoading }] = useCreateListingMutation();
@@ -771,36 +780,35 @@ export function CreateListingV2() {
                       if (qm === "none") return null
                       return qm === "value" ? (
                         <Grid item xs={12} sm={6} md={4}>
-                          <NumericFormat
-                        decimalScale={0}
-                        allowNegative={false}
-                        customInput={TextField}
-                        size="small"
-                        fullWidth
-                        isAllowed={({ floatValue }) => !floatValue || floatValue <= 1000}
-                        onValueChange={(values) => {
-                          handleUpdateStockLot(
-                            lot.id,
-                            "quality_value",
-                            values.floatValue
-                          );
-                        }}
-                        label={t("CreateListingV2.qualityValue", "Quality Value")}
-                        value={lot.quality_value ?? ""}
-                        color="secondary"
-                        helperText={t(
-                          "CreateListingV2.qualityValueHelp",
-                          "Optional: 0-1000"
-                        )}
-                        inputProps={{
-                          inputMode: "decimal",
-                          "aria-label": t(
-                            "CreateListingV2.qualityValueAriaLabel",
-                            "Enter quality value"
-                          ),
-                        }}
-                      />
-                    </Grid>
+                          {qualityBands && qualityBands.length > 0 ? (
+                            <QualityBandSelect
+                              bands={qualityBands}
+                              value={lot.quality_value}
+                              onChange={(val) => handleUpdateStockLot(lot.id, "quality_value", val ?? undefined)}
+                              label={t("CreateListingV2.qualityValue", "Quality Value")}
+                            />
+                          ) : (
+                            <NumericFormat
+                              decimalScale={0}
+                              allowNegative={false}
+                              customInput={TextField}
+                              size="small"
+                              fullWidth
+                              isAllowed={({ floatValue }) => !floatValue || floatValue <= 1000}
+                              onValueChange={(values) => {
+                                handleUpdateStockLot(lot.id, "quality_value", values.floatValue);
+                              }}
+                              label={t("CreateListingV2.qualityValue", "Quality Value")}
+                              value={lot.quality_value ?? ""}
+                              color="secondary"
+                              helperText={t("CreateListingV2.qualityValueHelp", "Optional: 0-1000")}
+                              inputProps={{
+                                inputMode: "decimal",
+                                "aria-label": t("CreateListingV2.qualityValueAriaLabel", "Enter quality value"),
+                              }}
+                            />
+                          )}
+                        </Grid>
                       ) : (
                         <Grid item xs={12} sm={6} md={4}>
                           <TextField
