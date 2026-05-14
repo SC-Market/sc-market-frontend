@@ -127,6 +127,7 @@ export const routeRegistry: Record<string, RouteImportFunction> = {
   // Admin routes
   "/admin/users": () => import("../pages/people/People"),
   "/admin/market": () => import("../pages/admin/AllMarketListings"),
+  "/admin/wipe": () => import("../pages/admin/AdminWipeListings"),
   "/admin/orders": () => import("../pages/admin/AdminOrderStats"),
   "/admin/moderation": () => import("../pages/admin/AdminModeration"),
   "/admin/alerts": () => import("../pages/admin/AdminAlerts"),
