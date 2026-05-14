@@ -1,7 +1,9 @@
 import { generatedApiV2 as api } from "../../generatedApiV2"
 export const addTagTypes = [
   "Variant Types V2",
+  "Suppliers V2",
   "Stock Lots V2",
+  "Requisitions V2",
   "Orders V2",
   "Offers V2",
   "Listings V2",
@@ -39,6 +41,63 @@ const injectedRtkApi = api
       >({
         query: () => ({ url: `/variant-types` }),
         providesTags: ["Variant Types V2"],
+      }),
+      getMySuppliers: build.query<
+        GetMySuppliersApiResponse,
+        GetMySuppliersApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/suppliers`,
+          params: {
+            status: queryArg.status,
+            tier: queryArg.tier,
+            page: queryArg.page,
+            page_size: queryArg.pageSize,
+          },
+        }),
+        providesTags: ["Suppliers V2"],
+      }),
+      addSupplier: build.mutation<AddSupplierApiResponse, AddSupplierApiArg>({
+        query: (queryArg) => ({
+          url: `/suppliers`,
+          method: "POST",
+          body: queryArg.addSupplierRequest,
+        }),
+        invalidatesTags: ["Suppliers V2"],
+      }),
+      updateSupplier: build.mutation<
+        UpdateSupplierApiResponse,
+        UpdateSupplierApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/suppliers/${queryArg.relationshipId}`,
+          method: "PATCH",
+          body: queryArg.updateSupplierRequest,
+        }),
+        invalidatesTags: ["Suppliers V2"],
+      }),
+      removeSupplier: build.mutation<
+        RemoveSupplierApiResponse,
+        RemoveSupplierApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/suppliers/${queryArg.relationshipId}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["Suppliers V2"],
+      }),
+      getMyAggregators: build.query<
+        GetMyAggregatorsApiResponse,
+        GetMyAggregatorsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/suppliers/as-supplier`,
+          params: {
+            page: queryArg.page,
+            page_size: queryArg.pageSize,
+          },
+        }),
+        providesTags: ["Suppliers V2"],
       }),
       createStockLot: build.mutation<
         CreateStockLotApiResponse,
@@ -99,6 +158,59 @@ const injectedRtkApi = api
           body: queryArg.bulkUpdateStockLotsRequest,
         }),
         invalidatesTags: ["Stock Lots V2"],
+      }),
+      createRequisition: build.mutation<
+        CreateRequisitionApiResponse,
+        CreateRequisitionApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/requisitions`,
+          method: "POST",
+          body: queryArg.createRequisitionRequest,
+        }),
+        invalidatesTags: ["Requisitions V2"],
+      }),
+      getRequisitions: build.query<
+        GetRequisitionsApiResponse,
+        GetRequisitionsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/requisitions`,
+          params: {
+            role: queryArg.role,
+            status: queryArg.status,
+            page: queryArg.page,
+            page_size: queryArg.pageSize,
+          },
+        }),
+        providesTags: ["Requisitions V2"],
+      }),
+      getRequisition: build.query<
+        GetRequisitionApiResponse,
+        GetRequisitionApiArg
+      >({
+        query: (queryArg) => ({ url: `/requisitions/${queryArg.orderId}` }),
+        providesTags: ["Requisitions V2"],
+      }),
+      setOfferRequisitionItems: build.mutation<
+        SetOfferRequisitionItemsApiResponse,
+        SetOfferRequisitionItemsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/requisitions/offer-items`,
+          method: "POST",
+          body: queryArg.setOfferRequisitionItemsRequest,
+        }),
+        invalidatesTags: ["Requisitions V2"],
+      }),
+      getOfferRequisitionItems: build.query<
+        GetOfferRequisitionItemsApiResponse,
+        GetOfferRequisitionItemsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/requisitions/offer-items/${queryArg.offerId}`,
+        }),
+        providesTags: ["Requisitions V2"],
       }),
       createOrder: build.mutation<CreateOrderApiResponse, CreateOrderApiArg>({
         query: (queryArg) => ({
@@ -1147,6 +1259,17 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["Buy Orders V2"],
       }),
+      declineBuyOrder: build.mutation<
+        DeclineBuyOrderApiResponse,
+        DeclineBuyOrderApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/buy-orders/decline`,
+          method: "POST",
+          body: queryArg.declineBuyOrderRequest,
+        }),
+        invalidatesTags: ["Buy Orders V2"],
+      }),
       getNextAvailable: build.query<
         GetNextAvailableApiResponse,
         GetNextAvailableApiArg
@@ -1351,6 +1474,36 @@ export { injectedRtkApi as marketV2Api }
 export type GetVariantTypesApiResponse =
   /** status 200 All variant type definitions with validation rules */ GetVariantTypesResponse
 export type GetVariantTypesApiArg = void
+export type GetMySuppliersApiResponse =
+  /** status 200 Ok */ GetSuppliersResponse
+export type GetMySuppliersApiArg = {
+  status?: "active" | "suspended" | "removed"
+  tier?: "preferred" | "approved" | "restricted"
+  page?: number
+  pageSize?: number
+}
+export type AddSupplierApiResponse = /** status 200 Ok */ AddSupplierResponse
+export type AddSupplierApiArg = {
+  addSupplierRequest: AddSupplierRequest
+}
+export type UpdateSupplierApiResponse =
+  /** status 200 Ok */ UpdateSupplierResponse
+export type UpdateSupplierApiArg = {
+  relationshipId: string
+  updateSupplierRequest: UpdateSupplierRequest
+}
+export type RemoveSupplierApiResponse = /** status 200 Ok */ {
+  success: boolean
+}
+export type RemoveSupplierApiArg = {
+  relationshipId: string
+}
+export type GetMyAggregatorsApiResponse =
+  /** status 200 Ok */ GetSuppliersResponse
+export type GetMyAggregatorsApiArg = {
+  page?: number
+  pageSize?: number
+}
 export type CreateStockLotApiResponse =
   /** status 200 Created stock lot */ UpdateStockLotResponse
 export type CreateStockLotApiArg = {
@@ -1399,6 +1552,35 @@ export type BulkUpdateStockLotsApiResponse =
 export type BulkUpdateStockLotsApiArg = {
   /** Bulk update request with array of lot updates */
   bulkUpdateStockLotsRequest: BulkUpdateStockLotsRequest
+}
+export type CreateRequisitionApiResponse =
+  /** status 200 Ok */ CreateRequisitionResponse
+export type CreateRequisitionApiArg = {
+  createRequisitionRequest: CreateRequisitionRequest
+}
+export type GetRequisitionsApiResponse =
+  /** status 200 Ok */ GetRequisitionsResponse
+export type GetRequisitionsApiArg = {
+  role?: "buyer" | "supplier"
+  status?: "pending" | "assigned" | "completed" | "cancelled"
+  page?: number
+  pageSize?: number
+}
+export type GetRequisitionApiResponse = /** status 200 Ok */ RequisitionDetail
+export type GetRequisitionApiArg = {
+  orderId: string
+}
+export type SetOfferRequisitionItemsApiResponse = /** status 200 Ok */ {
+  items: OfferRequisitionItem[]
+}
+export type SetOfferRequisitionItemsApiArg = {
+  setOfferRequisitionItemsRequest: SetOfferRequisitionItemsRequest
+}
+export type GetOfferRequisitionItemsApiResponse = /** status 200 Ok */ {
+  items: OfferRequisitionItem[]
+}
+export type GetOfferRequisitionItemsApiArg = {
+  offerId: string
 }
 export type CreateOrderApiResponse =
   /** status 200 Created order with order_id and item details */ CreateOrderResponse
@@ -2280,6 +2462,10 @@ export type FulfillBuyOrderApiArg = {
     listing_id: string
   }
 }
+export type DeclineBuyOrderApiResponse = /** status 200 Ok */ StandingBuyOrder
+export type DeclineBuyOrderApiArg = {
+  declineBuyOrderRequest: DeclineBuyOrderRequest
+}
 export type GetNextAvailableApiResponse =
   /** status 200 Ok */ SellerNextAvailableResponse
 export type GetNextAvailableApiArg = {
@@ -2437,6 +2623,53 @@ export type GetVariantTypesResponse = {
   /** Total count of variant types */
   total: number
 }
+export type SupplierEntityInfo = {
+  id: string
+  username: string
+  display_name: string
+  avatar?: string | null
+  /** 'user' | 'contractor' */
+  kind: "user" | "contractor"
+  /** Contractor spectrum_id, only present when kind = 'contractor' */
+  spectrum_id?: string
+}
+export type SupplierTier = "preferred" | "approved" | "restricted"
+export type SupplierStatus = "active" | "suspended" | "removed"
+export type SupplierRelationship = {
+  relationship_id: string
+  aggregator: SupplierEntityInfo
+  supplier: SupplierEntityInfo
+  tier?: SupplierTier | null
+  notes?: string | null
+  status: SupplierStatus
+  created_at: string
+  updated_at: string
+}
+export type GetSuppliersResponse = {
+  suppliers: SupplierRelationship[]
+  total: number
+  page: number
+  page_size: number
+}
+export type AddSupplierResponse = {
+  relationship: SupplierRelationship
+}
+export type AddSupplierRequest = {
+  /** UUID of user to add as supplier (mutually exclusive with supplier_contractor_id) */
+  supplier_id?: string
+  /** UUID of contractor org to add as supplier (mutually exclusive with supplier_id) */
+  supplier_contractor_id?: string
+  tier?: SupplierTier
+  notes?: string
+}
+export type UpdateSupplierResponse = {
+  relationship: SupplierRelationship
+}
+export type UpdateSupplierRequest = {
+  tier?: SupplierTier | null
+  notes?: string | null
+  status?: SupplierStatus
+}
 export type VariantAttributes = {
   /** Quality tier from 1 (lowest) to 5 (highest) */
   quality_tier?: number
@@ -2574,6 +2807,98 @@ export type BulkLotUpdate = {
 export type BulkUpdateStockLotsRequest = {
   /** Array of lot updates */
   updates: BulkLotUpdate[]
+}
+export type RequisitionLineItem = {
+  requisition_item_id: string
+  game_item_id: string
+  game_item_name: string
+  quantity: number
+  price_per_unit: number
+  fulfilled_quantity: number
+  quality_tier_min?: number | null
+  quality_tier_max?: number | null
+}
+export type CreateRequisitionResponse = {
+  order_id: string
+  offer_session_id: string
+  status: string
+  items: RequisitionLineItem[]
+  created_at: string
+}
+export type CreateRequisitionItem = {
+  game_item_id: string
+  quantity: number
+  price_per_unit: number
+  quality_tier_min?: number
+  quality_tier_max?: number
+}
+export type CreateRequisitionRequest = {
+  /** UUID of target supplier user (mutually exclusive with target_contractor_id) */
+  target_supplier_id?: string
+  /** UUID of target supplier contractor org */
+  target_contractor_id?: string
+  title: string
+  description?: string
+  items: CreateRequisitionItem[]
+  /** Link to an existing buy order that triggered this requisition (optional) */
+  buy_order_id?: string
+}
+export type RequisitionDetail = {
+  order_id: string
+  offer_session_id?: string | null
+  status: string
+  kind: "requisition"
+  title: string
+  description: string
+  buyer: {
+    avatar?: string | null
+    display_name: string
+    username: string
+    user_id: string
+  }
+  supplier: {
+    avatar?: string | null
+    display_name: string
+    username: string
+    user_id: string
+  } | null
+  supplier_contractor: {
+    avatar?: string | null
+    name: string
+    spectrum_id: string
+    contractor_id: string
+  } | null
+  items: RequisitionLineItem[]
+  total_price: number
+  created_at: string
+  updated_at: string
+}
+export type GetRequisitionsResponse = {
+  requisitions: RequisitionDetail[]
+  total: number
+  page: number
+  page_size: number
+}
+export type OfferRequisitionItem = {
+  id: string
+  offer_id: string
+  game_item_id: string
+  game_item_name: string
+  quantity: number
+  price_per_unit: number
+  /** Optional: listing the supplier plans to fulfil from */
+  listing_id?: string | null
+  listing_title?: string | null
+}
+export type OfferRequisitionItemInput = {
+  game_item_id: string
+  quantity: number
+  price_per_unit: number
+  listing_id?: string
+}
+export type SetOfferRequisitionItemsRequest = {
+  offer_id: string
+  items: OfferRequisitionItemInput[]
 }
 export type OrderVariantDetail = {
   /** UUID of the variant */
@@ -3699,6 +4024,14 @@ export type SelectVersionRequest = {
   /** Version ID to select */
   version_id: string
 }
+export type QualityBand = {
+  /** Start of the raw quality range (0-1000) */
+  start: number
+  /** End of the raw quality range (0-1000) */
+  end: number
+  /** The quality value items in this band are snapped to */
+  mappedValue: number
+}
 export type ResourceSearchResult = {
   /** Resource UUID */
   resource_id: string
@@ -3726,6 +4059,8 @@ export type ResourceSearchResult = {
   can_be_looted: boolean
   /** Number of blueprints that require this resource */
   blueprint_count: number
+  /** Quality quantization bands — defines discrete quality tiers for this resource */
+  quality_bands?: QualityBand[]
 }
 export type SearchResourcesResponse = {
   /** Resource search results */
@@ -4610,10 +4945,12 @@ export type SlotModifier = {
   property: string
   start_quality: number
   end_quality: number
-  /** Modifier value at start_quality (e.g., 0.9 = ×0.9) */
+  /** Modifier value at start_quality (e.g., 0.9 = ×0.9 for linear, or -2 for additive) */
   modifier_at_start: number
-  /** Modifier value at end_quality (e.g., 1.1 = ×1.1) */
+  /** Modifier value at end_quality (e.g., 1.1 = ×1.1 for linear, or +2 for additive) */
   modifier_at_end: number
+  /** "linear" = multiplicative (×0.8–×1.2), "additive" = flat integer (+/- value) */
+  modifier_type: "linear" | "additive"
 }
 export type UserBlueprintAcquisition = {
   /** Acquisition date */
@@ -4894,6 +5231,10 @@ export type StandingBuyOrder = {
   status: "active" | "fulfilled" | "cancelled" | "expired"
   created_at: string
   expires_at?: string
+  visibility?: "public" | "roster_only" | "private"
+  target_supplier_id?: string | null
+  target_supplier_contractor_id?: string | null
+  declined_at?: string | null
 }
 export type CreateStandingBuyOrderRequest = {
   game_item_id: string
@@ -4923,6 +5264,9 @@ export type UpdateStandingBuyOrderRequest = {
   quality_value_max?: number
   negotiable?: boolean
   expires_in_days?: number
+}
+export type DeclineBuyOrderRequest = {
+  buy_order_id: string
 }
 export type SellerNextAvailableResponse = {
   /** ISO 8601 timestamp of next available slot, or null if currently available / no schedule */
@@ -5195,11 +5539,21 @@ export type GameDataImportJob = {
 }
 export const {
   useGetVariantTypesQuery,
+  useGetMySuppliersQuery,
+  useAddSupplierMutation,
+  useUpdateSupplierMutation,
+  useRemoveSupplierMutation,
+  useGetMyAggregatorsQuery,
   useCreateStockLotMutation,
   useGetStockLotsQuery,
   useUpdateStockLotMutation,
   useDeleteStockLotMutation,
   useBulkUpdateStockLotsMutation,
+  useCreateRequisitionMutation,
+  useGetRequisitionsQuery,
+  useGetRequisitionQuery,
+  useSetOfferRequisitionItemsMutation,
+  useGetOfferRequisitionItemsQuery,
   useCreateOrderMutation,
   useGetOrdersQuery,
   useGetOrderDetailQuery,
@@ -5296,6 +5650,7 @@ export const {
   useUpdateBuyOrderMutation,
   useCancelBuyOrderMutation,
   useFulfillBuyOrderMutation,
+  useDeclineBuyOrderMutation,
   useGetNextAvailableQuery,
   useGetAuctionDetailQuery,
   usePlaceBidMutation,
