@@ -160,7 +160,7 @@ export const adminApi = serviceApi.injectEndpoints({
       transformResponse: unwrapResponse,
     }),
     testNotification: builder.mutation<
-      { message: string; data?: any },
+      { message: string; data?: { order_id?: string; contractor_id?: string | null; chat_id?: string; listing_id?: string } },
       {
         notification_type: string
         target_username: string

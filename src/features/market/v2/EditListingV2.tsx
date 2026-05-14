@@ -130,7 +130,7 @@ export function EditListingV2() {
     if (firstItem) {
       setPricingMode(firstItem.pricing_mode);
       setBasePrice(firstItem.base_price || 0);
-      setBulkDiscountTiers((firstItem as any).bulk_discount_tiers || []);
+      setBulkDiscountTiers((firstItem as { bulk_discount_tiers?: { min_quantity: number; discount_percent: number }[] }).bulk_discount_tiers || []);
 
       // Build stock lots from actual lot data (not variant aggregates)
       const actualLots = stockLotsData?.lots || [];
@@ -153,7 +153,7 @@ export function EditListingV2() {
 
   // Update stock lot field
   const handleUpdateStockLot = useCallback(
-    (lot_id: string, field: keyof StockLotFormData, value: any) => {
+    (lot_id: string, field: keyof StockLotFormData, value: StockLotFormData[keyof StockLotFormData]) => {
       setStockLots((prev) =>
         prev.map((lot) =>
           lot.lot_id === lot_id ? { ...lot, [field]: value, isModified: true } : lot
@@ -255,9 +255,9 @@ export function EditListingV2() {
       }
 
       // Include bulk discount tiers
-      const currentTiers = (listingData?.items[0] as any)?.bulk_discount_tiers || [];
+      const currentTiers = (listingData?.items[0] as { bulk_discount_tiers?: { min_quantity: number; discount_percent: number }[] })?.bulk_discount_tiers || [];
       if (JSON.stringify(bulkDiscountTiers) !== JSON.stringify(currentTiers)) {
-        (request as any).bulk_discount_tiers = bulkDiscountTiers;
+        request.bulk_discount_tiers = bulkDiscountTiers;
       }
 
       // Handle pricing updates
@@ -338,10 +338,11 @@ export function EditListingV2() {
 
         // Navigate back to listing detail page
         navigate(`/market/${id}`);
-      } catch (error: any) {
+      } catch (error) {
+        const err = error as { data?: { message?: string } }
         issueAlert({
           message:
-            error?.data?.message ||
+            err?.data?.message ||
             t("EditListingV2.error", "Failed to update listing"),
           severity: "error",
         });
@@ -565,7 +566,7 @@ export function EditListingV2() {
                 size="small"
                 label={t("EditListingV2.pickupMethod", "Pickup Method")}
                 value={pickupMethod}
-                onChange={(e) => setPickupMethod(e.target.value as any)}
+                onChange={(e) => setPickupMethod(e.target.value as typeof pickupMethod)}
                 disabled={!canEdit}
                 helperText={t("EditListingV2.pickupMethodHelper", "How will the buyer receive the item?")}
               >
@@ -770,7 +771,7 @@ export function EditListingV2() {
                       <LocationSelector
                         value={lot.location_id ?? null}
                         onChange={(locationId) =>
-                          handleUpdateStockLot(lot.lot_id, "location_id", locationId)
+                          handleUpdateStockLot(lot.lot_id, "location_id", locationId ?? undefined)
                         }
                         size="small"
                         fullWidth

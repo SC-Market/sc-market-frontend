@@ -317,7 +317,7 @@ export function MarketAggregateViewV2() {
   }, [quality_distribution]);
 
   // TODO: Implement image update mutation
-  const updateAggregate = async (data: any) => {
+  const updateAggregate = async (_data: { photo?: string }) => {
     // await updateAggregateV2Mutation({ game_item_id: game_item.id, data });
   };
 

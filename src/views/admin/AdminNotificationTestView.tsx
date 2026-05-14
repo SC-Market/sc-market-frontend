@@ -49,7 +49,7 @@ export function AdminNotificationTestView() {
   const [notificationType, setNotificationType] = useState<string>("")
   const [targetUser, setTargetUser] = useState<User | null>(null)
   const [contractorId, setContractorId] = useState<string>("")
-  const [testResult, setTestResult] = useState<any>(null)
+  const [testResult, setTestResult] = useState<{ message: string; data?: { order_id?: string; contractor_id?: string | null; chat_id?: string; listing_id?: string } } | null>(null)
   const [testError, setTestError] = useState<string>("")
 
   const [testNotification, { isLoading: isTesting }] =
@@ -109,19 +109,20 @@ export function AdminNotificationTestView() {
         ),
         severity: "success",
       })
-    } catch (error: any) {
+    } catch (error: unknown) {
       // Handle error response structure: { error: { code, message } }
       let errorMessage: string
-      if (error?.data?.error) {
-        if (typeof error.data.error === "string") {
-          errorMessage = error.data.error
-        } else if (error.data.error?.message) {
-          errorMessage = error.data.error.message
+      const errData = error as { data?: { error?: string | { message?: string } }; message?: string } | undefined
+      if (errData?.data?.error) {
+        if (typeof errData.data.error === "string") {
+          errorMessage = errData.data.error
+        } else if (errData.data.error?.message) {
+          errorMessage = errData.data.error.message
         } else {
-          errorMessage = JSON.stringify(error.data.error)
+          errorMessage = JSON.stringify(errData.data.error)
         }
-      } else if (error?.message) {
-        errorMessage = error.message
+      } else if (errData?.message) {
+        errorMessage = errData.message
       } else {
         errorMessage = t(
           "admin.notificationTest.error",
