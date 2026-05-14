@@ -626,7 +626,7 @@ function AllocatedStockGridV2() {
       field: "listing_id",
       headerName: t("stock.listing", "Listing"),
       flex: 1.5,
-      valueGetter: (_value: any, row: Allocation) => row.lot?.listing_id ?? "",
+      valueGetter: (_value, row: Allocation) => row.lot?.listing_id ?? "",
       renderCell: (params: GridRenderCellParams) => {
         const photo = params.row.lot?.photos?.[0]
         const title = params.row.lot?.title || String(params.value).substring(0, 8).toUpperCase()
@@ -657,13 +657,13 @@ function AllocatedStockGridV2() {
       field: "location_name",
       headerName: t("stock.location", "Location"),
       flex: 1,
-      valueGetter: (_value: any, row: Allocation) => row.lot?.location?.name ?? "Unspecified",
+      valueGetter: (_value, row: Allocation) => row.lot?.location?.name ?? "Unspecified",
     },
     {
       field: "owner",
       headerName: t("stock.user", "User"),
       flex: 1,
-      valueGetter: (_value: any, row: Allocation) =>
+      valueGetter: (_value, row: Allocation) =>
         row.lot?.owner?.display_name ?? row.lot?.owner?.username ?? "—",
       renderCell: (params: GridRenderCellParams) => {
         if (!params.row.lot?.owner) return <Typography variant="body2" color="text.disabled">—</Typography>

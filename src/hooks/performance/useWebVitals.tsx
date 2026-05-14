@@ -32,9 +32,10 @@ export function useWebVitals() {
     const sendToAnalytics = (metric: Metric) => {
       // Check if gtag is available (Google Analytics)
       // react-ga4 sets up gtag, so this will work if GA is initialized
-      if (typeof window !== "undefined" && (window as any).gtag) {
+      const win = window as typeof globalThis & { gtag?: (...args: [string, string, Record<string, string | number | boolean>]) => void }
+      if (typeof window !== "undefined" && win.gtag) {
         try {
-          const gtag = (window as any).gtag
+          const gtag = win.gtag
 
           // Send to Google Analytics 4
           // Using the recommended format for Core Web Vitals in GA4

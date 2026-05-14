@@ -127,7 +127,7 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
           contractorsApi.endpoints.getOrgTheme.initiate(spectrum_id),
         )
         if (!themeResult.data) return
-        const themeData = (themeResult.data as any).data || themeResult.data
+        const themeData = themeResult.data.data
         const { theme_data, favicon_url, updated_at } = themeData
 
         // Step 3: Check if newer than cache
@@ -146,7 +146,7 @@ function ThemeProviderWrapper(props: { children: React.ReactElement }) {
             contractorsApi.endpoints.getWhitelabelSidebar.initiate(spectrum_id),
           )
           if (sidebarResult.data) {
-            const items = (sidebarResult.data as any).data || sidebarResult.data || []
+            const items = sidebarResult.data.data || []
             setSidebarConfig(items)
           }
         } catch { /* sidebar config is optional */ }

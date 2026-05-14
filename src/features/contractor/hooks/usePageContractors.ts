@@ -1,5 +1,6 @@
 import { useGetContractorsQuery } from "../api/contractorApi"
 import type { ContractorSearchState } from "../hooks/ContractorSearch"
+import type { Contractor } from "../domain/types"
 
 /**
  * Page hook interface for consistent data fetching patterns.
@@ -31,7 +32,7 @@ export interface ContractorsQueryParams extends ContractorSearchState {
  */
 export function usePageContractors(
   params: ContractorsQueryParams,
-): UsePageResult<any> {
+): UsePageResult<{ total: number; items: Contractor[] }> {
   const { language_codes, ...restParams } = params
 
   const contractors = useGetContractorsQuery({

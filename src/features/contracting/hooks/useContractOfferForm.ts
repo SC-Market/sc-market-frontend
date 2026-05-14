@@ -3,7 +3,7 @@ import { useCreateContractOfferMutation } from "../api/publicContractsApi"
 import { useGetUserProfileQuery, useGetUserByUsernameQuery } from "../../profile/api/profileApi"
 import { useCheckContractorOrderLimitsQuery, useCheckUserOrderLimitsQuery } from "../../orders/api/orderSettingsApi"
 import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
-import { useAlertHook } from "../../../hooks/alert/AlertHook"
+import { useAlertHook, type UnwrappedErrorInterface } from "../../../hooks/alert/AlertHook"
 import { useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import type { OrderKind, PaymentType } from "../../orders/domain/types"
@@ -37,11 +37,11 @@ export function useContractOfferForm(contract: PublicContract) {
     }).unwrap()
       .then((data) => {
         issueAlert({ message: t("createPublicContract.submitted"), severity: "success" })
-        navigate(`/offer/${(data as any).session_id}`)
+        navigate(`/offer/${data.session_id}`)
       })
-      .catch((error: any) => {
-        if (error?.data?.error?.code === "ORDER_LIMIT_VIOLATION") {
-          issueAlert({ message: error.data.error.message || "Order does not meet size or value requirements", severity: "error" })
+      .catch((error: UnwrappedErrorInterface) => {
+        if (error?.error?.code === "ORDER_LIMIT_VIOLATION") {
+          issueAlert({ message: error.error.message || "Order does not meet size or value requirements", severity: "error" })
         } else { issueAlert(error) }
       })
   }, [collateral, cost, createContractOffer, description, issueAlert, kind, navigate, paymentType, title, t, currentOrg, contract.id])

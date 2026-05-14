@@ -162,7 +162,7 @@ export function CreateListingV2() {
 
   // Update stock lot field
   const handleUpdateStockLot = useCallback(
-    (id: string, field: keyof StockLotFormData, value: any) => {
+    (id: string, field: keyof StockLotFormData, value: StockLotFormData[keyof StockLotFormData]) => {
       setStockLots((prev) =>
         prev.map((lot) => (lot.id === id ? { ...lot, [field]: value } : lot))
       );
@@ -322,10 +322,11 @@ export function CreateListingV2() {
 
         // Navigate to listing detail page
         navigate(`/market/${result.listing_id}`);
-      } catch (error: any) {
+      } catch (error) {
+        const err = error as { data?: { message?: string } }
         issueAlert({
           message:
-            error?.data?.message ||
+            err?.data?.message ||
             t("CreateListingV2.error", "Failed to create listing"),
           severity: "error",
         });
@@ -875,7 +876,7 @@ export function CreateListingV2() {
                       <LocationSelector
                         value={lot.location_id ?? null}
                         onChange={(locationId) =>
-                          handleUpdateStockLot(lot.id, "location_id", locationId)
+                          handleUpdateStockLot(lot.id, "location_id", locationId ?? undefined)
                         }
                         size="small"
                         fullWidth

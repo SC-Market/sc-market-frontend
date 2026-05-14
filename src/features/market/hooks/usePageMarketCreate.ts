@@ -1,4 +1,5 @@
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
+import type { UserProfileState } from "../../../hooks/login/UserProfile"
 
 /**
  * Page hook interface for consistent data fetching patterns.
@@ -16,7 +17,7 @@ export interface UsePageResult<T> {
  */
 export interface MarketCreatePageData {
   isVerified: boolean
-  userProfile: any
+  userProfile: UserProfileState
 }
 
 /**

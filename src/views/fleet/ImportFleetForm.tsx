@@ -21,11 +21,11 @@ export function ImportFleetForm() {
 
   const onFileUpload = async () => {
     const content = await selectedFile?.text()
-    const res: { data?: any; error?: any } = await uploadFleetFile(
+    const res = await uploadFleetFile(
       JSON.parse(content || "[]"),
     )
 
-    if (res?.data && !res?.error) {
+    if ("data" in res && !("error" in res)) {
       issueAlert({
         message: t("ships.import.submitted"),
         severity: "success",

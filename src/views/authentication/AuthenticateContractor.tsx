@@ -38,7 +38,7 @@ export function AuthenticateContractor() {
   const issueAlert = useAlertHook()
 
   const submit = useCallback(
-    async (event: any) => {
+    async (_event: React.SyntheticEvent) => {
       if (!orgName) {
         setError(true)
         return

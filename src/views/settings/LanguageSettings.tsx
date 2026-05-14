@@ -50,11 +50,10 @@ export function LanguageSettings() {
         ),
         severity: "success",
       })
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : t("settings.languages.saveError", "Failed to update languages")
       issueAlert({
-        message:
-          err?.data?.error?.message ||
-          t("settings.languages.saveError", "Failed to update languages"),
+        message,
         severity: "error",
       })
     } finally {

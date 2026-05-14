@@ -37,6 +37,7 @@ import {
   useGetUserOverridesQuery,
   useSetUserOverrideMutation,
   useRemoveUserOverrideMutation,
+  type UpdateConfigRequest,
 } from "../../store/api/v2/market"
 import { UserSearch } from "../../components/search/UserSearch"
 
@@ -49,9 +50,8 @@ export function AdminFeatureFlagDetailView({ flagName }: Props) {
   const label = flagName.replace(/_/g, " ").replace(/\bv2\b/i, "V2")
 
   // Config
-  const { data: statsRaw } = useGetStatsQuery()
-  const stats = ((statsRaw as any)?.data || statsRaw) as any[] | undefined
-  const flagConfig = stats?.find((s: any) => s.flag_name === flagName)
+  const { data: stats } = useGetStatsQuery()
+  const flagConfig = stats?.find((s) => s.flag_name === flagName)
 
   const [updateConfig] = useUpdateConfigMutation()
   const [localEnabled, setLocalEnabled] = useState<boolean | null>(null)
@@ -67,21 +67,22 @@ export function AdminFeatureFlagDetailView({ flagName }: Props) {
   const handleSave = async () => {
     setSaving(true)
     try {
-      const updates: any = { flag_name: flagName }
+      const updates: UpdateConfigRequest = { flag_name: flagName }
       if (localEnabled !== null) updates.enabled = localEnabled
       if (localDefault !== null) updates.default_version = localDefault
       if (localRollout !== null) updates.rollout_percentage = localRollout
       await updateConfig({ updateConfigRequest: updates }).unwrap()
       issueAlert({ message: "Config saved", severity: "success" })
       setLocalEnabled(null); setLocalDefault(null); setLocalRollout(null)
-    } catch (err: any) {
-      issueAlert({ message: err?.data?.message || "Failed", severity: "error" })
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Failed"
+      issueAlert({ message, severity: "error" })
     } finally { setSaving(false) }
   }
 
   // Overrides for this flag
-  const { data: overridesRaw } = useGetUserOverridesQuery({ page: 1, pageSize: 200, flagName })
-  const overrides = ((overridesRaw as any)?.data || overridesRaw)?.overrides || []
+  const { data: overridesData } = useGetUserOverridesQuery({ page: 1, pageSize: 200, flagName })
+  const overrides = overridesData?.overrides || []
 
   const [setUserOverride] = useSetUserOverrideMutation()
   const [removeUserOverride] = useRemoveUserOverrideMutation()
@@ -97,8 +98,9 @@ export function AdminFeatureFlagDetailView({ flagName }: Props) {
       }).unwrap()
       issueAlert({ message: `Override set for ${newUsername}`, severity: "success" })
       setAddOpen(false); setNewUsername("")
-    } catch (err: any) {
-      issueAlert({ message: err?.data?.message || "User not found", severity: "error" })
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "User not found"
+      issueAlert({ message, severity: "error" })
     }
   }
 
@@ -106,8 +108,9 @@ export function AdminFeatureFlagDetailView({ flagName }: Props) {
     try {
       await removeUserOverride({ username, flagName }).unwrap()
       issueAlert({ message: `Override removed`, severity: "success" })
-    } catch (err: any) {
-      issueAlert({ message: err?.data?.message || "Failed", severity: "error" })
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Failed"
+      issueAlert({ message, severity: "error" })
     }
   }
 
@@ -185,7 +188,7 @@ export function AdminFeatureFlagDetailView({ flagName }: Props) {
                 </TableCell>
               </TableRow>
             )}
-            {overrides.map((o: any) => (
+            {overrides.map((o) => (
               <TableRow key={o.user_id}>
                 <TableCell><Typography variant="body2" fontWeight="bold">{o.username}</Typography></TableCell>
                 <TableCell><Chip label={o.enabled ? "ON" : "OFF"} color={o.enabled ? "success" : "default"} size="small" /></TableCell>

@@ -229,10 +229,11 @@ export function ManualAllocationDialog({
       onClose()
       setSelectedAllocations(new Map())
       setValidationErrors([])
-    } catch (error: any) {
+    } catch (error) {
       // Handle API errors
+      const err = error as { data?: { error?: { message?: string } } }
       const errorMessage =
-        error?.data?.error?.message || "Failed to allocate stock"
+        err?.data?.error?.message || "Failed to allocate stock"
 
       // Check if this is an insufficient stock error
       if (

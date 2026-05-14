@@ -112,11 +112,12 @@ export function ListingRefreshButtonV2(props: ListingRefreshButtonV2Props) {
         message: "Listing refreshed successfully",
         severity: "success",
       })
-    } catch (error: any) {
+    } catch (error) {
+      const err = error as { data?: { message?: string; errors?: { field: string; message: string }[] } }
       // Handle validation errors with cooldown information
-      if (error?.data?.errors) {
-        const cooldownError = error.data.errors.find(
-          (e: any) => e.field === "updated_at",
+      if (err?.data?.errors) {
+        const cooldownError = err.data.errors.find(
+          (e) => e.field === "updated_at",
         )
         if (cooldownError) {
           issueAlert({
@@ -128,7 +129,7 @@ export function ListingRefreshButtonV2(props: ListingRefreshButtonV2Props) {
       }
 
       issueAlert({
-        message: error?.data?.message || "Failed to refresh listing",
+        message: err?.data?.message || "Failed to refresh listing",
         severity: "error",
       })
     }

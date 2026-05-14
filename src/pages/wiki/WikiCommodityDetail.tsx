@@ -113,7 +113,7 @@ export function WikiCommodityDetail() {
                     </Typography>
                     <Table size="small">
                       <TableBody>
-                        {r.mining_locations.map((loc: any, i: number) => (
+                        {r.mining_locations.map((loc, i) => (
                           <TableRow key={i}>
                             <TableCell>{loc.location_name || loc.name || "Unknown"}</TableCell>
                             <TableCell align="right">
@@ -142,7 +142,7 @@ export function WikiCommodityDetail() {
                     </Typography>
                     <Table size="small">
                       <TableBody>
-                        {r.purchase_locations.map((loc: any, i: number) => (
+                        {r.purchase_locations.map((loc, i) => (
                           <TableRow key={i}>
                             <TableCell>{loc.location_name || loc.name || "Unknown"}</TableCell>
                             <TableCell align="right">
@@ -167,7 +167,7 @@ export function WikiCommodityDetail() {
                       Used in Blueprints ({bps.length})
                     </Typography>
                     <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap>
-                      {bps.map((bp: any) => (
+                      {bps.map((bp) => (
                         <Chip
                           key={bp.blueprint_id}
                           label={bp.output_item_name || bp.blueprint_name}
@@ -226,7 +226,7 @@ function MiningDataSection({ resourceName }: { resourceName: string }) {
               <>
                 <Divider sx={{ my: 0.5 }} />
                 <Typography variant="caption" color="text.secondary" fontWeight={600}>Best Locations</Typography>
-                {(ore.topLocations || []).map((loc: any) => (
+                {(ore.topLocations || []).map((loc) => (
                   <Stack key={loc.name} direction="row" justifyContent="space-between">
                     <Typography variant="caption">{loc.name}</Typography>
                     <Typography variant="caption" color="primary">{loc.probability?.toFixed(1)}%</Typography>

@@ -123,8 +123,9 @@ export default function InventoryPage() {
       setCreateOpen(false)
       resetCreateForm()
       refetch()
-    } catch (err: any) {
-      issueAlert({ message: err?.data?.message || t("inventory.createError", "Failed to create lot"), severity: "error" })
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : t("inventory.createError", "Failed to create lot")
+      issueAlert({ message, severity: "error" })
     }
   }
 
@@ -135,8 +136,9 @@ export default function InventoryPage() {
       issueAlert({ message: t("inventory.deleted", "Lot deleted"), severity: "success" })
       setConfirmDeleteId(null)
       refetch()
-    } catch (err: any) {
-      issueAlert({ message: err?.data?.message || t("inventory.deleteError", "Failed to delete lot"), severity: "error" })
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : t("inventory.deleteError", "Failed to delete lot")
+      issueAlert({ message, severity: "error" })
     }
   }
 
@@ -145,8 +147,9 @@ export default function InventoryPage() {
       await unlinkLot({ lotId }).unwrap()
       issueAlert({ message: t("inventory.unlinked", "Lot unlinked from listing"), severity: "success" })
       refetch()
-    } catch (err: any) {
-      issueAlert({ message: err?.data?.message || t("inventory.unlinkError", "Failed to unlink lot"), severity: "error" })
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : t("inventory.unlinkError", "Failed to unlink lot")
+      issueAlert({ message, severity: "error" })
     }
   }
 

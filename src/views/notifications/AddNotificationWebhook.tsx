@@ -70,7 +70,7 @@ export function AddNotificationWebhook(props: { org?: boolean }) {
   const { t } = useTranslation()
 
   const submitCreateForm = useCallback(
-    async (event: any) => {
+    async (_event: React.SyntheticEvent) => {
       // event.preventDefault();
       let response
       if (props.org) {
@@ -139,7 +139,7 @@ export function AddNotificationWebhook(props: { org?: boolean }) {
           color={"secondary"}
           label={t("AddNotificationWebhook.webhookName")}
           value={name}
-          onChange={(event: any) => {
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
             setName(event.target.value)
           }}
         />
@@ -152,7 +152,7 @@ export function AddNotificationWebhook(props: { org?: boolean }) {
           color={"secondary"}
           label={t("AddNotificationWebhook.webhookUrl")}
           value={url}
-          onChange={(event: any) => {
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
             setURL(event.target.value)
           }}
           error={!!url && !url.match(URL_REGEX)}

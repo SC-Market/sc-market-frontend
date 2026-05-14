@@ -169,7 +169,7 @@ export function OrgDetailEditForm(props: { contractor: Contractor }) {
                       fullWidth
                       multiline
                       value={newName}
-                      onChange={(event: any) => {
+                      onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                         setNewName(event.target.value)
                       }}
                       aria-label={t(
@@ -288,7 +288,7 @@ export function OrgDetailEditForm(props: { contractor: Contractor }) {
                 multiple
                 filterSelectedOptions
                 value={newTags}
-                onChange={(event: any, newValue) => {
+                onChange={(_event: React.SyntheticEvent, newValue) => {
                   setNewTags(newValue || [])
                 }}
                 options={contractorKindIconsKeys}

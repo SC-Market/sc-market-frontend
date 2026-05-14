@@ -100,6 +100,7 @@ import {
 } from "date-fns"
 import { Stack } from "@mui/system"
 import { AdCard } from "../../../../components/ads/AdCard"
+import type { AdConfig } from "../../../../components/ads/types"
 import { MARKET_ADS } from "../../../../components/ads/adConfig"
 import { VirtualizedGrid } from "../../../../components/list/VirtualizedGrid"
 import {
@@ -510,7 +511,7 @@ export function DisplayListingsMin(props: {
             // Ad card - render same as listings, no special handling
             return (
               <AdCard
-                ad={item as any}
+                ad={item as AdConfig}
                 index={index}
                 key={key}
                 noGridWrapper={true}
@@ -700,7 +701,7 @@ export function ItemListings(props: {
   // Memoize search query parameters to prevent unnecessary re-renders
   const searchQueryParams = useMemo(() => {
     const { attributes, ...rest } = searchState
-    const params: any = {
+    const params: Record<string, string | number | string[] | null | undefined> = {
       rating: 0,
       contractor_seller: CURRENT_CUSTOM_ORG || org,
       user_seller: user,
@@ -919,7 +920,7 @@ export function BuyOrders() {
 
   // Convert attributes from URL format to API format
   const searchParams = useMemo(() => {
-    const params: any = {}
+    const params: Record<string, string> = {}
 
     // Convert attributes to JSON string for API
     if (
@@ -1085,7 +1086,7 @@ export function MyItemListings(props: {
 
   // Build search query parameters for new endpoints
   const searchQueryParams = useMemo(() => {
-    const baseParams = {
+    const baseParams: Record<string, string | number | undefined> = {
       page_size: perPage,
       index: page * perPage, // Convert page to index
       quantityAvailable: searchState.quantityAvailable ?? 1,
@@ -1099,7 +1100,7 @@ export function MyItemListings(props: {
 
     // Add status filter if provided
     if (props.status) {
-      ;(baseParams as any).statuses = props.status
+      baseParams.statuses = props.status
     }
 
     return baseParams

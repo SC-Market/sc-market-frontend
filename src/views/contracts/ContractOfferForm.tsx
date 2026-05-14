@@ -279,7 +279,7 @@ export function ContractOfferForm(props: { contract: PublicContract }) {
               select
               label={t("createPublicContract.payment_type")}
               value={paymentType}
-              onChange={(event: any) => {
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 setPaymentType(event.target.value)
               }}
               fullWidth

@@ -37,10 +37,11 @@ export function useEmailActions() {
 
         setSuccess(result.message || t("settings.email.addSuccess"))
         return { success: true, result }
-      } catch (error: any) {
+      } catch (error) {
+        const err = error as { data?: { error?: { message?: string } }; message?: string }
         setError(
-          error?.data?.error?.message ||
-            error?.message ||
+          err?.data?.error?.message ||
+            err?.message ||
             t("settings.email.addError"),
         )
         return { success: false, error }
@@ -64,10 +65,11 @@ export function useEmailActions() {
         const result = await updateEmail({ email }).unwrap()
         setSuccess(result.message || t("settings.email.updateSuccess"))
         return { success: true, result }
-      } catch (error: any) {
+      } catch (error) {
+        const err = error as { data?: { error?: { message?: string } }; message?: string }
         setError(
-          error?.data?.error?.message ||
-            error?.message ||
+          err?.data?.error?.message ||
+            err?.message ||
             t("settings.email.updateError"),
         )
         return { success: false, error }
@@ -85,10 +87,11 @@ export function useEmailActions() {
       const result = await deleteEmail().unwrap()
       setSuccess(result.message || t("settings.email.deleteSuccess"))
       return { success: true, result }
-    } catch (error: any) {
+    } catch (error) {
+      const err = error as { data?: { error?: { message?: string } }; message?: string }
       setError(
-        error?.data?.error?.message ||
-          error?.message ||
+        err?.data?.error?.message ||
+          err?.message ||
           t("settings.email.deleteError"),
       )
       return { success: false, error }
@@ -111,10 +114,11 @@ export function useEmailActions() {
       const result = await requestVerification().unwrap()
       setSuccess(result.message || t("settings.email.verificationSent"))
       return { success: true, result }
-    } catch (error: any) {
+    } catch (error) {
+      const err = error as { data?: { error?: { message?: string } }; message?: string }
       setError(
-        error?.data?.error?.message ||
-          error?.message ||
+        err?.data?.error?.message ||
+          err?.message ||
           t("settings.email.verificationError"),
       )
       // Reset cooldown on error so user can retry

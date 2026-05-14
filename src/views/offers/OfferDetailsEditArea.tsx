@@ -198,7 +198,7 @@ export function OfferDetailsEditArea(props: { session: GetOfferSessionV2Response
                       size="small"
                       label={t("OfferDetailsEditArea.paymentType")}
                       value={body.payment_type}
-                      onChange={(event: any) => {
+                      onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                         setBody({ ...body, payment_type: event.target.value })
                       }}
                       SelectProps={{

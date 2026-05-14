@@ -20,7 +20,7 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { useGetCraftingHistoryQuery } from "../../store/api/v2/market"
 
-const TIER_COLORS: Record<number, string> = {
+const TIER_COLORS: Record<number, "default" | "primary" | "secondary" | "error" | "info" | "success" | "warning"> = {
   1: "default",
   2: "success",
   3: "info",
@@ -77,7 +77,7 @@ export function CraftingHistory() {
                           <Chip
                             label={`T${row.output_quality_tier}`}
                             size="small"
-                            color={TIER_COLORS[row.output_quality_tier] as any}
+                            color={TIER_COLORS[row.output_quality_tier]}
                           />
                           {row.output_quality_value}
                         </Box>

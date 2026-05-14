@@ -107,8 +107,10 @@ export function CreateTokenDialog({ open, onClose }: CreateTokenDialogProps) {
 
       setCreatedToken(result.token)
       setShowToken(true)
-    } catch (err: any) {
-      setError(err.data?.error?.message || err.data?.error || "Failed to create token")
+    } catch (err) {
+      const error = err as { data?: { error?: { message?: string } | string } }
+      const errorMsg = typeof error.data?.error === 'string' ? error.data.error : error.data?.error?.message
+      setError(errorMsg || "Failed to create token")
     }
   }
 

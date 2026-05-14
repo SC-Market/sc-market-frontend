@@ -10,7 +10,7 @@ import type {
   CreateAttributeDefinitionPayload,
   UpdateAttributeDefinitionPayload,
 } from "../../../store/api/attributes"
-import { useAlertHook } from "../../../hooks/alert/AlertHook"
+import { useAlertHook, type UnwrappedErrorInterface } from "../../../hooks/alert/AlertHook"
 import { useTranslation } from "react-i18next"
 
 const INITIAL_FORM: CreateAttributeDefinitionPayload = {
@@ -71,7 +71,7 @@ export function useAdminAttributeDefinitions() {
   const handleCreateDefinition = useCallback(() => {
     createDefinition({ ...formData, allowed_values: parseAllowedValues(allowedValuesInput) }).unwrap()
       .then(() => { issueAlert({ message: t("admin.attributes.created", "Attribute definition created successfully"), severity: "success" }); handleCloseModals() })
-      .catch((err: any) => issueAlert(err))
+      .catch((err: UnwrappedErrorInterface) => issueAlert(err))
   }, [formData, allowedValuesInput, createDefinition, issueAlert, handleCloseModals, t])
 
   const handleUpdateDefinition = useCallback(() => {
@@ -83,14 +83,14 @@ export function useAdminAttributeDefinitions() {
     }
     updateDefinition({ name: selectedDefinition.attribute_name, data: payload }).unwrap()
       .then(() => { issueAlert({ message: t("admin.attributes.updated", "Attribute definition updated successfully"), severity: "success" }); handleCloseModals() })
-      .catch((err: any) => issueAlert(err))
+      .catch((err: UnwrappedErrorInterface) => issueAlert(err))
   }, [selectedDefinition, formData, allowedValuesInput, updateDefinition, issueAlert, handleCloseModals, t])
 
   const handleDeleteDefinition = useCallback(() => {
     if (!selectedDefinition) return
     deleteDefinition({ name: selectedDefinition.attribute_name, cascade: cascadeDelete }).unwrap()
       .then(() => { issueAlert({ message: t("admin.attributes.deleted", "Attribute definition deleted successfully"), severity: "success" }); handleCloseModals() })
-      .catch((err: any) => issueAlert(err))
+      .catch((err: UnwrappedErrorInterface) => issueAlert(err))
   }, [selectedDefinition, cascadeDelete, deleteDefinition, issueAlert, handleCloseModals, t])
 
   const rows = useMemo(() => {

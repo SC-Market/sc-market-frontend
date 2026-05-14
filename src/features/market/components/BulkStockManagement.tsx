@@ -27,7 +27,7 @@ import {
 import { useTranslation } from "react-i18next"
 import { UniqueListing } from "../domain/types"
 import { useUpdateListingQuantityMutation } from "../api/marketApi"
-import { useAlertHook } from "../../../hooks/alert/AlertHook"
+import { useAlertHook, type UnwrappedErrorInterface } from "../../../hooks/alert/AlertHook"
 import { Link } from "react-router-dom"
 
 export interface BulkStockManagementProps {
@@ -88,7 +88,7 @@ export function BulkStockManagement({
         await onRefresh()
       }
     } catch (error) {
-      issueAlert(error as any)
+      issueAlert(error as UnwrappedErrorInterface)
     } finally {
       setSaving((prev) => ({ ...prev, [listing.listing.listing_id]: false }))
     }
@@ -115,7 +115,7 @@ export function BulkStockManagement({
         await onRefresh()
       }
     } catch (error) {
-      issueAlert(error as any)
+      issueAlert(error as UnwrappedErrorInterface)
     } finally {
       setSaving((prev) => ({ ...prev, [listing.listing.listing_id]: false }))
     }

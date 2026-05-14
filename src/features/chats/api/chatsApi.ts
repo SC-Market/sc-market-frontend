@@ -98,7 +98,7 @@ export const chatsApi = serviceApi.injectEndpoints({
       async onQueryStarted(body, { dispatch, queryFulfilled }) {
         await createOptimisticUpdate(
           (dispatch) => {
-            const patches: any[] = []
+            const patches: OptimisticPatch[] = []
 
             // Optimistically add chat to my chats list
             // Note: We don't know the chat_id yet, so we'll create a temp one

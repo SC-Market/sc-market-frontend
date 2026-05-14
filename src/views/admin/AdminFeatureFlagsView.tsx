@@ -10,18 +10,17 @@ import {
   Typography,
 } from "@mui/material"
 import { Link } from "react-router-dom"
-import { useGetStatsQuery } from "../../store/api/v2/market"
+import { useGetStatsQuery, type FeatureFlagStats } from "../../store/api/v2/market"
 
 export function AdminFeatureFlagsView() {
-  const { data: statsRaw } = useGetStatsQuery()
-  const stats = ((statsRaw as any)?.data || statsRaw) as any[] | undefined
+  const { data: stats } = useGetStatsQuery()
   const [search, setSearch] = useState("")
 
   const filtered = useMemo(() => {
-    if (!stats) return []
+    if (!stats) return [] as FeatureFlagStats[]
     if (!search.trim()) return stats
     const q = search.toLowerCase()
-    return stats.filter((f: any) => f.flag_name.toLowerCase().includes(q))
+    return stats.filter((f) => f.flag_name.toLowerCase().includes(q))
   }, [stats, search])
 
   return (
@@ -36,7 +35,7 @@ export function AdminFeatureFlagsView() {
         sx={{ mb: 2 }}
       />
       <List disablePadding>
-        {filtered.map((flag: any) => {
+        {filtered.map((flag) => {
           const label = flag.flag_name.replace(/_/g, " ").replace(/\bv2\b/i, "V2")
           return (
             <ListItemButton

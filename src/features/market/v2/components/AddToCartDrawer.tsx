@@ -26,7 +26,7 @@ import {
   useAddToCartMutation,
   useRemoveCartItemMutation,
 } from "../../../../store/api/v2/market"
-import { useAlertHook } from "../../../../hooks/alert/AlertHook"
+import { useAlertHook, type UnwrappedErrorInterface } from "../../../../hooks/alert/AlertHook"
 import { formatQuantity } from "../../../../util/formatQuantity"
 
 interface AddToCartDrawerProps {
@@ -54,8 +54,8 @@ export function AddToCartDrawer({ open, onClose, listingId }: AddToCartDrawerPro
 
   const variants = useMemo(() => {
     if (!listingData) return []
-    return listingData.items.flatMap((item: any) =>
-      item.variants.map((v: any) => ({ ...v, itemId: item.item_id })),
+    return listingData.items.flatMap((item) =>
+      item.variants.map((v) => ({ ...v, itemId: item.item_id })),
     )
   }, [listingData])
 
@@ -65,7 +65,7 @@ export function AddToCartDrawer({ open, onClose, listingId }: AddToCartDrawerPro
     }
   }, [variants, selectedVariantId])
 
-  const selectedVariant = variants.find((v: any) => v.variant_id === selectedVariantId)
+  const selectedVariant = variants.find((v) => v.variant_id === selectedVariantId)
 
   // How many of this variant are already in cart
   const inCartQty = useMemo(() => {
@@ -105,16 +105,16 @@ export function AddToCartDrawer({ open, onClose, listingId }: AddToCartDrawerPro
       }).unwrap()
       issueAlert({ message: t("cart.added", "Added to cart"), severity: "success" })
       setQuantity(1)
-    } catch (err: any) {
-      issueAlert(err)
+    } catch (err) {
+      issueAlert(err as UnwrappedErrorInterface)
     }
   }
 
   const handleRemoveCartItem = async (cartItemId: string) => {
     try {
       await removeCartItem({ id: cartItemId }).unwrap()
-    } catch (err: any) {
-      issueAlert(err)
+    } catch (err) {
+      issueAlert(err as UnwrappedErrorInterface)
     }
   }
 
@@ -141,7 +141,7 @@ export function AddToCartDrawer({ open, onClose, listingId }: AddToCartDrawerPro
               value={selectedVariantId}
               onChange={(e) => { setSelectedVariantId(e.target.value); setQuantity(1) }}
             >
-              {variants.map((v: any) => (
+              {variants.map((v) => (
                 <MenuItem key={v.variant_id} value={v.variant_id}>
                   {v.display_name || "Standard"} — {Number(v.price).toLocaleString()} aUEC ({formatQuantity(v.quantity, listingData.listing.quantity_unit)} avail.)
                 </MenuItem>

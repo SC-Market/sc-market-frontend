@@ -148,16 +148,8 @@ export function BlocklistSettings() {
         severity: "success",
       })
       refetch()
-    } catch (error: any) {
-      let errorMessage = t("unblockUser.error")
-
-      if (error?.error?.message) {
-        errorMessage = error.error.message
-      } else if (error?.data?.message) {
-        errorMessage = error.data.message
-      } else if (typeof error?.message === "string") {
-        errorMessage = error.message
-      }
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : t("unblockUser.error")
 
       issueAlert({
         message: errorMessage,
@@ -185,16 +177,8 @@ export function BlocklistSettings() {
       setSelectedUser(null)
       setReason("")
       refetch()
-    } catch (error: any) {
-      let errorMessage = t("blockUser.error")
-
-      if (error?.error?.message) {
-        errorMessage = error.error.message
-      } else if (error?.data?.message) {
-        errorMessage = error.data.message
-      } else if (typeof error?.message === "string") {
-        errorMessage = error.message
-      }
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : t("blockUser.error")
 
       issueAlert({
         message: errorMessage,

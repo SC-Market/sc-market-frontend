@@ -6,7 +6,7 @@ import { HeadCell } from "../../components/table/PaginatedTable"
 import { Section } from "../../components/paper/Section"
 import { ScrollableTable } from "../../components/table/ScrollableTable"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
-import { useTranslation } from "react-i18next"
+import { useTranslation, type TFunction } from "react-i18next"
 
 const statusColors = new Map<
   "Completed" | "Pending" | "Cancelled",
@@ -17,7 +17,7 @@ statusColors.set("Pending", "warning")
 statusColors.set("Cancelled", "error")
 
 // const fulldays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-function getLocalizedMonths(t: any) {
+function getLocalizedMonths(t: TFunction) {
   return [
     t("transactions.months.jan"),
     t("transactions.months.feb"),
@@ -34,7 +34,7 @@ function getLocalizedMonths(t: any) {
   ]
 }
 
-function formatAMPM(date: Date, t: any) {
+function formatAMPM(date: Date, t: TFunction) {
   let hours = date.getHours()
   let minutes: number | string = date.getMinutes()
   const ampm =
@@ -45,7 +45,7 @@ function formatAMPM(date: Date, t: any) {
   return hours + ":" + minutes + " " + ampm
 }
 
-function formatDate(someDateTimeStamp: number, t: any) {
+function formatDate(someDateTimeStamp: number, t: TFunction) {
   const months = getLocalizedMonths(t)
   const dt = new Date(someDateTimeStamp),
     date = dt.getDate(),

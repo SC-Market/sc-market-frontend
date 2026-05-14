@@ -79,12 +79,13 @@ export function useOrderDetails(order: Order) {
   // Assignment handlers
   const handleAssignSave = useCallback(async () => {
     if (!targetObject) return
-    const res: { data?: any; error?: any } = await assignUser({ order_id: order.order_id, username: targetObject.username })
-    if (res?.data && !res?.error) {
+    const res = await assignUser({ order_id: order.order_id, username: targetObject.username })
+    if ("data" in res && !("error" in res)) {
       issueAlert({ message: t("memberAssignArea.assigned"), severity: "success" })
       setIsEditingAssigned(false); setTarget(""); setTargetObject(null)
     } else {
-      issueAlert({ message: `${t("memberAssignArea.failed_assign")} ${res.error?.error || res.error?.data?.error || res.error}`, severity: "error" })
+      const error = "error" in res ? res.error as { error?: string; data?: { error?: string } } : undefined
+      issueAlert({ message: `${t("memberAssignArea.failed_assign")} ${error?.error || error?.data?.error || ""}`, severity: "error" })
     }
   }, [assignUser, order.order_id, issueAlert, targetObject, t])
 
@@ -93,12 +94,13 @@ export function useOrderDetails(order: Order) {
   }, [])
 
   const handleUnassign = useCallback(async () => {
-    const res: { data?: any; error?: any } = await unassignUser({ order_id: order.order_id })
-    if (res?.data && !res?.error) {
+    const res = await unassignUser({ order_id: order.order_id })
+    if ("data" in res && !("error" in res)) {
       issueAlert({ message: t("memberAssignArea.unassigned"), severity: "success" })
       setIsEditingAssigned(false)
     } else {
-      issueAlert({ message: `${t("memberAssignArea.failed_unassign")} ${res.error?.error || res.error?.data?.error || res.error}`, severity: "error" })
+      const error = "error" in res ? res.error as { error?: string; data?: { error?: string } } : undefined
+      issueAlert({ message: `${t("memberAssignArea.failed_unassign")} ${error?.error || error?.data?.error || ""}`, severity: "error" })
     }
   }, [unassignUser, order.order_id, issueAlert, t])
 

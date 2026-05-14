@@ -37,6 +37,8 @@ import {
   useRunMigrationMutation,
   useListMigrationJobsQuery,
   useGetMigrationJobQuery,
+  type MigrationResult,
+  type MigrationJob,
 } from "../../store/api/v2/market"
 
 function CountCard({ label, count, color }: { label: string; count: number; color?: string }) {
@@ -52,7 +54,7 @@ function CountCard({ label, count, color }: { label: string; count: number; colo
   )
 }
 
-function JobResult({ result }: { result: any }) {
+function JobResult({ result }: { result: MigrationResult }) {
   const categories = [
     { key: "listings", label: "Listings", skipReason: "Already migrated (re-run)" },
     { key: "price_history", label: "Price History", skipReason: "Already migrated or NULL game_item_id" },
@@ -94,7 +96,7 @@ function JobResult({ result }: { result: any }) {
           <Typography variant="subtitle2" color="error" sx={{ mb: 0.5 }}>
             Errors ({result.listings.errors.length})
           </Typography>
-          {result.listings.errors.slice(0, 50).map((e: any, i: number) => (
+          {result.listings.errors.slice(0, 50).map((e, i) => (
             <Typography key={i} variant="caption" display="block" color="text.secondary" sx={{ fontFamily: "monospace", fontSize: "0.7rem" }}>
               {e.v1_listing_id}: {e.error}
             </Typography>
@@ -210,7 +212,7 @@ export default function AdminMigrationPage() {
       {jobs.length > 0 && (
         <Paper sx={{ p: 2 }}>
           <Typography variant="h6" fontWeight="bold" sx={{ mb: 2 }}>Recent Runs</Typography>
-          {jobs.map((job: any) => (
+          {jobs.map((job) => (
             <Paper key={job.id} variant="outlined" sx={{ p: 1.5, mb: 1 }}>
               <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1 }}>
                 {job.status === "completed" ? <CheckCircleRounded color="success" fontSize="small" /> : job.status === "failed" ? <ErrorRounded color="error" fontSize="small" /> : <CircularProgress size={14} />}

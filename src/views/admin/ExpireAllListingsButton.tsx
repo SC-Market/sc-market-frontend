@@ -18,8 +18,9 @@ export function ExpireAllListingsButton() {
       const result = await expireAll().unwrap()
       issueAlert({ message: `Expired ${result.affected} listings`, severity: "success" })
       setOpen(false)
-    } catch (err: any) {
-      issueAlert({ message: err?.data?.message || "Failed to expire listings", severity: "error" })
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Failed to expire listings"
+      issueAlert({ message, severity: "error" })
     }
   }
 

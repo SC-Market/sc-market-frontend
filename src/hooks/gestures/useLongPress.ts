@@ -68,7 +68,7 @@ export function useLongPress({
       // Prevent default context menu on long press
       if (
         event.type === "contextmenu" ||
-        (event.nativeEvent as any).button === 2
+        (event.nativeEvent as MouseEvent).button === 2
       ) {
         event.preventDefault()
         return

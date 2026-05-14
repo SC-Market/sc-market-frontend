@@ -36,10 +36,12 @@ import { ListingDetailItem } from "../listing-view/components/ListingDetailItem"
 import { dateDiffInDays } from "../../../util/dateDiff"
 import { useGetGameItemAttributesQuery } from "../../../store/api/attributes"
 import { SellerStatusBadge } from "../../../components/presence/SellerStatusBadge"
+import type { Contractor } from "../../contractor/domain/types"
+import type { UserProfileState } from "../../../hooks/login/UserProfile"
 interface MarketListingDetailsProps {
   listing: BaseListingType
-  currentOrg?: any
-  profile?: any
+  currentOrg?: Contractor | null
+  profile?: UserProfileState
   PurchaseArea: React.ComponentType<{ listing: BaseListingType }>
   BidArea: React.ComponentType<{ listing: UniqueListing }>
 }

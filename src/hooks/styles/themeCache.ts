@@ -82,9 +82,10 @@ export function buildOrgTheme(
 ): Theme {
   const orgOptions = mode === "light" ? themeData.light : themeData.dark
   // Sync divider with outline.main so all border colors are consistent
-  const outlineMain = (orgOptions?.palette as any)?.outline?.main
-  if (outlineMain && !(orgOptions?.palette as any)?.divider) {
-    ;(orgOptions as any).palette = { ...orgOptions?.palette, divider: outlineMain }
+  const palette = orgOptions?.palette as ThemeOptions["palette"] & { outline?: { main?: string }; divider?: string } | undefined
+  const outlineMain = palette?.outline?.main
+  if (outlineMain && !palette?.divider) {
+    orgOptions.palette = { ...orgOptions?.palette, divider: outlineMain }
   }
   const base =
     mode === "light"

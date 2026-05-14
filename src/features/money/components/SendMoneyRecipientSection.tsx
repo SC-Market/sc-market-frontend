@@ -6,6 +6,7 @@ import {
   MenuItem,
   Select,
   TextField,
+  type SelectChangeEvent,
 } from "@mui/material"
 import { User } from "../../../datatypes/User"
 import type { Contractor } from "../../contractor/domain/types"
@@ -66,7 +67,7 @@ export function SendMoneyRecipientSection(
             />
           )}
           value={props.targetObject}
-          onChange={(event: any, newValue: User | Contractor | null) => {
+          onChange={(_event: React.SyntheticEvent, newValue: User | Contractor | null) => {
             props.setTargetObject(newValue)
           }}
           inputValue={props.target}
@@ -90,8 +91,8 @@ export function SendMoneyRecipientSection(
         <Select
           label={t("sendMoney.targetKind")}
           value={props.recipientType}
-          onChange={(event: any) => {
-            props.setRecipientType(event.target.value)
+          onChange={(event: SelectChangeEvent) => {
+            props.setRecipientType(event.target.value as RecipientType)
           }}
           fullWidth
           aria-label={t(

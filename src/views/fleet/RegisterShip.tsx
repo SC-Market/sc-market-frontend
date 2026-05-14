@@ -37,7 +37,7 @@ export function RegisterShip(props: {}) {
               }}
             />
           )}
-          onChange={(event: any, newValue: ShipName | null) => {
+          onChange={(_event: React.SyntheticEvent, newValue: ShipName | null) => {
             setShip(newValue)
           }}
           aria-label={t("accessibility.shipSelector", "Ship selector")}

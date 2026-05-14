@@ -156,7 +156,7 @@ export function ContractorSidebar() {
             multiple
             filterSelectedOptions
             value={fields}
-            onChange={(event: any, newValue) => {
+            onChange={(_event: React.SyntheticEvent, newValue) => {
               setFields(newValue || [])
             }}
             options={contractorKindIconsKeys}

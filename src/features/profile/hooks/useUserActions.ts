@@ -3,7 +3,7 @@ import { useGetUserProfileQuery, useProfileGetBlocklistQuery } from "../../profi
 import { useGetOrgBlocklistQuery } from "../../contractor/api/contractorApi"
 import { useAdminUnlinkUserAccountMutation } from "../../admin/api/adminApi"
 import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
-import { useAlertHook } from "../../../hooks/alert/AlertHook"
+import { useAlertHook, type UnwrappedErrorInterface } from "../../../hooks/alert/AlertHook"
 import { useTranslation } from "react-i18next"
 
 export function useUserActions(username: string) {
@@ -27,7 +27,7 @@ export function useUserActions(username: string) {
       await unlinkAccount({ username }).unwrap()
       issueAlert({ message: t("userActions.adminUnlinkSuccess", { username }), severity: "success" })
       setUnlinkDialogOpen(false)
-    } catch (err: any) { issueAlert(err) }
+    } catch (err) { issueAlert(err as UnwrappedErrorInterface) }
   }, [unlinkAccount, username, issueAlert, t])
 
   return {

@@ -131,7 +131,7 @@ function PeopleRow(props: {
                 (r) => myPosition < r.position,
               )}
               getOptionLabel={(role) => role.name}
-              onChange={(event: any, newValue) => {
+              onChange={(_event: React.SyntheticEvent, newValue) => {
                 const oldSet = new Set(row.roles)
                 const newSet = new Set(newValue.map((r) => r.role_id))
 
@@ -261,7 +261,7 @@ export function MemberList(props: { contractor: Contractor }) {
               ),
             }}
             value={searchQuery}
-            onChange={(event: any) => {
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               setSearchQuery(event.target.value)
               setPage(0)
             }}
@@ -270,7 +270,7 @@ export function MemberList(props: { contractor: Contractor }) {
             select
             label={t("manageMemberList.role")}
             value={roleFilter}
-            onChange={(event: any) => {
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               setRoleFilter(event.target.value)
               setPage(0)
             }}
@@ -390,7 +390,7 @@ export function ManageMemberList() {
             }}
             sx={{ marginRight: 1 }}
             value={searchQuery}
-            onChange={(event: any) => {
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               setSearchQuery(event.target.value)
               setPage(0) // Reset to first page when searching
             }}
@@ -399,7 +399,7 @@ export function ManageMemberList() {
             select
             label={t("manageMemberList.role")}
             value={roleFilter}
-            onChange={(event: any) => {
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               setRoleFilter(event.target.value)
               setPage(0) // Reset to first page when filtering
             }}

@@ -187,7 +187,7 @@ export function Recruiting() {
                   </Grid>
                 ) : (
                   (pageData.data?.posts?.items || []).map(
-                    (item: any, index: number) => (
+                    (item, index) => (
                       <RecruitingPostItem
                         post={item}
                         key={index}

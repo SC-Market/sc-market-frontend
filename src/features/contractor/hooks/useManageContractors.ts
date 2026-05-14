@@ -65,7 +65,7 @@ export function useManageContractors() {
         issueAlert({ message: t("settingsManageContractors.transfer_ownership_success", { name: transferTarget.name, username: transferSelectedUser.username }), severity: "success" })
         setTransferTarget(null); setTransferSearchQuery(""); setTransferSelectedUser(null); setTransferSearchOptions([])
       })
-      .catch((error: any) => {
+      .catch((error: { data?: { message?: string } }) => {
         issueAlert({ message: error?.data?.message || t("settingsManageContractors.transfer_ownership_error", { name: transferTarget.name }), severity: "error" })
       })
   }, [transferTarget, transferSelectedUser, transferOwnership, issueAlert, t])

@@ -47,7 +47,7 @@ export function useOfferSearch(params: UseOfferSearchParams) {
 
   useEffect(() => { setPage(0) }, [debouncedBuyerUsername, debouncedSellerUsername, hasMarketListings, hasService])
 
-  const handleSelectChange = (selected: readonly any[]) => {
+  const handleSelectChange = (selected: readonly string[]) => {
     setSelectedOfferIds(selected.map(String))
   }
 
@@ -90,11 +90,11 @@ export function useOfferSearch(params: UseOfferSearchParams) {
     mergeOffers({ offer_session_ids: selectedOfferIds })
       .unwrap()
       .then((result) => {
-        issueAlert({ message: (result as any).message || t("OffersViewPaginated.merge_success"), severity: "success" })
+        issueAlert({ message: result.message || t("OffersViewPaginated.merge_success"), severity: "success" })
         setSelectedOfferIds([])
         setMergeModalOpen(false)
-        if ((result as any).merged_offer_session?.id) {
-          window.open(`/offer/${(result as any).merged_offer_session.id}`, "_blank")
+        if (result.merged_offer_session?.id) {
+          window.open(`/offer/${result.merged_offer_session.id}`, "_blank")
         }
       })
       .catch(issueAlert)

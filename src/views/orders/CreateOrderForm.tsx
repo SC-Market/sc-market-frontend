@@ -39,8 +39,8 @@ function AvailabilityModalWrapper(props: {
   open: boolean
   onClose: () => void
   title: string
-  onSave: (selections: any) => void
-  initialSelections: any
+  onSave: (selections: boolean[]) => void
+  initialSelections: boolean[]
 }) {
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
@@ -533,7 +533,7 @@ const CreateOrderFormComponent = React.forwardRef<
               select
               label={t("CreateOrderForm.paymentType")}
               value={state.payment_type}
-              onChange={(event: any) => {
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 setState({ ...state, payment_type: event.target.value })
               }}
               fullWidth

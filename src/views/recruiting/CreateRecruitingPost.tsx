@@ -53,7 +53,7 @@ export function CreateRecruitingPost(props: { post?: RecruitingPost }) {
   const navigate = useNavigate()
 
   const submitPost = useCallback(
-    async (event: any) => {
+    async (_event: React.SyntheticEvent) => {
       let request
       if (!post) {
         request = createPost({

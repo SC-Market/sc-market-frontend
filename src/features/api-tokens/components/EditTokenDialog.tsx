@@ -153,8 +153,9 @@ export function EditTokenDialog({
 
       issueAlert({ message: "Token updated successfully", severity: "success" })
       onClose()
-    } catch (err: any) {
-      setError(err.data?.error || "Failed to update token")
+    } catch (err) {
+      const error = err as { data?: { error?: string } }
+      setError(error.data?.error || "Failed to update token")
     }
   }
 

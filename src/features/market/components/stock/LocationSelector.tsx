@@ -14,6 +14,8 @@ import {
   Typography,
   Chip,
   CircularProgress,
+  type SxProps,
+  type Theme,
 } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import {
@@ -32,7 +34,7 @@ export interface LocationSelectorProps {
   label?: string
   disabled?: boolean
   fullWidth?: boolean
-  sx?: any
+  sx?: SxProps<Theme>
 }
 
 /**
@@ -109,7 +111,7 @@ export function LocationSelector({
     locations.find((loc) => loc.location_id === value) || null
 
   // Handle selection
-  const handleChange = (_event: any, newValue: Location | string | null) => {
+  const handleChange = (_event: React.SyntheticEvent, newValue: Location | string | null) => {
     if (typeof newValue === "string") {
       // User typed a new location name and pressed Enter
       handleCreateLocation(newValue)

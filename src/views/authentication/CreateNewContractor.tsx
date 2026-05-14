@@ -42,7 +42,7 @@ export function CreateNewContractor() {
   const issueAlert = useAlertHook()
 
   const submit = useCallback(
-    async (event: any) => {
+    async (_event: React.SyntheticEvent) => {
       if (!contractorName) {
         setError(true)
         return

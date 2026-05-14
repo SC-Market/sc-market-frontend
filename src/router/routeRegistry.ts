@@ -140,6 +140,10 @@ export const routeRegistry: Record<string, RouteImportFunction> = {
     import("../pages/admin/AdminGameItemAttributes"),
   "/admin/import-monitoring": () =>
     import("../pages/admin/AdminImportMonitoring"),
+  "/admin/supplier-roster": () =>
+    import("../pages/admin/AdminSupplierRoster"),
+  "/admin/requisitions": () =>
+    import("../pages/admin/AdminRequisitions"),
 
   // Widget routes
   "/widget/orders": () => import("../pages/widget/OrdersWidget"),

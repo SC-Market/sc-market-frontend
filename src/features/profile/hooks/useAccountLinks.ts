@@ -60,16 +60,16 @@ export function useAccountLinks() {
 
   const authProviders = useMemo(() => {
     if (!Array.isArray(links)) return []
-    return links.filter((link: any) => {
+    return links.filter((link) => {
       if (link.provider_type === "rsi") return false
       if (!isCitizenIdEnabled && link.provider_type === "citizenid") return false
       return true
     })
   }, [links])
 
-  const hasDiscord = authProviders.some((link: any) => link.provider_type === "discord")
-  const hasCitizenID = isCitizenIdEnabled && authProviders.some((link: any) => link.provider_type === "citizenid")
-  const primaryProvider = authProviders.find((link: any) => link.is_primary)
+  const hasDiscord = authProviders.some((link) => link.provider_type === "discord")
+  const hasCitizenID = isCitizenIdEnabled && authProviders.some((link) => link.provider_type === "citizenid")
+  const primaryProvider = authProviders.find((link) => link.is_primary)
 
   const handleUnlinkClick = useCallback((providerType: string) => {
     setUnlinkDialog({ open: true, providerType })

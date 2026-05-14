@@ -57,8 +57,9 @@ export function BidAreaV2({ listingId, startingPrice, isOwner }: BidAreaV2Props)
       await placeBid({ listingId, placeBidRequest: { amount: bidAmount } }).unwrap()
       issueAlert({ message: t("BidAreaV2.bidPlaced", "Bid placed successfully!"), severity: "success" })
       refetch()
-    } catch (err: any) {
-      issueAlert({ message: err?.data?.message || t("BidAreaV2.bidFailed", "Failed to place bid"), severity: "error" })
+    } catch (err) {
+      const error = err as { data?: { message?: string } }
+      issueAlert({ message: error?.data?.message || t("BidAreaV2.bidFailed", "Failed to place bid"), severity: "error" })
     }
   }
 

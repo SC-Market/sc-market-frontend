@@ -75,7 +75,7 @@ class SharedIntersectionObserver {
 }
 
 interface UsePrefetchOnVisibleOptions {
-  prefetchFn: () => Promise<any>
+  prefetchFn: () => Promise<void>
   prefetchKey: string
   threshold?: number
   rootMargin?: string

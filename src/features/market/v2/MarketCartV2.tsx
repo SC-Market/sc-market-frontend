@@ -24,7 +24,7 @@ import { Link, useNavigate } from "react-router-dom"
 import { UnderlineLink } from "../../../components/typography/UnderlineLink"
 import { TrashCan } from "mdi-material-ui"
 import LoadingButton from "@mui/lab/LoadingButton"
-import { useAlertHook } from "../../../hooks/alert/AlertHook"
+import { useAlertHook, type UnwrappedErrorInterface } from "../../../hooks/alert/AlertHook"
 import { HeaderTitle } from "../../../components/typography/HeaderTitle"
 import { BackArrow } from "../../../components/button/BackArrow"
 import { NumericFormat } from "react-number-format"
@@ -141,9 +141,9 @@ export function CartItemEntryV2(props: {
             sx={{ width: 48, height: 48 }}
             imgProps={{
               loading: "lazy",
-              onError: ({ currentTarget }: any) => {
-                currentTarget.onerror = null
-                currentTarget.src = FALLBACK_IMAGE_URL
+              onError: (e: React.SyntheticEvent<HTMLImageElement>) => {
+                e.currentTarget.onerror = null
+                e.currentTarget.src = FALLBACK_IMAGE_URL
               },
             }}
           />
@@ -397,9 +397,9 @@ export function MarketCartV2() {
         }
 
         navigate(`/offer/${result.session_id}`)
-      } catch (err: any) {
+      } catch (err) {
         setCheckoutDialogOpen(false)
-        issueAlert(err)
+        issueAlert(err as UnwrappedErrorInterface)
       }
     },
     [cartData, checkoutCart, issueAlert, navigate, t, notes]

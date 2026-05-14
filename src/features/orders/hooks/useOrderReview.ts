@@ -11,19 +11,20 @@ export function useOrderReview(orderId: string, role: "customer" | "contractor")
   const [addReview] = useLeaveOrderReviewMutation()
 
   const submitReview = useCallback(async () => {
-    const res: { data?: any; error?: any } = await addReview({
+    const res = await addReview({
       content,
       rating,
       order_id: orderId,
       role,
     })
 
-    if (res?.data && !res?.error) {
+    if ("data" in res && !("error" in res)) {
       issueAlert({ message: t("orderReviewArea.alert.success"), severity: "success" })
       setContent("")
     } else {
+      const error = "error" in res ? res.error as { error?: string; data?: { error?: string } } : undefined
       issueAlert({
-        message: `${t("orderReviewArea.alert.error")} ${res.error?.error || res.error?.data?.error || res.error}`,
+        message: `${t("orderReviewArea.alert.error")} ${error?.error || error?.data?.error || ""}`,
         severity: "error",
       })
     }

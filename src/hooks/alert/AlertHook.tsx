@@ -15,7 +15,7 @@ export interface UnwrappedErrorInterface {
   error?: {
     message: string
     code?: string
-    details?: Record<string, any>
+    details?: Record<string, string | number | boolean>
     validationErrors?: Array<{
       field: string
       message: string

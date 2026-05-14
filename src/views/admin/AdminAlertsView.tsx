@@ -183,7 +183,7 @@ export function AdminAlertsView() {
             <Select
               value={targetTypeFilter}
               label={t("admin.alerts.targetTypeFilter", "Target Type")}
-              onChange={(e) => setTargetTypeFilter(e.target.value as any)}
+              onChange={(e) => setTargetTypeFilter(e.target.value as typeof targetTypeFilter)}
             >
               <MenuItem value="">All Types</MenuItem>
               <MenuItem value="all_users">All Users</MenuItem>

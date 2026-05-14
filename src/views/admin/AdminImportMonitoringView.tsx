@@ -97,9 +97,10 @@ export function AdminImportMonitoringView() {
     try {
       await startImport({ source }).unwrap()
       issueAlert({ message: `Started ${source} import`, severity: "info" })
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Failed to start import"
       issueAlert({
-        message: err?.data?.job?.error || err?.data?.message || "Failed to start import",
+        message,
         severity: "error",
       })
     }

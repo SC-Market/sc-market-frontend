@@ -8,7 +8,7 @@ import {
   useUpdateMarketListingMutation,
   useMarketGetGameItemByNameQuery,
 } from "../../api/marketApi"
-import { useAlertHook } from "../../../../hooks/alert/AlertHook"
+import { useAlertHook, type UnwrappedErrorInterface } from "../../../../hooks/alert/AlertHook"
 import { useCurrentOrg } from "../../../../hooks/login/CurrentOrg"
 import { UniqueListing } from "../../domain/types"
 import { StockRow, NewListingRow } from "../types"
@@ -72,7 +72,7 @@ export function useStockManagement(
           await onRefresh()
         }
       } catch (error) {
-        issueAlert(error as any)
+        issueAlert(error as UnwrappedErrorInterface)
       }
     },
     [updateQuantity, issueAlert, t, onRefresh],

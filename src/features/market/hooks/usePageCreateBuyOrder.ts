@@ -3,6 +3,7 @@ import {
   useGetOrCreateAggregateQuery,
   useGetMarketItemsByCategoryQuery,
 } from "../api/marketApi"
+import type { MarketAggregate } from "../../../datatypes/MarketListing"
 
 /**
  * Page hook interface for consistent data fetching patterns.
@@ -19,8 +20,8 @@ export interface UsePageResult<T> {
  * Page data structure for create buy order page.
  */
 export interface CreateBuyOrderPageData {
-  items: any[] | undefined
-  aggregate: any | undefined
+  items: { id: string; name: string }[] | undefined
+  aggregate: MarketAggregate | undefined
   itemType: string
   itemName: string | null
   itemId: string | null

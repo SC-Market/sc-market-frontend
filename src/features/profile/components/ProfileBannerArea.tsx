@@ -14,7 +14,7 @@ import { DarkBannerContainer, LightBannerContainer } from "./BannerContainers"
 
 function BannerEditArea(props: {
   profile: User
-  submitUpdate: (arg: any) => void
+  submitUpdate: (arg: { about?: string; display_name?: string }) => void
 }) {
   const { profile } = props
   const { t } = useTranslation()
@@ -105,7 +105,7 @@ function BannerEditArea(props: {
 
 export function ProfileBannerArea(props: {
   profile: User
-  submitUpdate: (arg: any) => void
+  submitUpdate: (arg: { about?: string; display_name?: string }) => void
 }) {
   const { profile, submitUpdate } = props
   const theme = useTheme<ExtendedTheme>()

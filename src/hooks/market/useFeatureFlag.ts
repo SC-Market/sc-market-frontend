@@ -79,7 +79,7 @@ export function useFeatureFlag(): UseFeatureFlagReturn {
         )
         if (cancelled) return
 
-        const data = (result.data as any)?.data || result.data
+        const data = result.data
         if (data?.flags) {
           const serverFlags = { ...DEFAULT_FLAGS, ...data.flags }
           localStorage.setItem(STORAGE_KEY, JSON.stringify(serverFlags))
