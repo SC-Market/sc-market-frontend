@@ -115,7 +115,7 @@ export function WikiCommodityDetail() {
                       <TableBody>
                         {r.mining_locations.map((loc, i) => (
                           <TableRow key={i}>
-                            <TableCell>{loc.location_name || loc.name || "Unknown"}</TableCell>
+                            <TableCell>{loc.location_detail || loc.planet_moon || "Unknown"}</TableCell>
                             <TableCell align="right">
                               {loc.star_system && <Chip label={loc.star_system} size="small" variant="outlined" sx={{ height: 18, fontSize: "0.65rem" }} />}
                             </TableCell>
@@ -144,9 +144,9 @@ export function WikiCommodityDetail() {
                       <TableBody>
                         {r.purchase_locations.map((loc, i) => (
                           <TableRow key={i}>
-                            <TableCell>{loc.location_name || loc.name || "Unknown"}</TableCell>
+                            <TableCell>{loc.station || loc.planet_moon || "Unknown"}</TableCell>
                             <TableCell align="right">
-                              {loc.price != null && <Typography variant="caption">{formatPrice(loc.price)}</Typography>}
+                              {loc.average_price != null && <Typography variant="caption">{formatPrice(loc.average_price)}</Typography>}
                             </TableCell>
                           </TableRow>
                         ))}

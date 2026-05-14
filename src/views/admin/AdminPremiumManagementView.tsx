@@ -26,7 +26,7 @@ import {
 } from "../../store/api/premium"
 import { useSearchContractorsQuery } from "../../store/api/contractors"
 import { useTranslation } from "react-i18next"
-import { MinimalContractor } from "../../features/contractor/domain/types"
+import type { MinimalContractor } from "../../store/api/contractors"
 
 export function AdminPremiumManagementView() {
   const { t } = useTranslation()

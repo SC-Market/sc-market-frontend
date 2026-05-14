@@ -64,7 +64,7 @@ function GameItemPicker({
   onChange: (item: { id: string; name: string } | null) => void
 }) {
   const [query, setQuery] = useState("")
-  const { data: results = [], isFetching } = useSearchGameItemsQuery(query, {
+  const { data: results = [], isFetching } = useSearchGameItemsQuery({ query }, {
     skip: query.length < 2,
   })
 

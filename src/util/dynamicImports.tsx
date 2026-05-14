@@ -10,15 +10,17 @@ interface DynamicImportOptions {
 }
 
 export function createDynamicImport<P extends object = object>(
-  importFn: () => Promise<{ default: React.ComponentType<P> }>,
+  importFn: () => Promise<{ default: React.ComponentType<P> } | { default: React.ComponentType<never> }>,
   options: DynamicImportOptions = {},
 ) {
   const { fallback = <PageFallback />, errorFallback } = options
 
-  // React.lazy requires ComponentType which is contravariant in props.
-  // We cast here because callers may pass re-exported lazy components
-  // that TypeScript can't prove are assignable due to variance.
-  const LazyComponent = React.lazy(importFn as () => Promise<{ default: React.ComponentType<P> }>)
+  // React.lazy requires an exact ComponentType<P> return. Cast the union
+  // away because callers may pass re-exported lazy components whose type
+  // is ComponentType<never> (which is safe but not provably assignable).
+  const LazyComponent = React.lazy(
+    importFn as () => Promise<{ default: React.ComponentType<P> }>,
+  )
 
   return function DynamicComponent(props: P) {
     const defaultErrorFallback = (

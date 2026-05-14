@@ -22,7 +22,7 @@ import { Section } from "../../components/paper/Section"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import { BACKEND_URL, PAYMENT_TYPES } from "../../util/constants"
 import { orderIcons } from "../../features/orders/components/orderIcons"
-import type { Service } from "../../features/orders/domain/types"
+import type { Service, PaymentType } from "../../features/orders/domain/types"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { NumericFormat } from "react-number-format"
 import { useTranslation } from "react-i18next"
@@ -534,7 +534,7 @@ const CreateOrderFormComponent = React.forwardRef<
               label={t("CreateOrderForm.paymentType")}
               value={state.payment_type}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setState({ ...state, payment_type: event.target.value })
+                setState({ ...state, payment_type: event.target.value as PaymentType })
               }}
               fullWidth
               aria-required="true"

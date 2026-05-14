@@ -236,7 +236,7 @@ export function CreatePublicContract() {
                   label={t("createPublicContract.payment_type")}
                   value={paymentType}
                   onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                    setPaymentType(event.target.value)
+                    setPaymentType(event.target.value as PaymentType)
                   }}
                   fullWidth
                   SelectProps={{

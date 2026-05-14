@@ -280,7 +280,7 @@ export function ContractOfferForm(props: { contract: PublicContract }) {
               label={t("createPublicContract.payment_type")}
               value={paymentType}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setPaymentType(event.target.value)
+                setPaymentType(event.target.value as PaymentType)
               }}
               fullWidth
               aria-required="true"

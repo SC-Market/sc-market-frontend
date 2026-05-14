@@ -6,7 +6,8 @@ import { HeadCell } from "../../components/table/PaginatedTable"
 import { Section } from "../../components/paper/Section"
 import { ScrollableTable } from "../../components/table/ScrollableTable"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
-import { useTranslation, type TFunction } from "react-i18next"
+import { useTranslation } from "react-i18next"
+import type { TFunction } from "i18next"
 
 const statusColors = new Map<
   "Completed" | "Pending" | "Cancelled",

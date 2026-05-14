@@ -38,6 +38,7 @@ import {
   useListMigrationJobsQuery,
   useGetMigrationJobQuery,
   type MigrationResult,
+  type MigrationSummary,
   type MigrationJob,
 } from "../../store/api/v2/market"
 
@@ -55,7 +56,8 @@ function CountCard({ label, count, color }: { label: string; count: number; colo
 }
 
 function JobResult({ result }: { result: MigrationResult }) {
-  const categories = [
+  type MigrationSummaryKey = { [K in keyof MigrationResult]: MigrationResult[K] extends MigrationSummary ? K : never }[keyof MigrationResult]
+  const categories: { key: MigrationSummaryKey; label: string; skipReason: string }[] = [
     { key: "listings", label: "Listings", skipReason: "Already migrated (re-run)" },
     { key: "price_history", label: "Price History", skipReason: "Already migrated or NULL game_item_id" },
     { key: "auctions", label: "Auctions", skipReason: "Already migrated or listing not yet migrated" },

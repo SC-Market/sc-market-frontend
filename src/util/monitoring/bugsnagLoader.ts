@@ -50,7 +50,7 @@ export async function initializeBugsnagAsync(apiKey: string): Promise<void> {
           apiKey,
         })
 
-        bugsnagReactPlugin = bugsnagInstance.getPlugin("react")
+        bugsnagReactPlugin = bugsnagInstance.getPlugin("react") ?? null
         bugsnagInitialized = true
 
         resolve()
@@ -74,17 +74,17 @@ export async function initializeBugsnagAsync(apiKey: string): Promise<void> {
  */
 export function getBugsnagErrorBoundary(
   ReactInstance: typeof React,
-): React.ComponentType<{ children: React.ReactNode }> {
+): React.ComponentType<{ children?: React.ReactNode }> {
   if (bugsnagReactPlugin) {
     return bugsnagReactPlugin.createErrorBoundary(ReactInstance)
   }
 
   // Fallback error boundary if Bugsnag fails to load
   return class FallbackErrorBoundary extends ReactInstance.Component<
-    { children: React.ReactNode },
+    { children?: React.ReactNode },
     { hasError: boolean; error: Error | null }
   > {
-    constructor(props: { children: React.ReactNode }) {
+    constructor(props: { children?: React.ReactNode }) {
       super(props)
       this.state = { hasError: false, error: null }
     }
