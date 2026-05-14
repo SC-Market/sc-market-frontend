@@ -646,6 +646,13 @@ const router = createBrowserRouter([
                 }),
               },
               {
+                path: "/admin/wipe",
+                lazy: async () => ({
+                  Component: (await import("./pages/admin/AdminWipeListings"))
+                    .AdminWipeListings,
+                }),
+              },
+              {
                 path: "/admin/orders",
                 lazy: async () => ({
                   Component: (await import("./pages/admin/AdminOrderStats"))
