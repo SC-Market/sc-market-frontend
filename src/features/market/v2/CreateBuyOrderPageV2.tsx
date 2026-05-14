@@ -29,7 +29,7 @@ export function CreateBuyOrderPageV2() {
           </Typography>
           <GameItemSearchAutocomplete
             value={null}
-            onChange={(name, type, itemId) => setSelectedGameItem({ id: itemId, name, type })}
+            onChange={(name, type, itemId) => setSelectedGameItem(itemId ? { id: itemId, name: name || "", type: type || "" } : null)}
             label={t("buyOrderActions.searchItem", "Search for a game item")}
           />
         </Paper>

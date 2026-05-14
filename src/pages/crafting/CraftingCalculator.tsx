@@ -25,11 +25,14 @@ import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import {
   useSearchBlueprintsQuery,
   useSearchItemsQuery,
+  useSearchResourcesQuery,
   useCalculateQualityMutation,
   useGetInventorySummaryQuery,
   useFindCraftableBlueprintsMutation,
   type CraftingInputMaterial,
+  type QualityBand,
 } from "../../store/api/v2/market"
+import { QualityBandSelect } from "../../components/game-data/QualityBandSelect"
 import { useDebounce } from "../../hooks/useDebounce"
 import { useSearchParams, useNavigate } from "react-router-dom"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
@@ -44,6 +47,76 @@ interface MaterialInput {
   game_item_name: string
   quality_value: number
   quantity: number
+}
+
+/**
+ * Per-material quality input: shows QualityBandSelect when the resource has
+ * discrete quality bands, otherwise falls back to the free-range slider.
+ */
+function MaterialQualityInput({
+  materialName,
+  value,
+  onChange,
+}: {
+  materialName: string
+  value: number
+  onChange: (val: number) => void
+}) {
+  const { data: resourceData } = useSearchResourcesQuery(
+    { text: materialName, pageSize: 5 },
+    { skip: !materialName },
+  )
+
+  // Match by exact name (case-insensitive) to get quality bands
+  const bands: QualityBand[] = useMemo(() => {
+    if (!resourceData?.resources?.length) return []
+    const match = resourceData.resources.find(
+      (r) => r.resource_name.toLowerCase() === materialName.toLowerCase(),
+    )
+    return match?.quality_bands ?? []
+  }, [resourceData, materialName])
+
+  if (bands.length > 0) {
+    return (
+      <Stack direction="row" spacing={2} alignItems="center">
+        <Typography variant="caption" color="text.secondary" sx={{ minWidth: 50 }}>
+          Quality
+        </Typography>
+        <QualityBandSelect
+          bands={bands}
+          value={value}
+          onChange={(val) => onChange(val ?? 500)}
+          label="Quality"
+          allowAny={false}
+          size="small"
+          fullWidth
+        />
+      </Stack>
+    )
+  }
+
+  // Fallback: free-range slider for materials without quality bands
+  return (
+    <Stack direction="row" spacing={2} alignItems="center">
+      <Typography variant="caption" color="text.secondary" sx={{ minWidth: 50 }}>
+        Quality
+      </Typography>
+      <Slider
+        value={value}
+        onChange={(_, val) => onChange(val as number)}
+        min={0} max={1000} step={1}
+        size="small"
+        sx={{ flex: 1 }}
+        color={value >= 600 ? "success" : value >= 300 ? "primary" : "warning"}
+      />
+      <TextField
+        size="small" type="number"
+        value={value} sx={{ width: 80 }}
+        onChange={e => onChange(Math.max(0, Math.min(1000, +e.target.value || 0)))}
+        inputProps={{ min: 0, max: 1000 }}
+      />
+    </Stack>
+  )
 }
 
 export function CraftingCalculator() {
@@ -272,26 +345,12 @@ export function CraftingCalculator() {
                       </Stack>
                     </Stack>
 
-                    {/* Quality slider + input */}
-                    <Stack direction="row" spacing={2} alignItems="center">
-                      <Typography variant="caption" color="text.secondary" sx={{ minWidth: 50 }}>
-                        Quality
-                      </Typography>
-                      <Slider
-                        value={mat.quality_value}
-                        onChange={(_, val) => updateMaterial(mat.id, "quality_value", val as number)}
-                        min={0} max={1000} step={1}
-                        size="small"
-                        sx={{ flex: 1 }}
-                        color={mat.quality_value >= 600 ? "success" : mat.quality_value >= 300 ? "primary" : "warning"}
-                      />
-                      <TextField
-                        size="small" type="number"
-                        value={mat.quality_value} sx={{ width: 80 }}
-                        onChange={e => updateMaterial(mat.id, "quality_value", Math.max(0, Math.min(1000, +e.target.value || 0)))}
-                        inputProps={{ min: 0, max: 1000 }}
-                      />
-                    </Stack>
+                    {/* Quality input — band select when available, slider fallback */}
+                    <MaterialQualityInput
+                      materialName={mat.game_item_name}
+                      value={mat.quality_value}
+                      onChange={(val) => updateMaterial(mat.id, "quality_value", val)}
+                    />
 
                     {/* Per-material contribution (shown after calculation) */}
                     {contrib && (

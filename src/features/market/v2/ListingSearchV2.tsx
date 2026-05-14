@@ -31,11 +31,13 @@ import { FALLBACK_IMAGE_URL } from "../../../util/constants";
 import { UnderlineLink } from "../../../components/typography/UnderlineLink";
 import { MarketListingRating } from "../../../components/rating/ListingRating";
 import { HideOnScroll, MarketNavArea } from "../components/MarketNavArea";
-import { useSearchListingsQuery } from "../../../store/api/v2/market";
+import { useSearchListingsQuery, useSearchResourcesQuery } from "../../../store/api/v2/market";
 import type { ListingSearchResult } from "../../../store/api/v2/market";
 import { formatPriceRange } from "../../../util/formatPrice";
 import { UnifiedSearchBar, marketParamsToTokens, marketTokensToParams, type SearchToken } from "../../../components/game-data/UnifiedSearchBar";
 import { QualityFilter } from "../../../components/market/v2/QualityFilter";
+import { QualityBandSelect } from "../../../components/game-data/QualityBandSelect";
+import { getQualityMode } from "../../../util/qualityMode";
 import { LanguageFilter } from "../../../components/search/LanguageFilter";
 import { ListingWrapper } from "../components/listings/ListingCard";
 import { ListingSkeleton } from "../../../components/skeletons";
@@ -93,6 +95,8 @@ export function ListingSearchV2() {
     const gameItemId = searchParams.get("game_item_id") || undefined;
     const qualityTierMin = searchParams.get("quality_tier_min");
     const qualityTierMax = searchParams.get("quality_tier_max");
+    const qualityValueMin = searchParams.get("quality_value_min");
+    const qualityValueMax = searchParams.get("quality_value_max");
     const priceMin = searchParams.get("price_min") || searchParams.get("minCost");
     const priceMax = searchParams.get("price_max") || searchParams.get("maxCost");
     const page = searchParams.get("page") || searchParams.get("index");
@@ -110,6 +114,8 @@ export function ListingSearchV2() {
       gameItemId,
       qualityTierMin: qualityTierMin ? Number(qualityTierMin) : undefined,
       qualityTierMax: qualityTierMax ? Number(qualityTierMax) : undefined,
+      qualityValueMin: qualityValueMin ? Number(qualityValueMin) : undefined,
+      qualityValueMax: qualityValueMax ? Number(qualityValueMax) : undefined,
       priceMin: priceMin ? Number(priceMin) : undefined,
       priceMax: priceMax ? Number(priceMax) : undefined,
       page: page ? Number(page) : 1,
@@ -636,10 +642,27 @@ export function MarketSidebarV2() {
 
 /**
  * QualityFilterWrapper - Wrapper component for QualityFilter with URL state management
+ *
+ * Switches between tier-based (1-5) and value-based (0-1000) quality filtering
+ * depending on the current item_type filter.
+ *
+ * - Tier mode: shown for armor, weapons, clothing types — uses QualityFilter dropdowns
+ * - Value mode: shown when item_type is "commodity" — uses QualityBandSelect if a
+ *   game_item_id is present (so we can fetch resource-specific quality bands), or
+ *   plain numeric min/max inputs otherwise
+ * - None mode: hidden for item types that have no quality concept
+ *
+ * When no item_type is set the filter defaults to tier mode so users can still
+ * filter the mixed result set by quality tier.
  */
 function QualityFilterWrapper() {
+  const theme = useTheme<ExtendedTheme>();
   const [searchParams, setSearchParams] = useSearchParams();
 
+  const itemType = searchParams.get("item_type") || searchParams.get("type") || "";
+  const qualityMode = getQualityMode(itemType || undefined);
+
+  // --- Tier state (quality_tier_min / quality_tier_max) ---
   const minTier = useMemo(() => {
     const value = searchParams.get("quality_tier_min");
     return value ? Number(value) : null;
@@ -658,7 +681,7 @@ function QualityFilterWrapper() {
       } else {
         params.set("quality_tier_min", String(tier));
       }
-      params.set("page", "1"); // Reset to first page
+      params.set("page", "1");
       setSearchParams(params);
     },
     [searchParams, setSearchParams],
@@ -672,12 +695,140 @@ function QualityFilterWrapper() {
       } else {
         params.set("quality_tier_max", String(tier));
       }
-      params.set("page", "1"); // Reset to first page
+      params.set("page", "1");
       setSearchParams(params);
     },
     [searchParams, setSearchParams],
   );
 
+  // --- Value state (quality_value_min / quality_value_max) ---
+  const valueMin = useMemo(() => {
+    const v = searchParams.get("quality_value_min");
+    return v ? Number(v) : null;
+  }, [searchParams]);
+
+  const valueMax = useMemo(() => {
+    const v = searchParams.get("quality_value_max");
+    return v ? Number(v) : null;
+  }, [searchParams]);
+
+  const handleValueMinChange = useCallback(
+    (value: number | null) => {
+      const params = new URLSearchParams(searchParams);
+      if (value === null) {
+        params.delete("quality_value_min");
+      } else {
+        params.set("quality_value_min", String(value));
+      }
+      params.set("page", "1");
+      setSearchParams(params);
+    },
+    [searchParams, setSearchParams],
+  );
+
+  const handleValueMaxChange = useCallback(
+    (value: number | null) => {
+      const params = new URLSearchParams(searchParams);
+      if (value === null) {
+        params.delete("quality_value_max");
+      } else {
+        params.set("quality_value_max", String(value));
+      }
+      params.set("page", "1");
+      setSearchParams(params);
+    },
+    [searchParams, setSearchParams],
+  );
+
+  // --- Fetch quality bands when a specific game item is selected ---
+  const gameItemId = searchParams.get("game_item_id") || undefined;
+  // We fetch the resource by text search when we have a game_item_id and the item
+  // is a commodity.  The search text comes from the main text field as a fallback.
+  const text = searchParams.get("text") || searchParams.get("query") || undefined;
+  const { data: resourceData } = useSearchResourcesQuery(
+    { text: text, pageSize: 1 },
+    { skip: qualityMode !== "value" || !gameItemId },
+  );
+  const qualityBands = resourceData?.resources?.[0]?.quality_bands;
+
+  // --- Commodity / value mode ---
+  if (qualityMode === "value") {
+    return (
+      <Box>
+        <Typography
+          variant="subtitle2"
+          fontWeight="bold"
+          sx={{ mb: theme.layoutSpacing?.text ?? 1 }}
+        >
+          Quality Value
+        </Typography>
+        {qualityBands && qualityBands.length > 0 ? (
+          <Grid container spacing={theme.layoutSpacing?.layout ?? 1}>
+            <Grid item xs={6}>
+              <QualityBandSelect
+                bands={qualityBands}
+                value={valueMin}
+                onChange={handleValueMinChange}
+                label="Min Value"
+                allowAny
+                size="small"
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <QualityBandSelect
+                bands={qualityBands}
+                value={valueMax}
+                onChange={handleValueMaxChange}
+                label="Max Value"
+                allowAny
+                size="small"
+                fullWidth
+              />
+            </Grid>
+          </Grid>
+        ) : (
+          <Grid container spacing={theme.layoutSpacing?.layout ?? 1}>
+            <Grid item xs={6}>
+              <TextField
+                fullWidth
+                size="small"
+                color="secondary"
+                label="Min Value"
+                value={valueMin ?? ""}
+                onChange={(e) => {
+                  const v = e.target.value;
+                  handleValueMinChange(v === "" ? null : Number(v));
+                }}
+                inputProps={{ inputMode: "numeric", pattern: "[0-9]*", min: 0, max: 1000 }}
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <TextField
+                fullWidth
+                size="small"
+                color="secondary"
+                label="Max Value"
+                value={valueMax ?? ""}
+                onChange={(e) => {
+                  const v = e.target.value;
+                  handleValueMaxChange(v === "" ? null : Number(v));
+                }}
+                inputProps={{ inputMode: "numeric", pattern: "[0-9]*", min: 0, max: 1000 }}
+              />
+            </Grid>
+          </Grid>
+        )}
+      </Box>
+    );
+  }
+
+  // --- No quality concept for this item type ---
+  if (qualityMode === "none" && itemType) {
+    return null;
+  }
+
+  // --- Tier mode (default when no item type is set, or for tier-based types) ---
   return (
     <QualityFilter
       minTier={minTier}

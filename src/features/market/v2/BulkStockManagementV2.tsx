@@ -57,12 +57,17 @@ import {
   useCreateStockLotMutation,
   useUpdateStockLotMutation,
   useDeleteStockLotMutation,
+  useGetListingDetailQuery,
+  useSearchResourcesQuery,
   type MyListingItem,
   type StockLotDetail,
   type LocationInfo,
+  type QualityBand,
+  type VariantAttributes,
 } from "../../../store/api/v2/market"
 import { getQualityMode, formatQuality, type QualityMode } from "../../../util/qualityMode"
 import { useGetContractorAllocationsQuery, type Allocation } from "../../../store/api/stockLotsApi"
+import { QualityBandSelect } from "../../../components/game-data/QualityBandSelect"
 import { CreateLotDialogV2 } from "./components/CreateLotDialogV2"
 
 /* ── Local filter context (mirrors V1 StockSearchContext) ── */
@@ -274,6 +279,22 @@ function AllStockLotsGridV2() {
 
   const [addLotListingId, setAddLotListingId] = useState<string | null>(null)
 
+  // Fetch listing detail to determine game item type when a listing is filtered
+  const { data: listingDetailData } = useGetListingDetailQuery(
+    { id: filters.listingId! },
+    { skip: !filters.listingId },
+  )
+  const gameItem = listingDetailData?.items?.[0]?.game_item
+  const qualityMode = getQualityMode(gameItem?.type)
+  const gameItemName = gameItem?.name
+
+  // Fetch quality bands for commodity items
+  const { data: resourceData } = useSearchResourcesQuery(
+    { text: gameItemName || undefined, pageSize: 1 },
+    { skip: qualityMode !== "value" || !gameItemName },
+  )
+  const qualityBands = resourceData?.resources?.[0]?.quality_bands
+
   const lots = lotsData?.lots ?? []
 
   const locations = useMemo(() => {
@@ -337,6 +358,28 @@ function AllStockLotsGridV2() {
     )
   }
 
+  // Quality edit cell for value mode with quality bands.
+  // Stores the selected band mapped value in the quality_tier column field;
+  // handleRowUpdate interprets it as quality_value when qualityBands are present.
+  function QualityBandEditCell(props: GridRenderEditCellParams & { bands: QualityBand[] }) {
+    const apiRef = useGridApiContext()
+    // Show the current quality_value as the initial selection
+    const currentValue = props.row.quality_value as number | null
+    return (
+      <QualityBandSelect
+        bands={props.bands}
+        value={currentValue}
+        onChange={(val) => {
+          apiRef.current.setEditCellValue({ id: props.id, field: props.field, value: val })
+        }}
+        label=""
+        allowAny
+        size="small"
+        fullWidth
+      />
+    )
+  }
+
   const allLots = lots
     .filter((lot) => !lot.notes?.includes("allocated"))
     .map((lot) => ({
@@ -384,7 +427,12 @@ function AllStockLotsGridV2() {
         )
         return <Typography variant="body2" color="text.disabled">—</Typography>
       },
-      renderEditCell: (props: GridRenderEditCellParams) => <QualityTierEditCell {...props} />,
+      renderEditCell: (props: GridRenderEditCellParams) =>
+        qualityBands?.length ? (
+          <QualityBandEditCell {...props} bands={qualityBands} />
+        ) : (
+          <QualityTierEditCell {...props} />
+        ),
     },
     {
       field: "quantity",
@@ -447,10 +495,34 @@ function AllStockLotsGridV2() {
 
   const handleRowUpdate = async (newRow: GridRowModel, oldRow: GridRowModel) => {
     if (String(newRow.id).startsWith("new-")) return newRow
-    const qualityChanged = newRow.quality_tier !== oldRow.quality_tier || newRow.quality_value !== oldRow.quality_value
-    const variantAttrs = qualityChanged
-      ? { quality_tier: newRow.quality_tier ?? undefined, quality_value: newRow.quality_value ?? undefined, crafted_source: newRow.crafted_source ?? undefined }
-      : undefined
+
+    // When quality bands are available, the quality_tier column carries a band
+    // mapped value that should be sent as quality_value instead of quality_tier.
+    const isBandMode = !!qualityBands?.length
+    const qualityTierChanged = newRow.quality_tier !== oldRow.quality_tier
+    const qualityValueChanged = newRow.quality_value !== oldRow.quality_value
+    const qualityChanged = qualityTierChanged || qualityValueChanged
+
+    let variantAttrs: VariantAttributes | undefined
+    if (qualityChanged) {
+      if (isBandMode && qualityTierChanged) {
+        // The quality_tier field was edited via QualityBandSelect — interpret as quality_value
+        variantAttrs = {
+          quality_value: newRow.quality_tier ?? undefined,
+          quality_tier: undefined,
+          crafted_source: newRow.crafted_source ?? undefined,
+        }
+        // Update the row model so the returned row reflects the correct fields
+        newRow.quality_value = newRow.quality_tier ?? null
+        newRow.quality_tier = null
+      } else {
+        variantAttrs = {
+          quality_tier: newRow.quality_tier ?? undefined,
+          quality_value: newRow.quality_value ?? undefined,
+          crafted_source: newRow.crafted_source ?? undefined,
+        }
+      }
+    }
 
     try {
       const result = await updateLot({
