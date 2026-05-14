@@ -17,7 +17,7 @@ import { LoadingButton } from "@mui/lab";
 import { ExtendedTheme } from "../../../../hooks/styles/Theme";
 import { useAlertHook } from "../../../../hooks/alert/AlertHook";
 import { Section } from "../../../../components/paper/Section";
-import { useCreateStandingBuyOrderMutation, useSearchResourcesQuery } from "../../../../store/api/v2/market";
+import { useCreateStandingBuyOrderMutation, useSearchResourcesQuery, type GameItemSearchResult } from "../../../../store/api/v2/market";
 import { useNavigate } from "react-router-dom";
 
 import { getQualityMode, type QualityMode } from "../../../../util/qualityMode";
@@ -29,12 +29,11 @@ import { QualityBandSelect } from "../../../../components/game-data/QualityBandS
  */
 
 interface CreateBuyOrderV2Props {
-  gameItemId: string;
-  gameItemName?: string;
-  gameItemType?: string;
+  gameItem: GameItemSearchResult;
 }
 
-export function CreateBuyOrderV2({ gameItemId, gameItemName, gameItemType }: CreateBuyOrderV2Props) {
+export function CreateBuyOrderV2({ gameItem }: CreateBuyOrderV2Props) {
+  const { id: gameItemId, name: gameItemName, type: gameItemType } = gameItem;
   const { t } = useTranslation();
   const theme = useTheme<ExtendedTheme>();
   const issueAlert = useAlertHook();
