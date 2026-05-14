@@ -4811,6 +4811,28 @@
 					},
 					"image_url": {
 						"type": "string"
+					},
+					"crew_size": {
+						"type": "number",
+						"format": "double"
+					},
+					"career": {
+						"type": "string"
+					},
+					"role": {
+						"type": "string"
+					},
+					"length_m": {
+						"type": "number",
+						"format": "double"
+					},
+					"width_m": {
+						"type": "number",
+						"format": "double"
+					},
+					"height_m": {
+						"type": "number",
+						"format": "double"
 					}
 				},
 				"required": [
@@ -8273,6 +8295,51 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"CraftedPropertyDef": {
+				"description": "Crafted property display metadata (how to show a modifier's value to users)",
+				"properties": {
+					"property_key": {
+						"type": "string",
+						"description": "Property key matching slot_modifiers[].property (e.g. \"damagemitigation\")"
+					},
+					"display_name": {
+						"type": "string",
+						"nullable": true,
+						"description": "Localized display name (e.g. \"Damage Mitigation\")"
+					},
+					"display_mode": {
+						"type": "string",
+						"enum": [
+							"raw",
+							"percent",
+							"negated_percent",
+							"scale",
+							"percent_of_base"
+						],
+						"description": "How to transform the raw modifier value for display"
+					},
+					"scale_factor": {
+						"type": "number",
+						"format": "double",
+						"nullable": true,
+						"description": "Scale factor (only set when display_mode is \"scale\")"
+					},
+					"unit_label": {
+						"type": "string",
+						"nullable": true,
+						"description": "Localized unit label (e.g. \"%\", \"C\")"
+					}
+				},
+				"required": [
+					"property_key",
+					"display_name",
+					"display_mode",
+					"scale_factor",
+					"unit_label"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"UserBlueprintAcquisition": {
 				"description": "User acquisition data",
 				"properties": {
@@ -8356,6 +8423,13 @@
 					"item_attributes": {
 						"$ref": "#/components/schemas/Record_string.string_",
 						"description": "Output item base attributes (damage resistance, temperature, etc.)"
+					},
+					"crafted_property_defs": {
+						"items": {
+							"$ref": "#/components/schemas/CraftedPropertyDef"
+						},
+						"type": "array",
+						"description": "Crafted property display metadata for interpreting slot modifier values"
 					},
 					"user_owns": {
 						"type": "boolean",

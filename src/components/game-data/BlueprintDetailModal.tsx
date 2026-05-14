@@ -38,7 +38,7 @@ function formatQty(scu: number | string): string {
 }
 
 import { formatCraftingTime } from "../../constants/crafting"
-import { propertyLabel, isModifierPositive, interpolateModifier } from "../../util/statDisplay"
+import { isModifierPositive, interpolateModifier, formatModifierValue, buildPropertyDefMap, propertyDisplayName } from "../../util/statDisplay"
 import { DetailPageSkeleton } from "./GameDataSkeletons"
 
 interface Props {
@@ -60,6 +60,7 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
   const ingredients = data?.ingredients || []
   const slotModifiers = data?.slot_modifiers || []
   const itemAttrs = data?.item_attributes || {}
+  const craftedPropertyDefs = data?.crafted_property_defs
 
 
   const [currentOrg] = useCurrentOrg()
@@ -94,6 +95,8 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
     return map
   }, [slotModifiers])
 
+  const propDefMap = useMemo(() => buildPropertyDefMap(craftedPropertyDefs), [craftedPropertyDefs])
+
   const [qualities, setQualities] = useState<number[]>([])
   const [craftQty, setCraftQty] = useState(1)
 
@@ -122,12 +125,19 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
   )
 
   const combinedModifiers = useMemo(() => {
-    const result = new Map<string, number>()
+    const result = new Map<string, { value: number; modifierType: "linear" | "additive" }>()
     for (const mod of slotModifiers) {
       const slotIdx = ingredients.findIndex((ing: any) => (ing.slot_name || ing.game_item?.name) === mod.slot_name)
       const qv = qualities[slotIdx] ?? 500
       const factor = interpolateModifier(qv, mod.start_quality, mod.end_quality, mod.modifier_at_start, mod.modifier_at_end)
-      result.set(mod.property, (result.get(mod.property) || 1) * factor)
+      const existing = result.get(mod.property)
+      if (mod.modifier_type === "additive") {
+        // Additive modifiers sum together
+        result.set(mod.property, { value: (existing?.value ?? 0) + factor, modifierType: "additive" })
+      } else {
+        // Linear (multiplicative) modifiers multiply together
+        result.set(mod.property, { value: (existing?.value ?? 1) * factor, modifierType: "linear" })
+      }
     }
     return result
   }, [slotModifiers, qualities, ingredients])
@@ -189,17 +199,18 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
               return (
               <Box>
                 <Typography variant="subtitle2" sx={{ mb: 0.5 }}>Product Stats</Typography>
-                {stats.map(([prop, modifier]) => {
+                {stats.map(([prop, { value: modifier, modifierType }]) => {
+                  const def = propDefMap.get(prop)
                   const baseKey = Object.keys(itemAttrs).find(k => k.toLowerCase().includes(prop.replace(/^gpp_armor_/, "").toLowerCase()))!
                   const baseVal = parseFloat(itemAttrs[baseKey])
-                  const modified = baseVal * modifier
-                  const pctChange = (modifier - 1) * 100
+                  const modified = modifierType === "additive" ? baseVal + modifier : baseVal * modifier
+                  const formattedMod = formatModifierValue(modifier, modifierType, def)
                   return (
                     <Stack key={prop} direction="row" spacing={1} alignItems="center" sx={{ py: 0.25 }}>
-                      <Typography variant="caption" color="text.secondary" sx={{ minWidth: 140 }}>{propertyLabel(prop)}</Typography>
-                      <Typography variant="caption">×{baseVal.toFixed(2)}</Typography>
-                      <Typography variant="caption" color="text.disabled">→</Typography>
-                      <Typography variant="caption" fontWeight={600} color={isModifierPositive(prop, modifier) ? "success.main" : modifier === 1 ? "text.secondary" : "error.main"}>×{modified.toFixed(2)} ({pctChange >= 0 ? "+" : ""}{pctChange.toFixed(1)}%)</Typography>
+                      <Typography variant="caption" color="text.secondary" sx={{ minWidth: 140 }}>{propertyDisplayName(prop, def)}</Typography>
+                      <Typography variant="caption">{baseVal.toFixed(2)}</Typography>
+                      <Typography variant="caption" color="text.disabled">{"→"}</Typography>
+                      <Typography variant="caption" fontWeight={600} color={isModifierPositive(prop, modifierType === "additive" ? 1 + modifier : modifier) ? "success.main" : modifier === (modifierType === "additive" ? 0 : 1) ? "text.secondary" : "error.main"}>{modified.toFixed(2)} ({formattedMod})</Typography>
                     </Stack>
                   )
                 })}
@@ -257,14 +268,18 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
             {/* Scaling attributes summary */}
             {combinedModifiers.size > 0 && (
               <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap sx={{ mb: 0.5 }}>
-                {Array.from(combinedModifiers.entries()).map(([prop, modifier]) => {
-                  const pct = (modifier - 1) * 100
+                {Array.from(combinedModifiers.entries()).map(([prop, { value: modifier, modifierType }]) => {
+                  const def = propDefMap.get(prop)
+                  const formatted = formatModifierValue(modifier, modifierType, def)
+                  const neutralValue = modifierType === "additive" ? 0 : 1
+                  // For isModifierPositive, normalize additive to a multiplicative-like value
+                  const positiveCheck = modifierType === "additive" ? 1 + modifier : modifier
                   return (
                     <Chip
                       key={prop}
                       size="small"
-                      label={`${propertyLabel(prop)}: ×${modifier.toFixed(3)} (${pct >= 0 ? "+" : ""}${pct.toFixed(1)}%)`}
-                      color={isModifierPositive(prop, modifier) ? "success" : modifier === 1 ? "default" : "error"}
+                      label={`${propertyDisplayName(prop, def)}: ${formatted}`}
+                      color={isModifierPositive(prop, positiveCheck) ? "success" : modifier === neutralValue ? "default" : "error"}
                       variant="outlined"
                       sx={{ height: 22, fontSize: "0.7rem" }}
                     />
@@ -294,13 +309,19 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
                     <TextField size="small" type="number" value={qv} onChange={e => setQuality(idx, +e.target.value || 0)} inputProps={{ min: qr.min, max: qr.max }} sx={{ width: 70, "& input": { py: 0.5, fontSize: "0.8rem" } }} />
                   </Stack>
                   {(modsBySlot.get(ing.slot_name || ing.game_item?.name) || []).map((mod: any, mi: number) => {
+                    const def = propDefMap.get(mod.property)
                     const factor = interpolateModifier(qv, mod.start_quality, mod.end_quality, mod.modifier_at_start, mod.modifier_at_end)
-                    const pct = (factor - 1) * 100
+                    const currentFormatted = formatModifierValue(factor, mod.modifier_type, def)
+                    const startFormatted = formatModifierValue(mod.modifier_at_start, mod.modifier_type, def)
+                    const endFormatted = formatModifierValue(mod.modifier_at_end, mod.modifier_type, def)
+                    // For color: normalize additive to multiplicative-like for isModifierPositive
+                    const positiveCheck = mod.modifier_type === "additive" ? 1 + factor : factor
+                    const neutralValue = mod.modifier_type === "additive" ? 0 : 1
                     return (
                       <Stack key={mi} direction="row" spacing={1} alignItems="center" sx={{ mt: 0.25 }}>
-                        <Typography variant="caption" color="text.secondary" sx={{ minWidth: 120 }}>{propertyLabel(mod.property)}</Typography>
-                        <Typography variant="caption" fontWeight={600} color={isModifierPositive(mod.property, factor) ? "success.main" : factor === 1 ? "text.secondary" : "error.main"}>×{factor.toFixed(3)} {pct >= 0 ? "+" : ""}{pct.toFixed(2)}%</Typography>
-                        <Typography variant="caption" color="text.disabled">Factor: ×{mod.modifier_at_start}–{mod.modifier_at_end}</Typography>
+                        <Typography variant="caption" color="text.secondary" sx={{ minWidth: 120 }}>{propertyDisplayName(mod.property, def)}</Typography>
+                        <Typography variant="caption" fontWeight={600} color={isModifierPositive(mod.property, positiveCheck) ? "success.main" : factor === neutralValue ? "text.secondary" : "error.main"}>{currentFormatted}</Typography>
+                        <Typography variant="caption" color="text.disabled">Range: {startFormatted} {"→"} {endFormatted}</Typography>
                       </Stack>
                     )
                   })}
