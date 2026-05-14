@@ -293,6 +293,8 @@ const injectedRtkApi = api
             game_item_id: queryArg.gameItemId,
             quality_tier_min: queryArg.qualityTierMin,
             quality_tier_max: queryArg.qualityTierMax,
+            quality_value_min: queryArg.qualityValueMin,
+            quality_value_max: queryArg.qualityValueMax,
             price_min: queryArg.priceMin,
             price_max: queryArg.priceMax,
             page: queryArg.page,
@@ -1642,6 +1644,10 @@ export type SearchListingsApiArg = {
   qualityTierMin?: number
   /** Maximum quality tier (1-5) */
   qualityTierMax?: number
+  /** Minimum quality value (0-1000) — for commodity items */
+  qualityValueMin?: number
+  /** Maximum quality value (0-1000) — for commodity items */
+  qualityValueMax?: number
   /** Minimum price filter */
   priceMin?: number
   /** Maximum price filter */
