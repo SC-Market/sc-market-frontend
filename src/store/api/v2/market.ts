@@ -4108,6 +4108,8 @@ export type Resource = {
   can_be_looted: boolean
   mining_locations?: MiningLocation[]
   purchase_locations?: PurchaseLocation[]
+  /** Quality quantization bands — defines discrete quality tiers for this resource */
+  quality_bands?: QualityBand[]
   created_at: string
   updated_at: string
 }
