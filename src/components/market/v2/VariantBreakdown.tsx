@@ -31,7 +31,7 @@ interface Variant {
     quality_value?: number;
     crafted_source?: string;
     blueprint_tier?: number;
-    [key: string]: any;
+    [key: string]: string | number | undefined;
   };
   quantity: number;
   price: number;

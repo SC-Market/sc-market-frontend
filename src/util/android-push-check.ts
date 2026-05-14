@@ -35,7 +35,8 @@ export function isAndroidPushSupported(): boolean {
   // Check if PWA is installed (required for Android push)
   const isStandalone =
     window.matchMedia("(display-mode: standalone)").matches ||
-    (window.navigator as any).standalone === true
+    (window.navigator as Navigator & { standalone?: boolean }).standalone ===
+      true
 
   if (!isStandalone) {
     return false // Android requires PWA installation
@@ -59,7 +60,8 @@ export function getAndroidPushErrorMessage(): string | null {
 
   const isStandalone =
     window.matchMedia("(display-mode: standalone)").matches ||
-    (window.navigator as any).standalone === true
+    (window.navigator as Navigator & { standalone?: boolean }).standalone ===
+      true
 
   if (!isStandalone) {
     return "Android requires the app to be installed as a PWA to receive push notifications. Please install the app first."

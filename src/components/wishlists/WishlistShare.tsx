@@ -129,9 +129,9 @@ export function WishlistShare({ open, onClose, wishlist }: WishlistShareProps) {
           ? "Shopping list is now public. Anyone with the link can view it."
           : "Shopping list is now private. Only you can view it."
       )
-    } catch (err: any) {
+    } catch (err: unknown) {
       const errorMessage =
-        err?.data?.message || err?.message || "Failed to update privacy settings."
+        err instanceof Error ? err.message : "Failed to update privacy settings."
       setError(errorMessage)
       // Revert toggle on error
       setIsPublic(!checked)
@@ -157,9 +157,9 @@ export function WishlistShare({ open, onClose, wishlist }: WishlistShareProps) {
           ? "Collaborative mode enabled. Organization members can edit this shopping list."
           : "Collaborative mode disabled. Only you can edit this shopping list."
       )
-    } catch (err: any) {
+    } catch (err: unknown) {
       const errorMessage =
-        err?.data?.message || err?.message || "Failed to update collaborative settings."
+        err instanceof Error ? err.message : "Failed to update collaborative settings."
       setError(errorMessage)
       // Revert toggle on error
       setIsCollaborative(!checked)

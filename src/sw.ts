@@ -27,6 +27,7 @@ interface SyncEvent extends ExtendableEvent {
 // These imports will be replaced by vite-plugin-pwa during build
 // In the final build, they'll be workbox CDN imports or bundled code
 import { clientsClaim, skipWaiting } from "workbox-core"
+import type { PrecacheEntry } from "workbox-precaching"
 import { cleanupOutdatedCaches, precacheAndRoute } from "workbox-precaching"
 import { registerRoute } from "workbox-routing"
 import {
@@ -61,7 +62,7 @@ precacheAndRoute(manifest)
 
 // Build a set of precached URLs for quick lookup
 const precachedUrls = new Set(
-  manifest.map((entry: any) => {
+  manifest.map((entry: PrecacheEntry | string) => {
     const url = typeof entry === "string" ? entry : entry.url
     return new URL(url, self.location.href).pathname
   }),

@@ -28,14 +28,16 @@ import { useAlertHook } from "../../hooks/alert/AlertHook"
 import type { ThemeOptions } from "@mui/material"
 import { CUSTOM_THEMES } from "../../hooks/styles/custom_themes"
 
+type ThemeModeData = ThemeOptions & Record<string, unknown>
+
 interface ThemeEditorProps {
-  initialThemeData: { light: Record<string, any>; dark: Record<string, any> }
+  initialThemeData: { light: ThemeModeData; dark: ThemeModeData }
   initialFaviconUrl: string | null
   onSave: (data: {
-    theme_data: { light: Record<string, any>; dark: Record<string, any> }
+    theme_data: { light: ThemeModeData; dark: ThemeModeData }
     favicon_url: string | null
-  }) => Promise<any>
-  onReset: () => Promise<any>
+  }) => Promise<void>
+  onReset: () => Promise<void>
   isSaving?: boolean
 }
 
@@ -95,21 +97,21 @@ const BORDER_RADIUS_FIELDS = [
   { key: "image", labelKey: "theme.borderRadiusImage", fallback: "Images", path: ["borderRadius", "image"] },
 ]
 
-function getNestedValue(obj: Record<string, any>, path: string[]): any {
-  let current: any = obj
+function getNestedValue(obj: Record<string, unknown>, path: string[]): unknown {
+  let current: unknown = obj
   for (const key of path) {
     if (!current || typeof current !== "object") return undefined
-    current = current[key]
+    current = (current as Record<string, unknown>)[key]
   }
   return current
 }
 
-function setNestedValue(obj: Record<string, any>, path: string[], value: any): Record<string, any> {
+function setNestedValue(obj: Record<string, unknown>, path: string[], value: unknown): Record<string, unknown> {
   const result = { ...obj }
-  let current: any = result
+  let current: Record<string, unknown> = result
   for (let i = 0; i < path.length - 1; i++) {
-    current[path[i]] = { ...(current[path[i]] || {}) }
-    current = current[path[i]]
+    current[path[i]] = { ...((current[path[i]] as Record<string, unknown>) || {}) }
+    current = current[path[i]] as Record<string, unknown>
   }
   current[path[path.length - 1]] = value
   return result
@@ -150,16 +152,17 @@ export function ThemeEditor({
   const [resetDialogOpen, setResetDialogOpen] = useState(false)
   const [isResetting, setIsResetting] = useState(false)
 
-  const currentMode = themeData[editMode] as Record<string, any>
-  const paperVariant = currentMode?.components?.MuiPaper?.defaultProps?.variant ?? "outlined"
-  const cardVariant = currentMode?.components?.MuiCard?.defaultProps?.variant ?? "outlined"
-  const paperElevation = currentMode?.components?.MuiPaper?.defaultProps?.elevation ?? 4
-  const cardElevation = currentMode?.components?.MuiCard?.defaultProps?.elevation ?? 4
-  const navKind = currentMode?.navKind ?? "outlined"
-  const borderRadiusUnit = currentMode?.borderRadiusUnit ?? "px"
+  const currentMode = themeData[editMode]
+  const components = currentMode?.components as Record<string, { defaultProps?: Record<string, unknown> }> | undefined
+  const paperVariant = (components?.MuiPaper?.defaultProps?.variant as string) ?? "outlined"
+  const cardVariant = (components?.MuiCard?.defaultProps?.variant as string) ?? "outlined"
+  const paperElevation = (components?.MuiPaper?.defaultProps?.elevation as number) ?? 4
+  const cardElevation = (components?.MuiCard?.defaultProps?.elevation as number) ?? 4
+  const navKind = (currentMode?.navKind as string) ?? "outlined"
+  const borderRadiusUnit = (currentMode?.borderRadiusUnit as string) ?? "px"
 
   const updateValue = useCallback(
-    (path: string[], value: any) => {
+    (path: string[], value: unknown) => {
       setThemeData((prev) => ({
         ...prev,
         [editMode]: setNestedValue(prev[editMode], path, value),
@@ -170,42 +173,51 @@ export function ThemeEditor({
 
   const updateComponentVariant = useCallback(
     (component: string, variant: string) => {
-      setThemeData((prev) => ({
-        ...prev,
-        [editMode]: {
-          ...prev[editMode],
-          components: {
-            ...(prev[editMode] as any)?.components,
-            [component]: {
-              defaultProps: {
-                variant,
-                ...(variant === "elevation" ? { elevation: (prev[editMode] as any)?.components?.[component]?.defaultProps?.elevation ?? 4 } : {}),
+      setThemeData((prev) => {
+        const mode = prev[editMode]
+        const prevComponents = (mode?.components as Record<string, { defaultProps?: Record<string, unknown> }>) || {}
+        const prevElevation = prevComponents[component]?.defaultProps?.elevation ?? 4
+        return {
+          ...prev,
+          [editMode]: {
+            ...mode,
+            components: {
+              ...prevComponents,
+              [component]: {
+                defaultProps: {
+                  variant,
+                  ...(variant === "elevation" ? { elevation: prevElevation } : {}),
+                },
               },
             },
           },
-        },
-      }))
+        }
+      })
     },
     [editMode],
   )
 
   const updateComponentElevation = useCallback(
     (component: string, elevation: number) => {
-      setThemeData((prev) => ({
-        ...prev,
-        [editMode]: {
-          ...prev[editMode],
-          components: {
-            ...(prev[editMode] as any)?.components,
-            [component]: {
-              defaultProps: {
-                ...(prev[editMode] as any)?.components?.[component]?.defaultProps,
-                elevation,
+      setThemeData((prev) => {
+        const mode = prev[editMode]
+        const prevComponents = (mode?.components as Record<string, { defaultProps?: Record<string, unknown> }>) || {}
+        return {
+          ...prev,
+          [editMode]: {
+            ...mode,
+            components: {
+              ...prevComponents,
+              [component]: {
+                defaultProps: {
+                  ...prevComponents[component]?.defaultProps,
+                  elevation,
+                },
               },
             },
           },
-        },
-      }))
+        }
+      })
     },
     [editMode],
   )
@@ -267,17 +279,20 @@ export function ThemeEditor({
                     onClick={() => {
                       const p = themeObj.palette
                       const mode = p?.mode || "dark"
-                      const preset: Record<string, any> = {
+                      const bg = p?.background as { default?: string; paper?: string; sidebar?: string; navbar?: string } | undefined
+                      const outline = (p as { outline?: { main?: string } } | undefined)?.outline
+                      const thm = themeObj as unknown as ThemeModeData
+                      const preset: ThemeModeData = {
                         palette: {
                           mode,
-                          primary: { main: p?.primary?.main, contrastText: p?.primary?.contrastText },
-                          secondary: { main: p?.secondary?.main, contrastText: p?.secondary?.contrastText },
-                          background: { default: (p?.background as any)?.default, paper: (p?.background as any)?.paper, sidebar: (p?.background as any)?.sidebar, navbar: (p?.background as any)?.navbar },
+                          ...(p?.primary?.main && { primary: { main: p.primary.main, contrastText: p.primary.contrastText } }),
+                          ...(p?.secondary?.main && { secondary: { main: p.secondary.main, contrastText: p.secondary.contrastText } }),
+                          background: { default: bg?.default, paper: bg?.paper, sidebar: bg?.sidebar, navbar: bg?.navbar },
                           text: { primary: p?.text?.primary, secondary: p?.text?.secondary },
-                          outline: { main: (p as any)?.outline?.main },
+                          ...(outline?.main && { outline: { main: outline.main } }),
                           action: { hover: p?.action?.hover },
                         },
-                        navKind: (themeObj as any).navKind,
+                        navKind: thm.navKind,
                       }
                       setThemeData((prev) => ({ ...prev, [editMode]: preset }))
                     }}
@@ -305,7 +320,7 @@ export function ThemeEditor({
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
                   <input
                     type="color"
-                    value={getNestedValue(currentMode, field.path) || "#000000"}
+                    value={(getNestedValue(currentMode, field.path) as string) || "#000000"}
                     onChange={(e) => updateValue(field.path, e.target.value)}
                     style={{ width: 32, height: 32, border: "none", cursor: "pointer", flexShrink: 0 }}
                   />
@@ -422,7 +437,7 @@ export function ThemeEditor({
                   min={0}
                   max={borderRadiusUnit === "px" ? 32 : borderRadiusUnit === "%" ? 50 : 3}
                   step={borderRadiusUnit === "px" ? 1 : borderRadiusUnit === "%" ? 1 : 0.125}
-                  value={getNestedValue(currentMode, field.path) ?? (borderRadiusUnit === "px" ? 3 : 0.375)}
+                  value={(getNestedValue(currentMode, field.path) as number) ?? (borderRadiusUnit === "px" ? 3 : 0.375)}
                   onChange={(_, v) => updateValue(field.path, v as number)}
                   valueLabelDisplay="auto"
                   valueLabelFormat={(v) => `${v}${borderRadiusUnit}`}

@@ -3,7 +3,7 @@
  * This enables prefetching and dynamic loading of route components
  */
 
-export type RouteImportFunction = () => Promise<any>
+export type RouteImportFunction = () => Promise<unknown>
 
 /**
  * Registry of all route imports by path

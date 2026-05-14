@@ -64,7 +64,7 @@ export function ComponentErrorBoundary({
     // Report to Bugsnag
     const bugsnag = getBugsnagInstance()
     if (bugsnag) {
-      bugsnag.notify(error, (event: any) => {
+      bugsnag.notify(error, (event) => {
         event.context = componentName || "Component"
         event.addMetadata("errorBoundary", {
           type: "component",

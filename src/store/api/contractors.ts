@@ -1045,7 +1045,7 @@ export type AuditLogEntry = {
   subject_id: string
   /** Additional metadata about the action */
   metadata: {
-    [key: string]: any
+    [key: string]: unknown
   }
   /** Timestamp when the action was performed */
   created_at: string
@@ -1189,8 +1189,8 @@ export type GetOrgThemeApiResponse =
   /** status 200 OK - Org theme retrieved successfully */ {
     data: {
       theme_data: {
-        light: Record<string, any>
-        dark: Record<string, any>
+        light: Record<string, unknown>
+        dark: Record<string, unknown>
       }
       favicon_url: string | null
       updated_at: string
@@ -1201,8 +1201,8 @@ export type UpdateOrgThemeApiResponse =
   /** status 200 OK - Theme updated successfully */ {
     data: {
       theme_data: {
-        light: Record<string, any>
-        dark: Record<string, any>
+        light: Record<string, unknown>
+        dark: Record<string, unknown>
       }
       favicon_url: string | null
       updated_at: string
@@ -1211,8 +1211,8 @@ export type UpdateOrgThemeApiResponse =
 export type UpdateOrgThemeApiArg = {
   spectrum_id: string
   theme_data: {
-    light: Record<string, any>
-    dark: Record<string, any>
+    light: Record<string, unknown>
+    dark: Record<string, unknown>
   }
   favicon_url?: string | null
 }

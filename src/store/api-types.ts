@@ -24,7 +24,7 @@ export interface StandardErrorResponse {
   error: {
     code: string
     message: string
-    details?: Record<string, any>
+    details?: Record<string, unknown>
     validationErrors?: ValidationError[]
   }
 }
@@ -47,7 +47,7 @@ export type APIResponse<T> = StandardSuccessResponse<T> | StandardErrorResponse
  * Legacy error formats for backward compatibility
  * These are kept for gradual migration
  */
-export interface LegacyErrorResponse<E = any> {
+export interface LegacyErrorResponse<E = unknown> {
   error?: E
   errors?: E[]
   validationErrors?: E[]
@@ -57,4 +57,4 @@ export interface LegacyErrorResponse<E = any> {
 /**
  * Response type that supports both new and legacy formats
  */
-export type Response<T, E = any> = APIResponse<T> | LegacyErrorResponse<E>
+export type Response<T, E = unknown> = APIResponse<T> | LegacyErrorResponse<E>

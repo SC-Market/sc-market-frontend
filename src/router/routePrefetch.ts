@@ -116,7 +116,11 @@ export function prefetchRouteOnInteraction(
 function shouldPrefetch(): boolean {
   // Check if user has data saver enabled
   if ("connection" in navigator) {
-    const connection = (navigator as any).connection
+    const connection = (
+      navigator as Navigator & {
+        connection?: { saveData?: boolean; effectiveType?: string }
+      }
+    ).connection
     if (connection?.saveData) {
       return false
     }

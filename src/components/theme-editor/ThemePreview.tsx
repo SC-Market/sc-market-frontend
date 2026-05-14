@@ -44,11 +44,11 @@ function isValidColor(value: unknown): boolean {
 
 // Deep-clone theme options, stripping any string values that aren't valid colors
 // from palette sub-objects (where MUI would call getContrastText)
-function sanitizePalette(obj: Record<string, any>): Record<string, any> {
-  const result: Record<string, any> = {}
+function sanitizePalette(obj: Record<string, unknown>): Record<string, unknown> {
+  const result: Record<string, unknown> = {}
   for (const [key, value] of Object.entries(obj)) {
     if (value && typeof value === "object" && !Array.isArray(value)) {
-      result[key] = sanitizePalette(value)
+      result[key] = sanitizePalette(value as Record<string, unknown>)
     } else if (typeof value === "string") {
       if (isValidColor(value)) {
         result[key] = value
@@ -65,7 +65,7 @@ function sanitizeThemeData(data: ThemeOptions): ThemeOptions {
   if (!data || typeof data !== "object") return data
   const result = { ...data }
   if (result.palette) {
-    result.palette = sanitizePalette(result.palette as Record<string, any>) as any
+    result.palette = sanitizePalette(result.palette as Record<string, unknown>) as ThemeOptions["palette"]
   }
   return result
 }

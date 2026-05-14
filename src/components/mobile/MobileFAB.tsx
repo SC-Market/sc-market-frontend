@@ -36,7 +36,7 @@ export function MobileFAB({
     const bottomNavHeight = isMobile && aboveBottomNav ? 80 : 0 // 64px nav + 16px spacing
     const safeAreaBottom = isMobile ? "env(safe-area-inset-bottom)" : 0
 
-    const positions: Record<string, any> = {
+    const positions: Record<string, Record<string, string>> = {
       "bottom-right": {
         bottom: `calc(${offset}px + ${bottomNavHeight}px + ${safeAreaBottom})`,
         right: `calc(${offset}px + env(safe-area-inset-right))`,

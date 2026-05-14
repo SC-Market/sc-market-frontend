@@ -3,7 +3,7 @@
  * This enables prefetching of tab components and other lazy-loaded sections
  */
 
-export type ComponentImportFunction = () => Promise<any>
+export type ComponentImportFunction = () => Promise<unknown>
 
 /**
  * Registry of component imports by identifier

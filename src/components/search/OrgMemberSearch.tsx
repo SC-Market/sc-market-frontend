@@ -6,7 +6,9 @@ import {
   Box,
   Typography,
   CircularProgress,
+  type Theme,
 } from "@mui/material"
+import type { SxProps } from "@mui/system"
 import { useTranslation } from "react-i18next"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { contractorsApi } from "../../features/contractor/api/contractorApi"
@@ -27,7 +29,7 @@ interface OrgMemberSearchProps {
   fullWidth?: boolean
   size?: "small" | "medium"
   includeSelf?: boolean
-  sx?: any
+  sx?: SxProps<Theme>
 }
 
 export function OrgMemberSearch({

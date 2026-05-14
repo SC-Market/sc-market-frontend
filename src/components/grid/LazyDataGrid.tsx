@@ -1,6 +1,7 @@
 import { lazy, Suspense, useEffect, useState } from "react"
 import { Skeleton } from "@mui/material"
 import type { DataGridProps } from "@mui/x-data-grid"
+import type { Localization } from "@mui/x-data-grid/utils/getGridLocalization"
 import { getMuiDataGridLocale } from "../../util/i18n"
 import { useTranslation } from "react-i18next"
 
@@ -16,7 +17,7 @@ const PAGINATION_SELECT_MENU_PROPS = {
 
 export function LazyDataGrid(props: DataGridProps) {
   const { i18n } = useTranslation()
-  const [gridLocale, setGridLocale] = useState<any>(undefined)
+  const [gridLocale, setGridLocale] = useState<Localization | undefined>(undefined)
 
   useEffect(() => {
     getMuiDataGridLocale(i18n.language).then(setGridLocale)

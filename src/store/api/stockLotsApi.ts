@@ -83,6 +83,7 @@ export interface AllocationGroup {
   listing: AllocationListingData | null
   allocations: Allocation[]
   total_allocated: number
+  status?: string
 }
 
 export interface ManualAllocationInput {

@@ -3,10 +3,10 @@ import { Grid, GridProps } from "@mui/material"
 
 interface LazySectionProps {
   // Lazy-loaded component
-  component: React.LazyExoticComponent<React.ComponentType<any>>
+  component: React.LazyExoticComponent<React.ComponentType<Record<string, unknown>>>
 
   // Props to pass to the component
-  componentProps?: Record<string, any>
+  componentProps?: Record<string, unknown>
 
   // Loading state
   skeleton: React.ComponentType

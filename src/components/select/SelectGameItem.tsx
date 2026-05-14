@@ -357,7 +357,7 @@ export function SelectGameCategoryOption(props: {
   const category_value = useMemo(
     () =>
       categories
-        ? (categories || []).find((o: any) => o.subcategory === props.item_type) || {
+        ? (categories || []).find((o) => o.subcategory === props.item_type) || {
             category: t("market.other_category", "Other"),
             subcategory: t("market.other_category", "Other"),
           }

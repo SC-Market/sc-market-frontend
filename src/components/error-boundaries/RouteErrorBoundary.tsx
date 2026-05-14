@@ -58,7 +58,7 @@ export function RouteErrorBoundary({
     // Report to Bugsnag
     const bugsnag = getBugsnagInstance()
     if (bugsnag) {
-      bugsnag.notify(error, (event: any) => {
+      bugsnag.notify(error, (event) => {
         event.context = `Route: ${location.pathname}`
         event.addMetadata("errorBoundary", {
           type: "route",

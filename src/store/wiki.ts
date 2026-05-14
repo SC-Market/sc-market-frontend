@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 import { serviceApi } from "./service"
 
-const temp_sample: any = {
+const temp_sample = {
   pageid: 35591,
   ns: 6,
   title: "File:Demeco - on grey background - Left.jpg",

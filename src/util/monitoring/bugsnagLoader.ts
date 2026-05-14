@@ -10,8 +10,11 @@ import React from "react"
 import { onPageInteractive } from "../scripts/delayedScriptLoader"
 
 let bugsnagInitialized = false
-let bugsnagInstance: any = null
-let bugsnagReactPlugin: any = null
+import type { Client } from "@bugsnag/core"
+import type { BugsnagPluginReactResult } from "@bugsnag/plugin-react"
+
+let bugsnagInstance: Client | null = null
+let bugsnagReactPlugin: BugsnagPluginReactResult | null = null
 
 /**
  * Initialize Bugsnag asynchronously after page is interactive.
@@ -71,7 +74,7 @@ export async function initializeBugsnagAsync(apiKey: string): Promise<void> {
  */
 export function getBugsnagErrorBoundary(
   ReactInstance: typeof React,
-): React.ComponentType<any> {
+): React.ComponentType<{ children: React.ReactNode }> {
   if (bugsnagReactPlugin) {
     return bugsnagReactPlugin.createErrorBoundary(ReactInstance)
   }
@@ -113,11 +116,21 @@ export function getBugsnagErrorBoundary(
             null,
             "Please refresh the page to continue.",
           ),
-          this.state.error && ReactInstance.createElement(
-            "pre",
-            { style: { fontSize: "12px", color: "#888", textAlign: "left", maxWidth: "600px", margin: "10px auto", overflow: "auto" } },
-            this.state.error.message,
-          ),
+          this.state.error &&
+            ReactInstance.createElement(
+              "pre",
+              {
+                style: {
+                  fontSize: "12px",
+                  color: "#888",
+                  textAlign: "left",
+                  maxWidth: "600px",
+                  margin: "10px auto",
+                  overflow: "auto",
+                },
+              },
+              this.state.error.message,
+            ),
           ReactInstance.createElement(
             "button",
             {
@@ -164,10 +177,10 @@ export function isBugsnagInitialized(): boolean {
  */
 export function notifyBugsnag(
   error: Error,
-  metadata?: Record<string, any>,
+  metadata?: Record<string, unknown>,
 ): void {
   if (bugsnagInstance) {
-    bugsnagInstance.notify(error, (event: any) => {
+    bugsnagInstance.notify(error, (event) => {
       if (metadata) {
         event.addMetadata("custom", metadata)
       }
