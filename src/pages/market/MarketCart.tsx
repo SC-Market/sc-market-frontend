@@ -413,8 +413,6 @@ export function CartSellerEntry(props: {
         })
       } catch (error) {
         const errorMessage =
-          (error as any)?.error ||
-          (error as any)?.data?.error ||
           (error instanceof Error ? error.message : String(error))
         issueAlert({
           message: `${t("availability.failed")} ${errorMessage}`,

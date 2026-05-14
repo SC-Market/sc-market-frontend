@@ -217,7 +217,7 @@ function MessageHeader(props: {
               />
             )}
             value={targetObject}
-            onChange={(event: any, newValue) => {
+            onChange={(_event: React.SyntheticEvent, newValue) => {
               setTargetObject(newValue)
               setError(null)
             }}

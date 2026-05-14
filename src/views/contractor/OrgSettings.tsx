@@ -37,7 +37,7 @@ export function OrgSettings() {
     try {
       await updateContractor({
         contractor: contractor.spectrum_id,
-        body: { locale: language as any },
+        body: { locale: language as "en" | "es" | "uk" | "zh-CN" | "fr" | "de" | "ja" },
       }).unwrap()
       setContractor({ ...contractor, locale: language })
     } catch (_err) {

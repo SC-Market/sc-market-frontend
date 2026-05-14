@@ -24,9 +24,9 @@ export function AdminExpressVerify() {
   const issueAlert = useAlertHook()
 
   const callback = useCallback(async () => {
-    const res: { data?: any; error?: any } = await expressVerify(state)
+    const res = await expressVerify(state)
 
-    if (res?.data && !res?.error) {
+    if ("data" in res && !("error" in res)) {
       setState({ owner_discord_id: "", owner_username: "", spectrum_id: "" })
 
       issueAlert({

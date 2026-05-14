@@ -522,7 +522,7 @@ function DisplayStockV2({
       }
     } else if (existing) {
       try {
-        const req: any = {}
+        const req: Record<string, string | number> = {}
         if (editing.status !== undefined && editing.status !== existing.status) req.status = editing.status
         if (editing.price !== undefined && editing.price !== existing.price_min) req.base_price = editing.price
         if (Object.keys(req).length > 0) {

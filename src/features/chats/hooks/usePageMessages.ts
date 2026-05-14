@@ -6,12 +6,13 @@ import {
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
 import { useEffect } from "react"
 import type { Chat } from "../domain/types"
+import type { UserProfileState } from "../../../hooks/login/UserProfile"
 
 export interface UsePageMessagesResult {
   data:
     | {
         chat: Chat
-        profile: any
+        profile: UserProfileState | undefined
       }
     | undefined
   isLoading: boolean

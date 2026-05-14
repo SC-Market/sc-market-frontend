@@ -63,9 +63,10 @@ export function Availability() {
           message: t("availability.updated"),
           severity: "success",
         })
-      } catch (error: any) {
+      } catch (error: unknown) {
+        const message = error instanceof Error ? error.message : String(error)
         issueAlert({
-          message: `${t("availability.failed")} ${error?.error || error?.data?.error || error}`,
+          message: `${t("availability.failed")} ${message}`,
           severity: "error",
         })
       }

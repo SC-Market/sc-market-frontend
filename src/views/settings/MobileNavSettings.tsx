@@ -23,7 +23,7 @@ import {
   DashboardCustomizeRounded,
   AssignmentTurnedInRounded,
 } from "@mui/icons-material"
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd"
+import { DragDropContext, Droppable, Draggable, type DropResult } from "@hello-pangea/dnd"
 import { useTranslation } from "react-i18next"
 import { CURRENT_CUSTOM_ORG } from "../../hooks/contractor/CustomDomain"
 import { getDisabledTabs } from "../../components/sidebar/utils/sidebarFilters"
@@ -148,7 +148,7 @@ export function MobileNavSettings() {
     return saved ? JSON.parse(saved) : DEFAULT_TABS
   })
 
-  const handleDragEnd = (result: any) => {
+  const handleDragEnd = (result: DropResult) => {
     if (!result.destination) return
 
     const items = Array.from(selectedTabs)

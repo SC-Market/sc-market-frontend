@@ -56,8 +56,8 @@ export function useWhiteLabelSettings() {
   const [updateConfig, { isLoading: configSaving }] = useUpdateWhitelabelConfigMutation()
   const [updateSidebar, { isLoading: sidebarSaving }] = useUpdateWhitelabelSidebarMutation()
 
-  const config = (configRes as any)?.data
-  const sidebarItems: SidebarConfigItem[] = (sidebarRes as any)?.data ?? []
+  const config = configRes?.data
+  const sidebarItems: SidebarConfigItem[] = sidebarRes?.data ?? []
 
   // Config state
   const [focusMode, setFocusMode] = useState<"public" | "internal">("public")

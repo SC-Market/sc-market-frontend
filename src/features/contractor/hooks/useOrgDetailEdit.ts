@@ -27,11 +27,12 @@ export function useOrgDetailEdit(contractor: Contractor) {
   const [uploadBanner, { isLoading: isUploadingBanner }] = useContractorUploadBannerMutation()
 
   const submitUpdate = useCallback(async (data: { description?: string; tags?: string[]; site_url?: string; name?: string }) => {
-    const res: { data?: any; error?: any } = await updateContractor({ contractor: contractor.spectrum_id, body: data })
-    if (res?.data && !res?.error) {
+    const res = await updateContractor({ contractor: contractor.spectrum_id, body: data })
+    if ("data" in res && !("error" in res)) {
       issueAlert({ message: t("orgDetailEdit.submitted"), severity: "success" })
     } else {
-      issueAlert({ message: t("orgDetailEdit.failed_submit", { reason: res.error?.error || res.error?.data?.error || res.error || "" }), severity: "error" })
+      const error = "error" in res ? res.error as { error?: string; data?: { error?: string } } : undefined
+      issueAlert({ message: t("orgDetailEdit.failed_submit", { reason: error?.error || error?.data?.error || "" }), severity: "error" })
     }
   }, [updateContractor, contractor.spectrum_id, issueAlert, t])
 

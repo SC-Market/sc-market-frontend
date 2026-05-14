@@ -15,7 +15,10 @@ export function createDynamicImport<P extends object = object>(
 ) {
   const { fallback = <PageFallback />, errorFallback } = options
 
-  const LazyComponent = React.lazy(importFn)
+  // React.lazy requires ComponentType which is contravariant in props.
+  // We cast here because callers may pass re-exported lazy components
+  // that TypeScript can't prove are assignable due to variance.
+  const LazyComponent = React.lazy(importFn as () => Promise<{ default: React.ComponentType<P> }>)
 
   return function DynamicComponent(props: P) {
     const defaultErrorFallback = (

@@ -101,7 +101,7 @@ export const pushNotificationApi = serviceApi.injectEndpoints({
       query: (body) => ({
         url: `${baseUrl}/preferences`,
         method: "PATCH",
-        body: Array.isArray((body as any).preferences) ? body : body,
+        body: "preferences" in body && Array.isArray(body.preferences) ? body : body,
       }),
       invalidatesTags: ["PushPreferences" as const],
     }),

@@ -75,7 +75,7 @@ export function BlueprintDetail() {
 
   // Group slot modifiers by slot_name
   const modsBySlot = useMemo(() => {
-    const map = new Map<string, any[]>()
+    const map = new Map<string, SlotModifier[]>()
     for (const m of slotModifiers) {
       if (!map.has(m.slot_name)) map.set(m.slot_name, [])
       map.get(m.slot_name)!.push(m)
@@ -292,7 +292,7 @@ export function BlueprintDetail() {
             </Stack>
           )}
           <Stack spacing={1} sx={{ mb: 1 }}>
-            {ingredients.map((ing: any, idx: number) => {
+            {ingredients.map((ing: BlueprintIngredient, idx: number) => {
               const qv = qualities[idx] ?? Math.round((qualityRanges[idx]?.min + qualityRanges[idx]?.max) / 2)
               const qr = qualityRanges[idx] || { min: 0, max: 1000 }
               const color = getCommodityColor(ing.game_item?.sub_type) || "#616161"
@@ -398,7 +398,7 @@ export function BlueprintDetail() {
               <Divider />
               <Typography variant="subtitle2">Recovered Materials{craftQty > 1 && ` (×${craftQty})`}</Typography>
               <Stack spacing={0.75}>
-                {ingredients.map((ing: any, i: number) => {
+                {ingredients.map((ing: BlueprintIngredient, i: number) => {
                   const recovered = parseFloat(String(ing.quantity_required)) * 0.5 * craftQty
                   return (
                     <Stack key={i} direction="row" spacing={1} alignItems="center">

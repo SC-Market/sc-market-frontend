@@ -54,11 +54,12 @@ export function useEmailSettings() {
           message: `Preference updated for ${preference.action_name || (preference as EmailPreference).action_name || "notification"}`,
           severity: "success",
         })
-      } catch (error: any) {
+      } catch (error) {
+        const err = error as { data?: { error?: { message?: string } }; message?: string }
         issueAlert({
           message:
-            error?.data?.error?.message ||
-            error?.message ||
+            err?.data?.error?.message ||
+            err?.message ||
             "Failed to update preference",
           severity: "error",
         })
@@ -102,11 +103,12 @@ export function useEmailSettings() {
             severity: "success",
           })
         }
-      } catch (error: any) {
+      } catch (error) {
+        const err = error as { data?: { error?: { message?: string } }; message?: string }
         issueAlert({
           message:
-            error?.data?.error?.message ||
-            error?.message ||
+            err?.data?.error?.message ||
+            err?.message ||
             "Failed to update preferences",
           severity: "error",
         })

@@ -59,27 +59,29 @@ export function useMemberAssign(orderId: string) {
 
   const updateAssignment = useCallback(async () => {
     if (!targetObject) return
-    const res: { data?: any; error?: any } = await assignUser({
+    const res = await assignUser({
       order_id: orderId,
       username: targetObject.username,
     })
-    if (res?.data && !res?.error) {
+    if ("data" in res && !("error" in res)) {
       issueAlert({ message: t("memberAssignArea.assigned"), severity: "success" })
     } else {
+      const error = "error" in res ? res.error as { error?: string; data?: { error?: string } } : undefined
       issueAlert({
-        message: `${t("memberAssignArea.failed_assign")} ${res.error?.error || res.error?.data?.error || res.error}`,
+        message: `${t("memberAssignArea.failed_assign")} ${error?.error || error?.data?.error || ""}`,
         severity: "error",
       })
     }
   }, [assignUser, orderId, issueAlert, targetObject, t])
 
   const removeAssignment = useCallback(async () => {
-    const res: { data?: any; error?: any } = await unassignUser({ order_id: orderId })
-    if (res?.data && !res?.error) {
+    const res = await unassignUser({ order_id: orderId })
+    if ("data" in res && !("error" in res)) {
       issueAlert({ message: t("memberAssignArea.unassigned"), severity: "success" })
     } else {
+      const error = "error" in res ? res.error as { error?: string; data?: { error?: string } } : undefined
       issueAlert({
-        message: `${t("memberAssignArea.failed_unassign")} ${res.error?.error || res.error?.data?.error || res.error}`,
+        message: `${t("memberAssignArea.failed_unassign")} ${error?.error || error?.data?.error || ""}`,
         severity: "error",
       })
     }

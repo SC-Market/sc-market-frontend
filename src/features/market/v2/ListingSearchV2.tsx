@@ -32,7 +32,7 @@ import { UnderlineLink } from "../../../components/typography/UnderlineLink";
 import { MarketListingRating } from "../../../components/rating/ListingRating";
 import { HideOnScroll, MarketNavArea } from "../components/MarketNavArea";
 import { useSearchListingsQuery, useSearchResourcesQuery } from "../../../store/api/v2/market";
-import type { ListingSearchResult } from "../../../store/api/v2/market";
+import type { ListingSearchResult, SearchListingsApiArg } from "../../../store/api/v2/market";
 import { formatPriceRange } from "../../../util/formatPrice";
 import { UnifiedSearchBar, marketParamsToTokens, marketTokensToParams, type SearchToken } from "../../../components/game-data/UnifiedSearchBar";
 import { QualityFilter } from "../../../components/market/v2/QualityFilter";
@@ -101,7 +101,7 @@ export function ListingSearchV2() {
     const priceMax = searchParams.get("price_max") || searchParams.get("maxCost");
     const page = searchParams.get("page") || searchParams.get("index");
     const pageSize = searchParams.get("page_size");
-    const sortBy = searchParams.get("sort_by") || searchParams.get("sort") as any;
+    const sortBy = (searchParams.get("sort_by") || searchParams.get("sort")) as SearchListingsApiArg["sortBy"];
     const sortOrder = searchParams.get("sort_order") as "asc" | "desc" | undefined;
     const itemType = searchParams.get("item_type") || searchParams.get("type") || undefined;
     const quantityMin = searchParams.get("quantity_min") || searchParams.get("quantityAvailable");

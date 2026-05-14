@@ -53,7 +53,7 @@ export function MyListingCardV2({ listing, index }: MyListingCardV2Props) {
     return `Tier ${listing.quality_tier_min}-${listing.quality_tier_max}`
   }, [listing.quality_tier_min, listing.quality_tier_max])
 
-  const statusColor = (s: string) => {
+  const statusColor = (s: string): "success" | "info" | "warning" | "error" | "default" => {
     switch (s.toLowerCase()) {
       case "active": return "success"
       case "sold": return "info"
@@ -96,7 +96,7 @@ export function MyListingCardV2({ listing, index }: MyListingCardV2Props) {
             <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <Chip
                 label={listing.status.toUpperCase()}
-                color={statusColor(listing.status) as any}
+                color={statusColor(listing.status)}
                 size="small"
               />
               <Button

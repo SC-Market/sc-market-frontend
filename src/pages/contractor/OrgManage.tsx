@@ -238,13 +238,13 @@ export function OrgManage() {
           <TabPanel value={page} index={"theme"}>
             <ThemeEditor
               initialThemeData={
-                (orgTheme as any)?.data?.theme_data ?? {
+                orgTheme?.data?.theme_data ?? {
                   light: {},
                   dark: {},
                 }
               }
               initialFaviconUrl={
-                (orgTheme as any)?.data?.favicon_url ?? null
+                orgTheme?.data?.favicon_url ?? null
               }
               onSave={async (data) => {
                 await updateOrgTheme({

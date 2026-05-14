@@ -1,5 +1,7 @@
 import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
+import type { Contractor } from "../domain/types"
+import type { UserProfileState } from "../../../hooks/login/UserProfile"
 
 /**
  * Page hook interface for consistent data fetching patterns.
@@ -16,8 +18,8 @@ export interface UsePageResult<T> {
  * Page data structure for org manage page.
  */
 export interface OrgManagePageData {
-  contractor: any
-  profile: any
+  contractor: Contractor
+  profile: UserProfileState
 }
 
 /**

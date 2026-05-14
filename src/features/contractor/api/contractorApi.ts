@@ -709,7 +709,7 @@ export const contractorsApi = serviceApi.injectEndpoints({
     >({
       query: (params) => {
         const { language_codes, ...restParams } = params
-        const queryParams: any = { ...restParams }
+        const queryParams: Record<string, string | number | string[]> = { ...restParams }
         if (language_codes) {
           queryParams.language_codes = language_codes
         }

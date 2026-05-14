@@ -14,20 +14,21 @@ export function usePageImportFleet() {
 
     try {
       const content = await selectedFile.text()
-      const res: { data?: any; error?: any } = await uploadFleetFile(
+      const res = await uploadFleetFile(
         JSON.parse(content || "[]"),
       )
 
-      if (res?.data && !res?.error) {
+      if ("data" in res && !("error" in res)) {
         issueAlert({
           message: t("ships.import.submitted"),
           severity: "success",
         })
       } else {
+        const error = "error" in res ? res.error as { error?: string; data?: { error?: string } } : undefined
         issueAlert({
           message: t("ships.import.failed", {
             error:
-              res.error?.error || res.error?.data?.error || res.error || "",
+              error?.error || error?.data?.error || "",
           }),
           severity: "error",
         })

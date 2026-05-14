@@ -117,7 +117,7 @@ export function QualityDistributionChart({
   }, [data])
 
   // Custom tooltip formatter
-  const tooltipFormatter = (value: number | null, context: any) => {
+  const tooltipFormatter = (value: number | null, context: { dataIndex: number }) => {
     if (value === null || !chartData[context.dataIndex]) {
       return ""
     }

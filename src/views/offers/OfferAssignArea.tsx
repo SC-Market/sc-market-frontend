@@ -79,12 +79,12 @@ export function OfferAssignArea(props: { offer: OfferSession }) {
       return
     }
 
-    const res: { data?: any; error?: any } = await assignUser({
+    const res = await assignUser({
       session_id: offer.id,
       username: targetObject.username!,
     })
 
-    if (res?.data && !res?.error) {
+    if ("data" in res && !("error" in res)) {
       issueAlert({
         message: t("memberAssignArea.assigned"),
         severity: "success",
@@ -100,11 +100,11 @@ export function OfferAssignArea(props: { offer: OfferSession }) {
   }, [assignUser, offer.id, issueAlert, targetObject, t])
 
   const removeAssignment = useCallback(async () => {
-    const res: { data?: any; error?: any } = await unassignUser({
+    const res = await unassignUser({
       session_id: offer.id,
     })
 
-    if (res?.data && !res?.error) {
+    if ("data" in res && !("error" in res)) {
       issueAlert({
         message: t("memberAssignArea.unassigned"),
         severity: "success",
@@ -158,7 +158,7 @@ export function OfferAssignArea(props: { offer: OfferSession }) {
           )}
           value={targetObject}
           onChange={(
-            event: any,
+            _event: React.SyntheticEvent,
             newValue: { display_name: string; username: string } | null,
           ) => {
             setTargetObject(newValue)

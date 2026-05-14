@@ -6,7 +6,7 @@ import {
   useDeleteAdminAlertMutation,
 } from "../api/adminApi"
 import { useSearchContractorsQuery } from "../../contractor/api/contractorApi"
-import { useAlertHook } from "../../../hooks/alert/AlertHook"
+import { useAlertHook, type UnwrappedErrorInterface } from "../../../hooks/alert/AlertHook"
 import { useTranslation } from "react-i18next"
 import type { AdminAlert, AdminAlertCreate } from "../../../datatypes/AdminAlert"
 import type { MinimalContractor } from "../../contractor/domain/types"
@@ -78,7 +78,7 @@ export function useAdminAlerts() {
   }, [])
 
   const handleTargetTypeChange = useCallback((targetType: string) => {
-    setFormData((prev) => ({ ...prev, target_type: targetType as any, ...(targetType !== "specific_org" ? { target_spectrum_id: null } : {}) }))
+    setFormData((prev) => ({ ...prev, target_type: targetType as AdminAlertCreate["target_type"], ...(targetType !== "specific_org" ? { target_spectrum_id: null } : {}) }))
     if (targetType !== "specific_org") { setSelectedContractor(null); setContractorError("") }
   }, [])
 
@@ -111,7 +111,7 @@ export function useAdminAlerts() {
     }
     createAlertMut(formData).unwrap()
       .then(() => { issueAlert({ message: t("admin.alerts.created", "Alert created successfully"), severity: "success" }); handleCloseModals() })
-      .catch((err: any) => issueAlert(err))
+      .catch((err: UnwrappedErrorInterface) => issueAlert(err))
   }, [formData, linkError, createAlertMut, issueAlert, handleCloseModals, t])
 
   const handleUpdateAlert = useCallback(() => {
@@ -121,14 +121,14 @@ export function useAdminAlerts() {
     }
     updateAlertMut({ alertId: selectedAlert.alert_id, data: formData }).unwrap()
       .then(() => { issueAlert({ message: t("admin.alerts.updated", "Alert updated successfully"), severity: "success" }); handleCloseModals() })
-      .catch((err: any) => issueAlert(err))
+      .catch((err: UnwrappedErrorInterface) => issueAlert(err))
   }, [selectedAlert, formData, linkError, updateAlertMut, issueAlert, handleCloseModals, t])
 
   const handleDeleteAlert = useCallback(() => {
     if (!selectedAlert) return
     deleteAlertMut(selectedAlert.alert_id).unwrap()
       .then(() => { issueAlert({ message: t("admin.alerts.deleted", "Alert deleted successfully"), severity: "success" }); handleCloseModals() })
-      .catch((err: any) => issueAlert(err))
+      .catch((err: UnwrappedErrorInterface) => issueAlert(err))
   }, [selectedAlert, deleteAlertMut, issueAlert, handleCloseModals, t])
 
   const rows = useMemo(() => {

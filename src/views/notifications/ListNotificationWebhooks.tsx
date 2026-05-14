@@ -58,7 +58,7 @@ export function WebhookRow(props: {
 
   const submitDelete = useCallback(async () => {
     // event.preventDefault();
-    let res: { data?: any; error?: any }
+    let res
     if (props.org) {
       res = await deleteContractorWebhook({
         contractor: currentOrg!.spectrum_id,
@@ -70,7 +70,7 @@ export function WebhookRow(props: {
       })
     }
 
-    if (res?.data && !res?.error) {
+    if ("data" in res && !("error" in res)) {
       issueAlert({
         message: t("Webhooks.submitted"),
         severity: "success",

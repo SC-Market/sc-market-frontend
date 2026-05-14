@@ -62,7 +62,7 @@ export function MemberAssignArea(props: { order: Order }) {
           )}
           value={targetObject}
           onChange={(
-            event: any,
+            _event: React.SyntheticEvent,
             newValue: { display_name: string; username: string } | null,
           ) => {
             setTargetObject(newValue)

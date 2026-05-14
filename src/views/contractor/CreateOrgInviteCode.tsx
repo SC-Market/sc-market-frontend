@@ -18,9 +18,9 @@ export function CreateOrgInviteCode() {
   const issueAlert = useAlertHook()
 
   const submitCreateForm = useCallback(
-    async (event: any) => {
+    async (_event: React.SyntheticEvent) => {
       // event.preventDefault();
-      const res: { data?: any; error?: any } = await createContractorInvite({
+      const res = await createContractorInvite({
         contractor: currentOrg!.spectrum_id,
         body: {
           max_uses: maxUses,
@@ -71,7 +71,7 @@ export function CreateOrgInviteCode() {
           label={t("inviteCodes.max_uses")}
           helperText={t("inviteCodes.max_uses_helper")}
           value={maxUses}
-          onChange={(event: any) => {
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
             setMaxUses(+event.target.value || 0)
           }}
         />

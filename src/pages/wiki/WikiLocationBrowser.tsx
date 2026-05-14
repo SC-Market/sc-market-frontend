@@ -103,7 +103,7 @@ function MiningLocationSummary({ locationCode }: { locationCode: string }) {
           Mining Resources
         </Typography>
       </Stack>
-      {(data.groups || []).map((g: any) => (
+      {(data.groups || []).map((g) => (
         <Box key={g.groupName} sx={{ mb: 0.5 }}>
           <Typography
             variant="caption"
@@ -116,7 +116,7 @@ function MiningLocationSummary({ locationCode }: { locationCode: string }) {
             ({g.groupProbability}%)
           </Typography>
           <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap>
-            {(g.ores || []).slice(0, 6).map((ore: any) => (
+            {(g.ores || []).slice(0, 6).map((ore) => (
               <Chip
                 key={ore.presetName}
                 label={`${ore.elementName || ore.presetName} ${ore.relativeProbability?.toFixed(1)}%`}

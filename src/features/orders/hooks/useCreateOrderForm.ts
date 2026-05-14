@@ -132,7 +132,8 @@ export function useCreateOrderForm(params: UseCreateOrderFormParams) {
         setIsAvailabilityModalOpen(false)
         issueAlert({ message: t("availability.updated"), severity: "success" })
       } catch (error) {
-        const errorMessage = (error as any)?.error || (error as any)?.data?.error || (error instanceof Error ? error.message : String(error))
+        const err = error as { error?: string; data?: { error?: string } }
+        const errorMessage = err?.error || err?.data?.error || (error instanceof Error ? error.message : String(error))
         issueAlert({ message: `${t("availability.failed")} ${errorMessage}`, severity: "error" })
       }
     },

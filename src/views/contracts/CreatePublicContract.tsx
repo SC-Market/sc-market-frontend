@@ -41,7 +41,7 @@ export function CreatePublicContract() {
 
   const navigate = useNavigate()
   const submitOrder = useCallback(
-    async (event: any) => {
+    async (_event: React.SyntheticEvent) => {
       // event.preventDefault();
       createPublicContract({
         title,
@@ -235,7 +235,7 @@ export function CreatePublicContract() {
                   select
                   label={t("createPublicContract.payment_type")}
                   value={paymentType}
-                  onChange={(event: any) => {
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                     setPaymentType(event.target.value)
                   }}
                   fullWidth

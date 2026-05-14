@@ -125,7 +125,7 @@ export function Contractors() {
             </Grid>
           ) : pageData.data && pageData.data.items.length > 0 ? (
             <Grid container spacing={2}>
-              {pageData.data.items.map((item: any, index: number) => (
+              {pageData.data.items.map((item, index) => (
                 <ContractorListItem
                   contractor={item}
                   key={item.name}

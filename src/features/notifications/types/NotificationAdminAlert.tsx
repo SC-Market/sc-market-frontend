@@ -14,7 +14,7 @@ export function NotificationAdminAlert(props: { notif: Notification }) {
 
   const alertEntity =
     notif.entity && typeof notif.entity === "object" && "title" in notif.entity
-      ? (notif.entity as any)
+      ? (notif.entity as { title: string; content?: string; link?: string })
       : null
 
   const handleClick = async () => {

@@ -119,10 +119,11 @@ export function useCreateServiceForm(service?: Service) {
       starmapApi.endpoints.searchStarmap.initiate({ query }),
     )
     if (!result.data) return []
-    const data = result.data as any
+    const responseData = result.data as unknown as { results?: StarmapObject[]; objects?: { resultset?: StarmapObject[] } }
+    const resultList: StarmapObject[] = responseData.objects?.resultset || responseData.results || []
     const extended: StarmapObject[] = []
     await Promise.all(
-      (data.objects?.resultset || data.results || []).map(async (obj: StarmapObject) => {
+      resultList.map(async (obj) => {
         if (obj.type === "SATELLITE") {
           const planetNum = obj.designation.replace(/\D/g, "")
           const planetDes = `${obj.star_system.name} ${romanize(parseInt(planetNum))}`
@@ -130,7 +131,7 @@ export function useCreateServiceForm(service?: Service) {
         }
       }),
     )
-    extended.push(...(data.objects?.resultset || data.results || []))
+    extended.push(...resultList)
     return extended
   }, [])
 
@@ -211,7 +212,7 @@ export function useCreateServiceForm(service?: Service) {
       })
         .unwrap()
         .then(async (result) => {
-          const serviceId = (result as any).service_id
+          const serviceId = result.service_id
           if (uploadedFiles.length > 0) {
             uploadServicePhotos({ service_id: serviceId, photos: uploadedFiles })
               .unwrap()

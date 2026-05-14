@@ -21,7 +21,7 @@ import { useTheme } from "@mui/material/styles"
 import { useNavigate, useSearchParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
-import { useSearchGameItemAggregatesQuery } from "../../../store/api/v2/market"
+import { useSearchGameItemAggregatesQuery, type GameItemAggregate, type SearchGameItemAggregatesApiArg } from "../../../store/api/v2/market"
 import { FALLBACK_IMAGE_URL } from "../../../util/constants"
 import { QualityBadge } from "../../../components/market/v2/QualityBadge"
 import { HideOnScroll, MarketNavArea } from "../components/MarketNavArea"
@@ -137,7 +137,7 @@ function BulkMobileSidebar() {
 
 // ── Aggregate Card ─────────────────────────────────────────────────────
 
-function AggregateCard({ item }: { item: any }) {
+function AggregateCard({ item }: { item: GameItemAggregate }) {
   const theme = useTheme<ExtendedTheme>()
   const navigate = useNavigate()
 
@@ -205,8 +205,8 @@ export function BulkItemsPageV2() {
     priceMax: searchParams.get("price_max") ? Number(searchParams.get("price_max")) : undefined,
     quantityMin: searchParams.get("quantity_min") ? Number(searchParams.get("quantity_min")) : undefined,
     quantityMax: searchParams.get("quantity_max") ? Number(searchParams.get("quantity_max")) : undefined,
-    sortBy: (searchParams.get("sort_by") as any) || "quantity",
-    sortOrder: (searchParams.get("sort_order") as any) || "desc",
+    sortBy: (searchParams.get("sort_by") as SearchGameItemAggregatesApiArg["sortBy"]) || "quantity",
+    sortOrder: (searchParams.get("sort_order") as SearchGameItemAggregatesApiArg["sortOrder"]) || "desc",
     page: Number(searchParams.get("page")) || 1,
     pageSize: 24,
   }), [searchParams])

@@ -212,7 +212,7 @@ export function AdminModerationView() {
             <Select
               value={statusFilter}
               label={t("admin.moderation.filter.status", "Status Filter")}
-              onChange={(e) => setStatusFilter(e.target.value as any)}
+              onChange={(e) => setStatusFilter(e.target.value as typeof statusFilter)}
             >
               <MenuItem value="">All Statuses</MenuItem>
               <MenuItem value="pending">Pending</MenuItem>

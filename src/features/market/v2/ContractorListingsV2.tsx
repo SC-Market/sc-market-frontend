@@ -315,7 +315,7 @@ function ContractorListingCard({ listing, index, canManage }: ContractorListingC
   }, [listing.quality_tier_min, listing.quality_tier_max]);
 
   // Get quality tier color
-  const getQualityColor = (tier: number | null | undefined) => {
+  const getQualityColor = (tier: number | null | undefined): "default" | "success" | "info" | "primary" | "warning" | "error" => {
     if (!tier) return "default";
     if (tier >= 5) return "success";
     if (tier >= 4) return "info";
@@ -435,7 +435,7 @@ function ContractorListingCard({ listing, index, canManage }: ContractorListingC
                 <Box sx={{ display: "flex", alignItems: "center", gap: 1, mt: 0.5 }}>
                   <Chip
                     label={qualityRange}
-                    color={getQualityColor(listing.quality_tier_max) as any}
+                    color={getQualityColor(listing.quality_tier_max)}
                     size="small"
                   />
                 </Box>

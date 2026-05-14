@@ -104,7 +104,7 @@ export interface OfferVariantItemV2 {
   variant_id: string
   quantity: number
   price_per_unit: number
-  attributes: Record<string, any>
+  attributes: Record<string, string | number | boolean>
   display_name: string
   short_name: string
 }

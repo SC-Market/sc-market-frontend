@@ -164,7 +164,7 @@ export function AdminAttributeDefinitionsView() {
                 onChange={(e) =>
                   setFormData({
                     ...formData,
-                    attribute_type: e.target.value as any,
+                    attribute_type: e.target.value as AttributeDefinition["attribute_type"],
                   })
                 }
               >
@@ -318,7 +318,7 @@ export function AdminAttributeDefinitionsView() {
                 onChange={(e) =>
                   setFormData({
                     ...formData,
-                    attribute_type: e.target.value as any,
+                    attribute_type: e.target.value as AttributeDefinition["attribute_type"],
                   })
                 }
               >

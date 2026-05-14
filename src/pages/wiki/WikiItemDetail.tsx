@@ -33,7 +33,7 @@ import {
 import { useTheme } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
 import { useParams, useNavigate } from "react-router-dom"
-import { useGetItemDetailQuery, useSearchListingsQuery, useAddBlueprintToInventoryMutation, useRemoveBlueprintFromInventoryMutation } from "../../store/api/v2/market"
+import { useGetItemDetailQuery, useSearchListingsQuery, useAddBlueprintToInventoryMutation, useRemoveBlueprintFromInventoryMutation, type BlueprintReference } from "../../store/api/v2/market"
 import { ShoppingCart, Gavel } from "@mui/icons-material"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -195,7 +195,7 @@ export function WikiItemDetail() {
                             </TableCell>
                             <TableCell>
                               {typeof value === "object" && value !== null
-                                ? Object.entries(value as Record<string, any>).map(([k, v]) => (
+                                ? Object.entries(value as Record<string, unknown>).map(([k, v]) => (
                                     <Chip key={k} label={`${k}: ${v}`} size="small" variant="outlined" sx={{ mr: 0.5, mb: 0.5, height: 20, fontSize: "0.65rem" }} />
                                   ))
                                 : String(value)}
@@ -332,17 +332,17 @@ export function WikiItemDetail() {
                         </Button>
                         <Button
                           size="small"
-                          variant={((bp as any).user_owns) ? "contained" : "outlined"}
+                          variant={((bp as BlueprintReference & { user_owns?: boolean }).user_owns) ? "contained" : "outlined"}
                           sx={{ ml: 1 }}
                           onClick={() => {
-                            if ((bp as any).user_owns) {
+                            if ((bp as BlueprintReference & { user_owns?: boolean }).user_owns) {
                               removeFromInventory({ blueprintId: bp.blueprint_id }).catch(() => {})
                             } else {
                               addToInventory({ blueprintId: bp.blueprint_id, body: {} }).catch(() => {})
                             }
                           }}
                         >
-                          {(bp as any).user_owns ? "Owned ✓" : "Mark Owned"}
+                          {(bp as BlueprintReference & { user_owns?: boolean }).user_owns ? "Owned ✓" : "Mark Owned"}
                         </Button>
                       </Box>
                     </Paper>

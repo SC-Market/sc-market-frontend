@@ -181,8 +181,9 @@ export function AdminGameDataImportView() {
       await importGameData({ file, gameChannel, gameVersion: gameVersion || undefined }).unwrap()
       issueAlert({ message: "Import started", severity: "info" })
       refetch()
-    } catch (err: any) {
-      issueAlert({ message: err?.data?.error || err?.message || "Upload failed", severity: "error" })
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Upload failed"
+      issueAlert({ message, severity: "error" })
     }
   }
 
@@ -214,7 +215,7 @@ export function AdminGameDataImportView() {
       <Stack direction="row" spacing={2} sx={{ mb: 3 }}>
         <FormControl size="small" sx={{ minWidth: 120 }}>
           <InputLabel>Channel</InputLabel>
-          <Select value={gameChannel} label="Channel" onChange={(e) => setGameChannel(e.target.value as any)}>
+          <Select value={gameChannel} label="Channel" onChange={(e) => setGameChannel(e.target.value as typeof gameChannel)}>
             <MenuItem value="LIVE">LIVE</MenuItem>
             <MenuItem value="PTU">PTU</MenuItem>
             <MenuItem value="EPTU">EPTU</MenuItem>

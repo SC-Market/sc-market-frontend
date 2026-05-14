@@ -750,6 +750,22 @@ const router = createBrowserRouter([
                   ).AdminFeatureFlagDetail,
                 }),
               },
+              {
+                path: "/admin/supplier-roster",
+                lazy: async () => ({
+                  Component: (
+                    await import("./pages/admin/AdminSupplierRoster")
+                  ).AdminSupplierRoster,
+                }),
+              },
+              {
+                path: "/admin/requisitions",
+                lazy: async () => ({
+                  Component: (
+                    await import("./pages/admin/AdminRequisitions")
+                  ).AdminRequisitions,
+                }),
+              },
             ],
           },
           {

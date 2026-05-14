@@ -84,7 +84,7 @@ export function usePushSettings() {
         if (pushPreferences.length > 0) {
           await updatePreference({
             preferences: pushPreferences,
-          } as any).unwrap()
+          }).unwrap()
           issueAlert({
             message: `Updated ${pushPreferences.length} notification preference${pushPreferences.length !== 1 ? "s" : ""}`,
             severity: "success",

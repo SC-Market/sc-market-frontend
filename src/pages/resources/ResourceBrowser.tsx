@@ -89,7 +89,7 @@ export function ResourceBrowser() {
         size="small"
         label={t("resources.acquisition", "Acquisition")}
         value={acquisition}
-        onChange={(e) => { setAcquisition(e.target.value as any); setPage(1) }}
+        onChange={(e) => { setAcquisition(e.target.value as typeof acquisition); setPage(1) }}
       >
         <MenuItem value="">{t("common.all", "All")}</MenuItem>
         <MenuItem value="mined">{t("resources.mined", "Mined")}</MenuItem>

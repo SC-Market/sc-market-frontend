@@ -1,4 +1,5 @@
 import React from "react"
+import type { PaymentType } from "../../domain/types"
 import { Button, Grid, InputAdornment, MenuItem, TextField, Typography } from "@mui/material"
 import { Section } from "../../../../components/paper/Section"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
@@ -47,7 +48,7 @@ export function CostsSection({ isEditing }: { isEditing: boolean }) {
           <Grid item xs={12}>
             <TextField
               select label={t("CreateServiceForm.paymentType")} value={state.payment_type}
-              onChange={(e: any) => setState({ ...state, payment_type: e.target.value })}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => setState({ ...state, payment_type: e.target.value as PaymentType })}
               fullWidth aria-required="true"
               SelectProps={{ IconComponent: KeyboardArrowDownRoundedIcon }}
             >

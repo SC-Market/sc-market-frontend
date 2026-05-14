@@ -22,6 +22,8 @@ import LoadingButton from "@mui/lab/LoadingButton"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import { useGetContractorBySpectrumIDQuery } from "../../features/contractor/api/contractorApi"
 import { useManageContractors } from "../../features/contractor/hooks/useManageContractors"
+import type { MinimalContractor } from "../../features/contractor/domain/types"
+import type { UserProfileState } from "../../hooks/login/UserProfile"
 
 export function SettingsManageContractors() {
   const { t } = useTranslation()
@@ -192,7 +194,7 @@ export function SettingsManageContractors() {
             disablePortal
             value={transferSelectedUser}
             onChange={(
-              event: any,
+              _event: React.SyntheticEvent,
               newValue: {
                 display_name: string
                 username: string
@@ -257,8 +259,8 @@ export function SettingsManageContractors() {
 }
 
 function ContractorActions(props: {
-  row: any
-  profile: any
+  row: MinimalContractor & { roles: string[]; role: string; archived?: boolean }
+  profile: UserProfileState | undefined
   onTransfer: (spectrum_id: string, name: string) => void
   onArchive: (spectrum_id: string, name: string) => void
   onLeave: (spectrum_id: string) => void
@@ -269,7 +271,7 @@ function ContractorActions(props: {
 
   const ownerRole = contractor?.owner_role
   const userContractor = profile?.contractors?.find(
-    (c: any) => c.spectrum_id === contractor?.spectrum_id,
+    (c) => c.spectrum_id === contractor?.spectrum_id,
   )
   const isOwner = ownerRole && userContractor?.roles.find((r: string) => r === ownerRole)
 

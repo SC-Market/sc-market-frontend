@@ -46,7 +46,7 @@ export function AdminPremiumManagementView() {
   const [revokeOrgPremium, { isLoading: isRevoking }] =
     useRevokeOrgPremiumMutation()
 
-  const searchOrgs = ((searchResults as any)?.data ?? []) as MinimalContractor[]
+  const searchOrgs = searchResults?.data ?? []
 
   const handleGrant = async () => {
     if (!selectedOrg) return

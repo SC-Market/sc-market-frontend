@@ -429,7 +429,7 @@ export function ShoppingList() {
                               <Chip
                                 icon={stockStatus.icon}
                                 label={stockStatus.label}
-                                color={stockStatus.color as any}
+                                color={stockStatus.color as "success" | "warning" | "error"}
                                 size="small"
                                 variant="outlined"
                               />

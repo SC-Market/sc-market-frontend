@@ -165,10 +165,11 @@ export function OrderAllocationView({
         severity: "success",
         message: "Stock allocated successfully",
       })
-    } catch (error: any) {
+    } catch (error) {
+      const err = error as { data?: { message?: string } }
       issueAlert({
         severity: "error",
-        message: error?.data?.message || "Failed to allocate stock",
+        message: err?.data?.message || "Failed to allocate stock",
       })
     }
   }

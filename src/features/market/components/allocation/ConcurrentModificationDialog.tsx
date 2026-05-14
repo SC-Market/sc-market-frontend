@@ -28,8 +28,8 @@ interface ConcurrentModificationDialogProps {
   resourceType?: string
   conflictDetails?: {
     field: string
-    yourValue: any
-    currentValue: any
+    yourValue: string | number | boolean | null
+    currentValue: string | number | boolean | null
   }[]
 }
 

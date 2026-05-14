@@ -7,6 +7,7 @@ import { unwrapResponse } from "../../../store/api-utils"
 import {
   generateTempId,
   createOptimisticUpdate,
+  type OptimisticPatch,
 } from "../../../util/optimisticUpdates"
 
 // Re-export domain types for backward compatibility
@@ -69,7 +70,7 @@ export const offersApi = serviceApi.injectEndpoints({
     >({
       query: (queryParams) => {
         // Convert boolean filters to strings for query params
-        const params: any = { ...queryParams }
+        const params: Record<string, string | number | boolean | undefined> = { ...queryParams }
         if (params.has_market_listings !== undefined) {
           params.has_market_listings = String(params.has_market_listings)
         }
@@ -109,7 +110,7 @@ export const offersApi = serviceApi.injectEndpoints({
       async onQueryStarted(body, { dispatch, queryFulfilled, getState }) {
         await createOptimisticUpdate(
           (dispatch) => {
-            const patches: any[] = []
+            const patches: OptimisticPatch[] = []
 
             // Optimistically update offer session
             const sessionPatch = dispatch(
@@ -134,7 +135,7 @@ export const offersApi = serviceApi.injectEndpoints({
                       listing_id: ml.listing_id,
                       listing: {} as UniqueListing, // Will be filled by server
                     })),
-                    payment_type: body.payment_type as any,
+                    payment_type: body.payment_type as Offer["payment_type"],
                   }
                   draft.offers.push(newOffer)
                   draft.status = body.status
@@ -144,7 +145,7 @@ export const offersApi = serviceApi.injectEndpoints({
             patches.push(sessionPatch)
 
             // Optimistically update search results
-            const state = getState() as any
+            const state = getState() as { api?: { queries?: Record<string, { data?: { items?: OfferSessionStub[] }; originalArgs?: OfferSearchQuery }> } }
             const cachedQueries = state.api?.queries || {}
 
             Object.keys(cachedQueries).forEach((queryKey) => {

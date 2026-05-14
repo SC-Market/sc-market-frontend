@@ -63,7 +63,7 @@ export function AuthenticateRSI({
   const [tosAccepted, setTosAccepted] = useState(false)
 
   const submit = useCallback(
-    async (event: any) => {
+    async (_event: React.SyntheticEvent) => {
       if (!username || !tosAccepted) {
         setError(true)
         return

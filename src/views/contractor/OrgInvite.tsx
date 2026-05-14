@@ -48,7 +48,7 @@ export function OrgInvite() {
   const issueAlert = useAlertHook()
 
   const submitInviteForm = useCallback(
-    async (event: any) => {
+    async (_event: React.SyntheticEvent) => {
       // event.preventDefault();
       sendInvites({
         contractor: currentOrg?.spectrum_id!,
@@ -123,7 +123,7 @@ export function OrgInvite() {
             ))
           }
           value={choices}
-          onChange={(event: any, newValue) => {
+          onChange={(_event: React.SyntheticEvent, newValue) => {
             setChoices(newValue || [])
           }}
           inputValue={buffer}
@@ -144,7 +144,7 @@ export function OrgInvite() {
           color={"secondary"}
           label={t("orgInvite.note")}
           value={message}
-          onChange={(event: any) => {
+          onChange={(event: React.ChangeEvent<HTMLTextAreaElement>) => {
             setMessage(event.target.value)
           }}
         ></TextField>

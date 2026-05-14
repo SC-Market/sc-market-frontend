@@ -16,16 +16,17 @@ export function useAcceptApplicant(
   const { t } = useTranslation()
 
   return useCallback(async () => {
-    const res: { data?: any; error?: any } = await acceptApplicant({
+    const res = await acceptApplicant({
       order_id: orderId,
       contractor_id: applicant.orgSpectrumId,
       user_id: applicant.userUsername,
     })
-    if (res?.data && !res?.error) {
+    if ("data" in res && !("error" in res)) {
       issueAlert({ message: t("orderApplicantsArea.accepted"), severity: "success" })
     } else {
+      const error = "error" in res ? res.error as { error?: string; data?: { error?: string } } : undefined
       issueAlert({
-        message: `${t("orderApplicantsArea.failed_accept")} ${res.error?.error || res.error?.data?.error || res.error}`,
+        message: `${t("orderApplicantsArea.failed_accept")} ${error?.error || error?.data?.error || ""}`,
         severity: "error",
       })
     }
@@ -40,16 +41,17 @@ export function useApplyToOrder(orderId: string) {
   const { t } = useTranslation()
 
   const processApp = useCallback(async () => {
-    const res: { data?: any; error?: any } = await applyToOrder({
+    const res = await applyToOrder({
       order_id: orderId,
       contractor_id: currentOrg?.spectrum_id,
       message: appMessage,
     })
-    if (res?.data && !res?.error) {
+    if ("data" in res && !("error" in res)) {
       issueAlert({ message: t("orderApplicantsArea.applied"), severity: "success" })
     } else {
+      const error = "error" in res ? res.error as { error?: string; data?: { error?: string } } : undefined
       issueAlert({
-        message: `${t("orderApplicantsArea.failed_apply")} ${res.error?.error || res.error?.data?.error || res.error}`,
+        message: `${t("orderApplicantsArea.failed_apply")} ${error?.error || error?.data?.error || ""}`,
         severity: "error",
       })
     }
