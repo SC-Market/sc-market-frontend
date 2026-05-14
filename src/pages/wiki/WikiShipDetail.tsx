@@ -151,11 +151,29 @@ export function WikiShipDetail() {
                     />
                   )}
                   <Box sx={{ flex: 1 }}>
-                    <Stack direction="row" spacing={1} sx={{ mb: 2 }} flexWrap="wrap">
+                    <Stack direction="row" spacing={1} sx={{ mb: 1 }} flexWrap="wrap" useFlexGap>
                       {ship.manufacturer && <Chip label={ship.manufacturer} color="primary" />}
+                      {ship.career && <Chip label={ship.career} color="secondary" variant="outlined" />}
+                      {ship.role && <Chip label={ship.role} color="primary" variant="outlined" />}
                       {ship.focus && <Chip label={ship.focus} />}
                       {ship.size && <Chip label={ship.size} />}
                       {ship.movement_class && <Chip label={ship.movement_class} />}
+                    </Stack>
+                    <Stack direction="row" spacing={3} sx={{ mb: 2 }} flexWrap="wrap" useFlexGap>
+                      {ship.crew_size != null && (
+                        <Typography variant="body2" color="text.secondary">
+                          <strong>Crew:</strong> {ship.crew_size}
+                        </Typography>
+                      )}
+                      {(ship.length_m != null || ship.width_m != null || ship.height_m != null) && (
+                        <Typography variant="body2" color="text.secondary">
+                          <strong>Dimensions:</strong>{" "}
+                          {[ship.length_m, ship.width_m, ship.height_m]
+                            .filter(v => v != null)
+                            .map(v => `${v}m`)
+                            .join(" × ")}
+                        </Typography>
+                      )}
                     </Stack>
                     {ship.description && (
                       <Typography variant="body1" color="text.secondary" paragraph>

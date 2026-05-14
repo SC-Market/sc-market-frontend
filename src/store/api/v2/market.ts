@@ -293,8 +293,6 @@ const injectedRtkApi = api
             game_item_id: queryArg.gameItemId,
             quality_tier_min: queryArg.qualityTierMin,
             quality_tier_max: queryArg.qualityTierMax,
-            quality_value_min: queryArg.qualityValueMin,
-            quality_value_max: queryArg.qualityValueMax,
             price_min: queryArg.priceMin,
             price_max: queryArg.priceMax,
             page: queryArg.page,
@@ -1644,10 +1642,6 @@ export type SearchListingsApiArg = {
   qualityTierMin?: number
   /** Maximum quality tier (1-5) */
   qualityTierMax?: number
-  /** Minimum quality value (0-1000) — for commodity items */
-  qualityValueMin?: number
-  /** Maximum quality value (0-1000) — for commodity items */
-  qualityValueMax?: number
   /** Minimum price filter */
   priceMin?: number
   /** Maximum price filter */
@@ -3932,6 +3926,12 @@ export type WikiShipSearchResult = {
   focus?: string
   size?: string
   image_url?: string
+  crew_size?: number
+  career?: string
+  role?: string
+  length_m?: number
+  width_m?: number
+  height_m?: number
 }
 export type WikiShipDetail = {
   id: string
@@ -3944,6 +3944,12 @@ export type WikiShipDetail = {
   image_url?: string
   default_loadout?: any
   attributes: RecordStringAny
+  crew_size?: number
+  career?: string
+  role?: string
+  length_m?: number
+  width_m?: number
+  height_m?: number
 }
 export type WikiCommoditySearchResult = {
   resource_id: string
@@ -4960,6 +4966,23 @@ export type SlotModifier = {
   /** "linear" = multiplicative (×0.8–×1.2), "additive" = flat integer (+/- value) */
   modifier_type: "linear" | "additive"
 }
+export type CraftedPropertyDef = {
+  /** Property key matching slot_modifiers[].property (e.g. "damagemitigation") */
+  property_key: string
+  /** Localized display name (e.g. "Damage Mitigation") */
+  display_name: string | null
+  /** How to transform the raw modifier value for display */
+  display_mode:
+    | "raw"
+    | "percent"
+    | "negated_percent"
+    | "scale"
+    | "percent_of_base"
+  /** Scale factor (only set when display_mode is "scale") */
+  scale_factor: number | null
+  /** Localized unit label (e.g. "%", "C") */
+  unit_label: string | null
+}
 export type UserBlueprintAcquisition = {
   /** Acquisition date */
   acquisition_date: string
@@ -4989,6 +5012,8 @@ export type BlueprintDetailResponse = {
   slot_modifiers: SlotModifier[]
   /** Output item base attributes (damage resistance, temperature, etc.) */
   item_attributes: RecordStringString
+  /** Crafted property display metadata for interpreting slot modifier values */
+  crafted_property_defs?: CraftedPropertyDef[]
   /** Does user own this blueprint */
   user_owns?: boolean
   /** User acquisition data */

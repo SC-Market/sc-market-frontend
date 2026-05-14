@@ -6,7 +6,10 @@ import React, { useMemo, useCallback } from "react"
 import {
   Box, Card, CardContent, CardMedia, Grid, Typography, TextField,
   MenuItem, Select, FormControl, InputLabel, Pagination, Alert, Chip, Stack,
+  Tooltip,
 } from "@mui/material"
+import GroupsIcon from "@mui/icons-material/Groups"
+import StraightenIcon from "@mui/icons-material/Straighten"
 import { useTheme } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
 import { useGetShipsQuery } from "../../store/api/v2/market"
@@ -27,6 +30,8 @@ export function WikiShipBrowser() {
   const manufacturer = searchParams.get("manufacturer") || ""
   const focus = searchParams.get("focus") || ""
   const size = searchParams.get("size") || ""
+  const career = searchParams.get("career") || ""
+  const role = searchParams.get("role") || ""
   const page = Number(searchParams.get("page")) || 1
 
   const updateParam = useCallback((key: string, value: string) => {
@@ -49,13 +54,25 @@ export function WikiShipBrowser() {
   const manufacturers = useMemo(() => [...new Set(allShips.map(s => s.manufacturer).filter(Boolean))].sort(), [allShips])
   const focuses = useMemo(() => [...new Set(allShips.map(s => s.focus).filter(Boolean))].sort(), [allShips])
   const sizes = useMemo(() => [...new Set(allShips.map(s => s.size).filter(Boolean))].sort(), [allShips])
+  const careers = useMemo(() => [...new Set(allShips.map(s => s.career).filter(Boolean))].sort() as string[], [allShips])
+  const roles = useMemo(() => [...new Set(allShips.map(s => s.role).filter(Boolean))].sort() as string[], [allShips])
 
-  // Client-side text filter (API doesn't support text search for ships)
+  // Client-side text + career/role filter (API doesn't support text search for ships)
   const filtered = useMemo(() => {
-    if (!text) return allShips
-    const q = text.toLowerCase()
-    return allShips.filter(s => s.name.toLowerCase().includes(q) || s.manufacturer?.toLowerCase().includes(q))
-  }, [allShips, text])
+    let result = allShips
+    if (career) result = result.filter(s => s.career === career)
+    if (role) result = result.filter(s => s.role === role)
+    if (text) {
+      const q = text.toLowerCase()
+      result = result.filter(s =>
+        s.name.toLowerCase().includes(q) ||
+        s.manufacturer?.toLowerCase().includes(q) ||
+        s.career?.toLowerCase().includes(q) ||
+        s.role?.toLowerCase().includes(q)
+      )
+    }
+    return result
+  }, [allShips, text, career, role])
 
   const totalPages = data ? Math.ceil(data.total / data.page_size) : 0
 
@@ -84,6 +101,24 @@ export function WikiShipBrowser() {
           {sizes.map(s => <MenuItem key={s} value={s}>{s}</MenuItem>)}
         </Select>
       </FormControl>
+      {careers.length > 0 && (
+        <FormControl fullWidth size="small">
+          <InputLabel>Career</InputLabel>
+          <Select value={career} label="Career" onChange={(e) => updateParam("career", e.target.value)}>
+            <MenuItem value="">All</MenuItem>
+            {careers.map(c => <MenuItem key={c} value={c}>{c}</MenuItem>)}
+          </Select>
+        </FormControl>
+      )}
+      {roles.length > 0 && (
+        <FormControl fullWidth size="small">
+          <InputLabel>Role</InputLabel>
+          <Select value={role} label="Role" onChange={(e) => updateParam("role", e.target.value)}>
+            <MenuItem value="">All</MenuItem>
+            {roles.map(r => <MenuItem key={r} value={r}>{r}</MenuItem>)}
+          </Select>
+        </FormControl>
+      )}
     </Stack>
   )
 
@@ -106,10 +141,30 @@ export function WikiShipBrowser() {
                       <CardContent sx={{ flex: 1, p: 1.5, "&:last-child": { pb: 1.5 } }}>
                         <Typography variant="body2" fontWeight={700} noWrap>{ship.name}</Typography>
                         <Stack direction="row" spacing={0.5} sx={{ mt: 0.5 }} flexWrap="wrap" useFlexGap>
-                          {ship.focus && <Chip label={ship.focus} size="small" color="primary" sx={{ height: 20, fontSize: "0.65rem" }} />}
+                          {ship.career && <Chip label={ship.career} size="small" color="secondary" variant="outlined" sx={{ height: 20, fontSize: "0.65rem" }} />}
+                          {ship.role && <Chip label={ship.role} size="small" color="primary" sx={{ height: 20, fontSize: "0.65rem" }} />}
+                          {ship.focus && !ship.role && <Chip label={ship.focus} size="small" color="primary" sx={{ height: 20, fontSize: "0.65rem" }} />}
                           {ship.size && <Chip label={ship.size} size="small" sx={{ height: 20, fontSize: "0.65rem" }} />}
                         </Stack>
                         {ship.manufacturer && <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5, display: "block" }}>{ship.manufacturer}</Typography>}
+                        <Stack direction="row" spacing={1} sx={{ mt: 0.5 }} alignItems="center">
+                          {ship.crew_size != null && (
+                            <Tooltip title="Crew size" arrow>
+                              <Stack direction="row" spacing={0.25} alignItems="center">
+                                <GroupsIcon sx={{ fontSize: 14, color: "text.disabled" }} />
+                                <Typography variant="caption" color="text.secondary">{ship.crew_size}</Typography>
+                              </Stack>
+                            </Tooltip>
+                          )}
+                          {ship.length_m != null && (
+                            <Tooltip title={`${ship.length_m}m${ship.width_m ? ` × ${ship.width_m}m` : ""}${ship.height_m ? ` × ${ship.height_m}m` : ""}`} arrow>
+                              <Stack direction="row" spacing={0.25} alignItems="center">
+                                <StraightenIcon sx={{ fontSize: 14, color: "text.disabled" }} />
+                                <Typography variant="caption" color="text.secondary">{ship.length_m}m</Typography>
+                              </Stack>
+                            </Tooltip>
+                          )}
+                        </Stack>
                       </CardContent>
                     </Card>
                   </Grid>
