@@ -237,7 +237,7 @@ export function transformSearchResults(results: typeof image_search_sample) {
           const maxKey = Object.keys(value.imageinfo[0].responsiveUrls).reduce(
             (k1, k2) => (+k1 > +k2 ? k1 : k2),
           )
-          return value.imageinfo[0].responsiveUrls[maxKey]
+          return value.imageinfo[0].responsiveUrls[maxKey as keyof typeof value.imageinfo[0]["responsiveUrls"]]
         } else {
           return page.thumbnail.url
         }

@@ -35,11 +35,15 @@ export function CreateOrgInviteCode() {
           severity: "success",
         })
       } else {
+        let reason = "Unknown error"
+        if (res.error && 'data' in res.error && res.error.data) {
+          const errData = res.error.data as { error?: string; message?: string }
+          reason = errData.error ?? errData.message ?? reason
+        } else if (res.error && 'message' in res.error) {
+          reason = res.error.message ?? reason
+        }
         issueAlert({
-          message: t("inviteCodes.failed_submit", {
-            reason:
-              res.error?.error || res.error?.data?.error || res.error || "",
-          }),
+          message: t("inviteCodes.failed_submit", { reason }),
           severity: "error",
         })
       }

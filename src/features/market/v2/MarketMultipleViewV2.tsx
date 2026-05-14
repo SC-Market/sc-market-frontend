@@ -109,7 +109,7 @@ export interface BundleListingV2 {
   seller_type: "user" | "contractor";
   title: string;
   description: string;
-  status: "active" | "sold" | "expired" | "cancelled";
+  status: "active" | "inactive" | "sold" | "expired" | "cancelled";
   created_at: string;
   updated_at: string;
   expires_at: string;

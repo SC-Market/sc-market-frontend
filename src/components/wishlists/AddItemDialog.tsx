@@ -52,10 +52,11 @@ export function AddItemDialog({ open, onClose, wishlistId }: AddItemDialogProps)
   const [addItem, { isLoading: isAdding }] = useAddWishlistItemMutation()
 
   // Search for blueprints that produce the selected item
-  const { data: blueprintResults = [] } = useSearchBlueprintsQuery(
+  const { data: blueprintData } = useSearchBlueprintsQuery(
     { text: selectedItem?.name || "" },
     { skip: !selectedItem },
   )
+  const blueprintResults = blueprintData?.blueprints ?? []
 
   // Filter to blueprints that actually produce this item
   const itemBlueprints = blueprintResults.filter(

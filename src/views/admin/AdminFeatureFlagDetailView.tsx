@@ -38,6 +38,7 @@ import {
   useSetUserOverrideMutation,
   useRemoveUserOverrideMutation,
   type UpdateConfigRequest,
+  type MarketVersion,
 } from "../../store/api/v2/market"
 import { UserSearch } from "../../components/search/UserSearch"
 
@@ -55,7 +56,7 @@ export function AdminFeatureFlagDetailView({ flagName }: Props) {
 
   const [updateConfig] = useUpdateConfigMutation()
   const [localEnabled, setLocalEnabled] = useState<boolean | null>(null)
-  const [localDefault, setLocalDefault] = useState<string | null>(null)
+  const [localDefault, setLocalDefault] = useState<MarketVersion | null>(null)
   const [localRollout, setLocalRollout] = useState<number | null>(null)
   const [saving, setSaving] = useState(false)
 
@@ -133,7 +134,7 @@ export function AdminFeatureFlagDetailView({ flagName }: Props) {
             <Grid item xs={12} sm={4}>
               <FormControl fullWidth size="small">
                 <InputLabel>Default</InputLabel>
-                <Select value={defaultVersion} label="Default" onChange={(e) => setLocalDefault(e.target.value)}>
+                <Select value={defaultVersion} label="Default" onChange={(e) => setLocalDefault(e.target.value as MarketVersion)}>
                   <MenuItem value="V1">V1 (Off)</MenuItem>
                   <MenuItem value="V2">V2 (On)</MenuItem>
                 </Select>

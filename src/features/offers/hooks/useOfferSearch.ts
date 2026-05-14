@@ -47,7 +47,10 @@ export function useOfferSearch(params: UseOfferSearchParams) {
 
   useEffect(() => { setPage(0) }, [debouncedBuyerUsername, debouncedSellerUsername, hasMarketListings, hasService])
 
-  const handleSelectChange = (selected: readonly string[]) => {
+  // ControlledTable's onSelectChange passes T[keyof T][] (a union of all value types).
+  // Since our keyAttr is "id" (string), the runtime values are always strings,
+  // but the type is a wide union. Accept readonly unknown[] to satisfy the table signature.
+  const handleSelectChange = (selected: readonly unknown[]) => {
     setSelectedOfferIds(selected.map(String))
   }
 

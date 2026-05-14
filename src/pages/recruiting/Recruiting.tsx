@@ -11,6 +11,7 @@ import {
 } from "../../features/recruiting/hooks/RecruitingSearch"
 import { RecruitingPostItem } from "../../views/recruiting/RecruitingList"
 import { RecruitingPostSkeleton } from "../../components/skeletons"
+import type { RecruitingPost } from "../../features/recruiting/domain/types"
 import { Link } from "react-router-dom"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useTranslation } from "react-i18next"
@@ -186,8 +187,8 @@ export function Recruiting() {
                     />
                   </Grid>
                 ) : (
-                  (pageData.data?.posts?.items || []).map(
-                    (item, index) => (
+                  (pageData.data?.posts?.items ?? []).map(
+                    (item: RecruitingPost, index: number) => (
                       <RecruitingPostItem
                         post={item}
                         key={index}

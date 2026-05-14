@@ -1,12 +1,12 @@
 import React, { Component, ReactElement, Suspense } from "react"
 import { Grid, GridProps } from "@mui/material"
 
-interface LazySectionProps {
+interface LazySectionProps<P extends Record<string, unknown> = Record<string, unknown>> {
   // Lazy-loaded component
-  component: React.LazyExoticComponent<React.ComponentType<Record<string, unknown>>>
+  component: React.LazyExoticComponent<React.ComponentType<P>>
 
   // Props to pass to the component
-  componentProps?: Record<string, unknown>
+  componentProps?: P
 
   // Loading state
   skeleton: React.ComponentType
@@ -90,20 +90,24 @@ class SectionErrorBoundary extends Component<
  * />
  * ```
  */
-export function LazySection(props: LazySectionProps): ReactElement {
+export function LazySection<P extends Record<string, unknown> = Record<string, unknown>>(props: LazySectionProps<P>): ReactElement {
   const {
     component: LazyComponent,
-    componentProps = {},
+    componentProps,
     skeleton: Skeleton,
     errorFallback,
     gridProps = {},
   } = props
 
+  // Spread componentProps if provided; default to empty object cast to P
+  // (safe because all callers provide componentProps when the component requires them)
+  const resolvedProps = (componentProps ?? {}) as P
+
   return (
     <Grid item xs={12} {...gridProps}>
       <SectionErrorBoundary fallback={errorFallback}>
         <Suspense fallback={<Skeleton />}>
-          <LazyComponent {...componentProps} />
+          <LazyComponent {...resolvedProps} />
         </Suspense>
       </SectionErrorBoundary>
     </Grid>

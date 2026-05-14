@@ -76,10 +76,15 @@ export function WebhookRow(props: {
         severity: "success",
       })
     } else {
+      let reason = String(res?.error || "")
+      if (res?.error && 'data' in res.error && res.error.data) {
+        const errData = res.error.data as { error?: string; message?: string }
+        reason = errData.error || errData.message || reason
+      } else if (res?.error && 'message' in res.error) {
+        reason = res.error.message ?? reason
+      }
       issueAlert({
-        message:
-          t("Webhooks.failedToSubmit") +
-          (res?.error?.error || res?.error?.data?.error || res?.error || ""),
+        message: t("Webhooks.failedToSubmit") + reason,
         severity: "error",
       })
     }
