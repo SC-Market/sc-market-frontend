@@ -18,7 +18,7 @@ interface Variant {
     quality_tier?: number;
     quality_value?: number;
     crafted_source?: string;
-    [key: string]: any;
+    [key: string]: string | number | undefined;
   };
   quantity: number;
   price: number;

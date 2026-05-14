@@ -19,7 +19,7 @@ import {
 } from "@mui/material"
 import KeyboardArrowDownRoundedIcon from "@mui/icons-material/KeyboardArrowDownRounded"
 import UpdateIcon from "@mui/icons-material/Update"
-import { useGetActiveVersionsQuery, useSelectVersionMutation } from "../../store/api/v2/market"
+import { useGetActiveVersionsQuery, useSelectVersionMutation, type GameVersion } from "../../store/api/v2/market"
 import type { ExtendedTheme } from "../../hooks/styles/Theme"
 
 interface VersionSelectorProps {
@@ -118,7 +118,7 @@ export const VersionSelector: React.FC<VersionSelectorProps> = ({
   }
 
   // Format version display
-  const formatVersion = (version: any): string => {
+  const formatVersion = (version: GameVersion | undefined): string => {
     if (!version) return ""
     const parts = [version.version_number]
     if (version.build_number) {

@@ -17,10 +17,11 @@ import { useDrawerOpen } from "../../../hooks/layout/Drawer"
 import { SidebarActorSelect } from "../SidebarActorSelect"
 import { HapticIconButton } from "../../haptic"
 import { CURRENT_CUSTOM_ORG, getWhiteLabelConfig } from "../../../hooks/contractor/CustomDomain"
+import type { UserProfileState } from "../../../hooks/login/UserProfile"
 
 interface SidebarHeaderProps {
   avatar: string
-  profile: any
+  profile: UserProfileState | undefined
   searchQuery: string
   onSearchChange: (value: string) => void
 }

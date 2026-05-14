@@ -131,10 +131,10 @@ export function MissionRatingDialog({
 
       // Close dialog on success
       handleClose()
-    } catch (err: any) {
+    } catch (err: unknown) {
       // Handle error
       const errorMessage =
-        err?.data?.message || err?.message || "Failed to submit rating. Please try again."
+        (err instanceof Error ? err.message : undefined) || "Failed to submit rating. Please try again."
       setError(errorMessage)
     }
   }

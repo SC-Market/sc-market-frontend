@@ -5,7 +5,7 @@ const prefetchedModules = new Set<string>()
 
 // Generic prefetch function
 export async function prefetchModule(
-  importFn: () => Promise<any>,
+  importFn: () => Promise<unknown>,
   moduleKey: string,
 ): Promise<void> {
   if (prefetchedModules.has(moduleKey)) {
@@ -91,7 +91,11 @@ export async function prefetchLocales(): Promise<void> {
 function shouldPrefetch(): boolean {
   // Check if user has data saver enabled
   if ("connection" in navigator) {
-    const connection = (navigator as any).connection
+    const connection = (
+      navigator as Navigator & {
+        connection?: { saveData?: boolean; effectiveType?: string }
+      }
+    ).connection
     if (connection?.saveData) {
       return false
     }

@@ -88,7 +88,7 @@ export function SelectLocation() {
       starmapApi.endpoints.searchStarmap.initiate({ query }),
     )
     if (!result.data) return []
-    const data = result.data as any
+    const data = result.data as { objects?: { resultset?: StarmapObject[] }; results?: StarmapObject[] }
 
     const extended: StarmapObject[] = []
 

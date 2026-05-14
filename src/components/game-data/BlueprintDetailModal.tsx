@@ -25,7 +25,7 @@ import {
 import { Close, BuildRounded, TimerRounded, RecyclingRounded, TrackChangesRounded, Bookmark, BookmarkBorder } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
-import { useGetBlueprintDetailQuery, useGetOrgBlueprintOwnersQuery, useAddBlueprintToInventoryMutation, useRemoveBlueprintFromInventoryMutation } from "../../store/api/v2/market"
+import { useGetBlueprintDetailQuery, useGetOrgBlueprintOwnersQuery, useAddBlueprintToInventoryMutation, useRemoveBlueprintFromInventoryMutation, type BlueprintIngredient, type SlotModifier, type MissionRewardingBlueprint } from "../../store/api/v2/market"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { formatCategoryName } from "../../util/categoryDisplay"
 import { getCommodityColor, getItemCategoryColor } from "../../util/gameIcons"
@@ -90,7 +90,7 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
 
   // Quality state
   const modsBySlot = useMemo(() => {
-    const map = new Map<string, any[]>()
+    const map = new Map<string, SlotModifier[]>()
     for (const m of slotModifiers) { if (!map.has(m.slot_name)) map.set(m.slot_name, []); map.get(m.slot_name)!.push(m) }
     return map
   }, [slotModifiers])
@@ -102,11 +102,11 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
 
   // Quality range per ingredient from slot modifiers
   const qualityRanges = useMemo(() => {
-    return ingredients.map((ing: any) => {
+    return ingredients.map((ing: BlueprintIngredient) => {
       const mods = modsBySlot.get(ing.slot_name || ing.game_item?.name) || []
       if (!mods.length) return { min: 0, max: 1000 }
-      const min = Math.min(...mods.map((m: any) => m.start_quality))
-      const max = Math.max(...mods.map((m: any) => m.end_quality))
+      const min = Math.min(...mods.map((m: SlotModifier) => m.start_quality))
+      const max = Math.max(...mods.map((m: SlotModifier) => m.end_quality))
       return { min, max }
     })
   }, [ingredients, modsBySlot])
@@ -127,7 +127,7 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
   const combinedModifiers = useMemo(() => {
     const result = new Map<string, { value: number; modifierType: "linear" | "additive" }>()
     for (const mod of slotModifiers) {
-      const slotIdx = ingredients.findIndex((ing: any) => (ing.slot_name || ing.game_item?.name) === mod.slot_name)
+      const slotIdx = ingredients.findIndex((ing: BlueprintIngredient) => (ing.slot_name || ing.game_item?.name) === mod.slot_name)
       const qv = qualities[slotIdx] ?? 500
       const factor = interpolateModifier(qv, mod.start_quality, mod.end_quality, mod.modifier_at_start, mod.modifier_at_end)
       const existing = result.get(mod.property)
@@ -146,7 +146,7 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
 
   const outputQuality = useMemo(() => {
     if (!ingredients.length || !qualities.length) return 500
-    return Math.round(ingredients.reduce((s: number, _: any, i: number) => s + (qualities[i] ?? 500), 0) / ingredients.length)
+    return Math.round(ingredients.reduce((s: number, _: BlueprintIngredient, i: number) => s + (qualities[i] ?? 500), 0) / ingredients.length)
   }, [qualities, ingredients])
 
   return (
@@ -226,7 +226,7 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
                   <TrackChangesRounded sx={{ fontSize: 16, mr: 0.5 }} />Missions ({data.missions_rewarding.length})
                 </Typography>
                 <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                  {(missionsExpanded ? data.missions_rewarding : data.missions_rewarding.slice(0, 8)).map((m: any) => (
+                  {(missionsExpanded ? data.missions_rewarding : data.missions_rewarding.slice(0, 8)).map((m: MissionRewardingBlueprint) => (
                     <Chip key={m.mission_id} label={m.mission_name} size="small" sx={{ height: 22, cursor: "pointer" }}
                       onClick={() => { onClose(); navigate(`/missions/${m.mission_id}`) }} />
                   ))}
@@ -288,7 +288,7 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
               </Stack>
             )}
             <Stack spacing={1}>
-            {ingredients.map((ing: any, idx: number) => {
+            {ingredients.map((ing: BlueprintIngredient, idx: number) => {
               const qv = qualities[idx] ?? Math.round((qualityRanges[idx]?.min + qualityRanges[idx]?.max) / 2)
               const qr = qualityRanges[idx] || { min: 0, max: 1000 }
               const color = getCommodityColor(ing.game_item?.sub_type) || "#616161"
@@ -308,7 +308,7 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
                     <Slider size="small" min={qr.min} max={qr.max} value={qv} onChange={(_, v) => setQuality(idx, v as number)} sx={{ flex: 1, color, "& .MuiSlider-thumb": { width: 12, height: 12 } }} />
                     <TextField size="small" type="number" value={qv} onChange={e => setQuality(idx, +e.target.value || 0)} inputProps={{ min: qr.min, max: qr.max }} sx={{ width: 70, "& input": { py: 0.5, fontSize: "0.8rem" } }} />
                   </Stack>
-                  {(modsBySlot.get(ing.slot_name || ing.game_item?.name) || []).map((mod: any, mi: number) => {
+                  {(modsBySlot.get(ing.slot_name || ing.game_item?.name) || []).map((mod: SlotModifier, mi: number) => {
                     const def = propDefMap.get(mod.property)
                     const factor = interpolateModifier(qv, mod.start_quality, mod.end_quality, mod.modifier_at_start, mod.modifier_at_end)
                     const currentFormatted = formatModifierValue(factor, mod.modifier_type, def)
@@ -351,7 +351,7 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
               <Box>
                 <Typography variant="caption" color="text.secondary">Quantity</Typography>
                 <TextField size="small" type="number" value={craftQty} sx={{ width: 60, "& input": { py: 0.5, fontSize: "0.8rem" } }}
-                  onChange={(e: any) => setCraftQty(Math.max(1, +e.target.value || 1))} inputProps={{ min: 1 }} />
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCraftQty(Math.max(1, +e.target.value || 1))} inputProps={{ min: 1 }} />
               </Box>
               {craftQty > 1 && (
                 <Box>
@@ -363,7 +363,7 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
             <Divider />
             <Typography variant="subtitle2">Recovered Materials{craftQty > 1 && ` (×${craftQty})`}</Typography>
             <Stack spacing={0.75}>
-              {ingredients.map((ing: any, i: number) => {
+              {ingredients.map((ing: BlueprintIngredient, i: number) => {
                 const recovered = parseFloat(String(ing.quantity_required)) * 0.5 * craftQty
                 return (
                   <Stack key={i} direction="row" spacing={1} alignItems="center">

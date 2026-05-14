@@ -65,7 +65,7 @@ export function getErrorMessage(
       typeof error.data === "object" &&
       "message" in error.data
     ) {
-      return (error.data as any).message
+      return (error.data as { message: string }).message
     }
   }
 

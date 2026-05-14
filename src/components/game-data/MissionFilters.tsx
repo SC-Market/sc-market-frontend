@@ -100,7 +100,7 @@ export const MissionFilters: React.FC<MissionFiltersProps> = (props) => {
 
       <FormControl fullWidth size="small">
         <InputLabel>Legal</InputLabel>
-        <Select value={props.legalStatus} label="Legal" onChange={(e) => props.onLegalStatusChange(e.target.value as any)}>
+        <Select value={props.legalStatus} label="Legal" onChange={(e) => props.onLegalStatusChange(e.target.value as "" | "LEGAL" | "ILLEGAL")}>
           <MenuItem value="">All</MenuItem>
           <MenuItem value="LEGAL">Legal</MenuItem>
           <MenuItem value="ILLEGAL">Illegal</MenuItem>

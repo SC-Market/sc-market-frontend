@@ -1,6 +1,8 @@
 import { SidebarItemProps } from "../types"
 import { has_permission } from "../../../views/contractor/OrgRoles"
 import { CURRENT_CUSTOM_ORG, getWhiteLabelConfig } from "../../../hooks/contractor/CustomDomain"
+import type { UserProfileState } from "../../../hooks/login/UserProfile"
+import type { Contractor } from "../../../features/contractor/domain/types"
 import React from "react"
 import {
   AssignmentRounded,
@@ -107,9 +109,9 @@ export function getCustomTabs(): SidebarItemProps[] {
  * On white-label domains, also applies the org's sidebar config.
  */
 export function createItemFilter(
-  profile: any,
-  profileError: any,
-  currentOrgObj: any,
+  profile: UserProfileState | undefined,
+  profileError: unknown,
+  currentOrgObj: Contractor | null,
 ) {
   return (item: SidebarItemProps): boolean => {
     if (item.hidden) {

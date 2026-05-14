@@ -9,15 +9,15 @@ interface DynamicImportOptions {
   errorFallback?: ReactNode
 }
 
-export function createDynamicImport<T extends React.ComponentType<any>>(
-  importFn: () => Promise<{ default: T }>,
+export function createDynamicImport<P extends object = object>(
+  importFn: () => Promise<{ default: React.ComponentType<P> }>,
   options: DynamicImportOptions = {},
 ) {
   const { fallback = <PageFallback />, errorFallback } = options
 
   const LazyComponent = React.lazy(importFn)
 
-  return function DynamicComponent(props: React.ComponentProps<T>) {
+  return function DynamicComponent(props: P) {
     const defaultErrorFallback = (
       error: Error,
       errorInfo: React.ErrorInfo,

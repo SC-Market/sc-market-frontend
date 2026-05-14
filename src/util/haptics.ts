@@ -99,12 +99,12 @@ export const isHapticSupported = (): boolean => {
 /**
  * Wrapper for onClick handlers that adds haptic feedback
  */
-export const withHaptic = <T extends (...args: any[]) => any>(
-  handler: T,
+export const withHaptic = <Args extends unknown[], R>(
+  handler: (...args: Args) => R,
   hapticType: keyof typeof haptic = "medium",
-): T => {
-  return ((...args: any[]) => {
+): ((...args: Args) => R) => {
+  return (...args: Args): R => {
     haptic[hapticType]()
     return handler(...args)
-  }) as T
+  }
 }

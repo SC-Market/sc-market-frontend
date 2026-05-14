@@ -25,6 +25,8 @@ import { BottomSheet } from "../mobile/BottomSheet"
 import {
   useGetCartQuery,
   useRemoveCartItemMutation,
+  type GetCartResponse,
+  type CartItemDetail,
 } from "../../store/api/v2/market"
 import { formatQuantity } from "../../util/formatQuantity"
 import { EmptyCart } from "../empty-states"
@@ -43,8 +45,9 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
   const { data: cart, isLoading } = useGetCartQuery(undefined, { skip: !open })
   const [removeItem] = useRemoveCartItemMutation()
 
-  const items = (cart as any)?.data?.items || (cart as any)?.items || []
-  const totalPrice = (cart as any)?.data?.total_price || (cart as any)?.total_price || 0
+  const cartData = cart as GetCartResponse | undefined
+  const items: CartItemDetail[] = cartData?.items || []
+  const totalPrice = cartData?.total_price || 0
   const itemCount = items.length
 
   const handleCheckout = () => {
@@ -88,7 +91,7 @@ export function CartDrawer({ open, onClose }: CartDrawerProps) {
       ) : (
         <>
           <Stack spacing={1} sx={{ flex: 1, overflow: "auto", mb: 2 }}>
-            {items.map((item: any) => (
+            {items.map((item: CartItemDetail) => (
               <Box
                 key={item.cart_item_id}
                 sx={{

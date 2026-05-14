@@ -55,7 +55,7 @@ export function FeatureErrorBoundary({
     // Report to Bugsnag
     const bugsnag = getBugsnagInstance()
     if (bugsnag) {
-      bugsnag.notify(error, (event: any) => {
+      bugsnag.notify(error, (event) => {
         event.context = featureName
         event.addMetadata("errorBoundary", {
           type: "feature",

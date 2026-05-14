@@ -78,7 +78,7 @@ function arrayRotate<T>(orig: T[], count: number) {
 const tzOffset = Math.floor(new Date().getTimezoneOffset() / 30)
 
 export function AvailabilitySelector(props: {
-  onSave: (selections: boolean[]) => any
+  onSave: (selections: boolean[]) => void
   initialSelections?: boolean[]
 }) {
   const { t, i18n } = useTranslation()

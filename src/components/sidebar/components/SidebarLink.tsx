@@ -7,7 +7,7 @@ import { prefetchModule } from "../../../util/prefetch"
 // Route prefetch map for sidebar links
 const routePrefetchMap: Record<
   string,
-  { importFn: () => Promise<any>; key: string }
+  { importFn: () => Promise<unknown>; key: string }
 > = {
   // Market
   "/market": { importFn: () => import("../../../features/market"), key: "MarketPage" },

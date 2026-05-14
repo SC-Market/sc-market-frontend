@@ -3,7 +3,7 @@ import { Link, LinkProps } from "react-router-dom"
 import { prefetchModule } from "../../util/prefetch"
 
 interface PrefetchLinkProps extends LinkProps {
-  prefetchFn?: () => Promise<any>
+  prefetchFn?: () => Promise<unknown>
   prefetchKey?: string
   prefetchDelay?: number
 }

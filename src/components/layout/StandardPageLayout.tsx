@@ -145,7 +145,7 @@ export function StandardPageLayout(
       <ContainerGrid
         sidebarOpen={sidebarOpen}
         sidebarWidth={sidebarWidth}
-        maxWidth={maxWidth as any}
+        maxWidth={maxWidth as "xs" | "sm" | "md" | "lg" | "xl" | "xxl" | "xxxl" | false}
         noFooter={noFooter}
         noSidebar={noSidebar}
         noMobilePadding={noMobilePadding}

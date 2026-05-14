@@ -82,13 +82,13 @@ export function AddItemDialog({ open, onClose, wishlistId }: AddItemDialogProps)
 
   const handleClose = () => { resetForm(); onClose() }
 
-  const handleItemChange = (_: any, newValue: GameItemOption | null) => {
+  const handleItemChange = (_: React.SyntheticEvent, newValue: GameItemOption | null) => {
     setSelectedItem(newValue)
     setAcquisitionMode("buy")
     setSelectedBlueprintId(null)
   }
 
-  const handleAcquisitionModeChange = (_: any, newMode: AcquisitionMode | null) => {
+  const handleAcquisitionModeChange = (_: React.MouseEvent<HTMLElement>, newMode: AcquisitionMode | null) => {
     if (newMode) {
       setAcquisitionMode(newMode)
       if (newMode === "craft" && itemBlueprints.length === 1) {
@@ -119,8 +119,9 @@ export function AddItemDialog({ open, onClose, wishlistId }: AddItemDialogProps)
         },
       }).unwrap()
       handleClose()
-    } catch (err: any) {
-      setError(err?.data?.message || err?.message || "Failed to add item.")
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Failed to add item."
+      setError(message)
     }
   }
 

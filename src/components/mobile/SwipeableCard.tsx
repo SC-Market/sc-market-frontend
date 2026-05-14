@@ -8,6 +8,7 @@ import {
   Box,
   Card,
   CardContent,
+  CardProps,
   IconButton,
   Stack,
   useMediaQuery,
@@ -25,7 +26,7 @@ interface SwipeableCardProps {
   onSwipeRight?: () => void
   threshold?: number // Distance in pixels to trigger action
   disabled?: boolean
-  CardProps?: any
+  CardProps?: CardProps
 }
 
 export function SwipeableCard({

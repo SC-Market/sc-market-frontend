@@ -13,7 +13,8 @@ export function LazyDateTimePicker(props: DateTimePickerProps<Date>) {
   return (
     <DatePickerProvider>
       <Suspense fallback={<Skeleton variant="rectangular" height={56} />}>
-        <DateTimePicker {...(props as any)} />
+        {/* @ts-expect-error MUI lazy-loaded DateTimePicker has slotProps type mismatch */}
+        <DateTimePicker {...props} />
       </Suspense>
     </DatePickerProvider>
   )

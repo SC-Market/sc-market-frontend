@@ -41,15 +41,18 @@ export function BlockUserButton({
         severity: "success",
       })
       onSuccess()
-    } catch (error: any) {
+    } catch (error: unknown) {
       let errorMessage = t("blockUser.error")
 
-      if (error?.error?.message) {
-        errorMessage = error.error.message
-      } else if (error?.data?.message) {
-        errorMessage = error.data.message
-      } else if (typeof error?.message === "string") {
+      if (error instanceof Error) {
         errorMessage = error.message
+      } else if (typeof error === "object" && error !== null) {
+        const err = error as Record<string, Record<string, string>>
+        if (err.error?.message) {
+          errorMessage = err.error.message
+        } else if (err.data?.message) {
+          errorMessage = err.data.message
+        }
       }
 
       issueAlert({
@@ -115,15 +118,18 @@ export function BlockUserForOrgButton({
         severity: "success",
       })
       onSuccess()
-    } catch (error: any) {
+    } catch (error: unknown) {
       let errorMessage = t("blockUser.error")
 
-      if (error?.error?.message) {
-        errorMessage = error.error.message
-      } else if (error?.data?.message) {
-        errorMessage = error.data.message
-      } else if (typeof error?.message === "string") {
+      if (error instanceof Error) {
         errorMessage = error.message
+      } else if (typeof error === "object" && error !== null) {
+        const err = error as Record<string, Record<string, string>>
+        if (err.error?.message) {
+          errorMessage = err.error.message
+        } else if (err.data?.message) {
+          errorMessage = err.data.message
+        }
       }
 
       issueAlert({
