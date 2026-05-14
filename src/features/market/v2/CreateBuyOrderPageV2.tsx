@@ -4,12 +4,11 @@ import { useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../../components/layout/StandardPageLayout"
 import { GameItemSearchAutocomplete } from "../components/GameItemSearchAutocomplete"
 import { CreateBuyOrderV2 } from "./components/CreateBuyOrderV2"
+import type { GameItemSearchResult } from "../../../store/api/v2/market"
 
 export function CreateBuyOrderPageV2() {
   const { t } = useTranslation()
-  const [selectedGameItemId, setSelectedGameItemId] = useState<string | null>(null)
-  const [selectedGameItemName, setSelectedGameItemName] = useState<string | null>(null)
-  const [selectedGameItemType, setSelectedGameItemType] = useState<string | null>(null)
+  const [selectedGameItem, setSelectedGameItem] = useState<GameItemSearchResult | null>(null)
 
   return (
     <StandardPageLayout
@@ -30,14 +29,14 @@ export function CreateBuyOrderPageV2() {
           </Typography>
           <GameItemSearchAutocomplete
             value={null}
-            onChange={(name, type, itemId) => { setSelectedGameItemId(itemId); setSelectedGameItemName(name); setSelectedGameItemType(type) }}
+            onChange={(name, type, itemId) => setSelectedGameItem({ id: itemId, name, type })}
             label={t("buyOrderActions.searchItem", "Search for a game item")}
           />
         </Paper>
       </Grid>
-      {selectedGameItemId && (
+      {selectedGameItem && (
         <Grid item xs={12}>
-          <CreateBuyOrderV2 gameItemId={selectedGameItemId} gameItemName={selectedGameItemName || undefined} gameItemType={selectedGameItemType || undefined} />
+          <CreateBuyOrderV2 gameItem={selectedGameItem} />
         </Grid>
       )}
     </StandardPageLayout>
