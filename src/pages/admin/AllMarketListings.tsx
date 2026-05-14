@@ -1,135 +1,199 @@
-import React, { lazy, Suspense, useState } from "react"
-import { Box, Divider, Grid, IconButton, Skeleton } from "@mui/material"
-import { sidebarDrawerWidth, useDrawerOpen } from "../../hooks/layout/Drawer"
-import CloseIcon from "@mui/icons-material/CloseRounded"
-import MenuIcon from "@mui/icons-material/MenuRounded"
-import { MarketSidebarContext } from "../../features/market/hooks/MarketSidebar"
-import { MarketActions } from "../../features/market/components/MarketActions"
-import { HideOnScroll } from "../../features/market/components/MarketNavArea"
-import { MarketNavArea } from "../../features/market/components/MarketNavArea"
+import React, { useState } from "react"
+import {
+  Box,
+  Divider,
+  Grid,
+  Skeleton,
+  Tab,
+  Tabs,
+  Typography,
+  Card,
+  CardActionArea,
+  CardMedia,
+  CardContent,
+  Fade,
+} from "@mui/material"
+import { useTheme } from "@mui/material/styles"
+import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
-import { HeaderTitle } from "../../components/typography/HeaderTitle"
-import { useTheme } from "@mui/material/styles"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
-
 import { ExpireAllListingsButton } from "../../views/admin/ExpireAllListingsButton"
+import {
+  useSearchListingsQuery,
+  SearchListingsApiArg,
+  ListingSearchResult,
+} from "../../store/api/v2/market"
+import { formatPrice } from "../../util/formatPrice"
+import { ExtendedTheme } from "../../hooks/styles/Theme"
+import { FALLBACK_IMAGE_URL } from "../../util/constants"
+import { ListingPagination } from "../../features/market/components/listings/ListingPagination"
 
-const AllItemListings = lazy(() =>
-  import("../../features/market/views/ItemListings").then((m) => ({
-    default: m.AllItemListings,
-  })),
-)
+type ListingStatus = "active" | "inactive" | "expired" | "sold" | "cancelled"
+
+function AdminListingCard({ listing }: { listing: ListingSearchResult }) {
+  const theme = useTheme<ExtendedTheme>()
+
+  return (
+    <Fade in style={{ transitionDuration: "300ms" }}>
+      <Box sx={{ position: "relative", height: "100%" }}>
+        <Link
+          to={`/listing/${listing.listing_id}`}
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
+          <CardActionArea
+            sx={{ borderRadius: theme.spacing(theme.borderRadius.topLevel) }}
+          >
+            <Card sx={{ height: 280, position: "relative" }}>
+              <CardMedia
+                component="img"
+                loading="lazy"
+                image={listing.photo || FALLBACK_IMAGE_URL}
+                onError={({ currentTarget }) => {
+                  currentTarget.onerror = null
+                  currentTarget.src = FALLBACK_IMAGE_URL
+                }}
+                sx={{ height: 140, objectFit: "cover" }}
+                alt={listing.title}
+              />
+              <CardContent sx={{ padding: "8px 12px !important" }}>
+                <Typography
+                  variant="h6"
+                  color="primary"
+                  fontWeight="bold"
+                  noWrap
+                  sx={{ fontSize: "0.95rem", mb: 0.5 }}
+                >
+                  {listing.price_min === listing.price_max
+                    ? formatPrice(listing.price_min)
+                    : `${formatPrice(listing.price_min)} - ${formatPrice(listing.price_max)}`}
+                </Typography>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{
+                    fontSize: "0.75rem",
+                    lineHeight: 1.3,
+                    maxHeight: 36,
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    display: "-webkit-box",
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: "vertical",
+                    mb: 0.5,
+                  }}
+                >
+                  {listing.title}
+                </Typography>
+                <Typography variant="caption" color="text.secondary">
+                  {listing.seller_name} · {listing.game_item_type}
+                </Typography>
+                <Typography
+                  display="block"
+                  variant="caption"
+                  color="text.primary"
+                  sx={{ mt: 0.5 }}
+                >
+                  Qty: {listing.quantity_available}
+                  {listing.variant_count > 1 &&
+                    ` · ${listing.variant_count} variants`}
+                </Typography>
+              </CardContent>
+            </Card>
+          </CardActionArea>
+        </Link>
+      </Box>
+    </Fade>
+  )
+}
 
 function ListingsSkeleton() {
   return (
-    <Grid item xs={12}>
-      <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, pb: 3 }}>
-        {[1, 2, 3, 4].map((i) => (
-          <Skeleton key={i} variant="rectangular" width={280} height={200} />
-        ))}
-      </Box>
+    <Grid container spacing={1}>
+      {Array.from({ length: 12 }).map((_, i) => (
+        <Grid item xs={6} sm={4} md={3} lg={2} key={i}>
+          <Skeleton variant="rectangular" height={280} sx={{ borderRadius: 1 }} />
+        </Grid>
+      ))}
     </Grid>
+  )
+}
+
+function AdminListingsSection({ status }: { status: ListingStatus }) {
+  const [page, setPage] = useState(1)
+  const [pageSize, setPageSize] = useState(48)
+
+  const { data, isLoading } = useSearchListingsQuery({
+    status,
+    page,
+    pageSize,
+    sortBy: "updated_at",
+    sortOrder: "desc",
+  })
+
+  if (isLoading) return <ListingsSkeleton />
+
+  if (!data?.listings?.length) {
+    return (
+      <Typography color="text.secondary" sx={{ py: 4, textAlign: "center" }}>
+        No {status} listings
+      </Typography>
+    )
+  }
+
+  return (
+    <>
+      <Grid container spacing={1}>
+        {data.listings.map((listing) => (
+          <Grid item xs={6} sm={4} md={3} lg={2} key={listing.listing_id}>
+            <AdminListingCard listing={listing} />
+          </Grid>
+        ))}
+      </Grid>
+      <Box sx={{ mt: 2 }}>
+        <ListingPagination
+          count={data.total}
+          page={page - 1}
+          rowsPerPage={pageSize}
+          onPageChange={(_, newPage) => setPage(newPage + 1)}
+          onRowsPerPageChange={(e) => {
+            setPageSize(parseInt(e.target.value, 10))
+            setPage(1)
+          }}
+        />
+      </Box>
+    </>
   )
 }
 
 export function AllMarketListings() {
   const { t } = useTranslation()
-  const theme = useTheme<ExtendedTheme>()
-  const [open, setOpen] = useState(false)
-  const [drawerOpen] = useDrawerOpen()
+  const [tab, setTab] = useState<ListingStatus>("active")
 
   return (
     <StandardPageLayout
-      title={t("market.allListingsTitle")}
-      headerTitle={t("market.activeListings")}
-      headerActions={<><ExpireAllListingsButton /><MarketActions /></>}
-      sidebarOpen={true}
-      maxWidth="lg"
+      title={t("market.allListingsTitle", "All Market Listings")}
+      headerTitle={t("market.allListingsTitle", "All Market Listings")}
+      headerActions={<ExpireAllListingsButton />}
+      maxWidth="xl"
     >
-      <IconButton
-        color="secondary"
-        aria-label={t("market.toggleSidebar")}
-        sx={{
-          position: "absolute",
-          zIndex: 50,
-          left: (drawerOpen ? sidebarDrawerWidth : 0) + 24,
-          top: 64 + 24,
-        }}
-        onClick={() => {
-          setOpen(true)
-        }}
-      >
-        {open ? <CloseIcon /> : <MenuIcon />}
-      </IconButton>
-
-      <MarketSidebarContext.Provider value={[open, setOpen]}>
-        <Grid item xs={12}>
-          <HideOnScroll>
-            <MarketNavArea />
-          </HideOnScroll>
-        </Grid>
-
-        <Grid item xs={12}>
-          <Divider light />
-        </Grid>
-
-        <Grid item xs={12}>
-          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, pb: 3 }}>
-            <Suspense fallback={<ListingsSkeleton />}>
-              <AllItemListings status={"active"} />
-            </Suspense>
-          </Box>
-        </Grid>
-
-        <Grid
-          item
-          container
-          justifyContent={"space-between"}
-          spacing={theme.layoutSpacing.layout}
-          xs={12}
+      <Grid item xs={12}>
+        <Tabs
+          value={tab}
+          onChange={(_, v) => setTab(v)}
+          sx={{ mb: 2 }}
         >
-          <HeaderTitle lg={12} xl={12}>
-            {t("market.inactiveListings")}
-          </HeaderTitle>
-        </Grid>
+          <Tab label="Active" value="active" />
+          <Tab label="Inactive" value="inactive" />
+          <Tab label="Expired" value="expired" />
+          <Tab label="Sold" value="sold" />
+          <Tab label="Cancelled" value="cancelled" />
+        </Tabs>
+        <Divider sx={{ mb: 2 }} />
+      </Grid>
 
-        <Grid item xs={12}>
-          <Divider light />
-        </Grid>
-
-        <Grid item xs={12}>
-          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, pb: 3 }}>
-            <Suspense fallback={<ListingsSkeleton />}>
-              <AllItemListings status={"inactive"} />
-            </Suspense>
-          </Box>
-        </Grid>
-
-        <Grid
-          item
-          container
-          justifyContent={"space-between"}
-          spacing={theme.layoutSpacing.layout}
-          xs={12}
-        >
-          <HeaderTitle lg={12} xl={12}>
-            {t("market.archivedListings")}
-          </HeaderTitle>
-        </Grid>
-
-        <Grid item xs={12}>
-          <Divider light />
-        </Grid>
-
-        <Grid item xs={12}>
-          <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, pb: 3 }}>
-            <Suspense fallback={<ListingsSkeleton />}>
-              <AllItemListings status={"archived"} />
-            </Suspense>
-          </Box>
-        </Grid>
-      </MarketSidebarContext.Provider>
+      <Grid item xs={12}>
+        <AdminListingsSection status={tab} />
+      </Grid>
     </StandardPageLayout>
   )
 }
