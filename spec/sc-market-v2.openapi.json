@@ -5416,6 +5416,13 @@
 						},
 						"type": "array"
 					},
+					"quality_bands": {
+						"items": {
+							"$ref": "#/components/schemas/QualityBand"
+						},
+						"type": "array",
+						"description": "Quality quantization bands — defines discrete quality tiers for this resource"
+					},
 					"created_at": {
 						"type": "string"
 					},

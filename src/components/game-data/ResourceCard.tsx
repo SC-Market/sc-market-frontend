@@ -4,8 +4,10 @@
  */
 
 import React from "react"
-import { Card, CardActionArea, CardContent, Chip, Stack, Typography } from "@mui/material"
+import { Box, Card, CardActionArea, CardContent, Chip, Stack, Typography } from "@mui/material"
+import { useTheme } from "@mui/material/styles"
 import { type ResourceSearchResult } from "../../store/api/v2/market"
+import type { ExtendedTheme } from "../../hooks/styles/Theme"
 
 interface ResourceCardProps {
   resource: ResourceSearchResult
@@ -13,6 +15,7 @@ interface ResourceCardProps {
 }
 
 export const ResourceCard: React.FC<ResourceCardProps> = ({ resource, onClick }) => {
+  const theme = useTheme<ExtendedTheme>()
   const acquisitionMethods = [
     resource.can_be_mined && "Mined",
     resource.can_be_purchased && "Purchased",
@@ -36,6 +39,25 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({ resource, onClick })
               <Chip key={method} label={method} size="small" variant="outlined" />
             ))}
           </Stack>
+          {resource.quality_bands && resource.quality_bands.length > 0 && (
+            <Box sx={{ mb: 1 }}>
+              <Typography variant="caption" color="text.secondary" sx={{ mb: 0.5, display: "block" }}>
+                {resource.quality_bands.length} quality tiers
+              </Typography>
+              <Box sx={{ display: "flex", gap: "2px", height: 6, borderRadius: 1, overflow: "hidden" }}>
+                {resource.quality_bands.map((band) => (
+                  <Box
+                    key={band.start}
+                    sx={{
+                      flex: band.end - band.start + 1,
+                      backgroundColor: theme.palette.primary.main,
+                      opacity: 0.3 + (band.mappedValue / 1000) * 0.7,
+                    }}
+                  />
+                ))}
+              </Box>
+            </Box>
+          )}
           <Stack direction="row" justifyContent="space-between" alignItems="center">
             {resource.base_value != null && (
               <Typography variant="caption" color="text.secondary">

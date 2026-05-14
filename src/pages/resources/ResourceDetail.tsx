@@ -153,6 +153,45 @@ export function ResourceDetail() {
         </Paper>
       </Grid>
 
+      {/* Quality Bands */}
+      {resource.quality_bands && resource.quality_bands.length > 0 && (
+        <Grid item xs={12}>
+          <Paper sx={{ p: 2 }}>
+            <Typography variant="h6" gutterBottom>
+              {t("resources.qualityTiers", "Quality Tiers")}
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              {t("resources.qualityTiersDescription", "Mined quality is bucketed into discrete tiers. Raw quality within a range maps to a fixed value.")}
+            </Typography>
+            <TableContainer>
+              <Table size="small">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>{t("resources.qualityRange", "Quality Range")}</TableCell>
+                    <TableCell align="right">{t("resources.mappedValue", "Effective Quality")}</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {resource.quality_bands.map((band) => (
+                    <TableRow key={band.start}>
+                      <TableCell>{band.start}–{band.end}</TableCell>
+                      <TableCell align="right">
+                        <Chip
+                          label={band.mappedValue}
+                          size="small"
+                          color={band.mappedValue >= 900 ? "secondary" : band.mappedValue >= 700 ? "primary" : "default"}
+                          variant="outlined"
+                        />
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Paper>
+        </Grid>
+      )}
+
       {/* Blueprints Requiring This Resource */}
       {blueprints_requiring.length > 0 && (
         <Grid item xs={12}>
