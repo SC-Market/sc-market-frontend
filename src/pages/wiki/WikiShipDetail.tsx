@@ -192,8 +192,8 @@ export function WikiShipDetail() {
                     </Stack>
 
                     {ship.description && (
-                      <Typography variant="body1" color="text.secondary">
-                        {ship.description}
+                      <Typography variant="body1" color="text.secondary" sx={{ whiteSpace: "pre-line" }}>
+                        {ship.description.replace(/\\n/g, "\n")}
                       </Typography>
                     )}
                   </Box>

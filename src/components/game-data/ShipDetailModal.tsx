@@ -99,7 +99,9 @@ export function ShipDetailModal({ shipId, open, onClose }: Props) {
                 </Stack>
 
                 {ship.description && (
-                  <Typography variant="body2" color="text.secondary">{ship.description}</Typography>
+                  <Typography variant="body2" color="text.secondary" sx={{ whiteSpace: "pre-line" }}>
+                    {ship.description.replace(/\\n/g, "\n")}
+                  </Typography>
                 )}
               </Box>
             </Stack>
