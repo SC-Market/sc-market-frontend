@@ -414,6 +414,7 @@ export function shipsTokensToParams(tokens: SearchToken[]): Record<string, strin
       case "query": queries.push(t.value); break
       case "category": params.career = t.value; break
       case "manufacturer": params.manufacturer = t.value; break
+      case "faction": params.role = t.value; break
       case "tag": params.size = t.value; break
     }
   }
@@ -425,9 +426,26 @@ export function shipsParamsToTokens(sp: URLSearchParams): SearchToken[] {
   const tokens: SearchToken[] = []
   const q = sp.get("q"); if (q) tokens.push({ type: "query", label: q, value: q })
   const career = sp.get("career"); if (career) {
-    tokens.push({ type: "category", label: career.charAt(0).toUpperCase() + career.slice(1), value: career })
+    const label = career.charAt(0).toUpperCase() + career.slice(1)
+    tokens.push({ type: "category", label, value: career })
   }
   const mfr = sp.get("manufacturer"); if (mfr) tokens.push({ type: "manufacturer", label: mfr, value: mfr })
+  const role = sp.get("role"); if (role) {
+    const key = role.toLowerCase().replace(/[^a-z]/g, "")
+    const roleLabels: Record<string, string> = {
+      lightfighter: "Light Fighter", mediumfighter: "Medium Fighter", heavyfighter: "Heavy Fighter",
+      stealthfighter: "Stealth Fighter", stealthbomber: "Stealth Bomber", bomber: "Bomber",
+      interceptor: "Interceptor", gunship: "Gunship", dropship: "Dropship",
+      pathfinder: "Pathfinder", touring: "Touring", lightfreight: "Light Freight",
+      mediumfreight: "Medium Freight", heavyfreight: "Heavy Freight",
+      lightmining: "Light Mining", mediummining: "Medium Mining", heavymining: "Heavy Mining",
+      lightsalvage: "Light Salvage", mediumsalvage: "Medium Salvage", heavysalvage: "Heavy Salvage",
+      medical: "Medical", repair: "Repair", refueling: "Refueling",
+      racer: "Racer", racing: "Racing", snub: "Snub",
+      corvette: "Corvette", frigate: "Frigate", destroyer: "Destroyer", carrier: "Carrier",
+    }
+    tokens.push({ type: "faction", label: roleLabels[key] || role, value: role })
+  }
   const size = sp.get("size"); if (size) {
     const sizeLabels: Record<string, string> = { "1": "Small (1)", "2": "Medium (2)", "3": "Large (3)", "4": "Capital (4+)" }
     tokens.push({ type: "tag", label: sizeLabels[size] || `Size ${size}`, value: size })

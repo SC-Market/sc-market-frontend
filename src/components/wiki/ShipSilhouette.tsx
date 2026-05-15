@@ -112,8 +112,8 @@ export function ShipSilhouette({
         // CSS mask renders the SVG shape, colors it with bgcolor above
         maskImage: `url(${url})`,
         WebkitMaskImage: `url(${url})`,
-        maskSize: "contain",
-        WebkitMaskSize: "contain",
+        maskSize: "auto 100%",
+        WebkitMaskSize: "auto 100%",
         maskRepeat: "no-repeat",
         WebkitMaskRepeat: "no-repeat",
         maskPosition: "center",
