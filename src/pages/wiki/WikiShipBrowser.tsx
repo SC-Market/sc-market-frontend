@@ -4,7 +4,7 @@
 
 import React, { useMemo, useCallback } from "react"
 import {
-  Box, Card, CardContent, CardMedia, Grid, Typography, TextField,
+  Box, Card, CardContent, Grid, Typography, TextField,
   MenuItem, Select, FormControl, InputLabel, Pagination, Alert, Chip, Stack,
   Tooltip,
 } from "@mui/material"
@@ -19,6 +19,7 @@ import { FilterSidebarLayout } from "../../components/layout/FilterSidebarLayout
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { CardGridSkeleton } from "../../components/game-data/GameDataSkeletons"
 import { FALLBACK_IMAGE_URL } from "../../util/constants"
+import { ShipSilhouette, getShipColor } from "../../components/wiki/ShipSilhouette"
 
 export function WikiShipBrowser() {
   const { t } = useTranslation()
@@ -132,43 +133,91 @@ export function WikiShipBrowser() {
             <>
               <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>{filtered.length} ships</Typography>
               <Grid container spacing={1.5}>
-                {filtered.map((ship) => (
-                  <Grid item xs={6} sm={4} md={3} key={ship.id}>
-                    <Card sx={{ cursor: "pointer", transition: "transform 0.15s", "&:hover": { transform: "translateY(-3px)" }, height: "100%", display: "flex", flexDirection: "column" }}
-                      onClick={() => navigate(`/wiki/ships/${ship.id}`)}>
-                      <CardMedia component="img" height="140" image={ship.image_url || FALLBACK_IMAGE_URL} alt={ship.name}
-                        sx={{ objectFit: "cover", bgcolor: "background.default" }} />
-                      <CardContent sx={{ flex: 1, p: 1.5, "&:last-child": { pb: 1.5 } }}>
-                        <Typography variant="body2" fontWeight={700} noWrap>{ship.name}</Typography>
-                        <Stack direction="row" spacing={0.5} sx={{ mt: 0.5 }} flexWrap="wrap" useFlexGap>
-                          {ship.career && <Chip label={ship.career} size="small" color="secondary" variant="outlined" sx={{ height: 20, fontSize: "0.65rem" }} />}
-                          {ship.role && <Chip label={ship.role} size="small" color="primary" sx={{ height: 20, fontSize: "0.65rem" }} />}
-                          {ship.focus && !ship.role && <Chip label={ship.focus} size="small" color="primary" sx={{ height: 20, fontSize: "0.65rem" }} />}
-                          {ship.size && <Chip label={ship.size} size="small" sx={{ height: 20, fontSize: "0.65rem" }} />}
-                        </Stack>
-                        {ship.manufacturer && <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5, display: "block" }}>{ship.manufacturer}</Typography>}
-                        <Stack direction="row" spacing={1} sx={{ mt: 0.5 }} alignItems="center">
-                          {ship.crew_size != null && (
-                            <Tooltip title="Crew size" arrow>
-                              <Stack direction="row" spacing={0.25} alignItems="center">
-                                <GroupsIcon sx={{ fontSize: 14, color: "text.disabled" }} />
-                                <Typography variant="caption" color="text.secondary">{ship.crew_size}</Typography>
-                              </Stack>
-                            </Tooltip>
+                {filtered.map((ship) => {
+                  const color = getShipColor(ship.career, ship.role)
+                  return (
+                    <Grid item xs={6} sm={4} md={3} key={ship.id}>
+                      <Card
+                        sx={{
+                          cursor: "pointer",
+                          transition: "transform 0.15s",
+                          "&:hover": { transform: "translateY(-3px)" },
+                          height: "100%",
+                          display: "flex",
+                          flexDirection: "column",
+                          overflow: "hidden",
+                        }}
+                        onClick={() => navigate(`/wiki/ships/${ship.id}`)}
+                      >
+                        {/* Silhouette or fallback image */}
+                        <Box
+                          sx={{
+                            height: 120,
+                            bgcolor: "background.default",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            position: "relative",
+                            // Subtle career-color tint on the bg
+                            "&::before": {
+                              content: '""',
+                              position: "absolute",
+                              inset: 0,
+                              bgcolor: color,
+                              opacity: 0.07,
+                            },
+                          }}
+                        >
+                          {ship.ship_code ? (
+                            <ShipSilhouette
+                              shipCode={ship.ship_code}
+                              career={ship.career}
+                              role={ship.role}
+                              height={100}
+                              sx={{ mx: "auto" }}
+                            />
+                          ) : (
+                            <Box
+                              component="img"
+                              src={ship.image_url || FALLBACK_IMAGE_URL}
+                              alt={ship.name}
+                              sx={{ width: "100%", height: "100%", objectFit: "cover" }}
+                            />
                           )}
-                          {ship.length_m != null && (
-                            <Tooltip title={`${ship.length_m}m${ship.width_m ? ` × ${ship.width_m}m` : ""}${ship.height_m ? ` × ${ship.height_m}m` : ""}`} arrow>
-                              <Stack direction="row" spacing={0.25} alignItems="center">
-                                <StraightenIcon sx={{ fontSize: 14, color: "text.disabled" }} />
-                                <Typography variant="caption" color="text.secondary">{ship.length_m}m</Typography>
-                              </Stack>
-                            </Tooltip>
-                          )}
-                        </Stack>
-                      </CardContent>
-                    </Card>
-                  </Grid>
-                ))}
+                        </Box>
+
+                        <CardContent sx={{ flex: 1, p: 1.5, "&:last-child": { pb: 1.5 } }}>
+                          <Typography variant="body2" fontWeight={700} noWrap>{ship.name}</Typography>
+                          <Stack direction="row" spacing={0.5} sx={{ mt: 0.5 }} flexWrap="wrap" useFlexGap>
+                            {ship.career && <Chip label={ship.career} size="small" color="secondary" variant="outlined" sx={{ height: 20, fontSize: "0.65rem" }} />}
+                            {ship.role && <Chip label={ship.role} size="small" color="primary" sx={{ height: 20, fontSize: "0.65rem" }} />}
+                            {ship.focus && !ship.role && <Chip label={ship.focus} size="small" color="primary" sx={{ height: 20, fontSize: "0.65rem" }} />}
+                            {ship.size && <Chip label={ship.size} size="small" sx={{ height: 20, fontSize: "0.65rem" }} />}
+                          </Stack>
+                          {ship.manufacturer && <Typography variant="caption" color="text.secondary" sx={{ mt: 0.5, display: "block" }}>{ship.manufacturer}</Typography>}
+                          <Stack direction="row" spacing={1} sx={{ mt: 0.5 }} alignItems="center">
+                            {ship.crew_size != null && (
+                              <Tooltip title="Crew size" arrow>
+                                <Stack direction="row" spacing={0.25} alignItems="center">
+                                  <GroupsIcon sx={{ fontSize: 14, color: "text.disabled" }} />
+                                  <Typography variant="caption" color="text.secondary">{ship.crew_size}</Typography>
+                                </Stack>
+                              </Tooltip>
+                            )}
+                            {ship.length_m != null && (
+                              <Tooltip title={`${ship.length_m}m${ship.width_m ? ` × ${ship.width_m}m` : ""}${ship.height_m ? ` × ${ship.height_m}m` : ""}`} arrow>
+                                <Stack direction="row" spacing={0.25} alignItems="center">
+                                  <StraightenIcon sx={{ fontSize: 14, color: "text.disabled" }} />
+                                  <Typography variant="caption" color="text.secondary">{ship.length_m}m</Typography>
+                                </Stack>
+                              </Tooltip>
+                            )}
+                          </Stack>
+                        </CardContent>
+                      </Card>
+                    </Grid>
+                  )
+                })}
               </Grid>
               {filtered.length === 0 && <Box sx={{ textAlign: "center", py: 6 }}><Typography color="text.secondary">No ships found.</Typography></Box>}
               {totalPages > 1 && (

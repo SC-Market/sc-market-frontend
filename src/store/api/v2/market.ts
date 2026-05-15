@@ -3922,6 +3922,7 @@ export type WikiItemDetail = {
 export type WikiShipSearchResult = {
   id: string
   name: string
+  ship_code?: string
   manufacturer?: string
   focus?: string
   size?: string
@@ -3936,6 +3937,7 @@ export type WikiShipSearchResult = {
 export type WikiShipDetail = {
   id: string
   name: string
+  ship_code?: string
   manufacturer?: string
   focus?: string
   size?: string

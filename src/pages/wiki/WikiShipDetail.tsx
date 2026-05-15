@@ -1,8 +1,7 @@
 /**
  * Wiki Ship Detail
- * 
- * Loadout diagram, description, components
- * Task 8.10.5
+ *
+ * Loadout diagram, description, components, and ship silhouette.
  */
 
 import React from "react"
@@ -13,7 +12,6 @@ import {
   Typography,
   Grid,
   Chip,
-  CircularProgress,
   Alert,
   Divider,
   Table,
@@ -25,12 +23,13 @@ import {
   Stack,
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
-import { useTranslation } from "react-i18next"
 import { useParams, useNavigate } from "react-router-dom"
 import { useGetShipDetailQuery } from "../../store/api/v2/market"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { DetailPageSkeleton } from "../../components/game-data/GameDataSkeletons"
+import { ShipSilhouette, getShipColor } from "../../components/wiki/ShipSilhouette"
+import { FALLBACK_IMAGE_URL } from "../../util/constants"
 
 interface LoadoutNode {
   name?: string
@@ -44,11 +43,16 @@ interface LoadoutNode {
   [key: string]: LoadoutNode | LoadoutNode[] | string | number | boolean | null | undefined
 }
 
-/** Recursively render a loadout object as a nested list */
-function LoadoutTree({ data, navigate, depth = 0 }: { data: LoadoutNode | LoadoutNode[] | string | number | null | undefined; navigate: (path: string) => void; depth?: number }) {
+function LoadoutTree({ data, navigate, depth = 0 }: {
+  data: LoadoutNode | LoadoutNode[] | string | number | null | undefined
+  navigate: (path: string) => void
+  depth?: number
+}) {
   if (!data || typeof data !== "object") return <Typography variant="caption">{String(data)}</Typography>
 
-  const entries = Array.isArray(data) ? data.map((v, i) => [String(i), v] as const) : Object.entries(data)
+  const entries = Array.isArray(data)
+    ? data.map((v, i) => [String(i), v] as const)
+    : Object.entries(data)
 
   return (
     <Stack spacing={0} sx={{ pl: depth > 0 ? 2 : 0, borderLeft: depth > 0 ? "1px solid" : "none", borderColor: "divider" }}>
@@ -60,7 +64,9 @@ function LoadoutTree({ data, navigate, depth = 0 }: { data: LoadoutNode | Loadou
           return (
             <Box key={key} sx={{ py: 0.25 }}>
               <Stack direction="row" spacing={0.5} alignItems="center">
-                <Typography variant="caption" color="text.secondary" sx={{ minWidth: 80 }}>{key.replace(/_/g, " ")}</Typography>
+                <Typography variant="caption" color="text.secondary" sx={{ minWidth: 80 }}>
+                  {key.replace(/_/g, " ")}
+                </Typography>
                 {name ? (
                   <Chip
                     label={name}
@@ -73,14 +79,18 @@ function LoadoutTree({ data, navigate, depth = 0 }: { data: LoadoutNode | Loadou
                 ) : null}
                 {type && <Typography variant="caption" color="text.disabled">{type}</Typography>}
               </Stack>
-              {Object.keys(value).length > 3 && <LoadoutTree data={value} navigate={navigate} depth={depth + 1} />}
+              {Object.keys(value).length > 3 && (
+                <LoadoutTree data={value} navigate={navigate} depth={depth + 1} />
+              )}
             </Box>
           )
         }
         if (Array.isArray(value) && value.length > 0) {
           return (
             <Box key={key} sx={{ py: 0.25 }}>
-              <Typography variant="caption" color="text.secondary" fontWeight={600}>{key.replace(/_/g, " ")} ({value.length})</Typography>
+              <Typography variant="caption" color="text.secondary" fontWeight={600}>
+                {key.replace(/_/g, " ")} ({value.length})
+              </Typography>
               <LoadoutTree data={value} navigate={navigate} depth={depth + 1} />
             </Box>
           )
@@ -88,7 +98,9 @@ function LoadoutTree({ data, navigate, depth = 0 }: { data: LoadoutNode | Loadou
         if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
           return (
             <Stack key={key} direction="row" spacing={1} sx={{ py: 0.125 }}>
-              <Typography variant="caption" color="text.secondary" sx={{ minWidth: 80 }}>{key.replace(/_/g, " ")}</Typography>
+              <Typography variant="caption" color="text.secondary" sx={{ minWidth: 80 }}>
+                {key.replace(/_/g, " ")}
+              </Typography>
               <Typography variant="caption">{String(value)}</Typography>
             </Stack>
           )
@@ -100,7 +112,6 @@ function LoadoutTree({ data, navigate, depth = 0 }: { data: LoadoutNode | Loadou
 }
 
 export function WikiShipDetail() {
-  const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
@@ -108,12 +119,7 @@ export function WikiShipDetail() {
 
   if (isLoading) {
     return (
-      <StandardPageLayout
-        title={t("wiki.shipDetail.title", "Ship Details")}
-        headerTitle={t("wiki.shipDetail.title", "Ship Details")}
-        sidebarOpen={true}
-        maxWidth="xl"
-      >
+      <StandardPageLayout title="Ship Details" headerTitle="Ship Details" sidebarOpen={true} maxWidth="xl">
         <Grid item xs={12}><DetailPageSkeleton /></Grid>
       </StandardPageLayout>
     )
@@ -121,12 +127,7 @@ export function WikiShipDetail() {
 
   if (error || !ship) {
     return (
-      <StandardPageLayout
-        title={t("wiki.shipDetail.title", "Ship Details")}
-        headerTitle={t("wiki.shipDetail.title", "Ship Details")}
-        sidebarOpen={true}
-        maxWidth="xl"
-      >
+      <StandardPageLayout title="Ship Details" headerTitle="Ship Details" sidebarOpen={true} maxWidth="xl">
         <Grid item xs={12}>
           <Alert severity="error">Failed to load ship details. Please try again.</Alert>
         </Grid>
@@ -134,36 +135,64 @@ export function WikiShipDetail() {
     )
   }
 
+  const shipColor = getShipColor(ship.career, ship.role)
+
   return (
-    <StandardPageLayout
-      title={t("wiki.shipDetail.title", "Ship Details")}
-      headerTitle={ship.name}
-      sidebarOpen={true}
-      maxWidth="xl"
-    >
+    <StandardPageLayout title="Ship Details" headerTitle={ship.name} sidebarOpen={true} maxWidth="xl">
       <Grid item xs={12}>
         <Grid container spacing={3}>
-          {/* Main Info */}
+
+          {/* Header card: silhouette + info */}
           <Grid item xs={12}>
-            <Card>
+            <Card sx={{ overflow: "hidden" }}>
+              {/* Career-color accent bar */}
+              <Box sx={{ height: 4, bgcolor: shipColor }} />
               <CardContent>
-                <Stack direction="row" spacing={2} alignItems="flex-start">
-                  {ship.image_url && (
-                    <Box
-                      component="img"
-                      src={ship.image_url}
-                      alt={ship.name}
-                      sx={{
-                        width: 300,
-                        height: 200,
-                        objectFit: "cover",
-                        bgcolor: "background.default",
-                        borderRadius: 1,
-                      }}
-                    />
-                  )}
-                  <Box sx={{ flex: 1 }}>
-                    <Stack direction="row" spacing={1} sx={{ mb: 1 }} flexWrap="wrap" useFlexGap>
+                <Stack direction={{ xs: "column", sm: "row" }} spacing={3} alignItems="flex-start">
+
+                  {/* Silhouette or fallback */}
+                  <Box
+                    sx={{
+                      width: { xs: "100%", sm: 240 },
+                      flexShrink: 0,
+                      height: 180,
+                      bgcolor: "background.default",
+                      borderRadius: 1,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      position: "relative",
+                      overflow: "hidden",
+                      "&::before": {
+                        content: '""',
+                        position: "absolute",
+                        inset: 0,
+                        bgcolor: shipColor,
+                        opacity: 0.08,
+                      },
+                    }}
+                  >
+                    {ship.ship_code ? (
+                      <ShipSilhouette
+                        shipCode={ship.ship_code}
+                        career={ship.career}
+                        role={ship.role}
+                        height={150}
+                        opacity={0.9}
+                      />
+                    ) : ship.image_url ? (
+                      <Box
+                        component="img"
+                        src={ship.image_url}
+                        alt={ship.name}
+                        sx={{ width: "100%", height: "100%", objectFit: "cover" }}
+                      />
+                    ) : null}
+                  </Box>
+
+                  {/* Ship info */}
+                  <Box sx={{ flex: 1, minWidth: 0 }}>
+                    <Stack direction="row" spacing={1} sx={{ mb: 1.5 }} flexWrap="wrap" useFlexGap>
                       {ship.manufacturer && <Chip label={ship.manufacturer} color="primary" />}
                       {ship.career && <Chip label={ship.career} color="secondary" variant="outlined" />}
                       {ship.role && <Chip label={ship.role} color="primary" variant="outlined" />}
@@ -171,6 +200,8 @@ export function WikiShipDetail() {
                       {ship.size && <Chip label={ship.size} />}
                       {ship.movement_class && <Chip label={ship.movement_class} />}
                     </Stack>
+
+                    {/* Key stats row */}
                     <Stack direction="row" spacing={3} sx={{ mb: 2 }} flexWrap="wrap" useFlexGap>
                       {ship.crew_size != null && (
                         <Typography variant="body2" color="text.secondary">
@@ -187,8 +218,9 @@ export function WikiShipDetail() {
                         </Typography>
                       )}
                     </Stack>
+
                     {ship.description && (
-                      <Typography variant="body1" color="text.secondary" paragraph>
+                      <Typography variant="body1" color="text.secondary">
                         {ship.description}
                       </Typography>
                     )}
@@ -203,9 +235,7 @@ export function WikiShipDetail() {
             <Grid item xs={12} md={6}>
               <Card>
                 <CardContent>
-                  <Typography variant="h6" gutterBottom>
-                    Ship Specifications
-                  </Typography>
+                  <Typography variant="h6" gutterBottom>Ship Specifications</Typography>
                   <Divider sx={{ mb: 2 }} />
                   <TableContainer component={Paper} variant="outlined">
                     <Table size="small">
@@ -215,7 +245,7 @@ export function WikiShipDetail() {
                           .map(([key, value]) => (
                             <TableRow key={key}>
                               <TableCell component="th" scope="row" sx={{ fontWeight: "bold" }}>
-                                {key.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())}
+                                {key.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase())}
                               </TableCell>
                               <TableCell>
                                 {typeof value === "object"
@@ -237,9 +267,7 @@ export function WikiShipDetail() {
             <Grid item xs={12} md={6}>
               <Card>
                 <CardContent>
-                  <Typography variant="h6" gutterBottom>
-                    Default Loadout
-                  </Typography>
+                  <Typography variant="h6" gutterBottom>Default Loadout</Typography>
                   <Divider sx={{ mb: 2 }} />
                   <Box sx={{ maxHeight: 500, overflow: "auto" }}>
                     <LoadoutTree data={ship.default_loadout} navigate={navigate} />
@@ -248,6 +276,7 @@ export function WikiShipDetail() {
               </Card>
             </Grid>
           )}
+
         </Grid>
       </Grid>
     </StandardPageLayout>
