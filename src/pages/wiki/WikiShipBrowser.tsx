@@ -201,8 +201,8 @@ export function WikiShipBrowser() {
             <>
               <Grid container spacing={1.5}>
                 {pageShips.map((ship) => {
-                  const color = getShipColor(ship.career, ship.role)
-                  const chipColor = getShipRoleColor(ship.career, ship.role)
+                  const color = getShipColor(ship.career, ship.role, ship.focus)
+                  const chipColor = getShipRoleColor(ship.career, ship.role, ship.focus)
                   return (
                     <Grid item xs={6} sm={4} md={3} key={ship.id}>
                       <Card
@@ -240,6 +240,7 @@ export function WikiShipBrowser() {
                               shipCode={ship.ship_code}
                               career={ship.career}
                               role={ship.role}
+                              focus={ship.focus}
                               height={120}
                             />
                           ) : (

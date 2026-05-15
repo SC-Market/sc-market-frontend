@@ -122,8 +122,8 @@ export function WikiShipDetail() {
     )
   }
 
-  const shipColor = getShipColor(ship.career, ship.role)
-  const chipColor = getShipRoleColor(ship.career, ship.role)
+  const shipColor = getShipColor(ship.career, ship.role, ship.focus)
+  const chipColor = getShipRoleColor(ship.career, ship.role, ship.focus)
 
   return (
     <StandardPageLayout title="Ship Details" headerTitle={ship.name} sidebarOpen={true} maxWidth="xl">
@@ -157,7 +157,7 @@ export function WikiShipDetail() {
                     }}
                   >
                     {ship.ship_code ? (
-                      <ShipSilhouette shipCode={ship.ship_code} career={ship.career} role={ship.role} height={150} opacity={0.9} />
+                      <ShipSilhouette shipCode={ship.ship_code} career={ship.career} role={ship.role} focus={ship.focus} height={150} opacity={0.9} />
                     ) : ship.image_url ? (
                       <Box component="img" src={ship.image_url} alt={ship.name}
                         sx={{ width: "100%", height: "100%", objectFit: "cover" }} />

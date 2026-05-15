@@ -73,26 +73,37 @@ export function formatShipCareer(career?: string): string {
   return CAREER_LABELS[key] || career.charAt(0).toUpperCase() + career.slice(1)
 }
 
-export function getShipRoleColor(career?: string, role?: string): "default" | "primary" | "secondary" | "error" | "info" | "success" | "warning" {
+export function getShipRoleColor(career?: string, role?: string, focus?: string): "default" | "primary" | "secondary" | "error" | "info" | "success" | "warning" {
   const r = role?.toLowerCase().replace(/[^a-z]/g, "") || ""
   const c = career?.toLowerCase() || ""
+  const f = focus?.toLowerCase() || ""
 
-  // Combat — red
-  if (c === "combat" || r.includes("fighter") || r.includes("bomber") || r === "gunship"
+  // Check career first — this is the primary classification
+  if (c === "combat" || c.includes("combat")) return "error"
+  if (c === "exploration" || c.includes("explor")) return "info"
+  if (c === "industrial" || c.includes("industrial")) return "warning"
+  if (c === "support") return "success"
+  if (c === "transporter" || c === "transport" || c.includes("transport")) return "secondary"
+  if (c === "competition") return "primary"
+
+  // Then check role for ships that might not have a career set
+  if (r.includes("fighter") || r.includes("bomber") || r === "gunship"
     || r === "interceptor" || r === "dropship" || r === "corvette" || r === "frigate"
     || r === "destroyer" || r === "carrier" || r === "snub") return "error"
-  // Exploration — blue/info
-  if (c === "exploration" || r === "pathfinder" || r === "exploration" || r === "touring"
+  if (r === "pathfinder" || r === "exploration" || r === "touring"
     || r === "reporting" || r === "datarunning" || r === "science" || r === "scienceship") return "info"
-  // Industrial — orange/warning
-  if (c === "industrial" || r.includes("mining") || r.includes("salvage")
+  if (r.includes("mining") || r.includes("salvage")
     || r === "refinery" || r === "construction" || r === "constructionship") return "warning"
-  // Support — green/success
-  if (c === "support" || r === "medical" || r === "repair" || r === "refueling") return "success"
-  // Transport — purple/secondary
-  if (c === "transporter" || c === "transport" || r.includes("freight")) return "secondary"
-  // Competition — cyan/primary
-  if (r === "racer" || r === "racing" || c === "competition") return "primary"
+  if (r === "medical" || r === "repair" || r === "refueling") return "success"
+  if (r.includes("freight")) return "secondary"
+  if (r === "racer" || r === "racing") return "primary"
+
+  // Fallback to focus field
+  if (f.includes("combat") || f.includes("fight")) return "error"
+  if (f.includes("explor") || f.includes("tour")) return "info"
+  if (f.includes("mining") || f.includes("salvag") || f.includes("industrial")) return "warning"
+  if (f.includes("medical") || f.includes("repair") || f.includes("support")) return "success"
+  if (f.includes("transport") || f.includes("freight") || f.includes("cargo")) return "secondary"
 
   return "default"
 }

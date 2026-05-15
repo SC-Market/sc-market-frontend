@@ -24,7 +24,7 @@ export function ShipDetailModal({ shipId, open, onClose }: Props) {
     { skip: !shipId },
   )
 
-  const shipColor = ship ? getShipColor(ship.career, ship.role) : undefined
+  const shipColor = ship ? getShipColor(ship.career, ship.role, ship.focus) : undefined
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="md" fullWidth>
@@ -64,7 +64,7 @@ export function ShipDetailModal({ shipId, open, onClose }: Props) {
                 }}
               >
                 {ship.ship_code ? (
-                  <ShipSilhouette shipCode={ship.ship_code} career={ship.career} role={ship.role} height={120} opacity={0.9} />
+                  <ShipSilhouette shipCode={ship.ship_code} career={ship.career} role={ship.role} focus={ship.focus} height={120} opacity={0.9} />
                 ) : ship.image_url ? (
                   <Box component="img" src={ship.image_url} alt={ship.name}
                     sx={{ width: "100%", height: "100%", objectFit: "cover" }} />
