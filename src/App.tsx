@@ -1105,20 +1105,6 @@ const router = createBrowserRouter([
         }),
       },
       {
-        path: "/wiki/vehicles/:id",
-        lazy: async () => ({
-          Component: (await import("./pages/wiki/WikiShipDetailGate"))
-            .WikiShipDetailGate,
-        }),
-      },
-      {
-        path: "/wiki/vehicles",
-        lazy: async () => ({
-          Component: (await import("./pages/wiki/WikiVehicleBrowser"))
-            .WikiVehicleBrowser,
-        }),
-      },
-      {
         path: "/wiki/commodities",
         lazy: async () => ({
           Component: (await import("./pages/wiki/WikiCommodityBrowser"))
