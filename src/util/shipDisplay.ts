@@ -1,41 +1,53 @@
 const ROLE_LABELS: Record<string, string> = {
+  // Combat
   lightfighter: "Light Fighter",
   mediumfighter: "Medium Fighter",
   heavyfighter: "Heavy Fighter",
   stealthfighter: "Stealth Fighter",
   stealthbomber: "Stealth Bomber",
-  lightfreight: "Light Freight",
-  mediumfreight: "Medium Freight",
-  heavyfreight: "Heavy Freight",
+  bomber: "Bomber",
+  interceptor: "Interceptor",
+  gunship: "Gunship",
+  dropship: "Dropship",
+  corvette: "Corvette",
+  frigate: "Frigate",
+  destroyer: "Destroyer",
+  carrier: "Carrier",
+  snub: "Snub",
+  // Exploration
+  pathfinder: "Pathfinder",
+  exploration: "Exploration",
+  touring: "Touring",
+  reporting: "Reporting",
+  datarunning: "Data Running",
+  science: "Science",
+  scienceship: "Science Ship",
+  // Industrial
   lightmining: "Light Mining",
   mediummining: "Medium Mining",
   heavymining: "Heavy Mining",
   lightsalvage: "Light Salvage",
   mediumsalvage: "Medium Salvage",
   heavysalvage: "Heavy Salvage",
-  pathfinder: "Pathfinder",
-  dropship: "Dropship",
-  gunship: "Gunship",
-  bomber: "Bomber",
-  interceptor: "Interceptor",
-  racer: "Racer",
-  touring: "Touring",
-  refueling: "Refueling",
-  repair: "Repair",
-  medical: "Medical",
-  reporting: "Reporting",
-  datarunning: "Data Running",
-  exploration: "Exploration",
   refinery: "Refinery",
-  corvette: "Corvette",
-  frigate: "Frigate",
-  destroyer: "Destroyer",
-  carrier: "Carrier",
+  construction: "Construction",
   constructionship: "Construction Ship",
-  scienceship: "Science Ship",
+  // Support
+  medical: "Medical",
+  repair: "Repair",
+  refueling: "Refueling",
+  // Transport
+  lightfreight: "Light Freight",
+  mediumfreight: "Medium Freight",
+  heavyfreight: "Heavy Freight",
+  // Competition
+  racer: "Racer",
   racing: "Racing",
   competition: "Competition",
-  snub: "Snub",
+  // Multi-role
+  multirole: "Multi-Role",
+  ground: "Ground Vehicle",
+  groundvehicle: "Ground Vehicle",
 }
 
 const CAREER_LABELS: Record<string, string> = {
@@ -46,6 +58,7 @@ const CAREER_LABELS: Record<string, string> = {
   transporter: "Transport",
   transport: "Transport",
   competition: "Competition",
+  multirole: "Multi-Role",
 }
 
 export function formatShipRole(role?: string): string {
@@ -64,11 +77,22 @@ export function getShipRoleColor(career?: string, role?: string): "default" | "p
   const r = role?.toLowerCase().replace(/[^a-z]/g, "") || ""
   const c = career?.toLowerCase() || ""
 
-  if (c === "combat" || r.includes("fighter") || r.includes("bomber") || r === "gunship" || r === "interceptor") return "error"
-  if (c === "exploration" || r === "pathfinder" || r === "exploration") return "info"
-  if (c === "industrial" || r.includes("mining") || r.includes("salvage") || r === "refinery") return "warning"
+  // Combat — red
+  if (c === "combat" || r.includes("fighter") || r.includes("bomber") || r === "gunship"
+    || r === "interceptor" || r === "dropship" || r === "corvette" || r === "frigate"
+    || r === "destroyer" || r === "carrier" || r === "snub") return "error"
+  // Exploration — blue/info
+  if (c === "exploration" || r === "pathfinder" || r === "exploration" || r === "touring"
+    || r === "reporting" || r === "datarunning" || r === "science" || r === "scienceship") return "info"
+  // Industrial — orange/warning
+  if (c === "industrial" || r.includes("mining") || r.includes("salvage")
+    || r === "refinery" || r === "construction" || r === "constructionship") return "warning"
+  // Support — green/success
   if (c === "support" || r === "medical" || r === "repair" || r === "refueling") return "success"
+  // Transport — purple/secondary
   if (c === "transporter" || c === "transport" || r.includes("freight")) return "secondary"
+  // Competition — cyan/primary
   if (r === "racer" || r === "racing" || c === "competition") return "primary"
+
   return "default"
 }
