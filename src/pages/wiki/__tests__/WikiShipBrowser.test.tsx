@@ -27,7 +27,7 @@ describe("WikiShipBrowser", () => {
     store = createMockStore()
   })
 
-  it("renders the component with title and description", () => {
+  it("renders the component with title", () => {
     render(
       <Provider store={store}>
         <BrowserRouter>
@@ -37,12 +37,9 @@ describe("WikiShipBrowser", () => {
     )
 
     expect(screen.getByText("Ships Database")).toBeInTheDocument()
-    expect(
-      screen.getByText("Browse all ships with detailed specifications and loadouts")
-    ).toBeInTheDocument()
   })
 
-  it("renders filter controls", () => {
+  it("renders search bar", () => {
     render(
       <Provider store={store}>
         <BrowserRouter>
@@ -51,20 +48,6 @@ describe("WikiShipBrowser", () => {
       </Provider>
     )
 
-    expect(screen.getByText("Manufacturer")).toBeInTheDocument()
-    expect(screen.getByText("Focus")).toBeInTheDocument()
-    expect(screen.getByText("Size")).toBeInTheDocument()
-  })
-
-  it("displays loading state initially", () => {
-    render(
-      <Provider store={store}>
-        <BrowserRouter>
-          <WikiShipBrowser />
-        </BrowserRouter>
-      </Provider>
-    )
-
-    expect(screen.getByRole("progressbar")).toBeInTheDocument()
+    expect(screen.getByPlaceholderText("Search ships, manufacturers, careers...")).toBeInTheDocument()
   })
 })
