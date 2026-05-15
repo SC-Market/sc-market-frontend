@@ -69,14 +69,25 @@ const ROLE_OVERRIDES: Record<string, string> = {
 
 const DEFAULT_COLOR = "hsl(220, 15%, 55%)"
 
-export function getShipColor(career?: string, role?: string): string {
+export function getShipColor(career?: string, role?: string, focus?: string): string {
+  // Career is the primary classifier
+  if (career) {
+    const key = career.toLowerCase()
+    if (CAREER_COLORS[key]) return CAREER_COLORS[key]
+  }
+  // Role provides more specific tint
   if (role) {
     const key = role.toLowerCase().replace(/[^a-z]/g, "")
     if (ROLE_OVERRIDES[key]) return ROLE_OVERRIDES[key]
   }
-  if (career) {
-    const key = career.toLowerCase()
-    if (CAREER_COLORS[key]) return CAREER_COLORS[key]
+  // Fallback to focus field
+  if (focus) {
+    const f = focus.toLowerCase()
+    if (f.includes("combat") || f.includes("fight")) return CAREER_COLORS.combat
+    if (f.includes("explor")) return CAREER_COLORS.exploration
+    if (f.includes("mining") || f.includes("salvag") || f.includes("industrial")) return CAREER_COLORS.industrial
+    if (f.includes("support") || f.includes("medical") || f.includes("repair")) return CAREER_COLORS.support
+    if (f.includes("transport") || f.includes("freight") || f.includes("cargo")) return CAREER_COLORS.transporter
   }
   return DEFAULT_COLOR
 }
@@ -85,6 +96,7 @@ interface ShipSilhouetteProps {
   shipCode: string
   career?: string
   role?: string
+  focus?: string
   /** Height of the silhouette area — width fills container */
   height?: number | string
   opacity?: number
@@ -95,11 +107,12 @@ export function ShipSilhouette({
   shipCode,
   career,
   role,
+  focus,
   height = 120,
   opacity = 0.85,
   sx,
 }: ShipSilhouetteProps) {
-  const color = getShipColor(career, role)
+  const color = getShipColor(career, role, focus)
   const url = `/ship-icons/${shipCode}.svg`
 
   return (
