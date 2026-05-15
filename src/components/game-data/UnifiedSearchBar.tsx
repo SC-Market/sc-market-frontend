@@ -79,7 +79,7 @@ interface UnifiedSearchBarProps {
   onChange: (tokens: SearchToken[]) => void
   extraOptions?: SearchToken[]
   placeholder?: string
-  mode?: "missions" | "blueprints" | "market" | "mining" | "locations" | "wiki-items"
+  mode?: "missions" | "blueprints" | "market" | "mining" | "locations" | "wiki-items" | "ships"
 }
 
 // === Mining suggestions ===
@@ -102,6 +102,25 @@ const LOCATION_TYPES: SearchToken[] = [
 const LOCATION_TAGS: SearchToken[] = [
   { type: "tag" as const, label: "Has Refinery", value: "refinery" },
 ]
+
+// === Ships suggestions ===
+const SHIP_CAREERS: SearchToken[] = [
+  "Combat", "Exploration", "Industrial", "Support", "Transporter",
+].map(c => ({ type: "category" as const, label: c, value: c.toLowerCase() }))
+
+const SHIP_SIZES: SearchToken[] = [
+  { type: "tag" as const, label: "Small (1)", value: "1" },
+  { type: "tag" as const, label: "Medium (2)", value: "2" },
+  { type: "tag" as const, label: "Large (3)", value: "3" },
+  { type: "tag" as const, label: "Capital (4+)", value: "4" },
+]
+
+const SHIP_MANUFACTURERS: SearchToken[] = [
+  "Aegis Dynamics", "Anvil Aerospace", "Argo Astronautics", "CNOU",
+  "Consolidated Outland", "Crusader Industries", "Drake Interplanetary",
+  "Esperia", "Gatac", "Greycat Industrial", "Kruger Intergalactic",
+  "MISC", "Origin Jumpworks", "Roberts Space Industries", "Tumbril",
+].map(m => ({ type: "manufacturer" as const, label: m, value: m }))
 
 // === Wiki Items suggestions ===
 const WIKI_ITEM_TYPES: SearchToken[] = [
@@ -133,6 +152,7 @@ export function UnifiedSearchBar({ tokens, onChange, extraOptions = [], placehol
     if (mode === "mining") return [...SYSTEMS, ...MINING_RARITIES, ...MINING_METHODS]
     if (mode === "locations") return [...SYSTEMS, ...LOCATION_TYPES, ...LOCATION_TAGS]
     if (mode === "wiki-items") return [...WIKI_ITEM_TYPES, ...SYSTEMS]
+    if (mode === "ships") return [...SHIP_CAREERS, ...SHIP_MANUFACTURERS, ...SHIP_SIZES]
     return [...SYSTEMS, ...MISSION_CATEGORIES, ...MISSION_TAGS, ...MISSION_GIVERS, ...MISSION_FACTIONS]
   }, [mode])
 
@@ -382,5 +402,35 @@ export function wikiItemsParamsToTokens(sp: URLSearchParams): SearchToken[] {
   const q = sp.get("q"); if (q) tokens.push({ type: "query", label: q, value: q })
   const type = sp.get("type"); if (type) tokens.push({ type: "category", label: type, value: type })
   const mfr = sp.get("manufacturer"); if (mfr) tokens.push({ type: "system", label: mfr, value: mfr })
+  return tokens
+}
+
+// === Ships param conversion ===
+export function shipsTokensToParams(tokens: SearchToken[]): Record<string, string> {
+  const params: Record<string, string> = {}
+  const queries: string[] = []
+  for (const t of tokens) {
+    switch (t.type) {
+      case "query": queries.push(t.value); break
+      case "category": params.career = t.value; break
+      case "manufacturer": params.manufacturer = t.value; break
+      case "tag": params.size = t.value; break
+    }
+  }
+  if (queries.length) params.q = queries.join(" ")
+  return params
+}
+
+export function shipsParamsToTokens(sp: URLSearchParams): SearchToken[] {
+  const tokens: SearchToken[] = []
+  const q = sp.get("q"); if (q) tokens.push({ type: "query", label: q, value: q })
+  const career = sp.get("career"); if (career) {
+    tokens.push({ type: "category", label: career.charAt(0).toUpperCase() + career.slice(1), value: career })
+  }
+  const mfr = sp.get("manufacturer"); if (mfr) tokens.push({ type: "manufacturer", label: mfr, value: mfr })
+  const size = sp.get("size"); if (size) {
+    const sizeLabels: Record<string, string> = { "1": "Small (1)", "2": "Medium (2)", "3": "Large (3)", "4": "Capital (4+)" }
+    tokens.push({ type: "tag", label: sizeLabels[size] || `Size ${size}`, value: size })
+  }
   return tokens
 }

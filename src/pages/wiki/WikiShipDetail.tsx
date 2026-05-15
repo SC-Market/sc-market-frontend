@@ -1,26 +1,12 @@
 /**
- * Wiki Ship Detail
- *
- * Loadout diagram, description, components, and ship silhouette.
+ * Wiki Ship Detail — full page (mobile) view
  */
 
 import React from "react"
 import {
-  Box,
-  Card,
-  CardContent,
-  Typography,
-  Grid,
-  Chip,
-  Alert,
-  Divider,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableRow,
-  Paper,
-  Stack,
+  Box, Card, CardContent, Typography, Grid, Chip,
+  Alert, Divider, Table, TableBody, TableCell,
+  TableContainer, TableRow, Paper, Stack,
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import { useParams, useNavigate } from "react-router-dom"
@@ -30,6 +16,7 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { DetailPageSkeleton } from "../../components/game-data/GameDataSkeletons"
 import { ShipSilhouette, getShipColor } from "../../components/wiki/ShipSilhouette"
 import { FALLBACK_IMAGE_URL } from "../../util/constants"
+import { formatShipRole, formatShipCareer, getShipRoleColor } from "../../util/shipDisplay"
 
 interface LoadoutNode {
   name?: string
@@ -136,21 +123,18 @@ export function WikiShipDetail() {
   }
 
   const shipColor = getShipColor(ship.career, ship.role)
+  const chipColor = getShipRoleColor(ship.career, ship.role)
 
   return (
     <StandardPageLayout title="Ship Details" headerTitle={ship.name} sidebarOpen={true} maxWidth="xl">
       <Grid item xs={12}>
         <Grid container spacing={3}>
 
-          {/* Header card: silhouette + info */}
           <Grid item xs={12}>
             <Card sx={{ overflow: "hidden" }}>
-              {/* Career-color accent bar */}
               <Box sx={{ height: 4, bgcolor: shipColor }} />
               <CardContent>
                 <Stack direction={{ xs: "column", sm: "row" }} spacing={3} alignItems="flex-start">
-
-                  {/* Silhouette or fallback */}
                   <Box
                     sx={{
                       width: { xs: "100%", sm: 240 },
@@ -173,35 +157,23 @@ export function WikiShipDetail() {
                     }}
                   >
                     {ship.ship_code ? (
-                      <ShipSilhouette
-                        shipCode={ship.ship_code}
-                        career={ship.career}
-                        role={ship.role}
-                        height={150}
-                        opacity={0.9}
-                      />
+                      <ShipSilhouette shipCode={ship.ship_code} career={ship.career} role={ship.role} height={150} opacity={0.9} />
                     ) : ship.image_url ? (
-                      <Box
-                        component="img"
-                        src={ship.image_url}
-                        alt={ship.name}
-                        sx={{ width: "100%", height: "100%", objectFit: "cover" }}
-                      />
+                      <Box component="img" src={ship.image_url} alt={ship.name}
+                        sx={{ width: "100%", height: "100%", objectFit: "cover" }} />
                     ) : null}
                   </Box>
 
-                  {/* Ship info */}
                   <Box sx={{ flex: 1, minWidth: 0 }}>
                     <Stack direction="row" spacing={1} sx={{ mb: 1.5 }} flexWrap="wrap" useFlexGap>
                       {ship.manufacturer && <Chip label={ship.manufacturer} color="primary" />}
-                      {ship.career && <Chip label={ship.career} color="secondary" variant="outlined" />}
-                      {ship.role && <Chip label={ship.role} color="primary" variant="outlined" />}
-                      {ship.focus && <Chip label={ship.focus} />}
-                      {ship.size && <Chip label={ship.size} />}
+                      {ship.career && <Chip label={formatShipCareer(ship.career)} color={chipColor} variant="outlined" />}
+                      {ship.role && <Chip label={formatShipRole(ship.role)} color={chipColor} />}
+                      {ship.focus && !ship.role && <Chip label={ship.focus} />}
+                      {ship.size && <Chip label={`Size ${ship.size}`} />}
                       {ship.movement_class && <Chip label={ship.movement_class} />}
                     </Stack>
 
-                    {/* Key stats row */}
                     <Stack direction="row" spacing={3} sx={{ mb: 2 }} flexWrap="wrap" useFlexGap>
                       {ship.crew_size != null && (
                         <Typography variant="body2" color="text.secondary">
@@ -230,7 +202,6 @@ export function WikiShipDetail() {
             </Card>
           </Grid>
 
-          {/* Ship Attributes */}
           {Object.keys(ship.attributes).length > 0 && (
             <Grid item xs={12} md={6}>
               <Card>
@@ -241,7 +212,7 @@ export function WikiShipDetail() {
                     <Table size="small">
                       <TableBody>
                         {Object.entries(ship.attributes)
-                          .filter(([key]) => !key.includes("loadout"))
+                          .filter(([key]) => !key.includes("loadout") && key !== "description" && key !== "ship_focus")
                           .map(([key, value]) => (
                             <TableRow key={key}>
                               <TableCell component="th" scope="row" sx={{ fontWeight: "bold" }}>
@@ -262,7 +233,6 @@ export function WikiShipDetail() {
             </Grid>
           )}
 
-          {/* Default Loadout */}
           {ship.default_loadout && (
             <Grid item xs={12} md={6}>
               <Card>

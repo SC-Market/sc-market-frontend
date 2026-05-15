@@ -1093,8 +1093,8 @@ const router = createBrowserRouter([
       {
         path: "/wiki/ships/:id",
         lazy: async () => ({
-          Component: (await import("./pages/wiki/WikiShipDetail"))
-            .WikiShipDetail,
+          Component: (await import("./pages/wiki/WikiShipDetailGate"))
+            .WikiShipDetailGate,
         }),
       },
       {
