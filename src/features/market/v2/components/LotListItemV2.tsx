@@ -83,7 +83,6 @@ export function LotListItemV2({
 
   const handleSaveEdit = useCallback(async () => {
     try {
-      // Validate quantity
       if (editedQuantity < 0) {
         issueAlert({
           message: t(
@@ -95,7 +94,6 @@ export function LotListItemV2({
         return
       }
 
-      // Validate notes length
       if (editedNotes.length > 1000) {
         issueAlert({
           message: t(
@@ -122,12 +120,22 @@ export function LotListItemV2({
         message: t("LotListItemV2.updateSuccess", "Lot updated successfully"),
         severity: "success",
       })
-    } catch (error) {
-      issueAlert({
-        message: t("LotListItemV2.updateError", "Failed to update lot"),
-        severity: "error",
-      })
-      // Rollback on error
+    } catch (error: any) {
+      const detail = error?.data?.details || error?.data
+      if (detail?.code === "INVALID_QUANTITY") {
+        issueAlert({
+          message: t(
+            "LotListItemV2.cannotReduceStock",
+            "Cannot reduce stock — units are committed to active orders",
+          ),
+          severity: "warning",
+        })
+      } else {
+        issueAlert({
+          message: t("LotListItemV2.updateError", "Failed to update lot"),
+          severity: "error",
+        })
+      }
       handleCancelEdit()
     }
   }, [

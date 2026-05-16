@@ -71,8 +71,19 @@ export function useStockManagement(
         if (onRefresh) {
           await onRefresh()
         }
-      } catch (error) {
-        issueAlert(error as UnwrappedErrorInterface)
+      } catch (error: any) {
+        const detail = error?.data?.details || error?.data
+        if (detail?.code === "INVALID_QUANTITY") {
+          issueAlert({
+            message: t(
+              "ItemStock.cannotReduceStock",
+              "Cannot reduce stock — units are committed to active orders",
+            ),
+            severity: "warning",
+          })
+        } else {
+          issueAlert(error as UnwrappedErrorInterface)
+        }
       }
     },
     [updateQuantity, issueAlert, t, onRefresh],
