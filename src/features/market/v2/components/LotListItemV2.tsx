@@ -189,9 +189,16 @@ export function LotListItemV2({
               <Typography variant="h6" fontWeight="medium">
                 {lot.quantity_total.toLocaleString()}
               </Typography>
-              <Typography variant="caption" color="text.secondary">
-                {t("LotListItemV2.units", "units")}
-              </Typography>
+              <Stack direction="row" spacing={0.5} alignItems="center">
+                <Typography variant="caption" color="success.main">
+                  {(lot.quantity_total - (lot.quantity_allocated || 0)).toLocaleString()} {t("LotListItemV2.available", "available")}
+                </Typography>
+                {(lot.quantity_allocated || 0) > 0 && (
+                  <Typography variant="caption" color="warning.main">
+                    · {lot.quantity_allocated.toLocaleString()} {t("LotListItemV2.reserved", "reserved")}
+                  </Typography>
+                )}
+              </Stack>
             </Box>
           )}
 

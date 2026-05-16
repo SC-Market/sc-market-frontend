@@ -48,6 +48,9 @@ export function BulkStockManagement({
   const [quantities, setQuantities] = useState<Record<string, number>>({})
   const [saving, setSaving] = useState<Record<string, boolean>>({})
 
+  // Track reserved (allocated) counts returned by the API
+  const [reserved, setReserved] = useState<Record<string, number>>({})
+
   const handleQuantityChange = (listingId: string, newQuantity: number) => {
     setQuantities((prev) => ({
       ...prev,
@@ -67,10 +70,14 @@ export function BulkStockManagement({
     setSaving((prev) => ({ ...prev, [listing.listing.listing_id]: true }))
 
     try {
-      await updateQuantity({
+      const result = await updateQuantity({
         listing_id: listing.listing.listing_id,
         quantity: newQuantity,
       }).unwrap()
+
+      if (result.quantity_reserved) {
+        setReserved((prev) => ({ ...prev, [listing.listing.listing_id]: result.quantity_reserved }))
+      }
 
       issueAlert({
         message: t("ItemStock.updated"),
@@ -86,19 +93,8 @@ export function BulkStockManagement({
       if (onRefresh) {
         await onRefresh()
       }
-    } catch (error: any) {
-      const detail = error?.data?.details || error?.data
-      if (detail?.code === "INVALID_QUANTITY") {
-        issueAlert({
-          message: t(
-            "ItemStock.cannotReduceStock",
-            "Cannot reduce stock — units are committed to active orders",
-          ),
-          severity: "warning",
-        })
-      } else {
-        issueAlert(error as UnwrappedErrorInterface)
-      }
+    } catch (error) {
+      issueAlert(error as UnwrappedErrorInterface)
     } finally {
       setSaving((prev) => ({ ...prev, [listing.listing.listing_id]: false }))
     }
@@ -108,13 +104,20 @@ export function BulkStockManagement({
     const currentQty = listing.listing.quantity_available
     const newQuantity = Math.max(0, currentQty + delta)
 
+    // Noop if no actual change
+    if (newQuantity === currentQty) return
+
     setSaving((prev) => ({ ...prev, [listing.listing.listing_id]: true }))
 
     try {
-      await updateQuantity({
+      const result = await updateQuantity({
         listing_id: listing.listing.listing_id,
         quantity: newQuantity,
       }).unwrap()
+
+      if (result.quantity_reserved) {
+        setReserved((prev) => ({ ...prev, [listing.listing.listing_id]: result.quantity_reserved }))
+      }
 
       issueAlert({
         message: t("ItemStock.updated"),
@@ -124,19 +127,8 @@ export function BulkStockManagement({
       if (onRefresh) {
         await onRefresh()
       }
-    } catch (error: any) {
-      const detail = error?.data?.details || error?.data
-      if (detail?.code === "INVALID_QUANTITY") {
-        issueAlert({
-          message: t(
-            "ItemStock.cannotReduceStock",
-            "Cannot reduce stock — units are committed to active orders",
-          ),
-          severity: "warning",
-        })
-      } else {
-        issueAlert(error as UnwrappedErrorInterface)
-      }
+    } catch (error) {
+      issueAlert(error as UnwrappedErrorInterface)
     } finally {
       setSaving((prev) => ({ ...prev, [listing.listing.listing_id]: false }))
     }
@@ -200,12 +192,21 @@ export function BulkStockManagement({
                     <Typography variant="body1" noWrap>
                       {listing.details.title}
                     </Typography>
-                    <Stack direction="row" spacing={1} flexWrap="wrap">
+                    <Stack direction="row" spacing={0.5} flexWrap="wrap" useFlexGap>
                       <Chip
-                        label={`${currentQty.toLocaleString()} ${t("ItemStock.inStock", "in stock")}`}
+                        label={`${currentQty.toLocaleString()} ${t("ItemStock.available", "available")}`}
                         size="small"
                         variant="outlined"
+                        color="success"
                       />
+                      {(reserved[listingId] ?? 0) > 0 && (
+                        <Chip
+                          label={`${reserved[listingId].toLocaleString()} ${t("ItemStock.reserved", "reserved")}`}
+                          size="small"
+                          variant="outlined"
+                          color="warning"
+                        />
+                      )}
                       <Chip
                         label={`${listing.listing.price.toLocaleString()} aUEC`}
                         size="small"
