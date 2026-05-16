@@ -77,7 +77,6 @@ export function BulkStockManagement({
         severity: "success",
       })
 
-      // Clear the pending change
       setQuantities((prev) => {
         const next = { ...prev }
         delete next[listing.listing.listing_id]
@@ -87,8 +86,19 @@ export function BulkStockManagement({
       if (onRefresh) {
         await onRefresh()
       }
-    } catch (error) {
-      issueAlert(error as UnwrappedErrorInterface)
+    } catch (error: any) {
+      const detail = error?.data?.details || error?.data
+      if (detail?.code === "INVALID_QUANTITY") {
+        issueAlert({
+          message: t(
+            "ItemStock.cannotReduceStock",
+            "Cannot reduce stock — units are committed to active orders",
+          ),
+          severity: "warning",
+        })
+      } else {
+        issueAlert(error as UnwrappedErrorInterface)
+      }
     } finally {
       setSaving((prev) => ({ ...prev, [listing.listing.listing_id]: false }))
     }
@@ -114,8 +124,19 @@ export function BulkStockManagement({
       if (onRefresh) {
         await onRefresh()
       }
-    } catch (error) {
-      issueAlert(error as UnwrappedErrorInterface)
+    } catch (error: any) {
+      const detail = error?.data?.details || error?.data
+      if (detail?.code === "INVALID_QUANTITY") {
+        issueAlert({
+          message: t(
+            "ItemStock.cannotReduceStock",
+            "Cannot reduce stock — units are committed to active orders",
+          ),
+          severity: "warning",
+        })
+      } else {
+        issueAlert(error as UnwrappedErrorInterface)
+      }
     } finally {
       setSaving((prev) => ({ ...prev, [listing.listing.listing_id]: false }))
     }
