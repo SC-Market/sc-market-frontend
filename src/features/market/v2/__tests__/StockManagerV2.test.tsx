@@ -54,6 +54,7 @@ const mockStockLots: GetStockLotsResponse = {
         short_name: "T5 Crafted",
       },
       quantity_total: 100,
+      quantity_allocated: 0,
       location: {
         location_id: "loc-1",
         name: "Orison",
@@ -81,6 +82,7 @@ const mockStockLots: GetStockLotsResponse = {
         short_name: "T3 Store",
       },
       quantity_total: 50,
+      quantity_allocated: 0,
       location: {
         location_id: "loc-1",
         name: "Orison",

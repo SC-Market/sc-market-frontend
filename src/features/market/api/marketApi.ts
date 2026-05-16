@@ -430,7 +430,7 @@ export const marketApi = serviceApi.injectEndpoints({
     }),
 
     updateListingQuantity: builder.mutation<
-      void,
+      { result: string; quantity_available: number; quantity_reserved: number },
       { listing_id: string; quantity: number }
     >({
       query: ({ listing_id, quantity }) => ({
@@ -438,6 +438,7 @@ export const marketApi = serviceApi.injectEndpoints({
         method: "POST",
         body: { quantity_available: quantity },
       }),
+      transformResponse: (response: any) => response?.data ?? response,
       invalidatesTags: (result, error, { listing_id }) => [
         "MarketListings",
         "MyListings",

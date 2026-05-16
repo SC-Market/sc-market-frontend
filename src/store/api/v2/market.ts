@@ -474,6 +474,7 @@ const injectedRtkApi = api
           url: `/game-items/search`,
           params: {
             query: queryArg.query,
+            limit: queryArg.limit,
           },
         }),
         providesTags: ["Game Items V2"],
@@ -1788,6 +1789,8 @@ export type SearchGameItemsApiResponse =
 export type SearchGameItemsApiArg = {
   /** Search text */
   query?: string
+  /** Max results (default 50) */
+  limit?: number
 }
 export type GetCategoriesApiResponse = /** status 200 Ok */ GameItemCategory[]
 export type GetCategoriesApiArg = void
@@ -2721,6 +2724,8 @@ export type StockLotDetail = {
   variant: StockLotVariant
   /** Total quantity in this lot */
   quantity_total: number
+  /** Quantity currently allocated to active orders */
+  quantity_allocated: number
   /** Location information (null if unspecified) */
   location: LocationInfo | null
   /** Owner information (null if unassigned) */

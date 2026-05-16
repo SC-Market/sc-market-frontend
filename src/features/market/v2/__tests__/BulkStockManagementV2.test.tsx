@@ -44,6 +44,7 @@ const mockLots: StockLotDetail[] = [
       short_name: "T5 Crafted",
     },
     quantity_total: 10,
+    quantity_allocated: 0,
     location: {
       location_id: "loc-1",
       name: "Orison",
@@ -71,6 +72,7 @@ const mockLots: StockLotDetail[] = [
       short_name: "T3 Store",
     },
     quantity_total: 5,
+    quantity_allocated: 0,
     location: {
       location_id: "loc-2",
       name: "Lorville",
