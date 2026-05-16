@@ -3,6 +3,9 @@ import {
   TextField,
   InputAdornment,
   IconButton,
+  CircularProgress,
+  Typography,
+  Box,
 } from "@mui/material"
 import SearchIcon from "@mui/icons-material/Search"
 import React, { useState, useEffect, useMemo } from "react"
@@ -29,11 +32,13 @@ export function ItemSearchAutocomplete({
     Array<{ name: string; type: string }>
   >([])
   const [inputValue, setInputValue] = useState("")
+  const [isSearching, setIsSearching] = useState(false)
 
   const debouncedSearch = useMemo(
     () =>
       debounce(async (searchQuery: string) => {
-        if (searchQuery.length > 1) {
+        if (searchQuery.trim().length >= 1) {
+          setIsSearching(true)
           const result = await searchTrigger({
             query: searchQuery,
             index: 0,
@@ -53,34 +58,51 @@ export function ItemSearchAutocomplete({
             )
             setItemOptions(uniqueItems)
           }
+          setIsSearching(false)
         } else {
           setItemOptions([])
         }
-      }, 300),
+      }, 250),
     [searchTrigger],
   )
 
   useEffect(() => {
     debouncedSearch(inputValue)
+    return () => { debouncedSearch.cancel() }
   }, [inputValue, debouncedSearch])
 
   return (
     <Autocomplete
       size={size}
       options={itemOptions}
+      loading={isSearching}
       value={itemOptions.find((opt) => opt.name === value) || null}
       inputValue={inputValue}
-      onInputChange={(event, newValue) => {
-        setInputValue(newValue)
+      onInputChange={(event, newValue, reason) => {
+        if (reason !== "reset") {
+          setInputValue(newValue)
+        }
       }}
       onChange={(event, newValue) => {
         onChange(newValue?.name || null, newValue?.type || null)
       }}
+      filterOptions={(x) => x}
       getOptionLabel={(option) => option.name}
+      renderOption={(props, option) => (
+        <li {...props} key={option.name}>
+          <Box sx={{ display: "flex", flexDirection: "column" }}>
+            <Typography variant="body2">{option.name}</Typography>
+            <Typography variant="caption" color="text.secondary">
+              {option.type}
+            </Typography>
+          </Box>
+        </li>
+      )}
       renderInput={(params) => (
         <TextField
           {...params}
           label={label || t("MarketListingForm.searchItem", "Search Item")}
+          placeholder={t("market.searchItemPlaceholder", "Start typing an item name...")}
           color="secondary"
           InputProps={{
             ...params.InputProps,
@@ -94,9 +116,23 @@ export function ItemSearchAutocomplete({
                 {params.InputProps.startAdornment}
               </>
             ),
+            endAdornment: (
+              <>
+                {isSearching ? <CircularProgress color="inherit" size={18} /> : null}
+                {params.InputProps.endAdornment}
+              </>
+            ),
           }}
         />
       )}
+      noOptionsText={
+        inputValue.trim().length < 1
+          ? t("market.typeToSearch", "Type to search...")
+          : isSearching
+          ? t("market.searching", "Searching...")
+          : t("market.noItemResults", "No items found — try a shorter or different term")
+      }
+      loadingText={t("market.searching", "Searching...")}
     />
   )
 }
