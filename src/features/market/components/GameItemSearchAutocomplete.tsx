@@ -3,6 +3,9 @@ import {
   TextField,
   InputAdornment,
   IconButton,
+  CircularProgress,
+  Typography,
+  Box,
   SxProps,
   Theme,
 } from "@mui/material"
@@ -41,7 +44,7 @@ export function GameItemSearchAutocomplete({
   const debouncedSearch = useMemo(
     () =>
       debounce(async (searchQuery: string) => {
-        if (searchQuery.length > 1) {
+        if (searchQuery.trim().length >= 1) {
           setIsSearching(true)
           const result = await searchTrigger(searchQuery)
           if (result.data) {
@@ -51,12 +54,13 @@ export function GameItemSearchAutocomplete({
         } else {
           setItemOptions([])
         }
-      }, 300),
+      }, 250),
     [searchTrigger],
   )
 
   useEffect(() => {
     debouncedSearch(inputValue)
+    return () => { debouncedSearch.cancel() }
   }, [inputValue, debouncedSearch])
 
   return (
@@ -80,13 +84,25 @@ export function GameItemSearchAutocomplete({
           setInputValue(newValue.name)
         }
       }}
+      filterOptions={(x) => x}
       isOptionEqualToValue={(option, val) => option.id === val.id}
       getOptionLabel={(option) => option.name}
+      renderOption={(props, option) => (
+        <li {...props} key={option.id}>
+          <Box sx={{ display: "flex", flexDirection: "column" }}>
+            <Typography variant="body2">{option.name}</Typography>
+            <Typography variant="caption" color="text.secondary">
+              {option.type}
+            </Typography>
+          </Box>
+        </li>
+      )}
       renderInput={(params) => (
         <TextField
           {...params}
           autoFocus={autoFocus}
           label={label || t("market.search_query")}
+          placeholder={t("market.searchItemPlaceholder", "Start typing an item name...")}
           InputProps={{
             ...params.InputProps,
             startAdornment: (
@@ -96,15 +112,21 @@ export function GameItemSearchAutocomplete({
                 </IconButton>
               </InputAdornment>
             ),
+            endAdornment: (
+              <>
+                {isSearching ? <CircularProgress color="inherit" size={18} /> : null}
+                {params.InputProps.endAdornment}
+              </>
+            ),
           }}
         />
       )}
       noOptionsText={
-        inputValue.length < 2
+        inputValue.trim().length < 1
           ? t("market.typeToSearch", "Type to search...")
           : isSearching
           ? t("market.searching", "Searching...")
-          : t("market.noResults", "No results")
+          : t("market.noItemResults", "No items found — try a shorter or different term")
       }
       loadingText={t("market.searching", "Searching...")}
     />
