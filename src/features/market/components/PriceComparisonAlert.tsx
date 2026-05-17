@@ -3,7 +3,7 @@ import { Alert, Box, Chip } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import TrendingUpIcon from "@mui/icons-material/TrendingUp"
 import TrendingDownIcon from "@mui/icons-material/TrendingDown"
-import { useGetOrCreateAggregateQuery } from "../api/marketApi"
+import { useGetListingsQuery } from "../../../store/api/v2/market"
 
 interface PriceComparisonAlertProps {
   gameItemId: string | null
@@ -15,14 +15,15 @@ export function PriceComparisonAlert({
   currentPrice,
 }: PriceComparisonAlertProps) {
   const { t } = useTranslation()
-  const { data: aggregate } = useGetOrCreateAggregateQuery(gameItemId || "", {
-    skip: !gameItemId || currentPrice <= 0,
-  })
+  const { data } = useGetListingsQuery(
+    { id: gameItemId!, sortBy: "price", sortOrder: "asc", pageSize: 100 },
+    { skip: !gameItemId || currentPrice <= 0 },
+  )
 
   const priceComparison = useMemo(() => {
-    if (!aggregate?.listings.length || currentPrice <= 0) return null
+    if (!data?.listings?.length || currentPrice <= 0) return null
 
-    const prices = aggregate.listings.map((l) => Number(l.price))
+    const prices = data.listings.map((l) => l.price_min)
     const avgPrice = prices.reduce((a, b) => a + b, 0) / prices.length
     const minPrice = Math.min(...prices)
     const percentVsAvg = ((currentPrice - avgPrice) / avgPrice) * 100
@@ -32,9 +33,9 @@ export function PriceComparisonAlert({
       minPrice,
       percentVsAvg,
       isBelowAvg: currentPrice < avgPrice,
-      isLowest: currentPrice === minPrice,
+      isLowest: currentPrice <= minPrice,
     }
-  }, [aggregate, currentPrice])
+  }, [data, currentPrice])
 
   if (!priceComparison) return null
 

@@ -12,7 +12,7 @@ import {
 import SearchIcon from "@mui/icons-material/Search"
 import React, { useState, useEffect, useMemo } from "react"
 import { useTranslation } from "react-i18next"
-import { useLazySearchGameItemsQuery } from "../api/marketApi"
+import { marketV2Api } from "../../../store/api/v2/market"
 import { debounce } from "lodash-es"
 
 interface GameItemSearchAutocompleteProps {
@@ -33,7 +33,7 @@ export function GameItemSearchAutocomplete({
   sx,
 }: GameItemSearchAutocompleteProps) {
   const { t } = useTranslation()
-  const [searchTrigger] = useLazySearchGameItemsQuery()
+  const [searchTrigger] = marketV2Api.endpoints.searchGameItems.useLazyQuery()
   const [itemOptions, setItemOptions] = useState<
     Array<{ name: string; type: string; id: string }>
   >([])
@@ -46,7 +46,7 @@ export function GameItemSearchAutocomplete({
       debounce(async (searchQuery: string) => {
         if (searchQuery.trim().length >= 1) {
           setIsSearching(true)
-          const result = await searchTrigger(searchQuery)
+          const result = await searchTrigger({ query: searchQuery, limit: 50 })
           if (result.data) {
             setItemOptions(result.data)
           }
