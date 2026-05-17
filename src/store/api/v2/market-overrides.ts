@@ -5,6 +5,36 @@
  */
 import { generatedApiV2 } from "../../generatedApiV2"
 
+export interface UexImportPreviewItem {
+  title: string
+  price: number
+  quantity: number
+  quality?: number
+  source?: string
+}
+
+export interface UexImportRequest {
+  uex_username: string
+  contractor_spectrum_id?: string
+  listings?: Array<{
+    title: string
+    description: string
+    price: number
+    quantity: number
+    quality?: number
+    durability?: number
+    location?: string
+    source?: string
+  }>
+  confirm?: boolean
+}
+
+export interface UexImportResponse {
+  preview?: UexImportPreviewItem[]
+  imported?: number
+  total?: number
+}
+
 export const marketV2Overrides = generatedApiV2.injectEndpoints({
   overrideExisting: true,
   endpoints: (build) => ({
@@ -24,7 +54,29 @@ export const marketV2Overrides = generatedApiV2.injectEndpoints({
         }
       },
     }),
+    uploadImage: build.mutation<
+      { resource_id: string; url: string },
+      File
+    >({
+      query: (file) => {
+        const formData = new FormData()
+        formData.append("photo", file)
+        return {
+          url: `/images/upload`,
+          method: "POST",
+          body: formData,
+        }
+      },
+    }),
+    importFromUex: build.mutation<UexImportResponse, UexImportRequest>({
+      query: (body) => ({
+        url: "/listings/import-uex",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Listings V2"] as any,
+    }),
   }),
 })
 
-export const { useUploadPhotosMutation } = marketV2Overrides
+export const { useUploadPhotosMutation, useUploadImageMutation, useImportFromUexMutation } = marketV2Overrides

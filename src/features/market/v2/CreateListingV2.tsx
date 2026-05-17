@@ -29,12 +29,12 @@ import { FormPaper } from "../../../components/paper/FormPaper";
 import { MarkdownEditor } from "../../../components/markdown/Markdown.lazy";
 import { GameItemSearchAutocomplete } from "../components/GameItemSearchAutocomplete";
 import { getQualityMode } from "../../../util/qualityMode";
-import { SelectPhotosArea } from "../../../components/modal/SelectPhotosArea";
+import { SelectPhotosArea, UploadedImageStatus } from "../../../components/modal/SelectPhotosArea";
 import { LocationSelector } from "../components/stock/LocationSelector";
 import { BulkDiscountTierEditor } from "../../../components/market/BulkDiscountTierEditor";
 import { QualityBandSelect } from "../../../components/game-data/QualityBandSelect";
 import { useCreateListingMutation, useSearchResourcesQuery } from "../../../store/api/v2/market";
-import { useUploadPhotosMutation } from "../../../store/api/v2/market-overrides";
+import { useUploadImageMutation } from "../../../store/api/v2/market-overrides";
 import { useAlertHook } from "../../../hooks/alert/AlertHook";
 import { useGetUserProfileQuery } from "../../profile/api/profileApi";
 import { useCurrentOrg } from "../../../hooks/login/CurrentOrg";
@@ -79,7 +79,9 @@ export function CreateListingV2() {
   const [pricingMode, setPricingMode] = useState<"unified" | "per_variant">("unified");
   const [basePrice, setBasePrice] = useState<number>(0);
   const [photos, setPhotos] = useState<string[]>([]);
-  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [photoResourceIds, setPhotoResourceIds] = useState<string[]>([]);
+  const [uploadedImages, setUploadedImages] = useState<UploadedImageStatus[]>([]);
+  const isUploading = uploadedImages.some((img) => img.status === "uploading");
   const [pickupMethod, setPickupMethod] = useState<"delivery" | "pickup" | "any" | "">("");
   const [quantityUnit, setQuantityUnit] = useState<"unit" | "scu">("unit");
   const [minOrderQuantity, setMinOrderQuantity] = useState<number | null>(null);
@@ -119,9 +121,9 @@ export function CreateListingV2() {
   )
   const qualityBands = resourceData?.resources?.[0]?.quality_bands
 
-  // RTK Query mutation
+  // RTK Query mutations
   const [createListing, { isLoading }] = useCreateListingMutation();
-  const [uploadPhotos] = useUploadPhotosMutation();
+  const [uploadImage] = useUploadImageMutation();
 
   // Add new stock lot
   const handleAddStockLot = useCallback(() => {
@@ -280,26 +282,11 @@ export function CreateListingV2() {
           min_bid_increment: minBidIncrement,
           reserve_price: reservePrice ?? undefined,
         } : undefined,
+        photo_resource_ids: photoResourceIds.length > 0 ? photoResourceIds : undefined,
       };
 
       try {
         const result = await createListing({ createListingRequest: request }).unwrap();
-
-        if (uploadedFiles.length > 0) {
-          try {
-            await uploadPhotos({ id: result.listing_id, photos: uploadedFiles }).unwrap();
-          } catch (photoErr: any) {
-            const errBody = photoErr?.data?.error || photoErr?.data || {}
-            const detail = errBody?.message || errBody?.validationErrors?.[0]?.message || ""
-            const isModeration = detail.toLowerCase().includes("moderation")
-            issueAlert({
-              message: isModeration
-                ? t("CreateListingV2.photoModerationError", "Listing created but a photo was rejected by content moderation")
-                : detail || t("CreateListingV2.photoUploadError", "Listing created but photo upload failed"),
-              severity: isModeration ? "error" : "warning",
-            });
-          }
-        }
 
         issueAlert({
           message: t("CreateListingV2.success", "Listing created successfully"),
@@ -325,6 +312,7 @@ export function CreateListingV2() {
       gameItemId,
       pricingMode,
       basePrice,
+      photoResourceIds,
       createListing,
       issueAlert,
       navigate,
@@ -332,8 +320,48 @@ export function CreateListingV2() {
     ]
   );
 
+  // Two-phase upload: upload each file immediately and track status
   const handleFileUpload = useCallback((files: File[]) => {
-    setUploadedFiles((prev) => [...prev, ...files]);
+    for (const file of files) {
+      const tempId = `temp-${crypto.randomUUID()}`;
+      const newEntry: UploadedImageStatus = {
+        resource_id: tempId,
+        url: "",
+        status: "uploading",
+        file,
+      };
+
+      setUploadedImages((prev) => [...prev, newEntry]);
+
+      uploadImage(file)
+        .unwrap()
+        .then((result) => {
+          setUploadedImages((prev) =>
+            prev.map((img) =>
+              img.resource_id === tempId
+                ? { ...img, resource_id: result.resource_id, url: result.url, status: "success" as const }
+                : img
+            )
+          );
+          setPhotoResourceIds((prev) => [...prev, result.resource_id]);
+        })
+        .catch((err: any) => {
+          const errBody = err?.data?.error || err?.data || {};
+          const detail = errBody?.message || errBody?.validationErrors?.[0]?.message || "Upload failed";
+          setUploadedImages((prev) =>
+            prev.map((img) =>
+              img.resource_id === tempId
+                ? { ...img, status: "error" as const, error: detail }
+                : img
+            )
+          );
+        });
+    }
+  }, [uploadImage]);
+
+  const handleRemoveUploadedImage = useCallback((resourceId: string) => {
+    setUploadedImages((prev) => prev.filter((img) => img.resource_id !== resourceId));
+    setPhotoResourceIds((prev) => prev.filter((id) => id !== resourceId));
   }, []);
 
   return (
@@ -441,11 +469,12 @@ export function CreateListingV2() {
                 setPhotos={setPhotos}
                 photos={photos}
                 onFileUpload={handleFileUpload}
-                pendingFiles={uploadedFiles}
-                onRemovePendingFile={(file) => {
-                  setUploadedFiles((prev) => prev.filter((f) => f !== file));
-                }}
                 onAlert={(severity, message) => issueAlert({ severity, message })}
+                onImageUploaded={(resourceId, url) => {
+                  // Already handled in handleFileUpload
+                }}
+                uploadedImages={uploadedImages}
+                onRemoveUploadedImage={handleRemoveUploadedImage}
               />
             </Grid>
           </FormPaper>
@@ -1002,9 +1031,12 @@ export function CreateListingV2() {
               color="secondary"
               type="submit"
               loading={isLoading}
+              disabled={isUploading}
               aria-label={t("CreateListingV2.submit", "Create Listing")}
             >
-              {t("CreateListingV2.submit", "Create Listing")}
+              {isUploading
+                ? t("CreateListingV2.uploadingPhotos", "Uploading photos...")
+                : t("CreateListingV2.submit", "Create Listing")}
             </LoadingButton>
           </Grid>
         </Grid>

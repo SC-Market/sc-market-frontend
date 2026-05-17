@@ -35,10 +35,10 @@ import {
   useGetStockLotsQuery,
   useUpdateListingMutation,
 } from "../../../store/api/v2/market";
-import { useUploadPhotosMutation } from "../../../store/api/v2/market-overrides";
+import { useUploadImageMutation } from "../../../store/api/v2/market-overrides";
 import { useAlertHook } from "../../../hooks/alert/AlertHook";
 import { PriceComparisonAlert } from "../components/PriceComparisonAlert";
-import { SelectPhotosArea } from "../../../components/modal/SelectPhotosArea";
+import { SelectPhotosArea, UploadedImageStatus } from "../../../components/modal/SelectPhotosArea";
 import type {
   UpdateListingRequest,
   VariantPriceUpdate,
@@ -101,13 +101,15 @@ export function EditListingV2() {
   // Stock lots state - flattened from variants
   const [stockLots, setStockLots] = useState<StockLotFormData[]>([]);
 
-  // RTK Query mutation
+  // RTK Query mutations
   const [updateListing, { isLoading: isUpdating }] = useUpdateListingMutation();
-  const [uploadPhotos] = useUploadPhotosMutation();
+  const [uploadImage] = useUploadImageMutation();
 
   // Photo state
   const [photos, setPhotos] = useState<string[]>([]);
-  const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
+  const [photoResourceIds, setPhotoResourceIds] = useState<string[]>([]);
+  const [uploadedImages, setUploadedImages] = useState<UploadedImageStatus[]>([]);
+  const isUploading = uploadedImages.some((img) => img.status === "uploading");
 
   // Check if listing can be edited
   const canEdit = useMemo(() => {
@@ -292,6 +294,11 @@ export function EditListingV2() {
         request.lot_updates = lotUpdates;
       }
 
+      // Include newly uploaded photo resource IDs
+      if (photoResourceIds.length > 0) {
+        request.photo_resource_ids = photoResourceIds;
+      }
+
       // Check if there are any changes
       if (
         !request.title &&
@@ -300,7 +307,7 @@ export function EditListingV2() {
         !request.variant_prices &&
         !request.lot_updates &&
         !request.photos &&
-        uploadedFiles.length === 0
+        !request.photo_resource_ids
       ) {
         issueAlert({
           message: t("EditListingV2.noChanges", "No changes to save"),
@@ -310,30 +317,10 @@ export function EditListingV2() {
       }
 
       try {
-        const hasFieldChanges = !!(request.title || request.description || request.base_price || request.variant_prices || request.lot_updates || request.photos)
-
-        if (hasFieldChanges) {
-          await updateListing({
-            id: id!,
-            updateListingRequest: request,
-          }).unwrap();
-        }
-
-        if (uploadedFiles.length > 0) {
-          try {
-            await uploadPhotos({ id: id!, photos: uploadedFiles }).unwrap();
-          } catch (photoErr: any) {
-            const errBody = photoErr?.data?.error || photoErr?.data || {}
-            const detail = errBody?.message || errBody?.validationErrors?.[0]?.message || ""
-            const isModeration = detail.toLowerCase().includes("moderation")
-            issueAlert({
-              message: isModeration
-                ? t("EditListingV2.photoModerationError", "Listing updated but a photo was rejected by content moderation")
-                : detail || t("EditListingV2.photoUploadError", "Listing updated but photo upload failed"),
-              severity: isModeration ? "error" : "warning",
-            });
-          }
-        }
+        await updateListing({
+          id: id!,
+          updateListingRequest: request,
+        }).unwrap();
 
         issueAlert({
           message: t("EditListingV2.success", "Listing updated successfully"),
@@ -360,6 +347,7 @@ export function EditListingV2() {
       pricingMode,
       basePrice,
       stockLots,
+      photoResourceIds,
       listingData,
       updateListing,
       id,
@@ -368,6 +356,50 @@ export function EditListingV2() {
       t,
     ]
   );
+
+  // Two-phase upload: upload each file immediately and track status
+  const handleFileUpload = useCallback((files: File[]) => {
+    for (const file of files) {
+      const tempId = `temp-${crypto.randomUUID()}`;
+      const newEntry: UploadedImageStatus = {
+        resource_id: tempId,
+        url: "",
+        status: "uploading",
+        file,
+      };
+
+      setUploadedImages((prev) => [...prev, newEntry]);
+
+      uploadImage(file)
+        .unwrap()
+        .then((result) => {
+          setUploadedImages((prev) =>
+            prev.map((img) =>
+              img.resource_id === tempId
+                ? { ...img, resource_id: result.resource_id, url: result.url, status: "success" as const }
+                : img
+            )
+          );
+          setPhotoResourceIds((prev) => [...prev, result.resource_id]);
+        })
+        .catch((err: any) => {
+          const errBody = err?.data?.error || err?.data || {};
+          const detail = errBody?.message || errBody?.validationErrors?.[0]?.message || "Upload failed";
+          setUploadedImages((prev) =>
+            prev.map((img) =>
+              img.resource_id === tempId
+                ? { ...img, status: "error" as const, error: detail }
+                : img
+            )
+          );
+        });
+    }
+  }, [uploadImage]);
+
+  const handleRemoveUploadedImage = useCallback((resourceId: string) => {
+    setUploadedImages((prev) => prev.filter((img) => img.resource_id !== resourceId));
+    setPhotoResourceIds((prev) => prev.filter((id) => id !== resourceId));
+  }, []);
 
   // Show loading state
   if (isLoadingListing) {
@@ -553,10 +585,13 @@ export function EditListingV2() {
               <SelectPhotosArea
                 setPhotos={setPhotos}
                 photos={photos}
-                onFileUpload={(files: File[]) => setUploadedFiles((prev) => [...prev, ...files])}
-                pendingFiles={uploadedFiles}
-                onRemovePendingFile={(file: File) => setUploadedFiles((prev) => prev.filter((f) => f !== file))}
+                onFileUpload={handleFileUpload}
                 onAlert={(severity: "warning" | "error", message: string) => issueAlert({ severity, message })}
+                onImageUploaded={(resourceId, url) => {
+                  // Already handled in handleFileUpload
+                }}
+                uploadedImages={uploadedImages}
+                onRemoveUploadedImage={handleRemoveUploadedImage}
               />
             </Grid>
           </FormPaper>
@@ -842,10 +877,12 @@ export function EditListingV2() {
               color="secondary"
               type="submit"
               loading={isUpdating}
-              disabled={!canEdit}
+              disabled={!canEdit || isUploading}
               aria-label={t("EditListingV2.submit", "Update Listing")}
             >
-              {t("EditListingV2.submit", "Update Listing")}
+              {isUploading
+                ? t("EditListingV2.uploadingPhotos", "Uploading photos...")
+                : t("EditListingV2.submit", "Update Listing")}
             </LoadingButton>
           </Grid>
         </Grid>
