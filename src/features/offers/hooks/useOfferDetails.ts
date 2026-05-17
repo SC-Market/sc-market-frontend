@@ -31,9 +31,9 @@ export function useOfferDetails(session: GetOfferSessionV2Response, offerIndex?:
 
   // Offer selection — use provided index or default to 0
   const selectedOfferIndex = offerIndex ?? 0
-  const currentOffer = session.offers[selectedOfferIndex]
-  const previousOffer = selectedOfferIndex < session.offers.length - 1 ? session.offers[selectedOfferIndex + 1] : undefined
-  const offerChanges = detectOfferChanges(currentOffer, previousOffer)
+  const currentOffer = session.offers?.[selectedOfferIndex] ?? undefined
+  const previousOffer = selectedOfferIndex < (session.offers?.length ?? 0) - 1 ? session.offers[selectedOfferIndex + 1] : undefined
+  const offerChanges = currentOffer ? detectOfferChanges(currentOffer, previousOffer) : null
 
   // Assignment editing
   const [isEditingAssigned, setIsEditingAssigned] = useState(false)
