@@ -319,14 +319,17 @@ export function EditListingV2() {
           }).unwrap();
         }
 
-        // Upload new photos if any files were selected
         if (uploadedFiles.length > 0) {
           try {
             await uploadPhotos({ id: id!, photos: uploadedFiles }).unwrap();
-          } catch {
+          } catch (photoErr: any) {
+            const detail = photoErr?.data?.message || photoErr?.data?.error || ""
+            const isModeration = detail.toLowerCase().includes("moderation")
             issueAlert({
-              message: t("EditListingV2.photoUploadError", "Listing updated but photo upload failed"),
-              severity: "warning",
+              message: isModeration
+                ? t("EditListingV2.photoModerationError", "Listing updated but a photo was rejected by content moderation")
+                : detail || t("EditListingV2.photoUploadError", "Listing updated but photo upload failed"),
+              severity: isModeration ? "error" : "warning",
             });
           }
         }
