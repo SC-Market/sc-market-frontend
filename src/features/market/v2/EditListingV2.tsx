@@ -323,7 +323,8 @@ export function EditListingV2() {
           try {
             await uploadPhotos({ id: id!, photos: uploadedFiles }).unwrap();
           } catch (photoErr: any) {
-            const detail = photoErr?.data?.message || photoErr?.data?.error || ""
+            const errBody = photoErr?.data?.error || photoErr?.data || {}
+            const detail = errBody?.message || errBody?.validationErrors?.[0]?.message || ""
             const isModeration = detail.toLowerCase().includes("moderation")
             issueAlert({
               message: isModeration
