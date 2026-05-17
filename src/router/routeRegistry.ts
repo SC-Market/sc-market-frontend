@@ -25,11 +25,7 @@ export const routeRegistry: Record<string, RouteImportFunction> = {
   "/recruiting": () => import("../pages/recruiting/Recruiting"),
 
   // Market routes
-  "/market/:id": () => import("../pages/market/ViewMarketListing"),
-  "/market/aggregate/:id": () => import("../pages/market/ViewMarketAggregate"),
-  "/market/multiple/:id": () => import("../pages/market/ViewMarketMultiple"),
   "/market/category/:name": () => import("../features/market"),
-  "/buyorder/create": () => import("../pages/market/CreateBuyOrder"),
 
   // Contractor routes
   "/contractor/:id": () => import("../pages/contractor/ViewOrg"),
@@ -68,17 +64,8 @@ export const routeRegistry: Record<string, RouteImportFunction> = {
   "/accountlink": () => import("../pages/authentication/AuthenticateRSI"),
 
   // Market management routes
-  "/market/create": () => import("../pages/market/MarketCreate"),
-  "/market/create/:tab": () => import("../pages/market/MarketCreate"),
-  "/market/me": () => import("../pages/market/MyMarketListings"),
   "/market/manage": () => import("../pages/market/ManageStock"),
   "/market/manage-stock": () => import("../pages/market/ManageStockLots"),
-  "/market/stock/:listingId": () =>
-    import("../pages/market/ManageListingStock"),
-  "/market/cart": () => import("../pages/market/MarketCart"),
-  "/market_edit/:id": () => import("../pages/market/ViewMarketListing"),
-  "/market/multiple/:id/edit": () =>
-    import("../pages/market/ViewMarketListing"),
   "/sell": () => import("../pages/market/SellMaterials"),
 
   // Order routes

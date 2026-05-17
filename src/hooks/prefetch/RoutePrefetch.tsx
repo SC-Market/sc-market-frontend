@@ -8,18 +8,6 @@ const routePrefetchMap: Record<string, () => Promise<void>> = {
   "/market": async () => {
     await Promise.allSettled([
       prefetchModule(
-        () => import("../../pages/market/MarketCreate"),
-        "MarketCreate",
-      ),
-      prefetchModule(
-        () => import("../../pages/market/ViewMarketListing"),
-        "ViewMarketListing",
-      ),
-      prefetchModule(
-        () => import("../../pages/market/ViewMarketAggregate"),
-        "ViewMarketAggregate",
-      ),
-      prefetchModule(
         () => import("../../pages/market/ManageStock"),
         "ManageStock",
       ),
