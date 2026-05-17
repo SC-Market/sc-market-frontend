@@ -3557,6 +3557,8 @@ export type UpdateListingRequest = {
   max_order_value?: number | null
   /** Updated bulk discount tiers (pass [] to remove, omit to keep unchanged) */
   bulk_discount_tiers?: BulkDiscountTier[]
+  /** New photo resource IDs to append (from two-phase upload) */
+  photo_resource_ids?: string[]
 }
 export type InventoryLotDetail = {
   lot_id: string

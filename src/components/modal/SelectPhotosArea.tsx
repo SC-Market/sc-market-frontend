@@ -13,11 +13,14 @@ import {
   Grid,
   CircularProgress,
   useMediaQuery,
+  Tooltip,
 } from "@mui/material"
 import {
   AddAPhotoRounded,
+  CheckCircleRounded,
   CloseRounded,
   CloudUploadRounded,
+  ErrorRounded,
 } from "@mui/icons-material"
 import React, { useState, useRef, useCallback, Suspense } from "react"
 import { useTranslation } from "react-i18next"
@@ -108,6 +111,117 @@ export function PendingPhotoEntry(props: { file: File; onClose: () => void }) {
   )
 }
 
+export interface UploadedImageStatus {
+  resource_id: string
+  url: string
+  status: "uploading" | "success" | "error"
+  error?: string
+  file: File
+}
+
+export function UploadingPhotoEntry(props: {
+  imageStatus: UploadedImageStatus
+  onClose: () => void
+}) {
+  const { imageStatus, onClose } = props
+  const theme = useTheme<ExtendedTheme>()
+  const [previewUrl, setPreviewUrl] = useState<string>("")
+
+  React.useEffect(() => {
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      if (e.target?.result) {
+        setPreviewUrl(e.target.result as string)
+      }
+    }
+    reader.readAsDataURL(imageStatus.file)
+  }, [imageStatus.file])
+
+  return (
+    <Paper
+      sx={{
+        width: 96,
+        height: 96,
+        bgcolor: theme.palette.background.imageOverlay,
+        position: "relative",
+      }}
+    >
+      <Fab
+        size={"small"}
+        sx={{
+          transform: "scale(0.6)",
+          position: "absolute",
+          top: -4,
+          right: -4,
+          zIndex: 2,
+        }}
+        onClick={onClose}
+      >
+        <CloseRounded />
+      </Fab>
+      <Avatar
+        src={previewUrl}
+        sx={{ borderRadius: 0, width: "100%", height: "100%" }}
+      />
+      {/* Status overlay */}
+      {imageStatus.status === "uploading" && (
+        <Box
+          sx={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: "rgba(0,0,0,0.5)",
+            borderRadius: 0,
+          }}
+        >
+          <CircularProgress size={32} sx={{ color: "white" }} />
+        </Box>
+      )}
+      {imageStatus.status === "success" && (
+        <Box
+          sx={{
+            position: "absolute",
+            bottom: 2,
+            right: 2,
+          }}
+        >
+          <CheckCircleRounded
+            sx={{ color: theme.palette.success.main, fontSize: 22 }}
+          />
+        </Box>
+      )}
+      {imageStatus.status === "error" && (
+        <Tooltip title={imageStatus.error || "Upload failed"} arrow>
+          <Box
+            sx={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              backgroundColor: "rgba(0,0,0,0.4)",
+              borderRadius: 0,
+              cursor: "pointer",
+            }}
+          >
+            <ErrorRounded
+              sx={{ color: theme.palette.error.main, fontSize: 32 }}
+            />
+          </Box>
+        </Tooltip>
+      )}
+    </Paper>
+  )
+}
+
 export function SelectPhotosArea(props: {
   setPhotos: (photos: string[]) => void
   photos: string[]
@@ -116,6 +230,12 @@ export function SelectPhotosArea(props: {
   pendingFiles?: File[]
   onRemovePendingFile?: (file: File) => void
   onAlert?: (severity: "warning" | "error", message: string) => void
+  /** Called when an image finishes uploading successfully (two-phase upload mode) */
+  onImageUploaded?: (resourceId: string, url: string) => void
+  /** Tracked uploaded images with per-image status (two-phase upload mode) */
+  uploadedImages?: UploadedImageStatus[]
+  /** Called to remove an uploaded image from the tracked list */
+  onRemoveUploadedImage?: (resourceId: string) => void
 }) {
   const {
     photos,
@@ -125,6 +245,9 @@ export function SelectPhotosArea(props: {
     pendingFiles = [],
     onRemovePendingFile,
     onAlert,
+    onImageUploaded,
+    uploadedImages = [],
+    onRemoveUploadedImage,
   } = props
   const [isDragOver, setIsDragOver] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -447,12 +570,25 @@ export function SelectPhotosArea(props: {
           </Paper>
         )}
 
-        {/* Display pending files */}
+        {/* Display pending files (legacy mode without two-phase upload) */}
         {pendingFiles.map((file, index) => (
           <PendingPhotoEntry
             file={file}
             key={`pending-${index}`}
             onClose={() => handleRemovePendingFile(file)}
+          />
+        ))}
+
+        {/* Display uploading/uploaded images (two-phase upload mode) */}
+        {uploadedImages.map((img) => (
+          <UploadingPhotoEntry
+            imageStatus={img}
+            key={`upload-${img.resource_id}`}
+            onClose={() => {
+              if (onRemoveUploadedImage) {
+                onRemoveUploadedImage(img.resource_id)
+              }
+            }}
           />
         ))}
 
