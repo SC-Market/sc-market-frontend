@@ -13,9 +13,6 @@ const routePrefetchMap: Record<
   "/market": { importFn: () => import("../../../features/market"), key: "MarketPage" },
   "/bulk": { importFn: () => import("../../../features/market-bulk"), key: "BulkItems" },
   "/buyorders": { importFn: () => import("../../../features/market-buy-orders"), key: "BuyOrders" },
-  "/market/me": { importFn: () => import("../../../pages/market/MyMarketListings"), key: "MyListings" },
-  "/market/create": { importFn: () => import("../../../pages/market/MarketCreate"), key: "MarketCreate" },
-  "/market/cart": { importFn: () => import("../../../pages/market/MarketCart"), key: "MarketCart" },
   "/market/manage": { importFn: () => import("../../../pages/market/ManageStock"), key: "ManageStock" },
 
   // Contracting

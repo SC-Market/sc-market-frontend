@@ -49,14 +49,6 @@ export async function prefetchMarketComponents(): Promise<void> {
 export async function prefetchCommonComponents(): Promise<void> {
   const prefetchPromises = [
     prefetchModule(
-      () => import("../features/market/views/MarketAggregateView"),
-      "MarketAggregateView",
-    ),
-    prefetchModule(
-      () => import("../features/market/views/MarketListingView"),
-      "MarketListingView",
-    ),
-    prefetchModule(
       () => import("../views/contracts/ServiceListings"),
       "ServiceListings",
     ),

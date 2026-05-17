@@ -50,12 +50,6 @@ export const componentRegistry: Record<string, ComponentImportFunction> = {
   "settings:contractors": () => import("../views/settings/ContractorsSettings"),
   "settings:blocklist": () => import("../views/settings/BlocklistSettings"),
 
-  // MarketCreate tab components - all from MarketListingForm
-  "marketCreate:listing": () =>
-    import("../features/market/components/MarketListingForm"),
-
-  // MyMarketListings tab components
-  "myListings:views": () => import("../features/market/views/ItemListings"),
 
   // Fleet tab components
   "fleet:ships": () => import("../views/fleet/Ships"),
