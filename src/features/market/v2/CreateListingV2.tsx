@@ -288,10 +288,14 @@ export function CreateListingV2() {
         if (uploadedFiles.length > 0) {
           try {
             await uploadPhotos({ id: result.listing_id, photos: uploadedFiles }).unwrap();
-          } catch {
+          } catch (photoErr: any) {
+            const detail = photoErr?.data?.message || photoErr?.data?.error || ""
+            const isModeration = detail.toLowerCase().includes("moderation")
             issueAlert({
-              message: t("CreateListingV2.photoUploadError", "Listing created but photo upload failed"),
-              severity: "warning",
+              message: isModeration
+                ? t("CreateListingV2.photoModerationError", "Listing created but a photo was rejected by content moderation")
+                : detail || t("CreateListingV2.photoUploadError", "Listing created but photo upload failed"),
+              severity: isModeration ? "error" : "warning",
             });
           }
         }
