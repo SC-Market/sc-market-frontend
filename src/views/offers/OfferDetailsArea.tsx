@@ -124,6 +124,7 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response; se
   const isLatestOffer = (props.selectedOfferIndex ?? 0) === 0
 
   const v2SummaryItems = useMemo(() => {
+    if (!currentOffer) return []
     if (currentOffer?.market_listings_v2?.length) {
       return currentOffer.market_listings_v2.flatMap((ml) =>
         ml.v2_variants.map((v) => ({
@@ -158,6 +159,18 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response; se
     }
     return []
   }, [currentOffer])
+
+  if (!currentOffer) {
+    return (
+      <Grid item xs={12} lg={8} md={6} sx={{ minWidth: 0 }}>
+        <Paper sx={{ p: 3, textAlign: "center" }}>
+          <Typography color="text.secondary">
+            {t("OfferDetailsArea.noOffer", "No offer details available")}
+          </Typography>
+        </Paper>
+      </Grid>
+    )
+  }
 
   return (
     <Grid item xs={12} lg={8} md={6} sx={{ minWidth: 0 }}>
