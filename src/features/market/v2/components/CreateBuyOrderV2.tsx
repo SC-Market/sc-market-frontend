@@ -7,6 +7,8 @@ import {
   FormControlLabel,
   Grid,
   InputAdornment,
+  Radio,
+  RadioGroup,
   TextField,
   Typography,
   useTheme,
@@ -17,7 +19,9 @@ import { LoadingButton } from "@mui/lab";
 import { ExtendedTheme } from "../../../../hooks/styles/Theme";
 import { useAlertHook } from "../../../../hooks/alert/AlertHook";
 import { Section } from "../../../../components/paper/Section";
-import { useCreateStandingBuyOrderMutation, useSearchResourcesQuery, type GameItemSearchResult } from "../../../../store/api/v2/market";
+import { useCreateStandingBuyOrderMutation, useGetMySuppliersQuery, useSearchResourcesQuery, type GameItemSearchResult } from "../../../../store/api/v2/market";
+import { useUploadImageMutation } from "../../../../store/api/v2/market-overrides";
+import { SelectPhotosArea, UploadedImageStatus } from "../../../../components/modal/SelectPhotosArea";
 import { useNavigate } from "react-router-dom";
 
 import { getQualityMode, type QualityMode } from "../../../../util/qualityMode";
@@ -49,12 +53,65 @@ export function CreateBuyOrderV2({ gameItem }: CreateBuyOrderV2Props) {
   const [qualityTierMax, setQualityTierMax] = useState<number | null>(null);
   const [qualityValueMin, setQualityValueMin] = useState<number | null>(null);
   const [qualityValueMax, setQualityValueMax] = useState<number | null>(null);
+  const [visibility, setVisibility] = useState<"public" | "roster_only">("public");
   const qualityMode = getQualityMode(gameItemType);
   const { data: resourceData } = useSearchResourcesQuery(
     { text: gameItemName || undefined, pageSize: 1 },
     { skip: qualityMode !== "value" || !gameItemName },
   )
   const qualityBands = resourceData?.resources?.[0]?.quality_bands
+
+  // Photo upload state
+  const [photos, setPhotos] = useState<string[]>([]);
+  const [photoResourceIds, setPhotoResourceIds] = useState<string[]>([]);
+  const [uploadedImages, setUploadedImages] = useState<UploadedImageStatus[]>([]);
+  const isUploading = uploadedImages.some((img) => img.status === "uploading");
+  const [uploadImage] = useUploadImageMutation();
+
+  // Supplier roster check (for roster_only visibility)
+  const { data: suppliersData } = useGetMySuppliersQuery({});
+  const hasSuppliers = (suppliersData?.suppliers?.length ?? 0) > 0;
+
+  const handleFileUpload = useCallback((files: File[]) => {
+    for (const file of files) {
+      const tempId = `temp-${crypto.randomUUID()}`;
+      const newEntry: UploadedImageStatus = {
+        resource_id: tempId,
+        url: "",
+        status: "uploading",
+        file,
+      };
+      setUploadedImages((prev) => [...prev, newEntry]);
+      uploadImage(file)
+        .unwrap()
+        .then((result) => {
+          setUploadedImages((prev) =>
+            prev.map((img) =>
+              img.resource_id === tempId
+                ? { ...img, resource_id: result.resource_id, url: result.url, status: "success" as const }
+                : img
+            )
+          );
+          setPhotoResourceIds((prev) => [...prev, result.resource_id]);
+        })
+        .catch((err: any) => {
+          const errBody = err?.data?.error || err?.data || {};
+          const detail = errBody?.message || errBody?.validationErrors?.[0]?.message || "Upload failed";
+          setUploadedImages((prev) =>
+            prev.map((img) =>
+              img.resource_id === tempId
+                ? { ...img, status: "error" as const, error: detail }
+                : img
+            )
+          );
+        });
+    }
+  }, [uploadImage]);
+
+  const handleRemoveUploadedImage = useCallback((resourceId: string) => {
+    setUploadedImages((prev) => prev.filter((img) => img.resource_id !== resourceId));
+    setPhotoResourceIds((prev) => prev.filter((id) => id !== resourceId));
+  }, []);
 
   // Calculate total price range
   const totalMin = priceMin * quantity;
@@ -131,6 +188,8 @@ export function CreateBuyOrderV2({ gameItem }: CreateBuyOrderV2Props) {
           quality_value_min: qualityMode === "value" ? (qualityValueMin ?? undefined) : undefined,
           quality_value_max: qualityMode === "value" ? (qualityValueMax ?? undefined) : undefined,
           negotiable,
+          photo_resource_ids: photoResourceIds.length > 0 ? photoResourceIds : undefined,
+          visibility,
         },
       }).unwrap();
 
@@ -343,6 +402,42 @@ export function CreateBuyOrderV2({ gameItem }: CreateBuyOrderV2Props) {
           </>
         )}
 
+        {/* Photos */}
+        <Grid item xs={12}>
+          <Divider />
+        </Grid>
+        <Grid item xs={12}>
+          <Typography color="text.secondary" variant="body2" sx={{ mb: 1 }}>
+            {t("buyorder.imageHint", "Add reference photos (optional, max 2.5MB each)")}
+          </Typography>
+          <SelectPhotosArea
+            setPhotos={setPhotos}
+            photos={photos}
+            onFileUpload={handleFileUpload}
+            onAlert={(severity, message) => issueAlert({ severity, message })}
+            onImageUploaded={() => {}}
+            uploadedImages={uploadedImages}
+            onRemoveUploadedImage={handleRemoveUploadedImage}
+          />
+        </Grid>
+
+        {/* Visibility */}
+        {hasSuppliers && (
+          <Grid item xs={12}>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 0.5 }}>
+              {t("buyorder.visibility", "Visibility")}
+            </Typography>
+            <RadioGroup
+              row
+              value={visibility}
+              onChange={(e) => setVisibility(e.target.value as "public" | "roster_only")}
+            >
+              <FormControlLabel value="public" control={<Radio color="secondary" size="small" />} label="Public" />
+              <FormControlLabel value="roster_only" control={<Radio color="secondary" size="small" />} label="Roster Only" />
+            </RadioGroup>
+          </Grid>
+        )}
+
         {/* Submit Button */}
         <Grid item xs={12}>
           <Divider />
@@ -352,8 +447,8 @@ export function CreateBuyOrderV2({ gameItem }: CreateBuyOrderV2Props) {
             variant="contained"
             color="primary"
             onClick={handleSubmit}
-            loading={isSubmitting}
-            disabled={isSubmitting}
+            loading={isSubmitting || isUploading}
+            disabled={isSubmitting || isUploading}
           >
             {t("common.submit", "Submit")}
           </LoadingButton>

@@ -3,7 +3,7 @@ import { OrgDetailEdit } from "../../views/contractor/OrgManage"
 import { OrgInvite } from "../../views/contractor/OrgInvite"
 import { CustomerList } from "../../views/people/Customers"
 import { MyWebhooks } from "../../views/notifications/ListNotificationWebhooks"
-import { Box, Grid, Tab, Tabs } from "@mui/material"
+import { Box, Divider, Grid, Tab, Tabs, Typography } from "@mui/material"
 import {
   AccountBoxRounded,
   InfoRounded,
@@ -47,6 +47,7 @@ import {
 } from "../../store/api/contractors"
 import { clearCachedOrgTheme } from "../../hooks/styles/themeCache"
 import { WhiteLabelSettings } from "../../views/contractor/WhiteLabelSettings"
+import { ImportFromUex } from "../../features/market/v2/ImportFromUex"
 
 export function OrgManage() {
   const { t } = useTranslation()
@@ -218,6 +219,13 @@ export function OrgManage() {
         <TabPanel value={page} index={"market"}>
           <Grid container spacing={theme.layoutSpacing.layout}>
             <MarketEditTemplate org />
+            <Grid item xs={12}>
+              <Divider sx={{ my: 3 }} />
+              <Typography variant="h6" gutterBottom>
+                Import from UEX
+              </Typography>
+              <ImportFromUex contractorSpectrumId={spectrumId} />
+            </Grid>
           </Grid>
         </TabPanel>
         <TabPanel value={page} index={"settings"}>

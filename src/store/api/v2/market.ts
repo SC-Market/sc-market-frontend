@@ -1228,6 +1228,19 @@ const injectedRtkApi = api
         }),
         providesTags: ["Buy Orders V2"],
       }),
+      getBuyOrderMatchesForSeller: build.query<
+        SearchBuyOrdersApiResponse,
+        { page?: number; pageSize?: number }
+      >({
+        query: (queryArg) => ({
+          url: `/buy-orders/matches-for-seller`,
+          params: {
+            page: queryArg.page,
+            page_size: queryArg.pageSize,
+          },
+        }),
+        providesTags: ["Buy Orders V2"],
+      }),
       updateBuyOrder: build.mutation<
         UpdateBuyOrderApiResponse,
         UpdateBuyOrderApiArg
@@ -2463,6 +2476,7 @@ export type FulfillBuyOrderApiArg = {
   body: {
     variant_id: string
     listing_id: string
+    quantity?: number
   }
 }
 export type DeclineBuyOrderApiResponse = /** status 200 Ok */ StandingBuyOrder
@@ -5253,6 +5267,10 @@ export type CreateBuyOrderRequest = {
   /** Quantity to purchase (must be > 0) */
   quantity: number
 }
+export type BuyOrderPhoto = {
+  resource_id: string
+  url: string
+}
 export type StandingBuyOrder = {
   buy_order_id: string
   game_item_id: string
@@ -5262,6 +5280,7 @@ export type StandingBuyOrder = {
   buyer_id: string
   buyer_name: string
   quantity: number
+  quantity_fulfilled: number
   price_per_unit: number
   quality_tier_min?: number
   quality_tier_max?: number
@@ -5277,6 +5296,7 @@ export type StandingBuyOrder = {
   target_supplier_id?: string | null
   target_supplier_contractor_id?: string | null
   declined_at?: string | null
+  photos?: BuyOrderPhoto[]
 }
 export type CreateStandingBuyOrderRequest = {
   game_item_id: string
@@ -5290,6 +5310,8 @@ export type CreateStandingBuyOrderRequest = {
   quality_value_max?: number
   negotiable?: boolean
   expires_in_days?: number
+  photo_resource_ids?: string[]
+  visibility?: "public" | "roster_only" | "private"
 }
 export type SearchBuyOrdersResponse = {
   buy_orders: StandingBuyOrder[]
@@ -5689,6 +5711,7 @@ export const {
   useCreateStandingBuyOrderMutation,
   useSearchBuyOrdersQuery,
   useGetMyBuyOrdersQuery,
+  useGetBuyOrderMatchesForSellerQuery,
   useUpdateBuyOrderMutation,
   useCancelBuyOrderMutation,
   useFulfillBuyOrderMutation,

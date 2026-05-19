@@ -35,7 +35,7 @@ export function BuyOrdersTableV2({ aggregates }: { aggregates: BuyOrderAggregate
             const prices = agg.orders.map((o) => o.price_per_unit)
             const min = Math.min(...prices)
             const max = Math.max(...prices)
-            const totalQty = agg.orders.reduce((sum, o) => sum + o.quantity, 0)
+            const totalQty = agg.orders.reduce((sum, o) => sum + (o.quantity - (o.quantity_fulfilled || 0)), 0)
             return (
               <TableRow key={agg.item_id} hover>
                 <TableCell>

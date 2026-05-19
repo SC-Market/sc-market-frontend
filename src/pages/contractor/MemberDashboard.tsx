@@ -5,6 +5,7 @@ import { MemberAssignments } from "../../views/member/MemberAssignments"
 import { DashNotificationArea } from "../../views/notifications/DashNotificationArea"
 import { UserOrderTrend } from "../../views/orders/OrderTrend"
 import { ReceivedOffersArea } from "../../views/offers/ReceivedOffersArea"
+import { MatchingBuyOrdersArea } from "../../features/market/views/MatchingBuyOrdersArea"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
@@ -38,6 +39,7 @@ export function MemberDashboard() {
           <Grid item xs={12} lg={6.5}>
             <Grid container spacing={theme.layoutSpacing.layout}>
               {!currentOrg && <ReceivedOffersArea />}
+              <MatchingBuyOrdersArea />
               <MemberAssignments />
               <UserOrderTrend />
             </Grid>
@@ -55,6 +57,7 @@ export function MemberDashboard() {
           <Grid item xs={12} lg={9}>
             <Grid container spacing={theme.layoutSpacing.layout}>
               {!currentOrg && <ReceivedOffersArea />}
+              <MatchingBuyOrdersArea />
               <MemberAssignments />
               <UserOrderTrend />
             </Grid>
@@ -68,6 +71,7 @@ export function MemberDashboard() {
               <ReceivedOffersArea />
             </Grid>
           )}
+          <MatchingBuyOrdersArea />
           <Grid item xs={12}>
             <MemberAssignments />
           </Grid>

@@ -751,6 +751,14 @@ const router = createBrowserRouter([
                 }),
               },
               {
+                path: "/admin/supplier-dashboard",
+                lazy: async () => ({
+                  Component: (
+                    await import("./pages/admin/AdminSupplierDashboard")
+                  ).AdminSupplierDashboard,
+                }),
+              },
+              {
                 path: "/admin/supplier-roster",
                 lazy: async () => ({
                   Component: (
