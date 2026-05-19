@@ -226,7 +226,11 @@ function BuyOrderAggregateCard({
     [aggregate.orders],
   )
   const totalQty = useMemo(
-    () => aggregate.orders.reduce((sum, o) => sum + o.quantity, 0),
+    () => aggregate.orders.reduce((sum, o) => sum + (o.quantity - (o.quantity_fulfilled || 0)), 0),
+    [aggregate.orders],
+  )
+  const imageUrl = useMemo(
+    () => aggregate.orders.find(o => o.photos && o.photos.length > 0)?.photos?.[0]?.url || FALLBACK_IMAGE_URL,
     [aggregate.orders],
   )
 
@@ -249,7 +253,7 @@ function BuyOrderAggregateCard({
               <CardMedia
                 component="img"
                 loading="lazy"
-                image={FALLBACK_IMAGE_URL}
+                image={imageUrl}
                 sx={{ width: "100%", objectFit: "cover", height: isDark ? "100%" : 150 }}
                 onError={({ currentTarget }) => { currentTarget.onerror = null; currentTarget.src = FALLBACK_IMAGE_URL }}
               />

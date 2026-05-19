@@ -82,6 +82,8 @@ import {
   useCreateListingMutation,
   type MyListingItem,
 } from "../../../store/api/v2/market"
+import { MobileListingRow } from "./components/MobileListingRow"
+import { QuickEditListingSheet } from "./components/QuickEditListingSheet"
 
 /* ── Types ── */
 
@@ -276,136 +278,6 @@ function StockToolbarV2(props: StockToolbarProps) {
   )
 }
 
-/* ── Mobile Stock Card (mirrors V1 StockCard) ── */
-
-const StockCardV2 = React.memo<{
-  row: MyListingItem & { id: string }
-  isSelected: boolean
-  onRefresh: (id: string) => void
-}>(({ row, isSelected, onRefresh }) => {
-  const { t } = useTranslation()
-  const theme = useTheme<ExtendedTheme>()
-  const ctx = useContext(StockSelectionContext)
-  if (!ctx) return null
-  const [selectionModel, setSelectionModel] = ctx
-
-  const isInSelectionMode = selectionModel.ids.size > 0
-
-  const handleLongPressForSelection = useCallback(
-    (event: React.MouseEvent | React.TouchEvent) => {
-      event.preventDefault()
-      const newIds = new Set(selectionModel.ids)
-      if (newIds.has(row.id)) newIds.delete(row.id)
-      else newIds.add(row.id)
-      setSelectionModel({ type: "include", ids: newIds })
-    },
-    [selectionModel, row.id, setSelectionModel],
-  )
-
-  const handleTapForSelection = useCallback(
-    (event: React.MouseEvent | React.TouchEvent) => {
-      if (!isInSelectionMode) return
-      event.preventDefault()
-      event.stopPropagation()
-      const newIds = new Set(selectionModel.ids)
-      if (newIds.has(row.id)) newIds.delete(row.id)
-      else newIds.add(row.id)
-      setSelectionModel({ type: "include", ids: newIds })
-    },
-    [selectionModel, row.id, setSelectionModel, isInSelectionMode],
-  )
-
-  const longPressHandlers = useLongPress({
-    onLongPress: handleLongPressForSelection,
-    onClick: handleTapForSelection,
-    enabled: true,
-    delay: 500,
-  })
-
-  const longPressActions = [
-    {
-      label: t("common.viewDetails", "View Details"),
-      icon: <VisibilityRounded />,
-      onClick: () => { window.location.href = `/market/${row.listing_id}` },
-    },
-    {
-      label: t("ItemStock.manageStock", "Manage Stock"),
-      icon: <InventoryRounded />,
-      onClick: () => { window.location.href = `/market/stock/${row.listing_id}` },
-    },
-    {
-      label: t("ItemStock.share", "Share"),
-      icon: <ShareRounded />,
-      onClick: () => {
-        navigator.clipboard.writeText(window.location.origin + `/market/${row.listing_id}`)
-      },
-    },
-    {
-      label: t("ItemStock.refresh", "Refresh"),
-      icon: <RefreshOutlined />,
-      onClick: () => onRefresh(row.listing_id),
-    },
-  ]
-
-  const priceLabel =
-    row.price_min === row.price_max
-      ? `${row.price_min?.toLocaleString()} aUEC`
-      : `${row.price_min?.toLocaleString()}–${row.price_max?.toLocaleString()} aUEC`
-
-  return (
-    <LongPressMenu actions={longPressActions}>
-      <Card
-        sx={{
-          mb: 2,
-          border: isSelected ? 2 : 0,
-          borderColor: isSelected ? "primary.main" : "transparent",
-        }}
-      >
-        <CardActionArea
-          {...longPressHandlers}
-          component={isInSelectionMode ? "div" : Link}
-          to={isInSelectionMode ? undefined : `/market/${row.listing_id}`}
-        >
-          <Stack direction="row" spacing={2} sx={{ p: 2 }} alignItems="center">
-            <Box sx={{ flex: 1, minWidth: 0 }}>
-              <Typography variant="subtitle1" fontWeight="bold" noWrap>
-                {row.title}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {priceLabel}
-              </Typography>
-              <Stack direction="row" spacing={1} sx={{ mt: 1 }} flexWrap="wrap">
-                <Chip
-                  label={`${t("ItemStock.quantity")}: ${row.quantity_available.toLocaleString()}`}
-                  size="small"
-                  variant="outlined"
-                />
-                <Chip
-                  label={row.status === "active" ? t("ItemStock.active") : t("ItemStock.inactive")}
-                  color={row.status === "active" ? "success" : "error"}
-                  size="small"
-                />
-                {row.quality_tier_min != null && (
-                  <Chip
-                    label={
-                      row.quality_tier_min === row.quality_tier_max
-                        ? `Tier ${row.quality_tier_min}`
-                        : `T${row.quality_tier_min}–${row.quality_tier_max}`
-                    }
-                    size="small"
-                    variant="outlined"
-                  />
-                )}
-              </Stack>
-            </Box>
-            {isSelected && <RadioButtonCheckedRounded color="primary" />}
-          </Stack>
-        </CardActionArea>
-      </Card>
-    </LongPressMenu>
-  )
-})
-StockCardV2.displayName = "StockCardV2"
 
 /* ── DisplayStockV2 (mirrors V1 DisplayStock) ── */
 
@@ -442,6 +314,8 @@ function DisplayStockV2({
   const [newRows, setNewRows] = useState<NewListingRowV2[]>([])
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({})
   const [editingRows, setEditingRows] = useState<Record<string, Partial<NewListingRowV2>>>({})
+  const [editTarget, setEditTarget] = useState<MyListingItem | null>(null)
+  const [sheetOpen, setSheetOpen] = useState(false)
 
   const ctx = useContext(StockSelectionContext)
   if (!ctx) return null
@@ -817,20 +691,17 @@ function DisplayStockV2({
           }}
         />
         <PullToRefresh onRefresh={async () => onRefreshAll()}>
-          <Paper sx={{ borderRadius: theme.spacing(theme.borderRadius.topLevel) }}>
+          <Paper sx={{ borderRadius: theme.spacing(theme.borderRadius.topLevel), overflow: "hidden" }}>
             {allRows.length === 0 ? (
               <EmptyListings showCreateAction={false} />
             ) : (
-              <Grid container spacing={theme.layoutSpacing.layout}>
-                {allRows.map((row) => (
-                  <StockCardV2
-                    key={row.id}
-                    row={row as MyListingItem & { id: string }}
-                    isSelected={selectionModel.ids.has(row.id)}
-                    onRefresh={handleRefresh}
-                  />
-                ))}
-              </Grid>
+              allRows.map((row) => (
+                <MobileListingRow
+                  key={row.id}
+                  listing={row as MyListingItem}
+                  onEdit={(l) => { setEditTarget(l); setSheetOpen(true) }}
+                />
+              ))
             )}
           </Paper>
         </PullToRefresh>
@@ -843,6 +714,11 @@ function DisplayStockV2({
           onRowsPerPageChange={(e) => onPageSizeChange(parseInt(e.target.value, 10))}
           rowsPerPageOptions={[24, 48, 96]}
           labelRowsPerPage={t("common.rowsPerPage", "Rows per page")}
+        />
+        <QuickEditListingSheet
+          listing={editTarget}
+          open={sheetOpen}
+          onClose={() => setSheetOpen(false)}
         />
       </Box>
     )

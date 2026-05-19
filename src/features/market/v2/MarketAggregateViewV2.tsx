@@ -1019,6 +1019,8 @@ export function BuyOrderRowV2(props: {
   const issueAlert = useAlertHook();
   const [fulfillDialogOpen, setFulfillDialogOpen] = useState(false);
   const [agreedPrice, setAgreedPrice] = useState<number>(0);
+  const [fulfillQuantity, setFulfillQuantity] = useState<number>(buy_order.quantity - (buy_order.quantity_fulfilled || 0));
+  const remaining = buy_order.quantity - (buy_order.quantity_fulfilled || 0);
   const navigate = useNavigate();
   const [currentOrg] = useCurrentOrg();
   const { data: profile } = useGetUserProfileQuery();
@@ -1028,8 +1030,15 @@ export function BuyOrderRowV2(props: {
   const isLoading = fulfillIsLoading;
 
   const doFulfill = useCallback(
-    (agreedPricePerUnit?: number) => {
-      fulfillBuyOrderMut({ id: buy_order.buy_order_id, body: { variant_id: "", listing_id: "" } })
+    (agreedPricePerUnit?: number, qty?: number) => {
+      fulfillBuyOrderMut({
+        id: buy_order.buy_order_id,
+        body: {
+          variant_id: "",
+          listing_id: "",
+          quantity: qty !== undefined && qty < remaining ? qty : undefined,
+        },
+      })
         .unwrap()
         .then((result) => {
           issueAlert({
@@ -1045,24 +1054,22 @@ export function BuyOrderRowV2(props: {
           severity: "error",
         }));
     },
-    [buy_order, fulfillBuyOrderMut, issueAlert, navigate, t]
+    [buy_order, remaining, fulfillBuyOrderMut, issueAlert, navigate, t]
   );
 
   const callback = useCallback(() => {
-    if (buy_order.negotiable) {
+    if (buy_order.negotiable || remaining > 1) {
       setAgreedPrice(0);
+      setFulfillQuantity(remaining);
       setFulfillDialogOpen(true);
       return false;
     }
     doFulfill();
     return false;
-  }, [buy_order.negotiable, doFulfill]);
+  }, [buy_order.negotiable, remaining, doFulfill]);
 
   const handleFulfillDialogSubmit = useCallback(() => {
-    if (agreedPrice >= 1) {
-      doFulfill(agreedPrice);
-      setFulfillDialogOpen(false);
-    } else {
+    if (buy_order.negotiable && agreedPrice < 1) {
       issueAlert({
         message: t(
           "buyorder.agreedPriceRequired",
@@ -1070,8 +1077,18 @@ export function BuyOrderRowV2(props: {
         ),
         severity: "error",
       });
+      return;
     }
-  }, [agreedPrice, doFulfill, issueAlert, t]);
+    if (fulfillQuantity < 1 || fulfillQuantity > remaining) {
+      issueAlert({
+        message: `Quantity must be between 1 and ${remaining}`,
+        severity: "error",
+      });
+      return;
+    }
+    doFulfill(agreedPrice, fulfillQuantity);
+    setFulfillDialogOpen(false);
+  }, [buy_order.negotiable, agreedPrice, fulfillQuantity, remaining, doFulfill, issueAlert, t]);
 
   const cancelCallback = useCallback(async () => {
     cancelBuyOrderMut({ id: buy_order.buy_order_id })
@@ -1179,7 +1196,9 @@ export function BuyOrderRowV2(props: {
         }}
       >
         <Typography variant={"subtitle2"} color={"primary"}>
-          {buy_order.quantity.toLocaleString(i18n.language)}
+          {buy_order.quantity_fulfilled
+            ? `${remaining.toLocaleString(i18n.language)}/${buy_order.quantity.toLocaleString(i18n.language)}`
+            : buy_order.quantity.toLocaleString(i18n.language)}
         </Typography>
       </TableCell>
 
@@ -1235,29 +1254,46 @@ export function BuyOrderRowV2(props: {
         onClose={() => setFulfillDialogOpen(false)}
       >
         <DialogTitle>
-          {t("buyorder.agreePriceTitle", "Agreed price per unit")}
+          {t("buyorder.fulfillTitle", "Fulfill Buy Order")}
         </DialogTitle>
         <DialogContent>
-          <Typography variant="body2" sx={{ mb: 2 }}>
-            {t(
-              "buyorder.agreePriceDescription",
-              "This buy order is negotiable. Enter the agreed price per unit in aUEC to fulfill."
-            )}
-          </Typography>
+          {buy_order.negotiable && (
+            <>
+              <Typography variant="body2" sx={{ mb: 2 }}>
+                {t(
+                  "buyorder.agreePriceDescription",
+                  "This buy order is negotiable. Enter the agreed price per unit in aUEC to fulfill."
+                )}
+              </Typography>
+              <NumericFormat
+                decimalScale={0}
+                allowNegative={false}
+                customInput={TextField}
+                thousandSeparator
+                fullWidth
+                label={t("buyorder.price_per_unit")}
+                value={agreedPrice}
+                onValueChange={(values) => setAgreedPrice(values.floatValue ?? 0)}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="start">aUEC</InputAdornment>
+                  ),
+                }}
+                sx={{ mb: 2 }}
+              />
+            </>
+          )}
           <NumericFormat
             decimalScale={0}
             allowNegative={false}
             customInput={TextField}
             thousandSeparator
             fullWidth
-            label={t("buyorder.price_per_unit")}
-            value={agreedPrice}
-            onValueChange={(values) => setAgreedPrice(values.floatValue ?? 0)}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="start">aUEC</InputAdornment>
-              ),
-            }}
+            label={t("buyorder.fulfillQuantity", "Quantity to fulfill")}
+            value={fulfillQuantity}
+            onValueChange={(values) => setFulfillQuantity(values.floatValue ?? remaining)}
+            helperText={`${remaining.toLocaleString()} ${t("buyorder.remaining", "remaining")}`}
+            isAllowed={({ floatValue }) => !floatValue || (floatValue >= 1 && floatValue <= remaining)}
           />
         </DialogContent>
         <DialogActions>
