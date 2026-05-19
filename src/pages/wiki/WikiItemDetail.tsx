@@ -34,7 +34,8 @@ import { useTheme } from "@mui/material/styles"
 import { useTranslation } from "react-i18next"
 import { useParams, useNavigate } from "react-router-dom"
 import { useGetItemDetailQuery, useSearchListingsQuery, useAddBlueprintToInventoryMutation, useRemoveBlueprintFromInventoryMutation, type BlueprintReference } from "../../store/api/v2/market"
-import { ShoppingCart, Gavel } from "@mui/icons-material"
+import { useGetItemShopsQuery } from "../../store/api/shops"
+import { ShoppingCart, Gavel, Storefront } from "@mui/icons-material"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { useCartDrawer } from "../../features/market/hooks/AddToCartContext"
@@ -58,6 +59,12 @@ export function WikiItemDetail() {
   // Fetch related market listings for this item
   const { data: listingsData } = useSearchListingsQuery(
     { gameItemId: id!, pageSize: 6, sortBy: "price", sortOrder: "asc" },
+    { skip: !id },
+  )
+
+  // Fetch NPC shop availability for this item
+  const { data: shopAvailability, isLoading: shopsLoading } = useGetItemShopsQuery(
+    { itemId: id! },
     { skip: !id },
   )
 
@@ -291,6 +298,96 @@ export function WikiItemDetail() {
                 </CardContent>
               </Card>
             )}
+
+            {/* In-Game Shop Availability */}
+            <Card sx={{ mt: 3 }}>
+              <CardContent>
+                <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 2 }}>
+                  <Storefront color="action" />
+                  <Typography variant="h6">In-Game Shop Availability</Typography>
+                </Stack>
+                {shopsLoading ? (
+                  <Box sx={{ display: "flex", justifyContent: "center", py: 3 }}>
+                    <CircularProgress size={24} />
+                  </Box>
+                ) : shopAvailability && shopAvailability.length > 0 ? (
+                  <TableContainer component={Paper} variant="outlined">
+                    <Table size="small">
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>Shop</TableCell>
+                          <TableCell>Location</TableCell>
+                          <TableCell align="right">Buy Price</TableCell>
+                          <TableCell align="right">Sell Price</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {[...shopAvailability]
+                          .sort((a, b) => {
+                            const aPrice = a.buy_price ?? Infinity
+                            const bPrice = b.buy_price ?? Infinity
+                            return aPrice - bPrice
+                          })
+                          .map((shop) => (
+                            <TableRow key={shop.shop_id}>
+                              <TableCell>
+                                <Typography variant="body2" fontWeight="medium">
+                                  {shop.shop_name}
+                                </Typography>
+                              </TableCell>
+                              <TableCell>
+                                <Chip
+                                  label={shop.shop_location}
+                                  size="small"
+                                  variant="outlined"
+                                  sx={{
+                                    borderColor: shop.shop_location.toLowerCase().includes("stanton")
+                                      ? "info.main"
+                                      : shop.shop_location.toLowerCase().includes("pyro")
+                                        ? "warning.main"
+                                        : "default",
+                                    color: shop.shop_location.toLowerCase().includes("stanton")
+                                      ? "info.main"
+                                      : shop.shop_location.toLowerCase().includes("pyro")
+                                        ? "warning.main"
+                                        : "text.secondary",
+                                  }}
+                                />
+                              </TableCell>
+                              <TableCell align="right">
+                                {shop.buy_price != null && shop.buy_price > 0 ? (
+                                  <Typography variant="body2" fontWeight="bold" color="primary">
+                                    {shop.buy_price.toLocaleString()} aUEC
+                                  </Typography>
+                                ) : (
+                                  <Typography variant="body2" color="text.disabled">
+                                    —
+                                  </Typography>
+                                )}
+                              </TableCell>
+                              <TableCell align="right">
+                                {shop.sell_price != null && shop.sell_price > 0 ? (
+                                  <Typography variant="body2" color="success.main">
+                                    {shop.sell_price.toLocaleString()} aUEC
+                                  </Typography>
+                                ) : (
+                                  <Typography variant="body2" color="text.disabled">
+                                    —
+                                  </Typography>
+                                )}
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                ) : (
+                  <Typography variant="body2" color="text.secondary">
+                    Not sold at any NPC shop
+                  </Typography>
+                )}
+              </CardContent>
+            </Card>
               </>
             )}
 
