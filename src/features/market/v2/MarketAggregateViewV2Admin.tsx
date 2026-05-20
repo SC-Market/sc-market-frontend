@@ -28,6 +28,8 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Divider,
+  Grid,
   InputAdornment,
   Paper,
   Stack,
@@ -36,7 +38,10 @@ import {
   TextField,
   Tooltip,
   Typography,
+  useTheme,
 } from "@mui/material";
+import { Section } from "../../../components/paper/Section";
+import type { ExtendedTheme } from "../../../hooks/styles/Theme";
 import { NumericFormat } from "react-number-format";
 import { Link, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -166,14 +171,10 @@ function StatStrip({
         gridTemplateColumns: "repeat(6, 1fr)",
         gap: "1px",
         bgcolor: "divider",
-        borderTop: "1px solid",
-        borderBottom: "1px solid",
-        borderColor: "divider",
-        mt: 2.5,
       }}
     >
       {cells.map((c) => (
-        <Box key={c.label} sx={{ bgcolor: "background.paper", px: 2.5, py: 1.75 }}>
+        <Box key={c.label} sx={{ bgcolor: "background.paper", px: 2.5, py: 2 }}>
           <Typography
             variant="caption"
             sx={{
@@ -229,13 +230,7 @@ function QualityTabs({
   if (distribution.length === 0) return null;
 
   return (
-    <Box
-      sx={{
-        borderBottom: "1px solid",
-        borderColor: "divider",
-        px: 3.5,
-      }}
-    >
+    <Box sx={{ px: 2 }}>
       <Tabs
         value={selectedTier ?? 0}
         onChange={(_, v) => onSelect(v === 0 ? null : v)}
@@ -356,16 +351,7 @@ function DepthChart({
   if (!bidBars.length && !askBars.length) return null;
 
   return (
-    <Paper
-      elevation={0}
-      sx={{
-        px: 3.5,
-        py: 2.5,
-        borderRadius: 0,
-        borderBottom: "1px solid",
-        borderColor: "divider",
-      }}
-    >
+    <Box sx={{ px: 2.5, py: 2 }}>
       <Stack
         direction="row"
         alignItems="center"
@@ -533,7 +519,7 @@ function DepthChart({
             ))}
         </Stack>
       </Box>
-    </Paper>
+    </Box>
   );
 }
 
@@ -683,53 +669,6 @@ function SellOrdersPanel({
 
   return (
     <Box>
-      {/* Panel header */}
-      <Stack
-        direction="row"
-        alignItems="center"
-        justifyContent="space-between"
-        sx={{
-          px: 3,
-          py: 1.5,
-          borderBottom: "1px solid",
-          borderColor: "divider",
-          bgcolor: "background.paper",
-        }}
-      >
-        <Stack direction="row" alignItems="center" spacing={1}>
-          <Box
-            sx={{
-              width: 8,
-              height: 8,
-              borderRadius: "50%",
-              bgcolor: "success.main",
-              boxShadow: "0 0 6px rgba(34,197,94,0.5)",
-            }}
-          />
-          <Typography
-            variant="caption"
-            fontWeight={700}
-            sx={{
-              textTransform: "uppercase",
-              letterSpacing: "0.06em",
-              color: "success.main",
-            }}
-          >
-            Sell Orders
-          </Typography>
-          <Chip
-            label={sorted.length}
-            size="small"
-            sx={{
-              height: 18,
-              fontSize: "10px",
-              bgcolor: "rgba(34,197,94,0.12)",
-              color: "success.main",
-            }}
-          />
-        </Stack>
-      </Stack>
-
       {/* Column headers */}
       <Box
         sx={{
@@ -1140,53 +1079,6 @@ function BuyOrdersPanel({ buyOrders }: { buyOrders: StandingBuyOrder[] }) {
 
   return (
     <Box>
-      {/* Panel header */}
-      <Stack
-        direction="row"
-        alignItems="center"
-        justifyContent="space-between"
-        sx={{
-          px: 2.5,
-          py: 1.5,
-          borderBottom: "1px solid",
-          borderColor: "divider",
-          bgcolor: "background.paper",
-        }}
-      >
-        <Stack direction="row" alignItems="center" spacing={1}>
-          <Box
-            sx={{
-              width: 8,
-              height: 8,
-              borderRadius: "50%",
-              bgcolor: "warning.main",
-              boxShadow: "0 0 6px rgba(245,158,11,0.5)",
-            }}
-          />
-          <Typography
-            variant="caption"
-            fontWeight={700}
-            sx={{
-              textTransform: "uppercase",
-              letterSpacing: "0.06em",
-              color: "warning.main",
-            }}
-          >
-            Buy Orders
-          </Typography>
-          <Chip
-            label={active.length}
-            size="small"
-            sx={{
-              height: 18,
-              fontSize: "10px",
-              bgcolor: "rgba(245,158,11,0.12)",
-              color: "warning.main",
-            }}
-          />
-        </Stack>
-      </Stack>
-
       {/* Column headers */}
       <Box
         sx={{
@@ -1407,29 +1299,6 @@ function BuyOrdersPanel({ buyOrders }: { buyOrders: StandingBuyOrder[] }) {
         })
       )}
 
-      {/* Footer CTA */}
-      <Box
-        sx={{
-          px: 2.5,
-          py: 1.5,
-          bgcolor: "action.hover",
-          borderTop: "1px solid",
-          borderColor: "divider",
-        }}
-      >
-        <Typography
-          variant="caption"
-          fontWeight={700}
-          color="warning.main"
-          display="block"
-        >
-          Want a specific price or quality?
-        </Typography>
-        <Typography variant="caption" color="text.secondary">
-          Post a standing buy order — sellers will fill it.
-        </Typography>
-      </Box>
-
       <FulfillDialog
         buyOrder={fulfillTarget}
         open={!!fulfillTarget}
@@ -1467,198 +1336,132 @@ export function MarketAggregateViewV2Admin({
     );
   }, [listings, selectedTier]);
 
+  const createListingUrl = [
+    `/market/create`,
+    `?game_item_id=${encodeURIComponent(gameItemId)}`,
+    `&game_item_name=${encodeURIComponent(game_item.name)}`,
+    `&game_item_type=${encodeURIComponent(game_item.type || "")}`,
+  ].join("");
+
   return (
-    <Box>
-      {/* Admin preview banner */}
-      <Box
-        sx={{
-          bgcolor: "rgba(59,130,246,0.08)",
-          borderBottom: "1px solid rgba(59,130,246,0.2)",
-          px: 3.5,
-          py: 0.75,
-        }}
-      >
-        <Typography variant="caption" color="primary" fontWeight={600}>
-          🔬 Admin preview — redesigned layout. Not visible to regular users.
-        </Typography>
-      </Box>
+    <Grid item xs={12}>
+      <Grid container spacing={2}>
 
-      {/* Item header */}
-      <Stack
-        direction="row"
-        alignItems="flex-start"
-        spacing={2.5}
-        sx={{ px: 3.5, pt: 3 }}
-      >
-        {/* Thumbnail */}
-        <Paper
-          variant="outlined"
-          sx={{
-            width: 56,
-            height: 56,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexShrink: 0,
-            overflow: "hidden",
-          }}
-        >
-          {game_item.image_url ? (
-            <Box
-              component="img"
-              src={game_item.image_url}
-              alt={game_item.name}
-              sx={{
-                maxWidth: "100%",
-                maxHeight: "100%",
-                objectFit: "contain",
-                mixBlendMode: "luminosity",
-                opacity: 0.85,
-              }}
-              onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
-                e.currentTarget.src =
-                  "https://cdn.robertsspaceindustries.com/static/images/Temp/default-image.png";
-              }}
-            />
-          ) : null}
-        </Paper>
-
-        {/* Name + description */}
-        <Box flex={1}>
-          <Chip
-            label={game_item.type || "Item"}
-            size="small"
-            color="primary"
-            variant="outlined"
+        {/* Admin preview banner */}
+        <Grid item xs={12}>
+          <Paper
             sx={{
-              fontSize: "10px",
-              height: 18,
-              fontWeight: 700,
-              letterSpacing: "0.05em",
-              mb: 0.5,
+              p: 1.5,
+              bgcolor: "rgba(59,130,246,0.08)",
+              border: "1px solid rgba(59,130,246,0.2)",
             }}
-          />
-          <Typography
-            variant="h5"
-            fontWeight={800}
-            sx={{ letterSpacing: "-0.02em", lineHeight: 1.1, mb: 0.5 }}
           >
-            {game_item.name}
-          </Typography>
-          {game_item.description && (
-            <Typography
-              variant="body2"
-              color="text.secondary"
-              sx={{ maxWidth: 560 }}
-            >
-              {game_item.description}
+            <Typography variant="caption" color="primary" fontWeight={600}>
+              🔬 Admin preview — redesigned layout. Not visible to regular users.
             </Typography>
-          )}
-        </Box>
+          </Paper>
+        </Grid>
 
-        {/* Action */}
-        <Box flexShrink={0} mt={0.5}>
-          <Button
-            component={Link}
-            to={`/market/create?game_item_id=${gameItemId}`}
-            variant="outlined"
-            color="success"
-            size="small"
-            sx={{ fontWeight: 600 }}
-          >
-            + Create Listing
-          </Button>
-        </Box>
-      </Stack>
+        {/* Market overview: stat strip + action buttons */}
+        <Grid item xs={12}>
+          <Paper>
+            <Stack
+              direction="row"
+              alignItems="center"
+              justifyContent="flex-end"
+              spacing={1}
+              sx={{ px: 2, pt: 1.5, pb: 1 }}
+            >
+              <Button
+                component={Link}
+                to={createListingUrl}
+                variant="outlined"
+                color="success"
+                size="small"
+                sx={{ fontWeight: 600 }}
+              >
+                + Create Listing
+              </Button>
+              <Button
+                component={Link}
+                to={`/market/buy-orders/create?game_item_id=${encodeURIComponent(gameItemId)}&game_item_name=${encodeURIComponent(game_item.name)}`}
+                variant="outlined"
+                color="warning"
+                size="small"
+                sx={{ fontWeight: 600 }}
+              >
+                + Buy Order
+              </Button>
+            </Stack>
+            <Divider />
+            <StatStrip complete={complete} selectedTier={selectedTier} />
+          </Paper>
+        </Grid>
 
-      {/* Stats strip */}
-      <StatStrip complete={complete} selectedTier={selectedTier} />
+        {/* Quality tier filter tabs */}
+        {quality_distribution.length > 0 && (
+          <Grid item xs={12}>
+            <Paper>
+              <QualityTabs
+                distribution={quality_distribution}
+                selectedTier={selectedTier}
+                onSelect={setSelectedTier}
+              />
+            </Paper>
+          </Grid>
+        )}
 
-      {/* Quality tier tabs */}
-      <QualityTabs
-        distribution={quality_distribution}
-        selectedTier={selectedTier}
-        onSelect={setSelectedTier}
-      />
-
-      {/* Market depth */}
-      <DepthChart listings={filteredListings} buyOrders={buy_orders} />
-
-      {/* Split order book */}
-      <Box
-        sx={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          borderBottom: "1px solid",
-          borderColor: "divider",
-          "& > :last-child": {
-            borderLeft: "1px solid",
-            borderColor: "divider",
-          },
-        }}
-      >
-        <SellOrdersPanel
-          listings={filteredListings}
-          totalCount={
-            listings.filter((l) => l.quantity_available > 0).length
-          }
-        />
-        <BuyOrdersPanel buyOrders={buy_orders} />
-      </Box>
-
-      {/* Create buy order */}
-      <Paper
-        elevation={0}
-        sx={{
-          px: 3.5,
-          py: 2.5,
-          borderRadius: 0,
-          bgcolor: "action.hover",
-          borderBottom: "1px solid",
-          borderColor: "divider",
-        }}
-      >
-        <Stack direction="row" spacing={1} alignItems="center" mb={2}>
-          <Chip
-            label={t("MarketAggregateView.buyOrders", "Buy Order")}
-            size="small"
-            color="warning"
-            variant="outlined"
-            sx={{ fontSize: "10px", fontWeight: 700 }}
-          />
-          <Typography variant="subtitle2" fontWeight={700}>
-            Place a standing buy order for {game_item.name}
-          </Typography>
-        </Stack>
-        <CreateBuyOrderV2 gameItem={game_item} />
-      </Paper>
-
-      {/* Charts — reuse existing components */}
-      <Box sx={{ px: 3.5, pt: 2 }}>
-        <Typography
-          variant="h6"
-          fontWeight="bold"
-          color="text.secondary"
-          gutterBottom
+        {/* Sell orders */}
+        <Section
+          xs={12}
+          lg={6}
+          title={t("MarketAggregateView.sellOrders", "Sell Orders")}
+          disablePadding
         >
-          {t("MarketAggregateView.priceHistory", "Price History")}
-        </Typography>
+          <Grid item xs={12}>
+            <SellOrdersPanel
+              listings={filteredListings}
+              totalCount={listings.filter((l) => l.quantity_available > 0).length}
+            />
+          </Grid>
+        </Section>
+
+        {/* Buy orders */}
+        <Section
+          xs={12}
+          lg={6}
+          title={t("MarketAggregateView.buyOrders", "Buy Orders")}
+          disablePadding
+        >
+          <Grid item xs={12}>
+            <BuyOrdersPanel buyOrders={buy_orders} />
+          </Grid>
+        </Section>
+
+        {/* Market depth mini-chart */}
+        <Grid item xs={12}>
+          <Paper>
+            <DepthChart listings={filteredListings} buyOrders={buy_orders} />
+          </Paper>
+        </Grid>
+
+        {/* Place buy order form */}
+        <Section
+          xs={12}
+          title={t("MarketAggregateView.buyOrders", "Place Buy Order")}
+        >
+          <Grid item xs={12}>
+            <CreateBuyOrderV2 gameItem={game_item} />
+          </Grid>
+        </Section>
+
+        {/* Price history chart */}
         <AggregateChartV2 aggregate={complete} />
-      </Box>
 
-      <Box sx={{ px: 3.5, pt: 1 }}>
-        <Typography
-          variant="h6"
-          fontWeight="bold"
-          color="text.secondary"
-          gutterBottom
-        >
-          {t("MarketAggregateView.orderDepth", "Order Depth")}
-        </Typography>
+        {/* Market depth chart */}
         <AggregateBuySellWallV2 aggregate={complete} />
-      </Box>
 
-      <Box sx={{ height: 40 }} />
-    </Box>
+      </Grid>
+    </Grid>
   );
 }
