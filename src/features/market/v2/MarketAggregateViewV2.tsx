@@ -62,7 +62,6 @@ import { HeaderTitle } from "../../../components/typography/HeaderTitle";
 import { Section } from "../../../components/paper/Section";
 import { DynamicKlineChart } from "../../../components/charts/DynamicCharts";
 import { MuiAreaChart } from "../../../components/charts/MuiCharts";
-import { TabbedChartLayout } from "../../../components/charts/TabbedChartLayout";
 import { NumericFormat } from "react-number-format";
 import { useTranslation } from "react-i18next";
 import { QualityBadge } from "../../../components/market/v2/QualityBadge";
@@ -1411,16 +1410,8 @@ export function AggregateChartV2(props: { aggregate: GameItemAggregateV2 }) {
 export function AggregateBuySellWallV2(props: { aggregate: GameItemAggregateV2 }) {
   const { t } = useTranslation();
   const { aggregate } = props;
-  const [selectedTab, setSelectedTab] = React.useState(0);
 
-  const {
-    series,
-    supplyDemand,
-    buyMax,
-    sellMax,
-    totalStockAvailable,
-    totalQuantityRequested,
-  } = useMemo(() => {
+  const { supplyPoints, demandPoints } = useMemo(() => {
     const bucketCount = 100;
     const sellHigh = aggregate.listings.length
       ? aggregate.listings.reduce(
@@ -1443,15 +1434,7 @@ export function AggregateBuySellWallV2(props: { aggregate: GameItemAggregateV2 }
     const interval = high / bucketCount;
 
     if (interval === 0) {
-      return {
-        series: [[], []],
-        supplyDemand: [[], []],
-        high,
-        buyMax: 0,
-        sellMax: 0,
-        totalStockAvailable: 0,
-        totalQuantityRequested: 0,
-      };
+      return { supplyPoints: [] as {x: number; y: number}[], demandPoints: [] as {x: number; y: number}[] };
     }
 
     const sortedSell = [...aggregate.listings]
@@ -1461,153 +1444,65 @@ export function AggregateBuySellWallV2(props: { aggregate: GameItemAggregateV2 }
       (a, b) => (a.price_per_unit ?? 0) - (b.price_per_unit ?? 0)
     );
 
-    const sellPoints = new Array(bucketCount + 1)
-      .fill(undefined)
-      .map((o, i) => ({ x: interval * i, y: 0 }));
-    const buyPoints = new Array(bucketCount + 1)
-      .fill(undefined)
-      .map((o, i) => ({ x: interval * i, y: 0 }));
-
-    for (const sell of sortedSell) {
-      const index = Math.min(
-        Math.floor(sell.price_min / interval),
-        bucketCount
-      );
-      sellPoints[index].y += 1;
-    }
-
-    for (const buy of sortedBuy) {
-      const index = Math.min(
-        Math.floor((buy.price_per_unit ?? 0) / interval),
-        bucketCount
-      );
-      buyPoints[index].y += 1;
-    }
-
-    for (let i = 1; i < bucketCount + 1; i++) {
-      sellPoints[i].y += sellPoints[i - 1].y;
-    }
-
-    const sellMax = sellPoints[bucketCount].y;
-
-    for (let i = bucketCount; i > 0; i--) {
-      buyPoints[i - 1].y += buyPoints[i].y;
-    }
-
-    const buyMax = buyPoints[0].y;
-
-    // Calculate cumulative supply (stock available at or below each price)
+    // Cumulative supply: stock available at or below each price bucket
     const supplyPoints = new Array(bucketCount + 1)
       .fill(undefined)
-      .map((o, i) => ({ x: interval * i, y: 0 }));
-
+      .map((_, i) => ({ x: interval * i, y: 0 }));
     for (const sell of sortedSell) {
-      const index = Math.min(
-        Math.floor(sell.price_min / interval),
-        bucketCount
-      );
+      const index = Math.min(Math.floor(sell.price_min / interval), bucketCount);
       for (let i = index; i < bucketCount + 1; i++) {
         supplyPoints[i].y += sell.quantity_available;
       }
     }
 
-    // Calculate cumulative demand (quantity requested at or above each price)
+    // Cumulative demand: quantity requested at or above each price bucket
     const demandPoints = new Array(bucketCount + 1)
       .fill(undefined)
-      .map((o, i) => ({ x: interval * i, y: 0 }));
-
+      .map((_, i) => ({ x: interval * i, y: 0 }));
     for (const buy of sortedBuy) {
-      const index = Math.min(
-        Math.floor((buy.price_per_unit ?? 0) / interval),
-        bucketCount
-      );
+      const index = Math.min(Math.floor((buy.price_per_unit ?? 0) / interval), bucketCount);
       for (let i = 0; i <= index; i++) {
         demandPoints[i].y += buy.quantity;
       }
     }
 
-    const totalStockAvailable = aggregate.listings.reduce(
-      (sum, listing) => sum + listing.quantity_available,
-      0
-    );
-    const totalQuantityRequested = aggregate.buy_orders.reduce(
-      (sum, order) => sum + order.quantity,
-      0
-    );
-
-    return {
-      series: [sellPoints, buyPoints],
-      supplyDemand: [supplyPoints, demandPoints],
-      high,
-      buyMax,
-      sellMax,
-      totalStockAvailable,
-      totalQuantityRequested,
-    };
+    return { supplyPoints, demandPoints };
   }, [aggregate]);
 
-  const [sellWall, buyWall] = series;
-  const [supplyPoints, demandPoints] = supplyDemand;
-  const yMax = useMemo(() => Math.max(buyMax, sellMax), [buyMax, sellMax]);
-
-  const tabs = [
-    t("MarketAggregateView.orderDepth", "Order Depth"),
-    t("MarketAggregateView.supplyDemand", "Supply & Demand"),
-  ];
+  // Format price bucket values as "1.2k aUEC" etc.
+  const formatPrice = (v: Date | number | string) => {
+    const n = Number(v);
+    if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
+    if (n >= 1_000) return `${(n / 1_000).toFixed(n >= 10_000 ? 0 : 1)}k`;
+    return Math.round(n).toLocaleString();
+  };
 
   return (
     <Section xs={12} disablePadding>
       <Grid item xs={12}>
-        <TabbedChartLayout
-          tabs={tabs}
-          selectedTab={selectedTab}
-          onTabChange={setSelectedTab}
-        >
-          {selectedTab === 0 && (
-            <MuiAreaChart
-              series={[
-                {
-                  name: t("MarketAggregateView.buyOrdersChart"),
-                  data: buyWall.map((d) => ({ x: d.x.toString(), y: d.y })),
-                },
-                {
-                  name: t("MarketAggregateView.sellOrdersChart"),
-                  data: sellWall.map((d) => ({ x: d.x.toString(), y: d.y })),
-                },
-              ]}
-              height={400}
-              xAxisType="category"
-            />
-          )}
-          {selectedTab === 1 && (
-            <MuiAreaChart
-              series={[
-                {
-                  name: t(
-                    "MarketAggregateView.stockAvailable",
-                    "Stock Available ≤ Price"
-                  ),
-                  data: supplyPoints.map((d: { x: number; y: number }) => ({
-                    x: d.x.toString(),
-                    y: d.y,
-                  })),
-                },
-                {
-                  name: t(
-                    "MarketAggregateView.quantityRequested",
-                    "Quantity Requested ≥ Price"
-                  ),
-                  data: demandPoints.map((d: { x: number; y: number }) => ({
-                    x: d.x.toString(),
-                    y: d.y,
-                  })),
-                },
-              ]}
-              height={400}
-              xAxisType="category"
-            />
-          )}
-        </TabbedChartLayout>
+        <MuiAreaChart
+          series={[
+            {
+              name: t("MarketAggregateView.stockAvailable", "Supply (stock ≤ price)"),
+              data: supplyPoints.map((d: { x: number; y: number }) => ({
+                x: d.x.toString(),
+                y: d.y,
+              })),
+            },
+            {
+              name: t("MarketAggregateView.quantityRequested", "Demand (wanted ≥ price)"),
+              data: demandPoints.map((d: { x: number; y: number }) => ({
+                x: d.x.toString(),
+                y: d.y,
+              })),
+            },
+          ]}
+          height={400}
+          xAxisType="category"
+          colors={["#22c55e", "#f59e0b"]}
+          xTickInterval={10}
+          xValueFormatter={formatPrice}
+        />
       </Grid>
     </Section>
   );
