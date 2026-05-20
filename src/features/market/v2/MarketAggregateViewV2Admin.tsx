@@ -1529,14 +1529,9 @@ export function MarketAggregateViewV2Admin({
         </Grid>
 
         {/* Place buy order form */}
-        <Section
-          xs={12}
-          title={t("MarketAggregateView.buyOrders", "Place Buy Order")}
-        >
-          <Grid item xs={12}>
-            <CreateBuyOrderV2 gameItem={game_item} />
-          </Grid>
-        </Section>
+        <Grid item xs={12}>
+          <CreateBuyOrderV2 gameItem={game_item} />
+        </Grid>
 
         {/* Price history chart */}
         <AggregateChartV2 aggregate={complete} />
