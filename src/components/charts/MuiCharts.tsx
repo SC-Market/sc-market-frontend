@@ -74,6 +74,9 @@ export function MuiLineChart({
 interface MuiAreaChartProps extends MuiLineChartProps {
   gradient?: boolean
   rightYAxis?: boolean
+  colors?: string[]
+  xTickInterval?: number  // show every Nth x tick label (default: show all)
+  xValueFormatter?: (value: Date | number | string) => string
 }
 
 export function MuiAreaChart({
@@ -85,6 +88,9 @@ export function MuiAreaChart({
   smooth = true,
   gradient = true,
   rightYAxis = false,
+  colors,
+  xTickInterval,
+  xValueFormatter,
 }: MuiAreaChartProps) {
   const xData = series[0]?.data.map((d) =>
     xAxisType === "time" ? new Date(d.x) : d.x,
@@ -116,22 +122,25 @@ export function MuiAreaChart({
         },
       ]
 
+  const defaultXFormatter =
+    xAxisType === "time"
+      ? (value: Date | number | string) => new Date(value).toLocaleDateString()
+      : (value: Date | number | string) => Math.round(Number(value)).toLocaleString()
+
   return (
     <LineChart
       xAxis={[
         {
           data: xData,
           scaleType: xAxisType === "time" ? "time" : "point",
-          valueFormatter:
-            xAxisType === "time"
-              ? (value: Date | number | string) =>
-                  new Date(value).toLocaleDateString()
-              : (value: Date | number | string) => Math.round(Number(value)).toLocaleString(),
+          valueFormatter: xValueFormatter ?? defaultXFormatter,
+          ...(xTickInterval != null ? { tickInterval: (_: unknown, index: number) => index % xTickInterval === 0 } : {}),
         },
       ]}
       yAxis={yAxisConfig}
       series={seriesData}
       height={height}
+      colors={colors}
       sx={{
         width: width === "100%" ? "100%" : width,
         "& .MuiLineElement-root": {
