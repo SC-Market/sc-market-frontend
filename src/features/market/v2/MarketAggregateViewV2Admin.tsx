@@ -60,9 +60,11 @@ import { CreateBuyOrderV2 } from "./components/CreateBuyOrderV2";
 import {
   AggregateChartV2,
   AggregateBuySellWallV2,
+  PriceComparisonTable,
   type AggregateListingV2Row,
   type GameItemAggregateV2,
 } from "./MarketAggregateViewV2";
+import { QualityHistogram } from "../../../components/market/v2/QualityHistogram";
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -1322,8 +1324,19 @@ export function MarketAggregateViewV2Admin({
   gameItemId,
 }: MarketAggregateViewV2AdminProps) {
   const { t } = useTranslation();
+  const theme = useTheme<ExtendedTheme>();
   const { game_item, quality_distribution, listings, buy_orders } = complete;
   const [selectedTier, setSelectedTier] = useState<number | null>(null);
+
+  const histogramData = useMemo(() => {
+    const total = quality_distribution.reduce((s, i) => s + i.listing_count, 0);
+    return quality_distribution.map((item) => ({
+      tier: item.quality_tier,
+      count: item.listing_count,
+      percentage: total > 0 ? (item.listing_count / total) * 100 : 0,
+      averagePrice: item.avg_price,
+    }));
+  }, [quality_distribution]);
 
   const filteredListings = useMemo(() => {
     if (!selectedTier) return listings;
@@ -1362,9 +1375,43 @@ export function MarketAggregateViewV2Admin({
           </Paper>
         </Grid>
 
+        {/* Item image */}
+        <Grid item xs={12} lg={4}>
+          <Paper
+            sx={{
+              borderRadius: (t) => t.spacing(theme.borderRadius.image),
+              backgroundColor: theme.palette.background.default,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              minHeight: 300,
+              height: 300,
+              width: "100%",
+              overflow: "hidden",
+            }}
+          >
+            <Box
+              component="img"
+              src={game_item.image_url || "https://cdn.robertsspaceindustries.com/static/images/Temp/default-image.png"}
+              alt={game_item.name}
+              sx={{
+                display: "block",
+                maxHeight: "100%",
+                maxWidth: "100%",
+                margin: "auto",
+                objectFit: "contain",
+              }}
+              onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+                e.currentTarget.src =
+                  "https://cdn.robertsspaceindustries.com/static/images/Temp/default-image.png";
+              }}
+            />
+          </Paper>
+        </Grid>
+
         {/* Market overview: stat strip + action buttons */}
-        <Grid item xs={12}>
-          <Paper>
+        <Grid item xs={12} lg={8}>
+          <Paper sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
             <Stack
               direction="row"
               alignItems="center"
@@ -1411,6 +1458,24 @@ export function MarketAggregateViewV2Admin({
           </Grid>
         )}
 
+        {/* Quality distribution + price by tier */}
+        {histogramData.length > 0 && (
+          <>
+            <Grid item xs={12} lg={6}>
+              <QualityHistogram
+                distribution={histogramData}
+                title="Quality Distribution"
+                showPrices
+              />
+            </Grid>
+            <Section xs={12} lg={6} title="Price by Quality Tier">
+              <Grid item xs={12}>
+                <PriceComparisonTable distribution={quality_distribution} />
+              </Grid>
+            </Section>
+          </>
+        )}
+
         {/* Sell orders */}
         <Section
           xs={12}
@@ -1438,10 +1503,25 @@ export function MarketAggregateViewV2Admin({
           </Grid>
         </Section>
 
-        {/* Market depth mini-chart */}
+        {/* Market depth — compact order density bar chart */}
         <Grid item xs={12}>
-          <Paper>
-            <DepthChart listings={filteredListings} buyOrders={buy_orders} />
+          <Paper sx={{ overflow: "hidden", pb: 1 }}>
+            <Typography
+              variant="caption"
+              fontWeight={700}
+              sx={{
+                display: "block",
+                px: 2.5,
+                pt: 2,
+                pb: 0.5,
+                textTransform: "uppercase",
+                letterSpacing: "0.08em",
+                color: "text.secondary",
+              }}
+            >
+              Order Depth
+            </Typography>
+            <AggregateBuySellWallV2 aggregate={complete} compact />
           </Paper>
         </Grid>
 

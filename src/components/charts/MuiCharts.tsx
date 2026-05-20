@@ -160,6 +160,8 @@ interface MuiBarChartProps {
   width?: string | number
   xAxisType?: "time" | "category"
   yAxisLabel?: string
+  colors?: string[]
+  xValueFormatter?: (value: Date | number | string) => string
 }
 
 export function MuiBarChart({
@@ -168,6 +170,8 @@ export function MuiBarChart({
   width = "100%",
   xAxisType = "time",
   yAxisLabel,
+  colors,
+  xValueFormatter,
 }: MuiBarChartProps) {
   const xData = series[0]?.data.map((d) =>
     xAxisType === "time" ? new Date(d.x) : d.x,
@@ -178,17 +182,18 @@ export function MuiBarChart({
     data: s.data.map((d) => d.y),
   }))
 
+  const defaultXFormatter =
+    xAxisType === "time"
+      ? (value: Date | number | string) => new Date(value).toLocaleDateString()
+      : (value: Date | number | string) => Math.round(Number(value)).toLocaleString()
+
   return (
     <BarChart
       xAxis={[
         {
           data: xData,
           scaleType: xAxisType === "time" ? "time" : "band",
-          valueFormatter:
-            xAxisType === "time"
-              ? (value: Date | number | string) =>
-                  new Date(value).toLocaleDateString()
-              : (value: Date | number | string) => Math.round(Number(value)).toLocaleString(),
+          valueFormatter: xValueFormatter ?? defaultXFormatter,
         },
       ]}
       yAxis={[
@@ -198,6 +203,7 @@ export function MuiBarChart({
       ]}
       series={seriesData}
       height={height}
+      colors={colors}
       sx={{
         width: width === "100%" ? "100%" : width,
       }}

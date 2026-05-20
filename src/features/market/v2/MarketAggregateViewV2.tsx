@@ -61,7 +61,7 @@ import { ImageSearch } from "../components/ImageSearch";
 import { HeaderTitle } from "../../../components/typography/HeaderTitle";
 import { Section } from "../../../components/paper/Section";
 import { DynamicKlineChart } from "../../../components/charts/DynamicCharts";
-import { MuiAreaChart } from "../../../components/charts/MuiCharts";
+import { MuiAreaChart, MuiBarChart } from "../../../components/charts/MuiCharts";
 import { NumericFormat } from "react-number-format";
 import { useTranslation } from "react-i18next";
 import { QualityBadge } from "../../../components/market/v2/QualityBadge";
@@ -662,7 +662,7 @@ export function MarketAggregateViewV2() {
  * 
  * Requirements: 41.5
  */
-function PriceComparisonTable({
+export function PriceComparisonTable({
   distribution,
 }: {
   distribution: Array<{
@@ -1407,11 +1407,56 @@ export function AggregateChartV2(props: { aggregate: GameItemAggregateV2 }) {
  * 
  * Requirements: 41.4
  */
-export function AggregateBuySellWallV2(props: { aggregate: GameItemAggregateV2 }) {
+export function AggregateBuySellWallV2(props: { aggregate: GameItemAggregateV2; compact?: boolean }) {
   const { t } = useTranslation();
-  const { aggregate } = props;
+  const { aggregate, compact } = props;
 
+  // Compact mode: non-cumulative density histogram (20 buckets, short bar chart)
+  const { compactSellBars, compactBuyBars } = useMemo(() => {
+    if (!compact) return { compactSellBars: [] as { x: string; y: number }[], compactBuyBars: [] as { x: string; y: number }[] };
+    const BUCKETS = 20;
+    const activeSells = aggregate.listings.filter((l) => l.quantity_available > 0);
+    const pricedBuys = aggregate.buy_orders.filter((o) => o.price_per_unit > 0);
+    if (!activeSells.length && !pricedBuys.length)
+      return { compactSellBars: [] as { x: string; y: number }[], compactBuyBars: [] as { x: string; y: number }[] };
+
+    const allPrices = [
+      ...activeSells.map((l) => l.price_min),
+      ...pricedBuys.map((o) => o.price_per_unit),
+    ];
+    const minPrice = Math.min(...allPrices);
+    const maxPrice = Math.max(...allPrices) * 1.05;
+    const interval = (maxPrice - minPrice) / BUCKETS;
+    if (interval === 0)
+      return { compactSellBars: [] as { x: string; y: number }[], compactBuyBars: [] as { x: string; y: number }[] };
+
+    const sellBuckets = new Array(BUCKETS).fill(0);
+    const buyBuckets = new Array(BUCKETS).fill(0);
+    activeSells.forEach((l) => {
+      const idx = Math.min(Math.floor((l.price_min - minPrice) / interval), BUCKETS - 1);
+      if (idx >= 0) sellBuckets[idx] += l.quantity_available;
+    });
+    pricedBuys.forEach((o) => {
+      const idx = Math.min(Math.floor((o.price_per_unit - minPrice) / interval), BUCKETS - 1);
+      if (idx >= 0) buyBuckets[idx] += o.quantity;
+    });
+
+    // Label each bucket by its midpoint price
+    const fmt = (n: number) => {
+      if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
+      if (n >= 1_000) return `${(n / 1_000).toFixed(n >= 10_000 ? 0 : 1)}k`;
+      return Math.round(n).toString();
+    };
+    const labels = Array.from({ length: BUCKETS }, (_, i) => fmt(minPrice + interval * (i + 0.5)));
+    return {
+      compactSellBars: labels.map((x, i) => ({ x, y: sellBuckets[i] })),
+      compactBuyBars: labels.map((x, i) => ({ x, y: buyBuckets[i] })),
+    };
+  }, [compact, aggregate]);
+
+  // Full mode: cumulative supply/demand (skip in compact)
   const { supplyPoints, demandPoints } = useMemo(() => {
+    if (compact) return { supplyPoints: [] as { x: number; y: number }[], demandPoints: [] as { x: number; y: number }[] };
     const bucketCount = 100;
     const sellHigh = aggregate.listings.length
       ? aggregate.listings.reduce(
@@ -1467,7 +1512,23 @@ export function AggregateBuySellWallV2(props: { aggregate: GameItemAggregateV2 }
     }
 
     return { supplyPoints, demandPoints };
-  }, [aggregate]);
+  }, [compact, aggregate]);
+
+  // Compact early return (all hooks have been called above)
+  if (compact) {
+    if (!compactSellBars.length && !compactBuyBars.length) return null;
+    return (
+      <MuiBarChart
+        series={[
+          { name: "Ask (supply)", data: compactSellBars },
+          { name: "Bid (demand)", data: compactBuyBars },
+        ]}
+        height={200}
+        xAxisType="category"
+        colors={["#22c55e", "#f59e0b"]}
+      />
+    );
+  }
 
   // Format price bucket values as "1.2k aUEC" etc.
   const formatPrice = (v: Date | number | string) => {
