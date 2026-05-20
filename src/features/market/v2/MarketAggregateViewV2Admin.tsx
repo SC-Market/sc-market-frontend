@@ -173,6 +173,7 @@ function StatStrip({
         gridTemplateColumns: "repeat(6, 1fr)",
         gap: "1px",
         bgcolor: "divider",
+        height: "100%",
       }}
     >
       {cells.map((c) => (
@@ -1441,7 +1442,9 @@ export function MarketAggregateViewV2Admin({
               </Button>
             </Stack>
             <Divider />
-            <StatStrip complete={complete} selectedTier={selectedTier} />
+            <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
+              <StatStrip complete={complete} selectedTier={selectedTier} />
+            </Box>
           </Paper>
         </Grid>
 
