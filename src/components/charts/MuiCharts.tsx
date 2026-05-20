@@ -125,7 +125,7 @@ export function MuiAreaChart({
   const defaultXFormatter =
     xAxisType === "time"
       ? (value: Date | number | string) => new Date(value).toLocaleDateString()
-      : (value: Date | number | string) => Math.round(Number(value)).toLocaleString()
+      : (value: Date | number | string) => String(value)  // category labels are already formatted strings
 
   return (
     <LineChart
