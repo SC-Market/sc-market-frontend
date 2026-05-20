@@ -81,11 +81,6 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
             icon: <CableRounded />,
           },
           {
-            to: "/bulk",
-            text: "sidebar.bulk_items",
-            icon: <GavelIcon />,
-          },
-          {
             to: "/buyorders",
             text: "sidebar.buy_orders",
             icon: <RequestQuoteRounded />,

@@ -50,7 +50,7 @@ export function MatchingBuyOrdersArea() {
                   <TableCell>
                     <MuiLink
                       component={RouterLink}
-                      to={`/market/aggregate/${order.game_item_id}`}
+                      to={`/buyorder/${order.buy_order_id}`}
                       underline="hover"
                       color="text.primary"
                       fontWeight="bold"

@@ -1241,6 +1241,13 @@ const injectedRtkApi = api
         }),
         providesTags: ["Buy Orders V2"],
       }),
+      getBuyOrderDetail: build.query<
+        StandingBuyOrder,
+        { id: string }
+      >({
+        query: (queryArg) => ({ url: `/buy-orders/${queryArg.id}` }),
+        providesTags: ["Buy Orders V2"],
+      }),
       updateBuyOrder: build.mutation<
         UpdateBuyOrderApiResponse,
         UpdateBuyOrderApiArg
@@ -5712,6 +5719,7 @@ export const {
   useSearchBuyOrdersQuery,
   useGetMyBuyOrdersQuery,
   useGetBuyOrderMatchesForSellerQuery,
+  useGetBuyOrderDetailQuery,
   useUpdateBuyOrderMutation,
   useCancelBuyOrderMutation,
   useFulfillBuyOrderMutation,
