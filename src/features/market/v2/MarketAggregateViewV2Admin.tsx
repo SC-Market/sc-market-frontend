@@ -1311,6 +1311,136 @@ function BuyOrdersPanel({ buyOrders }: { buyOrders: StandingBuyOrder[] }) {
   );
 }
 
+
+// ---------------------------------------------------------------------------
+// Analytics card — tabbed Price History / Order Depth with quality filter
+// ---------------------------------------------------------------------------
+
+function AnalyticsCard({
+  complete,
+  selectedTier,
+  onTierSelect,
+}: {
+  complete: GameItemAggregateV2;
+  selectedTier: number | null;
+  onTierSelect: (tier: number | null) => void;
+}) {
+  const [activeTab, setActiveTab] = useState<"price" | "depth">("price");
+  const { quality_distribution } = complete;
+  const hasMultiTier = quality_distribution.length > 1;
+
+  return (
+    <Paper>
+      {/* Card header: label + quality chip filter */}
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          px: 2.5,
+          pt: 1.5,
+          pb: 0,
+        }}
+      >
+        <Typography
+          variant="caption"
+          fontWeight={700}
+          sx={{
+            textTransform: "uppercase",
+            letterSpacing: "0.08em",
+            color: "text.secondary",
+          }}
+        >
+          Analytics
+        </Typography>
+
+        {hasMultiTier && (
+          <Stack direction="row" spacing={0.5} alignItems="center">
+            <Box
+              onClick={() => onTierSelect(null)}
+              sx={{
+                cursor: "pointer",
+                px: 1,
+                py: 0.25,
+                borderRadius: 1,
+                border: "1px solid",
+                borderColor: selectedTier === null ? "primary.main" : "divider",
+                bgcolor: selectedTier === null ? "primary.main" : "transparent",
+              }}
+            >
+              <Typography
+                variant="caption"
+                fontWeight={700}
+                sx={{
+                  color: selectedTier === null ? "primary.contrastText" : "text.secondary",
+                  fontSize: "10px",
+                  letterSpacing: "0.05em",
+                  textTransform: "uppercase",
+                }}
+              >
+                All
+              </Typography>
+            </Box>
+            {quality_distribution.map((d) => (
+              <Box
+                key={d.quality_tier}
+                onClick={() => onTierSelect(d.quality_tier)}
+                sx={{
+                  cursor: "pointer",
+                  opacity: selectedTier === d.quality_tier ? 1 : 0.5,
+                  transition: "opacity 0.15s",
+                  "&:hover": { opacity: 1 },
+                  outline: selectedTier === d.quality_tier ? "2px solid" : "none",
+                  outlineColor: "primary.main",
+                  outlineOffset: 2,
+                  borderRadius: 0.5,
+                }}
+              >
+                <QualityBadge tier={d.quality_tier} size="small" />
+              </Box>
+            ))}
+          </Stack>
+        )}
+      </Box>
+
+      {/* Tab strip */}
+      <Tabs
+        value={activeTab}
+        onChange={(_, v) => setActiveTab(v)}
+        textColor="inherit"
+        TabIndicatorProps={{ sx: { bgcolor: "primary.main" } }}
+        sx={{
+          px: 2,
+          minHeight: 0,
+          borderBottom: "1px solid",
+          borderColor: "divider",
+        }}
+      >
+        <Tab
+          value="price"
+          label="Price History"
+          sx={{ minHeight: 40, py: 0.5, fontSize: "12px", fontWeight: 600 }}
+        />
+        <Tab
+          value="depth"
+          label="Order Depth"
+          sx={{ minHeight: 40, py: 0.5, fontSize: "12px", fontWeight: 600 }}
+        />
+      </Tabs>
+
+      {/* Chart content — wrap in Grid container since chart components use Section (Grid item) */}
+      <Grid container>
+        {activeTab === "price" && (
+          <AggregateChartV2 aggregate={complete} qualityTier={selectedTier} />
+        )}
+        {activeTab === "depth" && (
+          <AggregateBuySellWallV2 aggregate={complete} qualityTier={selectedTier} />
+        )}
+      </Grid>
+    </Paper>
+  );
+}
+
 // ---------------------------------------------------------------------------
 // Main export
 // ---------------------------------------------------------------------------
@@ -1533,11 +1663,14 @@ export function MarketAggregateViewV2Admin({
           <CreateBuyOrderV2 gameItem={game_item} />
         </Grid>
 
-        {/* Price history chart */}
-        <AggregateChartV2 aggregate={complete} />
-
-        {/* Market depth chart */}
-        <AggregateBuySellWallV2 aggregate={complete} />
+        {/* Analytics: tabbed Price History / Order Depth with quality filter */}
+        <Grid item xs={12}>
+          <AnalyticsCard
+            complete={complete}
+            selectedTier={selectedTier}
+            onTierSelect={setSelectedTier}
+          />
+        </Grid>
 
       </Grid>
     </Grid>

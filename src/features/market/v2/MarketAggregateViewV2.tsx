@@ -1339,13 +1339,17 @@ export function BuyOrderRowV2(props: {
  * 
  * Requirements: 41.4
  */
-export function AggregateChartV2(props: { aggregate: GameItemAggregateV2 }) {
-  const { aggregate } = props;
+export function AggregateChartV2(props: { aggregate: GameItemAggregateV2; qualityTier?: number | null }) {
+  const { aggregate, qualityTier } = props;
   const { t } = useTranslation();
 
-  // TODO: Replace with actual V2 API call when ready
-  // const { data: chartData } = useGetAggregateHistoryV2Query(aggregate.game_item.id);
-  const chartData = aggregate.price_history;
+  const rawHistory = aggregate.price_history;
+
+  // Filter to selected quality tier when set
+  const chartData = useMemo(() => {
+    if (qualityTier == null) return rawHistory;
+    return rawHistory.filter((d) => d.quality_tier === qualityTier);
+  }, [rawHistory, qualityTier]);
 
   // Transform price history data for chart
   const chartSeries = useMemo(() => {
@@ -1407,9 +1411,31 @@ export function AggregateChartV2(props: { aggregate: GameItemAggregateV2 }) {
  * 
  * Requirements: 41.4
  */
-export function AggregateBuySellWallV2(props: { aggregate: GameItemAggregateV2; compact?: boolean }) {
+export function AggregateBuySellWallV2(props: { aggregate: GameItemAggregateV2; compact?: boolean; qualityTier?: number | null }) {
   const { t } = useTranslation();
-  const { aggregate, compact } = props;
+  const { aggregate: rawAggregate, compact, qualityTier } = props;
+
+  // Pre-filter listings/buy_orders to selected quality tier
+  const aggregate = useMemo(() => {
+    if (qualityTier == null) return rawAggregate;
+    return {
+      ...rawAggregate,
+      listings: rawAggregate.listings.filter(
+        (l) =>
+          l.quality_tier_min != null &&
+          l.quality_tier_max != null &&
+          l.quality_tier_min <= qualityTier &&
+          l.quality_tier_max >= qualityTier
+      ),
+      buy_orders: rawAggregate.buy_orders.filter(
+        (o) =>
+          o.quality_tier_min != null &&
+          o.quality_tier_max != null &&
+          o.quality_tier_min <= qualityTier &&
+          o.quality_tier_max >= qualityTier
+      ),
+    };
+  }, [rawAggregate, qualityTier]);
 
   // Compact mode: non-cumulative density histogram (20 buckets, short bar chart)
   const { compactSellBars, compactBuyBars } = useMemo(() => {
