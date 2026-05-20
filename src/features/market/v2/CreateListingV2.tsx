@@ -18,7 +18,7 @@ import {
   Collapse,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { NumericFormat } from "react-number-format";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { AddCircleOutlineRounded, DeleteOutline, ExpandMoreRounded } from "@mui/icons-material";
@@ -65,17 +65,18 @@ export function CreateListingV2() {
   const { t } = useTranslation();
   const theme = useTheme<ExtendedTheme>();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const issueAlert = useAlertHook();
   const { data: profile } = useGetUserProfileQuery();
   const [currentOrg] = useCurrentOrg();
   const isVerified = profile?.rsi_confirmed;
 
-  // Form state
+  // Form state — prefilled from ?game_item_id=&game_item_name=&game_item_type= query params
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [gameItemId, setGameItemId] = useState<string | null>(null);
-  const [gameItemName, setGameItemName] = useState<string | null>(null);
-  const [gameItemType, setGameItemType] = useState<string | null>(null);
+  const [gameItemId, setGameItemId] = useState<string | null>(searchParams.get("game_item_id"));
+  const [gameItemName, setGameItemName] = useState<string | null>(searchParams.get("game_item_name"));
+  const [gameItemType, setGameItemType] = useState<string | null>(searchParams.get("game_item_type"));
   const [pricingMode, setPricingMode] = useState<"unified" | "per_variant">("unified");
   const [basePrice, setBasePrice] = useState<number>(0);
   const [photos, setPhotos] = useState<string[]>([]);
