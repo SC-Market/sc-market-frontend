@@ -92,8 +92,8 @@ export function BuyOrdersViewV2() {
   )
 
   const gridBreakpoints = useMemo(() => {
-    if (marketSidebarOpen) return { xs: 6, sm: 6, md: 4, lg: 3, xl: 2 }
-    return { xs: 6, sm: 4, md: 3, lg: 2, xl: 2 }
+    if (marketSidebarOpen) return { xs: 6, sm: 4, md: 4, lg: 3, xl: 2.4 }
+    return { xs: 6, sm: 4, md: 4, lg: 2.4, xl: 2 }
   }, [marketSidebarOpen])
 
   const loading = isLoading || isFetching
@@ -236,38 +236,81 @@ function BuyOrderAggregateCard({
 
   const priceDisplay = minPrice === maxPrice
     ? `${maxPrice.toLocaleString(i18n.language)} aUEC`
-    : `${minPrice.toLocaleString(i18n.language)} - ${maxPrice.toLocaleString(i18n.language)} aUEC`
+    : `${minPrice.toLocaleString(i18n.language)} – ${maxPrice.toLocaleString(i18n.language)} aUEC`
 
-  const cardHeight = 300
   const isDark = theme.palette.mode === "dark"
-  const contentSx = isDark
-    ? { position: "absolute" as const, bottom: 0, zIndex: 4, width: "100%" }
-    : {}
 
   return (
-    <ListingWrapper>
-      <Fade in style={{ transitionDelay: `${50 + 50 * index}ms`, transitionDuration: "500ms" }}>
+    <ListingWrapper useFixedWidth={false}>
+      <Fade in timeout={500} style={{ transitionDelay: `${50 + 50 * index}ms` }}>
         <Link to={`/market/aggregate/${aggregate.item_id}`} style={{ textDecoration: "none", color: "inherit" }}>
-          <CardActionArea sx={{ borderRadius: (t) => t.spacing((t as ExtendedTheme).borderRadius.topLevel) }}>
-            <Card sx={{ borderRadius: (t) => t.spacing((t as ExtendedTheme).borderRadius.topLevel), height: cardHeight, position: "relative" }}>
+          <CardActionArea sx={{ borderRadius: theme.spacing(theme.borderRadius.topLevel) }}>
+            <Card sx={{ height: 300, position: "relative" }}>
               <CardMedia
                 component="img"
                 loading="lazy"
                 image={imageUrl}
-                sx={{ width: "100%", objectFit: "cover", height: isDark ? "100%" : 150 }}
+                sx={{
+                  width: "100%",
+                  objectFit: "cover",
+                  ...(isDark
+                    ? { height: "100%", aspectRatio: "16/9" }
+                    : { height: 180, aspectRatio: "16/9" }),
+                  overflow: "hidden",
+                }}
                 onError={({ currentTarget }) => { currentTarget.onerror = null; currentTarget.src = FALLBACK_IMAGE_URL }}
+                alt={`Image of ${aggregate.item_name}`}
               />
-              {isDark && (
-                <Box sx={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "100%", background: cardFadeGradient(theme), zIndex: 3 }} />
-              )}
-              <CardContent sx={contentSx}>
-                <Typography variant="subtitle1" fontWeight="bold" color="text.secondary" sx={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                  {aggregate.item_name}
-                </Typography>
-                <Typography variant="body2" color="primary">
+              <Box
+                sx={{
+                  ...(theme.palette.mode === "light" ? { display: "none" } : {}),
+                  position: "absolute",
+                  zIndex: 3,
+                  top: 0,
+                  left: 0,
+                  height: "100%",
+                  width: "100%",
+                  borderRadius: theme.spacing(theme.borderRadius.topLevel),
+                  background: cardFadeGradient(theme, 50, 60),
+                }}
+              />
+              <CardContent
+                sx={{
+                  ...(isDark
+                    ? { position: "absolute", bottom: 0, zIndex: 4 }
+                    : {}),
+                  maxWidth: "100%",
+                  padding: "8px 12px !important",
+                }}
+              >
+                <Typography
+                  variant="h6"
+                  color="primary"
+                  fontWeight="bold"
+                  noWrap
+                  sx={{ fontSize: "0.95rem", mb: 0.5 }}
+                >
                   {priceDisplay}
                 </Typography>
-                <Typography variant="body2" color="text.secondary">
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{
+                    fontSize: "0.75rem",
+                    lineHeight: 1.3,
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                    mb: 0.5,
+                  }}
+                >
+                  {aggregate.item_name}
+                </Typography>
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  sx={{ fontSize: "0.7rem", lineHeight: 1 }}
+                >
                   {totalQty.toLocaleString(i18n.language)} {t("market.requested", "requested")}
                   {" · "}{aggregate.orders.length} {t("market.buyOrders", "buy orders")}
                 </Typography>

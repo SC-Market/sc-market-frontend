@@ -70,6 +70,7 @@ import { QualityHistogram } from "../../../components/market/v2/QualityHistogram
 import { QualityFilter } from "../../../components/market/v2/QualityFilter";
 import { VariantSelector } from "../../../components/market/v2/VariantSelector";
 import { CreateBuyOrderV2 } from "./components/CreateBuyOrderV2";
+import { MarketAggregateViewV2Admin } from "./MarketAggregateViewV2Admin";
 import { useGetListingsQuery, useGetQualityDistributionQuery, useGetPriceHistoryQuery, useSearchBuyOrdersQuery, useFulfillBuyOrderMutation, useCancelBuyOrderMutation, type StandingBuyOrder } from "../../../store/api/v2/market";
 import type { GameItemListingResult, GameItemQualityDistribution, PriceDataPoint } from "../../../store/api/v2/market";
 
@@ -320,6 +321,27 @@ export function MarketAggregateViewV2() {
   const updateAggregate = async (_data: { photo?: string }) => {
     // await updateAggregateV2Mutation({ game_item_id: game_item.id, data });
   };
+
+  // Admin preview: exchange-terminal redesign
+  if (profile?.role === "admin") {
+    return (
+      <StandardPageLayout
+        title={game_item.name || "Market Item"}
+        headerTitle={game_item.name}
+        breadcrumbs={[
+          { label: t("sidebar.market_short", "Market"), href: "/market" },
+          ...(game_item.type && game_item.type !== "Other" ? [{ label: game_item.type, href: `/market?type=${encodeURIComponent(game_item.type)}` }] : []),
+          { label: game_item.name || "Item" },
+        ]}
+        isLoading={isLoading}
+        error={error}
+        sidebarOpen={true}
+        maxWidth="xl"
+      >
+        <MarketAggregateViewV2Admin complete={complete} gameItemId={gameItemId!} />
+      </StandardPageLayout>
+    );
+  }
 
   return (
     <StandardPageLayout

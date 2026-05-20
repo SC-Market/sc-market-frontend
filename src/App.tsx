@@ -253,6 +253,12 @@ const router = createBrowserRouter([
         }),
       },
       {
+        path: "/buyorder/:id",
+        lazy: async () => ({
+          Component: (await import("./features/market/v2/BuyOrderDetailV2")).BuyOrderDetailV2,
+        }),
+      },
+      {
         path: "/contractors",
         lazy: async () => ({
           Component: (await import("./pages/contractor/Contractors"))

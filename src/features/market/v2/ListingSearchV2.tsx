@@ -412,7 +412,6 @@ export function MarketSearchAreaV2({ manageMode }: { manageMode?: boolean } = {}
               exclusive
               onChange={(_, newValue) => {
                 if (newValue === 'market') navigate('/market');
-                else if (newValue === 'bulk') navigate('/bulk');
                 else if (newValue === 'buyorders') navigate('/buyorders');
               }}
               fullWidth
@@ -420,7 +419,6 @@ export function MarketSearchAreaV2({ manageMode }: { manageMode?: boolean } = {}
               color="secondary"
             >
               <ToggleButton value="market">{t('market.listings', 'Listings')}</ToggleButton>
-              <ToggleButton value="bulk">{t('market.bulk', 'Bulk')}</ToggleButton>
               <ToggleButton value="buyorders">{t('market.buyOrders', 'Buy Orders')}</ToggleButton>
             </ToggleButtonGroup>
           </Grid>
