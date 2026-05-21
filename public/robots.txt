@@ -2,4 +2,4 @@
 User-agent: *
 Disallow: /profile
 
-Sitemap: https://sc-market.space/sitemap.xml
+Sitemap: https://api.sc-market.space/sitemap.xml
