@@ -1562,7 +1562,7 @@ export function MarketAggregateViewV2Admin({
               </Button>
               <Button
                 component={Link}
-                to={`/market/buy-orders/create?game_item_id=${encodeURIComponent(gameItemId)}&game_item_name=${encodeURIComponent(game_item.name)}`}
+                to={`/buyorder/create?game_item_id=${encodeURIComponent(gameItemId)}&game_item_name=${encodeURIComponent(game_item.name)}`}
                 variant="outlined"
                 color="warning"
                 size="small"
