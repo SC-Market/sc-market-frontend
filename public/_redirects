@@ -1,3 +1,1 @@
-# Cloudflare Pages SPA routing
-# Redirect all routes to index.html for client-side routing
-/*    /index.html   200
+/sitemap.xml  https://api.sc-market.space/sitemap.xml  200
