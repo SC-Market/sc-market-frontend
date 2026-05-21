@@ -1592,7 +1592,7 @@ export function MarketAggregateViewV2Admin({
         )}
 
         {/* Quality distribution + price by tier */}
-        {histogramData.length > 0 && (
+        {quality_distribution.some((d) => d.listing_count > 0) && (
           <>
             <Grid item xs={12} lg={6}>
               <QualityHistogram
