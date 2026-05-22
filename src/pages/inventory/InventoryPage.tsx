@@ -250,14 +250,23 @@ export default function InventoryPage() {
                     </TableCell>
                     <TableCell>
                       {lot.listing_id ? (
-                        <Chip
-                          label={lot.listing_title || "Listing"}
-                          size="small"
-                          component={Link}
-                          to={`/market/${lot.listing_id}`}
-                          clickable
-                          icon={<LinkRounded />}
-                        />
+                        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                          {lot.listing_photo && (
+                            <Avatar
+                              src={lot.listing_photo}
+                              variant="rounded"
+                              sx={{ width: 24, height: 24 }}
+                            />
+                          )}
+                          <Chip
+                            label={lot.listing_title || "Listing"}
+                            size="small"
+                            component={Link}
+                            to={`/market/${lot.listing_id}`}
+                            clickable
+                            icon={!lot.listing_photo ? <LinkRounded /> : undefined}
+                          />
+                        </Box>
                       ) : (
                         <Typography variant="body2" color="text.disabled">
                           {t("inventory.unlisted", "Unlisted")}
