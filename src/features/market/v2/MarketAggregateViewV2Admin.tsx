@@ -1491,21 +1491,6 @@ export function MarketAggregateViewV2Admin({
     <Grid item xs={12}>
       <Grid container spacing={2}>
 
-        {/* Admin preview banner */}
-        <Grid item xs={12}>
-          <Paper
-            sx={{
-              p: 1.5,
-              bgcolor: "rgba(59,130,246,0.08)",
-              border: "1px solid rgba(59,130,246,0.2)",
-            }}
-          >
-            <Typography variant="caption" color="primary" fontWeight={600}>
-              🔬 Admin preview — redesigned layout. Not visible to regular users.
-            </Typography>
-          </Paper>
-        </Grid>
-
         {/* Item image */}
         <Grid item xs={12} lg={4}>
           <Paper
