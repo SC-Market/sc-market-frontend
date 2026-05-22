@@ -19,8 +19,6 @@ import {
   Stack,
   Switch,
   TextField,
-  ToggleButton,
-  ToggleButtonGroup,
   Typography,
   InputAdornment,
   useMediaQuery,
@@ -33,7 +31,7 @@ import {
 import FilterListIcon from "@mui/icons-material/FilterList"
 import SearchIcon from "@mui/icons-material/Search"
 import { useTheme } from "@mui/material/styles"
-import { Link, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import {
   GridColDef,
@@ -196,7 +194,6 @@ export function BulkStockManagementV2() {
 
 function StockSearchAreaV2() {
   const { t } = useTranslation()
-  const navigate = useNavigate()
   const { filters, setSearch, setListingId, setLocationId } = useStockFilter()
   const [currentOrg] = useCurrentOrg()
   const { data: listingsData } = useGetMyListingsQuery({ pageSize: 100, sortBy: "updated_at", sortOrder: "desc", spectrumId: currentOrg?.spectrum_id })
@@ -204,22 +201,6 @@ function StockSearchAreaV2() {
 
   return (
     <Stack spacing={1} sx={{ p: 2 }}>
-      <ToggleButtonGroup
-        value="bulk"
-        exclusive
-        onChange={(_, v) => {
-          if (v === "market") navigate("/market")
-          else if (v === "buyorders") navigate("/buyorders")
-        }}
-        fullWidth
-        size="small"
-        color="secondary"
-      >
-        <ToggleButton value="market">{t("market.listings", "Listings")}</ToggleButton>
-        <ToggleButton value="bulk">{t("market.bulk", "Bulk")}</ToggleButton>
-        <ToggleButton value="buyorders">{t("market.buyOrders", "Buy Orders")}</ToggleButton>
-      </ToggleButtonGroup>
-
       <Typography variant="h6">{t("stock.filters", "Filters")}</Typography>
 
       <TextField
@@ -385,7 +366,11 @@ function AllStockLotsGridV2() {
     .map((lot) => ({
       id: lot.lot_id,
       lot_id: lot.lot_id,
-      listing_id: lot.item_id,
+      item_id: lot.item_id,
+      listing_id: lot.listing_id,
+      listing_title: lot.listing_title,
+      listing_photo: (lot as any).listing_photo ?? null,
+      game_item_name: (lot as any).game_item_name ?? null,
       variant_display_name: lot.variant.display_name,
       quality_tier: lot.variant.attributes.quality_tier ?? null,
       quality_value: lot.variant.attributes.quality_value ?? null,
@@ -401,85 +386,105 @@ function AllStockLotsGridV2() {
 
   const columns: GridColDef[] = [
     {
-      field: "variant_display_name",
-      headerName: t("AllStockLots.listing", "Listing"),
-      flex: 2,
+      field: "game_item_name",
+      headerName: t("inventory.item", "Item"),
+      flex: 1.5,
       renderCell: (params: GridRenderCellParams) => (
-        <Typography variant="body2">{params.value}</Typography>
+        <Typography variant="body2" fontWeight={600}>
+          {params.value || "Custom Item"}
+        </Typography>
       ),
     },
     {
-      field: "quality_tier",
-      headerName: t("StockManagerV2.qualityTier", "Quality"),
-      flex: 1,
-      editable: true,
-      renderCell: (params: GridRenderCellParams) => {
-        const tier = params.value as number | null
-        const qv = params.row.quality_value as number | null
-        if (qv != null) return <Chip label={`Q${qv}`} size="small" variant="outlined" />
-        if (tier != null) return (
-          <Chip
-            label={`Tier ${tier}`}
-            size="small"
-            color={tier >= 4 ? "success" : tier >= 3 ? "primary" : "default"}
-            variant="outlined"
-          />
-        )
-        return <Typography variant="body2" color="text.disabled">—</Typography>
-      },
-      renderEditCell: (props: GridRenderEditCellParams) =>
-        qualityBands?.length ? (
-          <QualityBandEditCell {...props} bands={qualityBands} />
-        ) : (
-          <QualityTierEditCell {...props} />
-        ),
+      field: "variant_display_name",
+      headerName: t("inventory.variant", "Variant"),
+      flex: 1.5,
+      renderCell: (params: GridRenderCellParams) => (
+        <Typography variant="body2">{params.value || "—"}</Typography>
+      ),
     },
     {
       field: "quantity",
-      headerName: t("AllStockLots.quantity", "Quantity"),
-      flex: 1,
+      headerName: t("inventory.quantity", "Qty"),
+      flex: 0.7,
       editable: true,
       type: "number" as const,
+      align: "right" as const,
+      headerAlign: "right" as const,
       valueParser: (value: string) => Math.max(0, Number(value) || 0),
+      renderCell: (params: GridRenderCellParams) => (
+        <Typography variant="body2" fontWeight={600}>{params.value?.toLocaleString()}</Typography>
+      ),
     },
     {
       field: "location_id",
-      headerName: t("AllStockLots.location", "Location"),
-      flex: 1.5,
-      minWidth: 200,
+      headerName: t("inventory.location", "Location"),
+      flex: 1.2,
+      minWidth: 160,
       editable: true,
       renderEditCell: renderLocationEditCell,
-      valueFormatter: (value: string) => locations.find((l) => l.location_id === value)?.name ?? "Unspecified",
+      renderCell: (params: GridRenderCellParams) => (
+        <Typography variant="body2" color="text.secondary">
+          {locations.find((l) => l.location_id === params.value)?.name ?? "Unspecified"}
+        </Typography>
+      ),
+    },
+    {
+      field: "listing_title",
+      headerName: t("inventory.listing", "Listing"),
+      flex: 1.8,
+      renderCell: (params: GridRenderCellParams) => {
+        const photo = params.row.listing_photo
+        const listingId = params.row.listing_id
+        const title = params.value || "—"
+        return (
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            {photo && (
+              <Avatar
+                src={photo}
+                variant="rounded"
+                sx={{ width: 28, height: 28 }}
+              />
+            )}
+            {listingId ? (
+              <UnderlineLink
+                component={Link}
+                to={`/market/${listingId}`}
+                variant="body2"
+                noWrap
+              >
+                {title}
+              </UnderlineLink>
+            ) : (
+              <Typography variant="body2" color="text.disabled">{title}</Typography>
+            )}
+          </Box>
+        )
+      },
     },
     {
       field: "listed",
-      headerName: t("AllStockLots.listed", "Listed"),
-      flex: 1,
+      headerName: t("inventory.status", "Status"),
+      flex: 0.8,
       editable: true,
       renderCell: (params: GridRenderCellParams) => (
         <Chip
-          label={params.value ? t("ui.yes", "Yes") : t("ui.no", "No")}
+          label={params.value ? t("inventory.listed", "Listed") : t("inventory.personal", "Personal")}
           color={params.value ? "success" : "default"}
           size="small"
+          variant="outlined"
         />
       ),
     },
     {
-      field: "notes",
-      headerName: t("AllStockLots.notes", "Notes"),
-      flex: 2,
-      editable: true,
-    },
-    {
       field: "actions",
-      headerName: t("AllStockLots.actions", "Actions"),
-      flex: 1,
+      headerName: "",
+      flex: 0.5,
+      sortable: false,
       renderCell: (params: GridRenderCellParams) => (
-        <Box sx={{ display: "flex", gap: 0.5 }}>
-          <IconButton size="small" onClick={() => handleDelete(params.row.lot_id)}>
-            <DeleteIcon />
-          </IconButton>
-        </Box>
+        <IconButton size="small" color="error" onClick={() => handleDelete(params.row.lot_id)}>
+          <DeleteIcon fontSize="small" />
+        </IconButton>
       ),
     },
   ]
@@ -623,17 +628,58 @@ function AllocatedStockGridV2() {
 
   const columns: GridColDef[] = [
     {
-      field: "listing_id",
-      headerName: t("stock.listing", "Listing"),
+      field: "game_item_name",
+      headerName: t("inventory.item", "Item"),
       flex: 1.5,
+      valueGetter: (_value, row: Allocation) => (row.lot as any)?.game_item_name || "Item",
+      renderCell: (params: GridRenderCellParams) => (
+        <Typography variant="body2" fontWeight={600}>{params.value}</Typography>
+      ),
+    },
+    {
+      field: "variant",
+      headerName: t("inventory.variant", "Variant"),
+      flex: 1.2,
+      valueGetter: (_value, row: Allocation) => row.lot?.variant?.display_name || "—",
+    },
+    {
+      field: "quantity",
+      headerName: t("inventory.quantity", "Qty"),
+      flex: 0.7,
+      align: "right" as const,
+      headerAlign: "right" as const,
+      renderCell: (params: GridRenderCellParams) => (
+        <Typography variant="body2" fontWeight={600}>{params.value?.toLocaleString()}</Typography>
+      ),
+    },
+    {
+      field: "location_name",
+      headerName: t("inventory.location", "Location"),
+      flex: 1,
+      valueGetter: (_value, row: Allocation) => row.lot?.location?.name ?? "Unspecified",
+      renderCell: (params: GridRenderCellParams) => (
+        <Typography variant="body2" color="text.secondary">{params.value}</Typography>
+      ),
+    },
+    {
+      field: "listing_id",
+      headerName: t("inventory.listing", "Listing"),
+      flex: 1.8,
       valueGetter: (_value, row: Allocation) => row.lot?.listing_id ?? "",
       renderCell: (params: GridRenderCellParams) => {
         const photo = params.row.lot?.photos?.[0]
-        const title = params.row.lot?.title || String(params.value).substring(0, 8).toUpperCase()
+        const title = params.row.lot?.title || "Listing"
+        const listingId = params.value
         return (
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <Avatar src={photo} variant="rounded" sx={{ width: 32, height: 32 }} />
-            <Typography variant="body2">{title}</Typography>
+            {photo && <Avatar src={photo} variant="rounded" sx={{ width: 28, height: 28 }} />}
+            {listingId ? (
+              <UnderlineLink component={Link} to={`/market/${listingId}`} variant="body2" noWrap>
+                {title}
+              </UnderlineLink>
+            ) : (
+              <Typography variant="body2" color="text.disabled">—</Typography>
+            )}
           </Box>
         )
       },
@@ -641,45 +687,12 @@ function AllocatedStockGridV2() {
     {
       field: "order_id",
       headerName: t("stock.order", "Order"),
-      flex: 1.5,
+      flex: 1.2,
       renderCell: (params: GridRenderCellParams) => (
         <Typography variant="body2" color="text.secondary">
-          {params.row.order_title || String(params.value).substring(0, 8).toUpperCase()}
+          {params.row.order_title || String(params.value || "").substring(0, 8).toUpperCase()}
         </Typography>
       ),
-    },
-    {
-      field: "quantity",
-      headerName: t("stock.quantity", "Quantity"),
-      width: 120,
-    },
-    {
-      field: "location_name",
-      headerName: t("stock.location", "Location"),
-      flex: 1,
-      valueGetter: (_value, row: Allocation) => row.lot?.location?.name ?? "Unspecified",
-    },
-    {
-      field: "owner",
-      headerName: t("stock.user", "User"),
-      flex: 1,
-      valueGetter: (_value, row: Allocation) =>
-        row.lot?.owner?.display_name ?? row.lot?.owner?.username ?? "—",
-      renderCell: (params: GridRenderCellParams) => {
-        if (!params.row.lot?.owner) return <Typography variant="body2" color="text.disabled">—</Typography>
-        return (
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <Avatar src={params.row.lot.owner.avatar || undefined} sx={{ width: 24, height: 24 }} />
-            <Typography variant="body2" color="text.secondary">{params.value}</Typography>
-          </Box>
-        )
-      },
-    },
-    {
-      field: "created_at",
-      headerName: t("stock.allocatedAt", "Allocated"),
-      width: 150,
-      valueFormatter: (value: string) => value ? new Date(value).toLocaleDateString() : "-",
     },
   ]
 
