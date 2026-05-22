@@ -3593,6 +3593,7 @@ export type InventoryLotDetail = {
   owner_id: string
   game_item_id: string | null
   game_item_name: string | null
+  game_item_image: string | null
   variant_id: string | null
   variant_display_name: string | null
   listing_id: string | null
