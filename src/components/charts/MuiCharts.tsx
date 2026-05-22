@@ -182,10 +182,13 @@ export function MuiBarChart({
     data: s.data.map((d) => d.y),
   }))
 
-  const defaultXFormatter =
-    xAxisType === "time"
+  // For band scale (category), don't set a formatter — MUI renders string labels natively.
+  // Only time scale needs an explicit formatter.
+  const xFormatter =
+    xValueFormatter ??
+    (xAxisType === "time"
       ? (value: Date | number | string) => new Date(value).toLocaleDateString()
-      : (value: Date | number | string) => Math.round(Number(value)).toLocaleString()
+      : undefined)
 
   return (
     <BarChart
@@ -193,7 +196,7 @@ export function MuiBarChart({
         {
           data: xData,
           scaleType: xAxisType === "time" ? "time" : "band",
-          valueFormatter: xValueFormatter ?? defaultXFormatter,
+          ...(xFormatter != null ? { valueFormatter: xFormatter } : {}),
         },
       ]}
       yAxis={[
