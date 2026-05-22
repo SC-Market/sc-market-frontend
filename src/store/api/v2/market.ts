@@ -3598,6 +3598,7 @@ export type InventoryLotDetail = {
   variant_display_name: string | null
   listing_id: string | null
   listing_title: string | null
+  listing_photo: string | null
   quantity_total: number
   location_id: string | null
   location_name: string | null
