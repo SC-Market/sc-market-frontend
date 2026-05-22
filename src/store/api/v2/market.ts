@@ -121,6 +121,7 @@ const injectedRtkApi = api
             variant_id: queryArg.variantId,
             quality_tier_min: queryArg.qualityTierMin,
             quality_tier_max: queryArg.qualityTierMax,
+            spectrum_id: queryArg.spectrumId,
             page: queryArg.page,
             page_size: queryArg.pageSize,
           },
@@ -1548,6 +1549,8 @@ export type GetStockLotsApiArg = {
   qualityTierMin?: number
   /** Maximum quality tier (1-5) */
   qualityTierMax?: number
+  /** Filter by org spectrum ID (shows only that org's lots) */
+  spectrumId?: string
   /** Page number for pagination (default: 1) */
   page?: number
   /** Number of results per page (default: 20, max: 100) */

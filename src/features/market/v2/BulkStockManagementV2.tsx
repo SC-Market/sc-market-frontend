@@ -64,7 +64,6 @@ import {
   type VariantAttributes,
 } from "../../../store/api/v2/market"
 import { getQualityMode, formatQuality, type QualityMode } from "../../../util/qualityMode"
-import { useGetContractorAllocationsQuery, type Allocation } from "../../../store/api/stockLotsApi"
 import { QualityBandSelect } from "../../../components/game-data/QualityBandSelect"
 import { CreateLotDialogV2 } from "./components/CreateLotDialogV2"
 
@@ -244,13 +243,15 @@ function AllStockLotsGridV2() {
   const issueAlert = useAlertHook()
   const { filters } = useStockFilter()
 
+  const [currentOrg] = useCurrentOrg()
+
   const { data: lotsData, isLoading } = useGetStockLotsQuery({
     listingId: filters.listingId ?? undefined,
     locationId: filters.locationId ?? undefined,
+    spectrumId: currentOrg?.spectrum_id,
     pageSize: 100,
   })
 
-  const [currentOrg] = useCurrentOrg()
   const { data: listingsData } = useGetMyListingsQuery({ pageSize: 100, sortBy: "updated_at", sortOrder: "desc", spectrumId: currentOrg?.spectrum_id })
   const listings = listingsData?.listings ?? []
 
@@ -618,58 +619,74 @@ function AllStockLotsGridV2() {
 
 function AllocatedStockGridV2() {
   const { t } = useTranslation()
+  const { filters } = useStockFilter()
   const [currentOrg] = useCurrentOrg()
 
-  const { data, isLoading } = useGetContractorAllocationsQuery(
-    { contractor_spectrum_id: currentOrg?.spectrum_id || "" },
-    { skip: !currentOrg?.spectrum_id },
+  const { data: lotsData, isLoading } = useGetStockLotsQuery({
+    listingId: filters.listingId ?? undefined,
+    locationId: filters.locationId ?? undefined,
+    spectrumId: currentOrg?.spectrum_id,
+    pageSize: 100,
+  })
+
+  const allocatedLots = useMemo(
+    () => (lotsData?.lots ?? []).filter((lot) => lot.quantity_allocated > 0).map((lot) => ({
+      id: lot.lot_id,
+      lot_id: lot.lot_id,
+      game_item_name: lot.game_item_name || "Custom Item",
+      variant_display_name: lot.variant.display_name || "—",
+      quantity_allocated: lot.quantity_allocated,
+      quantity_total: lot.quantity_total,
+      location_name: lot.location?.name ?? "Unspecified",
+      listing_id: lot.listing_id,
+      listing_title: lot.listing_title,
+      listing_photo: lot.listing_photo,
+    })),
+    [lotsData],
   )
-  const allocations: Allocation[] = data?.allocations ?? []
 
   const columns: GridColDef[] = [
     {
       field: "game_item_name",
       headerName: t("inventory.item", "Item"),
       flex: 1.5,
-      valueGetter: (_value, row: Allocation) => (row.lot as any)?.game_item_name || "Item",
       renderCell: (params: GridRenderCellParams) => (
         <Typography variant="body2" fontWeight={600}>{params.value}</Typography>
       ),
     },
     {
-      field: "variant",
+      field: "variant_display_name",
       headerName: t("inventory.variant", "Variant"),
       flex: 1.2,
-      valueGetter: (_value, row: Allocation) => row.lot?.variant?.display_name || "—",
     },
     {
-      field: "quantity",
-      headerName: t("inventory.quantity", "Qty"),
-      flex: 0.7,
+      field: "quantity_allocated",
+      headerName: t("stock.allocated", "Allocated"),
+      flex: 0.8,
       align: "right" as const,
       headerAlign: "right" as const,
       renderCell: (params: GridRenderCellParams) => (
-        <Typography variant="body2" fontWeight={600}>{params.value?.toLocaleString()}</Typography>
+        <Typography variant="body2" fontWeight={600}>
+          {params.value?.toLocaleString()} / {params.row.quantity_total?.toLocaleString()}
+        </Typography>
       ),
     },
     {
       field: "location_name",
       headerName: t("inventory.location", "Location"),
       flex: 1,
-      valueGetter: (_value, row: Allocation) => row.lot?.location?.name ?? "Unspecified",
       renderCell: (params: GridRenderCellParams) => (
         <Typography variant="body2" color="text.secondary">{params.value}</Typography>
       ),
     },
     {
-      field: "listing_id",
+      field: "listing_title",
       headerName: t("inventory.listing", "Listing"),
       flex: 1.8,
-      valueGetter: (_value, row: Allocation) => row.lot?.listing_id ?? "",
       renderCell: (params: GridRenderCellParams) => {
-        const photo = params.row.lot?.photos?.[0]
-        const title = params.row.lot?.title || "Listing"
-        const listingId = params.value
+        const photo = params.row.listing_photo
+        const listingId = params.row.listing_id
+        const title = params.value || "—"
         return (
           <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             {photo && <Avatar src={photo} variant="rounded" sx={{ width: 28, height: 28 }} />}
@@ -678,31 +695,20 @@ function AllocatedStockGridV2() {
                 {title}
               </UnderlineLink>
             ) : (
-              <Typography variant="body2" color="text.disabled">—</Typography>
+              <Typography variant="body2" color="text.disabled">{title}</Typography>
             )}
           </Box>
         )
       },
-    },
-    {
-      field: "order_id",
-      headerName: t("stock.order", "Order"),
-      flex: 1.2,
-      renderCell: (params: GridRenderCellParams) => (
-        <Typography variant="body2" color="text.secondary">
-          {params.row.order_title || String(params.value || "").substring(0, 8).toUpperCase()}
-        </Typography>
-      ),
     },
   ]
 
   return (
     <Paper>
       <DataGrid
-        rows={allocations}
+        rows={allocatedLots}
         columns={columns}
         loading={isLoading}
-        getRowId={(row: Allocation) => row.allocation_id}
         autoHeight
         pageSizeOptions={[10, 25, 50]}
         initialState={{ pagination: { paginationModel: { pageSize: 10 } } }}
@@ -710,14 +716,14 @@ function AllocatedStockGridV2() {
           noRowsOverlay: () => (
             <Box sx={{ textAlign: "center", py: 4 }}>
               <Typography color="text.secondary">
-                {currentOrg ? t("stock.noAllocations", "No allocated stock") : t("stock.noOrgForAllocations", "Join an org to see allocations")}
+                {t("stock.noAllocations", "No allocated stock")}
               </Typography>
             </Box>
           ),
           toolbar: () => (
             <Box sx={{ p: 2, display: "flex", alignItems: "center", gap: 1 }}>
               <Typography variant="h6">{t("stock.allocatedStock", "Allocated Stock")}</Typography>
-              <Chip label={allocations.length} size="small" color="primary" />
+              <Chip label={allocatedLots.length} size="small" color="primary" />
             </Box>
           ),
         }}
