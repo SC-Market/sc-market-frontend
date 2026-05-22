@@ -233,13 +233,6 @@ export interface GameItemAggregateV2 {
 export function MarketAggregateViewV2() {
   const { t } = useTranslation();
   const { id: gameItemId } = useParams<{ id: string }>();
-  const { data: profile } = useGetUserProfileQuery();
-  const [currentOrg] = useCurrentOrg();
-  const theme = useTheme<ExtendedTheme>();
-  const issueAlert = useAlertHook();
-  const [imageModalOpen, setImageModalOpen] = useState(false);
-  const [updateImageModalOpen, setUpdateImageModalOpen] = useState(false);
-  const [selectedQualityTier, setSelectedQualityTier] = useState<number | null>(null);
 
   const { data: listingsData, isLoading: listingsLoading, error: listingsError } = useGetListingsQuery({ id: gameItemId! }, { skip: !gameItemId });
   const { data: qualityData } = useGetQualityDistributionQuery({ gameItemId: gameItemId! }, { skip: !gameItemId });
@@ -249,7 +242,6 @@ export function MarketAggregateViewV2() {
   const isLoading = listingsLoading;
   const error = listingsError;
 
-  // Compose aggregate data from multiple API responses
   const complete: GameItemAggregateV2 = useMemo(() => ({
     game_item: listingsData?.game_item
       ? { ...listingsData.game_item, description: "", image_url: listingsData.game_item.image_url || "" }
@@ -287,60 +279,8 @@ export function MarketAggregateViewV2() {
       volume: p.volume,
     })),
   }), [listingsData, qualityData, priceData, buyOrdersData, gameItemId]);
-  const { game_item, quality_distribution, listings, buy_orders, price_history } = complete;
 
-  // Filter listings by selected quality tier
-  const filteredListings = useMemo(() => {
-    if (!selectedQualityTier) return listings;
-    return listings.filter(
-      (listing) =>
-        listing.quality_tier_min !== null &&
-        listing.quality_tier_max !== null &&
-        listing.quality_tier_min <= selectedQualityTier &&
-        listing.quality_tier_max >= selectedQualityTier
-    );
-  }, [listings, selectedQualityTier]);
-
-  // Transform quality distribution for histogram
-  const histogramData = useMemo(() => {
-    const totalListings = quality_distribution.reduce(
-      (sum, item) => sum + item.listing_count,
-      0
-    );
-
-    return quality_distribution.map((item) => ({
-      tier: item.quality_tier,
-      count: item.listing_count,
-      percentage: totalListings > 0 ? (item.listing_count / totalListings) * 100 : 0,
-      averagePrice: item.avg_price,
-    }));
-  }, [quality_distribution]);
-
-  // TODO: Implement image update mutation
-  const updateAggregate = async (_data: { photo?: string }) => {
-    // await updateAggregateV2Mutation({ game_item_id: game_item.id, data });
-  };
-
-  // Admin preview: exchange-terminal redesign
-  if (profile?.role === "admin") {
-    return (
-      <StandardPageLayout
-        title={game_item.name || "Market Item"}
-        headerTitle={game_item.name}
-        breadcrumbs={[
-          { label: t("sidebar.market_short", "Market"), href: "/market" },
-          ...(game_item.type && game_item.type !== "Other" ? [{ label: game_item.type, href: `/market?type=${encodeURIComponent(game_item.type)}` }] : []),
-          { label: game_item.name || "Item" },
-        ]}
-        isLoading={isLoading}
-        error={error}
-        sidebarOpen={true}
-        maxWidth="xl"
-      >
-        <MarketAggregateViewV2Admin complete={complete} gameItemId={gameItemId!} />
-      </StandardPageLayout>
-    );
-  }
+  const { game_item } = complete;
 
   return (
     <StandardPageLayout
@@ -356,303 +296,20 @@ export function MarketAggregateViewV2() {
       sidebarOpen={true}
       maxWidth="xl"
     >
-    <Grid item xs={12}>
-    <Grid container spacing={2}>
-      {/* SEO */}
       <Helmet>
         <title>{game_item.name} — SC Market</title>
         <meta property="og:title" content={game_item.name} />
         <meta property="og:url" content={`${FRONTEND_URL}/market/aggregate/${game_item.id}`} />
         {game_item.image_url && <meta property="og:image" content={game_item.image_url} />}
-        <script type="application/ld+json">{JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "Product",
-          name: game_item.name,
-          image: game_item.image_url || undefined,
-          url: `${FRONTEND_URL}/market/aggregate/${game_item.id}`,
-          offers: {
-            "@type": "AggregateOffer",
-            offerCount: listings.length,
-            lowPrice: listings.length ? Math.min(...listings.map(l => l.price_min)) : undefined,
-            highPrice: listings.length ? Math.max(...listings.map(l => l.price_max)) : undefined,
-            priceCurrency: "aUEC",
-          },
-        })}</script>
+        <meta name="description" content={game_item.description} />
+        <meta property="og:type" content="website" />
+        <meta property="og:description" content={game_item.description} />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={game_item.name} />
+        <meta name="twitter:description" content={game_item.description} />
+        <meta name="twitter:image" content={game_item.image_url} />
       </Helmet>
-
-      {/* Image Section */}
-      <Grid item xs={12} lg={4}>
-        <ImagePreviewModal
-          images={[game_item.image_url]}
-          open={imageModalOpen}
-          onClose={() => setImageModalOpen(false)}
-        />
-        <Paper
-          sx={{
-            borderRadius: (theme) => theme.spacing(theme.borderRadius.image),
-            backgroundColor: theme.palette.background.default,
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            minHeight: 400,
-            maxHeight: 600,
-            height: 400,
-            width: "100%",
-            position: "relative",
-          }}
-          onClick={() => setImageModalOpen((o) => !o)}
-        >
-          <IconButton sx={{ top: 4, right: 4, position: "absolute" }}>
-            <ZoomInRounded />
-          </IconButton>
-
-          {profile?.role === "admin" && (
-            <>
-              <ImageSearch
-                open={updateImageModalOpen}
-                setOpen={setUpdateImageModalOpen}
-                callback={async (arg) => {
-                  if (arg) {
-                    await updateAggregate({ photo: arg });
-                  }
-                }}
-              />
-              <IconButton
-                onClick={(event) => {
-                  event.preventDefault();
-                  event.stopPropagation();
-                  setUpdateImageModalOpen(true);
-                  return false;
-                }}
-                sx={{ top: 4, left: 4, position: "absolute" }}
-              >
-                <EditRounded />
-              </IconButton>
-            </>
-          )}
-          <img
-            loading="lazy"
-            style={{
-              display: "block",
-              maxHeight: "100%",
-              maxWidth: "100%",
-              margin: "auto",
-            }}
-            src={game_item.image_url}
-            alt={t(
-              "marketAggregateView.productImage",
-              "Product image for {{title}}",
-              { title: game_item.name }
-            )}
-            onError={({ currentTarget }) => {
-              currentTarget.onerror = null;
-              currentTarget.src =
-                "https://cdn.robertsspaceindustries.com/static/images/Temp/default-image.png";
-            }}
-          />
-        </Paper>
-        <Helmet>
-          <meta name="description" content={game_item.description} />
-          <meta property="og:type" content="website" />
-          <meta
-            property="og:url"
-            content={`${FRONTEND_URL}/market/aggregate/${game_item.id}`}
-          />
-          <meta property="og:title" content={game_item.name} />
-          <meta property="og:description" content={game_item.description} />
-          <meta property="og:image" content={game_item.image_url} />
-          <meta name="twitter:card" content="summary_large_image" />
-          <meta
-            name="twitter:url"
-            content={`${FRONTEND_URL}/market/aggregate/${game_item.id}`}
-          />
-          <meta name="twitter:title" content={game_item.name} />
-          <meta name="twitter:description" content={game_item.description} />
-          <meta name="twitter:image" content={game_item.image_url} />
-        </Helmet>
-      </Grid>
-
-      {/* Item Details Card */}
-      <Grid item xs={12} lg={8}>
-        <Fade in={true}>
-          <Card
-            sx={{
-              borderRadius: (theme) => theme.spacing(theme.borderRadius.image),
-              minHeight: 400,
-            }}
-          >
-            <CardHeader
-              disableTypography
-              sx={{
-                padding: 3,
-                paddingBottom: 1,
-              }}
-              title={
-                <Stack
-                  direction={"column"}
-                  alignItems={"left"}
-                  spacing={theme.layoutSpacing.compact}
-                  justifyContent={"left"}
-                >
-                  <Breadcrumbs
-                    aria-label={t("ui.aria.breadcrumb")}
-                    color={"text.primary"}
-                  >
-                    <MaterialLink
-                      component={Link}
-                      underline="hover"
-                      color="inherit"
-                      to="/market"
-                    >
-                      {t("MarketAggregateView.market")}
-                    </MaterialLink>
-                    <MaterialLink
-                      component={Link}
-                      underline="hover"
-                      color="inherit"
-                      to={`/market?type=${encodeURIComponent(game_item.type)}`}
-                    >
-                      {game_item.type}
-                    </MaterialLink>
-                    <MaterialLink
-                      component={Link}
-                      underline="hover"
-                      color="text.secondary"
-                      to={`/market?query=${encodeURIComponent(game_item.name)}`}
-                    >
-                      {game_item.name}
-                    </MaterialLink>
-                  </Breadcrumbs>
-                  <Typography
-                    sx={{
-                      marginRight: 1,
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                    variant={"h5"}
-                    color={"text.secondary"}
-                    fontWeight={"bold"}
-                  >
-                    {game_item.name}
-                  </Typography>
-                </Stack>
-              }
-            />
-            <CardContent
-              sx={{
-                width: "auto",
-                minHeight: 192,
-                padding: 3,
-                paddingTop: 0,
-              }}
-            >
-              <Divider light />
-              <Box sx={{ padding: 2 }}>
-                <Typography
-                  variant={"subtitle1"}
-                  fontWeight={"bold"}
-                  color={"text.secondary"}
-                >
-                  {t("MarketAggregateView.description")}
-                </Typography>
-                <Typography>
-                  <MarkdownRender text={game_item.description} />
-                </Typography>
-              </Box>
-            </CardContent>
-          </Card>
-        </Fade>
-      </Grid>
-
-      {/* Quality Distribution Histogram */}
-      <Grid item xs={12} lg={6}>
-        <QualityHistogram
-          distribution={histogramData}
-          title={t("market.qualityDistribution", "Quality Distribution")}
-          showPrices={true}
-        />
-      </Grid>
-
-      {/* Price Comparison Table by Quality Tier */}
-      <Grid item xs={12} lg={6}>
-        <Section xs={12} title={t("market.priceByQuality", "Price by Quality Tier")}>
-          <Grid item xs={12}>
-            <PriceComparisonTable distribution={quality_distribution} />
-          </Grid>
-        </Section>
-      </Grid>
-
-      {/* Quality Tier Filter */}
-      <Grid item xs={12}>
-        <QualityFilter
-          minTier={selectedQualityTier}
-          maxTier={selectedQualityTier}
-          onMinTierChange={setSelectedQualityTier}
-          onMaxTierChange={setSelectedQualityTier}
-        />
-      </Grid>
-
-      {/* Sell Orders Section */}
-      <Grid item xs={12}>
-        <HeaderTitle>
-          {t("MarketAggregateView.sellOrders")}
-          {selectedQualityTier && ` - Tier ${selectedQualityTier}`}
-        </HeaderTitle>
-      </Grid>
-      <Grid item xs={12}>
-        <PaginatedTable
-          disableSelect
-          rows={filteredListings
-            .filter((l) => l.quantity_available > 0)
-            .map((l) => ({
-              ...l,
-              rating: l.seller_rating,
-            }))}
-          initialSort={"price_min"}
-          keyAttr={"listing_id"}
-          headCells={headCells}
-          generateRow={AggregateRowV2}
-        />
-      </Grid>
-
-      {/* Buy Orders Section */}
-      <Grid item xs={12}>
-        <HeaderTitle>{t("MarketAggregateView.buyOrders")}</HeaderTitle>
-      </Grid>
-      <Grid item xs={12}>
-        <PaginatedTable
-          disableSelect
-          rows={buy_orders.map((o) => ({
-            ...o,
-            total:
-              o.negotiable
-                ? null
-                : o.price_per_unit * o.quantity,
-          }))}
-          initialSort={"price_per_unit"}
-          keyAttr={"buy_order_id"}
-          headCells={buyOrderHeadCells}
-          generateRow={BuyOrderRowV2}
-        />
-      </Grid>
-
-      {/* Create Buy Order Form */}
-      <CreateBuyOrderV2 gameItem={game_item} />
-
-      {/* Buy/Sell Wall Charts */}
-      <Grid item xs={12}>
-        <AggregateBuySellWallV2 aggregate={complete} />
-      </Grid>
-
-      {/* Price History Chart */}
-      <Grid item xs={12}>
-        <HeaderTitle>{t("MarketAggregateView.priceHistory")}</HeaderTitle>
-      </Grid>
-      <Grid item xs={12}>
-        <AggregateChartV2 key={gameItemId} aggregate={complete} />
-      </Grid>
-    </Grid>
-    </Grid>
+      <MarketAggregateViewV2Admin complete={complete} gameItemId={gameItemId!} />
     </StandardPageLayout>
   );
 }
