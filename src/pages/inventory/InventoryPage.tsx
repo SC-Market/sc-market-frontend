@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react"
 import {
+  Avatar,
   Box,
   Button,
   Chip,
@@ -211,9 +212,30 @@ export default function InventoryPage() {
                 {filtered.map((lot) => (
                   <TableRow key={lot.lot_id} hover>
                     <TableCell>
-                      <Typography variant="body2" fontWeight={600}>
-                        {lot.game_item_name || t("inventory.custom_item", "Custom Item")}
-                      </Typography>
+                      <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                        {lot.game_item_image && (
+                          <Avatar
+                            src={lot.game_item_image}
+                            variant="rounded"
+                            sx={{ width: 28, height: 28 }}
+                          />
+                        )}
+                        {lot.game_item_id ? (
+                          <Typography
+                            variant="body2"
+                            fontWeight={600}
+                            component={Link}
+                            to={`/market/aggregate/${lot.game_item_id}`}
+                            sx={{ color: "text.primary", textDecoration: "none", "&:hover": { textDecoration: "underline" } }}
+                          >
+                            {lot.game_item_name || t("inventory.custom_item", "Custom Item")}
+                          </Typography>
+                        ) : (
+                          <Typography variant="body2" fontWeight={600}>
+                            {lot.game_item_name || t("inventory.custom_item", "Custom Item")}
+                          </Typography>
+                        )}
+                      </Box>
                     </TableCell>
                     <TableCell>{lot.variant_display_name || "—"}</TableCell>
                     <TableCell align="right">
