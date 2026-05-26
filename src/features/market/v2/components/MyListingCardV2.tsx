@@ -94,11 +94,21 @@ export function MyListingCardV2({ listing, index }: MyListingCardV2Props) {
         <CardContent sx={{ padding: 0 }}>
           <Stack spacing={2}>
             <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <Chip
-                label={listing.status.toUpperCase()}
-                color={statusColor(listing.status)}
-                size="small"
-              />
+              <Box sx={{ display: "flex", gap: 0.5, alignItems: "center" }}>
+                <Chip
+                  label={listing.status.toUpperCase()}
+                  color={statusColor(listing.status)}
+                  size="small"
+                />
+                {listing.visibility === "private" && (
+                  <Chip
+                    label={t("market.internalListing")}
+                    color="warning"
+                    size="small"
+                    sx={{ textTransform: "uppercase", fontWeight: "bold", fontSize: "0.65rem" }}
+                  />
+                )}
+              </Box>
               <Button
                 size="small"
                 startIcon={<EditRounded />}

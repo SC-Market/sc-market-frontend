@@ -105,6 +105,9 @@ export function EditListingV2() {
   const [updateListing, { isLoading: isUpdating }] = useUpdateListingMutation();
   const [uploadImage] = useUploadImageMutation();
 
+  // Visibility state
+  const [visibility, setVisibility] = useState<"public" | "private">("public");
+
   // Photo state
   const [photos, setPhotos] = useState<string[]>([]);
   const [photoResourceIds, setPhotoResourceIds] = useState<string[]>([]);
@@ -126,6 +129,7 @@ export function EditListingV2() {
     setDescription(listingData.listing.description || "");
     setPickupMethod(listingData.listing.pickup_method || "");
     setPhotos(listingData.listing.photos || []);
+    setVisibility(listingData.listing.visibility === "private" ? "private" : "public");
 
     // Get first item (assuming single item listings for now)
     const firstItem = listingData.items[0];
@@ -254,6 +258,12 @@ export function EditListingV2() {
       const originalPhotos = listingData?.listing.photos || [];
       if (JSON.stringify(photos) !== JSON.stringify(originalPhotos)) {
         request.photos = photos;
+      }
+
+      // Include visibility if changed (only for contractor listings)
+      const currentVisibility = listingData?.listing.visibility === "private" ? "private" : "public";
+      if (visibility !== currentVisibility && listingData?.seller.type === "contractor") {
+        request.visibility = visibility;
       }
 
       // Include bulk discount tiers
@@ -616,6 +626,30 @@ export function EditListingV2() {
               </TextField>
             </Grid>
           </FormPaper>
+
+          {/* Visibility - only for contractor listings */}
+          {listingData?.seller.type === "contractor" && (
+            <FormPaper title={t("market.visibility", "Visibility")}>
+              <Grid item xs={12}>
+                <TextField
+                  select
+                  fullWidth
+                  size="small"
+                  label={t("market.visibility", "Visibility")}
+                  value={visibility}
+                  onChange={(e) => setVisibility(e.target.value as "public" | "private")}
+                  disabled={!canEdit}
+                  helperText={visibility === "private"
+                    ? t("market.visibilityPrivateHelp", "Only visible to organization members")
+                    : t("market.visibilityPublicHelp", "Visible to all buyers")
+                  }
+                >
+                  <MenuItem value="public">{t("market.visibilityPublic", "Public")}</MenuItem>
+                  <MenuItem value="private">{t("market.visibilityPrivate", "Private (org members only)")}</MenuItem>
+                </TextField>
+              </Grid>
+            </FormPaper>
+          )}
 
           {/* Bulk Discount Tiers */}
           <FormPaper title={t("market.bulkDiscountTiers", "Bulk Discounts")}>

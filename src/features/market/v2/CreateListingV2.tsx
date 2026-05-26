@@ -92,6 +92,7 @@ export function CreateListingV2() {
   const [bulkDiscountTiers, setBulkDiscountTiers] = useState<Array<{ min_quantity: number; discount_percent: number }>>([]);
   const [saleType, setSaleType] = useState<"fixed" | "auction" | "negotiable">("fixed");
   const [listingStatus, setListingStatus] = useState<"active" | "inactive">("active");
+  const [visibility, setVisibility] = useState<"public" | "private">("public");
   const [auctionEndTime, setAuctionEndTime] = useState<string>("");
   const [minBidIncrement, setMinBidIncrement] = useState<number>(1000);
   const [reservePrice, setReservePrice] = useState<number | null>(null);
@@ -276,6 +277,7 @@ export function CreateListingV2() {
         max_order_value: maxOrderValue ?? undefined,
         bulk_discount_tiers: bulkDiscountTiers.length ? bulkDiscountTiers : undefined,
         contractor_spectrum_id: currentOrg?.spectrum_id || undefined,
+        visibility: currentOrg ? visibility : undefined,
         sale_type: saleType,
         status: listingStatus,
         auction_details: saleType === "auction" ? {
@@ -601,6 +603,25 @@ export function CreateListingV2() {
                       <MenuItem value="inactive">{t("CreateListingV2.inactive", "Inactive (Draft)")}</MenuItem>
                     </TextField>
                   </Grid>
+                  {currentOrg && (
+                    <Grid item xs={12} sm={6}>
+                      <TextField
+                        select
+                        fullWidth
+                        size="small"
+                        label={t("market.visibility", "Visibility")}
+                        value={visibility}
+                        onChange={(e) => setVisibility(e.target.value as "public" | "private")}
+                        helperText={visibility === "private"
+                          ? t("market.visibilityPrivateHelp", "Only visible to organization members")
+                          : t("market.visibilityPublicHelp", "Visible to all buyers")
+                        }
+                      >
+                        <MenuItem value="public">{t("market.visibilityPublic", "Public")}</MenuItem>
+                        <MenuItem value="private">{t("market.visibilityPrivate", "Private (org members only)")}</MenuItem>
+                      </TextField>
+                    </Grid>
+                  )}
                   {!gameItemId && (
                     <Grid item xs={12} sm={6}>
                       <TextField

@@ -3331,6 +3331,8 @@ export type CreateListingRequest = {
   }
   /** Initial listing status (default: 'active'). Use 'inactive' for draft/prep. */
   status?: "active" | "inactive"
+  /** Listing visibility (default: 'public'). Use 'private' for org-internal listings. */
+  visibility?: "public" | "private"
 }
 export type ListingSearchResult = {
   /** Listing UUID */
@@ -3381,6 +3383,8 @@ export type ListingSearchResult = {
   quantity_unit: "unit" | "scu"
   /** Whether this listing has bulk discount tiers defined */
   has_bulk_discount?: boolean
+  /** Listing visibility: public, private (org-only), or unlisted */
+  visibility?: "public" | "private" | "unlisted"
 }
 export type SearchListingsResponse = {
   /** Array of listing results */
@@ -3419,6 +3423,8 @@ export type MyListingItem = {
   photo?: string
   /** ISO 8601 timestamp when listing expires (null if no expiry) */
   expires_at?: string
+  /** Listing visibility */
+  visibility?: "public" | "private" | "unlisted"
 }
 export type GetMyListingsResponse = {
   /** Array of user's listings */
@@ -3587,6 +3593,8 @@ export type UpdateListingRequest = {
   bulk_discount_tiers?: BulkDiscountTier[]
   /** New photo resource IDs to append (from two-phase upload) */
   photo_resource_ids?: string[]
+  /** Listing visibility (null to keep unchanged) */
+  visibility?: "public" | "private"
 }
 export type InventoryLotDetail = {
   lot_id: string
