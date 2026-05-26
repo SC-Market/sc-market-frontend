@@ -2,6 +2,7 @@ import React from "react"
 import { Link as RouterLink } from "react-router-dom"
 import {
   Avatar,
+  Chip,
   Link as MuiLink,
   Table,
   TableBody,
@@ -11,6 +12,7 @@ import {
   TableRow,
   Typography,
 } from "@mui/material"
+import { useTranslation } from "react-i18next"
 import { ListingSearchResult } from "../../../../store/api/v2/market"
 import { FALLBACK_IMAGE_URL } from "../../../../util/constants"
 
@@ -20,6 +22,7 @@ function formatPrice(min: number, max: number) {
 }
 
 export function ListingTableV2({ listings }: { listings: ListingSearchResult[] }) {
+  const { t } = useTranslation()
   return (
     <TableContainer>
       <Table size="small">
@@ -48,6 +51,9 @@ export function ListingTableV2({ listings }: { listings: ListingSearchResult[] }
                 <MuiLink component={RouterLink} to={`/market/${l.listing_id}`} underline="hover" color="text.primary" fontWeight="bold" variant="body2">
                   {l.title}
                 </MuiLink>
+                {l.visibility === "private" && (
+                  <Chip label={t("market.internalListing")} color="warning" size="small" sx={{ ml: 0.5, height: 16, fontSize: "0.6rem", fontWeight: "bold", textTransform: "uppercase" }} />
+                )}
               </TableCell>
               <TableCell sx={{ whiteSpace: "nowrap" }}>
                 <Typography variant="body2" color="primary" fontWeight="bold">{formatPrice(l.price_min, l.price_max)}</Typography>

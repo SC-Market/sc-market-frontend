@@ -1058,6 +1058,23 @@ export function ListingCardV2({ listing, index }: ListingCardV2Props) {
                   />
                 )
               })()}
+              {listing.visibility === "private" && (
+                <Chip
+                  label={t("market.internalListing")}
+                  color="warning"
+                  size="small"
+                  sx={{
+                    position: "absolute",
+                    bottom: listing.has_bulk_discount ? 28 : 4,
+                    right: 4,
+                    zIndex: 2,
+                    textTransform: "uppercase",
+                    fontWeight: "bold",
+                    fontSize: "0.65rem",
+                    height: 18,
+                  }}
+                />
+              )}
               <CardMedia
                 component="img"
                 loading="lazy"
