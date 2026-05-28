@@ -963,7 +963,7 @@ function qualityChipProps(listing: ListingSearchResult): { label: string; color:
 
 export function ListingCardV2({ listing, index }: ListingCardV2Props) {
   const theme = useTheme<ExtendedTheme>();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { openAddToCart } = useCartDrawer();
 
