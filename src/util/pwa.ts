@@ -194,13 +194,20 @@ export function unregisterServiceWorker(): Promise<boolean> {
 }
 
 /**
- * Reload page to apply service worker update
+ * Reload page to apply service worker update.
+ * Tells the waiting SW to skipWaiting, then reloads once it takes control.
  */
 export function reloadForUpdate(): void {
-  if (registrationState.registration?.waiting) {
-    registrationState.registration.waiting.postMessage({ type: "SKIP_WAITING" })
+  const waiting = registrationState.registration?.waiting
+  if (waiting) {
+    // Reload once the new SW activates and claims this client
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      window.location.reload()
+    }, { once: true })
+    waiting.postMessage({ type: "SKIP_WAITING" })
+  } else {
+    window.location.reload()
   }
-  window.location.reload()
 }
 
 /**
@@ -319,11 +326,8 @@ export function initPWA(): void {
     // Initialize online detection
     initOnlineDetection()
 
-    // Do not reload on every controllerchange. skipWaiting + clientsClaim in sw.ts
-    // can fire controllerchange on install/update; an unconditional reload caused
-    // refresh loops and failed dynamic imports (stale chunk + reload repeatedly).
-    // Users still get updates via UpdateNotification → reloadForUpdate(), and
-    // index.html / App handle one-shot reload on asset load failure.
+    // controllerchange is now only triggered via reloadForUpdate() which registers
+    // a one-shot listener before telling the waiting SW to activate.
   } catch (error) {
     console.warn("PWA initialization error (non-critical):", error)
     // Still try to initialize online detection even if SW fails
