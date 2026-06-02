@@ -28,7 +28,6 @@ import { ExtendedTheme } from "../../../hooks/styles/Theme";
 import { StandardPageLayout } from "../../../components/layout/StandardPageLayout";
 import { FormPaper } from "../../../components/paper/FormPaper";
 import { MarkdownEditor } from "../../../components/markdown/Markdown.lazy";
-import { LocationSelector } from "../components/stock/LocationSelector";
 import { BulkDiscountTierEditor } from "../../../components/market/BulkDiscountTierEditor";
 import {
   useGetListingDetailQuery,
@@ -46,19 +45,20 @@ import type {
 } from "../../../store/api/v2/market";
 
 /**
- * Stock lot form data for editing
+ * Variant form data for editing — matches what the listing detail shows
  */
-interface StockLotFormData {
-  lot_id: string; // Existing lot ID
+interface VariantFormData {
   variant_id: string;
+  lot_id?: string; // Primary lot ID for this variant (for updates)
   quantity: number;
   quality_tier?: number;
   quality_value?: number;
   crafted_source?: "crafted" | "store" | "looted" | "unknown" | "duped";
-  location_id?: string;
   price?: number; // For per_variant pricing mode
-  display_name: string; // For display purposes
-  isModified: boolean; // Track if lot has been modified
+  display_name: string;
+  short_name: string;
+  locations: string[];
+  isModified: boolean;
 }
 
 /**
@@ -98,8 +98,8 @@ export function EditListingV2() {
   const [pickupMethod, setPickupMethod] = useState<"delivery" | "pickup" | "any" | "">(""); 
   const [bulkDiscountTiers, setBulkDiscountTiers] = useState<Array<{ min_quantity: number; discount_percent: number }>>([]);
 
-  // Stock lots state - flattened from variants
-  const [stockLots, setStockLots] = useState<StockLotFormData[]>([]);
+  // Variant state — mirrors what listing detail shows
+  const [variants, setVariants] = useState<VariantFormData[]>([]);
 
   // RTK Query mutations
   const [updateListing, { isLoading: isUpdating }] = useUpdateListingMutation();
@@ -138,47 +138,39 @@ export function EditListingV2() {
       setBasePrice(firstItem.base_price || 0);
       setBulkDiscountTiers((firstItem as { bulk_discount_tiers?: { min_quantity: number; discount_percent: number }[] }).bulk_discount_tiers || []);
 
-      // Build stock lots from actual lot data, falling back to variant aggregates
-      const actualLots = stockLotsData?.lots || [];
-      if (actualLots.length > 0) {
-        const lots: StockLotFormData[] = actualLots.map((lot) => ({
-          lot_id: lot.lot_id,
-          variant_id: lot.variant.variant_id,
-          quantity: lot.quantity_total,
-          quality_tier: lot.variant.attributes.quality_tier,
-          quality_value: lot.variant.attributes.quality_value,
-          crafted_source: lot.variant.attributes.crafted_source,
-          location_id: lot.location?.location_id,
-          price: firstItem.variants.find((v) => v.variant_id === lot.variant.variant_id)?.price ?? 0,
-          display_name: lot.variant.display_name,
-          isModified: false,
-        }));
-        setStockLots(lots);
-      } else if (firstItem.variants.length > 0) {
-        // Fallback: use variant aggregates from listing detail when stock lots unavailable
-        const lots: StockLotFormData[] = firstItem.variants.map((v) => ({
-          lot_id: v.variant_id,
-          variant_id: v.variant_id,
-          quantity: v.quantity,
-          quality_tier: v.attributes.quality_tier,
-          quality_value: v.attributes.quality_value,
-          crafted_source: v.attributes.crafted_source,
-          location_id: undefined,
-          price: v.price,
-          display_name: v.display_name,
-          isModified: false,
-        }));
-        setStockLots(lots);
+      // Build variant form data from listing detail variants
+      // Map lot IDs from stock lots so we can send lot_updates on save
+      const lotsByVariant = new Map<string, string>();
+      for (const lot of stockLotsData?.lots || []) {
+        if (!lotsByVariant.has(lot.variant.variant_id)) {
+          lotsByVariant.set(lot.variant.variant_id, lot.lot_id);
+        }
       }
+
+      const variantData: VariantFormData[] = firstItem.variants.map((v) => ({
+        variant_id: v.variant_id,
+        lot_id: lotsByVariant.get(v.variant_id),
+        quantity: v.quantity,
+        quality_tier: v.attributes.quality_tier,
+        quality_value: v.attributes.quality_value,
+        crafted_source: v.attributes.crafted_source,
+        price: v.price,
+        display_name: v.display_name,
+        short_name: v.short_name,
+        locations: v.locations,
+        isModified: false,
+      }));
+
+      setVariants(variantData);
     }
   }, [listingData, stockLotsData]);
 
-  // Update stock lot field
-  const handleUpdateStockLot = useCallback(
-    (lot_id: string, field: keyof StockLotFormData, value: StockLotFormData[keyof StockLotFormData]) => {
-      setStockLots((prev) =>
-        prev.map((lot) =>
-          lot.lot_id === lot_id ? { ...lot, [field]: value, isModified: true } : lot
+  // Update variant field
+  const handleUpdateVariant = useCallback(
+    (variant_id: string, field: keyof VariantFormData, value: VariantFormData[keyof VariantFormData]) => {
+      setVariants((prev) =>
+        prev.map((v) =>
+          v.variant_id === variant_id ? { ...v, [field]: value, isModified: true } : v
         )
       );
     },
@@ -206,27 +198,27 @@ export function EditListingV2() {
       );
     }
 
-    // Validate each stock lot
-    for (let i = 0; i < stockLots.length; i++) {
-      const lot = stockLots[i];
-      if (!lot.quantity || lot.quantity < 0) {
+    // Validate each variant
+    for (let i = 0; i < variants.length; i++) {
+      const v = variants[i];
+      if (v.quantity < 0) {
         return t(
           "EditListingV2.validation.quantityInvalid",
-          "Quantity must be 0 or greater for lot {{index}}",
+          "Quantity must be 0 or greater for variant {{index}}",
           { index: i + 1 }
         );
       }
-      if (pricingMode === "per_variant" && (!lot.price || lot.price <= 0)) {
+      if (pricingMode === "per_variant" && (!v.price || v.price <= 0)) {
         return t(
           "EditListingV2.validation.variantPriceRequired",
-          "Price must be greater than 0 for lot {{index}} in per-variant pricing mode",
+          "Price must be greater than 0 for variant {{index}} in per-variant pricing mode",
           { index: i + 1 }
         );
       }
     }
 
     return null;
-  }, [title, description, pricingMode, basePrice, stockLots, t]);
+  }, [title, description, pricingMode, basePrice, variants, t]);
 
   // Submit form
   const handleSubmit = useCallback(
@@ -295,11 +287,11 @@ export function EditListingV2() {
         }
       } else {
         // Per-variant pricing
-        const variantPrices: VariantPriceUpdate[] = stockLots
-          .filter((lot) => lot.isModified && lot.price !== undefined)
-          .map((lot) => ({
-            variant_id: lot.variant_id,
-            price: lot.price!,
+        const variantPrices: VariantPriceUpdate[] = variants
+          .filter((v) => v.isModified && v.price !== undefined)
+          .map((v) => ({
+            variant_id: v.variant_id,
+            price: v.price!,
           }));
 
         if (variantPrices.length > 0) {
@@ -307,13 +299,12 @@ export function EditListingV2() {
         }
       }
 
-      // Handle lot updates (quantity and location changes)
-      const lotUpdates: LotUpdate[] = stockLots
-        .filter((lot) => lot.isModified)
-        .map((lot) => ({
-          lot_id: lot.lot_id,
-          quantity_total: lot.quantity,
-          location_id: lot.location_id,
+      // Handle quantity updates via lot_updates (variant → lot mapping)
+      const lotUpdates: LotUpdate[] = variants
+        .filter((v) => v.isModified && v.lot_id)
+        .map((v) => ({
+          lot_id: v.lot_id!,
+          quantity_total: v.quantity,
         }));
 
       if (lotUpdates.length > 0) {
@@ -372,7 +363,7 @@ export function EditListingV2() {
       description,
       pricingMode,
       basePrice,
-      stockLots,
+      variants,
       photoResourceIds,
       listingData,
       updateListing,
@@ -749,8 +740,8 @@ export function EditListingV2() {
               "Update quantities and prices for each variant"
             )}
           >
-            {stockLots.map((lot, index) => (
-              <Grid item xs={12} key={lot.lot_id}>
+            {variants.map((v, index) => (
+              <Grid item xs={12} key={v.variant_id}>
                 <Box
                   sx={{
                     p: 2,
@@ -770,15 +761,20 @@ export function EditListingV2() {
                     }}
                   >
                     <Typography variant="subtitle2" fontWeight="bold">
-                      {lot.display_name || `Variant ${index + 1}`}
+                      {v.display_name || `Variant ${index + 1}`}
                     </Typography>
-                    {lot.isModified && (
-                      <Chip
-                        label={t("EditListingV2.modified", "Modified")}
-                        color="primary"
-                        size="small"
-                      />
-                    )}
+                    <Stack direction="row" spacing={0.5} alignItems="center">
+                      {v.locations.length > 0 && (
+                        <Chip label={v.locations[0]} size="small" variant="outlined" />
+                      )}
+                      {v.isModified && (
+                        <Chip
+                          label={t("EditListingV2.modified", "Modified")}
+                          color="primary"
+                          size="small"
+                        />
+                      )}
+                    </Stack>
                   </Box>
 
                   <Grid container spacing={2}>
@@ -792,14 +788,14 @@ export function EditListingV2() {
                         size="small"
                         fullWidth
                         onValueChange={(values) => {
-                          handleUpdateStockLot(
-                            lot.lot_id,
+                          handleUpdateVariant(
+                            v.variant_id,
                             "quantity",
                             values.floatValue || 0
                           );
                         }}
                         label={t("EditListingV2.quantity", "Quantity")}
-                        value={lot.quantity}
+                        value={v.quantity}
                         color="secondary"
                         disabled={!canEdit}
                         required
@@ -814,13 +810,13 @@ export function EditListingV2() {
                     </Grid>
 
                     {/* Quality Tier (Read-only) */}
-                    {lot.quality_tier !== undefined && (
+                    {v.quality_tier !== undefined && (
                       <Grid item xs={12} sm={6} md={4}>
                         <TextField
                           fullWidth
                           size="small"
                           label={t("EditListingV2.qualityTier", "Quality Tier")}
-                          value={`Tier ${lot.quality_tier}`}
+                          value={`Tier ${v.quality_tier}`}
                           color="secondary"
                           disabled
                         />
@@ -828,13 +824,13 @@ export function EditListingV2() {
                     )}
 
                     {/* Quality Value (Read-only) */}
-                    {lot.quality_value !== undefined && (
+                    {v.quality_value !== undefined && (
                       <Grid item xs={12} sm={6} md={4}>
                         <TextField
                           fullWidth
                           size="small"
                           label={t("EditListingV2.qualityValue", "Quality Value")}
-                          value={lot.quality_value.toFixed(2)}
+                          value={v.quality_value.toFixed(2)}
                           color="secondary"
                           disabled
                         />
@@ -842,32 +838,18 @@ export function EditListingV2() {
                     )}
 
                     {/* Crafted Source (Read-only) */}
-                    {lot.crafted_source && (
+                    {v.crafted_source && (
                       <Grid item xs={12} sm={6} md={4}>
                         <TextField
                           fullWidth
                           size="small"
                           label={t("EditListingV2.craftedSource", "Source")}
-                          value={lot.crafted_source}
+                          value={v.crafted_source}
                           color="secondary"
                           disabled
                         />
                       </Grid>
                     )}
-
-                    {/* Location */}
-                    <Grid item xs={12} sm={6} md={4}>
-                      <LocationSelector
-                        value={lot.location_id ?? null}
-                        onChange={(locationId) =>
-                          handleUpdateStockLot(lot.lot_id, "location_id", locationId ?? undefined)
-                        }
-                        size="small"
-                        fullWidth
-                        disabled={!canEdit}
-                        label={t("EditListingV2.location", "Location")}
-                      />
-                    </Grid>
 
                     {/* Per-Variant Price */}
                     {pricingMode === "per_variant" && (
@@ -880,14 +862,14 @@ export function EditListingV2() {
                           size="small"
                           fullWidth
                           onValueChange={(values) => {
-                            handleUpdateStockLot(
-                              lot.lot_id,
+                            handleUpdateVariant(
+                              v.variant_id,
                               "price",
                               values.floatValue || 0
                             );
                           }}
                           label={t("EditListingV2.price", "Price")}
-                          value={lot.price ?? ""}
+                          value={v.price ?? ""}
                           color="secondary"
                           disabled={!canEdit}
                           required

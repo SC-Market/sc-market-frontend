@@ -732,11 +732,11 @@ function AllocatedStockGridV2() {
         initialState={{ pagination: { paginationModel: { pageSize: 10 } } }}
         slots={{
           noRowsOverlay: () => (
-            <Box sx={{ textAlign: "center", py: 4 }}>
-              <Typography color="text.secondary">
-                {t("stock.noAllocations", "No allocated stock")}
-              </Typography>
-            </Box>
+            <EmptyState
+              title={t("stock.noAllocations", "No allocated stock")}
+              description={t("stock.noAllocationsDesc", "Stock will appear here when orders are placed against your listings.")}
+              sx={{ minHeight: 200 }}
+            />
           ),
           toolbar: () => (
             <Box sx={{ p: 2, display: "flex", alignItems: "center", gap: 1 }}>
