@@ -88,7 +88,7 @@ export function EditListingV2() {
     isLoading: isLoadingListing,
     error: loadError,
   } = useGetListingDetailQuery({ id: id! });
-  const { data: stockLotsData } = useGetStockLotsQuery({ listingId: id! });
+  const { data: stockLotsData } = useGetStockLotsQuery({ listingId: id!, pageSize: 100 });
 
   // Form state
   const [title, setTitle] = useState("");
@@ -138,22 +138,38 @@ export function EditListingV2() {
       setBasePrice(firstItem.base_price || 0);
       setBulkDiscountTiers((firstItem as { bulk_discount_tiers?: { min_quantity: number; discount_percent: number }[] }).bulk_discount_tiers || []);
 
-      // Build stock lots from actual lot data (not variant aggregates)
+      // Build stock lots from actual lot data, falling back to variant aggregates
       const actualLots = stockLotsData?.lots || [];
-      const lots: StockLotFormData[] = actualLots.map((lot) => ({
-        lot_id: lot.lot_id,
-        variant_id: lot.variant.variant_id,
-        quantity: lot.quantity_total,
-        quality_tier: lot.variant.attributes.quality_tier,
-        quality_value: lot.variant.attributes.quality_value,
-        crafted_source: lot.variant.attributes.crafted_source,
-        location_id: lot.location?.location_id,
-        price: firstItem.variants.find((v) => v.variant_id === lot.variant.variant_id)?.price ?? 0,
-        display_name: lot.variant.display_name,
-        isModified: false,
-      }));
-
-      setStockLots(lots);
+      if (actualLots.length > 0) {
+        const lots: StockLotFormData[] = actualLots.map((lot) => ({
+          lot_id: lot.lot_id,
+          variant_id: lot.variant.variant_id,
+          quantity: lot.quantity_total,
+          quality_tier: lot.variant.attributes.quality_tier,
+          quality_value: lot.variant.attributes.quality_value,
+          crafted_source: lot.variant.attributes.crafted_source,
+          location_id: lot.location?.location_id,
+          price: firstItem.variants.find((v) => v.variant_id === lot.variant.variant_id)?.price ?? 0,
+          display_name: lot.variant.display_name,
+          isModified: false,
+        }));
+        setStockLots(lots);
+      } else if (firstItem.variants.length > 0) {
+        // Fallback: use variant aggregates from listing detail when stock lots unavailable
+        const lots: StockLotFormData[] = firstItem.variants.map((v) => ({
+          lot_id: v.variant_id,
+          variant_id: v.variant_id,
+          quantity: v.quantity,
+          quality_tier: v.attributes.quality_tier,
+          quality_value: v.attributes.quality_value,
+          crafted_source: v.attributes.crafted_source,
+          location_id: undefined,
+          price: v.price,
+          display_name: v.display_name,
+          isModified: false,
+        }));
+        setStockLots(lots);
+      }
     }
   }, [listingData, stockLotsData]);
 

@@ -387,7 +387,7 @@ export function WikiShipBrowser() {
       s.role?.toLowerCase().replace(/[^a-z]/g, "") === role.toLowerCase().replace(/[^a-z]/g, ""),
     )
     if (size) result = result.filter((s) => String(s.size) === size)
-    const textTokens = searchTokens.filter((t) => t.type === "text")
+    const textTokens = searchTokens.filter((t) => t.type === "query")
     for (const t of textTokens) {
       const q = t.value.toLowerCase()
       result = result.filter(

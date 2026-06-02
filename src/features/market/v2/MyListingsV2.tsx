@@ -133,8 +133,18 @@ function MobileListingsView() {
   const [sheetOpen, setSheetOpen] = useState(false)
   const [archiveTarget, setArchiveTarget] = useState<MyListingItem | null>(null)
 
+  // Prefetch active count to decide whether to show combined view
+  const { data: activeData, isLoading: activeLoading } = useGetMyListingsQuery({
+    status: "active",
+    page: 1,
+    pageSize: 1,
+    spectrumId: currentOrg?.spectrum_id,
+  })
+  const activeCount = activeData?.total ?? 0
+  const showCombined = !activeLoading && activeCount === 0 && selectedStatus === "active"
+
   const { data, isLoading, refetch } = useGetMyListingsQuery({
-    status: selectedStatus,
+    status: showCombined ? undefined : selectedStatus,
     page: 1,
     pageSize: 100,
     sortBy: "updated_at",
@@ -222,7 +232,7 @@ function MobileListingsView() {
         </Typography>
       )}
 
-      <PullToRefresh onRefresh={async () => refetch()}>
+      <PullToRefresh onRefresh={() => { refetch() }}>
         <Paper
           variant="outlined"
           sx={{

@@ -2,6 +2,7 @@ import type { MinimalUser, User } from "../../../datatypes/User"
 import type { MinimalContractor, Contractor } from "../../contractor/domain/types"
 import type { AvailabilitySelection } from "../../../hooks/login/UserProfile"
 import type { OfferMarketListing } from "../../offers/api/offerApi"
+import type { OrderV2MarketListing } from "../../../store/api/orders"
 
 // ── Order Status & Kind ──
 
@@ -51,6 +52,7 @@ export interface Order {
   comments: OrderComment[]
   applicants: OrderApplicant[]
   market_listings?: OfferMarketListing[]
+  market_listings_v2?: OrderV2MarketListing[] | null
   customer_review?: OrderReview
   contractor_review?: OrderReview
   service_id?: string | null

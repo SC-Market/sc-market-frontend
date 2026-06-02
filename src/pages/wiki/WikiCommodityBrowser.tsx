@@ -40,7 +40,7 @@ const ACQ_FILTERS: { value: AcqFilter; label: string; icon: React.ReactNode }[] 
 function AcqChips({ can_be_mined, can_be_purchased, can_be_salvaged, can_be_looted }: {
   can_be_mined: boolean; can_be_purchased: boolean; can_be_salvaged: boolean; can_be_looted: boolean
 }) {
-  const chips: { label: string; icon: React.ReactNode; color: "success" | "primary" | "warning" | "error" }[] = []
+  const chips: { label: string; icon: React.ReactElement; color: "success" | "primary" | "warning" | "error" }[] = []
   if (can_be_mined) chips.push({ label: "Mine", icon: <HardwareRoundedIcon />, color: "success" })
   if (can_be_purchased) chips.push({ label: "Buy", icon: <ShoppingCartIcon />, color: "primary" })
   if (can_be_salvaged) chips.push({ label: "Salvage", icon: <ConstructionIcon />, color: "warning" })

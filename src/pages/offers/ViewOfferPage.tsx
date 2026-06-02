@@ -146,7 +146,12 @@ export function ViewOfferPage() {
             )}
 
             {activeTab === availabilityTab && (
-              <OrderAvailabilityArea session={session} />
+              <>
+                <Grid item xs={12} lg={8} md={6}>
+                  <OrderAvailabilityArea session={session} />
+                </Grid>
+                {!isMobile && <OfferMessagesArea session={session} />}
+              </>
             )}
           </>
         )
