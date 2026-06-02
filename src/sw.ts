@@ -40,9 +40,16 @@ import { ExpirationPlugin } from "workbox-expiration"
 import { CacheableResponsePlugin } from "workbox-cacheable-response"
 import { BackgroundSyncPlugin } from "workbox-background-sync"
 
-// Take control of all clients immediately
-skipWaiting()
-clientsClaim()
+// Only skip waiting when explicitly told by the client (user clicks "Update").
+// Unconditional skipWaiting + clientsClaim causes all open tabs to reload
+// simultaneously when the new SW's precache manifest no longer contains
+// the old hashed assets that those tabs reference.
+self.addEventListener("message", (event) => {
+  if (event.data?.type === "SKIP_WAITING") {
+    skipWaiting()
+    clientsClaim()
+  }
+})
 
 // Clean up old precache entries from previous SW versions
 cleanupOutdatedCaches()
@@ -77,17 +84,22 @@ registerRoute(
     url.origin === self.location.origin &&
     url.pathname.startsWith("/assets/") &&
     !precachedUrls.has(url.pathname),
-  async ({ request }) => {
+  async ({ request, event }) => {
     try {
       const response = await fetch(request)
       if (response.ok) return response
     } catch {
       // network error
     }
-    // Asset gone — tell clients to reload
-    const clients = await self.clients.matchAll({ type: "window" })
-    for (const client of clients) {
-      client.postMessage({ type: "ASSET_NOT_FOUND" })
+    // Asset gone — notify only the requesting client, not all tabs
+    const clientId =
+      (event as FetchEvent).resultingClientId ||
+      (event as FetchEvent).clientId
+    if (clientId) {
+      const client = await self.clients.get(clientId)
+      if (client) {
+        client.postMessage({ type: "ASSET_NOT_FOUND" })
+      }
     }
     return new Response("Asset not found — reload required", { status: 404 })
   },
@@ -195,20 +207,7 @@ registerRoute(
         purgeOnQuotaError: true,
       }),
       {
-        fetchDidSucceed: async ({ response }: { response: Response }) => {
-          if (response.status === 404) {
-            const clients = await self.clients.matchAll({ type: "window" })
-            for (const client of clients) {
-              client.postMessage({ type: "ASSET_NOT_FOUND" })
-            }
-          }
-          return response
-        },
         handlerDidError: async ({ request }: { request: Request }) => {
-          const clients = await self.clients.matchAll({ type: "window" })
-          for (const client of clients) {
-            client.postMessage({ type: "ASSET_NOT_FOUND" })
-          }
           try {
             return await fetch(request)
           } catch {
@@ -457,15 +456,10 @@ interface ServiceWorkerMessage {
 }
 
 /**
- * Handle messages from the main app
+ * Handle messages from the main app (non-lifecycle messages)
  */
 self.addEventListener("message", (event: ExtendableMessageEvent) => {
   console.log("Service worker received message:", event.data)
-
-  const data = event.data as ServiceWorkerMessage | null
-  if (data && data.type === "SKIP_WAITING") {
-    self.skipWaiting()
-  }
 })
 
 // ============================================================================
