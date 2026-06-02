@@ -9,6 +9,18 @@ export const DISASSEMBLY_EFFICIENCY = 0.5
 /** Time in seconds to disassemble one item */
 export const DISASSEMBLY_TIME_SECONDS = 15
 
+/** Resources that cannot be reclaimed from dismantling (prevents infinite craft/dismantle loops) */
+export const NON_RECLAIMABLE_RESOURCES = new Set([
+  "Quantanium",
+  "Stileron",
+  "Savrilium",
+  "Lindinium",
+  "Riccite",
+  "Ouratite",
+  "Saldynium",
+  "Janalite",
+])
+
 /**
  * Format crafting/disassembly time from seconds to human-readable string.
  * e.g. 45 → "45s", 180 → "3m", 3665 → "1h 1m 5s"

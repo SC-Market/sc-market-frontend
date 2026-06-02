@@ -380,9 +380,16 @@ export function ViewOrder() {
 
                 {/* Availability Tab */}
                 {amRelated && order && activeTab === availabilityTab && (
-                  <Grid item xs={12}>
-                    <OrderAvailabilityArea order={order} />
-                  </Grid>
+                  <>
+                    <Grid item xs={12} lg={isAssigned ? 8 : 12}>
+                      <OrderAvailabilityArea order={order} />
+                    </Grid>
+                    {isAssigned && (
+                      <Grid item xs={12} lg={4}>
+                        <OrderMessagesArea order={order} />
+                      </Grid>
+                    )}
+                  </>
                 )}
               </>
             )

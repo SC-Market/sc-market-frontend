@@ -675,6 +675,24 @@ export type OrderAvailability = {
   customer: AvailabilityEntry[]
   assigned: AvailabilityEntry[]
 }
+export interface OrderV2VariantItem {
+  listing_id: string
+  variant_id: string
+  quantity: number
+  price_per_unit: number
+  attributes: Record<string, unknown>
+  display_name: string
+  short_name: string
+}
+
+export interface OrderV2MarketListing {
+  listing_id: string
+  title: string
+  price: number
+  quantity: number
+  variants: OrderV2VariantItem[]
+}
+
 export type Order = {
   order_id: string
   status: OrderStatus
@@ -692,6 +710,7 @@ export type Order = {
   timestamp: string
   applicants: OrderApplicant[]
   market_listings?: OfferMarketListing[]
+  market_listings_v2?: OrderV2MarketListing[] | null
   customer_review?: OrderReview
   contractor_review?: OrderReview
   template_id?: string | null

@@ -37,7 +37,7 @@ function formatQty(scu: number | string): string {
   return `${n.toFixed(2)} SCU`
 }
 
-import { formatCraftingTime } from "../../constants/crafting"
+import { formatCraftingTime, NON_RECLAIMABLE_RESOURCES } from "../../constants/crafting"
 
 export function BlueprintDetail() {
   const { slug } = useParams<{ slug: string }>()
@@ -372,7 +372,10 @@ export function BlueprintDetail() {
           </>)}
 
           {/* Disassemble tab */}
-          {tab === 1 && (
+          {tab === 1 && (() => {
+            const reclaimable = ingredients.filter((ing: BlueprintIngredient) => !NON_RECLAIMABLE_RESOURCES.has(ing.game_item?.name))
+            const lost = ingredients.filter((ing: BlueprintIngredient) => NON_RECLAIMABLE_RESOURCES.has(ing.game_item?.name))
+            return (
             <Stack spacing={2}>
               <Stack direction="row" spacing={2} alignItems="center">
                 <Box>
@@ -398,7 +401,7 @@ export function BlueprintDetail() {
               <Divider />
               <Typography variant="subtitle2">Recovered Materials{craftQty > 1 && ` (×${craftQty})`}</Typography>
               <Stack spacing={0.75}>
-                {ingredients.map((ing: BlueprintIngredient, i: number) => {
+                {reclaimable.map((ing: BlueprintIngredient, i: number) => {
                   const recovered = parseFloat(String(ing.quantity_required)) * 0.5 * craftQty
                   return (
                     <Stack key={i} direction="row" spacing={1} alignItems="center">
@@ -408,9 +411,26 @@ export function BlueprintDetail() {
                     </Stack>
                   )
                 })}
+                {reclaimable.length === 0 && (
+                  <Typography variant="body2" color="text.secondary">No materials can be recovered from this item.</Typography>
+                )}
               </Stack>
+              {lost.length > 0 && (<>
+                <Divider />
+                <Typography variant="subtitle2" color="text.secondary">Not Recovered (Rare)</Typography>
+                <Stack spacing={0.75}>
+                  {lost.map((ing: BlueprintIngredient, i: number) => (
+                    <Stack key={i} direction="row" spacing={1} alignItems="center" sx={{ opacity: 0.6 }}>
+                      <GameItemAvatar name={ing.game_item?.name} iconUrl={ing.game_item?.icon_url} subType={ing.game_item?.sub_type} itemType={ing.game_item?.type} size={28} />
+                      <Typography variant="body2" sx={{ flex: 1 }}>{ing.game_item?.name || "Unknown"}</Typography>
+                      <Typography variant="body2" color="error.main">Lost</Typography>
+                    </Stack>
+                  ))}
+                </Stack>
+              </>)}
             </Stack>
-          )}
+            )
+          })()}
 
           {/* Org Owners tab */}
           {tab === 2 && spectrumId && (

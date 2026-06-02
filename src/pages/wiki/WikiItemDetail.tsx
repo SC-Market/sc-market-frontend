@@ -476,6 +476,7 @@ export function WikiItemDetail() {
                     <>
                       <Alert severity="info" sx={{ mb: 2 }}>
                         Disassembly returns {Math.round(DISASSEMBLY_EFFICIENCY * 100)}% of crafting components at {DISASSEMBLY_TIME_SECONDS} seconds per item.
+                        Rare materials (Quantanium, Stileron, Savrilium, Lindinium, Riccite, Ouratite, Saldynium, Janalite) cannot be recovered.
                       </Alert>
 
                       {item.craftable_from.map((bp) => (
