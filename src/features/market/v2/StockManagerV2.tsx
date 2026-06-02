@@ -80,6 +80,7 @@ import {
   useRefreshListingMutation,
   useDeleteListingMutation,
   useCreateListingMutation,
+  useUpdateStockLotMutation,
   type MyListingItem,
 } from "../../../store/api/v2/market"
 import { MobileListingRow } from "./components/MobileListingRow"
@@ -310,6 +311,7 @@ function DisplayStockV2({
   const [refreshListing] = useRefreshListingMutation()
   const [deleteListing] = useDeleteListingMutation()
   const [createListing] = useCreateListingMutation()
+  const [updateStockLot] = useUpdateStockLotMutation()
 
   const [newRows, setNewRows] = useState<NewListingRowV2[]>([])
   const [rowModesModel, setRowModesModel] = useState<GridRowModesModel>({})
@@ -342,10 +344,24 @@ function DisplayStockV2({
   const handleEditClick = useCallback(
     (id: GridRowId) => () => {
       const nr = newRows.find((r) => r.id === id)
-      if (nr) setEditingRows((prev) => ({ ...prev, [id]: { ...nr } }))
+      if (nr) {
+        setEditingRows((prev) => ({ ...prev, [id]: { ...nr } }))
+      } else {
+        const existing = listings.find((l) => l.listing_id === id.toString())
+        if (existing) {
+          setEditingRows((prev) => ({
+            ...prev,
+            [id]: {
+              status: existing.status as "active" | "inactive",
+              price: existing.price_min,
+              quantity_available: existing.quantity_available,
+            },
+          }))
+        }
+      }
       setRowModesModel((old) => ({ ...old, [id]: { mode: GridRowModes.Edit } }))
     },
-    [newRows],
+    [newRows, listings],
   )
 
   const handleCancelClick = useCallback(
@@ -401,8 +417,28 @@ function DisplayStockV2({
         if (editing.price !== undefined && editing.price !== existing.price_min) req.base_price = editing.price
         if (Object.keys(req).length > 0) {
           await updateListing({ id: existing.listing_id, updateListingRequest: req }).unwrap()
-          issueAlert({ message: t("ItemStock.updated"), severity: "success" })
         }
+
+        // Handle quantity change: fetch first listed lot and update it
+        if (
+          editing.quantity_available !== undefined &&
+          editing.quantity_available !== existing.quantity_available
+        ) {
+          const lotsRes = await fetch(
+            `/api/v2/stock-lots?listing_id=${existing.listing_id}&listed=true&page_size=1`,
+            { credentials: "include" },
+          )
+          const lotsData = await lotsRes.json()
+          const firstLot = lotsData?.lots?.[0]
+          if (firstLot) {
+            await updateStockLot({
+              id: firstLot.lot_id,
+              updateStockLotRequest: { quantity_total: editing.quantity_available },
+            }).unwrap()
+          }
+        }
+
+        issueAlert({ message: t("ItemStock.updated"), severity: "success" })
       } catch {
         issueAlert({ message: t("ItemStock.updateError", "Failed to update"), severity: "error" })
         return
@@ -462,8 +498,7 @@ function DisplayStockV2({
         width: 150,
         display: "flex" as const,
         renderCell: (params: GridRenderCellParams) => {
-          const nr = newRows.find((r) => r.id === params.id)
-          if (nr && rowModesModel[params.id]?.mode === GridRowModes.Edit) {
+          if (rowModesModel[params.id]?.mode === GridRowModes.Edit) {
             const editing = editingRows[params.id as string]
             return (
               <NumericFormat
@@ -479,7 +514,7 @@ function DisplayStockV2({
                 }}
                 size="small"
                 label={t("ItemStock.price")}
-                value={editing?.price ?? 1}
+                value={editing?.price ?? params.row.price_min ?? 1}
               />
             )
           }
@@ -495,8 +530,7 @@ function DisplayStockV2({
         width: 90,
         display: "flex" as const,
         renderCell: (params: GridRenderCellParams) => {
-          const nr = newRows.find((r) => r.id === params.id)
-          if (nr && rowModesModel[params.id]?.mode === GridRowModes.Edit) {
+          if (rowModesModel[params.id]?.mode === GridRowModes.Edit) {
             const editing = editingRows[params.id as string]
             return (
               <NumericFormat
@@ -507,12 +541,12 @@ function DisplayStockV2({
                 onValueChange={(v) => {
                   setEditingRows((prev) => ({
                     ...prev,
-                    [params.id]: { ...prev[params.id as string], quantity_available: v.floatValue || 1 },
+                    [params.id]: { ...prev[params.id as string], quantity_available: v.floatValue || 0 },
                   }))
                 }}
                 size="small"
                 label={t("ItemStock.qty")}
-                value={editing?.quantity_available ?? 1}
+                value={editing?.quantity_available ?? params.value ?? 0}
               />
             )
           }

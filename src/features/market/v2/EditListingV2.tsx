@@ -88,7 +88,7 @@ export function EditListingV2() {
     isLoading: isLoadingListing,
     error: loadError,
   } = useGetListingDetailQuery({ id: id! });
-  const { data: stockLotsData } = useGetStockLotsQuery({ listingId: id!, pageSize: 100 });
+  const { data: stockLotsData } = useGetStockLotsQuery({ listingId: id!, listed: true, pageSize: 100 });
 
   // Form state
   const [title, setTitle] = useState("");
