@@ -514,6 +514,39 @@ export const userApi = serviceApi.injectEndpoints({
         "MyProfile" as const,
       ],
     }),
+
+    // Account deletion endpoints
+    accountDeletionPrecheck: builder.query<
+      { canDelete: boolean; blockers: Array<{ type: string; detail: string }> },
+      void
+    >({
+      query: () => `${BACKEND_URL}/api/v2/accounts/deletion-precheck`,
+    }),
+    accountDeletionStatus: builder.query<
+      { pending: boolean; scheduledAt?: string; isTombstone: boolean },
+      void
+    >({
+      query: () => `${BACKEND_URL}/api/v2/accounts/deletion-status`,
+      providesTags: [{ type: "MyProfile" as const }],
+    }),
+    accountRequestDeletion: builder.mutation<
+      { scheduledAt: string; message: string },
+      { reason?: string } | void
+    >({
+      query: (body) => ({
+        url: `${BACKEND_URL}/api/v2/accounts/delete`,
+        method: "POST",
+        body: body || {},
+      }),
+      invalidatesTags: [{ type: "MyProfile" as const }, "MyProfile" as const],
+    }),
+    accountCancelDeletion: builder.mutation<{ message: string }, void>({
+      query: () => ({
+        url: `${BACKEND_URL}/api/v2/accounts/cancel-deletion`,
+        method: "POST",
+      }),
+      invalidatesTags: [{ type: "MyProfile" as const }, "MyProfile" as const],
+    }),
   }),
 })
 
@@ -562,4 +595,8 @@ export const {
   useProfileGetLanguagesQuery,
   useProfileSetLanguagesMutation,
   useProfileUpdateInGameStatusMutation,
+  useAccountDeletionPrecheckQuery,
+  useAccountDeletionStatusQuery,
+  useAccountRequestDeletionMutation,
+  useAccountCancelDeletionMutation,
 } = userApi
