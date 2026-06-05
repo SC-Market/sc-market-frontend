@@ -18,7 +18,7 @@ import {
   useMediaQuery,
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
-import { useNavigate, useSearchParams } from "react-router-dom"
+import { Link as RouterLink, useSearchParams } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { useSearchGameItemAggregatesQuery, type GameItemAggregate, type SearchGameItemAggregatesApiArg } from "../../../store/api/v2/market"
@@ -139,7 +139,6 @@ function BulkMobileSidebar() {
 
 function AggregateCard({ item }: { item: GameItemAggregate }) {
   const theme = useTheme<ExtendedTheme>()
-  const navigate = useNavigate()
 
   return (
     <Card sx={{
@@ -148,8 +147,9 @@ function AggregateCard({ item }: { item: GameItemAggregate }) {
       "&:hover": { transform: "translateY(-2px)" },
     }}>
       <CardActionArea
-        onClick={() => navigate(`/market/aggregate/${item.game_item_id}`)}
-        sx={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "stretch" }}
+        component={RouterLink}
+        to={`/market/aggregate/${item.game_item_id}`}
+        sx={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "stretch", textDecoration: "none", color: "inherit" }}
       >
         <CardMedia
           component="img"

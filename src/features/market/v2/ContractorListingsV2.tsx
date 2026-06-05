@@ -19,7 +19,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link as RouterLink, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { ExtendedTheme } from "../../../hooks/styles/Theme";
 import { useSearchListingsQuery } from "../../../store/api/v2/market";
@@ -324,13 +324,10 @@ function ContractorListingCard({ listing, index, canManage }: ContractorListingC
     return "error";
   };
 
-  const handleCardClick = useCallback(() => {
-    navigate(`/market/${listing.listing_id}`);
-  }, [navigate, listing.listing_id]);
-
   const handleEditClick = useCallback(
     (e: React.MouseEvent) => {
-      e.stopPropagation(); // Prevent card click
+      e.stopPropagation();
+      e.preventDefault();
       navigate(`/market_edit/${listing.listing_id}`);
     },
     [navigate, listing.listing_id],
@@ -343,10 +340,14 @@ function ContractorListingCard({ listing, index, canManage }: ContractorListingC
       style={{ transitionDelay: `${50 + 50 * index}ms` }}
     >
       <Card
+        component={RouterLink}
+        to={`/market/${listing.listing_id}`}
         sx={{
           minHeight: 400,
           padding: 3,
           cursor: "pointer",
+          textDecoration: "none",
+          color: "inherit",
           transition: "all 0.2s ease-in-out",
           "&:hover": {
             transform: "translateY(-4px)",
@@ -354,7 +355,6 @@ function ContractorListingCard({ listing, index, canManage }: ContractorListingC
           },
           position: "relative",
         }}
-        onClick={handleCardClick}
       >
         <CardContent sx={{ padding: 0 }}>
           <Stack spacing={2}>

@@ -19,7 +19,6 @@ import {
 import { Search } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
-import { useNavigate } from "react-router-dom"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { FilterSidebarLayout } from "../../components/layout/FilterSidebarLayout"
@@ -33,7 +32,6 @@ import { useDebounce } from "../../hooks/useDebounce"
 export function ResourceBrowser() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
-  const navigate = useNavigate()
 
   const [searchText, setSearchText] = useState("")
   const [category, setCategory] = useState("")
@@ -131,7 +129,7 @@ export function ResourceBrowser() {
                   <Grid item xs={12} sm={6} md={4} lg={3} key={resource.resource_id}>
                     <ResourceCard
                       resource={resource}
-                      onClick={(id) => navigate(`/resources/${id}`)}
+                      to={`/resources/${resource.resource_id}`}
                     />
                   </Grid>
                 ))}
