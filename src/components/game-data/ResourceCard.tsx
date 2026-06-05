@@ -6,15 +6,17 @@
 import React from "react"
 import { Box, Card, CardActionArea, CardContent, Chip, Stack, Typography } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
+import { Link as RouterLink } from "react-router-dom"
 import { type ResourceSearchResult } from "../../store/api/v2/market"
 import type { ExtendedTheme } from "../../hooks/styles/Theme"
 
 interface ResourceCardProps {
   resource: ResourceSearchResult
+  to?: string
   onClick?: (resourceId: string) => void
 }
 
-export const ResourceCard: React.FC<ResourceCardProps> = ({ resource, onClick }) => {
+export const ResourceCard: React.FC<ResourceCardProps> = ({ resource, to, onClick }) => {
   const theme = useTheme<ExtendedTheme>()
   const acquisitionMethods = [
     resource.can_be_mined && "Mined",
@@ -25,7 +27,10 @@ export const ResourceCard: React.FC<ResourceCardProps> = ({ resource, onClick })
 
   return (
     <Card sx={{ height: "100%" }}>
-      <CardActionArea onClick={() => onClick?.(resource.resource_id)} sx={{ height: "100%" }}>
+      <CardActionArea
+        {...(to ? { component: RouterLink, to } : { onClick: () => onClick?.(resource.resource_id) })}
+        sx={{ height: "100%", textDecoration: "none", color: "inherit" }}
+      >
         <CardContent>
           <Typography variant="subtitle1" fontWeight="bold" gutterBottom noWrap>
             {resource.resource_name}

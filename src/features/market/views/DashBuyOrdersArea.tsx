@@ -10,7 +10,7 @@ import {
   Typography,
   useMediaQuery,
 } from "@mui/material"
-import { Link, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 import {
   useGetBuyOrderListingsQuery,
   useCancelBuyOrderMutation,
@@ -193,7 +193,6 @@ export function BuyOrderRow(props: {
   const { row } = props
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
-  const navigate = useNavigate()
   const issueAlert = useAlertHook()
   const [cancelBuyOrder, { isLoading: isCancelling }] =
     useCancelBuyOrderMutation()
@@ -215,9 +214,12 @@ export function BuyOrderRow(props: {
   return (
     <TableRow
       hover
-      onClick={() => navigate(`/market/aggregate/${row.game_item_id ?? ""}`)}
+      component={Link}
+      to={`/market/aggregate/${row.game_item_id ?? ""}`}
       tabIndex={-1}
       sx={{
+        textDecoration: "none",
+        color: "inherit",
         cursor: "pointer",
         "& .MuiTableCell-root": {
           padding: { xs: theme.spacing(0.75), sm: theme.spacing(2) },

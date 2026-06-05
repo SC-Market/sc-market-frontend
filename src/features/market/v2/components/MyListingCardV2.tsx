@@ -20,7 +20,7 @@ import {
   Fade,
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
-import { useNavigate } from "react-router-dom"
+import { Link as RouterLink, useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { EditRounded } from "@mui/icons-material"
 import { ExtendedTheme } from "../../../../hooks/styles/Theme"
@@ -63,13 +63,10 @@ export function MyListingCardV2({ listing, index }: MyListingCardV2Props) {
     }
   }
 
-  const handleCardClick = useCallback(() => {
-    navigate(`/market/${listing.listing_id}`)
-  }, [navigate, listing.listing_id])
-
   const handleEditClick = useCallback(
     (e: React.MouseEvent) => {
       e.stopPropagation()
+      e.preventDefault()
       navigate(`/market_edit/${listing.listing_id}`)
     },
     [navigate, listing.listing_id],
@@ -78,10 +75,14 @@ export function MyListingCardV2({ listing, index }: MyListingCardV2Props) {
   return (
     <Fade in timeout={500} style={{ transitionDelay: `${50 + 50 * index}ms` }}>
       <Card
+        component={RouterLink}
+        to={`/market/${listing.listing_id}`}
         sx={{
           minHeight: 400,
           padding: 3,
           cursor: "pointer",
+          textDecoration: "none",
+          color: "inherit",
           transition: "all 0.2s ease-in-out",
           "&:hover": {
             transform: "translateY(-4px)",
@@ -89,7 +90,6 @@ export function MyListingCardV2({ listing, index }: MyListingCardV2Props) {
           },
           position: "relative",
         }}
-        onClick={handleCardClick}
       >
         <CardContent sx={{ padding: 0 }}>
           <Stack spacing={2}>
