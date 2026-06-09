@@ -29,6 +29,7 @@ import { useRefreshMarketListingMutation } from "../../api/marketApi"
 import { formatMarketUrl } from "../../domain/urls"
 import { useCurrentOrg } from "../../../../hooks/login/CurrentOrg"
 import { useGetUserProfileQuery } from "../../../profile/api/profileApi"
+import { has_permission } from "../../../../views/contractor/OrgRoles"
 import { useAlertHook } from "../../../../hooks/alert/AlertHook"
 import { useMarketSidebarExp } from "../../hooks/MarketSidebar"
 import { UnderlineLink } from "../../../../components/typography/UnderlineLink"
@@ -109,12 +110,14 @@ export const ItemListingBase = React.memo(
     const { data: profile } = useGetUserProfileQuery()
     const [currentOrg] = useCurrentOrg()
     const showExpiration = useMemo(
-      () =>
-        (listing.user_seller === profile?.username ||
-          (currentOrg &&
-            currentOrg.spectrum_id === listing.contractor_seller)) &&
-        listing.expiration &&
-        profile,
+      () => {
+        if (!listing.expiration || !profile) return false
+        if (listing.user_seller === profile.username) return true
+        if (currentOrg && currentOrg.spectrum_id === listing.contractor_seller) {
+          return has_permission(currentOrg, profile, "manage_market", profile.contractors)
+        }
+        return false
+      },
       [
         currentOrg,
         listing.contractor_seller,
@@ -124,15 +127,18 @@ export const ItemListingBase = React.memo(
       ],
     )
 
-    // Determine if this is the user's own listing
     const isMyListing = useMemo(
-      () =>
-        listing.user_seller === profile?.username ||
-        (currentOrg && currentOrg.spectrum_id === listing.contractor_seller),
+      () => {
+        if (listing.user_seller === profile?.username) return true
+        if (currentOrg && currentOrg.spectrum_id === listing.contractor_seller && profile) {
+          return has_permission(currentOrg, profile, "manage_market", profile.contractors)
+        }
+        return false
+      },
       [
         listing.user_seller,
         listing.contractor_seller,
-        profile?.username,
+        profile,
         currentOrg,
       ],
     )
