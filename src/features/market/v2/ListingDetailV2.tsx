@@ -42,6 +42,7 @@ import { dateDiffInDays } from "../../../util/dateDiff"
 import { formatQuantity } from "../../../util/formatQuantity"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
+import { has_permission } from "../../../views/contractor/OrgRoles"
 import { useTranslation } from "react-i18next"
 import { AddToCartDrawer } from "./components/AddToCartDrawer"
 import { useCartDrawer } from "../hooks/AddToCartContext"
@@ -154,7 +155,9 @@ export function ListingDetailV2() {
     if (!profile || !seller || !listing) return false
     if (profile.role === "admin") return true
     if (seller.type === "user" && seller.slug === profile.username) return true
-    if (seller.type === "contractor" && currentOrg?.spectrum_id === seller.slug) return true
+    if (seller.type === "contractor" && currentOrg?.spectrum_id === seller.slug) {
+      return has_permission(currentOrg, profile, "manage_market", profile.contractors)
+    }
     return false
   }, [profile, seller, listing, currentOrg])
 
