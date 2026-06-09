@@ -88,7 +88,15 @@ export function EditListingV2() {
     isLoading: isLoadingListing,
     error: loadError,
   } = useGetListingDetailQuery({ id: id! });
-  const { data: stockLotsData } = useGetStockLotsQuery({ listingId: id!, listed: true, pageSize: 100 });
+
+  // Determine seller context for stock lot fetch (contractor listings need spectrum_id)
+  const sellerSpectrumId = listingData?.seller?.type === "contractor" ? listingData.seller.slug : undefined;
+  const { data: stockLotsData } = useGetStockLotsQuery({
+    listingId: id!,
+    listed: true,
+    pageSize: 100,
+    spectrumId: sellerSpectrumId,
+  });
 
   // Form state
   const [title, setTitle] = useState("");
