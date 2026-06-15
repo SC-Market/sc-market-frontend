@@ -11,7 +11,7 @@ import { marketV2Api as api, GetCartResponse } from "../../../../store/api/v2/ma
 import { describe, it, expect, beforeEach, vi } from "vitest"
 import { CurrentOrgContext } from "../../../../hooks/login/CurrentOrg"
 import { DrawerOpenContext } from "../../../../hooks/layout/Drawer"
-import { Contractor } from "../../../../datatypes/Contractor"
+import { Contractor } from "../../../../features/contractor/domain/types"
 
 // Mock navigation
 const mockNavigate = vi.fn()
@@ -122,6 +122,7 @@ const mockCartData: GetCartResponse = {
       cart_item_id: "cart-1",
       listing: {
         listing_id: "listing-1",
+        seller_id: "seller-1",
         title: "Test Item 1",
         seller_name: "TestSeller",
         seller_rating: 4.5, seller_type: "user" as const, seller_slug: "testuser",
@@ -138,6 +139,7 @@ const mockCartData: GetCartResponse = {
         short_name: "T5 Crafted",
       },
       quantity: 2,
+      quantity_available: 10,
       price_per_unit: 1000,
       subtotal: 2000,
       available: true,
@@ -147,6 +149,7 @@ const mockCartData: GetCartResponse = {
       cart_item_id: "cart-2",
       listing: {
         listing_id: "listing-2",
+        seller_id: "seller-2",
         title: "Test Item 2",
         seller_name: "TestSeller2",
         seller_rating: 4.0, seller_type: "user" as const, seller_slug: "testuser2",
@@ -163,6 +166,7 @@ const mockCartData: GetCartResponse = {
         short_name: "T3 Store",
       },
       quantity: 1,
+      quantity_available: 5,
       price_per_unit: 500,
       subtotal: 500,
       available: true,

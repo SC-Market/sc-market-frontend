@@ -47,6 +47,7 @@ const mockOrderItems: OrderItemDetail[] = [
   {
     order_item_id: "item-1",
     listing_id: "listing-1",
+    listing_title: "Test Listing 1",
     item_id: "game-item-1",
     variant: {
       variant_id: "variant-1",
@@ -65,6 +66,7 @@ const mockOrderItems: OrderItemDetail[] = [
   {
     order_item_id: "item-2",
     listing_id: "listing-2",
+    listing_title: "Test Listing 2",
     item_id: "game-item-2",
     variant: {
       variant_id: "variant-2",
@@ -164,6 +166,7 @@ describe("OfferMarketListingsV2", () => {
         {
           order_item_id: "item-3",
           listing_id: "listing-3",
+          listing_title: "Test Listing 3",
           item_id: "game-item-3",
           variant: {
             variant_id: "variant-3",
@@ -259,6 +262,7 @@ describe("OfferMarketListingsV2", () => {
         {
           order_item_id: "item-large",
           listing_id: "listing-large",
+          listing_title: "Large Listing",
           item_id: "game-item-large",
           variant: {
             variant_id: "variant-large",

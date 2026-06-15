@@ -161,7 +161,7 @@ describe("ShoppingList", () => {
 
   describe("Display Requirements", () => {
     it("should display materials with quantities (Requirement 9.1, 9.2)", () => {
-      vi.spyOn(marketV2ApiHooks, "useGetShoppingListQuery").mockReturnValue({
+      vi.spyOn(marketV2ApiHooks, "useGenerateShoppingListQuery").mockReturnValue({
         data: mockShoppingListData,
         isLoading: false,
         error: undefined,
@@ -181,7 +181,7 @@ describe("ShoppingList", () => {
     })
 
     it("should display in-stock vs to-acquire quantities (Requirement 9.2)", () => {
-      vi.spyOn(marketV2ApiHooks, "useGetShoppingListQuery").mockReturnValue({
+      vi.spyOn(marketV2ApiHooks, "useGenerateShoppingListQuery").mockReturnValue({
         data: mockShoppingListData,
         isLoading: false,
         error: undefined,
@@ -203,7 +203,7 @@ describe("ShoppingList", () => {
     })
 
     it("should display estimated costs (Requirement 9.3)", () => {
-      vi.spyOn(marketV2ApiHooks, "useGetShoppingListQuery").mockReturnValue({
+      vi.spyOn(marketV2ApiHooks, "useGenerateShoppingListQuery").mockReturnValue({
         data: mockShoppingListData,
         isLoading: false,
         error: undefined,
@@ -220,7 +220,7 @@ describe("ShoppingList", () => {
     })
 
     it("should display acquisition methods (Requirement 9.4)", () => {
-      vi.spyOn(marketV2ApiHooks, "useGetShoppingListQuery").mockReturnValue({
+      vi.spyOn(marketV2ApiHooks, "useGenerateShoppingListQuery").mockReturnValue({
         data: mockShoppingListData,
         isLoading: false,
         error: undefined,
@@ -235,7 +235,7 @@ describe("ShoppingList", () => {
     })
 
     it("should display summary statistics", () => {
-      vi.spyOn(marketV2ApiHooks, "useGetShoppingListQuery").mockReturnValue({
+      vi.spyOn(marketV2ApiHooks, "useGenerateShoppingListQuery").mockReturnValue({
         data: mockShoppingListData,
         isLoading: false,
         error: undefined,
@@ -255,7 +255,7 @@ describe("ShoppingList", () => {
     })
 
     it("should display quality tiers when specified", () => {
-      vi.spyOn(marketV2ApiHooks, "useGetShoppingListQuery").mockReturnValue({
+      vi.spyOn(marketV2ApiHooks, "useGenerateShoppingListQuery").mockReturnValue({
         data: mockShoppingListData,
         isLoading: false,
         error: undefined,
@@ -270,7 +270,7 @@ describe("ShoppingList", () => {
     })
 
     it("should display stock status indicators", () => {
-      vi.spyOn(marketV2ApiHooks, "useGetShoppingListQuery").mockReturnValue({
+      vi.spyOn(marketV2ApiHooks, "useGenerateShoppingListQuery").mockReturnValue({
         data: mockShoppingListData,
         isLoading: false,
         error: undefined,
@@ -289,7 +289,7 @@ describe("ShoppingList", () => {
     it("should sort by material name", async () => {
       const user = userEvent.setup()
 
-      vi.spyOn(marketV2ApiHooks, "useGetShoppingListQuery").mockReturnValue({
+      vi.spyOn(marketV2ApiHooks, "useGenerateShoppingListQuery").mockReturnValue({
         data: mockShoppingListData,
         isLoading: false,
         error: undefined,
@@ -315,7 +315,7 @@ describe("ShoppingList", () => {
     it("should sort by quantity", async () => {
       const user = userEvent.setup()
 
-      vi.spyOn(marketV2ApiHooks, "useGetShoppingListQuery").mockReturnValue({
+      vi.spyOn(marketV2ApiHooks, "useGenerateShoppingListQuery").mockReturnValue({
         data: mockShoppingListData,
         isLoading: false,
         error: undefined,
@@ -341,7 +341,7 @@ describe("ShoppingList", () => {
     it("should toggle sort order on second click", async () => {
       const user = userEvent.setup()
 
-      vi.spyOn(marketV2ApiHooks, "useGetShoppingListQuery").mockReturnValue({
+      vi.spyOn(marketV2ApiHooks, "useGenerateShoppingListQuery").mockReturnValue({
         data: mockShoppingListData,
         isLoading: false,
         error: undefined,
@@ -377,7 +377,7 @@ describe("ShoppingList", () => {
     it("should export shopping list to CSV", async () => {
       const user = userEvent.setup()
 
-      vi.spyOn(marketV2ApiHooks, "useGetShoppingListQuery").mockReturnValue({
+      vi.spyOn(marketV2ApiHooks, "useGenerateShoppingListQuery").mockReturnValue({
         data: mockShoppingListData,
         isLoading: false,
         error: undefined,
@@ -423,7 +423,7 @@ describe("ShoppingList", () => {
     })
 
     it("should disable export button when no materials", () => {
-      vi.spyOn(marketV2ApiHooks, "useGetShoppingListQuery").mockReturnValue({
+      vi.spyOn(marketV2ApiHooks, "useGenerateShoppingListQuery").mockReturnValue({
         data: {
           ...mockShoppingListData,
           materials_needed: [],
@@ -443,7 +443,7 @@ describe("ShoppingList", () => {
     it("should navigate back to wishlist detail", async () => {
       const user = userEvent.setup()
 
-      vi.spyOn(marketV2ApiHooks, "useGetShoppingListQuery").mockReturnValue({
+      vi.spyOn(marketV2ApiHooks, "useGenerateShoppingListQuery").mockReturnValue({
         data: mockShoppingListData,
         isLoading: false,
         error: undefined,
@@ -458,7 +458,7 @@ describe("ShoppingList", () => {
     })
 
     it("should display link back to wishlist in error state", () => {
-      vi.spyOn(marketV2ApiHooks, "useGetShoppingListQuery").mockReturnValue({
+      vi.spyOn(marketV2ApiHooks, "useGenerateShoppingListQuery").mockReturnValue({
         data: undefined,
         isLoading: false,
         error: { status: 404, data: { message: "Not found" } },
@@ -472,7 +472,7 @@ describe("ShoppingList", () => {
 
   describe("Loading and Error States", () => {
     it("should display loading spinner", () => {
-      vi.spyOn(marketV2ApiHooks, "useGetShoppingListQuery").mockReturnValue({
+      vi.spyOn(marketV2ApiHooks, "useGenerateShoppingListQuery").mockReturnValue({
         data: undefined,
         isLoading: true,
         error: undefined,
@@ -484,7 +484,7 @@ describe("ShoppingList", () => {
     })
 
     it("should display error message on failure", () => {
-      vi.spyOn(marketV2ApiHooks, "useGetShoppingListQuery").mockReturnValue({
+      vi.spyOn(marketV2ApiHooks, "useGenerateShoppingListQuery").mockReturnValue({
         data: undefined,
         isLoading: false,
         error: { status: 500, data: { message: "Server error" } },
@@ -496,7 +496,7 @@ describe("ShoppingList", () => {
     })
 
     it("should display empty state when no materials needed", () => {
-      vi.spyOn(marketV2ApiHooks, "useGetShoppingListQuery").mockReturnValue({
+      vi.spyOn(marketV2ApiHooks, "useGenerateShoppingListQuery").mockReturnValue({
         data: {
           ...mockShoppingListData,
           materials_needed: [],
@@ -514,7 +514,7 @@ describe("ShoppingList", () => {
 
   describe("Material Details", () => {
     it("should display material icons", () => {
-      vi.spyOn(marketV2ApiHooks, "useGetShoppingListQuery").mockReturnValue({
+      vi.spyOn(marketV2ApiHooks, "useGenerateShoppingListQuery").mockReturnValue({
         data: mockShoppingListData,
         isLoading: false,
         error: undefined,
@@ -530,7 +530,7 @@ describe("ShoppingList", () => {
     it("should show tooltip with used-by items on info button hover", async () => {
       const user = userEvent.setup()
 
-      vi.spyOn(marketV2ApiHooks, "useGetShoppingListQuery").mockReturnValue({
+      vi.spyOn(marketV2ApiHooks, "useGenerateShoppingListQuery").mockReturnValue({
         data: mockShoppingListData,
         isLoading: false,
         error: undefined,
@@ -567,7 +567,7 @@ describe("ShoppingList", () => {
         dispatchEvent: vi.fn(),
       }))
 
-      vi.spyOn(marketV2ApiHooks, "useGetShoppingListQuery").mockReturnValue({
+      vi.spyOn(marketV2ApiHooks, "useGenerateShoppingListQuery").mockReturnValue({
         data: mockShoppingListData,
         isLoading: false,
         error: undefined,
@@ -592,7 +592,7 @@ describe("ShoppingList", () => {
         ],
       }
 
-      vi.spyOn(marketV2ApiHooks, "useGetShoppingListQuery").mockReturnValue({
+      vi.spyOn(marketV2ApiHooks, "useGenerateShoppingListQuery").mockReturnValue({
         data: dataWithNoCost,
         isLoading: false,
         error: undefined,
@@ -625,7 +625,7 @@ describe("ShoppingList", () => {
         ],
       }
 
-      vi.spyOn(marketV2ApiHooks, "useGetShoppingListQuery").mockReturnValue({
+      vi.spyOn(marketV2ApiHooks, "useGenerateShoppingListQuery").mockReturnValue({
         data: dataWithMultipleItems,
         isLoading: false,
         error: undefined,
@@ -643,7 +643,7 @@ describe("ShoppingList", () => {
         total_estimated_cost: 0,
       }
 
-      vi.spyOn(marketV2ApiHooks, "useGetShoppingListQuery").mockReturnValue({
+      vi.spyOn(marketV2ApiHooks, "useGenerateShoppingListQuery").mockReturnValue({
         data: dataWithZeroCost,
         isLoading: false,
         error: undefined,

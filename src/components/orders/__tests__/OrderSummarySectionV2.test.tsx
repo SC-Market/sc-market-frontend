@@ -14,8 +14,9 @@ vi.mock("react-i18next", () => ({
 describe("OrderSummarySectionV2", () => {
   const mockItems: OrderItemDetail[] = [
     {
-      order_item_id: "item-1",
-      listing_id: "listing-1",
+    order_item_id: "item-1",
+    listing_id: "listing-1",
+    listing_title: "Test Listing 1",
       item_id: "item-1",
       variant: {
         variant_id: "variant-1",
@@ -32,8 +33,9 @@ describe("OrderSummarySectionV2", () => {
       subtotal: 2000,
     },
     {
-      order_item_id: "item-2",
-      listing_id: "listing-2",
+    order_item_id: "item-2",
+    listing_id: "listing-2",
+    listing_title: "Test Listing 2",
       item_id: "item-2",
       variant: {
         variant_id: "variant-2",
@@ -163,8 +165,9 @@ describe("OrderSummarySectionV2", () => {
   it("handles items without quality tier", () => {
     const itemsWithoutQuality: OrderItemDetail[] = [
       {
-        order_item_id: "item-1",
-        listing_id: "listing-1",
+    order_item_id: "item-1",
+    listing_id: "listing-1",
+    listing_title: "Test Listing 1",
         item_id: "item-1",
         variant: {
           variant_id: "variant-1",
@@ -192,8 +195,9 @@ describe("OrderSummarySectionV2", () => {
   it("formats large numbers with locale string", () => {
     const expensiveItems: OrderItemDetail[] = [
       {
-        order_item_id: "item-1",
-        listing_id: "listing-1",
+    order_item_id: "item-1",
+    listing_id: "listing-1",
+    listing_title: "Test Listing 1",
         item_id: "item-1",
         variant: {
           variant_id: "variant-1",

@@ -21,7 +21,6 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 import { ThemeProvider, createTheme } from "@mui/material/styles"
 import { CraftingCalculator } from "../CraftingCalculator"
 import { marketV2Api } from "../../../store/api/v2/market"
-import { marketV2Api } from "../../../store/api/v2/market"
 import { DrawerOpenContext } from "../../../hooks/layout/Drawer"
 import { CurrentOrgContext } from "../../../hooks/login/CurrentOrg"
 
@@ -64,10 +63,9 @@ function createTestStore() {
   return configureStore({
     reducer: {
       [marketV2Api.reducerPath]: marketV2Api.reducer,
-      [marketV2Api.reducerPath]: marketV2Api.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().concat(marketV2Api.middleware, marketV2Api.middleware),
+      getDefaultMiddleware().concat(marketV2Api.middleware),
   })
 }
 
