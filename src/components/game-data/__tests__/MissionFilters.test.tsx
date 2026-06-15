@@ -48,6 +48,10 @@ describe("MissionFilters", () => {
     onMissionGiverChange: vi.fn(),
     creditRewardMin: "" as number | "",
     onCreditRewardMinChange: vi.fn(),
+    eventCode: "",
+    onEventCodeChange: vi.fn(),
+    showEventMissions: false,
+    onShowEventMissionsChange: vi.fn(),
     ...mockHandlers,
   }
 
