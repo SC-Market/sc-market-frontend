@@ -57,6 +57,8 @@ const mockLots: StockLotDetail[] = [
     updated_at: "2024-01-01T00:00:00Z",
     listing_id: "listing-1",
     listing_title: "Mock Listing",
+    game_item_name: "Test Item",
+    listing_photo: null,
   },
   {
     lot_id: "lot-2",
@@ -85,6 +87,8 @@ const mockLots: StockLotDetail[] = [
     updated_at: "2024-01-01T00:00:00Z",
     listing_id: "listing-1",
     listing_title: "Mock Listing",
+    game_item_name: "Test Item",
+    listing_photo: null,
   },
 ]
 

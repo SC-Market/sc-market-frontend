@@ -5,7 +5,8 @@ import userEvent from "@testing-library/user-event"
 import { describe, it, expect, beforeEach, vi } from "vitest"
 import { OfferMarketListingsEditAreaV2 } from "../OfferMarketListingsEditAreaV2"
 import { CounterOfferDetailsContext } from "../../../../hooks/offer/CounterOfferDetails"
-import { OfferSession, CounterOfferBody } from "../../../offers/api/offerApi"
+import type { GetOfferSessionV2Response } from "../../../../store/api/v2/market"
+import { CounterOfferBody } from "../../../offers/api/offerApi"
 import { Provider } from "react-redux"
 import { configureStore } from "@reduxjs/toolkit"
 import { marketV2Api } from "../../../../store/api/v2/market"
@@ -29,8 +30,21 @@ vi.mock("react-i18next", async () => {
 })
 
 // Mock data
-const mockOffer: OfferSession = {
-  id: "test-session-id",
+const mockSession = {
+  session_id: "test-session-id",
+  status: "active",
+  created_at: new Date().toISOString(),
+  customer: {
+    username: "test-customer",
+    display_name: "Test Customer",
+    avatar: "",
+    rating: {
+      avg_rating: 4.0,
+      rating_count: 5,
+      total_rating: 20,
+      streak: 2,
+    },
+  },
   assigned_to: {
     username: "test-seller",
     display_name: "Test Seller",
@@ -43,28 +57,15 @@ const mockOffer: OfferSession = {
     },
   },
   contractor: null,
-  customer: {
-    username: "test-customer",
-    display_name: "Test Customer",
-    avatar: "",
-    rating: {
-      avg_rating: 4.0,
-      rating_count: 5,
-      total_rating: 20,
-      streak: 2,
-    },
-  },
-  status: "active",
-  timestamp: new Date().toISOString(),
   offers: [],
-  discord_thread_id: null,
-  discord_server_id: null,
-  discord_invite: null,
   availability: {
     customer: [],
     assigned: null,
   },
-}
+  discord_thread_id: null,
+  discord_server_id: null,
+  discord_invite: null,
+} satisfies GetOfferSessionV2Response
 
 const mockCounterOfferBody: CounterOfferBody = {
   session_id: "test-session-id",
@@ -257,7 +258,7 @@ describe("OfferMarketListingsEditAreaV2", () => {
   })
 
   it("renders the component with title", () => {
-    renderWithProviders(<OfferMarketListingsEditAreaV2 offer={mockOffer} />)
+    renderWithProviders(<OfferMarketListingsEditAreaV2 session={mockSession} />)
 
     expect(
       screen.getByText(/associatedMarketListings/i)
@@ -265,7 +266,7 @@ describe("OfferMarketListingsEditAreaV2", () => {
   })
 
   it("displays empty table when no listings in counter offer", () => {
-    renderWithProviders(<OfferMarketListingsEditAreaV2 offer={mockOffer} />)
+    renderWithProviders(<OfferMarketListingsEditAreaV2 session={mockSession} />)
 
     // Should show add listing controls
     expect(screen.getByText(/addMarketListing/i)).toBeInTheDocument()
@@ -281,7 +282,7 @@ describe("OfferMarketListingsEditAreaV2", () => {
     }
 
     renderWithProviders(
-      <OfferMarketListingsEditAreaV2 offer={mockOffer} />,
+      <OfferMarketListingsEditAreaV2 session={mockSession} />,
       { counterOfferBody: bodyWithListings }
     )
 
@@ -292,7 +293,7 @@ describe("OfferMarketListingsEditAreaV2", () => {
 
   it("allows selecting a listing from autocomplete", async () => {
     const user = userEvent.setup()
-    renderWithProviders(<OfferMarketListingsEditAreaV2 offer={mockOffer} />)
+    renderWithProviders(<OfferMarketListingsEditAreaV2 session={mockSession} />)
 
     // Find the autocomplete input
     const autocomplete = screen.getByLabelText(/selectListing/i)
@@ -310,7 +311,7 @@ describe("OfferMarketListingsEditAreaV2", () => {
   })
 
   it("disables add button when no variant is selected", () => {
-    renderWithProviders(<OfferMarketListingsEditAreaV2 offer={mockOffer} />)
+    renderWithProviders(<OfferMarketListingsEditAreaV2 session={mockSession} />)
 
     const addButton = screen.getByRole("button", { name: /add/i })
     expect(addButton).toBeDisabled()
@@ -325,7 +326,7 @@ describe("OfferMarketListingsEditAreaV2", () => {
     }
 
     renderWithProviders(
-      <OfferMarketListingsEditAreaV2 offer={mockOffer} />,
+      <OfferMarketListingsEditAreaV2 session={mockSession} />,
       { counterOfferBody: bodyWithListings }
     )
 
@@ -345,7 +346,7 @@ describe("OfferMarketListingsEditAreaV2", () => {
     }
 
     renderWithProviders(
-      <OfferMarketListingsEditAreaV2 offer={mockOffer} />,
+      <OfferMarketListingsEditAreaV2 session={mockSession} />,
       { counterOfferBody: bodyWithListings }
     )
 
@@ -355,7 +356,7 @@ describe("OfferMarketListingsEditAreaV2", () => {
   })
 
   it("maintains visual parity with V1 component", () => {
-    renderWithProviders(<OfferMarketListingsEditAreaV2 offer={mockOffer} />)
+    renderWithProviders(<OfferMarketListingsEditAreaV2 session={mockSession} />)
 
     // Check for Typography with correct variant
     const title = screen.getByText(/associatedMarketListings/i)
@@ -375,7 +376,7 @@ describe("OfferMarketListingsEditAreaV2", () => {
     }
 
     renderWithProviders(
-      <OfferMarketListingsEditAreaV2 offer={mockOffer} />,
+      <OfferMarketListingsEditAreaV2 session={mockSession} />,
       { counterOfferBody: bodyWithListings }
     )
 
@@ -394,7 +395,7 @@ describe("OfferMarketListingsEditAreaV2", () => {
     }
 
     renderWithProviders(
-      <OfferMarketListingsEditAreaV2 offer={mockOffer} />,
+      <OfferMarketListingsEditAreaV2 session={mockSession} />,
       { counterOfferBody: bodyWithListings }
     )
 
@@ -413,7 +414,7 @@ describe("OfferMarketListingsEditAreaV2", () => {
     }
 
     renderWithProviders(
-      <OfferMarketListingsEditAreaV2 offer={mockOffer} />,
+      <OfferMarketListingsEditAreaV2 session={mockSession} />,
       { counterOfferBody: bodyWithListings }
     )
 
