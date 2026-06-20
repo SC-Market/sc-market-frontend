@@ -934,7 +934,7 @@ function FulfillDialog({
     }
     fulfillBuyOrderMut({
       id: buyOrder.buy_order_id,
-      body: {
+      fulfillBuyOrderRequest: {
         variant_id: "",
         listing_id: "",
         quantity: fulfillQty < remaining ? fulfillQty : undefined,

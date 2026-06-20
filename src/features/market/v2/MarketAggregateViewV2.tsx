@@ -711,7 +711,7 @@ export function BuyOrderRowV2(props: {
     (agreedPricePerUnit?: number, qty?: number) => {
       fulfillBuyOrderMut({
         id: buy_order.buy_order_id,
-        body: {
+        fulfillBuyOrderRequest: {
           variant_id: "",
           listing_id: "",
           quantity: qty !== undefined && qty < remaining ? qty : undefined,
