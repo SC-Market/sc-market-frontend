@@ -70,4 +70,5 @@ export interface UserProfileState {
   locale: string
   last_seen?: string
   in_game?: boolean
+  onboarding_completed_at?: string | null
 }

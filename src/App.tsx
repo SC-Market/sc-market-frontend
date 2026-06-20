@@ -384,6 +384,14 @@ const router = createBrowserRouter([
         element: <LoggedInRoute />,
         children: [
           {
+            path: "/onboarding",
+            lazy: async () => ({
+              Component: (
+                await import("./pages/onboarding/OnboardingPage")
+              ).OnboardingPage,
+            }),
+          },
+          {
             path: "/accountlink",
             lazy: async () => ({
               Component: (

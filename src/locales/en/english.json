@@ -2288,6 +2288,43 @@
       "offerTabs": "offer tabs"
     }
   },
+  "onboarding": {
+    "welcome": "Welcome to SC Market",
+    "subtitle": "Let's get your account set up so you can start trading.",
+    "skipAll": "Skip setup, I'll explore on my own",
+    "skip": "Skip",
+    "continue": "Continue",
+    "complete": "Complete Setup",
+    "availabilitySaved": "Availability saved",
+    "emailVerificationSent": "Verification email sent! Check your inbox.",
+    "steps": {
+      "discord": "Link Discord",
+      "availability": "Availability",
+      "email": "Email",
+      "notifications": "Notifications"
+    },
+    "discord": {
+      "title": "Link your Discord account",
+      "description": "Connect Discord to receive trade notifications and communicate with buyers directly.",
+      "link": "Link Discord"
+    },
+    "availability": {
+      "title": "Set your availability",
+      "description": "Let others know when you're online for trades. Drag to select time slots."
+    },
+    "email": {
+      "title": "Add your email",
+      "description": "Get notified about new messages and offers when you're away.",
+      "verify": "Send verification",
+      "sent": "Verification email sent! You can verify it later."
+    },
+    "notifications": {
+      "title": "Notification preferences",
+      "description": "Choose how you'd like to be reminded about unread messages.",
+      "dmReminders": "Email me about unread messages",
+      "dmRemindersHelp": "We'll send a reminder if you have messages waiting for more than 24 hours. You can change this anytime in Settings."
+    }
+  },
   "sendMoney": {
     "title": "Send Money",
     "recipient": "Recipient",

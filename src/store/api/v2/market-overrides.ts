@@ -54,10 +54,7 @@ export const marketV2Overrides = generatedApiV2.injectEndpoints({
         }
       },
     }),
-    uploadImage: build.mutation<
-      { resource_id: string; url: string },
-      File
-    >({
+    uploadImage: build.mutation<{ resource_id: string; url: string }, File>({
       query: (file) => {
         const formData = new FormData()
         formData.append("photo", file)
@@ -79,4 +76,8 @@ export const marketV2Overrides = generatedApiV2.injectEndpoints({
   }),
 })
 
-export const { useUploadPhotosMutation, useUploadImageMutation, useImportFromUexMutation } = marketV2Overrides
+export const {
+  useUploadPhotosMutation,
+  useUploadImageMutation,
+  useImportFromUexMutation,
+} = marketV2Overrides

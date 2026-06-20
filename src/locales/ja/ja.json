@@ -173,6 +173,43 @@
     "clear_all": "Clear all notifications",
     "mark_all_as_read": "Mark all as read"
   },
+  "onboarding": {
+    "welcome": "SC Marketへようこそ",
+    "subtitle": "取引を始めるためにアカウントを設定しましょう。",
+    "skipAll": "セットアップをスキップして自分で探索する",
+    "skip": "スキップ",
+    "continue": "続ける",
+    "complete": "セットアップ完了",
+    "availabilitySaved": "利用可能時間を保存しました",
+    "emailVerificationSent": "確認メールを送信しました！受信トレイを確認してください。",
+    "steps": {
+      "discord": "Discord連携",
+      "availability": "利用可能時間",
+      "email": "メール",
+      "notifications": "通知"
+    },
+    "discord": {
+      "title": "Discordアカウントを連携する",
+      "description": "Discordを接続して取引通知を受け取り、買い手と直接コミュニケーションしましょう。",
+      "link": "Discordを連携"
+    },
+    "availability": {
+      "title": "利用可能時間を設定する",
+      "description": "取引可能な時間を他のユーザーに知らせましょう。ドラッグして時間枠を選択してください。"
+    },
+    "email": {
+      "title": "メールを追加する",
+      "description": "不在時に新しいメッセージやオファーの通知を受け取りましょう。",
+      "verify": "確認メールを送信",
+      "sent": "確認メールを送信しました！後で確認できます。"
+    },
+    "notifications": {
+      "title": "通知設定",
+      "description": "未読メッセージのリマインダー方法を選択してください。",
+      "dmReminders": "未読メッセージについてメールで通知する",
+      "dmRemindersHelp": "24時間以上未読のメッセージがある場合にリマインダーを送信します。設定からいつでも変更できます。"
+    }
+  },
   "recruitmentVotes": {
     "upvoteButtonTooltip": "Upvote this post"
   },
