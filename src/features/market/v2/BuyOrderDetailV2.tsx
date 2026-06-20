@@ -22,7 +22,7 @@ import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../../components/layout/StandardPageLayout"
 import {
   useGetBuyOrderDetailQuery,
-  useGetBuyOrderMatchesForSellerQuery,
+  useGetMatchesForSellerQuery,
 } from "../../../store/api/v2/market"
 import { QualityBadge } from "../../../components/market/v2/QualityBadge"
 import { ImagePreviewPaper } from "../../../components/paper/ImagePreviewPaper"

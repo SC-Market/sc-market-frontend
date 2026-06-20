@@ -179,7 +179,7 @@ export function CreateBuyOrderV2({ gameItem }: CreateBuyOrderV2Props) {
 
     try {
       const result = await createStandingBuyOrder({
-        createStandingBuyOrderRequest: {
+        createTargetedBuyOrderRequest: {
           game_item_id: gameItemId,
           quantity,
           price_per_unit: priceMax || priceMin || 0,

@@ -1223,7 +1223,7 @@ const injectedRtkApi = api
         query: (queryArg) => ({
           url: `/buy-orders/standing`,
           method: "POST",
-          body: queryArg.createStandingBuyOrderRequest,
+          body: queryArg.createTargetedBuyOrderRequest,
         }),
         invalidatesTags: ["Buy Orders V2"],
       }),
@@ -2548,7 +2548,7 @@ export type CreatePurchaseApiArg = {
 export type CreateStandingBuyOrderApiResponse =
   /** status 200 Ok */ StandingBuyOrder
 export type CreateStandingBuyOrderApiArg = {
-  createStandingBuyOrderRequest: CreateStandingBuyOrderRequest
+  createTargetedBuyOrderRequest: CreateTargetedBuyOrderRequest
 }
 export type SearchBuyOrdersApiResponse =
   /** status 200 Ok */ SearchBuyOrdersResponse
@@ -3557,6 +3557,8 @@ export type MyListingItem = {
   photo?: string
   /** ISO 8601 timestamp when listing expires (null if no expiry) */
   expires_at?: string
+  /** Listing visibility: public or private (org-only) */
+  visibility?: "public" | "private"
 }
 export type GetMyListingsResponse = {
   /** Array of user's listings */
@@ -3593,8 +3595,9 @@ export type ListingDetail = {
   description: string
   /** Current listing status */
   status: "active" | "inactive" | "sold" | "expired" | "cancelled"
-  /** Visibility setting */
-  visibility: "public" | "private" | "unlisted"
+  /** Visibility setting
+    Listing visibility: public or private (org-only) */
+  visibility: "public" | "private"
   /** Sale type */
   sale_type: "fixed" | "auction" | "negotiable"
   /** Listing type */
@@ -5462,7 +5465,8 @@ export type StandingBuyOrder = {
   declined_at?: string | null
   photos?: BuyOrderPhoto[]
 }
-export type CreateStandingBuyOrderRequest = {
+export type BuyOrderVisibility = "public" | "roster_only" | "private"
+export type CreateTargetedBuyOrderRequest = {
   game_item_id: string
   quantity: number
   price_per_unit: number
@@ -5472,10 +5476,17 @@ export type CreateStandingBuyOrderRequest = {
   quality_value_min?: number
   /** Maximum quality value (0-1000) for resource buy orders */
   quality_value_max?: number
+  /** Whether the buyer accepts counter-offers / offer sessions on this order */
   negotiable?: boolean
   expires_in_days?: number
   /** Optional image resource IDs to attach to this buy order */
   photo_resource_ids?: string[]
+  /** Controls who can see and act on this buy order */
+  visibility?: BuyOrderVisibility
+  /** Direct to a specific supplier user (requires visibility = 'private') */
+  target_supplier_id?: string
+  /** Direct to a specific supplier org (requires visibility = 'private') */
+  target_supplier_contractor_id?: string
 }
 export type SearchBuyOrdersResponse = {
   buy_orders: StandingBuyOrder[]

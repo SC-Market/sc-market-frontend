@@ -1,0 +1,1643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SC Market — Cyber Brutalist Concept v2</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #fafafa;
+      --bg-panel: #ffffff;
+      --bg-dark: #0d0d0d;
+      --bg-muted: #f0f0f0;
+      --border: #e0e0e0;
+      --border-dark: #1a1a1a;
+      --text-primary: #0d0d0d;
+      --text-secondary: #555555;
+      --text-muted: #999999;
+      --accent-lime: #a3e635;
+      --accent-violet: #7c3aed;
+      --accent-violet-light: #ede9fe;
+      --accent-lime-dark: #65a30d;
+      --white: #ffffff;
+      --black: #0d0d0d;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { font-size: 15px; scroll-behavior: smooth; }
+    body {
+      background: var(--bg);
+      color: var(--text-primary);
+      font-family: 'JetBrains Mono', monospace;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ═══════ DECORATIVE UTILITIES ═══════ */
+    .deco-cross {
+      position: relative;
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+    }
+    .deco-cross::before, .deco-cross::after {
+      content: '';
+      position: absolute;
+      background: var(--border);
+    }
+    .deco-cross::before { width: 1.5px; height: 14px; left: 50%; top: 0; transform: translateX(-50%); }
+    .deco-cross::after { width: 14px; height: 1.5px; top: 50%; left: 0; transform: translateY(-50%); }
+    .deco-cross.dark::before, .deco-cross.dark::after { background: var(--text-muted); }
+    .deco-cross.violet::before, .deco-cross.violet::after { background: var(--accent-violet); }
+    .deco-cross.lime::before, .deco-cross.lime::after { background: var(--accent-lime-dark); }
+
+    .deco-dot {
+      width: 5px;
+      height: 5px;
+      background: var(--border);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .deco-dot.dark { background: var(--text-muted); }
+    .deco-dot.violet { background: var(--accent-violet); }
+    .deco-dot.lime { background: var(--accent-lime); }
+    .deco-dot.black { background: var(--black); }
+
+    .deco-corner {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+    }
+    .deco-corner::before, .deco-corner::after {
+      content: '';
+      position: absolute;
+      background: var(--text-muted);
+    }
+    .deco-corner.tl::before { width: 12px; height: 1.5px; top: 0; left: 0; }
+    .deco-corner.tl::after { width: 1.5px; height: 12px; top: 0; left: 0; }
+    .deco-corner.tr::before { width: 12px; height: 1.5px; top: 0; right: 0; left: auto; }
+    .deco-corner.tr::after { width: 1.5px; height: 12px; top: 0; right: 0; left: auto; }
+    .deco-corner.bl::before { width: 12px; height: 1.5px; bottom: 0; top: auto; left: 0; }
+    .deco-corner.bl::after { width: 1.5px; height: 12px; bottom: 0; top: auto; left: 0; }
+    .deco-corner.br::before { width: 12px; height: 1.5px; bottom: 0; top: auto; right: 0; left: auto; }
+    .deco-corner.br::after { width: 1.5px; height: 12px; bottom: 0; top: auto; right: 0; left: auto; }
+
+    .deco-line-h {
+      height: 1px;
+      background: var(--border);
+      flex: 1;
+    }
+    .deco-line-h.dashed {
+      background: none;
+      border-top: 1px dashed var(--border);
+    }
+
+    .deco-bracket {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      font-weight: 300;
+    }
+
+    .deco-tag {
+      font-size: 0.5rem;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 2px 6px;
+      border: 1px solid var(--border);
+    }
+
+    .deco-annotation {
+      font-size: 0.5rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .deco-grid-overlay {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
+      background-size: 20px 20px;
+      pointer-events: none;
+    }
+
+    .deco-scanline {
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+    }
+
+    .deco-circuit {
+      position: absolute;
+      width: 60px;
+      height: 40px;
+    }
+    .deco-circuit::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: var(--border);
+    }
+    .deco-circuit::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 1px;
+      height: 100%;
+      background: var(--border);
+    }
+
+    .deco-hash {
+      font-size: 0.5rem;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+      opacity: 0.7;
+    }
+
+    /* ═══════ HEADER ═══════ */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 40px;
+      border-bottom: 1.5px solid var(--border);
+      position: sticky;
+      top: 0;
+      background: var(--bg);
+      z-index: 100;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 1rem;
+      letter-spacing: -0.5px;
+    }
+
+    .logo-icon {
+      width: 20px;
+      height: 20px;
+      background: var(--accent-violet);
+      clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    }
+
+    .logo span { font-family: 'Space Mono', monospace; }
+    .logo-cursor { color: var(--accent-violet); animation: blink 1s step-end infinite; }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .nav a {
+      font-size: 0.73rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 6px 12px;
+      transition: all 0.15s;
+    }
+    .nav a:hover { color: var(--text-primary); }
+    .nav a.active { color: var(--text-primary); background: var(--bg-muted); font-weight: 600; }
+    .nav-sep { color: var(--border); font-size: 0.8rem; }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .sys-time {
+      font-size: 0.6rem;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      padding: 6px 12px;
+      line-height: 1.4;
+    }
+    .sys-time .time-val { color: var(--text-primary); font-weight: 600; }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--black);
+      color: var(--white);
+      border: none;
+      padding: 10px 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-primary:hover { background: var(--accent-violet); }
+    .btn-primary .arrow {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      background: var(--accent-lime);
+      color: var(--black);
+      font-size: 0.8rem;
+    }
+
+    /* ═══════ HERO ═══════ */
+    .hero {
+      padding: 60px 40px 48px;
+      border-bottom: 1.5px solid var(--border);
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 40px;
+      min-height: 420px;
+      overflow: hidden;
+    }
+
+    .hero-content { position: relative; }
+    .hero-section-num { font-size: 0.65rem; color: var(--text-muted); margin-bottom: 20px; }
+
+    .hero-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 4.5rem;
+      font-weight: 900;
+      line-height: 0.95;
+      letter-spacing: -3px;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+
+    .hero-tagline {
+      font-size: 0.8rem;
+      letter-spacing: 1px;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+    }
+    .hero-tagline span { color: var(--accent-violet); }
+
+    .hero-desc {
+      font-size: 0.75rem;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      max-width: 420px;
+      margin-bottom: 32px;
+    }
+
+    .hero-actions { display: flex; align-items: center; gap: 24px; }
+
+    .btn-lime {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--accent-lime);
+      color: var(--black);
+      border: none;
+      padding: 10px 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-lime:hover { background: #bef264; }
+    .btn-lime .arrow {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 18px;
+      height: 18px;
+      background: var(--black);
+      color: var(--accent-lime);
+      font-size: 0.7rem;
+    }
+
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: none;
+      border: 1.5px solid var(--border);
+      color: var(--text-primary);
+      padding: 10px 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-outline:hover { border-color: var(--text-primary); }
+
+    .hero-visual {
+      position: relative;
+      background: var(--bg-muted);
+      border: 1.5px solid var(--border);
+      overflow: hidden;
+    }
+
+    .hero-visual-blocks {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      bottom: 20px;
+      left: 40%;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .v-block { flex: 1; background: var(--black); }
+    .v-block:nth-child(1) { width: 80%; margin-left: auto; opacity: 0.9; }
+    .v-block:nth-child(2) { width: 55%; margin-left: 25%; opacity: 0.4; }
+    .v-block:nth-child(3) { width: 92%; margin-left: auto; opacity: 0.85; }
+    .v-block:nth-child(4) { width: 45%; margin-left: 35%; opacity: 0.25; }
+    .v-block:nth-child(5) { width: 68%; margin-left: auto; opacity: 0.6; }
+    .v-block:nth-child(6) { width: 88%; margin-left: 5%; opacity: 0.75; }
+    .v-block:nth-child(7) { width: 35%; margin-left: auto; opacity: 0.35; }
+
+    .hero-coords {
+      position: absolute;
+      bottom: 16px;
+      right: 16px;
+      font-size: 0.55rem;
+      color: var(--text-muted);
+      text-align: right;
+      line-height: 1.7;
+      border: 1px solid var(--border);
+      padding: 8px 12px;
+      background: var(--bg);
+    }
+    .hero-coords .coord-val { color: var(--accent-violet); font-weight: 600; }
+
+    .hero-render-badge {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      font-size: 0.5rem;
+      color: var(--accent-lime-dark);
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .hero-render-badge span:first-child::before { content: '> '; }
+
+    .hero-globe {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 30px;
+      height: 30px;
+      border: 1.5px solid var(--black);
+      border-radius: 50%;
+      position: relative;
+    }
+    .hero-globe::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 14px;
+      height: 14px;
+      border: 1px solid var(--black);
+      border-radius: 50%;
+    }
+    .hero-globe::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: var(--black);
+    }
+
+    .year-text {
+      position: absolute;
+      left: 16px;
+      bottom: 40px;
+      font-size: 0.65rem;
+      color: var(--text-muted);
+      writing-mode: vertical-rl;
+    }
+
+    .vertical-label {
+      position: absolute;
+      left: -20px;
+      top: 50%;
+      transform: rotate(-90deg) translateX(-50%);
+      transform-origin: left center;
+      font-size: 0.5rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .hero-scn {
+      position: absolute;
+      bottom: 16px;
+      right: 40px;
+      font-size: 0.55rem;
+      color: var(--text-muted);
+    }
+
+    /* ═══════ STATS ═══════ */
+    .section {
+      padding: 48px 40px;
+      border-bottom: 1.5px solid var(--border);
+      position: relative;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 36px;
+    }
+    .section-num { font-size: 0.65rem; color: var(--text-muted); }
+    .section-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0;
+      border: 1.5px solid var(--border);
+    }
+    .stat-card {
+      padding: 24px;
+      border-right: 1.5px solid var(--border);
+      position: relative;
+    }
+    .stat-card:last-child { border-right: none; }
+
+    .stat-card-icon {
+      width: 36px;
+      height: 36px;
+      border: 1.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      font-size: 1rem;
+    }
+    .stat-card-label {
+      font-size: 0.6rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+    .stat-card-value {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 6px;
+    }
+    .stat-card-desc {
+      font-size: 0.6rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .stat-plus {
+      position: absolute;
+      top: 50%;
+      right: -8px;
+      transform: translateY(-50%);
+      z-index: 2;
+    }
+
+    /* ═══════ LISTINGS ═══════ */
+    .listings-section {
+      padding: 48px 40px;
+      border-bottom: 1.5px solid var(--border);
+      position: relative;
+    }
+
+    .listings-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+    .filter-pills { display: flex; gap: 8px; }
+    .filter-pill {
+      font-size: 0.65rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 6px 14px;
+      border: 1.5px solid var(--border);
+      background: none;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-family: 'JetBrains Mono', monospace;
+      transition: all 0.15s;
+    }
+    .filter-pill:hover { border-color: var(--text-primary); color: var(--text-primary); }
+    .filter-pill.active { background: var(--black); color: var(--white); border-color: var(--black); }
+
+    .listings-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      border: 1.5px solid var(--border);
+    }
+    .listing-card {
+      border-right: 1.5px solid var(--border);
+      border-bottom: 1.5px solid var(--border);
+      position: relative;
+      cursor: pointer;
+      transition: all 0.2s;
+      overflow: hidden;
+    }
+    .listing-card:nth-child(4n) { border-right: none; }
+    .listing-card:nth-last-child(-n+4) { border-bottom: none; }
+    .listing-card:hover { background: var(--accent-violet-light); }
+    .listing-card:hover .listing-card-arrow { opacity: 1; background: var(--accent-violet); color: var(--white); border-color: var(--accent-violet); }
+    .listing-card:hover .card-corner { opacity: 1; }
+
+    .listing-card-image {
+      width: 100%;
+      aspect-ratio: 4/3;
+      background: var(--bg-muted);
+      border-bottom: 1.5px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    .listing-card-image-inner {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .listing-img-placeholder {
+      width: 70%;
+      height: 60%;
+      background-image:
+        linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px);
+      background-size: 8px 8px;
+      border: 1px solid var(--border);
+      position: relative;
+    }
+    .listing-img-placeholder::before {
+      content: '';
+      position: absolute;
+      top: 20%;
+      left: 15%;
+      width: 70%;
+      height: 60%;
+      background: var(--black);
+      opacity: 0.08;
+      transform: skewX(-5deg);
+    }
+
+    .card-corner {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .card-corner::before, .card-corner::after {
+      content: '';
+      position: absolute;
+      background: var(--accent-violet);
+    }
+    .card-corner.tl { top: 6px; left: 6px; }
+    .card-corner.tl::before { width: 10px; height: 1.5px; top: 0; left: 0; }
+    .card-corner.tl::after { width: 1.5px; height: 10px; top: 0; left: 0; }
+    .card-corner.tr { top: 6px; right: 6px; }
+    .card-corner.tr::before { width: 10px; height: 1.5px; top: 0; right: 0; }
+    .card-corner.tr::after { width: 1.5px; height: 10px; top: 0; right: 0; }
+    .card-corner.bl { bottom: 6px; left: 6px; }
+    .card-corner.bl::before { width: 10px; height: 1.5px; bottom: 0; left: 0; }
+    .card-corner.bl::after { width: 1.5px; height: 10px; bottom: 0; left: 0; }
+    .card-corner.br { bottom: 6px; right: 6px; }
+    .card-corner.br::before { width: 10px; height: 1.5px; bottom: 0; right: 0; }
+    .card-corner.br::after { width: 1.5px; height: 10px; bottom: 0; right: 0; }
+
+    .listing-card-badge {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      font-size: 0.5rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 3px 8px;
+      background: var(--accent-lime);
+      color: var(--black);
+    }
+    .listing-card-badge.rare { background: var(--accent-violet); color: var(--white); }
+    .listing-card-badge.hot { background: var(--black); color: var(--accent-lime); }
+
+    .listing-card-body { padding: 14px 16px; }
+    .listing-card-name {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      letter-spacing: 0.3px;
+    }
+    .listing-card-meta {
+      font-size: 0.6rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .listing-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      border-top: 1px solid var(--border);
+    }
+    .listing-card-price {
+      font-family: 'Inter', sans-serif;
+      font-weight: 800;
+      font-size: 1rem;
+      letter-spacing: -0.5px;
+    }
+    .listing-card-price .unit {
+      font-size: 0.6rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      margin-left: 4px;
+    }
+    .listing-card-arrow {
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1.5px solid var(--border);
+      font-size: 0.7rem;
+      opacity: 0.5;
+      transition: all 0.2s;
+    }
+
+    /* ═══════ THREE COL ═══════ */
+    .three-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      border-bottom: 1.5px solid var(--border);
+    }
+    .three-col-item {
+      padding: 40px;
+      border-right: 1.5px solid var(--border);
+      position: relative;
+    }
+    .three-col-item:last-child { border-right: none; }
+
+    .three-col-title {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: -0.5px;
+      margin-bottom: 12px;
+      line-height: 1.2;
+    }
+    .three-col-desc {
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    /* System Status */
+    .sys-status { display: flex; flex-direction: column; gap: 12px; }
+    .sys-status-row {
+      display: grid;
+      grid-template-columns: 80px 1fr 60px;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.65rem;
+    }
+    .sys-status-label { text-transform: uppercase; color: var(--text-muted); font-weight: 500; }
+    .sys-status-bar {
+      height: 6px;
+      background: var(--bg-muted);
+      border: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+    .sys-status-bar-fill { height: 100%; position: absolute; left: 0; top: 0; background: var(--accent-lime); }
+    .sys-status-bar-fill.violet { background: var(--accent-violet); }
+    .sys-status-val { text-align: right; font-weight: 600; font-size: 0.6rem; }
+
+    .sys-online {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 8px;
+      padding: 8px 12px;
+      border: 1.5px solid var(--border);
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .sys-online-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--accent-lime);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+    /* Subscribe */
+    .subscribe-form {
+      display: flex;
+      border: 1.5px solid var(--border);
+      overflow: hidden;
+    }
+    .subscribe-input {
+      flex: 1;
+      padding: 10px 14px;
+      border: none;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      background: var(--bg-muted);
+      color: var(--text-primary);
+      outline: none;
+    }
+    .subscribe-input::placeholder { color: var(--text-muted); }
+    .subscribe-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 16px;
+      background: var(--accent-violet);
+      color: var(--white);
+      border: none;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+    }
+    .subscribe-btn:hover { background: #6d28d9; }
+
+    /* ═══════ TRENDING ═══════ */
+    .trending-section {
+      padding: 48px 40px;
+      border-bottom: 1.5px solid var(--border);
+      position: relative;
+    }
+    .trending-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+
+    .trending-table { border: 1.5px solid var(--border); }
+    .trending-table-header {
+      display: grid;
+      grid-template-columns: 40px 1fr 80px 80px;
+      padding: 10px 16px;
+      background: var(--bg-muted);
+      border-bottom: 1.5px solid var(--border);
+      font-size: 0.55rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+    .trending-row {
+      display: grid;
+      grid-template-columns: 40px 1fr 80px 80px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      align-items: center;
+      font-size: 0.7rem;
+      transition: background 0.1s;
+    }
+    .trending-row:last-child { border-bottom: none; }
+    .trending-row:hover { background: var(--accent-violet-light); }
+    .trending-rank { font-family: 'Inter', sans-serif; font-weight: 800; color: var(--text-muted); }
+    .trending-name { font-weight: 600; }
+    .trending-price { font-weight: 700; text-align: right; }
+    .trending-change { text-align: right; font-weight: 600; font-size: 0.6rem; }
+    .trending-change.up { color: var(--accent-lime-dark); }
+    .trending-change.down { color: #dc2626; }
+
+    .activity-list { display: flex; flex-direction: column; border: 1.5px solid var(--border); }
+    .activity-row {
+      display: grid;
+      grid-template-columns: 8px 1fr auto;
+      gap: 12px;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--border);
+      align-items: center;
+      font-size: 0.7rem;
+    }
+    .activity-row:last-child { border-bottom: none; }
+    .activity-dot { width: 8px; height: 8px; background: var(--accent-lime); }
+    .activity-dot.sale { background: var(--accent-violet); }
+    .activity-dot.order { background: var(--black); }
+    .activity-text { color: var(--text-secondary); }
+    .activity-text strong { color: var(--text-primary); font-weight: 600; }
+    .activity-time { color: var(--text-muted); font-size: 0.6rem; }
+
+    /* ═══════ FOOTER ═══════ */
+    .footer { padding: 48px 40px 0; border-bottom: 1.5px solid var(--border); }
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr;
+      gap: 32px;
+      padding-bottom: 40px;
+    }
+    .footer-brand { font-size: 0.6rem; color: var(--text-muted); line-height: 1.6; }
+    .footer-brand .logo { margin-bottom: 16px; }
+    .footer-col-title {
+      font-size: 0.6rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+      color: var(--text-primary);
+    }
+    .footer-col a {
+      display: block;
+      font-size: 0.7rem;
+      color: var(--text-secondary);
+      text-decoration: none;
+      margin-bottom: 8px;
+      transition: color 0.1s;
+    }
+    .footer-col a:hover { color: var(--text-primary); }
+    .footer-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 0;
+      border-top: 1.5px solid var(--border);
+      font-size: 0.6rem;
+      color: var(--text-muted);
+    }
+    .footer-bar-left { display: flex; align-items: center; gap: 8px; }
+    .footer-bar-left .dot { width: 6px; height: 6px; background: var(--accent-lime); border-radius: 50%; }
+    .footer-access {
+      background: var(--accent-lime);
+      color: var(--black);
+      padding: 6px 20px;
+      font-weight: 700;
+      font-size: 0.6rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .footer-access::before { content: '> '; }
+    .footer-node { font-weight: 500; }
+
+    /* ═══════ RESPONSIVE ═══════ */
+    @media (max-width: 1200px) {
+      .listings-grid { grid-template-columns: repeat(3, 1fr); }
+      .stats-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-visual { display: none; }
+      .listings-grid { grid-template-columns: repeat(2, 1fr); }
+      .three-col { grid-template-columns: 1fr; }
+      .three-col-item { border-right: none; border-bottom: 1.5px solid var(--border); }
+      .trending-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .header { padding: 12px 16px; }
+      .hero { padding: 32px 16px; }
+      .hero-title { font-size: 2.8rem; }
+      .section, .listings-section, .trending-section { padding: 32px 16px; }
+      .listings-grid { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: 1fr; }
+      .nav { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════ HEADER ═══════ -->
+  <header class="header">
+    <div class="header-left">
+      <div class="logo">
+        <div class="logo-icon"></div>
+        <span>SC_MARKET<span class="logo-cursor">_</span></span>
+      </div>
+      <nav class="nav">
+        <a href="#" class="active">Market</a>
+        <span class="nav-sep">/</span>
+        <a href="#">Buy Orders</a>
+        <span class="nav-sep">/</span>
+        <a href="#">Fleet</a>
+        <span class="nav-sep">/</span>
+        <a href="#">Contracts</a>
+        <span class="nav-sep">/</span>
+        <a href="#">Mining</a>
+      </nav>
+    </div>
+    <div class="header-right">
+      <div class="sys-time">
+        <div>SYS.TIME</div>
+        <div class="time-val" id="sysTime">23:47:12</div>
+        <div>UTC+0</div>
+      </div>
+      <button class="btn-primary">
+        Sell Item
+        <span class="arrow">↗</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ═══════ HERO ═══════ -->
+  <section class="hero">
+    <!-- Decorative elements -->
+    <span class="vertical-label">PLAYER DRIVEN ECONOMY</span>
+    <div class="deco-scanline" style="top: 30%;"></div>
+    <div class="deco-scanline" style="top: 70%;"></div>
+
+    <div class="hero-content">
+      <div class="hero-section-num">/01</div>
+
+      <!-- Decorative dots near section num -->
+      <div style="position:absolute;top:58px;left:80px;display:flex;gap:4px;align-items:center;">
+        <span class="deco-dot violet"></span>
+        <span class="deco-dot"></span>
+        <span class="deco-dot"></span>
+      </div>
+
+      <h1 class="hero-title">STAR<br>CITIZEN<br>MARKET</h1>
+
+      <!-- Decorative annotation beside title -->
+      <div style="position:absolute;top:90px;right:0;display:flex;flex-direction:column;gap:4px;align-items:flex-end;">
+        <span class="deco-annotation">• RENDERING</span>
+        <span class="deco-annotation">• 83%</span>
+      </div>
+
+      <p class="hero-tagline"><span>FUNCTIONAL.</span> DIGITAL. <span>UNAPOLOGETIC.</span></p>
+      <p class="hero-desc">SC Market is the intersection of player-driven commerce and digital infrastructure. Raw interfaces, structural layouts, and data-driven trading for the verse.</p>
+
+      <div class="hero-actions">
+        <button class="btn-lime">
+          Browse Market
+          <span class="arrow">↗</span>
+        </button>
+        <button class="btn-outline">View Buy Orders &nbsp;⎔ ⎕</button>
+      </div>
+
+      <div class="year-text">2954</div>
+    </div>
+
+    <!-- Hero Visual -->
+    <div class="hero-visual">
+      <div class="deco-grid-overlay"></div>
+      <div class="hero-visual-blocks">
+        <div class="v-block"></div>
+        <div class="v-block"></div>
+        <div class="v-block"></div>
+        <div class="v-block"></div>
+        <div class="v-block"></div>
+        <div class="v-block"></div>
+        <div class="v-block"></div>
+      </div>
+
+      <!-- Corner marks on visual -->
+      <div class="deco-corner tl" style="position:absolute;top:8px;left:8px;"></div>
+      <div class="deco-corner tr" style="position:absolute;top:8px;right:8px;"></div>
+      <div class="deco-corner bl" style="position:absolute;bottom:8px;left:8px;"></div>
+      <div class="deco-corner br" style="position:absolute;bottom:8px;right:8px;"></div>
+
+      <!-- Render badge -->
+      <div class="hero-render-badge">
+        <span>RENDERING</span>
+        <span>• 83%</span>
+      </div>
+
+      <!-- Globe icon -->
+      <div style="position:absolute;top:14px;right:14px;">
+        <div class="hero-globe"></div>
+      </div>
+
+      <!-- Coordinate box -->
+      <div class="hero-coords">
+        <div>X_<span class="coord-val">36.1749</span></div>
+        <div>Y_<span class="coord-val">-86.7676</span></div>
+        <div>Z_<span class="coord-val">46.6827</span></div>
+      </div>
+
+      <!-- Scattered dots -->
+      <div style="position:absolute;top:45%;left:12px;display:flex;flex-direction:column;gap:6px;">
+        <span class="deco-dot dark"></span>
+        <span class="deco-dot dark"></span>
+        <span class="deco-dot"></span>
+      </div>
+    </div>
+
+    <div class="hero-scn">//SCN_01</div>
+  </section>
+
+  <!-- ═══════ STATS ═══════ -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-num">/02</span>
+      <span class="deco-cross dark"></span>
+      <h2 class="section-title">Market Overview</h2>
+      <div class="deco-line-h dashed"></div>
+      <span class="deco-tag">LIVE DATA</span>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-card-icon">⊡</div>
+        <div class="stat-card-label">Active Listings</div>
+        <div class="stat-card-value">12,847</div>
+        <div class="stat-card-desc">Live items available for purchase across all categories.</div>
+        <span class="stat-plus"><span class="deco-cross dark"></span></span>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon">◈</div>
+        <div class="stat-card-label">24h Volume</div>
+        <div class="stat-card-value">847.2M</div>
+        <div class="stat-card-desc">Total aUEC traded in the last 24 hours.</div>
+        <span class="stat-plus"><span class="deco-cross dark"></span></span>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon">⬡</div>
+        <div class="stat-card-label">Active Traders</div>
+        <div class="stat-card-value">3,421</div>
+        <div class="stat-card-desc">Unique sellers and buyers active this week.</div>
+        <span class="stat-plus"><span class="deco-cross dark"></span></span>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon">◇</div>
+        <div class="stat-card-label">Buy Orders</div>
+        <div class="stat-card-value">2,156</div>
+        <div class="stat-card-desc">Standing buy orders waiting for fulfillment.</div>
+        <span class="stat-plus"><span class="deco-cross dark"></span></span>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-icon">⊞</div>
+        <div class="stat-card-label">Avg. Rating</div>
+        <div class="stat-card-value">4.8★</div>
+        <div class="stat-card-desc">Average seller trust rating across the platform.</div>
+      </div>
+    </div>
+
+    <!-- Decorative annotation below stats -->
+    <div style="display:flex;align-items:center;gap:12px;margin-top:16px;">
+      <span class="deco-dot violet"></span>
+      <span class="deco-hash">REF: MKT_STATS_2954.Q4</span>
+      <div class="deco-line-h" style="max-width:80px;"></div>
+      <span class="deco-dot"></span>
+      <span class="deco-dot"></span>
+      <span class="deco-hash">UPDATED: REALTIME</span>
+      <span class="deco-dot lime"></span>
+    </div>
+  </section>
+
+  <!-- ═══════ LISTINGS ═══════ -->
+  <section class="listings-section">
+    <!-- Corner decorations -->
+    <div class="deco-corner tl" style="position:absolute;top:24px;left:24px;"></div>
+    <div class="deco-corner tr" style="position:absolute;top:24px;right:24px;"></div>
+
+    <div class="section-header">
+      <span class="section-num">/03</span>
+      <span class="deco-cross dark"></span>
+      <h2 class="section-title">Featured Listings</h2>
+      <div class="deco-line-h dashed"></div>
+      <span class="deco-annotation">↳ sorted by activity</span>
+    </div>
+    <div class="listings-toolbar">
+      <div class="filter-pills">
+        <button class="filter-pill active">All</button>
+        <button class="filter-pill">Ships</button>
+        <button class="filter-pill">Components</button>
+        <button class="filter-pill">Materials</button>
+        <button class="filter-pill">Weapons</button>
+        <button class="filter-pill">Armor</button>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span class="deco-dot black"></span>
+        <span style="font-size:0.6rem;color:var(--text-muted);">Showing <strong style="color:var(--text-primary);">3,241</strong> results</span>
+      </div>
+    </div>
+    <div class="listings-grid">
+      <!-- Card 1 -->
+      <div class="listing-card">
+        <div class="card-corner tl"></div>
+        <div class="card-corner tr"></div>
+        <div class="card-corner bl"></div>
+        <div class="card-corner br"></div>
+        <div class="listing-card-image">
+          <div class="listing-card-image-inner">
+            <div class="listing-img-placeholder" style="background-color:rgba(124,58,237,0.03);"></div>
+          </div>
+          <span class="listing-card-badge">In Stock</span>
+          <!-- Image corner marks -->
+          <div class="deco-corner tl" style="position:absolute;top:6px;left:6px;opacity:0.4;"></div>
+          <div class="deco-corner br" style="position:absolute;bottom:6px;right:6px;opacity:0.4;"></div>
+        </div>
+        <div class="listing-card-body">
+          <div class="listing-card-name">Sakura_Sun_Radiance</div>
+          <div class="listing-card-meta">Power Plant • Grade A</div>
+        </div>
+        <div class="listing-card-footer">
+          <div class="listing-card-price">42,500<span class="unit">aUEC</span></div>
+          <div class="listing-card-arrow">↗</div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="listing-card">
+        <div class="card-corner tl"></div>
+        <div class="card-corner tr"></div>
+        <div class="card-corner bl"></div>
+        <div class="card-corner br"></div>
+        <div class="listing-card-image">
+          <div class="listing-card-image-inner">
+            <div class="listing-img-placeholder" style="background-color:rgba(163,230,53,0.05);"></div>
+          </div>
+          <span class="listing-card-badge rare">Rare</span>
+          <div class="deco-corner tl" style="position:absolute;top:6px;left:6px;opacity:0.4;"></div>
+          <div class="deco-corner br" style="position:absolute;bottom:6px;right:6px;opacity:0.4;"></div>
+        </div>
+        <div class="listing-card-body">
+          <div class="listing-card-name">TS-2_Crossfield</div>
+          <div class="listing-card-meta">Quantum Drive • Grade A</div>
+        </div>
+        <div class="listing-card-footer">
+          <div class="listing-card-price">128,000<span class="unit">aUEC</span></div>
+          <div class="listing-card-arrow">↗</div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="listing-card">
+        <div class="card-corner tl"></div>
+        <div class="card-corner tr"></div>
+        <div class="card-corner bl"></div>
+        <div class="card-corner br"></div>
+        <div class="listing-card-image">
+          <div class="listing-card-image-inner">
+            <div class="listing-img-placeholder"></div>
+          </div>
+          <span class="listing-card-badge hot">Hot</span>
+          <div class="deco-corner tl" style="position:absolute;top:6px;left:6px;opacity:0.4;"></div>
+          <div class="deco-corner br" style="position:absolute;bottom:6px;right:6px;opacity:0.4;"></div>
+        </div>
+        <div class="listing-card-body">
+          <div class="listing-card-name">Aspis_Palisade</div>
+          <div class="listing-card-meta">Shield Generator • Grade B</div>
+        </div>
+        <div class="listing-card-footer">
+          <div class="listing-card-price">18,200<span class="unit">aUEC</span></div>
+          <div class="listing-card-arrow">↗</div>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="listing-card">
+        <div class="card-corner tl"></div>
+        <div class="card-corner tr"></div>
+        <div class="card-corner bl"></div>
+        <div class="card-corner br"></div>
+        <div class="listing-card-image">
+          <div class="listing-card-image-inner">
+            <div class="listing-img-placeholder" style="background-color:rgba(0,0,0,0.02);"></div>
+          </div>
+          <span class="listing-card-badge">Bulk</span>
+          <div class="deco-corner tl" style="position:absolute;top:6px;left:6px;opacity:0.4;"></div>
+          <div class="deco-corner br" style="position:absolute;bottom:6px;right:6px;opacity:0.4;"></div>
+        </div>
+        <div class="listing-card-body">
+          <div class="listing-card-name">Quantanium_Refined</div>
+          <div class="listing-card-meta">Refined Material • 100 SCU</div>
+        </div>
+        <div class="listing-card-footer">
+          <div class="listing-card-price">88.2<span class="unit">aUEC/SCU</span></div>
+          <div class="listing-card-arrow">↗</div>
+        </div>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="listing-card">
+        <div class="card-corner tl"></div>
+        <div class="card-corner tr"></div>
+        <div class="card-corner bl"></div>
+        <div class="card-corner br"></div>
+        <div class="listing-card-image">
+          <div class="listing-card-image-inner">
+            <div class="listing-img-placeholder" style="background-color:rgba(124,58,237,0.02);"></div>
+          </div>
+          <span class="listing-card-badge">In Stock</span>
+          <div class="deco-corner tl" style="position:absolute;top:6px;left:6px;opacity:0.4;"></div>
+          <div class="deco-corner br" style="position:absolute;bottom:6px;right:6px;opacity:0.4;"></div>
+        </div>
+        <div class="listing-card-body">
+          <div class="listing-card-name">CF-447_Rhino_Repeater</div>
+          <div class="listing-card-meta">Weapons • Size 4</div>
+        </div>
+        <div class="listing-card-footer">
+          <div class="listing-card-price">15,800<span class="unit">aUEC</span></div>
+          <div class="listing-card-arrow">↗</div>
+        </div>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="listing-card">
+        <div class="card-corner tl"></div>
+        <div class="card-corner tr"></div>
+        <div class="card-corner bl"></div>
+        <div class="card-corner br"></div>
+        <div class="listing-card-image">
+          <div class="listing-card-image-inner">
+            <div class="listing-img-placeholder" style="background-color:rgba(163,230,53,0.03);"></div>
+          </div>
+          <span class="listing-card-badge rare">Rare</span>
+          <div class="deco-corner tl" style="position:absolute;top:6px;left:6px;opacity:0.4;"></div>
+          <div class="deco-corner br" style="position:absolute;bottom:6px;right:6px;opacity:0.4;"></div>
+        </div>
+        <div class="listing-card-body">
+          <div class="listing-card-name">Aegis_Sabre_LTI</div>
+          <div class="listing-card-meta">Ship • Medium Fighter</div>
+        </div>
+        <div class="listing-card-footer">
+          <div class="listing-card-price">4.2M<span class="unit">aUEC</span></div>
+          <div class="listing-card-arrow">↗</div>
+        </div>
+      </div>
+
+      <!-- Card 7 -->
+      <div class="listing-card">
+        <div class="card-corner tl"></div>
+        <div class="card-corner tr"></div>
+        <div class="card-corner bl"></div>
+        <div class="card-corner br"></div>
+        <div class="listing-card-image">
+          <div class="listing-card-image-inner">
+            <div class="listing-img-placeholder"></div>
+          </div>
+          <span class="listing-card-badge">In Stock</span>
+          <div class="deco-corner tl" style="position:absolute;top:6px;left:6px;opacity:0.4;"></div>
+          <div class="deco-corner br" style="position:absolute;bottom:6px;right:6px;opacity:0.4;"></div>
+        </div>
+        <div class="listing-card-body">
+          <div class="listing-card-name">Atlas_QD_Drive</div>
+          <div class="listing-card-meta">Quantum Drive • Grade B</div>
+        </div>
+        <div class="listing-card-footer">
+          <div class="listing-card-price">67,800<span class="unit">aUEC</span></div>
+          <div class="listing-card-arrow">↗</div>
+        </div>
+      </div>
+
+      <!-- Card 8 -->
+      <div class="listing-card">
+        <div class="card-corner tl"></div>
+        <div class="card-corner tr"></div>
+        <div class="card-corner bl"></div>
+        <div class="card-corner br"></div>
+        <div class="listing-card-image">
+          <div class="listing-card-image-inner">
+            <div class="listing-img-placeholder" style="background-color:rgba(124,58,237,0.04);"></div>
+          </div>
+          <span class="listing-card-badge hot">Hot</span>
+          <div class="deco-corner tl" style="position:absolute;top:6px;left:6px;opacity:0.4;"></div>
+          <div class="deco-corner br" style="position:absolute;bottom:6px;right:6px;opacity:0.4;"></div>
+        </div>
+        <div class="listing-card-body">
+          <div class="listing-card-name">Hadanite_Refined_50SCU</div>
+          <div class="listing-card-meta">Refined Mineral • 50 SCU</div>
+        </div>
+        <div class="listing-card-footer">
+          <div class="listing-card-price">275<span class="unit">aUEC/unit</span></div>
+          <div class="listing-card-arrow">↗</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Decorative row below grid -->
+    <div style="display:flex;align-items:center;gap:8px;margin-top:20px;justify-content:center;">
+      <span class="deco-dot"></span>
+      <span class="deco-dot"></span>
+      <span class="deco-dot violet"></span>
+      <span class="deco-dot"></span>
+      <span class="deco-dot"></span>
+    </div>
+  </section>
+
+  <!-- ═══════ THREE COL ═══════ -->
+  <div class="three-col">
+    <div class="three-col-item">
+      <!-- Decorative corner -->
+      <div class="deco-corner tl" style="position:absolute;top:16px;left:16px;"></div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
+        <span class="section-num">/04</span>
+        <span class="deco-cross"></span>
+      </div>
+      <h3 class="three-col-title">Join the<br>Marketplace</h3>
+      <p class="three-col-desc">SC Market is more than a store. It's a player-driven economy. List items, fulfill orders, build reputation.</p>
+      <button class="btn-lime">
+        Start Selling
+        <span class="arrow">↗</span>
+      </button>
+      <!-- Bottom decorative -->
+      <div style="position:absolute;bottom:16px;left:16px;display:flex;gap:4px;">
+        <span class="deco-dot violet"></span>
+        <span class="deco-dot"></span>
+        <span class="deco-dot"></span>
+      </div>
+    </div>
+    <div class="three-col-item">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
+        <span class="section-num">/05</span>
+        <span class="deco-cross"></span>
+      </div>
+      <h3 class="three-col-title">System Status</h3>
+      <div class="sys-status">
+        <div class="sys-status-row">
+          <span class="sys-status-label">API</span>
+          <div class="sys-status-bar"><div class="sys-status-bar-fill" style="width:98%"></div></div>
+          <span class="sys-status-val">98%</span>
+        </div>
+        <div class="sys-status-row">
+          <span class="sys-status-label">Listings</span>
+          <div class="sys-status-bar"><div class="sys-status-bar-fill violet" style="width:72%"></div></div>
+          <span class="sys-status-val">12,847</span>
+        </div>
+        <div class="sys-status-row">
+          <span class="sys-status-label">Uptime</span>
+          <div class="sys-status-bar"><div class="sys-status-bar-fill" style="width:100%"></div></div>
+          <span class="sys-status-val">7D 14H</span>
+        </div>
+        <div class="sys-status-row">
+          <span class="sys-status-label">Network</span>
+          <div class="sys-status-bar"><div class="sys-status-bar-fill" style="width:100%"></div></div>
+          <span class="sys-status-val">Secure</span>
+        </div>
+        <div class="sys-online">
+          <div class="sys-online-dot"></div>
+          All Systems Operational
+          <span class="deco-dot lime" style="margin-left:auto;"></span>
+        </div>
+      </div>
+      <!-- Decorative hash at bottom -->
+      <div style="position:absolute;bottom:16px;right:16px;">
+        <span class="deco-hash">NODE: LIVE_0042</span>
+      </div>
+    </div>
+    <div class="three-col-item">
+      <!-- Decorative corner -->
+      <div class="deco-corner tr" style="position:absolute;top:16px;right:16px;"></div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
+        <span class="section-num">/06</span>
+        <span class="deco-cross"></span>
+      </div>
+      <h3 class="three-col-title">Subscribe to<br>Signal</h3>
+      <p class="three-col-desc">Updates on price drops, new listings, and market shifts from the verse.</p>
+      <div class="subscribe-form">
+        <input class="subscribe-input" type="email" placeholder="ENTER EMAIL">
+        <button class="subscribe-btn">Subscribe <span>↗</span></button>
+      </div>
+      <!-- Decorative dots -->
+      <div style="position:absolute;bottom:16px;left:16px;display:flex;gap:6px;align-items:center;">
+        <span class="deco-dot"></span>
+        <span class="deco-line-h" style="width:30px;"></span>
+        <span class="deco-dot violet"></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ TRENDING ═══════ -->
+  <section class="trending-section">
+    <!-- Decorative corners on section -->
+    <div class="deco-corner tl" style="position:absolute;top:24px;left:24px;"></div>
+    <div class="deco-corner br" style="position:absolute;bottom:24px;right:24px;"></div>
+
+    <div class="section-header">
+      <span class="section-num">/07</span>
+      <span class="deco-cross dark"></span>
+      <h2 class="section-title">Trending & Activity</h2>
+      <div class="deco-line-h dashed"></div>
+      <span class="deco-dot violet"></span>
+      <span class="deco-dot lime"></span>
+    </div>
+    <div class="trending-grid">
+      <div>
+        <!-- Table header annotation -->
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+          <span class="deco-annotation">↳ price movement 24h</span>
+          <span class="deco-dot"></span>
+        </div>
+        <div class="trending-table">
+          <div class="trending-table-header">
+            <span>#</span>
+            <span>Item</span>
+            <span style="text-align:right">Price</span>
+            <span style="text-align:right">24h</span>
+          </div>
+          <div class="trending-row">
+            <span class="trending-rank">01</span>
+            <span class="trending-name">Quantanium (Raw)</span>
+            <span class="trending-price">88.2</span>
+            <span class="trending-change up">+12.4%</span>
+          </div>
+          <div class="trending-row">
+            <span class="trending-rank">02</span>
+            <span class="trending-name">Aegis Gladius</span>
+            <span class="trending-price">1.1M</span>
+            <span class="trending-change up">+8.7%</span>
+          </div>
+          <div class="trending-row">
+            <span class="trending-rank">03</span>
+            <span class="trending-name">FR-76 Shield Gen</span>
+            <span class="trending-price">28.4K</span>
+            <span class="trending-change down">-3.2%</span>
+          </div>
+          <div class="trending-row">
+            <span class="trending-rank">04</span>
+            <span class="trending-name">Atlas QD Drive</span>
+            <span class="trending-price">67.8K</span>
+            <span class="trending-change up">+5.1%</span>
+          </div>
+          <div class="trending-row">
+            <span class="trending-rank">05</span>
+            <span class="trending-name">Hadanite (Refined)</span>
+            <span class="trending-price">275</span>
+            <span class="trending-change up">+2.9%</span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <!-- Activity annotation -->
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+          <span class="deco-annotation">↳ live feed</span>
+          <span class="deco-dot lime"></span>
+          <span class="deco-hash">STREAM: ACTIVE</span>
+        </div>
+        <div class="activity-list">
+          <div class="activity-row">
+            <div class="activity-dot sale"></div>
+            <div class="activity-text"><strong>QuantumLeap</strong> sold TS-2 Crossfield for 128K aUEC</div>
+            <div class="activity-time">2m ago</div>
+          </div>
+          <div class="activity-row">
+            <div class="activity-dot"></div>
+            <div class="activity-text"><strong>NovaTrade_Corp</strong> listed 5x Radiance Power Plants</div>
+            <div class="activity-time">4m ago</div>
+          </div>
+          <div class="activity-row">
+            <div class="activity-dot order"></div>
+            <div class="activity-text"><strong>MiningKing</strong> placed buy order: 200 SCU Quantanium</div>
+            <div class="activity-time">7m ago</div>
+          </div>
+          <div class="activity-row">
+            <div class="activity-dot sale"></div>
+            <div class="activity-text"><strong>FleetCommander</strong> sold Aegis Sabre — LTI</div>
+            <div class="activity-time">12m ago</div>
+          </div>
+          <div class="activity-row">
+            <div class="activity-dot"></div>
+            <div class="activity-text"><strong>ArmsDealer_Prime</strong> updated CF-447 pricing</div>
+            <div class="activity-time">15m ago</div>
+          </div>
+          <div class="activity-row">
+            <div class="activity-dot order"></div>
+            <div class="activity-text"><strong>BulkBuyer99</strong> buy order: 500 SCU Laranite</div>
+            <div class="activity-time">18m ago</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════ FOOTER ═══════ -->
+  <footer class="footer">
+    <!-- Decorative row above footer content -->
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:32px;">
+      <span class="deco-dot black"></span>
+      <span class="deco-line-h"></span>
+      <span class="deco-cross dark"></span>
+      <span class="deco-line-h"></span>
+      <span class="deco-dot black"></span>
+    </div>
+
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo" style="margin-bottom:16px;">
+          <div class="logo-icon"></div>
+          <span>SC_MARKET<span class="logo-cursor">_</span></span>
+        </div>
+        <p>© 2954 SC MARKET<br>ALL RIGHTS RESERVED.</p>
+        <br>
+        <p>Player-driven commerce<br>for the verse.</p>
+        <!-- Decorative dots -->
+        <div style="display:flex;gap:4px;margin-top:16px;">
+          <span class="deco-dot violet"></span>
+          <span class="deco-dot"></span>
+          <span class="deco-dot"></span>
+          <span class="deco-dot lime"></span>
+        </div>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Navigation</div>
+        <a href="#">Market</a>
+        <a href="#">Buy Orders</a>
+        <a href="#">Fleet</a>
+        <a href="#">Contracts</a>
+        <a href="#">Mining</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Resources</div>
+        <a href="#">Wiki</a>
+        <a href="#">Price History</a>
+        <a href="#">API Docs</a>
+        <a href="#">Status</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">Community</div>
+        <a href="#">Discord</a>
+        <a href="#">Reddit</a>
+        <a href="#">Github</a>
+        <a href="#">Twitter/X</a>
+      </div>
+      <div class="footer-col">
+        <div class="footer-col-title">System Node</div>
+        <div style="display:flex;gap:12px;font-size:0.65rem;color:var(--text-muted);align-items:center;flex-wrap:wrap;">
+          <span>STANTON</span>
+          <span style="color:var(--accent-violet);">•</span>
+          <span>PYRO</span>
+          <span style="color:var(--accent-lime-dark);">+</span>
+          <span>NEMO</span>
+          <span style="color:var(--accent-violet);">•</span>
+          <span>TERRA</span>
+        </div>
+        <!-- Mini decorative circuit-ish element -->
+        <div style="margin-top:16px;display:flex;align-items:center;gap:6px;">
+          <div style="width:30px;height:1px;background:var(--border);"></div>
+          <span class="deco-dot"></span>
+          <div style="width:20px;height:1px;background:var(--border);"></div>
+          <span class="deco-dot violet"></span>
+          <div style="width:10px;height:1px;background:var(--border);"></div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bar">
+      <div class="footer-bar-left">
+        <div class="dot"></div>
+        <span>CONNECTION SECURE</span>
+      </div>
+      <div class="footer-access">ACCESS GRANTED</div>
+      <div class="footer-node">SCN: 0042 &nbsp;&nbsp; NODE: STANTON_01</div>
+    </div>
+  </footer>
+
+  <script>
+    function updateTime() {
+      const now = new Date();
+      const h = String(now.getUTCHours()).padStart(2, '0');
+      const m = String(now.getUTCMinutes()).padStart(2, '0');
+      const s = String(now.getUTCSeconds()).padStart(2, '0');
+      document.getElementById('sysTime').textContent = `${h}:${m}:${s}`;
+    }
+    setInterval(updateTime, 1000);
+    updateTime();
+  </script>
+</body>
+</html>

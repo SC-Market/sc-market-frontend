@@ -16,13 +16,13 @@ import {
 import { useTranslation } from "react-i18next"
 import { Section } from "../../../components/paper/Section"
 import {
-  useGetBuyOrderMatchesForSellerQuery,
+  useGetMatchesForSellerQuery,
   type StandingBuyOrder,
 } from "../../../store/api/v2/market"
 
 export function MatchingBuyOrdersArea() {
   const { t, i18n } = useTranslation()
-  const { data, isLoading } = useGetBuyOrderMatchesForSellerQuery({ page: 1, pageSize: 5 })
+  const { data, isLoading } = useGetMatchesForSellerQuery({ page: 1, pageSize: 5 })
   const orders = data?.buy_orders || []
 
   if (isLoading || orders.length === 0) return null
