@@ -24,6 +24,11 @@ export function LoggedInRoute() {
       !["/settings", "/accountlink"].includes(location.pathname)
     ) {
       return <Navigate to={"/settings"} />
+    } else if (
+      !profile.onboarding_completed_at &&
+      !["/settings", "/accountlink", "/onboarding"].includes(location.pathname)
+    ) {
+      return <Navigate to={"/onboarding"} />
     } else {
       return <Outlet />
     }

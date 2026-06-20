@@ -173,6 +173,43 @@
     "clear_all": "Clear all notifications",
     "mark_all_as_read": "Mark all as read"
   },
+  "onboarding": {
+    "welcome": "Willkommen bei SC Market",
+    "subtitle": "Lass uns dein Konto einrichten, damit du mit dem Handeln beginnen kannst.",
+    "skipAll": "Einrichtung überspringen, ich erkunde selbst",
+    "skip": "Überspringen",
+    "continue": "Weiter",
+    "complete": "Einrichtung abschließen",
+    "availabilitySaved": "Verfügbarkeit gespeichert",
+    "emailVerificationSent": "Bestätigungs-E-Mail gesendet! Überprüfe deinen Posteingang.",
+    "steps": {
+      "discord": "Discord verknüpfen",
+      "availability": "Verfügbarkeit",
+      "email": "E-Mail",
+      "notifications": "Benachrichtigungen"
+    },
+    "discord": {
+      "title": "Verknüpfe dein Discord-Konto",
+      "description": "Verbinde Discord, um Handelsbenachrichtigungen zu erhalten und direkt mit Käufern zu kommunizieren.",
+      "link": "Discord verknüpfen"
+    },
+    "availability": {
+      "title": "Verfügbarkeit festlegen",
+      "description": "Lass andere wissen, wann du für Trades online bist. Ziehe um Zeitfenster auszuwählen."
+    },
+    "email": {
+      "title": "E-Mail hinzufügen",
+      "description": "Erhalte Benachrichtigungen über neue Nachrichten und Angebote, wenn du nicht da bist.",
+      "verify": "Bestätigung senden",
+      "sent": "Bestätigungs-E-Mail gesendet! Du kannst sie später verifizieren."
+    },
+    "notifications": {
+      "title": "Benachrichtigungseinstellungen",
+      "description": "Wähle, wie du an ungelesene Nachrichten erinnert werden möchtest.",
+      "dmReminders": "Per E-Mail über ungelesene Nachrichten benachrichtigen",
+      "dmRemindersHelp": "Wir senden eine Erinnerung, wenn Nachrichten länger als 24 Stunden ungelesen sind. Du kannst dies jederzeit in den Einstellungen ändern."
+    }
+  },
   "recruitmentVotes": {
     "upvoteButtonTooltip": "Upvote this post"
   },

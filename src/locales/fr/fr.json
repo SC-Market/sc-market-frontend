@@ -173,6 +173,43 @@
     "clear_all": "Clear all notifications",
     "mark_all_as_read": "Mark all as read"
   },
+  "onboarding": {
+    "welcome": "Bienvenue sur SC Market",
+    "subtitle": "Configurons votre compte pour que vous puissiez commencer à trader.",
+    "skipAll": "Passer la configuration, je vais explorer seul",
+    "skip": "Passer",
+    "continue": "Continuer",
+    "complete": "Terminer la configuration",
+    "availabilitySaved": "Disponibilité enregistrée",
+    "emailVerificationSent": "E-mail de vérification envoyé ! Vérifiez votre boîte de réception.",
+    "steps": {
+      "discord": "Lier Discord",
+      "availability": "Disponibilité",
+      "email": "E-mail",
+      "notifications": "Notifications"
+    },
+    "discord": {
+      "title": "Liez votre compte Discord",
+      "description": "Connectez Discord pour recevoir des notifications de trades et communiquer directement avec les acheteurs.",
+      "link": "Lier Discord"
+    },
+    "availability": {
+      "title": "Définir votre disponibilité",
+      "description": "Indiquez aux autres quand vous êtes en ligne pour les trades. Glissez pour sélectionner les créneaux."
+    },
+    "email": {
+      "title": "Ajouter votre e-mail",
+      "description": "Recevez des notifications pour les nouveaux messages et offres quand vous êtes absent.",
+      "verify": "Envoyer la vérification",
+      "sent": "E-mail de vérification envoyé ! Vous pourrez le vérifier plus tard."
+    },
+    "notifications": {
+      "title": "Préférences de notification",
+      "description": "Choisissez comment vous souhaitez être rappelé des messages non lus.",
+      "dmReminders": "M'envoyer un e-mail pour les messages non lus",
+      "dmRemindersHelp": "Nous vous enverrons un rappel si vous avez des messages en attente depuis plus de 24 heures. Vous pouvez modifier ceci à tout moment dans les Paramètres."
+    }
+  },
   "recruitmentVotes": {
     "upvoteButtonTooltip": "Upvote this post"
   },

@@ -444,6 +444,16 @@
 						"type": "string",
 						"description": "Listing title"
 					},
+					"game_item_name": {
+						"type": "string",
+						"nullable": true,
+						"description": "Game item name"
+					},
+					"listing_photo": {
+						"type": "string",
+						"nullable": true,
+						"description": "First listing photo URL"
+					},
 					"variant": {
 						"$ref": "#/components/schemas/StockLotVariant",
 						"description": "Variant information"
@@ -507,6 +517,8 @@
 					"item_id",
 					"listing_id",
 					"listing_title",
+					"game_item_name",
+					"listing_photo",
 					"variant",
 					"quantity_total",
 					"quantity_allocated",
@@ -1760,6 +1772,47 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"OnboardingStatusResponse": {
+				"properties": {
+					"completed": {
+						"type": "boolean"
+					},
+					"completedAt": {
+						"type": "string",
+						"nullable": true
+					},
+					"steps": {
+						"properties": {
+							"dmRemindersEnabled": {
+								"type": "boolean"
+							},
+							"hasEmail": {
+								"type": "boolean"
+							},
+							"hasAvailability": {
+								"type": "boolean"
+							},
+							"hasDiscord": {
+								"type": "boolean"
+							}
+						},
+						"required": [
+							"dmRemindersEnabled",
+							"hasEmail",
+							"hasAvailability",
+							"hasDiscord"
+						],
+						"type": "object"
+					}
+				},
+				"required": [
+					"completed",
+					"completedAt",
+					"steps"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"Rating": {
 				"properties": {
 					"avg_rating": {
@@ -2632,6 +2685,14 @@
 							"inactive"
 						],
 						"description": "Initial listing status (default: 'active'). Use 'inactive' for draft/prep."
+					},
+					"visibility": {
+						"type": "string",
+						"enum": [
+							"public",
+							"private"
+						],
+						"description": "Listing visibility (default: 'public'). Use 'private' for org-internal listings (contractor only)."
 					}
 				},
 				"required": [
@@ -2770,6 +2831,15 @@
 					"has_bulk_discount": {
 						"type": "boolean",
 						"description": "Whether this listing has bulk discount tiers defined"
+					},
+					"visibility": {
+						"type": "string",
+						"enum": [
+							"public",
+							"private",
+							"unlisted"
+						],
+						"description": "Listing visibility: public, private (org-only), or unlisted"
 					}
 				},
 				"required": [
@@ -3476,6 +3546,21 @@
 						},
 						"type": "array",
 						"description": "Updated bulk discount tiers (pass [] to remove, omit to keep unchanged)"
+					},
+					"photo_resource_ids": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array",
+						"description": "New photo resource IDs to append (from two-phase upload)"
+					},
+					"visibility": {
+						"type": "string",
+						"enum": [
+							"public",
+							"private"
+						],
+						"description": "Listing visibility (null to keep unchanged). Only contractor listings can be 'private'."
 					}
 				},
 				"type": "object",
@@ -3497,6 +3582,10 @@
 						"type": "string",
 						"nullable": true
 					},
+					"game_item_image": {
+						"type": "string",
+						"nullable": true
+					},
 					"variant_id": {
 						"type": "string",
 						"nullable": true
@@ -3510,6 +3599,10 @@
 						"nullable": true
 					},
 					"listing_title": {
+						"type": "string",
+						"nullable": true
+					},
+					"listing_photo": {
 						"type": "string",
 						"nullable": true
 					},
@@ -3544,10 +3637,12 @@
 					"owner_id",
 					"game_item_id",
 					"game_item_name",
+					"game_item_image",
 					"variant_id",
 					"variant_display_name",
 					"listing_id",
 					"listing_title",
+					"listing_photo",
 					"quantity_total",
 					"location_id",
 					"location_name",
@@ -3635,7 +3730,8 @@
 				"enum": [
 					"cstone-items",
 					"uex-items",
-					"uex-attributes"
+					"uex-attributes",
+					"shop-inventories"
 				]
 			},
 			"JobStatus": {
@@ -3691,6 +3787,23 @@
 					"completedAt",
 					"result",
 					"error"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ImageUploadResponse": {
+				"description": "Response for a single image upload",
+				"properties": {
+					"resource_id": {
+						"type": "string"
+					},
+					"url": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"resource_id",
+					"url"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -9174,6 +9287,22 @@
 				"type": "object",
 				"additionalProperties": false
 			},
+			"BuyOrderPhoto": {
+				"properties": {
+					"resource_id": {
+						"type": "string"
+					},
+					"url": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"resource_id",
+					"url"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"StandingBuyOrder": {
 				"properties": {
 					"buy_order_id": {
@@ -9196,6 +9325,10 @@
 						"type": "string"
 					},
 					"quantity": {
+						"type": "number",
+						"format": "double"
+					},
+					"quantity_fulfilled": {
 						"type": "number",
 						"format": "double"
 					},
@@ -9258,6 +9391,12 @@
 					"declined_at": {
 						"type": "string",
 						"nullable": true
+					},
+					"photos": {
+						"items": {
+							"$ref": "#/components/schemas/BuyOrderPhoto"
+						},
+						"type": "array"
 					}
 				},
 				"required": [
@@ -9267,6 +9406,7 @@
 					"buyer_id",
 					"buyer_name",
 					"quantity",
+					"quantity_fulfilled",
 					"price_per_unit",
 					"negotiable",
 					"status",
@@ -9313,6 +9453,13 @@
 					"expires_in_days": {
 						"type": "number",
 						"format": "double"
+					},
+					"photo_resource_ids": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array",
+						"description": "Optional image resource IDs to attach to this buy order"
 					}
 				},
 				"required": [
@@ -9387,6 +9534,27 @@
 						"format": "double"
 					}
 				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"FulfillBuyOrderRequest": {
+				"properties": {
+					"listing_id": {
+						"type": "string"
+					},
+					"variant_id": {
+						"type": "string"
+					},
+					"quantity": {
+						"type": "number",
+						"format": "double",
+						"description": "Quantity to fulfill (defaults to remaining if omitted)"
+					}
+				},
+				"required": [
+					"listing_id",
+					"variant_id"
+				],
 				"type": "object",
 				"additionalProperties": false
 			},
@@ -10494,6 +10662,81 @@
 				],
 				"type": "object",
 				"additionalProperties": false
+			},
+			"RequestDeletionResponse": {
+				"properties": {
+					"scheduledAt": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"scheduledAt",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"RequestDeletionBody": {
+				"properties": {
+					"reason": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"DeletionStatusResponse": {
+				"properties": {
+					"pending": {
+						"type": "boolean"
+					},
+					"scheduledAt": {
+						"type": "string"
+					},
+					"isTombstone": {
+						"type": "boolean"
+					}
+				},
+				"required": [
+					"pending",
+					"isTombstone"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"DeletionPreCheckResponse": {
+				"properties": {
+					"canDelete": {
+						"type": "boolean"
+					},
+					"blockers": {
+						"items": {
+							"properties": {
+								"detail": {
+									"type": "string"
+								},
+								"type": {
+									"type": "string"
+								}
+							},
+							"required": [
+								"detail",
+								"type"
+							],
+							"type": "object"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"canDelete",
+					"blockers"
+				],
+				"type": "object",
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {}
@@ -10895,6 +11138,14 @@
 						"schema": {
 							"format": "double",
 							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "spectrum_id",
+						"required": false,
+						"schema": {
+							"type": "string"
 						}
 					},
 					{
@@ -11516,6 +11767,66 @@
 				]
 			}
 		},
+		"/onboarding/status": {
+			"get": {
+				"operationId": "GetOnboardingStatus",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/OnboardingStatusResponse"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Onboarding"
+				],
+				"security": [
+					{
+						"loggedin": []
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/onboarding/complete": {
+			"post": {
+				"operationId": "CompleteOnboarding",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"completedAt": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"completedAt"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Onboarding"
+				],
+				"security": [
+					{
+						"loggedin": []
+					}
+				],
+				"parameters": []
+			}
+		},
 		"/offers/{sessionId}": {
 			"get": {
 				"operationId": "GetOfferSession",
@@ -11644,7 +11955,7 @@
 				],
 				"security": [
 					{
-						"loggedin": []
+						"verified": []
 					}
 				],
 				"parameters": [],
@@ -12276,6 +12587,143 @@
 				]
 			}
 		},
+		"/listings/import-uex": {
+			"post": {
+				"operationId": "ImportFromUex",
+				"responses": {
+					"200": {
+						"description": "Preview of importable listings or import result",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"total": {
+											"type": "number",
+											"format": "double"
+										},
+										"imported": {
+											"type": "number",
+											"format": "double"
+										},
+										"preview": {
+											"items": {
+												"properties": {
+													"source": {
+														"type": "string"
+													},
+													"quality": {
+														"type": "number",
+														"format": "double"
+													},
+													"quantity": {
+														"type": "number",
+														"format": "double"
+													},
+													"price": {
+														"type": "number",
+														"format": "double"
+													},
+													"title": {
+														"type": "string"
+													}
+												},
+												"required": [
+													"quantity",
+													"price",
+													"title"
+												],
+												"type": "object"
+											},
+											"type": "array"
+										}
+									},
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"description": "Import listings from UEX marketplace\n\nFetches a user's active sell listings from UEXCorp API and creates\ncorresponding listings on SC Market. Supports importing as the user\nor as an org they belong to.",
+				"summary": "Import listings from UEX",
+				"tags": [
+					"Listings V2"
+				],
+				"security": [
+					{
+						"verified": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"description": "UEX username and optional org to import as",
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"confirm": {
+										"type": "boolean"
+									},
+									"listings": {
+										"items": {
+											"properties": {
+												"source": {
+													"type": "string"
+												},
+												"location": {
+													"type": "string"
+												},
+												"durability": {
+													"type": "number",
+													"format": "double"
+												},
+												"quality": {
+													"type": "number",
+													"format": "double"
+												},
+												"quantity": {
+													"type": "number",
+													"format": "double"
+												},
+												"price": {
+													"type": "number",
+													"format": "double"
+												},
+												"description": {
+													"type": "string"
+												},
+												"title": {
+													"type": "string"
+												}
+											},
+											"required": [
+												"quantity",
+												"price",
+												"description",
+												"title"
+											],
+											"type": "object"
+										},
+										"type": "array"
+									},
+									"contractor_spectrum_id": {
+										"type": "string"
+									},
+									"uex_username": {
+										"type": "string"
+									}
+								},
+								"required": [
+									"uex_username"
+								],
+								"type": "object",
+								"description": "UEX username and optional org to import as"
+							}
+						}
+					}
+				}
+			}
+		},
 		"/inventory": {
 			"get": {
 				"operationId": "GetInventory",
@@ -12640,6 +13088,34 @@
 				"description": "List all import jobs (most recent first)",
 				"tags": [
 					"Admin Imports"
+				],
+				"security": [
+					{
+						"loggedin": []
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/images/upload": {
+			"post": {
+				"operationId": "UploadImage",
+				"responses": {
+					"200": {
+						"description": "The uploaded image resource_id and CDN URL",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ImageUploadResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Upload a single image\n\nUploads and validates an image immediately (before form submission).\nThe returned resource_id can be used in photo_resource_ids when creating a listing.",
+				"summary": "Upload image",
+				"tags": [
+					"Images V2"
 				],
 				"security": [
 					{
@@ -16385,7 +16861,7 @@
 				],
 				"security": [
 					{
-						"loggedin": []
+						"verified": []
 					}
 				],
 				"parameters": [],
@@ -16424,7 +16900,7 @@
 				],
 				"security": [
 					{
-						"loggedin": []
+						"verified": []
 					}
 				],
 				"parameters": [],
@@ -16547,6 +17023,52 @@
 				]
 			}
 		},
+		"/buy-orders/matches-for-seller": {
+			"get": {
+				"operationId": "GetMatchesForSeller",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/SearchBuyOrdersResponse"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get active buy orders matching the seller's current inventory.\nJoins against listing_items to find orders the seller can fulfill right now.",
+				"tags": [
+					"Buy Orders V2"
+				],
+				"security": [
+					{
+						"loggedin": []
+					}
+				],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "page",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "page_size",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
 		"/buy-orders/mine": {
 			"get": {
 				"operationId": "GetMyBuyOrders",
@@ -16608,6 +17130,36 @@
 			}
 		},
 		"/buy-orders/{id}": {
+			"get": {
+				"operationId": "GetBuyOrderDetail",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/StandingBuyOrder"
+								}
+							}
+						}
+					}
+				},
+				"description": "Get a single buy order by ID with full details",
+				"tags": [
+					"Buy Orders V2"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			},
 			"put": {
 				"operationId": "UpdateBuyOrder",
 				"responses": {
@@ -16710,14 +17262,14 @@
 						}
 					}
 				},
-				"description": "Fulfill a standing buy order",
+				"description": "Fulfill a standing buy order (supports partial fulfillment)",
 				"summary": "Seller fulfills a buy order",
 				"tags": [
 					"Buy Orders V2"
 				],
 				"security": [
 					{
-						"loggedin": []
+						"verified": []
 					}
 				],
 				"parameters": [
@@ -16735,19 +17287,7 @@
 					"content": {
 						"application/json": {
 							"schema": {
-								"properties": {
-									"variant_id": {
-										"type": "string"
-									},
-									"listing_id": {
-										"type": "string"
-									}
-								},
-								"required": [
-									"variant_id",
-									"listing_id"
-								],
-								"type": "object"
+								"$ref": "#/components/schemas/FulfillBuyOrderRequest"
 							}
 						}
 					}
@@ -17687,6 +18227,128 @@
 				"summary": "Get active listing count",
 				"tags": [
 					"Admin"
+				],
+				"security": [
+					{
+						"loggedin": []
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/accounts/delete": {
+			"post": {
+				"operationId": "RequestDeletion",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/RequestDeletionResponse"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Accounts V2"
+				],
+				"security": [
+					{
+						"loggedin": []
+					}
+				],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/RequestDeletionBody"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/accounts/cancel-deletion": {
+			"post": {
+				"operationId": "CancelDeletion",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"properties": {
+										"message": {
+											"type": "string"
+										}
+									},
+									"required": [
+										"message"
+									],
+									"type": "object"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Accounts V2"
+				],
+				"security": [
+					{
+						"loggedin": []
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/accounts/deletion-status": {
+			"get": {
+				"operationId": "GetDeletionStatus",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DeletionStatusResponse"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Accounts V2"
+				],
+				"security": [
+					{
+						"loggedin": []
+					}
+				],
+				"parameters": []
+			}
+		},
+		"/accounts/deletion-precheck": {
+			"get": {
+				"operationId": "PreDeletionCheck",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/DeletionPreCheckResponse"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Accounts V2"
 				],
 				"security": [
 					{

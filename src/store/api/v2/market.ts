@@ -5,10 +5,12 @@ export const addTagTypes = [
   "Stock Lots V2",
   "Requisitions V2",
   "Orders V2",
+  "Onboarding",
   "Offers V2",
   "Listings V2",
   "Inventory V2",
   "Admin Imports",
+  "Images V2",
   "Health",
   "Game Items V2",
   "Game Data - Wishlists",
@@ -28,6 +30,7 @@ export const addTagTypes = [
   "Admin Migration",
   "Admin Feature Flags",
   "Admin",
+  "Accounts V2",
 ] as const
 const injectedRtkApi = api
   .enhanceEndpoints({
@@ -253,6 +256,20 @@ const injectedRtkApi = api
         }),
         providesTags: ["Orders V2"],
       }),
+      getOnboardingStatus: build.query<
+        GetOnboardingStatusApiResponse,
+        GetOnboardingStatusApiArg
+      >({
+        query: () => ({ url: `/onboarding/status` }),
+        providesTags: ["Onboarding"],
+      }),
+      completeOnboarding: build.mutation<
+        CompleteOnboardingApiResponse,
+        CompleteOnboardingApiArg
+      >({
+        query: () => ({ url: `/onboarding/complete`, method: "POST" }),
+        invalidatesTags: ["Onboarding"],
+      }),
       getOfferSession: build.query<
         GetOfferSessionApiResponse,
         GetOfferSessionApiArg
@@ -393,6 +410,17 @@ const injectedRtkApi = api
           invalidatesTags: ["Listings V2"],
         },
       ),
+      importFromUex: build.mutation<
+        ImportFromUexApiResponse,
+        ImportFromUexApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/listings/import-uex`,
+          method: "POST",
+          body: queryArg.body,
+        }),
+        invalidatesTags: ["Listings V2"],
+      }),
       getInventory: build.query<GetInventoryApiResponse, GetInventoryApiArg>({
         query: (queryArg) => ({
           url: `/inventory`,
@@ -462,6 +490,10 @@ const injectedRtkApi = api
       listJobs: build.query<ListJobsApiResponse, ListJobsApiArg>({
         query: () => ({ url: `/admin/imports` }),
         providesTags: ["Admin Imports"],
+      }),
+      uploadImage: build.mutation<UploadImageApiResponse, UploadImageApiArg>({
+        query: () => ({ url: `/images/upload`, method: "POST" }),
+        invalidatesTags: ["Images V2"],
       }),
       getHealth: build.query<GetHealthApiResponse, GetHealthApiArg>({
         query: () => ({ url: `/health` }),
@@ -1215,6 +1247,19 @@ const injectedRtkApi = api
         }),
         providesTags: ["Buy Orders V2"],
       }),
+      getMatchesForSeller: build.query<
+        GetMatchesForSellerApiResponse,
+        GetMatchesForSellerApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/buy-orders/matches-for-seller`,
+          params: {
+            page: queryArg.page,
+            page_size: queryArg.pageSize,
+          },
+        }),
+        providesTags: ["Buy Orders V2"],
+      }),
       getMyBuyOrders: build.query<
         GetMyBuyOrdersApiResponse,
         GetMyBuyOrdersApiArg
@@ -1229,22 +1274,9 @@ const injectedRtkApi = api
         }),
         providesTags: ["Buy Orders V2"],
       }),
-      getBuyOrderMatchesForSeller: build.query<
-        SearchBuyOrdersApiResponse,
-        { page?: number; pageSize?: number }
-      >({
-        query: (queryArg) => ({
-          url: `/buy-orders/matches-for-seller`,
-          params: {
-            page: queryArg.page,
-            page_size: queryArg.pageSize,
-          },
-        }),
-        providesTags: ["Buy Orders V2"],
-      }),
       getBuyOrderDetail: build.query<
-        StandingBuyOrder,
-        { id: string }
+        GetBuyOrderDetailApiResponse,
+        GetBuyOrderDetailApiArg
       >({
         query: (queryArg) => ({ url: `/buy-orders/${queryArg.id}` }),
         providesTags: ["Buy Orders V2"],
@@ -1277,7 +1309,7 @@ const injectedRtkApi = api
         query: (queryArg) => ({
           url: `/buy-orders/${queryArg.id}/fulfill`,
           method: "POST",
-          body: queryArg.body,
+          body: queryArg.fulfillBuyOrderRequest,
         }),
         invalidatesTags: ["Buy Orders V2"],
       }),
@@ -1489,6 +1521,38 @@ const injectedRtkApi = api
         query: () => ({ url: `/admin/active-listing-count` }),
         providesTags: ["Admin"],
       }),
+      requestDeletion: build.mutation<
+        RequestDeletionApiResponse,
+        RequestDeletionApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/accounts/delete`,
+          method: "POST",
+          body: queryArg.requestDeletionBody,
+        }),
+        invalidatesTags: ["Accounts V2"],
+      }),
+      cancelDeletion: build.mutation<
+        CancelDeletionApiResponse,
+        CancelDeletionApiArg
+      >({
+        query: () => ({ url: `/accounts/cancel-deletion`, method: "POST" }),
+        invalidatesTags: ["Accounts V2"],
+      }),
+      getDeletionStatus: build.query<
+        GetDeletionStatusApiResponse,
+        GetDeletionStatusApiArg
+      >({
+        query: () => ({ url: `/accounts/deletion-status` }),
+        providesTags: ["Accounts V2"],
+      }),
+      preDeletionCheck: build.query<
+        PreDeletionCheckApiResponse,
+        PreDeletionCheckApiArg
+      >({
+        query: () => ({ url: `/accounts/deletion-precheck` }),
+        providesTags: ["Accounts V2"],
+      }),
     }),
     overrideExisting: false,
   })
@@ -1549,7 +1613,6 @@ export type GetStockLotsApiArg = {
   qualityTierMin?: number
   /** Maximum quality tier (1-5) */
   qualityTierMax?: number
-  /** Filter by org spectrum ID (shows only that org's lots) */
   spectrumId?: string
   /** Page number for pagination (default: 1) */
   page?: number
@@ -1636,6 +1699,13 @@ export type GetOrdersByListingApiArg = {
   /** Listing UUID */
   listingId: string
 }
+export type GetOnboardingStatusApiResponse =
+  /** status 200 Ok */ OnboardingStatusResponse
+export type GetOnboardingStatusApiArg = void
+export type CompleteOnboardingApiResponse = /** status 200 Ok */ {
+  completedAt: string
+}
+export type CompleteOnboardingApiArg = void
 export type GetOfferSessionApiResponse =
   /** status 200 Ok */ GetOfferSessionV2Response
 export type GetOfferSessionApiArg = {
@@ -1756,6 +1826,36 @@ export type UploadPhotosApiArg = {
   /** Listing UUID */
   id: string
 }
+export type ImportFromUexApiResponse =
+  /** status 200 Preview of importable listings or import result */ {
+    total?: number
+    imported?: number
+    preview?: {
+      source?: string
+      quality?: number
+      quantity: number
+      price: number
+      title: string
+    }[]
+  }
+export type ImportFromUexApiArg = {
+  /** UEX username and optional org to import as */
+  body: {
+    confirm?: boolean
+    listings?: {
+      source?: string
+      location?: string
+      durability?: number
+      quality?: number
+      quantity: number
+      price: number
+      description: string
+      title: string
+    }[]
+    contractor_spectrum_id?: string
+    uex_username: string
+  }
+}
 export type GetInventoryApiResponse = /** status 200 Ok */ InventoryResponse
 export type GetInventoryApiArg = {
   gameItemId?: string
@@ -1805,6 +1905,9 @@ export type ListJobsApiResponse = /** status 200 Ok */ {
   jobs: ImportJob[]
 }
 export type ListJobsApiArg = void
+export type UploadImageApiResponse =
+  /** status 200 The uploaded image resource_id and CDN URL */ ImageUploadResponse
+export type UploadImageApiArg = void
 export type GetHealthApiResponse = /** status 200 Ok */ HealthResponse
 export type GetHealthApiArg = void
 export type SearchGameItemsApiResponse =
@@ -2461,12 +2564,22 @@ export type SearchBuyOrdersApiArg = {
   page?: number
   pageSize?: number
 }
+export type GetMatchesForSellerApiResponse =
+  /** status 200 Ok */ SearchBuyOrdersResponse
+export type GetMatchesForSellerApiArg = {
+  page?: number
+  pageSize?: number
+}
 export type GetMyBuyOrdersApiResponse =
   /** status 200 Ok */ SearchBuyOrdersResponse
 export type GetMyBuyOrdersApiArg = {
   status?: "active" | "fulfilled" | "cancelled" | "expired"
   page?: number
   pageSize?: number
+}
+export type GetBuyOrderDetailApiResponse = /** status 200 Ok */ StandingBuyOrder
+export type GetBuyOrderDetailApiArg = {
+  id: string
 }
 export type UpdateBuyOrderApiResponse = /** status 200 Ok */ StandingBuyOrder
 export type UpdateBuyOrderApiArg = {
@@ -2483,11 +2596,7 @@ export type FulfillBuyOrderApiResponse =
   /** status 200 Ok */ CreateBuyOrderResponse
 export type FulfillBuyOrderApiArg = {
   id: string
-  body: {
-    variant_id: string
-    listing_id: string
-    quantity?: number
-  }
+  fulfillBuyOrderRequest: FulfillBuyOrderRequest
 }
 export type DeclineBuyOrderApiResponse = /** status 200 Ok */ StandingBuyOrder
 export type DeclineBuyOrderApiArg = {
@@ -2614,6 +2723,21 @@ export type GetActiveListingCountApiResponse = /** status 200 Ok */ {
   count: number
 }
 export type GetActiveListingCountApiArg = void
+export type RequestDeletionApiResponse =
+  /** status 200 Ok */ RequestDeletionResponse
+export type RequestDeletionApiArg = {
+  requestDeletionBody: RequestDeletionBody
+}
+export type CancelDeletionApiResponse = /** status 200 Ok */ {
+  message: string
+}
+export type CancelDeletionApiArg = void
+export type GetDeletionStatusApiResponse =
+  /** status 200 Ok */ DeletionStatusResponse
+export type GetDeletionStatusApiArg = void
+export type PreDeletionCheckApiResponse =
+  /** status 200 Ok */ DeletionPreCheckResponse
+export type PreDeletionCheckApiArg = void
 export type VariantType = {
   /** Unique identifier for the variant type */
   variant_type_id: string
@@ -3120,6 +3244,16 @@ export type OrdersByListingResponse = {
   orders: ListingOrderSummary[]
   offers: ListingOfferSummary[]
 }
+export type OnboardingStatusResponse = {
+  completed: boolean
+  completedAt: string | null
+  steps: {
+    dmRemindersEnabled: boolean
+    hasEmail: boolean
+    hasAvailability: boolean
+    hasDiscord: boolean
+  }
+}
 export type Rating = {
   avg_rating: number
   rating_count: number
@@ -3331,7 +3465,7 @@ export type CreateListingRequest = {
   }
   /** Initial listing status (default: 'active'). Use 'inactive' for draft/prep. */
   status?: "active" | "inactive"
-  /** Listing visibility (default: 'public'). Use 'private' for org-internal listings. */
+  /** Listing visibility (default: 'public'). Use 'private' for org-internal listings (contractor only). */
   visibility?: "public" | "private"
 }
 export type ListingSearchResult = {
@@ -3423,8 +3557,6 @@ export type MyListingItem = {
   photo?: string
   /** ISO 8601 timestamp when listing expires (null if no expiry) */
   expires_at?: string
-  /** Listing visibility */
-  visibility?: "public" | "private" | "unlisted"
 }
 export type GetMyListingsResponse = {
   /** Array of user's listings */
@@ -3593,7 +3725,7 @@ export type UpdateListingRequest = {
   bulk_discount_tiers?: BulkDiscountTier[]
   /** New photo resource IDs to append (from two-phase upload) */
   photo_resource_ids?: string[]
-  /** Listing visibility (null to keep unchanged) */
+  /** Listing visibility (null to keep unchanged). Only contractor listings can be 'private'. */
   visibility?: "public" | "private"
 }
 export type InventoryLotDetail = {
@@ -3631,7 +3763,11 @@ export type CreateInventoryLotRequest = {
 export type LinkToListingRequest = {
   listing_id: string
 }
-export type ImportSource = "cstone-items" | "uex-items" | "uex-attributes"
+export type ImportSource =
+  | "cstone-items"
+  | "uex-items"
+  | "uex-attributes"
+  | "shop-inventories"
 export type JobStatus = "running" | "completed" | "failed"
 export type RecordStringAny = {
   [key: string]: any
@@ -3644,6 +3780,10 @@ export type ImportJob = {
   completedAt: string | null
   result: RecordStringAny | null
   error: string | null
+}
+export type ImageUploadResponse = {
+  resource_id: string
+  url: string
 }
 export type HealthResponse = {
   status: string
@@ -5334,8 +5474,8 @@ export type CreateStandingBuyOrderRequest = {
   quality_value_max?: number
   negotiable?: boolean
   expires_in_days?: number
+  /** Optional image resource IDs to attach to this buy order */
   photo_resource_ids?: string[]
-  visibility?: "public" | "roster_only" | "private"
 }
 export type SearchBuyOrdersResponse = {
   buy_orders: StandingBuyOrder[]
@@ -5352,6 +5492,12 @@ export type UpdateStandingBuyOrderRequest = {
   quality_value_max?: number
   negotiable?: boolean
   expires_in_days?: number
+}
+export type FulfillBuyOrderRequest = {
+  listing_id: string
+  variant_id: string
+  /** Quantity to fulfill (defaults to remaining if omitted) */
+  quantity?: number
 }
 export type DeclineBuyOrderRequest = {
   buy_order_id: string
@@ -5625,6 +5771,25 @@ export type GameDataImportJob = {
   error: string | null
   details: string | null
 }
+export type RequestDeletionResponse = {
+  scheduledAt: string
+  message: string
+}
+export type RequestDeletionBody = {
+  reason?: string
+}
+export type DeletionStatusResponse = {
+  pending: boolean
+  scheduledAt?: string
+  isTombstone: boolean
+}
+export type DeletionPreCheckResponse = {
+  canDelete: boolean
+  blockers: {
+    detail: string
+    type: string
+  }[]
+}
 export const {
   useGetVariantTypesQuery,
   useGetMySuppliersQuery,
@@ -5646,6 +5811,8 @@ export const {
   useGetOrdersQuery,
   useGetOrderDetailQuery,
   useGetOrdersByListingQuery,
+  useGetOnboardingStatusQuery,
+  useCompleteOnboardingMutation,
   useGetOfferSessionQuery,
   useSearchOffersQuery,
   useCreateListingMutation,
@@ -5658,6 +5825,7 @@ export const {
   useRefreshListingMutation,
   useTrackViewMutation,
   useUploadPhotosMutation,
+  useImportFromUexMutation,
   useGetInventoryQuery,
   useCreateInventoryLotMutation,
   useLinkToListingMutation,
@@ -5666,6 +5834,7 @@ export const {
   useStartImportMutation,
   useGetJobStatusQuery,
   useListJobsQuery,
+  useUploadImageMutation,
   useGetHealthQuery,
   useSearchGameItemsQuery,
   useGetCategoriesQuery,
@@ -5734,8 +5903,8 @@ export const {
   useCreatePurchaseMutation,
   useCreateStandingBuyOrderMutation,
   useSearchBuyOrdersQuery,
+  useGetMatchesForSellerQuery,
   useGetMyBuyOrdersQuery,
-  useGetBuyOrderMatchesForSellerQuery,
   useGetBuyOrderDetailQuery,
   useUpdateBuyOrderMutation,
   useCancelBuyOrderMutation,
@@ -5762,4 +5931,8 @@ export const {
   useGetImportJobStatusQuery,
   useExpireAllListingsMutation,
   useGetActiveListingCountQuery,
+  useRequestDeletionMutation,
+  useCancelDeletionMutation,
+  useGetDeletionStatusQuery,
+  usePreDeletionCheckQuery,
 } = injectedRtkApi

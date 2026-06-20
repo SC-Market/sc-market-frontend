@@ -173,6 +173,43 @@
     "clear_all": "Clear all notifications",
     "mark_all_as_read": "Mark all as read"
   },
+  "onboarding": {
+    "welcome": "Bienvenido a SC Market",
+    "subtitle": "Configuremos tu cuenta para que puedas empezar a comerciar.",
+    "skipAll": "Saltar configuración, exploraré por mi cuenta",
+    "skip": "Saltar",
+    "continue": "Continuar",
+    "complete": "Completar configuración",
+    "availabilitySaved": "Disponibilidad guardada",
+    "emailVerificationSent": "¡Correo de verificación enviado! Revisa tu bandeja de entrada.",
+    "steps": {
+      "discord": "Vincular Discord",
+      "availability": "Disponibilidad",
+      "email": "Correo electrónico",
+      "notifications": "Notificaciones"
+    },
+    "discord": {
+      "title": "Vincula tu cuenta de Discord",
+      "description": "Conecta Discord para recibir notificaciones de intercambios y comunicarte directamente con los compradores.",
+      "link": "Vincular Discord"
+    },
+    "availability": {
+      "title": "Establece tu disponibilidad",
+      "description": "Indica a otros cuándo estás disponible para intercambios. Arrastra para seleccionar franjas horarias."
+    },
+    "email": {
+      "title": "Agrega tu correo electrónico",
+      "description": "Recibe notificaciones de nuevos mensajes y ofertas cuando no estés.",
+      "verify": "Enviar verificación",
+      "sent": "¡Correo de verificación enviado! Puedes verificarlo más tarde."
+    },
+    "notifications": {
+      "title": "Preferencias de notificación",
+      "description": "Elige cómo te gustaría recibir recordatorios de mensajes no leídos.",
+      "dmReminders": "Enviarme correos sobre mensajes no leídos",
+      "dmRemindersHelp": "Te enviaremos un recordatorio si tienes mensajes esperando por más de 24 horas. Puedes cambiar esto en cualquier momento en Configuración."
+    }
+  },
   "recruitmentVotes": {
     "upvoteButtonTooltip": "Upvote this post"
   },

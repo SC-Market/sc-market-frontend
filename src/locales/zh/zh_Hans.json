@@ -179,6 +179,43 @@
     "clear_all": "清除全部通知",
     "mark_all_as_read": "全部已读"
   },
+  "onboarding": {
+    "welcome": "欢迎来到 SC Market",
+    "subtitle": "让我们设置您的账户，以便您开始交易。",
+    "skipAll": "跳过设置，我自己探索",
+    "skip": "跳过",
+    "continue": "继续",
+    "complete": "完成设置",
+    "availabilitySaved": "可用时间已保存",
+    "emailVerificationSent": "验证邮件已发送！请检查您的收件箱。",
+    "steps": {
+      "discord": "关联 Discord",
+      "availability": "可用时间",
+      "email": "邮箱",
+      "notifications": "通知"
+    },
+    "discord": {
+      "title": "关联您的 Discord 账户",
+      "description": "连接 Discord 以接收交易通知并直接与买家沟通。",
+      "link": "关联 Discord"
+    },
+    "availability": {
+      "title": "设置您的可用时间",
+      "description": "让其他人知道您何时在线进行交易。拖动以选择时间段。"
+    },
+    "email": {
+      "title": "添加您的邮箱",
+      "description": "在您离开时接收新消息和报价的通知。",
+      "verify": "发送验证",
+      "sent": "验证邮件已发送！您可以稍后验证。"
+    },
+    "notifications": {
+      "title": "通知偏好设置",
+      "description": "选择您希望如何收到未读消息的提醒。",
+      "dmReminders": "通过邮件提醒我未读消息",
+      "dmRemindersHelp": "如果您有超过24小时未读的消息，我们会发送提醒。您可以随时在设置中更改此选项。"
+    }
+  },
   "recruitmentVotes": {
     "upvoteButtonTooltip": "为此帖点赞"
   },
