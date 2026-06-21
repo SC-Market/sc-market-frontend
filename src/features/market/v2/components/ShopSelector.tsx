@@ -46,10 +46,9 @@ export function ShopSelector({ value, onChange }: ShopSelectorProps) {
   const filteredShops = useMemo(() => {
     if (!shops) return []
     if (currentOrg) {
-      // Show shops owned by this org
-      return shops.filter(
-        (shop) => shop.owner_contractor_id === currentOrg.spectrum_id
-      )
+      // Show shops owned by any org (owner_contractor_id is set)
+      // /shops/mine already filters to orgs the user is a member of
+      return shops.filter((shop) => shop.owner_contractor_id)
     }
     // Show personal shops (no org owner)
     return shops.filter((shop) => shop.owner_user_id && !shop.owner_contractor_id)
