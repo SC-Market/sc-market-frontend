@@ -113,7 +113,7 @@ export function EmailSettings() {
     })) || []
 
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={2} sx={{ pt: 1 }}>
       {error && (
         <Grid item xs={12}>
           <Alert severity="error" sx={{ mb: 2 }} onClose={() => setError(null)}>
@@ -137,22 +137,24 @@ export function EmailSettings() {
       {/* Email Status Section */}
       <Grid item xs={12}>
         <FlatSection title={t("settings.email.emailAddress")}>
-          <EmailStatus
-            email={userEmail}
-            emailVerified={emailVerified}
-            isLoading={preferencesLoading}
-            isError={preferencesError}
-            resendCooldown={resendCooldown}
-            onAddEmail={() => setAddEmailDialogOpen(true)}
-            onEditEmail={() => {
-              setNewEmail(userEmail || "")
-              setEditEmailDialogOpen(true)
-            }}
-            onDeleteEmail={() => setDeleteEmailDialogOpen(true)}
-            onRequestVerification={async () => {
-              await handleRequestVerification()
-            }}
-          />
+          <Grid item xs={12}>
+            <EmailStatus
+              email={userEmail}
+              emailVerified={emailVerified}
+              isLoading={preferencesLoading}
+              isError={preferencesError}
+              resendCooldown={resendCooldown}
+              onAddEmail={() => setAddEmailDialogOpen(true)}
+              onEditEmail={() => {
+                setNewEmail(userEmail || "")
+                setEditEmailDialogOpen(true)
+              }}
+              onDeleteEmail={() => setDeleteEmailDialogOpen(true)}
+              onRequestVerification={async () => {
+                await handleRequestVerification()
+              }}
+            />
+          </Grid>
         </FlatSection>
       </Grid>
 
