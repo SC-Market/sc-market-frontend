@@ -232,6 +232,19 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["Shops"],
       }),
+      getShopReviews: build.query<
+        GetShopReviewsApiResponse,
+        GetShopReviewsApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/shops/${queryArg.shopId}/reviews`,
+          params: {
+            page: queryArg.page,
+            page_size: queryArg.pageSize,
+          },
+        }),
+        providesTags: ["Shops"],
+      }),
       transferShop: build.mutation<TransferShopApiResponse, TransferShopApiArg>(
         {
           query: (queryArg) => ({
@@ -417,6 +430,7 @@ const injectedRtkApi = api
               sort_by: queryArg.sortBy,
               sort_order: queryArg.sortOrder,
               spectrum_id: queryArg.spectrumId,
+              shop_id: queryArg.shopId,
             },
           }),
           providesTags: ["Listings V2"],
@@ -1730,6 +1744,17 @@ export type ArchiveShopApiResponse = /** status 200 Ok */ {
 export type ArchiveShopApiArg = {
   shopId: string
 }
+export type GetShopReviewsApiResponse = /** status 200 Ok */ {
+  page_size: number
+  page: number
+  total: number
+  reviews: ShopReviewResponse[]
+}
+export type GetShopReviewsApiArg = {
+  shopId: string
+  page?: number
+  pageSize?: number
+}
 export type TransferShopApiResponse = /** status 200 Ok */ ShopResponse
 export type TransferShopApiArg = {
   shopId: string
@@ -1870,6 +1895,7 @@ export type GetMyListingsApiArg = {
   /** Sort order (default: desc) */
   sortOrder?: "asc" | "desc"
   spectrumId?: string
+  shopId?: string
 }
 export type GetInventorySummaryApiResponse =
   /** status 200 Complete listing detail with variant breakdown */ InventorySummaryResponse
@@ -3115,6 +3141,18 @@ export type UpdateShopRequest = {
   default_pickup_method?: string | null
   tags?: string[]
   accepts_custom_orders?: boolean
+}
+export type ShopReviewResponse = {
+  review_id: string
+  rating: number
+  comment: string
+  created_at: string
+  author: {
+    avatar: string | null
+    display_name: string
+    username: string
+    user_id: string
+  }
 }
 export type TransferShopRequest = {
   target_contractor_id: string
@@ -5907,6 +5945,7 @@ export const {
   useGetShopQuery,
   useUpdateShopMutation,
   useArchiveShopMutation,
+  useGetShopReviewsQuery,
   useTransferShopMutation,
   useCreateRequisitionMutation,
   useGetRequisitionsQuery,

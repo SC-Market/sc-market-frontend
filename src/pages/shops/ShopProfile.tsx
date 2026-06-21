@@ -5,13 +5,17 @@ import {
   Chip,
   Container,
   Grid,
+  LinearProgress,
+  linearProgressClasses,
   Rating,
   Skeleton,
   Stack,
+  TableCell,
+  TableRow,
   Tabs,
   Typography,
 } from "@mui/material"
-import { useTheme } from "@mui/material/styles"
+import { styled, useTheme } from "@mui/material/styles"
 import {
   DesignServicesRounded,
   InfoRounded,
@@ -20,6 +24,7 @@ import {
 } from "@mui/icons-material"
 import {
   useGetShopQuery,
+  useGetShopReviewsQuery,
   useSearchListingsQuery,
   ShopPublicResponse,
 } from "../../store/api/v2/market"
@@ -36,6 +41,11 @@ import { ShareButton } from "../../components/buttons/ShareButton"
 import { useShopTab } from "../../features/shops/hooks/useShopTab"
 import { ServiceListings } from "../../features/services/components/ServiceListings"
 import { MarkdownRender } from "../../components/markdown/Markdown"
+import { HeadCell, PaginatedTable } from "../../components/table/PaginatedTable"
+import { UnderlineLink } from "../../components/typography/UnderlineLink"
+import { amber } from "@mui/material/colors"
+import { useCallback, useMemo, MouseEventHandler } from "react"
+import { EmptyReviews } from "../../components/empty-states"
 
 export function ShopProfile() {
   const { slug } = useParams<{ slug: string }>()
@@ -87,11 +97,7 @@ export function ShopProfile() {
                   <ShopHeader shop={shop} />
                 </Grid>
                 <Grid item xs={12} md={4}>
-                  <ShopRatingSummary
-                    rating={shop.rating}
-                    ratingCount={shop.rating_count}
-                    totalSales={shop.total_sales}
-                  />
+                  <ShopRatingSummary shop={shop} />
                 </Grid>
               </Grid>
             </Grid>
@@ -207,90 +213,95 @@ function ShopHeader(props: { shop: ShopPublicResponse }) {
   )
 }
 
-function ShopRatingSummary(props: {
-  rating: number | null
-  ratingCount: number
-  totalSales?: number | null
-}) {
-  const theme = useTheme<ExtendedTheme>()
+const BorderLinearProgress = styled(LinearProgress)(({ theme }) => {
+  const extendedTheme = theme as ExtendedTheme
+  return {
+    height: 10,
+    borderRadius: theme.spacing(extendedTheme.borderRadius.input),
+    width: "95%",
+    display: "inline",
+    flexGrow: "1",
+    [`&.${linearProgressClasses.colorPrimary}`]: {
+      backgroundColor:
+        theme.palette.grey[theme.palette.mode === "light" ? 200 : 800],
+    },
+    [`& .${linearProgressClasses.bar}`]: {
+      borderRadius: theme.spacing(extendedTheme.borderRadius.input),
+      backgroundColor: amber[500],
+    },
+  }
+})
 
-  const salesBadge = (() => {
-    if (!props.totalSales) return null
-    if (props.totalSales >= 1000) return { label: "1000+ sales", color: "#FFD700" }
-    if (props.totalSales >= 500) return { label: "500+ sales", color: "#FFD700" }
-    if (props.totalSales >= 100) return { label: "100+ sales", color: "#C9A84C" }
-    return null
-  })()
+function ShopRatingSummary(props: { shop: ShopPublicResponse }) {
+  const { shop } = props
+  const theme = useTheme<ExtendedTheme>()
+  const { data: reviewsData } = useGetShopReviewsQuery({
+    shopId: shop.shop_id,
+    pageSize: 200,
+  })
+
+  const counts = useMemo(() => {
+    const reviews = reviewsData?.reviews || []
+    const vals = [0, 0, 0, 0, 0]
+    reviews.forEach((item) => {
+      if (+item.rating) {
+        vals[5 - Math.ceil(+item.rating)] += 1
+      }
+    })
+    const max = vals.reduce((x, y) => (x > y ? x : y), 0)
+    return vals.map((v) => (max > 0 ? (v / max) * 100 : 0))
+  }, [reviewsData])
 
   return (
-    <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "flex-end",
-        gap: 3,
-      }}
-    >
-      {/* Rating bar area (left side) */}
-      <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
-        {[5, 4, 3, 2, 1].map((star) => (
-          <Box
-            key={star}
-            sx={{ display: "flex", alignItems: "center", gap: 1 }}
-          >
-            <Typography
-              variant="caption"
-              color="text.secondary"
-              sx={{ width: 12, textAlign: "right" }}
-            >
-              {star}
-            </Typography>
-            <Box
-              sx={{
-                width: 80,
-                height: 6,
-                borderRadius: 1,
-                bgcolor: "action.hover",
-                overflow: "hidden",
-              }}
-            >
-              <Box
-                sx={{
-                  width:
-                    props.rating && Math.round(props.rating) === star
-                      ? "100%"
-                      : "0%",
-                  height: "100%",
-                  bgcolor: "warning.main",
-                  borderRadius: 1,
-                }}
-              />
-            </Box>
+    <Box display="flex" sx={{ maxWidth: 800, width: "100%", marginTop: 2 }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          flexGrow: "3",
+          "& > *": {
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+          },
+        }}
+      >
+        {counts.map((d, i) => (
+          <Box key={i}>
+            {5 - i}&nbsp;&nbsp;
+            <BorderLinearProgress variant="determinate" value={d || 0} />
           </Box>
         ))}
       </Box>
-
-      {/* Number + stars + badges (right side) */}
-      <Box sx={{ textAlign: "right" }}>
-        <Typography variant="h3" fontWeight={700}>
-          {props.rating ? props.rating.toFixed(1) : "—"}
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexDirection: "column",
+          minWidth: 100,
+        }}
+      >
+        <Typography variant="h3">
+          {shop.rating != null ? shop.rating.toFixed(1) : "—"}
         </Typography>
-        <Rating value={props.rating || 0} precision={0.5} readOnly />
-        <Typography variant="body2" color="text.secondary">
-          {props.ratingCount} review{props.ratingCount !== 1 ? "s" : ""}
+        <Rating
+          readOnly
+          precision={0.5}
+          value={shop.rating || 0}
+          icon={<StarRounded fontSize="inherit" />}
+          emptyIcon={
+            <StarRounded
+              style={{ color: theme.palette.text.primary }}
+              fontSize="inherit"
+            />
+          }
+        />
+        <Typography variant="body1" color="text.primary">
+          {shop.rating_count} review{shop.rating_count !== 1 ? "s" : ""}
         </Typography>
-        {salesBadge && (
-          <Chip
-            label={salesBadge.label}
-            size="small"
-            sx={{
-              mt: 1,
-              fontWeight: 700,
-              bgcolor: salesBadge.color,
-              color: theme.palette.getContrastText(salesBadge.color),
-            }}
-          />
-        )}
       </Box>
     </Box>
   )
@@ -409,31 +420,172 @@ function ShopServicesTab(props: { shop: ShopPublicResponse }) {
   )
 }
 
+interface ShopReviewRow {
+  review_id: string
+  rating: number
+  comment: string
+  created_at: string
+  author: {
+    avatar: string | null
+    display_name: string
+    username: string
+    user_id: string
+  }
+  timestamp: number
+}
+
+const shopReviewHeadCells: readonly HeadCell<ShopReviewRow>[] = [
+  {
+    id: "rating",
+    numeric: false,
+    disablePadding: false,
+    label: "Rating",
+  },
+  {
+    id: "comment",
+    numeric: true,
+    disablePadding: false,
+    label: "Review",
+  },
+]
+
+function ShopReviewRow(props: {
+  row: ShopReviewRow
+  index: number
+  onClick?: MouseEventHandler
+  isItemSelected: boolean
+  labelId: string
+}) {
+  const { row, onClick, isItemSelected, labelId } = props
+  const theme = useTheme<ExtendedTheme>()
+
+  const formatDate = useCallback(
+    (date: number) =>
+      Intl.DateTimeFormat("default", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }).format(new Date(date)),
+    [],
+  )
+
+  return (
+    <TableRow
+      hover
+      onClick={onClick}
+      role="checkbox"
+      aria-checked={isItemSelected}
+      tabIndex={-1}
+      key={row.author.username}
+      selected={isItemSelected}
+    >
+      <TableCell component="th" id={labelId} scope="row">
+        <Grid container spacing={theme.layoutSpacing.layout}>
+          <Grid item>
+            <Link to={`/user/${row.author.username}`}>
+              <Avatar src={row.author.avatar || undefined} />
+            </Link>
+          </Grid>
+          <Grid item>
+            <Link to={`/user/${row.author.username}`}>
+              <UnderlineLink
+                color="text.secondary"
+                variant="subtitle1"
+                fontWeight="bold"
+              >
+                {row.author.username}
+              </UnderlineLink>
+            </Link>
+            <Typography variant="subtitle2">
+              {row.author.display_name}
+            </Typography>
+          </Grid>
+        </Grid>
+        <Typography variant="subtitle1">
+          <Rating
+            readOnly
+            precision={0.5}
+            value={row.rating}
+            icon={<StarRounded fontSize="inherit" />}
+            emptyIcon={
+              <StarRounded
+                style={{ color: theme.palette.text.primary }}
+                fontSize="inherit"
+              />
+            }
+          />
+        </Typography>
+      </TableCell>
+      <TableCell align="right">
+        <Box
+          sx={{
+            height: "100%",
+            WebkitBoxOrient: "vertical",
+            display: "-webkit-box",
+            WebkitLineClamp: "3",
+            lineClamp: "3",
+            textOverflow: "ellipsis",
+            overflow: "hidden",
+          }}
+        >
+          <Typography variant="subtitle2" color="text.secondary">
+            {formatDate(row.timestamp)}
+          </Typography>
+          <Typography variant="subtitle1">{row.comment}</Typography>
+        </Box>
+      </TableCell>
+    </TableRow>
+  )
+}
+
 function ShopReviewsTab(props: { shop: ShopPublicResponse }) {
   const { shop } = props
-  return (
-    <Box sx={{ maxWidth: 600 }}>
-      <Stack spacing={2} alignItems="center" sx={{ py: 4 }}>
-        {shop.rating != null && (
-          <>
-            <Typography variant="h2" fontWeight={700}>
-              {shop.rating.toFixed(1)}
-            </Typography>
-            <Rating value={shop.rating} precision={0.5} readOnly size="large" />
-            <Typography variant="body1" color="text.secondary">
-              {shop.rating_count} review{shop.rating_count !== 1 ? "s" : ""}
-            </Typography>
-          </>
-        )}
-        <Typography
-          variant="body2"
-          color="text.secondary"
-          sx={{ mt: 2, textAlign: "center" }}
-        >
-          Reviews will appear here as orders are completed
+  const { data: reviewsData, isLoading } = useGetShopReviewsQuery({
+    shopId: shop.shop_id,
+    pageSize: 200,
+  })
+
+  const rows: ShopReviewRow[] = useMemo(() => {
+    if (!reviewsData?.reviews) return []
+    return reviewsData.reviews.map((r) => ({
+      ...r,
+      timestamp: new Date(r.created_at).getTime(),
+    }))
+  }, [reviewsData])
+
+  if (isLoading) {
+    return (
+      <Box sx={{ p: 3 }}>
+        <Typography variant="body2" color="text.secondary">
+          Loading...
         </Typography>
-      </Stack>
-    </Box>
+      </Box>
+    )
+  }
+
+  if (!rows.length) {
+    return (
+      <Grid container>
+        <Grid item xs={12}>
+          <EmptyReviews
+            title="No reviews yet"
+            description="Reviews will appear here as orders are completed"
+          />
+        </Grid>
+      </Grid>
+    )
+  }
+
+  return (
+    <PaginatedTable<ShopReviewRow>
+      rows={rows}
+      initialSort="timestamp"
+      initialSortDirection="desc"
+      generateRow={ShopReviewRow}
+      keyAttr="review_id"
+      headCells={shopReviewHeadCells}
+      disableSelect
+    />
   )
 }
 

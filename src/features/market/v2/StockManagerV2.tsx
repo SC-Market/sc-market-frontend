@@ -821,10 +821,6 @@ export function StockManagerV2() {
 
   const { data: myShops } = useGetMyShopsQuery()
 
-  // Derive spectrumId from the selected shop for filtering
-  const selectedShop = myShops?.find((s) => s.shop_id === selectedShopId)
-  const filterSpectrumId = selectedShop?.owner_contractor_id ?? currentOrg?.spectrum_id
-
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>({
     type: "include",
     ids: new Set(),
@@ -836,7 +832,8 @@ export function StockManagerV2() {
     pageSize,
     sortBy: "updated_at",
     sortOrder: "desc",
-    spectrumId: filterSpectrumId,
+    shopId: selectedShopId || undefined,
+    spectrumId: !selectedShopId ? currentOrg?.spectrum_id : undefined,
   })
 
   const listings = data?.listings ?? []
@@ -895,16 +892,14 @@ export function StockManagerV2() {
               </Box>
             </Grid>
 
-            {/* Shop selector for multi-shop users */}
-            {myShops && myShops.length > 1 && (
-              <Grid item xs={12} md={4}>
-                <ShopSelector value={selectedShopId} onChange={setSelectedShopId} />
-              </Grid>
-            )}
-
             {/* Desktop sidebar */}
             {!isMobile && (
               <Grid item xs={12} md={3}>
+                {myShops && myShops.length > 1 && (
+                  <Box sx={{ mb: 2 }}>
+                    <ShopSelector value={selectedShopId} onChange={setSelectedShopId} />
+                  </Box>
+                )}
                 <Paper><MarketSearchAreaV2 manageMode /></Paper>
               </Grid>
             )}
