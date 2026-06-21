@@ -79,16 +79,20 @@ export function OnboardingPage() {
         icon: <Discord />,
       })
     }
-    s.push({
-      key: "availability",
-      label: t("onboarding.steps.availability", "Availability"),
-      icon: <ScheduleIcon />,
-    })
-    s.push({
-      key: "email",
-      label: t("onboarding.steps.email", "Email"),
-      icon: <EmailIcon />,
-    })
+    if (!status?.steps.hasAvailability) {
+      s.push({
+        key: "availability",
+        label: t("onboarding.steps.availability", "Availability"),
+        icon: <ScheduleIcon />,
+      })
+    }
+    if (!status?.steps.hasEmail) {
+      s.push({
+        key: "email",
+        label: t("onboarding.steps.email", "Email"),
+        icon: <EmailIcon />,
+      })
+    }
     s.push({
       key: "notifications",
       label: t("onboarding.steps.notifications", "Notifications"),
