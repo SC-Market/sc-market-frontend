@@ -94,6 +94,11 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
         icon: <DesignServicesRounded />,
       },
       {
+        to: "/shops",
+        text: "sidebar.browse_shops",
+        icon: <StoreRounded />,
+      },
+      {
         to: "/contracts",
         text: "sidebar.open_contracts", tab_key: "contracts",
         icon: <AssignmentIcon />,

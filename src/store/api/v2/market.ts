@@ -28,7 +28,6 @@ export const addTagTypes = [
   "Availability",
   "Auctions V2",
   "Analytics V2",
-  "Admin Migration",
   "Admin Feature Flags",
   "Admin",
   "Accounts V2",
@@ -176,6 +175,19 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["Shops"],
       }),
+      browseShops: build.query<BrowseShopsApiResponse, BrowseShopsApiArg>({
+        query: (queryArg) => ({
+          url: `/shops`,
+          params: {
+            search: queryArg.search,
+            page: queryArg.page,
+            page_size: queryArg.pageSize,
+            sort_by: queryArg.sortBy,
+            sort_order: queryArg.sortOrder,
+          },
+        }),
+        providesTags: ["Shops"],
+      }),
       quickCreateShop: build.mutation<
         QuickCreateShopApiResponse,
         QuickCreateShopApiArg
@@ -186,6 +198,19 @@ const injectedRtkApi = api
           body: queryArg.quickCreateShopRequest,
         }),
         invalidatesTags: ["Shops"],
+      }),
+      getShopsByOwner: build.query<
+        GetShopsByOwnerApiResponse,
+        GetShopsByOwnerApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/shops/by-owner`,
+          params: {
+            username: queryArg.username,
+            spectrum_id: queryArg.spectrumId,
+          },
+        }),
+        providesTags: ["Shops"],
       }),
       getShop: build.query<GetShopApiResponse, GetShopApiArg>({
         query: (queryArg) => ({ url: `/shops/${queryArg.slug}` }),
@@ -1446,39 +1471,6 @@ const injectedRtkApi = api
         }),
         providesTags: ["Analytics V2"],
       }),
-      getMigrationStatus: build.query<
-        GetMigrationStatusApiResponse,
-        GetMigrationStatusApiArg
-      >({
-        query: () => ({ url: `/admin/migration/status` }),
-        providesTags: ["Admin Migration"],
-      }),
-      listMigrationJobs: build.query<
-        ListMigrationJobsApiResponse,
-        ListMigrationJobsApiArg
-      >({
-        query: () => ({ url: `/admin/migration/jobs` }),
-        providesTags: ["Admin Migration"],
-      }),
-      getMigrationJob: build.query<
-        GetMigrationJobApiResponse,
-        GetMigrationJobApiArg
-      >({
-        query: (queryArg) => ({
-          url: `/admin/migration/jobs/${queryArg.jobId}`,
-        }),
-        providesTags: ["Admin Migration"],
-      }),
-      runMigration: build.mutation<RunMigrationApiResponse, RunMigrationApiArg>(
-        {
-          query: (queryArg) => ({
-            url: `/admin/migration/run`,
-            method: "POST",
-            body: queryArg.migrationRunRequest,
-          }),
-          invalidatesTags: ["Admin Migration"],
-        },
-      ),
       getConfig: build.query<GetConfigApiResponse, GetConfigApiArg>({
         query: () => ({ url: `/admin/feature-flags/config` }),
         providesTags: ["Admin Feature Flags"],
@@ -1698,9 +1690,28 @@ export type CreateShopApiResponse = /** status 200 Ok */ ShopResponse
 export type CreateShopApiArg = {
   createShopRequest: CreateShopRequest
 }
+export type BrowseShopsApiResponse = /** status 200 Ok */ {
+  page_size: number
+  page: number
+  total: number
+  shops: ShopPublicResponse[]
+}
+export type BrowseShopsApiArg = {
+  search?: string
+  page?: number
+  pageSize?: number
+  sortBy?: "name" | "rating" | "created_at"
+  sortOrder?: "asc" | "desc"
+}
 export type QuickCreateShopApiResponse = /** status 200 Ok */ ShopResponse
 export type QuickCreateShopApiArg = {
   quickCreateShopRequest: QuickCreateShopRequest
+}
+export type GetShopsByOwnerApiResponse =
+  /** status 200 Ok */ ShopPublicResponse[]
+export type GetShopsByOwnerApiArg = {
+  username?: string
+  spectrumId?: string
 }
 export type GetShopApiResponse = /** status 200 Ok */ ShopPublicResponse
 export type GetShopApiArg = {
@@ -2731,25 +2742,6 @@ export type GetSellerStatsApiArg = {
   /** Shop ID to get stats for */
   shopId?: string
 }
-export type GetMigrationStatusApiResponse =
-  /** status 200 Ok */ MigrationStatusResponse
-export type GetMigrationStatusApiArg = void
-export type ListMigrationJobsApiResponse = /** status 200 Ok */ {
-  jobs: MigrationJob[]
-}
-export type ListMigrationJobsApiArg = void
-export type GetMigrationJobApiResponse = /** status 200 Ok */ {
-  job: MigrationJob | null
-}
-export type GetMigrationJobApiArg = {
-  jobId: string
-}
-export type RunMigrationApiResponse = /** status 200 Ok */ {
-  job_id: string
-}
-export type RunMigrationApiArg = {
-  migrationRunRequest: MigrationRunRequest
-}
 export type GetConfigApiResponse = /** status 200 Ok */ FeatureFlagConfig
 export type GetConfigApiArg = void
 export type UpdateConfigApiResponse = /** status 200 Ok */ FeatureFlagConfig
@@ -3073,11 +3065,6 @@ export type CreateShopRequest = {
   /** If set, shop is owned by this org. User must have manage_market in the org. */
   contractor_id?: string
 }
-export type QuickCreateShopRequest = {
-  owner_type: "user" | "contractor"
-  /** Required when owner_type is "contractor" */
-  contractor_id?: string
-}
 export type ShopPublicResponse = {
   shop_id: string
   slug: string
@@ -3090,6 +3077,11 @@ export type ShopPublicResponse = {
   created_at: string
   rating: number | null
   rating_count: number
+}
+export type QuickCreateShopRequest = {
+  owner_type: "user" | "contractor"
+  /** Required when owner_type is "contractor" */
+  contractor_id?: string
 }
 export type UpdateShopRequest = {
   name?: string
@@ -5766,73 +5758,6 @@ export type GetSellerStatsResponse = {
   /** Price premium percentages by quality tier */
   price_premiums: QualityTierPremium[]
 }
-export type MigrationStatusResponse = {
-  v1_counts: {
-    total: number
-    multiple: number
-    aggregate: number
-    unique: number
-  }
-  v2_counts: {
-    photos: number
-    stock_lots_mapped: number
-    mapped: number
-    listings: number
-  }
-  price_history: {
-    v2: number
-    v1: number
-  }
-  auctions: {
-    v2: number
-    v1: number
-  }
-  order_items: {
-    v2: number
-    v1: number
-  }
-  offer_items: {
-    v2: number
-    v1: number
-  }
-  buy_orders: {
-    v2: number
-    v1: number
-  }
-}
-export type MigrationSummary = {
-  total_attempted: number
-  successful: number
-  failed: number
-  skipped: number
-  errors: {
-    error: string
-    v1_listing_id: string
-  }[]
-}
-export type MigrationResult = {
-  dry_run: boolean
-  listings: MigrationSummary
-  price_history: MigrationSummary
-  auctions: MigrationSummary
-  order_items: MigrationSummary
-  offer_items: MigrationSummary
-  buy_orders: MigrationSummary
-  duration_seconds: number
-}
-export type MigrationJob = {
-  id: string
-  status: "running" | "rolling_back" | "completed" | "failed"
-  dry_run: boolean
-  started_at: string
-  completed_at: string | null
-  progress: string | null
-  result: MigrationResult | null
-  error: string | null
-}
-export type MigrationRunRequest = {
-  dry_run: boolean
-}
 export type FeatureFlagConfig = {
   flag_name: string
   default_version: MarketVersion
@@ -5947,7 +5872,9 @@ export const {
   useBulkUpdateStockLotsMutation,
   useGetMyShopsQuery,
   useCreateShopMutation,
+  useBrowseShopsQuery,
   useQuickCreateShopMutation,
+  useGetShopsByOwnerQuery,
   useGetShopQuery,
   useUpdateShopMutation,
   useArchiveShopMutation,
@@ -6066,10 +5993,6 @@ export const {
   useGetPriceHistoryQuery,
   useGetQualityDistributionQuery,
   useGetSellerStatsQuery,
-  useGetMigrationStatusQuery,
-  useListMigrationJobsQuery,
-  useGetMigrationJobQuery,
-  useRunMigrationMutation,
   useGetConfigQuery,
   useUpdateConfigMutation,
   useGetStatsQuery,
