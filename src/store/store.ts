@@ -29,14 +29,21 @@ export const store = configureStore({
 setupListeners(store.dispatch)
 
 // Seed profile cache from localStorage to prevent logged-out flash,
-// then always refetch to get fresh data (stale-while-revalidate)
+// then immediately fetch fresh data (stale-while-revalidate).
+// upsertQueryData provides instant data so LoggedInRoute doesn't flash;
+// initiate with forceRefetch overwrites it once the network responds.
 const cachedProfile = loadProfileCache()
 if (cachedProfile) {
   store.dispatch(
     userApi.util.upsertQueryData("profileGetUserProfile", undefined, cachedProfile),
   )
 }
-store.dispatch(userApi.endpoints.profileGetUserProfile.initiate(undefined, { forceRefetch: true }))
+store.dispatch(
+  userApi.endpoints.profileGetUserProfile.initiate(undefined, {
+    subscribe: false,
+    forceRefetch: true,
+  }),
+)
 
 export type AppDispatch = typeof store.dispatch
 export type RootState = ReturnType<typeof store.getState>
