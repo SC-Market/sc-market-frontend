@@ -78,7 +78,7 @@ export const userApi = serviceApi.injectEndpoints({
           saveProfileCache(data)
         } catch (err: unknown) {
           const status = (err as { error?: { status?: number } })?.error?.status
-          if (status === 401 || status === 403) {
+          if (status && status >= 400 && status < 500) {
             clearProfileCache()
           }
         }
