@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   Container,
+  Divider,
   FormControlLabel,
   Paper,
   Stack,
@@ -25,12 +26,18 @@ import {
   useCompleteOnboardingMutation,
 } from "../../store/api/v2/market"
 import { useProfileUpdateAvailabilityMutation } from "../../features/profile/api/profileApi"
-import { useAddEmailMutation, useUpdateEmailPreferencesMutation } from "../../features/email"
+import {
+  useAddEmailMutation,
+  useUpdateEmailPreferencesMutation,
+  useGetNotificationTypesQuery,
+} from "../../features/email"
+import { usePushSubscription } from "../../features/push-notifications"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import ScheduleIcon from "@mui/icons-material/Schedule"
 import EmailIcon from "@mui/icons-material/Email"
 import NotificationsIcon from "@mui/icons-material/Notifications"
+import GroupsIcon from "@mui/icons-material/Groups"
 
 const AvailabilitySelector = lazy(() =>
   import("../../components/time/AvailabilitySelector").then((module) => ({
@@ -49,6 +56,17 @@ interface OnboardingStep {
   icon: React.ReactNode
 }
 
+const EMAIL_NOTIFICATION_CATEGORIES = [
+  { action_type_id: 82, label: "Unread message reminders", defaultEnabled: true },
+  { action_type_id: 81, label: "Order messages", defaultEnabled: true },
+  { action_type_id: 18, label: "Offer messages", defaultEnabled: true },
+  { action_type_id: 19, label: "New offers received", defaultEnabled: true },
+  { action_type_id: 10, label: "Market item bids", defaultEnabled: true },
+  { action_type_id: 11, label: "Market item offers", defaultEnabled: true },
+  { action_type_id: 9, label: "Organization invites", defaultEnabled: true },
+  { action_type_id: 8, label: "Order comments", defaultEnabled: false },
+]
+
 export function OnboardingPage() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
@@ -64,11 +82,23 @@ export function OnboardingPage() {
   const [addEmail, { isLoading: addingEmail }] = useAddEmailMutation()
   const [updateEmailPreferences] = useUpdateEmailPreferencesMutation()
 
+  const {
+    isSupported: pushSupported,
+    isPermissionGranted: pushGranted,
+    isConfigured: pushConfigured,
+    handleSubscribe: handlePushSubscribe,
+    isSubscribing: pushSubscribing,
+  } = usePushSubscription()
 
   const [activeStep, setActiveStep] = useState(0)
   const [emailInput, setEmailInput] = useState("")
   const [emailSent, setEmailSent] = useState(false)
-  const [dmReminders, setDmReminders] = useState(true)
+  const [emailPrefs, setEmailPrefs] = useState<Record<number, boolean>>(() =>
+    Object.fromEntries(
+      EMAIL_NOTIFICATION_CATEGORIES.map((c) => [c.action_type_id, c.defaultEnabled]),
+    ),
+  )
+  const [pushEnabled, setPushEnabled] = useState(true)
 
   const steps = useMemo<OnboardingStep[]>(() => {
     const s: OnboardingStep[] = []
@@ -94,6 +124,11 @@ export function OnboardingPage() {
       })
     }
     s.push({
+      key: "org",
+      label: t("onboarding.steps.org", "Organization"),
+      icon: <GroupsIcon />,
+    })
+    s.push({
       key: "notifications",
       label: t("onboarding.steps.notifications", "Notifications"),
       icon: <NotificationsIcon />,
@@ -116,17 +151,27 @@ export function OnboardingPage() {
 
   const handleComplete = useCallback(async () => {
     try {
-      await updateEmailPreferences({
-        preferences: [
-          { action_type_id: 82, enabled: dmReminders, frequency: "immediate" },
-        ],
-      }).unwrap()
+      const prefs = Object.entries(emailPrefs).map(([id, enabled]) => ({
+        action_type_id: Number(id),
+        enabled,
+        frequency: "immediate" as const,
+      }))
+      await updateEmailPreferences({ preferences: prefs }).unwrap()
+
+      if (pushEnabled && pushSupported && pushConfigured && !pushGranted) {
+        await handlePushSubscribe()
+      }
+
       await completeOnboarding().unwrap()
       navigate("/dashboard")
     } catch {
       issueAlert({ severity: "error", message: "Failed to complete setup" })
     }
-  }, [completeOnboarding, updateEmailPreferences, dmReminders, navigate, issueAlert])
+  }, [
+    completeOnboarding, updateEmailPreferences, emailPrefs,
+    pushEnabled, pushSupported, pushConfigured, pushGranted,
+    handlePushSubscribe, navigate, issueAlert,
+  ])
 
   const handleLinkDiscord = useCallback(() => {
     window.location.href = `${BACKEND_URL}/auth/discord?path=${encodeURIComponent("/onboarding")}&action=link&origin=${encodeURIComponent(window.location.origin)}`
@@ -373,6 +418,28 @@ export function OnboardingPage() {
             </StepContent>
           )}
 
+          {currentStepKey === "org" && (
+            <StepContent
+              title={t("onboarding.org.title", "Register an organization")}
+              description={t(
+                "onboarding.org.description",
+                "If you run a Star Citizen org, you can register it to manage members, listings, and orders as a group.",
+              )}
+            >
+              <Stack direction="row" spacing={2} sx={{ mt: 3 }}>
+                <Button
+                  variant="contained"
+                  onClick={() => navigate("/org/register")}
+                >
+                  {t("onboarding.org.register", "Register Organization")}
+                </Button>
+                <Button variant="text" onClick={handleNext}>
+                  {t("onboarding.skip", "Skip")}
+                </Button>
+              </Stack>
+            </StepContent>
+          )}
+
           {currentStepKey === "notifications" && (
             <StepContent
               title={t(
@@ -381,40 +448,74 @@ export function OnboardingPage() {
               )}
               description={t(
                 "onboarding.notifications.description",
-                "Choose how you'd like to be reminded about unread messages.",
+                "Choose what you'd like to be notified about. You can change these anytime in Settings.",
               )}
             >
               <Box sx={{ mt: 3 }}>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      checked={dmReminders}
-                      onChange={(e) => setDmReminders(e.target.checked)}
+                {pushSupported && pushConfigured && (
+                  <>
+                    <FormControlLabel
+                      control={
+                        <Switch
+                          checked={pushEnabled}
+                          onChange={(e) => setPushEnabled(e.target.checked)}
+                        />
+                      }
+                      label={
+                        <Box>
+                          <Typography variant="body1">
+                            {t(
+                              "onboarding.notifications.pushEnable",
+                              "Enable push notifications",
+                            )}
+                          </Typography>
+                          <Typography variant="body2" color="text.secondary">
+                            {t(
+                              "onboarding.notifications.pushHelp",
+                              "Get instant alerts on this device for new messages, orders, and offers.",
+                            )}
+                          </Typography>
+                        </Box>
+                      }
+                      sx={{ alignItems: "flex-start", ml: 0, mb: 2 }}
                     />
-                  }
-                  label={
-                    <Box>
-                      <Typography variant="body1">
-                        {t(
-                          "onboarding.notifications.dmReminders",
-                          "Email me about unread messages",
-                        )}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        {t(
-                          "onboarding.notifications.dmRemindersHelp",
-                          "We'll send a reminder if you have messages waiting for more than 24 hours. You can change this anytime in Settings.",
-                        )}
-                      </Typography>
-                    </Box>
-                  }
-                  sx={{ alignItems: "flex-start", ml: 0 }}
-                />
+                    <Divider sx={{ my: 2 }} />
+                  </>
+                )}
+
+                <Typography variant="subtitle2" sx={{ mb: 1.5 }}>
+                  {t("onboarding.notifications.emailPrefsTitle", "Email notifications")}
+                </Typography>
+                <Stack spacing={0.5}>
+                  {EMAIL_NOTIFICATION_CATEGORIES.map((category) => (
+                    <FormControlLabel
+                      key={category.action_type_id}
+                      control={
+                        <Switch
+                          size="small"
+                          checked={emailPrefs[category.action_type_id] ?? category.defaultEnabled}
+                          onChange={(e) =>
+                            setEmailPrefs((prev) => ({
+                              ...prev,
+                              [category.action_type_id]: e.target.checked,
+                            }))
+                          }
+                        />
+                      }
+                      label={
+                        <Typography variant="body2">
+                          {category.label}
+                        </Typography>
+                      }
+                      sx={{ ml: 0 }}
+                    />
+                  ))}
+                </Stack>
               </Box>
               <Stack direction="row" spacing={2} sx={{ mt: 4 }}>
                 <LoadingButton
                   variant="contained"
-                  loading={completing}
+                  loading={completing || pushSubscribing}
                   onClick={handleComplete}
                 >
                   {t("onboarding.complete", "Complete Setup")}
