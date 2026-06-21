@@ -3331,12 +3331,11 @@ export type GetOrderDetailResponse = {
     username: string
     user_id: string
   }
-  /** Seller information */
+  /** Seller shop information */
   seller: {
-    avatar: string | null
-    display_name: string
-    username: string
-    user_id: string
+    slug: string
+    name: string
+    shop_id: string
   }
   /** Total price in aUEC (atomic units) */
   total_price: number

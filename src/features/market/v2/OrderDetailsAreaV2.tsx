@@ -196,7 +196,7 @@ export function OrderDetailsAreaV2(props: OrderDetailsAreaV2Props) {
                 <TableCell align="right">
                   <Stack direction="row" justifyContent={"right"}>
                     <Typography variant="body1">
-                      {orderDetail.seller.display_name || orderDetail.seller.username}
+                      <a href={`/shops/${orderDetail.seller.slug}`}>{orderDetail.seller.name}</a>
                     </Typography>
                   </Stack>
                 </TableCell>
