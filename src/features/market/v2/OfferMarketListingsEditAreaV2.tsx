@@ -30,9 +30,9 @@ import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import type { GetOfferSessionV2Response } from "../../../store/api/v2/market"
 import {
   useSearchListingsQuery,
-  ListingSearchResult,
   useGetListingDetailQuery,
-  VariantDetail,
+  type ListingSearchResult,
+  type VariantDetail,
 } from "../../../store/api/v2/market"
 import { QualityBadge } from "../../../components/market/v2/QualityBadge"
 import { formatCraftedSource, hasDisplayableSource } from "../../../util/variantDisplay"
@@ -63,9 +63,19 @@ export function OfferMarketListingsEditAreaV2(props: { session: GetOfferSessionV
   const { session } = props
   const [body, setBody] = useCounterOffer()
 
-  // Search listings scoped to this seller
+  // Derive shop slug: prefer the session-level field, fall back to listing detail
+  const firstListingId =
+    session.offers[0]?.market_listings_v2?.[0]?.listing_id ??
+    session.offers[0]?.market_listings?.[0]?.listing_id
+  const { data: firstListingDetail } = useGetListingDetailQuery(
+    { id: firstListingId || "" },
+    { skip: !!session.shop_slug || !firstListingId },
+  )
+  const sellerShopSlug = session.shop_slug ?? firstListingDetail?.seller?.slug
+
+  // Search listings scoped to this seller's shop
   const { data: searchResults } = useSearchListingsQuery({
-    shopSlug: session.contractor?.spectrum_id ?? session.assigned_to?.username,
+    shopSlug: sellerShopSlug ?? undefined,
     quantityMin: 1,
     page: 1,
     pageSize: 50,

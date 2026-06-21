@@ -140,7 +140,9 @@ export function useCreateOrderForm(params: UseCreateOrderFormParams) {
     [contractor_id, assigned_to, updateAvailability, refetchContractorRequirement, refetchUserRequirement, issueAlert, t],
   )
 
-  const sellerName = useMemo(() => contractor_id || assigned_to || "this seller", [contractor_id, assigned_to])
+  // TODO: Resolve shop name from contractor/user once service orders are shop-linked.
+  // For now, display the org name (from currentOrg context) or username as the seller identifier.
+  const sellerName = useMemo(() => assigned_to || contractor_id || "this seller", [contractor_id, assigned_to])
 
   // Sync service from props
   useEffect(() => { setService(params.service || null) }, [params.service])
