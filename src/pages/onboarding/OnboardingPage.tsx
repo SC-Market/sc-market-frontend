@@ -3,14 +3,13 @@ import {
   Box,
   Button,
   Container,
-  Divider,
-  FormControlLabel,
   Paper,
   Stack,
   Step,
   StepLabel,
   Stepper,
-  Switch,
+  Tab,
+  Tabs,
   TextField,
   Typography,
   useMediaQuery,
@@ -26,12 +25,18 @@ import {
   useCompleteOnboardingMutation,
 } from "../../store/api/v2/market"
 import { useProfileUpdateAvailabilityMutation } from "../../features/profile/api/profileApi"
+import { useAddEmailMutation, useEmailSettings } from "../../features/email"
 import {
-  useAddEmailMutation,
-  useUpdateEmailPreferencesMutation,
-  useGetNotificationTypesQuery,
-} from "../../features/email"
-import { usePushSubscription } from "../../features/push-notifications"
+  usePushSubscription,
+  usePushSettings,
+} from "../../features/push-notifications"
+import { useGetNotificationTypesQuery } from "../../features/email"
+import { PreferenceSection } from "../../components/settings/PreferenceSection"
+import { PushNotificationSubscription } from "../../features/push-notifications"
+import { formatActionName } from "../../features/email"
+import type { EmailPreference } from "../../features/email"
+import type { PushPreference } from "../../features/push-notifications"
+import { isPushNotificationSupported } from "../../util/push-subscription"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import ScheduleIcon from "@mui/icons-material/Schedule"
@@ -56,16 +61,6 @@ interface OnboardingStep {
   icon: React.ReactNode
 }
 
-const EMAIL_NOTIFICATION_CATEGORIES = [
-  { action_type_id: 82, label: "Unread message reminders", defaultEnabled: true },
-  { action_type_id: 81, label: "Order messages", defaultEnabled: true },
-  { action_type_id: 18, label: "Offer messages", defaultEnabled: true },
-  { action_type_id: 19, label: "New offers received", defaultEnabled: true },
-  { action_type_id: 10, label: "Market item bids", defaultEnabled: true },
-  { action_type_id: 11, label: "Market item offers", defaultEnabled: true },
-  { action_type_id: 9, label: "Organization invites", defaultEnabled: true },
-  { action_type_id: 8, label: "Order comments", defaultEnabled: false },
-]
 
 export function OnboardingPage() {
   const { t } = useTranslation()
@@ -80,7 +75,23 @@ export function OnboardingPage() {
     useCompleteOnboardingMutation()
   const [updateAvailability] = useProfileUpdateAvailabilityMutation()
   const [addEmail, { isLoading: addingEmail }] = useAddEmailMutation()
-  const [updateEmailPreferences] = useUpdateEmailPreferencesMutation()
+
+  // Notification settings hooks (same as settings page)
+  const {
+    preferences: emailPreferences,
+    preferencesLoading: emailPrefsLoading,
+    handlePreferenceChange: handleEmailPrefChange,
+    handleBatchPreferenceChange: handleEmailBatchChange,
+  } = useEmailSettings()
+
+  const {
+    preferences: pushPreferences,
+    preferencesLoading: pushPrefsLoading,
+    handlePreferenceChange: handlePushPrefChange,
+    handleBatchPreferenceChange: handlePushBatchChange,
+  } = usePushSettings()
+
+  const { data: notificationTypesData } = useGetNotificationTypesQuery()
 
   const {
     isSupported: pushSupported,
@@ -93,12 +104,6 @@ export function OnboardingPage() {
   const [activeStep, setActiveStep] = useState(0)
   const [emailInput, setEmailInput] = useState("")
   const [emailSent, setEmailSent] = useState(false)
-  const [emailPrefs, setEmailPrefs] = useState<Record<number, boolean>>(() =>
-    Object.fromEntries(
-      EMAIL_NOTIFICATION_CATEGORIES.map((c) => [c.action_type_id, c.defaultEnabled]),
-    ),
-  )
-  const [pushEnabled, setPushEnabled] = useState(true)
 
   const steps = useMemo<OnboardingStep[]>(() => {
     const s: OnboardingStep[] = []
@@ -151,27 +156,12 @@ export function OnboardingPage() {
 
   const handleComplete = useCallback(async () => {
     try {
-      const prefs = Object.entries(emailPrefs).map(([id, enabled]) => ({
-        action_type_id: Number(id),
-        enabled,
-        frequency: "immediate" as const,
-      }))
-      await updateEmailPreferences({ preferences: prefs }).unwrap()
-
-      if (pushEnabled && pushSupported && pushConfigured && !pushGranted) {
-        await handlePushSubscribe()
-      }
-
       await completeOnboarding().unwrap()
       navigate("/dashboard")
     } catch {
       issueAlert({ severity: "error", message: "Failed to complete setup" })
     }
-  }, [
-    completeOnboarding, updateEmailPreferences, emailPrefs,
-    pushEnabled, pushSupported, pushConfigured, pushGranted,
-    handlePushSubscribe, navigate, issueAlert,
-  ])
+  }, [completeOnboarding, navigate, issueAlert])
 
   const handleLinkDiscord = useCallback(() => {
     window.location.href = `${BACKEND_URL}/auth/discord?path=${encodeURIComponent("/onboarding")}&action=link&origin=${encodeURIComponent(window.location.origin)}`
@@ -441,87 +431,24 @@ export function OnboardingPage() {
           )}
 
           {currentStepKey === "notifications" && (
-            <StepContent
-              title={t(
-                "onboarding.notifications.title",
-                "Notification preferences",
-              )}
-              description={t(
-                "onboarding.notifications.description",
-                "Choose what you'd like to be notified about. You can change these anytime in Settings.",
-              )}
-            >
-              <Box sx={{ mt: 3 }}>
-                {pushSupported && pushConfigured && (
-                  <>
-                    <FormControlLabel
-                      control={
-                        <Switch
-                          checked={pushEnabled}
-                          onChange={(e) => setPushEnabled(e.target.checked)}
-                        />
-                      }
-                      label={
-                        <Box>
-                          <Typography variant="body1">
-                            {t(
-                              "onboarding.notifications.pushEnable",
-                              "Enable push notifications",
-                            )}
-                          </Typography>
-                          <Typography variant="body2" color="text.secondary">
-                            {t(
-                              "onboarding.notifications.pushHelp",
-                              "Get instant alerts on this device for new messages, orders, and offers.",
-                            )}
-                          </Typography>
-                        </Box>
-                      }
-                      sx={{ alignItems: "flex-start", ml: 0, mb: 2 }}
-                    />
-                    <Divider sx={{ my: 2 }} />
-                  </>
-                )}
-
-                <Typography variant="subtitle2" sx={{ mb: 1.5 }}>
-                  {t("onboarding.notifications.emailPrefsTitle", "Email notifications")}
-                </Typography>
-                <Stack spacing={0.5}>
-                  {EMAIL_NOTIFICATION_CATEGORIES.map((category) => (
-                    <FormControlLabel
-                      key={category.action_type_id}
-                      control={
-                        <Switch
-                          size="small"
-                          checked={emailPrefs[category.action_type_id] ?? category.defaultEnabled}
-                          onChange={(e) =>
-                            setEmailPrefs((prev) => ({
-                              ...prev,
-                              [category.action_type_id]: e.target.checked,
-                            }))
-                          }
-                        />
-                      }
-                      label={
-                        <Typography variant="body2">
-                          {category.label}
-                        </Typography>
-                      }
-                      sx={{ ml: 0 }}
-                    />
-                  ))}
-                </Stack>
-              </Box>
-              <Stack direction="row" spacing={2} sx={{ mt: 4 }}>
-                <LoadingButton
-                  variant="contained"
-                  loading={completing || pushSubscribing}
-                  onClick={handleComplete}
-                >
-                  {t("onboarding.complete", "Complete Setup")}
-                </LoadingButton>
-              </Stack>
-            </StepContent>
+            <NotificationsStep
+              emailPreferences={emailPreferences}
+              emailPrefsLoading={emailPrefsLoading}
+              pushPreferences={pushPreferences}
+              pushPrefsLoading={pushPrefsLoading}
+              notificationTypesData={notificationTypesData}
+              handleEmailPrefChange={handleEmailPrefChange}
+              handleEmailBatchChange={handleEmailBatchChange}
+              handlePushPrefChange={handlePushPrefChange}
+              handlePushBatchChange={handlePushBatchChange}
+              pushSupported={pushSupported}
+              pushGranted={pushGranted}
+              pushConfigured={pushConfigured}
+              handlePushSubscribe={handlePushSubscribe}
+              pushSubscribing={pushSubscribing}
+              completing={completing}
+              onComplete={handleComplete}
+            />
           )}
         </Paper>
       </Container>
@@ -548,5 +475,152 @@ function StepContent({
       </Typography>
       {children}
     </Box>
+  )
+}
+
+function NotificationsStep({
+  emailPreferences,
+  emailPrefsLoading,
+  pushPreferences,
+  pushPrefsLoading,
+  notificationTypesData,
+  handleEmailPrefChange,
+  handleEmailBatchChange,
+  handlePushPrefChange,
+  handlePushBatchChange,
+  pushSupported,
+  pushGranted,
+  pushConfigured,
+  handlePushSubscribe,
+  pushSubscribing,
+  completing,
+  onComplete,
+}: {
+  emailPreferences: any
+  emailPrefsLoading: boolean
+  pushPreferences: any
+  pushPrefsLoading: boolean
+  notificationTypesData: { notificationTypes: Array<{ action_type_id: number; action: string; description: string | null }> } | undefined
+  handleEmailPrefChange: (pref: any, enabled: boolean, contractorId: string | null) => void
+  handleEmailBatchChange: (updates: any[], contractorId: string | null) => void
+  handlePushPrefChange: (pref: any, enabled: boolean, contractorId: string | null) => void
+  handlePushBatchChange: (updates: any[], contractorId: string | null) => void
+  pushSupported: boolean
+  pushGranted: boolean
+  pushConfigured: boolean
+  handlePushSubscribe: () => Promise<void>
+  pushSubscribing: boolean
+  completing: boolean
+  onComplete: () => void
+}) {
+  const { t } = useTranslation()
+  const showPushTab = pushSupported && pushConfigured
+  const [tab, setTab] = useState(0)
+
+  const availableNotificationTypes =
+    notificationTypesData?.notificationTypes.map((type) => ({
+      id: type.action_type_id,
+      name: formatActionName(type.action),
+      description: type.description || undefined,
+      action: type.action,
+    })) || []
+
+  return (
+    <StepContent
+      title={t("onboarding.notifications.title", "Notification preferences")}
+      description={t(
+        "onboarding.notifications.description",
+        "Choose what you'd like to be notified about. You can change these anytime in Settings.",
+      )}
+    >
+      <Box sx={{ mt: 2 }}>
+        {showPushTab ? (
+          <>
+            <Tabs
+              value={tab}
+              onChange={(_, v) => setTab(v)}
+              sx={{ mb: 2 }}
+            >
+              <Tab label={t("onboarding.notifications.emailTab", "Email")} />
+              <Tab label={t("onboarding.notifications.pushTab", "Push")} />
+            </Tabs>
+
+            {tab === 0 && (
+              <PreferenceSection
+                title={t("onboarding.notifications.emailPrefsTitle", "Email notifications")}
+                preferences={emailPreferences?.preferences?.individual || []}
+                notificationTypes={availableNotificationTypes}
+                onPreferenceChange={(pref, enabled) =>
+                  handleEmailPrefChange(pref as EmailPreference, enabled, null)
+                }
+                onBatchPreferenceChange={(updates) =>
+                  handleEmailBatchChange(updates, null)
+                }
+                type="email"
+                contractorId={null}
+                isLoading={emailPrefsLoading || !notificationTypesData}
+              />
+            )}
+
+            {tab === 1 && (
+              <Box>
+                {!pushGranted && (
+                  <Box sx={{ mb: 2 }}>
+                    <PushNotificationSubscription
+                      onSubscribe={handlePushSubscribe}
+                      isSubscribing={pushSubscribing}
+                      isPermissionGranted={pushGranted}
+                      isConfigured={pushConfigured}
+                      requiresPWAInstall={false}
+                    />
+                  </Box>
+                )}
+                {pushGranted && (
+                  <PreferenceSection
+                    title={t("onboarding.notifications.pushPrefsTitle", "Push notifications")}
+                    preferences={pushPreferences?.preferences?.individual || []}
+                    notificationTypes={availableNotificationTypes}
+                    onPreferenceChange={(pref, enabled) =>
+                      handlePushPrefChange(pref as PushPreference, enabled, null)
+                    }
+                    onBatchPreferenceChange={(updates) =>
+                      handlePushBatchChange(updates, null)
+                    }
+                    type="push"
+                    contractorId={null}
+                    isLoading={pushPrefsLoading || !notificationTypesData}
+                  />
+                )}
+              </Box>
+            )}
+          </>
+        ) : (
+          <PreferenceSection
+            title={t("onboarding.notifications.emailPrefsTitle", "Email notifications")}
+            preferences={emailPreferences?.preferences?.individual || []}
+            notificationTypes={availableNotificationTypes}
+            onPreferenceChange={(pref, enabled) =>
+              handleEmailPrefChange(pref as EmailPreference, enabled, null)
+            }
+            onBatchPreferenceChange={(updates) =>
+              handleEmailBatchChange(updates, null)
+            }
+            type="email"
+            contractorId={null}
+            isLoading={emailPrefsLoading || !notificationTypesData}
+          />
+        )}
+      </Box>
+
+      <Stack direction="row" spacing={2} sx={{ mt: 4 }}>
+        <LoadingButton
+          variant="contained"
+          loading={completing}
+          onClick={onComplete}
+        >
+          {t("onboarding.complete", "Complete Setup")}
+        </LoadingButton>
+      </Stack>
+    </StepContent>
   )
 }
