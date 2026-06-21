@@ -224,7 +224,7 @@ export function OrgManage() {
               <Typography variant="h6" gutterBottom>
                 Import from UEX
               </Typography>
-              <ImportFromUex contractorSpectrumId={spectrumId} />
+              <ImportFromUex />
             </Grid>
           </Grid>
         </TabPanel>

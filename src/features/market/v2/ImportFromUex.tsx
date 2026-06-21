@@ -21,12 +21,10 @@ import LoadingButton from "@mui/lab/LoadingButton"
 import { CloudDownloadRounded, CheckCircleRounded } from "@mui/icons-material"
 import { useImportFromUexMutation } from "../../../store/api/v2/market-overrides"
 import type { UexImportPreviewItem } from "../../../store/api/v2/market-overrides"
+import { ShopSelector } from "./components/ShopSelector"
 
-interface ImportFromUexProps {
-  contractorSpectrumId?: string
-}
-
-export function ImportFromUex({ contractorSpectrumId }: ImportFromUexProps) {
+export function ImportFromUex() {
+  const [shopId, setShopId] = useState("")
   const [username, setUsername] = useState("")
   const [preview, setPreview] = useState<UexImportPreviewItem[] | null>(null)
   const [selectedIndices, setSelectedIndices] = useState<Set<number>>(new Set())
@@ -41,7 +39,7 @@ export function ImportFromUex({ contractorSpectrumId }: ImportFromUexProps) {
     try {
       const result = await importFromUex({
         uex_username: username.trim(),
-        contractor_spectrum_id: contractorSpectrumId,
+        shop_id: shopId,
       }).unwrap()
 
       if (result.preview) {
@@ -72,7 +70,7 @@ export function ImportFromUex({ contractorSpectrumId }: ImportFromUexProps) {
     try {
       const result = await importFromUex({
         uex_username: username.trim(),
-        contractor_spectrum_id: contractorSpectrumId,
+        shop_id: shopId,
         listings: selectedListings,
         confirm: true,
       }).unwrap()
@@ -129,9 +127,13 @@ export function ImportFromUex({ contractorSpectrumId }: ImportFromUexProps) {
   return (
     <Box>
       <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-        Import your active sell listings from UEXCorp. Enter your UEX username
+        Import your active sell listings from UEXCorp. Select a shop, then enter your UEX username
         to preview what will be imported.
       </Typography>
+
+      <Box sx={{ mb: 2 }}>
+        <ShopSelector value={shopId} onChange={setShopId} />
+      </Box>
 
       <Box sx={{ display: "flex", gap: 1, mb: 3 }}>
         <TextField
@@ -140,7 +142,7 @@ export function ImportFromUex({ contractorSpectrumId }: ImportFromUexProps) {
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleFetchPreview()}
-          disabled={isLoading}
+          disabled={isLoading || !shopId}
           sx={{ flex: 1, maxWidth: 300 }}
         />
         <LoadingButton

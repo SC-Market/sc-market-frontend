@@ -15,7 +15,7 @@ export interface UexImportPreviewItem {
 
 export interface UexImportRequest {
   uex_username: string
-  contractor_spectrum_id?: string
+  shop_id: string
   listings?: Array<{
     title: string
     description: string

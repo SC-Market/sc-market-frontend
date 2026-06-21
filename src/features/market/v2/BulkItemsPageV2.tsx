@@ -67,7 +67,7 @@ function BulkSearchArea() {
             <MenuItem value="quantity">Quantity</MenuItem>
             <MenuItem value="price">Lowest Price</MenuItem>
             <MenuItem value="name">Name</MenuItem>
-            <MenuItem value="seller_count">Most Sellers</MenuItem>
+            <MenuItem value="shop_count">Most Shops</MenuItem>
           </TextField>
         </Grid>
         <Grid item xs={12}>
