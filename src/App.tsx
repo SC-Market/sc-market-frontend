@@ -331,6 +331,12 @@ const router = createBrowserRouter([
         }),
       },
       {
+        path: "/shops",
+        lazy: async () => ({
+          Component: (await import("./pages/shops/ShopDirectory")).ShopDirectory,
+        }),
+      },
+      {
         path: "/shops/:slug",
         lazy: async () => ({
           Component: (await import("./pages/shops/ShopProfile")).ShopProfile,
@@ -704,12 +710,6 @@ const router = createBrowserRouter([
                 lazy: async () => ({
                   Component: (await import("./pages/admin/AdminAuditLogs"))
                     .AdminAuditLogs,
-                }),
-              },
-              {
-                path: "/admin/migration",
-                lazy: async () => ({
-                  Component: (await import("./pages/admin/AdminMigrationPage")).default,
                 }),
               },
               {
