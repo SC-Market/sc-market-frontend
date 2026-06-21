@@ -180,6 +180,7 @@ const injectedRtkApi = api
           url: `/shops`,
           params: {
             search: queryArg.search,
+            tag: queryArg.tag,
             page: queryArg.page,
             page_size: queryArg.pageSize,
             sort_by: queryArg.sortBy,
@@ -1698,9 +1699,10 @@ export type BrowseShopsApiResponse = /** status 200 Ok */ {
 }
 export type BrowseShopsApiArg = {
   search?: string
+  tag?: string
   page?: number
   pageSize?: number
-  sortBy?: "name" | "rating" | "created_at"
+  sortBy?: "name" | "rating" | "created_at" | "total_sales"
   sortOrder?: "asc" | "desc"
 }
 export type QuickCreateShopApiResponse = /** status 200 Ok */ ShopResponse
@@ -3048,6 +3050,8 @@ export type ShopResponse = {
   owner_user_id: string | null
   owner_contractor_id: string | null
   supported_languages: string[]
+  tags: string[]
+  accepts_custom_orders: boolean
   market_order_template: string
   default_pickup_method: string | null
   status: string
@@ -3080,6 +3084,8 @@ export type ShopPublicResponse = {
   banner_url: string | null
   logo_url: string | null
   supported_languages: string[]
+  tags: string[]
+  accepts_custom_orders: boolean
   status: string
   created_at: string
   rating: number | null
@@ -3105,6 +3111,8 @@ export type UpdateShopRequest = {
   supported_languages?: string[]
   market_order_template?: string
   default_pickup_method?: string | null
+  tags?: string[]
+  accepts_custom_orders?: boolean
 }
 export type TransferShopRequest = {
   target_contractor_id: string
@@ -3278,8 +3286,10 @@ export type OrderPreview = {
   updated_at: string
   /** Buyer username */
   buyer_username: string
-  /** Seller username */
-  seller_username: string
+  /** Shop name (seller) */
+  shop_name: string
+  /** Shop slug (for linking to /shops/:slug) */
+  shop_slug: string
   /** Number of items in order */
   item_count: number
   /** Minimum quality tier across all items */
@@ -3288,8 +3298,8 @@ export type OrderPreview = {
   quality_tier_max?: number
   /** Buyer avatar URL */
   buyer_avatar?: string | null
-  /** Seller avatar URL */
-  seller_avatar?: string | null
+  /** Shop logo URL */
+  shop_logo?: string | null
 }
 export type GetOrdersResponse = {
   /** Array of order previews */
@@ -3512,6 +3522,8 @@ export type GetOfferSessionV2Response = {
   customer: MinimalUser
   assigned_to: MinimalUser | null
   contractor: MinimalContractor | null
+  /** Shop slug for the seller — use to filter listings in counteroffers */
+  shop_slug?: string | null
   offers: OfferV2[]
   availability?: OfferAvailability | null
 }
@@ -3527,6 +3539,8 @@ export type OfferSessionV2 = {
   customer: MinimalUser
   assigned_to: MinimalUser | null
   contractor: MinimalContractor | null
+  /** Shop slug for the seller — use to filter listings in counteroffers */
+  shop_slug?: string | null
   offers: OfferV2[]
   availability?: OfferAvailability | null
 }

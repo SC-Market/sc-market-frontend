@@ -781,6 +781,15 @@
 						},
 						"type": "array"
 					},
+					"tags": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"accepts_custom_orders": {
+						"type": "boolean"
+					},
 					"market_order_template": {
 						"type": "string"
 					},
@@ -816,6 +825,8 @@
 					"owner_user_id",
 					"owner_contractor_id",
 					"supported_languages",
+					"tags",
+					"accepts_custom_orders",
 					"market_order_template",
 					"default_pickup_method",
 					"status",
@@ -933,6 +944,15 @@
 						},
 						"type": "array"
 					},
+					"tags": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"accepts_custom_orders": {
+						"type": "boolean"
+					},
 					"status": {
 						"type": "string"
 					},
@@ -971,6 +991,8 @@
 					"banner_url",
 					"logo_url",
 					"supported_languages",
+					"tags",
+					"accepts_custom_orders",
 					"status",
 					"created_at",
 					"rating",
@@ -1008,6 +1030,15 @@
 					"default_pickup_method": {
 						"type": "string",
 						"nullable": true
+					},
+					"tags": {
+						"items": {
+							"type": "string"
+						},
+						"type": "array"
+					},
+					"accepts_custom_orders": {
+						"type": "boolean"
 					}
 				},
 				"type": "object",
@@ -1875,9 +1906,13 @@
 						"type": "string",
 						"description": "Buyer username"
 					},
-					"seller_username": {
+					"shop_name": {
 						"type": "string",
-						"description": "Seller username"
+						"description": "Shop name (seller)"
+					},
+					"shop_slug": {
+						"type": "string",
+						"description": "Shop slug (for linking to /shops/:slug)"
 					},
 					"item_count": {
 						"type": "number",
@@ -1899,10 +1934,10 @@
 						"nullable": true,
 						"description": "Buyer avatar URL"
 					},
-					"seller_avatar": {
+					"shop_logo": {
 						"type": "string",
 						"nullable": true,
-						"description": "Seller avatar URL"
+						"description": "Shop logo URL"
 					}
 				},
 				"required": [
@@ -1913,7 +1948,8 @@
 					"created_at",
 					"updated_at",
 					"buyer_username",
-					"seller_username",
+					"shop_name",
+					"shop_slug",
 					"item_count"
 				],
 				"type": "object",
@@ -2589,6 +2625,11 @@
 						],
 						"nullable": true
 					},
+					"shop_slug": {
+						"type": "string",
+						"nullable": true,
+						"description": "Shop slug for the seller — use to filter listings in counteroffers"
+					},
 					"offers": {
 						"items": {
 							"$ref": "#/components/schemas/OfferV2"
@@ -2665,6 +2706,11 @@
 							}
 						],
 						"nullable": true
+					},
+					"shop_slug": {
+						"type": "string",
+						"nullable": true,
+						"description": "Shop slug for the seller — use to filter listings in counteroffers"
 					},
 					"offers": {
 						"items": {
@@ -11389,6 +11435,14 @@
 					},
 					{
 						"in": "query",
+						"name": "tag",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
 						"name": "page",
 						"required": false,
 						"schema": {
@@ -11414,7 +11468,8 @@
 							"enum": [
 								"name",
 								"rating",
-								"created_at"
+								"created_at",
+								"total_sales"
 							]
 						}
 					},
