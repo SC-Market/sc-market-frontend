@@ -35,6 +35,8 @@ import { formatActionName } from "../../features/email"
 import type { EmailPreference } from "../../features/email"
 import type { PushPreference } from "../../features/push-notifications"
 import { isPushNotificationSupported } from "../../util/push-subscription"
+import { useDispatch } from "react-redux"
+import { serviceApi } from "../../store/service"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import ScheduleIcon from "@mui/icons-material/Schedule"
@@ -65,6 +67,7 @@ export function OnboardingPage() {
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
   const navigate = useNavigate()
+  const dispatch = useDispatch()
   const issueAlert = useAlertHook()
 
   const { data: status, isLoading: statusLoading } =
@@ -165,17 +168,19 @@ export function OnboardingPage() {
 
   const handleSkipAll = useCallback(async () => {
     await completeOnboarding().unwrap()
+    dispatch(serviceApi.util.invalidateTags(["MyProfile"]))
     navigate("/dashboard")
-  }, [completeOnboarding, navigate])
+  }, [completeOnboarding, dispatch, navigate])
 
   const handleComplete = useCallback(async () => {
     try {
       await completeOnboarding().unwrap()
+      dispatch(serviceApi.util.invalidateTags(["MyProfile"]))
       navigate("/dashboard")
     } catch {
       issueAlert({ severity: "error", message: "Failed to complete setup" })
     }
-  }, [completeOnboarding, navigate, issueAlert])
+  }, [completeOnboarding, dispatch, navigate, issueAlert])
 
   const handleLinkDiscord = useCallback(() => {
     window.location.href = `${BACKEND_URL}/auth/discord?path=${encodeURIComponent("/onboarding")}&action=link&origin=${encodeURIComponent(window.location.origin)}`
