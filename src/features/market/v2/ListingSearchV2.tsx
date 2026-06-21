@@ -106,8 +106,7 @@ export function ListingSearchV2() {
     const itemType = searchParams.get("item_type") || searchParams.get("type") || undefined;
     const quantityMin = searchParams.get("quantity_min") || searchParams.get("quantityAvailable");
     const status = (searchParams.get("status") || searchParams.get("statuses") || undefined) as "active" | "sold" | "expired" | "cancelled" | undefined;
-    const sellerId = searchParams.get("seller_id") || undefined;
-    const contractorId = searchParams.get("contractor_id") || searchParams.get("contractor_seller") || undefined;
+    const shopSlug = searchParams.get("shop_slug") || searchParams.get("shop") || undefined;
 
     return {
       text,
@@ -127,8 +126,7 @@ export function ListingSearchV2() {
       status,
       languageCodes: searchParams.get('language_codes') || undefined,
       pickupMethod: (searchParams.get('pickup_method') || undefined) as "delivery" | "pickup" | "any" | undefined,
-      sellerId,
-      contractorId,
+      shopSlug,
     };
   }, [searchParams, isMobile]);
 
@@ -500,8 +498,8 @@ export function MarketSearchAreaV2({ manageMode }: { manageMode?: boolean } = {}
             <MenuItem value="created_at:asc">{t("MarketSearchArea.sortOldest", "Date: Oldest First")}</MenuItem>
             <MenuItem value="quality:desc">{t("MarketSearchArea.sortQualityHigh", "Quality: High to Low")}</MenuItem>
             <MenuItem value="quality:asc">{t("MarketSearchArea.sortQualityLow", "Quality: Low to High")}</MenuItem>
-            <MenuItem value="seller_rating:desc">{t("MarketSearchArea.sortRatingHigh", "Rating: High to Low")}</MenuItem>
-            <MenuItem value="seller_rating:asc">{t("MarketSearchArea.sortRatingLow", "Rating: Low to High")}</MenuItem>
+            <MenuItem value="shop_rating:desc">{t("MarketSearchArea.sortRatingHigh", "Rating: High to Low")}</MenuItem>
+            <MenuItem value="shop_rating:asc">{t("MarketSearchArea.sortRatingLow", "Rating: Low to High")}</MenuItem>
             <MenuItem value="updated_at:desc">{t("MarketSearchArea.sortUpdated", "Recently Updated")}</MenuItem>
             <MenuItem value="quantity:desc">{t("MarketSearchArea.sortQuantityHigh", "Quantity: High to Low")}</MenuItem>
             <MenuItem value="quantity:asc">{t("MarketSearchArea.sortQuantityLow", "Quantity: Low to High")}</MenuItem>
