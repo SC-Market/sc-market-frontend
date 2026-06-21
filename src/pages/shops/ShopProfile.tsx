@@ -35,6 +35,7 @@ import { a11yProps } from "../../components/tabs/Tabs"
 import { ShareButton } from "../../components/buttons/ShareButton"
 import { useShopTab } from "../../features/shops/hooks/useShopTab"
 import { ServiceListings } from "../../features/services/components/ServiceListings"
+import { MarkdownRender } from "../../components/markdown/Markdown"
 
 export function ShopProfile() {
   const { slug } = useParams<{ slug: string }>()
@@ -444,9 +445,7 @@ function ShopAboutTab(props: { shop: ShopPublicResponse }) {
     <Grid container spacing={theme.layoutSpacing.layout}>
       <Grid item xs={12} md={8}>
         {shop.description ? (
-          <Typography variant="body1" sx={{ whiteSpace: "pre-wrap" }}>
-            {shop.description}
-          </Typography>
+          <MarkdownRender text={shop.description} />
         ) : (
           <Typography color="text.secondary">No description provided</Typography>
         )}
