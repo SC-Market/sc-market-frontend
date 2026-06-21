@@ -337,6 +337,12 @@ const router = createBrowserRouter([
         }),
       },
       {
+        path: "/shops/:slug/:tab",
+        lazy: async () => ({
+          Component: (await import("./pages/shops/ShopProfile")).ShopProfile,
+        }),
+      },
+      {
         path: "/shops/:slug",
         lazy: async () => ({
           Component: (await import("./pages/shops/ShopProfile")).ShopProfile,

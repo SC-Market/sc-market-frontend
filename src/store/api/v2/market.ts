@@ -3065,6 +3065,13 @@ export type CreateShopRequest = {
   /** If set, shop is owned by this org. User must have manage_market in the org. */
   contractor_id?: string
 }
+export type ShopOwnerInfo = {
+  type: "user" | "contractor"
+  /** Username (for users) or spectrum_id (for orgs) */
+  slug: string
+  name: string
+  avatar_url: string | null
+}
 export type ShopPublicResponse = {
   shop_id: string
   slug: string
@@ -3077,6 +3084,12 @@ export type ShopPublicResponse = {
   created_at: string
   rating: number | null
   rating_count: number
+  /** Owner information — link to user profile or org page (included in detail view) */
+  owner?: ShopOwnerInfo
+  /** Number of active listings in this shop (included in detail view) */
+  listing_count?: number
+  /** Total completed orders (included in detail view) */
+  total_sales?: number
 }
 export type QuickCreateShopRequest = {
   owner_type: "user" | "contractor"

@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import {
   Avatar,
   Box,
@@ -8,23 +8,40 @@ import {
   Rating,
   Skeleton,
   Stack,
-  Tab,
   Tabs,
   Typography,
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
-import { StorefrontRounded } from "@mui/icons-material"
-import { useState } from "react"
-import { useGetShopQuery, useSearchListingsQuery } from "../../store/api/v2/market"
+import {
+  InfoRounded,
+  StarRounded,
+  StorefrontRounded,
+} from "@mui/icons-material"
+import {
+  useGetShopQuery,
+  useSearchListingsQuery,
+  ShopPublicResponse,
+} from "../../store/api/v2/market"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
-import { DarkBannerContainer, LightBannerContainer } from "../../features/profile/components/BannerContainers"
+import {
+  DarkBannerContainer,
+  LightBannerContainer,
+} from "../../features/profile/components/BannerContainers"
+import type { User } from "../../datatypes/User"
 import { ListingCardV2 } from "../../features/market/v2/ListingSearchV2"
+import { HapticTab } from "../../components/haptic"
+import { a11yProps } from "../../components/tabs/Tabs"
+import { ShareButton } from "../../components/buttons/ShareButton"
+import { useShopTab } from "../../features/shops/hooks/useShopTab"
 
 export function ShopProfile() {
   const { slug } = useParams<{ slug: string }>()
   const theme = useTheme<ExtendedTheme>()
-  const { data: shop, isLoading, error } = useGetShopQuery({ slug: slug! }, { skip: !slug })
-  const [tab, setTab] = useState(0)
+  const { data: shop, isLoading, error } = useGetShopQuery(
+    { slug: slug! },
+    { skip: !slug },
+  )
+  const currentTab = useShopTab()
 
   if (isLoading) return <ShopProfileSkeleton />
 
@@ -37,14 +54,14 @@ export function ShopProfile() {
     )
   }
 
-  const bannerProfile = { banner: shop.banner_url || "" }
+  const bannerProfile = { banner: shop.banner_url || "" } as unknown as User
 
   return (
     <Box sx={{ position: "relative" }}>
       {theme.palette.mode === "dark" ? (
-        <DarkBannerContainer profile={bannerProfile as any} />
+        <DarkBannerContainer profile={bannerProfile} />
       ) : (
-        <LightBannerContainer profile={bannerProfile as any} />
+        <LightBannerContainer profile={bannerProfile} />
       )}
       <Box
         sx={{
@@ -54,11 +71,11 @@ export function ShopProfile() {
         }}
       >
         <Container maxWidth="xl">
-          <Grid container spacing={theme.layoutSpacing?.layout || 3}>
+          <Grid container spacing={theme.layoutSpacing.layout}>
             <Grid item xs={12}>
               <Grid
                 container
-                spacing={theme.layoutSpacing?.component || 2}
+                spacing={theme.layoutSpacing.component}
                 alignItems="flex-end"
                 justifyContent="space-between"
                 minHeight={375}
@@ -67,37 +84,42 @@ export function ShopProfile() {
                   <ShopHeader shop={shop} />
                 </Grid>
                 <Grid item xs={12} md={4}>
-                  <ShopRatingSummary rating={shop.rating} ratingCount={shop.rating_count} />
+                  <ShopRatingSummary
+                    rating={shop.rating}
+                    ratingCount={shop.rating_count}
+                  />
                 </Grid>
               </Grid>
             </Grid>
 
             <Grid item xs={12}>
-              <Tabs
-                value={tab}
-                onChange={(_, v) => setTab(v)}
-                variant="scrollable"
-                scrollButtons="auto"
-              >
-                <Tab label="Listings" icon={<StorefrontRounded />} iconPosition="start" />
-                <Tab label="About" />
-              </Tabs>
+              <ShopTabs slug={slug!} currentTab={currentTab} />
             </Grid>
           </Grid>
         </Container>
 
         <Container maxWidth="xl" sx={{ mt: 3 }}>
-          {tab === 0 && <ShopListingsTab slug={slug!} />}
-          {tab === 1 && <ShopAboutTab shop={shop} />}
+          <ShopTabContent currentTab={currentTab} slug={slug!} shop={shop} />
         </Container>
       </Box>
     </Box>
   )
 }
 
-function ShopHeader(props: { shop: NonNullable<ReturnType<typeof useGetShopQuery>["data"]> }) {
+function ShopHeader(props: { shop: ShopPublicResponse }) {
   const { shop } = props
   const theme = useTheme<ExtendedTheme>()
+
+  const ownerLink = shop.owner
+    ? shop.owner.type === "contractor"
+      ? `/contractor/${shop.owner.slug}`
+      : `/user/${shop.owner.slug}`
+    : null
+
+  const memberSince = new Date(shop.created_at).toLocaleDateString(undefined, {
+    year: "numeric",
+    month: "short",
+  })
 
   return (
     <Stack direction="row" spacing={2} alignItems="flex-start" flexWrap="wrap">
@@ -114,22 +136,68 @@ function ShopHeader(props: { shop: NonNullable<ReturnType<typeof useGetShopQuery
         {shop.name[0]}
       </Avatar>
       <Stack spacing={0.5}>
-        <Typography variant="h4" fontWeight={700}>
-          {shop.name}
-        </Typography>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-          <Rating value={shop.rating || 0} precision={0.5} readOnly size="small" />
-          <Typography variant="body2" color="text.secondary">
-            ({shop.rating_count} reviews)
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            gap: 0.5,
+            flexWrap: "wrap",
+          }}
+        >
+          <Typography color="text.secondary" variant="h6" fontWeight={600}>
+            {shop.name}
           </Typography>
+          <ShareButton title={`${shop.name} - SC Market`} />
         </Box>
+
+        {shop.owner && ownerLink && (
+          <Typography variant="body2" color="text.secondary">
+            by{" "}
+            <Typography
+              component={Link}
+              to={ownerLink}
+              variant="body2"
+              color="primary"
+              sx={{ textDecoration: "none", "&:hover": { textDecoration: "underline" } }}
+            >
+              {shop.owner.name}
+            </Typography>
+          </Typography>
+        )}
+
         {shop.supported_languages.length > 1 && (
-          <Box sx={{ display: "flex", gap: 0.5 }}>
+          <Box sx={{ display: "flex", gap: 0.5, flexWrap: "wrap" }}>
             {shop.supported_languages.map((lang) => (
-              <Chip key={lang} label={lang.toUpperCase()} size="small" variant="outlined" />
+              <Chip
+                key={lang}
+                label={lang.toUpperCase()}
+                size="small"
+                variant="outlined"
+                color="primary"
+                sx={{ padding: 0.5, textTransform: "capitalize" }}
+              />
             ))}
           </Box>
         )}
+
+        <Stack direction="row" spacing={1} flexWrap="wrap" sx={{ mt: 0.5 }}>
+          {shop.listing_count != null && (
+            <Chip
+              size="small"
+              label={`${shop.listing_count} listing${shop.listing_count !== 1 ? "s" : ""}`}
+              icon={<StorefrontRounded />}
+              variant="outlined"
+            />
+          )}
+          {shop.total_sales != null && (
+            <Chip
+              size="small"
+              label={`${shop.total_sales} sale${shop.total_sales !== 1 ? "s" : ""}`}
+              variant="outlined"
+            />
+          )}
+          <Chip size="small" label={`Since ${memberSince}`} variant="outlined" />
+        </Stack>
       </Stack>
     </Stack>
   )
@@ -147,6 +215,53 @@ function ShopRatingSummary(props: { rating: number | null; ratingCount: number }
       </Typography>
     </Box>
   )
+}
+
+function ShopTabs(props: { slug: string; currentTab: number }) {
+  return (
+    <Box sx={{ borderBottom: 1, borderColor: "divider.light" }}>
+      <Tabs value={props.currentTab} variant="scrollable" aria-label="Shop tabs">
+        <HapticTab
+          label="Listings"
+          component={Link}
+          to={`/shops/${props.slug}`}
+          icon={<StorefrontRounded />}
+          {...a11yProps(0)}
+        />
+        <HapticTab
+          label="Reviews"
+          component={Link}
+          to={`/shops/${props.slug}/reviews`}
+          icon={<StarRounded />}
+          {...a11yProps(1)}
+        />
+        <HapticTab
+          label="About"
+          component={Link}
+          to={`/shops/${props.slug}/about`}
+          icon={<InfoRounded />}
+          {...a11yProps(2)}
+        />
+      </Tabs>
+    </Box>
+  )
+}
+
+function ShopTabContent(props: {
+  currentTab: number
+  slug: string
+  shop: ShopPublicResponse
+}) {
+  switch (props.currentTab) {
+    case 0:
+      return <ShopListingsTab slug={props.slug} />
+    case 1:
+      return <ShopReviewsTab shop={props.shop} />
+    case 2:
+      return <ShopAboutTab shop={props.shop} />
+    default:
+      return null
+  }
 }
 
 function ShopListingsTab(props: { slug: string }) {
@@ -188,40 +303,218 @@ function ShopListingsTab(props: { slug: string }) {
   )
 }
 
-function ShopAboutTab(props: { shop: NonNullable<ReturnType<typeof useGetShopQuery>["data"]> }) {
+function ShopReviewsTab(props: { shop: ShopPublicResponse }) {
   const { shop } = props
   return (
-    <Box sx={{ maxWidth: 700 }}>
-      {shop.description ? (
-        <Typography variant="body1" sx={{ whiteSpace: "pre-wrap" }}>
-          {shop.description}
+    <Box sx={{ maxWidth: 600 }}>
+      <Stack spacing={2} alignItems="center" sx={{ py: 4 }}>
+        {shop.rating != null && (
+          <>
+            <Typography variant="h2" fontWeight={700}>
+              {shop.rating.toFixed(1)}
+            </Typography>
+            <Rating value={shop.rating} precision={0.5} readOnly size="large" />
+            <Typography variant="body1" color="text.secondary">
+              {shop.rating_count} review{shop.rating_count !== 1 ? "s" : ""}
+            </Typography>
+          </>
+        )}
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          sx={{ mt: 2, textAlign: "center" }}
+        >
+          Reviews will appear here as orders are completed
         </Typography>
-      ) : (
-        <Typography color="text.secondary">No description provided</Typography>
+      </Stack>
+    </Box>
+  )
+}
+
+function ShopAboutTab(props: { shop: ShopPublicResponse }) {
+  const { shop } = props
+  const theme = useTheme<ExtendedTheme>()
+
+  return (
+    <Grid container spacing={theme.layoutSpacing.layout}>
+      <Grid item xs={12} md={8}>
+        {shop.description ? (
+          <Typography variant="body1" sx={{ whiteSpace: "pre-wrap" }}>
+            {shop.description}
+          </Typography>
+        ) : (
+          <Typography color="text.secondary">No description provided</Typography>
+        )}
+      </Grid>
+      {shop.owner && (
+        <Grid item xs={12} md={4}>
+          <OwnerCard owner={shop.owner} />
+        </Grid>
       )}
+    </Grid>
+  )
+}
+
+function OwnerCard(props: { owner: NonNullable<ShopPublicResponse["owner"]> }) {
+  const { owner } = props
+  const theme = useTheme<ExtendedTheme>()
+  const ownerLink =
+    owner.type === "contractor"
+      ? `/contractor/${owner.slug}`
+      : `/user/${owner.slug}`
+
+  return (
+    <Box
+      sx={{
+        p: 2,
+        borderRadius: theme.spacing(1),
+        border: `1px solid`,
+        borderColor: "divider",
+      }}
+    >
+      <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 1.5 }}>
+        Shop owner
+      </Typography>
+      <Stack
+        component={Link}
+        to={ownerLink}
+        direction="row"
+        spacing={1.5}
+        alignItems="center"
+        sx={{ textDecoration: "none", color: "inherit" }}
+      >
+        <Avatar
+          src={owner.avatar_url || undefined}
+          sx={{ width: 40, height: 40 }}
+        >
+          {owner.name[0]}
+        </Avatar>
+        <Typography variant="body1" fontWeight={500}>
+          {owner.name}
+        </Typography>
+      </Stack>
     </Box>
   )
 }
 
 function ShopProfileSkeleton() {
   const theme = useTheme<ExtendedTheme>()
+
   return (
-    <Box>
+    <Box sx={{ position: "relative" }}>
       <Skeleton
         variant="rectangular"
         sx={{
-          height: theme.palette.mode === "dark" ? 450 : 200,
+          height: theme.palette.mode === "dark" ? 500 : 250,
           width: "100%",
+          borderRadius: 0,
         }}
       />
-      <Container maxWidth="xl" sx={{ mt: 3 }}>
-        <Stack direction="row" spacing={2} alignItems="center">
-          <Skeleton variant="rounded" width={96} height={96} />
-          <Stack spacing={1}>
-            <Skeleton width={200} height={40} />
-            <Skeleton width={150} height={24} />
-          </Stack>
-        </Stack>
+      <Container
+        maxWidth="xl"
+        sx={{
+          ...(theme.palette.mode === "dark"
+            ? { position: "relative", top: -450 }
+            : { position: "relative", top: -200 }),
+        }}
+      >
+        <Grid container spacing={theme.layoutSpacing.layout}>
+          <Grid item xs={12}>
+            <Grid
+              container
+              spacing={theme.layoutSpacing.component}
+              alignItems="flex-end"
+              justifyContent="space-between"
+              minHeight={375}
+            >
+              <Grid item xs={12} md={8}>
+                <Stack
+                  direction="row"
+                  spacing={2}
+                  alignItems="flex-start"
+                  flexWrap="wrap"
+                >
+                  <Skeleton
+                    variant="rectangular"
+                    sx={{
+                      height: theme.spacing(12),
+                      width: theme.spacing(12),
+                      flexShrink: 0,
+                      borderRadius: 2,
+                    }}
+                  />
+                  <Stack spacing={0.5}>
+                    <Skeleton variant="text" width={200} height={28} />
+                    <Skeleton variant="text" width={120} height={20} />
+                    <Stack direction="row" spacing={0.5} sx={{ mt: 0.5 }}>
+                      <Skeleton
+                        variant="rectangular"
+                        width={80}
+                        height={28}
+                        sx={{ borderRadius: 1 }}
+                      />
+                      <Skeleton
+                        variant="rectangular"
+                        width={80}
+                        height={28}
+                        sx={{ borderRadius: 1 }}
+                      />
+                      <Skeleton
+                        variant="rectangular"
+                        width={80}
+                        height={28}
+                        sx={{ borderRadius: 1 }}
+                      />
+                    </Stack>
+                  </Stack>
+                </Stack>
+              </Grid>
+              <Grid item xs={12} md={4}>
+                <Skeleton
+                  variant="rectangular"
+                  sx={{
+                    height: 120,
+                    width: "100%",
+                    borderRadius: 1,
+                    maxWidth: 320,
+                    ml: "auto",
+                  }}
+                />
+              </Grid>
+            </Grid>
+          </Grid>
+
+          <Grid item xs={12}>
+            <Box sx={{ borderBottom: 1, borderColor: "divider.light" }}>
+              <Tabs value={0} aria-label="Shop tabs" variant="scrollable">
+                <HapticTab
+                  label={<Skeleton width={60} />}
+                  icon={<StorefrontRounded />}
+                  {...a11yProps(0)}
+                />
+                <HapticTab
+                  label={<Skeleton width={60} />}
+                  icon={<StarRounded />}
+                  {...a11yProps(1)}
+                />
+                <HapticTab
+                  label={<Skeleton width={60} />}
+                  icon={<InfoRounded />}
+                  {...a11yProps(2)}
+                />
+              </Tabs>
+            </Box>
+          </Grid>
+
+          <Grid item xs={12}>
+            <Skeleton
+              variant="rectangular"
+              width="100%"
+              height={400}
+              sx={{ borderRadius: 2 }}
+            />
+          </Grid>
+        </Grid>
       </Container>
     </Box>
   )
