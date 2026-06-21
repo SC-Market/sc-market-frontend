@@ -4,10 +4,9 @@ import { useParams } from "react-router-dom"
 const NAME_TO_INDEX = new Map([
   ["", 0],
   ["store", 0],
-  ["services", 1],
-  ["about", 2],
-  ["order", 3],
-  ["reviews", 4],
+  ["about", 1],
+  ["order", 2],
+  ["reviews", 3],
 ])
 
 export function useProfileTab() {

@@ -4,8 +4,9 @@ import { useParams } from "react-router-dom"
 const NAME_TO_INDEX = new Map([
   ["", 0],
   ["listings", 0],
-  ["reviews", 1],
-  ["about", 2],
+  ["services", 1],
+  ["reviews", 2],
+  ["about", 3],
 ])
 
 export function useShopTab() {

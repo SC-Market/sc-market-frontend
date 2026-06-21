@@ -8,7 +8,6 @@ import { OrgReviews } from "../../../views/contractor/OrgReviews"
 import { MemberList } from "../../../views/contractor/OrgMembers"
 import { RecruitingPostArea } from "../../recruiting/components/RecruitingPostArea"
 import { OrgStoreView } from "../../profile/components/ProfileStoreView"
-import { OrgServicesView } from "../../profile/components/ProfileServicesView"
 import { MarkdownRender } from "../../../components/markdown/Markdown.lazy"
 import { Contractor } from "../domain/types"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
@@ -28,9 +27,6 @@ export function OrgTabContent({ currentTab, contractor }: OrgTabContentProps) {
         <OrgStoreView org={contractor.spectrum_id} />
       </TabPanel>
       <TabPanel value={currentTab} index={1} preload>
-        <OrgServicesView org={contractor.spectrum_id} />
-      </TabPanel>
-      <TabPanel value={currentTab} index={2} preload>
         <Grid
           container
           spacing={theme.layoutSpacing.layout}
@@ -69,22 +65,22 @@ export function OrgTabContent({ currentTab, contractor }: OrgTabContentProps) {
           </Grid>
         </Grid>
       </TabPanel>
-      <TabPanel value={currentTab} index={3} preload>
+      <TabPanel value={currentTab} index={2} preload>
         <Grid container spacing={theme.layoutSpacing.layout}>
           <CreateOrderForm contractor_id={contractor.spectrum_id} />
         </Grid>
       </TabPanel>
-      <TabPanel value={currentTab} index={4} preload>
+      <TabPanel value={currentTab} index={3} preload>
         <Grid container spacing={theme.layoutSpacing.layout}>
           <MemberList contractor={contractor} />
         </Grid>
       </TabPanel>
-      <TabPanel value={currentTab} index={5} preload>
+      <TabPanel value={currentTab} index={4} preload>
         <Grid container spacing={theme.layoutSpacing.layout}>
           <RecruitingPostArea spectrum_id={contractor.spectrum_id} />
         </Grid>
       </TabPanel>
-      <TabPanel value={currentTab} index={6} preload>
+      <TabPanel value={currentTab} index={5} preload>
         <Grid container spacing={theme.layoutSpacing.layout}>
           <Section xs={12} lg={8} disablePadding>
             <OrgReviews contractor={contractor} />

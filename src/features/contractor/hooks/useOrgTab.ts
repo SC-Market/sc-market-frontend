@@ -4,12 +4,11 @@ import { useParams } from "react-router-dom"
 const NAME_TO_INDEX = new Map([
   ["", 0],
   ["store", 0],
-  ["services", 1],
-  ["about", 2],
-  ["order", 3],
-  ["members", 4],
-  ["recruiting", 5],
-  ["reviews", 6],
+  ["about", 1],
+  ["order", 2],
+  ["members", 3],
+  ["recruiting", 4],
+  ["reviews", 5],
 ])
 
 export function useOrgTab() {

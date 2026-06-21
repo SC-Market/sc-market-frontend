@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next"
 import { Box, Tabs } from "@mui/material"
 import {
   CreateRounded,
-  DesignServicesRounded,
   InfoRounded,
   PersonAddRounded,
   StarRounded,
@@ -42,32 +41,25 @@ export function OrgTabs({
           {...a11yProps(0)}
         />
         <HapticTab
-          label={t("orgInfo.services")}
-          component={Link}
-          to={`/contractor/${spectrumId}/services`}
-          icon={<DesignServicesRounded />}
-          {...a11yProps(1)}
-        />
-        <HapticTab
           label={t("orgInfo.about")}
           component={Link}
           to={`/contractor/${spectrumId}/about`}
           icon={<InfoRounded />}
-          {...a11yProps(2)}
+          {...a11yProps(1)}
         />
         <HapticTab
           label={t("orgInfo.order")}
           component={Link}
           to={`/contractor/${spectrumId}/order`}
           icon={<CreateRounded />}
-          {...a11yProps(3)}
+          {...a11yProps(2)}
         />
         <HapticTab
           label={t("orgInfo.members")}
           component={Link}
           to={`/contractor/${spectrumId}/members`}
           icon={<PeopleAltRoundedIcon />}
-          {...a11yProps(4)}
+          {...a11yProps(3)}
         />
         {hasRecruitingPost && (
           <HapticTab
@@ -75,7 +67,7 @@ export function OrgTabs({
             component={Link}
             to={`/contractor/${spectrumId}/recruiting`}
             icon={<PersonAddRounded />}
-            {...a11yProps(5)}
+            {...a11yProps(4)}
           />
         )}
         <HapticTab
@@ -83,7 +75,7 @@ export function OrgTabs({
           component={Link}
           to={`/contractor/${spectrumId}/reviews`}
           icon={<StarRounded />}
-          {...a11yProps(6)}
+          {...a11yProps(5)}
         />
       </Tabs>
     </Box>

@@ -13,6 +13,7 @@ import {
 } from "@mui/material"
 import { useTheme } from "@mui/material/styles"
 import {
+  DesignServicesRounded,
   InfoRounded,
   StarRounded,
   StorefrontRounded,
@@ -33,6 +34,7 @@ import { HapticTab } from "../../components/haptic"
 import { a11yProps } from "../../components/tabs/Tabs"
 import { ShareButton } from "../../components/buttons/ShareButton"
 import { useShopTab } from "../../features/shops/hooks/useShopTab"
+import { ServiceListings } from "../../features/services/components/ServiceListings"
 
 export function ShopProfile() {
   const { slug } = useParams<{ slug: string }>()
@@ -87,6 +89,7 @@ export function ShopProfile() {
                   <ShopRatingSummary
                     rating={shop.rating}
                     ratingCount={shop.rating_count}
+                    totalSales={shop.total_sales}
                   />
                 </Grid>
               </Grid>
@@ -203,16 +206,91 @@ function ShopHeader(props: { shop: ShopPublicResponse }) {
   )
 }
 
-function ShopRatingSummary(props: { rating: number | null; ratingCount: number }) {
+function ShopRatingSummary(props: {
+  rating: number | null
+  ratingCount: number
+  totalSales?: number | null
+}) {
+  const theme = useTheme<ExtendedTheme>()
+
+  const salesBadge = (() => {
+    if (!props.totalSales) return null
+    if (props.totalSales >= 1000) return { label: "1000+ sales", color: "#FFD700" }
+    if (props.totalSales >= 500) return { label: "500+ sales", color: "#FFD700" }
+    if (props.totalSales >= 100) return { label: "100+ sales", color: "#C9A84C" }
+    return null
+  })()
+
   return (
-    <Box sx={{ textAlign: "right" }}>
-      <Typography variant="h3" fontWeight={700}>
-        {props.rating ? props.rating.toFixed(1) : "—"}
-      </Typography>
-      <Rating value={props.rating || 0} precision={0.5} readOnly />
-      <Typography variant="body2" color="text.secondary">
-        {props.ratingCount} review{props.ratingCount !== 1 ? "s" : ""}
-      </Typography>
+    <Box
+      sx={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "flex-end",
+        gap: 3,
+      }}
+    >
+      {/* Rating bar area (left side) */}
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
+        {[5, 4, 3, 2, 1].map((star) => (
+          <Box
+            key={star}
+            sx={{ display: "flex", alignItems: "center", gap: 1 }}
+          >
+            <Typography
+              variant="caption"
+              color="text.secondary"
+              sx={{ width: 12, textAlign: "right" }}
+            >
+              {star}
+            </Typography>
+            <Box
+              sx={{
+                width: 80,
+                height: 6,
+                borderRadius: 1,
+                bgcolor: "action.hover",
+                overflow: "hidden",
+              }}
+            >
+              <Box
+                sx={{
+                  width:
+                    props.rating && Math.round(props.rating) === star
+                      ? "100%"
+                      : "0%",
+                  height: "100%",
+                  bgcolor: "warning.main",
+                  borderRadius: 1,
+                }}
+              />
+            </Box>
+          </Box>
+        ))}
+      </Box>
+
+      {/* Number + stars + badges (right side) */}
+      <Box sx={{ textAlign: "right" }}>
+        <Typography variant="h3" fontWeight={700}>
+          {props.rating ? props.rating.toFixed(1) : "—"}
+        </Typography>
+        <Rating value={props.rating || 0} precision={0.5} readOnly />
+        <Typography variant="body2" color="text.secondary">
+          {props.ratingCount} review{props.ratingCount !== 1 ? "s" : ""}
+        </Typography>
+        {salesBadge && (
+          <Chip
+            label={salesBadge.label}
+            size="small"
+            sx={{
+              mt: 1,
+              fontWeight: 700,
+              bgcolor: salesBadge.color,
+              color: theme.palette.getContrastText(salesBadge.color),
+            }}
+          />
+        )}
+      </Box>
     </Box>
   )
 }
@@ -229,18 +307,25 @@ function ShopTabs(props: { slug: string; currentTab: number }) {
           {...a11yProps(0)}
         />
         <HapticTab
+          label="Services"
+          component={Link}
+          to={`/shops/${props.slug}/services`}
+          icon={<DesignServicesRounded />}
+          {...a11yProps(1)}
+        />
+        <HapticTab
           label="Reviews"
           component={Link}
           to={`/shops/${props.slug}/reviews`}
           icon={<StarRounded />}
-          {...a11yProps(1)}
+          {...a11yProps(2)}
         />
         <HapticTab
           label="About"
           component={Link}
           to={`/shops/${props.slug}/about`}
           icon={<InfoRounded />}
-          {...a11yProps(2)}
+          {...a11yProps(3)}
         />
       </Tabs>
     </Box>
@@ -256,8 +341,10 @@ function ShopTabContent(props: {
     case 0:
       return <ShopListingsTab slug={props.slug} />
     case 1:
-      return <ShopReviewsTab shop={props.shop} />
+      return <ShopServicesTab shop={props.shop} />
     case 2:
+      return <ShopReviewsTab shop={props.shop} />
+    case 3:
       return <ShopAboutTab shop={props.shop} />
     default:
       return null
@@ -299,6 +386,24 @@ function ShopListingsTab(props: { slug: string }) {
           <ListingCardV2 listing={listing} index={index} />
         </Grid>
       ))}
+    </Grid>
+  )
+}
+
+function ShopServicesTab(props: { shop: ShopPublicResponse }) {
+  const { shop } = props
+  const theme = useTheme<ExtendedTheme>()
+
+  // Services are owned by users/orgs, so filter by the shop owner
+  const ownerFilter = shop.owner
+    ? shop.owner.type === "user"
+      ? { user: shop.owner.slug }
+      : { contractor: shop.owner.slug }
+    : {}
+
+  return (
+    <Grid container spacing={theme.layoutSpacing.layout} justifyContent="center">
+      <ServiceListings {...ownerFilter} />
     </Grid>
   )
 }
@@ -494,13 +599,18 @@ function ShopProfileSkeleton() {
                 />
                 <HapticTab
                   label={<Skeleton width={60} />}
-                  icon={<StarRounded />}
+                  icon={<DesignServicesRounded />}
                   {...a11yProps(1)}
                 />
                 <HapticTab
                   label={<Skeleton width={60} />}
-                  icon={<InfoRounded />}
+                  icon={<StarRounded />}
                   {...a11yProps(2)}
+                />
+                <HapticTab
+                  label={<Skeleton width={60} />}
+                  icon={<InfoRounded />}
+                  {...a11yProps(3)}
                 />
               </Tabs>
             </Box>

@@ -24,7 +24,7 @@ export function MyShops() {
 
   if (isLoading) {
     return (
-      <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Container maxWidth="lg" sx={{ pt: 12, pb: 4 }}>
         <Typography variant="h4" sx={{ mb: 3 }}>My Shops</Typography>
         <Grid container spacing={2}>
           {[1, 2].map((i) => (
@@ -38,7 +38,7 @@ export function MyShops() {
   }
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
+    <Container maxWidth="lg" sx={{ pt: 12, pb: 4 }}>
       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
         <Typography variant="h4">My Shops</Typography>
         <Button

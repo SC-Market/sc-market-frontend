@@ -1,28 +1,19 @@
 import { useState } from "react"
-import { Link as RouterLink } from "react-router-dom"
 import {
   Container,
   Typography,
   TextField,
   Grid,
-  Card,
-  CardContent,
-  CardActionArea,
-  Avatar,
-  Rating,
   Box,
   Chip,
   Skeleton,
   MenuItem,
   InputAdornment,
-  Fade,
 } from "@mui/material"
-import { useTheme } from "@mui/material/styles"
 import { Search, StorefrontRounded } from "@mui/icons-material"
 import { useBrowseShopsQuery } from "../../store/api/v2/market"
-import type { ShopPublicResponse } from "../../store/api/v2/market"
 import { useDebounce } from "../../hooks/useDebounce"
-import type { ExtendedTheme } from "../../hooks/styles/Theme"
+import { ShopCard } from "../../features/shops/components/ShopCard"
 
 const SHOP_TAGS = [
   "Weapons",
@@ -52,7 +43,6 @@ const SORT_OPTIONS: SortConfig[] = [
 ]
 
 export function ShopDirectory() {
-  const theme = useTheme<ExtendedTheme>()
   const [search, setSearch] = useState("")
   const [selectedTag, setSelectedTag] = useState<string | null>(null)
   const [sortIndex, setSortIndex] = useState(0)
@@ -73,7 +63,7 @@ export function ShopDirectory() {
   }
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
+    <Container maxWidth="lg" sx={{ pt: 12, pb: 4 }}>
       {/* Header */}
       <Typography variant="h4" fontWeight={700} sx={{ mb: 3 }}>
         Browse Shops
@@ -143,157 +133,7 @@ export function ShopDirectory() {
         <Grid container spacing={2}>
           {data.shops.map((shop, index) => (
             <Grid item xs={12} sm={6} md={4} lg={3} key={shop.shop_id}>
-              <Fade
-                in
-                timeout={400}
-                style={{ transitionDelay: `${50 + 30 * index}ms` }}
-              >
-                <Card
-                  sx={{
-                    height: "100%",
-                    transition: "box-shadow 0.2s, transform 0.2s",
-                    "&:hover": {
-                      boxShadow: 6,
-                      transform: "translateY(-2px)",
-                    },
-                  }}
-                >
-                  <CardActionArea
-                    component={RouterLink}
-                    to={`/shops/${shop.slug}`}
-                    sx={{
-                      height: "100%",
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "stretch",
-                    }}
-                  >
-                    <CardContent
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: 1,
-                        flex: 1,
-                        p: 2,
-                      }}
-                    >
-                      {/* Shop identity row */}
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 1.5,
-                        }}
-                      >
-                        <Avatar
-                          src={shop.logo_url || undefined}
-                          variant="rounded"
-                          sx={{ width: 48, height: 48 }}
-                        >
-                          {shop.name[0]}
-                        </Avatar>
-                        <Box sx={{ minWidth: 0, flex: 1 }}>
-                          <Typography
-                            variant="subtitle1"
-                            noWrap
-                            fontWeight={700}
-                          >
-                            {shop.name}
-                          </Typography>
-                          {shop.owner && (
-                            <Typography
-                              variant="caption"
-                              color="text.secondary"
-                              noWrap
-                            >
-                              by {shop.owner.name}
-                            </Typography>
-                          )}
-                        </Box>
-                      </Box>
-
-                      {/* Rating */}
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 0.5,
-                        }}
-                      >
-                        <Rating
-                          value={shop.rating || 0}
-                          precision={0.5}
-                          readOnly
-                          size="small"
-                        />
-                        <Typography variant="caption" color="text.secondary">
-                          ({shop.rating_count})
-                        </Typography>
-                      </Box>
-
-                      {/* Tags */}
-                      {shop.tags.length > 0 && (
-                        <Box
-                          sx={{
-                            display: "flex",
-                            gap: 0.5,
-                            flexWrap: "wrap",
-                          }}
-                        >
-                          {shop.tags.slice(0, 3).map((tag) => (
-                            <Chip
-                              key={tag}
-                              label={tag}
-                              size="small"
-                              variant="outlined"
-                              color="primary"
-                              sx={{ fontSize: "0.65rem", height: 20 }}
-                            />
-                          ))}
-                        </Box>
-                      )}
-
-                      {/* Stats */}
-                      <Box
-                        sx={{
-                          display: "flex",
-                          gap: 2,
-                        }}
-                      >
-                        {shop.listing_count != null && (
-                          <Typography variant="caption" color="text.secondary">
-                            {shop.listing_count} listings
-                          </Typography>
-                        )}
-                        {shop.total_sales != null && (
-                          <Typography variant="caption" color="text.secondary">
-                            {shop.total_sales} sales
-                          </Typography>
-                        )}
-                      </Box>
-
-                      {/* Description */}
-                      {shop.description && (
-                        <Typography
-                          variant="body2"
-                          color="text.secondary"
-                          sx={{
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            display: "-webkit-box",
-                            WebkitLineClamp: 2,
-                            WebkitBoxOrient: "vertical",
-                            lineHeight: 1.4,
-                            mt: "auto",
-                          }}
-                        >
-                          {shop.description}
-                        </Typography>
-                      )}
-                    </CardContent>
-                  </CardActionArea>
-                </Card>
-              </Fade>
+              <ShopCard shop={shop} index={index} />
             </Grid>
           ))}
         </Grid>
