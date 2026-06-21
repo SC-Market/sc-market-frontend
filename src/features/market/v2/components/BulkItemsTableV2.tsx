@@ -59,7 +59,7 @@ export function BulkItemsTableV2({ items }: { items: GameItemAggregate[] }) {
                 <Typography variant="body2">{item.total_quantity.toLocaleString()}</Typography>
               </TableCell>
               <TableCell align="right">
-                <Typography variant="body2">{item.seller_count}</Typography>
+                <Typography variant="body2">{item.shop_count}</Typography>
               </TableCell>
             </TableRow>
           ))}

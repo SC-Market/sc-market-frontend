@@ -160,6 +160,13 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
     title: "sidebar.dashboard.title",
     items: [
       {
+        to: "/dashboard/shops",
+        text: "sidebar.my_shops", tab_key: "my_shops",
+        icon: <StoreRounded />,
+        logged_in: true,
+        org: false,
+      },
+      {
         to: "/market/manage?quantityAvailable=0",
         text: "sidebar.manage_market_listings", tab_key: "manage_listings",
         icon: <ListAltRounded />,

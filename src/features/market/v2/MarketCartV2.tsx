@@ -374,7 +374,7 @@ export function MarketCartV2() {
       const hasPriceChanges = cartData.items.some((item) => item.price_changed)
 
       // Get note from the first seller group (cart is single-seller)
-      const sellerName = cartData.items[0]?.listing.seller_name
+      const sellerName = cartData.items[0]?.listing.shop_name
       const note = sellerName ? notes[sellerName] : undefined
 
       try {
@@ -382,7 +382,7 @@ export function MarketCartV2() {
           checkoutCartRequest: {
             confirm_price_changes: hasPriceChanges,
             note: note || undefined,
-            seller_id: checkoutSellerId,
+            shop_id: checkoutSellerId,
           },
         }).unwrap()
 
@@ -422,8 +422,8 @@ export function MarketCartV2() {
     if (!cartData?.items.length) return []
     const groups = new Map<string, { sellerName: string; sellerId: string; items: CartItemDetail[]; total: number; nextAvailable?: string | null }>()
     for (const item of cartData.items) {
-      const key = item.listing.seller_id
-      if (!groups.has(key)) groups.set(key, { sellerName: item.listing.seller_name, sellerId: key, items: [], total: 0, nextAvailable: item.listing.seller_next_available })
+      const key = item.listing.shop_id
+      if (!groups.has(key)) groups.set(key, { sellerName: item.listing.shop_name, sellerId: key, items: [], total: 0, nextAvailable: item.listing.shop_next_available })
       const g = groups.get(key)!
       g.items.push(item)
       g.total += item.subtotal
@@ -632,7 +632,7 @@ export function MarketCartV2() {
           {t("cart.confirmCheckout", "Confirm Checkout")}
         </DialogTitle>
         <DialogContent dividers>
-          {cartData?.items.filter(i => i.listing.seller_id === checkoutSellerId).map((item) => (
+          {cartData?.items.filter(i => i.listing.shop_id === checkoutSellerId).map((item) => (
             <Box key={item.cart_item_id} sx={{ mb: 1 }}>
               <Box display="flex" justifyContent="space-between" alignItems="center">
                 <Box>
@@ -663,7 +663,7 @@ export function MarketCartV2() {
           <Box display="flex" justifyContent="space-between">
             <Typography variant="h6">{t("cart.total")}</Typography>
             <Typography variant="h6">
-              {(cartData?.items.filter(i => i.listing.seller_id === checkoutSellerId).reduce((s, i) => s + i.subtotal, 0) ?? 0).toLocaleString()} aUEC
+              {(cartData?.items.filter(i => i.listing.shop_id === checkoutSellerId).reduce((s, i) => s + i.subtotal, 0) ?? 0).toLocaleString()} aUEC
             </Typography>
           </Box>
           {hasPriceChanges && (

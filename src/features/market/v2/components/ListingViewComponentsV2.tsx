@@ -78,22 +78,20 @@ function ListingRow({
 // ============================================================================
 
 export function SellerOtherListingsV2(props: {
-  sellerUsername?: string | null
-  contractorSpectrumId?: string | null
+  shopSlug?: string | null
   currentListingId: string
 }) {
   const { t } = useTranslation()
-  const { sellerUsername, contractorSpectrumId, currentListingId } = props
+  const { shopSlug, currentListingId } = props
 
   const { data, isLoading } = useSearchListingsQuery(
     {
-      sellerUsername: sellerUsername || undefined,
-      contractorSpectrumId: contractorSpectrumId || undefined,
+      shopSlug: shopSlug || undefined,
       pageSize: 8,
       sortBy: "created_at",
       sortOrder: "desc",
     },
-    { skip: !sellerUsername && !contractorSpectrumId },
+    { skip: !shopSlug },
   )
 
   const listings = useMemo(
@@ -101,9 +99,7 @@ export function SellerOtherListingsV2(props: {
     [data, currentListingId],
   )
 
-  const seeAllHref = contractorSpectrumId
-    ? `/market?seller=${encodeURIComponent(contractorSpectrumId)}`
-    : `/market?seller=${encodeURIComponent(sellerUsername || "")}`
+  const seeAllHref = `/market?shop=${encodeURIComponent(shopSlug || "")}`
 
   return (
     <ListingRow

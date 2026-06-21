@@ -85,7 +85,7 @@ function AdminListingCard({ listing }: { listing: ListingSearchResult }) {
                   {listing.title}
                 </Typography>
                 <Typography variant="caption" color="text.secondary">
-                  {listing.seller_name} · {listing.game_item_type}
+                  {listing.shop_name} · {listing.game_item_type}
                 </Typography>
                 <Typography
                   display="block"

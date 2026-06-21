@@ -1155,11 +1155,7 @@ export function ListingCardV2({ listing, index }: ListingCardV2Props) {
                       onClick={(e) => {
                         e.preventDefault();
                         e.stopPropagation();
-                        navigate(
-                          listing.seller_type === "contractor"
-                            ? `/contractor/${listing.seller_slug}`
-                            : `/user/${listing.seller_slug}`,
-                        );
+                        navigate(`/shops/${listing.shop_slug}`);
                       }}
                       sx={{
                         overflowX: "hidden",
@@ -1170,7 +1166,7 @@ export function ListingCardV2({ listing, index }: ListingCardV2Props) {
                         lineHeight: 1.2,
                       }}
                     >
-                      {listing.seller_name}
+                      {listing.shop_name}
                     </UnderlineLink>
                   </Box>
                   <Box
@@ -1184,8 +1180,8 @@ export function ListingCardV2({ listing, index }: ListingCardV2Props) {
                     }}
                   >
                     <MarketListingRating
-                      avg_rating={listing.seller_rating}
-                      rating_count={listing.seller_rating_count ?? null}
+                      avg_rating={listing.shop_rating}
+                      rating_count={listing.shop_rating_count ?? null}
                       total_rating={0}
                       rating_streak={null}
                       total_orders={null}

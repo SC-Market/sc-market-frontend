@@ -331,6 +331,12 @@ const router = createBrowserRouter([
         }),
       },
       {
+        path: "/shops/:slug",
+        lazy: async () => ({
+          Component: (await import("./pages/shops/ShopProfile")).ShopProfile,
+        }),
+      },
+      {
         path: "/contractor/:id/:tab",
         lazy: async () => ({
           Component: (await import("./pages/contractor/ViewOrg")).ViewOrg,
@@ -480,6 +486,12 @@ const router = createBrowserRouter([
             lazy: async () => ({
               Component: (await import("./pages/market/SellMaterials"))
                 .SellMaterials,
+            }),
+          },
+          {
+            path: "/dashboard/shops",
+            lazy: async () => ({
+              Component: (await import("./pages/shops/MyShops")).MyShops,
             }),
           },
           {

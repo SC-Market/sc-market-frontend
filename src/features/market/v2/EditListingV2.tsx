@@ -89,13 +89,10 @@ export function EditListingV2() {
     error: loadError,
   } = useGetListingDetailQuery({ id: id! });
 
-  // Determine seller context for stock lot fetch (contractor listings need spectrum_id)
-  const sellerSpectrumId = listingData?.seller?.type === "contractor" ? listingData.seller.slug : undefined;
   const { data: stockLotsData } = useGetStockLotsQuery({
     listingId: id!,
     listed: true,
     pageSize: 100,
-    spectrumId: sellerSpectrumId,
   });
 
   // Form state
@@ -276,9 +273,9 @@ export function EditListingV2() {
         request.photos = photos;
       }
 
-      // Include visibility if changed (only for contractor listings)
+      // Include visibility if changed
       const currentVisibility = listingData?.listing.visibility === "private" ? "private" : "public";
-      if (visibility !== currentVisibility && listingData?.seller.type === "contractor") {
+      if (visibility !== currentVisibility) {
         request.visibility = visibility;
       }
 
@@ -642,29 +639,27 @@ export function EditListingV2() {
             </Grid>
           </FormPaper>
 
-          {/* Visibility - only for contractor listings */}
-          {listingData?.seller.type === "contractor" && (
-            <FormPaper title={t("market.visibility", "Visibility")}>
-              <Grid item xs={12}>
-                <TextField
-                  select
-                  fullWidth
-                  size="small"
-                  label={t("market.visibility", "Visibility")}
-                  value={visibility}
-                  onChange={(e) => setVisibility(e.target.value as "public" | "private")}
-                  disabled={!canEdit}
-                  helperText={visibility === "private"
-                    ? t("market.visibilityPrivateHelp", "Only visible to organization members")
-                    : t("market.visibilityPublicHelp", "Visible to all buyers")
-                  }
-                >
-                  <MenuItem value="public">{t("market.visibilityPublic", "Public")}</MenuItem>
-                  <MenuItem value="private">{t("market.visibilityPrivate", "Private (org members only)")}</MenuItem>
-                </TextField>
-              </Grid>
-            </FormPaper>
-          )}
+          {/* Visibility */}
+          <FormPaper title={t("market.visibility", "Visibility")}>
+            <Grid item xs={12}>
+              <TextField
+                select
+                fullWidth
+                size="small"
+                label={t("market.visibility", "Visibility")}
+                value={visibility}
+                onChange={(e) => setVisibility(e.target.value as "public" | "private")}
+                disabled={!canEdit}
+                helperText={visibility === "private"
+                  ? t("market.visibilityPrivateHelp", "Only visible to organization members")
+                  : t("market.visibilityPublicHelp", "Visible to all buyers")
+                }
+              >
+                <MenuItem value="public">{t("market.visibilityPublic", "Public")}</MenuItem>
+                <MenuItem value="private">{t("market.visibilityPrivate", "Private (org members only)")}</MenuItem>
+              </TextField>
+            </Grid>
+          </FormPaper>
 
           {/* Bulk Discount Tiers */}
           <FormPaper title={t("market.bulkDiscountTiers", "Bulk Discounts")}>

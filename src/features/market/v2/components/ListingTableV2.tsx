@@ -62,12 +62,12 @@ export function ListingTableV2({ listings }: { listings: ListingSearchResult[] }
                 <Typography variant="body2">{l.quantity_available.toLocaleString()}</Typography>
               </TableCell>
               <TableCell>
-                <MuiLink component={RouterLink} to={`/${l.seller_type === "contractor" ? "contractor" : "user"}/${l.seller_slug}`} underline="hover" color="text.secondary" variant="caption">
-                  {l.seller_name}
+                <MuiLink component={RouterLink} to={`/shops/${l.shop_slug}`} underline="hover" color="text.secondary" variant="caption">
+                  {l.shop_name}
                 </MuiLink>
               </TableCell>
               <TableCell>
-                <Typography variant="caption" color="text.secondary">{l.seller_rating.toFixed(1)}</Typography>
+                <Typography variant="caption" color="text.secondary">{l.shop_rating.toFixed(1)}</Typography>
               </TableCell>
             </TableRow>
           ))}

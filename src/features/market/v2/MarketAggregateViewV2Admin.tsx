@@ -121,7 +121,7 @@ function StatStrip({
     0
   );
   const totalStock = filtered.reduce((s, l) => s + l.quantity_available, 0);
-  const sellerCount = new Set(filtered.map((l) => l.seller_id)).size;
+  const sellerCount = new Set(filtered.map((l) => l.shop_id)).size;
 
   const cells: Array<{
     label: string;
@@ -549,13 +549,7 @@ function BuyDialog({
     const cart: Cart = cookies.market_cart || [];
     let found = false;
     for (const seller of cart) {
-      const matches =
-        (seller.user_seller_id &&
-          listing.seller_type === "user" &&
-          seller.user_seller_id === listing.seller_id) ||
-        (seller.contractor_seller_id &&
-          listing.seller_type === "contractor" &&
-          seller.contractor_seller_id === listing.seller_id);
+      const matches = seller.shop_id && seller.shop_id === listing.shop_id;
       if (matches) {
         seller.items.push({
           listing_id: listing.listing_id,
@@ -569,10 +563,7 @@ function BuyDialog({
     }
     if (!found) {
       cart.push({
-        user_seller_id:
-          listing.seller_type === "user" ? listing.seller_id : undefined,
-        contractor_seller_id:
-          listing.seller_type === "contractor" ? listing.seller_id : undefined,
+        shop_id: listing.shop_id,
         items: [
           {
             listing_id: listing.listing_id,
@@ -600,7 +591,7 @@ function BuyDialog({
   return (
     <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
       <DialogTitle sx={{ fontWeight: 700 }}>
-        Buy from {listing.seller_name}
+        Buy from {listing.shop_name}
       </DialogTitle>
       <DialogContent sx={{ pt: "12px !important" }}>
         <Typography variant="body2" color="text.secondary" mb={2}>
@@ -730,38 +721,18 @@ function SellOrdersPanel({
             >
               {/* Seller — use ListingNameAndRating */}
               <ListingNameAndRating
-                user={
-                  listing.seller_type === "user"
-                    ? {
-                        username: listing.seller_name,
-                        display_name: listing.seller_name,
-                        avatar: "",
-                        rating: {
-                          avg_rating: listing.seller_rating,
-                          rating_count: 0,
-                          total_rating: 0,
-                          streak: 0,
-                          total_orders: 0,
-                        },
-                      }
-                    : undefined
-                }
-                contractor={
-                  listing.seller_type === "contractor"
-                    ? {
-                        name: listing.seller_name,
-                        avatar: "",
-                        spectrum_id: listing.seller_slug,
-                        rating: {
-                          avg_rating: listing.seller_rating,
-                          rating_count: 0,
-                          total_rating: 0,
-                          streak: 0,
-                          total_orders: 0,
-                        },
-                      }
-                    : undefined
-                }
+                contractor={{
+                  name: listing.shop_name,
+                  avatar: "",
+                  spectrum_id: listing.shop_slug,
+                  rating: {
+                    avg_rating: listing.shop_rating,
+                    rating_count: 0,
+                    total_rating: 0,
+                    streak: 0,
+                    total_orders: 0,
+                  },
+                }}
               />
 
               {/* Quality — use QualityBadge */}

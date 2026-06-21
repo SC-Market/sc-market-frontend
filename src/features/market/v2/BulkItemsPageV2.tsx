@@ -169,7 +169,7 @@ function AggregateCard({ item }: { item: GameItemAggregate }) {
 
           <Stack direction="row" spacing={0.5} sx={{ mt: 0.5 }} flexWrap="wrap" useFlexGap>
             <Chip label={`${item.total_quantity.toLocaleString()} avail.`} size="small" variant="outlined" />
-            <Chip label={`${item.seller_count} seller${item.seller_count !== 1 ? "s" : ""}`} size="small" variant="outlined" />
+            <Chip label={`${item.shop_count} seller${item.shop_count !== 1 ? "s" : ""}`} size="small" variant="outlined" />
           </Stack>
 
           {(item.quality_tier_min || item.quality_tier_max) && (
