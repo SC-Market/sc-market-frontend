@@ -92,11 +92,9 @@ export function MyShops() {
                 <Button size="small" component={RouterLink} to={`/shops/${shop.slug}`}>
                   View
                 </Button>
-                {shop.can_manage && (
-                  <Button size="small" variant="contained" component={RouterLink} to={`/shops/${shop.slug}`}>
-                    Manage
-                  </Button>
-                )}
+                <Button size="small" variant="contained" component={RouterLink} to={`/shops/${shop.slug}`}>
+                  Manage
+                </Button>
               </CardActions>
             </Card>
           </Grid>
