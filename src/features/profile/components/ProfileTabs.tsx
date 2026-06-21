@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next"
 import { Divider, Tabs } from "@mui/material"
 import {
   CreateRounded,
-  DesignServicesRounded,
   InfoRounded,
   StarRounded,
   StorefrontRounded,
@@ -37,32 +36,25 @@ export function ProfileTabs({ username, currentTab }: ProfileTabsProps) {
           {...a11yProps(0)}
         />
         <HapticTab
-          label={t("viewProfile.services_tab")}
-          component={Link}
-          to={`/user/${username}/services`}
-          icon={<DesignServicesRounded />}
-          {...a11yProps(1)}
-        />
-        <HapticTab
           label={t("viewProfile.about_tab")}
           component={Link}
           to={`/user/${username}/about`}
           icon={<InfoRounded />}
-          {...a11yProps(2)}
+          {...a11yProps(1)}
         />
         <HapticTab
           label={t("viewProfile.order_tab")}
           component={Link}
           to={`/user/${username}/order`}
           icon={<CreateRounded />}
-          {...a11yProps(3)}
+          {...a11yProps(2)}
         />
         <HapticTab
           label={t("viewProfile.reviews_tab")}
           component={Link}
           to={`/user/${username}/reviews`}
           icon={<StarRounded />}
-          {...a11yProps(4)}
+          {...a11yProps(3)}
         />
       </Tabs>
       <Divider light />

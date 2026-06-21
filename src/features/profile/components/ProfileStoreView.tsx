@@ -1,7 +1,7 @@
 import React from "react"
-import { Link as RouterLink } from "react-router-dom"
-import { Box, Grid, Card, CardContent, Avatar, Typography, Rating, Skeleton, Chip } from "@mui/material"
+import { Grid, Skeleton, Typography } from "@mui/material"
 import { useGetShopsByOwnerQuery } from "../../../store/api/v2/market"
+import { ShopCard } from "../../shops/components/ShopCard"
 
 export function ProfileStoreView(props: { user: string }) {
   return <ShopList username={props.user} />
@@ -22,7 +22,7 @@ function ShopList(props: { username?: string; spectrumId?: string }) {
       <Grid container spacing={2}>
         {[1, 2].map((i) => (
           <Grid item xs={12} sm={6} md={4} key={i}>
-            <Skeleton variant="rectangular" height={140} sx={{ borderRadius: 2 }} />
+            <Skeleton variant="rectangular" height={220} sx={{ borderRadius: 2 }} />
           </Grid>
         ))}
       </Grid>
@@ -39,42 +39,9 @@ function ShopList(props: { username?: string; spectrumId?: string }) {
 
   return (
     <Grid container spacing={2}>
-      {shops.map((shop) => (
+      {shops.map((shop, index) => (
         <Grid item xs={12} sm={6} md={4} key={shop.shop_id}>
-          <Card
-            component={RouterLink}
-            to={`/shops/${shop.slug}`}
-            sx={{ textDecoration: "none", "&:hover": { boxShadow: 4 }, transition: "box-shadow 0.2s" }}
-          >
-            <CardContent>
-              <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 1 }}>
-                <Avatar src={shop.logo_url || undefined} sx={{ width: 48, height: 48 }}>
-                  {shop.name[0]}
-                </Avatar>
-                <Box sx={{ minWidth: 0 }}>
-                  <Typography variant="h6" noWrap>{shop.name}</Typography>
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 0.5 }}>
-                    <Rating value={shop.rating || 0} precision={0.5} readOnly size="small" />
-                    <Typography variant="caption" color="text.secondary">
-                      ({shop.rating_count})
-                    </Typography>
-                  </Box>
-                </Box>
-              </Box>
-              {shop.description && (
-                <Typography variant="body2" color="text.secondary" noWrap>
-                  {shop.description}
-                </Typography>
-              )}
-              {shop.supported_languages.length > 1 && (
-                <Box sx={{ display: "flex", gap: 0.5, mt: 1 }}>
-                  {shop.supported_languages.slice(0, 4).map((lang) => (
-                    <Chip key={lang} label={lang.toUpperCase()} size="small" variant="outlined" sx={{ height: 20 }} />
-                  ))}
-                </Box>
-              )}
-            </CardContent>
-          </Card>
+          <ShopCard shop={shop} index={index} />
         </Grid>
       ))}
     </Grid>

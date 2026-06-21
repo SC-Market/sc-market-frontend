@@ -5,7 +5,6 @@ import { Section } from "../../../components/paper/Section"
 import { CreateOrderForm } from "../../../views/orders/CreateOrderForm"
 import { UserReviews } from "../../../views/contractor/OrgReviews"
 import { ProfileStoreView } from "./ProfileStoreView"
-import { ProfileServicesView } from "./ProfileServicesView"
 import { ProfileAboutTab } from "./ProfileAboutTab"
 import { User } from "../../../datatypes/User"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
@@ -34,21 +33,18 @@ export function ProfileTabContent({
         <ProfileStoreView user={profile.username} />
       </TabPanel>
       <TabPanel index={currentTab} value={1} preload>
-        <ProfileServicesView user={profile.username} />
-      </TabPanel>
-      <TabPanel index={currentTab} value={2} preload>
         <ProfileAboutTab
           profile={profile}
           submitUpdate={submitUpdate}
           isMyProfile={isMyProfile}
         />
       </TabPanel>
-      <TabPanel index={currentTab} value={3} preload>
+      <TabPanel index={currentTab} value={2} preload>
         <Grid container spacing={theme.layoutSpacing.layout}>
           <CreateOrderForm assigned_to={profile.username} />
         </Grid>
       </TabPanel>
-      <TabPanel index={currentTab} value={4} preload>
+      <TabPanel index={currentTab} value={3} preload>
         <Grid container spacing={theme.layoutSpacing.layout}>
           <Section xs={12} lg={8} disablePadding>
             <UserReviews user={profile} />
