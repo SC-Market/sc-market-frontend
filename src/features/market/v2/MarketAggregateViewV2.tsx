@@ -106,7 +106,7 @@ import type { GameItemListingResult, GameItemQualityDistribution, PriceDataPoint
 // Localized headCells for sell orders table
 const headCells: readonly HeadCell<AggregateListingV2Row>[] = [
   {
-    id: "seller_name",
+    id: "shop_name",
     numeric: false,
     disablePadding: false,
     label: "MarketAggregateView.sellerRating",
@@ -183,11 +183,10 @@ const buyOrderHeadCells: readonly HeadCell<BuyOrderV2Row>[] = [
 /** Row shape for aggregate listings table */
 export interface AggregateListingV2Row {
   listing_id: string;
-  seller_id: string;
-  seller_slug: string;
-  seller_name: string;
-  seller_type: "user" | "contractor";
-  seller_rating: number;
+  shop_id: string;
+  shop_slug: string;
+  shop_name: string;
+  shop_rating: number;
   price_min: number;
   price_max: number;
   quantity_available: number;
@@ -216,7 +215,7 @@ export interface GameItemAggregateV2 {
     min_price: number;
     avg_price: number;
     max_price: number;
-    seller_count: number;
+    shop_count: number;
   }>;
   listings: AggregateListingV2Row[];
   buy_orders: BuyOrderV2Row[];
@@ -253,15 +252,14 @@ export function MarketAggregateViewV2() {
       min_price: d.min_price,
       avg_price: d.avg_price,
       max_price: d.max_price,
-      seller_count: d.seller_count,
+      shop_count: d.shop_count,
     })),
     listings: (listingsData?.listings || []).map((l): AggregateListingV2Row => ({
       listing_id: l.listing_id,
-      seller_id: l.seller_id,
-      seller_slug: l.seller_slug,
-      seller_name: l.seller_name,
-      seller_type: l.seller_type,
-      seller_rating: l.seller_rating,
+      shop_id: l.shop_id,
+      shop_slug: l.shop_slug,
+      shop_name: l.shop_name,
+      shop_rating: l.shop_rating,
       price_min: l.price_min,
       price_max: l.price_max,
       quantity_available: l.quantity_available,
@@ -329,7 +327,7 @@ export function PriceComparisonTable({
     min_price: number;
     avg_price: number;
     max_price: number;
-    seller_count: number;
+    shop_count: number;
   }>;
 }) {
   const { t, i18n } = useTranslation();
@@ -387,7 +385,7 @@ export function PriceComparisonTable({
                 <QualityBadge tier={item.quality_tier} size="small" />
               </td>
               <td style={{ textAlign: "right", padding: theme.spacing(1) }}>
-                <Typography variant="body2">{item.seller_count}</Typography>
+                <Typography variant="body2">{item.shop_count}</Typography>
               </td>
               <td style={{ textAlign: "right", padding: theme.spacing(1) }}>
                 <Typography variant="body2" color="primary">
@@ -450,16 +448,7 @@ export function AggregateRowV2(props: {
     let found = false;
 
     for (const seller of cart) {
-      const matchesUser =
-        seller.user_seller_id &&
-        listing.seller_type === "user" &&
-        seller.user_seller_id === listing.seller_id;
-      const matchesContractor =
-        seller.contractor_seller_id &&
-        listing.seller_type === "contractor" &&
-        seller.contractor_seller_id === listing.seller_id;
-
-      if (matchesUser || matchesContractor) {
+      if (seller.shop_id && seller.shop_id === listing.shop_id) {
         seller.items.push({
           listing_id: listing.listing_id,
           aggregate_id: listing.listing_id, // TODO: Get actual aggregate_id
@@ -474,10 +463,7 @@ export function AggregateRowV2(props: {
 
     if (!found) {
       cart.push({
-        user_seller_id:
-          listing.seller_type === "user" ? listing.seller_id : undefined,
-        contractor_seller_id:
-          listing.seller_type === "contractor" ? listing.seller_id : undefined,
+        shop_id: listing.shop_id,
         items: [
           {
             listing_id: listing.listing_id,
@@ -533,38 +519,18 @@ export function AggregateRowV2(props: {
           }}
         >
           <ListingNameAndRating
-            user={
-              listing.seller_type === "user"
-                ? {
-                    username: listing.seller_name,
-                    display_name: listing.seller_name,
-                    avatar: "",
-                    rating: { 
-                      avg_rating: listing.seller_rating,
-                      rating_count: 0,
-                      total_rating: 0,
-                      streak: 0,
-                      total_orders: 0,
-                    },
-                  }
-                : undefined
-            }
-            contractor={
-              listing.seller_type === "contractor"
-                ? {
-                    name: listing.seller_name,
-                    avatar: "",
-                    spectrum_id: listing.seller_slug,
-                    rating: { 
-                      avg_rating: listing.seller_rating,
-                      rating_count: 0,
-                      total_rating: 0,
-                      streak: 0,
-                      total_orders: 0,
-                    },
-                  }
-                : undefined
-            }
+            contractor={{
+              name: listing.shop_name,
+              avatar: "",
+              spectrum_id: listing.shop_slug,
+              rating: {
+                avg_rating: listing.shop_rating,
+                rating_count: 0,
+                total_rating: 0,
+                streak: 0,
+                total_orders: 0,
+              },
+            }}
           />
         </Box>
       </TableCell>

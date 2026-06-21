@@ -110,7 +110,7 @@ export function QualityDistributionChart({
         avgPrice: tierData?.avg_price ?? 0,
         minPrice: tierData?.min_price ?? 0,
         maxPrice: tierData?.max_price ?? 0,
-        sellerCount: tierData?.seller_count ?? 0,
+        sellerCount: tierData?.shop_count ?? 0,
         listingCount: tierData?.listing_count ?? 0,
       }
     })

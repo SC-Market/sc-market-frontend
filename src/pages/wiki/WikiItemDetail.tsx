@@ -262,7 +262,7 @@ export function WikiItemDetail() {
                                 {listing.title}
                               </Typography>
                               <Typography variant="caption" color="text.secondary">
-                                {listing.seller_name}
+                                {listing.shop_name}
                               </Typography>
                             </TableCell>
                             <TableCell align="right">

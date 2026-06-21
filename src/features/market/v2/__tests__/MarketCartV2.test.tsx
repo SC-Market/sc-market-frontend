@@ -122,10 +122,10 @@ const mockCartData: GetCartResponse = {
       cart_item_id: "cart-1",
       listing: {
         listing_id: "listing-1",
-        seller_id: "seller-1",
+        shop_id: "seller-1",
         title: "Test Item 1",
-        seller_name: "TestSeller",
-        seller_rating: 4.5, seller_type: "user" as const, seller_slug: "testuser",
+        shop_name: "TestSeller",
+        shop_rating: 4.5, shop_slug: "testuser",
         status: "active",
       },
       variant: {
@@ -149,10 +149,10 @@ const mockCartData: GetCartResponse = {
       cart_item_id: "cart-2",
       listing: {
         listing_id: "listing-2",
-        seller_id: "seller-2",
+        shop_id: "seller-2",
         title: "Test Item 2",
-        seller_name: "TestSeller2",
-        seller_rating: 4.0, seller_type: "user" as const, seller_slug: "testuser2",
+        shop_name: "TestSeller2",
+        shop_rating: 4.0, shop_slug: "testuser2",
         status: "active",
       },
       variant: {

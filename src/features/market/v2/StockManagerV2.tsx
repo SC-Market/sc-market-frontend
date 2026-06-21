@@ -76,6 +76,7 @@ import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { formatMostSignificantDiff } from "../../../util/time"
 import {
   useGetMyListingsQuery,
+  useGetMyShopsQuery,
   useUpdateListingMutation,
   useRefreshListingMutation,
   useDeleteListingMutation,
@@ -307,6 +308,7 @@ function DisplayStockV2({
   const [currentOrg] = useCurrentOrg()
   const issueAlert = useAlertHook()
 
+  const { data: myShops } = useGetMyShopsQuery()
   const [updateListing] = useUpdateListingMutation()
   const [refreshListing] = useRefreshListingMutation()
   const [deleteListing] = useDeleteListingMutation()
@@ -394,6 +396,11 @@ function DisplayStockV2({
         return
       }
       try {
+        const shopId = myShops?.[0]?.shop_id
+        if (!shopId) {
+          issueAlert({ message: t("ItemStock.noShopError", "No shop found — create one first"), severity: "error" })
+          return
+        }
         await createListing({
           createListingRequest: {
             title: editing.game_item_name || "New Listing",
@@ -402,6 +409,7 @@ function DisplayStockV2({
             pricing_mode: "unified",
             base_price: editing.price || 1,
             lots: [{ quantity: editing.quantity_available || 1, variant_attributes: {} }],
+            shop_id: shopId,
           },
         }).unwrap()
         issueAlert({ message: t("ItemStock.created"), severity: "success" })

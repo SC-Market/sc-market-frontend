@@ -147,15 +147,11 @@ export function ListingDetailV2() {
     return crumbs
   }, [listing, gameItemType, gameItemId, gameItemName, t])
 
-  // Seller props for V1 components
-  const userSeller = seller?.type === "user" ? { username: seller.slug } : null
-  const contractorSeller = seller?.type === "contractor" ? { spectrum_id: seller.slug } : null
-
   const canEdit = useMemo(() => {
     if (!profile || !seller || !listing) return false
     if (profile.role === "admin") return true
-    if (seller.type === "user" && seller.slug === profile.username) return true
-    if (seller.type === "contractor" && currentOrg?.spectrum_id === seller.slug) {
+    if (seller.slug === profile.username) return true
+    if (currentOrg?.spectrum_id === seller.slug) {
       return has_permission(currentOrg, profile, "manage_market", profile.contractors)
     }
     return false
@@ -258,7 +254,7 @@ export function ListingDetailV2() {
                             <Box component="span" sx={{ display: "inline-flex", alignItems: "center", gap: 0.5 }}>
                               <Link
                                 component={RouterLink}
-                                to={`/${seller.type === "contractor" ? "contractor" : "user"}/${seller.slug}`}
+                                to={`/shops/${seller.slug}`}
                                 underline="hover"
                                 color="text.primary"
                                 variant="subtitle2"
@@ -371,7 +367,7 @@ export function ListingDetailV2() {
                         <BidAreaV2
                           listingId={listing.listing_id}
                           startingPrice={items[0]?.base_price || 0}
-                          isOwner={seller?.type === "user" && seller?.slug === profile?.username}
+                          isOwner={seller?.slug === profile?.username || currentOrg?.spectrum_id === seller?.slug}
                         />
                       )}
 
@@ -394,7 +390,7 @@ export function ListingDetailV2() {
           {/* FULL-WIDTH SECTIONS */}
 
           {/* Seller Reviews */}
-          <SellerReviews userSeller={userSeller} contractorSeller={contractorSeller} />
+          <SellerReviews userSeller={seller ? { username: seller.slug } : null} />
 
           {/* Market Analysis */}
           {gameItemId && priceRange && (
@@ -410,8 +406,7 @@ export function ListingDetailV2() {
 
           {/* Seller's Other Listings */}
           <SellerOtherListingsV2
-            sellerUsername={seller.type === "user" ? seller.slug : undefined}
-            contractorSpectrumId={seller.type === "contractor" ? seller.slug : undefined}
+            shopSlug={seller.slug}
             currentListingId={listing.listing_id}
           />
 

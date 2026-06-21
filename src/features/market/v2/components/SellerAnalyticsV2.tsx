@@ -36,7 +36,7 @@ export function SellerAnalyticsV2({ sellerId }: SellerAnalyticsV2Props) {
 
   // Fetch seller stats from V2 API
   const { data, isLoading, isError } = marketV2Api.useGetSellerStatsQuery({
-    sellerId,
+    shopId: sellerId,
   })
 
   // Get tier name for display

@@ -83,7 +83,7 @@ export function ContractorListingsV2() {
     error,
     refetch,
   } = useSearchListingsQuery({
-    contractorSpectrumId: contractor_id,
+    shopSlug: contractor_id,
     page: page + 1, // Convert 0-based to 1-based
     pageSize: perPage,
     sortBy: "created_at",
@@ -362,7 +362,7 @@ function ContractorListingCard({ listing, index, canManage }: ContractorListingC
             <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <Chip
                 icon={<BusinessRounded />}
-                label={listing.seller_name}
+                label={listing.shop_name}
                 color="primary"
                 size="small"
                 variant="outlined"
@@ -448,7 +448,7 @@ function ContractorListingCard({ listing, index, canManage }: ContractorListingC
                 {t("contractorListings.rating", "Organization Rating")}
               </Typography>
               <Typography variant="body1" fontWeight="medium" sx={{ display: "flex", alignItems: "center", gap: 0.25 }}>
-                {listing.seller_rating.toFixed(1)} <StarRounded sx={{ fontSize: 18, color: "warning.main" }} />
+                {listing.shop_rating.toFixed(1)} <StarRounded sx={{ fontSize: 18, color: "warning.main" }} />
               </Typography>
             </Box>
 

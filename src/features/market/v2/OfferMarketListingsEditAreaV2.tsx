@@ -65,8 +65,7 @@ export function OfferMarketListingsEditAreaV2(props: { session: GetOfferSessionV
 
   // Search listings scoped to this seller
   const { data: searchResults } = useSearchListingsQuery({
-    sellerUsername: !session.contractor ? session.assigned_to?.username : undefined,
-    contractorSpectrumId: session.contractor?.spectrum_id,
+    shopSlug: session.contractor?.spectrum_id ?? session.assigned_to?.username,
     quantityMin: 1,
     page: 1,
     pageSize: 50,

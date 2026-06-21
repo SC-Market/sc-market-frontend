@@ -40,6 +40,7 @@ import { useGetUserProfileQuery } from "../../profile/api/profileApi";
 import { useCurrentOrg } from "../../../hooks/login/CurrentOrg";
 import { Alert } from "@mui/material";
 import { PriceComparisonAlert } from "../components/PriceComparisonAlert";
+import { ShopSelector } from "./components/ShopSelector";
 import type {
   CreateListingRequest,
   StockLotInput,
@@ -70,6 +71,9 @@ export function CreateListingV2() {
   const { data: profile } = useGetUserProfileQuery();
   const [currentOrg] = useCurrentOrg();
   const isVerified = profile?.rsi_confirmed;
+
+  // Shop selection
+  const [shopId, setShopId] = useState("");
 
   // Form state — prefilled from ?game_item_id=&game_item_name=&game_item_type= query params
   const [title, setTitle] = useState("");
@@ -162,6 +166,9 @@ export function CreateListingV2() {
 
   // Validate form
   const validateForm = useCallback((): string | null => {
+    if (!shopId) {
+      return t("CreateListingV2.validation.shopRequired", "Please select a shop");
+    }
     if (!title.trim()) {
       return t("CreateListingV2.validation.titleRequired", "Title is required");
     }
@@ -226,7 +233,7 @@ export function CreateListingV2() {
     }
 
     return null;
-  }, [title, description, gameItemId, pricingMode, basePrice, stockLots, t]);
+  }, [shopId, title, description, gameItemId, pricingMode, basePrice, stockLots, t]);
 
   // Submit form
   const handleSubmit = useCallback(
@@ -276,7 +283,7 @@ export function CreateListingV2() {
         min_order_value: minOrderValue ?? undefined,
         max_order_value: maxOrderValue ?? undefined,
         bulk_discount_tiers: bulkDiscountTiers.length ? bulkDiscountTiers : undefined,
-        contractor_spectrum_id: currentOrg?.spectrum_id || undefined,
+        shop_id: shopId,
         visibility: currentOrg ? visibility : undefined,
         sale_type: saleType,
         status: listingStatus,
@@ -315,6 +322,7 @@ export function CreateListingV2() {
       gameItemId,
       pricingMode,
       basePrice,
+      shopId,
       photoResourceIds,
       createListing,
       issueAlert,
@@ -393,14 +401,12 @@ export function CreateListingV2() {
             </Grid>
           )}
 
-          {/* Org context banner */}
-          <Grid item xs={12}>
-            <Alert severity="info" icon={false}>
-              {currentOrg
-                ? t("CreateListingV2.creatingForOrg", "Creating listing on behalf of {{orgName}}", { orgName: currentOrg.name })
-                : t("CreateListingV2.creatingAsUser", "Creating listing as {{username}}", { username: profile?.display_name || profile?.username || "" })}
-            </Alert>
-          </Grid>
+          {/* Shop Selector */}
+          <FormPaper title={t("CreateListingV2.shop", "Shop")}>
+            <Grid item xs={12}>
+              <ShopSelector value={shopId} onChange={setShopId} />
+            </Grid>
+          </FormPaper>
 
           {/* ============================================================ */}
           {/* ESSENTIAL FIELDS — always visible                            */}
@@ -1053,7 +1059,7 @@ export function CreateListingV2() {
               color="secondary"
               type="submit"
               loading={isLoading}
-              disabled={isUploading}
+              disabled={isUploading || !shopId}
               aria-label={t("CreateListingV2.submit", "Create Listing")}
             >
               {isUploading

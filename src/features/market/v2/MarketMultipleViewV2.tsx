@@ -106,7 +106,6 @@ export interface BundleItemV2 {
 /** Bundle listing data structure */
 export interface BundleListingV2 {
   listing_id: string;
-  seller_type: "user" | "contractor";
   title: string;
   description: string;
   status: "active" | "inactive" | "sold" | "expired" | "cancelled";
@@ -144,7 +143,6 @@ export function MarketMultipleViewV2() {
     const { listing, seller, items } = listingDetail;
     return {
       listing_id: listing.listing_id,
-      seller_type: listing.seller_type,
       title: listing.title,
       description: listing.description,
       status: listing.status,
@@ -179,7 +177,7 @@ export function MarketMultipleViewV2() {
       seller: {
         name: seller.name,
         slug: seller.slug,
-        avatar: seller.avatar_url,
+        avatar: seller.logo_url,
         rating: { avg_rating: seller.rating },
       },
       orders: [],
@@ -190,17 +188,15 @@ export function MarketMultipleViewV2() {
   // Permission checks
   const amContractor = useMemo(
     () =>
-      currentOrg?.spectrum_id === complete?.seller.slug &&
-      complete?.seller_type === "contractor",
-    [currentOrg?.spectrum_id, complete?.seller.slug, complete?.seller_type]
+      currentOrg?.spectrum_id === complete?.seller.slug,
+    [currentOrg?.spectrum_id, complete?.seller.slug]
   );
 
   const amSeller = useMemo(
     () =>
-      profile?.username === complete?.seller.username &&
-      complete?.seller_type === "user" &&
+      profile?.username === complete?.seller.slug &&
       !currentOrg,
-    [currentOrg, complete?.seller.username, complete?.seller_type, profile?.username]
+    [currentOrg, complete?.seller.slug, profile?.username]
   );
 
   const amContractorManager = useMemo(
@@ -366,7 +362,7 @@ export function MarketMultipleViewV2() {
                           users={[{
                             name: complete.seller.name,
                             display_name: complete.seller.display_name || complete.seller.name,
-                            username: complete.seller.username || complete.seller.name,
+                            username: complete.seller.slug,
                             avatar: complete.seller.avatar || "",
                             rating: {
                               avg_rating: complete.seller.rating.avg_rating,
@@ -479,36 +475,17 @@ export function MarketMultipleViewV2() {
                         <Stack direction={"column"} alignItems={"left"}>
                           <ListingDetailItem icon={<PersonRounded fontSize={"inherit"} />}>
                             <ListingNameAndRating
-                              user={
-                                complete.seller_type === "user"
-                                  ? {
-                                      username: complete.seller.username || complete.seller.name,
-                                      display_name: complete.seller.display_name || complete.seller.name,
-                                      avatar: complete.seller.avatar || "",
-                                      rating: {
-                                        avg_rating: complete.seller.rating.avg_rating,
-                                        rating_count: 0,
-                                        total_rating: 0,
-                                        streak: 0,
-                                      },
-                                    }
-                                  : undefined
-                              }
-                              contractor={
-                                complete.seller_type === "contractor"
-                                  ? {
-                                      name: complete.seller.name,
-                                      avatar: complete.seller.avatar || "",
-                                      spectrum_id: complete.seller.slug,
-                                      rating: {
-                                        avg_rating: complete.seller.rating.avg_rating,
-                                        rating_count: 0,
-                                        total_rating: 0,
-                                        streak: 0,
-                                      },
-                                    }
-                                  : undefined
-                              }
+                              contractor={{
+                                name: complete.seller.name,
+                                avatar: complete.seller.avatar || "",
+                                spectrum_id: complete.seller.slug,
+                                rating: {
+                                  avg_rating: complete.seller.rating.avg_rating,
+                                  rating_count: 0,
+                                  total_rating: 0,
+                                  streak: 0,
+                                },
+                              }}
                             />
                           </ListingDetailItem>
                           <ListingDetailItem icon={<CreateRounded fontSize={"inherit"} />}>

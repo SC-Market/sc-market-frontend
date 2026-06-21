@@ -10,6 +10,7 @@ export interface CartItem {
 export interface CartSeller {
   user_seller_id?: string | null
   contractor_seller_id?: string | null
+  shop_id?: string | null
   items: CartItem[]
   note?: string
 }

@@ -3,6 +3,7 @@ export const addTagTypes = [
   "Variant Types V2",
   "Suppliers V2",
   "Stock Lots V2",
+  "Shops",
   "Requisitions V2",
   "Orders V2",
   "Onboarding",
@@ -163,6 +164,58 @@ const injectedRtkApi = api
         }),
         invalidatesTags: ["Stock Lots V2"],
       }),
+      getMyShops: build.query<GetMyShopsApiResponse, GetMyShopsApiArg>({
+        query: () => ({ url: `/shops/mine` }),
+        providesTags: ["Shops"],
+      }),
+      createShop: build.mutation<CreateShopApiResponse, CreateShopApiArg>({
+        query: (queryArg) => ({
+          url: `/shops`,
+          method: "POST",
+          body: queryArg.createShopRequest,
+        }),
+        invalidatesTags: ["Shops"],
+      }),
+      quickCreateShop: build.mutation<
+        QuickCreateShopApiResponse,
+        QuickCreateShopApiArg
+      >({
+        query: (queryArg) => ({
+          url: `/shops/quick`,
+          method: "POST",
+          body: queryArg.quickCreateShopRequest,
+        }),
+        invalidatesTags: ["Shops"],
+      }),
+      getShop: build.query<GetShopApiResponse, GetShopApiArg>({
+        query: (queryArg) => ({ url: `/shops/${queryArg.slug}` }),
+        providesTags: ["Shops"],
+      }),
+      updateShop: build.mutation<UpdateShopApiResponse, UpdateShopApiArg>({
+        query: (queryArg) => ({
+          url: `/shops/${queryArg.shopId}`,
+          method: "PUT",
+          body: queryArg.updateShopRequest,
+        }),
+        invalidatesTags: ["Shops"],
+      }),
+      archiveShop: build.mutation<ArchiveShopApiResponse, ArchiveShopApiArg>({
+        query: (queryArg) => ({
+          url: `/shops/${queryArg.shopId}`,
+          method: "DELETE",
+        }),
+        invalidatesTags: ["Shops"],
+      }),
+      transferShop: build.mutation<TransferShopApiResponse, TransferShopApiArg>(
+        {
+          query: (queryArg) => ({
+            url: `/shops/${queryArg.shopId}/transfer`,
+            method: "POST",
+            body: queryArg.transferShopRequest,
+          }),
+          invalidatesTags: ["Shops"],
+        },
+      ),
       createRequisition: build.mutation<
         CreateRequisitionApiResponse,
         CreateRequisitionApiArg
@@ -322,8 +375,7 @@ const injectedRtkApi = api
             sort_order: queryArg.sortOrder,
             language_codes: queryArg.languageCodes,
             listing_type: queryArg.listingType,
-            seller_username: queryArg.sellerUsername,
-            contractor_spectrum_id: queryArg.contractorSpectrumId,
+            shop_slug: queryArg.shopSlug,
           },
         }),
         providesTags: ["Listings V2"],
@@ -1389,7 +1441,7 @@ const injectedRtkApi = api
         query: (queryArg) => ({
           url: `/analytics/seller-stats`,
           params: {
-            seller_id: queryArg.sellerId,
+            shop_id: queryArg.shopId,
           },
         }),
         providesTags: ["Analytics V2"],
@@ -1640,6 +1692,36 @@ export type BulkUpdateStockLotsApiArg = {
   /** Bulk update request with array of lot updates */
   bulkUpdateStockLotsRequest: BulkUpdateStockLotsRequest
 }
+export type GetMyShopsApiResponse = /** status 200 Ok */ ShopResponse[]
+export type GetMyShopsApiArg = void
+export type CreateShopApiResponse = /** status 200 Ok */ ShopResponse
+export type CreateShopApiArg = {
+  createShopRequest: CreateShopRequest
+}
+export type QuickCreateShopApiResponse = /** status 200 Ok */ ShopResponse
+export type QuickCreateShopApiArg = {
+  quickCreateShopRequest: QuickCreateShopRequest
+}
+export type GetShopApiResponse = /** status 200 Ok */ ShopPublicResponse
+export type GetShopApiArg = {
+  slug: string
+}
+export type UpdateShopApiResponse = /** status 200 Ok */ ShopResponse
+export type UpdateShopApiArg = {
+  shopId: string
+  updateShopRequest: UpdateShopRequest
+}
+export type ArchiveShopApiResponse = /** status 200 Ok */ {
+  success: boolean
+}
+export type ArchiveShopApiArg = {
+  shopId: string
+}
+export type TransferShopApiResponse = /** status 200 Ok */ ShopResponse
+export type TransferShopApiArg = {
+  shopId: string
+  transferShopRequest: TransferShopRequest
+}
 export type CreateRequisitionApiResponse =
   /** status 200 Ok */ CreateRequisitionResponse
 export type CreateRequisitionApiArg = {
@@ -1753,14 +1835,13 @@ export type SearchListingsApiArg = {
     | "updated_at"
     | "price"
     | "quality"
-    | "seller_rating"
+    | "shop_rating"
     | "quantity"
   /** Sort order (default: desc) */
   sortOrder?: "asc" | "desc"
   languageCodes?: string
   listingType?: "single" | "bundle" | "bulk"
-  sellerUsername?: string
-  contractorSpectrumId?: string
+  shopSlug?: string
 }
 export type GetMyListingsApiResponse =
   /** status 200 Updated listing with variant breakdown */ GetMyListingsResponse
@@ -1852,7 +1933,7 @@ export type ImportFromUexApiArg = {
       description: string
       title: string
     }[]
-    contractor_spectrum_id?: string
+    shop_id: string
     uex_username: string
   }
 }
@@ -1928,7 +2009,7 @@ export type GetListingsApiArg = {
   /** Optional quality tier filter (1-5) */
   qualityTier?: number
   /** Sort field (default: price) */
-  sortBy?: "price" | "quality" | "quantity" | "seller_rating"
+  sortBy?: "price" | "quality" | "quantity" | "shop_rating"
   /** Sort order (default: asc) */
   sortOrder?: "asc" | "desc"
   /** Page number for pagination (default: 1) */
@@ -1945,7 +2026,7 @@ export type SearchGameItemAggregatesApiArg = {
   priceMax?: number
   quantityMin?: number
   quantityMax?: number
-  sortBy?: "price" | "quantity" | "name" | "seller_count"
+  sortBy?: "price" | "quantity" | "name" | "shop_count"
   sortOrder?: "asc" | "desc"
   page?: number
   pageSize?: number
@@ -2645,10 +2726,10 @@ export type GetQualityDistributionApiArg = {
   endDate?: string
 }
 export type GetSellerStatsApiResponse =
-  /** status 200 Seller analytics with sales and inventory breakdown */ GetSellerStatsResponse
+  /** status 200 Shop analytics with sales and inventory breakdown */ GetSellerStatsResponse
 export type GetSellerStatsApiArg = {
-  /** Optional seller ID (defaults to current user) */
-  sellerId?: string
+  /** Shop ID to get stats for */
+  shopId?: string
 }
 export type GetMigrationStatusApiResponse =
   /** status 200 Ok */ MigrationStatusResponse
@@ -2965,6 +3046,64 @@ export type BulkUpdateStockLotsRequest = {
   /** Array of lot updates */
   updates: BulkLotUpdate[]
 }
+export type ShopResponse = {
+  shop_id: string
+  slug: string
+  name: string
+  description: string
+  banner: string | null
+  logo: string | null
+  owner_user_id: string | null
+  owner_contractor_id: string | null
+  supported_languages: string[]
+  market_order_template: string
+  default_pickup_method: string | null
+  status: string
+  created_at: string
+  updated_at: string
+  banner_url: string | null
+  logo_url: string | null
+}
+export type CreateShopRequest = {
+  name: string
+  slug?: string
+  description?: string
+  banner?: string
+  logo?: string
+  /** If set, shop is owned by this org. User must have manage_market in the org. */
+  contractor_id?: string
+}
+export type QuickCreateShopRequest = {
+  owner_type: "user" | "contractor"
+  /** Required when owner_type is "contractor" */
+  contractor_id?: string
+}
+export type ShopPublicResponse = {
+  shop_id: string
+  slug: string
+  name: string
+  description: string
+  banner_url: string | null
+  logo_url: string | null
+  supported_languages: string[]
+  status: string
+  created_at: string
+  rating: number | null
+  rating_count: number
+}
+export type UpdateShopRequest = {
+  name?: string
+  slug?: string
+  description?: string
+  banner?: string
+  logo?: string
+  supported_languages?: string[]
+  market_order_template?: string
+  default_pickup_method?: string | null
+}
+export type TransferShopRequest = {
+  target_contractor_id: string
+}
 export type RequisitionLineItem = {
   requisition_item_id: string
   game_item_id: string
@@ -3090,8 +3229,8 @@ export type CreateOrderResponse = {
   order_id: string
   /** UUID of the buyer */
   buyer_id: string
-  /** UUID of the seller */
-  seller_id: string
+  /** Shop ID of the seller */
+  shop_id: string
   /** Total price in aUEC (atomic units) */
   total_price: number
   /** Order status */
@@ -3395,8 +3534,7 @@ export type SearchOffersV2Response = {
 }
 export type CreateListingResponse = {
   listing_id: string
-  seller_id: string
-  seller_type: "user" | "contractor"
+  shop_id: string
   title: string
   description: string
   status: "active" | "inactive" | "sold" | "expired" | "cancelled"
@@ -3448,8 +3586,8 @@ export type CreateListingRequest = {
   max_order_value?: number
   /** Optional bulk discount tiers sorted by min_quantity ascending */
   bulk_discount_tiers?: BulkDiscountTier[]
-  /** Optional contractor spectrum_id — if provided, listing is created on behalf of the org */
-  contractor_spectrum_id?: string
+  /** Shop ID to create the listing under. Required — use GET /shops/mine to list available shops, or POST /shops/quick to create one. */
+  shop_id: string
   /** Sale type: fixed price, auction, or negotiable */
   sale_type?: "fixed" | "auction" | "negotiable"
   /** Auction details — required when sale_type is 'auction' */
@@ -3473,10 +3611,20 @@ export type ListingSearchResult = {
   listing_id: string
   /** Listing title */
   title: string
-  /** Seller username or contractor name */
-  seller_name: string
-  /** Seller rating (0-5) */
-  seller_rating: number
+  /** Shop ID this listing belongs to */
+  shop_id: string
+  /** Shop name */
+  shop_name: string
+  /** Shop slug — use for profile links: /shops/:slug */
+  shop_slug: string
+  /** Shop logo URL */
+  shop_logo?: string
+  /** Shop rating (0-5) */
+  shop_rating: number
+  /** Shop rating count */
+  shop_rating_count: number
+  /** Shop supported languages (ISO 639-1 codes) */
+  shop_languages: string[]
   /** Minimum price across all variants */
   price_min: number
   /** Maximum price across all variants */
@@ -3493,10 +3641,6 @@ export type ListingSearchResult = {
   quality_value_max?: number
   /** Number of unique variants in this listing */
   variant_count: number
-  /** Seller type (user or contractor) */
-  seller_type: "user" | "contractor"
-  /** Username (for user sellers) or spectrum_id (for contractor sellers) - use for profile links */
-  seller_slug: string
   /** ISO 8601 timestamp when listing was created */
   created_at: string
   /** ISO 8601 timestamp when listing was last updated */
@@ -3505,10 +3649,6 @@ export type ListingSearchResult = {
   game_item_name: string
   /** Game item type/category */
   game_item_type: string
-  /** Seller rating count */
-  seller_rating_count: number
-  /** Seller's supported languages (ISO 639-1 codes) */
-  seller_languages?: string[]
   /** First photo URL (null if no photos) */
   photo?: string
   /** Pickup method: delivery, pickup, any, or null (not specified) */
@@ -3585,19 +3725,16 @@ export type InventorySummaryResponse = {
 export type ListingDetail = {
   /** Listing UUID */
   listing_id: string
-  /** Seller UUID */
-  seller_id: string
-  /** Type of seller */
-  seller_type: "user" | "contractor"
+  /** Shop ID this listing belongs to */
+  shop_id: string
   /** Listing title */
   title: string
   /** Listing description (markdown) */
   description: string
   /** Current listing status */
   status: "active" | "inactive" | "sold" | "expired" | "cancelled"
-  /** Visibility setting
-    Listing visibility: public or private (org-only) */
-  visibility: "public" | "private"
+  /** Visibility setting */
+  visibility: "public" | "private" | "unlisted"
   /** Sale type */
   sale_type: "fixed" | "auction" | "negotiable"
   /** Listing type */
@@ -3623,18 +3760,18 @@ export type ListingDetail = {
   view_count?: number
 }
 export type SellerInfo = {
-  /** Seller username or contractor name */
+  /** Shop ID */
+  shop_id: string
+  /** Shop name */
   name: string
-  /** Seller type */
-  type: "user" | "contractor"
-  /** Username (for users) or spectrum_id (for contractors) - use for profile links */
+  /** Shop slug — use for profile links: /shops/:slug */
   slug: string
-  /** Seller rating (0-5) */
+  /** Shop rating (0-5) */
   rating: number
-  /** Optional seller avatar URL */
-  avatar_url?: string
-  /** Seller's supported languages (ISO 639-1 codes) */
-  languages?: string[]
+  /** Shop logo URL */
+  logo_url?: string
+  /** Shop supported languages (ISO 639-1 codes) */
+  languages: string[]
 }
 export type GameItemInfo = {
   /** Game item UUID */
@@ -3824,8 +3961,8 @@ export type GameItemQualityDistribution = {
   price_max: number
   /** Average price for this tier */
   price_avg: number
-  /** Number of unique sellers offering this tier */
-  seller_count: number
+  /** Number of unique shops offering this tier */
+  shop_count: number
   /** Number of listings offering this tier */
   listing_count: number
 }
@@ -3834,16 +3971,14 @@ export type GameItemListingResult = {
   listing_id: string
   /** Listing title */
   title: string
-  /** Seller ID */
-  seller_id: string
-  /** Seller name */
-  seller_name: string
-  /** Seller rating (0-5) */
-  seller_rating: number
-  /** Seller type */
-  seller_type: "user" | "contractor"
-  /** Username (for user sellers) or spectrum_id (for contractor sellers) */
-  seller_slug: string
+  /** Shop ID */
+  shop_id: string
+  /** Shop name */
+  shop_name: string
+  /** Shop rating (0-5) */
+  shop_rating: number
+  /** Shop slug — use for profile links: /shops/:slug */
+  shop_slug: string
   /** Minimum price across all variants in this listing */
   price_min: number
   /** Maximum price across all variants in this listing */
@@ -3891,7 +4026,7 @@ export type GameItemAggregate = {
   /** Number of active listings */
   listing_count: number
   /** Number of unique sellers */
-  seller_count: number
+  shop_count: number
   /** Minimum quality tier available */
   quality_tier_min?: number
   /** Maximum quality tier available */
@@ -5273,20 +5408,18 @@ export type CartListingInfo = {
   listing_id: string
   /** Listing title */
   title: string
-  /** Seller username or contractor name */
-  seller_name: string
-  /** Seller ID (user_id or contractor_id) */
-  seller_id: string
-  /** Seller type */
-  seller_type: "user" | "contractor"
-  /** Seller slug (username or spectrum_id) */
-  seller_slug: string
-  /** Seller rating (0-5) */
-  seller_rating: number
+  /** Shop ID */
+  shop_id: string
+  /** Shop name */
+  shop_name: string
+  /** Shop slug — use for profile links: /shops/:slug */
+  shop_slug: string
+  /** Shop rating (0-5) */
+  shop_rating: number
   /** Current listing status */
   status: string
-  /** ISO 8601 timestamp of seller's next available slot, or null if not set / currently available */
-  seller_next_available?: string | null
+  /** ISO 8601 timestamp of shop's next available slot, or null if not set / currently available */
+  shop_next_available?: string | null
 }
 export type CartVariantDetail = {
   /** UUID of the variant */
@@ -5375,8 +5508,8 @@ export type CheckoutCartRequest = {
   confirm_price_changes?: boolean
   /** Optional note from buyer to seller */
   note?: string
-  /** Checkout only items from this seller (user_id or contractor_id). If omitted, all items must be from one seller. */
-  seller_id?: string
+  /** Checkout only items from this shop. If omitted, all items must be from one shop. */
+  shop_id?: string
 }
 export type BuyOrderVariantDetail = {
   /** UUID of the variant */
@@ -5409,8 +5542,8 @@ export type CreateBuyOrderResponse = {
   order_id: string
   /** UUID of the buyer */
   buyer_id: string
-  /** UUID of the seller */
-  seller_id: string
+  /** Shop ID of the seller */
+  shop_id: string
   /** Total price in aUEC (atomic units) */
   total_price: number
   /** Order status */
@@ -5592,7 +5725,7 @@ export type QualityTierDistribution = {
   /** Maximum price for this tier */
   max_price: number
   /** Number of unique sellers offering this tier */
-  seller_count: number
+  shop_count: number
 }
 export type GetQualityDistributionResponse = {
   /** Game item UUID */
@@ -5625,8 +5758,8 @@ export type QualityTierPremium = {
   premium_percentage: number
 }
 export type GetSellerStatsResponse = {
-  /** Seller ID */
-  seller_id: string
+  /** Shop ID */
+  shop_id: string
   /** Sales data grouped by quality tier */
   sales_by_quality: QualityTierSales[]
   /** Current inventory distribution by quality tier */
@@ -5813,6 +5946,13 @@ export const {
   useUpdateStockLotMutation,
   useDeleteStockLotMutation,
   useBulkUpdateStockLotsMutation,
+  useGetMyShopsQuery,
+  useCreateShopMutation,
+  useQuickCreateShopMutation,
+  useGetShopQuery,
+  useUpdateShopMutation,
+  useArchiveShopMutation,
+  useTransferShopMutation,
   useCreateRequisitionMutation,
   useGetRequisitionsQuery,
   useGetRequisitionQuery,

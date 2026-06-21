@@ -45,7 +45,7 @@ import { Section } from "../../../components/paper/Section";
 // Table column definitions for listings
 const headCells: readonly HeadCell<GameItemListingResult>[] = [
   {
-    id: "seller_name",
+    id: "shop_name",
     numeric: false,
     disablePadding: false,
     label: "MarketAggregateView.sellerRating",
@@ -493,10 +493,7 @@ function GameItemListingRow(props: {
 
     // Find or create seller entry in cart
     for (const seller of cart) {
-      if (
-        (seller.user_seller_id && seller.user_seller_id === listing.seller_id) ||
-        (seller.contractor_seller_id && seller.contractor_seller_id === listing.seller_id)
-      ) {
+      if (seller.shop_id && seller.shop_id === listing.shop_id) {
         seller.items.push({
           listing_id: listing.listing_id,
           aggregate_id: gameItemId,
@@ -511,8 +508,7 @@ function GameItemListingRow(props: {
 
     if (!found) {
       cart.push({
-        user_seller_id: listing.seller_type === "user" ? listing.seller_id : undefined,
-        contractor_seller_id: listing.seller_type === "contractor" ? listing.seller_id : undefined,
+        shop_id: listing.shop_id,
         items: [
           {
             listing_id: listing.listing_id,
@@ -574,38 +570,18 @@ function GameItemListingRow(props: {
           }}
         >
           <ListingNameAndRating
-            user={
-              listing.seller_type === "user"
-                ? { 
-                    username: listing.seller_name, 
-                    display_name: listing.seller_name,
-                    avatar: "",
-                    rating: { 
-                      avg_rating: listing.seller_rating,
-                      rating_count: 0,
-                      total_rating: 0,
-                      streak: 0,
-                      total_orders: 0,
-                    } 
-                  }
-                : undefined
-            }
-            contractor={
-              listing.seller_type === "contractor"
-                ? { 
-                    name: listing.seller_name,
-                    avatar: "",
-                    spectrum_id: listing.seller_slug,
-                    rating: { 
-                      avg_rating: listing.seller_rating,
-                      rating_count: 0,
-                      total_rating: 0,
-                      streak: 0,
-                      total_orders: 0,
-                    } 
-                  }
-                : undefined
-            }
+            contractor={{
+              name: listing.shop_name,
+              avatar: "",
+              spectrum_id: listing.shop_slug,
+              rating: {
+                avg_rating: listing.shop_rating,
+                rating_count: 0,
+                total_rating: 0,
+                streak: 0,
+                total_orders: 0,
+              },
+            }}
           />
         </Box>
       </TableCell>
