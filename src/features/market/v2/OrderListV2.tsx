@@ -64,9 +64,10 @@ function OrderListItemV2(props: {
     order_id: string
     title: string
     buyer_username: string
-    seller_username: string
+    shop_name: string
+    shop_slug: string
     buyer_avatar?: string | null
-    seller_avatar?: string | null
+    shop_logo?: string | null
     quality_tier_min?: number
     quality_tier_max?: number
     status: string
@@ -76,10 +77,10 @@ function OrderListItemV2(props: {
 }) {
   const { order, role } = props
 
-  // Determine which avatar to show based on role
-  // If user is buyer, show seller avatar; if seller, show buyer avatar
-  const displayAvatar = role === "buyer" ? order.seller_avatar : order.buyer_avatar
-  const displayUsername = role === "buyer" ? order.seller_username : order.buyer_username
+  // Determine which avatar/name to show based on role
+  // If user is buyer, show shop info; if seller, show buyer info
+  const displayAvatar = role === "buyer" ? order.shop_logo : order.buyer_avatar
+  const displayUsername = role === "buyer" ? order.shop_name : order.buyer_username
 
   // Format quality tier display
   const qualityTierDisplay = useMemo(() => {
@@ -119,7 +120,7 @@ function OrderListItemV2(props: {
         }
         secondary={
           <Typography variant="caption" color="text.secondary">
-            {role === "buyer" ? `Seller: ${order.seller_username}` : `Buyer: ${order.buyer_username}`}
+            {role === "buyer" ? `Shop: ${order.shop_name}` : `Buyer: ${order.buyer_username}`}
           </Typography>
         }
       />

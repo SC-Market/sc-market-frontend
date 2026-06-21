@@ -86,6 +86,7 @@ import {
 } from "../../../store/api/v2/market"
 import { MobileListingRow } from "./components/MobileListingRow"
 import { QuickEditListingSheet } from "./components/QuickEditListingSheet"
+import { ShopSelector } from "./components/ShopSelector"
 
 /* ── Types ── */
 
@@ -816,6 +817,13 @@ export function StockManagerV2() {
   const [pageSize, setPageSize] = useState(48)
   const [searchParams] = useSearchParams()
   const statusFilter = searchParams.get("status") as "active" | "inactive" | "expired" | "cancelled" | null
+  const [selectedShopId, setSelectedShopId] = useState("")
+
+  const { data: myShops } = useGetMyShopsQuery()
+
+  // Derive spectrumId from the selected shop for filtering
+  const selectedShop = myShops?.find((s) => s.shop_id === selectedShopId)
+  const filterSpectrumId = selectedShop?.owner_contractor_id ?? currentOrg?.spectrum_id
 
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>({
     type: "include",
@@ -828,7 +836,8 @@ export function StockManagerV2() {
     pageSize,
     sortBy: "updated_at",
     sortOrder: "desc",
-    spectrumId: currentOrg?.spectrum_id,  })
+    spectrumId: filterSpectrumId,
+  })
 
   const listings = data?.listings ?? []
 
@@ -885,6 +894,13 @@ export function StockManagerV2() {
                 />
               </Box>
             </Grid>
+
+            {/* Shop selector for multi-shop users */}
+            {myShops && myShops.length > 1 && (
+              <Grid item xs={12} md={4}>
+                <ShopSelector value={selectedShopId} onChange={setSelectedShopId} />
+              </Grid>
+            )}
 
             {/* Desktop sidebar */}
             {!isMobile && (
