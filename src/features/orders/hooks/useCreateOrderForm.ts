@@ -146,10 +146,7 @@ export function useCreateOrderForm(params: UseCreateOrderFormParams) {
     contractor_id ? { spectrumId: contractor_id } : { username: assigned_to || "" },
     { skip: !contractor_id && !assigned_to },
   )
-  const sellerName = useMemo(() => {
-    if (sellerShops?.length) return sellerShops[0].name
-    return assigned_to || contractor_id || "this seller"
-  }, [sellerShops, contractor_id, assigned_to])
+  const sellerName = sellerShops?.[0]?.name || ""
 
   // Sync service from props
   useEffect(() => { setService(params.service || null) }, [params.service])
