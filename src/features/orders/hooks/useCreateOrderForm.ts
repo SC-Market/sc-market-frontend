@@ -18,6 +18,7 @@ import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
 import { useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
+import { useGetShopsByOwnerQuery } from "../../../store/api/v2/market"
 import { convertAvailability } from "../../../pages/availability/Availability.lazy"
 import type { Service, PaymentType } from "../domain/types"
 import type { OrderLimits } from "../domain/types"
@@ -140,9 +141,15 @@ export function useCreateOrderForm(params: UseCreateOrderFormParams) {
     [contractor_id, assigned_to, updateAvailability, refetchContractorRequirement, refetchUserRequirement, issueAlert, t],
   )
 
-  // TODO: Resolve shop name from contractor/user once service orders are shop-linked.
-  // For now, display the org name (from currentOrg context) or username as the seller identifier.
-  const sellerName = useMemo(() => assigned_to || contractor_id || "this seller", [contractor_id, assigned_to])
+  // Resolve shop name from contractor/user
+  const { data: sellerShops } = useGetShopsByOwnerQuery(
+    contractor_id ? { spectrumId: contractor_id } : { username: assigned_to || "" },
+    { skip: !contractor_id && !assigned_to },
+  )
+  const sellerName = useMemo(() => {
+    if (sellerShops?.length) return sellerShops[0].name
+    return assigned_to || contractor_id || "this seller"
+  }, [sellerShops, contractor_id, assigned_to])
 
   // Sync service from props
   useEffect(() => { setService(params.service || null) }, [params.service])
