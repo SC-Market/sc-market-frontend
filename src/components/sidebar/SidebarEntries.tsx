@@ -171,6 +171,23 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
         logged_in: true,
       },
       {
+        to: "/inventory",
+        text: "sidebar.inventory", tab_key: "inventory",
+        icon: <InventoryRounded />,
+        logged_in: true,
+      },
+      {
+        to: "/availability",
+        text: "sidebar.availability", tab_key: "availability",
+        icon: <CalendarMonthRounded />,
+        logged_in: true,
+      },
+    ],
+  },
+  {
+    title: "sidebar.manage.title",
+    items: [
+      {
         to: "/market/manage",
         text: "sidebar.manage_market_listings", tab_key: "manage_listings",
         icon: <ListAltRounded />,
@@ -192,28 +209,23 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
         shopRouteRest: "services",
       },
       {
-        to: "/inventory",
-        text: "sidebar.inventory", tab_key: "inventory",
-        icon: <InventoryRounded />,
+        to: "/shop/orders",
+        text: "sidebar.shop_orders", tab_key: "shop_orders",
+        icon: <AssignmentTurnedInRounded />,
         logged_in: true,
-      },
-      {
-        to: "/availability",
-        text: "sidebar.availability", tab_key: "availability",
-        icon: <CalendarMonthRounded />,
-        logged_in: true,
-      },
-      {
-        to: "/my-orgs",
-        text: "sidebar.my_orgs",
-        icon: <BusinessIcon />,
-        logged_in: true,
+        shopRouteRest: "orders",
       },
     ],
   },
   {
     title: "sidebar.organizations.title",
     items: [
+      {
+        to: "/my-orgs",
+        text: "sidebar.my_orgs",
+        icon: <ManageAccountsRounded />,
+        logged_in: true,
+      },
       {
         to: "/contractors",
         text: "sidebar.contractors",
