@@ -7,6 +7,7 @@ const NAME_TO_INDEX = new Map([
   ["services", 1],
   ["reviews", 2],
   ["about", 3],
+  ["order", 4],
 ])
 
 export function useShopTab() {
