@@ -28,26 +28,26 @@ import {
   useGetShopReviewsQuery,
   useSearchListingsQuery,
   ShopPublicResponse,
-} from "../../store/api/v2/market"
-import { ExtendedTheme } from "../../hooks/styles/Theme"
+} from "../../../store/api/v2/market"
+import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import {
   DarkBannerContainer,
   LightBannerContainer,
-} from "../../features/profile/components/BannerContainers"
-import type { User } from "../../datatypes/User"
-import { ListingCardV2 } from "../../features/market/v2/ListingSearchV2"
-import { HapticTab } from "../../components/haptic"
-import { a11yProps } from "../../components/tabs/Tabs"
-import { ShareButton } from "../../components/buttons/ShareButton"
-import { useShopTab } from "../../features/shops/hooks/useShopTab"
-import { ServiceListings } from "../../features/services/components/ServiceListings"
-import { MarkdownRender } from "../../components/markdown/Markdown"
-import { HeadCell, PaginatedTable } from "../../components/table/PaginatedTable"
-import { UnderlineLink } from "../../components/typography/UnderlineLink"
+} from "../../profile/components/BannerContainers"
+import type { User } from "../../../datatypes/User"
+import { ListingCardV2 } from "../../market/v2/ListingSearchV2"
+import { HapticTab } from "../../../components/haptic"
+import { a11yProps } from "../../../components/tabs/Tabs"
+import { ShareButton } from "../../../components/buttons/ShareButton"
+import { useShopTab } from "../hooks/useShopTab"
+import { ServiceListings } from "../../services/components/ServiceListings"
+import { MarkdownRender } from "../../../components/markdown/Markdown"
+import { HeadCell, PaginatedTable } from "../../../components/table/PaginatedTable"
+import { UnderlineLink } from "../../../components/typography/UnderlineLink"
 import { amber } from "@mui/material/colors"
 import { useCallback, useMemo, MouseEventHandler } from "react"
-import { EmptyReviews } from "../../components/empty-states"
-import { CreateOrderForm } from "../../views/orders/CreateOrderForm"
+import { EmptyReviews } from "../../../components/empty-states"
+import { CreateOrderForm } from "../../../views/orders/CreateOrderForm"
 
 export function ShopProfile() {
   const { slug } = useParams<{ slug: string }>()

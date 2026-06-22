@@ -12,9 +12,9 @@ import {
   InputAdornment,
 } from "@mui/material"
 import { Search, StorefrontRounded } from "@mui/icons-material"
-import { useBrowseShopsQuery } from "../../store/api/v2/market"
-import { useDebounce } from "../../hooks/useDebounce"
-import { ShopCard } from "../../features/shops/components/ShopCard"
+import { useBrowseShopsQuery } from "../../../store/api/v2/market"
+import { useDebounce } from "../../../hooks/useDebounce"
+import { ShopCard } from "./ShopCard"
 
 const SHOP_TAGS = [
   "Weapons",

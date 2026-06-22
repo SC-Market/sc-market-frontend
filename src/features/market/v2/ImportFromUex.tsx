@@ -21,7 +21,7 @@ import LoadingButton from "@mui/lab/LoadingButton"
 import { CloudDownloadRounded, CheckCircleRounded } from "@mui/icons-material"
 import { useImportFromUexMutation } from "../../../store/api/v2/market-overrides"
 import type { UexImportPreviewItem } from "../../../store/api/v2/market-overrides"
-import { ShopSelector } from "./components/ShopSelector"
+import { ShopSelector } from "../../shops/components/ShopSelector"
 
 export function ImportFromUex() {
   const [shopId, setShopId] = useState("")

@@ -18,9 +18,9 @@ import {
 import LoadingButton from "@mui/lab/LoadingButton"
 import { StorefrontRounded } from "@mui/icons-material"
 import { Link, useNavigate } from "react-router-dom"
-import { useCreateShopMutation } from "../../store/api/v2/market"
-import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
-import { useAlertHook } from "../../hooks/alert/AlertHook"
+import { useCreateShopMutation } from "../../../store/api/v2/market"
+import { useGetUserProfileQuery } from "../../profile/api/profileApi"
+import { useAlertHook } from "../../../hooks/alert/AlertHook"
 
 const AVAILABLE_TAGS = [
   "Weapons",
