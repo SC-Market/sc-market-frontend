@@ -514,6 +514,12 @@ const router = createBrowserRouter([
             }),
           },
           {
+            path: "/my-orgs",
+            lazy: async () => ({
+              Component: (await import("./pages/contractor/MyOrgs")).MyOrgs,
+            }),
+          },
+          {
             path: "/orders/assigned",
             element: <Navigate to="/dashboard" replace />,
           },
