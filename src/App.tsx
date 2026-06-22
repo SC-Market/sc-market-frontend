@@ -436,15 +436,11 @@ const router = createBrowserRouter([
           },
           {
             path: "/market/create/:tab",
-            lazy: async () => ({
-              Component: (await import("./components/market/MarketRouter")).CreateListingGate,
-            }),
+            element: <ShopRedirectListings suffix="/create" />,
           },
           {
             path: "/market/create",
-            lazy: async () => ({
-              Component: (await import("./components/market/MarketRouter")).CreateListingGate,
-            }),
+            element: <ShopRedirectListings suffix="/create" />,
           },
           {
             path: "/market/me",
@@ -462,9 +458,7 @@ const router = createBrowserRouter([
           },
           {
             path: "/market/stock/:listingId",
-            lazy: async () => ({
-              Component: (await import("./components/market/MarketRouter")).ManageStockGate,
-            }),
+            element: <ShopRedirectListings />,
           },
           {
             path: "/inventory",

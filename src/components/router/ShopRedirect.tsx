@@ -17,8 +17,8 @@ export function ShopRedirect({ subpath }: { subpath: string }) {
   return <Navigate to="/dashboard/shops" replace />
 }
 
-export function ShopRedirectListings() {
-  return <ShopRedirect subpath="listings" />
+export function ShopRedirectListings({ suffix }: { suffix?: string }) {
+  return <ShopRedirect subpath={`listings${suffix || ""}`} />
 }
 
 export function ShopRedirectStock() {
