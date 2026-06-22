@@ -23,7 +23,7 @@ import { useParams } from "react-router-dom";
 import { StandardPageLayout } from "../../../components/layout/StandardPageLayout";
 import { ExtendedTheme } from "../../../hooks/styles/Theme";
 import { useGetUserProfileQuery } from "../../profile/api/profileApi";
-import { useCurrentOrg } from "../../../hooks/login/CurrentOrg";
+import { useGetContractorBySpectrumIDQuery } from "../../../features/contractor/api/contractorApi";
 import {
   CreateRounded,
   PersonRounded,
@@ -131,7 +131,6 @@ export function MarketMultipleViewV2() {
   const { id } = useParams<{ id: string }>();
   const theme = useTheme<ExtendedTheme>();
   const { data: profile } = useGetUserProfileQuery();
-  const [currentOrg] = useCurrentOrg();
   const [imageModalOpen, setImageModalOpen] = useState(false);
   const [selectedItemIndex, setSelectedItemIndex] = useState(0);
   const [selectedVariants, setSelectedVariants] = useState<Record<string, string>>({});
@@ -186,24 +185,27 @@ export function MarketMultipleViewV2() {
   const currentItem = complete?.items[selectedItemIndex];
 
   // Permission checks
-  const amContractor = useMemo(
-    () =>
-      currentOrg?.spectrum_id === complete?.seller.slug,
-    [currentOrg?.spectrum_id, complete?.seller.slug]
+  const belongsToSellerOrg = useMemo(
+    () => profile?.contractors?.some(c => c.spectrum_id === complete?.seller.slug),
+    [profile?.contractors, complete?.seller.slug]
   );
+  const { data: sellerContractor } = useGetContractorBySpectrumIDQuery(
+    complete?.seller.slug!, { skip: !complete?.seller.slug || !belongsToSellerOrg }
+  );
+
+  const amContractor = useMemo(() => !!belongsToSellerOrg, [belongsToSellerOrg]);
 
   const amSeller = useMemo(
     () =>
-      profile?.username === complete?.seller.slug &&
-      !currentOrg,
-    [currentOrg, complete?.seller.slug, profile?.username]
+      profile?.username === complete?.seller.slug && !belongsToSellerOrg,
+    [belongsToSellerOrg, complete?.seller.slug, profile?.username]
   );
 
   const amContractorManager = useMemo(
     () =>
-      amContractor &&
-      has_permission(currentOrg, profile, "manage_market", profile?.contractors),
-    [currentOrg, profile, amContractor]
+      amContractor && !!sellerContractor &&
+      has_permission(sellerContractor, profile, "manage_market", profile?.contractors),
+    [sellerContractor, profile, amContractor]
   );
 
   const amRelated = useMemo(

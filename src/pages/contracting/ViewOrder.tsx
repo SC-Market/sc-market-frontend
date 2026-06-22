@@ -12,8 +12,8 @@ import { HapticTab } from "../../components/haptic"
 import { OrderDetailSkeleton } from "../../components/skeletons"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { useGetOrderDetailQuery } from "../../store/api/v2/market"
-import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { has_permission } from "../../views/contractor/OrgRoles"
+import { useGetContractorBySpectrumIDQuery } from "../../features/contractor/api/contractorApi"
 import { useTranslation } from "react-i18next"
 import { DetailPageLayout } from "../../components/layout/DetailPageLayout"
 import { usePageOrder } from "../../features/contracting"
@@ -80,7 +80,15 @@ export function ViewOrder() {
 
   const { data: orderDetailV2 } = useGetOrderDetailQuery({ orderId: id! }, { skip: !id })
   const { data: profile } = useGetUserProfileQuery()
-  const [currentOrg] = useCurrentOrg()
+
+  const belongsToOrderOrg = useMemo(
+    () => !!order?.contractor && !!profile?.contractors?.some(c => c.spectrum_id === order.contractor),
+    [order?.contractor, profile?.contractors],
+  )
+  const { data: orderContractor } = useGetContractorBySpectrumIDQuery(
+    order?.contractor!,
+    { skip: !order?.contractor || !belongsToOrderOrg },
+  )
 
   const amCustomer = useMemo(
     () => !!profile && order?.customer === profile?.username,
@@ -91,8 +99,8 @@ export function ViewOrder() {
     [order, profile],
   )
   const amContractor = useMemo(
-    () => currentOrg?.spectrum_id === order?.contractor,
-    [currentOrg?.spectrum_id, order?.contractor],
+    () => belongsToOrderOrg,
+    [belongsToOrderOrg],
   )
   const amRelated = useMemo(
     () => amCustomer || amAssigned || amContractor,
@@ -102,13 +110,14 @@ export function ViewOrder() {
   const amContractorManager = useMemo(
     () =>
       amContractor &&
+      !!orderContractor &&
       has_permission(
-        currentOrg,
+        orderContractor,
         profile,
         "manage_orders",
         profile?.contractors,
       ),
-    [currentOrg, profile, amContractor],
+    [orderContractor, profile, amContractor],
   )
 
   const isAssigned = useMemo(() => {

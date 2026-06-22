@@ -7,7 +7,8 @@ import {
   useRecruitingCreatePostMutation,
   useRecruitingUpdatePostMutation,
 } from "../../features/recruiting/api/recruitingApi"
-import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
+import { useGetContractorBySpectrumIDQuery } from "../../features/contractor/api/contractorApi"
+import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import throttle from "lodash/throttle"
 import { RecruitingPostView } from "./RecruitingPostView"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
@@ -41,7 +42,11 @@ export function CreateRecruitingPost(props: { post?: RecruitingPost }) {
   }, [post])
 
   const issueAlert = useAlertHook()
-  const [contractor] = useCurrentOrg()
+  const { data: profile } = useGetUserProfileQuery()
+  const primaryContractorId = profile?.contractors?.[0]?.spectrum_id
+  const { data: contractor } = useGetContractorBySpectrumIDQuery(
+    primaryContractorId!, { skip: !primaryContractorId },
+  )
 
   const [
     createPost, // This is the mutation trigger

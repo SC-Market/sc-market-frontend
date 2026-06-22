@@ -10,15 +10,13 @@ import { Paper, Typography, Box, Chip, Avatar } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { Link } from "react-router-dom"
 import { useOptionalShopRouteContext } from "../../../../components/router/ShopContextFromRoute"
-import { useCurrentOrg } from "../../../../hooks/login/CurrentOrg"
 import { useGetContractorAllocationsQuery } from "../../../../store/api/stockLotsApi"
 import { UnderlineLink } from "../../../../components/typography/UnderlineLink"
 
 export function AllAllocatedLotsGrid() {
   const { t } = useTranslation()
   const shopCtx = useOptionalShopRouteContext()
-  const [currentOrg] = useCurrentOrg()
-  const spectrumId = shopCtx?.shop.owner_contractor_id ?? currentOrg?.spectrum_id
+  const spectrumId = shopCtx?.shop.owner_contractor_id ?? undefined
 
   const { data, isLoading } = useGetContractorAllocationsQuery(
     { contractor_spectrum_id: spectrumId || "" },

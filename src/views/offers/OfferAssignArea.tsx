@@ -1,7 +1,6 @@
 import { Section } from "../../components/paper/Section"
 import React, { useCallback, useEffect, useState } from "react"
 import { MinimalUser } from "../../datatypes/User"
-import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useGetContractorMembersQuery } from "../../features/contractor/api/contractorApi"
 import throttle from "lodash/throttle"
 import { Autocomplete, Box, Button, Grid, TextField } from "@mui/material"
@@ -23,15 +22,15 @@ export function OfferAssignArea(props: { offer: OfferSession }) {
     username: string
     display_name: string
   } | null>(null)
-  const [currentOrg] = useCurrentOrg()
   const { offer } = props
+  const contractorSpectrumId = offer.contractor?.spectrum_id
   const [options, setOptions] = useState<MinimalUser[]>([])
 
   const { t } = useTranslation()
   const issueAlert = useAlertHook()
 
   const { data: membersData } = useGetContractorMembersQuery({
-    spectrum_id: currentOrg?.spectrum_id || "",
+    spectrum_id: contractorSpectrumId || "",
     page: 0,
     page_size: 100,
     search: "",
@@ -49,14 +48,14 @@ export function OfferAssignArea(props: { offer: OfferSession }) {
 
       const { status, data, error } = await store.dispatch(
         contractorsApi.endpoints.searchContractorMembers.initiate({
-          spectrum_id: currentOrg?.spectrum_id!,
+          spectrum_id: contractorSpectrumId!,
           query: query,
         }),
       )
 
       setOptions(data || [])
     },
-    [currentOrg?.spectrum_id],
+    [contractorSpectrumId],
   )
 
   const retrieve = React.useMemo(

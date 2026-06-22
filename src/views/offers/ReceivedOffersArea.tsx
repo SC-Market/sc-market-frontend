@@ -55,8 +55,8 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { EmptyOrders } from "../../components/empty-states"
 import { useLongPress } from "../../components/gestures"
 import { useOptionalShopRouteContext } from "../../components/router/ShopContextFromRoute"
-import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
+import { useGetContractorBySpectrumIDQuery } from "../../features/contractor/api/contractorApi"
 import { OrderSearchSortMethod } from "../../features/orders/domain/types"
 import { UserAvatar } from "../../components/avatar/UserAvatar"
 import { useTranslation } from "react-i18next"
@@ -119,16 +119,23 @@ export function OfferRow(props: {
   const theme = useTheme<ExtendedTheme>()
   const navigate = useNavigate()
   const { data: profile } = useGetUserProfileQuery()
-  const [currentOrg] = useCurrentOrg()
   const [assignOffer] = useAssignOfferMutation()
   const issueAlert = useAlertHook()
 
+  const belongsToOfferOrg = useMemo(
+    () => !!row.contractor && profile?.contractors?.some(c => c.spectrum_id === row.contractor!.spectrum_id),
+    [row.contractor, profile?.contractors],
+  )
+  const { data: offerContractor } = useGetContractorBySpectrumIDQuery(
+    row.contractor?.spectrum_id!, { skip: !row.contractor?.spectrum_id || !belongsToOfferOrg },
+  )
+
   const canClaim = useMemo(() => {
-    if (row.assigned_to || !currentOrg || !profile) return false
+    if (row.assigned_to || !offerContractor || !profile) return false
     const normalized = normalizeOfferStatus(row.status)
     if (normalized !== "waitingSeller" && normalized !== "waitingCustomer") return false
-    return has_permission(currentOrg, profile, "claim_orders", profile.contractors)
-  }, [row.assigned_to, row.status, currentOrg, profile])
+    return has_permission(offerContractor, profile, "claim_orders", profile.contractors)
+  }, [row.assigned_to, row.status, offerContractor, profile])
 
   // Key for translation and colour
   const statusKey = normalizeOfferStatus(row.status)
@@ -383,8 +390,7 @@ export function OfferRow(props: {
 
 export function ReceivedOffersArea({ unassigned }: { unassigned?: boolean } = {}) {
   const shopCtx = useOptionalShopRouteContext()
-  const [currentOrg] = useCurrentOrg()
-  const contractorId = shopCtx?.shop.owner_contractor_id ?? currentOrg?.spectrum_id
+  const contractorId = shopCtx?.shop.owner_contractor_id ?? undefined
 
   return (
     <OffersViewPaginated

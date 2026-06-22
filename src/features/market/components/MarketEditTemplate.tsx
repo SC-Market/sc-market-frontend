@@ -1,4 +1,3 @@
-import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
 import { FlatSection } from "../../../components/paper/Section"
 import { MarkdownEditor } from "../../../components/markdown/Markdown.lazy"
 import React, { useCallback, useEffect, useState } from "react"
@@ -8,15 +7,20 @@ import {
 } from "../../profile/api/profileApi"
 import { Grid, Typography } from "@mui/material"
 import LoadingButton from "@mui/lab/LoadingButton"
-import { useUpdateContractorMutation } from "../../contractor/api/contractorApi"
+import {
+  useUpdateContractorMutation,
+  useGetContractorBySpectrumIDQuery,
+} from "../../contractor/api/contractorApi"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { useTranslation } from "react-i18next" // Localization
 import { OrderSettings } from "../../../components/settings/OrderSettings"
 
-export function MarketEditTemplate(props: { org?: boolean }) {
+export function MarketEditTemplate(props: { org?: boolean; contractorId?: string }) {
   const { t } = useTranslation() // Localization hook
 
-  const [contractor] = useCurrentOrg()
+  const { data: contractor } = useGetContractorBySpectrumIDQuery(
+    props.contractorId!, { skip: !props.org || !props.contractorId }
+  )
   const { data: profile } = useGetUserProfileQuery()
 
   const [template, setTemplate] = useState("")

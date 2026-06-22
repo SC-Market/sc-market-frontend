@@ -9,9 +9,6 @@ import { MarketSidebarContext } from "../../../features/market/hooks/MarketSideb
 import { ServiceSidebarContext } from "../../../features/contracting/hooks/ServiceSidebar"
 import { MarketTabsLayout } from "../../../components/layout/MarketTabsLayout"
 import { MarketActions, BuyOrderActions } from "../../../features/market/components/MarketActions"
-import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
-import { useGetUserProfileQuery } from "../../../features/profile/api/profileApi"
-import { has_permission } from "../../../views/contractor/OrgRoles"
 import { TabPanel } from "../../../components/tabs/Tabs"
 import { FiltersFAB } from "../../../components/mobile/FiltersFAB"
 import { FeatureErrorBoundary } from "../../../components/error-boundaries"
@@ -53,14 +50,9 @@ export function MarketPageV2() {
   const showMobileSidebar = useMediaQuery(theme.breakpoints.down("lg"))
   const [marketSidebarOpen, setMarketSidebarOpen] = useState(false)
   const [serviceSidebarOpen, setServiceSidebarOpen] = useState(false)
-  const [currentOrg] = useCurrentOrg()
-  const { data: profile } = useGetUserProfileQuery()
 
-  // Hide create listing button if user is in an org but lacks manage_market permission
-  const canCreateListing = useMemo(() => {
-    if (!currentOrg) return true // No org selected — user creates as themselves
-    return has_permission(currentOrg, profile, "manage_market", profile?.contractors)
-  }, [currentOrg, profile])
+  // Everyone can create listings — the create page handles which shop to create under
+  const canCreateListing = true
 
   const tabPage = useMemo(() => {
     if (location.pathname.startsWith("/market/services")) return 1

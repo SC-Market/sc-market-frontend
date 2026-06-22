@@ -9,10 +9,10 @@ import {
 } from "@mui/material"
 import { Section } from "../../components/paper/Section"
 import React, { useCallback, useState } from "react"
+import { useParams } from "react-router-dom"
 import { useProfileCreateWebhook } from "../../features/profile/api/profileApi"
 import { useCreateContractorWebhookMutation } from "../../features/contractor/api/contractorApi"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
-import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { URL_REGEX } from "../../util/parsing"
 import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
@@ -54,7 +54,7 @@ function NotificationActionCheck(props: {
 
 export function AddNotificationWebhook(props: { org?: boolean }) {
   const theme = useTheme<ExtendedTheme>()
-  const [currentOrg] = useCurrentOrg()
+  const { contractor_id } = useParams<{ contractor_id: string }>()
   const [name, setName] = useState("")
   const [url, setURL] = useState("")
   const [actions, setActions] = useState<string[]>([])
@@ -75,7 +75,7 @@ export function AddNotificationWebhook(props: { org?: boolean }) {
       let response
       if (props.org) {
         response = createContractorWebhook({
-          contractor: currentOrg!.spectrum_id,
+          contractor: contractor_id!,
           body: {
             name: name,
             webhook_url: url,
@@ -107,7 +107,7 @@ export function AddNotificationWebhook(props: { org?: boolean }) {
     [
       createContractorWebhook,
       createUserWebhook,
-      currentOrg,
+      contractor_id,
       name,
       props.org,
       issueAlert,

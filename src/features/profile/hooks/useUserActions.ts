@@ -2,15 +2,14 @@ import { useCallback, useMemo, useState } from "react"
 import { useGetUserProfileQuery, useProfileGetBlocklistQuery } from "../../profile/api/profileApi"
 import { useGetOrgBlocklistQuery } from "../../contractor/api/contractorApi"
 import { useAdminUnlinkUserAccountMutation } from "../../admin/api/adminApi"
-import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
 import { useAlertHook, type UnwrappedErrorInterface } from "../../../hooks/alert/AlertHook"
 import { useTranslation } from "react-i18next"
 
 export function useUserActions(username: string) {
   const { t } = useTranslation()
   const issueAlert = useAlertHook()
-  const [contractor] = useCurrentOrg()
   const { data: myProfile } = useGetUserProfileQuery()
+  const contractor = myProfile?.contractors?.[0]
   const [unlinkAccount, { isLoading: isUnlinking }] = useAdminUnlinkUserAccountMutation()
   const [unlinkDialogOpen, setUnlinkDialogOpen] = useState(false)
 

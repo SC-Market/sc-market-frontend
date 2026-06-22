@@ -19,7 +19,7 @@ export function MemberAssignArea(props: { order: Order }) {
     members,
     updateAssignment,
     removeAssignment,
-  } = useMemberAssign(order.order_id)
+  } = useMemberAssign(order.order_id, order.contractor || undefined)
 
   return (
     <Section

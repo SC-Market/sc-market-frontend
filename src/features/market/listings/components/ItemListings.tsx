@@ -70,7 +70,7 @@ import {
   useMarketSidebarExp,
 } from "../../index"
 import { Link, useNavigate, useLocation } from "react-router-dom"
-import { useCurrentOrg } from "../../../../hooks/login/CurrentOrg"
+import { useOptionalShopRouteContext } from "../../../../components/router/ShopContextFromRoute"
 import { UnderlineLink } from "../../../../components/typography/UnderlineLink"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../../hooks/styles/Theme"
@@ -1053,7 +1053,8 @@ export function MyItemListings(props: {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
-  const [currentOrg] = useCurrentOrg()
+  const shopCtx = useOptionalShopRouteContext()
+  const spectrumId = shopCtx?.shop.owner_contractor_id
   const { data: profile, isLoading: profileLoading } = useGetUserProfileQuery()
   const [perPage, setPerPage] = useState(isMobile ? 12 : 48)
   const [page, setPage] = useState(0)
@@ -1078,7 +1079,7 @@ export function MyItemListings(props: {
   )
 
   // Determine if we should search by contractor or user
-  const hasOrg = currentOrg && currentOrg.spectrum_id
+  const hasOrg = !!spectrumId
   const hasUser = !hasOrg && profile?.username && !profileLoading
 
   // Get search state from URL
@@ -1108,7 +1109,7 @@ export function MyItemListings(props: {
 
   // Use unified endpoint with contractor_id parameter when needed
   const finalParams = hasOrg
-    ? { ...searchQueryParams, contractor_id: currentOrg?.spectrum_id }
+    ? { ...searchQueryParams, contractor_id: spectrumId }
     : searchQueryParams
 
   const {

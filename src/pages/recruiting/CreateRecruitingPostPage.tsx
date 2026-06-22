@@ -4,7 +4,6 @@ import { useTranslation } from "react-i18next"
 import { FormPageLayout } from "../../components/layout/FormPageLayout"
 import { CreateRecruitingPost } from "../../views/recruiting/CreateRecruitingPost"
 import { useRecruitingGetPostByIDQuery } from "../../features/recruiting/api/recruitingApi"
-import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { RecruitingPostViewSkeleton } from "../../components/skeletons"
 
 export function CreateRecruitingPostPage() {
@@ -36,7 +35,6 @@ export function UpdateRecruitingPostPage() {
     error,
     isLoading,
   } = useRecruitingGetPostByIDQuery(post_id!)
-  const [currentOrg] = useCurrentOrg()
 
   return (
     <FormPageLayout
@@ -48,7 +46,7 @@ export function UpdateRecruitingPostPage() {
       sidebarOpen={true}
       maxWidth="md"
     >
-      {currentOrg && post && <CreateRecruitingPost post={post} />}
+      {post && <CreateRecruitingPost post={post} />}
     </FormPageLayout>
   )
 }

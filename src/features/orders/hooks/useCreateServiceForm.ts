@@ -4,7 +4,6 @@ import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { store } from "../../../store/store"
 import { starmapApi } from "../../../store/api/starmap"
 import { useOptionalShopRouteContext } from "../../../components/router/ShopContextFromRoute"
-import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
 import type { Service, PaymentType } from "../domain/types"
 import { romanize } from "../domain/formatters"
 import {
@@ -76,8 +75,7 @@ const INITIAL_STATE: ServiceFormState = {
 export function useCreateServiceForm(service?: Service) {
   const { t } = useTranslation()
   const shopCtx = useOptionalShopRouteContext()
-  const [currentOrg] = useCurrentOrg()
-  const contractorId = shopCtx?.shop.owner_contractor_id ?? currentOrg?.spectrum_id
+  const contractorId = shopCtx?.shop.owner_contractor_id
   const [state, setState] = useState<ServiceFormState>({ ...INITIAL_STATE })
   const issueAlert = useAlertHook()
   const navigate = useNavigate()
@@ -209,7 +207,7 @@ export function useCreateServiceForm(service?: Service) {
         destination: destTargetObject ? destTargetObject.code : null,
         cost: state.offer,
         payment_type: state.payment_type,
-        contractor: currentOrg?.spectrum_id,
+        contractor: contractorId,
         status: state.status,
         photos: allPhotos,
       })

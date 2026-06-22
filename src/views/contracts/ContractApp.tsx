@@ -1,16 +1,14 @@
 import { Section } from "../../components/paper/Section"
 import React from "react"
 import { Button, Grid, TextField, Typography } from "@mui/material"
-import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { useTranslation } from "react-i18next"
 
 export function ContractApp(props: {}) {
-  const [currentOrg] = useCurrentOrg()
-  const profile = useGetUserProfileQuery()
+  const { data: profile } = useGetUserProfileQuery()
   const { t } = useTranslation()
 
-  const orgName = currentOrg?.name
+  const orgName = profile?.contractors?.[0]?.name
 
   return (
     <Section xs={12} lg={4} title={t("contractApp.apply")}>
@@ -18,7 +16,7 @@ export function ContractApp(props: {}) {
         <Typography variant={"subtitle1"}>
           {t("contractApp.applying_as")}{" "}
           <Typography color={"secondary"} display={"inline"}>
-            {orgName || profile.data?.username}
+            {orgName || profile?.username}
           </Typography>
         </Typography>
       </Grid>

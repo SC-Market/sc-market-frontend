@@ -3,8 +3,7 @@ import { Grid, Skeleton } from "@mui/material"
 import { useTranslation } from "react-i18next"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { LazySection } from "../../components/layout/LazySection"
-import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
-import { useProfileUpdateAvailabilityMutation, useProfileGetAvailabilityQuery } from "../../features/profile/api/profileApi"
+import { useGetUserProfileQuery, useProfileUpdateAvailabilityMutation, useProfileGetAvailabilityQuery } from "../../features/profile/api/profileApi"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
 import { convertAvailability } from "../../util/availability"
 
@@ -21,8 +20,8 @@ interface Span {
 
 export function Availability() {
   const { t } = useTranslation()
-  const [currentOrg] = useCurrentOrg()
-  const spectrumId = currentOrg?.spectrum_id || undefined
+  const { data: userProfile } = useGetUserProfileQuery()
+  const spectrumId = userProfile?.contractors?.[0]?.spectrum_id
 
   // Fetch availability — pass spectrumId for org, undefined for personal
   // Don't skip when spectrumId is undefined — that fetches personal availability

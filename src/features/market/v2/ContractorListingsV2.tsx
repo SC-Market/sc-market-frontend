@@ -30,9 +30,9 @@ import { EmptyListings } from "../../../components/empty-states";
 import { useDrawerOpen } from "../../../hooks/layout/Drawer";
 import { EditRounded, BusinessRounded, StarRounded } from "@mui/icons-material";
 import { getRelativeTime } from "../../../util/time";
-import { useCurrentOrg } from "../../../hooks/login/CurrentOrg";
 import { useGetUserProfileQuery } from "../../profile/api/profileApi";
 import { has_permission } from "../../../views/contractor/OrgRoles";
+import { useGetContractorBySpectrumIDQuery } from "../../../features/contractor/api/contractorApi";
 
 /**
  * ContractorListingsV2 - Display contractor organization listings with V2 variant support
@@ -58,9 +58,14 @@ export function ContractorListingsV2() {
   const [drawerOpen] = useDrawerOpen();
   const { contractor_id } = useParams<{ contractor_id: string }>();
 
-  // Get current organization and user profile for permission checks
-  const [currentOrg] = useCurrentOrg();
+  // Get user profile for permission checks
   const { data: profile } = useGetUserProfileQuery();
+
+  // Check if user belongs to this contractor org
+  const belongsToContractor = profile?.contractors?.some(c => c.spectrum_id === contractor_id);
+  const { data: contractorData } = useGetContractorBySpectrumIDQuery(
+    contractor_id!, { skip: !contractor_id || !belongsToContractor }
+  );
 
   // State for pagination
   const [page, setPage] = useState(0);
@@ -68,11 +73,9 @@ export function ContractorListingsV2() {
 
   // Check if user has manage_market permission for this contractor
   const canManageListings = useMemo(() => {
-    if (!currentOrg || !profile || currentOrg.spectrum_id !== contractor_id) {
-      return false;
-    }
-    return has_permission(currentOrg, profile, "manage_market", profile?.contractors);
-  }, [currentOrg, profile, contractor_id]);
+    if (!contractorData || !profile || !belongsToContractor) return false;
+    return has_permission(contractorData, profile, "manage_market", profile?.contractors);
+  }, [contractorData, profile, belongsToContractor]);
 
   // Fetch contractor listings using RTK Query search endpoint
   // Filter by seller_type = 'contractor' and seller_id = contractor_id
@@ -148,7 +151,7 @@ export function ContractorListingsV2() {
                 {t("contractorListings.title", "Organization Listings")}
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                {currentOrg?.name || contractor_id}
+                {contractorData?.name || contractor_id}
               </Typography>
             </Box>
           </Box>
@@ -167,7 +170,7 @@ export function ContractorListingsV2() {
         )}
 
         {/* Permission Warning */}
-        {!canManageListings && currentOrg?.spectrum_id === contractor_id && (
+        {!canManageListings && belongsToContractor && (
           <Grid item xs={12}>
             <Alert severity="warning" sx={{ mb: 2 }}>
               {t(

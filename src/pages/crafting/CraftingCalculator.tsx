@@ -35,7 +35,7 @@ import {
 import { QualityBandSelect } from "../../components/game-data/QualityBandSelect"
 import { useDebounce } from "../../hooks/useDebounce"
 import { useSearchParams, useNavigate } from "react-router-dom"
-import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
+import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 
 const TIER_COLORS: Record<number, "default" | "success" | "info" | "secondary" | "warning"> = {
   1: "default", 2: "success", 3: "info", 4: "secondary", 5: "warning",
@@ -126,8 +126,8 @@ export function CraftingCalculator() {
   const navigate = useNavigate()
   const prefillBlueprintId = searchParams.get("blueprint_id")
   const [mode, setMode] = useState<"craft" | "discover">(prefillBlueprintId ? "craft" : "craft")
-  const [currentOrg] = useCurrentOrg()
-  const spectrumId = currentOrg?.spectrum_id
+  const { data: craftingProfile } = useGetUserProfileQuery()
+  const spectrumId = craftingProfile?.contractors?.[0]?.spectrum_id
 
   // Blueprint search — by product name
   const [bpSearch, setBpSearch] = useState("")

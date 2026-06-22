@@ -27,9 +27,9 @@ import { ExtendedTheme, cardFadeGradient } from "../../../../hooks/styles/Theme"
 import { ExtendedUniqueSearchResult } from "../../domain/types"
 import { useRefreshMarketListingMutation } from "../../api/marketApi"
 import { formatMarketUrl } from "../../domain/urls"
-import { useCurrentOrg } from "../../../../hooks/login/CurrentOrg"
 import { useGetUserProfileQuery } from "../../../profile/api/profileApi"
 import { has_permission } from "../../../../views/contractor/OrgRoles"
+import { useGetContractorBySpectrumIDQuery } from "../../../contractor/api/contractorApi"
 import { useAlertHook } from "../../../../hooks/alert/AlertHook"
 import { useMarketSidebarExp } from "../../hooks/MarketSidebar"
 import { UnderlineLink } from "../../../../components/typography/UnderlineLink"
@@ -108,18 +108,23 @@ export const ItemListingBase = React.memo(
       [timeDisplay],
     )
     const { data: profile } = useGetUserProfileQuery()
-    const [currentOrg] = useCurrentOrg()
+    const belongsToSeller = profile?.contractors?.some(c => c.spectrum_id === listing.contractor_seller)
+    const { data: sellerContractor } = useGetContractorBySpectrumIDQuery(
+      listing.contractor_seller!, { skip: !listing.contractor_seller || !belongsToSeller }
+    )
+
     const showExpiration = useMemo(
       () => {
         if (!listing.expiration || !profile) return false
         if (listing.user_seller === profile.username) return true
-        if (currentOrg && currentOrg.spectrum_id === listing.contractor_seller) {
-          return has_permission(currentOrg, profile, "manage_market", profile.contractors)
+        if (belongsToSeller && sellerContractor) {
+          return has_permission(sellerContractor, profile, "manage_market", profile.contractors)
         }
         return false
       },
       [
-        currentOrg,
+        belongsToSeller,
+        sellerContractor,
         listing.contractor_seller,
         listing.expiration,
         listing.user_seller,
@@ -130,8 +135,8 @@ export const ItemListingBase = React.memo(
     const isMyListing = useMemo(
       () => {
         if (listing.user_seller === profile?.username) return true
-        if (currentOrg && currentOrg.spectrum_id === listing.contractor_seller && profile) {
-          return has_permission(currentOrg, profile, "manage_market", profile.contractors)
+        if (belongsToSeller && sellerContractor && profile) {
+          return has_permission(sellerContractor, profile, "manage_market", profile.contractors)
         }
         return false
       },
@@ -139,7 +144,8 @@ export const ItemListingBase = React.memo(
         listing.user_seller,
         listing.contractor_seller,
         profile,
-        currentOrg,
+        belongsToSeller,
+        sellerContractor,
       ],
     )
 

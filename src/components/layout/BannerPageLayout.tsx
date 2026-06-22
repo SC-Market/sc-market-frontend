@@ -10,7 +10,7 @@ import {
 import { ErrorPage } from "../../pages/errors/ErrorPage"
 import { FetchBaseQueryError } from "@reduxjs/toolkit/query"
 import { SerializedError } from "@reduxjs/toolkit"
-import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
+import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 
 export interface BreadcrumbItem {
   label: string
@@ -60,7 +60,8 @@ export interface BannerPageLayoutProps {
  * Requirements: 1.1, 1.2, 2.1, 2.2, 7.1, 7.2, 10.1, 10.2
  */
 export function BannerPageLayout(props: BannerPageLayoutProps): ReactElement {
-  const [currentOrg] = useCurrentOrg()
+  const { data: profile } = useGetUserProfileQuery()
+  const primaryContractor = profile?.contractors?.[0]
   
   const {
     title,
@@ -78,20 +79,20 @@ export function BannerPageLayout(props: BannerPageLayoutProps): ReactElement {
     skeleton,
   } = props
 
-  // Inject currentOrg into breadcrumbs if it exists and is enabled
+  // Inject primary contractor into breadcrumbs if it exists and is enabled
   const enhancedBreadcrumbs = useMemo(() => {
-    if (!breadcrumbs || !currentOrg || !showOrgInBreadcrumbs) return breadcrumbs
-    
+    if (!breadcrumbs || !primaryContractor || !showOrgInBreadcrumbs) return breadcrumbs
+
     // Insert org after first breadcrumb (home)
     return [
       breadcrumbs[0],
       {
-        label: currentOrg.name || currentOrg.spectrum_id,
-        href: `/contractor/${currentOrg.spectrum_id}`,
+        label: primaryContractor.name || primaryContractor.spectrum_id,
+        href: `/contractor/${primaryContractor.spectrum_id}`,
       },
       ...breadcrumbs.slice(1),
     ]
-  }, [breadcrumbs, currentOrg, showOrgInBreadcrumbs])
+  }, [breadcrumbs, primaryContractor, showOrgInBreadcrumbs])
 
   // Handle 404 errors
   if (

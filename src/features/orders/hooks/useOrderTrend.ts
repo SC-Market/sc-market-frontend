@@ -1,4 +1,3 @@
-import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
 import {
   useGetContractorOrderDataQuery,
   useGetUserOrderDataQuery,
@@ -9,34 +8,31 @@ export interface UseOrderTrendResult {
   orderData: ContractorOrderData | undefined
 }
 
-export function useOrgOrderTrend(): UseOrderTrendResult {
-  const [contractor] = useCurrentOrg()
+export function useOrgOrderTrend(spectrumId: string | undefined): UseOrderTrendResult {
   const { data: orderData } = useGetContractorOrderDataQuery(
     {
-      spectrum_id: contractor?.spectrum_id!,
+      spectrum_id: spectrumId!,
       include_trends: true,
       assigned_only: false,
     },
-    { skip: !contractor?.spectrum_id },
+    { skip: !spectrumId },
   )
   return { orderData }
 }
 
-export function useUserOrderTrend(): UseOrderTrendResult {
-  const [contractor] = useCurrentOrg()
-
+export function useUserOrderTrend(spectrumId: string | undefined): UseOrderTrendResult {
   const { data: contractorOrderData } = useGetContractorOrderDataQuery(
     {
-      spectrum_id: contractor?.spectrum_id!,
+      spectrum_id: spectrumId!,
       include_trends: true,
       assigned_only: true,
     },
-    { skip: !contractor?.spectrum_id },
+    { skip: !spectrumId },
   )
 
   const { data: userOrderData } = useGetUserOrderDataQuery(
     { include_trends: true },
-    { skip: !!contractor?.spectrum_id },
+    { skip: !!spectrumId },
   )
 
   return { orderData: contractorOrderData || userOrderData }

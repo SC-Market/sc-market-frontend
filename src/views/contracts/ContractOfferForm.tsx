@@ -12,9 +12,9 @@ import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { OrderLimitsDisplay } from "../../components/orders/OrderLimitsDisplay"
-import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { OrgDetails, UserDetails } from "../../components/list/UserDetails"
 import { useContractOfferForm } from "../../features/contracting/hooks/useContractOfferForm"
+import { useGetContractorBySpectrumIDQuery } from "../../features/contractor/api/contractorApi"
 
 export function ContractOfferForm(props: { contract: PublicContract }) {
   const { contract } = props
@@ -28,7 +28,10 @@ export function ContractOfferForm(props: { contract: PublicContract }) {
     isLoading, submitContractOffer,
     profile, myUser, orderLimits,
   } = useContractOfferForm(contract)
-  const [currentOrg] = useCurrentOrg()
+  const primaryContractor = profile?.contractors?.[0]
+  const { data: primaryOrg } = useGetContractorBySpectrumIDQuery(
+    primaryContractor?.spectrum_id!, { skip: !primaryContractor },
+  )
   return (
     <>
       <Section xs={12}>
@@ -43,8 +46,8 @@ export function ContractOfferForm(props: { contract: PublicContract }) {
           </Typography>
         </Grid>
         <Grid item xs={12} lg={8} justifyContent={"right"} display={"flex"}>
-          {currentOrg ? (
-            <OrgDetails org={currentOrg} />
+          {primaryOrg ? (
+            <OrgDetails org={primaryOrg} />
           ) : (
             myUser && <UserDetails user={myUser} />
           )}

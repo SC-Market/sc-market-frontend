@@ -1,4 +1,5 @@
 import React from "react"
+import { useParams } from "react-router-dom"
 import { OrgBalance } from "../../views/contractor/OrgBalance"
 import { Grid } from "@mui/material"
 import { OrgTransactions } from "../../views/contractor/OrgTransactions"
@@ -9,6 +10,7 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 
 export function OrgMoney() {
+  const { contractor_id } = useParams<{ contractor_id: string }>()
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
 
@@ -33,7 +35,7 @@ export function OrgMoney() {
             direction={"column"}
           >
             <OrgBalance />
-            <OrderMetrics />
+            <OrderMetrics spectrumId={contractor_id} />
           </Grid>
         </Grid>
         <Grid

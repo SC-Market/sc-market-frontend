@@ -24,7 +24,6 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { Link } from "react-router-dom"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { getRelativeTime } from "../../util/time"
-import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import {
   CreateRounded,
@@ -482,7 +481,6 @@ export function ServiceView(props: {
   const { service } = props
   const theme = useTheme<ExtendedTheme>()
   const { data: profile } = useGetUserProfileQuery()
-  const [currentOrg] = useCurrentOrg()
   const { t } = useTranslation()
   const mainRef = useMainRef()
   const paymentType = PAYMENT_TYPE_MAP.get(service.payment_type) || ""
@@ -493,17 +491,17 @@ export function ServiceView(props: {
   )
   const amContractor = useMemo(
     () =>
-      profile && currentOrg?.spectrum_id === service?.contractor?.spectrum_id,
-    [currentOrg?.spectrum_id, profile, service?.contractor?.spectrum_id],
+      !!profile &&
+      !!service?.contractor?.spectrum_id &&
+      profile.contractors?.some(
+        (c) => c.spectrum_id === service.contractor?.spectrum_id,
+      ),
+    [profile, service?.contractor?.spectrum_id],
   )
   const amRelated = useMemo(
     () => amAssigned || amContractor,
     [amAssigned, amContractor],
   )
-  // const amContractorManager = useMemo(() =>
-  //         amContractor && has_permission(service.contractor, profile, 'manage_orders'),
-  //     [currentOrg, profile, amContractor]
-  // )
 
   const scrollToOrderForm = useCallback(() => {
     if (props.orderFormRef?.current && mainRef.current) {

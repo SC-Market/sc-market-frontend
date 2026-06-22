@@ -1,4 +1,3 @@
-import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
 import { useGetContractorOrderMetricsQuery } from "../api/ordersApi"
 import type { ContractorOrderMetrics } from "../domain/types"
 
@@ -8,11 +7,10 @@ export interface UseOrderMetricsResult {
   error: unknown
 }
 
-export function useOrderMetrics(): UseOrderMetricsResult {
-  const [contractor] = useCurrentOrg()
+export function useOrderMetrics(spectrumId: string | undefined): UseOrderMetricsResult {
   const { data: metrics, isLoading, error } = useGetContractorOrderMetricsQuery(
-    contractor?.spectrum_id!,
-    { skip: !contractor?.spectrum_id },
+    spectrumId!,
+    { skip: !spectrumId },
   )
   return { metrics, isLoading, error }
 }

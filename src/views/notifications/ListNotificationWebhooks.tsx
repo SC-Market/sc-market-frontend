@@ -10,7 +10,7 @@ import {
   useGetUserWebhooks,
   useProfileDeleteWebhook,
 } from "../../features/profile/api/profileApi"
-import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
+import { useParams } from "react-router-dom"
 import { OrderWebhook } from "../../features/contractor/domain/types"
 import { DeleteRounded } from "@mui/icons-material"
 import { useAlertHook } from "../../hooks/alert/AlertHook"
@@ -43,7 +43,7 @@ export function WebhookRow(props: {
   org?: boolean
 }): ReactElement {
   const { row, index, isItemSelected } = props // TODO: Add `assigned_to` column
-  const [currentOrg] = useCurrentOrg()
+  const { contractor_id } = useParams<{ contractor_id: string }>()
 
   const [
     deleteUserWebhook, // This is the mutation trigger
@@ -61,7 +61,7 @@ export function WebhookRow(props: {
     let res
     if (props.org) {
       res = await deleteContractorWebhook({
-        contractor: currentOrg!.spectrum_id,
+        contractor: contractor_id!,
         webhook_id: row.webhook_id,
       })
     } else {
@@ -90,7 +90,7 @@ export function WebhookRow(props: {
     }
     return false
   }, [
-    currentOrg,
+    contractor_id,
     deleteContractorWebhook,
     deleteUserWebhook,
     props.org,
@@ -162,10 +162,10 @@ export function WebhookRow(props: {
 }
 
 export function MyWebhooks(props: { org?: boolean }) {
-  const [currentOrg] = useCurrentOrg()
+  const { contractor_id } = useParams<{ contractor_id: string }>()
   const { data: contractorWebhooks } = useGetContractorWebhooksQuery(
-    currentOrg?.spectrum_id!,
-    { skip: !props.org },
+    contractor_id!,
+    { skip: !props.org || !contractor_id },
   )
   const { data: webhooks } = useGetUserWebhooks(undefined, {
     skip: !!props.org,
