@@ -364,7 +364,7 @@ export function AllStockLotsGrid() {
   const issueAlert = useAlertHook()
   const { filters } = useStockSearch()
   const shopCtx = useOptionalShopRouteContext()
-  const spectrumId = shopCtx?.shop.owner_contractor_id ?? undefined
+  const spectrumId = shopCtx?.shop.owner_contractor_id
 
   // Map status filter → API listed param
   const listed =

@@ -390,7 +390,7 @@ export function OfferRow(props: {
 
 export function ReceivedOffersArea({ unassigned }: { unassigned?: boolean } = {}) {
   const shopCtx = useOptionalShopRouteContext()
-  const contractorId = shopCtx?.shop.owner_contractor_id ?? undefined
+  const contractorId = shopCtx?.shop.owner_contractor_id
 
   return (
     <OffersViewPaginated

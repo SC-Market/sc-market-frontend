@@ -16,7 +16,7 @@ import { UnderlineLink } from "../../../../components/typography/UnderlineLink"
 export function AllAllocatedLotsGrid() {
   const { t } = useTranslation()
   const shopCtx = useOptionalShopRouteContext()
-  const spectrumId = shopCtx?.shop.owner_contractor_id ?? undefined
+  const spectrumId = shopCtx?.shop.owner_contractor_id
 
   const { data, isLoading } = useGetContractorAllocationsQuery(
     { contractor_spectrum_id: spectrumId || "" },
