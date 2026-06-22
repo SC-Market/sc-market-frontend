@@ -177,6 +177,7 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
         icon: <ListAltRounded />,
         logged_in: true,
         org: false,
+        shopRouteRest: "listings",
       },
       {
         to: "/market/manage-stock",
@@ -184,6 +185,7 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
         icon: <WarehouseRounded />,
         logged_in: true,
         org: false,
+        shopRouteRest: "stock",
       },
       {
         to: "/inventory",
@@ -198,6 +200,7 @@ export const all_sidebar_entries: SidebarSectionProps[] = [
         icon: <DashboardCustomizeRounded />,
         org: false,
         logged_in: true,
+        shopRouteRest: "services",
       },
       {
         to: "/availability",
