@@ -229,7 +229,7 @@ function ShopManagementCard({ shop }: { shop: ShopResponse }) {
               size="small"
               startIcon={<Settings />}
               component={RouterLink}
-              to={`/shops/${shop.slug}/manage`}
+              to={`/shop/${shop.slug}/settings`}
             >
               Manage
             </Button>
@@ -412,7 +412,6 @@ export function MyShops() {
       )}
 
       {/* Summary stats bar */}
-      {shops && shops.length > 0 && <SummaryStatsBar shops={shops} />}
 
       {/* Shop management cards */}
       {shops?.map((shop) => (
