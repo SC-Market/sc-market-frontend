@@ -19,6 +19,7 @@ import {
 import { styled, useTheme } from "@mui/material/styles"
 import { HeadCell, PaginatedTable } from "../../components/table/PaginatedTable"
 import { Section } from "../../components/paper/Section"
+import { useOptionalShopRouteContext } from "../../components/router/ShopContextFromRoute"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
@@ -226,24 +227,26 @@ export function MobileServiceRow(props: ServiceRowProps) {
 export function MyServices(props: { status: string }) {
   const { status } = props
   const { data: profile } = useGetUserProfileQuery()
+  const shopCtx = useOptionalShopRouteContext()
   const [currentOrg] = useCurrentOrg()
+  const contractorId = shopCtx?.shop.owner_contractor_id ?? currentOrg?.spectrum_id
   const { t } = useTranslation()
 
   const { data: listings } = useGetServicesQuery(profile?.username!, {
-    skip: !profile || !!currentOrg,
+    skip: !profile || !!contractorId,
   })
 
   const { data: orglistings } = useGetServicesContractorQuery(
-    currentOrg?.spectrum_id!,
-    { skip: !currentOrg },
+    contractorId!,
+    { skip: !contractorId },
   )
 
   const filteredServices = useMemo(
     () =>
-      ((currentOrg ? orglistings : listings) || []).filter((service) => {
+      ((contractorId ? orglistings : listings) || []).filter((service) => {
         return !status || status === service.status
       }),
-    [currentOrg, listings, orglistings, status],
+    [contractorId, listings, orglistings, status],
   )
 
   return (

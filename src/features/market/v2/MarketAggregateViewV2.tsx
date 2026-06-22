@@ -34,7 +34,6 @@ import {
 } from "@mui/material";
 import { HapticButton } from "../../../components/haptic";
 import { ExtendedTheme } from "../../../hooks/styles/Theme";
-import { useCurrentOrg } from "../../../hooks/login/CurrentOrg";
 import { useGetUserProfileQuery } from "../../profile/api/profileApi";
 import {
   AddShoppingCartRounded,
@@ -666,7 +665,6 @@ export function BuyOrderRowV2(props: {
   const [fulfillQuantity, setFulfillQuantity] = useState<number>(buy_order.quantity - (buy_order.quantity_fulfilled || 0));
   const remaining = buy_order.quantity - (buy_order.quantity_fulfilled || 0);
   const navigate = useNavigate();
-  const [currentOrg] = useCurrentOrg();
   const { data: profile } = useGetUserProfileQuery();
 
   const [fulfillBuyOrderMut, { isLoading: fulfillIsLoading }] = useFulfillBuyOrderMutation();

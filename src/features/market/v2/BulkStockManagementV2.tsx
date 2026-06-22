@@ -45,6 +45,7 @@ import { StandardPageLayout } from "../../../components/layout/StandardPageLayou
 import { ManageListingsTabBar } from "../components/ManageListingsTabBar"
 import { BottomSheet } from "../../../components/mobile/BottomSheet"
 import { ThemedDataGrid as DataGrid } from "../../../components/grid/ThemedDataGrid"
+import { useOptionalShopRouteContext } from "../../../components/router/ShopContextFromRoute"
 import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
 import { EmptyState } from "../../../components/empty-states/EmptyState"
 import { UnderlineLink } from "../../../components/typography/UnderlineLink"
@@ -194,8 +195,10 @@ export function BulkStockManagementV2() {
 function StockSearchAreaV2() {
   const { t } = useTranslation()
   const { filters, setSearch, setListingId, setLocationId } = useStockFilter()
+  const shopCtx = useOptionalShopRouteContext()
   const [currentOrg] = useCurrentOrg()
-  const { data: listingsData } = useGetMyListingsQuery({ pageSize: 100, sortBy: "updated_at", sortOrder: "desc", spectrumId: currentOrg?.spectrum_id })
+  const spectrumId = shopCtx?.shop.owner_contractor_id ?? currentOrg?.spectrum_id
+  const { data: listingsData } = useGetMyListingsQuery({ pageSize: 100, sortBy: "updated_at", sortOrder: "desc", spectrumId })
   const listings = listingsData?.listings ?? []
 
   return (
@@ -243,16 +246,18 @@ function AllStockLotsGridV2() {
   const issueAlert = useAlertHook()
   const { filters } = useStockFilter()
 
+  const shopCtx = useOptionalShopRouteContext()
   const [currentOrg] = useCurrentOrg()
+  const spectrumId = shopCtx?.shop.owner_contractor_id ?? currentOrg?.spectrum_id
 
   const { data: lotsData, isLoading } = useGetStockLotsQuery({
     listingId: filters.listingId ?? undefined,
     locationId: filters.locationId ?? undefined,
-    spectrumId: currentOrg?.spectrum_id,
+    spectrumId,
     pageSize: 100,
   })
 
-  const { data: listingsData } = useGetMyListingsQuery({ pageSize: 100, sortBy: "updated_at", sortOrder: "desc", spectrumId: currentOrg?.spectrum_id })
+  const { data: listingsData } = useGetMyListingsQuery({ pageSize: 100, sortBy: "updated_at", sortOrder: "desc", spectrumId })
   const listings = listingsData?.listings ?? []
 
   const [createLot] = useCreateStockLotMutation()
@@ -638,12 +643,14 @@ function AllStockLotsGridV2() {
 function AllocatedStockGridV2() {
   const { t } = useTranslation()
   const { filters } = useStockFilter()
+  const shopCtx = useOptionalShopRouteContext()
   const [currentOrg] = useCurrentOrg()
+  const spectrumId = shopCtx?.shop.owner_contractor_id ?? currentOrg?.spectrum_id
 
   const { data: lotsData, isLoading } = useGetStockLotsQuery({
     listingId: filters.listingId ?? undefined,
     locationId: filters.locationId ?? undefined,
-    spectrumId: currentOrg?.spectrum_id,
+    spectrumId,
     pageSize: 100,
   })
 
