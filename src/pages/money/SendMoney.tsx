@@ -1,15 +1,19 @@
 import React from "react"
-import { Navigate } from "react-router-dom"
+import { Navigate, useParams } from "react-router-dom"
 import { FormPageLayout } from "../../components/layout/FormPageLayout"
 import { Section } from "../../components/paper/Section"
 import { useTranslation } from "react-i18next"
 import { usePageSendMoney } from "../../features/money/hooks/usePageSendMoney"
 import { SendMoneyRecipientSection } from "../../features/money/components/SendMoneyRecipientSection"
 import { SendMoneyDetailsSection } from "../../features/money/components/SendMoneyDetailsSection"
+import { ORG_PATHS } from "../../routes/paths"
 
 export function SendMoney(props: { org?: boolean }) {
   const { t } = useTranslation()
+  const { contractor_id } = useParams<{ contractor_id: string }>()
   const pageData = usePageSendMoney(props.org)
+
+  const orgMoneyHref = contractor_id ? ORG_PATHS.money(contractor_id) : "/dashboard"
 
   return (
     <FormPageLayout
@@ -17,7 +21,7 @@ export function SendMoney(props: { org?: boolean }) {
       breadcrumbs={[
         {
           label: t("dashboard.title", "Dashboard"),
-          href: props.org ? "/org/money" : "/dashboard",
+          href: props.org ? orgMoneyHref : "/dashboard",
         },
         { label: t("sendMoney.title", "Send Money") },
       ]}
@@ -26,7 +30,7 @@ export function SendMoney(props: { org?: boolean }) {
       maxWidth="sm"
     >
       {pageData.isSuccess && (
-        <Navigate to={props.org ? "/org/money" : "/dashboard"} />
+        <Navigate to={props.org ? orgMoneyHref : "/dashboard"} />
       )}
 
       {pageData.step === "recipient" ? (

@@ -521,13 +521,10 @@ const router = createBrowserRouter([
           },
           {
             path: "/org/members",
-            lazy: async () => {
-              const component = (await import("./pages/people/People"))
-                .CustomerPage
-              return {
-                Component: () => createElement(component, { members: true }),
-              }
-            },
+            lazy: async () => ({
+              Component: (await import("./components/router/OrgRedirect"))
+                .OrgRedirectMembers,
+            }),
           },
           {
             path: "/myfleet/import",
@@ -815,7 +812,8 @@ const router = createBrowserRouter([
               {
                 path: "/org/fleet",
                 lazy: async () => ({
-                  Component: (await import("./pages/fleet/Fleet")).Fleet,
+                  Component: (await import("./components/router/OrgRedirect"))
+                    .OrgRedirectFleet,
                 }),
               },
               {
@@ -826,13 +824,10 @@ const router = createBrowserRouter([
               },
               {
                 path: "/org/send",
-                lazy: async () => {
-                  const component = (await import("./pages/money/SendMoney"))
-                    .SendMoney
-                  return {
-                    Component: () => createElement(component, { org: true }),
-                  }
-                },
+                lazy: async () => ({
+                  Component: (await import("./components/router/OrgRedirect"))
+                    .OrgRedirectSend,
+                }),
               },
             ],
           },
@@ -863,8 +858,8 @@ const router = createBrowserRouter([
               {
                 path: "/org/orders",
                 lazy: async () => ({
-                  Component: (await import("./pages/contractor/OrgOrders"))
-                    .OrgOrders,
+                  Component: (await import("./components/router/OrgRedirect"))
+                    .OrgRedirectOrders,
                 }),
               },
             ],
@@ -873,38 +868,18 @@ const router = createBrowserRouter([
             element: <OrgRoute />,
             children: [
               {
-                element: (
-                  <OrgAdminRoute
-                    anyPermission={[
-                      "manage_org_details",
-                      "manage_invites",
-                      "manage_roles",
-                      "manage_webhooks",
-                      "manage_theme",
-                    ]}
-                  />
-                ),
-                children: [
-                  {
-                    path: "/org/manage",
-                    lazy: async () => ({
-                      Component: (await import("./pages/contractor/OrgManage"))
-                        .OrgManage,
-                    }),
-                  },
-                ],
+                path: "/org/manage",
+                lazy: async () => ({
+                  Component: (await import("./components/router/OrgRedirect"))
+                    .OrgRedirectManage,
+                }),
               },
               {
-                element: <OrgAdminRoute permission="manage_stock" />,
-                children: [
-                  {
-                    path: "/org/money",
-                    lazy: async () => ({
-                      Component: (await import("./pages/contractor/OrgMoney"))
-                        .OrgMoney,
-                    }),
-                  },
-                ],
+                path: "/org/money",
+                lazy: async () => ({
+                  Component: (await import("./components/router/OrgRedirect"))
+                    .OrgRedirectMoney,
+                }),
               },
             ],
           },
@@ -1026,8 +1001,8 @@ const router = createBrowserRouter([
               {
                 path: "listings",
                 lazy: async () => ({
-                  Component: (await import("./pages/market/ManageStock"))
-                    .ManageStock,
+                  Component: (await import("./components/market/MarketRouter"))
+                    .ManageStockGate,
                 }),
               },
               {

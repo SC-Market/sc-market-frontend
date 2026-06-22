@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from "react";
+import React, { useState, useCallback } from "react";
 import {
   Grid,
   TextField,
@@ -37,10 +37,9 @@ import { useCreateListingMutation, useSearchResourcesQuery } from "../../../stor
 import { useUploadImageMutation } from "../../../store/api/v2/market-overrides";
 import { useAlertHook } from "../../../hooks/alert/AlertHook";
 import { useGetUserProfileQuery } from "../../profile/api/profileApi";
-import { useCurrentOrg } from "../../../hooks/login/CurrentOrg";
+import { useShopRouteContext } from "../../../components/router/ShopContextFromRoute";
 import { Alert } from "@mui/material";
 import { PriceComparisonAlert } from "../components/PriceComparisonAlert";
-import { ShopSelector } from "./components/ShopSelector";
 import type {
   CreateListingRequest,
   StockLotInput,
@@ -69,11 +68,8 @@ export function CreateListingV2() {
   const [searchParams] = useSearchParams();
   const issueAlert = useAlertHook();
   const { data: profile } = useGetUserProfileQuery();
-  const [currentOrg] = useCurrentOrg();
+  const { shop } = useShopRouteContext();
   const isVerified = profile?.rsi_confirmed;
-
-  // Shop selection
-  const [shopId, setShopId] = useState("");
 
   // Form state — prefilled from ?game_item_id=&game_item_name=&game_item_type= query params
   const [title, setTitle] = useState("");
@@ -166,9 +162,6 @@ export function CreateListingV2() {
 
   // Validate form
   const validateForm = useCallback((): string | null => {
-    if (!shopId) {
-      return t("CreateListingV2.validation.shopRequired", "Please select a shop");
-    }
     if (!title.trim()) {
       return t("CreateListingV2.validation.titleRequired", "Title is required");
     }
@@ -233,7 +226,7 @@ export function CreateListingV2() {
     }
 
     return null;
-  }, [shopId, title, description, gameItemId, pricingMode, basePrice, stockLots, t]);
+  }, [title, description, gameItemId, pricingMode, basePrice, stockLots, t]);
 
   // Submit form
   const handleSubmit = useCallback(
@@ -283,8 +276,8 @@ export function CreateListingV2() {
         min_order_value: minOrderValue ?? undefined,
         max_order_value: maxOrderValue ?? undefined,
         bulk_discount_tiers: bulkDiscountTiers.length ? bulkDiscountTiers : undefined,
-        shop_id: shopId,
-        visibility: currentOrg ? visibility : undefined,
+        shop_id: shop.shop_id,
+        visibility: shop.owner_contractor_id ? visibility : undefined,
         sale_type: saleType,
         status: listingStatus,
         auction_details: saleType === "auction" ? {
@@ -322,7 +315,8 @@ export function CreateListingV2() {
       gameItemId,
       pricingMode,
       basePrice,
-      shopId,
+      shop.shop_id,
+      shop.owner_contractor_id,
       photoResourceIds,
       createListing,
       issueAlert,
@@ -400,13 +394,6 @@ export function CreateListingV2() {
               </Alert>
             </Grid>
           )}
-
-          {/* Shop Selector */}
-          <FormPaper title={t("CreateListingV2.shop", "Shop")}>
-            <Grid item xs={12}>
-              <ShopSelector value={shopId} onChange={setShopId} />
-            </Grid>
-          </FormPaper>
 
           {/* ============================================================ */}
           {/* ESSENTIAL FIELDS — always visible                            */}
@@ -609,7 +596,7 @@ export function CreateListingV2() {
                       <MenuItem value="inactive">{t("CreateListingV2.inactive", "Inactive (Draft)")}</MenuItem>
                     </TextField>
                   </Grid>
-                  {currentOrg && (
+                  {shop.owner_contractor_id && (
                     <Grid item xs={12} sm={6}>
                       <TextField
                         select
@@ -1059,7 +1046,7 @@ export function CreateListingV2() {
               color="secondary"
               type="submit"
               loading={isLoading}
-              disabled={isUploading || !shopId}
+              disabled={isUploading}
               aria-label={t("CreateListingV2.submit", "Create Listing")}
             >
               {isUploading
