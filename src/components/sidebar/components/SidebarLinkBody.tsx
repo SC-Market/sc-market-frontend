@@ -33,6 +33,16 @@ export const ORG_ROUTE_REST_TO_CANONICAL: Record<string, string> = {
 
 function isSidebarPathSelected(pathOnly: string, pathname: string): boolean {
   if (matchPath(pathOnly, pathname)) return true
+  // Match /shop/:slug/* routes
+  if (pathname.startsWith("/shop/")) {
+    const shopMatch = matchPath("/shop/:shopSlug/*", pathname)
+    if (shopMatch) {
+      const shopPath = `/shop/${(shopMatch.params as { shopSlug?: string }).shopSlug}/${(shopMatch.params as { "*"?: string })["*"] || ""}`
+      if (pathOnly === shopPath || shopPath.startsWith(pathOnly + "/")) return true
+      // Also check if the resolved path matches
+      if (matchPath(pathOnly, shopPath)) return true
+    }
+  }
   if (!pathname.startsWith("/org/")) return false
   const m = matchPath("/org/:contractor_id/*", pathname)
   const rest = (m?.params as { contractor_id?: string; "*"?: string })?.["*"]

@@ -16,6 +16,7 @@ export interface SidebarItemProps {
   external?: boolean
   toOrgPublic?: boolean
   orgRouteRest?: string
+  shopRouteRest?: string // Resolved to /shop/:slug/<shopRouteRest>
   tab_key?: string // Used for org sidebar config filtering
   feature_flag?: string // Only show when this flag is enabled (e.g. "wiki")
 }

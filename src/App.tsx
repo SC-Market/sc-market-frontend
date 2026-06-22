@@ -23,6 +23,11 @@ import {
   OrgAdminRoute,
 } from "./components/router/LoggedInRoute"
 import { OrgContextFromRoute } from "./components/router/OrgContextFromRoute"
+import { ShopContextFromRoute } from "./components/router/ShopContextFromRoute"
+import {
+  ShopRedirectListings,
+  ShopRedirectStock,
+} from "./components/router/ShopRedirect"
 import { store } from "./store/store"
 import { notificationApi } from "./features/notifications/api/notificationApi"
 import { usePeriodicBackgroundSync } from "./hooks/pwa/usePeriodicBackgroundSync"
@@ -437,15 +442,11 @@ const router = createBrowserRouter([
           },
           {
             path: "/market/manage",
-            lazy: async () => ({
-              Component: (await import("./components/market/MarketRouter")).ManageStockGate,
-            }),
+            element: <ShopRedirectListings />,
           },
           {
             path: "/market/manage-stock",
-            lazy: async () => ({
-              Component: (await import("./components/market/MarketRouter")).ManageStockLotsGate,
-            }),
+            element: <ShopRedirectStock />,
           },
           {
             path: "/market/stock/:listingId",
@@ -1015,6 +1016,59 @@ const router = createBrowserRouter([
                   Component: (await import("./pages/contracting/MyServices"))
                     .MyServicesPage,
                 }),
+              },
+            ],
+          },
+          {
+            path: "/shop/:shopSlug",
+            element: <ShopContextFromRoute />,
+            children: [
+              {
+                path: "listings",
+                lazy: async () => ({
+                  Component: (await import("./pages/market/ManageStock"))
+                    .ManageStock,
+                }),
+              },
+              {
+                path: "listings/create",
+                lazy: async () => ({
+                  Component: (await import("./components/market/MarketRouter"))
+                    .CreateListingGate,
+                }),
+              },
+              {
+                path: "stock",
+                lazy: async () => ({
+                  Component: (await import("./pages/market/ManageStockLots"))
+                    .ManageStockLots,
+                }),
+              },
+              {
+                path: "orders",
+                lazy: async () => ({
+                  Component: (
+                    await import("./pages/contractor/MemberDashboard")
+                  ).MemberDashboard,
+                }),
+              },
+              {
+                path: "services",
+                lazy: async () => ({
+                  Component: (await import("./pages/contracting/MyServices"))
+                    .MyServicesPage,
+                }),
+              },
+              {
+                path: "settings",
+                lazy: async () => ({
+                  Component: (await import("./pages/shops/ShopSettings"))
+                    .ShopSettings,
+                }),
+              },
+              {
+                index: true,
+                element: <Navigate to="listings" replace />,
               },
             ],
           },
