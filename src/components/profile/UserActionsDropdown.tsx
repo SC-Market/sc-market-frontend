@@ -14,7 +14,6 @@ import { useTranslation } from "react-i18next"
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { User } from "../../datatypes/User"
-// removed: useCurrentOrg (now in hook)
 import {
   useProfileGetBlocklistQuery,
   useGetUserProfileQuery,

@@ -195,7 +195,7 @@ function StockSearchAreaV2() {
   const { t } = useTranslation()
   const { filters, setSearch, setListingId, setLocationId } = useStockFilter()
   const shopCtx = useOptionalShopRouteContext()
-  const spectrumId = shopCtx?.shop.owner_contractor_id ?? undefined
+  const spectrumId = shopCtx?.shop.owner_contractor_id
   const { data: listingsData } = useGetMyListingsQuery({ pageSize: 100, sortBy: "updated_at", sortOrder: "desc", spectrumId })
   const listings = listingsData?.listings ?? []
 
@@ -245,7 +245,7 @@ function AllStockLotsGridV2() {
   const { filters } = useStockFilter()
 
   const shopCtx = useOptionalShopRouteContext()
-  const spectrumId = shopCtx?.shop.owner_contractor_id ?? undefined
+  const spectrumId = shopCtx?.shop.owner_contractor_id
 
   const { data: lotsData, isLoading } = useGetStockLotsQuery({
     listingId: filters.listingId ?? undefined,
@@ -641,7 +641,7 @@ function AllocatedStockGridV2() {
   const { t } = useTranslation()
   const { filters } = useStockFilter()
   const shopCtx = useOptionalShopRouteContext()
-  const spectrumId = shopCtx?.shop.owner_contractor_id ?? undefined
+  const spectrumId = shopCtx?.shop.owner_contractor_id
 
   const { data: lotsData, isLoading } = useGetStockLotsQuery({
     listingId: filters.listingId ?? undefined,

@@ -54,7 +54,6 @@ import { useMarketSearch } from ".."
 import { formatCompleteListingUrl } from "../../../util/urls"
 import { Link } from "react-router-dom"
 import { MarketListingUpdateBody, UniqueListing } from "../domain/types"
-// useCurrentOrg removed — spectrumId now comes from useStockManagement
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import {
