@@ -1,4 +1,5 @@
 import React, { useState, useMemo, useCallback } from "react"
+import { useOptionalShopRouteContext } from "../../../../components/router/ShopContextFromRoute"
 import { useCurrentOrg } from "../../../../hooks/login/CurrentOrg"
 import { useGetUserProfileQuery } from "../../../profile/api/profileApi"
 import { useGetMyListingsQuery } from "../../api/marketApi"
@@ -15,13 +16,15 @@ function statusesForManageStock(raw: string | undefined): string {
 }
 
 export function MyItemStock() {
+  const shopCtx = useOptionalShopRouteContext()
   const [currentOrg] = useCurrentOrg()
+  const spectrumId = shopCtx?.shop.owner_contractor_id ?? currentOrg?.spectrum_id
   const { data: profile, isLoading: profileLoading } = useGetUserProfileQuery()
   const [page, setPage] = useState(0)
   const [perPage, setPerPage] = useState(48)
   const [searchState] = useMarketSearch()
 
-  const hasOrg = currentOrg && currentOrg.spectrum_id
+  const hasOrg = !!spectrumId
 
   const searchQueryParams = useMemo(() => {
     return {
@@ -39,7 +42,7 @@ export function MyItemStock() {
   }, [perPage, page, searchState])
 
   const finalParams = hasOrg
-    ? { ...searchQueryParams, contractor_id: currentOrg?.spectrum_id }
+    ? { ...searchQueryParams, contractor_id: spectrumId }
     : searchQueryParams
 
   const {

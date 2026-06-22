@@ -61,6 +61,7 @@ import { formatCraftedSource, hasDisplayableSource } from "../../../../util/vari
 import { useAlertHook } from "../../../../hooks/alert/AlertHook"
 import { useStockSearch } from "./StockSearchContext"
 import { LocationSelector } from "./LocationSelector"
+import { useOptionalShopRouteContext } from "../../../../components/router/ShopContextFromRoute"
 import { useCurrentOrg } from "../../../../hooks/login/CurrentOrg"
 
 /* ── Row type ── */
@@ -363,7 +364,9 @@ export function AllStockLotsGrid() {
   const { t } = useTranslation()
   const issueAlert = useAlertHook()
   const { filters } = useStockSearch()
+  const shopCtx = useOptionalShopRouteContext()
   const [currentOrg] = useCurrentOrg()
+  const spectrumId = shopCtx?.shop.owner_contractor_id ?? currentOrg?.spectrum_id
 
   // Map status filter → API listed param
   const listed =
@@ -389,7 +392,7 @@ export function AllStockLotsGrid() {
     status: "active",
     page: 1,
     pageSize: 200,
-    spectrumId: currentOrg?.spectrum_id,
+    spectrumId,
   })
   const [updateLot] = useUpdateStockLotMutation()
   const [deleteLot, { isLoading: deleting }] = useDeleteStockLotMutation()

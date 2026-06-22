@@ -65,3 +65,16 @@ export function ShopContextFromRoute() {
 export function useShopRouteContext() {
   return useOutletContext<ShopRouteContext>()
 }
+
+/**
+ * Optional version of useShopRouteContext — returns null when the component
+ * is NOT rendered under a ShopContextFromRoute outlet (e.g. under org routes).
+ * Use this for components that are mounted in both /shop/:slug/... and /org/:id/... trees.
+ */
+export function useOptionalShopRouteContext(): ShopRouteContext | null {
+  const ctx = useOutletContext<ShopRouteContext | undefined>()
+  if (ctx && "shop" in ctx && ctx.shop?.shop_id) {
+    return ctx as ShopRouteContext
+  }
+  return null
+}

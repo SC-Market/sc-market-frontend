@@ -40,6 +40,7 @@ import { ListingSkeleton } from "../../../components/skeletons"
 import { EmptyListings } from "../../../components/empty-states"
 import { HeaderTitle } from "../../../components/typography/HeaderTitle"
 import { LazySection } from "../../../components/layout/LazySection"
+import { useOptionalShopRouteContext } from "../../../components/router/ShopContextFromRoute"
 import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { MobileListingRow } from "./components/MobileListingRow"
@@ -54,7 +55,9 @@ function MyListingSectionV2({
   status: "active" | "inactive" | "cancelled"
 }) {
   const theme = useTheme<ExtendedTheme>()
+  const shopCtx = useOptionalShopRouteContext()
   const [currentOrg] = useCurrentOrg()
+  const spectrumId = shopCtx?.shop.owner_contractor_id ?? currentOrg?.spectrum_id
   const gridBreakpoints = { xs: 6, sm: 4, md: 4, lg: 3, xl: 2.4 }
 
   const { data, isLoading, isFetching } = useGetMyListingsQuery({
@@ -63,7 +66,7 @@ function MyListingSectionV2({
     pageSize: 48,
     sortBy: "created_at",
     sortOrder: "desc",
-    spectrumId: currentOrg?.spectrum_id,
+    spectrumId,
   })
 
   const listings = data?.listings ?? []
@@ -124,7 +127,9 @@ type MobileStatus = "active" | "inactive" | "cancelled"
 function MobileListingsView() {
   const theme = useTheme<ExtendedTheme>()
   const { t } = useTranslation()
+  const shopCtx = useOptionalShopRouteContext()
   const [currentOrg] = useCurrentOrg()
+  const spectrumId = shopCtx?.shop.owner_contractor_id ?? currentOrg?.spectrum_id
   const issueAlert = useAlertHook()
   const [updateListing] = useUpdateListingMutation()
 
@@ -138,7 +143,7 @@ function MobileListingsView() {
     status: "active",
     page: 1,
     pageSize: 1,
-    spectrumId: currentOrg?.spectrum_id,
+    spectrumId,
   })
   const activeCount = activeData?.total ?? 0
   const showCombined = !activeLoading && activeCount === 0 && selectedStatus === "active"
@@ -149,7 +154,7 @@ function MobileListingsView() {
     pageSize: 100,
     sortBy: "updated_at",
     sortOrder: "desc",
-    spectrumId: currentOrg?.spectrum_id,
+    spectrumId,
   })
 
   const listings = data?.listings ?? []

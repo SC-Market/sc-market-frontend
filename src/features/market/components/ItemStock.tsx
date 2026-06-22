@@ -54,7 +54,7 @@ import { useMarketSearch } from ".."
 import { formatCompleteListingUrl } from "../../../util/urls"
 import { Link } from "react-router-dom"
 import { MarketListingUpdateBody, UniqueListing } from "../domain/types"
-import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
+// useCurrentOrg removed — spectrumId now comes from useStockManagement
 import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
 import {
@@ -128,7 +128,7 @@ export function DisplayStock({
     fetchingItemName,
     setFetchingItemName,
     gameItem,
-    currentOrg,
+    spectrumId,
     refresh,
     createListing,
     updateListing,
@@ -183,7 +183,7 @@ export function DisplayStock({
           status: editingRow.status || "active",
           end_time: null,
           item_name: editingRow.item_name,
-          spectrum_id: currentOrg?.spectrum_id,
+          spectrum_id: spectrumId,
         }
 
         await createListing(listingData).unwrap()

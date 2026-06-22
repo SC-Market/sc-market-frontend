@@ -54,6 +54,7 @@ import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { EmptyOrders } from "../../components/empty-states"
 import { useLongPress } from "../../components/gestures"
+import { useOptionalShopRouteContext } from "../../components/router/ShopContextFromRoute"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { OrderSearchSortMethod } from "../../features/orders/domain/types"
@@ -381,13 +382,15 @@ export function OfferRow(props: {
 }
 
 export function ReceivedOffersArea({ unassigned }: { unassigned?: boolean } = {}) {
+  const shopCtx = useOptionalShopRouteContext()
   const [currentOrg] = useCurrentOrg()
+  const contractorId = shopCtx?.shop.owner_contractor_id ?? currentOrg?.spectrum_id
 
   return (
     <OffersViewPaginated
-      assigned={!currentOrg && !unassigned}
+      assigned={!contractorId && !unassigned}
       unassigned={unassigned}
-      contractor={currentOrg?.spectrum_id}
+      contractor={contractorId}
     />
   )
 }
