@@ -17,6 +17,7 @@ import {
 } from "@mui/material"
 import { styled, useTheme } from "@mui/material/styles"
 import {
+  CreateRounded,
   DesignServicesRounded,
   InfoRounded,
   StarRounded,
@@ -46,6 +47,7 @@ import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { amber } from "@mui/material/colors"
 import { useCallback, useMemo, MouseEventHandler } from "react"
 import { EmptyReviews } from "../../components/empty-states"
+import { CreateOrderForm } from "../../views/orders/CreateOrderForm"
 
 export function ShopProfile() {
   const { slug } = useParams<{ slug: string }>()
@@ -103,7 +105,7 @@ export function ShopProfile() {
             </Grid>
 
             <Grid item xs={12}>
-              <ShopTabs slug={slug!} currentTab={currentTab} />
+              <ShopTabs slug={slug!} currentTab={currentTab} shop={shop} />
             </Grid>
           </Grid>
         </Container>
@@ -307,7 +309,7 @@ function ShopRatingSummary(props: { shop: ShopPublicResponse }) {
   )
 }
 
-function ShopTabs(props: { slug: string; currentTab: number }) {
+function ShopTabs(props: { slug: string; currentTab: number; shop: ShopPublicResponse }) {
   return (
     <Box sx={{ borderBottom: 1, borderColor: "divider.light" }}>
       <Tabs value={props.currentTab} variant="scrollable" aria-label="Shop tabs">
@@ -339,6 +341,15 @@ function ShopTabs(props: { slug: string; currentTab: number }) {
           icon={<InfoRounded />}
           {...a11yProps(3)}
         />
+        {props.shop.accepts_custom_orders && (
+          <HapticTab
+            label="Order"
+            component={Link}
+            to={`/shops/${props.slug}/order`}
+            icon={<CreateRounded />}
+            {...a11yProps(4)}
+          />
+        )}
       </Tabs>
     </Box>
   )
@@ -358,6 +369,8 @@ function ShopTabContent(props: {
       return <ShopReviewsTab shop={props.shop} />
     case 3:
       return <ShopAboutTab shop={props.shop} />
+    case 4:
+      return <ShopOrderTab shop={props.shop} />
     default:
       return null
   }
@@ -607,6 +620,25 @@ function ShopAboutTab(props: { shop: ShopPublicResponse }) {
           <OwnerCard owner={shop.owner} />
         </Grid>
       )}
+    </Grid>
+  )
+}
+
+function ShopOrderTab(props: { shop: ShopPublicResponse }) {
+  const { shop } = props
+  const theme = useTheme<ExtendedTheme>()
+
+  const contractorId =
+    shop.owner?.type === "contractor" ? shop.owner.slug : undefined
+  const assignedTo =
+    shop.owner?.type === "user" ? shop.owner.slug : undefined
+
+  return (
+    <Grid container spacing={theme.layoutSpacing.layout} justifyContent="center">
+      <CreateOrderForm
+        contractor_id={contractorId}
+        assigned_to={assignedTo}
+      />
     </Grid>
   )
 }
