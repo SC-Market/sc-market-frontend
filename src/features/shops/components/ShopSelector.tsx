@@ -25,8 +25,8 @@ import {
   useGetMyShopsQuery,
   useQuickCreateShopMutation,
   type ShopResponse,
-} from "../../../../store/api/v2/market"
-import { useAlertHook } from "../../../../hooks/alert/AlertHook"
+} from "../../../store/api/v2/market"
+import { useAlertHook } from "../../../hooks/alert/AlertHook"
 
 interface ShopSelectorProps {
   value: string

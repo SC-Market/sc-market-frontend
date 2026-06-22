@@ -338,7 +338,7 @@ const router = createBrowserRouter([
       {
         path: "/shops",
         lazy: async () => ({
-          Component: (await import("./pages/shops/ShopDirectory")).ShopDirectory,
+          Component: (await import("./features/shops/components/ShopDirectory")).ShopDirectory,
         }),
       },
       {
@@ -348,7 +348,7 @@ const router = createBrowserRouter([
           {
             index: true,
             lazy: async () => ({
-              Component: (await import("./pages/shops/CreateShop")).CreateShop,
+              Component: (await import("./features/shops/components/CreateShop")).CreateShop,
             }),
           },
         ],
@@ -356,13 +356,13 @@ const router = createBrowserRouter([
       {
         path: "/shops/:slug/:tab",
         lazy: async () => ({
-          Component: (await import("./pages/shops/ShopProfile")).ShopProfile,
+          Component: (await import("./features/shops/components/ShopProfile")).ShopProfile,
         }),
       },
       {
         path: "/shops/:slug",
         lazy: async () => ({
-          Component: (await import("./pages/shops/ShopProfile")).ShopProfile,
+          Component: (await import("./features/shops/components/ShopProfile")).ShopProfile,
         }),
       },
       {
@@ -510,7 +510,7 @@ const router = createBrowserRouter([
           {
             path: "/dashboard/shops",
             lazy: async () => ({
-              Component: (await import("./pages/shops/MyShops")).MyShops,
+              Component: (await import("./features/shops/components/MyShops")).MyShops,
             }),
           },
           {
@@ -1049,7 +1049,7 @@ const router = createBrowserRouter([
               {
                 path: "settings",
                 lazy: async () => ({
-                  Component: (await import("./pages/shops/ShopSettings"))
+                  Component: (await import("./features/shops/components/ShopSettings"))
                     .ShopSettings,
                 }),
               },
