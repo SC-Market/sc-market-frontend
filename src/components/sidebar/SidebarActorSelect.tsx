@@ -63,16 +63,26 @@ export function SidebarActorSelect() {
   }, [currentShopSlug, setCookie])
 
   const handleShopSelect = (slug: string) => {
-    const shopMatch = matchPath("/shop/:shopSlug/:rest/*", location.pathname)
-    const currentSubPath =
-      (shopMatch?.params as { rest?: string })?.rest ?? "listings"
-    const validSubPath = SHOP_SUB_PATHS.includes(
-      currentSubPath as (typeof SHOP_SUB_PATHS)[number],
-    )
-      ? currentSubPath
-      : "listings"
+    // Update cookie so shopRouteRest links resolve to this shop
+    setCookie("current_shop_slug", slug, {
+      path: "/",
+      sameSite: "strict",
+      maxAge: 31536000,
+    })
 
-    navigate(`/shop/${slug}/${validSubPath}`)
+    // If currently on a /shop/:slug/... page, replace the slug segment and stay on same sub-page
+    const shopMatch = matchPath("/shop/:shopSlug/:rest/*", location.pathname)
+    if (shopMatch) {
+      const currentSubPath =
+        (shopMatch.params as { rest?: string })?.rest ?? "listings"
+      const validSubPath = SHOP_SUB_PATHS.includes(
+        currentSubPath as (typeof SHOP_SUB_PATHS)[number],
+      )
+        ? currentSubPath
+        : "listings"
+      navigate(`/shop/${slug}/${validSubPath}`)
+    }
+    // If not on a shop page, don't navigate — just update the cookie
   }
 
   const handleCreateShop = async () => {
