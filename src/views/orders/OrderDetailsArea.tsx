@@ -110,7 +110,7 @@ export function OrderDetailsArea(props: { order: Order }) {
   const { t } = useTranslation()
 
   const {
-    profile, issueAlert, currentOrg,
+    profile, issueAlert,
     isEditingAssigned, setIsEditingAssigned,
     target, setTarget, targetObject, setTargetObject,
     options, members,

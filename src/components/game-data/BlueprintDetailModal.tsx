@@ -26,7 +26,7 @@ import { Close, BuildRounded, TimerRounded, RecyclingRounded, TrackChangesRounde
 import { useTranslation } from "react-i18next"
 import { useNavigate } from "react-router-dom"
 import { useGetBlueprintDetailQuery, useGetOrgBlueprintOwnersQuery, useAddBlueprintToInventoryMutation, useRemoveBlueprintFromInventoryMutation, type BlueprintIngredient, type SlotModifier, type MissionRewardingBlueprint } from "../../store/api/v2/market"
-import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
+import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { formatCategoryName } from "../../util/categoryDisplay"
 import { getCommodityColor, getItemCategoryColor } from "../../util/gameIcons"
 import { GameItemAvatar } from "./GameItemAvatar"
@@ -63,8 +63,8 @@ export function BlueprintDetailModal({ blueprintId, open, onClose }: Props) {
   const craftedPropertyDefs = data?.crafted_property_defs
 
 
-  const [currentOrg] = useCurrentOrg()
-  const spectrumId = currentOrg?.spectrum_id
+  const { data: userProfile } = useGetUserProfileQuery()
+  const spectrumId = userProfile?.contractors?.[0]?.spectrum_id
   const [tab, setTab] = useState(0)
   const [missionsExpanded, setMissionsExpanded] = useState(false)
 

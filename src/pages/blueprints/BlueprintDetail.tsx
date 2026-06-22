@@ -20,7 +20,7 @@ import {
   Avatar,
 } from "@mui/material"
 import { useGetBlueprintDetailQuery, useGetOrgBlueprintOwnersQuery, useAddBlueprintToInventoryMutation, useRemoveBlueprintFromInventoryMutation, type BlueprintIngredient, type SlotModifier, type MissionRewardingBlueprint } from "../../store/api/v2/market"
-import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
+import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 import { formatCategoryName } from "../../util/categoryDisplay"
 import { getCommodityColor, getItemCategoryColor } from "../../util/gameIcons"
@@ -53,8 +53,8 @@ export function BlueprintDetail() {
   const slotModifiers = data?.slot_modifiers || []
   const itemAttrs = data?.item_attributes || {}
 
-  const [currentOrg] = useCurrentOrg()
-  const spectrumId = currentOrg?.spectrum_id
+  const { data: userProfile } = useGetUserProfileQuery()
+  const spectrumId = userProfile?.contractors?.[0]?.spectrum_id
   const [tab, setTab] = useState(0)
   const [missionsExpanded, setMissionsExpanded] = useState(false)
 

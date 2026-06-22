@@ -2,7 +2,6 @@ import { useCallback, useState } from "react"
 import { useCreateContractOfferMutation } from "../api/publicContractsApi"
 import { useGetUserProfileQuery, useGetUserByUsernameQuery } from "../../profile/api/profileApi"
 import { useCheckContractorOrderLimitsQuery, useCheckUserOrderLimitsQuery } from "../../orders/api/orderSettingsApi"
-import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
 import { useAlertHook, type UnwrappedErrorInterface } from "../../../hooks/alert/AlertHook"
 import { useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
@@ -11,7 +10,6 @@ import type { PublicContract } from "../domain/types"
 
 export function useContractOfferForm(contract: PublicContract) {
   const { t } = useTranslation()
-  const [currentOrg] = useCurrentOrg()
   const issueAlert = useAlertHook()
   const navigate = useNavigate()
 
@@ -26,13 +24,14 @@ export function useContractOfferForm(contract: PublicContract) {
   const { data: profile } = useGetUserProfileQuery()
   const { data: myUser } = useGetUserByUsernameQuery(profile?.username!, { skip: !profile })
 
-  const { data: contractorLimits } = useCheckContractorOrderLimitsQuery(currentOrg?.spectrum_id || "", { skip: !currentOrg?.spectrum_id })
-  const { data: userLimits } = useCheckUserOrderLimitsQuery(profile?.username || "", { skip: !profile?.username || !!currentOrg })
+  const primaryContractorId = profile?.contractors?.[0]?.spectrum_id
+  const { data: contractorLimits } = useCheckContractorOrderLimitsQuery(primaryContractorId || "", { skip: !primaryContractorId })
+  const { data: userLimits } = useCheckUserOrderLimitsQuery(profile?.username || "", { skip: !profile?.username || !!primaryContractorId })
   const orderLimits = contractorLimits || userLimits
 
   const submitContractOffer = useCallback(async () => {
     createContractOffer({
-      contract_id: contract.id, contractor: currentOrg?.spectrum_id || null,
+      contract_id: contract.id, contractor: primaryContractorId || null,
       title, description, kind, collateral, cost, payment_type: paymentType,
     }).unwrap()
       .then((data) => {
@@ -44,7 +43,7 @@ export function useContractOfferForm(contract: PublicContract) {
           issueAlert({ message: error.error.message || "Order does not meet size or value requirements", severity: "error" })
         } else { issueAlert(error) }
       })
-  }, [collateral, cost, createContractOffer, description, issueAlert, kind, navigate, paymentType, title, t, currentOrg, contract.id])
+  }, [collateral, cost, createContractOffer, description, issueAlert, kind, navigate, paymentType, title, t, primaryContractorId, contract.id])
 
   return {
     title, setTitle, description, setDescription,

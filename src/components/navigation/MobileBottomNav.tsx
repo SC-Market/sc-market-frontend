@@ -31,7 +31,6 @@ import { useUnreadChatCount } from "../../features/chats"
 import { useBottomNavHeight } from "../../hooks/layout/useBottomNavHeight"
 import { usePendingOrderCount } from "../../features/orders/hooks/usePendingOrderCount"
 import { haptic } from "../../util/haptics"
-import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { CURRENT_CUSTOM_ORG, getWhiteLabelConfig } from "../../hooks/contractor/CustomDomain"
 import { getDisabledTabs } from "../sidebar/utils/sidebarFilters"
 
@@ -68,8 +67,8 @@ export function MobileBottomNav() {
   const navigate = useNavigate()
   const { t } = useTranslation()
   const { data: userProfile } = useGetUserProfileQuery()
-  const [currentOrg] = useCurrentOrg()
   const isLoggedIn = !!userProfile
+  const primaryContractor = userProfile?.contractors?.[0]
   const unreadChatCount = useUnreadChatCount()
   const pendingOrderCount = usePendingOrderCount()
   const bottomNavHeight = useBottomNavHeight()
@@ -180,8 +179,8 @@ export function MobileBottomNav() {
         id: "org-public",
         label: "sidebar.org_public_page",
         icon: <StoreRounded />,
-        route: currentOrg
-          ? `/contractor/${currentOrg.spectrum_id}`
+        route: primaryContractor
+          ? `/contractor/${primaryContractor.spectrum_id}`
           : "/contractors",
         requiresAuth: true,
       },

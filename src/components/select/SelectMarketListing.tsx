@@ -4,7 +4,6 @@ import {
   ExtendedUniqueSearchResult,
   useSearchMarketListingsQuery,
 } from "../../features/market"
-import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useTranslation } from "react-i18next"
 
 export interface SelectMarketListingProps {
@@ -15,9 +14,7 @@ export interface SelectMarketListingProps {
 
 export function SelectMarketListing(props: SelectMarketListingProps) {
   const { t } = useTranslation()
-  const [currentOrg] = useCurrentOrg()
   const { data: searchResults } = useSearchMarketListingsQuery({
-    contractor_seller: currentOrg?.spectrum_id,
     listing_type: "unique",
   })
 

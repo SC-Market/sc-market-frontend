@@ -4,7 +4,6 @@ import {
   useApplyToOrderMutation,
 } from "../api/ordersApi"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
-import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
 import { useTranslation } from "react-i18next"
 
 export function useAcceptApplicant(
@@ -33,17 +32,16 @@ export function useAcceptApplicant(
   }, [acceptApplicant, orderId, applicant.orgSpectrumId, applicant.userUsername, issueAlert, t])
 }
 
-export function useApplyToOrder(orderId: string) {
+export function useApplyToOrder(orderId: string, contractorId?: string) {
   const [applyToOrder] = useApplyToOrderMutation()
   const [appMessage, setAppMessage] = useState("")
   const issueAlert = useAlertHook()
-  const [currentOrg] = useCurrentOrg()
   const { t } = useTranslation()
 
   const processApp = useCallback(async () => {
     const res = await applyToOrder({
       order_id: orderId,
-      contractor_id: currentOrg?.spectrum_id,
+      contractor_id: contractorId,
       message: appMessage,
     })
     if ("data" in res && !("error" in res)) {
@@ -55,7 +53,7 @@ export function useApplyToOrder(orderId: string) {
         severity: "error",
       })
     }
-  }, [applyToOrder, orderId, currentOrg?.spectrum_id, appMessage, issueAlert, t])
+  }, [applyToOrder, orderId, contractorId, appMessage, issueAlert, t])
 
   return { appMessage, setAppMessage, processApp }
 }

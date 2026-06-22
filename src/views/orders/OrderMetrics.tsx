@@ -277,8 +277,8 @@ export function ContractorOrderMetricsDisplay(props: {
   )
 }
 
-export function OrderMetrics(props: {}) {
-  const { metrics, isLoading, error } = useOrderMetrics()
+export function OrderMetrics(props: { spectrumId: string | undefined }) {
+  const { metrics, isLoading, error } = useOrderMetrics(props.spectrumId)
   const { t } = useTranslation()
 
   if (isLoading) {

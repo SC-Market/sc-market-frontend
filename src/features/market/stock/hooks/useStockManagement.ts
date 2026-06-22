@@ -10,7 +10,6 @@ import {
 } from "../../api/marketApi"
 import { useAlertHook, type UnwrappedErrorInterface } from "../../../../hooks/alert/AlertHook"
 import { useOptionalShopRouteContext } from "../../../../components/router/ShopContextFromRoute"
-import { useCurrentOrg } from "../../../../hooks/login/CurrentOrg"
 import { UniqueListing } from "../../domain/types"
 import { StockRow, NewListingRow } from "../types"
 
@@ -21,8 +20,7 @@ export function useStockManagement(
   const { t } = useTranslation()
   const issueAlert = useAlertHook()
   const shopCtx = useOptionalShopRouteContext()
-  const [currentOrg] = useCurrentOrg()
-  const spectrumId = shopCtx?.shop.owner_contractor_id ?? currentOrg?.spectrum_id
+  const spectrumId = shopCtx?.shop.owner_contractor_id ?? undefined
 
   // API hooks
   const [refresh] = useMarketRefreshListingMutation()
@@ -138,7 +136,6 @@ export function useStockManagement(
     fetchingItemName,
     setFetchingItemName,
     gameItem,
-    currentOrg,
     spectrumId,
     // API mutations
     refresh,

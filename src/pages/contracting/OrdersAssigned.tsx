@@ -23,7 +23,7 @@ export function OrdersAssigned() {
       headerTitle={t("sidebar.orders_assigned_to_me")}
     >
       <Grid item xs={12} lg={3}>
-        <OrderMetrics />
+        <OrderMetrics spectrumId={undefined} />
       </Grid>
       <Grid item xs={12} lg={9}>
         <MemberAssignments />

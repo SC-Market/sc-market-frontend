@@ -24,8 +24,8 @@ import { MarkdownRender } from "../../components/markdown/Markdown.lazy"
 import { RecruitingPost } from "../../features/recruiting/api/recruitingApi"
 import { RecruitmentVotes } from "../../components/button/RecruitmentVotes"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
+import { useGetContractorBySpectrumIDQuery } from "../../features/contractor/api/contractorApi"
 import { Link } from "react-router-dom"
-import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { contractorKindIcons } from "../contractor/ContractorList"
 import { has_permission } from "../contractor/OrgRoles"
 import { ListingSellerRating } from "../../components/rating/ListingRating"
@@ -39,16 +39,22 @@ export function RecruitingPostView(props: { post: RecruitingPost }) {
   const { t } = useTranslation()
 
   const { data: profile } = useGetUserProfileQuery()
-  const [currentOrg] = useCurrentOrg()
+  const belongsToPostOrg = useMemo(
+    () => profile?.contractors?.some(c => c.spectrum_id === contractor.spectrum_id),
+    [profile?.contractors, contractor.spectrum_id],
+  )
+  const { data: fullContractor } = useGetContractorBySpectrumIDQuery(
+    contractor.spectrum_id, { skip: !belongsToPostOrg },
+  )
   const amContractorManager = useMemo(
     () =>
       has_permission(
-        currentOrg,
+        fullContractor,
         profile,
         "manage_recruiting",
         profile?.contractors,
       ),
-    [contractor, profile],
+    [fullContractor, profile],
   )
 
   return (
@@ -138,7 +144,7 @@ export function RecruitingPostView(props: { post: RecruitingPost }) {
             action={
               <>
                 <RecruitmentVotes post={post} />
-                {currentOrg && amContractorManager && (
+                {amContractorManager && (
                   <Link
                     to={`/recruiting/post/${post.post_id}/update`}
                     style={{ marginLeft: 2 }}

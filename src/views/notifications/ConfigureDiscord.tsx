@@ -1,7 +1,7 @@
 import { Avatar, Box, Button, Grid, Typography } from "@mui/material"
 import { Section } from "../../components/paper/Section"
 import React, { useCallback } from "react"
-import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
+import { useParams } from "react-router-dom"
 import {
   useProfileGetDiscordSettingsQuery,
   useProfileUseOfficialDiscordSettingsMutation,
@@ -18,13 +18,13 @@ import { useTheme } from "@mui/material/styles"
 import { ExtendedTheme } from "../../hooks/styles/Theme"
 
 export function ConfigureDiscord(props: { org?: boolean }) {
-  const [currentOrg] = useCurrentOrg()
+  const { contractor_id } = useParams<{ contractor_id: string }>()
   const { data: userSettings } = useProfileGetDiscordSettingsQuery(undefined, {
     skip: !!props.org,
   })
   const { data: orgSettings } = useGetDiscordSettingsQuery(
-    currentOrg?.spectrum_id ?? "",
-    { skip: !props.org || !currentOrg?.spectrum_id },
+    contractor_id ?? "",
+    { skip: !props.org || !contractor_id },
   )
 
   const [setUseUserOfficial] = useProfileUseOfficialDiscordSettingsMutation()
@@ -35,14 +35,14 @@ export function ConfigureDiscord(props: { org?: boolean }) {
   const theme = useTheme<ExtendedTheme>()
 
   const callback = useCallback(async () => {
-    if (props.org && currentOrg?.spectrum_id) {
-      setUseContractorOfficial(currentOrg.spectrum_id)
+    if (props.org && contractor_id) {
+      setUseContractorOfficial(contractor_id)
     } else {
       setUseUserOfficial()
     }
     window.open(DISCORD_INVITE, "_blank")
   }, [
-    currentOrg?.spectrum_id,
+    contractor_id,
     props.org,
     setUseContractorOfficial,
     setUseUserOfficial,

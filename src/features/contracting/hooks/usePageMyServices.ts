@@ -3,7 +3,7 @@ import {
   useGetServicesContractorQuery,
 } from "../../services/api/servicesApi"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
-import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
+import { useOptionalShopRouteContext } from "../../../components/router/ShopContextFromRoute"
 
 interface UsePageMyServicesResult {
   data: {
@@ -18,20 +18,21 @@ interface UsePageMyServicesResult {
 
 export function usePageMyServices(): UsePageMyServicesResult {
   const { data: profile } = useGetUserProfileQuery()
-  const [currentOrg] = useCurrentOrg()
+  const shopCtx = useOptionalShopRouteContext()
+  const contractorId = shopCtx?.shop.owner_contractor_id
 
-  // Get services for user or org
+  // Get services for user or org (org when under a shop route)
   const userServicesQuery = useGetServicesQuery(profile?.username!, {
-    skip: !profile || !!currentOrg,
+    skip: !profile || !!contractorId,
   })
 
   const orgServicesQuery = useGetServicesContractorQuery(
-    currentOrg?.spectrum_id!,
-    { skip: !currentOrg },
+    contractorId!,
+    { skip: !contractorId },
   )
 
   // Use whichever query is active
-  const activeQuery = currentOrg ? orgServicesQuery : userServicesQuery
+  const activeQuery = contractorId ? orgServicesQuery : userServicesQuery
 
   return {
     data: {

@@ -1,6 +1,5 @@
 import { Transaction } from "../../datatypes/Transaction"
 import React, { MouseEventHandler, useMemo } from "react"
-import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { Chip, Fade, TableCell, TableRow, Typography } from "@mui/material"
 import { HeadCell } from "../../components/table/PaginatedTable"
 import { Section } from "../../components/paper/Section"
@@ -83,15 +82,14 @@ export function TransactionTableRow(props: {
     [profile?.username, props.row.user_recipient_id],
   )
 
-  const [currentOrg] = useCurrentOrg()
   const orgRec = useMemo(
-    () => currentOrg?.spectrum_id === props.row.contractor_recipient_id,
-    [currentOrg?.spectrum_id, props.row.contractor_recipient_id],
+    () => profile?.contractors?.some(c => c.spectrum_id === props.row.contractor_recipient_id),
+    [profile?.contractors, props.row.contractor_recipient_id],
   )
 
   const receiving = useMemo(
-    () => (currentOrg && orgRec) || userRec,
-    [currentOrg, orgRec, userRec],
+    () => orgRec || userRec,
+    [orgRec, userRec],
   )
 
   return (

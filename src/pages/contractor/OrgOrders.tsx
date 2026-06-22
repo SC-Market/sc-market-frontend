@@ -1,4 +1,5 @@
 import React from "react"
+import { useParams } from "react-router-dom"
 import { RecentOrders } from "../../views/orders/RecentOrders"
 import { OrgOrderTrend } from "../../views/orders/OrderTrend"
 import { OrderMetrics } from "../../views/orders/OrderMetrics"
@@ -9,6 +10,7 @@ import { ExtendedTheme } from "../../hooks/styles/Theme"
 import { StandardPageLayout } from "../../components/layout/StandardPageLayout"
 
 export function OrgOrders() {
+  const { contractor_id } = useParams<{ contractor_id: string }>()
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const xxl = useMediaQuery(theme.breakpoints.up("xxl"))
@@ -25,7 +27,7 @@ export function OrgOrders() {
         <>
           <Grid item xs={12} lg={2.5}>
             <Grid container spacing={theme.layoutSpacing.layout}>
-              <OrderMetrics />
+              <OrderMetrics spectrumId={contractor_id} />
             </Grid>
           </Grid>
           <Grid item xs={12} lg={6.5}>
@@ -36,7 +38,7 @@ export function OrgOrders() {
           </Grid>
           <Grid item xs={12} lg={3}>
             <Grid container spacing={theme.layoutSpacing.layout}>
-              <OrgOrderTrend />
+              <OrgOrderTrend spectrumId={contractor_id} />
             </Grid>
           </Grid>
         </>
@@ -46,14 +48,14 @@ export function OrgOrders() {
         <>
           <Grid item xs={12} lg={3}>
             <Grid container spacing={theme.layoutSpacing.layout}>
-              <OrderMetrics />
+              <OrderMetrics spectrumId={contractor_id} />
             </Grid>
           </Grid>
           <Grid item xs={12} lg={9}>
             <Grid container spacing={theme.layoutSpacing.layout}>
               <ReceivedOffersArea unassigned />
               <RecentOrders unassigned />
-              <OrgOrderTrend />
+              <OrgOrderTrend spectrumId={contractor_id} />
             </Grid>
           </Grid>
         </>
@@ -67,8 +69,8 @@ export function OrgOrders() {
           <Grid item xs={12}>
             <RecentOrders unassigned />
           </Grid>
-          <OrderMetrics />
-          <OrgOrderTrend />
+          <OrderMetrics spectrumId={contractor_id} />
+          <OrgOrderTrend spectrumId={contractor_id} />
         </>
       )}
     </StandardPageLayout>

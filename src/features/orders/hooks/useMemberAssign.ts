@@ -1,6 +1,4 @@
 import { useCallback, useEffect, useMemo, useState } from "react"
-import React from "react"
-import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
 import { useGetContractorMembersQuery, contractorsApi } from "../../contractor/api/contractorApi"
 import { useAssignOrderMutation, useUnassignOrderMutation } from "../api/ordersApi"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
@@ -9,19 +7,18 @@ import { store } from "../../../store/store"
 import type { MinimalUser } from "../../../datatypes/User"
 import throttle from "lodash/throttle"
 
-export function useMemberAssign(orderId: string) {
+export function useMemberAssign(orderId: string, contractorId: string | undefined) {
   const [target, setTarget] = useState("")
   const [targetObject, setTargetObject] = useState<{
     username: string
     display_name: string
   } | null>(null)
-  const [currentOrg] = useCurrentOrg()
   const [options, setOptions] = useState<MinimalUser[]>([])
   const { t } = useTranslation()
   const issueAlert = useAlertHook()
 
   const { data: membersData } = useGetContractorMembersQuery({
-    spectrum_id: currentOrg?.spectrum_id || "",
+    spectrum_id: contractorId || "",
     page: 0,
     page_size: 100,
     search: "",
@@ -33,16 +30,16 @@ export function useMemberAssign(orderId: string) {
 
   const fetchOptions = useCallback(
     async (query: string) => {
-      if (query.length < 3) return
+      if (query.length < 3 || !contractorId) return
       const { data } = await store.dispatch(
         contractorsApi.endpoints.searchContractorMembers.initiate({
-          spectrum_id: currentOrg?.spectrum_id!,
+          spectrum_id: contractorId,
           query,
         }),
       )
       setOptions(data || [])
     },
-    [currentOrg?.spectrum_id],
+    [contractorId],
   )
 
   const retrieve = useMemo(

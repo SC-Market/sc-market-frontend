@@ -21,7 +21,7 @@ import { ReviewRevisionButton } from "../../components/reviews/ReviewRevisionBut
 import { EditableReview } from "../../components/reviews/EditableReview"
 import { useGetUserProfileQuery } from "../../features/profile/api/profileApi"
 import { UserProfileState } from "../../hooks/login/UserProfile"
-import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
+import { useGetContractorBySpectrumIDQuery } from "../../features/contractor/api/contractorApi"
 import { has_permission } from "../contractor/OrgRoles"
 import { Contractor } from "../../features/contractor/domain/types"
 
@@ -29,7 +29,7 @@ import { Contractor } from "../../features/contractor/domain/types"
 function canRequestRevision(
   review: OrderReview,
   currentUser: UserProfileState | undefined,
-  currentOrg: Contractor | undefined | null,
+  orderContractor: Contractor | undefined | null,
   order: Order,
 ): boolean {
   if (!currentUser || !review) return false
@@ -49,11 +49,11 @@ function canRequestRevision(
   if (
     review.role !== "contractor" &&
     order.contractor &&
-    currentOrg &&
-    order.contractor === currentOrg.spectrum_id
+    orderContractor &&
+    order.contractor === orderContractor.spectrum_id
   ) {
     return has_permission(
-      currentOrg,
+      orderContractor,
       currentUser,
       "manage_orders",
       currentUser?.contractors,
@@ -67,7 +67,7 @@ function canRequestRevision(
 function canEditReview(
   review: OrderReview,
   currentUser: UserProfileState | undefined,
-  currentOrg: Contractor | null | undefined,
+  orderContractor: Contractor | null | undefined,
   order: Order,
 ): boolean {
   if (!currentUser || !review || !review.revision_requested) return false
@@ -79,17 +79,16 @@ function canEditReview(
   if (
     review.contractor_author &&
     order.contractor &&
-    order.contractor === currentOrg?.spectrum_id
+    orderContractor &&
+    order.contractor === orderContractor.spectrum_id
   ) {
-    if (currentOrg) {
-      // Check if user has manage_orders permission
-      return has_permission(
-        currentOrg,
-        currentUser,
-        "manage_orders",
-        currentUser?.contractors,
-      )
-    }
+    // Check if user has manage_orders permission
+    return has_permission(
+      orderContractor,
+      currentUser,
+      "manage_orders",
+      currentUser?.contractors,
+    )
   }
 
   return false
@@ -104,7 +103,14 @@ export function OrderReviewView(props: {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const { data: currentUser } = useGetUserProfileQuery()
-  const [currentOrg] = useCurrentOrg()
+
+  const belongsToOrderOrg = useMemo(
+    () => !!order.contractor && currentUser?.contractors?.some(c => c.spectrum_id === order.contractor),
+    [order.contractor, currentUser?.contractors],
+  )
+  const { data: orderContractor } = useGetContractorBySpectrumIDQuery(
+    order.contractor!, { skip: !order.contractor || !belongsToOrderOrg },
+  )
 
   const review = useMemo(
     () => (props.customer ? order.customer_review! : order.contractor_review!),
@@ -199,14 +205,14 @@ export function OrderReviewView(props: {
         </Grid>
 
         {/* Review Revision Button */}
-        {canRequestRevision(review, currentUser, currentOrg, order) && (
+        {canRequestRevision(review, currentUser, orderContractor, order) && (
           <Grid item xs={12} sx={{ mt: 2 }}>
             <ReviewRevisionButton review={review} orderId={order.order_id} />
           </Grid>
         )}
 
         {/* Editable Review Component */}
-        {canEditReview(review, currentUser, currentOrg, order) && (
+        {canEditReview(review, currentUser, orderContractor, order) && (
           <Grid item xs={12} sx={{ mt: 2 }}>
             <EditableReview review={review} />
           </Grid>

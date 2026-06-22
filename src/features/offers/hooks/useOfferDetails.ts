@@ -10,8 +10,7 @@ import {
 } from "../api/offerApi"
 import { useGetPublicContractQuery } from "../../contracting/api/publicContractsApi"
 import { useGetUserProfileQuery } from "../../profile/api/profileApi"
-import { useGetContractorMembersQuery, contractorsApi } from "../../contractor/api/contractorApi"
-import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
+import { useGetContractorBySpectrumIDQuery, useGetContractorMembersQuery, contractorsApi } from "../../contractor/api/contractorApi"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
@@ -22,10 +21,13 @@ import type { MinimalUser } from "../../../datatypes/User"
 
 export function useOfferDetails(session: GetOfferSessionV2Response, offerIndex?: number) {
   const { t } = useTranslation()
-  const [org] = useCurrentOrg()
   const { data: profile } = useGetUserProfileQuery()
   const issueAlert = useAlertHook()
   const navigate = useNavigate()
+
+  const { data: contractorData } = useGetContractorBySpectrumIDQuery(
+    session.contractor?.spectrum_id!, { skip: !session.contractor?.spectrum_id },
+  )
 
   const { data: publicContract } = useGetPublicContractQuery(session?.contract_id!, { skip: !session?.contract_id })
 
@@ -42,17 +44,17 @@ export function useOfferDetails(session: GetOfferSessionV2Response, offerIndex?:
   const [options, setOptions] = useState<MinimalUser[]>([])
 
   const { data: membersData } = useGetContractorMembersQuery({
-    spectrum_id: org?.spectrum_id || "", page: 0, page_size: 100, search: "", role_filter: "", sort: "username",
+    spectrum_id: session.contractor?.spectrum_id || "", page: 0, page_size: 100, search: "", role_filter: "", sort: "username",
   })
   const members = membersData?.members || []
 
   const fetchOptions = useCallback(async (query: string) => {
-    if (query.length < 3) return
+    if (query.length < 3 || !session.contractor?.spectrum_id) return
     const { data } = await store.dispatch(
-      contractorsApi.endpoints.searchContractorMembers.initiate({ spectrum_id: org?.spectrum_id!, query }),
+      contractorsApi.endpoints.searchContractorMembers.initiate({ spectrum_id: session.contractor.spectrum_id, query }),
     )
     setOptions(data || [])
-  }, [org?.spectrum_id])
+  }, [session.contractor?.spectrum_id])
 
   const retrieve = useMemo(() => throttle((query: string) => fetchOptions(query), 400), [fetchOptions])
   useEffect(() => { retrieve(target) }, [target, retrieve])
@@ -65,8 +67,8 @@ export function useOfferDetails(session: GetOfferSessionV2Response, offerIndex?:
 
   // Permissions
   const amContractorManager = useMemo(
-    () => session.contractor && org?.spectrum_id === session.contractor.spectrum_id && has_permission(org, profile, "manage_orders", profile?.contractors),
-    [org, profile, session],
+    () => !!session.contractor && !!profile?.contractors?.some(c => c.spectrum_id === session.contractor!.spectrum_id) && !!contractorData && has_permission(contractorData, profile, "manage_orders", profile?.contractors),
+    [contractorData, profile, session],
   )
 
   const statusKey: OfferStatusKey = useMemo(
@@ -85,7 +87,7 @@ export function useOfferDetails(session: GetOfferSessionV2Response, offerIndex?:
     if (["rejected", "accepted"].includes(statusKey)) return false
 
     if (session.contractor) {
-      if (org?.spectrum_id === session.contractor.spectrum_id) {
+      if (profile?.contractors?.some(c => c.spectrum_id === session.contractor!.spectrum_id)) {
         return statusKey === "waitingSeller"
       }
     }
@@ -101,7 +103,7 @@ export function useOfferDetails(session: GetOfferSessionV2Response, offerIndex?:
     }
 
     return false
-  }, [profile, org, session, statusKey])
+  }, [profile, session, statusKey])
 
   const showCancel = !showAccept && statusKey !== "rejected" && statusKey !== "accepted"
 
@@ -139,8 +141,8 @@ export function useOfferDetails(session: GetOfferSessionV2Response, offerIndex?:
   }, [unassignUser, session.session_id, issueAlert, t])
 
   const amContractor = useMemo(
-    () => !!session.contractor && org?.spectrum_id === session.contractor.spectrum_id,
-    [org?.spectrum_id, session.contractor],
+    () => !!session.contractor && !!profile?.contractors?.some(c => c.spectrum_id === session.contractor!.spectrum_id),
+    [profile?.contractors, session.contractor],
   )
 
   const handleClaimOffer = useCallback(async () => {
@@ -154,7 +156,7 @@ export function useOfferDetails(session: GetOfferSessionV2Response, offerIndex?:
   }, [assignUser, session.session_id, profile?.username, issueAlert, t])
 
   return {
-    profile, org, issueAlert, publicContract,
+    profile, org: contractorData, issueAlert, publicContract,
     currentOffer, previousOffer, offerChanges,
     isEditingAssigned, setIsEditingAssigned,
     target, setTarget, targetObject, setTargetObject,

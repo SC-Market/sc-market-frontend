@@ -10,9 +10,7 @@ import {
 } from "../api/ordersApi"
 import { useGetOrderDetailQuery } from "../../../store/api/v2/market"
 import { useGetUserProfileQuery, useGetUserByUsernameQuery } from "../../profile/api/profileApi"
-import { useGetContractorBySpectrumIDQuery, contractorsApi } from "../../contractor/api/contractorApi"
-import { useGetContractorMembersQuery } from "../../contractor/api/contractorApi"
-import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
+import { useGetContractorBySpectrumIDQuery, useGetContractorMembersQuery, contractorsApi } from "../../contractor/api/contractorApi"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { useTranslation } from "react-i18next"
 import { has_permission } from "../../contractor/domain/permissions"
@@ -23,7 +21,6 @@ export function useOrderDetails(order: Order) {
   const { t } = useTranslation()
   const { data: profile } = useGetUserProfileQuery()
   const issueAlert = useAlertHook()
-  const [currentOrg] = useCurrentOrg()
 
   // Inline assignment editing
   const [isEditingAssigned, setIsEditingAssigned] = useState(false)
@@ -37,20 +34,20 @@ export function useOrderDetails(order: Order) {
 
   // Member search for assignment
   const { data: membersData } = useGetContractorMembersQuery({
-    spectrum_id: currentOrg?.spectrum_id || "",
+    spectrum_id: order.contractor || "",
     page: 0, page_size: 100, search: "", role_filter: "", sort: "username",
   })
   const members = membersData?.members || []
 
   const fetchOptions = useCallback(async (query: string) => {
-    if (query.length < 3) return
+    if (query.length < 3 || !order.contractor) return
     const { data } = await store.dispatch(
       contractorsApi.endpoints.searchContractorMembers.initiate({
-        spectrum_id: currentOrg?.spectrum_id!, query,
+        spectrum_id: order.contractor, query,
       }),
     )
     setOptions(data || [])
-  }, [currentOrg?.spectrum_id])
+  }, [order.contractor])
 
   const retrieve = useMemo(
     () => throttle((query: string) => fetchOptions(query), 400),
@@ -112,11 +109,14 @@ export function useOrderDetails(order: Order) {
   // Permission checks
   const amCustomer = useMemo(() => order.customer === profile?.username, [order, profile])
   const amAssigned = useMemo(() => order.assigned_to === profile?.username, [order, profile])
-  const amContractor = useMemo(() => currentOrg?.spectrum_id === order?.contractor, [currentOrg?.spectrum_id, order?.contractor])
+  const amContractor = useMemo(
+    () => !!order.contractor && !!profile?.contractors?.some(c => c.spectrum_id === order.contractor),
+    [order.contractor, profile?.contractors],
+  )
   const amRelated = useMemo(() => amCustomer || amAssigned || amContractor, [amCustomer, amAssigned, amContractor])
   const amContractorManager = useMemo(
-    () => amContractor && has_permission(currentOrg, profile, "manage_orders", profile?.contractors),
-    [currentOrg, profile, amContractor],
+    () => amContractor && has_permission(contractor, profile, "manage_orders", profile?.contractors),
+    [contractor, profile, amContractor],
   )
 
   const privateContractCustomer = useMemo(
@@ -144,7 +144,7 @@ export function useOrderDetails(order: Order) {
   }, [assignUser, order.order_id, profile?.username, issueAlert, t])
 
   return {
-    profile, issueAlert, currentOrg,
+    profile, issueAlert,
     // Assignment editing
     isEditingAssigned, setIsEditingAssigned,
     target, setTarget, targetObject, setTargetObject,

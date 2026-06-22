@@ -218,7 +218,7 @@ export function OrgManage() {
         </TabPanel>
         <TabPanel value={page} index={"market"}>
           <Grid container spacing={theme.layoutSpacing.layout}>
-            <MarketEditTemplate org />
+            <MarketEditTemplate org contractorId={spectrumId} />
             <Grid item xs={12}>
               <Divider sx={{ my: 3 }} />
               <Typography variant="h6" gutterBottom>

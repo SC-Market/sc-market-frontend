@@ -41,8 +41,8 @@ import { getRelativeTime } from "../../../util/time"
 import { dateDiffInDays } from "../../../util/dateDiff"
 import { formatQuantity } from "../../../util/formatQuantity"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
-import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
 import { has_permission } from "../../../views/contractor/OrgRoles"
+import { useGetContractorBySpectrumIDQuery } from "../../../features/contractor/api/contractorApi"
 import { useTranslation } from "react-i18next"
 import { AddToCartDrawer } from "./components/AddToCartDrawer"
 import { useCartDrawer } from "../hooks/AddToCartContext"
@@ -79,7 +79,6 @@ export function ListingDetailV2() {
   const [trackView] = useTrackViewMutation()
   const issueAlert = useAlertHook()
   const { data: profile } = useGetUserProfileQuery()
-  const [currentOrg] = useCurrentOrg()
 
   useEffect(() => {
     if (id) trackView({ id }).catch(() => {})
@@ -147,15 +146,20 @@ export function ListingDetailV2() {
     return crumbs
   }, [listing, gameItemType, gameItemId, gameItemName, t])
 
+  const belongsToSellerOrg = profile?.contractors?.some(c => c.spectrum_id === seller?.slug)
+  const { data: sellerContractor } = useGetContractorBySpectrumIDQuery(
+    seller?.slug!, { skip: !seller?.slug || !belongsToSellerOrg }
+  )
+
   const canEdit = useMemo(() => {
     if (!profile || !seller || !listing) return false
     if (profile.role === "admin") return true
     if (seller.slug === profile.username) return true
-    if (currentOrg?.spectrum_id === seller.slug) {
-      return has_permission(currentOrg, profile, "manage_market", profile.contractors)
+    if (belongsToSellerOrg && sellerContractor) {
+      return has_permission(sellerContractor, profile, "manage_market", profile.contractors)
     }
     return false
-  }, [profile, seller, listing, currentOrg])
+  }, [profile, seller, listing, belongsToSellerOrg, sellerContractor])
 
   const canonicalUrl = listing ? `${FRONTEND_URL}/market/${listing.listing_id}` : undefined
 
@@ -367,7 +371,7 @@ export function ListingDetailV2() {
                         <BidAreaV2
                           listingId={listing.listing_id}
                           startingPrice={items[0]?.base_price || 0}
-                          isOwner={seller?.slug === profile?.username || currentOrg?.spectrum_id === seller?.slug}
+                          isOwner={seller?.slug === profile?.username || !!belongsToSellerOrg}
                         />
                       )}
 

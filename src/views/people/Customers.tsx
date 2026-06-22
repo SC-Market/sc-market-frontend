@@ -10,10 +10,9 @@ import {
   Typography,
 } from "@mui/material"
 import { User } from "../../datatypes/User"
-import { Link } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import { styled } from "@mui/material/styles"
 import { HeadCell, PaginatedTable } from "../../components/table/PaginatedTable"
-import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useGetContractorCustomersQuery } from "../../features/contractor/api/contractorApi"
 import { UnderlineLink } from "../../components/typography/UnderlineLink"
 import { useTranslation } from "react-i18next"
@@ -127,12 +126,12 @@ export function CustomerList(props: {
   members?: boolean
   customers?: boolean
 }) {
-  const [currentOrg] = useCurrentOrg()
+  const { contractor_id } = useParams<{ contractor_id: string }>()
   const { t } = useTranslation()
 
   const { isLoading, data } = useGetContractorCustomersQuery(
-    currentOrg?.spectrum_id!,
-    { skip: !currentOrg?.spectrum_id },
+    contractor_id!,
+    { skip: !contractor_id },
   )
 
   return (

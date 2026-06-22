@@ -15,7 +15,6 @@ import {
   useProfileUpdateAvailabilityMutation,
 } from "../../profile/api/profileApi"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
-import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
 import { useNavigate } from "react-router-dom"
 import { useTranslation } from "react-i18next"
 import { useGetShopsByOwnerQuery } from "../../../store/api/v2/market"
@@ -46,7 +45,6 @@ export function useCreateOrderForm(params: UseCreateOrderFormParams) {
   const { t } = useTranslation()
   const issueAlert = useAlertHook()
   const navigate = useNavigate()
-  const [currentOrg] = useCurrentOrg()
 
   const [state, setState] = useState<WorkRequestState>({
     title: "",
@@ -81,7 +79,7 @@ export function useCreateOrderForm(params: UseCreateOrderFormParams) {
   }, [contractorRequirement, userRequirement])
 
   const { data: userAvailability } = useProfileGetAvailabilityQuery(
-    contractor_id ? currentOrg?.spectrum_id || null : null,
+    contractor_id || null,
   )
 
   // Order limits

@@ -26,7 +26,6 @@ import {
   useQuickCreateShopMutation,
   type ShopResponse,
 } from "../../../../store/api/v2/market"
-import { useCurrentOrg } from "../../../../hooks/login/CurrentOrg"
 import { useAlertHook } from "../../../../hooks/alert/AlertHook"
 
 interface ShopSelectorProps {
@@ -36,23 +35,13 @@ interface ShopSelectorProps {
 
 export function ShopSelector({ value, onChange }: ShopSelectorProps) {
   const { t } = useTranslation()
-  const [currentOrg] = useCurrentOrg()
   const issueAlert = useAlertHook()
 
   const { data: shops, isLoading, isError, refetch } = useGetMyShopsQuery()
   const [quickCreateShop, { isLoading: isCreating }] = useQuickCreateShopMutation()
 
-  // Filter shops based on current org context
-  const filteredShops = useMemo(() => {
-    if (!shops) return []
-    if (currentOrg) {
-      // Show shops owned by any org (owner_contractor_id is set)
-      // /shops/mine already filters to orgs the user is a member of
-      return shops.filter((shop) => shop.owner_contractor_id)
-    }
-    // Show personal shops (no org owner)
-    return shops.filter((shop) => shop.owner_user_id && !shop.owner_contractor_id)
-  }, [shops, currentOrg])
+  // Show all user's shops (both personal and org-owned)
+  const filteredShops = useMemo(() => shops || [], [shops])
 
   // Auto-select if only one shop is available
   useEffect(() => {
@@ -65,8 +54,7 @@ export function ShopSelector({ value, onChange }: ShopSelectorProps) {
     try {
       const result = await quickCreateShop({
         quickCreateShopRequest: {
-          owner_type: currentOrg ? "contractor" : "user",
-          contractor_id: currentOrg?.spectrum_id,
+          owner_type: "user",
         },
       }).unwrap()
 
@@ -86,7 +74,7 @@ export function ShopSelector({ value, onChange }: ShopSelectorProps) {
         severity: "error",
       })
     }
-  }, [quickCreateShop, currentOrg, onChange, issueAlert, t])
+  }, [quickCreateShop, onChange, issueAlert, t])
 
   if (isLoading) {
     return (
@@ -117,16 +105,10 @@ export function ShopSelector({ value, onChange }: ShopSelectorProps) {
     return (
       <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
         <Typography variant="body2" color="text.secondary">
-          {currentOrg
-            ? t(
-                "ShopSelector.noOrgShops",
-                "No shop found for {{orgName}}. Create one to start selling.",
-                { orgName: currentOrg.name }
-              )
-            : t(
-                "ShopSelector.noPersonalShops",
-                "You don't have a personal shop yet. Create one to start selling."
-              )}
+          {t(
+            "ShopSelector.noPersonalShops",
+            "You don't have a personal shop yet. Create one to start selling."
+          )}
         </Typography>
         <LoadingButton
           variant="outlined"
