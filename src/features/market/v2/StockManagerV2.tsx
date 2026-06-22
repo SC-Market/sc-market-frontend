@@ -62,7 +62,7 @@ import { useTheme } from "@mui/material/styles"
 import { NumericFormat } from "react-number-format"
 import { RefreshCircle } from "mdi-material-ui"
 import { ExtendedTheme } from "../../../hooks/styles/Theme"
-import { useCurrentOrg } from "../../../hooks/login/CurrentOrg"
+import { useShopRouteContext } from "../../../components/router/ShopContextFromRoute"
 import { ThemedDataGrid } from "../../../components/grid/ThemedDataGrid"
 import { StandardPageLayout } from "../../../components/layout/StandardPageLayout"
 import { ManageListingsTabBar } from "../components/ManageListingsTabBar"
@@ -76,7 +76,6 @@ import { useAlertHook } from "../../../hooks/alert/AlertHook"
 import { formatMostSignificantDiff } from "../../../util/time"
 import {
   useGetMyListingsQuery,
-  useGetMyShopsQuery,
   useUpdateListingMutation,
   useRefreshListingMutation,
   useDeleteListingMutation,
@@ -86,7 +85,6 @@ import {
 } from "../../../store/api/v2/market"
 import { MobileListingRow } from "./components/MobileListingRow"
 import { QuickEditListingSheet } from "./components/QuickEditListingSheet"
-import { ShopSelector } from "./components/ShopSelector"
 
 /* ── Types ── */
 
@@ -306,10 +304,8 @@ function DisplayStockV2({
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
-  const [currentOrg] = useCurrentOrg()
+  const { shop } = useShopRouteContext()
   const issueAlert = useAlertHook()
-
-  const { data: myShops } = useGetMyShopsQuery()
   const [updateListing] = useUpdateListingMutation()
   const [refreshListing] = useRefreshListingMutation()
   const [deleteListing] = useDeleteListingMutation()
@@ -397,11 +393,6 @@ function DisplayStockV2({
         return
       }
       try {
-        const shopId = myShops?.[0]?.shop_id
-        if (!shopId) {
-          issueAlert({ message: t("ItemStock.noShopError", "No shop found — create one first"), severity: "error" })
-          return
-        }
         await createListing({
           createListingRequest: {
             title: editing.game_item_name || "New Listing",
@@ -410,7 +401,7 @@ function DisplayStockV2({
             pricing_mode: "unified",
             base_price: editing.price || 1,
             lots: [{ quantity: editing.quantity_available || 1, variant_attributes: {} }],
-            shop_id: shopId,
+            shop_id: shop.shop_id,
           },
         }).unwrap()
         issueAlert({ message: t("ItemStock.created"), severity: "success" })
@@ -811,15 +802,12 @@ export function StockManagerV2() {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
   const isMobile = useMediaQuery(theme.breakpoints.down("md"))
-  const [currentOrg] = useCurrentOrg()
+  const { shop } = useShopRouteContext()
   const [sidebarOpen, setSidebarOpen] = useState(!isMobile)
   const [page, setPage] = useState(0)
   const [pageSize, setPageSize] = useState(48)
   const [searchParams] = useSearchParams()
   const statusFilter = searchParams.get("status") as "active" | "inactive" | "expired" | "cancelled" | null
-  const [selectedShopId, setSelectedShopId] = useState("")
-
-  const { data: myShops } = useGetMyShopsQuery()
 
   const [selectionModel, setSelectionModel] = useState<GridRowSelectionModel>({
     type: "include",
@@ -832,8 +820,7 @@ export function StockManagerV2() {
     pageSize,
     sortBy: "updated_at",
     sortOrder: "desc",
-    shopId: selectedShopId || undefined,
-    spectrumId: !selectedShopId ? currentOrg?.spectrum_id : undefined,
+    shopId: shop.shop_id,
   })
 
   const listings = data?.listings ?? []
@@ -882,7 +869,7 @@ export function StockManagerV2() {
                 <ManageListingsTabBar
                   title={t("sidebar.manage_listings", "Manage Listings")}
                   rightAction={
-                    <Link to="/market/create" style={{ textDecoration: "none" }}>
+                    <Link to={`/shop/${shop.slug}/listings/create`} style={{ textDecoration: "none" }}>
                       <Button variant="contained" color="secondary" startIcon={<AddRounded />} size="large">
                         {t("market.createListing", "Create Listing")}
                       </Button>
@@ -895,11 +882,6 @@ export function StockManagerV2() {
             {/* Desktop sidebar */}
             {!isMobile && (
               <Grid item xs={12} md={3}>
-                {myShops && myShops.length > 1 && (
-                  <Box sx={{ mb: 2 }}>
-                    <ShopSelector value={selectedShopId} onChange={setSelectedShopId} />
-                  </Box>
-                )}
                 <Paper><MarketSearchAreaV2 manageMode /></Paper>
               </Grid>
             )}

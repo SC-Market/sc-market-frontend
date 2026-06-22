@@ -4,6 +4,7 @@ import React from "react"
 import { Link } from "react-router-dom"
 import { useCurrentOrg } from "../../hooks/login/CurrentOrg"
 import { useTranslation } from "react-i18next"
+import { ORG_PATHS } from "../../routes/paths"
 
 export function OrgBalance() {
   const [contractor] = useCurrentOrg()
@@ -39,7 +40,7 @@ export function OrgBalance() {
       </Grid>
       <Grid item xs={12} container justifyContent={"space-between"}>
         <Link
-          to={`/org/send`}
+          to={contractor?.spectrum_id ? ORG_PATHS.send(contractor.spectrum_id) : "/org/send"}
           style={{ textDecoration: "none", color: "inherit" }}
         >
           <Button color={"primary"} variant={"outlined"}>
