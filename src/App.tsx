@@ -342,6 +342,18 @@ const router = createBrowserRouter([
         }),
       },
       {
+        path: "/shops/create",
+        element: <LoggedInRoute />,
+        children: [
+          {
+            index: true,
+            lazy: async () => ({
+              Component: (await import("./pages/shops/CreateShop")).CreateShop,
+            }),
+          },
+        ],
+      },
+      {
         path: "/shops/:slug/:tab",
         lazy: async () => ({
           Component: (await import("./pages/shops/ShopProfile")).ShopProfile,
