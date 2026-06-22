@@ -3084,8 +3084,13 @@ export type ShopResponse = {
   created_at: string
   updated_at: string
   banner_url: string | null
-  /** Whether the current user can manage this shop (edit settings, create listings) */
-  can_manage?: boolean
+  /** Granular permissions for the current user on this shop (only in /shops/mine) */
+  permissions?: {
+    manage_orders: boolean
+    manage_stock: boolean
+    manage_market: boolean
+    can_manage: boolean
+  }
   logo_url: string | null
 }
 export type CreateShopRequest = {

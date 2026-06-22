@@ -223,7 +223,7 @@ function ShopManagementCard({ shop }: { shop: ShopResponse }) {
           >
             View Shop
           </Button>
-          {shop.can_manage && (
+          {shop.permissions?.can_manage && (
             <Button
               variant="contained"
               size="small"
