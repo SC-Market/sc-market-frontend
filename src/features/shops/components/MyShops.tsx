@@ -149,7 +149,7 @@ function ShopManagementCard({ shop }: { shop: ShopResponse }) {
             <Typography
               variant="body2"
               color="text.secondary"
-              sx={{ fontFamily: "monospace" }}
+              
             >
               /shops/{shop.slug}
             </Typography>
