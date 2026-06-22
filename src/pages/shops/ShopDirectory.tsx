@@ -1,5 +1,6 @@
 import { useState } from "react"
 import {
+  Button,
   Container,
   Typography,
   TextField,
@@ -46,6 +47,8 @@ export function ShopDirectory() {
   const [search, setSearch] = useState("")
   const [selectedTag, setSelectedTag] = useState<string | null>(null)
   const [sortIndex, setSortIndex] = useState(0)
+  const [page, setPage] = useState(1)
+  const pageSize = 24
 
   const debouncedSearch = useDebounce(search, 300)
   const currentSort = SORT_OPTIONS[sortIndex]
@@ -55,11 +58,13 @@ export function ShopDirectory() {
     tag: selectedTag || undefined,
     sortBy: currentSort.sortBy,
     sortOrder: currentSort.sortOrder,
-    pageSize: 40,
+    page,
+    pageSize,
   })
 
   const handleTagToggle = (tag: string) => {
     setSelectedTag((prev) => (prev === tag ? null : tag))
+    setPage(1)
   }
 
   return (
@@ -155,6 +160,28 @@ export function ShopDirectory() {
           <Typography variant="h6" color="text.secondary">
             No shops found
           </Typography>
+        </Box>
+      )}
+
+      {/* Pagination */}
+      {data && data.total > pageSize && (
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
+          <Button
+            disabled={page <= 1}
+            onClick={() => setPage((p) => p - 1)}
+            sx={{ mr: 1 }}
+          >
+            Previous
+          </Button>
+          <Typography variant="body2" sx={{ display: "flex", alignItems: "center", mx: 2 }}>
+            Page {page} of {Math.ceil(data.total / pageSize)}
+          </Typography>
+          <Button
+            disabled={page >= Math.ceil(data.total / pageSize)}
+            onClick={() => setPage((p) => p + 1)}
+          >
+            Next
+          </Button>
         </Box>
       )}
     </Container>
