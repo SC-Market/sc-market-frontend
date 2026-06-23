@@ -721,17 +721,10 @@ function SellOrdersPanel({
             >
               {/* Seller — use ListingNameAndRating */}
               <ListingNameAndRating
-                contractor={{
+                shop={{
                   name: listing.shop_name,
-                  avatar: "",
-                  spectrum_id: listing.shop_slug,
-                  rating: {
-                    avg_rating: listing.shop_rating,
-                    rating_count: 0,
-                    total_rating: 0,
-                    streak: 0,
-                    total_orders: 0,
-                  },
+                  slug: listing.shop_slug,
+                  rating: listing.shop_rating,
                 }}
               />
 
