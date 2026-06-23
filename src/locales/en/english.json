@@ -618,6 +618,9 @@
     "browse_shops": "Browse Shops",
     "my_orgs": "My Organizations",
     "shop_orders": "Shop Orders",
+    "manage": {
+      "title": "Manage"
+    },
     "manage_market_listings": "Manage Market Listings",
     "manage_services": "Manage Services",
     "availability": "Availability",
