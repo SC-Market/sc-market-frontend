@@ -81,8 +81,10 @@ export function SidebarActorSelect() {
         ? currentSubPath
         : "listings"
       navigate(`/shop/${slug}/${validSubPath}`)
+    } else {
+      // Not on a shop page — navigate to the shop's default page
+      navigate(`/shop/${slug}/listings`)
     }
-    // If not on a shop page, don't navigate — just update the cookie
   }
 
   const handleCreateShop = async () => {
