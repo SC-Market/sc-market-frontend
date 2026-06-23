@@ -3109,6 +3109,13 @@ export type ShopOwnerInfo = {
   name: string
   avatar_url: string | null
 }
+export type ShopMetricsResponse = {
+  total_orders: number
+  total_completed: number
+  avg_completion_hours: number | null
+  streak: number
+  response_rate: number | null
+}
 export type ShopPublicResponse = {
   shop_id: string
   slug: string
@@ -3129,6 +3136,8 @@ export type ShopPublicResponse = {
   listing_count?: number
   /** Total completed orders (included in detail view) */
   total_sales?: number
+  /** Metrics for reputation/badges (included in detail view) */
+  metrics?: ShopMetricsResponse
 }
 export type QuickCreateShopRequest = {
   owner_type: "user" | "contractor"
