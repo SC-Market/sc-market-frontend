@@ -33,7 +33,6 @@ import {
 import { ClockAlert } from "mdi-material-ui";
 import { getRelativeTime } from "../../../util/time";
 import { Section } from "../../../components/paper/Section";
-import { UserList } from "../../../components/list/UserList";
 import { OrderList } from "../../../components/list/OrderList";
 import { MarkdownRender } from "../../../components/markdown/Markdown.lazy";
 import { Helmet } from "react-helmet";
@@ -48,7 +47,6 @@ import { useTranslation } from "react-i18next";
 import { VariantSelector } from "../../../components/market/v2/VariantSelector";
 import { QualityBadge } from "../../../components/market/v2/QualityBadge";
 import type { Order } from "../../orders/domain/types"
-import { MinimalUser } from "../../../datatypes/User";
 import { useGetListingDetailQuery } from "../../../store/api/v2/market";
 
 /**
@@ -124,6 +122,48 @@ export interface BundleListingV2 {
     rating: { avg_rating: number };
   };
   orders?: Order[];
+}
+
+/** Compact shop link for the seller section (replaces UserList for shop context) */
+function ShopSellerLink(props: {
+  name: string
+  slug: string
+  avatar?: string
+  rating?: number
+  title?: string
+}) {
+  return (
+    <Box>
+      {props.title && (
+        <Typography variant="subtitle2" color="text.secondary" sx={{ pl: 2, pt: 1 }}>
+          {props.title}
+        </Typography>
+      )}
+      <Box
+        component={Link}
+        to={`/shops/${props.slug}`}
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          gap: 1.5,
+          px: 2,
+          py: 1,
+          textDecoration: "none",
+          color: "inherit",
+          "&:hover": { bgcolor: "action.hover" },
+          borderRadius: 1,
+        }}
+      >
+        <Box
+          component="img"
+          src={props.avatar || undefined}
+          alt={props.name}
+          sx={{ width: 40, height: 40, borderRadius: 1, objectFit: "cover", bgcolor: "action.selected" }}
+        />
+        <Typography variant="body1">{props.name}</Typography>
+      </Box>
+    </Box>
+  )
 }
 
 export function MarketMultipleViewV2() {
@@ -360,19 +400,11 @@ export function MarketMultipleViewV2() {
                           boxSizing: "border-box",
                         }}
                       >
-                        <UserList
-                          users={[{
-                            name: complete.seller.name,
-                            display_name: complete.seller.display_name || complete.seller.name,
-                            username: complete.seller.slug,
-                            avatar: complete.seller.avatar || "",
-                            rating: {
-                              avg_rating: complete.seller.rating.avg_rating,
-                              rating_count: 0,
-                              total_rating: 0,
-                              streak: 0,
-                            }
-                          } as MinimalUser]}
+                        <ShopSellerLink
+                          name={complete.seller.name}
+                          slug={complete.seller.slug}
+                          avatar={complete.seller.avatar}
+                          rating={complete.seller.rating.avg_rating}
                           title={t("MarketMultipleView.seller")}
                         />
                       </Grid>
@@ -477,16 +509,10 @@ export function MarketMultipleViewV2() {
                         <Stack direction={"column"} alignItems={"left"}>
                           <ListingDetailItem icon={<PersonRounded fontSize={"inherit"} />}>
                             <ListingNameAndRating
-                              contractor={{
+                              shop={{
                                 name: complete.seller.name,
-                                avatar: complete.seller.avatar || "",
-                                spectrum_id: complete.seller.slug,
-                                rating: {
-                                  avg_rating: complete.seller.rating.avg_rating,
-                                  rating_count: 0,
-                                  total_rating: 0,
-                                  streak: 0,
-                                },
+                                slug: complete.seller.slug,
+                                rating: complete.seller.rating.avg_rating,
                               }}
                             />
                           </ListingDetailItem>

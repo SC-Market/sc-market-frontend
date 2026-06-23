@@ -1,4 +1,5 @@
 import type { GetOfferSessionV2Response } from "../../store/api/v2/market"
+import { useGetShopQuery } from "../../store/api/v2/market"
 import {
   Chip,
   Grid,
@@ -20,7 +21,7 @@ import {
   DialogActions,
 } from "@mui/material"
 import React, { useEffect, useMemo } from "react"
-import { OrgDetails, UserDetails } from "../../components/list/UserDetails"
+import { UserDetails } from "../../components/list/UserDetails"
 import { Stack } from "@mui/system"
 import { format } from "../../util/time"
 import {
@@ -120,6 +121,11 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response; se
     isUpdatingStatus, updateStatusCallback,
     createThread, createThreadLoading,
   } = useOfferDetails(session, props.selectedOfferIndex)
+
+  const { data: shop } = useGetShopQuery(
+    { slug: session.shop_slug! },
+    { skip: !session.shop_slug },
+  )
 
   const isLatestOffer = (props.selectedOfferIndex ?? 0) === 0
 
@@ -225,17 +231,32 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response; se
                 </TableCell>
               </TableRow>
             )}
-            {/* Seller (org) row */}
-            {session.contractor && (
+            {/* Seller (shop) row */}
+            {session.shop_slug && (
               <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                 <TableCell component="th" scope="row">
                   {t("OfferDetailsArea.seller")}
                 </TableCell>
                 <TableCell align="right">
                   <Stack direction="row" justifyContent="right">
-                    <Stack direction="column">
-                      <OrgDetails org={session.contractor} />
-                      <ListingSellerRating contractor={session.contractor} />
+                    <Stack direction="column" alignItems="flex-end">
+                      <MaterialLink
+                        component={Link}
+                        to={`/shops/${session.shop_slug}`}
+                        underline="hover"
+                        color="text.secondary"
+                        variant="subtitle2"
+                      >
+                        {shop?.name || session.shop_slug}
+                      </MaterialLink>
+                      <ListingSellerRating
+                        shop={{
+                          name: shop?.name || session.shop_slug,
+                          slug: session.shop_slug,
+                          rating: shop?.rating ?? undefined,
+                          rating_count: shop?.rating_count,
+                        }}
+                      />
                     </Stack>
                   </Stack>
                 </TableCell>
@@ -246,9 +267,7 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response; se
             <TableRow sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
               <TableCell component="th" scope="row">
                 <Stack direction="row" alignItems="center" spacing={1}>
-                  {session.contractor
-                    ? t("orderDetailsArea.assigned", "Assigned")
-                    : t("OfferDetailsArea.seller")}
+                  {t("orderDetailsArea.assigned", "Assigned")}
                   {amContractorManager &&
                     !["accepted", "rejected"].includes(session.status) && (
                       <Button
@@ -268,7 +287,6 @@ export function OfferDetailsArea(props: { session: GetOfferSessionV2Response; se
                   {session.assigned_to ? (
                     <Stack direction="column">
                       <UserDetails user={session.assigned_to} />
-                      <ListingSellerRating user={session.assigned_to} />
                     </Stack>
                   ) : (
                     <>

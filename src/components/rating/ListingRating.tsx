@@ -74,16 +74,45 @@ export interface ShopRatingProps {
   streak: number
 }
 
+/**
+ * Minimal shop identity for display in listing/offer views.
+ * Use this instead of contractor/user props when the seller is a shop.
+ */
+export interface ShopIdentityProps {
+  name: string
+  slug: string
+  rating?: number
+  rating_count?: number
+  total_orders?: number
+  streak?: number
+}
+
 export function ListingNameAndRating(props: {
   user?: MinimalUser | null
   contractor?: MinimalContractor | null
+  shop?: ShopIdentityProps | null
   shopRating?: ShopRatingProps
 }) {
-  const { user, contractor, shopRating } = props
+  const { user, contractor, shop, shopRating } = props
   const navigate = useNavigate()
-  const url = user
-    ? `/user/${user?.username}`
-    : `/contractor/${contractor?.spectrum_id}`
+
+  const url = shop
+    ? `/shops/${shop.slug}`
+    : user
+      ? `/user/${user?.username}`
+      : `/contractor/${contractor?.spectrum_id}`
+
+  const displayName = shop
+    ? shop.name
+    : user?.display_name || contractor?.name
+
+  // Build shopRating from shop prop if not explicitly provided
+  const effectiveShopRating: ShopRatingProps | undefined = shopRating ?? (shop ? {
+    avg_rating: shop.rating ?? 0,
+    rating_count: shop.rating_count ?? 0,
+    total_orders: shop.total_orders ?? 0,
+    streak: shop.streak ?? 0,
+  } : undefined)
 
   return (
     <Box display={"flex"} alignItems={"center"} flexWrap={"wrap"} gap={0.5}>
@@ -100,10 +129,10 @@ export function ListingNameAndRating(props: {
         }}
       >
         <UnderlineLink variant={"subtitle2"}>
-          {user?.display_name || contractor?.name}
+          {displayName}
         </UnderlineLink>
       </Box>
-      <ListingSellerRating user={user} contractor={contractor} shopRating={shopRating} />
+      <ListingSellerRating user={user} contractor={contractor} shopRating={effectiveShopRating} />
     </Box>
   )
 }
@@ -111,14 +140,23 @@ export function ListingNameAndRating(props: {
 export function ListingSellerRating(props: {
   user?: MinimalUser | null
   contractor?: MinimalContractor | null
+  shop?: ShopIdentityProps | null
   shopRating?: ShopRatingProps
 }) {
-  const { user, contractor, shopRating } = props
+  const { user, contractor, shop, shopRating } = props
+
+  // Build shopRating from shop prop if not explicitly provided
+  const effectiveShopRating: ShopRatingProps | undefined = shopRating ?? (shop ? {
+    avg_rating: shop.rating ?? 0,
+    rating_count: shop.rating_count ?? 0,
+    total_orders: shop.total_orders ?? 0,
+    streak: shop.streak ?? 0,
+  } : undefined)
 
   return (
     <Box display={"flex"} alignItems={"center"} flexWrap={"wrap"} gap={0.5}>
-      <SellerRatingStars user={user} contractor={contractor} shopRating={shopRating} />
-      <SellerRatingCount user={user} contractor={contractor} shopRating={shopRating} />
+      <SellerRatingStars user={user} contractor={contractor} shopRating={effectiveShopRating} />
+      <SellerRatingCount user={user} contractor={contractor} shopRating={effectiveShopRating} />
     </Box>
   )
 }
