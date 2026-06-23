@@ -1,20 +1,22 @@
 import React, { useEffect, useState } from "react"
 import {
   Autocomplete,
-  Box,
   Chip,
-  Container,
   FormControlLabel,
-  Stack,
+  Grid,
   Switch,
   TextField,
   Typography,
 } from "@mui/material"
+import { useTheme } from "@mui/material/styles"
 import LoadingButton from "@mui/lab/LoadingButton"
 import { SaveRounded } from "@mui/icons-material"
 import { useShopRouteContext } from "../../../components/router/ShopContextFromRoute"
 import { useUpdateShopMutation } from "../../../store/api/v2/market"
 import { useAlertHook } from "../../../hooks/alert/AlertHook"
+import { ExtendedTheme } from "../../../hooks/styles/Theme"
+import { FormPaper } from "../../../components/paper/FormPaper"
+import { StandardPageLayout } from "../../../components/layout/StandardPageLayout"
 
 const AVAILABLE_TAGS = [
   "Weapons",
@@ -40,6 +42,7 @@ const AVAILABLE_LANGUAGES = [
 
 export function ShopSettings() {
   const { shop } = useShopRouteContext()
+  const theme = useTheme<ExtendedTheme>()
   const [updateShop, { isLoading }] = useUpdateShopMutation()
   const issueAlert = useAlertHook()
 
@@ -90,53 +93,59 @@ export function ShopSettings() {
   }
 
   return (
-    <Container maxWidth="md">
-      <Box sx={{ py: 4 }}>
-        <Typography variant="h4" gutterBottom>
+    <StandardPageLayout
+      title="Shop Settings"
+      headerTitle={
+        <Typography variant="h4" fontWeight="bold" color="text.secondary">
           Shop Settings
         </Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 4 }}>
-          Manage settings for <strong>{shop.name}</strong>.
-        </Typography>
-
-        <Stack spacing={4}>
+      }
+      sidebarOpen={true}
+      maxWidth="lg"
+    >
+      <Grid item xs={12}>
+        <Grid container spacing={theme.layoutSpacing.layout}>
           {/* General */}
-          <Box>
-            <Typography variant="h6" gutterBottom>
-              General
-            </Typography>
-            <Stack spacing={2}>
+          <FormPaper title="General" subtitle="Basic shop information">
+            <Grid item xs={12}>
               <TextField
                 label="Shop Name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 fullWidth
+                size="small"
                 required
               />
+            </Grid>
+            <Grid item xs={12} md={6}>
               <TextField
                 label="Slug"
                 value={slug}
                 onChange={(e) => setSlug(e.target.value)}
                 fullWidth
-                helperText="URL-friendly identifier (e.g. my-shop)"
+                size="small"
+                helperText={`sc-market.space/shop/${slug || "..."}`}
               />
+            </Grid>
+            <Grid item xs={12}>
               <TextField
                 label="Description"
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 fullWidth
+                size="small"
                 multiline
                 minRows={3}
               />
-            </Stack>
-          </Box>
+            </Grid>
+          </FormPaper>
 
-          {/* Categories & Languages */}
-          <Box>
-            <Typography variant="h6" gutterBottom>
-              Categories & Languages
-            </Typography>
-            <Stack spacing={2}>
+          {/* Categories & Tags */}
+          <FormPaper
+            title="Categories & Tags"
+            subtitle="Help buyers find your shop"
+          >
+            <Grid item xs={12}>
               <Autocomplete
                 multiple
                 options={AVAILABLE_TAGS.slice()}
@@ -156,9 +165,16 @@ export function ShopSettings() {
                   })
                 }
                 renderInput={(params) => (
-                  <TextField {...params} label="Tags" placeholder="Add tag" />
+                  <TextField
+                    {...params}
+                    label="Tags"
+                    placeholder="Add tag"
+                    size="small"
+                  />
                 )}
               />
+            </Grid>
+            <Grid item xs={12}>
               <Autocomplete
                 multiple
                 options={AVAILABLE_LANGUAGES.map((l) => l.code)}
@@ -189,18 +205,19 @@ export function ShopSettings() {
                     {...params}
                     label="Supported Languages"
                     placeholder="Add language"
+                    size="small"
                   />
                 )}
               />
-            </Stack>
-          </Box>
+            </Grid>
+          </FormPaper>
 
           {/* Orders */}
-          <Box>
-            <Typography variant="h6" gutterBottom>
-              Orders
-            </Typography>
-            <Stack spacing={2}>
+          <FormPaper
+            title="Orders"
+            subtitle="Configure how buyers interact with your shop"
+          >
+            <Grid item xs={12}>
               <FormControlLabel
                 control={
                   <Switch
@@ -210,32 +227,36 @@ export function ShopSettings() {
                 }
                 label="Accept custom orders"
               />
+            </Grid>
+            <Grid item xs={12}>
               <TextField
                 label="Market Order Template"
                 value={marketOrderTemplate}
                 onChange={(e) => setMarketOrderTemplate(e.target.value)}
                 fullWidth
+                size="small"
                 multiline
                 minRows={4}
                 helperText="Template shown to buyers when placing a custom order"
               />
-            </Stack>
-          </Box>
+            </Grid>
+          </FormPaper>
 
           {/* Save */}
-          <Box>
+          <Grid item xs={12} container justifyContent="flex-end">
             <LoadingButton
               variant="contained"
+              color="secondary"
               loading={isLoading}
               startIcon={<SaveRounded />}
               onClick={handleSave}
               disabled={!name.trim()}
             >
-              Save Settings
+              Save Changes
             </LoadingButton>
-          </Box>
-        </Stack>
-      </Box>
-    </Container>
+          </Grid>
+        </Grid>
+      </Grid>
+    </StandardPageLayout>
   )
 }
