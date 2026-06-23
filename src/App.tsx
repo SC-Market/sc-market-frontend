@@ -25,6 +25,7 @@ import {
 import { OrgContextFromRoute } from "./components/router/OrgContextFromRoute"
 import { ShopContextFromRoute } from "./components/router/ShopContextFromRoute"
 import {
+  ShopRedirect,
   ShopRedirectListings,
   ShopRedirectStock,
 } from "./components/router/ShopRedirect"
@@ -582,10 +583,7 @@ const router = createBrowserRouter([
           },
           {
             path: "/order/services",
-            lazy: async () => ({
-              Component: (await import("./pages/contracting/MyServices"))
-                .MyServicesPage,
-            }),
+            element: <ShopRedirect subpath="services" />,
           },
           {
             path: "/org/register",
