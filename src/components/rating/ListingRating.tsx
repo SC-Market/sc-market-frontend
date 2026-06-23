@@ -29,6 +29,7 @@ import { useTranslation } from "react-i18next"
 import {
   prioritizeBadges,
   calculateBadgesFromRating,
+  calculateBadgesFromShopMetrics,
   BADGE_RATING_99_9,
   BADGE_RATING_99,
   BADGE_RATING_95,
@@ -58,13 +59,27 @@ import {
   BADGE_DONOR_COPPER,
   BADGE_EARLY_ADOPTER,
   BADGE_RESPONSIVE,
+  type ShopMetricsForBadges,
 } from "../../util/badges"
+
+/**
+ * Minimal shop rating data that can be passed to rating components
+ * in place of user/contractor ratings. Allows V2 callers to gradually
+ * migrate to shop-level rating display.
+ */
+export interface ShopRatingProps {
+  avg_rating: number
+  rating_count: number
+  total_orders: number
+  streak: number
+}
 
 export function ListingNameAndRating(props: {
   user?: MinimalUser | null
   contractor?: MinimalContractor | null
+  shopRating?: ShopRatingProps
 }) {
-  const { user, contractor } = props
+  const { user, contractor, shopRating } = props
   const navigate = useNavigate()
   const url = user
     ? `/user/${user?.username}`
@@ -88,7 +103,7 @@ export function ListingNameAndRating(props: {
           {user?.display_name || contractor?.name}
         </UnderlineLink>
       </Box>
-      <ListingSellerRating user={user} contractor={contractor} />
+      <ListingSellerRating user={user} contractor={contractor} shopRating={shopRating} />
     </Box>
   )
 }
@@ -96,13 +111,14 @@ export function ListingNameAndRating(props: {
 export function ListingSellerRating(props: {
   user?: MinimalUser | null
   contractor?: MinimalContractor | null
+  shopRating?: ShopRatingProps
 }) {
-  const { user, contractor } = props
+  const { user, contractor, shopRating } = props
 
   return (
     <Box display={"flex"} alignItems={"center"} flexWrap={"wrap"} gap={0.5}>
-      <SellerRatingStars user={user} contractor={contractor} />
-      <SellerRatingCount user={user} contractor={contractor} />
+      <SellerRatingStars user={user} contractor={contractor} shopRating={shopRating} />
+      <SellerRatingCount user={user} contractor={contractor} shopRating={shopRating} />
     </Box>
   )
 }
@@ -170,15 +186,17 @@ export function MarketListingRating(props: {
 export function SellerRatingStars(props: {
   user?: MinimalUser | null
   contractor?: MinimalContractor | null
+  shopRating?: ShopRatingProps
 }) {
   const theme = useTheme<ExtendedTheme>()
-  const { user, contractor } = props
+  const { user, contractor, shopRating } = props
   const rating = useMemo(() => {
+    if (shopRating) return shopRating.avg_rating
     const avgRating =
       user?.rating?.avg_rating || contractor?.rating?.avg_rating || 0
     // Ratings are stored in 0-5 scale, use directly (no division needed)
     return avgRating
-  }, [user, contractor])
+  }, [user, contractor, shopRating])
 
   return (
     <MuiRating
@@ -233,11 +251,12 @@ export function MarketRatingStars(props: { rating: Rating }) {
 export function SellerRatingCount(props: {
   user?: MinimalUser | null
   contractor?: MinimalContractor | null
+  shopRating?: ShopRatingProps
   display_limit?: number // Default: unlimited for profiles
 }) {
   const { t } = useTranslation()
   const theme = useTheme<ExtendedTheme>()
-  const { user, contractor, display_limit } = props
+  const { user, contractor, shopRating, display_limit } = props
   const rating = useMemo(
     () =>
       user?.rating ||
@@ -253,14 +272,27 @@ export function SellerRatingCount(props: {
     [user, contractor],
   )
 
-  // Use badge_ids if available, otherwise calculate from rating
-  const badgeIds = user?.badges?.badge_ids || contractor?.badges?.badge_ids
-  const allBadges = badgeIds || calculateBadgesFromRating(rating)
+  // When shopRating is provided, use it for badge calculation
+  const allBadges = useMemo(() => {
+    if (shopRating) {
+      return calculateBadgesFromRating({
+        avg_rating: shopRating.avg_rating,
+        rating_count: shopRating.rating_count,
+        total_rating: shopRating.avg_rating * shopRating.rating_count,
+        streak: shopRating.streak,
+        total_orders: shopRating.total_orders,
+      })
+    }
+    const badgeIds = user?.badges?.badge_ids || contractor?.badges?.badge_ids
+    return badgeIds || calculateBadgesFromRating(rating)
+  }, [shopRating, user, contractor, rating])
+
   const badges = prioritizeBadges(allBadges, display_limit)
+  const displayCount = shopRating ? shopRating.rating_count : rating.rating_count
 
   return (
     <>
-      ({rating.rating_count.toLocaleString(undefined)}){" "}
+      ({displayCount.toLocaleString(undefined)}){" "}
       <BadgeDisplay badges={badges} />
     </>
   )
