@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react"
+import { Navigate } from "react-router-dom"
 import {
   Autocomplete,
   Chip,
@@ -43,6 +44,11 @@ const AVAILABLE_LANGUAGES = [
 export function ShopSettings() {
   const { shop } = useShopRouteContext()
   const theme = useTheme<ExtendedTheme>()
+
+  // Redirect if user doesn't have manage_market permission
+  if (!shop.permissions?.manage_market) {
+    return <Navigate to={`/shop/${shop.slug}/listings`} replace />
+  }
   const [updateShop, { isLoading }] = useUpdateShopMutation()
   const issueAlert = useAlertHook()
 
